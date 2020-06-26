@@ -23,60 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//
-//      ---------------- G4VExceptionHandler ----------------
-//
-// Authors: M.Asai - August 2002
-//
-// ------------------------------------------------------------
+// G4VExceptionHandler
 //
 // Class description:
 //
-// Abstract base class which need to be notified when G4Exception occurs.
-// The concrete class object derived from this base class will be automatically 
-// registered to G4StateManager and the virtual method Notify() will be invoked 
-// when G4Exception occurs.
+// Abstract base class which needs to be notified when a G4Exception occurs.
+// The concrete class object derived from this base class will be
+// automatically registered to G4StateManager and the virtual method Notify()
+// will be invoked when the G4Exception occurs.
 
-// ------------------------------------------------------------
+// Author: M.Asai, August 2002
+// --------------------------------------------------------------------
+#ifndef G4VExceptionHandler_hh
+#define G4VExceptionHandler_hh 1
 
-#ifndef G4VExceptionHandler_h
-#define G4VExceptionHandler_h 1
-
-#include "G4Types.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4Types.hh"
 
 class G4VExceptionHandler
 {
-
-public:
-
+ public:
   G4VExceptionHandler();
   virtual ~G4VExceptionHandler();
-  G4bool operator==(const G4VExceptionHandler &right) const;
-  G4bool operator!=(const G4VExceptionHandler &right) const;
-
-public: // with description
+  G4bool operator==(const G4VExceptionHandler& right) const;
+  G4bool operator!=(const G4VExceptionHandler& right) const;
 
   virtual G4bool Notify(const char* originOfException,
-                        const char* exceptionCode,
-                        G4ExceptionSeverity severity,
+                        const char* exceptionCode, G4ExceptionSeverity severity,
                         const char* description) = 0;
-    // Pure virtual method which will be invoked by G4StateManager when
-    // G4Exception occurs.
-    // If TRUE returned, core dump will be generated, while FALSE returned,
-    // program execution continues.
+  // Pure virtual method which will be invoked by G4StateManager when
+  // a G4Exception occurs.
+  // If TRUE is returned, a core dump will be generated,
+  // while if FALSE is returned, program execution continues.
 
-private:
-
-  G4VExceptionHandler(const G4VExceptionHandler &right);
-  G4VExceptionHandler& operator=(const G4VExceptionHandler &right);
-
+ private:
+  G4VExceptionHandler(const G4VExceptionHandler& right);
+  G4VExceptionHandler& operator=(const G4VExceptionHandler& right);
 };
 
 #endif

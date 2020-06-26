@@ -62,7 +62,6 @@ class G4ProtonBuilder : public G4PhysicsBuilderInterface
     
     std::vector<G4VProtonBuilder *> theModelCollections;
 
-    G4bool wasActivated;
 };
 
 #endif

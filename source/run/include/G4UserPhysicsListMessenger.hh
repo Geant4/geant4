@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4UserPhysicsListMessenger.hh
@@ -35,9 +35,9 @@
 //    between ParticleUserList and UI.
 // --
 //  the List of Directory and Commands
-// -       
+// -
 //  /run/particle/   Paricle control commands.
-//   Commands : 
+//   Commands :
 //    SetCuts *  Set default cut value
 //    dumpList * Dump List of particles in G4VUserPhysicsList.
 //    verbose * Set the Verbose level of G4VUserPhysicsList.
@@ -45,11 +45,12 @@
 //    buildPhysicsTable * build physics table
 //    storePhysicsTable * store physics table into files
 //    retreivePhysicsTable * retreive physics table from files
-//    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics Table
+//    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics
+//    Table
 // ------------------------------------------------------------
 //	History
-//        first version                   09 Jan. 1998 by H.Kurashige 
-//        second version                  24 Jan. 1998 by H.Kurashige 
+//        first version                   09 Jan. 1998 by H.Kurashige
+//        second version                  24 Jan. 1998 by H.Kurashige
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add store/retreivePhysicsTable  08 Nov. 2000 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
@@ -68,47 +69,45 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString; 
+class G4UIcmdWithAString;
 class G4UIcommand;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4UserPhysicsListMessenger: public G4UImessenger
+class G4UserPhysicsListMessenger : public G4UImessenger
 {
-  private:
+ private:
   // hide default constructor
-    G4UserPhysicsListMessenger(){}
+  G4UserPhysicsListMessenger() {}
 
-  public:
-    G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList);
-    virtual ~G4UserPhysicsListMessenger();
-    
-public: // with description
-    virtual  void SetNewValue(G4UIcommand * command,G4String newValues);
-    virtual  G4String GetCurrentValue(G4UIcommand * command);
+ public:
+  G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList);
+  virtual ~G4UserPhysicsListMessenger();
 
-  protected:
-    G4VUserPhysicsList* thePhysicsList;
-    
-  private: //commands
-    G4UIdirectory *             theDirectory;
-    G4UIcmdWithADoubleAndUnit * setCutCmd; 
-    G4UIcommand *               setCutRCmd;
-    G4UIcommand *               setCutForAGivenParticleCmd;
-    G4UIcmdWithAString *        getCutForAGivenParticleCmd;
-    G4UIcmdWithAnInteger *      verboseCmd;
-    G4UIcmdWithoutParameter *   dumpListCmd;
-    G4UIcmdWithAString *        addProcManCmd;
-    G4UIcmdWithAString *        buildPTCmd;
-    G4UIcmdWithAString *        storeCmd;
-    G4UIcmdWithAString *        retrieveCmd;
-    G4UIcmdWithAnInteger *      asciiCmd;
-    G4UIcommand *               applyCutsCmd;
-    G4UIcmdWithAString *        dumpCutValuesCmd;
-    G4UIcmdWithAnInteger*       dumpOrdParamCmd;
+ public:  // with description
+  virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+  virtual G4String GetCurrentValue(G4UIcommand* command);
+
+ protected:
+  G4VUserPhysicsList* thePhysicsList;
+
+ private:  // commands
+  G4UIdirectory* theDirectory;
+  G4UIcmdWithADoubleAndUnit* setCutCmd;
+  G4UIcommand* setCutRCmd;
+  G4UIcommand* setCutForAGivenParticleCmd;
+  G4UIcmdWithAString* getCutForAGivenParticleCmd;
+  G4UIcmdWithAnInteger* verboseCmd;
+  G4UIcmdWithoutParameter* dumpListCmd;
+  G4UIcmdWithAString* addProcManCmd;
+  G4UIcmdWithAString* buildPTCmd;
+  G4UIcmdWithAString* storeCmd;
+  G4UIcmdWithAString* retrieveCmd;
+  G4UIcmdWithAnInteger* asciiCmd;
+  G4UIcommand* applyCutsCmd;
+  G4UIcmdWithAString* dumpCutValuesCmd;
+  G4UIcmdWithAnInteger* dumpOrdParamCmd;
 };
 
 #endif
-
-

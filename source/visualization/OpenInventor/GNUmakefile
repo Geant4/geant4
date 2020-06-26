@@ -17,6 +17,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
+include $(G4INSTALL)/config/G4UI_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
 CPPFLAGS += -I$(G4BASE)/visualization/externals/gl2ps/include
@@ -28,6 +29,7 @@ CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
+CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/materials/include

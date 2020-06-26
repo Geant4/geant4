@@ -17,7 +17,66 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
-07 December 19:  V.Ivanchenko (emstand-V10-05-27)
+15 May 20:  V.Ivanchenko    (emstand-V10-06-11)
+- G4UrbanMscModel - added e- range cut to the cache data structure; minor
+    improvement of the code
+- G4UniversalFluctuation - set value for a0 = 42 after optimisations 
+
+29 April 20: Gunter Folger    (emstand-V10-06-10)
+- fix for clang10: G4PAIPhotModel.hh, G4PAIModel.hh : mark class final
+
+26 April 20:  V.Ivanchenko    (emstand-V10-06-09)
+- G4UrbanMscModel - L.Urban improved cache data structure
+
+22 April 20:  V.Ivanchenko    (emstand-V10-06-08)
+- G4LindhardSorensenData - fixed data table
+
+07 April 20:  V.Ivanchenko    (emstand-V10-06-07)
+- G4UniversalFluctuation - 10.6 value for a0=50 is returned, because 
+    test results with the previous tag does not improve all thin target tests
+- G4eeToTwoGammaModel - code clean-up; added static flag, which identifies if
+    electron motion is taken into account for sampling of acolliniarity, 
+    when annihilation is happen at rest; the model was introduced previously
+    by John Allison, here we ensure, that by default no extra computation
+    is performed; also removed extra printout at initialisation and extra
+    data structure
+
+02 April 20:  V.Ivanchenko    (emstand-V10-06-06)
+- G4UniversalFluctuation - L.Urban propose to change a0 from
+    50 to 40 in order to improve agreement with silicon data;
+    minor C++ improvements are added in order to speed-up the code
+
+25 March 20:  V.Ivanchenko    (emstand-V10-06-05)
+- G4UniversalFluctuation - L.Urban propose to change nmaxCont from
+    16 to 8 in order to speed-up simulation
+- G4BetheHeitler5DModel - Li Zhuxin change  "final"  keyword by "override" 
+    for virtual methods
+
+23 March 20:  J.Allison       (emstand-V10-06-04)
+- G4eeToTwoGammaModel - introduce thermal model of positronium decay to two gammas:
+  o In this model, the positronium acquires a mean kinetic energy
+    on formation, which contributes to a small non-collinearity of
+    the gammas, detectable and significant in PET. To activate this
+    model, material->GetIonisation()->SetMeanEnergyPerIonPair(meanKE).
+    A mean kinetic energy of 5 eV produces a projected acollinearity
+    of about 0.5 degrees FWHM, as reported in K.Shibuya et al.,
+    IFMBE Proceedings Vol. 14/3 1667 (2007).
+
+09 March 20:  V.Ivanchenko    (emstand-V10-06-03)
+- G4eplusAnnihilation - fixed problem seen in the rare case, when
+    initial energy is null 
+
+03 March 20:  V.Ivanchenko    (emstand-V10-06-02)
+- G4UrbanMscModel - removed Cache and introduced data struct
+    precomputed at initialisation
+
+25 February 20:  V.Ivanchenko (emstand-V10-06-01)
+- G4UrbanMscModel - L.Urban changed tlimitmin computation for e-
+    (for e+ kept unchanged) and changed parameterisation
+    of stepmin; two private inline methods are added to reduce 
+    duplication of the code
+
+07 December 19:  V.Ivanchenko (emstand-V10-06-00)
 - G4BetheHeitler5DModel - added protection against negative
     argument of sqrt() due to precision lost 
 

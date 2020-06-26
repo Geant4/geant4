@@ -89,9 +89,21 @@ public:
 
     void SetObservedReactionRateConstant(G4double rate);
     G4double GetObservedReactionRateConstant() const;
+    G4double GetActivationRateConstant() const;
+    G4double GetDiffusionRateConstant() const;
 
-    G4double GetEffectiveReactionRadius() const;
+    void SetReactionRadius(G4double radius);
+    G4double GetReactionRadius() const;
+
     void SetEffectiveReactionRadius(G4double radius);
+    G4double GetEffectiveReactionRadius() const;
+    G4double GetOnsagerRadius() const;
+
+    void SetProbability(G4double prob);
+    G4double GetProbability() const;
+
+    void SetReactionType(G4int type);
+    G4int GetReactionType() const;
 
     void SetReactant1(Reactant* reactive);
     void SetReactant2(Reactant* reactive);
@@ -137,8 +149,18 @@ protected:
     G4DNAMolecularReactionData();
     Reactant* fpReactant1;
     Reactant* fpReactant2;
+
     G4double fObservedReactionRate;
+    G4double fActivationRate;
+    G4double fDiffusionRate;
+
+    G4double fOnsagerRadius;
+
+    G4double fReactionRadius;
     G4double fEffectiveReactionRadius;
+
+    G4double fProbability;
+    G4int fType;
 
     ReactionProducts fProducts;
     RateParam fRateParam;

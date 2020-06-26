@@ -28,9 +28,8 @@
 // Author: H.Kurashige, 04.08.1998
 // --------------------------------------------------------------------
 
-/////////////
 inline 
- G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
+G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
 {
   for (auto i = pProcMgrVector->cbegin(); i!= pProcMgrVector->cend(); ++i)
   {
@@ -39,9 +38,9 @@ inline
   return false;
 }
 
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- G4int  G4ProcTblElement::GetIndex(const G4ProcessManager* pManager) const
+G4int G4ProcTblElement::GetIndex(const G4ProcessManager* pManager) const
 {
   G4int index = 0;
   for (auto i = pProcMgrVector->cbegin(); i!= pProcMgrVector->cend(); ++i)
@@ -52,17 +51,16 @@ inline
   return -1;
 }
 
-
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- G4int  G4ProcTblElement::Length() const
+G4int G4ProcTblElement::Length() const
 {
   return G4int(pProcMgrVector->size());
 } 
 
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- G4ProcessManager* G4ProcTblElement::GetProcessManager(G4int index) const
+G4ProcessManager* G4ProcTblElement::GetProcessManager(G4int index) const
 {
   if ((index < G4int(pProcMgrVector->size())) && (index>=0))
   {
@@ -74,25 +72,23 @@ inline
   }
 }
 
-
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- G4VProcess* G4ProcTblElement::GetProcess() const
+G4VProcess* G4ProcTblElement::GetProcess() const
 {
   return pProcess;
 }
 
-
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- void  G4ProcTblElement::Insert(G4ProcessManager* aProcMgr)
+void  G4ProcTblElement::Insert(G4ProcessManager* aProcMgr)
 {
   pProcMgrVector->push_back(aProcMgr);
 } 
 
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- void  G4ProcTblElement::Remove(G4ProcessManager* aProcMgr)
+void G4ProcTblElement::Remove(G4ProcessManager* aProcMgr)
 {
   for (auto i = pProcMgrVector->cbegin(); i!= pProcMgrVector->cend(); ++i)
   {
@@ -104,9 +100,16 @@ inline
   }
 } 
 
-//////////////////////////
+// --------------------------------------------------------------------
 inline 
- const G4String& G4ProcTblElement::GetProcessName() const
+const G4String& G4ProcTblElement::GetProcessName() const
 {
   return  pProcess->GetProcessName();
+}
+
+// --------------------------------------------------------------------
+inline const std::vector<G4ProcessManager*>*
+G4ProcTblElement::GetProcMgrVector() const
+{
+  return pProcMgrVector;
 }

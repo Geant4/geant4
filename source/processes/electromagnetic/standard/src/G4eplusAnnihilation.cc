@@ -114,6 +114,8 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
 // Performs the e+ e- annihilation when both particles are assumed at rest.
 {
   fParticleChange.InitializeForPostStep(track);
+
+  DefineMaterial(track.GetMaterialCutsCouple());
   size_t idx = CurrentMaterialCutsCoupleIndex();
   G4double ene(0.0);
   G4VEmModel* model = SelectModel(ene, idx);

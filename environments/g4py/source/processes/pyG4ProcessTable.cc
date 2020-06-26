@@ -110,7 +110,7 @@ void(G4ProcessTable::*f2_SetProcessActivation)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f3_SetProcessActivation)
-  (const G4String&, G4ParticleDefinition*, G4bool)
+  (const G4String&, const G4ParticleDefinition*, G4bool)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f4_SetProcessActivation)
@@ -125,7 +125,7 @@ void(G4ProcessTable::*f6_SetProcessActivation)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f7_SetProcessActivation)
-  (G4ProcessType, G4ParticleDefinition*, G4bool)
+  (G4ProcessType, const G4ParticleDefinition*, G4bool)
   = &G4ProcessTable::SetProcessActivation;
 
 void(G4ProcessTable::*f8_SetProcessActivation)

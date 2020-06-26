@@ -23,55 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsModelCatalog class implementation
 //
-//
+// Author: M.Asai (SLAC), 26 September 2013
+// --------------------------------------------------------------------
 
 #include "G4PhysicsModelCatalog.hh"
 
 #include "G4Threading.hh"
 
-modelCatalog* G4PhysicsModelCatalog::catalog = 0;
+std::vector<G4String>* G4PhysicsModelCatalog::theCatalog = nullptr;
 
+// --------------------------------------------------------------------
 G4PhysicsModelCatalog::G4PhysicsModelCatalog()
-{ if(!catalog) {
-    static modelCatalog catal;
-    catalog = &catal;
+{
+  if(theCatalog == nullptr)
+  {
+    static std::vector<G4String> catal;
+    theCatalog = &catal;
   }
 }
 
-G4PhysicsModelCatalog::~G4PhysicsModelCatalog()
-{}
-//{ delete catalog; catalog = 0; }
+// --------------------------------------------------------------------
+G4PhysicsModelCatalog::~G4PhysicsModelCatalog() {}
 
+// --------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::Register(const G4String& name)
 {
   G4PhysicsModelCatalog();
   G4int idx = GetIndex(name);
-  if(idx>=0) return idx;
+  if(idx >= 0)
+    return idx;
 #ifdef G4MULTITHREADED
-  if(G4Threading::IsWorkerThread()) return -1;
+  if(G4Threading::IsWorkerThread())
+    return -1;
 #endif
-  catalog->push_back(name);
-  return catalog->size()-1;
+  theCatalog->push_back(name);
+  return theCatalog->size() - 1;
 }
 
+// --------------------------------------------------------------------
 const G4String& G4PhysicsModelCatalog::GetModelName(G4int idx)
 {
   static const G4String undef = "Undefined";
-  if(idx>=0 && idx<Entries()) return (*catalog)[idx];
+  if(idx >= 0 && idx < Entries())
+    return (*theCatalog)[idx];
   return undef;
 }
 
+// --------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::GetIndex(const G4String& name)
 {
-  for(G4int idx=0;idx<Entries();++idx)
-  { if((*catalog)[idx]==name) return idx; }
+  for(G4int idx = 0; idx < Entries(); ++idx)
+  {
+    if((*theCatalog)[idx] == name)
+      return idx;
+  }
   return -1;
 }
 
+// --------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::Entries()
-{ return (catalog) ? G4int(catalog->size()) : -1; }
+{
+  return (theCatalog != nullptr) ? G4int(theCatalog->size()) : -1;
+}
 
-void G4PhysicsModelCatalog::Destroy()
-{}
-
+// --------------------------------------------------------------------
+void G4PhysicsModelCatalog::Destroy() {}

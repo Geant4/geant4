@@ -56,6 +56,7 @@
 class G4EmExtraParametersMessenger;
 class G4VEnergyLossProcess;
 class G4VEmProcess;
+class G4ParticleDefinition;
 class G4VAtomDeexcitation;
 
 class G4EmExtraParameters
@@ -88,6 +89,16 @@ public:
   G4double GetStepFunctionMuHadP1() const;
   G4double GetStepFunctionMuHadP2() const;
 
+  void SetStepFunctionLightIons(G4double v1, G4double v2);
+  G4double GetStepFunctionLightIonsP1() const;
+  G4double GetStepFunctionLightIonsP2() const;
+
+  void SetStepFunctionIons(G4double v1, G4double v2);
+  G4double GetStepFunctionIonsP1() const;
+  G4double GetStepFunctionIonsP2() const;
+
+  void FillStepFunction(const G4ParticleDefinition*, G4VEnergyLossProcess*) const;
+
   // parameters per region or per process 
   void AddPAIModel(const G4String& particle,
                    const G4String& region,
@@ -116,8 +127,7 @@ public:
 				G4double energyLimit);
 
   // initialisation methods
-  void DefineRegParamForLoss(G4VEnergyLossProcess*, 
-                             G4bool isElectron) const;
+  void DefineRegParamForLoss(G4VEnergyLossProcess*) const;
   void DefineRegParamForEM(G4VEmProcess*) const;
 
   G4EmExtraParameters(G4EmExtraParameters &) = delete;
@@ -139,6 +149,10 @@ private:
   G4double finalRange;
   G4double dRoverRangeMuHad;
   G4double finalRangeMuHad;
+  G4double dRoverRangeLIons;
+  G4double finalRangeLIons;
+  G4double dRoverRangeIons;
+  G4double finalRangeIons;
 
   G4double directionalSplittingRadius;
   G4ThreeVector directionalSplittingTarget;

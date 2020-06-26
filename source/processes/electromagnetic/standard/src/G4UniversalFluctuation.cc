@@ -64,9 +64,9 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   particle(nullptr),
   minNumberInteractionsBohr(10.0),
   minLoss(10.*eV),
-  nmaxCont(16.),
+  nmaxCont(8.),
   rate(0.56),
-  a0(50.),
+  a0(42),
   fw(4.00)
 {
   lastMaterial = nullptr;
@@ -116,19 +116,19 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   // shortcut for very small loss or from a step nearly equal to the range
   // (out of validity of the model)
   //
+  if (averageLoss < minLoss) { return averageLoss; }
   G4double meanLoss = averageLoss;
-  G4double tkin  = dp->GetKineticEnergy();
+  const G4double tkin  = dp->GetKineticEnergy();
   //G4cout<< "Emean= "<< meanLoss<< " tmax= "<< tmax<< " L= "<<length<<G4endl;
-  if (meanLoss < minLoss) { return meanLoss; }
 
   if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
 
   CLHEP::HepRandomEngine* rndmEngineF = G4Random::getTheEngine();
-  
-  G4double tau   = tkin * m_Inv_particleMass;            
-  G4double gam   = tau + 1.0;
-  G4double gam2  = gam*gam;
-  G4double beta2 = tau*(tau + 2.0)/gam2;
+             
+  const G4double gam   = tkin * m_Inv_particleMass + 1.0;
+  const G4double gam2  = gam*gam;
+  const G4double beta  = dp->GetBeta(); 
+  const G4double beta2 = beta*beta;
 
   G4double loss(0.), siga(0.);
 
@@ -149,12 +149,12 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
       siga = sqrt((1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                   * electronDensity * chargeSquare);
 
-      G4double sn = meanLoss/siga;
+      const G4double sn = meanLoss/siga;
   
       // thick target case 
       if (sn >= 2.0) {
 
-        G4double twomeanLoss = meanLoss + meanLoss;
+        const G4double twomeanLoss = meanLoss + meanLoss;
         do {
           loss = G4RandGauss::shoot(rndmEngineF,meanLoss,siga);
           // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
@@ -191,7 +191,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   if(tmax <= e0) { return meanLoss; }
 
   // width correction for small cuts
-  G4double scaling = std::min(1.+0.5*CLHEP::keV/tmax,1.50);
+  const G4double scaling = std::min(1.+0.5*CLHEP::keV/tmax,1.50);
   meanLoss /= scaling;
 
   G4double a1(0.0), a2(0.0), a3(0.0);
@@ -206,14 +206,14 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 
     if(w2 > ipotLogFluct)  {
       if(w2 > e2LogFluct) {
-	G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
+	const G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
 	a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
 	a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
       } else {
 	a1 = meanLoss*(1.-rate)/e1;
       }
       if(a1 < a0) { 
-        G4double fwnow = 0.5+(fw-0.5)*sqrt(a1/a0);
+        const G4double fwnow = 0.5+(fw-0.5)*sqrt(a1/a0);
         a1 /= fwnow;
         e1 *= fwnow;
       } else {
@@ -251,8 +251,8 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     if(a3 > nmaxCont)
       {
         alfa            = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
-        G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
-        G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
+        const G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
+        const G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
         emean          += namean*e0*alfa1;
         sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
         p3              = a3-namean;
@@ -294,8 +294,8 @@ G4double G4UniversalFluctuation::Dispersion(
 
   electronDensity = material->GetElectronDensity();
 
-  G4double gam   = (dp->GetKineticEnergy())*m_Inv_particleMass + 1.0;
-  G4double beta2 = 1.0 - 1.0/(gam*gam);
+  const G4double beta = dp->GetBeta();
+  const G4double beta2 = beta*beta;
 
   G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                  * electronDensity * chargeSquare;
@@ -314,13 +314,8 @@ G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
     particleMass   = part->GetPDGMass();
 
     // Derived quantities
-    if( particleMass != 0.0 ){
-      m_Inv_particleMass = 1.0 / particleMass;
-      m_massrate = electron_mass_c2 * m_Inv_particleMass ;
-    }else{
-      m_Inv_particleMass = DBL_MAX;
-      m_massrate = DBL_MAX;
-    }
+    m_Inv_particleMass = 1.0 / particleMass;
+    m_massrate = electron_mass_c2 * m_Inv_particleMass;
   }
   chargeSquare = q2;
 }

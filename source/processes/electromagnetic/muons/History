@@ -16,7 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13 January 20:  V.Ivanchenko (emmuons-V10-05-02)
+31 January 20:  V.Ivanchenko (emmuons-V10-06-01)
+- G4MuPairProductionModel - fixed Coverity warning 
+
+13 January 20:  V.Ivanchenko (emmuons-V10-06-00)
 - G4MuPairProductionModel - added Store/Retrieve data methods
     by request of CMS 
 

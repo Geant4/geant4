@@ -1,17 +1,6 @@
 #-----------------------------------------------------------------------
-# sources.cmake
 # Module : G4gl2ps
 # Package: Geant4.src.G4visualization..G4gl2ps
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitely.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
 #-----------------------------------------------------------------------
 
 # List external includes needed.
@@ -35,9 +24,9 @@ if(GEANT4_USE_INVENTOR)
   add_definitions(-DG4VIS_BUILD_OI_DRIVER)
 endif()
 
-set(G4GL2PS_GL_LIBRARIES OpenGL::GL OpenGL::GLU)
+set(G4GL2PS_GL_LIBRARIES OpenGL::GL)
 if(APPLE AND GEANT4_USE_OPENGL_X11)
-  list(APPEND G4GL2PS_GL_LIBRARIES XQuartzGL::GL XQuartzGL::GLU)
+  list(APPEND G4GL2PS_GL_LIBRARIES XQuartzGL::GL)
 endif()
 
 # Define the Geant4 Module.

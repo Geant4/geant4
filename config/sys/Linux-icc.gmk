@@ -3,8 +3,7 @@
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -fp-model precise -w1
-  G4USE_STD11 := 1
+  CXXFLAGS  := -ansi -fp-model precise -w1 -pthread
   ifdef G4USE_STD14
     CPPFLAGS  += -std=c++14
     CXXFLAGS  += -std=c++14
@@ -18,7 +17,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
     endif
   endif
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec -pthread
+    CXXFLAGS += -ftls-model=initial-exec
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
@@ -51,7 +50,6 @@ ifeq ($(G4SYSTEM),Linux-icc)
   AR := ar r
   ECHO    := /bin/echo -e
   SHEXT   := so
-#  LOADLIBS += -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
@@ -78,7 +76,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
     OGLHOME     := /usr
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    OGLLIBS   := -L$(OGLHOME)/lib -lGL
   endif
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \

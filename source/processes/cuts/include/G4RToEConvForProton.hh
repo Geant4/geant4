@@ -23,70 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForProton
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// Class Description
-//  This class is a Range to Energy Converter for proton.
-//
-// ------------------------------------------------------------
-//   First Implementation          5 Oct. 2002  H.Kurahige
-// ------------------------------------------------------------
+// This class is a Range to Energy Converter for proton.
 
-#ifndef G4RToEConvForProton_h
-#define G4RToEConvForProton_h 1
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4RToEConvForProton_hh
+#define G4RToEConvForProton_hh 1
+
+#include <vector>
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
-
 #include "G4VRangeToEnergyConverter.hh"
-
 
 class G4RToEConvForProton : public G4VRangeToEnergyConverter
 {
   public: 
-  //  constructor
-  G4RToEConvForProton();
 
-  public:
-  //  destructor
-  virtual ~G4RToEConvForProton();
+    G4RToEConvForProton();
+      // Constructor
 
-  virtual G4double Convert(G4double rangeCut, const G4Material* material);
+    virtual ~G4RToEConvForProton();
+      // Destructor
 
-  // reset Loss Table and Range Vectors
-  virtual void Reset();
+    virtual G4double Convert(G4double rangeCut, const G4Material* material);
+
+    virtual void Reset();
+      // Reset Loss Table and Range Vectors
 
   protected:
+
     virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy
-                                ) ;
+                                 G4double KineticEnergy);
 
-  protected:
-    G4double Mass;
-    G4double Z;  
-    G4double tau0;
-    G4double taul;
-    G4double taum;
-    G4double ionpot;
-    G4double ca;
-    G4double cba;
-    G4double cc;  
+    G4double Mass = 0.0;
+    G4double Z = -1.0;  
+    G4double tau0 = 0.0;
+    G4double taul = 0.0;
+    G4double taum = 0.0;
+    G4double ionpot = 0.0;
+    G4double ca = 0.0;
+    G4double cba = 0.0;
+    G4double cc = 0.0;  
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-

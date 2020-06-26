@@ -817,8 +817,11 @@ ReactionStage(const G4HadProjectile* originalIncident,
 
     if (tempList.size() > 1) {
       G4int n_entry = 0;
-      wgt = GenerateNBodyEventT(pseudoParticle[6].GetMass(), 
-                                constantCrossSection, tempList);
+//      wgt = GenerateNBodyEventT(pseudoParticle[6].GetMass(), 
+//                                constantCrossSection, tempList);
+// DHW: wgt not used before before being overwritten; remove it here
+      GenerateNBodyEventT(pseudoParticle[6].GetMass(), constantCrossSection,
+                          tempList);
 
       if (targetParticle.GetSide() == -3) {
         targetParticle = *tempList[0];

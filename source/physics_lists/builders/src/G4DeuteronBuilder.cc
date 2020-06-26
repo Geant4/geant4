@@ -42,7 +42,6 @@
  
  void G4DeuteronBuilder::Build()
  {
-   wasActivated = true;
    std::vector<G4VDeuteronBuilder *>::iterator i;
    for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
    {
@@ -52,8 +51,7 @@
    theProcMan->AddDiscreteProcess(theDeuteronInelastic);
  }
 
- G4DeuteronBuilder::
- G4DeuteronBuilder(): wasActivated(false)  
+ G4DeuteronBuilder::G4DeuteronBuilder()
  {
    theDeuteronInelastic=new G4DeuteronInelasticProcess;
  }

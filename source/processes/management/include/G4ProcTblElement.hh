@@ -23,27 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcTblElement
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	4th Aug 1998, H.Kurashige
-// ------------------------------------------------------------
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
-//
-// Class Description  
-//  This class is used by G4ProcessTable ONLY for booking !!!
-//
+// This class is exclusively used by G4ProcessTable for booking.
 
-#ifndef G4ProcTblElement_h
-#define G4ProcTblElement_h 1
+// Author: H.Kurashige, 4 August 1998
+// --------------------------------------------------------------------
+#ifndef G4ProcTblElement_hh
+#define G4ProcTblElement_hh 1
+
+#include <vector>
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
 
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
@@ -51,56 +45,49 @@
 
 class G4ProcTblElement
 {
-  // this class is used by G4ProcessTable ONLY for booking !!!
   friend class G4ProcessTable;
-  protected:
-    G4ProcTblElement();
+
+  using G4ProcMgrVector = std::vector<G4ProcessManager*>;
 
   public:
+
     G4ProcTblElement(const G4ProcTblElement& right);
     G4ProcTblElement(G4VProcess* aProcess);
-    //  Constructors
+      // Constructors
 
     ~G4ProcTblElement();
-    //  Destructor
+      // Destructor
 
-    G4ProcTblElement & operator=(const G4ProcTblElement &right);
-    // Assignment operator
+    G4ProcTblElement& operator=(const G4ProcTblElement& right);
+      // Assignment operator
 
-    G4bool operator==(const G4ProcTblElement &right) const;
-    G4bool operator!=(const G4ProcTblElement &right) const;
-    // equal / unequal operator
+    G4bool operator==(const G4ProcTblElement& right) const;
+    G4bool operator!=(const G4ProcTblElement& right) const;
+      // Equality operators
 
   protected:
-    // Use STL Vector 
-    typedef std::vector<G4ProcessManager*> G4ProcMgrVector;
 
-    G4int Length() const ;
-    void  Insert(G4ProcessManager* aProcMgr);
-    void  Remove(G4ProcessManager* aProcMgr);
+    G4ProcTblElement();
 
-    G4VProcess*       GetProcess() const;
-    const G4String&   GetProcessName() const;
- 
-    G4ProcessManager* GetProcessManager(G4int index) const;
+    inline G4int Length() const ;
+    inline void Insert(G4ProcessManager* aProcMgr);
+    inline void Remove(G4ProcessManager* aProcMgr);
 
-    inline 
-     const G4ProcMgrVector*   GetProcMgrVector() const
-      { return pProcMgrVector;}
+    inline G4VProcess*       GetProcess() const;
+    inline const G4String&   GetProcessName() const;
+    inline G4ProcessManager* GetProcessManager(G4int index) const;
+
+    inline const G4ProcMgrVector* GetProcMgrVector() const; 
   
-    G4int      GetIndex(const G4ProcessManager* pManager) const ;
-    G4bool     Contains(const G4ProcessManager* pManager) const ;
+    inline G4int  GetIndex(const G4ProcessManager* pManager) const;
+    inline G4bool Contains(const G4ProcessManager* pManager) const;
 
   private:
-    G4VProcess*       pProcess;
-    // pointer to G4VProcess
 
-    G4ProcMgrVector*  pProcMgrVector;
+    G4VProcess* pProcess = nullptr;
+    G4ProcMgrVector* pProcMgrVector = nullptr;
 };
 
 #include "G4ProcTblElement.icc"
+
 #endif
-
-
-
-

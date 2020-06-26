@@ -25,6 +25,13 @@
 //
 /*
 Authors:
+
+Updated 15 Novebmer 2019
+
+Updates:
+1. Change reading method for cross section data.
+2. Add warning not to use with polarized photons.
+
 M. Omer and R. Hajima  on   17 October 2016
 contact:
 omer.mohamed@jaea.go.jp and hajima.ryoichi@qst.go.jp
@@ -47,10 +54,8 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4JAEAElasticScatteringModel::maxZ = 99;
-G4LPhysicsFreeVector* G4JAEAElasticScatteringModel::dataCS[] ;
-//Initialising an array to hold all elastic scattering data.
-G4double Diff_CS_data[100][183][300];
+G4LPhysicsFreeVector* G4JAEAElasticScatteringModel::dataCS[]={nullptr} ;
+G4DataVector* G4JAEAElasticScatteringModel::ES_Data[]={nullptr};
 
 G4JAEAElasticScatteringModel::G4JAEAElasticScatteringModel()
   :G4VEmModel("G4JAEAElasticScatteringModel"),isInitialised(false)
@@ -77,10 +82,14 @@ G4JAEAElasticScatteringModel::G4JAEAElasticScatteringModel()
 G4JAEAElasticScatteringModel::~G4JAEAElasticScatteringModel()
 {
   if(IsMaster()) {
-    for(G4int i=0; i<maxZ; ++i) {
+    for(G4int i=0; i<=maxZ; ++i) {
       if(dataCS[i]) {
 	delete dataCS[i];
-	dataCS[i] = 0;
+	dataCS[i] = nullptr;
+      }
+      if (ES_Data[i]){
+	delete ES_Data[i];
+	ES_Data[i] = nullptr;
       }
     }
   }
@@ -174,18 +183,19 @@ void G4JAEAElasticScatteringModel::ReadData(size_t Z, const char* path)
 The first row is the energy, and the second row is the total cross section.
 Rows from the 3rd to the 183rd are the differential cross section with an angular resolution of 1 degree.
 */
-G4double ESdata[183][300];
+
 
 std::ostringstream ostCS;
-ostCS << datadir << "/JAEAESData/cs_Z_" << Z <<".dat";
-std::ifstream alldata(ostCS.str().c_str());
-if(!alldata.is_open())
+ostCS << datadir << "/JAEAESData/amp_Z_" << Z ;
+std::ifstream ES_Data_Buffer(ostCS.str().c_str(),ios::binary);
+if( !ES_Data_Buffer.is_open() )
 {
   G4ExceptionDescription ed;
-  ed << "G4JAEAElasticScattering Model data file <" << ostCS.str().c_str()
+  ed << "G4JAEAElasticScattertingModel data file <" << ostCS.str().c_str()
      << "> is not opened!" << G4endl;
-  G4Exception("Elastic Scattering::ReadData()","em0003",FatalException,
-  ed,"G4LEDATA version should be G4EMLOW6.27 or later. Elastic Scattering Data are not loaded");
+  G4Exception("G4JAEAElasticScatteringModel::ReadData()","em0003",FatalException,
+	      ed,
+	      "G4LEDATA version should be G4EMLOW7.11 or later. Elastic Scattering Data are not loaded");
   return;
 }
 else
@@ -195,18 +205,17 @@ else
 	   << " is opened by G4JAEAElasticScatteringModel" << G4endl;
   }
   }
-while (!alldata.eof())
+ if (!ES_Data[Z])
+   ES_Data[Z] = new G4DataVector();
+   
+
+G4float buffer_var;
+while (ES_Data_Buffer.read(reinterpret_cast<char*>(&buffer_var),sizeof(float)))
 {
-	for (int i=0; i<183;i++)
-	{
-		for (int j=0; j<300; j++)
-		{
-		alldata >> ESdata[i][j];
-		Diff_CS_data[Z][i][j]=ESdata[i][j];
-		}
-	}
-	if (!alldata) break;
+	ES_Data[Z]->push_back(buffer_var);
 }
+
+
 
 /*
 Writing the total cross section data to a G4LPhysicsFreeVector.
@@ -215,14 +224,14 @@ This provides an interpolation of the Energy-Total Cross Section data.
 
       dataCS[Z] = new G4LPhysicsFreeVector(300,0.01,3.);
 //Note that the total cross section and energy are converted to the internal units.
-      for (int i=0;i<300;i++)
-      dataCS[Z]->PutValue(i,Diff_CS_data[Z][0][i]*1e-3,Diff_CS_data[Z][1][i]*1e-22);
+      for (G4int i=0;i<300;++i)
+	dataCS[Z]->PutValue(i,10.*i*1e-3,ES_Data[Z]->at(i)*1e-22);
 
-  // Activation of spline interpolation
-    dataCS[Z] ->SetSpline(true);
+      // Activation of spline interpolation
+      dataCS[Z] ->SetSpline(true);
 
 
-
+      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -234,7 +243,7 @@ G4double G4JAEAElasticScatteringModel::ComputeCrossSectionPerAtom(
                                              G4double, G4double)
 {
 
-  if (verboseLevel > 1)
+  if (verboseLevel > 2)
   {
     G4cout << "G4JAEAElasticScatteringModel::ComputeCrossSectionPerAtom()"
 	   << G4endl;
@@ -291,10 +300,11 @@ void G4JAEAElasticScatteringModel::SampleSecondaries(
 			  const G4DynamicParticle* aDynamicGamma,
 			  G4double, G4double)
 {
-  if (verboseLevel > 1) {
-    G4cout << "Calling SampleSecondaries() of G4JAEAElasticScatteringModel"
+  if (verboseLevel > 2) {
+    G4cout << "Calling SampleSecondaries() of G4JAEAElasticScatteringModel."
 	   << G4endl;
   }
+
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
   // Absorption of low-energy gamma
@@ -303,9 +313,25 @@ void G4JAEAElasticScatteringModel::SampleSecondaries(
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      return ;
+      return;
     }
 
+
+//Warning if the incoming photon has polarization
+
+G4double Xi1=0, Xi2=0, Xi3=0;
+    G4ThreeVector gammaPolarization0 = aDynamicGamma->GetPolarization();
+    Xi1=gammaPolarization0.x();
+    Xi2=gammaPolarization0.y();
+    Xi3=gammaPolarization0.z();
+
+    G4double polarization_magnitude=Xi1*Xi1+Xi2*Xi2+Xi3*Xi3;
+    if ((polarization_magnitude)>0 || (Xi1*Xi1>0) || (Xi2*Xi2>0) || (Xi3*Xi3>0))
+    {
+    	G4cout<<"WARNING: G4JAEAElasticScatteringModel is only compatible with non-polarized photons."<<G4endl;
+    	G4cout<<"The event is ignored."<<G4endl;
+    	return;
+    }
 
   // Select randomly one element in the current material
   const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
@@ -313,36 +339,38 @@ void G4JAEAElasticScatteringModel::SampleSecondaries(
   G4int Z = G4lrint(elm->GetZ());
 
 
-//Select the angular distribution depending on the photon energy
-	G4double *whichdistribution = lower_bound(Diff_CS_data[Z][0],Diff_CS_data[Z][0]+300,photonEnergy0*1000.);
-	int index = max(0,(int)(whichdistribution-Diff_CS_data[Z][0]-1));
-
-//Rounding up to half the energy-grid separation (5 keV)
-	if (photonEnergy0*1000>=0.5*(Diff_CS_data[Z][0][index]+Diff_CS_data[Z][0][index+1]))
-			index++;
+G4int energyindex=round(100*photonEnergy0)-1;
 /*
 Getting the normalized probablity distrbution function and
 normalization factor to create the probability distribution function
 */
-	G4double normdist=0;
-	for (int i=0;i<=180;i++)
-		{
-      		distribution[i]=Diff_CS_data[Z][i+2][index];
-		normdist = normdist + distribution[i];
-		}
+G4double a1=0, a2=0, a3=0,a4=0;
+G4double normdist=0;
+for (G4int i=0;i<=180;++i)
+	{
+		a1=ES_Data[Z]->at(4*i+300+181*4*(energyindex));
+		a2=ES_Data[Z]->at(4*i+1+300+181*4*(energyindex));
+		a3=ES_Data[Z]->at(4*i+2+300+181*4*(energyindex));
+		a4=ES_Data[Z]->at(4*i+3+300+181*4*(energyindex));
+		distribution[i]=a1*a1+a2*a2+a3*a3+a4*a4;
+		normdist += distribution[i];
+	}
+
+
 //Create the cummulative distribution function (cdf)
-	for (int i =0;i<=180;i++) pdf[i]=distribution[i]/normdist;
+	for (G4int i =0;i<=180;++i)
+	  pdf[i]=distribution[i]/normdist;
 	cdf[0]=0;
 	G4double cdfsum =0;
-	for (int i=0; i<=180;i++)
-		{
-		cdfsum=cdfsum+pdf[i];
-		cdf[i]=cdfsum;
-		}
-//Sampling the polar angle by inverse transform uing cdf.
+	for (G4int i=0; i<=180;++i)
+	  {
+	    cdfsum=cdfsum+pdf[i];
+	    cdf[i]=cdfsum;
+	  }
+	//Sampling the polar angle by inverse transform uing cdf.
     G4double r = G4UniformRand();
     G4double *cdfptr=lower_bound(cdf,cdf+181,r);
-    int cdfindex = (int)(cdfptr-cdf-1);
+    G4int cdfindex = (G4int)(cdfptr-cdf-1);
     G4double cdfinv = (r-cdf[cdfindex])/(cdf[cdfindex+1]-cdf[cdfindex]);
     G4double theta = (cdfindex+cdfinv)/180.;
 //polar is now ready

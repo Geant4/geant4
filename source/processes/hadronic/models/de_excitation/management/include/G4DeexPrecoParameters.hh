@@ -128,6 +128,8 @@ public:
 
   inline G4bool StoreICLevelData() const;
 
+  inline G4bool IsomerProduction() const;
+
   inline G4DeexChannelType GetDeexChannelsType() const;
 
   // Set methods 
@@ -196,6 +198,8 @@ public:
   void SetLevelDensityFlag(G4bool);
 
   void SetDiscreteExcitationFlag(G4bool);
+
+  void SetIsomerProduction(G4bool);
 
   void SetDeexChannelsType(G4DeexChannelType);
 
@@ -274,6 +278,7 @@ private:
   G4bool fInternalConversion;
   G4bool fLD;  // use simple level density model 
   G4bool fFD;  // use transition to discrete level 
+  G4bool fIsomerFlag;  // enable isomere production 
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -436,6 +441,11 @@ inline G4bool G4DeexPrecoParameters::GetLevelDensityFlag() const
 inline G4bool G4DeexPrecoParameters::GetDiscreteExcitationFlag() const
 {
   return fFD;
+}
+
+inline G4bool G4DeexPrecoParameters::IsomerProduction() const
+{
+  return fIsomerFlag;
 }
 
 inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const

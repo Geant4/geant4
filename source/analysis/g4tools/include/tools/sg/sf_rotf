@@ -44,6 +44,8 @@ public:
     //a_out << parent::m_value << std::endl;
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   sf_rotf():parent(){}
   sf_rotf(const rotf& a_value):parent(a_value){}

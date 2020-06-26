@@ -14,6 +14,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+11 January 2020  Dennis Wright     (hadr-rpg-V10-06-00)
+-------------------------------------------------------
+- fix Coverity unused variable warnings for wgt (60890 and 60891) in 
+  G4RPGTwoCluster.cc and G4RPGFragmentation.cc
+
 9 May 2018 Alberto Ribon           (hadr-rpg-V10-04-00)
 --------------------------------------------------------
 - G4RPGAntiKZeroInelastic, G4RPGInelastic : fixed warnings in gcc 8

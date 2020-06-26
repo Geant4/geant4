@@ -37,9 +37,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
 #include "TSActionInitialization.hh"
 #include "TSDetectorConstruction.hh"
 #include "TSPrimaryGeneratorAction.hh"
@@ -53,36 +50,30 @@ TSActionInitialization* TSActionInitialization::fgInstance = 0;
 
 TSActionInitialization* TSActionInitialization::Instance()
 {
-    return fgInstance;
+  return fgInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSActionInitialization::TSActionInitialization()
-{
-    fgInstance = this;
-}
+TSActionInitialization::TSActionInitialization() { fgInstance = this; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSActionInitialization::~TSActionInitialization()
-{
-    fgInstance = 0;
-}
+TSActionInitialization::~TSActionInitialization() { fgInstance = 0; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSActionInitialization::BuildForMaster() const
 {
-    SetUserAction(new TSRunAction);
+  SetUserAction(new TSRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSActionInitialization::Build() const
 {
-    SetUserAction(new TSPrimaryGeneratorAction);
-    SetUserAction(new TSRunAction);
+  SetUserAction(new TSPrimaryGeneratorAction);
+  SetUserAction(new TSRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

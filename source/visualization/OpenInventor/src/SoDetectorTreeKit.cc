@@ -66,7 +66,11 @@ SO_KIT_SOURCE(SoDetectorTreeKit)
  
 // initClass
 void SoDetectorTreeKit::initClass(){
-  SO_KIT_INIT_CLASS(SoDetectorTreeKit,SoBaseKit,"BaseKit");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_KIT_INIT_CLASS(SoDetectorTreeKit,SoBaseKit,"BaseKit");
+  }
 }
 
 // Constructor

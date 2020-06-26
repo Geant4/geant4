@@ -100,17 +100,17 @@ class G4OpenGLQtExportDialog : public QDialog
 
  private:
   QString f_name, f_type, f_dir;
-  QLabel* qualityLabel;
-  bool expAll;
+//  QLabel* qualityLabel;
+//  bool expAll;
   QPushButton* buttonOk;
   QPushButton* buttonCancel;
 
   QGroupBox * sizeGroupBox;
 
-  QCheckBox* transparencyEPS,*boxTransparency,*vectorEPSCheckBox;
+  QCheckBox/** transparencyEPS,*boxTransparency,*/*vectorEPSCheckBox;
   QCheckBox* ratioCheckBox;
   QSlider * qualitySlider;
-  QLabel *formatLabel;
+//  QLabel *formatLabel;
   QRadioButton* colorButton,*BWButton;
   QRadioButton* original,* modify;
   QLineEdit* height,*width;

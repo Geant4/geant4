@@ -15,6 +15,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 March 2020 - P.Arce (ascii-V10-06-01)
+- G4tgbGeometryDumper.cc: Fix coverity warnings
+- G4tgbVolume.cc: Fix coverity warnings
+- G4tgbVolumeMgr.cc: Fix coverity warnings
+
+11 December 2019 - B.Morgan (ascii-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 30 October 2019 - G.Cosmo (ascii-V10-05-01)
 - Fixed printout syntax in G4tgrUtils::GetDouble().
 

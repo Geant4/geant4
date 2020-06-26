@@ -140,6 +140,7 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
   G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
   G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( GetName() );
   G4bool bFirstCopy = false;
+  G4VPhysicalVolume* physvol = 0;
   if( logvol == 0 ) 
   {
     bFirstCopy = true;
@@ -159,9 +160,10 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
     {
       return;
     }
-  } 
+  }
   //--- Construct PhysVol
-  G4VPhysicalVolume* physvol = ConstructG4PhysVol( place, logvol, parentLV );
+  physvol = ConstructG4PhysVol( place, logvol, parentLV );
+
   if( physvol != 0 )  // 0 for G4AssemblyVolumes
   {
     g4vmgr->RegisterMe( physvol );

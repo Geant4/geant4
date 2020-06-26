@@ -29,7 +29,7 @@
 #ifndef G4OPENINVENTORQTVIEWER_HH
 #define G4OPENINVENTORQTVIEWER_HH
 
-#ifdef G4VIS_BUILD_OIQT_DRIVER
+#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
 
 // Inheritance :
 #include "G4OpenInventorViewer.hh"

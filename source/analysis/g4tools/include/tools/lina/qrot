@@ -260,6 +260,40 @@ public:
     a_m.v33(w*w + x*x + y*y + z*z);
   }
 
+  template <class MAT3>
+  T value_3(MAT3& a_m) const {
+    //Return this rotation in the form of a 3D matrix.
+    //NOTE : in coin3d/SbRotation, it looks as if "w <-> -w", but coin3d/SbMatrix logic is transposed relative to us.
+    
+    const T x = m_quat.v0();
+    const T y = m_quat.v1();
+    const T z = m_quat.v2();
+    const T w = m_quat.v3();
+    // q = w + x * i + y * j + z * k
+
+    // first row :
+    a_m.v00(w*w + x*x - y*y - z*z);
+    a_m.v01(2*x*y - 2*w*z);
+    a_m.v02(2*x*z + 2*w*y);
+  
+    // second row :
+    a_m.v10(2*x*y + 2*w*z);
+    a_m.v11(w*w - x*x + y*y - z*z);
+    a_m.v12(2*y*z - 2*w*x);
+  
+    // third row :
+    a_m.v20(2*x*z - 2*w*y);
+    a_m.v21(2*y*z + 2*w*x);
+    a_m.v22(w*w - x*x - y*y + z*z);
+  
+    // fourth row :
+    //a_m.v30(0);
+    //a_m.v31(0);
+    //a_m.v32(0);
+    //a_m.v33(w*w + x*x + y*y + z*z);
+    return w*w + x*x + y*y + z*z;  //should be 1.
+  }
+
   void mul_vec(const VEC3& a_in,VEC3& a_out) const {
     const T x = m_quat.v0();
     const T y = m_quat.v1();

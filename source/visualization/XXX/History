@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+18 June 2020 John Allison  (visXXX-V10-05-04)
+- G4XXXSGSceneHandler.cc: Fix a debug statement.
+
 29 August 2019  John Allison (visXXX-V10-05-03)
 - Part of vis-V10-05-24.
 - Add G4TessellatedSolid to list of solids that may be specially treated

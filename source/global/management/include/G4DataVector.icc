@@ -23,50 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // class G4DataVector inline implementation
-// 
+//
+// Author: H.Kurashige, 18 September 2001
+// --------------------------------------------------------------------
 
-inline
-void G4DataVector::insertAt(size_t pos, const G4double& a) 
-{ 
-  iterator i = begin();
-  for (size_t ptn=0; (ptn<pos)&&(i!=end()); i++,ptn++) {;}
-  if (i!=end())
-    { insert(i,a); }
-  else
-    { push_back(a); }
-}
-
-inline
-size_t G4DataVector::index(const G4double& a) 
-{ 
-  size_t ptn = 0;
-  for (iterator i=begin(); i!=end(); i++,ptn++)
-    { if (!(*i!=a)) { return ptn; } }
-
-  return (ptn=~(size_t)0);
-}
-
-inline
-G4bool G4DataVector::contains(const G4double& a) const
+inline void G4DataVector::insertAt(std::size_t pos, const G4double& a)
 {
-  for (const_iterator i=begin(); i!=end(); i++)
-    { if (!(*i!=a)) { return true; } }
+  auto i = cbegin();
+  for(std::size_t ptn = 0; (ptn < pos) && (i != cend()); ++i, ++ptn)
+  {
+    ;
+  }
+  if(i != cend())
+  {
+    insert(i, a);
+  }
+  else
+  {
+    push_back(a);
+  }
+}
+
+inline std::size_t G4DataVector::index(const G4double& a)
+{
+  std::size_t ptn = 0;
+  for(auto i = cbegin(); i != cend(); ++i, ++ptn)
+  {
+    if(!(*i != a))
+    {
+      return ptn;
+    }
+  }
+
+  return (ptn = ~(std::size_t) 0);
+}
+
+inline G4bool G4DataVector::contains(const G4double& a) const
+{
+  for(auto i = cbegin(); i != cend(); ++i)
+  {
+    if(!(*i != a))
+    {
+      return true;
+    }
+  }
 
   return false;
 }
 
-inline 
-G4bool G4DataVector::remove(const G4double& a)
+inline G4bool G4DataVector::remove(const G4double& a)
 {
   G4bool found = false;
 
-  for (iterator i=begin(); i!=end(); i++)
+  for(auto i = cbegin(); i != cend(); ++i)
   {
-    if (!(*i!=a))
+    if(!(*i != a))
     {
       erase(i);
       found = true;
@@ -76,19 +88,18 @@ G4bool G4DataVector::remove(const G4double& a)
   return found;
 }
 
-inline 
-size_t G4DataVector::removeAll(const G4double& a)
+inline std::size_t G4DataVector::removeAll(const G4double& a)
 {
-  size_t ptn=0;
+  std::size_t ptn = 0;
 
-  for (iterator i=begin(); i!=end(); i++)
+  for(auto i = cbegin(); i != cend(); ++i)
   {
-    if (!(*i!=a))
+    if(!(*i != a))
     {
       erase(i);
-      ptn++;
-      i--;
-    } 
+      ++ptn;
+      --i;
+    }
   }
   return ptn;
 }

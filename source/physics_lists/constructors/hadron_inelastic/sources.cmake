@@ -144,7 +144,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4had_mod_man
         G4had_mod_util
         G4had_lept_nuclear
-        G4had_neu_hp
         G4had_preequ_exciton
         G4had_string_diff
         G4had_string_frag

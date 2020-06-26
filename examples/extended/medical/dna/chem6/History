@@ -1,0 +1,22 @@
+$Id $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example chem6 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+19-02-20: W. G. Shin chem6-V10-06-01
+- fixed memory issue
+
+10-02-20: W. G. Shin chem6-V10-06-00
+- created and adapted from chem4

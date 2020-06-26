@@ -23,33 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessTable
+//
+// Class description:
+//
+// This class is used for "book keeping" of all processes 
+// which are registered for all particles
 
-//
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	4th Aug 1998, H.Kurashige
-//
-// Class Description
-//  This class is used for "book keeping" of all processes 
-//  which are registered in all particles
-//
-//  History:
-//   Added G4ProcessTableMesseneger         16 Aug. 1998, H.Kurashige
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
-//
-// ------------------------------------------------------------
+// Author: H.Kurashige, 4 August 1998
+// --------------------------------------------------------------------
+#ifndef G4ProcessTable_hh
+#define G4ProcessTable_hh 1
 
-#ifndef G4ProcessTable_h
-#define G4ProcessTable_h 1
-
-#include "globals.hh"
-#include "G4ios.hh"
 #include <vector>
 
+#include "globals.hh"
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
 #include "G4ThreadLocalSingleton.hh"
@@ -59,132 +47,130 @@ class G4ProcessTableMessenger;
 
 class G4ProcessTable
 {
+  friend class G4ThreadLocalSingleton<G4ProcessTable>;
 
-friend class G4ThreadLocalSingleton<G4ProcessTable>;
+  public:
 
- public:
-  G4ProcessTable();
-  //  Constructors
+    using G4ProcTableVector = std::vector<G4ProcTblElement*>;
+    using G4ProcNameVector = std::vector<G4String>;
+
+    ~G4ProcessTable();
+      // Destructor
   
-  ~G4ProcessTable();
-  //  Destructor
-  
- private:
-  G4ProcessTable(const G4ProcessTable &right);
-  G4ProcessTable & operator=(const G4ProcessTable &right);
-  // Assignment operator
-  G4bool operator==(const G4ProcessTable &right) const;
-  G4bool operator!=(const G4ProcessTable &right) const;
-  // equal / unequal operator
-  
+    G4ProcessTable(const G4ProcessTable&) = delete;
+    G4ProcessTable& operator=(const G4ProcessTable&) = delete;
+    G4bool operator==(const G4ProcessTable &right) const = delete;
+    G4bool operator!=(const G4ProcessTable &right) const = delete;
+      // Copy constructor and operators not allowed  
  
- public: // with description
-  static G4ProcessTable* GetProcessTable();
-  // return the pointer to G4ProcessTable object
-  //   G4ProcessTable is a "singleton" and can get its pointer by this function
+    static G4ProcessTable* GetProcessTable();
+      // Return the pointer to the G4ProcessTable object
+      // As "singleton" one can get the instance pointer by this function
 
-  G4int  Length() const;
-  // return the number of processes in the table
+    inline G4int Length() const;
+      // Return the number of processes in the table
 
-  G4int  Insert(G4VProcess* aProcess, G4ProcessManager* aProcMgr);
-  G4int  Remove(G4VProcess* aProcess, G4ProcessManager* aProcMgr);  
-  // insert and remove methods
-  //  each process object is registered with information of process managers
-  //  that use it.
+    G4int Insert(G4VProcess* aProcess, G4ProcessManager* aProcMgr);
+    G4int Remove(G4VProcess* aProcess, G4ProcessManager* aProcMgr);  
+      // Each process object is registered with information of process
+      // managers that use it
 
-  G4VProcess* FindProcess(const G4String& processName, 
-			  const G4String& particleName) const;
-  G4VProcess* FindProcess(const G4String& processName, 
-			  const G4ParticleDefinition* particle) const;
-  G4VProcess* FindProcess(const G4String& processName, 
-			  const G4ProcessManager* processManager) const;
-  // return the process pointer   
+    G4VProcess* FindProcess(const G4String& processName, 
+                            const G4String& particleName) const;
+    inline G4VProcess* FindProcess(const G4String& processName, 
+                                   const G4ParticleDefinition* particle) const;
+    G4VProcess* FindProcess(const G4String& processName, 
+                            const G4ProcessManager* processManager) const;
+    G4VProcess* FindProcess(G4ProcessType processType, 
+                            const G4ParticleDefinition* particle) const;
+    G4VProcess* FindProcess(G4int processSubType, 
+                            const G4ParticleDefinition* particle) const;
+      // Return the process pointer
+
+    void RegisterProcess(G4VProcess*);
+    void DeRegisterProcess(G4VProcess*);
+      // Implementation of registration mechanism
   
-  G4ProcessVector* FindProcesses();
-  G4ProcessVector* FindProcesses( const G4ProcessManager* processManager );
-  G4ProcessVector* FindProcesses( const G4String& processName );
-  G4ProcessVector* FindProcesses( G4ProcessType   processType );
-  // return pointer of a process vector 
-  //  which includes processes specified
-  //  Note:: User is responsible to delete this process vector object  
+    inline G4ProcessVector* FindProcesses();
+    inline G4ProcessVector* FindProcesses( const G4ProcessManager* pManager );
+    inline G4ProcessVector* FindProcesses( const G4String& processName );
+    inline G4ProcessVector* FindProcesses( G4ProcessType processType );
+      // Return pointer of a process vector which includes processes specified
+      // Note: user is responsible to delete this process vector object  
 
-  void SetProcessActivation( const G4String& processName, 
-			     G4bool          fActive);
-  void SetProcessActivation( const G4String& processName, 
-		             const G4String& particleName, 
-			     G4bool          fActive );
-  void SetProcessActivation( const G4String& processName, 
-		             G4ParticleDefinition* particle, 
-			     G4bool          fActive );
-  void SetProcessActivation( const G4String& processName, 
-		             G4ProcessManager* processManager, 
-			     G4bool          fActive  );
-  void SetProcessActivation( G4ProcessType   processType, 
-			     G4bool          fActive  );
-  void SetProcessActivation( G4ProcessType   processType,
-		             const G4String& particleName, 
-			     G4bool          fActive  );
-  void SetProcessActivation( G4ProcessType   processType,
-		             G4ParticleDefinition* particle, 
-			     G4bool          fActive );
-  void SetProcessActivation( G4ProcessType   processType,
-		             G4ProcessManager* processManager, 
-			     G4bool          fActive  );
-  // These methods are provided to activate or inactivate processes
+    void SetProcessActivation( const G4String& processName, 
+                               G4bool          fActive );
+    void SetProcessActivation( const G4String& processName, 
+                               const G4String& particleName, 
+                               G4bool          fActive );
+    inline void SetProcessActivation( const G4String& processName, 
+                                      const G4ParticleDefinition* particle, 
+                                      G4bool          fActive );
+    void SetProcessActivation( const G4String& processName, 
+                               G4ProcessManager* processManager, 
+                               G4bool          fActive );
+    void SetProcessActivation( G4ProcessType   processType, 
+                               G4bool          fActive );
+    void SetProcessActivation( G4ProcessType   processType,
+                               const G4String& particleName, 
+                               G4bool          fActive );
+    inline void SetProcessActivation( G4ProcessType   processType,
+                                      const G4ParticleDefinition* particle, 
+                                      G4bool          fActive );
+    void SetProcessActivation( G4ProcessType   processType,
+                               G4ProcessManager* processManager, 
+                               G4bool          fActive );
+      // These methods are provided to activate or inactivate processes
 
- public:
-  typedef std::vector<G4ProcTblElement*>  G4ProcTableVector;
-  typedef std::vector<G4String> G4ProcNameVector;
+    inline G4ProcNameVector* GetNameList();
+      // Return pointer of the list of process name
 
- public: // with description
-  G4ProcNameVector*  GetNameList();
-  // return pointer of the list of process name
+    inline G4ProcTableVector* GetProcTableVector();
+      // Return pointer of the vector of G4ProcTblElement
 
-  G4ProcTableVector* GetProcTableVector();
-  // return pointer of the vector of G4ProcTblElement
-  
- private:
-  G4ProcTableVector* Find(  G4ProcTableVector* procTableVector,
-			    const G4String& processName );
-  G4ProcTableVector* Find(  G4ProcTableVector* procTableVector,
-			    G4ProcessType   processType );
-  // return pointer of a ProcTableVector 
-  //  which includes ProcTbleElement specified
-
-  G4ProcessVector*   ExtractProcesses( G4ProcTableVector* procTableVector);
-  // extract all process objects from the process table 
- 
- public: // with description
-  void DumpInfo(G4VProcess* process, G4ParticleDefinition* particle=0);
-  // dump out information of the process table
-  //  second argument is used to specify processes designated by a particle 
+    void DumpInfo(G4VProcess* process, 
+                  const G4ParticleDefinition* particle = nullptr);
+      // Dump out information of the process table. The second argument
+      // is used to specify processes designated by a particle 
     
- public: // with description
-   void  SetVerboseLevel(G4int value);
-   G4int GetVerboseLevel() const;
-   // Set/Get controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
+    inline void  SetVerboseLevel(G4int value);
+    inline G4int GetVerboseLevel() const;
+      // Set/Get control flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
 
+  private:
 
- private:
-  static G4ThreadLocal G4ProcessTable*    fProcessTable;
-  G4ProcessTableMessenger*   fProcTblMessenger;
-
- private:
-  G4ProcTableVector*        fProcTblVector;
-  G4ProcNameVector*         fProcNameVector;
-  // list of G4ProcTblElement
+    G4ProcessTable();
+      // Private default constructor
   
-  G4ProcTableVector*        tmpTblVector;
-  // used only internaly for temporary buffer.
+    G4ProcTableVector* Find(const G4String& processName );
+    G4ProcTableVector* Find(G4ProcessType   processType );
+      // Return pointer of a ProcTableVector which includes
+      // ProcTbleElement specified
 
- private:
-   G4int verboseLevel;
-   // controle flag for output message
+    G4ProcessVector* ExtractProcesses(G4ProcTableVector*) const;
+      // Extract all process objects from the process table 
+ 
+  private:
 
+    static G4ThreadLocal G4ProcessTable* fProcessTable;
+    G4ProcessTableMessenger* fProcTblMessenger = nullptr;
+
+    G4ProcTableVector* fProcTblVector = nullptr;
+    G4ProcNameVector* fProcNameVector = nullptr;
+  
+    G4ProcTableVector* tmpTblVector = nullptr;
+      // Used only internally as temporary buffer
+
+    std::vector<G4VProcess*> fListProcesses;
+      // Used for registration of process instances
+
+    G4int verboseLevel = 1;
+      // Control flag for output message
 };
 
 #include "G4ProcessTable.icc"
+
 #endif

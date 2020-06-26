@@ -1,0 +1,76 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//---------------------------------------------------------------------------
+// ClassName: G4HyperonQGSPBuilder
+// Author: Alberto Ribon
+// Date: May 2020
+// Description: builder class for hyperons and anti-hyperons using QGSP
+//              string model; recommended use above >~ 12 GeV .
+// Modified:
+//---------------------------------------------------------------------------
+
+#ifndef G4HyperonQGSPBuilder_h
+#define G4HyperonQGSPBuilder_h 1
+
+#include "G4VHyperonBuilder.hh"
+#include "globals.hh"
+
+class G4TheoFSGenerator;
+class G4VCrossSectionDataSet;
+
+
+class G4HyperonQGSPBuilder : public G4VHyperonBuilder {
+  public: 
+  G4HyperonQGSPBuilder( G4bool quasiElastic = false );
+    virtual ~G4HyperonQGSPBuilder();
+
+    virtual void Build( G4HadronElasticProcess* ) final override {}
+    virtual void Build( G4LambdaInelasticProcess*         aP ) final override;
+    virtual void Build( G4AntiLambdaInelasticProcess*     aP ) final override;
+    virtual void Build( G4SigmaMinusInelasticProcess*     aP ) final override;
+    virtual void Build( G4AntiSigmaMinusInelasticProcess* aP ) final override;
+    virtual void Build( G4SigmaPlusInelasticProcess*      aP ) final override;
+    virtual void Build( G4AntiSigmaPlusInelasticProcess*  aP ) final override;
+    virtual void Build( G4XiMinusInelasticProcess*        aP ) final override;
+    virtual void Build( G4AntiXiMinusInelasticProcess*    aP ) final override;
+    virtual void Build( G4XiZeroInelasticProcess*         aP ) final override;
+    virtual void Build( G4AntiXiZeroInelasticProcess*     aP ) final override;
+    virtual void Build( G4OmegaMinusInelasticProcess*     aP ) final override;
+    virtual void Build( G4AntiOmegaMinusInelasticProcess* aP ) final override;
+
+    virtual void SetMinEnergy( G4double val ) final override { theMin = val; }
+    virtual void SetMaxEnergy( G4double val ) final override { theMax = val; }
+
+    using G4VHyperonBuilder::Build;  // Prevent compiler warning
+
+  private: 
+    G4TheoFSGenerator* theHyperonQGSP;
+    G4VCrossSectionDataSet* theInelasticCrossSection;
+    G4double theMin;
+    G4double theMax;
+};
+
+#endif

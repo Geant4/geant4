@@ -23,18 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
-// G4UserTrackingAction.cc
+// G4UserTrackingAction class implementation
 //
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-// ---------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4UserTrackingAction.hh"
 #include "G4ParticleTable.hh"
@@ -43,30 +38,29 @@
 /////////////////////////////////////////////////////////
 G4UserTrackingAction::G4UserTrackingAction()
 /////////////////////////////////////////////////////////
-  : fpTrackingManager(0)
 {
   if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
   {
-   G4String msg;
-   msg =  " You are instantiating G4UserTrackingAction BEFORE your\n";
-   msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
-   msg += " Such an instantiation is prohibited since Geant4 version 8.0. To fix this problem,\n";
-   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
-   msg += "set it to G4RunManager before instantiating other user action classes\n";
-   msg += "such as G4UserTrackingAction.";
-   G4Exception("G4UserTrackingAction::G4UserTrackingAction()",
-               "Tracking0001", FatalException, msg);
+    G4String msg;
+    msg =  " You are instantiating G4UserTrackingAction BEFORE your\n";
+    msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
+    msg += " Such an instantiation is prohibited. To fix this problem,\n";
+    msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+    msg += "set it to G4RunManager before instantiating other user action classes\n";
+    msg += "such as G4UserTrackingAction.";
+    G4Exception("G4UserTrackingAction::G4UserTrackingAction()",
+                "Tracking0001", FatalException, msg);
   }
 }
 
 /////////////////////////////////////////////////////////
 G4UserTrackingAction::~G4UserTrackingAction()
 /////////////////////////////////////////////////////////
-{;}
+{
+}
 
 /////////////////////////////////////////////////////////
-void G4UserTrackingAction::
-     SetTrackingManagerPointer(G4TrackingManager* pValue)
+void G4UserTrackingAction::SetTrackingManagerPointer(G4TrackingManager* pValue)
 /////////////////////////////////////////////////////////
 {
   fpTrackingManager = pValue;

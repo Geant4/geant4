@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-//
-// G4ThreeVector class, typedef to CLHEP Hep3Vector
-//
-// ----------------------------------------------------------------------
+// G4ThreeVector, a typedef to CLHEP Hep3Vector
 
+// Author: G.Cosmo (CERN), 1997
+// --------------------------------------------------------------------
 #ifndef G4THREEVECTOR_HH
-#define G4THREEVECTOR_HH
+#define G4THREEVECTOR_HH 1
 
 #include "globals.hh"
 #include <CLHEP/Vector/ThreeVector.h>
 
-typedef CLHEP::Hep3Vector G4ThreeVector;
+using G4ThreeVector = CLHEP::Hep3Vector;
 
 #endif

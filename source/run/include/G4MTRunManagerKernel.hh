@@ -54,46 +54,49 @@
 #ifndef G4MTRunManagerKernel_h
 #define G4MTRunManagerKernel_h 1
 
+#include "G4MTRunManager.hh"
 #include "G4RunManagerKernel.hh"
 #include "G4Threading.hh"
-#include "G4MTRunManager.hh"
 
 class G4WorkerThread;
 class G4WorkerRunManager;
 #include <vector>
 
-class G4MTRunManagerKernel : public G4RunManagerKernel {
-public:
-    G4MTRunManagerKernel();
-    virtual ~G4MTRunManagerKernel();
-protected:
-    void SetupShadowProcess() const;
+class G4MTRunManagerKernel : public G4RunManagerKernel
+{
+ public:
+  G4MTRunManagerKernel();
+  virtual ~G4MTRunManagerKernel();
 
-public: // with descroption
-    // This static method is used to start a worker thread.
-    // Virtual methods to be invoked from this methos are
-    // defined in G4UserWorkerInitialization class.
-    static void StartThread(G4WorkerThread* context);
+ protected:
+  void SetupShadowProcess() const;
 
-//private:
-//    static void ReinitializeGeometry();
-private:
-    static G4ThreadLocal G4WorkerThread* wThreadContext;
-public:
-    static G4WorkerThread* GetWorkerThread();
+ public:  // with descroption
+  // This static method is used to start a worker thread.
+  // Virtual methods to be invoked from this methos are
+  // defined in G4UserWorkerInitialization class.
+  static void StartThread(G4WorkerThread* context);
 
-public: // with descroption
-    // Fill decay tables with particle definition pointers of
-    // decay products. This method has to be invoked by 
-    // MTRunManager before event loop starts on workers.
-    void SetUpDecayChannels();
+  // private:
+  //    static void ReinitializeGeometry();
+ private:
+  static G4ThreadLocal G4WorkerThread* wThreadContext;
 
-private:
-    static std::vector<G4WorkerRunManager*>* workerRMvector;
+ public:
+  static G4WorkerThread* GetWorkerThread();
 
-public:
-    // This method should be invoked by G4MTRunManager
-    void BroadcastAbortRun(G4bool softAbort);
+ public:  // with descroption
+  // Fill decay tables with particle definition pointers of
+  // decay products. This method has to be invoked by
+  // MTRunManager before event loop starts on workers.
+  void SetUpDecayChannels();
+
+ private:
+  static std::vector<G4WorkerRunManager*>* workerRMvector;
+
+ public:
+  // This method should be invoked by G4MTRunManager
+  void BroadcastAbortRun(G4bool softAbort);
 };
 
-#endif //G4MTRunManagerKernel_h
+#endif  // G4MTRunManagerKernel_h

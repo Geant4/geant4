@@ -26,9 +26,9 @@
 // class description:
 //
 // This class is exclusively used by G4StackManager and G4TrackStack
-// classes for storing a G4Track object.
-//
-// Author: Makoto Asai (SLAC) - 02/Feb/96
+// classes for storing a G4Track object
+
+// Author: Makoto Asai - 02/Feb/96
 // --------------------------------------------------------------------
 #ifndef G4StackedTrack_hh
 #define G4StackedTrack_hh 1
@@ -45,14 +45,13 @@ class G4StackedTrack
       : track(aTrack), trajectory(aTraj) {}
    ~G4StackedTrack() {}
 
-    G4Track* GetTrack() const { return track; }
-    G4VTrajectory* GetTrajectory() const { return trajectory; }
+    inline G4Track* GetTrack() const { return track; }
+    inline G4VTrajectory* GetTrajectory() const { return trajectory; }
 
   private:
 
-    G4Track* track;
-    G4VTrajectory* trajectory;
+    G4Track* track = nullptr;
+    G4VTrajectory* trajectory = nullptr;
 };
 
 #endif
-

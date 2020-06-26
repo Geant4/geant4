@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 21, 2020, A. Zaborowska (param-V10-06-01)
+- Sanity check for root logical volumes for regions in G4GlobalFastSimulationManager.
+  UI command /param/showSetup works also if no parallel world is present.
+
+March 26, 2020, I. Semeniouk (param-V10-06-00)
+- G4FastSimulationHelper : merge ActivateFastSimulation calls for mass and parallel geometries cases
+- G4FastSimulationManager.hh, G4VFastSimulationModel.hh : remove
+  redefinition of G4Envelope type
+
 October 30, 2019, A. Zaborowska (param-v10-05-00)
 - Register G4FastSimulationManagerProcess with highest ordering in
   G4FastSimulationManagerHelper to ensure it is the only process

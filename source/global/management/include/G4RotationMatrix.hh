@@ -23,23 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-//
-// G4RotationMatrix class, typedef to CLHEP HepRotation
-//
-// ----------------------------------------------------------------------
+// G4RotationMatrix, a typedef to CLHEP HepRotation
 
+// Author: G.Cosmo (CERN), 1997
+// --------------------------------------------------------------------
 #ifndef G4ROTATIONMATRIX_HH
-#define G4ROTATIONMATRIX_HH
+#define G4ROTATIONMATRIX_HH 1
 
-#include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "globals.hh"
 #include <CLHEP/Vector/Rotation.h>
 
-typedef CLHEP::HepRotation G4RotationMatrix;
-typedef CLHEP::HepRep3x3 G4Rep3x3;
+using G4RotationMatrix = CLHEP::HepRotation;
+using G4Rep3x3         = CLHEP::HepRep3x3;
 
 #endif

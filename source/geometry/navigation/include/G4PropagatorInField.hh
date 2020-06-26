@@ -92,6 +92,7 @@ class G4PropagatorInField
           G4int SetVerboseLevel( G4int verbose );
    inline G4int GetVerboseLevel() const;
    inline G4int Verbose() const;
+   inline void CheckMode(G4bool mode);
 
    inline void   SetVerboseTrace( G4bool enable );
    inline G4bool GetVerboseTrace();
@@ -293,6 +294,7 @@ class G4PropagatorInField
 
    G4int fVerboseLevel = 0;
    G4bool fVerbTracePiF = false;
+   G4bool fCheck = false;
      // For debugging purposes
 
    G4bool fFirstStepInVolume = true; 

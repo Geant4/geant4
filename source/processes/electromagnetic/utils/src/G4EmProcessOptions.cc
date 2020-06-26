@@ -164,9 +164,8 @@ void G4EmProcessOptions::SetMscMuHadLateralDisplacement(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetDisplacementBeyondSafety(G4bool val)
+void G4EmProcessOptions::SetDisplacementBeyondSafety(G4bool)
 {
-  theParameters->SetLatDisplacementBeyondSafety(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

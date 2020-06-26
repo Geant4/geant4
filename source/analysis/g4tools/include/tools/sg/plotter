@@ -103,6 +103,8 @@ public:
   sf<bool> z_axis_is_log;
 
   sf<float> value_top_margin;
+  sf<float> value_bottom_margin;
+  sf<bool> value_bins_with_entries;
 
   sf<float> infos_width; //in percent of width.
   sf<float> infos_x_margin; //in percent of width. From right.
@@ -178,7 +180,7 @@ public:
 public:
   virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::plotter)
-    static const desc_fields s_v(parent::node_desc_fields(),61, //WARNING : take care of count.
+    static const desc_fields s_v(parent::node_desc_fields(),63, //WARNING : take care of count.
 
       TOOLS_ARG_FIELD_DESC(width),
       TOOLS_ARG_FIELD_DESC(height),
@@ -231,13 +233,15 @@ public:
       TOOLS_ARG_FIELD_DESC(z_axis_is_log),
 
       TOOLS_ARG_FIELD_DESC(value_top_margin),
+      TOOLS_ARG_FIELD_DESC(value_bottom_margin),
+      TOOLS_ARG_FIELD_DESC(value_bins_with_entries),
 
       TOOLS_ARG_FIELD_DESC(infos_width),
       TOOLS_ARG_FIELD_DESC(infos_x_margin),
-      TOOLS_ARG_FIELD_DESC(infos_y_margin),
+      TOOLS_ARG_FIELD_DESC(infos_y_margin), //40
       TOOLS_ARG_FIELD_DESC(infos_what),
 
-      TOOLS_ARG_FIELD_DESC(func2D_borders_visible), //40
+      TOOLS_ARG_FIELD_DESC(func2D_borders_visible),
       TOOLS_ARG_FIELD_DESC(theta),
       TOOLS_ARG_FIELD_DESC(phi),
       TOOLS_ARG_FIELD_DESC(tau),
@@ -251,11 +255,11 @@ public:
       
       TOOLS_ARG_FIELD_DESC(legends_origin_unit),
       TOOLS_ARG_FIELD_DESC(legends_size),
-      TOOLS_ARG_FIELD_DESC(legends_string),
+      TOOLS_ARG_FIELD_DESC(legends_string), //50
 
       TOOLS_ARG_FIELD_DESC(shape_automated),
 
-      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(shape,2) //50
+      TOOLS_ARG_FIELD_DESC_ENUMS_BEG(shape,2)
         "xy",xy,
         "xyz",xyz
       TOOLS_ARG_FIELD_DESC_ENUMS_END,
@@ -271,10 +275,10 @@ public:
       TOOLS_ARG_FIELD_DESC(primitives_enforced),
       TOOLS_ARG_FIELD_DESC(inner_frame_enforced),
       
-      TOOLS_ARG_FIELD_DESC(title_box_width),
+      TOOLS_ARG_FIELD_DESC(title_box_width), //60
       TOOLS_ARG_FIELD_DESC(title_box_height),
       TOOLS_ARG_FIELD_DESC(title_box_x_margin),
-      TOOLS_ARG_FIELD_DESC(title_box_y_margin)
+      TOOLS_ARG_FIELD_DESC(title_box_y_margin)   //63
       
     );
     return s_v;
@@ -359,6 +363,8 @@ private:
     add_field(&z_axis_is_log);
 
     add_field(&value_top_margin);
+    add_field(&value_bottom_margin);
+    add_field(&value_bins_with_entries);
 
     add_field(&infos_width);
     add_field(&infos_x_margin);
@@ -403,6 +409,8 @@ public: //style
     xy_depth = a_from.xy_depth;
     curve_number_of_points = a_from.curve_number_of_points;
     value_top_margin = a_from.value_top_margin;
+    value_bottom_margin = a_from.value_bottom_margin;
+    value_bins_with_entries = a_from.value_bins_with_entries;
     infos_what = a_from.infos_what;
     infos_width = a_from.infos_width;
     //infos height is automatic.
@@ -491,9 +499,10 @@ public: //style
     xy_depth = 0.01f;
     curve_number_of_points = 100;
     ////////////////////////////////////////////
-    // CERN-PAW seems to have 0.1F and CERN-ROOT 0.05F.
-    value_top_margin = 0.1f; //percent.
-
+    value_top_margin = 0.1f; //percent.  // CERN-PAW seems to have 0.1F and CERN-ROOT 0.05F.
+    value_bottom_margin = 0.0f; //percent.
+    value_bins_with_entries = true; //gopaw uses false.
+     
     infos_what = s_infos_what_def();
     infos_width = 0.3f;
     //infos height is automatic.
@@ -871,6 +880,14 @@ public: //style
         float v;
         if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
         value_top_margin = v;
+      } else if(key=="value_bottom_margin") {
+        float v;
+        if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
+        value_bottom_margin = v;
+      } else if(key=="value_bins_with_entries") {
+        float v;
+        if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
+        value_bins_with_entries = v;
       } else if(key=="infos_width") {
         float v;
         if(!to<float>(sv,v)) {style_failed(a_out,key,sv);return false;}
@@ -1243,8 +1260,9 @@ public:
   ,z_axis_max(1)
   ,z_axis_is_log(false)
 
-  // CERN-PAW seems to have 0.1F and CERN-ROOT 0.05F.
-  ,value_top_margin(0.1f) //percent.
+  ,value_top_margin(0.1f) //percent. // CERN-PAW seems to have 0.1F and CERN-ROOT 0.05F.
+  ,value_bottom_margin(0.0f) //percent.
+  ,value_bins_with_entries(true)
 
   ,infos_width(0.3f) //percent of width
   ,infos_x_margin(default_infos_margin()) //percent of width
@@ -1346,6 +1364,8 @@ public:
   ,z_axis_max(a_from.z_axis_max)
   ,z_axis_is_log(a_from.z_axis_is_log)
   ,value_top_margin(a_from.value_top_margin)
+  ,value_bottom_margin(a_from.value_bottom_margin)
+  ,value_bins_with_entries(a_from.value_bins_with_entries)
 
   ,infos_width(a_from.infos_width)
   ,infos_x_margin(a_from.infos_x_margin)
@@ -1465,6 +1485,8 @@ public:
     z_axis_max = a_from.z_axis_max;
     z_axis_is_log = a_from.z_axis_is_log;
     value_top_margin = a_from.value_top_margin;
+    value_bottom_margin = a_from.value_bottom_margin;
+    value_bins_with_entries = a_from.value_bins_with_entries;
 
     infos_width = a_from.infos_width;
     infos_x_margin = a_from.infos_x_margin;
@@ -1947,7 +1969,7 @@ public: //public
 
   bool axis_2_data_frame(const vec3f& a_pos,vec3f& aDF) const {
     // a_pos is in axes coordinates.
-    // aDF in data area coodinate. In [0,1][0,1][0,1].
+    // aDF in data area coordinate. In [0,1][0,1][0,1].
   
     // Assume that axes min,max,logScale are up to date.
   
@@ -2029,7 +2051,7 @@ public: //public
   bool axis_2_vp(const vec3f& a_pos,vec3f& a_vp) const {
     // a_pos is in axes coordinates.
     // a_vp is in viewport/screen coordinates (in [0,1]).
-    vec3f d; // In data area coodinate. In [0,1][0,1][0,1].
+    vec3f d; // In data area coordinate. In [0,1][0,1][0,1].
     if(!axis_2_data_frame(a_pos,d)) return false;
     return data_frame_2_vp(d,a_vp);
   }
@@ -2037,7 +2059,7 @@ public: //public
   bool vp_2_axis(const vec3f& a_vp,vec3f& a_pos) const {
     // a_vp is in viewport/screen coordinates (in [0,1]).
     // a_pos is in axes coordinates.
-    vec3f d; // In data area coodinate. In [0,1][0,1][0,1].
+    vec3f d; // In data area coordinate. In [0,1][0,1][0,1].
     if(!vp_2_data_frame(a_vp,d)) return false;  
     return data_frame_2_axis(d,a_pos);
   }
@@ -2911,32 +2933,95 @@ public:
     update_primitives(a_out);
   }
 
+  void get_value_axis_min_max(float a_Sw_mn,float a_Sw_mx,bool a_is_log,float& a_min,float& a_max,bool a_min_visible) {
+    if(a_Sw_mn>a_Sw_mx) {
+      a_min = 0;
+      a_max = 0;
+      return;
+    }
+    // a_Sw_mx >= a_Sw_mn.
+    if(a_is_log && (a_Sw_mn<=0) ) { //let data_axis.adjust() do something.
+      a_min = a_Sw_mn;
+      a_max = a_Sw_mx;
+      return;    
+    }
+    float mn;
+    if(a_is_log) {
+      if(value_bottom_margin.value()!=0) {
+        float log_Sw_mn = flog10(a_Sw_mn);
+        float log_Sw_mx = flog10(a_Sw_mx);
+        float log_mn = log_Sw_mn - (log_Sw_mx-log_Sw_mn)*value_bottom_margin;
+        mn = fpow(10,log_mn);
+      } else {
+        mn = a_Sw_mn;
+        if(a_min_visible) { // arrang so that the bin with a_Sw_mn be visible.
+          float log_Sw_mn = flog10(a_Sw_mn);
+          mn = fpow(10,log_Sw_mn)*(1.0f-0.4f);
+        }
+      }      
+    } else {
+      if(value_bottom_margin.value()!=0) {
+        mn = a_Sw_mn - (a_Sw_mx-a_Sw_mn)*value_bottom_margin;
+      } else {
+        if(a_min_visible) {
+	  // Arrange so that the bin with a_Sw_mn (if not 0) be visible. (If 0, it will be anyway on the x axis) :
+          if(a_Sw_mn>0) {
+	    mn = 0; //PAW logic.
+	  } else if(a_Sw_mn==0) {
+	    mn = 0; //PAW logic. min bin will be anyway on x axis.
+	  } else {
+	    mn = a_Sw_mn; // min bin will be anyway on x axis.
+	  }
+	} else {
+          mn = a_Sw_mn; //min bin will be on x axis.
+	}
+      }
+    } 
+    a_min = mn;
+
+    float mx;
+    if(a_is_log) {
+      if(value_top_margin.value()!=0) {
+        float log_Sw_mn = flog10(a_Sw_mn);
+        float log_Sw_mx = flog10(a_Sw_mx);
+        float log_mx = log_Sw_mx + (log_Sw_mx-log_Sw_mn)*value_top_margin;
+        mx = fpow(10,log_mx);
+      } else {
+        mx = a_Sw_mx; //max bin will be on top of frame (then not visible if same color).
+      }      
+    } else {
+      mx = a_Sw_mx + (a_Sw_mx-mn)*value_top_margin;
+    //mx = a_Sw_mx + (a_Sw_mx-a_Sw_mn)*value_top_margin; //not compatible with gopaw.
+    }
+    a_max = mx;
+  }    
+
   void update_axes_data(std::ostream& a_out){
-    m_x_axis_data.min_value(0);
-    m_x_axis_data.max_value(0);
-    m_x_axis_data.is_log(x_axis_is_log);
+    m_x_axis_data.set_min_value(0);
+    m_x_axis_data.set_max_value(0);
+    m_x_axis_data.set_is_log(x_axis_is_log);
   
-    m_y_axis_data.min_value(0);
-    m_y_axis_data.max_value(0);
-    m_y_axis_data.is_log(y_axis_is_log);
+    m_y_axis_data.set_min_value(0);
+    m_y_axis_data.set_max_value(0);
+    m_y_axis_data.set_is_log(y_axis_is_log);
   
-    m_z_axis_data.min_value(0);
-    m_z_axis_data.max_value(0);
-    m_z_axis_data.is_log(z_axis_is_log);
+    m_z_axis_data.set_min_value(0);
+    m_z_axis_data.set_max_value(0);
+    m_z_axis_data.set_is_log(z_axis_is_log);
   
     if(!x_axis_automated) { //def = true
-      m_x_axis_data.min_value(x_axis_min);
-      m_x_axis_data.max_value(x_axis_max);
+      m_x_axis_data.set_min_value(x_axis_min);
+      m_x_axis_data.set_max_value(x_axis_max);
     }
   
     if(!y_axis_automated) {
-      m_y_axis_data.min_value(y_axis_min);
-      m_y_axis_data.max_value(y_axis_max);
+      m_y_axis_data.set_min_value(y_axis_min);
+      m_y_axis_data.set_max_value(y_axis_max);
     }
   
     if(!z_axis_automated) {
-      m_z_axis_data.min_value(z_axis_min);
-      m_z_axis_data.max_value(z_axis_max);
+      m_z_axis_data.set_min_value(z_axis_min);
+      m_z_axis_data.set_max_value(z_axis_max);
     }
   
     bins1D* b1;
@@ -2953,39 +3038,46 @@ public:
       if(b1) {
   
         if(x_axis_automated) {
-          m_x_axis_data.min_value(b1->axis_min());
-          m_x_axis_data.max_value(b1->axis_max());
+          m_x_axis_data.set_min_value(b1->axis_min());
+          m_x_axis_data.set_max_value(b1->axis_max());
         }
         
         if(y_axis_automated) {
+        //::printf("debug : value %g %g %d : is log %d\n",
+        //    value_bottom_margin.value(),value_top_margin.value(),value_bins_with_entries.value(),
+        //    m_y_axis_data.is_log());
+          float Sw_mn,Sw_mx;
+          b1->bins_Sw_range(Sw_mn,Sw_mx,value_bins_with_entries.value());
+        //::printf("debug : Sw %g %g\n",Sw_mn,Sw_mx);
           float mn,mx;
-          b1->bins_Sw_range(mn,mx);
-          //m_y_axis_data.min_value(mn);
-          if(mn>=0) mn = 0; //PAW convention.
-          m_y_axis_data.min_value(mn);
-          mx = mx + (mx-mn)*value_top_margin;
-          m_y_axis_data.max_value(mx);
+          get_value_axis_min_max(Sw_mn,Sw_mx,m_y_axis_data.is_log(),mn,mx,true);
+        //::printf("debug : mn mx %g %g\n",mn,mx);
+          m_y_axis_data.set_min_value(mn);
+          m_y_axis_data.set_max_value(mx);
   
           m_y_axis_data.adjust();
+        //::printf("debug : adjusted : mn mx %g %g\n",mn,mx);
         }
         
       } if(b2) {
         if(x_axis_automated) {
-          m_x_axis_data.min_value(b2->x_axis_min());
-          m_x_axis_data.max_value(b2->x_axis_max());
+          m_x_axis_data.set_min_value(b2->x_axis_min());
+          m_x_axis_data.set_max_value(b2->x_axis_max());
         }
   
         if(y_axis_automated) {
-          m_y_axis_data.min_value(b2->y_axis_min());
-          m_y_axis_data.max_value(b2->y_axis_max());
+          m_y_axis_data.set_min_value(b2->y_axis_min());
+          m_y_axis_data.set_max_value(b2->y_axis_max());
         }
   
         if(z_axis_automated) {
+          float Sw_mn,Sw_mx;
+          b2->bins_Sw_range(Sw_mn,Sw_mx,value_bins_with_entries.value());
           float mn,mx;
-          b2->bins_Sw_range(mn,mx);
-          m_z_axis_data.min_value(mn);
-          mx = mx + (mx-mn)*value_top_margin;
-          m_z_axis_data.max_value(mx);
+          get_value_axis_min_max(Sw_mn,Sw_mx,m_z_axis_data.is_log(),mn,mx,false);
+          m_z_axis_data.set_min_value(mn);
+          m_z_axis_data.set_max_value(mx);
+
           m_z_axis_data.adjust();
         }
       } /*else if(f_binsList[0]->getDimension()==3) {
@@ -2997,33 +3089,33 @@ public:
     } else if(first_points(p2,p3)) { 
       if(p2) {
         if(x_axis_automated) {
-          m_x_axis_data.min_value(p2->x_axis_min());
-          m_x_axis_data.max_value(p2->x_axis_max());
+          m_x_axis_data.set_min_value(p2->x_axis_min());
+          m_x_axis_data.set_max_value(p2->x_axis_max());
         }      
         if(y_axis_automated) {
           float ymn = p2->y_axis_min();
           float ymx = p2->y_axis_max();
           // For pawex22 ?
-          //m_y_axis_data.min_value(ymn*1.1F);
-          //m_y_axis_data.max_value(ymx*1.1F);
-          m_y_axis_data.min_value(ymn);
-          m_y_axis_data.max_value(ymx);
+          //m_y_axis_data.set_min_value(ymn*1.1F);
+          //m_y_axis_data.set_max_value(ymx*1.1F);
+          m_y_axis_data.set_min_value(ymn);
+          m_y_axis_data.set_max_value(ymx);
         }
       } else if(p3) {
 
         if(x_axis_automated) {
-          m_x_axis_data.min_value(p3->x_axis_min());
-          m_x_axis_data.max_value(p3->x_axis_max());
+          m_x_axis_data.set_min_value(p3->x_axis_min());
+          m_x_axis_data.set_max_value(p3->x_axis_max());
         }      
         
         if(y_axis_automated) {
-          m_y_axis_data.min_value(p3->y_axis_min());
-          m_y_axis_data.max_value(p3->y_axis_max());
+          m_y_axis_data.set_min_value(p3->y_axis_min());
+          m_y_axis_data.set_max_value(p3->y_axis_max());
         }
         
         if(z_axis_automated) {
-          m_z_axis_data.min_value(p3->z_axis_min());
-          m_z_axis_data.max_value(p3->z_axis_max());
+          m_z_axis_data.set_min_value(p3->z_axis_min());
+          m_z_axis_data.set_max_value(p3->z_axis_max());
         }
       }
 
@@ -3038,8 +3130,8 @@ public:
             xmn = -1;
             xmx = 1;
           }
-          m_x_axis_data.min_value(xmn);
-          m_x_axis_data.max_value(xmx);
+          m_x_axis_data.set_min_value(xmn);
+          m_x_axis_data.set_max_value(xmx);
         }
         
         if(y_axis_automated) {
@@ -3070,8 +3162,8 @@ public:
                   << " problem when getting some function value."
                   << std::endl;
           }
-          m_y_axis_data.min_value(vmin);
-          m_y_axis_data.max_value(vmax);
+          m_y_axis_data.set_min_value(vmin);
+          m_y_axis_data.set_max_value(vmax);
           m_y_axis_data.adjust();
         }
         
@@ -3083,8 +3175,8 @@ public:
             xmn = -1;
             xmx = 1;
           }
-          m_x_axis_data.min_value(xmn);
-          m_x_axis_data.max_value(xmx);
+          m_x_axis_data.set_min_value(xmn);
+          m_x_axis_data.set_max_value(xmx);
         }
   
         if(y_axis_automated) {
@@ -3094,8 +3186,8 @@ public:
             ymn = -1;
             ymx = 1;
           }
-          m_y_axis_data.min_value(ymn);
-          m_y_axis_data.max_value(ymx);
+          m_y_axis_data.set_min_value(ymn);
+          m_y_axis_data.set_max_value(ymx);
         }
         
         if(z_axis_automated) {
@@ -3141,8 +3233,8 @@ public:
                   << " problem when getting some function value."
                   << std::endl;
           }
-          m_z_axis_data.min_value(vmin);
-          m_z_axis_data.max_value(vmax);
+          m_z_axis_data.set_min_value(vmin);
+          m_z_axis_data.set_max_value(vmax);
           m_z_axis_data.adjust();
         }
       }  
@@ -3555,20 +3647,31 @@ protected: //vis bins
     //::sprintf(sid,"tools::sg::bins1D/0x%lx",
     //  (unsigned long)const_cast<bins1D*>(&a_bins));
   
+  //bool hbe = a_bins.has_entries_per_bin();
+
+    float bmin = 0;
+    float bmax = 0;
+    
     size_t xnbin = a_bins.bins();
     std::vector<rep_bin1D> bins(xnbin);
+   {bool first = true;
     for(size_t ibin=0;ibin<xnbin;ibin++) { 
+    //if(hbe && (a_bins.bin_entries(size_t(ibin))<=0)) continue;
+      float val = a_bins.bin_Sw(int(ibin));
       float xx = float(a_bins.bin_lower_edge(int(ibin)));
       float xe = float(a_bins.bin_upper_edge(int(ibin)));
-      float vmin,vmax;
-      //if(aSuperpose) {
-        //uuugetHeight(aIndex1D,a_bins1DList,a_bins1DListSwMnMx,ibin,vmin,vmax);
-      //} else {
-        vmin = 0;
-        vmax = a_bins.bin_Sw(int(ibin));
-      //}
-      bins[ibin] = rep_bin1D(xx,xe,vmin,vmax);
-    }
+      bins[ibin] = rep_bin1D(xx,xe,0,val);
+      if(first) {
+        first = false;
+        bmin = val;
+        bmax = val;
+      } else {
+        bmin = mn<float>(bmin,val);
+        bmax = mx<float>(bmax,val);
+      }
+    }}
+
+    //a_bins.bins_Sw_range(bmin,bmax,false);
 
     //modeling_profile could override errors_visible.
     bool errors_visible = a_errors_style.visible;
@@ -3581,9 +3684,6 @@ protected: //vis bins
       } else if( (painting==painting_grey_scale) ||
                  (painting==painting_grey_scale_inverse) ||
                  (painting==painting_violet_to_red) ){
-        float bmin;
-        float bmax;
-        a_bins.bins_Sw_range(bmin,bmax);
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
           for(size_t index=0;index<xnbin;index++) bins[index].m_ratio = (a_bins.bin_Sw(int(index))-bmin)/dbins;
@@ -3819,10 +3919,6 @@ protected: //vis bins
     unsigned int xnbin = a_bins.x_bins();
     unsigned int ynbin = a_bins.y_bins();
 
-    float bmin;
-    float bmax;
-    a_bins.bins_Sw_range(bmin,bmax);
-
     const std::string& modeling = a_data_style.modeling;
 
     if( (modeling==modeling_curve()) || (modeling==modeling_filled_curve()) ){
@@ -3944,21 +4040,37 @@ protected: //vis bins
 
       bool hbe = a_bins.has_entries_per_bin();
 
+      float bmin = 0;
+      float bmax = 0;
+
       std::vector<rep_bin2D> bins;
-     {for(int jbin=ynbin-1;jbin>=0;jbin--) {
+     {bool first = true;
+      for(int jbin=ynbin-1;jbin>=0;jbin--) {
         for(int ibin=xnbin-1;ibin>=0;ibin--) { 
           if(hbe && (a_bins.bin_entries(ibin,jbin)<=0)) continue;
     
           float val = a_bins.bin_Sw(ibin,jbin);
+	  
           float xx = a_bins.bin_lower_edge_x(ibin);
           float xe = a_bins.bin_upper_edge_x(ibin);
           float yy = a_bins.bin_lower_edge_y(jbin);
           float ye = a_bins.bin_upper_edge_y(jbin);
               
           bins.push_back(rep_bin2D(xx,xe,yy,ye,val,ibin,jbin));
+
+          if(first) {
+            first = false;
+            bmin = val;
+            bmax = val;
+          } else {
+            bmin = mn<float>(bmin,val);
+            bmax = mx<float>(bmax,val);
+          }
         }
       }}
       size_t number = bins.size();
+
+      //a_bins.bins_Sw_range(bmin,bmax,false);
 
       painting_policy painting = a_data_style.painting;
       if(painting==painting_by_value) {
@@ -4497,8 +4609,12 @@ protected: //vis bins
 
       bool hbe = a_bins.has_entries_per_bin();
 
+      float bmin = 0;
+      float bmax = 0;
+
       std::vector<rep_bin2D> bins;
-     {for(int jbin=ynbin-1;jbin>=0;jbin--) {
+     {bool first = true;
+      for(int jbin=ynbin-1;jbin>=0;jbin--) {
         for(int ibin=xnbin-1;ibin>=0;ibin--) { 
           if(hbe && (a_bins.bin_entries(ibin,jbin)<=0)) continue;
     
@@ -4510,13 +4626,20 @@ protected: //vis bins
           float ye = a_bins.bin_upper_edge_y(jbin);
               
           bins.push_back(rep_bin2D(xx,xe,yy,ye,val,ibin,jbin));
+
+          if(first) {
+            first = false;
+            bmin = val;
+            bmax = val;
+          } else {
+            bmin = mn<float>(bmin,val);
+            bmax = mx<float>(bmax,val);
+          }
         }
       }}
       size_t number = bins.size();
-
-      float bmin;
-      float bmax;
-      a_bins.bins_Sw_range(bmin,bmax);
+      
+      //a_bins.bins_Sw_range(bmin,bmax,false);
 
       painting_policy painting = a_style.painting;
       if(painting==painting_by_value) {
@@ -4545,7 +4668,11 @@ protected: //vis bins
 
     } else if(modeling==modeling_curve()){ //gopaw
 
+      float bmin = 0;
+      float bmax = 0;
+    
       std::vector<rep_top_face2D> faces((xnbin-1)*(ynbin-1));
+     {bool first = true;
       size_t facei = 0;
       unsigned int xnbin_1 = xnbin-1;
       unsigned int ynbin_1 = ynbin-1;
@@ -4572,10 +4699,22 @@ protected: //vis bins
           float val3 = a_bins.bin_Sw(ibin+1,jbin+1);
           float val4 = a_bins.bin_Sw(ibin,jbin+1);
                 
-          faces[facei] = rep_top_face2D(xx,xe,yy,ye,val1,val2,val3,val4); 
+          faces[facei] = rep_top_face2D(xx,xe,yy,ye,val1,val2,val3,val4);
+	  
+          if(first) {
+            first = false;
+            bmin = val1;
+            bmax = val1;
+          } else {
+            bmin = mn<float>(bmin,val1);
+            bmax = mx<float>(bmax,val1);
+          }
+	  
           facei++;
         }
-      }
+      }}
+      
+      //a_bins.bins_Sw_range(bmin,bmax,false);
 
       painting_policy painting = a_style.painting;
       if((painting==painting_by_value)||(painting==painting_by_level)) {
@@ -4585,9 +4724,6 @@ protected: //vis bins
       }
   
       if(painting==painting_by_level) { //gopaw
-        float bmin;
-        float bmax;
-        a_bins.bins_Sw_range(bmin,bmax);
         rep_top_face2D_xyz_by_level(a_style,painting,*(m_bins_cmaps[a_index]),
                                     faces,a_box_x,a_box_y,a_box_z,
                                     bmin,bmax/*,SbString(sid.c_str())*/);
@@ -8885,14 +9021,14 @@ protected: //etc
 
   float _zoffset() const {
     // first data plane is at _zoffset.
-    // last one at m_plottables.size()*_zoffset = xy_depth-_zoffset().
-    return xy_depth.value()/(m_plottables.size()+1);
+    // last one at m_plottables.size()*_zoffset = xy_depth.value()-_zoffset().
+    return xy_depth.value()/(float(m_plottables.size())+1.0f);
   }
   float _zaxis() const {return _zoffset();}
-  float _zgrid() const {return xy_depth-_zoffset()*0.5f;}
+  float _zgrid() const {return xy_depth.value()-_zoffset()*0.5f;}
   float _ztext() const {return 0.01f;} //if text back is visible else 0. (sf<float> zfront ?)
   float _zscale_text() const {return _zoffset()*0.4f/_ztext();} //title and infos boxes thickness.
-  float _zinfos() const {return xy_depth-_zoffset()*0.4f;} //in front _zgrid
+  float _zinfos() const {return xy_depth.value()-_zoffset()*0.4f;} //in front _zgrid
   float _zhatch() const {return _zoffset()*0.25f;}
   float _zerrors() const {return _zoffset()*0.5f;}
 
@@ -8906,28 +9042,28 @@ protected: //etc
     }
   }
 
-  static float verify_log(float aVal,float aMin,float aDx,bool aLog){
-    if(aLog) {
-      if(aVal>0.0F) {
-        return (flog10(aVal) - aMin)/aDx;
+  static float verify_log(float a_val,float a_min,float a_dx,bool a_log){
+    if(a_log) {
+      if(a_val>0.0F) {
+        return (flog10(a_val) - a_min)/a_dx;
       } else { // Return a negative large number :
         //return -FLT_MAX; 
         return -100;
       }
     } else {
       // Simple protection against value that could exceed a float :
-      if(aVal>(aMin+100.0F * aDx)) return 100; 
-      if(aVal<aMin-100.0F * aDx) return -100;
+      if(a_val>(a_min+100.0F * a_dx)) return 100; 
+      if(a_val<(a_min-100.0F * a_dx)) return -100;
       // Rescale :
-      return (aVal - aMin)/aDx;
+      return (a_val - a_min)/a_dx;
     }
   }
 
-  static float verify_log_inv(float aVal,float aMin,float aDx,bool aLog){
-   if(aLog) {
-      return fpow(10,aVal*aDx+aMin);
+  static float verify_log_inv(float a_val,float a_min,float a_dx,bool a_log){
+   if(a_log) {
+      return fpow(10,a_val*a_dx+a_min);
     } else {
-      return aVal*aDx+aMin;
+      return a_val*a_dx+a_min;
     }
   }
 

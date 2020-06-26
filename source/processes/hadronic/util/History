@@ -14,8 +14,29 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-06 August 2019 Alberto Ribon    (hadr-util-V10-05-02)
+13 May 2020 Vladimir Ivanchenko (hadr-util-V10-06-03)
 --------------------------------------------------------
+- G4HadronicParameters : added Get/Set methods to enable b-, c- particles
+
+12 May 2020 Alberto Ribon (hadr-util-V10-06-02)
+-----------------------------------------------
+- G4HadronicParametersMessenger : created new messenger class for
+  G4HadronicParameters. For the time being it has only the global
+  verbosity level for hadronics.
+- G4HadronicParameters : added Set methods; creates the new messenger.
+
+21 January 2020 Vladimir Ivanchenko (hadr-util-V10-06-01)
+--------------------------------------------------------
+- G4HadronicParameters : added Set methods for Cascade-FTF transition
+    due to CMS request
+
+16 January 2020 Alberto Ribon (hadr-util-V10-06-00)
+---------------------------------------------------
+- G4HadFinalState : fixed warning (seen on Windows) regarding the conversion
+  from 'size_t' to 'G4int'. 
+
+06 August 2019 Alberto Ribon (hadr-util-V10-05-02)
+--------------------------------------------------
 - G4HadronicParameters : extended to the recommended (default) energy
   transition regions between FTF and cascade models (BERT and/or BIC)
   and between strings models (QGS and FTF).

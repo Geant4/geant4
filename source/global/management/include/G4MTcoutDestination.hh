@@ -23,92 +23,86 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MTcoutDestination
 //
-//
-// 
-// ---------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4MTcoutDestination.hh
-//
-// ---------------------------------------------------------------
-#ifndef G4MTcoutDestination_H
-#define G4MTcoutDestination_H
+// Handling of cout/cerr in multi-threaded mode
 
+// Authors: M.Asai, A.Dotti (SLAC) - 23 May 2013
+// ---------------------------------------------------------------
+#ifndef G4MTcoutDestination_hh
+#define G4MTcoutDestination_hh
+
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 
-#include "globals.hh"
 #include "G4MulticoutDestination.hh"
 #include "G4StateManager.hh"
+#include "globals.hh"
 
 class G4LockcoutDestination;
 
 class G4MTcoutDestination : public G4MulticoutDestination
 {
-  public:
+ public:
+  explicit G4MTcoutDestination(const G4int& threadId);
+  virtual ~G4MTcoutDestination();
 
-    explicit G4MTcoutDestination(const G4int& threadId); 
-    virtual ~G4MTcoutDestination(); 
+  virtual void Reset();
 
-    virtual void Reset(); 
+  void SetDefaultOutput(G4bool addMasterDestination = true,
+                        G4bool formatAlsoMaster     = true);
 
-    void SetDefaultOutput( G4bool addMasterDestination = true ,
-                           G4bool formatAlsoMaster = true ); 
+  void SetCoutFileName(const G4String& fileN = "G4cout.txt",
+                       G4bool ifAppend       = true);
+  void AddCoutFileName(const G4String& fileN = "G4cout.txt",
+                       G4bool ifAppend       = true);
+  void SetCerrFileName(const G4String& fileN = "G4cerr.txt",
+                       G4bool ifAppend       = true);
+  void AddCerrFileName(const G4String& fileN = "G4cerr.txt",
+                       G4bool ifAppend       = true);
 
-    void SetCoutFileName(const G4String& fileN = "G4cout.txt",
-                               G4bool ifAppend = true); 
-    void AddCoutFileName(const G4String& fileN = "G4cout.txt",
-                               G4bool ifAppend = true);
-    void SetCerrFileName(const G4String& fileN = "G4cerr.txt",
-                               G4bool ifAppend = true); 
-    void AddCerrFileName(const G4String& fileN = "G4cerr.txt",
-                               G4bool ifAppend = true);
+  void EnableBuffering(G4bool flag = true);
 
-    void EnableBuffering(G4bool flag=true); 
+  inline void SetPrefixString(const G4String& wd = "G4WT") { prefix = wd; }
 
-    inline void SetPrefixString(const G4String& wd = "G4WT") { prefix = wd; } 
+  void SetIgnoreCout(G4int tid = 0);
+  inline void SetIgnoreInit(G4bool val = true) { ignoreInit = val; }
 
-    void SetIgnoreCout(G4int tid = 0);
-    inline void SetIgnoreInit(G4bool val=true) { ignoreInit = val; }
+  inline G4String GetPrefixString() const { return prefix; }
+  inline G4String GetFullPrefixString() const
+  {
+    std::stringstream os;
+    os << prefix << id;
+    return os.str();
+  }
 
-    inline G4String GetPrefixString() const { return prefix; } 
-    inline G4String GetFullPrefixString() const
-    { 
-        std::stringstream os;
-        os<<prefix<<id;
-        return os.str();
-    }
+ protected:
+  void AddMasterOutput(G4bool formatAlsoMaster);
+  void HandleFileCout(G4String fileN, G4bool appendFlag,
+                      G4bool suppressDefault);
+  void HandleFileCerr(G4String fileN, G4bool appendFlag,
+                      G4bool suppressDefault);
 
-  protected:
+ private:
+  void DumpBuffer();
 
-    void AddMasterOutput( G4bool formatAlsoMaster); 
-    void HandleFileCout( G4String fileN, G4bool appendFlag,
-                         G4bool suppressDefault);
-    void HandleFileCerr( G4String fileN, G4bool appendFlag,
-                         G4bool suppressDefault);
-  private:
+ private:
+  // Reference to the default destination
+  G4coutDestination* ref_defaultOut = nullptr;
 
-    void DumpBuffer(); 
-  
-  private:
+  // Reference to the master destination
+  G4coutDestination* ref_masterOut = nullptr;
+  G4bool masterDestinationFlag     = true;
+  G4bool masterDestinationFmtFlag  = true;
 
-    // Reference to the default destination
-    G4coutDestination* ref_defaultOut; 
+  const G4int id;
+  G4bool useBuffer  = false;
+  G4bool ignoreCout = false;
+  G4bool ignoreInit = true;
 
-    // Reference to the master destination
-    G4coutDestination* ref_masterOut; 
-    G4bool masterDestinationFlag;  
-    G4bool masterDestinationFmtFlag; 
-
-    const G4int id; 
-    G4bool useBuffer; 
-    G4bool ignoreCout; 
-    G4bool ignoreInit; 
-
-    G4String prefix;
-    G4StateManager* stateMgr; 
+  G4String prefix          = "G4WT";
+  G4StateManager* stateMgr = nullptr;
 };
 
 #endif

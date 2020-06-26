@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -17,20 +17,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -43,12 +43,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -316,7 +322,7 @@ hPairProd:  for pi-  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Vacuum
@@ -342,32 +348,32 @@ Index : 2     used in the geometry : Yes
 Index : 3     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  10 GeV    e-  1.19608 GeV    e+  1.13347 GeV proton 200 keV
+ Energy thresholds :  gamma  10 GeV    e-  1.18852 GeV    e+  1.1417 GeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Carbon Fibre
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  3.23215 MeV    e-  777.993 MeV    e+  737.272 MeV proton 200 keV
+ Energy thresholds :  gamma  3.31962 MeV    e-  774.181 MeV    e+  743.686 MeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : Titanium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  10 GeV    e-  6.00061 GeV    e+  5.68653 GeV proton 200 keV
+ Energy thresholds :  gamma  10 GeV    e-  6.0108 GeV    e+  5.6972 GeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 2 mm 
- Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 200 keV
+ Energy thresholds :  gamma  10 GeV    e-  1.01203 GeV    e+  972.168 MeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -379,7 +385,7 @@ Opening output file xraytel ...  done
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.010000s Real=0.013941s Sys=0.000000s
+  User=0.030000s Real=0.027498s Sys=0.000000s
 ##########################################
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.

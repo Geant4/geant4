@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4AdjointStackingAction class implementation
 //
-/////////////////////////////////////////////////////////////////////////////
-//      Class Name:	G4AdjointCrossSurfChecker
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////
+// Author: L. Desorgher, SpaceIT GmbH - April 2008
+// Contract: ESA contract 21435/08/NL/AT
+// Customer: ESA/ESTEC
+// --------------------------------------------------------------------
 
 #include "G4AdjointStackingAction.hh"
 #include "G4AdjointTrackingAction.hh"
@@ -39,53 +37,80 @@
 #include "G4ios.hh"
 #include "G4StackManager.hh"
 
-
-G4AdjointStackingAction::G4AdjointStackingAction(G4AdjointTrackingAction* anAction)
-  : reclassification_stage (false)
+G4AdjointStackingAction::
+G4AdjointStackingAction(G4AdjointTrackingAction* anAction)
 {
-  theFwdStackingAction =0;
-  theUserAdjointStackingAction =0;
   theAdjointTrackingAction = anAction;
 }
-////////////////////////////////////////////////////////////////////////////////
+
+// --------------------------------------------------------------------
 //
 G4AdjointStackingAction::~G4AdjointStackingAction()
 {;}
-////////////////////////////////////////////////////////////////////////////////
+
+// --------------------------------------------------------------------
 //
-G4ClassificationOfNewTrack  G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
+G4ClassificationOfNewTrack
+G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
-   G4ClassificationOfNewTrack classification = fUrgent;
-   G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
-   adjoint_mode = partType.contains(G4String("adjoint"));
-   if (!adjoint_mode ){
-	   if (!reclassification_stage) classification = fWaiting;
-	   else { //need to check if forwrad tracking can be continued use of
-		   if (theAdjointTrackingAction->GetNbOfAdointTracksReachingTheExternalSurface()>0) {
-			   if (theFwdStackingAction)   classification =  theFwdStackingAction->ClassifyNewTrack(aTrack);
-		   }
-		   else classification = fKill;
-	   }
-   }
-   else if (theUserAdjointStackingAction)   classification =  theUserAdjointStackingAction->ClassifyNewTrack(aTrack);
-   return classification;
-}
-////////////////////////////////////////////////////////////////////////////////
-//
-void G4AdjointStackingAction::NewStage()
-{ reclassification_stage =true;
-  if (first_reclassification_stage){
-	  if (theUserAdjointStackingAction)   theUserAdjointStackingAction->NewStage();
-	  stackManager->ReClassify();
+  G4ClassificationOfNewTrack classification = fUrgent;
+  G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
+  adjoint_mode = partType.contains(G4String("adjoint"));
+  if (!adjoint_mode )
+  {
+    if (!reclassification_stage)
+    {
+      classification = fWaiting;
+    }
+    else  // need to check if forwrad tracking can be continued use of
+    {
+      if (theAdjointTrackingAction->GetNbOfAdointTracksReachingTheExternalSurface()>0)
+      {
+        if (theFwdStackingAction)
+        {
+          classification =  theFwdStackingAction->ClassifyNewTrack(aTrack);
+        }
+      }
+      else
+      {
+        classification = fKill;
+      }
+    }
   }
-  else if (theFwdStackingAction) theFwdStackingAction->NewStage();
-  first_reclassification_stage =false;
-}
-////////////////////////////////////////////////////////////////////////////////
-//    
-void G4AdjointStackingAction::PrepareNewEvent()
-{ reclassification_stage =false;
-  first_reclassification_stage =true;
-  if (theUserAdjointStackingAction)   theUserAdjointStackingAction->PrepareNewEvent();
+  else if (theUserAdjointStackingAction)
+  {
+    classification = theUserAdjointStackingAction->ClassifyNewTrack(aTrack);
+  }
+  return classification;
 }
 
+// --------------------------------------------------------------------
+//
+void G4AdjointStackingAction::NewStage()
+{
+  reclassification_stage = true;
+  if (first_reclassification_stage)
+  {
+    if (theUserAdjointStackingAction)
+    {
+      theUserAdjointStackingAction->NewStage();
+    }
+    stackManager->ReClassify();
+  }
+  else if (theFwdStackingAction) theFwdStackingAction->NewStage();
+  {
+    first_reclassification_stage = false;
+  }
+}
+
+// --------------------------------------------------------------------
+//    
+void G4AdjointStackingAction::PrepareNewEvent()
+{
+  reclassification_stage = false;
+  first_reclassification_stage = true;
+  if (theUserAdjointStackingAction)
+  {
+    theUserAdjointStackingAction->PrepareNewEvent();
+  }
+}

@@ -23,28 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file
+// G4PionRadiativeDecayChannel
 //
-//      History:
-//               30 July 2007 P.Gumplinger
-//               Samples Radiative Pion Decay
-//               Reference: 
-//                    TRIUMF/PIENU Technote: 
-//                    "Inclusion of pi->enug in the Monte Carlo" 
-//                    by M. Blecher
+// Class decription:
 //
-// ------------------------------------------------------------
-//
-//
-//
-//
+// This class describes radiative pion decay kinematics.
+// Rate is for gammas > 100keV.
+// NOTE: it gives incorrect energy spectrum for neutrino
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef G4PionRadiativeDecayChannel_h
-#define G4PionRadiativeDecayChannel_h 1
+// Author: P.Gumplinger, 30 July 2007 
+// Reference: M. Blecher, TRIUMF/PIENU Technote
+//            "Inclusion of pi->enug in the Monte Carlo" 
+// --------------------------------------------------------------------
+#ifndef G4PionRadiativeDecayChannel_hh
+#define G4PionRadiativeDecayChannel_hh 1
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -53,30 +45,21 @@
 
 class G4PionRadiativeDecayChannel : public G4VDecayChannel
 {
-  // Class Decription
-  // This class describes radiative pion decay kinemtics, but
-  // gives incorrect energy spectrum for neutrino
+  public:
 
-  public:  // With Description
-
-    //Constructors 
     G4PionRadiativeDecayChannel(const G4String& theParentName,
                                 G4double        theBR);
-    //  Destructor
     virtual ~G4PionRadiativeDecayChannel();
 
-  protected:
-    // Copy constructor and assignment operator
-    G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel &);
-    G4PionRadiativeDecayChannel & operator=(const G4PionRadiativeDecayChannel &);
+    virtual G4DecayProducts* DecayIt(G4double);
 
   protected:
-      G4PionRadiativeDecayChannel();
 
-  public:  // With Description
+    G4PionRadiativeDecayChannel();
 
-    virtual G4DecayProducts *DecayIt(G4double);
-
+    G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel&);
+    G4PionRadiativeDecayChannel& operator=(const G4PionRadiativeDecayChannel&);
+      // Copy constructor and assignment operator
 };
 
 #endif

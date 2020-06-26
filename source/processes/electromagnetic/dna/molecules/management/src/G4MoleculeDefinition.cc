@@ -280,42 +280,6 @@ G4MoleculeDefinition::GetDecayChannels(const G4MolecularConfiguration* conf)
 }
 
 //___________________________________________________________________________
-// Protected
-//___________________________________________________________________________
-
-G4MoleculeDefinition::G4MoleculeDefinition(const G4MoleculeDefinition& right) :
-    G4ParticleDefinition((const G4ParticleDefinition &) right),
-    fDiffusionCoefficient(right.fDiffusionCoefficient),
-    fAtomsNb(right.fAtomsNb),
-    fVanDerVaalsRadius(right.fVanDerVaalsRadius)
-{
-  if (right.fElectronOccupancy != 0)
-  {
-    fElectronOccupancy = new G4ElectronOccupancy(*(right.fElectronOccupancy));
-  }
-  else fElectronOccupancy = 0;
-
-  if (right.fDecayTable != 0)
-  {
-    fDecayTable = new G4MolecularDissociationTable(*(right.fDecayTable));
-  }
-  else fDecayTable = 0;
-
-  fCharge = right.fCharge;
-}
-
-//___________________________________________________________________________
-
-const G4MoleculeDefinition&
-G4MoleculeDefinition::operator=(const G4MoleculeDefinition &right)
-{
-  if (this != &right)
-  {
-  }
-  return *this;
-}
-
-//___________________________________________________________________________
 
 void G4MoleculeDefinition::Finalize()
 {

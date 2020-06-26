@@ -44,6 +44,7 @@
 #include "G4ElementTable.hh"
 #include "G4ParticleHPData.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4Pow.hh"
 
 G4ParticleHPElasticData::G4ParticleHPElasticData()
@@ -123,9 +124,13 @@ void G4ParticleHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 //080428
    if ( G4ParticleHPManager::GetInstance()->GetNeglectDoppler() ) 
    {
-      G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
-      G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of elastic scattering of neutrons (<20MeV)." << G4endl;
       onFlightDB = false;
+      #ifdef G4VERBOSE
+      if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+	G4cout << "Find a flag of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+	G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of elastic scattering of neutrons (<20MeV)." << G4endl;
+      }
+      #endif
    }
 
    if ( G4Threading::IsWorkerThread() ) {
@@ -159,6 +164,9 @@ void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
+  #ifdef G4VERBOSE  
+  if ( G4HadronicParameters::Instance()->GetVerboseLevel() == 0 ) return;
+  
 //
 // Dump element based cross section
 // range 10e-5 eV to 20 MeV
@@ -200,8 +208,8 @@ void G4ParticleHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
       G4cout << G4endl;
    }
 
-
-//  G4cout << "G4ParticleHPElasticData::DumpPhysicsTable still to be implemented"<<G4endl;
+   //G4cout << "G4ParticleHPElasticData::DumpPhysicsTable still to be implemented"<<G4endl;
+   #endif
 }
 
 #include "G4Nucleus.hh"

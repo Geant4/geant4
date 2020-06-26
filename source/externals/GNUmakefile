@@ -16,6 +16,10 @@ include $(G4INSTALL)/config/architecture.gmk
 SUBDIRS :=
 SUBLIBS :=
 
+ifdef G4LIB_USE_PTL
+  SUBDIRS += ptl
+  SUBLIBS += G4ptl
+endif
 ifdef G4LIB_USE_CLHEP
   SUBDIRS += clhep
   SUBLIBS += G4clhep

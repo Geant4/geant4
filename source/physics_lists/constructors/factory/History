@@ -12,6 +12,8 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30-Apr-2020 Ben Morgan                  (phys-ctor-fact-V10-06-00)
+- Remove obsolete GRANULAR_DEPENDENCIES entries
 
 16-Mar-2018, Robert Hatcher             (phys-ctor-fact-V10-04-02)
 - Allows override of exclusion of G4RegisterPhysicsConstructors.icc
@@ -77,5 +79,5 @@ introduced in the code and keeptrack of all tags.
 - move G4PhysListFactory from constructor/factory to lists.
 
 10-Jan-2012, Gunter Folger              (phys-ctor-fact-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/factory classes

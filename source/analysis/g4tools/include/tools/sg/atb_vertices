@@ -130,6 +130,7 @@ public:
         it += 4;
       }}
 #endif //__APPLE__
+      clean_gstos();
       reset_touched();
     }
     if(xyzs.empty()) return;

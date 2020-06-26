@@ -16,8 +16,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16 Jan 2020 Gabriele Cosmo (interfaces-V10-05-08)
+19 June 2020  John Allison  (interfaces-V10-06-05)
+- Fix Qt 5.15 deprecation warnings.
+
+31 May 2020 Ben Morgan (interfaces-V10-06-04)
+- Use add_definitions to set PRIVATE-level compile definitions
+  for compatibility between old/new CMake system
+- Use CMake AUTOMOC to automatically generate and compile Moc
+  sources
+
+16 Apr 2020 Ben Morgan (interfaces-V10-06-03)
+- Remove Qt4 support
+
+ 6 Apr 2020 Igor Semeniouk (interfaces-V10-06-02)
+-- G4UIQt.cc:
+ o replace setcolor with rich text html tags.
+
+16 Jan 2020 Gabriele Cosmo (interfaces-V10-06-01)
 - Fixed obsolete URLs in UIQt splash screen.
+
+11 Dec 2019 Ben Morgan (interfaces-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
 
 30 Nov 2019 Igor Semeniouk (interfaces-V10-05-07)
 -- G4UIQt.cc:

@@ -51,28 +51,23 @@ G4QGSBinaryPiKBuilder(G4bool quasiElastic)
   theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
   theModel = new G4TheoFSGenerator("QGSB");
 
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  G4ExcitedStringDecay* theStringDecay = 
+    new G4ExcitedStringDecay(new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4BinaryCascade;
-
+  theModel->SetTransport(new G4BinaryCascade());
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
-  theModel->SetTransport(theCascade);
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
 }
 
 G4QGSBinaryPiKBuilder::
 ~G4QGSBinaryPiKBuilder() 
 {
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theStringDecay;
-  delete theStringModel;
 }
 
 void G4QGSBinaryPiKBuilder::

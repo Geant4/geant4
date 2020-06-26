@@ -1,0 +1,36 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the log-message one should put at every
+committal in the code repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+23 June 2020 - J.Madsen (ptl-V10-06-03)
+- Tweaked VTaskGroup to use a vector instead of list
+- Declared the default ctor/dtor/assign-op for
+  JoinFunction class in TaskGroup
+
+22 June 2020 - B.Morgan (ptl-V10-06-02)
+- Force use of -pthread on non-Win32 platforms
+
+18 June 2020 - G.Cosmo (ptl-V10-06-01)
+- Adapted files organisation to Geant4 and fixed porting on Windows DLLs.
+- Changed library name to "G4ptl", to distinguish from external installation.
+- Integrated with GNUmake system.
+
+8 May 2020 - J.Madsen (ptl-V10-06-00)
+- New module for built-in Parallel Tasking Library (PTL), a Lightweight
+  C++11 multithreading tasking system featuring thread-pool, task-groups,
+  and lock-free task queue.
+  Original version 0.0.2.

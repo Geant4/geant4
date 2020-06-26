@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4ConvergenceTester
 //
 // Class description:
 //
@@ -37,141 +37,183 @@
 // CHAPTER 2. GEOMETRY, DATA, PHYSICS, AND MATHEMATICS
 //        VI. ESTIMATION OF THE MONTE CARLO PRECISION
 //
-// Positives numbers are assumed for input values
+// Positive numbers are assumed for input values
 
 // Author: Tatsumi Koi (SLAC/SCCS)
-// 
 // --------------------------------------------------------------------
-
-#ifndef G4ConvergenceTester
-#define G4ConvergenceTester_h 1
+#ifndef G4ConvergenceTester_hh
+#define G4ConvergenceTester_hh 1
 
 #include "G4SimplexDownhill.hh"
-
 #include "G4Timer.hh"
 #include "globals.hh"
 
 #include <map>
 #include <vector>
 
-class G4ConvergenceTester 
+class G4ConvergenceTester
 {
-   public:
+ public:
+  G4ConvergenceTester(G4String theName = "NONAME");
+  ~G4ConvergenceTester();
+  G4ConvergenceTester(G4double);
 
-      G4ConvergenceTester( G4String theName="NONAME" );
-     ~G4ConvergenceTester();
-      G4ConvergenceTester( G4double );
+  void AddScore(G4double);
 
-   public:
+  inline G4ConvergenceTester& operator+=(G4double val)
+  {
+    this->AddScore(val);
+    return *this;
+  }
 
-      void AddScore( G4double );
+  // default to G4cout but can redirected to another ostream
+  void ShowHistory(std::ostream& out = G4cout);
+  void ShowResult(std::ostream& out = G4cout);
 
-      G4ConvergenceTester& operator+=(G4double val)
-      { this->AddScore(val); return *this; }
+  inline G4double GetValueOfMinimizingFunction(std::vector<G4double> x)
+  {
+    return slope_fitting_function(x);
+  }
 
-      // default to G4cout but can redirected to another ostream
-      void ShowHistory(std::ostream& out = G4cout);
-      void ShowResult(std::ostream& out = G4cout);
+ public:
+  void ComputeStatistics() { calStat(); }
+  // Public function to explicitly calculate statistics
 
-      inline G4double GetValueOfMinimizingFunction( std::vector<G4double> x )
-             { return slope_fitting_function( x ); }
+  // All accessors check to make sure value is current before returning
 
-   private:
+  inline G4double GetMean()
+  {
+    CheckIsUpdated();
+    return mean;
+  }
+  inline G4double GetStandardDeviation()
+  {
+    CheckIsUpdated();
+    return sd;
+  }
+  inline G4double GetVariance()
+  {
+    CheckIsUpdated();
+    return var;
+  }
+  inline G4double GetR()
+  {
+    CheckIsUpdated();
+    return r;
+  }
+  inline G4double GetEfficiency()
+  {
+    CheckIsUpdated();
+    return efficiency;
+  }
+  inline G4double GetR2eff()
+  {
+    CheckIsUpdated();
+    return r2eff;
+  }
+  inline G4double GetR2int()
+  {
+    CheckIsUpdated();
+    return r2int;
+  }
+  inline G4double GetShift()
+  {
+    CheckIsUpdated();
+    return shift;
+  }
+  inline G4double GetVOV()
+  {
+    CheckIsUpdated();
+    return vov;
+  }
+  inline G4double GetFOM()
+  {
+    CheckIsUpdated();
+    return fom;
+  }
 
-      void calStat();
-      // boolean value of “statsAreUpdated” is set to TRUE at end of calStat
-      // and set to FALSE at end of AddScore
-      // NOTE : A thread lock for Geant4-MT needs to be put in AddScore so calStat is not
-      // executed in one thread while AddScore is modifying/adding data
-      void CheckIsUpdated() { if(!statsAreUpdated) { calStat(); } }
-      
-   public:
-      // Public function to explicitly calculate statistics
-      void ComputeStatistics() { calStat(); }
-   
-      // All “Get” functions check to make sure value is current before returning
-      G4double GetMean() { CheckIsUpdated(); return mean; }
-      G4double GetStandardDeviation() { CheckIsUpdated(); return sd; }
-      G4double GetVariance() { CheckIsUpdated(); return var; }
-      G4double GetR() { CheckIsUpdated(); return r; }
-      G4double GetEfficiency() { CheckIsUpdated(); return efficiency; }
-      G4double GetR2eff() { CheckIsUpdated(); return r2eff; }
-      G4double GetR2int() { CheckIsUpdated(); return r2int; }
-      G4double GetShift() { CheckIsUpdated(); return shift; }
-      G4double GetVOV() { CheckIsUpdated(); return vov; }
-      G4double GetFOM() { CheckIsUpdated(); return fom; }
+ private:
+  void calStat();
+  // Boolean value of 'statsAreUpdated' is set to TRUE at end of calStat
+  // and set to FALSE at end of AddScore
+  // NOTE : A thread lock for Geant4-MT needs to be put in AddScore so calStat
+  // is not executed in one thread while AddScore is modifying/adding data
 
-   private:
-      void calc_grid_point_of_history();
-      void calc_stat_history();
-      void check_stat_history(std::ostream& out = G4cout);
-      G4double calc_Pearson_r( G4int, std::vector<G4double>,
-                               std::vector<G4double> );
-      G4bool is_monotonically_decrease( std::vector<G4double> ); 
-      void calc_slope_fit( std::vector< G4double > );
-      G4double slope_fitting_function( std::vector< G4double > );
+  inline void CheckIsUpdated()
+  {
+    if(!statsAreUpdated)
+    {
+      calStat();
+    }
+  }
 
-   private:
+  void calc_grid_point_of_history();
+  void calc_stat_history();
+  void check_stat_history(std::ostream& out = G4cout);
+  G4double calc_Pearson_r(G4int, std::vector<G4double>, std::vector<G4double>);
+  G4bool is_monotonically_decrease(std::vector<G4double>);
+  void calc_slope_fit(std::vector<G4double>);
+  G4double slope_fitting_function(std::vector<G4double>);
 
-      G4String name;
-      std::map< G4int , G4double > nonzero_histories;
-        // (ith-history , score value)
-      G4int n;
-        // number of history
-      G4double sum; // sum of scores;
+ private:
+  G4String name;
+  std::map<G4int, G4double> nonzero_histories;
+  // (ith-history , score value)
+  G4int n = 0;
+  // number of history
+  G4double sum = 0.0;  // sum of scores;
 
-      G4Timer* timer; 
-      std::vector<G4double> cpu_time; 
+  G4Timer* timer = nullptr;
+  std::vector<G4double> cpu_time;
 
-      G4double mean; 
-      G4double var; 
-      G4double sd; 
-      G4double r;          // relative err sd/mean/sqrt(n) 
-      G4double efficiency; // rate of non zero score 
-      G4double r2eff; 
-      G4double r2int; 
-      G4double shift; 
-      G4double vov; 
-      G4double fom; 
+  G4double mean       = 0.0;
+  G4double var        = 0.0;
+  G4double sd         = 0.0;
+  G4double r          = 0.0;  // relative err sd/mean/sqrt(n)
+  G4double efficiency = 0.0;  // rate of non zero score
+  G4double r2eff      = 0.0;
+  G4double r2int      = 0.0;
+  G4double shift      = 0.0;
+  G4double vov        = 0.0;
+  G4double fom        = 0.0;
 
-      G4double largest;
-      G4int largest_score_happened;
- 
-      G4double mean_1; 
-      G4double var_1; 
-      G4double sd_1; 
-      G4double r_1;        // relative err sd/mean/sqrt(n) 
-      G4double shift_1; 
-      G4double vov_1; 
-      G4double fom_1; 
+  G4double largest             = 0.0;
+  G4int largest_score_happened = 0;
 
-      G4int noBinOfHistory;
-      std::vector< G4int > history_grid;
-      std::vector< G4double > mean_history;
-      std::vector< G4double > var_history;
-      std::vector< G4double > sd_history;
-      std::vector< G4double > r_history;
-      std::vector< G4double > vov_history;
-      std::vector< G4double > fom_history;
-      std::vector< G4double > shift_history;
-      std::vector< G4double > e_history;
-      std::vector< G4double > r2eff_history;
-      std::vector< G4double > r2int_history;
+  G4double mean_1  = 0.0;
+  G4double var_1   = 0.0;
+  G4double sd_1    = 0.0;
+  G4double r_1     = 0.0;  // relative err sd/mean/sqrt(n)
+  G4double shift_1 = 0.0;
+  G4double vov_1   = 0.0;
+  G4double fom_1   = 0.0;
 
-      G4double slope; 
-      std::vector< G4double > largest_scores; 
-      std::vector< G4double > f_xi;
-      std::vector< G4double > f_yi;
-      G4int noBinOfPDF;
-      G4SimplexDownhill<G4ConvergenceTester>* minimizer;
+  G4int noBinOfHistory = 16;
+  std::vector<G4int> history_grid;
+  std::vector<G4double> mean_history;
+  std::vector<G4double> var_history;
+  std::vector<G4double> sd_history;
+  std::vector<G4double> r_history;
+  std::vector<G4double> vov_history;
+  std::vector<G4double> fom_history;
+  std::vector<G4double> shift_history;
+  std::vector<G4double> e_history;
+  std::vector<G4double> r2eff_history;
+  std::vector<G4double> r2int_history;
 
-      G4int noPass;
-      G4int noTotal; // Total number of tests
+  G4double slope = 0.0;
+  std::vector<G4double> largest_scores;
+  std::vector<G4double> f_xi;
+  std::vector<G4double> f_yi;
+  G4int noBinOfPDF                                  = 10;
+  G4SimplexDownhill<G4ConvergenceTester>* minimizer = nullptr;
 
-      G4bool statsAreUpdated;
+  G4int noPass  = 0;
+  G4int noTotal = 8;  // Total number of tests
 
-      G4bool showHistory;
-      G4bool calcSLOPE;
+  G4bool statsAreUpdated = true;
+  G4bool showHistory     = true;
+  G4bool calcSLOPE       = true;
 };
-#endif
 
+#endif

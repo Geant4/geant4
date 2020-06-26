@@ -79,6 +79,11 @@ inline bool dpow(const double& a_x,const double& a_y,double& a_v) {
   return true;
 }
 
+inline double dgaussian(const double& a_x,const double& a_mean,const double& a_sigma) {
+  double _tmp = (a_x-a_mean)/a_sigma;
+  return ::exp(-_tmp*_tmp/2.0)/(a_sigma*::sqrt(2*pi()));
+}
+
 }
 
 #endif

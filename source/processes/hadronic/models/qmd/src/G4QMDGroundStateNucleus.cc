@@ -69,6 +69,22 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
    csp = parameters->Get_csp();
    clp = parameters->Get_clp();
 
+   // Following 10 lines should be here, right before the line 90.
+   // Otherwise, mass number cannot be conserved if the projectile or
+   // the target are nucleons.
+   //Nucleon primary or target case;
+   if ( z == 1 && a == 1 ) {  // Hydrogen  Case or proton primary 
+      SetParticipant( new G4QMDParticipant( G4Proton::Proton() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      ebini = 0.0; 
+      return;
+   }
+   else if ( z == 0 && a == 1 ) { // Neutron primary 
+      SetParticipant( new G4QMDParticipant( G4Neutron::Neutron() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      ebini = 0.0; 
+      return;
+   }
+
+
    //edepth = 0.0; 
 
    for ( int i = 0 ; i < a ; i++ )
@@ -100,18 +116,6 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
 
    //maxTrial = 1000;
    
-   //Nucleon primary or target case;
-   if ( z == 1 && a == 1 ) {  // Hydrogen  Case or proton primary 
-      SetParticipant( new G4QMDParticipant( G4Proton::Proton() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
-      ebini = 0.0; 
-      return;
-   }
-   else if ( z == 0 && a == 1 ) { // Neutron primary 
-      SetParticipant( new G4QMDParticipant( G4Neutron::Neutron() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
-      ebini = 0.0; 
-      return;
-   }
-
    
    meanfield = new G4QMDMeanField();
    meanfield->SetSystem( this );

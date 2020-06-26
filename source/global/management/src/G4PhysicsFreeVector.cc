@@ -23,71 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsFreeVector class implementation
 //
-//
-// 
-//--------------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//  G4PhysicsFreeVector.cc
-//
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    06 June 1996, K.Amako : The 1st version of implemented
-//    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
-//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
-//
-//--------------------------------------------------------------------
+// Authors:
+// - 02 Dec. 1995, G.Cosmo: Structure created based on object model
+// - 06 Jun. 1996, K.Amako: Implemented the 1st version
+// Revisions:
+// - 11 Nov. 2000, H.Kurashige: Use STL vector for dataVector and binVector
+// --------------------------------------------------------------------
 
 #include "G4PhysicsFreeVector.hh"
 
-G4PhysicsFreeVector::G4PhysicsFreeVector() 
+// --------------------------------------------------------------------
+G4PhysicsFreeVector::G4PhysicsFreeVector()
   : G4PhysicsVector()
 {
   type = T_G4PhysicsFreeVector;
 }
 
-G4PhysicsFreeVector::G4PhysicsFreeVector(size_t length)
+// --------------------------------------------------------------------
+G4PhysicsFreeVector::G4PhysicsFreeVector(std::size_t length)
   : G4PhysicsVector()
 {
-  type = T_G4PhysicsFreeVector;
+  type          = T_G4PhysicsFreeVector;
   numberOfNodes = length;
 
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
 
-  for (size_t i=0; i<numberOfNodes; ++i)
+  for(std::size_t i = 0; i < numberOfNodes; ++i)
   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
+    binVector.push_back(0.0);
+    dataVector.push_back(0.0);
   }
-}  
+}
 
-G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector, 
+// --------------------------------------------------------------------
+G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
                                          const G4DataVector& theDataVector)
   : G4PhysicsVector()
 {
-  type = T_G4PhysicsFreeVector;
+  type          = T_G4PhysicsFreeVector;
   numberOfNodes = theBinVector.size();
 
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
 
-  for (size_t i=0; i<numberOfNodes; ++i)
+  for(std::size_t i = 0; i < numberOfNodes; ++i)
   {
     binVector.push_back(theBinVector[i]);
     dataVector.push_back(theDataVector[i]);
   }
-  if(numberOfNodes > 0) 
+  if(numberOfNodes > 0)
   {
     edgeMin = binVector[0];
-    edgeMax = binVector[numberOfNodes-1];
+    edgeMax = binVector[numberOfNodes - 1];
   }
-}  
+}
 
-G4PhysicsFreeVector::~G4PhysicsFreeVector()
-{}
-
+// --------------------------------------------------------------------
+G4PhysicsFreeVector::~G4PhysicsFreeVector() {}

@@ -16,10 +16,42 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 13, 2020 G.Cosmo                         - field-V10-05-18
+June 15, 2020 G.Cosmo                            - field-V10-06-05
+---------------------
+- Implemented move constructor and operator for G4FieldTrack.
+
+March 24, 2020 J.Apostolakis                     - field-V10-06-04
+----------------------------
+- New class G4DriverReporter to print progress of drivers.
+   Used for debugging differences between Old & fixed MagIntDriver
+- Revisions in testing CMake config file and stepper/driver test
+   for magnetic field.
+
+March 13, 2020 J.Apostolakis                     - field-V10-06-03
+----------------------------
+- G4VIntegrationDriver & dependent driver classes:
+    Added new virtual StreamInfo() method,
+       & used it to implement operator << for G4VIntegrationDriver
+    Made (virtual) DoesReIntegrate() const.
+- G4MagInt_Driver: Fixed max iterations & clarified that its
+     ComputeNewStepSize does NOT (yet) respect maximum reduction factor (0.1).
+  ( Done to enable comparisons with new G4IntegrationDriver<> implementation.)
+- G4OldMagIntDriver maintains all old behaviour of G4MagInt_Driver.
+
+
+January 22, 2020 G.Cosmo                         - field-V10-06-02
+------------------------
+- Fixed compilation errors and configuration for field07 unit test.
+
+January 13, 2020 G.Cosmo                         - field-V10-06-01
 ------------------------
 - Turn off verbosity flags by default in G4IntegratorDriver,
   G4InterpolationDriver and G4MagIntegratorDriver.
+
+December 10, 2019 B.Morgan                       - field-V10-06-00
+--------------------------
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
 
 November 14, 2019 J.Apostolakis                  - field-V10-05-17
 -------------------------------

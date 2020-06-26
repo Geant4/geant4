@@ -23,34 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsLnVector
 //
+// Description:
 //
-// 
-//--------------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//  G4PhysicsLnVector.hh
-//
-//  Class description:
-//
-//    A physics vector which has values of energy-loss, cross-section, 
-//    and other physics values of a particle in matter in a given 
-//    range of the energy, momentum, etc. The scale of energy/momentum
-//    bins is natural logarithmic.
-//
-//  History:
-//    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector 
-//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
-//    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
-//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
-//
-//--------------------------------------------------------------------
+// A physics vector which has values of energy-loss, cross-section,
+// and other physics values of a particle in matter in a given
+// range of energy, momentum, etc. The scale of energy/momentum
+// bins is natural logarithmic.
 
-#ifndef G4PhysicsLnVector_h
-#define G4PhysicsLnVector_h 1
+// Author:
+// - 27 April 1999, M.G. Pia: Created, copying from G4PhysicsLogVector
+// --------------------------------------------------------------------
+#ifndef G4PhysicsLnVector_hh
+#define G4PhysicsLnVector_hh 1
 
 #include "G4PhysicsLogVector.hh"
 
-typedef G4PhysicsLogVector G4PhysicsLnVector;
+using G4PhysicsLnVector = G4PhysicsLogVector;
 
 #endif

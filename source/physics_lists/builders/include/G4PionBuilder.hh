@@ -58,8 +58,6 @@ class G4PionBuilder : public G4PhysicsBuilderInterface
     G4PionPlusInelasticProcess*  thePionPlusInelastic;
     G4PionMinusInelasticProcess* thePionMinusInelastic;
     std::vector<G4VPionBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

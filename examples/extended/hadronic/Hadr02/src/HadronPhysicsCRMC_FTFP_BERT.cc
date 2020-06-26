@@ -58,6 +58,7 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "CRMCNeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
@@ -218,9 +219,12 @@ void HadronPhysicsCRMC_FTFP_BERT::Kaon() {
 
 void HadronPhysicsCRMC_FTFP_BERT::Others() {
   // Hyperons
+  auto hyp = new G4HyperonBuilder;
+  AddBuilder( hyp );
   auto ftfp_hyp = new G4HyperonFTFPBuilder;
   AddBuilder( ftfp_hyp );
-  ftfp_hyp->Build();
+  hyp->RegisterMe( ftfp_hyp );
+  hyp->Build();  
   // Anti-baryons
   auto abar = new G4AntiBarionBuilder;
   AddBuilder( abar );

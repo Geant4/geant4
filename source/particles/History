@@ -16,9 +16,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 06 February 2020 Makoto Asai (particles-V10-05-11)
+- 29 April 2020 Gabriele Cosmo (particles-V10-06-08)
+  Fixed Coverity warning
+
+- 14 April 2020 Gabriele Cosmo (particles-V10-06-07)
+  Revision for c++11; code cleanup and formatting
+
+- 02 April 2020 Gabriele Cosmo (particles-V10-06-06)
+  G4DynamicParticle - added move operators and code cleanup/formatting
+
+- 11 March 2020 Vladimir Ivanchenko (particles-V10-06-05)
+  G4DynamicParticle - added GetBeta() method
+
+- 18 February 2020 Vladimir Ivanchenko (particles-V10-06-04)
+  G4ParticleTable - create destruct only one instance of the 
+  G4IonTable and the messenger; assignment operator and copy 
+  constructor are deleted; added cache with pointer to selected
+  particle and get/set methods
+
+- 13 February 2020 Vladimir Ivanchenko (particles-V10-06-03)
+  G4NuclideTable - added destruction of messenger
+
+- 10 February 2020 Vladimir Ivanchenko (particles-V10-06-02)
+  G4OpticalPhoton - define pdg code as "-22"
+
+- 06 February 2020 Makoto Asai (particles-V10-06-01)
   Fix broken if-block in G4DecayTableMessenger.cc.
   Addressing to Bug report #2193.
+
+- 10 December 2019 Ben Morgan (particles-V10-06-00)
+  Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
 
 - 05 November 2019 Vladimir Ivanchenko (particles-V10-05-10)
   G4NucleiProperties - in some hadronic models a fragment may be

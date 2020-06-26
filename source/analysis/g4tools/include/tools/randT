@@ -61,6 +61,7 @@ public:
     return m_mean + displ;
   }
   FLAT& flat() {return m_flat;}
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
 protected:
   FLAT& m_flat;
   REAL m_mean;
@@ -85,6 +86,7 @@ public:
     return -a_log(v)/m_rate;
   }
   FLAT& flat() {return m_flat;}
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
 protected:
   FLAT& m_flat;
   REAL m_rate;
@@ -112,6 +114,7 @@ public:
     a_y = REAL(2) * u * v / s;
   }
   FLAT& flat() {return m_flat;}
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
 protected:
   FLAT& m_flat;
 };
@@ -140,6 +143,7 @@ public:
     a_y *= a;
   }
   FLAT& flat() {return m_flat;}
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
 protected:
   FLAT& m_flat;
 };
@@ -186,6 +190,48 @@ public:
 protected:
   FLAT& m_flat;
   REAL m_mean;
+};
+
+template <class FLAT,class REAL,class UINT>
+class rbinomial {
+public:
+  rbinomial(FLAT& a_flat,UINT a_n = 1,REAL a_p = REAL(0.5)):m_flat(a_flat),m_n(a_n),m_p(a_p){}
+  virtual ~rbinomial(){}
+public:
+  rbinomial(const rbinomial& a_from):m_flat(a_from.m_flat),m_n(a_from.m_n),m_p(a_from.m_p){}
+  rbinomial& operator=(const rbinomial& a_from) {
+    m_n = a_from.m_n;
+    m_p = a_from.m_p;
+    return *this;
+  }
+public:
+  UINT shoot() const {
+    // from ROOT/TRandom.cxx.
+    ////////////////////////////////////////////////////////////////////////////////
+    /// Generates a random integer N according to the binomial law.
+    /// Coded from Los Alamos report LA-5061-MS.
+    ///
+    /// N is binomially distributed between 0 and ntot inclusive
+    /// with mean prob*ntot and prob is between 0 and 1.
+    ///
+    /// Note: This function should not be used when ntot is large (say >100).
+    /// The normal approximation is then recommended instead
+    /// (with mean =*ntot+0.5 and standard deviation sqrt(ntot*prob*(1-prob)).
+    ////////////////////////////////////////////////////////////////////////////////
+    if((m_p<REAL(0))||(REAL(1)<m_p)) return 0;    
+    UINT n = 0;
+    for(UINT i=0;i<m_n;i++) {
+      if(m_flat.shoot()>m_p) continue;
+      n++;
+    }
+    return n;
+  }
+  FLAT& flat() {return m_flat;}
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+protected:
+  FLAT& m_flat;
+  UINT m_n;
+  REAL m_p;
 };
 
 }

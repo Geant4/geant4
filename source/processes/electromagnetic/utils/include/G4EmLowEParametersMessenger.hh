@@ -86,6 +86,7 @@ private:
 
   G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAString*        pixeeXsCmd;
+  G4UIcmdWithAString*        livCmd;
   G4UIcmdWithAString*        dnaSolCmd;
 
   G4UIcmdWithAString*        meCmd;

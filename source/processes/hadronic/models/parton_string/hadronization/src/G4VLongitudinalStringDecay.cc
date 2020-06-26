@@ -55,13 +55,16 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 
+#include "G4HadronicException.hh" 
+
 //------------------------debug switches
 //#define debug_VStringDecay
 
-//********************************************************************************
+//******************************************************************************
 // Constructors
 
-G4VLongitudinalStringDecay::G4VLongitudinalStringDecay() : ProbCCbar(0.0), ProbBBbar(0.0) 
+G4VLongitudinalStringDecay::G4VLongitudinalStringDecay(const G4String& name) 
+  : G4HadronicInteraction(name), ProbCCbar(0.0), ProbBBbar(0.0)
 {
    MassCut = 210.0*MeV;   // Mpi + Delta
 
@@ -117,38 +120,24 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay() : ProbCCbar(0.0), ProbB
    SetMinMasses();  // Re-calculation of minimal mass of strings and weights of particles in 2-part. decays
 
    Kappa = 1.0 * GeV/fermi;
+   DecayQuark = NewQuark = 0;
 }
-
 
 G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
 {
    delete hadronizer;
 }
 
+G4HadFinalState* 
+G4VLongitudinalStringDecay::ApplyYourself(const G4HadProjectile&, G4Nucleus&)
+{
+  return nullptr;
+}
+
 //=============================================================================
 
-// Operators
-
-//-----------------------------------------------------------------------------
-
-G4bool G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) const
-{
-   throw G4HadronicException(__FILE__, __LINE__, "G4VLongitudinalStringDecay::operator== forbidden");
-   return false;
-}
-
-//-------------------------------------------------------------------------------------
-
-G4bool G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) const
-{
-   throw G4HadronicException(__FILE__, __LINE__, "G4VLongitudinalStringDecay::operator!= forbidden");
-   return true;
-}
-
-//***********************************************************************************
-
 // For changing Mass Cut used for selection of very small mass strings
-void     G4VLongitudinalStringDecay::SetMassCut(G4double aValue){ MassCut=aValue; }
+void G4VLongitudinalStringDecay::SetMassCut(G4double aValue){ MassCut=aValue; }
 G4double G4VLongitudinalStringDecay::GetMassCut() { return MassCut; }
 
 //-----------------------------------------------------------------------------
@@ -167,15 +156,15 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::ProduceOneHadron(const G4Excit
         #ifdef debug_VStringDecay
         G4cout<<"G4VLongitudinalStringDecay::ProduceOneHadron: PossibleHmass StrMass "
               <<aString.Mass()<<" MassCut "<<MassCut<<G4endl;
-        G4cout<<"G4VLongitudinalStringDecay::ProduceOneHadron: PossibleHmass StrMass WWW "
-              <<aString.Mass()<<G4endl;
         #endif
-
+	
+	SetMinimalStringMass(&aString);  // Uzhi June 2020
+	
 	if ( sqr(PossibleHadronMass(&aString,0,&hadrons)+MassCut) < aString.Mass2()) {
 		return 0;
 	}
 
-        // The string mass has low mass---------------------------
+        // The string mass has low value
 	
 	result=new G4KineticTrackVector;
         
@@ -184,7 +173,7 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::ProduceOneHadron(const G4Excit
                // Substitute string by light hadron, Note that Energy is not conserved here!
 
                #ifdef debug_VStringDecay
-	       G4cout << "VlongSF Warning replacing string by single hadron (G4VLongitudinalStringDecay)" <<G4endl;
+	       G4cout << "VlongSD Warning replacing string by single hadron (G4VLongitudinalStringDecay)" <<G4endl;
 	       G4cout << hadrons.first->GetParticleName()<<G4endl
 	              << "string .. " << string->Get4Momentum() << " " 
 	              << string->Get4Momentum().m() << G4endl;
@@ -195,11 +184,10 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::ProduceOneHadron(const G4Excit
                result->push_back( new G4KineticTrack( hadrons.first, 0, string->GetPosition(), Mom ) );
 	} else 
 	{
-               // I do not know if this part work?
                //... string was qq--qqbar type: Build two stable hadrons,
 
                #ifdef debug_VStringDecay
-	       G4cout << "VlongSF Warning replacing qq-qqbar string by TWO hadrons (G4VLongitudinalStringDecay)" 
+	       G4cout << "VlongSD Warning replacing qq-qqbar string by TWO hadrons (G4VLongitudinalStringDecay)" 
 	              << hadrons.first->GetParticleName() << " / " 
 	              << hadrons.second->GetParticleName()
 	              << "string .. " << string->Get4Momentum() << " " 
@@ -230,7 +218,8 @@ G4double G4VLongitudinalStringDecay::PossibleHadronMass( const G4FragmentingStri
 
 	if ( build==0 ) build=&G4HadronBuilder::BuildLowSpin;
 
-        G4ParticleDefinition *Hadron1, *Hadron2=0;
+        G4ParticleDefinition* Hadron1 = nullptr;
+	G4ParticleDefinition* Hadron2 = nullptr;
 
         if (!string->IsAFourQuarkString() )
         {
@@ -238,24 +227,26 @@ G4double G4VLongitudinalStringDecay::PossibleHadronMass( const G4FragmentingStri
 
            Hadron1 = (hadronizer->*build)(string->GetLeftParton(), string->GetRightParton());
            #ifdef debug_VStringDecay
-           G4cout<<"VlongSF Quarks at the string ends "<<string->GetLeftParton()->GetParticleName()
+	   G4cout<<"VlongSD PossibleHadronMass"<<G4endl;
+           G4cout<<"VlongSD Quarks at the string ends "<<string->GetLeftParton()->GetParticleName()
                  <<" "<<string->GetRightParton()->GetParticleName()<<G4endl;
-           if ( Hadron1 != NULL) {
+           if ( Hadron1 != nullptr) {
              G4cout<<"(G4VLongitudinalStringDecay) Hadron "<<Hadron1->GetParticleName()
                    <<" "<<Hadron1->GetPDGMass()<<G4endl;
            }
            #endif
-           if ( Hadron1 != NULL) { mass = (Hadron1)->GetPDGMass();}
+           if ( Hadron1 != nullptr) { mass = (Hadron1)->GetPDGMass();}
            else                  { mass = MaxMass;}
         } else
         {
            //... string is qq--qqbar: Build two stable hadrons,
-           //...    with extra uubar or ddbar quark pair
 
            #ifdef debug_VStringDecay
-           G4cout<<"VlongSF string is qq--qqbar: Build two stable hadrons"<<G4endl; 
+           G4cout<<"VlongSD PossibleHadronMass"<<G4endl;
+           G4cout<<"VlongSD string is qq--qqbar: Build two stable hadrons"<<G4endl; 
            #endif
 
+	   /*  // Uzhi June 2020
 	   G4int iflc = (G4UniformRand() < 0.5)? 1 : 2;
 	   if (string->GetLeftParton()->GetPDGEncoding() < 0) iflc = -iflc;
 
@@ -263,12 +254,43 @@ G4double G4VLongitudinalStringDecay::PossibleHadronMass( const G4FragmentingStri
 	   Hadron1 = (hadronizer->*build)(string->GetLeftParton(), FindParticle(iflc));
 	   Hadron2 = (hadronizer->*build)(string->GetRightParton(), FindParticle(-iflc));
 
-           if ( (Hadron1 != NULL) && (Hadron2 != NULL) ) { mass = (Hadron1)->GetPDGMass() + (Hadron2)->GetPDGMass();}
+           if ( (Hadron1 != nullptr) && (Hadron2 != nullptr) ) { mass = (Hadron1)->GetPDGMass() + (Hadron2)->GetPDGMass();}
            else                                          { mass = MaxMass;}
+           return mass;
+           */  // Uzhi June 2020
+           //+++++++++++++++++++++++++++++++  // Uzhi June 2020 Start
+           G4double StringMass   = string->Mass();
+           G4int cClusterInterrupt = 0;
+           do
+           {
+             if (cClusterInterrupt++ >= ClusterLoopInterrupt) return false;
+
+             G4int LeftQuark1= string->GetLeftParton()->GetPDGEncoding()/1000;
+             G4int LeftQuark2=(string->GetLeftParton()->GetPDGEncoding()/100)%10;
+
+             G4int RightQuark1= string->GetRightParton()->GetPDGEncoding()/1000;
+             G4int RightQuark2=(string->GetRightParton()->GetPDGEncoding()/100)%10;
+
+             if (G4UniformRand()<0.5) {
+               Hadron1 =hadronizer->Build(FindParticle(LeftQuark1), FindParticle(RightQuark1));
+               Hadron2 =hadronizer->Build(FindParticle(LeftQuark2), FindParticle(RightQuark2));
+             } else {
+               Hadron1 =hadronizer->Build(FindParticle(LeftQuark1), FindParticle(RightQuark2));
+               Hadron2 =hadronizer->Build(FindParticle(LeftQuark2), FindParticle(RightQuark1));
+             }
+             if ( (Hadron1 == nullptr) || (Hadron2 == nullptr) ) continue;
+
+             //... repeat procedure, if mass of cluster is too low to produce hadrons
+             //... ClusterMassCut = 0.15*GeV model parameter
+           }
+           while ((StringMass <= Hadron1->GetPDGMass() + Hadron2->GetPDGMass()));
+
+	   mass = (Hadron1)->GetPDGMass() + (Hadron2)->GetPDGMass();
+           //+++++++++++++++++++++++++++++++  // Uzhi June 2020 End
         }
 
         #ifdef debug_VStringDecay
-        G4cout<<"VlongSF *Hadrons 1 and 2, proposed mass "<<Hadron1<<" "<<Hadron2<<" "<<mass<<G4endl; 
+        G4cout<<"VlongSD *Hadrons 1 and 2, proposed mass "<<Hadron1<<" "<<Hadron2<<" "<<mass<<G4endl; 
         #endif
 	
 	if ( pdefs != 0 ) 
@@ -301,7 +323,7 @@ G4ParticleDefinition* G4VLongitudinalStringDecay::FindParticle(G4int Encoding)
 
   G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(Encoding);
 
-  if (ptr == NULL)
+  if (ptr == nullptr)
   {
      for (size_t i=0; i < NewParticles.size(); i++)
      {
@@ -341,7 +363,7 @@ G4ParticleDefinition * G4VLongitudinalStringDecay::QuarkSplitup( G4ParticleDefin
                                                                  G4ParticleDefinition *&created )
 {
    #ifdef debug_VStringDecay
-   G4cout<<"VlongSF QuarkSplitup: quark ID "<<decay->GetPDGEncoding()<<G4endl; 
+   G4cout<<"VlongSD QuarkSplitup: quark ID "<<decay->GetPDGEncoding()<<G4endl; 
    #endif
 
    G4int IsParticle=(decay->GetPDGEncoding()>0) ? -1 : +1;  // if we have a quark, we need antiquark (or diquark)
@@ -353,7 +375,7 @@ G4ParticleDefinition * G4VLongitudinalStringDecay::QuarkSplitup( G4ParticleDefin
    NewQuark   = created->GetPDGEncoding();
 
    #ifdef debug_VStringDecay
-   G4cout<<"VlongSF QuarkSplitup: "<<decay->GetPDGEncoding()<<" -> "<<QuarkPair.second->GetPDGEncoding()<<G4endl;
+   G4cout<<"VlongSD QuarkSplitup: "<<decay->GetPDGEncoding()<<" -> "<<QuarkPair.second->GetPDGEncoding()<<G4endl;
    G4cout<<"hadronizer->Build(QuarkPair.first, decay)"<<G4endl;
    #endif
    return hadronizer->Build(QuarkPair.first, decay);
@@ -369,7 +391,7 @@ CreatePartonPair(G4int NeedParticle,G4bool AllowDiquarks)
     {
       // Create a Diquark - AntiDiquark pair , first in pair is anti to IsParticle
       #ifdef debug_VStringDecay
-      G4cout<<"VlongSF Create a Diquark - AntiDiquark pair"<<G4endl;
+      G4cout<<"VlongSD Create a Diquark - AntiDiquark pair"<<G4endl;
       #endif
       G4int q1(0), q2(0), spin(0), PDGcode(0);
 
@@ -385,7 +407,7 @@ CreatePartonPair(G4int NeedParticle,G4bool AllowDiquarks)
     } else {
       // Create a Quark - AntiQuark pair, first in pair  IsParticle
       #ifdef debug_VStringDecay
-      G4cout<<"VlongSF Create a Quark - AntiQuark pair"<<G4endl; 
+      G4cout<<"VlongSD Create a Quark - AntiQuark pair"<<G4endl; 
       #endif
       G4int PDGcode=SampleQuarkFlavor()*NeedParticle;
       return pDefPair (FindParticle(PDGcode),FindParticle(-PDGcode));
@@ -405,7 +427,7 @@ G4int G4VLongitudinalStringDecay::SampleQuarkFlavor(void)
      quark = 1 + (int)(G4UniformRand()/StrangeSuppress);
    }
    #ifdef debug_VStringDecay
-   G4cout<<"VlongSF SampleQuarkFlavor "<<quark<<" (ProbCB ProbCCbar ProbBBbar "<<ProbCB
+   G4cout<<"VlongSD SampleQuarkFlavor "<<quark<<" (ProbCB ProbCCbar ProbBBbar "<<ProbCB
          <<" "<<ProbCCbar<<" "<<ProbBBbar<<" )"<<G4endl; 
    #endif
    return quark;
@@ -620,11 +642,11 @@ void G4VLongitudinalStringDecay::SetMinMasses()
         Code1 = 100*i + 10*1 + 1;
         hadron1 = FindParticle(Code1);
 
-        if (hadron1 != NULL) {
+        if (hadron1 != nullptr) {
            for (G4int j=1; j < 6; j++) {
                Code2 = 100*j + 10*1 + 1;
                hadron2 = FindParticle(Code2);
-               if (hadron2 != NULL) {
+               if (hadron2 != nullptr) {
                  minMassQQbarStr[i-1][j-1] = hadron1->GetPDGMass() + hadron2->GetPDGMass() + 70.0 * MeV;
                }
            } 
@@ -653,15 +675,15 @@ void G4VLongitudinalStringDecay::SetMinMasses()
                 hadron2 = G4ParticleTable::GetParticleTable()->FindParticle(Code2);
                 hadron3 = G4ParticleTable::GetParticleTable()->FindParticle(Code2 + 2);
 
-                if ((hadron2 == NULL) && (hadron3 == NULL)) {minMassQDiQStr[i-1][j-1][k-1] = MaxMass; continue;};
+                if ((hadron2 == nullptr) && (hadron3 == nullptr)) {minMassQDiQStr[i-1][j-1][k-1] = MaxMass; continue;};
 
-                if ((hadron2 != NULL) && (hadron3 != NULL)) {
+                if ((hadron2 != nullptr) && (hadron3 != nullptr)) {
                    if (hadron2->GetPDGMass() > hadron3->GetPDGMass() ) { hadron2 = hadron3; }
                 };
 
-                if ((hadron2 != NULL) && (hadron3 == NULL)) {};
+                if ((hadron2 != nullptr) && (hadron3 == nullptr)) {};
 
-                if ((hadron2 == NULL) && (hadron3 != NULL)) {hadron2 = hadron3;};
+                if ((hadron2 == nullptr) && (hadron3 != nullptr)) {hadron2 = hadron3;};
 
                 minMassQDiQStr[i-1][j-1][k-1] = hadron1->GetPDGMass() + hadron2->GetPDGMass() + 70.0 * MeV;
             }
@@ -917,12 +939,12 @@ void G4VLongitudinalStringDecay::SetMinMasses()
                        G4ParticleTable::GetParticleTable()->FindParticle(Baryon[i][j][k][l]);
                      /*
                      G4cout<<i<<" "<<j<<" "<<k<<" "<<l<<" "<<Baryon[i][j][k][l]<<" "<<TestHadron<<" "<<BaryonWeight[i][j][k][l];
-                     if (TestHadron != NULL) G4cout<<" "<<TestHadron->GetParticleName();
-                     if ((TestHadron == NULL)&&(Baryon[i][j][k][l] != 0)) G4cout<<" *****";
-                     if ((TestHadron == NULL)&&(Baryon[i][j][k][l] == 0)) G4cout<<" ---------------";
+                     if (TestHadron != nullptr) G4cout<<" "<<TestHadron->GetParticleName();
+                     if ((TestHadron == nullptr)&&(Baryon[i][j][k][l] != 0)) G4cout<<" *****";
+                     if ((TestHadron == nullptr)&&(Baryon[i][j][k][l] == 0)) G4cout<<" ---------------";
                      G4cout<<G4endl;
                      */
-                     if ((TestHadron == NULL)&&(Baryon[i][j][k][l] != 0)) Baryon[i][j][k][l] = 0;
+                     if ((TestHadron == nullptr)&&(Baryon[i][j][k][l] != 0)) Baryon[i][j][k][l] = 0;
                     }
 		 }
 	  }
@@ -950,8 +972,27 @@ void G4VLongitudinalStringDecay::SetMinMasses()
 void G4VLongitudinalStringDecay::SetMinimalStringMass(const G4FragmentingString * const string)  
 {
         //MaxMass = -350.0*GeV;
-	G4double EstimatedMass=0.;
+	G4double EstimatedMass=MaxMass;  // Uzhi June 2020 0.->MaxMass;
 
+        // Uzhi June 2020 Start
+        G4ParticleDefinition* LeftParton  = string->GetLeftParton();
+        G4ParticleDefinition* RightParton = string->GetRightParton();
+        if( LeftParton->GetParticleSubType() == RightParton->GetParticleSubType() ) { // q qbar, qq qqbar
+          if( LeftParton->GetPDGEncoding() * RightParton->GetPDGEncoding() > 0 ) {
+            // Not allowed combination of the partons
+            throw G4HadronicException(__FILE__, __LINE__,
+				      "G4VLongitudinalStringDecay::SetMinimalStringMass: Illegal quark content as input");
+          }
+        }
+        if( LeftParton->GetParticleSubType() != RightParton->GetParticleSubType() ) { // q qq, qbar qqbar
+          if( LeftParton->GetPDGEncoding() * RightParton->GetPDGEncoding() < 0 ) {
+            // Not allowed combination of the partons
+            throw G4HadronicException(__FILE__, __LINE__,
+				      "G4VLongitudinalStringDecay::SetMinimalStringMass: Illegal quark content as input");
+          }
+        }
+        // Uzhi June 2020 End
+	
         G4int Qleft =std::abs(string->GetLeftParton()->GetPDGEncoding());
         G4int Qright=std::abs(string->GetRightParton()->GetPDGEncoding());
 

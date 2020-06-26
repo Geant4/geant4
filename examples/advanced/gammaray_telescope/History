@@ -8,6 +8,10 @@
                           History file
                           ------------
 
+26.02.2020 - V.Ivanchenko, Tag gammaraytel-V10-06-00
+             GammaRayTelHadronPhysics, GammaRayTelIonPhysics - fixed
+             compilation problems due to incorrect FTFP instantiation
+
 31.01.2019 - I.Hrivnacova, Tag gammaraytel-V10-05-00
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 

@@ -43,7 +43,7 @@
 #include "G4VUserTrackInformation.hh"
 
 // Represents the scintillation type used to create the track (opticalphoton).
-enum G4ScintillationType {Fast, Slow};
+enum G4ScintillationType {Fast, Medium, Slow};
 
 class G4ScintillationTrackInformation : public G4VUserTrackInformation
 {

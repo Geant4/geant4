@@ -4,9 +4,9 @@
 #ifndef tools_sg_GL_action
 #define tools_sg_GL_action
 
-#include <tools/sg/render_action>
-
 #include "GL_manager"
+
+#include <tools/sg/render_action>
 
 namespace tools {
 namespace sg {
@@ -526,6 +526,7 @@ public:
     }
 
     ::glLineWidth(_state.m_line_width);
+
     ::glPointSize(_state.m_point_size);
 
 #if TARGET_OS_IPHONE

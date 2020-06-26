@@ -2116,6 +2116,46 @@ HepPolyhedronTorus::HepPolyhedronTorus(G4double rmin,
 
 HepPolyhedronTorus::~HepPolyhedronTorus() {}
 
+HepPolyhedronTet::HepPolyhedronTet(const G4double p0[3],
+                                   const G4double p1[3],
+                                   const G4double p2[3],
+                                   const G4double p3[3])
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedronTet                            Date:  21.02.2020 *
+ * Author: E.Tcherniaev                              Revised:          *
+ *                                                                     *
+ * Function: Constructor of polyhedron for TETrahedron                 *
+ *                                                                     *
+ * Input: p0,p1,p2,p3 - vertices                                       *
+ *                                                                     *
+ ***********************************************************************/
+{
+  AllocateMemory(4,4);
+
+  pV[1].set(p0[0], p0[1], p0[2]);
+  pV[2].set(p1[0], p1[1], p1[2]);
+  pV[3].set(p2[0], p2[1], p2[2]);
+  pV[4].set(p3[0], p3[1], p3[2]);
+
+  G4Vector3D v1(pV[2] - pV[1]);
+  G4Vector3D v2(pV[3] - pV[1]);
+  G4Vector3D v3(pV[4] - pV[1]);
+
+  if (v1.cross(v2).dot(v3) < 0.)
+  {
+    pV[3].set(p3[0], p3[1], p3[2]);
+    pV[4].set(p2[0], p2[1], p2[2]);
+  }
+
+  pF[1] = G4Facet(1,2,  3,4,  2,3);
+  pF[2] = G4Facet(1,3,  4,4,  3,1);
+  pF[3] = G4Facet(1,1,  2,4,  4,2);
+  pF[4] = G4Facet(2,1,  3,2,  4,3);
+}
+
+HepPolyhedronTet::~HepPolyhedronTet() {}
+
 HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(G4double ax, G4double by,
                                                G4double cz, G4double zCut1,
                                                G4double zCut2)
@@ -2306,6 +2346,68 @@ HepPolyhedronEllipticalCone::HepPolyhedronEllipticalCone(G4double ax,
 }
 
 HepPolyhedronEllipticalCone::~HepPolyhedronEllipticalCone() {}
+
+HepPolyhedronHyperbolicMirror::HepPolyhedronHyperbolicMirror(G4double a,
+                                                             G4double h,
+                                                             G4double r)
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedronHyperbolicMirror               Date:  22.02.2020 *
+ * Author: E.Tcherniaev                              Revised:          *
+ *                                                                     *
+ * Function: Create polyhedron for Hyperbolic mirror                   *
+ *                                                                     *
+ * Input: a - half-separation                                          *
+ *        h - height                                                   *
+ *        r - radius                                                   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  G4double H = std::abs(h);
+  G4double R = std::abs(r);
+  G4double A = std::abs(a);
+  G4double B = A*R/std::sqrt(2*A*H + H*H);
+
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  G4int np1 = (A == 0.) ? 2 : std::max(3, GetNumberOfRotationSteps()/4) + 1;
+  G4int np2 = 2;
+  G4double maxAng = (A == 0.) ? 0. : std::acosh(1. + H/A);
+  G4double delAng = maxAng/(np1 - 1);
+
+  G4double *zz = new G4double[np1 + np2];
+  G4double *rr = new G4double[np1 + np2];
+
+  // 1st polyline
+  zz[0] = H;
+  rr[0] = R;
+  for (G4int iz = 1; iz < np1 - 1; ++iz)
+  {
+    G4double ang = maxAng - iz*delAng;
+    zz[iz] = A*std::cosh(ang) - A;
+    rr[iz] = B*std::sinh(ang);
+  }
+  zz[np1 - 1] = 0.;
+  rr[np1 - 1] = 0.;
+
+  // 2nd polyline
+  zz[np1] = H;
+  rr[np1] = 0.;
+  zz[np1 + 1] = 0.;
+  rr[np1 + 1] = 0.;
+
+  //   R O T A T E    P O L Y L I N E S
+
+  G4double phi  = 0.;
+  G4double dphi = CLHEP::twopi;
+  RotateAroundZ(0, phi, dphi, np1, np2, zz, rr, -1, -1);
+  SetReferences();
+
+  delete [] zz;
+  delete [] rr;
+}
+
+HepPolyhedronHyperbolicMirror::~HepPolyhedronHyperbolicMirror() {}
 
 G4ThreadLocal G4int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
 /***********************************************************************

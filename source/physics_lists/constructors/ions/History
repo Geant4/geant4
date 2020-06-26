@@ -6,12 +6,19 @@
 
      Hadronic physics-list/constructors/ions History
      -----------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30-April-2020, Ben Morgan             (phys-ctor-ions-V10-06-01)
+- Remove obsolete GRANULAR_DEPENDENCIES entries
+
+21-February-2020, Vladimir Ivanchenko (phys-ctor-ions-V10-06-00)
+- cleanup of all constructors: fixed names; make all constructor
+  signatures universal, removed thread local members, added c++11
+  keywords
 
 16-August-2019, Vladimir Ivanchenko (phys-ctor-ions-V10-05-01)
 - G4IonQMDPhysics : replacing explicit values for the QMD model
@@ -31,8 +38,8 @@ introduced in the code and keeptrack of all tags.
   G4IonBinaryCascadePhysics is now identical to G4IonPhysics
 
 06-August-2018, Alberto Ribon           (phys-ctor-ions-V10-04-02)
-- G4IonPhysics, G4IonBinaryCascadePhysics, G4IonPhysicsPHP : replaced the 
-  explicit high-energy limit of hadronic physics with the one from 
+- G4IonPhysics, G4IonBinaryCascadePhysics, G4IonPhysicsPHP : replaced the
+  explicit high-energy limit of hadronic physics with the one from
   G4HadronicParameters .
 
 29-July-2018, Vladimir Ivanchenko       (phys-ctor-ions-V10-04-01)
@@ -61,7 +68,7 @@ introduced in the code and keeptrack of all tags.
 
 06-May-2014, Vladimir Ivanchenko        (phys-ctor-ions-V10-00-02)
 - Reuse G4PreCompoundModel and not create a new local in all
-  ion physics classes, should reduce memory and memory churn 
+  ion physics classes, should reduce memory and memory churn
 
 29-Jan-2014, Gunter Folger              (phys-ctor-ions-V10-00-01)
 - Removed from photolepton_hadron/muon_nuclear from sources.cmake
@@ -74,7 +81,7 @@ introduced in the code and keeptrack of all tags.
 - Removed low_energy and high_energy from sources.cmake and GNUmakefile.
 
 09-Jun-2013, Andrea Dotti		(phys-ctor-ions-V09-06-04)
-- MT fixes: make private data members TLS since constructors is 
+- MT fixes: make private data members TLS since constructors is
  shared instance, but processes not
 
 19-Apr-2013, Alberto Ribon              (phys-ctor-ions-V09-06-03)
@@ -91,5 +98,5 @@ introduced in the code and keeptrack of all tags.
 - Fixed warning messages in G4IonQMDPhysics.
 
 10-Jan-2013, Gunter Folger              (phys-ctor-ions-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/ions classes

@@ -479,6 +479,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
   RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
   RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceCloud);
   RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
   RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
   RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
@@ -691,7 +692,8 @@ void G4VisManager::Disable() {
       "\n  \"/tracking/storeTrajectory 0\""
       "\nbut don't forget to re-enable with"
       "\n  \"/vis/enable\""
-      "\n  \"/tracking/storeTrajectory " << currentTrajectoryType << '\"'
+      "\n  \"/tracking/storeTrajectory " << currentTrajectoryType
+      << "\"\n  and maybe \"/vis/viewer/rebuild\""
       << G4endl;
     }
   }
@@ -1613,14 +1615,14 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
 
 void G4VisManager::PrintAvailableGraphicsSystems (Verbosity verbosity) const
 {
-  G4cout << "Current available graphics systems are:\n";
+  G4cout << "Registered graphics systems are:\n";
   if (fAvailableGraphicsSystems.size ()) {
     for (const auto& gs: fAvailableGraphicsSystems) {
       const G4String& name = gs->GetName();
       const std::vector<G4String>& nicknames = gs->GetNicknames();
       if (verbosity <= warnings) {
         // Brief output
-        G4cout << name << " (";
+        G4cout << "  " << name << " (";
         for (size_t i = 0; i < nicknames.size(); ++i) {
           if (i != 0) {
             G4cout << ", ";
@@ -1635,7 +1637,7 @@ void G4VisManager::PrintAvailableGraphicsSystems (Verbosity verbosity) const
       G4cout << G4endl;
     }
   } else {
-    G4cout << "\n  NONE!!!  None registered - yet!  Mmmmm!" << G4endl;
+    G4cout << "  NONE!!!  None registered - yet!  Mmmmm!" << G4endl;
   }
 }
 
@@ -1649,15 +1651,17 @@ void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
     if (factoryList.empty()) G4cout << "  None" << G4endl;
     else {
       std::vector<G4VModelFactory<G4VTrajectoryModel>*>::const_iterator i;
-      for (i = factoryList.begin(); i != factoryList.end(); ++i)
-	(*i)->Print(G4cout);
+      for (i = factoryList.begin(); i != factoryList.end(); ++i) {
+        (*i)->Print(G4cout);
+      }
     }
+    G4cout << "\nRegistered models:" << G4endl;
     const G4VisListManager<G4VTrajectoryModel>* listManager =
       fpTrajDrawModelMgr->ListManager();
     const std::map<G4String, G4VTrajectoryModel*>& modelMap =
       listManager->Map();
-    if (!modelMap.empty()) {
-      G4cout << "\nRegistered models:" << G4endl;
+    if (modelMap.empty()) G4cout << "  None" << G4endl;
+    else {
       std::map<G4String, G4VTrajectoryModel*>::const_iterator i;
       for (i = modelMap.begin(); i != modelMap.end(); ++i) {
 	G4cout << "  " << i->second->Name();
@@ -1678,13 +1682,16 @@ void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
     if (factoryList.empty()) G4cout << "  None" << G4endl;
     else {
       std::vector<G4VModelFactory<G4VFilter<G4VTrajectory> >*>::const_iterator i;
-      for (i = factoryList.begin(); i != factoryList.end(); ++i)
-	(*i)->Print(G4cout);
+      for (i = factoryList.begin(); i != factoryList.end(); ++i) {
+        (*i)->Print(G4cout);
+      }
     }
+
+    G4cout << "\nRegistered filters:" << G4endl;
     const std::vector<G4VFilter<G4VTrajectory>*>&
       filterList = fpTrajFilterMgr->FilterList();
-    if (!filterList.empty()) {
-      G4cout << "\nRegistered filters:" << G4endl;
+    if (filterList.empty()) G4cout << "  None" << G4endl;
+    else {
       std::vector<G4VFilter<G4VTrajectory>*>::const_iterator i;
       for (i = filterList.begin(); i != filterList.end(); ++i) {
 	G4cout << "  " << (*i)->GetName() << G4endl;

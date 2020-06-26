@@ -110,7 +110,7 @@ G4bool G4VReadOutGeometry::CheckROVolume(G4Step*currentStep,G4TouchableHistory*&
 {
   ROhist = nullptr;
   G4bool incFlg = true;
-  G4VPhysicalVolume* PV = currentStep->GetPreStepPoint()->GetPhysicalVolume();
+  auto PV = currentStep->GetPreStepPoint()->GetPhysicalVolume();
   if((fexcludeList)&&(fexcludeList->CheckPV(PV)))
     { incFlg = false; }
   else if ((fincludeList)&&(fincludeList->CheckPV(PV)))
@@ -162,7 +162,7 @@ G4bool G4VReadOutGeometry::FindROTouchable(G4Step*currentStep)
   // at the safety value only.
   
   // checks if volume is sensitive:
-  G4VPhysicalVolume* currentVolume = touchableHistory->GetVolume();
+  auto currentVolume = touchableHistory->GetVolume();
   // checks first if a physical volume exists here:
   if ( currentVolume )
     {

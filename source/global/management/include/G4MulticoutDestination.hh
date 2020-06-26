@@ -22,13 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// --------------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4MulticoutDestination.hh
+// G4MulticoutDestination
 //
 // Class description:
 //
@@ -52,44 +46,44 @@
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
-#ifndef G4MULTICOUTDESTINATION_HH_
-#define G4MULTICOUTDESTINATION_HH_
+#ifndef G4MULTICOUTDESTINATION_HH
+#define G4MULTICOUTDESTINATION_HH
 
 #include <memory>
 #include <vector>
 
 #include "G4coutDestination.hh"
 
-using G4coutDestinationUPtr = std::unique_ptr<G4coutDestination>;
+using G4coutDestinationUPtr   = std::unique_ptr<G4coutDestination>;
 using G4coutDestinationVector = std::vector<G4coutDestinationUPtr>;
 
-class G4MulticoutDestination : public G4coutDestination,
-                               public G4coutDestinationVector
+class G4MulticoutDestination
+  : public G4coutDestination
+  , public G4coutDestinationVector
 {
-  public:
+ public:
+  G4MulticoutDestination() = default;
+  virtual ~G4MulticoutDestination() {}
 
-    G4MulticoutDestination() = default;
-    virtual ~G4MulticoutDestination() {}
+  // Forward call to contained destination. Note that the message may have
+  // been modified by formatters attached to this
+  virtual G4int ReceiveG4cout(const G4String& msg) override
+  {
+    G4bool result = true;
+    std::for_each(begin(), end(), [&](G4coutDestinationUPtr& e) {
+      result &= (e->ReceiveG4cout_(msg) == 0);
+    });
+    return (result ? 0 : -1);
+  }
 
-    // Forward call to contained destination. Note that the message may have
-    // been modified by formatters attached to this
-    virtual G4int ReceiveG4cout(const G4String& msg) override
-    {
-      G4bool result = true;
-      std::for_each( begin(), end(),
-        [&](G4coutDestinationUPtr& e) { result &= (e->ReceiveG4cout_(msg)==0); }
-      );
-      return ( result ? 0 : -1);
-    }
-
-    virtual G4int ReceiveG4cerr(const G4String& msg) override
-    {
-      G4bool result = true;
-      std::for_each( begin(), end(),
-        [&](G4coutDestinationUPtr& e) { result &= (e->ReceiveG4cerr_(msg)==0); }
-      );
-      return ( result ? 0 : -1);
-    }
+  virtual G4int ReceiveG4cerr(const G4String& msg) override
+  {
+    G4bool result = true;
+    std::for_each(begin(), end(), [&](G4coutDestinationUPtr& e) {
+      result &= (e->ReceiveG4cerr_(msg) == 0);
+    });
+    return (result ? 0 : -1);
+  }
 };
 
-#endif /* G4MULTICOUTDESTINATION_HH_ */
+#endif

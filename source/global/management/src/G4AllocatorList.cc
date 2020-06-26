@@ -23,91 +23,91 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4AllocatorList class implementation
 //
-//
-// 
+// Authors: M.Asai (SLAC), G.Cosmo (CERN), June 2013
+// --------------------------------------------------------------------
 
 #include <iomanip>
 
-#include "G4AllocatorList.hh"
 #include "G4Allocator.hh"
+#include "G4AllocatorList.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4AllocatorList* G4AllocatorList::fAllocatorList=0;
+G4ThreadLocal G4AllocatorList* G4AllocatorList::fAllocatorList = nullptr;
 
+// --------------------------------------------------------------------
 G4AllocatorList* G4AllocatorList::GetAllocatorList()
 {
-  if(!fAllocatorList)
+  if(fAllocatorList == nullptr)
   {
     fAllocatorList = new G4AllocatorList;
   }
   return fAllocatorList;
 }
 
+// --------------------------------------------------------------------
 G4AllocatorList* G4AllocatorList::GetAllocatorListIfExist()
 {
   return fAllocatorList;
 }
 
-G4AllocatorList::G4AllocatorList()
-{
-}
+// --------------------------------------------------------------------
+G4AllocatorList::G4AllocatorList() {}
 
-G4AllocatorList::~G4AllocatorList()
-{
-  fAllocatorList = 0;
-}
+// --------------------------------------------------------------------
+G4AllocatorList::~G4AllocatorList() { fAllocatorList = nullptr; }
 
+// --------------------------------------------------------------------
 void G4AllocatorList::Register(G4AllocatorBase* alloc)
 {
   fList.push_back(alloc);
 }
 
+// --------------------------------------------------------------------
 void G4AllocatorList::Destroy(G4int nStat, G4int verboseLevel)
 {
-  std::vector<G4AllocatorBase*>::iterator itr=fList.begin();
-  G4int i=0, j=0;
-  G4double mem=0, tmem=0;
-  if(verboseLevel>0)
+  auto itr = fList.cbegin();
+  G4int i = 0, j = 0;
+  G4double mem = 0, tmem = 0;
+  if(verboseLevel > 0)
   {
     G4cout << "================== Deleting memory pools ==================="
            << G4endl;
   }
-  for(; itr!=fList.end();++itr)
+  for(; itr != fList.cend(); ++itr)
   {
     mem = (*itr)->GetAllocatedSize();
-    if(i<nStat)
+    if(i < nStat)
     {
-      i++;
+      ++i;
       tmem += mem;
       (*itr)->ResetStorage();
       continue;
     }
-    j++;
+    ++j;
     tmem += mem;
-    if(verboseLevel>1)
+    if(verboseLevel > 1)
     {
-      G4cout << "Pool ID '" << (*itr)->GetPoolType() << "', size : "
-             << std::setprecision(3) << mem/1048576
+      G4cout << "Pool ID '" << (*itr)->GetPoolType()
+             << "', size : " << std::setprecision(3) << mem / 1048576
              << std::setprecision(6) << " MB" << G4endl;
     }
     (*itr)->ResetStorage();
-    delete *itr; 
+    delete *itr;
   }
-  if(verboseLevel>0)
+  if(verboseLevel > 0)
   {
     G4cout << "Number of memory pools allocated: " << Size()
            << "; of which, static: " << i << G4endl;
-    G4cout << "Dynamic pools deleted: " << j 
+    G4cout << "Dynamic pools deleted: " << j
            << " / Total memory freed: " << std::setprecision(2)
-           << tmem/1048576 << std::setprecision(6) << " MB" << G4endl;
+           << tmem / 1048576 << std::setprecision(6) << " MB" << G4endl;
     G4cout << "============================================================"
            << G4endl;
   }
   fList.clear();
 }
 
-G4int G4AllocatorList::Size() const
-{
-  return fList.size();
-}
+// --------------------------------------------------------------------
+G4int G4AllocatorList::Size() const { return fList.size(); }

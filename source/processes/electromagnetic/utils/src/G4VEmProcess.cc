@@ -126,7 +126,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   mfpKinEnergy  = DBL_MAX;
   massRatio     = 1.0;
 
-  idxLambda = idxLambdaPrim = currentCoupleIndex = basedCoupleIndex = 0;
+  currentCoupleIndex = basedCoupleIndex = 0;
 
   modelManager = new G4EmModelManager();
   biasManager  = nullptr;
@@ -170,7 +170,6 @@ G4VEmProcess::~G4VEmProcess()
   delete modelManager;
   delete biasManager;
   lManager->DeRegister(this);
-  //std::cout << "G4VEmProcess removed " << GetProcessName() << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -179,7 +178,6 @@ void G4VEmProcess::Clear()
 {
   currentCouple = nullptr;
   preStepLambda = 0.0;
-  idxLambda = idxLambdaPrim = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -604,9 +602,9 @@ void G4VEmProcess::StreamInfo(std::ostream& out,
 void G4VEmProcess::StartTracking(G4Track* track)
 {
   // reset parameters for the new track
-  currentParticle = track->GetParticleDefinition();
   theNumberOfInteractionLengthLeft = -1.0;
-  mfpKinEnergy = DBL_MAX; 
+  mfpKinEnergy = DBL_MAX;
+
   if(isIon) { massRatio = proton_mass_c2/currentParticle->GetPDGMass(); }
 
   // forced biasing only for primary particles
@@ -773,15 +771,15 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     fParticleChange.ProposeWeight(weight);
   }
   
-  /*  
-  if(0 < verboseLevel) {
+
+  if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PostStepDoIt: Sample secondary; E= "
            << finalT/MeV
            << " MeV; model= (" << currentModel->LowEnergyLimit()
            << ", " <<  currentModel->HighEnergyLimit() << ")"
            << G4endl;
   }
-  */
+
 
   // sample secondaries
   secParticles.clear();
@@ -1013,13 +1011,15 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 
 G4double 
 G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
-                                    const G4MaterialCutsCouple* couple)
+                                    const G4MaterialCutsCouple* couple,
+                                    G4double logKinEnergy)
 {
   // Cross section per atom is calculated
   DefineMaterial(couple);
   G4double cross = 0.0;
   if(buildLambdaTable) {
-    cross = GetCurrentLambda(kineticEnergy);
+    cross = GetCurrentLambda(kineticEnergy, 
+      (logKinEnergy < DBL_MAX) ? logKinEnergy : G4Log(kineticEnergy));
   } else {
     SelectModel(kineticEnergy, currentCoupleIndex);
     if(currentModel) {
@@ -1250,6 +1250,15 @@ void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
 G4VEmProcess* G4VEmProcess::GetEmProcess(const G4String& nam)
 {
   return (nam == GetProcessName()) ? this : nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4VEmProcess::GetLambda(G4double kinEnergy, const G4MaterialCutsCouple* couple)
+{
+  CurrentSetup(couple, kinEnergy);
+  return GetCurrentLambda(kinEnergy, G4Log(kinEnergy));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

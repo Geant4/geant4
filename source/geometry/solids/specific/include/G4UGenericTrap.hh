@@ -38,7 +38,7 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <volumes/UnplacedGenTrap.h>
+#include <VecGeom/volumes/UnplacedGenTrap.h>
 #include "G4TwoVector.hh"
 
 #include "G4Polyhedron.hh"

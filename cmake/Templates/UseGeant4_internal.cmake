@@ -182,9 +182,9 @@ function(geant4_add_test test)
   endif()
 
   #- Locate the test driver
-  set(_driver ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4TestDriver.cmake)
+  set(_driver ${CMAKE_SOURCE_DIR}/cmake/Modules/G4TestDriver.cmake)
   if(NOT EXISTS ${_driver})
-    message(FATAL_ERROR "GEANT4_ADD_TEST: Geant4TestDriver.cmake not found!")
+    message(FATAL_ERROR "GEANT4_ADD_TEST: G4TestDriver.cmake not found!")
   endif()
   set(_command ${_command} -P ${_driver})
 
@@ -211,6 +211,7 @@ function(geant4_add_test test)
       --build-project ${ARG_PROJECT}
       --build-config $<CONFIGURATION>
       --build-noclean
+      --build-options --no-warn-unused-cli -DCMAKE_DISABLE_FIND_PACKAGE_ROOT=$<BOOL:${CMAKE_DISABLE_FIND_PACKAGE_ROOT}>
       --test-command ${_command} )
     set_property(TEST ${test} PROPERTY ENVIRONMENT Geant4_DIR=${CMAKE_BINARY_DIR})
     if(ARG_FAILREGEX)

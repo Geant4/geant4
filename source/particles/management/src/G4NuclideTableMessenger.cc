@@ -23,17 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//---------------------------------------------------------------
+// G4NuclideTableMessenger class implementation
 //
-//  G4NuclideTableMessenger.cc
-//
-//  Description:
-//    This is a messenger class to interface to exchange information
-//    between ParticleDefinition and UI.
-//
-//  History:
-//    11 November 2015, T. Koi   : The 1st version created.
-//---------------------------------------------------------------
+// Author: T.Koi, SLAC - 11 November 2015
+//---------------------------------------------------------------------
 
 #include "G4NuclideTableMessenger.hh"
 #include "G4UImanager.hh"
@@ -44,17 +37,17 @@
 #include "G4UIcmdWithABool.hh"
 
 #include "G4NuclideTable.hh"
-#include "G4ios.hh"                 // Include from 'system'
+#include "G4ios.hh"
+
 #include <iomanip>                  // Include from 'system'
 
 G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
-                        :theNuclideTable(nuclideTable)
+  : theNuclideTable(nuclideTable)
 {
-  //Commnad   /particle/manage/nuclide
   thisDirectory = new G4UIdirectory("/particle/nuclideTable/");
   thisDirectory->SetGuidance("Nuclide table control commands.");
 
-  ///particle/manage/nuclide/min_halflife
+  // particle/manage/nuclide/min_halflife
   lifetimeCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/min_halflife",this);
   lifetimeCmd->SetGuidance("Set threshold of half-life.");
   lifetimeCmd->SetGuidance("Unit of the time can be :");
@@ -65,7 +58,7 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
   lifetimeCmd->SetDefaultUnit("ns");
   lifetimeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ///particle/manage/nuclide/level_tolerance
+  // particle/manage/nuclide/level_tolerance
   lToleranceCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/level_tolerance",this);
   lToleranceCmd->SetGuidance("Set tolerance in level searching.");
   lToleranceCmd->SetGuidance("Unit of the energy can be :");
@@ -75,7 +68,6 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
   lToleranceCmd->SetRange("lTolerance >0.0");
   lToleranceCmd->SetDefaultUnit("eV");
   lToleranceCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
 }
 
 G4NuclideTableMessenger::~G4NuclideTableMessenger()
@@ -85,13 +77,17 @@ G4NuclideTableMessenger::~G4NuclideTableMessenger()
   delete lToleranceCmd;
 } 
 
-void G4NuclideTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void G4NuclideTableMessenger::
+SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == lifetimeCmd ) {
-    //Commnad   /particle/manage/nuclideTable/min_halflife
+  if (command == lifetimeCmd )
+  {
+    // Command   /particle/manage/nuclideTable/min_halflife
     theNuclideTable->SetThresholdOfHalfLife(lifetimeCmd->GetNewDoubleValue(newValue)); 
-  } else if (command == lToleranceCmd ) {
-    //Commnad   /particle/manage/nuclideTable/level_tolerance
+  }
+  else if (command == lToleranceCmd )
+  {
+    // Command   /particle/manage/nuclideTable/level_tolerance
     theNuclideTable->SetLevelTolerance(lToleranceCmd->GetNewDoubleValue(newValue)); 
   }
 }

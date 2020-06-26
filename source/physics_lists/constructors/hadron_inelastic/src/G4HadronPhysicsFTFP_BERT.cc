@@ -61,6 +61,7 @@
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
@@ -78,6 +79,7 @@
 #include "G4Threading.hh"
 
 #include "G4HadronicParameters.hh"
+#include "G4HadronicBuilder.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -135,6 +137,7 @@ void G4HadronPhysicsFTFP_BERT::CreateModels()
   Pion();
   Kaon();
   Others();
+  G4HadronicBuilder::BuildBCHadronsFTFP_BERT();
 }
 
 void G4HadronPhysicsFTFP_BERT::Neutron()
@@ -205,12 +208,14 @@ void G4HadronPhysicsFTFP_BERT::Kaon()
 
 void G4HadronPhysicsFTFP_BERT::Others()
 {
-  //===== Hyperons ====== //
-  auto hyp = new G4HyperonFTFPBuilder;
-  AddBuilder( hyp );
+  // Hyperons (and anti-hyperons)
+  auto hyp = new G4HyperonBuilder;
+  AddBuilder(hyp);
+  auto ftfphyp = new G4HyperonFTFPBuilder;
+  AddBuilder(ftfphyp);
+  hyp->RegisterMe(ftfphyp);
   hyp->Build();
-
-  ///===== Anti-barions==== //
+  // Anti-barions
   auto abar = new G4AntiBarionBuilder;
   AddBuilder(abar);
   auto ftfpabar = new G4FTFPAntiBarionBuilder(QuasiElastic);

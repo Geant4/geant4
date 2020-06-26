@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
 #ifndef G4VPreCompoundModel_h
 #define G4VPreCompoundModel_h 1
@@ -64,8 +62,6 @@ public:
 
   virtual ~G4VPreCompoundModel();
   
-public:
-
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
 
   virtual void DeExciteModelDescription(std::ostream& outFile) const = 0;
@@ -74,12 +70,12 @@ public:
     
   inline G4ExcitationHandler* GetExcitationHandler() const;
   
-private:
-
   G4VPreCompoundModel(const G4VPreCompoundModel &) = delete;
   const G4VPreCompoundModel& operator=(const G4VPreCompoundModel &right) = delete;
   G4bool operator==(const G4VPreCompoundModel &right) const = delete;
   G4bool operator!=(const G4VPreCompoundModel &right) const = delete;
+
+private:
 
   G4ExcitationHandler* theExcitationHandler;
 };

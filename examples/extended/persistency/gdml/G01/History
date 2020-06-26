@@ -16,7 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 28th, 2019 I. Hrivnacova G01-V10-05-06
+May 14th, 2020 Gabriele Cosmo G01-V10-06-00
+- Use [] brackets in loop.gdml sample to show how to index names
+  and dimensions in loops.
+
+November 28th, 2019 Ivana Hrivnacova G01-V10-05-06
 - Fixed Doxygen warning in .README.txt
 
 September 24th, 2019 Gabriele Cosmo G01-V10-05-05

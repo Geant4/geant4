@@ -48,37 +48,34 @@ class G4VPhysicalVolume;
 // event information can be delegated to this class, for example.
 //
 
-class G4VPersistencyManager 
+class G4VPersistencyManager
 {
-  public: // with description
-      static G4VPersistencyManager* GetPersistencyManager();
-      //  Static method to return the pointer to the singleton object.
-      // Note that this method does NOT create the singleton object.
+ public:  // with description
+  static G4VPersistencyManager* GetPersistencyManager();
+  //  Static method to return the pointer to the singleton object.
+  // Note that this method does NOT create the singleton object.
 
-  protected:
-      G4VPersistencyManager();
+ protected:
+  G4VPersistencyManager();
 
-  public:
-      virtual ~G4VPersistencyManager();
+ public:
+  virtual ~G4VPersistencyManager();
 
-  private: 
-      static G4ThreadLocal G4VPersistencyManager * fPersistencyManager;
+ private:
+  static G4ThreadLocal G4VPersistencyManager* fPersistencyManager;
 
-  public: // with description
-      virtual G4bool Store(const G4Event* anEvent)=0;
-      virtual G4bool Store(const G4Run* aRun)=0;
-      virtual G4bool Store(const G4VPhysicalVolume* theWorld)=0;
-      //  Stores G4Event, G4Run, and geometry tree characterized by the world volume.
+ public:  // with description
+  virtual G4bool Store(const G4Event* anEvent)            = 0;
+  virtual G4bool Store(const G4Run* aRun)                 = 0;
+  virtual G4bool Store(const G4VPhysicalVolume* theWorld) = 0;
+  //  Stores G4Event, G4Run, and geometry tree characterized by the world
+  //  volume.
 
-      virtual G4bool Retrieve(G4Event*& anEvent)=0;
-      virtual G4bool Retrieve(G4Run*& aRun)=0;
-      virtual G4bool Retrieve(G4VPhysicalVolume*& theWorld)=0;
-      //  Restore G4Event, G4Run, and geometry tree characterized by the world volume.
-
+  virtual G4bool Retrieve(G4Event*& anEvent)            = 0;
+  virtual G4bool Retrieve(G4Run*& aRun)                 = 0;
+  virtual G4bool Retrieve(G4VPhysicalVolume*& theWorld) = 0;
+  //  Restore G4Event, G4Run, and geometry tree characterized by the world
+  //  volume.
 };
 
-
-
-
 #endif
-

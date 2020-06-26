@@ -74,6 +74,7 @@
 #include "G4HadronicInteractionRegistry.hh"
 
 #include "G4HadronicParameters.hh"
+#include "G4HadronicBuilder.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -238,4 +239,5 @@ void G4HadronInelasticQBBC::ConstructProcess()
       hp->AddDataSet(anucxs);
     } 
   }
+  G4HadronicBuilder::BuildBCHadronsFTFP_BERT();
 }

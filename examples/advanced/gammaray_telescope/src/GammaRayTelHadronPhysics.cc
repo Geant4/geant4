@@ -34,19 +34,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4HadronicParameters.hh"
-
+#include "G4ProcessManager.hh"
 
 GammaRayTelHadronPhysics::GammaRayTelHadronPhysics(const G4String& name)
                     :  G4VPhysicsConstructor(name)
 {;}
 
 GammaRayTelHadronPhysics::~GammaRayTelHadronPhysics()
-{
-  delete theStringDecay;
-}
-
-
-#include "G4ProcessManager.hh"
+{}
 
 
 void GammaRayTelHadronPhysics::ConstructProcess()
@@ -71,13 +66,12 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   const G4double theFTFMin =    4.0*GeV;
   const G4double theFTFMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay( new G4LundStringFragmentation );
+  G4FTFModel* theStringModel = new G4FTFModel;
+  G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay();
   theStringModel->SetFragmentationModel( theStringDecay );
-  thePreEquilib = new G4PreCompoundModel( new G4ExcitationHandler );
-  theCascade = new G4GeneratorPrecompoundInterface( thePreEquilib );
+  G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface();
 
-  theModel = new G4TheoFSGenerator( "FTFP" );
+  G4TheoFSGenerator* theModel = new G4TheoFSGenerator( "FTFP" );
   theModel->SetHighEnergyGenerator( theStringModel );
   theModel->SetTransport( theCascade );
   theModel->SetMinEnergy( theFTFMin );
@@ -97,7 +91,6 @@ void GammaRayTelHadronPhysics::ConstructProcess()
 
   G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( new G4PiNuclearCrossSection, 91*GeV );
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
-
 
   // PionPlus
   G4ParticleDefinition* pion = G4PionPlus::PionPlusDefinition();

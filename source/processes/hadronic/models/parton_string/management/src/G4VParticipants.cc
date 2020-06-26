@@ -40,44 +40,42 @@
 #include "G4Fancy3DNucleus.hh"
 
 
-G4VParticipants::G4VParticipants() : theNucleus(NULL), 
-                                     theProjectileNucleus(NULL)
+G4VParticipants::G4VParticipants() : theNucleus(nullptr), 
+                                     theProjectileNucleus(nullptr)
 {}
-
 
 G4VParticipants::~G4VParticipants()
 {
   // G4cout << "G4VParticipants::~G4VParticipants()" << G4endl;
-  if ( theNucleus != NULL ) delete theNucleus;
-  if ( theProjectileNucleus != NULL ) delete theProjectileNucleus;
+  if ( theNucleus != nullptr ) delete theNucleus;
+  if ( theProjectileNucleus != nullptr ) delete theProjectileNucleus;
 }
-
 
 void G4VParticipants::Init(G4int theA, G4int theZ)
 {
-  if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
+  if ( theNucleus == nullptr ) theNucleus = new G4Fancy3DNucleus();
   theNucleus->Init(theA, theZ);
   theNucleus->SortNucleonsIncZ();
 }
 
-
 void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
 {
-  if (theNucleus != NULL) delete theNucleus;
+  if (theNucleus != nullptr) delete theNucleus;
   theNucleus = aNucleus;
 }
 
 void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ)
 {
-  if ( theProjectileNucleus == NULL ) theProjectileNucleus = new G4Fancy3DNucleus();
+  if ( theProjectileNucleus == nullptr ) 
+    theProjectileNucleus = new G4Fancy3DNucleus();
+
   theProjectileNucleus->Init(theA, theZ);
   theProjectileNucleus->SortNucleonsDecZ();
 }
 
-
 void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
 {
-  if (theProjectileNucleus != NULL) delete theProjectileNucleus;
+  if (theProjectileNucleus != nullptr) delete theProjectileNucleus;
   theProjectileNucleus = aNucleus;
 }
 

@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 February 2020 Witek Pokorski (gdml-V10-06-01)
+- Fixed writting out and reading in of const properties of material.
+
+11 December 2019 Ben Morgan (gdml-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 13 November 2019 Makoto Asai (gdml-V10-05-09)
 - G4GDMLRead.cc : avoid double-definition of units.
 

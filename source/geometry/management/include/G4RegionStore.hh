@@ -27,8 +27,8 @@
 //
 // Class description:
 //
-// Container for all regiong, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// Container for all regions, with functionality derived from
+// std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static method
 // G4RegionStore::GetInstance().
 //
@@ -58,7 +58,7 @@ class G4VPhysicalVolume;
 
 class G4RegionStore : public std::vector<G4Region*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4Region* pRegion);
       // Add the region to the collection.
@@ -91,19 +91,22 @@ class G4RegionStore : public std::vector<G4Region*>
       // If it does not exist it will allocate one delegating ownership
       // to the client.
 
-  public:  // without description
-
     void SetWorldVolume();
       // Set a world volume pointer to a region that belongs to it.
       // Scan over all world volumes.
       // This method should be exclusively used by G4RunManagerKernel.
 
+    virtual ~G4RegionStore();
+      // Destructor: takes care to delete allocated regions.
+
+    G4RegionStore(const G4RegionStore&) = delete;
+    G4RegionStore& operator=(const G4RegionStore&) = delete;
+      // Forbidden copy constructor and assignment operator
+
   protected:
 
     G4RegionStore();
       // Protected singleton constructor.
-    virtual ~G4RegionStore();
-      // Destructor: takes care to delete allocated regions.
 
   private:
 

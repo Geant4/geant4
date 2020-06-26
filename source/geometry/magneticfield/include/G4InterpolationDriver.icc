@@ -388,7 +388,9 @@ G4double G4InterpolationDriver<T>::CalcChordStep(G4double stepTrialOld,
 template <class T>
 G4bool G4InterpolationDriver<T>::
 AccurateAdvance(G4FieldTrack& track, G4double hstep,
-                G4double /*eps*/, G4double /*hinitial*/)
+                G4double /*eps*/,
+                G4double /*hinitial*/
+   )
 {
     if (hstep == 0.0)
     {
@@ -574,3 +576,24 @@ void G4InterpolationDriver<T>::AccumulateStatistics(G4int noTrials)
     }
 }
 
+template <class T>
+void G4InterpolationDriver<T>::StreamInfo( std::ostream& os ) const
+{
+    os << "State of G4InterpolationDriver: " << std::endl;
+    os << "--Base state (G4RKIntegrationDriver): " << std::endl;
+    Base::StreamInfo( os );    
+    os << "  fMinimumStep   =      " << fMinimumStep  << std::endl;    
+    // os << "  Max number of Steps = " << fMaxNoSteps << std::endl;
+    // os << "  Safety factor       = " << safety  << std::endl;
+    // os << "  Power - shrink      = " << pshrnk << std::endl;
+    // os << "  Power - grow        = " << pgrow << std::endl;
+    // os << "  threshold - shrink  = " << errorConstraintShrink << std::endl;
+    // os << "  threshold - grow    = " << errorConstraintGrow   << std::endl;
+
+    os << "  Max num of Trials   = " << fMaxTrials << std::endl;
+    os << "  Fract Next Estimate = " << fFractionNextEstimate << std::endl;
+    os << "  Smallest Curve Fract= " << fSmallestCurveFraction << std::endl;
+    
+    os << "  VerboseLevel        = " << fVerboseLevel << std::endl;
+    os << "  KeepLastStepper     = " << fKeepLastStepper << std::endl;
+}

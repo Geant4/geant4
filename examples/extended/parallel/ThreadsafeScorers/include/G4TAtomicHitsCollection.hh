@@ -42,9 +42,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
 #ifndef G4TAtomicHitsCollection_h
 #define G4TAtomicHitsCollection_h 1
 
@@ -80,50 +77,43 @@
       void* theCollection;
 };*/
 
-
 template <class T>
 class G4TAtomicHitsCollection : public G4VHitsCollection
 {
-protected:
+ protected:
   static_assert(std::is_fundamental<T>::value,
                 "G4TAtomicHitsCollection must use fundamental type");
 
-public:
-  typedef T                                 base_type;
-  typedef G4atomic<T>                       value_type;
-  typedef typename std::deque<value_type*>  container_type;
+ public:
+  typedef T base_type;
+  typedef G4atomic<T> value_type;
+  typedef typename std::deque<value_type*> container_type;
 
-public:
+ public:
   G4TAtomicHitsCollection();
 
-public:
+ public:
   // with description
   G4TAtomicHitsCollection(G4String detName, G4String colNam);
 
   // constructor.
-public:
+ public:
   virtual ~G4TAtomicHitsCollection();
-  G4bool operator==(const G4TAtomicHitsCollection<T> &right) const;
+  G4bool operator==(const G4TAtomicHitsCollection<T>& right) const;
 
-  //inline void *operator new(size_t);
-  //inline void operator delete(void* anHC);
+  // inline void *operator new(size_t);
+  // inline void operator delete(void* anHC);
 
-public: // with description
+ public:  // with description
   virtual void DrawAllHits();
   virtual void PrintAllHits();
   //  These two methods invokes Draw() and Print() methods of all of
   // hit objects stored in this collection, respectively.
 
-public: // with description
-  inline value_type* operator[](size_t i) const
-  {
-    return (*theCollection)[i];
-  }
+ public:  // with description
+  inline value_type* operator[](size_t i) const { return (*theCollection)[i]; }
   //  Returns a pointer to a concrete hit object.
-  inline container_type* GetVector() const
-  {
-    return theCollection;
-  }
+  inline container_type* GetVector() const { return theCollection; }
   //  Returns a collection vector.
   inline G4int insert(T* aHit)
   {
@@ -140,49 +130,46 @@ public: // with description
   }
   //  Returns the number of hit objects stored in this collection
 
-public:
-  virtual G4VHit* GetHit(size_t i) const
-  {
-    return (*theCollection)[i];
-  }
+ public:
+  virtual G4VHit* GetHit(size_t i) const { return (*theCollection)[i]; }
   virtual size_t GetSize() const
   {
     G4AutoLock l(&fMutex);
     return theCollection->size();
   }
 
-protected:
+ protected:
   container_type* theCollection;
-  G4Mutex         fMutex;
-
+  G4Mutex fMutex;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <class T>
 G4TAtomicHitsCollection<T>::G4TAtomicHitsCollection()
   : theCollection(new container_type)
-{ }
+{}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <class T>
 G4TAtomicHitsCollection<T>::G4TAtomicHitsCollection(G4String detName,
                                                     G4String colNam)
-  : G4VHitsCollection(detName,colNam),
-    theCollection(new container_type)
-{ }
+  : G4VHitsCollection(detName, colNam)
+  , theCollection(new container_type)
+{}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-template <class T> G4TAtomicHitsCollection<T>::~G4TAtomicHitsCollection()
+template <class T>
+G4TAtomicHitsCollection<T>::~G4TAtomicHitsCollection()
 {
   for(size_t i = 0; i < theCollection->size(); i++)
-    delete (*theCollection)[i];
+    delete(*theCollection)[i];
   theCollection->clear();
   delete theCollection;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <class T>
-G4bool G4TAtomicHitsCollection<T>
-::operator==(const G4TAtomicHitsCollection<T> &right) const
+G4bool G4TAtomicHitsCollection<T>::operator==(
+  const G4TAtomicHitsCollection<T>& right) const
 {
-    return (collectionName == right.collectionName);
+  return (collectionName == right.collectionName);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <class T>

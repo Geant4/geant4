@@ -23,14 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4CacheDetails class implementation
 //
+// Author: A.Dotti, 21 October 2013 - First implementation
+// --------------------------------------------------------------------
 
-// Decalare needed static data member for fully specialized version of cache
+// Declare needed static data member for fully specialized version of cache
+//
 #include "G4CacheDetails.hh"
 
+// --------------------------------------------------------------------
 G4CacheReference<G4double>::cache_container*&
 G4CacheReference<G4double>::cache()
 {
-    G4ThreadLocalStatic std::vector<G4double>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic std::vector<G4double>* _instance = nullptr;
+  return _instance;
 }

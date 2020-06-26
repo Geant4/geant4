@@ -23,27 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Description:
-//      Manage the per-thread state of solids - those which 
-//        have a per-thread state and dependent classes (if any)
-//   In particular it 
-//       - owns the arrays that implement 'split' classes 
-//       - classes/objects which are owned by the split classes.
-//   Background: the classes/objects affected are  
-//       - 'split' classes part of its state is per-thread,
-//       - per-thread objects, in particular those which are owned 
-//         by the split classes.
-// Goal: Take ownership and control of per-thread state of 
-//        classes to work with multi-threading. 
-//       Offshoot of G4GeometryWorkspace, to deal with Particles.
-// 
-// Designed / created by John Apostolakis
-// Interface design - review with Andrea Dotti.
-// 
-// First version: 4th Oct 2013
-//    Created due to dependency issue with G4GeometryWorkspace 
-// Working version:  
+// G4ParticlesWorkspace
+//
+// Class description:
+//
+// Class managing the per-thread state of particles, those which 
+// have a per-thread state and dependent classes (if any).
+// In particular, it owns the arrays that implement 'split' classes 
+// and classes/objects which are owned by the split classes.
+// The classes/objects affected are  
+//   - 'split' classes part of its state is per-thread,
+//   - per-thread objects, in particular those which are owned 
+//     by the split classes.
+// Goal: Take ownership and control of per-thread state of classes
+//       to work with multi-threading. 
 
+// Authors: J.Apostolakis & A.Dotti, 4 October 2013
+// --------------------------------------------------------------------
 #ifndef G4PARTICLESWORKSPACE_HH
 #define G4PARTICLESWORKSPACE_HH
 
@@ -55,37 +51,39 @@ class G4ParticlesWorkspace
 {
   public:
 
-    typedef G4TWorkspacePool<G4ParticlesWorkspace> pool_type;
-      G4ParticlesWorkspace(G4bool verbose=false);
-     ~G4ParticlesWorkspace();
+    using pool_type = G4TWorkspacePool<G4ParticlesWorkspace>;
 
-     void UseWorkspace();     //Take ownership
-     void ReleaseWorkspace(); //Release ownership
-     void DestroyWorkspace(); //Release ownership and destroy
+    G4ParticlesWorkspace(G4bool verbose=false);
+    ~G4ParticlesWorkspace();
 
-     void InitialiseWorkspace();
+    void UseWorkspace();     // Take ownership
+    void ReleaseWorkspace(); // Release ownership
+    void DestroyWorkspace(); // Release ownership and destroy
+
+    void InitialiseWorkspace();
       // To be called at start of each run (especially 2nd and further runs)
 
-     void   SetVerbose(G4bool v) { fVerbose=v; } 
-     G4bool GetVerbose()  { return fVerbose;   } 
+    void   SetVerbose(G4bool v) { fVerbose=v; } 
+    G4bool GetVerbose()  { return fVerbose;   } 
   
     static pool_type* GetPool();
 
- protected:  // Implementation methods
+  protected:  // Implementation methods
 
-      void   InitialiseParticles();
+    void InitialiseParticles();
 
- private:
+  private:
 
-     // Helper pointer - can be per instance or shared
-     G4PDefManager *fpPDefSIM;
+    G4PDefManager* fpPDefSIM = nullptr;
+      // Helper pointer - can be per instance or shared
   
-  // Per Instance variables
-  //   NOTE: the ownership of the Data Arrays is IN this object
+    // Per Instance variables
+    // NOTE: the ownership of the Data Arrays is IN this object
 
-     // Store SubInstanceManager object pointers (SIM pointers)
-     G4PDefData  *fpPDefOffset;
-     G4bool       fVerbose;
+    G4PDefData* fpPDefOffset = nullptr;
+      // Store SubInstanceManager object pointers (SIM pointers)
+
+    G4bool fVerbose = false;
 };
 
-#endif //G4PARTICLESWORKSPACE_HH
+#endif

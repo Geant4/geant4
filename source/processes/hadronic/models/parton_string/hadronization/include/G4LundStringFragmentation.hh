@@ -36,7 +36,7 @@
 
 #include "G4VLongitudinalStringDecay.hh"
 
-//**************************************************************************************************************
+//******************************************************************************
 
 class G4LundStringFragmentation: public G4VLongitudinalStringDecay
 {
@@ -109,7 +109,7 @@ class G4LundStringFragmentation: public G4VLongitudinalStringDecay
     G4int SampleState(void);
 };
 
-//**************************************************************************************************************
+//******************************************************************************
 // Class G4LundStringFragmentation 
 
 #endif

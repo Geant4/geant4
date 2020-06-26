@@ -61,9 +61,7 @@ G4WLSTimeGeneratorProfileExponential::~G4WLSTimeGeneratorProfileExponential()
 
 G4double G4WLSTimeGeneratorProfileExponential::GenerateTime(const G4double time_constant)
 {
-  G4double time = 0;
-  time = -std::log(G4UniformRand())*time_constant;
-  return time;
+  return -std::log(G4UniformRand())*time_constant;
 }
 
 G4double G4WLSTimeGeneratorProfileExponential::GenerateTime(const G4MaterialPropertiesTable*){

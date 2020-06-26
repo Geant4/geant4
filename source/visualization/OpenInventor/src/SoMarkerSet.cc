@@ -630,7 +630,11 @@ void HEPVis_SoMarkerSet::initClass (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_NODE_INIT_CLASS(HEPVis_SoMarkerSet,SoPointSet,"PointSet");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(HEPVis_SoMarkerSet,SoPointSet,"PointSet");
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 HEPVis_SoMarkerSet::HEPVis_SoMarkerSet (

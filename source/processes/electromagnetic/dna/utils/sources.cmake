@@ -65,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNARevertProbability.hh
         G4DNAWaterExcitationStructure.hh
         G4DNAWaterIonisationStructure.hh
+	G4ErrorFunction.hh
         G4MoleculeGun.hh
         G4MoleculeGunMessenger.hh
         G4ReactionTableMessenger.hh
@@ -89,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNAPTBIonisationStructure.cc
         G4DNAWaterExcitationStructure.cc
         G4DNAWaterIonisationStructure.cc
+	G4ErrorFunction.cc
         G4MoleculeGun.cc
         G4MoleculeGunMessenger.cc
         G4ReactionTableMessenger.cc
@@ -98,6 +100,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4VPhysChemIO.cc
         G4PhysChemIO.cc
     GRANULAR_DEPENDENCIES
+        G4analysismng
         G4baryons
         G4bosons
         G4cuts

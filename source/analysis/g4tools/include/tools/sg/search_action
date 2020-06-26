@@ -107,6 +107,7 @@ public:
 
   typedef std::vector<path_t> paths_t;
   const paths_t& paths() const {return m_paths;}
+
 protected:
   search_what m_what;
   bool m_stop_at_first;

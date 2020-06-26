@@ -72,27 +72,27 @@ G4double G4LegendrePolynomial::EvalAssocLegendrePoly(G4int l, G4int m, G4double 
   // hard-code the first few orders for speed
   if(l==0)   return 1;
   if(l==1) {
-    if(m==0) return x;
+    if(m==0){return x;}
     /*m==1*/ return -sqrt(1.-x*x);
   }
   if(l<5) {
     G4double x2 = x*x;
     if(l==2) {
-      if(m==0) return 0.5*(3.*x2 - 1.);
-      if(m==1) return -3.*x*sqrt(1.-x2);
+      if(m==0){return 0.5*(3.*x2 - 1.);}
+      if(m==1){return -3.*x*sqrt(1.-x2);}
       /*m==2*/ return 3.*(1.-x2);
     }
     if(l==3) {
-      if(m==0) return 0.5*(5.*x*x2 - 3.*x);
-      if(m==1) return -1.5*(5.*x2-1.)*sqrt(1.-x2);
-      if(m==2) return 15.*x*(1.-x2);
+      if(m==0){return 0.5*(5.*x*x2 - 3.*x);}
+      if(m==1){return -1.5*(5.*x2-1.)*sqrt(1.-x2);}
+      if(m==2){return 15.*x*(1.-x2);}
       /*m==3*/ return -15.*(1.-x2)*sqrt(1.-x2);
     }
     if(l==4) {
-      if(m==0) return 0.125*(35.*x2*x2 - 30.*x2 + 3.);
-      if(m==1) return -2.5*(7.*x*x2-3.*x)*sqrt(1.-x2);
-      if(m==2) return 7.5*(7.*x2-1.)*(1.-x2);
-      if(m==3) return -105.*x*(1.-x2)*sqrt(1.-x2);
+      if(m==0){return 0.125*(35.*x2*x2 - 30.*x2 + 3.);}
+      if(m==1){return -2.5*(7.*x*x2-3.*x)*sqrt(1.-x2);}
+      if(m==2){return 7.5*(7.*x2-1.)*(1.-x2);}
+      if(m==3){return -105.*x*(1.-x2)*sqrt(1.-x2);}
       /*m==4*/ return 105.*(1. - 2.*x2 + x2*x2);
     }
   }

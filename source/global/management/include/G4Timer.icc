@@ -23,41 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Timer inline methods implementations
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class inline implementation
-// ------------------------------------------------------------
+// Author: P.Kent, 21.08.95 - First implementation
+// Revision: G.Cosmo, 29.04.97 - Added timings for Windows
+// --------------------------------------------------------------------
 
-inline
-void G4Timer::Start()
+inline void G4Timer::Start()
 {
-  fValidTimes=false;
+  fValidTimes = false;
   times(&fStartTimes);
   fStartRealTime = clock_type::now();
 }
 
-inline
-void G4Timer::Stop()
+inline void G4Timer::Stop()
 {
   times(&fEndTimes);
   fEndRealTime = clock_type::now();
-  fValidTimes=true;
+  fValidTimes  = true;
 }
 
-inline
-G4bool G4Timer::IsValid() const
-{
-  return fValidTimes;
-}
+inline G4bool G4Timer::IsValid() const { return fValidTimes; }
 
 inline const char* G4Timer::GetClockTime() const
 {
   time_t rawtime;
-  struct tm * timeinfo;
+  struct tm* timeinfo;
 
-  time ( &rawtime );
-  timeinfo = localtime ( &rawtime );
-  return asctime (timeinfo);
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+  return asctime(timeinfo);
 }

@@ -335,7 +335,7 @@ public:
 
   // Redefine parameteters for stepping control
   void SetLinearLossLimit(G4double val);
-  void SetStepFunction(G4double v1, G4double v2, G4bool lock=true);
+  void SetStepFunction(G4double v1, G4double v2);
   void SetLowestEnergyLimit(G4double);
 
   inline G4int NumberOfSubCutoffRegions() const;
@@ -489,17 +489,17 @@ private:
   G4PhysicsTable*             theLambdaTable;
   G4PhysicsTable*             theSubLambdaTable;
 
-  size_t                      idxDEDX;
-  size_t                      idxDEDXSub;
-  size_t                      idxDEDXunRestricted;
-  size_t                      idxIonisation;
-  size_t                      idxIonisationSub;
-  size_t                      idxRange;
-  size_t                      idxCSDA;
-  size_t                      idxSecRange;
-  size_t                      idxInverseRange;
-  size_t                      idxLambda;
-  size_t                      idxSubLambda;
+  size_t                      idxDEDX = 0;
+  size_t                      idxDEDXSub = 0;
+  size_t                      idxDEDXunRestricted = 0;
+  size_t                      idxIonisation = 0;
+  size_t                      idxIonisationSub = 0;
+  size_t                      idxRange = 0;
+  size_t                      idxCSDA = 0;
+  size_t                      idxSecRange = 0;
+  size_t                      idxInverseRange = 0;
+  size_t                      idxLambda = 0;
+  size_t                      idxSubLambda = 0;
 
   std::vector<G4double>       theDEDXAtMaxEnergy;
   std::vector<G4double>       theRangeAtMaxEnergy;
@@ -541,7 +541,6 @@ private:
   G4bool   weightFlag;
   G4bool   isMaster;
   G4bool   actIntegral;
-  G4bool   actStepFunc;
   G4bool   actLinLossLimit;
   G4bool   actLossFluc;
   G4bool   actBinning;
@@ -743,6 +742,7 @@ G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e, G4double loge)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double 
 G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 {
@@ -887,6 +887,7 @@ G4VEnergyLossProcess::GetRangeForLoss(G4double kinEnergy,
   DefineMaterial(couple);
   return reduceFactor * GetScaledRangeForScaledEnergy(kinEnergy*massRatio);
 }
+
 
 inline G4double 
 G4VEnergyLossProcess::GetRangeForLoss(G4double kinEnergy,
@@ -1051,7 +1052,7 @@ inline G4double G4VEnergyLossProcess::CrossSectionBiasingFactor() const
 
 inline G4bool G4VEnergyLossProcess::TablesAreBuilt() const
 {
-  return  tablesAreBuilt;
+  return tablesAreBuilt;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -168,8 +168,10 @@ G4tgbVolume* G4tgbVolumeMgr::FindVolume( const G4String& volname)
     G4String ErrMessage = "G4tgbVolume not found: " + volname + " !";
     G4Exception("G4tgbVolumeMgr::FindVolume()", "InvalidSetup",
                 FatalException, ErrMessage);
+    return (G4tgbVolume*)0;
+  } else {
+    return (*cite).second;
   }
-  return (*cite).second;
 }
 
 

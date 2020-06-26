@@ -11,7 +11,7 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 Mar. 2020 B. Morgan (geant4py-V10-05-00)
+19 Mar. 2020 B. Morgan (geant4py-V10-06-00)
 - Integrate build, test, and install of geant4py with core Geant4
   CMake buildsystem.
 

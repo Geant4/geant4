@@ -25,12 +25,10 @@
 //
 // G4ProcessManager implementation
 //
-// First implementation, based on object model of
-// 2nd December 1995, G.Cosmo
-// --------------------------------------------------------------------
-// New Physics scheme - 08.01.1997, H.Kurahige
-// Use STL vector instead of RW vector - 01.03.2000, H.Kurashige
-// Add exception to check ordering paramters - 02.10.2007, H.Kurashige
+// Authors:
+// - 02.12.1995, G.Cosmo - First implementation, based on object model
+// - 06.05.1996, G.Cosmo - Revised; added vector of processes at rest
+// - 08.01.1997, H.Kurashige - New Physics scheme
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -42,20 +40,13 @@
 #include "G4StateManager.hh"
 #include "G4ProcessTable.hh"
 
-// ---------------------------------
-//  function members implementation
-// ---------------------------------
-G4ThreadLocal G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
-G4ThreadLocal G4int  G4ProcessManager::counterOfObjects = 0;
+G4ThreadLocal G4ProcessManagerMessenger*
+              G4ProcessManager::fProcessManagerMessenger = nullptr;
+G4ThreadLocal G4int G4ProcessManager::counterOfObjects = 0;
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType)
-  : theAttrVector(nullptr),
-    theParticleType(aParticleType),
-    numberOfProcesses(0),
-    theProcessList(nullptr),
-    duringTracking(false),     
-    verboseLevel(1)
+  : theParticleType(aParticleType)
 {
   // create the process List
   theProcessList = new G4ProcessVector();
@@ -65,7 +56,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType)
                  FatalException, "Can not create G4ProcessList ");
   }
 
-  //create process vector
+  // create process vector
   for (G4int i=0; i<SizeOfProcVectorArray; ++i)
   {
     theProcVector[i] = new G4ProcessVector();
@@ -87,27 +78,24 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType)
 
   for (G4int i=0; i<NDoit; ++i)
   {
-    isSetOrderingFirstInvoked[i]=false;
-    isSetOrderingLastInvoked[i]=false;
+    isSetOrderingFirstInvoked[i] = false;
+    isSetOrderingLastInvoked[i] = false;
   }
 
   // Increment counter of G4ProcessManager objects
-  counterOfObjects+=1; 
+  ++counterOfObjects; 
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4ProcessManager::G4ProcessManager(G4ProcessManager& right)
-  : theAttrVector(nullptr),
-    theParticleType(right.theParticleType),
-    numberOfProcesses(0),
-    theProcessList(nullptr),
-    duringTracking(false),
+  : theParticleType(right.theParticleType),
     verboseLevel(right.verboseLevel)
 {
 #ifdef G4VERBOSE
    if (GetVerboseLevel() > 2)
    {
-     G4cout <<  "G4ProcessManageer:: copy constructor " <<G4endl; 
+     G4cout << "G4ProcessManager::G4ProcessManager() [copy constructor]"
+            << G4endl; 
    }
 #endif
 
@@ -116,8 +104,8 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager& right)
    theAttrVector = new G4ProcessAttrVector();
    if ( ( theProcessList == nullptr) || (theAttrVector == nullptr) )
    {
-     G4Exception( "G4ProcessManager::G4ProcessManager() [coopy constructor]",
-                  "ProcMan011",FatalException, "Can not create G4ProcessList ");
+     G4Exception( "G4ProcessManager::G4ProcessManager() [copy constructor]",
+                  "ProcMan011",FatalException, "Cannot create G4ProcessList");
    }
 
    for (G4int idx=0; idx < right.numberOfProcesses; ++idx)
@@ -129,7 +117,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager& right)
      G4ProcessAttribute* dAttr = new G4ProcessAttribute(*sAttr);
      // adds  a G4ProcessAttribute object
      theAttrVector->push_back(dAttr);
-     numberOfProcesses +=1;
+     ++numberOfProcesses;
    }
   
    // fill up theProcVector
@@ -139,8 +127,8 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager& right)
      theProcVector[i] = new G4ProcessVector();
      if ( theProcVector[i] == nullptr )
      {
-       G4Exception("G4ProcessManager::G4ProcessManager() [coopy constructor]",
-                   "ProcMan011",FatalException, "Can not create G4ProcessVector ");
+       G4Exception("G4ProcessManager::G4ProcessManager() [copy constructor]",
+                  "ProcMan011",FatalException, "Cannot create G4ProcessVector");
      }
 
      G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
@@ -164,44 +152,10 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager& right)
    }
 
    // Increment counter of G4ProcessManager objects
-   counterOfObjects+=1; 
+   ++counterOfObjects; 
 }
 
-// ///////////////////////////////////////
-G4ProcessManager::G4ProcessManager()
-  : theAttrVector(nullptr),
-    theParticleType(nullptr),
-    numberOfProcesses(0),
-    theProcessList(nullptr),
-    duringTracking(false),
-    verboseLevel(1)
-{
-  // clear the process List and ProcessAttr Vector
-  G4Exception("G4ProcessManager::G4ProcessManager()","ProcMan111",
-              JustWarning,"Default constructor is called");
-
-  //create process vector
-  for (G4int i=0; i<SizeOfProcVectorArray; ++i)
-  {
-    theProcVector[i] = nullptr;
-  }
-
-  for (G4int i=0; i<NDoit; ++i)
-  {
-    isSetOrderingFirstInvoked[i]=false;
-    isSetOrderingLastInvoked[i]=false;
-  }
-}
-
-// ///////////////////////////////////////
-G4ProcessManager & G4ProcessManager::operator=(const G4ProcessManager &)
-{
-  G4Exception("G4ProcessManager::operator=","ProcMan112",
-              JustWarning,"Assignment operator is called");
-  return *this;
-}
-
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4ProcessManager::~G4ProcessManager()
 {
   for (G4int i=0; i<SizeOfProcVectorArray; ++i)
@@ -215,46 +169,43 @@ G4ProcessManager::~G4ProcessManager()
   theProcessList->clear();
   delete theProcessList;
 
-  for (auto itr = theAttrVector->begin(); itr!= theAttrVector->end(); ++itr)
+  for (auto itr = theAttrVector->cbegin(); itr!= theAttrVector->cend(); ++itr)
   {
     delete (*itr);
   }
   theAttrVector->clear();
-  delete  theAttrVector;
+  delete theAttrVector;
 
-  counterOfObjects-=1; 
+  --counterOfObjects; 
 
   // delete messenger if this object is last one
   if ( counterOfObjects == 0 )
   {
-    if (fProcessManagerMessenger != nullptr)
-    {
-      delete fProcessManagerMessenger;
-      fProcessManagerMessenger = nullptr;
+    delete fProcessManagerMessenger;
+    fProcessManagerMessenger = nullptr;
 #ifdef G4VERBOSE
-      if (GetVerboseLevel() > 1)
-      {
-        G4cout << "G4ProcessManagerMessenger is deleted" << G4endl;
-      } 
+    if (GetVerboseLevel() > 1)
+    {
+      G4cout << "G4ProcessManagerMessenger is deleted" << G4endl;
+    } 
 #endif
-    }
   }
 }
 
-////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4int G4ProcessManager::GetProcessVectorIndex(
                            G4VProcess* aProcess,
                            G4ProcessVectorDoItIndex idx,
                            G4ProcessVectorTypeIndex typ
                            ) const
 {
-  G4int idxVect =  -1;
+  G4int idxVect = -1;
   G4int idxProc = GetProcessIndex(aProcess); 
   G4int ivec = GetProcessVectorId(idx, typ);
 
   if ( ( idxProc >=0) && (ivec >=0) )
   {
-    idxVect =  GetAttribute(idxProc)->idxProcVector[ivec];
+    idxVect = GetAttribute(idxProc)->idxProcVector[ivec];
   }
   else
   {
@@ -281,7 +232,7 @@ G4int G4ProcessManager::GetProcessVectorIndex(
   return idxVect;
 }
 
-/////////////////////////////////////////
+// --------------------------------------------------------------------
 G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
 {
   // check index range
@@ -305,14 +256,14 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
   G4VProcess* aProcess = (*theProcessList)[index];
   if (aProcess == nullptr)
   {
-    G4String aErrorMessage("Bad ProcessList:  Null Pointer for");
+    G4String aErrorMessage("Bad ProcessList: Null Pointer for ");
     aErrorMessage += theParticleType->GetParticleName() ;
     G4Exception("G4ProcessManager::GetAttribute()","ProcMan012",
-                FatalException,aErrorMessage);
+                FatalException, aErrorMessage);
     return nullptr;
   }    
 
-  //find the process attribute
+  // find the process attribute
   if ( ((*theAttrVector)[index])->idxProcessList == index )
   {
     return  (*theAttrVector)[index];
@@ -327,12 +278,13 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
       G4cout << "G4ProcessManager::GetAttribute():";
       G4cout << " particle[" << theParticleType->GetParticleName() << "]"
              << G4endl;
-      G4cout << "Warning: attribute vector index is inconsistent with process List index" 
+      G4cout << "Warning: attribute vector index is inconsistent"
+             << " with process List index" 
              << G4endl; 
    }
 #endif
    // re-ordering attribute vector 
-    G4ProcessAttribute *pAttr = nullptr;
+    G4ProcessAttribute* pAttr = nullptr;
     for (auto itr = theAttrVector->cbegin(); itr!= theAttrVector->cend(); ++itr)
     {
       if ( (*itr)->idxProcessList == index)
@@ -345,13 +297,13 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
   } 
 }
 
-// ///////////////////////////////////////
-G4ProcessAttribute * G4ProcessManager::GetAttribute(G4VProcess *aProcess) const
+// --------------------------------------------------------------------
+G4ProcessAttribute * G4ProcessManager::GetAttribute(G4VProcess* aProcess) const
 {
   return GetAttribute( GetProcessIndex(aProcess));
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
@@ -361,7 +313,7 @@ G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
   // insert in pVector
   pVector->insertAt(ip, process);
 
-  //correct index in ProcessAttributes of processes
+  // correct index in ProcessAttributes of processes
   for (G4int iproc=0; iproc<numberOfProcesses; ++iproc)
   {
     G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
@@ -386,10 +338,11 @@ G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
   return ip;
 }
 
-// ///////////////////////////////////////
-G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* , G4int ivec)
+// --------------------------------------------------------------------
+G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess*, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
+
   // check position
   if ( (ip<0) || (ip >= G4int(pVector->entries())) ) return -1;
 
@@ -417,7 +370,7 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* , G4int ivec)
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0)
       { 
-        G4cout << " G4ProcessManager::RemoveAt : No Process Attribute "
+        G4cout << " G4ProcessManager::RemoveAt(): No Process Attribute "
                << G4endl;
       }
 #endif
@@ -426,7 +379,7 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* , G4int ivec)
   return ip;
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4int G4ProcessManager::FindInsertPosition(G4int ord, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
@@ -448,16 +401,15 @@ G4int G4ProcessManager::FindInsertPosition(G4int ord, G4int ivec)
   return ip;
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4int G4ProcessManager::AddProcess(
-                 G4VProcess *aProcess,
+                 G4VProcess* aProcess,
                  G4int      ordAtRestDoIt,
                  G4int      ordAlongStepDoIt,
                  G4int      ordPostStepDoIt 
                 )
-{ 
-   
-  //check the process is applicable to this particle type
+{
+  // check the process is applicable to this particle type
   if (  !aProcess->IsApplicable(*theParticleType) )
   {
 #ifdef G4VERBOSE
@@ -477,11 +429,11 @@ G4int G4ProcessManager::AddProcess(
   }
 #endif
 
-  //add aProcess and this ProcessManager into ProcesssTable
+  // add aProcess and this ProcessManager into ProcesssTable
   G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
   theProcessTable->Insert(aProcess, this);
 
-  //add aProcess to process List
+  // add aProcess to process List
   theProcessList->insert(aProcess);  
   G4int idx = (theProcessList->entries()) - 1;
 
@@ -489,11 +441,11 @@ G4int G4ProcessManager::AddProcess(
   if (numberOfProcesses != idx)
   {
     theProcessList->removeLast();
-    G4String anErrorMessage("Bad ProcessList: Inconsistent process List size for ");
+    G4String anErrorMessage("Inconsistent process List size for ");
     anErrorMessage += "process[" + aProcess->GetProcessName() + "]";
     anErrorMessage += " particle[" + theParticleType->GetParticleName() + "]";
-    G4Exception( "G4ProcessManager::AddProcess()","ProcMan012",
-                 FatalException,anErrorMessage);
+    G4Exception("G4ProcessManager::AddProcess()", "ProcMan012",
+                FatalException, anErrorMessage);
     return -1;
   }
 
@@ -521,11 +473,10 @@ G4int G4ProcessManager::AddProcess(
     {
       // DoIt is inactive if ordering parameter is negative
       pAttr->idxProcVector[ivec] = -1;
-
     }
     else
     {
-      //add aProcess in ordering of ordProcVector
+      // add aProcess in ordering of ordProcVector
       // G4ProcessVector* pVector = theProcVector[ivec];
       // find insert position
       G4int ip = FindInsertPosition(pAttr->ordProcVector[ivec], ivec);
@@ -547,12 +498,12 @@ G4int G4ProcessManager::AddProcess(
     }
   }
 
-  //add ProcessAttribute to ProcessAttrVector
+  // add ProcessAttribute to ProcessAttrVector
   theAttrVector->push_back(pAttr);
 
   numberOfProcesses += 1;
 
- // check consistencies between ordering parameters and process 
+  // check consistencies between ordering parameters and process 
   CheckOrderingParameters(aProcess);
 
   CreateGPILvectors();
@@ -563,8 +514,7 @@ G4int G4ProcessManager::AddProcess(
   return idx;
 }
 
-
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
 {
   //find the process attribute
@@ -582,12 +532,14 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
     G4int idx = pAttr->idxProcVector[ivec];
     if ((idx >= 0) && (idx < G4int(pVector->entries())))
     {
-      //remove
+      // remove
       if (RemoveAt(idx, removedProcess, ivec) <0)
       {
         G4String anErrorMessage("Bad index in attribute");
-        anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
-        anErrorMessage += "process[" + removedProcess->GetProcessName() + "]  " ;
+        anErrorMessage += "for particle["
+                          + theParticleType->GetParticleName() + "] ";
+        anErrorMessage += "process["
+                          + removedProcess->GetProcessName() + "]  " ;
         G4Exception( "G4ProcessManager::RemoveProcess()","Fatal Error",
                      FatalException,anErrorMessage); 
         return nullptr;
@@ -600,7 +552,7 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
     else
     {
       // idx is out of range
-      G4String anErrorMessage("Bad ProcessList : Index is out of range ");
+      G4String anErrorMessage("Bad ProcessList: Index is out of range ");
       anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
       anErrorMessage += "process[" + removedProcess->GetProcessName() + "]  " ;
       G4Exception( "G4ProcessManager::RemoveProcess()","ProcMan012",
@@ -611,7 +563,7 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
   pAttr->isActive = false;
   // remove from the process List and delete the attribute
   theProcessList->removeAt(index);
-  for (auto itr = theAttrVector->begin(); itr!= theAttrVector->end(); ++itr)
+  for (auto itr = theAttrVector->cbegin(); itr!= theAttrVector->cend(); ++itr)
   {
     if ( (*itr) == pAttr)
     {
@@ -620,7 +572,7 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
     }
   }
   delete pAttr;
-  numberOfProcesses -= 1;
+  --numberOfProcesses;
   
   // correct index
   for(G4int i=0; i<numberOfProcesses; ++i)
@@ -638,13 +590,13 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
   return removedProcess;
 } 
   
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4VProcess* G4ProcessManager::RemoveProcess(G4VProcess *aProcess)
 {
   return RemoveProcess(GetProcessIndex(aProcess));
 } 
 
-/////////////////////////////////////////
+// --------------------------------------------------------------------
 G4int G4ProcessManager::GetProcessOrdering(
                         G4VProcess *aProcess,
                         G4ProcessVectorDoItIndex idDoIt
@@ -664,15 +616,14 @@ G4int G4ProcessManager::GetProcessOrdering(
   return -1;
 }
 
-
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::SetProcessOrdering(
                         G4VProcess *aProcess,
                         G4ProcessVectorDoItIndex idDoIt,
                         G4int      ordDoIt
                         )
 {
-  const G4String aErrorMessage(" G4ProcessManager::SetProcessOrdering");
+  const G4String aErrorMessage("G4ProcessManager::SetProcessOrdering() - ");
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2)
@@ -700,7 +651,7 @@ void G4ProcessManager::SetProcessOrdering(
     return;
   }
  
-  if (ordDoIt>ordLast) ordDoIt=ordLast;
+  if (ordDoIt>ordLast) ordDoIt = ordLast;
   // get attribute 
   G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
   if (pAttr == nullptr)
@@ -734,12 +685,12 @@ void G4ProcessManager::SetProcessOrdering(
 #ifdef G4VERBOSE
       if (verboseLevel>2)
       {
-        G4cout <<  aErrorMessage << G4endl;
+        G4cout << aErrorMessage << G4endl;
         G4cout << "particle[" << theParticleType->GetParticleName() << "] " ;
-        G4cout <<"process[" << aProcess->GetProcessName() << "]"<<  G4endl;
+        G4cout <<"process[" << aProcess->GetProcessName() << "]"<< G4endl;
         G4cout << aProcess->GetProcessName() << " is inserted at "<< ip;
         G4cout << " in ProcessVetor[" << ivec<< "]";
-        G4cout << " with Ordering parameter = " <<  ordDoIt ;
+        G4cout << " with Ordering parameter = " << ordDoIt ;
         G4cout << G4endl;
       }
 #endif
@@ -752,21 +703,20 @@ void G4ProcessManager::SetProcessOrdering(
   CreateGPILvectors();
 }
          
-
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::SetProcessOrderingToFirst(
                                G4VProcess *aProcess,
                                G4ProcessVectorDoItIndex idDoIt
                                )
 { 
-  // get Process Vector Id(
+  // get Process Vector Id
   G4int ivec = GetProcessVectorId(idDoIt, typeDoIt);
   if (ivec <0 )
   {
 #ifdef G4VERBOSE
     if (verboseLevel>0)
     {
-      G4cout << "G4ProcessManager::SetProcessOrdering: ";
+      G4cout << "G4ProcessManager::SetProcessOrderingToFirst(): ";
       G4cout << " illegal DoIt Index [= " << G4int(idDoIt) << "]";
       G4cout << G4endl;
     }
@@ -803,7 +753,7 @@ void G4ProcessManager::SetProcessOrderingToFirst(
 #ifdef G4VERBOSE
      if (verboseLevel>2)
      {
-       G4cout << "G4ProcessManager::SetProcessOrderingToFirst: ";
+       G4cout << "G4ProcessManager::SetProcessOrderingToFirst(): ";
        G4cout << aProcess->GetProcessName() << " is inserted at top ";
        G4cout << " in ProcessVetor[" << ivec<< "]";
        G4cout << G4endl;
@@ -818,8 +768,7 @@ void G4ProcessManager::SetProcessOrderingToFirst(
      anErrMsg += " to ";
      anErrMsg += theParticleType->GetParticleName();
      G4Exception("G4ProcessManager::SetProcessOrderingToFirst()",
-                 "ProcMan113",
-                 JustWarning,anErrMsg); 
+                 "ProcMan113", JustWarning, anErrMsg); 
    }
    isSetOrderingFirstInvoked[idDoIt] = true;
 
@@ -830,13 +779,13 @@ void G4ProcessManager::SetProcessOrderingToFirst(
    CreateGPILvectors();
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::SetProcessOrderingToSecond(
                         G4VProcess *aProcess,
                         G4ProcessVectorDoItIndex idDoIt
                         )
 {
-  const G4String aErrorMessage(" G4ProcessManager::SetProcessOrderingToSecond");
+  const G4String aErrorMessage("G4ProcessManager::SetProcessOrderingToSecond() - ");
  
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2)
@@ -881,13 +830,13 @@ void G4ProcessManager::SetProcessOrderingToSecond(
     }
   }
 
-  // set ordering parameter to 1
+  // set ordering parameter
   pAttr->ordProcVector[ivec-1] = 0;
   pAttr->ordProcVector[ivec]   = 0;
 
   // find insert position
   G4ProcessVector* pVector = theProcVector[ivec];
-  G4int ip =  pVector->entries();
+  G4int ip = pVector->entries();
   G4int tmp = INT_MAX;
 
   // find insert position
@@ -896,10 +845,10 @@ void G4ProcessManager::SetProcessOrderingToSecond(
     G4ProcessAttribute* aAttr = (*theAttrVector)[iproc];
     if ( aAttr->idxProcVector[ivec] >= 0 )
     {
-      if (    (aAttr->ordProcVector[ivec] !=0 )  &&
-              (tmp >= aAttr->ordProcVector[ivec]) )
+      if ( (aAttr->ordProcVector[ivec] !=0 )  &&
+           (tmp >= aAttr->ordProcVector[ivec]) )
       {
-        tmp =  aAttr->ordProcVector[ivec];
+        tmp = aAttr->ordProcVector[ivec];
         if ( ip > aAttr->idxProcVector[ivec] )
         {  
           ip = aAttr->idxProcVector[ivec] ;
@@ -933,7 +882,7 @@ void G4ProcessManager::SetProcessOrderingToSecond(
   CreateGPILvectors();
 }
          
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::SetProcessOrderingToLast(
                                G4VProcess *aProcess,
                                G4ProcessVectorDoItIndex idDoIt
@@ -953,7 +902,7 @@ void G4ProcessManager::SetProcessOrderingToLast(
   isSetOrderingLastInvoked[idDoIt] = true;
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 {
   G4ApplicationState currentState 
@@ -978,14 +927,14 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
    return nullptr;
   }
 
-  //find the process attribute
+  // find the process attribute
   G4ProcessAttribute* pAttr = GetAttribute(index);
   if (pAttr == nullptr) return nullptr;
 
   // remove process
   G4VProcess* pProcess = (*theProcessList)[index];
 
-  const G4String aErrorMessage(" G4ProcessManager::InactivateProcess():");
+  const G4String aErrorMessage("G4ProcessManager::InactivateProcess() - ");
 
   if (pAttr->isActive)
   {
@@ -1011,8 +960,8 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
           G4String anErrorMessage("Bad ProcessList: Bad index in attribute");
           anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
           anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-          G4Exception( "G4ProcessManager::InactivateProcess():","ProcMan012",
-                       FatalException,anErrorMessage); 
+          G4Exception( "G4ProcessManager::InactivateProcess()", "ProcMan012",
+                       FatalException, anErrorMessage); 
           return nullptr;
         }    
       }
@@ -1022,8 +971,8 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
         G4String anErrorMessage("Bad ProcessList:  Index is out of range");
         anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
         anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-        G4Exception( "G4ProcessManager::InactivateProcess():","ProcMan012",
-                     FatalException,anErrorMessage); 
+        G4Exception( "G4ProcessManager::InactivateProcess()", "ProcMan012",
+                     FatalException, anErrorMessage); 
         return nullptr;
       }
     } 
@@ -1032,7 +981,7 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
   return pProcess;
 } 
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 {
   G4ApplicationState currentState 
@@ -1042,7 +991,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1)
     {
-      G4cout << "G4ProcessManager::ActivateProcess is not valid in ";
+      G4cout << "G4ProcessManager::ActivateProcess() is not valid in ";
       if (currentState == G4State_PreInit )
       {
         G4cout << "PreInit ";
@@ -1077,7 +1026,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
       }
       else if ((idx >= 0) && (idx < G4int(pVector->entries())))
       {
-        //check pointer and set
+        // check pointer and set
         if ((*pVector)[idx] == nullptr)
         {
           (*pVector)[idx] = pProcess;
@@ -1087,19 +1036,20 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
           G4String anErrorMessage("Bad ProcessList: Bad index in attribute");
           anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
           anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-          G4Exception("G4ProcessManager::ActivateProcess():","ProcMan012",
-                      FatalException,anErrorMessage);
+          G4Exception("G4ProcessManager::ActivateProcess()", "ProcMan012",
+                      FatalException, anErrorMessage);
           return nullptr;
         }    
       }
       else
       {
         // idx is out of range
-        G4String anErrorMessage("bad ProcessList:  Index is out of range");
-        anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
+        G4String anErrorMessage("bad ProcessList: Index is out of range");
+        anErrorMessage += "for particle["
+                          + theParticleType->GetParticleName() + "] ";
         anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-        G4Exception("G4ProcessManager::ActivateProcess():","ProcMan012",
-                    FatalException,anErrorMessage); 
+        G4Exception("G4ProcessManager::ActivateProcess()", "ProcMan012",
+                    FatalException, anErrorMessage); 
          return nullptr;
       }
     } 
@@ -1108,25 +1058,25 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
   return pProcess;
 } 
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4bool G4ProcessManager::operator==(const G4ProcessManager &right) const
 {
   return (this == &right);
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 G4bool G4ProcessManager::operator!=(const G4ProcessManager &right) const
 {
   return (this != &right);
 }
 
-// ///////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::DumpInfo()
 { 
   // Dump Information
 
   // particle type
-  G4cout << "G4ProcessManager:  particle[" 
+  G4cout << "G4ProcessManager: particle[" 
          << theParticleType->GetParticleName() << "]"
          << G4endl;
 
@@ -1135,8 +1085,10 @@ void G4ProcessManager::DumpInfo()
   {
     // process name/type
     G4cout << "[" << idx << "]";
-    G4cout << "=== process[" << ((*theProcessList)(idx))->GetProcessName()<< " :"; 
-    G4cout << G4VProcess::GetProcessTypeName( ((*theProcessList)(idx))->GetProcessType() )<< "]";
+    G4cout << "=== process[" << ((*theProcessList)(idx))->GetProcessName()
+           << " :"; 
+    G4cout << G4VProcess::GetProcessTypeName( ((*theProcessList)(idx))->GetProcessType() )
+           << "]";
 
     // process attribute    
     G4ProcessAttribute* pAttr = (*theAttrVector)[idx];
@@ -1165,13 +1117,13 @@ void G4ProcessManager::DumpInfo()
       G4cout << "  index           ";
       for (G4int idx2 = 0; idx2 <6 ; ++idx2)
       {
-        G4cout << std::setw(8) << pAttr->idxProcVector[idx2] <<":";
+        G4cout << std::setw(8) << pAttr->idxProcVector[idx2] << ":";
       }
       G4cout << G4endl;
       G4cout << "  parameter       ";
       for (G4int idx3 = 0; idx3 <6 ; ++idx3)
       {
-        G4cout << std::setw(8) << pAttr->ordProcVector[idx3] <<":";
+        G4cout << std::setw(8) << pAttr->ordProcVector[idx3] << ":";
       }
       G4cout << G4endl;
     }
@@ -1179,10 +1131,12 @@ void G4ProcessManager::DumpInfo()
   }
 }
 
+// --------------------------------------------------------------------
 void G4ProcessManager::CreateGPILvectors()
 {
-//-- create GetPhysicalInteractionLength process vectors just as the inverse
-//-- order of DoIt process vector
+  // Create GetPhysicalInteractionLength process vectors just as the inverse
+  // order of DoIt() process vector
+
   for(std::size_t k=0; k<theProcessList->entries(); ++k)
   {
     GetAttribute((*theProcessList)[k])->idxProcVector[0]=-1;
@@ -1203,11 +1157,9 @@ void G4ProcessManager::CreateGPILvectors()
       GetAttribute(aProc)->idxProcVector[i] = procGPIL->entries()-1;
     }
   }
-
 }
 
-
-//////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::StartTracking(G4Track* aTrack)
 {
   for (std::size_t idx = 0; idx<theProcessList->entries(); ++idx)
@@ -1218,7 +1170,7 @@ void G4ProcessManager::StartTracking(G4Track* aTrack)
   if(aTrack) duringTracking = true;
 }
 
-/////////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::EndTracking()
 {
   for (std::size_t idx = 0; idx<theProcessList->entries(); ++idx)
@@ -1229,8 +1181,7 @@ void G4ProcessManager::EndTracking()
   duringTracking = false;
 }
 
-
-/////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4VProcess* G4ProcessManager::GetProcess(const G4String& processName) const
 {
   for (G4int k=0; k<numberOfProcesses; ++k)
@@ -1241,31 +1192,28 @@ G4VProcess* G4ProcessManager::GetProcess(const G4String& processName) const
   return nullptr;
 }
 
-
-/////////////////////////////////////////////
- G4VProcess* G4ProcessManager::SetProcessActivation(G4VProcess *aProcess, 
-                                                    G4bool      fActive  )
+// --------------------------------------------------------------------
+G4VProcess* G4ProcessManager::SetProcessActivation(G4VProcess* aProcess, 
+                                                   G4bool      fActive  )
 {
   return SetProcessActivation(GetProcessIndex(aProcess), fActive);
 } 
 
-
-/////////////////////////////////////////////
- G4VProcess* G4ProcessManager::SetProcessActivation(G4int index, G4bool fActive)
+// --------------------------------------------------------------------
+G4VProcess* G4ProcessManager::SetProcessActivation(G4int index, G4bool fActive)
 {
   if (fActive) return ActivateProcess(index);
   else         return InActivateProcess(index);
 }
 
-/////////////////////////////////////////////
- G4bool G4ProcessManager::GetProcessActivation(G4VProcess *aProcess) const
+// --------------------------------------------------------------------
+ G4bool G4ProcessManager::GetProcessActivation(G4VProcess* aProcess) const
 {
   return GetProcessActivation(GetProcessIndex(aProcess));
 } 
 
-
-/////////////////////////////////////////////
- G4bool G4ProcessManager::GetProcessActivation(G4int index) const
+// --------------------------------------------------------------------
+G4bool G4ProcessManager::GetProcessActivation(G4int index) const
 {
   if (index <0)
   {
@@ -1281,10 +1229,10 @@ G4VProcess* G4ProcessManager::GetProcess(const G4String& processName) const
   // process attribute    
   G4ProcessAttribute* pAttr = (*theAttrVector)[index];
   // status
-  return pAttr-> isActive;
+  return pAttr->isActive;
 }
 
-/////////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 {
   if (aProcess == nullptr) return;
@@ -1294,7 +1242,7 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0)
     {
-      G4cout << "G4ProcessManager::CheckOrderingParameters ";
+      G4cout << "G4ProcessManager::CheckOrderingParameters()" << G4endl;
       G4cout << " process " << aProcess->GetProcessName() 
              << " has no attribute" << G4endl;
     }
@@ -1310,7 +1258,7 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
  #ifdef G4VERBOSE
     if (GetVerboseLevel()>0)
     {
-      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "G4ProcessManager::CheckOrderingParameters()" << G4endl;
       G4cerr << "You cannot set ordering parameter ["
              << pAttr->ordProcVector[0]
              << "] for AtRest DoIt  to the process "
@@ -1325,7 +1273,7 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0)
     {
-      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "G4ProcessManager::CheckOrderingParameters()" << G4endl;
       G4cerr << "You cannot set ordering parameter ["
              <<  pAttr->ordProcVector[2]
              << "] for AlongStep DoIt to the process "
@@ -1341,7 +1289,7 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0)
     {
-      G4cerr << "G4ProcessManager::CheckOrderingParameters ";
+      G4cerr << "G4ProcessManager::CheckOrderingParameters()" << G4endl;
       G4cerr << "You cannot set ordering parameter [" 
              << pAttr->ordProcVector[4] 
              << "] for PostStep DoIt to the process"
@@ -1356,8 +1304,8 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
     G4String msg;
     msg = "Invalid ordering parameters are set for  ";
     msg +=  aProcess->GetProcessName();
-    G4Exception( "G4ProcessManager::CheckOrderingParameters ",
-                 "ProcMan013",FatalException, msg);
+    G4Exception( "G4ProcessManager::CheckOrderingParameters()",
+                 "ProcMan013", FatalException, msg);
   }
   
   return;

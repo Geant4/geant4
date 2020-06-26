@@ -23,42 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DynamicParticle class implementation
 //
-//
-// 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-//      ---------------- G4DynamicParticle  ----------------
-//      first implementation by Makoto Asai, 29 January 1996
-//      revised by G.Cosmo, 29 February 1996
-//      revised by H.Kurashige 06 May 1996
-//      revised by Hisaya Kurashige, 27 July 1996
-//         modify thePreAssignedDecayProducts
-//         add   void SetMomentum(G4ThreeVector &momentum)
-//         add   void Set4Momentum(G4LorentzVector &momentum)
-//         add   G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
-//                                 G4LorentzVector &p4vector)
-//      revised by Hisaya Kurashige, 19 Oct 1996
-//         add    theKillProcess
-//         add    ProperTime
-//      revised by Hisaya Kurashige, 26 Mar 1997
-//         modify destructor
-//      revised by Hisaya Kurashige, 05 June 1997
-//         modify DumpInfo()
-//      revised by Hisaya Kurashige, 5  June 1998
-//         remove    theKillProcess
-//      revised by Hisaya Kurashige, 5  Mar 2001
-//         fixed  SetDefinition()
-//      revised by V.Ivanchenko,    12 June 2003
-//         fixed problem of massless particles
-//      revised by V.Ivanchenko,    18 June 2003
-//         take into account the case of virtual photons
-//      revised by M.Kelsey         12 May 2010
-//	   ensure that all constructors initialize all data members
-//--------------------------------------------------------------
+// History:
+// - 2 December 1995, G.Cosmo - first design, based on object model.
+// - 29 January 1996, M.Asai - first implementation.
+// - 1996 - 2007,     H.Kurashige - revisions.
+// - 15 March 2019,   M.Novak - log-kinetic energy value is computed only 
+//                    on demand if its stored value is not up-to-date.  
+//---------------------------------------------------------------------
 
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -69,8 +42,8 @@
 
 G4Allocator<G4DynamicParticle>*& pDynamicParticleAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4DynamicParticle>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4DynamicParticle>* _instance = nullptr;
+  return _instance;
 }
 
 static const G4double EnergyMomentumRelationAllowance = 1.0e-2*CLHEP::keV;
@@ -78,189 +51,179 @@ static const G4double EnergyMRA2 =
   EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance;
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle():
-		   theMomentumDirection(0.0,0.0,1.0),
-		   thePolarization(0.0,0.0,0.0),
-		   theParticleDefinition(nullptr),
-		   theElectronOccupancy(nullptr),
-                   thePreAssignedDecayProducts(nullptr),
-		   primaryParticle(nullptr),
-		   theKineticEnergy(0.0),
-                   theLogKineticEnergy(DBL_MAX),
- 		   theProperTime(0.0),
-		   theDynamicalMass(0.0),
-		   theDynamicalCharge(0.0),
-		   theDynamicalSpin(0.0),
-		   theDynamicalMagneticMoment(0.0),
-                   thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1),
-                   thePDGcode(0)
-{
-}
-
-////////////////////
 // -- constructors ----
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
-				     const G4ThreeVector& aMomentumDirection,
-				     G4double aKineticEnergy):
-		   theMomentumDirection(aMomentumDirection),
-		   thePolarization(0.0,0.0,0.0),
-		   theParticleDefinition(aParticleDefinition),
-		   theElectronOccupancy(nullptr),
-                   thePreAssignedDecayProducts(nullptr),
-		   primaryParticle(nullptr),
-		   theKineticEnergy(aKineticEnergy),
-		   theLogKineticEnergy(DBL_MAX),
- 		   theProperTime(0.0),
-		   theDynamicalMass(aParticleDefinition->GetPDGMass()),
-		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
-		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
-		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
-                   thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1),
-                   thePDGcode(0)
+G4DynamicParticle::G4DynamicParticle()
+  : theMomentumDirection(0.0,0.0,1.0),
+    thePolarization(0.0,0.0,0.0)
 {
 }
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
-				     const G4ThreeVector& aMomentumDirection,
-				     G4double aKineticEnergy,
-                                     const G4double dynamicalMass):
-		   theMomentumDirection(aMomentumDirection),
-		   thePolarization(0.0,0.0,0.0),
-		   theParticleDefinition(aParticleDefinition),
-		   theElectronOccupancy(nullptr),
-                   thePreAssignedDecayProducts(nullptr),
-		   primaryParticle(nullptr),
-		   theKineticEnergy(aKineticEnergy),
-                   theLogKineticEnergy(DBL_MAX),
- 		   theProperTime(0.0),
-		   theDynamicalMass(aParticleDefinition->GetPDGMass()),
-		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
-		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
-		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
-                   thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1),
-                   thePDGcode(0)
+G4DynamicParticle::
+G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                  const G4ThreeVector& aMomentumDirection,
+                        G4double aKineticEnergy)
+  : theMomentumDirection(aMomentumDirection),
+    thePolarization(0.0,0.0,0.0),
+    theParticleDefinition(aParticleDefinition),
+    theKineticEnergy(aKineticEnergy),
+    theDynamicalMass(aParticleDefinition->GetPDGMass()),
+    theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
+    theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
+    theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment())
 {
-  if (std::abs(theDynamicalMass-dynamicalMass)> EnergyMomentumRelationAllowance) {
-    if (dynamicalMass>EnergyMomentumRelationAllowance) theDynamicalMass= dynamicalMass;
-    else  theDynamicalMass= 0.0;
+}
+
+////////////////////
+G4DynamicParticle::
+G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                  const G4ThreeVector& aMomentumDirection,
+                        G4double aKineticEnergy,
+                  const G4double dynamicalMass)
+  : theMomentumDirection(aMomentumDirection),
+    thePolarization(0.0,0.0,0.0),
+    theParticleDefinition(aParticleDefinition),
+    theKineticEnergy(aKineticEnergy),
+    theDynamicalMass(aParticleDefinition->GetPDGMass()),
+    theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
+    theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
+    theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment())
+{
+  if (std::abs(theDynamicalMass-dynamicalMass)
+      > EnergyMomentumRelationAllowance)
+  {
+    if (dynamicalMass>EnergyMomentumRelationAllowance)
+      theDynamicalMass= dynamicalMass;
+    else
+      theDynamicalMass= 0.0;
   } 
 }
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
-                                     const G4ThreeVector& aParticleMomentum):
-		   thePolarization(0.0,0.0,0.0),
-		   theParticleDefinition(aParticleDefinition),
-		   theElectronOccupancy(nullptr),
-                   thePreAssignedDecayProducts(nullptr),
-		   primaryParticle(nullptr),
-		   theKineticEnergy(0.0),
-                   theLogKineticEnergy(DBL_MAX),
-       		   theProperTime(0.0),
-		   theDynamicalMass(aParticleDefinition->GetPDGMass()),
-		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
-		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
-		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
-                   thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1),
-                   thePDGcode(0)
+G4DynamicParticle::
+G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                  const G4ThreeVector& aParticleMomentum)
+  : thePolarization(0.0,0.0,0.0),
+    theParticleDefinition(aParticleDefinition),
+    theDynamicalMass(aParticleDefinition->GetPDGMass()),
+    theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
+    theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
+    theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment())
 {
   SetMomentum(aParticleMomentum);  // 3-dim momentum is given
 }
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
-				     const G4LorentzVector   &aParticleMomentum):
-		   thePolarization(0.0,0.0,0.0),
-		   theParticleDefinition(aParticleDefinition),
-		   theElectronOccupancy(nullptr),
-                   thePreAssignedDecayProducts(nullptr),
-		   primaryParticle(nullptr),
-		   theKineticEnergy(0.0),
-                   theLogKineticEnergy(DBL_MAX),
- 		   theProperTime(0.0),
-		   theDynamicalMass(aParticleDefinition->GetPDGMass()),
-		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
-		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
-		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
-                   thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1),
-                   thePDGcode(0)
+G4DynamicParticle::
+G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                  const G4LorentzVector& aParticleMomentum)
+  : thePolarization(0.0,0.0,0.0),
+    theParticleDefinition(aParticleDefinition),
+    theDynamicalMass(aParticleDefinition->GetPDGMass()),
+    theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
+    theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
+    theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment())
 {
-  Set4Momentum(aParticleMomentum);  // 4-momentum vector (Lorentz vector) is given
+  Set4Momentum(aParticleMomentum);  // 4-momentum vector (Lorentz vector)
 }
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
-                                     G4double totalEnergy,
-				     const G4ThreeVector &aParticleMomentum):
-		   thePolarization(0.0,0.0,0.0),
-                   theParticleDefinition(aParticleDefinition),
-		   theElectronOccupancy(nullptr),
-                   thePreAssignedDecayProducts(nullptr),
-		   primaryParticle(nullptr),
-		   theKineticEnergy(0.0),
-                   theLogKineticEnergy(DBL_MAX),
-                   theProperTime(0.0),
-		   theDynamicalMass(aParticleDefinition->GetPDGMass()),
-		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
-		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
-		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
-                   thePreAssignedDecayTime(-1.0),
-		   verboseLevel(1),
-                   thePDGcode(0)
+G4DynamicParticle::
+G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
+                        G4double totalEnergy,
+                  const G4ThreeVector &aParticleMomentum)
+  : thePolarization(0.0,0.0,0.0),
+    theParticleDefinition(aParticleDefinition),
+    theDynamicalMass(aParticleDefinition->GetPDGMass()),
+    theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
+    theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
+    theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment())
 {
   // total energy and 3-dim momentum are given
   G4double pModule2 = aParticleMomentum.mag2();
-  if (pModule2 > 0.0) {
+  if (pModule2 > 0.0)
+  {
     G4double mass2 = totalEnergy*totalEnergy - pModule2;
-    G4double PDGmass2 = (aParticleDefinition->GetPDGMass())*(aParticleDefinition->GetPDGMass());
+    G4double PDGmass2 = (aParticleDefinition->GetPDGMass())
+                      * (aParticleDefinition->GetPDGMass());
     SetMomentumDirection(aParticleMomentum.unit());
-    if (mass2 < EnergyMRA2) {
+    if (mass2 < EnergyMRA2)
+    {
       theDynamicalMass = 0.;
       SetKineticEnergy(totalEnergy);
-    } else {
-      if (std::abs(PDGmass2-mass2)>EnergyMRA2){
+    }
+    else
+    {
+      if (std::abs(PDGmass2-mass2)>EnergyMRA2)
+      {
         theDynamicalMass = std::sqrt(mass2);
         SetKineticEnergy(totalEnergy-theDynamicalMass);
-      } else {
-	SetKineticEnergy(totalEnergy-theDynamicalMass);
+      }
+      else
+      {
+        SetKineticEnergy(totalEnergy-theDynamicalMass);
       }
     }
-  } else {
+  }
+  else
+  {
     SetMomentumDirection(1.0,0.0,0.0);
     SetKineticEnergy(0.0);
   }
 }
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right):
-  theMomentumDirection(right.theMomentumDirection),
-  thePolarization(right.thePolarization),
-  theParticleDefinition(right.theParticleDefinition),
-  theElectronOccupancy(nullptr),
-  thePreAssignedDecayProducts(nullptr),	// Do not copy preassignedDecayProducts
-  primaryParticle(right.primaryParticle),
-  theKineticEnergy(right.theKineticEnergy),
-  theLogKineticEnergy(right.theLogKineticEnergy),
-  theProperTime(right.theProperTime),
-  theDynamicalMass(right.theDynamicalMass),
-  theDynamicalCharge(right.theDynamicalCharge),
-  theDynamicalSpin(right.theDynamicalSpin),
-  theDynamicalMagneticMoment(right.theDynamicalMagneticMoment),
-  thePreAssignedDecayTime(-1.0),
-  verboseLevel(right.verboseLevel),
-  thePDGcode(right.thePDGcode)
+G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle& right)
+  : theMomentumDirection(right.theMomentumDirection),
+    thePolarization(right.thePolarization),
+    theParticleDefinition(right.theParticleDefinition),
+    theElectronOccupancy(nullptr),
+    thePreAssignedDecayProducts(nullptr), // Don't copy preassignedDecayProducts
+    primaryParticle(right.primaryParticle),
+    theKineticEnergy(right.theKineticEnergy),
+    theLogKineticEnergy(right.theLogKineticEnergy),
+    theBeta(right.theBeta),
+    theProperTime(right.theProperTime),
+    theDynamicalMass(right.theDynamicalMass),
+    theDynamicalCharge(right.theDynamicalCharge),
+    theDynamicalSpin(right.theDynamicalSpin),
+    theDynamicalMagneticMoment(right.theDynamicalMagneticMoment),
+    thePreAssignedDecayTime(-1.0),
+    verboseLevel(right.verboseLevel),
+    thePDGcode(right.thePDGcode)
 {
-  if (right.theElectronOccupancy != nullptr) {
-      theElectronOccupancy =
-	new G4ElectronOccupancy(*right.theElectronOccupancy);
+  if (right.theElectronOccupancy != nullptr)
+  {
+    theElectronOccupancy = new G4ElectronOccupancy(*right.theElectronOccupancy);
   }
+}
+
+////////////////////
+G4DynamicParticle::G4DynamicParticle(G4DynamicParticle&& from)
+  : theMomentumDirection(from.theMomentumDirection),
+    thePolarization(from.thePolarization),
+    theParticleDefinition(from.theParticleDefinition),
+    theElectronOccupancy(from.theElectronOccupancy),
+    thePreAssignedDecayProducts(nullptr), // Don't move preassignedDecayProducts
+    primaryParticle(from.primaryParticle),
+    theKineticEnergy(from.theKineticEnergy),
+    theLogKineticEnergy(from.theLogKineticEnergy),
+    theBeta(from.theBeta),
+    theProperTime(from.theProperTime),
+    theDynamicalMass(from.theDynamicalMass),
+    theDynamicalCharge(from.theDynamicalCharge),
+    theDynamicalSpin(from.theDynamicalSpin),
+    theDynamicalMagneticMoment(from.theDynamicalMagneticMoment),
+    thePreAssignedDecayTime(-1.0),
+    verboseLevel(from.verboseLevel),
+    thePDGcode(from.thePDGcode)
+{
+    // Release the data from the source object
+    from.theParticleDefinition = nullptr;
+    from.theElectronOccupancy = nullptr;
+    from.thePreAssignedDecayProducts = nullptr;
+    from.primaryParticle = nullptr;
 }
 
 ////////////////////
@@ -268,20 +231,22 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right):
 ////////////////////
 G4DynamicParticle::~G4DynamicParticle()
 {
-  //  delete thePreAssignedDecayProducts
-  if (thePreAssignedDecayProducts != nullptr) delete thePreAssignedDecayProducts;
+  if (thePreAssignedDecayProducts != nullptr)
+    delete thePreAssignedDecayProducts;
   thePreAssignedDecayProducts = nullptr;
 
-  if (theElectronOccupancy != nullptr) delete theElectronOccupancy;
-  theElectronOccupancy =nullptr;
+  if (theElectronOccupancy != nullptr)
+    delete theElectronOccupancy;
+  theElectronOccupancy = nullptr;
 }
 
 ////////////////////
 // -- operators ----
 ////////////////////
-G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
+G4DynamicParticle& G4DynamicParticle::operator=(const G4DynamicParticle& right)
 {
-  if (this != &right) {
+  if (this != &right)
+  {
     theMomentumDirection = right.theMomentumDirection;
     theParticleDefinition = right.theParticleDefinition;
     thePolarization = right.thePolarization;
@@ -293,11 +258,14 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
     theDynamicalSpin = right.theDynamicalSpin;
     theDynamicalMagneticMoment = right.theDynamicalMagneticMoment;
 
-    if (theElectronOccupancy != nullptr) delete theElectronOccupancy;
-    if (right.theElectronOccupancy != nullptr){
+    if (theElectronOccupancy != nullptr) { delete theElectronOccupancy; }
+    if (right.theElectronOccupancy != nullptr)
+    {
       theElectronOccupancy =
              new G4ElectronOccupancy(*right.theElectronOccupancy);
-    } else {
+    }
+    else
+    {
       theElectronOccupancy = nullptr;
     }
 
@@ -316,17 +284,58 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
 }
 
 ////////////////////
-void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefinition)
+G4DynamicParticle& G4DynamicParticle::operator=(G4DynamicParticle&& from)
+{
+  if (this != &from)
+  {
+    theMomentumDirection = from.theMomentumDirection;
+    thePolarization = from.thePolarization;
+    theKineticEnergy = from.theKineticEnergy;
+    theProperTime = from.theProperTime;
+
+    theDynamicalMass = from.theDynamicalMass;
+    theDynamicalCharge = from.theDynamicalCharge;
+    theDynamicalSpin = from.theDynamicalSpin;
+    theDynamicalMagneticMoment = from.theDynamicalMagneticMoment;
+
+    if (theElectronOccupancy != nullptr) { delete theElectronOccupancy; }
+    theElectronOccupancy = from.theElectronOccupancy;
+    from.theElectronOccupancy = nullptr;
+
+    // thePreAssignedDecayProducts must not be moved.
+    thePreAssignedDecayProducts = nullptr;
+    from.thePreAssignedDecayProducts = nullptr;
+    thePreAssignedDecayTime = -1.0;
+
+    theParticleDefinition = from.theParticleDefinition;
+    from.theParticleDefinition = nullptr;
+
+    verboseLevel = from.verboseLevel;
+
+    primaryParticle = from.primaryParticle;
+    from.primaryParticle = nullptr;
+
+    thePDGcode = from.thePDGcode;
+  }
+  return *this;
+}
+
+////////////////////
+void G4DynamicParticle::
+SetDefinition(const G4ParticleDefinition* aParticleDefinition)
 {
   // remove preassigned decay
-  if (thePreAssignedDecayProducts != nullptr) {
+  if (thePreAssignedDecayProducts != nullptr)
+  {
 #ifdef G4VERBOSE
-    if (verboseLevel>0) {
+    if (verboseLevel>0)
+    {
       G4cout << " G4DynamicParticle::SetDefinition()::"
              << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
-      G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
-	     << " !!! " << G4endl;
-      G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
+      G4cout << "!!! New Definition is "
+             << aParticleDefinition->GetParticleName()  << " !!! " << G4endl;
+      G4cout << "!!! Pre-assigned decay products will be deleted !!!! "
+             << G4endl;
     }
 #endif
     delete thePreAssignedDecayProducts;
@@ -336,26 +345,27 @@ void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefi
   theParticleDefinition = aParticleDefinition;
 
   // set Dynamic mass/charge
-  theDynamicalMass = theParticleDefinition->GetPDGMass();
+  SetMass(theParticleDefinition->GetPDGMass());
   theDynamicalCharge = theParticleDefinition->GetPDGCharge();
   theDynamicalSpin = theParticleDefinition->GetPDGSpin();
   theDynamicalMagneticMoment = theParticleDefinition->GetPDGMagneticMoment();
 
   // Set electron orbits
-  if (theElectronOccupancy != nullptr) {
+  if (theElectronOccupancy != nullptr)
+  {
     delete theElectronOccupancy;
     theElectronOccupancy = nullptr;
   }
 }
 
 ////////////////////
-G4bool G4DynamicParticle::operator==(const G4DynamicParticle &right) const
+G4bool G4DynamicParticle::operator==(const G4DynamicParticle& right) const
 {
   return (this == (G4DynamicParticle *) &right);
 }
 
 ////////////////////
-G4bool G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
+G4bool G4DynamicParticle::operator!=(const G4DynamicParticle& right) const
 {
   return (this != (G4DynamicParticle *) &right);
 }
@@ -365,48 +375,60 @@ G4bool G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
 ////////////////////
 void  G4DynamicParticle::AllocateElectronOccupancy()
 {
-  if (G4IonTable::IsIon(theParticleDefinition)) {
+  if (G4IonTable::IsIon(theParticleDefinition))
+  {
     // Only ions can have ElectronOccupancy
     theElectronOccupancy = new G4ElectronOccupancy();
 
-  } else {
+  }
+  else
+  {
     theElectronOccupancy = nullptr;
-
   }
 }
 
 ////////////////////
 // -- methods for setting Energy/Momentum  --
 ////////////////////
-void G4DynamicParticle::SetMomentum(const G4ThreeVector &momentum)
+void G4DynamicParticle::SetMomentum(const G4ThreeVector& momentum)
 {
   G4double pModule2 = momentum.mag2();
-  if (pModule2>0.0) {
-    G4double mass = theDynamicalMass;
+  if (pModule2>0.0)
+  {
+    const G4double mass = theDynamicalMass;
     SetMomentumDirection(momentum.unit());
     SetKineticEnergy(pModule2/(std::sqrt(pModule2 + mass*mass)+mass));
-  } else {
+  }
+  else
+  {
     SetMomentumDirection(1.0,0.0,0.0);
     SetKineticEnergy(0.0);
   }
 }
 
 ////////////////////
-void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
+void G4DynamicParticle::Set4Momentum(const G4LorentzVector& momentum )
 {
   G4double pModule2 = momentum.vect().mag2();
-  if (pModule2>0.0) {
+  if (pModule2>0.0)
+  {
     SetMomentumDirection(momentum.vect().unit());
-    G4double totalenergy = momentum.t();
-    G4double mass2 = totalenergy*totalenergy - pModule2;
-    G4double PDGmass2 = (theParticleDefinition->GetPDGMass())*(theParticleDefinition->GetPDGMass());
-    if (mass2 < EnergyMRA2) {
+    const G4double totalenergy = momentum.t();
+    const G4double mass2 = totalenergy*totalenergy - pModule2;
+    const G4double PDGmass2 = (theParticleDefinition->GetPDGMass())
+                            * (theParticleDefinition->GetPDGMass());
+    if (mass2 < EnergyMRA2)
+    {
       theDynamicalMass = 0.;
-    } else if (std::abs(PDGmass2-mass2)>EnergyMRA2){
+    }
+    else if (std::abs(PDGmass2-mass2)>EnergyMRA2)
+    {
       theDynamicalMass = std::sqrt(mass2);
     }
     SetKineticEnergy(totalenergy-theDynamicalMass);
-  } else {
+  }
+  else
+  {
     SetMomentumDirection(1.0,0.0,0.0);
     SetKineticEnergy(0.0);
   }
@@ -418,27 +440,39 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 #ifdef G4VERBOSE
 void G4DynamicParticle::DumpInfo(G4int mode) const
 {
-  if (theParticleDefinition == 0) {
-    G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << G4endl;
-  } else {
-    G4cout << " Particle type - " << theParticleDefinition->GetParticleName() << G4endl
-         << "   mass:        " << GetMass()/CLHEP::GeV <<  "[GeV]" <<G4endl
-	   << "   charge:      " << GetCharge()/CLHEP::eplus <<  "[e]" <<G4endl
-         << "   Direction x: " << GetMomentumDirection().x() << ", y: "
-	 << GetMomentumDirection().y() << ", z: "
-                             << GetMomentumDirection().z() << G4endl
-         << "   Total Momentum = " << GetTotalMomentum()/CLHEP::GeV << "[GeV]" << G4endl
-         << "   Momentum: "    << GetMomentum().x() /CLHEP::GeV << "[GeV]" << ", y: "
-                               << GetMomentum().y() /CLHEP::GeV << "[GeV]" << ", z: "
-                               << GetMomentum().z() /CLHEP::GeV << "[GeV]" << G4endl
-         << "   Total Energy   = " << GetTotalEnergy()/CLHEP::GeV << "[GeV]"  << G4endl
-         << "   Kinetic Energy = " << GetKineticEnergy() /CLHEP::GeV << "[GeV]" << G4endl
-	 << " MagneticMoment  [MeV/T]: " << GetMagneticMoment()/CLHEP::MeV*CLHEP::tesla << G4endl
-         << "   ProperTime     = " << GetProperTime() /CLHEP::ns <<  "[ns]" << G4endl;
+  if (theParticleDefinition == nullptr)
+  {
+    G4cout << " G4DynamicParticle::DumpInfo() - Particle type not defined !!! "
+           << G4endl;
+  }
+  else
+  {
+    G4cout << " Particle type - " << theParticleDefinition->GetParticleName()
+           << G4endl
+           << "   mass:        " << GetMass()/CLHEP::GeV <<  "[GeV]" << G4endl
+           << "   charge:      " << GetCharge()/CLHEP::eplus <<  "[e]" << G4endl
+           << "   Direction x: " << GetMomentumDirection().x() << ", y: "
+           << GetMomentumDirection().y() << ", z: "
+           << GetMomentumDirection().z() << G4endl
+           << "   Total Momentum = "
+           << GetTotalMomentum()/CLHEP::GeV << "[GeV]" << G4endl
+           << "   Momentum: "    << GetMomentum().x() /CLHEP::GeV << "[GeV]"
+           << ", y: " << GetMomentum().y() /CLHEP::GeV << "[GeV]"
+           << ", z: " << GetMomentum().z() /CLHEP::GeV << "[GeV]" << G4endl
+           << "   Total Energy   = "
+           << GetTotalEnergy()/CLHEP::GeV << "[GeV]" << G4endl
+           << "   Kinetic Energy = "
+           << GetKineticEnergy()/CLHEP::GeV << "[GeV]" << G4endl
+           << " MagneticMoment  [MeV/T]: "
+           << GetMagneticMoment()/CLHEP::MeV*CLHEP::tesla << G4endl
+           << "   ProperTime     = "
+           << GetProperTime() /CLHEP::ns <<  "[ns]" << G4endl;
 
-    if (mode>0) {
-      if( theElectronOccupancy != nullptr) {
-	theElectronOccupancy->DumpInfo();
+    if (mode>0)
+    {
+      if( theElectronOccupancy != nullptr)
+      {
+        theElectronOccupancy->DumpInfo();
       }
     }
   }

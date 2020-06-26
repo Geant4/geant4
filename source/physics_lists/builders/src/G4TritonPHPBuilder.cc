@@ -35,7 +35,6 @@ G4TritonPHPBuilder()
 {
   theMin = 0;
   theMax=200.*MeV;
-  theParticlePHPModel = 0;
 }
 
 void G4TritonPHPBuilder::
@@ -52,7 +51,7 @@ Build(G4TritonInelasticProcess * aP)
   theTritonHPInelasticData->SetMaxKinEnergy(theMax);
   aP->AddDataSet(theTritonHPInelasticData);
 
-  theParticlePHPModel = new G4ParticleHPInelastic(G4Triton::Triton(),"ParticleHPInelastic");
+  G4ParticleHPInelastic* theParticlePHPModel = new G4ParticleHPInelastic(G4Triton::Triton(),"ParticleHPInelastic");
   theParticlePHPModel->SetMinEnergy(theMin);
   theParticlePHPModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theParticlePHPModel);

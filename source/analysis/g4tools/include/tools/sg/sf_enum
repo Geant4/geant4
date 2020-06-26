@@ -52,6 +52,8 @@ public:
     //a_out << parent::m_value << std::endl;
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   virtual void set_value(int a_value) {parent::value(T(a_value));}
 public:

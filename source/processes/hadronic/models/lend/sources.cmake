@@ -205,7 +205,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_lend
         G4globman
         G4had_mod_man
         G4had_mod_util
-        G4hadronic_LE
         G4hadronic_deex_management
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util

@@ -66,8 +66,17 @@
 //                      phi,dphi,the,dthe)  - create G4Polyhedron for Sphere;
 //   G4PolyhedronTorus(rmin,rmax,rtor,
 //                     phi,dphi)            - create G4Polyhedron for Torus;
+//   G4PolyhedronTet(p0[3],p1[3],p2[3],p3[3]) - create polyhedron for Tet;
+//                                          
 //   G4PolyhedronEllipsoid(dx,dy,dz,
-//                     zcut1,zcut2)         - create G4Polyhedron for Ellipsoid;
+//                         zcut1,zcut2)     - create G4Polyhedron for Ellipsoid;
+//   G4PolyhedronEllipticalCone(dx,dy,z,
+//                              zcut1)      - create polyhedron for Elliptical cone;
+//   G4PolyhedronParaboloid(r1,r2,dz,
+//                          phi,dphi)       - create polyhedron for Paraboloid;
+//   G4PolyhedronHype(r1,r2,
+//                    tan1,tan2,halfz)      - create polyhedron for Hype;
+//   G4PolyhedronHyperbolicMirror(a,h,r)    - create polyhedron for Hyperbolic mirror;
 //
 // Public functions inherited from HepPolyhedron (this list might be
 // incomplete):
@@ -180,6 +189,15 @@ public:
   virtual ~G4PolyhedronSphere ();
 };
 
+class G4PolyhedronTet: public G4Polyhedron {
+public:
+  G4PolyhedronTet (const G4double p0[3],
+                   const G4double p1[3],
+                   const G4double p2[3],
+                   const G4double p3[3]);
+  virtual ~G4PolyhedronTet ();
+};
+
 class G4PolyhedronTorus: public G4Polyhedron {
 public:
   G4PolyhedronTorus (G4double rmin, G4double rmax, G4double rtor,
@@ -250,6 +268,12 @@ class G4PolyhedronEllipticalCone : public G4Polyhedron {
   G4PolyhedronEllipticalCone(G4double dx, G4double dy, G4double z, 
                              G4double zcut1);
   virtual ~G4PolyhedronEllipticalCone ();
+};
+
+class G4PolyhedronHyperbolicMirror : public G4Polyhedron {
+ public:
+  G4PolyhedronHyperbolicMirror(G4double a, G4double h, G4double r);
+  virtual ~G4PolyhedronHyperbolicMirror ();
 };
 
 std::ostream& operator<<(std::ostream& os, const G4Polyhedron&);

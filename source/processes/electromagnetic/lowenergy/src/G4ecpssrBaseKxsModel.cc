@@ -575,26 +575,26 @@ G4double G4ecpssrBaseKxsModel::FunctionFK(G4double k, G4double theta)
 
   // END PROTECTION
 
-    std::vector<double>::iterator t2 = std::upper_bound(dummyVec.begin(),dummyVec.end(), k);
-    std::vector<double>::iterator t1 = t2-1;
+  std::vector<double>::iterator t2 = std::upper_bound(dummyVec.begin(),dummyVec.end(), k);
+  std::vector<double>::iterator t1 = t2-1;
 
-    std::vector<double>::iterator e12 = std::upper_bound(aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), theta);
-    std::vector<double>::iterator e11 = e12-1;
+  std::vector<double>::iterator e12 = std::upper_bound(aVecMap[(*t1)].begin(),aVecMap[(*t1)].end(), theta);
+  std::vector<double>::iterator e11 = e12-1;
 
-    std::vector<double>::iterator e22 = std::upper_bound(aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), theta);
-    std::vector<double>::iterator e21 = e22-1;
+  std::vector<double>::iterator e22 = std::upper_bound(aVecMap[(*t2)].begin(),aVecMap[(*t2)].end(), theta);
+  std::vector<double>::iterator e21 = e22-1;
 
-    valueT1  =*t1;
-    valueT2  =*t2;
-    valueE21 =*e21;
-    valueE22 =*e22;
-    valueE12 =*e12;
-    valueE11 =*e11;
+  valueT1  =*t1;
+  valueT2  =*t2;
+  valueE21 =*e21;
+  valueE22 =*e22;
+  valueE12 =*e12;
+  valueE11 =*e11;
 
-    xs11 = FKData[valueT1][valueE11];
-    xs12 = FKData[valueT1][valueE12];
-    xs21 = FKData[valueT2][valueE21];
-    xs22 = FKData[valueT2][valueE22];
+  xs11 = FKData[valueT1][valueE11];
+  xs12 = FKData[valueT1][valueE12];
+  xs21 = FKData[valueT2][valueE21];
+  xs22 = FKData[valueT2][valueE22];
 
 /*
     if (verboseLevel>0)

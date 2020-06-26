@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ----------------------------------------------------------------------
-//
 // G4Evaluator class, typedef to CLHEP Evaluator
 //
-// ----------------------------------------------------------------------
-
+// --------------------------------------------------------------------
 #ifndef G4EVALUATOR_HH
 #define G4EVALUATOR_HH
 
 #include "globals.hh"
 #include <CLHEP/Evaluator/Evaluator.h>
 
-typedef HepTool::Evaluator G4Evaluator;
+using G4Evaluator = HepTool::Evaluator;
 
 #endif

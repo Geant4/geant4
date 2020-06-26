@@ -23,62 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsLogVector
 //
+// Class description:
 //
-// 
-//--------------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//  G4PhysicsLogVector.hh
-//
-//  Class description:
-//
-//    A physics vector which has values of energy-loss, cross-section, 
-//    and other physics values of a particle in matter in a given 
-//    range of the energy, momentum, etc. The scale of energy/momentum
-//    bins is in logarithmic.
+// A physics vector which has values of energy-loss, cross-section,
+// and other physics values of a particle in matter in a given
+// range of energy, momentum, etc. The scale of energy/momentum
+// bins is logarithmic.
 
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    03 Mar. 1996, K.Amako : Implemented the 1st version
-//    27 Apr. 1996, K.Amako : Cache mechanism added
-//    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
-//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
-//    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
-//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
-//
-//--------------------------------------------------------------------
+// Authors:
+// - 02 Dec. 1995, G.Cosmo: Structure created based on object model
+// - 03 Mar. 1996, K.Amako: Implemented the 1st version
+// Revisions:
+// - 11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+// --------------------------------------------------------------------
+#ifndef G4PhysicsLogVector_hh
+#define G4PhysicsLogVector_hh 1
 
-#ifndef G4PhysicsLogVector_h
-#define G4PhysicsLogVector_h 1
-
-#include "globals.hh"
 #include "G4PhysicsVector.hh"
+#include "globals.hh"
 
-class G4PhysicsLogVector : public G4PhysicsVector  
+class G4PhysicsLogVector : public G4PhysicsVector
 {
-public:// with description
-
+ public:
   G4PhysicsLogVector();
-       // the vector will be filled from external file using Retrieve method
+  // The vector will be filled from external file using Retrieve() method
 
-  G4PhysicsLogVector(G4double theEmin, G4double theEmax, size_t theNbin);
-       // Energy vector will be computed and filled at construction, 
-       // number of nodes 'theNbin+1'. Use PutValue() to fill the data vector
-       // 
-       // Because of logarithmic scale, 'theEmin' has to be 
-       // greater than zero. No protection exists against this error.
+  G4PhysicsLogVector(G4double Emin, G4double Emax, std::size_t Nbin);
+  // Energy vector will be computed and filled at construction,
+  // number of nodes 'Nbin+1'. Use PutValue() to fill the data vector
+  // Because of logarithmic scale, 'Emin' has to be
+  // greater than zero. No protection exists against this error
 
   virtual ~G4PhysicsLogVector();
 
   virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii) final;
-       // To retrieve persistent data from a file stream.
+  // To retrieve persistent data from a file stream
 
   virtual void ScaleVector(G4double factorE, G4double factorV) final;
-       // Scale all values of the vector and second derivatives
-       // by factorV, energies - by vectorE. 
-
+  // Scale all values of the vector and second derivatives
+  // by factorV, energies - by vectorE
 };
 
 #endif

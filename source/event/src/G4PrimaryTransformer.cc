@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PrimaryTransformer class implementation
 //
-//
+// Author: Makoto Asai, 1999
+// --------------------------------------------------------------------
 
 #include "G4PrimaryTransformer.hh"
 #include "G4SystemOfUnits.hh"
@@ -40,43 +42,41 @@
 #include "Randomize.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
-:verboseLevel(0),trackID(0),
- unknown(nullptr),unknownParticleDefined(false),
- opticalphoton(nullptr),opticalphotonDefined(false),
- nWarn(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
   CheckUnknown();
 }
 
 G4PrimaryTransformer::~G4PrimaryTransformer()
-{;}
+{
+}
 
 void G4PrimaryTransformer::CheckUnknown()
 {
   unknown = particleTable->FindParticle("unknown");
-  if(unknown) 
+  if(unknown != nullptr) 
   { unknownParticleDefined = true; }
   else
   { unknownParticleDefined = false; }
   opticalphoton = particleTable->FindParticle("opticalphoton");
-  if(opticalphoton) 
+  if(opticalphoton != nullptr) 
   { opticalphotonDefined = true; }
   else
   { opticalphotonDefined = false; }
 }
     
-G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent,G4int trackIDCounter)
+G4TrackVector*
+G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent, G4int trackIDCounter)
 {
   trackID = trackIDCounter;
 
-  //TV.clearAndDestroy();
   for(auto tr : TV) delete tr;
   TV.clear();
 
-  //Loop over vertices
+  // Loop over vertices
+  //
   G4PrimaryVertex* nextVertex = anEvent->GetPrimaryVertex();
-  while(nextVertex) // Loop checking 12.28.2015 M.Asai
+  while(nextVertex != nullptr) // Loop checking 12.28.2015 M.Asai
   { 
     GenerateTracks(nextVertex);
     nextVertex = nextVertex->GetNext();
@@ -93,9 +93,12 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   G4double WV = primaryVertex->GetWeight();
 
 #ifdef G4VERBOSE
-  if(verboseLevel>2) { 
+  if(verboseLevel>2)
+  { 
     primaryVertex->Print();
-  } else if (verboseLevel==1) {
+  }
+  else if (verboseLevel==1)
+  {
     G4cout << "G4PrimaryTransformer::PrimaryVertex ("
            << X0 / mm << "(mm),"
            << Y0 / mm << "(mm),"
@@ -105,21 +108,21 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
 #endif
 
   G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
-  while( primaryParticle != 0 ) // Loop checking 12.28.2015 M.Asai
+  while( primaryParticle != nullptr ) // Loop checking 12.28.2015 M.Asai
   {
     GenerateSingleTrack( primaryParticle, X0, Y0, Z0, T0, WV );
     primaryParticle = primaryParticle->GetNext();
   }
 }
 
-void G4PrimaryTransformer::GenerateSingleTrack
-     (G4PrimaryParticle* primaryParticle,
-      G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
+void G4PrimaryTransformer::
+GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
+                     G4double x0, G4double y0, G4double z0,
+                     G4double t0, G4double wv)
 {
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
   if(!IsGoodForTrack(partDef))
-  // The particle cannot be converted to G4Track, check daughters
-  {
+  {  // The particle cannot be converted to G4Track, check daughters
 #ifdef G4VERBOSE
     if(verboseLevel>2)
     {
@@ -128,37 +131,39 @@ void G4PrimaryTransformer::GenerateSingleTrack
     }
 #endif 
     G4PrimaryParticle* daughter = primaryParticle->GetDaughter();
-    while(daughter) // Loop checking 12.28.2015 M.Asai
+    while(daughter != nullptr) // Loop checking 12.28.2015 M.Asai
     {
       GenerateSingleTrack(daughter,x0,y0,z0,t0,wv);
       daughter = daughter->GetNext();
     }
   }
-
-  // The particle is defined in GEANT4
-  else
+  else  // The particle is defined in GEANT4
   {
     // Create G4DynamicParticle object
 #ifdef G4VERBOSE
     if(verboseLevel>1)
     {
       G4cout << "Primary particle (" << partDef->GetParticleName()
-             << ") --- Transfered with momentum " << primaryParticle->GetMomentum()
+             << ") --- Transfered with momentum "
+             << primaryParticle->GetMomentum()
              << G4endl;
     }
 #endif
     G4DynamicParticle* DP = 
       new G4DynamicParticle(partDef,
-			    primaryParticle->GetMomentumDirection(),
-			    primaryParticle->GetKineticEnergy());
-    if(opticalphotonDefined && partDef==opticalphoton && primaryParticle->GetPolarization().mag2()==0.)
+                            primaryParticle->GetMomentumDirection(),
+                            primaryParticle->GetKineticEnergy());
+    if(opticalphotonDefined && partDef==opticalphoton
+       && primaryParticle->GetPolarization().mag2()==0.)
     {
       if(nWarn<10)
       {
-        G4Exception("G4PrimaryTransformer::GenerateSingleTrack","ZeroPolarization",JustWarning,
-                    "Polarization of the optical photon is null. Random polarization is assumed.");
+        G4Exception("G4PrimaryTransformer::GenerateSingleTrack",
+                    "ZeroPolarization", JustWarning,
+                    "Polarization of the optical photon is null.\
+                     Random polarization is assumed.");
         G4cerr << "This warning message is issued up to 10 times." << G4endl;
-        nWarn++;
+        ++nWarn;
       }
 
       G4double angle = G4UniformRand() * 360.0*deg;
@@ -171,7 +176,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
       if (modul2 > 0.) e_perpend = (1./std::sqrt(modul2))*product;
       G4ThreeVector e_paralle    = e_perpend.cross(kphoton);
 
-      G4ThreeVector polar = std::cos(angle)*e_paralle + std::sin(angle)*e_perpend;
+      G4ThreeVector polar = std::cos(angle)*e_paralle
+                          + std::sin(angle)*e_perpend;
       DP->SetPolarization(polar.x(),polar.y(),polar.z());
     }
     else
@@ -181,68 +187,91 @@ void G4PrimaryTransformer::GenerateSingleTrack
                           primaryParticle->GetPolZ());
     }
     if(primaryParticle->GetProperTime()>=0.0)
-    { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
+    {
+      DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime());
+    }
 
     // Set Mass if it is specified
+    //
     G4double pmas = primaryParticle->GetMass();
-    if(pmas>=0.)
-    { DP->SetMass(pmas); }
+    if(pmas>=0.) { DP->SetMass(pmas); }
 
     // Set Charge if it is specified
-    if (primaryParticle->GetCharge()<DBL_MAX) {
-      if (partDef->GetAtomicNumber() <0) {
-	DP->SetCharge(primaryParticle->GetCharge());
-      } else {
-	// ions
-	G4int iz = partDef->GetAtomicNumber();
-	G4int iq = static_cast<int>(primaryParticle->GetCharge()/eplus);
-	G4int n_e = iz - iq;
-	if (n_e>0) DP->AddElectron(0,n_e);  
-       }
+    //
+    if (primaryParticle->GetCharge()<DBL_MAX)
+    {
+      if (partDef->GetAtomicNumber() <0)
+      {
+        DP->SetCharge(primaryParticle->GetCharge());
+      }
+      else  // ions
+      {
+        G4int iz = partDef->GetAtomicNumber();
+        G4int iq = static_cast<G4int>(primaryParticle->GetCharge()/eplus);
+        G4int n_e = iz - iq;
+        if (n_e>0) DP->AddElectron(0,n_e);  
+      }
     } 
     // Set decay products to the DynamicParticle
+    //
     SetDecayProducts( primaryParticle, DP );
+
     // Set primary particle
+    //
     DP->SetPrimaryParticle(primaryParticle);
+
     // Set PDG code if it is different from G4ParticleDefinition
+    //
     if(partDef->GetPDGEncoding()==0 && primaryParticle->GetPDGcode()!=0)
     {
       DP->SetPDGcode(primaryParticle->GetPDGcode());
     }
+
     // Check the particle is properly constructed
+    //
     if(!CheckDynamicParticle(DP))
     {
       delete DP;
       return;
     }
+
     // Create G4Track object
+    //
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
+
     // Set trackID and let primary particle know it
-    trackID++;
+    //
+    ++trackID;
     track->SetTrackID(trackID);
     primaryParticle->SetTrackID(trackID);
-    // Set parentID to 0 as a primary particle
-    track->SetParentID(0);
-    // Set weight ( vertex weight * particle weight )
-    track->SetWeight(wv*(primaryParticle->GetWeight()));
-    // Store it to G4TrackVector
-    TV.push_back( track );
 
+    // Set parentID to 0 as a primary particle
+    //
+    track->SetParentID(0);
+
+    // Set weight ( vertex weight * particle weight )
+    //
+    track->SetWeight(wv*(primaryParticle->GetWeight()));
+
+    // Store it to G4TrackVector
+    //
+    TV.push_back( track );
   }
 }
 
-void G4PrimaryTransformer::SetDecayProducts
-      (G4PrimaryParticle* mother, G4DynamicParticle* motherDP)
+void G4PrimaryTransformer::
+SetDecayProducts(G4PrimaryParticle* mother, G4DynamicParticle* motherDP)
 {
   G4PrimaryParticle* daughter = mother->GetDaughter();
-  if(!daughter) return;
-  G4DecayProducts* decayProducts = (G4DecayProducts*)(motherDP->GetPreAssignedDecayProducts() );
-  if(!decayProducts)
+  if(daughter == nullptr) return;
+  G4DecayProducts* decayProducts
+    = (G4DecayProducts*)(motherDP->GetPreAssignedDecayProducts() );
+  if(decayProducts == nullptr)
   {
     decayProducts = new G4DecayProducts(*motherDP);
     motherDP->SetPreAssignedDecayProducts(decayProducts);
   }
-  while(daughter)
+  while(daughter != nullptr)
   {
     G4ParticleDefinition* partDef = GetDefinition(daughter);
     if(!IsGoodForTrack(partDef))
@@ -266,23 +295,39 @@ void G4PrimaryTransformer::SetDecayProducts
                << G4endl;
       }
 #endif
-      G4DynamicParticle*DP 
+      G4DynamicParticle* DP 
         = new G4DynamicParticle(partDef,daughter->GetMomentum());
       DP->SetPrimaryParticle(daughter);
+
       // Decay proper time for daughter
+      //
       if(daughter->GetProperTime()>=0.0)
-      { DP->SetPreAssignedDecayProperTime(daughter->GetProperTime()); }
-      // Set Charge is specified
-      if (daughter->GetCharge()<DBL_MAX) {
+      {
+        DP->SetPreAssignedDecayProperTime(daughter->GetProperTime());
+      }
+
+      // Set Charge and Mass is specified
+      //
+      if (daughter->GetCharge()<DBL_MAX)
+      {
         DP->SetCharge(daughter->GetCharge());
       } 
       G4double pmas = daughter->GetMass();
       if(pmas>=0.)
-      { DP->SetMass(pmas); }
-      DP->SetPolarization(daughter->GetPolX(),daughter->GetPolY(),daughter->GetPolZ());
+      {
+        DP->SetMass(pmas);
+      }
+
+      // Set Polarization
+      //
+      DP->SetPolarization(daughter->GetPolX(),
+                          daughter->GetPolY(),
+                          daughter->GetPolZ());
       decayProducts->PushProducts(DP);
       SetDecayProducts(daughter,DP);
+
       // Check the particle is properly constructed
+      //
       if(!CheckDynamicParticle(DP))
       {
         delete DP;
@@ -297,43 +342,58 @@ void G4PrimaryTransformer::SetUnknnownParticleDefined(G4bool vl)
 {
   unknownParticleDefined = vl;
   if(unknownParticleDefined && !unknown)
-  { G4cerr << "unknownParticleDefined cannot be set true because G4UnknownParticle is not defined in the physics list."
-           << G4endl << "Command ignored." << G4endl;
+  {
+    G4cerr << "unknownParticleDefined cannot be set true because" << G4endl
+           << "G4UnknownParticle is not defined in the physics list." << G4endl
+           << "Command ignored." << G4endl;
     unknownParticleDefined = false;
   }
 }
 
-G4bool G4PrimaryTransformer::CheckDynamicParticle(G4DynamicParticle*DP)
+G4bool G4PrimaryTransformer::CheckDynamicParticle(G4DynamicParticle* DP)
 {
   if(IsGoodForTrack(DP->GetDefinition())) return true;
-  G4DecayProducts* decayProducts = (G4DecayProducts*)(DP->GetPreAssignedDecayProducts());
-  if(decayProducts && decayProducts->entries()>0) return true;
+  G4DecayProducts* decayProducts
+    = (G4DecayProducts*)(DP->GetPreAssignedDecayProducts());
+  if(decayProducts != nullptr && decayProducts->entries()>0) return true;
   G4cerr << G4endl
-         << "G4PrimaryTransformer: a shortlived primary particle is found" << G4endl
-         << " without any valid decay table nor pre-assigned decay mode." << G4endl;
-  G4Exception("G4PrimaryTransformer","InvalidPrimary",JustWarning,
+         << "G4PrimaryTransformer: a shortlived primary particle is found"
+         << G4endl
+         << " without any valid decay table nor pre-assigned decay mode."
+         << G4endl;
+  G4Exception("G4PrimaryTransformer", "InvalidPrimary", JustWarning,
               "This primary particle will be ignored.");
   return false;
 }
 
-G4ParticleDefinition* G4PrimaryTransformer::GetDefinition(G4PrimaryParticle*pp)
+G4ParticleDefinition*
+G4PrimaryTransformer::GetDefinition(G4PrimaryParticle* pp)
 {
   G4ParticleDefinition* partDef = pp->GetG4code();
-  if(!partDef) partDef = particleTable->FindParticle(pp->GetPDGcode());
-  if(unknownParticleDefined && ((!partDef)||partDef->IsShortLived())) partDef = unknown;
+  if(partDef == nullptr)
+  {
+    partDef = particleTable->FindParticle(pp->GetPDGcode());
+  }
+  if(unknownParticleDefined && ((!partDef)||partDef->IsShortLived()))
+  {
+    partDef = unknown;
+  }
   return partDef;
 }
 
 G4bool G4PrimaryTransformer::IsGoodForTrack(G4ParticleDefinition* pd)
 {
-  if(!pd)
+  if(pd == nullptr)
   { return false; }
   else if(!(pd->IsShortLived()))
   { return true; }
-// Following two lines should be removed if the user does not want to make shortlived 
-// primary particle with proper decay table to be converted into a track.
-  else if(pd->GetDecayTable())
+  //
+  // Following two lines should be removed if the user does not want to make
+  // shortlived primary particle with proper decay table to be converted into
+  // a track.
+  //
+  else if(pd->GetDecayTable() != nullptr)
   { return true; }
+
   return false;
 }
-

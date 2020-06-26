@@ -799,26 +799,26 @@ G4double G4ecpssrBaseLixsModel::FunctionFL1(G4double k, G4double theta)
 
   // END PROTECTION
 
-    std::vector<double>::iterator t2 = std::upper_bound(dummyVec1.begin(),dummyVec1.end(), k);
-    std::vector<double>::iterator t1 = t2-1;
+  std::vector<double>::iterator t2 = std::upper_bound(dummyVec1.begin(),dummyVec1.end(), k);
+  std::vector<double>::iterator t1 = t2-1;
 
-    std::vector<double>::iterator e12 = std::upper_bound(aVecMap1[(*t1)].begin(),aVecMap1[(*t1)].end(), theta);
-    std::vector<double>::iterator e11 = e12-1;
+  std::vector<double>::iterator e12 = std::upper_bound(aVecMap1[(*t1)].begin(),aVecMap1[(*t1)].end(), theta);
+  std::vector<double>::iterator e11 = e12-1;
 
-    std::vector<double>::iterator e22 = std::upper_bound(aVecMap1[(*t2)].begin(),aVecMap1[(*t2)].end(), theta);
-    std::vector<double>::iterator e21 = e22-1;
+  std::vector<double>::iterator e22 = std::upper_bound(aVecMap1[(*t2)].begin(),aVecMap1[(*t2)].end(), theta);
+  std::vector<double>::iterator e21 = e22-1;
 
-    valueT1  =*t1;
-    valueT2  =*t2;
-    valueE21 =*e21;
-    valueE22 =*e22;
-    valueE12 =*e12;
-    valueE11 =*e11;
+  valueT1  =*t1;
+  valueT2  =*t2;
+  valueE21 =*e21;
+  valueE22 =*e22;
+  valueE12 =*e12;
+  valueE11 =*e11;
 
-    xs11 = FL1Data[valueT1][valueE11];
-    xs12 = FL1Data[valueT1][valueE12];
-    xs21 = FL1Data[valueT2][valueE21];
-    xs22 = FL1Data[valueT2][valueE22];
+  xs11 = FL1Data[valueT1][valueE11];
+  xs12 = FL1Data[valueT1][valueE12];
+  xs21 = FL1Data[valueT2][valueE21];
+  xs22 = FL1Data[valueT2][valueE22];
 
   if (verboseLevel>0)
     G4cout
@@ -890,26 +890,26 @@ G4double G4ecpssrBaseLixsModel::FunctionFL2(G4double k, G4double theta)
 
   // END PROTECTION
 
-    std::vector<double>::iterator t2 = std::upper_bound(dummyVec2.begin(),dummyVec2.end(), k);
-    std::vector<double>::iterator t1 = t2-1;
+  std::vector<double>::iterator t2 = std::upper_bound(dummyVec2.begin(),dummyVec2.end(), k);
+  std::vector<double>::iterator t1 = t2-1;
 
-    std::vector<double>::iterator e12 = std::upper_bound(aVecMap2[(*t1)].begin(),aVecMap2[(*t1)].end(), theta);
-    std::vector<double>::iterator e11 = e12-1;
+  std::vector<double>::iterator e12 = std::upper_bound(aVecMap2[(*t1)].begin(),aVecMap2[(*t1)].end(), theta);
+  std::vector<double>::iterator e11 = e12-1;
 
-    std::vector<double>::iterator e22 = std::upper_bound(aVecMap2[(*t2)].begin(),aVecMap2[(*t2)].end(), theta);
-    std::vector<double>::iterator e21 = e22-1;
+  std::vector<double>::iterator e22 = std::upper_bound(aVecMap2[(*t2)].begin(),aVecMap2[(*t2)].end(), theta);
+  std::vector<double>::iterator e21 = e22-1;
 
-    valueT1  =*t1;
-    valueT2  =*t2;
-    valueE21 =*e21;
-    valueE22 =*e22;
-    valueE12 =*e12;
-    valueE11 =*e11;
+  valueT1  =*t1;
+  valueT2  =*t2;
+  valueE21 =*e21;
+  valueE22 =*e22;
+  valueE12 =*e12;
+  valueE11 =*e11;
 
-    xs11 = FL2Data[valueT1][valueE11];
-    xs12 = FL2Data[valueT1][valueE12];
-    xs21 = FL2Data[valueT2][valueE21];
-    xs22 = FL2Data[valueT2][valueE22];
+  xs11 = FL2Data[valueT1][valueE11];
+  xs12 = FL2Data[valueT1][valueE12];
+  xs21 = FL2Data[valueT2][valueE21];
+  xs22 = FL2Data[valueT2][valueE22];
 
   if (verboseLevel>0)
     G4cout

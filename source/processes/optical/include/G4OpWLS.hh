@@ -37,40 +37,19 @@
 //              (Adaptation of G4Scintillation and G4OpAbsorption)
 // Updated:     2005-07-28 add G4ProcessType to constructor
 //              2006-05-07 - add G4VWLSTimeGeneratorProfile
-// mail:        gum@triumf.ca
-//              jparcham@phys.ualberta.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpWLS_h
 #define G4OpWLS_h 1
 
-#include "globals.hh"
-#include "templates.hh"
-#include "Randomize.hh"
-#include "G4Poisson.hh"
-#include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
-#include "G4Step.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
 #include "G4OpticalPhoton.hh"
-#include "G4PhysicsTable.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
-#include "G4VWLSTimeGeneratorProfile.hh"
-
-// Class Description:
-// Discrete Process -- Bulk absorption of Optical Photons.
-// Class inherits publicly from G4VDiscreteProcess
-// Class Description - End:
 
 class G4VWLSTimeGeneratorProfile;
 
 class G4OpWLS : public G4VDiscreteProcess
 {
-
 public:
 
   explicit G4OpWLS(const G4String& processName = "OpWLS",
@@ -86,13 +65,12 @@ public:
   virtual G4double GetMeanFreePath(const G4Track& aTrack,
                                    G4double,
                                    G4ForceCondition*) override;
-  // Returns the absorption length for bulk absorption of optical
+  // Returns the absorption length for WLS absorption of optical
   // photons in media with a specified attenuation length.
 
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                           const G4Step&  aStep) override;
-  // This is the method implementing bulk absorption of optical
-  // photons.
+  // This is the method implementing WLS for optical photons.
 
   virtual G4PhysicsTable* GetIntegralTable() const;
   // Returns the address of the WLS integral table.
@@ -112,6 +90,8 @@ private:
 
   G4OpWLS(const G4OpWLS &right) = delete;
   G4OpWLS& operator=(const G4OpWLS &right) = delete;
+
+  size_t idx_wls = 0;
 };
 
 ////////////////////
@@ -136,7 +116,7 @@ void G4OpWLS::DumpPhysicsTable() const
   G4int PhysicsTableSize = theIntegralTable->entries();
   G4PhysicsOrderedFreeVector *v;
 
-  for (G4int i = 0; i < PhysicsTableSize; i++)
+  for (G4int i=0; i<PhysicsTableSize; ++i)
   {
     v = (G4PhysicsOrderedFreeVector*)(*theIntegralTable)[i];
     v->DumpValues();

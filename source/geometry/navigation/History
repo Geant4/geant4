@@ -16,10 +16,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 5, 2020 - P.Arce  (geomnav-V10-05-20)
+June 15, 2020 - G.Cosmo (geomnav-V10-06-05)
+-----------------------
+- Fixed Coverity defects in G4LocatorChangeRecord and some code cleanup.
+
+June 8, 2020 - G.Cosmo (geomnav-V10-06-04)
+----------------------
+- Enabled "check-mode" for G4PropagatorInField and G4VIntersectionLocator.
+  Enable use of whiteboard for logging/debugging in G4MultiLevelLocator, if
+  "check-mode" in navigation is being activated through UI command.
+
+May 28, 2020 - J.Apostolakis  (geomnav-V10-06-03)
+----------------------------
+- G4MultiLevelLocator: introduced whiteboard for logging/debugging in
+  G4MultiLevelLocator, to help identify source(s) of recent issues seen
+  in CMS and Belle2.
+  Activating the following:
+    * Record points ( e.g. A, B, H ) changes using G4LocatorChangeRecord
+    * Report when a problem is encountered.
+    * Improved reports of check of distance of endpoints <= the curve length.
+      and of exception of interval start A being past end B during integration.
+    * New separate name for return of intersection 'PointGi'.
+  Improved PiF ClearPropagatorState.
+- New classes G4LocatorChangeLogger and G4LocatorChangeRecord, implementing
+  simple 'whiteboard' to store successive curve-point values (e.g. start(A)
+  or end(B) ).
+- G4PropagationInField: improved ClearPropagatorState() method.
+  Clears values of additional data members.
+
+March 24, 2020 - J.Apostolakis  (geomnav-V10-06-02)
+------------------------------
+- Reordered the data members of G4Navigator, to reduce size 
+  of G4Navigator object(s), as compromise between full compactification and
+  keeping some related data members declarations close.
+  Inspired by the effort of G.Amadio in this direction.
+
+February 5, 2020 - P.Arce  (geomnav-V10-06-01)
 -------------------------
-- Fixed problem report #2196.
+- Addressing problem report #2196.
   Avoid looping infinitely by pushing N times with increasing step size.
+
+December 10, 2019 - B.Morgan  (geomnav-V10-06-0)
+----------------------------
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
 
 November 29, 2019 - J.Apostolakis  (geomnav-V10-05-19)
 ---------------------------------

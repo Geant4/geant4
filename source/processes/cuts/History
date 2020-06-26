@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun. 5th, 2020  - G.Cosmo (procuts-V10-06-00)
+- Revision for use of c++11 constructs. Code cleanup and formatting.
+
 Nov. 19th, 2019  - G.Cosmo (procuts-V10-05-02)
 - Fixed cases of implicit type conversions from size_t to G4int.
 

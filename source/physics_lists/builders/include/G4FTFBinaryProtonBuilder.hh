@@ -68,11 +68,6 @@ class G4FTFBinaryProtonBuilder : public G4VProtonBuilder
     using G4VProtonBuilder::Build; //Prevent compiler warning
   private:
     G4TheoFSGenerator * theModel;
-    G4BinaryCascade * theCascade;
-    G4FTFModel * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-
     G4double theMin;
     G4double theMax;
 };

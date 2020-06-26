@@ -61,10 +61,9 @@ void GammaRayTelIonPhysics::ConstructProcess()
   const G4double theFTFMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   
   G4FTFModel* theStringModel = new G4FTFModel;
-  G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay( new G4LundStringFragmentation );
+  G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay();
   theStringModel->SetFragmentationModel( theStringDecay );
-  G4PreCompoundModel* thePreEquilib = new G4PreCompoundModel( new G4ExcitationHandler );
-  G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface( thePreEquilib );
+  G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface();
 
   G4TheoFSGenerator* theModel = new G4TheoFSGenerator( "FTFP" );
   theModel->SetHighEnergyGenerator( theStringModel );

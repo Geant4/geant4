@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class description:
+// G4SmartTrackStack
+//
+// Class description:
 //
 // This is a 'smart' stack class used by G4StackManager. This class object
 // stores G4StackedTrack class objects in various dedicated stacks
 
-// Author: S.Kamperis - 04/Oct/12
+// Author: S.Kamperis - 4 October 2012
 // --------------------------------------------------------------------
 #ifndef G4SmartTrackStack_hh
 #define G4SmartTrackStack_hh 1
@@ -86,4 +88,3 @@ class G4SmartTrackStack
 };
 
 #endif
-

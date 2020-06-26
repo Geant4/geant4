@@ -23,56 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4GaussHermiteQ
 //
 // Class description:
 //
 // Roots of ortogonal polynoms and corresponding weights are calculated based on
 // iteration method (by bisection Newton algorithm). Constant values for initial
-// approximations were derived from the book: M. Abramowitz, I. Stegun, Handbook
-// of mathematical functions, DOVER Publications INC, New York 1965 ; chapters 9,
-// 10, and 22 .
-//
-// --------------------------------------------------------------------------
-//
-// Constructor for Gauss-Hermite quadrature method . The function GaussHermite
-// should be called then
-//
-// G4GaussHermiteQ( function pFunction, G4int nHermite  ) 
-//
-// ----------------------------------------------------------------------------
-//
-// Gauss-Hermite method for integration of std::exp(-x*x)*nFunction(x) from minus infinity
-// to plus infinity .
-//
-// G4double Integral() const 
+// approximations were derived from the book:
+//   M. Abramowitz, I. Stegun, Handbook of mathematical functions,
+//   DOVER Publications INC, New York 1965 ; chapters 9, 10, and 22.
 
-// ------------------------------- HISTORY -------------------------------------
-//
-// 13.05.97 V.Grichine (Vladimir.Grichine@cern.chz0
-
+// Author: V.Grichine, 13.05.1997 V.Grichine
+// --------------------------------------------------------------------
 #ifndef G4GAUSSHERMITEQ_HH
-#define G4GAUSSHERMITEQ_HH
+#define G4GAUSSHERMITEQ_HH 1
 
 #include "G4VGaussianQuadrature.hh"
 
 class G4GaussHermiteQ : public G4VGaussianQuadrature
 {
-public:
-        // Constructor
+ public:
+  // Constructor
 
-        G4GaussHermiteQ( function pFunction, G4int nHermite  ) ;
-			       
-        // Methods
-			     
-        G4double Integral() const ;
+  G4GaussHermiteQ(function pFunction, G4int nHermite);
+  // Constructor for Gauss-Hermite quadrature method.
+  // The function GaussHermite should be called then.
 
+  G4GaussHermiteQ(const G4GaussHermiteQ&) = delete;
+  G4GaussHermiteQ& operator=(const G4GaussHermiteQ&) = delete;
 
-private:
-
-	G4GaussHermiteQ(const G4GaussHermiteQ&);
-	G4GaussHermiteQ& operator=(const G4GaussHermiteQ&);
-
+  G4double Integral() const;
+  // Gauss-Hermite method for integration of std::exp(-x*x)*nFunction(x) from
+  // minus infinity to plus infinity.
 };
 
 #endif

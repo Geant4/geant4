@@ -23,57 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TauLeptonicDecayChannel
 //
+// Class decription:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      30 May 1997 H.Kurashige
-// ------------------------------------------------------------
-#ifndef G4TauLeptonicDecayChannel_h
-#define G4TauLeptonicDecayChannel_h 1
+// Class describing tau leptonic decay kinematics.
+// This version assumes the pure V-A coupling and gives incorrect
+// energy spectrum for neutrinos without tau polarization.
+
+// Author: H.Kurashige, 30 May 1997 
+// --------------------------------------------------------------------
+#ifndef G4TauLeptonicDecayChannel_hh
+#define G4TauLeptonicDecayChannel_hh 1
 
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDecayChannel.hh"
 
-class G4TauLeptonicDecayChannel :public G4VDecayChannel
+class G4TauLeptonicDecayChannel : public G4VDecayChannel
 {
-  // Class Decription
-  //  This class describes tau leptonic decay kinemtics.
-  //  This version assumes the pure V-A coupling
-  //              gives incorrect energy spectrum for neutrinos
-  //              without tau polarization 
+  public:
 
-  public:  // With Description
-    //Constructors 
-      G4TauLeptonicDecayChannel(const G4String& theParentName,
-				G4double        theBR,
-				const G4String& theLeptonName);
-    //  Destructor
-      virtual ~G4TauLeptonicDecayChannel();
+    G4TauLeptonicDecayChannel(const G4String& theParentName,
+                                    G4double  theBR,
+                              const G4String& theLeptonName);
+    virtual ~G4TauLeptonicDecayChannel();
+
+    virtual G4DecayProducts* DecayIt(G4double);   
 
   protected:
-    // Copy constructor and assignment operator
-      G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel &);
-      G4TauLeptonicDecayChannel & operator=(const G4TauLeptonicDecayChannel &);
 
-  protected:
-      G4TauLeptonicDecayChannel();
+    G4TauLeptonicDecayChannel();
 
+    G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel&);
+    G4TauLeptonicDecayChannel& operator=(const G4TauLeptonicDecayChannel&);
 
-  public:  // With Description
-     virtual G4DecayProducts *DecayIt(G4double);   
-  
   private:
-     static G4double   spectrum(G4double momentum,
-				G4double energy,
-				G4double mtau,
-				G4double ml);
+
+    static G4double spectrum(G4double momentum, G4double energy,
+                             G4double mtau, G4double ml);
 };  
 
-
 #endif
-

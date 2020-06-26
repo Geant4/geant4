@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // ----------------------------------------------------------------------
 // Constants, typedefs, enums for Geometry Section
 //
@@ -50,11 +50,25 @@ static const double kMinExitingNormalCosine = 1E-3;
 // Radial3D = Radial axis in spherical polar
 // Phi = Phi axis in cylindrical polar
 // kUndefined = Not defined axis
-enum EAxis {kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi,kUndefined};
+enum EAxis
+{
+  kXAxis,
+  kYAxis,
+  kZAxis,
+  kRho,
+  kRadial3D,
+  kPhi,
+  kUndefined
+};
 
 // G4VSolid::Inside return codes
 // kSurface => within tolerance of exact surface
-enum EInside {kOutside,kSurface,kInside};
+enum EInside
+{
+  kOutside,
+  kSurface,
+  kInside
+};
 // enum EInside {kInside=1, kSurface=2, kOutside=3};
 
 // kNormal = (G4PVPlacement) Conventional positioning
@@ -65,11 +79,17 @@ enum EInside {kOutside,kSurface,kInside};
 // kParameterised = (G4PVParameterised) General parameterised volume
 //                           => Distance & location computed to volumes
 //                              after setup/modification via user object
-enum EVolume {kNormal,kReplica,kParameterised,kExternal};
+enum EVolume
+{
+  kNormal,
+  kReplica,
+  kParameterised,
+  kExternal
+};
 
 // Default max size of Navigation history
 //
-static const G4int kHistoryMax    = 15;
+static const G4int kHistoryMax = 15;
 
 // History increase stride of Navigation history
 //

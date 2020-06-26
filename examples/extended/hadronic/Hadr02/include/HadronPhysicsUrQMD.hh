@@ -52,6 +52,7 @@
 #include "G4NeutronBuilder.hh"
 #include "UrQMDNeutronBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 
 #include "G4AntiBarionBuilder.hh"
@@ -81,7 +82,8 @@ private:
   G4ProtonBuilder * fPro;
   UrQMDProtonBuilder * fUrQMDPro;    
     
-  G4HyperonFTFPBuilder * fHyperon;
+  G4HyperonBuilder * fHyperon;
+  G4HyperonFTFPBuilder * fFTFPHyperon;
     
   G4AntiBarionBuilder * fAntiBaryon;
   UrQMDAntiBarionBuilder * fUrQMDAntiBaryon;

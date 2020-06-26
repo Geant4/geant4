@@ -59,17 +59,29 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
     HEADERS
+        G4ANuElNucleusCcModel.hh
+        G4ANuElNucleusNcModel.hh
+        G4ANuMuNucleusCcModel.hh
+        G4ANuMuNucleusNcModel.hh
         G4ElectroVDNuclearModel.hh
         G4MuonVDNuclearModel.hh
         G4NeutrinoElectronCcModel.hh
         G4NeutrinoNucleusModel.hh
+        G4NuElNucleusCcModel.hh
+        G4NuElNucleusNcModel.hh
         G4NuMuNucleusCcModel.hh
         G4NuMuNucleusNcModel.hh
     SOURCES
+        G4ANuElNucleusCcModel.cc
+        G4ANuElNucleusNcModel.cc
+        G4ANuMuNucleusCcModel.cc
+        G4ANuMuNucleusNcModel.cc
         G4ElectroVDNuclearModel.cc
         G4MuonVDNuclearModel.cc
         G4NeutrinoElectronCcModel.cc
         G4NeutrinoNucleusModel.cc
+        G4NuElNucleusCcModel.cc
+        G4NuElNucleusNcModel.cc
         G4NuMuNucleusCcModel.cc
         G4NuMuNucleusNcModel.cc
     GRANULAR_DEPENDENCIES
@@ -92,8 +104,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_HE
-        G4hadronic_LE
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_util

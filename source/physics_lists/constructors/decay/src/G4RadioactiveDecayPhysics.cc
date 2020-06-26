@@ -55,10 +55,11 @@ G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
   deex->SetStoreICLevelData(true);
   deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
                        /std::log(2.));
+  deex->SetIsomerProduction(true);
 }
 
-G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&)
-  : G4RadioactiveDecayPhysics(0)
+G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&, G4int ver)
+  : G4RadioactiveDecayPhysics(ver)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,11 +80,13 @@ void G4RadioactiveDecayPhysics::ConstructProcess()
 {
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4VAtomDeexcitation* ad = man->AtomDeexcitation();
+
+  // EM physics constructors are not used
   if(!ad) {
     G4EmParameters::Instance()->SetAugerCascade(true);
     ad = new G4UAtomicDeexcitation();
     man->SetAtomDeexcitation(ad);
-    ad->InitialiseAtomicDeexcitation();
+    man->ResetParameters();
   }
 
   G4PhysicsListHelper::GetPhysicsListHelper()->

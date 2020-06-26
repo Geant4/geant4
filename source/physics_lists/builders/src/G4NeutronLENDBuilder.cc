@@ -30,7 +30,7 @@
 #include "G4ProcessManager.hh"
 
 G4NeutronLENDBuilder::
-G4NeutronLENDBuilder( G4String eva ) 
+G4NeutronLENDBuilder(const G4String& eva ) 
 {
   theLENDElastic = 0;
   theLENDElasticCrossSection = 0;

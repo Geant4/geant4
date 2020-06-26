@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
+- March 11, 2020 V.Ivanchenko (track-V10-06-03)
+  G4Track - do not use Velocity table, instead use GetBeta() method
+    from G4DynamicParticle; expected minor speed-up
+
+- February 10, 2020 V.Ivanchenko (track-V10-06-02)
+  G4Track - use G4OpticalPhoton pdg code; removed static thread local 
+    variables; slightly simplified velocity computation; removed 
+    commented code left from previous tag
+
+- January 29, 2020 V.Ivanchenko (track-V10-06-01)
+  G4Track - fixed Coverity reports connected with unnecessary checks 
+  for valid pointers to G4Step and G4DynamicParticle
+
+- December 9, 2019 B. Morgan (track-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 - November 15, 2019 G.Cosmo (track-V10-05-01)
 - Fixed implicit type conversions from size_t to G4int in G4Step.
 

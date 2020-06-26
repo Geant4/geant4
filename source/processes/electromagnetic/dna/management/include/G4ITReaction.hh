@@ -283,6 +283,10 @@ public:
     return fReactionPerTime;
   }
 
+  void SortByTime(){
+	  fSortByTime = true;
+  }
+
 protected:
   void AddReaction(G4Track* track, G4ITReactionPtr reaction)
   {

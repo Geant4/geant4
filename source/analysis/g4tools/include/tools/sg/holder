@@ -9,14 +9,33 @@
 // of holder copy(), the new holder receives a null object.
 
 #include "node"
+
 #include "sf_string"
 
 namespace tools {
 namespace sg {
 
+class base_holder : public node {
+  TOOLS_NODE(base_holder,tools::sg::base_holder,node)
+public:  
+  base_holder(const std::string& a_name):parent(),m_name(a_name) {}
+  virtual ~base_holder(){}
+public:
+  base_holder(const base_holder& a_from):parent(a_from),m_name(a_from.m_name) {}
+  base_holder& operator=(const base_holder& a_from){
+    parent::operator=(a_from);
+    m_name = a_from.m_name;
+    return *this;
+  }
+public:  
+  const std::string& name() const {return m_name;}
+protected:
+  std::string m_name;
+};
+
 template <class T>
-class holder : public node {
-  typedef node parent;
+class holder : public base_holder {
+  typedef base_holder parent;
 public:
   //WARNING : we do not put the T class name in the name of this class.
   //          We put it in the class_name field.
@@ -46,10 +65,9 @@ private:
   }
 public:  
   holder(T* a_obj = 0,const std::string& a_name = "")
-  :parent()
+  :parent(a_name)
   ,class_name(T::s_class())
   ,m_obj(a_obj) //it takes a_obj ownership.
-  ,m_name(a_name)
   {
     add_fields();
   }
@@ -61,26 +79,23 @@ public:
   :parent(a_from)
   ,class_name(std::string())
   ,m_obj(0)
-  ,m_name()
   {
+    parent::m_name.clear();
     add_fields();
   }
   holder& operator=(const holder& a_from){
     parent::operator=(a_from);
     class_name.value().clear();
     m_obj = 0;
-    m_name.clear();
+    parent::m_name.clear();
     return *this;
   }
 public:  
   const T* object() const {return m_obj;}
   T* object() {return m_obj;}
-  const std::string& name() const {return m_name;}
 protected:
   T* m_obj;
-  std::string m_name;
 };
-
 
 template <class T>
 inline holder<T>* cast_holder(node& a_node) {
@@ -88,6 +103,29 @@ inline holder<T>* cast_holder(node& a_node) {
   h_t* _h = (h_t*)a_node.cast(h_t::s_class());
   if(!_h) return 0;
   return (_h->class_name.value()==T::s_class()?_h:0);
+}
+
+template <class T>
+inline const holder<T>* cast_holder(const node& a_node) {
+  typedef holder<T> h_t;
+  h_t* _h = (h_t*)a_node.cast(h_t::s_class());
+  if(!_h) return 0;
+  return (_h->class_name.value()==T::s_class()?_h:0);
+}
+
+template <class T>
+inline const T* cast_holder_object(const node& a_node) {
+  typedef holder<T> h_t;
+  h_t* _h = (h_t*)a_node.cast(h_t::s_class());
+  if(!_h) return 0;
+  return (_h->class_name.value()==T::s_class()?_h->object():0);
+}
+template <class T>
+inline T* cast_holder_object(node& a_node) {
+  typedef holder<T> h_t;
+  h_t* _h = (h_t*)a_node.cast(h_t::s_class());
+  if(!_h) return 0;
+  return (_h->class_name.value()==T::s_class()?_h->object():0);
 }
 
 template <class T>

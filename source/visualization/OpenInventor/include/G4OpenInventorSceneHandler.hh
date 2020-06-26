@@ -33,7 +33,7 @@
 #ifndef G4OPENINVENTORSCENEHANDLER_HH
 #define G4OPENINVENTORSCENEHANDLER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
+#if defined (G4VIS_BUILD_OI_DRIVER) || defined (G4VIS_USE_OI)
 
 // Inheritance :
 #include "G4VSceneHandler.hh"

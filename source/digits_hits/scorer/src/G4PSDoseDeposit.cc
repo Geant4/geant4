@@ -68,7 +68,6 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
                ->GetReplicaNumber(indexDepth);
   G4double cubicVolume = ComputeVolume(aStep, idx);
 
-
   G4double density = aStep->GetTrack()->GetStep()->GetPreStepPoint()->GetMaterial()->GetDensity();
   G4double dose    = edep / ( density * cubicVolume );
   dose *= aStep->GetPreStepPoint()->GetWeight(); 
@@ -116,27 +115,9 @@ void G4PSDoseDeposit::SetUnit(const G4String& unit)
 	CheckAndSetUnit(unit,"Dose");
 }
 
-G4double G4PSDoseDeposit::ComputeVolume(G4Step* aStep, G4int idx){
-
-  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    if(idx<0)
-    {
-      G4ExceptionDescription ED;
-      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
-      G4Exception("G4PSDoseDeposit::ComputeVolume","DetPS0004",JustWarning,ED);
-    }
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
-  
+G4double G4PSDoseDeposit::ComputeVolume(G4Step* aStep, G4int idx)
+{
+  G4VSolid* solid = ComputeSolid(aStep, idx);
   return solid->GetCubicVolume();
 }
 

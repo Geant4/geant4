@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -187,7 +187,7 @@ hIoni:  for proton  SubType=2
           BetheBloch : Emin=    2 MeV Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
@@ -203,24 +203,24 @@ Index : 1     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
- ---> NbofEvents= 1000   NbOfelectr= 70862   Tkin= 588.581 keV (0.000 %)   NbOfelec in cav= 4670   Dose/EnFluence= 30.208 cm2/g (0.000 %) 
+ ---> NbofEvents= 1000   NbOfelectr= 70726   Tkin= 589.139 keV (0.000 %)   NbOfelec in cav= 4785   Dose/EnFluence= 29.592 cm2/g (0.000 %) 
 
 --> Event 2000 starts.
- ---> NbofEvents= 2000   NbOfelectr= 140770   Tkin= 588.302 keV (-0.047 %)   NbOfelec in cav= 9324   Dose/EnFluence= 27.920 cm2/g (-7.574 %) 
+ ---> NbofEvents= 2000   NbOfelectr= 140567   Tkin= 587.699 keV (-0.244 %)   NbOfelec in cav= 9836   Dose/EnFluence= 30.158 cm2/g (1.910 %) 
 
 --> Event 3000 starts.
- ---> NbofEvents= 3000   NbOfelectr= 210833   Tkin= 588.321 keV (0.003 %)   NbOfelec in cav= 14377   Dose/EnFluence= 28.740 cm2/g (2.939 %) 
+ ---> NbofEvents= 3000   NbOfelectr= 211774   Tkin= 589.440 keV (0.296 %)   NbOfelec in cav= 14357   Dose/EnFluence= 30.536 cm2/g (1.254 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=13.350000s Real=13.447095s Sys=0.000000s
+  User=42.410000s Real=43.102396s Sys=0.030000s
 
  ======================== run summary ======================
 
@@ -230,31 +230,31 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 280949  Transportation= 77842  msc= 2584487  eIoni= 1716870
+ Process calls frequency --->  compt= 281945  Transportation= 78940  msc= 2584067  eIoni= 1716147
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 589.0003 keV +- 0.1029 %  (--> range in wall material = 2.2250 mm )
- Mass_energy_transfer coef: 29.9041 cm2/g
+ Mean energy of secondary e- = 589.2619 keV +- 0.1027 %  (--> range in wall material = 2.2263 mm )
+ Mass_energy_transfer coef: 29.9174 cm2/g
 
- StoppingPower in wall   = 1.9640 MeV*cm2/g
-               in cavity = 1.9640 MeV*cm2/g
+ StoppingPower in wall   = 1.9638 MeV*cm2/g
+               in cavity = 1.9638 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19096	 Energy = 9.6036 GeV
-      Exit  --> nbParticles = 19086	 Energy = 9.6007 GeV
+      Enter --> nbParticles = 19434	 Energy = 9.8009 GeV
+      Exit  --> nbParticles = 19434	 Energy = 9.8017 GeV
 
- Total edep in cavity = 12.7979 MeV +- 3.1764 %	 Total charged trackLength = 52.9933 m     (mean value = 2.7751 mm )
- Total dose in cavity = 20.3685 MeV/mg
- Dose/EnergyFluence   = 28.7953 cm2/g
+ Total edep in cavity = 13.5332 MeV +- 3.1102 %	 Total charged trackLength = 54.6531 m     (mean value = 2.8122 mm )
+ Total dose in cavity = 21.5387 MeV/mg
+ Dose/EnergyFluence   = 30.4496 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.96292 +- 0.03060
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.01779 +- 0.03167
 
- StepSize of ch. tracks in wall   = 110.2992 um  +- 70.5230 um 	 (nbSteps/track = 15.2836)
- StepSize of ch. tracks in cavity = 681.9104 um  +- 731.8146 um 	 (nbSteps/track = 4.0696)
+ StepSize of ch. tracks in wall   = 110.2904 um  +- 70.5163 um 	 (nbSteps/track = 15.2240)
+ StepSize of ch. tracks in cavity = 689.7601 um  +- 763.7022 um 	 (nbSteps/track = 4.0771)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.07 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

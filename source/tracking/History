@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 4, 2020, G.Cosmo (tracking-V10-06-02)
+- Fixed minor Coverity defect for uninitialised data in G4SteppingManager.
+
+Mar 27, 2020, G.Cosmo (tracking-V10-06-01)
+- Minor c++11 revision; code cleanup and formatting.
+
+Dec 9, 2019, B.Morgan (tracking-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 Nov 26, 2019, G.Cosmo (tracking-V10-05-02)
 - Fixed cases of implicit type conversions from size_t to G4int.
 

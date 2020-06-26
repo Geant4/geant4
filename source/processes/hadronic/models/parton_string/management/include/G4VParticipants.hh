@@ -43,17 +43,16 @@
 
 class G4V3DNucleus;
 
-
 class G4VParticipants 
 {
   public:
     G4VParticipants();
-    G4VParticipants(const G4VParticipants &right);
     virtual ~G4VParticipants();
 
-    const G4VParticipants & operator=(const G4VParticipants &right);
-    G4bool operator==(const G4VParticipants &right) const;
-    G4bool operator!=(const G4VParticipants &right) const;
+    G4VParticipants(const G4VParticipants &right) = delete;
+    const G4VParticipants & operator=(const G4VParticipants &right) = delete;
+    G4bool operator==(const G4VParticipants &right) const = delete;
+    G4bool operator!=(const G4VParticipants &right) const = delete;
 
     virtual void Init(G4int theZ, G4int theA);
     virtual void SetNucleus(G4V3DNucleus* aNucleus);
@@ -63,10 +62,9 @@ class G4VParticipants
     virtual void SetProjectileNucleus(G4V3DNucleus* aNucleus);
     virtual G4V3DNucleus* GetProjectileNucleus() const;
 
+  protected:
     G4V3DNucleus* theNucleus;
-    G4V3DNucleus* theProjectileNucleus;      
-  private:
-  
+    G4V3DNucleus* theProjectileNucleus;        
 };
 
 // Class G4VParticipants 

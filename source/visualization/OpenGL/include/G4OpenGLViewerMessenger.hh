@@ -49,23 +49,25 @@ public:
 private:
   G4OpenGLViewerMessenger();  // Private constructor.
   static G4OpenGLViewerMessenger* fpInstance;
+  
   G4UIdirectory* fpDirectory;
+  G4UIcommand*             fpCommandExport;
+  G4UIcommand*             fpCommandFlushAt;
   G4UIcmdWithoutParameter* fpCommandPrintEPS;
-  G4UIcommand* fpCommandPrintSize;
-  G4UIcommand* fpCommandPrintFilename;
-  G4UIcommand* fpCommandExport;
-  G4UIcommand* fpCommandExportFormat;
+
   G4UIdirectory* fpDirectorySet;
-  G4UIcommand* fpCommandDisplayHeadTime;
+  G4UIcommand*          fpCommandDisplayHeadTime;
+  G4UIcommand*          fpCommandDisplayLightFront;
   G4UIcmdWithAnInteger* fpCommandDisplayListLimit;
-  G4UIcommand* fpCommandDisplayLightFront;
-  G4UIcommand* fpCommandEndTime;
+  G4UIcommand*          fpCommandEndTime;
   G4UIcmdWithAnInteger* fpCommandEventsDrawInterval;
-  G4UIcmdWithADouble* fpCommandFade;
-  G4UIcommand* fpCommandFlushAt;
-  G4UIcmdWithAString* fpCommandPrintMode;
-  G4UIcommand* fpCommandStartTime;
-  G4UIcmdWithABool* fpCommandTransparency;
+  G4UIcommand*          fpCommandExportFormat;
+  G4UIcmdWithADouble*   fpCommandFade;
+  G4UIcommand*          fpCommandPrintFilename;
+  G4UIcmdWithAString*   fpCommandPrintMode;
+  G4UIcommand*          fpCommandPrintSize;
+  G4UIcommand*          fpCommandStartTime;
+  G4UIcmdWithABool*     fpCommandTransparency;
 };
 
 #endif

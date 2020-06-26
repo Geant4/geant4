@@ -14,11 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-05 February 2020 A. Ribon (hadr-stopping-V10-05-03)
+01 April 2020 V.Ivanchenko (hadr-stopping-V10-06-02)
  --------------------------------------------------------------------
-- G4MuonicAtomDecay : (applied fix made by Vladimir Ivanchenko on 
-  27 January 2020 on the master) fixed Coverity warning by addition
-  of G4Exception.
+- G4MuonicAtomDecay - fixed Coverity warning 
+
+24 February 2020 V.Ivanchenko (hadr-stopping-V10-06-01)
+ --------------------------------------------------------------------
+- G4HadronicAbsorptionFritiof, G4HadronicAbsorptionFritiofWithBinaryCascade
+  simplified instantiation of the FTF model, do not destruct its components
+
+27 January 2020 V.Ivanchenko (hadr-stopping-V10-06-00)
+ --------------------------------------------------------------------
+- G4MuonicAtomDecay - fixed Coverity warning by addition of G4Exception
 
 06 November 2019 V.Ivanchenko (hadr-stopping-V10-05-02)
  --------------------------------------------------------------------

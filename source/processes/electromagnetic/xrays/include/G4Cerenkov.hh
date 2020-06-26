@@ -47,10 +47,6 @@
 #ifndef G4Cerenkov_h
 #define G4Cerenkov_h 1
 
-/////////////
-// Includes
-/////////////
-
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
@@ -68,23 +64,10 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
-// Class Description:
-// Discrete Process -- Generation of Cerenkov Photons.
-// Class inherits publicly from G4VDiscreteProcess.
-// Class Description - End:
-
-/////////////////////
-// Class Definition
-/////////////////////
-
 class G4Cerenkov : public G4VProcess
 {
 
 public:
-
-  ////////////////////////////////
-  // Constructors and Destructor
-  ////////////////////////////////
 
   explicit G4Cerenkov(const G4String& processName = "Cerenkov", 
              G4ProcessType type = fElectromagnetic);
@@ -94,17 +77,9 @@ public:
 
 private:
 
-  //////////////
-  // Operators
-  //////////////
-
   G4Cerenkov& operator=(const G4Cerenkov &right) = delete;
 
 public:
-
-  ////////////
-  // Methods
-  ////////////
 
   G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable', for all charged particles
@@ -156,25 +131,23 @@ public:
   // Returns the boolean flag for tracking secondaries first.
 
   void SetMaxBetaChangePerStep(const G4double d);
-  // Set the maximum allowed change in beta = v/c in % (perCent)
-  // per step.
+  // Set the maximum allowed change in beta = v/c in % (perCent) per step.
 
   G4double GetMaxBetaChangePerStep() const;
   // Returns the maximum allowed change in beta = v/c in % (perCent)
 
   void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
-  // Set the maximum number of Cerenkov photons allowed to be 
-  // generated during a tracking step. This is an average ONLY; 
-  // the actual number will vary around this average. If invoked, 
-  // the maximum photon stack will roughly be of the size set.
-  // If not called, the step is not limited by the number of 
+  // Set the maximum number of Cerenkov photons allowed to be generated during
+  // a tracking step. This is an average ONLY; the actual number will vary
+  // around this average. If invoked, the maximum photon stack will roughly be
+  // of the size set. If not called, the step is not limited by the number of 
   // photons generated.
 
   G4int GetMaxNumPhotonsPerStep() const;
   // Returns the maximum number of Cerenkov photons allowed to be
   // generated during a tracking step.
 
-  void SetStackPhotons(const G4bool );
+  void SetStackPhotons(const G4bool);
   // Call by the user to set the flag for stacking the scint. photons
 
   G4bool GetStackPhotons() const;
@@ -193,25 +166,14 @@ private:
 
   void BuildThePhysicsTable();
 
-  /////////////////////
-  // Helper Functions
-  /////////////////////
-
   G4double GetAverageNumberOfPhotons(const G4double charge,
                                      const G4double beta,
                                      const G4Material *aMaterial,
                                      G4MaterialPropertyVector* Rindex) const;
 
-  ///////////////////////
-  // Class Data Members
-  ///////////////////////
-
 protected:
 
   G4PhysicsTable* thePhysicsTable;
-  //  A Physics Table can be either a cross-sections table or
-  //  an energy table (or can be used for other specific
-  //  purposes).
 
 private:
 
@@ -223,10 +185,6 @@ private:
 
   G4int fNumPhotons;
 };
-
-  ////////////////////
-  // Inline methods
-  ////////////////////
 
 inline
 G4bool G4Cerenkov::GetTrackSecondariesFirst() const
@@ -249,19 +207,19 @@ G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const
 inline
 void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
 {
-        fStackingFlag = stackingFlag;
+  fStackingFlag = stackingFlag;
 }
 
 inline
 G4bool G4Cerenkov::GetStackPhotons() const
 {
-        return fStackingFlag;
+  return fStackingFlag;
 }
 
 inline
 G4int G4Cerenkov::GetNumPhotons() const
 {
-        return fNumPhotons;
+  return fNumPhotons;
 }
 
 inline

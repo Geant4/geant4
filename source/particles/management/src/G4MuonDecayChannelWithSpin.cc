@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file
+// G4MuonDecayChannelWithSpin class implementation
 //
-//      History:
-//               17 August 2004 P.Gumplinger and T.MacPhail
-//               samples Michel spectrum including 1st order
-//               radiative corrections
-//               Reference: Florian Scheck "Muon Physics", in Physics Reports
-//                          (Review Section of Physics Letters) 44, No. 4 (1978)
-//                          187-248. North-Holland Publishing Company, Amsterdam
-//                          at page 210 cc.
-//
-//                          W.E. Fisher and F. Scheck, Nucl. Phys. B83 (1974) 25.
-//
-// ------------------------------------------------------------
-//
+// References:
+// - Florian Scheck "Muon Physics", in Physics Reports
+//   (Review Section of Physics Letters) 44, No. 4 (1978)
+//   187-248. North-Holland Publishing Company, Amsterdam at page 210 cc.
+// - W.E. Fisher and F. Scheck, Nucl. Phys. B83 (1974) 25.
+
+// Authors: P.Gumplinger and T.MacPhail, 17 August 2004 
+// --------------------------------------------------------------------
+
 #include "G4MuonDecayChannelWithSpin.hh"
 
 #include "G4PhysicalConstants.hh"
@@ -53,8 +48,9 @@ G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin()
 {
 }
 
-G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4String& theParentName, 
-						       G4double        theBR)
+G4MuonDecayChannelWithSpin::
+G4MuonDecayChannelWithSpin(const G4String& theParentName, 
+                                 G4double  theBR)
   : G4MuonDecayChannel(theParentName,theBR)
 {
 }
@@ -63,19 +59,23 @@ G4MuonDecayChannelWithSpin::~G4MuonDecayChannelWithSpin()
 {
 }
 
-G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin &right):
-  G4MuonDecayChannel(right)
+G4MuonDecayChannelWithSpin::
+G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin& right)
+  : G4MuonDecayChannel(right)
 {
 }
 
-G4MuonDecayChannelWithSpin & G4MuonDecayChannelWithSpin::operator=(const G4MuonDecayChannelWithSpin & right)
+G4MuonDecayChannelWithSpin& G4MuonDecayChannelWithSpin::
+operator=(const G4MuonDecayChannelWithSpin& right)
 {
-  if (this != &right) { 
+  if (this != &right)
+  { 
     kinematics_name = right.kinematics_name;
     verboseLevel = right.verboseLevel;
     rbranch = right.rbranch;
 
     // copy parent name
+    delete parent_name;
     parent_name = new G4String(*right.parent_name);
 
     // clear daughters_name array
@@ -83,20 +83,20 @@ G4MuonDecayChannelWithSpin & G4MuonDecayChannelWithSpin::operator=(const G4MuonD
 
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
-    if ( numberOfDaughters >0 ) {
-      if (daughters_name !=0) ClearDaughtersName();
+    if ( numberOfDaughters > 0 )
+    {
       daughters_name = new G4String*[numberOfDaughters];
-      //copy daughters name
-      for (G4int index=0; index < numberOfDaughters; index++) {
-          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      // copy daughters name
+      for (G4int index=0; index<numberOfDaughters; ++index)
+      {
+        daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
   }
   return *this;
 }
 
-
-G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double) 
+G4DecayProducts* G4MuonDecayChannelWithSpin::DecayIt(G4double) 
 {
   // This version assumes V-A coupling with 1st order radiative correctons,
   //              the standard model Michel parameter values, but
@@ -117,21 +117,23 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   //daughters'mass
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
-  for (G4int index=0; index<3; index++){
+  for (G4int index=0; index<3; ++index)
+  {
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
 
   G4double EMASS = daughtermass[0];
 
-  //create parent G4DynamicParticle at rest
+  // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
-  //create G4Decayproducts
+  G4DynamicParticle* parentparticle
+    = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  // create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
-  // calcurate electron energy
+  // calculate electron energy
 
   G4double michel_rho   = 0.75; //Standard Model Michel rho
   G4double michel_delta = 0.75; //Standard Model Michel delta
@@ -156,9 +158,9 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   // ***** sampling F(x,y) directly (brute force) *****
 
-  const size_t MAX_LOOP=10000;
-  for (size_t loop_count =0; loop_count <MAX_LOOP; ++loop_count){
-
+  const std::size_t MAX_LOOP=10000;
+  for (std::size_t loop_count=0; loop_count<MAX_LOOP; ++loop_count)
+  {
     // Sample the positron energy by sampling from F
 
     rndm = G4UniformRand();
@@ -170,19 +172,22 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
     G4double F_IS, F_AS, G_IS, G_AS;
 
     F_IS = 1./6.*(-2.*x_squared+3.*x-x0_squared);
-    F_AS = 1./6.*std::sqrt(x_squared-x0_squared)*(2.*x-2.+std::sqrt(1.-x0_squared));
+    F_AS = 1./6.*std::sqrt(x_squared-x0_squared)
+                *(2.*x-2.+std::sqrt(1.-x0_squared));
 
     G_IS = 2./9.*(michel_rho-0.75)*(4.*x_squared-3.*x-x0_squared);
     G_IS = G_IS + michel_eta*(1.-x)*x0;
 
     G_AS = 3.*(michel_xsi-1.)*(1.-x);
-    G_AS = G_AS+2.*(michel_xsi*michel_delta-0.75)*(4.*x-4.+std::sqrt(1.-x0_squared));
+    G_AS = G_AS+2.*(michel_xsi*michel_delta-0.75)
+                  *(4.*x-4.+std::sqrt(1.-x0_squared));
     G_AS = 1./9.*std::sqrt(x_squared-x0_squared)*G_AS;
 
     F_IS = F_IS + G_IS;
     F_AS = F_AS + G_AS;
 
     // *** Radiative Corrections ***
+
     const G4double omega =  std::log(EMMU/EMASS);
     G4double R_IS = F_c(x,x0,omega);
 
@@ -200,8 +205,11 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
     FG = std::sqrt(x_squared-x0_squared)*F*(1.+(G/F)*ctheta);
 
-    if(FG>FG_max){
-      G4cout<<"***Problem in Muon Decay *** : FG > FG_max"<<G4endl;
+    if(FG>FG_max)
+    {
+      G4Exception("G4MuonDecayChannelWithSpin::DecayIt()",
+                  "PART113", JustWarning,
+                  "Problem in Muon Decay: FG > FG_max");
       FG_max = FG;
     }
 
@@ -218,7 +226,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   if(energy < EMASS) energy = EMASS;
 
-  // calculate daughter momentum
+  // Calculate daughter momentum
   G4double daughtermomentum[3];
 
   daughtermomentum[0] = std::sqrt(energy*energy - EMASS*EMASS);
@@ -227,8 +235,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   G4double cphi = std::cos(phi);
   G4double sphi = std::sin(phi);
 
-  //Coordinates of the decay positron with respect to the muon spin
-
+  // Coordinates of the decay positron with respect to the muon spin
   G4double px = stheta*cphi;
   G4double py = stheta*sphi;
   G4double pz = ctheta;
@@ -246,7 +253,8 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   // daughter 1 ,2 (neutrinos)
   // create neutrinos in the C.M frame of two neutrinos
   G4double energy2 = parentmass-energy; 
-  G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
+  G4double vmass = std::sqrt((energy2-daughtermomentum[0])
+                 * (energy2+daughtermomentum[0]));
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
   G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
@@ -275,7 +283,8 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
   // output message
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
+  if (GetVerboseLevel()>1)
+  {
     G4cout << "G4MuonDecayChannelWithSpin::DecayIt ";
     G4cout << "  create decay products in rest frame " <<G4endl;
     G4double TT = daughterparticle0->GetTotalEnergy()
@@ -292,15 +301,16 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   return products;
 }
 
-G4double G4MuonDecayChannelWithSpin::R_c(G4double x,G4double omega){
-
-  G4int n_max = (int)(100.*x);
+G4double G4MuonDecayChannelWithSpin::R_c(G4double x,G4double omega)
+{
+  G4int n_max = (G4int)(100.*x);
 
   if(n_max<10)n_max=10;
 
   G4double L2 = 0.0;
 
-  for(G4int n=1; n<=n_max; n++){
+  for(G4int n=1; n<=n_max; ++n)
+  {
     L2 += std::pow(x,n)/(n*n);
   }
 

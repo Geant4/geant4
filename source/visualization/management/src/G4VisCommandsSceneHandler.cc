@@ -256,7 +256,9 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
 
   // Check UI session compatibility.
   G4bool fallback = false;
+  G4int loopCounter = 0;
   while (!gsl[iGS]->IsUISessionCompatible()) {
+    G4int iGSBeingTested = iGS;
     // Not compatible, search for a fallback
     fallback = false;
     G4String fallbackNickname = gsl[iGS]->GetNickname() + "_FALLBACK";
@@ -273,18 +275,19 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
         break;  // Match found
       }
     }
-    if (iGS < 0 || iGS >= nSystems) {
+    if (iGS < 0 || iGS >= nSystems || loopCounter >=3) {
       if (verbosity >= G4VisManager::errors) {
         G4cerr <<
-        "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
-        " could not find fallback graphics system for \""
-        << graphicsSystem
-        << "\"."
+        "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue: \""
+        << gsl[iGSBeingTested]->GetNickname()
+        << "\" is not compatible with your chosen session,"
+        " and no fallback system found."
         << G4endl;
       }
       return;
     }
     //  A fallback system found...but go back and check this too.
+    ++loopCounter;
   }
 
   // A graphics system has been found

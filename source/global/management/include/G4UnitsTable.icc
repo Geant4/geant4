@@ -23,89 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UnitsTable inline methods implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class inline implementation
-// ------------------------------------------------------------
+// Author: M.Maire, 17.05.1998 - First version
+// Revisions: G.Cosmo, 06.03.2001 - Migrated to STL vectors
+// --------------------------------------------------------------------
 
-// --------------------
-// --- G4UnitDefinition
-// --------------------
+// ---------------------
+// --- G4UnitsDefinition
+// ---------------------
 
-inline
-const G4String& G4UnitDefinition::GetName() const
-{
-  return Name;
-}
+inline const G4String& G4UnitDefinition::GetName() const { return Name; }
 
-inline
-const G4String& G4UnitDefinition::GetSymbol() const
+inline const G4String& G4UnitDefinition::GetSymbol() const
 {
   return SymbolName;
 }
 
-inline
-G4double G4UnitDefinition::GetValue() const
-{
-  return Value;
-}
+inline G4double G4UnitDefinition::GetValue() const { return Value; }
 
 // -------------------
 // --- G4UnitsCategory
 // -------------------
 
-inline
-const G4String& G4UnitsCategory::GetName() const
+inline const G4String& G4UnitsCategory::GetName() const { return Name; }
+
+inline G4UnitsContainer& G4UnitsCategory::GetUnitsList() { return UnitsList; }
+
+inline G4int G4UnitsCategory::GetNameMxLen() const { return NameMxLen; }
+
+inline G4int G4UnitsCategory::GetSymbMxLen() const { return SymbMxLen; }
+
+inline void G4UnitsCategory::UpdateNameMxLen(G4int len)
 {
-  return Name;
-}
- 
-inline
-G4UnitsContainer& G4UnitsCategory::GetUnitsList()
-{
-  return UnitsList;
+  if(NameMxLen < len)
+  {
+    NameMxLen = len;
+  }
 }
 
-inline
-G4int G4UnitsCategory::GetNameMxLen() const
+inline void G4UnitsCategory::UpdateSymbMxLen(G4int len)
 {
-  return NameMxLen;
+  if(SymbMxLen < len)
+  {
+    SymbMxLen = len;
+  }
 }
 
-inline
-G4int G4UnitsCategory::GetSymbMxLen() const
-{
-  return SymbMxLen;
-}
+inline G4double* G4BestUnit::GetValue() { return Value; }
 
-inline
-void G4UnitsCategory::UpdateNameMxLen(G4int len)
-{
-  if (NameMxLen<len) { NameMxLen=len; }
-}
+inline const G4String& G4BestUnit::GetCategory() const { return Category; }
 
-inline
-void G4UnitsCategory::UpdateSymbMxLen(G4int len)
-{
-  if (SymbMxLen<len) { SymbMxLen=len; }
-}
-
-inline
-G4double* G4BestUnit::GetValue()
-{
-  return Value;
-}
-
-inline
-const G4String& G4BestUnit::GetCategory() const
-{
-  return Category;
-}
-
-inline
-size_t G4BestUnit::GetIndexOfCategory() const
+inline std::size_t G4BestUnit::GetIndexOfCategory() const
 {
   return IndexOfCategory;
 }

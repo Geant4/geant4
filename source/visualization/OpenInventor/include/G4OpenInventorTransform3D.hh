@@ -33,7 +33,7 @@
 #ifndef G4OPENINVENTORTRANSFORM3D_HH
 #define G4OPENINVENTORTRANSFORM3D_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
+#if defined (G4VIS_BUILD_OI_DRIVER) || defined (G4VIS_USE_OI)
 
 #include "G4Transform3D.hh"
 

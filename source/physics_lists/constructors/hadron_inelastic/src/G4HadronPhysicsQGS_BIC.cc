@@ -59,9 +59,12 @@
 #include "G4QGSBinaryNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
+#include "G4HyperonQGSPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
+#include "G4QGSPAntiBarionBuilder.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -208,14 +211,29 @@ void G4HadronPhysicsQGS_BIC::Kaon()
 
 void G4HadronPhysicsQGS_BIC::Others()
 {
-  auto hyp = new G4HyperonFTFPBuilder;
+  // Hyperons (and anti-hyperons)
+  auto hyp = new G4HyperonBuilder;
   AddBuilder(hyp);
+  auto ftfphyp = new G4HyperonFTFPBuilder(QuasiElasticFTF);
+  AddBuilder(ftfphyp);
+  ftfphyp->SetMaxEnergy(maxFTF_proton);
+  hyp->RegisterMe(ftfphyp);
+  auto qgsphyp = new G4HyperonQGSPBuilder(QuasiElasticQGS);
+  AddBuilder(qgsphyp);
+  qgsphyp->SetMinEnergy(G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF());
+  hyp->RegisterMe(qgsphyp);
   hyp->Build();
+  // Antibaryons
   auto abar = new G4AntiBarionBuilder;
   AddBuilder(abar);
   auto ftf = new G4FTFPAntiBarionBuilder(QuasiElasticFTF);
   AddBuilder(ftf);
+  ftf->SetMaxEnergy(maxFTF_proton);
   abar->RegisterMe(ftf);
+  auto qgs = new G4QGSPAntiBarionBuilder(QuasiElasticQGS);
+  AddBuilder(qgs);
+  qgs->SetMinEnergy(G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF());
+  abar->RegisterMe(qgs);
   abar->Build();
 }
 

@@ -33,6 +33,7 @@
 #include "G4ScoringBox.hh"
 #include "G4ScoringCylinder.hh"
 #include "G4ScoringRealWorld.hh"
+#include "G4ScoringProbe.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -66,9 +67,6 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   verboseCmd->SetGuidance("  0) errors or warnings,");
   verboseCmd->SetGuidance("  1) information with 0)");
 
-  meshDir = new G4UIdirectory("/score/mesh/");
-  meshDir->SetGuidance("    Mesh processing commands.");
-
   meshCreateDir = new G4UIdirectory("/score/create/");
   meshCreateDir->SetGuidance("  Mesh creation commands.");
   //
@@ -98,6 +96,20 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetDefaultValue(0);
   meshRWLogVolCreateCmd->SetParameter(param);
   //
+  probeCreateCmd = new G4UIcommand("/score/create/probe",this);
+  probeCreateCmd->SetGuidance("Define scoring probe.");
+  probeCreateCmd->SetGuidance("  halfSize defines the half-width of the probing cube.");
+  param = new G4UIparameter("pname",'s',false);
+  probeCreateCmd->SetParameter(param);
+  param = new G4UIparameter("halfSize",'d',false);
+  probeCreateCmd->SetParameter(param);
+  param = new G4UIparameter("unit",'s',true);
+  param->SetDefaultUnit("mm");
+  probeCreateCmd->SetParameter(param);
+  param = new G4UIparameter("checkOverlap",'b',true);
+  param->SetDefaultValue(false);
+  probeCreateCmd->SetParameter(param);
+  //
   meshOpnCmd = new G4UIcmdWithAString("/score/open",this);
   meshOpnCmd->SetGuidance("Open scoring mesh.");
   meshOpnCmd->SetParameterName("MeshName",false);
@@ -108,6 +120,9 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
 //  meshActCmd = new G4UIcmdWithABool("/score/mesh/activate",this);
 //  meshActCmd->SetGuidance("Activate scoring mesh.");
 //  meshActCmd->SetParameterName("MeshName",false);
+  //
+  meshDir = new G4UIdirectory("/score/mesh/");
+  meshDir->SetGuidance("    Mesh processing commands.");
   //
   mBoxSizeCmd = new G4UIcmdWith3VectorAndUnit("/score/mesh/boxSize",this);
   mBoxSizeCmd->SetGuidance("Define size of the scoring mesh.");
@@ -192,6 +207,23 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   mRotZCmd->SetParameterName("Rz",false);
   mRotZCmd->SetDefaultUnit("deg");
   //
+  probeDir = new G4UIdirectory("/score/probe/");
+  probeDir->SetGuidance("Probe commands");
+
+  probeMatCmd = new G4UIcmdWithAString("/score/probe/material",this);
+  probeMatCmd->SetGuidance("Specify a material to the probe cube.");
+  probeMatCmd->SetGuidance("Material name has to be taken from G4NistManager.");
+  probeMatCmd->SetGuidance("Once this command is used, the specified material overlays the material in the mass geometry");
+  probeMatCmd->SetGuidance("with \"Layered Mass Geometry\" mechanism so that physics quantities such as energy deposition");
+  probeMatCmd->SetGuidance("or dose will be calculated with this material.");
+  probeMatCmd->SetGuidance("To switch-off this overlaying, use \"none\".");
+  probeMatCmd->SetParameterName("matName",true);
+  probeMatCmd->SetDefaultValue("none");
+
+  probeLocateCmd = new G4UIcmdWith3VectorAndUnit("/score/probe/locate",this);
+  probeLocateCmd->SetGuidance("Locate a probe in the global coordinate system.");
+  probeLocateCmd->SetParameterName("x","y","z",false);
+  probeLocateCmd->SetDefaultUnit("mm");
 
   // Draw Scoring result
   drawCmd = new G4UIcommand("/score/drawProjection",this);
@@ -335,10 +367,11 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete listCmd;
     delete verboseCmd;
     //
-    delete           meshCreateDir;
     delete           meshBoxCreateCmd;
     delete           meshCylinderCreateCmd;
     delete           meshRWLogVolCreateCmd;
+    delete           probeCreateCmd;
+    delete           meshCreateDir;
 //    delete           meshSphereCreateCmd;
     //
     delete          meshOpnCmd;
@@ -362,6 +395,10 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete   mRotZCmd;
     delete   mRotDir;
     //
+    delete probeLocateCmd;
+    delete probeMatCmd;
+    delete probeDir;
+    //
     //delete     chartCmd;
     delete     dumpCmd;
     delete     drawCmd;
@@ -370,10 +407,10 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete     floatMinMaxCmd;
     delete     colorMapMinMaxCmd;
     delete     colorMapDir;
+    delete     dumpQtyToFileCmd;
     delete     dumpQtyWithFactorCmd;
-    delete dumpQtyWithFactorCmd;
     delete     dumpAllQtsToFileCmd;
-    delete dumpAllQtsWithFactorCmd;
+    delete     dumpAllQtsWithFactorCmd;
     //
     delete scoreDir;
 }
@@ -545,7 +582,70 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
           command->CommandFailed(ed);
         }
       }
+  } else if(command==probeCreateCmd) {
+      auto mesh = fSMan->GetCurrentMesh();
+      if ( mesh ){
+        G4ExceptionDescription ed;
+        ed << "ERROR[" << meshRWLogVolCreateCmd->GetCommandPath()
+           << "] : Mesh <" << mesh->GetWorldName()
+               << "> is still open. Close it first. Command ignored.";
+        command->CommandFailed(ed);
+      }
+      else
+      {
+        G4Tokenizer next(newVal);
+        G4String qname = next();
+        G4double halfSize = StoD(next());
+        halfSize *= G4UIcommand::ValueOf(next());
+        G4bool checkOverlap = StoB(next());
+        mesh = fSMan->FindMesh(qname);
+        if(!mesh)
+        {
+          mesh = new G4ScoringProbe(qname,halfSize,checkOverlap);
+          fSMan->RegisterScoringMesh(mesh);
+        }
+        else
+        {
+          G4ExceptionDescription ed;
+          ed << "ERROR[" << probeCreateCmd->GetCommandPath()
+             << "] : Mesh name <" << qname << "> already exists. Use another name.";
+          command->CommandFailed(ed);
+        }
+      }
+  } else if(command==probeMatCmd || command==probeLocateCmd) {
+      auto mesh = fSMan->GetCurrentMesh();
+      if(!mesh)
+      {
+        G4ExceptionDescription ed;
+        ed << "ERROR : No mesh is currently open. Open/create a mesh first. Command ignored.";
+        command->CommandFailed(ed);
+        return;
+      }
+      if(mesh->GetShape() != MeshShape::probe)
+      {
+        G4ExceptionDescription ed;
+        ed << "ERROR : Inconsistent mesh type. Close current mesh and open Scoring Probe.";
+        command->CommandFailed(ed);
+        return;
+      }
 
+      if(command==probeMatCmd)
+      {
+        G4bool succ = static_cast<G4ScoringProbe*>(mesh)->SetMaterial(newVal);
+        if(!succ)
+        {
+          G4ExceptionDescription ed;
+          ed << "Material <" << newVal << "> is not defind in G4NistManager. Command is ignored.\n"
+             << "Use /material/nist/listMaterials command to see the available materials.";
+          command->CommandFailed(ed);
+          return;
+        }
+      }
+      else if(command==probeLocateCmd)
+      {
+        G4ThreeVector loc = probeLocateCmd->GetNew3VectorValue(newVal);
+        static_cast<G4ScoringProbe*>(mesh)->LocateProbe(loc);
+      }
   } else if(command==listColorMapCmd) {
       fSMan->ListScoreColorMaps();
   } else if(command==floatMinMaxCmd) {

@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProductionCuts class implementation
 //
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file/  History:
-//    18 Sep. 2002, H.Kuirashige : Structure created based on object model
-// --------------------------------------------------------------
+// Author: H.Kurashige, 17 September 2002 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
+
 #include <iomanip>
 
 G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = nullptr;
@@ -40,18 +38,18 @@ G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = nullptr;
 G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::positDef = nullptr;
 G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::protonDef = nullptr;
 
-G4ProductionCuts::G4ProductionCuts() :
-  isModified(true)
+G4ProductionCuts::G4ProductionCuts()
 {
-  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
+  for (G4int i=0; i< NumberOfG4CutIndex; ++i)
+  {
     fRangeCuts.push_back(0.0);
   }
 }
 
 G4ProductionCuts::G4ProductionCuts(const G4ProductionCuts& right) 
-  :   isModified(true)
 {
-  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
+  for (G4int i=0; i< NumberOfG4CutIndex; ++i)
+  {
     fRangeCuts.push_back(0.0);
   }
   *this = right;
@@ -62,32 +60,30 @@ G4ProductionCuts::~G4ProductionCuts()
   fRangeCuts.clear();
 }
 
-G4ProductionCuts & G4ProductionCuts::operator=(const G4ProductionCuts &right)
+G4ProductionCuts& G4ProductionCuts::operator=(const G4ProductionCuts& right)
 {
   if (&right==this) return *this;
 
-  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
+  for (G4int i=0; i< NumberOfG4CutIndex; ++i)
+  {
     fRangeCuts[i] = right.fRangeCuts[i];
   }
   isModified = right.isModified;
   return *this;
 }
 
-
-
-G4bool G4ProductionCuts::operator==(const G4ProductionCuts &right) const
+G4bool G4ProductionCuts::operator==(const G4ProductionCuts& right) const
 {
   return (this == &right);
 }
 
 
-G4bool G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
+G4bool G4ProductionCuts::operator!=(const G4ProductionCuts& right) const
 {
-  return (this !=  &right);
+  return (this != &right);
 }
 
-
-G4int  G4ProductionCuts::GetIndex(const G4String& name)
+G4int G4ProductionCuts::GetIndex(const G4String& name)
 {
   static const G4String gamma ("gamma");
   static const G4String electron("e-");
@@ -105,44 +101,51 @@ G4int  G4ProductionCuts::GetIndex(const G4String& name)
 }
 
 
-G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
+G4int G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
 { 
   if(!ptcl) return -1;
+
   // In the first call, pointers are set 
-  if(gammaDef==nullptr  && ptcl->GetParticleName()=="gamma")  { gammaDef = (G4ParticleDefinition*) ptcl; }
-  if(electDef==nullptr  && ptcl->GetParticleName()=="e-")     { electDef = (G4ParticleDefinition*) ptcl; }
-  if(positDef==nullptr  && ptcl->GetParticleName()=="e+")     { positDef = (G4ParticleDefinition*) ptcl; }
-  if(protonDef==nullptr && ptcl->GetParticleName()=="proton") { protonDef = (G4ParticleDefinition*) ptcl; }
+  if(gammaDef==nullptr  && ptcl->GetParticleName()=="gamma")
+    { gammaDef = (G4ParticleDefinition*) ptcl; }
+  if(electDef==nullptr  && ptcl->GetParticleName()=="e-")
+    { electDef = (G4ParticleDefinition*) ptcl; }
+  if(positDef==nullptr  && ptcl->GetParticleName()=="e+")
+    { positDef = (G4ParticleDefinition*) ptcl; }
+  if(protonDef==nullptr && ptcl->GetParticleName()=="proton")
+    { protonDef = (G4ParticleDefinition*) ptcl; }
 
   G4int index;
   if(ptcl==(const G4ParticleDefinition*) gammaDef)       { index = 0;  }
   else if(ptcl==(const G4ParticleDefinition*) electDef)  { index = 1;  }
   else if(ptcl==(const G4ParticleDefinition*) positDef)  { index = 2;  }
   else if(ptcl==(const G4ParticleDefinition*) protonDef) { index = 3;  }
-  else                     { index = -1; }
+  else { index = -1; }
 
   return index;
 }
 
-
-void  G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
+void G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
 {  
   G4int vSize = cut.size();
-  if (vSize != NumberOfG4CutIndex) {
+  if (vSize != NumberOfG4CutIndex)
+  {
 #ifdef G4VERBOSE
-    if ( G4ProductionCutsTable::GetProductionCutsTable()->GetVerboseLevel()>1) {
+    if ( G4ProductionCutsTable::GetProductionCutsTable()->GetVerboseLevel()>1)
+    {
       G4cerr << "G4ProductionCuts::SetProductionCuts ";
       G4cerr << " The size of given cut value vector [=" << vSize << "]  "
-	     << " is not consitent with number of CutIndex [="  
-	     << NumberOfG4CutIndex << G4endl;
+             << " is not consistent with number of CutIndex [="  
+             << NumberOfG4CutIndex << G4endl;
     }
 #endif
     G4Exception( "G4ProductionCuts::SetProductionCuts ",
-		 "ProcCuts108",
-		 JustWarning, "Given vector size is inconsitent ");
-    if (NumberOfG4CutIndex<vSize) vSize = NumberOfG4CutIndex;
+                 "ProcCuts108",
+                 JustWarning, "Given vector size is inconsistent ");
+    if (NumberOfG4CutIndex<vSize)  { vSize = NumberOfG4CutIndex; }
   }
-  for(G4int i = 0; (i<vSize ); i++) {
+  for(G4int i = 0; (i<vSize ); ++i)
+  {
     fRangeCuts[i] = cut[i];
   }
   isModified = true;

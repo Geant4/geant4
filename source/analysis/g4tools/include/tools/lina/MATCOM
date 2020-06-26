@@ -315,6 +315,16 @@ public:\
     return true;\
   }\
 \
+  bool is_diagonal() const {\
+    unsigned int _D = dimension();\
+    for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=0;c<_D;c++) {\
+        if(c!=r) {if(value(r,c)!=zero()) return false;}\
+      }\
+    }\
+    return true;\
+  }\
+\
   template <class PREC>\
   bool is_diagonal_prec(const PREC& a_prec,PREC(*a_fabs)(const T&)) const {\
     unsigned int _D = dimension();\
@@ -323,6 +333,33 @@ public:\
         if(c!=r) {if(!is_zero(value(r,c),a_prec,a_fabs)) return false;}\
       }\
     }\
+    return true;\
+  }\
+\
+  bool is_identity() const {\
+    unsigned int _D = dimension();\
+   {for(unsigned int r=0;r<_D;r++) {\
+      if(value(r,r)!=one()) return false;\
+    }}\
+   {for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=0;c<_D;c++) {\
+        if(c!=r) {if(value(r,c)!=zero()) return false;}\
+      }\
+    }}\
+    return true;\
+  }\
+\
+  template <class PREC>\
+  bool is_identity_prec(const PREC& a_prec,PREC(*a_fabs)(const T&)) const {\
+    unsigned int _D = dimension();\
+   {for(unsigned int r=0;r<_D;r++) {\
+      if(!numbers_are_equal(value(r,r),one(),a_prec,a_fabs)) return false;\
+    }}\
+   {for(unsigned int r=0;r<_D;r++) {\
+      for(unsigned int c=0;c<_D;c++) {\
+        if(c!=r) {if(!is_zero(value(r,c),a_prec,a_fabs)) return false;}\
+      }\
+    }}\
     return true;\
   }\
 \

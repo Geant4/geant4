@@ -61,22 +61,25 @@ class G4ExcitedString;
 class G4FTFModel : public G4VPartonStringModel {
   public:
     G4FTFModel( const G4String& modelName = "FTF" );
-    ~G4FTFModel();
+    ~G4FTFModel() override;
 
-    void Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProjectile );
-    G4ExcitedStringVector* GetStrings();
-    G4V3DNucleus* GetWoundedNucleus() const;
     G4V3DNucleus* GetTargetNucleus() const;
-    G4V3DNucleus* GetProjectileNucleus() const;
+    G4V3DNucleus* GetWoundedNucleus() const override;
+    G4V3DNucleus* GetProjectileNucleus() const override;
 
-    virtual void ModelDescription( std::ostream& ) const;
+    void ModelDescription( std::ostream& ) const override;
+
+    G4FTFModel( const G4FTFModel& right ) = delete;
+    const G4FTFModel& operator=( const G4FTFModel& right ) = delete;
+    G4bool operator==( const G4FTFModel& right ) const = delete;
+    G4bool operator!=( const G4FTFModel& right ) const = delete;
+
+  protected:
+    void Init( const G4Nucleus& aNucleus, 
+               const G4DynamicParticle& aProjectile ) override;
+    G4ExcitedStringVector* GetStrings() override;
 
   private:
-    G4FTFModel( const G4FTFModel& right );
-    const G4FTFModel& operator=( const G4FTFModel& right );
-    G4bool operator==( const G4FTFModel& right ) const;
-    G4bool operator!=( const G4FTFModel& right ) const;
-
     void StoreInvolvedNucleon();              
     void ReggeonCascade();
     G4bool PutOnMassShell();
@@ -187,16 +190,13 @@ class G4FTFModel : public G4VPartonStringModel {
     G4double        TargetResidualExcitationEnergy;
 };
 
-
 inline G4V3DNucleus* G4FTFModel::GetWoundedNucleus() const {
   return theParticipants.GetWoundedNucleus();
 }
 
-
 inline G4V3DNucleus* G4FTFModel::GetTargetNucleus() const {
   return theParticipants.GetWoundedNucleus();
 }
-
 
 inline G4V3DNucleus* G4FTFModel::GetProjectileNucleus() const {
   return theParticipants.GetProjectileNucleus();

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -37,11 +37,14 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
@@ -63,7 +66,6 @@ Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
@@ -112,10 +114,16 @@ physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 /process/list
-     Transportation,            ionIoni,    nuclearStopping,              hIoni
-              eIoni,              eBrem,            annihil,               phot
-              compt,               conv,             muIoni,            muBrems
-         muPairProd,             hBrems,          hPairProd,        UserStepMax
+     Transportation,            ionIoni,    nuclearStopping,            ionIoni
+    nuclearStopping,            ionIoni,    nuclearStopping,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              eIoni,              eBrem,            annihil
+              eIoni,              eBrem,               phot,              compt
+               conv,              hIoni,              hIoni,             muIoni
+            muBrems,         muPairProd,             muIoni,            muBrems
+         muPairProd,              hIoni,             hBrems,          hPairProd
+              hIoni,             hBrems,          hPairProd,              hIoni
+             hBrems,          hPairProd,              hIoni,        UserStepMax
 
 #
 /gun/particle e-
@@ -136,16 +144,16 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 100 keV
+ Energy thresholds :  gamma  2.92994 keV    e-  349.731 keV    e+  342.774 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -161,42 +169,42 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.900000s Real=0.906061s Sys=0.000000s
+  User=1.090000s Real=1.090814s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
  Process defining step :
-      Edep alone=    360   Transportation=  99994            eBrem=  37505            eIoni=  24136
+      Edep alone=     50   Transportation=  99996            eBrem=  37605            eIoni=  24068
 
 
- TrackLength = 1 cm   nb of steps = 1.62  stepSize = 6.173 mm   (4.568 nm --> 1 cm )
+ TrackLength = 1 cm   nb of steps = 1.617  stepSize = 6.184 mm   (26.92 nm --> 1 cm )
 
- Energy continuously deposited along primary track (restricted dE/dx)  dE1 = 1.745 MeV  (924.6 keV --> 3.241 MeV)
+ Energy continuously deposited along primary track (restricted dE/dx)  dE1 = 1.744 MeV  (754.1 keV --> 2.971 MeV)
 
- Evaluation of dE1 from reading restricted Range table : dE1_table = 1.745 MeV   ---> dE1/dE1_table = 1
+ Evaluation of dE1 from reading restricted Range table : dE1_table = 1.744 MeV   ---> dE1/dE1_table = 1
 
  Energy transfered to secondary particles :
-       due to eBrem:  dE2 =  2.358 MeV  (2.941 keV --> 98.64 MeV)
-       due to eIoni:  dE2 =  448.6 keV  (351.9 keV --> 70.78 MeV)
+       due to eBrem:  dE2 =  2.338 MeV  (2.932 keV --> 99.25 MeV)
+       due to eIoni:  dE2 =    447 keV  (349.7 keV --> 49.39 MeV)
 
- Total energy transfered to secondaries : dE3 = sum of dE2 = 2.807 MeV  (2.941 keV --> 98.64 MeV)
+ Total energy transfered to secondaries : dE3 = sum of dE2 = 2.785 MeV  (2.932 keV --> 99.25 MeV)
 
- Total energy lost by incident particle : dE4 = dE1 + dE3 = 4.552 MeV  (1.337 MeV --> 100 MeV)
+ Total energy lost by incident particle : dE4 = dE1 + dE3 = 4.529 MeV  (1.33 MeV --> 100 MeV)
 
- calcul of dE4 from energy balance : dE4_bal = E_in - E_out = 4.552 MeV  (1.337 MeV --> 100 MeV)
+ calcul of dE4 from energy balance : dE4_bal = E_in - E_out = 4.529 MeV  (1.33 MeV --> 100 MeV)
 
- Evaluation of dE4 from reading full Range table : dE4_table = 4.578 MeV   ---> dE4/dE4_table = 0.9943
+ Evaluation of dE4 from reading full Range table : dE4_table = 4.577 MeV   ---> dE4/dE4_table = 0.9895
 
  Energy spectrum of secondary particles :
-             e-:   24136  Emean =  1.859 MeV  (351.9 keV --> 49.37 MeV)
-          gamma:   37491  Emean =  6.291 MeV  (2.941 keV --> 98.64 MeV)
+             e-:   24068  Emean =  1.857 MeV  (349.7 keV --> 49.39 MeV)
+          gamma:   37591  Emean =   6.22 MeV  (2.932 keV --> 99.25 MeV)
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1432407171, 26561005
+ Current couple of seeds = 209994030, 1973556145
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

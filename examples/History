@@ -16,6 +16,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th June 2020  Gabriele Cosmo (examples-V10-06-06)
+- Updated reference outputs according to reference tag geant4-10-06-ref-06.
+- Includes tags: exampleB5-V10-06-00, exhadr03-V10-06-02, exhadr06-V10-06-01,
+                 tbbex-V10-06-00, ThreadsafeScorers-V10-06-01,
+                 activation-V10-06-01.
+
+31st May 2020  Gabriele Cosmo (examples-V10-06-05)
+- Updated reference outputs according to reference tag geant4-10-06-ref-05.
+- Includes tags: air_shower-V10-06-00, ChargeExchangeMC-V10-06-00,
+                 fastAerosol-V10-06-00, ReverseMC01-V10-06-00,
+                 exhadr02-V10-06-00, exhadr03-V10-06-01, exhadr06-V10-06-00,
+                 exhadr07-V10-06-00, NeutronSource-V10-06-00, G01-V10-06-00,
+                 OpNovice2-V10-06-03, activation-V10-06-00.
+
+30th April 2020  Gabriele Cosmo (examples-V10-06-04)
+- Updated reference outputs according to reference tag geant4-10-06-ref-04.
+- Includes tags: exdna-V10-06-02, testem4-V10-06-00, testem7-V10-06-00,
+                 exampleP01-V10-06-01.
+
+31st March 2020  Gabriele Cosmo (examples-V10-06-03)
+- Updated reference outputs according to reference tag geant4-10-06-ref-03.
+- Includes tags: hadrontherapy-V10-06-00.
+
+29th February 2020  Gabriele Cosmo (examples-V10-06-02)
+- Updated reference outputs according to reference tag geant4-10-06-ref-02.
+- Includes tags: gammaraytel-V10-06-00, exampleB2-V10-06-00, monopole-V10-06-00,
+                 exHadr00-V10-06-00, exdna-V10-06-01, chem6-V10-06-00,
+                 OpNovice2-V10-06-01.
+
+31st January 2020  Gabriele Cosmo (examples-V10-06-01)
+- Updated reference outputs according to reference tag geant4-10-06-ref-01.
+- Includes tags: exbasic-V10-06-00, testem1-V10-06-00, testem11-V10-06-00,
+                 exHadr01-V10-06-00, OpNovice2-V10-06-00.
+
 6th December 2019  Gabriele Cosmo (examples-V10-06-00)
 - Updated reference outputs according to reference tag geant4-10-06-ref-00.
 - Includes tags: doxygen-V10-05-02, air_shower-V10-05-01, ccal-V10-05-01,

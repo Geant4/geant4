@@ -38,7 +38,7 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <volumes/UnplacedTessellated.h>
+#include <VecGeom/volumes/UnplacedTessellated.h>
 
 #include "G4Polyhedron.hh"
 #include "G4VFacet.hh"

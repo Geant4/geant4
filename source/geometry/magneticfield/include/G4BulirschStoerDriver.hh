@@ -72,7 +72,7 @@ class G4IntegrationDriver<G4BulirschStoer>:
 
     virtual void OnComputeStep() override {};
 
-    virtual G4bool DoesReIntegrate() override { return false; }  /// ????
+    virtual G4bool DoesReIntegrate() const override { return false; }  /// ????
    
     virtual G4bool AccurateAdvance( G4FieldTrack& track,
                                     G4double stepLen,
@@ -114,6 +114,9 @@ class G4IntegrationDriver<G4BulirschStoer>:
     virtual const G4MagIntegratorStepper* GetStepper() const override;
     virtual G4MagIntegratorStepper* GetStepper() override;
 
+    virtual void  StreamInfo( std::ostream& os ) const override;
+     // Write out the parameters / state of the driver
+   
   private:
 
     G4int GetNumberOfVarialbles() const;

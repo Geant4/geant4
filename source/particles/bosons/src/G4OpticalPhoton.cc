@@ -68,7 +68,7 @@ G4OpticalPhoton*  G4OpticalPhoton::Definition()
                  name,         0.0*MeV,       0.0*MeV,         0.0,
                     2,              -1,            -1,
                     0,               0,             0,
-      "opticalphoton",               0,             0,         0,
+      "opticalphoton",               0,             0,        -22,
                  true,            -1.0,          NULL,
 	        false,        "photon",               0
 	     );

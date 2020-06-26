@@ -55,10 +55,10 @@ class G4RKIntegrationDriver : public G4VIntegrationDriver
                                       G4double field[]) const override;
 
     virtual G4double ComputeNewStepSize(G4double errMaxNorm, // normalised error
-                                        G4double hstepCurrent) override;
+                                        G4double hstepCurrent) override final;
       // Taking the last step's normalised error, calculate
       // a step size for the next step.
-      // Do not limit the next step's size within a factor of the current one.
+      // - Limits the next step's size within a factor of the current one.
 
     virtual G4EquationOfMotion* GetEquationOfMotion() override;
     virtual void SetEquationOfMotion(G4EquationOfMotion* equation) override;
@@ -66,6 +66,8 @@ class G4RKIntegrationDriver : public G4VIntegrationDriver
     virtual const T* GetStepper() const override;
     virtual T* GetStepper() override;
 
+    virtual void  StreamInfo( std::ostream& os ) const override;
+   
     // Accessors.
     G4double GetSafety() const;
     G4double GetPshrnk() const;

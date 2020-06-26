@@ -19,6 +19,28 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
+04 March 2020. John Allison  (greps-V10-06-03)
+- operator<<(...const std::map<G4String,G4AttDef>*):
+  o Improve deprecation message.
+
+22 February 2020  Evgueni Tcherniaev (greps-V10-06-02)
+- HepPolyhedron: Added HepPolyhedronTet and HepPolyhedronHyberbolicMirror
+- G4Polyhedron: Added G4PolyhedronTet and G4PolyhedronHyberbolicMirror
+
+13 February 2020  John Allison  (greps-V10-06-01)
+- G4VisAttributes:
+  o Clarify that if number of cloud points (for cloud style drawing)
+    is <= 0, this is to be interpreted as under control of the viewer,
+    i.e., to be decided by the viewer. Otherwise this number is to be
+    drawn.
+  o Make 0 the default value.
+  o It may be changed with SetForceNumberOfCloudPoints.
+  o You may also force cloud drawing with SetForceCloud.
+
+09 December 2019  Ben Morgan (greps-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 07 November 2019  Evgueni Tcherniaev (greps-V10-05-06)
 - HepPolyhedron: Added move constructor and move assignment
 - BooleanProcessor::createPolyhedron(): Use return std::move() 

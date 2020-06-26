@@ -112,11 +112,13 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // needed for unit tests
-  G4int nn = std::max(numOfCouples, 1);
-  activeDeexcitationMedia.resize(nn, false);
-  activeAugerMedia.resize(nn, false);
-  activePIXEMedia.resize(nn, false);
-  activeZ.resize(93, false);
+  size_t nn = std::max(numOfCouples, 1);
+  if(activeDeexcitationMedia.size() != nn) {
+    activeDeexcitationMedia.resize(nn, false);
+    activeAugerMedia.resize(nn, false);
+    activePIXEMedia.resize(nn, false);
+  }
+  if(activeZ.size() != 93) { activeZ.resize(93, false); }
 
   // initialisation of flags and options
   // normally there is no locksed flags

@@ -23,57 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//****************************************************************************
 
-//************************************************************************************************
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel() 
-    {
-	G4VPartonStringModel::SetThisPointer(this);
-	SetEnergyMomentumCheckLevels(2*CLHEP::perCent, 150*CLHEP::MeV);
-    }
-template<class ParticipantType>
-G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)
-    {
-	G4VPartonStringModel::SetThisPointer(this);
-	std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
-	SetEnergyMomentumCheckLevels(levels.first, levels.second);
-    }
+{
+  SetEnergyMomentumCheckLevels(2*CLHEP::perCent, 150*CLHEP::MeV);
+}
 
-template<class ParticipantType>
-G4QGSModel<ParticipantType>& G4QGSModel<ParticipantType>::operator=(const G4QGSModel &right)
-    {
-       if (this != &right )
-       {
-         G4VPartonStringModel::SetThisPointer(this);
-         std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
-         SetEnergyMomentumCheckLevels(levels.first, levels.second);
-      }
-    }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::~G4QGSModel()
-    {
-    }
+{}
 
 template<class ParticipantType>
-void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
-    {
-//    It is assumed that target nucleus is at rest.
+void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, 
+                                       const G4DynamicParticle & aProjectile)
+{
+  // It is assumed that target nucleus is at rest.
+  theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
 
-    theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt()); // Init of a target nucleus
+  G4LorentzVector Mom = aProjectile.Get4Momentum();
 
-    G4LorentzVector Mom = aProjectile.Get4Momentum();                  // Momentum of a projectile
+  G4ReactionProduct theProjectile;   
+  theProjectile.SetDefinition(aProjectile.GetDefinition());
+  theProjectile.SetTotalEnergy(Mom.e());
+  theProjectile.SetMomentum(Mom.vect());
 
-    G4ReactionProduct theProjectile;   
-    theProjectile.SetDefinition(aProjectile.GetDefinition());
-    theProjectile.SetTotalEnergy(Mom.e());
-    theProjectile.SetMomentum(Mom.vect());
-
-    theParticipants.BuildInteractions(theProjectile);                  // Creation of strings and nuclear remnant
-    }
+  // Creation of strings and nuclear remnant
+  theParticipants.BuildInteractions(theProjectile);
+}
 
 template<class ParticipantType>
 G4ExcitedStringVector * G4QGSModel<ParticipantType>::GetStrings()
-{ // The strings are produced at theParticipants.BuildInteractions(theProjectile) 
+{ 
+  // The strings are produced at theParticipants.BuildInteractions(theProjectile) 
 
   G4PartonPair* aPair;
   G4ExcitedStringVector* theStrings = new G4ExcitedStringVector;
@@ -89,7 +72,7 @@ G4ExcitedStringVector * G4QGSModel<ParticipantType>::GetStrings()
       aString = theSoftStringBuilder.BuildString(aPair);
     }
 
-//    aString->Boost(theCurrentVelocity);  
+    //    aString->Boost(theCurrentVelocity);  
     theStrings->push_back(aString);
     delete aPair;
   }
@@ -106,7 +89,7 @@ G4V3DNucleus* G4QGSModel<ParticipantType>::GetWoundedNucleus() const
 template<class ParticipantType>
 G4V3DNucleus* G4QGSModel<ParticipantType>::GetProjectileNucleus() const
 {
-  return 0;
+  return nullptr;
 }
 
 template<class ParticipantType>
@@ -119,5 +102,5 @@ void G4QGSModel<ParticipantType>::ModelDescription(std::ostream& outFile) const
           << "into quarks and di-quarks, the formation and excitation of\n"
           << "quark-gluon strings, string hadronization and diffractive dissociation.\n";
 }
-//************************************************************************************************
+//****************************************************************************
 

@@ -43,7 +43,7 @@
 class G4FermiFragmentsPoolVI;
 class G4FermiDecayProbability;
 
-class G4FermiBreakUpVI : public G4VFermiBreakUp 
+class G4FermiBreakUpVI final: public G4VFermiBreakUp 
 {
 public:
 

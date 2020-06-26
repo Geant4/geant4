@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4AnalyticalPolSolver
 //
 // Class description:
 //
@@ -50,27 +50,23 @@
 // sum_{k=0:n} p[k] x^(n-k) = 0
 // Assumes p[0] != 0. (< or > 0) (overflows otherwise)
 
-// --------------------------- HISTORY --------------------------------------
-//
-// 13.05.05 V.Grichine ( Vladimir.Grichine@cern.ch )
-//          First implementation in C++
-
+// Author: V.Grichine, 13.05.2005
+// --------------------------------------------------------------------
 #ifndef G4AN_POL_SOLVER_HH
-#define G4AN_POL_SOLVER_HH
+#define G4AN_POL_SOLVER_HH 1
 
-#include  "G4Types.hh"
+#include "G4Types.hh"
 
-class G4AnalyticalPolSolver 
+class G4AnalyticalPolSolver
 {
-  public:  // with description
+ public:
+  G4AnalyticalPolSolver();
+  ~G4AnalyticalPolSolver();
 
-    G4AnalyticalPolSolver();
-    ~G4AnalyticalPolSolver();
-
-    G4int QuadRoots(    G4double p[5], G4double r[3][5]);
-    G4int CubicRoots(   G4double p[5], G4double r[3][5]);
-    G4int BiquadRoots(  G4double p[5], G4double r[3][5]);
-    G4int QuarticRoots( G4double p[5], G4double r[3][5]);
+  G4int QuadRoots(G4double p[5], G4double r[3][5]);
+  G4int CubicRoots(G4double p[5], G4double r[3][5]);
+  G4int BiquadRoots(G4double p[5], G4double r[3][5]);
+  G4int QuarticRoots(G4double p[5], G4double r[3][5]);
 };
 
 #endif

@@ -13,6 +13,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 June 2020  Dennis Wright (hadr-qmd-V10-06-00)
+------------------------------------------------
+- Fix of bug 2236, by Jeonghyeok Park:
+  G4QMDReaction::ApplyYourself() : add code to get cross section when
+    projectile is pion
+  G4QMDReaction.hh and G4QMDReaction::G4QMDReaction() : replace data member
+    G4PiNuclearCrossSection with G4BGGPionElasticXS and G4BGGPionInelasticXS
+
+  G4QMDGroundStateNucleus ctor: move check for p or n projectile earlier
+    in code so baryon number can be conserved 
+
 31 October 2016 Tatsumi Koi (hadr-qmd-V10-02-01)
 - Set type of deexcitation channels to fCombined
 

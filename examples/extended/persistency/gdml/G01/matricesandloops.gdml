@@ -6,8 +6,6 @@
   <position name="v2" unit="mm" x="-12" y="-10" z="20" />
   <position name="v3" unit="mm" x="22" y="14" z="25" />
   <position name="P" unit="mm" x="10" y="20" z="30" />
-  <rotation name="R" unit="degree" x="10" y="20" z="30" />
-
   <matrix name="m" coldim="3" values="100000 200000 30000 
                                       100000 500000 6000 
                                       70000 8000 90000"/>
@@ -16,12 +14,9 @@
 
   <matrix name="k" coldim="1" values="3 2 2.2 1.4 5 6.3 72 2.8 19"/>
 
-  <variable name="x" value="10"/>
-  <variable name="ss" value="0"/>
-  <variable name="ll" value="10"/>
+  <variable name="ss" value="1"/>
   <variable name="ii" value="1"/>
   <variable name="j" value="2"/>
-  <variable name="i" value="1"/>
  </define>
  <materials>
   <material Z="7" formula=" " name="Nitrogen" >

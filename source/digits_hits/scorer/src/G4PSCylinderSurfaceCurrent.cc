@@ -76,26 +76,13 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
 G4PSCylinderSurfaceCurrent::~G4PSCylinderSurfaceCurrent()
 {;}
 
+
 G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
-  G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid * solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                ->GetReplicaNumber(indexDepth);
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
-
-  G4Tubs* tubsSolid = (G4Tubs*)(solid);
-
+  G4StepPoint* preStep = aStep->GetPreStepPoint();   
+  G4VSolid* solid= ComputeCurrentSolid(aStep);
+  G4Tubs* tubsSolid = static_cast<G4Tubs*>(solid);
+          
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
   // G4cout << " pos " << preStep->GetPosition() <<" dirFlag " << G4endl;
   if ( dirFlag > 0 ) {

@@ -26,51 +26,55 @@
 //
 // Thread Local Storage typedefs
 
-// History:
-// 01.10.2012 G.Cosmo - Created
+// Author: G.Cosmo, 01.10.2012 - Created
+// --------------------------------------------------------------------
 
 // Fundamental definitions
 #ifndef G4GMAKE
-#include "G4GlobalConfig.hh"
+#  include "G4GlobalConfig.hh"
 #endif
 
 #ifndef G4_TLS
-#define G4_TLS
+#  define G4_TLS 1
 
-#if defined (G4MULTITHREADED)
-  #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
-      ( defined(__linux__) && defined(__clang__) )
-    #  define G4ThreadLocalStatic static thread_local
-    #  define G4ThreadLocal thread_local
-  #elif ( (defined(__linux__) || defined(__MACH__)) && \
-          !defined(__INTEL_COMPILER) && defined(__GNUC__) && (__GNUC__>=4 && __GNUC_MINOR__<9))
-    #  define G4ThreadLocalStatic static __thread
-    #  define G4ThreadLocal thread_local
-  #elif ( (defined(__linux__) || defined(__MACH__)) && \
-          !defined(__INTEL_COMPILER) && defined(__GNUC__) && (__GNUC__>=4 && __GNUC_MINOR__>=9) || __GNUC__>=5 )
-    #  define G4ThreadLocalStatic static thread_local
-    #  define G4ThreadLocal thread_local
-  #elif ( (defined(__linux__) || defined(__MACH__)) && \
-          defined(__INTEL_COMPILER) )
-    #if __INTEL_COMPILER>=1500
-      #  define G4ThreadLocalStatic static thread_local
-      #  define G4ThreadLocal thread_local
-    #else
-      #  define G4ThreadLocalStatic static __thread
-      #  define G4ThreadLocal __thread
-    #endif
-  #elif defined(_AIX)
-    #  define G4ThreadLocalStatic static thread_local
-    #  define G4ThreadLocal thread_local
-  #elif defined(WIN32)
-    #  define G4ThreadLocalStatic static thread_local
-    #  define G4ThreadLocal thread_local
-  #else
-  #  error "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
-  #endif
-#else
-  #  define G4ThreadLocalStatic static
-  #  define G4ThreadLocal
-#endif
+#  if defined(G4MULTITHREADED)
+#    if(defined(__MACH__) && defined(__clang__) && defined(__x86_64__)) ||     \
+      (defined(__linux__) && defined(__clang__))
+#      define G4ThreadLocalStatic static thread_local
+#      define G4ThreadLocal thread_local
+#    elif((defined(__linux__) || defined(__MACH__)) &&                         \
+          !defined(__INTEL_COMPILER) && defined(__GNUC__) &&                   \
+          (__GNUC__ >= 4 && __GNUC_MINOR__ < 9))
+#      define G4ThreadLocalStatic static __thread
+#      define G4ThreadLocal thread_local
+#    elif((defined(__linux__) || defined(__MACH__)) &&                         \
+            !defined(__INTEL_COMPILER) && defined(__GNUC__) &&                 \
+            (__GNUC__ >= 4 && __GNUC_MINOR__ >= 9) ||                          \
+          __GNUC__ >= 5)
+#      define G4ThreadLocalStatic static thread_local
+#      define G4ThreadLocal thread_local
+#    elif((defined(__linux__) || defined(__MACH__)) &&                         \
+          defined(__INTEL_COMPILER))
+#      if __INTEL_COMPILER >= 1500
+#        define G4ThreadLocalStatic static thread_local
+#        define G4ThreadLocal thread_local
+#      else
+#        define G4ThreadLocalStatic static __thread
+#        define G4ThreadLocal __thread
+#      endif
+#    elif defined(_AIX)
+#      define G4ThreadLocalStatic static thread_local
+#      define G4ThreadLocal thread_local
+#    elif defined(WIN32)
+#      define G4ThreadLocalStatic static thread_local
+#      define G4ThreadLocal thread_local
+#    else
+#      error                                                                   \
+        "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
+#    endif
+#  else
+#    define G4ThreadLocalStatic static
+#    define G4ThreadLocal
+#  endif
 
 #endif

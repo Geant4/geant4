@@ -26,8 +26,7 @@
 //
 // F.W. Jones 05012018
 
-#if defined(G4VIS_BUILD_OIQT_DRIVER)
-//#if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
+#ifdef G4VIS_BUILD_OIQT_DRIVER
 
 #include <stdlib.h>
 #include <string.h>
@@ -39,17 +38,21 @@
 //#include "G4UImanager.hh"
 
 #include <Inventor/Qt/SoQt.h>
+#include <QMainWindow>
 
 #include <qwidget.h>
 #include <qapplication.h>
 
+#ifndef G4GMAKE
+#include "moc_G4SoQt.cpp"
+#endif
 
 G4SoQt* G4SoQt::instance    = NULL;
 
 static G4bool QtInited  = FALSE;
 
 /***************************************************************************/
-G4SoQt* G4SoQt::getInstance() 
+G4SoQt* G4SoQt::getInstance()
 {
   if (instance==NULL) {
      instance = new G4SoQt();
@@ -78,20 +81,30 @@ G4SoQt::G4SoQt()
   // to the (one and only one) QApplication object:
   //      new QApplication (*p_argn, args);
   //      if(!qApp) {
-        
+
   QWidget* mainWin = SoQt::init("Geant4");
+
+  // FWJ DEBUG
+  //  G4cout << "G4SoQt: mainWin=" << mainWin << G4endl;
+  //  G4cout << "G4SoQt: toplevelwidget=" << SoQt::getTopLevelWidget() << G4endl;
+
+// FWJ CAN'T GET MENUBAR THIS WAY OR BY CAST
+  //  QWidget* toplevel = SoQt::getTopLevelWidget();
+  //  QMenuBar* menubar = QMainWindow::menuBar();
+  //  G4cout << "G4OpenInventorQtExaminerViewer menubar=" << menubar << G4endl;
+
 
   // FWJ will this work?
   SetMainInteractor(mainWin);
   //  SetMainInteractor(qApp);
   //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
-  
+
 // FWJ no locale for now (see G4Qt.cc)
 
 }
 
 /***************************************************************************/
-G4SoQt::~G4SoQt() 
+G4SoQt::~G4SoQt()
 {
   if(this==instance) {
     instance = NULL;
@@ -104,7 +117,7 @@ G4bool G4SoQt::Inited()
 }
 
 /***************************************************************************/
-void* G4SoQt::GetEvent() 
+void* G4SoQt::GetEvent()
 {
   return 0;
 }
@@ -124,7 +137,10 @@ void G4SoQt::FlushAndWaitExecution()
 /***************************************************************************/
 void G4SoQt::SecondaryLoop()
 {
-   G4cout << "G4SoQt: SECONDARY LOOP CALLED !!!!!!" << G4endl;
+   // FWJ DEBUG
+   G4cout <<
+     "ENTERING OIQT VIEWER SECONDARY LOOP... PRESS E KEY TO EXIT" << G4endl;
+
    SoQt::mainLoop();
 }
 

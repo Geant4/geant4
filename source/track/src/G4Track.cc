@@ -40,8 +40,6 @@
 
 #include "G4Track.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4ParticleTable.hh"
-#include "G4VelocityTable.hh"
 #include "G4VAuxiliaryTrackInformation.hh"
 #include "G4PhysicsModelCatalog.hh"
 
@@ -51,12 +49,6 @@
 G4Allocator<G4Track>*& aTrackAllocator()
 {
     G4ThreadLocalStatic G4Allocator<G4Track>* _instance = nullptr;
-    return _instance;
-}
-
-G4VelocityTable*& G4Track::velTable()
-{
-    G4ThreadLocalStatic G4VelocityTable* _instance = nullptr;
     return _instance;
 }
 
@@ -70,7 +62,6 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fTrackLength(0.),
     fParentID(0),             fTrackID(0),
     fVelocity(c_light),
-    fpDynamicParticle(apValueDynamicParticle),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
     fStepLength(0.0),         fWeight(1.0),
@@ -85,20 +76,9 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     useGivenVelocity(false),
     fpAuxiliaryTrackInformationMap(nullptr)
 {
-  static G4ThreadLocal G4bool isFirstTime = true;
-  static G4ThreadLocal G4ParticleDefinition* fOpticalPhoton = nullptr;
-  if ( isFirstTime ) {
-    isFirstTime = false;
-    // set  fOpticalPhoton
-    fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-  }
+  fpDynamicParticle = (apValueDynamicParticle) ? apValueDynamicParticle : new G4DynamicParticle();
   // check if the particle type is Optical Photon
-  is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
-
-  if (velTable() == nullptr ) velTable() = G4VelocityTable::GetVelocityTable();
-
-  fVelocity = CalculateVelocity();
-
+  is_OpticalPhoton = (fpDynamicParticle->GetDefinition()->GetPDGEncoding() == -22);
 }
 
 //////////////////
@@ -109,7 +89,7 @@ G4Track::G4Track()
     fTrackLength(0.),
     fParentID(0),             fTrackID(0),
     fVelocity(c_light),
-    fpDynamicParticle(nullptr),
+    fpDynamicParticle(new G4DynamicParticle()),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
     fStepLength(0.0),         fWeight(1.0),
@@ -157,9 +137,7 @@ G4Track::~G4Track()
 ///////////////////
 {
    delete fpDynamicParticle;
-   fpDynamicParticle = nullptr;
    delete fpUserInformation;
-   fpUserInformation = nullptr;
    ClearAuxiliaryTrackInformation();
 }
 
@@ -231,46 +209,11 @@ void G4Track::CopyTrackInfo(const G4Track& right)
 }
 
 ///////////////////
-G4double G4Track::CalculateVelocity() const
-///////////////////
-{
-  if (useGivenVelocity) return fVelocity;    
-
-  G4double velocity = c_light ;
-  
-  G4double mass = fpDynamicParticle->GetMass();
-
-  // special case for photons
-  if ( is_OpticalPhoton ) return CalculateVelocityForOpticalPhoton();
-
-  // particles other than optical photon
-  if (mass<DBL_MIN) {
-    // Zero Mass
-    velocity = c_light;
-  } else {
-    G4double T = (fpDynamicParticle->GetKineticEnergy())/mass;
-    if (T > GetMaxTOfVelocityTable()) {
-      velocity = c_light;
-    } else if (T<DBL_MIN) {
-      velocity =0.;
-    } else if (T<GetMinTOfVelocityTable()) {
-      velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
-    } else {	
-      velocity = velTable()->Value(T);
-    }
-    
-  }                                                                             
-  return velocity ;
-}
-
-///////////////////
 G4double G4Track::CalculateVelocityForOpticalPhoton() const
 ///////////////////
-{
-    
+{  
   G4double velocity = c_light ;
   
-
   G4Material* mat = nullptr; 
   G4bool update_groupvel = false;
   if ( fpStep !=0  ){
@@ -308,29 +251,6 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
   
   return velocity ;
 }
-
-///////////////////
-void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
-///////////////////
-{
-  G4VelocityTable::SetVelocityTableProperties(t_max, t_min, nbin);
-  velTable() = G4VelocityTable::GetVelocityTable();
-}
-
-///////////////////
-G4double G4Track::GetMaxTOfVelocityTable()
-///////////////////
-{ return G4VelocityTable::GetMaxTOfVelocityTable(); }
-
-///////////////////
-G4double G4Track::GetMinTOfVelocityTable() 
-///////////////////
-{ return G4VelocityTable::GetMinTOfVelocityTable(); }
-
-///////////////////
-G4int    G4Track::GetNbinOfVelocityTable() 
-///////////////////
-{ return G4VelocityTable::GetNbinOfVelocityTable(); }
 
 ///////////////////
 void G4Track::SetAuxiliaryTrackInformation(G4int idx, G4VAuxiliaryTrackInformation* info) const

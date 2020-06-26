@@ -392,3 +392,23 @@ void G4ChordFinderDelegate<T>::TestChordPrint(G4int noTrials,
      G4cout << " nextStepTrial = " << std::setw(10) << nextStepTrial << G4endl;
      G4cout.precision(oldprec);
 }
+
+template <class T>
+void G4ChordFinderDelegate<T>::StreamDelegateInfo( std::ostream& os ) const
+{
+// Write out the parameters / state of the driver
+  os << "State of G4ChordFinderDelegate: " << std::endl;
+  os << "--Parameters: " << std::endl;
+  os << "    First Fraction = " << fFirstFraction << std::endl;
+  os << "    Last  Fraction = " << fFractionLast << std::endl;
+  os << "    Fract Next est = " << fFractionNextEstimate << std::endl;
+
+  os << "--State (fungible): " << std::endl;
+  os << "    Maximum No Trials (seen)         = " << fmaxTrials  << std::endl;  
+  os << "    LastStepEstimate (Unconstrained) = " << fLastStepEstimate_Unconstrained
+     << std::endl;
+  // os << "    Statistics NOT printed. " << std::endl;
+  os << "--Statistics: trials= " << fTotalNoTrials
+     << "  calls= " << fNoCalls << std::endl;
+}
+

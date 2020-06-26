@@ -14,41 +14,60 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 February 2020  Alberto Ribon  radioactive_decay-V10-05-12
-----------------------------------------------------------
+12 May 2020  Alberto Ribon  radioactive_decay-V10-06-08
+------------------------------------------------------------
+- G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc : 
+  in the method BuildPhysicsTable, check the global hadronic verbosity level
+  before printing out information.
+
+19 February 2020  Alberto Ribon  radioactive_decay-V10-06-07
+------------------------------------------------------------
 - G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc , G4Radioactivation.cc :
   use G4VERBOSE consistently; 
   for G4Radioactivation, forgotten change of verbosity from 0 to 1
   at line 844.
 
-12 February 2020  Alberto Ribon  radioactive_decay-V10-05-11
-----------------------------------------------------------
+12 February 2020  Alberto Ribon  radioactive_decay-V10-06-06
+------------------------------------------------------------
 - G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc : forgotten change of
   verbosity from 0 to 1, at lines: 309, 316, 331 and 932 for 
   G4RadioactiveDecayBase.cc , and 340, 396, 403, 418 and 1676 for 
   G4RadioactiveDecay.cc .
 
-5 February 2020  Alberto Ribon  radioactive_decay-V10-05-10
-----------------------------------------------------------
-(Including a set of fixes made by Dennis Wright on the master on the period
- between 15 December 2019 and 22 January 2020)
-- G4BetaPlusDecay.cc, line 166: change sign of daughterZ argument in
-  G4BetaDecayCorrections according to bug report 2199.
-- G4RadioactiveDecay.cc, G4RadioactiveDecayBase.cc : change default verbosity 
-  from 0 to 1, and remove G4cerr wherever it occurs and replace it with 
-  G4Exception or G4cout.
-- Fix Coverity errors 102466 and 102470, "dereference before null test"
-  of ptr theDecayChannel in G4RadioactiveDecay.cc and G4RadioactiveDecayBase.cc,
-  respectively.
-- Fix Coverity error 98937, uninitialized boolean, in G4SFDecay by removing
-  boolean applyARM, which was unused.
-- G4Radioactivation::AddDeexcitationSpectrumForBiasMode : fix memory leak
-  by deleting pevap_products. Addresses bug report #2164.
-- Increased verbosity thresholds in G4RadioactiveDecay, G4RadioactiveDecayBase,
-  G4Radioctivation in order to reduce printout size.
+ 6 February 2020  Alberto Ribon  radioactive_decay-V10-06-05
+------------------------------------------------------------
 - G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc : forgotten change of
   verbosity from 0 to 1, at line 977 and 1720 respectively.
-  (Only this fix has been made by A.R.).
+
+22 January 2020  Dennis Wright  radioactive_decay-V10-06-04
+-----------------------------------------------------------
+- increased verbosity thresholds in G4RadioactiveDecay, G4RadioactiveDecayBase,
+  G4Radioctivation in order to reduce printout size
+ 
+22 January 2020  Dennis Wright  radioactive_decay-V10-06-03
+-----------------------------------------------------------
+- G4Radioactivation::AddDeexcitationSpectrumForBiasMode: fix memory leak
+  by deleting pevap_products.  Addresses bug report #2164.
+  
+10 January 2020  Dennis Wright  radioactive_decay-V10-06-02
+-----------------------------------------------------------
+- fix Coverity errors 102466 and 102470, "dereference before null test"
+  of ptr theDecayChannel in G4RadioactiveDecay.cc and G4RadioactiveDecayBase.cc,
+  respectively.
+
+- fix Coverity error 98937, uninitialized boolean, in G4SFDecay by removing
+  boolean applyARM, which was unused.
+ 
+19 December 2019  Dennis Wright  radioactive_decay-V10-06-01
+------------------------------------------------------------
+- G4RadioactiveDecay.cc, G4RadioactiveDecayBase.cc: change default verbosity 
+  from 0 to 1, and remove G4cerr wherever it occurs and replace it with 
+  G4Exception or G4cout
+
+15 December 2019  Dennis Wright  radioactive_decay-V10-06-00
+------------------------------------------------------------
+- G4BetaPlusDecay.cc, line 166: change sign of daughterZ argument in
+  G4BetaDecayCorrections according to bug report 2199
 
 1 November 2019  Laurent Desorgher  radioactive_decay-V10-05-09
 ----------------------------------------------------------

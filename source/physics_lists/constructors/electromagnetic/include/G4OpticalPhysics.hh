@@ -56,6 +56,7 @@ class G4EmSaturation;
 class G4Scintillation;
 class G4Cerenkov;
 class G4OpWLS;
+class G4OpWLS2;
 class G4OpRayleigh;
 class G4OpMieHG;
 class G4OpBoundaryProcess;
@@ -78,10 +79,8 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
   private:
 
-    /// Not implemented
-    G4OpticalPhysics(const G4OpticalPhysics& right);
-    /// Not implemented
-    G4OpticalPhysics& operator=(const G4OpticalPhysics& right);
+    G4OpticalPhysics(const G4OpticalPhysics& right) = delete;
+    G4OpticalPhysics& operator=(const G4OpticalPhysics& right) = delete;
 
   public:
 
@@ -106,12 +105,17 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetFiniteRiseTime(G4bool );
     void SetScintillationStackPhotons(G4bool );
     void SetScintillationVerbosity(G4int);
+    void SetScintillationEnhancedTimeConstants(G4bool);
     //void AddScintillationSaturation(G4EmSaturation* );
 
     // WLS
     void SetWLSTimeProfile(G4String );
     void SetWLSVerbosity(G4int);
 
+    // WLS2
+    void SetWLS2TimeProfile(G4String );
+    void SetWLS2Verbosity(G4int);
+  
     //boundary
     void SetBoundaryVerbosity(G4int);
     void SetInvokeSD(G4bool );
@@ -141,6 +145,8 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     G4double                    fYieldFactor;
 
     /// scintillation excitation ratio
+    /// Note: this is to be removed in the next major release. 
+    ///       Use material properties SCINTILLATIONYIELD1, 2, 3 instead
     G4double                    fExcitationRatio;
 
     /// option to set a finite rise-time; Note: the G4Scintillation
@@ -160,6 +166,10 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// option to allow stacking of secondary Scintillation photons
     G4bool                      fScintillationStackPhotons;
 
+    /// new in version 10.7; allow > 2 time constants, and > 1 time 
+    /// constant for scintillation by particle type
+    G4bool                      fScintillationEnhancedTimeConstants;
+
     G4int                       fScintillationVerbosity;
 
     ////////////////// Cerenkov
@@ -177,6 +187,11 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     G4String                    fWLSTimeProfileName;
     G4int                       fWLSVerbosity;
 
+    ///////////////// WLS2
+    static G4ThreadLocal G4OpWLS2* fWLS2Process;
+    G4String                    fWLS2TimeProfileName;
+    G4int                       fWLS2Verbosity;
+  
     static G4ThreadLocal G4OpAbsorption* fAbsorptionProcess;
     G4int                       fAbsorptionVerbosity;
 

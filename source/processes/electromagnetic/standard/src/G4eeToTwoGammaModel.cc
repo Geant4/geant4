@@ -41,6 +41,7 @@
 // 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 // 29-06-06 Fix problem for zero energy incident positron (V.Ivanchenko) 
 // 20-10-06 Add theGamma as a member (V.Ivanchenko)
+// 18-01-20 Introduce thermal model of annihilation at rest (J.Allison)
 //
 //
 // Class Description:
@@ -54,12 +55,11 @@
 //
 // GEANT4 internal units.
 //
-// Note 1: The initial electron is assumed free and at rest.
+// Note 1: The initial electron is assumed free and at rest if atomic PDF 
+//         is not defined
 //
 // Note 2: The annihilation processes producing one or more than two photons are
 //         ignored, as negligible compared to the two photons process.
-
-
 
 //
 // -------------------------------------------------------------------
@@ -75,13 +75,17 @@
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
+#include "G4RandomDirection.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4EmParameters.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+
+G4bool G4eeToTwoGammaModel::fSampleAtomicPDF = false;
 
 G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
                                          const G4String& nam)
@@ -102,6 +106,26 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {
+  if(IsMaster()) {
+    G4int verbose = G4EmParameters::Instance()->Verbose();
+    // redo initialisation for each new run
+    fSampleAtomicPDF = false;
+    const auto& materialTable = G4Material::GetMaterialTable();
+    for (const auto& material: *materialTable) {
+      const G4double meanEnergyPerIonPair = material->GetIonisation()->GetMeanEnergyPerIonPair();
+      if (meanEnergyPerIonPair > 0.) {
+	fSampleAtomicPDF = true;
+        if(verbose > 0) {
+          G4cout << "### G4eeToTwoGammaModel: for " << material->GetName() << " mean energy per ion pair is " 
+                 << meanEnergyPerIonPair/CLHEP::eV << " eV" << G4endl;
+	}
+      }
+    }
+  }
+  // If no materials have meanEnergyPerIonPair set. This is probably the usual
+  // case, since most applications are not senstive to the slight
+  // non-collinearity of gammas in eeToTwoGamma. Do not issue any warning.
+
   if(fParticleChange) { return; }
   fParticleChange = GetParticleChangeForGamma();
 }
@@ -135,9 +159,7 @@ G4double G4eeToTwoGammaModel::ComputeCrossSectionPerAtom(
 				    G4double, G4double, G4double)
 {
   // Calculates the cross section per atom of annihilation into two photons
-  
-  G4double cross = Z*ComputeCrossSectionPerElectron(kineticEnergy);
-  return cross;  
+  return Z*ComputeCrossSectionPerElectron(kineticEnergy);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,19 +171,16 @@ G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
 					      G4double, G4double)
 {
   // Calculates the cross section per volume of annihilation into two photons
-  
-  G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron(kineticEnergy);
-  return cross;
+  return material->GetElectronDensity()*ComputeCrossSectionPerElectron(kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Polarisation of gamma according to M.H.L.Pryce and J.C.Ward, 
+// Polarisation of gamma according to M.H.L.Pryce and J.C.Ward,
 // Nature 4065 (1947) 435.
 
 void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-					    const G4MaterialCutsCouple*,
+					    const G4MaterialCutsCouple* pCutsCouple,
 					    const G4DynamicParticle* dp,
 					    G4double,
 					    G4double)
@@ -173,26 +192,81 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
    
   // Case at rest
   if(posiKinEnergy == 0.0) {
-    G4double cost = 2.*rndmEngine->flat()-1.;
-    G4double sint = sqrt((1. - cost)*(1. + cost));
-    G4double phi  = twopi * rndmEngine->flat();
-    G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
-    phi = twopi * rndmEngine->flat();
-    G4double cosphi = cos(phi);
-    G4double sinphi = sin(phi);
-    G4ThreeVector pol(cosphi, sinphi, 0.0);
-    pol.rotateUz(dir);
-    aGamma1 = new G4DynamicParticle(theGamma, dir, electron_mass_c2);
-    aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
-    aGamma2 = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
-    pol.set(-sinphi, cosphi, 0.0);
-    pol.rotateUz(dir);
-    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
-    /*
-    G4cout << "Annihilation at rest fly: e0= "  << " dir= " <<  dir 
-	   << G4endl;
-    */
-  } else {
+
+    const G4double eGamma = electron_mass_c2;
+
+    // In rest frame of positronium gammas are back to back
+    const G4ThreeVector& dir1 = G4RandomDirection();
+    const G4ThreeVector& dir2 = -dir1;
+    aGamma1 = new G4DynamicParticle(G4Gamma::Gamma(),dir1,eGamma);
+    aGamma2 = new G4DynamicParticle(G4Gamma::Gamma(),dir2,eGamma);
+
+    // In rest frame the gammas are polarised perpendicular to each other - see
+    // Pryce and Ward, Nature No 4065 (1947) p.435.
+    // Snyder et al, Physical Review 73 (1948) p.440.
+    G4ThreeVector pol1 = (G4RandomDirection().cross(dir1)).unit();
+    G4ThreeVector pol2 = (pol1.cross(dir2)).unit();
+
+    // But the positronium is moving...
+    // A positron in matter slows down and combines with an atomic electron to
+    // make a neutral “atom” called positronium, about half the size of a normal
+    // atom. I expect that when the energy of the positron is small enough,
+    // less than the binding energy of positronium (6.8 eV), it is
+    // energetically favourable for an electron from the outer orbitals of a
+    // nearby atom or molecule to transfer and bind to the positron, as in an
+    // ionic bond, leaving behind a mildly ionised nearby atom/molecule. I
+    // would expect the positronium to come away with a kinetic energy of a
+    // few eV on average. In its para (spin 0) state it annihilates into two
+    // photons, which in the rest frame of the positronium are collinear
+    // (back-to-back) due to momentum conservation. Because of the motion of the
+    // positronium, photons will be not quite back-to-back in the laboratory.
+
+    // The positroniuim acquires an energy of order its binding energy and
+    // doesn't have time to thermalise. Nevertheless, here we approximate its
+    // energy distribution by a Maxwell-Boltzman with mean energy <KE>. In terms
+    // of a more familiar concept of temperature, and the law of equipartition
+    // of energy of translational motion, <KE>=3kT/2. Each component of velocity
+    // has a distribution exp(-mv^2/2kT), which is a Gaussian of mean zero
+    // and variance kT/m=2<KE>/3m, where m is the positronium mass.
+
+    // We take <KE> = material->GetIonisation()->GetMeanEnergyPerIonPair().
+
+    if(fSampleAtomicPDF) {
+      const G4Material* material = pCutsCouple->GetMaterial();
+      const G4double meanEnergyPerIonPair = material->GetIonisation()->GetMeanEnergyPerIonPair();
+      const G4double& meanKE = meanEnergyPerIonPair;  // Just an alias
+      if (meanKE > 0.) {  // Positronium haas motion
+	// Mass of positronium
+	const G4double mass = 2.*electron_mass_c2;
+	// Mean <KE>=3kT/2, as described above
+	// const G4double T = 2.*meanKE/(3.*k_Boltzmann);
+	// Component velocities: Gaussian, variance kT/m=2<KE>/3m.
+	const G4double sigmav = std::sqrt(2.*meanKE/(3.*mass));
+	// This is in units where c=1
+	const G4double vx = G4RandGauss::shoot(0.,sigmav);
+	const G4double vy = G4RandGauss::shoot(0.,sigmav);
+	const G4double vz = G4RandGauss::shoot(0.,sigmav);
+	const G4ThreeVector v(vx,vy,vz);  // In unit where c=1
+	const G4ThreeVector& beta = v;    // so beta=v/c=v
+
+	aGamma1->Set4Momentum(aGamma1->Get4Momentum().boost(beta));
+	aGamma2->Set4Momentum(aGamma2->Get4Momentum().boost(beta));
+
+	// Rotate polarisation vectors
+	const G4ThreeVector& newDir1 = aGamma1->GetMomentumDirection();
+	const G4ThreeVector& newDir2 = aGamma2->GetMomentumDirection();
+	const G4ThreeVector& axis1 = dir1.cross(newDir1);  // No need to be unit
+	const G4ThreeVector& axis2 = dir2.cross(newDir2);  // No need to be unit
+	const G4double& angle1 = std::acos(dir1*newDir1);
+	const G4double& angle2 = std::acos(dir2*newDir2);
+	if (axis1 != G4ThreeVector()) pol1.rotate(axis1,angle1);
+	if (axis2 != G4ThreeVector()) pol2.rotate(axis2,angle2);
+      }
+    }
+    aGamma1->SetPolarization(pol1.x(),pol1.y(),pol1.z());
+    aGamma2->SetPolarization(pol2.x(),pol2.y(),pol2.z());
+
+  } else {  // Positron interacts in flight
 
     G4ThreeVector posiDirection = dp->GetMomentumDirection();
 

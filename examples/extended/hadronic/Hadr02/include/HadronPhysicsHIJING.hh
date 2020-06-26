@@ -54,6 +54,7 @@
 #include "G4NeutronBuilder.hh"
 #include "HIJINGNeutronBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 
 #include "G4AntiBarionBuilder.hh"
@@ -84,7 +85,8 @@ class HadronPhysicsHIJING : public G4VPhysicsConstructor
     G4ProtonBuilder * fPro;
     HIJINGProtonBuilder * fHIJINGPro;    
     
-    G4HyperonFTFPBuilder * fHyperon;
+    G4HyperonBuilder * fHyperon;
+    G4HyperonFTFPBuilder * fFTFPHyperon;
     
     G4AntiBarionBuilder * fAntiBaryon;
     HIJINGAntiBarionBuilder * fHIJINGAntiBaryon;

@@ -6,6 +6,8 @@
 
 #include "sf"
 
+#include "../words"
+
 namespace tools {
 namespace sg {
 
@@ -56,6 +58,36 @@ public:
     a_out << parent::m_value << std::endl;
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {
+    a_s.clear();
+    const T& vec = parent::m_value;
+    for(size_t index=0;index<vec.size();index++) {
+      if(index) a_s += ' ';
+      std::ostringstream strm;
+      strm << vec[index];
+      a_s += strm.str();
+    }
+    return true;
+  }
+  virtual bool s2value(const std::string& a_s) {
+    std::vector<std::string> ws;
+    words(a_s," ",false,ws);
+    T& vec = parent::m_value;
+    if(ws.size()!=vec.size()) return false;
+    T old_vec = vec;
+    for(size_t index=0;index<vec.size();index++) {
+      std::istringstream strm(ws[index].c_str());
+      TT v;
+      strm >> v;
+      if(strm.fail()) {
+        vec = old_vec;
+        return false;
+      }
+      if(vec[index]!=v) parent::m_touched = true;
+      vec[index] = v;
+    }
+    return true;
+  }
 public:
   sf_vec():parent(){}
   sf_vec(const T& a_value):parent(a_value){}
@@ -75,17 +107,6 @@ public:
   sf_vec& operator+=(const T& a_value) {
     parent::value(parent::value()+a_value);
     return *this;
-  }
-  virtual bool s_value(std::string& a_s) const {
-    const T& vec = parent::m_value;
-    typename T::size_type sz = vec.size();
-    std::ostringstream strm;
-    for(typename T::size_type index=0;index<sz;index++) {
-      if(index) strm << " ";
-      strm << vec[index];
-    }
-    a_s = strm.str();
-    return true;
   }
 };
 

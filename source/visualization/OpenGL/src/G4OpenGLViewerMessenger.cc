@@ -62,24 +62,35 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpCommandExport =
   new G4UIcommand("/vis/ogl/export", this);
-  fpCommandExport->SetGuidance ("export a screenshot of current OpenGL viewer");
-  fpCommandExport->SetGuidance ("If name is \"\", filename and extension will have the default value");
-  fpCommandExport->SetGuidance ("If name is \"toto.png\", set the name to \"toto\" and the format to \"png\". No incremented suffix is added.");
-  fpCommandExport->SetGuidance ("If name is \"toto\", set the name to \"toto\" and the format to default (or current format if specify). Will also add an incremented suffix at the end of the file, except if name is the same as previous it will not reset incremented suffix.");
-  fpCommandExport->SetGuidance ("Setting size is available only on eps/pdf/svg/ps formats");
+  fpCommandExport->SetGuidance ("Export a screenshot of current OpenGL viewer");
+  fpCommandExport->SetGuidance
+  ("If name is \"\", filename and extension will have the current value");
+  fpCommandExport->SetGuidance
+  ("If name is \"toto.png\", set the name to \"toto\" and the format to \"png\".");
+  fpCommandExport->SetGuidance
+  ("If name is \"toto\", set the name to \"toto\" and the format to current format.");
+  fpCommandExport->SetGuidance
+  ("Will also add an incremented suffix at the end of the name, except if name is"
+   "\nthe same as previous it will not reset the incremented suffix.");
+  fpCommandExport->SetGuidance
+  ("Setting size is available only on eps/pdf/svg/ps formats.");
   G4UIparameter* parameterExport;
   parameterExport = new G4UIparameter ("name", 's', omitable = true);
   parameterExport->SetDefaultValue("!");
-  parameterExport->SetGuidance("by default, will take a default value or the last /vis/ogl/set/printFilename value if set");
+  parameterExport->SetGuidance
+  ("By default, will take a default value or the last \"/vis/ogl/set/printFilename\""
+   " value if set.");
   fpCommandExport->SetParameter(parameterExport);
   parameterExport = new G4UIparameter ("width", 'd', omitable = true);
-  parameterExport->SetGuidance("By default, will take the current width of the viewer or /vis/ogl/set/printSize if set");
-  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
+  parameterExport->SetGuidance
+  ("By default, will take the current width of the viewer or \"/vis/ogl/set/printSize\""
+   "\nif set. This parameter is only useful for eps/pdf/svg/ps formats !");
   parameterExport->SetDefaultValue(-1);
   fpCommandExport->SetParameter(parameterExport);
   parameterExport = new G4UIparameter ("height", 'd', omitable = true);
-  parameterExport->SetGuidance("By default, will take the current height of the viewer or /vis/ogl/set/printSize if set");
-  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
+  parameterExport->SetGuidance
+  ("By default, will take the current height of the viewer or \"/vis/ogl/set/printSize\""
+   "\nif set. This parameter is only useful for eps/pdf/svg/ps formats !");
   parameterExport->SetDefaultValue(-1);
   fpCommandExport->SetParameter(parameterExport);
 
@@ -109,8 +120,10 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
   fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
   fpCommandPrintEPS->SetGuidance
-  ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-   "\nnumber, starting at 0."
+  ("See \"/vis/ogl/export\" for other file formats.");
+  fpCommandPrintEPS->SetGuidance
+  ("Generates files with names G4OpenGL_viewer-name_nnnn.eps, where nnnn is a"
+   "\nsequence number, starting at 0000."
    "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
@@ -235,6 +248,17 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandEventsDrawInterval->SetParameterName("N", omitable = true);
   fpCommandEventsDrawInterval->SetDefaultValue(1);
 
+  fpCommandExportFormat =
+  new G4UIcommand("/vis/ogl/set/exportFormat", this);
+  fpCommandExportFormat->SetGuidance ("Set export format");
+  fpCommandExportFormat->SetGuidance ("By default, pdf/eps/svg/ps are available. Depending of viewers several other format are available.");
+  fpCommandExportFormat->SetGuidance ("Try /vis/ogl/set/exportFormat without parameters to see them.");
+  fpCommandExportFormat->SetGuidance ("Changing format will reset the incremental suffix to 0.");
+  G4UIparameter* parameterExportFormat;
+  parameterExportFormat = new G4UIparameter ("format", 's', omitable = true);
+  parameterExportFormat->SetDefaultValue("");
+  fpCommandExportFormat->SetParameter(parameterExportFormat);
+
   fpCommandFade = new G4UIcmdWithADouble("/vis/ogl/set/fade", this);
   fpCommandFade->SetGuidance
     ("DEPRECATED. Use /vis/viewer/set/timeWindow/fadeFactor."
@@ -255,19 +279,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameterPrintFilename->SetDefaultValue(1);
   fpCommandPrintFilename->SetParameter(parameterPrintFilename);
   
-  fpCommandExportFormat =
-  new G4UIcommand("/vis/ogl/set/exportFormat", this);
-  fpCommandExportFormat->SetGuidance ("Set export format");
-  fpCommandExportFormat->SetGuidance ("By default, pdf/eps/svg/ps are available. Depending of viewers several other format are available.");
-  fpCommandExportFormat->SetGuidance ("Try /vis/ogl/set/exportFormat without parameters to see them.");
-  fpCommandExportFormat->SetGuidance ("Changing format will reset the incremental suffix to 0.");
-  G4UIparameter* parameterExportFormat;
-  parameterExportFormat = new G4UIparameter ("format", 's', omitable = true);
-  parameterExportFormat->SetDefaultValue("");
-  fpCommandExportFormat->SetParameter(parameterExportFormat);
-  
-  fpCommandPrintMode = new G4UIcmdWithAString
-    ("/vis/ogl/set/printMode",this);
+  fpCommandPrintMode = new G4UIcmdWithAString("/vis/ogl/set/printMode",this);
   fpCommandPrintMode->SetGuidance("Set print mode, only available for \"ps\" format");
   fpCommandPrintMode->SetParameterName("print_mode",omitable = true);
   fpCommandPrintMode->SetCandidates("vectored pixmap");
@@ -384,27 +396,7 @@ void G4OpenGLViewerMessenger::SetNewValue
     << G4endl;
     return;
   }
-  
-  if (command == fpCommandPrintEPS)
-  {
-    pOGLViewer->setExportImageFormat("eps",true);
-    pOGLViewer->exportImage();
-    
-    if (pOGLViewer->fVP.IsAutoRefresh())
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    return;
-  }
-  
-  if (command == fpCommandExportFormat)
-  {
-    G4String name;
-    std::istringstream iss(newValue);
-    iss >> name;
-    pOGLViewer->setExportImageFormat(name);
-    
-    return;
-  }
-  
+
   if (command == fpCommandExport)
   {
     G4String name;
@@ -418,41 +410,15 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
   
-  if (command == fpCommandPrintSize)
-    {
-      G4int width,height;
-      std::istringstream iss(newValue);
-      iss >> width
-	  >> height;
-      pOGLViewer->setExportSize(width,height);
-      return;
-    }
+  if (command == fpCommandExportFormat)
+  {
+    G4String name;
+    std::istringstream iss(newValue);
+    iss >> name;
+    pOGLViewer->setExportImageFormat(name);
 
-  if (command == fpCommandPrintFilename) 
-    {
-      G4String name;
-      G4bool inc;
-      std::istringstream iss(newValue);
-      iss >> name
-	  >> inc;
-      pOGLViewer->setExportFilename(name,inc);
-      return;
-    }
-
-  if (command == fpCommandPrintMode)
-    {
-      if (newValue == "vectored") pOGLViewer->fVectoredPs = true;
-      if (newValue == "pixmap") pOGLViewer->fVectoredPs = false;
-      return;
-    }
-
-  if (command == fpCommandTransparency)
-    {
-      pOGLViewer->transparency_enabled = command->ConvertToBool(newValue);
-      if (pOGLViewer->fVP.IsAutoRefresh())
-	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-      return;
-    }
+    return;
+  }
 
   if (command == fpCommandEventsDrawInterval)
   {
@@ -465,17 +431,17 @@ void G4OpenGLViewerMessenger::SetNewValue
 
   if (command == fpCommandFlushAt)
   {
-//    G4bool firstTime = true;
-    std::map<G4String,G4OpenGLSceneHandler::FlushAction> actionMap;
-//    if (firstTime) {
+    static G4bool firstTime = true;
+    static std::map<G4String,G4OpenGLSceneHandler::FlushAction> actionMap;
+    if (firstTime) {
       actionMap["endOfEvent"]    = G4OpenGLSceneHandler::endOfEvent;
       actionMap["endOfRun"]      = G4OpenGLSceneHandler::endOfRun;
       actionMap["eachPrimitive"] = G4OpenGLSceneHandler::eachPrimitive;
       actionMap["NthPrimitive"]  = G4OpenGLSceneHandler::NthPrimitive;
       actionMap["NthEvent"]      = G4OpenGLSceneHandler::NthEvent;
       actionMap["never"]         = G4OpenGLSceneHandler::never;
-//      firstTime = false;
-//    }
+      firstTime = false;
+    }
     G4String action;
     G4int entitiesFlushInterval;
     std::istringstream iss(newValue);
@@ -485,6 +451,54 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
+  if (command == fpCommandPrintEPS)
+  {
+    pOGLViewer->setExportImageFormat("eps",true);
+    pOGLViewer->exportImage();
+
+    if (pOGLViewer->fVP.IsAutoRefresh())
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    return;
+  }
+
+  if (command == fpCommandPrintFilename)
+    {
+      G4String name;
+      G4bool inc;
+      std::istringstream iss(newValue);
+      iss >> name
+    >> inc;
+      pOGLViewer->setExportFilename(name,inc);
+      return;
+    }
+
+  if (command == fpCommandPrintMode)
+    {
+      if (newValue == "vectored") pOGLViewer->fVectoredPs = true;
+
+      if (newValue == "pixmap") pOGLViewer->fVectoredPs = false;
+      return;
+    }
+
+  if (command == fpCommandPrintSize)
+    {
+      G4int width,height;
+      std::istringstream iss(newValue);
+      iss >> width
+    >> height;
+      pOGLViewer->setExportSize(width,height);
+      return;
+    }
+
+  if (command == fpCommandTransparency)
+    {
+      pOGLViewer->transparency_enabled = command->ConvertToBool(newValue);
+      if (pOGLViewer->fVP.IsAutoRefresh())
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
+    }
+
+  // Stored viewer commands
   G4OpenGLStoredViewer* pOGLSViewer =
     dynamic_cast<G4OpenGLStoredViewer*>(pViewer);
 
@@ -605,6 +619,7 @@ void G4OpenGLViewerMessenger::SetNewValue
       return;
     }
 
+  // Scene handler commands
   G4OpenGLStoredSceneHandler* pOGLSSceneHandler =
     dynamic_cast<G4OpenGLStoredSceneHandler*>(pViewer->GetSceneHandler());
 

@@ -16,60 +16,85 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 19th, 2019 G. Cosmo (event-V10-05-08)
+April 29th, 2020 M.Asai (event-V10-06-05)
+- G4GeneralParticleSourceMessenger: command structure clean-up.
+
+April 28th, 2020 G.Cosmo (event-V10-06-04)
+- Code formatting and cleanup.
+
+April 20th, 2020 M.Asai (event-V10-06-03)
+- Introducing a new General Particle Source energy distribution option,
+  that generates flat energy distribution with track weights that
+  represents energy spectrum provided by /gps/hist/point commands.
+  This option can enhance, for example, higher energy tracks that are
+  rare but contribute to the scores.
+
+February 28th, 2020 G.Cosmo (event-V10-06-02)
+- Fixed Coverity defect in G4GeneralParticleSourceMessenger.
+
+February 26th, 2020 G.Cosmo (event-V10-06-01)
+- Some code cleanup, formatting and C++11 revision.
+- Removed obsolete and unused headers.
+- Corrected logic in G4VPrimaryGenerator::CheckVertexInsideWorld() method.
+
+December 9th, 2019 B.Morgan (event-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
+November 19th, 2019 G.Cosmo (event-V10-05-08)
 - Fixed more implicit type conversions.
 
-November 15th, 2019 G. Cosmo (event-V10-05-07)
+November 15th, 2019 G.Cosmo (event-V10-05-07)
 - Fixed implicit type conversions from size_t to G4int in G4TrackStack
   and G4TrajectoryContainer. Fixed typos and ome code cleanup.
 
-October 25th, 2019 B. Morgan (event-V10-05-06)
+October 25th, 2019 B.Morgan (event-V10-05-06)
 - Make -DG4_USESMARTSTACK a public compile definition of G4event
   to propagate it directly to CMake clients.
 
 October 1st, 2019 M. Asai (event-V10-05-05)
-- G4SPSEneDistribution.cc: Protect inifinite loop caused by while loop.
+- G4SPSEneDistribution.cc: Protect infinite loop caused by while loop.
   Addressing to Bugzilla report #2177.
 
-June 3rd, 2019 M. Asai (event-V10-05-04)
+June 3rd, 2019 M.Asai (event-V10-05-04)
 - G4SPSPosDistribution::GetConfineVolume() now returns 
   const G4String&.
 
-May 29th, 2019 M. Asai (event-V10-05-03)
+May 29th, 2019 M.Asai (event-V10-05-03)
 - G4SPSPosDistribution.hh: Add get methods for volume confinement 
   based on the Geant4 GitHub user request.
 
-March 11th, 2019 G. Cosmo (event-V10-05-02)
+March 11th, 2019 G.Cosmo (event-V10-05-02)
 - Fixed typos in printouts in G4GeneralParticleSourceMessenger.
 
-January 31st, 2019 I. Hrivnacova
+January 31st, 2019 I.Hrivnacova
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
-January 28th, 2019 M. Asai (event-V10-05-01)
+January 28th, 2019 M.Asai (event-V10-05-01)
 - G4HEPEvtInterface.cc : Clean up G4Exception seviorities when 
   end-of-file is detected.
 
-December 14th, 2018 M. Asai (event-V10-05-00)
+December 14th, 2018 M.Asai (event-V10-05-00)
 - G4PrimaryTransformer.cc : Allowing absolute zero proper decay time.
   Co-working with particles-V10-05-00 and decay-V10-05-00.
  
-November 9th, 2018 G. Cosmo (event-V10-04-08)
+November 9th, 2018 G.Cosmo (event-V10-04-08)
 - Fixed printout typos.
 
-May 17th, 2018 J. Madsen (event-V10-04-07)
+May 17th, 2018 J.Madsen (event-V10-04-07)
 - updated "thread-local-static-var" model to
   "function-returning-thread-local-static-reference" model
   which fixes Windows DLL + MT
 
-April 30, 2018  M. Asai (event-V10-04-06)
+April 30, 2018  M.Asai (event-V10-04-06)
 - Re-tagging event-V10-04-04 : Change the default stack to
   G4TrackStak. Addressing to bug report #2040.
 
-April 2, 2018  M. Asai (event-V10-04-05)
+April 2, 2018  M.Asai (event-V10-04-05)
 - Tag event-V10-04-04 is removed for the time being.
 - G4StackManager.cc : code clean up.
 
-March 16, 2018  M. Asai (event-V10-04-04)
+March 16, 2018  M.Asai (event-V10-04-04)
 - Change the default stack to G4TrackStak. Addressing to bug
   report #2040.
 

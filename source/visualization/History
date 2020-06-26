@@ -23,6 +23,68 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+19 June 2020  John Allison
+- opengl-V10-06-07: Fix Qt 5.15 deprecation warnings.
+
+18 June 2020 John Allison  (vis-V10-06-04)  
+* visman-V10-06-06: /vis/scene/add/*Field: Correct guidance (red->green->blue).
+* visXXX-V10-05-04: Fix a debug statement.
+* From earlier:
+  * DAWN-V10-06-01: Compatibility between old and new CMake systems.
+  * opengl-V10-06-06: Automatically generate and compile Moc sources.
+  * opengl-V10-06-05: Remove Qt4 support.
+  * openinventor-V10-06-07: Automatically generate and compile Moc sources.
+  * openinventor-V10-06-06: Corrected GNUmakefile.
+  * openinventor-V10-06-05: Corrections to OIQt viewer.
+  * openinventor-V10-06-04: Fix compilation warnings.
+  * openinventor-V10-06-03: sources.cmake: Configuration for OIQt driver.
+  * openinventor-V10-06-02: Remove Qt4 support.
+  * openinventor-V10-06-01: Fix Bugzilla 2215.
+  * raytracer-V10-06-01: Compatibility between old and new CMake systems.
+  * VRML-V10-06-01: Compatibility between old and new CMake systems.
+  * gMocren-V10-06-01: Fix for clang10.
+
+19 May 2020 John Allison
+* visman-V10-06-05: Very minor improvements.
+
+22 April 2020 Frederick Jones
+* visman-V10-06-04: Support fro OIQt driver.
+
+07 April 2020. John Allison
+* modeling-V10-06-02: Minor tidy.
+* visman-V10-06-03:
+  * Bug fix: Models with no extent do not contribute to scene's extent.
+  * /vis/sceneHandler/create:
+    * Trap infinite loop when looking for a fallback graphics system.
+
+04 March 2020. John Allison  (vis-V10-06-03)
+* greps-V10-06-03: Improve deprecation message.
+* modeling-V10-06-01:
+  * Suppress warnings while filter not fully established.
+* visman-V10-06-02:
+  * Bug fix: Rebuild graphics databases after /vis/filtering/*/mode.
+  * Improve printing of available systems and models.
+* G4VisCommandsListManager.hh:
+  * Notify handlers after /vis/filtering/*/mode command.
+    * Causes rebuild of graphics database.
+* G4VisManager.cc: Improve printing of available systems and models.
+* opengl-V10-06-04: Fix bug in /vis/ogl/export when dot in name.
+
+13 February 2020. John Allison  (vis-V10-06-02)
+- visman-V10-06-01: New command: /vis/geometry/set/forceCloud.
+- opengl-V10-06-03: Improve guidance and tidy /vis/ogl/ commands.
+
+12 December 2019 B. Morgan (vis-V10-06-01)
+- DAWN-V10-06-00, gMocren-V10-06-00, VRML-V10-06-00, vis-HepRep-V10-06-00,
+  visman-V10-06-00, modeling-V10-06-00, openinventor-V10-06-00, raytracer-V10-06-00,
+  vistree-V10-06-00, opengl-V10-06-01
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
+12 December 2019 Ben Morgan (vis-V10-06-00)
+- visexternalgl2ps-V10-06-00, opengl-V10-06-00
+  - Remove no longer required dependence on OpenGLU
+
 04 November 2019  John Allison  (vis-V10-05-26)
 - opengl-V10-05-11: Extend glFlush scaling to all circumstances.
 - visman-V10-05-14: G4VisCommandsViewer.cc (Gabriele Cosmo):

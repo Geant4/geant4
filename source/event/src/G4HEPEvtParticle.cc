@@ -23,25 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HEPEvtParticle class implementation
 //
-//
-//
+// Author: Makoto Asai, 1997
+// --------------------------------------------------------------------
 
 #include "G4HEPEvtParticle.hh"
 
 G4Allocator<G4HEPEvtParticle>*& aHEPEvtParticleAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4HEPEvtParticle>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4HEPEvtParticle>* _instance = nullptr;
+  return _instance;
 }
 
 G4HEPEvtParticle::G4HEPEvtParticle()
-  : theParticle(0), ISTHEP(1), JDAHEP1(1), JDAHEP2(1)
 {
 }
 
-G4HEPEvtParticle::G4HEPEvtParticle(G4PrimaryParticle* pp,
-        G4int isthep, G4int jdahep1, G4int jdahep2)
+G4HEPEvtParticle::
+G4HEPEvtParticle(G4PrimaryParticle* pp,
+                 G4int isthep, G4int jdahep1, G4int jdahep2)
   : theParticle(pp),ISTHEP(isthep),JDAHEP1(jdahep1),JDAHEP2(jdahep2)
 {
 }

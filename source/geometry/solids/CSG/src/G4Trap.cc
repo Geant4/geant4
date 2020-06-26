@@ -607,13 +607,11 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
 
 EInside G4Trap::Inside( const G4ThreeVector& p ) const
 {
-  G4double dz = std::abs(p.z())-fDz;
-  if (dz > halfCarTolerance) return kOutside;
-
   switch (fTrapType)
   {
     case 0: // General case
     {
+      G4double dz = std::abs(p.z())-fDz;
       G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
       G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
       G4double dy = std::max(dz,std::max(dy1,dy2));
@@ -624,11 +622,12 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
                    + fPlanes[3].c*p.z()+fPlanes[3].d;
       G4double dist = std::max(dy,std::max(dx1,dx2));
 
-      if (dist > halfCarTolerance) return kOutside;
-      return (dist > -halfCarTolerance) ? kSurface : kInside;
+      return (dist > halfCarTolerance) ? kOutside :
+        ((dist > -halfCarTolerance) ? kSurface : kInside);
     }
     case 1: // YZ section is a rectangle
     {
+      G4double dz = std::abs(p.z())-fDz;
       G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
       G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
                    + fPlanes[2].c*p.z()+fPlanes[2].d;
@@ -636,28 +635,30 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
                    + fPlanes[3].c*p.z()+fPlanes[3].d;
       G4double dist = std::max(dy,std::max(dx1,dx2));
 
-      if (dist > halfCarTolerance) return kOutside;
-      return (dist > -halfCarTolerance) ? kSurface : kInside;
+      return (dist > halfCarTolerance) ? kOutside :
+        ((dist > -halfCarTolerance) ? kSurface : kInside);
     }
     case 2: // YZ section is a rectangle and
     {       // XZ section is an isosceles trapezoid
+      G4double dz = std::abs(p.z())-fDz;
       G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
       G4double dx = fPlanes[3].a*std::abs(p.x())
                   + fPlanes[3].c*p.z()+fPlanes[3].d;
       G4double dist = std::max(dy,dx);
 
-      if (dist > halfCarTolerance) return kOutside;
-      return (dist > -halfCarTolerance) ? kSurface : kInside;
+      return (dist > halfCarTolerance) ? kOutside :
+        ((dist > -halfCarTolerance) ? kSurface : kInside);
     }
     case 3: // YZ section is a rectangle and
     {       // XY section is an isosceles trapezoid
+      G4double dz = std::abs(p.z())-fDz;
       G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
       G4double dx = fPlanes[3].a*std::abs(p.x())
                   + fPlanes[3].b*p.y()+fPlanes[3].d;
       G4double dist = std::max(dy,dx);
 
-      if (dist > halfCarTolerance) return kOutside;
-      return (dist > -halfCarTolerance) ? kSurface : kInside;
+      return (dist > halfCarTolerance) ? kOutside :
+        ((dist > -halfCarTolerance) ? kSurface : kInside);
     }
   }
   return kOutside; 
@@ -669,14 +670,9 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  G4int nsurf = 0; // number of surfaces where p is placed
   G4double nx = 0, ny = 0, nz = 0;
   G4double dz = std::abs(p.z()) - fDz;
-  if (std::abs(dz) <= halfCarTolerance)
-  {
-    nz = (p.z() < 0) ? -1 : 1;
-    ++nsurf;
-  }
+  nz = std::copysign(G4double(std::abs(dz) <= halfCarTolerance), p.z());
 
   switch (fTrapType)
   {
@@ -688,7 +684,6 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
         if (std::abs(dy) > halfCarTolerance) continue;
         ny  = fPlanes[i].b;
         nz += fPlanes[i].c;
-        ++nsurf;
         break;
       }
       for (G4int i=2; i<4; ++i)
@@ -699,15 +694,14 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
         nx  = fPlanes[i].a;
         ny += fPlanes[i].b;
         nz += fPlanes[i].c;
-        ++nsurf;
         break;
       }
       break;
     }
-    case 1: // YZ section is a rectangle
+    case 1: // YZ section - rectangle
     {
       G4double dy = std::abs(p.y()) + fPlanes[1].d;
-      if (std::abs(dy) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
+      ny = std::copysign(G4double(std::abs(dy) <= halfCarTolerance), p.y());
       for (G4int i=2; i<4; ++i)
       {
         G4double dx = fPlanes[i].a*p.x() +
@@ -716,45 +710,39 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
         nx  = fPlanes[i].a;
         ny += fPlanes[i].b;
         nz += fPlanes[i].c;
-        ++nsurf;
         break;
       }
       break;
     }
-    case 2: // YZ section is a rectangle and
-    {       // XZ section is an isosceles trapezoid
+    case 2: // YZ section - rectangle, XZ section - isosceles trapezoid
+    {
       G4double dy = std::abs(p.y()) + fPlanes[1].d;
-      if (std::abs(dy) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
+      ny = std::copysign(G4double(std::abs(dy) <= halfCarTolerance), p.y());
       G4double dx = fPlanes[3].a*std::abs(p.x()) +
                     fPlanes[3].c*p.z() + fPlanes[3].d;
-      if (std::abs(dx) <= halfCarTolerance)
-      {
-        nx  = (p.x() < 0) ? -fPlanes[3].a : fPlanes[3].a;
-        nz += fPlanes[3].c;
-        ++nsurf;
-      }
+      G4double k = std::abs(dx) <= halfCarTolerance;
+      nx  = std::copysign(k, p.x())*fPlanes[3].a;
+      nz += k*fPlanes[3].c;
       break;
     }
-    case 3: // YZ section is a rectangle and
-    {       // XY section is an isosceles trapezoid
+    case 3: // YZ section - rectangle, XY section - isosceles trapezoid
+    {
       G4double dy = std::abs(p.y()) + fPlanes[1].d;
-      if (std::abs(dy) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
+      ny = std::copysign(G4double(std::abs(dy) <= halfCarTolerance), p.y());
       G4double dx = fPlanes[3].a*std::abs(p.x()) +
                     fPlanes[3].b*p.y() + fPlanes[3].d;
-      if (std::abs(dx) <= halfCarTolerance)
-      {
-        nx  = (p.x() < 0) ? -fPlanes[3].a : fPlanes[3].a;
-        ny += fPlanes[3].b;
-        ++nsurf;
-      }
+      G4double k = std::abs(dx) <= halfCarTolerance;
+      nx  = std::copysign(k, p.x())*fPlanes[3].a;
+      ny += k*fPlanes[3].b;
       break;
     }
   }
 
   // Return normal
   //
-  if (nsurf == 1)      return G4ThreeVector(nx,ny,nz);
-  else if (nsurf != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
+  G4double mag2 = nx*nx + ny*ny + nz*nz;
+  if (mag2 == 1)      return G4ThreeVector(nx,ny,nz);
+  else if (mag2 != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else
   {
     // Point is not on the surface

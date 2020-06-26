@@ -2413,12 +2413,12 @@ static void tools_gl2psParseFeedbackBuffer(tools_GLint used)
       case TOOLS_GL2PS_LINE_CAP_TOKEN :
         current += 2;
         used -= 2;
-        lcap = current[1];
+        lcap = (tools_GLint)current[1]; //G.Barrand : _MSC_VER : cast.
         break;
       case TOOLS_GL2PS_LINE_JOIN_TOKEN :
         current += 2;
         used -= 2;
-        ljoin = current[1];
+        ljoin = (tools_GLint)current[1]; //G.Barrand : _MSC_VER : cast.
         break;
       case TOOLS_GL2PS_LINE_WIDTH_TOKEN :
         current += 2;
@@ -4359,7 +4359,8 @@ static int tools_tools_tools_gl2psPrintPDFShaderStreamDataCoord(tools_GL2PSverte
   int offs = 0;
   unsigned long imap;
   tools_GLfloat diff;
-  double dmax = ~1UL;
+//double dmax = ~1UL;
+  double dmax = (double)~1UL; //G.Barrand : clang10 : cast.
   char edgeflag = 0;
 
   /* FIXME: temp bux fix for 64 bit archs: */
@@ -4402,7 +4403,8 @@ static int tools_tools_tools_gl2psPrintPDFShaderStreamDataRGB(tools_GL2PSvertex 
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+//double dmax = ~1UL;
+  double dmax = (double)~1UL; //G.Barrand : clang10 : cast.
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -4427,7 +4429,8 @@ static int tools_tools_tools_gl2psPrintPDFShaderStreamDataAlpha(tools_GL2PSverte
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+//double dmax = ~1UL;
+  double dmax = (double)~1UL; //G.Barrand : clang10 : cast.
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -6412,7 +6415,7 @@ TOOLS_GL2PSDLL_API tools_GLint tools_gl2psLineJoin(tools_GLint value)
   if(!tools_gl2ps_context) return TOOLS_GL2PS_UNINITIALIZED;
 
   tools_glPassThrough(TOOLS_GL2PS_LINE_JOIN_TOKEN);
-  tools_glPassThrough(value);
+  tools_glPassThrough((tools_GLfloat)value);  //G.Barrand : _MSC_VER : cast.
 
   return TOOLS_GL2PS_SUCCESS;
 }
@@ -6422,7 +6425,7 @@ TOOLS_GL2PSDLL_API tools_GLint tools_gl2psLineWidth(tools_GLfloat value)
   if(!tools_gl2ps_context) return TOOLS_GL2PS_UNINITIALIZED;
 
   tools_glPassThrough(TOOLS_GL2PS_LINE_WIDTH_TOKEN);
-  tools_glPassThrough(value);
+  tools_glPassThrough((tools_GLfloat)value);  //G.Barrand : _MSC_VER : cast.
 
   return TOOLS_GL2PS_SUCCESS;
 }

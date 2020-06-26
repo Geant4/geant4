@@ -25,6 +25,7 @@ OpBoundary	3	32	-1	-1	1000	0
 OpRayleigh	3	33	-1	-1	1000	0
 OpWLS		3	34	-1	-1	1000	0
 OpMieHG		3	35	-1	-1	1000	0		
+OpWLS2		3	36	-1	-1	1000	0
 DNAElastic 	2	51	-1	-1	1000	0	
 DNAExcit 	2	52	-1	-1	1000	0
 DNAIonisation 	2	53	-1	-1	1000	0

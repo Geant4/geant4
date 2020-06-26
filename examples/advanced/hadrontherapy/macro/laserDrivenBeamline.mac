@@ -77,6 +77,33 @@
 /vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
 
+
+
+##########################################################################################################
+############### Define the entrance beam: TARANIS angular distribution
+##  beam->1-2
+#/gps/verbose 2
+#/gps/source/intensity 3.6
+#/gps/particle proton
+#/gps/pos/type Beam
+#/gps/pos/shape Circle
+#/gps/pos/centre -171.3 0.0 0.0 cm
+#/gps/pos/radius 0.007 mm
+#/gps/pos/sigma_r 0. mm
+#/gps/ang/rot1 0 0 1
+#/gps/ang/rot2 0 1 0
+#/gps/pos/rot1 0 0 1
+#/gps/pos/rot2 0 1 0
+#/gps/ang/type iso
+#/gps/ang/mintheta 0 deg
+#/gps/ang/maxtheta 26.69 deg
+#/gps/ene/type Arb
+#/gps/hist/type arb
+#/gps/hist/point 1.1 3.5
+#/gps/hist/point 3.1399999999999999 1.2
+#/gps/hist/inter Exp
+
+
 ################# change first collimator #################
 #/LaserDriven/EnergySelector/FirstCollimator/Radius 10.0 mm
 ##/LaserDriven/EnergySelector/FirstCollimator/Thickness 20.0 mm

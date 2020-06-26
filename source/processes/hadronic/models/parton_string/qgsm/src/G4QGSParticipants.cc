@@ -58,8 +58,7 @@ G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(),
   SetPt2ofNuclearDestruction( 0.075*GeV*GeV );
   SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
   SetExcitationEnergyPerWoundedNucleon( 40.0*MeV );
-
-  sigmaPt=0.25*sqr(GeV);
+  sigmaPt=0.0;  // Uzhi June 2020 : sigmaPt=0.25*sqrt(GeV);
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)

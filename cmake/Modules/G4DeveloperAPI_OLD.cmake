@@ -239,9 +239,13 @@ macro(geant4_library_target)
     add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
     target_compile_definitions(${G4LIBTARGET_NAME} PRIVATE GEANT4_DEVELOPER_$<CONFIG>)
     target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
-    target_link_libraries(${G4LIBTARGET_NAME}
-      ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
-      ${G4LIBTARGET_LINK_LIBRARIES})
+
+    set(__sorted_link_libs ${G4LIBTARGET_GEANT4_LINK_LIBRARIES} ${G4LIBTARGET_LINK_LIBRARIES})
+    if(__sorted_link_libs)
+      list(SORT __sorted_link_libs)
+    endif()
+
+    target_link_libraries(${G4LIBTARGET_NAME} ${__sorted_link_libs})
     # DLL support, portable to all platforms
     # G4LIB_BUILD_DLL is public as despite the name it indicates the shared/archive mode
     # and clients must apply it when linking to the shared libs. The global
@@ -305,14 +309,16 @@ macro(geant4_library_target)
     # Because externals like clhep appear in G4LIBTARGET_LINK_LIBRARIES,
     # filter this list to replace shared builtins with their static variant
     string(REGEX REPLACE
-      "(G4clhep|G4expat|G4zlib|G4geomUSolids)(;|$)" "\\1-static\\2"
+      "(G4clhep|G4expat|G4zlib|G4ptl|G4geomUSolids)(;|$)" "\\1-static\\2"
       G4LIBTARGET_LINK_LIBRARIES_STATIC
       "${G4LIBTARGET_LINK_LIBRARIES}"
       )
 
-    target_link_libraries(${G4LIBTARGET_NAME}-static PUBLIC
-      ${G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC}
-      ${G4LIBTARGET_LINK_LIBRARIES_STATIC})
+    set(__sorted_link_libs ${G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC} ${G4LIBTARGET_LINK_LIBRARIES_STATIC})
+    if(__sorted_link_libs)
+      list(SORT __sorted_link_libs)
+    endif()
+    target_link_libraries(${G4LIBTARGET_NAME}-static PUBLIC ${__sorted_link_libs})
 
     # But we can rename the output library to the correct name
     # On WIN32 we *retain* the -static postfix to avoid name clashes

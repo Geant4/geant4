@@ -115,7 +115,9 @@ void G4Scene::CalculateExtent ()
       G4VModel* model = fRunDurationModelList[i].fpModel;
       if (model -> Validate()) {  // Validates and also recomputes extent.
         const G4VisExtent& thisExtent = model -> GetTransformedExtent ();
-        boundingExtentScene.AccrueBoundingExtent(thisExtent);
+        if (thisExtent != G4VisExtent::GetNullExtent()) {
+          boundingExtentScene.AccrueBoundingExtent(thisExtent);
+        }
       } else {
         PrintInvalidModel(model);
       }
@@ -127,7 +129,9 @@ void G4Scene::CalculateExtent ()
       G4VModel* model = fEndOfEventModelList[i].fpModel;
       if (model -> Validate()) {  // Validates and also recomputes extent.
         const G4VisExtent& thisExtent = model -> GetTransformedExtent ();
-        boundingExtentScene.AccrueBoundingExtent(thisExtent);
+        if (thisExtent != G4VisExtent::GetNullExtent()) {
+          boundingExtentScene.AccrueBoundingExtent(thisExtent);
+        }
       } else {
         PrintInvalidModel(model);
       }
@@ -139,7 +143,9 @@ void G4Scene::CalculateExtent ()
       G4VModel* model = fEndOfRunModelList[i].fpModel;
       if (model -> Validate()) {  // Validates and also recomputes extent.
         const G4VisExtent& thisExtent = model -> GetTransformedExtent ();
-        boundingExtentScene.AccrueBoundingExtent(thisExtent);
+        if (thisExtent != G4VisExtent::GetNullExtent()) {
+          boundingExtentScene.AccrueBoundingExtent(thisExtent);
+        }
       } else {
         PrintInvalidModel(model);
       }

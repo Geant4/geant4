@@ -23,19 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SmoothTrajectoryPoint
 //
+// Class description:
 //
-//---------------------------------------------------------------
-//
-// G4SmoothTrajectoryPoint.hh
-//
-// class description:
-//  This class contains position and auxiliary points of a trajectory point.
-//
-// ---------------------------------------------------------------
+// This class contains position and auxiliary points of a trajectory point.
 
-#ifndef G4SmoothTrajectoryPoint_h
-#define G4SmoothTrajectoryPoint_h 1
+// Contact:
+//   Questions and comments to this code should be sent to
+//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//     Makoto  Asai   (e-mail: asai@slac.stanford.edu)
+//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// ---------------------------------------------------------------
+#ifndef G4SmoothTrajectoryPoint_hh
+#define G4SmoothTrajectoryPoint_hh 1
 
 #include "trkgdefs.hh"
 #include "G4VTrajectoryPoint.hh"
@@ -43,66 +44,71 @@
 #include "G4ThreeVector.hh"          // Include from 'geometry'
 #include "G4Allocator.hh"            // Include from 'particle+matter'
 
-
 class G4SmoothTrajectoryPoint : public G4VTrajectoryPoint
 {
 
-//--------
-public: // without description
-//--------
+  public:
 
-// Constructor/Destructor
-   G4SmoothTrajectoryPoint();
-   // No auxiliary points setter, so must set the points in the
-   // constructor already
-   G4SmoothTrajectoryPoint(G4ThreeVector pos,
-			   std::vector<G4ThreeVector>* auxiliaryPoints);
-   G4SmoothTrajectoryPoint(G4ThreeVector pos);
-   G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right);
-   virtual ~G4SmoothTrajectoryPoint();
+    G4SmoothTrajectoryPoint();
+    G4SmoothTrajectoryPoint(G4ThreeVector pos,
+                            std::vector<G4ThreeVector>* auxiliaryPoints);
+      // No auxiliary points setter, so must set the points in the
+      // constructor already
 
-private:
-   G4SmoothTrajectoryPoint& operator= (const G4SmoothTrajectoryPoint&);
+    G4SmoothTrajectoryPoint(G4ThreeVector pos);
+    G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint& right);
+    virtual ~G4SmoothTrajectoryPoint();
 
-public:
+    G4SmoothTrajectoryPoint& operator= (const G4SmoothTrajectoryPoint&)= delete;
 
-// Operators
-   inline void *operator new(size_t);
-   inline void operator delete(void *aTrajectoryPoint);
-   inline G4bool operator==(const G4SmoothTrajectoryPoint& right) const
-   { return (this==&right); };
+    // Operators
+    //
+    inline void* operator new(size_t);
+    inline void operator delete(void* aTrajectoryPoint);
+    inline G4bool operator==(const G4SmoothTrajectoryPoint& right) const;
 
-// Get/Set functions
-   inline const G4ThreeVector GetPosition() const
-   { return fPosition; }
-   inline const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
-   { return fAuxiliaryPointVector; }
+    // Get/Set functions
+    //
+    inline const G4ThreeVector GetPosition() const
+      { return fPosition; }
+    inline const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
+      { return fAuxiliaryPointVector; }
 
-// Get method for HEPRep style attributes
-   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual std::vector<G4AttValue>* CreateAttValues() const;
+    // Get method for HEPRep style attributes
+    //
+    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-//---------
-   private:
-//---------
+  private:
 
-// Member data
-   G4ThreeVector fPosition;
-   std::vector<G4ThreeVector>* fAuxiliaryPointVector;
+    G4ThreeVector fPosition;
+    std::vector<G4ThreeVector>* fAuxiliaryPointVector = nullptr;
 };
 
-extern G4TRACKING_DLL G4Allocator<G4SmoothTrajectoryPoint>*& aSmoothTrajectoryPointAllocator();
+extern G4TRACKING_DLL
+G4Allocator<G4SmoothTrajectoryPoint>*& aSmoothTrajectoryPointAllocator();
 
-inline void* G4SmoothTrajectoryPoint::operator new(size_t)
+inline void*
+G4SmoothTrajectoryPoint::operator new(size_t)
 {
-  if (!aSmoothTrajectoryPointAllocator())
-  { aSmoothTrajectoryPointAllocator()= new G4Allocator<G4SmoothTrajectoryPoint>; }
+  if (aSmoothTrajectoryPointAllocator() == nullptr)
+  {
+    aSmoothTrajectoryPointAllocator()= new G4Allocator<G4SmoothTrajectoryPoint>;
+  }
   return (void *) aSmoothTrajectoryPointAllocator()->MallocSingle();
 }
 
-inline void G4SmoothTrajectoryPoint::operator delete(void *aTrajectoryPoint)
+inline void
+G4SmoothTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-  aSmoothTrajectoryPointAllocator()->FreeSingle((G4SmoothTrajectoryPoint *) aTrajectoryPoint);
+  aSmoothTrajectoryPointAllocator()
+   ->FreeSingle((G4SmoothTrajectoryPoint*) aTrajectoryPoint);
+}
+
+inline G4bool
+G4SmoothTrajectoryPoint::operator==(const G4SmoothTrajectoryPoint& r) const
+{
+  return (this==&r);
 }
 
 #endif

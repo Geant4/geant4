@@ -142,6 +142,7 @@
 #include "G4HadronicProcessStore.hh"
 #include "G4HadronicException.hh"
 #include "G4PhotonEvaporation.hh"
+#include "G4HadronicParameters.hh"
 
 #include <vector>
 #include <sstream>
@@ -741,7 +742,8 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
   if (!isInitialised) {
     isInitialised = true;
 #ifdef G4VERBOSE
-    if(G4Threading::IsMasterThread()) { StreamInfo(G4cout, "\n"); }
+    if(G4HadronicParameters::Instance()->GetVerboseLevel() > 0  &&
+       G4Threading::IsMasterThread()) { StreamInfo(G4cout, "\n"); }
 #endif
   }
   G4HadronicProcessStore::

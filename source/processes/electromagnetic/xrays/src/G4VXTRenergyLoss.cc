@@ -169,7 +169,6 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 
 G4VXTRenergyLoss::~G4VXTRenergyLoss()
 {
-  if(fEnvelope) delete fEnvelope;
   delete fProtonEnergyVector;
   delete fXTREnergyVector;
   if(fEnergyDistrTable) { 

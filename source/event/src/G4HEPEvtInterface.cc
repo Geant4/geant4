@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4HEPEvtInterface class implementation
 //
-//
-// 
+// Author: Makoto Asai, 1997
 // --------------------------------------------------------------------
 
 #include "G4HEPEvtInterface.hh"
@@ -40,49 +40,55 @@
 #include "G4Event.hh"
 
 G4HEPEvtInterface::G4HEPEvtInterface(const char* evfile, G4int vl)
-:vLevel(vl)
+  : vLevel(vl)
 {
   inputFile.open((char*)evfile);
-  if (inputFile.is_open()) {
+  if (inputFile.is_open())
+  {
     fileName = evfile;
-    if(vl>0) G4cout << "G4HEPEvtInterface - " << fileName << " is open." << G4endl;
+    if(vl>0)
+      G4cout << "G4HEPEvtInterface - " << fileName << " is open." << G4endl;
   }
-  else {
-    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
-    "G4HEPEvtInterface:: cannot open file.");
+  else
+  {
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",
+                FatalException, "G4HEPEvtInterface:: cannot open file.");
   }
   G4ThreeVector zero;
   particle_position = zero;
   particle_time = 0.0;
-
 }
 
 G4HEPEvtInterface::~G4HEPEvtInterface()
-{;}
+{
+}
 
 void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 {
   G4int NHEP = 0;  // number of entries
-  if (inputFile.is_open()) {
+  if (inputFile.is_open())
+  {
     inputFile >> NHEP;
   }
-  else {
-    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
-    "G4HEPEvtInterface:: cannot open file.");
+  else
+  {
+    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",
+                FatalException, "G4HEPEvtInterface:: cannot open file.");
   }
   if( inputFile.eof() ) 
   {
-    G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
-    RunMustBeAborted,"End-Of-File : HEPEvt input file -- no more event to read!");
+    G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex", "Event0202",
+                RunMustBeAborted,
+                "End-Of-File: HEPEvt input file -- no more event to read!");
     return;
   }
 
   if(vLevel > 0)
   {
-    G4cout << "G4HEPEvtInterface - reading " << NHEP << " HEPEvt particles from "
-           << fileName << "." << G4endl;
+    G4cout << "G4HEPEvtInterface - reading " << NHEP
+           << " HEPEvt particles from " << fileName << "." << G4endl;
   }
-  for( G4int IHEP=0; IHEP<NHEP; IHEP++ )
+  for( G4int IHEP=0; IHEP<NHEP; ++IHEP )
   {
     G4int ISTHEP;   // status code
     G4int IDHEP;    // PDG code
@@ -94,46 +100,50 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
     G4double PHEP5; // mass in GeV
 
     inputFile >> ISTHEP >> IDHEP >> JDAHEP1 >> JDAHEP2
-       >> PHEP1 >> PHEP2 >> PHEP3 >> PHEP5;
+              >> PHEP1 >> PHEP2 >> PHEP3 >> PHEP5;
     if( inputFile.eof() ) 
     {
-      G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0203",
-        FatalException,"Unexpected End-Of-File in the middle of an event");
+      G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex", "Event0203",
+                  FatalException,
+                  "Unexpected End-Of-File in the middle of an event");
     }
     if(vLevel > 1)
     {
-      G4cout << " " << ISTHEP << " " << IDHEP << " " << JDAHEP1 << " " << JDAHEP2
-             << " " << PHEP1 << " " << PHEP2 << " " << PHEP3 << " " << PHEP5
-             << G4endl;
+      G4cout << " " << ISTHEP << " " << IDHEP << " " << JDAHEP1
+             << " " << JDAHEP2 << " " << PHEP1 << " " << PHEP2
+             << " " << PHEP3 << " " << PHEP5 << G4endl;
     }
 
-    // create G4PrimaryParticle object
-    G4PrimaryParticle* particle 
-      = new G4PrimaryParticle( IDHEP );
+    // Create G4PrimaryParticle object
+    //
+    G4PrimaryParticle* particle = new G4PrimaryParticle( IDHEP );
     particle->SetMass( PHEP5*GeV );
     particle->SetMomentum(PHEP1*GeV, PHEP2*GeV, PHEP3*GeV );
 
-    // create G4HEPEvtParticle object
+    // Create G4HEPEvtParticle object
+    //
     G4HEPEvtParticle* hepParticle
       = new G4HEPEvtParticle( particle, ISTHEP, JDAHEP1, JDAHEP2 );
 
     // Store
+    //
     HPlist.push_back( hepParticle );
   }
 
-  // check if there is at least one particle
+  // Check if there is at least one particle
+  //
   if( HPlist.size() == 0 ) return; 
 
-  // make connection between daughter particles decayed from 
-  // the same mother
-  for( size_t i=0; i<HPlist.size(); i++ )
+  // Make connection between daughter particles decayed from the same mother
+  //
+  for( std::size_t i=0; i<HPlist.size(); ++i )
   {
     if( HPlist[i]->GetJDAHEP1() > 0 ) //  it has daughters
     {
       G4int jda1 = HPlist[i]->GetJDAHEP1()-1; // FORTRAN index starts from 1
       G4int jda2 = HPlist[i]->GetJDAHEP2()-1; // but C++ starts from 0.
       G4PrimaryParticle* mother = HPlist[i]->GetTheParticle();
-      for( G4int j=jda1; j<=jda2; j++ )
+      for( G4int j=jda1; j<=jda2; ++j )
       {
         G4PrimaryParticle* daughter = HPlist[j]->GetTheParticle();
         if(HPlist[j]->GetISTHEP()>0)
@@ -145,27 +155,31 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
     }
   }
 
-  // create G4PrimaryVertex object
+  // Create G4PrimaryVertex object
+  //
   G4PrimaryVertex* vertex = new G4PrimaryVertex(particle_position,particle_time);
 
-  // put initial particles to the vertex
-  for( size_t ii=0; ii<HPlist.size(); ii++ )
+  // Put initial particles to the vertex
+  //
+  for( std::size_t ii=0; ii<HPlist.size(); ++ii )
   {
     if( HPlist[ii]->GetISTHEP() > 0 ) // ISTHEP of daughters had been 
-                                       // set to negative
+                                      // set to negative
     {
       G4PrimaryParticle* initialParticle = HPlist[ii]->GetTheParticle();
       vertex->SetPrimary( initialParticle );
     }
   }
 
-  // clear G4HEPEvtParticles
-  //HPlist.clearAndDestroy();
-  for(size_t iii=0;iii<HPlist.size();iii++)
-  { delete HPlist[iii]; }
+  // Clear G4HEPEvtParticles
+  //
+  for(std::size_t iii=0; iii<HPlist.size(); ++iii)
+  {
+    delete HPlist[iii];
+  }
   HPlist.clear();
 
   // Put the vertex to G4Event object
+  //
   evt->AddPrimaryVertex( vertex );
 }
-

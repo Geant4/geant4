@@ -64,7 +64,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef G4atomic_hh_
 #define G4atomic_hh_
 
@@ -72,199 +71,301 @@
 
 #ifdef G4MULTITHREADED
 
-#include "G4atomic_defines.hh"
+#  include "G4atomic_defines.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-template<typename _Tp>
+template <typename _Tp>
 class G4atomic
 {
-  public:
+ public:
+  typedef typename std::atomic<_Tp> base_type;
+  typedef _Tp value_type;
 
-    typedef typename std::atomic<_Tp>   base_type;
-    typedef _Tp                         value_type;
+ private:
+  using mem_ord = std::memory_order;
 
-  private:
+ public:
+  // constructors
+  explicit G4atomic(mem_ord mo = std::memory_order_acq_rel)
+    : fMemOrder(mo)
+  {
+    atomics::set(&fvalue, value_type());
+  }
 
-    using mem_ord = std::memory_order;
+  explicit G4atomic(const value_type& _init,
+                    mem_ord mo = std::memory_order_acq_rel)
+    : fMemOrder(mo)
+  {
+    atomics::set(&fvalue, _init);
+  }
 
-  public:
+  // copy-constructor from pure C++11 atomic
+  explicit G4atomic(const base_type& rhs,
+                    mem_ord mo = std::memory_order_acq_rel)
+    : fMemOrder(mo)
+  {
+    atomics::set(&fvalue, rhs);
+  }
 
-    // constructors
-    explicit
-    G4atomic(mem_ord mo = std::memory_order_acq_rel) : fMemOrder(mo)
-    { atomics::set(&fvalue, value_type()); }
+  // copy-constructor
+  explicit G4atomic(const G4atomic& rhs)
+    : fMemOrder(rhs.fMemOrder)
+  {
+    atomics::set(&fvalue, rhs.base());
+  }
 
-    explicit
-    G4atomic(const value_type& _init,
-             mem_ord mo = std::memory_order_acq_rel) : fMemOrder(mo)
-    { atomics::set(&fvalue, _init); }
+  // assignment operators
+  G4atomic& operator=(const G4atomic& rhs)
+  {
+    if(this != &rhs)
+      atomics::set(&fvalue, rhs.fvalue);
+    return *this;
+  }
 
-    // copy-constructor from pure C++11 atomic
-    explicit
-    G4atomic(const base_type& rhs,
-             mem_ord mo = std::memory_order_acq_rel) : fMemOrder(mo)
-    { atomics::set(&fvalue, rhs); }
+  G4atomic& operator=(const value_type& rhs)
+  {
+    atomics::set(&fvalue, rhs);
+    return *this;
+  }
 
-    // copy-constructor
-    explicit
-    G4atomic(const G4atomic& rhs) : fMemOrder(rhs.fMemOrder)
-    { atomics::set(&fvalue, rhs.base()); }
+  G4atomic& operator=(const base_type& rhs)
+  {
+    atomics::set(&fvalue, rhs);
+    return *this;
+  }
 
-    // assignment operators
-    G4atomic& operator=(const G4atomic& rhs)
-    {
-        if(this != &rhs)
-            atomics::set(&fvalue, rhs.fvalue);
-        return *this;
-    }
+  // destructor
+  ~G4atomic() { fvalue.~base_type(); }
 
-    G4atomic& operator=(const value_type& rhs)
-    {
-        atomics::set(&fvalue, rhs);
-        return *this;
-    }
+  // base version
+  base_type& base() { return fvalue; }
+  const base_type& base() const { return fvalue; }
+  base_type& base() volatile { return fvalue; }
+  const base_type& base() const volatile { return fvalue; }
 
-    G4atomic& operator=(const base_type& rhs)
-    {
-        atomics::set(&fvalue, rhs);
-        return *this;
-    }
+  // check if atomic is lock-free
+  bool is_lock_free() const { return fvalue.is_lock_free(); }
+  bool is_lock_free() const volatile { return fvalue.is_lock_free(); }
 
-    // destructor
-    ~G4atomic() { fvalue.~base_type(); }
+  // store functions
+  void store(_Tp _desired, mem_ord mo = std::memory_order_seq_cst)
+  {
+    atomics::set(fvalue, _desired, mo);
+  }
+  void store(_Tp _desired, mem_ord mo = std::memory_order_seq_cst) volatile
+  {
+    atomics::set(fvalue, _desired, mo);
+  }
 
-    // base version
-    base_type& base() { return fvalue; }
-    const base_type& base() const { return fvalue; }
-    base_type& base() volatile { return fvalue; }
-    const base_type& base() const volatile { return fvalue; }
+  // load functions
+  _Tp load(mem_ord mo = std::memory_order_seq_cst) const
+  {
+    return atomics::get(fvalue, mo);
+  }
+  _Tp load(mem_ord mo = std::memory_order_seq_cst) const volatile
+  {
+    return atomics::get(fvalue, mo);
+  }
 
-    // check if atomic is lock-free
-    bool is_lock_free() const { return fvalue.is_lock_free(); }
-    bool is_lock_free() const volatile { return fvalue.is_lock_free(); }
+  // implicit conversion functions
+  operator _Tp() const { return this->load(); }
+  operator _Tp() const volatile { return this->load(); }
 
-    // store functions
-    void store(_Tp _desired, mem_ord mo = std::memory_order_seq_cst)
-    { atomics::set(fvalue, _desired, mo); }
-    void store(_Tp _desired, mem_ord mo = std::memory_order_seq_cst) volatile
-    { atomics::set(fvalue, _desired, mo); }
+  operator base_type&() const { return fvalue; }
 
-    // load functions
-    _Tp load(mem_ord mo = std::memory_order_seq_cst) const
-    { return atomics::get(fvalue, mo); }
-    _Tp load(mem_ord mo = std::memory_order_seq_cst) const volatile
-    { return atomics::get(fvalue, mo); }
+  // compare-and-swap functions
+  bool compare_exchange_weak(_Tp& _expected, _Tp _desired, mem_ord _success,
+                             mem_ord _failure)
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _success,
+                                        _failure);
+  }
+  bool compare_exchange_weak(_Tp& _expected, _Tp _desired, mem_ord _success,
+                             mem_ord _failure) volatile
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _success,
+                                        _failure);
+  }
 
-    // implicit conversion functions
-    operator _Tp() const { return this->load(); }
-    operator _Tp() const volatile { return this->load(); }
+  bool compare_exchange_weak(_Tp& _expected, _Tp _desired, mem_ord _order)
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _order);
+  }
+  bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
+                             mem_ord _order) volatile
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _order);
+  }
 
-    operator base_type&() const { return fvalue; }
+  bool compare_exchange_strong(_Tp& _expected, _Tp _desired, mem_ord _success,
+                               mem_ord _failure)
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _success,
+                                        _failure);
+  }
+  bool compare_exchange_strong(_Tp& _expected, _Tp _desired, mem_ord _success,
+                               mem_ord _failure) volatile
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _success,
+                                        _failure);
+  }
 
-    // compare-and-swap functions
-    bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
-                               mem_ord _success, mem_ord _failure)
-    { return fvalue.compare_exchange_weak(_expected, _desired,
-                                          _success, _failure); }
-    bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
-                               mem_ord _success, mem_ord _failure) volatile
-    { return fvalue.compare_exchange_weak(_expected, _desired,
-                                          _success, _failure); }
-
-    bool compare_exchange_weak(_Tp& _expected, _Tp _desired, mem_ord _order)
-    { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
-    bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
+  bool compare_exchange_strong(_Tp& _expected, _Tp _desired, mem_ord _order)
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _order);
+  }
+  bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
                                mem_ord _order) volatile
-    { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
+  {
+    return fvalue.compare_exchange_weak(_expected, _desired, _order);
+  }
 
-    bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 mem_ord _success, mem_ord _failure)
-    { return fvalue.compare_exchange_weak(_expected, _desired,
-                                          _success, _failure); }
-    bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 mem_ord _success, mem_ord _failure) volatile
-    { return fvalue.compare_exchange_weak(_expected, _desired,
-                                          _success, _failure); }
+  // value_type operators
+  G4atomic& operator+=(const value_type& rhs)
+  {
+    atomics::increment(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator-=(const value_type& rhs)
+  {
+    atomics::decrement(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator*=(const value_type& rhs)
+  {
+    atomics::multiply(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator/=(const value_type& rhs)
+  {
+    atomics::divide(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
 
-    bool compare_exchange_strong(_Tp& _expected, _Tp _desired, mem_ord _order)
-    { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
-    bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 mem_ord _order) volatile
-    { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
+  // atomic operators
+  G4atomic& operator+=(const G4atomic& rhs)
+  {
+    atomics::increment(&fvalue, rhs.fvalue);
+    return *this;
+  }
+  G4atomic& operator-=(const G4atomic& rhs)
+  {
+    atomics::decrement(&fvalue, rhs.fvalue);
+    return *this;
+  }
+  G4atomic& operator*=(const G4atomic& rhs)
+  {
+    atomics::multiply(&fvalue, rhs.fvalue);
+    return *this;
+  }
+  G4atomic& operator/=(const G4atomic& rhs)
+  {
+    atomics::divide(&fvalue, rhs.fvalue);
+    return *this;
+  }
 
-    // value_type operators
-    G4atomic& operator+=(const value_type& rhs)
-    { atomics::increment(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator-=(const value_type& rhs)
-    { atomics::decrement(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator*=(const value_type& rhs)
-    { atomics::multiply(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator/=(const value_type& rhs)
-    { atomics::divide(&fvalue, rhs, fMemOrder); return *this; }
+  G4atomic& operator+=(const G4atomic& rhs) volatile
+  {
+    atomics::increment(&fvalue, rhs.fvalue);
+    return *this;
+  }
+  G4atomic& operator-=(const G4atomic& rhs) volatile
+  {
+    atomics::decrement(&fvalue, rhs.fvalue);
+    return *this;
+  }
+  G4atomic& operator*=(const G4atomic& rhs) volatile
+  {
+    atomics::multiply(&fvalue, rhs.fvalue);
+    return *this;
+  }
+  G4atomic& operator/=(const G4atomic& rhs) volatile
+  {
+    atomics::divide(&fvalue, rhs.fvalue);
+    return *this;
+  }
 
-    // atomic operators
-    G4atomic& operator+=(const G4atomic& rhs)
-    { atomics::increment(&fvalue, rhs.fvalue); return *this; }
-    G4atomic& operator-=(const G4atomic& rhs)
-    { atomics::decrement(&fvalue, rhs.fvalue); return *this; }
-    G4atomic& operator*=(const G4atomic& rhs)
-    { atomics::multiply(&fvalue, rhs.fvalue); return *this; }
-    G4atomic& operator/=(const G4atomic& rhs)
-    { atomics::divide(&fvalue, rhs.fvalue); return *this; }
+  // STL atomic operators
+  G4atomic& operator+=(const std::atomic<_Tp>& rhs)
+  {
+    atomics::increment(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator-=(const std::atomic<_Tp>& rhs)
+  {
+    atomics::decrement(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator*=(const std::atomic<_Tp>& rhs)
+  {
+    atomics::multiply(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator/=(const std::atomic<_Tp>& rhs)
+  {
+    atomics::divide(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
 
-    G4atomic& operator+=(const G4atomic& rhs) volatile
-    { atomics::increment(&fvalue, rhs.fvalue); return *this; }
-    G4atomic& operator-=(const G4atomic& rhs) volatile
-    { atomics::decrement(&fvalue, rhs.fvalue); return *this; }
-    G4atomic& operator*=(const G4atomic& rhs) volatile
-    { atomics::multiply(&fvalue, rhs.fvalue); return *this; }
-    G4atomic& operator/=(const G4atomic& rhs) volatile
-    { atomics::divide(&fvalue, rhs.fvalue); return *this; }
+  G4atomic& operator+=(const std::atomic<_Tp>& rhs) volatile
+  {
+    atomics::increment(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator-=(const std::atomic<_Tp>& rhs) volatile
+  {
+    atomics::decrement(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator*=(const std::atomic<_Tp>& rhs) volatile
+  {
+    atomics::multiply(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
+  G4atomic& operator/=(const std::atomic<_Tp>& rhs) volatile
+  {
+    atomics::divide(&fvalue, rhs, fMemOrder);
+    return *this;
+  }
 
-    // STL atomic operators
-    G4atomic& operator+=(const std::atomic<_Tp>& rhs)
-    { atomics::increment(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator-=(const std::atomic<_Tp>& rhs)
-    { atomics::decrement(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator*=(const std::atomic<_Tp>& rhs)
-    { atomics::multiply(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator/=(const std::atomic<_Tp>& rhs)
-    { atomics::divide(&fvalue, rhs, fMemOrder); return *this; }
+  // increment operators
+  value_type operator++()
+  {
+    value_type _tmp = ++fvalue;
+    return _tmp;
+  }
+  value_type operator++(int)
+  {
+    value_type _tmp = fvalue++;
+    return _tmp;
+  }
 
-    G4atomic& operator+=(const std::atomic<_Tp>& rhs) volatile
-    { atomics::increment(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator-=(const std::atomic<_Tp>& rhs) volatile
-    { atomics::decrement(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator*=(const std::atomic<_Tp>& rhs) volatile
-    { atomics::multiply(&fvalue, rhs, fMemOrder); return *this; }
-    G4atomic& operator/=(const std::atomic<_Tp>& rhs) volatile
-    { atomics::divide(&fvalue, rhs, fMemOrder); return *this; }
+  value_type operator--()
+  {
+    value_type _tmp = --fvalue;
+    return _tmp;
+  }
+  value_type operator--(int)
+  {
+    value_type _tmp = fvalue--;
+    return _tmp;
+  }
 
-    // increment operators
-    value_type operator++() { value_type _tmp = ++fvalue; return _tmp; }
-    value_type operator++(int)
-    { value_type _tmp = fvalue++; return _tmp; }
-
-    value_type operator--() { value_type _tmp = --fvalue; return _tmp; }
-    value_type operator--(int)
-    { value_type _tmp = fvalue--; return _tmp; }
-
-  protected:
-
-    base_type fvalue;
-    mem_ord fMemOrder;
-
+ protected:
+  base_type fvalue;
+  mem_ord fMemOrder;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#else // ! G4MULTITHREADED
+#else  // ! G4MULTITHREADED
 
-template <typename _Tp> using G4atomic = _Tp;
+template <typename _Tp>
+using G4atomic = _Tp;
 
-#endif // G4MULTITHREADED
+#endif  // G4MULTITHREADED
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif // G4atomic_hh_
+#endif  // G4atomic_hh_

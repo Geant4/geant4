@@ -60,21 +60,9 @@
 
 G4FTFParticipants::G4FTFParticipants() : currentInteraction( -1 ) {}
 
-
-//============================================================================
-
-G4FTFParticipants::G4FTFParticipants( const G4FTFParticipants& ) : 
-  G4VParticipants(), currentInteraction( -1 ) 
-{
-  G4Exception( "G4FTFParticipants::G4FTFParticipants()", "HAD_FTF_001",
-               FatalException, " Must not use copy ctor()" );
-}
-
-
 //============================================================================
 
 G4FTFParticipants::~G4FTFParticipants() {}
-
 
 //============================================================================
 
@@ -96,7 +84,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
   G4double deltaxy = 2.0 * fermi;  // Extra nuclear radius
 
-  if ( theProjectileNucleus == 0 ) {  // Hadron-nucleus or anti-baryon-nucleus interactions
+  if ( theProjectileNucleus == nullptr ) {  // Hadron-nucleus or anti-baryon-nucleus interactions
 
     G4double impactX( 0.0 ), impactY( 0.0 );
 

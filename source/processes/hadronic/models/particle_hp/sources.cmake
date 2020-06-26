@@ -432,7 +432,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
     G4globman
     G4had_mod_man
     G4had_mod_util
-    G4hadronic_LE
     G4hadronic_deex_management
     G4hadronic_deex_photon_evaporation
     G4hadronic_deex_util
@@ -469,10 +468,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
 
 # List any source specific properties here
 if("$ENV{PHP_AS_HP}")
-set_source_files_properties(
-    ${G4had_par_hp_SOURCES}
-    PROPERTIES COMPILE_DEFINITIONS PHP_AS_HP
-)
+  add_definitions(-DPHP_AS_HP)
 endif()
 
 

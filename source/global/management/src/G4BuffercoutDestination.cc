@@ -23,70 +23,86 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/*
- * G4BuffercoutDestination.cc
- *
- *  Created on: Apr 14, 2017
- *      Author: adotti
- */
+// G4BuffercoutDestination class implementation
+//
+// Author: A.Dotti (SLAC), 14 April 2017
+// --------------------------------------------------------------------
 
-#include "G4BuffercoutDestination.hh"
-#include "G4AutoLock.hh"
 #include <iostream>
 
+#include "G4AutoLock.hh"
+#include "G4BuffercoutDestination.hh"
 
-G4BuffercoutDestination::G4BuffercoutDestination(size_t max) :
-  m_buffer_out("") , m_buffer_err(""), m_currentSize_out(0) ,
-  m_currentSize_err(0), m_maxSize(max) {}
+// --------------------------------------------------------------------
+G4BuffercoutDestination::G4BuffercoutDestination(std::size_t max)
+  : m_buffer_out("")
+  , m_buffer_err("")
+  , m_maxSize(max)
+{}
 
-G4BuffercoutDestination::~G4BuffercoutDestination() {
-  Finalize();
-}
+// --------------------------------------------------------------------
+G4BuffercoutDestination::~G4BuffercoutDestination() { Finalize(); }
 
-void G4BuffercoutDestination::Finalize() {
+// --------------------------------------------------------------------
+void G4BuffercoutDestination::Finalize()
+{
   FlushG4cerr();
   FlushG4cout();
 }
 
-G4int G4BuffercoutDestination::ReceiveG4cout(const G4String& msg) {
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::ReceiveG4cout(const G4String& msg)
+{
   m_currentSize_out += msg.size();
   m_buffer_out << msg;
-  //If there is a max size and it has been reached, flush
-  if ( m_maxSize>0 && m_currentSize_out >= m_maxSize ) {
-      FlushG4cout();
+  // If there is a max size and it has been reached, flush
+  if(m_maxSize > 0 && m_currentSize_out >= m_maxSize)
+  {
+    FlushG4cout();
   }
   return 0;
 }
 
-G4int G4BuffercoutDestination::ReceiveG4cerr(const G4String& msg) {
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::ReceiveG4cerr(const G4String& msg)
+{
   m_currentSize_err += msg.size();
   m_buffer_err << msg;
-  //If there is a max size and it has been reached, flush
-  if ( m_maxSize>0 && m_currentSize_err >= m_maxSize ) {
-      FlushG4cerr();
+  // If there is a max size and it has been reached, flush
+  if(m_maxSize > 0 && m_currentSize_err >= m_maxSize)
+  {
+    FlushG4cerr();
   }
   return 0;
 }
 
-G4int G4BuffercoutDestination::FlushG4cout() {
-  std::cout<<m_buffer_out.str()<<std::flush;
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::FlushG4cout()
+{
+  std::cout << m_buffer_out.str() << std::flush;
   ResetCout();
   return 0;
 }
 
-void G4BuffercoutDestination::ResetCout() {
+// --------------------------------------------------------------------
+void G4BuffercoutDestination::ResetCout()
+{
   m_buffer_out.str("");
   m_buffer_out.clear();
   m_currentSize_out = 0;
 }
 
-G4int G4BuffercoutDestination::FlushG4cerr() {
-  std::cerr<<m_buffer_err.str()<<std::flush;
+// --------------------------------------------------------------------
+G4int G4BuffercoutDestination::FlushG4cerr()
+{
+  std::cerr << m_buffer_err.str() << std::flush;
   ResetCerr();
   return 0;
 }
 
-void G4BuffercoutDestination::ResetCerr() {
+// --------------------------------------------------------------------
+void G4BuffercoutDestination::ResetCerr()
+{
   m_buffer_err.str("");
   m_buffer_err.clear();
   m_currentSize_err = 0;

@@ -76,6 +76,7 @@ public:
   void GammaToMuMuFactor(G4double val);
   void PositronToMuMuFactor(G4double val);
   void PositronToHadronsFactor(G4double val);
+  void GammaNuclearLEModelLimit(G4double val);
 
   void NeutrinoActivated(G4bool val);
   void NuETotXscActivated(G4bool val);
@@ -109,6 +110,7 @@ private:
   G4double fNuEleCcBias;
   G4double fNuEleNcBias;
   G4double fNuNucleusBias;
+  G4double fGNLowEnergyLimit;
 
   G4String fNuDetectorName;
 

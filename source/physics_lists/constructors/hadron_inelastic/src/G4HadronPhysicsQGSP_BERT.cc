@@ -38,6 +38,8 @@
 // 10.12.2007 G.Folger: Add projectilediffrative option for proton/neutron, off by default
 // 31.10.2012 A.Ribon: Use G4MiscBuilder
 // 19.03.2013 A.Ribon: Replace LEP with FTFP
+// 05.05.2020 A.Ribon: Use QGSP for antibaryons at high energies
+// 07.05.2020 A.Ribon: Use QGSP for hyperons (and anti-hyperons) at high energies
 //
 //----------------------------------------------------------------------------
 //
@@ -66,9 +68,12 @@
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
+#include "G4HyperonQGSPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
+#include "G4QGSPAntiBarionBuilder.hh"
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
@@ -83,6 +88,7 @@
 #include "G4PhysListUtil.hh"
 #include "G4ProcessManager.hh"
 #include "G4HadronicParameters.hh"
+#include "G4HadronicBuilder.hh"
 
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -115,6 +121,7 @@ void G4HadronPhysicsQGSP_BERT::CreateModels()
   Pion();
   Kaon();
   Others();
+  G4HadronicBuilder::BuildBCHadronsQGSP_FTFP_BERT(QuasiElasticQGS);
 }
 
 void G4HadronPhysicsQGSP_BERT::Neutron()
@@ -187,15 +194,29 @@ void G4HadronPhysicsQGSP_BERT::Pion()
 
 void G4HadronPhysicsQGSP_BERT::Others()
 {
-  auto hyp = new G4HyperonFTFPBuilder;
+  // Hyperons (and anti-hyperons)
+  auto hyp = new G4HyperonBuilder;
   AddBuilder(hyp);
-  hyp->Build();
-  
+  auto ftfphyp = new G4HyperonFTFPBuilder(QuasiElasticFTF);
+  AddBuilder(ftfphyp);
+  ftfphyp->SetMaxEnergy(maxFTFP_proton);
+  hyp->RegisterMe(ftfphyp);
+  auto qgsphyp = new G4HyperonQGSPBuilder(QuasiElasticQGS);
+  AddBuilder(qgsphyp);
+  qgsphyp->SetMinEnergy(minQGSP_proton);
+  hyp->RegisterMe(qgsphyp);
+  hyp->Build();  
+  // Antibaryons
   auto abar = new G4AntiBarionBuilder;
   AddBuilder(abar);
   auto ftf = new G4FTFPAntiBarionBuilder(QuasiElasticFTF);
   AddBuilder(ftf);
+  ftf->SetMaxEnergy(maxFTFP_proton);
   abar->RegisterMe(ftf);
+  auto qgs = new G4QGSPAntiBarionBuilder(QuasiElasticQGS);
+  AddBuilder(qgs);
+  qgs->SetMinEnergy(minQGSP_proton);
+  abar->RegisterMe(qgs);
   abar->Build();
 }
 

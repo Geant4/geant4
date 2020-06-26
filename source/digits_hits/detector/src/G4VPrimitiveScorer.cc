@@ -32,6 +32,8 @@
 #include "G4Step.hh"
 #include "G4TouchableHistory.hh"
 #include "G4UnitsTable.hh"
+#include "G4VSolid.hh"
+#include "G4VPVParameterisation.hh"
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
   :primitiveName(name),detector(nullptr),filter(nullptr),verboseLevel(0),indexDepth(depth),
@@ -81,4 +83,44 @@ void G4VPrimitiveScorer::CheckAndSetUnit(const G4String& unit,
 	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) requested for " + GetName();
 	G4Exception("G4VPrimitiveScorer::CheckAndSetUnit","Det0151",JustWarning,msg);
     }
+}
+
+
+
+G4VSolid* G4VPrimitiveScorer::ComputeSolid(G4Step* aStep, G4int replicaIdx )
+{
+  G4VSolid* solid = nullptr;
+  G4StepPoint* preStep= aStep->GetPreStepPoint();
+  
+  auto physVol = preStep->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+
+  if(physParam)
+  { // for parameterized volume
+    if(replicaIdx<0)
+    {
+      G4ExceptionDescription desc;
+      desc << "Incorrect replica number --- GetReplicaNumber : " << replicaIdx << G4endl;
+      G4Exception("G4VPrimitiveScorer::ComputeSolid","DetPS0001",JustWarning,desc);
+      // replicaIdx= 0;  // You must ensure that it's in range !!!
+    }
+    solid = physParam->ComputeSolid(replicaIdx, physVol);
+    solid->ComputeDimensions(physParam,replicaIdx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
+  return solid;
+}
+
+G4VSolid* G4VPrimitiveScorer::ComputeCurrentSolid(G4Step* aStep )
+{
+  G4StepPoint* preStep= aStep->GetPreStepPoint();   
+  // The only difference: did not know the replica number
+  G4int replicaIdx = (static_cast<const G4TouchableHistory*>(preStep->GetTouchable()))
+                                            ->GetReplicaNumber(indexDepth);
+
+  return ComputeSolid(aStep, replicaIdx);
 }

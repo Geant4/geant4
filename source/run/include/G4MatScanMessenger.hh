@@ -30,7 +30,6 @@
 // class description:
 //
 
-
 #ifndef G4MatScanMessenger_HH
 #define G4MatScanMessenger_HH 1
 
@@ -46,28 +45,25 @@ class G4MaterialScanner;
 
 class G4MatScanMessenger : public G4UImessenger
 {
-  public:
-    G4MatScanMessenger(G4MaterialScanner* p1);
-    virtual ~G4MatScanMessenger();
-    
-    virtual G4String GetCurrentValue(G4UIcommand * command);
-    virtual void SetNewValue(G4UIcommand * command,G4String newValue);
+ public:
+  G4MatScanMessenger(G4MaterialScanner* p1);
+  virtual ~G4MatScanMessenger();
 
-  private:
-    G4MaterialScanner* theScanner;
-    
-    G4UIdirectory* msDirectory;
-    G4UIcmdWithoutParameter* scanCmd;
-    G4UIcommand* thetaCmd;
-    G4UIcommand* phiCmd;
-    G4UIcommand* singleCmd;
-    G4UIcmdWith3Vector* single2Cmd;
-    G4UIcmdWithABool* regSenseCmd;
-    G4UIcmdWithAString* regionCmd;
-    G4UIcmdWith3VectorAndUnit* eyePosCmd;
+  virtual G4String GetCurrentValue(G4UIcommand* command);
+  virtual void SetNewValue(G4UIcommand* command, G4String newValue);
+
+ private:
+  G4MaterialScanner* theScanner;
+
+  G4UIdirectory* msDirectory;
+  G4UIcmdWithoutParameter* scanCmd;
+  G4UIcommand* thetaCmd;
+  G4UIcommand* phiCmd;
+  G4UIcommand* singleCmd;
+  G4UIcmdWith3Vector* single2Cmd;
+  G4UIcmdWithABool* regSenseCmd;
+  G4UIcmdWithAString* regionCmd;
+  G4UIcmdWith3VectorAndUnit* eyePosCmd;
 };
 
 #endif
-
-
-

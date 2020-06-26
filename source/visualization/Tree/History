@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+12 December 2019 Ben Morgan (vistree-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
 
 06 July 2019  John Allison (vistree-V10-05-01)
 - Part of vis-V10-05-21.

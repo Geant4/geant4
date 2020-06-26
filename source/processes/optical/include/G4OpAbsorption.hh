@@ -40,41 +40,22 @@
 //              > new physics/tracking scheme
 //              1998-08-25 by Stefano Magni
 //              > Change process to use G4MaterialPropertiesTables
-// mail:        gum@triumf.ca
-//              magni@mi.infn.it
 //
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpAbsorption_h
 #define G4OpAbsorption_h 1
 
-/////////////
-// Includes
-/////////////
-
-#include "globals.hh"
-#include "templates.hh"
-#include "Randomize.hh"
-#include "G4Step.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
 #include "G4OpticalPhoton.hh"
-
-// Class Description:
-// Discrete Process -- Bulk absorption of Optical Photons.
-// Class inherits publicly from G4VDiscreteProcess
-// Class Description - End:
 
 class G4OpAbsorption : public G4VDiscreteProcess
 {
-
 public:
 
   explicit G4OpAbsorption(const G4String& processName = "OpAbsorption",
                         G4ProcessType type = fOptical);
 	virtual ~G4OpAbsorption();
-
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable' only for an optical photon.
@@ -82,23 +63,22 @@ public:
 	virtual G4double GetMeanFreePath(const G4Track& aTrack,
 				 G4double ,
 				 G4ForceCondition*) override;
-        // Returns the absorption length for bulk absorption of optical
-        // photons in media with a specified attenuation length.
+  // Returns the absorption length for bulk absorption of optical
+  // photons in media with a specified attenuation length.
 
 	virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
  				        const G4Step&  aStep) override;
-  // This is the method implementing bulk absorption of optical
-  // photons.
+  // Method implementing bulk absorption of optical photons.
 
 private:
 
   G4OpAbsorption(const G4OpAbsorption &right) = delete;
   G4OpAbsorption& operator=(const G4OpAbsorption &right) = delete;
+
+  size_t  idx_absorption = 0;
 };
 
-////////////////////
 // Inline methods
-////////////////////
 
 inline
 G4bool G4OpAbsorption::IsApplicable(const G4ParticleDefinition& aParticleType)

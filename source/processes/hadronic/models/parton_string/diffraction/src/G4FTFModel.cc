@@ -73,7 +73,6 @@ G4FTFModel::G4FTFModel( const G4String& modelName ) :
   theElastic( new G4ElasticHNScattering() ),
   theAnnihilation( new G4FTFAnnihilation() )
 {
-  G4VPartonStringModel::SetThisPointer( this );
   // ---> JVY theParameters = 0;
   theParameters = new G4FTFParameters();
   //
@@ -219,9 +218,9 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
       theParticipants.InitProjectileNucleus( 
           std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ),
           std::abs( G4int( theProjectile.GetDefinition()->GetPDGCharge() ) ) );
-      theParticipants.theProjectileNucleus->StartLoop();
+      theParticipants.GetProjectileNucleus()->StartLoop();
       G4Nucleon* aNucleon;
-      while ( ( aNucleon = theParticipants.theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+      while ( ( aNucleon = theParticipants.GetProjectileNucleus()->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
         if ( aNucleon->GetDefinition() == G4Proton::Proton() ) {
           aNucleon->SetParticleType( G4AntiProton::AntiProton() ); 
         } else if ( aNucleon->GetDefinition() == G4Neutron::Neutron() ) {
@@ -240,8 +239,8 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
     }
 
     G4ThreeVector BoostVector = theProjectile.GetMomentum() / theProjectile.GetTotalEnergy();
-    theParticipants.theProjectileNucleus->DoLorentzBoost( BoostVector );
-    theParticipants.theProjectileNucleus->DoLorentzContraction( BoostVector );
+    theParticipants.GetProjectileNucleus()->DoLorentzBoost( BoostVector );
+    theParticipants.GetProjectileNucleus()->DoLorentzContraction( BoostVector );
     ProjectileResidualExcitationEnergy = 0.0;
     //G4double ProjectileResidualMass = theProjectile.GetMass();
     ProjectileResidual4Momentum.setVect( theProjectile.GetMomentum() );

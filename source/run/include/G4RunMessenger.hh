@@ -25,30 +25,29 @@
 //
 //
 //
-// 
-//	GEANT 4 class header file 
+//
+//	GEANT 4 class header file
 
 // class description:
 //
 //      This is a messenger class for G4RunManager.
 //      Implemented commands are following;
 //
-//  Commands : 
+//  Commands :
 //    beamOn *              Start a Run.
 //    verbose *             Set the Verbose level of G4RunManager.
-//    printProgress *       Set the frequency of printing out the progress of a run.
-//    dumpRegion *          Dump information of a region.
-//    dumpCouples *         Dump information of material-cuts-couples.
-//    optimizeGeometry *    Set the optimization flag of closing geometry.
-//    breakAtBeginOfEvent * Set a break point at the beginning of every event.
-//    breakAtEndOfEvent *   Set a break point at the end of every event.
-//    abort *               Abort current run processing.
-//    Initialize *          Initialize G4 kernel.
-//    geometryModified *    Force geometry to be closed again.
-//    physicsModified *     Force cross-section tables to be calculated again.
+//    printProgress *       Set the frequency of printing out the progress of a
+//    run. dumpRegion *          Dump information of a region. dumpCouples *
+//    Dump information of material-cuts-couples. optimizeGeometry *    Set the
+//    optimization flag of closing geometry. breakAtBeginOfEvent * Set a break
+//    point at the beginning of every event. breakAtEndOfEvent *   Set a break
+//    point at the end of every event. abort *               Abort current run
+//    processing. Initialize *          Initialize G4 kernel. geometryModified *
+//    Force geometry to be closed again. physicsModified *     Force
+//    cross-section tables to be calculated again.
 //           (and rebuilding physics table will be invoked)
 //    constructScoringWorlds * Construct scoring world(s) if defined
-// 
+//
 
 #ifndef G4RunMessenger_h
 #define G4RunMessenger_h 1
@@ -65,58 +64,56 @@ class G4MaterialScanner;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4RunMessenger: public G4UImessenger
+class G4RunMessenger : public G4UImessenger
 {
-  public:
-    G4RunMessenger(G4RunManager* runMgr);
-    ~G4RunMessenger();
+ public:
+  G4RunMessenger(G4RunManager* runMgr);
+  ~G4RunMessenger();
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+ public:
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+  G4String GetCurrentValue(G4UIcommand* command);
 
-  private:
-    G4RunManager * runManager;
-    G4String macroFileName; // internal use only!!!
-    
-  private: //commands
-    G4UIdirectory *             runDirectory;
-    G4UIcommand *               beamOnCmd;
-    G4UIcmdWithAnInteger *      verboseCmd;
-    G4UIcmdWithAnInteger *      printProgCmd;
-    G4UIcmdWithAnInteger *      nThreadsCmd;
-    G4UIcmdWithoutParameter *   maxThreadsCmd;
-    G4UIcmdWithAnInteger *      pinAffinityCmd;
-    G4UIcommand *               evModCmd;
-    G4UIcmdWithAString *        dumpRegCmd;
-    G4UIcmdWithoutParameter *   dumpCoupleCmd;
-    G4UIcmdWithABool *          optCmd;
-    G4UIcmdWithABool *          brkBoECmd;
-    G4UIcmdWithABool *          brkEoECmd;
-    G4UIcmdWithABool *          abortCmd;
-    G4UIcmdWithoutParameter *   abortEventCmd;
-    G4UIcmdWithoutParameter *   initCmd;
-    G4UIcmdWithoutParameter *   geomCmd;
-    G4UIcmdWithABool*           geomRebCmd;
-    G4UIcmdWithoutParameter *   physCmd;
-    G4UIcmdWithAnInteger *      randEvtCmd;
-    G4UIcommand *               procUICmds;
+ private:
+  G4RunManager* runManager;
+  G4String macroFileName;  // internal use only!!!
 
-    G4UIdirectory *             randomDirectory;
-    G4UIcmdWithAString *        seedCmd;
-    G4UIcmdWithAString *        randDirCmd;
-    G4UIcmdWithABool *          savingFlagCmd;
-    G4UIcmdWithoutParameter *   saveThisRunCmd;
-    G4UIcmdWithoutParameter *   saveThisEventCmd;
-    G4UIcmdWithAString *        restoreRandCmd;
-    G4UIcmdWithABool *          saveEachEventCmd;
-    G4UIcmdWithABool *	 	    restoreRandCmdMT;
-    
-    G4UIcmdWithoutParameter *   constScoreCmd;
+ private:  // commands
+  G4UIdirectory* runDirectory;
+  G4UIcommand* beamOnCmd;
+  G4UIcmdWithAnInteger* verboseCmd;
+  G4UIcmdWithAnInteger* printProgCmd;
+  G4UIcmdWithAnInteger* nThreadsCmd;
+  G4UIcmdWithoutParameter* maxThreadsCmd;
+  G4UIcmdWithAnInteger* pinAffinityCmd;
+  G4UIcommand* evModCmd;
+  G4UIcmdWithAString* dumpRegCmd;
+  G4UIcmdWithoutParameter* dumpCoupleCmd;
+  G4UIcmdWithABool* optCmd;
+  G4UIcmdWithABool* brkBoECmd;
+  G4UIcmdWithABool* brkEoECmd;
+  G4UIcmdWithABool* abortCmd;
+  G4UIcmdWithoutParameter* abortEventCmd;
+  G4UIcmdWithoutParameter* initCmd;
+  G4UIcmdWithoutParameter* geomCmd;
+  G4UIcmdWithABool* geomRebCmd;
+  G4UIcmdWithoutParameter* physCmd;
+  G4UIcmdWithAnInteger* randEvtCmd;
+  G4UIcommand* procUICmds;
 
-    G4MaterialScanner *         materialScanner;
+  G4UIdirectory* randomDirectory;
+  G4UIcmdWithAString* seedCmd;
+  G4UIcmdWithAString* randDirCmd;
+  G4UIcmdWithABool* savingFlagCmd;
+  G4UIcmdWithoutParameter* saveThisRunCmd;
+  G4UIcmdWithoutParameter* saveThisEventCmd;
+  G4UIcmdWithAString* restoreRandCmd;
+  G4UIcmdWithABool* saveEachEventCmd;
+  G4UIcmdWithABool* restoreRandCmdMT;
+
+  G4UIcmdWithoutParameter* constScoreCmd;
+
+  G4MaterialScanner* materialScanner;
 };
 
 #endif
-
-

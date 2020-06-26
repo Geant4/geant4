@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -17,20 +17,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -43,12 +43,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -223,7 +229,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -239,7 +245,7 @@ msc:  for alpha  SubType= 10
 ionIoni:  for alpha  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
@@ -273,10 +279,6 @@ hPairProd:  for anti_proton  SubType=4
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV
-
-nuclearStopping:  for anti_proton SubType=8 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for kaon+  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 1
@@ -436,7 +438,7 @@ hPairProd:  for pi-  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -455,39 +457,39 @@ Index : 1     used in the geometry : Yes
 Index : 2     used in the geometry : Yes
  Material : G4_Ti
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  1.28664 keV    e-  42.9443 keV    e+  42.0872 keV proton 10 keV
+ Energy thresholds :  gamma  1.28552 keV    e-  42.6948 keV    e+  42.4098 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_PLEXIGLASS
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  990 eV     e-  18.2368 keV    e+  17.8256 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  18.4904 keV    e+  17.8006 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  990 eV     e-  34.1725 keV    e+  33.9436 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  34.2283 keV    e+  33.7728 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
- Energy thresholds :  gamma  990 eV     e-  14.0874 keV    e+  14.0874 keV proton 10 keV
+ Energy thresholds :  gamma  990 eV     e-  14.1795 keV    e+  13.7742 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 6     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  14.0874 keV    e+  14.0874 keV proton 0 eV 
+ Energy thresholds :  gamma  990 eV     e-  14.1795 keV    e+  13.7742 keV proton 0 eV 
  Region(s) which use this couple : 
     DetectorLog
 
-====================================================================
+==================================================================
 
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -500,13 +502,13 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=11.400000s Real=12.005350s Sys=0.190000s
+  User=23.070000s Real=23.705487s Sys=0.190000s
 /score/dumpQuantityToFile boxMesh_1 dose dose.out
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.15 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.16 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

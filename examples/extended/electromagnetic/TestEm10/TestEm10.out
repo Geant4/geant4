@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -87,64 +87,64 @@ CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
 
 Lorentz Factor	XTR photon number
 
-107.6	0.0003514
-123.4	0.0006259
-141.5	0.001078
-162.3	0.001513
-186.2	0.002884
-213.7	0.004694
-245.2	0.006087
-281.3	0.009628
-322.9	0.01836
-370.5	0.03094
-425.3	0.04306
-488.2	0.05193
-560.3	0.06382
-643.2	0.08559
-738.3	0.1271
-847.6	0.1977
-973	0.3108
-1117	0.4511
-1282	0.5944
-1472	0.7402
-1690	1.109
-1940	1.51
-2228	1.864
-2558	2.157
-2936	2.391
-3371	2.574
-3871	2.714
-4444	2.821
-5102	2.902
-5858	2.964
-6726	3.01
-7722	3.046
-8866	3.073
-1.018e+04	3.093
-1.169e+04	3.109
-1.342e+04	3.12
-1.541e+04	3.129
-1.769e+04	3.136
-2.031e+04	3.141
-2.332e+04	3.145
-2.677e+04	3.148
-3.074e+04	3.15
-3.529e+04	3.152
-4.052e+04	3.153
-4.652e+04	3.154
-5.342e+04	3.155
-6.133e+04	3.156
-7.042e+04	3.156
-8.085e+04	3.156
-9.283e+04	3.157
+107.6	0.0003516
+123	0.0006162
+140.7	0.001063
+161	0.001462
+184.2	0.002731
+210.8	0.004544
+241.2	0.005942
+276.1	0.00888
+316	0.01662
+361.6	0.02875
+414	0.04088
+473.9	0.05028
+542.4	0.06057
+621	0.07842
+710.9	0.1139
+813.9	0.1726
+931.8	0.2712
+1067	0.4029
+1221	0.5447
+1398	0.6784
+1601	0.9513
+1833	1.348
+2099	1.719
+2403	2.032
+2752	2.287
+3151	2.489
+3607	2.646
+4131	2.767
+4730	2.859
+5415	2.929
+6201	2.983
+7100	3.024
+8130	3.055
+9309	3.078
+1.066e+04	3.097
+1.22e+04	3.11
+1.397e+04	3.121
+1.6e+04	3.129
+1.832e+04	3.135
+2.098e+04	3.14
+2.402e+04	3.143
+2.751e+04	3.146
+3.15e+04	3.148
+3.607e+04	3.15
+4.13e+04	3.151
+4.729e+04	3.152
+5.415e+04	3.153
+6.2e+04	3.153
+7.099e+04	3.154
+8.129e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.14 s
+total time for build X-ray TR energy loss tables = 0.15 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.13 s
+total time for build XTR angle for given energy tables = 0.18 s
 
 msc:  for e+  SubType= 10
       RangeFactor= 0.04, stepLimType: 1, latDisp: 1
@@ -179,56 +179,56 @@ CoulombScat:  for e+, integral:1  SubType=1 BuildTable=1
 
 Lorentz Factor	XTR photon number
 
-107.6	0.0003514
-123.4	0.0006259
-141.5	0.001078
-162.3	0.001513
-186.2	0.002884
-213.7	0.004694
-245.2	0.006087
-281.3	0.009628
-322.9	0.01836
-370.5	0.03094
-425.3	0.04306
-488.2	0.05193
-560.3	0.06382
-643.2	0.08559
-738.3	0.1271
-847.6	0.1977
-973	0.3108
-1117	0.4511
-1282	0.5944
-1472	0.7402
-1690	1.109
-1940	1.51
-2228	1.864
-2558	2.157
-2936	2.391
-3371	2.574
-3871	2.714
-4444	2.821
-5102	2.902
-5858	2.964
-6726	3.01
-7722	3.046
-8866	3.073
-1.018e+04	3.093
-1.169e+04	3.109
-1.342e+04	3.12
-1.541e+04	3.129
-1.769e+04	3.136
-2.031e+04	3.141
-2.332e+04	3.145
-2.677e+04	3.148
-3.074e+04	3.15
-3.529e+04	3.152
-4.052e+04	3.153
-4.652e+04	3.154
-5.342e+04	3.155
-6.133e+04	3.156
-7.042e+04	3.156
-8.085e+04	3.156
-9.283e+04	3.157
+107.6	0.0003516
+123	0.0006162
+140.7	0.001063
+161	0.001462
+184.2	0.002731
+210.8	0.004544
+241.2	0.005942
+276.1	0.00888
+316	0.01662
+361.6	0.02875
+414	0.04088
+473.9	0.05028
+542.4	0.06057
+621	0.07842
+710.9	0.1139
+813.9	0.1726
+931.8	0.2712
+1067	0.4029
+1221	0.5447
+1398	0.6784
+1601	0.9513
+1833	1.348
+2099	1.719
+2403	2.032
+2752	2.287
+3151	2.489
+3607	2.646
+4131	2.767
+4730	2.859
+5415	2.929
+6201	2.983
+7100	3.024
+8130	3.055
+9309	3.078
+1.066e+04	3.097
+1.22e+04	3.11
+1.397e+04	3.121
+1.6e+04	3.129
+1.832e+04	3.135
+2.098e+04	3.14
+2.402e+04	3.143
+2.751e+04	3.146
+3.15e+04	3.148
+3.607e+04	3.15
+4.13e+04	3.151
+4.729e+04	3.152
+5.415e+04	3.153
+6.2e+04	3.153
+7.099e+04	3.154
+8.129e+04	3.154
 
 total time for build X-ray TR energy loss tables = 0.14 s
 Build angle for energy distribution according the current radiator
@@ -236,7 +236,7 @@ Build angle for energy distribution according the current radiator
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.13 s
+total time for build XTR angle for given energy tables = 0.18 s
 
 msc:  for proton  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 0
@@ -523,7 +523,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
@@ -535,18 +535,18 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : radiatorMat
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1.07314 keV    e-  83.5287 keV    e+  82.4135 keV proton 100 keV
+ Energy thresholds :  gamma  1.07285 keV    e-  83.4168 keV    e+  82.3069 keV proton 100 keV
  Region(s) which use this couple : 
     XTRradiator
 
 Index : 2     used in the geometry : Yes
  Material : Xe15CO2
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  2.08861 keV    e+  2.0697 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  2.10545 keV    e+  2.04897 keV proton 100 keV
  Region(s) which use this couple : 
     XTRdEdxDetector
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 ### Run 0 start.
@@ -560,22 +560,22 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.280000s Real=0.277119s Sys=0.000000s
+  User=0.570000s Real=0.575596s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
- Mean energy deposit in absorber = 0.0480988 +-0.0184346  MeV 
- Total number of XTR gammas = 2694
- Total number of all gammas = 2800
+ Mean energy deposit in absorber = 0.0494515 +-0.0190899  MeV 
+ Total number of XTR gammas = 2713
+ Total number of all gammas = 2816
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1216350760, 1997571281
+ Current couple of seeds = 2078979988, 399844062
 ----------------------------------------
 ... write Root file : testem10.root - done
 ... close Root file : testem10.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.04 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.042 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

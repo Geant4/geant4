@@ -41,8 +41,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4PionBuilder::
-G4PionBuilder(): wasActivated(false) 
+G4PionBuilder::G4PionBuilder()
 {  
   thePionPlusInelastic=new G4PionPlusInelasticProcess;
   thePionMinusInelastic=new G4PionMinusInelasticProcess;
@@ -51,8 +50,6 @@ G4PionBuilder(): wasActivated(false)
 void G4PionBuilder::
 Build()
 {
-  wasActivated = true;
-
   std::vector<G4VPionBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {

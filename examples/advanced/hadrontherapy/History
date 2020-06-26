@@ -8,10 +8,14 @@ https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+06.03.2020 G.A.P. Cirrone; Tag: hadrontherapy-V10-06-00
+      - Many osolete macro files were deleted
+      - Code cleaning; removed ROOT script folder, other cosmetics
+
 19.11.2019 G. Folger     Tag: hadrontherapy-V10-05-02
-- remove using namespace std from header files:
-    HadrontherapyElectricTabulatedField3D.hh and HadrontherapyMagneticField3D.hh
-  put the using into the .cc file, and make use of endl consistent with g4cout or std::cout  
+      - remove using namespace std from header files:
+        HadrontherapyElectricTabulatedField3D.hh and HadrontherapyMagneticField3D.hh
+        put the using into the .cc file, and make use of endl consistent with g4cout or std::cout
 
 30.10.2019, S. Guatelli, Tag: hadrontherapy-V10-05-01
       - namespace std deleted

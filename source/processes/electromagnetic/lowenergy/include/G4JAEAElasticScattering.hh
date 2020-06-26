@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /*
-Authors:
+Author:
 M. Omer and R. Hajima  on   17 October 2016
 contact:
 omer.mohamed@jaea.go.jp and hajima.ryoichi@qst.go.jp
@@ -60,12 +60,12 @@ public:
 
 
 // Adding an enumerator to those included in G4EmProcessSubType to define sub-type of EM processes
-// The last enumerator has a value of 24 so, G4JAEAElasticScattering should be 25 unless change in
-// order to be made by Geant4 team. Temporarily, the enum is assigned as 11 of G4RayleighScattering.
 
 
+//SI
 enum G4EmProcessSubType
 {fG4JAEAElasticScattering=11};
+//
 
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();

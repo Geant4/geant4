@@ -23,27 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiUserSteppingAction class implementation
 //
-// ---------------------------------------------------------------
-//
-// G4MultiUserSteppingAction.cc
-//
-//   Created on: Jan 17, 2016
-//       Author: adotti
-//
-// ---------------------------------------------------------------
+// Author: Andrea Dotti, SLAC - 17 January 2016
+// --------------------------------------------------------------------
 
 #include <G4MultiSteppingAction.hh>
 #include <algorithm>
 
-void G4MultiSteppingAction::UserSteppingAction(const G4Step* step) {
-  std::for_each( begin() , end() ,
-      [step](G4UserSteppingActionUPtr& e) { e->UserSteppingAction(step); }
+void G4MultiSteppingAction::UserSteppingAction(const G4Step* step)
+{
+  std::for_each( begin(), end(),
+    [step](G4UserSteppingActionUPtr& e) { e->UserSteppingAction(step); }
   );
 }
 
-void G4MultiSteppingAction::SetSteppingManagerPointer(G4SteppingManager* pValue) {
-  std::for_each( begin() , end() ,
-      [pValue](G4UserSteppingActionUPtr& e) { e->SetSteppingManagerPointer(pValue); }
+void G4MultiSteppingAction::SetSteppingManagerPointer(G4SteppingManager* pVal)
+{
+  std::for_each( begin(), end(),
+    [pVal](G4UserSteppingActionUPtr& e) { e->SetSteppingManagerPointer(pVal); }
   );
 }

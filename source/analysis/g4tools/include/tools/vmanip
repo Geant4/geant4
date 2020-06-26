@@ -87,8 +87,7 @@ inline void append(std::vector<T>& a_vec,typename std::vector<T>::size_type a_nu
 template <class T>
 inline void removep(std::vector<T*>& a_vec,const T* a_elem) {
   typedef typename std::vector<T*>::iterator it_t;
-  it_t it;
-  for(it=a_vec.begin();it!=a_vec.end();) {
+  for(it_t it=a_vec.begin();it!=a_vec.end();) {
     if(*it==a_elem) {
       it = a_vec.erase(it);
     } else { 
@@ -100,8 +99,7 @@ inline void removep(std::vector<T*>& a_vec,const T* a_elem) {
 template <class T>
 inline bool is_inp(const std::vector<T*>& a_vec,const T* a_item){
   typedef typename std::vector<T*>::const_iterator it_t;
-  it_t it;
-  for(it=a_vec.begin();it!=a_vec.end();++it) {
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) {
     if(*it==a_item) return true;
   }
   return false;
@@ -160,7 +158,7 @@ inline void unique(std::vector<T>& a_vec) {
   for(it=a_vec.begin();it!=a_vec.end();++it) {
     it2 = it;it2++; //TOOLS_STL : it2=it+1 does not compile.
     for(;it2!=a_vec.end();) {
-      if(*it2==*it) {
+      if((*it2)==(*it)) {
         it2 = a_vec.erase(it2);
       } else { 
         ++it2;

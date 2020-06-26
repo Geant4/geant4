@@ -131,6 +131,42 @@ G4EmExtraParametersMessenger::G4EmExtraParametersMessenger(G4EmExtraParameters* 
   unitPrm1->SetDefaultValue("mm");
   StepFuncCmd1->SetParameter(unitPrm1);
 
+  StepFuncCmd2 = new G4UIcommand("/process/eLoss/StepFunctionLightIons",this);
+  StepFuncCmd2->SetGuidance("Set the energy loss step limitation parameters for light ions.");
+  StepFuncCmd2->SetGuidance("  dRoverR   : max Range variation per step");
+  StepFuncCmd2->SetGuidance("  finalRange: range for final step");
+  StepFuncCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  G4UIparameter* dRoverRPrm2 = new G4UIparameter("dRoverRLIons",'d',false);
+  dRoverRPrm2->SetParameterRange("dRoverRLIons>0. && dRoverRLIons<=1.");
+  StepFuncCmd2->SetParameter(dRoverRPrm2);
+
+  G4UIparameter* finalRangePrm2 = new G4UIparameter("finalRangeLIons",'d',false);
+  finalRangePrm2->SetParameterRange("finalRangeLIons>0.");
+  StepFuncCmd2->SetParameter(finalRangePrm2);
+
+  G4UIparameter* unitPrm2 = new G4UIparameter("unit",'s',true);
+  unitPrm2->SetDefaultValue("mm");
+  StepFuncCmd2->SetParameter(unitPrm2);
+
+  StepFuncCmd3 = new G4UIcommand("/process/eLoss/StepFunctionIons",this);
+  StepFuncCmd3->SetGuidance("Set the energy loss step limitation parameters for ions.");
+  StepFuncCmd3->SetGuidance("  dRoverR   : max Range variation per step");
+  StepFuncCmd3->SetGuidance("  finalRange: range for final step");
+  StepFuncCmd3->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  G4UIparameter* dRoverRPrm3 = new G4UIparameter("dRoverRMuHad",'d',false);
+  dRoverRPrm3->SetParameterRange("dRoverRIons>0. && dRoverRIons<=1.");
+  StepFuncCmd3->SetParameter(dRoverRPrm3);
+
+  G4UIparameter* finalRangePrm3 = new G4UIparameter("finalRangeIons",'d',false);
+  finalRangePrm3->SetParameterRange("finalRangeIons>0.");
+  StepFuncCmd3->SetParameter(finalRangePrm3);
+
+  G4UIparameter* unitPrm3 = new G4UIparameter("unit",'s',true);
+  unitPrm3->SetDefaultValue("mm");
+  StepFuncCmd3->SetParameter(unitPrm3);
+
   G4UIparameter* subSec = new G4UIparameter("subSec",'s',false);
   SubSecCmd->SetParameter(subSec);
 
@@ -235,6 +271,8 @@ G4EmExtraParametersMessenger::~G4EmExtraParametersMessenger()
   delete qeCmd;
   delete StepFuncCmd;
   delete StepFuncCmd1;
+  delete StepFuncCmd2;
+  delete StepFuncCmd3;
   delete dirSplitCmd;
   delete dirSplitTargetCmd;
   delete dirSplitRadiusCmd;
@@ -257,7 +295,7 @@ void G4EmExtraParametersMessenger::SetNewValue(G4UIcommand* command,
     std::istringstream is(newValue);
     is >> s1 >> s2;
     theParameters->AddPhysics(s1, s2);
-  } else if (command == StepFuncCmd || command == StepFuncCmd1) {
+  } else if (command == StepFuncCmd || command == StepFuncCmd1 || command == StepFuncCmd2 || command == StepFuncCmd3) {
     G4double v1,v2;
     G4String unt;
     std::istringstream is(newValue);
@@ -265,8 +303,12 @@ void G4EmExtraParametersMessenger::SetNewValue(G4UIcommand* command,
     v2 *= G4UIcommand::ValueOf(unt);
     if(command == StepFuncCmd) {
       theParameters->SetStepFunction(v1,v2);
-    } else {
+    } else if(command == StepFuncCmd1) {
       theParameters->SetStepFunctionMuHad(v1,v2);
+    } else if(command == StepFuncCmd2) {
+      theParameters->SetStepFunctionLightIons(v1,v2);
+    } else {
+      theParameters->SetStepFunctionIons(v1,v2);
     }
     physicsModified = true;
   } else if (command == SubSecCmd) {

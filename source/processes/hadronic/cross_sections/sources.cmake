@@ -79,6 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4CrossSectionInelastic.hh
 	G4CrossSectionPairGG.hh
 	G4ElectroNuclearCrossSection.hh
+        G4ElNeutrinoNucleusTotXsc.hh
         G4DiffElasticRatio.hh
 	G4EMDissociationCrossSection.hh
 	G4EMDissociationSpectrum.hh
@@ -156,6 +157,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4CrossSectionPairGG.cc
         G4DiffElasticRatio.cc
 	G4ElectroNuclearCrossSection.cc
+        G4ElNeutrinoNucleusTotXsc.cc
 	G4EMDissociationCrossSection.cc
 	G4EMDissociationSpectrum.cc
 	G4GeneralSpaceNNCrossSection.cc

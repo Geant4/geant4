@@ -7,6 +7,10 @@
                            History file
                            ------------
 
+29.05.2020 - D.Sawkey (air_shower-V10-06-00)
+             added an #include to UltraDetectorConstruction, due to optical 
+             physics changes.
+
 8 November, 2019 B. Tomé (air_shower-V10-05-01)
 - Minor changes, mainly stetics. 
 

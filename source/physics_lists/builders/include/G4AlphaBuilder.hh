@@ -56,8 +56,6 @@ class G4AlphaBuilder : public G4PhysicsBuilderInterface
     G4AlphaInelasticProcess * theAlphaInelastic;
     
     std::vector<G4VAlphaBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

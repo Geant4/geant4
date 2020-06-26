@@ -52,6 +52,8 @@ enum G4MaterialPropertyIndex   {
   kRAYLEIGH,                   // Rayleigh scattering attenuation length
   kWLSCOMPONENT,               // the relative emission spectrum of the material as a function of the photon's momentum
   kWLSABSLENGTH,               // the absorption length of the material as a function of the photon's momentum
+  kWLSCOMPONENT2,               // the relative emission spectrum of the material as a function of the photon's momentum
+  kWLSABSLENGTH2,               // the absorption length of the material as a function of the photon's momentum
   kABSLENGTH,                  // the absorption length
   kFASTCOMPONENT,              // fast component of scintillation
   kSLOWCOMPONENT,              // slow component of scintillation
@@ -61,6 +63,9 @@ enum G4MaterialPropertyIndex   {
   kALPHASCINTILLATIONYIELD,    // scintillation light yield by alphas
   kIONSCINTILLATIONYIELD,      // scintillation light yield by ions
   kELECTRONSCINTILLATIONYIELD, // scintillation light yield by electrons
+  kSCINTILLATIONCOMPONENT1,    // scintillation light yield vectors for 
+  kSCINTILLATIONCOMPONENT2,    //   3 channels
+  kSCINTILLATIONCOMPONENT3,    // "
   kNumberOfPropertyIndex       // the number of G4MaterialPropertyIndex
 } ;
 
@@ -72,22 +77,24 @@ enum G4MaterialConstPropertyIndex
   kRS_SCALE_FACTOR,             // Rayleigh scattering scale factor
   kWLSMEANNUMBERPHOTONS,        // WLS mean number of photons
   kWLSTIMECONSTANT,             // any time delay which may occur between absorption and re-emission of the photon
+  kWLSMEANNUMBERPHOTONS2,        // WLS mean number of photons
+  kWLSTIMECONSTANT2,             // any time delay which may occur between absorption and re-emission of the photon
   kMIEHG_FORWARD,               // forward angle of Mie scattering based on Henyey-Greenstein phase function
   kMIEHG_BACKWARD,              // backward angle of Mie scattering based on Henyey-Greenstein phase function
   kMIEHG_FORWARD_RATIO,	        // ratio of the MIEHG forward scattering 
   kSCINTILLATIONYIELD,	        // scintillation light yield
-  kRESOLUTIONSCALE,	        // resolution scale
-  kFASTTIMECONSTANT,	        // fast scintillation time constant 
+  kRESOLUTIONSCALE,	            // resolution scale
+  kFASTTIMECONSTANT,	          // fast scintillation time constant 
   kFASTSCINTILLATIONRISETIME,   // rise time of fast scintillation 
-  kSLOWTIMECONSTANT,	        // slow scintillation time constant
+  kSLOWTIMECONSTANT,	          // slow scintillation time constant
   kSLOWSCINTILLATIONRISETIME,   // rise time of slow scintillation 
   kYIELDRATIO,                  // yield ratio
   kFERMIPOT,                    // the Fermi potential (in neV)
   kDIFFUSION,                   // diffusion
-  kSPINFLIP,		        // spin flip
-  kLOSS,		        // loss
-  kLOSSCS,		        // loss cross-section
-  kABSCS,		        // 1/v energy dependent absorption cross section
+  kSPINFLIP,		                // spin flip
+  kLOSS,		                    // loss
+  kLOSSCS,		                  // loss cross-section
+  kABSCS,		                    // 1/v energy dependent absorption cross section
   kSCATCS,                      // incoherent elastic scattering cross-section
   kMR_NBTHETA,                  // number of theta bins of microroughness (MR)
   kMR_NBE,                      // number of energy bins 
@@ -100,6 +107,33 @@ enum G4MaterialConstPropertyIndex
   kMR_ANGNOTHETA,               // number of theta angles in the look-up table
   kMR_ANGNOPHI,                 // number of phi angles in the look-up table
   kMR_ANGCUT,                   // angular cut
+  kSCINTILLATIONTIMECONSTANT1,  // three scintillation decay time constants
+  kSCINTILLATIONTIMECONSTANT2,  // "
+  kSCINTILLATIONTIMECONSTANT3,  // "
+  kSCINTILLATIONRISETIME1,      // three scintillation rise times
+  kSCINTILLATIONRISETIME2,      // "
+  kSCINTILLATIONRISETIME3,      // "
+  kSCINTILLATIONYIELD1,         // relative yields for 3 scintillation channels
+  kSCINTILLATIONYIELD2,         // "
+  kSCINTILLATIONYIELD3,         // "
+  kPROTONSCINTILLATIONYIELD1,   // scintillation light yield by protons  
+  kPROTONSCINTILLATIONYIELD2,   //   for 3 channels
+  kPROTONSCINTILLATIONYIELD3,   // "
+  kDEUTERONSCINTILLATIONYIELD1, // scintillation light yield by deuterons
+  kDEUTERONSCINTILLATIONYIELD2, //   for 3 channels
+  kDEUTERONSCINTILLATIONYIELD3, // "
+  kTRITONSCINTILLATIONYIELD1,   // scintillation light yield by tritons
+  kTRITONSCINTILLATIONYIELD2,   //   for 3 channels
+  kTRITONSCINTILLATIONYIELD3,   // "
+  kALPHASCINTILLATIONYIELD1,    // scintillation light yield by alphas
+  kALPHASCINTILLATIONYIELD2,    //   for 3 channels
+  kALPHASCINTILLATIONYIELD3,    // "
+  kIONSCINTILLATIONYIELD1,      // scintillation light yield by ions
+  kIONSCINTILLATIONYIELD2,      //   for 3 channels
+  kIONSCINTILLATIONYIELD3,      // "
+  kELECTRONSCINTILLATIONYIELD1, // scintillation light yield by electrons
+  kELECTRONSCINTILLATIONYIELD2, //   for 3 channels
+  kELECTRONSCINTILLATIONYIELD3, // "
   kNumberOfConstPropertyIndex   // the number of G4MaterialConstPropertyIndex
 };
 

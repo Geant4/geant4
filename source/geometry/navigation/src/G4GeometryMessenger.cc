@@ -36,6 +36,7 @@
 #include "G4GeometryManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
+#include "G4PropagatorInField.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -317,6 +318,8 @@ G4GeometryMessenger::SetCheckMode(G4String input)
   G4bool mode = chkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
   navigator->CheckMode(mode);
+  G4PropagatorInField* pField = tmanager->GetPropagatorInField();
+  if (pField != nullptr)  { pField->CheckMode(mode); }
 }
 
 //

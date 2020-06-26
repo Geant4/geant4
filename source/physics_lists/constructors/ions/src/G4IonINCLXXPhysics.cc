@@ -68,13 +68,6 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonINCLXXPhysics);
 
-G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXDeuteron = nullptr;
-G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXTriton = nullptr;
-G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXHe3 = nullptr;
-G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXAlpha = nullptr;
-G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXIons = nullptr;
-G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theFTFPBuilder = nullptr;
-
 G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
   G4IonINCLXXPhysics("IonINCLXX", ver)
 {}
@@ -92,25 +85,15 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& nname, G4int ver)
 }
 
 G4IonINCLXXPhysics::~G4IonINCLXXPhysics()
-{
-  //For MT need to explicitly set back pointers to zero:
-  //variables are static and if new threads are created we can have problems
-  //since variable is still pointing old value
-  delete theFTFPBuilder; theFTFPBuilder=nullptr;
-  delete theINCLXXDeuteron; theINCLXXDeuteron = nullptr;
-  delete theINCLXXTriton; theINCLXXTriton=nullptr;
-  delete theINCLXXHe3; theINCLXXHe3=nullptr;
-  delete theINCLXXAlpha; theINCLXXAlpha=nullptr;
-  delete theINCLXXIons; theINCLXXIons=nullptr;
-}
+{}
 
 void G4IonINCLXXPhysics::ConstructProcess()
 {
-  theINCLXXDeuteron= new G4INCLXXInterface();
-  theINCLXXTriton= new G4INCLXXInterface();
-  theINCLXXHe3= new G4INCLXXInterface();
-  theINCLXXAlpha= new G4INCLXXInterface();
-  theINCLXXIons= new G4INCLXXInterface();
+  G4INCLXXInterface* theINCLXXDeuteron= new G4INCLXXInterface();
+  G4INCLXXInterface* theINCLXXTriton= new G4INCLXXInterface();
+  G4INCLXXInterface* theINCLXXHe3= new G4INCLXXInterface();
+  G4INCLXXInterface* theINCLXXAlpha= new G4INCLXXInterface();
+  G4INCLXXInterface* theINCLXXIons= new G4INCLXXInterface();
 
   G4HadronicInteraction* p =
     G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
@@ -123,8 +106,8 @@ void G4IonINCLXXPhysics::ConstructProcess()
   G4double emax = G4HadronicParameters::Instance()->GetMaxEnergy();
   G4HadronicInteraction* theFTFP = nullptr;
   if(emax > emaxINCLXX) {
-    theFTFPBuilder = new G4FTFBuilder("FTFP",thePreCompound);
-    theFTFP = theFTFPBuilder->GetModel();
+    G4FTFBuilder theFTFPBuilder("FTFP",thePreCompound);
+    theFTFP = theFTFPBuilder.GetModel();
     theFTFP->SetMinEnergy(emaxINCLXX - deltaE);
     theFTFP->SetMaxEnergy(emax);
   }

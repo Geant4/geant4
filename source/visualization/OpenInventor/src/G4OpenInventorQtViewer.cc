@@ -54,6 +54,10 @@
 #include "G4VInteractorManager.hh"
 #include "G4VisManager.hh"
 
+#ifndef G4GMAKE
+#include "moc_G4OpenInventorQtViewer.cpp"
+#endif
+
 G4OpenInventorQtViewer::G4OpenInventorQtViewer(
    G4OpenInventorSceneHandler& sceneHandler, const G4String& name)
    : G4OpenInventorViewer(sceneHandler, name)
@@ -70,8 +74,9 @@ void G4OpenInventorQtViewer::Initialise()
 
   QWidget* parent = SoQt::getTopLevelWidget();
 
-  G4cout << "G4OIQtViewer: Creating G4OIQtExaminerViewer with parent " << 
-     parent << G4endl;
+  // FWJ DEBUG
+  //  G4cout << "G4OIQtViewer: Creating G4OIQtExaminerViewer with parent " <<
+  //     parent << G4endl;
 
   //  fViewer = new SoQtExaminerViewer(parent, "Geant4", TRUE);
   fViewer = new G4OpenInventorQtExaminerViewer(parent, "Geant4", TRUE);
@@ -79,8 +84,8 @@ void G4OpenInventorQtViewer::Initialise()
   //  G4String wName = fName;
   //
   //  QWidget parent = (QWidget)fInteractorManager->GetParentInteractor();
-  int width = 600;
-  int height = 600;
+  int width = fVP.GetWindowSizeHintX();
+  int height = fVP.GetWindowSizeHintY();
 
   // FWJ not sure what this is for
   //     fInteractorManager->AddShell(fShell);
@@ -100,10 +105,13 @@ void G4OpenInventorQtViewer::Initialise()
   fViewer->setGLRenderAction(fGL2PSAction);
 
   // Else :
-  G4cout << "G4OpenInventorQtViewer: setting scene graph " << 
-     fSoSelection << G4endl;
-  G4cout << "G4OpenInventorQtViewer: getNumChildren " << 
-     fSoSelection->getNumChildren() << G4endl;
+
+  // FWJ DEBUG
+  //  G4cout << "G4OpenInventorQtViewer: setting scene graph " <<
+  //     fSoSelection << G4endl;
+  //  G4cout << "G4OpenInventorQtViewer: getNumChildren " <<
+  //     fSoSelection->getNumChildren() << G4endl;
+
   fViewer->setSceneGraph(fSoSelection);
   fViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
   fViewer->viewAll();
@@ -113,14 +121,20 @@ void G4OpenInventorQtViewer::Initialise()
 
   // This SHOULD invoke the event loop:
   //  if(fShell) {
+
   QWidget* mainWin = SoQt::getTopLevelWidget();
-  G4cout << "G4OIQtViewer: calling SoQt::show on mainWin = " << mainWin 
-         << G4endl;
+
+  // FWJ DEBUG
+  //  G4cout << "G4OIQtViewer: calling SoQt::show on mainWin = " << mainWin
+  //         << G4endl;
+
   SoQt::show(mainWin);
   fInteractorManager->FlushAndWaitExecution();
+
   //  }
   fInteractorManager->SetCreatedInteractor(fViewer->getWidget());
 }
+
 
 G4OpenInventorQtViewer::~G4OpenInventorQtViewer()
 {
@@ -175,7 +189,7 @@ SoCamera* G4OpenInventorQtViewer::GetCamera () {
   // Widget menu = XmCreatePulldownMenu(aMenuBar,(char*)aName.c_str(),NULL,0);
   // // Cascade button :
   // Arg args[2];
-  // XmString cps = 
+  // XmString cps =
   //   XmStringLtoRCreate((char*)aLabel.c_str(),(char*)XmSTRING_DEFAULT_CHARSET);
   // XtSetArg (args[0],XmNlabelString,cps);
   // XtSetArg (args[1],XmNsubMenuId,menu);

@@ -1055,14 +1055,16 @@ bool G4OpenGLViewer::setExportFilename(G4String name,G4bool inc) {
   } else {
     // guess format by extention
     std::string extension = name.substr(name.find_last_of(".") + 1);
-    // no format
-    if (name.size() != extension.size()) {
-      if (! setExportImageFormat(extension, false)) {
+    // If there is a dot in the name the above might find rubbish, so...
+    if (extension.size() >= 3 && extension.size() <= 4) {  // Possible extension
+      if (setExportImageFormat(extension, false)) {  // Extension found
+        fExportFilename = name.substr(0,name.find_last_of("."));
+      } else {  // No viable extension found
         return false;
       }
+    } else {  // Assume name is already the required without-extension part
+        fExportFilename = name;
     }
-    // get the name
-    fExportFilename = name.substr(0,name.find_last_of("."));
   }
   return true;
 }

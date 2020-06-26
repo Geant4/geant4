@@ -14,7 +14,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
   CPPFLAGS  += -DGL_SILENCE_DEPRECATION
-  G4USE_STD11 := 1
   ifdef G4USE_STD14
     CPPFLAGS  += -std=c++14
     CXXFLAGS  += -std=c++14
@@ -100,7 +99,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     ifneq ($(OGLPATH),)
       OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
     else
-      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+      OGLLIBS := -L$(OGLHOME)/lib -lGL
     endif
   endif
   ifndef OGLLIBS
@@ -112,13 +111,13 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
       ifeq ($(DARWIN_VERSION),9)
         # the following lines are for building on MacOSX 10.5 "Leopard"
-        OGLLIBS := -Wl,$(OGLPATH)/Libraries/libGL.dylib -L$(OGLHOME)/lib -lGLU -lGL
+        OGLLIBS := -Wl,$(OGLPATH)/Libraries/libGL.dylib -L$(OGLHOME)/lib -lGL
       else
         # the following lines are for building on MacOSX > 10.5
         OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
       endif
     else
-      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+      OGLLIBS := -L$(OGLHOME)/lib -lGL
     endif
   endif
 

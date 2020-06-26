@@ -72,16 +72,12 @@ using namespace std;
 
 G4_DECLARE_PHYSCONSTR_FACTORY( G4IonPhysicsPHP );
 
-G4ThreadLocal G4FTFBuilder* G4IonPhysicsPHP::theBuilder = nullptr;
-
 G4IonPhysicsPHP::G4IonPhysicsPHP( G4int ver )
-  : G4IonPhysicsPHP( "ionInelasticFTFP_BIC_PHP" )
-{
-  verbose = ver;
-}
+  : G4IonPhysicsPHP( "ionInelasticFTFP_BIC_PHP", ver)
+{}
 
-G4IonPhysicsPHP::G4IonPhysicsPHP( const G4String& nname )
-  : G4VPhysicsConstructor( nname ), verbose( 1 ) 
+G4IonPhysicsPHP::G4IonPhysicsPHP( const G4String& nname, G4int ver )
+  : G4VPhysicsConstructor( nname ), verbose( ver ) 
 {
   SetPhysicsType( bIons );
   G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
@@ -89,20 +85,14 @@ G4IonPhysicsPHP::G4IonPhysicsPHP( const G4String& nname )
   if ( verbose > 1 ) G4cout << "### G4IonPhysics: " << nname << G4endl;
 }
 
-
 G4IonPhysicsPHP::~G4IonPhysicsPHP() {
-  //Explictly setting pointers to zero is actually needed.
-  //These are static variables, in case we restart threads we need to re-create objects
-  delete theBuilder;  theBuilder = nullptr;
 }
-
 
 void G4IonPhysicsPHP::ConstructParticle() {
   //  Construct ions
   G4IonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
-
 
 void G4IonPhysicsPHP::ConstructProcess() {
 
@@ -129,8 +119,8 @@ void G4IonPhysicsPHP::ConstructProcess() {
   // FTFP
   G4HadronicInteraction* theFTFP = nullptr;
   if(maxFTF > maxBIC) {
-    theBuilder = new G4FTFBuilder( "FTFP", thePreCompound );
-    theFTFP = theBuilder->GetModel();
+    G4FTFBuilder theBuilder( "FTFP", thePreCompound );
+    theFTFP = theBuilder.GetModel();
     theFTFP->SetMinEnergy( minFTF );
     theFTFP->SetMaxEnergy( maxFTF );
   }
@@ -191,7 +181,6 @@ void G4IonPhysicsPHP::ConstructProcess() {
 
   if ( verbose > 1 ) G4cout << "G4IonPhysicsPHP::ConstructProcess done! " << G4endl;
 }
-
 
 void G4IonPhysicsPHP::AddProcess( const G4String& name, G4ParticleDefinition* part, 
                                   G4ParticleHPInelasticData* xsecPHP, G4HadronicInteraction* aPHP, 

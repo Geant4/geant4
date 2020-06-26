@@ -89,8 +89,6 @@ public:
   virtual void ModelDescription(std::ostream& outFile) const ;
   virtual void PropagateModelDescription(std::ostream& outFile) const ;
 
-private:
-
   G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) = delete;
   const G4VIntraNuclearTransportModel& operator=(const G4VIntraNuclearTransportModel &right) = delete;
   G4bool operator==(const G4VIntraNuclearTransportModel& right) const = delete;

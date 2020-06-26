@@ -138,15 +138,26 @@ public: //plottable
     }
   }
 public: //bins1D
-  virtual void bins_Sw_range(float& a_mn,float& a_mx) const {
-    a_mn = (float)m_data.min_bin_height();
-    a_mx = (float)m_data.max_bin_height();
+  virtual void bins_Sw_range(float& a_mn,float& a_mx,bool a_with_entries) const {
+    if(a_with_entries && m_data.has_entries_per_bin()) {
+      double mn,mx;
+      m_data.min_bin_height_with_entries(mn);
+      m_data.max_bin_height_with_entries(mx);
+      a_mn = float(mn);
+      a_mx = float(mx);
+    } else {
+      a_mn = (float)m_data.min_bin_height();
+      a_mx = (float)m_data.max_bin_height();
+    }
   }
   virtual unsigned int bins() const {return m_data.axis().bins();}
   virtual float axis_min() const {return (float)m_data.axis().lower_edge();}
   virtual float axis_max() const {return (float)m_data.axis().upper_edge();}
   virtual float bin_lower_edge(int aI) const {return (float)m_data.axis().bin_lower_edge(aI);}
   virtual float bin_upper_edge(int aI) const {return (float)m_data.axis().bin_upper_edge(aI);}
+
+  virtual bool has_entries_per_bin() const {return m_data.has_entries_per_bin();}
+  virtual unsigned int bin_entries(int aI) const {return m_data.bin_entries(aI);}
 
   virtual float bin_Sw(int aI) const {return (float)m_data.bin_height(aI);}
 
@@ -241,9 +252,17 @@ public: //plottable
     }
   }
 public: //bins2D
-  virtual void bins_Sw_range(float& a_mn,float& a_mx) const {
-    a_mn = (float)m_data.min_bin_height();
-    a_mx = (float)m_data.max_bin_height();
+  virtual void bins_Sw_range(float& a_mn,float& a_mx,bool a_with_entries) const {
+    if(a_with_entries && m_data.has_entries_per_bin()) {
+      double mn,mx;
+      m_data.min_bin_height_with_entries(mn);
+      m_data.max_bin_height_with_entries(mx);
+      a_mn = float(mn);
+      a_mx = float(mx);
+    } else {
+      a_mn = (float)m_data.min_bin_height();
+      a_mx = (float)m_data.max_bin_height();
+    }
   }
   virtual unsigned int x_bins() const {return m_data.axis_x().bins();}
   virtual unsigned int y_bins() const {return m_data.axis_y().bins();}
@@ -347,9 +366,17 @@ public:
 public:
   virtual unsigned int bins() const {return m_data.axis().bins();}
 
-  virtual void bins_Sw_range(float& a_mn,float& a_mx) const {
-    a_mn = (float)m_data.min_bin_height();
-    a_mx = (float)m_data.max_bin_height();
+  virtual void bins_Sw_range(float& a_mn,float& a_mx,bool a_with_entries) const {
+    if(a_with_entries && m_data.has_entries_per_bin()) {
+      double mn,mx;
+      m_data.min_bin_height_with_entries(mn);
+      m_data.max_bin_height_with_entries(mx);
+      a_mn = float(mn);
+      a_mx = float(mx);
+    } else {
+      a_mn = (float)m_data.min_bin_height();
+      a_mx = (float)m_data.max_bin_height();
+    }
   }
 
   virtual float axis_min() const {return (float)m_data.axis().lower_edge();}
@@ -357,6 +384,7 @@ public:
   virtual float bin_lower_edge(int aI) const {return (float)m_data.axis().bin_lower_edge(aI);}
   virtual float bin_upper_edge(int aI) const {return (float)m_data.axis().bin_upper_edge(aI);}
 
+  virtual bool has_entries_per_bin() const {return m_data.has_entries_per_bin();}
   virtual unsigned int bin_entries(int aI) const {return m_data.bin_entries(aI);}
 
   virtual float bin_Sw(int aI) const {return (float)m_data.bin_height(aI);}

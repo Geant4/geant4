@@ -73,7 +73,7 @@ G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
 // ..........................................................................
 
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
-                              G4double                stepMinimum, 
+                              G4double                stepMinimum,
                               G4MagIntegratorStepper* pItsStepper,
                               G4bool                  useFSALstepper )
   : fDefaultDeltaChord(0.25 * mm)
@@ -126,9 +126,20 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
   if( pItsStepper != nullptr )
   {
+#if 0     
+     // G4cout << " G4ChordFinder: Creating G4IntegrationDriver<G4MagIntegratorStepper> with "
+     //        << " stepMinimum = " << stepMinimum
+     //        << " numVar= " << pItsStepper->GetNumberOfVariables() << G4endl;
      // Type is not known - so must use old class
      fIntgrDriver = new G4IntegrationDriver<G4MagIntegratorStepper>(
         stepMinimum, pItsStepper, pItsStepper->GetNumberOfVariables());
+#else
+     G4cout << " G4ChordFinder: Creating G4MagInt_Driver with "
+            << " stepMinimum = " << stepMinimum
+            << " numVar= " << pItsStepper->GetNumberOfVariables() << G4endl;     
+     fIntgrDriver = new G4MagInt_Driver( stepMinimum, pItsStepper,
+                                         pItsStepper->GetNumberOfVariables());
+#endif     
   }
   else if ( !useFSALstepper )
   {
@@ -150,7 +161,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
         errorInStepperCreation = true;
      }
      else
-     {
+     {        
         using SmallStepDriver = G4InterpolationDriver<G4DormandPrince745>;
         using LargeStepDriver = G4IntegrationDriver<G4HelixHeum>;
 
@@ -483,3 +494,15 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
 }
 
 // ...........................................................................
+
+std::ostream& operator<<( std::ostream& os, const G4ChordFinder& cf)
+{
+   // Dumping the state of G4ChordFinder
+   os << "State of G4ChordFinder : " << std::endl;
+   os << "   delta_chord   = " <<  cf.fDeltaChord;
+   os << "   Default d_c   = " <<  cf.fDefaultDeltaChord;
+
+   os << "   stats-verbose = " <<  cf.fStatsVerbose;
+
+   return os;
+}

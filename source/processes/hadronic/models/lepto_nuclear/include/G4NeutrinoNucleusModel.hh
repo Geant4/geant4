@@ -70,6 +70,11 @@ public:
   virtual G4bool IsApplicable(const G4HadProjectile & aTrack, 
   			      G4Nucleus & targetNucleus);
 
+  G4double SampleXkr(G4double energy);
+  G4double GetXkr(G4int iEnergy, G4double prob);
+  G4double SampleQkr(G4double energy, G4double xx);
+  G4double GetQkr(G4int iE, G4int jX, G4double prob);
+
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
 					  G4Nucleus & targetNucleus)=0;
 
@@ -111,6 +116,10 @@ public:
   G4double GetMr(){return fMr;};
   G4double GetTr(){return fTr;};
   G4double GetDp(){return fDp;};
+
+  G4bool GetfBreak()  {return fBreak;};
+  G4bool GetfCascade(){return fCascade;};
+  G4bool GetfString() {return fString;};
 
   G4LorentzVector GetLVl(){return fLVl;};
   G4LorentzVector GetLVh(){return fLVh;};
@@ -186,7 +195,17 @@ protected:
   static const G4double fNuMuQeTotRat[50];
   static const G4double fOnePionEnergy[58];
   static const G4double fOnePionProb[58];
-  
+ 
+  static const G4double fNuMuEnergyLogVector[50];
+
+  // KR sample distributions, X at E_nu and Q2 at E_nu and X
+
+  static G4double fNuMuXarrayKR[50][51];
+  static G4double fNuMuXdistrKR[50][50];
+  static G4double fNuMuQarrayKR[50][51][51];
+  static G4double fNuMuQdistrKR[50][51][50];
+
+ 
 };
 
 

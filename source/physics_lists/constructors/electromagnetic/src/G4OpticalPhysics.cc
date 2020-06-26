@@ -44,6 +44,7 @@
 #include "G4OpMieHG.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpWLS.hh"
+#include "G4OpWLS2.hh"
 #include "G4Scintillation.hh"
 #include "G4Cerenkov.hh"
 
@@ -60,6 +61,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
 G4ThreadLocal G4Scintillation*     G4OpticalPhysics::fScintillationProcess = nullptr;
 G4ThreadLocal G4Cerenkov*          G4OpticalPhysics::fCerenkovProcess = nullptr;
 G4ThreadLocal G4OpWLS*             G4OpticalPhysics::fWLSProcess = nullptr;
+G4ThreadLocal G4OpWLS2*            G4OpticalPhysics::fWLS2Process = nullptr;
 G4ThreadLocal G4OpAbsorption*      G4OpticalPhysics::fAbsorptionProcess = nullptr;
 G4ThreadLocal G4OpRayleigh*        G4OpticalPhysics::fRayleighProcess = nullptr;
 G4ThreadLocal G4OpMieHG*           G4OpticalPhysics::fMieProcess = nullptr;
@@ -76,6 +78,9 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fScintillationByParticleType(false),
     fScintillationTrackInfo(false),
     fScintillationStackPhotons(true),
+    // fScintillationEnhancedTimeConstants to be set to
+    // true in the next major release
+    fScintillationEnhancedTimeConstants(false),
     fScintillationVerbosity(0),
     fMaxNumPhotons(100),
     fMaxBetaChange(10.0),
@@ -83,6 +88,8 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fCerenkovVerbosity(0),
     fWLSTimeProfileName("delta"),
     fWLSVerbosity(0),
+    fWLS2TimeProfileName("delta"),
+    fWLS2Verbosity(0),
     fAbsorptionVerbosity(0),
     fRayleighVerbosity(0),
     fMieVerbosity(0),
@@ -132,7 +139,7 @@ void G4OpticalPhysics::PrintStatistics() const
       }
       if ( i == kScintillation ) {
         if (fScintillationByParticleType)
-        G4cout << "    Scintillation by Particle Type:  activated " << G4endl;
+          G4cout << "    Scintillation by Particle Type:  activated " << G4endl;
         G4cout << "    Yield factor: "  << fYieldFactor << G4endl;
         G4cout << "    ExcitationRatio: " << fExcitationRatio << G4endl;
         if ( fProcessTrackSecondariesFirst[kScintillation] ) {
@@ -141,9 +148,15 @@ void G4OpticalPhysics::PrintStatistics() const
         else {
           G4cout << "    Track secondaries first:  inactivated" << G4endl;
         }
+        if (fScintillationEnhancedTimeConstants) {
+          G4cout << "    Scintillation enhanced time constants activated." << G4endl;
+        }
       }
       if ( i == kWLS ) {
         G4cout << "     WLS process time profile: " << fWLSTimeProfileName << G4endl;
+      }
+      if ( i == kWLS2 ) {
+        G4cout << "     WLS2 process time profile: " << fWLS2TimeProfileName << G4endl;
       }
     }
   }
@@ -187,6 +200,10 @@ void G4OpticalPhysics::ConstructProcess()
   fWLSProcess->UseTimeProfile(fWLSTimeProfileName);
   OpProcesses[kWLS] = fWLSProcess;
 
+  fWLS2Process = new G4OpWLS2();
+  fWLS2Process->UseTimeProfile(fWLS2TimeProfileName);
+  OpProcesses[kWLS2] = fWLS2Process;
+
   G4ProcessManager* pManager = nullptr;
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
 
@@ -198,12 +215,12 @@ void G4OpticalPhysics::ConstructProcess()
      return;
   }
 
-  for ( G4int i=kAbsorption; i<=kWLS; i++ ) {
+  for ( G4int i=kAbsorption; i<=kWLS2; i++ ) {
       if ( fProcessUse[i] ) {
          pManager->AddDiscreteProcess(OpProcesses[i]);
       }
   }
-
+  
   fScintillationProcess = new G4Scintillation();
   fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
   fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
@@ -212,6 +229,7 @@ void G4OpticalPhysics::ConstructProcess()
   fScintillationProcess->SetScintillationTrackInfo(fScintillationTrackInfo);
   fScintillationProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
   fScintillationProcess->SetStackPhotons(fScintillationStackPhotons);
+  fScintillationProcess->SetEnhancedTimeConstants(fScintillationEnhancedTimeConstants);
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   fScintillationProcess->AddSaturation(emSaturation);
   OpProcesses[kScintillation] = fScintillationProcess;
@@ -343,12 +361,37 @@ void G4OpticalPhysics::SetWLSVerbosity(G4int ver)
   }
 }
 
+void G4OpticalPhysics::SetWLS2TimeProfile(G4String name)
+{
+/// Set the WLS2 time profile (delta or exponential)
+  fWLS2TimeProfileName = name;
+  if (fWLS2Process) {
+    fWLS2Process->UseTimeProfile(fWLS2TimeProfileName);
+  }
+}
+
+void G4OpticalPhysics::SetWLS2Verbosity(G4int ver)
+{
+  fWLS2Verbosity = ver;
+  if (fWLS2Process) {
+    fWLS2Process->SetVerboseLevel(fWLS2Verbosity);
+  }
+}
+
 void G4OpticalPhysics::SetScintillationByParticleType(G4bool val)
 {
   fScintillationByParticleType = val;
   if (fScintillationProcess) {
     fScintillationProcess->
       SetScintillationByParticleType(fScintillationByParticleType);
+  }
+}
+
+void G4OpticalPhysics::SetScintillationEnhancedTimeConstants(G4bool val)
+{
+  fScintillationEnhancedTimeConstants = val;
+  if (fScintillationProcess) {
+    fScintillationProcess->SetEnhancedTimeConstants(fScintillationEnhancedTimeConstants);
   }
 }
 

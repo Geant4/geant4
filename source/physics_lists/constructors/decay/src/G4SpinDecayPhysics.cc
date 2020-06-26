@@ -53,20 +53,18 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4SpinDecayPhysics);
 
-G4SpinDecayPhysics::G4SpinDecayPhysics()
-  : G4VPhysicsConstructor("SpinDecay"), decayWithSpin(NULL), poldecay(NULL)
+G4SpinDecayPhysics::G4SpinDecayPhysics(G4int)
+  : G4VPhysicsConstructor("SpinDecay")
 {
 }
 
-G4SpinDecayPhysics::G4SpinDecayPhysics(const G4String& name)
-  : G4VPhysicsConstructor(name), decayWithSpin(NULL), poldecay(NULL)
+G4SpinDecayPhysics::G4SpinDecayPhysics(const G4String& name, G4int)
+  : G4VPhysicsConstructor(name)
 {
 }
 
 G4SpinDecayPhysics::~G4SpinDecayPhysics()
 {
-  if (decayWithSpin) delete decayWithSpin;
-  if (poldecay) delete poldecay;
 }
 
 void G4SpinDecayPhysics::ConstructParticle()
@@ -105,15 +103,14 @@ void G4SpinDecayPhysics::ConstructParticle()
 
 void G4SpinDecayPhysics::ConstructProcess()
 {
-  decayWithSpin = new G4DecayWithSpin();
+  G4DecayWithSpin* decayWithSpin = new G4DecayWithSpin();
 
   G4ProcessTable* processTable = G4ProcessTable::GetProcessTable();
 
   G4VProcess* decay;
   decay = processTable->FindProcess("Decay",G4MuonPlus::MuonPlus());
 
-  G4ProcessManager* fManager;
-  fManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+  G4ProcessManager* fManager = G4MuonPlus::MuonPlus()->GetProcessManager();
 
   if (fManager) {
     if (decay) fManager->RemoveProcess(decay);
@@ -133,7 +130,7 @@ void G4SpinDecayPhysics::ConstructProcess()
     fManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
   }
 
-  poldecay = new G4PionDecayMakeSpin();
+  G4PionDecayMakeSpin* poldecay = new G4PionDecayMakeSpin();
 
   decay = processTable->FindProcess("Decay",G4PionPlus::PionPlus());
 

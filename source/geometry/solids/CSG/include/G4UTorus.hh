@@ -38,7 +38,7 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <volumes/UnplacedTorus2.h>
+#include <VecGeom/volumes/UnplacedTorus2.h>
 
 #include "G4Polyhedron.hh"
 

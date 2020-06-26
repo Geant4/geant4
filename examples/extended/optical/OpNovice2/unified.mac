@@ -31,16 +31,16 @@
 /opnovice2/gun/optPhotonPolar
 #
 /analysis/setFileName unified
-/analysis/h1/set 3   40 -1 39
-/analysis/h1/set 4  100 -1.1 1.1
-/analysis/h1/set 5  100 -1.1 1.1
-/analysis/h1/set 6  100 -1.1 1.1
-/analysis/h1/set 7  100 -1.1 1.1
-/analysis/h1/set 8  100 -1.1 1.1
-/analysis/h1/set 9  100 -1.1 1.1
-/analysis/h1/set 10 100 -1.1 1.1
+/analysis/h1/set 10  40 -1 39
 /analysis/h1/set 11 100 -1.1 1.1
 /analysis/h1/set 12 100 -1.1 1.1
+/analysis/h1/set 13 100 -1.1 1.1
+/analysis/h1/set 14 100 -1.1 1.1
+/analysis/h1/set 15 100 -1.1 1.1
+/analysis/h1/set 16 100 -1.1 1.1
+/analysis/h1/set 17 100 -1.1 1.1
+/analysis/h1/set 18 100 -1.1 1.1
+/analysis/h1/set 19 100 -1.1 1.1
 
 /run/beamOn 10000
 

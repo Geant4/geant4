@@ -36,8 +36,8 @@ public:
 //    return parent::is_a(a_class);
 //  }
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = cmp_cast<node>(this,a_class)) {return p;}
-    else return 0;
+    if(void* p = cmp_cast<node>(this,a_class)) return p;
+    return 0;
   }
   virtual const std::string& s_cls() const = 0;
 public:
@@ -70,7 +70,7 @@ public:
         path.push_back(this);
         a_action.add_path(path);        
         if(a_action.stop_at_first()) a_action.set_done(true);
-      } 
+      }
     }
   }
   virtual void get_matrix(get_matrix_action& a_action) {
@@ -103,7 +103,8 @@ public:
     tools_vforcit(field*,m_fields,it) (*it)->reset_touched();
   }
 public:
-  node(){
+  node()
+  {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -114,12 +115,15 @@ public:
 #endif
   }
 protected:
-  node(const node&){
+  node(const node&)
+  {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
-  node& operator=(const node&){return *this;}
+  node& operator=(const node&){
+    return *this;
+  }
 protected:
   void add_field(field* a_field) {
     m_fields.push_back(a_field); //it does not take ownerhship.
@@ -246,6 +250,30 @@ public:
     //WARNING : touchy.
     return *((field*)((char*)this+a_desc.offset()));
   }
+  void dump_field_descs(std::ostream& a_out) const {
+    a_out << "field descs of node class " << s_cls() << " :" << std::endl;
+    const std::vector<field_desc>& fds = node_desc_fields();
+    tools_vforcit(field_desc,fds,itd) {
+      a_out << "name " << (*itd).name()
+            << ", class " << (*itd).cls()
+            << ", offset " << (*itd).offset()
+            << std::endl;
+    }
+  }
+  field* find_field_by_name(const std::string& a_name) const {
+    // a_name is of the form <class>.<field>. For example for color on sg::text, there are :
+    //   tools::sg::back_area.color
+    //   tools::sg::text.color
+    const std::vector<field_desc>& fds = node_desc_fields();
+    tools_vforcrit(field_desc,fds,it) {
+      if((*it).name()==a_name) {
+        tools_vforcit(field*,m_fields,itf) {
+          if(field_offset(*itf)==(*it).offset()) return (*itf);
+        }
+      }
+    }
+    return 0;
+  }
 protected:
   field_desc::offset_t field_offset(const field* a_field) const {
     //WARNING : touchy.
@@ -253,15 +281,6 @@ protected:
   }
 
   field* find_field(const field_desc& a_rdesc) const {
-/*
-    //WARNING : must not use field name since, through inheritance, a node can have two field with same name.
-    //          (For exa sg::text has one field "color" and another one coming from back_area).
-    //::printf("debug : find_field : %s ...\n",a_rdesc.name().c_str());
-    tools_vforcit(field*,m_fields,it) {
-      //::printf("debug : find_field :   look : %s\n",field_name(*(*it)).c_str());
-      if(field_offset(*it)==a_rdesc.offset()) return (*it);
-    }
-*/
     const std::vector<field_desc>& fds = node_desc_fields();
     tools_vforcit(field_desc,fds,it) {
       if((*it).name()==a_rdesc.name()) {
@@ -272,17 +291,6 @@ protected:
       }
     }
     return 0;
-  }
-
-  void dump_field_descs(std::ostream& a_out) const {
-    a_out << "field descs of node class " << s_cls() << " :" << std::endl;
-    const std::vector<field_desc>& fds = node_desc_fields();
-    tools_vforcit(field_desc,fds,itd) {
-      a_out << "name " << (*itd).name()
-            << ", class " << (*itd).cls()
-            << ", offset " << (*itd).offset()
-            << std::endl;
-    }
   }
 
   void check_fields(std::ostream& a_out) const {

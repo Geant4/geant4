@@ -111,6 +111,7 @@ public: // With description
   void SetForceSolid          (G4bool = true);
   void SetForceCloud          (G4bool = true);
   void SetForceNumberOfCloudPoints (G4int nPoints);
+  // nPoints <= 0 means under control of viewer
   void SetForceAuxEdgeVisible (G4bool = true);
   void SetForceLineSegmentsPerCircle (G4int nSegments);
   // Allows choice of circle approximation.  A circle of 360 degrees

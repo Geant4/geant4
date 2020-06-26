@@ -224,7 +224,7 @@
     G4bool residual = false;
     G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
                                    ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
-    for ( G4int j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
+    for ( std::size_t j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
     {
        if ( theResult.Get()->GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
     }
@@ -233,7 +233,7 @@
     {
        G4int nNonZero = 0;
        G4LorentzVector p_photons(0,0,0,0);
-       for ( G4int j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
+       for ( std::size_t j = 0 ; j != theResult.Get()->GetNumberOfSecondaries() ; j++ )
        {
           p_photons += theResult.Get()->GetSecondary(j)->GetParticle()->Get4Momentum();
           // To many 0 momentum photons -> Check PhotonDist 

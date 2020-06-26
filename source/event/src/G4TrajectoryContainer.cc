@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TrajectoryContainer class implementation
+//
 // Author: Makoto Asai (SLAC)
 // --------------------------------------------------------------------
 

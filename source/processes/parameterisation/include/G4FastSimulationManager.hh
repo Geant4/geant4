@@ -60,11 +60,6 @@
 
 #include "G4ios.hh"
 
-//---------------------------
-// For possible future needs:
-//---------------------------
-typedef G4Region G4Envelope;
-
 //-------------------------------------------
 //
 //        G4FastSimulationManager class

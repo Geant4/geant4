@@ -23,51 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NeutronBetaDecayChannel
 //
+// Class decription:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      18 Sep. 2001 H.Kurashige
-// ------------------------------------------------------------
-#ifndef G4NeutronBetaDecayChannel_h
-#define G4NeutronBetaDecayChannel_h 1
+// This class describes free neutron beta decay kinematics.
+// It neglects neutron/electron polarization without Coulomb effect.
+
+// Author: H.Kurashige, 18 September 2001 
+// --------------------------------------------------------------------
+#ifndef G4NeutronBetaDecayChannel_hh
+#define G4NeutronBetaDecayChannel_hh 1
 
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDecayChannel.hh"
 
-class G4NeutronBetaDecayChannel :public G4VDecayChannel
+class G4NeutronBetaDecayChannel : public G4VDecayChannel
 {
-  // Class Decription
-  //  This class describes free neutron beta decay  kinemtics.
-  //  This version neglects neutron/electron polarization  
-  //  without Coulomb effect
+  public:
 
-  public:  // With Description
-    //Constructors 
-      G4NeutronBetaDecayChannel(const G4String& theParentName,
-				G4double        theBR);
-    //  Destructor
-      virtual ~G4NeutronBetaDecayChannel();
+    G4NeutronBetaDecayChannel(const G4String& theParentName,
+                                    G4double  theBR);
+    virtual ~G4NeutronBetaDecayChannel();
 
-  protected:
-    // Copy constructor and assignment operator
-      G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel &);
-      G4NeutronBetaDecayChannel & operator=(const G4NeutronBetaDecayChannel &);
-
-  protected:
-      G4NeutronBetaDecayChannel();
-
-  public:  // With Description
-     virtual G4DecayProducts *DecayIt(G4double);     
+    virtual G4DecayProducts* DecayIt(G4double);     
   
-  protected: 
-  // e-neutrino angular correlation parameter 
-     const G4double aENuCorr;
-};  
+  protected:
 
+    G4NeutronBetaDecayChannel();
+
+    G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel&);
+    G4NeutronBetaDecayChannel& operator=(const G4NeutronBetaDecayChannel&);
+      // Copy constructor and assignment operator
+
+    const G4double aENuCorr = -0.102;
+      // e-neutrino angular correlation parameter 
+};  
 
 #endif

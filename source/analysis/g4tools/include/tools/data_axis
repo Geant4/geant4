@@ -25,9 +25,14 @@ public:
     return *this;
   }
 public:
+  bool set_is_log(bool a_v) {if(m_is_log==a_v) return false;m_is_log = a_v;return true;}
+  bool set_min_value(float a_v) {if(m_min_value==a_v) return false;m_min_value = a_v;return true;}
+  bool set_max_value(float a_v) {if(m_max_value==a_v) return false;m_max_value = a_v;return true;}
+#ifdef tools_data_axis  //g4tools backcomp :
   bool is_log(bool a_v) {if(m_is_log==a_v) return false;m_is_log = a_v;return true;}
   bool min_value(float a_v) {if(m_min_value==a_v) return false;m_min_value = a_v;return true;}
   bool max_value(float a_v) {if(m_max_value==a_v) return false;m_max_value = a_v;return true;}
+#endif  
   float min_value() const {return m_min_value;}
   float max_value() const {return m_max_value;}
   bool is_log() const {return m_is_log;}

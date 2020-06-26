@@ -39,7 +39,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #include "TSPhysicsList.hh"
 
 #include "G4RunManager.hh"
@@ -90,15 +89,12 @@ TSPhysicsList* TSPhysicsList::fgInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSPhysicsList* TSPhysicsList::Instance()
-{
-  return fgInstance;
-}
+TSPhysicsList* TSPhysicsList::Instance() { return fgInstance; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TSPhysicsList::TSPhysicsList()
-: fDefaultCutValue(1.*CLHEP::mm)
+  : fDefaultCutValue(1. * CLHEP::mm)
 {
   fgInstance = this;
 
@@ -125,67 +121,66 @@ TSPhysicsList::~TSPhysicsList()
 
 void TSPhysicsList::ConstructParticle()
 {
-    for(auto c : fConstructors)
-    {
-        c->ConstructParticle();
-    }
+  for(auto c : fConstructors)
+  {
+    c->ConstructParticle();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSPhysicsList::ConstructProcess()
 {
-    // Transportation
-    //
-    AddTransportation();
+  // Transportation
+  //
+  AddTransportation();
 
-    for(auto c : fConstructors)
+  for(auto c : fConstructors)
+  {
+    c->ConstructProcess();
+  }
+
+  std::set<G4String> step_limit_particles;
+  // standard particles
+  step_limit_particles.insert("e-");
+  step_limit_particles.insert("e+");
+  step_limit_particles.insert("alpha");
+  step_limit_particles.insert("He3");
+  step_limit_particles.insert("GenericIon");
+  step_limit_particles.insert("proton");
+  step_limit_particles.insert("neutron");
+  // more ~exotic particles
+  step_limit_particles.insert("pi+");
+  step_limit_particles.insert("pi-");
+  step_limit_particles.insert("mu+");
+  step_limit_particles.insert("mu-");
+
+  auto particleIterator = GetParticleIterator();
+  particleIterator->reset();
+
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  while((*particleIterator)())
+  {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4String pname                 = particle->GetParticleName();
+
+    if(step_limit_particles.find(pname) != step_limit_particles.end() ||
+       particle->GetPDGCharge())
     {
-        c->ConstructProcess();
+      ph->RegisterProcess(new G4StepLimiter, particle);
     }
-
-    std::set<G4String> step_limit_particles;
-    // standard particles
-    step_limit_particles.insert("e-");
-    step_limit_particles.insert("e+");
-    step_limit_particles.insert("alpha");
-    step_limit_particles.insert("He3");
-    step_limit_particles.insert("GenericIon");
-    step_limit_particles.insert("proton");
-    step_limit_particles.insert("neutron");
-    // more ~exotic particles
-    step_limit_particles.insert("pi+");
-    step_limit_particles.insert("pi-");
-    step_limit_particles.insert("mu+");
-    step_limit_particles.insert("mu-");
-
-    auto particleIterator=GetParticleIterator();
-    particleIterator->reset();
-
-    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-
-    while( (*particleIterator)() )
-    {
-        G4ParticleDefinition* particle = particleIterator->value();
-        G4String pname = particle->GetParticleName();
-
-        if(step_limit_particles.find(pname) != step_limit_particles.end() ||
-           particle->GetPDGCharge())
-        {
-            ph->RegisterProcess(new G4StepLimiter, particle);
-        }
-    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSPhysicsList::SetCuts()
 {
-    SetCutValue(fDefaultCutValue, "e-");
-    SetCutValue(fDefaultCutValue, "e+");
-    SetCutValue(fDefaultCutValue, "gamma");
-    SetCutValue(fDefaultCutValue, "proton");
+  SetCutValue(fDefaultCutValue, "e-");
+  SetCutValue(fDefaultCutValue, "e+");
+  SetCutValue(fDefaultCutValue, "gamma");
+  SetCutValue(fDefaultCutValue, "proton");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 10, 2019 B.Morgan              - geomsolids-V10-06-00
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 June 3, 2019 J.Apostolakis              - geomsolids-V10-05-00
 - Change CMakeLists.txt in test directories to allow optional use
   with integrate testing or via one-target builds using G4TARGET

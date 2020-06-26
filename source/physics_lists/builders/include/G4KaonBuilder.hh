@@ -64,8 +64,6 @@ class G4KaonBuilder : public G4PhysicsBuilderInterface
     G4KaonZeroSInelasticProcess* theKaonZeroSInelastic;
      
     std::vector<G4VKaonBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

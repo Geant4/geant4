@@ -33,25 +33,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4RadioactiveDecayBase;
-
 class G4RadioactiveDecayPhysics : public G4VPhysicsConstructor
 {
 public: 
   G4RadioactiveDecayPhysics(G4int verbose =1);
-  G4RadioactiveDecayPhysics(const G4String& name);
-  virtual ~G4RadioactiveDecayPhysics();
+  G4RadioactiveDecayPhysics(const G4String& name, G4int verbose =1);
+  ~G4RadioactiveDecayPhysics() override;
 
-public: 
   // This method is dummy for physics
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
-private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

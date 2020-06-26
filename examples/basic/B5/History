@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 June 2020  Jonathan Madsen (exampleB5-V10-06-00)
+- Migrated to new G4RunManagerFactory
+
 18 Nov 2019  Gabriele Cosmo (exampleB5-V10-05-01)
 - Fixed cases of type conversions from size_t to G4int in B5HodoscopeSD.
 
@@ -26,14 +29,14 @@ track of all tags.
 - Move instantiation of G4UIExecutive nearer to start of main.
 
 19 February 2017  Ivana Hrivnacova (exampleB5-V10-04-00)
-- Fix filling ntuple 
+- Fix filling ntuple
   (there was omitted call to AddNtupleRow() in the previous update)
 
 14 April 2017  Ivana Hrivnacova Cosmo (exampleB5-V10-03-01)
 - Use std::array for related data members in B5EventAction to reduce the code
 - Added data members for histogram Ids and the code to retrieve them by histogram
   names via G4AnalysisManager
-- Corrected the list of 2D histograms in README  
+- Corrected the list of 2D histograms in README
 
 24 March 2017  Gabriele Cosmo (exampleB5-V10-03-00)
 - Do not use G4AutoDelete utility for thread-local magnetic-field and
@@ -52,7 +55,7 @@ track of all tags.
 08 October 2016 Ivana Hrivnacova (exampleB5-V10-02-01)
 - Fix in gui.mac by Helmut Burkhard:
   Replace undefined /globalField/setValue by  /B5/field/value
-- Updated B5ActionInitialization (Ivana)  
+- Updated B5ActionInitialization (Ivana)
   Event action is instantiated also on master - needed for ntuple merging
   (as its deta define the vectors refernced from ntuple)
 
@@ -89,9 +92,9 @@ track of all tags.
   used yo verify correct behavior of FPE detection in MT.
   When tests will be over, changes will be reverted.
 
-02 December 2013 Ivana Hrivnacova 
+02 December 2013 Ivana Hrivnacova
 - Fixed gui.mac:
-  corrected wireframe parameter, removed run2.mac from gui 
+  corrected wireframe parameter, removed run2.mac from gui
 
 28 November 2013 Ivana Hrivnacova (exampleB5-V09-06-11)
 - Added macros for GUI
@@ -102,16 +105,16 @@ track of all tags.
 - Changed the way G4GenericMessenger declares UI commands that take units.
 
 26 November 2013 Ivana Hrivnacova (exampleB5-V09-06-09)
-- Fixed deleting magnetic field and its manager with use of G4AutoDelete 
+- Fixed deleting magnetic field and its manager with use of G4AutoDelete
   utility
 
 22 November 2013 Joseph Perl (exampleB5-V09-06-08)
-- Added paragraph about HepRep attributes in README  
+- Added paragraph about HepRep attributes in README
 
-22 November 2013 Ivana Hrivnacova 
-- Changed step limit size to 1 m  (more sutable for demonstration 
+22 November 2013 Ivana Hrivnacova
+- Changed step limit size to 1 m  (more sutable for demonstration
   of the smooth trajectory visualization option)
-- Added paragraph about this limit in README  
+- Added paragraph about this limit in README
 
 15 November 2013 Ivana Hrivnacova (exampleB5-V09-06-07)
 - Changed magnetic tube material to G4_Air (was G4_Galactic)
@@ -147,7 +150,7 @@ track of all tags.
 - A new tag co-working with a fix in ctest.
 
 03 October 2013 Ivana Hrivnacova (exampleB5-V09-06-00)
-- The first tagged version of the new B5 example created from 
+- The first tagged version of the new B5 example created from
   extended/analysis/A01.
 
 05 June 2013  Ivana Hrivnacova (exampleA01-V09-06-04)
@@ -163,7 +166,7 @@ track of all tags.
 - Apply coding guidelines
 
 01 April 2013 Andrea Dotti (exampleA01-V09-06-01)
-- New G4VUserPhysicsList interface 
+- New G4VUserPhysicsList interface
 
 18 December 2012 Michael Kelsey (exampleA01-V09-06-00)
 - Replace G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
@@ -175,14 +178,14 @@ track of all tags.
 - Minor fixes in CMakeList.txt
 
 24 August 2012 Ivana Hrivnacova (exampleA01-V09-05-01)
-- README.JAIDA replaced with more general README.AIDA (revised 
+- README.JAIDA replaced with more general README.AIDA (revised
   by Guy Barrand)
-- Added README.OpenScientist (previously AnaEx03/UseOpenScientist.txt) 
+- Added README.OpenScientist (previously AnaEx03/UseOpenScientist.txt)
 - Added .README files for Doxygen documentation
 - Added file descriptions for all .hh and .cc
-- Fixed functions names in B5AnalysisManager (to get example 
+- Fixed functions names in B5AnalysisManager (to get example
   compiling)
-- Adding support for building example with AIDA in CMake build   
+- Adding support for building example with AIDA in CMake build
 
 19 June 2012  Joseph Perl (exampleA01-V09-05-00)
 - Corrected order of filling x and y for Cloud2D
@@ -280,7 +283,7 @@ track of all tags.
 - Updated mac files for HepRep2 driver to set zoom factor and coordinate system.
 
 9th February 2004 Makoto Asai (exampleA01-V06-00-00)
-- Fix EM part of the physics list to use the new 
+- Fix EM part of the physics list to use the new
   processes introduced at 6.0.
 - Reference output is updated accordingly.
 
@@ -318,19 +321,19 @@ track of all tags.
 13th October 2003 Mark Donszelmann
 - Re-included B5EventActionMessenger in general (non G4ANALYSIS_USE) compilation
   for use with B5EventACtion, see comment below.
-- Removed all include/AIDA include files and changed the GNUmakefile. 
-  To compile/link with G4ANALYSIS_USE you will need an AIDA 3.0 compliant 
+- Removed all include/AIDA include files and changed the GNUmakefile.
+  To compile/link with G4ANALYSIS_USE you will need an AIDA 3.0 compliant
   implementation, such as AIDAJNI. The makefile will execute aida-config
   to find the include files and the libraries to link with.
 - setup-analysis.csh/sh/win32 now only sets up G4 specific flags to compile
   in the AIDA analysis framework.
-  
+
 13th October 2003 Joseph Perl
 - Minor changes to README's sections on vis and analysis.
 
 12th October 2003 Makoto Asai
 - Move G4ANALYSIS_USE ifdef blocks so that event summary is printed out
-  regardless of this flag. Only the AIDA part in B5EventAction is 
+  regardless of this flag. Only the AIDA part in B5EventAction is
   blocked.
 
 12th October 2003 Joseph Perl

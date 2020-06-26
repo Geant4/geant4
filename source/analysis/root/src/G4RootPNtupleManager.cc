@@ -399,8 +399,9 @@ G4bool G4RootPNtupleManager::Merge()
   for ( auto ntupleDescription : fNtupleDescriptionVector) {
 
     // skip inactivated ntuples
-    if ( ! ntupleDescription->fActivation ) continue;
-  
+    if(!ntupleDescription->fActivation || !ntupleDescription->fNtuple)
+      continue;
+
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL4() ) {
       fState.GetVerboseL4()

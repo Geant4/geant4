@@ -45,53 +45,45 @@
 #include "G4BinaryCascade.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
+#include "G4HadronicParameters.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
 
-
-G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4PreCompoundModel* p,
+G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4PreCompoundModel*,
 			   G4bool quasiel) 
   : G4VHadronModelBuilder(aName), 
-    theQGStringModel(0), theQGStringDecay(0), theQuasiElastic(0), 
-    thePreCompound(p),theQGSM(0), 
     quasielFlag(quasiel)
 {}
 
 G4QGSBuilder::~G4QGSBuilder() 
-{
-  delete theQuasiElastic;
-  delete theQGStringDecay;
-  delete theQGStringModel;
-  delete theQGSM;
-}                                     
+{}                                     
 
 G4HadronicInteraction* G4QGSBuilder::BuildModel()
 {
-  G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator(GetName());
-  theQGStringModel  = new G4QGSModel< G4QGSParticipants >;
-  theQGSM = new G4QGSMFragmentation();
-  theQGStringDecay  = new G4ExcitedStringDecay(theQGSM);
-  theQGStringModel->SetFragmentationModel(theQGStringDecay);
-  theQGSModel->SetHighEnergyGenerator(theQGStringModel);
+  G4double theMin = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
+  G4double theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
+  G4TheoFSGenerator* theModel = new G4TheoFSGenerator(GetName());
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
 
-  if(quasielFlag) {
-    theQuasiElastic = new G4QuasiElasticChannel();
-    theQGSModel->SetQuasiElasticChannel(theQuasiElastic);
-  }
+  G4QGSModel< G4QGSParticipants >* theStringModel = 
+    new G4QGSModel< G4QGSParticipants >;
+  G4ExcitedStringDecay* theStringDecay = 
+    new G4ExcitedStringDecay(new G4QGSMFragmentation());
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-  if(!thePreCompound) {
-    thePreCompound = new G4PreCompoundModel(new G4ExcitationHandler());
-  }
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasielFlag)
+    {
+      theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+    } 
 
   if(GetName() == "QGSB") {
-    G4BinaryCascade* bic = new G4BinaryCascade();
-    bic->SetDeExcitation(thePreCompound);
-    theQGSModel->SetTransport(bic);
-
+    theModel->SetTransport(new G4BinaryCascade());
   } else {
-    G4GeneratorPrecompoundInterface* pint = new G4GeneratorPrecompoundInterface();
-    pint->SetDeExcitation(thePreCompound);
-    theQGSModel->SetTransport(pint);
+    theModel->SetTransport(new G4GeneratorPrecompoundInterface());
   }
 
-  return theQGSModel;
+  return theModel;
 }
 

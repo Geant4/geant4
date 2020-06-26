@@ -31,6 +31,9 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 07.05.2020 A.Ribon: Use eventually QGSP for hyperons (and anti-hyperons)
+//                     at high energies
+// 05.05.2020 A.Ribon: Use eventually QGSP for antibaryons at high energies
 // 22.05.2014 D. Mancusi: Extend INCL++ to 20 GeV
 // 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
 // 08.03.2013 D. Mancusi: Fix a problem with overlapping model ranges
@@ -77,9 +80,12 @@
 #include "G4INCLXXNeutronBuilder.hh"
 #include "G4NeutronPHPBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
+#include "G4HyperonQGSPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
+#include "G4QGSPAntiBarionBuilder.hh"
 
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
@@ -239,15 +245,34 @@ void G4HadronPhysicsINCLXX::Kaon()
 
 void G4HadronPhysicsINCLXX::Others()
 {
-  auto hyp = new G4HyperonFTFPBuilder;
+  // Hyperons (and anti-hyperons)
+  auto hyp = new G4HyperonBuilder;
   AddBuilder(hyp);
-  hyp->Build();
+  auto ftfphyp = new G4HyperonFTFPBuilder(quasiElasticFTF);
+  AddBuilder(ftfphyp);
+  hyp->RegisterMe(ftfphyp);
+  if (!withFTFP) {
+    ftfphyp->SetMaxEnergy(G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF());
+    auto qgsphyp = new G4HyperonQGSPBuilder(quasiElasticQGS);
+    AddBuilder(qgsphyp);
+    qgsphyp->SetMinEnergy(G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF());
+    hyp->RegisterMe(qgsphyp);
+  }
+  hyp->Build();  
 
+  // Antibaryons
   auto abar = new G4AntiBarionBuilder;
   AddBuilder(abar);
-  auto ftfpabar = new G4FTFPAntiBarionBuilder(quasiElasticFTF);
-  AddBuilder(ftfpabar);
-  abar->RegisterMe(ftfpabar);
+  auto ftf = new G4FTFPAntiBarionBuilder(quasiElasticFTF);
+  AddBuilder(ftf);
+  abar->RegisterMe(ftf);
+  if (!withFTFP) {
+    ftf->SetMaxEnergy(G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF());
+    auto qgs = new G4QGSPAntiBarionBuilder(quasiElasticQGS);
+    AddBuilder(qgs);
+    qgs->SetMinEnergy(G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF());
+    abar->RegisterMe(qgs);
+  }
   abar->Build();
 }
 

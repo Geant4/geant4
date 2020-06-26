@@ -105,9 +105,9 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-  void ConstructProcess();
+    void ConstructProcess();
 
-  protected:
+private:
   // Elastic Process
   G4HadronElasticProcess theElasticProcess;
   G4HadronElastic*        theElasticModel;
@@ -124,15 +124,7 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4PiMinusAbsorptionBertini thePionMinusAbsorption;
 
    // pi+ and pi-
-   
-    G4TheoFSGenerator* theModel;
-    G4ExcitationHandler theHandler;
-    G4PreCompoundModel * thePreEquilib;
-    G4GeneratorPrecompoundInterface* theCascade;
-    G4FTFModel* theStringModel;
-    G4QGSMFragmentation theFragmentation;
-    G4ExcitedStringDecay * theStringDecay;
-
+ 
    // K + 
    G4KaonPlusInelasticProcess theKaonPlusInelastic;
    G4hMultipleScattering theKaonPlusMult;
@@ -169,8 +161,6 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
 
    // anti-neutron
    G4AntiNeutronInelasticProcess  theAntiNeutronInelastic;  
-   
-  
 };
 
 

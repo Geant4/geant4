@@ -61,13 +61,12 @@ public:
   sf<bool> enforced;
   sf_vec3f translation;
   sf_string coloring;
-  sf_string filling;
   sf_string title;
 public:
   virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::style)
-    static const desc_fields s_v(parent::node_desc_fields(),44, //WARNING : take care of count.
-      TOOLS_ARG_FIELD_DESC(color),
+    static const desc_fields s_v(parent::node_desc_fields(),43, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(color),  //1
       TOOLS_ARG_FIELD_DESC(highlight_color),
       TOOLS_ARG_FIELD_DESC(back_color),
       TOOLS_ARG_FIELD_DESC(line_width),
@@ -113,7 +112,6 @@ public:
 
       TOOLS_ARG_FIELD_DESC(translation),
       TOOLS_ARG_FIELD_DESC(coloring),
-      TOOLS_ARG_FIELD_DESC(filling),
       TOOLS_ARG_FIELD_DESC(title)
     );
     return s_v;
@@ -162,7 +160,6 @@ private:
     add_field(&enforced);
     add_field(&translation);
     add_field(&coloring);
-    add_field(&filling);
     add_field(&title);
   }
 public:
@@ -210,7 +207,6 @@ public:
   ,enforced(false)
   ,translation(vec3f(0,0,0))
   ,coloring()
-  ,filling()
   ,title()
   {
     add_fields();
@@ -261,7 +257,6 @@ public:
   ,enforced(a_from.enforced)
   ,translation(a_from.translation)
   ,coloring(a_from.coloring)
-  ,filling(a_from.filling)
   ,title(a_from.title)
   {
     add_fields();
@@ -311,7 +306,6 @@ public:
     enforced = a_from.enforced;
     translation = a_from.translation;
     coloring = a_from.coloring;
-    filling = a_from.filling;
     title = a_from.title;
 
     return *this;
@@ -360,7 +354,6 @@ public:
     enforced = false;
     translation = vec3f(0,0,0);
     coloring = "";
-    filling = ""; 
     title = "";
   }
   
@@ -411,7 +404,6 @@ public:
     sp.enforced(enforced.value());
     sp.translation(translation.value());
     sp.coloring(coloring.value());
-    sp.filling(filling.value());
     sp.title(title.value());
 
     //if(!sp.parse(a_s,style_parser::def_error_func)) 
@@ -468,7 +460,6 @@ public:
     enforced.value(sp.enforced());
     translation.value(sp.translation());
     coloring.value(sp.coloring());
-    filling.value(sp.filling());
     title.value(sp.title());
 
     return true;

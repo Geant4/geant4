@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-// class G4PolynomialSolver
+// G4PolynomialSolver
 //
 // Class description:
 //
@@ -56,80 +54,72 @@
 //   G4double MyFunctionClass::Function(G4double value)
 //   {
 //     G4double Lx,Ly,Lz;
-//     G4double result;  
-//   
+//     G4double result;
+//
 //     Lx = x + value*dx;
 //     Ly = y + value*dy;
 //     Lz = z + value*dz;
-//   
+//
 //     result = TorusEquation(Lx,Ly,Lz,Rmax,Rmin);
-//     
-//     return result ;  
-//   }    
-// 
+//
+//     return result ;
+//   }
+//
 //   G4double MyFunctionClass::Derivative(G4double value)
 //   {
 //     G4double Lx,Ly,Lz;
-//     G4double result;  
-//     
+//     G4double result;
+//
 //     Lx = x + value*dx;
 //     Ly = y + value*dy;
 //     Lz = z + value*dz;
-//      
+//
 //     result = dx*TorusDerivativeX(Lx,Ly,Lz,Rmax,Rmin);
 //     result += dy*TorusDerivativeY(Lx,Ly,Lz,Rmax,Rmin);
 //     result += dz*TorusDerivativeZ(Lx,Ly,Lz,Rmax,Rmin);
-//   
+//
 //     return result;
 //   }
-//   
+//
 //   Then to have a root inside an interval [IntervalMin,IntervalMax] do the
 //   following:
 //
 //   MyRoot = PolySolver.solve(IntervalMin,IntervalMax);
-//
 
-// History:
-//
-// - 19.12.00 E.Medernach, First implementation
-//
-
+// Author: E.Medernach, 19.12.2000 - First implementation
+// --------------------------------------------------------------------
 #ifndef G4POL_SOLVER_HH
-#define G4POL_SOLVER_HH
+#define G4POL_SOLVER_HH 1
 
-#include  "globals.hh"
+#include "globals.hh"
 
 template <class T, class F>
-class G4PolynomialSolver 
+class G4PolynomialSolver
 {
-public:  // with description
-  
-  G4PolynomialSolver(T* typeF, F func, F deriv, G4double precision);  
+ public:
+  G4PolynomialSolver(T* typeF, F func, F deriv, G4double precision);
   ~G4PolynomialSolver();
-  
 
-  G4double solve (G4double IntervalMin, G4double IntervalMax);
-  
-private:
+  G4double solve(G4double IntervalMin, G4double IntervalMax);
 
-  G4double Newton (G4double IntervalMin, G4double IntervalMax);
-    //General Newton method with Bezier Clipping
+ private:
+  G4double Newton(G4double IntervalMin, G4double IntervalMax);
+  // General Newton method with Bezier Clipping
 
   // Works for polynomial of order less or equal than 4.
   // But could be changed to work for polynomial of any order providing
   // that we find the bezier control points.
 
-  G4int BezierClipping(G4double *IntervalMin, G4double *IntervalMax);
-    //   This is just one iteration of Bezier Clipping
+  G4int BezierClipping(G4double* IntervalMin, G4double* IntervalMax);
+  // This is just one iteration of Bezier Clipping
 
+  T* FunctionClass;
+  F Function;
+  F Derivative;
 
-  T* FunctionClass ;
-  F Function ;
-  F Derivative ;
-  
   G4double Precision;
 };
 
 #include "G4PolynomialSolver.icc"
 
-#endif 
+#endif

@@ -60,6 +60,7 @@
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
 #include "G4Box.hh"
 #include "G4Sphere.hh"
 #include "G4Tubs.hh"

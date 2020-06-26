@@ -82,6 +82,12 @@ G4DeexParametersMessenger::G4DeexParametersMessenger(G4DeexPrecoParameters* ptr)
   corgCmd->SetDefaultValue(false);
   corgCmd->AvailableForStates(G4State_PreInit);
 
+  isoCmd = new G4UIcmdWithABool("/process/deex/isomerProduction",this);
+  isoCmd->SetGuidance("Enable/disable simulation of long lived isomers.");
+  isoCmd->SetParameterName("corrG",true);
+  isoCmd->SetDefaultValue(false);
+  isoCmd->AvailableForStates(G4State_PreInit);
+
   maxjCmd = new G4UIcmdWithAnInteger("/process/deex/maxTwoJ",this);
   maxjCmd->SetGuidance("Set max value for 2J for simulation of correlated gamma emission.");
   maxjCmd->SetParameterName("max2J",true);
@@ -110,6 +116,7 @@ G4DeexParametersMessenger::~G4DeexParametersMessenger()
   delete readCmd;
   delete icCmd;
   delete corgCmd;
+  delete isoCmd;
   delete maxjCmd;
   delete upCmd;
   delete verbCmd;
@@ -126,10 +133,12 @@ void G4DeexParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetInternalConversionFlag(icCmd->GetNewBoolValue(newValue));
   } else if (command == corgCmd) {
     theParameters->SetCorrelatedGamma(corgCmd->GetNewBoolValue(newValue));
+  } else if (command == isoCmd) {
+    theParameters->SetIsomerProduction(isoCmd->GetNewBoolValue(newValue));
   } else if (command == maxjCmd) { 
     theParameters->SetTwoJMAX(maxjCmd->GetNewIntValue(newValue));
   } else if (command == upCmd) { 
-    theParameters->SetUploadZ(maxjCmd->GetNewIntValue(newValue));
+    theParameters->SetUploadZ(upCmd->GetNewIntValue(newValue));
   } else if (command == verbCmd) { 
     theParameters->SetVerbose(verbCmd->GetNewIntValue(newValue));
   }

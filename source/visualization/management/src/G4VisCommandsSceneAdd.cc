@@ -553,7 +553,7 @@ G4VisCommandSceneAddElectricField::G4VisCommandSceneAddElectricField () {
   fpCommand -> SetGuidance
   ("In the arrow representation, the length of the arrow is proportional"
    "\nto the magnitude of the field and the colour is mapped onto the range"
-   "\nas a fraction of the maximum magnitude: 0->0.5->1 is blue->green->red.");
+   "\nas a fraction of the maximum magnitude: 0->0.5->1 is red->green->blue.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("nDataPointsPerHalfScene", 'i', omitable = true);
   parameter -> SetDefaultValue (10);

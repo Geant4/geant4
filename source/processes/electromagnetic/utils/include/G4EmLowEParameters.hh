@@ -101,6 +101,9 @@ public:
   void SetPIXEElectronCrossSectionModel(const G4String&);
   const G4String& PIXEElectronCrossSectionModel();
 
+  void SetLivermoreDataDir(const G4String&);
+  const G4String& LivermoreDataDir();
+
   // parameters per region or per process 
   void AddMicroElec(const G4String& region);
   const std::vector<G4String>& RegionsMicroElec() const;
@@ -141,6 +144,7 @@ private:
 
   G4String namePIXE;
   G4String nameElectronPIXE;
+  G4String livDataDir;
 
   std::vector<G4String>  m_regnamesME;
 

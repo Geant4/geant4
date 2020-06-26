@@ -47,6 +47,7 @@ set(OpNovice2_SCRIPTS
     glisur.mac
     electron.mac
     scint_by_particle.mac
+    wls.mac
   )
 
 foreach(_script ${OpNovice2_SCRIPTS})

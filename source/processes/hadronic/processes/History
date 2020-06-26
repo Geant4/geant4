@@ -15,7 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-17 December 2019 Vladimir Ivanchenko (hadr-proc-V10-05-09)
+27 April 2020 V/ Grichine (hadr-proc-V10-06-01)
+----------------------------------------------------------
+- G4MuNeutrinoNucleusProcess, G4ElNeutrinoNucleusProcess - extension to anti_nu_mu, nu_e, and anti_nu_e 
+
+13 December 2019 Vladimir Ivanchenko (hadr-proc-V10-06-00)
 ----------------------------------------------------------
 - G4HadronElasticProcess : removed forgotten try/catch pattern for
     target isotope selection, which should be a part of 10.6

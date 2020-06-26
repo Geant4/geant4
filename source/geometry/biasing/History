@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 10th, 2019 B.Morgan (geombias-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 September 19th, 2019 G.Cosmo (geombias-V10-05-00)
 - Implemented minor c++11 revision and code cleanup.
 

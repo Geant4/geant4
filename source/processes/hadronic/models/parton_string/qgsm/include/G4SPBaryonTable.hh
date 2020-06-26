@@ -36,7 +36,7 @@ class G4SPBaryonTable
 
     ~G4SPBaryonTable() {std::for_each(theBaryons.begin(), theBaryons.end(), G4SPBaryonTable::DeleteSPBaryon());}
     void insert(G4SPBaryon * aBaryon) { theBaryons.push_back(aBaryon);}
-    G4double length() {return theBaryons.size();}
+    std::size_t length() {return theBaryons.size();}
 
     const G4SPBaryon * GetBaryon(G4ParticleDefinition * aDefinition);
 

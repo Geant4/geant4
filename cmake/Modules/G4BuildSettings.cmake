@@ -6,7 +6,7 @@
 # Geant4 libraries and tests,
 #
 # In addition to the core compiler/linker flags (configured in the
-# Geant4MakeRules_<LANG>.cmake files) for Geant4, the build may require
+# G4MakeRules_<LANG>.cmake files) for Geant4, the build may require
 # further configuration. This module performs this task whicj includes:
 #
 #  1) Extra build modes for developers
@@ -273,8 +273,6 @@ if(GEANT4_BUILD_MULTITHREADED)
     set(GEANT4_MULTITHREADED_CXX_FLAGS "${GEANT4_MULTITHREADED_CXX_FLAGS} ${${GEANT4_BUILD_TLS_MODEL}_TLSMODEL_FLAGS}")
   endif()
 
-  # Set Defs/Compiler Flags
-  # TODO: Migrate def to header
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
 endif()
 
@@ -424,5 +422,3 @@ foreach(_conftype ${CMAKE_CONFIGURATION_TYPES})
     "${BASE_OUTPUT_DIRECTORY}/${_conftype}/${CMAKE_INSTALL_LIBDIR}"
     )
 endforeach()
-
-

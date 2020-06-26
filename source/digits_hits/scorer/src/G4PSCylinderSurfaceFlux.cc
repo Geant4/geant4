@@ -80,23 +80,10 @@ G4PSCylinderSurfaceFlux::~G4PSCylinderSurfaceFlux()
 G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
+  G4VSolid* solid= ComputeCurrentSolid(aStep);
+  assert( dynamic_cast<G4Tubs*>(solid) );
 
-  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid * solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                ->GetReplicaNumber(indexDepth);
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
-
-  G4Tubs* tubsSolid = (G4Tubs*)(solid);
+  G4Tubs* tubsSolid = static_cast<G4Tubs*>(solid);
   
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
   

@@ -23,39 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StateManager inline methods implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class inline implementation
-// ------------------------------------------------------------
+// Authors: G.Cosmo, M.Asai - November 1996
+// --------------------------------------------------------------------
 
-inline
-void G4StateManager::SetSuppressAbortion(G4int i)
+inline void G4StateManager::SetSuppressAbortion(G4int i)
 {
   suppressAbortion = i;
 }
 
-inline
-G4int G4StateManager::GetSuppressAbortion() const
+inline G4int G4StateManager::GetSuppressAbortion() const
 {
   return suppressAbortion;
 }
 
-inline
-const char* G4StateManager::GetMessage() const
-{
-  return msgptr;
-}
+inline const char* G4StateManager::GetMessage() const { return msgptr; }
 
-inline
-void G4StateManager::SetExceptionHandler(G4VExceptionHandler* eh)
+inline void G4StateManager::SetExceptionHandler(G4VExceptionHandler* eh)
 {
   exceptionHandler = eh;
 }
 
-inline
-G4VExceptionHandler* G4StateManager::GetExceptionHandler() const
+inline G4VExceptionHandler* G4StateManager::GetExceptionHandler() const
 {
   return exceptionHandler;
 }

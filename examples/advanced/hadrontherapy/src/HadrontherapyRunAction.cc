@@ -50,48 +50,17 @@ HadrontherapyRunAction::HadrontherapyRunAction()
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->RegisterAccumulable(&fRBEAccumulable);
     
-    // Create analysis manager
-    // The choice of analysis technology is done via selectin of a namespace
-    // in Analysis.hh
-    auto analysisManager =G4AnalysisManager::Instance();
-    G4cout << "Using " << analysisManager -> GetType() << G4endl;
-    
-    analysisManager->SetVerboseLevel(1);
-    analysisManager->SetFirstHistoId(1);
-    
-    // Comment out the following line to generate an N-tuple
-    analysisManager-> SetFirstNtupleId(2);
-    
-    // Creating the histograms of primary kinetic
-    // energy (Ekin) and of the energy deposited (Edep)
-    // in the first voxel/slice of the water phantom
-    analysisManager -> CreateH1("Ekin","Ekin the voxel", 400,20*MeV, 60*MeV);
-    analysisManager -> CreateH1("Edep","Edep the voxel", 200, -10, 10*MeV);
-    
-    // Example of how to create an Ntuple (comment-out, if needed)
-    //analysisManager->CreateNtuple("NYUPLA", "Edep and TrackL");
-    //analysisManager->CreateNtupleDColumn("Ekin");
-    
 }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyRunAction::~HadrontherapyRunAction()
 {
-    delete G4AnalysisManager::Instance();
+    //delete G4AnalysisManager::Instance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
-{
-    
-    // Get analysis manager
-    auto analysisManager = G4AnalysisManager::Instance();
-    
-    // Open an output file
-    //
-    G4String fileName = "Hadrontherapy";
-    analysisManager->OpenFile(fileName);
-    
+{   
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->Reset();
 
@@ -112,12 +81,7 @@ void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
 {
     auto analysisManager = G4AnalysisManager::Instance();
-    
-    //G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
-    //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
-    // 	   << electromagnetic << G4endl;
-    //G4cout << "Number of hadronic processes of primary particles in the phantom:"
-    //	   << hadronic << G4endl;
+
     G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
     accumulableManager->Merge();
 

@@ -34,7 +34,12 @@
 
 #include <Inventor/Qt/SoQt.h>
 #include <Inventor/events/SoKeyboardEvent.h>
+#include <QMenuBar>
+//#include <QMainWindow>
 
+#ifndef G4GMAKE
+#include "moc_G4OpenInventorQtExaminerViewer.cpp"
+#endif
 
 G4OpenInventorQtExaminerViewer* G4OpenInventorQtExaminerViewer::viewer = 0;
 
@@ -42,12 +47,20 @@ G4OpenInventorQtExaminerViewer* G4OpenInventorQtExaminerViewer::viewer = 0;
 // Constructor
 G4OpenInventorQtExaminerViewer::
 G4OpenInventorQtExaminerViewer(QWidget* parent, const char* name, SbBool embed,
-                               SoQtFullViewer::BuildFlag flag, 
+                               SoQtFullViewer::BuildFlag flag,
                                SoQtViewer::Type type)
    : SoQtExaminerViewer(parent, name, embed, flag, type)
 {
-   G4cout << "G4OpenInventorQtExaminerViewer CONSTRUCTOR CALLED" << G4endl;
+   // FWJ DEBUG
+   //   G4cout << "G4OpenInventorQtExaminerViewer CONSTRUCTOR CALLED" << G4endl;
+   //   G4cout << "G4OpenInventorQtExaminerViewer parent=" << parent << G4endl;
+
+   // FWJ THIS DOESN'T WORK APPARENTLY NO MAINWINDOW
+   //   QMenuBar* menubar = ((QMainWindow*)parent)->menuBar();
+   //   G4cout << "G4OpenInventorQtExaminerViewer menubar=" << menubar << G4endl;
+
    viewer = this;
+   construct(TRUE);
 }
 
 // Destructor
@@ -70,8 +83,32 @@ G4OpenInventorQtExaminerViewer::~G4OpenInventorQtExaminerViewer()
 }
 
 
+void G4OpenInventorQtExaminerViewer::construct(const SbBool)
+{
+   //   setClassName(thisClassName);
+   buildWidget(getParentWidget());
+}
+
+
+// Adds a menu bar and a few menu items to the viewer.
+void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
+{
+   if (!parent)
+      SoDebugError::post("G4OpenInventorQtExaminerViewer::buildWidget",
+                         "Error: Parent is null.");
+// CONTINUE HERE LATER
+   //   QMenuBar* menubar = new QMenuBar(parent);
+   //   G4cout << "G4OpenInventorQtExaminerViewer: GOT A menubar=" <<
+   //      menubar << G4endl;
+   //  QMenu* filemenu = new QMenu("File");
+   //  menubar->addMenu(filemenu);
+   //
+   //  filemenu->addAction(newAct);
+}
+
+
 // FWJ try to handle events as in XtExaminerViewer
-SbBool 
+SbBool
 G4OpenInventorQtExaminerViewer::processSoEvent(const SoEvent* const ev)
 {
 
@@ -84,7 +121,8 @@ G4OpenInventorQtExaminerViewer::processSoEvent(const SoEvent* const ev)
       if (SoKeyboardEvent::isKeyPressEvent(ev, ke->getKey())) {
          switch (ke->getKey()) {
          case SoKeyboardEvent::E:
-            G4cout << "E KEY PRESSED, EXITING Qt MAIN LOOP" << G4endl;
+            G4cout <<
+               "E KEY PRESSED, EXITING OIQT VIEWER SECONDARY LOOP" << G4endl;
             SoQt::exitMainLoop();
             break;
          default:

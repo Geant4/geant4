@@ -33,6 +33,7 @@
 //
 // Modified:
 //
+// 2020.05.07 A.Ribon used the newly introduced G4HyperonBuilder
 // 2019.08.01 A.Ribon replaced explicit numbers for the energy transition
 //                    region with values taken from G4HadronicParameters
 // 2014.08.05 K.L.Genser added provisions for modifing the Bertini to
@@ -73,6 +74,7 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4NeutronPHPBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
@@ -249,17 +251,19 @@ void G4HadronPhysicsShielding::Kaon()
 
 void G4HadronPhysicsShielding::Others()
 {
-  // Hyperons
-  auto hyp = new G4HyperonFTFPBuilder;
-  AddBuilder( hyp );
+  // Hyperons (and anti-hyperons)
+  auto hyp = new G4HyperonBuilder;
+  AddBuilder(hyp);
+  auto ftfphyp = new G4HyperonFTFPBuilder;
+  AddBuilder(ftfphyp);
+  hyp->RegisterMe(ftfphyp);
   hyp->Build();
-
-  // Antibaryons
+  // Anti-barions
   auto abar = new G4AntiBarionBuilder;
-  AddBuilder( abar );
-  auto ftfpabar = new G4FTFPAntiBarionBuilder( false );
-  AddBuilder( ftfpabar );
-  abar->RegisterMe( ftfpabar );
+  AddBuilder(abar);
+  auto ftfpabar = new G4FTFPAntiBarionBuilder;
+  AddBuilder(ftfpabar);
+  abar->RegisterMe(ftfpabar);
   abar->Build();
 }
 

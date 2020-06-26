@@ -45,12 +45,14 @@
 
 G4VPartonStringModel::G4VPartonStringModel(const G4String& modelName)
     : G4VHighEnergyGenerator(modelName),
-      stringFragmentationModel(0),
-      theThis(0)
+      stringFragmentationModel(nullptr)
 {
-//  Make shure Shotrylived particles are constructed.
+  //  Make shure Shotrylived particles are constructed.
+  //  VI: should not instantiate particles by any model
+  /*
   G4ShortLivedConstructor ShortLived;
   ShortLived.ConstructParticle();
+  */
 }
 
 G4VPartonStringModel::~G4VPartonStringModel()
@@ -60,11 +62,11 @@ G4VPartonStringModel::~G4VPartonStringModel()
 G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus, 
                                                 const G4DynamicParticle &aPrimary)
 {  
-  G4ExcitedStringVector * strings = NULL;
+  G4ExcitedStringVector * strings = nullptr;
   G4DynamicParticle thePrimary=aPrimary;
   G4LorentzVector SumStringMom(0.,0.,0.,0.);
   G4KineticTrackVector * theResult = 0;
-  G4Nucleon * theNuclNucleon(0);
+  G4Nucleon * theNuclNucleon(nullptr);
 
   #ifdef debug_PartonStringModel
   G4cout<<G4endl;
@@ -80,7 +82,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   G4cout<<"Initial charge        "<<Qsum<<G4endl;
   G4cout<<"-------------- Parton-String model:  Generation of strings -------"<<G4endl<<G4endl;
   Bsum -= theNucleus.GetA_asInt();  Qsum -= theNucleus.GetZ_asInt();
-  if(theThis->GetProjectileNucleus()) {
+  if(GetProjectileNucleus()) {
     Bsum -= thePrimary.GetDefinition()->GetBaryonNumber();
     Qsum -= thePrimary.GetDefinition()->GetPDGCharge();
   }
@@ -101,20 +103,20 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   {
     if (attempts++ > maxAttempts ) 
     {
-      theThis->Init(theNucleus,thePrimary);  // To put a nucleus into ground state
+      Init(theNucleus,thePrimary);  // To put a nucleus into ground state
                                              // But marks of hitted nucleons are left. They must be erased.
-      G4V3DNucleus * ResNucleus=theThis->GetWoundedNucleus(); 
-      theNuclNucleon = ResNucleus->StartLoop() ? ResNucleus->GetNextNucleon() : NULL;
+      G4V3DNucleus * ResNucleus = GetWoundedNucleus(); 
+      theNuclNucleon = ResNucleus->StartLoop() ? ResNucleus->GetNextNucleon() : nullptr;
       while( theNuclNucleon )
       {
         if(theNuclNucleon->AreYouHit()) theNuclNucleon->Hit(nullptr);
         theNuclNucleon = ResNucleus->GetNextNucleon();
       }
 
-      G4V3DNucleus * ProjResNucleus=theThis->GetProjectileNucleus();
+      G4V3DNucleus * ProjResNucleus = GetProjectileNucleus();
       if(ProjResNucleus != 0)
       {
-        theNuclNucleon = ProjResNucleus->StartLoop() ? ProjResNucleus->GetNextNucleon() : NULL;
+        theNuclNucleon = ProjResNucleus->StartLoop() ? ProjResNucleus->GetNextNucleon() : nullptr;
         while( theNuclNucleon )
         {
           if(theNuclNucleon->AreYouHit()) theNuclNucleon->Hit(nullptr);
@@ -135,18 +137,18 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
       G4ThreeVector Position(0.,0.,2*ResNucleus->GetOuterRadius());
       G4KineticTrack* Hadron = new G4KineticTrack(aPrimary.GetParticleDefinition(), 0.,
                                                   Position, aPrimary.Get4Momentum());
-      if(theResult == 0) theResult = new G4KineticTrackVector();
+      if(theResult == nullptr) theResult = new G4KineticTrackVector();
       theResult->push_back(Hadron);
       return theResult;
     }
 
     Success=true;
 
-    theThis->Init(theNucleus,thePrimary);
+    Init(theNucleus,thePrimary);
 
     strings = GetStrings();
 
-    if (strings->size() == 0) { Success=false; continue; }
+    if (strings->empty()) { Success=false; continue; }
 
     G4double stringEnergy(0);
     SumStringMom=G4LorentzVector(0.,0.,0.,0.);
@@ -194,12 +196,12 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     G4double ExcitationEt(0.), ExcitationEp(0.);
     #endif
 
-    G4V3DNucleus * ProjResNucleus=theThis->GetProjectileNucleus();
+    G4V3DNucleus * ProjResNucleus = GetProjectileNucleus();
 
     G4int numberProtonProjectileResidual( 0 ), numberNeutronProjectileResidual( 0 );
     if(ProjResNucleus != 0)
     {
-      theNuclNucleon = ProjResNucleus->StartLoop() ? ProjResNucleus->GetNextNucleon() : NULL;
+      theNuclNucleon = ProjResNucleus->StartLoop() ? ProjResNucleus->GetNextNucleon() : nullptr;
       G4int numberProtonProjectileHits( 0 ), numberNeutronProjectileHits( 0 );
       while( theNuclNucleon )
       {
@@ -230,10 +232,10 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
                                         - thePrimary.GetDefinition()->GetPDGCharge() - numberNeutronProjectileHits;
     }
 
-    G4V3DNucleus * ResNucleus=theThis->GetWoundedNucleus(); 
+    G4V3DNucleus * ResNucleus = GetWoundedNucleus(); 
 
     // loop over wounded nucleus
-    theNuclNucleon = ResNucleus->StartLoop() ? ResNucleus->GetNextNucleon() : NULL;
+    theNuclNucleon = ResNucleus->StartLoop() ? ResNucleus->GetNextNucleon() : nullptr;
     G4int numberProtonTargetHits( 0 ), numberNeutronTargetHits( 0 );
     while( theNuclNucleon )
     {
@@ -305,7 +307,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     SumPsecondr=G4LorentzVector(0.,0.,0.,0.);
     #endif
 
-    if(theResult != 0)
+    if(theResult != nullptr)
     {
       std::for_each(theResult->begin(), theResult->end(), DeleteKineticTrack());
       delete theResult;
@@ -375,5 +377,5 @@ void G4VPartonStringModel::ModelDescription(std::ostream& outFile) const
 }
 
 G4V3DNucleus * G4VPartonStringModel::GetProjectileNucleus() const 
-{ return 0; }
+{ return nullptr; }
 

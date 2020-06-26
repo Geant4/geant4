@@ -91,15 +91,17 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy) override;
 
-private:
-
   // hide assignment operator
   G4eeToTwoGammaModel & operator=(const  G4eeToTwoGammaModel &right) = delete;
   G4eeToTwoGammaModel(const  G4eeToTwoGammaModel&) = delete;
 
+private:
+
   G4double pi_rcl2;
   G4ParticleDefinition*  theGamma;
   G4ParticleChangeForGamma* fParticleChange;
+
+  static G4bool fSampleAtomicPDF;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

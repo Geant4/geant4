@@ -50,10 +50,9 @@ public:
   // -- Fast simulation activation methods:
   // --------------------------------------
   // -- Used to select particles for which fast simulation has to be activated:
-  // ---- Activate fast simulation for one particle with fast simulation attached to mass geometry:
-  void ActivateFastSimulation(const G4String& particleName);
-  // ---- Activate fast simulation for one particle with fast simulation attached to a parallel geometry:
-  void ActivateFastSimulation(const G4String& particleName, const G4String& parallelGeometryName);
+  // ---- Activate fast simulation for one particle with fast simulation attached to mass geometry: (without geometry name) or
+  // ---- activate fast simulation for one particle with fast simulation attached to a parallel geometry:
+  void ActivateFastSimulation(const G4String particleName, const G4String parallelGeometryName = "");
 
   // -- Information about particles under fast simulation:
   void BeVerbose() { fVerbose = true; }
@@ -81,8 +80,6 @@ private:
 
   // -- Report:
   G4bool fVerbose;
-
-
   
 };
 

@@ -25,8 +25,16 @@ public:
     str_del(cstr);
     return true;
   }
-  virtual bool dump(std::ostream&) {
-    //a_out << parent::m_value << std::endl;
+  virtual bool dump(std::ostream& a_out) {
+    a_out << m_value << std::endl;
+    return true;
+  }
+  virtual bool s_value(std::string& a_s) const {
+    a_s = m_value;
+    return true;
+  }
+  virtual bool s2value(const std::string& a_s) {
+    value(a_s);
     return true;
   }
 public:

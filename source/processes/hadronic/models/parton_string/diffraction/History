@@ -14,7 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-07-Dec-2019 V. Ivanchenko     (hadr-string-diff-V10-05-11)
+08-Mar-2020 V. Ivanchenko     (hadr-string-diff-V10-06-01)
+- G4FTFModel, G4FTFParticipants - clean-up: removed unused methods, delete
+     operators, use C++11 keywords
+
+07-Dec-2019 V. Ivanchenko     (hadr-string-diff-V10-06-00)
 - G4FTFParameters:
   o  Fixed division by zero (Coverity report) due to wrong protection
      in previous MR 05-09

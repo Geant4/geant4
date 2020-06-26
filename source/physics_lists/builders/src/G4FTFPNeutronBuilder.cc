@@ -43,7 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4BGGNucleonInelasticXS.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
 
@@ -54,22 +54,18 @@ G4FTFPNeutronBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  G4FTFModel* theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-  theCascade = new G4GeneratorPrecompoundInterface();
-
-  theModel->SetTransport(theCascade);
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+  if (quasiElastic) {
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+  } 
 
+  theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
 }
@@ -77,10 +73,6 @@ G4FTFPNeutronBuilder(G4bool quasiElastic)
 G4FTFPNeutronBuilder::
 ~G4FTFPNeutronBuilder() 
 {
-  delete theStringDecay;
-  delete theStringModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theLund;
 }
 
 void G4FTFPNeutronBuilder::
@@ -89,7 +81,6 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
-    
+  aP->AddDataSet(new G4NeutronInelasticXS());
 }
 

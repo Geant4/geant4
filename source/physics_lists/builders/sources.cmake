@@ -85,7 +85,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/in
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/optical/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
@@ -121,7 +120,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPPiKBuilder.hh
         G4FTFPPionBuilder.hh
         G4FTFPProtonBuilder.hh
+        G4HadronicBuilder.hh
+        G4HyperonBuilder.hh
         G4HyperonFTFPBuilder.hh
+        G4HyperonQGSPBuilder.hh
         G4INCLXXNeutronBuilder.hh
         G4INCLXXPionBuilder.hh
         G4INCLXXProtonBuilder.hh
@@ -141,14 +143,16 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryPionBuilder.hh
         G4QGSBinaryProtonBuilder.hh
         G4QGSBuilder.hh
+	G4QGSPAntiBarionBuilder.hh
+        G4QGSPKaonBuilder.hh
         G4QGSPLundStrFragmProtonBuilder.hh
         G4QGSPNeutronBuilder.hh
         G4QGSPPiKBuilder.hh
         G4QGSPPionBuilder.hh
-        G4QGSPKaonBuilder.hh
         G4QGSPProtonBuilder.hh
         G4VAntiBarionBuilder.hh
         G4VHadronModelBuilder.hh
+        G4VHyperonBuilder.hh
         G4VKaonBuilder.hh
         G4VNeutronBuilder.hh
         G4VPiKBuilder.hh
@@ -195,7 +199,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFPPiKBuilder.cc
         G4FTFPPionBuilder.cc
         G4FTFPProtonBuilder.cc
+        G4HadronicBuilder.cc
+        G4HyperonBuilder.cc
         G4HyperonFTFPBuilder.cc
+        G4HyperonQGSPBuilder.cc
         G4INCLXXNeutronBuilder.cc
         G4INCLXXPionBuilder.cc
         G4INCLXXProtonBuilder.cc
@@ -214,11 +221,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryPionBuilder.cc
         G4QGSBinaryProtonBuilder.cc
         G4QGSBuilder.cc
-        G4QGSPNeutronBuilder.cc
+	G4QGSPAntiBarionBuilder.cc
+        G4QGSPKaonBuilder.cc
 	G4QGSPLundStrFragmProtonBuilder.cc
+        G4QGSPNeutronBuilder.cc
         G4QGSPPiKBuilder.cc
         G4QGSPPionBuilder.cc
-        G4QGSPKaonBuilder.cc
         G4QGSPProtonBuilder.cc
         G4VHadronModelBuilder.cc
         G4AlphaBuilder.cc
@@ -254,14 +262,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4had_mod_man
         G4had_mod_util
         G4had_lept_nuclear
-        G4had_neu_hp
         G4had_preequ_exciton
         G4had_string_diff
         G4had_string_frag
         G4had_string_man
         G4had_theo_max
-        G4hadronic_HE
-        G4hadronic_LE
         G4hadronic_bert_cascade
         G4hadronic_binary
         G4hadronic_coherent_elastic

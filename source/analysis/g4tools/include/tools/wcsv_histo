@@ -38,22 +38,26 @@ inline void annotations_to(std::ostream& a_writer,const ANNOTATION& a_ans,char a
 }
 
 template <class HIST>
+inline void h_header(std::ostream& a_writer,const std::string& a_class,const HIST& a_h,char a_hc = '#') {
+  a_writer << a_hc << "class " << a_class << std::endl;
+  a_writer << a_hc << "title " << a_h.title() << std::endl;
+  a_writer << a_hc << "dimension " << a_h.dimension() << std::endl;
+  for(unsigned int iaxis=0;iaxis<a_h.dimension();iaxis++) axis_to(a_writer,a_h.get_axis(iaxis),a_hc);
+ {const std::vector<typename HIST::coordinate_t>& planes = a_h.in_range_planes_xyw();
+  if(planes.size()) {
+    a_writer << a_hc << "planes_Sxyw";
+    for(unsigned int iplane=0;iplane<planes.size();iplane++) a_writer << " " << planes[iplane];
+    a_writer << std::endl;
+  }}
+  annotations_to(a_writer,a_h.annotations(),a_hc);
+  a_writer << a_hc << "bin_number " << a_h.get_bins() << std::endl;
+}
+
+template <class HIST>
 inline bool hto(std::ostream& a_writer,const std::string& a_class,const HIST& a_h,
                 char a_sep = ',',char a_hc = '#',bool a_header = true) {
-  if(a_header) {
-    a_writer << a_hc << "class " << a_class << std::endl;
-    a_writer << a_hc << "title " << a_h.title() << std::endl;
-    a_writer << a_hc << "dimension " << a_h.dimension() << std::endl;
-    for(unsigned int iaxis=0;iaxis<a_h.dimension();iaxis++) axis_to(a_writer,a_h.get_axis(iaxis),a_hc);
-   {const std::vector<typename HIST::coordinate_t>& planes = a_h.in_range_planes_xyw();
-    if(planes.size()) {
-      a_writer << a_hc << "planes_Sxyw";
-      for(unsigned int iplane=0;iplane<planes.size();iplane++) a_writer << " " << planes[iplane];
-      a_writer << std::endl;
-    }}
-    annotations_to(a_writer,a_h.annotations(),a_hc);
-    a_writer << a_hc << "bin_number " << a_h.get_bins() << std::endl;
-  }
+  if(a_header) h_header(a_writer,a_class,a_h,a_hc);
+
  {a_writer << "entries" << a_sep << "Sw" << a_sep << "Sw2";
   for(unsigned int iaxis=0;iaxis<a_h.dimension();iaxis++) {
     a_writer << a_sep << "Sxw" << iaxis << a_sep << "Sx2w" << iaxis;
@@ -89,25 +93,29 @@ inline bool hto(std::ostream& a_writer,const std::string& a_class,const HIST& a_
 }
 
 template <class PROF>
+inline void p_header(std::ostream& a_writer,const std::string& a_class,const PROF& a_prof,char a_hc = '#') {
+  a_writer << a_hc << "class " << a_class << std::endl;
+  a_writer << a_hc << "title " << a_prof.title() << std::endl;
+  a_writer << a_hc << "dimension " << a_prof.dimension() << std::endl;
+  for(unsigned int iaxis=0;iaxis<a_prof.dimension();iaxis++) axis_to(a_writer,a_prof.get_axis(iaxis),a_hc);
+ {const std::vector<typename PROF::coordinate_t>& planes = a_prof.in_range_planes_xyw();
+  if(planes.size()) {
+    a_writer << a_hc << "planes_Sxyw";
+    for(unsigned int iplane=0;iplane<planes.size();iplane++) a_writer << " " << planes[iplane];
+    a_writer << std::endl;
+  }}
+  annotations_to(a_writer,a_prof.annotations(),a_hc);
+  a_writer << a_hc << "cut_v " << (a_prof.cut_v()?"true":"false") << std::endl;
+  a_writer << a_hc << "min_v " << a_prof.min_v() << std::endl;
+  a_writer << a_hc << "max_v " << a_prof.max_v() << std::endl;
+  a_writer << a_hc << "bin_number " << a_prof.get_bins() << std::endl;
+}
+
+template <class PROF>
 inline bool pto(std::ostream& a_writer,const std::string& a_class,const PROF& a_prof,
                 char a_sep = ',',char a_hc = '#',bool a_header = true) {
-  if(a_header) {
-    a_writer << a_hc << "class " << a_class << std::endl;
-    a_writer << a_hc << "title " << a_prof.title() << std::endl;
-    a_writer << a_hc << "dimension " << a_prof.dimension() << std::endl;
-    for(unsigned int iaxis=0;iaxis<a_prof.dimension();iaxis++) axis_to(a_writer,a_prof.get_axis(iaxis),a_hc);
-   {const std::vector<typename PROF::coordinate_t>& planes = a_prof.in_range_planes_xyw();
-    if(planes.size()) {
-      a_writer << a_hc << "planes_Sxyw";
-      for(unsigned int iplane=0;iplane<planes.size();iplane++) a_writer << " " << planes[iplane];
-      a_writer << std::endl;
-    }}
-    annotations_to(a_writer,a_prof.annotations(),a_hc);
-    a_writer << a_hc << "cut_v " << (a_prof.cut_v()?"true":"false") << std::endl;
-    a_writer << a_hc << "min_v " << a_prof.min_v() << std::endl;
-    a_writer << a_hc << "max_v " << a_prof.max_v() << std::endl;
-    a_writer << a_hc << "bin_number " << a_prof.get_bins() << std::endl;
-  }
+  if(a_header) p_header(a_writer,a_class,a_prof,a_hc);
+
  {a_writer << "entries" << a_sep << "Sw" << a_sep << "Sw2" << a_sep << "Svw" << a_sep << "Sv2w";
   for(unsigned int iaxis=0;iaxis<a_prof.dimension();iaxis++) {
     a_writer << a_sep << "Sxw" << iaxis << a_sep << "Sx2w" << iaxis;

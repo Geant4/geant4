@@ -55,7 +55,7 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
                         const G4VIStore &aIstore,
                         const G4VTrackTerminator *TrackTerminator,
                         const G4String &aName, G4bool para)
- : G4VProcess(aName),
+ : G4VProcess(aName, fParallel),
    fParticleChange(new G4ParticleChange),
    fImportanceAlgorithm(aImportanceAlgorithm),
    fIStore(aIstore),
@@ -64,8 +64,7 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
    fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0'),
    fParaflag(para), fEndTrack('0'), feLimited(kDoNot)  
 {
-  G4cout << G4endl << G4endl << G4endl;
-  G4cout << "G4ImportanceProcess:: Creating " << G4endl;
+  G4cout << "### G4ImportanceProcess:: Creating " << G4endl;
   if (TrackTerminator)
   {
     fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);

@@ -181,6 +181,8 @@ public:
 
   void SetVerbose(G4int val);
 
+  void ResetParameters();
+
   void SetAtomDeexcitation(G4VAtomDeexcitation*);
 
   void SetSubCutProducer(G4VSubCutProducer*);
@@ -234,8 +236,6 @@ private:
   G4LossTableManager();
 
   void Clear();
-
-  void ResetParameters();
 
   G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
 

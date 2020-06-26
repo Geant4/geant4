@@ -23,74 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ErrorPropagatorData
 //
+// Class description:
 //
-//
-// --------------------------------------------------------------------
-//      GEANT 4 class header file 
-// --------------------------------------------------------------------
-//
-// Class Description:
-//
-//   Utility class to provide access to mode, state, target 
-//   and manager verbosity for the error propagation classes.
+// Utility class to provide access to mode, state, target
+// and manager verbosity for the error propagation classes.
 
-// - Created. P.Arce, 2004.
+// Author: P.Arce, 2004
 // --------------------------------------------------------------------
 
-#ifndef G4ErrorPropagatorData_HH
-#define G4ErrorPropagatorData_HH
+#ifndef G4ErrorPropagatorData_hh
+#define G4ErrorPropagatorData_hh
 
 #include "globals.hh"
 
-enum G4ErrorMode  { G4ErrorMode_PropForwards = 1,
-                    G4ErrorMode_PropBackwards,
-                    G4ErrorMode_PropTest };
+enum G4ErrorMode
+{
+  G4ErrorMode_PropForwards = 1,
+  G4ErrorMode_PropBackwards,
+  G4ErrorMode_PropTest
+};
 
-enum G4ErrorState { G4ErrorState_PreInit = 1,
-                    G4ErrorState_Init,
-                    G4ErrorState_Propagating,
-                    G4ErrorState_TargetCloserThanBoundary,
-                    G4ErrorState_StoppedAtTarget };
+enum G4ErrorState
+{
+  G4ErrorState_PreInit = 1,
+  G4ErrorState_Init,
+  G4ErrorState_Propagating,
+  G4ErrorState_TargetCloserThanBoundary,
+  G4ErrorState_StoppedAtTarget
+};
 
-enum G4ErrorStage  { G4ErrorStage_Inflation = 1,
-                     G4ErrorStage_Deflation };
+enum G4ErrorStage
+{
+  G4ErrorStage_Inflation = 1,
+  G4ErrorStage_Deflation
+};
 
 class G4ErrorTarget;
 
-class G4ErrorPropagatorData 
+class G4ErrorPropagatorData
 {
-
-public:  // with description
-
+ public:
   static G4ErrorPropagatorData* GetErrorPropagatorData();
-    // Singleton instance
+  // Singleton instance
 
-  // Get and Set methods
-  G4ErrorMode GetMode() const;
-  void SetMode( G4ErrorMode mode );
+  inline G4ErrorMode GetMode() const;
+  inline void SetMode(G4ErrorMode mode);
 
-  G4ErrorState GetState() const;
-  void SetState( G4ErrorState sta );
+  inline G4ErrorState GetState() const;
+  inline void SetState(G4ErrorState sta);
 
-  G4ErrorStage GetStage() const;
-  void SetStage( G4ErrorStage sta );
+  inline G4ErrorStage GetStage() const;
+  inline void SetStage(G4ErrorStage sta);
 
-  const G4ErrorTarget* GetTarget( G4bool mustExist = 0) const;
-  void SetTarget( const G4ErrorTarget* target );
+  inline const G4ErrorTarget* GetTarget(G4bool mustExist = false) const;
+  inline void SetTarget(const G4ErrorTarget* target);
 
   static G4int verbose();
-  static void SetVerbose( G4int ver );
+  static void SetVerbose(G4int ver);
 
-
-private:
-
+ private:
   G4ErrorPropagatorData();
   ~G4ErrorPropagatorData();
-    // constructor and destructor are private
+  // constructor and destructor are private
 
-private:
-
+ private:
   static G4ThreadLocal G4ErrorPropagatorData* fpInstance;
 
   G4ErrorMode theMode;
@@ -99,10 +97,9 @@ private:
 
   G4ErrorStage theStage;
 
-  G4ErrorTarget* theTarget;
+  G4ErrorTarget* theTarget = nullptr;
 
   static G4ThreadLocal G4int theVerbosity;
-
 };
 
 #include "G4ErrorPropagatorData.icc"

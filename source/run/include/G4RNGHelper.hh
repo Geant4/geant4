@@ -38,89 +38,94 @@
 #ifndef G4RNGHELPER_HH
 #define G4RNGHELPER_HH
 
-#include <vector>
-#include <queue>
 #include "globals.hh"
+#include <queue>
+#include <vector>
 
 template <class T>
 class G4TemplateRNGHelper
 {
-  public:
-    // The container is modeled as a (shared) singleton
-    static G4TemplateRNGHelper<T>* GetInstance();
-    static G4TemplateRNGHelper<T>* GetInstanceIfExist(); 
-    typedef std::vector<T> SeedsQueue;
-    typedef typename SeedsQueue::size_type SeedsQueueSize_type;
+ public:
+  // The container is modeled as a (shared) singleton
+  static G4TemplateRNGHelper<T>* GetInstance();
+  static G4TemplateRNGHelper<T>* GetInstanceIfExist();
+  typedef std::vector<T> SeedsQueue;
+  typedef typename SeedsQueue::size_type SeedsQueueSize_type;
 
-    virtual ~G4TemplateRNGHelper();
-    
-    //Returns seed given id
-    virtual const T GetSeed(const G4int& sdId )
+  virtual ~G4TemplateRNGHelper();
+
+  // Returns seed given id
+  virtual const T GetSeed(const G4int& sdId)
+  {
+    G4int seedId = sdId - 2 * offset;
+    if(seedId < static_cast<G4int>(seeds.size()))
     {
-      G4int seedId = sdId - 2*offset;
-      if ( seedId < static_cast<G4int>(seeds.size()) )
-      {
-         T& seed = seeds[seedId];
-         return seed;
-      }
-      G4ExceptionDescription msg;
-      msg << "No seed number "<<seedId<<"("<<seeds.size()<<" available)\n"
-          << " Original seed number "<<sdId<<" filled so far "<<offset;
-      G4Exception("G4RNGHelper::GetSeed","Run0115", FatalException,msg);
-      return T();
+      T& seed = seeds[seedId];
+      return seed;
     }
-    
-    //Adds one seed to the collection
-    void AddOneSeed( const T& seed ) { seeds.push_back(seed); }
+    G4ExceptionDescription msg;
+    msg << "No seed number " << seedId << "(" << seeds.size() << " available)\n"
+        << " Original seed number " << sdId << " filled so far " << offset;
+    G4Exception("G4RNGHelper::GetSeed", "Run0115", FatalException, msg);
+    return T();
+  }
 
-    //Fills N primary seed pairs
-    void Fill(G4double* dbl,G4int nev,G4int nev_tot,G4int nrpe)
+  // Adds one seed to the collection
+  void AddOneSeed(const T& seed) { seeds.push_back(seed); }
+
+  // Fills N primary seed pairs
+  void Fill(G4double* dbl, G4int nev, G4int nev_tot, G4int nrpe)
+  {
+    seeds.clear();
+    for(G4int i = 0; i < nrpe * nev; i++)
     {
-      seeds.clear();
-      for(G4int i=0;i<nrpe*nev;i++)
-      { seeds.push_back((G4long)(100000000L*dbl[i])); }
-      offset = 0;
-      nev_filled = nev;
-      nev_total = nev_tot;
-      nRandParEvent = nrpe;
+      seeds.push_back((G4long)(100000000L * dbl[i]));
     }
+    offset        = 0;
+    nev_filled    = nev;
+    nev_total     = nev_tot;
+    nRandParEvent = nrpe;
+  }
 
-    void Refill(G4double* dbl, G4int nev)
+  void Refill(G4double* dbl, G4int nev)
+  {
+    if(nev == 0)
+      return;
+    seeds.clear();
+    for(G4int i = 0; i < nRandParEvent * nev; i++)
     {
-      if(nev==0) return;
-      seeds.clear();
-      for(G4int i=0;i<nRandParEvent*nev;i++)
-      { seeds.push_back((G4long)(100000000L*dbl[i])); }
-      offset += nev_filled;
-      nev_filled = nev;
+      seeds.push_back((G4long)(100000000L * dbl[i]));
     }
-    
-    //Number of available seeds
-    const SeedsQueueSize_type GetNumberSeeds() const { return seeds.size(); }
-    
-    //Empty the seeds container
-    virtual void Clear() { seeds.clear(); }
+    offset += nev_filled;
+    nev_filled = nev;
+  }
 
-  protected:
-    SeedsQueue seeds;
-    // Note: following numbers are number of events.
-    //       seeds are generated for nRandParEvent times n_event
-    G4int offset;
-    G4int nev_filled;
-    G4int nev_total;
-    G4int nRandParEvent;
+  // Number of available seeds
+  const SeedsQueueSize_type GetNumberSeeds() const { return seeds.size(); }
 
-  private:
-    G4TemplateRNGHelper()
-    {
-      offset=0;
-      nev_filled=0;
-      nev_total=0;
-      nRandParEvent=0;
-    }
+  // Empty the seeds container
+  virtual void Clear() { seeds.clear(); }
 
-  private:
-    static G4TemplateRNGHelper<T>* instance;
+ protected:
+  SeedsQueue seeds;
+  // Note: following numbers are number of events.
+  //       seeds are generated for nRandParEvent times n_event
+  G4int offset;
+  G4int nev_filled;
+  G4int nev_total;
+  G4int nRandParEvent;
+
+ private:
+  G4TemplateRNGHelper()
+  {
+    offset        = 0;
+    nev_filled    = 0;
+    nev_total     = 0;
+    nRandParEvent = 0;
+  }
+
+ private:
+  static G4TemplateRNGHelper<T>* instance;
 };
 
 typedef G4TemplateRNGHelper<G4long> G4RNGHelper;

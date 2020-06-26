@@ -23,18 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VTrajectoryPoint class implementation
 //
-//
-//---------------------------------------------------------------
-//
-// G4VTrajectoryPoint.cc
-//
-// ---------------------------------------------------------------
+// Contact:
+//   Questions and comments to this code should be sent to
+//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
 
 #include "G4VTrajectoryPoint.hh"
 
-G4VTrajectoryPoint::G4VTrajectoryPoint() {;}
-G4VTrajectoryPoint::~G4VTrajectoryPoint() {;}
+G4VTrajectoryPoint::G4VTrajectoryPoint()
+{
+}
+
+G4VTrajectoryPoint::~G4VTrajectoryPoint()
+{
+}
 
 G4bool G4VTrajectoryPoint::operator==(const G4VTrajectoryPoint& right) const
 {

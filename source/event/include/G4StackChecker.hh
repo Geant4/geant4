@@ -23,41 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StackChecker
 //
+// Class description:
 //
+// A UserStackingAction for removing unreasonable tracks.
 
-#ifndef G4StackChecker_h
-#define G4StackChecker_h 1
+// Author: Makoto Asai, 2003
+// --------------------------------------------------------------------
+#ifndef G4StackChecker_hh
+#define G4StackChecker_hh 1
 
 #include "G4UserStackingAction.hh"
 #include "G4ClassificationOfNewTrack.hh"
 #include "G4ThreeVector.hh"
 
-// class description:
-//
-//  This is the UserStackingAction for removing unreasonable tracks.
-//
-
 class G4Track;
 
-class G4StackChecker  : public G4UserStackingAction
+class G4StackChecker : public G4UserStackingAction
 {
-public:
-  G4StackChecker();
-  virtual ~G4StackChecker();
+  public:
 
-public: // with description
+    G4StackChecker();
+    virtual ~G4StackChecker();
 
-  virtual G4ClassificationOfNewTrack
-        ClassifyNewTrack(const G4Track* track);
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* track);
 
-  virtual void NewStage() {};
-  virtual void PrepareNewEvent() {};
+    virtual void NewStage();
+    virtual void PrepareNewEvent();
 
-private:
+  private:
 
-  G4ThreeVector nullDirection;
-
+    G4ThreeVector nullDirection;
 };
 
 #endif

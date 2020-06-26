@@ -46,7 +46,7 @@
 class G4NeutronLENDBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4NeutronLENDBuilder(G4String eva="");
+    G4NeutronLENDBuilder(const G4String& eva="");
     virtual ~G4NeutronLENDBuilder() {}
 
     virtual void Build(G4HadronElasticProcess * aP) final override;

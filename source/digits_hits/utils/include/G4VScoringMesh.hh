@@ -53,7 +53,7 @@ class G4ParallelWorldProcess;
 class G4VScoringMesh
 {
 public:
-  enum class MeshShape { box, cylinder, sphere, realWorldLogVol, undefined = -1};
+  enum class MeshShape { box, cylinder, sphere, realWorldLogVol, probe, undefined = -1};
   using EventScore = G4THitsMap< G4double >;
   using RunScore = G4THitsMap< G4StatDouble >;
   using MeshScoreMap = std::map< G4String, RunScore* >;
@@ -174,7 +174,7 @@ public: // with description
   inline G4bool ReadyForQuantity() const
   { return (sizeIsSet && nMeshIsSet); }
 
-protected:
+//protected:
   // get registered primitive socrer by the name
   G4VPrimitiveScorer * GetPrimitiveScorer(const G4String & name);
 
@@ -235,6 +235,15 @@ public:
   { copyNumberLevel = val; }
   inline G4int GetCopyNumberLevel() const
   { return copyNumberLevel; }
+
+protected:
+  // This flag may be set to true for Probe scoring mesh.
+  // There is no public set method for this boolean flag, but it should be set to true
+  // through SetMaterial() method of Probe scoring mesh.
+  G4bool layeredMassFlg;
+public:
+  G4bool LayeredMassFlg() 
+  { return layeredMassFlg; }
 };
 
 #endif

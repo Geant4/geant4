@@ -53,8 +53,11 @@ GFlashHomoShowerParameterisation(G4Material * aMat,
     Rhoh(0.), Alphah(0.), Tmaxh(0.), Betah(0.)
 
 {  
-  if(!aPar) { thePar = new GVFlashHomoShowerTuning; owning = true; }
-  else      { thePar = aPar; owning = false; }
+  if(!aPar) {
+    thePar = new GVFlashHomoShowerTuning;
+  } else {
+    thePar = aPar;
+  }
 
   SetMaterial(aMat);
   PrintMaterial(aMat);
@@ -150,7 +153,7 @@ void GFlashHomoShowerParameterisation::SetMaterial(G4Material *mat)
 
 GFlashHomoShowerParameterisation::~GFlashHomoShowerParameterisation()
 {
-  if(owning) { delete thePar; }
+  delete thePar;
 }
 
 void GFlashHomoShowerParameterisation::

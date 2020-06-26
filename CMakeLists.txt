@@ -22,7 +22,7 @@ cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
 # - Make overrides for default flags, so they appear in interfaces
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
-   ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
+   ${CMAKE_SOURCE_DIR}/cmake/Modules/G4MakeRules_cxx.cmake)
 
 #-----------------------------------------------------------------------
 # - Project definition and basic configuration
@@ -31,8 +31,8 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
 #   the same form.
 project(Geant4)
 set(${PROJECT_NAME}_VERSION_MAJOR 10)
-set(${PROJECT_NAME}_VERSION_MINOR  6)
-set(${PROJECT_NAME}_VERSION_PATCH  2)
+set(${PROJECT_NAME}_VERSION_MINOR  7)
+set(${PROJECT_NAME}_VERSION_PATCH  0)
 set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
 
 # - Prepend our own CMake Modules to the search path

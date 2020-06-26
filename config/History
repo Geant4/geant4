@@ -15,8 +15,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12th Feb 2020 Gabriele Cosmo (config-V10-05-09)
+22nd June 2020 Gabriele Cosmo (config-V10-06-06)
+- Added -pthread to all builds in Linux targets.
+
+18th June 2020 Gabriele Cosmo (config-V10-06-05)
+- Added setup for building and configuring new externals/ptl
+  and tasking modules. External installation of PTL can be enabled
+  by defining the installation through the environment variable PTL_BASE_DIR.
+
+25th May 2020 Gabriele Cosmo (config-V10-06-04)
+- Added missing settings in G4UI_BUILD.gmk script for OIQt and use of UI.
+
+18th May 2020 Gabriele Cosmo (config-V10-06-03)
+- Removed deprecated G4USE_STD11 flag settings.
+
+30th Apr 2020 Gabriele Cosmo (config-V10-06-02)
+- Corrected setup for use of OpenInventor (Coin).
+
+12th Feb 2020 Gabriele Cosmo (config-V10-06-01)
 - Fixed and updated setup for DLL builds on Windows.
+
+12th Dec 2019 Gabriele Cosmo (config-V10-06-00)
+- Removed dependency on GLU for all configurations, as no longer necessary.
 
 20th Nov 2019 Gabriele Cosmo (config-V10-05-08)
 - interactivity.gmk: added -DQT_NO_DEPRECATED_WARNINGS to Qt compilation

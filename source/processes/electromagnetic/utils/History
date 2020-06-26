@@ -16,10 +16,42 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28 April 19: V.Ivanchenko (emutils-V10-05-24)
+11 June 20: V.Ivanchenko (emutils-V10-06-07)
+- G4EmParameters, G4EmExtraParameters - FillStepFunction method is 
+    applied in each thread - critical fix may affect Shielding CPU
+- G4VEnergyLossProcess - better printout in a warning
+
+30 May 20: V.Ivanchenko (emutils-V10-06-06)
+- G4LossTableManager - make ResetParameters() method public
+- G4VAtomicDeexcitation - optimized arrays initialisation  
+
+03 May 20: V.Ivanchenko (emutils-V10-06-05)
+- G4EmParameters, G4EmParametersMessenger, G4EmExtraParametersMessenger,
+  G4VEnergyLossProcess - added two extra set of StepFunction parameters
+    for light ions and generic ions; added extra UI commands; modified
+    interfaces accordingly; removed old comments
+
+28 April 20: V.Ivanchenko (emutils-V10-06-04)
 - G4LossTableBuilder - fixed #2230 (typo in the code)
 
-13 January 19: V.Ivanchenko (emutils-V10-05-23)
+26 April 20: V.Ivanchenko (emutils-V10-06-03)
+- G4EmParameters, G4EmParametersMessenger, G4VMultipleScattering
+  removed displacement beyond safety option - L.Urban studied
+  in details and we come to conclusion, that it does not bring
+  an advantages but may provoke crashes in some circomstances
+- G4EmLowEParametersMessenger - extend number of DNA PhysicsList options
+- G4EmCalculator - fixed printout
+
+09 March 20: V.Ivanchenko (emutils-V10-06-02)
+- G4VEmProcess - removed old not used methods; DefinedMaterial(..)
+    method is now protected (needed for AtRest processes)
+
+06 March 20: V.Ivanchenko (emutils-V10-06-01)
+- G4EmParameters, G4EmLowEParameters, G4EmLowEParametersMessenger 
+    added a new parameter - name of the sub-directory with data for 
+    Livermore models with variants: "livermore" (default), "epics_2017"
+
+13 January 20: V.Ivanchenko (emutils-V10-06-00)
 - G4EmParameters, G4EmParametersMessenger - added new parameter
     to enable read of e+e- production table from file (CMS request)
 

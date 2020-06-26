@@ -31,11 +31,11 @@
 //     This is a class for mandatory control of GEANT4 kernel.
 //     This class implements Worker behavior in a MT application.
 //
-//     This class is constructed by G4WorkerRunManager. If a user uses his/her own
-//     class instead of G4WorkerRunManager, this class must be instantiated by
-//     him/herself at the very beginning of the application and must be deleted
-//     at the very end of the application. Also, following methods must be
-//     invoked in the proper order.
+//     This class is constructed by G4WorkerRunManager. If a user uses his/her
+//     own class instead of G4WorkerRunManager, this class must be instantiated
+//     by him/herself at the very beginning of the application and must be
+//     deleted at the very end of the application. Also, following methods must
+//     be invoked in the proper order.
 //       DefineWorldVolume
 //       InitializePhysics
 //       RunInitialization
@@ -56,13 +56,15 @@
 
 #include "G4RunManagerKernel.hh"
 
-class G4WorkerRunManagerKernel : public G4RunManagerKernel {
-public:
-    G4WorkerRunManagerKernel();
-    virtual ~G4WorkerRunManagerKernel();
-protected:
-    //Overwrite default behavior
-    void SetupShadowProcess() const;
+class G4WorkerRunManagerKernel : public G4RunManagerKernel
+{
+ public:
+  G4WorkerRunManagerKernel();
+  virtual ~G4WorkerRunManagerKernel();
+
+ protected:
+  // Overwrite default behavior
+  void SetupShadowProcess() const;
 };
 
-#endif //G4WorkerRunManagerKernel_h
+#endif  // G4WorkerRunManagerKernel_h

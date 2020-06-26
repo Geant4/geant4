@@ -72,11 +72,6 @@ class G4QGSBinaryNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4BinaryCascade * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-
     G4double theMin;
 
 };

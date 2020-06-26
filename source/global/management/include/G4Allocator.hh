@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-// GEANT 4 class header file 
+// G4Allocator
 //
 // Class Description:
 //
@@ -35,14 +31,13 @@
 // chunks organised as linked list. It's meant to be used by associating
 // it to the object to be allocated and defining for it new and delete
 // operators via MallocSingle() and FreeSingle() methods.
-       
+
 //      ---------------- G4Allocator ----------------
 //
 // Author: G.Cosmo (CERN), November 2000
-// ------------------------------------------------------------
-
-#ifndef G4Allocator_h
-#define G4Allocator_h 1
+// --------------------------------------------------------------------
+#ifndef G4Allocator_hh
+#define G4Allocator_hh 1
 
 #include <cstddef>
 #include <typeinfo>
@@ -51,118 +46,119 @@
 
 class G4AllocatorBase
 {
-  public:
-    G4AllocatorBase(); 
-    virtual ~G4AllocatorBase();
-    virtual void ResetStorage()=0;
-    virtual size_t GetAllocatedSize() const=0;
-    virtual int GetNoPages() const=0;
-    virtual size_t GetPageSize() const=0;
-    virtual void IncreasePageSize( unsigned int sz )=0;
-    virtual const char* GetPoolType() const=0;
+ public:
+  G4AllocatorBase();
+  virtual ~G4AllocatorBase();
+  virtual void ResetStorage()                    = 0;
+  virtual std::size_t GetAllocatedSize() const   = 0;
+  virtual int GetNoPages() const                 = 0;
+  virtual std::size_t GetPageSize() const        = 0;
+  virtual void IncreasePageSize(unsigned int sz) = 0;
+  virtual const char* GetPoolType() const        = 0;
 };
 
 template <class Type>
 class G4Allocator : public G4AllocatorBase
 {
-  public:  // with description
+ public:
+  G4Allocator() throw();
+  ~G4Allocator() throw();
+  // Constructor & destructor
 
-    G4Allocator() throw();
-    ~G4Allocator() throw();
-      // Constructor & destructor
+  inline Type* MallocSingle();
+  inline void FreeSingle(Type* anElement);
+  // Malloc and Free methods to be used when overloading
+  // new and delete operators in the client <Type> object
 
-    inline Type* MallocSingle();
-    inline void FreeSingle(Type* anElement);
-      // Malloc and Free methods to be used when overloading
-      // new and delete operators in the client <Type> object
+  inline void ResetStorage();
+  // Returns allocated storage to the free store, resets allocator.
+  // Note: contents in memory are lost using this call !
 
-    inline void ResetStorage();
-      // Returns allocated storage to the free store, resets allocator.
-      // Note: contents in memory are lost using this call !
+  inline std::size_t GetAllocatedSize() const;
+  // Returns the size of the total memory allocated
+  inline int GetNoPages() const;
+  // Returns the total number of allocated pages
+  inline std::size_t GetPageSize() const;
+  // Returns the current size of a page
+  inline void IncreasePageSize(unsigned int sz);
+  // Resets allocator and increases default page size of a given factor
 
-    inline size_t GetAllocatedSize() const;
-      // Returns the size of the total memory allocated
-    inline int GetNoPages() const;
-      // Returns the total number of allocated pages
-    inline size_t GetPageSize() const;
-      // Returns the current size of a page
-    inline void IncreasePageSize( unsigned int sz );
-      // Resets allocator and increases default page size of a given factor
+  inline const char* GetPoolType() const;
+  // Returns the type_info Id of the allocated type in the pool
 
-    inline const char* GetPoolType() const;
-      // Returns the type_info Id of the allocated type in the pool
+  // This public section includes standard methods and types
+  // required if the allocator is to be used as alternative
+  // allocator for STL containers.
+  // NOTE: the code below is a trivial implementation to make
+  //       this class an STL compliant allocator.
+  //       It is anyhow NOT recommended to use this class as
+  //       alternative allocator for STL containers !
 
-  public:  // without description
+  using value_type      = Type;
+  using size_type       = std::size_t;
+  using difference_type = ptrdiff_t;
+  using pointer         = Type*;
+  using const_pointer   = const Type*;
+  using reference       = Type&;
+  using const_reference = const Type&;
 
-    // This public section includes standard methods and types
-    // required if the allocator is to be used as alternative
-    // allocator for STL containers.
-    // NOTE: the code below is a trivial implementation to make
-    //       this class an STL compliant allocator.
-    //       It is anyhow NOT recommended to use this class as
-    //       alternative allocator for STL containers !
+  template <class U>
+  G4Allocator(const G4Allocator<U>& right) throw()
+    : mem(right.mem)
+  {}
+  // Copy constructor
 
-    typedef Type value_type;
-    typedef size_t size_type;
-    typedef ptrdiff_t difference_type;
-    typedef Type* pointer;
-    typedef const Type* const_pointer;
-    typedef Type& reference;
-    typedef const Type& const_reference;
+  pointer address(reference r) const { return &r; }
+  const_pointer address(const_reference r) const { return &r; }
+  // Returns the address of values
 
-    template <class U> G4Allocator(const G4Allocator<U>& right) throw()
-      : mem(right.mem) {}
-      // Copy constructor
+  pointer allocate(size_type n, void* = 0)
+  {
+    // Allocates space for n elements of type Type, but does not initialise
+    //
+    Type* mem_alloc = 0;
+    if(n == 1)
+      mem_alloc = MallocSingle();
+    else
+      mem_alloc = static_cast<Type*>(::operator new(n * sizeof(Type)));
+    return mem_alloc;
+  }
+  void deallocate(pointer p, size_type n)
+  {
+    // Deallocates n elements of type Type, but doesn't destroy
+    //
+    if(n == 1)
+      FreeSingle(p);
+    else
+      ::operator delete((void*) p);
+    return;
+  }
 
-    pointer address(reference r) const { return &r; }
-    const_pointer address(const_reference r) const { return &r; }
-      // Returns the address of values
+  void construct(pointer p, const Type& val) { new((void*) p) Type(val); }
+  // Initialises *p by val
+  void destroy(pointer p) { p->~Type(); }
+  // Destroy *p but doesn't deallocate
 
-    pointer allocate(size_type n, void* = 0)
-    {
-      // Allocates space for n elements of type Type, but does not initialise
-      //
-      Type* mem_alloc = 0;
-      if (n == 1)
-        mem_alloc = MallocSingle();
-      else
-        mem_alloc = static_cast<Type*>(::operator new(n*sizeof(Type)));
-      return mem_alloc;
-    }
-    void deallocate(pointer p, size_type n)
-    {
-      // Deallocates n elements of type Type, but doesn't destroy
-      //
-      if (n == 1)
-        FreeSingle(p);
-      else
-        ::operator delete((void*)p);
-      return;
-    }
+  size_type max_size() const throw()
+  {
+    // Returns the maximum number of elements that can be allocated
+    //
+    return 2147483647 / sizeof(Type);
+  }
 
-    void construct(pointer p, const Type& val) { new((void*)p) Type(val); }
-      // Initialises *p by val
-    void destroy(pointer p) { p->~Type(); }
-      // Destroy *p but doesn't deallocate
+  template <class U>
+  struct rebind
+  {
+    typedef G4Allocator<U> other;
+  };
+  // Rebind allocator to type U
 
-    size_type max_size() const throw()
-    {
-      // Returns the maximum number of elements that can be allocated
-      //
-      return 2147483647/sizeof(Type);
-    }
+  G4AllocatorPool mem;
+  // Pool of elements of sizeof(Type)
 
-    template <class U>
-    struct rebind { typedef G4Allocator<U> other; };
-      // Rebind allocator to type U
-
-    G4AllocatorPool mem;
-      // Pool of elements of sizeof(Type)
-
-  private:
-
-    const char* tname;
-      // Type name identifier
+ private:
+  const char* tname;
+  // Type name identifier
 };
 
 // ------------------------------------------------------------
@@ -190,8 +186,7 @@ G4Allocator<Type>::G4Allocator() throw()
 //
 template <class Type>
 G4Allocator<Type>::~G4Allocator() throw()
-{
-}
+{}
 
 // ************************************************************
 // MallocSingle
@@ -232,7 +227,7 @@ void G4Allocator<Type>::ResetStorage()
 // ************************************************************
 //
 template <class Type>
-size_t G4Allocator<Type>::GetAllocatedSize() const
+std::size_t G4Allocator<Type>::GetAllocatedSize() const
 {
   return mem.Size();
 }
@@ -262,10 +257,10 @@ size_t G4Allocator<Type>::GetPageSize() const
 // ************************************************************
 //
 template <class Type>
-void G4Allocator<Type>::IncreasePageSize( unsigned int sz )
+void G4Allocator<Type>::IncreasePageSize(unsigned int sz)
 {
   ResetStorage();
-  mem.GrowPageSize(sz); 
+  mem.GrowPageSize(sz);
 }
 
 // ************************************************************
@@ -283,7 +278,7 @@ const char* G4Allocator<Type>::GetPoolType() const
 // ************************************************************
 //
 template <class T1, class T2>
-bool operator== (const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
+bool operator==(const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
 {
   return true;
 }
@@ -293,7 +288,7 @@ bool operator== (const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
 // ************************************************************
 //
 template <class T1, class T2>
-bool operator!= (const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
+bool operator!=(const G4Allocator<T1>&, const G4Allocator<T2>&) throw()
 {
   return false;
 }

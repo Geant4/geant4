@@ -6,23 +6,34 @@
 
      Hadronic physics-list/constructors/gamma_lepto_nuclear History
      --------------------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28 May 2020 Ben Morgan           (phys-ctor-glnuclear-V10-06-03)
+- Remove obsolete GRANULAR_DEPENDENCIES entries
 
-13 January 2020,  Dennis Wright (phys-ctor-glnuclear-V10-05-04)
-- Remove double delete in destructor of G4LENDBertiniGammaElectroNuclearBuilder
-  (Coverity errors 101609 and 101727).
+29 April 2020 V. Grichine  (phys-ctor-glnuclear-V10-06-02)
+ - G4EmExtraPhysics - extension to anti_nu_mu, nu_e and anti_nu_e processes-models
+
+
+21 April 2020  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-06-01)
+- G4EmExtraPhysics, G4EmMessenger - added low-energy limit, set method, and UI
+  command defining low-energy gamma-nuclear model, which are using de-excitation
+  module and providing isomere production and gamma transitions
+
+13 January 2020  Dennis Wright (phys-ctor-glnuclear-V10-06-00)
+- remove double delete in destructor of G4LENDBertiniGammaElectroNuclearBuilder
+  (Coverity errors 101609 and 101727)
 
 29 November 2019, A.Ribon (phys-ctor-glnuclear-V10-05-03)
 - Update of the only README file.
 
 19 November 2019, V.Ivanchenko (phys-ctor-glnuclear-V10-05-02)
 - G4EmExtraPhysics - simplified and clean-up model creation;
-    do not use extra builder classes; used std::getenv; use 
+    do not use extra builder classes; used std::getenv; use
     transition from the cascade to string model 3 - 6 GeV (according
     to values in G4HadronicParameters class), before there were
     3 - 3.5 GeV transition; should reduce memory leak at destruction
@@ -38,7 +49,7 @@ introduced in the code and keeptrack of all tags.
 - G4EmMessenger - fixed destructor
 
 04 October 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-07)
-- G4EmExtraPhysics, G4EmMessenger - V.Grichine added possibility 
+- G4EmExtraPhysics, G4EmMessenger - V.Grichine added possibility
     of x-section biasing for neutrino-nuclear process
 
 26 September 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-06)
@@ -61,11 +72,11 @@ introduced in the code and keeptrack of all tags.
 
 02-Feb-2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-01)
 - G4EmExtraPhysics, G4EmMessenger - added extra UI commands and Set
-    methods for neutrino-electron interactions (V.Grichine) 
+    methods for neutrino-electron interactions (V.Grichine)
 
 30-Jan-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-04-00)
 - G4EmExtraPhysics, G4EmMessenger - added extra UI commands and Set
-    methods to define flags for neutrinos 
+    methods to define flags for neutrinos
 
 10-November-2017, T.Koi (phys-ctor-glnuclear-V10-03-04)
 -Dumpping LEND target information in G4LENDBertiniGammaElectroNuclearBuilder
@@ -74,22 +85,22 @@ introduced in the code and keeptrack of all tags.
 - Fix problem on GNUMake system
 
 27-October-2017, T.Koi (phys-ctor-glnuclear-V10-03-02)
-- Add G4LENDBertiniGammaElectroNuclearBuilder, which uses LEND 
-for low energy gamma-nuclear interaction 
-- Add option and UI command to use G4LENDBertiniGammaElectroNuclearBuilder 
+- Add G4LENDBertiniGammaElectroNuclearBuilder, which uses LEND
+for low energy gamma-nuclear interaction
+- Add option and UI command to use G4LENDBertiniGammaElectroNuclearBuilder
 in the physics constructor of EmExtraPhysics
 
 06-June-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-01)
-- G4EmExtraPhysics, G4EmMessenger - added extra UI commands to define 
-    cross section factors for rare processes (requirement of ShiP 
-    experiment for dark matter search) 
+- G4EmExtraPhysics, G4EmMessenger - added extra UI commands to define
+    cross section factors for rare processes (requirement of ShiP
+    experiment for dark matter search)
 
 04-May-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-00)
-- G4EmExtraPhysics, G4EmMessenger, G4BertiniElectroNuclearBuilder 
+- G4EmExtraPhysics, G4EmMessenger, G4BertiniElectroNuclearBuilder
     added option and UI command to enable/disable e+- nuclear process
 
 12-Nov-2016, V.Ivanchenko (phys-ctor-glnuclear-V10-02-04)
-- G4EmExtraPhysics, G4EmMessenger - added rare high energy EM processes, 
+- G4EmExtraPhysics, G4EmMessenger - added rare high energy EM processes,
     disabled by default
 
 03-Nov-2016 A.Ribon      (phys-ctor-glnuclear-V10-02-03)
@@ -100,7 +111,7 @@ in the physics constructor of EmExtraPhysics
 
 15-October-2016 M.Maire  (phys-ctor-glnuclear-V10-02-01)
 - add README
-  
+
 12-October-2016 G.Folger  (phys-ctor-glnuclear-V10-02-00)
 - replace direct use of aParticleIterator by GetParticleIterator().
   fix required by clang39 on Windows and MAC
@@ -113,9 +124,9 @@ in the physics constructor of EmExtraPhysics
 
 08-June-2015, V.Ivanchenko              (phys-ctor-glnuclear-V10-01-01)
 - G4EmExtraPhysics, G4EmMessenger - fixed problem #1752; clean up
-    messenger and add new UI commands; instead of old UI commands 
+    messenger and add new UI commands; instead of old UI commands
     "/physics_lists/tailor/SyncRadiation on" and similar now one
-    should use another syntax: 
+    should use another syntax:
     /physics_lists/em/SyncRadiation true    (for e+-)
     /physics_lists/em/SyncRadiationAll true (for all charged particles)
     /physics_lists/em/GammaNuclear true     (for gamma, e+- nuclear)
@@ -149,8 +160,8 @@ in the physics constructor of EmExtraPhysics
 - G4EmExtraPhysics - fixed warning from the clang compiler on MacOS
 
 01-Feb-2013, V.Ivanchenko (phys-ctor-glnuclear-V09-06-01)
--  G4EmExtraPhysics and G4EmMessenger are added 
+-  G4EmExtraPhysics and G4EmMessenger are added
 
 10-Jan-2013, Gunter Folger              (phys-ctor-glnuclear-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/gamma_lepto_nuclear classes

@@ -18,6 +18,14 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+ 5 May 2020      Gunter Folger (gMocren-V10-06-01)
+- Fix for clang10: for for warning on confusing indentation
+   enclose statements in if/else with {}
+   affected: src/G4GMocrenFileViewer.cc
+    
+12 December 2019 Ben Morgan (gMocren-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
 
 29 August 2019  John Allison (gMocren-V10-05-01)
 - Part of vis-V10-05-24.

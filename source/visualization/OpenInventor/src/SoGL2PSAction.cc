@@ -50,7 +50,11 @@ void SoGL2PSAction::initClass(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_ACTION_INIT_CLASS(SoGL2PSAction,SoGLRenderAction);
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_ACTION_INIT_CLASS(SoGL2PSAction,SoGLRenderAction);
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 SoGL2PSAction::SoGL2PSAction(

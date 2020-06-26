@@ -1,13 +1,6 @@
 #------------------------------------------------------------------------------
-# CMakeLists.txt
 # Module : G4gl2ps
 # Package: Geant4.src.G4visualization.G4gl2ps
-#
-# CMakeLists.txt for single level library that may be build global or granular
-#
-# Generated on : 24/9/2010
-#
-#
 #------------------------------------------------------------------------------
 
 include(Geant4MacroLibraryTargets)

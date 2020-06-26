@@ -29,7 +29,7 @@
 #include "G4StringModel.hh"
 
 G4StringModel::G4StringModel() :  G4VHighEnergyGenerator(),
-the3DNucleus(0), theStringFragmentationModel(0)
+the3DNucleus(nullptr), theStringFragmentationModel(nullptr)
 {
 }
 
@@ -37,27 +37,4 @@ G4StringModel::~G4StringModel()
 {
 }
 
-  // private:
-G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator(),
-the3DNucleus(0), theStringFragmentationModel(0)
-{
-}
-
-const G4StringModel & G4StringModel::operator=(const G4StringModel &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, 
-                            "G4StringModel::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4StringModel::operator==(const G4StringModel &) const
-{
-  return false;
-}
-
-G4bool G4StringModel::operator!=(const G4StringModel &) const
-{
-  return true;
-}
 

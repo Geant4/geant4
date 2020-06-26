@@ -43,7 +43,6 @@
  
  void G4He3Builder::Build()
  {
-   wasActivated = true;
    std::vector<G4VHe3Builder *>::iterator i;
    for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
    {
@@ -53,8 +52,7 @@
    theProcMan->AddDiscreteProcess(theHe3Inelastic);
  }
 
- G4He3Builder::
- G4He3Builder(): wasActivated(false)  
+ G4He3Builder::G4He3Builder()
  {
    theHe3Inelastic=new G4He3InelasticProcess;
  }

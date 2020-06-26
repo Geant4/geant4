@@ -25,18 +25,19 @@
 //
 // G4ProcessVector
 //
-// 
-// Class Description
+// Class description:
 //
-// This class is a container for pointers to physics process objects.
+// A container for pointers to physics process objects.
 
+// Authors: G.Cosmo, H.Kurashige - 1998
 // --------------------------------------------------------------------
 #ifndef G4ProcessVector_hh
 #define G4ProcessVector_hh 1
 
+#include <vector>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
 
 class G4VProcess;
 
@@ -44,61 +45,59 @@ class G4ProcessVector
 {
   public:
 
-    //  Constructors
     G4ProcessVector();
-    explicit G4ProcessVector(size_t);
+    explicit G4ProcessVector(std::size_t);
     G4ProcessVector(const G4ProcessVector &);
+      // Constructors
 
-    //  Destructor.
     virtual ~G4ProcessVector();
+      // Destructor
 
-    // assignment operator
-    G4ProcessVector & operator=(const G4ProcessVector &right);
+    G4ProcessVector& operator=(const G4ProcessVector& right);
+      // Assignment operator
  
-    // equality operator
-    G4bool operator==(const G4ProcessVector &right) const;
+    inline G4bool operator==(const G4ProcessVector& right) const;
+      // Equality operator
 
-  public: // With Description
-
-    // Returns the number of items
-    size_t entries() const;
-    size_t length() const;
-    size_t size() const;
+    inline std::size_t entries() const;
+    inline std::size_t length() const;
+    inline std::size_t size() const;
+      // Returns the number of items
     
-    // Returns the position of the element
-    size_t index(G4VProcess* aProcess) const;
+    std::size_t index(G4VProcess* aProcess) const;
+      // Returns the position of the element
  
-    // Returns "true" if the element exists
     G4bool contains(G4VProcess* aProcess) const;
+      // Returns "true" if the element exists
 
-    // Insert an element
-    G4bool insert(G4VProcess* aProcess);
+    inline G4bool insert(G4VProcess* aProcess);
+      // Insert an element
 
-    // Insert an element at i-th position
     G4bool insertAt(G4int i, G4VProcess* aProcess);
+      // Insert an element at i-th position
     
-    // Remove and returns the i-th element
     G4VProcess* removeAt(G4int i);
+      // Remove and returns the i-th element
 
-    // Remove and returns the last element
-    G4VProcess* removeLast();
+    inline G4VProcess* removeLast();
+      // Remove and returns the last element
     
-    // Clear the collection by removing all items
-    void clear();
+    inline void clear();
+      // Clear the collection by removing all items
     
-    // returns const reference to the i-th item
-    G4VProcess* const& operator[](G4int i) const;
-    G4VProcess* const& operator()(G4int i) const;
+    inline G4VProcess* const& operator[](G4int i) const;
+    inline G4VProcess* const& operator()(G4int i) const;
+      // Returns const reference to the i-th item
 
-    // returns  reference to the i-th item
-    G4VProcess* & operator[](G4int i);
-    G4VProcess* & operator()(G4int i);
+    inline G4VProcess* & operator[](G4int i);
+    inline G4VProcess* & operator()(G4int i);
+      // Returns reference to the i-th item
 
   protected:
 
-    typedef std::vector<G4VProcess*> G4ProcVector;
+    using G4ProcVector = std::vector<G4VProcess*>;
 
-    G4ProcVector * pProcVector;
+    G4ProcVector* pProcVector = nullptr;
 };
 
 #include "G4ProcessVector.icc"

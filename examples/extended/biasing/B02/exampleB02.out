@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,10 +33,7 @@ G4IStore:: Creating new Parallel IStore ParallelBiasingWorld
 G4GeometrySampler:: preparing importance sampling WorldName is 
  G4ImportanceConfigurator:: setting world name: 
 G4ImportanceConfigurator:: entering importance configure, paraflag 1
-
-
-
-G4ImportanceProcess:: Creating 
+### G4ImportanceProcess:: Creating 
 G4ImportanceProcess:: importance process paraflag is: 1
 
 
@@ -519,31 +516,31 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -551,11 +548,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -565,11 +562,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -579,11 +576,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -593,11 +590,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -607,11 +604,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -621,11 +618,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -634,12 +631,12 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -659,7 +656,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -756,16 +754,30 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -785,6 +797,7 @@ Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1000
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
@@ -809,24 +822,24 @@ Upload data before 1st event for                Z < 9
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            45 |           137 |             0 |             0 |      0.066972 |       3.36739 |             1 |        9160.5 |        9160.5 |       14380.3 |       30846.9 |        963.08 |
-       cell_01 |           142 |           179 |           545 |           545 |     0.0277374 |       4.27835 |             1 |       23447.9 |       23447.9 |        102191 |        100318 |       2834.51 |
-       cell_02 |           145 |           239 |          1032 |           516 |     0.0118914 |       2.99122 |           0.5 |       41602.7 |       20801.4 |        167129 |       62221.5 |        1987.4 |
-       cell_03 |           209 |           315 |          1808 |           452 |    0.00821041 |       1.94088 |          0.25 |       59911.5 |       14977.9 |        127949 |       29070.3 |       1050.51 |
-       cell_04 |           273 |           379 |          2568 |           321 |    0.00392332 |       1.33351 |         0.125 |         75062 |       9382.75 |        125038 |         12512 |       490.562 |
-       cell_05 |           296 |           446 |          2864 |           179 |    0.00274665 |       1.19781 |        0.0625 |       85143.2 |       5321.45 |       94230.6 |       6374.09 |       258.818 |
-       cell_06 |           249 |           358 |          2290 |       71.5625 |    0.00247751 |      0.989118 |       0.03125 |       67307.9 |       2103.37 |       36173.6 |       2080.48 |       89.6205 |
-       cell_07 |           215 |           306 |          1965 |       30.7031 |    0.00240697 |      0.961914 |      0.015625 |       57727.7 |       901.995 |       16256.2 |       867.642 |       39.1281 |
-       cell_08 |           163 |           245 |          1588 |       12.4062 |    0.00227517 |      0.780284 |     0.0078125 |       43982.9 |       343.616 |       5747.92 |       268.118 |       13.0775 |
-       cell_09 |           145 |           201 |          1487 |       5.80859 |    0.00213174 |      0.953122 |    0.00390625 |         39642 |       154.852 |       2988.38 |       147.593 |       6.37046 |
-       cell_10 |           122 |           167 |          1210 |       2.36328 |    0.00284511 |      0.807256 |    0.00195312 |         35003 |       68.3652 |       953.219 |       55.1883 |       2.71201 |
-       cell_11 |           110 |           153 |          1106 |       1.08008 |    0.00271237 |      0.683355 |   0.000976562 |       28864.1 |       28.1876 |       361.373 |       19.2621 |      0.980177 |
-       cell_12 |           104 |           149 |          1049 |      0.512207 |    0.00161832 |      0.763488 |   0.000488281 |       28325.9 |        13.831 |       300.098 |       10.5598 |      0.485655 |
-       cell_13 |            77 |           120 |           843 |      0.205811 |    0.00161873 |      0.840605 |   0.000244141 |       22145.2 |       5.40655 |       118.182 |       4.54477 |      0.191305 |
-       cell_14 |            62 |            90 |           555 |      0.067749 |    0.00181788 |       1.08574 |    0.00012207 |       15239.4 |       1.86027 |       43.4291 |       2.01976 |     0.0789487 |
-       cell_15 |            76 |            97 |           520 |     0.0317383 |    0.00321143 |       1.30693 |   6.10352e-05 |       17438.3 |       1.06435 |       18.4495 |       1.39103 |     0.0592492 |
-       cell_16 |            92 |           118 |           742 |      0.022644 |    0.00408478 |       1.22238 |   3.05176e-05 |       22638.7 |       0.69088 |       9.25587 |      0.844521 |     0.0378082 |
-       cell_17 |            82 |           116 |           871 |     0.0132904 |    0.00226897 |      0.626095 |   1.52588e-05 |       23934.6 |      0.365214 |       5.64003 |      0.228658 |      0.012797 |
-       cell_18 |            46 |            84 |           519 |    0.00395966 |    0.00186564 |      0.572898 |   7.62939e-06 |       14806.3 |      0.112963 |       2.06478 |     0.0647164 |    0.00385215 |
-       cell_19 |            26 |            26 |             0 |             0 |     0.0046517 |      0.872571 |   7.62939e-06 |       3853.71 |     0.0294015 |      0.272145 |     0.0256549 |    0.00126594 |
+       cell_00 |            44 |           137 |             0 |             0 |       0.11279 |       2.05928 |             1 |       7206.45 |       7206.45 |       5483.87 |       14840.1 |       618.524 |
+       cell_01 |           145 |           181 |           546 |           546 |     0.0215203 |       4.45479 |             1 |         24208 |         24208 |        142267 |        107841 |       3061.63 |
+       cell_02 |           161 |           247 |          1240 |           620 |     0.0117777 |       2.90435 |           0.5 |       43916.4 |       21958.2 |        165638 |       63774.3 |       1950.83 |
+       cell_03 |           206 |           328 |          1685 |        421.25 |    0.00644696 |       2.58971 |          0.25 |       57500.8 |       14375.2 |        179936 |       37227.7 |       1160.04 |
+       cell_04 |           270 |           405 |          2141 |       267.625 |    0.00633287 |       2.18008 |         0.125 |       71061.7 |       8882.72 |        103531 |         19365 |       655.647 |
+       cell_05 |           342 |           493 |          2896 |           181 |    0.00647144 |       1.87094 |        0.0625 |       94917.9 |       5932.37 |       62553.1 |       11099.1 |       404.809 |
+       cell_06 |           397 |           582 |          3731 |       116.594 |    0.00419539 |       1.52926 |       0.03125 |        113395 |        3543.6 |       48340.1 |       5419.09 |       202.805 |
+       cell_07 |           426 |           624 |          3873 |       60.5156 |    0.00372682 |       1.39665 |      0.015625 |        114896 |       1795.26 |         26534 |       2507.35 |       98.8875 |
+       cell_08 |           454 |           634 |          4145 |       32.3828 |    0.00331807 |       1.19275 |     0.0078125 |        121603 |        950.02 |       13988.9 |       1133.14 |       46.4162 |
+       cell_09 |           417 |           604 |          3928 |       15.3438 |    0.00258224 |       1.07172 |    0.00390625 |        109253 |        426.77 |       7474.39 |       457.376 |       19.3007 |
+       cell_10 |           342 |           504 |          3263 |       6.37305 |    0.00257193 |       1.12321 |    0.00195312 |       91412.1 |       178.539 |       3174.68 |       200.538 |       8.16506 |
+       cell_11 |           267 |           401 |          2497 |       2.43848 |    0.00302537 |       1.19636 |   0.000976562 |       71208.5 |       69.5395 |       1127.49 |       83.1942 |       3.41107 |
+       cell_12 |           224 |           335 |          2337 |       1.14111 |     0.0030635 |         1.121 |   0.000488281 |         70619 |       34.4819 |       539.874 |       38.6544 |       1.65391 |
+       cell_13 |           225 |           324 |          2270 |      0.554199 |    0.00240101 |       1.16859 |   0.000244141 |         63445 |       15.4895 |       310.248 |       18.1008 |       0.74491 |
+       cell_14 |           183 |           278 |          1801 |      0.219849 |    0.00313682 |       1.34018 |    0.00012207 |       51725.6 |       6.31416 |       109.153 |       8.46212 |      0.342393 |
+       cell_15 |           170 |           250 |          1518 |     0.0926514 |    0.00340284 |       1.38748 |   6.10352e-05 |         47881 |       2.92242 |       47.7143 |       4.05482 |      0.162364 |
+       cell_16 |           157 |           238 |          1588 |     0.0484619 |    0.00421738 |        1.1852 |   3.05176e-05 |       47455.3 |       1.44822 |       17.6694 |       1.71643 |     0.0745187 |
+       cell_17 |           147 |           210 |          1452 |     0.0221558 |    0.00274644 |      0.956596 |   1.52588e-05 |       42778.1 |      0.652742 |       10.1936 |       0.62441 |     0.0279961 |
+       cell_18 |            88 |           165 |          1006 |    0.00767517 |     0.0029308 |      0.973851 |   7.62939e-06 |       28004.6 |      0.213658 |       2.99047 |      0.208071 |    0.00876448 |
+       cell_19 |            56 |            56 |             0 |             0 |    0.00406801 |       2.12524 |   7.62939e-06 |       8109.45 |     0.0618702 |       1.10211 |      0.131489 |     0.0044834 |
 =============================================

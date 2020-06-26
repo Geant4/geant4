@@ -37,6 +37,7 @@
 //
 // Modifications:
 // 23.01.2009 V.Ivanchenko add destruction of processes
+// 12.05.2020 A.Ribon introduced general verbose level in hadronics
 //
 // Class Description:
 // Singleton to store hadronic processes, to provide access to processes
@@ -58,6 +59,7 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
+#include "G4HadronicParameters.hh"
 #include <algorithm>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -744,17 +746,12 @@ G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 G4String G4HadronicProcessStore::HtmlFileName(const G4String & in) const
 {
    G4String str(in);
-    // replace blanks by _  C++11 version:
-#ifdef G4USE_STD11
-	std::transform(str.begin(), str.end(), str.begin(), [](char ch) {
+
+   // replace blanks:
+   std::transform(str.begin(), str.end(), str.begin(), [](char ch)
+   {
      return ch == ' ' ? '_' : ch;
    });
-#else	
-	  // and now in ancient language
-	   for(std::string::iterator it = str.begin(); it != str.end(); ++it) {
-        if(*it == ' ') *it = '_';
-      }
-#endif
    str=str + ".html";		
    return str;
 }
@@ -763,7 +760,7 @@ G4String G4HadronicProcessStore::HtmlFileName(const G4String & in) const
 
 void G4HadronicProcessStore::Dump(G4int level)
 {
- if (level == 0) return;
+  if (G4HadronicParameters::Instance()->GetVerboseLevel() == 0 || level == 0) return;
   
  G4cout 
    << "\n====================================================================\n"
@@ -791,6 +788,9 @@ void G4HadronicProcessStore::Dump(G4int level)
 		       pname == "kaon+" ||
 		       pname == "kaon-" ||
 		       pname == "lambda" ||
+		       pname == "sigma-" ||
+		       pname == "D-" ||
+		       pname == "B-" ||
 		       pname == "GenericIon" ||
 		       pname == "anti_neutron" ||
 		       pname == "anti_proton" ||

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -285,15 +285,18 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 0.1 mm)
 Step function for muons/hadrons                    (0.2, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
 Lowest e+e- kinetic energy                         100 eV 
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
-Use ICRU90 data                                    0
+Use ICRU90 data                                    1
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -311,7 +314,6 @@ Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
@@ -338,16 +340,16 @@ Type of PIXE cross section for hadrons             Empirical
 Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Germanium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7332 keV    e-  870.964 keV    e+  825.404 keV proton 100 keV
+ Energy thresholds :  gamma  20.6831 keV    e-  871.363 keV    e+  819.636 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 
@@ -359,64 +361,64 @@ Index : 0     used in the geometry : Yes
 
  
   compCrossSectionPerVolume : 	    0.0761844 cm^-1	     0.489918 cm^-1	            0 cm^-1	    0.0338962 cm^-1	     0.599999 cm^-1
-  cross section per volume : 	    0.0761844 cm^-1	     0.489918 cm^-1	            0 cm^-1	    0.0339035 cm^-1	     0.600006 cm^-1
-  cross section per mass   : 	      1.43123 mm2/g 	      9.20379 mm2/g 	            0 um2/mg	      636.924 um2/mg	      11.2719 mm2/g 
+  cross section per volume : 	    0.0761844 cm^-1	     0.489918 cm^-1	            0 cm^-1	    0.0338999 cm^-1	     0.600002 cm^-1
+  cross section per mass   : 	      1.43123 mm2/g 	      9.20379 mm2/g 	            0 um2/mg	      636.857 um2/mg	      11.2719 mm2/g 
  
-  mean free path           : 	       13.126 cm 	      2.04116 cm 	 5.82593e+288 pc 	      29.4955 cm 	      1.66665 cm 
-        (g/cm2)            : 	      69.8699 g/cm2 	      10.8651 g/cm2 	 2.88022e+285 kg/cm2	      157.005 g/cm2 	      8.87158 g/cm2 
+  mean free path           : 	       13.126 cm 	      2.04116 cm 	 5.82593e+288 pc 	      29.4986 cm 	      1.66666 cm 
+        (g/cm2)            : 	      69.8699 g/cm2 	      10.8651 g/cm2 	 2.88022e+285 kg/cm2	      157.021 g/cm2 	      8.87163 g/cm2 
 
 -----------------------------------------------------------
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000605s Sys=0.000000s
+  User=0.000000s Real=0.000590s Sys=0.000000s
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : No 
  Material : Germanium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  5.93381 keV    e-  173.78 keV    e+  169.824 keV proton 10 keV
+ Energy thresholds :  gamma  5.9441 keV    e-  173.461 keV    e+  169.526 keV proton 10 keV
 
 Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11344 keV    e-  85.1138 keV    e+  83.8172 keV proton 10 keV
+ Energy thresholds :  gamma  1.11304 keV    e-  85.1594 keV    e+  83.5462 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 
  e- (10 MeV) in Water (density: 1 g/cm3    radiation length: 36.0924 cm )
 
   Range cuts : 	 gamma      100 um 	 e-      100 um 
- Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
+ Energy cuts : 	 gamma  1.11304 keV	 e-  85.1594 keV
 
   Max_energy _transferable  : 5 MeV (2.53529 cm )
 
   processes :                	        eIoni		        eBrem		    ePairProd		        total
  
-  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.325102 cm^-1	            0 cm^-1	      1.31986 cm^-1
-  cross section per volume : 	     0.994761 cm^-1	     0.325093 cm^-1	            0 cm^-1	      1.31985 cm^-1
-  cross section per mass   : 	      99.4761 mm2/g 	      32.5093 mm2/g 	            0 um2/mg	      1.31985 cm2/g 
+  compCrossSectionPerVolume : 	     0.994224 cm^-1	     0.325115 cm^-1	            0 cm^-1	      1.31934 cm^-1
+  cross section per volume : 	     0.994224 cm^-1	     0.325039 cm^-1	            0 cm^-1	      1.31926 cm^-1
+  cross section per mass   : 	      99.4224 mm2/g 	      32.5039 mm2/g 	            0 um2/mg	      1.31926 cm2/g 
  
-  mean free path           : 	      1.00527 cm 	      3.07604 cm 	 5.82593e+288 pc 	      7.57659 mm 
-        (g/cm2)            : 	      1.00527 g/cm2 	      3.07604 g/cm2 	 2.88022e+285 kg/cm2	      757.659 mg/cm2
+  mean free path           : 	      1.00581 cm 	      3.07655 cm 	 5.82593e+288 pc 	      7.57999 mm 
+        (g/cm2)            : 	      1.00581 g/cm2 	      3.07655 g/cm2 	 2.88022e+285 kg/cm2	      757.999 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61328 MeV/cm	      25.6439 eV/cm 	            0 eV/cm 	       1.6133 MeV/cm
-      (MeV/g/cm2)          : 	      1.61328 MeV*cm2/g	      25.6439  eV*cm2/g	            0  eV*cm2/g	       1.6133 MeV*cm2/g
+  restricted dE/dx         : 	      1.61332 MeV/cm	      25.6289 eV/cm 	            0 eV/cm 	      1.61335 MeV/cm
+      (MeV/g/cm2)          : 	      1.61332 MeV*cm2/g	      25.6289  eV*cm2/g	            0  eV*cm2/g	      1.61335 MeV*cm2/g
  
   unrestricted dE/dx       : 	      1.99147 MeV/cm	      181.698 keV/cm	            0 eV/cm 	      2.17317 MeV/cm
       (MeV/g/cm2)          : 	      1.99147 MeV*cm2/g	      181.698 keV*cm2/g	            0  eV*cm2/g	      2.17317 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.07217 cm  ( 6.07217 g/cm2 )
+  range from restrict dE/dx: 	 6.07199 cm  ( 6.07199 g/cm2 )
   range from full dE/dx    : 	 4.93182 cm  ( 4.93182 g/cm2 )
  
-  transport mean free path : 	  27.828 cm  (  27.828 g/cm2 )
+  transport mean free path : 	 27.7692 cm  ( 27.7692 g/cm2 )
  
   critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 
@@ -425,7 +427,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000177s Sys=0.000000s
+  User=0.000000s Real=0.000435s Sys=0.000000s
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

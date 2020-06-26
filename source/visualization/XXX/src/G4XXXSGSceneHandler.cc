@@ -125,12 +125,7 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& /*header*/) {
     // TREE.
 
     /* Debug
-    for (size_t i = 0; i < drawnPVPath.size(); ++i) {
-      std::cout << drawnPVPath[i].GetPhysicalVolume()->GetName() << ":"
-	    << drawnPVPath[i].GetCopyNo() << " ("
-	    << currentPOListIndex << "), ";
-    }
-    std::cout << std::endl;
+    G4cout << drawnPVPath << G4endl;
     */
 
     static G4int index = 0;  // Some index for future reference

@@ -172,6 +172,42 @@ public:
     return value;
   }
 
+  bool min_bin_height_with_entries(TH& a_value) const {
+    TH value = 0;
+    bool first = true;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin) && (parent::m_bin_entries[ibin]>0) ) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin<=value) value = vbin;
+        }
+      }
+    }
+    a_value = value;
+    return first?false:true; //return true if at least one bin with entries processed.
+  }
+  
+  bool max_bin_height_with_entries(TH& a_value) const {
+    TH value = 0;
+    bool first = true;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin) && (parent::m_bin_entries[ibin]>0) ) {
+        TH vbin = get_bin_height(ibin);
+        if(first) {
+          first = false;
+          value = vbin;
+        } else {
+          if(vbin>=value) value = vbin;
+        }
+      }
+    }
+    a_value = value;
+    return first?false:true; //return true if at least one bin with entries processed.
+  }
+
   bool has_entries_per_bin() const { //to detect histos coming from TH streaming out of a root file.
     // it assumes that update_fast_getters() had been applied.
     if(parent::m_in_range_entries) return true;

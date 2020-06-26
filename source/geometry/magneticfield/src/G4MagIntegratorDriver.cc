@@ -38,6 +38,10 @@
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
 
+#ifdef   G4DEBUG_FIELD
+#include "G4DriverReporter.hh"
+#endif
+
 // ---------------------------------------------------------
 
 //  Constructor
@@ -194,7 +198,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 #ifdef G4DEBUG_FIELD
       if (dbg>2)
       {
-        PrintStatus( ySubStepStart, xSubStepStart, y, x, h,  nstp); // Only
+         // PrintStatus( ySubStepStart, xSubStepStart, y, x, h,  nstp); // Only
+        G4DriverReporter::PrintStatus( ySubStepStart, xSubStepStart, y, x, h,  nstp, nvar);
       }
 #endif
     }
@@ -216,7 +221,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
       if ( dyerr_len > fDyerr_max )  { fDyerr_max = dyerr_len; }
       fDyerrPos_smTot += dyerr_len;
       fSumH_sm += h;  // Length total for 'small' steps
-      if (nstp<=1)  { ++fNoInitialSmallSteps; }
+      if (nstp==1)  { ++fNoInitialSmallSteps; }
 #endif
 #ifdef G4DEBUG_FIELD
       if (dbg>1)
@@ -351,7 +356,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 #endif
       }
     }
-  } while ( ((nstp++)<=fMaxNoSteps) && (x < x2) && (!lastStep) );
+  } while ( ((++nstp)<=fMaxNoSteps) && (x < x2) && (!lastStep) );
   // Loop checking, 07.10.2016, J. Apostolakis
 
      // Have we reached the end ?
@@ -719,7 +724,7 @@ G4bool  G4MagInt_Driver::QuickAdvance(G4double  yarrin[],    // In
 // within  certain factors
 // 
 G4double G4MagInt_Driver::
-ComputeNewStepSize(G4double  errMaxNorm,    // max error  (normalised)
+ComputeNewStepSize_WithoutReductionLimit(G4double  errMaxNorm,    // max error  (normalised)
                    G4double  hstepCurrent)  // current step size
 {
   G4double hnew;
@@ -745,6 +750,17 @@ ComputeNewStepSize(G4double  errMaxNorm,    // max error  (normalised)
 }
 
 // ---------------------------------------------------------------------------
+
+G4double 
+G4MagInt_Driver::ComputeNewStepSize(
+                          G4double  errMaxNorm,    // max error  (normalised)
+                          G4double  hstepCurrent)  // current step size
+{
+   // Legacy behaviour:
+   return ComputeNewStepSize_WithoutReductionLimit( errMaxNorm, hstepCurrent );
+   // 'Improved' behaviour - at least more consistent with other step estimates:
+   // return ComputeNewStepSize_WithinLimits( errMaxNorm, hstepCurrent );
+}
 
 // This method computes new step sizes limiting changes within certain factors
 // 
@@ -1013,6 +1029,49 @@ G4MagIntegratorStepper* G4MagInt_Driver::GetStepper()
 void G4MagInt_Driver::
 RenewStepperAndAdjust(G4MagIntegratorStepper* pItsStepper)
 {  
-    pIntStepper = pItsStepper; 
+    pIntStepper = pItsStepper;
     ReSetParameters();
+}
+
+void G4MagInt_Driver::StreamInfo( std::ostream& os ) const
+{
+    os << "State of G4MagInt_Driver: " << std::endl;
+    os << "  Max number of Steps = " << fMaxNoSteps
+       << "    (base # = " << fMaxStepBase << " )" << std::endl;
+    os << "  Safety factor       = " << safety  << std::endl;
+    os << "  Power - shrink      = " << pshrnk << std::endl;
+    os << "  Power - grow        = " << pgrow << std::endl;
+    os << "  threshold (errcon)  = " << errcon << std::endl;
+
+    os << "    fMinimumStep =      " << fMinimumStep  << std::endl;
+    os << "    Smallest Fraction = " << fSmallestFraction << std::endl;
+
+    os << "    No Integrat Vars  = " << fNoIntegrationVariables << std::endl;
+    os << "    Min No Vars       = " << fMinNoVars << std::endl;
+    os << "    Num-Vars          = " << fNoVars << std::endl;
+    
+    os << "    verbose level     = " << fVerboseLevel << std::endl;
+    os << "    Reintegrates      = " << DoesReIntegrate() << std::endl;
+}
+
+void PrintInfo( const G4MagInt_Driver & magDrv, std::ostream& os )
+{
+    os << "State of G4MagInt_Driver: " << std::endl;
+    os << "  Max number of Steps = " << magDrv.GetMaxNoSteps();
+    //   << "    (base # = " << magDrv.fMaxStepBase << " )" << std::endl;
+    os << "  Safety factor       = " << magDrv.GetSafety()  << std::endl;
+    os << "  Power - shrink      = " << magDrv.GetPshrnk() << std::endl;
+    os << "  Power - grow        = " << magDrv.GetPgrow() << std::endl;
+    os << "  threshold (errcon)  = " << magDrv.GetErrcon() << std::endl;
+
+    os << "    fMinimumStep =      " << magDrv.GetHmin()  << std::endl;
+    os << "    Smallest Fraction = " << magDrv.GetSmallestFraction() << std::endl;
+
+    /*****
+    os << "    No Integrat Vars  = " << magDrv.GetNoIntegrationVariables << std::endl;
+    os << "    Min No Vars       = " << magDrv.GetMinNoVars << std::endl;
+    os << "    Num-Vars          = " << magDrv.GetNoVars << std::endl;
+    *****/
+    os << "    verbose level     = " << magDrv.GetVerboseLevel() << std::endl;
+    os << "    Reintegrates      = " << magDrv.DoesReIntegrate() << std::endl;
 }

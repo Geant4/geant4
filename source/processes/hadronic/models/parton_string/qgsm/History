@@ -14,6 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-Jun-2020 A. Ribon                     (hadr-qgsm-V10-06-02)
+-  Improved treatment of antibaryon interactions in QGS
+   (made by Vladimir Uzhinsky):
+   1. G4QGSParticipants : the average transverse momentum of partons
+      in a hadron is set to zero (according to the study of transverse
+      momentum distributions of hadrons produced in hadronic
+      interactions, in particular the study of Xf - Pt correlations
+      presented by the NA49 Collaboration).
+   2. G4QuarkExchange : the reggeon exchanges are now treated as
+      annihilation and creation of quark-antiquark pairs (to reflect
+      in inelastic processes the non-vacuum reggeon exchanges present
+      in antiparticle-particle elastic scattering amplitudes).
+
+08-Mar-2020 V.Ivanchenko                 (hadr-qgsm-V10-06-01)
+-  G4QGSModel - clean-up: removed unused methods, delete
+     operators, use C++11 keywords, moved icc implementation to src
+
+16-Jan-2020 A. Ribon                     (hadr-qgsm-V10-06-00)
+-  G4SPBaryonTable : changed the return type of the method 'length()' from
+   'double' to 'size_t' (to avoid warnings seen on Windows).
+
 19-Nov-2019 A. Ribon                     (hadr-qgsm-V10-05-02)
 -  G4VAnnihilationCrossSection, G4AnnihilationCrossSection, 
    G4GammaAnnCrossSection, G4ASCCrossSection, G4QGSMParameters :

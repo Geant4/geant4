@@ -131,7 +131,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   maxKinEnergyCSDA = 1.0*GeV;
   nBinsCSDA        = 35;
   actMinKinEnergy = actMaxKinEnergy = actBinning = actLinLossLimit 
-    = actLossFluc = actIntegral = actStepFunc = false;
+    = actLossFluc = actIntegral = false;
 
   // default linear loss limit for spline
   linLossLimit = 0.01;
@@ -176,10 +176,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   weightFlag   = false; 
   isMaster     = true;
   lastIdx      = 0;
-
-  idxDEDX = idxDEDXSub = idxDEDXunRestricted = idxIonisation =
-    idxIonisationSub = idxRange = idxCSDA = idxSecRange =
-    idxInverseRange = idxLambda = idxSubLambda = 0;
 
   scTracks.reserve(5);
   secParticles.reserve(5);
@@ -295,10 +291,11 @@ void G4VEnergyLossProcess::Clean()
 
   scProcesses.clear();
   nProcesses = 0;
-
+  /*
   idxDEDX = idxDEDXSub = idxDEDXunRestricted = idxIonisation =
     idxIonisationSub = idxRange = idxCSDA = idxSecRange =
     idxInverseRange = idxLambda = idxSubLambda = 0;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -461,12 +458,12 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if(isMaster) { SetVerboseLevel(theParameters->Verbose()); }
   else {  SetVerboseLevel(theParameters->WorkerVerbose()); }
 
-  G4bool isElec = true;
-  if(particle->GetPDGMass() > CLHEP::MeV) { isElec = false; }
-  theParameters->DefineRegParamForLoss(this, isElec);
+  theParameters->DefineRegParamForLoss(this);
 
   G4double initialCharge = particle->GetPDGCharge();
   G4double initialMass   = particle->GetPDGMass();
+
+  theParameters->FillStepFunction(particle, this);
 
   if (baseParticle) {
     massRatio    = (baseParticle->GetPDGMass())/initialMass;
@@ -2299,18 +2296,14 @@ void G4VEnergyLossProcess::SetIonisation(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
-G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2, G4bool lock)
+void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
 {
-  if(actStepFunc) { return; }
-  actStepFunc = lock;
-  if(0.0 < v1 && 0.0 < v2 && v2 < 1.e+50) { 
+  if(0.0 < v1 && 0.0 < v2) { 
     dRoverRange = std::min(1.0, v1);
-    finalRange = v2;
-  } else if(v1 <= 0.0) {
-    PrintWarning("SetStepFunction", v1); 
+    finalRange = std::min(v2, 1.e+50);
   } else {
-    PrintWarning("SetStepFunction", v2); 
+    PrintWarning("SetStepFunctionV1", v1); 
+    PrintWarning("SetStepFunctionV2", v2); 
   }
 }
 

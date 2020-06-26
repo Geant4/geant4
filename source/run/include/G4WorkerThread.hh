@@ -34,31 +34,30 @@
 
 #ifndef G4WorkerThread_hh
 #define G4WorkerThread_hh
-#include "G4Types.hh"
 #include "G4String.hh"
+#include "G4Types.hh"
 
 #include "G4Threading.hh"
 
-class G4WorkerThread {
-public:
-    void SetThreadId( G4int threadId );
-    G4int GetThreadId() const;
-        
-    void SetNumberThreads( G4int numnberThreads );
-    G4int GetNumberThreads() const; 
-        
-    //Build geometry for workers
-    static void BuildGeometryAndPhysicsVector();
-    static void DestroyGeometryAndPhysicsVector();
-    static void UpdateGeometryAndPhysicsVectorFromMaster();
+class G4WorkerThread
+{
+ public:
+  void SetThreadId(G4int threadId);
+  G4int GetThreadId() const;
 
-    //Setting Pin Affinity
-    void SetPinAffinity(G4int aff) const;
+  void SetNumberThreads(G4int numnberThreads);
+  G4int GetNumberThreads() const;
 
-private:
-    G4int threadId;
-    G4int numThreads;
-    
+  // Build geometry for workers
+  static void BuildGeometryAndPhysicsVector();
+  static void DestroyGeometryAndPhysicsVector();
+  static void UpdateGeometryAndPhysicsVectorFromMaster();
+
+  // Setting Pin Affinity
+  void SetPinAffinity(G4int aff) const;
+
+ private:
+  G4int threadId;
+  G4int numThreads;
 };
-#endif //G4WorkerThread_hh
-
+#endif  // G4WorkerThread_hh

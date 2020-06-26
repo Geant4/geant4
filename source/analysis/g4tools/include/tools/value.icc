@@ -936,10 +936,14 @@ inline bool value::subtract(value& aThis,const value& aV,std::string& aError){
     break;
   case value::UNSIGNED_INT:
     switch(aV.m_type) {
-//uuu
-    //case value::UNSIGNED_INT:
-    //  aThis.u.m_unsigned_int -= aV.u.m_unsigned_int;
-    //  return true;
+    case value::UNSIGNED_INT:
+      if(aThis.u.m_unsigned_int>=aV.u.m_unsigned_int) {
+        aThis.u.m_unsigned_int -= aV.u.m_unsigned_int;
+      } else {
+        int i = int(aThis.u.m_unsigned_int) - aV.u.m_unsigned_int;
+        aThis.set(i);
+      }
+      return true;
     case value::DOUBLE:{
       double d = double(aThis.u.m_unsigned_int) - aV.u.m_double;
       aThis.set(d);
@@ -968,7 +972,6 @@ inline bool value::subtract(value& aThis,const value& aV,std::string& aError){
     //case value::UNSIGNED_CHAR:
     //case value::CHAR:
     case value::UNSIGNED_SHORT :
-    case value::UNSIGNED_INT:
     case value::UNSIGNED_INT64 :
     case value::DOUBLE_STAR:
     case value::FLOAT_STAR:

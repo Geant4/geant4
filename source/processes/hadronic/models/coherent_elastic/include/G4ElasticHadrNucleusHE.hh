@@ -42,6 +42,8 @@
 #define G4ElasticHadrNucleusHE_h 1
 
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -131,6 +133,14 @@ private:
 
   void FillData(const G4ParticleDefinition* p, G4int idx, G4int Z);
 
+  void InFileName(std::ostringstream&, const G4ParticleDefinition* p, G4int Z);
+
+  void OutFileName(std::ostringstream&, const G4ParticleDefinition* p, G4int Z);
+
+  G4bool ReadLine(std::ifstream&, std::vector<G4double>&);
+
+  void WriteLine(std::ofstream&, std::vector<G4double>&);
+
   inline G4double LineInterpol(G4double p0, G4double p2,
                                G4double c1, G4double c2, G4double p);
 
@@ -147,6 +157,9 @@ private:
   static const G4int fHadronCode[NHADRONS];
   static const G4int fHadronType[NHADRONS];
   static const G4int fHadronType1[NHADRONS];
+
+  static G4bool fStoreToFile;
+  static G4bool fRetrieveFromFile;
 
   // momemtum limits
   G4double ekinLowLimit;
@@ -182,6 +195,8 @@ private:
 
   static G4ElasticData* fElasticData[NHADRONS][ZMAX];
   G4NistManager*  nistManager;
+  char* fDirectory;
+
   G4bool isMaster;
 
 #ifdef G4MULTITHREADED

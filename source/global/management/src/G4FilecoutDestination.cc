@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// --------------------------------------------------------------------
-//
-// G4FilecoutDestination.cc
+// G4FilecoutDestination class implementation
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
@@ -35,43 +32,52 @@
 
 #include <ios>
 
+// --------------------------------------------------------------------
 G4FilecoutDestination::~G4FilecoutDestination()
 {
   Close();
-  if ( m_output ) m_output.reset();
+  if(m_output)
+    m_output.reset();
 }
 
+// --------------------------------------------------------------------
 void G4FilecoutDestination::Open(std::ios_base::openmode mode)
 {
-  if ( m_name.isNull() )
+  if(m_name.isNull())
   {
 #ifndef __MIC
-      // Cannot use G4Exception, because G4cout/G4cerr is not setup
-      throw std::ios_base::failure("No output file name specified");
+    // Cannot use G4Exception, because G4cout/G4cerr is not setup
+    throw std::ios_base::failure("No output file name specified");
 #endif
   }
-  if ( m_output != nullptr && m_output->is_open() ) Close();
-  m_output.reset( new std::ofstream(m_name , std::ios_base::out|mode) );
+  if(m_output != nullptr && m_output->is_open())
+    Close();
+  m_output.reset(new std::ofstream(m_name, std::ios_base::out | mode));
 }
 
+// --------------------------------------------------------------------
 void G4FilecoutDestination::Close()
 {
-  if ( m_output && m_output->is_open() )
+  if(m_output && m_output->is_open())
   {
     m_output->close();
   }
 }
 
+// --------------------------------------------------------------------
 G4int G4FilecoutDestination::ReceiveG4cout(const G4String& msg)
 {
-  if ( m_output == nullptr || ! m_output->is_open() ) Open(m_mode);
+  if(m_output == nullptr || !m_output->is_open())
+    Open(m_mode);
   *m_output << msg;
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4int G4FilecoutDestination::ReceiveG4cerr(const G4String& msg)
 {
-  if ( m_output == nullptr || ! m_output->is_open() ) Open(m_mode);
+  if(m_output == nullptr || !m_output->is_open())
+    Open(m_mode);
   *m_output << msg;
   return 0;
 }

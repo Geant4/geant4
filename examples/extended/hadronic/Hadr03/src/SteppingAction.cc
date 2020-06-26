@@ -120,18 +120,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     //energy spectrum
     ih = 0; 
          if (particle == G4Gamma::Gamma())       ih = 2;
-    else if (particle == G4Neutron::Neutron())   ih = 3;
-    else if (particle == G4Proton::Proton())     ih = 4;
-    else if (particle == G4Deuteron::Deuteron()) ih = 5;
-    else if (particle == G4Alpha::Alpha())       ih = 6;       
-    else if (type == "nucleus")                  ih = 7;
-    else if (type == "meson")                    ih = 8;
-    else if (type == "baryon")                   ih = 9;        
+    else if (particle == G4Electron::Electron()) ih = 3;
+    else if (particle == G4Neutron::Neutron())   ih = 4;        
+    else if (particle == G4Proton::Proton())     ih = 5;
+    else if (particle == G4Deuteron::Deuteron()) ih = 6;
+    else if (particle == G4Alpha::Alpha())       ih = 7;       
+    else if (type == "nucleus")                  ih = 8;
+    else if (type == "meson")                    ih = 9;
+    else if (type == "baryon")                   ih = 10;        
     if (ih > 0) analysis->FillH1(ih,energy);
     //atomic mass
     if (type == "nucleus") {
       G4int A = particle->GetAtomicMass();
-      analysis->FillH1(12, A);
+      analysis->FillH1(13, A);
     }
     //energy-momentum balance
     G4ThreeVector momentum = (*secondary)[lp]->GetMomentum();
@@ -146,9 +147,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //energy-momentum balance
   G4double Pbal = Pbalance.mag();
   run->Balance(Pbal);
-  ih = 10;
-  analysis->FillH1(ih,Q);
   ih = 11;
+  analysis->FillH1(ih,Q);
+  ih = 12;
   analysis->FillH1(ih,Pbal);  
   
   // nuclear channel

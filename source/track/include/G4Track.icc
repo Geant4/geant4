@@ -109,18 +109,23 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
 
 // proper time
    inline G4double G4Track::GetProperTime() const
-   { 
-     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetProperTime();} 
-     else                              {return 0.0;} 
-   }
+   { return fpDynamicParticle->GetProperTime(); } 
 
    inline void G4Track::SetProperTime(const G4double aValue)
-   { if (fpDynamicParticle != nullptr) fpDynamicParticle->SetProperTime(aValue); }
+   { fpDynamicParticle->SetProperTime(aValue); }
       // Proper time of the current track
 
 // velocity
    inline G4double G4Track::GetVelocity() const
-   { return fVelocity; }
+   { return (useGivenVelocity) ? fVelocity : 
+     ((!is_OpticalPhoton) ? CLHEP::c_light*fpDynamicParticle->GetBeta() : 
+     CalculateVelocityForOpticalPhoton()); 
+   }
+
+   inline G4double G4Track::CalculateVelocity() const
+   {
+     return GetVelocity();
+   }  
 
    inline void  G4Track::SetVelocity(G4double val)
    { fVelocity = val; } 
@@ -131,48 +136,25 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
    inline void     G4Track::UseGivenVelocity(G4bool val)
    { useGivenVelocity = val;}
 
-
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const
-   { 
-     if ( fpTouchable == 0 ) {return nullptr;} 
-     else {return fpTouchable->GetVolume(); }
-   }
+   { return (fpTouchable) ?  fpTouchable->GetVolume() : nullptr; }
 
    inline G4VPhysicalVolume* G4Track::GetNextVolume() const
-   {  
-     if ( fpNextTouchable == 0 ) {return nullptr;} 
-     else { return fpNextTouchable->GetVolume(); }
-   }
+   { return (fpNextTouchable) ? fpNextTouchable->GetVolume() : nullptr; }
 
-// material
-   inline 
-    const G4MaterialCutsCouple* G4Track::GetMaterialCutsCouple() const
-    { 
-      if ( fpStep==nullptr ) {return nullptr;}
-      else {return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
-   }
+// material - assuming that the pointer to G4Step is defined
+   inline const G4MaterialCutsCouple* G4Track::GetMaterialCutsCouple() const
+   { return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
 
-   inline 
-    const G4MaterialCutsCouple* G4Track::GetNextMaterialCutsCouple() const
-    { 
-      if ( fpStep==nullptr ) {return nullptr;}
-      else   {return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
-    }
+   inline const G4MaterialCutsCouple* G4Track::GetNextMaterialCutsCouple() const
+   { return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
 
-// material
-   inline G4Material* G4Track::GetMaterial() const
-    { 
-      if ( fpStep==nullptr ) {return nullptr;}
-      else { return fpStep->GetPreStepPoint()->GetMaterial(); }
-    }
+   inline G4Material* G4Track::GetMaterial() const 
+   { return fpStep->GetPreStepPoint()->GetMaterial(); }
 
    inline G4Material* G4Track::GetNextMaterial() const
-    { 
-      if ( fpStep==nullptr ) {return nullptr;}
-      else   { return fpStep->GetPostStepPoint()->GetMaterial(); }
-    }
-
+   { return fpStep->GetPostStepPoint()->GetMaterial(); }
 
 // touchable
    inline const G4VTouchable* G4Track::GetTouchable() const 
@@ -204,60 +186,32 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
 
 // kinetic energy
    inline G4double G4Track::GetKineticEnergy() const
-   { 
-     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetKineticEnergy();}
-     else { return 0.0; }
-   }
+   { return fpDynamicParticle->GetKineticEnergy(); }
 
    inline void G4Track::SetKineticEnergy(const G4double aValue)
-   { 
-      if (fpDynamicParticle != nullptr) { fpDynamicParticle->SetKineticEnergy(aValue); }
-   }
+   { fpDynamicParticle->SetKineticEnergy(aValue); }
 
 // total energy
    inline G4double G4Track::GetTotalEnergy() const
-   { 
-     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetTotalEnergy();}
-     else { return 0.0; }
-   }
+   { return fpDynamicParticle->GetTotalEnergy(); }
 
 // momentum
    inline G4ThreeVector G4Track::GetMomentum() const
-   { 
-     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetMomentum();}
-     const G4ThreeVector zerovector;
-     return zerovector; 
-   }
+   { return fpDynamicParticle->GetMomentum(); }
 
 // momentum (direction)
    inline const G4ThreeVector& G4Track::GetMomentumDirection() const
-   { 
-     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetMomentumDirection();}
-     static const G4ThreeVector zerovector;
-     return zerovector; 
-   }
+   { return fpDynamicParticle->GetMomentumDirection(); }
 
    inline void G4Track::SetMomentumDirection(const G4ThreeVector& aValue)
-   { 
-     if (fpDynamicParticle != nullptr) {fpDynamicParticle->SetMomentumDirection(aValue);}
-   }
+   { fpDynamicParticle->SetMomentumDirection(aValue); }
 
 // polarization
    inline const G4ThreeVector& G4Track::GetPolarization() const
-   { 
-     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetPolarization();}
-     static const G4ThreeVector zerovector;
-     return zerovector; 
-   }
+   { return fpDynamicParticle->GetPolarization(); }
 
    inline void G4Track::SetPolarization(const G4ThreeVector& aValue)
-   { 
-     if (fpDynamicParticle != nullptr) {
-        fpDynamicParticle->SetPolarization(aValue.x(),
-                                           aValue.y(),
-                                           aValue.z()); 
-     }
-   } 
+   { fpDynamicParticle->SetPolarization(aValue); }
 
 // track status
    inline G4TrackStatus G4Track::GetTrackStatus() const
@@ -279,7 +233,7 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
    { return fCurrentStepNumber; }
 
    inline void G4Track::IncrementCurrentStepNumber()
-   { fCurrentStepNumber++; }
+   { ++fCurrentStepNumber; }
 
 // step length
    inline G4double G4Track::GetStepLength() const
@@ -298,7 +252,7 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
    inline const G4ThreeVector& G4Track::GetVertexMomentumDirection() const
    { return fVtxMomentumDirection; }
    inline void G4Track::SetVertexMomentumDirection(const G4ThreeVector& aValue)
-   { fVtxMomentumDirection = aValue ;}
+   { fVtxMomentumDirection = aValue; }
 
    inline G4double G4Track::GetVertexKineticEnergy() const
    { return fVtxKineticEnergy; }
@@ -354,6 +308,7 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
 // user information
    inline G4VUserTrackInformation* G4Track::GetUserInformation() const
    { return fpUserInformation; }
+
    inline void G4Track::SetUserInformation(G4VUserTrackInformation* aValue) const
    { fpUserInformation = aValue; }
 

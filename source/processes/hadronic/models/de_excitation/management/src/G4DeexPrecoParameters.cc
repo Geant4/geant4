@@ -35,6 +35,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4DeexParametersMessenger.hh"
+#include "G4HadronicParameters.hh"
 
 #ifdef G4MULTITHREADED
 G4Mutex G4DeexPrecoParameters::deexPrecoMutex = G4MUTEX_INITIALIZER;
@@ -67,7 +68,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoHighEnergy = 30*CLHEP::MeV;
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
-  fMaxLifeTime = 1.0*CLHEP::microsecond;
+  fMaxLifeTime = 1*CLHEP::microsecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
@@ -88,6 +89,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fInternalConversion = true;
   fLD = true;
   fFD = false;
+  fIsomerFlag = true;
   fDeexChannelType = fCombined;
   fInternalConversionID = 
     G4PhysicsModelCatalog::Register("e-InternalConvertion");
@@ -282,6 +284,12 @@ void G4DeexPrecoParameters::SetDiscreteExcitationFlag(G4bool val)
   fFD = val;
 }
 
+void G4DeexPrecoParameters::SetIsomerProduction(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fIsomerFlag = val;
+}
+
 void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
 {
   if(IsLocked()) { return; }
@@ -319,6 +327,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "Use discrete excitation energy of the residual      " << fFD << "\n";
   os << "Time limit for long lived isomeres (ns)             " 
      << fMaxLifeTime/CLHEP::ns << "\n";
+  os << "Isomer production flag                              " << fIsomerFlag << "\n";
   os << "Internal e- conversion flag                         " 
      << fInternalConversion << "\n";
   os << "Store e- internal conversion data                   " << fStoreAllLevels << "\n";
@@ -334,7 +343,8 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 
 void G4DeexPrecoParameters::Dump() const
 {
-  if (G4Threading::IsMasterThread()) { StreamInfo(G4cout); }
+  if (G4Threading::IsMasterThread() && fVerbose > 0 &&
+      G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) { StreamInfo(G4cout); }
 }
 
 std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)

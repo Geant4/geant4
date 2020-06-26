@@ -79,6 +79,51 @@ G4FieldTrack& G4FieldTrack::operator= ( const G4FieldTrack& rStVec )
 }
 
 inline
+G4FieldTrack::G4FieldTrack(G4FieldTrack&& from)
+ : fDistanceAlongCurve( from.fDistanceAlongCurve),
+   fKineticEnergy( from.fKineticEnergy ),
+   fRestMass_c2( from.fRestMass_c2),
+   fLabTimeOfFlight( from.fLabTimeOfFlight ), 
+   fProperTimeOfFlight( from.fProperTimeOfFlight ), 
+   fChargeState( from.fChargeState )
+{
+  SixVector[0]= from.SixVector[0];
+  SixVector[1]= from.SixVector[1];
+  SixVector[2]= from.SixVector[2];
+  SixVector[3]= from.SixVector[3];
+  SixVector[4]= from.SixVector[4];
+  SixVector[5]= from.SixVector[5];
+
+  fPolarization = std::move( from.fPolarization );
+  fMomentumDir = std::move( from.fMomentumDir );
+}
+
+inline
+G4FieldTrack& G4FieldTrack::operator=(G4FieldTrack&& from)
+{
+  if (&from == this) return *this;
+
+  SixVector[0]= from.SixVector[0];
+  SixVector[1]= from.SixVector[1];
+  SixVector[2]= from.SixVector[2];
+  SixVector[3]= from.SixVector[3];
+  SixVector[4]= from.SixVector[4];
+  SixVector[5]= from.SixVector[5];
+
+  fDistanceAlongCurve = from.fDistanceAlongCurve;
+  fKineticEnergy = from.fKineticEnergy;
+  fRestMass_c2 = from.fRestMass_c2;
+  fLabTimeOfFlight = from.fLabTimeOfFlight;
+  fProperTimeOfFlight = from.fProperTimeOfFlight;
+  fChargeState = from.fChargeState;
+
+  fPolarization = std::move( from.fPolarization );
+  fMomentumDir = std::move( from.fMomentumDir );
+
+  return *this;
+}
+
+inline
 G4FieldTrack::~G4FieldTrack()
 {
   // delete fpChargeState; 

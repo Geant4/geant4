@@ -23,23 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//---------------------------------------------------------------
-//
-// G4TrackingMessenger.cc
-//
-// Description:
-//   This is a messenger class to interface to exchange information
-//   between tracking and stepping managers and UI.
+// G4TrackingMessenger class implementation
 //
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Makoto  Asai   (e-mail: asai@kekvax.kek.jp)
+//     Makoto  Asai   (e-mail: asai@slac.stanford.edu)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4TrackingMessenger.hh"
 #include "G4UIdirectory.hh"
@@ -56,9 +47,9 @@
 #include "G4IdentityTrajectoryFilter.hh"
 
 ///////////////////////////////////////////////////////////////////
-G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
+G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager* trMan)
 ///////////////////////////////////////////////////////////////////
-: trackingManager(trMan)
+  : trackingManager(trMan)
 {
   steppingManager = trackingManager->GetSteppingManager();
 
@@ -67,7 +58,6 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
 
   AbortCmd = new G4UIcmdWithoutParameter("/tracking/abort",this);
   AbortCmd->SetGuidance("Abort current G4Track processing.");
-
 
   ResumeCmd = new G4UIcmdWithoutParameter("/tracking/resume",this);
   ResumeCmd->SetGuidance("Resume current G4Track processing.");
@@ -83,7 +73,6 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
   StoreTrajectoryCmd->SetParameterName("Store",true);
   StoreTrajectoryCmd->SetDefaultValue(0);
   StoreTrajectoryCmd->SetRange("Store >=0 && Store <= 4"); 
-
 
   VerboseCmd = new G4UIcmdWithAnInteger("/tracking/verbose",this);
 #ifdef G4VERBOSE
@@ -118,25 +107,33 @@ G4TrackingMessenger::~G4TrackingMessenger()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+void G4TrackingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
 ///////////////////////////////////////////////////////////////////////////////
 {
-  if( command == VerboseCmd ){
+  if( command == VerboseCmd )
+  {
     trackingManager->SetVerboseLevel(VerboseCmd->ConvertToInt(newValues));
   }
 
-  if( command  == AbortCmd ){
+  if( command == AbortCmd )
+  {
     steppingManager->GetTrack()->SetTrackStatus(fStopAndKill);
     G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
   }
 
-  if( command  == ResumeCmd ){
-        G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
+  if( command == ResumeCmd )
+  {
+    G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
   }
 
-  static G4ThreadLocal G4IdentityTrajectoryFilter* auxiliaryPointsFilter = 0;
-  if(!auxiliaryPointsFilter) auxiliaryPointsFilter = new G4IdentityTrajectoryFilter;
-  if( command == StoreTrajectoryCmd ){
+  static G4ThreadLocal
+         G4IdentityTrajectoryFilter* auxiliaryPointsFilter = nullptr;
+  if(auxiliaryPointsFilter == nullptr)
+  {
+    auxiliaryPointsFilter = new G4IdentityTrajectoryFilter;
+  }
+  if( command == StoreTrajectoryCmd )
+  {
     G4int trajType = StoreTrajectoryCmd->ConvertToInt(newValues);
     if(trajType==2||trajType==4)
     {
@@ -152,29 +149,18 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   }
 }
 
-
 ////////////////////////////////////////////////////////////////////
-G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand * command)
+G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand* command)
 ////////////////////////////////////////////////////////////////////
 {
-  if( command == VerboseCmd ){
+  if( command == VerboseCmd )
+  {
     return VerboseCmd->ConvertToString(trackingManager->GetVerboseLevel());
   }
-  else if( command == StoreTrajectoryCmd ){
-    return StoreTrajectoryCmd->ConvertToString(trackingManager->GetStoreTrajectory());
+  else if( command == StoreTrajectoryCmd )
+  {
+    return StoreTrajectoryCmd
+           ->ConvertToString(trackingManager->GetStoreTrajectory());
   }
   return G4String('\0');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

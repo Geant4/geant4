@@ -23,23 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DecayTableMessenger class implementation
 //
-//
-//
-//---------------------------------------------------------------
-//
-//  G4DecayTableMessenger.cc
-//
-//  Description:
-//    This is a messenger class to interface to exchange information
-//    between ParticleDefinition and UI.
-//
-//  History:
-//    13 June 1997, H. Kurashige   : The 1st version created.
-//    10 Nov. 1997  H. Kurashige   : fixed bugs 
-//    08 jan. 1998  H. Kurashige   : new UIcommnds 
-//
-//---------------------------------------------------------------
+// Author: H.Kurashige, 13 June 1997
+//---------------------------------------------------------------------
 
 #include "G4DecayTableMessenger.hh"
 #include "G4UImanager.hh"
@@ -55,26 +42,19 @@
 #include <iomanip>                  // Include from 'system'
 
 G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
-                      :theParticleTable(pTable),
-		       currentParticle(nullptr), 
-		       currentDecayTable(nullptr),
-		       idxCurrentChannel(-1), 
-		       currentChannel(nullptr),
-		       thisDirectory(nullptr),
-		       dumpCmd(nullptr),
-		       selectCmd(nullptr),
-		       brCmd(nullptr) 
+  : theParticleTable(pTable)
 {
-  if ( theParticleTable == nullptr ) {
+  if ( theParticleTable == nullptr )
+  {
     theParticleTable = G4ParticleTable::GetParticleTable();
   }
   currentParticle = nullptr;
 
-  //Commnad   /particle/property/decay/
+  // Command /particle/property/decay/
   thisDirectory = new G4UIdirectory("/particle/property/decay/");
   thisDirectory->SetGuidance("Decay Table control commands.");
 
-  //Commnad   /particle/property/decay/select
+  // Command /particle/property/decay/select
   selectCmd = new G4UIcmdWithAnInteger("/particle/property/decay/select",this);
   selectCmd->SetGuidance("Enter index of decay mode.");
   selectCmd->SetParameterName("mode", true);
@@ -82,16 +62,15 @@ G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
   selectCmd->SetRange("mode >=0");
   currentChannel = nullptr;
 
-  //Commnad   /particle/property/decay/dump
+  // Command /particle/property/decay/dump
   dumpCmd = new G4UIcmdWithoutParameter("/particle/property/decay/dump",this);
   dumpCmd->SetGuidance("Dump decay mode information.");
 
-  //Command   /particle/property/decay/br
+  // Command /particle/property/decay/br
   brCmd = new G4UIcmdWithADouble("/particle/property/decay/br",this);
   brCmd->SetGuidance("Set branching ratio. [0< BR <1.0]");
   brCmd->SetParameterName("br",false);
   brCmd->SetRange("(br >=0.0) && (br <=1.0)");
-
 }
 
 G4DecayTableMessenger::~G4DecayTableMessenger()
@@ -102,43 +81,58 @@ G4DecayTableMessenger::~G4DecayTableMessenger()
   if (thisDirectory != nullptr) delete thisDirectory;
 }
 
-void G4DecayTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void G4DecayTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (SetCurrentParticle()== nullptr) {
+  if (SetCurrentParticle()== nullptr)
+  {
     G4cout << "Particle is not selected yet !! Command ignored." << G4endl;
     return;
   }
-  if (currentDecayTable== nullptr) {
+  if (currentDecayTable== nullptr)
+  {
     G4cout << "The particle has no decay table !! Command ignored." << G4endl;
     return;
   }
 
-  if( command == dumpCmd ){
-    //Commnad   /particle/property/decay/dump
+  if( command == dumpCmd )
+  {
+    // Command /particle/property/decay/dump
     currentDecayTable->DumpInfo();
 
-  } else if ( command == selectCmd ){
-    //Commnad   /particle/property/decay/select
+  }
+  else if ( command == selectCmd )
+  {
+    // Command /particle/property/decay/select
     G4int index = selectCmd->GetNewIntValue(newValue) ;
     currentChannel = currentDecayTable->GetDecayChannel(index);
-    if ( currentChannel == nullptr ) {
+    if ( currentChannel == nullptr )
+    {
       G4cout << "Invalid index. Command ignored." << G4endl;
-    } else {
+    }
+    else
+    {
       idxCurrentChannel = index;
     }
 
-  } else {
-    if ( currentChannel == nullptr ) {
+  }
+  else
+  {
+    if ( currentChannel == nullptr )
+    {
       G4cout << "Select a decay channel. Command ignored." << G4endl;
       return;
     }
-    if (command == brCmd) {
-      //Commnad   /particle/property/decay/br
+    if (command == brCmd)
+    {
+      // Command /particle/property/decay/br
       G4double  br = brCmd->GetNewDoubleValue(newValue);
-      if( (br<0.0) || (br>1.0) ) { 
-	G4cout << "Invalid brancing ratio. Command ignored." << G4endl;
-      } else {
-	currentChannel->SetBR(br);
+      if( (br<0.0) || (br>1.0) )
+      { 
+        G4cout << "Invalid brancing ratio. Command ignored." << G4endl;
+      }
+      else
+      {
+        currentChannel->SetBR(br);
       }
     }
   }
@@ -150,30 +144,41 @@ G4ParticleDefinition* G4DecayTableMessenger::SetCurrentParticle()
   // set currentParticle pointer  
   // get particle name by asking G4ParticleMessenger via UImanager
 
-  G4String particleName = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
+  G4String particleName
+    = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
 
-  if (currentParticle != nullptr ){
+  if (currentParticle != nullptr )
+  {
     // check whether selection is changed 
-    if (currentParticle->GetParticleName() != particleName) {
+    if (currentParticle->GetParticleName() != particleName)
+    {
       currentParticle = theParticleTable->FindParticle(particleName);
       idxCurrentChannel = -1;
       currentDecayTable = nullptr;
-    } else {
+    }
+    else
+    {
       // no change 
       return currentParticle;
     }
 
-  } else {
+  }
+  else
+  {
     currentParticle = theParticleTable->FindParticle(particleName);
     idxCurrentChannel = -1;
     currentDecayTable = nullptr;
   }
 
-  if (currentParticle != nullptr ){
+  if (currentParticle != nullptr )
+  {
     currentDecayTable = currentParticle->GetDecayTable();
-    if ((currentDecayTable != nullptr ) && (idxCurrentChannel >0) ) {
+    if ( (currentDecayTable != nullptr ) && (idxCurrentChannel >0) )
+    {
       currentChannel = currentDecayTable->GetDecayChannel(idxCurrentChannel);
-    } else {
+    }
+    else
+    {
       idxCurrentChannel = -1;
       currentChannel = nullptr;
     }
@@ -182,31 +187,28 @@ G4ParticleDefinition* G4DecayTableMessenger::SetCurrentParticle()
   return currentParticle;
 }
 
-G4String G4DecayTableMessenger::GetCurrentValue(G4UIcommand * command)
+G4String G4DecayTableMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String returnValue('\0');
 
-  if (SetCurrentParticle()==nullptr) {
+  if (SetCurrentParticle() == nullptr)
+  {
     // no particle is selected. return null 
     return returnValue;
   }
 
-  if( command == selectCmd ){
-    //Commnad   /particle/property/decay/select
+  if( command == selectCmd )
+  {
+    // Command /particle/property/decay/select
     returnValue = selectCmd->ConvertToString(idxCurrentChannel);
 
-  } else if( command == brCmd ){
-    if ( currentChannel != nullptr) {
+  }
+  else if( command == brCmd )
+  {
+    if ( currentChannel != nullptr)
+    {
       returnValue = brCmd->ConvertToString(currentChannel->GetBR());
     } 
   }
   return returnValue;
 }
-
-
-
-
-
-
-
-

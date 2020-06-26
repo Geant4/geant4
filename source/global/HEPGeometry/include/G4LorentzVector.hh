@@ -33,4 +33,4 @@
 
 typedef CLHEP::HepLorentzVector G4LorentzVector;
 
-#endif // G4LorentzVector_hh
+#endif  // G4LorentzVector_hh

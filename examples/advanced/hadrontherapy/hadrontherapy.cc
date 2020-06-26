@@ -35,15 +35,15 @@
 //
 //                                  ACTUAL CONTRIBUTORS
 //                                  ====================
-//          G.A.P. Cirrone(a), Z. Mei(i), L. Pandola(a), G. Petringa(a), F. Romano (a,g)
+//                  G.A.P. Cirrone(a), L. Pandola(a), G. Petringa(a)
 //
 //
 //                      ==========>   PAST CONTRIBUTORS  <==========
 //
 //                      R. Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
 //                      S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-//                      A.Lechner(d), S.E.Mazzaglia(a), M.G.Pia(e),
-//                      G.Russo(a,h), M.Russo(a), A. Tramontana (a),
+//                      A.Lechner(d), S.E.Mazzaglia(a), Z. Mei(h), M.G.Pia(e),
+//                      F.Romano(a), G.Russo(a,g), M.Russo(a), A. Tramontana (a),
 //                      A.Varisano(a)
 //
 //              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
@@ -52,9 +52,8 @@
 //              (d) CERN, Geneve, Switzwerland
 //              (e) INFN Section of Genova, Genova, Italy
 //              (f) Physics and Astronomy Department, Univ. of Catania, Catania, Italy
-//              (g) National Physics Laboratory, Teddington, UK
-//              (h) CNR-IBFM, Italy
-//              (i) Institute of Applied Electromagnetic Engineering(IAEE) 
+//              (g) CNR-IBFM, Italy
+//              (h) Institute of Applied Electromagnetic Engineering(IAEE)
 //                  Huazhong University of Science and Technology(HUST), Wuhan, China
 //
 //

@@ -62,7 +62,7 @@ class G4VIntegrationDriver
     virtual G4bool AccurateAdvance(G4FieldTrack& track,
                                    G4double hstep,
                                    G4double eps, // Requested y_err/hstep
-                                   G4double hinitial = 0) = 0;
+                                   G4double hinitial = 0 ) = 0;
 
     virtual void SetEquationOfMotion(G4EquationOfMotion* equation) = 0;
     virtual G4EquationOfMotion* GetEquationOfMotion() = 0;
@@ -104,13 +104,19 @@ class G4VIntegrationDriver
                                         G4double hstepCurrent) = 0;
       // Taking the last step's normalised error, calculate
       // a step size for the next step.
-      // Do not limit the next step's size within a factor of the current one.
+      // - Can limit the next step's size within a factor of the current one.
 
-    virtual G4bool DoesReIntegrate() = 0;
+    virtual G4bool DoesReIntegrate() const = 0;
       // Whether the driver implementates re-integration
       //  - original Integration driver will re-start and re-calculate interval => yes
       //  - Interpolation Driver does not recalculate (it interpolates)
       // Basically answer: does this driver *Recalculate* when AccurateAdvance is called ?
+
+    virtual void   StreamInfo( std::ostream& os ) const = 0;
+      // Write out the parameters / state of the driver
+
+    friend std::ostream& operator<<( std::ostream& os, const G4VIntegrationDriver& id);
+   
   protected:
 
     static constexpr G4double max_stepping_increase = 5;

@@ -44,6 +44,10 @@
 //  Please, see hep-ex/0001020 for details.
 
 // Author: Joanna Weng - 11.2005
+//
+// Usage: use new statement for new instance of class, do not delete.
+//        The instance of class will be deleted in
+//        GFlashSamplingShowerParameterisation Destructor.
 //---------------------------------------------------------------
 #ifndef GFlashSamplingShowerTuning_hh
 #define GFlashSamplingShowerTuning_hh

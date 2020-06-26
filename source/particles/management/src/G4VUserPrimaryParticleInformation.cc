@@ -23,9 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserPrimaryParticleInformation
 //
-//
-#include "G4VUserPrimaryParticleInformation.hh"
-G4VUserPrimaryParticleInformation::G4VUserPrimaryParticleInformation() {;}
-G4VUserPrimaryParticleInformation::~G4VUserPrimaryParticleInformation() {;}
+// Author: M.Asai (SLAC)
+// --------------------------------------------------------------------
 
+#include "G4VUserPrimaryParticleInformation.hh"
+
+G4VUserPrimaryParticleInformation::G4VUserPrimaryParticleInformation()
+{
+}
+
+G4VUserPrimaryParticleInformation::~G4VUserPrimaryParticleInformation()
+{
+}

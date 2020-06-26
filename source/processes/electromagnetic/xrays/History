@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 May 20: D. Sawkey (xrays-V10-06-03)
+- G4Cerenkov - set verbosity levels correctly
+
+24 May 20: D. Sawkey (xrays-V10-06-02)
+- G4Scintillation, G4ScintillationTrackInformation - new material property
+  names allowing 3 time constants, either with/without scintillation
+  by particle type
+
+19 May 20: D. Sawkey (xrays-V10-06-01)
+- G4Cerenkov, G4Scintillation - update format and style
+
+14 February 20: V. Ivanchenko (xrays-V10-06-00)
+- G4VXTRenergyLoss - fixed destructor
+
 08 November 19: V. Ivanchenko (xrays-V10-05-02)
 - G4SynchrotronRadiation, G4VTransitionRadiation - fixed deregistration
 

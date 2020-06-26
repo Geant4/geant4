@@ -96,7 +96,6 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   facrange(0.04),
   latDisplacement(true),
   isIon(false),
-  fDispBeyondSafety(false),
   fNewPosition(0.,0.,0.),
   fNewDirection(0.,0.,1.)
 {
@@ -235,9 +234,6 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
         stepLimit = theParameters->MscStepLimitType(); 
         facrange = theParameters->MscRangeFactor(); 
         latDisplacement = theParameters->LateralDisplacement();
-      }
-      if(latDisplacement) { 
-        fDispBeyondSafety = theParameters->LatDisplacementBeyondSafety();
       }
     }
     if(master) { SetVerboseLevel(theParameters->Verbose()); }
@@ -523,77 +519,6 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
           if(dispR < postSafety) {
             fNewPosition += displacement;
 
-            // optional extra mechanism is applied only if a particle
-            // is stopped by the boundary
-          } else if(fDispBeyondSafety && 0.0 == postSafety) {
-            fNewPosition += displacement;
-            G4double maxshift = 
-              std::min(2.0*dispR, geomLength*(physStepLimit/tPathLength - 1.0));
-            G4double dist = 0.0;
-            G4double safety = postSafety + dispR;
-            fNewDirection = *(fParticleChange.GetMomentumDirection());
-            /*
-              G4cout << "##MSC before Recheck maxshift= " << maxshift
-                     << " postsafety= " << postSafety
-                     << " Ekin= " << track.GetKineticEnergy()
-                     << "  " << track.GetDefinition()->GetParticleName()
-                     << G4endl; 
-            */
-            // check if it is possible to shift to the boundary
-            // and the shift is not large
-            if(safetyHelper->RecheckDistanceToCurrentBoundary(fNewPosition,
-               fNewDirection, maxshift, &dist, &safety) 
-               && std::abs(dist) < maxshift) {
-                 /* 
-                    G4cout << "##MSC after Recheck dist= " << dist
-                    << " postsafety= " << postSafety
-                    << " t= " << tPathLength
-                    << " g=  " << geomLength
-                    << " p=  " << physStepLimit
-                    << G4endl; 
-                 */
-              // shift is positive
-              if(dist >= 0.0) {
-                tPathLength *= (1.0 + dist/geomLength);
-                fNewPosition += dist*fNewDirection; 
-
-                // shift is negative cannot be larger than geomLength
-              } else {
-                maxshift = std::min(maxshift, geomLength);
-                if(0.0 < maxshift + dist) {
-                  const G4ThreeVector& postpoint = 
-                    step.GetPostStepPoint()->GetPosition();
-                  G4ThreeVector point = fNewPosition + dist*fNewDirection;
-                  G4double R2 = (postpoint - point).mag2();
-                  G4double newdist = dist;
-                  // check not more than 10 extra boundaries
-                  for(G4int i=0; i<10; ++i) {
-                    dist = 0.0;
-                    if(safetyHelper->RecheckDistanceToCurrentBoundary(
-                       point, fNewDirection, maxshift, &dist, &safety) 
-                       && std::abs(newdist + dist) < maxshift) {
-                      point += dist*fNewDirection;
-                      G4double R2new = (postpoint - point).mag2();
-                      //G4cout << "Backward  i= " << i << " dist= " << dist 
-                      //     << " R2= " << R2new << G4endl; 
-                      if(dist >= 0.0 || R2new > R2) { break; }
-                      R2 = R2new;
-                      fNewPosition = point;
-                      newdist += dist;
-                    } else { 
-                      break; 
-                    }
-                  }
-                  tPathLength *= (1.0 + newdist/geomLength);
-                // shift on boundary is not possible for negative disp
-                } else {
-                  fNewPosition += displacement*(postSafety/dispR - 1.0); 
-                }
-              }
-              // shift on boundary is not possible for any disp
-            } else {
-              fNewPosition += displacement*(postSafety/dispR - 1.0); 
-            }
             // reduced displacement
           } else if(postSafety > geomMin) {
             fNewPosition += displacement*(postSafety/dispR); 

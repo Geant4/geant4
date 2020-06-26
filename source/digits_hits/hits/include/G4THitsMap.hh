@@ -62,13 +62,13 @@ private:
     using enable_if_t = typename std::enable_if<_Bp, _Tp>::type;
 
     // ensure fundamental types are initialized to zero
-    template <typename U = T, enable_if_t<is_fundamental_t(U), int> = 0>
+    template <typename U = T, enable_if_t<is_fundamental_t(U), G4int> = 0>
     T* allocate() const
     { return new T(0.); }
     // non-fundamental types should set values to appropriate values
     // and avoid issues such as:
     //   G4StatDouble stat(0.); stat += 1.0; gives n == 2;
-    template <typename U = T, enable_if_t<! is_fundamental_t(U), int> = 0>
+    template <typename U = T, enable_if_t<! is_fundamental_t(U), G4int> = 0>
     T* allocate() const
     { return new T(); }
 
@@ -123,11 +123,11 @@ public:
     inline typename Map_t::size_type GetIndex(const_iterator itr) const
     { return itr->first; }
 
-    template <typename MapU_t = Map_t, enable_if_t< !is_mmap_t(MapU_t), int> = 0>
+    template <typename MapU_t = Map_t, enable_if_t< !is_mmap_t(MapU_t), G4int> = 0>
     inline T* GetObject(G4int idx) const
     { return (GetContainer()->count(idx) != 0) ? (*GetContainer())[idx] : nullptr; }
 
-    template <typename MapU_t = Map_t, enable_if_t< is_mmap_t(MapU_t), int> = 0>
+    template <typename MapU_t = Map_t, enable_if_t< is_mmap_t(MapU_t), G4int> = 0>
     inline T* GetObject(G4int idx) const
     {
         return (GetContainer()->count(idx) != 0) ? GetContainer()->find(idx)->second : nullptr;
@@ -173,7 +173,7 @@ public:
     // and += adds to white (not correct)
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<is_same_t(U, T) && ! is_mmap_t(MapU_t), int> = 0>
+              enable_if_t<is_same_t(U, T) && ! is_mmap_t(MapU_t), G4int> = 0>
     size_t add(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -188,7 +188,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     size_t add(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -201,7 +201,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     size_t add(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -220,7 +220,7 @@ public:
     // and += adds to white (not correct)
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
     size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -236,7 +236,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(! is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(! is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
     size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -250,7 +250,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -263,7 +263,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     size_t add(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -283,7 +283,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -297,7 +297,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -315,7 +315,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(!is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(!is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int & key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -332,7 +332,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int& key, U*& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -358,7 +358,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -375,7 +375,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -390,7 +390,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(!is_same_t(U, T) && ! is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(!is_same_t(U, T) && ! is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int & key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -407,7 +407,7 @@ public:
     //------------------------------------------------------------------------//
     template <typename U = T,
               typename MapU_t = Map_t,
-              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), int> = 0>
+              enable_if_t<(!is_same_t(U, T) && is_mmap_t(MapU_t)), G4int> = 0>
     inline size_t set(const G4int& key, U& aHit) const
     {
         map_type* theHitsMap = GetMap();
@@ -428,7 +428,7 @@ public:
     //      case of a multimap
     //------------------------------------------------------------------------//
     template <typename MapU_t = Map_t,
-              enable_if_t<! is_mmap_t(MapU_t), int> = 0>
+              enable_if_t<! is_mmap_t(MapU_t), G4int> = 0>
     T* operator[](G4int key) const
     {
         map_type* theHitsMap = GetMap();
@@ -438,7 +438,7 @@ public:
     }
     //------------------------------------------------------------------------//
     template <typename MapU_t = Map_t,
-              enable_if_t<is_mmap_t(MapU_t), int> = 0>
+              enable_if_t<is_mmap_t(MapU_t), G4int> = 0>
     T* operator[](G4int key) const
     {
 #ifdef G4VERBOSE
@@ -491,7 +491,7 @@ template <typename T, typename Map_t>
 G4VTHitsMap<T, Map_t>::~G4VTHitsMap()
 {
   map_type* theHitsMap = GetMap();
-  for(iterator itr = theHitsMap->begin(); itr != theHitsMap->end(); itr++)
+  for(iterator itr = theHitsMap->begin(); itr != theHitsMap->end(); ++itr)
       delete itr->second;
   delete theHitsMap;
 }
@@ -522,7 +522,7 @@ void G4VTHitsMap<T, Map_t>::PrintAllHits()
      Map_t * theHitsMap = GetMap();
      typename Map_t::iterator itr = theHitsMap->begin();
      T sum = 0.;
-     for(; itr != theHitsMap->end(); itr++) {
+     for(; itr != theHitsMap->end(); ++itr) {
       G4cout << "  " << itr->first << " : "
              << *(itr->second) << G4endl;
       sum += *(itr->second);
@@ -537,7 +537,7 @@ template <typename T, typename Map_t>
 void G4VTHitsMap<T, Map_t>::clear()
 {
     Map_t * theHitsMap = GetMap();
-    for(iterator itr = theHitsMap->begin(); itr != theHitsMap->end(); itr++)
+    for(iterator itr = theHitsMap->begin(); itr != theHitsMap->end(); ++itr)
         delete itr->second;
     theHitsMap->clear();
 }

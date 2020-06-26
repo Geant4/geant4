@@ -66,8 +66,6 @@ public:
 private:
   G4double theMin;
   G4double theMax;
-  G4ParticleHPInelastic*  theParticlePHPModel;
-  
 };
 
 #endif

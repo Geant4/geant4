@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 17, 2020 V.Ivanchenko  (ReverseMC01-V10-05-02)
+May 17, 2020 V.Ivanchenko  (ReverseMC01-V10-06-00)
 - RMC01AnalysisManager - use G4double for computation of mean and RMS,
     added protection for sqrt argument, to avoid a problem due to precision
     loss in arithmetic computations

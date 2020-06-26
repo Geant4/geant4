@@ -64,6 +64,7 @@ class QKeyEvent;
 class QWheelEvent;
 class QProcess;
 class QTime;
+class QElapsedTimer;
 class QVBoxLayout;
 class QPushButton;
 class QSlider;
@@ -308,7 +309,11 @@ private:
   G4OpenGLQtMovieDialog* fMovieParametersDialog;
   RECORDING_STEP fRecordingStep;
   QProcess *fProcess;
+#if QT_VERSION < 0x050e00
   QTime *fLastEventTime;
+#else
+  QElapsedTimer *fLastEventTime;
+#endif
   int fSpinningDelay;
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;

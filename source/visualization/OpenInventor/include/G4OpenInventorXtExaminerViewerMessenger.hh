@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#ifdef G4VIS_BUILD_OIX_DRIVER
+#if defined (G4VIS_BUILD_OIX_DRIVER) || defined (G4VIS_USE_OIX)
 
 #ifndef G4OPENINVENTORXTEXAMINERVIEWERMESSENGER_HH
 #define G4OPENINVENTORXTEXAMINERVIEWERMESSENGER_HH

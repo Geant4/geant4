@@ -59,6 +59,12 @@ void G4HadronicInteraction::BuildPhysicsTable(const G4ParticleDefinition&)
 void G4HadronicInteraction::InitialiseModel()
 {}
 
+G4HadFinalState* 
+G4HadronicInteraction::ApplyYourself(const G4HadProjectile&, G4Nucleus&)
+{
+  return nullptr;
+}
+
 G4double 
 G4HadronicInteraction::SampleInvariantT(const G4ParticleDefinition*, 
 					G4double, G4int, G4int)

@@ -23,26 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4TrackingMessenger
 //
+// Class description:
 //
-//---------------------------------------------------------------
-//
-// G4TrackingMessenger.hh
-//
-// class Description:
-//   This is a messenger class to interface to exchange information
-//   between tracking/stepping and UI.
-//
+// This is a messenger class to interface and exchange information
+// between tracking/stepping and UI.
+
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Makoto  Asai   (e-mail: asai@kekvax.kek.jp)
+//     Makoto  Asai   (e-mail: asai@slac.stanford.edu)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
 //---------------------------------------------------------------
+#ifndef G4TrackingMessenger_hh
+#define G4TrackingMessenger_hh 1
 
-#ifndef G4TrackingMessenger_h
-#define G4TrackingMessenger_h 1
+#include "G4UImessenger.hh"
 
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
@@ -50,36 +47,29 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithABool;
 class G4TrackingManager;
 class G4SteppingManager;
-#include "G4UImessenger.hh"
-///////////////////////////////////////////////
-class G4TrackingMessenger: public G4UImessenger
-///////////////////////////////////////////////
+
+class G4TrackingMessenger : public G4UImessenger
 {
 
-//--------
-public: // without description
-//--------
+  public:
 
-   G4TrackingMessenger(G4TrackingManager* trMan);
+    G4TrackingMessenger(G4TrackingManager* trMan);
    ~G4TrackingMessenger();
-   void SetNewValue(G4UIcommand * command,G4String newValues);
-   G4String GetCurrentValue(G4UIcommand * command);
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
 
-//---------
-   private:
-//---------
+  private:
 
-   G4TrackingManager* trackingManager;
-   G4SteppingManager* steppingManager;
+    G4TrackingManager* trackingManager = nullptr;
+    G4SteppingManager* steppingManager = nullptr;
 
-  // commands 
-    G4UIdirectory *             TrackingDirectory;
-    G4UIcmdWithoutParameter *   AbortCmd;
-    G4UIcmdWithoutParameter *   ResumeCmd;
-    G4UIcmdWithAnInteger *      StoreTrajectoryCmd;
-    G4UIcmdWithAnInteger *      VerboseCmd;
+    // commands 
 
+    G4UIdirectory*           TrackingDirectory = nullptr;
+    G4UIcmdWithoutParameter* AbortCmd = nullptr;
+    G4UIcmdWithoutParameter* ResumeCmd = nullptr;
+    G4UIcmdWithAnInteger*    StoreTrajectoryCmd = nullptr;
+    G4UIcmdWithAnInteger*    VerboseCmd = nullptr;
 };
 
 #endif
-

@@ -23,28 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ReferenceCountedHandle class implementation
 //
-// -------------------------------------------------------------------
-//
-// GEANT4 Class file
-//
-//
-// File name:     G4ReferenceCountedHandle.cc
-//
-// -------------------------------------------------------------------
+// Author: Radovan Chytracek, CERN - November 2001
+// --------------------------------------------------------------------
 
-#include "G4Types.hh"
 #include "G4ReferenceCountedHandle.hh"
+#include "G4Types.hh"
 
 G4Allocator<G4CountedObject<void>>*& aCountedObjectAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4CountedObject<void>>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4CountedObject<void>>* _instance = nullptr;
+  return _instance;
 }
 
 G4Allocator<G4ReferenceCountedHandle<void>>*& aRCHAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4ReferenceCountedHandle<void>>*
-            _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4ReferenceCountedHandle<void>>* _instance =
+    nullptr;
+  return _instance;
 }

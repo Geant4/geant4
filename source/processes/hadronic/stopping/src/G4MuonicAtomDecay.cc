@@ -266,9 +266,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
       if (GetVerboseLevel()>1) {
 	decaychannel->SetVerboseLevel(temp);
       }
-#endif
-#ifdef G4VERBOSE
-      if (GetVerboseLevel()>2) {
+      if (GetVerboseLevel()>2 && products) {
 	if (! products->IsChecked() ) products->DumpInfo();
       }
 #endif

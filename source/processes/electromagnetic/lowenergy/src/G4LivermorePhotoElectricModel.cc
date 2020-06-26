@@ -130,7 +130,8 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
         
         if(!fWater) {
             fWater = G4Material::GetMaterial("G4_WATER", false);
-            if(fWater) { fWaterEnergyLimit = 13.6*eV; }
+            if(!fWater) { fWater = G4Material::GetMaterial("Water", false); }
+            if(fWater)  { fWaterEnergyLimit = 13.6*eV; }
         }
         
         if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }

@@ -912,7 +912,7 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
     << "\n" << transformedExtent;
     DrawExtent(transformedExtent);
   }
-  G4cout << "Overall extent:\n";
+  G4cout << "\n  Overall extent:\n";
   DrawExtent(pCurrentScene->GetExtent());
   G4cout << G4endl;
 }

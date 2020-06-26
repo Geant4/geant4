@@ -34,8 +34,8 @@ public:
   virtual bool write(io::iwbuf&) = 0;
   virtual bool read(io::irbuf&) = 0;
   virtual bool dump(std::ostream&) = 0;
-  //virtual bool s_value(std::string& a_s) const = 0;
-  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s_value(std::string&) const = 0;
+  virtual bool s2value(const std::string&) = 0;
 protected:
   field():m_touched(true){
 #ifdef TOOLS_MEM

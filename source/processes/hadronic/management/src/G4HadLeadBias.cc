@@ -43,7 +43,7 @@
       emax = result->GetEnergyChange();
     }
     //G4cout << "max energy "<<G4endl;
-    for(i=0;i<result->GetNumberOfSecondaries();i++)
+    for(i=0;i<static_cast<G4int>(result->GetNumberOfSecondaries());i++)
     {
       if(result->GetSecondary(i)->GetParticle()->GetKineticEnergy()>emax)
       {
@@ -52,7 +52,7 @@
       }
     }
     //G4cout <<"loop1"<<G4endl;
-    for(i=0; i<result->GetNumberOfSecondaries(); i++)
+    for(i=0; i<static_cast<G4int>(result->GetNumberOfSecondaries()); i++)
     {
       const G4DynamicParticle* aSecTrack = result->GetSecondary(i)->GetParticle();
       if(i==maxE)
@@ -94,7 +94,7 @@
     
     std::vector<G4HadSecondary> buffer;
     G4int cMeson(0), cBaryon(0), cpi0(0), cgamma(0), cLepton(0);
-    for(i=0; i<result->GetNumberOfSecondaries(); i++)
+    for(i=0; i<static_cast<G4int>(result->GetNumberOfSecondaries()); i++)
     {
       G4bool aCatch = false;
       G4double weight = 1;

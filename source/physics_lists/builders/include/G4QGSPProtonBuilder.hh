@@ -62,8 +62,8 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     virtual ~G4QGSPProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess *)  final override {}
-    virtual void Build(G4ProtonInelasticProcess * aP)  final override ;
+    virtual void Build(G4HadronElasticProcess *)  override {}
+    virtual void Build(G4ProtonInelasticProcess * aP) override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
@@ -71,13 +71,7 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
   private:
 
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4QGSMFragmentation * theQGSM;
     G4double theMin;
-
 };
 
 #endif

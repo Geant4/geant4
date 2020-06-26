@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4SimplexDownhill
 //
 // Class description:
 //
@@ -34,75 +34,75 @@
 //            by William H., Cambridge University Press ISBN 0521437202 (1992)
 
 // Author: Tatsumi Koi (SLAC/SCCS), 2007
-// --------------------------------------------------------------------------
-
+// --------------------------------------------------------------------
 #ifndef G4SimplexDownhill_hh
-#define G4SimplexDownhill_hh
+#define G4SimplexDownhill_hh 1
 
 #include "globals.hh"
 
-#include <vector> 
-#include <algorithm> 
+#include <algorithm>
+#include <vector>
 
-template<class T>
+template <class T>
 class G4SimplexDownhill
 {
+ public:
+  G4SimplexDownhill(T* tp, G4int n)
+    : currentValue(0.)
+    , target(tp)
+    , numberOfVariable(n)
+  {
+    init();
+  }
 
-   public: // with description
+  ~G4SimplexDownhill();
 
-      G4SimplexDownhill( T* tp , G4int n )
-        : currentValue(0.), target(tp), numberOfVariable(n)
-      { init(); }
+  G4double GetMinimum();
 
-      ~G4SimplexDownhill();
+  std::vector<G4double> GetMinimumPoint();
 
-      G4double GetMinimum();
+ private:
+  G4double getValue(std::vector<G4double> x)
+  {
+    return target->GetValueOfMinimizingFunction(x);
+  }
 
-      std::vector< G4double > GetMinimumPoint();
+  void initialize();
+  std::vector<std::vector<G4double>> currentSimplex;
 
+  void calHeights();
+  std::vector<G4double> currentHeights;
+  G4double currentValue;
 
-   private:
+  std::vector<G4double> calCentroid(G4int);
 
-      G4double getValue( std::vector< G4double > x )
-      { return target->GetValueOfMinimizingFunction( x ); }
+  G4bool isItGoodEnough();
 
-      void initialize();
-      std::vector< std::vector< G4double > > currentSimplex;
+  std::vector<G4double> getReflectionPoint(std::vector<G4double>,
+                                           std::vector<G4double>);
+  std::vector<G4double> getExpansionPoint(std::vector<G4double>,
+                                          std::vector<G4double>);
+  std::vector<G4double> getContractionPoint(std::vector<G4double>,
+                                            std::vector<G4double>);
 
-      void calHeights();
-      std::vector< G4double > currentHeights;
-      G4double currentValue;
+  void doDownhill();
 
-      std::vector< G4double > calCentroid( G4int );
+  void init();
 
-      G4bool isItGoodEnough();
+ private:
+  T* target;
 
-      std::vector< G4double > getReflectionPoint( std::vector< G4double > ,
-                                                  std::vector< G4double > );
-      std::vector< G4double > getExpansionPoint( std::vector< G4double > ,
-                                                 std::vector< G4double > );
-      std::vector< G4double > getContractionPoint( std::vector< G4double > ,
-                                                   std::vector< G4double > );
+  G4int numberOfVariable;
 
-      void doDownhill();
+  G4double alpha;
+  G4double beta;
+  G4double gamma;
+  G4double max_se;
+  G4double max_ratio;
+  G4int maximum_no_trial;
+  G4bool minimized;
 
-      void init();
-
-   private:
-
-      T* target;
-
-      G4int numberOfVariable; 
-
-      G4double alpha;
-      G4double beta;
-      G4double gamma;
-      G4double max_se;
-      G4double max_ratio;
-      G4int maximum_no_trial;
-      G4bool minimized;
-
-      std::vector< G4double > minimumPoint;
+  std::vector<G4double> minimumPoint;
 };
 
 #include "G4SimplexDownhill.icc"

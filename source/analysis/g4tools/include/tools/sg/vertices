@@ -48,6 +48,7 @@ protected: //gstos
 
 public:
   virtual void render(render_action& a_action) {
+    if(touched()) {clean_gstos();reset_touched();}
     if(xyzs.empty()) return;
 
     const state& state = a_action.state();
@@ -101,13 +102,16 @@ public:
 #endif    
   }
   virtual void pick(pick_action& a_action) {
+    if(touched()) {clean_gstos();reset_touched();}
     a_action.add__primitive(*this,mode.value(),xyzs.values(),true);
   }
 
   virtual void bbox(bbox_action& a_action) {
+    if(touched()) {clean_gstos();reset_touched();}
     a_action.add_points(xyzs.values());
   }
   virtual void is_visible(visible_action& a_action) {
+    if(touched()) {clean_gstos();reset_touched();}
     if(_is_visible(a_action)) a_action.increment();
   }
 

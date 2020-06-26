@@ -75,12 +75,6 @@ public:
      G4double tmin,
      G4double maxEnergy);
      
-  //---
-  // kept for backward compatibility
-  inline void SetKillBelowThreshold (G4double threshold);   
-  G4double GetKillBelowThreshold () { return killBelowEnergy; }   
-  //---
-  
   inline void SelectStationary(G4bool input); 
 
 protected:
@@ -94,9 +88,6 @@ private:
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
-  G4double killBelowEnergy;  
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
   
@@ -159,21 +150,5 @@ inline void G4DNACPA100ElasticModel::SelectStationary (G4bool input)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//---
-// kept for backward compatibility
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4DNACPA100ElasticModel::SetKillBelowThreshold (G4double /*threshold*/) 
-{ 
-
-  G4ExceptionDescription errMsg;
-  errMsg << "*** WARNING : "
-      << "G4DNACPA100ElasticModel::SetKillBelowThreshold"
-      << "is deprecated, the kill threshold won't be taken into account";
-
-  G4Exception ("*** WARNING : G4DNACPA100ElasticModel::SetKillBelowThreshold DEPRECATED","",JustWarning,"") ;
-            
-}   
 
 #endif

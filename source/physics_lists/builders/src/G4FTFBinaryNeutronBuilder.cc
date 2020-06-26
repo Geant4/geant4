@@ -54,30 +54,24 @@ G4FTFBinaryNeutronBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFB");
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  G4FTFModel* theStringModel = new G4FTFModel;
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-  theCascade = new G4BinaryCascade;
+  G4BinaryCascade* theCascade = new G4BinaryCascade;
   theModel->SetTransport(theCascade);
+
+  theModel->SetHighEnergyGenerator(theStringModel);
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
 
-  theModel->SetHighEnergyGenerator(theStringModel);
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+  if (quasiElastic) {
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+  } 
 }
 
 G4FTFBinaryNeutronBuilder::
 ~G4FTFBinaryNeutronBuilder() 
 {
-  delete theStringDecay;
-  delete theStringModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
 }
 
 void G4FTFBinaryNeutronBuilder::

@@ -35,7 +35,7 @@
 
 class G4LevelManager;
 
-class G4GEMProbabilityVI : public G4VEmissionProbability
+class G4GEMProbabilityVI final: public G4VEmissionProbability
 {
 public:
 

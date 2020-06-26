@@ -23,54 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPrimaryGenerator
 //
+// Class description:
 //
+// This is an abstract base class of all of primary generators.
+// This class has only one pure virtual method GeneratePrimaryVertex()
+// which takes a G4Event object and generates a primay vertex and
+// primary particles associate to the vertex
 
-#ifndef G4VPrimaryGenerator_h
-#define G4VPrimaryGenerator_h 1
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
+#ifndef G4VPrimaryGenerator_hh
+#define G4VPrimaryGenerator_hh 1
 
 #include "G4ThreeVector.hh"
 
 class G4Event;
 
-// class description:
-//
-//  This is an abstract base class of all of primary generators.
-// This class has only one pure virtual method GeneratePrimaryVertex()
-// which takes a G4Event object and generates a primay vertex and
-// primary particles associate to the vertex.
-//
-
 class G4VPrimaryGenerator
 {
-  public: // with description
-  // static service method for checking a point is included in the (current) world
-     static G4bool CheckVertexInsideWorld(const G4ThreeVector& pos);
+  public:
 
-  public: // with description
-     // Constructor and destrucot of this base class
-     G4VPrimaryGenerator();
-     virtual ~G4VPrimaryGenerator();
+    G4VPrimaryGenerator();
+    virtual ~G4VPrimaryGenerator();
+      // Constructor and destructor
 
-     // Pure virtual method which a concrete class derived from this base class must
-     // have a concrete implementation
-     virtual void GeneratePrimaryVertex(G4Event* evt) = 0;
+    static G4bool CheckVertexInsideWorld(const G4ThreeVector& pos);
+      // Static service method for checking a point is included
+      // in the (current) world
+
+    virtual void GeneratePrimaryVertex(G4Event* evt) = 0;
+      // Pure virtual method which a concrete class derived from this
+      // base class must implement
+
+    inline G4ThreeVector GetParticlePosition() { return particle_position; }
+    inline G4double GetParticleTime() { return particle_time; }
+
+    inline void SetParticlePosition(G4ThreeVector aPosition)
+      { particle_position = aPosition; }
+    inline void SetParticleTime(G4double aTime)
+      { particle_time = aTime; }
 
   protected:
-     G4ThreeVector         particle_position;
-     G4double              particle_time;
 
-  public:
-     G4ThreeVector GetParticlePosition()
-     { return particle_position; }
-     G4double GetParticleTime()
-     { return particle_time; }
-     void SetParticlePosition(G4ThreeVector aPosition)
-     { particle_position = aPosition; }
-     void SetParticleTime(G4double aTime)
-     { particle_time = aTime; }
-
+    G4ThreeVector particle_position;
+    G4double particle_time = 0.0;
 };
 
 #endif
-

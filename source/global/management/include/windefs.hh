@@ -23,22 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT 4 class header file
+// Description:
 //
-// Class Description:
-//
-// This file includes protections from Windows declarations in the
+// This file includes protections from Windows kits declarations in the
 // global scope that may cause trouble in compilation.
 
+// Author: G.Cosmo, 2019
 // --------------------------------------------------------------------
 #ifndef windefs_hh
-#define windefs_hh
+#define windefs_hh 1
 
 #if defined(_WIN32)
-  #if defined (ABSOLUTE)
-    #undef ABSOLUTE
-    #undef RELATIVE
-  #endif
-#endif // _WIN32
+#  if defined(ABSOLUTE)
+#    undef ABSOLUTE
+#    undef RELATIVE
+#  endif
+#endif  // _WIN32
 
-#endif // windefs_hh
+#endif  // windefs_hh

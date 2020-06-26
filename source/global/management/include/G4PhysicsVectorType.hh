@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// --------------------------------------------------------------
-//
 // G4PhysicsVectorType
 //
-// Class Description:
+// Description:
 //
 // Enumerator to define the physics vector type:
 //   G4PhysicsVector - base
@@ -40,14 +36,14 @@
 //   G4PhysicsOrderedFreeVector
 //   G4LPhysicsFreeVector
 
+// Author: H.Kurashige, 9 March 2001
 // --------------------------------------------------------------
-
-#ifndef G4PhysicsVectorType_h
-#define G4PhysicsVectorType_h
+#ifndef G4PhysicsVectorType_hh
+#define G4PhysicsVectorType_hh 1
 
 enum G4PhysicsVectorType
 {
-  T_G4PhysicsVector =0,
+  T_G4PhysicsVector = 0,
   T_G4PhysicsLinearVector,
   T_G4PhysicsLogVector,
   T_G4PhysicsLnVector,

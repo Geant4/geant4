@@ -23,27 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleTypes
 //
+// Description:
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      4-th April 1996, G.Cosmo
-//     ----------------- G4ParticleTypes.hh -----------------
-// Class Description
-//  Files including all existing particle definitions GEANT4 classes 
-//
-// ****************************************************************
-// Created, G.Cosmo, 19 September 1996
-// Modified H.Kurashige 8 Mar. 1997
-// Modified H.Kurashige 18 June 1997
-// Moved from global/management, G.Cosmo, 1 December 1998
-// ----------------------------------------------------------------
+// Inclusion of all existing particle definitions
 
-#ifndef G4ParticleTypes_h
-#define G4ParticleTypes_h 1
+// Created, G.Cosmo, 4 April 1996
+// --------------------------------------------------------------------
+#ifndef G4ParticleTypes_hh
+#define G4ParticleTypes_hh 1
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -96,7 +85,6 @@
 #include "G4BsMesonZero.hh"
 #include "G4AntiBsMesonZero.hh"
 #include "G4Upsilon.hh"
-
 
 // Barions
 #include "G4Proton.hh"
@@ -163,7 +151,7 @@
 #include "G4AntiHe3.hh"
 #include "G4AntiTriton.hh"
 
-//ions
+// Ions
 #include "G4GenericIon.hh"
-#endif
 
+#endif

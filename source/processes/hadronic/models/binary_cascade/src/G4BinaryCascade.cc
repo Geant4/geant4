@@ -179,13 +179,6 @@ G4VIntraNuclearTransportModel("Binary Cascade", ptr)
 
 }
 
-/*
-G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
-: G4VIntraNuclearTransportModel("Binary Cascade")
-{
-}
- */
-
 G4BinaryCascade::~G4BinaryCascade()
 {
     ClearAndDestroy(&theTargetList);
@@ -193,9 +186,9 @@ G4BinaryCascade::~G4BinaryCascade()
     ClearAndDestroy(&theCapturedList);
     delete thePropagator;
     delete theCollisionMgr;
-    std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
+    for(auto & ptr : theImR) { delete ptr; }
+    theImR.clear();
     delete theLateParticle;
-    //delete theExcitationHandler;
     delete theH1Scatterer;
 }
 

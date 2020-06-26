@@ -30,7 +30,7 @@
 #ifndef G4OPENINVENTORQTEXAMINERVIEWER_HH
 #define G4OPENINVENTORQTEXAMINERVIEWER_HH
 
-#ifdef G4VIS_BUILD_OIQT_DRIVER
+#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
 
 //#include <map>
 //#include <vector>
@@ -82,6 +82,10 @@ protected:
 
   // FWJ try to handle events as in XtExaminerViewer
   SbBool processSoEvent(const SoEvent* const event);
+
+   void construct(const SbBool build);
+   void buildWidget(QWidget* parent);
+
 
 };
 

@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-Mar-2020, Vladimir Ivanchenko    had-binary-V10-06-00
+- G4BinaryCascade: fixed memory leak at exit
+
 06-Nov-2019, Alberto Ribon          had-binary-V10-05-01
 - G4GeneratorPrecompoundInterface: trivial fix.
 

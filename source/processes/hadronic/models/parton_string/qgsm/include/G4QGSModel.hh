@@ -45,7 +45,7 @@
 #include "G4SoftStringBuilder.hh"
 #include "G4PartonPair.hh"
 
-//*****************************************************************************************
+//***************************************************************************
 
 template<class ParticipantType>
 class G4QGSModel : public G4VPartonStringModel
@@ -53,15 +53,19 @@ class G4QGSModel : public G4VPartonStringModel
   public:
     G4QGSModel();
     virtual ~G4QGSModel();
-    G4QGSModel(const G4QGSModel &right);
-    G4QGSModel& operator=(const G4QGSModel &right);
 
-  public:
-    virtual G4V3DNucleus* GetWoundedNucleus() const;
-    virtual G4V3DNucleus* GetProjectileNucleus() const;
-    virtual void Init(const G4Nucleus& Nucleus, const G4DynamicParticle& Projectile);
-    virtual G4ExcitedStringVector * GetStrings();
-    virtual void ModelDescription(std::ostream& outFile) const;
+    G4QGSModel(const G4QGSModel &right) = delete;
+    G4QGSModel& operator=(const G4QGSModel &right) = delete;
+    G4bool operator==(const G4QGSModel &right) const = delete;
+    G4bool operator!=(const G4QGSModel &right) const = delete;
+
+    G4V3DNucleus* GetWoundedNucleus() const override;
+    G4V3DNucleus* GetProjectileNucleus() const override;
+    void ModelDescription(std::ostream& outFile) const override;
+
+  protected:
+    void Init(const G4Nucleus& Nucleus, const G4DynamicParticle& dyn) override;
+    G4ExcitedStringVector * GetStrings() override;
 
   private:
     ParticipantType theParticipants;
@@ -69,7 +73,7 @@ class G4QGSModel : public G4VPartonStringModel
     G4SoftStringBuilder theSoftStringBuilder;
 };
 
-//*****************************************************************************************
+//***************************************************************************
     
 #include "G4QGSModel.icc"
 

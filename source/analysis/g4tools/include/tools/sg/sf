@@ -13,7 +13,9 @@
 #include "../io/iwbuf"
 #include "../io/irbuf"
 #include "../stype"
+
 #include <sstream>
+#include <istream>
 
 namespace tools {
 namespace sg {
@@ -46,6 +48,14 @@ public:
     std::ostringstream strm;
     strm << parent::m_value;
     a_s = strm.str();
+    return true;
+  }
+  virtual bool s2value(const std::string& a_s) {
+    std::istringstream strm(a_s.c_str());
+    T v;
+    strm >> v;
+    if(strm.fail()) return false;
+    parent::value(v); 
     return true;
   }
 public:

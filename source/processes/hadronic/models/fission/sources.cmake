@@ -84,7 +84,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_fission
         G4geometrymng
         G4globman
         G4had_mod_man
-        G4had_neu_hp
         G4had_par_hp
         G4hadronic_mgt
         G4hadronic_proc

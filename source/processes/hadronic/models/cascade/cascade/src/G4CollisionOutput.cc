@@ -539,9 +539,9 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   }
 
   // Momentum (hard) tuning required for energy conservation
-  if (verboseLevel > 2)
+  if (verboseLevel > 2) {
     G4cout << " trying hard (particle-pair) tuning" << G4endl;
-
+  }
   /*****
   // Hard tuning of quasielastic particle against nucleus
   if (npart == 1) {

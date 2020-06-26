@@ -23,7 +23,7 @@ Result Variables
 This module sets the following variables:
 
 ``XQuartzGL_FOUND``
- True, if the XQuartz GL/GLU libraries were located
+ True, if the XQuartz GL libraries were located
 
 Cache Variables
 ^^^^^^^^^^^^^^^
@@ -72,7 +72,6 @@ find_package_handle_standard_args(XQuartzGL
   REQUIRED_VARS
     XQuartzGL_INCLUDE_DIR
     XQuartzGL_gl_LIBRARY
-    XQuartzGL_glu_LIBRARY
   )
 
 mark_as_advanced(XQuartzGL_INCLUDE_DIR XQuartzGL_gl_LIBRARY XQuartzGL_glu_LIBRARY)
@@ -86,7 +85,7 @@ if(XQuartzGL_FOUND)
     )
   endif()
 
-  if(NOT TARGET XQuartzGL::GLU)
+  if(NOT TARGET XQuartzGL::GLU AND XQuartzGL_glu_LIBRARY)
     add_library(XQuartzGL::GLU UNKNOWN IMPORTED)
     set_target_properties(XQuartzGL::GLU PROPERTIES 
       INTERFACE_INCLUDE_DIRECTORIES "${XQuartzGL_INCLUDE_DIR}"

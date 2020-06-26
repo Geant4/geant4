@@ -77,6 +77,7 @@ G4HadronPhysicsFTFP_BERT_TRV::G4HadronPhysicsFTFP_BERT_TRV(const G4String& name,
   minFTFP_neutron = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   maxBERT_neutron = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   QuasiElastic = false;
+  G4HadronicParameters::Instance()->SetEnableBCParticles(true);
 }
 
 /*

@@ -73,12 +73,6 @@ class G4FTFPKaonBuilder : public G4VKaonBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4FTFModel * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4LundStringFragmentation * theLund;
-
     G4double theMin;
     G4double theMax;
 

@@ -57,16 +57,15 @@ void G4HadronicInteractionRegistry::Clean()
   //	    << " " << this << G4endl;
   for (size_t i=0; i<nModels; ++i) {
     if( allModels[i] ) {
-      const char* xxx = (allModels[i]->GetModelName()).c_str();
-      G4int len = (allModels[i]->GetModelName()).length();
-      len = std::min(len, 9);
-      const G4String mname = G4String(xxx, len);
+      //const char* xxx = (allModels[i]->GetModelName()).c_str();
+      //G4int len = (allModels[i]->GetModelName()).length();
+      //len = std::min(len, 9);
+      //const G4String mname = G4String(xxx, len);
       //G4cout << "G4HadronicInteractionRegistry: delete " << i << "  "
       //		<< allModels[i] << " " << mname 
       //		<< " " << this << G4endl;
-      if(mname != "NeutronHP" && mname != "ParticleH") {
-	delete allModels[i];
-      }
+      //if(mname != "NeutronHP" && mname != "ParticleH")
+      delete allModels[i];
       // G4cout << "done " << this << G4endl;
     }
   }

@@ -60,33 +60,6 @@
 using namespace std;
 using namespace CLHEP;
 
-const G4int G4NuMuNucleusNcModel::fResNumber = 6;
-
-const G4double G4NuMuNucleusNcModel::fResMass[6] = // [fResNumber] = 
-  {2190., 1920., 1700., 1600., 1440., 1232. };
-
-const G4int G4NuMuNucleusNcModel::fClustNumber = 4;
-
-const G4double G4NuMuNucleusNcModel::fMesMass[4] = {1260., 980., 770., 139.57};
-const G4int    G4NuMuNucleusNcModel::fMesPDG[4]  = {20213, 9000211, 213, 211};
-
-// const G4double G4NuMuNucleusNcModel::fBarMass[4] = {1905., 1600., 1232., 939.57};
-// const G4int    G4NuMuNucleusNcModel::fBarPDG[4]  = {2226, 32224, 2224, 2212};
-
-const G4double G4NuMuNucleusNcModel::fBarMass[4] = {1700., 1600., 1232., 939.57};
-const G4int    G4NuMuNucleusNcModel::fBarPDG[4]  = {12224, 32224, 2224, 2212};
-
-const G4double  G4NuMuNucleusNcModel::fNuMuEnergyLogVector[50] = {
-115.603, 133.424, 153.991, 177.729, 205.126, 236.746, 273.24, 315.361, 363.973, 420.08, 484.836, 559.573, 645.832, 
-745.387, 860.289, 992.903, 1145.96, 1322.61, 1526.49, 1761.8, 2033.38, 2346.83, 2708.59, 3126.12, 3608.02, 4164.19, 
-4806.1, 5546.97, 6402.04, 7388.91, 8527.92, 9842.5, 11359.7, 13110.8, 15131.9, 17464.5, 20156.6, 23263.8, 26849.9, 
-30988.8, 35765.7, 41279, 47642.2, 54986.3, 63462.4, 73245.2, 84536, 97567.2, 112607, 129966 };
-
-G4double G4NuMuNucleusNcModel::fNuMuXarrayKR[50][51] = {{1.0}};
-G4double G4NuMuNucleusNcModel::fNuMuXdistrKR[50][50] = {{1.0}};
-G4double G4NuMuNucleusNcModel::fNuMuQarrayKR[50][51][51] = {{{1.0}}};
-G4double G4NuMuNucleusNcModel::fNuMuQdistrKR[50][51][50] = {{{1.0}}};
-
 #ifdef G4MULTITHREADED
     G4Mutex G4NuMuNucleusNcModel::numuNucleusModel = G4MUTEX_INITIALIZER;
 #endif     
@@ -97,7 +70,10 @@ G4NuMuNucleusNcModel::G4NuMuNucleusNcModel(const G4String& name)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
-  SetMinEnergy(1.e-6*eV); 
+  SetMinEnergy(1.e-6*eV);
+
+  theNuMu =  G4NeutrinoMu::NeutrinoMu();
+  theANuMu =  G4AntiNeutrinoMu::AntiNeutrinoMu();
 
   fMnumu = 0.; 
   fData = fMaster = false;
@@ -291,7 +267,7 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
   G4int iPi     = GetOnePionIndex(energy);
   G4double p1pi = GetNuMuOnePionProb( iPi, energy);
 
-  if( p1pi > G4UniformRand()  ) // && fQtransfer < 0.95*GeV ) // mu- & coherent pion + nucleus
+  if( p1pi > G4UniformRand() && fCosTheta > 0.9  ) // && fQtransfer < 0.95*GeV ) // mu- & coherent pion + nucleus
   {
     // lvsum = lvp1 + lvpip1;
     lvsum = lvp1 + lvt1;
@@ -313,8 +289,12 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
     lvX = lvsum - lv2;
     lvX = fLVh;
     massX2 = lvX.m2();
+    G4double massX = lvX.m();
+    G4double massR = fLVt.m();
 
-    if ( massX2 <= 0. ) // vmg: very rarely ~ (1-4)e-6 due to big Q2/x, to be improved
+    // if ( massX2 <= 0. ) // vmg: very rarely ~ (1-4)e-6 due to big Q2/x, to be improved
+    if ( massX2 <= fM1*fM1 ) // 9-3-20 vmg: very rarely ~ (1-4)e-6 due to big Q2/x, to be improved
+      if ( lvX.e() <= fM1 ) // 9-3-20 vmg: very rarely ~ (1-4)e-6 due to big Q2/x, to be improved
     {
       theParticleChange.SetEnergyChange(energy);
       theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
@@ -333,7 +313,15 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
  
     pdgP = 111;
 
-    G4double eCut = fMpi + 0.5*(fMpi*fMpi - massX2)/mTarg; // massX -> fMpi
+    G4double eCut; // = fMpi + 0.5*(fMpi*fMpi - massX2)/mTarg; // massX -> fMpi
+
+    if( A > 1 )
+    {
+      eCut = (fMpi + mTarg)*(fMpi + mTarg) - (massX + massR)*(massX + massR);
+      eCut /= 2.*massR;
+      eCut += massX;
+    }
+    else  eCut = fM1 + fMpi;
 
     if ( lvX.e() > eCut ) // && sqrt( GetW2() ) < 1.4*GeV ) // 
     {
@@ -375,9 +363,8 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
     }
     fW2 = massX2;
 
-    if(  pName == "nu_mu" )         aLept = new G4DynamicParticle( theNuMu, lv2 );  
-    else if( pName == "anti_nu_mu") aLept = new G4DynamicParticle( theANuMu,  lv2 );
-    
+    aLept = new G4DynamicParticle( theNuMu, lv2 );  
+  
     theParticleChange.AddSecondary( aLept );
   }
 
@@ -426,15 +413,12 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
   G4ThreeVector dX = (lvX.vect()).unit();
   G4double eX   = lvX.e();  // excited nucleon
   G4double mX   = sqrt(massX2);
-  G4double dP(0.), pX   = sqrt( eX*eX - mX*mX );
-  G4double sumE = eX + rM;
-  G4double a(0.), b(0.), c(0.), B(0.);
 
   if( qeTotRat > G4UniformRand() || mX <= fMt ) // || eX <= 1232.*MeV) // QE
   {  
     fString = false;
 
-    if( fProton ) // pName == "nu_mu" ) 
+    if( fProton ) 
     {  
       fPDGencoding = 2212;
       fMr =  proton_mass_c2;
@@ -442,7 +426,7 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
       fRecoil = &recoil;
       rM = recoil.AtomicMass(A-1,Z-1);
     } 
-    else // if( pName == "anti_nu_mu" ) 
+    else
     {  
       fPDGencoding = 2112;
       fMr =   G4ParticleTable::GetParticleTable()->
@@ -451,7 +435,6 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
       fRecoil = &recoil;
       rM = recoil.AtomicMass(A-1,Z);
     } 
-    sumE = eX + rM; 
     G4double eTh = fMr+0.5*(fMr*fMr-mX*mX)/rM;
 
     if(eX <= eTh) // vmg, very rarely out of kinematics
@@ -460,78 +443,15 @@ G4HadFinalState* G4NuMuNucleusNcModel::ApplyYourself(
       theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
       return &theParticleChange;
     } 
-    B = sumE*sumE + rM*rM - fMr*fMr - pX*pX;
-    a = 4.*(sumE*sumE - pX*pX);
-    b = -4.*B*pX;
-    c = 4.*sumE*sumE*rM*rM - B*B;
-    G4double det2 = b*b-4.*a*c;
-    if( det2 < 0.) det2 = 0.;
-    dP = 0.5*(-b - sqrt(det2) )/a;
-    pX -= dP;
-    eX = sqrt( pX*pX + fMr*fMr );
-    G4LorentzVector qeLV( pX*dX, eX );
-
-    G4ParticleDefinition* qePart = G4ParticleTable::GetParticleTable()->
-                                 FindParticle(fPDGencoding); 
- 
-    G4DynamicParticle* qeDyn = new G4DynamicParticle( qePart, qeLV);
-    theParticleChange.AddSecondary(qeDyn); 
-  
-    G4double eRecoil = sqrt(rM*rM + dP*dP);
-    G4ThreeVector vRecoil(dP*dX);
-    G4LorentzVector lvTarg(vRecoil, eRecoil);
-
-    if( eRecoil > 100.*MeV ) // add recoil nucleus
-    {
-      G4ParticleDefinition * recoilDef = 0;
-      G4int Zr = recoil.GetZ_asInt();
-      G4int Ar = recoil.GetA_asInt();
-
-      if      ( Zr == 1 && Ar == 1 ) { recoilDef = G4Proton::Proton(); }
-      else if ( Zr == 0 && Ar == 1 ) { recoilDef = G4Neutron::Neutron(); }
-      else if ( Zr == 1 && Ar == 2 ) { recoilDef = G4Deuteron::Deuteron(); }
-      else if ( Zr == 1 && Ar == 3 ) { recoilDef = G4Triton::Triton(); }
-      else if ( Zr == 2 && Ar == 3 ) { recoilDef = G4He3::He3(); }
-      else if ( Zr == 2 && Ar == 4 ) { recoilDef = G4Alpha::Alpha(); }
-      else 
-      {
-        recoilDef = 
-	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon( Zr, Ar, 0.0 );
-      }
-      G4DynamicParticle * aSec = new G4DynamicParticle( recoilDef, lvTarg);
-      theParticleChange.AddSecondary(aSec);
-    } 
-    else if( eRecoil > 0.0 ) 
-    {
-      theParticleChange.SetLocalEnergyDeposit( eRecoil );
-    }
+    FinalBarion( lvX, 0, fPDGencoding ); // p(n)+deexcited recoil
   }
-  else if ( eX < 95000.*GeV ) // < 25.*GeV) //  < 95.*GeV ) // < 2.5*GeV ) //cluster decay
+  else // if ( eX < 9500000.*GeV ) // < 25.*GeV) //  < 95.*GeV ) // < 2.5*GeV ) //cluster decay
   {  
     if     (  fProton && pName == "nu_mu" )      qB =  1;
-    else if(  fProton && pName == "anti_nu_mu" ) qB =  1;
     else if( !fProton && pName == "nu_mu" )      qB =  0;
-    else if( !fProton && pName == "anti_nu_mu" ) qB =  0;
 
-    // if( G4UniformRand() > 0.1 )
-    {
-      ClusterDecay( lvX, qB );
-    }
-    // else
-    {
-       pdgP = 111;
-
-      if ( fQtransfer < 0.95*GeV )  // < 0.99*GeV )  //
-      {
-        // if( lvX.m() > mSum ) CoherentPion( lvX, pdgP, targetNucleus);
-      }
-    }
+    ClusterDecay( lvX, qB );
   }
-  else // string
-  {  
-    return &theParticleChange;
-
-  } 
   return &theParticleChange;
 }
 
@@ -638,9 +558,9 @@ void G4NuMuNucleusNcModel::SampleLVkr(const G4HadProjectile & aTrack, G4Nucleus&
       fLVh = G4LorentzVector(-nMomDir, sqrt( hM*hM+nMom*nMom ) ); 
     }
     // G4cout<<hM<<", ";
-    bst = fLVh.boostVector();
+    // bst = fLVh.boostVector(); // 9-3-20
 
-    lvp1.boost(-bst); // -> nucleon rest system, where Q2 transfer is ???
+    // lvp1.boost(-bst); // 9-3-20 -> nucleon rest system, where Q2 transfer is ???
 
     fNuEnergy  = lvp1.e();
     iTer = 0;
@@ -699,191 +619,10 @@ void G4NuMuNucleusNcModel::SampleLVkr(const G4HadProjectile & aTrack, G4Nucleus&
     fLVl = G4LorentzVector( eP, fEmu );
     fLVh = lvsum - fLVl;
     // back to lab system
-    fLVl.boost(bst);
-    fLVh.boost(bst);
+    // fLVl.boost(bst); // 9-3-20
+    // fLVh.boost(bst); // 9-3-20
   }
   //G4cout<<iTer<<", "<<fBreak<<"; ";
-}
-
-//////////////////////////////////////
-
-G4double G4NuMuNucleusNcModel::SampleXkr(G4double energy)
-{
-  G4int i(0), nBin(50);
-  G4double xx(0.), prob = G4UniformRand();
-
-  for( i = 0; i < nBin; ++i ) 
-  {
-    if( energy <= fNuMuEnergyLogVector[i] ) break;
-  }
-  if( i <= 0)          // E-edge
-  {
-    fEindex = 0;
-    xx = GetXkr( 0, prob);  
-  }
-  else if ( i >= nBin-1) 
-  {
-    fEindex = nBin-1;  
-    xx = GetXkr( nBin-1, prob); 
-  }
-  else
-  {
-    fEindex = i;
-    G4double x1 = GetXkr(i-1,prob);
-    G4double x2 = GetXkr(i,prob);
-
-    G4double e1 = G4Log(fNuMuEnergyLogVector[i-1]);
-    G4double e2 = G4Log(fNuMuEnergyLogVector[i]);
-    G4double e  = G4Log(energy);
-
-    if( e2 <= e1) xx = x1 + G4UniformRand()*(x2-x1);
-    else          xx = x1 + (e-e1)*(x2-x1)/(e2-e1);  // lin in energy log-scale
-  }
-  return xx;
-}
-
-//////////////////////////////////////////////
-//
-// sample X according to prob (xmin,1) at a given energy index iEnergy
-
-G4double G4NuMuNucleusNcModel::GetXkr(G4int iEnergy, G4double prob)
-{
-  G4int i(0), nBin=50; 
-  G4double xx(0.);
-
-  for( i = 0; i < nBin; ++i ) 
-  {
-    if( prob <= fNuMuXdistrKR[iEnergy][i] ) 
-      break;
-  }
-  if(i <= 0 )  // X-edge
-  {
-    fXindex = 0;
-    xx = fNuMuXarrayKR[iEnergy][0];
-  }
-  if ( i >= nBin ) 
-  {
-    fXindex = nBin;
-    xx = fNuMuXarrayKR[iEnergy][nBin];
-  }  
-  else
-  {
-    fXindex = i;
-    G4double x1 = fNuMuXarrayKR[iEnergy][i];
-    G4double x2 = fNuMuXarrayKR[iEnergy][i+1];
-
-    G4double p1 = 0.;
-
-    if( i > 0 ) p1 = fNuMuXdistrKR[iEnergy][i-1];
-
-    G4double p2 = fNuMuXdistrKR[iEnergy][i];  
-
-    if( p2 <= p1 ) xx = x1 + G4UniformRand()*(x2-x1);
-    else           xx = x1 + (prob-p1)*(x2-x1)/(p2-p1);
-  }
-  return xx;
-}
-
-//////////////////////////////////////
-//
-// Sample fQtransfer at a given Enu and fX
-
-G4double G4NuMuNucleusNcModel::SampleQkr( G4double energy, G4double xx)
-{
-  G4int nBin(50), iE=fEindex, jX=fXindex;
-  G4double qq(0.), qq1(0.), qq2(0.);
-  G4double prob = G4UniformRand();
-
-  // first E
-
-  if( iE <= 0 )          
-  {
-    qq1 = GetQkr( 0, jX, prob);  
-  }
-  else if ( iE >= nBin-1) 
-  {
-    qq1 = GetQkr( nBin-1, jX, prob); 
-  }
-  else
-  {
-    G4double q1 = GetQkr(iE-1,jX, prob);
-    G4double q2 = GetQkr(iE,jX, prob);
-
-    G4double e1 = G4Log(fNuMuEnergyLogVector[iE-1]);
-    G4double e2 = G4Log(fNuMuEnergyLogVector[iE]);
-    G4double e  = G4Log(energy);
-
-    if( e2 <= e1) qq1 = q1 + G4UniformRand()*(q2-q1);
-    else          qq1 = q1 + (e-e1)*(q2-q1)/(e2-e1);  // lin in energy log-scale
-  }
-
-  // then X
-
-  if( jX <= 0 )          
-  {
-    qq2 = GetQkr( iE, 0, prob);  
-  }
-  else if ( jX >= nBin) 
-  {
-    qq2 = GetQkr( iE, nBin, prob); 
-  }
-  else
-  {
-    G4double q1 = GetQkr(iE,jX-1, prob);
-    G4double q2 = GetQkr(iE,jX, prob);
-
-    G4double e1 = G4Log(fNuMuXarrayKR[iE][jX-1]);
-    G4double e2 = G4Log(fNuMuXarrayKR[iE][jX]);
-    G4double e  = G4Log(xx);
-
-    if( e2 <= e1) qq2 = q1 + G4UniformRand()*(q2-q1);
-    else          qq2 = q1 + (e-e1)*(q2-q1)/(e2-e1);  // lin in energy log-scale
-  }
-  qq = 0.5*(qq1+qq2);
-
-  return qq;
-}
-
-//////////////////////////////////////////////
-//
-// sample Q according to prob (qmin,qmax) at a given energy index iE and X index jX
-
-G4double G4NuMuNucleusNcModel::GetQkr( G4int iE, G4int jX, G4double prob )
-{
-  G4int i(0), nBin=50; 
-  G4double qq(0.);
-
-  for( i = 0; i < nBin; ++i ) 
-  {
-    if( prob <= fNuMuQdistrKR[iE][jX][i] ) 
-      break;
-  }
-  if(i <= 0 )  // Q-edge
-  {
-    fQindex = 0;
-    qq = fNuMuQarrayKR[iE][jX][0];
-  }
-  if ( i >= nBin ) 
-  {
-    fQindex = nBin;
-    qq = fNuMuQarrayKR[iE][jX][nBin];
-  }  
-  else
-  {
-    fQindex = i;
-    G4double q1 = fNuMuQarrayKR[iE][jX][i];
-    G4double q2 = fNuMuQarrayKR[iE][jX][i+1];
-
-    G4double p1 = 0.;
-
-    if( i > 0 ) p1 = fNuMuQdistrKR[iE][jX][i-1];
-
-    G4double p2 = fNuMuQdistrKR[iE][jX][i];  
-
-    if( p2 <= p1 ) qq = q1 + G4UniformRand()*(q2-q1);
-    else           qq = q1 + (prob-p1)*(q2-q1)/(p2-p1);
-  }
-  return qq;
 }
 
 //

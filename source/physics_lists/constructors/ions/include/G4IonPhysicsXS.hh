@@ -50,8 +50,8 @@ class G4IonPhysicsXS : public G4IonPhysics
 public:
 
   G4IonPhysicsXS(G4int ver = 0);
-  G4IonPhysicsXS(const G4String& nname);
-  virtual ~G4IonPhysicsXS();
+  G4IonPhysicsXS(const G4String& nname, G4int ver = 0);
+  ~G4IonPhysicsXS()  override;
 
 private:
 

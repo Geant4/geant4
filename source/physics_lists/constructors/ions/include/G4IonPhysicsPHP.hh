@@ -54,14 +54,14 @@ class G4IonPhysicsPHP : public G4VPhysicsConstructor {
   public:
 
     G4IonPhysicsPHP( G4int ver = 0 );
-    G4IonPhysicsPHP( const G4String& nname );
-    virtual ~G4IonPhysicsPHP();
+    G4IonPhysicsPHP( const G4String& nname, G4int ver = 0 );
+    ~G4IonPhysicsPHP() override;
 
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
-    void ConstructParticle();
-    void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
   private:
 
@@ -69,8 +69,6 @@ class G4IonPhysicsPHP : public G4VPhysicsConstructor {
                      G4ParticleHPInelasticData*, G4HadronicInteraction*, 
                      G4HadronicInteraction*, G4HadronicInteraction*,
 		     G4VCrossSectionDataSet*);
-
-    static G4ThreadLocal G4FTFBuilder*             theBuilder;
 
     G4int  verbose;
 };

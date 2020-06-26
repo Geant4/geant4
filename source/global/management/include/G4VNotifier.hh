@@ -23,9 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// class G4VNotifier
+// G4VNotifier
 //
 // Class description:
 //
@@ -33,24 +31,22 @@
 // to be activated for example at registration/deregistration of objects
 // in stores.
 
-// Author:
-// 01.09.04 G.Cosmo Initial version
+// Author: G.Cosmo, 01.09.2004 - Initial version
 // --------------------------------------------------------------------
 #ifndef G4VNOTIFIER_HH
-#define G4VNOTIFIER_HH
+#define G4VNOTIFIER_HH 1
 
 class G4VNotifier
 {
-  public:  // with description
+ public:
+  G4VNotifier();
+  virtual ~G4VNotifier();
+  // Constructor and destructor
 
-    G4VNotifier();
-    virtual ~G4VNotifier();
-      // Constructor and destructor.
-
-    virtual void NotifyRegistration() = 0;
-      // Notification of object registration.
-    virtual void NotifyDeRegistration() = 0;
-      // Notification of object deregistration.
+  virtual void NotifyRegistration() = 0;
+  // Notification of object registration
+  virtual void NotifyDeRegistration() = 0;
+  // Notification of object deregistration
 };
 
 #endif

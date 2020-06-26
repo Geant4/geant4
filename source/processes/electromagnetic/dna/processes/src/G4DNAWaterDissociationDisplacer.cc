@@ -391,11 +391,19 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
                 auto pProduct = pDecayChannel->GetProduct(i);
                 if (pProduct->GetDefinition() == G4H2::Definition())
                 {
-                    theProductDisplacementVector[i] = -2. / 18. * RandDirection;
+                    // In the paper of Kreipl (2009)
+                    // theProductDisplacementVector[i] = -2. / 18. * RandDirection;
+
+                    // Based on momentum conservation
+                    theProductDisplacementVector[i] = -16. / 18. * RandDirection;
                 }
                 else if (pProduct->GetDefinition() == G4OH::Definition())
                 {
-                    G4ThreeVector OxygenDisplacement = +16. / 18. * RandDirection;
+                    // In the paper of Kreipl (2009)
+                    // G4ThreeVector OxygenDisplacement = +16. / 18. * RandDirection;
+
+                    // Based on momentum conservation
+                    G4ThreeVector OxygenDisplacement = +2. / 18. * RandDirection;
                     G4double OHRMSDisplacement = 1.1 * nanometer;
 
                     auto OHDisplacement =

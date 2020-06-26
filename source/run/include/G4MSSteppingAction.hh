@@ -31,9 +31,8 @@
 //
 
 //////////////////////
-//G4MSSteppingAction
+// G4MSSteppingAction
 /////////////////////
-
 
 #ifndef G4MSSteppingAction_h
 #define G4MSSteppingAction_h 1
@@ -45,24 +44,24 @@ class G4Region;
 
 class G4MSSteppingAction : public G4UserSteppingAction
 {
-  public:
-    G4MSSteppingAction();
-    virtual ~G4MSSteppingAction();
+ public:
+  G4MSSteppingAction();
+  virtual ~G4MSSteppingAction();
 
-    void Initialize(G4bool rSens,G4Region* reg);
-    virtual void UserSteppingAction(const G4Step*);
+  void Initialize(G4bool rSens, G4Region* reg);
+  virtual void UserSteppingAction(const G4Step*);
 
-  private:
-    G4bool regionSensitive;
-    G4Region* theRegion;
-    G4double length;
-    G4double x0;
-    G4double lambda;
+ private:
+  G4bool regionSensitive;
+  G4Region* theRegion;
+  G4double length;
+  G4double x0;
+  G4double lambda;
 
-  public:
-    inline G4double GetTotalStepLength() const { return length; }
-    inline G4double GetX0() const { return x0; }
-    inline G4double GetLambda0() const { return lambda; }
+ public:
+  inline G4double GetTotalStepLength() const { return length; }
+  inline G4double GetX0() const { return x0; }
+  inline G4double GetLambda0() const { return lambda; }
 };
 
 #endif

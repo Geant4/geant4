@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-05-20   A. Ribon   (exhadr02-V10-06-00)
+- HadronPhysicsCRMC_FTFP_BERT , HadronPhysicsHIJING , HadronPhysicsUrQMD :
+  introduced the new class G4HyperonBuilder which is now needed when
+  using G4HyperonFTFPBuilder.
+
 06-08-19   A. Ribon   (exhadr02-V10-05-03)
 - HadronPhysicsCRMC_FTFP_BERT : use G4HadronicParameters for the energy
   transition region between FTF and BERT models.

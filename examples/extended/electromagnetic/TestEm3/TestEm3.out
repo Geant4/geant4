@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -460,7 +460,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Galactic
@@ -472,64 +472,64 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_Pb
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
+ Energy thresholds :  gamma  101.981 keV    e-  1.36213 MeV    e+  1.28245 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_lAr
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.19986 keV    e-  349.521 keV    e+  337.972 keV proton 100 keV
+ Energy thresholds :  gamma  6.2036 keV    e-  345.078 keV    e+  335.956 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   3 kByte
+    Total memory consumed for geometry optimisation:   4 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            3k Calorimeter
+       0.00         0.00         0.00            4k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      92.05          2k         1       50         50         0.00    Calorimeter
-       7.95          0k         1        3          4         0.00    Layer
+      92.30          4k         1       50         50         0.00    Calorimeter
+       7.70          0k         1        3          4         0.00    Layer
 ### Run 0 starts.
 --> Event 0 starts.
 --> Event 50 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.660000s Real=1.664279s Sys=0.000000s
+  User=3.320000s Real=3.354409s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb:  774.4 MeV :   15.9 MeV     2.053 +- 0.2053 %      54.7 cm  +- 1.26 cm 
-        G4_lAr: 214.77 MeV :  15.46 MeV       7.2 +-  0.72 %      1.06 m   +- 7.95 cm 
+         G4_Pb: 775.48 MeV :  17.96 MeV     2.316 +- 0.2316 %      54.8 cm  +- 1.33 cm 
+        G4_lAr: 214.69 MeV :  17.13 MeV      7.98 +- 0.798 %      1.05 m   +- 8.56 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       510
- Mean number of e-          875
- Mean number of e+          53.6
- Mean number of charged steps  3647.24
- Mean number of neutral steps  3722.52
+ Mean number of gamma       508
+ Mean number of e-          872
+ Mean number of e+          53.2
+ Mean number of charged steps  3604.6
+ Mean number of neutral steps  3669.14
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 774.384 MeV
-    G4_lAr:	 214.784 MeV
+     G4_Pb:	 775.483 MeV
+    G4_lAr:	 214.664 MeV
 
 ------------------------------------------------------------
 
@@ -927,7 +927,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Galactic
@@ -939,18 +939,18 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_Pb
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
+ Energy thresholds :  gamma  101.981 keV    e-  1.36213 MeV    e+  1.28245 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_lAr
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.19986 keV    e-  349.521 keV    e+  337.972 keV proton 100 keV
+ Energy thresholds :  gamma  6.2036 keV    e-  345.078 keV    e+  335.956 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 --> Event 0 starts.
@@ -958,28 +958,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.380000s Real=1.380102s Sys=0.000000s
+  User=2.670000s Real=2.690025s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 779.76 MeV :  21.86 MeV     2.803 +- 0.2803 %      52.4 cm  +- 1.27 cm 
-        G4_lAr: 211.44 MeV :  16.94 MeV     8.013 +- 0.8013 %      99.8 cm  +- 7.97 cm 
+         G4_Pb: 775.92 MeV :  21.72 MeV     2.799 +- 0.2799 %      52.2 cm  +- 1.27 cm 
+        G4_lAr: 214.13 MeV :  15.31 MeV     7.149 +- 0.7149 %      1.01 m   +- 7.82 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       294
- Mean number of e-          556
- Mean number of e+          54.4
- Mean number of charged steps  3074.08
- Mean number of neutral steps  2920.97
+ Mean number of gamma       291
+ Mean number of e-          558
+ Mean number of e+          52.7
+ Mean number of charged steps  3096.93
+ Mean number of neutral steps  2918.06
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-     G4_Pb:	 778.957 MeV
-    G4_lAr:	 212.506 MeV
+     G4_Pb:	 774.622 MeV
+    G4_lAr:	 216.487 MeV
 
 ------------------------------------------------------------
 
@@ -994,19 +994,19 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 34
+Total navigation history collections cleaned: 33
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0509 MB
+Pool ID '20G4NavigationLevelRep', size : 0.049 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0144 MB
-Pool ID '7G4Track', size : 0.0279 MB
+Pool ID '17G4DynamicParticle', size : 0.0135 MB
+Pool ID '7G4Track', size : 0.026 MB
 Pool ID '18G4TouchableHistory', size : 0.00385 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.1 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.097 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

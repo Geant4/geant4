@@ -126,12 +126,6 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mulatCmd->SetDefaultValue(true);
   mulatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  catCmd = new G4UIcmdWithABool("/process/msc/DisplacementBeyondSafety",this);
-  catCmd->SetGuidance("Enable/disable displacement at geometry boundary");
-  catCmd->SetParameterName("cat",true);
-  catCmd->SetDefaultValue(false);
-  catCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   delCmd = new G4UIcmdWithABool("/process/eLoss/UseAngularGenerator",this);
   delCmd->SetGuidance("Enable usage of angular generator for ionisation");
   delCmd->SetParameterName("del",true);
@@ -405,7 +399,6 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete latCmd;
   delete lat96Cmd;
   delete mulatCmd;
-  delete catCmd;
   delete delCmd;
   delete IntegCmd;
   delete mottCmd;
@@ -484,9 +477,6 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == mulatCmd) {
     theParameters->SetMuHadLateralDisplacement(mulatCmd->GetNewBoolValue(newValue));
-    physicsModified = true;
-  } else if (command == catCmd) {
-    theParameters->SetLatDisplacementBeyondSafety(catCmd->GetNewBoolValue(newValue));
     physicsModified = true;
   } else if (command == delCmd) {
     theParameters->ActivateAngularGeneratorForIonisation(delCmd->GetNewBoolValue(newValue));

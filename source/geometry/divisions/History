@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 10th, 2019     B.Morgan (geomdiv-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 October 23rd, 2019      J.Apostolakis (geomdiv-V10-05-02)
 - Added new virtual VolumeType() method in Physical Volume types.
   Requires and coworks with geommng-V10-05-11 and geomvol-V10-05-05.

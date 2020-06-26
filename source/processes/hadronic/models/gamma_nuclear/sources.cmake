@@ -58,7 +58,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
+GEANT4_DEFINE_MODULE(NAME G4had_gamma_nuclear
     HEADERS
 	G4LENDorBERTModel.hh
     SOURCES
@@ -84,8 +84,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_HE
-        G4hadronic_LE
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_util

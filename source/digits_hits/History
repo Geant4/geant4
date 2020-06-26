@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29th, 2020, G. Cosmo (digits_hits-V10-06-02)
+- Fixed cases of comparison between int and size_t in templated classes
+  and some cleanup. 
+
+May 2nd, 2020, J. Apostolakis (digits_hits-V10-06-01)
+- Added two ComputeSolid method to G4VPrimitiveScorer, to consolidate code.
+
+December 9th, 2019 B. Morgan (digits_hits-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 November 19th, 2019 G. Cosmo (digits_hits-V10-05-07)
 - Fixed more cases of implicit type conversions.
 

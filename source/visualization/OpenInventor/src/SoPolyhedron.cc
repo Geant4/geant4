@@ -63,7 +63,11 @@ void Geant4_SoPolyhedron::initClass(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_NODE_INIT_CLASS(Geant4_SoPolyhedron,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(Geant4_SoPolyhedron,SoShape,"Shape");
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 Geant4_SoPolyhedron::Geant4_SoPolyhedron(

@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+April 28, 2020  John Apostolakis
+- Added ComputeSolid methods to G4VPrimitiveScorer
+
 Febr 26, 2013 Andrea Dotti
 - Adding cloning capbailities to SD
 

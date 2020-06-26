@@ -54,6 +54,11 @@
 //  alpha = a1+(a2+a3/Z)ln(y)
 
 // Author: J.P. Wellisch - October 2004
+//
+// Usage: use new statement for new instance of class, do not delete.
+//        The instance of class will be deleted in
+//        GFlashHomoShowerParameterisation Destructor.
+
 //---------------------------------------------------------------
 #ifndef GVFlashHomoShowerTuning_hh
 #define GVFlashHomoShowerTuning_hh

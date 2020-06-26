@@ -78,7 +78,7 @@
 #  ui_win32          (WIN32 Style Application Command Line Interface)
 #
 #  motif             (Motif-X11/OpenGL Graphical User Interface)
-#  qt                (Qt4/OpenGL Graphical User Interface)
+#  qt                (Qt5/OpenGL Graphical User Interface)
 #
 #  vis_network_dawn  (Client/Server network interface to DAWN visualization)
 #  vis_network_vrml  (Client/Server network interface to VRML visualization)
@@ -265,6 +265,20 @@ if(NOT Geant4_builtin_zlib_FOUND)
   find_dependency(ZLIB @ZLIB_VERSION_STRING@)
 endif()
 
+set(Geant4_system_ptl_FOUND @GEANT4_USE_SYSTEM_PTL@)
+if(Geant4_system_ptl_FOUND)
+  set(Geant4_builtin_ptl_FOUND FALSE)
+  find_dependency(PTL @PTL_VERSION_STRING@)
+else()
+  # We know exactly where PTL is
+  set(Geant4_builtin_ptl_FOUND TRUE)
+  if(CMAKE_VERSION VERSION_GREATER 3.8.9999)
+    find_dependency(PTL @PTL_VERSION_STRING@ NO_DEFAULT_PATH PATHS "@PACKAGE_PTL_PREFIX@")
+  else()
+    find_package(PTL @PTL_VERSION_STRING@ REQUIRED NO_DEFAULT_PATH PATHS "@PACKAGE_PTL_PREFIX@")
+  endif()
+endif()
+
 # - Multithreading
 set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
 if(Geant4_multithreaded_FOUND)
@@ -283,6 +297,12 @@ endif()
 
 # - Smart track stack
 set(Geant4_smartstack_FOUND @GEANT4_USE_SMARTSTACK@)
+
+# - TBB
+set(Geant4_TBB_FOUND @GEANT4_USE_TBB@)
+if(Geant4_TBB_FOUND)
+  find_dependency(TBB @TBB_VERSION@)
+endif()
 
 # - TiMemory
 set(Geant4_timemory_FOUND @GEANT4_USE_TIMEMORY@)
@@ -395,19 +415,14 @@ endif()
 
 # - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
-set(Geant4_USES_QT5 @Qt5Core_FOUND@)
 if(Geant4_qt_FOUND)
   # Must always refind Qt5 to recreate imported targets. Because these
   # are in the public interface, always need linking.
-  if(Geant4_USES_QT5)
-    find_dependency(Qt5Core REQUIRED)
-    find_dependency(Qt5Gui REQUIRED)
-    find_dependency(Qt5Widgets REQUIRED)
-    find_dependency(Qt5OpenGL REQUIRED)
-    find_dependency(Qt5PrintSupport REQUIRED)
-  else()
-    find_dependency(Qt4 REQUIRED QtCore QtGui QtOpenGL)
-  endif()
+  find_dependency(Qt5Core REQUIRED)
+  find_dependency(Qt5Gui REQUIRED)
+  find_dependency(Qt5Widgets REQUIRED)
+  find_dependency(Qt5OpenGL REQUIRED)
+  find_dependency(Qt5PrintSupport REQUIRED)
 
   # Also require OpenGL
   find_dependency(OpenGL)
@@ -498,14 +513,22 @@ endif()
 
 # - OpenInventor
 set(Geant4_vis_openinventor_FOUND @GEANT4_USE_INVENTOR@)
+set(Geant4_vis_openinventor_qt_FOUND @GEANT4_USE_INVENTOR_QT@)
 if(Geant4_vis_openinventor_FOUND)
   if(("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
     if(UNIX AND NOT WIN32)
-      list(APPEND Geant4_DEFINITIONS
-        -DG4INTY_USE_XT
-        -DG4VIS_USE_OI
-        -DG4VIS_USE_OIX
+      if(Geant4_vis_openinventor_qt_FOUND)
+         list(APPEND Geant4_DEFINITIONS        
+            -DG4VIS_USE_OI
+            -DG4VIS_USE_OIQT
+         )
+      else()
+         list(APPEND Geant4_DEFINITIONS
+            -DG4INTY_USE_XT
+            -DG4VIS_USE_OI
+            -DG4VIS_USE_OIX
         )
+      endif()
     elseif(WIN32)
       list(APPEND Geant4_DEFINITIONS
         -G4INTY_USE_WIN32
@@ -640,6 +663,7 @@ list(APPEND _geant4_internal_libraries
   ${_geant4_physicslists_library}
   Geant4::G4run${_geant4_lib_use_suffix}
   Geant4::G4event${_geant4_lib_use_suffix}
+  Geant4::G4tasking${_geant4_lib_use_suffix}
   Geant4::G4tracking${_geant4_lib_use_suffix}
   Geant4::G4parmodels${_geant4_lib_use_suffix}
   Geant4::G4processes${_geant4_lib_use_suffix}

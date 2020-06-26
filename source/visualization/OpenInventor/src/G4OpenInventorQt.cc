@@ -34,12 +34,20 @@
 #include <Inventor/Qt/SoQt.h>
 
 #include "G4SoQt.hh"
+#include "G4UIQt.hh"
+#include "G4Qt.hh"
+#include "G4UImanager.hh"
+#include <qobject.h>
 //#include "G4Qt.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4OpenInventorQtViewer.hh"
 
+#ifndef G4GMAKE
+#include "moc_G4OpenInventorQt.cpp"
+#endif
+
 G4OpenInventorQt::G4OpenInventorQt()
-  : G4OpenInventor("OpenInventorQt", "OIQT", G4VGraphicsSystem::threeD),
+  : G4OpenInventor("OpenInventorQt", "OIQt", G4VGraphicsSystem::threeD),
     fInited(false)
 {
 }
@@ -48,16 +56,20 @@ void G4OpenInventorQt::Initialize()
 {
   if(fInited) return; //Done
 
-  G4cout << "G4OpenInventorQt: SETINTERACTORMANAGER " << G4SoQt::getInstance()
-         << G4endl;
+  // FWJ DEBUG
+  //  G4cout << "G4OpenInventorQt: SETINTERACTORMANAGER " << G4SoQt::getInstance()
+  //         << G4endl;
+
   SetInteractorManager(G4SoQt::getInstance());
-  G4cout << "G4OpenInventorQt: GETINTERACTORMANAGER " << GetInteractorManager()
-         << G4endl;
+
+  // FWJ DEBUG
+  //  G4cout << "G4OpenInventorQt: GETINTERACTORMANAGER " << GetInteractorManager()
+  //         << G4endl;
 
   // FWJ from G4OIXt: these have no counterpart in Qt
-  //  GetInteractorManager() -> 
-  //    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
-  //  GetInteractorManager() -> 
+  //  GetInteractorManager() ->
+  //    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);
+  //  GetInteractorManager() ->
   //    AddDispatcher((G4DispatchFunction)SoXt::dispatchEvent);
   //  Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
 
@@ -83,14 +95,16 @@ void G4OpenInventorQt::Initialize()
   // }
 
   // FWJ for now, create an independent main window
+
   // NOW should be done in G4SoQt [public G4VInteractorManager]
   //QWidget* mainWin = SoQt::init("Geant4");
 
   // Note that GetMainInteractor() returns G4Interactor [typedef void*]
-  QWidget* mainWin = (QWidget*)(GetInteractorManager()->GetMainInteractor());
-  G4cout << "OpenInventorQt: OBTAINED SoQt main window " << mainWin << G4endl;
-  //  G4cout << "OpenInventorQt: CREATED SoQt main window " << mainWin << G4endl;
-  G4cout << "SoQt::getTopLevelWidget()" << SoQt::getTopLevelWidget() << G4endl;
+  //QWidget* mainWin = (QWidget*)(GetInteractorManager()->GetMainInteractor());
+
+  //  FWJ DEBUG
+  //  G4cout << "OpenInventorQt: OBTAINED SoQt main window " << mainWin << G4endl;
+  //  G4cout << "SoQt::getTopLevelWidget()" << SoQt::getTopLevelWidget() << G4endl;
 
   // In parent G4OpenInventor
   InitNodes();
@@ -103,12 +117,22 @@ G4OpenInventorQt::~G4OpenInventorQt()
 }
 
 G4VViewer* G4OpenInventorQt::CreateViewer(G4VSceneHandler& scene,
-                                          const G4String& name) 
+                                          const G4String& name)
 {
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UIQt *uiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
+  if (uiQt) {
+    if (!((G4Qt*)(GetInteractorManager()->GetMainInteractor()))->IsExternalApp()) {
+      QWidget* mainWin = (QWidget*)(GetInteractorManager()->GetMainInteractor());
+      // Trying to get around git by adding this comment 2
+      uiQt->AddTabWidget((QWidget*)mainWin,QString(name));
+    }
+  }
+
   Initialize();
+
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   return new G4OpenInventorQtViewer(*pScene, name);
 }
-
 
 #endif

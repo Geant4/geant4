@@ -214,6 +214,8 @@ void G4VisCommandManagerMode<Manager>::SetNewValue(G4UIcommand*, G4String name)
 {
   assert (0 != fpManager);
   fpManager->SetMode(name);
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }    
 
 #endif

@@ -34,7 +34,11 @@ if(ROOT_FOUND)
 endif()
 
 # Include ROOT's CMake functions for dictionary generation
-include("${ROOT_DIR}/modules/RootNewMacros.cmake")
+#  since root6.20, the file is renamed and included by default, so include
+#  only when we find the *old* name
+if(EXISTS "${ROOT_DIR}/modules/RootNewMacros.cmake")
+   include("${ROOT_DIR}/modules/RootNewMacros.cmake")
+endif()
 
 #----------------------------------------------------------------------------
 # P01 requires shared libraries

@@ -23,17 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VIsotopeTable
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//----------------------------------------------------------
-//      New design                               5 Oct. 99 H.Kurashige
-//      Add  additinal GetIsotope method        30 Apr. 2013  H.Kurashige
-#ifndef G4VIsotopeTable_h
-#define G4VIsotopeTable_h 1
+// Virtual class for access to an isotope table containing
+// "stable" isotopes with their properties.
+
+// Author: H.Kurashige, 5 October 1999
+// --------------------------------------------------------------------
+#ifndef G4VIsotopeTable_hh
+#define G4VIsotopeTable_hh 1
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -43,74 +43,74 @@ class G4IsotopeProperty;
 
 class G4VIsotopeTable
 {
- // Class Description
- //  G4VIsotopeTable is the virtual class for acsess to an isotpe table
- //  which contains "stable" isotopes with their properties.
- //
+  public:
 
- public:
-  // constructor
-  G4VIsotopeTable();
-  explicit G4VIsotopeTable(const G4String& );
+    G4VIsotopeTable();
+    explicit G4VIsotopeTable(const G4String&);
+      // Constructors
 
-  G4VIsotopeTable(const G4VIsotopeTable& );
-  G4VIsotopeTable & operator=(const G4VIsotopeTable&);
+    G4VIsotopeTable(const G4VIsotopeTable&);
+    G4VIsotopeTable& operator=(const G4VIsotopeTable&);
+      // Copy contructor and assignment operator
 
- public:
-  // destructor
-  virtual ~G4VIsotopeTable();
+    virtual ~G4VIsotopeTable();
+      // Destructor
 
- public: // With Description
-  // pure virtual method
-  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-              G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float)=0;
-  virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int level=0);
-  // Search the isotope in the G4VIsotopeTable. 
-  // The isotope is desingated by 
-  //    G4int    Z:  number of proton (Atomic number)
-  //    G4int    A:  number of nucleon (Atomic mass)
-  //      and
-  //    G4double E:  excited energy
-  //    G4Ions::G4FloatLevelBase flb: floating level base (enum defined in G4Ions.hh)
-  //      or
-  //    G4int  level: isomer level
-  // in the given G4IsotopeProperty.
-  // If corresopnding isotope exist in the table, this method returns
-  // 'true' as well as fills other properties such as spin, lifetime,
-  // ,decay modes and precise excited energy in the given G4IsotopeProperty.
-  // This method returns 'false' if no corresponding isotope is found 
-  // without modification of property.
-  //   
+    virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
+            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float)= 0;
+      // Pure virtual method
 
-  // Set/Get verbose level
-  G4int                GetVerboseLevel() const;
-  void                 SetVerboseLevel(G4int level);  
+    virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A,
+                                                  G4int level=0);
+      // Search the isotope in the table. 
+      // The isotope is designated by 
+      //    G4int    Z:  number of proton (Atomic number)
+      //    G4int    A:  number of nucleon (Atomic mass)
+      //      and
+      //    G4double E:  excited energy
+      //    G4Ions::G4FloatLevelBase flb: floating level base (from G4Ions.hh)
+      //      or
+      //    G4int  level: isomer level
+      // in the given G4IsotopeProperty.
+      // If corresponding isotope exist in the table, this method returns
+      // 'true', as well as fills other properties such as spin, lifetime,
+      // decay modes and precise excited energy in the given G4IsotopeProperty.
+      // This method returns 'false' if no corresponding isotope is found 
+      // without modification of property
 
-  // Dump table
-  void                 DumpTable(G4int Zmin=1, G4int Zmax=118);
+    G4int GetVerboseLevel() const;
+    void SetVerboseLevel(G4int level);  
+      // Set/Get verbose level
 
-  // 
-  const G4String&      GetName() const;
+    void DumpTable(G4int Zmin=1, G4int Zmax=118);
+      // Dump table
 
- private:
-  G4String             fName;
-  G4int                verboseLevel;
+    const G4String& GetName() const;
+
+  private:
+
+    G4String fName = "";
+    G4int verboseLevel = 0;
 };
 
+// ------------------------
+// Inline methods
+// ------------------------
+
 inline
-  const G4String&  G4VIsotopeTable::GetName() const
+const G4String&  G4VIsotopeTable::GetName() const
 {
   return fName;
 }
 
 inline 
- G4int G4VIsotopeTable::GetVerboseLevel() const
+G4int G4VIsotopeTable::GetVerboseLevel() const
 {
   return verboseLevel;
 }
 
 inline 
- void G4VIsotopeTable::SetVerboseLevel(G4int level)
+void G4VIsotopeTable::SetVerboseLevel(G4int level)
 {
   verboseLevel = level;
 }

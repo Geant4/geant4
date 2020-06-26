@@ -8,7 +8,7 @@
 /vis/open OGL 600x600-0+0
 #
 # Use this open statement to create an OpenInventor view:
-#/vis/open OIX
+#/vis/open OI
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:

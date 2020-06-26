@@ -78,23 +78,11 @@ G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent()
 G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid * solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                ->GetReplicaNumber(indexDepth);
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
+  G4VSolid * solid= ComputeCurrentSolid(aStep);
+  assert( dynamic_cast<G4Sphere*>(solid) != nullptr );
 
-  G4Sphere* sphereSolid = (G4Sphere*)(solid);
-
+  G4Sphere* sphereSolid = static_cast<G4Sphere*>(solid);
+  
   G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);
   if ( dirFlag > 0 ) {
     if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){

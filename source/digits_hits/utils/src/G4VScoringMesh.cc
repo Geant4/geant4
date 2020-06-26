@@ -49,7 +49,7 @@ G4VScoringMesh::G4VScoringMesh(const G4String& wName)
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
     fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(nullptr),
     fParallelWorldProcess(nullptr), fGeometryHasBeenDestroyed(false),
-    copyNumberLevel(0)
+    copyNumberLevel(0), layeredMassFlg(false)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
@@ -76,7 +76,7 @@ void G4VScoringMesh::SetSize(G4double size[3]) {
     for(int i = 0; i < 3; i++) fSize[i] = size[i];
     sizeIsSet = true;
   }else{
-    G4String message = "   The size of scoring mesh can not be changed.";
+    G4String message = "   The size of scoring mesh is updated.";
     G4Exception("G4VScoringMesh::SetSize()",
                 "DigiHitsUtilsScoreVScoringMesh000", JustWarning,
                 message);
@@ -92,7 +92,7 @@ void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
   fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
 }
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3]) {
-  if ( !nMeshIsSet || fShape==MeshShape::realWorldLogVol ){
+  if ( !nMeshIsSet || fShape==MeshShape::realWorldLogVol || fShape==MeshShape::probe ){
     for(int i = 0; i < 3; i++) fNSegment[i] = nSegment[i];
     nMeshIsSet = true;
   } else {

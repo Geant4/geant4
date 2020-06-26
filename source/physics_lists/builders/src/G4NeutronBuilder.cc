@@ -43,32 +43,31 @@
 #include "G4ProcessManager.hh"
 
 G4NeutronBuilder::
-G4NeutronBuilder(G4bool fissionFlag): wasActivated(false), isFissionActivated(fissionFlag) 
+G4NeutronBuilder(G4bool fissionFlag)
 {
   theNeutronInelastic = new G4NeutronInelasticProcess;
   theNeutronCapture = new G4HadronCaptureProcess;
-  if ( isFissionActivated ) {
+  if ( fissionFlag ) {
     theNeutronFission = new G4HadronFissionProcess;
   } else {
-    theNeutronFission = 0;
+    theNeutronFission = nullptr;
   } 
 }
 
 void G4NeutronBuilder::
 Build()
 {
-  wasActivated = true;
   std::vector<G4VNeutronBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {
     (*i)->Build(theNeutronInelastic);
     (*i)->Build(theNeutronCapture);
-    if ( isFissionActivated ) (*i)->Build(theNeutronFission);
+    if ( theNeutronFission ) (*i)->Build(theNeutronFission);
   }
   G4ProcessManager * theProcMan = G4Neutron::Neutron()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theNeutronInelastic);
   theProcMan->AddDiscreteProcess(theNeutronCapture);
-  if ( isFissionActivated ) theProcMan->AddDiscreteProcess(theNeutronFission);
+  if ( theNeutronFission ) theProcMan->AddDiscreteProcess(theNeutronFission);
 }
 
 void G4NeutronBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {

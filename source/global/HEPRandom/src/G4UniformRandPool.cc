@@ -24,104 +24,90 @@
 // ********************************************************************
 //
 //
-// 
+//
 // G4UniformRandPool implementation
 //
 // Author: A.Dotti (SLAC)
 // ------------------------------------------------------------
 
 #include "G4UniformRandPool.hh"
-#include "globals.hh"
-#include "G4Threading.hh"
 #include "G4AutoDelete.hh"
+#include "G4Threading.hh"
+#include "globals.hh"
 
-#include <climits>
-#include <stdlib.h>
 #include <algorithm>
+#include <climits>
 #include <cstring>
+#include <stdlib.h>
 
 // Not aligned memory
 //
-void create_pool( G4double*& buffer , G4int ps )
-{
-  buffer = new G4double[ps];
-}
+void create_pool(G4double*& buffer, G4int ps) { buffer = new G4double[ps]; }
 
-void destroy_pool( G4double*& buffer)
-{
-  delete[] buffer;
-}
+void destroy_pool(G4double*& buffer) { delete[] buffer; }
 
 #if defined(WIN32)
 // No bother with WIN
-void create_pool_align( G4double*& buffer , G4int ps)
-{
-  create_pool(buffer,ps);
-}
-void destroy_pool_align( G4double*& buffer )
-{
-  destroy_pool(buffer);
-}
+void create_pool_align(G4double*& buffer, G4int ps) { create_pool(buffer, ps); }
+void destroy_pool_align(G4double*& buffer) { destroy_pool(buffer); }
 
 #else
 
 // Align memory pools
 // Assumption is: static_assert(sizeof(G4double)*CHAR_BIT==64)
 //
-void create_pool_align( G4double*& buffer , G4int ps)
+void create_pool_align(G4double*& buffer, G4int ps)
 {
   // POSIX standard way
-  G4int errcode = posix_memalign( (void**) &buffer ,
-                                 sizeof(G4double)*CHAR_BIT,
-                                 ps*sizeof(G4double));
-  if ( errcode != 0 )
+  G4int errcode = posix_memalign((void**) &buffer, sizeof(G4double) * CHAR_BIT,
+                                 ps * sizeof(G4double));
+  if(errcode != 0)
   {
-    G4Exception("G4UniformRandPool::create_pool_align()",
-                "InvalidCondition", FatalException,
-                "Cannot allocate aligned buffer");
+    G4Exception("G4UniformRandPool::create_pool_align()", "InvalidCondition",
+                FatalException, "Cannot allocate aligned buffer");
     return;
   }
   return;
 }
 
-void destroy_pool_align( G4double*& buffer )
-{
-  free(buffer);
-}
+void destroy_pool_align(G4double*& buffer) { free(buffer); }
 #endif
 
 G4UniformRandPool::G4UniformRandPool()
- : size(G4UNIFORMRANDPOOL_DEFAULT_POOLSIZE), buffer(0), currentIdx(0)
+  : size(G4UNIFORMRANDPOOL_DEFAULT_POOLSIZE)
+  , buffer(0)
+  , currentIdx(0)
 {
-  if ( sizeof(G4double)*CHAR_BIT==64 )
+  if(sizeof(G4double) * CHAR_BIT == 64)
   {
-    create_pool_align(buffer,size);
+    create_pool_align(buffer, size);
   }
   else
   {
-    create_pool(buffer,size);
+    create_pool(buffer, size);
   }
   Fill(size);
 }
 
-G4UniformRandPool::G4UniformRandPool( G4int siz )
- : size(siz), buffer(0), currentIdx(0)
+G4UniformRandPool::G4UniformRandPool(G4int siz)
+  : size(siz)
+  , buffer(0)
+  , currentIdx(0)
 {
-  if ( sizeof(G4double)*CHAR_BIT==64 )
+  if(sizeof(G4double) * CHAR_BIT == 64)
   {
-    create_pool_align(buffer,size);
+    create_pool_align(buffer, size);
   }
   else
   {
-    create_pool(buffer,size);
+    create_pool(buffer, size);
   }
   Fill(size);
-
-} 
+}
 
 G4UniformRandPool::~G4UniformRandPool()
 {
-  if ( sizeof(G4double)*CHAR_BIT==64 )
+  if(sizeof(G4double) * CHAR_BIT == 64)
   {
     destroy_pool_align(buffer);
   }
@@ -131,31 +117,31 @@ G4UniformRandPool::~G4UniformRandPool()
   }
 }
 
-void G4UniformRandPool::Resize(/*PoolSize_t*/ G4int newSize )
+void G4UniformRandPool::Resize(/*PoolSize_t*/ G4int newSize)
 {
-  if ( newSize != size )
+  if(newSize != size)
   {
     destroy_pool(buffer);
-    create_pool(buffer,newSize);
-    size=newSize;
+    create_pool(buffer, newSize);
+    size       = newSize;
     currentIdx = 0;
   }
   currentIdx = 0;
 }
 
-void G4UniformRandPool::Fill( G4int howmany )
+void G4UniformRandPool::Fill(G4int howmany)
 {
-  assert(howmany>0 && howmany <= size);
+  assert(howmany > 0 && howmany <= size);
 
   // Fill buffer with random numbers
   //
-  G4Random::getTheEngine()->flatArray(howmany,buffer);
+  G4Random::getTheEngine()->flatArray(howmany, buffer);
   currentIdx = 0;
 }
 
-void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
+void G4UniformRandPool::GetMany(G4double* rnds, G4int howmany)
 {
-  assert(rnds!=0 && howmany>0);
+  assert(rnds != 0 && howmany > 0);
 
   // if ( howmany <= 0 ) return;
   // We generate at max "size" numbers at once, and
@@ -164,12 +150,12 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
   // So:
   // how many times I need to get "size" numbers?
 
-  const G4int maxcycles = howmany/size;
+  const G4int maxcycles = howmany / size;
 
   // This is the rest
   //
-  const G4int peel = howmany%size;
-  assert(peel<size);
+  const G4int peel = howmany % size;
+  assert(peel < size);
 
   // Ok from now on I will get random numbers in group of  "size"
   // Note that if howmany<size maxcycles == 0
@@ -180,18 +166,18 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
   // and we will request at least "size" rng, so
   // let's start with a fresh buffer of numbers if needed
   //
-  if ( maxcycles>0 && currentIdx>0 )
+  if(maxcycles > 0 && currentIdx > 0)
   {
-    assert(currentIdx<=size);
-    Fill(currentIdx);//<size?currentIdx:size);
+    assert(currentIdx <= size);
+    Fill(currentIdx);  //<size?currentIdx:size);
   }
-  for ( ; cycle < maxcycles ; ++cycle )
+  for(; cycle < maxcycles; ++cycle)
   {
-    // We can use memcpy of std::copy, it turns out that the two are basically 
+    // We can use memcpy of std::copy, it turns out that the two are basically
     // performance-wise equivalent (expected), since in my tests memcpy is a
     // little bit faster, I use that
     //
-    memcpy(rnds+(cycle*size),buffer,sizeof(G4double)*size );
+    memcpy(rnds + (cycle * size), buffer, sizeof(G4double) * size);
     // std::copy(buffer,buffer+size,rnds+(cycle*size));
 
     // Get a new set of numbers
@@ -205,17 +191,17 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
   // but if maxcycles==0 currentIdx can be whatever, let's make sure we have
   // enough fresh numbers
   //
-  if (currentIdx + peel >= size)
+  if(currentIdx + peel >= size)
   {
-    Fill(currentIdx<size?currentIdx:size);
+    Fill(currentIdx < size ? currentIdx : size);
   }
-  memcpy(rnds+(cycle*size) , buffer+currentIdx , sizeof(G4double)*peel );
+  memcpy(rnds + (cycle * size), buffer + currentIdx, sizeof(G4double) * peel);
   // std::copy(buffer+currentIdx,buffer+(currentIdx+peel), rnds+(cycle*size));
 
   // Advance index, we are done
   //
-  currentIdx+=peel;
-  assert(currentIdx<=size);
+  currentIdx += peel;
+  assert(currentIdx <= size);
 }
 
 // Static interfaces implementing CLHEP methods
@@ -227,7 +213,7 @@ namespace
 
 G4double G4UniformRandPool::flat()
 {
-  if ( rndpool == 0 )
+  if(rndpool == 0)
   {
     rndpool = new G4UniformRandPool;
     G4AutoDelete::Register(rndpool);
@@ -235,12 +221,12 @@ G4double G4UniformRandPool::flat()
   return rndpool->GetOne();
 }
 
-void G4UniformRandPool::flatArray( G4int howmany, G4double *rnds)
+void G4UniformRandPool::flatArray(G4int howmany, G4double* rnds)
 {
-  if ( rndpool == 0 )
+  if(rndpool == 0)
   {
     rndpool = new G4UniformRandPool;
     G4AutoDelete::Register(rndpool);
   }
-  rndpool->GetMany(rnds,(unsigned int)howmany);
+  rndpool->GetMany(rnds, (unsigned int) howmany);
 }

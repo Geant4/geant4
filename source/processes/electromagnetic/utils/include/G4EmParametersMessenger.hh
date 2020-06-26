@@ -90,7 +90,6 @@ private:
   G4UIcmdWithABool*          latCmd;
   G4UIcmdWithABool*          lat96Cmd;
   G4UIcmdWithABool*          mulatCmd;
-  G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          delCmd;
   G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;

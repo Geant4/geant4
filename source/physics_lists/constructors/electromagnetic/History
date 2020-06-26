@@ -13,7 +13,71 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 December 2019, V.Ivanchenko (phys-ctor-em-V10-05-18)
+15 June 2020, V.Ivanchenko (phys-ctor-em-V10-06-12)
+- G4EmBuilder - attempt to fix non-reproducibility in the MT mode when
+    radioactive decay is enabled
+
+6 June 2020, V.Ivanchenko (phys-ctor-em-V10-06-11)
+- G4EmBuilder - fixed non-reproducibility in the MT mode, added
+    isWVI flag allowing choose msc model 
+- G4EmStandardPhysics_option3 - restore the same configuration
+    of EM models as in 10.6p02 
+
+3 June 2020, V.Ivanchenko (phys-ctor-em-V10-06-10)
+- G4EmModelActivator - use the same options for physics per region as
+    used in EM constructors 10.6ref05, this is needed to be coherent with 
+    several modifications in these configurations 
+- G4EmStandardPhysics, G4EmStandardPhysics_option1, G4EmStandardPhysics_option2,
+  G4EmStandardPhysics_option3, G4EmStandardPhysics_option4 G4EmStandardPhysicsSS,
+  G4EmStandardPhysicsGS, G4EmStandardPhysicsWVI, G4EmLowEPhysics - use C++11 
+    keywords
+
+1 June 2020, V.Ivanchenko (phys-ctor-em-V10-06-09)
+- G4EmStandardPhysicsGS, G4EmStandardPhysicsWVI, G4EmLowEPhysics,
+  G4LivermorePhysics, G4EmPenelopePhysics - remove duplicate code by using 
+    G4EmBuilder, fix definition of StepFunction, use the same flag as 
+    hadronic physics to enable EM interaction of b- and c- mesons and baryons
+- G4LivermorePolarizedPhysics - use inheritance from G4LivermorePhysics
+
+30 May 2020, V.Ivanchenko (phys-ctor-em-V10-06-08)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1, G4EmStandardPhysics_option2,
+  G4EmStandardPhysics_option3, G4EmStandardPhysics_option4 G4EmStandardPhysicsSS,
+  G4EmBuilder - remove duplicate code by using G4EmBuilder, fix definition
+    of StepFunction, use the same flag as hadronic physics to enable EM
+    interaction of b- and c- mesons and baryons
+
+27 May 2020, A.Howard (phys-ctor-em-V10-06-07)
+- Added second wavelength shifter optical process to constructors in
+  G4OpticalPhysics, G4OpticalPhysicsMessenger, G4OpticalProcessIndex
+
+25 May 2020, V.Ivanchenko (phys-ctor-em-V10-06-06)
+- G4EmDNAModelActivator - M.J. Pietrzak extended to extra available DNA options
+    DNA_Opt2, DNA_Opt4, DNA_Opt4a, DNA_Opt6, DNA_Opt6a, DNA_Opt7
+- G4EmBuilder - new utility class which will allow reduce code duplication
+    for standard and low-energy EM physics constructors
+- G4EmStandardPhysics_option1 - swith to use new G4EmBuilder utility, fixed
+    StepFunction definition
+- G4EmStandardPhysics_option3 - swith to use new G4EmBuilder utility, use
+    ICRU90 stopping power data for water and air
+
+24 May 2020, D.Sawkey (phys-ctor-em-V10-06-05)
+- G4OpticalPhysics, G4OpticalPhysicsMessenger - setting for G4Scintillation
+  to use 3 time constants
+
+04 April 2020, V.Ivanchenko (phys-ctor-em-V10-06-04)
+- G4EmStandardPhysics_option3 - return back UseDistanceToBoundary
+
+23 March 2020, V.Ivanchenko (phys-ctor-em-V10-06-03)
+- G4EmStandardPhysics_option3 - switch from UseDistanceToBoundary to
+    UseSafetyPlus
+
+23 February 2020, W.G.Shin (phys-ctor-em-V10-06-02)
+- fixed comments
+
+10 January 2020, W.G.Shin (phys-ctor-em-V10-06-01)
+- added new chemistry constructor option 3 for IRT
+
+21 December 2019, V.Ivanchenko (phys-ctor-em-V10-06-00)
 - G4EmModelActivator - fixed configuration of the default EM multiple
   scattering on top of any other physics configuration (problem #2106)
 

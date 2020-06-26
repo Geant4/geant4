@@ -23,12 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleGunMessenger
 //
+// Class description:
 //
-// 
+// This is a concrete class of G4UImessenger which handles commands for
+// G4ParticleGun.
 
-#ifndef G4ParticleGunMessenger_h
-#define G4ParticleGunMessenger_h 1
+// Author: Makoto Asai, 1997
+// --------------------------------------------------------------------
+#ifndef G4ParticleGunMessenger_hh
+#define G4ParticleGunMessenger_hh 1
+
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
 class G4ParticleGun;
 class G4ParticleTable;
@@ -41,58 +49,51 @@ class G4UIcmdWith3Vector;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithAnInteger;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-// class description:
-//
-//  This is a concrete class of G4UImessenger which handles commands for
-// G4ParticleGun.
-//
-
-class G4ParticleGunMessenger: public G4UImessenger
+class G4ParticleGunMessenger : public G4UImessenger
 {
   public:
-    G4ParticleGunMessenger(G4ParticleGun * fPtclGun);
+
+    G4ParticleGunMessenger(G4ParticleGun* fPtclGun);
     ~G4ParticleGunMessenger();
     
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
 
   private:
-    void IonCommand(G4String newValues);
-    void IonLevelCommand(G4String newValues);
+
+    void IonCommand(const G4String& newValues);
+    void IonLevelCommand(const G4String& newValues);
 
   private:
-    G4ParticleGun * fParticleGun;
-    G4ParticleTable * particleTable;
 
-  private: //commands
-    G4UIdirectory *             gunDirectory;
-    G4UIcmdWithoutParameter *   listCmd;
-    G4UIcmdWithAString *        particleCmd;
-    G4UIcmdWith3Vector *        directionCmd;
-    G4UIcmdWithADoubleAndUnit * energyCmd;
-    G4UIcmdWithADoubleAndUnit * momAmpCmd;
-    G4UIcmdWith3VectorAndUnit * momCmd;
-    G4UIcmdWith3VectorAndUnit * positionCmd;
-    G4UIcmdWithADoubleAndUnit * timeCmd;
-    G4UIcmdWith3Vector *        polCmd;
-    G4UIcmdWithAnInteger *      numberCmd;
-    
-    G4UIcommand *               ionCmd;
-    G4UIcommand* ionLvlCmd;
+    G4ParticleGun* fParticleGun = nullptr;
+    G4ParticleTable* particleTable = nullptr;
 
-  private: // for ion shooting
-    G4bool   fShootIon; 
-    G4int    fAtomicNumber;
-    G4int    fAtomicMass;
-    G4int    fIonCharge;
-    G4double fIonExciteEnergy;
-    char     fIonFloatingLevelBase;
-    G4int    fIonEnergyLevel;
+    // Commands
+    //
+    G4UIdirectory*              gunDirectory;
+    G4UIcmdWithoutParameter*    listCmd;
+    G4UIcmdWithAString*         particleCmd;
+    G4UIcmdWith3Vector*         directionCmd;
+    G4UIcmdWithADoubleAndUnit*  energyCmd;
+    G4UIcmdWithADoubleAndUnit*  momAmpCmd;
+    G4UIcmdWith3VectorAndUnit*  momCmd;
+    G4UIcmdWith3VectorAndUnit*  positionCmd;
+    G4UIcmdWithADoubleAndUnit*  timeCmd;
+    G4UIcmdWith3Vector*         polCmd;
+    G4UIcmdWithAnInteger*       numberCmd;
+    G4UIcommand*                ionCmd;
+    G4UIcommand*                ionLvlCmd;
+
+    // For ion shooting
+    //
+    G4bool   fShootIon = false; 
+    G4int    fAtomicNumber = 0;
+    G4int    fAtomicMass = 0;
+    G4int    fIonCharge = 0;
+    G4double fIonExciteEnergy = 0.0;
+    char     fIonFloatingLevelBase = '\0';
+    G4int    fIonEnergyLevel = 0;
 };
 
 #endif
-

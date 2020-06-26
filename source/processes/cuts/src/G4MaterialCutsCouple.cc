@@ -23,51 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MaterialCutsCouple class implementation
 //
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file/  History:
-//    18 Sep. 2002, H.Kuirashige : Structure created based on object model
-// --------------------------------------------------------------
+// Author: H.Kurashige, 17 September 2002 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4MaterialCutsCouple.hh"
+#include "G4Material.hh"
+
 #include <iomanip>
 
-#include "G4Material.hh"
-#include "G4ProductionCuts.hh"
-
-G4MaterialCutsCouple::G4MaterialCutsCouple() :
-  isMaterialModified(false),
-  fMaterial(nullptr),
-  fCuts(nullptr),
-  indexNumber(-1),
-  isUsedInGeometry(false)
+// --------------------------------------------------------------------
+G4MaterialCutsCouple::G4MaterialCutsCouple()
 {
 }
   
+// --------------------------------------------------------------------
 G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
-					   G4ProductionCuts* cut) :
-  isMaterialModified(true),
-  fMaterial(material),
-  fCuts(cut),
-  indexNumber(-1),
-  isUsedInGeometry(false)
+                                           G4ProductionCuts* cut)
+  : isMaterialModified(true),
+    fMaterial(material),
+    fCuts(cut)
 {
 }
 
-
+// --------------------------------------------------------------------
 G4MaterialCutsCouple::G4MaterialCutsCouple(const G4MaterialCutsCouple& right) 
-  :fMaterial(nullptr), fCuts(nullptr)
+  : fMaterial(nullptr), fCuts(nullptr)
 {
   *this = right;
 }
 
+// --------------------------------------------------------------------
 G4MaterialCutsCouple::~G4MaterialCutsCouple()
 {
 }
 
-G4MaterialCutsCouple & G4MaterialCutsCouple::operator=(const G4MaterialCutsCouple &right)
+// --------------------------------------------------------------------
+G4MaterialCutsCouple&
+G4MaterialCutsCouple::operator=(const G4MaterialCutsCouple& right)
 {
   if (&right==this) return *this;
 
@@ -79,4 +73,3 @@ G4MaterialCutsCouple & G4MaterialCutsCouple::operator=(const G4MaterialCutsCoupl
 
   return *this;
 }
-

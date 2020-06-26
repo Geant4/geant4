@@ -41,8 +41,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4KaonBuilder::
-G4KaonBuilder(): wasActivated(false) 
+G4KaonBuilder::G4KaonBuilder()
 {  
   theKaonPlusInelastic=new G4KaonPlusInelasticProcess;
   theKaonMinusInelastic=new G4KaonMinusInelasticProcess;
@@ -53,8 +52,6 @@ G4KaonBuilder(): wasActivated(false)
 void G4KaonBuilder::
 Build()
 {
-  wasActivated = true;
-
   std::vector<G4VKaonBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {

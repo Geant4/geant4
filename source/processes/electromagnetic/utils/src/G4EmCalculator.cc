@@ -391,7 +391,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       if(mname  == "ParamICRU73" || mname == "LinhardSorensen" || mname == "Atima") {
         res = currentModel->ComputeDEDXPerVolume(mat, p, kinEnergy, cut);
         if(verbose > 1) { 
-	  G4cout <<  " ICRU73 ion E(MeV)= " << kinEnergy << " "; 
+	  G4cout << mname << " ion E(MeV)= " << kinEnergy << " "; 
  	  G4cout << currentModel->GetName() << ": DEDX(MeV/mm)= " << res*mm/MeV
 	         << " DEDX(MeV*cm^2/g)= "
 	         << res*gram/(MeV*cm2*mat->GetDensity())

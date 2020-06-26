@@ -74,6 +74,9 @@ public:
   virtual void render(render_action& a_action) {
     _mult_matrix(a_action);
     set_state(a_action);
+ //{mat4f& _mtx = a_action.projection_matrix();
+ // a_action.out() << "debug : tools::sg::base_camera::render : proj :" << std::endl;
+ // a_action.out() << _mtx << std::endl;}
     a_action.load_proj_matrix(a_action.projection_matrix());
     a_action.load_model_matrix(a_action.model_matrix());
   }

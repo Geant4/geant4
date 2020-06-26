@@ -23,67 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4FastVector
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-// ------------------------------------------------------------
+// Template class defining a vector of pointers,
+// not performing boundary checking.
 
-#ifndef G4FastVector_h
-#define G4FastVector_h 1
+// Author: G.Cosmo, 2 December 1995
+//         First implementation, based on object model
+// --------------------------------------------------------------------
+#ifndef G4FastVector_hh
+#define G4FastVector_hh 1
 
 #include "globals.hh"
 
 template <class Type, G4int N>
-class G4FastVector 
+class G4FastVector
 {
-  //  Template class defining a vector of pointers,
-  //  not performing boundary checking.
+ public:
+  G4FastVector() { ptr = &theArray[0]; }
 
-  public:
+  ~G4FastVector()
+  {
+    if(ptr != &theArray[0])
+      delete[] ptr;
+  }
 
-      G4FastVector() { ptr = &theArray[0]; }
+  inline Type* operator[](G4int anIndex) const
+  //  Access operator to the array.
+  {
+    return ptr[anIndex];
+  }
 
-      ~G4FastVector()
-      {
-        if (ptr != &theArray[0]) delete [] ptr;
-      }
+  inline void Initialize(G4int items)
+  //  Normally the pointer ptr points to the stack-array
+  //  theArray; only when the number of items is greater
+  //  than N, memory is allocated dynamically.
+  {
+    if(ptr != &theArray[0])
+      delete[] ptr;
+    if(items > N)
+      ptr = new Type*[items];
+    else
+      ptr = &theArray[0];
+  }
 
-      inline Type* operator[](G4int anIndex) const
-      //  Access operator to the array.
-      {
-        return ptr[anIndex];
-      }
+  inline void SetElement(G4int anIndex, Type* anElement)
+  //  To insert an element at the given position inside
+  //  the vector.
+  {
+    ptr[anIndex] = anElement;
+  }
 
-      void Initialize(G4int items)
-      //  Normally the pointer ptr points to the stack-array
-      //  theArray; only when the number of items is greater
-      //  than N, memory is allocated dynamically.
-      {
-        if (ptr != &theArray[0])
-           delete [] ptr;
-        if (items > N)
-           ptr = new Type*[items];
-        else
-           ptr = &theArray[0];
-      } 
-
-      inline void SetElement(G4int anIndex, Type *anElement)
-      //  To insert an element at the given position inside
-      //  the vector.
-      {
-        ptr[anIndex] = anElement;
-      }
-
-  private:
-
-      Type *theArray[N];
-      Type **ptr;
+ private:
+  Type* theArray[N];
+  Type** ptr;
 };
 
 #endif
-

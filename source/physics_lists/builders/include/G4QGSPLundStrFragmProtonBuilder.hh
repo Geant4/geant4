@@ -70,13 +70,7 @@ class G4QGSPLundStrFragmProtonBuilder : public G4VProtonBuilder
   private:
 
     G4TheoFSGenerator*               theModel;
-    G4GeneratorPrecompoundInterface* theCascade;
-    G4QGSModel< G4QGSParticipants >* theStringModel;
-    G4ExcitedStringDecay*            theStringDecay;
-    G4QuasiElasticChannel*           theQuasiElastic;
-    G4LundStringFragmentation*       theStrFragm;
     G4double                         theMin;
-
 };
 
 #endif

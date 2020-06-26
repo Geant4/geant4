@@ -61,7 +61,14 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
+#include "G4Decay.hh"
+#include "G4PhysicsListHelper.hh"
+#include "G4RadioactiveDecayBase.hh"
+#include "G4GenericIon.hh"
+#include "G4NuclideTable.hh"
+#include "StepMax.hh"
+
+G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -221,41 +228,27 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Decay.hh"
-
 void PhysicsList::AddDecay()
 {
   // decay process
   //
-  G4Decay* fDecayProcess = new G4Decay();
+  G4Decay* decay = new G4Decay();
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while( (*particleIterator)() ){
     G4ParticleDefinition* particle = particleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
+    if (decay->IsApplicable(*particle) && !particle->IsShortLived()) { 
+      ph->RegisterProcess(decay, particle);
     }
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PhysicsListHelper.hh"
-#include "G4RadioactiveDecay.hh"
-#include "G4GenericIon.hh"
-#include "G4NuclideTable.hh"
-
 void PhysicsList::AddRadioactiveDecay()
 {  
-  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  G4RadioactiveDecayBase* radioactiveDecay = new G4RadioactiveDecayBase();
   
   radioactiveDecay->SetARM(true);                //Atomic Rearangement
   
@@ -269,8 +262,6 @@ void PhysicsList::AddRadioactiveDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "StepMax.hh"
-
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
@@ -279,13 +270,11 @@ void PhysicsList::AddStepMax()
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while ((*particleIterator)()){
-      G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (fStepMaxProcess->IsApplicable(*particle))
-        {
-          pmanager ->AddDiscreteProcess(fStepMaxProcess);
-        }
+    if(fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
+      pmanager->AddDiscreteProcess(fStepMaxProcess);
   }
 }
 

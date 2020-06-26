@@ -7,15 +7,59 @@
 #include "randT"
 #include "rtausmed"
 
+#include "S_STRING"
+#include "scast"
+
 namespace tools {
 
-class rgaussd : public rgauss<rtausmed,double> {
+class irandd {
+public:
+  virtual ~irandd() {}
+public:
+  virtual void* cast(const std::string&) const = 0;
+public:  
+  virtual double shootd() const = 0;
+};
+
+class rbinomiald : public virtual irandd, public rbinomial<rtausmed,double,unsigned int> {
+  typedef rbinomial<rtausmed,double,unsigned int> parent;
+public:
+  TOOLS_SCLASS(tools::rbinomiald)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<rbinomiald>(this,a_class)) return p;
+    return 0;
+  }
+  virtual double shootd() const {return shoot();}
+public:
+  rbinomiald(unsigned int a_n = 1,double a_p = 0.5):parent(m_flat,a_n,a_p),m_flat(){}
+  virtual ~rbinomiald(){}
+public:
+  rbinomiald(const rbinomiald& a_from):irandd(a_from),parent(m_flat),m_flat(a_from.m_flat){}
+  rbinomiald& operator=(const rbinomiald& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+protected:
+  rtausmed m_flat;
+};
+
+class rgaussd :  public virtual irandd, public rgauss<rtausmed,double> {
   typedef rgauss<rtausmed,double> parent;
+public:
+  TOOLS_SCLASS(tools::rgaussd)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<rgaussd>(this,a_class)) return p;
+    return 0;
+  }
+  virtual double shootd() const {return shoot();}
 public:
   rgaussd(double a_mean = 0,double a_std_dev = 1):parent(m_flat,a_mean,a_std_dev),m_flat(){}
   virtual ~rgaussd(){}
 public:
-  rgaussd(const rgaussd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rgaussd(const rgaussd& a_from):irandd(a_from),parent(m_flat),m_flat(a_from.m_flat){}
   rgaussd& operator=(const rgaussd& a_from) {
     parent::operator=(a_from);
     m_flat = a_from.m_flat;
@@ -27,13 +71,21 @@ protected:
   rtausmed m_flat;
 };
 
-class rexpd : public rexp<rtausmed,double> {
+class rexpd : public virtual irandd, public rexp<rtausmed,double> {
   typedef rexp<rtausmed,double> parent;
+public:
+  TOOLS_SCLASS(tools::rexpd)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<rexpd>(this,a_class)) return p;
+    return 0;
+  }
+  virtual double shootd() const {return shoot();}
 public:
   rexpd(double a_rate = 1):parent(m_flat,a_rate),m_flat(){}
   virtual ~rexpd(){}
 public:
-  rexpd(const rexpd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rexpd(const rexpd& a_from):irandd(a_from),parent(m_flat),m_flat(a_from.m_flat){}
   rexpd& operator=(const rexpd& a_from) {
     parent::operator=(a_from);
     m_flat = a_from.m_flat;
@@ -47,6 +99,8 @@ protected:
 
 class rdir2d : public rdir2<rtausmed,double> {
   typedef rdir2<rtausmed,double> parent;
+public:
+  TOOLS_SCLASS(tools::rdir2d)
 public:
   rdir2d():parent(m_flat),m_flat(){}
   virtual ~rdir2d(){}
@@ -63,6 +117,8 @@ protected:
 
 class rdir3d : public rdir3<rtausmed,double> {
   typedef rdir3<rtausmed,double> parent;
+public:
+  TOOLS_SCLASS(tools::rdir3d)
 public:
   rdir3d():parent(m_flat),m_flat(){}
   virtual ~rdir3d(){}
@@ -87,13 +143,21 @@ protected:
 
 namespace tools {
 
-class rbwd : public rbw<rtausmed,double> {
+class rbwd : public virtual irandd, public rbw<rtausmed,double> {
   typedef rbw<rtausmed,double> parent;
+public:
+  TOOLS_SCLASS(tools::rbwd)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<rbwd>(this,a_class)) return p;
+    return 0;
+  }
+  virtual double shootd() const {return shoot();}
 public:
   rbwd(double a_mean = 0,double a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
   virtual ~rbwd(){}
 public:
-  rbwd(const rbwd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rbwd(const rbwd& a_from):irandd(a_from),parent(m_flat),m_flat(a_from.m_flat){}
   rbwd& operator=(const rbwd& a_from) {
     parent::operator=(a_from);
     m_flat = a_from.m_flat;
@@ -111,14 +175,21 @@ protected:
 
 namespace tools {
 
-// NOTE : not used yet.
-class rpoissd : public rpoiss<rtausmed,double,uint64> {
+class rpoissd : public virtual irandd, public rpoiss<rtausmed,double,uint64> {
   typedef rpoiss<rtausmed,double,uint64> parent;
+public:
+  TOOLS_SCLASS(tools::rpoissd)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<rpoissd>(this,a_class)) return p;
+    return 0;
+  }
+  virtual double shootd() const {return double(shoot());}
 public:
   rpoissd(double a_mean = 1):parent(m_flat,a_mean),m_flat(){}
   virtual ~rpoissd(){}
 public:
-  rpoissd(const rpoissd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rpoissd(const rpoissd& a_from):irandd(a_from),parent(m_flat),m_flat(a_from.m_flat){}
   rpoissd& operator=(const rpoissd& a_from) {
     parent::operator=(a_from);
     m_flat = a_from.m_flat;

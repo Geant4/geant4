@@ -16,11 +16,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jun. 4, 2020  Gabriele Cosmo (procman-V10-06-03)
+- Fixed Coverity warning for uninitialised data in G4VProcess.
+
+- Apr. 22, 2020  Gabriele Cosmo (procman-V10-06-02)
+- C++11 revision and code cleanup/formatting.
+
+- Feb. 28, 2020  Vladimir Ivanchenko (procman-V10-06-01)
+- G4ProcessTable - enable deletion of all processes except
+  G4Transportation end of run.
+
+- Feb. 21, 2020  Vladimir Ivanchenko (procman-V10-06-00)
+- G4ProcessManagerMessenger - use cache pointer of selected particle
+  in the G4ParticleTable class.
+
 - Nov. 26, 2019  Gabriele Cosmo (procman-V10-05-05)
 - Fixed more cases of implicit type conversions from size_t to G4int.
 
 - Nov. 21, 2019  Vladimir Ivanchenko (procman-V10-05-04)
-- ProcessTable - make it true thread local singleton
+- ProcessTable - make it true thread local singleton.
 	 
 - Nov. 19, 2019  Gabriele Cosmo (procman-V10-05-03)
 - Fixed more cases of implicit type conversions.

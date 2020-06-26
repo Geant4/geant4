@@ -50,7 +50,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    OGLLIBS   := -L$(OGLHOME)/lib -lGL
   endif
   LOADLIBS += -lsunmath -lsocket -lnsl
 

@@ -500,8 +500,12 @@ ReactionStage(const G4HadProjectile* originalIncident,
     }
     if( tempLen >= 2 )
     {
-      wgt = GenerateNBodyEvent( pseudoParticle[3].GetMass()/MeV,
-                                constantCrossSection, tempV, tempLen );
+//      wgt = GenerateNBodyEvent( pseudoParticle[3].GetMass()/MeV,
+//                                constantCrossSection, tempV, tempLen );
+// DHW: wgt is not used before it is overwritten; remove it here
+      GenerateNBodyEvent(pseudoParticle[3].GetMass()/MeV, constantCrossSection,
+                         tempV, tempLen);
+
       if( currentParticle.GetSide() == 1 )
         currentParticle.Lorentz( currentParticle, pseudoParticle[5] );
       if( targetParticle.GetSide() == 1 )

@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 30, 2020 G.Cosmo geom-csg-V10-06-02
+- Adopt new convention for location of headers in VecGeom for all wrappers.
+
+April 09, 2020 E.Tcherniaev geom-csg-V10-06-01
+- G4Trap.cc: fixed calculation of normal for points on edge in
+  SurfaceNormal(), improved code for Inside().
+- testG4Sphere.cc: removed obsolete code for testing CalculateExtent().
+
+December 10, 2019 B.Morgan geom-csg-V10-06-00
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 August 23, 2019 G.Cosmo geom-csg-V10-05-05
 - Minor c++11 revision and headers cleanup.
 - Use pre-increment wherever possible.

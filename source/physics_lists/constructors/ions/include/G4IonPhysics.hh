@@ -50,8 +50,8 @@ class G4IonPhysics : public G4VPhysicsConstructor
 public:
 
   G4IonPhysics(G4int ver = 0);
-  G4IonPhysics(const G4String& nname);
-  virtual ~G4IonPhysics();
+  G4IonPhysics(const G4String& nname, G4int ver = 0);
+  ~G4IonPhysics() override;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
@@ -65,13 +65,10 @@ private:
 			  G4HadronicInteraction*, G4HadronicInteraction*, 
 			  G4VCrossSectionDataSet*);
 
-  static G4ThreadLocal G4FTFBuilder* theBuilder;
-
 protected:
 
   G4int verbose;
 };
-
 
 #endif
 

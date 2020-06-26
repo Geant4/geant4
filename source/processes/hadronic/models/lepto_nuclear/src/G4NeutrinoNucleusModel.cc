@@ -92,6 +92,19 @@ const G4int    G4NeutrinoNucleusModel::fMesPDG[4]  = {20213, 9000211, 213, 211};
 const G4double G4NeutrinoNucleusModel::fBarMass[4] = {1700., 1600., 1232., 939.57};
 const G4int    G4NeutrinoNucleusModel::fBarPDG[4]  = {12224, 32224, 2224, 2212};
 
+const G4double  G4NeutrinoNucleusModel::fNuMuEnergyLogVector[50] = {
+115.603, 133.424, 153.991, 177.729, 205.126, 236.746, 273.24, 315.361, 363.973, 420.08, 484.836, 559.573, 645.832, 
+745.387, 860.289, 992.903, 1145.96, 1322.61, 1526.49, 1761.8, 2033.38, 2346.83, 2708.59, 3126.12, 3608.02, 4164.19, 
+4806.1, 5546.97, 6402.04, 7388.91, 8527.92, 9842.5, 11359.7, 13110.8, 15131.9, 17464.5, 20156.6, 23263.8, 26849.9, 
+30988.8, 35765.7, 41279, 47642.2, 54986.3, 63462.4, 73245.2, 84536, 97567.2, 112607, 129966 };
+
+
+G4double G4NeutrinoNucleusModel::fNuMuXarrayKR[50][51] = {{1.0}};
+G4double G4NeutrinoNucleusModel::fNuMuXdistrKR[50][50] = {{1.0}};
+G4double G4NeutrinoNucleusModel::fNuMuQarrayKR[50][51][51] = {{{1.0}}};
+G4double G4NeutrinoNucleusModel::fNuMuQdistrKR[50][51][50] = {{{1.0}}};
+
+///////////////////////////////////////////
 
 G4NeutrinoNucleusModel::G4NeutrinoNucleusModel(const G4String& name) 
   : G4HadronicInteraction(name)
@@ -203,6 +216,187 @@ G4bool G4NeutrinoNucleusModel::IsApplicable(const G4HadProjectile & aPart,
         Z *= 1;
 
   return result;
+}
+
+//////////////////////////////////////
+
+G4double G4NeutrinoNucleusModel::SampleXkr(G4double energy)
+{
+  G4int i(0), nBin(50);
+  G4double xx(0.), prob = G4UniformRand();
+
+  for( i = 0; i < nBin; ++i ) 
+  {
+    if( energy <= fNuMuEnergyLogVector[i] ) break;
+  }
+  if( i <= 0)          // E-edge
+  {
+    fEindex = 0;
+    xx = GetXkr( 0, prob);  
+  }
+  else if ( i >= nBin) 
+  {
+    fEindex = nBin-1;  
+    xx = GetXkr( nBin-1, prob); 
+  }
+  else
+  {
+    fEindex = i;
+    G4double x1 = GetXkr(i-1,prob);
+    G4double x2 = GetXkr(i,prob);
+
+    G4double e1 = G4Log(fNuMuEnergyLogVector[i-1]);
+    G4double e2 = G4Log(fNuMuEnergyLogVector[i]);
+    G4double e  = G4Log(energy);
+
+    if( e2 <= e1) xx = x1 + G4UniformRand()*(x2-x1);
+    else          xx = x1 + (e-e1)*(x2-x1)/(e2-e1);  // lin in energy log-scale
+  }
+  return xx;
+}
+
+//////////////////////////////////////////////
+//
+// sample X according to prob (xmin,1) at a given energy index iEnergy
+
+G4double G4NeutrinoNucleusModel::GetXkr(G4int iEnergy, G4double prob)
+{
+  G4int i(0), nBin=50; 
+  G4double xx(0.);
+
+  for( i = 0; i < nBin; ++i ) 
+  {
+    if( prob <= fNuMuXdistrKR[iEnergy][i] ) 
+      break;
+  }
+  if(i <= 0 )  // X-edge
+  {
+    fXindex = 0;
+    xx = fNuMuXarrayKR[iEnergy][0];
+  }
+  if ( i >= nBin ) 
+  {
+    fXindex = nBin;
+    xx = fNuMuXarrayKR[iEnergy][nBin];
+  }  
+  else
+  {
+    fXindex = i;
+    G4double x1 = fNuMuXarrayKR[iEnergy][i];
+    G4double x2 = fNuMuXarrayKR[iEnergy][i+1];
+
+    G4double p1 = 0.;
+
+    if( i > 0 ) p1 = fNuMuXdistrKR[iEnergy][i-1];
+
+    G4double p2 = fNuMuXdistrKR[iEnergy][i];  
+
+    if( p2 <= p1 ) xx = x1 + G4UniformRand()*(x2-x1);
+    else           xx = x1 + (prob-p1)*(x2-x1)/(p2-p1);
+  }
+  return xx;
+}
+
+//////////////////////////////////////
+//
+// Sample fQtransfer at a given Enu and fX
+
+G4double G4NeutrinoNucleusModel::SampleQkr( G4double energy, G4double xx)
+{
+  G4int nBin(50), iE=fEindex, jX=fXindex;
+  G4double qq(0.), qq1(0.), qq2(0.);
+  G4double prob = G4UniformRand();
+
+  // first E
+
+  if( iE <= 0 )          
+  {
+    qq1 = GetQkr( 0, jX, prob);  
+  }
+  else if ( iE >= nBin-1) 
+  {
+    qq1 = GetQkr( nBin-1, jX, prob); 
+  }
+  else
+  {
+    G4double q1 = GetQkr(iE-1,jX, prob);
+    G4double q2 = GetQkr(iE,jX, prob);
+
+    G4double e1 = G4Log(fNuMuEnergyLogVector[iE-1]);
+    G4double e2 = G4Log(fNuMuEnergyLogVector[iE]);
+    G4double e  = G4Log(energy);
+
+    if( e2 <= e1) qq1 = q1 + G4UniformRand()*(q2-q1);
+    else          qq1 = q1 + (e-e1)*(q2-q1)/(e2-e1);  // lin in energy log-scale
+  }
+
+  // then X
+
+  if( jX <= 0 )          
+  {
+    qq2 = GetQkr( iE, 0, prob);  
+  }
+  else if ( jX >= nBin) 
+  {
+    qq2 = GetQkr( iE, nBin, prob); 
+  }
+  else
+  {
+    G4double q1 = GetQkr(iE,jX-1, prob);
+    G4double q2 = GetQkr(iE,jX, prob);
+
+    G4double e1 = G4Log(fNuMuXarrayKR[iE][jX-1]);
+    G4double e2 = G4Log(fNuMuXarrayKR[iE][jX]);
+    G4double e  = G4Log(xx);
+
+    if( e2 <= e1) qq2 = q1 + G4UniformRand()*(q2-q1);
+    else          qq2 = q1 + (e-e1)*(q2-q1)/(e2-e1);  // lin in energy log-scale
+  }
+  qq = 0.5*(qq1+qq2);
+
+  return qq;
+}
+
+//////////////////////////////////////////////
+//
+// sample Q according to prob (qmin,qmax) at a given energy index iE and X index jX
+
+G4double G4NeutrinoNucleusModel::GetQkr( G4int iE, G4int jX, G4double prob )
+{
+  G4int i(0), nBin=50; 
+  G4double qq(0.);
+
+  for( i = 0; i < nBin; ++i ) 
+  {
+    if( prob <= fNuMuQdistrKR[iE][jX][i] ) 
+      break;
+  }
+  if(i <= 0 )  // Q-edge
+  {
+    fQindex = 0;
+    qq = fNuMuQarrayKR[iE][jX][0];
+  }
+  if ( i >= nBin ) 
+  {
+    fQindex = nBin;
+    qq = fNuMuQarrayKR[iE][jX][nBin];
+  }  
+  else
+  {
+    fQindex = i;
+    G4double q1 = fNuMuQarrayKR[iE][jX][i];
+    G4double q2 = fNuMuQarrayKR[iE][jX][i+1];
+
+    G4double p1 = 0.;
+
+    if( i > 0 ) p1 = fNuMuQdistrKR[iE][jX][i-1];
+
+    G4double p2 = fNuMuQdistrKR[iE][jX][i];  
+
+    if( p2 <= p1 ) qq = q1 + G4UniformRand()*(q2-q1);
+    else           qq = q1 + (prob-p1)*(q2-q1)/(p2-p1);
+  }
+  return qq;
 }
 
 
@@ -372,35 +566,25 @@ void G4NeutrinoNucleusModel::FinalBarion( G4LorentzVector & lvB, G4int, G4int pd
 
 
 ///////////////////////////////////////////////////////
+//
+// Get final particles from excited recoil nucleus and write them to theParticleChange, delete the particle vector
 
 void G4NeutrinoNucleusModel::RecoilDeexcitation( G4Fragment& fragment)
 {
   G4ReactionProductVector* products = fPreCompound->DeExcite(fragment);
 
-  if( products != NULL )
+  if( products != nullptr )
   {
-    G4ReactionProductVector::iterator iter;
-
-    for( iter = products->begin(); iter != products->end(); ++iter )
+    for( auto iter = products->cbegin(); iter != products->cend(); ++iter )
+      // for( auto & prod : products ) // prod = (*iter) is the pointer to final hadronic particle
     {
-      G4DynamicParticle * aNewDP =
-                    new G4DynamicParticle((*iter)->GetDefinition(),
-                            (*iter)->GetTotalEnergy(),
-                            (*iter)->GetMomentum());
-      /*      
-      // G4HadSecondary aNew = G4HadSecondary(aNewDP);
-
-      G4double time=(*iter)->GetFormationTime();
-
-      if( time < 0.0) { time = 0.0; }
-
-      aNew.SetTime(time);// (timePrimary + time);
-      aNew.SetCreatorModelType((*iter)->GetCreatorModel());
-*/
-      // G4cout<<aNewDP->GetDefinition()->GetParticleName()<<", "<<aNewDP->Get4Momentum()<<G4endl;
-
-      theParticleChange.AddSecondary(aNewDP);
+      theParticleChange.AddSecondary(new G4DynamicParticle( (*iter)->GetDefinition(),
+                                                            (*iter)->GetTotalEnergy(),
+                                                            (*iter)->GetMomentum() ) );
+      // delete prod;
     }
+    // delete products;
+    products->clear();
   }
   return;
 }
@@ -415,8 +599,8 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
   G4int A(0), Z(0), pdg = pdgP;
   fLVcpi = G4LorentzVector(0.,0.,0.,0.);
 
-  G4double  rM(0.), mN(938.), mI(0.), det(0.), det2(0.); 
-
+  G4double  rM(0.), mN(938.), det(0.), det2(0.); 
+  G4double mI(0.);
   mN = G4ParticleTable::GetParticleTable()->FindParticle(2212)->GetPDGMass(); // *0.85; // *0.9; // 
 
   // mN = 1.*139.57 + G4UniformRand()*(938. - 1.*139.57);
@@ -424,9 +608,11 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
   G4ThreeVector vN = lvP.boostVector(), bst(0.,0.,0.);
   //  G4double gN = lvP.e()/lvP.m();
   // G4LorentzVector  lvNu(vN*gN*mN, mN*gN);
-  G4LorentzVector  lvNu(bst, mN);
-
-  // lvP = lvP - lvNu; // already 1pi
+  G4LorentzVector  lvNu(0.,0.,0., mN);  // lvNu(bst, mN);
+  lvP.boost(-vN);   // 9-3-20
+  lvP = lvP - lvNu; // 9-3-20  already 1pi
+  lvP.boost(vN);    // 9-3-20
+  lvNu.boost(vN);    // 9-3-20
 
   // G4cout<<vN-lvP.boostVector()<<", ";
 
@@ -439,19 +625,21 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
   
   if( A == 1 ) 
   {
-    // bst = lvNu.boostVector();
-    mI = 0.;
+    bst = vN; // lvNu.boostVector(); // 9-3-20
+    // mI = 0.; // 9-3-20
+    rM = mN;
   }
   else
   {
     G4Nucleus targ(A-1,Z);
     mI = targ.AtomicMass(A-1,Z);
-    G4LorentzVector lvTar(bst,rM); 
+    G4LorentzVector lvTar(0.,0.,0.,mI); 
     lvNu = lvNu + lvTar;
-    // bst = lvNu.boostVector();  
-    bst = fLVt.boostVector();  // to recoil rest frame
-    lvP.boost(-bst);
+    bst = lvNu.boostVector();  
+    // bst = fLVt.boostVector();  // to recoil rest frame
+    // G4cout<<fLVt<<"     "<<bst<<G4endl;
   }
+  lvP.boost(-bst); // 9-3-20
   fMr = G4ParticleTable::GetParticleTable()->FindParticle(pdg)->GetPDGMass();
   G4double eX = lvP.e();
   G4double mX = lvP.m();
@@ -469,7 +657,8 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
   if(det2 > 0.) det = sqrt(det2);
   G4double dP = 0.5*(-b - det )/a;
 
-  dP = FinalMomentum( mI, rM, fMr, lvP);
+  // dP = FinalMomentum( mI, rM, fMr, lvP);
+  dP = FinalMomentum( rM, rM, fMr, lvP); // 9-3-20
 
   // G4cout<<dP<<", ";
   pX -= dP;
@@ -478,7 +667,7 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
   eX = sqrt( dP*dP + fMr*fMr );
   G4LorentzVector lvN( dP*dX, eX );
 
-  if( A > 1 ) lvN.boost(bst); // back to lab
+  if( A >= 1 ) lvN.boost(bst); // 9-3-20 back to lab
 
   fLVcpi = lvN;
 
@@ -624,9 +813,15 @@ void G4NeutrinoNucleusModel::ClusterDecay( G4LorentzVector & lvX, G4int qX)
     mB = M1 + G4UniformRand()*(M2-M1);
     // mB = -sigmaM*log( (1.- rand)*exp(-M2/sigmaM) + rand*exp(-M1/sigmaM) );
 
-
-    dir = G4RandomDirection(); // ???
     bst = lvX.boostVector();
+
+    // dir = G4RandomDirection(); // ???
+    // dir = G4ThreeVector(0.,0.,1.);
+    dir = bst.orthogonal().unit(); // ??
+    // G4double cost =  exp(-G4UniformRand());
+    // G4double sint = sqrt((1.-cost)*(1.+cost));
+    // G4double phi = twopi*G4UniformRand();
+    // dir = G4ThreeVector(sint*cos(phi), sint*sin(phi), cost);
 
     eM  = 0.5*(mX*mX + mM*mM - mB*mB)/mX;
     pM  = sqrt(eM*eM - mM*mM);
@@ -668,10 +863,16 @@ void G4NeutrinoNucleusModel::MesonDecay( G4LorentzVector & lvX, G4int qX)
   G4bool   finB = false;
   G4int    pdgM(0), pdgB(0), i(0), qM(0), qB(0);
   G4double mM(0.), mB(0.), eM(0.), eB(0.), pM(0.), pB(0.);
-  G4double mm1(0.), mm22(0.), M1(0.), M2(0.), mX(0.);
+  G4double mm1(0.), mm22(0.), M1(0.), M2(0.), mX(0.), Tkin(0.);
 
   mX = lvX.m();
+  Tkin = lvX.e() - mX;
 
+  // if( mX < 1120*MeV && mX > 1020*MeV ) // phi(1020)->K+K-
+  if( mX < 1080*MeV && mX > 990*MeV && Tkin < 600*MeV ) // phi(1020)->K+K-
+  {
+    return  FinalMeson( lvX, qB, 333);
+  }
   G4double mPi = G4ParticleTable::GetParticleTable()->FindParticle(211)->GetPDGMass();
 
   G4double deltaMr[4] =  { 0.*MeV, 0.*MeV, 100.*MeV, 0.*MeV}; 
@@ -790,8 +991,10 @@ void G4NeutrinoNucleusModel::MesonDecay( G4LorentzVector & lvX, G4int qX)
     // mB = -sigmaM*log( (1.- rand)*exp(-M2/sigmaM) + rand*exp(-M1/sigmaM) );
     // mB = M1 + 0.9*(M2-M1);
 
-    dir = G4RandomDirection();
     bst = lvX.boostVector();
+
+    // dir = G4RandomDirection();
+    dir = bst.orthogonal().unit();
 
     eM  = 0.5*(mX*mX + mM*mM - mB*mB)/mX;
     pM  = sqrt(eM*eM - mM*mM);
@@ -1158,6 +1361,7 @@ const G4double G4NeutrinoNucleusModel::fOnePionProb[58] =
   0.0755204, 0.0703121, 0.0607066, 0.0554278, 0.0480401, 0.0427023, 0.0377123, 0.0323248, 0.0298584, 
   0.0244296, 0.0218526, 0.019121, 0.016477, 0.0137309, 0.0137963, 0.0110371, 0.00834028, 0.00686127, 0.00538226
 };
+
  
 //
 //

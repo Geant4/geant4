@@ -43,7 +43,6 @@
  
  void G4TritonBuilder::Build()
  {
-   wasActivated = true;
    std::vector<G4VTritonBuilder *>::iterator i;
    for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
    {
@@ -54,7 +53,7 @@
  }
 
  G4TritonBuilder::
- G4TritonBuilder(): wasActivated(false)  
+ G4TritonBuilder()
  {
    theTritonInelastic=new G4TritonInelasticProcess;
  }

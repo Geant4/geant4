@@ -24,28 +24,30 @@
 // ********************************************************************
 //
 // G4ProcessManager inline function members implementation
+//
+// - 02.12.1995, G.Cosmo - First implementation, based on object model
 // --------------------------------------------------------------------
 
 inline  
- void G4ProcessManager::SetParticleType(const G4ParticleDefinition* aParticle)
+void G4ProcessManager::SetParticleType(const G4ParticleDefinition* aParticle)
 {
   theParticleType = aParticle;
 }
 
 inline 
- G4ProcessVector* G4ProcessManager::GetProcessList() const
+G4ProcessVector* G4ProcessManager::GetProcessList() const
 {
   return theProcessList;
 }
 
 inline
- G4int  G4ProcessManager::GetProcessListLength() const
+G4int G4ProcessManager::GetProcessListLength() const
 {
   return numberOfProcesses;
 }
 
 inline 
- G4int  G4ProcessManager::GetProcessIndex(G4VProcess* aProcess) const
+G4int G4ProcessManager::GetProcessIndex(G4VProcess* aProcess) const
 {
   G4int idx = G4int(theProcessList->index(aProcess));
   if (idx>=numberOfProcesses) idx = -1;
@@ -53,27 +55,34 @@ inline
 }
 
 inline 
- G4int G4ProcessManager::GetProcessVectorId(G4ProcessVectorDoItIndex idx,
-					    G4ProcessVectorTypeIndex typ) const
+G4int G4ProcessManager::GetProcessVectorId(G4ProcessVectorDoItIndex idx,
+                                           G4ProcessVectorTypeIndex typ) const
 {
-  if ( idx == idxAtRest ) {
+  if ( idx == idxAtRest )
+  {
     if (typ == typeGPIL) { return 0; }
     else                 { return 1; }
-  } else if ( idx == idxAlongStep ) {
+  }
+  else if ( idx == idxAlongStep )
+  {
     if (typ == typeGPIL) { return 2; }
     else                 { return 3; }
-  } else if ( idx == idxPostStep ) {
+  }
+  else if ( idx == idxPostStep )
+  {
     if (typ == typeGPIL) { return 4; }
     else                 { return 5; }
-  } else {
+  }
+  else
+  {
     return -1;
   }
 }
  
 inline  
- G4ProcessVector* G4ProcessManager::GetProcessVector(
-				       G4ProcessVectorDoItIndex idx,  
-				       G4ProcessVectorTypeIndex typ
+G4ProcessVector* G4ProcessManager::GetProcessVector(
+                                       G4ProcessVectorDoItIndex idx,  
+                                       G4ProcessVectorTypeIndex typ
                                       ) const
 {
   G4int ivec = GetProcessVectorId(idx, typ);
@@ -88,88 +97,88 @@ inline
 }
 
 inline 
- G4ProcessVector*
- G4ProcessManager::GetAtRestProcessVector(G4ProcessVectorTypeIndex typ) const
+G4ProcessVector*
+G4ProcessManager::GetAtRestProcessVector(G4ProcessVectorTypeIndex typ) const
 {
   if (typ == typeGPIL) { return theProcVector[0]; }
   else                 { return theProcVector[1]; }
 }
 
 inline 
- G4ProcessVector*
- G4ProcessManager::GetAlongStepProcessVector(G4ProcessVectorTypeIndex typ) const
+G4ProcessVector*
+G4ProcessManager::GetAlongStepProcessVector(G4ProcessVectorTypeIndex typ) const
 {
   if (typ == typeGPIL) { return theProcVector[2]; }
   else                 { return theProcVector[3]; }
 }
 
 inline 
- G4ProcessVector*
- G4ProcessManager::GetPostStepProcessVector(G4ProcessVectorTypeIndex typ) const
+G4ProcessVector*
+G4ProcessManager::GetPostStepProcessVector(G4ProcessVectorTypeIndex typ) const
 {
   if (typ == typeGPIL) { return theProcVector[4]; }
   else                 { return theProcVector[5]; }
 }
 
 inline
- G4int G4ProcessManager::GetAtRestIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-			   ) const
+G4int G4ProcessManager::GetAtRestIndex(
+                          G4VProcess* aProcess,
+                          G4ProcessVectorTypeIndex typ 
+                          ) const
 {
   return GetProcessVectorIndex(aProcess, idxAtRest, typ);
 }
 
 inline 
- G4int G4ProcessManager::GetAlongStepIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-			   ) const
+G4int G4ProcessManager::GetAlongStepIndex(
+                          G4VProcess* aProcess,
+                          G4ProcessVectorTypeIndex typ 
+                          ) const
 {
   return GetProcessVectorIndex(aProcess, idxAlongStep, typ);
 }
 
 inline
- G4int G4ProcessManager::GetPostStepIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-                         ) const
+G4int G4ProcessManager::GetPostStepIndex(
+                          G4VProcess* aProcess,
+                          G4ProcessVectorTypeIndex typ 
+                        ) const
 {
   return GetProcessVectorIndex(aProcess, idxPostStep, typ);
 }
 
 inline 
- G4int G4ProcessManager::AddRestProcess(G4VProcess* aProcess, G4int ord)
+G4int G4ProcessManager::AddRestProcess(G4VProcess* aProcess, G4int ord)
 {
   return AddProcess(aProcess, ord, ordInActive, ordInActive);
 }
 
 inline 
- G4int G4ProcessManager::AddContinuousProcess(G4VProcess* aProcess, G4int ord)
+G4int G4ProcessManager::AddContinuousProcess(G4VProcess* aProcess, G4int ord)
 {
   return AddProcess(aProcess, ordInActive, ord, ordInActive);
 }
 
 inline 
- G4int G4ProcessManager::AddDiscreteProcess(G4VProcess* aProcess, G4int ord)
+G4int G4ProcessManager::AddDiscreteProcess(G4VProcess* aProcess, G4int ord)
 {
   return AddProcess(aProcess, ordInActive, ordInActive, ord);
 }
 
 inline 
- G4ParticleDefinition* G4ProcessManager::GetParticleType() const
+G4ParticleDefinition* G4ProcessManager::GetParticleType() const
 { 
-  return (G4ParticleDefinition* )theParticleType; 
+  return (G4ParticleDefinition*)theParticleType; 
 }
 
 inline 
- void G4ProcessManager::SetVerboseLevel(G4int value)
+void G4ProcessManager::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
 }
 
 inline  
- G4int G4ProcessManager::GetVerboseLevel() const
+G4int G4ProcessManager::GetVerboseLevel() const
 {
-  return  verboseLevel;
+  return verboseLevel;
 }

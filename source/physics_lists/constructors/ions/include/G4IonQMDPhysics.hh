@@ -44,11 +44,9 @@
 
 #include <vector>
 
-class G4HadronInelasticProcess;
 class G4HadronicInteraction;
 class G4BinaryLightIonReaction;
 class G4QMDReaction;
-class G4FTFBuilder;
 class G4VCrossSectionDataSet;
 
 class G4IonQMDPhysics : public G4VPhysicsConstructor
@@ -56,16 +54,16 @@ class G4IonQMDPhysics : public G4VPhysicsConstructor
 public:
   G4IonQMDPhysics(G4int verb = 0);
   G4IonQMDPhysics(const G4String& name, G4int ver = 0);
-  virtual ~G4IonQMDPhysics();
+  ~G4IonQMDPhysics() override;
 
   // This method will be invoked in the Construct() method.
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
 
@@ -75,8 +73,6 @@ private:
 		  G4QMDReaction*,
 		  G4HadronicInteraction*,
 		  G4VCrossSectionDataSet*);
-
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilder;
 
   G4double eminQMD;
   G4double emaxQMD;

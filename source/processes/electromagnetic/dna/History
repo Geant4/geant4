@@ -14,11 +14,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+12-06-2020, S.Incerti, W.G.Shin, tag emdna-V10-06-08
+- Fixed coverity warning
+
+10-06-2020, S.Incerti, W.G.Shin, tag emdna-V10-06-07
+- Fixed coverity warnings
+- Fix of IRT bug
+ (protection for the crash induced by empty reaction set)
+
+28-05-2020, B.Morgan, tag emdna-V10-06-06
+- Add missing G4analysismng module dependency to G4emdna-utils
+
+20-05-20: W.G.Shin emdna-V10-06-05
+- Revised displacement of OH radicals of B1A1 dissociation
+based on momentum conservation in G4DNAWaterDissociationDisplacer class
+- Added missing History
+
+26-04-20: W.G.Shin emdna-V10-06-04
+- Fixed coverity test
+
+15-04-20: G.Cosmo emdna-V10-06-03
+- G4MoleculeDefinition: copy constructor and assignment operator
+  are not allowed (as for G4ParticleDefinition). Now deleted.
+
+19-02-20: W.G.Shin emdna-V10-06-02
+- Fixed memory issue on G4DNAMolecularReactionTable
+- Revised headeres of IRT classes
+
+12-02-20: W.G.Shin emdna-V10-06-01
+- Added protections floating point exception in G4DNAIRT class
+
+10-01-20: W.G.Shin emdna-V10-06-00
+- Added classes for IRT
+- Added features in management classes for IRT (G4ITReaction,
+G4ITModelProcessor ...)
+- Added features in G4DNAMolecularReactionTable for GFDE
+- Added molecules of Plante et al. (2017) (Oxygen, O2, O3, HO2)
+
 15-11-19: G.Cosmo emdna-V10-05-11
 - Fixed cases of implicit type conversions from size_t to G4int.
 
 8-11-19: HT, tag emdna-V10-05-10
-- Fixed the exception divide by zero of diffusionCoefficient in 
+- Fixed the exception divide by zero of diffusionCoefficient in
 G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength
 for the case of static molecules (DNA) (diffusionCoefficient = 0)
 
@@ -27,10 +64,10 @@ for the case of static molecules (DNA) (diffusionCoefficient = 0)
   of external physical volume (meant for adapting external navigators)
 
 19-10-19: WGS, SI, tag emdna-V10-05-08
-- Added new model G4DNAELSEPAElasticModel 
+- Added new model G4DNAELSEPAElasticModel
 
 11-10-19: WGS, SI, tag emdna-V10-05-07
-- G4DNAOneStepThermalizationModel.* : 
+- G4DNAOneStepThermalizationModel.* :
 added Kreipl and Meesungnoen amorphous ice models
 - G4DNAWaterDissociationDisplacer* : updated
 
@@ -55,8 +92,8 @@ added Kreipl and Meesungnoen amorphous ice models
 DEV-300 : G4DNAChemistryManager clarify pointer ownership
 
 05-01-2019, HT, tag emdna-V10-05-00
-- moved the checking position of track status 
-in G4ITStepProcessor::SetInitialStep()  
+- moved the checking position of track status
+in G4ITStepProcessor::SetInitialStep()
 
 01-09-2018, SI, tag emdna-V10-04-10
 renamed tag
@@ -138,13 +175,13 @@ https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2084
 - added tagging of atom. deexc. products in ionisation models.
 
 11-05-2017, VI tag emdna-V10-03-17
-- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.      
+- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.
 
 10-05-2017, NL, MK, SI, tag emdna-V10-03-16
-- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.      
+- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.
 
 03-05-2017, SM, tag emdna-V10-03-15
-- add the new G4DNADummyModel and allow the combination of G4VEmModel and G4VDNAModel in G4DNAModelInterface.      
+- add the new G4DNADummyModel and allow the combination of G4VEmModel and G4VDNAModel in G4DNAModelInterface.
 
 27-04-2017, SM, tag emdna-V10-03-14
 - correct small typo mistakes.
@@ -159,7 +196,7 @@ https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2084
 - G4DNAMolecularMaterial: update doxygen doc
 
 13-02-2017, MK, tag emdna-V10-03-10
-- G4DNAMolecularMaterial: 
+- G4DNAMolecularMaterial:
   remove newly introduced methods, add fatal exception if used
   add doxygen documentation
 
@@ -188,10 +225,10 @@ https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2084
 14-01-2017, MK, tag emdna-V10-02-37
 - Prevent a crash when calling G4ITTrackingManager::EndTracking from
   the UserTimeStepAction::PostTimeStepAction
-- Add missing: G4ITTrackingManager* G4Scheduler::GetTrackingManager() 
+- Add missing: G4ITTrackingManager* G4Scheduler::GetTrackingManager()
 
 28-12-2016, SI, tag emdna-V10-03-04
-- extended upper energy limit of protons for 
+- extended upper energy limit of protons for
 G4DNARuddIonisationExtendedModel
 
 27-12-2016, SI, tag emdna-V10-03-03
@@ -214,20 +251,20 @@ G4DNARuddIonisationExtendedModel
 - G4ManyFastLists.hh: iterator::GetTrackList() correct type returned
 
 16-11-2016, MK, tag emdna-V10-02-34
-- G4VMolecularDissociationDisplacer & G4DNAWaterDissociationDisplacer: 
+- G4VMolecularDissociationDisplacer & G4DNAWaterDissociationDisplacer:
    displacement types can be thread shared
-- G4TrackState: Move implementation of static function 
+- G4TrackState: Move implementation of static function
                 G4VTrackStateID::Create() to cc file - windows crash
 
 15-11-2016, MK, tag emdna-V10-02-33
 - G4VMolecularDissociationDisplacer.cc: add missing initializer
 
 14-11-2016, MK, tag emdna-V10-02-32
-- Separate def and impl of dissociation flag to prevent issue with 
+- Separate def and impl of dissociation flag to prevent issue with
   windows platforms
 
 14-11-2016, MK, tag emdna-V10-02-31
-- G4DNAOneStepThermalizationModel.cc: 
+- G4DNAOneStepThermalizationModel.cc:
  tag init constexpr factor with number rather than expression
 
 14-11-2016, MK, tag emdna-V10-02-30
@@ -244,10 +281,10 @@ G4DNARuddIonisationExtendedModel
 - Adds and use G4CTCounter
 
 02-11-2016, MK, tag emdna-V10-02-27
-- add G4VMoleculeCounter & enable using custom molecule counter 
+- add G4VMoleculeCounter & enable using custom molecule counter
 - pass location information to molecule counter
-- G4ITNavigator2: relocate voxelNavigator before every call to 
-  computeStep & computeSafety 
+- G4ITNavigator2: relocate voxelNavigator before every call to
+  computeStep & computeSafety
 
 07-08-2016, SI, tag emdna-V10-02-26
 - added stationnary mode to sub-excitation electron processes
@@ -267,7 +304,7 @@ at init time
   prevent erasing/rewriting data (use isInit)
 - G4DNAChampionElasticModel.hh: rearrange declaration of attributes
 - G4DNAChampionElasticModel.cc: move up  if (isInitialised) { return; }
-- G4DNAUeharaScreenedRutherfordElasticModel.cc: add exception at init time if 
+- G4DNAUeharaScreenedRutherfordElasticModel.cc: add exception at init time if
   model used for another part than e-
 
 1-06-2016, MK, tag emdna-V10-02-23
@@ -289,15 +326,15 @@ one of the previous tags
 correct model and process names for solvation
 
 12-05-2016, MK, tag emdna-V10-02-18
-- G4DNAChampionElasticModel.hh: 
+- G4DNAChampionElasticModel.hh:
  * GetKillBelowThreshold is deprecated
- * Removed attributes: killBelowEnergy, lowEnergyLimit, highEnergyLimit, 
+ * Removed attributes: killBelowEnergy, lowEnergyLimit, highEnergyLimit,
    tableFile, tableData
  * Method Theta(): remove G4ParticleDefinition * aParticleDefinition
 - G4DNAUeharaScreenedRutherfordElasticModel.hh:
  * SetKillBelowThreshold, GetKillBelowThreshold are depreceted
  (use G4LowECapture or G4DNAElectronSolvatation)
- * SelectHighEnergyLimit uses SetHighEnergyLimit instead and a warning is 
+ * SelectHighEnergyLimit uses SetHighEnergyLimit instead and a warning is
    emitted when used
  * Removed attributes: killBelowEnergy, lowEnergyLimit, highEnergyLimit
 - G4DNAChampionElasticModel.cc & G4DNAUeharaScreenedRutherfordElasticModel.cc:
@@ -313,7 +350,7 @@ correct model and process names for solvation
 - G4DNATransformElectronModel.cc:
  * Check verbose flag if a preprocessor flag is trigerred
  * Remove call to G4Electron at initialization time
- * Add check if(G4DNAChemistryManager::IsActivated()) then solvated electron 
+ * Add check if(G4DNAChemistryManager::IsActivated()) then solvated electron
    created; otherwise, the primary electron is killed
 
 30-04-2016, MK, tag emdna-V10-02-17
@@ -321,7 +358,7 @@ correct model and process names for solvation
 
 30-04-2016, MK, tag emdna-V10-02-16
 - G4VUserChemistryList: remove a if statement
-- G4MoleculeCounter: at initialization time, prevent creating entries for 
+- G4MoleculeCounter: at initialization time, prevent creating entries for
   unregistered molecule definition
 
 22-04-2016, MK, tag emdna-V10-02-15
@@ -329,7 +366,7 @@ correct model and process names for solvation
 - G4DNASancheExcitationModel: remove warning when SANCHE_VERBOSE is OFF
 
 22-04-2016, MK, tag emdna-V10-02-14
-- G4DNAMeltonAttachmentModel, G4DNASancheExcitationModel: 
+- G4DNAMeltonAttachmentModel, G4DNASancheExcitationModel:
   remove usage of internal energy boundaries
 
 19-03-2016, SI, tag emdna-V10-02-13
@@ -375,11 +412,11 @@ by S. Okada (KEK, JP)
 * G4MoleculeCounter: remove check of c++ version for unique_ptr/auto_ptr selection
 
 16-12-2015, SI, tag emdna-V10-02-01
-* Ionisation models : in SampleSecondaries: 
+* Ionisation models : in SampleSecondaries:
 added protection on energy for interpolation method change
 
 16-12-2015, SI, tag emdna-V10-02-00
-* G4DNAIonElasticModel::SampleSecondaries: added protection on 
+* G4DNAIonElasticModel::SampleSecondaries: added protection on
 energy
 
 13-11-2015, MK, tag emdna-V10-01-55
@@ -420,14 +457,14 @@ is deleted
 * G4FastList.icc: use typedef WatcherSet even when iterators are used
 * G4ITModelProcessor: add RegisterModel, GetComputeTimeStep +
   fComputeTimeStep & fComputeReaction flags
-* G4DNAElectronHoleRecombination: enable using this model even when not 
+* G4DNAElectronHoleRecombination: enable using this model even when not
   all dissociation products have been defined (they will just not be taken
   into account)
 * G4DNAMolecularReactionTable: delete reaction data when table is deleted
 
 03-11-2015, MK, tag emdna-V10-01-47
 * G4Scheduler: Update time before G4ITStepProcessor::DoIt
-* G4ITStepProcessor::DoIt : reset leading tracks at the end of 
+* G4ITStepProcessor::DoIt : reset leading tracks at the end of
 the call
 
 03-11-2015, MK, tag emdna-V10-01-46
@@ -435,7 +472,7 @@ the call
 * G4DNAOneStepSolvatationModel -> G4DNAOneStepThermalizationModel
   Avoid placing products outside volume of the mother track
   (causing navigator complains)
-   
+
 03-11-2015, MK, tag emdna-V10-01-45
 * G4Serialize: Add definition in header for G4String
 
@@ -444,28 +481,28 @@ the call
 * molecules: fix unit tests
 * G4DNAElectronHoleRecombination: add missing check on G4MoleculeCounter::InUse
 * G4MoleculeCounter: add a flag to check or not against scheduler time
-* G4MoleculeTable: do not store G4MolecularConf anymore 
+* G4MoleculeTable: do not store G4MolecularConf anymore
   -> G4MolecularConfMan is taking care of this
-   
+
 30-10-2015, MK, tag emdna-V10-01-43
-* Bug solved in G4MoleculeCounter 
+* Bug solved in G4MoleculeCounter
   and made compatible wih G4DNAElectronHoleRecombination (temporary)
 * Unit tests corrected
 * G4VITDiscreteProcess added
 * G4ReactionTableMessenger added
 * Intermediate update for 10.2 release
-   
+
 27-10-2015, MK, tag emdna-V10-01-42
 * G4ITStepProcessor: clean dynamic_cast to G4VITProcess
- 
+
 26-10-2015, MK, tag emdna-V10-01-41
 * Sanche model: try to solve std::vector out of bounds
 
 23-10-2015, MK, tag emdna-V10-01-40
 * remove all CLHEP::shared_ptr usage
- 
+
 23-10-2015, CV, SM, tag emdna-V10-01-39
-* Addded base class G4VDNAPTBModel 
+* Addded base class G4VDNAPTBModel
 
 28-09-2015, SI, tag emdna-V10-01-38
 * updated ion selection in G4DNARuddIonisationExtendedModel.cc for Z>2
@@ -514,7 +551,7 @@ the call
  * Molecule gun : place randomly in a box
 
 15-07-2015, MK
-- G4DNAAttachment, G4DNAChargeDecrease, G4DNADissociation, 
+- G4DNAAttachment, G4DNAChargeDecrease, G4DNADissociation,
 G4DNAExcitation, G4DNAIonisation
  * processes & models initialisation again
 
@@ -536,8 +573,8 @@ G4DNAExcitation, G4DNAIonisation
 - G4ITLeadingTracks added
 - G4ITSteppingVerbose added
 - G4IosFlagsSaver added
-- G4VITSteppingVerbose & G4ITSteppingVerbose added 
-  * new UI command /chem/tracking/verbose 1,2,3 ... 
+- G4VITSteppingVerbose & G4ITSteppingVerbose added
+  * new UI command /chem/tracking/verbose 1,2,3 ...
 - G4MoleculeDefinition:
   ::SetFormatedName added
   ::NewConfiguration methods added
@@ -545,12 +582,12 @@ G4DNAExcitation, G4DNAIonisation
   ::AddDecayChannel per G4MolecularConfiguration or conf label added
   And replace ::AddDecayChannel for a molecule model
   ::Finalize added
-- G4MolecularConfiguration: 
+- G4MolecularConfiguration:
   * new configuration can be defined by labels
   * Add Finalize method and add exception if attempt to modified
   the G4MolecularConfiguration is done after finalization
-- G4MolecularDissociationChannel & G4DNAMolecularReactionTable & 
-G4DNAMolecularEncounterStepper use G4MolecularConfiguration rather 
+- G4MolecularDissociationChannel & G4DNAMolecularReactionTable &
+G4DNAMolecularEncounterStepper use G4MolecularConfiguration rather
 than molecule models
 - G4Molecule add constructor where only G4MolecularConfiguration is specified
 - G4Scheduler : remove entirely track specification from this class
@@ -559,11 +596,11 @@ than molecule models
 - G4DNAElectronHoleRecombination added
 
 06-07-2015, Shogo Okada, SI, tag emdna-V10-01-22
-- G4DNAEmfietzoglouIonisationModel: removed condition for 
+- G4DNAEmfietzoglouIonisationModel: removed condition for
 fasterCode usage on shell selection.
 
 26-06-2015, MK
-- G4DNAIonElasticModel: modify "validated" to "activated" in 
+- G4DNAIonElasticModel: modify "validated" to "activated" in
   warning message description
 
 16-06-205, MK
@@ -593,7 +630,7 @@ fasterCode usage on shell selection.
 17-05-2015, MK, tag emdna-V10-01-17
 - G4DNABornIonisationModel1/2 & G4DNABornExcitationModel2: remove unused variables
 - Correct sources.cmake
-- Born headears: includes both model versions when proxy header is included 
+- Born headears: includes both model versions when proxy header is included
 
 16-05-2015, MK, tag emdna-V10-01-16
 - Add G4DNAEmfietzoglouExcitationModel
@@ -628,12 +665,12 @@ fasterCode usage on shell selection.
 
 02-05-2015, MK
 - Update G4TrackState & related classes
-- G4DNABrownianTransportation: 
-  +Add constructor & destructor to G4BrownianAction 
+- G4DNABrownianTransportation:
+  +Add constructor & destructor to G4BrownianAction
   +comment useless method
-- G4Scheduler: 
-  +Add fStopTime+Watched times+PrintWhyDoYouStop method (code was existing before) 
-  +remove fTmpEndTime 
+- G4Scheduler:
+  +Add fStopTime+Watched times+PrintWhyDoYouStop method (code was existing before)
+  +remove fTmpEndTime
   +Add CanICarryOn
 - add G4DNASmoluchowskiDiffusion *PRELIMINARY*
 
@@ -647,7 +684,7 @@ instead of a reference
 12-02-2015, MK, tag emdna-V10-01-06
 - G4ITReaction: Remove "gAll" introduced for testing
 - G4ITModelProcessor: Remove "assert" introduced for testing
-- G4ITTransportation: Remove extra parenthesis in the undef of PrepareState 
+- G4ITTransportation: Remove extra parenthesis in the undef of PrepareState
 
 11-02-2015, MK, tag emdna-V10-01-05
 - Fix reproductibility of the chemistry module
@@ -659,7 +696,7 @@ instead of a reference
 
 14-12-2014, MK,  tag emdna-V10-01-03
 - BornIonisation: correct array cleaning
-- ScreenRutherfordElastic: correct retrieval of water density 
+- ScreenRutherfordElastic: correct retrieval of water density
 
 13-12-2014, SI,  tag emdna-V10-01-02
 - Added elastic model by H. Tran.
@@ -717,15 +754,15 @@ It slows the computation by forcing the Brownian particles to stop at the volume
 
 21-11-2014, MK, tag emdna-V10-00-54
 - Put back G4DNABrownianTransportation::fUseMaximumTimeBeforeReachingBoundary
-to true as long as the small distances to boundaries sent back by the navigator 
+to true as long as the small distances to boundaries sent back by the navigator
 are not understood
 - Update G4ITNavigator2 to the G4Navigator of John
 
 21-11-2014, MK, tag emdna-V10-00-53
-- Attempt to solve the 'No track found' bug by using G4FastList and 
+- Attempt to solve the 'No track found' bug by using G4FastList and
 G4ManyFastLists - A 'list watcher' is added
 - G4DNABrownianTransportation::fUseMaximumTimeBeforeReachingBoundary
-is false by default --> uses the random time computation for crossing 
+is false by default --> uses the random time computation for crossing
 boundaries
 
 20-11-2014, SI, tag emdna-V10-00-52
@@ -817,7 +854,7 @@ when the asked item is not found
 
 05-06-2014  SI, tag emdna-V10-00-29
       - added include of <deque> in G4DNAMillerGreenExcitationModel.hh
-            - updated G4DNAIonisation and G4DNARuddIonisationExtendModel for 
+            - updated G4DNAIonisation and G4DNARuddIonisationExtendModel for
               G4GenericIon usage
             - requires G4EMLOW6.39
 
@@ -851,13 +888,13 @@ when the asked item is not found
       Try to remove warnings
 
 09.05.2014  S. Incerti, tag emdna-V10-00-20
-            Added Si to G4DNARuddIonisationExtendedModel 
+            Added Si to G4DNARuddIonisationExtendedModel
             on behalf of Z. Francis
             G4EMLOW6.38 needed
 
 07-04-2014  SI  tag emdna-V10-00-19
       Changed faster method interpolation in
-      G4DNABornIonisationModel 
+      G4DNABornIonisationModel
 
 04-04-2014  G.Cosmo        tag emdna-V10-00-18
       Removed problematic #define in G4TrackState.hh causing errors on
@@ -892,7 +929,7 @@ when the asked item is not found
       (problem coming from having as a friend class a template argument)
 
 02-04-2014  MK                  tag emdna-V10-00-09
-      - try to fix build error on windows platform 
+      - try to fix build error on windows platform
 
 01-04-2014  MK                  tag emdna-V10-00-08
       - G4DNAChemistryManager.cc: remove a G4cout in destructor causing a crash in test60
@@ -916,7 +953,7 @@ when the asked item is not found
       - Added several clear() to vectors for MT
 
 17-03-2014  SI     tag emdna-V10-00-02
-      - Modified G4DNAChampionElasticModel.cc to read 
+      - Modified G4DNAChampionElasticModel.cc to read
               high precision diff. cumulated cross section
               to be used with G4EMLOW6.36
 
@@ -924,7 +961,7 @@ when the asked item is not found
       - G4DNAMolecularMaterial: Remove unused variable
 
 12-12-2013  M.K     tag emdna-V10-00-00
-      - G4DNAMolecularMaterial is modified to prevent segmentation fault in case 
+      - G4DNAMolecularMaterial is modified to prevent segmentation fault in case
       a model is not created at initialisation time
 
 21-11-2013  V.I.         tag emdna-V09-06-22
@@ -950,7 +987,7 @@ when the asked item is not found
 
 03-10-2013  M.K.   tag emdna-V09-06-15
       - Improve MT compatibility
-      - Enhance G4DNAChemistryManager to be the main interface used 
+      - Enhance G4DNAChemistryManager to be the main interface used
       by the user - stage 1
 
 14-09-2013  M.Asai       tag emdna-V09-06-14
@@ -972,7 +1009,7 @@ when the asked item is not found
 
 25-06-2013  M.K.         tag emdna-V09-06-09
       G4MoleculeID: Rectify initialization
-      G4MoleculeCounter: Automatic switch between unique_ptr or 
+      G4MoleculeCounter: Automatic switch between unique_ptr or
       auto_ptr according to c++ std version
 
 11-06-2013  G.Cosmo         tag emdna-V09-06-08
@@ -993,7 +1030,7 @@ when the asked item is not found
             *Fix warning compilation in G4KDMap for specific gcc version
 
 24-05-2013  M.K.            tag emdna-V09-06-04
-            * Track state class updated to fix compilation errors on mac 
+            * Track state class updated to fix compilation errors on mac
       but still not in usage
 
 23-05-2013  M.K.            tag emdna-V09-06-03
@@ -1008,15 +1045,15 @@ when the asked item is not found
       * G4KDMap : pop out elements from map
 
 22-05-2013  M.K.      tag emdna-V09-06-00
-      * !!! MT !!!! Promoted to thread-global storage : 
-    --> G4DNAGenericIonManager 
+      * !!! MT !!!! Promoted to thread-global storage :
+    --> G4DNAGenericIonManager
     --> G4DNAMolecularMaterial
     --> G4DNAMolecularReactionTable
       * G4KDMap added
       * G4DNASmoluchowskiReactionModel : exception description enhanced
-      * G4ITTrackingInteractivity : "Initialize()" method added for simplify 
+      * G4ITTrackingInteractivity : "Initialize()" method added for simplify
           intialization of daughter classes
-      * G4DNAChemistryManager : AddEmptyLineInOuputFile method added  
+      * G4DNAChemistryManager : AddEmptyLineInOuputFile method added
 
 12-11-2012  M.K             tag emdna-V09-05-35
             Remove unnecessary abort() and exit(-1) previously introduced to avoid
@@ -1084,9 +1121,9 @@ when the asked item is not found
 25.06.2012  M.K      tag emdna-V09-05-21
             Fix semantic warning related to forward declaration of G4ITNavigator_Lock
       Modify molecule's name
-      
+
 21.06.2012  S.I      tag emdna-V09-05-20
-            Update of electron elastic scattering low limit 
+            Update of electron elastic scattering low limit
 
 09.06.2012  M.K      tag emdna-V09-05-19
             Fixed shadowing
@@ -1204,7 +1241,7 @@ when the asked item is not found
             Correct verbose in new models & process
 
 18.11.2011  M.K                 tag emdna-V09-04-47
-            Fix uninitialized boolean variable (fWriteFile) 
+            Fix uninitialized boolean variable (fWriteFile)
       in G4DNAChemistryManager
 
 18.11.2011  M.K                 tag emdna-V09-04-46
@@ -1258,7 +1295,7 @@ when the asked item is not found
 03.11.2011  M.K.                tag emdna-V09-04-37
             Add G4ITStepManager fVerbose
       Add dna includes in sources.cmake
-     
+
 01.11.2011  M.K.                tag emdna-V09-04-36
             Remove warnings on G4ITModelProcessor,
             G4ITTransportation, G4TrackList on Windows
@@ -1270,7 +1307,7 @@ when the asked item is not found
 31.10.2011  M.K      tag emdna-V09-04-35
             Remove obsolete G4Exception
       Remove "friend class G4KDTree" in G4KDNode
-      Remove G4VITProcessor and all relatives 
+      Remove G4VITProcessor and all relatives
       Fix windows compilation errors & warnings
 
 28.10.2011  M.K      tag emdna-V09-04-34
@@ -1288,7 +1325,7 @@ when the asked item is not found
       coverity errors.
 
 26.10.2011  M.K      tag emdna-V09-04-31
-      change std::shared_ptr to CLHEP::shared_ptr      
+      change std::shared_ptr to CLHEP::shared_ptr
 
 26.10.2011  M.K.    tag emdna-V09-04-30
       Memory leak fixes
@@ -1300,31 +1337,31 @@ when the asked item is not found
       Add chemical processes
 
 21.10.2011  M.K.    tag emdna-V09-04-28
-      Same as emdna-V09-04-27 including models/ & processes/ from 
+      Same as emdna-V09-04-27 including models/ & processes/ from
       emdna-V09-04-24
-      
+
 21.10.2011  M.K.    tag emdna-V09-04-27
       CMake fixes from emdna-V09-04-24
-      
+
 21.10.2011  M.K.    tag emdna-V09-04-26
-      Bug fixes and new dev from the previous tag      
+      Bug fixes and new dev from the previous tag
 
 21.10.2011  S. Incerti    tag emdna-V09-04-25
       Extension of ionisation by HZE proposed by Z. Francis
 
 20.10.2011  M.K.    tag emdna-V09-04-24
       Bug fixes and new dev from the previous tag
-     
+
 07.10.2011  M.K.    tag emdna-V09-04-23
-      First tag with "molecules" files     
-     
+      First tag with "molecules" files
+
 07.10.2011  M.K.    tag emdna-V09-04-22
       Add molecules+management directory
       First tag with "management" files
 
 09.09.2011  G.Folger            tag emdna-V09-04-21
-            utils/sources.cmake: remove reference to non-existant 
-       G4DNAMoleculeManager.cc 
+            utils/sources.cmake: remove reference to non-existant
+       G4DNAMoleculeManager.cc
 
 05.09.2011  A. M. M. K., S. I., tag emdna-V09-04-20
             Updated sources.make and CMakeLists.txt
@@ -1364,7 +1401,7 @@ when the asked item is not found
       G4DNADingfelderChargeIncreaseModel
       G4DNADingflederChargeDecreaseModel
       in collaboration with Ziad F.
-      - This tag includes Alfonso's upgrade 
+      - This tag includes Alfonso's upgrade
       of ionisation classes for Auger e-
 
 16.05.2011  A.Mantero,  tag emdna-V09-04-09

@@ -19,6 +19,19 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+07 April 2020. John Allison  (modeling-V10-06-02)
+* G4BoundingExtentScene.cc:
+  * Minor tidy: Use G4VisExtent::GetNullExtent (rather than
+    default constructor).
+
+04 March 2020. John Allison  (modeling-V10-06-01)
+- G4AttributeFilterT.hh:
+  o Suppress warnings while filter not fully established.
+
+12 December 2019 B. Morgan (modeling-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 19 November 2019 Gabriele Cosmo (modeling-V10-05-11)
 - Fixed more cases of implicit type conversions.
 

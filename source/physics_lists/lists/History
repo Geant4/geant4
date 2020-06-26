@@ -12,8 +12,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30-April-2020 Ben Morgan       (phys-lists-V10-06-01)
+ - Remove obsolete GRANULAR_DEPENDENCIES entries
 
-15-January-2020  Alberto Ribon (phys-lists-V10-05-05)
+15-January-2020  Alberto Ribon (phys-lists-V10-06-00)
  - LBE : updated cross sections to avoid crashes caused by the removal of
    default Gheisha cross sections, and to have consistency between elastic
    and inelastic cross sections.
@@ -22,7 +24,7 @@ introduced in the code and keeptrack of all tags.
  - FTFP_BERT_HP, QGSP_BERT_HP, INCLXXPhysicsListHelper : added (consistently)
    RadioactiveDecay to all physics lists which use NeutronHP (the rationale
    is that precision is more valuable than speed for these physics lists;
-   note that, among the reference physics lists with NeutronHP, only 
+   note that, among the reference physics lists with NeutronHP, only
    FTFP_BERT_HP, QGSP_BERT_HP, FTFP_INCLXX_HP and QGSP_INCLXX_HP did not have
    RadioactiveDecay activated by default).
 
@@ -36,21 +38,21 @@ introduced in the code and keeptrack of all tags.
 31-July-2019  Gunter Folger (phys-lists-V10-05-02)
  - Code clean-up
    - remove template mechanism
-      - except for G4GenericPhysicsList, G4PhysListStamper, 
+      - except for G4GenericPhysicsList, G4PhysListStamper,
         and INCLXXPhysicsListHelper
    - delete copy ctor and assigmnet operator
-   - for empty dtor, use =default	
+   - for empty dtor, use =default
    - move include/x.icc to src/x.cc for lists without template
    - remove SetCuts() implementation where not specialised
    - remove version number from lists
    - remove G4DataQuestionaire
-   
+
 
 25-June-2019  Dennis Wright (phys-lists-V10-05-01)
 - replace G4RadioactiveDecay with G4RadioactiveDecayBase in LBE.icc
 
 18-March-2019 V.Ivanchenko  (phys-lists-V10-05-00)
-- Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP - cut for proton is set 
+- Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP - cut for proton is set
     to zero (problem #2150) and code clean-up
 
 21-November-2018 A. Ribon  (phys-lists-V10-04-07)

@@ -27,58 +27,59 @@
 #include "G4RNGHelper.hh"
 #include "Randomize.hh"
 
-template<>
+template <>
 G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::instance = 0;
 
-template<>
+template <>
 G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::instance = 0;
 
-template<class T>
+template <class T>
 G4TemplateRNGHelper<T>* G4TemplateRNGHelper<T>::GetInstance()
 {
-  if (!instance)
+  if(!instance)
   {
     instance = new G4TemplateRNGHelper<T>();
   }
   return instance;
 }
-template<class T>
+template <class T>
 G4TemplateRNGHelper<T>* G4TemplateRNGHelper<T>::GetInstanceIfExist()
 {
   return instance;
 }
 
-template<>
+template <>
 G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::GetInstance()
 {
-  if (!instance)
+  if(!instance)
   {
     instance = new G4TemplateRNGHelper<G4long>();
   }
   return instance;
 }
-template<>
+template <>
 G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::GetInstanceIfExist()
 {
   return instance;
 }
 
-template<>
+template <>
 G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::GetInstance()
 {
-  if (!instance)
+  if(!instance)
   {
     instance = new G4TemplateRNGHelper<G4String>();
   }
   return instance;
 }
-template<>
-G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::GetInstanceIfExist()
+template <>
+G4TemplateRNGHelper<G4String>*
+G4TemplateRNGHelper<G4String>::GetInstanceIfExist()
 {
   return instance;
 }
 
-template<class T>
+template <class T>
 G4TemplateRNGHelper<T>::~G4TemplateRNGHelper()
 {
   Clear();

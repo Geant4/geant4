@@ -118,6 +118,8 @@ protected:
 
   void CheckSceneAndNotifyHandlers (G4Scene* = nullptr);
 
+  G4bool CheckView();  // False if not valid
+
   void G4VisCommandsSceneAddUnsuccessful(G4VisManager::Verbosity verbosity);
 
   void CopyGuidanceFrom

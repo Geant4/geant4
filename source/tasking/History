@@ -1,0 +1,67 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 22nd, 2020, G. Cosmo (tasking-V10-06-04)
+- Fixed recursive inclusion in G4TaskRunManager.
+
+June 18th, 2020, G. Cosmo (tasking-V10-06-03)
+- Added DLL macros for Windows build.
+- Fixed cases of static inline methods and static symbols to export
+  in G4TaskRunManager and G4RunManagerFactory. Some code cleanup for
+  use of G4 types.
+- Fixed compilation warnings for unused mutexes in G4TaskRunManager
+  and G4WorkerTaskRunManager.
+
+June 17th, 2020, G. Folger
+- Fixes for Windows: in G4TaskRunManager, replaced direct access to
+  static data by access functions.
+
+June 10th, 2020, J. Madsen
+- Updated README.md
+- generated README via `pandoc -f markdown -t plain -o README README.md`
+- generated .README.txt via `pandoc -f markdown -t latex -o .README.txt README.md`
+
+June 10th, 2020, J. Madsen (tasking-V10-06-02)
+- Fixed numberOfEventsPerTask < nworker reproducibility
+- Migrated G4RunManagerCreator to own header/source
+- cleaned up sources.cmake
+
+June 4th, 2020, J. Madsen (tasking-V10-06-01)
+- Added G4TaskRunManager constructor overload taking boolean
+  for whether to use TBB
+- Added warning if using TBB is requested but no compile support
+- Default arguments in G4TaskRunManager query G4USE_TBB environment
+  variable to set default bool
+
+May 28th, 2020, J. Madsen (tasking-V10-06-00)
+- Created
+- Added tasking classes:
+    - G4TBBTask
+    - G4TBBTaskGroup
+    - G4Task
+    - G4TaskGroup
+    - G4TaskManager
+    - G4TaskRunManager
+    - G4TaskRunManagerKernel
+    - G4ThreadPool
+    - G4UserTaskInitialization
+    - G4UserTaskQueue
+    - G4UserTaskThreadInitialization
+    - G4VTask
+    - G4VTaskGroup
+    - G4VUserTaskQueue

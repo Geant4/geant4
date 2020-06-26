@@ -6,22 +6,39 @@
 
     Hadronic physics-list/constructors/decay History
     -----------------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-June-2020 Vladimir Ivanchenko        (phys-ctor-decay-V10-06-03)
+- G4RadioactiveDecayPhysics - coherent initialisation with recent 
+    updates of initialisation of atomic de-excitation
+
+30-Apr-2020 Ben Morgan                  (phys-ctor-decay-V10-06-02)
+- Remove obsolete GRANULAR_DEPENDENCIES entries
+
+18-February-2020 Vladimir Ivanchenko    (phys-ctor-decay-V10-06-01)
+- G4DecayPhysics, G4RadioactiveDecayPhysics, G4SpinDecayPhysics,
+  G4UnknownDecayPhysics - general cleanup: removed thread local
+    pointers, do not delete objects, use C++11 keywords, use
+    standard signatures for constructors; define bulder type for
+    the main constructor G4DecayPhysics - bDecay, for others bUnknown,
+
+13-February-2020 Vladimir Ivanchenko    (phys-ctor-decay-V10-06-00)
+- G4RadioactiveDecayPhysics - add enabled flag of isomer production,
+    which is needed after fix of problem #2226
+
 25 June 2019  Dennis Wright (phys-ctor-decay-V10-05-00)
--------------------------------------------------------
 - G4RadioactiveDecayPhysics: replace G4RadioactiveDecay with
   G4RadioactiveDecayBase.  This removes the biasing functionality which
   is generally not used in the physics lists.
 
 07-July-2018 Vladimir Ivanchenko        (phys-ctor-decay-V10-04-00)
 - G4RadioactiveDecayPhysics - fixed bug reported by M.Kelsey, which
-    resolves initialisation ordering of messages to EM physics 
+    resolves initialisation ordering of messages to EM physics
 
 07-Nov-2017, Vladimir Ivanchenko        (phys-ctor-decay-V10-03-08)
 - G4RadioactiveDecayPhysics - enable AugerCascade
@@ -33,7 +50,7 @@ introduced in the code and keeptrack of all tags.
 - G4RadioactiveDecayPhysics - defined new set of default parameters:
   disable correlated gamma, enable only X-ray emission for atomic
   de-excitation, internal conversion sampling in nuclear de-excitation
-  is left fully enabled 
+  is left fully enabled
 
 12-September-2017 K.L. Genser           (phys-ctor-decay-V10-03-05)
 - G4MuonicAtomDecayPhysics use new G4MuonicAtomDecay
@@ -49,16 +66,16 @@ introduced in the code and keeptrack of all tags.
 
 23-Dec-2016, Laurent Desorgher (phys-ctor-decay-V10-03-01)
 -G4RadioactiveDecayPhysics switch on  the storing of all internal conversion data vector
-  (G4NuclearLevelData::GetInstance()->GetParameters()->SetStoreAllLevels(true)) for 
- correct gamma deexcitation modeling in radioactive decay. 
+  (G4NuclearLevelData::GetInstance()->GetParameters()->SetStoreAllLevels(true)) for
+ correct gamma deexcitation modeling in radioactive decay.
 
 16-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-03-00)
 - G4RadioactiveDecayPhysics - simplified list of EM parameters;
     use a new method AddPhysics() instead of old AddMsc()
 
 02-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-07)
-- G4RadioactiveDecayPhysics - fixed initialisation (also for the 
-    cases when radioactive decay is registered before EM physics or 
+- G4RadioactiveDecayPhysics - fixed initialisation (also for the
+    cases when radioactive decay is registered before EM physics or
     is the only physics constructor)
 
 01-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-06)
@@ -115,5 +132,5 @@ introduced in the code and keeptrack of all tags.
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 
 10-Jan-2013, Gunter Folger              (phys-ctor-decay-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/decay classes

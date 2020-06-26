@@ -23,15 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MuonicAtom class implementation
 //
-//
-// 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	History: 
-//      July 2016, K.Lynch - first implementation
-//      June 2017, K.L.Genser - added baseion, lifetimes and access functions
+// Author: K. Lynch, July 2016
+// Revision:
+// - June 2017, K.L. Genser - added baseion, lifetimes and access functions
+// --------------------------------------------------------------------
 
 #include "G4MuonicAtom.hh"
 
@@ -67,4 +64,6 @@ G4MuonicAtom::G4MuonicAtom(
   isMuonicAtom = true;
 }
 
-G4MuonicAtom::~G4MuonicAtom(){}
+G4MuonicAtom::~G4MuonicAtom()
+{
+}

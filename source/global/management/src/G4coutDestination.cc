@@ -23,50 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4coutDestination class implementation
 //
-//
-// ----------------------------------------------------------------------
-// G4coutDestination
-// ----------------------------------------------------------------------
+// Authors: H.Yoshida, M.Nagamatu, 1997
+// --------------------------------------------------------------------
 
 #include "G4coutDestination.hh"
 
 #include <algorithm>
 
-G4coutDestination::~G4coutDestination()
-{
-}
+// --------------------------------------------------------------------
+G4coutDestination::~G4coutDestination() {}
 
+// --------------------------------------------------------------------
 void G4coutDestination::ResetTransformers()
 {
-  transformersCout.clear(); transformersCerr.clear();
+  transformersCout.clear();
+  transformersCerr.clear();
 }
 
+// --------------------------------------------------------------------
 G4int G4coutDestination::ReceiveG4cout(const G4String& msg)
 {
-  std::cout<<msg<<std::flush;
+  std::cout << msg << std::flush;
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4int G4coutDestination::ReceiveG4cerr(const G4String& msg)
 {
-  std::cerr<<msg<<std::flush;
+  std::cerr << msg << std::flush;
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4int G4coutDestination::ReceiveG4cout_(const G4String& msg)
 {
   // Avoid copy of string if not necessary
-  if( transformersCout.size() > 0 )
+  if(transformersCout.size() > 0)
   {
-    G4String m = msg;
+    G4String m    = msg;
     G4bool result = true;
-    for ( const auto& el : transformersCout )
+    for(const auto& el : transformersCout)
     {
       result &= el(m);
-      if ( ! result ) break;
+      if(!result)
+        break;
     }
-    return ( result ? ReceiveG4cout(m) : 0 );
+    return (result ? ReceiveG4cout(m) : 0);
   }
   else
   {
@@ -74,15 +78,16 @@ G4int G4coutDestination::ReceiveG4cout_(const G4String& msg)
   }
 }
 
+// --------------------------------------------------------------------
 G4int G4coutDestination::ReceiveG4cerr_(const G4String& msg)
 {
-  if( transformersCout.size() > 0 )
+  if(transformersCout.size() > 0)
   {
     G4String m = msg;
-    std::for_each( transformersCerr.begin() , transformersCerr.end() ,
-                   [&m](const Transformer& t) { t(m); }
-                   // Call transforming function on message
-                 );
+    std::for_each(transformersCerr.begin(), transformersCerr.end(),
+                  [&m](const Transformer& t) { t(m); }
+                  // Call transforming function on message
+    );
     return ReceiveG4cerr(m);
   }
   else

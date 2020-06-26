@@ -49,6 +49,7 @@
 #define G4Track_h 1
 
 #include <cmath>                      // Include from 'system'
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"                 // Include from 'global'
 #include "trkdefs.hh"                 // Include DLL defs...
@@ -66,7 +67,6 @@
 
 class G4Step;                         // Forward declaration
 class G4MaterialCutsCouple;
-class G4VelocityTable;
 class G4VAuxiliaryTrackInformation;
 class G4VProcess;
 
@@ -96,7 +96,7 @@ private:
 //--------
 public: // With description
 
-// Destrcutor
+// Destructor
    ~G4Track();
 
 // Operators
@@ -260,12 +260,6 @@ public: // With description
   G4VUserTrackInformation* GetUserInformation() const;
   void SetUserInformation(G4VUserTrackInformation* aValue) const;
  
-  // Velocity table
-  static void SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin);
-  static G4double GetMaxTOfVelocityTable();
-  static G4double GetMinTOfVelocityTable();
-  static G4int    GetNbinOfVelocityTable();
-
 //---------
    private:
 //---------
@@ -321,7 +315,6 @@ public: // With description
    mutable G4double                  prev_momentum;
 
    G4bool          is_OpticalPhoton; 
-   static G4VelocityTable*&  velTable();
  
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity

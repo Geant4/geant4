@@ -12,6 +12,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-06-20 mma (activation-V10-06-01)
+- Run.cc, line 188 : correct a protection on maximum number of histos
+     
+13-05-20 mma (activation-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
 
 07-10-18 mma (activation-V10-04-04)
 - PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS

@@ -7,16 +7,32 @@
 
 /opnovice2/boxProperty RINDEX    0.000002 1.3 0.000008 1.4
 /opnovice2/boxProperty ABSLENGTH 0.000002 1   0.000005 2   0.000008 3
-/opnovice2/boxProperty FASTCOMPONENT 0.000002 1.0 0.000008 1.3
-/opnovice2/boxConstProperty FASTTIMECONSTANT 20   ## ns
+/opnovice2/boxProperty SCINTILLATIONCOMPONENT1 0.000002 1.0 0.000005 1.1 0.000008 1.3
+/opnovice2/boxProperty SCINTILLATIONCOMPONENT2 0.000002 0.8 0.000005 0.6 0.000008 0.3
+/opnovice2/boxConstProperty SCINTILLATIONTIMECONSTANT1 20    ## ns
+/opnovice2/boxConstProperty SCINTILLATIONTIMECONSTANT2 200   ## ns
+/opnovice2/boxConstProperty SCINTILLATIONRISETIME1 5    ## ns
+/opnovice2/boxConstProperty SCINTILLATIONRISETIME2 10   ## ns
 /opnovice2/boxConstProperty RESOLUTIONSCALE 1
-/opnovice2/boxProperty SCINTILLATIONYIELD     5000.
+#/opnovice2/boxProperty SCINTILLATIONYIELD     5000.
 /opnovice2/boxProperty PROTONSCINTILLATIONYIELD   0 50 10  5000
+/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD1 0.2
+/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD2 0.8
 /opnovice2/boxProperty DEUTERONSCINTILLATIONYIELD 0 50 10  5000
+/opnovice2/boxConstProperty DEUTERONSCINTILLATIONYIELD1 0.6
+/opnovice2/boxConstProperty DEUTERONSCINTILLATIONYIELD2 0.4
 /opnovice2/boxProperty TRITONSCINTILLATIONYIELD   0 50 10  5000
+/opnovice2/boxConstProperty TRITONSCINTILLATIONYIELD1 0.5
+/opnovice2/boxConstProperty TRITONSCINTILLATIONYIELD2 0.5
 /opnovice2/boxProperty ALPHASCINTILLATIONYIELD    0 50 10  50000
+/opnovice2/boxConstProperty ALPHASCINTILLATIONYIELD1 0.7
+/opnovice2/boxConstProperty ALPHASCINTILLATIONYIELD2 0.3
 /opnovice2/boxProperty IONSCINTILLATIONYIELD      0 50 10  5000
+/opnovice2/boxConstProperty IONSCINTILLATIONYIELD1 0.7
+/opnovice2/boxConstProperty IONSCINTILLATIONYIELD2 0.3
 /opnovice2/boxProperty ELECTRONSCINTILLATIONYIELD 0 5000 10  500000
+/opnovice2/boxConstProperty ELECTRONSCINTILLATIONYIELD1 0.8
+/opnovice2/boxConstProperty ELECTRONSCINTILLATIONYIELD2 0.2
 
 /opnovice2/worldProperty RINDEX    0.000002 1.01 0.000008 1.01
 /opnovice2/worldProperty ABSLENGTH 0.000002 100  0.000005 100  0.000008 100
@@ -31,8 +47,9 @@
 
 /process/optical/verbose 0
 
+/process/optical/scintillation/setEnhancedTimeConstants true
 /process/optical/scintillation/setYieldFactor 10
-/process/optical/scintillation/setExcitationRatio .5
+#/process/optical/scintillation/setExcitationRatio .5
 /process/optical/scintillation/setByParticleType true
 /process/optical/scintillation/setTrackInfo      false
 /process/optical/scintillation/setFiniteRiseTime false
@@ -48,9 +65,9 @@
 /analysis/h1/set      2  100 0 10
 /analysis/h1/setXaxis 2  "Energy [eV]"
 /analysis/h1/setYaxis 2  "Number of photons"
-/analysis/h1/set      13 400 0 200
-/analysis/h1/setXaxis 13 "Creation time [ns]"
-/analysis/h1/setYaxis 13 "Number of photons"
+/analysis/h1/set      3  400 0 200
+/analysis/h1/setXaxis 3  "Creation time [ns]"
+/analysis/h1/setYaxis 3  "Number of photons"
 
 #
 /gun/particle e-

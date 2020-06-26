@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -316,11 +316,14 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
@@ -342,7 +345,6 @@ Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
@@ -364,11 +366,6 @@ Screening factor                                   1
 /run/initialize
 
  The Box is 10 m   of Aluminium
- G4RadioactiveDecay is deprecated and will be removed in Geant4 version 11. 
- Please replace it with G4RadioactiveDecayBase if you want the unbiased radioactive deacy process.
- If you want the general process, with optional biasing, use G4Radioactivation. 
-
-  GetProcess : RadioactiveDecay
 ##/globalField/setValue 0 0 5 tesla
 #
 /testem/gun/setDefault
@@ -379,9 +376,9 @@ Screening factor                                   1
 /run/printProgress 200
 #
 /run/beamOn 2000
-=======================================================================
-======       Radioactive Decay Physics Parameters              ========
-=======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
 Max life time                                     1e+06 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           0
@@ -392,18 +389,18 @@ Auger electron emission enabled                   0
 Auger cascade enabled                             0
 Check EM cuts disabled for atomic de-excitation   0
 Use Bearden atomic level energies                 0
-=======================================================================
+======================================================================
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.89843 keV    e-  599.101 keV    e+  573.786 keV proton 100 keV
+ Energy thresholds :  gamma  6.89704 keV    e-  597.831 keV    e+  572.651 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 
@@ -425,31 +422,31 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.440000s Real=1.453337s Sys=0.010000s
+  User=2.660000s Real=2.668387s Sys=0.010000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit:   99.781 MeV
+ Total energy deposit:   99.819 MeV
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:   25.26   charged:  136.98
- Nb  steps/event   neutral:  138.99   charged:  202.92
+ Nb tracks/event   neutral:   25.23   charged:  137.09
+ Nb  steps/event   neutral:  139.79   charged:   202.9
 
  Process calls frequency :
-          CoulombScat=      1                  Rayl=  17566        Transportation=   1806
-              annihil=   2870                 compt= 209885                  conv=   2849
-                eBrem=  45904                 eIoni= 356673                   msc=    393
-                 phot=  45872 
+          CoulombScat=      2                  Rayl=  18682        Transportation=   1796
+              annihil=   2699                 compt= 210435                  conv=   2684
+                eBrem=  46204                 eIoni= 356515                   msc=    367
+                 phot=  45985 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.028 cm    rms = 3.8268 cm 
- proj Range = 9.5963 cm    rms = 3.5427 cm 
- proj/true  = 0.87014
- transverse dispersion at end = 1.6082 cm 
-      mass true Range from simulation = 29.777 g/cm2 
+ true Range = 11.261 cm    rms = 3.7628 cm 
+ proj Range = 9.8133 cm    rms = 3.4783 cm 
+ proj/true  = 0.87141
+ transverse dispersion at end = 1.6391 cm 
+      mass true Range from simulation = 30.406 g/cm2 
        from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
@@ -457,29 +454,29 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436340311393, 601456480160915675, 9686027926653626, 767742483283484663, 536406349517635873, 1354210716166253206, 1479278801726113282, 77339136822577430, 1196822274643004463, 622119559967609975, 360524712356395728, 882337799694944936, 1172945503122491279, 1030203382258304970} counter= 8sumtot= 2145391241803225569
+N=17 V[N]={1302914586364516192, 981470369480427572, 2160502346718828356, 429787929074918439, 1808516940691426334, 698748172330148046, 2191967554294380159, 261909875613768565, 98089926860429589, 889034164219562401, 1469965970424315298, 1044070984276865562, 950537578583079633, 443060070319592163, 1678330447352259494, 203574551500751827, 1524677366059732756} counter= 6sumtot= 1996257769669144729
 ---------------------------------------
 #
 /gun/particle proton
 /run/beamOn 2000
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.89843 keV    e-  599.101 keV    e+  573.786 keV proton 100 keV
+ Energy thresholds :  gamma  6.89704 keV    e-  597.831 keV    e+  572.651 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436340311393, 601456480160915675, 9686027926653626, 767742483283484663, 536406349517635873, 1354210716166253206, 1479278801726113282, 77339136822577430, 1196822274643004463, 622119559967609975, 360524712356395728, 882337799694944936, 1172945503122491279, 1030203382258304970} counter= 8sumtot= 2145391241803225569
+N=17 V[N]={1302914586364516192, 981470369480427572, 2160502346718828356, 429787929074918439, 1808516940691426334, 698748172330148046, 2191967554294380159, 261909875613768565, 98089926860429589, 889034164219562401, 1469965970424315298, 1044070984276865562, 950537578583079633, 443060070319592163, 1678330447352259494, 203574551500751827, 1524677366059732756} counter= 6sumtot= 1996257769669144729
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -494,37 +491,37 @@ N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.090000s Real=0.088230s Sys=0.000000s
+  User=0.230000s Real=0.230819s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 232.77 eV 
+ NIEL energy calculated: 203.15 eV 
 
- Nb tracks/event   neutral:       0   charged:  1.0065
- Nb  steps/event   neutral:       0   charged:  19.291
+ Nb tracks/event   neutral:       0   charged:  1.0115
+ Nb  steps/event   neutral:       0   charged:  19.233
 
  Process calls frequency :
-          CoulombScat=     40      RadioactiveDecay=     13                 hIoni=  38517
-              ionIoni=     13 
+          CoulombScat=     57  RadioactiveDecayBase=     23                 hIoni=  38364
+              ionIoni=     23 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7123 cm    rms = 415.06 um 
- proj Range = 3.704 cm    rms = 433.14 um 
- proj/true  = 0.99778
- transverse dispersion at end = 1.1193 mm 
-      mass true Range from simulation = 10.023 g/cm2 
-       from PhysicsTable (csda range) = 10.013 g/cm2 
+ true Range = 3.7118 cm    rms = 409.95 um 
+ proj Range = 3.7034 cm    rms = 431.89 um 
+ proj/true  = 0.99773
+ transverse dispersion at end = 1.1246 mm 
+      mass true Range from simulation = 10.022 g/cm2 
+       from PhysicsTable (csda range) = 10.012 g/cm2 
 ---------------------------------------------------------
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={296756897984105786, 1164811784697120503, 1171919472061075883, 421455147284807038, 1207912060203907402, 444694195851482312, 1380924689904180074, 311060254420373099, 1250571243352452049, 707429322479082321, 430172947419961621, 1538635309822350742, 208161032916273555, 1062535583841882684, 578006669208780032, 69005964079513711, 176339073698693468} counter= 10sumtot= 891176603157572525
+N=17 V[N]={417212715860133423, 797475141997434162, 1924011096229498372, 1331368251629480060, 1397920013137059242, 1535453008484133520, 442812139949888600, 2280871965286744316, 202809921529404713, 2184402420635843947, 1908678186735148794, 869640362843451000, 1093219461757191434, 760010657361176867, 732134659819899150, 652372012853418261, 1486860334026738953} counter= 4sumtot= 1570508276427093206
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

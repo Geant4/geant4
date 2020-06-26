@@ -56,6 +56,7 @@ enum G4OpticalProcessIndex {
   kMieHG,         ///< Mie scattering process index
   kBoundary,      ///< Boundary process index
   kWLS,           ///< Wave Length Shifting process index
+  kWLS2,           ///< Second Wave Length Shifting process index
   kNoProcess      ///< Number of processes, no selected process
 };
 
@@ -77,6 +78,7 @@ G4String G4OpticalProcessName(G4int processNumber)
     case kMieHG:         return "OpMieHG";
     case kBoundary:      return "OpBoundary";
     case kWLS:           return "OpWLS";
+    case kWLS2:          return "OpWLS2";
     default:             return "NoProcess";
   }
 }

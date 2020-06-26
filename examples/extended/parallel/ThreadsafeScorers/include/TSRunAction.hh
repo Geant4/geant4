@@ -34,7 +34,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef tsrunaction_hh
 #define tsrunaction_hh 1
 
@@ -50,25 +49,24 @@ class TSDetectorConstruction;
 
 class TSRunAction : public G4UserRunAction
 {
-public:
-    typedef std::tuple<G4double, G4double, G4double>  Compare_t;
-    typedef std::map<G4int, Compare_t>                IDcompare_t;
-    typedef std::map<G4String, IDcompare_t>           TypeCompare_t;
+ public:
+  typedef std::tuple<G4double, G4double, G4double> Compare_t;
+  typedef std::map<G4int, Compare_t> IDcompare_t;
+  typedef std::map<G4String, IDcompare_t> TypeCompare_t;
 
-public:
-    TSRunAction();
-    virtual ~TSRunAction();
+ public:
+  TSRunAction();
+  virtual ~TSRunAction();
 
-public:
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
-    virtual G4Run* GenerateRun();
+ public:
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
+  virtual G4Run* GenerateRun();
 
-private:
-    TSDetectorConstruction* fDetector;
-    G4String fName;
-    TypeCompare_t fTypeCompare;
-
+ private:
+  TSDetectorConstruction* fDetector;
+  G4String fName;
+  TypeCompare_t fTypeCompare;
 };
 
 #endif

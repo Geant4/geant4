@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,20 +18,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -44,12 +44,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions:
@@ -478,7 +484,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
@@ -490,7 +496,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
@@ -503,11 +509,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -517,11 +523,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -531,11 +537,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -545,11 +551,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -559,11 +565,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -573,11 +579,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -586,7 +592,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
@@ -611,7 +617,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -709,11 +716,25 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
@@ -738,9 +759,10 @@ Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1000
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
-Electron internal conversion ID                     0
+Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
 Upload data before 1st event for                Z < 9
@@ -759,7 +781,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -771,25 +793,25 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.51944 keV    e-  276.265 keV    e+  270.751 keV proton 70 keV
+ Energy thresholds :  gamma  2.52852 keV    e-  278.507 keV    e+  271.144 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_A-150_TISSUE
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.27786 keV    e-  299.466 keV    e+  293.489 keV proton 70 keV
+ Energy thresholds :  gamma  2.28683 keV    e-  301.815 keV    e+  293.837 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_BONE_COMPACT_ICRU
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  3.95224 keV    e-  397.122 keV    e+  384 keV proton 70 keV
+ Energy thresholds :  gamma  3.9341 keV    e-  397.193 keV    e+  384.112 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -826,196 +848,253 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       74    -7.71    0.868      5.56        0        0         0    Envelope initStep
-    1     76.1    -8.22     8.27      4.24     1.32     7.88      7.88    Envelope eIoni
-    2     76.3    -11.3     13.6      3.32    0.921      6.3      14.2    Envelope eIoni
-    3     75.2    -15.8     14.6      1.59     0.85     5.11      19.3    Envelope eIoni
-    4     73.3    -17.6     14.1      1.05    0.537     3.07      22.4    Envelope eIoni
-    5     73.6    -19.5     13.6       0.5    0.554     2.39      24.7    Envelope eIoni
-    6     72.9      -20     13.4     0.167    0.329     1.22        26    Envelope eBrem
-    7     72.8    -19.9     13.3         0    0.167    0.339      26.3    Envelope eIoni
+    1     76.1    -8.22     8.27      4.25     1.32     7.88      7.88    Envelope eIoni
+    2     77.7    -11.2     13.4      3.27    0.975      6.3      14.2    Envelope eIoni
+    3     79.3    -12.3     17.8      2.53    0.742     5.13      19.3    Envelope eIoni
+    4     79.5    -12.3     17.8      2.04   0.0247    0.167      19.5    Envelope eIoni
+    5     82.6    -12.8     18.4      1.51    0.527     3.63      23.1    Envelope eIoni
+    6     82.5    -14.5     19.4      1.05    0.373     2.21      25.3    Envelope eBrem
+    7     83.1    -16.2     20.1     0.573    0.479     2.38      27.7    Envelope eIoni
+    8     82.4      -17     20.1     0.192    0.381     1.66      29.4    Envelope eIoni
+    9     82.5      -17     19.9         0    0.192    0.423      29.8    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 4,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     72.9      -20     13.4   0.00433        0        0         0    Envelope initStep
-    1     73.1    -20.3     13.3         0 0.000537    0.419     0.419    Envelope phot
+    0     82.5    -14.5     19.4    0.0875        0        0         0    Envelope initStep
+    1     85.2      -21     21.5    0.0875        0     7.35      7.35    Envelope Rayl
+    2     87.4    -39.2     52.8    0.0677        0     36.2      43.6    Envelope compt
+    3     85.5    -39.5     49.9    0.0657        0     3.44        47    Envelope compt
+    4       93    -52.7    -10.8    0.0545        0     62.6       110    Envelope compt
+    5     88.5    -55.6    -6.46    0.0456        0     6.91       116    Envelope compt
+    6      100    -52.8    -8.36    0.0456        0       12       129       World Transportation
+    7      120    -47.9    -11.7    0.0456        0     20.9       149  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     88.5    -55.6    -6.46   0.00887        0        0         0    Envelope initStep
+    1     88.5    -55.6    -6.46         0  0.00887  0.00207   0.00207    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0       93    -52.7    -10.8    0.0112        0        0         0    Envelope initStep
+    1       93    -52.7    -10.8         0   0.0112  0.00311   0.00311    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     85.5    -39.5     49.9   0.00201        0        0         0    Envelope initStep
+    1     85.5    -39.5     49.9         0  0.00201  0.00017   0.00017    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 4
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     73.1    -20.3     13.3    0.0038        0        0         0    Envelope initStep
-    1     73.1    -20.3     13.3         0   0.0038 0.000482  0.000482    Envelope eIoni
+    0     87.4    -39.2     52.8    0.0198        0        0         0    Envelope initStep
+    1     87.4    -39.2     52.8         0   0.0198  0.00853   0.00853    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     75.2    -15.8     14.6     0.879        0        0         0    Envelope initStep
-    1     74.8      -17     15.7     0.474    0.405     2.14      2.14    Envelope eIoni
-    2     74.4    -17.5     16.3     0.152    0.322     1.45      3.59    Envelope eIoni
-    3     74.5    -17.6     16.4         0    0.152     0.29      3.88    Envelope eIoni
+    0     79.5    -12.3     17.8     0.466        0        0         0    Envelope initStep
+    1     79.9    -11.6       18     0.104    0.361     1.42      1.42    Envelope eIoni
+    2       80    -11.6       18         0    0.104    0.155      1.58    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     19.6    -7.39     -150         6        0        0         0    Envelope initStep
-    1     19.6    -7.39     -105     0.457        0     44.7      44.7    Envelope compt
-    2    -64.9       45     -109     0.364        0     99.5       144    Envelope compt
-    3     -100     37.3     -106     0.364        0       36       180       World Transportation
-    4     -120     32.9     -105     0.364        0     20.5       201  OutOfWorld Transportation
+    0    -45.3     66.8     -150         6        0        0         0    Envelope initStep
+    1    -45.3     66.8     -105     0.792        0     45.2      45.2    Envelope compt
+    2     -100     79.1    -77.4     0.792        0     62.4       108       World Transportation
+    3     -120     83.5    -67.3     0.792        0     22.8       130  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -45.3     66.8     -105      5.21        0        0         0    Envelope initStep
+    1    -44.6       65    -97.8      4.09     1.11     7.45      7.45    Envelope eIoni
+    2    -43.7     64.2    -92.2      3.11    0.988     6.12      13.6    Envelope eIoni
+    3    -39.7       62    -91.5      2.31    0.794     4.93      18.5    Envelope eIoni
+    4    -36.7     60.1    -91.3      1.76    0.556     3.96      22.5    Envelope eIoni
+    5    -33.9     60.2      -91      1.26    0.492     3.28      25.7    Envelope eIoni
+    6    -31.7     60.8    -91.2     0.792    0.471     2.66      28.4    Envelope eIoni
+    7    -30.8     61.7      -92     0.487    0.305     2.02      30.4    Envelope eIoni
+    8    -31.4     62.3    -91.6     0.131    0.357     1.48      31.9    Envelope eIoni
+    9    -31.3     62.4    -91.7         0    0.131    0.225      32.1    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -31.5     68.4     -150         6        0        0         0    Envelope initStep
+    1    -31.5     68.4    -79.5      2.18        0     70.5      70.5    Envelope compt
+    2    -33.4     61.6      -68      1.65        0     13.5        84    Envelope compt
+    3     -100     23.5     67.8      1.65        0      156       240       World Transportation
+    4     -120       12      109      1.65        0     46.8       287  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -64.9       45     -109    0.0931        0        0         0    Envelope initStep
-    1      -65       45     -109         0   0.0931    0.128     0.128    Envelope eIoni
+    0    -33.4     61.6      -68     0.538        0        0         0    Envelope initStep
+    1    -32.9     60.8    -67.5     0.197     0.34     1.59      1.59    Envelope eIoni
+    2    -32.9     60.6    -67.4         0    0.197    0.442      2.03    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     19.6    -7.39     -105      5.54        0        0         0    Envelope initStep
-    1     21.6       -7    -97.9      4.21     1.33     7.86      7.86    Envelope eIoni
-    2     22.3    -6.03    -93.5      2.47    0.684     4.71      12.6    Envelope eIoni
-    3       21    -5.68    -90.3      1.38     0.52     3.54      16.1    Envelope eBrem
-    4       20    -5.99    -88.2     0.868    0.509      2.8      18.9    Envelope eIoni
-    5     20.3    -6.13    -87.2     0.664    0.203     1.18      20.1    Envelope eIoni
-    6     20.5    -6.65      -86     0.079    0.585     1.82      21.9    Envelope eIoni
-    7     20.4    -6.68      -86         0    0.079   0.0963        22    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0       21    -5.68    -90.3     0.571        0        0         0    Envelope initStep
-    1    -89.9     -100     48.6     0.571        0      201       201       World Transportation
-    2     -113     -120     78.1     0.571        0     42.7       244  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     22.3    -6.03    -93.5      1.06        0        0         0    Envelope initStep
-    1     23.7    -6.01    -92.1     0.653    0.404     2.39      2.39    Envelope eIoni
-    2     24.4    -5.46    -91.2     0.208    0.445      1.8      4.19    Envelope eIoni
-    3     24.5    -5.42      -91         0    0.208    0.481      4.67    Envelope eIoni
+    0    -31.5     68.4    -79.5      3.82        0        0         0    Envelope initStep
+    1    -31.2     69.8    -74.2      2.74     1.07     5.78      5.78    Envelope eIoni
+    2    -29.6     70.4    -70.5      1.95    0.796     4.49      10.3    Envelope eIoni
+    3    -26.7     70.8    -69.2      1.33    0.618     3.51      13.8    Envelope eIoni
+    4    -25.1     70.4    -67.6      0.94    0.388     2.74      16.5    Envelope eIoni
+    5    -23.8     69.5    -66.9     0.556    0.384     2.23      18.8    Envelope eIoni
+    6    -23.3       69    -67.6     0.181    0.375     1.62      20.4    Envelope eIoni
+    7    -23.5     68.9    -67.6         0    0.181    0.384      20.8    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.4     50.5     -150         6        0        0         0    Envelope initStep
-    1    -55.4     50.5     35.1     0.324        0      185       185    Envelope compt
-    2     8.93      100      -11     0.324        0     93.3       278       World Transportation
-    3     34.9      120    -29.6     0.324        0     37.7       316  OutOfWorld Transportation
+    0    -39.4    -44.4     -150         6        0        0         0    Envelope initStep
+    1    -39.4    -44.4    -52.9      1.74        0     97.1      97.1    Envelope compt
+    2    -39.1    -72.8    -16.1     0.237        0     46.5       144    Envelope compt
+    3    -25.9    -44.8    -32.8     0.231        0     35.2       179    Envelope compt
+    4    -2.32    -5.92    -81.9     0.231        0       67       246      Shape1 Transportation
+    5    -1.77    -5.01    -83.1     0.216        0     1.56       247      Shape1 compt
+    6   -0.458     -3.6    -83.6     0.123        0     2.01       249      Shape1 compt
+    7    -3.47    -4.91    -84.6     0.123        0     3.41       253    Envelope Transportation
+    8    -77.3    -36.9     -107     0.119        0     83.5       336    Envelope compt
+    9    -95.7    -62.1     -126     0.104        0     36.5       373    Envelope compt
+   10     -100    -63.1     -124     0.104        0     4.86       378       World Transportation
+   11     -120      -68     -115     0.104        0     22.6       400  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -95.7    -62.1     -126    0.0151        0        0         0    Envelope initStep
+    1    -95.7    -62.1     -126         0   0.0151  0.00524   0.00524    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -77.3    -36.9     -107   0.00436        0        0         0    Envelope initStep
+    1    -77.3    -36.9     -107         0  0.00436  0.00061   0.00061    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -0.458     -3.6    -83.6    0.0926        0        0         0      Shape1 initStep
+    1   -0.409    -3.56    -83.7         0   0.0926     0.11      0.11      Shape1 eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -1.77    -5.01    -83.1    0.0153        0        0         0      Shape1 initStep
+    1    -1.77    -5.01    -83.1         0   0.0153  0.00463   0.00463      Shape1 eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -25.9    -44.8    -32.8   0.00604        0        0         0    Envelope initStep
+    1    -25.9    -44.8    -32.8         0  0.00604  0.00107   0.00107    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -39.1    -72.8    -16.1      1.51        0        0         0    Envelope initStep
+    1    -39.3    -74.4    -14.1      1.04    0.465     2.97      2.97    Envelope eIoni
+    2    -38.8    -73.2    -12.7     0.594    0.447     2.37      5.34    Envelope eIoni
+    3    -39.7    -72.9    -12.1     0.292    0.303      1.7      7.03    Envelope eIoni
+    4    -40.1    -72.7    -12.1         0    0.292    0.812      7.84    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.4     50.5     35.1      5.68        0        0         0    Envelope initStep
-    1    -55.1     51.1     40.2      4.74    0.924     5.27      5.27    Envelope eBrem
-    2    -54.6     53.3     46.6      3.67     1.07      6.9      12.2    Envelope eIoni
-    3    -53.7     53.8     51.9      2.81     0.86     5.62      17.8    Envelope eIoni
-    4    -53.6     52.6     56.2       2.1    0.711     4.58      22.4    Envelope eIoni
-    5      -54     51.4     59.5      1.29     0.81     3.71      26.1    Envelope eIoni
-    6    -55.2     51.4     61.4     0.436    0.449     2.48      28.6    Envelope eIoni
-    7    -55.3     51.6     62.2     0.208    0.225     1.13      29.7    Envelope eBrem
-    8    -55.6     51.7     62.2         0    0.208    0.482      30.2    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.3     51.6     62.2   0.00296        0        0         0    Envelope initStep
-    1    -55.3     51.6     62.2         0 0.000537   0.0375    0.0375    Envelope phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 5
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.3     51.6     62.2   0.00243        0        0         0    Envelope initStep
-    1    -55.3     51.6     62.2         0  0.00243  0.00023   0.00023    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.2     51.4     61.4     0.408        0        0         0    Envelope initStep
-    1    -55.5     51.4     61.5     0.318   0.0899    0.386     0.386    Envelope msc
-    2    -55.8     51.6     61.4     0.228   0.0907    0.346     0.733    Envelope msc
-    3      -56     51.8     61.5         0    0.228    0.554      1.29    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 3,   Parent ID = 2
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.1     51.1     40.2   0.00827        0        0         0    Envelope initStep
-    1    -55.1     51.4     41.7         0 0.000537     1.51      1.51    Envelope phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -55.1     51.4     41.7   0.00773        0        0         0    Envelope initStep
-    1    -55.1     51.4     41.7         0  0.00773  0.00163   0.00163    Envelope eIoni
+    0    -39.4    -44.4    -52.9      4.26        0        0         0    Envelope initStep
+    1    -39.4    -43.1    -47.1      3.34     0.92     6.31      6.31    Envelope eIoni
+    2    -41.3      -43    -42.7      2.55    0.787     5.21      11.5    Envelope eIoni
+    3    -42.3    -42.7    -38.9      1.92    0.632     4.25      15.8    Envelope eIoni
+    4      -43    -41.5    -36.1     0.984    0.934     3.48      19.3    Envelope eIoni
+    5      -43    -41.1    -34.4     0.389    0.594     2.29      21.5    Envelope eIoni
+    6    -42.4      -41    -34.5     0.117    0.273     1.21      22.8    Envelope eIoni
+    7    -42.3      -41    -34.5         0    0.117    0.188      22.9    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     29.3    -4.03     -150         6        0        0         0    Envelope initStep
-    1     29.3    -4.03    -81.4       4.5        0     68.6      68.6    Envelope compt
-    2     28.9     1.77    -57.5       4.5        0     24.6      93.2      Shape1 Transportation
-    3     28.6     6.01      -40       4.5        0       18       111    Envelope Transportation
-    4     27.2     25.4       40       4.5        0     82.3       194      Shape2 Transportation
-    5     26.1     39.9      100       4.5        0     61.7       255    Envelope Transportation
-    6     25.3     52.1      150       4.5        0     51.5       307       World Transportation
-    7     24.7     59.3      180       4.5        0     30.9       338  OutOfWorld Transportation
+    0     32.5    -70.3     -150         6        0        0         0    Envelope initStep
+    1     32.5    -70.3     60.5         6        0      211       211      Shape2 Transportation
+    2     32.5    -70.3      100         6        0     39.5       250    Envelope Transportation
+    3     32.5    -70.3      134      3.41        0     34.1       284    Envelope compt
+    4     32.3    -72.2      139      2.14        0     5.48       290    Envelope compt
+    5     36.8    -75.1      150      2.14        0       12       302       World Transportation
+    6     49.3    -83.3      180      2.14        0     33.5       335  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     32.3    -72.2      139      1.28        0        0         0    Envelope initStep
+    1     31.1    -73.1      141     0.898    0.378     2.68      2.68    Envelope eIoni
+    2     30.4    -74.6      141     0.536    0.363     2.17      4.85    Envelope eIoni
+    3     30.5    -75.5      141      0.27    0.266     1.58      6.43    Envelope eIoni
+    4     30.6    -75.5      140         0     0.27     0.72      7.15    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     29.3    -4.03    -81.4       1.5        0        0         0    Envelope initStep
-    1     29.4    -5.43    -79.3     0.922    0.574     2.95      2.95    Envelope eIoni
-    2       31    -5.63    -78.7     0.515    0.406      2.2      5.16    Envelope eIoni
-    3     31.8    -5.78    -79.3    0.0163    0.499     1.54       6.7    Envelope eIoni
-    4     31.8    -5.78    -79.3         0   0.0163  0.00601       6.7    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     73.2    -75.8     -150         6        0        0         0    Envelope initStep
-    1     73.2    -75.8      150         6        0      300       300       World Transportation
-    2     73.2    -75.8      180         6        0       30       330  OutOfWorld Transportation
+    0     32.5    -70.3      134      2.59        0        0         0    Envelope initStep
+    1     32.7    -68.7      138      1.86    0.725      4.3       4.3    Envelope eIoni
+    2     33.7    -67.7      140      1.34     0.52     3.41      7.71    Envelope eIoni
+    3     34.1    -68.2      143     0.793    0.548     2.76      10.5    Envelope eIoni
+    4     33.5    -68.4      144     0.358    0.435     2.02      12.5    Envelope eIoni
+    5     33.7    -68.9      144         0    0.358      1.1      13.6    Envelope eIoni
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.002006s Sys=0.000000s
+  User=0.010000s Real=0.002696s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 5 gamma of 6 MeV
@@ -1044,7 +1123,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -1056,25 +1135,25 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  2.519443689999526 keV    e-  276.2650242766716 keV    e+  270.7512371977519 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  2.528516002468437 keV    e-  278.5068267112636 keV    e+  271.1444301022197 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_A-150_TISSUE
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  2.277861824750698 keV    e-  299.4661435146966 keV    e+  293.4893009628447 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  2.286829921335149 keV    e-  301.8153456204805 keV    e+  293.8367825691075 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_BONE_COMPACT_ICRU
  Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
- Energy thresholds :  gamma  3.952238766484486 keV    e-  397.1221526194081 keV    e+  384.0004092871193 keV proton 69.99999999999999 keV
+ Energy thresholds :  gamma  3.934103714656939 keV    e-  397.1930874594833 keV    e+  384.1118758920303 keV proton 69.99999999999999 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 
@@ -1083,114 +1162,346 @@ Index : 3     used in the geometry : Yes
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -47.5     46.4     -150       210        0        0         0    Envelope initStep
-    1    -47.5     46.4    -92.6       185     25.1     57.4      57.4    Envelope hIoni
-    2    -47.4     46.4    -83.8       180     4.06     8.77      66.2    Envelope hIoni
+    0    -4.03    -9.54     -150       210        0        0         0    Envelope initStep
+    1    -4.03    -9.54     -128         0     9.06     21.8      21.8    Envelope protonInelastic
+    :----- List of 2ndaries - #SpawnInStep=  4(Rest= 0,Along= 0,Post= 4), #SpawnTotal=  4 ---------------
+    :     -4.03     -9.54      -128       115             proton
+    :     -4.03     -9.54      -128      66.9            neutron
+    :     -4.03     -9.54      -128      2.55              gamma
+    :     -4.03     -9.54      -128     0.534                O15
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = O15,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -4.03    -9.54     -128     0.534        0        0         0    Envelope initStep
+    1    -4.04    -9.54     -128         0    0.534  0.00163   0.00163    Envelope ionIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -4.03    -9.54     -128      2.55        0        0         0    Envelope initStep
+    1    -75.3       13    -22.7     0.276        0      129       129    Envelope compt
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :     -47.4      46.4     -83.8     0.303                 e-
+    :     -75.3        13     -22.7      2.28                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3    -47.3     46.5    -76.8       177      3.1     7.03      73.2    Envelope hIoni
+    2      -60     4.07    -24.7     0.157        0     17.9       147    Envelope compt
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    :     -47.3      46.5     -76.8     0.351                 e-
+    :       -60      4.07     -24.7     0.119                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    4    -47.2     46.6    -70.8       174     2.93     5.94      79.2    Envelope hIoni
+    3    -99.5    -23.1     9.06     0.104        0     58.7       206    Envelope compt
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
-    :     -47.2      46.6     -70.8     0.308                 e-
+    :     -99.5     -23.1      9.06    0.0524                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    5    -47.2     46.7    -62.8       169     4.61     8.02      87.2    Envelope hIoni
+    4       30     19.8     39.3    0.0915        0      140       346    Envelope compt
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
-    :     -47.2      46.7     -62.8     0.297                 e-
+    :        30      19.8      39.3    0.0127                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    6    -47.1     46.9    -58.7       167     2.07     4.08      91.3    Envelope hIoni
+    5      100    -19.8    -38.5    0.0915        0      112       457       World Transportation
+    6      120    -31.1    -60.8    0.0915        0       32       489  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0       30     19.8     39.3    0.0127        0        0         0    Envelope initStep
+    1       30     19.8     39.3         0   0.0127  0.00387   0.00387    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -99.5    -23.1     9.06    0.0524        0        0         0    Envelope initStep
+    1    -99.5    -23.2     9.07         0   0.0524   0.0473    0.0473    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      -60     4.07    -24.7     0.119        0        0         0    Envelope initStep
+    1    -59.9     4.05    -24.7         0    0.119    0.194     0.194    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -75.3       13    -22.7      2.28        0        0         0    Envelope initStep
+    1    -77.5     13.7      -20      1.72    0.561     3.92      3.92    Envelope eIoni
+    2    -79.5     12.2    -18.8      1.25    0.466     3.23      7.15    Envelope eIoni
+    3    -80.4       11    -17.1     0.855    0.396     2.64       9.8    Envelope eIoni
+    4    -81.5     11.5    -16.1     0.474    0.381     2.11      11.9    Envelope eIoni
+    5    -82.3     11.8    -16.1     0.157    0.317     1.45      13.4    Envelope eIoni
+    6    -82.3       12      -16         0    0.157    0.307      13.7    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = neutron,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -4.03    -9.54     -128      66.9        0        0         0    Envelope initStep
+    1     24.9    -41.6    -82.4         0        0     62.9      62.9    Envelope neutronInelastic
+    :----- List of 2ndaries - #SpawnInStep=  4(Rest= 0,Along= 0,Post= 4), #SpawnTotal=  4 ---------------
+    :      24.9     -41.6     -82.4      34.1            neutron
+    :      24.9     -41.6     -82.4      15.1            neutron
+    :      24.9     -41.6     -82.4     0.165              gamma
+    :      24.9     -41.6     -82.4      1.82                O15
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = O15,   Track ID = 13,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     24.9    -41.6    -82.4      1.82        0        0         0    Envelope initStep
+    1     24.9    -41.6    -82.4         0     1.82   0.0024    0.0024    Envelope ionIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 12,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     24.9    -41.6    -82.4     0.165        0        0         0    Envelope initStep
+    1     14.2    -46.1    -83.3     0.118        0     11.7      11.7    Envelope compt
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :      14.2     -46.1     -83.3     0.046                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    2     14.9    -43.4    -70.8    0.0948        0     12.8      24.5    Envelope compt
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
+    :      14.9     -43.4     -70.8    0.0236                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    3    -24.4    -18.4    -77.2    0.0746        0     47.1      71.6    Envelope compt
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
+    :     -24.4     -18.4     -77.2    0.0203                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    4    -23.4    -38.9    -86.7    0.0708        0     22.5      94.1    Envelope compt
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
+    :     -23.4     -38.9     -86.7   0.00382                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    5    -16.4    -44.2    -87.6    0.0699        0     8.79       103    Envelope compt
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  5 ---------------
-    :     -47.1      46.9     -58.7     0.315                 e-
+    :     -16.4     -44.2     -87.6  0.000849                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    7    -46.5     47.9    -20.4       147       20     38.3       130    Envelope hIoni
-    8    -46.1     48.7     10.2       130       17     30.6       160    Envelope hIoni
-    9      -46     48.8     11.6       128    0.944     1.42       162    Envelope hIoni
+    6     58.6    -69.2    -75.3    0.0672        0     80.1       183    Envelope compt
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  6 ---------------
-    :       -46      48.8      11.6     0.282                 e-
+    :      58.6     -69.2     -75.3    0.0027                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   10    -45.6     49.4     35.9       113     15.4     24.3       186    Envelope hIoni
-   11    -45.3     50.6     55.3      98.9       14     19.4       205    Envelope hIoni
-   12    -45.2       51     62.1        94     4.95      6.8       212      Shape2 Transportation
-   13    -45.2     51.3     70.3      82.5     11.5     8.21       220      Shape2 hIoni
-   14    -45.2     51.6     76.8      72.6     9.86     6.54       227      Shape2 hIoni
-   15    -45.3       52       82      63.8     8.78     5.24       232      Shape2 hIoni
-   16    -45.4     52.4     86.2      55.8     8.07     4.19       236      Shape2 hIoni
-   17    -45.4     52.7     89.5      49.3     6.46     3.32       240      Shape2 hIoni
-   18    -45.5     52.9     92.2        43     6.28     2.69       242      Shape2 hIoni
-   19    -45.6     53.1     94.3      37.6     5.38     2.14       245      Shape2 hIoni
-   20    -45.6     53.2       96      32.9     4.76     1.72       246      Shape2 hIoni
-   21    -45.5     53.2     97.4      28.4     4.47     1.38       248      Shape2 hIoni
-   22    -45.4     53.2     98.5      24.8     3.64      1.1       249      Shape2 hIoni
-   23    -45.4     53.2     99.4      21.2     3.59    0.892       250      Shape2 hIoni
-   24    -45.4     53.2      100      18.4     2.74    0.606       250    Envelope Transportation
-   25    -45.3     53.2      101      15.8     2.65    0.897       251    Envelope hIoni
-   26    -45.3     53.2      102      13.4     2.36    0.716       252    Envelope hIoni
-   27    -45.3     53.2      102      11.1     2.34    0.574       252    Envelope hIoni
-   28    -45.3     53.2      103      9.09     1.98    0.451       253    Envelope hIoni
-   29    -45.3     53.2      103      7.23     1.86    0.361       253    Envelope hIoni
-   30    -45.3     53.2      103      5.36     1.87    0.288       253    Envelope hIoni
-   31    -45.3     53.2      104      3.46     1.89    0.223       254    Envelope hIoni
-   32    -45.3     53.2      104      1.24     2.23    0.157       254    Envelope hIoni
-   33    -45.3     53.2      104         0     1.24   0.0345       254    Envelope hIoni
+    7     61.5    -67.7    -74.3    0.0548        0     3.37       186    Envelope compt
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  7 ---------------
+    :      61.5     -67.7     -74.3    0.0124                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    8     52.1    -96.7    -80.4    0.0472        0     31.1       217    Envelope compt
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  8 ---------------
+    :      52.1     -96.7     -80.4    0.0076                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    9     51.1    -90.7    -64.9    0.0472        0     16.6       234    Envelope Rayl
+   10     19.1     -100    -59.4    0.0472        0     33.7       268       World Transportation
+   11    -49.9     -120    -47.5    0.0472        0     72.8       341  OutOfWorld Transportation
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+* G4Track Information:   Particle = e-,   Track ID = 21,   Parent ID = 12
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      -46     48.8     11.6     0.282        0        0         0    Envelope initStep
-    1      -46     48.9       12         0    0.282    0.773     0.773    Envelope eIoni
+    0     52.1    -96.7    -80.4    0.0076        0        0         0    Envelope initStep
+    1     52.1    -96.7    -80.4         0   0.0076  0.00158   0.00158    Envelope eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -47.1     46.9    -58.7     0.315        0        0         0    Envelope initStep
-    1    -46.9     46.9    -58.3         0    0.315    0.913     0.913    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+* G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 12
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -47.2     46.7    -62.8     0.297        0        0         0    Envelope initStep
-    1    -47.3     46.6    -62.4         0    0.297    0.834     0.834    Envelope eIoni
+    0     61.5    -67.7    -74.3    0.0124        0        0         0    Envelope initStep
+    1     61.5    -67.7    -74.3         0   0.0124  0.00373   0.00373    Envelope eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -47.2     46.6    -70.8     0.308        0        0         0    Envelope initStep
-    1    -47.2     46.4    -70.4         0    0.308    0.882     0.882    Envelope eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+* G4Track Information:   Particle = e-,   Track ID = 19,   Parent ID = 12
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -47.3     46.5    -76.8     0.351        0        0         0    Envelope initStep
-    1    -47.4     46.7    -76.2         0    0.351     1.07      1.07    Envelope eIoni
+    0     58.6    -69.2    -75.3    0.0027        0        0         0    Envelope initStep
+    1     58.6    -69.2    -75.3         0   0.0027 0.000274  0.000274    Envelope eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+* G4Track Information:   Particle = e-,   Track ID = 18,   Parent ID = 12
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -47.4     46.4    -83.8     0.303        0        0         0    Envelope initStep
-    1    -47.6     46.3    -83.4         0    0.303    0.863     0.863    Envelope eIoni
+    0    -16.4    -44.2    -87.6  0.000849        0        0         0    Envelope initStep
+    1    -16.4    -44.2    -87.6         0 0.000849  4.6e-05   4.6e-05    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 12
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -23.4    -38.9    -86.7   0.00382        0        0         0    Envelope initStep
+    1    -23.4    -38.9    -86.7         0  0.00382 0.000488  0.000488    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 12
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -24.4    -18.4    -77.2    0.0203        0        0         0    Envelope initStep
+    1    -24.4    -18.4    -77.2         0   0.0203  0.00885   0.00885    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 12
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     14.9    -43.4    -70.8    0.0236        0        0         0    Envelope initStep
+    1     14.9    -43.4    -70.8         0   0.0236   0.0116    0.0116    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 12
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     14.2    -46.1    -83.3     0.046        0        0         0    Envelope initStep
+    1     14.1    -46.1    -83.3         0    0.046   0.0377    0.0377    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = neutron,   Track ID = 11,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     24.9    -41.6    -82.4      15.1        0        0         0    Envelope initStep
+    1     37.3    -31.8    -73.7      2.55        0     18.1      18.1    Envelope hadElastic
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :      37.3     -31.8     -73.7      12.6             proton
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    2     54.7    -18.8    -89.8      1.28        0     27.1      45.1    Envelope hadElastic
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
+    :      54.7     -18.8     -89.8      1.27             proton
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    3     64.6    -15.9    -89.1     0.147        0     10.3      55.4    Envelope hadElastic
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
+    :      64.6     -15.9     -89.1      1.13             proton
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    4     66.6    -18.1    -85.6     0.123   0.0243     4.62        60    Envelope hadElastic
+    5     68.1    -18.7    -84.5     0.098    0.025     1.95        62    Envelope hadElastic
+    6     68.8    -18.7    -83.5    0.0445   0.0534      1.2      63.2    Envelope hadElastic
+    7     68.8      -22    -77.7    0.0167   0.0278     6.76      69.9    Envelope hadElastic
+    8     68.3    -23.4    -77.4   0.00711  0.00957     1.44      71.4    Envelope hadElastic
+    9     68.4    -23.5    -77.2   0.00104  0.00607    0.246      71.6    Envelope hadElastic
+   10     67.3    -22.8      -75   0.00024 0.000797     2.58      74.2    Envelope hadElastic
+   11       65    -20.5    -75.1  9.32e-05 0.000147     3.25      77.5    Envelope hadElastic
+   12     62.6    -19.5    -72.3  2.16e-05 7.16e-05     3.86      81.3    Envelope hadElastic
+   13     64.8    -18.1    -66.6  1.29e-05 8.73e-06     6.22      87.5    Envelope hadElastic
+   14     72.7    -25.6    -53.4  6.67e-06  6.2e-06     17.1       105    Envelope hadElastic
+   15     79.5    -21.2    -41.9  5.14e-06 1.53e-06       14       119    Envelope hadElastic
+   16     80.8    -21.5    -40.5  4.47e-06 6.74e-07     1.98       121    Envelope hadElastic
+   17     82.5      -29    -44.8  7.21e-07 3.74e-06     8.82       129    Envelope hadElastic
+   18       79    -29.6    -50.6  4.86e-07 2.35e-07     6.79       136    Envelope hadElastic
+   19     75.7    -28.1      -53  4.85e-07  8.7e-10     4.37       141    Envelope hadElastic
+   20     74.8    -27.6    -53.7  4.38e-07 4.68e-08     1.28       142    Envelope hadElastic
+   21     67.9      -20    -62.3  4.87e-08 3.89e-07     13.4       155    Envelope hadElastic
+   22     68.6      -20    -63.7  3.68e-08  1.2e-08      1.6       157    Envelope hadElastic
+   23     72.6    -19.5    -66.5  2.25e-08 1.43e-08     4.91       162    Envelope hadElastic
+   24     84.2      -26    -69.7  9.59e-09 1.29e-08     13.7       176    Envelope hadElastic
+   25     84.2      -26    -69.7  9.59e-09        0        0       176    Envelope nKiller
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 24,   Parent ID = 11
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     64.6    -15.9    -89.1      1.13        0        0         0    Envelope initStep
+    1     64.6    -15.9    -89.1     0.182    0.949     0.03      0.03    Envelope hIoni
+    2     64.6    -15.8    -89.1         0    0.182  0.00282    0.0328    Envelope hIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 23,   Parent ID = 11
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     54.7    -18.8    -89.8      1.27        0        0         0    Envelope initStep
+    1     54.7    -18.8    -89.9         0     1.27   0.0361    0.0361    Envelope hIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 22,   Parent ID = 11
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     37.3    -31.8    -73.7      12.6        0        0         0    Envelope initStep
+    1     37.5    -31.6    -73.2      10.3     2.26    0.528     0.528    Envelope hIoni
+    2     37.7    -31.4    -72.9      8.37     1.95    0.415     0.943    Envelope hIoni
+    3     37.9    -31.3    -72.6       6.5     1.88    0.331      1.27    Envelope hIoni
+    4       38    -31.2    -72.4      4.48     2.02    0.261      1.54    Envelope hIoni
+    5     38.1    -31.1    -72.3      2.51     1.97    0.193      1.73    Envelope hIoni
+    6     38.1    -31.1    -72.2    0.0369     2.47     0.11      1.84    Envelope hIoni
+    7     38.1    -31.1    -72.2    0.0139    0.023 0.000929      1.84    Envelope hIoni
+    8     38.1    -31.1    -72.2         0   0.0139 0.000528      1.84    Envelope hIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = neutron,   Track ID = 10,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     24.9    -41.6    -82.4      34.1        0        0         0    Envelope initStep
+    1       56    -78.4    -81.7      33.8        0     48.2      48.2    Envelope hadElastic
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :        56     -78.4     -81.7     0.359                O16
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+    2       67     -100    -72.7      33.8        0     25.8        74       World Transportation
+    3     77.1     -120    -64.4      33.8        0     23.9      97.9  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = O16,   Track ID = 25,   Parent ID = 10
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0       56    -78.4    -81.7     0.359        0        0         0    Envelope initStep
+    1       56    -78.4    -81.7         0    0.359  0.00146   0.00146    Envelope ionIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -4.03    -9.54     -128       115        0        0         0    Envelope initStep
+    1    -6.38   -0.612     -110       102     13.2     20.1      20.1    Envelope hIoni
+    2    -7.82     4.66     -100      93.2     8.83     11.7      31.8      Shape1 Transportation
+    3    -9.41     10.1    -89.3      82.6     10.7     12.1      43.9      Shape1 hIoni
+    4    -10.8     14.5    -80.6      73.2     9.33     9.81      53.7      Shape1 hIoni
+    5      -12       18    -73.6      64.2     9.01     7.94      61.7      Shape1 hIoni
+    6      -13     20.8      -68      56.4     7.82      6.3        68      Shape1 hIoni
+    7    -13.9     23.1    -63.6      49.6      6.8     5.02        73      Shape1 hIoni
+    8    -14.5     24.9    -60.1      43.5     6.16     4.01        77      Shape1 hIoni
+    9    -15.1     26.2    -57.3      38.2     5.24     3.19      80.2      Shape1 hIoni
+   10    -15.5     27.3      -55      33.3     4.95     2.56      82.7      Shape1 hIoni
+   11    -15.8     28.2    -53.2      28.9     4.35     2.03      84.8      Shape1 hIoni
+   12    -16.1     28.9    -51.7      25.3     3.64     1.61      86.4      Shape1 hIoni
+   13    -16.3     29.4    -50.6      21.8     3.49      1.3      87.7      Shape1 hIoni
+   14    -16.5     29.9    -49.7      18.9     2.86     1.03      88.7      Shape1 hIoni
+   15    -16.6     30.2      -49      16.3     2.65    0.832      89.5      Shape1 hIoni
+   16    -16.7     30.5    -48.4      13.8     2.53     0.67      90.2      Shape1 hIoni
+   17    -16.8     30.7    -47.9      11.6     2.15    0.535      90.7      Shape1 hIoni
+   18    -16.9     30.9    -47.5      9.42     2.18    0.433      91.2      Shape1 hIoni
+   19    -16.9     31.1    -47.2       7.4     2.02    0.344      91.5      Shape1 hIoni
+   20      -17     31.2      -47      5.39     2.01    0.272      91.8      Shape1 hIoni
+   21      -17     31.3    -46.8      3.24     2.14    0.209        92      Shape1 hIoni
+   22      -17     31.3    -46.6     0.674     2.57    0.135      92.1      Shape1 hIoni
+   23      -17     31.3    -46.6    0.0558    0.618    0.011      92.1      Shape1 hIoni
+   24      -17     31.3    -46.6    0.0377   0.0181 0.000826      92.1      Shape1 hIoni
+   25      -17     31.3    -46.6         0   0.0377 0.000651      92.1      Shape1 hIoni
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000917s Sys=0.000000s
+  User=0.050000s Real=0.050683s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1 proton of 210 MeV
- Dose in scoring volume : 6.992038185941505 picoGy  +- 0 picoGy 
+ Dose in scoring volume : 0 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
@@ -1205,19 +1516,21 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 7
+Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
+Pool ID '20G4NavigationLevelRep', size : 0.00961 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00192 MB
-Pool ID '7G4Track', size : 0.00288 MB
+Pool ID '7G4Track', size : 0.00385 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.018 MB
+Pool ID '10G4Fragment', size : 0.000961 MB
+Pool ID '17G4ReactionProduct', size : 0.000961 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.023 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

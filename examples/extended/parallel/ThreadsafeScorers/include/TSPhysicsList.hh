@@ -39,10 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef tsphysicslist_hh
 #define tsphysicslist_hh 1
-
 
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
@@ -51,24 +49,23 @@
 #include <deque>
 class TSPhysicsList : public G4VUserPhysicsList
 {
-public:
-    typedef std::deque<G4VPhysicsConstructor*> PhysicsSet_t;
+ public:
+  typedef std::deque<G4VPhysicsConstructor*> PhysicsSet_t;
 
-public:
-    TSPhysicsList();
-    virtual ~TSPhysicsList();
+ public:
+  TSPhysicsList();
+  virtual ~TSPhysicsList();
 
-public:
-    static TSPhysicsList* Instance();
-    void ConstructParticle();
-    void ConstructProcess();
-    void SetCuts();
+ public:
+  static TSPhysicsList* Instance();
+  void ConstructParticle();
+  void ConstructProcess();
+  void SetCuts();
 
-private:
-    static TSPhysicsList* fgInstance;
-    PhysicsSet_t fConstructors;
-    G4double fDefaultCutValue;
-
+ private:
+  static TSPhysicsList* fgInstance;
+  PhysicsSet_t fConstructors;
+  G4double fDefaultCutValue;
 };
 
 #endif

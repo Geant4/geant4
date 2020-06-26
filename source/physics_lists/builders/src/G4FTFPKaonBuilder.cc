@@ -46,19 +46,16 @@ G4FTFPKaonBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  G4FTFModel* theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-  theCascade = new G4GeneratorPrecompoundInterface();
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+  if (quasiElastic) {
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+  } 
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
@@ -67,12 +64,6 @@ G4FTFPKaonBuilder(G4bool quasiElastic)
 
 G4FTFPKaonBuilder::~G4FTFPKaonBuilder() 
 {
-  delete theStringDecay;
-  delete theStringModel;
-  //delete theModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  //delete theHandler;
-  delete theLund;
 }
 
 void G4FTFPKaonBuilder::

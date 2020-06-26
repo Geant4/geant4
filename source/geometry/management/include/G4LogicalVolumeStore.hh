@@ -27,13 +27,13 @@
 //
 // Class description:
 //
-// Container for all LogicalVolumes, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// Container for all logical volumes, with functionality derived from
+// std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static function
 // G4LogicalVolumeStore::GetInstance()
 //
-// All LogicalVolumes should be registered with G4LogicalVolumeStore,
-// and removed on their destruction. Intended principally for UI browser.
+// All logical volumes should be registered with G4LogicalVolumeStore,
+// and removed on their destruction.
 // The underlying container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
@@ -44,8 +44,8 @@
 // static G4LogicalVolumeStore* fgInstance
 //   - Ptr to the single G4LogicalVolumeStore.
 
-// 18.04.01 - G.Cosmo, Migrated to STL vector
 // 10.07.95 - P.Kent, Initial version
+// 18.04.01 - G.Cosmo, Migrated to STL vector
 // --------------------------------------------------------------------
 #ifndef G4LOGICALVOLUMESTORE_HH
 #define G4LOGICALVOLUMESTORE_HH
@@ -57,7 +57,7 @@
 
 class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4LogicalVolume* pVolume);
       // Add the logical volume to the collection.
@@ -76,6 +76,10 @@ class G4LogicalVolumeStore : public std::vector<G4LogicalVolume*>
 
     virtual ~G4LogicalVolumeStore();
       // Destructor: takes care to delete allocated logical volumes.
+
+    G4LogicalVolumeStore(const G4LogicalVolumeStore&) = delete;
+    G4LogicalVolumeStore& operator=(const G4LogicalVolumeStore&) = delete;
+      // Forbidden copy constructor and assignment operator
 
   protected:
 

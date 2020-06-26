@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -36,6 +36,8 @@ Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 
 ---------------------------------------------------------
 G4MonopoleEquation::G4MonopoleEquation
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.01 numVar= 6
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.01 numVar= 8
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
@@ -46,7 +48,7 @@ G4MonopoleEquation::G4MonopoleEquation
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /particle/select monopole
 /particle/process/dump
-G4ProcessManager:  particle[monopole]
+G4ProcessManager: particle[monopole]
 [0]=== process[MonopoleTransportation :Transportation] Active 
   Ordering::             AtRest             AlongStep          PostStep   
                     GetPIL/    DoIt    GetPIL/    DoIt    GetPIL/    DoIt 
@@ -68,6 +70,8 @@ G4ProcessManager:  particle[monopole]
 /run/printProgress 10
 /testex/fld/setField 0.2 tesla
 G4MonopoleEquation::G4MonopoleEquation
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.01 numVar= 6
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.01 numVar= 8
 /gun/particle monopole
 /gun/energy 100 GeV
 /run/beamOn 100
@@ -465,31 +469,31 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -497,11 +501,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -511,11 +515,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -525,11 +529,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -539,11 +543,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -553,11 +557,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -567,11 +571,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -580,12 +584,12 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -605,7 +609,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -702,16 +707,30 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -731,6 +750,7 @@ Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1000
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
@@ -740,7 +760,7 @@ Upload data before 1st event for                Z < 9
 =======================================================================
 ### Run 0 starts.
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
@@ -752,11 +772,11 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.87535 keV    e-  424.726 keV    e+  410.692 keV proton 70 keV
+ Energy thresholds :  gamma  5.87994 keV    e-  424.707 keV    e+  410.72 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 start.
 ... open Root analysis file : monopole.root - done
@@ -773,7 +793,7 @@ Index : 1     used in the geometry : Yes
 
  The run consists of 100 monopole of 100 GeV
  through 10 cm  of G4_Si (density: 2.33 g/cm3 )
- Projected Range= 7.7964 cm    rms= 173.04 um 
+ Projected Range= 7.7972 cm    rms= 176.42 um 
 
 ##################################################################
 ### Stopping Powers and Cross Sections
@@ -782,7 +802,7 @@ Index : 1     used in the geometry : Yes
                restr    tot      restr    tot          p      mpl
 ##################################################################
  0.    0.001    24.5    24.5    0.633-4.04e-16         0         0
- 1.  0.00126    27.4    27.3     0.71-4.54e-16         0         0
+ 1.  0.00126    27.3    27.3     0.71-4.54e-16         0         0
  2.  0.00158    30.7    30.8    0.797-5.09e-16         0         0
  3.    0.002    34.6    34.6    0.894-5.71e-16         0         0
  4.  0.00251    38.8    38.8        1-6.41e-16         0         0
@@ -791,9 +811,9 @@ Index : 1     used in the geometry : Yes
  7.  0.00501    54.8    54.8     1.42-9.05e-16         0         0
  8.  0.00631    61.4    61.5     1.59-1.02e-15         0         0
  9.  0.00794      69    68.9     1.78-1.14e-15         0         0
-10.     0.01    77.4    77.4        2-1.28e-15         0         0
-11.   0.0126    85.3    85.2     2.25-1.43e-15         0         0
-12.   0.0158    93.3    93.5     2.52-1.61e-15         0         0
+10.     0.01    77.2    77.4        2-1.28e-15         0         0
+11.   0.0126    85.2    85.2     2.25-1.43e-15         0         0
+12.   0.0158    93.4    93.5     2.52-1.61e-15         0         0
 13.     0.02     102     102     2.83-1.81e-15         0         0
 14.   0.0251     110     110     3.17-2.03e-15         0         0
 15.   0.0316     118     118     3.56-2.27e-15         0         0
@@ -807,46 +827,46 @@ Index : 1     used in the geometry : Yes
 23.      0.2    90.6    90.6     8.94-5.71e-15         0         0
 24.    0.251    82.1    82.1       10-6.41e-15         0         0
 25.    0.316    74.2    74.2     11.3-7.19e-15         0         0
-26.    0.398    66.8    66.8     12.6-8.07e-15         0         0
+26.    0.398    66.7    66.8     12.6-8.07e-15         0         0
 27.    0.501    59.8    59.7     14.2-9.05e-15         0         0
-28.    0.631    53.3    53.4     15.9-1.02e-14         0         0
-29.    0.794    47.2    47.1     17.8-1.14e-14         0         0
+28.    0.631    53.4    53.4     15.9-1.02e-14         0         0
+29.    0.794      47    47.1     17.8-1.14e-14         0         0
 30.        1    40.8    40.8       20-1.28e-14         0         0
 31.     1.26    35.3    35.3     22.5-1.43e-14         0         0
 32.     1.58    30.4    30.4     25.2-1.61e-14         0         0
-33.        2    26.1    26.1     28.3-1.81e-14         0         0
+33.        2      26    26.1     28.3-1.81e-14         0         0
 34.     2.51    22.2    22.3     31.7-2.03e-14         0         0
 35.     3.16    18.9    18.9     35.6-2.27e-14         0         0
-36.     3.98    16.1      16     39.9-2.55e-14         0         0
-37.     5.01    13.6    13.6     44.5   0.0264         0         0
-38.     6.31    11.4    11.4     47.7      3.1         0         0
-39.     7.94    9.59    9.61     50.4     7.11         0         0
+36.     3.98    16.1      16     40.1-2.55e-14         0         0
+37.     5.01    13.6    13.6     44.3   0.0264         0         0
+38.     6.31    11.4    11.4     47.2      3.1         0         0
+39.     7.94     9.6    9.61     50.6     7.11         0         0
 40.       10    8.05    8.05     54.9     12.2         0         0
-41.     12.6     6.7    6.69     60.4     18.5         0         0
-42.     15.8    5.57    5.58     67.1     26.3         0         0
-43.       20    4.66    4.66     75.6     35.8         0         0
-44.     25.1    3.91    3.91     85.8     47.2         0         0
+41.     12.6    6.73    6.69     60.4     18.5         0         0
+42.     15.8    5.58    5.58     67.2     26.3         0         0
+43.       20    4.65    4.66     75.6     35.8         0         0
+44.     25.1    3.91    3.91     85.7     47.2         0         0
 45.     31.6    3.27    3.27       98     60.8         0         0
-46.     39.8    2.74    2.74      113       77         0         0
+46.     39.8    2.73    2.74      113       77         0         0
 47.     50.1    2.29    2.29      130     96.2         0         0
 48.     63.1    1.92    1.92      151      119         0         0
 49.     79.4    1.61    1.61      175      145         0         0
 50.      100    1.36    1.36      204      176         0         0
 51.      126    1.15    1.15      238      213         0         0
-52.      158   0.983   0.984      277      255         0         0
-53.      200   0.842   0.847      322      304   0.00775         0
-54.      251   0.724   0.736      376      361     0.024         0
-55.      316   0.628   0.646      437      427    0.0302         0
-56.      398   0.554   0.575      509      503    0.0338         0
-57.      501   0.495    0.52      588      591    0.0353         0
-58.      631   0.449   0.476      638      631     0.036         0
-59.      794   0.414   0.444      667      670    0.0364         0
-60.    1e+03   0.388   0.421      708      708    0.0368         0
+52.      158   0.984   0.984      277      255         0         0
+53.      200   0.842   0.847      322      304   0.00783         0
+54.      251   0.723   0.736      375      361    0.0239         0
+55.      316   0.629   0.646      437      427    0.0303         0
+56.      398   0.554   0.575      510      503    0.0339         0
+57.      501   0.495    0.52      580      591    0.0353         0
+58.      631    0.45   0.476      633      631     0.036         0
+59.      794   0.414   0.444      671      670    0.0364         0
+60.    1e+03   0.388   0.421      707      708    0.0368         0
 61. 1.26e+03   0.369   0.405      748      747    0.0373         0
-62. 1.58e+03   0.355   0.395      785      786    0.0379         0
+62. 1.58e+03   0.355   0.395      786      786    0.0379         0
 63.    2e+03   0.346    0.39      825      825    0.0385         0
 64. 2.51e+03    0.34   0.388      864      864    0.0391         0
-65. 3.16e+03   0.337    0.39      902      903    0.0396         0
+65. 3.16e+03   0.337    0.39      903      903    0.0396         0
 66. 3.98e+03   0.336   0.395      942      942    0.0401         0
 67. 5.01e+03   0.336   0.401      981      981    0.0406         0
 68. 6.31e+03   0.337   0.409 1.02e+03 1.02e+03    0.0409         0
@@ -854,9 +874,9 @@ Index : 1     used in the geometry : Yes
 70.    1e+04    0.34   0.426  1.1e+03  1.1e+03    0.0414         0
 71. 1.26e+04   0.342   0.435 1.14e+03 1.14e+03    0.0416         0
 72. 1.58e+04   0.344   0.445 1.18e+03 1.18e+03    0.0417         0
-73.    2e+04   0.346   0.454 1.22e+03 1.22e+03    0.0418      8.23
-74. 2.51e+04   0.348   0.457 1.24e+03 1.26e+03    0.0418      50.2
-75. 3.16e+04   0.349   0.459 1.25e+03  1.3e+03    0.0417      83.6
+73.    2e+04   0.346   0.454 1.21e+03 1.22e+03    0.0418      8.29
+74. 2.51e+04   0.348   0.457 1.24e+03 1.26e+03    0.0418      50.7
+75. 3.16e+04   0.349   0.459 1.26e+03  1.3e+03    0.0417      83.8
 76. 3.98e+04   0.351    0.46 1.28e+03 1.35e+03    0.0417       111
 77. 5.01e+04   0.352   0.462  1.3e+03 1.39e+03    0.0417       132
 78. 6.31e+04   0.353   0.463 1.32e+03 1.43e+03    0.0417       148

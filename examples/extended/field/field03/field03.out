@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -215,6 +215,8 @@ Checking overlaps for volume Absorber (G4Tubs) ... OK!
 F03FieldSetup::UpdateField> The minimal step is equal to 0.25 mm
                             Stepper Type chosen = 4
 G4ClassicalRK4 (default) is called
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.25 numVar= 6
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.25 numVar= 6
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
@@ -228,20 +230,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -254,12 +256,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -271,6 +279,8 @@ Some /vis commands (optionally) take a string to specify colour.
 F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
                             Stepper Type chosen = 4
 G4ClassicalRK4 (default) is called
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 10 numVar= 6
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 10 numVar= 6
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -664,31 +674,31 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -696,11 +706,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -710,11 +720,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -724,11 +734,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -738,11 +748,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -752,11 +762,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -766,11 +776,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -779,12 +789,12 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -804,7 +814,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -901,16 +912,30 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -930,6 +955,7 @@ Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
 Time limit for long lived isomeres (ns)             1000
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
@@ -938,7 +964,7 @@ Max 2J for sampling of angular correlations         10
 Upload data before 1st event for                Z < 9
 =======================================================================
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
@@ -947,7 +973,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -959,25 +985,25 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm   Radiator    initStep
-    1          0 fm  2.4772565 mm    21.9395 m         500 MeV0.00012209589 eV  5.0081793 cm  5.0081793 cm   Radiator  Transportation           0 fm    98.830631 um   -995.10427 um 
-    2          0 fm  2.2749136 cm    21.8395 m         500 MeV0.00024917548 eV  10.220782 cm  15.228961 cm   RadSlice  Transportation           0 fm    296.49196 um   -955.03535 um 
-    3          0 fm  6.6086173 cm    21.7395 m         500 MeV0.00026621837 eV  10.919854 cm  26.148815 cm   Radiator  Transportation           0 fm    494.15309 um    -869.3749 um 
-    4          0 fm  14.060739 cm    21.6395 m         500 MeV0.00030481745 eV  12.503127 cm  38.651942 cm   RadSlice  Transportation           0 fm    691.81427 um    -722.0755 um 
-    5          0 fm  19.745298 cm    21.5885 m         500 MeV0.00018636263 eV  7.6442989 cm  46.296241 cm   Radiator  Transportation           0 fm    792.62153 um   -609.71395 um 
-    6          0 fm  81.438088 cm    21.5885 m         500 MeV0.0016174637 eV  66.345788 cm  1.1264203 m       World  Transportation           0 fm    792.62217 um    609.71312 um 
-    7          0 fm  87.122639 cm    21.6395 m         500 MeV0.0001863625 eV  7.6442933 cm  1.2028632 m    Radiator  Transportation           0 fm     691.8151 um    722.07469 um 
-    8          0 fm  94.574764 cm    21.7395 m         500 MeV0.0003048175 eV  12.503129 cm  1.3278945 m    RadSlice  Transportation           0 fm    494.15406 um    869.37435 um 
-    9          0 fm  98.908478 cm    21.8395 m         500 MeV0.00026621847 eV  10.919858 cm  1.4370931 m    Radiator  Transportation           0 fm    296.49295 um    955.03504 um 
-   10          0 fm   1.009356 m     21.9395 m         500 MeV0.00024917519 eV   10.22077 cm  1.5393008 m    RadSlice  Transportation           0 fm     98.83189 um    995.10414 um 
-   11          0 fm  1.0118329 m     21.9895 m         500 MeV0.00012209581 eV  5.0081759 cm  1.5893826 m    Radiator  Transportation           0 fm    1.3322291 nm         1000 um 
-   12          0 fm  1.0118319 m     21.9905 m         500 MeV2.4379313e-06 eV  1.0000007 mm  1.5903826 m    Absorber  Transportation           0 fm   -1.9752789 um    999.99805 um 
-   13          0 fm  1.0117239 m          22 m         500 MeV2.316217e-05 eV   9.500754 mm  1.5998833 m  OutOfWorld  Transportation           0 fm   -20.753087 um    999.78463 um 
+    1          0 fm  2.4772565 mm    21.9395 m         500 MeV0.00012209697 eV  5.0081793 cm  5.0081793 cm   Radiator  Transportation           0 fm    98.830631 um   -995.10427 um 
+    2          0 fm  2.2749136 cm    21.8395 m         500 MeV0.00024917769 eV  10.220782 cm  15.228961 cm   RadSlice  Transportation           0 fm    296.49196 um   -955.03535 um 
+    3          0 fm  6.6086173 cm    21.7395 m         500 MeV0.00026622073 eV  10.919854 cm  26.148815 cm   Radiator  Transportation           0 fm    494.15309 um    -869.3749 um 
+    4          0 fm  14.060739 cm    21.6395 m         500 MeV0.00030482015 eV  12.503127 cm  38.651942 cm   RadSlice  Transportation           0 fm    691.81427 um    -722.0755 um 
+    5          0 fm  19.745298 cm    21.5885 m         500 MeV0.00018636429 eV  7.6442989 cm  46.296241 cm   Radiator  Transportation           0 fm    792.62153 um   -609.71395 um 
+    6          0 fm  81.438088 cm    21.5885 m         500 MeV0.001617478 eV  66.345788 cm  1.1264203 m       World  Transportation           0 fm    792.62217 um    609.71312 um 
+    7          0 fm  87.122639 cm    21.6395 m         500 MeV0.00018636415 eV  7.6442933 cm  1.2028632 m    Radiator  Transportation           0 fm     691.8151 um    722.07469 um 
+    8          0 fm  94.574764 cm    21.7395 m         500 MeV0.00030482021 eV  12.503129 cm  1.3278945 m    RadSlice  Transportation           0 fm    494.15406 um    869.37435 um 
+    9          0 fm  98.908478 cm    21.8395 m         500 MeV0.00026622083 eV  10.919858 cm  1.4370931 m    Radiator  Transportation           0 fm    296.49295 um    955.03504 um 
+   10          0 fm   1.009356 m     21.9395 m         500 MeV0.0002491774 eV   10.22077 cm  1.5393008 m    RadSlice  Transportation           0 fm     98.83189 um    995.10414 um 
+   11          0 fm  1.0118329 m     21.9895 m         500 MeV0.00012209689 eV  5.0081759 cm  1.5893826 m    Radiator  Transportation           0 fm    1.3322291 nm         1000 um 
+   12          0 fm  1.0118319 m     21.9905 m         500 MeV2.4379529e-06 eV  1.0000007 mm  1.5903826 m    Absorber  Transportation           0 fm   -1.9752789 um    999.99805 um 
+   13          0 fm  1.0117239 m          22 m         500 MeV2.3162376e-05 eV   9.500754 mm  1.5998833 m  OutOfWorld  Transportation           0 fm   -20.753087 um    999.78463 um 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001331s Sys=0.000000s
+  User=0.000000s Real=0.001284s Sys=0.000000s
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
@@ -986,7 +1012,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 --> Event 0 starts.
@@ -994,10 +1020,10 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.011085s Sys=0.000000s
+  User=0.020000s Real=0.012491s Sys=0.000000s
 Set global field value to (0,0,1000) Gauss 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
@@ -1006,21 +1032,23 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 2 starts.
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.001429s Sys=0.000000s
+  User=0.000000s Real=0.001552s Sys=0.000000s
 Set global field value to (33000,0,0) Gauss 
 F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
                             Stepper Type chosen = 4
 G4ClassicalRK4 (default) is called
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 10 numVar= 6
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 10 numVar= 6
 Set local field value to (0,0,0) Gauss 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
@@ -1029,7 +1057,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 3 starts.
 --> Event 0 starts.
@@ -1040,23 +1068,23 @@ Index : 0     used in the geometry : Yes
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm   Radiator    initStep
-    1          0 fm          0 fm    21.9395 m         500 MeV0.00012189648 eV          5 cm          5 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    2          0 fm          0 fm    21.8395 m         500 MeV0.00024379297 eV         10 cm         15 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
-    3          0 fm          0 fm    21.7395 m         500 MeV0.00024379297 eV         10 cm         25 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    4          0 fm          0 fm    21.6395 m         500 MeV0.00024379297 eV         10 cm         35 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
-    5          0 fm          0 fm    21.5885 m         500 MeV0.00012433441 eV        5.1 cm       40.1 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
-    6          0 fm  1.0118328 m     21.5885 m         500 MeV0.0038748046 eV  1.5893832 m   1.9903832 m       World  Transportation           0 fm   0.87087764 fm            1 mm 
-    7          0 fm  1.0118328 m     21.6395 m         500 MeV0.00012433441 eV        5.1 cm  2.0413832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
-    8          0 fm  1.0118328 m     21.7395 m         500 MeV0.00024379297 eV         10 cm  2.1413832 m    RadSlice  Transportation           0 fm   0.87087764 fm            1 mm 
-    9          0 fm  1.0118328 m     21.8395 m         500 MeV0.00024379297 eV         10 cm  2.2413832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
-   10          0 fm  1.0118328 m     21.9395 m         500 MeV0.00024379297 eV         10 cm  2.3413832 m    RadSlice  Transportation           0 fm   0.87087764 fm            1 mm 
-   11          0 fm  1.0118328 m     21.9895 m         500 MeV0.00012189648 eV          5 cm  2.3913832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
-   12          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379313e-06 eV  1.0000007 mm  2.3923832 m    Absorber  Transportation           0 fm   -1.9766112 um    999.99805 um 
-   13          0 fm  1.0117238 m          22 m         500 MeV2.3162171e-05 eV  9.5007541 mm   2.401884 m  OutOfWorld  Transportation           0 fm   -20.754419 um     999.7846 um 
+    1          0 fm          0 fm    21.9395 m         500 MeV0.00012189757 eV          5 cm          5 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
+    2          0 fm          0 fm    21.8395 m         500 MeV0.00024379513 eV         10 cm         15 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
+    3          0 fm          0 fm    21.7395 m         500 MeV0.00024379513 eV         10 cm         25 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
+    4          0 fm          0 fm    21.6395 m         500 MeV0.00024379513 eV         10 cm         35 cm   RadSlice  Transportation           0 fm            0 fm           -1 mm 
+    5          0 fm          0 fm    21.5885 m         500 MeV0.00012433552 eV        5.1 cm       40.1 cm   Radiator  Transportation           0 fm            0 fm           -1 mm 
+    6          0 fm  1.0118328 m     21.5885 m         500 MeV0.003874839 eV  1.5893832 m   1.9903832 m       World  Transportation           0 fm   0.87087764 fm            1 mm 
+    7          0 fm  1.0118328 m     21.6395 m         500 MeV0.00012433552 eV        5.1 cm  2.0413832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
+    8          0 fm  1.0118328 m     21.7395 m         500 MeV0.00024379513 eV         10 cm  2.1413832 m    RadSlice  Transportation           0 fm   0.87087764 fm            1 mm 
+    9          0 fm  1.0118328 m     21.8395 m         500 MeV0.00024379513 eV         10 cm  2.2413832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
+   10          0 fm  1.0118328 m     21.9395 m         500 MeV0.00024379513 eV         10 cm  2.3413832 m    RadSlice  Transportation           0 fm   0.87087764 fm            1 mm 
+   11          0 fm  1.0118328 m     21.9895 m         500 MeV0.00012189757 eV          5 cm  2.3913832 m    Radiator  Transportation           0 fm   0.87087764 fm            1 mm 
+   12          0 fm  1.0118318 m     21.9905 m         500 MeV2.4379529e-06 eV  1.0000007 mm  2.3923832 m    Absorber  Transportation           0 fm   -1.9766112 um    999.99805 um 
+   13          0 fm  1.0117238 m          22 m         500 MeV2.3162376e-05 eV  9.5007541 mm   2.401884 m  OutOfWorld  Transportation           0 fm   -20.754419 um     999.7846 um 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000331s Sys=0.000000s
+  User=0.000000s Real=0.000415s Sys=0.000000s
 /tracking/verbose 0
 #
 /calor/setAbsMat Xe20CO2
@@ -1464,7 +1492,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
@@ -1483,23 +1511,23 @@ Index : 1     used in the geometry : Yes
 Index : 2     used in the geometry : Yes
  Material : Xe20CO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  990 eV     e-  1.28943 keV    e+  1.26711 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  1.27787 keV    e+  1.25587 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 4 starts.
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.350000s Real=0.360262s Sys=0.000000s
+  User=0.340000s Real=0.343445s Sys=0.010000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 1.5 MB
+Dynamic pools deleted: 12 / Total memory freed: 2 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

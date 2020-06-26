@@ -102,8 +102,8 @@ void G4OpenInventorWinViewer::Initialise() {
 
   G4String wName = fName;
 
-  int width = 600;
-  int height = 600;
+  int width = fVP.GetWindowSizeHintX();
+  int height = fVP.GetWindowSizeHintY();;
 
   HWND parent = (HWND)fInteractorManager->GetParentInteractor ();
   if(!parent) {

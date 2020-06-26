@@ -16,6 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-05-20 A. Howard (materials-V10-06-03)
+- G4MaterialPropertiesTable, G4MaterialPropertiesIndex: add new properties
+  for allowing a second wavelength shifter in the same material
+
+24-05-20 D. Sawkey (materials-V10-06-02)
+- G4MaterialPropertiesTable, G4MaterialPropertiesIndex: add new properties
+  for scintillation allowing 3 time constants
+
+21-01-20 D. Sawkey (materials-V10-06-01)
+- G4MaterialPropertiesTable: add ConstPropertyExists(G4int)
+
+09-12-19 B. Morgan (materials-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 26-11-19 G.Cosmo (materials-V10-05-11)
 - Fixed cases of implicit type conversions from size_t to G4int.
 

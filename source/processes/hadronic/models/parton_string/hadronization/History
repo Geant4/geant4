@@ -14,10 +14,30 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-26-Apr-2020 V. Ivanchenko    (had-hadronization-V10-05-05)
-- G4QGSMFragmentation, G4LundStringFragmentation - fixed Coverity warnings
-    if fragmentation at low energy is not possible always return flag 
-    "false"; initialise with nullptr and not NULL
+10-Jun-2020 A. Ribon         (had-hadronization-V10-06-02)
+-  Improved treatment of antibaryon interactions in QGS
+   (made by Vladimir Uzhinsky):
+   1. G4QGSMFragmentation : corrected the treatment of low mass
+      diquark-antidiquark strings. In addition to this, the Mt distribution
+      of produced hadrons has been introduced.
+   2. G4VLongitudinalStringDecay : introduced in the method
+      SetMinimalStringMass a check that the strings are of allowed type:
+      quark-antiquark, diquark-antidiquark, quark-diquark and
+      antiquark-antidiquark. Introduced also for diquark-antidiquark strings
+      a special algorithm (already present for the other types of allowed
+      strings) for treating low-mass strings with masses below known hadrons.
+
+23-Apr-2020 V. Ivanchenko    (had-hadronization-V10-06-01)
+- G4VLongitudinalStringDecay, G4QGSMFragmentation
+  G4LundStringFragmentation - fixed Coverity warnings - if fragmentation 
+    at low energy is not possible always return flag "false"; initialise
+    with nullptr and not NULL
+
+24-Feb-2020 V. Ivanchenko    (had-hadronization-V10-06-00)
+- G4VLongitudinalStringDecay, G4ExcitedStringDecay, 
+  G4LundStringFragmentation - inherit from G4HadronicInteraction
+    destruction of these models end of run by hadron model store;
+    removed implementations of private operators.
 
 19-Nov-2019 A. Ribon         (had-hadronization-V10-05-04)
 -  G4ExcitedStringDecay : protection in the sampling of resonance masses

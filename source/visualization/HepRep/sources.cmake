@@ -1,43 +1,12 @@
 #-----------------------------------------------------------------------
-# sources.cmake
 # Module : G4visHepRep
 # Package: Geant4.src.G4visualization.G4visHepRep
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitely.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
 #-----------------------------------------------------------------------
-
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${ZLIB_INCLUDE_DIRS})
-include_directories(${USOLIDS_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
 
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4visHepRep
+geant4_define_module(NAME G4visHepRep
   HEADERS
     G4HepRep.hh
     G4HepRepFile.hh
@@ -106,4 +75,3 @@ GEANT4_DEFINE_MODULE(NAME G4visHepRep
   )
 
 # List any source specific properties here
-

@@ -19,9 +19,12 @@ ifdef G4VIS_BUILD_OPENGLXM_DRIVER
   G4INTY_BUILD_XT = 1
 endif
 
-# Special case: if OIX vis driver requested, G4Xt must be built.
+# Special case: if OIX/OIQt vis driver requested, G4Xt/G4Qt must be built.
 ifdef G4VIS_BUILD_OIX_DRIVER
   G4INTY_BUILD_XT  = 1
+endif
+ifdef G4VIS_BUILD_OIQT_DRIVER
+  G4INTY_BUILD_QT  = 1
 endif
 
 ifdef G4UI_BUILD_XM_SESSION

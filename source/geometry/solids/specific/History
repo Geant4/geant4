@@ -16,28 +16,42 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21-May-2020 G.Lima                 (geom-specific-V10-05-23)
-- Fix constructor signatures in G4UExtrudedSolid wrapper.
+May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
+----------------------------
+- Fix constructor signatures in G4UExtrudedSolid wrappers, to match those in G4 version.
   There were missing const and reference qualifiers in non-POD parameters.
 
-17-January-2020 E.Tcherniaev       (geom-specific-V10-05-22)
+30-April-2020 G.Cosmo              (geom-specific-V10-06-07)
+- Adopt new convention for location of headers in VecGeom for all wrappers.
+
+09-April-2020 E.Tcherniaev         (geom-specific-V10-06-06)
+- Added G4GenericTrap::GetTwistedFaceSurfaceArea().
+- testG4GenericTrap.cc: fixed test for calculation of surface area.
+- testG4ExtrudedSolid.cc: fixed assert statements for cases where
+  point flys along the surface (DistanceToIn() returns kInfinity).
+
+17-January-2020 E.Tcherniaev       (geom-specific-V10-06-05)
 - Implemented G4Tet::SetVertices(), it addresses request made
   at Geant4 Technical Forum.
 
-14-January-2020 G.Cosmo
+14-January-2020 Gabriele Cosmo     (geom-specific-V10-06-04)
 - Added protection in G4VFacet header for double definition of global
   symbols from Windows Kits code.
 
-08-January-2020 E.Tcherniaev
+08-January-2020 E.Tcherniaev       (geom-specific-V10-06-03)
 - Complete revision of G4Tet, speed up, new testG4Tet.cc.
   It also fixes issues spotted by new unit test.
 
-16-December-2019 E.Tcherniaev
+16-December-2019 E.Tcherniaev      (geom-specific-V10-06-02)
 - Complete revision of G4Ellipsoid, it fixes issues with former
   implementation, in particular it addresses problem report #2206.
-  30%-70% speed-up in all main methods 
+  30%-70% speed-up in all main methods. 
 
-10-December-2019 G.Cosmo
+11-December-2019 B.Morgan          (geom-specific-V10-06-01)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
+10-December-2019 G.Cosmo           (geom-specific-V10-06-00)
 - Re-established parameterisation mechanism for G4Tet and G4UTet which was
   removed by mistake. Addressing problem report #2209.
 

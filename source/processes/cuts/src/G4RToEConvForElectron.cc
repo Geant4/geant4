@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForElectron class implementation
 //
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file/  History:
-//    5 Oct. 2002, H.Kuirashige : Structure created based on object model
-// --------------------------------------------------------------
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
 
 #include "G4RToEConvForElectron.hh"
 #include "G4ParticleDefinition.hh"
@@ -41,67 +38,68 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+// --------------------------------------------------------------------
 G4RToEConvForElectron::G4RToEConvForElectron() 
-  : G4VRangeToEnergyConverter(),
-    Mass(0.0),
-    Z(-1.),  
-    taul(0.0),
-    ionpot(0.0),
-    ionpotlog(-1.0e-10),
-    bremfactor(0.1)
+  : G4VRangeToEnergyConverter()
 {    
-  theParticle =  G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  if (theParticle ==0) {
+  theParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  if (theParticle == nullptr )
+  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << " G4RToEConvForElectron::G4RToEConvForElectron() ";
-      G4cout << " Electron is not defined !!" << G4endl;
+    if (GetVerboseLevel()>0)
+    {
+      G4cout << "G4RToEConvForElectron::G4RToEConvForElectron() - ";
+      G4cout << "Electron is not defined !!" << G4endl;
     }
 #endif
-  } else {
+  }
+  else
+  {
     Mass = theParticle->GetPDGMass();
   }
 }
 
+// --------------------------------------------------------------------
 G4RToEConvForElectron::~G4RToEConvForElectron()
 { 
 }
 
-
-// **********************************************************************
-// ************************* ComputeLoss ********************************
-// **********************************************************************
+// ***********************************************************************
+// ************************** ComputeLoss ********************************
+// ***********************************************************************
 G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
-					    G4double KineticEnergy) 
+                                            G4double KineticEnergy) 
 {
-  const  G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
-  const  G4double Tlow=10.*keV, Thigh=1.*GeV;
+  const G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
+  const G4double Tlow=10.*keV, Thigh=1.*GeV;
 
   //  calculate dE/dx for electrons
-  if( std::fabs(AtomicNumber-Z)>0.1 ) {
+  if( std::fabs(AtomicNumber-Z)>0.1 )
+  {
     Z = AtomicNumber;
     taul = Tlow/Mass;
     ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z))/Mass;
     ionpotlog = std::log(ionpot);
   } 
 
-
   G4double tau = KineticEnergy/Mass;
   G4double dEdx;
 
-  if(tau<taul) {
+  if(tau<taul)
+  {
     G4double t1 = taul+1.;
     G4double t2 = taul+2.;
     G4double tsq = taul*taul;
     G4double beta2 = taul*t2/(t1*t1);
     G4double f = 1.-beta2+std::log(tsq/2.)
-                  +(0.5+0.25*tsq+(1.+2.*taul)*std::log(0.5))/(t1*t1);
+               +(0.5+0.25*tsq+(1.+2.*taul)*std::log(0.5))/(t1*t1);
     dEdx = (std::log(2.*taul+4.)-2.*ionpotlog+f)/beta2;
     dEdx = twopi_mc2_rcl2*Z*dEdx;
     G4double clow = dEdx*std::sqrt(taul);
     dEdx = clow/std::sqrt(KineticEnergy/Mass);
-
-  } else {
+  }
+  else
+  {
     G4double t1 = tau+1.;
     G4double t2 = tau+2.;
     G4double tsq = tau*tau;

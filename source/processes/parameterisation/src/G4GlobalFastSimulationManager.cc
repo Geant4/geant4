@@ -163,6 +163,10 @@ void G4GlobalFastSimulationManager::ShowSetup()
   for (size_t i=0; i<regions->size(); i++)
     {
       world = (*regions)[i]->GetWorldPhysical();
+      if (world == nullptr) // region does not belong to any (existing) world
+        {
+          continue;
+        }
       G4bool newWorld = true;
       for (size_t ii=0; ii<worldDone.size(); ii++) if (worldDone[ii] == world) {newWorld = false; break;}
       if (newWorld)

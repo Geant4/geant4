@@ -16,6 +16,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 May 2019 B. Morgan channeling-V10-06-00
+-----------------------------------------------------
+- Name module "G4solidstate_channeling" for use with new CMake system,
+  as old "G4phonon" name clashes with solidstate/phonon"
+
 11 March 2019 G. Cosmo channeling-V10-05-00
 -----------------------------------------------------
 - Fixed typos in printouts and comments.

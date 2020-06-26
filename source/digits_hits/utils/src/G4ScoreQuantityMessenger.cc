@@ -269,7 +269,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qCellChgCmd) {
           if ( CheckMeshPS(mesh,token[0],command) ){
               G4PSCellCharge* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSCellCharge(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSCellCharge3D(token[0]); }
@@ -293,6 +293,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
               ed<<"Cell flux for real world volume is not yet supported. Command ignored.";
               command->CommandFailed(ed);
               return;
+            } else if(shape==MeshShape::probe) {
+              ps = new G4PSCellFlux(token[0]);
             }
             ps->SetUnit(token[1]);
             mesh->SetPrimitiveScorer(ps);
@@ -314,6 +316,8 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
               ed<<"Passing cell flux for real world volume is not yet supported. Command ignored.";
               command->CommandFailed(ed);
               return;
+            } else if(shape==MeshShape::probe) {
+              ps = new G4PSPassageCellFlux(token[0]);
             }
             ps->SetUnit(token[1]);
             mesh->SetPrimitiveScorer(ps);
@@ -321,7 +325,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command==qeDepCmd) {
           if ( CheckMeshPS(mesh,token[0],command) ){
               G4PSEnergyDeposit* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps =new G4PSEnergyDeposit(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps =new G4PSEnergyDeposit3D(token[0]); }
@@ -342,7 +346,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
               mesh->GetNumberOfSegments(nSeg);
               pps->SetNumberOfSegments(nSeg);
               ps = pps;
-            } else if(shape==MeshShape::realWorldLogVol) {
+            } else if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe) {
               ps = new G4PSDoseDeposit(token[0],mesh->GetCopyNumberLevel());
             }
             ps->SetUnit(token[1]);
@@ -351,7 +355,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qnOfStepCmd) {
           if ( CheckMeshPS(mesh,token[0],command) ){
               G4PSNofStep* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSNofStep(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSNofStep3D(token[0]); }
@@ -361,7 +365,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qnOfSecondaryCmd) {
           if ( CheckMeshPS(mesh,token[0],command) ){
               G4PSNofSecondary* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSNofSecondary(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSNofSecondary3D(token[0]); }
@@ -370,7 +374,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qTrackLengthCmd) {
           if ( CheckMeshPS(mesh,token[0],command) ){
               G4PSTrackLength* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSTrackLength(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSTrackLength3D(token[0]); }
@@ -383,7 +387,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qPassCellCurrCmd){
           if( CheckMeshPS(mesh,token[0],command) ) {
               G4PSPassageCellCurrent* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSPassageCellCurrent(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSPassageCellCurrent3D(token[0]); }
@@ -393,7 +397,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qPassTrackLengthCmd){
           if( CheckMeshPS(mesh,token[0],command) ) {
               G4PSPassageTrackLength* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSPassageTrackLength(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSPassageTrackLength3D(token[0]); }
@@ -404,7 +408,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qFlatSurfCurrCmd){
           if( CheckMeshPS(mesh,token[0],command)) {
               G4PSFlatSurfaceCurrent* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSFlatSurfaceCurrent(token[0],StoI(token[1]),mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1])); }
@@ -420,7 +424,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qFlatSurfFluxCmd){
           if( CheckMeshPS(mesh, token[0],command )) {
               G4PSFlatSurfaceFlux* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSFlatSurfaceFlux(token[0],StoI(token[1]),mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])); }
@@ -487,7 +491,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qNofCollisionCmd){
           if( CheckMeshPS(mesh,token[0],command)) {
               G4PSNofCollision* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSNofCollision3D(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSNofCollision3D(token[0]); }
@@ -497,7 +501,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qPopulationCmd){
           if( CheckMeshPS(mesh,token[0],command) ) {
               G4PSPopulation* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSPopulation(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSPopulation3D(token[0]); }
@@ -507,7 +511,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qTrackCountCmd){
           if( CheckMeshPS(mesh,token[0],command)) {
               G4PSTrackCounter* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSTrackCounter(token[0],StoI(token[1]),mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSTrackCounter3D(token[0],StoI(token[1])); }
@@ -517,7 +521,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qTerminationCmd){
           if( CheckMeshPS(mesh,token[0],command)) {
               G4PSTermination* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSTermination(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSTermination3D(token[0]); }
@@ -528,7 +532,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qMinKinEAtGeneCmd){
           if( CheckMeshPS(mesh,token[0],command) ){
               G4PSMinKinEAtGeneration* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSMinKinEAtGeneration(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSMinKinEAtGeneration3D(token[0]); }
@@ -538,7 +542,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
       } else if(command== qStepCheckerCmd){
           if( CheckMeshPS(mesh,token[0],command) ){
               G4PSStepChecker* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol)
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
               { ps = new G4PSStepChecker(token[0],mesh->GetCopyNumberLevel()); }
               else
               { ps = new G4PSStepChecker3D(token[0]); }

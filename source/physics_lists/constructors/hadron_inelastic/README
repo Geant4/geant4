@@ -127,13 +127,16 @@
    - final-state:   QGSP > 14 GeV; BERT < 15 GeV
  - hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP > 3 GeV; BERT < 6 GeV
- - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - final-state:   QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; BERT < 6 GeV
+ - anti_proton and anti_neutron inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV 
+ - anti_deuteron, anti_triton, anti_He3, and anti_alpha inelastic:
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   FTFP for all energies
  - anti_hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP for all energies
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV 
  Note: it is possible to specify in the constructor the use of FTFP instead
        of QGSP for proton, neutron, charged pions and kaons;
        moreover, NeutronHP can also be activated in the constructor, in which
@@ -172,13 +175,16 @@
    - final-state:   QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; BERT < 6 GeV
  - hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP > 3 GeV; BERT < 6 GeV
- - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - final-state:   QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; BERT < 6 GeV
+ - anti_proton and anti_neutron inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV 
+ - anti_deuteron, anti_triton, anti_He3, and anti_alpha inelastic:
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   FTFP for all energies
  - anti_hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP for all energies
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV 
 
  
  G4HadronPhysicsQGSP_BERT_HP
@@ -217,13 +223,16 @@
    - final-state:   QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; BERT < 6 GeV
  - hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP > 3 GeV; BERT < 6 GeV
- - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - final-state:   QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; BERT < 6 GeV
+ - anti_proton and anti_neutron inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV
+ - anti_deuteron, anti_triton, anti_He3, and anti_alpha inelastic:
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   FTFP for all energies
  - anti_hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP for all energies
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV 
 
  
  G4HadronPhysicsQGSP_BIC_HP
@@ -244,13 +253,13 @@
 
  G4HadronPhysicsQGSP_BIC_AllHP
  -----------------------------
- Similar to G4HadronPhysicsQGSP_BIC_HP with the only difference for proton
- and light ions (d, t, He3, alpha):
+ Similar to G4HadronPhysicsQGSP_BIC_HP, but with a different treatment of
+ low-energy protons:
  ParticleHP is used (for both cross section and final state) below 200 MeV; 
  above it: Barashenkov-Glauber-Gribov inelastic cross section; 
- final-state: QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; 199 MeV < BIC < 6 GeV.
+ final-state: QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; 190 MeV < BIC < 6 GeV.
 
- 
+
  G4HadronPhysicsQGSP_FTFP_BERT
  -----------------------------
  Currently it is the same as QGSP_BERT (this was not the case before G4 10.6).
@@ -290,13 +299,13 @@
    - final-state:   FTFP > 3 GeV; BERT < 6 GeV
  - hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP > 3 GeV; BERT < 6 GeV
+   - final-state:   QGSP > 12 GeV; 3 GeV < FTFP < 25 GeV; BERT < 6 GeV
  - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   FTFP for all energies
  - anti_hyperons inelastic:
    - cross section: Glauber-Gribov
-   - final-state:   FTFP for all energies
+   - final-state:   QGSP > 12 GeV; FTFP < 25 GeV 
  Moreover, RadioactiveDecay is activated (as in all the physics lists that use HP).
  Note: the variant "M" of the Shielding physics list has a transition region
        between FTFP and BERT - for proton, neutron, pions and kaons - between

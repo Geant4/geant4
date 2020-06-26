@@ -23,104 +23,99 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Threading implementation
 //
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-// G4Threading.cc
-//
-// ---------------------------------------------------------------
-// Author: Andrea Dotti (15 Feb 2013): First Implementation
-// ---------------------------------------------------------------
+// Author: Andrea Dotti, 15 February 2013 - First Implementation
+// Revision: Jonathan R. Madsen, 21 February 2018
+// --------------------------------------------------------------------
 
 #include "G4Threading.hh"
 #include "G4AutoDelete.hh"
 #include "G4AutoLock.hh"
 #include "globals.hh"
 
-#if defined (WIN32)
-   #include <Windows.h>
+#if defined(WIN32)
+#  include <Windows.h>
 #else
-   #include <unistd.h>
-   #include <sys/types.h>
-   #include <sys/syscall.h>
+#  include <sys/syscall.h>
+#  include <sys/types.h>
+#  include <unistd.h>
 #endif
 
 #if defined(G4MULTITHREADED)
 
-#include <atomic>
+#  include <atomic>
 
 namespace
 {
-   G4ThreadLocal G4int G4ThreadID = G4Threading::MASTER_ID;
-   G4bool isMTAppType = false;
-}
+  G4ThreadLocal G4int G4ThreadID = G4Threading::MASTER_ID;
+  G4bool isMTAppType             = false;
+}  // namespace
 
 G4Pid_t G4Threading::G4GetPidId()
 {
-    // In multithreaded mode return Thread ID
-    return std::this_thread::get_id();
+  // In multithreaded mode return Thread ID
+  return std::this_thread::get_id();
 }
 
 G4int G4Threading::G4GetNumberOfCores()
 {
-    return std::thread::hardware_concurrency();
+  return std::thread::hardware_concurrency();
 }
 
-void G4Threading::G4SetThreadId(G4int value ) { G4ThreadID = value; }
+void G4Threading::G4SetThreadId(G4int value) { G4ThreadID = value; }
 G4int G4Threading::G4GetThreadId() { return G4ThreadID; }
-G4bool G4Threading::IsWorkerThread() { return (G4ThreadID>=0); }
-G4bool G4Threading::IsMasterThread() { return (G4ThreadID==MASTER_ID); }
+G4bool G4Threading::IsWorkerThread() { return (G4ThreadID >= 0); }
+G4bool G4Threading::IsMasterThread() { return (G4ThreadID == MASTER_ID); }
 
-#if defined(__linux__) || defined(_AIX)
+#  if defined(__linux__) || defined(_AIX)
 G4bool G4Threading::G4SetPinAffinity(G4int cpu, G4NativeThread& aT)
 {
-    cpu_set_t* aset = new cpu_set_t;
-    G4AutoDelete::Register(aset);
-    CPU_ZERO(aset);
-    CPU_SET(cpu, aset);
-    pthread_t& _aT = (pthread_t&) (aT);
-    return (pthread_setaffinity_np(_aT, sizeof(cpu_set_t), aset) == 0);
+  cpu_set_t* aset = new cpu_set_t;
+  G4AutoDelete::Register(aset);
+  CPU_ZERO(aset);
+  CPU_SET(cpu, aset);
+  pthread_t& _aT = (pthread_t&) (aT);
+  return (pthread_setaffinity_np(_aT, sizeof(cpu_set_t), aset) == 0);
 }
-#else //Not available for Mac, WIN,...
+#  else  // Not available for Mac, WIN,...
 G4bool G4Threading::G4SetPinAffinity(G4int, G4NativeThread&)
 {
-    G4Exception("G4Threading::G4SetPinAffinity()",
-                "NotImplemented", JustWarning,
-                "Affinity setting not available for this architecture, "
-                "ignoring...");
-    return true;
+  G4Exception("G4Threading::G4SetPinAffinity()", "NotImplemented", JustWarning,
+              "Affinity setting not available for this architecture, "
+              "ignoring...");
+  return true;
 }
-#endif
+#  endif
 
 void G4Threading::SetMultithreadedApplication(G4bool value)
 {
-    isMTAppType = value;
+  isMTAppType = value;
 }
 
-G4bool G4Threading::IsMultithreadedApplication()
-{
-    return isMTAppType;
-}
+G4bool G4Threading::IsMultithreadedApplication() { return isMTAppType; }
 
 namespace
 {
-    std::atomic_int numActThreads(0);
+  std::atomic_int numActThreads(0);
 }
-int G4Threading::WorkerThreadLeavesPool() { return numActThreads--; }
-int G4Threading::WorkerThreadJoinsPool() { return numActThreads++;}
-G4int G4Threading::GetNumberOfRunningWorkerThreads() { return numActThreads.load(); }
+G4int G4Threading::WorkerThreadLeavesPool() { return --numActThreads; }
+G4int G4Threading::WorkerThreadJoinsPool() { return ++numActThreads; }
+G4int G4Threading::GetNumberOfRunningWorkerThreads()
+{
+  return numActThreads.load();
+}
 
 #else  // Sequential mode
 
 G4Pid_t G4Threading::G4GetPidId()
 {
-    // In sequential mode return Process ID and not Thread ID
-#if defined(WIN32)
-    return GetCurrentProcessId();
-#else
-    return getpid();
-#endif
+  // In sequential mode return Process ID and not Thread ID
+#  if defined(WIN32)
+  return GetCurrentProcessId();
+#  else
+  return getpid();
+#  endif
 }
 
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
@@ -133,8 +128,8 @@ G4bool G4Threading::G4SetPinAffinity(G4int, G4NativeThread&) { return true; }
 
 void G4Threading::SetMultithreadedApplication(G4bool) {}
 G4bool G4Threading::IsMultithreadedApplication() { return false; }
-int G4Threading::WorkerThreadLeavesPool() { return 0; }
-int G4Threading::WorkerThreadJoinsPool() { return 0; }
+G4int G4Threading::WorkerThreadLeavesPool() { return 0; }
+G4int G4Threading::WorkerThreadJoinsPool() { return 0; }
 G4int G4Threading::GetNumberOfRunningWorkerThreads() { return 0; }
 
 #endif

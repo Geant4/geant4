@@ -6,12 +6,47 @@
 
                   Hadronic physics-list/builders History
                   --------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26-May-2020 Ben Morgan              (phys-builders-V10-06-06)
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
+
+27-May-2020  Alexander Howard    (phys-builders-V10-06-05)
+-  add second wavelength shifter optical process to the OrderingParameterTable
+
+18-May-2020  Vladimir Ivanchenko    (phys-builders-V10-06-04)
+-  G4HadronicBuilder - use G4PhysicsListHelper instead of G4ProcessManager,
+     check G4HadronicParameters for b- and c- particles
+
+15-May-2020  Vladimir Ivanchenko    (phys-builders-V10-06-03)
+-  G4HadronicBuilder - new utility class to build kaons, hyperons,
+     and b-, c- particles
+
+07-May-2020  Alberto Ribon          (phys-builders-V10-06-02)
+-  G4VHyperonBuilder, G4HyperonBuilder, G4HyperonQGSPBuilder : new classes
+   to allow alternative builders for hyperons (and anti-hyperons).
+   The class G4HyperonQGSPBuilder uses QGSP model to handle hyperons
+   (and anti-hyperons) at high energies.
+-  G4HyperonFTFPBuilder : now it derives from G4VHyperonBuilder
+   (but the physics behind remains unchanged, i.e. it is still based
+   on BERT and FTFP models).
+
+05-May-2020  Alberto Ribon          (phys-builders-V10-06-01)
+-  G4QGSPAntiBarionBuilder : created new class to handle anti_proton
+   and anti_neutron at high energies with QGSP.
+   For the light anti-ions (anti_deuteron, anti_triton, anti_He3, and
+   anti_alpha), currently QGSP cannot handle them, therefore FTFP is used.
+
+26-Feb-2020  Vladimir Ivanchenko    (phys-builders-V10-06-00)
+-  revison of all classes of the sub-library: removed unnecessary
+   members of classes; do not destruct models and cross sections;
+   used updated instantiation of string models; these modifications
+   should help to achieve full deletion of hadronic physics objects
+   end of run
 
 22-Oct-2019  Alberto Ribon          (phys-builders-V10-05-02)
 -  G4HyperonFTFPBuilder : replaced the Chips inelastic cross sections for
@@ -31,13 +66,13 @@ introduced in the code and keeptrack of all tags.
          G4HadronPhysicsNuBeam and "ShieldingM".
 
 31-Jul-2019  Gunter Folger          (phys-builders-V10-05-00)
--  modified G4NeutronCrossSectionXS as consequence to code cleanup 
+-  modified G4NeutronCrossSectionXS as consequence to code cleanup
    in lists (phys-lists-V10-05-02),i.e. removed G4Dataquestionaire
    from util (phys-util-V10-04-02).
 
 22-Nov-2018, Alberto Ribon          (phys-builders-V10-04-03)
--  G4QGSBinaryPionBuilder, G4QGSBinaryPiKBuilder, G4QGSPPiKBuilder, 
-   G4FTFPPionBuilder, G4BertiniPiKBuilder, G4FTFPPiKBuilder, 
+-  G4QGSBinaryPionBuilder, G4QGSBinaryPiKBuilder, G4QGSPPiKBuilder,
+   G4FTFPPionBuilder, G4BertiniPiKBuilder, G4FTFPPiKBuilder,
    G4BertiniPionBuilder, G4FTFBinaryPiKBuilder, G4BinaryPiKBuilder,
    G4INCLXXPionBuilder, G4FTFBinaryPionBuilder, G4BinaryPionBuilder,
    G4QGSPPionBuilder : use Barashenkov-Glauber-Gribov inelastic cross section
@@ -53,14 +88,14 @@ introduced in the code and keeptrack of all tags.
 - OrderingParameterTable - added gamma and e- processes
 
 06-Aug-2018, Alberto Ribon	    (phys-builders-V10-04-00)
-- G4FTFBinaryKaonBuilder, G4QGSPPionBuilder, G4FTFPProtonBuilder, 
+- G4FTFBinaryKaonBuilder, G4QGSPPionBuilder, G4FTFPProtonBuilder,
   G4FTFPPiKBuilder, G4QGSPLundStrFragmProtonBuilder, G4FTFPKaonBuilder,
-  G4FTFPNeutronBuilder, G4QGSPProtonBuilder, G4QGSPKaonBuilder, 
+  G4FTFPNeutronBuilder, G4QGSPProtonBuilder, G4QGSPKaonBuilder,
   G4QGSBinaryPionBuilder, G4FTFBinaryPiKBuilder, G4FTFBinaryNeutronBuilder,
   G4QGSBinaryProtonBuilder, G4QGSBinaryPiKBuilder, G4HyperonFTFPBuilder,
   G4FTFPAntiBarionBuilder, G4QGSBinaryKaonBuilder, G4FTFBinaryPionBuilder,
   G4QGSBinaryNeutronBuilder, G4QGSPPiKBuilder, G4FTFPPionBuilder,
-  G4QGSPNeutronBuilder, G4FTFBinaryProtonBuilder : 
+  G4QGSPNeutronBuilder, G4FTFBinaryProtonBuilder :
   replaced the explicit high-energy limit of hadronic physics with the one
   from G4HadronicParameters .
 
@@ -74,7 +109,7 @@ introduced in the code and keeptrack of all tags.
 - Coworking tag: run-V10-03-08
 
 17-Apr-2017, Andrea Dotti	    (phys-builders-V10-03-02)
-- Workaround for compilation errror for MIC (that is actually a bug in the 
+- Workaround for compilation errror for MIC (that is actually a bug in the
   compiler for MIC)
 
 13-Apr-2017, Andrea Dotti	    (phys-builders-V10-03-01)
@@ -89,11 +124,11 @@ introduced in the code and keeptrack of all tags.
 - OrderingParameterTable - disable msc PostStep
 
 18-Jan-2016, Alberto Ribon          (phys-builders-V10-02-00)
-- G4NeutronHPBuilder : used the name "NeutronHPInelastic" 
+- G4NeutronHPBuilder : used the name "NeutronHPInelastic"
   (instead of "ParticleHPInelastic")
 
 19-Nov-2015, Alberto Ribon          (phys-builders-V10-01-05)
-- G4NeutronHPBuilder : kept only the header file, with a 
+- G4NeutronHPBuilder : kept only the header file, with a
   typedef to G4NeutronPHPBuilder
 
 05-Nov-2015, Alberto Ribon          (phys-builders-V10-01-04)
@@ -107,7 +142,7 @@ introduced in the code and keeptrack of all tags.
 - Coverity fixes
 
 17-March-2015, Vladimir Ivanchenko  (phys-builders-V10-01-01)
-- G4AlphaBuilder, G4AlphaPHPBuilder, G4DeuteronBuilder, 
+- G4AlphaBuilder, G4AlphaPHPBuilder, G4DeuteronBuilder,
   G4DeuteronPHPBuilder, G4He3Builder, G4He3PHPBuilder,
   G4NeutronHPBuilder, G4NeutronLENDBuilder, G4NeutronPHPBuilder,
   G4ProtonPHPBuilder, G4TritonBuilder, G4TritonPHPBuilder
@@ -121,7 +156,7 @@ introduced in the code and keeptrack of all tags.
 
 12-Nov-2014, G.Folger               (phys-builders-V10-00-07)
 - remove reference to G4INCLXXPiKBuilder.{hh,cc} from sources.cmake
- 
+
 07-Nov-2014, P. Arce          (phys-builders-V10-00-06)
 - Add builders for particle_hp physics list
 
@@ -133,14 +168,14 @@ introduced in the code and keeptrack of all tags.
 - In all builders do not create a new instance of G4PreCompoundModel
     and G4ExcitationHandler to reduce number of its instances.
 - Do not delete processes/models/cross sections in destructors
-    of builders 
+    of builders
 
 03-June-2014, Julia Yarba               (phys-builders-V10-00-03)
 - Add G4QGSPLundStrFragmProtonBuilder(.hh and .cc) which outfits
   QGSP model with G4 LundStringFragmentation object (instead of the
   older G4QGSMFfragmentation); this appears to give better agreement
   with data at the energies above 100GeV (tested for proton+C)
-- Set minimum energy for G4QGSPLundStrFragmProtonBuilder at 100GeV 
+- Set minimum energy for G4QGSPLundStrFragmProtonBuilder at 100GeV
 
 27-May-2014, Davide Mancusi             (phys-builders-V10-00-02)
 - Convert G4INCLXXPiKBuilder to G4INCLXXPionBuilder.
@@ -166,7 +201,7 @@ introduced in the code and keeptrack of all tags.
 
 30-Oct-2013, Alberto Ribon              (phys-builders-V09-06-10)
 - Coverity fixes (removed variables that are not needed) in the
-  following classes: G4QGSBuilder, G4QGSPPiKBuilder, 
+  following classes: G4QGSBuilder, G4QGSPPiKBuilder,
   G4QGSPNeutronBuilder, G4QGSPPionBuilder, and G4QGSPProtonBuilder.
 
 04-Oct-2013, Davide Mancusi             (phys-builders-V09-06-09)
@@ -205,6 +240,6 @@ introduced in the code and keeptrack of all tags.
 - GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
 
 10-Jan-2013, Gunter Folger              (phys-builders-V09-06-00)
-- new directory structure introduced. 
-   builders directory only keeps hadronic builders, hadronic constructors moved to 
+- new directory structure introduced.
+   builders directory only keeps hadronic builders, hadronic constructors moved to
    constructors/hadron_inelastic

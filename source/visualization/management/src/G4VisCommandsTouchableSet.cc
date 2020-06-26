@@ -82,18 +82,6 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceAuxEdgeVisible->SetParameterName("forceAuxEdgeVisible", omitable = true);
   fpCommandSetForceAuxEdgeVisible->SetDefaultValue(true);
 
-  fpCommandSetLineSegmentsPerCircle = new G4UIcmdWithAnInteger
-  ("/vis/touchable/set/lineSegmentsPerCircle", this);
-  fpCommandSetLineSegmentsPerCircle->SetGuidance
-    ("For current touchable, set number of line segments per circle, the"
-     "\nprecision with which a curved line or surface is represented by a"
-     "\npolygon or polyhedron, regardless of the view parameters."
-     "\nNegative to pick up G4Polyhedron default value.");
-  fpCommandSetLineSegmentsPerCircle->SetGuidance
-  ("Use \"/vis/set/touchable\" to set current touchable.");
-  fpCommandSetLineSegmentsPerCircle->SetParameterName("lineSegmentsPerCircle", omitable = true);
-  fpCommandSetLineSegmentsPerCircle->SetDefaultValue(0);
-  
   fpCommandSetForceCloud = new G4UIcmdWithABool
   ("/vis/touchable/set/forceCloud", this);
   fpCommandSetForceCloud->SetGuidance
@@ -121,6 +109,18 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceWireframe->SetParameterName("forceWireframe", omitable = true);
   fpCommandSetForceWireframe->SetDefaultValue(true);
 
+  fpCommandSetLineSegmentsPerCircle = new G4UIcmdWithAnInteger
+  ("/vis/touchable/set/lineSegmentsPerCircle", this);
+  fpCommandSetLineSegmentsPerCircle->SetGuidance
+    ("For current touchable, set number of line segments per circle, the"
+     "\nprecision with which a curved line or surface is represented by a"
+     "\npolygon or polyhedron, regardless of the view parameters."
+     "\nNegative to pick up G4Polyhedron default value.");
+  fpCommandSetLineSegmentsPerCircle->SetGuidance
+  ("Use \"/vis/set/touchable\" to set current touchable.");
+  fpCommandSetLineSegmentsPerCircle->SetParameterName("lineSegmentsPerCircle", omitable = true);
+  fpCommandSetLineSegmentsPerCircle->SetDefaultValue(0);
+
   fpCommandSetLineStyle = new G4UIcmdWithAString
   ("/vis/touchable/set/lineStyle", this);
   fpCommandSetLineStyle->SetGuidance("Set line style of current touchable drawing.");
@@ -141,13 +141,11 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetNumberOfCloudPoints = new G4UIcmdWithAnInteger
   ("/vis/touchable/set/numberOfCloudPoints", this);
   fpCommandSetNumberOfCloudPoints->SetGuidance
-  ("For current touchable, set number of line segments per circle, the"
-   "\nprecision with which a curved line or surface is represented by a"
-   "\npolygon or polyhedron, regardless of the view parameters."
-   "\nNegative to pick up G4Polyhedron default value.");
+  ("For current touchable, set number of cloud points for cloud drawing."
+   "\n<= 0 means under control of viewer.");
   fpCommandSetNumberOfCloudPoints->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
-  fpCommandSetNumberOfCloudPoints->SetParameterName("lineSegmentsPerCircle", omitable = true);
+  fpCommandSetNumberOfCloudPoints->SetParameterName("numberOfCloudPoints", omitable = true);
   fpCommandSetNumberOfCloudPoints->SetDefaultValue(0);
 
   fpCommandSetVisibility = new G4UIcmdWithABool

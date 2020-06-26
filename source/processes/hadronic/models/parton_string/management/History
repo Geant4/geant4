@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08-Mar-2020 V. Ivanchenko  hadr-partonstring-mgt-V10-06-01
+-  G4VParticipants, G4VPartonStringModel, G4VStringFragmentation,
+   G4StringModel - clean-up: removed unused methods, delete
+     operators, use C++11 keywords
+
+24-Feb-2020 V. Ivanchenko  hadr-partonstring-mgt-V10-06-00
+-  G4VStringFragmentation : use inheritance from G4HadronicInteraction;
+     removed implementations of private operators.
+
 28-Nov-2019 A. Ribon       hadr-partonstring-mgt-V10-05-02
 -  G4VPartonStringModel : fixed bug (use of "=" instead of "==" in
    if-statement, found by Coverity) in the Scatter method.

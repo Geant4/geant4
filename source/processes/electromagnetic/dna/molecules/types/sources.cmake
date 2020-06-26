@@ -34,21 +34,31 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-moltypes
     HEADERS
         G4Electron_aq.hh
+	G4FakeMolecule.hh
         G4H2.hh
         G4H2O2.hh
         G4H2O.hh
         G4H3O.hh
+	G4HO2.hh
         G4Hydrogen.hh
+	G4O2.hh
+	G4O3.hh
         G4OH.hh
+	G4Oxygen.hh
         G4DNAMolecule.hh
     SOURCES
         G4Electron_aq.cc
+	G4FakeMolecule.cc
         G4H2.cc
         G4H2O2.cc
         G4H2O.cc
         G4H3O.cc
+	G4HO2.cc
         G4Hydrogen.cc
+	G4O2.cc
+	G4O3.cc
         G4OH.cc
+	G4Oxygen.cc
         G4DNAMolecule.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng

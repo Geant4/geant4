@@ -12,6 +12,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-06-20 mma (exhadr06-V10-06-01)
+- HistoManager, TrackingAction : plot particle energy at creation
+     
+08-05-20 mma (exhadr06-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
 
 04-10-18 mma (exhadr06-V10-04-04)
 - PhysicsList : use G4IonPhysicsXS

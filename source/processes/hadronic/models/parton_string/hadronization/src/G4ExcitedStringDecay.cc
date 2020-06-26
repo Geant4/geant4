@@ -28,62 +28,34 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4KineticTrack.hh"
+#include "G4LundStringFragmentation.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 #include "G4SampleResonance.hh"
 
 //#define debug_G4ExcitedStringDecay
 //#define debug_G4ExcitedStringCorr
 
-
-G4ExcitedStringDecay::G4ExcitedStringDecay() : G4VStringFragmentation(),theStringDecay(0)
-{}
-
-
-G4ExcitedStringDecay::G4ExcitedStringDecay(G4VLongitudinalStringDecay * aStringDecay)
-: G4VStringFragmentation(),
-  theStringDecay(aStringDecay)
-{}
-
-
-G4ExcitedStringDecay::G4ExcitedStringDecay(const G4ExcitedStringDecay &)
-: G4VStringFragmentation(),
-  theStringDecay(0)
+G4ExcitedStringDecay::G4ExcitedStringDecay(G4VLongitudinalStringDecay* ptr)
+  : G4VStringFragmentation(), theStringDecay(ptr)
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay::copy ctor not accessible");
-} 
-
+  if(!ptr) { 
+    G4HadronicInteraction* p =
+      G4HadronicInteractionRegistry::Instance()->FindModel("LundStringFragmentation");
+    theStringDecay = static_cast<G4VLongitudinalStringDecay*>(p);
+    if(!theStringDecay) { theStringDecay = new G4LundStringFragmentation(); }
+  } 
+  SetModelName(theStringDecay->GetModelName());
+}
 
 G4ExcitedStringDecay::~G4ExcitedStringDecay()
-{
-}
-
-
-const G4ExcitedStringDecay & G4ExcitedStringDecay::operator=(const G4ExcitedStringDecay &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4ExcitedStringDecay::operator==(const G4ExcitedStringDecay &) const
-{
-  return false;
-}
-
-
-G4bool G4ExcitedStringDecay::operator!=(const G4ExcitedStringDecay &) const
-{
-  return true;
-}
-
+{}
 
 G4KineticTrackVector *G4ExcitedStringDecay::FragmentString(const G4ExcitedString &theString)
 {
- if ( theStringDecay == NULL ) theStringDecay=new G4LundStringFragmentation();
- return theStringDecay->FragmentString(theString);
+  return theStringDecay->FragmentString(theString);
 }
 
-	
 G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStringVector * theStrings)
 {
   G4LorentzVector KTsum(0.,0.,0.,0.);

@@ -29,8 +29,7 @@
 #ifndef G4SOQT_HH
 #define G4SOQT_HH
 
-#if defined(G4VIS_BUILD_OIQT_DRIVER)
-//#if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
+#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
 
 #include "G4VInteractorManager.hh"
 
@@ -39,9 +38,9 @@ class QString;
 
 // Class description :
 //
-// G4SoQt : a singleton to handle Open Inventor visualization 
-// drivers built over Qt. It permits to have one Qt main loop for 
-// the whole application. The SoQt toolkit is inited in the 
+// G4SoQt : a singleton to handle Open Inventor visualization
+// drivers built over Qt. It permits to have one Qt main loop for
+// the whole application. The SoQt toolkit is inited in the
 // constructor. It is done once for the whole application.
 //
 // Class description - end :
@@ -55,13 +54,13 @@ public:
   void* GetEvent();
   void FlushAndWaitExecution();
   void SecondaryLoop();
-  virtual ~G4SoQt();                     
+  virtual ~G4SoQt();
   bool IsExternalApp();
 
 private:
   G4SoQt(const G4SoQt&);
   G4SoQt();
-  //  G4SoQt(int, char**, char*);                     
+  //  G4SoQt(int, char**, char*);
   G4SoQt& operator=(const G4SoQt&);
   static G4SoQt* instance; // Pointer to single instance.
   //  int    argn;

@@ -166,13 +166,13 @@ void G4EmModelActivator::ActivateEmOptions()
   G4VEmModel* mod;
 
   // high energy limit for low-energy e+- model of msc
-  G4double mscEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
+  G4double mscEnergyLimit = theParameters->MscEnergyLimit();
 
   // high energy limit for Livermore and Penelope models
   G4double highEnergyLimit = 1*GeV;
 
   // general high energy limit
-  G4double highEnergy = 100*TeV;
+  G4double highEnergy = theParameters->MaxKinEnergy();
 
   for(G4int i=0; i<nreg; ++i) {
     G4String reg = regnamesPhys[i];
@@ -250,15 +250,9 @@ void G4EmModelActivator::ActivateEmOptions()
 
     } else if("G4EmStandard_opt4" == typesPhys[i]) {
       G4VMscModel* msc = GetGSModel();
-      msc->SetRangeFactor(0.08);
-      msc->SetSkin(3);
-      msc->SetStepLimitType(fUseSafetyPlus);
       AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       msc = GetGSModel();
-      msc->SetRangeFactor(0.08);
-      msc->SetSkin(3);
-      msc->SetStepLimitType(fUseSafetyPlus);
       AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       theParameters->SetNumberOfBinsPerDecade(20);
@@ -281,10 +275,12 @@ void G4EmModelActivator::ActivateEmOptions()
     } else if("G4EmStandardGS" == typesPhys[i]) {
       G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();
       msc->SetRangeFactor(0.06);
+      msc->SetLocked(true);
       AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       msc = new G4GoudsmitSaundersonMscModel();
       msc->SetRangeFactor(0.06);
+      msc->SetLocked(true);
       AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
     } else if("G4EmStandardWVI" == typesPhys[i]) {
@@ -327,15 +323,9 @@ void G4EmModelActivator::ActivateEmOptions()
     } else if("G4EmLivermore" == typesPhys[i]) {
 
       G4VMscModel* msc = GetGSModel();
-      msc->SetRangeFactor(0.08);
-      msc->SetSkin(3);
-      msc->SetStepLimitType(fUseSafetyPlus);
       AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       msc = GetGSModel();
-      msc->SetRangeFactor(0.08);
-      msc->SetSkin(3);
-      msc->SetStepLimitType(fUseSafetyPlus);
       AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       mod = new G4LivermorePhotoElectricModel();
@@ -365,15 +355,9 @@ void G4EmModelActivator::ActivateEmOptions()
     } else if("G4EmPenelope" == typesPhys[i]) {
 
       G4VMscModel* msc = GetGSModel();
-      msc->SetRangeFactor(0.08);
-      msc->SetSkin(3);
-      msc->SetStepLimitType(fUseSafetyPlus);
       AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       msc = GetGSModel();
-      msc->SetRangeFactor(0.08);
-      msc->SetSkin(3);
-      msc->SetStepLimitType(fUseSafetyPlus);
       AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
 
       mod = new G4PenelopePhotoElectricModel();
@@ -411,10 +395,10 @@ void G4EmModelActivator::ActivateEmOptions()
     } else if("G4RadioactiveDecay" == typesPhys[i]) {
 
       if(G4Threading::IsMasterThread()) {
-	theParameters->SetAugerCascade(true);
-	theParameters->SetDeexcitationIgnoreCut(true);
+        theParameters->SetAugerCascade(true);
+        theParameters->SetDeexcitationIgnoreCut(true);
       }
-      theParameters->DefineRegParamForDeex(adeexc);      
+      theParameters->DefineRegParamForDeex(adeexc);
 
     } else {
       if(verbose > 0 && G4Threading::IsMasterThread()) {
@@ -707,7 +691,7 @@ G4VMscModel* G4EmModelActivator::GetGSModel()
 {
   G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();
   msc->SetStepLimitType(fUseSafetyPlus);
-  msc->SetRangeFactor(0.2);
+  msc->SetRangeFactor(0.08);
   msc->SetSkin(3);
   msc->SetOptionMottCorrection(true);
   msc->SetLocked(true);

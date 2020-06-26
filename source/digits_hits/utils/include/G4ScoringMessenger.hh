@@ -91,6 +91,7 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithAString*        meshCylinderCreateCmd;
 //    G4UIcmdWithAString*        meshSphereCreateCmd;
     G4UIcommand*               meshRWLogVolCreateCmd;
+    G4UIcommand*               probeCreateCmd;
     //
     // Mesh commands
     G4UIdirectory*             meshDir;
@@ -116,6 +117,11 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* mRotXCmd;
     G4UIcmdWithADoubleAndUnit* mRotYCmd;
     G4UIcmdWithADoubleAndUnit* mRotZCmd;
+    //
+    // Probe commands
+    G4UIdirectory*             probeDir;
+    G4UIcmdWithAString*        probeMatCmd;
+    G4UIcmdWith3VectorAndUnit* probeLocateCmd;
     //
     // Draw Command
     G4UIcommand *             drawCmd;

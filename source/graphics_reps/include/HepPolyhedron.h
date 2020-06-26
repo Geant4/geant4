@@ -62,8 +62,18 @@
 //                                        - create polyhedron for Sphere;
 //   HepPolyhedronTorus (rmin,rmax,rtor,phi,dphi)
 //                                        - create polyhedron for Torus;
+//   HepPolyhedronTet (p0[3],p1[3],p2[3],p3[3])
+//                                        - create polyhedron for Tet;
 //   HepPolyhedronEllipsoid (dx,dy,dz,zcut1,zcut2)
 //                                        - create polyhedron for Ellipsoid;
+//   HepPolyhedronEllipticalCone(dx,dy,z,zcut1)
+//                                        - create polyhedron for Elliptical cone;
+//   HepPolyhedronParaboloid (r1,r2,dz,phi,dphi)
+//                                        - create polyhedron for Paraboloid;
+//   HepPolyhedronHype (r1,r2,tan1,tan2,halfz)
+//                                        - create polyhedron for Hype;
+//   HepPolyhedronHyperbolicMirror (a,h,r)
+//                                        - create polyhedron for Hyperbolic mirror;
 // Public functions:
 //
 //   GetNoVertices ()       - returns number of vertices;
@@ -505,6 +515,16 @@ class HepPolyhedronTorus : public HepPolyhedron
   virtual ~HepPolyhedronTorus();
 };
 
+class HepPolyhedronTet : public HepPolyhedron
+{
+ public:
+  HepPolyhedronTet(const G4double p0[3],
+                   const G4double p1[3],
+                   const G4double p2[3],
+                   const G4double p3[3]);
+  virtual ~HepPolyhedronTet();
+};
+
 class HepPolyhedronEllipsoid : public HepPolyhedron
 {
  public:
@@ -519,6 +539,13 @@ class HepPolyhedronEllipticalCone : public HepPolyhedron
   HepPolyhedronEllipticalCone(G4double dx, G4double dy, G4double z,
                               G4double zcut1);
   virtual ~HepPolyhedronEllipticalCone();
+};
+
+class HepPolyhedronHyperbolicMirror : public HepPolyhedron
+{
+ public:
+  HepPolyhedronHyperbolicMirror(G4double a, G4double h, G4double r);
+  virtual ~HepPolyhedronHyperbolicMirror();
 };
 
 #endif /* HEP_POLYHEDRON_HH */

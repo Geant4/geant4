@@ -44,30 +44,22 @@
 
 class G4SpinDecayPhysics : public G4VPhysicsConstructor
 {
-  public:
+public:
 
-    G4SpinDecayPhysics();
-    G4SpinDecayPhysics(const G4String& name);
-    virtual ~G4SpinDecayPhysics();
-
-  public:
+  G4SpinDecayPhysics(G4int ver = 1);
+  G4SpinDecayPhysics(const G4String& name, G4int ver = 1);
+  ~G4SpinDecayPhysics() override;
 
     // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
 
-    virtual void ConstructParticle();
+  void ConstructParticle() override;
     
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
 
-    virtual void ConstructProcess();
-    
-  private:
-
-    G4DecayWithSpin* decayWithSpin;
-    G4PionDecayMakeSpin* poldecay;
-
+  void ConstructProcess() override;
 };
 
 #endif

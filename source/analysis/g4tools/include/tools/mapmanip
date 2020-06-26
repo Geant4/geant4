@@ -42,13 +42,14 @@ template <class K,class V> inline void clear(std::map<K,V*>& a_m){safe_clear<K,V
 #endif
 
 template <class K,class V>
-inline void delete_key(std::map<K,V*>& a_m,const K& a_key){
+inline bool delete_key(std::map<K,V*>& a_m,const K& a_key){
   typedef typename std::map<K,V*>::iterator it_t;
   it_t it = a_m.find(a_key);
-  if(it==a_m.end()) return;
+  if(it==a_m.end()) return false;
   V* obj = (*it).second;
   a_m.erase(it);
   delete obj;
+  return true;
 }
 
 template <class K,class V>

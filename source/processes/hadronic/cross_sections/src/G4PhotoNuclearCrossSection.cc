@@ -1493,8 +1493,10 @@ static const G4double* SH[nHA]={
 // Bug 2092 fix (ejc3) Init deuteron_GDR ptr to null
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
  : G4VCrossSectionDataSet(Default_Name()), lastZ(0), lastSig(0), lastGDR(0),
-   lastHEN(0), lastE(0), lastTH(0), lastSP(0), deuteron_GDR(0), deuteron_HR(0),
-   deuteron_TH(0), deuteron_SP(0),
+   lastHEN(0), lastE(0), lastTH(0), lastSP(0),
+   deuteron_GDR(0), deuteron_HR(0), deuteron_TH(0), deuteron_SP(0),
+   triton_GDR(0), triton_HR(0), triton_TH(0), triton_SP(0),
+   he3_GDR(0), he3_HR(0), he3_TH(0), he3_SP(0),
    mNeut(G4NucleiProperties::GetNuclearMass(1,0)),
    mProt(G4NucleiProperties::GetNuclearMass(1,1))
 {
@@ -1532,15 +1534,17 @@ G4PhotoNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
 }
 
 
-// Method added to fix Bug 2092 (ejc3)
+// Allow D, T, 3He targets
 G4bool
 G4PhotoNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle*, 
                                             G4int Z, G4int A,
                                             const G4Element*, 
                                             const G4Material*)
 {
-  // explicitly allow deuterium
-  if (Z == 1 && A == 2) return true;
+  // explicitly allow deuterium and tritium
+//  if (Z == 1 && (A == 2 || A == 3) ) return true;
+  if ((Z == 1 && A == 2) || (Z == 1 && A == 3) ||
+      (Z == 2 && A == 3) ) return true; 
   return false;
 }
 
@@ -1552,7 +1556,8 @@ G4PhotoNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*parti
   return true;
 }
 
-// Method added to fix Bug 2092 (ejc3)
+
+// Get cross sections for deuterium, tritium and 3He only
 G4double
 G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
                                                G4int Z, G4int A,
@@ -1560,42 +1565,80 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
                                                const G4Element*,
                                                const G4Material* mat)
 {
-  // if not deuterium, go back to old style
-  if (!(Z == 1 && A == 2)) return GetElementCrossSection(aPart, Z, mat);
-
-  // Otherwise, follow a similar routine
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
   if (Energy < THmin) return 0.;
-  G4double sigma = 0.;
 
-  // init the XS table if need be
-  if (deuteron_GDR == NULL) {
-    deuteron_TH = ThresholdEnergy(1,1); // threshold calculation is correct
-    deuteron_GDR = new G4double[nL];    // direct copies
-    for (G4int i = 0 ; i < nL ; i++) deuteron_GDR[i] = SL[0][i];   // A = 2 -> SL0
-    deuteron_HR = new G4double[nH];
-    for (G4int i = 0 ; i < nH ; i++) deuteron_HR[i] = SH[1][i];    // A = 2 -> SH1
-    deuteron_SP = 1;                    // as would be assigned for proton
+  G4double sigma;
+  G4double lE;
+  if (Z == 1 && A == 2) { 
+    // init the XS table if need be
+    if (deuteron_GDR == NULL) {
+      deuteron_TH = ThresholdEnergy(1,1); // threshold calculation is correct
+      deuteron_GDR = new G4double[nL];    // direct copies
+      for (G4int i = 0 ; i < nL ; i++) deuteron_GDR[i] = SL[0][i];   // A = 2 -> SL0
+      deuteron_HR = new G4double[nH];
+      for (G4int i = 0 ; i < nH ; i++) deuteron_HR[i] = SH[1][i];    // A = 2 -> SH1
+      deuteron_SP = 1;                    // as would be assigned for proton
+    }
+    if (Energy < deuteron_TH) {
+      sigma = 0.;
+    } else if (Energy < Emin) {      // GDR region (approximated in E, not in lnE)
+      sigma = EquLinearFit(Energy,nL,THmin,dE,deuteron_GDR);
+    } else if (Energy < Emax) {      // High Energy region
+      lE = G4Log(Energy);
+      sigma = EquLinearFit(lE,nH,milE,dlE,deuteron_HR);
+    } else {                         // Very high energy region
+      lE = G4Log(Energy);
+      sigma = deuteron_SP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
+    }
+
+  } else if (Z == 1 && A == 3) {
+    if (triton_GDR == NULL) {
+      triton_TH = ThresholdEnergy(1,2);
+      triton_GDR = new G4double[nL];      // same as for deuteron since no A = 3 entry
+      for (G4int i = 0 ; i < nL ; i++) triton_GDR[i] = SL[0][i];     // A = 3 -> SL0
+      triton_HR = new G4double[nH];
+      for (G4int i = 0 ; i < nH ; i++) triton_HR[i] = SH[2][i];      // A = 3 -> SH2
+      triton_SP = 1;
+    }
+    if (Energy < triton_TH) {
+      sigma = 0.;
+    } else if (Energy < Emin) {      // GDR region
+      sigma = EquLinearFit(Energy,nL,THmin,dE,triton_GDR);
+    } else if (Energy < Emax) {      // High Energy region
+      lE = G4Log(Energy);
+      sigma = EquLinearFit(lE,nH,milE,dlE,triton_HR);
+    } else {
+      lE = G4Log(Energy);
+      sigma = triton_SP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
+    }
+
+  } else if (Z == 2 && A == 3) {
+    if (he3_GDR == NULL) {
+      he3_TH = ThresholdEnergy(2,1);
+      he3_GDR = new G4double[nL];      // same as for deuteron since no A = 3 entry
+      for (G4int i = 0 ; i < nL ; i++) he3_GDR[i] = SL[0][i];     // A = 3 -> SL0
+      he3_HR = new G4double[nH];
+      for (G4int i = 0 ; i < nH ; i++) he3_HR[i] = SH[2][i];      // A = 3 -> SH2
+      he3_SP = 2;
+    }
+    if (Energy < he3_TH) {
+      sigma = 0.;
+    } else if (Energy < Emin) {      // GDR region
+      sigma = EquLinearFit(Energy,nL,THmin,dE,he3_GDR);
+    } else if (Energy < Emax) {      // High Energy region
+      lE = G4Log(Energy);
+      sigma = EquLinearFit(lE,nH,milE,dlE,he3_HR);
+    } else {
+      lE = G4Log(Energy);
+      sigma = he3_SP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
+    }
+
+  } else {
+    return GetElementCrossSection(aPart, Z, mat);
   }
 
-  // =================== now the "magic" formula ===================
-  if (Energy < deuteron_TH) {
-    return 0.;
-
-  } else if (Energy < Emin) {  // GDR region (approximated in E, not in lnE)
-    sigma = EquLinearFit(Energy,nL,THmin,dE,deuteron_GDR);
-
-  } else if (Energy < Emax) {                  // High Energy region
-    G4double lE = G4Log(Energy);
-    sigma = EquLinearFit(lE,nH,milE,dlE,deuteron_HR);
-
-  } else {           // UHE region (calculation, but not so frequent)
-    G4double lE = G4Log(Energy);
-    sigma = deuteron_SP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
-  }
-  // End of "sigma" calculation
-    
-  if(sigma < 0.) return 0.;
+  if(sigma < 0.) sigma = 0.;
   return sigma*millibarn;
 }
 
@@ -1675,37 +1718,39 @@ G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPar
     return sigma*millibarn;
 }
 
-// Gives the threshold energy for different nuclei (min of p- and n-threshold)
+// Threshold energy for nuclei: explicitly calculated for p, D, T, 3He,
+// min of p- and n-threshold for heavier targets
 G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 {
-    // ---------
-    
-    G4int A=Z+N;
-    if(A<1) return infEn;
-    else if(A==1) return 134.9766; // Pi0 threshold for the nucleon
-    
-    G4double mT= 0.;
-    if(G4NucleiProperties::IsInStableTable(A,Z))
-        mT=G4NucleiProperties::GetNuclearMass(A,Z);
-    else
-    {
-        return infEn;
-    }
-    // ---------
-    G4double mP= infEn;
-    
-    if(Z && G4NucleiProperties::IsInStableTable(A-1,Z-1))
-    {
-        mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
-    }
-    G4double mN= infEn;
-    if(N&&G4NucleiProperties::IsInStableTable(A-1,Z))
-        mN=G4NucleiProperties::GetNuclearMass(A-1,Z);
-    
-    G4double dP= mP+mProt-mT;
-    G4double dN= mN+mNeut-mT;
-    if(dP<dN)dN=dP;
-    return dN;
+  G4int A = Z + N;
+  if (A < 1) return infEn;
+
+  // Thresholds for p, d, t, 3He in lab frame
+  else if (A == 1) return 144.6821;           // pi0 production
+  else if (Z == 1 && N == 1) return 2.2263;   // disintegration
+  else if (Z == 1 && N == 2) return 6.2650;   // n separation
+  else if (Z == 2 && N == 1) return 5.4994;   // p separation
+
+  G4double mT = 0.;
+  if (G4NucleiProperties::IsInStableTable(A,Z) ) {
+    mT = G4NucleiProperties::GetNuclearMass(A,Z);
+  } else {
+    return infEn;
+  }
+
+  G4double mP = infEn;    
+  if (Z && G4NucleiProperties::IsInStableTable(A-1,Z-1) ) {
+    mP = G4NucleiProperties::GetNuclearMass(A-1,Z-1);
+  }
+  G4double mN = infEn;
+  if (N && G4NucleiProperties::IsInStableTable(A-1,Z) ) {
+    mN = G4NucleiProperties::GetNuclearMass(A-1,Z);
+  }
+
+  G4double dP = mP + mProt - mT;
+  G4double dN = mN + mNeut - mT;
+  if (dP < dN) dN = dP;
+  return dN;
 }
 
 //

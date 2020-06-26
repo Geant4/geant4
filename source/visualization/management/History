@@ -25,6 +25,47 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+18 June 2020 John Allison  (visman-V10-06-06)
+* G4VisCommandsSceneAdd.cc:
+  /vis/scene/add/*Field: Correct guidance (red->green->blue).
+
+19 May 2020 John Allison  (visman-V10-06-05)
+* G4VVisCommand: Add CheckView for future utility.
+* G4VisCommandsScene.cc: /vis/scene/showExtents: Improve output layout.
+
+22 April 2020 Frederick Jones (visman-V10-06-04)
+* G4VisExecutive.icc: Support for OIQT Vis driver, via "OIQT"
+  or "OI" keywords, provided the G4OpenInventor library has
+  been built with the OIQT driver included.
+
+07 April 2020 John Allison  (visman-V10-06-03)
+* G4Scene.cc:
+  * Bug fix: Models with no extent do not contribute to scene's extent.
+* G4VisCommandsSceneHandler.cc: /vis/sceneHandler/create:
+  * Trap infinite loop when looking for a fallback graphics system.
+
+04 March 2020. John Allison  (visman-V10-06-02)
+- G4VisCommandsListManager.hh:
+  o Bug fix: Notify handlers after /vis/filtering/*/mode command.
+    . Causes rebuild of graphics database.
+- G4VisManager.cc: Improve printing of available systems and models.
+
+13 February 2020. John Allison  (visman-V10-06-01)
+- G4VisCommandsGeometrySet: /vis/geometry/set/forceCloud:
+  o New command (not previously available due to oversight.
+  o Set the default value of number of cloud points to 0 (<= 0 means
+    under control of the viewer, i.e., the value in the view parameters
+    - see G4VSceneHandler::RequestPrimitives.
+- G4VisCommandsTouchableSet:
+  o Clarify the meaning of the default value of number of cloud points.
+  o Correct guidance for /vis/touchable/set/numberOfCloudPoints.
+  o Tidy.
+- G4VisManager.cc: Instantiate /vis/geometry/set/forceCloud.
+
+12 December 2019 Ben Morgan (visman-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 29 October 2019  Gabriele Cosmo (visman-V10-05-14)
 - G4VisCommandsViewer.cc:
   o Replaced use of std::experimental::filesystem with std::filesystem

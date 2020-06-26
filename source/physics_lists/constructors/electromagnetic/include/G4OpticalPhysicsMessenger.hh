@@ -145,6 +145,9 @@ private:
   G4UIcmdWithABool*      fScintFiniteRiseTimeCmd;
   G4UIcmdWithABool*      fScintFiniteRiseTime1Cmd;
 
+  // setEnhancedTimeConstants commnad
+  G4UIcmdWithABool*      fScintEnhancedTimeConstantsCmd;
+
   G4UIcmdWithAnInteger*  fScintVerbosityCmd;
 
   // WLS
@@ -154,6 +157,12 @@ private:
   G4UIcmdWithAString*    fWLSTimeProfile1Cmd;
   G4UIcmdWithAnInteger*  fWLSVerbosityCmd;
 
+  // WLS2
+
+  /// setWLS2TimeProfile command
+  G4UIcmdWithAString*    fWLS2TimeProfileCmd;
+  G4UIcmdWithAnInteger*  fWLS2VerbosityCmd;
+  
   /// setInvokeSD command
   G4UIcmdWithABool*      fBoundaryInvokeSDCmd;
   G4UIcmdWithABool*      fBoundaryInvokeSD1Cmd;

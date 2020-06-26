@@ -7,17 +7,24 @@
             History file for hadronic/models/gamma_nuclear directory
             -----------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+30 April 2020 Ben Morgan    (hadr-gammanuc-V10-06-00)
+-----------------------------------------------------
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
+
+6 September 2019 Ben Morgan (hadr-gamnuc-V10-05-00)
+---------------------------------------------------
+- Rename module to G4had_gamma_nuclear to prevent clash with G4had_lept_nuclear
 
 9 October 2017 Tatsumi Koi (hadr-gamnuc-V10-03-00)
 ---------------------------------------------------
-- Created gamma_nuclear directory 
+- Created gamma_nuclear directory
 - G4LENDorBERTModel: This is a combined model.
-LEND is the first choice as final state generator. 
-If there is no LEND data for a target, 
+LEND is the first choice as final state generator.
+If there is no LEND data for a target,
 then BERT model will be used as the final state generator of the reaction.

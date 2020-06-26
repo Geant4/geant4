@@ -73,7 +73,7 @@
 
  5- HISTOGRAMS
          
-   The test contains 13 built-in 1D histograms, which are managed by
+   The test contains 23 built-in 1D histograms, which are managed by
    G4AnalysisManager and its Messenger. The histos can be individually 
    activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -83,17 +83,27 @@
             1     "total energy deposit"
             2     "Edep (MeV/mm) profile along radius"		  
             3     "total kinetic energy flow"
-            4     "energy spectrum of emerging gamma"
-            5     "energy spectrum of emerging e+-"
-            6     "energy spectrum of emerging neutrons"
-            7     "energy spectrum of emerging protons"
-            8     "energy spectrum of emerging deuterons"
-            9     "energy spectrum of emerging alphas"
-            10    "energy spectrum of all others emerging ions"
-            11    "energy spectrum of all others emerging baryons"
-            12    "energy spectrum of all others emerging mesons"
-            13    "energy spectrum of all others emerging leptons (neutrinos)"
-      
+            4     "energy spectrum of gamma at creation"
+            5     "energy spectrum of e+- at creation"
+            6     "energy spectrum of neutrons at creation"
+            7     "energy spectrum of protons at creation"
+            8     "energy spectrum of deuterons at creation"
+            9     "energy spectrum of alphas at creation"
+            10    "energy spectrum of all others ions at creation"
+            11    "energy spectrum of all others baryons at creation"
+            12    "energy spectrum of all others mesons at creation"
+            13    "energy spectrum of all others leptons (neutrinos) at creation"
+            14    "energy spectrum of emerging gamma"
+            15    "energy spectrum of emerging e+-"
+            16    "energy spectrum of emerging neutrons"
+            17    "energy spectrum of emerging protons"
+            18    "energy spectrum of emerging deuterons"
+            19    "energy spectrum of emerging alphas"
+            20    "energy spectrum of all others emerging ions"
+            21    "energy spectrum of all others emerging baryons"
+            22    "energy spectrum of all others emerging mesons"
+            23    "energy spectrum of all others emerging leptons (neutrinos)"
+	          
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 

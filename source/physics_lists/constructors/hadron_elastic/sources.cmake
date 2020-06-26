@@ -100,14 +100,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4had_mod_man
         G4had_mod_util
         G4had_lept_nuclear
-        G4had_neu_hp
         G4had_preequ_exciton
         G4had_string_diff
         G4had_string_frag
         G4had_string_man
         G4had_theo_max
-        G4hadronic_HE
-        G4hadronic_LE
         G4hadronic_bert_cascade
         G4hadronic_binary
         G4hadronic_coherent_elastic

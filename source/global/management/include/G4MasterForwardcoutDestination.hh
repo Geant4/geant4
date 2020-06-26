@@ -23,11 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file
+// G4MasterForwardcoutDestination
 //
 // Class description:
 //
@@ -40,20 +36,19 @@
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
-#ifndef G4MASTERFORWARDCOUTDESTINATION_HH_
-#define G4MASTERFORWARDCOUTDESTINATION_HH_
+#ifndef G4MASTERFORWARDCOUTDESTINATION_HH
+#define G4MASTERFORWARDCOUTDESTINATION_HH
 
 #include <G4coutDestination.hh>
 
 class G4MasterForwardcoutDestination : public G4coutDestination
 {
-  public:
+ public:
+  G4MasterForwardcoutDestination() = default;
 
-    G4MasterForwardcoutDestination() = default;
-
-    virtual ~G4MasterForwardcoutDestination();
-    virtual G4int ReceiveG4cout(const G4String& msg) override;
-    virtual G4int ReceiveG4cerr(const G4String& msg) override;
+  virtual ~G4MasterForwardcoutDestination();
+  virtual G4int ReceiveG4cout(const G4String& msg) override;
+  virtual G4int ReceiveG4cerr(const G4String& msg) override;
 };
 
-#endif /* G4MASTERFORWARDCOUTDESTINATION_HH_ */
+#endif

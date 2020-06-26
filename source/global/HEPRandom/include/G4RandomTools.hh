@@ -25,13 +25,13 @@
 //
 //
 //
-// 
+//
 // ---------------------------------------------------------------------------
-//      GEANT 4 class header file 
+//      GEANT 4 class header file
 // ---------------------------------------------------------------------------
 // Class description:
 //
-// Utility functions 
+// Utility functions
 
 // History:
 //
@@ -46,11 +46,11 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "globals.hh"
-#include "Randomize.hh"
-#include "G4TwoVector.hh"
-#include "G4ThreeVector.hh"
 #include "G4RandomDirection.hh"
+#include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
+#include "Randomize.hh"
+#include "globals.hh"
 
 // ---------------------------------------------------------------------------
 // Returns a random lambertian unit vector (rejection sampling)
@@ -59,22 +59,22 @@ inline G4ThreeVector G4LambertianRand(const G4ThreeVector& normal)
 {
   G4ThreeVector vect;
   G4double ndotv;
-  G4int count=0;
+  G4int count            = 0;
   const G4int max_trials = 1024;
 
   do
   {
     ++count;
-    vect = G4RandomDirection();
+    vect  = G4RandomDirection();
     ndotv = normal * vect;
 
-    if (ndotv < 0.0)
+    if(ndotv < 0.0)
     {
-      vect = -vect;
+      vect  = -vect;
       ndotv = -ndotv;
     }
 
-  } while (!(G4UniformRand() < ndotv) && (count < max_trials));
+  } while(!(G4UniformRand() < ndotv) && (count < max_trials));
 
   return vect;
 }
@@ -87,7 +87,7 @@ inline G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal)
   G4ThreeVector vec1 = normal.orthogonal();
   G4ThreeVector vec2 = vec1.cross(normal);
 
-  G4double phi = CLHEP::twopi*G4UniformRand();
+  G4double phi    = CLHEP::twopi * G4UniformRand();
   G4double cosphi = std::cos(phi);
   G4double sinphi = std::sin(phi);
 
@@ -99,13 +99,13 @@ inline G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal)
 //
 inline G4double G4RandomRadiusInRing(G4double rmin, G4double rmax)
 {
-  if (rmin == rmax)
+  if(rmin == rmax)
   {
     return rmin;
   }
   G4double k = G4UniformRand();
-  return (rmin <= 0) ? rmax*std::sqrt(k)
-                     : std::sqrt(k*rmax*rmax + (1.-k)*rmin*rmin);
+  return (rmin <= 0) ? rmax * std::sqrt(k)
+                     : std::sqrt(k * rmax * rmax + (1. - k) * rmin * rmin);
 }
 
 // ---------------------------------------------------------------------------
@@ -114,15 +114,16 @@ inline G4double G4RandomRadiusInRing(G4double rmin, G4double rmax)
 //
 inline G4TwoVector G4RandomPointInEllipse(G4double a, G4double b)
 {
-  G4double aa = (a*a == 0) ? 0 : 1/(a*a);
-  G4double bb = (b*b == 0) ? 0 : 1/(b*b);
-  for (G4int i=0; i<1000; ++i)
+  G4double aa = (a * a == 0) ? 0 : 1 / (a * a);
+  G4double bb = (b * b == 0) ? 0 : 1 / (b * b);
+  for(G4int i = 0; i < 1000; ++i)
   {
-    G4double x = a*(2*G4UniformRand() - 1);
-    G4double y = b*(2*G4UniformRand() - 1);
-    if (x*x*aa + y*y*bb <= 1) return G4TwoVector(x,y);
+    G4double x = a * (2 * G4UniformRand() - 1);
+    G4double y = b * (2 * G4UniformRand() - 1);
+    if(x * x * aa + y * y * bb <= 1)
+      return G4TwoVector(x, y);
   }
-  return G4TwoVector(0,0);
+  return G4TwoVector(0, 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -131,45 +132,47 @@ inline G4TwoVector G4RandomPointInEllipse(G4double a, G4double b)
 //
 inline G4TwoVector G4RandomPointOnEllipse(G4double a, G4double b)
 {
-  G4double A = std::abs(a);
-  G4double B = std::abs(b);
-  G4double mu_max = std::max(A,B);
+  G4double A      = std::abs(a);
+  G4double B      = std::abs(b);
+  G4double mu_max = std::max(A, B);
 
-  G4double x,y;
-  for (G4int i=0; i<1000; ++i)
+  G4double x, y;
+  for(G4int i = 0; i < 1000; ++i)
   {
-    G4double phi = CLHEP::twopi*G4UniformRand();
-    x = std::cos(phi);
-    y = std::sin(phi);
-    G4double mu = std::sqrt((B*x)*(B*x) + (A*y)*(A*y));
-    if (mu_max*G4UniformRand() <= mu) break;
+    G4double phi = CLHEP::twopi * G4UniformRand();
+    x            = std::cos(phi);
+    y            = std::sin(phi);
+    G4double mu  = std::sqrt((B * x) * (B * x) + (A * y) * (A * y));
+    if(mu_max * G4UniformRand() <= mu)
+      break;
   }
-  return G4TwoVector(A*x,B*y);
+  return G4TwoVector(A * x, B * y);
 }
 
 // ---------------------------------------------------------------------------
 // Returns a random point on ellipsoid (x/a)^2 + (y/b)^2 + (z/c)^2 = 1
 // (rejection sampling)
 //
-inline
-G4ThreeVector G4RandomPointOnEllipsoid(G4double a, G4double b, G4double c)
+inline G4ThreeVector G4RandomPointOnEllipsoid(G4double a, G4double b,
+                                              G4double c)
 {
-  G4double A = std::abs(a);
-  G4double B = std::abs(b);
-  G4double C = std::abs(c);
-  G4double mu_max = std::max(std::max(A*B,A*C),B*C);
+  G4double A      = std::abs(a);
+  G4double B      = std::abs(b);
+  G4double C      = std::abs(c);
+  G4double mu_max = std::max(std::max(A * B, A * C), B * C);
 
   G4ThreeVector p;
-  for (G4int i=0; i<1000; ++i)
+  for(G4int i = 0; i < 1000; ++i)
   {
-    p = G4RandomDirection();
-    G4double xbc = p.x()*B*C;
-    G4double yac = p.y()*A*C;
-    G4double zab = p.z()*A*B;
-    G4double mu = std::sqrt(xbc*xbc + yac*yac + zab*zab);
-    if (mu_max*G4UniformRand() <= mu) break;
+    p            = G4RandomDirection();
+    G4double xbc = p.x() * B * C;
+    G4double yac = p.y() * A * C;
+    G4double zab = p.z() * A * B;
+    G4double mu  = std::sqrt(xbc * xbc + yac * yac + zab * zab);
+    if(mu_max * G4UniformRand() <= mu)
+      break;
   }
-  return G4ThreeVector(A*p.x(),B*p.y(),C*p.z());
+  return G4ThreeVector(A * p.x(), B * p.y(), C * p.z());
 }
 
-#endif  /* G4RANDOMTOOLS_HH */
+#endif /* G4RANDOMTOOLS_HH */

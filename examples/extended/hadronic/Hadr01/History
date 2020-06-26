@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18-01-20  V.Ivanchenko (exhadr01-V10-05-02)
+18-01-20  V.Ivanchenko (exhadr01-V10-06-00)
 - HistoManager - removed FPE error (happens if check volume
     material is not vacuum)
 

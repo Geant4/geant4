@@ -16,12 +16,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 12th, 2020  T.Aso (detutils-V10-05-06)
-- In G4ScoreQuantityMessenger, changed SetDefaultUnit() in trackLength
-  scorer to SetDefaultValue() to support various unit category.
-  Addressing problem report #2216.
+April 29th, 2020  M.Asai (detutils-V10-06-07)
+- G4ScoringProbe.cc : Minor cosmetic changes.
 
-December 29th, 2019  M.Asai (detutils-V10-05-05)
+April 22nd, 2020  M.Asai (detutils-V10-06-06)
+- Introducing G4VPrimitivePlotter.hh that enables the user to extend
+  a primitive scorer and directly fill 1D histogram.
+
+April 13th, 2020  M.Asai (detutils-V10-06-05)
+- Introducing Probe mesh.
+
+April 7th, 2020  M.Asai (detutils-V10-06-04)
+- G4VScoringMesh.hh, .cc : further extension for Proble scoring mesh.
+
+April 2nd, 2020  M.Asai (detutils-V10-06-03)
+- G4ScoringMessenger.cc: Fix Coverity error.
+
+March 31st, 2020  M.Asai (detutils-V10-06-02)
+- G4VScoringMesh.hh: Add a new enum entry for future extension.
+
+Feburary 13th, 2020 T.Aso (detutils-V10-06-01)
+- G4ScoreQuantityMessengerQCmd.cc: default parameter for unit
+in trackLength scorer was changed.
+
+December 29th, 2019  M.Asai (detutils-V10-06-00)
 - G4ScoringManager, G4VScoreWriter, G4ScoringMessenger:
    Add missing setter/getter functions.
   

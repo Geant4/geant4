@@ -277,7 +277,6 @@ private:
 
   G4bool                      latDisplacement;
   G4bool                      isIon;
-  G4bool                      fDispBeyondSafety;
 
   // ======== Cached values - may be state dependent ================
 

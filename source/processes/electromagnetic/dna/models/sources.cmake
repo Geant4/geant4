@@ -67,8 +67,11 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAEmfietzoglouIonisationModel.hh
         G4DNAELSEPAElasticModel.hh
         G4DNAIonElasticModel.hh
+	G4DNAIRT.hh
+	G4DNAIRTMoleculeEncounterStepper.hh
         G4DNAMeltonAttachmentModel.hh
         G4DNAMillerGreenExcitationModel.hh
+	G4DNAMolecularIRTModel.hh
         G4DNAMolecularReaction.hh
         G4DNAMolecularStepByStepModel.hh
         G4DNAMoleculeEncounterStepper.hh
@@ -119,8 +122,11 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAEmfietzoglouExcitationModel.cc
         G4DNAEmfietzoglouIonisationModel.cc
         G4DNAIonElasticModel.cc
+	G4DNAIRT.cc
+	G4DNAIRTMoleculeEncounterStepper.cc
         G4DNAMeltonAttachmentModel.cc
         G4DNAMillerGreenExcitationModel.cc
+	G4DNAMolecularIRTModel.cc
         G4DNAMolecularReaction.cc
         G4DNAMolecularStepByStepModel.cc
         G4DNAMoleculeEncounterStepper.cc

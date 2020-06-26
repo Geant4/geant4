@@ -117,15 +117,20 @@ class G4VPrimitiveScorer
         { if(!(filter->Accept(aStep))) return false; }
         return ProcessHits(aStep,ROhis);
       }
- 
+
+  protected:
+     G4VSolid* ComputeSolid(G4Step* aStep, G4int replicaIdx );
+      // Get the solid at current depth, ensuring it's correct by 
+      //   calling a parameterisation is called if it's that volume type
+     G4VSolid* ComputeCurrentSolid(G4Step* aStep);
+      // Same as above -- using stored replica number
+   
   protected:
      G4int fNi, fNj, fNk; // used for 3D scorers
   public:
      inline void SetNijk(G4int i,G4int j,G4int k)
      { fNi = i; fNj = j; fNk = k; }
 };
-
-
 
 #endif
 

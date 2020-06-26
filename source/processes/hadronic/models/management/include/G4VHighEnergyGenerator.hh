@@ -25,14 +25,15 @@
 //
 //
 //      V. Uzhinsky Nov. 2012
-//          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter. 
+//  Added method GetProjectileNucleus for simulation of nucleus-nucleus inter. 
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1
 
 // Class Description
-// Base class for high energy interaction models in geant4. By merit of inheriting
-// from this class a high energy interaction model can be used in conjunction with
+// Base class for high energy interaction models in geant4. 
+// By merit of inheriting from this class a high energy 
+// interaction model can be used in conjunction with
 // any cascade, precompound model and evaporation phase in the
 // generation of complete final states for inelastic scattering.
 // Class Description - End
@@ -48,20 +49,16 @@ class G4KineticTrackVector;
 class G4VHighEnergyGenerator : public G4HadronicInteraction
 {
   public:
-      G4VHighEnergyGenerator(const G4String& modelName = "High Energy Generator");
+      G4VHighEnergyGenerator(const G4String& modelName = "HighEnergyGenerator");
       ~G4VHighEnergyGenerator() override;
 
-      G4HadFinalState *ApplyYourself(const G4HadProjectile&, G4Nucleus&) final;
+      G4VHighEnergyGenerator(const G4VHighEnergyGenerator &right) = delete;
+      const G4VHighEnergyGenerator & operator=(const G4VHighEnergyGenerator &right) = delete;
+      G4bool operator==(const G4VHighEnergyGenerator &right) const = delete;
+      G4bool operator!=(const G4VHighEnergyGenerator &right) const = delete;
 
-  private:
-      G4VHighEnergyGenerator(const G4VHighEnergyGenerator &right);
-      const G4VHighEnergyGenerator & operator=(const G4VHighEnergyGenerator &right);
-      G4bool operator==(const G4VHighEnergyGenerator &right) const;
-      G4bool operator!=(const G4VHighEnergyGenerator &right) const;
-
- public:
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
-      virtual G4V3DNucleus * GetProjectileNucleus() const;  // Uzhi Nov. 2012
+      virtual G4V3DNucleus * GetProjectileNucleus() const;
       virtual G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, 
                                              const G4DynamicParticle &thePrimary) = 0;
       void ModelDescription(std::ostream&) const override;

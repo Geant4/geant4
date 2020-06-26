@@ -29,45 +29,129 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
-21st April 2020 - Ben Morgan (cmake-V10-05-39)
-- BUGFIX: Only store variables in Geant4PackageCache if they have
-  a value.
 
-6th April 2020 - Ben Morgan (cmake-V10-05-38)
+17th June 2020 - Jonathan Madsen (cmake-V10-06-25)
+- Moved TBB before PTL
+- Forced PTL_USE_TBB to be set to GEANT4_USE_TBB when not
+  using system PTL
+- Added Geant4::G4ptl ALIAS targets for build tree testing
+- Added support for building G4ptl, GEANT4_USE_TBB option
+- Updated FindTBB.cmake to be more robust
+- Updates to PTL internal/external handling
+- fixed PTL find_dependency
+
+15th June 2020 - Gunter Folger (cmake-V10-06-24)
+- Switch to G4EMLOW 7.12
+
+8th June 2020 - Ben Morgan (cmake-V10-06-23)
+- Default GEANT4_USE_NEW_CMAKE to ON to use new build organization
+  as the primary system.
+- Fix bug in setting of AUTOMOC
+- Handle install of G4clhep{-static} independently of main modules
+  due it being built outside the category system.
+- Retain GEANT4_BUILDTREE_INCLUDE_DIRS in new CMake system to support
+  clients that may not yet support CMake target usage requirements.
+- Protect recursion into tests module on existence of the directory
+
+2nd June 2020 - Guilherme Amadio (cmake-V10-06-22)
+- Avoid warnings from propagating CMAKE_DISABLE_FIND_PACKAGE_ROOT
+  down to tests.
+
+30th May 2020 - Ben Morgan (cmake-V10-06-21)
+- Modules/Geant4DeveloperAPI.cmake: Import new "target" style API for
+  declaring and composing libraries from modules of source code.
+  Provide GEANT4_USE_NEW_CMAKE option, OFF by default, to switch between
+  systems.
+
+28th May 2020 - Gunter Folger (cmake-V10-06-20)
+- Switch to G4EMLOW 7.11
+
+26th May 2020 - Ben Morgan (cmake-V10-06-19)
+- Use "VecGeom::vecgeom" as imported target name for VecGeom library
+  to bring in line with upstream master of VecGeom. Export VecCore_DIR
+  if it is set to package cache file, as new VecGeomConfig needs to refind
+  VecCore.
+
+20 May 2020 - Frederick Jones (cmake-V10-06-18)
+- Modules/G4InterfaceOptions.cmake: added GEANT4_USE_XM to Open
+  Inventor X driver code block to correct Xm and Xt link order.
+
+19th May 2020 - Guilherme Amadio (cmake-V10-06-17)
+- Propagate value of CMAKE_DISABLE_FIND_PACKAGE_ROOT down to tests
+  that optionally support ROOT to allow testing Geant4 with ROOT support
+  disabled. This is necessary when testing Geant4 with a different C++
+  standard than ROOT when it's installed.
+
+29th April 2020 - Ben Morgan (cmake-V10-06-16)
+- Add GEANT4_USE_NEW_CMAKE option in preparation for testing of modular
+  build updates. Added now to suppress Continuous warnings
+
+22 April 2020 - Frederick Jones (cmake-V10-06-15)
+- Modules/G4InterfaceOptions.cmake, Templates/Geant4Config.cmake.in:
+  Added support for Open Inventor Qt Vis driver to be built
+  and used in applications.  The library can be built with the
+  OIQT driver, or with the OIX/OIXE drivers, but not both.
+
+6th April 2020 - Ben Morgan (cmake-V10-06-14)
 - Activate build of geant4py when GEANT4_USE_PYTHON is set
   Check that MT builds use global-dynamic TLS to allow Python
   module loading of the Geant4 dynamic libraries.
 
-3rd April 2020 - Guilherme Amadio (cmake-V10-05-37)
+21st April 2020 - Ben Morgan (cmake-V10-06-13)
+- BUGFIX: Only store variables in Geant4PackageCache if they have
+  a value.
+
+20th April 2020 - Ben Morgan (cmake-V10-06-12)
+- Remove Qt4 support
+
+17th April 2020 - Ben Morgan (cmake-V10-06-11)
+- Add GEANT4_USE_PYTHON option to suppress Continuous warnings
+
+3rd April 2020 - Guilherme Amadio (cmake-V10-06-10)
 - Use full path to datasets if GEANT4_INSTALL_DATADIR is an absolute path
 
-2nd April 2020 - Guilherme Amadio (cmake-V10-05-36)
+2nd April 2020 - Guilherme Amadio (cmake-V10-06-09)
 - Customize CMAKE_INSTALL_DATADIR in a single location
 
-18th March 2020 - Gunter Folger (cmake-V10-05-35)
+18th March 2020 - Gunter Folger (cmake-V10-06-08)
 - In Modules/G4CPack.cmake suppress warnings about icc libraries not existing
   for Intel icc version 19.
 
-14th February 2020 - Ben Morgan (cmake-V10-05-34)
+16th March 2020 - Gunter Folger (cmake-V10-06-07)
+- Switch to G4EMLOW 7.10
+
+14th February 2020 - Ben Morgan (cmake-V10-06-06)
 - No longer create gnumake symlinks on Windows
   Windows permissions may prevent creation of symlinks, leading to
   errors at install time. As gnumake is no longer supported on
   Windows, protect symlink creation with test on host platform.
 
-5th February 2020 - Ben Morgan (cmake-V10-05-33)
-- Apply patch from TXCorp to allow compilation on Windows using Clang
-
-4th February 2020 - Ben Morgan (cmake-V10-05-32)
+4th February 2020 - Ben Morgan (cmake-V10-06-05)
 - BUGFIX 2221
   Use "${FOO:-}" variable expansion and "-z" test to check for
   undefined variables in Bourne Shell scripts. Prevents errors when
   shell is in "set -u" mode. Report and patch supplied by Michael Reilly
 
-28th January 2020 - Gunter Folger (cmake-V10-05-31)
-- Switch to patched dataset for G4EMLOW 7.9.1
+27th January 2020 - Gunter Folger (cmake-V10-06-04)
+- Switch to G4EMLOW 7.9.1
 
-15th January 2020 - Ben Morgan (cmake-V10-05-30)
+15th January 2020 - Ben Morgan (cmake-V10-06-03)
 - Quote VECGEOM_COMPILE_DEFINITIONS to avoid incorrect argument errors
+
+6th January 2020 - Ben Morgan (cmake-V10-06-02)
+- Apply patch from TXCorp to allow compilation on Windows using Clang
+
+12th December 2019 - Ben Morgan (cmake-V10-06-01)
+- Remove requirement on presence of XQuartz GLU library
+- No longer save glu related variables in the package cache
+
+6th December 2019 - Ben Morgan (cmake-V10-06-00)
+- Remove obsolete Geant4Wrapping module in preparation for full G4Py
+  build support
+- Rename remaining internal "Geant4..." modules to "G4" convention
+  Retain Geant4DefineModule and Geant4LibraryTargets until new modularization
+  scheme in place.
+- Format G4ClangFormat
 
 25th November 2019 - Ben Morgan (cmake-V10-05-29)
 - Disable configuration of Wt UI/Vis driver due to it no longer

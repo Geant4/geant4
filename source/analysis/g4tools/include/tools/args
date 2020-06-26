@@ -23,6 +23,7 @@ namespace tools {
 
 class args {
 #ifdef TOOLS_MEM
+public:
   TOOLS_SCLASS(tools::args)
 #endif
 public:

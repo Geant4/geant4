@@ -33,7 +33,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4phonon
+GEANT4_DEFINE_MODULE(NAME G4solidstate_phonon
     HEADERS
 	G4LatticeManager.hh
 	G4LatticeReader.hh

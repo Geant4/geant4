@@ -47,13 +47,22 @@ class Run : public G4Run
 
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
-    // spectrum of Cerenkov radiation
+    //  particle energy
     void AddCerenkovEnergy(G4double en) {fCerenkovEnergy += en;}
     void AddScintillationEnergy(G4double en) {fScintEnergy += en;}
+    void AddWLSAbsorptionEnergy(G4double en) {fWLSAbsorptionEnergy += en;}
+    void AddWLSEmissionEnergy(G4double en)   {fWLSEmissionEnergy += en;}
+    void AddWLS2AbsorptionEnergy(G4double en) {fWLS2AbsorptionEnergy += en;}
+    void AddWLS2EmissionEnergy(G4double en)   {fWLS2EmissionEnergy += en;}
 
+    // number of particles
     void AddCerenkov(void) {fCerenkovCount += 1;}
     void AddScintillation(void) {fScintCount += 1;}
     void AddRayleigh(void) {fRayleighCount += 1;}
+    void AddWLSAbsorption(void) {fWLSAbsorptionCount += 1;}
+    void AddWLSEmission(void)   {fWLSEmissionCount += 1;}
+    void AddWLS2Absorption(void) {fWLS2AbsorptionCount += 1;}
+    void AddWLS2Emission(void)   {fWLS2EmissionCount += 1;}
     
     void AddOpAbsorption(void) {fOpAbsorption += 1;}
     void AddOpAbsorptionPrior(void) {fOpAbsorptionPrior += 1;}
@@ -144,10 +153,18 @@ class Run : public G4Run
 
     G4double fCerenkovEnergy;
     G4double fScintEnergy;
+    G4double fWLSAbsorptionEnergy;
+    G4double fWLSEmissionEnergy;
+    G4double fWLS2AbsorptionEnergy;
+    G4double fWLS2EmissionEnergy;
 
     // number of particles
     G4int fCerenkovCount;
     G4int fScintCount;
+    G4int fWLSAbsorptionCount;
+    G4int fWLSEmissionCount;
+    G4int fWLS2AbsorptionCount;
+    G4int fWLS2EmissionCount;
     // number of events
     G4int fRayleighCount;
     

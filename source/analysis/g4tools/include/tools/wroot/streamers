@@ -5,7 +5,6 @@
 #define tools_wroot_streamers
 
 #include "named"
-#include "date"
 #include "directory"
 #include "file"
 #include "../vmanip" //convert

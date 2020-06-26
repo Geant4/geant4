@@ -43,8 +43,6 @@
 //              > Change process to use G4MaterialPropertiesTables
 //              1998-09-03 by Peter Gumplinger
 //              > Protect G4MaterialPropertyVector* AttenuationLengthVector
-// mail:        gum@triumf.ca
-//              magni@mi.infn.it
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -54,24 +52,20 @@
 #include "G4OpAbsorption.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
   : G4VDiscreteProcess(processName, type)
 {
   if (verboseLevel >0 ) {
      G4cout << GetProcessName() << " is created " << G4endl;
   }
-
   SetProcessSubType(fOpAbsorption);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4OpAbsorption::~G4OpAbsorption()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4VParticleChange*
 G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
@@ -81,45 +75,29 @@ G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   G4double thePhotonMomentum = aParticle->GetTotalMomentum();
 
   aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
-
   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
-  if (verboseLevel>0) {
-    G4cout << "\n** Photon absorbed! **" << G4endl;
+  if (verboseLevel>1) {
+    G4cout << "\n** OpAbsorption: Photon absorbed! **" << G4endl;
   }
   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
  				         G4double,
 				         G4ForceCondition*)
 {
 	const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  const G4Material* aMaterial = aTrack.GetMaterial();
+	G4MaterialPropertiesTable* MPT = aTrack.GetMaterial()->GetMaterialPropertiesTable();
+  G4double attLength = DBL_MAX;
 
-	G4double thePhotonMomentum = aParticle->GetTotalMomentum();
-
-	G4MaterialPropertiesTable* aMaterialPropertyTable;
-	G4MaterialPropertyVector* AttenuationLengthVector;
-
-  G4double AttenuationLength = DBL_MAX;
-
-	aMaterialPropertyTable = aMaterial->GetMaterialPropertiesTable();
-
-	if (aMaterialPropertyTable) {
-    AttenuationLengthVector = aMaterialPropertyTable->GetProperty(kABSLENGTH);
-    if (AttenuationLengthVector) {
-      AttenuationLength = AttenuationLengthVector->Value(thePhotonMomentum);
+	if (MPT) {
+    G4MaterialPropertyVector* attVector = MPT->GetProperty(kABSLENGTH);
+    if (attVector) {
+      attLength = attVector->Value(aParticle->GetTotalMomentum(), idx_absorption);
     }
-    //    else {
-    //    G4cout << "No Absorption length specified" << G4endl;
-    //    }
   }
-  //  else {
-  //           G4cout << "No Absorption length specified" << G4endl;
-  //  }
 
-  return AttenuationLength;
+  return attLength;
 }

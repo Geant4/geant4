@@ -23,70 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessAttribute class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1997, H.Kurashige
-//   ----------------  G4ProcessAttribute -----------------
-// History:
-//   adds copy constructor            27 June 1998 H.Kurashige
-// ------------------------------------------------------------
+// Author: H.Kurashige, 2 December 1997
+// --------------------------------------------------------------------
 
 #include "G4ProcessAttribute.hh"
 
-// default constructor //////////////////////////
-G4ProcessAttribute::G4ProcessAttribute():
-         pProcess(nullptr),
-	 isActive(true),
-	 idxProcessList(-1)
+// --------------------------------------------------------------------
+// Default constructor
+//
+G4ProcessAttribute::G4ProcessAttribute()
 {
-  // clear 
-  for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){
+  for (std::size_t idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; ++idx)
+  {
     idxProcVector[idx] = -1;
     ordProcVector[idx] = -1;
   }
 }
 
-// copy constructor //////////////////////////
-G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right):
-         pProcess(right.pProcess),
-	 isActive(right.isActive),
-	 idxProcessList(right.idxProcessList)
+// --------------------------------------------------------------------
+G4ProcessAttribute::G4ProcessAttribute(const G4VProcess* aProcess)
+ : pProcess((G4VProcess*)aProcess)
 {
-  // copy all contents in idxProcVector[] and ordProcVector[]
-  //   deep copy 
-  for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){
+  for(std::size_t idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; ++idx)
+  {
+    idxProcVector[idx] = -1;
+    ordProcVector[idx] = 0; 
+  }
+}
+
+// --------------------------------------------------------------------
+// Copy constructor
+//
+G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute& right)
+  : pProcess(right.pProcess),
+    isActive(right.isActive),
+    idxProcessList(right.idxProcessList)
+{
+  // copy all contents in idxProcVector[] and ordProcVector[]; deep copy
+  //
+  for (std::size_t idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; ++idx)
+  {
     idxProcVector[idx] = right.idxProcVector[idx];
     ordProcVector[idx] = right.ordProcVector[idx];
   }
 }
 
-// destructor   ///////////////////////
+// --------------------------------------------------------------------
+// Destructor
+//
 G4ProcessAttribute::~G4ProcessAttribute()
 {
    // do nothing
 }
 
-// assignment operator //////////
-G4ProcessAttribute & G4ProcessAttribute::operator=(const G4ProcessAttribute &right)
+// --------------------------------------------------------------------
+// Assignment operator
+//
+G4ProcessAttribute&
+G4ProcessAttribute::operator=(const G4ProcessAttribute& right)
 {
-  if (this != &right) {
+  if (this != &right)
+  {
     pProcess       = right.pProcess;
     idxProcessList = right.idxProcessList;
     isActive = right.isActive;
-    // copy all contents in idxProcVector[] and ordProcVector[]
-    //   deep copy 
-    for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){
+
+    // copy all contents in idxProcVector[] and ordProcVector[]; deep copy 
+    //
+    for (std::size_t idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; ++idx)
+    {
       idxProcVector[idx] = right.idxProcVector[idx];
       ordProcVector[idx] = right.ordProcVector[idx];
     }
   }
   return *this;
 }
-
-
-

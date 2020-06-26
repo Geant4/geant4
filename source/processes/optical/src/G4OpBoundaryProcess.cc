@@ -70,112 +70,89 @@
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4OpProcessSubType.hh"
-
-#include "G4OpBoundaryProcess.hh"
 #include "G4GeometryTolerance.hh"
-
 #include "G4VSensitiveDetector.hh"
 #include "G4ParallelWorldProcess.hh"
-
-#include "G4SystemOfUnits.hh"
+#include "G4TransportationManager.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4OpBoundaryProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
                                                G4ProcessType type)
   : G4VDiscreteProcess(processName, type)
 {
-  if ( verboseLevel > 0) {
+  if (verboseLevel > 0) {
     G4cout << GetProcessName() << " is created " << G4endl;
   }
-
   SetProcessSubType(fOpBoundary);
 
   theStatus = Undefined;
-  theModel = glisur;
+  theModel  = glisur;
   theFinish = polished;
   theReflectivity  = 1.;
   theEfficiency    = 0.;
   theTransmittance = 0.;
-
   theSurfaceRoughness = 0.;
-
   prob_sl = 0.;
   prob_ss = 0.;
   prob_bs = 0.;
 
-  //PropertyPointer  = nullptr;
-  //PropertyPointer1 = nullptr;
-  //PropertyPointer2 = nullptr;
-
   fRealRIndexMPV = nullptr;
   fImagRIndexMPV = nullptr;
-
-  Material1 = nullptr;
-  Material2 = nullptr;
-
+  Material1      = nullptr;
+  Material2      = nullptr;
   OpticalSurface = nullptr;
-
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   iTE = iTM = 0;
   thePhotonMomentum = 0.;
   Rindex1 = Rindex2 = 1.;
   cost1 = cost2 = sint1 = sint2 = 0.;
-
   idx = idy = 0;
   DichroicVector = nullptr;
-
   fInvokeSD = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4OpBoundaryProcess::~G4OpBoundaryProcess()
-{}
+G4OpBoundaryProcess::~G4OpBoundaryProcess() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4VParticleChange*
 G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
   theStatus = Undefined;
-
   aParticleChange.Initialize(aTrack);
   aParticleChange.ProposeVelocity(aTrack.GetVelocity());
 
   // Get hyperStep from  G4ParallelWorldProcess
-  //  NOTE: PostSetpDoIt of this process should be
-  //        invoked after G4ParallelWorldProcess!
-
+  //  NOTE: PostSetpDoIt of this process to be invoked after G4ParallelWorldProcess!
   const G4Step* pStep = &aStep;
-
   const G4Step* hStep = G4ParallelWorldProcess::GetHyperStep();
-
   if (hStep) pStep = hStep;
 
   G4bool isOnBoundary = (pStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary);
-
   if (isOnBoundary) {
     Material1 = pStep->GetPreStepPoint()->GetMaterial();
     Material2 = pStep->GetPostStepPoint()->GetMaterial();
   } else {
     theStatus = NotAtBoundary;
-    if (verboseLevel > 0) BoundaryProcessVerbose();
+    if (verboseLevel > 1) BoundaryProcessVerbose();
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
 
   G4VPhysicalVolume* thePrePV  = pStep->GetPreStepPoint() ->GetPhysicalVolume();
   G4VPhysicalVolume* thePostPV = pStep->GetPostStepPoint()->GetPhysicalVolume();
 
-  if (verboseLevel > 0) {
+  if (verboseLevel > 1) {
     G4cout << " Photon at Boundary! " << G4endl;
     if (thePrePV)  G4cout << " thePrePV:  " << thePrePV->GetName()  << G4endl;
     if (thePostPV) G4cout << " thePostPV: " << thePostPV->GetName() << G4endl;
@@ -183,7 +160,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
   if (aTrack.GetStepLength() <= kCarTolerance/2.) {
     theStatus = StepTooSmall;
-    if (verboseLevel > 0) BoundaryProcessVerbose();
+    if (verboseLevel > 1) BoundaryProcessVerbose();
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
 
@@ -193,52 +170,43 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   OldMomentum       = aParticle->GetMomentumDirection();
   OldPolarization   = aParticle->GetPolarization();
 
-  if ( verboseLevel > 0 ) {
-    G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl;
-    G4cout << " Old Polarization:       " << OldPolarization << G4endl;
+  if (verboseLevel > 1) {
+    G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl
+           << " Old Polarization:       " << OldPolarization << G4endl;
   }
 
   G4ThreeVector theGlobalPoint = pStep->GetPostStepPoint()->GetPosition();
-
   G4bool valid;
-  //  Use the new method for Exit Normal in global coordinates,
-  //    which provides the normal more reliably.
 
   // ID of Navigator which limits step
   G4int hNavId = G4ParallelWorldProcess::GetHypNavigatorID();
-  std::vector<G4Navigator*>::iterator iNav =
+  auto iNav =
      G4TransportationManager::GetTransportationManager()->GetActiveNavigatorsIterator();
   theGlobalNormal = (iNav[hNavId])->GetGlobalExitNormal(theGlobalPoint, &valid);
 
   if (valid) {
     theGlobalNormal = -theGlobalNormal;
-  }
-  else
-  {
+  } else {
     G4ExceptionDescription ed;
     ed << " G4OpBoundaryProcess/PostStepDoIt(): "
-           << " The Navigator reports that it returned an invalid normal"
-           << G4endl;
+       << " The Navigator reports that it returned an invalid normal" << G4endl;
     G4Exception("G4OpBoundaryProcess::PostStepDoIt", "OpBoun01",
-                EventMustBeAborted,ed,
+                EventMustBeAborted, ed,
                 "Invalid Surface Normal - Geometry must return valid surface normal");
   }
 
   if (OldMomentum * theGlobalNormal > 0.0) {
 #ifdef G4OPTICAL_DEBUG
     G4ExceptionDescription ed;
-    ed << " G4OpBoundaryProcess/PostStepDoIt(): "
-       << " theGlobalNormal points in a wrong direction. "
-       << G4endl;
-    ed << "    The momentum of the photon arriving at interface (oldMomentum)"
-       << " must exit the volume cross in the step. " << G4endl;
-    ed << "  So it MUST have dot < 0 with the normal that Exits the new volume (globalNormal)." << G4endl;
-    ed << "  >> The dot product of oldMomentum and global Normal is " << OldMomentum*theGlobalNormal << G4endl;
-    ed << "     Old Momentum  (during step)     = " << OldMomentum << G4endl;
-    ed << "     Global Normal (Exiting New Vol) = " << theGlobalNormal << G4endl;
-    ed << G4endl;
+    ed << " G4OpBoundaryProcess/PostStepDoIt(): theGlobalNormal points in a wrong direction. " << G4endl
+       << "   The momentum of the photon arriving at interface (oldMomentum)"
+       << "   must exit the volume cross in the step. " << G4endl
+       << "   So it MUST have dot < 0 with the normal that Exits the new volume (globalNormal)." << G4endl
+       << "   >> The dot product of oldMomentum and global Normal is " << OldMomentum*theGlobalNormal << G4endl
+       << "     Old Momentum  (during step)     = " << OldMomentum << G4endl
+       << "     Global Normal (Exiting New Vol) = " << theGlobalNormal << G4endl << G4endl;
     G4Exception("G4OpBoundaryProcess::PostStepDoIt", "OpBoun02",
-                EventMustBeAborted,  // Or JustWarning to see if it happens repeatedbly on one ray
+                EventMustBeAborted,  // Or JustWarning to see if it happens repeatedly on one ray
                 ed,
                "Invalid Surface Normal - Geometry must return valid surface normal pointing in the right direction");
 #else
@@ -246,27 +214,24 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 #endif
   }
 
-	G4MaterialPropertiesTable* aMaterialPropertiesTable;
   G4MaterialPropertyVector* RindexMPV = nullptr;
-
-	aMaterialPropertiesTable = Material1->GetMaterialPropertiesTable();
-  if (aMaterialPropertiesTable) {
-		RindexMPV = aMaterialPropertiesTable->GetProperty(kRINDEX);
+	G4MaterialPropertiesTable* MPT = Material1->GetMaterialPropertiesTable();
+  if (MPT) {
+		RindexMPV = MPT->GetProperty(kRINDEX);
 	}
 	else {
     theStatus = NoRINDEX;
-    if (verboseLevel > 0) BoundaryProcessVerbose();
+    if (verboseLevel > 1) BoundaryProcessVerbose();
     aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
     aParticleChange.ProposeTrackStatus(fStopAndKill);
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
   if (RindexMPV) {
-    Rindex1 = RindexMPV->Value(thePhotonMomentum);
-  }
-  else {
+    Rindex1 = RindexMPV->Value(thePhotonMomentum, idx_rindex1);
+  } else {
     theStatus = NoRINDEX;
-    if (verboseLevel > 0) BoundaryProcessVerbose();
+    if (verboseLevel > 1) BoundaryProcessVerbose();
     aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
     aParticleChange.ProposeTrackStatus(fStopAndKill);
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -276,29 +241,21 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   theEfficiency       = 0.;
   theTransmittance    = 0.;
   theSurfaceRoughness = 0.;
-
   theModel  = glisur;
   theFinish = polished;
-
   G4SurfaceType type = dielectric_dielectric;
 
-  RindexMPV = nullptr;
+  RindexMPV      = nullptr;
   OpticalSurface = nullptr;
-
-  G4LogicalSurface* Surface = nullptr;
-
-  Surface = G4LogicalBorderSurface::GetSurface(thePrePV, thePostPV);
+  G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface(thePrePV, thePostPV);
 
   if (Surface == nullptr) {
-    G4bool enteredDaughter =
-      (thePostPV->GetMotherLogical() == thePrePV ->GetLogicalVolume());
-	  if (enteredDaughter) {
+	  if (thePostPV->GetMotherLogical() == thePrePV->GetLogicalVolume()) {
 	    Surface = G4LogicalSkinSurface::GetSurface(thePostPV->GetLogicalVolume());
 	    if (Surface == nullptr) {
 	      Surface = G4LogicalSkinSurface::GetSurface(thePrePV->GetLogicalVolume());
       }
-	  }
-	  else {
+	  } else {
 	    Surface = G4LogicalSkinSurface::GetSurface(thePrePV->GetLogicalVolume());
 	    if (Surface == nullptr) {
 	      Surface = G4LogicalSkinSurface::GetSurface(thePostPV->GetLogicalVolume());
@@ -309,80 +266,55 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   if (Surface) {
     OpticalSurface = dynamic_cast<G4OpticalSurface*> (Surface->GetSurfaceProperty());
   }
-
   if (OpticalSurface) {
     type      = OpticalSurface->GetType();
     theModel  = OpticalSurface->GetModel();
     theFinish = OpticalSurface->GetFinish();
 
-    aMaterialPropertiesTable = OpticalSurface->GetMaterialPropertiesTable();
-
-    if (aMaterialPropertiesTable) {
-
+    G4MaterialPropertiesTable* sMPT = OpticalSurface->GetMaterialPropertiesTable();
+    if (sMPT) {
       if (theFinish == polishedbackpainted || theFinish == groundbackpainted) {
-        RindexMPV = aMaterialPropertiesTable->GetProperty(kRINDEX);
+        RindexMPV = sMPT->GetProperty(kRINDEX);
         if (RindexMPV) {
-          Rindex2 = RindexMPV->Value(thePhotonMomentum);
-        }
-        else {
+          Rindex2 = RindexMPV->Value(thePhotonMomentum, idx_rindex_surface);
+        } else {
           theStatus = NoRINDEX;
-          if (verboseLevel > 0) BoundaryProcessVerbose();
+          if (verboseLevel > 1) BoundaryProcessVerbose();
           aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
           aParticleChange.ProposeTrackStatus(fStopAndKill);
           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
         }
       }
 
-      fRealRIndexMPV = aMaterialPropertiesTable->GetProperty(kREALRINDEX);
-      fImagRIndexMPV = aMaterialPropertiesTable->GetProperty(kIMAGINARYRINDEX);
+      fRealRIndexMPV = sMPT->GetProperty(kREALRINDEX);
+      fImagRIndexMPV = sMPT->GetProperty(kIMAGINARYRINDEX);
+      iTE = iTM = 1;
 
-      iTE = 1;
-      iTM = 1;
-
-      G4MaterialPropertyVector* PropertyPointer = aMaterialPropertiesTable->GetProperty(kREFLECTIVITY);
-      if (PropertyPointer) {
-        theReflectivity = PropertyPointer->Value(thePhotonMomentum);
-      } else if (fRealRIndexMPV && fImagRIndexMPV) {
-        CalculateReflectivity();
+      G4MaterialPropertyVector* pp;
+      if ((pp = sMPT->GetProperty(kREFLECTIVITY))) {
+        theReflectivity = pp->Value(thePhotonMomentum, idx_reflect);
       }
+      else if (fRealRIndexMPV && fImagRIndexMPV) { CalculateReflectivity(); }
 
-      PropertyPointer = aMaterialPropertiesTable->GetProperty(kEFFICIENCY);
-      if (PropertyPointer) {
-        theEfficiency = PropertyPointer->Value(thePhotonMomentum);
+      if ((pp = sMPT->GetProperty(kEFFICIENCY))) {
+        theEfficiency = pp->Value(thePhotonMomentum, idx_eff);
       }
-
-      PropertyPointer = aMaterialPropertiesTable->GetProperty(kTRANSMITTANCE);
-      if (PropertyPointer) {
-        theTransmittance = PropertyPointer->Value(thePhotonMomentum);
+      if ((pp = sMPT->GetProperty(kTRANSMITTANCE))) {
+        theTransmittance = pp->Value(thePhotonMomentum, idx_trans);
       }
-
-      if (aMaterialPropertiesTable->ConstPropertyExists("SURFACEROUGHNESS")) {
-        theSurfaceRoughness = aMaterialPropertiesTable-> GetConstProperty(kSURFACEROUGHNESS);
+      if (sMPT->ConstPropertyExists(kSURFACEROUGHNESS)) {
+        theSurfaceRoughness = sMPT->GetConstProperty(kSURFACEROUGHNESS);
       }
 
 	    if (theModel == unified) {
-        PropertyPointer = aMaterialPropertiesTable->GetProperty(kSPECULARLOBECONSTANT);
-        if (PropertyPointer) {
-          prob_sl = PropertyPointer->Value(thePhotonMomentum);
-        } else {
-          prob_sl = 0.0;
-        }
-
-        PropertyPointer = aMaterialPropertiesTable->GetProperty(kSPECULARSPIKECONSTANT);
-	      if (PropertyPointer) {
-          prob_ss = PropertyPointer->Value(thePhotonMomentum);
-        } else {
-          prob_ss = 0.0;
-        }
-
-        PropertyPointer = aMaterialPropertiesTable->GetProperty(kBACKSCATTERCONSTANT);
-        if (PropertyPointer) {
-          prob_bs = PropertyPointer->Value(thePhotonMomentum);
-        } else {
-          prob_bs = 0.0;
-        }
+        prob_sl = (pp = sMPT->GetProperty(kSPECULARLOBECONSTANT)) ? 
+                   pp->Value(thePhotonMomentum, idx_lobe) : 0.;
+        prob_ss = (pp = sMPT->GetProperty(kSPECULARSPIKECONSTANT)) ?
+                   pp->Value(thePhotonMomentum, idx_spike) : 0.;
+        prob_bs = (pp = sMPT->GetProperty(kBACKSCATTERCONSTANT)) ?
+                    pp->Value(thePhotonMomentum, idx_back) : 0.;
       }
-    }  // end of if(aMaterialPropertiesTable)
+    }  // end of if(sMPT)
     else if (theFinish == polishedbackpainted || theFinish == groundbackpainted ) {
       aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
       aParticleChange.ProposeTrackStatus(fStopAndKill);
@@ -395,17 +327,16 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     if (theFinish == polished || theFinish == ground) {
       if (Material1 == Material2) {
         theStatus = SameMaterial;
-        if (verboseLevel > 0) BoundaryProcessVerbose();
+        if (verboseLevel > 1) BoundaryProcessVerbose();
 		    return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	    }
-      aMaterialPropertiesTable = Material2->GetMaterialPropertiesTable();
-      if (aMaterialPropertiesTable) RindexMPV = aMaterialPropertiesTable->GetProperty(kRINDEX);
+      MPT = Material2->GetMaterialPropertiesTable();
+      if (MPT) { RindexMPV = MPT->GetProperty(kRINDEX); }
       if (RindexMPV) {
-        Rindex2 = RindexMPV->Value(thePhotonMomentum);
-      }
-      else {
+        Rindex2 = RindexMPV->Value(thePhotonMomentum, idx_rindex2);
+      } else {
         theStatus = NoRINDEX;
-        if (verboseLevel > 0) BoundaryProcessVerbose();
+        if (verboseLevel > 1) BoundaryProcessVerbose();
         aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
         aParticleChange.ProposeTrackStatus(fStopAndKill);
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -413,56 +344,39 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     }
     if (theFinish == polishedbackpainted || theFinish == groundbackpainted) {
       DielectricDielectric();
-    }
-    else {
+    } else {
       G4double rand = G4UniformRand();
-      if (rand > theReflectivity) {
-        if (rand > theReflectivity + theTransmittance) {
-          DoAbsorption();
-        } else {
-          theStatus       = Transmission;
-          NewMomentum     = OldMomentum;
-          NewPolarization = OldPolarization;
-        }
-      }
-      else {
+      if (rand > theReflectivity + theTransmittance) { DoAbsorption(); }
+      else if (rand > theReflectivity) {
+        theStatus       = Transmission;
+        NewMomentum     = OldMomentum;
+        NewPolarization = OldPolarization;
+      } else {
         if (theFinish == polishedfrontpainted) { DoReflection(); }
         else if (theFinish == groundfrontpainted) {
           theStatus = LambertianReflection;
           DoReflection();
-        }
-        else { DielectricDielectric(); }
+        } else { DielectricDielectric(); }
       }
     }
   }
-
-  else if (type == dielectric_metal) {
-    DielectricMetal();
-  }
-
-  else if (type == dielectric_LUT) {
-    DielectricLUT();
-  }
-
-  else if (type == dielectric_LUTDAVIS) {
-    DielectricLUTDAVIS();
-  }
-
-  else if (type == dielectric_dichroic) {
-    DielectricDichroic();
-  }
-
+  else if (type == dielectric_metal)    { DielectricMetal(); }
+  else if (type == dielectric_LUT)      { DielectricLUT(); }
+  else if (type == dielectric_LUTDAVIS) { DielectricLUTDAVIS(); }
+  else if (type == dielectric_dichroic) { DielectricDichroic(); }
   else {
-    G4cerr << " Error: G4BoundaryProcess: illegal boundary type " << G4endl;
+    G4ExceptionDescription ed;
+    ed << " PostStepDoIt(): Illegal boundary type." << G4endl;
+    G4Exception("G4OpBoundaryProcess", "OpBoun04", JustWarning, ed);
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
 
   NewMomentum = NewMomentum.unit();
   NewPolarization = NewPolarization.unit();
 
-  if (verboseLevel > 0) {
-    G4cout << " New Momentum Direction: " << NewMomentum     << G4endl;
-    G4cout << " New Polarization:       " << NewPolarization << G4endl;
+  if (verboseLevel > 1) {
+    G4cout << " New Momentum Direction: " << NewMomentum     << G4endl
+           << " New Polarization:       " << NewPolarization << G4endl;
     BoundaryProcessVerbose();
   }
 
@@ -473,193 +387,121 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     G4MaterialPropertyVector* groupvel =
       Material2->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
     if (groupvel) {
-      aParticleChange.ProposeVelocity(groupvel->Value(thePhotonMomentum));
+      aParticleChange.ProposeVelocity(groupvel->Value(thePhotonMomentum, idx_groupvel));
     }
   }
 
   if (theStatus == Detection && fInvokeSD) InvokeSD(pStep);
-
   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::BoundaryProcessVerbose() const
 {
-  if ( theStatus == Undefined )
-          G4cout << " *** Undefined *** " << G4endl;
-  if ( theStatus == Transmission )
-          G4cout << " *** Transmission *** " << G4endl;
-  if ( theStatus == FresnelRefraction )
-          G4cout << " *** FresnelRefraction *** " << G4endl;
-  if ( theStatus == FresnelReflection )
-          G4cout << " *** FresnelReflection *** " << G4endl;
-  if ( theStatus == TotalInternalReflection )
-          G4cout << " *** TotalInternalReflection *** " << G4endl;
-  if ( theStatus == LambertianReflection )
-          G4cout << " *** LambertianReflection *** " << G4endl;
-  if ( theStatus == LobeReflection )
-          G4cout << " *** LobeReflection *** " << G4endl;
-  if ( theStatus == SpikeReflection )
-          G4cout << " *** SpikeReflection *** " << G4endl;
-  if ( theStatus == BackScattering )
-          G4cout << " *** BackScattering *** " << G4endl;
-  if ( theStatus == PolishedLumirrorAirReflection )
-          G4cout << " *** PolishedLumirrorAirReflection *** " << G4endl;
-  if ( theStatus == PolishedLumirrorGlueReflection )
-          G4cout << " *** PolishedLumirrorGlueReflection *** " << G4endl;
-  if ( theStatus == PolishedAirReflection )
-          G4cout << " *** PolishedAirReflection *** " << G4endl;
-  if ( theStatus == PolishedTeflonAirReflection )
-          G4cout << " *** PolishedTeflonAirReflection *** " << G4endl;
-  if ( theStatus == PolishedTiOAirReflection )
-          G4cout << " *** PolishedTiOAirReflection *** " << G4endl;
-  if ( theStatus == PolishedTyvekAirReflection )
-          G4cout << " *** PolishedTyvekAirReflection *** " << G4endl;
-  if ( theStatus == PolishedVM2000AirReflection )
-          G4cout << " *** PolishedVM2000AirReflection *** " << G4endl;
-  if ( theStatus == PolishedVM2000GlueReflection )
-          G4cout << " *** PolishedVM2000GlueReflection *** " << G4endl;
-  if ( theStatus == EtchedLumirrorAirReflection )
-          G4cout << " *** EtchedLumirrorAirReflection *** " << G4endl;
-  if ( theStatus == EtchedLumirrorGlueReflection )
-          G4cout << " *** EtchedLumirrorGlueReflection *** " << G4endl;
-  if ( theStatus == EtchedAirReflection )
-          G4cout << " *** EtchedAirReflection *** " << G4endl;
-  if ( theStatus == EtchedTeflonAirReflection )
-          G4cout << " *** EtchedTeflonAirReflection *** " << G4endl;
-  if ( theStatus == EtchedTiOAirReflection )
-          G4cout << " *** EtchedTiOAirReflection *** " << G4endl;
-  if ( theStatus == EtchedTyvekAirReflection )
-          G4cout << " *** EtchedTyvekAirReflection *** " << G4endl;
-  if ( theStatus == EtchedVM2000AirReflection )
-          G4cout << " *** EtchedVM2000AirReflection *** " << G4endl;
-  if ( theStatus == EtchedVM2000GlueReflection )
-          G4cout << " *** EtchedVM2000GlueReflection *** " << G4endl;
-  if ( theStatus == GroundLumirrorAirReflection )
-          G4cout << " *** GroundLumirrorAirReflection *** " << G4endl;
-  if ( theStatus == GroundLumirrorGlueReflection )
-          G4cout << " *** GroundLumirrorGlueReflection *** " << G4endl;
-  if ( theStatus == GroundAirReflection )
-          G4cout << " *** GroundAirReflection *** " << G4endl;
-  if ( theStatus == GroundTeflonAirReflection )
-          G4cout << " *** GroundTeflonAirReflection *** " << G4endl;
-  if ( theStatus == GroundTiOAirReflection )
-          G4cout << " *** GroundTiOAirReflection *** " << G4endl;
-  if ( theStatus == GroundTyvekAirReflection )
-          G4cout << " *** GroundTyvekAirReflection *** " << G4endl;
-  if ( theStatus == GroundVM2000AirReflection )
-          G4cout << " *** GroundVM2000AirReflection *** " << G4endl;
-  if ( theStatus == GroundVM2000GlueReflection )
-          G4cout << " *** GroundVM2000GlueReflection *** " << G4endl;
-  if ( theStatus == Absorption )
-          G4cout << " *** Absorption *** " << G4endl;
-  if ( theStatus == Detection )
-          G4cout << " *** Detection *** " << G4endl;
-  if ( theStatus == NotAtBoundary )
-          G4cout << " *** NotAtBoundary *** " << G4endl;
-  if ( theStatus == SameMaterial )
-          G4cout << " *** SameMaterial *** " << G4endl;
-  if ( theStatus == StepTooSmall )
-          G4cout << " *** StepTooSmall *** " << G4endl;
-  if ( theStatus == NoRINDEX )
-          G4cout << " *** NoRINDEX *** " << G4endl;
-  if ( theStatus == Dichroic )
-          G4cout << " *** Dichroic Transmission *** " << G4endl;
+  G4cout << " *** ";
+  if      (theStatus == Undefined) G4cout << "Undefined";
+  else if (theStatus == Transmission) G4cout << "Transmission";
+  else if (theStatus == FresnelRefraction) G4cout << "FresnelRefraction";
+  else if (theStatus == FresnelReflection) G4cout << "FresnelReflection";
+  else if (theStatus == TotalInternalReflection) G4cout << "TotalInternalReflection";
+  else if (theStatus == LambertianReflection) G4cout << "LambertianReflection";
+  else if (theStatus == LobeReflection) G4cout << "LobeReflection";
+  else if (theStatus == SpikeReflection) G4cout << "SpikeReflection";
+  else if (theStatus == BackScattering) G4cout << "BackScattering";
+  else if (theStatus == PolishedLumirrorAirReflection) G4cout << "PolishedLumirrorAirReflection";
+  else if (theStatus == PolishedLumirrorGlueReflection) G4cout << "PolishedLumirrorGlueReflection";
+  else if (theStatus == PolishedAirReflection) G4cout << "PolishedAirReflection";
+  else if (theStatus == PolishedTeflonAirReflection) G4cout << "PolishedTeflonAirReflection";
+  else if (theStatus == PolishedTiOAirReflection) G4cout << "PolishedTiOAirReflection";
+  else if (theStatus == PolishedTyvekAirReflection) G4cout << "PolishedTyvekAirReflection";
+  else if (theStatus == PolishedVM2000AirReflection) G4cout << "PolishedVM2000AirReflection";
+  else if (theStatus == PolishedVM2000GlueReflection) G4cout << "PolishedVM2000GlueReflection";
+  else if (theStatus == EtchedLumirrorAirReflection) G4cout << "EtchedLumirrorAirReflection";
+  else if (theStatus == EtchedLumirrorGlueReflection) G4cout << "EtchedLumirrorGlueReflection";
+  else if (theStatus == EtchedAirReflection) G4cout << "EtchedAirReflection";
+  else if (theStatus == EtchedTeflonAirReflection) G4cout << "EtchedTeflonAirReflection";
+  else if (theStatus == EtchedTiOAirReflection) G4cout << "EtchedTiOAirReflection";
+  else if (theStatus == EtchedTyvekAirReflection) G4cout << "EtchedTyvekAirReflection";
+  else if (theStatus == EtchedVM2000AirReflection) G4cout << "EtchedVM2000AirReflection";
+  else if (theStatus == EtchedVM2000GlueReflection) G4cout << "EtchedVM2000GlueReflection";
+  else if (theStatus == GroundLumirrorAirReflection) G4cout << "GroundLumirrorAirReflection";
+  else if (theStatus == GroundLumirrorGlueReflection) G4cout << "GroundLumirrorGlueReflection";
+  else if (theStatus == GroundAirReflection) G4cout << "GroundAirReflection";
+  else if (theStatus == GroundTeflonAirReflection) G4cout << "GroundTeflonAirReflection";
+  else if (theStatus == GroundTiOAirReflection) G4cout << "GroundTiOAirReflection";
+  else if (theStatus == GroundTyvekAirReflection) G4cout << "GroundTyvekAirReflection";
+  else if (theStatus == GroundVM2000AirReflection) G4cout << "GroundVM2000AirReflection";
+  else if (theStatus == GroundVM2000GlueReflection) G4cout << "GroundVM2000GlueReflection";
+  else if (theStatus == Absorption) G4cout << "Absorption";
+  else if (theStatus == Detection) G4cout << "Detection";
+  else if (theStatus == NotAtBoundary) G4cout << "NotAtBoundary";
+  else if (theStatus == SameMaterial) G4cout << "SameMaterial";
+  else if (theStatus == StepTooSmall) G4cout << "StepTooSmall";
+  else if (theStatus == NoRINDEX) G4cout << "NoRINDEX";
+  else if (theStatus == Dichroic) G4cout << "Dichroic Transmission";
+  G4cout << " ***" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4ThreeVector
 G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 			            const G4ThreeVector&  Normal ) const
 {
-  G4ThreeVector FacetNormal;
-
+  G4ThreeVector facetNormal;
   if (theModel == unified || theModel == LUT || theModel== DAVIS) {
-
-    /* This function code alpha to a random value taken from the
+    /* This function codes alpha to a random value taken from the
     distribution p(alpha) = g(alpha; 0, sigma_alpha)*std::sin(alpha),
-    for alpha > 0 and alpha < 90, where g(alpha; 0, sigma_alpha)
-    is a gaussian distribution with mean 0 and standard deviation
-    sigma_alpha.  */
-
-    G4double alpha;
+    for alpha > 0 and alpha < 90, where g(alpha; 0, sigma_alpha) is a
+    gaussian distribution with mean 0 and standard deviation sigma_alpha.  */
 
     G4double sigma_alpha = 0.0;
     if (OpticalSurface) sigma_alpha = OpticalSurface->GetSigmaAlpha();
-
-    if (sigma_alpha == 0.0) return FacetNormal = Normal;
+    if (sigma_alpha == 0.0) { return Normal; }
 
     G4double f_max = std::min(1.0, 4.*sigma_alpha);
+    G4double alpha, phi, sinAlpha;//, cosPhi, sinPhi; 
 
-    G4double phi, SinAlpha, CosAlpha, SinPhi, CosPhi, unit_x, unit_y, unit_z;
-    G4ThreeVector tmpNormal;
-
-    do {
-      do {
+    do { // Loop checking, 13-Aug-2015, Peter Gumplinger
+      do {  // Loop checking, 13-Aug-2015, Peter Gumplinger
         alpha = G4RandGauss::shoot(0.0, sigma_alpha);
-        // Loop checking, 13-Aug-2015, Peter Gumplinger
       } while (G4UniformRand()*f_max > std::sin(alpha) || alpha >= halfpi);
 
       phi = G4UniformRand()*twopi;
-
-      SinAlpha = std::sin(alpha);
-      CosAlpha = std::cos(alpha);
-      SinPhi   = std::sin(phi);
-      CosPhi   = std::cos(phi);
-
-      unit_x   = SinAlpha * CosPhi;
-      unit_y   = SinAlpha * SinPhi;
-      unit_z   = CosAlpha;
-
-      FacetNormal.setX(unit_x);
-      FacetNormal.setY(unit_y);
-      FacetNormal.setZ(unit_z);
-
-      tmpNormal = Normal;
-
-      FacetNormal.rotateUz(tmpNormal);
-      // Loop checking, 13-Aug-2015, Peter Gumplinger
-    } while (Momentum * FacetNormal >= 0.0);
+      sinAlpha = std::sin(alpha);
+      facetNormal.set(sinAlpha*std::cos(phi), sinAlpha*std::sin(phi), std::cos(alpha));
+      facetNormal.rotateUz(Normal);
+    } while (Momentum * facetNormal >= 0.0);
 	}
   else {
     G4double polish = 1.0;
     if (OpticalSurface) polish = OpticalSurface->GetPolish();
-
     if (polish < 1.0) {
-      do {
+      do { // Loop checking, 13-Aug-2015, Peter Gumplinger
         G4ThreeVector smear;
-        do {
-          smear.setX(2.*G4UniformRand()-1.0);
-          smear.setY(2.*G4UniformRand()-1.0);
-          smear.setZ(2.*G4UniformRand()-1.0);
-          // Loop checking, 13-Aug-2015, Peter Gumplinger
+        do { // Loop checking, 13-Aug-2015, Peter Gumplinger
+          smear.setX(2.*G4UniformRand()-1.);
+          smear.setY(2.*G4UniformRand()-1.);
+          smear.setZ(2.*G4UniformRand()-1.);
         } while (smear.mag() > 1.0);
-        smear = (1.-polish) * smear;
-        FacetNormal = Normal + smear;
-        // Loop checking, 13-Aug-2015, Peter Gumplinger
-      } while (Momentum * FacetNormal >= 0.0);
-      FacetNormal = FacetNormal.unit();
-    }
-    else {
-      FacetNormal = Normal;
+        facetNormal = Normal + (1.-polish)*smear;
+      } while (Momentum * facetNormal >= 0.0);
+      facetNormal = facetNormal.unit();
+    } else {
+      facetNormal = Normal;
     }
 	}
-  return FacetNormal;
+  return facetNormal;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::DielectricMetal()
 {
   G4int n = 0;
-  G4double rand, PdotN, EdotN;
+  G4double rand, EdotN;
   G4ThreeVector A_trans, A_paral;
 
   do {
-    n++;
-
+    ++n;
     rand = G4UniformRand();
     if (rand > theReflectivity && n == 1) {
       if (rand > theReflectivity + theTransmittance) {
@@ -670,8 +512,7 @@ void G4OpBoundaryProcess::DielectricMetal()
         NewPolarization = OldPolarization;
       }
       break;
-    }
-    else {
+    } else {
       if (fRealRIndexMPV && fImagRIndexMPV) {
         if (n > 1) {
           CalculateReflectivity();
@@ -681,19 +522,15 @@ void G4OpBoundaryProcess::DielectricMetal()
           }
         }
       }
-
       if (theModel == glisur || theFinish == polished) {
         DoReflection();
       } else {
         if (n == 1) ChooseReflection();
-        if (theStatus == LambertianReflection) {
-          DoReflection();
-        }
+        if (theStatus == LambertianReflection) { DoReflection(); }
         else if (theStatus == BackScattering) {
           NewMomentum = -OldMomentum;
           NewPolarization = -OldPolarization;
-        }
-        else {
+        } else {
           if (theStatus == LobeReflection) {
             if (fRealRIndexMPV && fImagRIndexMPV){
               //
@@ -701,40 +538,29 @@ void G4OpBoundaryProcess::DielectricMetal()
               theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
             }
           }
-
-          PdotN       = OldMomentum * theFacetNormal;
-          NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+          NewMomentum = OldMomentum - 2.*OldMomentum*theFacetNormal*theFacetNormal;
           EdotN       = OldPolarization * theFacetNormal;
 
-          if (sint1 > 0.0) {
-            A_trans = OldMomentum.cross(theFacetNormal);
-            A_trans = A_trans.unit();
-          } else {
-            A_trans  = OldPolarization;
-          }
-          A_paral = NewMomentum.cross(A_trans);
-          A_paral = A_paral.unit();
+          A_trans = (sint1 > 0.0) ? OldMomentum.cross(theFacetNormal).unit() : OldPolarization;
+          A_paral = NewMomentum.cross(A_trans).unit();
 
           if (iTE > 0 && iTM > 0) {
             NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
           } else if (iTE > 0) {
             NewPolarization = -A_trans;
-          } else if (iTM >0 ) {
+          } else if (iTM > 0) {
             NewPolarization = -A_paral;
           }
         }
       }
-
       OldMomentum = NewMomentum;
       OldPolarization = NewPolarization;
 	  }
-
   // Loop checking, 13-Aug-2015, Peter Gumplinger
 	} while (NewMomentum * theGlobalNormal < 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::DielectricLUT()
 {
   G4int thetaIndex, phiIndex;
@@ -801,7 +627,6 @@ void G4OpBoundaryProcess::DielectricLUT()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::DielectricLUTDAVIS()
 {
   G4int angindex, random, angleIncident;
@@ -890,7 +715,6 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::DielectricDichroic()
 {
   // Calculate Angle between Normal and Photon Momentum
@@ -954,7 +778,6 @@ void G4OpBoundaryProcess::DielectricDichroic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::DielectricDielectric()
 {
   G4bool Inside = false;
@@ -973,8 +796,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
   G4bool Through = false;
   G4bool Done    = false;
 
-  G4double PdotN, EdotN;
-
+  G4double EdotN;
   G4ThreeVector A_trans, A_paral, E1pp, E1pl;
   G4double E1_perp, E1_parl;
   G4double s1, s2, E2_perp, E2_parl, E2_total, TransCoeff;
@@ -990,49 +812,36 @@ void G4OpBoundaryProcess::DielectricDielectric()
       G4SwapObj(&Rindex1, &Rindex2);
     }
 
-    if (theFinish == polished) {
-      theFacetNormal = theGlobalNormal;
-    }
-    else {
-      theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
-    }
+    if (theFinish == polished) { theFacetNormal = theGlobalNormal; }
+    else { theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal); }
 
-    PdotN = OldMomentum * theFacetNormal;
+    //PdotN = OldMomentum * theFacetNormal;
     EdotN = OldPolarization * theFacetNormal;
 
-    cost1 = -PdotN;
+    cost1 = -OldMomentum*theFacetNormal;
     if (std::abs(cost1) < 1.0-kCarTolerance) {
       sint1 = std::sqrt(1.-cost1*cost1);
       sint2 = sint1*Rindex1/Rindex2;     // *** Snell's Law ***
         // this isn't a sine as we might expect from the name; can be > 1
-    }
-    else {
+    } else {
       sint1 = 0.0;
       sint2 = 0.0;
     }
 
     // TOTAL INTERNAL REFLECTION
     if (sint2 >= 1.0) {
-      // Simulate total internal reflection
-
-      if (Swap) Swap = !Swap;
+      Swap = false;
 
       theStatus = TotalInternalReflection;
-
       if (!SurfaceRoughnessCriterionPass) theStatus = LambertianReflection;
-
       if (theModel == unified && theFinish != polished) ChooseReflection();
-
-      if (theStatus == LambertianReflection) {
-        DoReflection();
-      }
+      if (theStatus == LambertianReflection) { DoReflection(); }
       else if (theStatus == BackScattering) {
         NewMomentum = -OldMomentum;
         NewPolarization = -OldPolarization;
-      }
-      else {
-        PdotN = OldMomentum * theFacetNormal;
-        NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+      } else {
+        //PdotN = OldMomentum * theFacetNormal;
+        NewMomentum = OldMomentum - 2.*OldMomentum*theFacetNormal*theFacetNormal;
         EdotN = OldPolarization * theFacetNormal;
         NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
       }
@@ -1040,17 +849,11 @@ void G4OpBoundaryProcess::DielectricDielectric()
     // NOT TIR
     else if (sint2 < 1.0) {
       // Calculate amplitude for transmission (Q = P x N)
-
-      if (cost1 > 0.0) {
-        cost2 =  std::sqrt(1.-sint2*sint2);
-      }
-      else {
-        cost2 = -std::sqrt(1.-sint2*sint2);
-      }
+      if (cost1 > 0.0) { cost2 =  std::sqrt(1.-sint2*sint2); }
+      else { cost2 = -std::sqrt(1.-sint2*sint2); }
 
       if (sint1 > 0.0) {
-        A_trans = OldMomentum.cross(theFacetNormal);
-        A_trans = A_trans.unit();
+        A_trans = (OldMomentum.cross(theFacetNormal)).unit();
         E1_perp = OldPolarization * A_trans;
         E1pp    = E1_perp * A_trans;
         E1pl    = OldPolarization - E1pp;
@@ -1058,9 +861,8 @@ void G4OpBoundaryProcess::DielectricDielectric()
       }
       else {
         A_trans  = OldPolarization;
-        // Here we Follow Jackson's conventions and we set the
-        // parallel component = 1 in case of a ray perpendicular
-        // to the surface
+        // Here we Follow Jackson's conventions and set the parallel
+        // component = 1 in case of a ray perpendicular to the surface
         E1_perp  = 0.0;
         E1_parl  = 1.0;
       }
@@ -1077,70 +879,49 @@ void G4OpBoundaryProcess::DielectricDielectric()
 
       // NOT TIR: REFLECTION
       if (!G4BooleanRand(TransCoeff)) {
-        // Simulate reflection
-
-        if (Swap) Swap = !Swap;
-
+        Swap = false;
         theStatus = FresnelReflection;
 
         if (!SurfaceRoughnessCriterionPass) theStatus = LambertianReflection;
-
         if (theModel == unified && theFinish != polished) ChooseReflection();
-
-        if (theStatus == LambertianReflection) {
-          DoReflection();
-        }
+        if (theStatus == LambertianReflection) { DoReflection(); }
         else if (theStatus == BackScattering) {
           NewMomentum     = -OldMomentum;
           NewPolarization = -OldPolarization;
-        }
-        else {
-          PdotN = OldMomentum * theFacetNormal;
-          NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
-
+        } else {
+          NewMomentum = OldMomentum - 2.*OldMomentum*theFacetNormal*theFacetNormal;
           if (sint1 > 0.0) {   // incident ray oblique
             E2_parl   = Rindex2*E2_parl/Rindex1 - E1_parl;
             E2_perp   = E2_perp - E1_perp;
             E2_total  = E2_perp*E2_perp + E2_parl*E2_parl;
-            A_paral   = NewMomentum.cross(A_trans);
-            A_paral   = A_paral.unit();
+            A_paral   = (NewMomentum.cross(A_trans)).unit();
             E2_abs    = std::sqrt(E2_total);
             C_parl    = E2_parl/E2_abs;
             C_perp    = E2_perp/E2_abs;
 
             NewPolarization = C_parl*A_paral + C_perp*A_trans;
-          }
-          else {               // incident ray perpendicular
-            if (Rindex2 > Rindex1) {
-              NewPolarization = - OldPolarization;
-            }
-            else {
-              NewPolarization =   OldPolarization;
-            }
+          } else {               // incident ray perpendicular
+            if (Rindex2 > Rindex1) { NewPolarization = - OldPolarization; }
+            else { NewPolarization = OldPolarization; }
           }
         }
       }
       // NOT TIR: TRANSMISSION
-      else { // photon gets transmitted
-        // Simulate transmission/refraction
-
+      else {
         Inside = !Inside;
         Through = true;
         theStatus = FresnelRefraction;
 
         if (sint1 > 0.0) {      // incident ray oblique
           alpha = cost1 - cost2*(Rindex2/Rindex1);
-          NewMomentum = OldMomentum + alpha*theFacetNormal;
-          NewMomentum = NewMomentum.unit();
-          A_paral = NewMomentum.cross(A_trans);
-          A_paral = A_paral.unit();
+          NewMomentum = (OldMomentum + alpha*theFacetNormal).unit();
+          A_paral = (NewMomentum.cross(A_trans)).unit();
           E2_abs  = std::sqrt(E2_total);
           C_parl  = E2_parl/E2_abs;
           C_perp  = E2_perp/E2_abs;
 
           NewPolarization = C_parl*A_paral + C_perp*A_trans;
-        }
-        else {                  // incident ray perpendicular
+        } else {                  // incident ray perpendicular
           NewMomentum = OldMomentum;
           NewPolarization = OldPolarization;
         }
@@ -1150,32 +931,21 @@ void G4OpBoundaryProcess::DielectricDielectric()
     OldMomentum     = NewMomentum.unit();
     OldPolarization = NewPolarization.unit();
 
-    if (theStatus == FresnelRefraction) {
-      Done = (NewMomentum * theGlobalNormal <= 0.0);
-    }
-    else {
-      Done = (NewMomentum * theGlobalNormal >= -kCarTolerance);
-	  }
-
+    if (theStatus == FresnelRefraction) { Done = (NewMomentum * theGlobalNormal <= 0.0); }
+    else { Done = (NewMomentum * theGlobalNormal >= -kCarTolerance); }
        // Loop checking, 13-Aug-2015, Peter Gumplinger
 	} while (!Done);
 
   if (Inside && !Swap) {
     if (theFinish == polishedbackpainted || theFinish == groundbackpainted) {
       G4double rand = G4UniformRand();
-      if (rand > theReflectivity) {
-        if (rand > theReflectivity + theTransmittance) {
-          DoAbsorption();
-        } else {
-          theStatus = Transmission;
-          NewMomentum = OldMomentum;
-          NewPolarization = OldPolarization;
-        }
-      }
-	    else {
-        if (theStatus != FresnelRefraction ) {
-          theGlobalNormal = -theGlobalNormal;
-        }
+      if (rand > theReflectivity + theTransmittance) { DoAbsorption(); }
+      else if (rand > theReflectivity) {
+        theStatus = Transmission;
+        NewMomentum = OldMomentum;
+        NewPolarization = OldPolarization;
+      } else {
+        if (theStatus != FresnelRefraction ) { theGlobalNormal = -theGlobalNormal; }
         else {
           Swap = !Swap;
           G4SwapPtr(Material1, Material2);
@@ -1195,7 +965,6 @@ void G4OpBoundaryProcess::DielectricDielectric()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4OpBoundaryProcess::GetMeanFreePath(const G4Track& ,
                                               G4double ,
                                               G4ForceCondition* condition)
@@ -1205,7 +974,6 @@ G4double G4OpBoundaryProcess::GetMeanFreePath(const G4Track& ,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4OpBoundaryProcess::GetIncidentAngle()
 {
   G4double PdotN = OldMomentum * theFacetNormal;
@@ -1217,7 +985,6 @@ G4double G4OpBoundaryProcess::GetIncidentAngle()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
                                               G4double E1_parl,
                                               G4double incidentangle,
@@ -1235,21 +1002,17 @@ G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
   G4complex denominatorTE, denominatorTM;
   G4complex rTM, rTE;
 
-  G4MaterialPropertiesTable* aMaterialPropertiesTable =
-                                    Material1->GetMaterialPropertiesTable();
-  G4MaterialPropertyVector* aPropertyPointerR =
-                      aMaterialPropertiesTable->GetProperty(kREALRINDEX);
-  G4MaterialPropertyVector* aPropertyPointerI =
-                      aMaterialPropertiesTable->GetProperty(kIMAGINARYRINDEX);
-  if (aPropertyPointerR && aPropertyPointerI) {
-    G4double RRindex = aPropertyPointerR->Value(thePhotonMomentum);
-    G4double IRindex = aPropertyPointerI->Value(thePhotonMomentum);
+  G4MaterialPropertiesTable* MPT = Material1->GetMaterialPropertiesTable();
+  G4MaterialPropertyVector* ppR = MPT->GetProperty(kREALRINDEX);
+  G4MaterialPropertyVector* ppI = MPT->GetProperty(kIMAGINARYRINDEX);
+  if (ppR && ppI) {
+    G4double RRindex = ppR->Value(thePhotonMomentum, idx_rrindex);
+    G4double IRindex = ppI->Value(thePhotonMomentum, idx_irindex);
     N1 = G4complex(RRindex,IRindex);
   }
 
   // Following two equations, rTM and rTE, are from: "Introduction To Modern
   // Optics" written by Fowles
-
   CosPhi = std::sqrt(u-((std::sin(incidentangle)*std::sin(incidentangle))*(N1*N1)/(N2*N2)));
 
   numeratorTE   = N1*std::cos(incidentangle) - N2*CosPhi;
@@ -1292,31 +1055,22 @@ G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
 
 void G4OpBoundaryProcess::CalculateReflectivity()
 {
-  G4double RealRindex      = fRealRIndexMPV->Value(thePhotonMomentum);
-  G4double ImaginaryRindex = fImagRIndexMPV->Value(thePhotonMomentum);
+  G4double RealRindex      = fRealRIndexMPV->Value(thePhotonMomentum, idx_rrindex);
+  G4double ImaginaryRindex = fImagRIndexMPV->Value(thePhotonMomentum, idx_irindex);
 
   // calculate FacetNormal
-  if (theFinish == ground) {
-    theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
-  } else {
-    theFacetNormal = theGlobalNormal;
-  }
+  if (theFinish == ground) { theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal); }
+  else { theFacetNormal = theGlobalNormal; }
 
-  G4double PdotN = OldMomentum * theFacetNormal;
-  cost1 = -PdotN;
-
-  if (std::abs(cost1) < 1.0 - kCarTolerance) {
-    sint1 = std::sqrt(1. - cost1*cost1);
-  } else {
-    sint1 = 0.0;
-  }
+  cost1 = -OldMomentum*theFacetNormal;
+  if (std::abs(cost1) < 1.0 - kCarTolerance) { sint1 = std::sqrt(1. - cost1*cost1); }
+  else { sint1 = 0.0; }
 
   G4ThreeVector A_trans, A_paral, E1pp, E1pl;
   G4double E1_perp, E1_parl;
 
   if (sint1 > 0.0) {
-    A_trans = OldMomentum.cross(theFacetNormal);
-    A_trans = A_trans.unit();
+    A_trans = (OldMomentum.cross(theFacetNormal)).unit();
     E1_perp = OldPolarization * A_trans;
     E1pp    = E1_perp * A_trans;
     E1pl    = OldPolarization - E1pp;
@@ -1324,14 +1078,12 @@ void G4OpBoundaryProcess::CalculateReflectivity()
   }
   else {
     A_trans  = OldPolarization;
-    // Here we Follow Jackson's conventions and we set the
-    // parallel component = 1 in case of a ray perpendicular
-    // to the surface
+    // Here we Follow Jackson's conventions and we set the parallel
+    // component = 1 in case of a ray perpendicular to the surface
     E1_perp  = 0.0;
     E1_parl  = 1.0;
   }
 
-  //calculate incident angle
   G4double incidentangle = GetIncidentAngle();
 
   //calculate the reflectivity depending on incident angle,
@@ -1341,7 +1093,6 @@ void G4OpBoundaryProcess::CalculateReflectivity()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4bool G4OpBoundaryProcess::InvokeSD(const G4Step* pStep)
 {
   G4Step aStep = *pStep;

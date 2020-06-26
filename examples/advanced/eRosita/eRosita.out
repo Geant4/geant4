@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -154,7 +154,7 @@ hIoni:  for anti_proton  SubType=2
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Galactic
@@ -166,18 +166,18 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  6.83219 keV    e+  6.59324 keV proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  6.75977 keV    e+  6.64098 keV proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  250 eV     e-  858.354 eV     e+  842.18 eV  proton 100 eV 
+ Energy thresholds :  gamma  250 eV     e-  853.748 eV     e+  845.694 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 --- Run 0 start.
 ---- eRosita event counter: 100
@@ -200,4 +200,4 @@ Index : 2     used in the geometry : Yes
 ---- eRosita event counter: 9000
 ---- eRosita event counter: 10000
 --- Run 00 ends (Number of events = 10000).
-  User=39.280000s Real=39.503039s Sys=0.010000s
+  User=49.320000s Real=49.984513s Sys=0.020000s

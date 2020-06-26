@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -79,16 +79,16 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 10 um 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  14.0874 keV    e+  14.0874 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  14.1795 keV    e+  13.7742 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -125,11 +125,14 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
@@ -151,7 +154,6 @@ Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
@@ -180,24 +182,24 @@ Screening factor                                   1
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.890000s Real=0.898168s Sys=0.000000s
+  User=1.790000s Real=1.822103s Sys=0.010000s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.945 MeV +- 212.691 keV
+ Total Energy deposited        = 3.939 MeV +- 238.600 keV
 
- Track length of primary track = 2.045 cm  +- 2.800 mm 
+ Track length of primary track = 2.043 cm  +- 2.890 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.322 cm  +- 3.569 mm 
+ Projected range               = 1.323 cm  +- 3.594 mm 
 
- Nb of steps of primary track  = 16.31 +- 3.05	 Step size= 1.292 mm  +- 281.472 um 
+ Nb of steps of primary track  = 16.17 +- 2.98	 Step size= 1.300 mm  +- 277.785 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 463951167, 1335019302
+ Current couple of seeds = 297159154, 1690055230
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -217,11 +219,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00481 MB
-Pool ID '7G4Track', size : 0.00961 MB
+Pool ID '7G4Track', size : 0.00865 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.027 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.026 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -132,9 +132,6 @@ public:
   void SetMuHadLateralDisplacement(G4bool val);
   G4bool MuHadLateralDisplacement() const;
 
-  void SetLatDisplacementBeyondSafety(G4bool val);
-  G4bool LatDisplacementBeyondSafety() const;
-
   void ActivateAngularGeneratorForIonisation(G4bool val);
   G4bool UseAngularGeneratorForIonisation() const;
 
@@ -251,8 +248,10 @@ public:
   G4double MaxEnergyFor5DMuPair() const;
 
   void SetStepFunction(G4double v1, G4double v2);
-
   void SetStepFunctionMuHad(G4double v1, G4double v2);
+  void SetStepFunctionLightIons(G4double v1, G4double v2);
+  void SetStepFunctionIons(G4double v1, G4double v2);
+  void FillStepFunction(const G4ParticleDefinition*, G4VEnergyLossProcess*) const;
 
   void SetDirectionalSplittingRadius(G4double r);
   G4double GetDirectionalSplittingRadius();
@@ -296,6 +295,9 @@ public:
   void SetPIXEElectronCrossSectionModel(const G4String&);
   const G4String& PIXEElectronCrossSectionModel();
 
+  void SetLivermoreDataDir(const G4String&);
+  const G4String& LivermoreDataDir();
+
   // parameters per region or per process 
   void AddPAIModel(const G4String& particle,
                    const G4String& region,
@@ -337,8 +339,7 @@ public:
   G4EmSaturation* GetEmSaturation();
 
   // initialisation methods
-  void DefineRegParamForLoss(G4VEnergyLossProcess*, 
-                             G4bool isElectron) const;
+  void DefineRegParamForLoss(G4VEnergyLossProcess*) const;
   void DefineRegParamForEM(G4VEmProcess*) const;
   void DefineRegParamForDeex(G4VAtomDeexcitation*) const;
 
@@ -372,7 +373,6 @@ private:
   G4bool lateralDisplacement;
   G4bool lateralDisplacementAlg96;
   G4bool muhadLateralDisplacement;
-  G4bool latDisplacementBeyondSafety;
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
   G4bool integral;

@@ -23,104 +23,93 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsTable inline methods implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class inline implementation
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-//
-// ------------------------------------------------------------
+// Author: G.Cosmo, 2 December 1995 - First implementation based on object model
+// --------------------------------------------------------------------
 
-inline
- void G4PhysicsTable::clearAndDestroy() 
+inline void G4PhysicsTable::clearAndDestroy()
 {
-  G4PhysicsVector* a=nullptr;
-  while (size()>0)
+  G4PhysicsVector* a = nullptr;
+  while(size() > 0)
   {
     a = G4PhysCollection::back();
     G4PhysCollection::pop_back();
-    if ( a )  { delete a; }
-  } 
+    if(a != nullptr)
+    {
+      delete a;
+    }
+  }
   G4PhysCollection::clear();
   vecFlag.clear();
 }
 
-inline
- G4PhysicsVector*& G4PhysicsTable::operator()(size_t i) 
+inline G4PhysicsVector*& G4PhysicsTable::operator()(std::size_t i)
 {
-  return (*this)[i]; 
+  return (*this)[i];
 }
 
-inline
- G4PhysicsVector* const& G4PhysicsTable::operator()(size_t i) const
-{ 
-  return (*this)[i]; 
+inline G4PhysicsVector* const& G4PhysicsTable::operator()(std::size_t i) const
+{
+  return (*this)[i];
 }
 
-inline
- void   G4PhysicsTable::push_back(G4PhysicsVector* pvec)
+inline void G4PhysicsTable::push_back(G4PhysicsVector* pvec)
 {
   G4PhysCollection::push_back(pvec);
   vecFlag.push_back(true);
 }
 
-inline
- void   G4PhysicsTable::insert(G4PhysicsVector* pvec)
+inline void G4PhysicsTable::insert(G4PhysicsVector* pvec)
 {
   G4PhysCollection::push_back(pvec);
   vecFlag.push_back(true);
 }
 
-inline
- void  G4PhysicsTable::insertAt (size_t idx, G4PhysicsVector* pvec)
+inline void G4PhysicsTable::insertAt(std::size_t idx, G4PhysicsVector* pvec)
 {
   if(idx > entries())
-  { 
+  {
     G4ExceptionDescription ed;
-    ed << "Sprcified index (" << idx << ") is larger than the size of the vector ("
-       << entries() << ").";
-    G4Exception("G4PhysicsTable::insertAt()","Global_PhysTbl0001",
-                FatalException,ed);
+    ed << "Sprcified index (" << idx
+       << ") is larger than the size of the vector (" << entries() << ").";
+    G4Exception("G4PhysicsTable::insertAt()", "Global_PhysTbl0001",
+                FatalException, ed);
   }
 
-  G4PhysicsTableIterator itr=begin();
-  for (size_t i=0; i<idx; ++i) { itr++; }
+  auto itr = cbegin();
+  for(std::size_t i = 0; i < idx; ++i)
+  {
+    ++itr;
+  }
   G4PhysCollection::insert(itr, pvec);
 
-  G4FlagCollection::iterator itrF=vecFlag.begin();
-  for (size_t j=0; j<idx; ++j) { itrF++; }
+  auto itrF = vecFlag.cbegin();
+  for(std::size_t j = 0; j < idx; ++j)
+  {
+    ++itrF;
+  }
   vecFlag.insert(itrF, true);
 }
 
-inline
- size_t G4PhysicsTable::entries() const 
+inline std::size_t G4PhysicsTable::entries() const
 {
   return G4PhysCollection::size();
 }
 
-inline
- size_t G4PhysicsTable::length() const 
+inline std::size_t G4PhysicsTable::length() const
 {
   return G4PhysCollection::size();
 }
 
-inline
- G4bool G4PhysicsTable::isEmpty() const
+inline G4bool G4PhysicsTable::isEmpty() const
 {
   return G4PhysCollection::empty();
 }
 
-inline
- G4bool G4PhysicsTable::GetFlag(size_t i) const
+inline G4bool G4PhysicsTable::GetFlag(std::size_t i) const
 {
   return vecFlag[i];
 }
 
-inline 
- void  G4PhysicsTable::ClearFlag(size_t i)
-{
-  vecFlag[i] = false;
-}
+inline void G4PhysicsTable::ClearFlag(std::size_t i) { vecFlag[i] = false; }

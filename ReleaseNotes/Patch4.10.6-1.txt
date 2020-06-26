@@ -33,8 +33,8 @@ List of fixes included in this public patch since the public release 10.6:
       o Turn off verbosity flags by default in G4IntegratorDriver,
         G4InterpolationDriver and G4MagIntegratorDriver.
     + navigation:
-      o Avoid looping infinitely by pushing N times with increasing step size.
-        Addressing problem report #2196.
+      o Avoid looping infinitely in G4RegularNavigation by pushing N times
+        with increasing step size. Addressing problem report #2196.
     + solids/specific:
       o Re-established parameterisation mechanism for G4Tet and G4UTet which was
         removed by mistake. Addressing problem report #2209.

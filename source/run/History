@@ -16,6 +16,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 17th Gunter Folger, included in run-V10-06-07
+- Fixes for windows.
+  - G4MTRunManager:
+     - inline static functions split into declaration and definition:
+          GetMasterThreadId(), GetMasterScoringManager(), GetMasterWorlds(),
+	  addWorld(), SetSeedOncePerCommunication(), SetSeedOncePerCommunication()
+     - add  GetMasterTheadId()
+  - G4RunManager:
+     - impot/export static fGeometryHasBeenDestroyed using G4RUN_DLL, add
+        include for rundef.hh
+      	  
+    
+June 4th, 2020  J.Madsen (run-V10-06-07)
+- Minor class access changes in G4MTRunManager to enable inheritance
+  for G4TaskRunManager
+  June 17th Gunter Folger,   included in the above tag
+
+May 26th, 2020  A.Howard (run-V10-06-06)
+- Added second wavelength shifter process to G4PhysicsListHelper.cc
+
+May 20th, 2020  G.Cosmo (run-V10-06-05)
+- Re-applied clang-format after minor rules adaptations.
+
+May 12th, 2020  A.Ribon (run-V10-06-04)
+- G4VPhysicsConstructor.cc : added in the constructors an harmless call
+  to G4HadronicParameters (setting a default parameter), needed to create
+  the instance of the G4HadronicParameters singleton before run
+  initialization.
+
+May 8th, 2020 J. Madsen (run-V10-06-03)
+- Applied clang-format
+
+April 9th, 2020  M.Asai (run-V10-06-02)
+- G4RunManager.cc, G4WorkerRunManager.cc: Adding layered mass geometry
+  option for the new "probe" scoring mesh.
+
+February 18th, 2020  V.Ivanchenko (run-V10-06-01)
+- G4RunManager - does not call G4ParticleTable for Messenger 
+    deletion
+
+December 9th, 2019  B. Morgan (run-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 November 22nd, 2019 J. Madsen (run-V10-05-11)
 - Updated sources.cmake to use ${timemory_LIBRARIES} instead of
   difficult to type ${TiMemory_LIBRARIES}

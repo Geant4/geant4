@@ -69,7 +69,7 @@ public: // With description
   virtual ~G4HadronicInteraction();
     
   virtual G4HadFinalState *ApplyYourself(const G4HadProjectile &aTrack, 
-					 G4Nucleus & targetNucleus ) = 0;
+					 G4Nucleus & targetNucleus );
   // The interface to implement for final state production code.
 
   virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
@@ -156,6 +156,11 @@ public: // With description
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   virtual void InitialiseModel();
 
+  G4HadronicInteraction(const G4HadronicInteraction &right ) = delete;
+  const G4HadronicInteraction& operator=(const G4HadronicInteraction &right) = delete;
+  G4bool operator==(const G4HadronicInteraction &right ) const = delete;
+  G4bool operator!=(const G4HadronicInteraction &right ) const = delete;
+
 protected:
 
   inline void SetModelName(const G4String& nam) 
@@ -183,11 +188,6 @@ protected:
   G4bool isBlocked;
 
 private:       
-
-  G4HadronicInteraction(const G4HadronicInteraction &right ) = delete;
-  const G4HadronicInteraction& operator=(const G4HadronicInteraction &right) = delete;
-  G4bool operator==(const G4HadronicInteraction &right ) const = delete;
-  G4bool operator!=(const G4HadronicInteraction &right ) const = delete;
     
   G4HadronicInteractionRegistry* registry;
 

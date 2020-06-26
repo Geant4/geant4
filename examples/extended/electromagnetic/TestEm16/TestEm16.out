@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -243,7 +243,7 @@ muPairProd:  for mu-  SubType=4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Vacuum
@@ -252,7 +252,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 
@@ -270,7 +270,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.200000s Real=0.203947s Sys=0.000000s
+  User=0.350000s Real=0.352616s Sys=0.000000s
 Summary for synchrotron radiation :
   Number of photons = 65086
   Emean             = 20.39 +/- 0.1444 keV

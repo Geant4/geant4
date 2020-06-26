@@ -237,6 +237,7 @@ private:
   bool useIntegralXS;
 
   G4int nMatWarn;
+  G4int nKaonWarn;
 
   G4int nICelectrons;
 

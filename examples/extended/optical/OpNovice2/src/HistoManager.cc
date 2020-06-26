@@ -62,25 +62,32 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);    // enable inactivation of histograms
 
   // Define histogram indices, titles
-  G4int maxHisto = 13;
+  G4int maxHisto = 15;
   G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                   "10","11","12","13" };
-  
+                   "10","11","12","13","14","15","16","17","18","19" };
+ 
+  // TODO change throughout code
   G4String title[] = {
       "dummy",                                        // 0
       "Cerenkov spectrum",                            // 1
       "scintillation spectrum",                       // 2
-      "boundary process status",                      // 3
-      "X momentum dir of backward-going photons",     // 4
-      "Y momentum dir of backward-going photons",     // 5
-      "Z momentum dir of backward-going photons",     // 6
-      "X momentum dir of forward-going photons",      // 7
-      "Y momentum dir of forward-going photons",      // 8
-      "Z momentum dir of forward-going photons",      // 9
-      "X momentum dir of Fresnel-refracted photons",  //10
-      "Y momentum dir of Fresnel-refracted photons",  //11
-      "Z momentum dir of Fresnel-refracted photons",  //12
-      "scintillation photons creation time",          //13
+      "scintillation photons creation time",          // 3
+      "WLS absorption spectrum",                      // 4
+      "WLS emission spectrum",                        // 5
+      "WLS emission time",                            // 6
+      "WLS2 absorption spectrum",                     // 7
+      "WLS2 emission spectrum",                       // 8
+      "WLS2 emission time",                           // 9
+      "boundary process status",                      //10
+      "X momentum dir of backward-going photons",     //11
+      "Y momentum dir of backward-going photons",     //12
+      "Z momentum dir of backward-going photons",     //13
+      "X momentum dir of forward-going photons",      //14
+      "Y momentum dir of forward-going photons",      //15
+      "Z momentum dir of forward-going photons",      //16
+      "X momentum dir of Fresnel-refracted photons",  //17
+      "Y momentum dir of Fresnel-refracted photons",  //18
+      "Z momentum dir of Fresnel-refracted photons",  //19
   };
  
   // Default values (to be reset via /analysis/h1/set command)               

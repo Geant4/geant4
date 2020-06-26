@@ -45,6 +45,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4EmParameters.hh"
+#include "G4EmBuilder.hh"
 #include "G4LossTableManager.hh"
 
 #include "G4ComptonScattering.hh"
@@ -119,7 +120,7 @@ G4EmStandardPhysicsSS::G4EmStandardPhysicsSS(G4int ver)
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(verbose);
-  param->SetLowestElectronEnergy(10*eV);
+  param->SetLowestElectronEnergy(10*CLHEP::eV);
   param->SetMscThetaLimit(0.0);
   param->SetAugerCascade(true);
   param->SetPixe(true);
@@ -135,31 +136,8 @@ G4EmStandardPhysicsSS::~G4EmStandardPhysicsSS()
 
 void G4EmStandardPhysicsSS::ConstructParticle()
 {
-  // gamma
-  G4Gamma::Gamma();
-
-  // leptons
-  G4Electron::Electron();
-  G4Positron::Positron();
-  G4MuonPlus::MuonPlus();
-  G4MuonMinus::MuonMinus();
-
-  // mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-
-  // barions
-  G4Proton::Proton();
-  G4AntiProton::AntiProton();
-
-  // ions
-  G4Deuteron::Deuteron();
-  G4Triton::Triton();
-  G4He3::He3();
-  G4Alpha::Alpha();
-  G4GenericIon::GenericIonDefinition();
+  // minimal set of particles for EM physics
+  G4EmBuilder::ConstructMinimalEmSet();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,6 +147,8 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   if(verbose > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
+  G4EmBuilder::PrepareEMPhysics();
+
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
   // muon & hadron bremsstrahlung and pair production
@@ -311,11 +291,6 @@ void G4EmStandardPhysicsSS::ConstructProcess()
       ph->RegisterProcess(new G4CoulombScattering(), particle);
     }
   }
-
-  // Deexcitation
-  //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
   G4EmModelActivator mact(GetPhysicsName());
 }

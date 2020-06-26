@@ -87,12 +87,16 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fScintTrackSecondariesFirstCmd(nullptr),
     fScintFiniteRiseTimeCmd(nullptr),
     fScintFiniteRiseTime1Cmd(nullptr),
+    fScintEnhancedTimeConstantsCmd(nullptr),
     fScintVerbosityCmd(nullptr),
 
     fWLSTimeProfileCmd(nullptr),
     fWLSTimeProfile1Cmd(nullptr),
     fWLSVerbosityCmd(nullptr),
 
+    fWLS2TimeProfileCmd(nullptr),
+    fWLS2VerbosityCmd(nullptr),
+    
     fBoundaryInvokeSDCmd(nullptr),
     fBoundaryInvokeSD1Cmd(nullptr),
     fBoundaryVerbosityCmd(nullptr),
@@ -116,6 +120,7 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     CreateDirectory("/process/optical/cerenkov/", "Cerenkov process commands");
     CreateDirectory("/process/optical/scintillation/", "Scintillation process commands");
     CreateDirectory("/process/optical/wls/", "Wave length shifting process commands");
+    CreateDirectory("/process/optical/wls2/", "Second Wave length shifting process commands");
     CreateDirectory("/process/optical/boundary/", "Boundary scattering commands");
     CreateDirectory("/process/optical/mie/", "Mie scattering process commands");
     CreateDirectory("/process/optical/absorption/", "absorption process commands");
@@ -256,6 +261,11 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fScintByParticleTypeCmd->SetParameterName("ScintillationByParticleTypeActivation", false);
     fScintByParticleTypeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+    fScintEnhancedTimeConstantsCmd = new G4UIcmdWithABool("/process/optical/scintillation/setEnhancedTimeConstants", this);
+    fScintEnhancedTimeConstantsCmd->SetGuidance("Activate/Inactivate enhanced time constants for scintillation.");
+    fScintEnhancedTimeConstantsCmd->SetGuidance("This will be the default in the next major release.");
+    fScintEnhancedTimeConstantsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
     fScintTrackInfo1Cmd = new G4UIcmdWithABool("/process/optical/defaults/scintillation/setTrackInfo", this);
     fScintTrackInfo1Cmd->SetGuidance("Activate/Inactivate scintillation TrackInformation");
     fScintTrackInfo1Cmd->SetGuidance("DEPRECATED: use /process/optical/scintillation/setTrackInfo instead.");
@@ -331,6 +341,19 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fWLSVerbosityCmd->SetRange("verbosity >= 0 && verbosity <= 2");
     fWLSVerbosityCmd->AvailableForStates(G4State_Idle);
 
+    // WLS2   //////////////////////////////////
+    fWLS2TimeProfileCmd = new G4UIcmdWithAString("/process/optical/wls2/setTimeProfile", this);
+    fWLS2TimeProfileCmd->SetGuidance("Set the WLS2 time profile (delta or exponential)");
+    fWLS2TimeProfileCmd->SetParameterName("WLS2TimeProfile", false);
+    fWLS2TimeProfileCmd->SetCandidates("delta exponential");
+    fWLS2TimeProfileCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+    fWLS2VerbosityCmd = new G4UIcmdWithAnInteger("/process/optical/wls2/verbose", this);
+    fWLS2VerbosityCmd->SetGuidance("Verbosity for WLS2 process.");
+    fWLS2VerbosityCmd->SetParameterName("verbosity", true);
+    fWLS2VerbosityCmd->SetRange("verbosity >= 0 && verbosity <= 2");
+    fWLS2VerbosityCmd->AvailableForStates(G4State_Idle);
+
     // boundary //////////////////////////////////////
     fBoundaryInvokeSD1Cmd = new G4UIcmdWithABool("/process/optical/defaults/boundary/setInvokeSD", this);
     fBoundaryInvokeSD1Cmd->SetGuidance("Set option for calling InvokeSD in G4OpBoundaryProcess");
@@ -387,6 +410,7 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
   delete fScintYieldFactor1Cmd;
   delete fScintByParticleTypeCmd;
   delete fScintByParticleType1Cmd;
+  delete fScintEnhancedTimeConstantsCmd;
   delete fScintTrackInfoCmd;
   delete fScintTrackInfo1Cmd;
   delete fScintStackPhotonsCmd;
@@ -399,6 +423,8 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
   delete fWLSTimeProfileCmd;
   delete fWLSTimeProfile1Cmd;
   delete fWLSVerbosityCmd;
+  delete fWLS2TimeProfileCmd;
+  delete fWLS2VerbosityCmd;
   delete fAbsorptionVerbosityCmd;
   delete fRayleighVerbosityCmd;
   delete fMieVerbosityCmd;
@@ -431,6 +457,8 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
         fSelectedProcessIndex = kBoundary;
     } else if ( pn == "OpWLS" )         {
         fSelectedProcessIndex = kWLS;
+    } else if ( pn == "OpWLS2" )         {
+        fSelectedProcessIndex = kWLS2;
     } else {
         G4ExceptionDescription msg;
         msg << "Not allowed process name: "<<pn<<" (UI: "<<newValue<<")";
@@ -459,6 +487,8 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
         fSelectedProcessIndex = kBoundary;
       } else if ( pn == "OpWLS" )         {
         fSelectedProcessIndex = kWLS;
+      } else if ( pn == "OpWLS2" )         {
+        fSelectedProcessIndex = kWLS2;
       } else {
           G4ExceptionDescription msg;
           msg << "Not allowed process name: "<<pn<<" (UI: "<<newValue<<")";
@@ -523,6 +553,10 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
     fOpticalPhysics->SetScintillationByParticleType(
          fScintByParticleTypeCmd->GetNewBoolValue(newValue));
   }
+  else if (command == fScintEnhancedTimeConstantsCmd) {
+    fOpticalPhysics->SetScintillationEnhancedTimeConstants(
+         fScintEnhancedTimeConstantsCmd->GetNewBoolValue(newValue));
+  }
   else if (command == fScintTrackInfo1Cmd) {
     fOpticalPhysics->SetScintillationTrackInfo(
          fScintTrackInfo1Cmd->GetNewBoolValue(newValue));
@@ -571,6 +605,12 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
   }
   else if (command == fWLSVerbosityCmd) {
     fOpticalPhysics->SetWLSVerbosity(fWLSVerbosityCmd->GetNewIntValue(newValue));
+  }
+  else if (command == fWLS2TimeProfileCmd) {
+    fOpticalPhysics->SetWLS2TimeProfile(newValue);
+  }
+  else if (command == fWLS2VerbosityCmd) {
+    fOpticalPhysics->SetWLS2Verbosity(fWLS2VerbosityCmd->GetNewIntValue(newValue));
   }
   else if (command == fAbsorptionVerbosityCmd) {
     fOpticalPhysics->SetAbsorptionVerbosity(fAbsorptionVerbosityCmd->GetNewIntValue(newValue));

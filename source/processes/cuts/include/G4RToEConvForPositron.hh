@@ -23,62 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RToEConvForPositron
 //
+// Class description:
 //
-//
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//
-// Class Description
-//  This class is a Range to Energy Converter for positron.
-//
-// ------------------------------------------------------------
-//   First Implementation          5 Oct. 2002  H.Kurahige
-// ------------------------------------------------------------
+// This class is a Range to Energy Converter for positron.
 
-#ifndef G4RToEConvForPositron_h
-#define G4RToEConvForPositron_h 1
+// Author: H.Kurashige, 05 October 2002 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4RToEConvForPositron_hh
+#define G4RToEConvForPositron_hh 1
+
+#include <vector>
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
-
 #include "G4VRangeToEnergyConverter.hh"
-
 
 class G4RToEConvForPositron : public G4VRangeToEnergyConverter
 {
   public:
-  //  constructor
-  G4RToEConvForPositron();
 
-  public:
-  //  destructor
+    G4RToEConvForPositron();
+      // Constructor
+
   virtual ~G4RToEConvForPositron();
+      // Destructor
 
   protected:
+
     virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy
-                                ) ;
+                                 G4double KineticEnergy);
 
-  protected:
-    G4double Mass;
-    G4double Z;  
-    G4double taul;
-    G4double ionpot;
-    G4double ionpotlog;
-    G4double bremfactor;
+    G4double Mass = 0.0;
+    G4double Z = -1.0;  
+    G4double taul = 0.0;
+    G4double ionpot = 0.0;
+    G4double ionpotlog = -1.0e-10;
+    G4double bremfactor = 0.1;
 };
 
 
 #endif
-
-
-
-
-
-
-
-
-

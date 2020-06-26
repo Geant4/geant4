@@ -35,7 +35,7 @@ class G4Run;
 //
 //  This is the base class of a user's action class which defines the
 // user's action at the begining and the end of each run. The user can
-// override the following two methods but the user should not change 
+// override the following two methods but the user should not change
 // any of the contents of G4Run object.
 //    virtual void BeginOfRunAction(const G4Run* aRun);
 //    virtual void EndOfRunAction(const G4Run* aRun);
@@ -50,25 +50,21 @@ class G4Run;
 
 class G4UserRunAction
 {
-  public:
-    G4UserRunAction();
-    virtual ~G4UserRunAction();
+ public:
+  G4UserRunAction();
+  virtual ~G4UserRunAction();
 
-  public:
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run* aRun);
-    virtual void EndOfRunAction(const G4Run* aRun);
+ public:
+  virtual G4Run* GenerateRun();
+  virtual void BeginOfRunAction(const G4Run* aRun);
+  virtual void EndOfRunAction(const G4Run* aRun);
 
-  protected:
-    G4bool isMaster;
+ protected:
+  G4bool isMaster;
 
-  public:
-    inline virtual void SetMaster(G4bool val=true)
-    { isMaster = val; }
-    inline G4bool IsMaster() const
-    { return isMaster; }
+ public:
+  inline virtual void SetMaster(G4bool val = true) { isMaster = val; }
+  inline G4bool IsMaster() const { return isMaster; }
 };
 
 #endif
-
-

@@ -61,23 +61,24 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);     //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 13;
+  const G4int kMaxHisto = 14;
   const G4String id[] = {"0","1","2","3","4","5","6","7","8","9",
-                         "10","11","12"};
+                         "10","11","12","13"};
   const G4String title[] = 
                 { "dummy",                                          //0
                   "kinetic energy of scattered primary particle",   //1
                   "kinetic energy of gamma",                        //2
-                  "kinetic energy of neutrons",                     //3
-                  "kinetic energy of protons",                      //4
-                  "kinetic energy of deuterons",                    //5
-                  "kinetic energy of alphas",                       //6
-                  "kinetic energy of nuclei",                       //7
-                  "kinetic energy of mesons",                       //8
-                  "kinetic energy of baryons",                      //9
-                  "Q = Ekin out - Ekin in",                         //10
-                  "Pbalance = mag(P_out - P_in)",                   //11
-                  "atomic mass of nuclei"                           //12
+                  "kinetic energy of electrons",                    //3
+                  "kinetic energy of neutrons",                     //4	  
+                  "kinetic energy of protons",                      //5
+                  "kinetic energy of deuterons",                    //6
+                  "kinetic energy of alphas",                       //7
+                  "kinetic energy of nuclei",                       //8
+                  "kinetic energy of mesons",                       //9
+                  "kinetic energy of baryons",                      //10
+                  "Q = Ekin out - Ekin in",                         //11
+                  "Pbalance = mag(P_out - P_in)",                   //12
+                  "atomic mass of nuclei"                           //13
                  };  
 
   // Default values (to be reset via /analysis/h1/set command)               

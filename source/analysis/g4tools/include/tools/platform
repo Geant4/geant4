@@ -45,12 +45,16 @@ inline bool is_Android() {return false;}
 
 
 #if defined(ANDROID) || TARGET_OS_IPHONE
-inline bool small_screen()           {return true;}
-inline bool no_cursor()              {return true;}
-inline bool stop_app_button()        {return true;}
+inline bool small_screen()     {return true;}
+//inline bool no_cursor()        {return true;}
+inline bool stop_app_button()  {return true;} //the device has a button to stop the app.
+#elif defined(EMSCRIPTEN)
+inline bool small_screen()     {return false;}
+//inline bool no_cursor()        {return false;}
+inline bool stop_app_button()  {return true;} //the device has a button to stop the app.
 #else
 inline bool small_screen()     {return false;}
-inline bool no_cursor()        {return false;}
+//inline bool no_cursor()        {return false;}
 inline bool stop_app_button()  {return false;}
 #endif
 #if TARGET_OS_IPHONE
@@ -100,6 +104,8 @@ inline const char* os() {
   static const char s_s[] = "iOS";
 #elif defined(ANDROID)
   static const char s_s[] = "Android";
+#elif defined(EMSCRIPTEN)
+  static const char s_s[] = "emscripten";
 #elif defined(_WIN32)
   static const char s_s[] = "Windows_NT";
 #elif __APPLE__

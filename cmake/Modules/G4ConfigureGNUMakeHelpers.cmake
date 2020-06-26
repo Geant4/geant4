@@ -507,6 +507,13 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     _g4tc_setenv_command(GEANT4_TC_G4LIB_USE_ZLIB ${SHELL_FAMILY} G4LIB_USE_ZLIB 1)
   endif()
 
+  # - PTL...
+  if(GEANT4_USE_SYSTEM_PTL)
+    set(GEANT4_TC_G4LIB_USE_PTL "# USING SYSTEM PTL")
+  else()
+    _g4tc_setenv_command(GEANT4_TC_G4LIB_USE_PTL ${SHELL_FAMILY} G4LIB_USE_PTL 1)
+  endif()
+
   # - GDML...
   if(GEANT4_USE_GDML)
     _g4tc_setenv_command(GEANT4_TC_G4LIB_USE_GDML ${SHELL_FAMILY} G4LIB_USE_GDML 1)

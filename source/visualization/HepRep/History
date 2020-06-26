@@ -18,6 +18,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+12 December Ben Morgan (vis-HepRep-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
 
 29 August 2019  John Allison (vis-HepRep-V10-05-00)
 - Part of vis-V10-05-24.

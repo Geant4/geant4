@@ -63,7 +63,7 @@ set(GEANT4_THIRD_PARTY_IMPORT_SETUP )
 # Externals libraries that may be present
 set(GEANT4_EXTERNALS_TARGETS )
 
-# - Stuff from Geant4OptionalComponents.cmake
+# - Stuff from G4OptionalComponents.cmake
 # - CLHEP
 # If it's internal, add it to the externals list
 if(NOT GEANT4_USE_SYSTEM_CLHEP)
@@ -82,13 +82,20 @@ if(NOT GEANT4_USE_SYSTEM_ZLIB)
   list(APPEND GEANT4_EXTERNALS_TARGETS G4zlib)
 endif()
 
+# - PTL
+# If it's internal, add it to the externals list
+if(NOT GEANT4_USE_SYSTEM_PTL)
+  list(APPEND GEANT4_EXTERNALS_TARGETS G4ptl)
+  set(PTL_BUILDTREE_PREFIX "${PROJECT_BINARY_DIR}/source/externals/ptl")
+  set(PTL_INSTALLTREE_PREFIX "\${_geant4_thisdir}/../PTL")
+endif()
+
 # - USolids
 # Compile definitions
 if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   set(GEANT4_USE_USOLIDS_EITHER ON)
 endif()
 
-# - Stuff from Geant4InterfaceOptions.cmake
 
 #-----------------------------------------------------------------------
 # - Common Build/Install Tree Configuration files
@@ -124,7 +131,8 @@ set(GEANT4_INCLUDE_DIR_SETUP "
 # Geant4 configured for use from the build tree - absolute paths are used.
 set(Geant4_INCLUDE_DIR \"${__geant4_buildtree_include_dirs}\")
 ")
-
+# Builtin PTL is self located
+set(PACKAGE_PTL_PREFIX "${PTL_BUILDTREE_PREFIX}")
 # Geant4 data used in build tree
 geant4_export_datasets(BUILD GEANT4_DATASET_DESCRIPTIONS)
 
@@ -238,7 +246,8 @@ else()
 get_filename_component(Geant4_INCLUDE_DIR \"\${_geant4_thisdir}/${GEANT4_RELATIVE_HEADER_PATH}\" ABSOLUTE)
   ")
 endif()
-
+# Builtin PTL is self located
+set(PACKAGE_PTL_PREFIX "${PTL_INSTALLTREE_PREFIX}")
 # Geant4 data used in install tree
 geant4_export_datasets(INSTALL GEANT4_DATASET_DESCRIPTIONS)
 

@@ -88,6 +88,8 @@ private:
   G4UIcommand*               bsCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               StepFuncCmd1;
+  G4UIcommand*               StepFuncCmd2;
+  G4UIcommand*               StepFuncCmd3;
 
   G4UIcmdWith3VectorAndUnit* dirSplitTargetCmd;
 };

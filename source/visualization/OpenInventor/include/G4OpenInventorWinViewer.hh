@@ -32,7 +32,7 @@
 #ifndef G4OPENINVENTORWINVIEWER_HH
 #define G4OPENINVENTORWINVIEWER_HH
 
-#ifdef G4VIS_BUILD_OI_DRIVER
+#if defined (G4VIS_BUILD_OI_DRIVER) || defined (G4VIS_USE_OI)
 
 // Inheritance :
 #include "G4OpenInventorViewer.hh"

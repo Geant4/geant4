@@ -94,7 +94,6 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dcutCmd->SetDefaultValue(false);
   dcutCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
-
   dnafCmd = new G4UIcmdWithABool("/process/dna/UseDNAFast",this);
   dnafCmd->SetGuidance("Enable usage of fast sampling for DNA models");
   dnafCmd->SetParameterName("dnaf",true);
@@ -125,6 +124,12 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   pixeeXsCmd->SetCandidates("ECPSSR_Analytical Empirical Livermore Penelope");
   pixeeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  livCmd = new G4UIcmdWithAString("/process/em/LivermoreData",this);
+  livCmd->SetGuidance("The name of Livermore data directory");
+  livCmd->SetParameterName("livDir",true);
+  livCmd->SetCandidates("livermore epics_2017");
+  livCmd->AvailableForStates(G4State_PreInit);
+
   dnaSolCmd = new G4UIcmdWithAString("/process/dna/e-SolvationSubType",this);
   dnaSolCmd->SetGuidance("The name of e- solvation DNA model");
   dnaSolCmd->SetParameterName("dnaSol",true);
@@ -139,7 +144,7 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dnaCmd = new G4UIcommand("/process/em/AddDNARegion",this);
   dnaCmd->SetGuidance("Activate DNA in a G4Region.");
   dnaCmd->SetGuidance("  regName   : G4Region name");
-  dnaCmd->SetGuidance("  dnaType   : DNA_opt0, DNA_opt1, DNA_opt2");
+  dnaCmd->SetGuidance("  dnaType   : DNA_opt0, DNA_Opt2, DNA_Opt4, DNA_Opt4a, DNA_Opt6, DNA_Opt6a, DNA_Opt7");
   dnaCmd->AvailableForStates(G4State_PreInit);
 
   G4UIparameter* regName = new G4UIparameter("regName",'s',false);
@@ -147,7 +152,7 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
 
   G4UIparameter* type = new G4UIparameter("dnaType",'s',false);
   dnaCmd->SetParameter(type);
-  type->SetParameterCandidates("DNA_Opt0");
+  type->SetParameterCandidates("DNA_Opt0 DNA_Opt2 DNA_Opt4 DNA_Opt4a DNA_Opt6 DNA_Opt6a DNA_Opt7");
 
   deexCmd = new G4UIcommand("/process/em/deexcitation",this);
   deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
@@ -186,6 +191,7 @@ G4EmLowEParametersMessenger::~G4EmLowEParametersMessenger()
   delete dnamscCmd;
   delete pixeXsCmd;
   delete pixeeXsCmd;
+  delete livCmd;
   delete dnaSolCmd;
   delete meCmd;
   delete dnaCmd;
@@ -241,6 +247,8 @@ void G4EmLowEParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == pixeeXsCmd) {
     theParameters->SetPIXEElectronCrossSectionModel(newValue);
     physicsModified = true;
+  } else if (command == livCmd) {
+    theParameters->SetLivermoreDataDir(newValue);
   } else if (command == meCmd) {
     theParameters->AddMicroElec(newValue);
   } else if (command == dnaCmd) {

@@ -63,8 +63,9 @@ SteppingAction::~SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  static G4ParticleDefinition* opticalphoton = 
+  static G4ParticleDefinition* opticalphoton =
               G4OpticalPhoton::OpticalPhotonDefinition();
+
   G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
   Run* run = static_cast<Run*>(
                G4RunManager::GetRunManager()->GetNonConstCurrentRun());
@@ -73,38 +74,69 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4StepPoint* endPoint   = step->GetPostStepPoint();
   G4StepPoint* startPoint = step->GetPreStepPoint();
 
-  G4String particleName = track->GetDynamicParticle()->
-                                 GetParticleDefinition()->GetParticleName();
+  const G4DynamicParticle* theParticle = track->GetDynamicParticle();
+  const G4ParticleDefinition* particleDef = theParticle->
+               GetParticleDefinition();
 
-  TrackInformation* trackInfo = 
+  TrackInformation* trackInfo =
                         (TrackInformation*)(track->GetUserInformation());
 
-  if (particleName == "opticalphoton") {
+  if (particleDef == opticalphoton) {
     const G4VProcess* pds = endPoint->GetProcessDefinedStep();
-    if (pds->GetProcessName() == "OpAbsorption") {
-      run->AddOpAbsorption(); 
+    G4String procname = pds->GetProcessName();
+    if (procname.compare("OpAbsorption") == 0) {
+      run->AddOpAbsorption();
       if (trackInfo->GetIsFirstTankX()) {
         run->AddOpAbsorptionPrior();
       }
     } 
-    else if (pds->GetProcessName() == "OpRayleigh") {
+    else if (procname.compare("OpRayleigh") == 0) {
       run->AddRayleigh();
+    }
+    else if (procname.compare("OpWLS") == 0) {
+      G4double en = track->GetKineticEnergy();
+      run->AddWLSAbsorption();
+      run->AddWLSAbsorptionEnergy(en);
+      analysisMan->FillH1(4, en/eV); //absorption energy
+      // loop over secondaries, create statistics
+      //const std::vector<const G4Track*>* secondaries =
+      auto secondaries = step->GetSecondaryInCurrentStep();
+      for (auto sec : *secondaries) {
+        en = sec->GetKineticEnergy();
+        run->AddWLSEmission();
+        run->AddWLSEmissionEnergy(en);
+        analysisMan->FillH1(5, en/eV); // emission energy
+        G4double time = sec->GetGlobalTime();
+        analysisMan->FillH1(6, time/ns);
+      }
+    }
+    else if (procname.compare("OpWLS2") == 0) {
+      G4double en = track->GetKineticEnergy();
+      run->AddWLS2Absorption();
+      run->AddWLS2AbsorptionEnergy(en);
+      analysisMan->FillH1(7, en/eV); //absorption energy
+      // loop over secondaries, create statistics
+      //const std::vector<const G4Track*>* secondaries =
+      auto secondaries = step->GetSecondaryInCurrentStep();
+      for (auto sec : *secondaries) {
+        en = sec->GetKineticEnergy();
+        run->AddWLS2Emission();
+        run->AddWLS2EmissionEnergy(en);
+        analysisMan->FillH1(8, en/eV); // emission energy
+        G4double time = sec->GetGlobalTime();
+        analysisMan->FillH1(9, time/ns);
+      }
     }
 
     // optical process has endpt on bdry, 
     if (endPoint->GetStepStatus() == fGeomBoundary) {
-
-      const G4DynamicParticle* theParticle = track->GetDynamicParticle();
-
-      G4ThreeVector oldMomentumDir = theParticle->GetMomentumDirection();
 
       G4ThreeVector m0 = startPoint->GetMomentumDirection();
       G4ThreeVector m1 = endPoint->GetMomentumDirection();
 
       G4OpBoundaryProcessStatus theStatus = Undefined;
 
-      G4ProcessManager* OpManager = 
-        G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
+      G4ProcessManager* OpManager = opticalphoton->GetProcessManager();
       G4int MAXofPostStepLoops = 
         OpManager->GetPostStepProcessVector()->entries();
       G4ProcessVector* postStepDoItVector = 
@@ -116,13 +148,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         G4double py1 = momdir.y();
         G4double pz1 = momdir.z();
         if (px1 < 0.) {
-          analysisMan->FillH1(4, px1);
-          analysisMan->FillH1(5, py1);
-          analysisMan->FillH1(6, pz1);
-        } else if (px1 >= 0.) {
-          analysisMan->FillH1(7, px1);
-          analysisMan->FillH1(8, py1);
-          analysisMan->FillH1(9, pz1);
+          analysisMan->FillH1(11, px1);
+          analysisMan->FillH1(12, py1);
+          analysisMan->FillH1(13, pz1);
+        } else {
+          analysisMan->FillH1(14, px1);
+          analysisMan->FillH1(15, py1);
+          analysisMan->FillH1(16, pz1);
         }
 
         trackInfo->SetIsFirstTankX(false);
@@ -135,15 +167,15 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
             dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
           if (opProc) {
             theStatus = opProc->GetStatus();
-            analysisMan->FillH1(3, theStatus);
+            analysisMan->FillH1(10, theStatus);
             if (theStatus == Transmission) {
               run->AddTransmission();
             }
             else if (theStatus == FresnelRefraction) {
               run->AddFresnelRefraction(); 
-              analysisMan->FillH1(10, px1);
-              analysisMan->FillH1(11, py1);
-              analysisMan->FillH1(12, pz1);
+              analysisMan->FillH1(17, px1);
+              analysisMan->FillH1(18, py1);
+              analysisMan->FillH1(19, pz1);
             }
             else if (theStatus == FresnelReflection) { 
               run->AddFresnelReflection(); 
@@ -279,11 +311,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     G4int n_scint = 0;
     G4int n_cer   = 0;
     for (G4int i = 0; i < n_proc; ++i) {
-      if ((*proc_vec)[i]->GetProcessName().compare("Cerenkov") == 0) {
+      G4String proc_name = (*proc_vec)[i]->GetProcessName();
+      if (proc_name.compare("Cerenkov") == 0) {
         auto cer = (G4Cerenkov*)(*proc_vec)[i];
         n_cer = cer->GetNumPhotons();
       }
-      else if ((*proc_vec)[i]->GetProcessName().compare("Scintillation") == 0) {
+      else if (proc_name.compare("Scintillation") == 0) {
         auto scint = (G4Scintillation*)(*proc_vec)[i];
         n_scint = scint->GetNumPhotons();
       }
@@ -302,21 +335,21 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
     for (auto sec : *secondaries) {
       if (sec->GetDynamicParticle()->GetParticleDefinition() == opticalphoton){
-        if (sec->GetCreatorProcess()->GetProcessName().compare("Cerenkov")==0){
+        G4String creator_process = sec->GetCreatorProcess()->GetProcessName();
+        if (creator_process.compare("Cerenkov") == 0){
           G4double en = sec->GetKineticEnergy();
           run->AddCerenkovEnergy(en);
           run->AddCerenkov();
-          G4AnalysisManager::Instance()->FillH1(1, en/eV);
+          analysisMan->FillH1(1, en/eV);
         }
-        else if (sec->GetCreatorProcess()
-                    ->GetProcessName().compare("Scintillation") == 0) {
+        else if (creator_process.compare("Scintillation") == 0) {
           G4double en = sec->GetKineticEnergy();
           run->AddScintillationEnergy(en);
           run->AddScintillation();
-          G4AnalysisManager::Instance()->FillH1(2, en/eV);
+          analysisMan->FillH1(2, en/eV);
 
           G4double time = sec->GetGlobalTime();
-          analysisMan->FillH1(13, time/ns);
+          analysisMan->FillH1(3, time/ns);
         }
       }
     }

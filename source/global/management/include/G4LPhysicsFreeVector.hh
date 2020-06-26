@@ -23,12 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------------
-//
-// Class G4LPhysicsFreeVector -- header file
+// G4LPhysicsFreeVector
 //
 // Class description:
 //
@@ -38,38 +33,32 @@
 // who may wish to implement a free vector in a different way.
 // A subdivision method is used to find the energy|momentum bin.
 
-// F.W. Jones, TRIUMF, 04-JUN-96
-// 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
-// 02-APR-08 A.Bagulya: use GetValue() from base class
-// 02-OCT-13  V.Ivanchenko : Remove FindBinLocation method
-//
-// ------------------------------------------------------------------
-
-#ifndef G4LPhysicsFreeVector_h
-#define G4LPhysicsFreeVector_h 1
+// Author: F.W. Jones (TRIUMF), 04-June-1996 - First implementation
+// --------------------------------------------------------------------
+#ifndef G4LPhysicsFreeVector_hh
+#define G4LPhysicsFreeVector_hh 1
 
 #include "G4PhysicsFreeVector.hh"
 
-class G4LPhysicsFreeVector : public G4PhysicsFreeVector  
+class G4LPhysicsFreeVector : public G4PhysicsFreeVector
 {
-
-public: // with description
-
+ public:
   G4LPhysicsFreeVector();
-  // the vector will be filled from external file using Retrieve method
+  // The vector will be filled from external file using Retrieve method
 
-  G4LPhysicsFreeVector(size_t length, G4double emin=0.0, G4double emax=0.0);
-  // the vector with 'length' elements will be filled using PutValues method 
-  // by default the vector is initialized with zeros
+  G4LPhysicsFreeVector(std::size_t length, G4double emin = 0.,
+                       G4double emax = 0.);
+  // The vector with 'length' elements will be filled using PutValues
+  // method by default the vector is initialized with zeros
 
   virtual ~G4LPhysicsFreeVector();
 
-  inline void PutValues(size_t index, G4double e, G4double dataValue);
-  // user code is responsible for correct filling of all elements
+  inline void PutValues(std::size_t index, G4double e, G4double dataValue);
+  // User code is responsible for correct filling of all elements
 };
 
-inline
-void G4LPhysicsFreeVector::PutValues(size_t index, G4double e, G4double value)
+inline void G4LPhysicsFreeVector::PutValues(std::size_t index, G4double e,
+                                            G4double value)
 {
   G4PhysicsFreeVector::PutValue(index, e, value);
 }

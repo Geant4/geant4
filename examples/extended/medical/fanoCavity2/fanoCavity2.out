@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -185,7 +185,7 @@ hIoni:  for proton  SubType=2
           BetheBloch : Emin=    2 MeV Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
@@ -201,7 +201,7 @@ Index : 1     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 
  ===================== run conditions =====================
@@ -225,45 +225,45 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 10000 starts.
---->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05363 Ne-_cav= 2860 doseCavity/Ebeam= 1.06120  (100*(ratio-1) = 6.12007 %) 
+--->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05363 Ne-_cav= 2852 doseCavity/Ebeam= 1.01564  (100*(ratio-1) = 1.56371 %) 
 
 --> Event 20000 starts.
---->evntNb= 20000 Nwall= 19996 Ncav= 5 Ic/Iw= 1.31717 Ne-_cav= 5699 doseCavity/Ebeam= 1.08412  (100*(ratio-1) = 8.41192 %) 
+--->evntNb= 20000 Nwall= 19997 Ncav= 4 Ic/Iw= 1.05368 Ne-_cav= 5712 doseCavity/Ebeam= 1.01999  (100*(ratio-1) = 1.99866 %) 
 
 --> Event 30000 starts.
---->evntNb= 30000 Nwall= 29994 Ncav= 7 Ic/Iw= 1.22936 Ne-_cav= 8620 doseCavity/Ebeam= 1.08956  (100*(ratio-1) = 8.95590 %) 
+--->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87805 Ne-_cav= 8505 doseCavity/Ebeam= 0.99900  (100*(ratio-1) = -0.09999 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=2.640000s Real=2.650786s Sys=0.000000s
+  User=7.590000s Real=7.635075s Sys=0.000000s
 
- Process calls frequency --->  msc= 644751  eIoni= 258361  Transportation= 22831
+ Process calls frequency --->  msc= 640840  eIoni= 259324  Transportation= 22730
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11414	 Energy = 7.255 GeV
-      Exit  --> nbParticles = 11417	 Energy = 7.256 GeV
+      Enter --> nbParticles = 11366	 Energy = 7.229 GeV
+      Exit  --> nbParticles = 11364	 Energy = 7.227 GeV
 
- beamFluence in wall = 39991	 in cavity = 9	 Icav/Iwall = 1.18548	 energyFluence = 37.96066 MeV*cm2/mg
+ beamFluence in wall = 39995	 in cavity = 5	 Icav/Iwall = 0.65853	 energyFluence = 37.96068 MeV*cm2/mg
 
- Total edep in cavity = 7.99106 MeV +- 3.88055 %
- Total dose in cavity = 39.95531 MeV*cm2/mg +- 3.88055 %
+ Total edep in cavity = 7.56685 MeV +- 3.36433 %
+ Total dose in cavity = 37.83424 MeV*cm2/mg +- 3.36433 %
 
- DoseCavity/EnergyFluence = 1.05255 +- 0.04084
+ DoseCavity/EnergyFluence = 0.99667 +- 0.03353
 
- Total charged trackLength in cavity = 36.2841 m     (mean value = 3.1789 mm )
+ Total charged trackLength in cavity = 35.4115 m     (mean value = 3.1156 mm )
 
- StepSize of ch. tracks in wall   = 200.5631 um  +- 161.3791 um 	 (nbSteps/track = 21.9708)
- StepSize of ch. tracks in cavity = 766.9592 um  +- 1.3498 mm 	 (nbSteps/track = 4.1448)
+ StepSize of ch. tracks in wall   = 201.4959 um  +- 162.1213 um 	 (nbSteps/track = 21.9002)
+ StepSize of ch. tracks in cavity = 753.5164 um  +- 1.3530 mm 	 (nbSteps/track = 4.1347)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1486272994, 992432232
+ Current couple of seeds = 1612056410, 405244496
 ----------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1486272994, 992432232
+ Current couple of seeds = 1612056410, 405244496
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

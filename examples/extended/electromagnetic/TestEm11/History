@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-01-20 V.Ivanchenko (testem11-V11-06-00)
+- PhysicsList - use G4RadioactiveDecayBase instead of obsolete
+    G4RadioactiveDecay and minor code cleanup
 	 
 04-06-18 mma (testem11-V10-04-03)
 - SteppingAction.cc : Photoelectric, edep at end of step

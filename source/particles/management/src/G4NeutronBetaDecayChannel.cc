@@ -23,18 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NeutronBetaDecayChannel class implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      18 Sep  2001 H.Kurashige
-//---
-//      Fix energy of proton and neutrino     May 2011 H.Kurashige
-//      Fix direction of proton and neutrino  Nov 2013 H.Kurashige
-// ------------------------------------------------------------
+// Author: H.Kurashige, 18 September 2001 
+// --------------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
@@ -48,35 +40,39 @@
 #include "G4LorentzRotation.hh"
 
 G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel()
-                   :G4VDecayChannel(),
-		    aENuCorr(-0.102)
+  : G4VDecayChannel()
 {
 }
 
-G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
-				       const G4String& theParentName, 
-				       G4double        theBR)
-                   :G4VDecayChannel("Neutron Decay"),
-		    aENuCorr(-0.102)
+G4NeutronBetaDecayChannel::
+G4NeutronBetaDecayChannel(const G4String& theParentName, 
+                                G4double  theBR)
+  : G4VDecayChannel("Neutron Decay")
 {
   // set names for daughter particles
-  if (theParentName == "neutron") {
+  if (theParentName == "neutron")
+  {
     SetBR(theBR);
     SetParent("neutron");
     SetNumberOfDaughters(3);
     SetDaughter(0, "e-");
     SetDaughter(1, "anti_nu_e");
     SetDaughter(2, "proton");
-  } else if (theParentName == "anti_neutron") {
+  }
+  else if (theParentName == "anti_neutron")
+  {
     SetBR(theBR);
     SetParent("anti_neutron");
     SetNumberOfDaughters(3);
     SetDaughter(0, "e+");
     SetDaughter(1, "nu_e");
     SetDaughter(2, "anti_proton");
-  } else {
+  }
+  else
+  {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>0)
+    {
       G4cout << "G4NeutronBetaDecayChannel:: constructor :";
       G4cout << " parent particle is not neutron but ";
       G4cout << theParentName << G4endl;
@@ -89,21 +85,23 @@ G4NeutronBetaDecayChannel::~G4NeutronBetaDecayChannel()
 {
 }
 
-G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel &right)
-    : G4VDecayChannel(right),
-      aENuCorr(-0.102)
+G4NeutronBetaDecayChannel::
+G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel& right)
+  : G4VDecayChannel(right)
 {
 }
 
-
-G4NeutronBetaDecayChannel & G4NeutronBetaDecayChannel::operator=(const G4NeutronBetaDecayChannel & right)
+G4NeutronBetaDecayChannel& G4NeutronBetaDecayChannel::
+operator=(const G4NeutronBetaDecayChannel& right)
 {
-  if (this != &right) { 
+  if (this != &right)
+  { 
     kinematics_name = right.kinematics_name;
     verboseLevel = right.verboseLevel;
     rbranch = right.rbranch;
 
     // copy parent name
+    delete parent_name;
     parent_name = new G4String(*right.parent_name);
 
     // clear daughters_name array
@@ -111,21 +109,22 @@ G4NeutronBetaDecayChannel & G4NeutronBetaDecayChannel::operator=(const G4Neutron
 
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
-    if ( numberOfDaughters >0 ) {
-      if (daughters_name !=0) ClearDaughtersName();
+    if ( numberOfDaughters >0 )
+    {
       daughters_name = new G4String*[numberOfDaughters];
-      //copy daughters name
-      for (G4int index=0; index < numberOfDaughters; index++) {
-          daughters_name[index] = new G4String(*right.daughters_name[index]);
+      // copy daughters name
+      for (G4int index=0; index<numberOfDaughters; ++index)
+      {
+        daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
   }
   return *this;
 }
 
-G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double) 
+G4DecayProducts* G4NeutronBetaDecayChannel::DecayIt(G4double) 
 {
-  //  This class describes free neutron beta decay  kinemtics.
+  //  This class describes free neutron beta decay kinematics.
   //  This version neglects neutron/electron polarization  
   //  without Coulomb effect
 
@@ -139,20 +138,22 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();
 
-  //daughters'mass
+  // daughters'mass
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
-  for (G4int index=0; index<3; index++){
+  for (G4int index=0; index<3; ++index)
+  {
     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
   G4double xmax = parentmass-sumofdaughtermass;  
 
-   //create parent G4DynamicParticle at rest
+  // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle* parentparticle
+    = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
 
-  //create G4Decayproducts
+  // create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
@@ -166,18 +167,20 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double w;                    // cosine of e-nu angle
   G4double r;  
   G4double r0;
-  const size_t MAX_LOOP=10000;
-  for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
-      x = xmax*G4UniformRand();
-      p = std::sqrt(x*(x+2.0*dm));
-      w = 1.0-2.0*G4UniformRand();
-      r = p*(x+dm)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+dm)*w);
-      r0 = G4UniformRand()*(xmax+dm)*(xmax+dm)*xmax*xmax*(1.0+aENuCorr);
-      if  (r > r0) break;
-   }  
+  const std::size_t MAX_LOOP=10000;
+  for (std::size_t loop_counter=0; loop_counter<MAX_LOOP; ++loop_counter)
+  {
+    x = xmax*G4UniformRand();
+    p = std::sqrt(x*(x+2.0*dm));
+    w = 1.0-2.0*G4UniformRand();
+    r = p*(x+dm)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+dm)*w);
+    r0 = G4UniformRand()*(xmax+dm)*(xmax+dm)*xmax*xmax*(1.0+aENuCorr);
+    if  (r > r0) break;
+  }  
 
-  //create daughter G4DynamicParticle 
+  // create daughter G4DynamicParticle 
   // rotation materix to lab frame
+  //
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double theta = std::acos(costheta)*rad;
   G4double phi  = twopi*G4UniformRand()*rad;
@@ -189,13 +192,14 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   daughtermomentum[0] = p;
   G4ThreeVector direction0(0.0, 0.0, 1.0);
   direction0 = rm * direction0;
-  G4DynamicParticle * daughterparticle0 
-         = new G4DynamicParticle( G4MT_daughters[0], direction0*daughtermomentum[0]);
+  G4DynamicParticle* daughterparticle0 
+    = new G4DynamicParticle(G4MT_daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle0);
 
   // daughter 1 (nutrino) in XZ plane
   G4double eNu;    // Enu
-  eNu = (parentmass-daughtermass[2])*(parentmass+daughtermass[2])+(dm*dm)-2.*parentmass*(x+dm);
+  eNu = (parentmass-daughtermass[2])
+      * (parentmass+daughtermass[2])+(dm*dm)-2.*parentmass*(x+dm);
   eNu /= 2.*(parentmass+p*w-(x+dm));
   G4double cosn = w;
   G4double phin  = twopi*G4UniformRand()*rad;
@@ -203,8 +207,8 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
 
   G4ThreeVector direction1(sinn*std::cos(phin), sinn*std::sin(phin), cosn);
   direction1 = rm * direction1;
-  G4DynamicParticle * daughterparticle1 
-         = new G4DynamicParticle( G4MT_daughters[1], direction1*eNu);
+  G4DynamicParticle* daughterparticle1 
+    = new G4DynamicParticle( G4MT_daughters[1], direction1*eNu);
   products->PushProducts(daughterparticle1);
 
   // daughter 2 (proton) at REST
@@ -213,16 +217,17 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double pPx = -eNu*sinn;
   G4double pPz = -p-eNu*cosn;
   G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
-  G4ThreeVector direction2(pPx/pP*std::cos(phin), pPx/pP*std::sin(phin), pPz/pP);
+  G4ThreeVector direction2(pPx/pP*std::cos(phin),
+                           pPx/pP*std::sin(phin), pPz/pP);
   direction2 = rm * direction2;
-    G4DynamicParticle * daughterparticle2 
-         = new G4DynamicParticle( G4MT_daughters[2], direction2*pP);
+  G4DynamicParticle* daughterparticle2 
+    = new G4DynamicParticle( G4MT_daughters[2], direction2*pP);
   products->PushProducts(daughterparticle2);
- 
 
- // output message
+  // output message
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
+  if (GetVerboseLevel()>1)
+  {
     G4cout << "G4NeutronBetaDecayChannel::DecayIt ";
     G4cout << "  create decay products in rest frame " <<G4endl;
     products->DumpInfo();
@@ -230,9 +235,3 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
 #endif
   return products;
 }
-
-
-
-
-
-

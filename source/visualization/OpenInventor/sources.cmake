@@ -1,40 +1,7 @@
 #------------------------------------------------------------------------------
-# sources.cmake
 # Module : G4OpenInventor
 # Package: Geant4.src.G4visualization.G4OpenInventor
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitely.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
 #------------------------------------------------------------------------------
-
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${USOLIDS_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/common/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/visualization/externals/gl2ps/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
-
 
 #----------------------------------------------------------------------------
 # Generic Inventor Headers, base library, OpenGL and Geant4 defines
@@ -48,8 +15,6 @@ list(APPEND G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES ${OPENGL_LIBRARIES})
 
 add_definitions(-DG4VIS_BUILD_OI_DRIVER)
-
-
 
 #----------------------------------------------------------------------------
 # Geant4 OpenInventor Core sources and headers (all platforms)
@@ -95,97 +60,87 @@ set(G4VIS_MODULE_OPENINVENTOR_SOURCES
 # UNIX Only (Xt) sources
 #
 if(UNIX)
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
-    G4OpenInventorX.hh
-    G4OpenInventorXt.hh
-    G4OpenInventorXtExaminerViewerMessenger.hh
-    G4OpenInventorXtExaminerViewer.hh
-    G4OpenInventorXtExtended.hh
-    G4OpenInventorXtExtendedViewer.hh
-    G4OpenInventorXtViewer.hh
-    wheelmouse.h
-    SoXtInternal.h
-    console.h
-    favorites.h
-    saveViewPt.h
-    pickext.h
-    pickref.h
-    wireframe.h
-    )
+  if(NOT GEANT4_USE_INVENTOR_QT)
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
+       G4OpenInventorX.hh
+       G4OpenInventorXt.hh
+       G4OpenInventorXtExaminerViewerMessenger.hh
+       G4OpenInventorXtExaminerViewer.hh
+       G4OpenInventorXtExtended.hh
+       G4OpenInventorXtExtendedViewer.hh
+       G4OpenInventorXtViewer.hh
+       wheelmouse.h
+       SoXtInternal.h
+       console.h
+       favorites.h
+       saveViewPt.h
+       pickext.h
+       pickref.h
+       wireframe.h
+       )
 
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
-    G4OpenInventorXt.cc
-    G4OpenInventorXtExaminerViewer.cc
-    G4OpenInventorXtExaminerViewerMessenger.cc
-    G4OpenInventorXtExtended.cc
-    G4OpenInventorXtExtendedViewer.cc
-    G4OpenInventorXtViewer.cc
-    wheelmouse.cc
-    )
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
+       G4OpenInventorXt.cc
+       G4OpenInventorXtExaminerViewer.cc
+       G4OpenInventorXtExaminerViewerMessenger.cc
+       G4OpenInventorXtExtended.cc
+       G4OpenInventorXtExtendedViewer.cc
+       G4OpenInventorXtViewer.cc
+       wheelmouse.cc
+       )
 
   # Add the definitions for SoXt
-  add_definitions(-DG4INTY_BUILD_XT)
-  add_definitions(-DG4VIS_BUILD_OIX_DRIVER)
+     add_definitions(-DG4INTY_BUILD_XT)
+     add_definitions(-DG4VIS_BUILD_OIX_DRIVER)
 
   # SoXt Library
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
-    ${INVENTOR_SOXT_LIBRARY}
-    )
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
+       ${INVENTOR_SOXT_LIBRARY}
+       )
 
   # We also need Xm and X11
-  include_directories(${X11_INCLUDE_DIR})
-  include_directories(${MOTIF_INCLUDE_DIR})
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS 
-    ${OPENGL_INCLUDE_DIR}
-    ${MOTIF_INCLUDE_DIR}
-    )
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
-   ${MOTIF_LIBRARIES}
-   ${X11_LIBRARIES}
-   ${X11_Xpm_LIB}
-   )
-endif()
+     include_directories(${X11_INCLUDE_DIR})
+     include_directories(${MOTIF_INCLUDE_DIR})
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS
+       ${OPENGL_INCLUDE_DIR}
+       ${MOTIF_INCLUDE_DIR}
+       )
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
+      ${MOTIF_LIBRARIES}
+      ${X11_LIBRARIES}
+      ${X11_Xpm_LIB}
+      )
 
+  else()
 
 #----------------------------------------------------------------------------
-# Qt
+# Open Inventor Qt
 #
-if(GEANT4_USE_QT AND GEANT4_USE_INVENTOR_QT)
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
-    G4OpenInventorQt.hh
-    G4OpenInventorQtExaminerViewer.hh
-    G4OpenInventorQtViewer.hh
-    G4SoQt.hh
-    )
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
+       G4OpenInventorQt.hh
+       G4OpenInventorQtExaminerViewer.hh
+       G4OpenInventorQtViewer.hh
+       G4SoQt.hh
+       )
 
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
-    G4OpenInventorQt.cc
-    G4OpenInventorQtExaminerViewer.cc
-    G4OpenInventorQtViewer.cc
-    G4SoQt.cc
-    )
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
+       G4OpenInventorQt.cc
+       G4OpenInventorQtExaminerViewer.cc
+       G4OpenInventorQtViewer.cc
+       G4SoQt.cc
+       )
 
-    # Add the moc sources - must use absolute path to the files
-    QT4_WRAP_CPP(G4OI_MOC_SOURCES
-        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/include/G4OpenInventorQt.hh
-        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/src/G4OpenInventorQtExaminerViewer.cc
-        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/src/G4OpenInventorQtViewer.cc
-        ${CMAKE_SOURCE_DIR}/source/visualization/OpenInventor/src/G4SoQt.cc
-         OPTIONS -DG4VIS_BUILD_OIQT_DRIVER)
-
-    list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES ${G4OI_MOC_SOURCES})
-
-    # Add the definitions - these will also be used to compile the moc sources
-    # Argh.. Have to remember about INTY and UI because of their use...
-    add_definitions(-DG4VIS_BUILD_OIQT_DRIVER)
-    add_definitions(-DG4INTY_BUILD_QT)
-    add_definitions(-DG4UI_BUILD_QT_SESSION)
+     # Add the definitions
+     # Argh.. Have to remember about INTY and UI because of their use...
+     add_definitions(-DG4VIS_BUILD_OIQT_DRIVER)
+     add_definitions(-DG4INTY_BUILD_QT)
+     add_definitions(-DG4UI_BUILD_QT_SESSION)
 
     # Add in Qt libraries
-    list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
+     list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
       ${INVENTOR_SOQT_LIBRARY}
-      ${QT_LIBRARIES}
-      )
+      Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets)
+  endif()
 endif()
 
 
@@ -218,13 +173,10 @@ if(WIN32)
     )
 endif()
 
-
-
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4OpenInventor
+geant4_define_module(NAME G4OpenInventor
   HEADERS
     ${G4VIS_MODULE_OPENINVENTOR_HEADERS}
   SOURCES

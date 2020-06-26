@@ -33,7 +33,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := glu32.lib opengl32.lib gdi32.lib user32.lib
+    OGLLIBS   := opengl32.lib gdi32.lib user32.lib
   endif
   ifndef UI32LIBS
     UI32LIBS  := gdi32.lib user32.lib
@@ -85,6 +85,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   ifdef G4LIB_USE_CLHEP
     GLOBLIBS += libG4clhep.lib
   endif
+  ifdef G4LIB_USE_PTL
+    GLOBLIBS += libptl.lib
+  endif
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
     cd $(G4TMP)/$(G4SYSTEM);\
@@ -102,6 +105,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
+             $(LIB_PATH)$(PTL_LIB_DIR) $(PTL_LIB) \
              $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS) $(LOADLIBS)
   endef
   define build-global-shared-lib
@@ -121,6 +125,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
+             $(LIB_PATH)$(PTL_LIB_DIR) $(PTL_LIB) \
              $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS) $(LOADLIBS)
   endef
 endif

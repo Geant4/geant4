@@ -27,14 +27,13 @@
 //
 // Class description:
 //
-// Container for all solids, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// Container for all physical volumes, with functionality derived from
+// std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static method
 // G4PhysicalVolumeStore::GetInstance()
 //
-// All solids should be registered with G4PhysicalVolumeStore, and removed on
-// their destruction. Intended principally for UI browser. The underlying
-// container initially has a capacity of 100.
+// All volumes should be registered with G4PhysicalVolumeStore, and removed on
+// their destruction. The underlying container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
 // instead of inheritance for std::vector<T>
@@ -44,8 +43,8 @@
 // static G4PhysicalVolumeStore*
 //   - Ptr to the single G4PhysicalVolumeStore.
 
-// 18.04.01, G.Cosmo - Migrated to STL vector
 // 25.07.95, P.Kent - Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
 // --------------------------------------------------------------------
 #ifndef G4PHYSICALVOLUMESTORE_HH
 #define G4PHYSICALVOLUMESTORE_HH
@@ -57,14 +56,14 @@
 
 class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4VPhysicalVolume* pSolid);
       // Add the volume to the collection.
     static void DeRegister(G4VPhysicalVolume* pSolid);
       // Remove the volume from the collection.
     static G4PhysicalVolumeStore* GetInstance();
-      // Get a ptr to the unique G4PhysicalVolumeStore, creating it if necessary.
+      // Get a ptr to the unique store instance, creating it if necessary.
     static void SetNotifier(G4VStoreNotifier* pNotifier);
       // Assign a notifier for allocation/deallocation of the physical volumes.
     static void Clean();
@@ -78,6 +77,10 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
 
     virtual ~G4PhysicalVolumeStore();
       // Destructor: takes care to delete allocated physical volumes.
+
+    G4PhysicalVolumeStore(const G4PhysicalVolumeStore&) = delete;
+    G4PhysicalVolumeStore& operator=(const G4PhysicalVolumeStore&) = delete;
+      // Forbidden copy constructor and assignment operator
 
   protected:
 

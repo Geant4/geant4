@@ -41,22 +41,13 @@
 #include "globals.hh"
 #include "G4IonPhysics.hh"
 
-class G4HadronInelasticProcess;
-class G4HadronicInteraction;
-class G4VCrossSectionDataSet;
-class G4VComponentCrossSection;
-class G4FTFBuilder;
-class G4BinaryLightIonReaction;
-
 class G4IonBinaryCascadePhysics : public G4IonPhysics
 {
 public:
   G4IonBinaryCascadePhysics(G4int ver = 0);
   G4IonBinaryCascadePhysics(const G4String& name, G4int ver = 0);
-  virtual ~G4IonBinaryCascadePhysics();
-
+  ~G4IonBinaryCascadePhysics() override;
 };
-
 
 #endif
 

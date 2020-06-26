@@ -53,14 +53,14 @@ public:
 
   explicit G4EmStandardPhysicsSS(G4int ver = 1);
 
-  virtual ~G4EmStandardPhysicsSS();
+  ~G4EmStandardPhysicsSS() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
 private:
-  G4int  verbose;
   G4EmParticleList partList;
+  G4int  verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

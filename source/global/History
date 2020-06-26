@@ -16,23 +16,71 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 29, 2020 Gabriele Cosmo (global-V10-05-29)
-- Updated tag IDs for release 10.6.p02.
+June 26, 2020 Gabriele Cosmo (global-V10-06-15)
+- Updated tag IDs for geant4-10-06-ref-06.
 
-March 31, 2020 Ben Morgan (global-V10-05-28)
-- G4UnitsTable - add inheriting constructors for std::vector
+May 31, 2020 Gabriele Cosmo (global-V10-06-14)
+- Updated tag IDs for geant4-10-06-ref-05.
 
-December 03, 2019 Gabriele Cosmo (global-V10-05-27)
-- Updated tag IDs for release 10.6.p01.
+May 28, 2020 Ben Morgan (global-V10-06-13)
+- management/sources.cmake: Add location of generated header to
+  public include directories of G4globman.
 
-January 30, 2020 Gabriele Cosmo
+May 20, 2020 Gabriele Cosmo (global-V10-06-12)
+- Minor c++11 revision in HepNumerics module.
+- Re-applied clang-format after minor rules adaptations.
+
+May 18, 2020 Gabriele Cosmo (global-V10-06-11)
+- Removed unnecessary use of deprecated G4USE_STD11 flag.
+  Also indicated in GitHub PR#13.
+
+May 10, 2020 Jonathan Madsen (global-V10-06-10)
+- Applied clang-format to G4global category
+
+May 5, 2020 Gabriele Cosmo (global-V10-06-09)
+- C++11 revision in 'management' module and some code cleanup/formatting.
+
+April 29, 2020 Gabriele Cosmo (global-V10-06-08)
+- Updated tag IDs for geant4-10-06-ref-04.
+
+March 31, 2020 Ben Morgan (global-V10-06-07)
+- G4UnitsTable: added inheriting constructors for std::vector.
+
+March 31, 2020 Gabriele Cosmo (global-V10-06-06)
+- Updated tag IDs for geant4-10-06-ref-03.
+
+February 29, 2020 Gabriele Cosmo (global-V10-06-05)
+- Updated tag IDs for geant4-10-06-ref-02.
+
+February 03, 2020 Vladimir Ivanchenko (global-V10-06-04)
+- G4PhysicsLinearVector, G4PhysicsLogVector - more accurate
+  checks in class constructors - fixed Coverity warning
+
+January 30, 2020 Gabriele Cosmo (global-V10-06-03)
 - Fixed symbol exporting problem in G4coutDestination on Windows; define
   'masterG4coutDestination' static pointer as a normal pointer.
   Addressing problem report #2217.
 
-January 14, 2020 Gabriele Cosmo
+January 16, 2020 Vladimir Ivanchenko (global-V10-06-02)
+- G4Physics2DVector - extend number of characters in the table dump
+  from 5 to 8; use similar algorithm for bin selection as in 1d vector;
+  if any dimension is less than 2 through G4Exception
+- G4PhysicsVector - use the same code for interpolation for all types
+  of PhysicsVector; removed obsolete unused methods; maximally use
+  const variables; preserve precision of printout;
+- G4PhysicsLinearVector - added checks on vector
+  length: if it is less than 2 through G4Exception
+- G4PhysicsLogVector - added checks on vector length: if it is less
+  than 3 through G4Exception
+
+January 14, 2020 Gabriele Cosmo (global-V10-06-01)
 - Added windefs.hh header, including protections for double definition
   of global symbols from Windows Kits code.
+- Updated tag IDs for geant4-10-06-ref-01.
+
+December 09, 2019 Ben Morgan (global-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
 
 December 03, 2019 Gabriele Cosmo (global-V10-05-26)
 - Updated tag IDs for release 10.6.
@@ -616,7 +664,7 @@ November 5, 2014 A.Dotti (global-V10-00-41)
 - Added missing G4GLOB_DLL specification for DLL import/export to
   G4CacheDetails specialization of cache reference for double.
 
-October 24, 2014 J.Apostolakis A.Dotti (global-V10-00-39,-40)
+October 24, 2014 J.Apostolakis, A.Dotti (global-V10-00-39,-40)
 - Adding template class G4TWorkspacePool.
 
 October 24, 2014 A.Dotti (global-V10-00-38)
@@ -1900,8 +1948,8 @@ November 20, 2002 G.Cosmo (global-V04-01-02)
 
 August 19, 2002 M.Asai (global-V04-01-01)
 - Introducing a new G4Exception scheme.
- Added : G4VStateDependent.hh G4VStateDependent.cc G4ExceptionSeverity.hh
- Modified : G4Exception.cc G4StateManager.hh globals.hh
+  Added : G4VStateDependent.hh G4VStateDependent.cc G4ExceptionSeverity.hh
+  Modified : G4Exception.cc G4StateManager.hh globals.hh
 
 June 21, 2002 G.Cosmo (global-V04-01-00)
 - G4Allocator.hh: changed definition of page size to become data-member of

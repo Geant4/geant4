@@ -66,7 +66,7 @@ class G4FSALIntegrationDriver
 
     virtual void OnComputeStep() override {}
 
-    virtual G4bool DoesReIntegrate() override { return true; } 
+    virtual G4bool DoesReIntegrate() const override { return true; } 
    
     virtual G4bool AccurateAdvance( G4FieldTrack& track,
                                     G4double hstep,
@@ -86,6 +86,9 @@ class G4FSALIntegrationDriver
     virtual void SetVerboseLevel(G4int newLevel) override;
     virtual G4int GetVerboseLevel() const override;
 
+    virtual void  StreamInfo( std::ostream& os ) const override;
+     // Write out the parameters / state of the driver
+   
     // Accessors
 
     G4double GetMinimumStep() const;

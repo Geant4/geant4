@@ -40,41 +40,23 @@
 //              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpRayleigh_h
 #define G4OpRayleigh_h 1
 
-#include "globals.hh"
-#include "templates.hh"
-#include "Randomize.hh"
-#include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
-#include "G4Step.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4PhysicsTable.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
-
-// Class Description:
-// Discrete Process -- Rayleigh scattering of optical photons.
-// Class inherits publicly from G4VDiscreteProcess.
-// Class Description - End:
 
 class G4OpRayleigh : public G4VDiscreteProcess
 {
-
 public:
 
   explicit G4OpRayleigh(const G4String& processName = "OpRayleigh",
                               G4ProcessType type = fOptical);
 	virtual ~G4OpRayleigh();
-
-public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable' only for an optical photon.
@@ -100,9 +82,6 @@ public:
 protected:
 
    G4PhysicsTable* thePhysicsTable;
-   //  A Physics Table can be either a cross-sections table or
-   //  an energy table (or can be used for other specific
-   //  purposes).
 
 private:
 
@@ -112,7 +91,9 @@ private:
   /// Calculates the mean free paths for a material as a function of
   /// photon energy
   G4PhysicsOrderedFreeVector*
-  CalculateRayleighMeanFreePaths( const G4Material* material ) const;
+  CalculateRayleighMeanFreePaths(const G4Material* material) const;
+
+  size_t idx_rslength = 0;
 };
 
 ////////////////////
@@ -128,13 +109,9 @@ G4bool G4OpRayleigh::IsApplicable(const G4ParticleDefinition& aParticleType)
 inline
 void G4OpRayleigh::DumpPhysicsTable() const
 {
-  G4int PhysicsTableSize = thePhysicsTable->entries();
-  G4PhysicsOrderedFreeVector *v;
-
-  for (G4int i = 0; i < PhysicsTableSize; ++i)
+  for (size_t i=0; i<thePhysicsTable->entries(); ++i)
   {
-    v = (G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i];
-    v->DumpValues();
+    ((G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i])->DumpValues();
   }
 }
 

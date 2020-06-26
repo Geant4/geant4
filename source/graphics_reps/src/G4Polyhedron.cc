@@ -89,6 +89,14 @@ G4PolyhedronSphere::G4PolyhedronSphere (G4double rmin, G4double rmax,
 
 G4PolyhedronSphere::~G4PolyhedronSphere () {}
 
+G4PolyhedronTet::G4PolyhedronTet (const G4double p0[3],
+                                  const G4double p1[3],
+                                  const G4double p2[3],
+                                  const G4double p3[3]):
+  G4Polyhedron (HepPolyhedronTet (p0, p1, p2, p3)) {}
+
+G4PolyhedronTet::~G4PolyhedronTet () {}
+
 G4PolyhedronTorus::G4PolyhedronTorus (G4double rmin, G4double rmax,
                                       G4double rtor,
                                       G4double phi, G4double dphi):
@@ -156,6 +164,13 @@ G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax,
   G4Polyhedron (HepPolyhedronEllipticalCone (ax, ay, h, zCut1)) {}
 
 G4PolyhedronEllipticalCone::~G4PolyhedronEllipticalCone () {}
+
+G4PolyhedronHyperbolicMirror::G4PolyhedronHyperbolicMirror (G4double a,
+                                                            G4double h,
+                                                            G4double r):
+  G4Polyhedron (HepPolyhedronHyperbolicMirror(a, h, r)) {}
+
+G4PolyhedronHyperbolicMirror::~G4PolyhedronHyperbolicMirror () {}
 
 std::ostream& operator<<(std::ostream& os, const G4Polyhedron& polyhedron)
 {

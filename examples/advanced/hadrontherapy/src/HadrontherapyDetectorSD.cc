@@ -56,6 +56,8 @@
 #include "G4VSensitiveDetector.hh"
 #include "HadrontherapyRunAction.hh"
 #include "G4SystemOfUnits.hh"
+#include "HadrontherapyRBE.hh"
+#include <G4AccumulableManager.hh>
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -91,7 +93,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     
     // Get kinetic energy
     G4Track * theTrack = aStep  ->  GetTrack();
-    
+    G4double kineticEnergy = theTrack->GetKineticEnergy();
     G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
     //Get particle name
     G4String particleName =  particleDef -> GetParticleName();
@@ -119,9 +121,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     G4VPhysicalVolume* volumePre = touchPreStep->GetVolume();
     G4String namePre = volumePre->GetName();
     
-    
-    
-    
+
     
     HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
     HadrontherapyLet* let = HadrontherapyLet::GetInstance();
@@ -219,6 +219,23 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
             HitsCollection -> insert(detectorHit);
         }
     }
+
+    auto rbe = HadrontherapyRBE::GetInstance();
+    if (rbe->IsCalculationEnabled())
+    {
+        if (!fRBEAccumulable)
+        {
+            fRBEAccumulable = dynamic_cast<HadrontherapyRBEAccumulable*>(G4AccumulableManager::Instance()->GetAccumulable("RBE"));
+            if (!fRBEAccumulable)
+            {
+                G4Exception("HadrontherapyDetectorSD::ProcessHits", "NoAccumulable", FatalException, "Accumulable RBE not found.");
+            }
+        }
+
+        fRBEAccumulable->Accumulate(kineticEnergy / A, energyDeposit, DX, Z, i, j, k);
+    }
+
+
     return true;
 }
 

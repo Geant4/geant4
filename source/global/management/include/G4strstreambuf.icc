@@ -23,133 +23,114 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4strstreambuf inline methods implementation
 //
-// ====================================================================
-//   G4strstreambuf.icc
-//
-// ====================================================================
+// Authors: H.Yoshida, M.Nagamatu - November 1998
+// Revisions: G.Cosmo, 1998-2013
+// --------------------------------------------------------------------
 
-///////////////////////////////////////
+// --------------------------------------------------------------------
 inline G4strstreambuf::G4strstreambuf()
-  : std::basic_streambuf<char>(),
-    count(0), destination(0)
-///////////////////////////////////////
+  : std::basic_streambuf<char>()
 {
-  size= 4095;
-  buffer= new char[size+1];
+  size   = 4095;
+  buffer = new char[size + 1];
 }
 
-
-////////////////////////////////////////
+// --------------------------------------------------------------------
 inline G4strstreambuf::~G4strstreambuf()
-////////////////////////////////////////
 {
   // flushing buffer...
   // std::cout is used because destination object may not be alive.
-  if(count !=0) std::cout << buffer;
+  if(count != 0)
+    std::cout << buffer;
 
-  delete [] buffer;
+  delete[] buffer;
 }
 
-
-//////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 inline G4strstreambuf::G4strstreambuf(const G4strstreambuf& right)
-  : std::basic_streambuf<char>(), 
-    buffer(right.buffer), 
-    count(right.count), size(right.size),
-    destination(right.destination)
-//////////////////////////////////////////////////////////////////
-{
-}
+  : std::basic_streambuf<char>()
+  , buffer(right.buffer)
+  , count(right.count)
+  , size(right.size)
+  , destination(right.destination)
+{}
 
-
-/////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 inline G4strstreambuf& G4strstreambuf::operator=(const G4strstreambuf& right)
-/////////////////////////////////////////////////////////////////////////////
 {
-  if(&right==this) return *this;
-  
-  destination= right.destination;
-  buffer= right.buffer;
-  count= right.count;
-  size= right.size;
+  if(&right == this)
+    return *this;
+
+  destination = right.destination;
+  buffer      = right.buffer;
+  count       = right.count;
+  size        = right.size;
 
   return *this;
 }
 
-
-//////////////////////////////////////////////
+// --------------------------------------------------------------------
 inline G4int G4strstreambuf::overflow(G4int c)
-//////////////////////////////////////////////
 {
-  G4int result= 0;
-  if(count>=size) result= sync();
+  G4int result = 0;
+  if(count >= size)
+    result = sync();
 
-  buffer[count]= c;
+  buffer[count] = c;
   count++;
 
   return result;
 }
 
-///////////////////////////////////
+// --------------------------------------------------------------------
 inline G4int G4strstreambuf::sync()
-///////////////////////////////////
 {
   buffer[count] = '\0';
-  count= 0;
+  count         = 0;
   return ReceiveString();
 }
 
-
 #ifdef WIN32
-////////////////////////////////////////
-inline G4int G4strstreambuf::underflow()
-////////////////////////////////////////
-{
-  return 0;
-}
+// --------------------------------------------------------------------
+inline G4int G4strstreambuf::underflow() { return 0; }
 #endif
 
-
-///////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 inline void G4strstreambuf::SetDestination(G4coutDestination* dest)
-///////////////////////////////////////////////////////////////////
 {
-  destination= dest;
+  destination = dest;
 }
 
-///////////////////////////////////////////////////////////////////
 inline G4coutDestination* G4strstreambuf::GetDestination() const
 {
   return destination;
 }
-///////////////////////////////////////////////////////////////////
 
-
-/////////////////////////////////////////////
-inline G4int G4strstreambuf::ReceiveString ()
-/////////////////////////////////////////////
+// --------------------------------------------------------------------
+inline G4int G4strstreambuf::ReceiveString()
 {
   G4String stringToSend(buffer);
-  G4int result= 0;
+  G4int result = 0;
 
-  if(this == &G4coutbuf && destination != 0)
+  if(this == &G4coutbuf && destination != nullptr)
   {
-    result=  destination-> ReceiveG4cout_(stringToSend);
+    result = destination->ReceiveG4cout_(stringToSend);
   }
-  else if(this == &G4cerrbuf && destination != 0)
+  else if(this == &G4cerrbuf && destination != nullptr)
   {
-    result=  destination-> ReceiveG4cerr_(stringToSend);
+    result = destination->ReceiveG4cerr_(stringToSend);
   }
-  else if(this == &G4coutbuf && destination == 0)
+  else if(this == &G4coutbuf && destination == nullptr)
   {
     std::cout << stringToSend << std::flush;
-    result= 0;
+    result = 0;
   }
-  else if(this == &G4cerrbuf && destination == 0)
+  else if(this == &G4cerrbuf && destination == nullptr)
   {
     std::cerr << stringToSend << std::flush;
-    result= 0;
+    result = 0;
   }
 
   return result;

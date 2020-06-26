@@ -23,17 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VRestProcess class implementation
 //
-//
-// 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-// --------------------------------------------------------------
-//   New Physics scheme           8 Jan. 1997  H.Kurahige
-// ------------------------------------------------------------
+// Authors:
+// - 2 December 1995, G.Cosmo - First implementation, based on object model
+// - 18 December 1996, H.Kurashige - New Physics scheme
+// --------------------------------------------------------------------
 
 #include "G4VRestProcess.hh"
 #include "G4SystemOfUnits.hh"
@@ -43,35 +38,39 @@
 #include "G4MaterialTable.hh"
 #include "G4VParticleChange.hh"
 
+// --------------------------------------------------------------------
 G4VRestProcess::G4VRestProcess()
-                   :G4VProcess("No Name Rest Process") 
+  : G4VProcess("No Name Rest Process") 
 {
-  G4Exception("G4VRestProcess::G4VRestProcess()","ProcMan102",
-	      JustWarning,"Default constructor is called");
+  G4Exception("G4VRestProcess::G4VRestProcess()", "ProcMan102",
+              JustWarning, "Default constructor is called");
 }
 
-G4VRestProcess::G4VRestProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType)
+// --------------------------------------------------------------------
+G4VRestProcess::G4VRestProcess(const G4String& aName, G4ProcessType aType)
+  : G4VProcess(aName, aType)
 {
   enableAlongStepDoIt = false;
   enablePostStepDoIt = false;
 }
 
+// --------------------------------------------------------------------
 G4VRestProcess::~G4VRestProcess()
 {
 }
 
+// --------------------------------------------------------------------
 G4VRestProcess::G4VRestProcess(G4VRestProcess& right)
-                  : G4VProcess(right)
+  : G4VProcess(right)
 {
 }
 
-G4double G4VRestProcess::AtRestGetPhysicalInteractionLength(
-                             const G4Track& track,
-			     G4ForceCondition* condition
-			    )
+// --------------------------------------------------------------------
+G4double G4VRestProcess::
+AtRestGetPhysicalInteractionLength( const G4Track& track,
+                                    G4ForceCondition* condition )
 {
-  // beggining of tracking 
+  // beginning of tracking 
   ResetNumberOfInteractionLengthLeft();
 
   // condition is set to "Not Forced"
@@ -81,26 +80,25 @@ G4double G4VRestProcess::AtRestGetPhysicalInteractionLength(
   currentInteractionLength = GetMeanLifeTime(track, condition);
 
 #ifdef G4VERBOSE
- if ((currentInteractionLength <0.0) || (verboseLevel>2)){
-    G4cout << "G4VRestProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
+  if ((currentInteractionLength <0.0) || (verboseLevel>2))
+  {
+    G4cout << "G4VRestProcess::AtRestGetPhysicalInteractionLength() - ";
+    G4cout << "[ " << GetProcessName() << "]" << G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]"
+           << G4endl;
   }
 #endif 
 
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
 }
 
-
-G4VParticleChange* G4VRestProcess::AtRestDoIt( 
-			     const G4Track&,
-			     const G4Step& 
-			    )
+// --------------------------------------------------------------------
+G4VParticleChange* G4VRestProcess::AtRestDoIt( const G4Track&,
+                                               const G4Step& )
 {
-//  clear NumberOfInteractionLengthLeft
-    ClearNumberOfInteractionLengthLeft();
+  ClearNumberOfInteractionLengthLeft();
 
-    return pParticleChange;
+  return pParticleChange;
 }

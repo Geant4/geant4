@@ -391,26 +391,19 @@ class G4LogicalVolume
       // Returns: success (true) or failure (false).
 
   private:
+    // Data members:
 
-    // Data members:   
+    G4GEOM_DLL static G4LVManager subInstanceManager;
+      // This new field helps to use the class G4LVManager introduced above.
 
     G4PhysicalVolumeList fDaughters;
       // Vector of daughters. Given initial size of 0.
     G4String fName;
       // Name of logical volume.
-    EVolume fDaughtersVolumeType;
-      // Are contents of volume placements, replica, parameterised or external?
-
     G4UserLimits* fUserLimits = nullptr;
       // Pointer (possibly nullptr) to user Step limit object for this node.
     G4SmartVoxelHeader* fVoxel = nullptr;
       // Pointer (possibly nullptr) to optimisation info objects.
-    G4bool fOptimise = true;
-      // Flag to identify if optimisation should be applied or not.
-    G4bool fRootRegion = false;
-      // Flag to identify if the logical volume is a root region.
-    G4bool fLock = false;
-      // Flag to identify if entity is locked for final deletion.
     G4double fSmartless = 2.0;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
@@ -420,11 +413,6 @@ class G4LogicalVolume
       // Pointer to the cuts region (if any)
     G4double fBiasWeight = 1.0;
       // Weight used in the event biasing technique.
-  
-    G4int instanceID;
-      // This new field is used as instance ID.
-    G4GEOM_DLL static G4LVManager subInstanceManager;
-      // This new field helps to use the class G4LVManager introduced above.    
 
     // Shadow of master pointers.
     // Each worker thread can access this field from the master thread
@@ -434,6 +422,17 @@ class G4LogicalVolume
     G4VSensitiveDetector* fSensitiveDetector = nullptr;
     G4FieldManager* fFieldManager = nullptr;
     G4LVData* lvdata = nullptr;  // For use of object persistency
+
+    G4int instanceID;
+      // This new field is used as instance ID.
+    EVolume fDaughtersVolumeType;
+      // Are contents of volume placements, replica, parameterised or external?
+    G4bool fOptimise = true;
+      // Flag to identify if optimisation should be applied or not.
+    G4bool fRootRegion = false;
+      // Flag to identify if the logical volume is a root region.
+    G4bool fLock = false;
+      // Flag to identify if entity is locked for final deletion.
 };
 
 #include "G4LogicalVolume.icc"

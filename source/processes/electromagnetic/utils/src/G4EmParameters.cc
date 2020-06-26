@@ -126,7 +126,6 @@ void G4EmParameters::Initialise()
   lateralDisplacement = true;
   lateralDisplacementAlg96 = true;
   muhadLateralDisplacement = false;
-  latDisplacementBeyondSafety = false;
   useAngGeneratorForIonisation = false;
   useMottCorrection = false;
   integral = true;
@@ -336,17 +335,6 @@ void G4EmParameters::SetMuHadLateralDisplacement(G4bool val)
 G4bool G4EmParameters::MuHadLateralDisplacement() const
 {
   return muhadLateralDisplacement;
-}
-
-void G4EmParameters::SetLatDisplacementBeyondSafety(G4bool val)
-{
-  if(IsLocked()) { return; }
-  latDisplacementBeyondSafety = val;
-}
-
-G4bool G4EmParameters::LatDisplacementBeyondSafety() const
-{
-  return latDisplacementBeyondSafety;
 }
 
 void G4EmParameters::ActivateAngularGeneratorForIonisation(G4bool val)
@@ -903,6 +891,23 @@ void G4EmParameters::SetStepFunctionMuHad(G4double v1, G4double v2)
   fBParameters->SetStepFunctionMuHad(v1, v2);
 }
 
+void G4EmParameters::SetStepFunctionLightIons(G4double v1, G4double v2)
+{
+  if(IsLocked()) { return; }
+  fBParameters->SetStepFunctionLightIons(v1, v2);
+}
+
+void G4EmParameters::SetStepFunctionIons(G4double v1, G4double v2)
+{
+  if(IsLocked()) { return; }
+  fBParameters->SetStepFunctionIons(v1, v2);
+}
+
+void G4EmParameters::FillStepFunction(const G4ParticleDefinition* part, G4VEnergyLossProcess* proc) const
+{
+  fBParameters->FillStepFunction(part, proc);
+}
+
 void G4EmParameters::SetNumberOfBins(G4int val)
 {
   if(IsLocked()) { return; }
@@ -1043,6 +1048,17 @@ const G4String& G4EmParameters::PIXEElectronCrossSectionModel()
   return fCParameters->PIXEElectronCrossSectionModel();
 }
 
+void G4EmParameters::SetLivermoreDataDir(const G4String& sss)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetLivermoreDataDir(sss);
+}
+
+const G4String& G4EmParameters::LivermoreDataDir()
+{
+  return fCParameters->LivermoreDataDir();
+}
+
 void G4EmParameters::PrintWarning(G4ExceptionDescription& ed) const
 {
   G4Exception("G4EmParameters", "em0044", JustWarning, ed);
@@ -1157,10 +1173,9 @@ G4EmParameters::ActivateSecondaryBiasing(const G4String& procname,
   fBParameters->ActivateSecondaryBiasing(procname, region, factor, energyLim);
 }
 
-void G4EmParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr, 
-                                           G4bool isElectron) const
+void G4EmParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
 {
-  fBParameters->DefineRegParamForLoss(ptr, isElectron);
+  fBParameters->DefineRegParamForLoss(ptr);
 }
 
 void G4EmParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
@@ -1252,6 +1267,8 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "5D gamma conversion limit for muon pair            " 
      << max5DEnergyForMuPair/CLHEP::GeV << " GeV\n";
   }
+  os << "Livermore data directory                           " 
+     << fCParameters->LivermoreDataDir() << "\n";
 
   os << "=======================================================================" << "\n";
   os << "======                 Ionisation Parameters                   ========" << "\n";
@@ -1262,6 +1279,12 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Step function for muons/hadrons                    " 
      <<"("<<fBParameters->GetStepFunctionMuHadP1() << ", " 
      << fBParameters->GetStepFunctionMuHadP2()/CLHEP::mm << " mm)\n";
+  os << "Step function for light ions                       " 
+     <<"("<<fBParameters->GetStepFunctionLightIonsP1() << ", " 
+     << fBParameters->GetStepFunctionLightIonsP2()/CLHEP::mm << " mm)\n";
+  os << "Step function for general ions                     " 
+     <<"("<<fBParameters->GetStepFunctionIonsP1() << ", " 
+     << fBParameters->GetStepFunctionIonsP2()/CLHEP::mm << " mm)\n";
   os << "Lowest e+e- kinetic energy                         " 
      <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
   os << "Lowest muon/hadron kinetic energy                  " 
@@ -1289,7 +1312,6 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Msc lateral displacement for e+- enabled           " <<lateralDisplacement << "\n";
   os << "Msc lateral displacement for muons and hadrons     " <<muhadLateralDisplacement << "\n";
   os << "Urban msc model lateral displacement alg96         " <<lateralDisplacementAlg96 << "\n";
-  os << "Msc lateral displacement beyond geometry safety    " <<latDisplacementBeyondSafety << "\n";
   os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
   os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
   os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";

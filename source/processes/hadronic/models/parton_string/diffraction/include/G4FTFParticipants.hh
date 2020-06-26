@@ -50,10 +50,12 @@
 class G4FTFParticipants : public G4VParticipants {
   public:
     G4FTFParticipants();
-    const G4FTFParticipants& operator=( const G4FTFParticipants& right );
     ~G4FTFParticipants();
-    G4bool operator==( const G4FTFParticipants& right ) const;
-    G4bool operator!=( const G4FTFParticipants& right ) const;
+
+    const G4FTFParticipants& operator=( const G4FTFParticipants& right ) = delete;
+    G4bool operator==( const G4FTFParticipants& right ) const = delete;
+    G4bool operator!=( const G4FTFParticipants& right ) const = delete;
+    G4FTFParticipants( const G4FTFParticipants& right ) = delete;
 
     void GetList( const G4ReactionProduct& thePrimary, G4FTFParameters* theParameters );
     void StartLoop();
@@ -62,23 +64,19 @@ class G4FTFParticipants : public G4VParticipants {
     void ShiftInteractionTime();
     G4InteractionContent& GetInteraction();  
     void Clean();
-    std::vector< G4InteractionContent* > theInteractions;
 
   private:
-    G4FTFParticipants( const G4FTFParticipants& right );
+    std::vector< G4InteractionContent* > theInteractions;
     G4int currentInteraction;
 };
-
 
 inline void G4FTFParticipants::StartLoop() {
   currentInteraction = -1;
 }
 
-
 inline G4bool G4FTFParticipants::Next() {
   return ++currentInteraction < static_cast< G4int >( theInteractions.size() );
 }
-
 
 inline G4InteractionContent& G4FTFParticipants::GetInteraction() {
   return *theInteractions[ currentInteraction ];

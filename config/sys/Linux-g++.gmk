@@ -5,9 +5,8 @@ ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
-  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe -pthread
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
-  G4USE_STD11 := 1
   ifdef G4USE_STD14
     CPPFLAGS  += -std=c++14
     CXXFLAGS  += -std=c++14
@@ -21,7 +20,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     endif
   endif
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec -pthread
+    CXXFLAGS += -ftls-model=initial-exec
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
@@ -86,7 +85,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib$(ARCH) -lGLU -lGL
+    OGLLIBS   := -L$(OGLHOME)/lib$(ARCH) -lGL
   endif
 
 # ---- QT Setup block -------------------------------------------------------

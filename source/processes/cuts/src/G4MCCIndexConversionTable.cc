@@ -23,21 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// First implementation - 20th August 2004, H.Kurashige
+// G4MCCIndexConversionTable class implementation
+//
+// Author: H.Kurashige, 20 August 2004 - First implementation
 //---------------------------------------------------------------------
 
 #include  "G4MCCIndexConversionTable.hh"
 
+// --------------------------------------------------------------------
 G4MCCIndexConversionTable::G4MCCIndexConversionTable()
 {
 } 
 
+// --------------------------------------------------------------------
 G4MCCIndexConversionTable::~G4MCCIndexConversionTable()
 {
   vecNewIndex.clear();
 }
 
-void G4MCCIndexConversionTable::Reset(size_t siz)
+// --------------------------------------------------------------------
+void G4MCCIndexConversionTable::Reset(std::size_t siz)
 {
   // reset conversion table 
   vecNewIndex.clear();

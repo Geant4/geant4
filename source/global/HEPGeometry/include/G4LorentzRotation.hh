@@ -33,5 +33,4 @@
 
 typedef CLHEP::HepLorentzRotation G4LorentzRotation;
 
-#endif // G4LorentzRotation_hh
-
+#endif  // G4LorentzRotation_hh

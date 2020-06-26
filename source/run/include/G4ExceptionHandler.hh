@@ -25,9 +25,9 @@
 //
 //
 //
-// 
+//
 // ------------------------------------------------------------
-//      GEANT 4 class header file 
+//      GEANT 4 class header file
 //
 //
 //      ---------------- G4ExceptionHandler ----------------
@@ -39,8 +39,8 @@
 // Class description:
 //
 // Abstract base class which need to be notified when G4Exception occurs.
-// The concrete class object derived from this base class will be automatically 
-// registered to G4StateManager and the virtual method Notify() will be invoked 
+// The concrete class object derived from this base class will be automatically
+// registered to G4StateManager and the virtual method Notify() will be invoked
 // when G4Exception occurs.
 
 // ------------------------------------------------------------
@@ -48,37 +48,32 @@
 #ifndef G4ExceptionHandler_h
 #define G4ExceptionHandler_h 1
 
-#include "globals.hh"
-#include "G4VExceptionHandler.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4VExceptionHandler.hh"
+#include "globals.hh"
 
 class G4ExceptionHandler : public G4VExceptionHandler
 {
-
-public:
-
+ public:
   G4ExceptionHandler();
   virtual ~G4ExceptionHandler();
-  G4bool operator==(const G4ExceptionHandler &right) const;
-  G4bool operator!=(const G4ExceptionHandler &right) const;
+  G4bool operator==(const G4ExceptionHandler& right) const;
+  G4bool operator!=(const G4ExceptionHandler& right) const;
 
-public: // with description
-
+ public:  // with description
   virtual G4bool Notify(const char* originOfException,
-                        const char* exceptionCode,
-                        G4ExceptionSeverity severity,
+                        const char* exceptionCode, G4ExceptionSeverity severity,
                         const char* description);
-    // Virtual method which will be invoked by G4StateManager when
-    // G4Exception occurs.
-    // If TRUE returned, core dump will be generated, while FALSE returned,
-    // program execution continues.
+  // Virtual method which will be invoked by G4StateManager when
+  // G4Exception occurs.
+  // If TRUE returned, core dump will be generated, while FALSE returned,
+  // program execution continues.
 
-private:
+ private:
+  G4ExceptionHandler(const G4ExceptionHandler& right);
+  G4ExceptionHandler& operator=(const G4ExceptionHandler& right);
 
-  G4ExceptionHandler(const G4ExceptionHandler &right);
-  G4ExceptionHandler& operator=(const G4ExceptionHandler &right);
-
-private:
+ private:
   void DumpTrackInfo();
 };
 

@@ -57,8 +57,8 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <base/Global.h>
-#include <base/Vector3D.h>
+#include <VecGeom/base/Global.h>
+#include <VecGeom/base/Vector3D.h>
 
 class G4VPVParameterisation;
 

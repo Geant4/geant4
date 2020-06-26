@@ -23,57 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SliceTimer class implementation
 //
-//
-// 
-// ----------------------------------------------------------------------
-// class G4SliceTimer
-//
-// Implementation
-// ----------------------------------------------------------------------
+// Author: M.Asai, 23.10.06 - Derived from G4Timer implementation
+// --------------------------------------------------------------------
 
 #include "G4SliceTimer.hh"
 #include "G4ios.hh"
 
 #if defined(IRIX6_2)
-#  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED==1)
+#  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED == 1)
 #    define __vfork vfork
 #  endif
 #endif
 
-// Print timer status n std::ostream
-std::ostream& operator << (std::ostream& os, const G4SliceTimer& t)
+// --------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4SliceTimer& t)
 {
-    if (t.IsValid())
-        {
-            os << "User=" << t.GetUserElapsed()
-               << "s Real=" << t.GetRealElapsed()
-               << "s Sys=" << t.GetSystemElapsed() << "s";
-        }
-    else
-        {
-            os << "User=****s Real=****s Sys=****s";
-        }
-    return os;
+  // Print timer status n std::ostream
+
+  if(t.IsValid())
+  {
+    os << "User = " << t.GetUserElapsed() << "s Real = " << t.GetRealElapsed()
+       << "s Sys = " << t.GetSystemElapsed() << "s";
+  }
+  else
+  {
+    os << "User = ****s Real = ****s Sys = ****s";
+  }
+  return os;
 }
 
-G4SliceTimer::G4SliceTimer()
-  : fValidTimes(true), fRealElapsed(0.), fSystemElapsed(0.), fUserElapsed(0.)
-{
-  Clear();
-}
+// --------------------------------------------------------------------
+G4SliceTimer::G4SliceTimer() { Clear(); }
 
+// --------------------------------------------------------------------
 G4double G4SliceTimer::GetRealElapsed() const
 {
-    return fRealElapsed/sysconf(_SC_CLK_TCK);
+  return fRealElapsed / sysconf(_SC_CLK_TCK);
 }
 
+// --------------------------------------------------------------------
 G4double G4SliceTimer::GetSystemElapsed() const
 {
-    return fSystemElapsed/sysconf(_SC_CLK_TCK);
+  return fSystemElapsed / sysconf(_SC_CLK_TCK);
 }
 
+// --------------------------------------------------------------------
 G4double G4SliceTimer::GetUserElapsed() const
 {
-    return fUserElapsed/sysconf(_SC_CLK_TCK);
+  return fUserElapsed / sysconf(_SC_CLK_TCK);
 }

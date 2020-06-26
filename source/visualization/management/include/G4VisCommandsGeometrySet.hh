@@ -83,6 +83,23 @@ private:
   G4bool fForce;
 };
 
+class G4VisCommandGeometrySetForceCloudFunction:
+public G4VVisCommandGeometrySetFunction {
+public:
+  virtual ~G4VisCommandGeometrySetForceCloudFunction() {}
+  G4VisCommandGeometrySetForceCloudFunction
+  (G4bool force, G4int nPoints)
+  :fForce(force)
+  ,fNPoints(nPoints) {}
+  void operator() (G4VisAttributes* visAtts) const {
+    visAtts->SetForceCloud(fForce);
+    visAtts->SetForceNumberOfCloudPoints(fNPoints);
+  }
+private:
+  G4bool fForce;
+  G4int  fNPoints;
+};
+
 class G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction:
   public G4VVisCommandGeometrySetFunction {
 public:
@@ -214,6 +231,21 @@ private:
   (const G4VisCommandGeometrySetForceAuxEdgeVisible&);
   G4VisCommandGeometrySetForceAuxEdgeVisible& operator=
   (const G4VisCommandGeometrySetForceAuxEdgeVisible&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandGeometrySetForceCloud:
+  public G4VVisCommandGeometrySet {
+public:
+  G4VisCommandGeometrySetForceCloud ();
+  virtual ~G4VisCommandGeometrySetForceCloud ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandGeometrySetForceCloud
+  (const G4VisCommandGeometrySetForceCloud&);
+  G4VisCommandGeometrySetForceCloud& operator=
+  (const G4VisCommandGeometrySetForceCloud&);
   G4UIcommand* fpCommand;
 };
 

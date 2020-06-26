@@ -58,7 +58,7 @@ class G4ComponentGGHadronNucleusXsc;
 class G4ComponentGGNuclNuclXsc;
 class G4NistManager;
 
-class G4ParticleInelasticXS : public G4VCrossSectionDataSet
+class G4ParticleInelasticXS final : public G4VCrossSectionDataSet
 {
 public: 
 

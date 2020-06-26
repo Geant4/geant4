@@ -379,6 +379,16 @@ class G4Navigator
     // Transformation and history of the current path
     // through the geometrical hierarchy.
 
+  G4ThreeVector fStepEndPoint;
+    // Endpoint of last ComputeStep 
+    // can be used for optimisation (e.g. when computing safety).
+  G4ThreeVector fLastStepEndPointLocal; 
+    // Position of the end-point of the last call to ComputeStep 
+    // in last Local coordinates.
+
+  G4int fVerbose = 0;
+    // Verbose(ness) level  [if > 0, printout can occur].
+   
   G4bool fEnteredDaughter;
     // A memory of whether in this Step a daughter volume is entered 
     // (set in Compute & Locate).
@@ -391,18 +401,51 @@ class G4Navigator
 
   G4bool fWasLimitedByGeometry = false;
     // Set true if last Step was limited by geometry.
-
-  G4ThreeVector fStepEndPoint;
-    // Endpoint of last ComputeStep 
-    // can be used for optimisation (e.g. when computing safety).
-  G4ThreeVector fLastStepEndPointLocal; 
-    // Position of the end-point of the last call to ComputeStep 
-    // in last Local coordinates.
-
-  G4int fVerbose = 0;
-    // Verbose(ness) level  [if > 0, printout can occur].
-
+   
  private:
+
+  G4ThreeVector fLastLocatedPointLocal;
+    // Position of the last located point relative to its containing volume.
+    //  This is coupled with the bool member fLocatedOutsideWorld;
+
+  G4ThreeVector fExitNormal;  // Leaving volume normal, in the
+                              // volume containing the exited
+                              // volume's coordinate system
+   //  This is closely coupled with G4bool fValidExitNormal - which 
+   //    signals whether we have a (valid) normal for volume we're leaving
+   
+  G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
+                                         // own coordinate system
+  G4ThreeVector fExitNormalGlobalFrame;  // Leaving volume normal, in the
+                                         // global coordinate system
+
+  G4ThreeVector  fPreviousSftOrigin;
+  G4double       fPreviousSafety; 
+    // Memory of last safety origin & value. Used in ComputeStep to ensure
+    // that origin of current Step is in the same volume as the point of the
+    // last relocation
+
+  G4VPhysicalVolume* fLastMotherPhys = nullptr;
+    // Memory of the mother volume during previous step.
+    //  Intended use: inform user in case of stuck track.
+   
+  G4VPhysicalVolume* fBlockedPhysicalVolume;
+  G4int fBlockedReplicaNo;
+  // Identifies the volume and copy / replica number that is 
+  //   blocked (after exiting -- because the exit direction is along the exit normal)
+  // or a candidate for entry (after compute step.)
+   
+  // Count zero steps - as one or two can occur due to changing momentum at
+  //                    a boundary or at an edge common between volumes
+  //                  - several are likely a problem in the geometry
+  //                    description or in the navigation
+  //
+  G4int fNumberZeroSteps;
+    // Number of preceding moves that were Zero. Reset to 0 after finite step
+  G4int fActionThreshold_NoZeroSteps = 10;  
+    // After this many failed/zero steps, act (push etc) 
+  G4int fAbandonThreshold_NoZeroSteps = 25; 
+    // After this many failed/zero steps, abandon track
 
   G4bool fActive = false;
     // States if the navigator is activated or not.
@@ -421,60 +464,26 @@ class G4Navigator
     // o If entering
     //      volume ptr & replica number (set by ComputeStep(),used by
     //      Locate..()) of volume for `automatic' entry
-
-  G4VPhysicalVolume* fBlockedPhysicalVolume;
-  G4int fBlockedReplicaNo;
-
-  G4ThreeVector fLastLocatedPointLocal;
-    // Position of the last located point relative to its containing volume.
-  G4bool fLocatedOutsideWorld;
-    // Whether the last call to Locate methods left the world
-
+   
   G4bool fValidExitNormal;    // Set true if have leaving volume normal
-  G4ThreeVector fExitNormal;  // Leaving volume normal, in the
-                              // volume containing the exited
-                              // volume's coordinate system
-  G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
-                                         // own coordinate system
-  G4bool  fChangedGrandMotherRefFrame;   // Whether frame is changed
-
-  G4ThreeVector fExitNormalGlobalFrame;  // Leaving volume normal, in the
-                                         // global coordinate system
+  G4bool fLastStepWasZero;
+    // Whether the last ComputeStep moved Zero. Used to check for edges.
+  G4bool fLocatedOnEdge;       
+    // Whether the Navigator has detected an edge
+  G4bool        fLocatedOutsideWorld;
+    // Whether the last call to Locate methods left the world
+   
+  G4bool  fChangedGrandMotherRefFrame;   // Whether frame is changed   
   G4bool  fCalculatedExitNormal;  // Has it been computed since
                                   // the last call to ComputeStep
                                   // Covers both Global and GrandMother
-   
-  // Count zero steps - as one or two can occur due to changing momentum at
-  //                    a boundary or at an edge common between volumes
-  //                  - several are likely a problem in the geometry
-  //                    description or in the navigation
-  //
-  G4bool fLastStepWasZero;
-    // Whether the last ComputeStep moved Zero. Used to check for edges.
-
-  G4bool fLocatedOnEdge;       
-    // Whether the Navigator has detected an edge
-  G4int fNumberZeroSteps;
-    // Number of preceding moves that were Zero. Reset to 0 after finite step
-  G4int fActionThreshold_NoZeroSteps = 10;  
-    // After this many failed/zero steps, act (push etc) 
-  G4int fAbandonThreshold_NoZeroSteps = 25; 
-    // After this many failed/zero steps, abandon track
-
-  G4ThreeVector  fPreviousSftOrigin;
-  G4double       fPreviousSafety; 
-    // Memory of last safety origin & value. Used in ComputeStep to ensure
-    // that origin of current Step is in the same volume as the point of the
-    // last relocation
-
-  G4VPhysicalVolume* fLastMotherPhys = nullptr;
-    // Memory of the mother volume during previous step.
-    //  Intended use: inform user in case of stuck track.
-
   //
   // END State information
   //
 
+  // Optional State information (created/used as needed)
+  // 
+   
   // Save key state information (NOT the navigation history stack)
   //
   struct G4SaveNavigatorState
@@ -496,18 +505,12 @@ class G4Navigator
      G4double sPreviousSafety; 
   } fSaveState; 
 
-  // Tracking Invariants
-  //
+private: 
+  // BEGIN -- Tracking Invariants
+  // ===========================================
   G4VPhysicalVolume* fTopPhysical = nullptr;
     // A link to the topmost physical volume in the detector.
     // Must be positioned at the origin and unrotated.
-
-  // Utility information
-  //
-  G4bool fCheck = false;
-    // Check-mode flag  [if true, more strict checks are performed].
-  G4bool fPushed = false, fWarnPush = true;
-    // Push flags  [if true, means a stuck particle has been pushed].
 
   // Helpers/Utility classes
   //
@@ -517,7 +520,16 @@ class G4Navigator
   G4ReplicaNavigation freplicaNav;
   G4RegularNavigation fregularNav;
   G4VExternalNavigation* fpExternalNav = nullptr;
-  G4VoxelSafety* fpVoxelSafety;   
+  G4VoxelSafety* fpVoxelSafety;
+
+  // Utility information
+  //
+  G4bool fCheck = false;
+    // Check-mode flag  [if true, more strict checks are performed].
+  G4bool fPushed = false, fWarnPush = true;
+    // Push flags  [if true, means a stuck particle has been pushed].
+
+  // End -- Tracking Invariants
 };
 
 #include "G4Navigator.icc"

@@ -23,81 +23,86 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsLogVector class implementation
 //
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//  G4PhysicsLogVector.cc
-//
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    15 Feb. 1996, K.Amako : Implemented the 1st version
-//    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
-//    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    9  Mar. 2001, H.Kurashige : added PhysicsVector type and Retrieve
-//    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
-//    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
-//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method, use G4Log
-//
-// --------------------------------------------------------------
+// Authors:
+// - 02 Dec. 1995, G.Cosmo: Structure created based on object model
+// - 03 Mar. 1996, K.Amako: Implemented the 1st version
+// Revisions:
+// - 11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
+// - 19 Jun. 2009, V.Ivanchenko : removed hidden bin
+// --------------------------------------------------------------------
 
 #include "G4PhysicsLogVector.hh"
 #include "G4Exp.hh"
 
+// --------------------------------------------------------------------
 G4PhysicsLogVector::G4PhysicsLogVector()
-  : G4PhysicsVector()
-{ 
-  type = T_G4PhysicsLogVector;
-}
-
-G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
-                                       G4double theEmax, size_t theNbin)
   : G4PhysicsVector()
 {
   type = T_G4PhysicsLogVector;
+}
 
-  invdBin  =  1./(G4Log(theEmax/theEmin)/(G4double)theNbin);
-  baseBin  =  G4Log(theEmin)*invdBin;
-
+// --------------------------------------------------------------------
+G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, G4double theEmax,
+                                       std::size_t theNbin)
+  : G4PhysicsVector()
+{
   numberOfNodes = theNbin + 1;
+  if(theNbin < 2 || theEmin == theEmax)
+  {
+    G4ExceptionDescription ed;
+    ed << "G4PhysicsLogVector with wrong parameters: theNbin= " << theNbin
+       << " theEmin= " << theEmin << " theEmax= " << theEmax;
+    G4Exception("G4PhysicsLogVector::G4PhysicsLogVector()", "glob03",
+                FatalException, ed, "theNbins should be > 2");
+  }
+  if(numberOfNodes < 3)
+  {
+    numberOfNodes = 3;
+  }
+  type = T_G4PhysicsLogVector;
+
+  invdBin = 1. / (G4Log(theEmax / theEmin) / (G4double) numberOfNodes);
+  baseBin = G4Log(theEmin) * invdBin;
+
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
 
   binVector.push_back(theEmin);
   dataVector.push_back(0.0);
 
-  for (size_t i=1; i<numberOfNodes-1; ++i)
-    {
-      binVector.push_back(G4Exp((baseBin+i)/invdBin));
-      dataVector.push_back(0.0);
-    }
+  for(std::size_t i = 1; i < numberOfNodes - 1; ++i)
+  {
+    binVector.push_back(G4Exp((baseBin + i) / invdBin));
+    dataVector.push_back(0.0);
+  }
   binVector.push_back(theEmax);
   dataVector.push_back(0.0);
 
   edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes-1];
-}  
+  edgeMax = binVector[numberOfNodes - 1];
+}
 
-G4PhysicsLogVector::~G4PhysicsLogVector()
-{}
+// --------------------------------------------------------------------
+G4PhysicsLogVector::~G4PhysicsLogVector() {}
 
+// --------------------------------------------------------------------
 G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
-  if (success)
+  if(success)
   {
-    invdBin = 1./G4Log(binVector[1]/edgeMin);
-    baseBin = G4Log(edgeMin)*invdBin;
+    invdBin = 1. / G4Log(binVector[1] / edgeMin);
+    baseBin = G4Log(edgeMin) * invdBin;
   }
   return success;
 }
 
+// --------------------------------------------------------------------
 void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
-  invdBin = 1./G4Log(binVector[1]/edgeMin);
-  baseBin = G4Log(edgeMin)*invdBin;
+  invdBin = 1. / G4Log(binVector[1] / edgeMin);
+  baseBin = G4Log(edgeMin) * invdBin;
 }

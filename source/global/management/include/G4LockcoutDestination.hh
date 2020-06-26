@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LockcoutDestination
 //
-//
-//
-// --------------------------------------------------------------------
-// GEANT 4 class header file 
-//
-// Class Description:
+// Class description:
 //
 // Implements a output destination to std::cout / std::cerr with a
 // mutex lock access to the shared resource.
@@ -38,19 +34,18 @@
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
-#ifndef G4LOCKCOUTDESTINATION_HH_
-#define G4LOCKCOUTDESTINATION_HH_
+#ifndef G4LOCKCOUTDESTINATION_HH
+#define G4LOCKCOUTDESTINATION_HH
 
 #include "G4coutDestination.hh"
 
 class G4LockcoutDestination : public G4coutDestination
 {
-  public:
-
-    G4LockcoutDestination() = default;
-    virtual ~G4LockcoutDestination();
-    virtual G4int ReceiveG4cout(const G4String& msg) override;
-    virtual G4int ReceiveG4cerr(const G4String& msg) override;
+ public:
+  G4LockcoutDestination() = default;
+  virtual ~G4LockcoutDestination();
+  virtual G4int ReceiveG4cout(const G4String& msg) override;
+  virtual G4int ReceiveG4cerr(const G4String& msg) override;
 };
 
-#endif /* G4LOCKCOUTDESTINATION_HH_ */
+#endif

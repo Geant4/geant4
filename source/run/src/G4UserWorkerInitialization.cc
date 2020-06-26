@@ -25,24 +25,16 @@
 //
 #include "G4UserWorkerInitialization.hh"
 
-G4UserWorkerInitialization::G4UserWorkerInitialization()
-{;}
+G4UserWorkerInitialization::G4UserWorkerInitialization() { ; }
 
-G4UserWorkerInitialization::~G4UserWorkerInitialization()
-{;}
+G4UserWorkerInitialization::~G4UserWorkerInitialization() { ; }
 
-void G4UserWorkerInitialization::WorkerInitialize() const
-{;}
+void G4UserWorkerInitialization::WorkerInitialize() const { ; }
 
-void G4UserWorkerInitialization::WorkerStart() const
-{;}
+void G4UserWorkerInitialization::WorkerStart() const { ; }
 
-void G4UserWorkerInitialization::WorkerRunStart() const
-{;}
+void G4UserWorkerInitialization::WorkerRunStart() const { ; }
 
-void G4UserWorkerInitialization::WorkerRunEnd() const
-{;}
+void G4UserWorkerInitialization::WorkerRunEnd() const { ; }
 
-void G4UserWorkerInitialization::WorkerStop() const
-{;}
-
+void G4UserWorkerInitialization::WorkerStop() const { ; }

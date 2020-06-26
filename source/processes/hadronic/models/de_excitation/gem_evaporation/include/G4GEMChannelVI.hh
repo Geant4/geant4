@@ -37,7 +37,7 @@ class G4VCoulombBarrier;
 class G4LevelManager;
 class G4GEMProbabilityVI;
 
-class G4GEMChannelVI : public G4VEvaporationChannel
+class G4GEMChannelVI final: public G4VEvaporationChannel
 {
 public:
 

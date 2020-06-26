@@ -40,19 +40,10 @@ MyGamma::~MyGamma(){}
 //____________________________________________________________________________
 double MyGamma::Gamma(double z)
 {
-  // Computation of gamma(z) for all z>0.
-  //
-  // The algorithm is based on the article by C.Lanczos [1] as denoted in
-  // Numerical Recipes 2nd ed. on p. 207 (W.H.Press et al.).
-  //
-  // [1] C.Lanczos, SIAM Journal of Numerical Analysis B1 (1964), 86.
-  //
-  //--- Nve 14-nov-1998 UU-SAP Utrecht
-  
-  if (z<=0) return 0;
-  
-  double v = LnGamma(z);
-  return std::exp(v);
+  if (z <= 0)
+      return 0;
+
+  return std::tgamma(z);
 }
 
 //____________________________________________________________________________
@@ -145,33 +136,8 @@ double MyGamma::GamSer(double a,double x)
 
 double MyGamma::LnGamma(double z)
 {
-  // Computation of ln[gamma(z)] for all z>0.
-  //
-  // The algorithm is based on the article by C.Lanczos [1] as denoted in
-  // Numerical Recipes 2nd ed. on p. 207 (W.H.Press et al.).
-  //
-  // [1] C.Lanczos, SIAM Journal of Numerical Analysis B1 (1964), 86.
-  //
-  // The accuracy of the result is better than 2e-10.
-  //
-  //--- Nve 14-nov-1998 UU-SAP Utrecht
-  
-  if (z<=0) return 0;
-  
-  // Coefficients for the series expansion
-  double c[7] = { 2.5066282746310005, 76.18009172947146, -86.50532032941677
-    ,24.01409824083091,  -1.231739572450155, 0.1208650973866179e-2
-    ,-0.5395239384953e-5};
-  
-  double x   = z;
-  double y   = x;
-  double tmp = x+5.5;
-  tmp = (x+0.5)*Log(tmp)-tmp;
-  double ser = 1.000000000190015;
-  for (int i=1; i<7; i++) {
-    y   += 1;
-    ser += c[i]/y;
-  }
-  double v = tmp+Log(c[0]*ser/x);
-  return v;
+  if (z <= 0)
+      return 0;
+
+  return std::lgamma(z);
 }

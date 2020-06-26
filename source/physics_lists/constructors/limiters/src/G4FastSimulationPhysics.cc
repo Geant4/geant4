@@ -63,15 +63,7 @@ G4FastSimulationPhysics::~G4FastSimulationPhysics()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4FastSimulationPhysics::ActivateFastSimulation(const G4String& particleName)
-{
-  fParticlesUnderFastSimulation.push_back(particleName);
-  fGeometries                  .push_back("");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4FastSimulationPhysics::ActivateFastSimulation(const G4String& particleName, const G4String& parallelGeometryName)
+void G4FastSimulationPhysics::ActivateFastSimulation(const G4String particleName, const G4String parallelGeometryName)
 {
   fParticlesUnderFastSimulation.push_back(particleName);
   fGeometries                  .push_back(parallelGeometryName);

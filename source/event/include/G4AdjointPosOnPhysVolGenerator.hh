@@ -23,34 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4AdjointPosOnPhysVolGenerator
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Class Name:	G4AdjointPosOnPhysVolGenerator
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
+// Class description:
 //
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	1st June 2006 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		This class is responsible for the generation of primary adjoint particle on the external surface of a user selected volume.
-//		The particle are generated uniformly on the surface with the angular distribution  set to a cosine law relative to normal of the surface.
-//		It is equivalent to  the flux going in  from the surface if an  isotropic flux is considered outside. 
-//		It uses ray tracking technique and can be applied to all kind of convex volume. Uisng the ray tracking technique the area 
-//		of the external surface is also computed. The area is needed to fix the weight of the primary adjoint particle.  
-//		At the time of the development of this class, generation of particle on volume surface and computation of surface was limited in G4, 
-//		therfore the general ray tracking technique was adopted. It could be now (2009) that direct method of G4VSolid could be used instead. To be checked! 
-//
-//		
-//
-#ifndef G4AdjointPosOnPhysVolGenerator_h
-#define G4AdjointPosOnPhysVolGenerator_h 1
+// This class is responsible for the generation of primary adjoint particles
+// on the external surface of a user selected volume.
+// The particles are generated uniformly on the surface with the angular
+// distribution set to a cosine law relative to normal of the surface.
+// It is equivalent to the flux going in from the surface if an isotropic flux
+// is considered outside. 
+// It uses ray tracking technique and can be applied to all kind of convex
+// volumes. Using the ray tracking technique the area of the external surface
+// is also computed. The area is needed to fix the weight of the primary
+// adjoint particle.  
+// At the time of the development of this class, generation of points on
+// volume surface and computation of surface was limited in Geant4, therefore
+// the general ray tracking technique was adopted. The direct method in
+// G4VSolid could be now (2009) used instead.
+
+// Author: L. Desorgher, SpaceIT GmbH - 01.06.2006
+// Contract: ESA contract 21435/08/NL/AT
+// Customer: ESA/ESTEC
+// --------------------------------------------------------------------
+#ifndef G4AdjointPosOnPhysVolGenerator_hh
+#define G4AdjointPosOnPhysVolGenerator_hh 1
 
 #include "G4VPhysicalVolume.hh"
 #include "G4AffineTransform.hh"
@@ -59,57 +56,68 @@
 class G4VSolid;
 
 class G4AdjointPosOnPhysVolGenerator 
-///////////////////////
 {
+//---------   
+  public:
+//---------   
 
-//--------
-  public: //without description
-//--------
-
-   static  G4AdjointPosOnPhysVolGenerator* GetInstance();
+    static  G4AdjointPosOnPhysVolGenerator* GetInstance();
    
-//--------
-  public:  //public methods
-//--------
-  G4VPhysicalVolume* DefinePhysicalVolume(const G4String& aName);
-  void DefinePhysicalVolume1(const G4String& aName);
-  G4double ComputeAreaOfExtSurface();
-  G4double ComputeAreaOfExtSurface(G4int NStat);
-  G4double ComputeAreaOfExtSurface(G4double epsilon);
-  G4double ComputeAreaOfExtSurface(G4VSolid* aSolid);
-  G4double ComputeAreaOfExtSurface(G4VSolid* aSolid,G4int NStat);
-  G4double ComputeAreaOfExtSurface(G4VSolid* aSolid,G4double epsilon);
+    G4VPhysicalVolume* DefinePhysicalVolume(const G4String& aName);
+    void DefinePhysicalVolume1(const G4String& aName);
+    G4double ComputeAreaOfExtSurface();
+    G4double ComputeAreaOfExtSurface(G4int NStat);
+    G4double ComputeAreaOfExtSurface(G4double epsilon);
+    G4double ComputeAreaOfExtSurface(G4VSolid* aSolid);
+    G4double ComputeAreaOfExtSurface(G4VSolid* aSolid,G4int NStat);
+    G4double ComputeAreaOfExtSurface(G4VSolid* aSolid,G4double epsilon);
  
-  void GenerateAPositionOnTheExtSurfaceOfASolid(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-  void GenerateAPositionOnTheExtSurfaceOfTheSolid(G4ThreeVector& p, G4ThreeVector&  direction);
-  void GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(G4ThreeVector& p, G4ThreeVector&  direction);
-  void GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(G4ThreeVector& p, G4ThreeVector&  direction,
-  										G4double& costh_to_normal);
+    void GenerateAPositionOnTheExtSurfaceOfASolid(G4VSolid* aSolid,
+                                                  G4ThreeVector& p,
+                                                  G4ThreeVector& direction);
+    void GenerateAPositionOnTheExtSurfaceOfTheSolid(G4ThreeVector& p,
+                                                    G4ThreeVector& direction);
+    void GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(G4ThreeVector& p,
+                                                    G4ThreeVector& direction);
+    void GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(G4ThreeVector& p,
+                                                    G4ThreeVector& direction,
+                                                    G4double& costh_to_normal);
 
-  //inline public methods
-   
-  inline void SetSolid(G4VSolid* aSolid){theSolid=aSolid;}
-  inline G4double GetAreaOfExtSurfaceOfThePhysicalVolume(){return AreaOfExtSurfaceOfThePhysicalVolume;}
-  inline G4double GetCosThDirComparedToNormal(){return CosThDirComparedToNormal;}
+    inline void SetSolid(G4VSolid* aSolid)
+      { theSolid=aSolid; }
+    inline G4double GetAreaOfExtSurfaceOfThePhysicalVolume()
+      { return AreaOfExtSurfaceOfThePhysicalVolume; }
+    inline G4double GetCosThDirComparedToNormal()
+      { return CosThDirComparedToNormal; }
   
 //---------   
-   private:   //private methods
+  private:   // private methods
 //---------  
-   G4AdjointPosOnPhysVolGenerator();
-  ~G4AdjointPosOnPhysVolGenerator();
-   G4double ComputeAreaOfExtSurfaceStartingFromSphere(G4VSolid* aSolid,G4int NStat);
-   G4double ComputeAreaOfExtSurfaceStartingFromBox(G4VSolid* aSolid,G4int NStat);
-   void GenerateAPositionOnASolidBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-   G4double GenerateAPositionOnASphereBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-   G4double GenerateAPositionOnABoxBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-   void ComputeTransformationFromPhysVolToWorld();
+
+    G4AdjointPosOnPhysVolGenerator();
+   ~G4AdjointPosOnPhysVolGenerator();
+    G4double ComputeAreaOfExtSurfaceStartingFromSphere(G4VSolid* aSolid,
+                                                       G4int NStat);
+    G4double ComputeAreaOfExtSurfaceStartingFromBox(G4VSolid* aSolid,
+                                                    G4int NStat);
+    void GenerateAPositionOnASolidBoundary(G4VSolid* aSolid,
+                                           G4ThreeVector& p,
+                                           G4ThreeVector& direction);
+    G4double GenerateAPositionOnASphereBoundary(G4VSolid* aSolid,
+                                                G4ThreeVector& p,
+                                                G4ThreeVector& direction);
+    G4double GenerateAPositionOnABoxBoundary(G4VSolid* aSolid,
+                                             G4ThreeVector& p,
+                                             G4ThreeVector& direction);
+    void ComputeTransformationFromPhysVolToWorld();
 
 //---------   
-   private: //attributes
+  private:   // attributes
 //---------   
+
    static G4ThreadLocal G4AdjointPosOnPhysVolGenerator* theInstance;
-   G4VSolid* theSolid;
-   G4VPhysicalVolume* thePhysicalVolume;
+   G4VSolid* theSolid = nullptr;
+   G4VPhysicalVolume* thePhysicalVolume = nullptr;
 
    G4bool UseSphere;
    G4String ModelOfSurfaceSource;
@@ -119,4 +127,3 @@ class G4AdjointPosOnPhysVolGenerator
 };
 
 #endif
-

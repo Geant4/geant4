@@ -22,10 +22,10 @@
 #
 /analysis/setFileName nFission
 /analysis/h1/set 2  100  0   10 MeV	#gamma
-/analysis/h1/set 3  100  0   10 MeV	#neutron
-/analysis/h1/set 7  100  0   150 MeV	#nuclei
-/analysis/h1/set 10 100  150 250 MeV	#Q
-/analysis/h1/set 12 200  1   200 none   #A
+/analysis/h1/set 4  100  0   10 MeV	#neutron
+/analysis/h1/set 8  100  0   150 MeV	#nuclei
+/analysis/h1/set 11 100  150 250 MeV	#Q
+/analysis/h1/set 13 200  1   200 none   #A
 #
 /run/printProgress 1000
 /testhadr/run/printStat false

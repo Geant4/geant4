@@ -23,50 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiSteppingAction
 //
+// Class description:
 //
-//---------------------------------------------------------------
+// This class extends G4UserSteppingAction and allows multiple user-defined
+// tracking actions to be used in the same job.
+// The class is a vector of user-defined tracking actions; it owns and manages
+// the dependent user-actions.
 //
-// G4MultiSteppingAction.hh
-//
-//   Created on: Jan 17, 2016
-//       Author: adotti
-//
-//
-// class description:
-//     This class extends G4UserSteppingAction and allows multiple
-//     user-defined tracking actions to be used in the same job.
-//     The class is a vector of user-defined tracking actions.
-//     This class owns and manages the dependent user-actions.
 // Usage:
-//     There is no need to explicitly use this class as long as the
-//     user actions are set via G4UserActionInitialization::SetUserAction
-//     that can be called several times. Explicitly this is what is happening:
-//     In user-defined action initialization:
-//      G4MultiSteppingAction* action = new G4MultiSteppingAction;
-//      action->push_back( G4UserSteppingActionUPtr( new MyUserSteppingAction );
-//      [... add as many as needed ...]
-//      SetUserAction( action );
-// ---------------------------------------------------------------
-//
+//   There is no need to explicitly use this class as long as the user actions
+//   are set via G4UserActionInitialization::SetUserAction(), that can be
+//   called several times. Explicitly this is what happens:
+//   In user-defined action initialization:
+//     G4MultiSteppingAction* action = new G4MultiSteppingAction;
+//     action->push_back( G4UserSteppingActionUPtr( new MyUserSteppingAction );
+//       [... add as many as needed ...]
+//     SetUserAction( action );
 
-#ifndef G4MULTISTEPPINGACTION_HH_
-#define G4MULTISTEPPINGACTION_HH_
+// Author: Andrea Dotti, SLAC - 17 January 2016
+// --------------------------------------------------------------------
+#ifndef G4MULTISTEPPINGACTION_HH
+#define G4MULTISTEPPINGACTION_HH
 
 #include "G4UserSteppingAction.hh"
 #include <vector>
 #include <memory>
 
-using G4UserSteppingActionUPtr=std::unique_ptr<G4UserSteppingAction>;
-using G4UserSteppingActionVector=std::vector<G4UserSteppingActionUPtr>;
+using G4UserSteppingActionUPtr = std::unique_ptr<G4UserSteppingAction>;
+using G4UserSteppingActionVector = std::vector<G4UserSteppingActionUPtr>;
 
-class G4MultiSteppingAction : public G4UserSteppingAction , public G4UserSteppingActionVector
+class G4MultiSteppingAction : public G4UserSteppingAction,
+                              public G4UserSteppingActionVector
 {
-public:
-  G4MultiSteppingAction() = default;
-  virtual ~G4MultiSteppingAction() override = default;
-  virtual void UserSteppingAction(const G4Step*) override;
-  virtual void SetSteppingManagerPointer(G4SteppingManager* pValue) override;
+  public:
+
+    G4MultiSteppingAction() = default;
+    virtual ~G4MultiSteppingAction() override = default;
+    virtual void UserSteppingAction(const G4Step*) override;
+    virtual void SetSteppingManagerPointer(G4SteppingManager* pVal) override;
 };
 
-#endif /* SOURCE_TRACKING_INCLUDE_G4MULTISTEPPINGACTION_HH_ */
+#endif

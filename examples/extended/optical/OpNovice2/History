@@ -13,6 +13,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29, 2020 D.Sawkey (OpNovice2-V10-06-03)
+- add code to generate statistics for wavelength shifting
+- add wls.mac to test WLS and new process WLS2
+
+May 24, 2020 D.Sawkey (OpNovice2-V10-06-02)
+- use new scintillation time constant parameter
+
+January 30, 2020 D.Sawkey (OpNovice2-V10-06-01)
+- remove redundant G4AnalysisManager::Instance calls
+
+January 21, 2020 D.Sawkey (OpNovice2-V10-06-00)
+- remove string comparisons and redundant calls in SteppingAction
+
 November 26, 2019 I. Hrivnacova (OpNovice2-V10-05-02)
 - Fixed formatting in .README.txt
 

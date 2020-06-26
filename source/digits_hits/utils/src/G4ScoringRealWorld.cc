@@ -61,8 +61,11 @@ void G4ScoringRealWorld::List() const
   G4VScoringMesh::List();
 }
 
+#include "G4AutoLock.hh"
+namespace { G4Mutex logvolmutex = G4MUTEX_INITIALIZER; }
 void G4ScoringRealWorld::SetupGeometry(G4VPhysicalVolume* ) 
 {
+  G4AutoLock l(&logvolmutex);
   auto store = G4LogicalVolumeStore::GetInstance();
   auto itr = store->begin();
   for(;itr!=store->end();itr++)

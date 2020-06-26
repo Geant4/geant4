@@ -23,20 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Event
 //
-//
-//
-// class description:
+// Class description:
 //
 // This is the class which represents an event. A G4Event is constructed and
 // deleted by G4RunManager (or its derived class). When a G4Event object is
 // passed to G4EventManager, G4Event must have one or more primary verteces
-// and primary particle(s) associated to the vertex(es) as an input of
+// and primary particle(s) associated to the verteces as an input of
 // simulating an event.
 // G4Event has trajectories, hits collections, and/or digi collections. 
 
-#ifndef G4Event_h
-#define G4Event_h 1
+// Author: M.Asai, SLAC
+// --------------------------------------------------------------------
+#ifndef G4Event_hh
+#define G4Event_hh 1
 
 #include "globals.hh"
 #include "evtdefs.hh"
@@ -48,121 +49,88 @@
 #include "G4VUserEventInformation.hh"
 
 class G4VHitsCollection;
+
 class G4Event 
 {
   public:
-      G4Event();
-      G4Event(G4int evID);
-      ~G4Event();
 
-      inline void *operator new(size_t);
-      inline void operator delete(void* anEvent);
+    G4Event();
+    G4Event(G4int evID);
+   ~G4Event();
 
-      G4bool operator==(const G4Event &right) const;
-      G4bool operator!=(const G4Event &right) const;
+    G4Event(const G4Event &) = delete;
+    G4Event& operator=(const G4Event &) = delete;
 
-  public: // with description
-      void Print() const;
+    inline void *operator new(std::size_t);
+    inline void operator delete(void* anEvent);
+
+    G4bool operator==(const G4Event& right) const;
+    G4bool operator!=(const G4Event& right) const;
+
+    void Print() const;
       // Print the event ID (starts with zero and increments by one) to G4cout.
-      void Draw() const;
+    void Draw() const;
       // Invoke Draw() methods of all stored trajectories, hits, and digits.
       // For hits and digits, Draw() methods of the concrete classes must be
       // implemented. Otherwise nothing will be drawn.
 
-  private:
-      // Copy constructor and = operator must not be used.
-      G4Event(const G4Event &) {;}
-      G4Event& operator=(const G4Event &) { return *this; }
-
-  private:
-      // event ID
-      G4int eventID;      
-
-      // PrimaryVertex
-      G4PrimaryVertex* thePrimaryVertex;
-      G4int numberOfPrimaryVertex;
-
-      // HitsCollection
-      G4HCofThisEvent* HC;
-
-      // DigiCollection
-      G4DCofThisEvent* DC;
-
-      // TrajectoryContainer
-      G4TrajectoryContainer * trajectoryContainer;
-
-      // Boolean flag which shall be set to true if the event is aborted and 
-      // thus the containing information is not to be used.
-      G4bool eventAborted;
-
-      // UserEventInformation (optional)
-      G4VUserEventInformation* userInfo;
-
-      // Initial random number engine status before primary particle generation
-      G4String* randomNumberStatus;
-      G4bool validRandomNumberStatus;
-
-      // Initial random number engine status before event processing
-      G4String* randomNumberStatusForProcessing;
-      G4bool validRandomNumberStatusForProcessing;
-
-      // Flag to keep the event until the end of run
-      G4bool keepTheEvent;
-      mutable G4int grips;
-
-  public:
-      inline void SetEventID(G4int i)
+    inline void SetEventID(G4int i)
       { eventID =  i; }
-      inline void SetHCofThisEvent(G4HCofThisEvent*value)
+    inline void SetHCofThisEvent(G4HCofThisEvent* value)
       { HC = value; }
-      inline void SetDCofThisEvent(G4DCofThisEvent*value)
+    inline void SetDCofThisEvent(G4DCofThisEvent* value)
       { DC = value; }
-      inline void SetTrajectoryContainer(G4TrajectoryContainer*value)
+    inline void SetTrajectoryContainer(G4TrajectoryContainer* value)
       { trajectoryContainer = value; }
-      inline void SetEventAborted()
+    inline void SetEventAborted()
       { eventAborted = true; }
-      inline void SetRandomNumberStatus(G4String& st)
+    inline void SetRandomNumberStatus(G4String& st)
       {
         randomNumberStatus = new G4String(st);
         validRandomNumberStatus = true;
       }
-      inline void SetRandomNumberStatusForProcessing(G4String& st)
+    inline void SetRandomNumberStatusForProcessing(G4String& st)
       {
         randomNumberStatusForProcessing = new G4String(st);
         validRandomNumberStatusForProcessing = true;
       }
-      inline void KeepTheEvent(G4bool vl=true)
+    inline void KeepTheEvent(G4bool vl=true)
       { keepTheEvent = vl; }
-      inline G4bool ToBeKept() const
+    inline G4bool ToBeKept() const
       { return keepTheEvent; }
-      inline void KeepForPostProcessing() const
-      { grips++; }
-      inline void PostProcessingFinished() const
-      { grips--;
-        if(grips<0)
-        { G4Exception("G4Event::Release()","EVENT91001",FatalException,
-                      "Number of grips became negative. This cannot be correct."); }
+    inline void KeepForPostProcessing() const
+      { ++grips; }
+    inline void PostProcessingFinished() const
+      {
+        --grips;
+        if (grips<0)
+        {
+          G4Exception("G4Event::Release()", "EVENT91001", FatalException,
+                      "Number of grips is negative. This cannot be correct.");
+        }
       }
-      inline G4int GetNumberOfGrips() const
+    inline G4int GetNumberOfGrips() const
       { return grips; }
 
-  public: // with description
-      inline G4int GetEventID() const
+    inline G4int GetEventID() const
       { return eventID; }
-      //  Returns the event ID
-      inline void AddPrimaryVertex(G4PrimaryVertex* aPrimaryVertex)
+
+    inline void AddPrimaryVertex(G4PrimaryVertex* aPrimaryVertex)
       {
+        //  This method sets a new primary vertex. This method must be invoked 
+        // exclusively by G4VPrimaryGenerator concrete class.
+
         if( thePrimaryVertex == nullptr )
         { thePrimaryVertex = aPrimaryVertex; }
         else
         { thePrimaryVertex->SetNext( aPrimaryVertex ); }
-        numberOfPrimaryVertex++;
+        ++numberOfPrimaryVertex;
       }
-      //  This method sets a new primary vertex. This method must be invoked 
-      // exclusively by G4VPrimaryGenerator concrete class.
-      inline G4int GetNumberOfPrimaryVertex() const
+
+    inline G4int GetNumberOfPrimaryVertex() const
       { return numberOfPrimaryVertex; }
-      //  Returns number of primary vertexes the G4Event object has.
+      // Returns number of primary verteces the G4Event object has.
+
       inline G4PrimaryVertex* GetPrimaryVertex(G4int i=0)  const
       { 
         if( i == 0 )
@@ -170,7 +138,7 @@ class G4Event
         else if( i > 0 && i < numberOfPrimaryVertex )
         {
           G4PrimaryVertex* primaryVertex = thePrimaryVertex;
-          for( G4int j=0; j<i; j++ )
+          for( G4int j=0; j<i; ++j )
           {
             if( !primaryVertex ) return nullptr; 
             primaryVertex = primaryVertex->GetNext();
@@ -180,24 +148,30 @@ class G4Event
         else
         { return nullptr; }
       }
-      //  Returns i-th primary vertex of the event.
-      inline G4HCofThisEvent* GetHCofThisEvent()  const
+      // Returns i-th primary vertex of the event.
+
+    inline G4HCofThisEvent* GetHCofThisEvent()  const
       { return HC; }
-      inline G4DCofThisEvent* GetDCofThisEvent()  const
+    inline G4DCofThisEvent* GetDCofThisEvent()  const
       { return DC; }
-      inline G4TrajectoryContainer* GetTrajectoryContainer() const
+    inline G4TrajectoryContainer* GetTrajectoryContainer() const
       { return trajectoryContainer; }
-      //  These three methods returns the pointers to the G4HCofThisEvent
+      //  These three methods return the pointers to the G4HCofThisEvent
       // (hits collections of this event), G4DCofThisEvent (digi collections
       // of this event), and G4TrajectoryContainer (trajectory coonainer),
       // respectively.
-      inline G4bool IsAborted() const { return eventAborted; }
+
+    inline G4bool IsAborted() const { return eventAborted; }
       //  Return a boolean which indicates the event has been aborted and thus
       // it should not be used for analysis.
-      inline void SetUserInformation(G4VUserEventInformation* anInfo) { userInfo = anInfo; }
-      inline G4VUserEventInformation* GetUserInformation() const { return userInfo; }
+
+    inline void SetUserInformation(G4VUserEventInformation* anInfo)
+      { userInfo = anInfo; }
+    inline G4VUserEventInformation* GetUserInformation() const
+      { return userInfo; }
       //  Set and Get method of G4VUserEventInformation
-      inline const G4String& GetRandomNumberStatus() const 
+
+    inline const G4String& GetRandomNumberStatus() const 
       {
         if(!validRandomNumberStatus)
         { G4Exception(
@@ -205,7 +179,7 @@ class G4Event
               "Random number status is not available for this event."); }
         return *randomNumberStatus;
       }
-      inline const G4String& GetRandomNumberStatusForProcessing() const 
+    inline const G4String& GetRandomNumberStatusForProcessing() const 
       {
         if(!validRandomNumberStatusForProcessing)
         { G4Exception(
@@ -214,11 +188,48 @@ class G4Event
               "Random number status is not available for this event."); }
         return *randomNumberStatusForProcessing;
       }
+
+  private:
+
+    // event ID
+    G4int eventID = 0;      
+
+    // PrimaryVertex
+    G4PrimaryVertex* thePrimaryVertex = nullptr;
+    G4int numberOfPrimaryVertex = 0;
+
+    // HitsCollection
+    G4HCofThisEvent* HC = nullptr;
+
+    // DigiCollection
+    G4DCofThisEvent* DC = nullptr;
+
+    // TrajectoryContainer
+    G4TrajectoryContainer* trajectoryContainer = nullptr;
+
+    // Boolean flag which shall be set to true if the event is aborted and 
+    // thus the containing information is not to be used.
+    G4bool eventAborted = false;
+
+    // UserEventInformation (optional)
+    G4VUserEventInformation* userInfo = nullptr;
+
+    // Initial random number engine status before primary particle generation
+    G4String* randomNumberStatus = nullptr;
+    G4bool validRandomNumberStatus = false;
+
+    // Initial random number engine status before event processing
+    G4String* randomNumberStatusForProcessing = nullptr;
+    G4bool validRandomNumberStatusForProcessing = false;
+
+    // Flag to keep the event until the end of run
+    G4bool keepTheEvent = false;
+    mutable G4int grips = 0;
 };
 
 extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();
 
-inline void* G4Event::operator new(size_t)
+inline void* G4Event::operator new(std::size_t)
 { 
   if (!anEventAllocator()) anEventAllocator() = new G4Allocator<G4Event>;
   return (void*)anEventAllocator()->MallocSingle();

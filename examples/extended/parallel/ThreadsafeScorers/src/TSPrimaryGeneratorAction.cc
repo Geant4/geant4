@@ -36,7 +36,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #include "TSPrimaryGeneratorAction.hh"
 #include "TSDetectorConstruction.hh"
 
@@ -53,43 +52,38 @@ using namespace CLHEP;
 
 TSPrimaryGeneratorAction::TSPrimaryGeneratorAction()
 {
-    fGun = new G4ParticleGun(1);
+  fGun = new G4ParticleGun(1);
 
-    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4String particleName;
-    G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="neutron");
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  G4ParticleDefinition* particle =
+    particleTable->FindParticle(particleName = "neutron");
 
-    fGun->SetParticleDefinition(particle);
-    fGun->SetParticleEnergy(1.*MeV);
-
+  fGun->SetParticleDefinition(particle);
+  fGun->SetParticleEnergy(1. * MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSPrimaryGeneratorAction::~TSPrimaryGeneratorAction()
-{
-    delete fGun;
-}
+TSPrimaryGeneratorAction::~TSPrimaryGeneratorAction() { delete fGun; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    TIMEMORY_AUTO_TIMER("");
-    static TSDetectorConstruction* detector
-            = TSDetectorConstruction::Instance();
+  TIMEMORY_AUTO_TIMER("");
+  static TSDetectorConstruction* detector = TSDetectorConstruction::Instance();
 
-    G4ThreeVector dir(0.,0., 1.);
-    G4ThreeVector pos(detector->GetWorldDimensions().x()*(G4UniformRand()-0.5),
-                      detector->GetWorldDimensions().y()*(G4UniformRand()-0.5),
-                      -0.5*detector->GetWorldDimensions().z());
+  G4ThreeVector dir(0., 0., 1.);
+  G4ThreeVector pos(
+    detector->GetWorldDimensions().x() * (G4UniformRand() - 0.5),
+    detector->GetWorldDimensions().y() * (G4UniformRand() - 0.5),
+    -0.5 * detector->GetWorldDimensions().z());
 
-    dir /= dir.mag();
-    fGun->SetParticleMomentumDirection(dir);
-    fGun->SetParticlePosition(pos);
-    fGun->GeneratePrimaryVertex(anEvent);
+  dir /= dir.mag();
+  fGun->SetParticleMomentumDirection(dir);
+  fGun->SetParticlePosition(pos);
+  fGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -106,6 +106,9 @@ class G4MaterialPropertiesTable
     G4bool ConstPropertyExists(const char *key) const;
     // Return true if a const property 'key' exists.
 
+    G4bool ConstPropertyExists(const G4int index) const;
+    // Return true if a const property with key-index 'index' exists.
+
     G4MaterialPropertyVector* GetProperty(const char *key,
                                           G4bool warning=false);
     // Get the property from the table corresponding to the key-name.

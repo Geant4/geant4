@@ -25,49 +25,49 @@
 //
 //
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//	GEANT 4 class header file
 // Class Description:
 //      This class is a ordering parameter only used by G4PhysicsListHelper
-// ------------------------------------------- 
+// -------------------------------------------
 //	History
-//        first version                   29 Apr. 2011 by H.Kurashige 
+//        first version                   29 Apr. 2011 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4PhysicsListOrderingParameter_h
 #define G4PhysicsListOrderingParameter_h 1
-#include "globals.hh"
 #include "G4ios.hh"
+#include "globals.hh"
 
-class G4PhysicsListHelper; 
+class G4PhysicsListHelper;
 class G4PhysicsListOrderingParameter
 {
-  friend class G4PhysicsListHelper;  
-  
-public:
-  // Hide constructor and destructor 
+  friend class G4PhysicsListHelper;
+
+ public:
+  // Hide constructor and destructor
   G4PhysicsListOrderingParameter();
   virtual ~G4PhysicsListOrderingParameter();
 
-  G4String  GetTypeName() const {return processTypeName;}
-  G4int     GetType() const { return processType;}
-  G4int     GetSubType() const { return processSubType;}
-  G4int     GetOrdering(int idx) const;
-  G4bool    GetDuplicable() const {return isDuplicable;}
-  
-private:
-  G4String  processTypeName;
-  G4int     processType;
-  G4int     processSubType;
-  G4int     ordering[3];
-  G4bool    isDuplicable;
+  G4String GetTypeName() const { return processTypeName; }
+  G4int GetType() const { return processType; }
+  G4int GetSubType() const { return processSubType; }
+  G4int GetOrdering(int idx) const;
+  G4bool GetDuplicable() const { return isDuplicable; }
+
+ private:
+  G4String processTypeName;
+  G4int processType;
+  G4int processSubType;
+  G4int ordering[3];
+  G4bool isDuplicable;
 };
 
-inline
- G4int     G4PhysicsListOrderingParameter::GetOrdering(int idx) const
+inline G4int G4PhysicsListOrderingParameter::GetOrdering(int idx) const
 {
-  if ((idx<-1)||(idx>2)) return -1;
-  else return ordering[idx]; 
+  if((idx < -1) || (idx > 2))
+    return -1;
+  else
+    return ordering[idx];
 }
 
 #endif
-

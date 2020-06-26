@@ -45,114 +45,112 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-    #include "G4MTRunManager.hh"
-    #include "G4Threading.hh"
-    typedef G4MTRunManager RunManager;
-#else
-    #include "G4RunManager.hh"
-    typedef G4RunManager RunManager;
-#endif
+#include "G4RunManagerFactory.hh"
+
+#include "G4Threading.hh"
 
 #include "Randomize.hh"
 
 // User Defined Classes
+#include "TSActionInitialization.hh"
 #include "TSDetectorConstruction.hh"
 #include "TSPhysicsList.hh"
-#include "TSActionInitialization.hh"
 
+#include "G4TiMemory.hh"
+#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
-#include "G4TiMemory.hh"
 
 // for std::system(const char*)
 #include <cstdlib>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void message(RunManager* runmanager)
+void message(G4RunManager* runmanager)
 {
-#ifdef G4MULTITHREADED
-    runmanager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+  G4MTRunManager* man = dynamic_cast<G4MTRunManager*>(runmanager);
+  if(man)
+  {
+    man->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
     G4cout << "\n\n\t--> Running in multithreaded mode with "
-           << runmanager->GetNumberOfThreads()
-           << " threads\n\n" << G4endl;
-#else
-    // get rid of unused variable warning
-    runmanager->SetVerboseLevel(runmanager->GetVerboseLevel());
+           << man->GetNumberOfThreads() << " threads\n\n"
+           << G4endl;
+  }
+  else
+  {
     G4cout << "\n\n\t--> Running in serial mode\n\n" << G4endl;
-#endif
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
-    TIMEMORY_INIT(argc, argv);
+  TIMEMORY_INIT(argc, argv);
 
 #if defined(GEANT4_USE_TIMEMORY)
-    // override environment settings
-    tim::settings::json_output() = true;
-    tim::settings::dart_output() = true;
-    tim::settings::dart_type() = "peak_rss";
-    tim::settings::dart_count() = 1;
+  // override environment settings
+  tim::settings::json_output() = true;
+  tim::settings::dart_output() = true;
+  tim::settings::dart_type()   = "peak_rss";
+  tim::settings::dart_count()  = 1;
 #endif
 
-    // Detect interactive mode (if no arguments) and define UI session
-    //
-    G4UIExecutive* ui = 0;
-    if(argc == 1)
-        ui = new G4UIExecutive(argc, argv);
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if(argc == 1)
+    ui = new G4UIExecutive(argc, argv);
 
-    // Set the random seed
-    CLHEP::HepRandom::setTheSeed(1245214UL);
+  // Set the random seed
+  CLHEP::HepRandom::setTheSeed(1245214UL);
 
-    RunManager* runmanager = new RunManager();
+  G4RunManager* runmanager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Tasking);
 
-    message(runmanager);
+  message(runmanager);
 
-    runmanager->SetUserInitialization(new TSDetectorConstruction);
+  runmanager->SetUserInitialization(new TSDetectorConstruction);
 
-    runmanager->SetUserInitialization(new TSPhysicsList);
+  runmanager->SetUserInitialization(new TSPhysicsList);
 
-    runmanager->SetUserInitialization(new TSActionInitialization);
+  runmanager->SetUserInitialization(new TSActionInitialization);
 
-    runmanager->Initialize();
+  runmanager->Initialize();
 
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
 
-    // Initialize visualization
-    //
-    G4VisManager* visManager = new G4VisExecutive;
-    // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-    // G4VisManager* visManager = new G4VisExecutive("Quiet");
-    visManager->Initialize();
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-    // Get the pointer to the User Interface manager
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  // Process macro or start UI session
+  //
+  if(!ui)
+  {
+    // batch mode
+    G4String command  = "/control/execute ";
+    G4String fileName = argv[argc - 1];
+    UImanager->ApplyCommand(command + fileName);
+  }
+  else
+  {
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
-    // Process macro or start UI session
-    //
-    if (!ui)
-    {
-        // batch mode
-        G4String command = "/control/execute ";
-        G4String fileName = argv[argc-1];
-        UImanager->ApplyCommand(command+fileName);
-    } else
-    {
-        // interactive mode
-        UImanager->ApplyCommand("/control/execute vis.mac");
-        ui->SessionStart();
-        delete ui;
-    }
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  // owned and deleted by the run manager, so they should not be deleted
+  // in the main() program !
+  delete visManager;
+  delete runmanager;
 
-    // Job termination
-    // Free the store: user actions, physics_list and detector_description are
-    // owned and deleted by the run manager, so they should not be deleted
-    // in the main() program !
-    delete visManager;
-    delete runmanager;
-
-    return 0;
+  return 0;
 }

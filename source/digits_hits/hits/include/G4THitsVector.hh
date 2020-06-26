@@ -111,27 +111,27 @@ public:
     inline typename Vector_t::size_type GetIndex(const_iterator itr) const
     { return std::distance(begin(), itr); }
 
-    template <typename U = store_type, enable_if_t< (is_pointer_t(U)), int> = 0>
+    template <typename U = store_type, enable_if_t< (is_pointer_t(U)), G4int> = 0>
     inline T* GetObject(G4int idx) const
-    { return (idx < GetContainer()->size()) ? (*GetContainer())[idx] : nullptr; }
+    { return (idx < (G4int)GetContainer()->size()) ? (*GetContainer())[idx] : nullptr; }
 
-    template <typename U = store_type, enable_if_t< (is_pointer_t(U)), int> = 0>
+    template <typename U = store_type, enable_if_t< (is_pointer_t(U)), G4int> = 0>
     inline T* GetObject(iterator itr) const
     { return (*itr); }
 
-    template <typename U = store_type, enable_if_t< (is_pointer_t(U)), int> = 0>
+    template <typename U = store_type, enable_if_t< (is_pointer_t(U)), G4int> = 0>
     inline const T* GetObject(const_iterator itr) const
     { return (*itr); }
 
-    template <typename U = store_type, enable_if_t< (!is_pointer_t(U)), int> = 0>
+    template <typename U = store_type, enable_if_t< (!is_pointer_t(U)), G4int> = 0>
     inline T* GetObject(G4int idx) const
-    { return (idx < GetContainer()->size()) ? &(*GetContainer())[idx] : nullptr; }
+    { return (idx < (G4int)GetContainer()->size()) ? &(*GetContainer())[idx] : nullptr; }
 
-    template <typename U = store_type, enable_if_t< (!is_pointer_t(U)), int> = 0>
+    template <typename U = store_type, enable_if_t< (!is_pointer_t(U)), G4int> = 0>
     inline T* GetObject(iterator itr) const
     { return &(*itr); }
 
-    template <typename U = store_type, enable_if_t< (!is_pointer_t(U)), int> = 0>
+    template <typename U = store_type, enable_if_t< (!is_pointer_t(U)), G4int> = 0>
     inline const T* GetObject(const_iterator itr) const
     { return &(*itr); }
 
@@ -168,7 +168,7 @@ public:
     template <typename U = T,
               typename V = store_type,
               enable_if_t< (is_fundamental_t(U) &&
-                            is_pointer_t(V)), int> = 0>
+                            is_pointer_t(V)), G4int> = 0>
     store_type allocate() const
     { return new T(0.); }
 
@@ -177,13 +177,13 @@ public:
     template <typename U = T,
               typename V = store_type,
               enable_if_t< (!is_fundamental_t(U) &&
-                            is_pointer_t(V)), int> = 0>
+                            is_pointer_t(V)), G4int> = 0>
     store_type allocate() const
     { return new T(); }
 
     // ensure fundamental types are initialized to zero
     template <typename U = store_type,
-              enable_if_t< (is_pointer_t(U)), int> = 0>
+              enable_if_t< (is_pointer_t(U)), G4int> = 0>
     store_type null() const
     { return nullptr; }
 
@@ -194,7 +194,7 @@ public:
     template <typename U = T,
               typename V = store_type,
               enable_if_t< (is_fundamental_t(U) &&
-                            !is_pointer_t(V)), int> = 0>
+                            !is_pointer_t(V)), G4int> = 0>
     store_type allocate() const
     { return T(0.); }
     // non-fundamental types should set values to appropriate values
@@ -202,13 +202,13 @@ public:
     template <typename U = T,
               typename V = store_type,
               enable_if_t< (!is_fundamental_t(U) &&
-                            !is_pointer_t(V)), int> = 0>
+                            !is_pointer_t(V)), G4int> = 0>
     store_type allocate() const
     { return T(); }
 
     // ensure fundamental types are initialized to zero
     template <typename U = store_type,
-              enable_if_t< (!is_pointer_t(U)), int> = 0>
+              enable_if_t< (!is_pointer_t(U)), G4int> = 0>
     store_type null() const
     { return store_type(); }
 
@@ -218,7 +218,7 @@ public:
     //  U and VectorU_t types
     //------------------------------------------------------------------------//
     template <typename U, typename VectorU_t,
-              enable_if_t< (is_pointer_t(typename VectorU_t::value_type)), int> = 0>
+              enable_if_t< (is_pointer_t(typename VectorU_t::value_type)), G4int> = 0>
     this_type& operator+=(const G4VTHitsVector<U, VectorU_t>& right) const
     {
         VectorU_t* aHitsVector = right.GetVector();
@@ -232,7 +232,7 @@ public:
     }
     //------------------------------------------------------------------------//
     template <typename U, typename VectorU_t,
-              enable_if_t< (!is_pointer_t(typename VectorU_t::value_type)), int> = 0>
+              enable_if_t< (!is_pointer_t(typename VectorU_t::value_type)), G4int> = 0>
     this_type& operator+=(const G4VTHitsVector<U, VectorU_t>& right) const
     {
         VectorU_t* aHitsVector = right.GetVector();
@@ -245,7 +245,7 @@ public:
     }
     //------------------------------------------------------------------------//
     template <typename U, typename MapU_t,
-              enable_if_t< (is_pointer_t(typename MapU_t::mapped_type)), int> = 0>
+              enable_if_t< (is_pointer_t(typename MapU_t::mapped_type)), G4int> = 0>
     this_type& operator+=(const G4VTHitsMap<U, MapU_t>& right) const
     {
         MapU_t* aHitsMap = right.GetMap();
@@ -255,7 +255,7 @@ public:
     }
     //------------------------------------------------------------------------//
     template <typename U, typename MapU_t,
-              enable_if_t< !(is_pointer_t(typename MapU_t::mapped_type)), int> = 0>
+              enable_if_t< !(is_pointer_t(typename MapU_t::mapped_type)), G4int> = 0>
     this_type& operator+=(const G4VTHitsMap<U, MapU_t>& right) const
     {
         MapU_t* aHitsMap = right.GetMap();
@@ -274,7 +274,7 @@ public:
     //      assumes type T has overload of += operator for U
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< is_same_t(U, T), int> = 0>
+              enable_if_t< is_same_t(U, T), G4int> = 0>
     std::size_t add(const G4int& key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -285,7 +285,7 @@ public:
     //  Overload for different types
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< !is_same_t(U, T), int> = 0>
+              enable_if_t< !is_same_t(U, T), G4int> = 0>
     std::size_t add(const G4int& key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -298,7 +298,7 @@ public:
     //  Overload for same type
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< is_same_t(U, T), int> = 0>
+              enable_if_t< is_same_t(U, T), G4int> = 0>
     std::size_t add(const G4int& key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -309,7 +309,7 @@ public:
     //  Overload for different types
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< !is_same_t(U, T), int> = 0>
+              enable_if_t< !is_same_t(U, T), G4int> = 0>
     std::size_t add(const G4int& key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -326,7 +326,7 @@ public:
     //  Overload for same type T
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< is_same_t(U, T), int> = 0>
+              enable_if_t< is_same_t(U, T), G4int> = 0>
     inline std::size_t set(const G4int& key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -337,7 +337,7 @@ public:
     //  Overload for different types
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< !is_same_t(U, T), int> = 0>
+              enable_if_t< !is_same_t(U, T), G4int> = 0>
     inline std::size_t set(const G4int & key, U*& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -356,7 +356,7 @@ public:
     //  Overload for same type T
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< is_same_t(U, T), int> = 0>
+              enable_if_t< is_same_t(U, T), G4int> = 0>
     inline std::size_t set(const G4int& key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -367,7 +367,7 @@ public:
     //  Overload for different types
     //------------------------------------------------------------------------//
     template <typename U = T,
-              enable_if_t< !is_same_t(U, T), int> = 0>
+              enable_if_t< !is_same_t(U, T), G4int> = 0>
     inline std::size_t set(const G4int & key, U& aHit) const
     {
         vector_type* theHitsVector = GetVector(key);
@@ -397,12 +397,12 @@ public:
 
 protected:
     template <typename U = store_type,
-              enable_if_t< (is_pointer_t(U)), int> = 0>
+              enable_if_t< (is_pointer_t(U)), G4int> = 0>
     void resize(vector_type*& theHitsVector,
                 const G4int& key) const
     {
         // ensure the proper size
-        if(key >= theHitsVector->size())
+        if(key >= (G4int)theHitsVector->size())
             theHitsVector->resize(key+1, null());
 
         // if null pointer for vector entry: allocate
@@ -414,12 +414,12 @@ protected:
     }
 
     template <typename U = store_type,
-              enable_if_t< (!is_pointer_t(U)), int> = 0>
+              enable_if_t< (!is_pointer_t(U)), G4int> = 0>
     void resize(vector_type*& theHitsVector,
                 const G4int& key) const
     {
         // ensure the proper size
-        if(key >= theHitsVector->size())
+        if(key >= (G4int)theHitsVector->size())
             theHitsVector->resize(key+1, null());
     }
 
@@ -435,7 +435,7 @@ protected:
     //      assumes type T has overload of += operator for U
     //------------------------------------------------------------------------//
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void _assign(vector_type*& theHitsVector, const G4int& key, T& val) const
     {
         delete (*theHitsVector)[key];
@@ -443,7 +443,7 @@ protected:
     }
 
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void _assign(vector_type*& theHitsVector, const G4int& key, T*& val) const
     {
         delete (*theHitsVector)[key];
@@ -451,42 +451,42 @@ protected:
     }
 
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, T& val) const
     {
         *(*theHitsVector)[key] += val;
     }
 
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, T*& val) const
     {
         *(*theHitsVector)[key] += *val;
     }
 
     template <typename V, typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, V& val) const
     {
         *(*theHitsVector)[key] += val;
     }
 
     template <typename V, typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, V*& val) const
     {
         *(*theHitsVector)[key] += *val;
     }
 
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     T& get(U& val) const
     {
         return *val;
     }
 
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     void delete_contents(vector_type*& theHitsVector) const
     {
         for(iterator itr = theHitsVector->begin(); itr != theHitsVector->end(); ++itr)
@@ -494,7 +494,7 @@ protected:
     }
 
     template <typename U = store_type,
-              enable_if_t< is_pointer_t(U), int> = 0>
+              enable_if_t< is_pointer_t(U), G4int> = 0>
     T& get_reference(U& val) const
     {
         return *val;
@@ -505,14 +505,14 @@ protected:
     //      assumes type T has overload of += operator for U
     //------------------------------------------------------------------------//
     template <typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void _assign(vector_type*& theHitsVector, const G4int& key, T& val) const
     {
         (*theHitsVector)[key] = val;
     }
 
     template <typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void _assign(vector_type*& theHitsVector, const G4int& key, T*& val) const
     {
         delete (*theHitsVector)[key];
@@ -520,14 +520,14 @@ protected:
     }
 
     template <typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, T& val) const
     {
         (*theHitsVector)[key] += val;
     }
 
     template <typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, T*& val) const
     {
         (*theHitsVector)[key] += *val;
@@ -535,7 +535,7 @@ protected:
 
     template <typename V,
               typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, V& val) const
     {
         (*theHitsVector)[key] += val;
@@ -543,19 +543,19 @@ protected:
 
     template <typename V,
               typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void _add(vector_type*& theHitsVector, const G4int& key, V*& val) const
     {
         (*theHitsVector)[key] += *val;
     }
 
     template <typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     void delete_contents(vector_type*&) const
     { }
 
     template <typename U = store_type,
-              enable_if_t< !is_pointer_t(U), int> = 0>
+              enable_if_t< !is_pointer_t(U), G4int> = 0>
     T& get_reference(U& val) const
     {
         return val;
@@ -653,7 +653,7 @@ void G4VTHitsVector<T, Vector_t>::PrintAllHits()
      Vector_t * theHitsVector = GetVector();
      typename Vector_t::iterator itr = theHitsVector->begin();
      T sum = 0.;
-     for(; itr != theHitsVector->end(); itr++) {
+     for(; itr != theHitsVector->end(); ++itr) {
       G4cout << "  " << itr->first << " : "
              << *(itr->second) << G4endl;
       sum += *(itr->second);

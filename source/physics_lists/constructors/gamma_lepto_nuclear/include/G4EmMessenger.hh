@@ -48,6 +48,7 @@ class G4EmExtraPhysics;
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //////////////////////////////////////
 
@@ -80,6 +81,7 @@ private:
   G4UIcmdWithADouble* theNuEleCcBF;
   G4UIcmdWithADouble* theNuEleNcBF;
   G4UIcmdWithADouble* theNuNucleusBF;
+  G4UIcmdWithADoubleAndUnit* theGNlowe;
 
   G4UIcmdWithAString* theNuDN;
 

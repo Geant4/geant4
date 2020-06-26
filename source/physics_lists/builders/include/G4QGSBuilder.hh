@@ -39,13 +39,8 @@
 
 #include "globals.hh"
 #include "G4VHadronModelBuilder.hh"
-#include "G4QGSModel.hh"
-#include "G4QGSParticipants.hh"
 
-class G4ExcitedStringDecay;
-class G4QuasiElasticChannel;
 class G4PreCompoundModel;
-class G4QGSMFragmentation;
 
 class G4QGSBuilder : public G4VHadronModelBuilder
 {
@@ -67,16 +62,7 @@ private:
   G4QGSBuilder(G4QGSBuilder &);
   G4QGSBuilder & operator=(const G4QGSBuilder &right);
 
-  G4QGSModel< G4QGSParticipants > * theQGStringModel;
-
-  G4ExcitedStringDecay*     theQGStringDecay;
-  G4QuasiElasticChannel*    theQuasiElastic;
-
-  G4PreCompoundModel* thePreCompound;
-  G4QGSMFragmentation* theQGSM;
-
   G4bool quasielFlag;
-
 };
 
 #endif

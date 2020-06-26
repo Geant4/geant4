@@ -1,0 +1,358 @@
+\hypertarget{geant4-tasking}{%
+\section{Geant4 Tasking}\label{geant4-tasking}}
+
+This directory contains a Geant4 run manager which uses a tasking system
+for the G4Event loop. This tasking system is fully compatible with TBB
+if \texttt{GEANT4\_USE\_TBB=ON} is specified when configuring CMake. The
+default behavior, however, is to submit the tasks to an internal
+thread-pool and task-queue.
+
+\hypertarget{g4taskrunmanager}{%
+\subsection{G4TaskRunManager}\label{g4taskrunmanager}}
+
+\texttt{G4TaskRunManager} multiply inherits from \texttt{G4MTRunManager}
+and \texttt{PTL::TaskRunManager}. \texttt{PTL::TaskRunManager} holds the
+thread-pool instance, the size of the thread-pool, and the default
+task-queue. The constructor of \texttt{G4TaskRunManager} takes a
+\texttt{G4VUserTaskQueue} pointer (can be nullptr), a boolean for
+whether to use TBB if available, and a grainsize.
+
+\hypertarget{concepts}{%
+\subsubsection{Concepts}\label{concepts}}
+
+\hypertarget{grainsize}{%
+\paragraph{Grainsize}\label{grainsize}}
+
+\begin{quote}
+Environment Variable: \texttt{G4FORCE\_GRAINSIZE=N}
+\end{quote}
+
+The grainsize is essentially the number of tasks. If set to 0, the
+default grainsize will be \texttt{poolSize} and each thread will get
+\texttt{numEvents\ /\ poolSize} events. If the grainsize is set to 1,
+then \emph{all the events} will be submitted as one task (i.e.~be
+processed serially by one thread in the pool). If the grainsize is set
+to 50 and there are 500 events, then 50 tasks of 10 events will be
+submitted.
+
+\hypertarget{events-per-tasks}{%
+\paragraph{Events Per Tasks}\label{events-per-tasks}}
+
+\begin{quote}
+Environment Variable: \texttt{G4FORCE\_EVENTS\_PER\_TASK=N}
+\end{quote}
+
+Sometimes is easier to specify the number of events in a task instead of
+the grainsize. If the events-per-task is set to 10 and there are 500
+events, then 50 tasks of 10 events will be submitted.
+
+\hypertarget{default-constructor}{%
+\subsubsection{Default Constructor}\label{default-constructor}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{    G4TaskRunManager(G4VUserTaskQueue* = }\KeywordTok{nullptr}\NormalTok{, }\DataTypeTok{bool}\NormalTok{ useTBB = }\KeywordTok{false}\NormalTok{, G4int grainsize = }\DecValTok{0}\NormalTok{);}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{g4runmanagercreator}{%
+\subsection{G4RunManagerCreator}\label{g4runmanagercreator}}
+
+An enumeration \texttt{G4RunManagerType} and a function
+\texttt{G4RunManagerCreator::CreateRunManager(...)} was added to
+\texttt{"G4RunManagerCreator.hh"} to simplify the selection of the
+various run managers. The first parameter is either one of the
+enumerated \texttt{G4RunManagerType} or a string identifier
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Enumeration & String ID & Class\tabularnewline
+\midrule
+\endhead
+\texttt{G4RunManagerType::Serial} & \texttt{"Serial"} &
+\texttt{G4RunManager}\tabularnewline
+\texttt{G4RunManagerType::MT} & \texttt{"MT"} &
+\texttt{G4MTRunManager}\tabularnewline
+\texttt{G4RunManagerType::Tasking} & \texttt{"Tasking"} &
+\texttt{G4TaskRunManager}\tabularnewline
+\texttt{G4RunManagerType::TBB} & \texttt{"TBB"} &
+\texttt{G4TaskRunManager}\tabularnewline
+\texttt{G4RunManagerType::Default} & \texttt{"Default"} & Environment
+setting\tabularnewline
+\bottomrule
+\end{longtable}
+
+The \texttt{Default} enumeration value will defer to the following
+environment variable \texttt{G4RUN\_MANAGER\_TYPE} if specified and will
+default to \texttt{"Tasking"} if MT is supported and serial if MT is not
+supported. If the \texttt{G4FORCE\_RUN\_MANAGER\_TYPE} environment
+variable is set, this variable will override the value passed to the
+\texttt{CreateRunManager} function.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.16\columnwidth}\raggedright
+Environment Variable\strut
+\end{minipage} & \begin{minipage}[b]{0.24\columnwidth}\raggedright
+Options\strut
+\end{minipage} & \begin{minipage}[b]{0.52\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.16\columnwidth}\raggedright
+\texttt{G4RUN\_MANAGER\_TYPE}\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+\texttt{"Serial"}, \texttt{"MT"}, \texttt{"Tasking"},
+\texttt{"TBB"}\strut
+\end{minipage} & \begin{minipage}[t]{0.52\columnwidth}\raggedright
+Only applicable when \texttt{G4RunManagerType::Default} is used\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.16\columnwidth}\raggedright
+\texttt{G4FORCE\_RUN\_MANAGER\_TYPE}\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\raggedright
+\texttt{"Serial"}, \texttt{"MT"}, \texttt{"Tasking"},
+\texttt{"TBB"}\strut
+\end{minipage} & \begin{minipage}[t]{0.52\columnwidth}\raggedright
+Will override explicitly specifed \texttt{G4RunManagerType} and fail if
+type is not available\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{creating-the-g4runmanager}{%
+\subsection{Creating the G4RunManager}\label{creating-the-g4runmanager}}
+
+\begin{itemize}
+\tightlist
+\item
+  The \texttt{G4RunManagerCreator::CreateRunManager(...)} function takes
+  either \texttt{G4RunManagerType} enumerated type or string to specify
+  the desired G4RunManager
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If a string is used, regex matching is used which is
+    case-insensitive
+  \item
+    Returns a \texttt{G4RunManager*}
+  \item
+    Various overloads exist which just reorder passing in:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \texttt{int\ numberOfThreads} - executes
+      \texttt{G4MTRunManager::SetNumberOfThreads(numberOfThreads)}
+      before returning if \textgreater{} 0
+
+      \begin{itemize}
+      \tightlist
+      \item
+        default: \texttt{0}
+      \end{itemize}
+    \item
+      \texttt{bool\ fail\_if\_unavail} - will cause a runtime failure if
+      requested type is not available with Geant4 build
+
+      \begin{itemize}
+      \tightlist
+      \item
+        default: \texttt{true}
+      \end{itemize}
+    \item
+      \texttt{G4VTaskQueue*} - a task-queue manager
+
+      \begin{itemize}
+      \tightlist
+      \item
+        default: \texttt{nullptr}
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\PreprocessorTok{\#include }\ImportTok{"G4RunManagerCreator.hh"}
+
+\DataTypeTok{int}\NormalTok{ main()}
+\NormalTok{\{}
+    \CommentTok{// specify \{Serial, MT, Tasking, TBB\} as the default, can be overridden}
+    \CommentTok{// with "G4FORCE\_RUN\_MANAGER\_TYPE" env variable}
+    \KeywordTok{auto}\NormalTok{* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::Serial);}
+    \KeywordTok{auto}\NormalTok{* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::MT);}
+    \KeywordTok{auto}\NormalTok{* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::Tasking);}
+    \KeywordTok{auto}\NormalTok{* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::TBB);}
+
+    \CommentTok{// defer to "G4RUN\_MANAGER\_TYPE" env variable and default to Tasking if}
+    \CommentTok{// env variable is not set}
+    \KeywordTok{auto}\NormalTok{* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::Default);}
+
+    \CommentTok{// same as above}
+    \KeywordTok{auto}\NormalTok{* runmanager = G4RunManagerCreator::CreateRunManager();}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{using-the-tasking-system}{%
+\subsection{Using the Tasking System}\label{using-the-tasking-system}}
+
+With G4TaskRunManager, Geant4 events will be launched asynchronously as
+tasks. These tasks are placed into a queue until one of the thread in
+the pool is available to execute the task. Users can take advantage of
+this system to load-balance expensive sub-event calculations which might
+have previously resulted in serial bottlenecks. For example, if an
+application needs to do extensive event analysis on electrons and thread
+\#1 ends up with 10x as many of these events, the other threads might
+finish their G4Run significantly eariler and be idle while thread \#1
+has a lot of work. Tasking allows these analysis calculations to be
+offload back into the queue so that other threads can contribute to
+their completion.
+
+\hypertarget{option-1---submit-directly-to-thread-pool}{%
+\subsubsection{Option 1 - Submit Directly to
+Thread-Pool}\label{option-1---submit-directly-to-thread-pool}}
+
+\begin{itemize}
+\tightlist
+\item
+  To execute the function \texttt{foo(int,\ double)} asynchronously:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// get the task manager}
+\KeywordTok{auto}\NormalTok{* task\_manager = G4TaskRunManager::GetTaskManager();}
+
+\CommentTok{// submit task to thread{-}pool and receive a future for when the result is need}
+\BuiltInTok{std::}\NormalTok{future\textless{}}\DataTypeTok{void}\NormalTok{\textgreater{} \_fvoid = task\_manager{-}\textgreater{}async\textless{}}\DataTypeTok{void}\NormalTok{\textgreater{}(foo, }\DecValTok{1}\NormalTok{, }\FloatTok{1.0}\NormalTok{);}
+\BuiltInTok{std::}\NormalTok{future\textless{}}\DataTypeTok{int}\NormalTok{\textgreater{}  \_fint  = task\_manager{-}\textgreater{}async\textless{}}\DataTypeTok{int}\NormalTok{\textgreater{}(bar, }\FloatTok{1.0}\NormalTok{);}
+
+\CommentTok{// wait for task to execute}
+\NormalTok{\_fvoid.wait();}
+\NormalTok{\_fint.wait();}
+
+\CommentTok{// get the result (if non{-}void)}
+\KeywordTok{auto}\NormalTok{ result = \_fint.get();}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{option-2---submit-to-task-group}{%
+\subsubsection{Option 2 - Submit to
+task-group}\label{option-2---submit-to-task-group}}
+
+\begin{itemize}
+\tightlist
+\item
+  Obtain a pointer to the thread-pool instance
+\item
+  Create a \texttt{task\_group\textless{}T\textgreater{}} object where
+  \texttt{T} is the return type of all the functions in the group
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \texttt{T} is non-void, you must provide a join functor who
+    return type and first argument are both references to the joined
+    type and the second argument is type \texttt{T},
+    e.g.~\texttt{task\_group\textless{}int\textgreater{}} can provide a
+    join functor with \texttt{vector\textless{}int\textgreater{}\&} as
+    the return type and \texttt{T} as the second argument or
+    \texttt{int\&} as the return and first argument and \texttt{int} as
+    the second argument
+  \item
+    If \texttt{T} is void, the join functor is optional and can be
+    treated as a final synchronization operation after all the tasks
+    have been completed.
+  \end{itemize}
+\end{itemize}
+
+\begin{quote}
+NOTE: The join functor for task-groups are called sequentially on the
+thread that is waiting on
+\texttt{task\_group\textless{}T\textgreater{}::join()} member function.
+\end{quote}
+
+\hypertarget{global-definitions-for-examples}{%
+\paragraph{Global Definitions for
+Examples}\label{global-definitions-for-examples}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// obtain thread{-}pool instance from task manager}
+\AttributeTok{static} \KeywordTok{auto}\NormalTok{* thread\_pool = G4TaskRunManager::GetThreadPool();}
+
+\CommentTok{// trivial int function which just returns value passed}
+\DataTypeTok{int}\NormalTok{ foo(}\DataTypeTok{int}\NormalTok{ v) \{ }\ControlFlowTok{return}\NormalTok{ v; \}}
+
+\CommentTok{// function which launches CUDA kernel}
+\DataTypeTok{void}\NormalTok{ bar(}\DataTypeTok{int}\NormalTok{ v)}
+\NormalTok{\{}
+\NormalTok{    cuda\_bar\textless{}\textless{}\textless{}}\DecValTok{512}\NormalTok{, }\DecValTok{1}\NormalTok{\textgreater{}\textgreater{}\textgreater{}(v);}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{example-with-non-void-return-types-from-tasks}{%
+\paragraph{Example with non-void return types from
+tasks}\label{example-with-non-void-return-types-from-tasks}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// put all return values from tasks into an array}
+\KeywordTok{auto}\NormalTok{ join\_vec = [](}\BuiltInTok{std::}\NormalTok{vector\textless{}}\DataTypeTok{int}\NormalTok{\textgreater{}\& lhs, }\DataTypeTok{int}\NormalTok{ rhs) \{ lhs.push\_back(rhs); }\ControlFlowTok{return}\NormalTok{ lhs; \};}
+
+\CommentTok{// sum the values returned by tasks}
+\KeywordTok{auto}\NormalTok{ sum\_int = [](}\DataTypeTok{int}\NormalTok{\& lhs, }\DataTypeTok{int}\NormalTok{ rhs) \{ }\ControlFlowTok{return}\NormalTok{ lhs += rhs; \};}
+
+\CommentTok{// task group which applies \textquotesingle{}join\_vec\textquotesingle{} to all task return values}
+\NormalTok{task\_group\textless{}}\DataTypeTok{int}\NormalTok{\textgreater{}  vec\_tg(join\_vec, thread\_pool);}
+\CommentTok{// task group with applies \textquotesingle{}sum\_int\textquotesingle{} to all task return values}
+\NormalTok{task\_group\textless{}}\DataTypeTok{int}\NormalTok{\textgreater{}  sum\_tg(sum\_int, thread\_pool);}
+
+\CommentTok{// submit work to task{-}groups}
+\NormalTok{vec\_tg.exec(foo, }\DecValTok{1}\NormalTok{);}
+\NormalTok{vec\_tg.exec(foo, }\DecValTok{2}\NormalTok{);}
+\NormalTok{sum\_tg.exec(foo, }\DecValTok{1}\NormalTok{);}
+\NormalTok{sum\_tg.exec(foo, }\DecValTok{2}\NormalTok{);}
+
+\CommentTok{// produces std::vector\{ 1, 2 \};}
+\KeywordTok{auto}\NormalTok{ vec\_result = vec\_tg.join();}
+
+\CommentTok{// produces 1 + 2 = 3}
+\KeywordTok{auto}\NormalTok{ sum\_result = sum\_tg.join();}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{example-with-void-return-type-from-tasks}{%
+\paragraph{Example with void return type from
+tasks}\label{example-with-void-return-type-from-tasks}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// wait for the GPU to finish}
+\KeywordTok{auto}\NormalTok{ sync = []() \{ cudaDeviceSynchronize(); \};}
+
+\CommentTok{// task group which applies \textquotesingle{}sync\textquotesingle{} after all tasks have been executed}
+\NormalTok{task\_group\textless{}}\DataTypeTok{void}\NormalTok{\textgreater{} gpu\_tg(sync, thread\_pool);}
+\CommentTok{// generic task group w/o a join functor}
+\NormalTok{task\_group\textless{}}\DataTypeTok{void}\NormalTok{\textgreater{} general\_tg(thread\_pool);}
+
+\CommentTok{// submit work to task{-}groups}
+\NormalTok{gpu\_tg.exec(bar, }\DecValTok{1}\NormalTok{);}
+\NormalTok{gpu\_tg.exec(bar, }\DecValTok{2}\NormalTok{);}
+\NormalTok{general\_tg.exec(bar, }\DecValTok{1}\NormalTok{);}
+\NormalTok{general\_tg.exec(bar, }\DecValTok{2}\NormalTok{);}
+
+\CommentTok{// \textquotesingle{}sync()\textquotesingle{} will get called after all tasks in group have executed}
+\CommentTok{// (i.e. return from \textquotesingle{}bar\textquotesingle{} function). \textquotesingle{}sync\textquotesingle{} will then block until}
+\CommentTok{// all GPU work has been completed}
+\NormalTok{gpu\_tg.join();}
+
+\CommentTok{// will block only until all tasks in group have been executed}
+\CommentTok{// (i.e. returned from \textquotesingle{}bar\textquotesingle{} function)}
+\NormalTok{generic\_tg.join();}
+\end{Highlighting}
+\end{Shaded}

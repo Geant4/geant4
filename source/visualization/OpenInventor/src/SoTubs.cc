@@ -85,7 +85,11 @@ SoTubs::~SoTubs() {
 // initClass
 void SoTubs::initClass(){
   // This statement is required.
-  SO_NODE_INIT_CLASS(SoTubs,SoShape,"Shape");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoTubs,SoShape,"Shape");
+  }
 }
 
 // generatePrimitives

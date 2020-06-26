@@ -54,6 +54,7 @@ G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(const G4String& nam
     G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
   maxBERT_proton = maxBERT_neutron = maxBERT_pik = 
     G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+  G4HadronicParameters::Instance()->SetEnableBCParticles(true);
 }
 
 

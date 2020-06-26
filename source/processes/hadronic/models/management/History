@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 March 2020 - Vladimir Ivanchenko (hadr-modman-V10-06-00)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - try to delete HP and PHP end of run
+- G4HadronicInteraction - provide default implementation for all
+    virtual methods
+- G4VHighEnergyGenerator, G4VIntraNuclearTransportModel,
+  G4VPreCompoundModel - cleaned up: removed old commented lines,
+    code format, C++11 keywords
+
 19 November 2019 - Vladimir Ivanchenko (hadr-modman-V10-05-02)
 -----------------------------------------------------------
 - G4VHighEnergyGenerator - use inheritance from G4HadronicInteraction

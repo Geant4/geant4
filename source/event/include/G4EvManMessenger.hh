@@ -23,40 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EvManMessenger
 //
+// Class description:
 //
+// This is a concrete class of G4UImessenger which takes care of commands
+// addressed to G4EventManager. Commands handled by this messenger are
+//     /event/
+//     /event/abort
+//     /event/verbose
 
-#ifndef G4EvManMessenger_h
-#define G4EvManMessenger_h 1
+// Author: M.Asai, SLAC
+// --------------------------------------------------------------------
+#ifndef G4EvManMessenger_hh
+#define G4EvManMessenger_hh 1
 
 #include "G4UImessenger.hh"
+
 class G4EventManager;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 
-// class description:
-//
-//  This is a concrete class of G4UImessenger which takes care of commands
-// addressed to G4EventManager. Commands handled by this messenger are
-//     /event/
-//     /event/abort
-//     /event/verbose
-//
-
-class G4EvManMessenger: public G4UImessenger
+class G4EvManMessenger : public G4UImessenger
 {
   public:
-    G4EvManMessenger(G4EventManager * fEvMan);
+
+    G4EvManMessenger(G4EventManager* fEvMan);
     ~G4EvManMessenger();
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
+
   private:
-    G4EventManager * fEvManager;
-    G4UIdirectory* eventDirectory;
-    G4UIcmdWithoutParameter* abortCmd;
-    G4UIcmdWithAnInteger* verboseCmd;
-    G4UIcmdWithoutParameter* storeEvtCmd;
+
+    G4EventManager* fEvManager = nullptr;
+    G4UIdirectory* eventDirectory = nullptr;
+    G4UIcmdWithoutParameter* abortCmd = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
+    G4UIcmdWithoutParameter* storeEvtCmd = nullptr;
 };
 
 #endif

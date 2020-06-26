@@ -125,10 +125,11 @@ void G4GMocrenFileViewer::SetView ()
 void
 G4GMocrenFileViewer::ClearView( void )
 {
-  if(GFDEBUG)
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if(GFDEBUG) {
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
       G4cout << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
-
+    }
+  }  
   //if(kSceneHandler.kGddDest) {
     //kSceneHandler.kGddDest.close();
     // Re-open with same filename...

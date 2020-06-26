@@ -143,6 +143,7 @@ private:
   G4bool   fRDM;
   G4bool   fSampleTime;
   G4bool   fCorrelatedGamma;
+  G4bool   fIsomerFlag;
   G4bool   isInitialised;
 
 #ifdef G4MULTITHREADED

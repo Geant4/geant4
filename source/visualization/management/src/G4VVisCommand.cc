@@ -219,6 +219,23 @@ void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
 
 }
 
+G4bool G4VVisCommand::CheckView ()
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+  "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+       << G4endl;
+    }
+    return false;
+  }
+  
+  return true;
+}
+
 void G4VVisCommand::G4VisCommandsSceneAddUnsuccessful
 (G4VisManager::Verbosity verbosity) {
   // Some frequently used error printing...

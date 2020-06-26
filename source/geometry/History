@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 10, 2019 Ben Morgan               geometry-V10-06-00
+----------------------------
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 June  5, 2019 J.Apostolakis                 geometry-V10-05-01
 ---------------------------
 - Change CMakeLists.txt in test directories to allow optional use

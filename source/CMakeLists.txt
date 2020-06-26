@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 # CMakeLists.txt
-# Module : 
+# Module :
 # Package: Geant4.src.
 #
 # Intermediate level CMakeLists.txt - just process subdirectories
@@ -18,7 +18,7 @@ add_subdirectory(externals)
 
 # Target G4g3tog4 is optional based on user selection...
 if(GEANT4_USE_G3TOG4)
-    add_subdirectory(g3tog4)
+  add_subdirectory(g3tog4)
 endif()
 
 add_subdirectory(geometry)
@@ -34,7 +34,12 @@ add_subdirectory(physics_lists)
 add_subdirectory(processes)
 add_subdirectory(readout)
 add_subdirectory(run)
+add_subdirectory(tasking)
 add_subdirectory(track)
 add_subdirectory(tracking)
 add_subdirectory(visualization)
 
+# - Compose libs
+if(GEANT4_USE_NEW_CMAKE)
+  geant4_compose_targets()
+endif()

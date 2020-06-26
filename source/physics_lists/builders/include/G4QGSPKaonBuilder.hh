@@ -72,13 +72,8 @@ class G4QGSPKaonBuilder : public G4VKaonBuilder
     using G4VKaonBuilder::Build; //Prevent compiler warning
   private:
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
     G4double theMin;
     G4double theMax;
-
 };
 
 #endif

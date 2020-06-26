@@ -707,7 +707,11 @@ void G4tgbGeometryDumper::DumpBooleanVolume( const G4String& solidType,
   if( displaced )
   {
     solid1Disp = dynamic_cast<G4DisplacedSolid*>(solid1);
-    if (solid1Disp)  { solid1 = solid1Disp->GetConstituentMovedSolid(); }
+    if (solid1Disp)  {
+      solid1 = solid1Disp->GetConstituentMovedSolid();
+    } else {
+      return;
+    }
   }
   DumpSolid( solid0 );
   DumpSolid( solid1 );
@@ -1353,15 +1357,16 @@ G4tgbGeometryDumper::Same2G4Isotopes( G4Isotope* isot1, G4Isotope* isot2 )
 const G4String& G4tgbGeometryDumper::FindSolidName( G4VSolid* solid )
 {
   std::map<G4String,G4VSolid*>::const_iterator ite;
-  for( ite = theSolids.begin(); ite != theSolids.end(); ite++ )
-  {
-    if( solid == (*ite).second )  { return (*ite).first; }
-  }
-
+  for( ite = theSolids.begin(); ite != theSolids.end(); ++ite )
+    {
+      if( solid == (*ite).second )  { return (*ite).first;
+      }
+    }
+  
   if( ite == theSolids.end() )
-  {
-    G4Exception("G4tgbGeometryDumper::FindSolidName()", "ReadError",
-                FatalException, "Programming error.");
-  }
+    {
+      G4Exception("G4tgbGeometryDumper::FindSolidName()", "ReadError",
+		  FatalException, "Programming error.");
+    }
   return (*ite).first;
 }

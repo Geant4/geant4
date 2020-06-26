@@ -23,34 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ElectronOccupancy
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//
-//      History: first implementation, based on object model of
-//      Hisaya Kurashige, 17 Aug 1999
-// ----------------------------------------------------------------
-// Class Description
-//     This class has information of occupation of electrons 
-//     in atomic orbits
-// -  
-//     GetOccupancy(N) gives the number of electron
-//     in N-th orbit
-//       For example : Carbon atom should be 
+// This class has information of occupation of electrons in atomic orbits.
+// GetOccupancy(N) gives the number of electron in N-th orbit
+//    For example : Carbon atom should be 
 //          GetOccupancy(0)      --> 2
 //          GetOccupancy(1)      --> 4
 //          GetOccupancy(2..7)   --> 0
-// -
-//     GetTotalOccupancy() gives the total number of electrons
 //
-// --------------------------------------------------------------- 
+// GetTotalOccupancy() gives the total number of electrons
 
-
-
-#ifndef G4ElectronOccupancy_h
-#define G4ElectronOccupancy_h 1
+// Author: Hisaya Kurashige, 17 Aug 1999
+// --------------------------------------------------------------------
+#ifndef G4ElectronOccupancy_hh
+#define G4ElectronOccupancy_hh 1
 
 #include "globals.hh"
 #include "G4Allocator.hh"
@@ -60,88 +49,88 @@
 
 class G4ElectronOccupancy 
 {
- public:
-   enum { MaxSizeOfOrbit = 20};
+  public:
 
- public: // With Description
-   G4ElectronOccupancy( G4int sizeOrbit = MaxSizeOfOrbit   );
-   G4ElectronOccupancy( const G4ElectronOccupancy& right );
+    enum { MaxSizeOfOrbit = 20};
 
- public:
-   virtual    	       ~G4ElectronOccupancy();
+    G4ElectronOccupancy( G4int sizeOrbit = MaxSizeOfOrbit );
+    G4ElectronOccupancy( const G4ElectronOccupancy& right );
 
-  //  new/delete operators are oberloded to use G4Allocator
-     inline void *operator new(size_t);
-     inline void operator delete(void *aElectronOccupancy);
+    virtual ~G4ElectronOccupancy();
 
- 
-  //- operators
-     G4ElectronOccupancy & operator=(const G4ElectronOccupancy &right);
-     G4bool operator==(const G4ElectronOccupancy &right) const;
-     G4bool operator!=(const G4ElectronOccupancy &right) const;
+    inline void *operator new(size_t);
+    inline void operator delete(void *aElectronOccupancy);
+      // new/delete operators are overloaded to use G4Allocator
+
+    G4ElectronOccupancy& operator=(const G4ElectronOccupancy& right);
+    G4bool operator==(const G4ElectronOccupancy& right) const;
+    G4bool operator!=(const G4ElectronOccupancy& right) const;
+      // operators
    
- public: // With Description
-   // The following methods returns
-   //     0:  if the orbit(atom) is vacant 
-   //    >0:  number of electrons in orbit
-   G4int  GetTotalOccupancy() const;
-   G4int  GetOccupancy(G4int orbit) const;
- 
-   //
-   G4int  AddElectron(G4int orbit, G4int number = 1);
-   G4int  RemoveElectron(G4int orbit, G4int number = 1);
+    inline G4int GetTotalOccupancy() const;
+    inline G4int GetOccupancy(G4int orbit) const;
+      // The following methods returns
+      //     0:  if the orbit(atom) is vacant 
+      //    >0:  number of electrons in orbit
+
+    G4int AddElectron(G4int orbit, G4int number = 1);
+    G4int RemoveElectron(G4int orbit, G4int number = 1);
    
-   G4int  GetSizeOfOrbit() const;
-   void   DumpInfo() const;
+    inline G4int  GetSizeOfOrbit() const;
+    void   DumpInfo() const;
 
- private:
-   G4int  theSizeOfOrbit;
-   G4int  theTotalOccupancy;
-   G4int* theOccupancies;
+  private:
 
+    G4int  theSizeOfOrbit = 0;
+    G4int  theTotalOccupancy = 0;
+    G4int* theOccupancies = nullptr;
 };
 
-extern G4PART_DLL G4Allocator<G4ElectronOccupancy>*& aElectronOccupancyAllocator();
+extern G4PART_DLL
+       G4Allocator<G4ElectronOccupancy>*& aElectronOccupancyAllocator();
 
 // ------------------------
-// Inlined operators
+// Inline methods
 // ------------------------
 
-inline void * G4ElectronOccupancy::operator new(size_t)
+inline
+void * G4ElectronOccupancy::operator new(size_t)
 {
-  if (!aElectronOccupancyAllocator())
+  if (aElectronOccupancyAllocator() == nullptr)
   {
     aElectronOccupancyAllocator() = new G4Allocator<G4ElectronOccupancy>;
   }
-  return (void *) aElectronOccupancyAllocator()->MallocSingle();
-}
-
-inline void G4ElectronOccupancy::operator delete(void * aElectronOccupancy)
-{
-  aElectronOccupancyAllocator()->FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
+  return (void*) aElectronOccupancyAllocator()->MallocSingle();
 }
 
 inline
- G4int  G4ElectronOccupancy::GetSizeOfOrbit() const
+void G4ElectronOccupancy::operator delete(void* aElectronOccupancy)
+{
+  aElectronOccupancyAllocator()
+    ->FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
+}
+
+inline
+G4int G4ElectronOccupancy::GetSizeOfOrbit() const
 {
   return  theSizeOfOrbit;
 }
 
 inline
- G4int G4ElectronOccupancy::GetTotalOccupancy() const
+G4int G4ElectronOccupancy::GetTotalOccupancy() const
 {
   return  theTotalOccupancy;
 }
 
 inline
- G4int  G4ElectronOccupancy::GetOccupancy(G4int orbit) const
+G4int G4ElectronOccupancy::GetOccupancy(G4int orbit) const
 {
   G4int value = 0;
-  if ((orbit >=0)&&(orbit<theSizeOfOrbit)){
+  if ((orbit >=0)&&(orbit<theSizeOfOrbit))
+  {
     value = theOccupancies[orbit];
   }
   return value;  
 }
-
 
 #endif

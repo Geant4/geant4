@@ -76,11 +76,6 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4QGSParticipants > * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4QGSMFragmentation * theQGSM;
     G4double theMin;
 };
 

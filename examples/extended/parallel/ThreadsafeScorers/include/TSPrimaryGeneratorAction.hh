@@ -36,7 +36,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #ifndef tsprimarygeneratoraction_hh
 #define tsprimarygeneratoraction_hh 1
 
@@ -48,16 +47,15 @@ class G4ParticleGun;
 
 class TSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-    TSPrimaryGeneratorAction();
-    virtual ~TSPrimaryGeneratorAction();
+ public:
+  TSPrimaryGeneratorAction();
+  virtual ~TSPrimaryGeneratorAction();
 
-public:
-    void GeneratePrimaries(G4Event*);
+ public:
+  void GeneratePrimaries(G4Event*);
 
-private:
-    G4ParticleGun* fGun;
-
+ private:
+  G4ParticleGun* fGun;
 };
 
 #endif

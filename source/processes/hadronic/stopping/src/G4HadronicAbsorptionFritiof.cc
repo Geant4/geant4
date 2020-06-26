@@ -62,9 +62,7 @@ G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef )
   
   G4TheoFSGenerator * theModel = new G4TheoFSGenerator( "FTFP" );
   G4FTFModel * theStringModel = new G4FTFModel;
-  theLund = new G4LundStringFragmentation;
-  theStringDecay = new G4ExcitedStringDecay( theLund );
-  theStringModel->SetFragmentationModel( theStringDecay );
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
   // Not a cascade - goes straight to Preco
   G4HadronicInteraction* p =
@@ -86,12 +84,8 @@ G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef )
   RegisterMe( theModel );
 }
 
-
 G4HadronicAbsorptionFritiof::~G4HadronicAbsorptionFritiof() {
-  delete theLund;
-  delete theStringDecay;
 }
-
 
 // Applies to constructor-specified particle, or to all known cases
 G4bool G4HadronicAbsorptionFritiof::

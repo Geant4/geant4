@@ -77,11 +77,6 @@ class G4FTFPPiKBuilder : public G4VPiKBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4FTFModel * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4LundStringFragmentation * theLund;
     G4double theMin;
     G4double theMax;
 };

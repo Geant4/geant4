@@ -41,34 +41,31 @@
 G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel(
         const G4String& modName, G4VPreCompoundModel* ptr)
   : G4HadronicInteraction(modName),theTransportModelName(modName),
-    the3DNucleus(0),theDeExcitation(ptr),thePrimaryProjectile(0)
+    the3DNucleus(nullptr),theDeExcitation(ptr),thePrimaryProjectile(nullptr)
 {}
 
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()
-{
-  //  if(the3DNucleus!=NULL) delete the3DNucleus;
-  // This is deleted by ~G4HadronicInteractionRegistry
-  // if(theDeExcitation!=NULL) delete theDeExcitation;
-}
+{}
 
 void G4VIntraNuclearTransportModel::ModelDescription(std::ostream& outFile) const
 {
-	outFile << "G4VIntraNuclearTransportModel is abstract class" << G4endl;
-	G4Exception("G4VIntraNuclearTransportModel::ModelDescription()","G4VINT01",FatalException,
-			"G4VIntraNuclearTransportModel is abstract class, no description available");
+  outFile << "G4VIntraNuclearTransportModel is abstract class.\n";
+  G4Exception("G4VIntraNuclearTransportModel::ModelDescription()","G4VINT01",
+              FatalException,
+              "G4VIntraNuclearTransportModel is abstract class, no description available");
 }
 
 void G4VIntraNuclearTransportModel::PropagateModelDescription(std::ostream& outFile) const
 {
-	outFile << "G4VIntraNuclearTransportModel is abstract class, missing description" << G4endl;
-//	G4Exception("G4VIntraNuclearTransportModel::ModelDescription()","G4VINT01",FatalException,
-//			"G4VIntraNuclearTransportModel is abstract class, no description available");
+  outFile << "G4VIntraNuclearTransportModel is abstract class, missing description.\n";
 }
 
-G4ReactionProductVector* G4VIntraNuclearTransportModel::PropagateNuclNucl(G4KineticTrackVector* ,
+G4ReactionProductVector* 
+G4VIntraNuclearTransportModel::PropagateNuclNucl(G4KineticTrackVector* ,
                G4V3DNucleus* , G4V3DNucleus* )
 {
-   G4Exception("G4VIntraNuclearTransportModel::Propagate()","G4VINT02",FatalException,
-         "Propagate method for nucleus-nucleus interactions not implemented");
-   return 0;
+  G4Exception("G4VIntraNuclearTransportModel::Propagate()","G4VINT02",
+              FatalException,
+              "Propagate method for nucleus-nucleus interactions not implemented");
+  return nullptr;
 }

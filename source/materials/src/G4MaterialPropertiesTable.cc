@@ -74,6 +74,8 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
   G4MaterialPropertyName.push_back(G4String("RAYLEIGH"));
   G4MaterialPropertyName.push_back(G4String("WLSCOMPONENT"));
   G4MaterialPropertyName.push_back(G4String("WLSABSLENGTH"));
+  G4MaterialPropertyName.push_back(G4String("WLSCOMPONENT2"));
+  G4MaterialPropertyName.push_back(G4String("WLSABSLENGTH2"));
   G4MaterialPropertyName.push_back(G4String("ABSLENGTH"));
   G4MaterialPropertyName.push_back(G4String("FASTCOMPONENT"));
   G4MaterialPropertyName.push_back(G4String("SLOWCOMPONENT"));
@@ -83,12 +85,17 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
   G4MaterialPropertyName.push_back(G4String("ALPHASCINTILLATIONYIELD"));
   G4MaterialPropertyName.push_back(G4String("IONSCINTILLATIONYIELD"));
   G4MaterialPropertyName.push_back(G4String("ELECTRONSCINTILLATIONYIELD"));
+  G4MaterialPropertyName.push_back(G4String("SCINTILLATIONCOMPONENT1"));
+  G4MaterialPropertyName.push_back(G4String("SCINTILLATIONCOMPONENT2"));
+  G4MaterialPropertyName.push_back(G4String("SCINTILLATIONCOMPONENT3"));
 
   G4MaterialConstPropertyName.push_back(G4String("SURFACEROUGHNESS"));
   G4MaterialConstPropertyName.push_back(G4String("ISOTHERMAL_COMPRESSIBILITY"));
   G4MaterialConstPropertyName.push_back(G4String("RS_SCALE_FACTOR"));
   G4MaterialConstPropertyName.push_back(G4String("WLSMEANNUMBERPHOTONS"));
   G4MaterialConstPropertyName.push_back(G4String("WLSTIMECONSTANT"));
+  G4MaterialConstPropertyName.push_back(G4String("WLSMEANNUMBERPHOTONS2"));
+  G4MaterialConstPropertyName.push_back(G4String("WLSTIMECONSTANT2"));
   G4MaterialConstPropertyName.push_back(G4String("MIEHG_FORWARD"));
   G4MaterialConstPropertyName.push_back(G4String("MIEHG_BACKWARD"));
   G4MaterialConstPropertyName.push_back(G4String("MIEHG_FORWARD_RATIO"));
@@ -117,6 +124,33 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable()
   G4MaterialConstPropertyName.push_back(G4String("MR_ANGNOTHETA"));
   G4MaterialConstPropertyName.push_back(G4String("MR_ANGNOPHI"));
   G4MaterialConstPropertyName.push_back(G4String("MR_ANGCUT"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONTIMECONSTANT1"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONTIMECONSTANT2"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONTIMECONSTANT3"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONRISETIME1"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONRISETIME2"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONRISETIME3"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("SCINTILLATIONYIELD3"));
+  G4MaterialConstPropertyName.push_back(G4String("PROTONSCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("PROTONSCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("PROTONSCINTILLATIONYIELD3"));
+  G4MaterialConstPropertyName.push_back(G4String("DEUTERONSCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("DEUTERONSCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("DEUTERONSCINTILLATIONYIELD3"));
+  G4MaterialConstPropertyName.push_back(G4String("TRITONSCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("TRITONSCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("TRITONSCINTILLATIONYIELD3"));
+  G4MaterialConstPropertyName.push_back(G4String("ALPHASCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("ALPHASCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("ALPHASCINTILLATIONYIELD3"));
+  G4MaterialConstPropertyName.push_back(G4String("IONSCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("IONSCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("IONSCINTILLATIONYIELD3"));
+  G4MaterialConstPropertyName.push_back(G4String("ELECTRONSCINTILLATIONYIELD1"));
+  G4MaterialConstPropertyName.push_back(G4String("ELECTRONSCINTILLATIONYIELD2"));
+  G4MaterialConstPropertyName.push_back(G4String("ELECTRONSCINTILLATIONYIELD3"));
 }
 
 ////////////////
@@ -208,16 +242,23 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const char *key) const
   return GetConstProperty(index);
 }
 
-G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key) const
+G4bool G4MaterialPropertiesTable::ConstPropertyExists(const G4int index) const
 {
-  // Returns true if a const property 'key' exists
-  const G4int index = GetConstPropertyIndex(G4String(key));
+  // Returns true if a const property corresponding to 'index' exists
 
   MCPiterator j;
   j = MCP.find(index);
   if ( j != MCP.end() ) return true;
   return false;
 }
+
+G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key) const
+{
+  // Returns true if a const property 'key' exists
+  const G4int index = GetConstPropertyIndex(G4String(key));
+  return ConstPropertyExists(index);
+}
+
 
 G4MaterialPropertyVector*
 G4MaterialPropertiesTable::GetProperty(const char *key, G4bool warning)

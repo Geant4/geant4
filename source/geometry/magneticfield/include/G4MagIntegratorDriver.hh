@@ -63,7 +63,7 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
 
     inline virtual void OnStartTracking() override;
     inline virtual void  OnComputeStep() override {};
-    virtual G4bool DoesReIntegrate() override { return true; }
+    virtual G4bool DoesReIntegrate() const override { return true; }
    
     virtual G4bool AccurateAdvance(G4FieldTrack& y_current,
                                    G4double hstep,
@@ -81,6 +81,9 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
                                 G4double& dchord_step,
                                 G4double& dyerr) override;
       // QuickAdvance just tries one Step - it does not ensure accuracy.
+
+    void  StreamInfo( std::ostream& os ) const override;
+     // Write out the parameters / state of the driver
 
     G4bool QuickAdvance(G4FieldTrack& y_posvel,   // INOUT
                         const G4double dydx[],
@@ -146,9 +149,18 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
                                         G4double hstepCurrent) override;
       // Taking the last step's normalised error, calculate
       // a step size for the next step.
-      // Do not limit the next step's size within a factor of the
-      // current one.
+      // Does it limit the next step's size within a factor of the current?
+      // --  DOES NOT limit for very bad steps
+      // --  DOES     limit for very good (x5) 
 
+    G4double
+    ComputeNewStepSize_WithoutReductionLimit(G4double  errMaxNorm,
+                                             G4double hstepCurrent);                                                      
+      // Taking the last step's normalised error, calculate
+      // a step size for the next step.
+      // Do not limit the next step's size within a factor of the
+      //  current one when *reducing* the size, i.e. for badly failing steps.
+                                                      
     G4double ComputeNewStepSize_WithinLimits(G4double errMaxNorm, // normalised
                                              G4double hstepCurrent);
       // Taking the last step's normalised error, calculate

@@ -55,6 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadronicDeveloperParameters.hh
         G4HadronicException.hh
         G4HadronicParameters.hh
+        G4HadronicParametersMessenger.hh
         G4IsoResult.hh
         G4LightMedia.hh
         G4NuclearPolarization.hh
@@ -74,6 +75,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadronicDeveloperParameters.cc
         G4HadronicException.cc
         G4HadronicParameters.cc
+        G4HadronicParametersMessenger.cc
         G4IsoResult.cc
         G4LightMedia.cc
         G4NuclearPolarization.cc

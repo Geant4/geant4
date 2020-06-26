@@ -23,147 +23,169 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Physics2DVector inline implementation
 //
-//
-// 
-//---------------------------------------------------------------
-//      GEANT 4 class inline source file
-//
-//  G4Physics2DVector.icc
+// Author: Vladimir Ivanchenko, 25.09.2011
+// --------------------------------------------------------------------
 
-//---------------------------------------------------------------
-
-inline
- G4double G4Physics2DVector::Value(G4double x, G4double y) const
+inline G4double G4Physics2DVector::Value(G4double x, G4double y) const
 {
-  size_t idx = 0;
-  size_t idy = 0;
+  std::size_t idx = 0;
+  std::size_t idy = 0;
   return Value(x, y, idx, idy);
 }
 
-inline void G4Physics2DVector::PutX(size_t idx, G4double val)
+inline void G4Physics2DVector::PutX(std::size_t idx, G4double val)
 {
   xVector[idx] = val;
 }
 
-inline void G4Physics2DVector::PutY(size_t idy, G4double val)
+inline void G4Physics2DVector::PutY(std::size_t idy, G4double val)
 {
   yVector[idy] = val;
 }
 
-inline void 
- G4Physics2DVector::PutValue(size_t idx, size_t idy, G4double val)
+inline void G4Physics2DVector::PutValue(std::size_t idx, std::size_t idy,
+                                        G4double val)
 {
   (*(value[idy]))[idx] = val;
 }
 
-inline G4double G4Physics2DVector::GetX(size_t index) const
+inline G4double G4Physics2DVector::GetX(std::size_t index) const
 {
   return xVector[index];
 }
 
-inline G4double G4Physics2DVector::GetY(size_t index) const
+inline G4double G4Physics2DVector::GetY(std::size_t index) const
 {
   return yVector[index];
 }
 
-inline
- G4double G4Physics2DVector::GetValue(size_t idx, size_t idy) const
+inline G4double G4Physics2DVector::GetValue(std::size_t idx,
+                                            std::size_t idy) const
 {
   return (*(value[idy]))[idx];
 }
 
-inline 
- G4double G4Physics2DVector::FindLinearX(G4double rand, G4double y) const
+inline G4double G4Physics2DVector::FindLinearX(G4double rand, G4double y) const
 {
-  size_t idy = 0;
+  std::size_t idy = 0;
   return FindLinearX(rand, y, idy);
 }
 
-inline size_t G4Physics2DVector::GetLengthX() const
+inline std::size_t G4Physics2DVector::GetLengthX() const
 {
   return numberOfXNodes;
 }
 
-inline size_t G4Physics2DVector::GetLengthY() const
+inline std::size_t G4Physics2DVector::GetLengthY() const
 {
   return numberOfYNodes;
 }
 
-inline G4PhysicsVectorType G4Physics2DVector::GetType() const
-{
-  return type;
-}
+inline G4PhysicsVectorType G4Physics2DVector::GetType() const { return type; }
 
 inline void G4Physics2DVector::SetBicubicInterpolation(G4bool val)
 {
   useBicubic = val;
 }
 
-inline size_t G4Physics2DVector::FindBin(G4double z, 
-                                         const G4PV2DDataVector& v, 
-                                         size_t idx,
-                                         size_t idxmax) const
+inline std::size_t G4Physics2DVector::FindBin(const G4double z,
+                                              const G4PV2DDataVector& v,
+                                              const std::size_t idx,
+                                              const std::size_t idxmax) const
 {
-  size_t id = idx;
-  if(z < v[1]) { 
-    id = 0; 
-  } else if(z >= v[idxmax-2]) { 
-    id = idxmax - 2; 
-  } else if(idx > idxmax-2 || z < v[idx] || z >= v[idx+1]) { 
-    id = FindBinLocation(z, v); 
+  std::size_t id = idx;
+  if(z <= v[1])
+  {
+    id = 0;
+  }
+  else if(z >= v[idxmax])
+  {
+    id = idxmax;
+  }
+  else if(idx > idxmax || z < v[idx] || z > v[idx + 1])
+  {
+    id = std::lower_bound(v.begin(), v.end(), z) - v.begin() - 1;
   }
   return id;
 }
 
-inline size_t 
-G4Physics2DVector::FindBinLocationX(G4double x, size_t lastidx) const
+inline std::size_t G4Physics2DVector::FindBinLocationX(
+  const G4double x, const std::size_t idx) const
 {
-  return FindBin(x, xVector, lastidx, numberOfXNodes);
+  return FindBin(x, xVector, idx, numberOfXNodes - 2);
 }
 
-inline size_t 
-G4Physics2DVector::FindBinLocationY(G4double y, size_t lastidy) const
+inline std::size_t G4Physics2DVector::FindBinLocationY(
+  const G4double y, const std::size_t idy) const
 {
-  return FindBin(y, yVector, lastidy, numberOfYNodes);
+  return FindBin(y, yVector, idy, numberOfYNodes - 2);
 }
 
 inline void G4Physics2DVector::SetVerboseLevel(G4int val)
 {
-   verboseLevel = val;
+  verboseLevel = val;
 }
 
-inline G4double 
-G4Physics2DVector::DerivativeX(size_t idx, size_t idy, G4double fac) const
+inline G4double G4Physics2DVector::DerivativeX(std::size_t idx, std::size_t idy,
+                                               G4double fac) const
 {
-  size_t i1 = idx;
-  if(i1 > 0) { --i1; }
-  size_t i2 = idx;
-  if(i2+1 < numberOfXNodes) { ++i2; }
-  return fac*(GetValue(i2, idy) - GetValue(i1, idy))/(GetX(i2) - GetX(i1));
+  std::size_t i1 = idx;
+  if(i1 > 0)
+  {
+    --i1;
+  }
+  std::size_t i2 = idx;
+  if(i2 + 1 < numberOfXNodes)
+  {
+    ++i2;
+  }
+  return fac * (GetValue(i2, idy) - GetValue(i1, idy)) / (GetX(i2) - GetX(i1));
 }
 
-inline G4double 
-G4Physics2DVector::DerivativeY(size_t idx, size_t idy, G4double fac) const
+inline G4double G4Physics2DVector::DerivativeY(std::size_t idx, std::size_t idy,
+                                               G4double fac) const
 {
-  size_t i1 = idy;
-  if(i1 > 0) { --i1; }
-  size_t i2 = idy;
-  if(i2+1 < numberOfYNodes) { ++i2; }
-  return fac*(GetValue(idx, i2) - GetValue(idx, i1))/(GetY(i2) - GetY(i1));
+  std::size_t i1 = idy;
+  if(i1 > 0)
+  {
+    --i1;
+  }
+  std::size_t i2 = idy;
+  if(i2 + 1 < numberOfYNodes)
+  {
+    ++i2;
+  }
+  return fac * (GetValue(idx, i2) - GetValue(idx, i1)) / (GetY(i2) - GetY(i1));
 }
 
-inline G4double 
-G4Physics2DVector::DerivativeXY(size_t idx, size_t idy, G4double fac) const
+inline G4double G4Physics2DVector::DerivativeXY(std::size_t idx,
+                                                std::size_t idy,
+                                                G4double fac) const
 {
-  size_t i1 = idx;
-  if(i1 > 0) { --i1; }
-  size_t i2 = idx;
-  if(i2+1 < numberOfXNodes) { ++i2; }
-  size_t j1 = idy;
-  if(j1 > 0) { --j1; }
-  size_t j2 = idy;
-  if(j2+1 < numberOfYNodes) { ++j2; }
-  return fac*(GetValue(i2, j2) - GetValue(i1, j2) - GetValue(i2, j1) 
-	+ GetValue(i1, j1))/((GetX(i2) - GetX(i1))*(GetY(j2) - GetY(j1)));
+  std::size_t i1 = idx;
+  if(i1 > 0)
+  {
+    --i1;
+  }
+  std::size_t i2 = idx;
+  if(i2 + 1 < numberOfXNodes)
+  {
+    ++i2;
+  }
+  std::size_t j1 = idy;
+  if(j1 > 0)
+  {
+    --j1;
+  }
+  std::size_t j2 = idy;
+  if(j2 + 1 < numberOfYNodes)
+  {
+    ++j2;
+  }
+  return fac *
+         (GetValue(i2, j2) - GetValue(i1, j2) - GetValue(i2, j1) +
+          GetValue(i1, j1)) /
+         ((GetX(i2) - GetX(i1)) * (GetY(j2) - GetY(j1)));
 }

@@ -44,11 +44,15 @@
 SO_ACTION_SOURCE(SoCounterAction)
 
 void SoCounterAction::initClass(void){
-  SO_ACTION_INIT_CLASS(SoCounterAction,SoAction);
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_ACTION_INIT_CLASS(SoCounterAction,SoAction);
 
-  SO_ENABLE(SoCounterAction,SoSwitchElement);
+    SO_ENABLE(SoCounterAction,SoSwitchElement);
 
-  SO_ACTION_ADD_METHOD(SoNode,SoCounterAction::actionMethod);
+    SO_ACTION_ADD_METHOD(SoNode,SoCounterAction::actionMethod);
+  }
 }
 SoCounterAction::SoCounterAction()
 :fCount(0),fLookFor(NODE),fType(),fCheckDerived(TRUE) {

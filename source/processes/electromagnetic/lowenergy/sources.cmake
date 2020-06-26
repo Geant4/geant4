@@ -90,12 +90,14 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4IonYangFluctuationModel.hh
         G4JAEAElasticScattering.hh
         G4JAEAElasticScatteringModel.hh
+        G4JAEAPolarizedElasticScatteringModel.hh
         G4LinInterpolation.hh
         G4LinLogInterpolation.hh
         G4LinLogLogInterpolation.hh
         G4LivermoreBremsstrahlungModel.hh
         G4LivermoreComptonModel.hh
         G4LivermoreComptonModifiedModel.hh
+		G4LivermoreGammaConversion5DModel.hh
         G4LivermoreGammaConversionModel.hh
         G4LivermoreGammaConversionModelRC.hh
         G4LivermoreIonisationCrossSection.hh
@@ -211,12 +213,14 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4IonYangFluctuationModel.cc
         G4JAEAElasticScattering.cc
         G4JAEAElasticScatteringModel.cc
+        G4JAEAPolarizedElasticScatteringModel.cc
         G4LinInterpolation.cc
         G4LinLogInterpolation.cc
         G4LinLogLogInterpolation.cc
         G4LivermoreBremsstrahlungModel.cc
         G4LivermoreComptonModel.cc
         G4LivermoreComptonModifiedModel.cc
+		G4LivermoreGammaConversion5DModel.cc
         G4LivermoreGammaConversionModel.cc
         G4LivermoreGammaConversionModelRC.cc
         G4LivermoreIonisationCrossSection.cc

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// G4VGaussianQuadrature
 //
 // Class description:
 //
@@ -31,67 +31,46 @@
 // with signature double f(double) by Gaussian quadrature methods
 // Roots of ortogonal polynoms and corresponding weights are calculated based on
 // iteration method (by bisection Newton algorithm). Constant values for initial
-// approximations were derived from the book: M. Abramowitz, I. Stegun, Handbook
-// of mathematical functions, DOVER Publications INC, New York 1965 ; chapters 9,
-// 10, and 22 .
-//
-// ---------------------------- Member data: ----------------------------------
-//
-//  fFunction  - pointer to the function to be integrated
-//  fNumber    - the number of points in fAbscissa and fWeight arrays
-//  fAbscissa  - array of abscissas, where function will be evaluated
-//  fWeight    - array of corresponding weights
-//
-//
-// ----------------------------------------------------------------------
-//
-// Auxiliary function which returns the value of std::log(gamma-function(x))
-//
-// G4double 
-// GammaLogarithm(G4double xx)
+// approximations were derived from the book:
+//   M. Abramowitz, I. Stegun, Handbook of mathematical functions,
+//   DOVER Publications INC, New York 1965 ; chapters 9, 10, and 22.
 
-// ------------------------------------------------------------------------------
-//
-// History:
-//             18.04.97   V.Grichine ( Vladimir.Grichine@cern.ch )
-
+// Author: V.Grichine, 18.04.1997
+// --------------------------------------------------------------------
 #ifndef G4VGAUSSIANQUADRATURE_HH
-#define G4VGAUSSIANQUADRATURE_HH
+#define G4VGAUSSIANQUADRATURE_HH 1
 
 #include "globals.hh"
 
-typedef G4double (*function)(G4double) ;
+typedef G4double (*function)(G4double);
 
 class G4VGaussianQuadrature
 {
-  public:
+ public:
+  explicit G4VGaussianQuadrature(function pFunction);
+  // Base constructor
 
-    explicit G4VGaussianQuadrature( function pFunction ) ;
-      // Base constructor
+  virtual ~G4VGaussianQuadrature();
+  // Virtual destructor
 
-    virtual ~G4VGaussianQuadrature() ;
-      // Virtual destructor     
+  G4VGaussianQuadrature(const G4VGaussianQuadrature&) = delete;
+  G4VGaussianQuadrature& operator=(const G4VGaussianQuadrature&) = delete;
 
-    G4double GetAbscissa(G4int index) const ;
-    G4double GetWeight(G4int index) const ;
-    G4int    GetNumber() const;
-      // Access functions
+  G4double GetAbscissa(G4int index) const;
+  G4double GetWeight(G4int index) const;
+  G4int GetNumber() const;
+  // Access functions
 
-  protected:
+ protected:
+  G4double GammaLogarithm(G4double xx);
+  // Auxiliary function which returns the value of std::log(gamma-function(x))
 
-    G4double GammaLogarithm(G4double xx) ;
-
-    //  Data members common for GaussianQuadrature family
-    //
-    function  fFunction ;
-    G4double* fAbscissa ;
-    G4double* fWeight ;
-    G4int     fNumber ;
-
-  private:
-
-    G4VGaussianQuadrature(const G4VGaussianQuadrature&);
-    G4VGaussianQuadrature& operator=(const G4VGaussianQuadrature&);
+  //  Data members common for GaussianQuadrature family
+  //
+  function fFunction;             // pointer to the function to be integrated
+  G4double* fAbscissa = nullptr;  // array of abscissas
+  G4double* fWeight   = nullptr;  // array of corresponding weights
+  G4int fNumber = 0;  // the number of points in fAbscissa and fWeight arrays
 };
 
 #endif

@@ -72,6 +72,8 @@ G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper()
     , fReactionModel(nullptr)
     , fVerbose(0)
 {
+    fpTrackContainer = G4ITTrackHolder::Instance();
+    fReactionSet = G4ITReactionSet::Instance();
 }
 
 G4DNAMoleculeEncounterStepper::~G4DNAMoleculeEncounterStepper() = default;
@@ -401,6 +403,7 @@ void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils,
 #ifdef G4VERBOSE
         if (fVerbose > 1)
         {
+
             G4double r2 = results->GetDistanceSqr();
             G4cout << "\t ************************************************** " << G4endl;
             G4cout << "\t Reaction between "
@@ -412,6 +415,7 @@ void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils,
                 << G4BestUnit((utils.fpTrackA.GetPosition() - trackB->GetPosition()).mag(), "Length") << G4endl;
             G4cout << "\t Distance between reactants calculated by nearest neighbor algorithm = "
                 << G4BestUnit(sqrt(r2), "Length") << G4endl;
+
         }
 #endif
 
@@ -432,4 +436,56 @@ G4VDNAReactionModel* G4DNAMoleculeEncounterStepper::GetReactionModel()
 void G4DNAMoleculeEncounterStepper::SetVerbose(int flag)
 {
     fVerbose = flag;
+}
+
+G4double G4DNAMoleculeEncounterStepper::CalculateMinTimeStep(G4double /*currentGlobalTime*/, G4double definedMinTimeStep){
+
+    G4double fTSTimeStep = DBL_MAX;
+
+    for (auto pTrack : *fpTrackContainer->GetMainList())
+    {
+        if (pTrack == nullptr)
+        {
+            G4ExceptionDescription exceptionDescription;
+            exceptionDescription << "No track found.";
+            G4Exception("G4Scheduler::CalculateMinStep", "ITScheduler006",
+                        FatalErrorInArgument, exceptionDescription);
+            continue;
+        }
+
+        G4TrackStatus trackStatus = pTrack->GetTrackStatus();
+        if (trackStatus == fStopAndKill || trackStatus == fStopButAlive)
+        {
+            continue;
+        }
+
+        G4double sampledMinTimeStep = CalculateStep(*pTrack, definedMinTimeStep);
+        G4TrackVectorHandle reactants = GetReactants();
+
+        if (sampledMinTimeStep < fTSTimeStep)
+        {
+            fTSTimeStep = sampledMinTimeStep;
+            fReactionSet->CleanAllReaction();
+            if (reactants)
+            {
+                fReactionSet->AddReactions(fTSTimeStep,
+                                           const_cast<G4Track*>(pTrack),
+                                           reactants);
+                ResetReactants();
+            }
+         }
+         else if (fTSTimeStep == sampledMinTimeStep && bool(reactants))
+         {
+             fReactionSet->AddReactions(fTSTimeStep,
+                                        const_cast<G4Track*>(pTrack),
+                                        reactants);
+             ResetReactants();
+         }
+         else if (reactants)
+         {
+             ResetReactants();
+         }
+    }
+
+    return fTSTimeStep;
 }

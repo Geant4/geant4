@@ -23,119 +23,116 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UserLimits inline methods implementation
 //
-//
-// 
-//
-// class G4UserLimits inline implementation
-// 
-// 01-11-97: change GetMaxAllowedStep(), Hisaya Kurashige
-// 08-04-98: new data members, mma
-//
+// Author: Paul Kent, August 1996
+// Revisions:
+// - 01-11-1997, H.Kurashige: changed GetMaxAllowedStep()
+// - 08-04-1998: M.Maire: new data members
+// --------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4UserLimits::G4UserLimits(G4double ustepMax,
-			          G4double utrakMax,
-			          G4double utimeMax,
-			          G4double uekinMin,
-			          G4double urangMin)
-:fMaxStep (ustepMax),fMaxTrack(utrakMax),fMaxTime(utimeMax),
- fMinEkine(uekinMin),fMinRange(urangMin),fType("base")
+inline G4UserLimits::G4UserLimits(G4double ustepMax, G4double utrakMax,
+                                  G4double utimeMax, G4double uekinMin,
+                                  G4double urangMin)
+  : fMaxStep(ustepMax)
+  , fMaxTrack(utrakMax)
+  , fMaxTime(utimeMax)
+  , fMinEkine(uekinMin)
+  , fMinRange(urangMin)
+  , fType("base")
 {}
 
-inline G4UserLimits::G4UserLimits(const G4String& type,
-				  G4double ustepMax,
-			          G4double utrakMax,
-			          G4double utimeMax,
-			          G4double uekinMin,
-			          G4double urangMin)
-:fMaxStep (ustepMax),fMaxTrack(utrakMax),fMaxTime(utimeMax),
- fMinEkine(uekinMin),fMinRange(urangMin),fType(type)
+// --------------------------------------------------------------------
+
+inline G4UserLimits::G4UserLimits(const G4String& type, G4double ustepMax,
+                                  G4double utrakMax, G4double utimeMax,
+                                  G4double uekinMin, G4double urangMin)
+  : fMaxStep(ustepMax)
+  , fMaxTrack(utrakMax)
+  , fMaxTime(utimeMax)
+  , fMinEkine(uekinMin)
+  , fMinRange(urangMin)
+  , fType(type)
 {}
 
-inline const G4String& G4UserLimits::GetType() const
-{
-  return fType;
-}
+// --------------------------------------------------------------------
 
-inline void G4UserLimits::SetType(const G4String& type)
-{
-  fType = type;
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline const G4String& G4UserLimits::GetType() const { return fType; }
 
-inline G4UserLimits::~G4UserLimits(){}
+// --------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+inline void G4UserLimits::SetType(const G4String& type) { fType = type; }
+
+// --------------------------------------------------------------------
+
+inline G4UserLimits::~G4UserLimits() {}
+
+// --------------------------------------------------------------------
+
 inline G4double G4UserLimits::GetMaxAllowedStep(const G4Track&)
 {
   return fMaxStep;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline G4double G4UserLimits::GetUserMaxTrackLength(const G4Track&)
 {
   return fMaxTrack;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline G4double G4UserLimits::GetUserMaxTime(const G4Track&)
 {
   return fMaxTime;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline G4double G4UserLimits::GetUserMinEkine(const G4Track&)
 {
   return fMinEkine;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline G4double G4UserLimits::GetUserMinRange(const G4Track&)
 {
   return fMinRange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline void G4UserLimits::SetMaxAllowedStep(G4double ustepMax)
 {
-  fMaxStep=ustepMax;
+  fMaxStep = ustepMax;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline void G4UserLimits::SetUserMaxTrackLength(G4double utrakMax)
 {
-  fMaxTrack=utrakMax;
+  fMaxTrack = utrakMax;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline void G4UserLimits::SetUserMaxTime(G4double utimeMax)
 {
-  fMaxTime=utimeMax;
+  fMaxTime = utimeMax;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline void G4UserLimits::SetUserMinEkine(G4double uekinMin)
 {
-  fMinEkine=uekinMin;
+  fMinEkine = uekinMin;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// --------------------------------------------------------------------
 
 inline void G4UserLimits::SetUserMinRange(G4double urangMin)
 {
-  fMinRange=urangMin;
+  fMinRange = urangMin;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -48,7 +48,8 @@ G4FTFPAntiBarionBuilder::
 G4FTFPAntiBarionBuilder(G4bool quasiElastic) 
 {
   G4CrossSectionDataSetRegistry* xsreg = G4CrossSectionDataSetRegistry::Instance();
-  theAntiNucleonXS = xsreg->GetComponentCrossSection("AntiAGlauber");
+  G4VComponentCrossSection* theAntiNucleonXS =
+    xsreg->GetComponentCrossSection("AntiAGlauber");
   if(!theAntiNucleonXS) { theAntiNucleonXS = new G4ComponentAntiNuclNuclearXS(); }
   theAntiNucleonData = new G4CrossSectionInelastic(theAntiNucleonXS);
 
@@ -56,19 +57,16 @@ G4FTFPAntiBarionBuilder(G4bool quasiElastic)
   theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  G4FTFModel* theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
 
-  theCascade = new G4GeneratorPrecompoundInterface();
+  G4GeneratorPrecompoundInterface* theCascade = 
+    new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+  if (quasiElastic) {
+     theModel->SetQuasiElasticChannel(new G4QuasiElasticChannel());
+  } 
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
@@ -77,11 +75,6 @@ G4FTFPAntiBarionBuilder(G4bool quasiElastic)
 
 G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder() 
 {
-  delete theStringDecay;
-  //delete theStringModel;
-  //delete theModel;
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theLund;
 }
 
 void G4FTFPAntiBarionBuilder::

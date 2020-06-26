@@ -11,7 +11,6 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
   CPPFLAGS  += -DGL_SILENCE_DEPRECATION
-  G4USE_STD11 := 1
   ifdef G4USE_STD14
     CPPFLAGS  += -std=c++14
     CXXFLAGS  += -std=c++14
@@ -92,7 +91,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     ifneq ($(OGLPATH),)
       OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
     else
-      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+      OGLLIBS := -L$(OGLHOME)/lib -lGL
     endif
   endif
 

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9-Dec-2019 - B.Morgan (error-propagation-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library option and
+  explicit include_directories.
+
 19-Dec-2017 - G.Cosmo (error-propagation-V10-04-00)
 - Fixed self-consistency in headers (missing #include) in G4ErrorMatrix,
   G4ErrorRunManagerHelper and G4ErrorSymMatrix.

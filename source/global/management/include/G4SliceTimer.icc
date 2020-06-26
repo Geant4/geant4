@@ -23,40 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4SliceTimer inline methods implementation
 //
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class inline implementation
-// ------------------------------------------------------------
+// Author: M.Asai, 23.10.06 - Derived from G4Timer implementation
+// --------------------------------------------------------------------
 
-inline
-void G4SliceTimer::Start()
+inline void G4SliceTimer::Start()
 {
-  fValidTimes=false;
-  fStartRealTime=times(&fStartTimes);
+  fValidTimes    = false;
+  fStartRealTime = times(&fStartTimes);
 }
 
-inline
-void G4SliceTimer::Stop()
+inline void G4SliceTimer::Stop()
 {
-  fEndRealTime=times(&fEndTimes);
-  fRealElapsed += fEndRealTime-fStartRealTime;
-  fSystemElapsed += fEndTimes.tms_stime-fStartTimes.tms_stime;
-  fUserElapsed += fEndTimes.tms_utime-fStartTimes.tms_utime;
-  fValidTimes=true;
+  fEndRealTime = times(&fEndTimes);
+  fRealElapsed += fEndRealTime - fStartRealTime;
+  fSystemElapsed += fEndTimes.tms_stime - fStartTimes.tms_stime;
+  fUserElapsed += fEndTimes.tms_utime - fStartTimes.tms_utime;
+  fValidTimes = true;
 }
 
-inline
-void G4SliceTimer::Clear()
+inline void G4SliceTimer::Clear()
 {
-  fRealElapsed = 0.;
+  fRealElapsed   = 0.;
   fSystemElapsed = 0.;
-  fUserElapsed = 0.;
+  fUserElapsed   = 0.;
 }
 
-inline
-G4bool G4SliceTimer::IsValid() const
-{
-  return fValidTimes;
-}
+inline G4bool G4SliceTimer::IsValid() const { return fValidTimes; }

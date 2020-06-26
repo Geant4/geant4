@@ -1,0 +1,32 @@
+# Macro file for the initialization of example B1
+# in interactive session
+#
+
+# Build the 'standard aerosol'
+/geometry/minSpacing 0.01 mm
+/geometry/dropletNumDens 0.001
+
+/geometry/parameterisedCloud false
+/geometry/fastAerosolCloud true
+/geometry/smoothCloud false
+
+/geometry/prePopulate false
+
+/geometry/cloudShape ellipsoid
+/geometry/dropletShape sphere
+
+/geometry/dropletR 1.0 mm
+
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Change the default number of threads (in multi-threaded mode)
+#/run/numberOfThreads 4
+#
+# Initialize kernel
+/run/initialize
+#
+# Visualization setting
+/control/execute vis.mac

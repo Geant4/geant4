@@ -216,7 +216,9 @@ G4VisExecutive::RegisterGraphicsSystems () {
   G4VGraphicsSystem* oi  = 0;
 #ifdef G4VIS_USE_OIX
   oi = new G4OpenInventorX;
-#elif G4VIS_USE_OIWIN32
+#elif defined(G4VIS_USE_OIQT)
+  oi = new G4OpenInventorQt;
+#elif defined(G4VIS_USE_OIWIN32)
   oi = new G4OpenInventorWin32;
 #endif
   if (oi) {
@@ -228,10 +230,6 @@ G4VisExecutive::RegisterGraphicsSystems () {
 // The new, extended OI is registered separately for now.
 #ifdef G4VIS_USE_OIX
   RegisterGraphicsSystem (new G4OpenInventorXtExtended);
-#endif
-
-#ifdef G4VIS_USE_OIQT
-  RegisterGraphicsSystem(new G4OpenInventorQt);
 #endif
 
 #ifdef G4VIS_USE_RAYTRACERX

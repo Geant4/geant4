@@ -46,6 +46,7 @@ GEANT4_DEFINE_MODULE(NAME G4optical
         G4OpProcessSubType.hh
         G4OpRayleigh.hh
         G4OpWLS.hh
+        G4OpWLS2.hh
         G4VWLSTimeGeneratorProfile.hh
         G4WLSTimeGeneratorProfileDelta.hh
         G4WLSTimeGeneratorProfileExponential.hh
@@ -55,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4optical
         G4OpMieHG.cc
         G4OpRayleigh.cc
         G4OpWLS.cc
+        G4OpWLS2.cc
         G4VWLSTimeGeneratorProfile.cc
         G4WLSTimeGeneratorProfileDelta.cc
         G4WLSTimeGeneratorProfileExponential.cc

@@ -57,7 +57,13 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData()
     : fpReactant1(nullptr)
     , fpReactant2(nullptr)
     , fObservedReactionRate(0.)
+    , fActivationRate(0.)
+    , fDiffusionRate(0.)
+    , fOnsagerRadius(0.)
+    , fReactionRadius(0.)
     , fEffectiveReactionRadius(0.)
+    , fProbability(0.)
+    , fType(0)
     , fReactionID(0)
 {
 }
@@ -68,7 +74,13 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
     : fpReactant1(pReactant1)
     , fpReactant2(pReactant2)
     , fObservedReactionRate(reactionRate)
+    , fActivationRate(0.)
+    , fDiffusionRate(0.)
+    , fOnsagerRadius(0.)
+    , fReactionRadius(0.)
     , fEffectiveReactionRadius(0.)
+    , fProbability(0.)
+    , fType(0)
     , fReactionID(0)
 {
     ComputeEffectiveRadius();
@@ -80,7 +92,13 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
     : fpReactant1(nullptr)
     , fpReactant2(nullptr)
     , fObservedReactionRate(reactionRate)
+    , fActivationRate(0.)
+    , fDiffusionRate(0.)
+    , fOnsagerRadius(0.)
+    , fReactionRadius(0.)
     , fEffectiveReactionRadius(0.)
+    , fProbability(0.)
+    , fType(0)
     , fReactionID(0)
 {
     SetReactant1(reactant1);
@@ -108,6 +126,12 @@ void G4DNAMolecularReactionData::ComputeEffectiveRadius()
                      + fpReactant2->GetDiffusionCoefficient();
         fEffectiveReactionRadius = fObservedReactionRate / (4. * CLHEP::pi * sumDiffCoeff * CLHEP::Avogadro);
     }
+
+    fReactionID = 0;
+    fReactionRadius = fEffectiveReactionRadius;
+    fOnsagerRadius = (fpReactant1->GetCharge() * fpReactant2->GetCharge())/(4*pi*epsilon0*k_Boltzmann) / (293.15 * 80.1) ;
+    fProbability = 1;
+
 }
 
 int G4DNAMolecularReactionData::GetReactionID() const
@@ -202,14 +226,90 @@ G4double G4DNAMolecularReactionData::GetObservedReactionRateConstant() const
     return fObservedReactionRate;
 }
 
-G4double G4DNAMolecularReactionData::GetEffectiveReactionRadius() const
+G4double G4DNAMolecularReactionData::GetActivationRateConstant() const
 {
-    return fEffectiveReactionRadius;
+    return fActivationRate;
+}
+
+G4double G4DNAMolecularReactionData::GetDiffusionRateConstant() const
+{
+    return fDiffusionRate;
+}
+
+void G4DNAMolecularReactionData::SetReactionRadius(G4double radius)
+{
+    fReactionRadius = radius;
+    fEffectiveReactionRadius = -fOnsagerRadius / (1-exp(fOnsagerRadius / fReactionRadius));
+}
+
+G4double G4DNAMolecularReactionData::GetReactionRadius() const
+{
+    return fReactionRadius;
 }
 
 void G4DNAMolecularReactionData::SetEffectiveReactionRadius(G4double radius)
 {
     fEffectiveReactionRadius = radius;
+}
+
+G4double G4DNAMolecularReactionData::GetEffectiveReactionRadius() const
+{
+    return fEffectiveReactionRadius;
+}
+
+G4double G4DNAMolecularReactionData::GetOnsagerRadius() const
+{
+    return fOnsagerRadius;
+}
+
+G4double G4DNAMolecularReactionData::GetProbability() const
+{
+    return fProbability;
+}
+
+void G4DNAMolecularReactionData::SetProbability(G4double prob)
+{
+    fProbability = prob;
+}
+
+void G4DNAMolecularReactionData::SetReactionType(G4int type)
+{
+    G4double sumDiffCoeff = 0.;
+
+    if(type == 1)
+    {
+
+        sumDiffCoeff = fpReactant1->GetDiffusionCoefficient() + 
+                       fpReactant2->GetDiffusionCoefficient();
+
+        fReactionRadius = fpReactant1->GetVanDerVaalsRadius() +
+                          fpReactant2->GetVanDerVaalsRadius();
+
+        G4double Rs = 0.29 * nm;
+        if(fOnsagerRadius == 0) // Type II
+        {
+            fEffectiveReactionRadius = fReactionRadius;
+            fDiffusionRate = 4 * pi * sumDiffCoeff * fReactionRadius * Avogadro;
+            if (fpReactant1 == fpReactant2) fDiffusionRate/=2;
+            fActivationRate = fDiffusionRate * fObservedReactionRate / (fDiffusionRate - fObservedReactionRate);
+            fProbability =  Rs / (Rs + (fDiffusionRate / fActivationRate) * (fReactionRadius + Rs));
+
+        }else{ // Type IV
+            fEffectiveReactionRadius = -fOnsagerRadius/(1-exp(fOnsagerRadius/fReactionRadius));
+            fDiffusionRate = 4 * pi * sumDiffCoeff * fEffectiveReactionRadius * Avogadro;
+            if (fpReactant1 == fpReactant2) fDiffusionRate/=2;
+
+            fActivationRate = fDiffusionRate * fObservedReactionRate / (fDiffusionRate - fObservedReactionRate);
+            fProbability = Rs / (Rs + (fDiffusionRate / fActivationRate) * (fEffectiveReactionRadius + Rs));
+        }
+    }
+
+    fType = type;
+}
+
+G4int G4DNAMolecularReactionData::GetReactionType() const
+{
+    return fType;
 }
 
 void G4DNAMolecularReactionData::AddProduct(const G4String& molecule)

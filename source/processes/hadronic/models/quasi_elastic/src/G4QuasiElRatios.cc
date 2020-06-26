@@ -105,7 +105,7 @@ G4QuasiElRatios::G4QuasiElRatios()
     lastItot=0;              // The Last index for which XS was calculated
     lastMtot=0.;             // The Last rel max ln(p) initialized in LogTable
     lastKtot=0;             // The Last topBin number initialized in LogTable
-    lastXtot = new std::pair<G4double,G4double>; // The Last ETPointers to LogTable in heap
+    lastXtot = nullptr;     // The Last ETPointers to LogTable in heap
     
     PCSmanager=(G4ChipsProtonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name());
     
@@ -130,7 +130,6 @@ G4QuasiElRatios::~G4QuasiElRatios()
     { delete [] *pos2; }
     vX->clear();
     delete vX;
-
 }
 
 // Calculation of pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)

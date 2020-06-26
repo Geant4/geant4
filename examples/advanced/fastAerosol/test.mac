@@ -1,0 +1,66 @@
+# ------------
+# random setup
+# ------------
+/geometry/cloudSeed 1				# random seed
+
+# ---------------------------
+# geometry setup (unchanging)
+# ---------------------------
+/geometry/minSpacing 0.01 mm		# minimum spacing between droplets
+/geometry/dropletNumDens 0.0002		# droplet number density. Hardcoded units (1/mm3)
+
+# -------------------------
+# geometry setup (changing)
+# ------------------------
+
+# choose only one build type out of the following 3:
+#      smooth cloud - model aerosol as a single volume model with background and droplet material in proper mass fraction
+#      fastAerosol cloud - model aerosol with the fastAerosol class
+#      parameterised cloud - model aerosol with a parameterised solid
+
+/geometry/smoothCloud false			# build as a single volume
+/geometry/parameterisedCloud false	# build as droplets described by G4VPVParameterisation. Must first generate droplet centers in distribution_r?mm_n?mm-3.csv
+/geometry/fastAerosolCloud true		# build as droplets described by fastAerosol and fastAerosolSolid
+
+/geometry/prePopulate false			# whether to populate all droplets at the beginning or not for fastAerosol
+
+/geometry/dropletR 1 mm				# minimum bounding radius of individual droplets
+
+/geometry/cloudShape box			# bulk shape of the aerosol
+/geometry/dropletShape sphere		# droplet shape
+
+
+# initialize
+# ----------
+/run/initialize
+
+/control/verbose 2
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 1
+
+
+# gun setup
+# ---------
+/gun/particle proton
+/gun/energy 50 MeV
+
+
+# score
+# -----
+/score/create/boxMesh detectorMesh
+/score/mesh/boxSize 250 250 25 mm
+/score/mesh/translate/xyz 0.0 0.0 2625 mm
+/score/mesh/nBin 20 20 1
+
+/score/quantity/energyDeposit eDep
+
+/score/close
+
+# shoot
+# -----
+/run/beamOn 10
+
+# save
+# ----
+/score/dumpQuantityToFile detectorMesh eDep eDep_fastAerosol_r1p0mm_n1E-3p7mm-3_bulkbox_dropletsphere.csv

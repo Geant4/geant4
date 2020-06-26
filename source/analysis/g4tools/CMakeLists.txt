@@ -1,11 +1,9 @@
 #-----------------------------------------------------------------------
-# CMakeLists.txt
 # Module : G4analysis
 # Package: Geant4.src.G4analysis.g4tools
 #
-# CMakeLists.txt for g4tools. We do not use the usual Geant4 sources.cmake
-# approach because G4analysis requires a custom install solution for its
-# headers. The 'tools' subdirectory contains many headers that are needed and
+# CMakeLists.txt for g4tools, retained due to the nested headers. 
+# The 'tools' subdirectory contains many headers that are needed and
 # these are in a nested structure which needs to be replicated when we 
 # install, i.e:
 # <INCLUDE>
@@ -14,13 +12,6 @@
 #       +- histo
 #       |  +- h1d 
 #       ...
-#
-# Nevertheless, we're able to build the library via the standard
-# GEANT4_LIBRARY_TARGET macro.
-#
-# Created on: 28/07/2011
-#
-#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -45,12 +36,3 @@ install(DIRECTORY include/
 install(FILES tools.license
   DESTINATION ${CMAKE_INSTALL_DATADIR}
   )
-
-#------------------------------------------------------------------------------
-# Finally we need to build C source code file(s)
-#
-if(GEANT4_BUILD_GRANULAR_LIBS)
-    include(Geant4MacroLibraryTargets)
-    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
-endif()
-

@@ -65,7 +65,7 @@ G4PhotonEvaporation::G4PhotonEvaporation(G4GammaTransition* p)
     fVerbose(1), fPoints(0), vShellNumber(-1), fIndex(0), 
     fMaxLifeTime(DBL_MAX), 
     fICM(true), fRDM(false), fSampleTime(true), 
-    fCorrelatedGamma(false), isInitialised(false)
+    fCorrelatedGamma(false), fIsomerFlag(false), isInitialised(false)
 {
   //G4cout << "### New G4PhotonEvaporation() " << this << G4endl;   
   fNuclearLevelData = G4NuclearLevelData::GetInstance(); 
@@ -95,6 +95,8 @@ void G4PhotonEvaporation::Initialise()
   fMaxLifeTime = param->GetMaxLifeTime();
   fCorrelatedGamma = param->CorrelatedGamma();
   fICM = param->GetInternalConversionFlag();
+  fIsomerFlag = param->IsomerProduction();
+  if(fRDM) { fIsomerFlag = true; }
   fVerbose = param->GetVerbose();
 
   fTransition->SetPolarizationFlag(fCorrelatedGamma);
@@ -506,7 +508,9 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 
     // final energy and time
     efinal = fLevelManager->LevelEnergy(fIndex);
-    if(fSampleTime && ltime > 0.0) { 
+    // time is sampled if decay not prompt and this class called not 
+    // from radioactive decay and isomer production is enabled 
+    if(fSampleTime && fIsomerFlag && ltime > 0.0) { 
       time -= ltime*G4Log(G4UniformRand()); 
     }
     nucleus->SetFloatingLevelNumber(fLevelManager->FloatingLevel(fIndex));

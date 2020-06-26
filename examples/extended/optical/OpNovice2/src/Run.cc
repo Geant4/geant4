@@ -47,10 +47,18 @@ Run::Run()
   fEkin = -1.;
   
   fCerenkovEnergy = 0.0;
-  fScintEnergy = 0.0;
+  fScintEnergy    = 0.0;
+  fWLSAbsorptionEnergy  = 0.0;
+  fWLSEmissionEnergy    = 0.0;
+  fWLS2AbsorptionEnergy = 0.0;
+  fWLS2EmissionEnergy   = 0.0;
   
   fCerenkovCount = 0;
-  fScintCount = 0;
+  fScintCount    = 0;
+  fWLSAbsorptionCount  = 0;
+  fWLSEmissionCount    = 0;
+  fWLS2AbsorptionCount = 0;
+  fWLS2EmissionCount   = 0;
   fRayleighCount = 0;
 
   fOpAbsorption = 0;
@@ -87,9 +95,17 @@ void Run::Merge(const G4Run* run)
 
   fCerenkovEnergy += localRun->fCerenkovEnergy;
   fScintEnergy    += localRun->fScintEnergy;
+  fWLSAbsorptionEnergy  += localRun->fWLSAbsorptionEnergy;
+  fWLSEmissionEnergy    += localRun->fWLSEmissionEnergy;
+  fWLS2AbsorptionEnergy += localRun->fWLS2AbsorptionEnergy;
+  fWLS2EmissionEnergy   += localRun->fWLS2EmissionEnergy;
 
   fCerenkovCount  += localRun->fCerenkovCount;
   fScintCount     += localRun->fScintCount;
+  fWLSAbsorptionCount  += localRun->fWLSAbsorptionCount;
+  fWLSEmissionCount    += localRun->fWLSEmissionCount;
+  fWLS2AbsorptionCount += localRun->fWLS2AbsorptionCount;
+  fWLS2EmissionCount   += localRun->fWLS2EmissionCount;
   fRayleighCount  += localRun->fRayleighCount;
   
   fTotalSurface   += localRun->fTotalSurface;
@@ -107,8 +123,8 @@ void Run::Merge(const G4Run* run)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Run::EndOfRun()
 {
-  G4int TotNbofEvents = numberOfEvent;
-  if (TotNbofEvents == 0) return;
+  if (numberOfEvent == 0) return;
+  G4double TotNbofEvents = (G4double)numberOfEvent;
 
   const DetectorConstruction* det = (const DetectorConstruction*)
     (G4RunManager::GetRunManager()->GetUserDetectorConstruction()); 
@@ -120,6 +136,7 @@ void Run::EndOfRun()
   G4cout <<   "---------------------------------\n";
   G4cout << "Primary particle was: " << fParticle->GetParticleName() 
          << " with energy " << G4BestUnit(fEkin, "Energy") << "." << G4endl;
+  G4cout << "Number of events: " << numberOfEvent << G4endl;
 
   G4cout << "Material of world: " << det->GetWorldMaterial()->GetName()
          << G4endl;
@@ -132,18 +149,50 @@ void Run::EndOfRun()
     G4cout << "Average number of Cerenkov photons created per event: " 
            << fCerenkovCount/TotNbofEvents << G4endl;
     if (fCerenkovCount > 0) { 
-      G4cout << " Average energy: " << (fCerenkovEnergy/eV)/fCerenkovCount 
-             << " eV." << G4endl;
+      G4cout << " Average energy per photon: " 
+             << (fCerenkovEnergy/eV)/fCerenkovCount << " eV." << G4endl;
     }
     G4cout << "Average energy of scintillation photons created per event: " 
            << (fScintEnergy/eV)/TotNbofEvents << " eV." << G4endl;
     G4cout << "Average number of scintillation photons created per event: " 
            << fScintCount/TotNbofEvents << G4endl;
     if (fScintCount > 0) {
-      G4cout << " Average energy: " << (fScintEnergy/eV)/fScintCount << " eV."
-             << G4endl;
+      G4cout << " Average energy per photon: " 
+             << (fScintEnergy/eV)/fScintCount << " eV." << G4endl;
     }
   }
+
+  G4cout << "Average number of photons absorbed by WLS per event: " 
+         << fWLSAbsorptionCount/G4double(TotNbofEvents) << " " << G4endl;
+  if (fWLSAbsorptionCount > 0) {
+    G4cout << " Average energy per photon: " 
+           << (fWLSAbsorptionEnergy/eV)/fWLSAbsorptionCount << " eV." <<G4endl;
+  }
+  G4cout << "Average number of photons created by WLS per event: " 
+         << fWLSEmissionCount/TotNbofEvents << G4endl;
+  if (fWLSEmissionCount > 0) {
+    G4cout << " Average energy per photon: " 
+           << (fWLSEmissionEnergy/eV)/fWLSEmissionCount << " eV." << G4endl;
+  }
+  G4cout << "Average energy of WLS photons created per event: " 
+         << (fWLSEmissionEnergy/eV)/TotNbofEvents << " eV." << G4endl;
+
+  G4cout << "Average number of photons absorbed by WLS2 per event: " 
+         << fWLS2AbsorptionCount/G4double(TotNbofEvents) << " " << G4endl;
+  if (fWLS2AbsorptionCount > 0) {
+    G4cout << " Average energy per photon: " 
+           << (fWLS2AbsorptionEnergy/eV)/fWLS2AbsorptionCount << " eV." <<G4endl;
+  }
+  G4cout << "Average number of photons created by WLS2 per event: " 
+         << fWLS2EmissionCount/TotNbofEvents << G4endl;
+  if (fWLS2EmissionCount > 0) {
+    G4cout << " Average energy per photon: " 
+           << (fWLS2EmissionEnergy/eV)/fWLS2EmissionCount << " eV." << G4endl;
+  }
+  G4cout << "Average energy of WLS2 photons created per event: " 
+         << (fWLS2EmissionEnergy/eV)/TotNbofEvents << " eV." << G4endl;
+
+
   G4cout << "Average number of OpRayleigh per event:   "
          << fRayleighCount/TotNbofEvents << G4endl;
   G4cout << "Average number of OpAbsorption per event: "

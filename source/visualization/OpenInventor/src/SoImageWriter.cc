@@ -67,7 +67,11 @@ void SoImageWriter::initClass (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  SO_NODE_INIT_CLASS(SoImageWriter,SoNode,"Node");
+  static bool first = true;
+  if (first) {
+    first = false;
+    SO_NODE_INIT_CLASS(SoImageWriter,SoNode,"Node");
+  }
 }
 //////////////////////////////////////////////////////////////////////////////
 SoImageWriter::SoImageWriter(

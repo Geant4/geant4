@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -36,11 +36,14 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
@@ -62,7 +65,6 @@ Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
@@ -136,16 +138,16 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
+ Energy thresholds :  gamma  2.94062 keV    e-  350.631 keV    e+  340.065 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -171,26 +173,26 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.590000s Real=3.592929s Sys=0.000000s
+  User=5.750000s Real=5.785304s Sys=0.010000s
 
  ======================== run summary ======================
 
  The run is: 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 983656	phot = 16344
+ Process calls frequency --->	compt = 983651	phot = 16349
 
- MeanFreePath:	6.0662 cm  +- 6.0668 cm 	massic: 6.0662 g/cm2 
+ MeanFreePath:	6.0662 cm  +- 6.0666 cm 	massic: 6.0662 g/cm2 
  CrossSection:	0.16485 cm^-1 			massic: 16.485 mm2/g 
 
  mean energy of charged secondaries: 15.197 keV
-     ---> mass_energy_transfer coef: 2.5052 mm2/g 
+     ---> mass_energy_transfer coef: 2.5053 mm2/g 
 
  Verification : crossSections from G4EmCalculator 
    compt= 16.23 mm2/g    phot= 268.53 um2/mg   total= 16.499 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1937641209, 57071983
+ Current couple of seeds = 1063437675, 1656850928
 ----------------------------------------
 #
 /gun/particle e-
@@ -211,22 +213,22 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
+ Energy thresholds :  gamma  2.94062 keV    e-  350.631 keV    e+  340.065 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1937641209, 57071983
+ Current couple of seeds = 1063437675, 1656850928
 ----------------------------------------
 --> Event 0 starts.
 --> Event 100000 starts.
@@ -241,26 +243,26 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.280000s Real=3.284644s Sys=0.000000s
+  User=6.930000s Real=6.987780s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 608555	eIoni = 391445
+ Process calls frequency --->	eBrem = 609357	eIoni = 390643
 
- MeanFreePath:	1.6102 cm  +- 1.6103 cm 	massic: 1.6102 g/cm2 
- CrossSection:	0.62103 cm^-1 			massic: 62.103 mm2/g 
+ MeanFreePath:	1.6123 cm  +- 1.6126 cm 	massic: 1.6123 g/cm2 
+ CrossSection:	0.62024 cm^-1 			massic: 62.024 mm2/g 
 
- mean energy of charged secondaries: 743.85 keV
-     ---> mass_energy_transfer coef: 461.95 um2/mg
+ mean energy of charged secondaries: 744.15 keV
+     ---> mass_energy_transfer coef: 461.55 um2/mg
 
  Verification : crossSections from G4EmCalculator 
-   eBrem= 37.788 mm2/g    eIoni= 24.337 mm2/g    total= 62.125 mm2/g 
+   eBrem= 37.785 mm2/g    eIoni= 24.252 mm2/g    total= 62.037 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 419401041, 1685305101
+ Current couple of seeds = 819625488, 312387976
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

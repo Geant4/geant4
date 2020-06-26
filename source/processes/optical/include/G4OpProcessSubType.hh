@@ -43,10 +43,11 @@
 enum G4OpProcessSubType 
 { 
   fOpAbsorption = 31,
-  fOpBoundary = 32,
-  fOpRayleigh = 33,
-  fOpWLS = 34,
-  fOpMieHG = 35
+  fOpBoundary   = 32,
+  fOpRayleigh   = 33,
+  fOpWLS        = 34,
+  fOpMieHG      = 35,
+  fOpWLS2       = 36,
 };
 
 #endif

@@ -21,7 +21,7 @@ public:
 public:
   virtual ~bins1D(){}
 public:
-  virtual void bins_Sw_range(float&,float&) const = 0;
+  virtual void bins_Sw_range(float&,float&,bool) const = 0;
 public:
   // axis :
   virtual unsigned int bins() const = 0;
@@ -31,6 +31,8 @@ public:
   virtual float bin_lower_edge(int) const = 0;
   virtual float bin_upper_edge(int) const = 0;
   // bins :
+  virtual bool has_entries_per_bin() const = 0;
+  virtual unsigned int bin_entries(int) const = 0;
   virtual float bin_Sw(int) const = 0;
   virtual float bin_error(int) const = 0;
 public:
@@ -48,7 +50,7 @@ public:
 public:
   virtual ~bins2D(){}
 public:
-  virtual void bins_Sw_range(float&,float&) const = 0;
+  virtual void bins_Sw_range(float&,float&,bool) const = 0;
 public:
   // x axis :
   virtual unsigned int x_bins() const = 0;

@@ -38,7 +38,7 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include <volumes/UnplacedCone.h>
+#include <VecGeom/volumes/UnplacedCone.h>
 
 #include "G4Polyhedron.hh"
 

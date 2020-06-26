@@ -29,7 +29,7 @@
 #ifndef G4OPENINVENTORQT_HH
 #define G4OPENINVENTORQT_HH
 
-#ifdef G4VIS_BUILD_OIQT_DRIVER
+#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
 
 #include "G4OpenInventor.hh"
 

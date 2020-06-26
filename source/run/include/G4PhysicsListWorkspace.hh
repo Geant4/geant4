@@ -24,70 +24,70 @@
 // ********************************************************************
 //
 // Description:
-//      Manage the per-thread state of solids - those which 
+//      Manage the per-thread state of solids - those which
 //        have a per-thread state and dependent classes (if any)
-//   In particular it 
-//       - owns the arrays that implement 'split' classes 
+//   In particular it
+//       - owns the arrays that implement 'split' classes
 //       - classes/objects which are owned by the split classes.
-//   Background: the classes/objects affected are  
+//   Background: the classes/objects affected are
 //       - 'split' classes part of its state is per-thread,
-//       - per-thread objects, in particular those which are owned 
+//       - per-thread objects, in particular those which are owned
 //         by the split classes.
-// Goal: Take ownership and control of per-thread state of 
-//        classes to work with multi-threading. 
+// Goal: Take ownership and control of per-thread state of
+//        classes to work with multi-threading.
 //       Offshoot of G4GeometryWorkspace, to deal with PhysicsList.
-// 
+//
 // Designed / created by John Apostolakis
 // Interface design - review with Andrea Dotti.
-// 
+//
 // First version: 4th Oct 2013
-//    Created due to dependency issue with G4GeometryWorkspace 
-// Working version:  
+//    Created due to dependency issue with G4GeometryWorkspace
+// Working version:
 
 #ifndef G4PHYSICSLISTWORKSPACE_HH
 #define G4PHYSICSLISTWORKSPACE_HH
 
-
 #include "G4TWorkspacePool.hh"
-#include "G4VUserPhysicsList.hh"
-#include "G4VPhysicsConstructor.hh"
 #include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4VUserPhysicsList.hh"
 
 class G4PhysicsListWorkspace
 {
-  public:
-    typedef G4TWorkspacePool<G4PhysicsListWorkspace> pool_type;
-      G4PhysicsListWorkspace(G4bool verbose=false);
-     ~G4PhysicsListWorkspace();
+ public:
+  typedef G4TWorkspacePool<G4PhysicsListWorkspace> pool_type;
+  G4PhysicsListWorkspace(G4bool verbose = false);
+  ~G4PhysicsListWorkspace();
 
-     void UseWorkspace();     //Take ownership
-     void ReleaseWorkspace(); //Release ownership
-     void DestroyWorkspace(); //Release ownership and destroy
+  void UseWorkspace();      // Take ownership
+  void ReleaseWorkspace();  // Release ownership
+  void DestroyWorkspace();  // Release ownership and destroy
 
-     void InitialiseWorkspace();
-      // To be called at start of each run (especially 2nd and further runs)
+  void InitialiseWorkspace();
+  // To be called at start of each run (especially 2nd and further runs)
 
-     void   SetVerbose(G4bool v) { fVerbose=v; } 
-     G4bool GetVerbose()  { return fVerbose;   } 
-  
-    static pool_type* GetPool();
+  void SetVerbose(G4bool v) { fVerbose = v; }
+  G4bool GetVerbose() { return fVerbose; }
+
+  static pool_type* GetPool();
+
  protected:  // Implementation methods
-      void   InitialisePhysicsList();
+  void InitialisePhysicsList();
 
- private:    // Helper pointers - can be per instance or shared
-    G4VUPLManager  *fpVUPLSIM;
-    G4VPCManager*fpVPCSIM;
-    G4VMPLManager *fpVMPLSIM;
+ private:  // Helper pointers - can be per instance or shared
+  G4VUPLManager* fpVUPLSIM;
+  G4VPCManager* fpVPCSIM;
+  G4VMPLManager* fpVMPLSIM;
 
   // Per Instance variables
   //   NOTE: the ownership of the Data Arrays is IN this object
  private:
-     // Store SubInstanceManager object pointers (SIM pointers)
-    G4VUPLData  *fpVUPLOffset;
-    G4VPCData   *fpVPCOffset;
-    G4VMPLData  *fpVMPLOffset;
+  // Store SubInstanceManager object pointers (SIM pointers)
+  G4VUPLData* fpVUPLOffset;
+  G4VPCData* fpVPCOffset;
+  G4VMPLData* fpVMPLOffset;
 
-    G4bool         fVerbose;
+  G4bool fVerbose;
 };
 
-#endif //G4PARTICLESWORKSPACE_HH
+#endif  // G4PARTICLESWORKSPACE_HH

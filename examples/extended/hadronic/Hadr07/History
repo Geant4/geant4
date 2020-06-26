@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-05-20 mma (exhadr07-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
 
 07-10-18 mma (exhadr07-V10-04-05)
 - PhysicsList : use G4IonPhysicsXS

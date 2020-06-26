@@ -841,7 +841,6 @@ protected:
 
   virtual void Apply(const G4String& param) {
     G4VModelCommand<M>::Model()->AddValue(param);
-
   }
 };
 

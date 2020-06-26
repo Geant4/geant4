@@ -66,8 +66,6 @@ class G4NeutronBuilder : public G4PhysicsBuilderInterface
     
     std::vector<G4VNeutronBuilder *> theModelCollections;
 
-    G4bool wasActivated;
-    G4bool isFissionActivated;
 };
 
 #endif

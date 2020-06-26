@@ -6,22 +6,27 @@
 
     Hadronic physics-list/constructors/limiters History
     ---------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28-May-2020, B. Morgan    (phys-ctor-limiters-V10-06-02)
+- Remove obsolete GRANULAR_DEPENDENCIES entries
 
-13-May-2020, M. Asai (phys-ctor-limiters-V10-05-01)
+13-May-2020, M. Asai (phys-ctor-limiters-V10-06-01)
 - G4GenericBiasingPhysics.cc : add missing code for parallel geometries
   for all neutral / charged particles.
+
+26-March-2020, I. Semeniouk (phys-ctor-limiters-V10-06-00)
+- G4FastSimulationPhysics : merge ActivateFastSimulation calls for mass and parallel geometries cases
 
 15-Nov-2019, G. Cosmo (phys-ctor-limiters-V10-05-00)
 - Fixed cases of implicit type conversions from size_t to G4int.
 
 22-Nov-2017, V. Ivanchenko (phys-ctor-limiters-V10-03-02)
-- G4StepLimiterPhysics - fixed thread safety - removed possible 
+- G4StepLimiterPhysics - fixed thread safety - removed possible
     race condition
 - G4NeutronTrackingCut - cosmetic change (removed commented code,
     added explicit builder type)
@@ -62,8 +67,8 @@ introduced in the code and keeptrack of all tags.
   fix required by clang39 on Windows and MAC
 
 18-Jul-2016, I. Hrivnacova (phys-ctor-limiters-V10-02-01)
-- G4StepLimiterPhysics: 
-  Added an option which allows to apply the step limit to all particles 
+- G4StepLimiterPhysics:
+  Added an option which allows to apply the step limit to all particles
   (by default the step limit is applied to charged particles only).
 
 27-Jan-2016, M. Asai (phys-ctor-limiters-V10-02-00)
@@ -94,13 +99,13 @@ introduced in the code and keeptrack of all tags.
    physics processes.
 
 05-Aug-2014, Vladimir Ivanchenko        (phys-ctor-limiters-V10-00-03)
-- G4NeurtonTrackingCut - register G4NeutronKiller in 
+- G4NeurtonTrackingCut - register G4NeutronKiller in
     G4HadronicProcessStore - improved log and process deleted at exit
 
 05-Jul-2014, Andrea Dotti               (phys-ctor-limiters-V10-00-02)
-- Fix (possible) data-race condition in G4NeutronTrackingCut in 
+- Fix (possible) data-race condition in G4NeutronTrackingCut in
   calling G4MTcout (defect seen from DRD)
-  
+
 27-May-2014, Vladimir Ivanchenko        (phys-ctor-limiters-V10-00-01)
 - G4StepLimiterPhysics - fixed minor memory leak reported by Coverity
 
@@ -132,7 +137,7 @@ introduced in the code and keeptrack of all tags.
 - Removed low_energy and high_energy from sources.cmake and GNUmakefile.
 
 08-May-2013, Andrea Dotti		(phys-ctor-limiters-V09-06-07)
-- Bug Fixing for MT (wasActivated flag is now TLS) in G4NeutronTrackingCut 
+- Bug Fixing for MT (wasActivated flag is now TLS) in G4NeutronTrackingCut
 
 15-May-2013, Makoto Asai                (phys-ctor-limiters-V09-06-06)
 - Making G4ParallelWorldPhysics work for layered mass geometry.
@@ -152,8 +157,8 @@ introduced in the code and keeptrack of all tags.
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 
 02-Feb-2013, V.Ivanchenko               (phys-ctor-limiters-V09-06-01)
-- added forgotten G4StepLimiterPhysics and fixed source.cmake 
+- added forgotten G4StepLimiterPhysics and fixed source.cmake
 
 10-Jan-2013, Gunter Folger              (phys-ctor-limiters-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    constructors/limiters classes

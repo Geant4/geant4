@@ -68,6 +68,7 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4NeutronPHPBuilder.hh"
 
+#include "G4HyperonBuilder.hh"
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
@@ -238,17 +239,19 @@ void G4HadronPhysicsShieldingLEND::Kaon()
 
 void G4HadronPhysicsShieldingLEND::Others()
 {
-  // Hyperons
-  auto hyp = new G4HyperonFTFPBuilder;
-  AddBuilder( hyp );
+  // Hyperons (and anti-hyperons)
+  auto hyp = new G4HyperonBuilder;
+  AddBuilder(hyp);
+  auto ftfphyp = new G4HyperonFTFPBuilder;
+  AddBuilder(ftfphyp);
+  hyp->RegisterMe(ftfphyp);
   hyp->Build();
-
-  // Antibaryons
+  // Anti-barions
   auto abar = new G4AntiBarionBuilder;
-  AddBuilder( abar );
-  auto ftfpabar = new G4FTFPAntiBarionBuilder( false );
-  AddBuilder( ftfpabar );
-  abar->RegisterMe( ftfpabar );
+  AddBuilder(abar);
+  auto ftfpabar = new G4FTFPAntiBarionBuilder;
+  AddBuilder(ftfpabar);
+  abar->RegisterMe(ftfpabar);
   abar->Build();
 }
 

@@ -23,17 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ios
 //
-//
-// 
-// ---------------------------------------------------------------
-// GEANT 4 class header file
-//
-// G4ios.hh
-//
-// ---------------------------------------------------------------
-#ifndef included_G4ios
-#define included_G4ios
+// Global types for cout/cerr streaming
+
+// Authors: H.Yoshida, M.Nagamatu - November 1998
+// --------------------------------------------------------------------
+#ifndef G4ios_hh
+#define G4ios_hh 1
 
 #include "G4Types.hh"
 
@@ -41,15 +38,15 @@
 
 #ifdef G4MULTITHREADED
 
-  extern G4GLOB_DLL std::ostream*& _G4cout_p();
-  extern G4GLOB_DLL std::ostream*& _G4cerr_p();
-  #define G4cout (*_G4cout_p())
-  #define G4cerr (*_G4cerr_p())
+extern G4GLOB_DLL std::ostream*& _G4cout_p();
+extern G4GLOB_DLL std::ostream*& _G4cerr_p();
+#  define G4cout (*_G4cout_p())
+#  define G4cerr (*_G4cerr_p())
 
 #else  // Sequential
 
-  extern G4GLOB_DLL std::ostream G4cout;
-  extern G4GLOB_DLL std::ostream G4cerr;
+extern G4GLOB_DLL std::ostream G4cout;
+extern G4GLOB_DLL std::ostream G4cerr;
 
 #endif
 

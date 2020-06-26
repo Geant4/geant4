@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 December, 19 B.Morgan (mctruth-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 6 July, 16  G.Cosmo (mctruth-V10-02-00)
 - Fixed typo in G4PersistencyCenterMessenger::GetCurrentValue() in
   selection of verbose mode.

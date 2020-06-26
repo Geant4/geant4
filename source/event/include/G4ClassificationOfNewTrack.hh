@@ -23,18 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ClassificationOfNewTrack
 //
+// Class description:
 //
-//
+// An enumeration for the possible classifications of tracks newly pushed
+// to the stack. G4UserStackingAction can set the classification.
 
+// Author: M.Asai, SLAC
+// --------------------------------------------------------------------
 #ifndef G4ClassificationOfNewTrack_hh
 #define G4ClassificationOfNewTrack_hh 1
-
-// class description:
-//
-//  This header file contain an enumeration for the possible classifications
-// for trackes newly pushed to the stack. G4UserStackingAction can set the
-// classification.
 
 enum G4ClassificationOfNewTrack
 { 
@@ -51,4 +50,3 @@ enum G4ClassificationOfNewTrack
 };
 
 #endif
-

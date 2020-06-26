@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -511,16 +511,16 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_PbWO4
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  89.3347 keV    e-  1.12535 MeV    e+  1.05931 MeV proton 100 keV
+ Energy thresholds :  gamma  89.7946 keV    e-  1.13679 MeV    e+  1.06315 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 
@@ -539,37 +539,37 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.740000s Real=2.743457s Sys=0.000000s
+  User=8.560000s Real=8.773186s Sys=0.010000s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7264.02
- Mean number of neutral steps:  4106.63
+ Mean number of charged steps:  7240.02
+ Mean number of neutral steps:  4092.36
 
- energy deposit :   95.15 % E0 +-    0.92 % E0
- charged traklen:  485.37 radl +-    4.67 radl
- neutral traklen: 4222.76 radl +-  101.51 radl
+ energy deposit :   95.16 % E0 +-    0.97 % E0
+ charged traklen:  485.13 radl +-    5.13 radl
+ neutral traklen: 4180.14 radl +-  123.39 radl
 
- 90.00 % confinement: radius = 2.90 radl  (2.59 cm )
+ 90.00 % confinement: radius = 2.87 radl  (2.56 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.951528  delEdep= 0.002528 nrms= 3.08293
-Erms: 0.00924808  delErms= 0.00104808 nrms= 1.27814
+Edep: 0.951576  delEdep= 0.00257597 nrms= 3.14142
+Erms: 0.00969668  delErms= 0.00149668 nrms= 1.82522
 <<<<END>>>>   IS NOT ACCEPTED
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1456376683079201629, 517985824475863921, 511948926957980794, 1353655700210543279, 1408698074564240176, 1795590274897364214, 2252012166181592618, 1176235539626734720, 1917084855057524137, 39333108570579076, 990012765610199292, 1774542995346816524, 1197304772488297596, 1674228714561384217, 1520030277918481505, 2243498411373012368, 526434336315375207} counter= 14sumtot= 1602386344311945714
+N=17 V[N]={1988256241637042433, 1290128793852102062, 741993723810955011, 88626892286938908, 925842433676995178, 2027261143151211294, 1103835360358955530, 1225691208052109603, 2166253751576666731, 1752302890925742466, 22334852124403215, 2106258793908074719, 761035665999996224, 164180213923982943, 1383706058027854732, 2161396677910274468, 368251014461497353} counter= 17sumtot= 1830611641975251262
 ---------------------------------------
 ... write Root file : testem2.root - done
 ... close Root file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.062 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

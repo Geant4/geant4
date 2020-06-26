@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,27 +12,27 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x1386520
+##### Create analysis manager   0x1074b60
 Using Root analysis manager
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -45,12 +45,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -106,7 +112,7 @@ physicsList->Construct() start.
 ### G4EmDNAPhysicsActivator::ConstructProcess for 1 regions DNA physics type DNA_Opt0
 ### DNA models type DNA_Opt0 are activated for G4Region DefaultRegionForTheWorld
 AddHeliumModels0 for <DefaultRegionForTheWorld> a1msc: 1 a2msc: 1 elimel= 1 pminbba= 7.9452
-### G4EmConfigurator::AddModels n= 45
+### G4EmConfigurator::AddModels n= 46
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -212,6 +218,11 @@ e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
           DummyModel : Emin=   13 eV  Emax=    1 GeV
 
+e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAOneStepThermalizationModel : Emin=    0 eV  Emax=  7.4 eV 
+DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=  7.4 eV  Emax= 8.22 eV 
+
 msc:  for e+  SubType= 10
       RangeFactor= 0.08, stepLimType: 2, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -258,28 +269,18 @@ msc:  for proton  SubType= 10
 hIoni:  for proton  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           BetheBloch : Emin=  100 MeV Emax=    1 GeV  deltaVI
-
-hBrems:  for proton  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-hPairProd:  for proton  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 1 GeV, 20 bins/decade, spline: 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    1 MeV Emax=    1 GeV
+
+nuclearStopping:  for proton SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 
 proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -311,7 +312,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           BetheBloch : Emin=   10 MeV Emax=    1 GeV  deltaVI
 
@@ -366,7 +367,7 @@ msc:  for alpha+  SubType= 10
 hIoni:  for alpha+  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           BetheBloch : Emin=100.69 MeV Emax=    1 GeV  deltaVI
 
@@ -403,23 +404,10 @@ msc:  for anti_proton  SubType= 10
 hIoni:  for anti_proton  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=    1 GeV  deltaVI
-
-hBrems:  for anti_proton  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-hPairProd:  for anti_proton  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 1 GeV, 20 bins/decade, spline: 1
@@ -475,23 +463,10 @@ msc:  for kaon+  SubType= 10
 hIoni:  for kaon+  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=    1 GeV  deltaVI
-
-hBrems:  for kaon+  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-hPairProd:  for kaon+  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 1 GeV, 20 bins/decade, spline: 1
@@ -507,23 +482,10 @@ msc:  for kaon-  SubType= 10
 hIoni:  for kaon-  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=    1 GeV  deltaVI
-
-hBrems:  for kaon-  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-hPairProd:  for kaon-  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of kaon+
@@ -539,23 +501,10 @@ msc:  for mu+  SubType= 10
 muIoni:  for mu+  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
           BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
-
-muBrems:  for mu+  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-muPairProd:  for mu+  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 1 GeV, 20 bins/decade, spline: 1
@@ -571,23 +520,10 @@ msc:  for mu-  SubType= 10
 muIoni:  for mu-  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
           BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
-
-muBrems:  for mu-  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-muPairProd:  for mu-  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of mu+
@@ -603,23 +539,10 @@ msc:  for pi+  SubType= 10
 hIoni:  for pi+  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=    1 GeV  deltaVI
-
-hBrems:  for pi+  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-hPairProd:  for pi+  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 1 GeV, 20 bins/decade, spline: 1
@@ -635,23 +558,10 @@ msc:  for pi-  SubType= 10
 hIoni:  for pi-  SubType=2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=    1 GeV  deltaVI
-
-hBrems:  for pi-  SubType=3
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=    1 GeV
-      ===== Limit on energy threshold has been applied 
-
-hPairProd:  for pi-  SubType=4
-      dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
-      Lambda tables from threshold to 1 GeV, 20 bins/decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=    1 GeV
 
 CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of pi+
@@ -672,16 +582,16 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 um      e- 1 um      e+ 1 um  proton 1 um 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 um     e-  1 um     e+  1 um  proton 1 um 
- Energy thresholds :  gamma  100 eV     e-  242.668 eV     e+  240.44 eV  proton 100 eV 
+ Energy thresholds :  gamma  100 eV     e-  243.293 eV     e+  238.864 eV  proton 100 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -695,7 +605,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=5.670000s Real=5.744974s Sys=0.030000s
+  User=27.900000s Real=28.477168s Sys=0.050000s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.
@@ -710,15 +620,15 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 5
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00481 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.364 MB
-Pool ID '7G4Track', size : 0.728 MB
+Pool ID '17G4DynamicParticle', size : 0.362 MB
+Pool ID '7G4Track', size : 0.725 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0

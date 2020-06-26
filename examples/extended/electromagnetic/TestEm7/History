@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-04-20 V.Ivantchenko (testem7-V10-06-00)
+- do not call vis.mac automatically in interactive mode
+
 28-11-19 I. Hrivnacova (testem7-V10-05-01)
 - Fixed comments, causing doxygen warnings, in c2_function.hh
 

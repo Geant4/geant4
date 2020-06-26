@@ -6,15 +6,25 @@
 
                   Hadronic physics-list/util History
                   -----------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28-May-2020 Ben Morgan                  (phys-util-V10-06-02)
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
+
+25-May-2020, Vladimir Ivanchenko        (phys-util-V10-06-01)
+- G4HadParticles - updated list of heavy EM particles, more comments
+
+11-May-2020, Vladimir Ivanchenko        (phys-util-V10-06-00)
+- G4HadParticles - utility providing several lists of PDG codes
+    for kaons, hyperons, b- and c- particles in order to
+    be used for construction of hadronic physics
 
 31-July-2019  Gunter Folger (phys-util-V10-05-00)
--  removed G4DataQuestionaire.hh as consequence to code cleanup 
+-  removed G4DataQuestionaire.hh as consequence to code cleanup
    in lists, see phys-lists-V10-05-02
 
 03-Nov-2018, Vladimir Ivanchenko        (phys-util-V10-04-01)
@@ -24,7 +34,7 @@ introduced in the code and keeptrack of all tags.
 - G4PhysListUtil - added methods GetCaptureProcess and GetFissionProcess
 
 26-Oct-2017, Tatsumi Koi                (phys-util-V10-03-00)
-- Fix address of ftp site of LEND data 
+- Fix address of ftp site of LEND data
 - Improve instruction about download file and environment variable for LEND data
 
 05-Nov-2015, Alberto Ribon              (phys-util-V10-01-00)
@@ -38,5 +48,5 @@ introduced in the code and keeptrack of all tags.
 - Removed low_energy and high_energy from sources.cmake
 
 10-Jan-2013, Gunter Folger              (phys-util-V09-06-00)
-- new directory structure introduced. 
+- new directory structure introduced.
    util directory keeps utility classes

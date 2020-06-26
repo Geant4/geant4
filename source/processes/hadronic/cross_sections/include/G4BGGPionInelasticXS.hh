@@ -62,7 +62,7 @@ class G4Material;
 class G4Element;
 class G4Isotope;
 
-class G4BGGPionInelasticXS : public G4VCrossSectionDataSet
+class G4BGGPionInelasticXS final : public G4VCrossSectionDataSet
 {
 public:
 

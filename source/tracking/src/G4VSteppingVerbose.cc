@@ -23,141 +23,121 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//---------------------------------------------------------------
-//
-// G4VSteppingVerbose.cc
-//
-// Description:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
+// G4VSteppingVerbose class implementation
 //
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4VSteppingVerbose.hh"
 #include "G4SteppingManager.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 
-G4ThreadLocal G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
+G4ThreadLocal G4VSteppingVerbose* G4VSteppingVerbose::fInstance = nullptr;
 G4ThreadLocal G4int G4VSteppingVerbose::Silent = 0;
 G4ThreadLocal G4int G4VSteppingVerbose::SilentStepInfo = 0;
 
+//////////////////////////////////////////////////
 G4VSteppingVerbose::G4VSteppingVerbose()
-  : fManager(0), fUserSteppingAction(0), 
-    PhysicalStep(0.), GeometricalStep(0.), CorrectedStep(0.),
-    PreStepPointIsGeom(false), FirstStep(false),
-    TempInitVelocity(0.), TempVelocity(0.), Mass(0.), sumEnergyChange(0.),
-    fParticleChange(0), fTrack(0), fSecondary(0), fStep(0), 
-    fPreStepPoint(0), fPostStepPoint(0), fCurrentVolume(0),
-    fSensitive(0), fCurrentProcess(0), fAtRestDoItVector(0),
-    fAlongStepDoItVector(0), fPostStepDoItVector(0), fAtRestGetPhysIntVector(0),
-    fAlongStepGetPhysIntVector(0), fPostStepGetPhysIntVector(0),
-    MAXofAtRestLoops(0), MAXofAlongStepLoops(0), MAXofPostStepLoops(0),
-    currentMinimumStep(0.), numberOfInteractionLengthLeft(0.),
-    fAtRestDoItProcTriggered(0), fAlongStepDoItProcTriggered(0),
-    fPostStepDoItProcTriggered(0), fN2ndariesAtRestDoIt(0),
-    fN2ndariesAlongStepDoIt(0), fN2ndariesPostStepDoIt(0),
-    fNavigator(0), verboseLevel(0), fSelectedAtRestDoItVector(0),
-    fSelectedAlongStepDoItVector(0), fSelectedPostStepDoItVector(0),
-    fPreviousStepSize(0.), physIntLength(0.)
+//////////////////////////////////////////////////
 {
-  if(fInstance!= 0)
+  if(fInstance!= nullptr)
   {
     G4Exception("G4VSteppingVerbose::G4VSteppingVerbose()",
                 "Tracking0014", FatalException,
                 "Only one SteppingVerbose class can be instantiated.");
   }
 }
-G4VSteppingVerbose::~G4VSteppingVerbose() { fInstance = 0; }
+
+//////////////////////////////////////////////////
+G4VSteppingVerbose::~G4VSteppingVerbose()
+//////////////////////////////////////////////////
+{
+  fInstance = nullptr;
+}
 
 //////////////////////////////////////////////////////////////////
 void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
 //////////////////////////////////////////////////////////////////
 {
-  fManager=fMan;
+  fManager = fMan;
 }
 
 //////////////////////////////////////////////////
 void G4VSteppingVerbose::CopyState()
 //////////////////////////////////////////////////
 {
+  fUserSteppingAction = fManager->GetUserAction();
 
-   fUserSteppingAction = fManager->GetUserAction();
-   //   fVerbose = this;
+  PhysicalStep = fManager->GetPhysicalStep();
+  GeometricalStep = fManager->GetGeometricalStep();
+  CorrectedStep = fManager->GetCorrectedStep();
+  PreStepPointIsGeom = fManager->GetPreStepPointIsGeom();
+  FirstStep = fManager->GetFirstStep();
+  fStepStatus = fManager->GetfStepStatus();
 
-   PhysicalStep = fManager->GetPhysicalStep();
-   GeometricalStep = fManager->GetGeometricalStep();
-   CorrectedStep = fManager->GetCorrectedStep();
-   PreStepPointIsGeom = fManager->GetPreStepPointIsGeom();
-   FirstStep = fManager->GetFirstStep();
-   fStepStatus = fManager->GetfStepStatus();
+  TempInitVelocity = fManager->GetTempInitVelocity();
+  TempVelocity = fManager->GetTempVelocity();
+  Mass = fManager->GetMass();
 
-   TempInitVelocity = fManager->GetTempInitVelocity();
-   TempVelocity = fManager->GetTempVelocity();
-   Mass = fManager->GetMass();
+  sumEnergyChange = fManager->GetsumEnergyChange();
 
-   sumEnergyChange = fManager->GetsumEnergyChange();
+  fParticleChange = fManager->GetfParticleChange();
+  fTrack = fManager->GetfTrack(); 
+  fSecondary = fManager->GetfSecondary();
+  fStep = fManager->GetfStep();
+  fPreStepPoint = fManager->GetfPreStepPoint();
+  fPostStepPoint = fManager->GetfPostStepPoint();
 
-   fParticleChange = fManager->GetfParticleChange();
-   fTrack = fManager->GetfTrack(); 
-   fSecondary = fManager->GetfSecondary();
-   fStep = fManager->GetfStep();
-   fPreStepPoint = fManager->GetfPreStepPoint();
-   fPostStepPoint = fManager->GetfPostStepPoint();
+  fCurrentVolume = fManager->GetfCurrentVolume();
+  fSensitive = fManager->GetfSensitive();
+  fCurrentProcess = fManager->GetfCurrentProcess();
 
-   fCurrentVolume = fManager->GetfCurrentVolume();
-   fSensitive = fManager->GetfSensitive();
-   fCurrentProcess = fManager->GetfCurrentProcess();
+  fAtRestDoItVector = fManager->GetfAtRestDoItVector(); 
+  fAlongStepDoItVector = fManager->GetfAlongStepDoItVector();
+  fPostStepDoItVector = fManager->GetfPostStepDoItVector();
 
-   fAtRestDoItVector = fManager->GetfAtRestDoItVector(); 
-   fAlongStepDoItVector = fManager->GetfAlongStepDoItVector();
-   fPostStepDoItVector = fManager->GetfPostStepDoItVector();
+  fAtRestGetPhysIntVector = fManager->GetfAtRestGetPhysIntVector();
+  fAlongStepGetPhysIntVector = fManager->GetfAlongStepGetPhysIntVector();
+  fPostStepGetPhysIntVector = fManager->GetfPostStepGetPhysIntVector();
 
-   fAtRestGetPhysIntVector = fManager->GetfAtRestGetPhysIntVector();
-   fAlongStepGetPhysIntVector = fManager->GetfAlongStepGetPhysIntVector();
-   fPostStepGetPhysIntVector = fManager->GetfPostStepGetPhysIntVector();
+  MAXofAtRestLoops = fManager->GetMAXofAtRestLoops();
+  MAXofAlongStepLoops = fManager->GetMAXofAlongStepLoops();
+  MAXofPostStepLoops = fManager->GetMAXofPostStepLoops();
 
-   MAXofAtRestLoops = fManager->GetMAXofAtRestLoops();
-   MAXofAlongStepLoops = fManager->GetMAXofAlongStepLoops();
-   MAXofPostStepLoops = fManager->GetMAXofPostStepLoops();
+  fAtRestDoItProcTriggered = fManager->GetfAtRestDoItProcTriggered();
+  fAlongStepDoItProcTriggered = fManager->GetfAlongStepDoItProcTriggered();
+  fPostStepDoItProcTriggered = fManager->GetfPostStepDoItProcTriggered();
 
-   fAtRestDoItProcTriggered = fManager->GetfAtRestDoItProcTriggered();
-   fAlongStepDoItProcTriggered = fManager->GetfAlongStepDoItProcTriggered();
-   fPostStepDoItProcTriggered = fManager->GetfPostStepDoItProcTriggered();
+  fN2ndariesAtRestDoIt = fManager->GetfN2ndariesAtRestDoIt();
+  fN2ndariesAlongStepDoIt = fManager->GetfN2ndariesAlongStepDoIt();
+  fN2ndariesPostStepDoIt = fManager->GetfN2ndariesPostStepDoIt();
 
-   fN2ndariesAtRestDoIt = fManager->GetfN2ndariesAtRestDoIt();
-   fN2ndariesAlongStepDoIt = fManager->GetfN2ndariesAlongStepDoIt();
-   fN2ndariesPostStepDoIt = fManager->GetfN2ndariesPostStepDoIt();
+  fNavigator = fManager->GetfNavigator();
 
-   fNavigator = fManager->GetfNavigator();
+  verboseLevel = fManager->GetverboseLevel();
 
-   verboseLevel = fManager->GetverboseLevel();
+  fSelectedAtRestDoItVector = fManager->GetfSelectedAtRestDoItVector();
+  fSelectedAlongStepDoItVector = fManager->GetfSelectedAlongStepDoItVector();
+  fSelectedPostStepDoItVector = fManager->GetfSelectedPostStepDoItVector();
 
-   fSelectedAtRestDoItVector = fManager->GetfSelectedAtRestDoItVector();
-   fSelectedAlongStepDoItVector = fManager->GetfSelectedAlongStepDoItVector();
-   fSelectedPostStepDoItVector = fManager->GetfSelectedPostStepDoItVector();
+  fPreviousStepSize = fManager->GetfPreviousStepSize();
 
-   fPreviousStepSize = fManager->GetfPreviousStepSize();
+  fTouchableHandle = fManager->GetTouchableHandle();
 
-   fTouchableHandle = fManager->GetTouchableHandle();
+  StepControlFlag = fManager->GetStepControlFlag();
 
-   StepControlFlag = fManager->GetStepControlFlag();
-
-   physIntLength = fManager->GetphysIntLength();
-   fCondition = fManager->GetfCondition();
-   fGPILSelection = fManager->GetfGPILSelection();
+  physIntLength = fManager->GetphysIntLength();
+  fCondition = fManager->GetfCondition();
+  fGPILSelection = fManager->GetfGPILSelection();
 }
 
 void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* Instance)
 {
-  fInstance=Instance;
+  fInstance = Instance;
 }
 
 G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
@@ -182,6 +162,5 @@ G4int G4VSteppingVerbose::GetSilentStepInfo()
 
 void G4VSteppingVerbose::SetSilentStepInfo(G4int fSilent)
 {
-  SilentStepInfo=fSilent;
+  SilentStepInfo = fSilent;
 }
-

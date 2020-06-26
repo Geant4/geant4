@@ -60,7 +60,7 @@ class G4ParticleChangeForLoss;
 
 class G4PAIPhotData;
 
-class G4PAIPhotModel : public G4VEmModel, public G4VEmFluctuationModel
+class G4PAIPhotModel final : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:

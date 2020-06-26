@@ -68,9 +68,11 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
   HEADERS
+    G4EmBuilder.hh
     G4EmDNAChemistry.hh
     G4EmDNAChemistry_option1.hh
     G4EmDNAChemistry_option2.hh
+    G4EmDNAChemistry_option3.hh
     G4EmDNAPhysics.hh
     G4EmDNAPhysics_option1.hh
     G4EmDNAPhysics_option2.hh
@@ -105,9 +107,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4OpticalPhysicsMessenger.hh
     G4OpticalProcessIndex.hh
   SOURCES
+    G4EmBuilder.cc
     G4EmDNAChemistry.cc
     G4EmDNAChemistry_option1.cc
     G4EmDNAChemistry_option2.cc
+    G4EmDNAChemistry_option3.cc
     G4EmDNAPhysics.cc
     G4EmDNAPhysics_option1.cc
     G4EmDNAPhysics_option2.cc

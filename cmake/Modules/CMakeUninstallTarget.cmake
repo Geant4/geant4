@@ -8,7 +8,7 @@
 #
 #
 
-function(WRITE_UNINSTALL_TARGET_SCRIPT)
+function(write_uninstall_target_script)
     # Create uninstall target template file, if it doesn't exist...
     if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in)
         set(__uninstall_filename ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake.in)
@@ -42,10 +42,8 @@ endforeach(file)
     endif()
 endfunction()
 
-
-
 # Call the file writing function, if needed
-WRITE_UNINSTALL_TARGET_SCRIPT()
+write_uninstall_target_script()
 
 # Configure the file that reads the install manifest and processes the files
 configure_file(
@@ -56,5 +54,3 @@ configure_file(
 # Add the uninstall target
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-
-

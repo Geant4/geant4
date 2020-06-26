@@ -35,8 +35,6 @@
 // Henyey-Greenstein phase function
 // Forward and backward angles are treated separately.
 //
-// mail: gum@triumf.ca
-//
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpMieHG_h
@@ -53,8 +51,6 @@ public:
   explicit G4OpMieHG(const G4String& processName = "OpMieHG",
                            G4ProcessType type = fOptical);
   virtual ~G4OpMieHG();
-
-public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable' only for an optical photon.
@@ -73,6 +69,7 @@ private:
   G4OpMieHG(const G4OpMieHG &right) = delete;
   G4OpMieHG& operator=(const G4OpMieHG &right) = delete;
 
+  size_t idx_mie = 0;
 };
 
 inline

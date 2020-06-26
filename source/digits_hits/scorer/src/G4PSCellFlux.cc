@@ -131,26 +131,9 @@ void G4PSCellFlux::DefineUnitAndCategory(){
    new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
 }
 
-G4double G4PSCellFlux::ComputeVolume(G4Step* aStep, G4int idx){
-
-  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    if(idx<0)
-    {
-      G4ExceptionDescription ED;
-      ED << "Incorrect replica number --- GetReplicaNumber : " << idx << G4endl;
-      G4Exception("G4PSCellFlux::ComputeVolume","DetPS0001",JustWarning,ED);
-    }
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
-  
+G4double G4PSCellFlux::ComputeVolume(G4Step* aStep, G4int idx)
+{
+  G4VSolid* solid = ComputeSolid( aStep, idx );
+  assert(solid);
   return solid->GetCubicVolume();
 }

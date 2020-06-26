@@ -23,34 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPrimaryGenerator class implementation
 //
-//
+// Author: Makoto Asai (SLAC)
+// --------------------------------------------------------------------
 
-// G4VPrimaryGenerator
 #include "G4VPrimaryGenerator.hh"
-
-G4VPrimaryGenerator::G4VPrimaryGenerator() : particle_time(0.)
-{;}
-
-G4VPrimaryGenerator::~G4VPrimaryGenerator()
-{;}
-
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VSolid.hh"
 
-G4bool G4VPrimaryGenerator::CheckVertexInsideWorld
-                         (const G4ThreeVector& pos)
+G4VPrimaryGenerator::G4VPrimaryGenerator()
+{;}
+
+G4VPrimaryGenerator::~G4VPrimaryGenerator()
+{;}
+
+G4bool G4VPrimaryGenerator::CheckVertexInsideWorld(const G4ThreeVector& pos)
 {
   G4Navigator* navigator= G4TransportationManager::GetTransportationManager()
                                                  -> GetNavigatorForTracking();
   
   G4VPhysicalVolume* world= navigator-> GetWorldVolume();
-  G4VSolid* solid= world-> GetLogicalVolume()-> GetSolid();
-  EInside qinside= solid-> Inside(pos);
+  G4VSolid* solid = world-> GetLogicalVolume()-> GetSolid();
+  EInside qinside = solid-> Inside(pos);
   
-  if( qinside != kInside) return false;
-  else return true;
+  return (qinside != kInside) ? false : true;
 }
-

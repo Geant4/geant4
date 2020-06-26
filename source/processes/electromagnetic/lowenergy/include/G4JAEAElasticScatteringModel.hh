@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /*
-Authors:
+Author:
 M. Omer and R. Hajima  on   17 October 2016
 contact:
 omer.mohamed@jaea.go.jp and hajima.ryoichi@qst.go.jp
@@ -46,7 +46,7 @@ https://doi.org/10.11484/jaea-data-code-2018-007
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
-
+#include "G4DataVector.hh"
 
 
 
@@ -80,13 +80,13 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  inline void SetLowEnergyThreshold(G4double);
-
-    G4double distribution[181];
-    G4double pdf[181];
-    G4double cdf[181];
+  void SetLowEnergyThreshold(G4double val){lowEnergyLimit = val;};
+  void SetDebugVerbosity(G4int val){verboseLevel = val;};
 
 private:
+  G4double distribution[181];
+  G4double pdf[181];
+  G4double cdf[181];
 
   void ReadData(size_t Z, const char* path = 0);
 
@@ -98,17 +98,13 @@ private:
 
   G4double lowEnergyLimit;
 
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* dataCS[101];
-
+  static const G4int maxZ = 99;
+  static G4LPhysicsFreeVector* dataCS[maxZ+1];
+  static G4DataVector* ES_Data[maxZ+1];
   G4ParticleChangeForGamma* fParticleChange;
 
 };
 
-inline void G4JAEAElasticScatteringModel::SetLowEnergyThreshold(G4double val)
-{
-  lowEnergyLimit = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -41,7 +41,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -59,7 +59,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -77,7 +77,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -96,7 +96,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
-fForcedNumberOfCloudPoints (10000),
+fForcedNumberOfCloudPoints (0),  // <= 0 means under control of viewer
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.

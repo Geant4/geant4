@@ -153,7 +153,7 @@ G4UniversalFluctuation::SampleGauss(CLHEP::HepRandomEngine* rndm,
                                     G4double& eloss)
 {
   G4double x = eav;
-  G4double sig = std::sqrt(esig2);
+  const G4double sig = std::sqrt(esig2);
   if(eav < 0.25*sig) {
     x += (2.*rndm->flat() - 1.)*eav;
   } else {

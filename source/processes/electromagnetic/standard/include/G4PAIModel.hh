@@ -65,7 +65,7 @@ class G4MaterialCutsCouple;
 class G4ParticleChangeForLoss;
 class G4PAIModelData;
 
-class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
+class G4PAIModel final : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:

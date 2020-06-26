@@ -47,7 +47,5 @@ G4VPreCompoundModel::~G4VPreCompoundModel()
  
 void G4VPreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
 {
-   outFile << "description of DeExcite() for model derived from G4VPrecompoundModel missing"
-           << "\n";
-
+  outFile << "description of DeExcite() for model derived from G4VPrecompoundModel missing.\n";
 }

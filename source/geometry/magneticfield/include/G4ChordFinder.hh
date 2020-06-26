@@ -115,6 +115,9 @@ class G4ChordFinder
 
       void OnComputeStep();
 
+      friend std::ostream&
+             operator<<( std::ostream& os, const G4ChordFinder& cf);
+
    protected:   // .........................................................
 
       void     PrintDchordTrial(G4int    noTrials, 

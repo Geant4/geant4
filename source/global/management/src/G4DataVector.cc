@@ -23,79 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4DataVector class implementation
 //
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//  G4DataVector.cc
-//
-//  History:
-//    18 Sep. 2001, H.Kurashige : Structure created based on object model
-// --------------------------------------------------------------
+// Author: H.Kurashige, 18 September 2001
+// --------------------------------------------------------------------
 
 #include "G4DataVector.hh"
 #include <iomanip>
 
+// --------------------------------------------------------------------
 G4DataVector::G4DataVector()
   : std::vector<G4double>()
-{
-}
+{}
 
-G4DataVector::G4DataVector(size_t cap)
+// --------------------------------------------------------------------
+G4DataVector::G4DataVector(std::size_t cap)
   : std::vector<G4double>(cap, 0.0)
-{
-}
+{}
 
-G4DataVector::G4DataVector(size_t cap, G4double value)
+// --------------------------------------------------------------------
+G4DataVector::G4DataVector(std::size_t cap, G4double value)
   : std::vector<G4double>(cap, value)
-{
-}
+{}
 
-G4DataVector::~G4DataVector()
-{
-}
+// --------------------------------------------------------------------
+G4DataVector::~G4DataVector() {}
 
+// --------------------------------------------------------------------
 G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
 {
   // Ascii mode
-  if (ascii)
+  if(ascii)
   {
     fOut << *this;
     return true;
-  } 
+  }
 
   // Binary Mode
-  G4int sizeV = G4int(size()); 
-  fOut.write((char*)(&sizeV), sizeof sizeV);
+  G4int sizeV = G4int(size());
+  fOut.write((char*) (&sizeV), sizeof sizeV);
 
   G4double* value = new G4double[sizeV];
-  size_t i=0;
-  for (const_iterator itr=begin(); itr!=end(); itr++, i++)
+  std::size_t i   = 0;
+  for(auto itr = cbegin(); itr != cend(); ++itr, ++i)
   {
-    value[i]  =  *itr;
+    value[i] = *itr;
   }
-  fOut.write((char*)(value), sizeV*(sizeof (G4double)) );
-  delete [] value;
-  
+  fOut.write((char*) (value), sizeV * (sizeof(G4double)));
+  delete[] value;
+
   return true;
 }
 
+// --------------------------------------------------------------------
 G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   clear();
-  G4int sizeV=0;
-  
+  G4int sizeV = 0;
+
   // retrieve in ascii mode
-  if (ascii)
+  if(ascii)
   {
     // contents
     fIn >> sizeV;
-    if (fIn.fail())  { return false; }
-    if (sizeV<=0)
+    if(fIn.fail())
     {
-#ifdef G4VERBOSE  
+      return false;
+    }
+    if(sizeV <= 0)
+    {
+#ifdef G4VERBOSE
       G4cerr << "G4DataVector::Retrieve():";
       G4cerr << " Invalid vector size: " << sizeV << G4endl;
 #endif
@@ -103,40 +100,44 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     }
 
     reserve(sizeV);
-    for(G4int i = 0; i < sizeV ; i++)
+    for(G4int i = 0; i < sizeV; ++i)
     {
-      G4double vData=0.0;
+      G4double vData = 0.0;
       fIn >> vData;
-      if (fIn.fail())  { return false; }
+      if(fIn.fail())
+      {
+        return false;
+      }
       push_back(vData);
     }
-    return true ;
+    return true;
   }
-  
+
   // retrieve in binary mode
-  fIn.read((char*)(&sizeV), sizeof sizeV); 
- 
+  fIn.read((char*) (&sizeV), sizeof sizeV);
+
   G4double* value = new G4double[sizeV];
-  fIn.read((char*)(value),  sizeV*(sizeof(G4double)) );
-  if (G4int(fIn.gcount()) != G4int(sizeV*(sizeof(G4double))) )
+  fIn.read((char*) (value), sizeV * (sizeof(G4double)));
+  if(G4int(fIn.gcount()) != G4int(sizeV * (sizeof(G4double))))
   {
-    delete [] value;
+    delete[] value;
     return false;
   }
 
   reserve(sizeV);
-  for(G4int i = 0; i < sizeV; i++) 
+  for(G4int i = 0; i < sizeV; ++i)
   {
     push_back(value[i]);
   }
-  delete [] value;
+  delete[] value;
   return true;
 }
-    
+
+// --------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4DataVector& pv)
 {
-  out << pv.size() << std::setprecision(12) << G4endl; 
-  for(size_t i = 0; i < pv.size(); i++)
+  out << pv.size() << std::setprecision(12) << G4endl;
+  for(std::size_t i = 0; i < pv.size(); ++i)
   {
     out << pv[i] << G4endl;
   }
@@ -144,4 +145,3 @@ std::ostream& operator<<(std::ostream& out, const G4DataVector& pv)
 
   return out;
 }
-

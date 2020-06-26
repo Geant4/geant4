@@ -58,8 +58,6 @@ class G4DeuteronBuilder : public G4PhysicsBuilderInterface
     G4DeuteronInelasticProcess * theDeuteronInelastic;
     
     std::vector<G4VDeuteronBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

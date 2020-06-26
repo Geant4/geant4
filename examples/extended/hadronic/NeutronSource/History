@@ -12,6 +12,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-05-20 mma (NeutronSource-V10-06-00)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
 
 07-10-18 mma (NeutronSource-V10-04-07)
 - PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS

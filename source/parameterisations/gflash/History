@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 17th, 2020, A. Zaborowska (gflash-V10-06-01)
+- Substitute Gamma calculation with STL following GitHub PR#3 from Marco Savelli.
+  Makes LnGamma calculation 1.4 times faster, and Gamma 1.9 times faster.
+
+Mar 26, 2020, I. Semeniouk (gflash-V10-06-00)
+- GFlashSamplingShowerParameterisation.cc : X0eff calculation
+- GFlashHomoShowerParameterisation, GVFlashHomoShowerTuning,
+  GFlashSamplingShowerParameterisation,GFlashSamplingShowerTuning:
+  GFlashXXXShowerTuning deleted locally in  Destractor
+  of GFlashXXXShowerParameterisation class 
+
 Oct 30st, 2019, A. Zaborowska (gflash-V10-05-01)
 - Add possibility to use sensitive detector from parallel world.
 

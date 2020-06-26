@@ -16,6 +16,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 17th, 2020  V.Ivanchenko 
+- G4ImportanceProcess: added process type as fParallel
 
 February 26th, 2018  A.Howard
 - G4ImportanceConfigurator: cleaned up unnecessary G4cout and removed

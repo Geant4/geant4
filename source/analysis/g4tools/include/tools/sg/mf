@@ -48,6 +48,8 @@ public:
     }
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   mf(){}
   mf(const T& a_v):parent(a_v){}
@@ -90,6 +92,8 @@ public:
     }
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   mf_string():parent(){}
   mf_string(const std::string& a_v):parent(a_v){}
@@ -153,6 +157,8 @@ public:
     }
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   mf_enum():parent(){}
   mf_enum(const T& a_v):parent(a_v){}
@@ -247,6 +253,8 @@ public:
     }
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   mf_vec():parent(){}
   mf_vec(const T& a_v):parent(a_v){}
@@ -292,6 +300,8 @@ public:
     }
     return true;
   }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
 public:
   mf_std_vec():parent(){}
   mf_std_vec(const T& a_v):parent(a_v){}

@@ -1,3 +1,13 @@
+5.1.0:
+ - tools/sg/plotter, data_axis, plottables, h2plot : corrections to handle automatic min/max in case of log scale.
+ - tools/histo/base_histo : [min,max]_bin_height_with_entries(). Used by the plotter.
+ - tools/wcsv_histo : h_header(), p_header() functions.
+ - tools/gl2ps : cast ~1UL to double.
+ - tools/test/cpp/waxml.cpp, wcsv_histo.cpp,wcsv_ntuple.cpp,wcsv_ntuple_booking.cpp :
+   have output file name of the form : out_<app>_<etc>.[aida,csv]
+ - tools/test/*.ps : new version to take into account modifs done in the plotter.
+ - various modifications coming from other usage of inlib/exlib.
+ 
 5.0.5:
  - tools/gl2ps : gl2psPDFgroupListWriteXObjectResources : add a break at end of case GL2PS_PIXMAP.
 

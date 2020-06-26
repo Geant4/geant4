@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 June 2020 - J. Madsen (externals-V10-06-02)
+- Migrated PTL's used of CMAKE_BINARY_DIR to PROJECT_BINARY_DIR
+- Fixed PTLConfig.cmake.in for testing
+- Reduced cmake to 3.8 to match Geant4
+
+4 June 2020 - J. Madsen (externals-V10-06-01)
+- Fixed ptl installation of interface libraries
+
+4 June 2020 - J. Madsen (externals-V10-06-00)
+- Added ptl (Parallel Tasking Library) source code
+
 19 November 2019 - G.Cosmo (externals-V10-05-05)
 - CLHEP: Fixed warnings for cases of implicit type conversions in
   Rand*Ziggurat classes.
@@ -35,7 +46,7 @@ committal in the CVS repository !
   MixMaxRng: throw if seed is zero. Use throw instead of exit() elsewhere.
 
 07 June 2019 - G.Cosmo (externals-V10-05-01)
-- CLHEP: defaulted operator=() also for Plan3D; fixing deprecation warnings 
+- CLHEP: defaulted operator=() also for Plan3D; fixing deprecation warnings
   on gcc-9.1.
   Fixed shadowing compilation warnings in Transform3D as reported on gcc-9.1.
 

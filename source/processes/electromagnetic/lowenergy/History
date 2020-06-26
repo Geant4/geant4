@@ -15,6 +15,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11.06.2020 Z. Li, emlowen-V10-06-06
+- Add InitialiseForElement() in G4LivermoreGammaConversionModel 
+  and G4LivermoreGammaConversion5DModel, which was missing before
+
+04.06.2020 L. Pandola, emlowen-V10-06-05
+- Fix Coverity defect
+
+25.05.2020 L. Pandola, emlowen-V10-06-04
+- Change initialization of JAEA models
+
+18.05.2020 M. Omer and R. Hajima, L. Pandola, emlowen-V10-06-03
+- Update G4JAEAElasticScattering and G4JAEAElasticScatteringModel to
+  comply with new data format
+- Add JAEA model for polarized gamma scattering 
+- Requires new G4EMLOW database
+
+29.04.2020 G. Folger,     emlowen-V10-06-02
+- Fixes for clang10: Correct formatting in G4ecpssrBaseKxsModel.cc
+    and G4ecpssrBaseLixsModel.cc
+
+21.04.2020 V. Ivanchenko, emlowen-V10-06-01
+- G4LivermoreGammaConversionModel, G4LivermoreGammaConversion5DModel
+  fixed compilation for old compilers
+- G4LivermorePhotoElectricModel - allowed "Water" as a name of water
+  material for low-energy photoeffect
+
+30.03.2020 Z. LI, emlowen-V10-06-00
+- Modify G4LivermoreGammaConversionModel class
+- Add G4LivermoreGammaConversion5DModel class
 
 06.11.2019 V. Ivanchenko, emlowen-V10-05-02
 - make transition getenv -> std::getenv in all sub-library

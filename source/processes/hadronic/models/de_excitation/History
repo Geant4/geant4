@@ -14,10 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-25 May 2020 Alberto Ribon (hadr-deex-V10-05-22)
-- G4DeexPrecoParameters : changed the parameter fMaxLifeTime 
-  from 1000 sec to 1 microsec, to correct the treatment of isomers.
-  This fix the bug #2226 reported by NA61/SHINE.
+12 May 2020   Alberto Ribon       (hadr-deex-V10-06-03)
+- G4DeexPrecoParameters : in the method Dump(), check the global verbosity
+  level of hadronics (if zero, do not print anything).
+
+05 May 2020   Gunter Folger       (hadr-deex-V10-06-02)
+- Fix for clang10: mark class final, as dtor is final.
+   affected: fermi_breakup/include/G4FermiBreakUpVI.hh
+             gem_evaporation/include/G4GEMChannelVI.hh
+	     gem_evaporation/include/G4GEMProbabilityVI.hh
+
+05 March 2020 Vladimir Ivanchenko (hadr-deex-V10-06-01)
+- G4DeexPrecoParameters - set default time limit 1 microsecond and
+    enable isomere production (related to problem #2226)
+
+13 February 2020 Vladimir Ivanchenko (hadr-deex-V10-06-00)
+- G4PhotonEvaporation, G4DeexPrecoParameters, G4DeexParametersMessager
+    added extra flag - IsomerProduction, if it is enabled photon 
+    evaporation samples time of gamma transition; added C++ interface
+    and UI command allowing set this flag; radioactive decay constructor 
+    should enable this parameter; fix of problem #2226
 
 25 November 2019 Vladimir Ivanchenko (hadr-deex-V10-05-21)
 - G4PhotonEvaporation - fixed Coverity problem

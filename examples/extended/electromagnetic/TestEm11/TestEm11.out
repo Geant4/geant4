@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -35,9 +35,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
- G4RadioactiveDecay is deprecated and will be removed in Geant4 version 11. 
- Please replace it with G4RadioactiveDecayBase if you want the unbiased radioactive deacy process.
- If you want the general process, with optional biasing, use G4Radioactivation. 
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -181,7 +178,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
       CSDA range table up to 1 GeV in 160 bins
@@ -189,9 +186,9 @@ ionIoni:  for GenericIon  SubType=2
 nuclearStopping:  for GenericIon SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
-=======================================================================
-======       Radioactive Decay Physics Parameters              ========
-=======================================================================
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
 Max life time                                     1e+06 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           0
@@ -202,7 +199,7 @@ Auger electron emission enabled                   0
 Auger cascade enabled                             0
 Check EM cuts disabled for atomic de-excitation   0
 Use Bearden atomic level energies                 0
-=======================================================================
+======================================================================
 
 msc:  for alpha  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 1
@@ -212,7 +209,7 @@ msc:  for alpha  SubType= 10
 ionIoni:  for alpha  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
@@ -248,10 +245,6 @@ hPairProd:  for anti_proton  SubType=4
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV
-
-nuclearStopping:  for anti_proton SubType=8 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for kaon+  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 1
@@ -430,7 +423,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Galactic
@@ -442,11 +435,11 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.95018 keV    e-  548.291 keV    e+  526.624 keV proton 100 keV
+ Energy thresholds :  gamma  6.90532 keV    e-  544.145 keV    e+  526.224 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -474,27 +467,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=1.530000s Real=1.530152s Sys=0.000000s
+  User=4.160000s Real=4.178206s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 447.067 keV	(14.007 keV-->500.000 keV)
+ Edep in absorber 1 = 447.251 keV	(20.438 keV-->500.000 keV)
 
- Track length of primary track = 878.504 um  +- 195.247 um 
- Range from EmCalculator = 942.776 um  (from full dE/dx)
+ Track length of primary track = 879.940 um  +- 193.456 um 
+ Range from EmCalculator = 942.757 um  (from full dE/dx)
 
- Projected range               = 316.885 um  +- 199.351 um 
+ Projected range               = 314.035 um  +- 198.145 um 
 
- Nb of steps of primary track  = 21.04 +- 4.92	 Step size= 42.222 um  +- 6.898 um 
+ Nb of steps of primary track  = 21.05 +- 4.89	 Step size= 42.270 um  +- 6.722 um 
 
- absorbed = 77.57 %   transmit = 5.06 %   reflected = 17.37 %
+ absorbed = 77.62 %   transmit = 5.22 %   reflected = 17.16 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 551293998, 986301545
+ Current couple of seeds = 1590892920, 653467453
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -514,11 +507,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.00192 MB
+Pool ID '7G4Track', size : 0.000961 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.015 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.014 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

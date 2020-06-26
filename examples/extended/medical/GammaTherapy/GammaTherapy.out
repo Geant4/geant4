@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -524,7 +524,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=   10 GeV
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
@@ -536,7 +536,7 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.05172 keV    e-  109.289 keV    e+  107.83 keV proton 10 keV
+ Energy thresholds :  gamma  1.05151 keV    e-  109.045 keV    e+  107.594 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -550,25 +550,25 @@ Index : 2     used in the geometry : Yes
 Index : 3     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  36.0599 keV    e-  351.877 keV    e+  337.972 keV proton 10 keV
+ Energy thresholds :  gamma  36.355 keV    e-  349.731 keV    e+  335.956 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.21113 keV    e-  99.4755 keV    e+  98.1475 keV proton 10 keV
+ Energy thresholds :  gamma  1.21032 keV    e-  98.6219 keV    e+  97.9636 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.10981 keV    e-  84.6589 keV    e+  83.5287 keV proton 10 keV
+ Energy thresholds :  gamma  1.10939 keV    e-  85.1099 keV    e+  83.4168 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
    80 bins R   stepR= 2.5 mm 
    60 bins Z   stepZ= 5 mm 
@@ -583,27 +583,27 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.800000s Real=3.830643s Sys=0.000000s
+  User=10.350000s Real=10.423109s Sys=0.010000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.3
-Average number of gamma                      19.59
-Average number of e+                         0.7599
-Average number of steps in the phantom       11.64
-Average number of e- steps in the target     18.12
-Average number of g  produced in the target  18.75
-Average number of e- produced in the target  21.02
-Average number of g produced in the phantom  0.4928
-Average number of e- produced in the phantom 5.939
-Total fGamma fluence in front of the phantom 8.185 MeV 
+Average number of e-                         32.85
+Average number of gamma                      19.45
+Average number of e+                         0.7534
+Average number of steps in the phantom       11.32
+Average number of e- steps in the target     18.07
+Average number of g  produced in the target  18.61
+Average number of e- produced in the target  20.83
+Average number of g produced in the phantom  0.4888
+Average number of e- produced in the phantom 5.776
+Total fGamma fluence in front of the phantom 8.01 MeV 
 ========================================================
 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1290475086, 451564420
+ Current couple of seeds = 165034343, 198826946
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

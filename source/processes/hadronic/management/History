@@ -14,7 +14,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-7 January 2020 V. Ivanchenko (hadr-man-V10-05-10)
+18 May 2020 G. Cosmo (hadr-man-V10-06-05)
+---------------------------------------------------
+- G4HadronicProcessStore: removed unnecessary use of deprecated
+  G4USE_STD11 flag in HtmlFileName(). Also indicated in GitHub PR#13.
+
+16 May 2020 V. Ivanchenko (hadr-man-V10-06-04)
+---------------------------------------------------
+- G4HadronicProcessStore : extended default initialisation printout to
+  sigma-, D-, B-.
+- G4HadronicProcess : removed check for G4HadronicException, where it
+  cannot be; limit printout on kaon0 in final state.
+
+12 May 2020 A. Ribon (hadr-man-V10-06-03)
+---------------------------------------------------
+- G4HadronicProcessStore : in the method Dump, check the internal verbosity
+  level as well as the newly introduced global hadronic verbosity level,
+  returning immediately (without printing anything) if one of these is 0.
+
+1 April 2020 V. Ivanchenko (hadr-man-V10-06-02)
+---------------------------------------------------
+- G4HadronicProcess : fixed Coverity warning to EP check method for
+    the case when primary particle remains in the interaction
+
+16 January 2020 A. Ribon (hadr-man-V10-06-01)
+---------------------------------------------------
+- G4HadLeadBias : replaced 'G4int' with 'size_t' to avoid warnings (seen on
+  Windows).
+
+3 January 2020 V. Ivanchenko (hadr-man-V10-06-00)
 ---------------------------------------------------
 - G4HadronicProcess : for charge check assume, that all final electrons
   come from internal conversion

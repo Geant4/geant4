@@ -57,13 +57,13 @@ class G4BFieldIntegrationDriver : public G4VIntegrationDriver
 
     virtual G4bool AccurateAdvance(G4FieldTrack& track,
                                    G4double hstep,
-                                   G4double eps,               
+                                   G4double eps,
                                    G4double hinitial = 0) override
     {
         return fCurrDriver->AccurateAdvance(track, hstep, eps, hinitial);
     }
 
-    virtual G4bool DoesReIntegrate() override
+    virtual G4bool DoesReIntegrate() const override
     {
        return fCurrDriver->DoesReIntegrate();
     }
@@ -130,6 +130,15 @@ class G4BFieldIntegrationDriver : public G4VIntegrationDriver
         fLargeStepDriver->OnStartTracking();
     }
 
+    virtual void  StreamInfo( std::ostream& os ) const override
+    {
+       os << "Small Step Driver Info: " << std::endl;
+       fSmallStepDriver->StreamInfo(os);
+       os << "Large Step Driver Info: " << std::endl;        
+       fLargeStepDriver->StreamInfo(os);
+    }
+    // Write out the parameters / state of the driver
+   
     void PrintStatistics() const;
 
   private:

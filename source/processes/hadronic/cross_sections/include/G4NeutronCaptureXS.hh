@@ -57,7 +57,7 @@ class G4ParticleDefinition;
 class G4Element;
 class G4PhysicsVector;
 
-class G4NeutronCaptureXS : public G4VCrossSectionDataSet
+class G4NeutronCaptureXS final : public G4VCrossSectionDataSet
 {
 public: 
 

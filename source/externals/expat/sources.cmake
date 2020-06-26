@@ -106,4 +106,8 @@ GEANT4_DEFINE_MODULE(NAME G4expat
 )
 
 # List any source specific properties here
-
+if(GEANT4_USE_NEW_CMAKE)
+  geant4_module_include_directories(G4expat
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src;${CMAKE_CURRENT_BINARY_DIR}>
+    )
+endif()

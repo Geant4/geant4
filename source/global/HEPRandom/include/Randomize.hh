@@ -32,13 +32,13 @@
 
 // Distributions used ...
 //
-#include <CLHEP/Random/RandFlat.h>
 #include <CLHEP/Random/RandBit.h>
+#include <CLHEP/Random/RandExponential.h>
+#include <CLHEP/Random/RandFlat.h>
 #include <CLHEP/Random/RandGamma.h>
 #include <CLHEP/Random/RandGaussQ.h>
-#include <CLHEP/Random/RandPoissonQ.h>
-#include <CLHEP/Random/RandExponential.h>
 #include <CLHEP/Random/RandGeneral.h>
+#include <CLHEP/Random/RandPoissonQ.h>
 
 #define G4RandStat CLHEP::HepStat
 #define G4RandFlat CLHEP::RandFlat
@@ -51,4 +51,4 @@
 
 #define G4UniformRand() CLHEP::HepRandom::getTheEngine()->flat()
 
-#endif // randomize_h 
+#endif  // randomize_h

@@ -28,13 +28,12 @@
 // Class description:
 //
 // Container for all solids, with functionality derived from
-// std::vector<T>. The class is a `singleton', in that only
+// std::vector<T>. The class is a 'singleton', in that only
 // one can exist, and access is provided via the static method
 // G4SolidStore::GetInstance().
 //
 // All solids should be registered with G4SolidStore, and removed on their
-// destruction. Intended principally for UI browser. The underlying
-// container initially has a capacity of 100.
+// destruction. The underlying container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
 // instead of inheritance for std::vector<T>
@@ -45,8 +44,8 @@
 //   - Ptr to the single G4SolidStore
 
 // History:
-// 18.04.01, G.Cosmo - Migrated to STL vector
 // 10.07.95, P.Kent - Initial version
+// 18.04.01, G.Cosmo - Migrated to STL vector
 // --------------------------------------------------------------------
 #ifndef G4VSOLIDSTORE_HH
 #define G4VSOLIDSTORE_HH
@@ -58,7 +57,7 @@
 
 class G4SolidStore : public std::vector<G4VSolid*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4VSolid* pSolid);
       // Add the solid to the collection.
@@ -77,6 +76,10 @@ class G4SolidStore : public std::vector<G4VSolid*>
 
     virtual ~G4SolidStore();
       // Destructor: takes care to delete allocated solids.
+
+    G4SolidStore(const G4SolidStore&) = delete;
+    G4SolidStore& operator=(const G4SolidStore&) = delete;
+      // Forbidden copy constructor and assignment operator
 
   protected:
 

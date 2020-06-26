@@ -1,10 +1,7 @@
-# G.A.P.Cirrone,
-# pablo.cirrone@lns.infn.it
+# G.A.P.Cirrone, pablo.cirrone@lns.infn.it
 #
-# Default macro file. It is called if no argument is provided at run
-# and when the PHYSLIST enviroment variable is OFF
-# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!>
-
+# Default macro file with visualisation. It is called if no argument is provided at run
+#
 #########################
 # Set of the verboses
 #
@@ -19,7 +16,7 @@
 #/Physics/addPhysics QGSP_BIC_EMY
 
 /Physics/addPhysics HADRONTHERAPY_1
-/run/numberOfThreads 1
+/run/numberOfThreads 10
 
 ##########################
 # Initialisation procedure
@@ -66,7 +63,6 @@
 
 # the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
 #
-
 /gps/ang/rot1 0 0 1
 /gps/ang/rot2 0 1 0
 /gps/ang/type beam1d
@@ -75,8 +71,8 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 60.0 MeV
-#/gps/ene/sigma 0.25 MeV
+/gps/ene/mono 62.3 MeV
+/gps/ene/sigma 0.25 MeV
 #/gps/ene/mono 744 MeV
 #/gps/ene/sigma 0.740 MeV
 
@@ -105,21 +101,39 @@
 /changePhantom/update
 
 #########################
-# Display the event number
-# during the run
-#
-/event/printEventNumber 100
-
-#########################
 # Start of the run
 #
 # If secondary particles dose & fluence are needed
 /analysis/secondary true
 /analysis/computeLet
 
+
+### RBE
+/rbe/verbose 2
+/rbe/loadLemTable data/rbe/lem1.csv
+/rbe/calculation 1
+/rbe/accumulate 1
+
+## U87
+#/rbe/dcut 8.0 gray
+#/rbe/alphaX 0.11 gray(-1)
+#/rbe/betaX 0.06 gray(-2)
+#/rbe/lemTable data/rbe/U87_LEM.dat
+/rbe/cellLine U87
+
+## AG01522
+#/rbe/dcut 9.5 gray
+#/rbe/alphaX 0.54 gray(-1)
+#/rbe/betaX 0.062 gray(-2)
+#/rbe/lemTable data/rbe/AG01522_LEM.dat
+
+/rbe/doseScale 7777770
+# Dose scale should be: 2e7 / nEvents * voxelSizeInCm2
+
+
 # Default material is water liquid
 /changePhantom/material G4_WATER
 
+
 /run/printProgress 1000
-/run/beamOn 1000
-/tracking/verbose 0
+/run/beamOn 50000

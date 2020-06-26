@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 May 2020 Gunter Folger  (hadr-mod-util-V10-06-00)
+- fixes for clang10: 
+  - Fixes for warnings on confusing indentation, enclosing statements
+      in {} in src/G4LegendrePolynomial.cc
+  - Use default copy ctor in include/G4Fancy3DNucleusHelper.hh
+   
 19 November 2019 Alberto Ribon (hadr-mod-util-V10-05-04)
 - G4GeneralPhaseSpaceDecay: corrected message when throwing an exception
   due to center-of-mass energy below threshold.

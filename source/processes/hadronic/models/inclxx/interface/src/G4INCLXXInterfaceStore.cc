@@ -51,6 +51,7 @@
 #include "G4INCLXXInterface.hh"
 #include "G4INCLConfig.hh"
 #include "G4AblaInterface.hh"
+#include "G4HadronicParameters.hh"
 #include <vector>
 
 G4ThreadLocal G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
@@ -178,6 +179,9 @@ void G4INCLXXInterfaceStore::EmitWarning(const G4String &message) {
 }
 
 void G4INCLXXInterfaceStore::EmitBigWarning(const G4String &message) const {
+  // Disable the printing when global hadronic verbosity is zero
+  // (which can be issued via the UI command "/process/had/verbose 0" )
+  if ( G4HadronicParameters::Instance()->GetVerboseLevel() == 0 ) return; 
   G4cout
     << G4endl
     << "================================================================================"

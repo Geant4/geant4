@@ -47,9 +47,11 @@
 #pragma once
 
 #include <G4VITReactionProcess.hh>
+#include <vector>
 
 class G4DNAMolecularReactionTable;
 class G4VDNAReactionModel;
+class G4ITReactionSet;
 
 /**
   * G4DNAMolecularReaction is the reaction process
@@ -72,6 +74,8 @@ public:
                             double currentStepTime,
                             bool userStepTimeLimit) override;
 
+    std::vector<std::unique_ptr<G4ITReactionChange>> FindReaction(G4ITReactionSet*,
+    		const double, const double, const bool) override;
     std::unique_ptr<G4ITReactionChange> MakeReaction(const G4Track&, const G4Track&) override;
 
     void SetReactionModel(G4VDNAReactionModel*);

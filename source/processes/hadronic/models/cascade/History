@@ -14,20 +14,29 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-06 February 2019  Vladimir Ivanchenko (hadr-casc-V10-05-03)
------------------------------------------------------------
-13 January 2020  Dennis Wright 
+ 5 May 2020  Gunter Folger      (hadr-casc-V10-06-04)
+ - Fix for clang10: confusing indentation caused by if
+    add {} around statements
+    
+-----------------------------------------------------
+26 February 2020  Dennis Wright (hadr-casc-V10-06-03)
+-----------------------------------------------------
+- G4LightTargetCollider::collide() : avoid frequent energy conservation warning
+  from G4HadronicProcess by setting up "no interaction" final state below 
+  threshold 
+
+13 January 2020  Dennis Wright (hadr-casc-V10-06-02)
 ----------------------------------------------------
 - G4CascadeInterface.cc: fix memory leak by deleting ltcollider in class
   dtor
 
-10 January 2020  Michael Kelsey 
+10 January 2020  Michael Kelsey (hadr-casc-V10-06-01)
 -----------------------------------------------------
 - G4CascadeParamMessenger.cc: Ensure that Bertini-specific commands get
   added to /process/had/cascade/ directory, instead of /process/had.
   Requires resetting cmdDir=0 between CreateDirectory() calls.
 
-16 December 2019  Vladimir Ivanchenko 
+16 December 2019  Vladimir Ivanchenko (hadr-casc-V10-06-00)
 -----------------------------------------------------------
 - G4CascadeCheckBalance: fixed outstanding problem of the interface 
   with native pre-compound model, which happens since in the 

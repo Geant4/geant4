@@ -160,7 +160,7 @@ template <class T> G4THitsCollection<T>::~G4THitsCollection()
     if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     std::vector<T*> * theHitsCollection = (std::vector<T*>*)theCollection;
   //theHitsCollection->clearAndDestroy();
-  for(size_t i=0;i<theHitsCollection->size();i++)
+  for(size_t i=0;i<theHitsCollection->size();++i)
   { delete (*theHitsCollection)[i]; }
   theHitsCollection->clear();
   delete theHitsCollection;
@@ -177,7 +177,7 @@ template <class T> void G4THitsCollection<T>::DrawAllHits()
     if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   std::vector<T*> * theHitsCollection = (std::vector<T*>*)theCollection;
   size_t n = theHitsCollection->size();
-  for(size_t i=0;i<n;i++)
+  for(size_t i=0;i<n;++i)
   { (*theHitsCollection)[i]->Draw(); }
 }
 
@@ -187,7 +187,7 @@ template <class T> void G4THitsCollection<T>::PrintAllHits()
   std::vector<T*> * theHitsCollection 
     = (std::vector<T*>*)theCollection;
   size_t n = theHitsCollection->size();
-  for(size_t i=0;i<n;i++)
+  for(size_t i=0;i<n;++i)
   { (*theHitsCollection)[i]->Print(); }
 }
 

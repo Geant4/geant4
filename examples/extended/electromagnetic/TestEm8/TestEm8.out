@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -513,7 +513,7 @@
 #
 /run/beamOn 1000
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
@@ -525,18 +525,18 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  2.28293 keV    e-  264.842 keV    e+  257.302 keV proton 0 eV 
+ Energy thresholds :  gamma  2.28625 keV    e-  263.228 keV    e+  258.933 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
- Energy thresholds :  gamma  25 eV     e-  5.46578 keV    e+  5.39804 keV proton 180 keV
+ Energy thresholds :  gamma  25 eV     e-  5.4285 keV    e+  5.3616 keV proton 180 keV
  Region(s) which use this couple : 
     GasDetector
 
-====================================================================
+==================================================================
 
 ### Run 0 starts.
 ### Run 0 start analysis activation: 
@@ -546,8 +546,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.070000s Real=0.087094s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0161372
+  User=1.030000s Real=1.043348s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0157782
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -556,30 +556,30 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0161372
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.137 +- 0.38609 keV    RMS/Emean = 0.75658
-   Mean number of steps in absorber= 1.23  mean number of ion-clusters = 807.19 MeanCluster= 806.82
+   Mean energy deposit in absorber = 15.778 +- 0.40999 keV    RMS/Emean = 0.82169
+   Mean number of steps in absorber= 1.227  mean number of ion-clusters = 788.7 MeanCluster= 788.53
 
- ====== Energy deposit distribution   Noverflows= 0.016 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.011 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           6       0.006
-    2         6          91       0.091
-    3         9         274       0.274
-    4        12         258       0.258
-    5        15         134       0.134
-    6        18          93       0.093
-    7        21          50        0.05
-    8        24          29       0.029
-    9        27          19       0.019
+    1         3           4       0.004
+    2         6         103       0.103
+    3         9         280        0.28
+    4        12         252       0.252
+    5        15         150        0.15
+    6        18          70        0.07
+    7        21          49       0.049
+    8        24          33       0.033
+    9        27          16       0.016
    10        30           6       0.006
-   11        33           7       0.007
-   12        36           2       0.002
-   13        39           5       0.005
+   11        33           5       0.005
+   12        36           7       0.007
+   13        39           1       0.001
    14        42           4       0.004
-   15        45           0           0
+   15        45           2       0.002
    16        48           2       0.002
    17        51           1       0.001
-   18        54           1       0.001
+   18        54           2       0.002
    19        57           2       0.002
  ================== run end ==========================
 ... write Root file : testem8.root - done
@@ -588,6 +588,6 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0161372
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.017 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.019 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

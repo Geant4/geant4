@@ -28,26 +28,24 @@
 #ifndef G4VStringFragmentation_h
 #define G4VStringFragmentation_h 1
 
+#include "G4HadronicInteraction.hh"
 #include "G4ExcitedStringVector.hh"
 
 class G4KineticTrackVector;
 
-class G4VStringFragmentation 
+class G4VStringFragmentation : public G4HadronicInteraction
 {
   public:
-    G4VStringFragmentation();
-    virtual ~G4VStringFragmentation();
+    G4VStringFragmentation(const G4String& name = "StringFragmentation");
+    ~G4VStringFragmentation() override;
 
-  private:
-    G4VStringFragmentation(const G4VStringFragmentation &right);
-    const G4VStringFragmentation & operator=(const G4VStringFragmentation &right);
-    G4bool operator==(const G4VStringFragmentation &right) const;
-    G4bool operator!=(const G4VStringFragmentation &right) const;
+    G4VStringFragmentation(const G4VStringFragmentation &right) = delete;
+    const G4VStringFragmentation & operator=
+    (const G4VStringFragmentation &right) = delete;
+    G4bool operator==(const G4VStringFragmentation &right) const = delete;
+    G4bool operator!=(const G4VStringFragmentation &right) const = delete;
 
-  public:
     virtual G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)=0;
-
-  private:
 
 };
 

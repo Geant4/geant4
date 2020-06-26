@@ -89,6 +89,9 @@ public:
 
   virtual ~G4MoleculeDefinition();
 
+  G4MoleculeDefinition(const G4MoleculeDefinition&) = delete;
+  G4MoleculeDefinition& operator=(const G4MoleculeDefinition&) = delete;
+
   // Set the electronic configuration at ground level
   void SetLevelOccupation(G4int,
                           G4int eNb = 2);
@@ -174,10 +177,6 @@ public:
 
 protected:
   G4MoleculeDefinition();
-  G4MoleculeDefinition(const G4MoleculeDefinition&);
-
-private:
-  const G4MoleculeDefinition & operator=(const G4MoleculeDefinition &right);
 
 private:
   G4int fCharge;

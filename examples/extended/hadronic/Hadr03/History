@@ -12,6 +12,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+04-06-20 mma (exhadr03-V10-06-02)
+- HistoManager, SteppingAction : add plot of e-
+     
+04-05-20 mma (exhadr03-V10-06-01)
+- GammaNuclearPhysics : add G4LowEGammaNuclearModel
+- add GammaNuclearPhysicsLEND
+- modify gamma.mac;  add Au196.mac
+     
+30-04-20 mma (exhadr03-V10-06-00)
+- PhysicsList : add G4HadronPhysicsQGSP_BIC, Shielding, RadioactiveDecay
 
 03-10-18 mma (exhadr03-V10-04-06)
 - PhysicsList : add G4HadronElasticPhysicsXS

@@ -65,8 +65,6 @@ class G4PiKBuilder : public G4PhysicsBuilderInterface
     G4KaonZeroSInelasticProcess* theKaonZeroSInelastic;
      
     std::vector<G4VPiKBuilder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

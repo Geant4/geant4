@@ -71,10 +71,6 @@ class G4FTFBinaryPionBuilder : public G4VPionBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4BinaryCascade * theCascade;
-    G4FTFModel * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
     G4double theMin;
     G4double theMax;
 };

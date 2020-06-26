@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 13, 2020, M. Asai (procscore-V10-06-01)
+- G4ParallelWorldProcess.hh: make some private methods and data members
+  protected so that this class can be extendable.
+
+February 10, 2020, V. Ivanchenko (procscore-V10-06-00)
+- G4ParallelWorldProcess.cc, G4ParallelWorldScoringProcess.cc 
+  - use new PDG code for optical photon "-22"
+
 November 24, 2018, M. Asai (procscore-V10-04-01)
 - G4ParallelWorldProcess.cc
   - Fix the track velocity of optical photon for the first step

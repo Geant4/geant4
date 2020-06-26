@@ -72,6 +72,7 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
+#include "G4LowEGammaNuclearModel.hh"
 
 #include "G4LENDorBERTModel.hh"
 #include "G4LENDCombinedCrossSection.hh"
@@ -88,10 +89,22 @@
 #include "G4NeutrinoElectronTotXsc.hh"
 #include "G4NeutrinoElectronCcModel.hh"
 #include "G4NeutrinoElectronNcModel.hh"
+
 #include "G4MuNeutrinoNucleusProcess.hh"
+#include "G4ElNeutrinoNucleusProcess.hh"
+
 #include "G4MuNeutrinoNucleusTotXsc.hh"
+#include "G4ElNeutrinoNucleusTotXsc.hh"
+
 #include "G4NuMuNucleusCcModel.hh"
 #include "G4NuMuNucleusNcModel.hh"
+#include "G4ANuMuNucleusCcModel.hh"
+#include "G4ANuMuNucleusNcModel.hh"
+#include "G4NuElNucleusCcModel.hh"
+#include "G4NuElNucleusNcModel.hh"
+#include "G4ANuElNucleusCcModel.hh"
+#include "G4ANuElNucleusNcModel.hh"
+
 #include "G4GammaGeneralProcess.hh"
 #include "G4LossTableManager.hh"
 
@@ -125,6 +138,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
   fNuEleCcBias(1.0),
   fNuEleNcBias(1.0),
   fNuNucleusBias(1.0),
+  fGNLowEnergyLimit(200*CLHEP::MeV),
   fNuDetectorName("0"),
   verbose(ver)
 {
@@ -162,6 +176,8 @@ void G4EmExtraPhysics::GammaNuclear(G4bool val)
 void G4EmExtraPhysics::LENDGammaNuclear(G4bool val)
 {
   gLENDActivated = val;
+  // LEND cannot be used with low-energy model
+  if(val) { fGNLowEnergyLimit = 0.0; }
 }
 
 void G4EmExtraPhysics::ElectroNuclear(G4bool val)
@@ -229,6 +245,18 @@ void G4EmExtraPhysics::SetNuEleNcBias(G4double bf)
 void G4EmExtraPhysics::SetNuNucleusBias(G4double bf)
 {
   if(bf > 0.0) fNuNucleusBias = bf;
+}
+
+void G4EmExtraPhysics::GammaNuclearLEModelLimit(G4double val)
+{
+  if(val <= CLHEP::MeV) { 
+    fGNLowEnergyLimit = 0.0;
+
+    // lowenergy model should not be applied at high energy
+  } else if(val <= CLHEP::GeV) {
+    fGNLowEnergyLimit = val;
+    gLENDActivated = false;
+  }
 }
 
 void G4EmExtraPhysics::SetNuDetectorName(const G4String& dn)
@@ -354,6 +382,7 @@ void G4EmExtraPhysics::ConstructProcess()
     ph->RegisterProcess(theNuEleProcess, nutau);
 
     // nu_mu nucleus interactions
+
     G4MuNeutrinoNucleusProcess* theNuMuNucleusProcess = new G4MuNeutrinoNucleusProcess(fNuDetectorName);
     G4MuNeutrinoNucleusTotXsc* theNuMuNucleusTotXsc = new G4MuNeutrinoNucleusTotXsc();
     
@@ -365,12 +394,40 @@ void G4EmExtraPhysics::ConstructProcess()
 
     G4NuMuNucleusCcModel* numunuclcc = new G4NuMuNucleusCcModel();
     G4NuMuNucleusNcModel* numunuclnc = new G4NuMuNucleusNcModel();
+    G4ANuMuNucleusCcModel* anumunuclcc = new G4ANuMuNucleusCcModel();
+    G4ANuMuNucleusNcModel* anumunuclnc = new G4ANuMuNucleusNcModel();
     
     theNuMuNucleusProcess->RegisterMe(numunuclcc);
     theNuMuNucleusProcess->RegisterMe(numunuclnc);
+    theNuMuNucleusProcess->RegisterMe(anumunuclcc);
+    theNuMuNucleusProcess->RegisterMe(anumunuclnc);
 
     ph->RegisterProcess(theNuMuNucleusProcess, anumuon);
     ph->RegisterProcess(theNuMuNucleusProcess, numuon);    
+
+    // nu_e nucleus interactions
+
+    G4ElNeutrinoNucleusProcess* theNuElNucleusProcess = new G4ElNeutrinoNucleusProcess(fNuDetectorName);
+    G4ElNeutrinoNucleusTotXsc* theNuElNucleusTotXsc = new G4ElNeutrinoNucleusTotXsc();
+    
+    if(fNuETotXscActivated)
+    {
+      theNuElNucleusProcess->SetBiasingFactor(fNuNucleusBias);
+    }
+    theNuElNucleusProcess->AddDataSet(theNuElNucleusTotXsc);
+
+    G4NuElNucleusCcModel* nuelnuclcc = new G4NuElNucleusCcModel();
+    G4NuElNucleusNcModel* nuelnuclnc = new G4NuElNucleusNcModel();
+    G4ANuElNucleusCcModel* anuelnuclcc = new G4ANuElNucleusCcModel();
+    G4ANuElNucleusNcModel* anuelnuclnc = new G4ANuElNucleusNcModel();
+    
+    theNuElNucleusProcess->RegisterMe(nuelnuclcc);
+    theNuElNucleusProcess->RegisterMe(nuelnuclnc);
+    theNuElNucleusProcess->RegisterMe(anuelnuclcc);
+    theNuElNucleusProcess->RegisterMe(anuelnuclnc);
+
+    ph->RegisterProcess(theNuElNucleusProcess, anuelectron);
+    ph->RegisterProcess(theNuElNucleusProcess, nuelectron);    
   }
 }
 
@@ -397,6 +454,14 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
   G4HadronicParameters* param = G4HadronicParameters::Instance();
 
   G4CascadeInterface* cascade = new G4CascadeInterface;
+
+  // added low-energy model LEND disabled
+  if (fGNLowEnergyLimit > 0.0) { 
+    G4LowEGammaNuclearModel* lemod = new G4LowEGammaNuclearModel();
+    lemod->SetMaxEnergy(fGNLowEnergyLimit);
+    gnuc->RegisterMe(lemod);
+    cascade->SetMinEnergy(fGNLowEnergyLimit - CLHEP::MeV);
+  }
   cascade->SetMaxEnergy(param->GetMaxEnergyTransitionFTF_Cascade());
   gnuc->RegisterMe(cascade);
   theModel->SetMinEnergy(param->GetMinEnergyTransitionFTF_Cascade());

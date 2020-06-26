@@ -59,7 +59,8 @@
 
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-  : theQuasiElastic(new G4QuasiElRatios),
+  : G4HadronicInteraction("QuasiElastic"),
+    theQuasiElastic(new G4QuasiElRatios),
     the3DNucleus(new G4Fancy3DNucleus) {
 }
 

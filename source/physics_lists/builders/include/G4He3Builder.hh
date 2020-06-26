@@ -57,8 +57,6 @@ class G4He3Builder : public G4PhysicsBuilderInterface
     G4He3InelasticProcess * theHe3Inelastic;
     
     std::vector<G4VHe3Builder *> theModelCollections;
-
-    G4bool wasActivated;
 };
 
 #endif

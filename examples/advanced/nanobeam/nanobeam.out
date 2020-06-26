@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-04    (30-April-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -36,6 +36,7 @@
    G2 (T/m) = 16.4947
    G3 (T/m) = 9.86677
    G4 (T/m) = -6.24449
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 1e-06 numVar= 6
 PhysicsList::SetCuts:CutLength : 1 um 
 G4Material WARNING: duplicate name of material Vacuum
 
@@ -83,6 +84,7 @@ G4Material WARNING: duplicate name of material Vacuum
    G2 (T/m) = 16.4953
    G3 (T/m) = 9.86726
    G4 (T/m) = -6.2448
+ G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 1e-06 numVar= 6
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -208,7 +210,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0x26cf6f0
+##### Create analysis manager   0x14cf3f0
 Using Root analysis manager
 Ntuple-1 created
 Ntuple-2 created
@@ -244,7 +246,7 @@ Ntuple-3 created
     =>IMAGE : X(microns)=11.739796819681 Y(microns)=-1.2386815553063 THETA(mrad)=8.0886256100935 PHI(mrad)=-6.5213432754334
 
 -> Event= 24: X0(mm)= -1.6440171508071 X0(mm) = 0.1811453908911 Z0(m) = -8.87 THETA(mrad)= -0.09956438716731 PHI(mrad)= 0.0025997657493583 E0(MeV)= 3.0000024453136
-    =>IMAGE : X(microns)=-277.93345473216 Y(microns)=4.1389707020423 THETA(mrad)=-27.914589558642 PHI(mrad)=5.1888288561074
+    =>IMAGE : X(microns)=-277.93813703976 Y(microns)=4.1394119767572 THETA(mrad)=-27.914598183369 PHI(mrad)=5.1888302083521
 
 -> Event= 31: X0(mm)= -0.016022163470015 X0(mm) = 0.041404162571301 Z0(m) = -8.87 THETA(mrad)= 0.028542617532504 PHI(mrad)= 0.088134758705809 E0(MeV)= 3.0000432110726
     =>IMAGE : X(microns)=0.1094027977376 Y(microns)=0.73278491257216 THETA(mrad)=1.6453108565386 PHI(mrad)=10.062577768408
@@ -256,10 +258,10 @@ Ntuple-3 created
     =>IMAGE : X(microns)=0.16317907584152 Y(microns)=0.55650397305418 THETA(mrad)=1.3321705383455 PHI(mrad)=-3.2844916125969
 
 -> Event= 45: X0(mm)= 1.0359873985916 X0(mm) = 1.4585907714292 Z0(m) = -8.87 THETA(mrad)= 0.049847294080646 PHI(mrad)= 0.085519303927924 E0(MeV)= 3.0000424805792
-    =>IMAGE : X(microns)=93.216485952497 Y(microns)=39.658363369997 THETA(mrad)=16.573475748505 PHI(mrad)=48.307485770058
+    =>IMAGE : X(microns)=93.212267900392 Y(microns)=39.663681068242 THETA(mrad)=16.573463116366 PHI(mrad)=48.307503421516
 
 -> Event= 49: X0(mm)= 0.69762782443828 X0(mm) = -1.6249490563253 Z0(m) = -8.87 THETA(mrad)= 0.040619733867931 PHI(mrad)= -0.076739556760004 E0(MeV)= 2.9999358606204
-    =>IMAGE : X(microns)=48.93779215545 Y(microns)=-42.312570408262 THETA(mrad)=11.587416807211 PHI(mrad)=-51.921938678405
+    =>IMAGE : X(microns)=48.940668495895 Y(microns)=-42.304503052802 THETA(mrad)=11.587426099965 PHI(mrad)=-51.921911885198
 
 -> Event= 51: X0(mm)= 0.029132094194837 X0(mm) = 0.23781110045416 Z0(m) = -8.87 THETA(mrad)= 0.068763552807069 PHI(mrad)= 0.025225497903624 E0(MeV)= 2.9999801399332
     =>IMAGE : X(microns)=2.8236454534197 Y(microns)=2.7442922247997 THETA(mrad)=4.8296688679511 PHI(mrad)=9.0095603631758
@@ -268,7 +270,7 @@ Ntuple-3 created
     =>IMAGE : X(microns)=8.2845160209151 Y(microns)=3.4543118589059 THETA(mrad)=6.7239668455362 PHI(mrad)=11.919753303181
 
 -> Event= 55: X0(mm)= -0.85375717958006 X0(mm) = 0.3573014582006 Z0(m) = -8.87 THETA(mrad)= -0.074501244846954 PHI(mrad)= 0.039440666297839 E0(MeV)= 2.999966559615
-    =>IMAGE : X(microns)=-64.025187461689 Y(microns)=6.1155711944451 THETA(mrad)=-15.804358305202 PHI(mrad)=13.702917585895
+    =>IMAGE : X(microns)=-64.022657044574 Y(microns)=6.1167393046648 THETA(mrad)=-15.804350835721 PHI(mrad)=13.702920781475
 
 -> Event= 56: X0(mm)= 0.1454709674432 X0(mm) = -0.011799618926587 Z0(m) = -8.87 THETA(mrad)= -0.03021980519692 PHI(mrad)= 0.027948785176419 E0(MeV)= 2.9999781445788
     =>IMAGE : X(microns)=2.2280357803426 Y(microns)=-0.065990321511344 THETA(mrad)=-0.10470310153243 PHI(mrad)=2.5149549454001
@@ -307,7 +309,7 @@ Ntuple-3 created
     =>IMAGE : X(microns)=0.50775463051147 Y(microns)=0.14714703947499 THETA(mrad)=1.1094803619608 PHI(mrad)=-5.7501242243973
 
 -> Event= 85: X0(mm)= 1.0674724333131 X0(mm) = -1.0663214971145 Z0(m) = -8.87 THETA(mrad)= 0.063205803646676 PHI(mrad)= -0.055370508485 E0(MeV)= 3.000051629789
-    =>IMAGE : X(microns)=97.290844140945 Y(microns)=-23.472399708891 THETA(mrad)=17.851795504956 PHI(mrad)=-34.58162314867
+    =>IMAGE : X(microns)=97.274009939425 Y(microns)=-23.478946376012 THETA(mrad)=17.851751504662 PHI(mrad)=-34.581636579734
 
 -> Event= 86: X0(mm)= -0.19481916629754 X0(mm) = 0.95206247986366 Z0(m) = -8.87 THETA(mrad)= -0.0050314491063534 PHI(mrad)= 0.088572692400845 E0(MeV)= 2.9999719319194
     =>IMAGE : X(microns)=-5.6749369137073 Y(microns)=16.635361610945 THETA(mrad)=-2.8117399104848 PHI(mrad)=34.820400204571

@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 February 2020: V.Ivantchenko (monopole-V10-05-03)
+21 February 2020: V.Ivantchenko (monopole-V10-06-00)
 - G4MonopolePhysics - minor code clean-up for thread safety
 - monopole.cc - do not instantiate VisManager in the batch mode;
     fixed typos

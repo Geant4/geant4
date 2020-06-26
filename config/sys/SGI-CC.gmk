@@ -40,7 +40,7 @@ ifeq ($(G4SYSTEM),SGI-CC)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L/usr/lib -lGLU -lGL
+    OGLLIBS   := -L/usr/lib -lGL
   endif
 
   define build-granular-shared-lib

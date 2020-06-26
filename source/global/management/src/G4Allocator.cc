@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Allocator/G4AllocatorBase class implementation
 //
-//
-// 
+// Author: G.Cosmo (CERN), November 2000
+// --------------------------------------------------------------------
 
 #include "G4Allocator.hh"
 #include "G4AllocatorList.hh"
 
+// --------------------------------------------------------------------
 G4AllocatorBase::G4AllocatorBase()
 {
   G4AllocatorList::GetAllocatorList()->Register(this);
 }
 
-G4AllocatorBase::~G4AllocatorBase() {;}
+// --------------------------------------------------------------------
+G4AllocatorBase::~G4AllocatorBase() {}

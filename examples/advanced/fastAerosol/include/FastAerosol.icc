@@ -1,0 +1,252 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// FastAerosol.icc
+//
+// Implementation of inline methods of FastAerosol
+//
+// Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
+// --------------------------------------------------------------------
+
+inline
+G4String FastAerosol::GetName() const
+{
+	return(fName);
+}
+
+inline
+G4VSolid* FastAerosol::GetBulk() const
+{
+	return(fCloud);
+}
+
+inline
+G4double FastAerosol::GetRadius() const
+{
+	return(fR);
+}
+
+inline
+G4double FastAerosol::GetAvgNumDens() const
+{
+	return(fAvgNumDens);
+}
+
+inline
+G4int FastAerosol::GetNumDroplets() const
+{
+	return((int)(fAvgNumDens*GetCubicVolume()));
+}
+
+
+
+inline
+G4double FastAerosol::GetXHalfLength() const
+{
+  return(fDx);
+}
+
+inline    
+G4double FastAerosol::GetYHalfLength() const
+{
+  return(fDy);
+}
+
+inline
+G4double FastAerosol::GetZHalfLength() const
+{
+  return(fDz);
+}
+
+inline
+void FastAerosol::GetBoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const
+{
+	pMin.setX(-fDx); pMax.setX(fDx);
+	pMin.setY(-fDy); pMax.setY(fDy);
+	pMin.setZ(-fDz); pMax.setZ(fDz);
+}
+
+inline
+G4double FastAerosol::GetCubicVolume() const
+{
+  return(fCloud->GetCubicVolume());
+}
+
+
+// Find the absolute distance to the cloud bulk from p
+inline
+G4double FastAerosol::DistanceToCloud(const G4ThreeVector &p) {
+	if (fCloud->Inside(p)==kOutside)
+	{
+		return(fCloud->DistanceToIn(p));
+	}
+	else
+	{
+		return(0);
+	}
+}
+
+// Find the distance to the cloud bulk from p along a vector v
+inline
+G4double FastAerosol::DistanceToCloud(const G4ThreeVector &p, const G4ThreeVector &v) {
+	if (fCloud->Inside(p)==kInside)
+	{
+		return(0);
+	}
+	else
+	{
+		return(fCloud->DistanceToIn(p,v));
+	}
+}
+
+
+// Get and set the base of the random seed used to set droplet positions
+// For a given seed and a given geometry, the droplet positions are the same
+inline
+long FastAerosol::GetSeed() {
+	return(fSeed);
+}
+
+inline
+void FastAerosol::SetSeed(long seedIn) {
+	fSeed = seedIn;
+}
+
+
+// Get and set the maximum radius of the voxelized spheres to pre-populate
+inline
+G4int FastAerosol::GetPreSphereR() {
+	return(fPreSphereR);
+}
+
+inline
+void FastAerosol::SetPreSphereR(G4int preSphereRIn) {
+	fPreSphereR = preSphereRIn;
+}
+
+
+// Get the droplet distribution function
+inline
+std::function<G4double (G4ThreeVector)> FastAerosol::GetDistribution() {
+	return(fDistribution);
+}
+
+
+// Get and set the maximum number of droplet placement tries in the solid
+// Skip placement if attempting to place a single droplet more than this
+inline
+G4int FastAerosol::GetNumPlacementTries()
+{
+	return(fNumNewPointTries);
+}
+
+inline
+void FastAerosol::SetNumPlacementTries(G4int numTries)
+{
+	fNumNewPointTries = numTries;
+}
+
+// Get and set the expected number of droplets per voxel (on average)
+inline
+G4double FastAerosol::GetDropletsPerVoxel()
+{
+  return(fDropletsPerVoxel);
+}
+
+inline
+void FastAerosol::SetDropletsPerVoxel(G4double newDropletsPerVoxel)
+{
+  if (newDropletsPerVoxel >= std::pow(4.0*std::sqrt(2),-1.0))
+  {
+  	fDropletsPerVoxel = newDropletsPerVoxel;
+  	InitializeGrid();
+  }
+  else
+  {
+  	std::ostringstream message;
+		message << "Invalid droplets/voxel for cloud: " << GetName() << "!" << G4endl
+				<< "		For grid pitch to be larger than radius (currently assumed),"
+				<< "		droplets/voxel must be greater than or equal to 1/(4*sqrt(2))"
+				<< "        newDropletsPerVoxel = " << newDropletsPerVoxel;
+		G4Exception("FastAerosol::SetDropletsPerVoxel()", "GeomSolids0002",
+					FatalErrorInArgument, message);
+  }
+}
+
+
+inline
+void FastAerosol::PrintPopulationReport() {
+	G4cout << "Total grids: " << fNumGridCells << G4endl;
+	G4cout << "Droplets created: " << fNumDroplets << G4endl;
+	G4cout << "Average Number density: " << fAvgNumDens << G4endl;
+	G4cout << "Droplets expected: " << GetNumDroplets() << G4endl;
+}
+
+
+// =======
+// Private
+// =======
+// Find the grid associated with a point.  Return true if that is a valid grid,
+// false if it is out of bounds.
+inline
+bool FastAerosol::GetGrid(const G4ThreeVector &p, int &xGrid, int &yGrid, int &zGrid) {
+	xGrid = (int)floorl((p.x() + fDx) / fGridPitch);
+	yGrid = (int)floorl((p.y() + fDy) / fGridPitch);
+	zGrid = (int)floorl((p.z() + fDz) / fGridPitch);
+	return(!AnyIndexOutOfBounds(xGrid, yGrid, zGrid));
+}
+
+// Return true if any grid index given is out of bounds, false otherwise
+inline
+bool FastAerosol::AnyIndexOutOfBounds(G4int xGrid, G4int yGrid, G4int zGrid) {
+	return ((xGrid < 0) || (xGrid >= fNx) ||
+			(yGrid < 0) || (yGrid >= fNy) ||
+			(zGrid < 0) || (zGrid >= fNz));
+}
+
+// Create index for grid 
+inline
+unsigned int FastAerosol::GetGridIndex(unsigned int xi, unsigned int yi, unsigned int zi) {
+	return(zi*fNxy + yi*fNx + xi);
+}
+
+// Create get coordinates of index
+inline
+G4ThreeVector FastAerosol::GetIndexCoord(G4int index) {
+	G4int x = index % fNx;
+	G4int y = ( (index -x)/fNx ) % fNy;
+	G4int z = (index -x -fNx*y )/(fNx*fNy);
+	return(G4ThreeVector(x,y,z));
+}
+
+// find lower and upper grid boundary
+inline
+std::pair<G4int, G4int> FastAerosol::GetMinMaxSide(G4int i, G4int numGrids) {
+	return(std::make_pair((i == 0) ? 0 : (i-1),
+						   (i == (numGrids-1)) ? i : (i+1)));
+}

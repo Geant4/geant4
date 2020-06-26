@@ -90,11 +90,19 @@ private:
     // Vector of pointers to the GDRPhotonuclearCrossSection
     std::vector <G4double*> GDR;
 
-    // ejc3 // store deuteron XS
+    // store deuteron, triton, He3 XS
     G4double* deuteron_GDR;
     G4double* deuteron_HR;
     G4double deuteron_TH;
     G4double deuteron_SP;
+    G4double* triton_GDR;
+    G4double* triton_HR;
+    G4double triton_TH;
+    G4double triton_SP;
+    G4double* he3_GDR;
+    G4double* he3_HR;
+    G4double he3_TH;
+    G4double he3_SP;
     
     // Vector of pointers to the HighEnPhotonuclearCrossSect
     std::vector <G4double*> HEN;

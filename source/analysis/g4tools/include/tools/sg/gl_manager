@@ -5,13 +5,12 @@
 #define tools_sg_GL_manager
 
 #include "gl"
+#include "../glbuf"
 
 #include <tools/sg/render_manager>
 #include <tools/mapmanip>
 
 #include <cmath> //::sqrt
-
-#include "../glbuf"
 
 #ifdef TOOLS_MEM
 #include <tools/mem>

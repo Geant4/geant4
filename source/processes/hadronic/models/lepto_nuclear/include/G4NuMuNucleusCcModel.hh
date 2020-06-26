@@ -73,11 +73,6 @@ public:
 
   void SampleLVkr(const G4HadProjectile & aTrack, G4Nucleus & targetNucleus);
 
-  G4double SampleXkr(G4double energy);
-  G4double GetXkr(G4int iEnergy, G4double prob);
-  G4double SampleQkr(G4double energy, G4double xx);
-  G4double GetQkr(G4int iE, G4int jX, G4double prob);
-
   G4double GetMinNuMuEnergy(){ return fMu + 0.5*fMu*fMu/fM1 + 4.*CLHEP::MeV; }; // kinematics + accuracy for sqrts
   
   G4double ThresholdEnergy(G4double mI, G4double mF, G4double mP) // for cluster decay
@@ -89,30 +84,6 @@ public:
   virtual void ModelDescription(std::ostream&) const;
 
 private:
-
-  static const G4int fResNumber;
-  static const G4double fResMass[6]; // [fResNumber];
-
-  static const G4int fClustNumber;
-
-  static const G4double fMesMass[4];
-  static const G4int    fMesPDG[4];
-
-  static const G4double fBarMass[4];
-  static const G4int    fBarPDG[4];
-
-  static const G4double fNuMuEnergyLogVector[50];
-
-  // KR sample distributions, X at E_nu and Q2 at E_nu and X
-
-  static G4double fNuMuXarrayKR[50][51];
-  static G4double fNuMuXdistrKR[50][50];
-  static G4double fNuMuQarrayKR[50][51][51];
-  static G4double fNuMuQdistrKR[50][51][50];
-
-
-  static const G4double fNuMuResQ[50][50];
-  
 
   G4bool fData, fMaster; // for one initialisation only
 

@@ -26,6 +26,8 @@ public:
   sf<bool> border_visible;
   sf<float> border_width;
   sf<float> border_height;
+  sf<float> border_z;
+  sf<float> border_scale;
   sf_vec<colorf,float> border_color;
 
   // for gopaw :
@@ -38,8 +40,8 @@ public:
 public:
   virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::plots)
-    static const desc_fields s_v(parent::node_desc_fields(),16, //WARNING : take care of count.
-      TOOLS_ARG_FIELD_DESC(width),
+    static const desc_fields s_v(parent::node_desc_fields(),18, //WARNING : take care of count.
+      TOOLS_ARG_FIELD_DESC(width),  //1
       TOOLS_ARG_FIELD_DESC(height),
       TOOLS_ARG_FIELD_DESC(cols),
       TOOLS_ARG_FIELD_DESC(rows),
@@ -48,6 +50,8 @@ public:
       TOOLS_ARG_FIELD_DESC(border_visible),
       TOOLS_ARG_FIELD_DESC(border_width),
       TOOLS_ARG_FIELD_DESC(border_height),
+      TOOLS_ARG_FIELD_DESC(border_z),  //10
+      TOOLS_ARG_FIELD_DESC(border_scale),
       TOOLS_ARG_FIELD_DESC(border_color),
       TOOLS_ARG_FIELD_DESC(left_margin),
       TOOLS_ARG_FIELD_DESC(right_margin),
@@ -84,6 +88,8 @@ private:
     add_field(&border_visible);
     add_field(&border_width);
     add_field(&border_height);
+    add_field(&border_z);
+    add_field(&border_scale);
     add_field(&border_color);
     add_field(&left_margin);
     add_field(&right_margin);
@@ -157,6 +163,8 @@ public:
   ,border_visible(false)
   ,border_width(0)
   ,border_height(0)
+  ,border_z(0)
+  ,border_scale(1)
   ,border_color(colorf_grey())
   ,left_margin(0)
   ,right_margin(0)
@@ -190,6 +198,8 @@ public:
   ,border_visible(a_from.border_visible)
   ,border_width(a_from.border_width)
   ,border_height(a_from.border_height)
+  ,border_z(a_from.border_z)
+  ,border_scale(a_from.border_scale)
   ,border_color(a_from.border_color)
   ,left_margin(a_from.left_margin)
   ,right_margin(a_from.right_margin)
@@ -229,6 +239,8 @@ public:
     border_visible = a_from.border_visible;
     border_width = a_from.border_width;
     border_height = a_from.border_height;
+    border_z = a_from.border_z;
+    border_scale = a_from.border_scale;
     border_color = a_from.border_color;
 
     left_margin = a_from.left_margin;
@@ -1070,12 +1082,21 @@ protected:
     if(border_width.value()<=0) return;
     if(border_height.value()<=0) return;
 
+    // border_scale could be used as an offscreen (inzb_[ps,png,jpeg], gl2s_pdf)
+    // cooking to avoid seeing a one pixel line at some side (in general left)
+    // coming from the border.
+    if(border_scale.value()!=1) {
+      matrix* _m = new matrix;
+      _m->set_scale(border_scale.value(),border_scale.value(),1);
+      m_border_sep.add(_m);
+    }
+
     float bw = border_width;
     float bh = border_height;
 
     // do it with four externals back_area.
 
-    float zz = 0;
+    float zz = border_z.value();
 
     // top :
    {separator* sep = new separator;

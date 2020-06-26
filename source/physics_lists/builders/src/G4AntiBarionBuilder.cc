@@ -40,8 +40,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-G4AntiBarionBuilder::
-G4AntiBarionBuilder(): wasActivated(false) 
+G4AntiBarionBuilder::G4AntiBarionBuilder()
 {  
   theAntiProtonInelastic=new G4AntiProtonInelasticProcess;
   theAntiNeutronInelastic=new G4AntiNeutronInelasticProcess;
@@ -51,12 +50,8 @@ G4AntiBarionBuilder(): wasActivated(false)
   theAntiAlphaInelastic=new G4AntiAlphaInelasticProcess;
 }
 
-
-void G4AntiBarionBuilder::
-Build()
+void G4AntiBarionBuilder::Build()
 {
-  wasActivated = true;
-
   std::vector<G4VAntiBarionBuilder *>::iterator i;
   for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
   {

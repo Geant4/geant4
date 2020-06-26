@@ -23,18 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//
-//      ---------------- G4VStateDependent ----------------
-//
-// Authors: G.Cosmo, M.Asai - November 1996
-//
-// ------------------------------------------------------------
+// G4VStateDependent
 //
 // Class description:
 //
@@ -43,38 +32,32 @@
 // this base class will be automatically registered to G4StateManager
 // and the virtual method Notify() will be invoked when the state changes.
 
-// ------------------------------------------------------------
+// Authors: G.Cosmo, M.Asai - November 1996
+// --------------------------------------------------------------------
+#ifndef G4VStateDependent_hh
+#define G4VStateDependent_hh 1
 
-#ifndef G4VStateDependent_h
-#define G4VStateDependent_h 1
-
-#include "G4Types.hh"
 #include "G4ApplicationState.hh"
+#include "G4Types.hh"
 
 class G4VStateDependent
 {
-
-public:
-
-  explicit G4VStateDependent(G4bool bottom=false);
+ public:
+  explicit G4VStateDependent(G4bool bottom = false);
   virtual ~G4VStateDependent();
-  G4bool operator==(const G4VStateDependent &right) const;
-  G4bool operator!=(const G4VStateDependent &right) const;
-
-public: // with description
+  G4bool operator==(const G4VStateDependent& right) const;
+  G4bool operator!=(const G4VStateDependent& right) const;
 
   virtual G4bool Notify(G4ApplicationState requestedState) = 0;
-    // Pure virtual method which will be invoked by G4StateManager.
-    // In case state change must not be allowed by some reason of the
-    // concrete class, false should be returned. But this scheme is
-    // NOT recommended to use. All command which are state sensitive
-    // MUST assign available state(s).
+  // Pure virtual method which will be invoked by G4StateManager.
+  // In case a state change must not be allowed by some reason of the
+  // concrete class, false should be returned. But this scheme use is
+  // NOT recommended. All commands which are state sensitive MUST assign
+  // available state(s).
 
-private:
-
-  G4VStateDependent(const G4VStateDependent &right);
-  G4VStateDependent& operator=(const G4VStateDependent &right);
-
+ private:
+  G4VStateDependent(const G4VStateDependent& right);
+  G4VStateDependent& operator=(const G4VStateDependent& right);
 };
 
 #endif

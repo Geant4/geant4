@@ -40,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmExtraParameters.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -77,6 +78,10 @@ void G4EmExtraParameters::Initialise()
   finalRange = CLHEP::mm;
   dRoverRangeMuHad = 0.2;
   finalRangeMuHad = 0.1*CLHEP::mm;
+  dRoverRangeLIons = 0.2;
+  finalRangeLIons = 0.1*CLHEP::mm;
+  dRoverRangeIons = 0.2;
+  finalRangeIons = 0.1*CLHEP::mm;
 
   m_regnamesForced.clear();
   m_procForced.clear();
@@ -147,6 +152,72 @@ G4double G4EmExtraParameters::GetStepFunctionMuHadP1() const
 G4double G4EmExtraParameters::GetStepFunctionMuHadP2() const
 {
   return finalRangeMuHad;
+}
+
+void G4EmExtraParameters::SetStepFunctionLightIons(G4double v1, G4double v2)
+{
+  if(v1 > 0.0 && v1 <= 1.0 && v2 > 0.0) {
+    dRoverRangeLIons = v1;
+    finalRangeLIons = v2;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Values of step function are out of range: " 
+       << v1 << ", " << v2/CLHEP::mm << " mm - are ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmExtraParameters::GetStepFunctionLightIonsP1() const
+{
+  return dRoverRangeLIons;
+}
+
+G4double G4EmExtraParameters::GetStepFunctionLightIonsP2() const
+{
+  return finalRangeLIons;
+}
+
+void G4EmExtraParameters::SetStepFunctionIons(G4double v1, G4double v2)
+{
+  if(v1 > 0.0 && v1 <= 1.0 && v2 > 0.0) {
+    dRoverRangeIons = v1;
+    finalRangeIons = v2;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Values of step function are out of range: " 
+       << v1 << ", " << v2/CLHEP::mm << " mm - are ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmExtraParameters::GetStepFunctionIonsP1() const
+{
+  return dRoverRangeIons;
+}
+
+G4double G4EmExtraParameters::GetStepFunctionIonsP2() const
+{
+  return finalRangeIons;
+}
+
+void G4EmExtraParameters::FillStepFunction(const G4ParticleDefinition* part, G4VEnergyLossProcess* proc) const
+{
+  // electron and positron
+  if (11 == std::abs(part->GetPDGEncoding())) {
+    proc->SetStepFunction(dRoverRange, finalRange);
+
+    // all heavy ions
+  } else if (part->IsGeneralIon()) {
+    proc->SetStepFunction(dRoverRangeIons, finalRangeIons);
+
+    // light nucleus and anti-nucleus
+  } else if (part->GetParticleType() == "nucleus" || part->GetParticleType() == "anti_nucleus") { 
+    proc->SetStepFunction(dRoverRangeLIons, finalRangeLIons);
+
+    // other particles
+  } else {
+    proc->SetStepFunction(dRoverRangeMuHad, finalRangeMuHad);
+  }
 }
 
 void G4EmExtraParameters::AddPAIModel(const G4String& particle,
@@ -307,12 +378,8 @@ G4EmExtraParameters::ActivateSecondaryBiasing(const G4String& procname,
   }
 }
 
-void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr, 
-                                                G4bool isElectron) const
+void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
 {
-  if(isElectron) { ptr->SetStepFunction(dRoverRange, finalRange, false); }
-  else { ptr->SetStepFunction(dRoverRangeMuHad, finalRangeMuHad, false); }
-
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
   G4int n = m_regnamesSubCut.size();
   for(G4int i=0; i<n; ++i) { 

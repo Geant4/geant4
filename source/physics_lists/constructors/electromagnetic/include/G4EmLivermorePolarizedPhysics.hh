@@ -27,26 +27,22 @@
 #ifndef G4EmLivermorePolarizedPhysics_h
 #define G4EmLivermorePolarizedPhysics_h 1
 
-#include "G4VPhysicsConstructor.hh"
-#include "G4EmParticleList.hh"
-#include "globals.hh"
+#include "G4EmLivermorePhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmLivermorePolarizedPhysics : public G4VPhysicsConstructor
+class G4EmLivermorePolarizedPhysics : public G4EmLivermorePhysics
 {
 public:
 
   explicit G4EmLivermorePolarizedPhysics(G4int ver=1, const G4String& name="");
 
-  virtual ~G4EmLivermorePolarizedPhysics();
+  ~G4EmLivermorePolarizedPhysics() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
   G4int  verbose;
-  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

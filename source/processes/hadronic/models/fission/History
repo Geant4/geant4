@@ -7,16 +7,19 @@
      History file for Lawrence Livermore Laboratory Fission Model
      ------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
     ---------------------------------------------------------------
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
+30 April 2020  B. Morgan    (hadr-fission-V10-06-00)
+----------------------------------------------------
+-  Remove obsolete GRANULAR_DEPENDENCIES entries
 
 3 April 2019  Dennis Wright (hadr-fission-V10-05-00)
 ----------------------------------------------------
-- G4SmpIsoDir.cc: remove use of G4Pow for squaring cospolang - sometimes 
+- G4SmpIsoDir.cc: remove use of G4Pow for squaring cospolang - sometimes
   causes crash
 
 19 December 2017  Gabriele Cosmo (hadr-fission-V10-04-00)
@@ -35,7 +38,7 @@ code and to keep track of all tags.
 
 16 October 2015  Tatsumi Koi (hadr-fission-V10-01-05)
 ----------------------------------------------------
-- Fix problem on previous tag 
+- Fix problem on previous tag
 
 13 October 2015  Tatsumi Koi (hadr-fission-V10-01-04)
 ----------------------------------------------------
@@ -45,12 +48,12 @@ code and to keep track of all tags.
 ----------------------------------------------------
 -Set A and Z of actual target of reaction to "targetNucleus" from HadronicProcess
 -Reset isotope pointer to the target G4Nucleus object of reaction
--By this, warning message about ReactionWhiteBoard" disappeared 
+-By this, warning message about ReactionWhiteBoard" disappeared
 	src/G4FissLib.cc
 
 4 June 2015  Tatsumi Koi (hadr-fission-V10-01-02)
 ----------------------------------------------------
-- Re-tag for testing 
+- Re-tag for testing
 
 3 June 2015  Tatsumi Koi (hadr-fission-V10-01-01)
 ----------------------------------------------------
@@ -58,15 +61,15 @@ code and to keep track of all tags.
 
 29 April 2015  Tatsumi Koi (hadr-fission-V10-01-00)
 ----------------------------------------------------
-- Use ParticleHP instead of NeutronHP 
+- Use ParticleHP instead of NeutronHP
 
 9 November 2014  Tatsumi Koi (hadr-fission-V10-00-09)
 ----------------------------------------------------
-- Re-tag for testing 
+- Re-tag for testing
 
 27 October 2014  Tatsumi Koi (hadr-fission-V10-00-08)
 ----------------------------------------------------
-- Re-tag for testing 
+- Re-tag for testing
 
 26 October 2014  Tatsumi Koi (hadr-fission-V10-00-07)
 ----------------------------------------------------
@@ -79,17 +82,17 @@ code and to keep track of all tags.
                        getneng_, getndircosu_, getndircosv_, getndircosw_
                        getpeng_, getpdircosu_, getpdircosv_, getpdircosw_
                      by their c++ equivalent:
-                       G4fissionEvent::G4fissionEvent G4fissionEvent::getNeutronNu(), 
-                       G4fissionEvent::getPhotonNu(), G4fissionEvent::getNeutronEnergy(), 
-                       G4fissionEvent::getNeutronDircosu(), G4fissionEvent::getNeutronDircosv(), 
-                       G4fissionEvent::getNeutronDircosw(), G4fissionEvent::getPhotonEnergy(), 
-                       G4fissionEvent::getPhotonDircosu(), G4fissionEvent::getPhotonDircosv(), 
+                       G4fissionEvent::G4fissionEvent G4fissionEvent::getNeutronNu(),
+                       G4fissionEvent::getPhotonNu(), G4fissionEvent::getNeutronEnergy(),
+                       G4fissionEvent::getNeutronDircosu(), G4fissionEvent::getNeutronDircosv(),
+                       G4fissionEvent::getNeutronDircosw(), G4fissionEvent::getPhotonEnergy(),
+                       G4fissionEvent::getPhotonDircosu(), G4fissionEvent::getPhotonDircosv(),
                        G4fissionEvent::getPhotonDircosw()
 - G4FissionLibrary.cc: same as G4FissionLibrary.hh
 
-- G4FissLib.hh: because the Fission Library does not produce fission 
+- G4FissLib.hh: because the Fission Library does not produce fission
                 fragments, fission events do not conserve energy/
-                momentum. Energy/momentum conservation checks are 
+                momentum. Energy/momentum conservation checks are
                 loosened to effectively avoid triggering re-sampling
                 of the fission event.
 - G4FissLib.cc: same as G4FissLib.hh
@@ -98,7 +101,7 @@ code and to keep track of all tags.
 
 10 March 2014  Dennis Wright (hadr-fission-V10-00-00)
 -----------------------------------------------------
-- G4FissionLibrary.cc: remove const_cast now that pointer to 
+- G4FissionLibrary.cc: remove const_cast now that pointer to
   G4ParticleDefinition is const
 
 8 November 2013  Alberto Ribon (hadr-fission-V09-06-00)
@@ -107,7 +110,7 @@ code and to keep track of all tags.
   identically to the lll_fission/ directory, but with in addition
   the LEP fission class, G4LFission .
   This allows to remove the low_energy (and high_energy) directories,
-  and future new fission models will go in fission/ 
+  and future new fission models will go in fission/
   (the previous lll_fission directory is removed).
 
 4 April 2013  Dennis Wright (hadr-lllfis-V09-06-01)
@@ -145,7 +148,7 @@ code and to keep track of all tags.
 17 October 2011 Tatsumi Koi (hadr-lllfis-V09-04-00)
 ---------------------------------------------------
 - Interface change along with "hadr-hpn-V09-04-28"
-- Enable to handle excited isomer nuclie as targets 
+- Enable to handle excited isomer nuclie as targets
 	include/G4FissionLibrary.hh
 	src/G4FissionLibrary.cc.
 
@@ -178,9 +181,9 @@ code and to keep track of all tags.
 
 30 May 2007 Dennis Wright (hadr-lllfis-V08-03-03)
 -------------------------------------------------
-- fixed compiler warnings: 
+- fixed compiler warnings:
   control reaches end of function:
-    G4SmpGEng.cc, G4SmpNEngCf252.cc, G4SmpNuDistDataU235.cc, 
+    G4SmpGEng.cc, G4SmpNEngCf252.cc, G4SmpNuDistDataU235.cc,
     G4SmpNugDist.cc
   unused parameter: G4SmpPVel.cc
   un-initialized array: G4SmpNuDistDataU235.cc, G4SmpNuDistDataU238.cc
@@ -201,6 +204,6 @@ code and to keep track of all tags.
 21 May 2007 Dennis Wright (hadr-lllfis-V08-03-00)
 -------------------------------------------------
 - new directory created for LLNL spontaneous fission model.
-  Livermore code given Geant4 license headers and .h files were 
+  Livermore code given Geant4 license headers and .h files were
   converted to .hh
 

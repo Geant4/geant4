@@ -58,68 +58,39 @@
 //
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpBoundaryProcess_h
 #define G4OpBoundaryProcess_h 1
 
-#include "globals.hh"
-#include "templates.hh"
-#include "geomdefs.hh"
-#include "Randomize.hh"
-
 #include "G4RandomTools.hh"
-#include "G4RandomDirection.hh"
-
-#include "G4Step.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
-#include "G4LogicalBorderSurface.hh"
-#include "G4LogicalSkinSurface.hh"
 #include "G4OpticalSurface.hh"
 #include "G4OpticalPhoton.hh"
-#include "G4TransportationManager.hh"
 
-// Class Description:
-// Discrete Process -- reflection/refraction at optical interfaces.
-// Class inherits publicly from G4VDiscreteProcess.
-// Class Description - End:
-
-enum G4OpBoundaryProcessStatus {  Undefined,
-                                  Transmission, FresnelRefraction,
-                                  FresnelReflection, TotalInternalReflection,
-                                  LambertianReflection, LobeReflection,
-                                  SpikeReflection, BackScattering,
-                                  Absorption, Detection, NotAtBoundary,
-                                  SameMaterial, StepTooSmall, NoRINDEX,
-                                  PolishedLumirrorAirReflection,
-                                  PolishedLumirrorGlueReflection,
-                                  PolishedAirReflection,
-                                  PolishedTeflonAirReflection,
-                                  PolishedTiOAirReflection,
-                                  PolishedTyvekAirReflection,
-                                  PolishedVM2000AirReflection,
-                                  PolishedVM2000GlueReflection,
-                                  EtchedLumirrorAirReflection,
-                                  EtchedLumirrorGlueReflection,
-                                  EtchedAirReflection,
-                                  EtchedTeflonAirReflection,
-                                  EtchedTiOAirReflection,
-                                  EtchedTyvekAirReflection,
-                                  EtchedVM2000AirReflection,
-                                  EtchedVM2000GlueReflection,
-                                  GroundLumirrorAirReflection,
-                                  GroundLumirrorGlueReflection,
-                                  GroundAirReflection,
-                                  GroundTeflonAirReflection,
-                                  GroundTiOAirReflection,
-                                  GroundTyvekAirReflection,
-                                  GroundVM2000AirReflection,
-                                  GroundVM2000GlueReflection,
-                                  Dichroic };
+enum G4OpBoundaryProcessStatus {
+  Undefined,
+  Transmission,                    FresnelRefraction,
+  FresnelReflection,               TotalInternalReflection,
+  LambertianReflection,            LobeReflection,
+  SpikeReflection,                 BackScattering,
+  Absorption,                      Detection,
+  NotAtBoundary,                   SameMaterial, 
+  StepTooSmall,                    NoRINDEX,
+  PolishedLumirrorAirReflection,   PolishedLumirrorGlueReflection,
+  PolishedAirReflection,           PolishedTeflonAirReflection,
+  PolishedTiOAirReflection,        PolishedTyvekAirReflection,
+  PolishedVM2000AirReflection,     PolishedVM2000GlueReflection,
+  EtchedLumirrorAirReflection,     EtchedLumirrorGlueReflection,
+  EtchedAirReflection,             EtchedTeflonAirReflection,
+  EtchedTiOAirReflection,          EtchedTyvekAirReflection,
+  EtchedVM2000AirReflection,       EtchedVM2000GlueReflection,
+  GroundLumirrorAirReflection,     GroundLumirrorGlueReflection,
+  GroundAirReflection,             GroundTeflonAirReflection,
+  GroundTiOAirReflection,          GroundTyvekAirReflection,
+  GroundVM2000AirReflection,       GroundVM2000GlueReflection,
+  Dichroic };
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
@@ -134,10 +105,9 @@ public:
   // Returns true -> 'is applicable' only for an optical photon.
 
   virtual G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition* condition) override;
-  // Returns infinity; i. e. the process does not limit the step,
-  // but sets the 'Forced' condition for the DoIt to be invoked at
-  // every step. However, only at a boundary will any action be
-  // taken.
+  // Returns infinity; i. e. the process does not limit the step, but sets the
+  // 'Forced' condition for the DoIt to be invoked at every step. However, only
+  // at a boundary will any action be taken.
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                   const G4Step&  aStep) override;
@@ -234,6 +204,20 @@ private:
   G4Physics2DVector* DichroicVector;
 
   G4bool fInvokeSD;
+
+  size_t idx_rindex1 = 0;
+  size_t idx_rindex_surface = 0;
+  size_t idx_reflect = 0;
+  size_t idx_eff = 0;
+  size_t idx_trans = 0;
+  size_t idx_lobe = 0;
+  size_t idx_spike = 0;
+  size_t idx_back = 0;
+  size_t idx_rindex2 = 0;
+  size_t idx_groupvel = 0;
+  size_t idx_rrindex = 0;
+  size_t idx_irindex = 0;
+
 };
 
 ////////////////////
@@ -274,10 +258,10 @@ void G4OpBoundaryProcess::ChooseReflection()
     theStatus = SpikeReflection;
     theFacetNormal = theGlobalNormal;
   }
-  else if ( rand >= prob_ss && rand <= prob_ss+prob_sl) {
+  else if (rand >= prob_ss && rand <= prob_ss+prob_sl) {
     theStatus = LobeReflection;
   }
-  else if ( rand > prob_ss+prob_sl && rand < prob_ss+prob_sl+prob_bs ) {
+  else if (rand > prob_ss+prob_sl && rand < prob_ss+prob_sl+prob_bs) {
     theStatus = BackScattering;
   }
   else {
@@ -317,7 +301,7 @@ void G4OpBoundaryProcess::DoReflection()
     if (fRealRIndexMPV && fImagRIndexMPV) {
       //
     } else {
-       theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+       theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
     }
     G4double PdotN = OldMomentum * theFacetNormal;
     NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;

@@ -47,9 +47,6 @@
 #include "G4HadronStoppingProcess.hh"
 
 class G4ParticleDefinition;
-class G4LundStringFragmentation;
-class G4ExcitedStringDecay;
-
 
 class G4HadronicAbsorptionFritiof : public G4HadronStoppingProcess { 
 
@@ -67,9 +64,6 @@ private:
   G4HadronicAbsorptionFritiof( const G4HadronicAbsorptionFritiof& );
   
   G4ParticleDefinition* pdefApplicable;
-
-  G4LundStringFragmentation * theLund;
-  G4ExcitedStringDecay * theStringDecay;
 
 };
 

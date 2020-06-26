@@ -54,23 +54,23 @@
 #define G4MULTIRUNACTION_HH_
 
 #include "G4UserRunAction.hh"
-#include <vector>
 #include <memory>
+#include <vector>
 
-using G4UserRunActionUPtr=std::unique_ptr<G4UserRunAction>;
-using G4UserRunActionVector=std::vector<G4UserRunActionUPtr>;
+using G4UserRunActionUPtr   = std::unique_ptr<G4UserRunAction>;
+using G4UserRunActionVector = std::vector<G4UserRunActionUPtr>;
 
-
-class G4MultiRunAction : public G4UserRunAction , public G4UserRunActionVector
+class G4MultiRunAction
+  : public G4UserRunAction
+  , public G4UserRunActionVector
 {
-public:
-  G4MultiRunAction() = default;
+ public:
+  G4MultiRunAction()          = default;
   virtual ~G4MultiRunAction() = default;
   virtual G4Run* GenerateRun() override;
   virtual void BeginOfRunAction(const G4Run* aRun) override;
   virtual void EndOfRunAction(const G4Run* aRun) override;
-  virtual void SetMaster(G4bool val=true) override;
-
+  virtual void SetMaster(G4bool val = true) override;
 };
 
 #endif /* SOURCE_RUN_INCLUDE_G4MULTIRUNACTION_HH_ */

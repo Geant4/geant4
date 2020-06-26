@@ -64,7 +64,6 @@ class G4AntiBarionBuilder : public G4PhysicsBuilderInterface
      
     std::vector<G4VAntiBarionBuilder *> theModelCollections;
 
-    G4bool wasActivated;
 };
 
 #endif

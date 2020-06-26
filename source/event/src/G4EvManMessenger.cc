@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4EvManMessenger class implementation
 //
-//
+// Author: M.Asai, SLAC
 // --------------------------------------------------------------------
 
 #include "G4EvManMessenger.hh"
@@ -34,7 +35,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 
 G4EvManMessenger::G4EvManMessenger(G4EventManager * fEvMan)
-:fEvManager(fEvMan)
+  : fEvManager(fEvMan)
 {
   eventDirectory = new G4UIdirectory("/event/");
   eventDirectory->SetGuidance("EventManager control commands.");
@@ -84,4 +85,3 @@ G4String G4EvManMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = verboseCmd->ConvertToString(fEvManager->GetVerboseLevel()); }
   return cv;
 }
-

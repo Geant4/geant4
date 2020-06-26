@@ -275,8 +275,11 @@ private:
   virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
+#if QT_VERSION < 0x050F00
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
-
+#else
+  QMultiMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+#endif
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
   G4UIDockWidget* CreateCoutTBWidget();

@@ -16,6 +16,10 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 10th, 2019 B.Morgan               - geomvol-V10-06-00
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+
 November 26th, 2019 G.Cosmo                - geomvol-V10-05-10
 - Fixed more cases of implicit type conversions from size_t to G4int.
 

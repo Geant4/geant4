@@ -23,24 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessTableMessenger class implementation
 //
-//
-//
-//---------------------------------------------------------------
-//
-//  G4ProcessTableMessenger.cc
-//
-//  Description:
-//    This is a messenger class to interface to exchange information
-//    between ProcessTable and UI.
-//
-//
-//  History:
-//    15 Aug. 1998, H. Kurashige  
-//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
-//    02 June 2006, add physicsModified in activate/inactivate  (mma)
-//
-//---------------------------------------------------------------
+// Author: H.Kurashige, 15 August 1998
+// --------------------------------------------------------------------
 
 #include "G4ProcessTableMessenger.hh"
 
@@ -60,22 +46,17 @@
 #include <iomanip>               
 #include <sstream>
 
-/////////////////////////////////////////
 G4ThreadLocal G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
 
-//////////////////////////
+// --------------------------------------------------------------------
 G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
-                        :theProcessTable(pTable), 
-			 currentProcessTypeName("all"),
-			 currentProcessName("all"),
-			 currentParticleName("all")
+  : theProcessTable(pTable)
 { 
-  //Commnad   /particle/process
+  // Command   /particle/process
   thisDirectory = new G4UIdirectory("/process/");
   thisDirectory->SetGuidance("Process Table control commands.");
 
-
-  //Commnad   /particle/process/list
+  // Command   /particle/process/list
   listCmd = new G4UIcmdWithAString("/process/list",this);
   listCmd->SetGuidance("List up process names");
   listCmd->SetGuidance("  list [type] ");
@@ -85,13 +66,13 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   SetNumberOfProcessType();
  
   G4String candidates("all");
-  for (G4int idx = 0; idx < NumberOfProcessType ; idx ++ ) {
-    candidates += " " + 
-      G4VProcess::GetProcessTypeName(G4ProcessType(idx));
+  for (G4int idx = 0; idx < NumberOfProcessType ; ++idx )
+  {
+    candidates += " " + G4VProcess::GetProcessTypeName(G4ProcessType(idx));
   }
   listCmd->SetCandidates((const char*)(candidates));
 
-  //Commnad   /particle/process/verbose
+  // Command   /particle/process/verbose
   verboseCmd = new G4UIcmdWithAnInteger("/process/verbose",this);
   verboseCmd->SetGuidance("Set Verbose Level for Process Table");
   verboseCmd->SetGuidance("  verbose [level]");
@@ -101,7 +82,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   verboseCmd->SetRange("verbose >=0");
   verboseCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
-  //Commnad   /particle/process/setVerbose
+  // Command   /particle/process/setVerbose
   procVerboseCmd = new G4UIcommand("/process/setVerbose",this);
   procVerboseCmd->SetGuidance("Set verbose level for processes");
   procVerboseCmd->SetGuidance("  setVerbose level [type or name] ");
@@ -116,7 +97,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   procVerboseCmd->SetParameter(param);
   procVerboseCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
  
-  //Commnad   /particle/process/dump
+  // Command   /particle/process/dump
   dumpCmd = new G4UIcommand("/process/dump",this);
   dumpCmd->SetGuidance("Dump process information");
   dumpCmd->SetGuidance(" dump name [particle]");
@@ -129,7 +110,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   dumpCmd->SetParameter(param);
   dumpCmd->AvailableForStates(G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
-  //Commnad   /process/activate
+  // Command   /process/activate
   activateCmd = new G4UIcommand("/process/activate",this);
   activateCmd->SetGuidance("Activate processes  ");
   activateCmd->SetGuidance(" Activate  name [particle]");
@@ -142,7 +123,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   activateCmd->SetParameter(param);
   activateCmd->AvailableForStates(G4State_Idle);
   
-  //Commnad   /process/inactivate
+  // Command   /process/inactivate
   inactivateCmd = new G4UIcommand("/process/inactivate",this);
   inactivateCmd->SetGuidance("Inactivate process  ");
   inactivateCmd->SetGuidance("Inactivate processes  ");
@@ -157,7 +138,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   inactivateCmd->AvailableForStates(G4State_Idle);
 }
 
-//////////////////
+// --------------------------------------------------------------------
 G4ProcessTableMessenger::~G4ProcessTableMessenger()
 {
   delete activateCmd; 
@@ -169,8 +150,9 @@ G4ProcessTableMessenger::~G4ProcessTableMessenger()
   delete thisDirectory;
 }
 
-///////////////
-void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+// --------------------------------------------------------------------
+void
+G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   G4ProcessTable::G4ProcNameVector* procNameVector 
                          = theProcessTable->GetNameList(); 
@@ -178,39 +160,48 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
   G4int type = -1;
   G4ExceptionDescription ed;
 
-  if( command == listCmd ){
-    //Commnad  /process/list
+  if( command == listCmd )
+  {
+    // Command  /process/list
     type = -1;
-    if (newValue == "all") {	
+    if (newValue == "all")
+    {
       currentProcessTypeName = newValue;
-    } else {
+    }
+    else
+    {
       type  = GetProcessType(newValue);
-      if (type <0) {
-	G4cout << " illegal type !!! " << G4endl;
-      } else {
-	currentProcessTypeName = newValue;
+      if (type <0)
+      {
+        G4cout << " illegal type !!! " << G4endl;
+      }
+      else
+      {
+        currentProcessTypeName = newValue;
       }
     }    
     G4int counter = 0;
-    idx =0;
-    G4ProcessTable::G4ProcNameVector::iterator itr; 
-    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
-      idx +=1;
+    idx = 0;
+    for (auto itr=procNameVector->cbegin(); itr!=procNameVector->cend(); ++itr)
+    {
+      ++idx;
       G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
-      if ( (type <0) || ( ((*tmpVector)(0)->GetProcessType()) == type) ) {
+      if ( (type <0) || ( ((*tmpVector)(0)->GetProcessType()) == type) )
+      {
         if ( counter%4 != 0) G4cout << ",";
-	G4cout << std::setw(19) <<*itr;
-	if ((counter++)%4 == 3) {
+        G4cout << std::setw(19) << *itr;
+        if ((counter++)%4 == 3)
+        {
           G4cout << G4endl;
         }
       }
       delete tmpVector;
     }
     G4cout << G4endl;
-    //Commnad  /process/list
-
-  } else if( command==procVerboseCmd ) {
-    //Commnad  /process/setVerbose
+  }
+  else if( command==procVerboseCmd )
+  {
+    // Command  /process/setVerbose
     G4Tokenizer next( newValue );
 
     // check 1st argument
@@ -228,58 +219,66 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     G4bool isAll = false;
     type = -1;
 
-    if (currentProcessTypeName == "all") {	
+    if (currentProcessTypeName == "all")
+    {
       isAll = true; 
-    } else {
+    }
+    else
+    {
       type  = GetProcessType(currentProcessTypeName);
-      if (type<0) {
-	isProcName = true;
-	currentProcessName = currentProcessTypeName;
-	currentProcessTypeName = "";
+      if (type<0)
+      {
+        isProcName = true;
+        currentProcessName = currentProcessTypeName;
+        currentProcessTypeName = "";
       }
     }  
-    idx =0;
+    idx = 0;
     for (auto itr=procNameVector->cbegin(); itr!=procNameVector->cend(); ++itr)
     {
-      idx +=1;
+      ++idx;
       G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
       G4VProcess* p = (*tmpVector)(0);
       if ( isAll || 
-	   (!isProcName && ( p->GetProcessType() == type) ) ||
-	   ( isProcName && ( p->GetProcessName()== currentProcessName) ) ){
-	p->SetVerboseLevel(level);
+           (!isProcName && ( p->GetProcessType() == type) ) ||
+           ( isProcName && ( p->GetProcessName()== currentProcessName) ) )
+      {
+        p->SetVerboseLevel(level);
       }
       delete tmpVector;
     }
-    //Commnad  /process/setVerbose
-
-  } else if( command==verboseCmd ) {
-    //Commnad   /process/verbose
-     theProcessTable->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));
-    //Commnad   /process/verbose
-
-  } else {
+  }
+  else if( command==verboseCmd )
+  {
+    // Command   /process/verbose
+    theProcessTable->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));
+  }
+  else
+  {
     G4Tokenizer next( newValue );
 
     // check 1st argument
     currentProcessName = G4String(next());
     G4bool isProcName = false; 
-    G4ProcessTable::G4ProcNameVector::iterator itr; 
-    for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
-      if ( (*itr) == currentProcessName ) {
-	isProcName  = true; 
-	break;
+    for (auto itr=procNameVector->cbegin(); itr!=procNameVector->cend(); ++itr)
+    {
+      if ( (*itr) == currentProcessName )
+      {
+        isProcName = true; 
+        break;
       }
     }
-    if (!isProcName) {
+    if (!isProcName)
+    {
       type  = GetProcessType(currentProcessName);
-      if (type <0 ) {
-	// no processes with specifed name
-	ed << " illegal process (or type) name ["
+      if (type <0 )
+      {
+        // no processes with specifed name
+        ed << " illegal process (or type) name ["
            << currentProcessName << "]";
         command->CommandFailed(ed);
-	currentProcessName = "";
-	return;
+        currentProcessName = "";
+        return;
       }
     }
   
@@ -287,18 +286,23 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     currentParticleName = G4String(next());
     G4bool isParticleFound = false;
     G4ParticleDefinition* currentParticle = nullptr;
-    if ( currentParticleName == "all" ) {
+    if ( currentParticleName == "all" )
+    {
       isParticleFound = true;
-
-    } else {
-      isParticleFound = G4ParticleTable::GetParticleTable()->contains(currentParticleName);
-      if (isParticleFound) {
-	currentParticle = G4ParticleTable::GetParticleTable()->FindParticle(currentParticleName);
+    }
+    else
+    {
+      isParticleFound = G4ParticleTable::GetParticleTable()
+                      ->contains(currentParticleName);
+      if (isParticleFound)
+      {
+        currentParticle = G4ParticleTable::GetParticleTable()
+                        ->FindParticle(currentParticleName);
       }
-
     }
 
-    if ( !isParticleFound ) {
+    if ( !isParticleFound )
+    {
       // no particle with specifed name
       ed << " illegal particle name [" << currentParticleName << "]";
       command->CommandFailed(ed);
@@ -306,81 +310,97 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       return;
     }
         
-    if( command==dumpCmd ) {
+    if( command==dumpCmd )
+    {
       // process/dump
       G4ProcessVector* tmpVector;
-      if (isProcName) {
-	tmpVector = theProcessTable->FindProcesses(currentProcessName);
-      } else {
-	tmpVector = theProcessTable->FindProcesses(G4ProcessType(type));
+      if (isProcName)
+      {
+        tmpVector = theProcessTable->FindProcesses(currentProcessName);
       }
-      for (std::size_t i=0; i<tmpVector->length(); ++i) {
-	theProcessTable->DumpInfo( (*tmpVector)(i), currentParticle );
+      else
+      {
+        tmpVector = theProcessTable->FindProcesses(G4ProcessType(type));
+      }
+      for (std::size_t i=0; i<tmpVector->length(); ++i)
+      {
+        theProcessTable->DumpInfo( (*tmpVector)(i), currentParticle );
       }
       delete tmpVector;
-      // process/dump
-
-    } else if ( (command==activateCmd) || (command==inactivateCmd)) {
+    }
+    else if ( (command==activateCmd) || (command==inactivateCmd))
+    {
       // process/activate , inactivate
       G4bool fActive = (command==activateCmd);
-      if (isProcName) {
-	if ( currentParticle == nullptr ) {
-	  theProcessTable->SetProcessActivation(currentProcessName, 
-						fActive);
-	} else {
-	  theProcessTable->SetProcessActivation(currentProcessName,
-						currentParticle,
-						fActive);
-	}
-      } else {
-	if ( currentParticle == nullptr ) {
-	  theProcessTable->SetProcessActivation(G4ProcessType(type),
-						fActive);
-	} else {
-	  theProcessTable->SetProcessActivation(G4ProcessType(type),
-						currentParticle,
-						fActive);
-	}
+      if (isProcName)
+      {
+        if ( currentParticle == nullptr )
+        {
+          theProcessTable->SetProcessActivation(currentProcessName, 
+                                                fActive);
+        }
+        else
+        {
+          theProcessTable->SetProcessActivation(currentProcessName,
+                                                currentParticle,
+                                                fActive);
+        }
+      }
+      else
+      {
+        if ( currentParticle == nullptr )
+        {
+          theProcessTable->SetProcessActivation(G4ProcessType(type),
+                                                fActive);
+        }
+        else
+        {
+          theProcessTable->SetProcessActivation(G4ProcessType(type),
+                                                currentParticle,
+                                                fActive);
+        }
       }
       G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
-      //  process/activate , inactivate
     } 
   }
 }
 
-
-//////////////////
-G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
+// --------------------------------------------------------------------
+G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand* command)
 {
-  if( command==verboseCmd ){
-    //Commnad   /process/verbose
+  if( command==verboseCmd )
+  {
+    // Command   /process/verbose
     return verboseCmd->ConvertToString(theProcessTable->GetVerboseLevel());
-
-  } else if ( command==listCmd ){
-    //Commnad   /process/list
+  }
+  else if ( command==listCmd )
+  {
+    // Command   /process/list
     return currentProcessTypeName;
-
-  } else {
-    //Commnad   /process/dump, activate, inactivate
+  }
+  else
+  {
+    // Command   /process/dump, activate, inactivate
     return   (currentProcessName + " " + currentParticleName);
-    
   }
 
   return "";
 }
 
-/////////////////
+// --------------------------------------------------------------------
 G4String G4ProcessTableMessenger::GetProcessTypeName(G4ProcessType aType) const
 {
   return G4VProcess::GetProcessTypeName(aType);
 }
 
-/////////////////
+// --------------------------------------------------------------------
 G4int G4ProcessTableMessenger::GetProcessType(const G4String& aTypeName) const
 {
   G4int type = -1;
-  for (G4int idx = 0; idx < NumberOfProcessType ; ++idx ) {
-    if (aTypeName == G4VProcess::GetProcessTypeName(G4ProcessType(idx)) ) {
+  for (G4int idx = 0; idx < NumberOfProcessType ; ++idx )
+  {
+    if (aTypeName == G4VProcess::GetProcessTypeName(G4ProcessType(idx)) )
+    {
       type = idx;
       break;
     }
@@ -388,26 +408,24 @@ G4int G4ProcessTableMessenger::GetProcessType(const G4String& aTypeName) const
   return type;
 }
 
-
-/////////////////
+// --------------------------------------------------------------------
 void G4ProcessTableMessenger::SetNumberOfProcessType()
 {
   G4bool isFoundEndMark = false;
   G4int idx;
-  for (idx = 0; idx < 1000 ; ++idx ) {
+  for (idx = 0; idx < 1000 ; ++idx )
+  {
     G4String typeName = G4VProcess::GetProcessTypeName(G4ProcessType(idx));
     isFoundEndMark = typeName.contains("---");
     if ( isFoundEndMark ) break;
   }
-  if ( isFoundEndMark ) {
+  if ( isFoundEndMark )
+  {
     NumberOfProcessType = idx;
-  } else {
+  }
+  else
+  {
     G4Exception("G4ProcessTableMessenger::SetNumberOfProcessType()",
-		"ProcMan014",
-		FatalException,"No End Mark");
+                "ProcMan014", FatalException, "No End Mark");
   } 
 }
-
-
-
-

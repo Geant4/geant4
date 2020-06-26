@@ -54,8 +54,11 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
     Rhoh(0.), Alphah(0.), Tmaxh(0.), Betah(0.), AveLogAlpha(0.), AveLogTmax(0.),
     SigmaLogAlpha(0.), SigmaLogTmax(0.), Rho(0.), Alpha(0.), Tmax(0.), Beta(0.)
 {  
-  if(!aPar) { thePar = new GFlashSamplingShowerTuning; owning = true; }
-  else      { thePar = aPar; owning = false; }
+  if(!aPar) {
+    thePar = new GFlashSamplingShowerTuning;
+  } else {
+    thePar = aPar;
+  }
 
   SetMaterial(aMat1,aMat2 );
   d1=dd1;
@@ -141,7 +144,7 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
 
 GFlashSamplingShowerParameterisation::~GFlashSamplingShowerParameterisation()
 {
-  if(owning) { delete thePar; }
+   delete thePar;
 }
 
 // ------------------------------------------------------------
@@ -183,8 +186,9 @@ void GFlashSamplingShowerParameterisation::ComputeZAX0EFFetc()
   G4double W2  = (d2*density2) / denominator;
   Zeff   = ( W1*Z1 ) + ( W2*Z2 );    //X0*Es/Ec;
   Aeff   = ( W1*A1 ) + ( W2*A2 );
-  X0eff  = ( 1./ ( ( W1 / X01) +( W2 / X02) ) ); 
   Rhoeff = ( (d1 *density1 ) + (d2 * density2 ))/G4double (d2  + d1  );
+  X0eff  = (W1 * Rhoeff) / (X01 * density1) + (W2 * Rhoeff) / (X02 * density2 );
+  X0eff  = 1./ X0eff;
   Rmeff =  1/  ((((W1*Ec1)/ X01)   +   ((W2* Ec2)/  X02) ) / Es ) ;
   Eceff =  X0eff *((W1*Ec1)/ X01 + (W2* Ec2)/  X02 );      
   Fs =  X0eff/G4double ((d1/mm )+(d2/mm) );

@@ -16,6 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 May 20: D. Sawkey (op-V10-06-03)
+- all files - thorough cleaning; shorten temporary variable names;
+  improve readability
+
+26 May 20: A. Howard (op-V10-06-02)
+- Add second wavelength shifting process - G4OpWLS2
+
+15 Feb 20: V. Ivanchenko (op-V10-06-01)
+- G4OpRayleigh - avoid double deletion of property vectors
+
+21 Jan 20: D. Sawkey (op-V10-06-00)
+- use new ConstPropertyExists(G4int) rather than (G4String)
+
 28 Oct 19: D. Sawkey (op-V10-05-02)
 -  G4OpWLS.cc - call G4VParticleChange->SetNumberOfSecondaries only once
  - address bug 2200

@@ -23,22 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// ---------------------------------------------------------------
-//
-// G4UserSteppingAction.cc
-//
-// Description:
-//   This class represents actions taken place by the user at each
-//   end of stepping. 
+// G4UserSteppingAction class implementation
 //
 // Contact:
 //   Questions and comments to this code should be sent to
 //     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-// ---------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4UserSteppingAction.hh"
 #include "G4ParticleTable.hh"
@@ -47,30 +38,29 @@
 /////////////////////////////////////////////////////////
 G4UserSteppingAction::G4UserSteppingAction()
 /////////////////////////////////////////////////////////
-   : fpSteppingManager(0)
 {
- if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
- {
-   G4String msg;
-   msg =  " You are instantiating G4UserSteppingAction BEFORE your\n";
-   msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
-   msg += " Such an instantiation is prohibited since Geant4 version 8.0. To fix this problem,\n";
-   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
-   msg += "set it to G4RunManager before instantiating other user action classes\n";
-   msg += "such as G4UserSteppingAction.";
-   G4Exception("G4UserSteppingAction::G4UserSteppingAction()",
-               "Tracking0002", FatalException, msg);
- }
+  if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
+  {
+    G4String msg;
+    msg =  " You are instantiating G4UserSteppingAction BEFORE your\n";
+    msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
+    msg += " Such an instantiation is prohibited. To fix this problem,\n";
+    msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
+    msg += "set it to G4RunManager before instantiating other user action classes\n";
+    msg += "such as G4UserSteppingAction.";
+    G4Exception("G4UserSteppingAction::G4UserSteppingAction()",
+                "Tracking0002", FatalException, msg);
+  }
 }
 
 /////////////////////////////////////////////////////////
 G4UserSteppingAction::~G4UserSteppingAction()
 /////////////////////////////////////////////////////////
-{;}
+{
+}
 
 /////////////////////////////////////////////////////////
-void G4UserSteppingAction::
-     SetSteppingManagerPointer(G4SteppingManager* pValue)
+void G4UserSteppingAction::SetSteppingManagerPointer(G4SteppingManager* pValue)
 /////////////////////////////////////////////////////////
 {
   fpSteppingManager = pValue;

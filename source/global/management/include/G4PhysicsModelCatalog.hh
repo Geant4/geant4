@@ -23,49 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// -----------------------------------------------------------------
-//
-//      ------------------- class G4PhysicsModelCatalog -----------------
+// G4PhysicsModelCatalog
 //
 // Class description:
 //
+// Singleton, collection of physics models, to be used by models and G4Track.
 
-#ifndef G4PhysicsModelCatalog_HH
-#define G4PhysicsModelCatalog_HH
+// Author: M.Asai (SLAC), 26 September 2013
+// --------------------------------------------------------------------
+#ifndef G4PhysicsModelCatalog_hh
+#define G4PhysicsModelCatalog_hh
 
-#include "globals.hh"
 #include <vector>
-#include "G4String.hh"
 
-typedef std::vector<G4String> modelCatalog;
+#include "G4String.hh"
+#include "globals.hh"
 
 class G4PhysicsModelCatalog
 {
-private:  // with description
+ public:
+  ~G4PhysicsModelCatalog();
+  G4PhysicsModelCatalog(const G4PhysicsModelCatalog&) = delete;
+  G4PhysicsModelCatalog& operator=(const G4PhysicsModelCatalog&) = delete;
 
-    G4PhysicsModelCatalog();
-    G4PhysicsModelCatalog(const G4PhysicsModelCatalog&);
-    G4PhysicsModelCatalog& operator=(const G4PhysicsModelCatalog&);
+  static G4int Register(const G4String&);
+  static const G4String& GetModelName(G4int);
 
-public:  // with description
-    
-    ~G4PhysicsModelCatalog();
-    static G4int Register(const G4String&);
-    static const G4String& GetModelName(G4int);
+  static G4int GetIndex(const G4String&);
+  static G4int Entries();
+  static void Destroy();
 
-public:  // without description
+ private:
+  G4PhysicsModelCatalog();
 
-    static G4int GetIndex(const G4String&);
-    static G4int Entries();
-    static void Destroy();
-    
-private:
-
-    static modelCatalog* catalog;
-
+  static std::vector<G4String>* theCatalog;
 };
 
 #endif

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-00    (6-December-2019)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -20,20 +20,20 @@ Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -46,12 +46,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -183,7 +189,7 @@ msc:  for proton  SubType= 10
 hIoni:  for proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
@@ -207,6 +213,10 @@ CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
+nuclearStopping:  for proton SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
+
 msc:  for GenericIon  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -215,7 +225,7 @@ msc:  for GenericIon  SubType= 10
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.001 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -248,7 +258,7 @@ msc:  for anti_proton  SubType= 10
 hIoni:  for anti_proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
@@ -280,7 +290,7 @@ msc:  for kaon+  SubType= 10
 hIoni:  for kaon+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
@@ -312,7 +322,7 @@ msc:  for kaon-  SubType= 10
 hIoni:  for kaon-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
@@ -344,7 +354,7 @@ msc:  for mu+  SubType= 10
 muIoni:  for mu+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
           BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
@@ -377,7 +387,7 @@ msc:  for mu-  SubType= 10
 muIoni:  for mu-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
           BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
@@ -410,7 +420,7 @@ msc:  for pi+  SubType= 10
 hIoni:  for pi+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
@@ -442,7 +452,7 @@ msc:  for pi-  SubType= 10
 hIoni:  for pi-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
@@ -493,31 +503,31 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -525,11 +535,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -539,11 +549,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -553,11 +563,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -567,11 +577,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -581,11 +591,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -595,11 +605,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
 
@@ -608,12 +618,12 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -633,7 +643,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
@@ -730,16 +741,30 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -758,7 +783,8 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1e+12
+Time limit for long lived isomeres (ns)             1000
+Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
 Electron internal conversion ID                     2
@@ -767,7 +793,7 @@ Max 2J for sampling of angular correlations         10
 Upload data before 1st event for                Z < 9
 =======================================================================
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Vacuum
@@ -779,61 +805,61 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.87535 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
+ Energy thresholds :  gamma  5.84069 keV    e-  457.179 keV    e+  442.122 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  23.933 keV    e-  391.82 keV    e+  376.336 keV proton 70 keV
+ Energy thresholds :  gamma  24.0004 keV    e-  389.292 keV    e+  376.471 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Glass
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09434 keV    e-  281.891 keV    e+  276.265 keV proton 70 keV
+ Energy thresholds :  gamma  2.10317 keV    e-  282.263 keV    e+  272.967 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-	Energy weighted position of hits in LXe : (6.57187,-10.9049,-101.128)
-	Total energy deposition in scintillator : 397.837 (keV)
-	Reconstructed position of hits in LXe : (1.28432,-3.61922,-19.9117)
+	Energy weighted position of hits in LXe : (6.53947,-10.787,-101.039)
+	Total energy deposition in scintillator : 398.194 (keV)
+	Reconstructed position of hits in LXe : (0.614728,0.999265,-16.5361)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
   manager (G4VisExecutive) and ensure drawing code is executed only if
   G4VVisManager::GetConcreteInstance() is non-zero.
-	Number of photons that hit PMTs in this event : 937
+	Number of photons that hit PMTs in this event : 939
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 3377
+	Number of photons produced by scintillation in this event : 3430
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 2440
+	Number of photons absorbed (OpAbsorption) in this event : 2491
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.040000s Real=0.041733s Sys=0.010000s
+  User=0.140000s Real=0.141855s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 1 events.
-Number of hits per event:	 937 +- 0
+Number of hits per event:	 939 +- 0
 Number of hits per event above threshold:	 32 +- 0
-Number of scintillation photons per event :	 3377 +- 0
+Number of scintillation photons per event :	 3430 +- 0
 Number of Cerenkov photons per event:	 0 +- 0
-Number of absorbed photons per event :	 2440 +- 0
+Number of absorbed photons per event :	 2491 +- 0
 Number of photons absorbed at boundary per event:	 0 +- 0
-Total energy deposition in scintillator per event:	 397.8 +- 0 keV.
+Total energy deposition in scintillator per event:	 398.2 +- 0 keV.
 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Vacuum
@@ -845,141 +871,141 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.87535 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
+ Energy thresholds :  gamma  5.84069 keV    e-  457.179 keV    e+  442.122 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : LXe
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  23.933 keV    e-  391.82 keV    e+  376.336 keV proton 70 keV
+ Energy thresholds :  gamma  24.0004 keV    e-  389.292 keV    e+  376.471 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Glass
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.09434 keV    e-  281.891 keV    e+  276.265 keV proton 70 keV
+ Energy thresholds :  gamma  2.10317 keV    e-  282.263 keV    e+  272.967 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
-	Energy weighted position of hits in LXe : (2.49614,2.7504,-98.065)
-	Total energy deposition in scintillator : 537.024 (keV)
-	Reconstructed position of hits in LXe : (1.40728,2.4522,-20.0827)
-	Number of photons that hit PMTs in this event : 1364
+	Energy weighted position of hits in LXe : (25.3778,-32.1105,47.6532)
+	Total energy deposition in scintillator : 538.298 (keV)
+	Reconstructed position of hits in LXe : (11.7926,-13.1687,23.7348)
+	Number of photons that hit PMTs in this event : 1655
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5046
+	Number of photons produced by scintillation in this event : 5516
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3682
+	Number of photons absorbed (OpAbsorption) in this event : 3861
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.0615129,-2.78631,-91.111)
-	Total energy deposition in scintillator : 536.004 (keV)
-	Reconstructed position of hits in LXe : (-1.51165,0.787524,-20.7863)
-	Number of photons that hit PMTs in this event : 1474
+	Energy weighted position of hits in LXe : (0.0333297,-0.0547412,-106.041)
+	Total energy deposition in scintillator : 358.566 (keV)
+	Reconstructed position of hits in LXe : (2.0696,-0.00153382,-20.3176)
+	Number of photons that hit PMTs in this event : 1035
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5010
+	Number of photons produced by scintillation in this event : 3725
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3536
+	Number of photons absorbed (OpAbsorption) in this event : 2690
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-2.32778,-0.0358351,-89.5265)
-	Total energy deposition in scintillator : 538.496 (keV)
-	Reconstructed position of hits in LXe : (2.04655,0.390137,-21.1603)
-	Number of photons that hit PMTs in this event : 1482
+	Energy weighted position of hits in LXe : (0.913543,-0.459931,-69.3678)
+	Total energy deposition in scintillator : 536.332 (keV)
+	Reconstructed position of hits in LXe : (1.63991,-0.846683,-24.961)
+	Number of photons that hit PMTs in this event : 1469
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5373
+	Number of photons produced by scintillation in this event : 5053
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3891
+	Number of photons absorbed (OpAbsorption) in this event : 3584
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-3.22631,3.81231,-71.956)
-	Total energy deposition in scintillator : 537.361 (keV)
-	Reconstructed position of hits in LXe : (-3.10581,2.58855,-24.8646)
-	Number of photons that hit PMTs in this event : 1551
+	Energy weighted position of hits in LXe : (-0.398866,0.976295,-72.6524)
+	Total energy deposition in scintillator : 537.405 (keV)
+	Reconstructed position of hits in LXe : (-2.05763,2.48297,-23.4178)
+	Number of photons that hit PMTs in this event : 1582
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5280
+	Number of photons produced by scintillation in this event : 5317
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3729
+	Number of photons absorbed (OpAbsorption) in this event : 3735
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.306863,0.568819,-102.037)
-	Total energy deposition in scintillator : 539.139 (keV)
-	Reconstructed position of hits in LXe : (-2.34309,1.69399,-17.6345)
-	Number of photons that hit PMTs in this event : 1448
+	Energy weighted position of hits in LXe : (-0.0550395,-0.00151261,-85.4005)
+	Total energy deposition in scintillator : 537.913 (keV)
+	Reconstructed position of hits in LXe : (-0.151561,0.57039,-24.7703)
+	Number of photons that hit PMTs in this event : 1489
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5428
+	Number of photons produced by scintillation in this event : 5296
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3980
+	Number of photons absorbed (OpAbsorption) in this event : 3807
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-28.9686,5.80253,-84.4598)
-	Total energy deposition in scintillator : 536.904 (keV)
-	Reconstructed position of hits in LXe : (-7.13119,3.32701,-23.1916)
-	Number of photons that hit PMTs in this event : 1606
+	Energy weighted position of hits in LXe : (0.0738991,-0.0121195,-98.9945)
+	Total energy deposition in scintillator : 539.066 (keV)
+	Reconstructed position of hits in LXe : (0.0831341,-1.08319,-17.5878)
+	Number of photons that hit PMTs in this event : 1518
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5270
+	Number of photons produced by scintillation in this event : 5489
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3664
+	Number of photons absorbed (OpAbsorption) in this event : 3971
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-9.61,0.634004,-74.8345)
-	Total energy deposition in scintillator : 538.456 (keV)
-	Reconstructed position of hits in LXe : (-1.76512,0.78514,-21.6676)
-	Number of photons that hit PMTs in this event : 1589
-	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5474
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3885
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
-Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.0363846,0.105927,1.02407)
-	Total energy deposition in scintillator : 537.816 (keV)
-	Reconstructed position of hits in LXe : (0.0886957,-1.9392,-3.10788)
-	Number of photons that hit PMTs in this event : 1566
-	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5359
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3793
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
-Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-37.9051,4.79651,-58.1883)
-	Total energy deposition in scintillator : 534.116 (keV)
-	Reconstructed position of hits in LXe : (-5.24428,2.10736,-21.589)
-	Number of photons that hit PMTs in this event : 1351
-	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 4621
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3270
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
-Unaccounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (17.9054,-5.11137,-52.179)
-	Total energy deposition in scintillator : 537.172 (keV)
-	Reconstructed position of hits in LXe : (6.4645,-2.30882,-22.6731)
-	Number of photons that hit PMTs in this event : 1566
+	Energy weighted position of hits in LXe : (0.396793,-0.608062,-105.507)
+	Total energy deposition in scintillator : 537.927 (keV)
+	Reconstructed position of hits in LXe : (-0.274503,-1.38035,-16.6277)
+	Number of photons that hit PMTs in this event : 1459
 	Number of PMTs above threshold(2) : 32
 	Number of photons produced by scintillation in this event : 5268
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3702
+	Number of photons absorbed (OpAbsorption) in this event : 3809
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unaccounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (-6.93916,1.70443,-90.5821)
+	Total energy deposition in scintillator : 537.774 (keV)
+	Reconstructed position of hits in LXe : (-4.76374,2.8512,-20.8279)
+	Number of photons that hit PMTs in this event : 1471
+	Number of PMTs above threshold(2) : 32
+	Number of photons produced by scintillation in this event : 5258
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 3787
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unaccounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (3.62478,-28.3945,-70.1812)
+	Total energy deposition in scintillator : 536.861 (keV)
+	Reconstructed position of hits in LXe : (2.90479,-10.1954,-23.7412)
+	Number of photons that hit PMTs in this event : 1500
+	Number of PMTs above threshold(2) : 32
+	Number of photons produced by scintillation in this event : 5158
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 3658
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unaccounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (-0.0497453,0.972606,-84.4793)
+	Total energy deposition in scintillator : 536.328 (keV)
+	Reconstructed position of hits in LXe : (-0.82084,-0.515543,-20.3176)
+	Number of photons that hit PMTs in this event : 1468
+	Number of PMTs above threshold(2) : 32
+	Number of photons produced by scintillation in this event : 5051
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 3583
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unaccounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.540000s Real=0.549259s Sys=0.000000s
+  User=1.920000s Real=1.943148s Sys=0.010000s
 
  ======================== run summary ======================
 The run was 10 events.
-Number of hits per event:	 1500 +- 27.36
+Number of hits per event:	 1465 +- 48.93
 Number of hits per event above threshold:	 32 +- 0
-Number of scintillation photons per event :	 5213 +- 76.91
+Number of scintillation photons per event :	 5113 +- 153.6
 Number of Cerenkov photons per event:	 0 +- 0
-Number of absorbed photons per event :	 3713 +- 60.85
+Number of absorbed photons per event :	 3648 +- 107.4
 Number of photons absorbed at boundary per event:	 0 +- 0
-Total energy deposition in scintillator per event:	 537.2 +- 0.4297 keV.
+Total energy deposition in scintillator per event:	 519.6 +- 16.98 keV.
 
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -23,24 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProcessAttribute
 //
+// Class description:
 //
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1997, H.Kurashige
-//   ----------------  G4ProcessAttribute -----------------
-// Class Description
-//  This class is used by G4ProcessManager ONLY for booking !!!
-//
-// History:
-//   adds copy constructor            27 June 1998 H.Kurashige
-// ------------------------------------------------------------
+// This class is used exclusively by G4ProcessManager for booking.
 
-#ifndef G4ProcessAttribute_h
-#define G4ProcessAttribute_h 1
+// Author: H.Kurashige, 2 December 1997
+// --------------------------------------------------------------------
+#ifndef G4ProcessAttribute_hh
+#define G4ProcessAttribute_hh 1
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -51,70 +43,58 @@ class G4VProcess;
 
 class G4ProcessAttribute
 {
-  // this class is used by G4ProcessManager ONLY for booking !!!
   friend class G4ProcessManager;
+
   public:
+
     G4ProcessAttribute();
     G4ProcessAttribute(const G4VProcess* aProcess);
-    G4ProcessAttribute(const G4ProcessAttribute &right);
-    //  Constructors
+    G4ProcessAttribute(const G4ProcessAttribute& right);
+      // Constructors
 
     ~G4ProcessAttribute();
-    //  Destructor
+      // Destructor
 
-    G4ProcessAttribute & operator=(const G4ProcessAttribute &right);
-    // Assignment operator
+    G4ProcessAttribute& operator=(const G4ProcessAttribute& right);
+      // Assignment operator
 
-    G4bool operator==(const G4ProcessAttribute &right) const;
-    G4bool operator!=(const G4ProcessAttribute &right) const;
-    // equal / unequal operator
+    inline G4bool operator==(const G4ProcessAttribute &right) const;
+    inline G4bool operator!=(const G4ProcessAttribute &right) const;
+      // Equality operators
 
-  
   protected:
-    G4VProcess*           pProcess;
-    // pointer to G4VProcess
 
-    G4bool                isActive;
-    // flag for activation/inactivation
+    G4VProcess* pProcess = nullptr;
+      // Pointer to G4VProcess
 
-    G4int                 idxProcessList;
-    // index to a ProcessVector for theProcessList and 
+    G4bool isActive = true;
+      // Flag for activation/inactivation
 
-    G4int                 idxProcVector[G4ProcessManager::SizeOfProcVectorArray];
-    // index to ProcessVectors for "Doit"s and "GetPhysicalInteractionLength"s
-    //   -1 : not applicable
+    G4int idxProcessList = -1;
+      // Index to a ProcessVector for theProcessList
 
-    G4int                 ordProcVector[G4ProcessManager::SizeOfProcVectorArray];
-    // ordering parameter 
+    G4int idxProcVector[G4ProcessManager::SizeOfProcVectorArray];
+      // Index to ProcessVectors for Doit() and GetPhysicalInteractionLength()
+      // methods. A value of -1 means "not applicable"
+
+    G4int ordProcVector[G4ProcessManager::SizeOfProcVectorArray];
+      // Ordering parameter 
 };
 
+// ------------------------
+// Inline methods
+// ------------------------
+
 inline 
- G4ProcessAttribute::G4ProcessAttribute(const G4VProcess* aProcess):
-         pProcess((G4VProcess*)aProcess),
-	 isActive(true),
-	 idxProcessList(-1)
+G4bool G4ProcessAttribute::operator==(const G4ProcessAttribute& right) const
 {
-  for(size_t ii=0; ii<G4ProcessManager::SizeOfProcVectorArray; ii++){
-    idxProcVector[ii]=-1;
-    ordProcVector[ii]=0; 
-  }
+  return this->pProcess == right.pProcess;
 }
 
 inline 
- G4bool  G4ProcessAttribute::operator==(const G4ProcessAttribute &right) const
+G4bool G4ProcessAttribute::operator!=(const G4ProcessAttribute& right) const
 {
-    return this->pProcess == right.pProcess;
-}
-
-inline 
- G4bool  G4ProcessAttribute::operator!=(const G4ProcessAttribute &right) const
-{
-    return this->pProcess != right.pProcess;
+  return this->pProcess != right.pProcess;
 }
 
 #endif
-
-
-
-
-

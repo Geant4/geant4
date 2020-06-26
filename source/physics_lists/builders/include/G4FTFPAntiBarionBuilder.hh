@@ -76,14 +76,7 @@ class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4FTFModel * theStringModel;
-    G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
-    G4LundStringFragmentation * theLund;
-
     G4VCrossSectionDataSet* theAntiNucleonData;
-    G4VComponentCrossSection * theAntiNucleonXS;
     G4double theMin;
     G4double theMax;
 

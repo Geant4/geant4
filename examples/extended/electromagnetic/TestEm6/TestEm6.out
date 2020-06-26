@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -113,7 +113,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Iron
@@ -122,7 +122,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
@@ -194,7 +194,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000826s Sys=0.000000s
+  User=0.000000s Real=0.000936s Sys=0.000000s
 
  Number of process calls --->	GammaToMuPair : 5... write Root file : testem6_0.root - done
 ... close Root file : testem6_0.root - done
@@ -223,7 +223,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Materials : 
  Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 1 km 
 
-========= Table of registered couples ==============================
+========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Iron
@@ -232,7 +232,7 @@ Index : 0     used in the geometry : Yes
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
+==================================================================
 
 ### Run 1 starts.
 ### Run 1 start.
@@ -300,7 +300,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000439s Sys=0.000000s
+  User=0.000000s Real=0.000491s Sys=0.000000s
 
  Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write Root file : testem6_1.root - done
 ... close Root file : testem6_1.root - done

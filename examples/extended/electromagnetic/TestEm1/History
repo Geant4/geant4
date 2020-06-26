@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-01-20 V.Ivanchenko (testem1-V10-06-00)
+- PhysicsList - use G4RadioactiveDecayBase instead of obsolete
+    G4RadioactiveDecay and minor code cleanup
      
 09-10-19 mma (testem1-V10-05-03)
 - PhysicsList : cleanup initialisation.

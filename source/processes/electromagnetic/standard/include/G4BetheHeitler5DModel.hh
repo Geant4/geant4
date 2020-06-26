@@ -72,12 +72,12 @@ public:
   virtual ~G4BetheHeitler5DModel();
 
   virtual void Initialise(const G4ParticleDefinition*,
-			  const G4DataVector&) final;
+			  const G4DataVector&) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
                          const G4MaterialCutsCouple* couple,
                          const G4DynamicParticle* aDynamicGamma,
-                         G4double, G4double) final;
+                         G4double, G4double) override;
 
   inline void SetVerbose(G4int val) { fVerbose = val; }
 

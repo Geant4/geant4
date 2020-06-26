@@ -319,4 +319,26 @@ inline bool is_heprep(const std::string& a_file,bool& a_is){
 
 }}
 
+#include <climits>
+
+namespace tools {
+namespace file {
+
+inline bool is_shp(const std::string& a_file,bool& a_is){
+  long sz;
+  if(!size(a_file,sz)) {a_is = false;return false;}
+  // below logic from shapelib-1.5.0/shpopen.c.
+  unsigned char head[100];
+ {unsigned int num = 100;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=100) {a_is = false;return true;}}
+  unsigned int _sz = (static_cast<unsigned int>(head[24])<<24)|(head[25]<<16)|(head[26]<<8)|head[27];
+  if(_sz<(UINT_MAX/2)) _sz *= 2;
+  else                 _sz = (UINT_MAX/2)*2;
+  a_is = sz==long(_sz)?true:false;  
+  return true;
+}
+
+}}
+
 #endif

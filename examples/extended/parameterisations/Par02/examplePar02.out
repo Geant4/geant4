@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -25,8 +25,6 @@ G4GDML: Reading 'Par02FullDetector.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Geometry loaded from  file .......Par02FullDetector.gdml 
 
-ecal !!!
-
 hcal !!!
 
 hcal !!!
@@ -46,9 +44,8 @@ ecal !!!
 ecal !!!
 
 ecal !!!
-Warning : Region <MuonForward_6> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
+
+ecal !!!
 Warning : Region <MuonEndCap_1> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -82,26 +79,29 @@ Default cuts are used for this region.
 Warning : Region <MuonForward_5> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
+Warning : Region <MuonForward_6> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
 Instantiating Visualization Manager.......
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
 
 You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateXm (OGLIXm, OGLI)
-OpenGLStoredXm (OGLSXm, OGL, OGLS)
-OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateXm (OGLIXm, OGLI)
+  OpenGLStoredXm (OGLSXm, OGL, OGLS)
+  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -114,12 +114,18 @@ Registered model factories:
   drawByParticleID
   drawByEncounteredVolume
 
+Registered models:
+  None
+
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
   encounteredVolumeFilter
+
+Registered filters:
+  None
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none

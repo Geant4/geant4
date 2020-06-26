@@ -67,20 +67,16 @@ using namespace std;
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonPhysics);
 
-G4ThreadLocal G4FTFBuilder* G4IonPhysics::theBuilder=nullptr;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::G4IonPhysics(G4int ver)
-  : G4IonPhysics("ionInelasticFTFP_BIC")
-{
-  verbose = ver;
-}
+  : G4IonPhysics("ionInelasticFTFP_BIC", ver)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4IonPhysics::G4IonPhysics(const G4String& nname)
-  : G4VPhysicsConstructor(nname),verbose(1)
+G4IonPhysics::G4IonPhysics(const G4String& nname, G4int ver)
+  : G4VPhysicsConstructor(nname),verbose(ver)
 {
   SetPhysicsType(bIons);
   if(verbose > 1) { G4cout << "### IonPhysics: " << nname << G4endl; }
@@ -89,13 +85,7 @@ G4IonPhysics::G4IonPhysics(const G4String& nname)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::~G4IonPhysics()
-{
-  // Explictly setting pointers to zero is actually needed.
-  // These are static variables, in case we restart threads 
-  // we need to re-create objects
-  delete theBuilder; 
-  theBuilder = nullptr;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -126,8 +116,8 @@ void G4IonPhysics::ConstructProcess()
   // FTFP
   G4HadronicInteraction* theFTFP = nullptr;
   if(emax > theIonBC->GetMaxEnergy()) {
-    theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
-    theFTFP = theBuilder->GetModel();
+    G4FTFBuilder theBuilder("FTFP",thePreCompound);
+    theFTFP = theBuilder.GetModel();
     theFTFP->SetMinEnergy( G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade() );
     theFTFP->SetMaxEnergy( emax );
   }

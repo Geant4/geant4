@@ -23,35 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4NucleiPropertiesTableAME12 class implementation 
 //
+// Data updated to AME2012
+//   "The Ame2012 atomic mass evaluation (I)"  
+//    by G.Audi, M.Wang, A.H.Wapstra, F.G.Kondev,
+//       M.MacCormick, X.Xu, and B.Pfeiffer
+//    Chinese Physics C36 p. 1287-1602, December 2012.
+//   "The Ame2012 atomic mass evaluation (II)"  
+//    by M.Wang, G.Audi, A.H.Wapstra, F.G.Kondev,
+//       M.MacCormick, X.Xu, and B.Pfeiffer
+//    Chinese Physics C36 p. 1603-2014, December 2012.
 //
-// -------------------------------------------------------------------
-//
-//      File name:     G4NucleiPropertiesTableAME12.cc 
-//
-//      Authors:       Tatsumi Koi (tkoi@slac.stanford.edu)
-// 
-//      Data are update to 
-//      "The Ame2012 atomic mass evaluation (I)"  
-//      	by G.Audi, M.Wang, A.H.Wapstra, F.G.Kondev, M.MacCormick, X.Xu, and B.~Pfeiffer
-//      	Chinese Physics C36 p. 1287-1602, December 2012.
-//      "The Ame2012 atomic mass evaluation (II)"  
-//      	by M.Wang, G.Audi, A.H.Wapstra, F.G.Kondev, M.MacCormick, X.Xu, and B.~Pfeiffer
-//              Chinese Physics C36 p. 1603-2014, December 2012.
-//
-//      Creation date: Aug. 2016 
-//                     based on G4NucleiPropertiesTableAME03
-//
-//      Modifications: 
-//
+// Author: Tatsumi Koi, SLAC - August 2016 
+// --------------------------------------------------------------------
 
 #include "G4ios.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NucleiPropertiesTableAME12.hh"
-
-// Class G4NucleiPropertiesTableAME12 
-// Determine the table index for a Nuclide with Z protons and A nucleons
 
 G4ThreadLocal G4bool  G4NucleiPropertiesTableAME12::isIntialized = false;
 G4ThreadLocal G4double G4NucleiPropertiesTableAME12::electronMass[ZMax];
@@ -60,26 +50,34 @@ G4NucleiPropertiesTableAME12::G4NucleiPropertiesTableAME12()
 {
 }
 
+// Determine the table index for a Nuclide with Z protons and A nucleons.
+//
 G4int G4NucleiPropertiesTableAME12::GetIndex(G4int Z, G4int A) 
 {
-  if(A>G4NucleiPropertiesTableAME12::MaxA) {
+  if(A>G4NucleiPropertiesTableAME12::MaxA)
+  {
     G4Exception("G4NucleiPropertiesTableAME12::GetIndex",
-		"PART201",
-		EventMustBeAborted,"Nucleon number larger than 293");
+                "PART201",
+                EventMustBeAborted,"Nucleon number larger than 293");
     return -1;
-  } else if(A<1) {
+  }
+  else if(A<1)
+  {
     G4Exception("G4NucleiPropertiesTableAME12::GetIndex",
-		"Illegal arguemntPART201",
-		EventMustBeAborted," Nucleon number is negative"); 
+                "Illegal arguemntPART201",
+                EventMustBeAborted," Nucleon number is negative"); 
     return -1;
-  } else if(Z>A) {
+  }
+  else if(Z>A)
+  {
     G4Exception("G4NucleiPropertiesTableAME12::GetIndex",
-		"PART201",
-		EventMustBeAborted, "Nucleon number smaller than Z"); 
+                "PART201",
+                EventMustBeAborted, "Nucleon number smaller than Z"); 
     return -1;
   }
    
-  for (G4int i = shortTable[A-1]; i < shortTable[A] ; i++) {
+  for (G4int i = shortTable[A-1]; i < shortTable[A]; ++i)
+  {
     if (indexArray[0][i] == Z ) return i;
   }
   return -1;
@@ -102,13 +100,15 @@ G4int G4NucleiPropertiesTableAME12::MaxZ(G4int A)
 
 G4double G4NucleiPropertiesTableAME12::GetNuclearMass(G4int Z, G4int A)
 {
-  if (!isIntialized) {
+  if (!isIntialized)
+  {
     // calculate electron mass in orbit with binding energy
     isIntialized = true;
-    for (int iz=1; iz<ZMax; iz+=1){
+    for (G4int iz=1; iz<ZMax; iz+=1)
+    {
       electronMass[iz] =  iz*electron_mass_c2 
-	  - ( 14.4381 * std::pow( G4double(iz) , 2.39 )) *eV
-	  - ( 1.55468*1e-6 * std::pow( G4double(iz) , 5.35 ) ) *eV;
+          - ( 14.4381 * std::pow( G4double(iz) , 2.39 )) *eV
+          - ( 1.55468*1e-6 * std::pow( G4double(iz) , 5.35 ) ) *eV;
     }
   }
 
@@ -117,26 +117,31 @@ G4double G4NucleiPropertiesTableAME12::GetNuclearMass(G4int Z, G4int A)
   if (nuclearMass <0.0) nuclearMass = 0.0;
 
   return nuclearMass;
-
 }
-
 
 G4double G4NucleiPropertiesTableAME12::GetMassExcess(G4int Z, G4int A) 
 {
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-      return MassExcess[i]*keV;
-    } else {
-      return 0.0;
-    }
+  G4int i=GetIndex(Z, A);
+  if (i >= 0)
+  {
+    return MassExcess[i]*keV;
+  }
+  else
+  {
+    return 0.0;
+  }
 }
 
 G4double G4NucleiPropertiesTableAME12::GetBindingEnergy(G4int Z, G4int A)
 {
   G4int i=GetIndex(Z, A);
-  if (i >= 0){
-      return (G4double(A-Z)*MassExcess[0] + G4double(Z)*MassExcess[1] - MassExcess[i])*keV;
-  } else { 
+  if (i >= 0)
+  {
+      return (G4double(A-Z)*MassExcess[0]
+            + G4double(Z)*MassExcess[1] - MassExcess[i])*keV;
+  }
+  else
+  { 
     return 0.0;
   }
 }
@@ -144,29 +149,34 @@ G4double G4NucleiPropertiesTableAME12::GetBindingEnergy(G4int Z, G4int A)
 G4double  G4NucleiPropertiesTableAME12::GetBetaDecayEnergy(G4int Z, G4int A)
 {
   G4int i=GetIndex(Z, A);
-    if (i >= 0){
+    if (i >= 0)
+    {
       return BetaEnergy[i]*keV;
-    } else { 
+    }
+    else
+    { 
       return 0.0;
     }
 }
 
 G4double  G4NucleiPropertiesTableAME12::GetAtomicMass(G4int Z, G4int A)
 {
-  G4int i=GetIndex(Z, A);	
-  if (i >= 0){
+  G4int i=GetIndex(Z, A);
+  if (i >= 0)
+  {
     return MassExcess[i]*keV + G4double(A)*amu_c2;
-  } else { 
+  }
+  else
+  { 
     return 0.0;
-  }	
+  }
 }
-
 
 G4bool G4NucleiPropertiesTableAME12::IsInTable(G4int Z, G4int A)
 {
-  return (Z <= A && A >= 1 && A <= 273 && Z >= 0 && Z <= 110 && GetIndex(Z, A) >= 0);
+  return (Z <= A && A >= 1 && A <= 273 && Z >= 0
+       && Z <= 110 && GetIndex(Z, A) >= 0);
 }
-
 
 //+------------------------------------------------------------+
 //| Table of Z (number of protons) and A (number of nucleons)  |
@@ -856,9 +866,6 @@ const G4int G4NucleiPropertiesTableAME12::indexArray[2][G4NucleiPropertiesTableA
   }
 };
 
-
-
-
 //+----------------------+
 //| Table of Mass Excess |
 //+----------------------+
@@ -1202,7 +1209,6 @@ const G4double G4NucleiPropertiesTableAME12::MassExcess[G4NucleiPropertiesTableA
  182550      , 185030      , 183570      , 187302      , 191454      , 187921      , 193251      , 190479      , 193970      , 198932      ,
  196044      , 199266      , 201427      
 };
-
 
 //+----------------------------+
 //| Table of Beta Decay Energy |
@@ -1553,6 +1559,7 @@ const G4double G4NucleiPropertiesTableAME12::BetaEnergy[G4NucleiPropertiesTableA
 //         The index in this table coincide with A-1
 //         For each A value shortTable[A-1] has the index of 
 //         the 1st occurrence in the indexArray[][]
+//
 const G4int G4NucleiPropertiesTableAME12::shortTable[G4NucleiPropertiesTableAME12::MaxA+1]=
 {
     0,    2,    3,    6,    9,   13,   18,   23,   28,   33,
@@ -1586,4 +1593,3 @@ const G4int G4NucleiPropertiesTableAME12::shortTable[G4NucleiPropertiesTableAME1
  3315, 3319, 3322, 3325, 3327, 3330, 3332, 3335, 3337, 3340,
  3342, 3345, 3347, 3350, 3352
 };
-

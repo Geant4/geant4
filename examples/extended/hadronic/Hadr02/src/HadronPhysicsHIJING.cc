@@ -87,6 +87,7 @@ HadronPhysicsHIJING::HadronPhysicsHIJING(G4int)
   fPro = 0;
   fHIJINGPro = 0;    
   fHyperon = 0;
+  fFTFPHyperon = 0;
   fAntiBaryon = 0;
   fHIJINGAntiBaryon = 0;
   fCHIPSInelastic = 0;
@@ -143,8 +144,10 @@ void HadronPhysicsHIJING::CreateModels()
   BertiniPiK->SetMaxEnergy(maxBERT);
 
   //For Hyperons use FTF model
-  fHyperon=new G4HyperonFTFPBuilder;
-    
+  fHyperon=new G4HyperonBuilder;
+  fFTFPHyperon=new G4HyperonFTFPBuilder;
+  fHyperon->RegisterMe( fFTFPHyperon );
+  
   fAntiBaryon=new G4AntiBarionBuilder;
   //FTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasFTF);
   G4FTFPAntiBarionBuilder* FTFPAB = new G4FTFPAntiBarionBuilder(quasiElasFTF);
@@ -165,6 +168,7 @@ HadronPhysicsHIJING::~HadronPhysicsHIJING()
   delete fHIJINGPro;    
     
   delete fHyperon;
+  delete fFTFPHyperon;
   delete fAntiBaryon;
   delete fHIJINGAntiBaryon;
   

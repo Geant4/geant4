@@ -185,7 +185,7 @@ G4int Run::GetIonId(G4String ionName)
    std::map<G4String,G4int>::const_iterator it = fgIonMap.find(ionName);
    if ( it == fgIonMap.end()) {
      fgIonMap[ionName] = fgIonId;
-     if (fgIonId < kMaxHisto2) fgIonId++;
+     if (fgIonId < (kMaxHisto2 - 1)) fgIonId++;
    }
    return fgIonMap[ionName];
 }

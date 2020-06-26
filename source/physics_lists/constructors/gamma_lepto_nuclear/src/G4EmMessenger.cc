@@ -131,6 +131,12 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theNuNucleusBF->SetGuidance("Neutrino-nucleus bias factor");
   theNuNucleusBF->AvailableForStates(G4State_PreInit);
 
+  theGNlowe = new G4UIcmdWithADoubleAndUnit("/physics_lists/em/GammaNuclearLEModelLimit",this);
+  theGNlowe->SetGuidance("Upper energy limit for low-energy model");
+  theGNlowe->SetParameterName("emin",true);
+  theGNlowe->SetUnitCategory("Energy");
+  theGNlowe->AvailableForStates(G4State_PreInit);
+
   theNuDN = new G4UIcmdWithAString("/physics_lists/em/NuDetectorName",this);  
   theNuDN->SetGuidance("Set neutrino detector name");
   theNuDN->AvailableForStates(G4State_PreInit);
@@ -157,6 +163,7 @@ G4EmMessenger::~G4EmMessenger()
   delete theNuEleNcBF;
   delete theNuNucleusBF;
   delete theNuDN;
+  delete theGNlowe;
 
   delete aDir1;
   delete aDir2;
@@ -180,9 +187,10 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==thePMM1)     theB->PositronToMuMuFactor(thePMM1->GetNewDoubleValue(aS));
   if(aComm==thePH1)      theB->PositronToHadronsFactor(thePH1->GetNewDoubleValue(aS));
 
-  if(aComm==theNuEleCcBF)       theB->SetNuEleCcBias(theNuEleCcBF->GetNewDoubleValue(aS));
-  if(aComm==theNuEleNcBF)       theB->SetNuEleNcBias(theNuEleCcBF->GetNewDoubleValue(aS));
-  if(aComm==theNuNucleusBF)     theB->SetNuNucleusBias(theNuNucleusBF->GetNewDoubleValue(aS));
+  if(aComm==theNuEleCcBF)    theB->SetNuEleCcBias(theNuEleCcBF->GetNewDoubleValue(aS));
+  if(aComm==theNuEleNcBF)    theB->SetNuEleNcBias(theNuEleCcBF->GetNewDoubleValue(aS));
+  if(aComm==theNuNucleusBF)  theB->SetNuNucleusBias(theNuNucleusBF->GetNewDoubleValue(aS));
+  if(aComm==theGNlowe)       theB->GammaNuclearLEModelLimit(theGNlowe->GetNewDoubleValue(aS));
 
   if(aComm==theNuDN)     theB->SetNuDetectorName(aS);
 }

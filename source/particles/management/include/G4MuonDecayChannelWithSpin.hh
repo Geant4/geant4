@@ -23,21 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file
+// G4MuonDecayChannelWithSpin
 //
-//      History:
-//               17 August 2004 P.Gumplinger and T.MacPhail
-//               samples Michel spectrum including 1st order
-//               radiative corrections
-//               Reference: Florian Scheck "Muon Physics", in Physics Reports
-//                          (Review Section of Physics Letters) 44, No. 4 (1978)
-//                          187-248. North-Holland Publishing Company, Amsterdam
-//                          at page 210 cc.
+// Class decription:
 //
-//                          W.E. Fisher and F. Scheck, Nucl. Phys. B83 (1974) 25.
-//
-// ------------------------------------------------------------
+// This class describes muon decay kinematics.
+// It assumes V-A coupling with 1st order radiative corrections, the
+// standard model parameter values, but gives incorrect energy spectrum
+// for neutrinos.
+// References:
+// - Florian Scheck "Muon Physics", in Physics Reports
+//   (Review Section of Physics Letters) 44, No. 4 (1978)
+//   187-248. North-Holland Publishing Company, Amsterdam at page 210 cc.
+// - W.E. Fisher and F. Scheck, Nucl. Phys. B83 (1974) 25.
+
+// Authors: P.Gumplinger and T.MacPhail, 17 August 2004 
+// --------------------------------------------------------------------
 #ifndef G4MuonDecayChannelWithSpin_hh
 #define G4MuonDecayChannelWithSpin_hh 1
 
@@ -49,44 +50,38 @@
 
 class G4MuonDecayChannelWithSpin : public G4MuonDecayChannel
 {
-  // Class Decription
-  // This class describes muon decay kinemtics.
-  // This version assumes V-A coupling with 1st order radiative correctons,
-  //              the standard model Michel parameter values, but 
-  //              gives incorrect energy spectrum for neutrinos
+  public:
 
-public:  // With Description
+    G4MuonDecayChannelWithSpin(const G4String& theParentName,
+                                     G4double  theBR);
+    virtual ~G4MuonDecayChannelWithSpin();
 
-  //Constructors 
-  G4MuonDecayChannelWithSpin(const G4String& theParentName,
-	  		     G4double        theBR);
-  //  Destructor
-  virtual ~G4MuonDecayChannelWithSpin();
+    virtual G4DecayProducts* DecayIt(G4double);
 
-protected:
-  // Copy constructor and assignment operator
-  G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin &);
-  G4MuonDecayChannelWithSpin & operator=(const G4MuonDecayChannelWithSpin &);
+  protected:
+
+    G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin&);
+    G4MuonDecayChannelWithSpin& operator=(const G4MuonDecayChannelWithSpin&);
+      // Copy constructor and assignment operator
   
-private:
-  G4MuonDecayChannelWithSpin();
+  private:
 
-public:  // With Description
+    G4MuonDecayChannelWithSpin();
 
-  virtual G4DecayProducts *DecayIt(G4double);
+    // Radiative Correction Factors
 
-private:
-// Radiative Correction Factors
-
-  G4double F_c(G4double x, G4double x0 , G4double omega);
-  G4double F_theta(G4double x, G4double x0 , G4double omega);
-  G4double R_c(G4double x , G4double omega);
-
+    inline G4double F_c(G4double x, G4double x0, G4double omega);
+    inline G4double F_theta(G4double x, G4double x0, G4double omega);
+    G4double R_c(G4double x, G4double omega);
 };
 
-inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0 , G4double omega)
-{
+// ------------------------
+// Inline methods
+// ------------------------
 
+inline G4double
+G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0, G4double omega)
+{
   G4double f_c;
 
   f_c = (5.+17.*x-34.*x*x)*(omega+std::log(x))-22.*x+34.*x*x;
@@ -97,7 +92,8 @@ inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0 , G4doub
   return f_c;
 }
 
-inline G4double G4MuonDecayChannelWithSpin::F_theta(G4double x, G4double x0,G4double omega)
+inline G4double
+G4MuonDecayChannelWithSpin::F_theta(G4double x, G4double x0, G4double omega)
 {
   G4double f_theta;
 

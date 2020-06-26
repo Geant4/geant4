@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// --------------------------------------------------------------------
-//
-// G4LockcoutDestination.cc
+// G4LockcoutDestination class implementation
 //
 // Author: A.Dotti (SLAC), April 2017
 // --------------------------------------------------------------------
@@ -39,18 +36,19 @@ namespace
   G4Mutex out_mutex = G4MUTEX_INITIALIZER;
 }
 
-G4LockcoutDestination::~G4LockcoutDestination()
-{
-}
+// --------------------------------------------------------------------
+G4LockcoutDestination::~G4LockcoutDestination() {}
 
-G4int G4LockcoutDestination::ReceiveG4cout(const G4String& msg )
+// --------------------------------------------------------------------
+G4int G4LockcoutDestination::ReceiveG4cout(const G4String& msg)
 {
   G4AutoLock l(&out_mutex);
   // Forward call to base class
   return G4coutDestination::ReceiveG4cout(msg);
 }
 
-G4int G4LockcoutDestination::ReceiveG4cerr(const G4String& msg )
+// --------------------------------------------------------------------
+G4int G4LockcoutDestination::ReceiveG4cerr(const G4String& msg)
 {
   G4AutoLock l(&out_mutex);
   return G4coutDestination::ReceiveG4cerr(msg);

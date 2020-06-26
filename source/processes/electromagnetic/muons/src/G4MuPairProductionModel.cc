@@ -667,7 +667,10 @@ void G4MuPairProductionModel::StoreTables() const
   for (G4int iz=0; iz<nzdat; ++iz) {
     G4int Z = zdat[iz];
     G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
-    if(!pv) { DataCorrupted(Z, 1.0); }
+    if(!pv) { 
+      DataCorrupted(Z, 1.0);
+      return;
+    }
     std::ostringstream ss;
     ss << "mupair/" << particle->GetParticleName() << Z << ".dat";
     std::ofstream outfile(ss.str());
@@ -692,14 +695,13 @@ G4bool G4MuPairProductionModel::RetrieveTables()
   for (G4int iz=0; iz<nzdat; ++iz) {
     G4double Z = zdat[iz];
     G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbine+1);
-    if(!pv) { 
-      DataCorrupted(Z, 2.0);
-      return false;
-    }
     std::ostringstream ss;
     ss << dir << particle->GetParticleName() << Z << ".dat";
     std::ifstream infile(ss.str(), std::ios::in);
-    if(!pv->Retrieve(infile)) { return false; }
+    if(!pv->Retrieve(infile)) { 
+      delete pv;
+      return false; 
+    }
     fElementData->InitialiseForElement(Z, pv);
   }
   return true;

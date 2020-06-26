@@ -49,8 +49,9 @@
 #define G4VWLSTimeGeneratorProfile_h 1
 
 #include "G4ios.hh"
-#include "globals.hh"
+//#include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
+//class G4MaterialPropertiesTable;
 
 class G4VWLSTimeGeneratorProfile
 {

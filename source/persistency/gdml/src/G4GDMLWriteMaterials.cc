@@ -230,6 +230,22 @@ void G4GDMLWriteMaterials::PropertyVectorWrite(const G4String& key,
    defineElement->appendChild(matrixElement);
 }
 
+void G4GDMLWriteMaterials::PropertyConstWrite(const G4String& key,
+					      const G4double pval, const G4MaterialPropertiesTable* ptable)
+{  
+   const G4String matrixref = GenerateName(key, ptable);
+   xercesc::DOMElement* matrixElement = NewElement("matrix");
+   matrixElement->setAttributeNode(NewAttribute("name", matrixref));
+   matrixElement->setAttributeNode(NewAttribute("coldim", "1"));
+   std::ostringstream pvalues;
+
+   pvalues << pval;
+   matrixElement->setAttributeNode(NewAttribute("values", pvalues.str()));
+
+   defineElement->appendChild(matrixElement);
+}
+
+
 void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
                                          const G4Material* const mat)
 {
@@ -276,13 +292,15 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
       propElement = NewElement("property");
       propElement->setAttributeNode(NewAttribute("name", 
                    ptable->GetMaterialConstPropertyNames()[cpos->first]));
-      propElement->setAttributeNode(NewAttribute("ref", 
-                   ptable->GetMaterialConstPropertyNames()[cpos->first]));
-      xercesc::DOMElement* constElement = NewElement("constant");
-      constElement->setAttributeNode(NewAttribute("name", 
-                    ptable->GetMaterialConstPropertyNames()[cpos->first]));
-      constElement->setAttributeNode(NewAttribute("value", cpos->second));
-      defineElement->appendChild(constElement);
+      propElement->
+	setAttributeNode(NewAttribute("ref", 
+				      GenerateName(ptable->GetMaterialConstPropertyNames()[cpos->first],
+						   ptable)));
+
+      
+      PropertyConstWrite(ptable->GetMaterialConstPropertyNames()[cpos->first],
+			 cpos->second, ptable);
+
       matElement->appendChild(propElement);
    }
 }
