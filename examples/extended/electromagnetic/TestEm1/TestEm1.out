@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-patch-03    (6-November-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -425,7 +425,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.440000s Real=1.453337s Sys=0.010000s
+  User=1.410000s Real=1.414580s Sys=0.010000s
 
  ======================== run summary ======================
 
@@ -494,7 +494,7 @@ N=17 V[N]={2090744789413038816, 475879386275182165, 924531448196777844, 92377436
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.090000s Real=0.088230s Sys=0.000000s
+  User=0.080000s Real=0.077665s Sys=0.000000s
 
  ======================== run summary ======================
 

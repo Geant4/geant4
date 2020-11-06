@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 October 2020 Witek Pokorski (gdml-V10-05-10)
+- Fix for problem 2273 (fixing loops when from == to).
+
 13 November 2019 Makoto Asai (gdml-V10-05-09)
 - G4GDMLRead.cc : avoid double-definition of units.
 

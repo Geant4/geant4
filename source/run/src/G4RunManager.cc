@@ -705,18 +705,35 @@ void G4RunManager::rndmSaveThisRun()
   os << "run" << runNumber << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();  
 
-  G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
+  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
-  if(verboseLevel>0) G4cout << "currentRun.rndm is copied to file: " << fileOut << G4endl;    
+  if(verboseLevel>0) 
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
 }
 
 void G4RunManager::rndmSaveThisEvent()
 {
-  if(!storeRandomNumberStatus || currentEvent == 0) {
-     G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
-          << " there is no currentEvent or its RandomEngineStatus is not available."
-	  << G4endl << "Command ignored." << G4endl;
-     return;
+  if(currentEvent == 0)
+  {
+    G4cerr
+      << "Warning from G4RunManager::rndmSaveThisEvent():"
+      << " there is no currentEvent available."
+      << G4endl << "Command ignored." << G4endl;
+    return;
+  }
+
+  if(!storeRandomNumberStatus)
+  {
+    G4cerr
+      << "Warning from G4RunManager::rndmSaveThisEvent():"
+      << " Random number engine status is not available."
+      << G4endl << "/random/setSavingFlag command must be issued "
+      << "prior to the start of the run. Command ignored." << G4endl;
+    return;
   }
   
   G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
@@ -726,9 +743,14 @@ void G4RunManager::rndmSaveThisEvent()
      << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();       
 
-  G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
+  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
-  if(verboseLevel>0) G4cout << "currentEvent.rndm is copied to file: " << fileOut << G4endl;  
+  if(verboseLevel>0) 
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
 }
   
 void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)

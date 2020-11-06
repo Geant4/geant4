@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2020   Alberto Ribon  (hadr-hpp-V10-05-11)
+------------------------------------------------------
+-  G4ParticleHPInelastic, G4ParticleHPInelasticData : improved error message
+   in the case that both G4PARTICLEHPDATA and the related particle-specific
+   environmental variable (e.g. G4PROTONHPDATA) are not defined.
+   The recommandation is to define only G4PARTICLEHPDATA.
+
 05 May 2020   Gunter Folger  (hadr-hpp-V10-05-10)
 -------------------------------------------------
 - fix for clang10: Correct copy ctor in G4ParticleHPDataPoint.hh

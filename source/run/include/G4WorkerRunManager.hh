@@ -71,6 +71,8 @@ public:
 protected:
     virtual void ConstructScoringWorlds();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
+    virtual void rndmSaveThisRun();
+    virtual void rndmSaveThisEvent();
     virtual void MergePartialResults();
     //This method will merge (reduce) the results of this run into the
     //global run

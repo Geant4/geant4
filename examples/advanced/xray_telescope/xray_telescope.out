@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-patch-03    (6-November-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -379,7 +379,7 @@ Opening output file xraytel ...  done
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.010000s Real=0.013941s Sys=0.000000s
+  User=0.020000s Real=0.011920s Sys=0.000000s
 ##########################################
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.

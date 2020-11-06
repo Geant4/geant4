@@ -4359,7 +4359,7 @@ static int tools_tools_tools_gl2psPrintPDFShaderStreamDataCoord(tools_GL2PSverte
   int offs = 0;
   unsigned long imap;
   tools_GLfloat diff;
-  double dmax = ~1UL;
+  double dmax = (double) ~1UL;
   char edgeflag = 0;
 
   /* FIXME: temp bux fix for 64 bit archs: */
@@ -4402,7 +4402,7 @@ static int tools_tools_tools_gl2psPrintPDFShaderStreamDataRGB(tools_GL2PSvertex 
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+  double dmax = (double) ~1UL;
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -4427,7 +4427,7 @@ static int tools_tools_tools_gl2psPrintPDFShaderStreamDataAlpha(tools_GL2PSverte
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+  double dmax = (double) ~1UL;
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;

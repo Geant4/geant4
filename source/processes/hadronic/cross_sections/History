@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 June 2020 - Alberto Ribon (hadr-cross-V10-05-33)
+- G4CrossSectionElastic, G4CrossSectionInelastic : for ions and anti-ions,
+  the max energy of applicability of the (elastic and inelastic) cross
+  sections must scale with the absolute baryonic number; however, the
+  cross sections objects are often shared between the different types
+  of ions (d, t, He3, alpha, and genericIon) therefore we scale by a
+  large value (256, safely larger than the number of nucleons of the
+  heaviest nuclides).
+  This fix a bug reported (by email) by LHCb.
+
 30 January 2020 - Vladimir Ivanchenko (hadr-cross-V10-05-32)
 - G4HadronInelasticDataSet - fixed problem #2220 - wrong GHEISHA x-section
 

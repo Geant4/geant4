@@ -157,68 +157,56 @@ G4double G4VLongitudinalStringDecay::GetMassCut() { return MassCut; }
 
 G4KineticTrackVector* G4VLongitudinalStringDecay::ProduceOneHadron(const G4ExcitedString * const string)
 {
-        // Check string decay threshold	
-	G4KineticTrackVector * result=0;  // return 0 when string exceeds the mass cut
-	
-	pDefPair hadrons((G4ParticleDefinition *)0,(G4ParticleDefinition *)0);
-
-	G4FragmentingString aString(*string);
+        G4KineticTrackVector* result = nullptr; 
+        pDefPair hadrons( nullptr, nullptr );
+        G4FragmentingString aString( *string );
 
         #ifdef debug_VStringDecay
         G4cout<<"G4VLongitudinalStringDecay::ProduceOneHadron: PossibleHmass StrMass "
               <<aString.Mass()<<" MassCut "<<MassCut<<G4endl;
-        G4cout<<"G4VLongitudinalStringDecay::ProduceOneHadron: PossibleHmass StrMass WWW "
-              <<aString.Mass()<<G4endl;
         #endif
-
-	if ( sqr(PossibleHadronMass(&aString,0,&hadrons)+MassCut) < aString.Mass2()) {
-		return 0;
-	}
-
-        // The string mass has low mass---------------------------
-	
-	result=new G4KineticTrackVector;
         
-	if ( hadrons.second ==0 )
-	{
+        SetMinimalStringMass( &aString );
+        PossibleHadronMass( &aString, 0, &hadrons );
+        result = new G4KineticTrackVector;
+        if ( hadrons.first != nullptr ) {       
+           if ( hadrons.second == nullptr ) {
                // Substitute string by light hadron, Note that Energy is not conserved here!
 
                #ifdef debug_VStringDecay
-	       G4cout << "VlongSF Warning replacing string by single hadron (G4VLongitudinalStringDecay)" <<G4endl;
-	       G4cout << hadrons.first->GetParticleName()<<G4endl
-	              << "string .. " << string->Get4Momentum() << " " 
-	              << string->Get4Momentum().m() << G4endl;
-               #endif		
+               G4cout << "VlongSD Warning replacing string by single hadron (G4VLongitudinalStringDecay)" <<G4endl;
+               G4cout << hadrons.first->GetParticleName()<<G4endl
+                      << "string .. " << string->Get4Momentum() << " " 
+                      << string->Get4Momentum().m() << G4endl;
+               #endif           
 
                G4ThreeVector   Mom3 = string->Get4Momentum().vect();
-	       G4LorentzVector Mom( Mom3, std::sqrt( Mom3.mag2() + sqr(hadrons.first->GetPDGMass())) );
+               G4LorentzVector Mom( Mom3, std::sqrt( Mom3.mag2() + sqr( hadrons.first->GetPDGMass() ) ) );
                result->push_back( new G4KineticTrack( hadrons.first, 0, string->GetPosition(), Mom ) );
-	} else 
-	{
-               // I do not know if this part work?
+           } else {
                //... string was qq--qqbar type: Build two stable hadrons,
 
                #ifdef debug_VStringDecay
-	       G4cout << "VlongSF Warning replacing qq-qqbar string by TWO hadrons (G4VLongitudinalStringDecay)" 
-	              << hadrons.first->GetParticleName() << " / " 
-	              << hadrons.second->GetParticleName()
-	              << "string .. " << string->Get4Momentum() << " " 
-	              << string->Get4Momentum().m() << G4endl;
+               G4cout << "VlongSD Warning replacing qq-qqbar string by TWO hadrons (G4VLongitudinalStringDecay)" 
+                      << hadrons.first->GetParticleName() << " / " 
+                      << hadrons.second->GetParticleName()
+                      << "string .. " << string->Get4Momentum() << " " 
+                      << string->Get4Momentum().m() << G4endl;
                #endif
 
-	       G4LorentzVector  Mom1, Mom2;
-	       Sample4Momentum(&Mom1, hadrons.first->GetPDGMass(), 
-			       &Mom2,hadrons.second->GetPDGMass(),
-			       string->Get4Momentum().mag());
+               G4LorentzVector  Mom1, Mom2;
+               Sample4Momentum( &Mom1, hadrons.first->GetPDGMass(), 
+                                &Mom2, hadrons.second->GetPDGMass(),
+                                string->Get4Momentum().mag() );
 
-	       result->push_back( new G4KineticTrack( hadrons.first, 0, string->GetPosition(), Mom1 ) );
-	       result->push_back( new G4KineticTrack( hadrons.second, 0, string->GetPosition(), Mom2) );
+               result->push_back( new G4KineticTrack( hadrons.first,  0, string->GetPosition(), Mom1 ) );
+               result->push_back( new G4KineticTrack( hadrons.second, 0, string->GetPosition(), Mom2 ) );
 
                G4ThreeVector Velocity = string->Get4Momentum().boostVector();
                result->Boost(Velocity);          
-	}
-
-	return result;
+           }
+        }
+        return result;  
 }
 
 //----------------------------------------------------------------------------------------

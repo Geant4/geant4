@@ -1,11 +1,11 @@
-Seed used : 1590745177
+Seed used : 1604571658
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-patch-03    (6-November-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -258,17 +258,21 @@ DNAMolecularStepByStepModel will be used
 Start event 1
 Start event 2
 Start event 3
+ * PrimaryKiller: aborts event 3, energy loss is too large. 
+ * Energy loss by primary is: 3.0469 keV. Event is aborted if the Eloss is > 2 keV
 Start event 4
 Start event 5
 Start event 6
+ * PrimaryKiller: aborts event 6, energy loss is too large. 
+ * Energy loss by primary is: 7.3763 keV. Event is aborted if the Eloss is > 2 keV
 Start event 7
 Start event 8
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 10 events 
-Number of events recorded by the species scorer = 10
- Total energy deposited in the world volume : 10449 eV
+  The run has 8 events 
+Number of events recorded by the species scorer = 8
+ Total energy deposited in the world volume : 8211.2 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

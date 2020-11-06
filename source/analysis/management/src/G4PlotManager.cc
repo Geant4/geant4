@@ -33,7 +33,7 @@
 #if defined(TOOLS_USE_FREETYPE)
 #include <tools/sg/text_freetype>
 #include <tools/xml/xml_style>
-#include <tools/xml/wrap_viewplot_style> 
+#include <tools/xml/wrap_viewplot_fonts_google_style>
   //inlib/xml/viewplot.style file embeded in an inline function.
 
 namespace {
@@ -127,7 +127,7 @@ void regions_style(tools::sg::plots& a_plots,float a_plotter_scale = 1) {
 bool load_embeded_styles(tools::xml::styles& a_styles) {
   std::string ss;
   unsigned int linen;
-  const char** lines = viewplot_style(linen);
+  const char** lines = viewplot_fonts_google_style(linen);
   for(unsigned int index=0;index<linen;index++) {
     std::string s = lines[index];
     tools::replace(s,"@@double_quote@@","\"");

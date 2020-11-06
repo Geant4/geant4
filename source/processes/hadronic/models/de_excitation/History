@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 July 2020 Vladimir Ivanchenko  (hadr-deex-V10-05-23)
+- G4NuclearLevelData - more safe initialisation of data in MT mode, use mutex
+    locks only within each method, whithout calls to other methods
+- G4ExcitationHandler - call to G4NuclearLevelData to initilise data for
+    levels for all elements possibly involved in the geometry
+- G4FermiFragmentsPoolVI - use old interface to nuclear levels
+
 25 May 2020 Alberto Ribon (hadr-deex-V10-05-22)
 - G4DeexPrecoParameters : changed the parameter fMaxLifeTime 
   from 1000 sec to 1 microsec, to correct the treatment of isomers.

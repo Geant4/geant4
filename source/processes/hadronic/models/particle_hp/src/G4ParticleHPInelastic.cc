@@ -82,7 +82,8 @@ G4ParticleHPInelastic::G4ParticleHPInelastic(G4ParticleDefinition* projectile, c
 
 //    G4cout << " entering G4ParticleHPInelastic constructor"<<G4endl;
   if ( !std::getenv("G4PARTICLEHPDATA") && !std::getenv(dataDirVariable) ) {
-     G4String message( "Please set the environement variable " + G4String(dataDirVariable) + " to point to the " + theProjectile->GetParticleName() + " cross-section files." );
+     G4String message("Please setenv G4PARTICLEHPDATA (recommended) or, at least setenv " +
+                      G4String(dataDirVariable) + " to point to the " + theProjectile->GetParticleName() + " cross-section files." );
      throw G4HadronicException(__FILE__, __LINE__,message.c_str());
   }
   if ( std::getenv(dataDirVariable) ) {

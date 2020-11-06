@@ -74,6 +74,7 @@ class G4UImessenger
       G4String DtoS(G4double a);
       G4String BtoS(G4bool b);
       G4int    StoI(G4String s);
+      G4long   StoL(G4String s);
       G4double StoD(G4String s);
       G4bool   StoB(G4String s);
 

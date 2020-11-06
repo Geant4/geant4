@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-patch-03    (6-November-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -551,7 +551,7 @@ Physics stage ends
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
  
- Calculation time                      = 3.17447 s 
+ Calculation time                      = 3.66095 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

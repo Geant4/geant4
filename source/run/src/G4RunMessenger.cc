@@ -506,7 +506,10 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     long seeds[100];
     G4String vl;
     while(!(vl=next()).isNull())
-    { seeds[idx] = (long)(StoI(vl)); idx++; }
+    {
+      seeds[idx] = StoL(vl);
+      idx++;
+    }
     if(idx<2)
     { G4cerr << "/random/setSeeds should have at least two integers. Command ignored." << G4endl; }
     else

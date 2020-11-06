@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 July 2020  John Allison  (visexternals-V10-05-01)
+- gl2ps.cc: Fix Coverity warning.
+
 20 February 2019 Ben Morgan (visexternals-V10-05-00)
 - visexternalgl2ps-V10-05-00: Add include path for generated G4GlobalConfig.hh
 

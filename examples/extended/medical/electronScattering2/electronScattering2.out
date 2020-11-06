@@ -8,7 +8,7 @@ Output File   : output.csv
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-patch-03    (6-November-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -769,4 +769,4 @@ Number of Events Processed:20000
      230   0.010869  0.0023612         14          3 
      231   0.008474  0.0034744          9          2 
      232  0.0054951  0.0017784          6          2 
-### deleting electronFilter 0x139a220
+### deleting electronFilter 0x12412b0

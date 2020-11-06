@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 September 2020  John Allison (interfaces-V10-05-09)
+- G4Qt.cc: Add the following to fix a problem with Windows - see
+  https://geant4-forum.web.cern.ch/t/blue-screen-when-running-b1-example-using-qt/3144
+#ifdef WIN32
+      qApp->setAttribute( Qt::AA_UseDesktopOpenGL );
+#endif
+
 16 Jan 2020 Gabriele Cosmo (interfaces-V10-05-08)
 - Fixed obsolete URLs in UIQt splash screen.
 

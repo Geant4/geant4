@@ -1,12 +1,15 @@
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
-     =========================================================
- 		      Geant4 - radiprotection example
-     =========================================================
+     ==============================================================
+ 		      Geant4 - Solid-target cyclotron example
+     ==============================================================
 
                       Category History file
                       ---------------------
+
+05.11.2020 - Gunter Folger STCyclotron-V10-05-02
+- Update README to recommended environment variable G4PARTCILEHPDATA
 
 19.11.2019 - G. Cosmo tag STCyclotron-V10-05-01
 - Fixed compilation warnings for cases of implicit type conversions.

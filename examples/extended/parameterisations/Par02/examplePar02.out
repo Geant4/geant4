@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-patch-02    (29-May-2020)
+ Geant4 version Name: geant4-10-06-patch-03    (6-November-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,9 +46,6 @@ ecal !!!
 ecal !!!
 
 ecal !!!
-Warning : Region <MuonForward_6> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
 Warning : Region <MuonEndCap_1> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -80,6 +77,9 @@ Warning : Region <MuonForward_4> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
 Warning : Region <MuonForward_5> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region <MuonForward_6> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
 Instantiating Visualization Manager.......

@@ -86,7 +86,13 @@ G4CrossSectionElastic::GetElementCrossSection(const G4DynamicParticle* p,
 void G4CrossSectionElastic::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
   component->BuildPhysicsTable(p);
-  SetMaxKinEnergy(G4HadronicParameters::Instance()->GetMaxEnergy());
+  // For ions, the max energy of applicability of the cross sections must scale
+  // with the absolute baryonic number; however, the cross sections objects are
+  // often shared between the different types of ions (d, t, He3, alpha, and
+  // genericIon) therefore we scale by Zmax - which is safely larger than the
+  // number of nucleons of the heaviest nuclides.
+  SetMaxKinEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() *
+		   ( std::abs( p.GetBaryonNumber() ) > 1 ? Zmax : 1 ) );
 }
 
 void G4CrossSectionElastic::DumpPhysicsTable(const G4ParticleDefinition& p)

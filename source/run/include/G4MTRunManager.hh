@@ -94,6 +94,8 @@ protected:
     //Adds one seed to the list of seeds
     virtual void PrepareCommandsStack();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
+    virtual void rndmSaveThisRun();
+    virtual void rndmSaveThisEvent();
     virtual void CreateAndStartWorkers();
     //Creates worker threads and signal to start
 public:

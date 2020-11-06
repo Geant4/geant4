@@ -94,6 +94,15 @@ G4int G4UImessenger::StoI(G4String str)
   return vl;
 }
 
+G4long G4UImessenger::StoL(G4String str)
+{
+  G4long vl;
+  const char* t = str;
+  std::istringstream is(t);
+  is >> vl;
+  return vl;
+}
+
 G4double G4UImessenger::StoD(G4String str)
 {
   G4double vl;

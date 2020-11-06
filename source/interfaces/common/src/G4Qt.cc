@@ -112,6 +112,9 @@ G4Qt::G4Qt (
 
       int *p_argn = (int*)malloc(sizeof(int));
       *p_argn = argn;
+#ifdef WIN32
+      qApp->setAttribute( Qt::AA_UseDesktopOpenGL );
+#endif
       new QApplication (*p_argn, args);
       if(!qApp) {
         

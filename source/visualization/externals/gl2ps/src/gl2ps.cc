@@ -4378,7 +4378,7 @@ static int gl2psPrintPDFShaderStreamDataCoord(GL2PSvertex *vertex,
   int offs = 0;
   unsigned long imap;
   GLfloat diff;
-  double dmax = ~1UL;
+  double dmax = (double) ~1UL;
   char edgeflag = 0;
 
   /* FIXME: temp bux fix for 64 bit archs: */
@@ -4421,7 +4421,7 @@ static int gl2psPrintPDFShaderStreamDataRGB(GL2PSvertex *vertex,
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+  double dmax = (double) ~1UL;
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -4446,7 +4446,7 @@ static int gl2psPrintPDFShaderStreamDataAlpha(GL2PSvertex *vertex,
 {
   int offs = 0;
   unsigned long imap;
-  double dmax = ~1UL;
+  double dmax = (double) ~1UL;
 
   /* FIXME: temp bux fix for 64 bit archs: */
   if(sizeof(unsigned long) == 8) dmax = dmax - 2048.;
@@ -5250,8 +5250,8 @@ static void gl2psPrintSVGPrimitive(void *data)
   GL2PSprimitive *prim;
   GL2PSxyz xyz[4];
   GL2PSrgba rgba[4];
-  char col[32];
-  char lcap[7], ljoin[7];
+  char col[32] = "";
+  char lcap[7] = "", ljoin[7] = "";
   int newline;
 
   prim = *(GL2PSprimitive**)data;

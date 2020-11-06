@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 April 2020   Gunter Folger (visexternalgl2ps-V10-05-04)
+- (trivial) fix for clang10. Affects src/gl2ps.cc
+
 23rd October 2019 Ben Morgan (visexternalgl2ps-V10-05-03)
 - Only link to imported targets for OpenGL
 - Explicitly link to G4globman/G4global to use/propagate usage requirements.

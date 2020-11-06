@@ -1,3 +1,14 @@
+5.0.6 : use Google roboto_bold and lato_regular instead of Microsoft arialbd and helvetica.
+ - tools/sg/strings : add roboto_bold, lato_regular.
+ - tools/sg/infos_box, textt : add roboto_bold, lato_regular in options for field font.
+ - tools/xml : rm viewplot.style, wrap_viewplot_style and add viewplot_fonts_google.style, wrap_viewplot_fonts_google_style
+ - test/cpp : add lato_regular.ttf, license_font_lato.txt, license_font_roboto.txt, readme_font_lato.txt, roboto_bold.ttf
+ - test/cpp : rm arialbd.ttf, helvetica.ttf
+ - test/cpp/test : viewplot_ttf.cpp  : include wrap_viewplot_style => wrap_viewplot_fonts_google_style
+ - test/cpp/test : lego_offscreen_sg : font_arialbd_ttf() => font_roboto_bold_ttf().
+ - test/cpp/test : update utest_viewplot_out_1x2_h.ps, utest_viewplot_out_1x2_r.ps, wrap_utest_viewplot_out_1x2_h_ps, wrap_utest_viewplot_out_1x2_r_ps to use roboto and lato_regular.
+ - test/cpp/test : update utest_lego_offscreen_out_zb.ps, wrap_utest_lego_offscreen_out_zb_ps to use roboto and lato_regular.
+
 5.0.5:
  - tools/gl2ps : gl2psPDFgroupListWriteXObjectResources : add a break at end of case GL2PS_PIXMAP.
 

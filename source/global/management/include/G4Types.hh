@@ -23,49 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Types
 //
-//
-//
-// GEANT4 native types
-//
+// Definition of global GEANT4 native types
 
+// Author: G.Cosmo (CERN), 1995
+// --------------------------------------------------------------------
 #ifndef G4TYPES_HH
-#define G4TYPES_HH
+#define G4TYPES_HH 1
 
 // Fundamental definitions
 #ifndef G4GMAKE
-#include "G4GlobalConfig.hh"
+#  include "G4GlobalConfig.hh"
 #endif
 
 #ifdef WIN32
-  // Disable warning C4786 on WIN32 architectures:
-  // identifier was truncated to '255' characters
-  // in the debug information
-  //
-  #pragma warning ( disable : 4786 )
-  //
-  // Define DLL export macro for WIN32 systems for
-  // importing/exporting external symbols to DLLs
-  //
-  #if defined G4LIB_BUILD_DLL && !defined G4MULTITHREADED
-    #define G4DLLEXPORT __declspec( dllexport )
-    #define G4DLLIMPORT __declspec( dllimport )
-  #else
-    #define G4DLLEXPORT
-    #define G4DLLIMPORT
-  #endif
-  //
-  // Unique identifier for global module
-  //
-  #if defined G4GLOB_ALLOC_EXPORT
-    #define G4GLOB_DLL G4DLLEXPORT
-  #else
-    #define G4GLOB_DLL G4DLLIMPORT
-  #endif
+// Disable warning C4786 on WIN32 architectures:
+// identifier was truncated to '255' characters
+// in the debug information
+//
+#  pragma warning(disable : 4786)
+//
+// Define DLL export macro for WIN32 systems for
+// importing/exporting external symbols to DLLs
+//
+#  if defined G4LIB_BUILD_DLL && !defined G4MULTITHREADED
+#    define G4DLLEXPORT __declspec(dllexport)
+#    define G4DLLIMPORT __declspec(dllimport)
+#  else
+#    define G4DLLEXPORT
+#    define G4DLLIMPORT
+#  endif
+//
+// Unique identifier for global module
+//
+#  if defined G4GLOB_ALLOC_EXPORT
+#    define G4GLOB_DLL G4DLLEXPORT
+#    define G4MTGLOB_DLL __declspec(dllexport)
+#  else
+#    define G4GLOB_DLL G4DLLIMPORT
+#    define G4MTGLOB_DLL __declspec(dllimport)
+#  endif
 #else
-  #define G4DLLEXPORT
-  #define G4DLLIMPORT
-  #define G4GLOB_DLL
+#  define G4DLLEXPORT
+#  define G4DLLIMPORT
+#  define G4GLOB_DLL
+#  define G4MTGLOB_DLL
 #endif
 
 #include <complex>
@@ -77,12 +80,12 @@
 // Typedefs to decouple from library classes
 // Typedefs for numeric types
 //
-typedef double G4double;
-typedef float G4float;
-typedef int G4int;
-typedef bool G4bool;
-typedef long G4long;
-typedef std::complex<G4double> G4complex;
+using G4double  = double;
+using G4float   = float;
+using G4int     = int;
+using G4bool    = bool;
+using G4long    = long;
+using G4complex = std::complex<G4double>;
 
 // Forward declation of void type argument for usage in direct object
 // persistency to define fake default constructors

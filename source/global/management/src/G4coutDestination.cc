@@ -33,6 +33,8 @@
 
 #include <algorithm>
 
+G4coutDestination* G4coutDestination::masterG4coutDestination = nullptr;
+
 G4coutDestination::~G4coutDestination()
 {
 }

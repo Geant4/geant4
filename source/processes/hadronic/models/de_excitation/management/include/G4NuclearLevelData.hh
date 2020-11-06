@@ -72,9 +72,8 @@ public:
   ~G4NuclearLevelData();
 
   // run time call to access or to create level manager
-  // isLocked flag informs, that the thread is already locked
-  const G4LevelManager* GetLevelManager(G4int Z, G4int A, 
-                                        G4bool isLocked = false);
+  // if data are not yet uploaded then lazy initialisation is used
+  const G4LevelManager* GetLevelManager(G4int Z, G4int A);
 
   // add private data to isotope from master thread
   G4bool AddPrivateData(G4int Z, G4int A, const G4String& filename);
@@ -117,10 +116,6 @@ public:
   G4NuclearLevelData & operator=(const G4NuclearLevelData &right) = delete;
 
 private:
-
-  void InitialiseForIsotope(G4int Z, G4int A);
-
-  void InitialiseUp(G4int Z);
 
   G4DeexPrecoParameters* fDeexPrecoParameters;
   G4LevelReader*         fLevelReader;

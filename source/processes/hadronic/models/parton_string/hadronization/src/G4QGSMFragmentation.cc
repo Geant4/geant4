@@ -134,7 +134,8 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
      if ( LeftVector != 0 ) G4cout<<"Non fragmentable - the string is converted to one hadron "<<G4endl;
      #endif
 
-     if ( LeftVector != 0 ) return LeftVector;
+     if ( LeftVector == nullptr ) LeftVector = new G4KineticTrackVector;
+     return LeftVector;
   }
 
   #ifdef debug_QGSMfragmentation

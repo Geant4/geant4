@@ -8,6 +8,9 @@
                       Category History file
                       ---------------------
 
+14.07.2020 - A. Zaborowska;brachy-V10-05-01
+             Add missing /run/initialize to VisualisationMacro.mac
+
 20.09.2019 - M. Asai;brachy-V10-05-00
              Add G4VScoringMesh:: scope identifier to BrachyUserScoreWriter.cc
              Co-working with detutils-V10-05-01

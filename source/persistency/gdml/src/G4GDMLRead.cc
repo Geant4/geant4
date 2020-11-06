@@ -228,11 +228,6 @@ void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
    
    if (!from.empty()) { _var = _from; }
 
-   if (_from == _to)
-   {
-     G4Exception("G4GDMLRead::loopRead()", "InvalidRead",
-                 FatalException, "Empty loop!");
-   }
    if ((_from < _to) && (_step <= 0))
    {
      G4Exception("G4GDMLRead::loopRead()", "InvalidRead",

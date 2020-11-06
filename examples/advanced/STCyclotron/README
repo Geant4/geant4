@@ -50,7 +50,7 @@ http://geant4.web.cern.ch/geant4/support/download.shtml (TENDL1.3)
 ftp://gdo-nuclear.ucllnl.org/pub/G4LEND/ (G4 Low Energy Nuclear Data)
 
 In your bashrc file, add the following:
-export G4PROTONHPDATA=/PATH_TO_TENDL____OR____ENDF_DATABASE/Proton
+export G4PARTICLEHPDATA=/PATH_TO_TENDL____OR____ENDF_DATABASE
 export G4NEUTRONHPDATA=/PATHTO_GEANT4_INSTALLATION_FOLDER/share/Geant4-vXX.XX/data/G4NDL4.5
 export G4PHP_DO_NOT_ADJUST_FINAL_STATE=1
 export G4PHP_MULTIPLICITY_METHOD=Poisson

@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 5th, 2020  Makoto Asai (run-V10-05-12)
+- Fix the issue of G4RunManager::GetRunManager()->rndmSaveThisEvent() not working
+  in multithreaded mode. Addresses to Bug Report #2278.
+
+September 29th, 2020 Anna Zaborowska
+- Bug fix for bug #2276: /random/setSeeds parses arguments to int instead of long
+
 November 22nd, 2019 J. Madsen (run-V10-05-11)
 - Updated sources.cmake to use ${timemory_LIBRARIES} instead of
   difficult to type ${TiMemory_LIBRARIES}

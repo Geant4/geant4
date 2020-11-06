@@ -16,6 +16,14 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 06, 2020 Gabriele Cosmo (global-V10-05-30)
+- Updated tag IDs for release 10.6.p03.
+
+September 24, 2020 Gabriele Cosmo
+- Re-instate static pointer for 'masterG4coutDestination' in G4coutDestination
+  with proper symbol exporting on Windows (necessary for MT builds).
+  Restores trapping of G4cout from workers in Qt GUI.
+
 May 29, 2020 Gabriele Cosmo (global-V10-05-29)
 - Updated tag IDs for release 10.6.p02.
 

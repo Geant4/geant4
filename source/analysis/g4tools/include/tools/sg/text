@@ -56,8 +56,10 @@ public:
 
       TOOLS_ARG_FIELD_DESC(color),
 
-      TOOLS_ARG_FIELD_DESC_OPTS_BEG(font,8)
+      TOOLS_ARG_FIELD_DESC_OPTS_BEG(font,10)
         font_hershey().c_str(),
+        font_lato_regular_ttf().c_str(),
+        font_roboto_bold_ttf().c_str(),
         font_arial_ttf().c_str(),
         font_arialbd_ttf().c_str(),
         font_timesbd_ttf().c_str(),

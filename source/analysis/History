@@ -16,6 +16,17 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 23, 2020 Hrivnacova (analysis-V10-05-14)
+- Fixed definition of UI commands in G4AnalysisMessenger
+  (for 2d and 3d histograms)
+- Updated to g4tools 5.0.6 (Guy Barrand):
+  - Change the usage of arialbd.ttf, helvetica.ttf with roboto_bold.ttf
+    and lato_regular.ttf (google fonts).
+  See History_tools for the complete list of modifications.
+
+April 29, 2020   G. Folger
+- (trivial) fix for clang10, affects header g4tools/include/tools/gl2ps
+
 December 3, 2019 Hrivnacova (analysis-V10-05-13)
 - Use consistently the same default value of rowMode 
   in G4RootAnalysisManager::SetNtupleRowWise() as defined in the 

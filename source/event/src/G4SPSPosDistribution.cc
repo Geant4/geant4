@@ -279,6 +279,15 @@ void G4SPSPosDistribution::ConfineSourceToVolume(G4String Vname)
   VolName = Vname;
   if(verbosityLevel == 2)
     G4cout << VolName << G4endl;
+
+  if(VolName=="NULL")
+  {
+    if(verbosityLevel >= 1)
+    { G4cout << "Volume confinement is set off." << G4endl; }
+    Confine = false;
+    return;
+  }
+
   G4VPhysicalVolume *tempPV      = NULL;
   G4PhysicalVolumeStore *PVStore = 0;
   G4String theRequiredVolumeName = VolName;
@@ -304,7 +313,7 @@ void G4SPSPosDistribution::ConfineSourceToVolume(G4String Vname)
     }
   else
     {
-      G4cout << " **** Error: Volume does not exist **** " << G4endl;
+      G4cout << " **** Error: Volume <" << VolName << "> does not exist **** " << G4endl;
       G4cout << " Ignoring confine condition" << G4endl;
       Confine = false;
       VolName = "NULL";

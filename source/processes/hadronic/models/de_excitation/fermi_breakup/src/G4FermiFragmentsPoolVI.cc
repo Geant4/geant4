@@ -159,7 +159,7 @@ void G4FermiFragmentsPoolVI::Initialise()
     G4int Amin = ndata->GetMinA(Z);
     G4int Amax = std::min(maxA, ndata->GetMaxA(Z)+1);
     for(G4int A=Amin; A<Amax; ++A) {
-      const G4LevelManager* man = ndata->GetLevelManager(Z, A, true);
+      const G4LevelManager* man = ndata->GetLevelManager(Z, A);
       if(man) {
         size_t nn = man->NumberOfTransitions();
         // very unstable state

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 September, 2020  A. Zaborowska (intercoms-V10-05-11)
+- Add StoL method for parsing string to long int.
+
 19 February, 2020  M. Asai (intercoms-V10-05-10)
 - Accept null string as an alias value. Addressing bug report #2208.
 

@@ -274,8 +274,15 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
   G4cout << "FTF end of Init" << G4endl << G4endl;
   #endif
 
-  //if ( std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ) <= 1  &&
-  //     aNucleus.GetA_asInt() < 2 ) theParameters->SetProbabilityOfElasticScatt( 0.0 );
+  // In the case of Hydrogen target, for non-ion hadron projectiles,
+  // do NOT simulate quasi-elastic (by forcing to 0 the probability of
+  // elastic scatering in theParameters - which is used only by FTF).
+  // This is necessary because in this case quasi-elastic on a target nucleus
+  // with only one nucleon would be identical to the hadron elastic scattering,
+  // and the latter is already included in the elastic process 
+  // (i.e. G4HadronElasticProcess).
+  if ( std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ) <= 1  &&
+       aNucleus.GetA_asInt() < 2 ) theParameters->SetProbabilityOfElasticScatt( 0.0 );
 }
 
 

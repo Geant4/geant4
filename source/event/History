@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 30th, 2020 M.Asai (event-V10-05-09)
+- G4SPSPosDistribution.cc: Fix misleading error message. Addressing to
+  Bugzilla report #2275.
+
 November 19th, 2019 G. Cosmo (event-V10-05-08)
 - Fixed more implicit type conversions.
 

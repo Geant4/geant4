@@ -91,7 +91,7 @@ class G4coutDestination
     // derived class should set this pointer.
     // Needed for some G4UIsession like GUIs
     //
-    G4coutDestination* masterG4coutDestination = nullptr;
+    G4MTGLOB_DLL static G4coutDestination* masterG4coutDestination;
 
     std::vector<Transformer> transformersCout;
     std::vector<Transformer> transformersCerr;
