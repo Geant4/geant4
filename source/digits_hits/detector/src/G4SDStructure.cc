@@ -85,7 +85,7 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
 #ifdef G4VERBOSE
       G4ExceptionDescription ed;
       ed << aSD->GetName() << " had already been stored in "
-         << pathName << ". Object pointer is overwitten.\n";
+         << pathName << ". Object pointer is overwritten.\n";
       ed << "It's users' responsibility to delete the old sensitive detector object.";
       G4Exception("G4SDStructure::AddNewDetector()","DET1010",JustWarning,ed);
 #endif

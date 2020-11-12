@@ -77,7 +77,7 @@ G4ZeroXS::GetElementCrossSection(const G4DynamicParticle* ,
 
 void G4ZeroXS::CrossSectionDescription(std::ostream& outFile) const
 {
-  outFile << "An artificial cross section data set which always replys zero.";
+  outFile << "An artificial cross section data set which always replies zero.";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
