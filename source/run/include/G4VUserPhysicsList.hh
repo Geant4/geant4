@@ -219,7 +219,7 @@ class G4VUserPhysicsList
 
   // Store PhysicsTable together with both material and cut value
   // information in files under the specified directory.
-  //  (return true if files are sucessfully created)
+  //  (return true if files are successfully created)
   G4bool StorePhysicsTable(const G4String& directory = ".");
 
   // Return true if "Retrieve" flag is ON.

@@ -43,11 +43,7 @@
 // *******************************************************
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "globals.hh"
 #include "G4UImanager.hh"
@@ -101,7 +97,6 @@ int main(int argc,char** argv)
   CLHEP::HepRandom::setTheSeeds(seeds);
 
   // Construct the default run manager
-#ifdef G4MULTITHREADED
   char* nthread_c = std::getenv("DICOM_NTHREADS");
 
   unsigned nthreads = 4;
@@ -110,18 +105,8 @@ int main(int argc,char** argv)
   if(nthread_c) {env_threads=unsigned(G4UIcommand::ConvertToDouble(nthread_c));}
   if(env_threads > 0) {nthreads=env_threads;}
 
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(nthreads);
-
-  G4cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads
-         << " threads\n\n" << G4endl;
-
-
-#else
-  G4RunManager* runManager = new G4RunManager;
-  G4cout << "\n\n\tDICOM running in serial mode\n\n" << G4endl;
-
-#endif
 
   DicomDetectorConstruction* theGeometry = 0;
 

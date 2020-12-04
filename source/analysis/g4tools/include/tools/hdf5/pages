@@ -64,7 +64,7 @@ public:
 	return;
       }
       if(!read_scalar<tools::uint64>(m_group,s_entries(),m_entries)) {
-        m_out << "pages::pages : read_scalar(entries) failed." << std::endl;    
+        m_out << "pages::pages : read_scalar(entries) failed." << std::endl;
         ::H5Gclose(m_group);
         m_group = -1;
 	return;
@@ -76,7 +76,7 @@ public:
       if(!write_scalar<tools::uint64>(m_group,s_entries(),m_entries)) {
         m_out << "pages::~pages : write_scalar(entries) failed." << std::endl;
       }
-      if(m_dataset>=0) ::H5Dclose(m_dataset);                 
+      if(m_dataset>=0) ::H5Dclose(m_dataset);
     }
     ::H5Gclose(m_group);
 #ifdef TOOLS_MEM
@@ -92,7 +92,7 @@ protected:
   pages& operator=(const pages&){return *this;}
 public:
   bool is_valid() const {return m_group<0?false:true;}
-  
+
   const std::string& name() const {return m_name;}
   const std::string& form() const {return m_form;}
   //int type() const {return m_type;}
@@ -100,7 +100,7 @@ public:
   tools::uint64 entries() const {return m_entries;}
   tools::uint64 pos() const {return m_pos;}
   void reset_pos() {m_pos = 0;}
-  
+
   template <class TYPE>
   bool write_page(size_t a_size,const TYPE* a_array) {
     if(!m_pos) {
@@ -123,7 +123,7 @@ public:
     m_entries = m_pos;
     return true;
   }
-  
+
   template <class TYPE>
   bool read_page(size_t a_size,TYPE* a_array) {
     //it is assumed that a_array can contain a_size*sizeof(TYPE) bytes.
@@ -144,7 +144,7 @@ public:
     TYPE* wpos = (TYPE*)a_array;
     for(size_t i=0;i<n;i++,rpos++,wpos++) *wpos = *rpos;
     for(size_t i=n;i<_size;i++,rpos++,wpos++) *wpos = TYPE();}
-   
+
     delete [] array;
 
     m_pos += n;
@@ -222,7 +222,7 @@ public:
     m_entries++;
     return true;
   }
-  
+
 /*
   bool write_string(const std::string& a_string) {return write_vlen<char>(a_string.size(),a_string.c_str());}
 
@@ -234,15 +234,15 @@ public:
     delete [] _data;
     return true;
   }
-*/  
-  
+*/
+
 /*
   bool write_strings(size_t a_number,void* a_array) {
     size_t sz = m_size*a_number;
     char* buffer = new char[sz];
    {char* pos = buffer;
-    for(size_t index=0;index<sz;index++,pos++) *pos = ' ';} 
-    
+    for(size_t index=0;index<sz;index++,pos++) *pos = ' ';}
+
    {char** strings = (char**)a_array;
     char* pos = buffer;
     size_t ls;
@@ -253,8 +253,8 @@ public:
       *(pos+m_size-1) = 0;
       pos += m_size;
     }}
-    
-    if(!m_pos) {      
+
+    if(!m_pos) {
       unsigned int chunked = 32*m_size; //<size>A strings.
       if(!write_array<char>(m_group,s_pages(),sz,buffer,chunked,m_compress)) {
         m_out << "pages::write_strings : write_strings() failed. Pos " << m_pos << std::endl;
@@ -295,11 +295,11 @@ public:
       ::memcpy(strings[index],pos,m_size*sizeof(char));
       pos += m_size;
     }}
-    delete [] array;    
+    delete [] array;
     m_pos += n;
     return true;
   }
-*/  
+*/
 protected:
   std::ostream& m_out;
   std::string m_name;

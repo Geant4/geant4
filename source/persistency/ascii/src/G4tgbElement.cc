@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbElement
 //
-//
-//
-// class G4tgbElement
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbElement.hh"
 #include "G4tgbMaterialMgr.hh"
@@ -38,96 +34,89 @@
 #include "G4tgrElementFromIsotopes.hh"
 #include "G4tgrMessenger.hh"
 
-
-//----------------------------------------------------------------------
-G4tgbElement::G4tgbElement( G4tgrElement* hg )
+// ---------------------------------------------------------------------
+G4tgbElement::G4tgbElement(G4tgrElement* hg)
 {
   theTgrElem = hg;
-  theG4Elem = 0;
 }
 
-
-//----------------------------------------------------------------------
+// ---------------------------------------------------------------------
 G4Element* G4tgbElement::BuildG4ElementSimple()
 {
-  G4Element* elem = 0;
+  G4Element* elem = nullptr;
 
-  //-------- if G4Element not found, construct it 
-  if( theG4Elem == 0 )
-  { 
-    //----- construct new G4Element 
+  //-------- if G4Element not found, construct it
+  if(theG4Elem == nullptr)
+  {
+    //----- construct new G4Element
     G4tgrElementSimple* tgrElem = static_cast<G4tgrElementSimple*>(theTgrElem);
 
     elem = new G4Element(tgrElem->GetName(), tgrElem->GetSymbol(),
-                         tgrElem->GetZ(), tgrElem->GetA() );
+                         tgrElem->GetZ(), tgrElem->GetA());
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    if(G4tgrMessenger::GetVerboseLevel() >= 1)
     {
-      G4cout << " Constructing new G4Element: " 
-             << *elem << G4endl;
+      G4cout << " Constructing new G4Element: " << *elem << G4endl;
     }
 #endif
     theG4Elem = elem;
   }
   else
   {
-    elem = theG4Elem; 
+    elem = theG4Elem;
   }
 
   return elem;
 }
 
-
-//----------------------------------------------------------------------
+// ---------------------------------------------------------------------
 G4Element* G4tgbElement::BuildG4ElementFromIsotopes()
 {
-  G4Element* elem = 0;
+  G4Element* elem = nullptr;
 
-  //-------- if G4Element not found, construct it 
-  if( theG4Elem == 0 )
-  { 
-    //----- construct new G4Element 
-    G4tgrElementFromIsotopes* tgrElem
-      = static_cast<G4tgrElementFromIsotopes*>(theTgrElem);
+  //-------- if G4Element not found, construct it
+  if(theG4Elem == nullptr)
+  {
+    //----- construct new G4Element
+    G4tgrElementFromIsotopes* tgrElem =
+      static_cast<G4tgrElementFromIsotopes*>(theTgrElem);
 
     elem = new G4Element(tgrElem->GetName(), tgrElem->GetSymbol(),
-                         tgrElem->GetNumberOfIsotopes() );
+                         tgrElem->GetNumberOfIsotopes());
 
     //----- add isotopes
     G4Isotope* compIsot;
     G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
-    for( G4int ii = 0; ii < tgrElem->GetNumberOfIsotopes(); ii++)
+    for(G4int ii = 0; ii < tgrElem->GetNumberOfIsotopes(); ++ii)
     {
       // Look if this component is a material
 
-      compIsot = mf->FindOrBuildG4Isotope( tgrElem->GetComponent(ii) );
-      if( compIsot != 0 )
-      { 
-        elem->AddIsotope( compIsot, tgrElem->GetAbundance(ii) );
+      compIsot = mf->FindOrBuildG4Isotope(tgrElem->GetComponent(ii));
+      if(compIsot != nullptr)
+      {
+        elem->AddIsotope(compIsot, tgrElem->GetAbundance(ii));
       }
       else
       {
-        G4String ErrMessage = "Component " + tgrElem->GetComponent(ii)
-                            + " of element " + tgrElem->GetName()
-                            + " is not an isotope !";
+        G4String ErrMessage = "Component " + tgrElem->GetComponent(ii) +
+                              " of element " + tgrElem->GetName() +
+                              " is not an isotope !";
         G4Exception("G4tgbElement::BuildG4ElementFromIsotopes()",
-                    "InvalidSetup", FatalException, ErrMessage );
+                    "InvalidSetup", FatalException, ErrMessage);
       }
-    } 
+    }
     theG4Elem = elem;
   }
   else
   {
-    elem = theG4Elem; 
+    elem = theG4Elem;
   }
 
-
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-    {
-      G4cout << " Constructing  new G4Element from isotopes: "
-             << *elem << G4endl;
-    }
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
+  {
+    G4cout << " Constructing  new G4Element from isotopes: " << *elem << G4endl;
+  }
 #endif
 
   return elem;

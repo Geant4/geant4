@@ -29,7 +29,7 @@
 // of two physical volumes.
 //
 // Author: John Apostolakis (John.Apostolakis@cern.ch), 26-06-1997
-// ----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 #include "G4LogicalBorderSurface.hh"
 #include "G4VPhysicalVolume.hh"
@@ -49,14 +49,14 @@ G4LogicalBorderSurface(const G4String& name,
   : G4LogicalSurface(name, surfaceProperty),
     Volume1(vol1), Volume2(vol2)
 {
-  if (!theBorderSurfaceTable)
+  if (theBorderSurfaceTable == nullptr)
   {
     theBorderSurfaceTable = new G4LogicalBorderSurfaceTable;
   }
 
   // Store in the table of Surfaces
   //
-  theBorderSurfaceTable->push_back(this);
+  theBorderSurfaceTable->insert(std::make_pair(std::make_pair(vol1,vol2),this));
 }
 
 G4LogicalBorderSurface::~G4LogicalBorderSurface()
@@ -92,7 +92,7 @@ const G4LogicalBorderSurfaceTable* G4LogicalBorderSurface::GetSurfaceTable()
   return theBorderSurfaceTable;
 }
 
-size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
+std::size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
 {
   if (theBorderSurfaceTable != nullptr)
   {
@@ -107,14 +107,10 @@ G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
 {
   if (theBorderSurfaceTable != nullptr)
   {
-    for(auto pos = theBorderSurfaceTable->cbegin();
-        pos != theBorderSurfaceTable->cend(); ++pos)
-    {
-      if( (*pos)->GetVolume1() == vol1 && (*pos)->GetVolume2() == vol2 )
-      { return *pos; }
-    }
+    auto pos = theBorderSurfaceTable->find(std::make_pair(vol1,vol2));
+    if(pos != theBorderSurfaceTable->cend()) return pos->second;
   }
-  return 0;
+  return nullptr;
 }
 
 // Dump info for known surfaces
@@ -129,11 +125,11 @@ void G4LogicalBorderSurface::DumpInfo()
     for(auto pos = theBorderSurfaceTable->cbegin();
         pos != theBorderSurfaceTable->cend(); ++pos)
     {
-      G4cout << (*pos)->GetName() << " : " << G4endl
+      G4LogicalBorderSurface* pSurf = pos->second;
+      G4cout << pSurf->GetName() << " : " << G4endl
              << " Border of volumes "
-             << (*pos)->GetVolume1()->GetName() << " and " 
-             << (*pos)->GetVolume2()->GetName()
-             << G4endl;
+             << pSurf->GetVolume1()->GetName() << " and " 
+             << pSurf->GetVolume2()->GetName() << G4endl;
     }
   }
   G4cout << G4endl;
@@ -146,7 +142,7 @@ void G4LogicalBorderSurface::CleanSurfaceTable()
     for(auto pos = theBorderSurfaceTable->cbegin();
         pos != theBorderSurfaceTable->cend(); ++pos)
     {
-      if (*pos)  { delete *pos; }
+      if (pos->second)  { delete pos->second; }
     }
     theBorderSurfaceTable->clear();
   }

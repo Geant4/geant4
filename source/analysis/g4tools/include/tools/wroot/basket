@@ -36,29 +36,29 @@ public: //ibo
     //            Moreover with the today branch code, a
     //              basket.write_on_file()
     //            happens only in a branch.fill() that deletes
-    //            the basket just after the call. 
+    //            the basket just after the call.
   //if(!m_data.length()) {
   //  // to be sure to not work on a basket already written
   //  // with write_on_file()
-  //  m_out << "tools::wroot::basket::stream :" 
+  //  m_out << "tools::wroot::basket::stream :"
   //        << " m_data.length() is null."
   //        << std::endl;
   //  return false;
   //}
     if(m_seek_key) {
-      m_out << "tools::wroot::basket::stream :" 
-            << " m_seek_key is not null."
+      m_out << "tools::wroot::basket::stream :"
+            << " m_seek_key is not null (" << m_seek_key << ")."
             << std::endl;
       return false;
     }
     if(m_last) {
-      m_out << "tools::wroot::basket::stream :" 
+      m_out << "tools::wroot::basket::stream :"
             << " m_last is not null."
             << std::endl;
       return false;
     }
     if(!m_entry_offset) {
-      m_out << "tools::wroot::basket::stream :" 
+      m_out << "tools::wroot::basket::stream :"
             << " m_entry_offset is null."
             << std::endl;
       return false;
@@ -82,10 +82,10 @@ public: //ibo
         if(!a_buffer.write_array(m_displacement,m_nev)) return false;
       }
     }
- 
+
     if(m_data.to_displace()) {
       if(!const_cast<basket&>(*this).m_data.displace_mapped(m_key_length)) {
-        m_out << "tools::wroot::basket::stream :" 
+        m_out << "tools::wroot::basket::stream :"
               << " m_data.displace_mapped() failed."
               << std::endl;
         return false;
@@ -177,7 +177,7 @@ public:
 
   const int* displacement() const {return m_displacement;}
   int* displacement() {return m_displacement;}
-  
+
   uint32 nev_buf_size() const {return m_nev_buf_size;}
   uint32 nev() const {return m_nev;}
   uint32 last() const {return m_last;}
@@ -186,9 +186,9 @@ public:
     m_last = a_last;
     m_nev_buf_size = a_nev_buf_size;
     m_nev = a_nev;
-    delete [] m_entry_offset;   
+    delete [] m_entry_offset;
     m_entry_offset = 0;
-    delete [] m_displacement;   
+    delete [] m_displacement;
     m_displacement = 0;
 
     if(a_entry_offset && m_nev_buf_size) {
@@ -233,15 +233,15 @@ public:
     a_nbytes = 0;
 
     if(m_seek_key) {
-      m_out << "tools::wroot::basket::write_on_file :" 
-            << " m_seek_key should be 0."
+      m_out << "tools::wroot::basket::write_on_file :"
+            << " m_seek_key should be 0 (" << m_seek_key << ")."
             << std::endl;
       return false;
     }
 
     if(m_version>big_file_version_tag()) {
     } else {
-      m_out << "tools::wroot::basket::write_on_file : " 
+      m_out << "tools::wroot::basket::write_on_file : "
             << " we should not pass here (1)."
             << std::endl;
       return false;
@@ -251,24 +251,24 @@ public:
         //     seek_key>START_BIG_FILE. If not doing that we shall
         //     write a big m_seek_key on a seek32 and then have
         //     a problem when reading.
-  
-        //m_out << "tools::wroot::basket::write_on_file : " 
+
+        //m_out << "tools::wroot::basket::write_on_file : "
         //      << " WARNING : pos>START_BIG_FILE."
         //      << std::endl;
 
         m_version += big_file_version_tag();
         m_key_length += 8;
-  
+
         if(m_entry_offset) {
           for(uint32 i=0;i<m_nev;i++) m_entry_offset[i] += 8;
           if(m_displacement) {
             //??? Do we have to shift them ?
-            m_out << "tools::wroot::basket::write_on_file : " 
+            m_out << "tools::wroot::basket::write_on_file : "
                   << " displace logic : m_displacement not null."
                   << std::endl;
           }
         }
-  
+
       }
 */
     }
@@ -278,19 +278,19 @@ public:
     m_last = m_key_length+m_data.length();
     if(m_entry_offset) {
       if(!m_data.write_array<int>(m_entry_offset,m_nev+1)) { // for the +1 we follow CERN-ROOT/TBasket logic.
-        delete [] m_entry_offset; 
+        delete [] m_entry_offset;
         m_entry_offset = 0;
         return false;
       }
-      delete [] m_entry_offset; 
+      delete [] m_entry_offset;
       m_entry_offset = 0;
       if(m_displacement) {
         if(!m_data.write_array<int>(m_displacement,m_nev+1)) {
-          delete [] m_displacement; 
+          delete [] m_displacement;
           m_displacement = 0;
           return false;
         }
-        delete [] m_displacement; 
+        delete [] m_displacement;
         m_displacement = 0;
       }
     }
@@ -307,7 +307,7 @@ public:
     a_file.compress_buffer(m_data,kbuf,klen,kdelete);
 
     if(klen>m_object_size) {
-      m_out << "tools::wroot::basket::write_on_file :" 
+      m_out << "tools::wroot::basket::write_on_file :"
             << " compression anomaly "
             << " m_object_size " << m_object_size
             << " klen " << klen
@@ -317,8 +317,8 @@ public:
     }
 
     if(!initialize(a_file,klen)) { //it will do a m_seek_key = a_file.END() and then a_file.set_END(...)
-      m_out << "tools::wroot::basket::write_on_file :" 
-            << " initialize() failed." 
+      m_out << "tools::wroot::basket::write_on_file :"
+            << " initialize() failed."
             << std::endl;
       if(kdelete) delete [] kbuf;
       return false;
@@ -328,7 +328,7 @@ public:
    {buffer bref(m_out,a_file.byte_swap(),256);
     if(!_stream_header(bref,a_file.verbose())) return false;
     if(bref.length()!=m_key_length) {
-      m_out << "tools::wroot::basket::write_on_file :" 
+      m_out << "tools::wroot::basket::write_on_file :"
             << " key len anomaly " << bref.length()
             << " m_key_length " << m_key_length
             << std::endl;
@@ -339,10 +339,10 @@ public:
 
     ::memcpy(m_buffer+m_key_length,kbuf,klen);
     if(kdelete) delete [] kbuf;
-    
+
     uint32 nbytes;
     if(!parent::write_file(a_file,nbytes)) return false;
-  
+
     m_data.pos() = m_data.buf(); //empty m_data.
 
     a_nbytes = m_key_length + klen;

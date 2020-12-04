@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------
 //                     Geant4 - examplePar01
 // --------------------------------------------------------------
@@ -53,11 +53,7 @@
 #include "G4FastSimulationPhysics.hh"
 
 #include "G4UImanager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 // ----------------------------------------------------------------
 // -- Action initialization (includes the primary generator action:
@@ -80,18 +76,8 @@ int main(int argc, char** argv)
   //-------------------------------
   // Initialization of Run manager
   //-------------------------------
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|              Constructing MT run manager              |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-#else
-  G4RunManager * runManager = new G4RunManager;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-  G4cout<<"|        Constructing sequential run manager            |"<<G4endl;
-  G4cout<<"+-------------------------------------------------------+"<<G4endl;
-#endif
 
   // -----------------------------------------------------
   // -- Detector/mass geometry and parallel geometry(ies):

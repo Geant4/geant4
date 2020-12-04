@@ -2,7 +2,10 @@
 #----------------------------------------------------------------------------
 # Setup the project
 #
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(plotG)
 
 #----------------------------------------------------------------------------
@@ -14,7 +17,7 @@ add_definitions(-DUSE_ROOT)
 
 # Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
 include(${ROOT_USE_FILE})
-  
+
 include_directories(${CMAKE_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
 add_definitions(${ROOT_CXX_FLAGS})
 
@@ -28,12 +31,12 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # NB: headers are included so they will show up in IDEs
 #
 
-EXECUTE_PROCESS(COMMAND rootcint -f ${PROJECT_BINARY_DIR}/CanvasInTab_Dict.cc 
-                                 -c ${PROJECT_SOURCE_DIR}/include/CanvasInTab.hh 
-                                    ${PROJECT_SOURCE_DIR}/include/CanvasInTab_LinkDef.hh)
+EXECUTE_PROCESS(COMMAND ${ROOT_rootcint_CMD} -f ${PROJECT_BINARY_DIR}/CanvasInTab_Dict.cc
+                                                ${PROJECT_SOURCE_DIR}/include/CanvasInTab.hh
+                                                ${PROJECT_SOURCE_DIR}/include/CanvasInTab_LinkDef.hh)
 
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc 
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc
                   ${PROJECT_BINARY_DIR}/CanvasInTab_Dict.cc)
 
 #----------------------------------------------------------------------------

@@ -16,9 +16,10 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-
-# - Any policy requirements should go here
+cmake_minimum_required(VERSION 3.8...3.18 FATAL_ERROR)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
 # - Make overrides for default flags, so they appear in interfaces
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX

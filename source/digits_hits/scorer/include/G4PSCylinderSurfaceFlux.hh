@@ -29,7 +29,7 @@
 #ifndef G4PSCylinderSurfaceFlux_h
 #define G4PSCylinderSurfaceFlux_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 #include "G4Tubs.hh"
 #include "G4PSDirectionFlag.hh"
@@ -52,10 +52,12 @@
 // Created: 2007-03-29  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByArea options
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. surface flux * track weight (y)        (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSCylinderSurfaceFlux : public G4VPrimitiveScorer
+class G4PSCylinderSurfaceFlux : public G4VPrimitivePlotter
 {
   public: // with description
       G4PSCylinderSurfaceFlux(G4String name,G4int direction, G4int depth=0);

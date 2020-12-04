@@ -16,6 +16,34 @@ committal in the code repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 Nov 2020 - B.Morgan (ptl-V10-06-08)
+- BUGFIX #2286: Install PTL DLL/archive into appropriate platform dependent
+  locations.
+
+20 Oct 2020 - B.Morgan (ptl-V10-06-07)
+- Export interface targets used by both static and shared variants of
+  PTL to a dedicated file in the build directory. Required to avoid
+  missing/double definitions of targets when building Geant4/PTL with
+  shared/static at the same time.
+
+5 Oct 2020 - J.Madsen(ptl-V10-06-06)
+- Stability fixes for ensuring that stack variables are copied
+  into task-group functions
+
+23 Sept 2020 - J.Madsen (ptl-V10-06-05)
+- All template parameters using leading underscore followed by
+  capital letter have been replaced --> reserved for standard library
+- TaskGroup and TBBTaskGroup support non-aggregating join function
+- Arguments are copied into tuple for tasks
+
+12 Sept 2020 - J.Madsen (ptl-V10-06-04)
+- Fixed issues with PTL::ThreadPool destruction.
+  - For some ill-advised reason, the original impl detached the threads
+    instead of joining them to ensure they were deleted
+- Created generic execute_on_all_threads member function for thread pool
+  - this handles the complexity of performing this operation w/ TBB
+- cleaned up the inconsistent naming in PTL::ThreadPool
+
 23 June 2020 - J.Madsen (ptl-V10-06-03)
 - Tweaked VTaskGroup to use a vector instead of list
 - Declared the default ctor/dtor/assign-op for

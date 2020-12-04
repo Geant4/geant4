@@ -19,16 +19,16 @@ public:
     // Construct a plane given 3 points.
     // Orientation is computed by taking (p1 - p0) x (p2 - p0) and
     // pointing the normal in that direction.
-  
+
     VEC3 P = a_p1;
     P.subtract(a_p0);
     VEC3 P2 = a_p2;
     P2.subtract(a_p0);
     P.cross(P2,m_normal);
     if(!m_normal.normalize()) {} //throw
-    m_distance = 
-      m_normal.v0() * a_p0.v0() + 
-      m_normal.v1() * a_p0.v1() + 
+    m_distance =
+      m_normal.v0() * a_p0.v0() +
+      m_normal.v1() * a_p0.v1() +
       m_normal.v2() * a_p0.v2();
   }
 
@@ -59,7 +59,7 @@ public:
     // Offset a plane by a given distance.
     m_distance += a_distance;
   }
-  
+
   bool intersect(const line<VEC3>& a_line,VEC3& a_intersection) const {
     // Intersect line and plane, returning true if there is an intersection
     // false if line is parallel to plane
@@ -74,7 +74,7 @@ public:
     //a_intersection = pos + t * dir;
     return true;
   }
-  
+
   bool is_in_half_space(const VEC3& a_point) const {
     // Returns true if the given point is within the half-space
     // defined by the plane
@@ -84,11 +84,11 @@ public:
     pos.add(a_point);
     return (m_normal.dot(pos) >= T() ? true : false);
   }
-  
+
   const VEC3& normal() const {return m_normal;}
 
   T distance_from_origin() const {return m_distance;}
-  
+
   T distance(const VEC3& a_point) const {
     // Return the distance from point to plane. Positive distance means
     // the point is in the plane's half space.
@@ -106,9 +106,9 @@ public:
     // Orientation is given by the normal vector n.
     m_normal = a_normal;
     if(!m_normal.normalize()) {} //throw
-    m_distance = 
-      m_normal.v0() * a_point.v0() + 
-      m_normal.v1() * a_point.v1() + 
+    m_distance =
+      m_normal.v0() * a_point.v0() +
+      m_normal.v1() * a_point.v1() +
       m_normal.v2() * a_point.v2();
   }
 

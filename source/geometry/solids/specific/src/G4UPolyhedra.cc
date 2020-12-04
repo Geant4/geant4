@@ -284,7 +284,7 @@ G4bool G4UPolyhedra::Reset()
     message << "Solid " << GetName() << " built using generic construct."
             << G4endl << "Not applicable to the generic construct !";
     G4Exception("G4UPolyhedra::Reset()", "GeomSolids1001",
-                JustWarning, message, "Parameters NOT resetted.");
+                JustWarning, message, "Parameters NOT reset.");
     return true;  // error code set
   }
 
@@ -614,7 +614,7 @@ G4Polyhedron* G4UPolyhedra::CreatePolyhedron() const
     // Here is an extract from the header file HepPolyhedron.h:
     /**
      * Creates user defined polyhedron.
-     * This function allows to the user to define arbitrary polyhedron.
+     * This function allows the user to define arbitrary polyhedron.
      * The faces of the polyhedron should be either triangles or planar
      * quadrilateral. Nodes of a face are defined by indexes pointing to
      * the elements in the xyz array. Numeration of the elements in the

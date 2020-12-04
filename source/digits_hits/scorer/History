@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 6, 2020  Makoto Asai (detscorer-V10-06-01)
+- Migrate following scorers to use G4PrimitivePlotter to directly fill histograms.
+   G4PSCellFlux G4PSCylinderSurfaceCurrent G4PSCylinderSurfaceFlux G4PSDoseDeposit
+   G4PSEnergyDeposit G4PSFlatSurfaceCurrent G4PSFlatSurfaceFlux G4PSMinKinEAtGeneration
+   G4PSNofSecondary G4PSNofStep G4PSPassageCellCurrent G4PSPassageCellFlux
+   G4PSPassageTrackLength G4PSTrackCounter
+
+September 3, 2020  Makoto Asai (detscorer-V10-06-00)
+- Introduing a new scorer G4PSVolumeFlux
+- Use G4VPrimitivePlotter base class to allow scorers to directly fill histograms
+
 February 2 2015  Gabriele Cosmo  (detscorer-V10-01-00)
 - Fix to sources.cmake script to include missing dependency on external library.
 

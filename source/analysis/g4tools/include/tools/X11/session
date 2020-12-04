@@ -13,7 +13,7 @@ namespace X11 {
 
 class session : public base_session {
   typedef base_session parent;
-public:  
+public:
   //virtual bool make_current(Window a_window) const {
   //  if(!m_display) return false;
   //  if(::glXMakeCurrent(m_display,a_window,m_ctx)==False) {
@@ -47,13 +47,13 @@ public:
   ,m_ctx(0)
   ,m_colormap(0)
   {
-    if(!initialize_gl()) {} //throw    
+    if(!initialize_gl()) {} //throw
   }
   session& operator=(const session& a_from){
     if(&a_from==this) return *this;
     parent::operator=(a_from);
     finalize_gl();
-    if(!initialize_gl()) {} //throw    
+    if(!initialize_gl()) {} //throw
     return *this;
   }
 protected:
@@ -64,9 +64,9 @@ protected:
       m_ctx = 0;
       return false;
     }
-    
+
    {int glxMajor, glxMinor;
-    ::glXQueryVersion(m_display,&glxMajor,&glxMinor);                                     
+    ::glXQueryVersion(m_display,&glxMajor,&glxMinor);
     if(glxMajor<=0) {
       m_out << "tools::X11::session::initialize : bad GLX-Version " << glxMajor << "." << glxMinor << std::endl;
       ::XCloseDisplay(m_display);
@@ -95,7 +95,7 @@ protected:
       //m_out << "tools::X11::session::initialize :"
       //      << " DefaultScreen(m_display): " << DefaultScreen(m_display) << "."
       //      << std::endl;
-	    
+
       static const int atbs[] = {
         GLX_RGBA,
         GLX_RED_SIZE,   1,
@@ -154,7 +154,7 @@ protected:
 
     return true;
   }
- 
+
   void finalize_gl() {
     if(!m_display) return;
     if(m_ctx) {
@@ -181,11 +181,11 @@ public:
        | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask
        | PointerMotionMask
        | KeyPressMask;
-       
+
     swa.colormap = m_colormap;
     swa.border_pixel = 0L;
 
-    Window window = ::XCreateWindow(m_display, 
+    Window window = ::XCreateWindow(m_display,
                                     ::XRootWindow(m_display,m_monitor),
                                     a_x,a_y,a_width,a_height,
 				    0,
@@ -193,7 +193,7 @@ public:
                                     InputOutput,
                                     m_vinfo->visual,
 				    CWBorderPixel|CWColormap|CWEventMask,&swa);
-				    
+
     if(window==0L) {
       m_out << "tools::X11::session::create_window :"
             << " can't create a X11 window."

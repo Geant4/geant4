@@ -12,6 +12,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-November-2020, Alberto Ribon       (phys-ctor-ions-V10-06-02)
+- Update README.
+
 30-April-2020, Ben Morgan             (phys-ctor-ions-V10-06-01)
 - Remove obsolete GRANULAR_DEPENDENCIES entries
 

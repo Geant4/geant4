@@ -59,13 +59,16 @@
 //
 #  if defined G4GLOB_ALLOC_EXPORT
 #    define G4GLOB_DLL G4DLLEXPORT
+#    define G4MTGLOB_DLL __declspec(dllexport)
 #  else
 #    define G4GLOB_DLL G4DLLIMPORT
+#    define G4MTGLOB_DLL __declspec(dllimport)
 #  endif
 #else
 #  define G4DLLEXPORT
 #  define G4DLLIMPORT
 #  define G4GLOB_DLL
+#  define G4MTGLOB_DLL
 #endif
 
 #include <complex>

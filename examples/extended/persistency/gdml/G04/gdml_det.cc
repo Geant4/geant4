@@ -40,11 +40,7 @@
 #include "G04DetectorConstruction.hh"
 #include "G04SensitiveDetector.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "FTFP_BERT.hh"
 #include "G4UImanager.hh"
@@ -76,11 +72,7 @@ int main(int argc,char **argv)
    G4GDMLParser parser;
    parser.Read(argv[1]);
 
-#ifdef G4MULTITHREADED
-   G4MTRunManager* runManager = new G4MTRunManager;
-#else
-   G4RunManager* runManager = new G4RunManager;
-#endif
+   auto* runManager = G4RunManagerFactory::CreateRunManager();
 
    runManager->SetUserInitialization(new G04DetectorConstruction(parser));
    runManager->SetUserInitialization(new FTFP_BERT);
@@ -97,7 +89,7 @@ int main(int argc,char **argv)
    G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
    // Process macro or start UI session
-   if ( ! ui )   // batch mode  
+   if ( ! ui )   // batch mode
    {
      G4String command = "/control/execute ";
      G4String fileName = argv[2];
@@ -105,7 +97,7 @@ int main(int argc,char **argv)
    }
    else           // interactive mode
    {
-     UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");
      ui->SessionStart();
      delete ui;
    }

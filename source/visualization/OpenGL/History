@@ -16,6 +16,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 November 2020 Gabriele Cosmo (OpenGL-V10-06-13)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+12 November 2020 Ben Morgan (OpenGL-V10-06-12)
+- Apply typo fixes from Gurkan Myczko (https://github.com/Geant4/geant4/pull/15)
+
+29 October 2020  Ben Morgan (OpenGL-V10-06-11)
+- Remove inclusion of obsolete CMake module
+
+20 October 2020  Jonathan Madsen (OpenGL-V10-06-10)
+- Implemented G4RunManagerFactory::GetMasterRunManager()
+
+18 September 2020  John Allison (OpenGL-V10-06-09)
+- Part of vis-V10-06-07.
+- G4OpenGLStoredViewer.cc and G4OpenGLStoredQtViewer.cc:
+  o CompareForKernelVisit; Force kernel visit if global parameters change.
+    . GlobalMarkerScale and GlobalLineWidthScale.
+- G4OpenGLStoredViewer.cc, G4OpenGLStoredQtViewer.cc, G4OpenGLStoredXViewer.cc,
+  G4OpenGLStoredXmViewer.cc, G4OpenGLStoredWin32Viewer.cc:
+  o Move fLastVP=fVP so always updated (avoids unnecessary redraw at start)
+
+28 August 2020 Ben Morgan (opengl-V10-06-08)
+- Ensure use of XQuartz GL on macOS for X11/Xm, System GL
+  for Qt. This can lead to both libraries linking, but there
+  do not appear to be immediate issues with this.
+
 19 June 2020  John Allison  (opengl-V10-06-07)
 - Fix Qt 5.15 deprecation warnings.
 

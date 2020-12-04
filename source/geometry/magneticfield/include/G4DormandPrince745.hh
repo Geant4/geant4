@@ -75,6 +75,9 @@ class G4DormandPrince745 : public G4MagIntegratorStepper
 
     virtual G4int IntegratorOrder() const override { return 4; }
 
+    const G4String& StepperType() const        { return gStepperType; }
+    const G4String& StepperDescription() const { return gStepperDescription; }
+   
     const field_utils::State& GetYOut() const { return fyOut; }
 
     void Interpolate4thOrder(G4double yOut[], G4double tau) const;
@@ -82,12 +85,17 @@ class G4DormandPrince745 : public G4MagIntegratorStepper
     void SetupInterpolation5thOrder();
     void Interpolate5thOrder(G4double yOut[], G4double tau) const;
 
+    G4EquationOfMotion* GetSpecificEquation() { return GetEquationOfMotion(); }
+   
   private:
+    // Name and description of this steppers - plus details of its implementation
+    static const G4String gStepperType;
+    static const G4String gStepperDescription;
+    // const unsigned int fIntegratorOrder = 4;  // Should it not be 5 ? 
 
     field_utils::State ak2, ak3, ak4, ak5, ak6, ak7, ak8, ak9;
     field_utils::State fyIn, fyOut, fdydxIn;
 
     G4double fLastStepLength = -1.0;
-
 };
 #endif

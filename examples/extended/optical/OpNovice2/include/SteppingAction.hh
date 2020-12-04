@@ -32,21 +32,20 @@
 #ifndef SteppingAction_h
 #define SteppingAction_h 1
 
-#include "G4UserSteppingAction.hh"
 #include "globals.hh"
-
+#include "G4UserSteppingAction.hh"
 
 class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    SteppingAction();
-    virtual ~SteppingAction();
+ public:
+  SteppingAction();
+  virtual ~SteppingAction();
 
-    // method from the base class
-    virtual void UserSteppingAction(const G4Step*);
+  // method from the base class
+  virtual void UserSteppingAction(const G4Step*);
 
-  private:
-    G4int fVerbose;
+ private:
+  G4int fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,26 +24,26 @@
 // ********************************************************************
 //
 //
-// 
+//
 /// \file testBlineTracer.cc
 /// \brief Test program for the G4BlineTracer class
 
 #include "G4BlineTracer.hh"
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "FTFP_BERT.hh"
 
 // Test program which only instantiates the G4BlineTracer class.
 
 int main()
 {
-  // Construct the default run manager
+  // Construct a serial run manager
   // and set a physics list (otherwise a run action cannot be instatiated)
-  G4RunManager * runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
   runManager->SetUserInitialization(new FTFP_BERT);
 
   // Instantiate the G4BlineTracer class
   G4BlineTracer* theBlineTool = new G4BlineTracer();
-  
+
   // delete it
   delete theBlineTool;
 }

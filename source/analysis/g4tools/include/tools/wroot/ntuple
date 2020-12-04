@@ -46,7 +46,7 @@ public:
   :tree(a_dir,a_bkg.name(),a_bkg.title()),m_row_wise(a_row_wise),m_row_wise_branch(0)
   {
     if(m_row_wise) m_row_wise_branch = create_branch("row_wise_branch");
-    
+
     const std::vector<column_booking>& cols = a_bkg.columns();
     tools_vforcit(column_booking,cols,it){
 
@@ -69,7 +69,7 @@ public:
 	  }\
         }\
       }
-      
+
 #define TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(a__type) \
       if((*it).cls_id()==_cid_std_vector<a__type>()) {\
         std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
@@ -89,15 +89,15 @@ public:
 	  }\
         }\
       }
-      
+
       //below types are in sync with rroot/ntuple.
-      
+
            TOOLS_WROOT_NTUPLE_CREATE_COL(char)
       else TOOLS_WROOT_NTUPLE_CREATE_COL(short)
       else TOOLS_WROOT_NTUPLE_CREATE_COL(int)
       else TOOLS_WROOT_NTUPLE_CREATE_COL(float)
       else TOOLS_WROOT_NTUPLE_CREATE_COL(double)
-      
+
       else if((*it).cls_id()==_cid(std::string())) {
         std::string* user = (std::string*)(*it).user_obj();
         if(user) {
@@ -116,7 +116,7 @@ public:
 	  }
         }
       }
-      
+
       else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(char)
       else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(short)
       else TOOLS_WROOT_NTUPLE_CREATE_VEC_COL(int)
@@ -154,7 +154,7 @@ public:
         safe_clear<icol>(m_cols);
         safe_clear<branch>(m_branches);
         return;
-      }      
+      }
     }
 #undef TOOLS_WROOT_NTUPLE_CREATE_VEC_COL
 #undef TOOLS_WROOT_NTUPLE_CREATE_COL
@@ -223,7 +223,7 @@ public:
     m_cols.push_back(col);
     return col;
   }
-  
+
   column_vector_string* create_column_vector_string(const std::string& a_name,
                                                     const std::vector<std::string>& a_def,char a_sep) {
     if(find_named<icol>(m_cols,a_name)) return 0;
@@ -279,7 +279,7 @@ public:
     if(!col) return 0;
     return id_cast<icol, column<T> >(*col);
   }
-  
+
   column_string_ref* find_column_string_ref(const std::string& a_name) {
     icol* col = find_named<icol>(m_cols,a_name);
     if(!col) return 0;
@@ -324,7 +324,7 @@ public:
       a_out << " " << (*it)->name() << std::endl;
     }
   }
-  
+
   bool add_row() {
     if(m_cols.empty()) return false;
     tools_vforit(icol*,m_cols,it) (*it)->add();
@@ -341,7 +341,7 @@ public:
       tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);
     }
   }
-  
+
   ///////////////////////////////////////////////////////////////////////////
   /// for parallelization : /////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
@@ -377,10 +377,10 @@ public:
       m_out << "tools::wroot::ntuple::mpi_add_basket : unpack(icol) failed."<< std::endl;
       return false;
     }
-	
-    if(m_row_wise) {    
+
+    if(m_row_wise) {
       if(!m_row_wise_branch) return false;
-      
+
       basket* basket = mpi_create_basket(m_out,a_impi,
                                          m_dir.file().byte_swap(),m_dir.seek_directory(),
                                          m_row_wise_branch->basket_size());
@@ -399,13 +399,13 @@ public:
       delete basket;
       m_row_wise_branch->set_tot_bytes(m_row_wise_branch->tot_bytes()+add_bytes);
       m_row_wise_branch->set_zip_bytes(m_row_wise_branch->zip_bytes()+nout);
-	  
+
     } else {
       if(icol>=m_cols.size()) {
         m_out << "tools::wroot::ntuple::mpi_add_basket : column index "  << icol << " >= " << m_cols.size() << std::endl;
         return false;
       }
-      
+
       branch& _branch = m_cols[icol]->get_branch();
 
       basket* basket = mpi_create_basket(m_out,a_impi,
@@ -429,7 +429,7 @@ public:
     }
     return true;
   }
-  
+
   bool mpi_add_baskets(impi& a_impi) { //column_wise && row_mode only.
     uint32 _icol = 0;
     tools_vforcit(icol*,m_cols,it) {
@@ -466,9 +466,9 @@ public:
     }
     return true;
   }
-  
+
   bool mpi_end_fill(impi& a_impi) {
-  
+
 #define TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(a__type) \
           {leaf_ref<a__type>* _mleaf_ = _mleaf?id_cast<base_leaf, leaf_ref<a__type> >(*_mleaf):0;\
             if(_mleaf_) {\
@@ -480,7 +480,7 @@ public:
               _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
               set_done = true;\
             }}
-	
+
 #define TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(a__type) \
           {leaf_std_vector_ref<a__type>* _mleaf_ = _mleaf?id_cast<base_leaf, leaf_std_vector_ref<a__type> >(*_mleaf):0;\
             if(_mleaf_) {\
@@ -492,7 +492,7 @@ public:
               _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
               set_done = true;\
             }}
-	  
+
 #define TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX \
            {leaf_string_ref* _mleaf_ = _mleaf?id_cast<base_leaf,leaf_string_ref>(*_mleaf):0;\
             if(_mleaf_) {\
@@ -504,43 +504,43 @@ public:
               _mleaf_->set_max(mx(_mx,_mleaf_->get_max()));\
               set_done = true;\
             }}
-	    
+
     if(m_row_wise) {
       if(!m_row_wise_branch) return false;
-      
+
       tools_vforcit(base_leaf*,m_row_wise_branch->leaves(),mit) {
         base_leaf* _mleaf = *mit;
 
         bool set_done = false;
-	  
+
         TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(char)
         TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(short)
         TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(int)
         TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(float)
         TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX(double)
-	    
+
         TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(char)
         TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(short)
         TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(int)
         TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(float)
         TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX(double)
-	    
+
         TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX
-	      
+
         if(!set_done) {
           m_out << "tools::wroot::ntuple::mpi_end_fill :"
                 << " leaf " << _mleaf->name() << " with cid " << _mleaf->id_cls() << " not treated." << std::endl;
           return false;
         }
       }
-      
+
     } else { // column wise :
       tools_vforcit(wroot::icol*,m_cols,it) {
         base_leaf* _mleaf = (*it)->get_leaf();
 
         bool set_done = false;
         TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX
-	
+
         if(!set_done) {
           uint32 _len;
           if(!a_impi.unpack(_len)) return false;
@@ -549,7 +549,7 @@ public:
         }
       }
     }
-	
+
 #undef TOOLS_WROOT_NTUPLE_SET_LEAF_LENGTH_MAX
 #undef TOOLS_WROOT_NTUPLE_SET_LEAF_STD_VECTOR_LENGTH_MAX
 #undef TOOLS_WROOT_NTUPLE_SET_LEAF_STRING_LENGTH_MAX

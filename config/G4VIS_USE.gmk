@@ -118,6 +118,16 @@ ifdef G4VIS_USE_OI
   G4LIB_USE_GL2PS = 1
 endif
 
+ifdef G4VIS_USE_QT3D
+  CPPFLAGS += -DG4VIS_USE_QT3D
+  VISLIBS  += -lG4visQt3D
+  ifneq ($(G4INCLUDE_EXEC),1)
+    CPPFLAGS += -I$(G4BASE)/visualization/Qt3D/include
+  endif
+  INC_QT    = 1
+  LOAD_3DQT = 1
+endif
+
 ifdef G4VIS_USE_RAYTRACERX
   CPPFLAGS += -DG4VIS_USE_RAYTRACERX
   # CPPFLAGS += -I... and VISLIBS += set above.

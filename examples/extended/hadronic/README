@@ -66,6 +66,13 @@ Notice that we use the generic biasing machinery, but the actual weights
 of all tracks remain to the usual value (1.0) as in the normal (unbiased)
 case.
 
+Hadr09
+------
+
+This example shows how to use Geant4 as a generator for simulating
+inelastic hadron-nuclear interactions.
+Notice that the Geant4 run-manager is not used.
+
 FissionFragment
 ---------------
 This example demonstrates the Fission Fragment model as used within the

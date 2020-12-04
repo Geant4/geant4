@@ -157,6 +157,20 @@ void G4VMscModel::InitialiseParameters(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4VMscModel::DumpParameters(std::ostream& out) const
+{
+  G4String alg = "UseSafety";
+  if (steppingAlgorithm == fUseDistanceToBoundary) alg = "DistanceToBoundary";
+  else if (steppingAlgorithm == fMinimal) alg = "Minimal";
+  else if (steppingAlgorithm == fUseSafetyPlus) alg = "SafetyPlus";
+
+  out << std::setw(22) << "StepLim=" << alg << " Rfact=" << facrange 
+      << " Gfact=" << facgeom << " Sfact=" << facsafety << " DispFlag:" << latDisplasment
+      << " Skin=" << skin << " Llimit=" << lambdalimit << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4VMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                     const G4MaterialCutsCouple*,
                                     const G4DynamicParticle*,

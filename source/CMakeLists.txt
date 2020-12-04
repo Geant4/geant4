@@ -40,6 +40,4 @@ add_subdirectory(tracking)
 add_subdirectory(visualization)
 
 # - Compose libs
-if(GEANT4_USE_NEW_CMAKE)
-  geant4_compose_targets()
-endif()
+geant4_compose_targets()

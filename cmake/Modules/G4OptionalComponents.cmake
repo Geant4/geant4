@@ -61,7 +61,7 @@ if(GEANT4_USE_SYSTEM_CLHEP)
     set(__system_clhep_mode " (granular)")
   endif()
 
-  find_package(CLHEP 2.3.3.0 REQUIRED ${__g4_clhep_components} CONFIG)
+  find_package(CLHEP 2.4.4.0 REQUIRED ${__g4_clhep_components} CONFIG)
 
   geant4_save_package_variables(CLHEP CLHEP_DIR)
 else()
@@ -185,7 +185,7 @@ else()
   set(GEANT4_USE_BUILTIN_PTL TRUE)
   set(PTL_LIBRARIES G4ptl)
 endif()
-
+mark_as_advanced(GEANT4_USE_SYSTEM_PTL)
 geant4_add_feature(GEANT4_USE_SYSTEM_PTL "Using system PTL library")
 
 #-----------------------------------------------------------------------
@@ -237,12 +237,20 @@ option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support" ${_default_use_t
 mark_as_advanced(GEANT4_USE_TIMEMORY)
 
 if(GEANT4_USE_TIMEMORY)
-  set(_G4timemory_DEFAULT_COMPONENTS headers caliper papi gotcha gperftools-cpu vector)
+  # by default just use the library which will import all the components that it
+  # was built with but once can add more
+  if(BUILD_SHARED_LIBS)
+    set(_G4timemory_DEFAULT_COMPONENTS cxx shared OPTIONAL_COMPONENTS)
+  else()
+    set(_G4timemory_DEFAULT_COMPONENTS cxx static OPTIONAL_COMPONENTS)
+  endif()
   set(G4timemory_COMPONENTS "${_G4timemory_DEFAULT_COMPONENTS}" CACHE STRING
       "timemory INTERFACE libraries that activate various capabilities in toolkit")
-  set(G4timemory_VERSION 3.0)
+  set(G4timemory_VERSION 3.2)
   set(timemory_FIND_COMPONENTS_INTERFACE geant4-timemory)
+  add_library(geant4-timemory INTERFACE)
   find_package(timemory ${G4timemory_VERSION} REQUIRED COMPONENTS ${G4timemory_COMPONENTS})
+  install(TARGETS geant4-timemory EXPORT Geant4LibraryDepends)
   set(timemory_LIBRARIES geant4-timemory)
   geant4_save_package_variables(timemory timemory_DIR)
 endif()
@@ -325,8 +333,7 @@ endif()
 
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
-  # VecGeom's config file doesn't support versioning...
-  find_package(VecGeom REQUIRED)
+  find_package(VecGeom 1.1.8 REQUIRED)
   # Shim until VecGeom supports config mode properly
   include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
   # Backward Compatibility

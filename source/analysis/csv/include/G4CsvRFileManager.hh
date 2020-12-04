@@ -45,6 +45,8 @@ class G4CsvRFileManager : public G4BaseFileManager
     explicit G4CsvRFileManager(const G4AnalysisManagerState& state);
     ~G4CsvRFileManager();
 
+    virtual G4String GetFileType() const final { return "csv"; }
+
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName);
 

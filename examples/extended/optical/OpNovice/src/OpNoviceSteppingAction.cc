@@ -29,63 +29,72 @@
 
 #include "OpNoviceSteppingAction.hh"
 
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4OpticalPhoton.hh"
+#include "OpNoviceRun.hh"
 
 #include "G4Event.hh"
+#include "G4OpBoundaryProcess.hh"
+#include "G4OpticalPhoton.hh"
 #include "G4RunManager.hh"
+#include "G4Step.hh"
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceSteppingAction::OpNoviceSteppingAction()
-: G4UserSteppingAction()
-{ 
-  fScintillationCounter = 0;
-  fCerenkovCounter      = 0;
-  fEventNumber = -1;
-}
+OpNoviceSteppingAction::OpNoviceSteppingAction(OpNoviceEventAction* event)
+  : G4UserSteppingAction()
+  , fEventAction(event)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceSteppingAction::~OpNoviceSteppingAction()
-{ ; }
+OpNoviceSteppingAction::~OpNoviceSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
 {
-  G4int eventNumber = G4RunManager::GetRunManager()->
-                                              GetCurrentEvent()->GetEventID();
+  static G4ParticleDefinition* opticalphoton =
+    G4OpticalPhoton::OpticalPhotonDefinition();
 
-  if (eventNumber != fEventNumber) {
-     fEventNumber = eventNumber;
-     fScintillationCounter = 0;
-     fCerenkovCounter = 0;
-  }
+  const G4ParticleDefinition* particleDef =
+    step->GetTrack()->GetDynamicParticle()->GetParticleDefinition();
 
-  G4Track* track = step->GetTrack();
+  if(particleDef == opticalphoton)
+  {
+    G4StepPoint* endPoint = step->GetPostStepPoint();
+    const G4VProcess* pds = endPoint->GetProcessDefinedStep();
+    G4String procname     = pds->GetProcessName();
+    if(procname.compare("OpRayleigh") == 0)
+      fEventAction->AddRayleigh();
+    else if(procname.compare("OpAbsorption") == 0)
+      fEventAction->AddAbsorption();
+    else if(procname.compare("OpMieHG") == 0)
+      fEventAction->AddMie();
 
-  G4String ParticleName = track->GetDynamicParticle()->
-                                 GetParticleDefinition()->GetParticleName();
+    // for boundary scattering, process name in 'transportation'.
+    // Need to check differently:
+    if(endPoint->GetStepStatus() == fGeomBoundary)
+    {
+      G4OpBoundaryProcessStatus theStatus = Undefined;
+      G4ProcessManager* opManager         = opticalphoton->GetProcessManager();
+      G4int n_proc = opManager->GetPostStepProcessVector(typeDoIt)->entries();
+      G4ProcessVector* postStepDoItVector =
+        opManager->GetPostStepProcessVector(typeDoIt);
+      for(G4int i = 0; i < n_proc; ++i)
+      {
+        G4VProcess* currentProcess = (*postStepDoItVector)[i];
 
-  if (ParticleName == "opticalphoton") return;
-
-  const std::vector<const G4Track*>* secondaries =
-                                            step->GetSecondaryInCurrentStep();
-
-  if (secondaries->size()>0) {
-     for(unsigned int i=0; i<secondaries->size(); ++i) {
-        if (secondaries->at(i)->GetParentID()>0) {
-           if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
-               == G4OpticalPhoton::OpticalPhotonDefinition()){
-              if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
-               == "Scintillation")fScintillationCounter++;
-              if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
-               == "Cerenkov")fCerenkovCounter++;
-           }
-        }
-     }
+        G4OpBoundaryProcess* opProc =
+          dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
+        if(opProc)
+          theStatus = opProc->GetStatus();
+      }
+      if(theStatus != Undefined && theStatus != NotAtBoundary &&
+         theStatus != StepTooSmall)
+      {
+        fEventAction->AddBoundary();
+      }
+    }
   }
 }
 

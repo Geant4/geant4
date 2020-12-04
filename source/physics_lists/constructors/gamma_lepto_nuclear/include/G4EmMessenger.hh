@@ -74,6 +74,7 @@ private:
   G4UIcmdWithABool*   thePH;
   G4UIcmdWithABool*   theNu;
   G4UIcmdWithABool*   theNuETX;
+  G4UIcmdWithABool*   theXS;
 
   G4UIcmdWithADouble* theGMM1;
   G4UIcmdWithADouble* thePMM1;

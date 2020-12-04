@@ -16,6 +16,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 October 20: D. Sawkey (xrays-V10-06-08)
+- G4Cerenkov, G4Scintillation: apply clang-format style guidelines
+
+30 September 20: H. Wenzel (xrays-V10-06-07)
+- G4Cerenkov: make GetAverageNumberOfPhotons public
+
+28 September 20: D. Sawkey (xrays-V10-06-06)
+- G4Scintillation, G4Cerenkov: remove BuildThePhysicsTable
+
+24 September 20: D. Sawkey (xrays-V10-06-05)
+- G4Scintillation: allow specifying SCINTILLATIONYIELD only (not
+    requiring SCINTILLATIONYIELD1) when only 1 scintillation channel present.
+    Same for particle specific yields.
+
+20 July 20: D. Sawkey (xrays-V10-06-04)
+- G4Cerenkov, G4Scintillation: use new G4OpticalParameters to control
+    simulation parameters
+
 28 May 20: D. Sawkey (xrays-V10-06-03)
 - G4Cerenkov - set verbosity levels correctly
 

@@ -52,7 +52,7 @@
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyLet.hh"
 #include "PassiveProtonBeamLine.hh"
-
+#include "BESTPassiveProtonBeamLine.hh"
 #include "HadrontherapyMatrix.hh"
 
 #include "HadrontherapyRBE.hh"

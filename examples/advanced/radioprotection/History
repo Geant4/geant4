@@ -7,6 +7,37 @@
 
                       Category History file
                       ---------------------
+17.11.2020 - S. Guatelli tag radioprotection-V10-06-02
+             Migration to G4RunManagerFactory
+             
+02.11.2020 - F. Romano and J. Magini tag radioprotection-V10-06-01
+           - radioprotection.cc :
+	     added new parameter to DetectorConstruction constructor
+	     added instance of DetectorManager
+           - DetectorConstruction.hh :
+	     defined private methods to construct a specific type of detector ("Silicon", "Diamond", and "MicroDiamond")
+	     added detectorType private string to store the name of the one in use
+	     added a variable to the constructor
+	     added declaration for DetectorMessenger class
+	   - DetectorConstruction.cc :
+	     modifed the constructor to store the detector type
+	     rewrote Construct so that it calls the specific method of the selected detector type
+	     moved the previous diamond detector geometry to ConstructDiamondDetector, and added new possible 		     		     geometries (silicon and microdiamond) from scratch via the other two methods
+   	   - DetectorMessenger.hh :
+	     created the file in order to switch detector type 
+	   - DetectorMessenger.cc :
+	     created the file in order to switch detector type 
+	   - geometry.mac :
+	     create the macro in order to select a specific detector at runtime (by default, all options are commented out)
+	   - vis.mac :
+	     added a line to execute geometry.mac before launching the GUI (at which point it wouldn't be possible to change 		     the geometry anymore)
+	   - run.mac: 
+             added a line to execute geometry.mac 
+	   - CMakeLists.txt :
+	     added geometry.mac to the list of files to be copied to the build directory
+
+02.11.2020 - B.Morgan tag radioprotection-V10-06-00
+             Support same CMake version range as core Geant4
 
 30.10.2019 - S. Guatelli tag radioprotection-V10-05-01
              using namespace std removed
@@ -33,10 +64,10 @@
 08.11.2013 - S. Guatelli. tag radioprotection-V09-06-03
              MT mode + analysis working
 
-20.09.2013 - S. Guatelli. tag radioprotection-V09-06-02 
+20.09.2013 - S. Guatelli. tag radioprotection-V09-06-02
              REMSIM example dismissed as it is out of date.
-             Replaced with characterisation of novel diamond detector for 
-             radiation protection, using microdosimetric approach. 
+             Replaced with characterisation of novel diamond detector for
+             radiation protection, using microdosimetric approach.
 
 04.02.2013 - G.Folger; tag radioprotection-V09-06-01
            RemSimPhysicsList.cc: Update for renamed physics builders
@@ -64,7 +95,7 @@
            G4Analysis component subtitutes AIDA/PI analysis
            tag radioprotection-V09-04-01
 
-21.09.2011 S. Guatelli. Update of the physics list, 
+21.09.2011 S. Guatelli. Update of the physics list,
            tag radioprotection-V09-04-00
 
 18.11.2010 J.Allison, tag radioprotection-V09-03-03
@@ -74,13 +105,13 @@
            Fix AIDA file option
 
 06.06.2010 J. Perl, tag radioprotection-V09-03-01
-	   Remove unused variable in EventAction	
+	   Remove unused variable in EventAction
 
 03.06.2010 J. Perl, tag radioprotection-V09-03-00
-	   Update vis usage	
+	   Update vis usage
 
 16.11.2009 S. Guatelli, tag radioprotection-V09-02-04
-	   analysis output format is changed to xml	
+	   analysis output format is changed to xml
 
 12.11.2009 S. Guatelli, tag radioprotection-V09-02-01
 	   Physics List updated
@@ -102,12 +133,12 @@
 
 31th May 2006 Susanna Guatelli(radioprotection-V08-00-01)
 - Added histograms
-- Added comments 
+- Added comments
 
 15th March 2006 Susanna Guatelli(radioprotection-V08-00-00)
 - Pion absorption at rest introduced in  RemSimHadronicBinary.cc
 - Added more histograms
-- Primary particle generator can handle spectra 
+- Primary particle generator can handle spectra
 
 7th December 2005 Susanna Guatelli (radioprotection-V07-01-04)
 - Macros updated
@@ -123,7 +154,7 @@
 - Ions introduced
 
 23th November 2005 Susanna Guatelli (radioprotection-V07-01-01)
-- Deleted warning due to standard C++ libraries concerning reading 
+- Deleted warning due to standard C++ libraries concerning reading
 external files
 - Added Eta and EtaPrime as particles
 
@@ -143,8 +174,8 @@ external files
 
 11.2004 - Option to define the format of the output file hbook or xml
 
-11.2004 - Add histograms 
- 
+11.2004 - Add histograms
+
 05.2004 - Design iteration with Decorator Design pattern
 
 01.2004 - S.Guatelli

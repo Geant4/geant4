@@ -69,19 +69,14 @@ G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G
   minBERT_neutron = 19.9*MeV;
 }
 
-void G4HadronPhysicsFTFP_BERT_HP::DumpBanner()
-{
-  G4cout << G4endl
-       << " FTFP_BERT_HP : new threshold between BERT and FTFP is over the interval " << G4endl
-       << " for pions :   " << minFTFP_pion/GeV << " to " << maxBERT_pion/GeV  << " GeV" << G4endl
-       << " for kaons :   " << minFTFP_kaon/GeV << " to " << maxBERT_kaon/GeV  << " GeV" << G4endl
-       << " for proton :  " << minFTFP_proton/GeV << " to " << maxBERT_proton/GeV  << " GeV" << G4endl
-       << " for neutron : " << minFTFP_neutron/GeV << " to " << maxBERT_neutron/GeV  << " GeV" << G4endl
-       << G4endl;
-}
+G4HadronPhysicsFTFP_BERT_HP::~G4HadronPhysicsFTFP_BERT_HP()
+{}
 
 void G4HadronPhysicsFTFP_BERT_HP::Neutron()
 {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+
   auto neu = new G4NeutronBuilder( true ); // Fission on
   AddBuilder(neu);
   auto ftfpneu = new G4FTFPNeutronBuilder(QuasiElastic);
@@ -97,12 +92,13 @@ void G4HadronPhysicsFTFP_BERT_HP::Neutron()
   AddBuilder(hpneu);
   neu->RegisterMe(hpneu);
   neu->Build();
-}
 
-void G4HadronPhysicsFTFP_BERT_HP::ExtraConfiguration()
-{
-  // --- Neutrons ---
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
+  if(inel) { 
+    if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+  }
+
   G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
   if (capture) {
     G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 

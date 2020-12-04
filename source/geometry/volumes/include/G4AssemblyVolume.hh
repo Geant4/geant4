@@ -28,7 +28,7 @@
 // Class description:
 //
 // G4AssemblyVolume is a helper class to make the build process of geometry
-// easier. It allows to combine several volumes together in an arbitrary way
+// easier. It allows one to combine several volumes together in an arbitrary way
 // in 3D space and then work with the result as with a single logical volume
 // for placement.
 // The resulting objects are independent copies of each of the assembled

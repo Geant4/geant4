@@ -65,7 +65,7 @@ private:
   G4bool operator!=(const G4EvaporationChannel & right) const;
 
   // This data member define the channel. 
-  // They are intializated at object creation (constructor) time.
+  // They are initialised at object creation (constructor) time.
   G4int theA;
   G4int theZ;
   G4int resA;

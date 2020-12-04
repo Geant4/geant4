@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 5, 2020, A. Zaborowska (param-V10-06-03)
+- Introduce general facilities based on GFlash implementation
+  to facilitate multiple hit (energy & position) creation
+  from fast simulation models.
+
+September 9, 2020, G. Cosmo (param-V10-06-02)
+- Fixed minor Coverity defect for uninitialised data in G4FastStep.
+
 April 21, 2020, A. Zaborowska (param-V10-06-01)
 - Sanity check for root logical volumes for regions in G4GlobalFastSimulationManager.
   UI command /param/showSetup works also if no parallel world is present.

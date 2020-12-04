@@ -8,10 +8,6 @@
 // the esoteric concepts of polar/azimuthal angular decomposition.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/ThreeVector.h"
 
 #include <cmath>

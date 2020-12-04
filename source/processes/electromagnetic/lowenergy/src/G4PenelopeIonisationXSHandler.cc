@@ -299,7 +299,7 @@ G4double G4PenelopeIonisationXSHandler::GetDensityCorrection(const G4Material* m
       G4cout << "Invalid energy " << energy/eV << " eV " << G4endl;
       return 0;
     }
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
  
   if (theDeltaTable->count(mat))
     {
@@ -410,12 +410,12 @@ void G4PenelopeIonisationXSHandler::BuildDeltaTable(const G4Material* mat)
 	      G4PenelopeOscillator* theOscLocal3 = (*theTable)[i];
 	      G4double wri = theOscLocal3->GetResonanceEnergy();
 	      delta += theOscLocal3->GetOscillatorStrength()*
-		std::log(1.0+(wl2/(wri*wri)));	  	     
+		G4Log(1.0+(wl2/(wri*wri)));	  	     
 	    }
 	  delta = (delta/totalZ)-wl2/(gamSq*plasmaSq);
 	}
       energy = std::max(1e-9*eV,energy); //prevents log(0)
-      theVector->PutValue(bin,std::log(energy),delta);
+      theVector->PutValue(bin,G4Log(energy),delta);
     }
   theDeltaTable->insert(std::make_pair(mat,theVector));
   return;
@@ -453,7 +453,7 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsElectron(G
   G4double beta = (gammaSq-1.0)/gammaSq;
   G4double pielr2 = pi*classic_electr_radius*classic_electr_radius; //pi*re^2
   G4double constant = pielr2*2.0*electron_mass_c2/beta;
-  G4double XHDT0 = std::log(gammaSq)-beta;
+  G4double XHDT0 = G4Log(gammaSq)-beta;
 
   G4double cpSq = energy*(energy+2.0*electron_mass_c2);
   G4double cp = std::sqrt(cpSq);
@@ -480,7 +480,7 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsElectron(G
 	}
       G4double SDL1 = 0;
       if (QM < cutoffEne)
-	SDL1 = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
+	SDL1 = G4Log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
       
       //Distant transverse interactions
       if (SDL1)
@@ -510,14 +510,14 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsElectron(G
   if (wl < wu-(1e-5*eV))
     {
       H0 += (1.0/(ee-wu)) - (1.0/(ee-wl)) - (1.0/wu) + (1.0/wl) + 
-	(1.0-amol)*std::log(((ee-wu)*wl)/((ee-wl)*wu))/ee + 
+	(1.0-amol)*G4Log(((ee-wu)*wl)/((ee-wl)*wu))/ee + 
 	amol*(wu-wl)/(ee*ee);
-      H1 += std::log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
-	(2.0-amol)*std::log((ee-wu)/(ee-wl)) + 
+      H1 += G4Log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
+	(2.0-amol)*G4Log((ee-wu)/(ee-wl)) + 
 	amol*(wu*wu-wl*wl)/(2.0*ee*ee);
       H2 += (2.0-amol)*(wu-wl)+(wu*(2.0*ee-wu)/(ee-wu)) - 
 	(wl*(2.0*ee-wl)/(ee-wl)) + 
-	(3.0-amol)*ee*std::log((ee-wu)/(ee-wl)) + 	
+	(3.0-amol)*ee*G4Log((ee-wu)/(ee-wl)) + 	
 	amol*(wu*wu*wu-wl*wl*wl)/(3.0*ee*ee);
       wu = wl;
     }
@@ -535,14 +535,14 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsElectron(G
     }
 
   S0 += (1.0/(ee-wu))-(1.0/(ee-wl)) - (1.0/wu) + (1.0/wl) + 
-    (1.0-amol)*std::log(((ee-wu)*wl)/((ee-wl)*wu))/ee +
+    (1.0-amol)*G4Log(((ee-wu)*wl)/((ee-wl)*wu))/ee +
     amol*(wu-wl)/(ee*ee);
-  S1 += std::log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
-    (2.0-amol)*std::log((ee-wu)/(ee-wl)) + 
+  S1 += G4Log(wu/wl)+(ee/(ee-wu))-(ee/(ee-wl)) + 
+    (2.0-amol)*G4Log((ee-wu)/(ee-wl)) + 
     amol*(wu*wu-wl*wl)/(2.0*ee*ee);
   S2 += (2.0-amol)*(wu-wl)+(wu*(2.0*ee-wu)/(ee-wu)) - 
     (wl*(2.0*ee-wl)/(ee-wl)) + 
-    (3.0-amol)*ee*std::log((ee-wu)/(ee-wl)) + 
+    (3.0-amol)*ee*G4Log((ee-wu)/(ee-wl)) + 
     amol*(wu*wu*wu-wl*wl*wl)/(3.0*ee*ee);
 
   (*result)[0] = constant*H0;
@@ -585,7 +585,7 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsPositron(G
   G4double beta = (gammaSq-1.0)/gammaSq;
   G4double pielr2 = pi*classic_electr_radius*classic_electr_radius; //pi*re^2
   G4double constant = pielr2*2.0*electron_mass_c2/beta;
-  G4double XHDT0 = std::log(gammaSq)-beta;
+  G4double XHDT0 = G4Log(gammaSq)-beta;
 
   G4double cpSq = energy*(energy+2.0*electron_mass_c2);
   G4double cp = std::sqrt(cpSq);
@@ -618,7 +618,7 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsPositron(G
 	}
       G4double SDL1 = 0;
       if (QM < cutoffEne)
-	SDL1 = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
+	SDL1 = G4Log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)));
       
       //Distant transverse interactions
       if (SDL1)
@@ -650,11 +650,11 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsPositron(G
     {
       G4double wlSq = wl*wl;
       G4double wuSq = wu*wu;
-      H0 += (1.0/wl) - (1.0/wu)- bha1*std::log(wu/wl)/energy  
+      H0 += (1.0/wl) - (1.0/wu)- bha1*G4Log(wu/wl)/energy  
 	+ bha2*(wu-wl)/energySq  
 	- bha3*(wuSq-wlSq)/(2.0*energySq*energy)
 	+ bha4*(wuSq*wu-wlSq*wl)/(3.0*energySq*energySq);
-      H1 += std::log(wu/wl) - bha1*(wu-wl)/energy
+      H1 += G4Log(wu/wl) - bha1*(wu-wl)/energy
 	+ bha2*(wuSq-wlSq)/(2.0*energySq)
 	- bha3*(wuSq*wu-wlSq*wl)/(3.0*energySq*energy)
 	+ bha4*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energySq);
@@ -680,12 +680,12 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsPositron(G
   G4double wlSq = wl*wl;
   G4double wuSq = wu*wu;
 
-  S0 += (1.0/wl) - (1.0/wu) - bha1*std::log(wu/wl)/energy 
+  S0 += (1.0/wl) - (1.0/wu) - bha1*G4Log(wu/wl)/energy 
     + bha2*(wu-wl)/energySq  
     - bha3*(wuSq-wlSq)/(2.0*energySq*energy)
     + bha4*(wuSq*wu-wlSq*wl)/(3.0*energySq*energySq);
 
-  S1 += std::log(wu/wl) - bha1*(wu-wl)/energy
+  S1 += G4Log(wu/wl) - bha1*(wu-wl)/energy
     + bha2*(wuSq-wlSq)/(2.0*energySq)
     - bha3*(wuSq*wu-wlSq*wl)/(3.0*energySq*energy)
     + bha4*(wuSq*wuSq-wlSq*wlSq)/(4.0*energySq*energySq);

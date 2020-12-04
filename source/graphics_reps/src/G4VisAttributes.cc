@@ -233,7 +233,7 @@ void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
     nSegments = nSegmentsMin;
     G4cout <<
       "G4VisAttributes::SetForcedLineSegmentsPerCircle: attempt to set the"
-      "\nnumber of line segements per circle < " << nSegmentsMin
+      "\nnumber of line segments per circle < " << nSegmentsMin
          << "; forced to " << nSegments << G4endl;
   }
   fForcedLineSegmentsPerCircle = nSegments;

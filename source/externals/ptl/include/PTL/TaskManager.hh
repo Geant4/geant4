@@ -30,6 +30,7 @@
 
 #pragma once
 
+#include "PTL/Globals.hh"
 #include "PTL/TBBTaskGroup.hh"
 #include "PTL/Task.hh"
 #include "PTL/TaskGroup.hh"
@@ -51,9 +52,6 @@ class TaskManager
 public:
     typedef TaskManager           this_type;
     typedef ThreadPool::size_type size_type;
-
-    template <bool _Bp, typename _Tp = void>
-    using enable_if_t = typename std::enable_if<_Bp, _Tp>::type;
 
 public:
     // Constructor and Destructors
@@ -89,8 +87,8 @@ public:
     //------------------------------------------------------------------------//
     // direct insertion of a task
     //------------------------------------------------------------------------//
-    template <typename... _Args>
-    void exec(Task<_Args...>* _task)
+    template <typename... Args>
+    void exec(Task<Args...>* _task)
     {
         m_pool->add_task(_task);
     }
@@ -98,39 +96,40 @@ public:
     //------------------------------------------------------------------------//
     // direct insertion of a packaged_task
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Func, typename... _Args>
-    std::future<_Ret> async(_Func&& func, _Args&&... args)
+    template <typename RetT, typename FuncT, typename... Args>
+    std::future<RetT> async(FuncT&& func, Args&&... args)
     {
-        typedef PackagedTask<_Ret, _Args...> task_type;
+        typedef PackagedTask<RetT, Args...>  task_type;
         typedef task_type*                   task_pointer;
 
         task_pointer _ptask =
-            new task_type(std::forward<_Func>(func), std::forward<_Args>(args)...);
-        std::future<_Ret> _f = _ptask->get_future();
+            new task_type(std::forward<FuncT>(func), std::forward<Args>(args)...);
+        std::future<RetT> _f = _ptask->get_future();
         m_pool->add_task(_ptask);
         return _f;
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Func>
-    std::future<_Ret> async(_Func&& func)
+    template <typename RetT, typename FuncT>
+    std::future<RetT> async(FuncT&& func)
     {
-        typedef PackagedTask<_Ret> task_type;
+        typedef PackagedTask<RetT> task_type;
         typedef task_type*         task_pointer;
 
-        task_pointer      _ptask = new task_type(std::forward<_Func>(func));
-        std::future<_Ret> _f     = _ptask->get_future();
+        task_pointer      _ptask = new task_type(std::forward<FuncT>(func));
+        std::future<RetT> _f     = _ptask->get_future();
         m_pool->add_task(_ptask);
         return _f;
     }
     //------------------------------------------------------------------------//
-    template <typename _Func, typename... _Args,
-              typename _Ret = typename std::result_of<_Func(_Args&&...)>::type>
-    auto async(_Func&& func, _Args&&... args) -> std::future<_Ret>
+    template <typename FuncT, typename... Args>
+    auto async(FuncT&& func, Args... args)
+        -> std::future<decay_t<decltype(func(args...))>>
     {
-        typedef PackagedTask<_Ret, _Args...> task_type;
+        using RetT = decay_t<decltype(func(args...))>;
+        typedef PackagedTask<RetT, Args...> task_type;
 
         auto _ptask =
-            new task_type(std::forward<_Func>(func), std::forward<_Args>(args)...);
+            new task_type(std::forward<FuncT>(func), std::forward<Args>(args)...);
         auto _f = _ptask->get_future();
         m_pool->add_task(_ptask);
         return _f;
@@ -141,59 +140,59 @@ public:
     //------------------------------------------------------------------------//
     // public wrap functions
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func, typename... _Args>
-    Task<_Ret, _Arg, _Args...>* wrap(TaskGroup<_Ret, _Arg>& tg, _Func&& func,
-                                     _Args&&... args)
+    template <typename RetT, typename ArgT, typename FuncT, typename... Args>
+    Task<RetT, ArgT, Args...>* wrap(TaskGroup<RetT, ArgT>& tg, FuncT&& func,
+                                    Args&&... args)
     {
-        return tg.wrap(std::forward<_Func>(func), std::forward<_Args>(args)...);
+        return tg.wrap(std::forward<FuncT>(func), std::forward<Args>(args)...);
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func>
-    Task<_Ret, _Arg>* wrap(TaskGroup<_Ret, _Arg>& tg, _Func&& func)
+    template <typename RetT, typename ArgT, typename FuncT>
+    Task<RetT, ArgT>* wrap(TaskGroup<RetT, ArgT>& tg, FuncT&& func)
     {
-        return tg.wrap(std::forward<_Func>(func));
+        return tg.wrap(std::forward<FuncT>(func));
     }
 
 public:
     //------------------------------------------------------------------------//
     // public exec functions
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func, typename... _Args>
-    void exec(TaskGroup<_Ret, _Arg>& tg, _Func&& func, _Args&&... args)
+    template <typename RetT, typename ArgT, typename FuncT, typename... Args>
+    void exec(TaskGroup<RetT, ArgT>& tg, FuncT&& func, Args&&... args)
     {
-        tg.exec(std::forward<_Func>(func), std::forward<_Args>(args)...);
+        tg.exec(std::forward<FuncT>(func), std::forward<Args>(args)...);
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func>
-    void exec(TaskGroup<_Ret, _Arg>& tg, _Func&& func)
+    template <typename RetT, typename ArgT, typename FuncT>
+    void exec(TaskGroup<RetT, ArgT>& tg, FuncT&& func)
     {
-        tg.exec(std::forward<_Func>(func));
+        tg.exec(std::forward<FuncT>(func));
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func, typename... _Args>
-    void rexec(TaskGroup<_Ret, _Arg>& tg, _Func&& func, _Args&&... args)
+    template <typename RetT, typename ArgT, typename FuncT, typename... Args>
+    void rexec(TaskGroup<RetT, ArgT>& tg, FuncT&& func, Args&&... args)
     {
-        tg.exec(std::forward<_Func>(func), std::forward<_Args>(args)...);
+        tg.exec(std::forward<FuncT>(func), std::forward<Args>(args)...);
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func>
-    void rexec(TaskGroup<_Ret, _Arg>& tg, _Func&& func)
+    template <typename RetT, typename ArgT, typename FuncT>
+    void rexec(TaskGroup<RetT, ArgT>& tg, FuncT&& func)
     {
-        tg.exec(std::forward<_Func>(func));
+        tg.exec(std::forward<FuncT>(func));
     }
     //------------------------------------------------------------------------//
     // public exec functions (void specializations)
     //------------------------------------------------------------------------//
-    template <typename _Func, typename... _Args>
-    void rexec(TaskGroup<void, void>& tg, _Func&& func, _Args&&... args)
+    template <typename FuncT, typename... Args>
+    void rexec(TaskGroup<void, void>& tg, FuncT&& func, Args&&... args)
     {
-        tg.exec(std::forward<_Func>(func), std::forward<_Args>(args)...);
+        tg.exec(std::forward<FuncT>(func), std::forward<Args>(args)...);
     }
     //------------------------------------------------------------------------//
-    template <typename _Func>
-    void rexec(TaskGroup<void, void>& tg, _Func&& func)
+    template <typename FuncT>
+    void rexec(TaskGroup<void, void>& tg, FuncT&& func)
     {
-        tg.exec(std::forward<_Func>(func));
+        tg.exec(std::forward<FuncT>(func));
     }
     //------------------------------------------------------------------------//
 
@@ -201,39 +200,39 @@ public:
     //------------------------------------------------------------------------//
     // public wrap functions using TBB tasks
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func, typename... _Args>
-    Task<_Ret, _Arg, _Args...>* wrap(TBBTaskGroup<_Ret, _Arg>& tg, _Func&& func,
-                                     _Args&&... args)
+    template <typename RetT, typename ArgT, typename FuncT, typename... Args>
+    Task<RetT, ArgT, Args...>* wrap(TBBTaskGroup<RetT, ArgT>& tg, FuncT&& func,
+                                    Args&&... args)
     {
-        return tg.wrap(std::forward<_Func>(func), std::forward<_Args>(args)...);
+        return tg.wrap(std::forward<FuncT>(func), std::forward<Args>(args)...);
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func>
-    Task<_Ret, _Arg>* wrap(TBBTaskGroup<_Ret, _Arg>& tg, _Func&& func)
+    template <typename RetT, typename ArgT, typename FuncT>
+    Task<RetT, ArgT>* wrap(TBBTaskGroup<RetT, ArgT>& tg, FuncT&& func)
     {
-        return tg.wrap(std::forward<_Func>(func));
+        return tg.wrap(std::forward<FuncT>(func));
     }
 
     //------------------------------------------------------------------------//
     // public exec functions using TBB tasks
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func, typename... _Args>
-    void exec(TBBTaskGroup<_Ret, _Arg>& tg, _Func&& func, _Args&&... args)
+    template <typename RetT, typename ArgT, typename FuncT, typename... Args>
+    void exec(TBBTaskGroup<RetT, ArgT>& tg, FuncT&& func, Args&&... args)
     {
-        tg.exec(std::forward<_Func>(func), std::forward<_Args>(args)...);
+        tg.exec(std::forward<FuncT>(func), std::forward<Args>(args)...);
     }
     //------------------------------------------------------------------------//
-    template <typename _Ret, typename _Arg, typename _Func>
-    void exec(TBBTaskGroup<_Ret, _Arg>& tg, _Func&& func)
+    template <typename RetT, typename ArgT, typename FuncT>
+    void exec(TBBTaskGroup<RetT, ArgT>& tg, FuncT&& func)
     {
-        tg.exec(std::forward<_Func>(func));
+        tg.exec(std::forward<FuncT>(func));
     }
     //------------------------------------------------------------------------//
 #endif
 
 protected:
     // Protected variables
-    ThreadPool* m_pool;
+    ThreadPool* m_pool = nullptr;
 
 private:
     static TaskManager*& fgInstance();

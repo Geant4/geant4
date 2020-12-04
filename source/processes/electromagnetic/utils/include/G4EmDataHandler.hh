@@ -57,6 +57,7 @@
 
 class G4ParticleDefinition;
 class G4VEmProcess;
+class G4VEnergyLossProcess;
 
 class G4EmDataHandler
 {

@@ -23,65 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4HCIOentryT.hh
+// G4HCIOentryT
 //
-// History:
-//   '01.09.12  Youhei Morita  Initial creation
+// Class Description:
+//
+// Template class of HitsCollection I/O Manager for late binding.
 
-#ifndef HCIO_ENTRY_T_HH
-#define HCIO_ENTRY_T_HH 1
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4HCIOENTRYT_HH
+#define G4HCIOENTRYT_HH 1
 
 #include <string>
 #include "G4Types.hh"
 #include "G4VPHitsCollectionIO.hh"
 
-// Class inherited:
 #include "G4VHCIOentry.hh"
 
-// Class Description:
-//   Template class of HitsCollection I/O Manager for late binding
-
-template <class T> class G4HCIOentryT
- : public G4VHCIOentry
+template <class T>
+class G4HCIOentryT : public G4VHCIOentry
 {
-    public: // With description
-      G4HCIOentryT<T>(std::string n)
-       : G4VHCIOentry(n), f_manager(0)
+  public:
+
+    G4HCIOentryT<T>(const G4String& n) : G4VHCIOentry(n)
+    {
+      if(m_verbose > 2)
       {
-         if ( m_verbose > 2 ) {
-           G4cout << "G4HCIOentryT: Registering HitsCollection IO manager"
-                  << " for \"" << n << "\"" <<  G4endl;
-         }
+        G4cout << "G4HCIOentryT: Registering HitsCollection IO manager"
+               << " for \"" << n << "\"" << G4endl;
       }
+    }
       // Constructor
 
-      ~G4HCIOentryT() {};
+    ~G4HCIOentryT() {}
       // Destructor
 
-    public: // With description
-      void CreateHCIOmanager(std::string detName, std::string colName)
+    void CreateHCIOmanager(const G4String& detName, const G4String& colName)
+    {
+      if(f_manager == nullptr)
       {
-        if ( f_manager == 0 ) {
-          f_manager = new T( detName, colName );
-          if ( m_verbose > 2 ) {
-            G4cout << "G4HCIOentryT: Constructing HitsCollection IO manager"
-                   << " for \"" << detName << "\" " << f_manager <<  G4endl;
-          }
-          G4HCIOcatalog::GetHCIOcatalog()->RegisterHCIOmanager(f_manager);
-          if ( m_verbose > 2 ) {
-            G4HCIOcatalog::GetHCIOcatalog()->PrintHCIOmanager();
-          }
+        f_manager = new T(detName, colName);
+        if(m_verbose > 2)
+        {
+          G4cout << "G4HCIOentryT: Constructing HitsCollection IO manager"
+                 << " for \"" << detName << "\" " << f_manager << G4endl;
+        }
+        G4HCIOcatalog::GetHCIOcatalog()->RegisterHCIOmanager(f_manager);
+        if(m_verbose > 2)
+        {
+          G4HCIOcatalog::GetHCIOcatalog()->PrintHCIOmanager();
         }
       }
+    }
       // Create a new hits collection I/O manager
 
-      void DeleteHCIOmanager() { if (f_manager!=0) delete f_manager; };
+    void DeleteHCIOmanager()
+    {
+      if(f_manager != nullptr)
+        delete f_manager;
+    }
       // Delete a hits collection I/O manager
 
-    private:
-      G4VPHitsCollectionIO* f_manager;
+  private:
 
-}; // End of class G4HCIOentryT
+    G4VPHitsCollectionIO* f_manager = nullptr;
+};
 
 #endif
-

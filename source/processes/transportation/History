@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 26th 2020, G. Amadio & J.Apostolakis transport-V10-06-00
+
+A substantial reorganisation of G4Transportation::AlongStepGPIL
+to use values already in cache, reduce the number of branches, and
+use extra local variables for track properties to avoid indirections.
+The method is one of the heaviest in many types of simulation workloads.
+Profiling identified a persistent reduction in misses of instruction-TLB
+loads after these changes.
+
 Nov  1st 2019, J.Apostolakis transport-V10-05-02
 ----------------------------
 - Optimisation in G4Transportation and G4CoupledTransportation:
@@ -311,7 +320,7 @@ Jan. 15th, 2013, A.Dotti
 Jul. 12th, 2011, J.Apostolakis transport-V09-05-02
 ------------------------------
 - G4Transportation.cc: 
-    Corrected issues with initilisation of data members reported by Coverity.
+    Corrected issues with initialisation of data members reported by Coverity.
     Renamed data member endpointdistance to fEndPointDistance (to conform).
 
 Jul. 5th, 2012 Gabriele Cosmo transport-V09-05-01

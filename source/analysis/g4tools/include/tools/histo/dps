@@ -152,21 +152,21 @@ public:
   void clear() {m_points.clear();}
   size_t size() const {return m_points.size();}
 
-  const data_point& point(size_t a_index) const { 
+  const data_point& point(size_t a_index) const {
     //WARNING : no check done on a_index.
     return m_points[a_index];
   }
-  data_point& point(size_t a_index) { 
+  data_point& point(size_t a_index) {
     //WARNING : no check done on a_index.
     return m_points[a_index];
   }
 
-  data_point& add_point() { 
+  data_point& add_point() {
     m_points.push_back(data_point(m_dim));
     return m_points.back();
   }
 
-  bool remove_point(size_t a_index) { 
+  bool remove_point(size_t a_index) {
     bool done = false;
     if(a_index<m_points.size()){
       std::vector<data_point>::iterator it = m_points.begin();
@@ -177,7 +177,7 @@ public:
     return done;
   }
 
-  bool lower_extent(unsigned int a_coord,double& a_value) const { 
+  bool lower_extent(unsigned int a_coord,double& a_value) const {
     if(m_points.empty()||(a_coord>=m_dim)){
       a_value = 0;
       return false;
@@ -190,8 +190,8 @@ public:
     }
     return true;
   }
-  
-  bool upper_extent(unsigned int a_coord,double& a_value) const { 
+
+  bool upper_extent(unsigned int a_coord,double& a_value) const {
     if(m_points.empty()||(a_coord>=m_dim)){
       a_value = 0;
       return false;
@@ -204,8 +204,8 @@ public:
     }
     return true;
   }
-  
-  void scale(double a_scale) { 
+
+  void scale(double a_scale) {
     std::vector<data_point>::iterator it;
     for(it=m_points.begin();it!=m_points.end();++it) {
       for(unsigned int coord=0;coord<m_dim;coord++) {
@@ -217,7 +217,7 @@ public:
     }
   }
 
-  void scale_value(double a_scale) { 
+  void scale_value(double a_scale) {
     std::vector<data_point>::iterator it;
     for(it=m_points.begin();it!=m_points.end();++it) {
       for(unsigned int coord=0;coord<m_dim;coord++) {
@@ -227,7 +227,7 @@ public:
     }
   }
 
-  void scale_errors(double a_scale) { 
+  void scale_errors(double a_scale) {
     std::vector<data_point>::iterator it;
     for(it=m_points.begin();it!=m_points.end();++it) {
       for(unsigned int coord=0;coord<m_dim;coord++) {

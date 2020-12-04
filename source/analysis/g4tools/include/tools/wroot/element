@@ -149,7 +149,7 @@ public:
   }
 protected: //Named
   std::string fName;
-  std::string fTitle;  
+  std::string fTitle;
 protected:
   int fType;            //element type
   int fSize;            //sizeof element
@@ -226,7 +226,7 @@ public:
   streamer_basic_type(const streamer_basic_type& a_from)
   :ibo(a_from),streamer_element(a_from)
   {}
-  streamer_basic_type& operator=(const streamer_basic_type& a_from){ 
+  streamer_basic_type& operator=(const streamer_basic_type& a_from){
     streamer_element::operator=(a_from);
     return *this;
   }
@@ -438,7 +438,7 @@ public:
   streamer_string(const streamer_string& a_from):ibo(a_from),streamer_element(a_from){}
   streamer_string& operator=(const streamer_string& a_from){streamer_element::operator=(a_from);return *this;}
 };
- 
+
 
 class streamer_object : public streamer_element {
 public: //ibo

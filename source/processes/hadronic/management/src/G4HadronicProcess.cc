@@ -115,27 +115,29 @@ void G4HadronicProcess::InitialiseLocal() {
   theInitialNumberOfInteractionLength = 0.0;
   aScaleFactor = 1.0;
   fWeight = 1.0;
-  xBiasOn = false;
   nMatWarn = nKaonWarn = 0;
   useIntegralXS = true;
   theLastCrossSection = 0.0;
   nICelectrons = 0;
   idxIC = -1;
   G4HadronicProcess_debug_flag = false;
+  levelsSetByProcess = false;
+  epReportLevel = 0;
+  epCheckLevels.first = DBL_MAX;
+  epCheckLevels.second = DBL_MAX;
   GetEnergyMomentumCheckEnvvars();
 }
 
 void G4HadronicProcess::GetEnergyMomentumCheckEnvvars() {
-  levelsSetByProcess = false;
-
-  epReportLevel = std::getenv("G4Hadronic_epReportLevel") ?
-    std::strtol(std::getenv("G4Hadronic_epReportLevel"),0,10) : 0;
-
-  epCheckLevels.first = std::getenv("G4Hadronic_epCheckRelativeLevel") ?
-    std::strtod(std::getenv("G4Hadronic_epCheckRelativeLevel"),0) : DBL_MAX;
-
-  epCheckLevels.second = std::getenv("G4Hadronic_epCheckAbsoluteLevel") ?
-    std::strtod(std::getenv("G4Hadronic_epCheckAbsoluteLevel"),0) : DBL_MAX;
+  if ( std::getenv("G4Hadronic_epReportLevel") ) {
+    epReportLevel = std::strtol(std::getenv("G4Hadronic_epReportLevel"),0,10);
+  }
+  if ( std::getenv("G4Hadronic_epCheckRelativeLevel") ) {
+    epCheckLevels.first = std::strtod(std::getenv("G4Hadronic_epCheckRelativeLevel"),0);
+  }
+  if ( std::getenv("G4Hadronic_epCheckAbsoluteLevel") ) {
+    epCheckLevels.second = std::strtod(std::getenv("G4Hadronic_epCheckAbsoluteLevel"),0);
+  }
 }
 
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -493,7 +495,6 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
     G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had010", 
                 JustWarning, ed, "Cross-section bias is ignored");
   } else {
-    xBiasOn = true;
     aScaleFactor = aScale;
   }
 }

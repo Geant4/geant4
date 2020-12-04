@@ -94,7 +94,7 @@ void G4BinaryLightIonReaction::ModelDescription(std::ostream& outFile) const
 			<< "using G4BinaryCasacde to model the interaction of a light\n"
 			<< "nucleus with a nucleus.\n"
 			<< "The lighter of the two nuclei is treated like a set of projectiles\n"
-			<< "which are transported simultanously through the heavier nucleus.\n";
+			<< "which are transported simultaneously through the heavier nucleus.\n";
 }
 
 //--------------------------------------------------------------------------------

@@ -244,7 +244,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
     // energy includes the projectile and virtual gamma.  This is then used
     // to calculate the boost required for the secondaries.
 
-    pP.setE(pP.e()+Eg);
+    pP.setE( std::sqrt( pP.vect().mag2() + (mass + Eg)*(mass + Eg) ) );
     boost = pP.findBoostToCM();
   }
   else
@@ -349,7 +349,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 
   G4Fragment* theFragment = new
     G4Fragment((G4int) typeDaughter->GetBaryonNumber(),
-    (G4int) typeDaughter->GetPDGCharge(), dynamicDaughter->Get4Momentum());
+	       (G4int) typeDaughter->GetPDGCharge(), dynamicDaughter->Get4Momentum(), false);
 
   if (verboseLevel >= 2) {
     G4cout <<"Dynamic properties of the prefragment:" <<G4endl;

@@ -27,17 +27,17 @@ public:
   }
 
   unsigned int dimension() const {return 1;}
-  bool reset() { 
+  bool reset() {
     clear();
     delete m_histo;
     m_histo = 0;
     return true;
   }
-  unsigned int entries() const { 
+  unsigned int entries() const {
     return m_histo ? m_histo->all_entries() : (unsigned int)m_ws.size();
   }
 public:
-  double sum_of_weights() const { 
+  double sum_of_weights() const {
     return (m_histo ? m_histo->sum_bin_heights() : m_Sw);
   }
 
@@ -73,11 +73,11 @@ public:
 
 public:
   bool fill(double aX,double aW = 1){
-    if(!m_histo && (m_limit!=UNLIMITED()) && 
+    if(!m_histo && (m_limit!=UNLIMITED()) &&
        ((int)m_xs.size()>=m_limit)){
       convert_to_histogram();
     }
-  
+
     if(m_histo) {
       return m_histo->fill(aX,aW);
     } else {
@@ -98,10 +98,10 @@ public:
     }
   }
 
-  double lower_edge() const { 
+  double lower_edge() const {
     return (m_histo ? m_histo->axis().lower_edge() : m_lower_x);
   }
-  double upper_edge() const { 
+  double upper_edge() const {
     return (m_histo ? m_histo->axis().upper_edge() : m_upper_x);
   }
   double value(unsigned int a_index) const {return (m_histo ?0:m_xs[a_index]);}
@@ -168,7 +168,7 @@ public:
   ,m_Sxw(0),m_Sx2w(0)
   ,m_cnv_x_num(0),m_cnv_x_min(0),m_cnv_x_max(0),m_histo(0)
   {}
-  
+
   c1d(const std::string& a_title,int aLimit = base_cloud::UNLIMITED())
   :base_cloud(aLimit)
   ,m_lower_x(0),m_upper_x(0)

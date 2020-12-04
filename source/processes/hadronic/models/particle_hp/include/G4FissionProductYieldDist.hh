@@ -89,6 +89,10 @@ private:
     /** Initialize is a common function called by all constructors. */
     void Initialize( std::istringstream& dataStream );
 
+#ifdef G4MULTITHREADED
+    static G4Mutex fissprodMutex;
+#endif
+
 public:
 // Functions
     /** Generates a fission event using default sampling and returns the pointer

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 
@@ -45,8 +45,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal 
-G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = 0; 
+G4ThreadLocal
+G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,7 +57,7 @@ DetectorConstruction::DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{}  
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,11 +71,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Material* csi = nistManager->FindOrBuildMaterial("G4_CESIUM_IODIDE");
        // There is no need to test if materials were built/found
        // as G4NistManager would issue an error otherwise
-       // Try the code with "XYZ".      
+       // Try the code with "XYZ".
 
   // Print all materials
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;         
-  
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
   // Option to switch on/off checking of volumes overlaps
   G4bool checkOverlaps = true;
 
@@ -85,12 +85,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // The world dimensions
   G4double worldHxyz = 2.*m;
-  
+
   // world volume
-  G4Box* worldS = new G4Box("World", worldHxyz, worldHxyz, worldHxyz); 
+  G4Box* worldS = new G4Box("World", worldHxyz, worldHxyz, worldHxyz);
 
   G4LogicalVolume* worldLV = new G4LogicalVolume(worldS, air, "World");
-                                   
+
   G4VPhysicalVolume* worldPV
     = new G4PVPlacement(
             0, G4ThreeVector(), worldLV, "World", 0, false, 0, checkOverlaps);
@@ -102,12 +102,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // The box dimensions
   G4double boxHxy = 1.*m;
   G4double boxHz = 10.*cm;
-  
+
   // box volume
-  G4Box* boxS = new G4Box("World", boxHxy, boxHxy, boxHz); 
+  G4Box* boxS = new G4Box("World", boxHxy, boxHxy, boxHz);
 
   G4LogicalVolume* boxLV = new G4LogicalVolume(boxS, csi, "Box");
-                                   
+
   // The box position
   G4double posz = 0.*m;
 
@@ -121,12 +121,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // The screen dimensions
   G4double screenHxy = 1.999*m;
   G4double screenHz = 1.*mm;
-  
+
   // Screen volume
-  G4Box* screenS = new G4Box("World", screenHxy, screenHxy, screenHz); 
-      
+  G4Box* screenS = new G4Box("World", screenHxy, screenHxy, screenHz);
+
   G4LogicalVolume* screenLV = new G4LogicalVolume(screenS, air, "Screen");
-                                   
+
   // The screen position
   posz += boxHz + screenHz;
 
@@ -134,7 +134,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         0, G4ThreeVector(0, 0, posz),
         screenLV, "Screen", worldLV, false, 0, checkOverlaps);
 
-  //                                        
+  //
   // Visualization attributes
   //
   worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
@@ -156,14 +156,14 @@ void DetectorConstruction::ConstructSDandField()
 {
   // G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
-  // 
+  //
   // Sensitive detectors
   //
   auto screenSD = new ScreenSD("ScreenSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(screenSD);
   SetSensitiveDetector("Screen", screenSD);
 
-  // 
+  //
   // Magnetic field
   //
   // Create global magnetic field messenger.
@@ -172,7 +172,7 @@ void DetectorConstruction::ConstructSDandField()
   G4ThreeVector fieldValue;
   fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
   fMagFieldMessenger->SetVerboseLevel(1);
-  
+
   // Register the field messenger for deleting
   G4AutoDelete::Register(fMagFieldMessenger);
 }

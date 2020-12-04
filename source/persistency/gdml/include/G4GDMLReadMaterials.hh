@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLReadMaterials
+// G4GDMLReadMaterials
 //
 // Class description:
 //
 // GDML class for loading isotopes, elements and materials according to
 // specifications in Geant4.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLREADMATERIALS_INCLUDED_
-#define _G4GDMLREADMATERIALS_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLREADMATERIALS_HH
+#define G4GDMLREADMATERIALS_HH 1
 
 #include "G4Types.hh"
 #include "G4GDMLReadDefine.hh"
@@ -47,36 +42,34 @@ class G4Element;
 class G4Isotope;
 class G4Material;
 
-class G4GDMLReadMaterials : public G4GDMLReadDefine 
+class G4GDMLReadMaterials : public G4GDMLReadDefine
 {
+  public:
 
- public:
+    G4Element* GetElement(const G4String&, G4bool verbose = true) const;
+    G4Isotope* GetIsotope(const G4String&, G4bool verbose = true) const;
+    G4Material* GetMaterial(const G4String&, G4bool verbose = true) const;
 
-   G4Element* GetElement(const G4String&, G4bool verbose=true) const;
-   G4Isotope* GetIsotope(const G4String&, G4bool verbose=true) const;
-   G4Material* GetMaterial(const G4String&, G4bool verbose=true) const;
+    virtual void MaterialsRead(const xercesc::DOMElement* const);
 
-   virtual void MaterialsRead(const xercesc::DOMElement* const);
+  protected:
 
- protected:
+    G4GDMLReadMaterials();
+    virtual ~G4GDMLReadMaterials();
 
-   G4GDMLReadMaterials();
-   virtual ~G4GDMLReadMaterials();
-
-   G4double AtomRead(const xercesc::DOMElement* const);
-   G4int CompositeRead(const xercesc::DOMElement* const,G4String&);
-   G4double DRead(const xercesc::DOMElement* const);
-   G4double PRead(const xercesc::DOMElement* const);
-   G4double TRead(const xercesc::DOMElement* const);
-   G4double MEERead(const xercesc::DOMElement* const);
-   void ElementRead(const xercesc::DOMElement* const);
-   G4double FractionRead(const xercesc::DOMElement* const,G4String&);
-   void IsotopeRead(const xercesc::DOMElement* const);
-   void MaterialRead(const xercesc::DOMElement* const);
-   void MixtureRead(const xercesc::DOMElement* const,G4Element*);
-   void MixtureRead(const xercesc::DOMElement* const,G4Material*);
-   void PropertyRead(const xercesc::DOMElement* const,G4Material*);
-
+    G4double AtomRead(const xercesc::DOMElement* const);
+    G4int CompositeRead(const xercesc::DOMElement* const, G4String&);
+    G4double DRead(const xercesc::DOMElement* const);
+    G4double PRead(const xercesc::DOMElement* const);
+    G4double TRead(const xercesc::DOMElement* const);
+    G4double MEERead(const xercesc::DOMElement* const);
+    void ElementRead(const xercesc::DOMElement* const);
+    G4double FractionRead(const xercesc::DOMElement* const, G4String&);
+    void IsotopeRead(const xercesc::DOMElement* const);
+    void MaterialRead(const xercesc::DOMElement* const);
+    void MixtureRead(const xercesc::DOMElement* const, G4Element*);
+    void MixtureRead(const xercesc::DOMElement* const, G4Material*);
+    void PropertyRead(const xercesc::DOMElement* const, G4Material*);
 };
 
 #endif

@@ -18,7 +18,7 @@ inline bool is_gzip(const std::string& a_file,bool& a_is){
   if(head[1]!=139) {a_is = false;return true;}
   //if(head[2]!=8) {a_is = false;return true;}
   //if(head[3]!=8) {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -29,7 +29,7 @@ inline bool gzip_usize(const std::string& a_file,unsigned int& a_usz){
   FILE* file = ::fopen(a_file.c_str(),"rb");
   if(!file) {a_usz=0;return false;}
   ::fseek(file,-4,SEEK_END);
-  unsigned char buf[4];  
+  unsigned char buf[4];
   size_t n = ::fread(buf,1,4,file);
   ::fclose(file);
   if(n!=4) {a_usz=0;return false;}

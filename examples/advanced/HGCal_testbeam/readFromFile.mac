@@ -1,0 +1,26 @@
+# Macro file for sample run of the HGCal testbeam simulation
+#
+
+# Set verbosity levels
+#/control/verbose 2
+#/control/saveHistory
+#/run/verbose 2
+#/tracking/verbose 2
+
+# Use only one thread
+/run/numberOfThreads 1
+
+# Initialize kernel
+/run/initialize
+
+# Choose geometry setup
+/HGCalTestbeam/setup/configuration 0
+
+# Read input particles from file
+/HGCalTestbeam/generator/readInputFile true
+# Substitute <INPUTFILE.root> with name of the file
+/HGCalTestbeam/generator/pathInputFile INPUTFILE.root
+/HGCalTestbeam/generator/startFromEvent 0
+
+/HGCalTestbeam/output/file output_inputFromFile_10events.root
+/run/beamOn 10

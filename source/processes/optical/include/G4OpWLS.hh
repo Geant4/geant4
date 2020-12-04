@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////////////////
 //
 // File:        G4OpWLS.hh
-// Description: Discrete Process -- Wavelength Shifting of Optical Photons 
+// Description: Discrete Process -- Wavelength Shifting of Optical Photons
 // Version:     1.0
 // Created:     2003-05-13
 // Author:      John Paul Archambault
@@ -50,26 +50,26 @@ class G4VWLSTimeGeneratorProfile;
 
 class G4OpWLS : public G4VDiscreteProcess
 {
-public:
-
+ public:
   explicit G4OpWLS(const G4String& processName = "OpWLS",
-                   G4ProcessType type = fOptical);
+                   G4ProcessType type          = fOptical);
   virtual ~G4OpWLS();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
+  virtual G4bool IsApplicable(
+    const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable' only for an optical photon.
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) override;
+  virtual void BuildPhysicsTable(
+    const G4ParticleDefinition& aParticleType) override;
   // Build the WLS integral table at the right time
 
-  virtual G4double GetMeanFreePath(const G4Track& aTrack,
-                                   G4double,
+  virtual G4double GetMeanFreePath(const G4Track& aTrack, G4double,
                                    G4ForceCondition*) override;
   // Returns the absorption length for WLS absorption of optical
   // photons in media with a specified attenuation length.
 
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                          const G4Step&  aStep) override;
+                                          const G4Step& aStep) override;
   // This is the method implementing WLS for optical photons.
 
   virtual G4PhysicsTable* GetIntegralTable() const;
@@ -78,18 +78,19 @@ public:
   virtual void DumpPhysicsTable() const;
   // Prints the WLS integral table.
 
-  void UseTimeProfile(const G4String name);
+  virtual void UseTimeProfile(const G4String name);
   // Selects the time profile generator
 
-protected:
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
+  virtual void Initialise();
 
+ protected:
   G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
   G4PhysicsTable* theIntegralTable;
 
-private:
-
-  G4OpWLS(const G4OpWLS &right) = delete;
-  G4OpWLS& operator=(const G4OpWLS &right) = delete;
+ private:
+  G4OpWLS(const G4OpWLS& right) = delete;
+  G4OpWLS& operator=(const G4OpWLS& right) = delete;
 
   size_t idx_wls = 0;
 };
@@ -98,27 +99,24 @@ private:
 // Inline methods
 ////////////////////
 
-inline
-G4bool G4OpWLS::IsApplicable(const G4ParticleDefinition& aParticleType)
+inline G4bool G4OpWLS::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
   return (&aParticleType == G4OpticalPhoton::OpticalPhoton());
 }
 
-inline
-G4PhysicsTable* G4OpWLS::GetIntegralTable() const
+inline G4PhysicsTable* G4OpWLS::GetIntegralTable() const
 {
   return theIntegralTable;
 }
 
-inline
-void G4OpWLS::DumpPhysicsTable() const
+inline void G4OpWLS::DumpPhysicsTable() const
 {
   G4int PhysicsTableSize = theIntegralTable->entries();
-  G4PhysicsOrderedFreeVector *v;
+  G4PhysicsOrderedFreeVector* v;
 
-  for (G4int i=0; i<PhysicsTableSize; ++i)
+  for(G4int i = 0; i < PhysicsTableSize; ++i)
   {
-    v = (G4PhysicsOrderedFreeVector*)(*theIntegralTable)[i];
+    v = (G4PhysicsOrderedFreeVector*) (*theIntegralTable)[i];
     v->DumpValues();
   }
 }

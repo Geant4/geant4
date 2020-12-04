@@ -17,8 +17,8 @@ namespace tools {
 namespace sg {
 
 class gl2ps_action : public render_action {
-  typedef render_action parent;
-  
+  TOOLS_ACTION(gl2ps_action,tools::sg::gl2ps_action,render_action)
+private:
   gl2ps_action& get_me() {return *this;}
 
   static unsigned int _GL2PS_POINT()    {return 2;}
@@ -41,24 +41,24 @@ public:
                                        size_t a_floatn,
                                        const float* a_xyzs,
                                        const float* a_rgbas){
-    m_pv.add_primitive(a_mode,a_floatn,a_xyzs,a_rgbas);
+    m_pv.add_primitive_rgba(a_mode,a_floatn,a_xyzs,a_rgbas);
   }
 
   virtual void draw_vertex_normal_array(gl::mode_t a_mode,
                                         size_t a_floatn,
                                         const float* a_xyzs,
-                                        const float* /*a_nms*/){
-    m_pv.add_primitive(a_mode,a_floatn,a_xyzs);
+                                        const float* a_nms){
+    m_pv.add_primitive_normal(a_mode,a_floatn,a_xyzs,a_nms);
   }
 
   virtual void draw_vertex_color_normal_array(gl::mode_t a_mode,
                                               size_t a_floatn,
                                               const float* a_xyzs,
                                               const float* a_rgbas,
-                                              const float* /*a_nms*/){
+                                              const float* a_nms){
     // We expect a_nms of size : 3*(a_floatn/3)
     // (then one normal per 3D point).
-    m_pv.add_primitive(a_mode,a_floatn,a_xyzs,a_rgbas);
+    m_pv.add_primitive_normal_rgba(a_mode,a_floatn,a_xyzs,a_nms,a_rgbas);
   }
 
   virtual void clear_color(float a_r,float a_g,float a_b,float /*a_a*/){
@@ -83,7 +83,7 @@ public:
     if(a_v==shade_smooth) {}
     else {}
   }
-  
+
   virtual void set_depth_test(bool a_on) {m_DEPTH_TEST = a_on;}
 
   virtual void set_cull_face(bool a_on) {m_CULL_FACE = a_on;}
@@ -91,7 +91,10 @@ public:
   virtual void set_line_smooth(bool a_on) {m_LINE_SMOOTH = a_on;}
 
   virtual void load_proj_matrix(const mat4f& a_mtx) {m_proj = a_mtx;}
-  virtual void load_model_matrix(const mat4f& a_mtx) {m_model = a_mtx;}
+  virtual void load_model_matrix(const mat4f& a_mtx) {
+    m_model = a_mtx;
+    set_normal_matrix();
+  }
 
   virtual unsigned int max_lights() {return 1000;}
 
@@ -110,6 +113,7 @@ public:
     const sg::state& _state = state();
     m_proj = _state.m_proj;
     m_model = _state.m_model;
+    set_normal_matrix();
 
     m_color = _state.m_color;
     m_ccw = (_state.m_winding==winding_ccw?true:false);
@@ -129,7 +133,7 @@ public:
   virtual void draw_vertex_array_texture(gl::mode_t,size_t a_xyzn,const float* a_xyzs,
                                          gstoid a_id,const float* a_tcs) {
     img_byte img;
-    if(!m_mgr.find(a_id,img)) return;    
+    if(!m_mgr.find(a_id,img)) return;
     m_pv.add_texture(m_out,a_xyzn,a_xyzs,img,a_tcs);
   }
 
@@ -184,7 +188,10 @@ public:
 
     //m_zb.change_size(a_ww,a_wh);
 //    m_zb.clear_color_buffer(0);
-//    m_zb.clear_depth_buffer();  
+//    m_zb.clear_depth_buffer();
+    m_proj.set_identity();
+    m_model.set_identity();
+    m_normal_matrix.set_identity();
   }
   virtual ~gl2ps_action(){}
 protected:
@@ -201,6 +208,7 @@ protected:
 
   ,m_proj(a_from.m_proj)
   ,m_model(a_from.m_model)
+  ,m_normal_matrix(a_from.m_normal_matrix)
   ,m_color(a_from.m_color)
   ,m_ccw(a_from.m_ccw)
   ,m_POLYGON_OFFSET_FILL(a_from.m_POLYGON_OFFSET_FILL)
@@ -232,6 +240,7 @@ protected:
 
     m_proj = a_from.m_proj;
     m_model = a_from.m_model;
+    m_normal_matrix = a_from.m_normal_matrix;
     m_color = a_from.m_color;
     m_ccw = a_from.m_ccw;
     m_POLYGON_OFFSET_FILL = a_from.m_POLYGON_OFFSET_FILL;
@@ -255,24 +264,24 @@ public:
       return false;
     }
 
-    int options = TOOLS_GL2PS_OCCLUSION_CULL 
-      | TOOLS_GL2PS_BEST_ROOT 
+    int options = TOOLS_GL2PS_OCCLUSION_CULL
+      | TOOLS_GL2PS_BEST_ROOT
       | TOOLS_GL2PS_SILENT
       | TOOLS_GL2PS_DRAW_BACKGROUND;
     //int sort = TOOLS_GL2PS_NO_SORT;
     //int sort = TOOLS_GL2PS_SIMPLE_SORT;
     int sort = TOOLS_GL2PS_BSP_SORT;
-          
+
     tools_GLint vp[4];
     vp[0] = 0;
     vp[1] = 0;
     vp[2] = m_ww;
     vp[3] = m_wh;
-      
+
     int bufsize = 0;
-    ::tools_gl2psBeginPage("","tools_sg_write_gl2ps", 
-                     vp,a_format,sort,options, 
-                     TOOLS_GL_RGBA,0, NULL,0,0,0,bufsize, 
+    ::tools_gl2psBeginPage("","tools_sg_write_gl2ps",
+                     vp,a_format,sort,options,
+                     TOOLS_GL_RGBA,0, NULL,0,0,0,bufsize,
                      m_FILE,a_name.c_str());
 
     ::tools_gl2psSetBackgroundColor(m_back[0],m_back[1],m_back[2]);
@@ -297,6 +306,15 @@ public:
     m_back[2] = a_b;
   }
 protected:
+  void set_normal_matrix() {
+    mat4f tmp(m_model);
+    tmp.no_translate();
+    if(!tmp.invert(m_normal_matrix)) {
+      m_out << "mem_action::set_normal_matrix : can't invert model matrix." << std::endl;
+    }
+    m_normal_matrix.transpose();
+  }
+
   bool project_point(float& a_x,float& a_y,float& a_z,float& a_w) {
     a_w = 1;
     m_model.mul_4f(a_x,a_y,a_z,a_w);
@@ -307,6 +325,11 @@ protected:
     a_z /= a_w;
     return true;
   }
+//  bool project_normal(float& a_x,float& a_y,float& a_z) {
+//    m_normal_matrix.mul_dir_3f(a_x,a_y,a_z);
+//  //m_proj.mul_dir_3f(a_x,a_y,a_z); //?
+//    return true;
+//  }
 
   static void set_vtx(tools_GL2PSvertex* a_vs,unsigned int a_index,
                       float a_x,float a_y,float a_z,
@@ -350,7 +373,7 @@ protected:
       ::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
       return true;
     }
-  
+
     virtual bool add_point(float a_x,float a_y,float a_z,float,
                            float a_r,float a_g,float a_b,float a_a) {
       tools_GLint offset = 0;
@@ -373,7 +396,7 @@ protected:
       ::tools_gl2psAddPolyPrimitive(_GL2PS_POINT(),1,vertices,offset,ofactor,ounits,pattern,factor,sz,linecap,linejoin,boundary);
       return true;
     }
-  
+
     virtual bool add_line(float a_bx,float a_by,float a_bz,float,
                           float a_ex,float a_ey,float a_ez,float) {
       float r = m_this.m_color[0];
@@ -390,7 +413,7 @@ protected:
       tools_GLint linecap = 0;  //
       tools_GLint linejoin = 0; //
       char boundary = 0;  //
-      
+
       tools_GL2PSvertex vertices[2];
 
       m_this.m_vp_mtx.mul_3f(a_bx,a_by,a_bz);
@@ -404,7 +427,7 @@ protected:
 
       return true;
     }
-  
+
     virtual bool add_line(float a_bx,float a_by,float a_bz,float,
                           float a_br,float a_bg,float a_bb,float a_ba,
                           float a_ex,float a_ey,float a_ez,float,
@@ -433,7 +456,7 @@ protected:
 
       return true;
     }
-  
+
     virtual bool add_triangle(float a_p1x,float a_p1y,float a_p1z,float,
                               float a_p2x,float a_p2y,float a_p2z,float,
                               float a_p3x,float a_p3y,float a_p3z,float){
@@ -461,20 +484,20 @@ protected:
       m_this.set_vtx(vertices,0, a_p1x,a_p1y,a_p1z, r,g,b,a);
       m_this.set_vtx(vertices,1, a_p2x,a_p2y,a_p2z, r,g,b,a);
       m_this.set_vtx(vertices,2, a_p3x,a_p3y,a_p3z, r,g,b,a);
-    
+
       //tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
       ::tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
-      
+
       return true;
     }
 
     virtual bool add_triangle(
       float a_p1x,float a_p1y,float a_p1z,float,
-        float a_r1,float a_g1,float a_b1,float a_a1,
+      float a_r1,float a_g1,float a_b1,float a_a1,
       float a_p2x,float a_p2y,float a_p2z,float,
-        float a_r2,float a_g2,float a_b2,float a_a2,
+      float a_r2,float a_g2,float a_b2,float a_a2,
       float a_p3x,float a_p3y,float a_p3z,float,
-        float a_r3,float a_g3,float a_b3,float a_a3){
+      float a_r3,float a_g3,float a_b3,float a_a3){
 
       tools_GLint offset = 0;
       tools_GLfloat ofactor = 0; //
@@ -495,13 +518,86 @@ protected:
       m_this.set_vtx(vertices,0, a_p1x,a_p1y,a_p1z, a_r1,a_g1,a_b1,a_a1);
       m_this.set_vtx(vertices,1, a_p2x,a_p2y,a_p2z, a_r2,a_g2,a_b2,a_a2);
       m_this.set_vtx(vertices,2, a_p3x,a_p3y,a_p3z, a_r3,a_g3,a_b3,a_a3);
-    
+
       //tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,0,pattern,factor,lwidth,0);
       ::tools_gl2psAddPolyPrimitive(_GL2PS_TRIANGLE(),3,vertices,offset,ofactor,ounits,pattern,factor,lwidth,linecap,linejoin,boundary);
-      
+
       return true;
     }
 
+    virtual bool project_normal(float& /*a_x*/,float& /*a_y*/,float& /*a_z*/) {
+      //return m_this.project_normal(a_x,a_y,a_z);
+      return true;
+    }
+    virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
+                                  float /*a_nx*/,float /*a_ny*/,float /*a_nz*/) {
+      add_point(a_x,a_y,a_z,a_w);
+    //m_this.m_points.add_normal(a_nx,a_ny,a_nz);
+      return true;
+    }
+    virtual bool add_point_normal(float a_x,float a_y,float a_z,float a_w,
+                                  float /*a_nx*/,float /*a_ny*/,float /*a_nz*/,
+                                  float a_r,float a_g,float a_b,float a_a) {
+      add_point(a_x,a_y,a_z,a_w,a_r,a_g,a_b,a_a);
+    //m_this.m_points.add_normal(a_nx,a_ny,a_nz);
+      return true;
+    }
+    virtual bool add_line_normal(float a_bx,float a_by,float a_bz,float a_bw,
+                                 float /*a_bnx*/,float /*a_bny*/,float /*a_bnz*/,
+                                 float a_ex,float a_ey,float a_ez,float a_ew,
+                                 float /*a_enx*/,float /*a_eny*/,float /*a_enz*/) {
+      add_line(a_bx,a_by,a_bz,a_bw, a_ex,a_ey,a_ez,a_ew);
+    //m_this.m_lines.add_normal(a_bnx,a_bny,a_bnz);
+    //m_this.m_lines.add_normal(a_enx,a_eny,a_enz);
+      return true;
+    }
+    virtual bool add_line_normal(float a_bx,float a_by,float a_bz,float a_bw,
+                                 float /*a_bnx*/,float /*a_bny*/,float /*a_bnz*/,
+                                 float a_br,float a_bg,float a_bb,float a_ba,
+                                 float a_ex,float a_ey,float a_ez,float a_ew,
+                                 float /*a_enx*/,float /*a_eny*/,float /*a_enz*/,
+                                 float a_er,float a_eg,float a_eb,float a_ea){
+      add_line(a_bx,a_by,a_bz,a_bw, a_br,a_bg,a_bb,a_ba, a_ex,a_ey,a_ez,a_ew, a_er,a_eg,a_eb,a_ea);
+    //m_this.m_lines.add_normal(a_bnx,a_bny,a_bnz);
+    //m_this.m_lines.add_normal(a_enx,a_eny,a_enz);
+      return true;
+    }
+    virtual bool add_triangle_normal(
+      float a_p1x,float a_p1y,float a_p1z,float a_p1w,
+      float /*a_n1x*/,float /*a_n1y*/,float /*a_n1z*/,
+      float a_p2x,float a_p2y,float a_p2z,float a_p2w,
+      float /*a_n2x*/,float /*a_n2y*/,float /*a_n2z*/,
+      float a_p3x,float a_p3y,float a_p3z,float a_p3w,
+      float /*a_n3x*/,float /*a_n3y*/,float /*a_n3z*/) {
+      add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                   a_p2x,a_p2y,a_p2z,a_p2w,
+                   a_p3x,a_p3y,a_p3z,a_p3w);
+    //m_this.m_triangles.add_normal(a_n1x,a_n1y,a_n1z);
+    //m_this.m_triangles.add_normal(a_n2x,a_n2y,a_n2z);
+    //m_this.m_triangles.add_normal(a_n3x,a_n3y,a_n3z);
+      return true;
+    }
+    virtual bool add_triangle_normal(
+      float a_p1x,float a_p1y,float a_p1z,float a_p1w,
+      float /*a_n1x*/,float /*a_n1y*/,float /*a_n1z*/,
+      float a_r1,float a_g1,float a_b1,float a_a1,
+      float a_p2x,float a_p2y,float a_p2z,float a_p2w,
+      float /*a_n2x*/,float /*a_n2y*/,float /*a_n2z*/,
+      float a_r2,float a_g2,float a_b2,float a_a2,
+      float a_p3x,float a_p3y,float a_p3z,float a_p3w,
+      float /*a_n3x*/,float /*a_n3y*/,float /*a_n3z*/,
+      float a_r3,float a_g3,float a_b3,float a_a3){
+      add_triangle(a_p1x,a_p1y,a_p1z,a_p1w,
+                   a_r1,a_g1,a_b1,a_a1,
+                   a_p2x,a_p2y,a_p2z,a_p2w,
+                   a_r2,a_g2,a_b2,a_a2,
+                   a_p3x,a_p3y,a_p3z,a_p3w,
+                   a_r3,a_g3,a_b3,a_a3);
+    //m_this.m_triangles.add_normal(a_n1x,a_n1y,a_n1z);
+    //m_this.m_triangles.add_normal(a_n2x,a_n2y,a_n2z);
+    //m_this.m_triangles.add_normal(a_n3x,a_n3y,a_n3z);
+      return true;
+    }
   public:
     primvis(gl2ps_action& a_this):m_this(a_this){}
     virtual ~primvis(){}
@@ -532,13 +628,14 @@ protected:
   // to be restored in restore_state() :
   mat4f m_proj;
   mat4f m_model;
-  colorf m_color;  
+  mat4f m_normal_matrix;
+  colorf m_color;
   bool m_ccw;
-  bool m_POLYGON_OFFSET_FILL;	
+  bool m_POLYGON_OFFSET_FILL;
   bool m_CULL_FACE;
   bool m_POINT_SMOOTH;
   bool m_LINE_SMOOTH;
-  float m_point_size;  
+  float m_point_size;
   float m_line_width;
   bool m_light_on;
   bool m_DEPTH_TEST;

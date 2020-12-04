@@ -28,18 +28,22 @@
 
 #include "G4VFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4Threading.hh"
 
 //_____________________________________________________________________________
 G4VFileManager::G4VFileManager(const G4AnalysisManagerState& state)
   : G4BaseFileManager(state),
-    fIsOpenFile(false),
     fHistoDirectoryName(""), 
     fNtupleDirectoryName(""),
-    fLockFileName(false),
-    fLockHistoDirectoryName(false), 
-    fLockNtupleDirectoryName(false)
+    fIsOpenFile(false),
+    fLockDirectoryNames(false), 
+    fH1FileManager(nullptr),
+    fH2FileManager(nullptr),
+    fH3FileManager(nullptr),
+    fP1FileManager(nullptr),
+    fP2FileManager(nullptr)
 {}
 
 //_____________________________________________________________________________
@@ -53,22 +57,28 @@ G4VFileManager::~G4VFileManager()
 //_____________________________________________________________________________
 G4bool G4VFileManager::SetFileName(const G4String& fileName) 
 {
-  if ( fLockFileName ) {
+  // Check extension
+  auto name = fileName;
+  auto extension = G4Analysis::GetExtension(fileName);
+  if ( extension.size() && GetFileType().size() && extension != GetFileType() ) {
+    // replace extension
+    name = G4Analysis::GetBaseName(fileName) + "." + GetFileType();
     G4ExceptionDescription description;
     description 
-      << "Cannot set File name as its value was already used.";
+      << fileName << " file extension is not valid for " 
+      << GetFileType() << " output." << G4endl
+      << name << " will be used.";
     G4Exception("G4VFileManager::SetFileName()",
                 "Analysis_W012", JustWarning, description);
-    return false;
-  }              
+  } 
 
-  return G4BaseFileManager::SetFileName(fileName);
-}  
+  return G4BaseFileManager::SetFileName(name);
+}
 
 //_____________________________________________________________________________
 G4bool G4VFileManager::SetHistoDirectoryName(const G4String& dirName) 
 {
-  if ( fLockHistoDirectoryName ) {
+  if ( fLockDirectoryNames ) {
     G4ExceptionDescription description;
     description 
       << "Cannot set Histo directory name as its value was already used.";
@@ -84,7 +94,7 @@ G4bool G4VFileManager::SetHistoDirectoryName(const G4String& dirName)
 //_____________________________________________________________________________
 G4bool G4VFileManager::SetNtupleDirectoryName(const G4String& dirName) 
 {
-  if ( fLockNtupleDirectoryName ) {
+  if ( fLockDirectoryNames ) {
     G4ExceptionDescription description;
     description 
       << "Cannot set Ntuple directory name as its value was already used.";
@@ -95,4 +105,4 @@ G4bool G4VFileManager::SetNtupleDirectoryName(const G4String& dirName)
 
   fNtupleDirectoryName = dirName;
   return true;
-}  
+}

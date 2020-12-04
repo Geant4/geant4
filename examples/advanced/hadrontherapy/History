@@ -3,10 +3,36 @@ History File, 2004/02/27 G.A.P. Cirrone, Created
 cirrone@lns.infn.it
 https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 -------------------------------------------------------------------------------
- 
+
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+
+15.11.20 S. Guatelli; Tag hadrontherapy-V10-06-07
+	- Migration to G4RunManagerFactory
+        
+05.11.20 G.A.P. Cirrone; Tag hadrontherapy-V10-06-06
+	- README update
+        - Minor changes in macro files
+
+02.11.20 B.Morgan, Tag: hadrontherapy-V10-06-05
+      - Support same CMake version range as core Geant4
+
+27.10.2020 L. Pandola, Tag: hadrontherapy-V10-06-04
+      - Added protections against FPEs in RBE module
+
+23.10.2020 I. Hrivnacova; Tag: hadrontherapy-V10-06-03
+      - Fixes in using analysis:
+        - Added test for open file before calling write & close
+        - Uncommented delete of analysis manager in RunAction
+
+25.09.2020 L. Pandola; Tag: hadrontherapy-V10-06-02
+      - Further fix for the failures seen on Windows builds
+
+24.09.2020 G.A.P. Cirrone; Tag: hadrontherapy-V10-06-01
+      - Added BEST beamline
+      - Code cleaning; fixed compiling errors in Windows related tp size_t G4int conversion and seg fault in MT;
+
 
 06.03.2020 G.A.P. Cirrone; Tag: hadrontherapy-V10-06-00
       - Many osolete macro files were deleted
@@ -37,14 +63,14 @@ https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 19.08.2018 G.A.P.Cirrone, G.Petringa, Z.Mei; Tag: hadrontherapy-V10-04-06
       - Fixed compilation erors in Windows
-      - LET class completely renewed with new calculation approaches      
+      - LET class completely renewed with new calculation approaches
 
 10.08.2018 G.A.P.Cirrone; hadrontherapy-V10-04-05
-      - Trying to fix compilation error under Windows	
+      - Trying to fix compilation error under Windows
 
 09.08.2018 G.A.P.Cirrone; Tag: hadrontherapy-V10-04-04
       - Updated History file;
-      - Corrected the pow use in the RBE class trying so solve a compilation problem under Windows	
+      - Corrected the pow use in the RBE class trying so solve a compilation problem under Windows
 
 Tag: hadrontherapy-V10-04-03: History file not updated
 Tag: hadrontherapy-V10-04-02: History file not updated
@@ -71,11 +97,11 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	  - LaserDrivenBeamLine.cc build fix
 
 24.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-10
-	  - Added the batch.mac file 
+	  - Added the batch.mac file
 
 23.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-09
 	  - Removed the obsolete /experimentalData/iaeaBenchmark folder and batch.mac file
-	  - Added the batch.mac file 
+	  - Added the batch.mac file
 
 22.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-08
 	  - Removed crash due to a bad pointer
@@ -84,29 +110,29 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Physics list cleaned
 	   - The local and obsolete ion-ion physics list has been removed
 
-06.05.2017 G. Petringa, G.A.P. Cirrone, L. Pandola, F. Romano, F. Tommasino; Tag: hadrontherapy-V10-03-06 
+06.05.2017 G. Petringa, G.A.P. Cirrone, L. Pandola, F. Romano, F. Tommasino; Tag: hadrontherapy-V10-03-06
            - Removed the SetCuts() method from the PhysicsList.cc
            — RippleFilter geometry on PassiveCarbonBeamLine
            — Added TIFPA beam line
- 
+
 28.03.2017 L. Pandola, G.Petringa, G.A.P.Cirrone, G. Cuttone; Tag: hadrontherapy-V10-03-05
 	    - G4SetCuts definition added in the PhysicsList
 
 27.03.2017 G.Petringa, G.A.P.Cirrone, G. Cuttone; Tag: hadrontherapy-V10-03-04
-	    - Carbon beamline geometry corrected and updated and corresponding code 
+	    - Carbon beamline geometry corrected and updated and corresponding code
               revised;
             - G4Region definition corrected
 
 22.03.2017 G.Petringa, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-03
             - Fixed cmakelist error
- 
+
 19.03.2017 G.Petringa, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-02
-	    - Carbon beam line geometry corrected and new modulators added 
+	    - Carbon beam line geometry corrected and new modulators added
 07.02.2017 G.A.P.Cirrone, G.Petringa; Tag: hadrontherapy-V10-03-01
-	    - Physics list corrected 
+	    - Physics list corrected
 31.01.2017 G. Petringa, J.Pipek, L.Pandola, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-00
            - HadrontherapyAnalysisManager.cc class deleted and G4tools inserted in HadrontherapyMatrix.cc class
-           - Fixed Bugzilla #1879 (remaining edge cases)	    
+           - Fixed Bugzilla #1879 (remaining edge cases)
 19.05.2016 F. Romano, B. Jia Tag: hadrontherapy-V10-02-00
            - new modulator class implemented
 31.10.2015 F. Romano, J. Pipek Tag: hadrontherapy-V10-01-03
@@ -154,7 +180,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	     no macro file is passed as argument;
 	     When a macro file is passed, the run is considered 'in batch mode' and
 	     no UI starts.
-	   - Step max is setted bigger in the various macro files: the previous value was bringing 
+	   - Step max is setted bigger in the various macro files: the previous value was bringing
 	     computation times extremely long.
 	   - Author names updated in the main() file and various minor revisions
 	   - Now the PHYSLIST enviroment variable (to define an external Reference Physics
@@ -164,38 +190,38 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	     'bachMacro.mac' to be used only in batch-mode configuration.
 	   - PhysicsLists class complety updated:
 	     	-- The G4EmStandardPhysics_option4 now substitute the G4EmStandardPhyscis_option3 builder.
-		   G4EmStandardPhysics_option4 in, at moment, the most accurate 
+		   G4EmStandardPhysics_option4 in, at moment, the most accurate
 		   Electromagnetic physics in Geant4
-	   	-- A new Physics List, called HADRONTHERAPY_1 and specifically implemented 
-		   for this application, has been defined. 
+	   	-- A new Physics List, called HADRONTHERAPY_1 and specifically implemented
+		   for this application, has been defined.
 		   HADONTHERAPY is defined as a collection of builders and is very similar to the QGSP_BIC_HP.
-		   Reference Physcs List. 
+		   Reference Physcs List.
 		   HADRONTHERAPY_1 differs from the QGSP_BIC_HP in the followings:
 		   --> It contains G4EmStandardPhysics_option4 in place of G4EmStandardPhysics;
 		   --> It contains the builder G4RadioactiveDecayPhysics;
-	        -- The defaults for the physics models are now complete and they corresponds 
-		   to the HADROTHERAPY_1 apart that: 
+	        -- The defaults for the physics models are now complete and they corresponds
+		   to the HADROTHERAPY_1 apart that:
 		   --> G4HadronPhysicsQGSP_BIC is used in place of G4HadronPhysicsQGSP_BIC_HP
 		   --> G4HadronElasticPhysics is used in place of G4HadronElasticPhysics_HP
 		   Physics List
-		-- Cuts messengers completely removed. Now cuts can be defined using 
+		-- Cuts messengers completely removed. Now cuts can be defined using
 		   the commands '/run/setCut'  'run/setCutForAGivenParticle', etc.
 		-- Multiple G4Regions can now be defined in the PhysicsList class file, to apply specific
 		   CUTs values via the command '/run/setCutForRegion <G4Region Name> <Cut value>'
-		-- The new physics list HADRONTHERAPY_2 is created. This list contains the local 
-		   implementation of a specific ion-ion inelastic hadronic physics. 
+		-- The new physics list HADRONTHERAPY_2 is created. This list contains the local
+		   implementation of a specific ion-ion inelastic hadronic physics.
 		   It use the QMD model to treat the ion-ion interactions.
 		-- Livermore and Penelope electromagnetic physics removed
 	   - HadrontherapyPhysicsLists.hh header file cleaned.
-	   - Corrected the command moving the simulated .root file to the experimental folder in the 
+	   - Corrected the command moving the simulated .root file to the experimental folder in the
 	     defaultMcro.mac and batch.mac macro files
 	   - The 'LocalINCLIonIonInelasticPhysic' has been removed
-	   - The 'defaultMacro.mac', 'defaultMacroWithReferencePhysicsList.mac' and 'bachMacro.mac' have 
+	   - The 'defaultMacro.mac', 'defaultMacroWithReferencePhysicsList.mac' and 'bachMacro.mac' have
 	     been competely updated and adapted to the new physics list
 	   - Migration to MT have been done.
-	     
+
 13.02.2014 L.Pandola;	Tag: hadrontherapy-V10-00-01
-           - Fix bug (missing inizialization) producing the problem 
+           - Fix bug (missing inizialization) producing the problem
              observed with x86_64-mac108-gcc42. Remove debug printout
 
 12.02.2014 L.Pandola; 	Tag: hadrontherapy-V10-00-00
@@ -225,7 +251,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
              data filed): in case of no ROOT found
 
 30.07.2013 A.Dotti;     Tag: hadrontherapy-V09-06-01
-           - Fixing compilation warnings from clang32 (unused private 
+           - Fixing compilation warnings from clang32 (unused private
              data filed)
 
 03.02.2013 V.Ivanchenko; Tag: hadrontherapy-V09-06-00
@@ -243,7 +269,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 08.11.2012 F.Romano;     Tag: hadrontherapy-V09-05-10
            - hadrontherapy.cc: fixed problem for referencePhysList if condition.
 	   - README revised.
-	   
+
 29.10.2012 F.Romano;     Tag: hadrontherapy-V09-05-09
            - Added explicit inclusion of units and constants headers where missing.
 	   - Executable renamed to the same name of the directory to avoid possible
@@ -279,22 +305,22 @@ Tag: hadrontherapy-V10-04-02: History file not updated
              in HadrontherapyMatrix::ion. Fixes compilation warning on gcc-4.7.
 
 08.12.2011 G.Folger;      Tag: hadrontherapy-V09-05-00
-	   - Added CMakeLists.txt file 
+	   - Added CMakeLists.txt file
 
 25.11.2011 G.Folger;      Tag: hadrontherapy-V09-04-08
-	   - remove #include for not needed unistd.h in 
+	   - remove #include for not needed unistd.h in
 	      HadrontherapyMatrix.cc
 
 21.11.2011 G.Folger;      Tag: hadrontherapy-V09-04-07
-	   - remove #include for not needed unistd.h in 
+	   - remove #include for not needed unistd.h in
 	      HadrontherapyInteractionParameters; unistd.h does not exist on Windows
-	   - Fix compilation error when G4ANALYSIS_USE_ROOT is set in 
+	   - Fix compilation error when G4ANALYSIS_USE_ROOT is set in
 	       HadrontherapyMatrix::TotalEnergyDeposit()
 
 21.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-06
 	   - Updated and cleaned physics
 	   - Updated macro files;
-	   
+
 14.11.2011 G.A.P.Cirrone; Tag: hadrontherapy-V09-04-05
 	   - Corrected macro files for a double call to the Decay physics
 	   - Added the complete physics to the batch.mac file
@@ -318,8 +344,8 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - Removed obsolete hadron elastic builders
 
 09.12.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-17
-           - Changed materials definition (by macro command) for Range Shifter with the NIST one. 
-	     The same macro /beamLine/RangeShifter/RSMat must be used, but with 
+           - Changed materials definition (by macro command) for Range Shifter with the NIST one.
+	     The same macro /beamLine/RangeShifter/RSMat must be used, but with
 	     NIST material name as parameter.
 
 26.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-16
@@ -339,9 +365,9 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Deleted the addPackage command. Now the Reference Physics lists
 	     can be activated setting the enviroment variable PHYSLIST to
 	     the name of the list (i.e. export PHYSLIST=QGSP_BIC_EMY)
-	   - The main file has been modified in order to launch different macro file 
+	   - The main file has been modified in order to launch different macro file
 	     depending if PHYSILIST variable is activated or not: if PHYSLIST is
-	     activated the 'defaultMacroWithReferencePhysicsList.mac' file 
+	     activated the 'defaultMacroWithReferencePhysicsList.mac' file
 	     is used; if not the 'defaultMacro.mac' is used
 	   - The 'packageQGSP_BIC.mac' macro file has been removed as now the activation of the Reference Physiocs Lists
 	     is done via the PHYSLIST envitoment variable
@@ -373,7 +399,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 
 19.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-06
 	   - Physics list 'QGSP_BIC_EMY' definition has been updated
-	     in the physics lists class to to be constistent with the definition 
+	     in the physics lists class to to be constistent with the definition
        	     of the one defined in the Geant4 kernel ($G4INSTALL/source/physics_lists/)
 	   - Macro file consequently updated
 
@@ -392,7 +418,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - Main file updated
 
 22.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-02
-	   - Updated ROOT scripts in folder RootScripts/proton/BraggPeak 
+	   - Updated ROOT scripts in folder RootScripts/proton/BraggPeak
 
 21.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-01
            - Solved some bugs related to the preprocessor variable G4ANALYSIS_USE_ROOT.
@@ -405,7 +431,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Added the possibility to store dose & fluence for all secondary particles
 	     produced in the same ASCII file. This feature can be switched on by the macro
 	     command: /analysis/secondaries true/false.
-	     
+
 
 16.12.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-42
            - Added the possibility to calculate the Let too, using an ASCII file to store it.
@@ -413,12 +439,12 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Minor revisions of the code.
 
 27.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-41
-	   - Added the possibility to store dose and fluence for every particle/ion 
-	     produced during the simulation 
+	   - Added the possibility to store dose and fluence for every particle/ion
+	     produced during the simulation
 
 25.11.2009 S.E.Mazzaglia & F.Romano; Tag: hadrontherapy-V09-02-40
-           - Corrected a bug in HadrontherapyDetectorConstruction class 
-	   - Added G4RadiactivedecayPhysics class to the Physics List. 
+           - Corrected a bug in HadrontherapyDetectorConstruction class
+	   - Added G4RadiactivedecayPhysics class to the Physics List.
 
 22.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-39
            - Correction in the initialization of the passiveProtonBeamLine class.
@@ -434,30 +460,30 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - Correction for a missing function in the HadrontherapyPhysicsListMessenger.cc class file
 
 18.11.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-35
-           - Updated the README file and general code revision for the 
+           - Updated the README file and general code revision for the
              Geant4 9.3 release
 
 17.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-34
-	   - Added some functionalities in order to change, via messengers, the geometry, the voxelization 
+	   - Added some functionalities in order to change, via messengers, the geometry, the voxelization
 	     of the detector, and the disposition in the space of the detector/phantom.
 	   - Added the possibility to calculate the stopping powers for ions too.
 	   - Modified the HadrontherapyDetectorROGeometry class constructor.
 	   - Various additions and fixes to the matrix class.
 
 10.11.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-33
-           - Added the possibility to make a graphical user interface (GUI) using the QT libraries. 
-             To start a GUI the correct enviroment variables must be configured (see the Geant4 installation 
-             manual) and a QT version must be installed  
+           - Added the possibility to make a graphical user interface (GUI) using the QT libraries.
+             To start a GUI the correct enviroment variables must be configured (see the Geant4 installation
+             manual) and a QT version must be installed
 
 05.10.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-32
            - Fixed a compilation error with GCC 4.4
 
 28.09.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-31
            - Now the HadrontherapyDetectorConstruction class implements only phantom and detector [RO]geometry.
-	     World volume and the rest of the geometry is inside another class whose messenger allows 
+	     World volume and the rest of the geometry is inside another class whose messenger allows
 	     modification by users with the same old syntax
-	   - Removed HadrontherapyInteractionParameters from the HadrontherapyGeometryController class 
-			  
+	   - Removed HadrontherapyInteractionParameters from the HadrontherapyGeometryController class
+
 20.09.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-30
            - Added ability to use command based scoring
            - IAEA geometry: produce Bragg peak using command based scoring
@@ -469,7 +495,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 
 11.09.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-28
            - Added messengers to control the event number and to draw only particular tracks.
-             The new command are accessible via the command /event/drawTracks and /event/PrintEventNumber  
+             The new command are accessible via the command /event/drawTracks and /event/PrintEventNumber
 
 08.09.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-27
            - Added a method to retrieve stopping power values for protons, alphas and electrons.
@@ -502,15 +528,15 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - ROOT script preparing an IAEA benchmark figure with data
 
 08.07.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-21
-           - Removed the README file in ASCII format 
+           - Removed the README file in ASCII format
 
 27.06.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-20
            - Eliminated not necessary dependences in the SteppingAction class
-           - Added folders containing experimental data (its name is 'experimentalData') and 
+           - Added folders containing experimental data (its name is 'experimentalData') and
              ROOT scripts ('RootScripts') where Root scripts are stored to
              perform a fast comparison with experimental data.
              A folder where simulation results are stored is also created. Its
-             name is 'simulationResults'. 
+             name is 'simulationResults'.
 
 27.06.2009 P. Kaitaniemi; Tag hadrontherapy-V09-02-19
 	   - Added ability to change the name of the output file between runs
@@ -525,11 +551,11 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Local INCL/ABLA physics list for deuterons, tritons and alphas
 
 26.06.2009 G.A.P.Cirrone; Tag hadrontherapy-V09-02-17
-           - Corrected the definition of total inelastic cross section for light ions in the 
+           - Corrected the definition of total inelastic cross section for light ions in the
              LocalIonIonInelasticPhysic.cc file
 
 26.06.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-16
-           - Momentarely removed the class for LET calculation 
+           - Momentarely removed the class for LET calculation
              for a conflict with the general structure of Hadrontherapy
 
 10.06.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-15
@@ -549,7 +575,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
              Activation can be done via macro commands in the usual way
 
 19.05.2009 F.Romano; Tag hadrontherapy-V09-02-11
-           - Corrected the stepMax value in each macro in order to avoid 
+           - Corrected the stepMax value in each macro in order to avoid
 	     a wrong dose deposition in the first slice.
 	   - Modified and revised the README and macro files.
 
@@ -564,7 +590,7 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - README file improved.
 
 14.05.2009  G.A.P.Cirrone; Tag: hadrontherapy-V09-02-07
-	   - Physic implementation completely changed. Now Hadrontherapy can be launched 
+	   - Physic implementation completely changed. Now Hadrontherapy can be launched
              with physics lists, packages and built-in physic models;
              In the README we give some suggestion in the physic models to use.
              All models can be activated via macro command.
@@ -610,19 +636,19 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - Corrected cross sections definitions for ions
            - Revised the definition and use of the electromagnetic options
              for the use with the Standard models
-             
+
 20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-09
-           - Updated readme and improved the comments. 
+           - Updated readme and improved the comments.
 
 20.11.2008: G.A.P.Cirrone and M.Russo; Tag: hadrontherapy-V09-01-08
 	   - Add new approach for the choice of the physic models.
-             Now packaged physic lists can be used alternatively 
+             Now packaged physic lists can be used alternatively
              to the the physic models implemented in the class files
-             EM, HE and HI. 
+             EM, HE and HI.
            - Improved the electromagnetic models for the generic ions
 
 22.09.2008 G.A.P.Cirrone; Tag: hadrontherapy-V09-01-07
-           - Corrected the G4eBremsstrahlung() process in the file 
+           - Corrected the G4eBremsstrahlung() process in the file
              EMElectronStandard.cc;
            - Updated the head of the History file;
 
@@ -630,22 +656,22 @@ Tag: hadrontherapy-V10-04-02: History file not updated
            - Corrections in the Low Energy Electromagnetic physic lists.
 
 15.06.2008 G.A.P.Cirrone; Tag: hadrontherapy-V09-01-05
-	   - Removed AIDA call from GNUmakefile 
+	   - Removed AIDA call from GNUmakefile
 
 19.05.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-04
            - Added in the beam line the MOPI detector. MOPI is a microstrip
              detector that, in the real case, is able to check during
              the treatment, the beam simmetry of the therapy beam.
-             Its physical structure is here exactly simulated so that 
+             Its physical structure is here exactly simulated so that
              the its contribute to the energy loss can be take into account;
-             A detailed description if the detector can be found in 
+             A detailed description if the detector can be found in
              NIM A 572 (2007) 1094-1101 and its references.
 	   - Corrected the position of the Phantom and Detector;
            - Added variables to the HadrontherapyBeamLine.cc file;
            - Added comments to the HadrontherapyBeamLine.cc file
              to improve the clearness.
            - Updated the README file.
-           - Changed the default dimensions of histogram bins 
+           - Changed the default dimensions of histogram bins
              (from 200 um to 100 um).
 
 09.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-03
@@ -657,9 +683,9 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Added NIST definition materials in Material class;
 	   - Code review of the DetectorConstruction class;
            - Changed name of the volume where the energy deposited is collected
-             from "phantom" to "detector". "Detector" is a more appropiate 
+             from "phantom" to "detector". "Detector" is a more appropiate
              name.
-	   - Changed name of the volume where the detector is inserted from 
+	   - Changed name of the volume where the detector is inserted from
 	     "patient" to the more appropriate "Water Phantom";
 
 03.03.2008 G.A.P.Cirrone tag hadrontherapy-V09-01-01
@@ -667,13 +693,13 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 	   - Removed a segmentation due to an uncorect pointer
 	     in the EMHadronIonStandard class;
 	   - Added options for an accurate use of Standard electromagnetic models
-	     in the EMHadronIonStandard, EMElectronStandard, 
+	     in the EMHadronIonStandard, EMElectronStandard,
 	     EMPositronStandard, EMPhotonStandard  and EMMuonStandard classes;
-	   - Added a macro file (physicsElectromagneticStandard.mac) 
+	   - Added a macro file (physicsElectromagneticStandard.mac)
  	     for the use of Hadrontherapy with the Standard Electromagnetic models;
-	   - Corrected in the defaultMacro.mac, a wrong command for the 
+	   - Corrected in the defaultMacro.mac, a wrong command for the
  	     activation of the Standard Electromagnetic models;
-         
+
 29.02.2007 G.A.P.Cirrone tag hadrontherapy-V09-01-00
 	   - Updated README
 
@@ -694,27 +720,27 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 
 04.06.2007 G.A.P. Cirrone (hadrontherapy-V09-00-00)
 	 - Changed the random engine.
- 
+
 10.05.2007 G.A.P. Cirrone (hadrontherapy-V08-03-02)
-	 - Improved the modulator geometry and fixed a bug on its rotation; 
+	 - Improved the modulator geometry and fixed a bug on its rotation;
 
 07.05.2007 G.A.P. Cirrone (hadrontherapy-V08-02-02)
-	 - Geometry upgrade(hadrontherapyBeamLine class) according 
-           to the experimental CATANA proton therapy beam line; 
+	 - Geometry upgrade(hadrontherapyBeamLine class) according
+           to the experimental CATANA proton therapy beam line;
 
 23.04.2007 S. Guatelli (hadrontherapy-V08-02-01)
          - Compilation error corrected - human error of Susanna Guatelli.
          - The file src/HadrontherapyProtonBertiniElastic.cc
            and the file include/HadrontherapyProtonBertiniElastic.hh
            have been removed
-         - This class is part of the previous version of the hadrontherapy 
-	   application,and it not necessary anymore in the current version 
+         - This class is part of the previous version of the hadrontherapy
+	   application,and it not necessary anymore in the current version
            of the hadrontherapy application.
 
 24.1.2007 S. Guatelli (hadrontherapy-V08-02-00)
          - Design iteration
          - Physics lists added
-              
+
 16.11.2006 S. Guatelli (hadrontherapy-V08-01-05)
          - Physics lists cleaned
 
@@ -755,23 +781,23 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 06.12.2005 S. Guatelli (hadrontherapy-V07-01-05)
          - Particles updated
          - Updated macros
- 
+
 23.11.2005 S. Guatelli (hadrontherapy-V07-01-04)
          - File ASCII as output file deleted
 
 02.09.2005 S. Guatelli (hadrontherapy-V07-01-03)
          - Added Hadronic physics models
- 
+
 08.07.2005 S. Guatelli (hadrontherapy-V07-01-02)
          - Added alternative stopping power parameterisations for protons:
            ICRU49, Ziegler 1977, Ziegler 1985, Ziegler (SRIM) 2000
- 
+
 30.05.2005 G.A.P. Cirrone and S.Guatelli (hadrontherapy-V07-00-06)
 	 - Removed warnings;
 	 - Analisys with AIDA 3.2.1 and PI 1.3.3;
-	 - Corrected bug in the modulator wheel; 
+	 - Corrected bug in the modulator wheel;
 	 - Added the hadronic physic list for proton and ion;
-	 - Code review	
+	 - Code review
 
 18.05.2005 Susanna Guatelli (hadrontherapy-V07-00-03)
 	- Delete public variables
@@ -790,11 +816,11 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 
 25.02.2005 - G.A.P. Cirrone & M.Piergentili, update of the physiscList
 		class to correct some bugs.
-30.11.2004 - S. Guatelli, 
+30.11.2004 - S. Guatelli,
                 correct analysis, tag: hadrontherapy-V06-02-00
-                
+
 16.07.2004 - G.A.P. Cirrone
-		AIDA classes inserted. Generation of an .hbk file 
+		AIDA classes inserted. Generation of an .hbk file
 		containing the depth dose distribution.
 
 28.05.2004 - S. Guatelli

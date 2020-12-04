@@ -22,6 +22,18 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+20th October 2020  Jonathan Madsen (raytracer-V10-06-03)
+- Implemented G4RunManagerFactory::GetMasterRunManager()
+
+10th August 2020  John Allison (raytracer-V10-06-02)
+- G4TheMTRayTracer.cc:
+  o Suppress printing during RayTracer run. Keep current verbosity and
+    printProgress, then
+      G4UImanager::GetUIpointer()->ApplyCommand("/run/verbose 0");
+      G4UImanager::GetUIpointer()->ApplyCommand("/run/printProgress 0");
+    then restore after.
+
 31 May 2020 Ben Morgan (raytracer-V10-06-01)
 - Use add_definitions to set PRIVATE-level compile add_definitions
   for compatibility between old and new CMake systems

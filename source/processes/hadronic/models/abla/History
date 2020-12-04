@@ -15,6 +15,9 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+15 Nov 2020 - Jose Luis Rodriguez Sanchez (hadr-abla-V10-06-00)
+--------------------------------------------------
+- Fix some coverity warnings.
 
 08 Oct 2018 - Jose Luis Rodriguez Sanchez (hadr-abla-V10-04-06)
 --------------------------------------------------

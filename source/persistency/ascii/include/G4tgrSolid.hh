@@ -23,57 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrSolid
+// G4tgrSolid
 //
 // Class description:
 //
 // Base class for management of transient solids.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrSolid_h
-#define G4tgrSolid_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrSolid_hh
+#define G4tgrSolid_hh 1
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4ThreeVector.hh"
 
 class G4tgrSolid
 {
-  public:  // with description
+  public:
 
     G4tgrSolid();
-    G4tgrSolid( const std::vector<G4String>& wl);
+    G4tgrSolid(const std::vector<G4String>& wl);
     virtual ~G4tgrSolid();
 
     friend std::ostream& operator<<(std::ostream&, const G4tgrSolid&);
 
-    // Accessors  
+    // Accessors
 
     const G4String& GetName() const { return theName; }
     const G4String& GetType() const { return theType; }
-    const std::vector< std::vector<G4double>* > GetSolidParams() const;
+    const std::vector<std::vector<G4double>*> GetSolidParams() const;
     virtual const G4String& GetRelativeRotMatName() const;
     virtual G4ThreeVector GetRelativePlace() const;
 
   private:
 
-    void FillSolidParams( const std::vector<G4String>&  wl );
+    void FillSolidParams(const std::vector<G4String>& wl);
 
   protected:
 
-    G4String theName;   
+    G4String theName;
       // Name of the solid
-    G4String theType;   
+    G4String theType;
       // Type of the solid (Simple, Boolean, Box, Tube, ...)
-    std::vector< std::vector<G4double>* > theSolidParams; 
+    std::vector<std::vector<G4double>*> theSolidParams;
       // Vectors of parameters
 };
 

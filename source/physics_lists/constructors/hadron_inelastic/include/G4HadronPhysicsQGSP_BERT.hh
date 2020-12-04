@@ -37,6 +37,7 @@
 // 10.12.2007 G.Folger: Add projectilediffrative option for proton/neutron, off by default
 // 31.10.2012 A.Ribon: Use G4MiscBuilder
 // 19.03.2013 A.Ribon: Replace LEP with FTFP
+// 25.08.2020 V.Ivanchenko change design using G4HadProcess utility
 //
 //----------------------------------------------------------------------------
 //
@@ -44,37 +45,31 @@
 #define G4HadronPhysicsQGSP_BERT_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-
-#include "G4Cache.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-class G4VCrossSectionDataSet;
 
 class G4HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
 {
   public: 
     G4HadronPhysicsQGSP_BERT(G4int verbose =1);
     G4HadronPhysicsQGSP_BERT(const G4String& name, G4bool quasiElastic=true);
-    virtual ~G4HadronPhysicsQGSP_BERT();
+    ~G4HadronPhysicsQGSP_BERT() override;
 
-    virtual void ConstructParticle() override;
-    virtual void ConstructProcess() override;
+    void ConstructParticle() override;
+    void ConstructProcess() override;
+
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsQGSP_BERT(G4HadronPhysicsQGSP_BERT &) = delete;
+    G4HadronPhysicsQGSP_BERT & operator =
+    (const G4HadronPhysicsQGSP_BERT &right) = delete;
 
   protected:
-    G4bool QuasiElasticFTF;
-    G4bool QuasiElasticQGS;
     void CreateModels();
     virtual void Neutron();
     virtual void Proton();
     virtual void Pion();
-    virtual void Kaon() { /*Done together w/ Pion*/ }
     virtual void Others();
-    virtual void DumpBanner() {}
-    //This contains extra configurataion specific to this PL
-    virtual void ExtraConfiguration();
+    virtual void DumpBanner();
 
     G4double minQGSP_proton;
     G4double minQGSP_neutron;
@@ -91,6 +86,9 @@ class G4HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     G4double maxBERT_proton;
     G4double maxBERT_neutron;
     G4double maxBERT_pik;
+
+    G4bool QuasiElasticFTF;
+    G4bool QuasiElasticQGS;
 };
 
 #endif

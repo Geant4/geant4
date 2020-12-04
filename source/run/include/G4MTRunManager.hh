@@ -38,6 +38,7 @@
 #include "G4RNGHelper.hh"
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
+#include "G4Profiler.hh"
 #include <list>
 #include <map>
 
@@ -45,11 +46,18 @@ class G4MTRunManagerKernel;
 class G4ScoringManager;
 class G4UserWorkerInitialization;
 class G4UserWorkerThreadInitialization;
+class G4RunManagerFactory;
 
 // TODO: Split random number storage from this class
 
 class G4MTRunManager : public G4RunManager
 {
+  friend class G4RunManagerFactory;
+
+ public:
+  // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+
  public:
   G4MTRunManager();
   virtual ~G4MTRunManager();
@@ -100,6 +108,8 @@ class G4MTRunManager : public G4RunManager
   // Adds one seed to the list of seeds
   virtual void PrepareCommandsStack();
   virtual void StoreRNGStatus(const G4String& filenamePrefix);
+  virtual void rndmSaveThisRun();
+  virtual void rndmSaveThisEvent();
   virtual void CreateAndStartWorkers();
   // Creates worker threads and signal to start
  public:
@@ -175,12 +185,14 @@ class G4MTRunManager : public G4RunManager
     return masterRNGEngine;
   }
 
- private:
+ protected:
   // Handling of master thread scoring worlds, access to it is needed by workers
-  static G4ScoringManager* masterScM;
-  static masterWorlds_t masterWorlds;
+  G4MTRUN_DLL static G4ScoringManager* masterScM;
+  G4MTRUN_DLL static masterWorlds_t masterWorlds;
   // Singleton implementing master thread behavior
-  static G4MTRunManager* fMasterRM;
+  G4MTRUN_DLL static G4MTRunManager* fMasterRM;
+
+ private:
   G4MTRunManagerKernel* MTkernel;
 
  public:  // with description

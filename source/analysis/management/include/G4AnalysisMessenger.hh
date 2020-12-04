@@ -63,9 +63,9 @@ class G4AnalysisMessenger : public G4UImessenger
     // methods
     void SetH1HnManager(G4HnManager& h1HnManager);
     void SetH2HnManager(G4HnManager& h2HnManager);
-    void SetH3HnManager(G4HnManager& h2HnManager);
-    void SetP1HnManager(G4HnManager& h1HnManager);
-    void SetP2HnManager(G4HnManager& h2HnManager);
+    void SetH3HnManager(G4HnManager& h3HnManager);
+    void SetP1HnManager(G4HnManager& p1HnManager);
+    void SetP2HnManager(G4HnManager& p2HnManager);
 
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;

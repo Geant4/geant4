@@ -525,7 +525,6 @@ void G4ErrorPropagator::GetFinalTrajState( G4ErrorTrajState* currentTS,
 //-------------------------------------------------------------------------
 G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
 {
-  G4bool exception = 0;
   G4bool lastG4eStep = false;
   G4ErrorPropagatorData* g4edata =
     G4ErrorPropagatorData::GetErrorPropagatorData();
@@ -558,48 +557,26 @@ G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
     //      give a n error/warning
     //
     lastG4eStep = true;
-    if( exception )
+    if( verbose >= 1 )
     {
       std::ostringstream message;
       message << "Track extrapolated until end of World" << G4endl
-              << "without finding the defined target!";
+              << "without finding the defined target.";
       G4Exception("G4ErrorPropagator::CheckIfLastStep()",
-                  "InvalidSetup", FatalException, message);
-    }
-    else
-    {
-      if( verbose >= 1 )
-      {
-        std::ostringstream message;
-        message << "Track extrapolated until end of World" << G4endl
-                << "without finding the defined target.";
-        G4Exception("G4ErrorPropagator::CheckIfLastStep()",
-                    "GEANT4e-Notification", JustWarning, message);
-      }
+                  "GEANT4e-Notification", JustWarning, message);
     }
   }  //----- not last step from G4e, but track is stopped (energy exhausted)
   else if( aTrack->GetTrackStatus() == fStopAndKill )
   { 
-    if( exception )
+    if( verbose >= 1 )
     {
       std::ostringstream message;
       message << "Track extrapolated until energy is exhausted" << G4endl
-              << "without finding the defined target!";
+              << "without finding the defined target.";
       G4Exception("G4ErrorPropagator::CheckIfLastStep()",
-                  "InvalidSetup", FatalException, message);
+                  "GEANT4e-Notification", JustWarning, message);
     }
-    else
-    {
-      if( verbose >= 1 )
-      {
-        std::ostringstream message;
-        message << "Track extrapolated until energy is exhausted" << G4endl
-                << "without finding the defined target.";
-        G4Exception("G4ErrorPropagator::CheckIfLastStep()",
-                    "GEANT4e-Notification", JustWarning, message);
-      }
-      lastG4eStep = 1;
-    }
+    lastG4eStep = 1;
   }
 
 #ifdef G4EVERBOSE

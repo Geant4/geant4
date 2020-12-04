@@ -16,6 +16,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 12, 2020 E.Tcherniaev geom-csg-V10-06-05
+- G4Sphere::InitializeThetaTrigonometry(): tan() replaced with sin()/cos(),
+  it addresses problem report #2289
+
+October 08, 2020 E.Tcherniaev geom-csg-V10-06-04
+- G4Box: Migration to G4QuickRand in GetPointOnSurface();
+- G4Trd: Added two precalculated values fHx, fHy for fast calculation
+  of lateral areas; Revision of GetPointOnSurface();
+- G4Trap: Added array fAreas[6] with precalculated face areas;
+  Added SetCachedValues() method; Revision of GetPointOnSurface();
+- G4Tubs: Revision of GetPointOnSurface();
+- G4CSGSolid: Explicit implementation of G4RandomRadiusInRing(rmin,rmax)
+  based on G4QuickRand
+
+October 06, 2020 E.Tcherniaev geom-csg-V10-06-03
+- Improved G4CutTubs:
+  o Implemented GetCubicVolume(), GetSurfaceArea();
+  o Reimplemented GetPointOnSurface(), it's now faster and uniform;
+  o Reimplemented IsCrossingCutPlanes(), it now reports a problem
+    only in case if cut planes are crossing inside the lateral surface;
+  o Removed GetMaxMinZ() as obsolete;
+
 April 30, 2020 G.Cosmo geom-csg-V10-06-02
 - Adopt new convention for location of headers in VecGeom for all wrappers.
 

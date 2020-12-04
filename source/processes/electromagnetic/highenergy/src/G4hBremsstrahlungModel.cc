@@ -74,28 +74,26 @@ G4double G4hBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 {
   G4double dxsection = 0.;
 
-  if( gammaEnergy > tkin) return dxsection ;
+  if(gammaEnergy > tkin) return dxsection;
   //  G4cout << "G4hBremsstrahlungModel m= " << mass 
   //	 << "  " << particle->GetParticleName() << G4endl;
   G4double E = tkin + mass ;
   G4double v = gammaEnergy/E ;
-  G4double delta = 0.5*mass*mass*v/(E-gammaEnergy) ;
+  G4double delta = 0.5*mass*mass*v/(E-gammaEnergy);
   G4double rab0=delta*sqrte ;
 
-  G4int iz = G4int(Z);
-  if(iz < 1) { iz = 1; }
+  G4int iz = std::max(G4lrint(Z), 1);
 
   G4double z13 = 1.0/nist->GetZ13(iz);
   G4double dn  = mass*nist->GetA27(iz)/(70.*MeV);
 
-  G4double    b = btf;
-  if(1 == iz) b = bh;
+  G4double b = (1 == iz) ? bh : btf;
 
   // nucleus contribution logarithm
   G4double rab1=b*z13;
   G4double fn=G4Log(rab1/(dn*(electron_mass_c2+rab0*rab1))*
               (mass+delta*(dn*sqrte-2.))) ;
-  if(fn <0.) fn = 0. ;
+  fn = std::max(fn, 0.0);
 
   G4double x = 1.0 - v;
   if(particle->GetPDGSpin() != 0) { x += 0.75*v*v; }

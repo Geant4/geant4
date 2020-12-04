@@ -72,11 +72,12 @@ class G4TaskRunManagerKernel : public G4RunManagerKernel
   static G4WorkerThread* GetWorkerThread();
   // G4ThreadPool tasks
   static void InitializeWorker();
-  static G4WorkerTaskRunManager** ExecuteWorkerTask(G4int nevts);
+  static void ExecuteWorkerInit();
+  static void ExecuteWorkerTask();
   static void TerminateWorkerRunEventLoop();
   static void TerminateWorker();
-  static void TerminateWorkerRunEventLoop(G4WorkerTaskRunManager**);
-  static void TerminateWorker(G4WorkerTaskRunManager**);
+  static void TerminateWorkerRunEventLoop(G4WorkerTaskRunManager*);
+  static void TerminateWorker(G4WorkerTaskRunManager*);
 
   static std::vector<G4String>& InitCommandStack();
   // Fill decay tables with particle definition pointers of

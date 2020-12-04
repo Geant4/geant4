@@ -47,13 +47,16 @@
 #include "G4DCofThisEvent.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4VUserEventInformation.hh"
+#include "G4Profiler.hh"
 
 class G4VHitsCollection;
 
 class G4Event 
 {
   public:
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
 
+ public:
     G4Event();
     G4Event(G4int evID);
    ~G4Event();

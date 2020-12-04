@@ -124,15 +124,15 @@ public:
   // Methods for initialisation of MT; may be overwritten if needed
   //------------------------------------------------------------------------
 
-  // initilisation in local thread
+  // initialisation in local thread
   virtual void InitialiseLocal(const G4ParticleDefinition*,
                                G4VEmModel* masterModel);
 
-  // initilisation of a new material at run time
+  // initialisation of a new material at run time
   virtual void InitialiseForMaterial(const G4ParticleDefinition*,
                                      const G4Material*);
 
-  // initilisation of a new element at run time
+  // initialisation of a new element at run time
   virtual void InitialiseForElement(const G4ParticleDefinition*,
                                     G4int Z);
 
@@ -211,7 +211,7 @@ public:
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
                                 const G4MaterialCutsCouple*);
 
-  // initilisation at run time for a given material
+  // initialisation at run time for a given material
   virtual void SetupForMaterial(const G4ParticleDefinition*,
                                 const G4Material*,
                                 G4double kineticEnergy);
@@ -393,6 +393,10 @@ public:
 
   inline void SetLocked(G4bool);
 
+  //  hide assignment operator
+  G4VEmModel & operator=(const  G4VEmModel &right) = delete;
+  G4VEmModel(const  G4VEmModel&) = delete;
+
 protected:
 
   inline const G4MaterialCutsCouple* CurrentCouple() const;
@@ -400,10 +404,6 @@ protected:
   inline void SetCurrentElement(const G4Element*);
 
 private:
-
-  //  hide assignment operator
-  G4VEmModel & operator=(const  G4VEmModel &right);
-  G4VEmModel(const  G4VEmModel&);
 
   // ======== Parameters of the class fixed at construction =========
  

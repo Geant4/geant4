@@ -93,7 +93,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition* p)
       AddEmModel(1, EmModel());
     }
 
-    // "alpha" must be explicitely used, not alpha++
+    // "alpha" must be explicitly used, not alpha++
     else if(name == "helium" || name == "alpha" || name == "alpha+")
     {
       if(!EmModel())

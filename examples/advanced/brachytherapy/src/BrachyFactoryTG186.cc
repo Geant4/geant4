@@ -47,21 +47,21 @@
 
 BrachyFactoryTG186:: BrachyFactoryTG186()
 {
-  TG186iridiumSource = new  BrachyDetectorConstructionTG186(); 
+  fTG186iridiumSource = new  BrachyDetectorConstructionTG186(); 
 }
 
 BrachyFactoryTG186:: ~BrachyFactoryTG186()
 {
-  delete TG186iridiumSource;
+  delete fTG186iridiumSource;
 }
  
 void BrachyFactoryTG186::CreateSource(G4VPhysicalVolume* mother)
 {
-  TG186iridiumSource -> ConstructTG186(mother);
+  fTG186iridiumSource -> ConstructTG186(mother);
 }
 
 void BrachyFactoryTG186::CleanSource()
 {
-  TG186iridiumSource -> CleanTG186();
-  TG186iridiumSource = 0;
+  fTG186iridiumSource -> CleanTG186();
+  fTG186iridiumSource = nullptr;
 }

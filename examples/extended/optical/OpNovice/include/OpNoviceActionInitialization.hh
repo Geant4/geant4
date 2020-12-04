@@ -32,19 +32,14 @@
 
 #include "G4VUserActionInitialization.hh"
 
-class B4DetectorConstruction;
-
-/// Action initialization class.
-///
-
 class OpNoviceActionInitialization : public G4VUserActionInitialization
 {
-  public:
-    OpNoviceActionInitialization();
-    virtual ~OpNoviceActionInitialization();
+ public:
+  OpNoviceActionInitialization();
+  ~OpNoviceActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  void BuildForMaster() const override;
+  void Build() const override;
 };
 
 #endif

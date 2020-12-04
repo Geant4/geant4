@@ -60,14 +60,7 @@ public:
   explicit G4hPairProductionModel(const G4ParticleDefinition* p = nullptr,
 			 const G4String& nam = "hPairProd");
 
-  virtual ~G4hPairProductionModel();
-
-protected:
-
-  virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
-						   G4double Z,
-						   G4double pairEnergy) override;
-private:
+  ~G4hPairProductionModel() override;
 
   // hide assignment operator
   G4hPairProductionModel & 

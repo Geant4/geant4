@@ -15,6 +15,17 @@ track of all tags.
  
      ----------------------------------------------------------
 
+November 5, 2020 D. Sawkey (WLS-V10-06-02)
+- Large cleaning including clang-format style guidelines.
+- Add counters to record run and event statistics.
+- update macros
+
+November 3, 2020 D. Sawkey (WLS-V10-06-01)
+- Add remaining material properties using new interface with sd::vectors
+
+August 4, 2020 D. Sawkey (WLS-V10-06-00)
+- Add material properties using new interface with std::vectors
+
 October 29, 2019 D. Sawkey (WLS-V10-05-01)
 - Use G4OpticalPhysics
 - Use G4SteppingVerbose

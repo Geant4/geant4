@@ -38,7 +38,7 @@ protected: //gstos
     m_gstos_nms_sz = _add.m_nms.size();
 
     if(gsto_data.empty()) return 0;
-    
+
     return a_mgr.create_gsto_from_data(gsto_data);
   }
 public: //node
@@ -50,7 +50,7 @@ public: //node
 
     if(state.m_use_gsto) {
       unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
-      if(_id) {        
+      if(_id) {
         bufpos pxyzs = 0;
         bufpos plines = pxyzs+m_gstos_points_sz*sizeof(float);
         bufpos ptris = plines+m_gstos_lines_sz*sizeof(float);
@@ -81,7 +81,7 @@ public: //node
         if(draw_edges) a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
         a_action.end_gsto();
         return true;
-  
+
       } else { //!_id
         // use immediate rendering.
       }
@@ -95,7 +95,7 @@ public: //node
     const state& state = a_action.state();
     if(state.m_use_gsto) {
       unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
-      if(_id) {        
+      if(_id) {
         bufpos pxyzs = 0;
         bufpos plines = pxyzs+m_gstos_points_sz*sizeof(float);
         bufpos ptris = plines+m_gstos_lines_sz*sizeof(float);
@@ -107,7 +107,7 @@ public: //node
         a_action.draw_gsto_vn(gl::triangles(),m_gstos_tris_sz/3,ptris,pnms);
         a_action.end_gsto();
         return true;
-  
+
       } else { //!_id
         // use immediate rendering.
       }

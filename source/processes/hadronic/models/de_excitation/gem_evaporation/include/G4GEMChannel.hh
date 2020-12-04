@@ -79,7 +79,7 @@ private:
   
   // Data Members ************
   // This data member define the channel. 
-  // They are intializated at object creation (constructor) time.
+  // They are initialised at object creation (constructor) time.
     
   // Atomic Number
   G4int A;

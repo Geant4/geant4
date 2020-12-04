@@ -23,12 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VMCTruthIO.cc
+// G4VMCTruthIO implementation
 //
-// History:
-//   '01.11.18  Youhei Morita  Initial creation
+// Author: Youhei Morita, 18.11.2001
+// --------------------------------------------------------------------
 
 #include "G4VMCTruthIO.hh"
 
-G4VMCTruthIO::G4VMCTruthIO() : m_verbose(0) {}
-G4VMCTruthIO::~G4VMCTruthIO()               {}
+// --------------------------------------------------------------------
+G4VMCTruthIO::G4VMCTruthIO()
+{
+}
+
+// --------------------------------------------------------------------
+G4VMCTruthIO::~G4VMCTruthIO()
+{
+}

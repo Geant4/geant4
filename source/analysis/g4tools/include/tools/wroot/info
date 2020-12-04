@@ -45,7 +45,7 @@ public: //ibo
   }
 public:
   virtual void out(std::ostream& a_out) const {
-    a_out << "streamer_info for class :" 
+    a_out << "streamer_info for class :"
           << " " << fName << ", version=" << fStreamedClassVersion
           << std::endl;
     tools_vforcit(streamer_element*,fElements,it) (*it)->out(a_out);
@@ -86,7 +86,7 @@ protected:
     fStreamedClassVersion = a_from.fStreamedClassVersion;
     fElements = a_from.fElements;
     return *this;
-  }  
+  }
 public:
   void add(streamer_element* a_elem){fElements.push_back(a_elem);}
 protected: //Named

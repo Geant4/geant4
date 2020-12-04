@@ -80,9 +80,7 @@
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4Run.hh"
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
@@ -657,23 +655,24 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
   }
 }
 
-void G4VSceneHandler::ProcessScene () {
-
+void G4VSceneHandler::ProcessScene()
+{
   // Assumes graphics database store has already been cleared if
   // relevant for the particular scene handler.
 
-  if (!fpScene) return;
+  if(!fpScene)
+    return;
 
-  if (fpScene->GetExtent() == G4VisExtent::GetNullExtent()) {
-    G4Exception
-    ("G4VSceneHandler::ProcessScene",
-     "visman0106", JustWarning,
-     "The scene has no extent.");
+  if(fpScene->GetExtent() == G4VisExtent::GetNullExtent())
+  {
+    G4Exception("G4VSceneHandler::ProcessScene", "visman0106", JustWarning,
+                "The scene has no extent.");
   }
 
   G4VisManager* visManager = G4VisManager::GetInstance();
 
-  if (!visManager->GetConcreteInstance()) return;
+  if(!visManager->GetConcreteInstance())
+    return;
 
   G4VisManager::Verbosity verbosity = visManager->GetVerbosity();
 
@@ -683,40 +682,44 @@ void G4VSceneHandler::ProcessScene () {
   // fMarkForClearingTransientStore true causes problems with
   // recomputing transients below.)  Restore it again at end...
   G4bool tmpMarkForClearingTransientStore = fMarkForClearingTransientStore;
-  fMarkForClearingTransientStore = false;
+  fMarkForClearingTransientStore          = false;
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
   const std::vector<G4Scene::Model>& runDurationModelList =
-    fpScene -> GetRunDurationModelList ();
+    fpScene->GetRunDurationModelList();
 
-  if (runDurationModelList.size ()) {
-    if (verbosity >= G4VisManager::confirmations) {
+  if(runDurationModelList.size())
+  {
+    if(verbosity >= G4VisManager::confirmations)
+    {
       G4cout << "Traversing scene data..." << G4endl;
     }
 
-    BeginModeling ();
+    BeginModeling();
 
     // Create modeling parameters from view parameters...
-    G4ModelingParameters* pMP = CreateModelingParameters ();
+    G4ModelingParameters* pMP = CreateModelingParameters();
 
-    for (size_t i = 0; i < runDurationModelList.size (); i++) {
-      if (runDurationModelList[i].fActive) {
+    for(size_t i = 0; i < runDurationModelList.size(); i++)
+    {
+      if(runDurationModelList[i].fActive)
+      {
         fpModel = runDurationModelList[i].fpModel;
-	// Note: this is not the place to take action on
-	// pModel->GetTransformation().  The model must take care of
-	// this in pModel->DescribeYourselfTo(*this).  See, for example,
-	// G4PhysicalVolumeModel and /vis/scene/add/logo.
-	fpModel -> SetModelingParameters (pMP);
-	fpModel -> DescribeYourselfTo (*this);
-	fpModel -> SetModelingParameters (0);
+        // Note: this is not the place to take action on
+        // pModel->GetTransformation().  The model must take care of
+        // this in pModel->DescribeYourselfTo(*this).  See, for example,
+        // G4PhysicalVolumeModel and /vis/scene/add/logo.
+        fpModel->SetModelingParameters(pMP);
+        fpModel->DescribeYourselfTo(*this);
+        fpModel->SetModelingParameters(0);
       }
     }
 
     fpModel = 0;
     delete pMP;
 
-    EndModeling ();
+    EndModeling();
   }
 
   fReadyForTransients = true;
@@ -724,57 +727,64 @@ void G4VSceneHandler::ProcessScene () {
   // Refresh event from end-of-event model list.
   // Allow only in Idle or GeomClosed state...
   G4StateManager* stateManager = G4StateManager::GetStateManager();
-  G4ApplicationState state = stateManager->GetCurrentState();
-  if (state == G4State_Idle || state == G4State_GeomClosed) {
-
+  G4ApplicationState state     = stateManager->GetCurrentState();
+  if(state == G4State_Idle || state == G4State_GeomClosed)
+  {
     visManager->SetEventRefreshing(true);
 
-    if (visManager->GetRequestedEvent()) {
+    if(visManager->GetRequestedEvent())
+    {
       DrawEvent(visManager->GetRequestedEvent());
-
-    } else {
-
-      G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-      if(G4Threading::IsMultithreadedApplication())
-      { runManager = G4MTRunManager::GetMasterRunManager(); }
-#endif
-      if (runManager) {
-	const G4Run* run = runManager->GetCurrentRun();
+    }
+    else
+    {
+      G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+      if(runManager)
+      {
+        const G4Run* run = runManager->GetCurrentRun();
         const std::vector<const G4Event*>* events =
-	  run? run->GetEventVector(): 0;
-	size_t nKeptEvents = 0;
-	if (events) nKeptEvents = events->size();
-	if (nKeptEvents) {
+          run ? run->GetEventVector() : 0;
+        size_t nKeptEvents = 0;
+        if(events)
+          nKeptEvents = events->size();
+        if(nKeptEvents)
+        {
+          if(fpScene->GetRefreshAtEndOfEvent())
+          {
+            if(verbosity >= G4VisManager::confirmations)
+            {
+              G4cout << "Refreshing event..." << G4endl;
+            }
+            const G4Event* event = 0;
+            if(events && events->size())
+              event = events->back();
+            if(event)
+              DrawEvent(event);
+          }
+          else
+          {  // Accumulating events.
 
-	  if (fpScene->GetRefreshAtEndOfEvent()) {
-
-	    if (verbosity >= G4VisManager::confirmations) {
-	      G4cout << "Refreshing event..." << G4endl;
-	    }
-	    const G4Event* event = 0;
-	    if (events && events->size()) event = events->back();
-	    if (event) DrawEvent(event);
-
-	  } else {  // Accumulating events.
-
-	    if (verbosity >= G4VisManager::confirmations) {
-	      G4cout << "Refreshing events in run..." << G4endl;
-	    }
-            for (const auto& event: *events) {
-              if (event) DrawEvent(event);
+            if(verbosity >= G4VisManager::confirmations)
+            {
+              G4cout << "Refreshing events in run..." << G4endl;
+            }
+            for(const auto& event : *events)
+            {
+              if(event)
+                DrawEvent(event);
             }
 
-	    if (!fpScene->GetRefreshAtEndOfRun()) {
-	      if (verbosity >= G4VisManager::warnings) {
-		G4cout <<
-		  "WARNING: Cannot refresh events accumulated over more"
-		  "\n  than one runs.  Refreshed just the last run."
-		       << G4endl;
-	      }
-	    }
-	  }
-	}
+            if(!fpScene->GetRefreshAtEndOfRun())
+            {
+              if(verbosity >= G4VisManager::warnings)
+              {
+                G4cout << "WARNING: Cannot refresh events accumulated over more"
+                          "\n  than one runs.  Refreshed just the last run."
+                       << G4endl;
+              }
+            }
+          }
+        }
       }
     }
     visManager->SetEventRefreshing(false);
@@ -782,7 +792,8 @@ void G4VSceneHandler::ProcessScene () {
 
   // Refresh end-of-run model list.
   // Allow only in Idle or GeomClosed state...
-  if (state == G4State_Idle || state == G4State_GeomClosed) {
+  if(state == G4State_Idle || state == G4State_GeomClosed)
+  {
     DrawEndOfRunModels();
   }
 
@@ -1147,7 +1158,7 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
       lineSegmentsPerCircle = pVisAttribs->GetMinLineSegmentsPerCircle();
       G4cout <<
 	"G4VSceneHandler::GetNoOfSides: attempt to set the"
-	"\nnumber of line segements per circle < " << lineSegmentsPerCircle
+	"\nnumber of line segments per circle < " << lineSegmentsPerCircle
 	     << "; forced to " << pVisAttribs->GetMinLineSegmentsPerCircle() << G4endl;
     }
   }

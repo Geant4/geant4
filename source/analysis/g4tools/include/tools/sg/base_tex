@@ -152,7 +152,7 @@ protected:
           if((pw*ph)<limit.value()) {
             unsigned int sx = (tw-pw)/2;
             unsigned int sy = (th-ph)/2;
-  
+
             img_byte part;
             if(!m_img.get_part(sx,sy,pw,ph,part)) {
               m_img.make_empty();
@@ -167,7 +167,7 @@ protected:
       }
     }
     //dump_not_null(a_out,"debug : base_tex::_update_sg_ :",m_img);
-    
+
   }
 
   static void dump(std::ostream& a_out,const std::string& a_cmt,const img_byte& a_img) {
@@ -184,20 +184,20 @@ protected:
     unsigned int h = a_img.height();
     unsigned int n = a_img.bpp();
     a_out << "img_byte : width " << w << " height " << h << " bpp " << n << std::endl;
-    byte* pos = a_img.buffer();
+    byte* pos = (byte*)a_img.buffer();
     if(n==3) {
       byte r,g,b;
       for(unsigned int j=0;j<h;j++) {
         for(unsigned int i=0;i<w;i++) {
-          r = *pos;pos++; 
-          g = *pos;pos++; 
-          b = *pos;pos++; 
+          r = *pos;pos++;
+          g = *pos;pos++;
+          b = *pos;pos++;
           if(r||g||b)
-            a_out << " " << i << " " << j 
+            a_out << " " << i << " " << j
                   << " : " << (unsigned int)r << " " << (unsigned int)g << " " << (unsigned int)b
                   << std::endl;
         }
-      }   
+      }
     }
   }
 

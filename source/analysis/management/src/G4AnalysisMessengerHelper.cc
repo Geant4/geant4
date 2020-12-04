@@ -348,7 +348,7 @@ void G4AnalysisMessengerHelper::WarnAboutSetCommands() const
 {
   G4ExceptionDescription description;
   description 
-    << "Command setX, setY, setZ must be called sucessively in this order. " << G4endl
+    << "Command setX, setY, setZ must be called successively in this order. " << G4endl
     << "Command was ignored." << G4endl;
   G4String methodName(Update("G4UHNTYPE_Messenger::SetNewValue"));  
   G4Exception(methodName,

@@ -82,7 +82,7 @@ Anger Logic calculation
 
 In PET analysis, the lines of response (LOR) needed for the image reconstruction is drawn between two opposing crystals. In simulation, these crystals are identified based on the highest energy deposition. In reality, however, errors are introduced in identifying the crystals which includes the Anger Logic calculation. Without additional blurring of the crystal, simulation results will always have a better spatial resolution than experimental measurements. To include the blurring in identifying the crystals, we included the Anger Logic calculation method. The steps in identifying the crystals are as follows:
  
-Crystal ID in 3D (tangential, axial and DOI directions) are identified with the highest energy deposition and this information along with energy deposition and position interaction is passed into the AngerLogic(Åc) function.
+Crystal ID in 3D (tangential, axial and DOI directions) are identified with the highest energy deposition and this information along with energy deposition and position interaction is passed into the AngerLogic(c) function.
 Signals (energy deposition) on the PMTs are obtained based on the lateral distance of the PMTs from the interaction position.
 Anger Logic position calculation is performed based on the signals on each PMT to obtain position interaction in 2D. The response of the PMTs are then shifted based on whether reflector exists between crystals or not. Note that, each layer has different reflector pattern.
 The new crystal ID is then calculated by comparing the look-up-table which is provided in the code based on a publication from NIRS. 

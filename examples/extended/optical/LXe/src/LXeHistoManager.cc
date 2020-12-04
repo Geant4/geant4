@@ -27,14 +27,11 @@
 /// \brief Implementation of the LXeHistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "LXeHistoManager.hh"
-#include "G4UnitsTable.hh"
-
-//#include<vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,10 +43,7 @@ LXeHistoManager::LXeHistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeHistoManager::~LXeHistoManager()
-{
-  delete G4AnalysisManager::Instance();
-}
+LXeHistoManager::~LXeHistoManager() { delete G4AnalysisManager::Instance(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,32 +55,44 @@ void LXeHistoManager::Book()
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
-  analysisManager->SetActivation(true);    // enable inactivation of histograms
+  analysisManager->SetActivation(true);  // enable inactivation of histograms
 
   // Define histogram indices, titles
-  std::vector<std::pair<G4String, G4String> > histograms =
-    { std::pair<G4String, G4String>("0", "dummy"),
-      std::pair<G4String, G4String>("1", "hits per event"),
-      std::pair<G4String, G4String>("2", "hits per event above threshold"),
-      std::pair<G4String, G4String>("3", "scintillation photons per event"),
-      std::pair<G4String, G4String>("4", "Cerenkov photons per event"),
-      std::pair<G4String, G4String>("5", "absorbed photons per event"),
-      std::pair<G4String, G4String>
-                      ("6", "photons absorbed at boundary per event"),
-      std::pair<G4String, G4String>
-                      ("7", "energy deposition in scintillator per event"),
-     };
 
   // Default values (to be reset via /analysis/h1/set command)
-  G4int nbins = 100;
+  G4int nbins   = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;
 
-  // Create all histograms as inactivated 
-  // as we have not yet set nbins, vmin, vmax
-  for (auto histogram : histograms) {
-    G4int ih = analysisManager->
-      CreateH1("h" + histogram.first, histogram.second, nbins, vmin, vmax);
-    analysisManager->SetH1Activation(ih, false);
+  // 0
+  analysisManager->CreateH1("0", "dummy", nbins, vmin, vmax);
+  // 1
+  analysisManager->CreateH1("hits per event", "hits per event", nbins, vmin,
+                            vmax);
+  // 2
+  analysisManager->CreateH1("hits above threshold",
+                            "hits per event above threshold", nbins, vmin,
+                            vmax);
+  // 3
+  analysisManager->CreateH1("scintillation", "scintillation photons per event",
+                            nbins, vmin, vmax);
+  // 4
+  analysisManager->CreateH1("Cerenkov", "Cerenkov photons per event", nbins,
+                            vmin, vmax);
+  // 5
+  analysisManager->CreateH1("absorbed", "absorbed photons per event", nbins,
+                            vmin, vmax);
+  // 6
+  analysisManager->CreateH1("boundary absorbed",
+                            "photons absorbed at boundary per event", nbins,
+                            vmin, vmax);
+  // 7
+  analysisManager->CreateH1(
+    "E dep", "energy deposition in scintillator per event", nbins, vmin, vmax);
+
+  // Create all histograms as inactivated
+  for(G4int i = 0; i < analysisManager->GetNofH1s(); ++i)
+  {
+    analysisManager->SetH1Activation(i, false);
   }
 }

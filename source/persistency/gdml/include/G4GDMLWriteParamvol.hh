@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLWriteParamvol
+// G4GDMLWriteParamvol
 //
 // Class description:
 //
 // GDML class for writing parameterised entities dimensions.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLWRITEPARAMVOL_INCLUDED_
-#define _G4GDMLWRITEPARAMVOL_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLWRITEPARAMVOL_HH
+#define G4GDMLWRITEPARAMVOL_HH 1
 
 #include "G4GDMLWriteSetup.hh"
 
@@ -58,35 +53,36 @@ class G4VPhysicalVolume;
 
 class G4GDMLWriteParamvol : public G4GDMLWriteSetup
 {
+  public:
 
- public:
+    virtual void ParamvolWrite(xercesc::DOMElement*,
+                               const G4VPhysicalVolume* const);
+    virtual void ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,
+                               const G4VPhysicalVolume* const paramvol);
 
-   virtual void ParamvolWrite(xercesc::DOMElement*,
-                              const G4VPhysicalVolume* const);
-   virtual void ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,
-                              const G4VPhysicalVolume* const paramvol);
+  protected:
 
- protected:
+    G4GDMLWriteParamvol();
+    virtual ~G4GDMLWriteParamvol();
 
-   G4GDMLWriteParamvol();
-   virtual ~G4GDMLWriteParamvol();
-
-   void Box_dimensionsWrite(xercesc::DOMElement*, const G4Box* const);
-   void Trd_dimensionsWrite(xercesc::DOMElement*, const G4Trd* const);
-   void Trap_dimensionsWrite(xercesc::DOMElement*, const G4Trap* const);
-   void Tube_dimensionsWrite(xercesc::DOMElement*, const G4Tubs* const);
-   void Cone_dimensionsWrite(xercesc::DOMElement*, const G4Cons* const);
-   void Sphere_dimensionsWrite(xercesc::DOMElement*, const G4Sphere* const);
-   void Orb_dimensionsWrite(xercesc::DOMElement*, const G4Orb* const);
-   void Torus_dimensionsWrite(xercesc::DOMElement*, const G4Torus* const);
-   void Ellipsoid_dimensionsWrite(xercesc::DOMElement*, const G4Ellipsoid* const);
-   void Para_dimensionsWrite(xercesc::DOMElement*, const G4Para* const);
-   void Hype_dimensionsWrite(xercesc::DOMElement*, const G4Hype* const);
-   void Polycone_dimensionsWrite(xercesc::DOMElement*, const G4Polycone* const);
-   void Polyhedra_dimensionsWrite(xercesc::DOMElement*, const G4Polyhedra* const);
-   void ParametersWrite(xercesc::DOMElement*,
-                        const G4VPhysicalVolume* const, const G4int&);
-
+    void Box_dimensionsWrite(xercesc::DOMElement*, const G4Box* const);
+    void Trd_dimensionsWrite(xercesc::DOMElement*, const G4Trd* const);
+    void Trap_dimensionsWrite(xercesc::DOMElement*, const G4Trap* const);
+    void Tube_dimensionsWrite(xercesc::DOMElement*, const G4Tubs* const);
+    void Cone_dimensionsWrite(xercesc::DOMElement*, const G4Cons* const);
+    void Sphere_dimensionsWrite(xercesc::DOMElement*, const G4Sphere* const);
+    void Orb_dimensionsWrite(xercesc::DOMElement*, const G4Orb* const);
+    void Torus_dimensionsWrite(xercesc::DOMElement*, const G4Torus* const);
+    void Ellipsoid_dimensionsWrite(xercesc::DOMElement*,
+                                   const G4Ellipsoid* const);
+    void Para_dimensionsWrite(xercesc::DOMElement*, const G4Para* const);
+    void Hype_dimensionsWrite(xercesc::DOMElement*, const G4Hype* const);
+    void Polycone_dimensionsWrite(xercesc::DOMElement*,
+                                  const G4Polycone* const);
+    void Polyhedra_dimensionsWrite(xercesc::DOMElement*,
+                                   const G4Polyhedra* const);
+    void ParametersWrite(xercesc::DOMElement*, const G4VPhysicalVolume* const,
+                         const G4int&);
 };
 
 #endif

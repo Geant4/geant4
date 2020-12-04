@@ -61,7 +61,8 @@ class G4ErrorMatrix
    // are set to 1.0.
 
    G4ErrorMatrix(const G4ErrorMatrix &m1);
-   // Copy constructor.
+   G4ErrorMatrix(G4ErrorMatrix &&) = default;
+   // Copy and move constructor.
 
    G4ErrorMatrix(const G4ErrorSymMatrix &m1);
    // Constructors from G4ErrorSymG4ErrorMatrix, DiagG4ErrorMatrix and Vector.
@@ -95,7 +96,8 @@ class G4ErrorMatrix
 
    G4ErrorMatrix & operator = ( const G4ErrorMatrix &m2);
    G4ErrorMatrix & operator = ( const G4ErrorSymMatrix &m2);
-   // Assignment operators.
+   G4ErrorMatrix & operator = (G4ErrorMatrix &&) = default;
+   // Assignment and move operators.
 
    G4ErrorMatrix operator- () const;
    // unary minus, ie. flip the sign of each element.

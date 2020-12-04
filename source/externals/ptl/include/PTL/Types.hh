@@ -126,15 +126,15 @@ public:
     static void set_max_depth(const int64_t& val) { fmax_depth = val; }
     static bool is_enabled() { return fenabled; }
 
-    template <typename _Tp = CountedType,
-              typename std::enable_if<std::is_same<_Tp, void>::value>::type* = nullptr>
+    template <typename Tp                                                   = CountedType,
+              typename std::enable_if<std::is_same<Tp, void>::value>::type* = nullptr>
     static bool enable()
     {
         return fenabled && fmax_depth > count();
     }
     // the void type is consider the global setting
-    template <typename _Tp = CountedType,
-              typename std::enable_if<!std::is_same<_Tp, void>::value>::type* = nullptr>
+    template <typename Tp = CountedType,
+              typename std::enable_if<!std::is_same<Tp, void>::value>::type* = nullptr>
     static bool enable()
     {
         return void_type::is_enabled() && void_type::max_depth() > count() && fenabled &&

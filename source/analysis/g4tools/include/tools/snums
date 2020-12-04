@@ -19,7 +19,7 @@ inline bool snums(const std::string& a_string,
   words(a_string,a_sep,false,a_tmp);
   T value;
   tools_vforcit(std::string,a_tmp,it) {
-    a_iss.str(*it);    
+    a_iss.str(*it);
     a_iss.clear(); //IMPORTANT.
     a_iss >> value;
     if(a_iss.fail()) {a_values.clear();return false;}

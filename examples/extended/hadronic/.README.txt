@@ -49,6 +49,21 @@ Survey energy deposition and particle's flux from an hadronic cascade.
 Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
 Show how to plot a depth dose profile in a rectangular box.
 
+\link ExampleHadr08 Hadr08 \endlink
+
+This example shows how to get "hadronic model per region" using generic
+biasing: in particular, it is shown how to use "FTFP+INCLXX" in one region,
+while using the default "FTFP+BERT" in all other regions. 
+Notice that we use the generic biasing machinery, but the actual weights
+of all tracks remain to the usual value (1.0) as in the normal (unbiased)
+case.
+
+\link ExampleHadr09 Hadr09 \endlink
+
+This example shows how to use Geant4 as a generator for simulating
+inelastic hadron-nuclear interactions.
+Notice that the Geant4 run-manager is not used.
+
 \link ExampleFissionFragment FissionFragment \endlink
 
 This example demonstrates the Fission Fragment model as used within the

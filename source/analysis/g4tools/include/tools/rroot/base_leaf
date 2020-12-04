@@ -64,19 +64,19 @@ public:
     bool created;
     if(!a_buffer.read_object(m_fac,args,obj,created)) {
       m_out << "tools::rroot::base_leaf::stream :"
-            << " can't read object." 
+            << " can't read object."
             << std::endl;
       return false;
     }
     if(!obj) {
       //m_out << "tools::rroot::base_leaf::stream :"
-      //      << " null leaf count object." 
+      //      << " null leaf count object."
       //      << std::endl;
     } else {
       m_leaf_count = safe_cast<iro,base_leaf>(*obj);
       if(!m_leaf_count) {
         m_out << "tools::rroot::base_leaf::stream :"
-              << " can't cast base_leaf." 
+              << " can't cast base_leaf."
               << std::endl;
         m_leaf_count = 0;
         if(created) {
@@ -151,14 +151,14 @@ public:
     // Return the number of effective elements of this leaf.
     if(m_leaf_count) {
       m_out << "tools::rroot::base_leaf::length :"
-            << " m_leaf_count not null. Case not yet handled." 
+            << " m_leaf_count not null. Case not yet handled."
             << std::endl;
       return m_length;
 
       //uint32 len = m_leaf_count->number();
       //if (len > fLeafCount->maximum()) {
       //  m_out << "tools::rroot::base_leaf::length :"
-      //        << fName << ", len=" << len << " and max=" 
+      //        << fName << ", len=" << len << " and max="
       //        << fLeafCount->maximum()
       //        << std::endl;
       //  len = fLeafCount->maximum();

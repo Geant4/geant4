@@ -204,8 +204,19 @@
      - Vector of energy deposits in EM calorimeter cells
      - Vector of energy deposits in Hadronic calorimeter cells
 
-   The histograms and ntuple are saved in the output file in a format
-   according to a technology selected in B5Analysis.hh.
+   The histograms and ntuple are saved in two output files in a default
+   (Root) file format.
+
+   Another file format (for example xml) can be selected either by
+   changing the generic analysis manager default file type:
+\verbatim
+analysisManager->SetDefaultFileType("xml");
+\endverbatim
+   or by providing the file names with the extension:
+\verbatim
+analysisManager->SetFileName("B5.xml");
+analysisManager->SetNtupleFileName(0, "B4ntuple.xml");
+\endverbatim
 
    When running in multi-threading mode, the histograms and ntuple accumulated 
    on threads are automatically merged in a single output file.

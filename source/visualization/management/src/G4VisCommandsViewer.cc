@@ -45,10 +45,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#ifdef G4VIS_USE_STD11
 #include <chrono>
 #include <thread>
-#endif
 #include <sstream>
 #include <fstream>
 #include <sstream>

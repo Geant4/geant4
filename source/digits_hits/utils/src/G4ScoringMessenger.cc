@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // ---------------------------------------------------------------------
 
 #include "G4ScoringMessenger.hh"
@@ -360,6 +359,23 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   dumpAllQtsWithFactorCmd->SetParameter(param);
   dumpAllQtsWithFactorCmd->SetToBeBroadcasted(false);
 
+  fill1DCmd = new G4UIcommand("/score/fill1D", this);
+  fill1DCmd->SetGuidance("Let a primitive scorer fill 1-D histogram");
+  fill1DCmd->SetGuidance("Before using this command, primitive scorer must be defined and assigned.");
+  fill1DCmd->SetGuidance("Also before using this command, a histogram has to be defined by /analysis/h1/create command.");
+  fill1DCmd->SetGuidance("This command is available only for real-world volume or probe.");
+  fill1DCmd->SetGuidance("Please note that this command has to be applied to each copy number of the scoring volume.");
+  fill1DCmd->SetGuidance("If same histogram ID is used more than once, more than one scorers fill that histogram.");
+  param = new G4UIparameter("histID", 'i', false);
+  fill1DCmd->SetParameter(param);
+  param = new G4UIparameter("meshName", 's', false);
+  fill1DCmd->SetParameter(param);
+  param = new G4UIparameter("scorerName", 's', false);
+  fill1DCmd->SetParameter(param);
+  param = new G4UIparameter("copyNo", 'i', true);
+  param->SetDefaultValue(0);
+  fill1DCmd->SetParameter(param);
+
 }
 
 G4ScoringMessenger::~G4ScoringMessenger()
@@ -411,6 +427,7 @@ G4ScoringMessenger::~G4ScoringMessenger()
     delete     dumpQtyWithFactorCmd;
     delete     dumpAllQtsToFileCmd;
     delete     dumpAllQtsWithFactorCmd;
+    delete     fill1DCmd;
     //
     delete scoreDir;
 }
@@ -510,6 +527,8 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       fSMan->SetFactor(fac);
       fSMan->DumpAllQuantitiesToFile(meshName, fileName, option);
       fSMan->SetFactor(1.0);
+  } else if(command==fill1DCmd) {
+      Fill1D(command,newVal);
   } else if(command==verboseCmd) { 
       fSMan->SetVerboseLevel(verboseCmd->GetNewIntValue(newVal)); 
   } else if(command==meshBoxCreateCmd) {
@@ -827,4 +846,66 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
     mesh->SetNumberOfSegments(nSegment);
 }
 
- 
+#include "G4VPrimitivePlotter.hh"
+#include "G4VScoreHistFiller.hh"
+
+void G4ScoringMessenger::Fill1D(G4UIcommand* cmd, G4String newVal) 
+{
+  using MeshShape = G4VScoringMesh::MeshShape;
+
+  G4Tokenizer next(newVal);
+  G4int histID = StoI(next());
+  G4String meshName = next();
+  G4String primName = next();
+  G4int copyNo = StoI(next());
+
+  auto filler = G4VScoreHistFiller::Instance();
+  if(!filler)
+  {
+    G4ExceptionDescription ed;
+    ed << "G4TScoreHistFiller is not instantiated in this application.";
+    cmd->CommandFailed(ed);
+    return;
+  }
+  //
+  // To do : check the validity of histID
+  //
+
+  auto sm = G4ScoringManager::GetScoringManagerIfExist();
+  auto mesh = sm->FindMesh(meshName);
+  if(mesh==nullptr)
+  {
+    G4ExceptionDescription ed;
+    ed << "Mesh name <" << meshName << "> is not found.";
+    cmd->CommandFailed(ed);
+    return;
+  }
+  auto shape = mesh->GetShape();
+  if(shape!=MeshShape::realWorldLogVol && shape!=MeshShape::probe)
+  {
+    G4ExceptionDescription ed;
+    ed << "Mesh <" << meshName << "> is not real-world logical volume or probe.";
+    cmd->CommandFailed(ed);
+    return;
+  }
+
+  auto prim = mesh->GetPrimitiveScorer(primName);
+  if(prim==nullptr)
+  {
+    G4ExceptionDescription ed;
+    ed << "Primitive scorer name <" << primName << "> is not found.";
+    cmd->CommandFailed(ed);
+    return;
+  }
+  auto pp = dynamic_cast<G4VPrimitivePlotter*>(prim);
+  if(pp==nullptr)
+  {
+    G4ExceptionDescription ed;
+    ed << "Primitive scorer <" << primName << "> does not support direct histogram filling.";
+    cmd->CommandFailed(ed);
+    return;
+  }
+
+  pp->Plot(copyNo,histID);
+}
+

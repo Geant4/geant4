@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrParameterMgr implementation
 //
-//
-//
-// class G4tgrParameterMgr
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrParameterMgr.hh"
 #include "G4tgrUtils.hh"
@@ -40,82 +36,77 @@
 #include "G4tgrMessenger.hh"
 #include "G4UIcommand.hh"
 
-G4ThreadLocal G4tgrParameterMgr* G4tgrParameterMgr::theInstance = 0;
+G4ThreadLocal G4tgrParameterMgr* G4tgrParameterMgr::theInstance = nullptr;
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrParameterMgr::G4tgrParameterMgr()
 {
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrParameterMgr::~G4tgrParameterMgr()
 {
   delete theInstance;
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrParameterMgr* G4tgrParameterMgr::GetInstance()
 {
-  if( !theInstance )
+  if(theInstance == nullptr)
   {
     theInstance = new G4tgrParameterMgr;
   }
   return theInstance;
 }
 
-
-//-------------------------------------------------------------
-void G4tgrParameterMgr::AddParameterNumber( const std::vector<G4String>& wl,
-                                                  G4bool mustBeNew  )
+// --------------------------------------------------------------------
+void G4tgrParameterMgr::AddParameterNumber(const std::vector<G4String>& wl,
+                                           G4bool mustBeNew)
 {
-  CheckIfNewParameter( wl, mustBeNew );
+  CheckIfNewParameter(wl, mustBeNew);
 
   //----- Convert third argument to double, but then store it as string
-  //      for later use in CLHEP evaluator 
-  G4float val = G4tgrUtils::GetDouble( wl[2] );
-  theParameterList[ wl[1] ] = G4UIcommand::ConvertToString( val );
+  //      for later use in CLHEP evaluator
+  G4float val             = G4tgrUtils::GetDouble(wl[2]);
+  theParameterList[wl[1]] = G4UIcommand::ConvertToString(val);
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
     G4cout << " G4tgrParameterMgr::AddParameterNumber() -"
-           << " parameter added " <<  wl[1]
-           << " = " << theParameterList[ wl[1] ] << G4endl; 
+           << " parameter added " << wl[1] << " = " << theParameterList[wl[1]]
+           << G4endl;
   }
 #endif
 }
 
-
-//-------------------------------------------------------------
-void G4tgrParameterMgr::AddParameterString( const std::vector<G4String>& wl,
-                                                  G4bool mustBeNew  )
+// --------------------------------------------------------------------
+void G4tgrParameterMgr::AddParameterString(const std::vector<G4String>& wl,
+                                           G4bool mustBeNew)
 {
-  CheckIfNewParameter( wl, mustBeNew );
+  CheckIfNewParameter(wl, mustBeNew);
 
   //----- Store parameter as string
-  theParameterList[ wl[1] ] = wl[2];
+  theParameterList[wl[1]] = wl[2];
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
     G4cout << " G4tgrParameterMgr::AddParameterString() -"
-           << " parameter added " <<  wl[1]
-           << " = " << theParameterList[ wl[1] ] << G4endl; 
+           << " parameter added " << wl[1] << " = " << theParameterList[wl[1]]
+           << G4endl;
   }
 #endif
 }
 
-//-------------------------------------------------------------
-void G4tgrParameterMgr::CheckIfNewParameter( const std::vector<G4String>& wl,
-                                                   G4bool mustBeNew  )
+// --------------------------------------------------------------------
+void G4tgrParameterMgr::CheckIfNewParameter(const std::vector<G4String>& wl,
+                                            G4bool mustBeNew)
 {
   //---------- Find first if it exists already
   G4bool existsAlready;
-  G4mapss::iterator sdite = theParameterList.find( wl[1] );
-  if( sdite == theParameterList.end() )
+  G4mapss::const_iterator sdite = theParameterList.find(wl[1]);
+  if(sdite == theParameterList.cend())
   {
     existsAlready = false;
   }
@@ -126,65 +117,63 @@ void G4tgrParameterMgr::CheckIfNewParameter( const std::vector<G4String>& wl,
 
   if(existsAlready)
   {
-    if( mustBeNew )
+    if(mustBeNew)
     {
       G4String ErrMessage = "Parameter already exists... " + wl[1];
-      G4Exception("G4tgrParameterMgr::CheckParameter()",
-                  "IllegalConstruct", FatalException, ErrMessage);
+      G4Exception("G4tgrParameterMgr::CheckParameter()", "IllegalConstruct",
+                  FatalException, ErrMessage);
     }
     else
     {
       G4String WarMessage = "Parameter already exists... " + wl[1];
-      G4Exception("G4tgrParameterMgr::CheckParameter()",
-                  "NotRecommended", JustWarning, WarMessage);
+      G4Exception("G4tgrParameterMgr::CheckParameter()", "NotRecommended",
+                  JustWarning, WarMessage);
     }
   }
-  
-  //---------- Check for miminum number of words read 
-  G4tgrUtils::CheckWLsize( wl, 3, WLSIZE_EQ, "Parameter::AddParameter");
+
+  //---------- Check for miminum number of words read
+  G4tgrUtils::CheckWLsize(wl, 3, WLSIZE_EQ, "Parameter::AddParameter");
 }
 
-
-//-------------------------------------------------------------
-G4String G4tgrParameterMgr::FindParameter( const G4String& name, G4bool exists )
+// --------------------------------------------------------------------
+G4String G4tgrParameterMgr::FindParameter(const G4String& name, G4bool exists)
 {
   G4String par = "";
-  
-  G4mapss::iterator sdite = theParameterList.find( name );
-  if( sdite == theParameterList.end() )
+
+  G4mapss::const_iterator sdite = theParameterList.find(name);
+  if(sdite == theParameterList.cend())
   {
-    if( exists )
+    if(exists)
     {
       DumpList();
       G4String ErrMessage = "Parameter not found in list: " + name;
-      G4Exception("G4tgrParameterMgr::FindParameter()",
-                  "InvalidSetup", FatalException, ErrMessage);
+      G4Exception("G4tgrParameterMgr::FindParameter()", "InvalidSetup",
+                  FatalException, ErrMessage);
     }
   }
   else
   {
     exists = 1;
-    par = ((*sdite).second);
+    par    = ((*sdite).second);
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
-  {
-    G4cout << " G4tgrParameterMgr::FindParameter() -"
-           << " parameter found " << name << " = " << par << G4endl; 
-  }
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
+    {
+      G4cout << " G4tgrParameterMgr::FindParameter() -"
+             << " parameter found " << name << " = " << par << G4endl;
+    }
 #endif
   }
 
   return par;
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 void G4tgrParameterMgr::DumpList()
 {
   //---------- Dump number of objects of each class
   G4cout << " @@@@@@@@@@@@@@@@@@ Dumping parameter list " << G4endl;
-  G4mapss::const_iterator cite;
-  for( cite = theParameterList.begin();cite != theParameterList.end(); cite++ )
+  for(auto cite = theParameterList.cbegin();
+           cite != theParameterList.cend(); ++cite)
   {
     G4cout << (*cite).first << " = " << (*cite).second << G4endl;
   }

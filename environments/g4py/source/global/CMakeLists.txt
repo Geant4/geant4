@@ -23,5 +23,5 @@ geant4_add_pymodule(pyG4global
   pymodG4global.cc
 )
 
-target_link_libraries(pyG4global PRIVATE G4global G4track pyG4Boost)
+target_link_libraries(pyG4global PRIVATE G4global G4track)
 install(TARGETS pyG4global DESTINATION "${CMAKE_INSTALL_PYTHONDIR}/Geant4")

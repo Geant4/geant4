@@ -78,7 +78,7 @@ public:
   G4Fragment(const G4Fragment &right);
 
   // A,Z and 4-momentum - main constructor for fragment
-  G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum);
+  G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4bool warning=true);
 
   // 4-momentum and pointer to G4particleDefinition (for gammas, e-)
   G4Fragment(const G4LorentzVector& aMomentum, 
@@ -176,7 +176,7 @@ private:
 
   void NumberOfExitationWarning(const G4String&);
 
-  inline void CalculateExcitationEnergy();
+  inline void CalculateExcitationEnergy(G4bool warning=true);
 
   inline void CalculateGroundStateMass();
 
@@ -235,11 +235,11 @@ inline void G4Fragment::operator delete(void * aFragment)
   pFragmentAllocator()->FreeSingle((G4Fragment *) aFragment);
 }
 
-inline void G4Fragment::CalculateExcitationEnergy()
+inline void G4Fragment::CalculateExcitationEnergy(G4bool warning)
 {
   theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
   if(theExcitationEnergy < minFragExcitation) { 
-    if(theExcitationEnergy < -minFragExcitation) {  ExcitationEnergyWarning(); }
+    if(theExcitationEnergy < -minFragExcitation && warning) {  ExcitationEnergyWarning(); }
     theExcitationEnergy = 0.0;
   }
 }

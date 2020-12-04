@@ -61,17 +61,16 @@
   LXe->AddElement( elementXe, 1);
   GXe->AddElement( elementXe, 1);
 
-  const G4int NUMENTRIES = 3;
-  //  G4double LXe_PP[NUMENTRIES]    = { 7.07*eV, 7.07*eV };
-  G4double LXe_PP[NUMENTRIES]    = { 7.0*eV , 7.07*eV, 7.14*eV };
-  G4double LXe_SCINT[NUMENTRIES] = { 0.1, 1.0, 0.1 };
-  G4double LXe_RIND[NUMENTRIES]  = { 1.59 , 1.57, 1.54 };
-  G4double LXe_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
+  //  std::vector<G4double> LXe_PP    = { 7.07*eV, 7.07*eV };
+  std::vector<G4double> LXe_PP    = { 7.0*eV , 7.07*eV, 7.14*eV };
+  std::vector<G4double> LXe_SCINT = { 0.1, 1.0, 0.1 };
+  std::vector<G4double> LXe_RIND  = { 1.59 , 1.57, 1.54 };
+  std::vector<G4double> LXe_ABSL  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
   G4MaterialPropertiesTable *LXe_mt = new G4MaterialPropertiesTable();
-  LXe_mt->AddProperty("FASTCOMPONENT", LXe_PP, LXe_SCINT, NUMENTRIES);
-  LXe_mt->AddProperty("SLOWCOMPONENT", LXe_PP, LXe_SCINT, NUMENTRIES);
-  LXe_mt->AddProperty("RINDEX",        LXe_PP, LXe_RIND,  NUMENTRIES);
-  LXe_mt->AddProperty("ABSLENGTH",     LXe_PP, LXe_ABSL,  NUMENTRIES);
+  LXe_mt->AddProperty("FASTCOMPONENT", LXe_PP, LXe_SCINT);
+  LXe_mt->AddProperty("SLOWCOMPONENT", LXe_PP, LXe_SCINT);
+  LXe_mt->AddProperty("RINDEX",        LXe_PP, LXe_RIND);
+  LXe_mt->AddProperty("ABSLENGTH",     LXe_PP, LXe_ABSL);
   LXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
   // and 13eV creation energy for photons - may be 15eV?
   // Fano factor assumed 1; should be much less for Xe ~ 0.13
@@ -83,16 +82,16 @@
   LXe_mt->AddConstProperty("YIELDRATIO",1.0);
   LXe->SetMaterialPropertiesTable(LXe_mt);
 
-  //  G4double GXe_PP[NUMENTRIES]    = { 7.07*eV, 7.07*eV };
-  G4double GXe_PP[NUMENTRIES]    = { 7.0*eV, 7.07*eV, 7.14*eV };
-  G4double GXe_SCINT[NUMENTRIES] = { 0.1, 1.0, 0.1 };
-  G4double GXe_RIND[NUMENTRIES]  = { 1.00, 1.00, 1.00 };
-  G4double GXe_ABSL[NUMENTRIES]  = { 100*m, 100*m, 100*m}; //atten length
+  //  std::vector<G4double> GXe_PP    = { 7.07*eV, 7.07*eV };
+  std::vector<G4double> GXe_PP = { 7.0*eV, 7.07*eV, 7.14*eV };
+  std::vector<G4double> GXe_SCINT = { 0.1, 1.0, 0.1 };
+  std::vector<G4double> GXe_RIND  = { 1.00, 1.00, 1.00 };
+  std::vector<G4double> GXe_ABSL  = { 100*m, 100*m, 100*m}; //atten length
   G4MaterialPropertiesTable *GXe_mt = new G4MaterialPropertiesTable();
-  GXe_mt->AddProperty("FASTCOMPONENT", GXe_PP, GXe_SCINT, NUMENTRIES);
-  GXe_mt->AddProperty("SLOWCOMPONENT", GXe_PP, GXe_SCINT, NUMENTRIES);
-  GXe_mt->AddProperty("RINDEX",        GXe_PP, GXe_RIND,  NUMENTRIES);
-  GXe_mt->AddProperty("ABSLENGTH",     GXe_PP, GXe_ABSL,  NUMENTRIES);
+  GXe_mt->AddProperty("FASTCOMPONENT", GXe_PP, GXe_SCINT);
+  GXe_mt->AddProperty("SLOWCOMPONENT", GXe_PP, GXe_SCINT);
+  GXe_mt->AddProperty("RINDEX",        GXe_PP, GXe_RIND);
+  GXe_mt->AddProperty("ABSLENGTH",     GXe_PP, GXe_ABSL);
   GXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
   GXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
   GXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
@@ -111,13 +110,13 @@
   quartz->AddElement(Si, 1);
   quartz->AddElement(O , 2);
 
-  G4double quartz_PP[NUMENTRIES]   = { 5.0*eV, 6.69*eV, 7.50*eV }; // lambda range 4 ri
-  G4double quartz_RIND[NUMENTRIES] = { 1.51, 1.57, 1.61 };     // ref index
-  //  G4double quartz_RIND[NUMENTRIES] = { 1.45, 1.51, 1.54 };     // ref index
-  G4double quartz_ABSL[NUMENTRIES] = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
+  std::vector<G4double> quartz_PP   = { 5.0*eV, 6.69*eV, 7.50*eV }; // lambda range 4 ri
+  std::vector<G4double> quartz_RIND = { 1.51, 1.57, 1.61 };     // ref index
+  //  std::vector<G4double> quartz_RIND = { 1.45, 1.51, 1.54 };     // ref index
+  std::vector<G4double> quartz_ABSL = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
   G4MaterialPropertiesTable *quartz_mt = new G4MaterialPropertiesTable();
-  quartz_mt->AddProperty("RINDEX", quartz_PP, quartz_RIND, NUMENTRIES);
-  quartz_mt->AddProperty("ABSLENGTH", quartz_PP, quartz_ABSL, NUMENTRIES);
+  quartz_mt->AddProperty("RINDEX", quartz_PP, quartz_RIND);
+  quartz_mt->AddProperty("ABSLENGTH", quartz_PP, quartz_ABSL);
   quartz->SetMaterialPropertiesTable(quartz_mt);
 
 
@@ -134,13 +133,13 @@
     (name="CathodeMetalAluminium", density=2.700*g/cm3, ncomponents=1);
   cathmetalAl->AddElement(Al, 1);
 
-  G4double cathmetal_PP[NUMENTRIES]   = { 5.0*eV, 6.69*eV, 7.50*eV };
-  G4double cathmetal_RIND[NUMENTRIES] = { 1.51, 1.57, 1.61 };     // ref index
-  G4double cathmetal_ABSL[NUMENTRIES] = { 1.e-20*m,  1.e-20*m,  1.e-20*m };// atten length
-//  G4double cathmetal_ABSL[NUMENTRIES] = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
+  std::vector<G4double> cathmetal_PP   = { 5.0*eV, 6.69*eV, 7.50*eV };
+  std::vector<G4double> cathmetal_RIND = { 1.51, 1.57, 1.61 };     // ref index
+  std::vector<G4double> cathmetal_ABSL = { 1.e-20*m,  1.e-20*m,  1.e-20*m };// atten length
+//  std::vector<G4double> cathmetal_ABSL = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
   G4MaterialPropertiesTable *cathmetal_mt = new G4MaterialPropertiesTable();
-  cathmetal_mt->AddProperty("RINDEX", cathmetal_PP, cathmetal_RIND,NUMENTRIES);
-  cathmetal_mt->AddProperty("ABSLENGTH", cathmetal_PP, cathmetal_ABSL, NUMENTRIES);
+  cathmetal_mt->AddProperty("RINDEX", cathmetal_PP, cathmetal_RIND);
+  cathmetal_mt->AddProperty("ABSLENGTH", cathmetal_PP, cathmetal_ABSL);
   cathmetalAl->SetMaterialPropertiesTable(cathmetal_mt);
 
 

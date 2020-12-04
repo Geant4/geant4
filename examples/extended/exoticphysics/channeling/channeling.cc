@@ -28,23 +28,12 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4MULTITHREADED
 #include "UserActionInitialization.hh"
-#else
-#include "PrimaryGeneratorAction.hh"
-#include "StackingAction.hh"
-#include "EventAction.hh"
-#include "RunAction.hh"
-#endif
 
 #include "DetectorConstruction.hh"
 
@@ -69,12 +58,8 @@ int main(int argc,char** argv)
     }
 
     // Construct the default run manager
-#ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
+    auto* runManager = G4RunManagerFactory::CreateRunManager();
     runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores() - 2);
-#else
-    G4RunManager* runManager = new G4RunManager;
-#endif
 
     // Activate UI-command base scorer
     G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
@@ -90,15 +75,8 @@ int main(int argc,char** argv)
     physlist->RegisterPhysics(biasingPhysics);
     runManager->SetUserInitialization(physlist);
 
-#ifndef G4MULTITHREADED
     // Set user action classes
-    runManager->SetUserAction(new PrimaryGeneratorAction());
-    runManager->SetUserAction(new EventAction());
-    runManager->SetUserAction(new StackingAction());
-    runManager->SetUserAction(new RunAction());
-#else
     runManager->SetUserInitialization(new UserActionInitialization());
-#endif
 
     runManager->SetUserInitialization(new DetectorConstruction());
 

@@ -35,18 +35,18 @@ public: //plottable
     std::vector<std::string> ws;
     words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-  
+
     for(it=ws.begin();it!=ws.end();++it) {
       if(((*it)=="name") && m_name.size()) {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
         a_sinfos += m_name;
-  
+
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries\n";
         if(!numas<unsigned int>(m_data.entries(),a_sinfos)){}
-  
+
       } else if((*it)=="mean") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "MeanX\n";
@@ -62,10 +62,10 @@ public: //plottable
         a_sinfos += f_lf;
         a_sinfos += "RMS Y\n";
         if(!numas<double>(m_data.rms_y(),a_sinfos)){}
-  
+
       }
     }
-  }  
+  }
 public: //points2D
   virtual float x_axis_min() const {return (float)m_data.lower_edge_x();}
   virtual float x_axis_max() const {return (float)m_data.upper_edge_x();}
@@ -104,7 +104,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   c2d2plot& operator=(const c2d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;
@@ -140,18 +140,18 @@ public: //plottable
     std::vector<std::string> ws;
     words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-  
+
     for(it=ws.begin();it!=ws.end();++it) {
       if(((*it)=="name") && m_name.size()) {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
         a_sinfos += m_name;
-  
+
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries\n";
         if(!numas<unsigned int>(m_data.entries(),a_sinfos)){}
-  
+
       } else if((*it)=="mean") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "MeanX\n";
@@ -173,10 +173,10 @@ public: //plottable
         a_sinfos += f_lf;
         a_sinfos += "RMS Z\n";
         if(!numas<double>(m_data.rms_z(),a_sinfos)){}
-  
+
       }
     }
-  }  
+  }
 public: //points2D
   virtual float x_axis_min() const {return (float)m_data.lower_edge_x();}
   virtual float x_axis_max() const {return (float)m_data.upper_edge_x();}
@@ -218,7 +218,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   c3d2plot& operator=(const c3d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;

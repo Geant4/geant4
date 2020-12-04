@@ -154,8 +154,6 @@
  - 60 :  "energy of G4DNA Auger e- at creation (log scale)"
  - 61 :  "energy of G4DNA gamma at creation (log scale)"
 
- The histograms can be viewed using ROOT or PAW.
- 
  One can control the name of the histograms file with the command:
 \verbatim
 /analysis/setFileName  name  (default testem5)
@@ -196,8 +194,6 @@
 	      | 	     |	gottsch.mac	|  tramu.mac
 	--------------------------------------------------------
 </pre>
- The relevant part of the GEANT3 code is in the subdirectory geant3 together 
- with the xxxx.dat input files.
 	
 \section TestEm5_s9 HOW TO START ?
  
@@ -216,5 +212,53 @@ Idle> control/execute vis.mac
 Idle> run/beamOn 5
 ....
 \endverbatim
- 
+
+Macros provided in this example:
+- acosta.mac:  Back x-ray emission by 20 keV electrons in Silver.
+     (E. Acosta et al. Journal of Applied Physics 83(11) 1998 page 6038,
+     Fig. 4-5-6)
+ - anthony.mac: LPM and dielectric effect measurement: 25 GeV electrons
+     through thin foils.
+     (P.L. Anthony et al. Phys.Rev. D 56 (1997) page 1373.)
+ - atima.mac: to test PhysListEm19DStandard for ions
+ - berger.mac: Energy deposit by 1 MeV electrons in silicon counters.
+     (M.J.Berger et al. NIM 69 (1969) page 181.)
+ - bichsel.mac: 0.766 MeV protons, transmitted through 1.37 mg/cm2 Al
+     (H.Bichsel Phys.Rev. 112 (1958) page 182.)
+ - dedx1.mac: to control dE/dx calculation.
+ - dedx2.mac: to control dE/dx calculation. High statistic and plot
+ - dna.mac: to illustrate DNA physics
+ - fluo.mac: to illustrate atomic deexcitation options
+ - gammaSpectrum.mac: to plot gamma spectrum  with/without atomic deexcitation.
+ - geom.mac: to play with geometry (can be run interactively with visualization)
+ - gottsch.mac: 158.6  MeV protons, transmitted through 0.2160 g/cm2 Al
+     (B.Gottschalk et al. NIM B74 (1993) page 467.)
+ - hanson.mac: Angle distribution of  15.7 MeV electrons transmitted through
+     thin gold foils.
+     (A.O.Hanson et al. Phys.Rev.84 (1951) page 634.)
+ - hunger.mac: Back scattering of  41 keV electrons.
+     (H.J. Hunger and L. Kuchler Phys. Stat. Sol.(a) 56, K45 (1979))
+ - ion.mac: ion C12 in 1m Iron
+ - kulchi.mac: 2.25 MeV e-, transmitted through 26.60 mg/cm2  Al
+     (L.Kulchitsky Phys.Rev. 61 (1941) page 254.)
+ - mumsc.mac: 100 GeV mu+, transmitted through 1 m of iron
+ - mutev.mac: 1 TeV mu+, transmitted through 1 m of iron
+ - pixe.mac: to illustrate atomic deexcitation options
+ - posi.mac: to test PhysListEm19DStandard for positron
+ - shen1.mac: Angle distribution of  high energy (50-200 GeV/c) protons
+      transmitted through different targets.
+      (G. Shen et al. Phys.Rev. D20 (1979) page 1584.)
+ - shen2.mac: proton 175 GeV/c, transmitted through 8.004 mm Al
+      (G. Shen et al. Phys.Rev. D20 (1979) page 1584.)
+ - tavora.mac: Back scattering of  35 keV electrons in Silver.
+      (L.M. Tavora et al. J.Phys.D: Appl. Phys. 33 (2000) page 2497,
+       Fig. 7)
+ - tramu.mac: 1 TeV mu+, transmitted through 3 m of iron
+      (Rev. of Particle Physics Eur. Phys. Jour. C (2000) page 172.
+       Rev. of Particle Physics Letters B 592 (2004) page 251.)
+ - vincour.mac: Angle distribution of  6.56 MeV protons transmitted through
+      thin silicon targets.
+      (J.Vincour,P.Bem NIM 148 (1978) page 396.)
+ - vis.mac - to activate visualization
+
 */

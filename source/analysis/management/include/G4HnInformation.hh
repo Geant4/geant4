@@ -100,7 +100,8 @@ class G4HnInformation
         fIsLogAxis({ false, false, false }),
         fActivation(true),
         fAscii(false),
-        fPlotting(false) { fHnDimensionInformations.reserve(nofDimensions); }
+        fPlotting(false),
+        fFileName("") { fHnDimensionInformations.reserve(nofDimensions); }
 
     // Deleted default constructor
     G4HnInformation() = delete; 
@@ -116,6 +117,7 @@ class G4HnInformation
     void SetActivation(G4bool activation);
     void SetAscii(G4bool ascii);
     void SetPlotting(G4bool plotting);
+    void SetFileName(G4String fileName);
   
     // Get methods
     G4String GetName() const;
@@ -124,6 +126,7 @@ class G4HnInformation
     G4bool  GetActivation() const;
     G4bool  GetAscii() const;
     G4bool  GetPlotting() const;
+    G4String GetFileName() const;
 
   private:
     // Data members
@@ -133,6 +136,7 @@ class G4HnInformation
     G4bool   fActivation;
     G4bool   fAscii;  
     G4bool   fPlotting;
+    G4String fFileName;
 };
 
 // inline functions
@@ -175,6 +179,9 @@ inline void G4HnInformation::SetAscii(G4bool ascii)
 inline void G4HnInformation::SetPlotting(G4bool plotting)
 { fPlotting = plotting; }
 
+inline void G4HnInformation::SetFileName(G4String fileName)
+{ fFileName = fileName; }
+
 inline G4String G4HnInformation::GetName() const
 { return fName; }
 
@@ -193,4 +200,7 @@ inline G4bool  G4HnInformation::GetAscii() const
 inline G4bool  G4HnInformation::GetPlotting() const
 { return fPlotting; }
 
-#endif  
+inline G4String G4HnInformation::GetFileName() const
+{ return fFileName; }
+
+#endif

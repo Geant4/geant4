@@ -56,11 +56,7 @@
   to be accurate (see param->SetStepFunction(1., 1*mm)).
 
   Several hadronic physics options are controlled by environment variables.
-  To trigger them, an envHadronic.csh has been added in this example.
-  One must select the options wished, and do
-\verbatim
-        source envHadronic.csh  (or sh)
-\endverbatim
+  To select them, see Hadr07.cc
 
 \section Hadr07_s3 AN EVENT : THE PRIMARY GENERATOR
 
@@ -164,5 +160,14 @@
  	....
  	Idle> exit
 \endverbatim
-
+	
+ Macros provided in this example:
+  - Na22.mac: multilayers. Radioactive source
+  - alpha.mac: alpha (400 MeV). Limit the step size from histo 10
+  - ionC12.mac: C12 (2.4 GeV). Limit the step size from histo 10
+  - water.mac: e- (4 MeV) in Water
+    
+ Macros to be run interactively:
+  - proton.mac: proton (1 GeV). Multilayers
+  - vis.mac: To activate visualization
 */

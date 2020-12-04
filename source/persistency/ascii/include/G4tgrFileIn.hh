@@ -23,40 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrFileIn
+// G4tgrFileIn
 //
 // Class description:
 //
 // Singleton for importing file descriptions.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrFileIn_hh
+#define G4tgrFileIn_hh 1
 
-#ifndef G4tgrFileIn_HH
-#define G4tgrFileIn_HH
-
-#include "globals.hh"
 #include <vector>
 
-class G4tgrFileIn 
+#include "globals.hh"
+
+class G4tgrFileIn
 {
-  public:  // with description
+  public:
 
     G4tgrFileIn();
-   ~G4tgrFileIn();
+    ~G4tgrFileIn();
 
-    static G4tgrFileIn& GetInstance( const G4String& name ); 
+    static G4tgrFileIn& GetInstance(const G4String& name);
       // Get the only instance opening the file
 
-    static G4tgrFileIn& GetInstanceOpened( const G4String& name ); 
+    static G4tgrFileIn& GetInstanceOpened(const G4String& name);
       // Get the only instance when file should be already opened
-  
-    G4int GetWordsInLine( std::vector<G4String>& wl );
-      // Read a line and transform it to a vector of words 
+
+    G4int GetWordsInLine(std::vector<G4String>& wl);
+      // Read a line and transform it to a vector of words
 
     void ErrorInLine();
       // Print out an error message indicating the line being read
@@ -64,35 +60,35 @@ class G4tgrFileIn
     // Access data members
 
     G4int Nline() { return theLineNo[theCurrentFile]; }
-  
+
     const G4String& GetName() { return theName; }
-  
-    void OpenNewFile( const char* filename );
+
+    void OpenNewFile(const char* filename);
     G4bool EndOfFile();
     void Close();
-    void DumpException( const G4String& sent );
+    void DumpException(const G4String& sent);
 
   private:
 
-    G4tgrFileIn( const G4String& name ) : theCurrentFile(-1), theName(name) {}
+    G4tgrFileIn(const G4String& name) : theName(name) {}
 
   private:
 
-    std::vector< std::ifstream* > theFiles;
+    std::vector<std::ifstream*> theFiles;
 
     std::vector<G4int> theLineNo;
       // Number of line being read
 
     std::vector<G4String> theNames;
 
-    G4int theCurrentFile;
+    G4int theCurrentFile = -1;
       // Index of file being read in theFiles
-  
-    static G4ThreadLocal std::vector<G4tgrFileIn*> *theInstances;
+
+    static G4ThreadLocal std::vector<G4tgrFileIn*>* theInstances;
       // Vector of class instances (each one identified by its name)
-  
-    G4String theName;
+
+    G4String theName = "";
       // Name of file
 };
 
-#endif 
+#endif

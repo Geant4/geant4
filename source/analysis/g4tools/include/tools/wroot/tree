@@ -76,7 +76,7 @@ public: //iobject
 
     if(!a_buffer.set_byte_count(c)) return false;
     return true;
-  }    
+  }
 public: //itree
   //virtual void add_tot_bytes(uint32 a_n) {m_tot_bytes += a_n;}
   //virtual void add_zip_bytes(uint32 a_n) {m_zip_bytes += a_n;}
@@ -210,7 +210,7 @@ public:
       a_nbytes += n;
       m_tot_bytes += add_bytes;
       m_zip_bytes += nout;
-    } 
+    }
 
     m_entries++;
 

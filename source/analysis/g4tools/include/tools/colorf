@@ -8,7 +8,7 @@
 
 namespace tools {
 
-class colorf : public vec4f {  
+class colorf : public vec4f {
   typedef vec4f parent;
 public: //for SWIG
   typedef unsigned char uchar;
@@ -20,7 +20,7 @@ public:
   colorf(float a_r,float a_g,float a_b,float a_a = 1,bool a_inc = true):parent(a_r,a_g,a_b,a_a,a_inc){}
 #else
   colorf(float a_r,float a_g,float a_b,float a_a = 1):parent(a_r,a_g,a_b,a_a){}
-#endif  
+#endif
   virtual ~colorf() {}
 public:
   colorf(const colorf& a_from):parent(a_from){}
@@ -71,7 +71,7 @@ public:
   static colorf lightblue() {return colorf(0.675792F,0.843763F,0.898451F);}
   static colorf lightsteelblue() {return colorf(0.68751F,0.765637F,0.867201F);}
   static colorf mediumblue() {return colorf(0,0,0.800793F);}
- 
+
   //10-19
   static colorf mediumslateblue() {return colorf(0.480476F,0.406256F,0.929702F);}
   static colorf midnightblue() {return colorf(0.0976577F,0.0976577F,0.437507F);}
@@ -83,7 +83,7 @@ public:
   static colorf coral() {return colorf(0.996109F,0.496101F,0.312505F);}
   static colorf cyan() {return colorf(0,1,1);}
   static colorf firebrick() {return colorf(0.695323F,0.132815F,0.132815F);}
-      
+
   //20-29
   static colorf brown() {return colorf(0.644541F,0.164065F,0.164065F);}
   static colorf gold() {return colorf(0.996109F,0.839857F,0);}
@@ -95,7 +95,7 @@ public:
   static colorf limegreen() {return colorf(0.195315F,0.800793F,0.195315F);}
   static colorf mediumseagreen() {return colorf(0.234379F,0.699229F,0.441413F);}
   static colorf mediumspringgreen() {return colorf(0,0.976577F,0.601572F);}
-      
+
   //30-39
   static colorf palegreen() {return colorf(0.593759F,0.980484F,0.593759F);}
   static colorf seagreen() {return colorf(0.17969F,0.542977F,0.339849F);}
@@ -119,7 +119,7 @@ public:
   static colorf red() {return colorf(1,0,0);}
   static colorf indianred() {return colorf(0.800793F,0.35938F,0.35938F);}
   static colorf mediumvioletred() {return colorf(0.777356F,0.0820325F,0.519539F);}
-      
+
   //50-59
   static colorf orangered() {return colorf(0.996109F,0.269535F,0);}
   static colorf violetred() {return colorf(0.812512F,0.125002F,0.562509F);}

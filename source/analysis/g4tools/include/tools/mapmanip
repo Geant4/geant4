@@ -17,7 +17,7 @@ inline void safe_clear(std::map<K,V*>& a_m){
     it_t it = a_m.begin();
     V* entry  = (*it).second;
     a_m.erase(it);
-    delete entry;    
+    delete entry;
   }
 }
 

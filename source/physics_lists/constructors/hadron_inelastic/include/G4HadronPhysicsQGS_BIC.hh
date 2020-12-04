@@ -32,59 +32,36 @@
 //     created from G4HadronPhysicsQGSP_BIC  by H.P.Wellisch
 //
 // Modified:
+// 18.10.2020 V.Ivanchenko use inheritance from G4HadronPhysicsQGSP_BERT
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsQGS_BIC_h
 #define G4HadronPhysicsQGS_BIC_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4Cache.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
-class G4ComponentGGHadronNucleusXsc;
-class G4VCrossSectionDataSet;
-
-class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
+class G4HadronPhysicsQGS_BIC : public G4HadronPhysicsQGSP_BERT
 {
   public: 
     G4HadronPhysicsQGS_BIC(G4int verbose =1);
     G4HadronPhysicsQGS_BIC(const G4String& name, G4bool quasiElastic=true);
     virtual ~G4HadronPhysicsQGS_BIC();
 
-    virtual void ConstructParticle() override;
-    virtual void ConstructProcess() override;
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsQGS_BIC(G4HadronPhysicsQGS_BIC &) = delete;
+    G4HadronPhysicsQGS_BIC & operator =
+    (const G4HadronPhysicsQGS_BIC &right) = delete;
 
   protected:
-    void CreateModels();
     virtual void Neutron();
     virtual void Proton();
     virtual void Pion();
-    virtual void Kaon();
-    virtual void Others();
-    virtual void DumpBanner() {}
-    //This contains extra configurataion specific to this PL
-    virtual void ExtraConfiguration();
-    
-    //Thread-private data
-    G4double maxFTF_neutron;
-    G4double maxFTF_proton;
-    G4double minFTF_neutron;
-    G4double minFTF_proton;
-    G4double maxBIC_neutron;
-    G4double maxBIC_proton;
-    
-    G4double maxFTF_pion;
-    G4double maxBERT_pion;
+
+  private:
     G4double minBERT_pion;
     G4double maxBIC_pion;
     
-    G4double maxFTF_kaon;
-    G4double maxBERT_kaon;
-    
-    G4bool QuasiElasticQGS;
-    G4bool QuasiElasticFTF;
 };
 
 #endif

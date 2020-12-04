@@ -55,7 +55,7 @@
     }
   public:
     const T& variable() const {return m_leaf->variable();}
-    T& variable() {return m_leaf->variable();}  
+    T& variable() {return m_leaf->variable();}
   protected:
     branch& m_branch;
     leaf_ref<T>* m_leaf;
@@ -169,7 +169,7 @@
     }
   public:
     const std::string& variable() const {return m_leaf->variable();}
-    std::string& variable() {return m_leaf->variable();}  
+    std::string& variable() {return m_leaf->variable();}
   protected:
     branch& m_branch;
     leaf_string_ref* m_leaf;
@@ -284,7 +284,7 @@
     }
   public:
     const std::vector<std::string>& variable() const {return m_ref;}
-    std::vector<std::string>& variable() {return const_cast< std::vector<std::string>& >(m_ref);}  
+    std::vector<std::string>& variable() {return const_cast< std::vector<std::string>& >(m_ref);}
   protected:
     const std::vector<std::string>& m_ref;
     char m_sep;
@@ -412,7 +412,7 @@
     }
   public:
     const std::vector<T>& variable() const {return m_ref;}
-    std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}  
+    std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}
   protected:
     branch& m_branch;
     const std::vector<T>& m_ref;

@@ -66,7 +66,7 @@ public: //ifile
     if (::lseek(m_file, a_offset, whence) < 0) {
 #endif
       m_out << "tools::rroot::file::set_pos :"
-            << " cannot set position " << a_offset 
+            << " cannot set position " << a_offset
             << " in file " << sout(m_path) << "."
             << std::endl;
       return false;
@@ -80,7 +80,7 @@ public: //ifile
     typedef int ssize_t;
 #endif
     ssize_t siz;
-    while ((siz = ::read(m_file,a_buffer,a_length)) < 0 && 
+    while ((siz = ::read(m_file,a_buffer,a_length)) < 0 &&
            error_number() == EINTR) reset_error_number();
     if (siz < 0) {
       m_out << "tools::rroot::file::read_buffer :"
@@ -90,7 +90,7 @@ public: //ifile
     }
     if (siz != ssize_t(a_length)) {
       m_out << "tools::rroot::file::read_buffer :"
-            << " error reading all requested bytes from file " 
+            << " error reading all requested bytes from file "
             << sout(m_path) << ", got " << long_out(siz)
             << " of " << a_length
             << std::endl;
@@ -165,7 +165,7 @@ protected:
   ,m_streamer_infos_key(a_from.m_out)
   ,m_streamer_fac(a_from.m_out)
   ,m_streamer_infos(m_streamer_fac)
-  { 
+  {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -242,12 +242,12 @@ protected:
     if (fWritable) {
       if (fSeekFree > fBEGIN) {
         if(!readFreeSegments()) {
-          m_out << "tools::rroot::file::initialize : Cannot read free segments." 
+          m_out << "tools::rroot::file::initialize : Cannot read free segments."
                << std::endl;
           return false;
         }
       } else {
-        m_out << "tools::rroot::file::initialize : file \"" << fName 
+        m_out << "tools::rroot::file::initialize : file \"" << fName
              << "\" probably not closed, cannot read free segments" << std::endl;
       }
     }
@@ -477,7 +477,7 @@ protected:
     buffer b(m_out,byte_swap(),sz,buf,k.key_length(),false);
     return m_streamer_infos.stream(b);
   }
-  
+
 #if defined(__sun) && !defined(__linux__) && (__SUNPRO_CC > 0x420)
   int error_number() {return ::errno;}
   void reset_error_number() {::errno = 0;}

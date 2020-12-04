@@ -50,27 +50,27 @@ class BrachyDetectorConstructionI
 public:
   BrachyDetectorConstructionI();
   ~BrachyDetectorConstructionI();
-  void  ConstructIodium(G4VPhysicalVolume*);// Construct iodium source
-  void  CleanIodium();
+  void  ConstructIodine(G4VPhysicalVolume*);// Construct iodium source
+  void  CleanIodine();
 private:
-  G4Tubs* defaultTub;
-  G4Tubs* capsule;
-  G4Sphere* capsuleTip;
-  G4Tubs* iodiumCore;
-  G4LogicalVolume* defaultTubLog;
-  G4LogicalVolume* capsuleLog;
-  G4LogicalVolume* capsuleTipLog;
-  G4LogicalVolume* iodiumCoreLog; 
-  G4VPhysicalVolume* defaultTubPhys; 
-  G4VPhysicalVolume* capsulePhys;
-  G4VPhysicalVolume* capsuleTipPhys1;
-  G4VPhysicalVolume* capsuleTipPhys2;
-  G4VPhysicalVolume* iodiumCorePhys;
-  G4VisAttributes* simpleiodiumVisAtt;
-  G4VisAttributes* simpleCapsuleVisAtt;
-  G4VisAttributes* simpleCapsuleTipVisAtt;
+  G4Tubs* fDefaultTub;
+  G4Tubs* fCapsule;
+  G4Sphere* fCapsuleTip;
+  G4Tubs* fIodineCore;
+  G4LogicalVolume* fDefaultTubLog;
+  G4LogicalVolume* fCapsuleLog;
+  G4LogicalVolume* fCapsuleTipLog;
+  G4LogicalVolume* fIodineCoreLog; 
+  G4VPhysicalVolume* fDefaultTubPhys; 
+  G4VPhysicalVolume* fCapsulePhys;
+  G4VPhysicalVolume* fCapsuleTipPhys1;
+  G4VPhysicalVolume* fCapsuleTipPhys2;
+  G4VPhysicalVolume* fIodineCorePhys;
+  G4VisAttributes* fSimpleIodineVisAtt;
+  G4VisAttributes* fSimpleCapsuleVisAtt;
+  G4VisAttributes* fSimpleCapsuleTipVisAtt;
 
-  BrachyMaterial* pMaterial;   
+  BrachyMaterial* fMaterial;   
 };
 #endif
 

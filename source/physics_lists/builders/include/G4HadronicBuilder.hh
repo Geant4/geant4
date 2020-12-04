@@ -39,25 +39,51 @@
 
 class G4HadronicBuilder
 {
+private:
+
+  // generic methods, Glauber-Gribov cross sections are used.
+  // if the boolean "bert" is true (false) then Bertini cascade is (not) built;
+  // when "bert" is false, then FTFP is used down to zero kinetic energy.
+  
+  static void BuildFTFP_BERT(const std::vector<G4int>& particleList, 
+                             G4bool bert, const G4String& xsName);
+
+  static void BuildFTFQGSP_BERT(const std::vector<G4int>& particleList, 
+                                G4bool bert, const G4String& xsName);
+
+  static void BuildQGSP_FTFP_BERT(const std::vector<G4int>& particleList, 
+                                  G4bool bert, G4bool quasiElastic,
+                                  const G4String& xsName);
+
 public:
 
-  static void BuildFTFP_BERT(const std::vector<G4int>& particleList);
-
-  static void BuildQGSP_FTFP_BERT(const std::vector<G4int>& particleList, G4bool quasiElastic);
+  // methods to build elastic and inelastic physics per particle category
+  static void BuildElastic(const std::vector<G4int>& particleList);
 
   static void BuildHyperonsFTFP_BERT();
+
+  static void BuildHyperonsFTFQGSP_BERT();
 
   static void BuildHyperonsQGSP_FTFP_BERT(G4bool quasiElastic);
 
   static void BuildKaonsFTFP_BERT();
 
+  static void BuildKaonsFTFQGSP_BERT();
+
   static void BuildKaonsQGSP_FTFP_BERT(G4bool quasiElastic);
+
+  static void BuildAntiLightIonsFTFP();
+
+  //static void BuildAntiLightIonsQGSP_FTFP(G4bool quasiElastic);
 
   static void BuildBCHadronsFTFP_BERT();
 
+  static void BuildBCHadronsFTFQGSP_BERT();
+
   static void BuildBCHadronsQGSP_FTFP_BERT(G4bool quasiElastic);
+
+  // method to create some decays for heavy hadrons
+  static void BuildDecayTableForBCHadrons();
 };
 
 #endif
-
-

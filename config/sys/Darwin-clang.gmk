@@ -105,9 +105,13 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTMOC      := /usr/bin/moc
     endif
     ifndef QTFLAGS
-      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
-      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
+      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/Qt3DCore.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/Qt3DExtras.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/Qt3DRender.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBPATH
@@ -122,12 +126,20 @@ ifeq ($(G4SYSTEM),Darwin-clang)
         QTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui
       endif   
     endif
+    ifndef QT3DLIBS
+      ifdef QT_AS_FRAMEWORK
+        QT3DLIBS  := $(QTLIBPATH) -framework QtCore -framework QtGui
+        QT3DLIBS  += -framework QtWidgets -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
+      else
+        QT3DLIBS  := -L$(QTLPATH) -lQtCore -lQtGui
+        QT3DLIBS  += -lQtWidgets -lQt3DCore -lQt3DExtras -lQt3DRender
+      endif   
+    endif
     ifndef GLQTLIBS  
       ifdef QT_AS_FRAMEWORK
-        GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-        GLQTLIBS    += -framework QtOpenGL
+        GLQTLIBS  := $(QTLIBPATH) -framework QtCore -framework QtGui -framework QtOpenGL
       else
-        GLQTLIBS    := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+        GLQTLIBS  := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
       endif   
     endif
   else
@@ -140,12 +152,21 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTFLAGS   += -I $(QTLPATH)/QtGui.framework/Headers 
       QTFLAGS   += -I $(QTLPATH)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/Qt3DCore.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/Qt3DExtras.framework/Headers
+      QTFLAGS   += -I $(QTLPATH)/Qt3DRender.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtPrintSupport.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
        QTLIBS    += -framework QtWidgets -framework QtPrintSupport
+    endif   
+    ifndef QT3DLIBS
+       QT3DLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
+       QT3DLIBS    += -framework QtWidgets
+       QT3DLIBS    += -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
+       QT3DLIBS    += -framework QtPrintSupport
     endif   
     ifndef GLQTLIBS  
       GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui

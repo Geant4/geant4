@@ -44,9 +44,10 @@ const int kTAG_NTUPLE = 1004;   // This constant is defined in G4MPImanager
 //_____________________________________________________________________________
 G4RootMpiNtupleManager::G4RootMpiNtupleManager(
                           const G4AnalysisManagerState& state, 
+                          std::shared_ptr<G4NtupleBookingManager> bookingManager,
                           G4bool rowWise, G4bool rowMode,
                           tools::impi* impi, G4int mpiSize)
- : G4RootNtupleManager(state, 0, rowWise, rowMode),
+ : G4RootNtupleManager(state, bookingManager, 0, 0, rowWise, rowMode),
    fImpi(impi),
    fSlaveRanks(),
    fMainRank(0)
@@ -65,13 +66,17 @@ G4RootMpiNtupleManager::~G4RootMpiNtupleManager()
 // private methods
 //
 
-
 //_____________________________________________________________________________
-G4bool G4RootMpiNtupleManager::Send(G4int id, tools::wroot::ntuple* ntuple)
+G4bool G4RootMpiNtupleManager::Send(G4int id, RootNtupleDescription* ntupleDescription)
 {
 // Pack and send the main ntuple data to the slave ranks
 
   // G4cout << "Going to send main ntuple data " << G4endl;
+  // G4cout << "ntupleDescription: " << ntupleDescription << G4endl;
+  // G4cout << "ntuple: " << ntupleDescription->fNtuple << G4endl;
+
+  // Get ntuple
+  auto ntuple = ntupleDescription->fNtuple;
 
   // Get basket sizes    
   std::vector<tools::wroot::branch*> mainBranches;
@@ -81,12 +86,14 @@ G4bool G4RootMpiNtupleManager::Send(G4int id, tools::wroot::ntuple* ntuple)
     basketSizes.push_back((*it)->basket_size());
   }
 
-  auto ntupleFile = fFileManager->GetNtupleFile(id);
+  auto g4RootFile = fFileManager->CreateNtupleFile(ntupleDescription);
+  auto ntupleFile = std::get<0>(*g4RootFile);
+
   tools::uint32 basketSize = fFileManager->GetBasketSize();
   unsigned int basketEntries = fFileManager->GetBasketEntries();
 
   for ( auto slaveRank : fSlaveRanks ) {
-    G4cout << "Going to send main ntuple data to slave rank " << slaveRank << G4endl;
+    // G4cout << "Going to send main ntuple data to slave rank " << slaveRank << G4endl;
 
     fImpi->pack_reset();
     if ( ! fImpi->pack(id)) {
@@ -161,7 +168,7 @@ G4bool G4RootMpiNtupleManager::InitializeRanks()
     // Do not create ntuple if it is inactivated 
     if ( fState.GetIsActivation() && ( ! ntupleDescription->fActivation ) ) continue;
 
-    auto result = Send(counter++, ntupleDescription->fNtuple);
+    auto result = Send(counter++, ntupleDescription);
     finalResult = finalResult && result;
   }
 
@@ -292,11 +299,14 @@ G4bool G4RootMpiNtupleManager::WaitBuffer()
 //
 
 //_____________________________________________________________________________
-void G4RootMpiNtupleManager::CreateNtuplesFromBooking()
+void G4RootMpiNtupleManager::CreateNtuplesFromBooking(
+                   const std::vector<G4NtupleBooking*>& ntupleBookings)
 {
-  // Base class actions
-  // G4cout << "Going to call CreateNtuplesFromBooking from base class" << G4endl;
-  G4TNtupleManager<tools::wroot::ntuple>::CreateNtuplesFromBooking();
+  // G4cout << "G4RootMpiNtupleManager::CreateNtuplesFromBooking()" << G4endl;
+
+  // Call base class method
+  G4TNtupleManager<tools::wroot::ntuple,G4RootFile>::CreateNtuplesFromBooking(
+    ntupleBookings);
 
   // Initialize ranks
   if ( ! InitializeRanks() ) {
@@ -306,13 +316,13 @@ void G4RootMpiNtupleManager::CreateNtuplesFromBooking()
   // Go to wait buffer mode
   if ( ! WaitBuffer() ) {
     G4cerr << "WaitBuffer failed." << G4endl;
-  }
+  }  
 }
 
 //_____________________________________________________________________________
 G4bool G4RootMpiNtupleManager::Merge()
 {
-  G4cout << "G4RootMpiNtupleManager::Merge()" << G4endl;
+  // G4cout << "G4RootMpiNtupleManager::Merge()" << G4endl;
 
   auto finalResult = true;
 

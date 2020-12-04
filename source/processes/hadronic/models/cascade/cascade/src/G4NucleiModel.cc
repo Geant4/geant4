@@ -318,7 +318,7 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
 	   << G4endl;
   }
 
-  // If model already built, just return; otherwise intialize everything
+  // If model already built, just return; otherwise initialize everything
   if (a == A && z == Z) {
     if (verboseLevel > 1) G4cout << " model already generated" << z << G4endl;
     reset();

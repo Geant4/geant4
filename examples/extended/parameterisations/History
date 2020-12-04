@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 11th, 2020 B. Morgan (exParameterisations-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+Nov 3rd, 2020 B. Morgan (exParameterisations-V10-06-00)
+- Support same CMake version range as core Geant4
+
+Oct 5th, 2020 A. Zaborowska (exParameterisations-V10-06-00)
+- Add new Par03 example
+
 Nov 28th, 2019  I. Hrivnacova (exParameterisations-V10-05-01)
 --------------------
 - Updated category README files for reorganization of gflash examples.
@@ -39,9 +48,9 @@ Dec 13th, 2012 I. Hrivnacova (exParameterisations-V09-06-00)
 Sep 24th, 2012 I. Hrivnacova (exParameterisations-V09-05-00)
 --------------------
 - Updated CMakeLists.txt:
-  adding visualization, copying macros, install target and comment lines 
+  adding visualization, copying macros, install target and comment lines
 - Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters
 
 Nov 4th, 2005 J.Weng (exparam-V07-01-01)
 --------------------

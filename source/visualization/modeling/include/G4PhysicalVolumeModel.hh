@@ -95,7 +95,7 @@ public: // With description
      G4int iCopyNo = 0,
      G4int depth = 0,
      const G4Transform3D& transform = G4Transform3D(),
-     G4bool drawn = true):
+     G4bool drawn = false):
       fpPV(pPV),
       fCopyNo(iCopyNo),
       fNonCulledDepth(depth),
@@ -108,6 +108,10 @@ public: // With description
     G4bool GetDrawn() const {return fDrawn;}
     void SetDrawn(G4bool drawn) {fDrawn = drawn;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
+    G4bool operator!= (const G4PhysicalVolumeNodeID& right) const;
+    G4bool operator== (const G4PhysicalVolumeNodeID& right) const {
+      return !operator!= (right);
+    }
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;

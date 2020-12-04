@@ -9,11 +9,10 @@
 // HepLorentzRotation class.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/LorentzVector.h"
+
+#include <cmath>
+#include <iostream>
 
 namespace CLHEP  {
 

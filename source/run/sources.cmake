@@ -16,12 +16,12 @@ geant4_define_module(NAME G4run
     G4MatScanMessenger.hh
     G4MaterialScanner.hh
     G4PhysicsListHelper.hh
-	G4PhysicsListOrderingParameter.hh
+    G4PhysicsListOrderingParameter.hh
     G4PhysicsListWorkspace.hh
     G4Run.hh
     G4RunManager.hh
-	G4MTRunManager.hh
-	G4WorkerRunManager.hh
+    G4MTRunManager.hh
+    G4WorkerRunManager.hh
     G4RunManagerKernel.hh
     G4MTRunManagerKernel.hh
     G4WorkerRunManagerKernel.hh
@@ -42,7 +42,7 @@ geant4_define_module(NAME G4run
     G4WorkerThread.hh
     G4VUPLSplitter.hh
     rundefs.hh
-    G4RNGHelper.hh 
+    G4RNGHelper.hh
     G4PhysicsBuilderInterface.hh
   SOURCES
     G4AdjointPrimaryGeneratorAction.cc
@@ -52,13 +52,13 @@ geant4_define_module(NAME G4run
     G4MSSteppingAction.cc
     G4MatScanMessenger.cc
     G4MaterialScanner.cc
-	G4PhysicsListHelper.cc
-	G4PhysicsListOrderingParamater.cc
+    G4PhysicsListHelper.cc
+    G4PhysicsListOrderingParamater.cc
     G4PhysicsListWorkspace.cc
     G4Run.cc
     G4RunManager.cc
-	G4MTRunManager.cc
-	G4WorkerRunManager.cc
+    G4MTRunManager.cc
+    G4WorkerRunManager.cc
     G4RunManagerKernel.cc
     G4MTRunManagerKernel.cc
     G4WorkerRunManagerKernel.cc
@@ -76,7 +76,7 @@ geant4_define_module(NAME G4run
     G4VPhysicsConstructor.cc
     G4VUserPhysicsList.cc
     G4VUserPrimaryGeneratorAction.cc
-	G4WorkerThread.cc
+    G4WorkerThread.cc
     G4RNGHelper.cc
   GRANULAR_DEPENDENCIES
     G4cuts
@@ -122,3 +122,6 @@ geant4_define_module(NAME G4run
 )
 
 # List any source specific properties here
+if(GEANT4_BUILD_BUILTIN_BACKTRACE)
+  geant4_module_compile_definitions(G4run PRIVATE G4BT_DEBUG)
+endif()

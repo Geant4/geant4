@@ -23,51 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrRotationMatrix
+// G4tgrRotationMatrix
 //
 // Class description:
 //
 // Transient class of a rotation matrix.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrRotationMatrix_h
-#define G4tgrRotationMatrix_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrRotationMatrix_hh
+#define G4tgrRotationMatrix_hh 1
 
 #include <vector>
 
-enum G4RotMatInputType { rm3, rm6, rm9 };
+#include "globals.hh"
+
+enum G4RotMatInputType
+{
+  rm3,
+  rm6,
+  rm9
+};
 
 class G4tgrRotationMatrix
 {
-  public:   // with description
+  public:
 
     G4tgrRotationMatrix();
-   ~G4tgrRotationMatrix();
+    ~G4tgrRotationMatrix();
 
-    G4tgrRotationMatrix( const std::vector<G4String>& wl );
+    G4tgrRotationMatrix(const std::vector<G4String>& wl);
       // Construct the G4tgrRotationMatrix (fill its data members)
-      // interpreting the data in the list of words 'wl' 
+      // interpreting the data in the list of words 'wl'
 
     const G4String& GetName() { return theName; }
     std::vector<G4double>& GetValues() { return theValues; }
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrRotationMatrix& obj);
+
   private:
 
-    G4String theName;
+    G4String theName = "Rotation-Matrix";
     std::vector<G4double> theValues;
       // thetaX,phiX,thetaY,phiY,thetaZ,phiZ;
 
-    G4RotMatInputType theInputType;
+    G4RotMatInputType theInputType = rm9;
 };
 
 #endif

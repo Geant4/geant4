@@ -114,7 +114,7 @@ enum move_type {
   move_rotate_down,
   move_roll_plus,
   move_roll_minus,
-  
+
   move_translate_right,
   move_translate_left,
   move_up,
@@ -193,12 +193,12 @@ enum draw_type {
   draw_filled
 //  draw_invisible
 };
-  
+
 enum shade_type { //shade_model is a node.
   shade_flat = 0,
-  shade_smooth //Gouraud
+  shade_smooth
 };
-  
+
 enum solid_operation {
   solid_none,
   solid_union,

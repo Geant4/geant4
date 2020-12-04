@@ -1536,7 +1536,7 @@ void G4IonTable::clear()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2)
   {
-    G4cout << "G4IonTable::Clear() : number of Ion regsitered =  "; 
+    G4cout << "G4IonTable::Clear() : number of Ion registered =  "; 
     G4cout << fIonList->size() <<  G4endl;
   }
 #endif

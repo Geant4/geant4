@@ -41,7 +41,7 @@ inline void set_plotter_camera(float a_XSIZ,float a_YSIZ,float a_ZSIZ,
     if(aspect>=1) { //w>h
       // camera must match in height YSIZ. Adjust XSIZ.
       a_plotter.width.value(YSIZ * aspect);
-    } else { 
+    } else {
       // camera must match in width XSIZ. Adjust YSIZ.
       a_plotter.height.value(XSIZ / aspect);
     }
@@ -73,14 +73,14 @@ inline void set_plotter_camera(float a_XSIZ,float a_YSIZ,float a_ZSIZ,
       if(aspect<plotterAspect) {
         camera_height =  XSIZ / aspect;
       } else {
-        camera_height =  YSIZ;    
+        camera_height =  YSIZ;
       }
     } else if(pvp==pvp_adjust_viewport) {
-      camera_height =  YSIZ;    
-    } 
+      camera_height =  YSIZ;
+    }
   }
 
-  a_camera.height.value(camera_height);    
+  a_camera.height.value(camera_height);
   a_camera.znear.value(camera_znear);
   a_camera.zfar.value(camera_zfar);
 

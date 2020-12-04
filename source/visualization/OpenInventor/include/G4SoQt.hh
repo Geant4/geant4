@@ -47,6 +47,7 @@ class QString;
 
 class G4SoQt : public G4VInteractorManager {
 public:
+  virtual ~G4SoQt();
   static G4SoQt* getInstance();
   // FWJ no command line args for time being
   //  static G4SoQt* getInstance(int, char**, char*);
@@ -54,7 +55,8 @@ public:
   void* GetEvent();
   void FlushAndWaitExecution();
   void SecondaryLoop();
-  virtual ~G4SoQt();
+   // Added direct exit method
+  void ExitSecondaryLoop();
   bool IsExternalApp();
 
 private:

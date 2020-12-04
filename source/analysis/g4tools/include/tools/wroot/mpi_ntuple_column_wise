@@ -18,7 +18,7 @@ namespace wroot {
 
 class mpi_ntuple_column_wise : public base_pntuple_column_wise, public virtual impi_ntuple {
   typedef base_pntuple_column_wise parent;
-protected:  
+protected:
   class basket_add : public mpi_basket_add {
     typedef mpi_basket_add parent;
   public:
@@ -57,7 +57,7 @@ protected:
     }
   protected:
     branch& m_parallel_branch;
-    std::vector<icol*>& m_cols;  
+    std::vector<icol*>& m_cols;
     bool m_row_mode;
   };
 
@@ -76,7 +76,7 @@ public:
     tools_vforit(icol*,m_cols,it) (*it)->set_def();
     return true;
   }
-  
+
   virtual bool end_fill(impi& a_mpi,int a_dest,int a_tag) {
     uint32 _icol = 0;
     tools_vforit(icol*,m_cols,it) {
@@ -93,7 +93,7 @@ public:
       }
       if(!status) return false;
     }
-    
+
     a_mpi.pack_reset();
     if(!a_mpi.pack(mpi_protocol_end_fill())) return false;
     if(!a_mpi.pack(m_id)) return false;
@@ -102,7 +102,7 @@ public:
 
     return true;
   }
-  
+
 public:
   mpi_ntuple_column_wise(uint32 a_id,std::ostream& a_out,
                           bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
@@ -160,7 +160,7 @@ protected:
     a_mpi.pack_reset();
     if(!a_mpi.pack(mpi_protocol_baskets())) return false;
     if(!a_mpi.pack(a_id)) return false;
-    
+
     bool status = true;
     uint32 _icol = 0;
     tools_vforit(icol*,a_cols,it) {
@@ -174,10 +174,10 @@ protected:
       _icol++;
     }
     if(!status) return false;
-    
+
     return a_mpi.send_buffer(a_dest,a_tag);
   }
-  
+
   static bool flush_remaining_baskets(size_t& a_number,impi& a_mpi,int a_dest,int a_tag,uint32 a_id,std::vector<icol*>& a_cols) {
     a_number = 0;
     while(ready_to_flush_baskets(a_cols)) {
@@ -194,16 +194,16 @@ protected:
     }}
     return true;
   }
-protected:  
+protected:
   bool end_leaves(impi& a_mpi) const {
 #include "MPI_SET_MAX.icc"
     tools_vforcit(icol*,m_cols,pit) {
       base_leaf* _pleaf = (*pit)->get_leaf();
 
       bool set_done = false;
-      
+
       TOOLS_WROOT_MPI_NTUPLE_LEAF_STRING_SET_LENGTH_MAX
-      
+
       if(!set_done) {
         if(!a_mpi.pack((uint32)0)) return false;
         if(!a_mpi.pack((int)0)) return false;

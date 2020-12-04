@@ -29,7 +29,7 @@
 #ifndef G4PSDoseDeposit_h
 #define G4PSDoseDeposit_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,10 +38,12 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of dose deposit (x)
+//              vs. weight (y) (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSDoseDeposit : public G4VPrimitiveScorer
+class G4PSDoseDeposit : public G4VPrimitivePlotter
 {
  public: // with description
       G4PSDoseDeposit(G4String name, G4int depth=0);

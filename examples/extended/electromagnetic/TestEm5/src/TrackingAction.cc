@@ -137,7 +137,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     if (theta > 0.0) {
       G4double dteta  = analysisManager->GetH1Width(id);
       G4double unit   = analysisManager->GetH1Unit(id);    
-      G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+      G4double weight = unit/(twopi*std::sin(theta)*dteta);
       /*
       G4cout << "theta, dteta, unit, weight: " 
              << theta << "  "   
@@ -162,7 +162,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     if (theta > 0.0) {
       G4double dteta  = analysisManager->GetH1Width(id);
       G4double unit   = analysisManager->GetH1Unit(id);    
-      G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+      G4double weight = unit/(twopi*std::sin(theta)*dteta);
       weight *= (aTrack->GetKineticEnergy()/MeV); 
       analysisManager->FillH1(id,theta,weight);
     } 

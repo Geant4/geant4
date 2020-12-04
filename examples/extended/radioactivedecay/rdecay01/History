@@ -14,6 +14,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+03-11-20 mma  (rdecay01-V10-06-04)
+- add a comment in atomicDeexcitation.mac
+
+26-10-20 mma (rdecay01-V10-06-03)
+- README : add macros description
+     
+14-10-20 mma (rdecay01-V10-06-02)
+- add a comment in atomicDeexcitation.mac
+     
+06-10-20 mma (rdecay01-V10-06-01)
+- PhysicsList : add SetDeexcitationIgnoreCut(ARMflag)
+- add macro atomicDeexcitation.mac
+  
+05-08-20 A. Ribon (rdecay01-V10-06-00)
+- README, .README.txt, fullChain.mac, Cf238.mac, No252.mac,
+  timeWindowBiased.mac : migrated UI commands from "/grdm/..."
+  to "/process/had/rdm/..."
+
 26-11-19 I. Hrivnacova (rdecay01-V10-05-06)
 - Fixed formatting in .README.txt
 

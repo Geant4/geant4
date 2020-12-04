@@ -47,6 +47,7 @@
 #include "G4Threading.hh"
 #include "G4VUserTaskQueue.hh"
 #include "G4EnvironmentUtils.hh"
+#include "G4Profiler.hh"
 
 #include "PTL/TaskRunManager.hh"
 
@@ -58,6 +59,7 @@ class G4ScoringManager;
 class G4UserTaskInitialization;
 class G4UserTaskThreadInitialization;
 class G4WorkerTaskRunManager;
+class G4RunManagerFactory;
 
 //============================================================================//
 
@@ -65,12 +67,15 @@ class G4TaskRunManager
   : public G4MTRunManager
   , public PTL::TaskRunManager
 {
+  friend class G4RunManagerFactory;
  public:
+  // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
 
+ public:
   using InitializeSeedsCallback = std::function<G4bool(G4int, G4int&, G4int&)>;
-  using WorkerRunSet = std::set<G4WorkerTaskRunManager**>;
-  using RunTaskGroup = G4TaskGroup<void>;
-  using RunTaskGroupTBB = G4TBBTaskGroup<WorkerRunSet, G4WorkerTaskRunManager**>;
+  using RunTaskGroup            = G4TaskGroup<void>;
+  using RunTaskGroupTBB         = G4TBBTaskGroup<void>;
 
  public:
   // Parameters:
@@ -79,7 +84,7 @@ class G4TaskRunManager
   //      evtGrainsize  : the number of events per task
   G4TaskRunManager(G4bool useTBB = G4GetEnv<G4bool>("G4USE_TBB", false));
   G4TaskRunManager(G4VUserTaskQueue* taskQueue,
-                   G4bool useTBB        = G4GetEnv<G4bool>("G4USE_TBB", false),
+                   G4bool useTBB      = G4GetEnv<G4bool>("G4USE_TBB", false),
                    G4int evtGrainsize = 0);
   virtual ~G4TaskRunManager();
 
@@ -154,33 +159,17 @@ class G4TaskRunManager
   virtual void CreateAndStartWorkers() override;
   // Creates worker threads and signal to start
 
- private:
-  // grainsize
-  G4int eventGrainsize;
-  G4int numberOfEventsPerTask;
-  G4int numberOfTasks;
-
-  // List of workers run managers
-  // List of all workers run managers
-  CLHEP::HepRandomEngine* masterRNGEngine;
-  // Pointer to the mastet thread random engine
-
  protected:
   virtual void TerminateWorkers() override;
 
- private:
-  // Handling of master thread scoring worlds, access to it is needed by workers
-  G4TASK_DLL static G4ScoringManager* masterScM;
-  G4TASK_DLL static masterWorlds_t masterWorlds;
-  // Singleton implementing master thread behavior
-  static G4TaskRunManager* fMasterRM;
-  G4TaskRunManagerKernel* MTkernel;
-
  public:  // with description
-  static G4TaskRunManager* GetMasterRunManager();
+  static G4TaskRunManager* GetMasterRunManager()
+  {
+    auto* _rm = G4MTRunManager::GetMasterRunManager();
+    return dynamic_cast<G4TaskRunManager*>(_rm);
+  }
   // Returns the singleton instance of the run manager common to all threads
   // implementing the master behavior
-  static G4RunManagerKernel* GetMasterRunManagerKernel();
   static G4TaskRunManagerKernel* GetMTMasterRunManagerKernel();
   // Returns the singleton instance of the run manager kernel common to all
   // threads
@@ -211,12 +200,10 @@ class G4TaskRunManager
   {
     return WorkerActionRequest::UNDEFINED;
   }
-  virtual void NewActionRequest(WorkerActionRequest) override {}
 
  protected:
-  // WorkerActionRequest nextActionRequest;
-  // virtual void NewActionRequest( WorkerActionRequest newRequest );
-  virtual void AddEventTask(G4int, G4int);
+  virtual void NewActionRequest(WorkerActionRequest) override {}
+  virtual void AddEventTask(G4int);
 
  public:
   inline void SetInitializeSeedsCallback(InitializeSeedsCallback f)
@@ -228,13 +215,22 @@ class G4TaskRunManager
   virtual void AbortRun(G4bool softAbort = false) override;
   virtual void AbortEvent() override;
 
+ private:
+  // grainsize
+  bool workersStarted                     = false;
+  G4int eventGrainsize                    = 0;
+  G4int numberOfEventsPerTask             = -1;
+  G4int numberOfTasks                     = -1;
+  CLHEP::HepRandomEngine* masterRNGEngine = nullptr;
+  // Pointer to the master thread random engine
+  G4TaskRunManagerKernel* MTkernel = nullptr;
+
  protected:
   // Barriers: synch points between master and workers
-  RunTaskGroup* workTaskGroup       = nullptr;
-  RunTaskGroupTBB* workTaskGroupTBB = nullptr;
+  RunTaskGroup* workTaskGroup = nullptr;
 
   // aliases to inherited member values
-  G4bool& poolInitialized        = PTL::TaskRunManager::m_is_initialized;
+  G4bool& poolInitialized      = PTL::TaskRunManager::m_is_initialized;
   G4ThreadPool*& threadPool    = PTL::TaskRunManager::m_thread_pool;
   G4VUserTaskQueue*& taskQueue = PTL::TaskRunManager::m_task_queue;
   G4TaskManager*& taskManager  = PTL::TaskRunManager::m_task_manager;

@@ -34,7 +34,7 @@ public:
     POINTBLOCK* curPtBlock;
     cmem_free(m_pETEs);
     m_pETEn = 0;
-    for(curPtBlock = m_FirstPtBlock.next; --m_numAllocPtBlocks >= 0;){ 
+    for(curPtBlock = m_FirstPtBlock.next; --m_numAllocPtBlocks >= 0;){
         POINTBLOCK* tmpPtBlock;
         tmpPtBlock  = curPtBlock->next;
         cmem_free(curPtBlock);
@@ -82,14 +82,14 @@ public:
 	 ((pts[0].x == pts[1].x) &&
 	  (pts[1].y == pts[2].y) &&
 	  (pts[2].x == pts[3].x) &&
-	  (pts[3].y == pts[0].y)))) 
+	  (pts[3].y == pts[0].y))))
       {
         int  xmin,xmax,ymin,ymax;
 	xmin = (int)mn(pts[0].x, pts[2].x);
 	ymin = (int)mn(pts[0].y, pts[2].y);
 	xmax = (int)mx(pts[0].x, pts[2].x);
 	ymax = (int)mx(pts[0].y, pts[2].y);
-	if ((xmin != xmax) && (ymin != ymax)) 
+	if ((xmin != xmax) && (ymin != ymax))
 	    {
               for(y=ymin;y<=ymax;y++)  a_proc(a_tag,xmin  ,xmax  ,y);
 	    }
@@ -101,7 +101,7 @@ public:
 	cmem_free(m_pETEs);
 	m_pETEn = Count;
 	m_pETEs = cmem_alloc<EdgeTableEntry>(m_pETEn);
-	if(m_pETEs==NULL)  
+	if(m_pETEs==NULL)
 	  {
 	    m_pETEn = 0;
 	    return;
@@ -114,9 +114,9 @@ public:
 
     curPtBlock     = &m_FirstPtBlock;
     pts            =  m_FirstPtBlock.pts;
-     
 
-    if (rule==0) 
+
+    if (rule==0)
       {
         /*
          *  for each scanline
@@ -126,14 +126,14 @@ public:
              *  Add a new edge to the active edge table when we
              *  get to the next edge.
              */
-            if (pSLL != NULL && y == pSLL->scanline) 
+            if (pSLL != NULL && y == pSLL->scanline)
 	      {
                 LoadAET(&AET, pSLL->edgelist);
                 pSLL = pSLL->next;
 	      }
             pPrevAET = &AET;
             pAET = AET.next;
- 
+
             /*
              *  for each active edge
              */
@@ -142,12 +142,12 @@ public:
                 pts->y = y;
                 pts++;
                 iPts++;
- 
+
                 /*
                  *  send out the buffer
                  */
-                if (iPts == NUMPTSTOBUFFER) 
-		  { 
+                if (iPts == NUMPTSTOBUFFER)
+		  {
                     if(numFullPtBlocks < m_numAllocPtBlocks)
                       {
                         curPtBlock = curPtBlock->next;
@@ -155,7 +155,7 @@ public:
 		    else
 		      {
 			POINTBLOCK* tmpPtBlock = cmem_alloc<POINTBLOCK>(1);
-                        if(tmpPtBlock==NULL)  
+                        if(tmpPtBlock==NULL)
 			  {
 			    FreeStorage(SLLBlock.next);
 			    return;
@@ -175,7 +175,7 @@ public:
             (void) InsertAndSort(&AET);
         }
       }
-    else 
+    else
       {
         /*
          *  for each scanline
@@ -185,7 +185,7 @@ public:
              *  Add a new edge to the active edge table when we
              *  get to the next edge.
              */
-            if (pSLL != NULL && y == pSLL->scanline) 
+            if (pSLL != NULL && y == pSLL->scanline)
 	      {
                 LoadAET(&AET, pSLL->edgelist);
                 ComputeWAET(&AET);
@@ -194,7 +194,7 @@ public:
             pPrevAET = &AET;
             pAET = AET.next;
             pWETE = pAET;
- 
+
             /*
              *  for each active edge
              */
@@ -208,12 +208,12 @@ public:
                     pts->y = y;
                     pts++;
 		    iPts++;
- 
+
                     /*
                      *  send out the buffer
                      */
-		    if (iPts == NUMPTSTOBUFFER) 
-		      { 
+		    if (iPts == NUMPTSTOBUFFER)
+		      {
 			if(numFullPtBlocks < m_numAllocPtBlocks)
 			  {
 			    curPtBlock = curPtBlock->next;
@@ -221,7 +221,7 @@ public:
 			else
 			  {
 			    POINTBLOCK* tmpPtBlock = cmem_alloc<POINTBLOCK>(1);
-                            if(tmpPtBlock==NULL)  
+                            if(tmpPtBlock==NULL)
 			      {
 				FreeStorage(SLLBlock.next);
 				return;
@@ -239,19 +239,19 @@ public:
                 }
                 EVALUATEEDGEWINDING(pAET, pPrevAET, y, fixWAET)
             }
- 
+
             /*
              *  recompute the winding active edge table if
              *  we just resorted or have exited an edge.
              */
-            if ( (InsertAndSort(&AET)!=0) || (fixWAET!=0) ) 
+            if ( (InsertAndSort(&AET)!=0) || (fixWAET!=0) )
 	      {
                 ComputeWAET(&AET);
                 fixWAET = 0;
 	      }
         }
       }
-    FreeStorage   (SLLBlock.next);	
+    FreeStorage   (SLLBlock.next);
 
     ScanPoints (numFullPtBlocks, iPts, &m_FirstPtBlock,a_proc,a_tag);
 
@@ -265,11 +265,11 @@ protected:
     POINTBLOCK* CurPtBlock;
     int         i;
     CurPtBlock = FirstPtBlock;
-    for ( ; numFullPtBlocks >= 0; numFullPtBlocks--) 
+    for ( ; numFullPtBlocks >= 0; numFullPtBlocks--)
       {
         /* the loop uses 2 points per iteration */
         i = numFullPtBlocks!=0 ? NUMPTSTOBUFFER >> 1 : iCurPtBlock >> 1 ;
-        for (pts = CurPtBlock->pts; i--; pts += 2) 
+        for (pts = CurPtBlock->pts; i--; pts += 2)
   	{
   	  a_proc (a_tag,(int)(pts->x),(int)pts[1].x,(int)pts->y);
   	}

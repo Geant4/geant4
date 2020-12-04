@@ -62,7 +62,7 @@ public:
   virtual bool read_std_vec_vec(std_vec_vec_string_t&) = 0;
 public: //helpers
   template <class T>
-  bool read_std_vec(std::vector<T>& a_x) { 
+  bool read_std_vec(std::vector<T>& a_x) {
     uint32 n;
     T* v;
     if(!read_vec(n,v)) return false;

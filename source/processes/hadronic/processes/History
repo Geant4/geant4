@@ -15,7 +15,28 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-27 April 2020 V/ Grichine (hadr-proc-V10-06-01)
+24 July 2020 Alberto Ribon (hadr-proc-V10-06-02)
+------------------------------------------------
+- Removed the inelastic processes for heavy hadron - nucleus interactions:
+  G4DMesonMinusInelasticProcess,  G4DMesonPlusInelasticProcess,
+  G4DMesonZeroInelasticProcess,   G4AntiDMesonZeroInelasticProcess,
+  G4DsMesonMinusInelasticProcess, G4DsMesonPlusInelasticProcess,
+  G4BMesonMinusInelasticProcess,  G4BMesonPlusInelasticProcess,
+  G4BMesonZeroInelasticProcess,   G4AntiBMesonZeroInelasticProcess,
+  G4BsMesonZeroInelasticProcess,  G4AntiBsMesonZeroInelasticProcess,
+  G4BcMesonMinusInelasticProcess, G4BcMesonPlusInelasticProcess,
+  G4LambdacPlusInelasticProcess,  G4AntiLambdacPlusInelasticProcess,
+  G4LambdabInelasticProcess,      G4AntiLambdabInelasticProcess,
+  G4XicPlusInelasticProcess,      G4AntiXicPlusInelasticProcess,
+  G4XicZeroInelasticProcess,      G4AntiXicZeroInelasticProcess,
+  G4XibMinusInelasticProcess,     G4AntiXibMinusInelasticProcess,
+  G4XibZeroInelasticProcess,      G4AntiXibZeroInelasticProcess,
+  G4OmegacZeroInelasticProcess,   G4AntiOmegacZeroInelasticProcess,
+  G4OmegabMinusInelasticProcess,  G4AntiOmegabMinusInelasticProcess.
+  These are no longer necessary because similar inelastic processes
+  are created by G4HadronicBuilder.
+
+27 April 2020 Vladimir Grichine (hadr-proc-V10-06-01)
 ----------------------------------------------------------
 - G4MuNeutrinoNucleusProcess, G4ElNeutrinoNucleusProcess - extension to anti_nu_mu, nu_e, and anti_nu_e 
 

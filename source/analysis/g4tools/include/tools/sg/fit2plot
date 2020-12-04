@@ -46,7 +46,7 @@ public: //plottable
     std::vector<std::string> ws;
     words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-  
+
     bool show_fit_ndf = false;
    {for(it=ws.begin();it!=ws.end();++it) {
       if((*it)=="fit_ndf") {show_fit_ndf = true;break;}
@@ -62,14 +62,14 @@ public: //plottable
         a_sinfos += "Name";
         a_sinfos += f_lf;
         a_sinfos += m_name;
-  
+
       } else if((*it)=="fit_quality") {
         if(show_fit_ndf) {
           if(a_sinfos.size()) a_sinfos += f_lf;
           a_sinfos += "[h]^2! / ndf";
-          a_sinfos += f_lf; 
+          a_sinfos += f_lf;
           if(!numas<double>(m_output[0],a_sinfos)){}
-          a_sinfos += " / "; 
+          a_sinfos += " / ";
           if(!numas<double>(m_output[1],a_sinfos)){}
         } else { //show chi2 only.
           if(a_sinfos.size()) a_sinfos += f_lf;
@@ -130,7 +130,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   fit2plot& operator=(const fit2plot& a_from){
     m_names = a_from.m_names;
     m_output = a_from.m_output;

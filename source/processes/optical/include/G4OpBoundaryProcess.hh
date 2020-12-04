@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Boundary Process Class Definition
 ////////////////////////////////////////////////////////////////////////
@@ -37,9 +37,9 @@
 // Created:     1997-06-18
 // Modified:    2005-07-28 add G4ProcessType to constructor
 //              1999-10-29 add method and class descriptors
-//              1999-10-10 - Fill NewMomentum/NewPolarization in 
+//              1999-10-10 - Fill NewMomentum/NewPolarization in
 //                           DoAbsorption. These members need to be
-//                           filled since DoIt calls 
+//                           filled since DoIt calls
 //                           aParticleChange.SetMomentumChange etc.
 //                           upon return (thanks to: Clark McGrew)
 //              2006-11-04 - add capability of calculating the reflectivity
@@ -69,48 +69,69 @@
 #include "G4OpticalSurface.hh"
 #include "G4OpticalPhoton.hh"
 
-enum G4OpBoundaryProcessStatus {
+enum G4OpBoundaryProcessStatus
+{
   Undefined,
-  Transmission,                    FresnelRefraction,
-  FresnelReflection,               TotalInternalReflection,
-  LambertianReflection,            LobeReflection,
-  SpikeReflection,                 BackScattering,
-  Absorption,                      Detection,
-  NotAtBoundary,                   SameMaterial, 
-  StepTooSmall,                    NoRINDEX,
-  PolishedLumirrorAirReflection,   PolishedLumirrorGlueReflection,
-  PolishedAirReflection,           PolishedTeflonAirReflection,
-  PolishedTiOAirReflection,        PolishedTyvekAirReflection,
-  PolishedVM2000AirReflection,     PolishedVM2000GlueReflection,
-  EtchedLumirrorAirReflection,     EtchedLumirrorGlueReflection,
-  EtchedAirReflection,             EtchedTeflonAirReflection,
-  EtchedTiOAirReflection,          EtchedTyvekAirReflection,
-  EtchedVM2000AirReflection,       EtchedVM2000GlueReflection,
-  GroundLumirrorAirReflection,     GroundLumirrorGlueReflection,
-  GroundAirReflection,             GroundTeflonAirReflection,
-  GroundTiOAirReflection,          GroundTyvekAirReflection,
-  GroundVM2000AirReflection,       GroundVM2000GlueReflection,
-  Dichroic };
+  Transmission,
+  FresnelRefraction,
+  FresnelReflection,
+  TotalInternalReflection,
+  LambertianReflection,
+  LobeReflection,
+  SpikeReflection,
+  BackScattering,
+  Absorption,
+  Detection,
+  NotAtBoundary,
+  SameMaterial,
+  StepTooSmall,
+  NoRINDEX,
+  PolishedLumirrorAirReflection,
+  PolishedLumirrorGlueReflection,
+  PolishedAirReflection,
+  PolishedTeflonAirReflection,
+  PolishedTiOAirReflection,
+  PolishedTyvekAirReflection,
+  PolishedVM2000AirReflection,
+  PolishedVM2000GlueReflection,
+  EtchedLumirrorAirReflection,
+  EtchedLumirrorGlueReflection,
+  EtchedAirReflection,
+  EtchedTeflonAirReflection,
+  EtchedTiOAirReflection,
+  EtchedTyvekAirReflection,
+  EtchedVM2000AirReflection,
+  EtchedVM2000GlueReflection,
+  GroundLumirrorAirReflection,
+  GroundLumirrorGlueReflection,
+  GroundAirReflection,
+  GroundTeflonAirReflection,
+  GroundTiOAirReflection,
+  GroundTyvekAirReflection,
+  GroundVM2000AirReflection,
+  GroundVM2000GlueReflection,
+  Dichroic
+};
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
-
-public:
-
+ public:
   explicit G4OpBoundaryProcess(const G4String& processName = "OpBoundary",
-                               G4ProcessType type = fOptical);
+                               G4ProcessType type          = fOptical);
   virtual ~G4OpBoundaryProcess();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
+  virtual G4bool IsApplicable(
+    const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable' only for an optical photon.
 
-  virtual G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition* condition) override;
+  virtual G4double GetMeanFreePath(const G4Track&, G4double,
+                                   G4ForceCondition* condition) override;
   // Returns infinity; i. e. the process does not limit the step, but sets the
   // 'Forced' condition for the DoIt to be invoked at every step. However, only
   // at a boundary will any action be taken.
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                  const G4Step&  aStep) override;
+                                  const G4Step& aStep) override;
   // This is the method implementing boundary processes.
 
   virtual G4OpBoundaryProcessStatus GetStatus() const;
@@ -119,15 +140,18 @@ public:
   virtual void SetInvokeSD(G4bool);
   // Set flag for call to InvokeSD method.
 
-private:
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
-  G4OpBoundaryProcess(const G4OpBoundaryProcess &right) = delete;
-  G4OpBoundaryProcess& operator=(const G4OpBoundaryProcess &right) = delete;
+  virtual void Initialise();
+
+ private:
+  G4OpBoundaryProcess(const G4OpBoundaryProcess& right) = delete;
+  G4OpBoundaryProcess& operator=(const G4OpBoundaryProcess& right) = delete;
 
   G4bool G4BooleanRand(const G4double prob) const;
 
   G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
-                               const G4ThreeVector&  Normal) const;
+                               const G4ThreeVector& Normal) const;
 
   void DielectricMetal();
   void DielectricDielectric();
@@ -144,10 +168,8 @@ private:
   G4double GetIncidentAngle();
   // Returns the incident angle of optical photon
 
-  G4double GetReflectivity(G4double E1_perp,
-                           G4double E1_parl,
-                           G4double incidentangle,
-                           G4double RealRindex,
+  G4double GetReflectivity(G4double E1_perp, G4double E1_parl,
+                           G4double incidentangle, G4double RealRindex,
                            G4double ImaginaryRindex);
   // Returns the Reflectivity on a metalic surface
 
@@ -205,81 +227,77 @@ private:
 
   G4bool fInvokeSD;
 
-  size_t idx_rindex1 = 0;
+  size_t idx_rindex1        = 0;
   size_t idx_rindex_surface = 0;
-  size_t idx_reflect = 0;
-  size_t idx_eff = 0;
-  size_t idx_trans = 0;
-  size_t idx_lobe = 0;
-  size_t idx_spike = 0;
-  size_t idx_back = 0;
-  size_t idx_rindex2 = 0;
-  size_t idx_groupvel = 0;
-  size_t idx_rrindex = 0;
-  size_t idx_irindex = 0;
-
+  size_t idx_reflect        = 0;
+  size_t idx_eff            = 0;
+  size_t idx_trans          = 0;
+  size_t idx_lobe           = 0;
+  size_t idx_spike          = 0;
+  size_t idx_back           = 0;
+  size_t idx_rindex2        = 0;
+  size_t idx_groupvel       = 0;
+  size_t idx_rrindex        = 0;
+  size_t idx_irindex        = 0;
 };
 
 ////////////////////
 // Inline methods
 ////////////////////
 
-inline
-G4bool G4OpBoundaryProcess::G4BooleanRand(const G4double prob) const
+inline G4bool G4OpBoundaryProcess::G4BooleanRand(const G4double prob) const
 {
   /* Returns a random boolean variable with the specified probability */
   return (G4UniformRand() < prob);
 }
 
-inline
-G4bool G4OpBoundaryProcess::IsApplicable(const G4ParticleDefinition&
-                                                       aParticleType)
+inline G4bool G4OpBoundaryProcess::IsApplicable(
+  const G4ParticleDefinition& aParticleType)
 {
   return (&aParticleType == G4OpticalPhoton::OpticalPhoton());
 }
 
-inline
-G4OpBoundaryProcessStatus G4OpBoundaryProcess::GetStatus() const
+inline G4OpBoundaryProcessStatus G4OpBoundaryProcess::GetStatus() const
 {
   return theStatus;
 }
 
-inline
-void G4OpBoundaryProcess::SetInvokeSD(G4bool flag)
-{
-  fInvokeSD = flag;
-}
+inline void G4OpBoundaryProcess::SetInvokeSD(G4bool flag) { fInvokeSD = flag; }
 
-inline
-void G4OpBoundaryProcess::ChooseReflection()
+inline void G4OpBoundaryProcess::ChooseReflection()
 {
   G4double rand = G4UniformRand();
-  if (rand >= 0.0 && rand < prob_ss) {
-    theStatus = SpikeReflection;
+  if(rand >= 0.0 && rand < prob_ss)
+  {
+    theStatus      = SpikeReflection;
     theFacetNormal = theGlobalNormal;
   }
-  else if (rand >= prob_ss && rand <= prob_ss+prob_sl) {
+  else if(rand >= prob_ss && rand <= prob_ss + prob_sl)
+  {
     theStatus = LobeReflection;
   }
-  else if (rand > prob_ss+prob_sl && rand < prob_ss+prob_sl+prob_bs) {
+  else if(rand > prob_ss + prob_sl && rand < prob_ss + prob_sl + prob_bs)
+  {
     theStatus = BackScattering;
   }
-  else {
+  else
+  {
     theStatus = LambertianReflection;
   }
 }
 
-inline
-void G4OpBoundaryProcess::DoAbsorption()
+inline void G4OpBoundaryProcess::DoAbsorption()
 {
   theStatus = Absorption;
 
-  if (G4BooleanRand(theEfficiency)) {
+  if(G4BooleanRand(theEfficiency))
+  {
     // EnergyDeposited =/= 0 means: photon has been detected
     theStatus = Detection;
     aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
   }
-  else {
+  else
+  {
     aParticleChange.ProposeLocalEnergyDeposit(0.0);
   }
 
@@ -289,31 +307,36 @@ void G4OpBoundaryProcess::DoAbsorption()
   aParticleChange.ProposeTrackStatus(fStopAndKill);
 }
 
-inline
-void G4OpBoundaryProcess::DoReflection()
+inline void G4OpBoundaryProcess::DoReflection()
 {
-  if (theStatus == LambertianReflection) {
-    NewMomentum = G4LambertianRand(theGlobalNormal);
+  if(theStatus == LambertianReflection)
+  {
+    NewMomentum    = G4LambertianRand(theGlobalNormal);
     theFacetNormal = (NewMomentum - OldMomentum).unit();
   }
-  else if (theFinish == ground) {
+  else if(theFinish == ground)
+  {
     theStatus = LobeReflection;
-    if (fRealRIndexMPV && fImagRIndexMPV) {
+    if(fRealRIndexMPV && fImagRIndexMPV)
+    {
       //
-    } else {
-       theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
+    }
+    else
+    {
+      theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
     }
     G4double PdotN = OldMomentum * theFacetNormal;
-    NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+    NewMomentum    = OldMomentum - (2. * PdotN) * theFacetNormal;
   }
-  else {
-    theStatus = SpikeReflection;
+  else
+  {
+    theStatus      = SpikeReflection;
     theFacetNormal = theGlobalNormal;
     G4double PdotN = OldMomentum * theFacetNormal;
-    NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+    NewMomentum    = OldMomentum - (2. * PdotN) * theFacetNormal;
   }
-  G4double EdotN = OldPolarization * theFacetNormal;
-  NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
+  G4double EdotN  = OldPolarization * theFacetNormal;
+  NewPolarization = -OldPolarization + (2. * EdotN) * theFacetNormal;
 }
 
 #endif /* G4OpBoundaryProcess_h */

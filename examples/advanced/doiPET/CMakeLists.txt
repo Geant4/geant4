@@ -1,8 +1,10 @@
-
 #----------------------------------------------------------------------------
 # Setup the project
 #
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(doiPET)
 
 #----------------------------------------------------------------------------
@@ -17,7 +19,7 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
-# Setup of ROOT ANALYSIS : optional. 
+# Setup of ROOT ANALYSIS : optional.
 option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
 if(WITH_ANALYSIS_USE)
 add_definitions(-DUSEROOT)
@@ -37,7 +39,7 @@ find_package(ROOT REQUIRED)
 if(WITH_ANALYSIS_USE)
 	EXECUTE_PROCESS(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
-endif(WITH_ANALYSIS_USE) 
+endif(WITH_ANALYSIS_USE)
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -45,8 +47,8 @@ endif(WITH_ANALYSIS_USE)
 #file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 #file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/shared/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR}/shared/include
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc
@@ -77,8 +79,8 @@ set(DOIPET_SCRIPTS
   run_imageQualityPhantom_smallAnimal.mac
   run_NECR.mac
   run_spatialResolution.mac
-  run_sensitivity.mac 
-  run_normalization.mac 
+  run_sensitivity.mac
+  run_normalization.mac
   run.mac
   inputParameter.txt
   )

@@ -123,6 +123,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_MULTITHREADING "no")
   endif()
 
+  # - PHP_AS_HP
+  if(GEANT4_BUILD_PHP_AS_HP)
+    set(G4_BUILTWITH_PHP_AS_HP "yes")
+  else()
+    set(G4_BUILTWITH_PHP_AS_HP "no")
+  endif()
+
   # - Smart Stack
   if(GEANT4_USE_SMARTSTACK)
     set(G4_BUILTWITH_SMARTSTACK "yes")
@@ -222,7 +229,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_FREETYPE "no")
   endif()
 
-  # - Freetype
+  # - HDF5
   if(GEANT4_USE_HDF5)
     set(G4_BUILTWITH_HDF5 "yes")
   else()
@@ -232,7 +239,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
-    set(G4_QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+    set(G4_QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS} ${Qt53DCore_INCLUDE_DIRS} ${Qt53DExtras_INCLUDE_DIRS} ${Qt53DRender_INCLUDE_DIRS})
 
     list(REMOVE_DUPLICATES G4_QT_INCLUDE_DIRS)
     if(_cxx_compiler_dirs)

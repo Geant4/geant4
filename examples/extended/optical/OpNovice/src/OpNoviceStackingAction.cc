@@ -32,38 +32,40 @@
 
 #include "OpNoviceStackingAction.hh"
 
-#include "G4VProcess.hh"
+#include "OpNoviceRun.hh"
 
+#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "G4RunManager.hh"
 #include "G4Track.hh"
-#include "G4ios.hh"
+#include "G4VProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNoviceStackingAction::OpNoviceStackingAction()
-  : G4UserStackingAction(),
-    fScintillationCounter(0), fCerenkovCounter(0)
+  : G4UserStackingAction()
+  , fScintillationCounter(0)
+  , fCerenkovCounter(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceStackingAction::~OpNoviceStackingAction()
-{}
+OpNoviceStackingAction::~OpNoviceStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack
-OpNoviceStackingAction::ClassifyNewTrack(const G4Track * aTrack)
+G4ClassificationOfNewTrack OpNoviceStackingAction::ClassifyNewTrack(
+  const G4Track* aTrack)
 {
   if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  { // particle is optical photon
-    if(aTrack->GetParentID()>0)
-    { // particle is secondary
+  {  // particle is optical photon
+    if(aTrack->GetParentID() > 0)
+    {  // particle is secondary
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation")
-        fScintillationCounter++;
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
-        fCerenkovCounter++;
+        ++fScintillationCounter;
+      else if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
+        ++fCerenkovCounter;
     }
   }
   return fUrgent;
@@ -73,10 +75,15 @@ OpNoviceStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 
 void OpNoviceStackingAction::NewStage()
 {
-  G4cout << "Number of Scintillation photons produced in this event : "
-         << fScintillationCounter << G4endl;
-  G4cout << "Number of Cerenkov photons produced in this event : "
-         << fCerenkovCounter << G4endl;
+  // G4cout << "Number of Scintillation photons produced in this event : "
+  //       << fScintillationCounter << G4endl;
+  // G4cout << "Number of Cerenkov photons produced in this event : "
+  //       << fCerenkovCounter << G4endl;
+
+  OpNoviceRun* run = static_cast<OpNoviceRun*>(
+    G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->AddScintillation((G4double) fScintillationCounter);
+  run->AddCerenkov((G4double) fCerenkovCounter);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,7 +91,7 @@ void OpNoviceStackingAction::NewStage()
 void OpNoviceStackingAction::PrepareNewEvent()
 {
   fScintillationCounter = 0;
-  fCerenkovCounter = 0;
+  fCerenkovCounter      = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

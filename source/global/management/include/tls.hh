@@ -38,7 +38,7 @@
 #  define G4_TLS 1
 
 #  if defined(G4MULTITHREADED)
-#    if(defined(__MACH__) && defined(__clang__) && defined(__x86_64__)) ||     \
+#    if(defined(__MACH__) && defined(__clang__)) ||                            \
       (defined(__linux__) && defined(__clang__))
 #      define G4ThreadLocalStatic static thread_local
 #      define G4ThreadLocal thread_local

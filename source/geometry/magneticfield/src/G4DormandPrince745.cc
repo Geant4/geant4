@@ -57,6 +57,13 @@
 
 using namespace field_utils;
 
+const G4String G4DormandPrince745::gStepperType =
+     G4String("G4DormandPrince745: 5th order");
+
+const G4String G4DormandPrince745::gStepperDescription= G4String(
+   "Embedeed 5th order Runge-Kutta stepper - 7 stages, FSAL, Interpolating.");
+
+
 G4DormandPrince745::G4DormandPrince745(G4EquationOfMotion* equation,
                                        G4int noIntegrationVariables)
     : G4MagIntegratorStepper(equation, noIntegrationVariables)
@@ -71,7 +78,7 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
                                        G4double dydxOutput[])
 {
   Stepper(yInput, dydx, hstep, yOutput, yError);
-  copy(dydxOutput, ak7);
+  field_utils::copy(dydxOutput, ak7);
 }
 
 // Stepper

@@ -70,6 +70,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "Randomize.hh"
 #include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4EventManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
@@ -79,17 +80,14 @@
 #include <sstream>
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#include "G4Threading.hh"
-#include "G4AutoLock.hh"
-#include "G4GeometryWorkspace.hh"
-#include "G4SolidsWorkspace.hh"
-#include <deque>
-#include <typeinfo>
-#ifdef G4VIS_USE_STD11
-#include <chrono>
-#include <thread>
-#endif
+#  include "G4Threading.hh"
+#  include "G4AutoLock.hh"
+#  include "G4GeometryWorkspace.hh"
+#  include "G4SolidsWorkspace.hh"
+#  include <deque>
+#  include <typeinfo>
+#  include <chrono>
+#  include <thread>
 #endif
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -110,7 +108,6 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fNoOfEventsDrawnThisRun   (0),
   fNKeepRequests            (0),
   fEventKeepingSuspended    (false),
-  fKeptLastEvent            (false),
   fDrawEventOnlyIfToBeKept  (false),
   fpRequestedEvent          (0),
   fReviewingKeptEvents      (false),
@@ -183,12 +180,10 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   //   (c) invoke the Initialise() method of the subclass.
   // For example:
   //   ...
-  // #ifdef G4VIS_USE
   //   // Instantiate and initialise Visualization Manager.
   //   G4VisManager* visManager = new G4VisExecutive;
   //   visManager -> SetVerboseLevel (Verbose);
   //   visManager -> Initialise ();
-  // #endif
   //   // (Don't forget to delete visManager;)
   //   ...
 
@@ -271,11 +266,9 @@ void G4VisManager::Initialise () {
       "\n  Also you should implement RegisterModelFactories()."
       "\n  See visualization/management/include/G4VisExecutive.hh/icc, for example."
       "\n  In your main() you will have something like:"
-      "\n  #ifdef G4VIS_USE"
       "\n    G4VisManager* visManager = new G4VisExecutive;"
       "\n    visManager -> SetVerboseLevel (Verbose);"
       "\n    visManager -> Initialize ();"
-      "\n  #endif"
       "\n  (Don't forget to delete visManager;)"
       "\n"
 	 << G4endl;
@@ -1047,13 +1040,8 @@ void G4VisManager::Draw (const G4VTrajectory& traj) {
   // A trajectory needs a trajectories model to provide G4Atts, etc.
   static G4TrajectoriesModel trajectoriesModel;
   trajectoriesModel.SetCurrentTrajectory(&traj);
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    runManager = G4MTRunManager::GetMasterRunManager();
-  }
-#endif
-  const G4Run* currentRun = runManager->GetCurrentRun();
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+  const G4Run* currentRun  = runManager->GetCurrentRun();
   if (currentRun) {
     trajectoriesModel.SetRunID(currentRun->GetRunID());
   }
@@ -1329,35 +1317,38 @@ void G4VisManager::NotifyHandlers () {
     G4cout << "G4VisManager::NotifyHandler() called." << G4endl;
   }
 
-  // Check scenes.
-  G4SceneList& sceneList = fSceneList;
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    G4Scene* pScene = sceneList [iScene];
-    std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
-    
-    if (modelList.size ()) {
-      pScene->CalculateExtent();
-      G4UImanager::GetUIpointer () ->
-        ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
-    }
-  }
+  if (IsValidView()) {
 
-  // Check the manager's current scene...
-  if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
-    if (fVerbosity >= warnings) {
-      G4cout << "WARNING: The current scene \""
-	     << fpScene -> GetName ()
-	     << "\" has no run duration models."
-             << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
-	     << G4endl;
+    // Check scenes.
+    G4SceneList& sceneList = fSceneList;
+    G4int iScene, nScenes = sceneList.size ();
+    for (iScene = 0; iScene < nScenes; iScene++) {
+      G4Scene* pScene = sceneList [iScene];
+      std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
+
+      if (modelList.size ()) {
+        pScene->CalculateExtent();
+        G4UImanager::GetUIpointer () ->
+        ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
+      }
     }
-    fpSceneHandler->ClearTransientStore();
-    fpSceneHandler->ClearStore();
-    fpViewer->NeedKernelVisit();
-    fpViewer->SetView();
-    fpViewer->ClearView();
-    fpViewer->FinishView();
+
+    // Check the manager's current scene...
+    if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
+      if (fVerbosity >= warnings) {
+        G4cout << "WARNING: The current scene \""
+        << fpScene -> GetName ()
+        << "\" has no run duration models."
+        << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
+        << G4endl;
+      }
+      fpSceneHandler->ClearTransientStore();
+      fpSceneHandler->ClearStore();
+      fpViewer->NeedKernelVisit();
+      fpViewer->SetView();
+      fpViewer->ClearView();
+      fpViewer->FinishView();
+    }
   }
 }
 
@@ -1600,7 +1591,8 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
     }
     return;
   }
-  fpViewer->SetView();
+  // JA: I don't think we need this. Setview will be called when needed.
+  // fpViewer->SetView();
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
@@ -1796,16 +1788,16 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 
   G4UImanager::GetUIpointer()->SetUpForSpecialThread("G4VIS");
 
-//  G4cout << "G4VisManager::G4VisSubThread: thread: "
-//  << G4Threading::G4GetThreadId() << std::endl;
+  //  G4cout << "G4VisManager::G4VisSubThread: thread: "
+  //  << G4Threading::G4GetThreadId() << std::endl;
 
   // Set up geometry and navigation for a thread
   G4GeometryWorkspace::GetPool()->CreateAndUseWorkspace();
   G4SolidsWorkspace::GetPool()->CreateAndUseWorkspace();
-  G4Navigator* navigator =
-  G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  navigator->SetWorldVolume
-  (G4MTRunManager::GetMasterRunManagerKernel()->GetCurrentWorld());
+  G4Navigator* navigator = G4TransportationManager::GetTransportationManager()
+                             ->GetNavigatorForTracking();
+  navigator->SetWorldVolume(
+    G4RunManagerFactory::GetMasterRunManagerKernel()->GetCurrentWorld());
 
   pViewer->SwitchToVisSubThread();
 
@@ -1814,17 +1806,18 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
     G4MUTEXLOCK(&mtVisSubThreadMutex);
     G4int eventQueueSize = mtVisEventQueue.size();
     G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-//    G4cout << "Event queue size (A): " << eventQueueSize << G4endl;
+    // G4cout << "Event queue size (A): " << eventQueueSize << G4endl;
 
     while (eventQueueSize) {
 
       G4MUTEXLOCK(&mtVisSubThreadMutex);
       const G4Event* event = mtVisEventQueue.front();
       G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-//      G4int eventID = event->GetEventID();
-//      G4cout <<
-//      "G4VisManager::G4VisSubThread: Vis sub-thread: Dealing with event: "
-//      << eventID << G4endl;
+      // G4int eventID = event->GetEventID();
+      // G4cout
+      //  << "G4VisManager::G4VisSubThread: Vis sub-thread: Dealing with event:
+      //  "
+      //  << eventID << G4endl;
 
       // Here comes the event drawing
       pVisManager->SetTransientsDrawnThisEvent(false);
@@ -1855,7 +1848,7 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
       }
 
       // Testing.
-//      std::this_thread::sleep_for(std::chrono::seconds(5));
+      // std::this_thread::sleep_for(std::chrono::seconds(5));
 
       // Then pop and release event
       G4MUTEXLOCK(&mtVisSubThreadMutex);
@@ -1863,7 +1856,7 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
       event->PostProcessingFinished();
       eventQueueSize = mtVisEventQueue.size();
       G4MUTEXUNLOCK(&mtVisSubThreadMutex);
-//      G4cout << "Event queue size (B): " << eventQueueSize << G4endl;
+      // G4cout << "Event queue size (B): " << eventQueueSize << G4endl;
     }
 
     G4MUTEXLOCK(&mtVisSubThreadMutex);
@@ -1876,18 +1869,14 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
     }
 
     // Run still in progress but nothing to draw, so wait a while.
-#ifdef G4VIS_USE_STD11
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-#else
-    G4THREADSLEEP(1);
-#endif
   }
 
   // Inform viewer that we have finished all sub-thread drawing
   pViewer->DoneWithVisSubThread();
   pViewer->MovingToMasterThread();
-//  G4cout << "G4VisManager::G4VisSubThread: Vis sub-thread: ending" << G4endl;
-  return /*(G4ThreadFunReturnType)*/0;
+  // G4cout << "G4VisManager::G4VisSubThread: Vis sub-thread: ending" << G4endl;
+  return nullptr;
 }
 
 namespace {
@@ -1906,22 +1895,16 @@ void G4VisManager::BeginOfRun ()
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
-//  G4cout << "G4VisManager::BeginOfRun: thread: "
-//  << G4Threading::G4GetThreadId() << G4endl;
+  //  G4cout << "G4VisManager::BeginOfRun: thread: "
+  //  << G4Threading::G4GetThreadId() << G4endl;
 
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    runManager = G4MTRunManager::GetMasterRunManager();
-  }
-#endif
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
 
   // For a fake run...
   G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
   if (nEventsToBeProcessed == 0) return;
 
   fNKeepRequests = 0;
-  fKeptLastEvent = false;
   fEventKeepingSuspended = false;
   fTransientsDrawnThisRun = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
@@ -2001,12 +1984,7 @@ void G4VisManager::EndOfEvent ()
 //  std::this_thread::sleep_for(std::chrono::seconds(5));
 #endif
 
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    runManager = G4MTRunManager::GetMasterRunManager();
-  }
-#endif
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
 
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (!currentRun) return;
@@ -2058,11 +2036,7 @@ void G4VisManager::EndOfEvent ()
         }
         //      G4cout << "Event queue size (3): " << eventQueueSize << G4endl;
         // Wait a while to give event drawing time to reduce the queue...
-#ifdef G4VIS_USE_STD11
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-#else
-        G4THREADSLEEP(1);
-#endif
         //      G4cout << "Event queue size (4): " << eventQueueSize << G4endl;
       } else {
         static G4bool warned = false;
@@ -2091,6 +2065,13 @@ void G4VisManager::EndOfEvent ()
       G4MUTEXLOCK(&mtVisSubThreadMutex);
       // Keep event for processing and put event on vis event queue
       currentEvent->KeepForPostProcessing();
+      if (fpScene->GetRefreshAtEndOfEvent()) {
+        // Keep one event (cannot know which is last so any will do)
+        if (fNKeepRequests == 0) {
+          eventManager->KeepTheCurrentEvent();
+          fNKeepRequests++;
+        }
+      }
       mtVisEventQueue.push_back(currentEvent);
       G4MUTEXUNLOCK(&mtVisSubThreadMutex);
     }
@@ -2143,7 +2124,6 @@ void G4VisManager::EndOfEvent ()
         if (nKeptEvents == 0) {
           eventManager->KeepTheCurrentEvent();
           fNKeepRequests++;
-          fKeptLastEvent = true;
         }
       }
       fpSceneHandler->SetMarkForClearingTransientStore(true);
@@ -2199,15 +2179,10 @@ void G4VisManager::EndOfRun ()
   if (G4Threading::IsWorkerThread()) return;
 #endif
 
-//  G4cout << "G4VisManager::EndOfRun: thread: "
-//  << G4Threading::G4GetThreadId() << G4endl;
+  //  G4cout << "G4VisManager::EndOfRun: thread: "
+  //  << G4Threading::G4GetThreadId() << G4endl;
 
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    runManager = G4MTRunManager::GetMasterRunManager();
-  }
-#endif
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
 
   // For a fake run...
   G4int nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
@@ -2253,28 +2228,36 @@ void G4VisManager::EndOfRun ()
   G4int nKeptEvents = 0;
   const std::vector<const G4Event*>* events = currentRun->GetEventVector();
   if (events) nKeptEvents = events->size();
-  if (nKeptEvents && !fKeptLastEvent) {
-    if (fVerbosity >= warnings) {
-      G4cout << nKeptEvents;
-      if (nKeptEvents == 1) G4cout << " event has";
-      else G4cout << " events have";
-      G4cout << " been kept for refreshing and/or reviewing." << G4endl;
-      if (nKeptEvents != fNKeepRequests) {
-        G4cout << "  (Note: ";
-        if (fNKeepRequests == 0) {
-          G4cout << "No keep requests were";
-        } else if (fNKeepRequests == 1) {
-          G4cout << "Only 1 keep request was";
-        } else {
-          G4cout << "Only " << fNKeepRequests << " keep requests were";
-        }
-        G4cout << " made by the vis manager.)" << G4endl;
+  if (fVerbosity >= warnings) {
+    G4cout << nKeptEvents;
+    if (nKeptEvents == 1) G4cout << " event has";
+    else G4cout << " events have";
+    G4cout << " been kept for refreshing and/or reviewing." << G4endl;
+    if (nKeptEvents != fNKeepRequests) {
+      G4cout << "  (Note: ";
+      if (fNKeepRequests == 0) {
+        G4cout << "No keep requests were";
+      } else if (fNKeepRequests == 1) {
+        G4cout << "1 keep request was";
+      } else {
+        G4cout << fNKeepRequests << " keep requests were";
       }
-      G4cout <<
-  "\n  \"/vis/reviewKeptEvents\" to review them one by one."
-  "\n  \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
-      << G4endl;
+      G4cout << " made by the vis manager.";
+      if (fNKeepRequests == 0) {
+        G4cout <<
+        "\n  The kept events are those you have asked to be kept in your user action(s).)";
+      } else {
+        G4cout <<
+        "\n  The same or further events may have been kept by you in your user action(s).)";
+      }
+      G4cout << G4endl;
     }
+    G4cout <<
+    "  \"/vis/reviewKeptEvents\" to review them one by one."
+    "\n  \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+    << G4endl;
+  }
+
     //    static G4bool warned = false;
     //    if (!valid && fVerbosity >= warnings && !warned) {
     //      G4cout <<
@@ -2291,7 +2274,6 @@ void G4VisManager::EndOfRun ()
     //	     << G4endl;
     //      warned = true;
     //    }
-  }
 
   if (fEventKeepingSuspended && fVerbosity >= warnings) {
     G4cout <<

@@ -23,107 +23,102 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VelocityTable
 //
+// Class description:
 //
-//---------------------------------------------------------------
-//
-//  G4VelocityTable.hh
-//
-//  class description:
-//    This class keeps a table of velocity as a function of
-//    the ratio kinetic erngy and mass
-//    This class is used by G4Track::CalculateVelocity
-//
-//---------------------------------------------------------------
-//   created                     17.Aug.  2011 H.Kurashige
-//
+// This class keeps a table of velocity as a function of the ratio
+// kinetic erngy and mass. G4VelocityTable is used by
+// G4Track::CalculateVelocity().
 
-#ifndef G4VelocityTable_h
-#define G4VelocityTable_h 1
+// Author: Hisaya Kurashige,  17 August 2011
+// --------------------------------------------------------------------
+#ifndef G4VelocityTable_hh
+#define G4VelocityTable_hh 1
 
 #include <vector>
 #include <iostream>
+
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreadLocalSingleton.hh"
 
-//////////////
 class G4VelocityTable
-////////////// 
 {
-friend class G4ThreadLocalSingleton<G4VelocityTable>;
+  friend class G4ThreadLocalSingleton<G4VelocityTable>;
 
-  // velocity table for massive particles used in CalculateVelocity 
- private:
-  typedef std::vector<G4double> G4VTDataVector;
+  using G4VTDataVector = std::vector<G4double>;
 
- public:
+  public:
 
-  G4double Value(G4double theEnergy);
-   // Get the cross-section/energy-loss value corresponding to the
-   // given energy. An appropriate interpolation is used to calculate
-   // the value. 
+    G4double Value(G4double theEnergy);
+      // Get the cross-section/energy-loss value corresponding to the
+      // given energy. An appropriate interpolation is used to calculate
+      // the value
 
-  static G4VelocityTable* GetVelocityTable();
+    static G4VelocityTable* GetVelocityTable();
 
-  static void SetVelocityTableProperties(G4double t_max, 
-					 G4double t_min, 
-					 G4int nbin);
-  static G4double GetMaxTOfVelocityTable();
-  static G4double GetMinTOfVelocityTable();
-  static G4int    GetNbinOfVelocityTable();
+    static void SetVelocityTableProperties(G4double t_max, G4double t_min,
+                                           G4int nbin);
+    static G4double GetMaxTOfVelocityTable();
+    static G4double GetMinTOfVelocityTable();
+    static G4int GetNbinOfVelocityTable();
 
- private:
+  private:
 
-  G4VelocityTable();
-  ~G4VelocityTable();
+    G4VelocityTable();
+    ~G4VelocityTable();
 
-  size_t FindBinLocation(G4double theEnergy) const;
-   // Find the bin# in which theEnergy belongs - pure virtual function
+    void PrepareVelocityTable();
 
-  G4double Interpolation() const;
+    std::size_t FindBinLocation(G4double theEnergy) const;
+      // Find the bin# in which theEnergy belongs - pure virtual function
 
-  G4double edgeMin;           // Energy of first point
-  G4double edgeMax;           // Energy of the last point
-  
-  size_t numberOfNodes;
-  
-  G4VTDataVector  dataVector;    // Vector to keep the crossection/energyloss
-  G4VTDataVector  binVector;     // Vector to keep energy
-  G4VTDataVector  secDerivative; // Vector to keep second derivatives 
+    inline G4double Interpolation() const;
 
-  G4double dBin;          // Bin width - useful only for fixed binning
-  G4double baseBin;       // Set this in constructor for performance
+    // --------------------------------------------------------------------
 
-  G4double lastEnergy;        // Cache the last input value
-  G4double lastValue;         // Cache the last output value   
-  size_t lastBin;             // Cache the last bin location
-  
- private:
-  void  PrepareVelocityTable();
+    G4double edgeMin = 0.0;  // Energy of first point
+    G4double edgeMax = 0.0;  // Energy of the last point
 
-  static G4ThreadLocal G4VelocityTable* theInstance;
-  G4double             maxT;
-  G4double             minT;
-  G4int                NbinT;
+    std::size_t numberOfNodes = 0;
+
+    G4VTDataVector dataVector;     // Vector to keep the crossection/energyloss
+    G4VTDataVector binVector;      // Vector to keep energy
+    G4VTDataVector secDerivative;  // Vector to keep second derivatives
+
+    G4double dBin = 0.0;     // Bin width - useful only for fixed binning
+    G4double baseBin = 0.0;  // Set this in constructor for performance
+
+    G4double lastEnergy = -DBL_MAX;  // Cache the last input value
+    G4double lastValue = 0.0;        // Cache the last output value
+    std::size_t lastBin = 0;         // Cache the last bin location
+
+    static G4ThreadLocal G4VelocityTable* theInstance;
+
+    G4double maxT = 1000.0;
+    G4double minT = 0.0001;
+    G4int NbinT = 500;
 };
 
-inline
- G4double G4VelocityTable::Interpolation() const
+// ----------------------
+// Inline methods
+// ----------------------
+
+inline G4double G4VelocityTable::Interpolation() const
 {
   // Linear interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
+  // is in the highest bin, no interpolation will be Done. Because
+  // there is an extra bin hidden from a user at locBin=numberOfBin,
   // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-  
-  G4double intplFactor = (lastEnergy-binVector[lastBin]) 
-     / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
-  
+  // numberOfBin-1.
+
+  G4double intplFactor =
+    (lastEnergy - binVector[lastBin]) /
+    (binVector[lastBin + 1] - binVector[lastBin]);  // Interpol. factor
+
   return dataVector[lastBin] +
-    ( dataVector[lastBin + 1]-dataVector[lastBin] ) * intplFactor;
+         (dataVector[lastBin + 1] - dataVector[lastBin]) * intplFactor;
 }
 
 #endif
-
-

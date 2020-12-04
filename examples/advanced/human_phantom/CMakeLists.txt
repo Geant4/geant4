@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(human_phantom)
 
 #----------------------------------------------------------------------------
@@ -20,7 +23,7 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-# Setup of ROOT ANALYSIS : optional. 
+# Setup of ROOT ANALYSIS : optional.
 option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
 if(WITH_ANALYSIS_USE)
 add_definitions(-DANALYSIS_USE)
@@ -28,7 +31,7 @@ else()
 endif()
 
 #----------------------------------------------------------------------------
-# Setup of GDML : optional. 
+# Setup of GDML : optional.
 option(WITH_GDML_USE "Build example with GDML" OFF)
 if(WITH_GDML_USE)
 add_definitions(-DG4LIB_USE_GDML)
@@ -38,7 +41,7 @@ endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${GDML_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
@@ -56,7 +59,7 @@ target_link_libraries(phantom ${Geant4_LIBRARIES} ${GDML_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(human_phantom_SCRIPTS
-    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C 
+    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C
   )
 
 foreach(_script ${human_phantom_SCRIPTS})

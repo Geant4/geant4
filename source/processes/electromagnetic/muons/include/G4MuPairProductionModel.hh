@@ -46,13 +46,12 @@
 // 12-05-06 Add parameter to SelectRandomAtom (A.Bogdanov) 
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 // 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
-
 //
 // Class Description:
 //
 // Implementation of e+e- pair production by muons
+// A.G. Bogdanov et al., IEEE Trans. Nuc. Sci., Vol.53, No.2, 2006
 //
-
 // -------------------------------------------------------------------
 //
 
@@ -157,16 +156,12 @@ protected:
   G4double lnZ;
   G4int    currentZ;
 
-  static const G4double xgi[8],wgi[8];
-
   G4ParticleDefinition*       theElectron;
   G4ParticleDefinition*       thePositron;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double minPairEnergy;
   G4double lowestKinEnergy;
-
-  G4int nzdat;
 
   // gamma energy bins
   G4int    nYBinPerDecade;

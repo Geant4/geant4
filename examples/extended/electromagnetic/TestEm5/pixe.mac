@@ -2,51 +2,50 @@
 #     		    
 /control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
-/testem/det/setAbsMat G4_Au
+/testem/det/setAbsMat Gold
 /testem/det/setAbsThick 50 um
 /testem/det/setAbsYZ    50 um
 #
-/testem/phys/addPhysics emlivermore
-#/testem/phys/addPhysics empenelope
+/testem/phys/addPhysics emstandard_opt4
+###/testem/phys/addPhysics emlivermore
 #
-/run/setCut 0.01 mm
+/run/setCut 2 um
 /run/setCutForAGivenParticle gamma 0.5 um
 #
-/process/em/deexcitationIgnoreCut true
-#/process/em/deexcitation world true false true
-/process/em/fluo true
+# to (de)activate pixe or atomic deexcitation
 /process/em/pixe true
-/process/em/auger true
 /process/em/augerCascade true
+/process/em/deexcitationIgnoreCut true
+#
+/process/em/verbose 0
+/process/em/printParameters 
 #
 /run/initialize
 #
 /testem/gun/setDefault
-/gun/particle e-
-#/gun/particle proton 
+/gun/particle proton 
 /gun/energy 20 MeV
+#
+# to be run interactively  
+###/control/execute vis.mac
+###/tracking/verbose 2
+###/run/beamOn 1
 # 
 /analysis/setFileName pixe
-/analysis/h1/set  3 100 0 0.1 MeV           #gamma: energy at vertex
-/analysis/h1/set  5 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
-/analysis/h1/set 51 100 0 0.1 MeV	    #gamma: energy at vertex
-/analysis/h1/set 53 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
-/analysis/h1/set 55 100 0 0.1 MeV	    #gamma: energy at vertex
-/analysis/h1/set 57 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
-/analysis/h1/set 20 100 0 0.1 MeV           #gamma: energy at exit
-/analysis/h1/set 40 100 0 0.1 MeV           #gamma: energy at back
+/analysis/h1/set  3 1000 0 100 keV  #all gamma: energy at vertex
+/analysis/h1/set 51 1000 0 100 keV  #deexcitation
+/analysis/h1/set 55 1000 0 100 keV  #pixe
 #
-/analysis/h1/set  2 100 0 0.1 MeV           #e-: energy at vertex
-/analysis/h1/set  4 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
-/analysis/h1/set 50 100 0 0.1 MeV	    #e-: energy at vertex
-/analysis/h1/set 52 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
-/analysis/h1/set 54 100 0 0.1 MeV	    #e-: energy at vertex
-/analysis/h1/set 56 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
-/analysis/h1/set 10 100 0 0.1 MeV           #e-: energy at exit
-/analysis/h1/set 30 100 0 0.1 MeV           #e-: energy at back
+/analysis/h1/set  2  500 0  50 keV  #all e-: energy at vertex
+/analysis/h1/set 50  200 0  20 keV  #deexcitation
+/analysis/h1/set 54  200 0  20 keV  #pixe
 #
-/run/printProgress 10000
-# 
-/run/beamOn 10000
+/analysis/h1/set  4  500 0.01  50 keV log10  #all e-: energy at vertex
+/analysis/h1/set 52  200 0.01  20 keV log10  #deexcitation
+/analysis/h1/set 56  200 0.01  20 keV log10  #pixe
+#
+/tracking/verbose 0
+/run/printProgress 10000 
+/run/beamOn 100000

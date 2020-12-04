@@ -82,7 +82,13 @@ G4SoQt::G4SoQt()
   //      new QApplication (*p_argn, args);
   //      if(!qApp) {
 
+  // FWJ detects existence of Qt UI or other running qApp
+  if (qApp) externalApp = true;
+
   QWidget* mainWin = SoQt::init("Geant4");
+
+  // FWJ Cf Xt:
+  QtInited = TRUE;
 
   // FWJ DEBUG
   //  G4cout << "G4SoQt: mainWin=" << mainWin << G4endl;
@@ -138,13 +144,26 @@ void G4SoQt::FlushAndWaitExecution()
 void G4SoQt::SecondaryLoop()
 {
    // FWJ DEBUG
+   if (externalApp) return;
+
+   //      G4cout <<
+   //     "ENTERING OIQT VIEWER SECONDARY LOOP" << G4endl;
+   //   else
    G4cout <<
-     "ENTERING OIQT VIEWER SECONDARY LOOP... PRESS E KEY TO EXIT" << G4endl;
+      "ENTERING OIQT VIEWER SECONDARY LOOP... PRESS E KEY TO EXIT" << G4endl;
 
    SoQt::mainLoop();
 }
+/***************************************************************************/
+void G4SoQt::ExitSecondaryLoop()
+{
+   // FWJ DEBUG
+   //   G4cout << "G4SoQt: EXIT SECONDARY LOOP externalApp=" <<
+   //      externalApp << G4endl;
 
-
+   if (externalApp) return;   
+   SoQt::exitMainLoop();
+}
 /***************************************************************************/
 bool G4SoQt::IsExternalApp()
 {

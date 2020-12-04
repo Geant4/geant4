@@ -57,7 +57,7 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionFlexi* flexiSource; 
+  BrachyDetectorConstructionFlexi* fFlexiSource; 
  
 };
 #endif

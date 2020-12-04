@@ -38,7 +38,7 @@
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -140,13 +140,13 @@ void G4Box::SetXHalfLength(G4double dx)
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
-} 
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
 //  Set Y dimension
 
-void G4Box::SetYHalfLength(G4double dy) 
+void G4Box::SetYHalfLength(G4double dy)
 {
   if(dy > 2*kCarTolerance)  // limit to thickness of surfaces
   {
@@ -163,7 +163,7 @@ void G4Box::SetYHalfLength(G4double dy)
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
-} 
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -186,7 +186,7 @@ void G4Box::SetZHalfLength(G4double dz)
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
-} 
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -252,8 +252,8 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
                   std::abs(p.x())-fDx,
                   std::abs(p.y())-fDy),
                   std::abs(p.z())-fDz);
-  if (dist > delta) return kOutside;
-  return (dist > -delta) ? kSurface : kInside;
+  return (dist > delta) ? kOutside :
+    ((dist > -delta) ? kSurface : kInside);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -278,7 +278,7 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   else
   {
     // Point is not on the surface
-    // 
+    //
 #ifdef G4CSGDEBUG
     std::ostringstream message;
     G4int oldprc = message.precision(16);
@@ -353,7 +353,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
 }
 
 //////////////////////////////////////////////////////////////////////////
-// 
+//
 // Appoximate distance to box.
 // Returns largest perpendicular distance to the closest x/y/z sides of
 // the box, which is the most fast estimation of the shortest distance to box
@@ -361,9 +361,10 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
 
 G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 {
-  G4double dist = std::max(std::max(std::abs(p.x())-fDx,
-                                    std::abs(p.y())-fDy),
-                           std::abs(p.z())-fDz);
+  G4double dist = std::max(std::max(
+                  std::abs(p.x())-fDx,
+                  std::abs(p.y())-fDy),
+                  std::abs(p.z())-fDz);
   return (dist > 0) ? dist : 0.;
 }
 
@@ -456,9 +457,10 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
     DumpInfo();
   }
 #endif
-  G4double dist = std::min(std::min(fDx-std::abs(p.x()),
-                                    fDy-std::abs(p.y())),
-                           fDz-std::abs(p.z()));
+  G4double dist = std::min(std::min(
+                  fDx-std::abs(p.x()),
+                  fDy-std::abs(p.y())),
+                  fDz-std::abs(p.z()));
   return (dist > 0) ? dist : 0.;
 }
 
@@ -493,29 +495,27 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// GetPointOnSurface
-//
-// Return a point (G4ThreeVector) randomly and uniformly selected
-// on the solid surface
+// Return a point randomly and uniformly selected on the surface
 
 G4ThreeVector G4Box::GetPointOnSurface() const
 {
   G4double sxy = fDx*fDy, sxz = fDx*fDz, syz = fDy*fDz;
-  G4double select = (sxy + sxz + syz)*G4UniformRand();
+  G4double select = (sxy + sxz + syz)*G4QuickRand();
+  G4double u = 2.*G4QuickRand() - 1.;
+  G4double v = 2.*G4QuickRand() - 1.;
 
   if (select < sxy)
-    return G4ThreeVector((2.*G4UniformRand() - 1.)*fDx,
-                         (2.*G4UniformRand() - 1.)*fDy,
-                         (select < 0.5*sxy) ? -fDz : fDz);
-
-  if (select < sxy + sxz)
-    return G4ThreeVector((2.*G4UniformRand() - 1.)*fDx,
-                         (select < sxy + 0.5*sxz) ? -fDy : fDy,
-                         (2.*G4UniformRand() - 1.)*fDz);
+    return G4ThreeVector(u*fDx,
+                         v*fDy,
+                         ((select < 0.5*sxy) ? -fDz : fDz));
+  else if (select < sxy + sxz)
+    return G4ThreeVector(u*fDx,
+                         ((select < sxy + 0.5*sxz) ? -fDy : fDy),
+                         v*fDz);
   else
-    return G4ThreeVector((select < sxy + sxz + 0.5*syz) ? -fDx : fDx,
-                         (2.*G4UniformRand() - 1.)*fDy,
-                         (2.*G4UniformRand() - 1.)*fDz);
+    return G4ThreeVector(((select < sxy + sxz + 0.5*syz) ? -fDx : fDx),
+                         u*fDy,
+                         v*fDz);
 }
 
 //////////////////////////////////////////////////////////////////////////

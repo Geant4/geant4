@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 October, 20 G.Cosmo (mctruth-V10-06-01)
+- Minor c++11 review. Code cleanup and formatting. Use of G4 types.
+
 11 December, 19 B.Morgan (mctruth-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library options and
   explicit include_directories.

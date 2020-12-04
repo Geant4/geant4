@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLParameterisation
+// G4GDMLParameterisation
 //
 // Class description:
 //
 // GDML class for interpretation of parameterisations.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLPARAMETERISATION_INCLUDED_
-#define _G4GDMLPARAMETERISATION_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLPARAMETERISATION_HH
+#define G4GDMLPARAMETERISATION_HH 1
 
 #include "G4VPVParameterisation.hh"
 #include "G4VPhysicalVolume.hh"
@@ -64,42 +59,56 @@
 
 class G4GDMLParameterisation : public G4VPVParameterisation
 {
+  public:
 
- public:
-
-   struct PARAMETER
-   {
-      G4RotationMatrix* pRot;
+    struct PARAMETER
+    {
+      G4RotationMatrix* pRot = nullptr;
       G4ThreeVector position;
       G4double dimension[16];
 
-      PARAMETER() : pRot(0) { memset(dimension,0,sizeof(dimension)); }
-   };
+      PARAMETER()
+      {
+        memset(dimension, 0, sizeof(dimension));
+      }
+    };
 
-   G4int GetSize() const;
-   void  AddParameter(const PARAMETER&);
+    G4int GetSize() const;
+    void AddParameter(const PARAMETER&);
 
- private:
+  private:
 
-   void ComputeTransformation(const G4int,G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Box&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Trd&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Trap&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Cons&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Sphere&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Orb&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Torus&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Para&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Hype&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Tubs&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const;
-   void ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const;
+    void ComputeTransformation(const G4int, G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Box&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Trd&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Trap&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Cons&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Sphere&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Orb&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Ellipsoid&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Torus&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Para&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Hype&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Tubs&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Polycone&, const G4int,
+                           const G4VPhysicalVolume*) const;
+    void ComputeDimensions(G4Polyhedra&, const G4int,
+                           const G4VPhysicalVolume*) const;
 
- private:
+  private:
 
-   std::vector<PARAMETER> parameterList;
-
+    std::vector<PARAMETER> parameterList;
 };
 
 #endif

@@ -36,7 +36,7 @@
 //
 //  Authors: A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
 //
-//  Modified: 
+//  Modified:
 //  29.12.2009 V.Ivanchenko introduced access to reference PhysLists
 //
 // -------------------------------------------------------------
@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -71,8 +71,8 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager();
+  //Construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
@@ -97,7 +97,7 @@ int main(int argc,char** argv) {
 
     // instantiated messenger
     mess = new PhysicsListMessenger();
-  } 
+  }
 
   //local Physics List
   if(!phys) { phys = new PhysicsList(); }
@@ -115,7 +115,7 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = nullptr;
 
   //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)  {
     //interactive mode
@@ -124,13 +124,13 @@ int main(int argc,char** argv) {
     ui->SessionStart();
     delete ui;
   } else  {
-    //batch mode  
+    //batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 
-  //job termination 
+  //job termination
   delete mess;
   delete visManager;
   delete runManager;

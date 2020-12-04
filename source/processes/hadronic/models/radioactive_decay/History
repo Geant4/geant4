@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 August 2020  Alberto Ribon  radioactive_decay-V10-06-09
+----------------------------------------------------------
+- G4RadioactiveDecayBaseMessenger, G4RadioactiveDecaymessenger,
+  G4RadioactivationMessenger : deprecated the old UI commands
+  "/grdm/..." and introduced the new corresponding ones,
+  "/process/had/rdm/..." .
+
 12 May 2020  Alberto Ribon  radioactive_decay-V10-06-08
 ------------------------------------------------------------
 - G4RadioactiveDecayBase.cc , G4RadioactiveDecay.cc : 
@@ -358,7 +365,7 @@ Code received from Anselmo Meregaglia.
 20 December 2016  Dennis Wright  radioactive_decay-V10-03-00
 ------------------------------------------------------------
 - G4ITDecay::G4ITDecay(): make G4PhotonEvaporation a class member 
-  and intialize only once to avoid memory churn
+  and initialize only once to avoid memory churn
 
 - G4ITDecay::DecayIt(): make G4Fragment a data member to avoid its
     deletion at end of this method and keep polarization information 

@@ -83,6 +83,7 @@ void G4OpenGLStoredXmViewer::DrawView () {
   // /vis/viewer/rebuild, but if not, make decision and set flag only
   // if necessary...
   if (!fNeedKernelVisit) KernelVisitDecision ();
+  fLastVP = fVP;
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
 

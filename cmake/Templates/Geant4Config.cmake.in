@@ -67,6 +67,8 @@
 #
 #  smartstack        (G4event library G4StackManager uses G4SmartTrackStack)
 #
+#  php_as_hp         (G4processes library ParticleHP built as HP)
+#
 # Optional Components
 # -------------------
 #  gdml              (GDML support)
@@ -143,13 +145,6 @@
 #
 #-----------------------------------------------------------------------
 
-# Support CMake >= 3.8
-cmake_policy(VERSION 3.8)
-if(CMAKE_VERSION VERSION_LESS 3.8)
-  message(FATAL_ERROR "Geant4Config requires CMake 3.8 or newer")
-endif()
-include(CMakeFindDependencyMacro)
-
 #-----------------------------------------------------------------------
 # DEBUG : print out the variables passed via find_package arguments
 #
@@ -165,6 +160,23 @@ if(Geant4_CONFIG_DEBUG)
 
   message(STATUS "G4CFG_DEBUG : Geant4_LIBDEPS_LOADED = ${Geant4_LIBDEPS_LOADED}")
 endif()
+
+#-----------------------------------------------------------------------
+# Check that consumers use the minimum needed CMake version
+# Geant4 uses cxx_std_EP to define the standard it was built against
+# 3.8 and above support EP=11,14,17. 3.12 and above add 20. We continue
+# to support the earlier version whilst checking for consumers using 20
+cmake_policy(VERSION 3.8...3.18)
+if(CMAKE_VERSION VERSION_LESS 3.8)
+  message(FATAL_ERROR "Projects consuming Geant4Config require CMake 3.8 or newer")
+endif()
+
+if(("@GEANT4_BUILD_CXXSTD@" GREATER_EQUAL 20) AND (CMAKE_VERSION VERSION_LESS 3.12))
+  message(FATAL_ERROR "Projects consuming Geant4Config require CMake 3.12 or newer")
+endif()
+
+# - Help find dependencies
+include(CMakeFindDependencyMacro)
 
 #-----------------------------------------------------------------------
 # Locate ourselves, since all other config files should have been
@@ -298,6 +310,9 @@ endif()
 # - Smart track stack
 set(Geant4_smartstack_FOUND @GEANT4_USE_SMARTSTACK@)
 
+# - ParticleHP as HP
+set(Geant4_php_as_hp_FOUND @GEANT4_BUILD_PHP_AS_HP@)
+
 # - TBB
 set(Geant4_TBB_FOUND @GEANT4_USE_TBB@)
 if(Geant4_TBB_FOUND)
@@ -309,8 +324,12 @@ set(Geant4_timemory_FOUND @GEANT4_USE_TIMEMORY@)
 if(Geant4_timemory_FOUND)
   set(_geant4_use_timemory_library ON)
   set(timemory_DIR "@timemory_DIR@" CACHE PATH "timemory installation for Geant4")
-  set(timemory_FIND_COMPONENTS_INTERFACE @timemory_FIND_COMPONENTS_INTERFACE@)
-  find_package(timemory @G4timemory_VERSION@ REQUIRED QUIET COMPONENTS @G4timemory_COMPONENTS@)
+  if(NOT TARGET @timemory_FIND_COMPONENTS_INTERFACE@)
+    add_library(@timemory_FIND_COMPONENTS_INTERFACE@ INTERFACE IMPORTED)
+    set(timemory_FIND_COMPONENTS_INTERFACE @timemory_FIND_COMPONENTS_INTERFACE@)
+    find_package(timemory @G4timemory_VERSION@ REQUIRED QUIET
+        COMPONENTS @G4timemory_COMPONENTS@)
+  endif()
   set(timemory_LIBRARIES @timemory_FIND_COMPONENTS_INTERFACE@)
 endif()
 
@@ -415,6 +434,7 @@ endif()
 
 # - Qt (UI and Vis!)
 set(Geant4_qt_FOUND @GEANT4_USE_QT@)
+set(Geant4_qt3d_FOUND @GEANT4_USE_QT3D@)
 if(Geant4_qt_FOUND)
   # Must always refind Qt5 to recreate imported targets. Because these
   # are in the public interface, always need linking.
@@ -424,10 +444,19 @@ if(Geant4_qt_FOUND)
   find_dependency(Qt5OpenGL REQUIRED)
   find_dependency(Qt5PrintSupport REQUIRED)
 
+  if(Geant4_qt3d_FOUND)
+    find_dependency(Qt53DCore @QT3D_MINIMUM_VERSION@ REQUIRED)
+    find_dependency(Qt53DExtras @QT3D_MINIMUM_VERSION@ REQUIRED)
+    find_dependency(Qt53DRender @QT3D_MINIMUM_VERSION@ REQUIRED)
+  endif()
+
   # Also require OpenGL
   find_dependency(OpenGL)
 
-  if(("qt" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
+  # Qt must be activated both directly and for OpenInventor
+  if(("qt" IN_LIST Geant4_FIND_COMPONENTS)
+     OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
+     OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_QT
@@ -435,24 +464,10 @@ if(Geant4_qt_FOUND)
       -DG4VIS_USE_OPENGLQT
       )
     set(_geant4_use_opengl_library ON)
+    # Qt3D is always on if available
+    set(_geant4_use_qt3D_library ${Geant4_qt3d_FOUND})
   endif()
 endif()
-
-# - Wt (UI and Vis!)
-#set(Geant4_wt_FOUND @GEANT4_USE_WT@)
-#if(Geant4_wt_FOUND)
-#  find_dependency(Wt)
-#  find_dependency(OpenGL)
-#  if(("wt" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-#    list(APPEND
-#      Geant4_DEFINITIONS
-#      -DG4INTY_USE_WT
-#      -DG4UI_USE_WT
-#      -DG4VIS_USE_OPENGLWT
-#      )
-#    set(_geant4_use_opengl_library ON)
-#  endif()
-#endif()
 
 # - Motif (UI and Vis!)
 set(Geant4_motif_FOUND @GEANT4_USE_XM@)
@@ -461,12 +476,16 @@ if(Geant4_motif_FOUND)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
   find_dependency(Motif)
   include("${CMAKE_CURRENT_LIST_DIR}/G4MotifShim.cmake")
-  find_dependency(OpenGL)
   if(APPLE)
     find_dependency(XQuartzGL)
+  else()
+    find_dependency(OpenGL)
   endif()
 
-  if(("motif" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
+  # Motif can be activated both directly and for OpenInventor
+  if(("motif" IN_LIST Geant4_FIND_COMPONENTS)
+     OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
+     OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_XT
@@ -482,9 +501,10 @@ set(Geant4_vis_opengl_x11_FOUND @GEANT4_USE_OPENGL_X11@)
 if(Geant4_vis_opengl_x11_FOUND)
   find_dependency(X11)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
-  find_dependency(OpenGL)
   if(APPLE)
     find_dependency(XQuartzGL)
+  else()
+    find_dependency(OpenGL)
   endif()
 
   if(("vis_opengl_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
@@ -515,26 +535,31 @@ endif()
 set(Geant4_vis_openinventor_FOUND @GEANT4_USE_INVENTOR@)
 set(Geant4_vis_openinventor_qt_FOUND @GEANT4_USE_INVENTOR_QT@)
 if(Geant4_vis_openinventor_FOUND)
+  find_dependency(Coin)
+
+  if(Geant4_vis_openinventor_qt_FOUND)
+    # Qt dependency handled by Geant4_vis_qt_FOUND earlier,
+    # always ON if Inventor_QT is
+    find_dependency(SoQt)
+  else()
+    if(WIN32)
+      find_dependency(SoWin)
+    else()
+      # Motif/X11/GL dependency handled by Geant4_motif_FOUND earlier,
+      # always ON if Inventor/Xt is.
+      find_dependency(SoXt)
+    endif()
+  endif()
+
   if(("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    if(UNIX AND NOT WIN32)
-      if(Geant4_vis_openinventor_qt_FOUND)
-         list(APPEND Geant4_DEFINITIONS        
-            -DG4VIS_USE_OI
-            -DG4VIS_USE_OIQT
-         )
+    if(Geant4_vis_openinventor_qt_FOUND)
+      list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIQT)
+    else()
+      if(WIN32)
+        list(APPEND Geant4_DEFINITIONS -G4INTY_USE_WIN32 -DG4VIS_USE_OI -DG4VIS_USE_OIWIN32)
       else()
-         list(APPEND Geant4_DEFINITIONS
-            -DG4INTY_USE_XT
-            -DG4VIS_USE_OI
-            -DG4VIS_USE_OIX
-        )
+        list(APPEND Geant4_DEFINITIONS -DG4INTY_USE_XT -DG4VIS_USE_OI -DG4VIS_USE_OIX)
       endif()
-    elseif(WIN32)
-      list(APPEND Geant4_DEFINITIONS
-        -G4INTY_USE_WIN32
-        -DG4VIS_USE_OI
-        -DG4VIS_USE_OIWIN32
-        )
     endif()
 
     set(_geant4_use_inventor_library ON)
@@ -599,6 +624,14 @@ if(_geant4_use_opengl_library)
     Geant4::G4gl2ps${_geant4_lib_use_suffix}
     )
   list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGL)
+endif()
+
+# - Qt3D if it's requested.
+if(_geant4_use_qt3D_library)
+  list(APPEND _geant4_internal_libraries
+    Geant4::G4visQt3D${_geant4_lib_use_suffix}
+    )
+  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_QT3D)
 endif()
 
 # - G4OpenInventor if it's requested.

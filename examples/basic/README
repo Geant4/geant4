@@ -52,5 +52,5 @@
      G4 sensitive detector and hits
    - Geant4 physics list (FTFP_BERT) with step limiter
    - UI commans defined using G4GenericMessenger
-   - Histograms (1D, 2D) and ntuple saved in the output file
+   - Histograms (1D, 2D) and ntuple saved in two output files
    - Started from extended/analysis/A01

@@ -37,7 +37,7 @@ public:
 public:
   virtual bool stream(buffer& a_buffer) {
     _clear();
-    
+
     short v;
     unsigned int s, c;
     if(!a_buffer.read_version(v,s,c)) return false;
@@ -138,7 +138,7 @@ public: //branch
       }*/
       //::printf("debug : uuuu : ndata %d\n",n);
       fNdata = n;
-      
+
       //TClonesArray *clones = (TClonesArray*)fObject;
       //if (!clones) return;
       //if (clones->IsZombie()) return;
@@ -149,12 +149,12 @@ public: //branch
       //      << " name " << m_name << " ref_cls " << fClassName
       //      << " : type " << fType << ", fNdata " << n
       //      << std::endl;
-      return true;	    
-	    
+      return true;
+
     } else if(fType==31) { // TClonesArray sub-branch (contains the elements).
       if(fStreamerType==kObject) { //to read EsbRoot fgd_dig.root.
         int ndata = fBranchCount->get_ndata();
-#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
         ::printf("debug : %s : fClassName %s : fID %d : kObject : ndata %d\n",m_name.c_str(),fClassName.c_str(),fID,ndata);
 #endif
         streamer_info* _info = a_file.find_streamer_info(fClassName);
@@ -162,14 +162,14 @@ public: //branch
           m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                 << " read(kObject) : streamer_infos for ref_cls " << fClassName << " not found."
                 << std::endl;
-          return false;		
+          return false;
         }
         streamer_element* _element = _info->find_streamer_element(fID);
         if(!_element) {
           m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                 << " read(kObject) : for ref_cls " << fClassName << ", fID " << fID << " streamer element not found."
                 << std::endl;
-          return false;		
+          return false;
         }
         //::printf("debug : element type name %s\n",_element->type_name().c_str());
 
@@ -183,12 +183,12 @@ public: //branch
             m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                   << " read(kObject) : m_obj is not an obj_list."
                   << std::endl;
-            return false;		  
+            return false;
           }
         }
-	
+
         _list->safe_clear();
-	
+
         for(int index=0;index<ndata;index++) {
           ifac::args args;
           iro* _obj = m_fac.create(_element->type_name(),args);
@@ -202,14 +202,14 @@ public: //branch
           }
           _list->add_object(_obj); //give ownership.
         }
-	
+
         return true;
       }
       if(fStreamerType==kObjectP) return true;
       //from v4-00-01
       if(fStreamerType==kDouble32) {
         int ndata = fBranchCount->get_ndata();
-#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
         ::printf("debug : %s : fID %d : double32 : ndata %d\n",m_name.c_str(),fID,ndata);
 #endif
         stl_vector<double>* vec = 0;
@@ -222,10 +222,10 @@ public: //branch
             m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                   << " read(kDouble32) : m_obj is not a stl_vector<double>."
                   << std::endl;
-            return false;		  
+            return false;
           }
         }
-	
+
         vec->resize(ndata);
         float afloat;
         for(int ii=0;ii<ndata;ii++) {
@@ -239,12 +239,12 @@ public: //branch
           //::printf("debug : zzzz %g\n",afloat);
           (*vec)[ii] = afloat;
         }
-	
+
         return true;
-	
+
       } else if(fStreamerType==kDouble) {
         int ndata = fBranchCount->get_ndata();
-#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
         ::printf("debug : %s : fID %d : double : ndata %d\n",m_name.c_str(),fID,ndata);
 #endif
         stl_vector<double>* vec = 0;
@@ -257,10 +257,10 @@ public: //branch
             m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                   << " read(kDouble) : m_obj is not a stl_vector<double>."
                   << std::endl;
-            return false;		  
+            return false;
           }
         }
-	
+
         vec->resize(ndata);
         double* _value = vec_data(*vec);
         if(!a_buffer.read_fast_array(_value,ndata)) {
@@ -270,12 +270,12 @@ public: //branch
           vec->clear();
           return false;
         }
-	
+
         return true;
-	
+
       } else if(fStreamerType==kInt) {
         int ndata = fBranchCount->get_ndata();
-#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
         ::printf("debug : %s : fID %d : int : ndata %d\n",m_name.c_str(),fID,ndata);
 #endif
         stl_vector<int>* vec = 0;
@@ -288,7 +288,7 @@ public: //branch
             m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                   << " read(kInt) : m_obj is not a stl_vector<int>."
                   << std::endl;
-            return false;		  
+            return false;
           }
         }
 
@@ -301,15 +301,15 @@ public: //branch
           vec->clear();
           return false;
         }
-	
+
         return true;
 
       } else if((fStreamerType==kUInt)||(fStreamerType==kBits)) {
         int ndata = fBranchCount->get_ndata();
-#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
         if(fStreamerType==kUInt) ::printf("debug : %s : fID %d : uint : ndata %d\n",m_name.c_str(),fID,ndata);
         else                     ::printf("debug : %s : fID %d : bits : ndata %d\n",m_name.c_str(),fID,ndata);
-#endif	
+#endif
         stl_vector<uint32>* vec = 0;
         if(!m_obj) {
           vec = new stl_vector<uint32>;
@@ -320,7 +320,7 @@ public: //branch
             m_out << "tools::rroot::branch_element::read_leaves : " << sout(m_name) << " :"
                   << " read(kUInt) : m_obj is not a stl_vector<uint32>."
                   << std::endl;
-            return false;		  
+            return false;
           }
         }
 
@@ -333,16 +333,16 @@ public: //branch
           vec->clear();
           return false;
         }
-	
+
         return true;
-	
+
       } else {
         m_out << "tools::rroot::branch_element::read_leaves :"
               << " name " << m_name << " ref_cls " << fClassName
               << " : for type " << fType << ", stream_type " << fStreamerType << " not treated."
               << std::endl;
         return false;
-      } 
+      }
 	/*
         //m_obj = clones_array<float>(m_fac,true,false);  //true = owner of objects.
         uint32 ndata = 1;
@@ -364,7 +364,7 @@ public: //branch
 //             << std::endl;
 //       return true;
 //
-       
+
        if((fID==-1)||
           (fID==1)     // for pmx to read LHCb files :
          ){
@@ -377,7 +377,7 @@ public: //branch
 	 } else {
 	   fNdata = 1;
 	 }
-	
+
          // read object :
 	 bool created = false;
          if(!m_obj) {
@@ -405,14 +405,14 @@ public: //branch
                << std::endl;
          return false;
        }
-   
+
     }
 
     m_out << "tools::rroot::branch_element::read_leaves :"
           << " name " << m_name << " ref_cls " << fClassName
           << " : type " << fType << " not treated, stream_type is " << fStreamerType << "."
           << std::endl;
-    return false;	    
+    return false;
 
 /*
     ///////////////////////////////////////////////////////
@@ -428,7 +428,7 @@ public: //branch
       m_out << "tools::rroot::branch_element::read_leaves :"
             << " name " << m_name << " ref_cls " << fClassName
             << " : type " << fType << " not treated."
-            << std::endl;  
+            << std::endl;
       return false;
 
     } else if(fType==41) {
@@ -509,7 +509,7 @@ public: //branch
         m_out << "tools::rroot::branch_element::read_leaves :"
               << " name " << m_name << " ref_cls " << fClassName << " :"
               << " obj stream failed."
-              << std::endl;          
+              << std::endl;
         if(created) {delete m_obj;m_obj = 0;}
         return false;
       }
@@ -517,7 +517,7 @@ public: //branch
       //m_out << "tools::rroot::branch_element::read_leaves :"
       //      << " name " << m_name << " ref_cls " << fClassName << " :"
       //      << " obj streamed."
-      //      << std::endl;          
+      //      << std::endl;
 
       return true;
 
@@ -549,7 +549,7 @@ public: //branch
 //         m_out << "tools::rroot::branch_element::read_leaves :"
 //               << " name " << m_name << " ref_cls " << fClassName << " :"
 //               << " obj stream failed."
-//               << std::endl;          
+//               << std::endl;
 //         return false;
 //       }
 //       return true;
@@ -597,7 +597,7 @@ public: //branch
         uint32 n;
         if(!(*it)->find_entry(a_file,a_entry,n)) return false;
         a_nbytes += n;
-      } 
+      }
     }
 
     return true;
@@ -677,7 +677,7 @@ public:
     }
     return od; //WARNING : we are not owner.
   }
- 
+
   template <class T>
   stl_vector<T>* find_entry_vec(ifile& a_file,uint64 a_event) {
     unsigned int n;
@@ -698,7 +698,7 @@ public:
     }
     return od; //WARNING : we are not owner.
   }
-  
+
 protected:
   void _clear() {
     if(fBranchCount_created) {delete fBranchCount;fBranchCount = 0;fBranchCount_created = false;}
@@ -721,8 +721,8 @@ protected:
 
 }}
 
-#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
-#undef TOOLS_RROOT_BRANCH_ELEMENT_DUMP	
+#ifdef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
+#undef TOOLS_RROOT_BRANCH_ELEMENT_DUMP
 #endif
 
 #endif
@@ -751,7 +751,7 @@ protected:
 						} break;}
 */
 /* 6.12.06 version 10 : fStreamerType : from meta/inc/TVirtualStreamerInfo.h :
-	  
+
    enum EReadWrite {
       kBase        =  0,  kOffsetL = 20,  kOffsetP = 40,  kCounter =  6,  kCharStar = 7,
       kChar        =  1,  kShort   =  2,  kInt     =  3,  kLong    =  4,  kFloat    = 5,

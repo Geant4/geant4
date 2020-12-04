@@ -383,7 +383,7 @@ G4Polyhedron* G4UGenericPolycone::CreatePolyhedron() const
     // Here is an extract from the header file HepPolyhedron.h:
     /**
      * Creates user defined polyhedron.
-     * This function allows to the user to define arbitrary polyhedron.
+     * This function allows one to the user to define arbitrary polyhedron.
      * The faces of the polyhedron should be either triangles or planar
      * quadrilateral. Nodes of a face are defined by indexes pointing to
      * the elements in the xyz array. Numeration of the elements in the

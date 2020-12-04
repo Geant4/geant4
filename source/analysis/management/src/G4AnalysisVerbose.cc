@@ -32,9 +32,8 @@
 #include <iostream>
 
 //_____________________________________________________________________________
-G4AnalysisVerbose::G4AnalysisVerbose(const G4String& type, G4int verboseLevel)
- : fType(type),
-   fToBeDoneText(),
+G4AnalysisVerbose::G4AnalysisVerbose(G4int verboseLevel)
+ : fToBeDoneText(),
    fDoneText(),
    fFailureText()
 {
@@ -64,17 +63,17 @@ void G4AnalysisVerbose::Message(const G4String& action,
          << fToBeDoneText
          << action
          << " "
-         << fType
-         << " "
-         << object 
+         << object;
+  if ( objectName.size() ) {
+    G4cout
          << " : "
-         << objectName 
-         << " ";
+         << objectName;
+  }
 
   if ( success )
-     G4cout << fDoneText;
+     G4cout << " " << fDoneText;
   else   
-     G4cout << fFailureText;
+     G4cout << " " << fFailureText;
         
   G4cout << G4endl;
 }  
@@ -89,9 +88,7 @@ void G4AnalysisVerbose::Message(const G4String& action,
          << fToBeDoneText
          << action
          << " "
-         << fType
-         << " "
-         << object 
+         << object
          << " : "
          << description.str() 
          << " ";
@@ -103,4 +100,3 @@ void G4AnalysisVerbose::Message(const G4String& action,
         
   G4cout << G4endl;
 }  
-  

@@ -48,12 +48,11 @@
 // 06-03-08 Remove obsolete methods and members (V.Ivanchenko) 
 // 31-05-13 Use element selectors instead of local data (V.Ivanchenko)
 //
-
-//
 // Class Description:
 //
 // Implementation of bremssrahlung by muons
-
+// A.G. Bogdanov et al., IEEE Trans. Nuc. Sci., Vol.53, No.2, 2006
+//
 // -------------------------------------------------------------------
 //
 
@@ -111,6 +110,11 @@ public:
          const G4ParticleDefinition*, 
          G4double) override;
 
+  // hide assignment operator
+  G4MuBremsstrahlungModel & 
+    operator=(const  G4MuBremsstrahlungModel &right) = delete;
+  G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&) = delete;
+
 protected:
 
   G4double ComputMuBremLoss(G4double Z, G4double tkin, G4double cut);
@@ -124,13 +128,6 @@ protected:
 						   G4double gammaEnergy);
 
   inline void SetParticle(const G4ParticleDefinition*);
-
-private:
-
-  // hide assignment operator
-  G4MuBremsstrahlungModel & 
-    operator=(const  G4MuBremsstrahlungModel &right) = delete;
-  G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&) = delete;
 
 protected:
 

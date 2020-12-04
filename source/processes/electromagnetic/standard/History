@@ -17,7 +17,46 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
-15 May 20:  V.Ivanchenko    (emstand-V10-06-11)
+11 November 20:  V.Ivanchenko  (emstand-V10-06-19)
+- G4UrbanMscModel - restored parameterisation of step limit to 
+    the variant of emstand-V10-06-13 
+
+10 November 20:  V.Ivanchenko (emstand-V10-06-18)
+- G4SauterGavrilaAngularDistribution, G4DeltaAngle - code clean-up
+
+01 November 20:  V.Ivanchenko (emstand-V10-06-17)
+- G4eplusTo3GammaOKVIModel, G4LindhardSorensenIonModel - fixed
+  Coverity reports
+
+11 October 20:  V.Ivanchenko  (emstand-V10-06-16)
+- G4UrbanMscModel - L.Urban optimized parameterisation of limit
+    on distance for e+- step
+
+02 September 20:  V.Ivanchenko  (emstand-V10-06-15)
+- G4UrbanMscModel - L.Urban changed computation of tlimit in
+    the step limitation algorithm "UseDistanceToBoundary", only
+    Opt3 EM physics is affected
+
+29 August 20:  V.Ivanchenko   (emstand-V10-06-14)
+- G4ICRU49NuclearStoppingModel, G4WentzelOKandVIxSection,
+  G4WentzelVIRelModel, G4SeltzerBergerModel,
+  G4LindhardSorensenIonModel.hh - improved usage of Mutex lock -
+    it is defined inside one method with call to any other method;
+    standard deletion of copy consructor and asignment operator
+
+21 July 20:  V.Ivanchenko     (emstand-V10-06-13)
+- G4UrbanMscModel - L.Urban changed parameterisation of backscattering
+    parameter 'doverra'
+
+02 July 20: M. Novak          (emstand-V10-06-12)
+- G4eDPWAElasticDCS - a new class that handles the numerical Differential Cross 
+   Sections(DCS) for Coulomb scattering of e-/e+, computed by Dirac Partial Wave 
+   Analysis(DPWA) using ELSEPA
+- G4eDPWACoulombScatteringModel - as new class that implements single Coulomb 
+   scattering model for e-/e+ based on the numerical DCS provided by the above 
+   G4eDPWAElasticDCS class 
+   
+15 May 20:  V.Ivanchenko      (emstand-V10-06-11)
 - G4UrbanMscModel - added e- range cut to the cache data structure; minor
     improvement of the code
 - G4UniversalFluctuation - set value for a0 = 42 after optimisations 
@@ -917,7 +956,7 @@ committal in the CVS repository !
 - G4UrbanMscModel - better optimization in ComputeTruePathLengthLimit
 
 01 May 15:  V.Ivanchenko (emstand-V10-01-12)
-- G4PAIModel, G4PAIPhotModel - fixed re-initilisation in MT mode
+- G4PAIModel, G4PAIPhotModel - fixed re-initialisation in MT mode
 
 30 April 15:  V.Ivanchenko (emstand-V10-01-11)
 - G4WentzelVIModel - repeat check on safety for each new step,
@@ -1769,7 +1808,7 @@ of the atomic form factor in the SampleSecondaries method.
     (to address bug#1345)
 
 28 August 12: V.Ivanchenko (emstand-V09-05-44)
-- G4CoulombScattering - fixed initilisation for the case when polar angle
+- G4CoulombScattering - fixed initialisation for the case when polar angle
     limit is below pi
 
 24 August 12: V.Ivanchenko (emstand-V09-05-43)
@@ -3613,7 +3652,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 - add G4MultipleScattering80 and G4MscModel80
 
 03 August 05: V.Ivant (emstand-V07-01-02)
-- Fix intialisation G4eBremsstrahlungModel
+- Fix initialisation G4eBremsstrahlungModel
 
 25 July 05: V.Ivant (emstand-V07-01-01)
 - Fix in G4MollerBhabhaModel: add protection in calculation of recoil direction

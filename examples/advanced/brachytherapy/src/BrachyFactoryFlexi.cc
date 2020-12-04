@@ -48,21 +48,21 @@
 
 BrachyFactoryFlexi:: BrachyFactoryFlexi()
 {
-  flexiSource = new  BrachyDetectorConstructionFlexi(); 
+  fFlexiSource = new  BrachyDetectorConstructionFlexi(); 
 }
 
 BrachyFactoryFlexi:: ~BrachyFactoryFlexi()
 {
-  delete flexiSource;
+  delete fFlexiSource;
 }
  
 void BrachyFactoryFlexi::CreateSource(G4VPhysicalVolume* mother)
 {
-  flexiSource -> ConstructFlexi(mother);
+  fFlexiSource -> ConstructFlexi(mother);
 }
 
 void BrachyFactoryFlexi::CleanSource()
 {
-  flexiSource -> CleanFlexi();
-  flexiSource = 0;
+  fFlexiSource -> CleanFlexi();
+  fFlexiSource = nullptr;
 }

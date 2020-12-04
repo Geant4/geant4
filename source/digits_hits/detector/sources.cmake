@@ -19,9 +19,13 @@ geant4_define_module(NAME G4detector
     G4SensitiveVolumeList.hh
     G4SensitiveVolumeList.icc
     G4TrackLogger.hh
+    G4TScoreHistFiller.hh
+    G4TScoreHistFiller.icc
+    G4VPrimitivePlotter.hh
     G4VPrimitiveScorer.hh
     G4VReadOutGeometry.hh
     G4VSDFilter.hh
+    G4VScoreHistFiller.hh
     G4VSensitiveDetector.hh
     G4MultiSensitiveDetector.hh
   SOURCES
@@ -36,6 +40,7 @@ geant4_define_module(NAME G4detector
     G4VPrimitiveScorer.cc
     G4VReadOutGeometry.cc
     G4VSDFilter.cc
+    G4VScoreHistFiller.cc
     G4VSensitiveDetector.cc
     G4MultiSensitiveDetector.cc
   GRANULAR_DEPENDENCIES

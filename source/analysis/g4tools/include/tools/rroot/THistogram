@@ -78,7 +78,7 @@ inline bool Axis_read_v7(buffer& a_buffer,axis_t& a_axis) {
 
 inline unsigned int new_bin_number(const std::vector< axis_t >& aAxes) {
   unsigned int number = 1;
-  for(unsigned int iaxis=0;iaxis<aAxes.size();iaxis++) 
+  for(unsigned int iaxis=0;iaxis<aAxes.size();iaxis++)
     number *= (aAxes[iaxis].bins()+2);
   return number;
 }
@@ -107,7 +107,7 @@ inline void add_outflow(const std::vector< axis_t >& aAxes,std::vector<T>& aVect
   for(int index=0;index<oldn;index++) {
     // Get new offset of index :
     offset = index;
-   {for(int iaxis=dim-1;iaxis>=0;iaxis--) { 
+   {for(int iaxis=dim-1;iaxis>=0;iaxis--) {
       is[iaxis] = offset/aAxes[iaxis].m_offset;
       offset -= is[iaxis] * aAxes[iaxis].m_offset;
     }}

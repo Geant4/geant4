@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT 4 - exampleRMC01
 //
@@ -36,7 +36,7 @@
 // Comments
 //
 // This example intends to show how to use the adjoint/reverse simulation mode.
-// 
+//
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@
 
 #include "G4Types.hh"
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
@@ -65,19 +65,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
-   
+
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Construct the default run manager
-  G4RunManager * theRunManager = new G4RunManager;
-   
-  
+  // Construct a serial run manager
+  auto* theRunManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+
+
   RMC01DetectorConstruction* detector = new RMC01DetectorConstruction();
-  
+
   //Physics and geometry are declared as in a normal G4 application
   //--------------------------------------------
   theRunManager->SetUserInitialization(detector);
@@ -87,32 +87,32 @@ int main(int argc,char** argv) {
   theRunManager->SetUserAction(new RMC01EventAction);
   RMC01RunAction* theRunAction = new RMC01RunAction;
   theRunManager->SetUserAction(theRunAction);
- 
-  //The adjoint simulation manager will control the Reverse MC mode 
+
+  //The adjoint simulation manager will control the Reverse MC mode
   //---------------------------------------------------------------
-  
+
   G4AdjointSimManager* theAdjointSimManager
                             = G4AdjointSimManager::GetInstance();
-  
+
   //It is possible to define action that will be used during
   //                                        the adjoint tracking phase
-  
+
   theAdjointSimManager->SetAdjointRunAction(theRunAction);
   //theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
   theAdjointSimManager->SetAdjointEventAction(new RMC01EventAction);
-  
+
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
-  // get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (!ui)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session

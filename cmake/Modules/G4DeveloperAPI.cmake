@@ -41,15 +41,6 @@ else()
   return()
 endif()
 
-# Whilst we test, allow switching between old and new implementations
-option(GEANT4_USE_NEW_CMAKE "Use new CMake module/library implementation" ON)
-mark_as_advanced(GEANT4_USE_NEW_CMAKE)
-
-if(NOT GEANT4_USE_NEW_CMAKE)
-  include(G4DeveloperAPI_OLD)
-  return()
-endif()
-
 # Needed modules
 include(G4ClangFormat)
 
@@ -499,12 +490,12 @@ function(geant4_compose_targets)
     endif()
   endforeach()
 
-  # Process all defined libraries, except for G4clhep{-static}
-  # G4clhep/G4ptl are a corner cases because its call to add_library happens
+  # Process all defined libraries, except for G4{clhep,expat,ptl}{-static}
+  # These are corner cases because its call to add_library happens
   # at a different (lower) directory level than all the other targets
   # This means we cannot install it here. That's left to it
   get_property(__g4definedlibraries GLOBAL PROPERTY GEANT4_DEFINED_CATEGORIES)
-  list(REMOVE_ITEM __g4definedlibraries G4clhep G4clhep-static G4ptl G4ptl-static)
+  list(REMOVE_ITEM __g4definedlibraries G4clhep G4clhep-static G4expat G4expat-static G4ptl G4ptl-static)
   set(__g4builtlibraries)
   set(__g4public_headers)
 
@@ -670,8 +661,8 @@ endfunction()
 #                           GEANT4_LINK_LIBRARIES lib1 [lib2 ...]
 #                           LINK_LIBRARIES lib1 [lib2 ...])
 #
-# DEPRECATED: Maintained only for building internal G4clhep target because of its
-#             different include structure.
+# Maintained for building internal G4clhep,G4expat targets because we try and
+# reuse their upstream code/build layout as far as possible
 #
 function(geant4_library_target)
   cmake_parse_arguments(G4GLOBLIB
@@ -681,7 +672,7 @@ function(geant4_library_target)
     ${ARGN}
     )
   # Currently a hack to get G4clhep to build, so an error if used elsewhere
-  if(NOT (${G4GLOBLIB_NAME} STREQUAL "G4clhep"))
+  if(NOT (${G4GLOBLIB_NAME} MATCHES "G4clhep|G4expat"))
     message(FATAL_ERROR "geant4_library_target called for '${G4GLOBLIB_NAME}' in '${CMAKE_CURRENT_LIST_DIR}'")
   endif()
 
@@ -856,8 +847,8 @@ endfunction()
 #  This is used internally by the ``geant4_compose_targets`` command.
 #
 function(__geant4_add_library _name _type)
-  # TEMP HACK: G4clhep/G4ptl are a special cases, and build is handled separately
-  if(_name MATCHES "G4clhep|G4ptl")
+  # TEMP HACK: G4clhep/G4expat/G4ptl are a special cases, and build is handled separately
+  if(_name MATCHES "G4clhep|G4expat|G4ptl")
     return()
   endif()
 

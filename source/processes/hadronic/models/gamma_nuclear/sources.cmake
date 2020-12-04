@@ -4,7 +4,7 @@
 # Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4lepto_nuclear
 #
 # Sources description for a library.
-# Lists the sources and headers of the code explicitely.
+# Lists the sources and headers of the code explicitly.
 # Lists include paths needed.
 # Lists the internal granular and global dependencies of the library.
 # Source specific properties should be added at the end.
@@ -14,50 +14,9 @@
 #
 #------------------------------------------------------------------------------
 
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_gamma_nuclear
     HEADERS
 	G4LENDorBERTModel.hh

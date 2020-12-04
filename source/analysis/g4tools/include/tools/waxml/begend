@@ -23,8 +23,8 @@ namespace waxml {
 
     a_writer << "<aida version=" << sout(sAIDA_VERSION) << ">"
              << std::endl;
-    a_writer << "  <implementation package=" << sout("tools") 
-             << " version=" << sout(TOOLS_VERSION) << "/>" 
+    a_writer << "  <implementation package=" << sout("tools")
+             << " version=" << sout(TOOLS_VERSION) << "/>"
              << std::endl;
   }
 

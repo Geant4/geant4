@@ -41,7 +41,6 @@
 // Author:      Juliet Armstrong
 // Updated:     2011-10-13 by Peter Gumplinger
 //              remove the class: simply typedef to G4PhysicsOrderedFreeVector
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 

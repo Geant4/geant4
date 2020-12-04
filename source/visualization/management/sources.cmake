@@ -94,6 +94,7 @@ geant4_define_module(NAME G4vis_management
     G4procman
     G4run
     G4specsolids
+    G4tasking
     G4track
     G4tracking
     G4vis_management
@@ -110,6 +111,7 @@ geant4_define_module(NAME G4vis_management
     G4particles
     G4processes
     G4run
+    G4tasking
     G4track
     G4tracking
 )

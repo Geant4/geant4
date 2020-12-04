@@ -168,7 +168,7 @@ G4LossTableManager::G4LossTableManager()
   subcutProducer = nullptr;
   nielCalculator = nullptr; 
   gGeneral = nullptr;
-  eGeneral = nullptr;
+  eGeneral = pGeneral = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -652,7 +652,7 @@ void G4LossTableManager::BuildPhysicsTable(
 
     startInitialisation = false;
     if(1 < verbose) {
-      G4cout << "### G4LossTableManager start initilisation for first particle "
+      G4cout << "### G4LossTableManager start initialisation for first particle "
              << firstParticle->GetParticleName() 
              << G4endl;
     }

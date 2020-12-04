@@ -14,6 +14,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 5, 2020 D. Sawkey (LXe-V10-06-03)
+- Apply clang-format style
+- update macros
+- Rename ProcessHits_constStep to ProcessHits_boundary
+- remove unused #includes, empty methods
+
+October 16, 2020 D. Sawkey (LXe-V10-06-02)
+- fix valgrind errors: add 'delete's, fix initialization of hits counters 
+
+October 8, 2020 D. Sawkey (LXe-V10-06-01)
+- macros: rename LXe.in to LXe.mac; store random seed in LXe.mac; set 
+  optical verbosity to 1
+
+September 24, 2020 D. Sawkey (LXe-V10-06-00)
+- Set optical parameters in G4OpticalParameters class
+- use new scintillation material property names
+- use std::vector to specify material property names
+
 November 28, 2019 I. Hrivnacova (LXe-V10-05-05)
 - Fixed Doxygen warnings in .README.txt 
 

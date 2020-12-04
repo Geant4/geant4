@@ -49,6 +49,8 @@
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
+#include "G4ParticleHPManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
@@ -80,6 +82,22 @@ int main(int argc,char** argv) {
 
   //initialize visualization
   G4VisManager* visManager = nullptr;
+
+  // Replaced HP environmental variables with C++ calls
+  G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes( false );
+  G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState( false );
+  G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation( false );
+  G4ParticleHPManager::GetInstance()->SetNeglectDoppler( false );
+  G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( false );
+  G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel( false );
+  G4ParticleHPManager::GetInstance()->SetUseNRESP71Model( false );
+  //G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes( true );
+  //G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState( true );
+  //G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation( true );
+  //G4ParticleHPManager::GetInstance()->SetNeglectDoppler( true );
+  //G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( true );
+  //G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel( true );
+  //G4ParticleHPManager::GetInstance()->SetUseNRESP71Model( true );
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

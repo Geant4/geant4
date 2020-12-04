@@ -40,6 +40,7 @@
 class G4VAnalysisManager;
 class G4UIcommand;
 class G4UIcmdWithABool;
+class G4UIcmdWithAString;
 
 class G4NtupleMessenger : public G4UImessenger
 {
@@ -53,13 +54,17 @@ class G4NtupleMessenger : public G4UImessenger
   private:
     void SetActivationCmd();
     void SetActivationToAllCmd();
+    void SetFileNameCmd();
+    void SetFileNameToAllCmd();
  
     G4VAnalysisManager*  fManager; ///< Associated class
     
-    std::unique_ptr<G4UIdirectory>     fNtupleDir;   
-    std::unique_ptr<G4UIcommand>       fSetActivationCmd;   
-    std::unique_ptr<G4UIcmdWithABool>  fSetActivationAllCmd;   
+    std::unique_ptr<G4UIdirectory>      fNtupleDir;
+    std::unique_ptr<G4UIcommand>        fSetActivationCmd;
+    std::unique_ptr<G4UIcmdWithABool>   fSetActivationAllCmd;
+    std::unique_ptr<G4UIcommand>        fSetFileNameCmd;
+    std::unique_ptr<G4UIcmdWithAString> fSetFileNameAllCmd;
 };
-  
+
 #endif
 

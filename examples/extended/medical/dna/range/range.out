@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +26,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -142,9 +144,9 @@ e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -264,6 +266,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 29.002 nm  +- 17.889 nm 
  Projected range               = 3.820 Ang +- 2.748 nm 
  Penetration                   = 4.224 nm  +- 2.525 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -272,6 +277,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 21.951 nm  +- 23.987 nm 
  Projected range               = 4.067 Ang +- 2.479 nm 
  Penetration                   = 3.440 nm  +- 2.612 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -280,6 +288,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 11.147 nm  +- 14.647 nm 
  Projected range               = 5.337 Ang +- 1.882 nm 
  Penetration                   = 2.419 nm  +- 1.932 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -288,6 +299,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 7.016 nm  +- 7.440 nm 
  Projected range               = 3.868 Ang +- 1.448 nm 
  Penetration                   = 1.972 nm  +- 1.518 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -296,6 +310,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 6.373 nm  +- 8.381 nm 
  Projected range               = 5.391 Ang +- 1.496 nm 
  Penetration                   = 1.861 nm  +- 1.630 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -304,6 +321,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.038 nm  +- 18.804 nm 
  Projected range               = 5.255 Ang +- 2.146 nm 
  Penetration                   = 2.780 nm  +- 2.277 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -312,6 +332,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 17.395 nm  +- 18.125 nm 
  Projected range               = 5.239 Ang +- 2.353 nm 
  Penetration                   = 3.293 nm  +- 2.397 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -320,6 +343,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.580 nm  +- 17.445 nm 
  Projected range               = 5.842 Ang +- 2.199 nm 
  Penetration                   = 3.042 nm  +- 2.142 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -328,6 +354,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 12.725 nm  +- 13.684 nm 
  Projected range               = 6.585 Ang +- 1.986 nm 
  Penetration                   = 2.914 nm  +- 2.017 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -336,6 +365,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 13.662 nm  +- 14.860 nm 
  Projected range               = 8.018 Ang +- 2.132 nm 
  Penetration                   = 3.023 nm  +- 2.007 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -344,6 +376,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.223 nm  +- 17.136 nm 
  Projected range               = 7.398 Ang +- 2.380 nm 
  Penetration                   = 3.215 nm  +- 2.278 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -352,6 +387,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 15.509 nm  +- 15.605 nm 
  Projected range               = 9.015 Ang +- 2.487 nm 
  Penetration                   = 3.394 nm  +- 2.132 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -360,6 +398,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 16.108 nm  +- 16.355 nm 
  Projected range               = 9.540 Ang +- 2.513 nm 
  Penetration                   = 3.558 nm  +- 2.205 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -368,6 +409,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 16.193 nm  +- 14.905 nm 
  Projected range               = 1.294 nm  +- 2.449 nm 
  Penetration                   = 3.695 nm  +- 2.120 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -376,6 +420,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 17.086 nm  +- 15.614 nm 
  Projected range               = 1.441 nm  +- 2.641 nm 
  Penetration                   = 3.832 nm  +- 2.185 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -384,6 +431,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 18.346 nm  +- 17.721 nm 
  Projected range               = 1.347 nm  +- 2.760 nm 
  Penetration                   = 3.990 nm  +- 2.241 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -392,6 +442,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 20.729 nm  +- 17.414 nm 
  Projected range               = 2.042 nm  +- 3.359 nm 
  Penetration                   = 4.955 nm  +- 2.598 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -400,6 +453,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 22.820 nm  +- 17.248 nm 
  Projected range               = 2.869 nm  +- 3.882 nm 
  Penetration                   = 5.923 nm  +- 2.897 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -408,6 +464,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 24.655 nm  +- 16.269 nm 
  Projected range               = 3.955 nm  +- 4.253 nm 
  Penetration                   = 6.973 nm  +- 3.187 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -416,6 +475,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 27.959 nm  +- 17.884 nm 
  Projected range               = 4.542 nm  +- 5.080 nm 
  Penetration                   = 8.393 nm  +- 3.677 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -424,6 +486,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 30.216 nm  +- 17.613 nm 
  Projected range               = 6.020 nm  +- 5.880 nm 
  Penetration                   = 10.092 nm  +- 4.375 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -432,6 +497,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 32.679 nm  +- 18.083 nm 
  Projected range               = 6.712 nm  +- 6.739 nm 
  Penetration                   = 11.690 nm  +- 5.089 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -440,6 +508,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 36.117 nm  +- 18.561 nm 
  Projected range               = 8.213 nm  +- 7.413 nm 
  Penetration                   = 13.440 nm  +- 5.834 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -448,6 +519,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 39.325 nm  +- 18.495 nm 
  Projected range               = 9.566 nm  +- 8.304 nm 
  Penetration                   = 15.494 nm  +- 6.215 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -456,6 +530,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 47.208 nm  +- 20.676 nm 
  Projected range               = 12.115 nm  +- 10.540 nm 
  Penetration                   = 19.354 nm  +- 7.964 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -464,6 +541,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 53.861 nm  +- 20.324 nm 
  Projected range               = 15.223 nm  +- 12.696 nm 
  Penetration                   = 23.771 nm  +- 9.860 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -472,6 +552,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 63.082 nm  +- 21.675 nm 
  Projected range               = 19.698 nm  +- 15.607 nm 
  Penetration                   = 29.837 nm  +- 11.756 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -480,6 +563,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 71.176 nm  +- 23.369 nm 
  Projected range               = 23.688 nm  +- 17.909 nm 
  Penetration                   = 35.120 nm  +- 13.668 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -488,6 +574,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 80.835 nm  +- 26.248 nm 
  Projected range               = 27.336 nm  +- 19.412 nm 
  Penetration                   = 40.156 nm  +- 15.309 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -495,7 +584,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Track length of primary track = 205.471 nm  +- 53.650 nm 
  Projected range               = 83.424 nm  +- 54.462 nm 
- Penetration                   = 122.232 nm  +- 43.688 nm 
+ Penetration                   = 122.233 nm  +- 43.688 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -504,6 +596,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 379.112 nm  +- 97.994 nm 
  Projected range               = 157.614 nm  +- 106.343 nm 
  Penetration                   = 230.086 nm  +- 81.104 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -512,6 +607,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 595.181 nm  +- 142.317 nm 
  Projected range               = 265.667 nm  +- 164.188 nm 
  Penetration                   = 379.507 nm  +- 121.351 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================= run summary ====================
 
@@ -520,5 +618,8 @@ See commands in /vis/modeling/trajectories/ for other options.
  Track length of primary track = 862.628 nm  +- 202.525 nm 
  Projected range               = 396.862 nm  +- 238.211 nm 
  Penetration                   = 559.410 nm  +- 183.300 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

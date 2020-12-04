@@ -45,7 +45,12 @@
 #include "G4ElementTable.hh"
 #include "BrachyMaterial.hh"
 
-BrachyMaterial::BrachyMaterial()
+BrachyMaterial::BrachyMaterial(): fW(nullptr), 
+fPlexiglass(nullptr), fPb(nullptr), fIr192(nullptr), 
+fTi(nullptr), fAir(nullptr), fH2O(nullptr), 
+fSoft(nullptr), fSteel(nullptr), fMat304steel(nullptr),
+fAu(nullptr), fI(nullptr), fCeramic(nullptr),
+fVacuum(nullptr), fBone(nullptr), fMuscle(nullptr), fAg(nullptr)
 {;}
 
 BrachyMaterial::~BrachyMaterial()
@@ -117,132 +122,132 @@ void BrachyMaterial::DefineMaterials()
  
   A = 183.84* g/mole;
   d = 19.3*g/cm3;
-  matW = new G4Material("Tungsten",Z = 74.,A,d);
+  fW = new G4Material("Tungsten",Z = 74.,A,d);
 
    // Perspex, plexiglass, lucite 
   d = 1.19*g/cm3;
-  matplexiglass = new G4Material("Plexiglass",d,3);
-  matplexiglass->AddElement(elH,0.08);
-  matplexiglass->AddElement(elC,0.60);
-  matplexiglass->AddElement(elO,0.32);
+  fPlexiglass = new G4Material("Plexiglass",d,3);
+  fPlexiglass -> AddElement(elH,0.08);
+  fPlexiglass -> AddElement(elC,0.60);
+  fPlexiglass -> AddElement(elO,0.32);
  
   // Lead material
   A = 207.19*g/mole;
   Z = 82;
   d = 11.35*g/cm3;
-  matPb = new G4Material("Lead",Z,A,d);
+  fPb = new G4Material("Lead",Z,A,d);
 
   // Iridium (Medical Physics, Vol 25, No 10, Oct 1998)
   d = 22.42*g/cm3;
   A = 191.96260*g/mole ;
   Z = 77;
-  matir192 = new G4Material("Iridium",Z,A,d);
+  fIr192 = new G4Material("Iridium",Z,A,d);
 
   //titanium
   A = 47.88*g/mole;
   d = 4.50*g/cm3;
-  Titanium = new G4Material("titanium" ,Z = 22.,A,d);
+  fTi = new G4Material("titanium" ,Z = 22.,A,d);
  
   //silver
   A = 107.87*g/mole;
   d = 10.49*g/cm3;
   Z = 22.0;
-  matAg = new G4Material("Silver", Z, A, d);
+  fAg = new G4Material("Silver", Z, A, d);
 
   // Air material
   d = 1.290*mg/cm3;
-  matAir = new G4Material("Air",d,2);
-  matAir->AddElement(elN,0.7);
-  matAir->AddElement(elO,0.3);
+  fAir = new G4Material("Air",d,2);
+  fAir -> AddElement(elN,0.7);
+  fAir -> AddElement(elO,0.3);
 
   // Water
   d = 1.000*g/cm3;
-  matH2O = new G4Material("Water",d,2);
-  matH2O->AddElement(elH,2);
-  matH2O->AddElement(elO,1);
-  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  fH2O = new G4Material("Water",d,2);
+  fH2O -> AddElement(elH,2);
+  fH2O -> AddElement(elO,1);
+  fH2O -> GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   //soft tissue(http://www.nist.gov)
   d = 1.0*g/cm3;
-  soft = new G4Material("tissue",d,13);
-  soft->AddElement(elH,0.104472);
-  soft->AddElement(elC,0.23219);
-  soft->AddElement(elN,0.02488);
-  soft->AddElement(elO,0.630238);
-  soft->AddElement(elNa,0.00113);
-  soft->AddElement(elMg,0.00013);
-  soft->AddElement(elP,0.00133);
-  soft->AddElement(elS,0.00199);
-  soft->AddElement(elCl,0.00134);
-  soft->AddElement(elK,0.00199);
-  soft->AddElement(elCa,0.00023);
-  soft->AddElement(elFe,0.00005);
-  soft->AddElement(elZn,0.00003); 
+  fSoft = new G4Material("tissue",d,13);
+  fSoft -> AddElement(elH,0.104472);
+  fSoft -> AddElement(elC,0.23219);
+  fSoft -> AddElement(elN,0.02488);
+  fSoft -> AddElement(elO,0.630238);
+  fSoft -> AddElement(elNa,0.00113);
+  fSoft -> AddElement(elMg,0.00013);
+  fSoft -> AddElement(elP,0.00133);
+  fSoft -> AddElement(elS,0.00199);
+  fSoft -> AddElement(elCl,0.00134);
+  fSoft -> AddElement(elK,0.00199);
+  fSoft -> AddElement(elCa,0.00023);
+  fSoft -> AddElement(elFe,0.00005);
+  fSoft -> AddElement(elZn,0.00003); 
  
   // Stainless steel (Medical Physics, Vol 25, No 10, Oct 1998)
   d = 8.02*g/cm3 ;
-  matsteel = new G4Material("Stainless steel",d,5);
-  matsteel->AddElement(elMn, 0.02);
-  matsteel->AddElement(elSi, 0.01);
-  matsteel->AddElement(elCr, 0.19);
-  matsteel->AddElement(elNi, 0.10);
-  matsteel->AddElement(elFe, 0.68);
+  fSteel = new G4Material("Stainless steel",d,5);
+  fSteel -> AddElement(elMn, 0.02);
+  fSteel -> AddElement(elSi, 0.01);
+  fSteel -> AddElement(elCr, 0.19);
+  fSteel -> AddElement(elNi, 0.10);
+  fSteel -> AddElement(elFe, 0.68);
 
  //Define Stainless-steel-304 - Flexi source
-  d = 7.999*g/cm3 ;
-  mat304steel = new G4Material("Stainless steel 304",d,6);
-  mat304steel->AddElement(elMn, 0.02);
-  mat304steel->AddElement(elSi, 0.01);
-  mat304steel->AddElement(elCr, 0.19);
-  mat304steel->AddElement(elNi, 0.10);
-  mat304steel->AddElement(elFe, 0.6792);
-  mat304steel->AddElement(elC, 0.0008);
+  d = 7.999*g/cm3;
+  fMat304steel = new G4Material("Stainless steel 304",d,6);
+  fMat304steel -> AddElement(elMn, 0.02);
+  fMat304steel -> AddElement(elSi, 0.01);
+  fMat304steel -> AddElement(elCr, 0.19);
+  fMat304steel -> AddElement(elNi, 0.10);
+  fMat304steel -> AddElement(elFe, 0.6792);
+  fMat304steel -> AddElement(elC, 0.0008);
  
   //gold 
   A = 196.97*g/mole;
   d = 19.32*g/cm3;
-  gold = new G4Material("gold",Z = 79.,A,d);
+  fAu = new G4Material("gold",Z = 79.,A,d);
 
   //Iodine Core
   A = 124.9*g/mole;
   d = 4.862*g/cm3;
-  matI = new G4Material("Iodine",Z = 53.,A,d);
+  fI = new G4Material("Iodine",Z = 53.,A,d);
 
   //ceramic(Medical Physics, May 2000)
   d = 2.88*g/cm3;
-  ceramic = new G4Material("allumina",d,2);
-  ceramic->AddElement(elAl,2);
-  ceramic->AddElement(elO,3);
+  fCeramic = new G4Material("allumina",d,2);
+  fCeramic -> AddElement(elAl,2);
+  fCeramic -> AddElement(elO,3);
 
   G4double density = universe_mean_density;
   G4double pressure = 3.e-18*pascal;
   G4double temperature = 2.73*kelvin;
   A=1.01*g/mole;
-  Vacuum = new G4Material("Galactic", Z = 1., A,density,kStateGas,temperature,pressure);
+  fVacuum = new G4Material("Galactic", Z = 1., A,density,kStateGas,temperature,pressure);
   
   //compact bone (http://www.NIST.gov)
   d = 1.85*g/cm3;
-  bone = new G4Material("bone",d,8);
-  bone->AddElement(elH,0.063984);
-  bone->AddElement(elC,0.278);
-  bone->AddElement(elN,0.027);
-  bone->AddElement(elO,0.410016);
-  bone->AddElement(elMg,0.002);
-  bone->AddElement(elP,0.07);
-  bone->AddElement(elS,0.002);
-  bone->AddElement(elCa,0.147);
+  fBone = new G4Material("bone",d,8);
+  fBone -> AddElement(elH,0.063984);
+  fBone -> AddElement(elC,0.278);
+  fBone -> AddElement(elN,0.027);
+  fBone -> AddElement(elO,0.410016);
+  fBone -> AddElement(elMg,0.002);
+  fBone -> AddElement(elP,0.07);
+  fBone -> AddElement(elS,0.002);
+  fBone -> AddElement(elCa,0.147);
 
   //muscle(http://www.NIST.gov)
-  muscle = new G4Material("muscle",d,9);
-  muscle->AddElement(elH,0.101997);
-  muscle->AddElement(elC,0.123);
-  muscle->AddElement(elN,0.035);
-  muscle->AddElement(elNa,0.0008);
-  muscle->AddElement(elO,0.729);
-  muscle->AddElement(elMg,0.0002);
-  muscle->AddElement(elP,0.002);
-  muscle->AddElement(elS,0.005);
-  muscle->AddElement(elK,0.003);
+  fMuscle = new G4Material("muscle",d,9);
+  fMuscle -> AddElement(elH,0.101997);
+  fMuscle -> AddElement(elC,0.123);
+  fMuscle -> AddElement(elN,0.035);
+  fMuscle -> AddElement(elNa,0.0008);
+  fMuscle -> AddElement(elO,0.729);
+  fMuscle -> AddElement(elMg,0.0002);
+  fMuscle -> AddElement(elP,0.002);
+  fMuscle -> AddElement(elS,0.005);
+  fMuscle -> AddElement(elK,0.003);
 }
 
 G4Material* BrachyMaterial::GetMat(G4String material)

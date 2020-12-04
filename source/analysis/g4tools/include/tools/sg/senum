@@ -19,7 +19,7 @@ inline const hjust_rec* hjust_recs(unsigned int& a_num){
     {"left",     left},
     {"center",   center},
     {"right",    right}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
 }
@@ -50,7 +50,7 @@ inline const vjust_rec* vjust_recs(unsigned int& a_num){
     {"bottom",   bottom},
     {"middle",   middle},
     {"top",      top}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
 }
@@ -100,7 +100,7 @@ inline const marker_style_rec* marker_style_recs(unsigned int& a_num){
     {"penta_star_line",     marker_penta_star_line},
     {"penta_star_filled",   marker_penta_star_filled},
     {"minus",               marker_minus}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
 }
@@ -124,6 +124,14 @@ inline const char* smarker_style(marker_style a_v){
   }
   return 0;
 }
+inline void smarker_styles(std::vector<std::string>& a_v){
+  a_v.clear();
+  unsigned int number;
+  const marker_style_rec* list = marker_style_recs(number);
+  for(unsigned int count=0;count<number;count++) {
+    a_v.push_back(list[count].string);
+  }
+}
 
 typedef struct {char string[16];area_style value;} area_style_rec;
 inline const area_style_rec* area_style_recsList(unsigned int& a_num){
@@ -132,7 +140,7 @@ inline const area_style_rec* area_style_recsList(unsigned int& a_num){
     {"hatched",       area_hatched},
     {"checker",       area_checker},
     {"edged",         area_edged}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
 }
@@ -142,7 +150,7 @@ inline bool sarea_style(const std::string& a_s,area_style& a_v){
   for(unsigned int count=0;count<number;count++) {
     if(a_s==list[count].string) {
       a_v = list[count].value;
-      return true;  
+      return true;
     }
   }
   a_v = area_solid;
@@ -166,10 +174,10 @@ inline const painting_policy_rec* painting_policy_recsList(unsigned int& a_num){
     {"grey_scale",   painting_grey_scale},
     {"violet_to_red",painting_violet_to_red},
     {"grey_scale_inverse",painting_grey_scale_inverse}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
-}  
+}
 inline void spainting_policies(std::vector<std::string>& a_v){
   a_v.clear();
   unsigned int number;
@@ -207,7 +215,7 @@ inline const hatching_policy_rec* hatching_policy_recsList(unsigned int& a_num){
     {"right",          hatching_right},
     {"left",           hatching_left},
     {"left_and_right", hatching_left_and_right}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
 }
@@ -240,7 +248,7 @@ inline const projection_type_rec* projection_type_recsList(unsigned int& a_num){
     {"phiz",     projection_phiz},
     {"zr",       projection_zr},
     {"zphi",     projection_zphi}
-  };  
+  };
   a_num = sizeof(list)/sizeof(list[0]);
   return list;
 }
@@ -280,7 +288,7 @@ inline bool sline_pattern(const std::string& a_s,lpat& aPattern){
   }
   return true;
 }
-  
+
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -309,7 +317,7 @@ inline bool smove_type(const std::string& a_s,move_type& a_move) {
   if(a_s=="move_zoom_in_out_rot") {a_move = move_zoom_in_out_rot;return true;}
   if(a_s=="move_curve") {a_move = move_curve;return true;}
   a_move = move_rotate_left;
-  return false;    
+  return false;
 }
 
 }}

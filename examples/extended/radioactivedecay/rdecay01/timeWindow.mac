@@ -1,3 +1,6 @@
+# macro for rdecay01
+#
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 1
 #

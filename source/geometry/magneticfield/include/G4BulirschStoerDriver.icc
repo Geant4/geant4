@@ -29,6 +29,8 @@
 // Supervision: John Apostolakis, CERN
 // --------------------------------------------------------------------
 
+#include <cassert>
+
 #include "G4LineSection.hh"
 #include "G4FieldUtils.hh"
 

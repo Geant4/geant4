@@ -137,7 +137,7 @@ G4MTRunManager::G4MTRunManager()
     G4ExceptionDescription msg1;
     msg1 << "There are " << numberOfStaticAllocators
          << " static G4Allocator objects detected.\n"
-         << "In multi-threaded mode, all G4Allocator objects must be dynamicly "
+         << "In multi-threaded mode, all G4Allocator objects must be dynamically "
             "instantiated.";
     G4Exception("G4MTRunManager::G4MTRunManager", "Run1035", FatalException,
                 msg1);
@@ -207,6 +207,41 @@ void G4MTRunManager::StoreRNGStatus(const G4String& fn)
   std::ostringstream os;
   os << randomNumberStatusDir << "G4Master_" << fn << ".rndm";
   G4Random::saveEngineStatus(os.str().c_str());
+}
+
+void G4MTRunManager::rndmSaveThisRun()
+{
+  G4int runNumber = 0;
+  if(currentRun) runNumber = currentRun->GetRunID();
+  if(!storeRandomNumberStatus)
+  {
+    G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
+           << " Random number status was not stored prior to this run."
+           << G4endl << "/random/setSavingFlag command must be issued. "
+           << "Command ignored." << G4endl;
+    return;
+  }
+
+  G4String fileIn = randomNumberStatusDir + "G4Worker_currentRun.rndm";
+
+  std::ostringstream os;
+  os << "run" << runNumber << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();
+
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
+  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel > 0)
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
+}
+
+void G4MTRunManager::rndmSaveThisEvent()
+{
+  G4Exception("G4MTRunManager::rndmSaveThisEvent","RUN_RNDM001",
+    FatalException,"This method shall not be invoked !!");
 }
 
 void G4MTRunManager::SetNumberOfThreads(G4int n)
@@ -284,6 +319,22 @@ void G4MTRunManager::CreateAndStartWorkers()
   // number of threads: threads area created once
   if(threads.size() == 0)
   {
+    {
+      // for consistency with G4TaskRunManager
+      std::stringstream msg;
+      msg << "--> G4MTRunManager::CreateAndStartWorkers() --> "
+          << "Initializing workers...";
+
+      std::stringstream ss;
+      ss.fill('=');
+      ss << std::setw(msg.str().length()) << "";
+      G4cout << "\n"
+             << ss.str() << "\n"
+             << msg.str() << "\n"
+             << ss.str() << "\n"
+             << G4endl;
+    }
+
     for(G4int nw = 0; nw < nworkers; ++nw)
     {
       // Create a new worker and remember it
@@ -302,7 +353,6 @@ void G4MTRunManager::CreateAndStartWorkers()
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
                                          G4int n_select)
 {
-  TIMEMORY_AUTO_TIMER("");
   MTkernel->SetUpDecayChannels();
   numberOfEventToBeProcessed = n_event;
   numberOfEventProcessed     = 0;
@@ -617,6 +667,8 @@ void G4MTRunManager::TerminateWorkers()
   RequestWorkersProcessCommandsStack();
   // Ask workers to exit
   NewActionRequest(WorkerActionRequest::ENDWORKER);
+  // finalize profiler before shutting down the threads
+  G4Profiler::Finalize();
   // Now join threads.
 #ifdef G4MULTITHREADED  // protect here to prevent warning in compilation
   while(!threads.empty())

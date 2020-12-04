@@ -5,13 +5,18 @@
 /control/verbose 1
 /event/verbose 0
 /tracking/verbose 0
-#
+
+/WLS/setMirrorPolish 0.99
+/WLS/setMirrorReflectivity 0.99
+/WLS/setPhotonDetPolish 0.98
+/WLS/setPhotonDetReflectivity 0.98
+
 /run/initialize
-#
+
 /gps/particle opticalphoton
 /gps/ene/type Mono
 /gps/ene/mono 2.10 eV
-#
+
 /gps/pos/type Plane
 /gps/pos/shape Circle
 /gps/pos/radius 0.5 mm
@@ -19,6 +24,38 @@
 /gps/ang/mintheta 180.0 deg
 /gps/ang/maxtheta  90.0 deg
 /gps/pos/centre 0.0 0.0 0.0 cm
+
+/WLS/setPhotonDetGeometry Circle
+/WLS/setNumOfLayers 2
+/WLS/setSurfaceRoughness 0.999
+/WLS/setXYRatio 0.8
+/WLS/setWLSLength 1. m
+/WLS/setWLSRadius 0.5 mm
+/WLS/setClad1Radius 0.3 mm
+/WLS/setClad2Radius 0.1 mm
 #
-/run/beamOn 200
+/WLS/setPhotonDetHalfLength 0.6 mm
+/WLS/setGap 0.15 mm
+/WLS/setAlignment 0.1 deg
+/WLS/setMirror true
+
+/WLS/setBarLength 1.1 m
+/WLS/setBarBase 9.5 mm
+/WLS/setHoleRadius 0.9 mm
+/WLS/setCoatingThickness 0.3 mm
+/WLS/setCoatingRadius 1.775 mm
+
+
+/WLS/eventVerbose 2
+/run/printProgress 1
+/WLS/eventVerbose 2
+/run/beamOn 10
+
+/WLS/gun/optPhotonPolar 90. deg
+/WLS/gun/setDecayTimeConstant 10. ns
+/stepping/setBounceLimit 10000
+
+/WLS/eventVerbose 0
+/run/printProgress 1000
+/run/beamOn 10000
 #

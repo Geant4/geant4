@@ -144,7 +144,7 @@ GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
     if(verboseLevel>1)
     {
       G4cout << "Primary particle (" << partDef->GetParticleName()
-             << ") --- Transfered with momentum "
+             << ") --- Transferred with momentum "
              << primaryParticle->GetMomentum()
              << G4endl;
     }

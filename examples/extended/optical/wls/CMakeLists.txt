@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(wls)
 
 #----------------------------------------------------------------------------
@@ -42,7 +45,6 @@ target_link_libraries(wls ${Geant4_LIBRARIES} )
 set(wls_SCRIPTS
     wls.out
     wls.in
-    init.in
     gui.mac
     Sr90.mac
     vis.mac

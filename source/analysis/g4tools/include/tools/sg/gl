@@ -22,7 +22,7 @@ inline void gl_clear_errors() {
   }
 }
 
-inline bool gl_dump_if_errors(std::ostream& a_out,const std::string& a_head) {   
+inline bool gl_dump_if_errors(std::ostream& a_out,const std::string& a_head) {
   bool retval = false;
   GLenum glerror = ::glGetError();
   if(glerror!=GL_NO_ERROR) {
@@ -82,7 +82,7 @@ inline void gl_dump_infos(std::ostream& a_out) {
 }
 
 inline bool gl_tex_img(std::ostream& a_out,const tools::img_byte& a_img) {
-    if(a_img.bpp()==1) { 
+    if(a_img.bpp()==1) {
       //to pass eiffel-tower.png
 #if defined(ANDROID) || TARGET_OS_IPHONE
       tools::img_byte res;
@@ -90,7 +90,7 @@ inline bool gl_tex_img(std::ostream& a_out,const tools::img_byte& a_img) {
         a_out << "tools::sg::gl::tex_img : tools::img.bw2x() failed." << std::endl;
         return false;
       }
-      ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,res.width(),res.height(),0,GL_RGB,GL_UNSIGNED_BYTE,res.buffer());      
+      ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,res.width(),res.height(),0,GL_RGB,GL_UNSIGNED_BYTE,res.buffer());
 #else
       ::glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,a_img.width(),a_img.height(),0,GL_LUMINANCE,GL_UNSIGNED_BYTE,a_img.buffer());
 #endif

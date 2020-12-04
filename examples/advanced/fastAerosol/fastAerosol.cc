@@ -28,7 +28,7 @@
 
 
 #include "G4MTRunManager.hh"
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "G4ScoringManager.hh"
@@ -47,11 +47,9 @@
 int main(int argc,char** argv)
 {
 // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
 
 	// Detect interactive mode (if no arguments) and define UI session
 	//

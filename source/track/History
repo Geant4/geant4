@@ -15,18 +15,28 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+- November 12, 2020 J.Madsen (track-V10-06-06)
+- Added G4Profiler support.
+
+- July 24, 2020 G.Cosmo (track-V10-06-05)
+- Fixed case of non-initialised values in G4Step.
+
+- July 16, 2020 G.Cosmo (track-V10-06-04)
+- Minor c++11 review; code formatting and cleanup.
 
 - March 11, 2020 V.Ivanchenko (track-V10-06-03)
-  G4Track - do not use Velocity table, instead use GetBeta() method
+- G4Track - do not use Velocity table, instead use GetBeta() method
     from G4DynamicParticle; expected minor speed-up
 
 - February 10, 2020 V.Ivanchenko (track-V10-06-02)
-  G4Track - use G4OpticalPhoton pdg code; removed static thread local 
+- G4Track - use G4OpticalPhoton pdg code; removed static thread local 
     variables; slightly simplified velocity computation; removed 
     commented code left from previous tag
 
 - January 29, 2020 V.Ivanchenko (track-V10-06-01)
-  G4Track - fixed Coverity reports connected with unnecessary checks 
+- G4Track - fixed Coverity reports connected with unnecessary checks 
   for valid pointers to G4Step and G4DynamicParticle
 
 - December 9, 2019 B. Morgan (track-V10-06-00)

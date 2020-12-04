@@ -95,7 +95,7 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 
   pchkCmd = new G4UIcmdWithABool( "/geometry/navigator/push_notify", this );
   pchkCmd->SetGuidance( "Set navigator verbosity push notifications." );
-  pchkCmd->SetGuidance( "This allows to disable/re-enable verbosity in" );
+  pchkCmd->SetGuidance( "This allows one to disable/re-enable verbosity in" );
   pchkCmd->SetGuidance( "navigation, when tracks may get stuck and require" );
   pchkCmd->SetGuidance( "one artificial push along the direction by the" );
   pchkCmd->SetGuidance( "navigator. Notification is active by default." );

@@ -28,6 +28,7 @@
 // G4PSTrackCounter
 #include "G4PSTrackCounter.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
@@ -39,7 +40,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackCounter::G4PSTrackCounter(G4String name, G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+  :G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),
    EvtMap(0),weighted(false)
 {
  SetUnit("");
@@ -77,6 +78,21 @@ G4bool G4PSTrackCounter::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       G4double val = 1.0;
       if(weighted) val *= aStep->GetPreStepPoint()->GetWeight();
       EvtMap->add(index,val);  
+
+      if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+      {
+        auto filler = G4VScoreHistFiller::Instance();
+        if(!filler)
+        {
+          G4Exception("G4PSTrackCounter::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+        }
+        else
+        {
+          filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),val);
+        }
+      }
+
   }
 
   return TRUE;

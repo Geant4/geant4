@@ -41,6 +41,12 @@ if(GEANT4_ENABLE_TESTING)
   if(GEANT4_USE_FREETYPE)
     list(APPEND GEANT4_TEST_ENVIRONMENT TOOLS_FONT_PATH=${PROJECT_SOURCE_DIR}/source/analysis/fonts)
   endif()
+
+  # - Configure 'G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default)'
+  # to use TBB
+  if(GEANT4_BUILD_MULTITHREADED AND GEANT4_USE_TBB)
+    list(APPEND GEANT4_TEST_ENVIRONMENT G4RUN_MANAGER_TYPE=TBB)
+  endif()
 endif()
 
 #-----------------------------------------------------------------------

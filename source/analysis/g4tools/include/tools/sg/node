@@ -44,12 +44,12 @@ public:
   virtual node* copy() const = 0;
 
   virtual unsigned int cls_version() const {return 1;}
-  
+
   virtual const desc_fields& node_desc_fields() const {
     static const desc_fields s_v;
     return s_v;
   }
-  
+
   virtual void render(render_action&) {}
   virtual void pick(pick_action&) {}
   virtual void bbox(bbox_action&) {}
@@ -63,12 +63,12 @@ public:
       if(this==a_action.node()){
         a_action.path_push(this); //ending node in the path.
         a_action.set_done(true);
-      } 
+      }
     } else if(a_action.what()==search_action::search_path_to_node_of_class) {
       if(cast(a_action.sclass())) {
         search_action::path_t path = a_action.path();
         path.push_back(this);
-        a_action.add_path(path);        
+        a_action.add_path(path);
         if(a_action.stop_at_first()) a_action.set_done(true);
       }
     }
@@ -77,7 +77,7 @@ public:
     if(this==a_action.node()){
       a_action.set_found_model(a_action.model_matrix());
       a_action.set_done(true);
-    } 
+    }
   }
   virtual bool write(write_action& a_action) {
     if(!a_action.beg_node(*this)) return false;
@@ -88,7 +88,7 @@ public:
   virtual void event(event_action&) {}
   virtual bool read(read_action& a_action) {return read_fields(a_action);}
   virtual void is_visible(visible_action&) {}
-  
+
   virtual void protocol_one_fields(std::vector<field*>& a_fields) const {a_fields = m_fields;}
 
   virtual bool draw_in_frame_buffer() const {return false;}  // marker nodes return true.

@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbMaterialMixtureByVolume implementation
 //
-//
-//
-// class G4tgbMaterialMixtureByVolume
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbMaterialMixtureByVolume.hh"
 
@@ -39,122 +35,113 @@
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgrMessenger.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialMixtureByVolume::G4tgbMaterialMixtureByVolume()
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialMixtureByVolume::~G4tgbMaterialMixtureByVolume()
 {
 }
 
-
-// -------------------------------------------------------------------------
-G4tgbMaterialMixtureByVolume::G4tgbMaterialMixtureByVolume( G4tgrMaterial* hg )
+// --------------------------------------------------------------------
+G4tgbMaterialMixtureByVolume::G4tgbMaterialMixtureByVolume(G4tgrMaterial* hg)
 {
   theTgrMate = hg;
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4Material* G4tgbMaterialMixtureByVolume::BuildG4Material()
 {
- 
   //----- construct new G4Material with components materials (a mixture)
-  G4Material* mate = new G4Material( theTgrMate->GetName(),
-                                     theTgrMate->GetDensity(),
-                                     theTgrMate->GetNumberOfComponents(),
-                                     theTgrMate->GetState(),
-                                     theTgrMate->GetTemperature(),
-                                     theTgrMate->GetPressure() );
+  G4Material* mate =
+    new G4Material(theTgrMate->GetName(), theTgrMate->GetDensity(),
+                   theTgrMate->GetNumberOfComponents(), theTgrMate->GetState(),
+                   theTgrMate->GetTemperature(), theTgrMate->GetPressure());
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
     G4cout << " G4tgbMaterialMixtureByVolume::buildG4Material() -"
            << " Constructing new G4Material:"
-           << " " << theTgrMate->GetName() 
-           << " " << theTgrMate->GetDensity()/g*cm3
-           << " " << theTgrMate->GetNumberOfComponents()
-           << " " << theTgrMate->GetState()
-           << " " << theTgrMate->GetTemperature()
+           << " " << theTgrMate->GetName() << " "
+           << theTgrMate->GetDensity() / g * cm3 << " "
+           << theTgrMate->GetNumberOfComponents() << " "
+           << theTgrMate->GetState() << " " << theTgrMate->GetTemperature()
            << " " << theTgrMate->GetPressure() << G4endl;
   }
 #endif
- 
+
   //----- Transform fractions by volume to fractions by weight
   TransformToFractionsByWeight();
 
   //----- Add components
-  G4Material* compMate = 0;
+  G4Material* compMate = nullptr;
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
-  for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++)
+  for(G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ++ii)
   {
     // Look if this component is a material
-    compMate = mf->FindOrBuildG4Material( GetComponent(ii) );
-    if( compMate != 0 )
-    { 
-      // If it is a material add it by weight fraction 
-      mate->AddMaterial( compMate, theFractionsByWeight[ii] );
+    compMate = mf->FindOrBuildG4Material(GetComponent(ii));
+    if(compMate != nullptr)
+    {
+      // If it is a material add it by weight fraction
+      mate->AddMaterial(compMate, theFractionsByWeight[ii]);
     }
     else
     {
-      G4String ErrMessage = "Component " + GetComponent(ii)
-                          + " of material " + theTgrMate->GetName()
-                          + "\n" + "is not an element nor a material !";
+      G4String ErrMessage = "Component " + GetComponent(ii) + " of material " +
+                            theTgrMate->GetName() + "\n" +
+                            "is not an element nor a material !";
       G4Exception("G4tgbMaterialMixtureByVolume::BuildG4Material()",
                   "InvalidSetup", FatalException, ErrMessage);
     }
-  } 
+  }
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
-    G4cout << " Constructing new G4Material by volume: " << *mate << G4endl; 
+    G4cout << " Constructing new G4Material by volume: " << *mate << G4endl;
   }
-#endif      
+#endif
 
   return mate;
 }
 
-
-// -------------------------------------------------------------------------
-void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight() 
-{ 
+// --------------------------------------------------------------------
+void G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()
+{
   G4tgbMaterialMgr* mf = G4tgbMaterialMgr::GetInstance();
-  G4Material* compMate = 0;
-  G4double totalfd = 0.;
-  for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++ )
+  G4Material* compMate = nullptr;
+  G4double totalfd     = 0.;
+  for(G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ++ii)
   {
-    compMate = mf->FindOrBuildG4Material( GetComponent(ii) );
-    if( compMate != 0 )
+    compMate = mf->FindOrBuildG4Material(GetComponent(ii));
+    if(compMate != nullptr)
     {
-      // If it is a material add it by weight fraction 
-      theFractionsByWeight.push_back( GetFraction(ii)*compMate->GetDensity() );
+      // If it is a material add it by weight fraction
+      theFractionsByWeight.push_back(GetFraction(ii) * compMate->GetDensity());
       totalfd += theFractionsByWeight[ii];
     }
     else
     {
-      G4String ErrMessage = "Component " + GetComponent(ii)
-                          + " of material " + theTgrMate->GetName()
-                          + "\n" + "is not a material !";
+      G4String ErrMessage = "Component " + GetComponent(ii) + " of material " +
+                            theTgrMate->GetName() + "\n" +
+                            "is not a material !";
       G4Exception("G4tgbMaterialMixtureByVolume::BuildG4Material()",
                   "InvalidSetup", FatalException, ErrMessage);
-    }   
+    }
   }
-  for( G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ii++ )
+  for(G4int ii = 0; ii < theTgrMate->GetNumberOfComponents(); ++ii)
   {
     theFractionsByWeight[ii] /= totalfd;
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+    if(G4tgrMessenger::GetVerboseLevel() >= 2)
     {
       G4cout << " G4tgbMaterialMixtureByVolume::TransformToFractionsByWeight()"
-             << " Component " << ii  << " : "
-             << mf->FindOrBuildG4Material( GetComponent(ii) )->GetName()
+             << " Component " << ii << " : "
+             << mf->FindOrBuildG4Material(GetComponent(ii))->GetName()
              << " FractionByVolume= " << GetFraction(ii)
-             << " FractionByWeight= " << theFractionsByWeight[ii] 
-             << G4endl;
+             << " FractionByWeight= " << theFractionsByWeight[ii] << G4endl;
     }
 #endif
   }

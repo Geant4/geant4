@@ -48,21 +48,21 @@
 
 BrachyFactoryLeipzig:: BrachyFactoryLeipzig()
 {
- leipzigSource = new  BrachyDetectorConstructionLeipzig();
+ fLeipzigSource = new  BrachyDetectorConstructionLeipzig();
 }
 
 BrachyFactoryLeipzig:: ~BrachyFactoryLeipzig()
 {
-  delete leipzigSource;
+  delete fLeipzigSource;
 }
 
 void BrachyFactoryLeipzig::CreateSource(G4VPhysicalVolume* mother)
 {
-  leipzigSource -> ConstructLeipzig(mother);
+  fLeipzigSource -> ConstructLeipzig(mother);
 }
 
 void BrachyFactoryLeipzig::CleanSource()
 {
-  leipzigSource -> CleanLeipzigApplicator();
-  leipzigSource = 0; 
+  fLeipzigSource -> CleanLeipzigApplicator();
+  fLeipzigSource = nullptr; 
 }

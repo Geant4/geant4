@@ -23,47 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIcmdWithABool
 //
+// Class description:
 //
-//
+// A concrete class of G4UIcommand. The command defined by this class
+// takes a Boolean value. Boolean value can be in the following notations:
+//    TRUE :
+//       1 t T true TRUE
+//    FALSE :
+//       0 f F false FALSE
+// General information of G4UIcommand is given in G4UIcommand.hh
 
-#ifndef G4UIcmdWithABool_H
-#define G4UIcmdWithABool_H 1
+// Author: M.Asai, 1998
+// --------------------------------------------------------------------
+#ifndef G4UIcmdWithABool_hh
+#define G4UIcmdWithABool_hh 1
 
 #include "G4UIcommand.hh"
 
-// class description:
-//  A concrete class of G4UIcommand. The command defined by this class
-// takes a boolean value. Boolean value can be the following notations.
-//    TRUE : 
-//       1 t T true TRUE
-//    FALSE : 
-//       0 f F false FALSE
-//  General information of G4UIcommand is given in G4UIcommand.hh.
-
 class G4UIcmdWithABool : public G4UIcommand
 {
-  public: // with description
-    G4UIcmdWithABool
-    (const char * theCommandPath,G4UImessenger * theMessenger);
-    //  Constructor. The command string with full path directory
-    // and the pointer to the messenger must be given.
+  public:
+
+    G4UIcmdWithABool(const char* theCommandPath, G4UImessenger* theMessenger);
+      // Constructor. The command string with full path directory
+      // and the pointer to the messenger must be given
+
     static G4bool GetNewBoolValue(const char* paramString);
-    //  Convert string which represents a boolean value to G4bool.
-    void SetParameterName(const char * theName,G4bool omittable,
-                          G4bool currentAsDefault=false);
-    //  Set the parameter name for a boolean parameter.
-    //  If "omittable" is set as true, the user of this command can ommit
-    // the value when he/she applies the command. If "omittable" is false,
-    // the user must supply a boolean value.
-    //  "currentAsDefault" flag is valid only if "omittable" is true. If this
-    // flag is true, the current value is used as the default value when the 
-    // user ommit the parameter. If this flag is false, the value given by the 
-    // next SetDefaultValue() method is used.
+      // Convert string which represents a boolean value to G4bool
+
+    void SetParameterName(const char* theName, G4bool omittable,
+                          G4bool currentAsDefault = false);
+      // Set the parameter name for a Boolean parameter.
+      // If "omittable" is set as true, the user of this command can omit
+      // the value when the command is applied. If "omittable" is false,
+      // the user must supply a Boolean value.
+      // "currentAsDefault" flag is valid only if "omittable" is true. If this
+      // flag is true, the current value is used as the default value when the
+      // user omits the parameter. If this flag is false, the value given by the
+      // next SetDefaultValue() method is used
+
     void SetDefaultValue(G4bool defVal);
-    //  Set the default value of the parameter. This default value is used
-    // when the user of this command ommits the parameter value, and
-    // "ommitable" is true and "currentAsDefault" is false.
+      // Set the default value of the parameter. This default value is used
+      // when the user of this command omits the parameter value, and
+      // "omittable" is true and "currentAsDefault" is false
 };
 
 #endif

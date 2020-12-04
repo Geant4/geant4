@@ -542,7 +542,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         }
 
       //step limit 
-      tlimit = facrange*rangeinit;              
+      tlimit = (currentRange > presafety) ?
+        std::max(facrange*rangeinit, facsafety*presafety) : currentRange;
 
       //lower limit for tlimit
       tlimit = std::min(std::max(tlimit,tlimitmin), tgeom);
@@ -727,9 +728,6 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   // z = t for very small tPathLength
   if(tPathLength < tlimitminfix2) return zPathLength;
 
-  // VI: it is already checked
-  // if(tPathLength > currentRange)
-  //  tPathLength = currentRange ;
   /*
   G4cout << "ComputeGeomPathLength: tpl= " <<  tPathLength
          << " R= " << currentRange << " L0= " << lambda0
@@ -1133,10 +1131,9 @@ void G4UrbanMscModel::SampleDisplacement(G4double, G4double phi)
 void G4UrbanMscModel::SampleDisplacementNew(G4double, G4double phi)
 {
   // best sampling based on single scattering results
-
   G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-  G4double r = 0.;
-  G4double u = r/rmax;
+  G4double r(0.0);
+  G4double u(0.0);
   static const G4double reps = 5.e-3;
 
   if(rmax > 0.)
@@ -1294,7 +1291,12 @@ void G4UrbanMscModel::InitialiseModelCache()
     msc[j]->stepmina = 27.725/(1.+0.203*Zeff);
     msc[j]->stepminb =  6.152/(1.+0.111*Zeff);
 
-    msc[j]->doverra = 1.20 - Zeff*(0.0162 - 9.22e-5*Zeff);
+    // 21.07.2020
+    msc[j]->doverra = 9.6280e-1 - 8.4848e-2*msc[j]->sqrtZ + 4.3769e-3*Zeff;
+
+    // 06.10.2020 
+    // msc[j]->doverra = 7.7024e-1 - 6.7878e-2*msc[j]->sqrtZ + 3.5015e-3*Zeff;
+
     msc[j]->doverrb = 1.15 - 9.76e-4*Zeff;
   }
 }

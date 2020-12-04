@@ -77,8 +77,7 @@ G4HadronicParameters::G4HadronicParameters() {
   fMaxEnergyTransitionFTF_Cascade = 6.0*CLHEP::GeV;
   fMinEnergyTransitionQGS_FTF = 12.0*CLHEP::GeV;
   fMaxEnergyTransitionQGS_FTF = 25.0*CLHEP::GeV;
-  fVerboseLevel = 1;
-  fEnableBC = false;
+  fEnergyThresholdForHeavyHadrons = 1.1*CLHEP::GeV;
   fMessenger = new G4HadronicParametersMessenger( this );
 }
 
@@ -129,4 +128,70 @@ void G4HadronicParameters::SetEnableBCParticles( G4bool val ) {
 
 void G4HadronicParameters::SetVerboseLevel( const G4int val ) {
   if ( ! IsLocked()  &&  val >= 0 ) fVerboseLevel = val;
+}
+
+
+void G4HadronicParameters::SetEnergyThresholdForHeavyHadrons( G4double val ) {
+  if ( ! IsLocked()  &&  val >= 0 && val < 5*CLHEP::GeV ) {
+    fEnergyThresholdForHeavyHadrons = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorNucleonInelastic( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorNucleonInelastic = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorNucleonElastic( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorNucleonElastic = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorPionInelastic( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorPionInelastic = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorPionElastic( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorPionElastic = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorHadronInelastic( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorHadronInelastic = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorHadronElastic( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorHadronElastic = val;
+  }
+}
+
+
+void G4HadronicParameters::SetXSFactorEM( G4double val ) {
+  if ( ! IsLocked()  &&  std::abs(val - 1.0) < fXSFactorLimit ) {
+    fXSFactorEM = val;
+  }
+}
+
+
+void G4HadronicParameters::SetApplyFactorXS( G4bool val ) {
+  if ( ! IsLocked() ) fApplyFactorXS = val; 
+}
+
+
+void G4HadronicParameters::SetEnableCRCoalescence( G4bool val ) {
+  if ( ! IsLocked() ) fEnableCRCoalescence = val;
 }

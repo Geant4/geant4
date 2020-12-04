@@ -107,6 +107,7 @@
 
 #include "G4GammaGeneralProcess.hh"
 #include "G4LossTableManager.hh"
+#include "G4GammaNuclearXS.hh"
 
 #include "G4HadronicParameters.hh"
 #include "G4PhysicsListHelper.hh"
@@ -132,6 +133,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
   phadActivated (false),
   fNuActivated (false),
   fNuETotXscActivated (false),
+  fUseGammaNuclearXS(false),
   gmumuFactor (1.0),
   pmumuFactor (1.0),
   phadFactor  (1.0),
@@ -230,6 +232,11 @@ void G4EmExtraPhysics::NeutrinoActivated(G4bool val)
 void G4EmExtraPhysics::NuETotXscActivated(G4bool val)
 {
   fNuETotXscActivated = val;
+}
+
+void G4EmExtraPhysics::SetUseGammaNuclearXS(G4bool val)
+{
+  fUseGammaNuclearXS = val;
 }
 
 void G4EmExtraPhysics::SetNuEleCcBias(G4double bf)
@@ -437,6 +444,9 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
   G4PhotoNuclearProcess* gnuc = new G4PhotoNuclearProcess();
+  if(fUseGammaNuclearXS) {
+    gnuc->AddDataSet(new G4GammaNuclearXS());
+  }
 
   G4QGSModel< G4GammaParticipants >* theStringModel = 
     new G4QGSModel< G4GammaParticipants >;
@@ -468,10 +478,10 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
   theModel->SetMaxEnergy(param->GetMaxEnergy());
   gnuc->RegisterMe(theModel);
   
-  G4GammaGeneralProcess* sp = 
+  G4GammaGeneralProcess* gproc = 
     (G4GammaGeneralProcess*)emManager->GetGammaGeneralProcess();
-  if(sp) {
-    sp->AddHadProcess(gnuc);
+  if(gproc != nullptr) {
+    gproc->AddHadProcess(gnuc);
   } else {
     // LEND may be activated if the general process is not activated
     ph->RegisterProcess(gnuc, G4Gamma::Gamma());
@@ -483,11 +493,23 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
     G4PositronNuclearProcess* pnuc = new G4PositronNuclearProcess;
     G4ElectroVDNuclearModel* eModel = new G4ElectroVDNuclearModel;
 
-    enuc->RegisterMe(eModel);
-    ph->RegisterProcess(enuc, G4Electron::Electron());
+    G4GammaGeneralProcess* eproc = 
+      (G4GammaGeneralProcess*)emManager->GetElectronGeneralProcess();
+    if(eproc != nullptr) {
+      eproc->AddHadProcess(enuc);
+    } else {
+      enuc->RegisterMe(eModel);
+      ph->RegisterProcess(enuc, G4Electron::Electron());
+    }
   
-    pnuc->RegisterMe(eModel);
-    ph->RegisterProcess(enuc, G4Positron::Positron());
+    G4GammaGeneralProcess* pproc = 
+      (G4GammaGeneralProcess*)emManager->GetPositronGeneralProcess();
+    if(pproc != nullptr) {
+      pproc->AddHadProcess(pnuc);
+    } else {
+      pnuc->RegisterMe(eModel);
+      ph->RegisterProcess(enuc, G4Positron::Positron());
+    }
   }
 }
 

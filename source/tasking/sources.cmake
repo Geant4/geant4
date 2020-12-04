@@ -18,7 +18,6 @@
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4tasking
     HEADERS
         G4RunManagerFactory.hh

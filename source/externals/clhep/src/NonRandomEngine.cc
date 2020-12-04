@@ -20,10 +20,11 @@
 #include "CLHEP/Random/NonRandomEngine.h"
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Random/DoubConv.h"
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <cassert>
+#include <vector>
 
 namespace CLHEP {
 

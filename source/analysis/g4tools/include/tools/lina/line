@@ -95,24 +95,24 @@ public:
     VEC3 D0 = m_dir;
     VEC3 D1 = a_line.m_dir;
     VEC3 D0N = D0;
-  
+
     T c[3], d[3];
-  
+
     for(unsigned int i=0;i<3;i++) {
       d[i] = D1[i] - D0N[i]*(D0[0]*D1[0] + D0[1]*D1[1] + D0[2]*D1[2]);
       c[i] = P1[i] - P0[i] + D0N[i]*(D0[0]*P0[0] + D0[1]*P0[1] + D0[2]*P0[2]);
     }
-  
+
     T den = d[0]*d[0]+d[1]*d[1]+d[2]*d[2];
     if(den==T()) return false;
 
     T t = -(c[0]*d[0]+c[1]*d[1]+c[2]*d[2]) / den;
-  
+
     a_on_line = a_line.m_pos + a_line.m_dir * t;
     closest_point(a_on_line,a_on_this);
     return true;
   }
-  
+
   bool intersect(const line<T>& a_line,VEC3& a_out,const T& a_prec) const {
     VEC3 p,q;
     if(!closest_points(a_line,p,q)) return false;
@@ -121,7 +121,7 @@ public:
     return true;
   }
 */
-  
+
 protected:
   VEC3 m_pos;
   VEC3 m_dir; //normalized.

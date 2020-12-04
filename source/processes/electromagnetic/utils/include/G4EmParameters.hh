@@ -62,6 +62,13 @@
 #include "G4Threading.hh"
 #include <vector>
 
+enum G4eSingleScatteringType
+  {
+    fWVI = 0,
+    fMott,
+    fDPWA
+  };
+
 class G4EmParametersMessenger;
 class G4EmExtraParameters;
 class G4EmLowEParameters;
@@ -207,6 +214,8 @@ public:
 
   void SetBremsstrahlungTh(G4double val);
   G4double BremsstrahlungTh() const;
+  void SetMuHadBremsstrahlungTh(G4double val);
+  G4double MuHadBremsstrahlungTh() const;
 
   void SetLambdaFactor(G4double val);
   G4double LambdaFactor() const;
@@ -277,6 +286,9 @@ public:
 
   void SetMscMuHadStepLimitType(G4MscStepLimitType val);
   G4MscStepLimitType MscMuHadStepLimitType() const;
+
+  void SetSingleScatteringType(G4eSingleScatteringType val); 
+  G4eSingleScatteringType SingleScatteringType() const;
 
   void SetNuclearFormfactorType(G4NuclearFormfactorType val);
   G4NuclearFormfactorType NuclearFormfactorType() const;
@@ -395,6 +407,7 @@ private:
   G4double lowestTripletEnergy;
   G4double linLossLimit;
   G4double bremsTh;
+  G4double bremsMuHadTh;
   G4double lambdaFactor;
   G4double factorForAngleLimit;
   G4double thetaLimit;
@@ -417,6 +430,7 @@ private:
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
   G4NuclearFormfactorType nucFormfactor;
+  G4eSingleScatteringType fSStype;
 
 #ifdef G4MULTITHREADED
   static G4Mutex emParametersMutex;

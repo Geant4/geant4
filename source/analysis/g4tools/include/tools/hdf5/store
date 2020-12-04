@@ -153,7 +153,7 @@ protected:
 public:
   std::ostream& out() const {return m_out;}
   //bool fill(tools::uint32 &a_n){a_n = 0;return true;}
-  
+
   bool entries(tools::uint64& a_entries) const {
     if(m_pagess.empty()) {a_entries = 0;return true;}
     a_entries = m_pagess.front()->entries();
@@ -165,9 +165,9 @@ public:
 	return false;
       }
     }
-    return true;    
+    return true;
   }
-  
+
   pages* create_pages(const std::string& a_name,const std::string& a_form) {
     //::printf("debug : create_pages %s %s\n",a_name.c_str(),a_form.c_str());
     pages* _pages = new pages(m_out,m_group,a_name,a_form,m_write,m_compress);

@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-20 B. Morgan (testem10-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10-11-20 B. Morgan (testem10-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 07-04-18 m. maire (testem10-V10-04-01)
 - testem10.cc : set visualiation only in interactive mode
 
@@ -21,7 +27,7 @@ track of all tags.
 - testem10.cc : remove G4UI_USE and G4VIS_USE
 
 10-11-16 V.Ivanchenko (testem10-V10-02-03)
-- DetectorConstruction, DetectorSimpleALICE - removed run time 
+- DetectorConstruction, DetectorSimpleALICE - removed run time
     warning by proper definition cuts per region
 
 14-10-16 G.Folger (testem10-V10-02-02)
@@ -35,12 +41,12 @@ track of all tags.
 - Major example revision & clean-up:
   - Removed Em10 prefix from class names to be consistent with other examples
     in electromagnetic category
-  - Refactored detector construction & its messenger classes 
+  - Refactored detector construction & its messenger classes
   - Revised scoring: removed unused code and replaced own-defined
     histograms with Geant4 analysis
   - Added StackingAction which accounts XTR gamma, all gamma and all e-
-    spectra 
-  - PhysicsList changed to a modular physics list and introduced 
+    spectra
+  - PhysicsList changed to a modular physics list and introduced
     TransitionRadiationPhysics builder
   - Clean-up primary generator action
   - Added test_suite.sh script
@@ -56,7 +62,7 @@ track of all tags.
 01-04-13 A.Dotti (testem10-V09-05-05,testem10-V09-05-06)
 - New G4VUserPhysicsList interface
 
-13-02-13 I.Hrivnacova 
+13-02-13 I.Hrivnacova
 - Applied coding guidelines (virtual keyword, data members initialization)
 
 28-11-12 G.Cosmo (testem10-V09-05-04)
@@ -66,54 +72,54 @@ track of all tags.
 - Migration to the updated analysis tool
 
 18-08-12 V.Ivant (testem10-V09-05-02)
-- Em10SteppingAction - rewritten (old code was very non-optimized and 
+- Em10SteppingAction - rewritten (old code was very non-optimized and
   provides crashes)
 
 11-07-12 V.Ivant (testem10-V09-05-01)
 - Em10RunAction - cleanup initialisation
 
 10-07-12 V.Ivant (testem10-V09-05-00)
-- Em10RunAction - fixed write outside boundaries of C-array 
+- Em10RunAction - fixed write outside boundaries of C-array
 
 03-10-11 G.Folger (testem10-V09-04-00)
-- Fix gcc46 compilation warning in Em10PrimaryGeneratorAction.cc 
+- Fix gcc46 compilation warning in Em10PrimaryGeneratorAction.cc
     and src/Em10Materials.cc
 
 03-06-10 J.Perl (testem10-V09-03-01)
-- Updated vis usage 
+- Updated vis usage
 
 21-05-10 mma (testem10-V09-03-00)
 - TestEm10.cc : introduction of G4UIExecutive
 
 21-11-09 V.Ivant (testem10-V09-02-00)
-- update PhysList according to 9.3 
+- update PhysList according to 9.3
 
 12-06-08 mma (testem10-V09-01-01)
-- Remove AIDA from GNUmakefile 
-     
+- Remove AIDA from GNUmakefile
+
 07-05-08 mma (testem10-V09-01-00)
 - README : update Aida informations
 
 27-07-07 V.Ivant  (testem10-V09-00-00)
 - Create VisManager only for interactive session, improve destructor
   of Em10DetectorConstruction class
-     
-25-10-06 mma (testem10-V08-01-00) 
+
+25-10-06 mma (testem10-V08-01-00)
 - GNUmakefile : LOADLIBS
 
 22 May 05: V.Ivant (testem10-V08-00-01)
 - Remove extra files
 
 19 May 05: V.Ivant (testem10-V08-00-00)
-- V.Grichine cleanup 
+- V.Grichine cleanup
 
 06 Dec 05: Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 
 29 Oct 05: V.Ivant (testem10-V07-01-01)
-- V.Grichine:Production cuts were moved to Physics list providing 
-              independent gamma, electron and positron cuts in radiator 
-              and detector regions.  
+- V.Grichine:Production cuts were moved to Physics list providing
+              independent gamma, electron and positron cuts in radiator
+              and detector regions.
 
 15 Oct 05: V.Ivant (testem10-V07-01-00)
 - Updated PhysicsList
@@ -135,7 +141,7 @@ track of all tags.
 
 27-08-03 V.Ivant (testem10-V05-02-00)
 - Remove obsolete interfaces
-- Substitute in the PhysicsList processes by those of 5.2 realise 
+- Substitute in the PhysicsList processes by those of 5.2 realise
 
 20 Feb. 2003 Vladimir Ivanchenko (testem10-V05-00-00)
 - Migrade to cut per region

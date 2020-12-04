@@ -37,7 +37,7 @@
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
-
+#include "G4HadronicParameters.hh"
 #include "G4Exp.hh"
 #include "G4Pow.hh"
 
@@ -52,19 +52,26 @@ G4LundStringFragmentation::G4LundStringFragmentation()
     SetMassCut(210.*MeV);   //  Mpi + Delta
                             // For ProduceOneHadron it is required
                             // that no one pi-meson can be produced.
-
     SigmaQT = 0.435 * GeV;
-
+    Tmt = 190.0 * MeV;
     SetStringTensionParameter(1.*GeV/fermi);
     SetDiquarkBreakProbability(0.5);
-    SetStrangenessSuppression((1.0 - 0.13)/2.0);
-
+    SetStrangenessSuppression((1.0 - 0.12)/2.0);
     SetDiquarkSuppression(0.15);
 
-    // For the time being, set to 0.0 the probabilities for c-cbar and b-bbar creation.
-    SetProbCCbar(0.0);  //(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
-    SetProbBBbar(0.0);  //(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
-
+    // Check if charmed and bottom hadrons are enabled: if this is the case, then
+    // set the non-zero probabilities for c-cbar and b-bbar creation from the vacuum,
+    // else set them to 0.0. If these probabilities are/aren't zero then charmed or bottom
+    // hadrons can't/can be created during the string fragmentation of ordinary
+    // (i.e. not heavy) projectile hadron nuclear reactions.
+    if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
+      SetProbCCbar(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+      SetProbBBbar(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+    } else {
+      SetProbCCbar(0.0);
+      SetProbBBbar(0.0);
+    }
+    
     SetMinMasses();  // For treating of small string decays
 }
 
@@ -108,15 +115,20 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(const G4ExcitedS
 		LeftVector=ProduceOneHadron(&theString);
 		SetMassCut(Mcut);
 
-		LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
-		LeftVector->operator[](0)->SetPosition(theString.GetPosition());
-
-		if (LeftVector->size() > 1)
-                {
+		if ( LeftVector )
+		{
+		  if ( LeftVector->size() > 0)
+                  {
+		        LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
+		        LeftVector->operator[](0)->SetPosition(theString.GetPosition());
+                  }
+		  if (LeftVector->size() > 1)
+                  {
 		        // 2 hadrons created from qq-qqbar are stored
 			LeftVector->operator[](1)->SetFormationTime(theString.GetTimeOfCreation());
 			LeftVector->operator[](1)->SetPosition(theString.GetPosition());
-		}
+		  }
+		}		
 		return LeftVector;
 	}
 
@@ -176,6 +188,8 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
               <<"Direction   "<<theString.GetDirection()<< G4endl;
         #endif
 
+        G4LorentzRotation toCmsI, toObserverFrameI;
+
 	G4bool final_success=false;
 	G4bool inner_success=true;
 
@@ -185,7 +199,10 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
 	{       // If the string fragmentation does not be happend, 
 	        // repeat the fragmentation.
 
-		G4FragmentingString *currentString=new G4FragmentingString(theString);
+                G4FragmentingString *currentString = new G4FragmentingString(theString);
+                toCmsI = currentString->TransformToAlignedCms();
+                toObserverFrameI = toCmsI.inverse();
+
 		G4LorentzRotation toCms, toObserverFrame;
 
 		//G4cout<<"Main loop start whilecounter "<<attempt<<G4endl;
@@ -200,7 +217,7 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
 		inner_success=true;  // set false on failure.
                 const G4int maxNumberOfLoops = 1000;
                 G4int loopCounter = -1;
-
+		
 		while ( (! StopFragmenting(currentString)) && ++loopCounter < maxNumberOfLoops )
 		{       // Split current string into hadron + new string
                         #ifdef debug_LUNDfragmentation
@@ -211,6 +228,7 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
 
 			toCms=currentString->TransformToAlignedCms();
                         toObserverFrame= toCms.inverse();
+			
                         #ifdef debug_LUNDfragmentation
                         //G4cout<<"CMS Left  mom "<<currentString->GetPleft()<<G4endl;
                         //G4cout<<"CMS Right mom "<<currentString->GetPright()<<G4endl;
@@ -251,7 +269,7 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
                           if ( newString ) delete newString;
                         }
 
-                  	currentString->LorentzRotate(toObserverFrame);
+                        currentString->LorentzRotate(toObserverFrame);
 		};
 
                 if ( loopCounter >= maxNumberOfLoops ) {
@@ -262,6 +280,7 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
                 #ifdef debug_LUNDfragmentation
                 if (inner_success) G4cout<<"Split remaining string into 2 final hadrons."<<G4endl;
                 #endif
+
 		if ( inner_success && SplitLast(currentString, LeftVector, RightVector) )  // Close to protect Last Str. Decay
 		{
 		  final_success = true;
@@ -269,6 +288,22 @@ G4bool G4LundStringFragmentation::Loop_toFragmentString( const G4ExcitedString  
 
 		delete currentString;
 	}  // End of the loop where we try to fragment the string.
+
+        G4int sign = +1;
+        if ( theString.GetDirection() < 0 ) sign = -1;
+        for ( unsigned int hadronI = 0; hadronI < LeftVector->size(); ++hadronI ) {
+           G4LorentzVector Tmp = LeftVector->operator[](hadronI)->Get4Momentum();
+           Tmp.setZ(sign*Tmp.getZ());
+           Tmp *= toObserverFrameI;
+           LeftVector->operator[](hadronI)->Set4Momentum(Tmp);
+        }
+        for ( unsigned int hadronI = 0; hadronI < RightVector->size(); ++hadronI ) {
+           G4LorentzVector Tmp = RightVector->operator[](hadronI)->Get4Momentum();
+           Tmp.setZ(sign*Tmp.getZ());
+           Tmp *= toObserverFrameI;
+           RightVector->operator[](hadronI)->Set4Momentum(Tmp);
+        }
+
 	return final_success;
 }
 
@@ -397,7 +432,7 @@ G4KineticTrack * G4LundStringFragmentation::Splitup(G4FragmentingString *string,
            #endif
 	   G4ThreeVector   Pos;
 	   Hadron = new G4KineticTrack(HadronDefinition, 0,Pos, *HadronMomentum);
-
+	   
            if ( newString ) delete newString;
 
 	   newString=new G4FragmentingString(*string,newStringEnd,
@@ -439,7 +474,7 @@ G4ParticleDefinition * G4LundStringFragmentation::DiQuarkSplitup(G4ParticleDefin
          decayQuarkEncoding = Swap;
       }
 
-      G4int IsParticle=(decayQuarkEncoding>0) ? -1 : +1;  // if we have a quark, we need antiquark)
+      G4int IsParticle=(decayQuarkEncoding>0) ? -1 : +1;  // if we have a quark, we need antiquark
 
       pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
 
@@ -507,26 +542,39 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 
 	String4Momentum.setPz(0.);
 	G4ThreeVector StringPt=String4Momentum.vect();
-
+        StringPt.setZ(0.);
+	
 	// calculate and assign hadron transverse momentum component HadronPx and HadronPy
 	G4ThreeVector HadronPt    , RemSysPt; 
 	G4double      HadronMassT2, ResidualMassT2;
 	G4double HadronMt, Pt, Pt2, phi;
+
+        G4double TmtCur = Tmt;
+        if ( (string->GetDecayParton()->GetParticleSubType()== "quark") &&
+             (pHadron->GetBaryonNumber() != 0) ) {
+          TmtCur = Tmt*0.37;			        // q->B     
+        } else if ( (string->GetDecayParton()->GetParticleSubType()== "quark") &&
+                    (pHadron->GetBaryonNumber() == 0) ) {
+          //TmtCur = Tmt;                               // q->M
+	} else if ( (string->GetDecayParton()->GetParticleSubType()== "di_quark") && 
+                    (pHadron->GetBaryonNumber() == 0) ) {
+          //TmtCur = Tmt*0.89;                          // qq -> M
+        } else if ( (string->GetDecayParton()->GetParticleSubType()== "di_quark") &&
+                    (pHadron->GetBaryonNumber() != 0) ) {
+          TmtCur = Tmt*1.35;                            // qq -> B
+        }
+
         //...  sample Pt of the hadron
         G4int attempt=0;
         do
         {
           attempt++; if (attempt > StringLoopInterrupt) {return 0;}
 
-	  HadronMt = HadronMass - 300.0*G4Log(G4UniformRand());
+          HadronMt = HadronMass - TmtCur*G4Log(G4UniformRand());
 	  Pt2 = sqr(HadronMt)-sqr(HadronMass); Pt=std::sqrt(Pt2);
 	  phi = 2.*pi*G4UniformRand();
-	  G4ThreeVector SampleQuarkPtw= G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
-
-          HadronPt =SampleQuarkPtw  + string->DecayPt();
-          HadronPt.setZ(0);
+          HadronPt = G4ThreeVector( Pt*std::cos(phi), Pt*std::sin(phi), 0. );
           RemSysPt = StringPt - HadronPt;
-
           HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
           ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
 
@@ -623,9 +671,9 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 
 	if (std::abs(PDGEncodingOfDecayParton) > 1000)     
 	{
-		G4double an = 2.5; 
-		an +=(sqr(Px)+sqr(Py))/sqr(GeV)-0.5;
-		z=zmin + (zmax-zmin)*G4Pow::GetInstance()->powA(G4UniformRand(),1./an);
+                G4double an = 2.5;
+                an +=(sqr(Px)+sqr(Py))/sqr(GeV)-0.5;
+                z=zmin + (zmax-zmin)*G4Pow::GetInstance()->powA(G4UniformRand(),1./an);
 	}
 
 	return z;
@@ -648,10 +696,13 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
         G4cout<<"String4mom "<<string->GetPstring()<<" "<<string->GetPstring().mag()<<G4endl;
         #endif
 
-	G4LorentzVector Str4Mom=string->Get4Momentum();
-
-	G4LorentzRotation toCms=string->TransformToAlignedCms();                                  
-	G4LorentzRotation toObserverFrame= toCms.inverse();
+        G4LorentzVector Str4Mom=string->Get4Momentum();
+        G4LorentzRotation toCms(-1*Str4Mom.boostVector());
+        G4LorentzVector Pleft = toCms * string->GetPleft();
+        toCms.rotateZ(-1*Pleft.phi());
+        toCms.rotateY(-1*Pleft.theta());
+	
+        G4LorentzRotation toObserverFrame= toCms.inverse();
 
 	G4double StringMass=string->Mass();
 
@@ -703,6 +754,7 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
                         #ifdef debug_LUNDfragmentation
                         G4cout<<"Q Q string LastSplit"<<G4endl;
                         #endif
+
 			Quark_AntiQuark_lastSplitting(string, LeftHadron, RightHadron);
 		
 			if (NumberOf_FS == 0) return false;
@@ -759,7 +811,7 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 	if (!(string->DecayIsQuark() && string->StableIsQuark() ))
 	{ // Only for qq - q, q - qq, and qq - qqbar -------------------
 
-	  if (std::abs(string->GetLeftParton()->GetPDGEncoding()) > 1000) 
+          if ( G4UniformRand() <= 0.5 )
 	  {
 	    if (P_left.z() <= 0.) {G4LorentzVector tmp = LeftMom; LeftMom=RightMom; RightMom=tmp;}
 	  } 
@@ -955,25 +1007,29 @@ G4bool G4LundStringFragmentation::Quark_Diquark_lastSplitting(G4FragmentingStrin
 	G4int AbsIDdi_quark=std::abs(IDdi_quark);
 	G4int Di_q1=AbsIDdi_quark/1000;
 	G4int Di_q2=(AbsIDdi_quark-Di_q1*1000)/100;
-
-	G4int              SignDiQ= 1;
+	G4int SignDiQ= 1;
 	if (IDdi_quark < 0) SignDiQ=-1;
 
 	NumberOf_FS=0;
-	for (G4int ProdQ=1; ProdQ < 4; ProdQ++)
-	{
+	for (G4int ProdQ=1; ProdQ < 4; ProdQ++)  // Loop over quark-antiquark cases: u-ubar, d-dbar, s-sbar 
+	{                                        // (as last splitting, do not consider c-cbar and b-bbar cases)
 		G4int SignQ;
 		if (IDquark > 0)
-		{                                   SignQ=-1;
-			if (IDquark == 2)                   SignQ= 1;
+		{
+		        SignQ=-1;
+		        if (IDquark == 2)                   SignQ= 1;
 			if ((IDquark == 1) && (ProdQ == 3)) SignQ= 1; // K0
 			if ((IDquark == 3) && (ProdQ == 1)) SignQ=-1; // K0bar
+		        if (IDquark == 4)                   SignQ= 1; // D+, D0, Ds+
+			if (IDquark == 5)                   SignQ=-1; // B-, anti_B0, anti_Bs0
 		} else
 		{
 			SignQ= 1;
 			if (IDquark == -2)                  SignQ=-1;
 			if ((IDquark ==-1) && (ProdQ == 3)) SignQ=-1; // K0bar
 			if ((IDquark ==-3) && (ProdQ == 1)) SignQ= 1; // K0
+			if (IDquark == -4)                  SignQ=-1; // D-, anti_D0, anti_Ds+
+			if (IDquark == -5)                  SignQ= 1; // B+, B0, Bs0
 		}
 
 		if (AbsIDquark == ProdQ)            SignQ= 1;
@@ -1076,19 +1132,25 @@ G4bool G4LundStringFragmentation::Quark_AntiQuark_lastSplitting(G4FragmentingStr
         //G4cout<<"Q Qbar "<<IDquark<<" "<<IDanti_quark<<G4endl;
 
 	NumberOf_FS=0;
-	for (G4int ProdQ=1; ProdQ < 4; ProdQ++)
-	{
+	for (G4int ProdQ=1; ProdQ < 4; ProdQ++)  // Loop over quark-antiquark cases: u-ubar, d-dbar, s-sbar 
+	{                                        // (as last splitting, do not consider c-cbar and b-bbar cases)
 		LeftHadronCharge = QuarkCharge - Qcharge[ProdQ-1];
 		G4int SignQ = LeftHadronCharge/3; if (SignQ == 0) SignQ = 1;
 
-		if ((IDquark == 1) && (ProdQ == 3)) SignQ= 1; // K0
-		if ((IDquark == 3) && (ProdQ == 1)) SignQ=-1; // K0bar
-
+		if ((IDquark == 1) && (ProdQ == 3)) SignQ= 1; // K0       (d,sbar)
+		if ((IDquark == 3) && (ProdQ == 1)) SignQ=-1; // K0bar    (s,dbar)
+                if ((IDquark == 4) && (ProdQ == 2)) SignQ= 1; // D0       (c,ubar)
+                if ((IDquark == 5) && (ProdQ == 1)) SignQ=-1; // anti_B0  (b,dbar)
+                if ((IDquark == 5) && (ProdQ == 3)) SignQ=-1; // anti_Bs0 (b,sbar)
+		
                 RightHadronCharge = AntiQuarkCharge + Qcharge[ProdQ-1];
 		G4int SignAQ = RightHadronCharge/3; if (SignAQ == 0) SignAQ = 1;
 
-		if ((IDanti_quark ==-1) && (ProdQ == 3)) SignAQ=-1; // K0bar
-		if ((IDanti_quark ==-3) && (ProdQ == 1)) SignAQ= 1; // K0
+		if ((IDanti_quark ==-1) && (ProdQ == 3)) SignAQ=-1; // K0bar   (dbar,s)
+		if ((IDanti_quark ==-3) && (ProdQ == 1)) SignAQ= 1; // K0      (sbar,d)
+		if ((IDanti_quark ==-4) && (ProdQ == 2)) SignAQ=-1; // anti_D0 (cbar,u)
+		if ((IDanti_quark ==-5) && (ProdQ == 1)) SignAQ= 1; // B0      (bbar,d)
+		if ((IDanti_quark ==-5) && (ProdQ == 3)) SignAQ= 1; // Bs0     (bbar,s)
 
                 //G4cout<<"ProQ signs "<<ProdQ<<" "<<SignQ<<" "<<SignAQ<<G4endl;
 
@@ -1223,8 +1285,18 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4doub
 	G4double Pabs = (r_val > 0.)? std::sqrt(r_val)/(2.*InitialMass) : 0;
 
         const G4int maxNumberOfLoops = 1000;
-	G4double SigmaQTw=SigmaQT;
-	if (Mass > 930. || AntiMass > 930.) SigmaQT *=(1.0-0.55*sqr((Mass+AntiMass)/InitialMass));
+	G4double SigmaQTw = SigmaQT;
+	if ( Mass > 930. || AntiMass > 930. ) {
+	  SigmaQT *= ( 1.0 - 0.55*sqr( (Mass+AntiMass)/InitialMass ) );
+        }
+        if ( Mass < 930. && AntiMass < 930. ) {}     // q-qbar string
+        if ( ( Mass < 930. && AntiMass > 930. ) ||
+	     ( Mass > 930. && AntiMass < 930. ) ) {  // q-di_q string
+          //SigmaQT = -1.;  // isotropical decay
+        }
+        if ( Mass > 930. && AntiMass > 930. ) {      // qq-qqbar string
+          SigmaQT *= ( 1.0 - 0.55*sqr( (Mass+AntiMass)/InitialMass ) );
+        }
 
         G4int loopCounter = 0;
 	do
@@ -1235,7 +1307,7 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector*     Mom, G4doub
 	}
 	while ( (InitialMass < MassMt + AntiMassMt) && ++loopCounter < maxNumberOfLoops ); 
 
-	if (Mass > 930. || AntiMass > 930.) SigmaQT=SigmaQTw;
+        SigmaQT = SigmaQTw;
 
         if ( loopCounter >= maxNumberOfLoops ) {
             AvailablePz2 = 0.0;

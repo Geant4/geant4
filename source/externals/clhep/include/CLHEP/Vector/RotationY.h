@@ -20,10 +20,6 @@
 #ifndef HEP_ROTATIONY_H
 #define HEP_ROTATIONY_H
 
-#ifdef GNUPRAGMA
-#pragma interface
-#endif
-
 #include "CLHEP/Vector/RotationInterfaces.h"
 
 namespace CLHEP {

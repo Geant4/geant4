@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -54,7 +54,7 @@
           ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
 
 
- Material:      CO2    density:  0.001 kg/m3   RadL: 361.873 km   Nucl.Int.Length: 858.384 km 
+ Material:      CO2    density:  0.001 mg/cm3  RadL: 361.873 km   Nucl.Int.Length: 858.384 km 
                        Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (C)   Z =  6.0   N =    12   A = 12.000 g/mole
@@ -69,7 +69,7 @@
           ElmMassFraction:  72.73 %  ElmAbundance  66.67 % 
 
 
- Material:   D2_gas    density:  0.036 kg/m3   RadL:  34.993 km   Nucl.Int.Length:   9.722 km 
+ Material:   D2_gas    density:  0.036 mg/cm3  RadL:  34.993 km   Nucl.Int.Length:   9.722 km 
                        Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Heavy-Hydrogen (D)   Z =  1.0   N =     2   A =  2.014 g/mole
@@ -246,7 +246,7 @@
           ElmMassFraction:   5.22 %  ElmAbundance  57.49 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -311,7 +311,9 @@ Number of bins per decade of a table               7
 Verbose level                                      0
 Verbose level for worker thread                    0
 Bremsstrahlung energy threshold above which 
-  primary is added to the list of secondary        100 TeV
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
@@ -357,6 +359,7 @@ Factor used for dynamic computation of angular
 Fixed angular limit between single 
   and multiple scattering                          3.1416 rad
 Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
 Type of nuclear form-factor                        1
 Screening factor                                   1
 =======================================================================
@@ -396,7 +399,7 @@ Use Bearden atomic level energies                 0
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.89704 keV    e-  597.831 keV    e+  572.651 keV proton 100 keV
+ Energy thresholds :  gamma  6.89843 keV    e-  599.101 keV    e+  573.786 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -422,31 +425,31 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.660000s Real=2.668387s Sys=0.010000s
+  User=1.610000s Real=1.619178s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit:   99.819 MeV
+ Total energy deposit:   99.827 MeV
  NIEL energy calculated: 0 eV 
 
- Nb tracks/event   neutral:   25.23   charged:  137.09
- Nb  steps/event   neutral:  139.79   charged:   202.9
+ Nb tracks/event   neutral:  25.128   charged:  137.12
+ Nb  steps/event   neutral:  139.35   charged:   202.9
 
  Process calls frequency :
-          CoulombScat=      2                  Rayl=  18682        Transportation=   1796
-              annihil=   2699                 compt= 210435                  conv=   2684
-                eBrem=  46204                 eIoni= 356515                   msc=    367
-                 phot=  45985 
+                 Rayl=  17745        Transportation=   1796               annihil=   2806
+                compt= 210700                  conv=   2785                 eBrem=  45775
+                eIoni= 356921                   msc=    296                  phot=  45680
+
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.261 cm    rms = 3.7628 cm 
- proj Range = 9.8133 cm    rms = 3.4783 cm 
- proj/true  = 0.87141
- transverse dispersion at end = 1.6391 cm 
-      mass true Range from simulation = 30.406 g/cm2 
+ true Range = 11.099 cm    rms = 3.8634 cm 
+ proj Range = 9.6568 cm    rms = 3.5968 cm 
+ proj/true  = 0.87009
+ transverse dispersion at end = 1.6112 cm 
+      mass true Range from simulation = 29.966 g/cm2 
        from PhysicsTable (csda range) = 32.101 g/cm2 
 ---------------------------------------------------------
 
@@ -454,7 +457,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1302914586364516192, 981470369480427572, 2160502346718828356, 429787929074918439, 1808516940691426334, 698748172330148046, 2191967554294380159, 261909875613768565, 98089926860429589, 889034164219562401, 1469965970424315298, 1044070984276865562, 950537578583079633, 443060070319592163, 1678330447352259494, 203574551500751827, 1524677366059732756} counter= 6sumtot= 1996257769669144729
+N=17 V[N]={511862276547668598, 1471172288461575206, 1128851390031159049, 986176925366361558, 1714976611656641989, 585612007627498246, 1310561837954673793, 1928477068593323800, 1745855577386704779, 1426413875986992036, 1452014596195759837, 144364650739019718, 1973405502184080304, 364138860850256971, 100193770972482617, 2029412755232034316, 1686421473982614873} counter= 2sumtot= 2113167396059296082
 ---------------------------------------
 #
 /gun/particle proton
@@ -465,7 +468,7 @@ N=17 V[N]={1302914586364516192, 981470369480427572, 2160502346718828356, 4297879
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.89704 keV    e-  597.831 keV    e+  572.651 keV proton 100 keV
+ Energy thresholds :  gamma  6.89843 keV    e-  599.101 keV    e+  573.786 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -476,7 +479,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1302914586364516192, 981470369480427572, 2160502346718828356, 429787929074918439, 1808516940691426334, 698748172330148046, 2191967554294380159, 261909875613768565, 98089926860429589, 889034164219562401, 1469965970424315298, 1044070984276865562, 950537578583079633, 443060070319592163, 1678330447352259494, 203574551500751827, 1524677366059732756} counter= 6sumtot= 1996257769669144729
+N=17 V[N]={511862276547668598, 1471172288461575206, 1128851390031159049, 986176925366361558, 1714976611656641989, 585612007627498246, 1310561837954673793, 1928477068593323800, 1745855577386704779, 1426413875986992036, 1452014596195759837, 144364650739019718, 1973405502184080304, 364138860850256971, 100193770972482617, 2029412755232034316, 1686421473982614873} counter= 2sumtot= 2113167396059296082
 ---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
@@ -491,42 +494,42 @@ N=17 V[N]={1302914586364516192, 981470369480427572, 2160502346718828356, 4297879
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.230000s Real=0.230819s Sys=0.000000s
+  User=0.070000s Real=0.071886s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 203.15 eV 
+ NIEL energy calculated: 230.53 eV 
 
- Nb tracks/event   neutral:       0   charged:  1.0115
- Nb  steps/event   neutral:       0   charged:  19.233
+ Nb tracks/event   neutral:       0   charged:   1.011
+ Nb  steps/event   neutral:       0   charged:  19.311
 
  Process calls frequency :
-          CoulombScat=     57  RadioactiveDecayBase=     23                 hIoni=  38364
-              ionIoni=     23 
+          CoulombScat=     55  RadioactiveDecayBase=     22                 hIoni=  38524
+              ionIoni=     22 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7118 cm    rms = 409.95 um 
- proj Range = 3.7034 cm    rms = 431.89 um 
- proj/true  = 0.99773
- transverse dispersion at end = 1.1246 mm 
-      mass true Range from simulation = 10.022 g/cm2 
-       from PhysicsTable (csda range) = 10.012 g/cm2 
+ true Range = 3.7132 cm    rms = 412.14 um 
+ proj Range = 3.7048 cm    rms = 425.83 um 
+ proj/true  = 0.99775
+ transverse dispersion at end = 1.1239 mm 
+      mass true Range from simulation = 10.026 g/cm2 
+       from PhysicsTable (csda range) = 10.013 g/cm2 
 ---------------------------------------------------------
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={417212715860133423, 797475141997434162, 1924011096229498372, 1331368251629480060, 1397920013137059242, 1535453008484133520, 442812139949888600, 2280871965286744316, 202809921529404713, 2184402420635843947, 1908678186735148794, 869640362843451000, 1093219461757191434, 760010657361176867, 732134659819899150, 652372012853418261, 1486860334026738953} counter= 4sumtot= 1570508276427093206
+N=17 V[N]={2242478760734191844, 367404330490087245, 45194397492864290, 1268791187056359920, 1662323814748851017, 1464932188731583832, 562075691796711105, 1863622584876278003, 1704574723025588234, 963592955979266590, 543515433432620312, 464598867962878693, 641770506223233834, 2042532019127553785, 346259490809042034, 998315733089559582, 244586720294023349} counter= 8sumtot= 1285668341374836012
 ---------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.036 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.037 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

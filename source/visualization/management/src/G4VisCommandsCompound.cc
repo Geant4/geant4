@@ -96,8 +96,8 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4bool keepAbleness = fpVisManager->GetConcreteInstance()? true: false;
 
-  UImanager->ApplyCommand(G4String("/vis/open " + system));
-  if (fErrorCode == 0) {
+  auto errorCode = UImanager->ApplyCommand(G4String("/vis/open " + system));
+  if (errorCode == 0) {
     if (!keepAbleness) {  // Enable temporarily
       fpVisManager->SetVerboseLevel("Quiet");
       UImanager->ApplyCommand("/vis/enable");
@@ -360,7 +360,7 @@ G4VisCommandOpen::~G4VisCommandOpen() {
   delete fpCommand;
 }
 
-void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
+void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
   G4String systemName, windowSizeHint;
   std::istringstream is(newValue);
   is >> systemName >> windowSizeHint;
@@ -371,8 +371,8 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  fErrorCode = UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
-  if (fErrorCode == 0) {
+  auto errorCode = UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
+  if (errorCode == 0) {
     UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
   } else {
     // Use set to get alphabetical order
@@ -385,11 +385,13 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
         }
       }
     }
-    G4cerr << "Candidates are:";
+    std::ostringstream oss;
+    oss << "Candidates are:";
     for (const auto& candidate: candidates) {
-      G4cerr << ' ' << candidate;
-    }
-    G4cerr << G4endl;
+      oss << ' ' << candidate;
+    };
+    G4cerr << oss.str() << G4endl;
+    command->CommandFailed(oss);
   }
   UImanager->SetVerboseLevel(keepVerbose);
 }

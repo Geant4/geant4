@@ -1,8 +1,9 @@
 #
 # macro file for TestEm18.cc
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
@@ -10,6 +11,9 @@
 /testem/phys/addPhysics standard
 #
 /run/setCut 100 um
+#
+/process/em/verbose 0
+/process/em/printParameters 
 #
 /run/initialize
 #
@@ -29,6 +33,5 @@
 /analysis/h1/set 12 100 0 10 MeV  #e- energy spectrum
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000
 

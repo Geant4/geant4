@@ -21,6 +21,7 @@ namespace tools {
 namespace sg {
 
 class read_action : public action {
+  TOOLS_ACTION_NO_COPY(read_action,tools::sg::read_action,action)
 public:
   virtual io::irbuf& buffer() = 0;
   virtual bool get_node_desc(const std::string&,node_desc&) const = 0;

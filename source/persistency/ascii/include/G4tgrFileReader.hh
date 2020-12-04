@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrFileReader
+// G4tgrFileReader
 //
 // Class description:
 //
 // This service provides access to detector description data.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrFileReader_H
-#define G4tgrFileReader_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrFileReader_hh
+#define G4tgrFileReader_hh 1
 
 #include "globals.hh"
 
@@ -49,17 +44,17 @@ class G4tgrLineProcessor;
 
 class G4tgrFileReader
 {
-  public:  // with description
+  public:
 
-    static G4tgrFileReader* GetInstance();  
-      // Get the only instance 
+    static G4tgrFileReader* GetInstance();
+      // Get the only instance
 
     virtual ~G4tgrFileReader();
 
     G4bool ReadFiles();
 
-    void AddTextFile(const G4String& fname) { theTextFiles.push_back( fname ); }
-    void SetLineProcessor( G4tgrLineProcessor* lp ) { theLineProcessor = lp; }
+    void AddTextFile(const G4String& fname) { theTextFiles.push_back(fname); }
+    void SetLineProcessor(G4tgrLineProcessor* lp) { theLineProcessor = lp; }
     G4tgrLineProcessor* GetLineProcessor() const { return theLineProcessor; }
 
   protected:
@@ -68,11 +63,10 @@ class G4tgrFileReader
 
   private:
 
-    static G4ThreadLocal G4tgrFileReader* theInstance;  
+    static G4ThreadLocal G4tgrFileReader* theInstance;
 
     std::vector<G4String> theTextFiles;
-    G4tgrLineProcessor* theLineProcessor;
-
+    G4tgrLineProcessor* theLineProcessor = nullptr;
 };
 
-# endif 
+#endif

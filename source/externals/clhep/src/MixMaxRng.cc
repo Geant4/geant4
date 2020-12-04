@@ -35,8 +35,11 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Utility/atomic_int.h"
 
-#include <string.h>        // for strcmp
+#include <atomic>
 #include <cmath>
+#include <iostream>
+#include <string.h>        // for strcmp
+#include <vector>
 
 const unsigned long MASK32=0xffffffff;
 
@@ -221,24 +224,24 @@ void MixMaxRng::setSeed(long longSeed, int /* extraSeed */)
 
 void MixMaxRng::setSeeds(const long* Seeds, int seedNum)
 {
-   unsigned long seed0, seed1= 0, seed2= 0, seed3= 0;
+   myID_t seed0, seed1= 0, seed2= 0, seed3= 0;
 
    if( seedNum < 1 ) {  // Assuming at least 2 seeds in vector...
-       seed0= static_cast<unsigned long>(Seeds[0]) & MASK32;
-       seed1= static_cast<unsigned long>(Seeds[1]) & MASK32;
+       seed0= static_cast<myID_t>(Seeds[0]) & MASK32;
+       seed1= static_cast<myID_t>(Seeds[1]) & MASK32;
    } 
    else
    {
      if( seedNum < 4 ) {
-       seed0= static_cast<unsigned long>(Seeds[0]) & MASK32;
-       if( seedNum > 1){ seed1= static_cast<unsigned long>(Seeds[1]) & MASK32; }
-       if( seedNum > 2){ seed2= static_cast<unsigned long>(Seeds[2]) & MASK32; }
+       seed0= static_cast<myID_t>(Seeds[0]) & MASK32;
+       if( seedNum > 1){ seed1= static_cast<myID_t>(Seeds[1]) & MASK32; }
+       if( seedNum > 2){ seed2= static_cast<myID_t>(Seeds[2]) & MASK32; }
      }
      if( seedNum >= 4 ) {
-       seed0= static_cast<unsigned long>(Seeds[0]) & MASK32;
-       seed1= static_cast<unsigned long>(Seeds[1]) & MASK32;
-       seed2= static_cast<unsigned long>(Seeds[2]) & MASK32;
-       seed3= static_cast<unsigned long>(Seeds[3]) & MASK32;
+       seed0= static_cast<myID_t>(Seeds[0]) & MASK32;
+       seed1= static_cast<myID_t>(Seeds[1]) & MASK32;
+       seed2= static_cast<myID_t>(Seeds[2]) & MASK32;
+       seed3= static_cast<myID_t>(Seeds[3]) & MASK32;
      }
    }
    theSeed = Seeds[0];

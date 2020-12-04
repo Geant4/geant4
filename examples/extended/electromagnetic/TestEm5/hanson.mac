@@ -17,8 +17,9 @@
 /run/setCut 1.12 um
 /run/setCutForAGivenParticle gamma 13 um
 #
-###/testem/phys/addPhysics  emstandard_opt0
 /testem/phys/addPhysics  local
+###/testem/phys/addPhysics  emstandard_opt3
+
 #
 /run/initialize
 #
@@ -26,9 +27,8 @@
 /gun/particle e- 
 /gun/energy 15.7 MeV
 #
-/analysis/setFileName hanson/19um.local
+/analysis/setFileName hanson/19um-local
 /analysis/h1/set 12  120 0 30 deg		#space angle    
 #
 /run/printProgress 100000
-# 
 /run/beamOn 1000000

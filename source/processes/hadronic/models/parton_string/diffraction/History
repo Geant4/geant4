@@ -14,6 +14,49 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14-Oct-2020 V. Ivanchenko     (hadr-string-diff-V10-06-08)
+- G4FTFModel - attempt to fix crash rarely observed in pion+proton
+  reaction: removed commented lines and unused variables; added
+  tolerance 1.e-10 for numerical computation; extended debug printout;
+  replace in all loops "i++" -> "++i"; cleaned-up sampling of Pt 
+  for residual nucleons - limit argument for G4Exp by 200 instead of 1e+9
+
+29-Sep-2020 A. Ribon          (hadr-string-diff-V10-06-07)
+- G4DiffractiveExcitation : Vladimir Uzhinsky's implementation of a
+  new splitting of excited hadrons into quark-antiquark or quark-diquark
+  in the method CreateStrings.
+  Other code improvements of this class were also introduced by
+  Vladimir Uzhinsky.
+
+21-Sep-2020 J. Yarba          (hadr-string-diff-V10-06-06)
+- G4FTFParameters.cc : extend FTF configuration interface 
+  to include parameters of quark exchange with and/or without 
+  excitation, for baryon and pion projectiles 
+
+16-Sep-2020 A. Ribon          (hadr-string-diff-V10-06-05)
+- G4FTFModel : quasi-elastic is not applied any longer when the target
+  nucleus has one nucleon and the projectile hadron is not an ion.
+  This avoids to double count elastic scattering (as reported by 
+  by Daria Prokhorova of NA61/SHINE in 158 GeV/c proton interactions
+  on liquid hydrogen: see bug report #2274). 
+
+08-Sep-2020 A. Ribon          (hadr-string-diff-V10-06-04)
+- G4FTFAnnihilation : added initialization of 2-dimensional arrays as
+  suggested by Coverity. Used consistently pre-increment instead of
+  post-increment.
+
+28-Jul-2020 A. Ribon          (hadr-string-diff-V10-06-03)
+- G4DiffractiveExcitation : add protection against inexisting in Geant4
+  excited hyperon states (Sigma* and Xi*).
+- G4FTFAnnihilation : removed useless check against inexisting in
+  either PDG (Lambda*) or Geant4 (Sigma* and Xi*) excited hyperon
+  states.
+
+24-Jul-2020 A. Ribon          (hadr-string-diff-V10-06-02)
+- G4DiffractiveExcitation : extended for handling heavy (charm and
+  bottom) hadrons; introduced also a new pre-processor option for
+  debugging heavy hadrons, switched off by default.
+
 08-Mar-2020 V. Ivanchenko     (hadr-string-diff-V10-06-01)
 - G4FTFModel, G4FTFParticipants - clean-up: removed unused methods, delete
      operators, use C++11 keywords

@@ -12,7 +12,6 @@
 #
 /run/initialize
 #
-/process/list
 /process/inactivate hadElastic
 #
 /gun/particle ion
@@ -23,5 +22,4 @@
 ##/analysis/h1/set 6  60  0. 12.  MeV #neutrons
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000

@@ -57,12 +57,7 @@
   In PhysicsList::ConstructProcess() we give an example of how to access hadronic models.
 
   Several hadronic physics options are controlled by environment variables.
-  To trigger them, an envHadronic.csh has been added in this example.
-  One must select the options wished, and do
-
-\verbatim   
-source envHadronic.[c]sh
-\endverbatim	 
+  To select them, see NeutronSource.cc
  
 \section NeutronSource_s3 AN EVENT : THE PRIMARY GENERATOR
  
@@ -151,5 +146,12 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
+	
+ Macros provided in this example:
+  - run1.mac: Am-Be system (default configuration)
+  
+ Macros to be run interactively:
+  - debug.mac: Am-Be
+  - vis.mac: To activate visualization
 
 */

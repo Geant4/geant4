@@ -17,11 +17,11 @@ class base_handle {
     static const std::string s_v("tools::handle");
     return s_v;
   }
-public:  
+public:
   virtual void* object() const = 0;
   virtual base_handle* copy() = 0; //can't be const.
   virtual void disown() = 0;
-public:  
+public:
   base_handle(){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -57,11 +57,11 @@ private:
 template <class T>
 class handle : public base_handle {
   typedef base_handle parent;
-public:  
+public:
   virtual void* object() const {return m_obj;}
   virtual base_handle* copy() {return new handle<T>(*this);}
   virtual void disown() {m_owner = false;}
-public:  
+public:
   handle(T* a_obj,bool a_owner = true):parent(),m_obj(a_obj),m_owner(a_owner){}
   handle(const std::string& a_class,T* a_obj,bool a_owner = true):parent(a_class),m_obj(a_obj),m_owner(a_owner){}
   virtual ~handle(){if(m_owner) delete m_obj;}
@@ -75,7 +75,7 @@ private:
     } else {
       m_owner = false;
     }
-    //a_from.m_obj = 0; //we do not remove the obj ref in a_from.    
+    //a_from.m_obj = 0; //we do not remove the obj ref in a_from.
   }
 private:
   // in principle the below are not used.

@@ -55,14 +55,14 @@ public:
     // dummy wait
     inline void wait() {}
     // run function
-    template <typename _Func>
-    inline void run(_Func f)
+    template <typename FuncT>
+    inline void run(FuncT f)
     {
         f();
     }
     // run and wait
-    template <typename _Func>
-    inline void run_and_wait(_Func f)
+    template <typename FuncT>
+    inline void run_and_wait(FuncT f)
     {
         f();
     }
@@ -99,8 +99,8 @@ class VUserTaskQueue;
 class ThreadData
 {
 public:
-    template <typename _Tp>
-    using TaskStack = std::deque<_Tp>;
+    template <typename Tp>
+    using TaskStack = std::deque<Tp>;
 
     ThreadData(ThreadPool* tp);
     ~ThreadData();

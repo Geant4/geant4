@@ -35,7 +35,7 @@ inline bool match(const std::string& a_string,const std::string& a_pattern,bool 
 
   unsigned int wn;
   std::string::size_type* wls = wps+lpattern;
-  words(a_pattern,"*",false,wn,wps,wls);  
+  words(a_pattern,"*",false,wn,wps,wls);
   if(!wn) {
     //delete [] wps;
     return true; // only wildcards :
@@ -43,7 +43,7 @@ inline bool match(const std::string& a_string,const std::string& a_pattern,bool 
 
   // tricky case :
   char* token = (char*)a_string.c_str();
- {for(unsigned int count=0;count<wn;count++) { 
+ {for(unsigned int count=0;count<wn;count++) {
     size_t lword = wls[count];
     if(!lword) continue;//should never happen !
     //WARNING : ws_pos does not have a null char at ws_pos+lword !

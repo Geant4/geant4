@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-20 B. Morgan (expol01-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10-11-20 B.Morgan (expol01-V10-06-00)
+- Migrate to G4RunManagerFactory.
+
 17-05-18 J.Allison (expol01-V10-04-00)
 - Add #include "G4Types.hh"
 - Remove G4UI_USE and G4VIS_USE.
@@ -37,8 +43,8 @@ track of all tags.
 - RunAction - fixed compillation at gcc 4.1
 
 11-11-14 V.Ivanchenko (expol01-V10-00-01)
-- Several updates for the unification of the example: use standard 
-  physics builder from physics_list sub-package; removed local 
+- Several updates for the unification of the example: use standard
+  physics builder from physics_list sub-package; removed local
   SetCuts() method; removed AIDA histograms
 
 16-10-14 I.Hrivnacova (expol01-V10-00-00)
@@ -60,10 +66,10 @@ track of all tags.
 - Introduced G4UIExecutive.
 
 06-06-10 J.Perl (expol01-V09-03-01)
-- Remove unused variable in EventAction 
+- Remove unused variable in EventAction
 
 04-06-10 J.Perl (expol01-V09-03-00)
-- Updated vis usage 
+- Updated vis usage
 
 20-11-09 V.Ivanchenko (expol01-V09-02-00)
 - Update msc processes according to 9.3 scheme
@@ -89,7 +95,7 @@ track of all tags.
 
 02-10-06 V.Ivanchenko (expol01-V08-01-00)
 - first tag
-          
+
 11-08-06 Andreas Schaelicke
 - created from TestEm15
 

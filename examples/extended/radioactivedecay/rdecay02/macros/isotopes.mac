@@ -17,8 +17,8 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 /analysis/h1/set 6 100 0. 15. MeV
 #
@@ -35,25 +35,25 @@
 #
 /gun/particle ion 
 /gun/ion 10 24
-/grdm/nucleusLimits 24 24 10 10
+/process/had/rdm/nucleusLimits 24 24 10 10
 /analysis/setFileName ne24
 /run/beamOn 10000
 #
 # No daughter decays 
 /gun/particle ion 
 /gun/ion 13 24
-/grdm/nucleusLimits 24 24 13 13
+/process/had/rdm/nucleusLimits 24 24 13 13
 /analysis/setFileName al24
 /run/beamOn 10000
 #
 /gun/particle ion 
 /gun/ion 24 46
-/grdm/nucleusLimits 46 46 24 24
+/process/had/rdm/nucleusLimits 46 46 24 24
 /analysis/setFileName cr46
 /run/beamOn 10000
 #
 /gun/particle ion 
 /gun/ion 84 215
-/grdm/nucleusLimits 215 215 84 84
+/process/had/rdm/nucleusLimits 215 215 84 84
 /analysis/setFileName po215
 /run/beamOn 10000

@@ -17,7 +17,7 @@ inline bool belong(const std::string& a_string,char a_c){
 }
 
 inline size_t numchar(const std::string& a_string,char a_c){
-  size_t num = 0;  
+  size_t num = 0;
   std::string::const_iterator it;
   for(it=a_string.begin();it!=a_string.end();++it) {
     if((*it)==a_c) num++;

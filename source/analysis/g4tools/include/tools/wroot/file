@@ -14,7 +14,7 @@
 #include "../platform"
 
 #include "../path"
-	
+
 #include <map>
 
 #include <fcntl.h>
@@ -68,7 +68,7 @@ public: //ifile
     if (::lseek(m_file, a_offset, whence) < 0) {
 #endif
       m_out << "tools::wroot::file::set_pos :"
-            << " cannot set position " << a_offset 
+            << " cannot set position " << a_offset
             << " in file " << sout(m_path) << "."
             << std::endl;
       return false;
@@ -103,7 +103,7 @@ public: //ifile
     typedef int ssize_t;
 #endif
     ssize_t siz;
-    while ((siz = ::write(m_file,a_buffer,a_length)) < 0 && 
+    while ((siz = ::write(m_file,a_buffer,a_length)) < 0 &&
             error_number() == EINTR) reset_error_number();
 
     if(siz < 0) {
@@ -128,9 +128,9 @@ public: //ifile
     static const uint32 ROOT_MAJOR_VERSION = 4;
     static const uint32 ROOT_MINOR_VERSION = 0;
     static const uint32 ROOT_PATCH_VERSION = 0;
-    return 
-      10000 * ROOT_MAJOR_VERSION + 
-      100 * ROOT_MINOR_VERSION + 
+    return
+      10000 * ROOT_MAJOR_VERSION +
+      100 * ROOT_MINOR_VERSION +
       ROOT_PATCH_VERSION;
   }
 
@@ -151,7 +151,7 @@ public: //ifile
             << " error in fsync() for file " << sout(m_path) << "."
             << std::endl;
       return false;
-    } 
+    }
 #endif
     return true;
   }
@@ -178,7 +178,7 @@ public: //ifile
     if(cxlevel && (nbytes>256)) {
       compress_func func;
       if(!ziper('Z',func)) {
-        //m_out << "tools::wroot::directory::write_object :" 
+        //m_out << "tools::wroot::directory::write_object :"
         //      << " zlib ziper not found."
         //      << std::endl;
         a_kbuf = (char*)a_buffer.buf();
@@ -188,7 +188,7 @@ public: //ifile
         const uint32 kMAXBUF = 0xffffff;
         const uint32 HDRSIZE = 9;
         uint32 nbuffers = nbytes/kMAXBUF;
-        uint32 buflen = nbytes+HDRSIZE*(nbuffers+1); 
+        uint32 buflen = nbytes+HDRSIZE*(nbuffers+1);
         a_kbuf = new char[buflen];
         a_kdel = true;
         char* src = (char*)a_buffer.buf();
@@ -208,7 +208,7 @@ public: //ifile
           a_klen += nout;
           src += kMAXBUF;
           nzip += kMAXBUF;
-        }    
+        }
         //::printf("debug : compress : end : %u %u\n",nbytes,klen);
       }
     } else {
@@ -274,14 +274,14 @@ public:
     m_free_segs.push_back(new free_seg(m_out,m_BEGIN,START_BIG_FILE()));
 
     // Write Directory info :
-    uint32 namelen = 
-      key::std_string_record_size(m_path) + 
+    uint32 namelen =
+      key::std_string_record_size(m_path) +
       key::std_string_record_size(m_title);
     uint32 nbytes = namelen + m_root_directory.record_size();
     wroot::key key(m_out,*this,0,m_path,m_title,"TFile",nbytes); // It does a (*this).set_END().
 
     // m_nbytes_name = start point of directory info from key head.
-    m_nbytes_name = key.key_length() + namelen; 
+    m_nbytes_name = key.key_length() + namelen;
     m_root_directory.set_nbytes_name(m_nbytes_name);
     m_root_directory.set_seek_directory(key.seek_key()); //at EOF.
 
@@ -302,15 +302,15 @@ public:
     if(m_verbose) {
       m_out << "tools::wroot::file::file :"
             << " write key ("
-            << namelen 
-            << ", " 
+            << namelen
+            << ", "
             << m_root_directory.record_size()
-            << ", " 
+            << ", "
             << nbytes
             << ", "
             << m_nbytes_name
             << ", "
-            << key.seek_key() 
+            << key.seek_key()
             << ")."
             << std::endl;
     }
@@ -346,7 +346,7 @@ protected:
   :ifile(a_from)
   ,m_out(a_from.m_out)
   ,m_root_directory(get_me())
-  { 
+  {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -475,7 +475,7 @@ protected:
     // false in case of failure.
     struct stat finfo;
     if (::stat(a_path.c_str(),&finfo) < 0) return false;
-#ifdef _MSC_VER 
+#ifdef _MSC_VER
     if (finfo.st_mode & S_IFDIR)
       return (::_rmdir(a_path.c_str())==-1 ? false : true);
     else
@@ -549,7 +549,7 @@ protected:
     buffer bref(m_out,byte_swap(),256);
 
     if(!sinfos.stream(bref)) {
-      m_out << "tools::wroot::file::write_streamer_infos :" 
+      m_out << "tools::wroot::file::write_streamer_infos :"
             << " cannot stream obj_list<streamer_info>."
             << std::endl;
       return false;
@@ -569,7 +569,7 @@ protected:
 
     //key.set_cycle(1);
     if(!key.write_self(*this)) {
-      m_out << "tools::wroot::file::write_streamer_infos :" 
+      m_out << "tools::wroot::file::write_streamer_infos :"
             << " key.write_self() failed."
             << std::endl;
       return false;
@@ -597,7 +597,7 @@ protected:
     //    GAPSIZE = -(Number of bytes occupied by the record).
 
     if(m_free_segs.empty()) {
-      m_out << "tools::wroot::file::make_free_seg :" 
+      m_out << "tools::wroot::file::make_free_seg :"
             << " free_seg list should not be empty here."
             << std::endl;
       return false;
@@ -605,12 +605,12 @@ protected:
 
     free_seg* newfree = add_free(m_free_segs,a_first,a_last);
     if(!newfree) {
-      m_out << "tools::wroot::file::make_free_seg :" 
+      m_out << "tools::wroot::file::make_free_seg :"
             << " add_free failed."
             << std::endl;
       return false;
     }
- 
+
     seek nfirst = newfree->first();
     seek nlast = newfree->last();
 
@@ -640,7 +640,7 @@ protected:
     // Delete old record if it exists :
     if(m_seek_free){
       if(!make_free_seg(m_seek_free, m_seek_free + m_nbytes_free -1)) {
-        m_out << "tools::wroot::file::write_free_segments :" 
+        m_out << "tools::wroot::file::write_free_segments :"
               << " key.write_self() failed."
               << std::endl;
         return false;
@@ -671,7 +671,7 @@ protected:
 
     //key.set_cycle(1);
     if(!key.write_self(*this)) {
-      m_out << "tools::wroot::file::write_free_segments :" 
+      m_out << "tools::wroot::file::write_free_segments :"
             << " key.write_self() failed."
             << std::endl;
       return false;
@@ -706,14 +706,14 @@ protected:
       a_out << "tools::wroot::directory::zip :"
             << " target buffer too small."
             << std::endl;
-      a_irep = 0; 
+      a_irep = 0;
       return false;
     }
     if(a_srcsize>0xffffff) {
       a_out << "tools::wroot::directory::zip :"
             << " source buffer too big."
             << std::endl;
-      a_irep = 0; 
+      a_irep = 0;
       return false;
     }
 
@@ -725,14 +725,14 @@ protected:
       a_out << "tools::wroot::directory::zip :"
             << " zipper failed."
             << std::endl;
-      a_irep = 0; 
+      a_irep = 0;
       return false;
     }
     if((HDRSIZE+out_size)>a_tgtsize) {
       a_out << "tools::wroot::directory::zip :"
             << " target buffer overflow."
             << std::endl;
-      a_irep = 0; 
+      a_irep = 0;
       return false;
     }
 
@@ -740,11 +740,11 @@ protected:
     a_tgt[0] = 'Z'; // Signature ZLib
     a_tgt[1] = 'L';
     a_tgt[2] = 8; //DEFLATE
- 
+
     a_tgt[3] = (char)(out_size & 0xff);
     a_tgt[4] = (char)((out_size >> 8) & 0xff);
     a_tgt[5] = (char)((out_size >> 16) & 0xff);
- 
+
     a_tgt[6] = (char)(a_srcsize & 0xff);
     a_tgt[7] = (char)((a_srcsize >> 8) & 0xff);
     a_tgt[8] = (char)((a_srcsize >> 16) & 0xff);

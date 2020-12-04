@@ -23,33 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPHitIO.cc
+// G4VPHitIO implementation
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
 
 #include "G4VPHitIO.hh"
 
-G4ThreadLocal G4VPHitIO* G4VPHitIO::f_G4VPHitIO = 0;
+G4ThreadLocal G4VPHitIO* G4VPHitIO::f_G4VPHitIO = nullptr;
 
-// Implementation of Constructor #1
+// --------------------------------------------------------------------
 G4VPHitIO::G4VPHitIO()
- : m_verbose(0)
 {
   f_catalog = G4HCIOcatalog::GetHCIOcatalog();
 }
 
-// Implementation of SetVerboseLevel
-void G4VPHitIO::SetVerboseLevel(int v)
+// --------------------------------------------------------------------
+void G4VPHitIO::SetVerboseLevel(G4int v)
 {
   m_verbose = v;
 
   // Loop through the registered Hit I/O managers
-  for ( size_t i=0; i < f_catalog->NumberOfHCIOmanager(); i++ ) {
+  for(std::size_t i = 0; i < f_catalog->NumberOfHCIOmanager(); ++i)
+  {
     G4VPHitsCollectionIO* hitIOman = f_catalog->GetHCIOmanager(i);
     hitIOman->SetVerboseLevel(v);
   }
 }
-
-// End of G4VPHitIO.cc
-

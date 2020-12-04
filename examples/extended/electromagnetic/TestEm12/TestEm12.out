@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,8 +12,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-/control/cout/ignoreThreadsExcept 0
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat G4_WATER
 /testem/det/setRadius 3 cm
@@ -23,7 +22,6 @@
 PhysicsList::AddPhysicsList: <emstandard_opt0>
 #
 /run/initialize
-userDetector->Construct() start.
 
 ---------------------------------------------------------
 ---> The Absorber is a sphere of 3 cm  radius of G4_WATER divided in 1 slices of 3 cm 
@@ -44,10 +42,6 @@ userDetector->Construct() start.
 
 
 ---------------------------------------------------------
-Absorber is registered to the default region.
-physicsList->Construct() start.
-physicsList->CheckParticleList() start.
-physicsList->setCut() start.
 #
 /run/setCut 10 um
 #
@@ -63,38 +57,19 @@ physicsList->setCut() start.
 ###/analysis/h1/set 8 120  0.   1.2 none #normalized edep profile
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <Absorber> world volume
- This region is in the mass world.
- Root logical volume(s) : Absorber 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_WATER 
- Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 10 um 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 10 um 
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  14.1795 keV    e+  13.7742 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  14.0874 keV    e+  14.0874 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
 
 --------- Ranecu engine status ---------
@@ -120,7 +95,9 @@ Number of bins per decade of a table               7
 Verbose level                                      0
 Verbose level for worker thread                    0
 Bremsstrahlung energy threshold above which 
-  primary is added to the list of secondary        100 TeV
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
 Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
@@ -166,6 +143,7 @@ Factor used for dynamic computation of angular
 Fixed angular limit between single 
   and multiple scattering                          3.1416 rad
 Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
 Type of nuclear form-factor                        1
 Screening factor                                   1
 =======================================================================
@@ -182,50 +160,28 @@ Screening factor                                   1
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.790000s Real=1.822103s Sys=0.010000s
+  User=0.770000s Real=0.834812s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.939 MeV +- 238.600 keV
+ Total Energy deposited        = 3.943 MeV +- 223.028 keV
 
- Track length of primary track = 2.043 cm  +- 2.890 mm 
+ Track length of primary track = 2.047 cm  +- 2.831 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.323 cm  +- 3.594 mm 
+ Projected range               = 1.325 cm  +- 3.580 mm 
 
- Nb of steps of primary track  = 16.17 +- 2.98	 Step size= 1.300 mm  +- 277.785 um 
+ Nb of steps of primary track  = 16.29 +- 3.04	 Step size= 1.295 mm  +- 282.026 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 297159154, 1690055230
+ Current couple of seeds = 2062153558, 1360634937
 ----------------------------------------
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
-EventManager deleted.
-Units table cleared.
-TransportationManager deleted.
-Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
-Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '7G4Event', size : 0.000961 MB
-Pool ID '15G4PrimaryVertex', size : 0.000961 MB
-Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00481 MB
-Pool ID '7G4Track', size : 0.00865 MB
-Pool ID '18G4TouchableHistory', size : 0.000961 MB
-Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.026 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.027 MB
 ============================================================
-G4Allocator objects are deleted.
-UImanager deleted.
-StateManager deleted.
 RunManagerKernel is deleted. Good bye :)

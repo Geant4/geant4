@@ -31,15 +31,15 @@ protected:
   }
 #endif
 public:
-  virtual bool init(int* a_argc,char*** a_argv) { 
+  virtual bool init(int* a_argc,char*** a_argv) {
     if(::MPI_Init(a_argc,a_argv)!=MPI_SUCCESS) return false;
     return true;
   }
-  virtual bool rank(int& a_rank) const { 
+  virtual bool rank(int& a_rank) const {
     if(::MPI_Comm_rank(MPI_COMM_WORLD,&a_rank)!=MPI_SUCCESS) {a_rank=-1;return false;}
     return true;
   }
-  virtual bool size(int& a_size) const { 
+  virtual bool size(int& a_size) const {
     if(::MPI_Comm_size(MPI_COMM_WORLD,&a_size)!=MPI_SUCCESS) {a_size=0;return false;}
     return true;
   }

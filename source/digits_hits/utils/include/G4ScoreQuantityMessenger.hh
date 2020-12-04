@@ -103,6 +103,7 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     G4UIcommand*          qPassTrackLengthCmd;
     G4UIcommand*          qFlatSurfCurrCmd;
     G4UIcommand*          qFlatSurfFluxCmd;
+    G4UIcommand*          qVolFluxCmd;
 //    G4UIcommand*          qSphereSurfCurrCmd;
 //    G4UIcommand*          qSphereSurfFluxCmd;
 //    G4UIcommand*          qCylSurfCurrCmd;

@@ -47,7 +47,7 @@ inline bool write_file(FILE* a_file,int a_quality,unsigned char* a_buffer,unsign
   int row_stride = a_width * cinfo.input_components;
 
   while (cinfo.next_scanline < cinfo.image_height) {
-    JSAMPROW row_pointer = 
+    JSAMPROW row_pointer =
       a_buffer+(cinfo.image_height-1-cinfo.next_scanline) * row_stride;
     ::jpeg_write_scanlines(&cinfo, &row_pointer, 1);
   }
@@ -171,7 +171,7 @@ inline unsigned char* read_file(FILE* a_file,unsigned int& a_width,unsigned int&
     a_height = 0;
     a_bpp = 0;
     return 0;
-  }  
+  }
 
   //FIXME : iPad : the below crashes on LHCb_artist_16384_4096_80.jpg.
 
@@ -236,7 +236,7 @@ inline bool infos(std::ostream& a_out,const std::string& a_file,unsigned int& a_
     a_height = 0;
     a_bpp = 0;
     return false;
-  } 
+  }
 
   FILE* file = ::fopen(a_file.c_str(),"rb");
   if(!file) {
@@ -279,7 +279,7 @@ inline unsigned char* read(std::ostream& a_out,const std::string& a_file,unsigne
     a_height = 0;
     a_bpp = 0;
     return 0;
-  } 
+  }
 
   FILE* file = ::fopen(a_file.c_str(),"rb");
   if(!file) {
@@ -310,7 +310,7 @@ inline unsigned char* read(std::ostream& a_out,const std::string& a_file,unsigne
   a_width = w;
   a_height = h;
   a_bpp = bpp;
-  return buffer;  
+  return buffer;
 }
 
 inline unsigned char* read_part(std::ostream& a_out,
@@ -327,7 +327,7 @@ inline unsigned char* read_part(std::ostream& a_out,
     a_rh = 0;
     a_rbpp = 0;
     return 0;
-  } 
+  }
 
   FILE* file = ::fopen(a_file.c_str(),"rb");
   if(!file) {
@@ -377,8 +377,8 @@ inline unsigned char* read_part(std::ostream& a_out,
   }
 
   // 012345
-  a_rw = tools::mn<unsigned int>(w-a_sx,a_sw); 
-  a_rh = tools::mn<unsigned int>(h-a_sy,a_sh); 
+  a_rw = tools::mn<unsigned int>(w-a_sx,a_sw);
+  a_rh = tools::mn<unsigned int>(h-a_sy,a_sh);
   a_rbpp = cinfo.output_components;
 
   if(!a_rw||!a_rh||!a_rbpp){
@@ -400,7 +400,7 @@ inline unsigned char* read_part(std::ostream& a_out,
     a_rh = 0;
     a_rbpp = 0;
     return 0;
-  }  
+  }
 
   unsigned char* line = new unsigned char[row_stride];
   if(!line) {
@@ -412,7 +412,7 @@ inline unsigned char* read_part(std::ostream& a_out,
     a_rh = 0;
     a_rbpp = 0;
     return 0;
-  }  
+  }
 
   //FIXME : iPad : the below crashes on LHCb_artist_16384_4096_80.jpg.
 
@@ -451,11 +451,11 @@ inline unsigned char* read_part(std::ostream& a_out,
 
   delete [] line;
 
-  return image_buffer;  
+  return image_buffer;
 }
 
 inline bool write(std::ostream& a_out,
-                  const std::string& a_file,                      
+                  const std::string& a_file,
                   unsigned char* a_buffer,
                   unsigned int a_width,
                   unsigned int a_height,
@@ -505,7 +505,7 @@ inline bool concatenate(std::ostream& a_out,
                         unsigned char a_bc,
                         const std::string& a_file,int a_quality) {
   unsigned int wa,ha,bppa;
-  unsigned char* ba = 
+  unsigned char* ba =
     tools::image::concatenate
       (a_out,a_files,a_cols,a_rows,a_bw,a_bh,a_bc,read,wa,ha,bppa);
   if(!ba) {
@@ -514,7 +514,7 @@ inline bool concatenate(std::ostream& a_out,
           << std::endl;
     delete [] ba;
     return false;
-  } 
+  }
 
   FILE* file = ::fopen(a_file.c_str(),"wb");
   if(!file) {
@@ -612,7 +612,7 @@ public:
 //            << " file " << a_file << " is not jpeg."
 //            << std::endl;
 //      return false;
-//    } 
+//    }
 //    m_FILE = ::fopen(a_file.c_str(),"rb");
 //    if(!m_FILE) {
 //      m_out << "tools::jpeg::jpeg_data::open :"
@@ -620,7 +620,7 @@ public:
 //            << std::endl;
 //      return false;
 //    }
-//  
+//
 //    m_cinfo.err = ::jpeg_std_error(&m_jerr.pub);
 //    m_jerr.pub.error_exit = exlib_jpeg_exlib_jpeg_exlib_jpeg_error_exit;
 //    if(::setjmp(m_jerr.setjmp_buffer)) {
@@ -637,7 +637,7 @@ public:
 //    ::jpeg_read_header(&m_cinfo,TRUE);
 //
 //    ::jpeg_start_decompress(&m_cinfo);
-//  
+//
 //    if(m_cinfo.output_components!=3) {
 //      m_out << "tools::jpeg::jpeg_data::open :"
 //            << " file " << a_file << " dont't have three components."
@@ -646,10 +646,10 @@ public:
 //      m_FILE = 0;
 //      return false;
 //    }
-//  
+//
 //    m_row_stride = m_cinfo.output_width * m_cinfo.output_components;
-//  
-//    unsigned char* buffer = 
+//
+//    unsigned char* buffer =
 //      new unsigned char[m_row_stride * m_cinfo.output_height];
 //    if(!buffer) {
 //      m_out << "tools::jpeg::jpeg_data::open :"
@@ -659,7 +659,7 @@ public:
 //      m_FILE = 0;
 //      return false;
 //    }
-//  
+//
 //    tools::img_byte::set(m_cinfo.output_width,m_cinfo.output_height,
 //                         buffer,true);
 //    m_pos = buffer + m_row_stride * m_cinfo.output_height;

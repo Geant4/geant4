@@ -15,9 +15,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17.11.2020  S. Guatelli, tag xraytel-V10-06-01
+            Migration to G4RunManagerFactory
+
+02.11.2020  B.Morgan, tag xraytel-V10-06-00
+            Support same CMake version range as core Geant4
+
 30.08.2019  S. Guatelli, tag xraytel-V10-05-00
             G4VIS_USE and G4UI_USE deleted
- 
+
 10.05.2018   B.Morgan,  tag xraytel-V10-04-00
              Include G4Types before use of G4MULTITHREADED. For forward
              compatibility with move to #defines over -D for G4 preprocessor
@@ -34,7 +40,7 @@ committal in the CVS repository !
 	     Migration to new MT compliant GPS
 
 23.05.2014   Luciano Pandola, tag xraytel-V10-00-02
-	     Fix compiler warning which caused the rejection 
+	     Fix compiler warning which caused the rejection
 	     of tag xraytel-V10-00-01
 
 22.05.2014   Luciano Pandola, tag xraytel-V10-00-01
@@ -45,19 +51,19 @@ committal in the CVS repository !
 
 21.05.2014   Luciano Pandola, tag xraytel-V10-00-00
 	     Added ActionInitialization class
-	     Move the method Update() from RunAction (thread-local) to 
-	      Analysis (global) 
+	     Move the method Update() from RunAction (thread-local) to
+	      Analysis (global)
 	     Protect analysis singleton by Mutex
 	     Changed named scheme of output objects
 
 19.03.2013   Luciano Pandola, tag xraytel-V09-06-00
-	     Migrated analysis to g4tools (removed AIDA dependency) 
-             and other small cosmetics. CMakeLists.txt, GNUmakefile 
+	     Migrated analysis to g4tools (removed AIDA dependency)
+             and other small cosmetics. CMakeLists.txt, GNUmakefile
              and README updated accordingly
 
 26.10.2012   Luciano Pandola, tag xraytel-V09-05-01
-	     Edit main(): added #ifdef to protect G4VisExecutive and 
-             G4UIExecutive. 
+	     Edit main(): added #ifdef to protect G4VisExecutive and
+             G4UIExecutive.
              Create CMakeLists.txt file
 
 12.10.2012   Gabriele Cosmo, Tag xraytel-V09-05-00
@@ -111,12 +117,12 @@ committal in the CVS repository !
              Small design iteration by MGP implemented
 
 07.11.2001 - RN, tag xraytel-V02-00-13
-             Cleaned up code to avoid compilation warnings arising 
+             Cleaned up code to avoid compilation warnings arising
              from "ANSI" and "pedantic" options
              Implemented new "/vis" commands in macro files
 
 07.11.2001 - RN, tag xraytel-V02-00-12
-             Error tag, same as 11  
+             Error tag, same as 11
 
 18.06.2001 - RN, tag xraytel-V02-00-11
              tested with latest global tag geant4-03-01-ref-02
@@ -129,24 +135,24 @@ committal in the CVS repository !
              Removed longsection.macro file from cvs
 
 30.11.2000 - RN, tag xraytel-V02-00-08
-             Implemented AnalysisManager class and related histograming 
+             Implemented AnalysisManager class and related histograming
              code.  Analysis is limited to the Lizard package for now.
 
 16.11.2000 - RN, tag xraytel-V02-00-07
              Removed analysis directory
 
-16.11.2000 - RN, tag xraytel-V02-00-06 
+16.11.2000 - RN, tag xraytel-V02-00-06
              Replace standard gun with General Particle Source
              Remove all code related to old Histogram implementation
              Modified all macros to work with GPS
              Cleaned GNUmakefile
              Started drafting README file
 
-08.11.2000 - RN, tag xraytel-V02-00-05 
+08.11.2000 - RN, tag xraytel-V02-00-05
              Tydied up macros
              Small bug fixes to compile on Linux, SUN and DEC platforms
 
-06.11.2000 - RN, tag xraytel-V02-00-04 
+06.11.2000 - RN, tag xraytel-V02-00-04
              Tydied up code added headers
 
 18.10.2000 - RN, tag xraytel-V02-00-03

@@ -13,28 +13,28 @@ namespace wroot {
 
 inline bool mpi_pack_basket(impi& a_mpi,uint32 a_icol,const basket& a_basket) {
   if(!a_mpi.pack(a_icol)) return false;
-      
+
   if(!a_mpi.spack(a_basket.object_name())) return false;
   if(!a_mpi.spack(a_basket.object_title())) return false;
-  
+
   if(!a_mpi.pack(a_basket.last())) return false;
   if(!a_mpi.pack(a_basket.nev_buf_size())) return false;
   if(!a_mpi.pack(a_basket.nev())) return false;
-        
+
   if(a_basket.entry_offset()) {
     if(!a_mpi.bpack(true)) return false;
     if(!a_mpi.pack(a_basket.nev_buf_size(),a_basket.entry_offset())) return false;
   } else {
     if(!a_mpi.bpack(false)) return false;
   }
-  
+
   if(a_basket.displacement()) {
     if(!a_mpi.bpack(true)) return false;
     if(!a_mpi.pack(a_basket.nev_buf_size(),a_basket.displacement())) return false;
   } else {
     if(!a_mpi.bpack(false)) return false;
   }
-  
+
   if(!a_mpi.pack(a_basket.datbuf().length(),a_basket.datbuf().buf())) return false;
   return true;
 }

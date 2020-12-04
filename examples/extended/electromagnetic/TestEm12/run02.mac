@@ -1,8 +1,11 @@
 #
+# Macro file for TestEm12
+#
 # limit the step size by geometry
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
@@ -25,5 +28,4 @@
 /testem/applyAutomaticStepMax false
 #
 /run/printProgress 2000
-#
 /run/beamOn 20000

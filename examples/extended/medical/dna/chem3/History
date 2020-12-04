@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.11.2020 Ben Morgan           tag chem3-V10-06-00
+-----------------------------------------------------
+- Migration to G4RunManagerFactory.
+
 08.02.2019 VI, WGS, SI          tag chem3-V10-05-01
 -----------------------------------------------------
 - Fixed PhysicsList

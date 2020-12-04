@@ -647,7 +647,7 @@ G4UIcommandTree* G4UIGainServer::FindDirPath(G4String newCommand){
 void G4UIGainServer::SendCommandProperties(G4UIcommandTree* tree){
 //////////////////////////////////////////////////////////
   if( tree == NULL ) {
-    G4cerr << "GetTree() returnes null." << G4endl;
+    G4cerr << "GetTree() returns null." << G4endl;
     return;
   }
   if (uiMode == java_mode){
@@ -662,7 +662,7 @@ void G4UIGainServer::SendCommandProperties(G4UIcommandTree* tree){
 void G4UIGainServer::SendParameterProperties(G4UIcommandTree* tree){
 ////////////////////////////////////////////////////////////
   if( tree == NULL ) {
-    G4cerr << "GetTree() returnes null." << G4endl;
+    G4cerr << "GetTree() returns null." << G4endl;
     return;
   }
   if (uiMode == java_mode){

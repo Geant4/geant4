@@ -33,7 +33,9 @@
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "g4analysis.hh"
+#include "G4GenericAnalysisManager.hh"
+
+using G4AnalysisManager = G4GenericAnalysisManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,19 +43,21 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
  : G4UserRunAction(),
    fEventAction(eventAction)
 { 
-  // Create the analysis manager using a new factory method.
-  // The choice of analysis technology is done via the function argument.
-  auto analysisManager = G4Analysis::ManagerInstance("root");
-  G4cout << "Using " << analysisManager->GetType() << G4endl;
+  // Create the generic analysis manager
+  // The choice of analysis technology is done according to the file extension
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetVerboseLevel(1);
 
   // Default settings
   analysisManager->SetNtupleMerging(true);
      // Note: merging ntuples is available only with Root output
-  analysisManager->SetVerboseLevel(1);
   analysisManager->SetFileName("B5");
+     // If the filename extension is not provided, the default file type (root)
+     // will be used for all files specified without extension.
+  // analysisManager->SetDefaultFileType("xml");
+     // The default file type (root) can be redefined by the user.
 
   // Book histograms, ntuple
-  //
   
   // Creating 1D histograms
   analysisManager
@@ -70,7 +74,6 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
                50, -1500., 1500, 50, -300., 300.);
 
   // Creating ntuple
-  //
   if ( fEventAction ) {
     analysisManager->CreateNtuple("B5", "Hits");
     analysisManager->CreateNtupleIColumn("Dc1Hits");  // column Id = 0
@@ -85,6 +88,9 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
       ->CreateNtupleDColumn("HCEnergyVector", fEventAction->GetHadCalEdep());
     analysisManager->FinishNtuple();
   }
+
+  // Set ntuple output file
+  analysisManager->SetNtupleFileName(0, "B4ntuple");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

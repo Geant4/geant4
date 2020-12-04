@@ -44,6 +44,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
 #include "G4ElementData.hh"
+#include "G4PhysicsVector.hh"
 #include "G4Threading.hh"
 #include <vector>
 
@@ -52,9 +53,7 @@ const G4int MAXZINEL = 93;
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
-class G4PhysicsVector;
-class G4ComponentGGHadronNucleusXsc;
-class G4NistManager;
+class G4VComponentCrossSection;
 
 class G4NeutronInelasticXS final : public G4VCrossSectionDataSet
 {
@@ -87,6 +86,11 @@ public:
 
   void CrossSectionDescription(std::ostream&) const final;
 
+  G4double IsoCrossSection(G4double ekin, G4double logekin, G4int Z, G4int A);
+
+  G4NeutronInelasticXS & operator=(const G4NeutronInelasticXS &right) = delete;
+  G4NeutronInelasticXS(const G4NeutronInelasticXS&) = delete;
+
 private: 
 
   void Initialise(G4int Z);
@@ -95,17 +99,11 @@ private:
 
   const G4String& FindDirectoryPath();
 
-  const G4PhysicsVector* GetPhysicsVector(G4int Z);
+  inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
-
-  G4double IsoCrossSection(G4double ekin, G4double logekin, G4int Z, G4int A);
-
-  G4NeutronInelasticXS & operator=(const G4NeutronInelasticXS &right);
-  G4NeutronInelasticXS(const G4NeutronInelasticXS&);
   
-  G4ComponentGGHadronNucleusXsc* ggXsection;
-  G4NistManager* nist;
+  G4VComponentCrossSection* ggXsection;
 
   const G4ParticleDefinition* neutron;
 
@@ -114,15 +112,23 @@ private:
   G4bool  isMaster;
 
   static G4ElementData* data;
-  static G4double   coeff[MAXZINEL];
-  static G4double    aeff[MAXZINEL];
-  static const G4int amin[MAXZINEL];
-  static const G4int amax[MAXZINEL];
+  static G4double coeff[MAXZINEL];
   static G4String gDataDirectory;
 
 #ifdef G4MULTITHREADED
   static G4Mutex neutronInelasticXSMutex;
 #endif
 };
+
+inline
+const G4PhysicsVector* G4NeutronInelasticXS::GetPhysicsVector(G4int Z)
+{
+  const G4PhysicsVector* pv = data->GetElementData(Z);
+  if(pv == nullptr) { 
+    InitialiseOnFly(Z);
+    pv = data->GetElementData(Z);
+  }
+  return pv;
+}
 
 #endif

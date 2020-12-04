@@ -40,7 +40,7 @@ public:
   virtual bool visit(std::vector<unsigned char>&) = 0;
   virtual bool visit(std::vector<std::string>&) = 0;
   virtual bool visit(std::vector< std::vector<double> >&) = 0;
-  //virtual bool visit_double(IArray&) = 0;  
+  //virtual bool visit_double(IArray&) = 0;
 };
 
 }

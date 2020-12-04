@@ -6,11 +6,10 @@
 // This is the implementation of those parts of the HepLorentzRotation class
 // which involve decomposition into Boost*Rotation.
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/LorentzRotation.h"
+
+#include <cmath>
+#include <iostream>
 
 namespace CLHEP  {
 

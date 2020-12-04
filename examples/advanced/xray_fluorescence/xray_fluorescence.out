@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -14,28 +14,28 @@
 
 Using the sequential Run Manager
 XrayFluoAnalysisManager created
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltMain> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltTraces> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltMain> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltTraces> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Dolorite> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TracesOfDolorite> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltMain> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltTraces> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltMain> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltTraces> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Dolorite> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TracesOfDolorite> is not found.
 G4Material WARNING: duplicate name of material Dolorite
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Mars1 Main components> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TracesOfMars1> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <HawaiianWD> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <HawaiianRF> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IcelandicWD> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IcelandicRF> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <GabbroWD> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <GabbroRF> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Anorthosite> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Gabbro> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <gallium arsenide> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Scintillator> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Basalt> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <SiLi> is not found out
-G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found out
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Mars1 Main components> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TracesOfMars1> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <HawaiianWD> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <HawaiianRF> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IcelandicWD> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IcelandicRF> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <GabbroWD> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <GabbroRF> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Anorthosite> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Gabbro> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <gallium arsenide> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Scintillator> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Basalt> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <SiLi> is not found.
+G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found.
 
 ***** Table : Nb of materials = 26 *****
 
@@ -72,7 +72,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   8.14 %  ElmAbundance   7.55 % 
@@ -302,7 +302,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   8.06 %  ElmAbundance   7.53 % 
@@ -520,7 +520,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.19 %  ElmAbundance   0.08 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   3.49 %  ElmAbundance   3.31 % 
@@ -728,7 +728,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.19 %  ElmAbundance   0.08 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   3.48 %  ElmAbundance   3.31 % 
@@ -930,7 +930,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   6.76 %  ElmAbundance   5.76 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   0.08 %  ElmAbundance   0.08 % 
@@ -1204,7 +1204,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   6.74 %  ElmAbundance   5.75 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   0.08 %  ElmAbundance   0.08 % 
@@ -1272,7 +1272,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:  10.33 %  ElmAbundance   8.22 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   2.42 %  ElmAbundance   2.13 % 
@@ -1552,7 +1552,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:  10.28 %  ElmAbundance   8.21 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   2.41 %  ElmAbundance   2.13 % 
@@ -1620,7 +1620,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:  13.29 %  ElmAbundance  10.93 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   0.24 %  ElmAbundance   0.22 % 
@@ -1680,7 +1680,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:  10.38 %  ElmAbundance   8.51 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   1.93 %  ElmAbundance   1.76 % 
@@ -1739,7 +1739,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:  11.34 %  ElmAbundance   4.52 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   3.50 %  ElmAbundance   3.21 % 
@@ -1803,7 +1803,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.23 %  ElmAbundance   0.09 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   2.35 %  ElmAbundance   2.17 % 
@@ -1863,7 +1863,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:  12.24 %  ElmAbundance   4.99 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   8.38 %  ElmAbundance   7.86 % 
@@ -1927,7 +1927,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.15 %  ElmAbundance   0.06 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   8.37 %  ElmAbundance   7.92 % 
@@ -1994,7 +1994,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   1.76 %  ElmAbundance   1.70 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   2.45 %  ElmAbundance   2.24 % 
@@ -2049,7 +2049,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
    --->  Element: Pd (Pd)   Z = 46.0   N =   106   A = 106.415 g/mole
          --->  Isotope: Pd102   Z = 46   N = 102   A = 101.91 g/mole   abundance:  1.020 %
          --->  Isotope: Pd104   Z = 46   N = 104   A = 103.90 g/mole   abundance: 11.140 %
-         --->  Isotope: Pd105   Z = 46   N = 105   A = 104.91 g/mole   abundance: 22.330 %
+         --->  Isotope: Pd105   Z = 46   N = 105   A = 104.90 g/mole   abundance: 22.330 %
          --->  Isotope: Pd106   Z = 46   N = 106   A = 105.90 g/mole   abundance: 27.330 %
          --->  Isotope: Pd108   Z = 46   N = 108   A = 107.90 g/mole   abundance: 26.460 %
          --->  Isotope: Pd110   Z = 46   N = 110   A = 109.91 g/mole   abundance: 11.720 %
@@ -2063,11 +2063,11 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
          --->  Isotope: Cd112   Z = 48   N = 112   A = 111.90 g/mole   abundance: 24.130 %
          --->  Isotope: Cd113   Z = 48   N = 113   A = 112.90 g/mole   abundance: 12.220 %
          --->  Isotope: Cd114   Z = 48   N = 114   A = 113.90 g/mole   abundance: 28.730 %
-         --->  Isotope: Cd116   Z = 48   N = 116   A = 115.90 g/mole   abundance:  7.490 %
+         --->  Isotope: Cd116   Z = 48   N = 116   A = 115.91 g/mole   abundance:  7.490 %
           ElmMassFraction:   0.02 %  ElmAbundance   0.00 % 
 
    --->  Element: Ag (Ag)   Z = 47.0   N =   108   A = 107.868 g/mole
-         --->  Isotope: Ag107   Z = 47   N = 107   A = 106.90 g/mole   abundance: 51.839 %
+         --->  Isotope: Ag107   Z = 47   N = 107   A = 106.91 g/mole   abundance: 51.839 %
          --->  Isotope: Ag109   Z = 47   N = 109   A = 108.91 g/mole   abundance: 48.161 %
           ElmMassFraction:   0.05 %  ElmAbundance   0.01 % 
 
@@ -2133,7 +2133,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   0.13 %  ElmAbundance   0.06 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   8.35 %  ElmAbundance   7.89 % 
@@ -2195,7 +2195,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   8.53 %  ElmAbundance  52.63 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -2242,7 +2242,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
           ElmMassFraction:   7.10 %  ElmAbundance   5.87 % 
 
    --->  Element: Mg (Mg)   Z = 12.0   N =    24   A = 24.305 g/mole
-         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance: 78.990 %
+         --->  Isotope:  Mg24   Z = 12   N =  24   A =  23.99 g/mole   abundance: 78.990 %
          --->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance: 10.000 %
          --->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance: 11.010 %
           ElmMassFraction:   5.90 %  ElmAbundance   5.42 % 
@@ -2307,10 +2307,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -2429,10 +2431,11 @@ Rayl:  for gamma SubType=11 BuildTable=1
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.08, stepLimType: 2, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+              StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+              StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 eIoni:  for e-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2456,7 +2459,7 @@ ePairProd:  for e-  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           ePairProd : Emin=    0 eV  Emax=  100 TeV
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 1
@@ -2465,10 +2468,11 @@ CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.08, stepLimType: 2, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   GoudsmitSaunderson : Emin=    0 eV  Emax=  100 MeV Nbins=120 100 eV  - 100 MeV
+              StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
+              StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2491,7 +2495,7 @@ ePairProd:  for e+  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           ePairProd : Emin=    0 eV  Emax=  100 TeV
+           ePairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 annihil:  for e+, integral:1  SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2504,9 +2508,9 @@ CoulombScat:  for e+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 hIoni:  for proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2522,7 +2526,7 @@ hBrems:  for proton  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 hPairProd:  for proton  SubType=4
@@ -2530,7 +2534,7 @@ hPairProd:  for proton  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
@@ -2543,9 +2547,9 @@ nuclearStopping:  for proton SubType=8 BuildTable=0
    ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for GenericIon  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2561,9 +2565,9 @@ nuclearStopping:  for GenericIon SubType=8 BuildTable=0
    ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for alpha  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 ionIoni:  for alpha  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2580,9 +2584,9 @@ nuclearStopping:  for alpha SubType=8 BuildTable=0
    ICRU49NucStopping : Emin=    0 eV  Emax=    1 MeV
 
 msc:  for anti_proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 hIoni:  for anti_proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2598,7 +2602,7 @@ hBrems:  for anti_proton  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 hPairProd:  for anti_proton  SubType=4
@@ -2606,7 +2610,7 @@ hPairProd:  for anti_proton  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
@@ -2615,9 +2619,9 @@ CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 hIoni:  for kaon+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2633,7 +2637,7 @@ hBrems:  for kaon+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 hPairProd:  for kaon+  SubType=4
@@ -2641,7 +2645,7 @@ hPairProd:  for kaon+  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
@@ -2650,9 +2654,9 @@ CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 hIoni:  for kaon-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2668,7 +2672,7 @@ hBrems:  for kaon-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 hPairProd:  for kaon-  SubType=4
@@ -2676,7 +2680,7 @@ hPairProd:  for kaon-  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of kaon+
@@ -2685,9 +2689,9 @@ CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 muIoni:  for mu+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2704,7 +2708,7 @@ muBrems:  for mu+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu+  SubType=4
@@ -2712,7 +2716,7 @@ muPairProd:  for mu+  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
@@ -2721,9 +2725,9 @@ CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 muIoni:  for mu-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2740,7 +2744,7 @@ muBrems:  for mu-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 muPairProd:  for mu-  SubType=4
@@ -2748,7 +2752,7 @@ muPairProd:  for mu-  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of mu+
@@ -2757,9 +2761,9 @@ CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 hIoni:  for pi+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2775,7 +2779,7 @@ hBrems:  for pi+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 hPairProd:  for pi+  SubType=4
@@ -2783,7 +2787,7 @@ hPairProd:  for pi+  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 1
@@ -2792,9 +2796,9 @@ CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llimit=1
 
 hIoni:  for pi-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -2810,7 +2814,7 @@ hBrems:  for pi-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
       ===== Limit on energy threshold has been applied 
 
 hPairProd:  for pi-  SubType=4
@@ -2818,7 +2822,7 @@ hPairProd:  for pi-  SubType=4
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of pi+
@@ -2895,13 +2899,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
        0.00         0.00         0.00            1k World
-       0.00         0.00         0.00            1k HPGeDetector
+       0.00         0.00         0.00            0k HPGeDetector
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      69.55          1k         3        9         24         0.00    World
-      30.45          0k         2        3         11         0.00    HPGeDetector
+      69.08          0k         3        9         24         0.00    World
+      30.92          0k         2        3         11         0.00    HPGeDetector
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
@@ -2918,12 +2922,15 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.910000s Real=1.925353s Sys=0.000000s
+  User=0.730000s Real=0.749298s Sys=0.000000s
 Going to save histograms
-... write Root file : xrayfluo.root - done
-... close Root file : xrayfluo.root - done
+... write file : xrayfluo.root - done
+... close file : xrayfluo.root - done
 /vis/viewer/update
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 visManager deleted
@@ -2950,12 +2957,12 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.325 MB
-Pool ID '7G4Track', size : 0.65 MB
+Pool ID '17G4DynamicParticle', size : 0.321 MB
+Pool ID '7G4Track', size : 0.642 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.99 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.98 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

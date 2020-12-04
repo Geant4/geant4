@@ -58,6 +58,7 @@
 #include "G4PSSphereSurfaceFlux3D.hh"
 #include "G4PSCylinderSurfaceCurrent3D.hh"
 #include "G4PSCylinderSurfaceFlux3D.hh"
+#include "G4PSVolumeFlux3D.hh"
 #include "G4PSNofCollision3D.hh"
 #include "G4PSPopulation3D.hh"
 #include "G4PSTrackCounter3D.hh"
@@ -291,6 +292,24 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   param->SetDefaultValue("percm2");
   qFlatSurfFluxCmd->SetParameter(param);
   //
+
+  qVolFluxCmd = new G4UIcommand("/score/quantity/volumeFlux",this);
+  qVolFluxCmd->SetGuidance("Volume flux scorer.");
+  qVolFluxCmd->SetGuidance("This scorer scores the number of particles getting into the volume without normalized by the surface area.");
+  qVolFluxCmd->SetGuidance("[usage] /score/quantity/volumeFlux qname divcos dflag");
+  qVolFluxCmd->SetGuidance("  qname  :(String) scorer name");
+  qVolFluxCmd->SetGuidance("  divcos :(Bool) divide by cos(theta), where theta is the incident angle (default : false)");
+  qVolFluxCmd->SetGuidance("  dflag  :(Int) direction, 1 : inward (default), 2 : outward");
+  param = new G4UIparameter("qname",'s',false);
+  qVolFluxCmd->SetParameter(param);
+  param = new G4UIparameter("divcos",'b',true);
+  param->SetDefaultValue(false);
+  qVolFluxCmd->SetParameter(param);
+  param = new G4UIparameter("dflag",'i',true);
+  param->SetParameterRange("dflag>=1 && dflag<=2");
+  param->SetDefaultValue(1);
+  qVolFluxCmd->SetParameter(param);
+
 //  qSphereSurfCurrCmd = new G4UIcommand("/score/quantity/sphereSurfaceCurrent",this);
 //  qSphereSurfCurrCmd->SetGuidance("Sphere surface current Scorer.");
 //  qSphereSurfCurrCmd->

@@ -43,12 +43,11 @@ protected: //render_gstos
 public:
   virtual void render(render_action& a_action) {
     if(gstos_render(a_action)) return;
-    
     // immediate rendering :
     const state& state = a_action.state();
     bool draw_edges = false;
     if(state.m_draw_type==draw_filled) draw_edges = state.m_GL_LIGHTING?false:true;
-    
+
     if(draw_edges) {
       a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
       a_action.line_width(1);
@@ -647,7 +646,7 @@ protected:
     lines[141] = bottom[0];
     lines[142] = bottom[1];
     lines[143] = bottom[2];
-  }   
+  }
 
   void _points(float points[]) { //[24]
     float wh = width.value()*0.5f;
@@ -663,7 +662,7 @@ protected:
     points[12+3] = -wh;points[12+ 4] = -hh;points[12+ 5] = -dh;
     points[12+6] = -wh;points[12+ 7] =  hh;points[12+ 8] = -dh;
     points[12+9] =  wh;points[12+10] =  hh;points[12+11] = -dh;
-  }   
+  }
 
   template <class T>
   void visit(T& a_visitor,draw_type a_style){
@@ -678,9 +677,9 @@ protected:
       a_visitor.add_lines(144,lines);
 
     } else if(a_style==draw_filled) {
-      float tris[108];float nms[108];  
+      float tris[108];float nms[108];
       _tris(tris,nms);
-      a_visitor.add_triangles(108,tris,nms);
+      a_visitor.add_triangles_normal(108,tris,nms);
     }
   }
 };

@@ -13,6 +13,17 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-August-2020 Vladimir Ivanchenko      (phys-ctor-decay-V10-06-05)
+- G4RadioactiveDecayPhysics - defined EM parameters in ConstructProcess(..)
+    instead definition inside the constructor
+
+02-July-2020 Vladimir Ivanchenko        (phys-ctor-decay-V10-06-04)
+- G4RadioactiveDecayPhysics - improved initialisation: added 
+    EM parameters definition in the class constructor; if atomic
+    de-excitation is not defined add it in each thread but not 
+    change EM parameters in a thread; should address several 
+    problems reported recently in the Forum and privately
+
 03-June-2020 Vladimir Ivanchenko        (phys-ctor-decay-V10-06-03)
 - G4RadioactiveDecayPhysics - coherent initialisation with recent 
     updates of initialisation of atomic de-excitation

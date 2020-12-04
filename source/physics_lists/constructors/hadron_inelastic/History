@@ -12,7 +12,87 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-38-May-2020 Ben Morgan           (phys-ctor-hinelastic-V10-06-04)
+
+26-November-2020, Alberto Ribon (phys-ctor-hinelastic-V10-06-18)
+- Update README.
+
+04-November-2020, Alberto Ribon (phys-ctor-hinelastic-V10-06-17)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT, G4HadronInelasticQBBC :
+    enabled charm and bottom hadronic physics (now available in nearly all
+    physics lists, in particular those of interest for HEP; the main
+    exception is QGSP_BIC and its derived physics lists, which are
+    typically used for low-energy applications).
+
+30-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-16)
+- G4HadronPhysicsINCLXX - use inheritance from the base
+    class G4HadronPhysicsFTFP_BERT; removed duplicate code; 
+    clean-up; list of models and applicability intervals are the same;
+    implemented b-, c- particle physics and cross section factor
+
+19-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-15)
+- G4HadronPhysicsFTF_BIC, G4HadronPhysicsQGS_BIC,
+  G4HadronPhysicsFTFQGSP_BERT - use inheritance from the base
+    class G4HadronPhysicsFTFP_BERT; removed duplicate code; 
+    clean-up; list of models and applicability intervals are the same;
+    implemented b-, c- particle physics and cross section factor
+  Improved comments and info printouts in other physics classes
+  G4HadronInelasticQBBC - use G4HadronicBuilder, apply the Binary
+    cascade to pions below 1.5 GeV
+
+02-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-14)
+- G4HadronPhysicsNuBeam, G4HadronPhysicsShielding,
+  G4HadronPhysicsShieldingLEND - use inheritance from the base
+    class G4HadronPhysicsFTFP_BERT; removed duplicate code; 
+    clean-up; list of models and applicability intervals are the same;
+    implemented b-, c- particle physics and cross section factor
+  Improved comments and info printouts in other physics classes
+
+01-October-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-13)
+- G4HadronPhysicsQGSP_BERT, G4HadronPhysicsQGSP_FTFP_BERT,
+  G4HadronPhysicsQGSP_BERT_HP - implement DumpBanner() method
+- G4VHadronPhysics - removed unused method 
+
+22-September-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-12)
+-  G4HadronInelasticFTFP_BERT, G4HadronInelasticFTFP_BERT_HP, 
+   G4HadronInelasticFTFP_BERT_ATL, G4HadronInelasticFTFP_BERT_TRV - added 
+     optinal cross section factor for systematics studies; added b-, c- 
+     physics; added more c++11 keywords; removed unused headers
+
+17-September-2020, Alberto Ribon    (phys-ctor-hinelastic-V10-06-11)
+-  G4HadronInelasticQGSP_BERT and G4HadronInelasticQGSP_BIC : replaced
+   G4HadronicBuilder::BuildAntiLightIonsQGSP_FTFP with 
+   G4HadronicBuilder::BuildAntiLightIonsFTFP 
+   (because currently QGSP cannot be applied to any ion or anti-ion).
+
+02-September-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-10)
+-  G4HadronInelasticQGSP_BERT, G4HadronInelasticQGSP_BIC - allow 
+     modification of parameters at PreInit stage
+-  G4HadronInelasticQGSP_FTFP_BERT - enable b- and c- particle physics
+
+25-August-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-09)
+-  G4HadronInelasticQGSP_BERT, G4HadronInelasticQGSP_BERT_HP, 
+   G4HadronInelasticQGSP_FTFP_BERT - added optinal cross section factor for
+     systematics studies; added b-, c- physics; added more c++11 keywords
+-  G4VHadronPhysics - removed obsolete methods
+
+21-August-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-08)
+-  G4HadronInelasticQBBC - fixed neutrom and anti-baryon configurations
+-  G4HadronInelasticQGSP_BIC, G4HadronInelasticQGSP_BIC_HP, 
+   G4HadronInelasticQGSP_BIC_AllHP - added optinal cross section factor for
+     systematics studies; added b-, c- physics;
+
+01-August-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-07)
+-  G4HadronInelasticQBBC - added optinal cross section factor for
+     systematics studies
+
+19-July-2020, Vladimir Ivanchenko  (phys-ctor-hinelastic-V10-06-06)
+-  G4HadronInelasticQBBC - use correct utility methods
+
+09-July-2020, Vladimir Ivanchenko  (phys-ctor-hinelastic-V10-06-05)
+-  G4HadronInelasticQBBC - use utilites G4HadParticle and G4HadronicBuilder
+-  G4VHadronPhysics - removed obsolete methods and thread_local methods
+ 
+30-May-2020 Ben Morgan             (phys-ctor-hinelastic-V10-06-04)
 -  Remove obsolete GRANULAR_DEPENDENCIES entries
 
 20-May-2020, Alberto Ribon         (phys-ctor-hinelastic-V10-06-03)

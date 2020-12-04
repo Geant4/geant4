@@ -37,12 +37,9 @@ class BrachyActionInitialization: public G4VUserActionInitialization
   public:
     BrachyActionInitialization();
     virtual ~BrachyActionInitialization();
-
     virtual void BuildForMaster() const;
     virtual void Build() const;
-
 };
-
 #endif
 
     

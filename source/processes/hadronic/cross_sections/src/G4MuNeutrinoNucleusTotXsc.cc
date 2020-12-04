@@ -276,7 +276,7 @@ G4double G4MuNeutrinoNucleusTotXsc::GetNuMuTotCsArray( G4int index)
   if( index >= 0 && index < fIndex) return fNuMuTotXsc[index];
   else 
   {
-    G4cout<<"Inproper index of fNuMuTotXsc array"<<G4endl;
+    G4cout<<"Improper index of fNuMuTotXsc array"<<G4endl;
     return 0.;
   }
 }
@@ -290,7 +290,7 @@ G4double G4MuNeutrinoNucleusTotXsc::GetANuMuTotCsArray( G4int index)
   if( index >= 0 && index < fIndex) return fANuMuTotXsc[index];
   else 
   {
-    G4cout<<"Inproper index of fANuMuTotXsc array"<<G4endl;
+    G4cout<<"Improper index of fANuMuTotXsc array"<<G4endl;
     return 0.;
   }
 }

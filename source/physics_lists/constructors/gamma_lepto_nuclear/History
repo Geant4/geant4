@@ -1,4 +1,4 @@
--------------------------------------------------------------------
+---------------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -12,12 +12,17 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 November 2020  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-06-04)
+- G4EmExtraPhysics, G4EmMessenger - added a flag to enable G4GammaNuclearXS
+    cross section and possibility to use general process for electron and 
+    positron; fixed several UI commands 
+
 28 May 2020 Ben Morgan           (phys-ctor-glnuclear-V10-06-03)
 - Remove obsolete GRANULAR_DEPENDENCIES entries
 
 29 April 2020 V. Grichine  (phys-ctor-glnuclear-V10-06-02)
  - G4EmExtraPhysics - extension to anti_nu_mu, nu_e and anti_nu_e processes-models
-
 
 21 April 2020  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-06-01)
 - G4EmExtraPhysics, G4EmMessenger - added low-energy limit, set method, and UI

@@ -17,8 +17,8 @@
 ###/testem/det/setAbsThick   3 mm
 /testem/det/setAbsYZ      1 cm
 #
-###/testem/phys/addPhysics emstandard_opt0
 /testem/phys/addPhysics local
+###/testem/phys/addPhysics emstandard_opt4
 #
 /run/setCut 10 um   
 #
@@ -31,6 +31,5 @@
 /analysis/setFileName berger/local
 /analysis/h1/set 1 105  0  1.05 MeV	#energy deposit  
 #
-/run/printProgress 100000
-# 
+/run/printProgress 100000 
 /run/beamOn 1000000

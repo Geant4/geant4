@@ -486,7 +486,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       for (size_t i=0;i<StechiometricFactors->size();i++)
 	{
 	  G4cout << "Element " << (*elementVector)[i]->GetSymbol() << " (Z = " <<
-	    (*elementVector)[i]->GetZ() << ") --> " <<
+	    (*elementVector)[i]->GetZasInt() << ") --> " <<
 	    (*StechiometricFactors)[i] << " atoms/molecule " << G4endl;
 	}
     }
@@ -494,10 +494,10 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   for (G4int i=0;i<nElements;i++)
     {
-      G4int iZ = (G4int) (*elementVector)[i]->GetZ();
+      G4int iZ = (*elementVector)[i]->GetZasInt();
       totalZ += iZ * (*StechiometricFactors)[i];
       totalMolecularWeight += (*elementVector)[i]->GetAtomicMassAmu() * (*StechiometricFactors)[i];
-      meanExcitationEnergy += iZ*std::log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
+      meanExcitationEnergy += iZ*G4Log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
       /*
       G4cout << iZ << " " << (*StechiometricFactors)[i] << " " << totalZ << " " <<
 	totalMolecularWeight/(g/mole) << " " << meanExcitationEnergy << " " <<
@@ -606,7 +606,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   if (verbosityLevel > 1)
     {
-      G4cout << "Estimated oscillator strenght and energy of plasmon: " <<
+      G4cout << "Estimated oscillator strength and energy of plasmon: " <<
 	conductionStrength << " and " << plasmaEnergy/eV << " eV" << G4endl;
     }
 
@@ -622,7 +622,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       if (verbosityLevel >1 )
 	G4cout << material->GetName() << " is a conductor " << G4endl;
       isAConductor = true;
-      //copy the conduction strenght.. The number is going to change.
+      //copy the conduction strength.. The number is going to change.
       G4double conductionStrengthCopy = conductionStrength;
       G4bool quit = false;
       for (size_t i = 1; i<helper->size() && !quit ;i++)
@@ -699,7 +699,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   G4double adjustmentFactor = 0;
   if (helper->size() > 1)
     {
-      G4double TST = totalZ*std::log(meanExcitationEnergy/eV);
+      G4double TST = totalZ*G4Log(meanExcitationEnergy/eV);
       G4double AALow = 0.1;
       G4double AAHigh = 10.;
       do
@@ -711,7 +711,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	      if (i == 0 && isAConductor)
 		{
 		  G4double resEne = (*helper)[i].GetResonanceEnergy();
-		  sumLocal += (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
+		  sumLocal += (*helper)[i].GetOscillatorStrength()*G4Log(resEne/eV);
 		}
 	      else
 		{
@@ -721,7 +721,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		    2./3.*(oscStre/totalZ)*Omega*Omega;
 		  G4double resEne = std::sqrt(WI2);
 		  (*helper)[i].SetResonanceEnergy(resEne);
-		  sumLocal +=  (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
+		  sumLocal +=  (*helper)[i].GetOscillatorStrength()*G4Log(resEne/eV);
 		}
 	    }
 	  if (sumLocal < TST)
@@ -746,11 +746,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
 
   //Check again for data consistency
-  G4double xcheck = (*helper)[0].GetOscillatorStrength()*std::log((*helper)[0].GetResonanceEnergy());
+  G4double xcheck = (*helper)[0].GetOscillatorStrength()*G4Log((*helper)[0].GetResonanceEnergy());
   G4double TST = (*helper)[0].GetOscillatorStrength();
   for (size_t i=1;i<helper->size();i++)
     {
-      xcheck += (*helper)[i].GetOscillatorStrength()*std::log((*helper)[i].GetResonanceEnergy());
+      xcheck += (*helper)[i].GetOscillatorStrength()*G4Log((*helper)[i].GetResonanceEnergy());
       TST += (*helper)[i].GetOscillatorStrength();
     }
   if (std::fabs(TST-totalZ)>1e-8*totalZ)
@@ -813,7 +813,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   //COPY THE HELPER (vector of object) to theTable (vector of Pointers).
   for (size_t i=0;i<helper->size();i++)
     {
-      //copy content --> one may need it later (e.g. to fill an other table, with variations)
+      //copy content --> one may need it later (e.g. to fill another table, with variations)
       G4PenelopeOscillator* theOsc = new G4PenelopeOscillator((*helper)[i]);
       theTable->push_back(theOsc);
     }
@@ -852,8 +852,8 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		skipLoop = true;
 	      if (!skipLoop)
 		{
-		  G4double newRes = G4Exp((oscStre*std::log(resEne)+
-					      oscStrePlus1*std::log(resEnePlus1))
+		  G4double newRes = G4Exp((oscStre*G4Log(resEne)+
+					      oscStrePlus1*G4Log(resEnePlus1))
 					     /(oscStre+oscStrePlus1));
 		  (*theTable)[i]->SetResonanceEnergy(newRes);
 		  G4double newIon = (oscStre*ionEne+
@@ -942,7 +942,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   //COPY THE HELPER (vector of object) to theTable (vector of Pointers).
   for (size_t i=0;i<helper->size();i++)
     {
-      //copy content --> one may need it later (e.g. to fill an other table, with variations)
+      //copy content --> one may need it later (e.g. to fill another table, with variations)
       G4PenelopeOscillator* theOsc = new G4PenelopeOscillator((*helper)[i]);
       theTableC->push_back(theOsc);
     }

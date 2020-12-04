@@ -1,0 +1,37 @@
+#
+# macro file for TestEm5.cc
+#
+# to play with geometry
+# can be run interactively
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setWorldMat Aluminium
+/testem/det/setWorldX   5 cm
+/testem/det/setWorldYZ  3 cm
+#
+/testem/det/setAbsMat H2Liq
+/testem/det/setAbsThick 3 cm
+/testem/det/setAbsYZ    2 cm
+#
+/testem/det/setAbsXpos  5 mm
+#
+/process/em/verbose 0
+#
+##/control/execute vis.mac
+##/vis/viewer/zoom 0.8
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle geantino
+/gun/position -20 0 0 mm 
+/gun/energy 1 eV
+#
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+#
+/testem/gun/rndm 0.8
+/run/beamOn 6

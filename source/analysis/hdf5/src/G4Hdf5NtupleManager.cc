@@ -41,7 +41,7 @@ using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4Hdf5NtupleManager::G4Hdf5NtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::hdf5::ntuple>(state),
+ : G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>(state),
    fFileManager(nullptr)
 {}
 
@@ -54,26 +54,30 @@ G4Hdf5NtupleManager::~G4Hdf5NtupleManager()
 //
 //_____________________________________________________________________________
 void G4Hdf5NtupleManager::CreateTNtuple(
-  NtupleDescriptionType*  ntupleDescription, G4bool warn)
+  Hdf5NtupleDescription* ntupleDescription, G4bool warn)
 {
 // Ntuple will be created from ntupleDescription if file is open,
 // return with or without warning otherwise
 
-  // create a file for this ntuple
-  // if ( ! fFileManager->CreateNtupleFile(ntupleDescription) ) return;
+  // Get ntuple file from ntuple description
+  auto ntupleFile = ntupleDescription->fFile;
+  if (! ntupleFile) {
+    ntupleFile = fFileManager->GetFile();
+  }
 
-  // Check ntuple directory
-  if ( fFileManager->GetNtupleDirectory() < 0 ) {
-    if ( warn ) {
-      G4String inFunction = "G4Hdf5NtupleManager::::CreateTNtupleFromBooking";
+  // Check file
+  if ( ! ntupleFile ) {
+    if (warn) {
+      G4String inFunction = "G4Hdf5NtupleManager::::CreateTNtuple";
       G4ExceptionDescription description;
       description << "      " 
-        << "Cannot create ntuple. Ntuple directory does not exist." << G4endl;
+        << "Cannot create ntuple. Ntuple file does not exist." << G4endl;
       G4Exception(inFunction, "Analysis_W002", JustWarning, description);
     }
     return;
   }
 
+  auto directory = std::get<2>(*ntupleFile);
   auto basketSize = fFileManager->GetBasketSize();
   // auto compressionLevel = fState.GetCompressionLevel();
   auto compressionLevel = 0;
@@ -81,31 +85,28 @@ void G4Hdf5NtupleManager::CreateTNtuple(
   // create ntuple
   ntupleDescription->fNtuple
     = new tools::hdf5::ntuple(
-            G4cout, fFileManager->GetNtupleDirectory(), ntupleDescription->fNtupleBooking, 
+            G4cout, directory, ntupleDescription->fNtupleBooking,
             compressionLevel, basketSize);
 
   fNtupleVector.push_back(ntupleDescription->fNtuple);  
 }
 
 //_____________________________________________________________________________
-void G4Hdf5NtupleManager::CreateTNtuple(
-  G4TNtupleDescription<tools::hdf5::ntuple>* /*ntupleDescription*/,
-  const G4String& /*name*/, const G4String& /*title*/)
-{
-  // Ntuple will be created at finish ntuple from ntuple_booking
-}
-
-//_____________________________________________________________________________
 void G4Hdf5NtupleManager::CreateTNtupleFromBooking(
-  G4TNtupleDescription<tools::hdf5::ntuple>* ntupleDescription)
+  Hdf5NtupleDescription* ntupleDescription)
 {
+  // Create file if file name per object is set
+  if ( ntupleDescription->fFileName.size() ) {
+    fFileManager->CreateNtupleFile(ntupleDescription);
+  }
+
   // Create ntuple from booking and print a warning if file is not open
   CreateTNtuple(ntupleDescription, true);
 }
 
 //_____________________________________________________________________________
 void G4Hdf5NtupleManager::FinishTNtuple(
-  G4TNtupleDescription<tools::hdf5::ntuple>* ntupleDescription,
+  Hdf5NtupleDescription* ntupleDescription,
   G4bool /*fromBooking*/)
 {
   if ( ! ntupleDescription->fNtuple ) {
@@ -113,6 +114,6 @@ void G4Hdf5NtupleManager::FinishTNtuple(
     CreateTNtuple(ntupleDescription, false);
   }
 
-  fFileManager->LockNtupleDirectoryName();
+  fFileManager->LockDirectoryNames();
 }
 

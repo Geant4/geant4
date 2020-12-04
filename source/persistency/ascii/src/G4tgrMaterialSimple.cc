@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrMaterialSimple implementation
 //
-//
-//
-// class G4tgrMaterialSimple
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrMaterialSimple.hh"
 
@@ -39,75 +35,68 @@
 #include "G4tgrMessenger.hh"
 #include "G4UIcommand.hh"
 
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterialSimple::G4tgrMaterialSimple()
-  : name("MaterialSimple"), theA(0.), theZ(0.)
 {
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterialSimple::~G4tgrMaterialSimple()
 {
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterialSimple::G4tgrMaterialSimple(const G4String& matType,
                                          const std::vector<G4String>& wl)
   : name("MaterialSimple")
 {
-  //---------- Check for miminum number of words read 
-  G4tgrUtils::CheckWLsize( wl, 5, WLSIZE_EQ,
-                           "G4tgrMaterialSimple::G4tgrMaterialSimple");
+  //---------- Check for miminum number of words read
+  G4tgrUtils::CheckWLsize(wl, 5, WLSIZE_EQ,
+                          "G4tgrMaterialSimple::G4tgrMaterialSimple");
 
   theMateType = matType;
 
-  //---------- Fill private data 
-  theName = G4tgrUtils::GetString( wl[1] );
-  theZ = G4tgrUtils::GetDouble( wl[2] );
-  theA = G4tgrUtils::GetDouble( wl[3], g/mole);
-  theDensity = G4tgrUtils::GetDouble( wl[4], g/cm3);
+  //---------- Fill private data
+  theName         = G4tgrUtils::GetString(wl[1]);
+  theZ            = G4tgrUtils::GetDouble(wl[2]);
+  theA            = G4tgrUtils::GetDouble(wl[3], g / mole);
+  theDensity      = G4tgrUtils::GetDouble(wl[4], g / cm3);
   theNoComponents = 0;
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
-     G4cout << " Created " << *this << G4endl;
+    G4cout << " Created " << *this << G4endl;
   }
 #endif
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 const G4String& G4tgrMaterialSimple::GetComponent(G4int ii) const
-{ 
-  G4String ErrMessage = "Should never be called for a MaterialSimple - i:"
-                      + G4UIcommand::ConvertToString(ii);
-  G4Exception("G4tgrMaterialSimple::GetComponent()",
-              "InvalidCall", FatalException, ErrMessage);
+{
+  G4String ErrMessage = "Should never be called for a MaterialSimple - i:" +
+                        G4UIcommand::ConvertToString(ii);
+  G4Exception("G4tgrMaterialSimple::GetComponent()", "InvalidCall",
+              FatalException, ErrMessage);
 
   return name;  // dummy, to avoid compilation warnings...
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4double G4tgrMaterialSimple::GetFraction(G4int ii)
 {
-  G4String ErrMessage = "Should never be called for a MaterialSimple - i:"
-                      + G4UIcommand::ConvertToString(ii);
-  G4Exception("G4tgrMaterialSimple::GetFraction()",
-              "InvalidCall", FatalException, ErrMessage);
+  G4String ErrMessage = "Should never be called for a MaterialSimple - i:" +
+                        G4UIcommand::ConvertToString(ii);
+  G4Exception("G4tgrMaterialSimple::GetFraction()", "InvalidCall",
+              FatalException, ErrMessage);
 
-  return 0.; // dummy, to avoid compilation warnings...
+  return 0.;  // dummy, to avoid compilation warnings...
 }
 
-
-//-------------------------------------------------------------
-std::ostream& operator<<(std::ostream& os, const G4tgrMaterialSimple& mate) 
+// --------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrMaterialSimple& mate)
 {
-  os << "G4tgrMaterialSimple= " << mate.theName 
-     << " Z " << mate.theZ << " A " << mate.theA 
-     << "density= " << mate.theDensity/g*cm3
+  os << "G4tgrMaterialSimple= " << mate.theName << " Z " << mate.theZ << " A "
+     << mate.theA << "density= " << mate.theDensity / g * cm3
      << " g/cm3. Number of Components: " << mate.theNoComponents << G4endl;
   return os;
 }

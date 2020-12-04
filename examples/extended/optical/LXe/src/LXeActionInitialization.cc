@@ -29,26 +29,25 @@
 
 #include "LXeActionInitialization.hh"
 
-#include "LXePrimaryGeneratorAction.hh"
 #include "LXeDetectorConstruction.hh"
-
-#include "LXeRunAction.hh"
 #include "LXeEventAction.hh"
-#include "LXeTrackingAction.hh"
-#include "LXeSteppingAction.hh"
+#include "LXePrimaryGeneratorAction.hh"
+#include "LXeRunAction.hh"
 #include "LXeStackingAction.hh"
+#include "LXeSteppingAction.hh"
+#include "LXeTrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeActionInitialization::LXeActionInitialization(
-   const LXeDetectorConstruction* det)
-  : G4VUserActionInitialization(), fDetector(det)
+  const LXeDetectorConstruction* det)
+  : G4VUserActionInitialization()
+  , fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeActionInitialization::~LXeActionInitialization()
-{}
+LXeActionInitialization::~LXeActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -14,18 +14,42 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17-Oct-2020 V.Ivanchenko                 (hadr-qgsm-V10-06-06)
+-  G4QGSParticipants - added protection for G4Exp (fixing outstanding
+     precision lost in gamma+proton interactions)
+
+28-Jul-2020 A. Ribon                     (hadr-qgsm-V10-06-05)
+-  G4BaryonSplitter : removed inexisting in Geant4 excited hyperon states
+   (Sigma* and Xi*).
+
+24-Jul-2020 A. Ribon                     (hadr-qgsm-V10-06-04)
+-  G4BaryonSplitter, G4SPBaryon : extension to charmed and bottom
+   baryons and anti-baryons.
+-  G4SingleDiffractiveExcitation, G4QGSDiffractiveExcitation,
+   G4QuarkExchange : in the ExciteParticipants method of these classe,
+   extension to charmed and bottom hadrons by assuming a minimum
+   projectile diffractive mass equal to the PDG mass plus 250 MeV;
+   in G4QuarkExchange, assumed also 50% for the probability of
+   projectile diffraction.
+-  G4Reggeons : in the constructor, replaced Omega_cc (PDG code 4432)
+   with Omega_c (PDG code 4332); added comments.
+
+06-Jul-2020 A. Ribon                     (hadr-qgsm-V10-06-03)
+-  G4QGSParticipants : rolled back the change in the average
+   transverse momentum of partons in a hadron.
+
 10-Jun-2020 A. Ribon                     (hadr-qgsm-V10-06-02)
--  Improved treatment of antibaryon interactions in QGS
-   (made by Vladimir Uzhinsky):
-   1. G4QGSParticipants : the average transverse momentum of partons
-      in a hadron is set to zero (according to the study of transverse
-      momentum distributions of hadrons produced in hadronic
-      interactions, in particular the study of Xf - Pt correlations
-      presented by the NA49 Collaboration).
-   2. G4QuarkExchange : the reggeon exchanges are now treated as
-      annihilation and creation of quark-antiquark pairs (to reflect
-      in inelastic processes the non-vacuum reggeon exchanges present
-      in antiparticle-particle elastic scattering amplitudes).
+Two, unrelated changes made by Vladimir Uzhinsky :
+-  G4QuarkExchange : improved treatment of antibaryon interactions in QGS.
+   The reggeon exchanges are now treated as annihilation and creation of
+   quark-antiquark pairs (to reflect in inelastic processes the non-vacuum
+   reggeon exchanges present in antiparticle-particle elastic scattering
+   amplitudes).
+-  G4QGSParticipants : the average transverse momentum of partons
+   in a hadron is set to zero (according to the study of transverse
+   momentum distributions of hadrons produced in hadronic
+   interactions, in particular the study of Xf - Pt correlations
+   presented by the NA49 Collaboration).
 
 08-Mar-2020 V.Ivanchenko                 (hadr-qgsm-V10-06-01)
 -  G4QGSModel - clean-up: removed unused methods, delete

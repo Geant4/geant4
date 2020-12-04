@@ -22,7 +22,7 @@ class field_desc {
   //typedef int offset_t; //could be <0 ?
 //#ifdef TOOLS_MEM
 //  TOOLS_SCLASS(tools::sg::field_desc)
-//#endif  
+//#endif
 public:
   typedef ptrdiff_t offset_t;
 public:

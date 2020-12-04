@@ -61,7 +61,7 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, G4double theEmax,
   }
   type = T_G4PhysicsLinearVector;
 
-  invdBin = 1. / ((theEmax - theEmin) / (G4double) numberOfNodes);
+  invdBin = 1. / ((theEmax - theEmin) / (G4double) (numberOfNodes - 1));
   baseBin = theEmin * invdBin;
 
   dataVector.reserve(numberOfNodes);

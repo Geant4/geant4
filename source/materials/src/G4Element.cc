@@ -78,7 +78,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
   G4int iz = G4lrint(zeff);
   if (iz < 1) {
     G4ExceptionDescription ed;
-    ed << "Fail to create G4Element " << name 
+    ed << "Failed to create G4Element " << name
        << " Z= " << zeff << " < 1 !";
     G4Exception ("G4Element::G4Element()", "mat011",  FatalException, ed);
   }
@@ -99,7 +99,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 
   if (fNeff < zeff) {
     G4ExceptionDescription ed;
-    ed << "Fail to create G4Element " << name 
+    ed << "Failed to create G4Element " << name
        << " with Z= " << zeff << "  N= " << fNeff 
        << "   N < Z is not allowed" << G4endl;
     G4Exception("G4Element::G4Element()", "mat012",  FatalException, ed);
@@ -134,9 +134,9 @@ G4Element::G4Element(const G4String& name,
 
   if(0 >= nIsotopes) {
     G4ExceptionDescription ed;
-    ed << "Fail to create G4Element " << name 
+    ed << "Failed to create G4Element " << name
        << " <" << symbol << "> with " << nIsotopes
-       << " isotopes";
+       << " isotopes.";
     G4Exception ("G4Element::G4Element()", "mat012",  FatalException, ed);
   } else {
     theIsotopeVector         = new G4IsotopeVector(n,0);
@@ -152,7 +152,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
   if (theIsotopeVector == 0) {
     G4ExceptionDescription ed;
-    ed << "Fail to add Isotope to G4Element " << fName 
+    ed << "Failed to add Isotope to G4Element " << fName
        << " with Z= " << fZeff << "  N= " << fNeff;
     G4Exception ("G4Element::AddIsotope()", "mat013",  FatalException, ed);
     return;
@@ -165,7 +165,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     if (fNumberOfIsotopes==0) { fZeff = G4double(iz); }
     else if (G4double(iz) != fZeff) { 
       G4ExceptionDescription ed;
-      ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
+      ed << "Failed to add Isotope Z= " << iz << " to G4Element " << fName
 	 << " with different Z= " << fZeff << fNeff;
       G4Exception ("G4Element::AddIsotope()", "mat014",  FatalException, ed);
       return;
@@ -177,8 +177,8 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
   } else {
     G4ExceptionDescription ed;
-    ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
-       << " - more isotopes than declaired ";
+    ed << "Failed to add Isotope Z= " << iz << " to G4Element " << fName
+       << " - more isotopes than declared.";
     G4Exception ("G4Element::AddIsotope()", "mat015",  FatalException, ed);
     return;
   }

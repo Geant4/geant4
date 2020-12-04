@@ -13,6 +13,38 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 November 2020, V.Ivanchenko (phys-ctor-em-V10-06-20)
+- G4GammaGeneralProcess - improved printouts and make some methods 
+    protected 
+
+04 October 2020, V.Ivanchenko (phys-ctor-em-V10-06-19)
+- G4GammaGeneralProcess - resolved problem of assigning of 
+    a concrete process define step to post step point 
+
+19 September 2020, V.Ivanchenko (phys-ctor-em-V10-06-18)
+- G4EmStandardPhysics_option4 - use ICRU90 data 
+
+05 August 2020, V.Ivanchenko (phys-ctor-em-V10-06-17)
+- G4EmBuilder - substitute hardcoded upper limit by the value from the
+    G4HadronicParameters class
+
+20 July 2020, D.Sawkey (phys-ctor-em-V10-06-16)
+- G4OpticalPhysics, G4OpticalPhysicsMessenger, G4OpticalProcessIndex: 
+    Move optical physics parameters to new G4OpticalParameters class.
+    G4OpticalPhysicsMessenger removed and replaced by G4OpticalParametersMessenger.
+    G4OpticalProcessIndex removed, code put in G4OpticalParameters.
+
+11 July 2020, V.Ivanchenko (phys-ctor-em-V10-06-15)
+- G4EmModelActivator - updated msc and PAI configurations to address
+    concerns reported in problem reports #2052 and #2106
+
+6 July 2020, M.Novak (phys-ctor-em-V10-06-14)
+- G4EmStandardPhysicsSS - use the new G4eDPWACoulombScatteringModel for e-/e+
+    below 100 [MeV] (for testing this new model)
+
+29 June 2020, V.Ivanchenko (phys-ctor-em-V10-06-13)
+- G4EmStandardPhysicsWVI - fixed typo
+
 15 June 2020, V.Ivanchenko (phys-ctor-em-V10-06-12)
 - G4EmBuilder - attempt to fix non-reproducibility in the MT mode when
     radioactive decay is enabled

@@ -23,67 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrEvaluator implementation
 //
-//
-//
-// class G4tgrEvaluator
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrEvaluator.hh"
 
 #include <cmath>
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrEvaluator::G4tgrEvaluator()
 {
   AddCommonFunctions();
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrEvaluator::~G4tgrEvaluator()
 {
 }
 
-
-// -------------------------------------------------------------------------
-void G4tgrEvaluator::print_error( G4int estatus ) const
+// --------------------------------------------------------------------
+void G4tgrEvaluator::print_error(G4int estatus) const
 {
-  switch (estatus)
+  switch(estatus)
   {
     case ERROR_SYNTAX_ERROR:
       G4cerr << "G4tgrEvaluator: syntax error!" << G4endl;
       return;
     default:
-      G4Evaluator::print_error();    
-    return;
+      G4Evaluator::print_error();
+      return;
   }
-} 
- 
-G4double fsin( G4double arg ){  return std::sin(arg); }
-G4double fcos( G4double arg ){  return std::cos(arg); }
-G4double ftan( G4double arg ){  return std::tan(arg); }
-G4double fasin( G4double arg ){  return std::asin(arg); }
-G4double facos( G4double arg ){  return std::acos(arg); }
-G4double fatan( G4double arg ){  return std::atan(arg); }
-G4double fatan2( G4double arg1, G4double arg2 ){ return std::atan2(arg1,arg2); }
-G4double fsinh( G4double arg ){  return std::sinh(arg); }
-G4double fcosh( G4double arg ){  return std::cosh(arg); }
-G4double ftanh( G4double arg ){  return std::tanh(arg); }
+}
+
+G4double fsin(G4double arg) { return std::sin(arg); }
+G4double fcos(G4double arg) { return std::cos(arg); }
+G4double ftan(G4double arg) { return std::tan(arg); }
+G4double fasin(G4double arg) { return std::asin(arg); }
+G4double facos(G4double arg) { return std::acos(arg); }
+G4double fatan(G4double arg) { return std::atan(arg); }
+G4double fatan2(G4double arg1, G4double arg2) { return std::atan2(arg1, arg2); }
+G4double fsinh(G4double arg) { return std::sinh(arg); }
+G4double fcosh(G4double arg) { return std::cosh(arg); }
+G4double ftanh(G4double arg) { return std::tanh(arg); }
 // G4double fasinh( G4double arg ){  return std::asinh(arg); }
 // G4double facosh( G4double arg ){  return std::acosh(arg); }
 // G4double fatanh( G4double arg ){  return std::atanh(arg); }
-G4double fsqrt( G4double arg ){  return std::sqrt(arg); }
-G4double fexp( G4double arg ){  return std::exp(arg); }
-G4double flog( G4double arg ){  return std::log(arg); }
-G4double flog10( G4double arg ){  return std::log10(arg); }
-G4double fpow( G4double arg1, G4double arg2 ){  return std::pow(arg1,arg2); }
+G4double fsqrt(G4double arg) { return std::sqrt(arg); }
+G4double fexp(G4double arg) { return std::exp(arg); }
+G4double flog(G4double arg) { return std::log(arg); }
+G4double flog10(G4double arg) { return std::log10(arg); }
+G4double fpow(G4double arg1, G4double arg2) { return std::pow(arg1, arg2); }
 
-
-//--------------------------------------------------------------------
+// --------------------------------------------------------------------
 void G4tgrEvaluator::AddCommonFunctions()
 {
   setFunction("sin", (*fsin));
@@ -96,9 +89,9 @@ void G4tgrEvaluator::AddCommonFunctions()
   setFunction("sinh", (*fsinh));
   setFunction("cosh", (*fcosh));
   setFunction("tanh", (*ftanh));
-//  setFunction("asinh", (*fasinh));
-//  setFunction("acosh", (*facosh));
-//  setFunction("atanh", (*fatanh));
+  //  setFunction("asinh", (*fasinh));
+  //  setFunction("acosh", (*facosh));
+  //  setFunction("atanh", (*fatanh));
   setFunction("sqrt", (*fsqrt));
   setFunction("exp", (*fexp));
   setFunction("log", (*flog));

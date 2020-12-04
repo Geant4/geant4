@@ -16,7 +16,7 @@ namespace WinTk {
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-inline bool GetClassName(HWND aWindow,std::string& a_value) { 
+inline bool GetClassName(HWND aWindow,std::string& a_value) {
   if(!aWindow) {a_value.clear();return false;}
   char className[256];
   ::GetClassName(aWindow,className,128);
@@ -38,7 +38,7 @@ inline HWND GetChildByClassName(HWND aWindow,const std::string& aClassName) {
   return NULL;
 }
 
-inline void SetGeometry(HWND aWindow,int aX,int aY,unsigned int aWidth,unsigned int aHeight) { 
+inline void SetGeometry(HWND aWindow,int aX,int aY,unsigned int aWidth,unsigned int aHeight) {
   if(!aWindow) return;
   std::string className;
   GetClassName(aWindow,className);
@@ -51,7 +51,7 @@ inline void SetGeometry(HWND aWindow,int aX,int aY,unsigned int aWidth,unsigned 
   }
 }
 
-inline void GetSize(HWND aWindow,int& aWidth,int& aHeight) { 
+inline void GetSize(HWND aWindow,int& aWidth,int& aHeight) {
   RECT rect;
   ::GetWindowRect(aWindow,&rect);
   aWidth = rect.right-rect.left;
@@ -232,7 +232,7 @@ namespace WinTk {
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-inline bool TreeGetItemLabel(HWND aWindow,HTREEITEM aItem,std::string& a_value) { 
+inline bool TreeGetItemLabel(HWND aWindow,HTREEITEM aItem,std::string& a_value) {
   TCHAR text[256];
   TV_ITEM item;
   item.hItem = aItem;
@@ -244,7 +244,7 @@ inline bool TreeGetItemLabel(HWND aWindow,HTREEITEM aItem,std::string& a_value) 
   return true;
 }
 
-inline bool TreeIsItemBranch(HWND aWindow,HTREEITEM aItem) { 
+inline bool TreeIsItemBranch(HWND aWindow,HTREEITEM aItem) {
   TV_ITEM item;
   item.hItem = aItem;
   item.mask = TVIF_CHILDREN;
@@ -252,7 +252,7 @@ inline bool TreeIsItemBranch(HWND aWindow,HTREEITEM aItem) {
   return item.cChildren?true:false;
 }
 
-inline bool TreeIsItemExpanded(HWND aWindow,HTREEITEM aItem) { 
+inline bool TreeIsItemExpanded(HWND aWindow,HTREEITEM aItem) {
   TV_ITEM item;
   item.hItem = aItem;
   item.mask = TVIS_EXPANDED;
@@ -295,7 +295,7 @@ inline void TreeGetItemXML(HWND aWindow,HTREEITEM aItem,std::string& a_value) {
     if (TreeView_GetChild(aWindow,aItem)) {
       TreeGetItemXML(aWindow,TreeView_GetChild(aWindow,aItem),ss);
       a_value += ss;
-    }    
+    }
     a_value += spaceRoot + "</treeItem>";
     aItem = TreeView_GetNextSibling(aWindow,aItem);
   }
@@ -459,7 +459,7 @@ inline HBITMAP ConvertXpmToDIB(HDC aDC,const std::vector<std::string>& aXPM,int&
 
           bool found = true;
           for (int l = 0; l < numchars; l++) {
-            if (charlookuptable[(k * numchars) + l] 
+            if (charlookuptable[(k * numchars) + l]
                   != line[(j * numchars) + l]) {
               found = false;
               break;
@@ -478,7 +478,7 @@ inline HBITMAP ConvertXpmToDIB(HDC aDC,const std::vector<std::string>& aXPM,int&
               g = glookuptable[k];
               b = blookuptable[k];
             }
-            
+
             if(pixelsize==4) {
               ((unsigned char*)dest)[y + x + 0] = b;
               ((unsigned char*)dest)[y + x + 1] = g;
@@ -489,22 +489,22 @@ inline HBITMAP ConvertXpmToDIB(HDC aDC,const std::vector<std::string>& aXPM,int&
               ((unsigned char*)dest)[y + x + 1] = g;
               ((unsigned char*)dest)[y + x + 2] = r;
             }
-            
+
             // next pixel
             break;
-            
+
           }
-          
+
         }
-        
+
       }
-      
+
     }
     if(!done) {
       //printf("debug : xpm : can'tread pixels.\n");
       ::DeleteObject(hbmp);
       hbmp = 0;
-    }    
+    }
   }
 
   // cleanup

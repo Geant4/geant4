@@ -10,26 +10,20 @@
 # Run menu :
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
-#/gui/addButton run run1 "/control/execute run1.mac"
-#/gui/addButton run run2 "/control/execute run2.mac"
 #
 # Gun menu :
 /gui/addMenu gun Gun
+/gui/addButton gun "500 keV"   "/gun/energy 500 keV"
+/gui/addButton gun "1 MeV"   "/gun/energy 1 MeV"
 /gui/addButton gun "50 MeV"  "/gun/energy 50 MeV"
-/gui/addButton gun "1 GeV"   "/gun/energy 1 GeV"
-/gui/addButton gun "10 GeV"  "/gun/energy 10 GeV"
+/gui/addButton gun "opticalphoton"      "/gun/particle opticalphoton"
 /gui/addButton gun "e-"      "/gun/particle e-"
 /gui/addButton gun "pi0"     "/gun/particle pi0"
 /gui/addButton gun "pi+"     "/gun/particle pi+"
 /gui/addButton gun "neutron" "/gun/particle neutron"
 /gui/addButton gun "proton"  "/gun/particle proton"
 #
-# Field menu :
-#/gui/addMenu field Field
-#/gui/addButton field "off"       "/B2/det/setField 0.2 tesla"
-#/gui/addButton field "0.2 tesla" "/B2/det/setField 0.2 tesla"
-#/gui/addButton field "2.0 tesla" "/B2/det/setField 2.0 tesla"
-#
+
 # Viewer menu :
 /gui/addMenu viewer Viewer
 /gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"

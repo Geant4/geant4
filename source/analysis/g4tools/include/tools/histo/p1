@@ -31,19 +31,19 @@ protected:
   }
 public:
   bool equals(const p1& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
-    if(!parent::equals(a_from,a_prec,a_fabs)) return false;    
+    if(!parent::equals(a_from,a_prec,a_fabs)) return false;
     if(m_cut_v!=a_from.m_cut_v) return false;
     if(!numbers_are_equal(m_min_v,a_from.m_min_v,a_prec,a_fabs)) return false;
-    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;    
+    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Svw,a_from.m_bin_Svw,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Sv2w,a_from.m_bin_Sv2w,a_prec,a_fabs)) return false;
     return true;
   }
   bool equals_TH(const p1& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
-    if(!parent::equals_TH(a_from,a_prec,a_fabs,false)) return false;    
+    if(!parent::equals_TH(a_from,a_prec,a_fabs,false)) return false;
     if(m_cut_v!=a_from.m_cut_v) return false;
     if(!numbers_are_equal(m_min_v,a_from.m_min_v,a_prec,a_fabs)) return false;
-    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;    
+    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Svw,a_from.m_bin_Svw,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Sv2w,a_from.m_bin_Sv2w,a_prec,a_fabs)) return false;
     return true;
@@ -63,7 +63,7 @@ public:
     //  Stat_t contsum = cont/sum;
     //  Stat_t eprim2  = TMath::Abs(err2/sum - contsum*contsum);
     //  eprim          = TMath::Sqrt(eprim2);
-    //  ... ??? 
+    //  ... ???
     //  if (fErrorMode == kERRORMEAN) return eprim/TMath::Sqrt(sum);
 
     TW sw = parent::m_bin_Sw[offset];      //ROOT sum
@@ -141,7 +141,7 @@ public:
     parent::m_bin_entries[offset]++;
     parent::m_bin_Sw[offset] += aWeight;
     parent::m_bin_Sw2[offset] += aWeight * aWeight;
-  
+
     TC xw = aX * aWeight;
     TC x2w = aX * xw;
     parent::m_bin_Sxw[offset][0] += xw;
@@ -209,7 +209,7 @@ public:
     // Profile part :
     m_bin_Svw[offset]  = a_Svw;
     m_bin_Sv2w[offset] = a_Sv2w;
-    
+
     return true;
   }
 
@@ -235,7 +235,7 @@ public:
     // Profile part :
     a_Svw = m_bin_Svw[offset];
     a_Sv2w = m_bin_Sv2w[offset];
-    
+
     return true;
   }
 
@@ -253,16 +253,16 @@ public:
   bool add(const p1& a_histo){
     parent::base_add(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
-      m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
-      m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
+      m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];
+      m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];
     }
     return true;
   }
   bool subtract(const p1& a_histo){
     parent::base_subtract(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
-      m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
-      m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
+      m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];
+      m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];
     }
     return true;
   }
@@ -271,7 +271,7 @@ public:
     if(!a_factor) return false;
 
     // actual bin number must be a multiple of a_factor.
-    
+
     const axis_t& _axis = parent::axis();
 
     bn_t n = _axis.bins();

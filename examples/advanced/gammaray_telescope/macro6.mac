@@ -12,7 +12,11 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
-/control/execute physics_polarized.mac
+#/control/execute physics_polarized.mac
+#
+#G4EmStandard_Option4 with BetheHeitler5D model
+#
+/control/execute physics_polarized_new.mac
 /run/initialize
 /gun/sourceGen true
 #/particle/select geantino
@@ -21,8 +25,6 @@
 /gun/polarization 1 0 0 
 /gun/energy 10 MeV
 /gun/sourceType 2
-
-
 
 # You can modify the geometry of the telescope via a messenger
 

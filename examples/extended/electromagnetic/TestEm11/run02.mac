@@ -1,8 +1,11 @@
 #
+# Macro file for TestEm11
+#
 # limit the step size by geometry
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setNbOfAbsor  1
 /testem/det/setAbsor 1 G4_Si  1 mm
@@ -28,5 +31,4 @@
 /testem/applyAutomaticStepMax false
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

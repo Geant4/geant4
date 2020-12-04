@@ -85,8 +85,6 @@ configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/src/zconf.h.cmakein
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
-#
 #   headers listed under Sources are internal zlib headers
 #   Private headers are in src!
 include_directories(include)
@@ -137,9 +135,6 @@ GEANT4_DEFINE_MODULE(NAME G4zlib
     LINK_LIBRARIES
 )
 # List any source specific properties here
-# List any source specific properties here
-if(GEANT4_USE_NEW_CMAKE)
-  geant4_module_include_directories(G4zlib
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src;${CMAKE_CURRENT_BINARY_DIR}>
-    )
-endif()
+geant4_module_include_directories(G4zlib
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src;${CMAKE_CURRENT_BINARY_DIR}>
+)

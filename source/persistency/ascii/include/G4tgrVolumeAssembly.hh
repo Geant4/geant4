@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrVolumeAssembly
+// G4tgrVolumeAssembly
 //
 // Class description:
 //
 // Class for keeping the information of assembly volumes.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrVolumeAssembly_h
-#define G4tgrVolumeAssembly_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrVolumeAssembly_hh
+#define G4tgrVolumeAssembly_hh 1
 
 #include "globals.hh"
 #include "G4tgrVolume.hh"
@@ -45,26 +40,26 @@
 
 class G4tgrVolumeAssembly : public G4tgrVolume
 {
-  public:  // with description
+  public:
 
     G4tgrVolumeAssembly();
-    G4tgrVolumeAssembly( const std::vector<G4String>& wl );
-   ~G4tgrVolumeAssembly();
+    G4tgrVolumeAssembly(const std::vector<G4String>& wl);
+    ~G4tgrVolumeAssembly();
 
-    virtual G4tgrPlace* AddPlace( const std::vector<G4String>& wl );
+    virtual G4tgrPlace* AddPlace(const std::vector<G4String>& wl);
       // Add a position with the data read from a ':place_assembly' tag
 
     const G4String& GetComponentName(G4int ii) const
-      { return theComponentNames[ii]; }
-    const G4String& GetComponentRM(G4int ii) const
-      { return theComponentRMs[ii]; }
-    G4ThreeVector GetComponentPos(G4int ii) const
-      { return theComponentPos[ii]; }
-    G4int GetNoComponents() const
-      { return theComponentNames.size(); }
+    {
+      return theComponentNames[ii];
+    }
+    const G4String& GetComponentRM(G4int ii) const {return theComponentRMs[ii];}
+    G4ThreeVector GetComponentPos(G4int ii) const {return theComponentPos[ii];}
+    G4int GetNoComponents() const { return theComponentNames.size(); }
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrVolumeAssembly& obj);
+
   protected:
 
     std::vector<G4String> theComponentNames;

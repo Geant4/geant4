@@ -316,7 +316,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cd0-Diquark
   particle = new G4DiQuarks(            
-        "cd0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+        "cd0_diquark",      1286.1*MeV,       0.0*MeV,   1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         4101,
@@ -324,7 +324,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cd1-Diquark
   particle = new G4DiQuarks(            
-         "cd1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+         "cd1_diquark",     1286.0*MeV,       0.0*MeV,   1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         4103,
@@ -332,7 +332,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cu0-Diquark
   particle = new G4DiQuarks(            
-        "cu0_diquark",         7.1*MeV,       0.0*MeV,   4./3.*eplus, 
+        "cu0_diquark",      1283.1*MeV,       0.0*MeV,   4./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         4201,
@@ -340,7 +340,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cu1-Diquark
   particle = new G4DiQuarks(            
-         "cu1_diquark",        7.0*MeV,       0.0*MeV,   4./3.*eplus, 
+         "cu1_diquark",     1283.0*MeV,       0.0*MeV,   4./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         4203,
@@ -348,7 +348,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cs0-Diquark
   particle = new G4DiQuarks(            
-        "cs0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+        "cs0_diquark",      1380.1*MeV,       0.0*MeV,   1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         4301,
@@ -356,7 +356,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cs1-Diquark
   particle = new G4DiQuarks(            
-         "cs1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+         "cs1_diquark",     1380.0*MeV,       0.0*MeV,   1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         4303,
@@ -364,7 +364,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // cc1-Diquark
   particle = new G4DiQuarks(            
-         "cc1_diquark",        7.0*MeV,       0.0*MeV,   4./3.*eplus, 
+         "cc1_diquark",     2565.0*MeV,       0.0*MeV,   4./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         4403,
@@ -374,7 +374,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bd0-Diquark
   particle = new G4DiQuarks(            
-        "bd0_diquark",         7.1*MeV,       0.0*MeV,  -2./3.*eplus, 
+        "bd0_diquark",      4186.1*MeV,       0.0*MeV,  -2./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         5101,
@@ -382,7 +382,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bd1-Diquark
   particle = new G4DiQuarks(            
-         "bd1_diquark",        7.0*MeV,       0.0*MeV,  -2./3.*eplus, 
+         "bd1_diquark",     4186.0*MeV,       0.0*MeV,  -2./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         5103,
@@ -390,7 +390,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bu0-Diquark
   particle = new G4DiQuarks(            
-        "bu0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+        "bu0_diquark",      4183.1*MeV,       0.0*MeV,   1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         5201,
@@ -398,7 +398,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bu1-Diquark
   particle = new G4DiQuarks(            
-         "bu1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+         "bu1_diquark",     4183.0*MeV,       0.0*MeV,   1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         5203,
@@ -406,7 +406,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bs0-Diquark
   particle = new G4DiQuarks(            
-        "bs0_diquark",         7.1*MeV,       0.0*MeV,  -2./3.*eplus, 
+        "bs0_diquark",      4280.1*MeV,       0.0*MeV,  -2./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         5301,
@@ -414,7 +414,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bs1-Diquark
   particle = new G4DiQuarks(            
-         "bs1_diquark",        7.0*MeV,       0.0*MeV,  -2./3.*eplus, 
+         "bs1_diquark",      4280.0*MeV,       0.0*MeV,  -2./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         5303,
@@ -422,7 +422,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bc0-Diquark
   particle = new G4DiQuarks(            
-        "bc0_diquark",         7.1*MeV,       0.0*MeV,   1./3.*eplus, 
+        "bc0_diquark",      5465.1*MeV,       0.0*MeV,   1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,         5401,
@@ -430,7 +430,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bc1-Diquark
   particle = new G4DiQuarks(            
-         "bc1_diquark",        7.0*MeV,       0.0*MeV,   1./3.*eplus, 
+         "bc1_diquark",     5465.0*MeV,       0.0*MeV,   1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         5403,
@@ -438,7 +438,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // bb1-Diquark
   particle = new G4DiQuarks(            
-         "bb1_diquark",        7.0*MeV,       0.0*MeV,   2./3.*eplus, 
+         "bb1_diquark",     8365.0*MeV,       0.0*MeV,  -2./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,         5503,
@@ -448,7 +448,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cd0-Diquark
   particle = new G4DiQuarks(            
-   "anti_cd0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+   "anti_cd0_diquark",      1286.1*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -4101,
@@ -456,7 +456,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cd1-Diquark
   particle = new G4DiQuarks(            
-    "anti_cd1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+    "anti_cd1_diquark",     1286.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -4103,
@@ -464,7 +464,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cu0-Diquark
   particle = new G4DiQuarks(            
-   "anti_cu0_diquark",         7.1*MeV,       0.0*MeV,  -4./3.*eplus, 
+   "anti_cu0_diquark",      1283.1*MeV,       0.0*MeV,  -4./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -4201,
@@ -472,7 +472,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cu1-Diquark
   particle = new G4DiQuarks(            
-    "anti_cu1_diquark",        7.0*MeV,       0.0*MeV,  -4./3.*eplus, 
+    "anti_cu1_diquark",     1283.0*MeV,       0.0*MeV,  -4./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -4203,
@@ -480,7 +480,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cs0-Diquark
   particle = new G4DiQuarks(            
-   "anti_cs0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+   "anti_cs0_diquark",      1380.1*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -4301,
@@ -488,7 +488,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cs1-Diquark
   particle = new G4DiQuarks(            
-    "anti_cs1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+    "anti_cs1_diquark",     1380.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -4303,
@@ -496,7 +496,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti cc1-Diquark
   particle = new G4DiQuarks(            
-    "anti_cc1_diquark",        7.0*MeV,       0.0*MeV,  -4./3.*eplus, 
+    "anti_cc1_diquark",     2565.0*MeV,       0.0*MeV,  -4./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -4403,
@@ -506,7 +506,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bd0-Diquark
   particle = new G4DiQuarks(            
-   "anti_bd0_diquark",         7.1*MeV,       0.0*MeV,  +2./3.*eplus, 
+   "anti_bd0_diquark",      4186.1*MeV,       0.0*MeV,  +2./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -5101,
@@ -514,7 +514,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bd1-Diquark
   particle = new G4DiQuarks(            
-    "anti_bd1_diquark",        7.0*MeV,       0.0*MeV,  +2./3.*eplus, 
+    "anti_bd1_diquark",     4186.0*MeV,       0.0*MeV,  +2./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -5103,
@@ -522,7 +522,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bu0-Diquark
   particle = new G4DiQuarks(            
-   "anti_bu0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+   "anti_bu0_diquark",      4183.1*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -5201,
@@ -530,7 +530,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bu1-Diquark
   particle = new G4DiQuarks(            
-    "anti_bu1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+    "anti_bu1_diquark",     4183.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -5203,
@@ -538,7 +538,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bs0-Diquark
   particle = new G4DiQuarks(            
-   "anti_bs0_diquark",         7.1*MeV,       0.0*MeV,  +2./3.*eplus, 
+   "anti_bs0_diquark",      4280.1*MeV,       0.0*MeV,  +2./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -5301,
@@ -546,7 +546,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bs1-Diquark
   particle = new G4DiQuarks(            
-    "anti_bs1_diquark",        7.0*MeV,       0.0*MeV,  +2./3.*eplus, 
+    "anti_bs1_diquark",     4280.0*MeV,       0.0*MeV,  +2./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -5303,
@@ -554,7 +554,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bc0-Diquark
   particle = new G4DiQuarks(            
-   "anti_bc0_diquark",         7.1*MeV,       0.0*MeV,  -1./3.*eplus, 
+   "anti_bc0_diquark",      5465.1*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -5401,
@@ -562,7 +562,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bc1-Diquark
   particle = new G4DiQuarks(            
-    "anti_bc1_diquark",        7.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+    "anti_bc1_diquark",     5465.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -5403,
@@ -570,7 +570,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti bb1-Diquark
   particle = new G4DiQuarks(            
-    "anti_bb1_diquark",        7.0*MeV,       0.0*MeV,  -2./3.*eplus, 
+    "anti_bb1_diquark",     8365.0*MeV,       0.0*MeV,   2./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -5503,

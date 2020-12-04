@@ -76,7 +76,7 @@ inline bool axis_stream(buffer& a_buffer,
     if(!a_buffer.write(a_axis.lower_edge())) return false;
     if(!a_buffer.write(a_axis.upper_edge())) return false;
 
-    // fXbins 
+    // fXbins
     //if(a_axis.m_fixed) {
     //  std::vector<double> v;
     //  ArrayT<double> dummy(v);
@@ -184,11 +184,11 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((double)a_h.get_in_range_Sw2())) return false; //idem
 
    {double value;
-    a_h.get_ith_axis_Sxw(0,value);  
+    a_h.get_ith_axis_Sxw(0,value);
     if(!a_buffer.write(value)) return false;}
 
    {double value;
-    a_h.get_ith_axis_Sx2w(0,value);  
+    a_h.get_ith_axis_Sx2w(0,value);
     if(!a_buffer.write(value)) return false;}
 
     if(!a_buffer.write((double)-1111)) return false; //fMaximum
@@ -199,13 +199,13 @@ inline bool TH_write_1D(buffer& a_buffer,
 
     if(!a_buffer.write_array(a_bin_Sw2)) return false; //fSumw2 TArrayD
 
-    // store annotation on fOption    
+    // store annotation on fOption
     // but try to fool CERN-ROOT in order that it does not
     // understand fOption as.. CERN-ROOT options !
-   //{std::string opt = " "+fAnnotation;   
+   //{std::string opt = " "+fAnnotation;
    // opt[0] = 0; //awfull trick
    // if(!a_buffer.write(opt)) return false;} //TString fOption
-   {std::string opt;   
+   {std::string opt;
     if(!a_buffer.write(opt)) return false;} //TString fOption
 
     if(!List_empty_stream(a_buffer)) return false; //*TList fFunctions
@@ -223,11 +223,11 @@ inline bool TH_write_2D(buffer& a_buffer,
   if(!a_buffer.write((double)1)) return false; //ScaleFactor
 
  {double value;
-  a_h.get_ith_axis_Sxw(1,value);  
+  a_h.get_ith_axis_Sxw(1,value);
   if(!a_buffer.write(value)) return false;}
 
  {double value;
-  a_h.get_ith_axis_Sx2w(1,value);  
+  a_h.get_ith_axis_Sx2w(1,value);
   if(!a_buffer.write(value)) return false;}
 
   if(!a_buffer.write((double)a_h.Sxyw())) return false; //Tsumwxy

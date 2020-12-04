@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,7 +46,7 @@ Command is ignored.
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
  for kaons :   3 to 6 GeV
  for proton :  3 to 6 GeV
@@ -69,7 +69,20 @@ Command is ignored.
               hIoni,              hIoni,              hIoni,              hIoni
               hIoni,              hIoni,              hIoni,              hIoni
               hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
+              hIoni,              hIoni,              hIoni,              hIoni
               hIoni,              hIoni,              Decay,    Radioactivation
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
+         hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
@@ -80,13 +93,21 @@ Command is ignored.
          hadElastic,         hadElastic,         hadElastic,         hadElastic
    neutronInelastic,           nCapture,    protonInelastic,       pi+Inelastic
        pi-Inelastic,     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic
-    kaon0SInelastic,    lambdaInelastic,anti-lambdaInelastic,    sigma-Inelastic
-anti_sigma-Inelastic,    sigma+Inelastic,anti_sigma+Inelastic,       xi-Inelastic
-  anti_xi-Inelastic,       xi0Inelastic,  anti_xi0Inelastic,    omega-Inelastic
-anti_omega-Inelastic,anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic
-anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic,         ionElastic
-         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
-       ionInelastic,      photonNuclear
+    kaon0SInelastic,anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic
+anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic,    lambdaInelastic
+    sigma+Inelastic,    sigma-Inelastic,       xi0Inelastic,       xi-Inelastic
+    omega-Inelastic,anti_lambdaInelastic,anti_sigma+Inelastic,anti_sigma-Inelastic
+  anti_xi0Inelastic,  anti_xi-Inelastic,anti_omega-Inelastic,        D+Inelastic
+        D0Inelastic,        D-Inelastic,   anti_D0Inelastic,       Ds+Inelastic
+       Ds-Inelastic,        B+Inelastic,        B0Inelastic,        B-Inelastic
+   anti_B0Inelastic,       Bs0Inelastic,  anti_Bs0Inelastic,       Bc+Inelastic
+       Bc-Inelastic, lambda_c+Inelastic,     xi_c+Inelastic,     xi_c0Inelastic
+  omega_c0Inelastic,  lambda_bInelastic,     xi_b0Inelastic,     xi_b-Inelastic
+  omega_b-Inelastic,anti_lambda_c+Inelastic,anti_xi_c+Inelastic,anti_xi_c0Inelastic
+anti_omega_c0Inelastic,anti_lambda_bInelastic,anti_xi_b0Inelastic,anti_xi_b-Inelastic
+anti_omega_b-Inelastic,         ionElastic,         dInelastic,         tInelastic
+       He3Inelastic,     alphaInelastic,       ionInelastic,      photonNuclear
+
 #
 /gun/particle ion
 /gun/ion 10 24
@@ -115,6 +136,28 @@ Use Bearden atomic level energies                 0
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for GenericIon
@@ -189,6 +232,17 @@ Use Bearden atomic level energies                 0
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 meV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_neutron
@@ -279,8 +333,8 @@ Use Bearden atomic level energies                 0
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
   Process: lambdaInelastic
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
         Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -343,8 +397,8 @@ Use Bearden atomic level energies                 0
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
   Process: sigma-Inelastic
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
         Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -383,7 +437,6 @@ Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ============================
@@ -417,7 +470,8 @@ Index : 2     used in the geometry : Yes
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-... open Root analysis file : rdecay02.root - done
+... create file : rdecay02.root - done
+... open analysis file : rdecay02.root - done
 --> Event 0 starts.
 --> Event 1000 starts.
 --> Event 2000 starts.
@@ -431,52 +485,51 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.870000s Real=1.926220s Sys=0.000000s
+  User=0.950000s Real=1.170520s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 meV through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 805.16 keV  rms = 419.73 keV
- Mean energy deposit in detector, in time window = 17.671 keV  rms = 105.39 keV
+ Mean energy deposit in target,   in time window = 806.45 keV  rms = 419.41 keV
+ Mean energy deposit in detector, in time window = 19.291 keV  rms = 109.73 keV
 
  Process calls frequency in target :
-      Radioactivation=  60756                  Rayl=    289        Transportation=  50111
-              annihil=    167                 compt=   4211                  conv=    174
-                eIoni=  26031               ionIoni=  39552                   msc=   3760
-                 phot=   1600 
+      Radioactivation=  60828                  Rayl=    267        Transportation=  50140
+              annihil=    161                 compt=   4215                  conv=    164
+                eIoni=  26028               ionIoni=  39627                   msc=   3558
+                 phot=   1595 
 
  Process calls frequency in detector:
-                 Rayl=   1267        Transportation=  45847               annihil=    329
-                compt=  22203                  conv=    333                 eIoni=  27055
-                  msc=   6715                  phot=   4249 
+                 Rayl=   1205        Transportation=  45921               annihil=    347
+                compt=  22564                  conv=    352                 eIoni=  27444
+                  msc=   5830                  phot=   4258 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.199 eV 	( 41.932 eV  --> 895.3 eV )
-  Mg24[1368.672]:    9996  Emean =  169.87 eV 	( 85.066 eV  --> 408.02 eV )
-  Mg24[4122.889]:    9986  Emean =  39.231 eV 	( 215.79 meV --> 74.548 eV )
-  Mg24[4238.240]:       1  Emean =  22.241 eV 	( 22.241 eV  --> 22.241 eV )
-  Mg24[5235.120]:       4  Emean =  2.5345 eV 	( 673.5 meV --> 3.601 eV )
-           Na24:    9997  Emean =  4.9978 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     768  Emean =  28.189 eV 	( 350.48 meV --> 51.864 eV )
-  Na24[472.207]:    9999  Emean =  68.367 eV 	( 147.52 meV --> 134.02 eV )
-  Na24[563.199]:       5  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  984.14 keV	( 57.103 keV --> 3.8769 MeV)
-             e+:     174  Emean =  787.56 keV	( 66.16 keV --> 1.641 MeV)
-             e-:   26003  Emean =  636.12 keV	( 36.159 eV  --> 3.3549 MeV)
-          gamma:   31085  Emean =  1.5043 MeV	( 1.0277 keV --> 4.2378 MeV)
+           Mg24:   10000  Emean =  42.119 eV 	( 41.932 eV  --> 842.44 eV )
+  Mg24[1368.672]:    9997  Emean =  169.94 eV 	( 85.066 eV  --> 440.38 eV )
+  Mg24[4122.889]:    9985  Emean =  39.305 eV 	( 141.48 meV --> 75.018 eV )
+  Mg24[5235.120]:       4  Emean =  3.0075 eV 	( 314.93 meV --> 5.416 eV )
+           Na24:    9997  Emean =  4.9965 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.621]:     838  Emean =  27.798 eV 	( 81.88 meV --> 51.99 eV )
+  Na24[472.207]:   10000  Emean =  68.661 eV 	( 147.52 meV --> 133.82 eV )
+  Na24[563.199]:       7  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  980.72 keV	( 35.558 keV --> 4.7316 MeV)
+             e+:     164  Emean =  807.72 keV	( 3.9611 keV --> 1.6505 MeV)
+             e-:   25994  Emean =  633.58 keV	( 37.533 eV  --> 3.5013 MeV)
+          gamma:   31143  Emean =  1.5031 MeV	( 90.991 keV --> 3.8661 MeV)
 
  List of generated particles in detector:
-             e+:     333  Emean =  837.12 keV	( 14.733 keV --> 1.7048 MeV)
-             e-:   26778  Emean =  378.75 keV	( 100.64 eV  --> 2.7526 MeV)
-          gamma:     656  Emean =  521.81 keV	( 330.31 keV --> 1.6294 MeV)
+             e+:     352  Emean =  868.75 keV	( 14.733 keV --> 1.7001 MeV)
+             e-:   27157  Emean =  380.69 keV	( 112.2 eV  --> 3.4647 MeV)
+          gamma:     690  Emean =  518.82 keV	( 330.31 keV --> 1.418 MeV)
 
-... write Root file : rdecay02.root - done
-... close Root file : rdecay02.root - done
+... write file : rdecay02.root - done
+... close file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 354922574, 1693501686
+ Current couple of seeds = 1362126438, 1599555896
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

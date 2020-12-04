@@ -122,7 +122,7 @@ inline bool remove(std::vector< std::pair<K,V> >& a_vec,const K& a_key,bool a_de
   it_t it;
   for(it=a_vec.begin();it!=a_vec.end();++it) {
     if((*it).first==a_key) {
-      V val = (*it).second;      
+      V val = (*it).second;
       a_vec.erase(it);
       if(a_delete) delete val;
       return true;

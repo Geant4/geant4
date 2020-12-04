@@ -101,12 +101,12 @@ G4VEmModel::~G4VEmModel()
   }
   delete anglModel;
   
-  if(localTable && xSectionTable) { 
+  if(localTable && xSectionTable != nullptr) { 
     xSectionTable->clearAndDestroy();
     delete xSectionTable;
     xSectionTable = nullptr; 
   }
-  if(isMaster && fElementData) {
+  if(isMaster && fElementData != nullptr) {
     delete fElementData;
     fElementData = nullptr;
   }
@@ -118,13 +118,13 @@ G4VEmModel::~G4VEmModel()
 G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
 {
   G4ParticleChangeForLoss* p = nullptr;
-  if (pParticleChange) {
+  if (pParticleChange != nullptr) {
     p = static_cast<G4ParticleChangeForLoss*>(pParticleChange);
   } else {
     p = new G4ParticleChangeForLoss();
     pParticleChange = p;
   }
-  if(fTripletModel) { fTripletModel->SetParticleChange(p); }
+  if(fTripletModel != nullptr) { fTripletModel->SetParticleChange(p); }
   return p;
 }
 
@@ -133,13 +133,13 @@ G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
 G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
 {
   G4ParticleChangeForGamma* p = nullptr;
-  if (pParticleChange) {
+  if (pParticleChange != nullptr) {
     p = static_cast<G4ParticleChangeForGamma*>(pParticleChange);
   } else {
     p = new G4ParticleChangeForGamma();
     pParticleChange = p;
   }
-  if(fTripletModel) { fTripletModel->SetParticleChange(p); }
+  if(fTripletModel != nullptr) { fTripletModel->SetParticleChange(p); }
   return p;
 }
 
@@ -226,7 +226,7 @@ void G4VEmModel::InitialiseLocal(const G4ParticleDefinition*,
 void G4VEmModel::InitialiseForMaterial(const G4ParticleDefinition* part,
                                        const G4Material* material)
 {
-  if(material) {
+  if(material != nullptr) {
     size_t n = material->GetNumberOfElements();
     for(size_t i=0; i<n; ++i) {
       G4int Z = material->GetElement(i)->GetZasInt();
@@ -455,7 +455,7 @@ void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
 void 
 G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 {
-  if(p && pParticleChange != p) { pParticleChange = p; }
+  if(p  != nullptr && pParticleChange != p) { pParticleChange = p; }
   if(flucModel != f) { flucModel = f; }
 }
 
@@ -464,7 +464,7 @@ G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
 {
   if(p != xSectionTable) {
-    if(xSectionTable && localTable) { 
+    if(xSectionTable != nullptr && localTable) { 
       xSectionTable->clearAndDestroy(); 
       delete xSectionTable;
     }

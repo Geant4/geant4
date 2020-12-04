@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-2020: B. Morgan chem6-V10-06-03
+- Migration to G4RunManagerFactory.
+
+06-11-20: I. Hrivnacova chem6-V10-06-02
+- Fixed doxygen documentation
+
 19-02-20: W. G. Shin chem6-V10-06-01
 - fixed memory issue
 

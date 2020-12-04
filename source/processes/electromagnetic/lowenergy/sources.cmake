@@ -4,7 +4,7 @@
 # Package: Geant4.src.G4processes.G4electromagnetic.G4emlowenergy
 #
 # Sources description for a library.
-# Lists the sources and headers of the code explicitely.
+# Lists the sources and headers of the code explicitly.
 # Lists include paths needed.
 # Lists the internal granular and global dependencies of the library.
 # Source specific properties should be added at the end.
@@ -14,35 +14,9 @@
 #
 #------------------------------------------------------------------------------
 
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/standard/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emlowenergy
     HEADERS
         G4AtomicDeexcitation.hh
@@ -97,7 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreBremsstrahlungModel.hh
         G4LivermoreComptonModel.hh
         G4LivermoreComptonModifiedModel.hh
-		G4LivermoreGammaConversion5DModel.hh
+	G4LivermoreGammaConversion5DModel.hh
         G4LivermoreGammaConversionModel.hh
         G4LivermoreGammaConversionModelRC.hh
         G4LivermoreIonisationCrossSection.hh
@@ -115,18 +89,19 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEPComptonModel.hh
         G4LowEPPolarizedComptonModel.hh
         G4LowEWentzelVIModel.hh
+        G4MIData.hh
         G4MicroElecCrossSectionDataSet.hh
         G4MicroElecElastic.hh
         G4MicroElecElasticModel.hh
         G4MicroElecInelastic.hh
         G4MicroElecInelasticModel.hh
-        G4MicroElecSiStructure.hh
-        G4MuElecCrossSectionDataSet.hh
-        G4MuElecElastic.hh
-        G4MuElecElasticModel.hh
-        G4MuElecInelastic.hh
-        G4MuElecInelasticModel.hh
-        G4MuElecSiStructure.hh
+        G4MicroElecCrossSectionDataSet_new.hh
+        G4MicroElecElasticModel_new.hh
+        G4MicroElecInelastic_new.hh
+        G4MicroElecInelasticModel_new.hh
+        G4MicroElecLOPhononModel.hh
+        G4MicroElecLOPhononScattering.hh
+        G4MicroElecSurface.hh
         G4OrlicLiXsModel.hh
         G4PaulKxsModel.hh
 	G4PenelopeAnnihilationModel.hh
@@ -138,11 +113,12 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
 	G4PenelopeGammaConversionModel.hh
 	G4PenelopeIonisationCrossSection.hh
 	G4PenelopeIonisationModel.hh
-	G4PenelopeIonisationXSHandler.hh	
+	G4PenelopeIonisationXSHandler.hh
 	G4PenelopeOscillator.hh
 	G4PenelopeOscillatorManager.hh
 	G4PenelopePhotoElectricModel.hh
 	G4PenelopeRayleighModel.hh
+	G4PenelopeRayleighModelMI.hh
 	G4PenelopeSamplingData.hh
         G4PhotoElectricAngularGeneratorPolarized.hh
         G4PhotoElectricAngularGeneratorSauterGavrila.hh
@@ -220,7 +196,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreBremsstrahlungModel.cc
         G4LivermoreComptonModel.cc
         G4LivermoreComptonModifiedModel.cc
-		G4LivermoreGammaConversion5DModel.cc
+	G4LivermoreGammaConversion5DModel.cc
         G4LivermoreGammaConversionModel.cc
         G4LivermoreGammaConversionModelRC.cc
         G4LivermoreIonisationCrossSection.cc
@@ -238,20 +214,21 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEPComptonModel.cc
         G4LowEPPolarizedComptonModel.cc
         G4LowEWentzelVIModel.cc
+	G4MIData.cc
         G4MicroElecCrossSectionDataSet.cc
         G4MicroElecElastic.cc
         G4MicroElecElasticModel.cc
         G4MicroElecInelastic.cc
         G4MicroElecInelasticModel.cc
-        G4MicroElecSiStructure.cc
-        G4MuElecCrossSectionDataSet.cc
-        G4MuElecElastic.cc
-        G4MuElecElasticModel.cc
-        G4MuElecInelastic.cc
-        G4MuElecInelasticModel.cc
-        G4MuElecSiStructure.cc
+        G4MicroElecCrossSectionDataSet_new.cc
+        G4MicroElecElasticModel_new.cc
+        G4MicroElecInelastic_new.cc
+        G4MicroElecInelasticModel_new.cc
+        G4MicroElecLOPhononModel.cc
+        G4MicroElecLOPhononScattering.cc
+        G4MicroElecSurface.cc
 	G4OrlicLiXsModel.cc
-        G4PaulKxsModel.cc      
+        G4PaulKxsModel.cc
 	G4PenelopeAnnihilationModel.cc
 	G4PenelopeBremsstrahlungAngular.cc
 	G4PenelopeBremsstrahlungFS.cc
@@ -266,6 +243,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
 	G4PenelopeOscillatorManager.cc
 	G4PenelopePhotoElectricModel.cc
 	G4PenelopeRayleighModel.cc
+	G4PenelopeRayleighModelMI.cc
 	G4PenelopeSamplingData.cc
         G4PhotoElectricAngularGeneratorPolarized.cc
         G4PhotoElectricAngularGeneratorSauterGavrila.cc

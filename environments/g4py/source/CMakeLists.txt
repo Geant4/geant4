@@ -1,8 +1,4 @@
 # - add libs components
-# Private interface library to help Boost.Python usage
-add_library(pyG4Boost INTERFACE)
-target_include_directories(pyG4Boost INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/boost")
-
 # Core Geant4 bindings
 add_subdirectory(global)
 add_subdirectory(interface)

@@ -28,11 +28,11 @@ inline void add_string(
 ,font_modeling& a_font_modeling
 ,const std::string& a_encoding
 ,bool //a_smoothing
-,const std::string& a_string  
+,const std::string& a_string
 ,float a_x,float a_y,float a_z
 ,const vec3f& a_X
 ,const vec3f& a_Y
-,float a_size    
+,float a_size
 ,hjust a_hjust
 ,vjust a_vjust
 ,const base_freetype& a_ttf
@@ -40,7 +40,7 @@ inline void add_string(
   if(a_string.empty()) return;
 
   matrix* tsf = new matrix;
-  
+
  {tsf->mul_translate(a_x,a_y,a_z);
   vec3f X = a_X;
   vec3f Y = a_Y;
@@ -54,7 +54,7 @@ inline void add_string(
                  0,0,0,1);
   tsf->mul_mtx(r);
   tsf->mul_scale(a_size,a_size,1);} //applied first on GL
-  
+
   a_sep.add(tsf);
 
   if(a_font==font_hershey()) {
@@ -69,9 +69,9 @@ inline void add_string(
   } else {
 
     base_freetype* text = base_freetype::create(a_ttf);
-    
+
     text->font = a_font;
-    
+
     //text->modeling.value(font_outline);
     //text->encoding.value(a_encoding);
     //text->smooting.value(a_smoothing);
@@ -91,7 +91,7 @@ inline matrix* add_string_opt(
 ,font_modeling a_font_modeling
 ,const std::string& a_encoding
 ,bool //a_smoothing
-,const std::string& a_string  
+,const std::string& a_string
 ,float a_x,float a_y,float a_z
 ,mat4f& a_scale_rot
 ,hjust a_hjust
@@ -128,11 +128,11 @@ inline matrix* add_string_opt(
         //_s = oss.str();
       }
     }
-    
+
     base_freetype* text = base_freetype::create(a_ttf);
-    
+
     text->font = a_font;
-    
+
     //text->modeling.value(font_outline);
     //text->encoding.value(a_encoding);
     //text->smooting.value(a_smoothing);
@@ -141,7 +141,7 @@ inline matrix* add_string_opt(
     text->vjust.value(a_vjust);
     text->modeling = a_font_modeling;
     a_sep.add(text);
-    
+
   }
 
   return tsf;

@@ -34,6 +34,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
+
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
@@ -48,11 +50,13 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted option
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. cell flux * track weight (y)         (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(true)
+    :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -60,7 +64,7 @@ G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
 }
 
 G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(true)
+    :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);
@@ -83,6 +87,20 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   if (weighted) CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int index = GetIndex(aStep);
   EvtMap->add(index,CellFlux);
+
+  if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception("G4PSCellFlux::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),CellFlux);
+    }
+  }
 
   return TRUE;
 }

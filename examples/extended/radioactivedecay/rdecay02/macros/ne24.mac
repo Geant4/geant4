@@ -18,21 +18,21 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 # place the isotopes in the middle of the target, at rest.
 /gun/particle ion
 /gun/ion 10 24
 #
 # vr mode
-/grdm/analogueMC 0
-/grdm/applyARM false
-/grdm/applyICM false
-/grdm/verbose 1
+/process/had/rdm/analogueMC 0
+/process/had/rdm/applyARM false
+/process/had/rdm/applyICM false
+/process/had/rdm/verbose 1
 # 
 # Branching ratio biasing on (as default)
-/grdm/BRbias 1
+/process/had/rdm/BRbias 1
 /analysis/setFileName ne24-br-on
 /analysis/h1/set 6 100 0. 10. MeV
 ###/analysis/ntuple/setActivation 3 true
@@ -40,7 +40,7 @@
 /run/beamOn 10
 #
 # Branching ratio biasing off
-/grdm/BRbias 0
+/process/had/rdm/BRbias 0
 /analysis/setFileName ne24-br-off
 ##/run/beamOn 1000
 

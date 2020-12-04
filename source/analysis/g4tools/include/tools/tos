@@ -18,7 +18,7 @@ namespace tools {
 
 inline std::string tos(unsigned char a_value){
   std::string s;
-  if(is_printable(a_value)) 
+  if(is_printable(a_value))
     sprintf(s,32,"%c",a_value);
   else
     sprintf(s,32,"%d",a_value);
@@ -27,7 +27,7 @@ inline std::string tos(unsigned char a_value){
 
 inline std::string tos(char a_value){
   std::string s;
-  if(is_printable(a_value)) 
+  if(is_printable(a_value))
     sprintf(s,32,"%c",a_value);
   else
     sprintf(s,32,"%d",a_value);
@@ -94,7 +94,7 @@ inline std::string tos(bool a_value){
 
 inline std::string tos(const std::string& a_value){return a_value;}
 
-template <class T>  
+template <class T>
 inline std::string tos(const std::vector<T>& a_vals,
                        const std::string& a_sep = "\n",
                        bool a_sep_at_end = false) {

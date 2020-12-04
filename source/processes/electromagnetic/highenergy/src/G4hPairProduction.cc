@@ -87,6 +87,7 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
+    EmModel()->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
     AddEmModel(1, EmModel(), fm);
   }
 }

@@ -72,9 +72,9 @@ void UltraRunAction::BeginOfRunAction(const G4Run* aRun)
   man->SetFirstHistoId(1);
 
   // Create histogram(s)
-  man->CreateH1("1","Optical photons energy (eV)", //histoID,histo name 
+  man->CreateH1("PhotonEnergy","Optical photons energy (eV)", //histoID,histo name 
 		500,0.,5.); //bins' number, xmin, xmax
-  man->CreateH1("2","Number of Detected Photons", 
+  man->CreateH1("NumberDetectedPhotons","Number of Detected Photons", 
 		10,0.,10.); //bins' number, xmin, xmax
 
   if (!IsMaster()) //it is a slave, do nothing else

@@ -21,13 +21,13 @@
 //typedef unsigned __int64 uint64;
 #define TOOLS_MPI_UINT64 MPI_UNSIGNED_LONG_LONG
 #define TOOLS_MPI_INT64  MPI_LONG_LONG
-#elif defined(_LP64) 
+#elif defined(_LP64)
 // 64 Bit Platforms
 //typedef long int64;
 //typedef unsigned long uint64;
 #define TOOLS_MPI_UINT64 MPI_UNSIGNED_LONG
 #define TOOLS_MPI_INT64  MPI_LONG
-#else 
+#else
 // 32-Bit Platforms
 //typedef long long int64;
 //typedef unsigned long long uint64;
@@ -297,7 +297,7 @@ public: //inlib::mpi::impi
     return true;
   }
   virtual bool bunpack(bool& a_val) {
-    typedef unsigned char bool_t;  
+    typedef unsigned char bool_t;
     bool_t val;
     if(::MPI_Unpack(m_buffer,m_size,&m_ipos,&val,1,MPI_UNSIGNED_CHAR,m_comm)!=MPI_SUCCESS) {
       m_out << "tools::mpi::wrmpi : MPI_Unpack(bool) failed." << std::endl;
@@ -389,7 +389,7 @@ public: //inlib::mpi::impi
     m_pos = m_buffer;
     m_ipos = 0; //IMPORTANT
   }
-  
+
   virtual bool send_buffer(int a_dest,int a_tag) { // used in tools/mpi/pntuple.
     if(::MPI_Send(m_buffer,m_ipos,MPI_CHAR,a_dest,a_tag,m_comm)!=MPI_SUCCESS) {
       m_out << "tools::mpi::wrmpi::send_buffer : MPI_Send() failed for rank destination " << a_dest << "." << std::endl;
@@ -412,13 +412,13 @@ public: //inlib::mpi::impi
     m_max = m_buffer+m_size;
     m_pos = m_buffer;
     m_ipos = 0; //IMPORTANT
-    return true; 
+    return true;
   }
 
   virtual bool wait_buffer(int a_rank,int a_tag,int& a_probe_src,bool a_verbose = false) {
     return wait_buffer(a_rank,MPI_ANY_SOURCE,a_tag,a_probe_src,a_verbose);
   }
-  
+
 public:
   wrmpi(std::ostream& a_out,const MPI_Comm& a_comm,tools::uint32 a_size = 128) // we expect a_size!=0
   :m_out(a_out)

@@ -32,8 +32,8 @@
 //
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4TNtupleManager<TNTUPLE>::G4TNtupleManager(
+template <typename TN, typename TF>
+G4TNtupleManager<TN, TF>::G4TNtupleManager(
   const G4AnalysisManagerState& state)
   : G4BaseNtupleManager(state),
     fNtupleDescriptionVector(),
@@ -41,8 +41,8 @@ G4TNtupleManager<TNTUPLE>::G4TNtupleManager(
 {}
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4TNtupleManager<TNTUPLE>::~G4TNtupleManager()
+template <typename TN, typename TF>
+G4TNtupleManager<TN, TF>::~G4TNtupleManager()
 {  
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
     delete ntupleDescription;
@@ -50,11 +50,11 @@ G4TNtupleManager<TNTUPLE>::~G4TNtupleManager()
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4TNtupleDescription<TNTUPLE>*
-G4TNtupleManager<TNTUPLE>::GetNtupleDescriptionInFunction(
+template <typename TN, typename TF>
+G4TNtupleDescription<TN, TF>*
+G4TNtupleManager<TN, TF>::GetNtupleDescriptionInFunction(
   G4int id, G4String functionName, G4bool warn) const
-{                                      
+{
   auto index = id - fFirstId;
   if ( index < 0 || index >= G4int(fNtupleDescriptionVector.size()) ) {
     if ( warn) {
@@ -66,14 +66,13 @@ G4TNtupleManager<TNTUPLE>::GetNtupleDescriptionInFunction(
     }
     return nullptr;         
   }
-  
+
   return fNtupleDescriptionVector[index];
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-TNTUPLE*  
-G4TNtupleManager<TNTUPLE>::GetNtupleInFunction(
+template <typename TN, typename TF>
+TN* G4TNtupleManager<TN, TF>::GetNtupleInFunction(
   G4int id, G4String functionName, G4bool warn) const
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(id, functionName);
@@ -94,50 +93,9 @@ G4TNtupleManager<TNTUPLE>::GetNtupleInFunction(
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
+template <typename TN, typename TF>
 template <typename T>
-G4int G4TNtupleManager<TNTUPLE>::CreateNtupleTColumn(
-  G4int ntupleId, const G4String& name, std::vector<T>* vector)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fState.GetVerboseL4()->Message("create", "ntuple T column", description);
-  }  
-#endif
-  
-  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "CreateNtupleTColumn");
-  if ( ! ntupleDescription )  return G4Analysis::kInvalidId;   
-    
-  // Save column info in booking
-  auto& ntupleBooking = ntupleDescription->fNtupleBooking;
-  auto index = ntupleBooking.columns().size();
-  if ( ! vector )
-    ntupleBooking.template add_column<T>(name);
-  else
-    ntupleBooking.template add_column<T>(name, *vector);
- 
-  // Create column if ntuple already exists
-  // CreateTColumnInNtuple<T>(ntupleDescription, name, vector);
-  fLockFirstNtupleColumnId = true;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fState.GetVerboseL2()->Message("create", "ntuple T column", description);
-  }  
-#endif
-
-  return G4int(index + fFirstNtupleColumnId);       
-
-}
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-template <typename T>
-G4bool G4TNtupleManager<TNTUPLE>::FillNtupleTColumn(
+G4bool G4TNtupleManager<TN, TF>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const T& value)
 {
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
@@ -162,7 +120,7 @@ G4bool G4TNtupleManager<TNTUPLE>::FillNtupleTColumn(
   auto icolumn =  ntuple->columns()[index];
 
   // get column and check its type
-  auto column = dynamic_cast<typename TNTUPLE::template column<T>* >(icolumn);
+  auto column = dynamic_cast<typename TN::template column<T>* >(icolumn);
   if ( ! column ) {
     G4ExceptionDescription description;
     description << " Column type does not match: "
@@ -191,201 +149,121 @@ G4bool G4TNtupleManager<TNTUPLE>::FillNtupleTColumn(
 //
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-void G4TNtupleManager<TNTUPLE>::CreateNtuplesFromBooking()
+template <typename TN, typename TF>
+G4int G4TNtupleManager<TN, TF>::CreateNtuple(G4NtupleBooking* ntupleBooking)
 {
-// Create ntuple from ntuple_booking.
+  // This ntuple id
+  auto ntupleId = G4int(fNtupleDescriptionVector.size()) + fFirstId;
 
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+  // Create ntuple description from ntuple booking.
+  auto ntupleDescription = new G4TNtupleDescription<TN, TF>(ntupleBooking);
+  fNtupleDescriptionVector.push_back(ntupleDescription);
 
-    // Do not create ntuple if it is inactivated 
-    if ( fState.GetIsActivation() && ( ! ntupleDescription->fActivation ) ) continue;
+  // Do not create ntuple if it is inactivated 
+  if ( fState.GetIsActivation() && 
+       ( ! ntupleDescription->fActivation ) ) return G4Analysis::kInvalidId;
     
-    // Do not create ntuple if it already exists
-    if ( ntupleDescription->fNtuple ) continue;
-    
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()
-        ->Message("create from booking", "ntuple", 
-                   ntupleDescription->fNtupleBooking.name());
-#endif
-
-    // create ntuple
-    CreateTNtupleFromBooking(ntupleDescription);
-
-    // finish created ntuple
-    auto fromBooking = true;
-    FinishTNtuple(ntupleDescription, fromBooking);
-
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL3() ) 
-      fState.GetVerboseL3()
-        ->Message("create from booking", "ntuple", 
-                  ntupleDescription->fNtupleBooking.name());
-#endif
-  }
-}   
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool 
-G4TNtupleManager<TNTUPLE>::IsEmpty() const
-{
-  return ! fNtupleDescriptionVector.size();
-}  
- 
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool 
-G4TNtupleManager<TNTUPLE>::Reset(G4bool deleteNtuple)
-{
-  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
-    if ( deleteNtuple ) {
-      delete ntupleDescription->fNtuple;
-    }  
-    ntupleDescription->fNtuple = 0;
+  // Do not create ntuple if it already exists
+  if ( ntupleDescription->fNtuple ) {
+    G4ExceptionDescription description;
+    description 
+      << "Ntuple " << ntupleId << " already exists.";
+    G4Exception("G4TNtupleManager::CreateNtuple",
+                "Analysis_W002", JustWarning, description);
+    return ntupleId;
   }
 
-  fNtupleVector.clear(); 
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()
+      ->Message("create from booking", "ntuple", 
+                ntupleDescription->fNtupleBooking.name());
+#endif
+
+  // create ntuple
+  CreateTNtupleFromBooking(ntupleDescription);
+
+  // finish created ntuple
+  auto fromBooking = true;
+  FinishTNtuple(ntupleDescription, fromBooking);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL3() ) 
+    fState.GetVerboseL3()
+      ->Message("create from booking", "ntuple", 
+                ntupleDescription->fNtupleBooking.name());
+#endif
+
+  return ntupleId;      
+}
+
+
+//_____________________________________________________________________________
+template <typename TN, typename TF>
+void G4TNtupleManager<TN, TF>::CreateNtuplesFromBooking(
+  const std::vector<G4NtupleBooking*>& ntupleBookings)
+{
+// Create ntuple from ntuple bookings.
+
+  // Create ntuple descriptions from ntuple booking.
+  for ( auto ntupleBooking : ntupleBookings ) {
+    CreateNtuple(ntupleBooking);
+  }
+}
+
+//_____________________________________________________________________________
+template <typename TN, typename TF>
+G4bool 
+G4TNtupleManager<TN, TF>::Reset(G4bool /*deleteNtuple*/)
+{
+  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+    // if ( deleteNtuple ) {
+    //   delete ntupleDescription->fNtuple;
+    // }
+    // ntupleDescription->fNtuple = 0;
+    delete ntupleDescription;
+  }
+
+  fNtupleDescriptionVector.clear();
+  fNtupleVector.clear();
   
   return true;
 }  
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::CreateNtuple(
-  const G4String& name, const G4String& title)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "ntuple", name);
-#endif
-
-  // Create ntuple description
-  auto index = fNtupleDescriptionVector.size();
-  auto ntupleDescription = new G4TNtupleDescription<TNTUPLE>();
-  fNtupleDescriptionVector.push_back(ntupleDescription);  
-
-  // Save name & title in ntuple booking
-  ntupleDescription->fNtupleBooking.set_name(name);
-  ntupleDescription->fNtupleBooking.set_title(title);
-
-  // Create ntuple
-  // CreateTNtuple(ntupleDescription, name, title);
-  fLockFirstId = true;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << index + fFirstId;
-    fState.GetVerboseL2()->Message("create", "ntuple", description);
-  } 
-#endif
-
-  return G4int(index + fFirstId);
-}                                         
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::CreateNtupleIColumn(
-  G4int ntupleId, const G4String& name, std::vector<int>* vector)
-{
-  return CreateNtupleTColumn<int>(ntupleId, name, vector);
-}                                         
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::CreateNtupleFColumn(
-  G4int ntupleId, const G4String& name, std::vector<float>* vector)
-{
-  return CreateNtupleTColumn<float>(ntupleId, name, vector);
-}                                         
-
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::CreateNtupleDColumn(
-  G4int ntupleId, const G4String& name, std::vector<double>* vector)
-{
-  return CreateNtupleTColumn<double>(ntupleId, name, vector);
-}                                         
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::CreateNtupleSColumn(
-  G4int ntupleId, const G4String& name)
-{
-  return CreateNtupleTColumn<std::string>(ntupleId, name, nullptr);
-}  
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-void G4TNtupleManager<TNTUPLE>::FinishNtuple(
-  G4int ntupleId)
-{ 
-  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "FinishNtuple");
-  if ( ! ntupleDescription )  return;   
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << ntupleDescription->fNtupleBooking.name() << " ntupleId " << ntupleId; 
-    fState.GetVerboseL4()->Message("finish", "ntuple", description);
-  }  
-#endif
-
-  // check that ntuple was really created
-  // auto ntuple = GetNtupleInFunction(ntupleId, "FinishNtuple", false);
-  // if ( ! ntuple )  return;   
-      // The test has to be now done in the FinishTNtuple implementations
-
-  auto fromBooking = false;
-  FinishTNtuple(ntupleDescription, fromBooking);
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << ntupleDescription->fNtupleBooking.name() << " ntupleId " << ntupleId; 
-    fState.GetVerboseL2()->Message("finish", "ntuple", description);
-  }  
-#endif
-}
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool G4TNtupleManager<TNTUPLE>::FillNtupleIColumn(
+template <typename TN, typename TF>
+G4bool G4TNtupleManager<TN, TF>::FillNtupleIColumn(
   G4int ntupleId, G4int columnId, G4int value)
 {
   return FillNtupleTColumn<int>(ntupleId, columnId, value);
 }                                         
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool G4TNtupleManager<TNTUPLE>::FillNtupleFColumn(
+template <typename TN, typename TF>
+G4bool G4TNtupleManager<TN, TF>::FillNtupleFColumn(
   G4int ntupleId, G4int columnId, G4float value)
 {
   return FillNtupleTColumn<float>(ntupleId, columnId, value);
 }                                         
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool G4TNtupleManager<TNTUPLE>::FillNtupleDColumn(
+template <typename TN, typename TF>
+G4bool G4TNtupleManager<TN, TF>::FillNtupleDColumn(
   G4int ntupleId, G4int columnId, G4double value)
 {
   return FillNtupleTColumn<double>(ntupleId, columnId, value);
 }                                         
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool G4TNtupleManager<TNTUPLE>::FillNtupleSColumn(
+template <typename TN, typename TF>
+G4bool G4TNtupleManager<TN, TF>::FillNtupleSColumn(
   G4int ntupleId, G4int columnId, const G4String& value)
 {
   return FillNtupleTColumn<std::string>(ntupleId, columnId, value);
 }                                         
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool G4TNtupleManager<TNTUPLE>::AddNtupleRow(
+template <typename TN, typename TF>
+G4bool G4TNtupleManager<TN, TF>::AddNtupleRow(
   G4int ntupleId)
 { 
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
@@ -401,7 +279,10 @@ G4bool G4TNtupleManager<TNTUPLE>::AddNtupleRow(
   }  
 #endif
 
-  auto ntuple = GetNtupleInFunction(ntupleId, "AddNtupleRow");
+  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
+  if ( ! ntupleDescription ) return false;
+
+  auto ntuple = ntupleDescription->fNtuple;
   if ( ! ntuple ) return false;
   
   auto result = ntuple->add_row();
@@ -413,11 +294,13 @@ G4bool G4TNtupleManager<TNTUPLE>::AddNtupleRow(
                 "Analysis_W002", JustWarning, description);
   }         
 
+  ntupleDescription->fHasFill = true;
+
 #ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
+  if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId;  
-    fState.GetVerboseL2()->Message("add", "ntuple row", description);
+    fState.GetVerboseL4()->Message("add", "ntuple row", description);
   }  
 #endif
 
@@ -425,8 +308,8 @@ G4bool G4TNtupleManager<TNTUPLE>::AddNtupleRow(
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-void  G4TNtupleManager<TNTUPLE>::SetActivation(
+template <typename TN, typename TF>
+void  G4TNtupleManager<TN, TF>::SetActivation(
   G4bool activation)
 {
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
@@ -435,8 +318,8 @@ void  G4TNtupleManager<TNTUPLE>::SetActivation(
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-void  G4TNtupleManager<TNTUPLE>::SetActivation(
+template <typename TN, typename TF>
+void  G4TNtupleManager<TN, TF>::SetActivation(
   G4int ntupleId, G4bool activation)
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetActivation");
@@ -446,8 +329,8 @@ void  G4TNtupleManager<TNTUPLE>::SetActivation(
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4bool  G4TNtupleManager<TNTUPLE>::GetActivation(
+template <typename TN, typename TF>
+G4bool  G4TNtupleManager<TN, TF>::GetActivation(
   G4int ntupleId) const
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetActivation");
@@ -457,17 +340,17 @@ G4bool  G4TNtupleManager<TNTUPLE>::GetActivation(
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-TNTUPLE* 
-G4TNtupleManager<TNTUPLE>::GetNtuple() const
+template <typename TN, typename TF>
+TN* 
+G4TNtupleManager<TN, TF>::GetNtuple() const
 {
   return GetNtuple(fFirstId);
 }  
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-TNTUPLE* 
-G4TNtupleManager<TNTUPLE>::GetNtuple(G4int ntupleId) const
+template <typename TN, typename TF>
+TN* 
+G4TNtupleManager<TN, TF>::GetNtuple(G4int ntupleId) const
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetNtuple");
   if ( ! ntupleDescription ) return nullptr; 
@@ -476,47 +359,40 @@ G4TNtupleManager<TNTUPLE>::GetNtuple(G4int ntupleId) const
 }  
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-typename std::vector<TNTUPLE*>::iterator 
-G4TNtupleManager<TNTUPLE>::BeginNtuple()
+template <typename TN, typename TF>
+typename std::vector<TN*>::iterator 
+G4TNtupleManager<TN, TF>::BeginNtuple()
 { 
   return fNtupleVector.begin();
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-typename std::vector<TNTUPLE*>::iterator 
-G4TNtupleManager<TNTUPLE>::EndNtuple()
+template <typename TN, typename TF>
+typename std::vector<TN*>::iterator 
+G4TNtupleManager<TN, TF>::EndNtuple()
 { 
   return fNtupleVector.end(); 
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-typename std::vector<TNTUPLE*>::const_iterator 
-G4TNtupleManager<TNTUPLE>::BeginConstNtuple() const
+template <typename TN, typename TF>
+typename std::vector<TN*>::const_iterator 
+G4TNtupleManager<TN, TF>::BeginConstNtuple() const
 { 
   return fNtupleVector.begin();
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-typename std::vector<TNTUPLE*>::const_iterator 
-G4TNtupleManager<TNTUPLE>::EndConstNtuple() const
+template <typename TN, typename TF>
+typename std::vector<TN*>::const_iterator 
+G4TNtupleManager<TN, TF>::EndConstNtuple() const
 { 
   return fNtupleVector.end();
 }
 
 //_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::GetNofNtuples() const
+template <typename TN, typename TF>
+G4int G4TNtupleManager<TN, TF>::GetNofNtuples() const
 { 
   return G4int(fNtupleVector.size());
-}
-
-//_____________________________________________________________________________
-template <typename TNTUPLE>
-G4int G4TNtupleManager<TNTUPLE>::GetNofNtupleBookings() const
-{ 
-  return G4int(fNtupleDescriptionVector.size());
 }

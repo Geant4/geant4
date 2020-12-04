@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
 
@@ -49,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
-{     
+{
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = 0;
@@ -59,7 +59,7 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-  G4RunManager * runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // Set mandatory initialization classes
   //
@@ -67,18 +67,18 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   //
   runManager->SetUserInitialization(new FTFP_BERT);
- 
+
   // set an HistoManager
   //
   HistoManager*  histo = new HistoManager();
-      
+
   // Set user action classes
   //
-  PrimaryGeneratorAction* gen_action = 
+  PrimaryGeneratorAction* gen_action =
                           new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
   //
-  RunAction* run_action = new RunAction(histo);  
+  RunAction* run_action = new RunAction(histo);
   runManager->SetUserAction(run_action);
   //
   EventAction* event_action = new EventAction(run_action,histo);
@@ -87,11 +87,11 @@ int main(int argc,char** argv)
   SteppingAction* stepping_action =
                     new SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);
-  
+
   // Initialize G4 kernel
   //
   runManager->Initialize();
-  
+
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
@@ -105,18 +105,18 @@ int main(int argc,char** argv)
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);    
+    UImanager->ApplyCommand(command+fileName);
   }
-  else {  
+  else {
     // interactive mode
-    UImanager->ApplyCommand("/control/execute init_vis.mac");     
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
     delete ui;
   }
-  
+
   // Job termination
   delete visManager;
-  delete histo;                
+  delete histo;
   delete runManager;
 
   return 0;

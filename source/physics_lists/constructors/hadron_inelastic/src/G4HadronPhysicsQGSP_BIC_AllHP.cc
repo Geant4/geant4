@@ -54,8 +54,8 @@ G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( G4int )
 {}
 
 
-G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( const G4String& name, G4bool /*quasiElastic */ )
-  :  G4HadronPhysicsQGSP_BIC_HP( name )
+G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( const G4String& name, G4bool quasiElastic )
+  :  G4HadronPhysicsQGSP_BIC_HP( name, quasiElastic )
 {
   minBIC_proton = 190.0*CLHEP::MeV;
   maxHP_proton  = 200.0*CLHEP::MeV;
@@ -63,6 +63,9 @@ G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( const G4String& na
 
 
 void G4HadronPhysicsQGSP_BIC_AllHP::Proton() {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+
   auto pro = new G4ProtonBuilder;
   AddBuilder( pro );
   auto qgs = new G4QGSPProtonBuilder( QuasiElasticQGS );
@@ -84,4 +87,10 @@ void G4HadronPhysicsQGSP_BIC_AllHP::Proton() {
   hp->SetMaxEnergy( maxHP_proton );
   pro->RegisterMe( hp );
   pro->Build();
+
+  const G4ParticleDefinition* proton = G4Proton::Proton();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(proton);
+  if(inel) { 
+    if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+  }
 }

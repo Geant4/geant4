@@ -42,6 +42,7 @@ geant4_define_module(NAME G4globman
     G4AllocatorList.hh
     G4ApplicationState.hh
     G4AutoLock.hh
+    G4Backtrace.hh
     G4BuffercoutDestination.hh
     G4Cache.hh
     G4CacheDetails.hh
@@ -81,6 +82,8 @@ geant4_define_module(NAME G4globman
     G4Physics2DVector.hh
     G4Physics2DVector.icc
     G4Pow.hh
+    G4Profiler.hh
+    G4Profiler.icc
     G4ReferenceCountedHandle.hh
     G4RotationMatrix.hh
     G4SIunits.hh
@@ -138,6 +141,7 @@ geant4_define_module(NAME G4globman
     G4PhysicsVector.cc
     G4Physics2DVector.cc
     G4Pow.cc
+    G4Profiler.cc
     G4ReferenceCountedHandle.cc
     G4SliceTimer.cc
     G4StateManager.cc
@@ -150,12 +154,11 @@ geant4_define_module(NAME G4globman
   LINK_LIBRARIES
     ${CLHEP_LIBRARIES}
     ${timemory_LIBRARIES}
+    ${PTL_LIBRARIES}  # for index_sequence implementation. Remove after C++14
 )
 
 # List any source specific properties here
-# For new system, must explicitly add path for generated header 
-if(GEANT4_USE_NEW_CMAKE)
-  geant4_module_include_directories(G4globman
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    )
-endif()
+# For new system, must explicitly add path for generated header
+geant4_module_include_directories(G4globman
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+)

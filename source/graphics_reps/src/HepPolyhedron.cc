@@ -1665,6 +1665,7 @@ HepPolyhedronHype::HepPolyhedronHype(G4double r1,
  *                                                                     *
  * Name: HepPolyhedronHype                           Date:    14.04.08 *
  * Author: Tatiana Nikitina (CERN)                   Revised: 14.04.08 *
+ *         Evgueni Tcherniaev                                 01.12.20 *
  *                                                                     *
  * Function: Constructor for Hype                                      *
  *                                                                     *
@@ -1676,19 +1677,15 @@ HepPolyhedronHype::HepPolyhedronHype(G4double r1,
  *                                                                     *
  ***********************************************************************/
 {
-  static const G4double wholeCircle=twopi;
+  static const G4double wholeCircle = twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
   G4int k = 0;
-  if (r2 < 0. || r1 < 0. )        k = 1;
-  if (r1 > r2 )                   k = 1;
-  if (r1 == r2)                   k = 1;
-
+  if (r1 < 0. || r2 < 0. || r1 >= r2) k = 1;
   if (halfZ <= 0.) k += 2;
- 
-  if (sqrtan1<0.||sqrtan2<0.) k += 4;  
- 
+  if (sqrtan1 < 0.|| sqrtan2 < 0.) k += 4;
+
   if (k != 0)
   {
     std::cerr << "HepPolyhedronHype: error in input parameters";
@@ -1702,42 +1699,35 @@ HepPolyhedronHype::HepPolyhedronHype(G4double r1,
               << std::endl;
     return;
   }
-  
+
   //   P R E P A R E   T W O   P O L Y L I N E S
 
-  G4int n = GetNumberOfRotationSteps();
-  G4double dz = 2.*halfZ / n;
-  G4double k1 = r1*r1;
-  G4double k2 = r2*r2;
+  G4int ns = std::max(3, GetNumberOfRotationSteps()/4);
+  G4int nz1 = (sqrtan1 == 0.) ? 2 : ns + 1;
+  G4int nz2 = (sqrtan2 == 0.) ? 2 : ns + 1;
+  G4double* zz = new G4double[nz1 + nz2];
+  G4double* rr = new G4double[nz1 + nz2];
 
-  G4double *zz = new G4double[n+n+1], *rr = new G4double[n+n+1];
-
-  zz[0] = halfZ;
-  rr[0] = std::sqrt(sqrtan2*halfZ*halfZ+k2);
-
-  for(G4int i = 1; i < n-1; i++)
+  // external polyline
+  G4double dz2 = 2.*halfZ/(nz2 - 1);
+  for(G4int i = 0; i < nz2; ++i)
   {
-    zz[i] = zz[i-1] - dz;
-    rr[i] =std::sqrt(sqrtan2*zz[i]*zz[i]+k2);
+    zz[i] = halfZ - dz2*i;
+    rr[i] = std::sqrt(sqrtan2*zz[i]*zz[i] + r2*r2);
   }
 
-  zz[n-1] = -halfZ;
-  rr[n-1] = rr[0];
-
-  zz[n] = halfZ;
-  rr[n] =  std::sqrt(sqrtan1*halfZ*halfZ+k1);
-
-  for(G4int i = n+1; i < n+n; i++)
+  // internal polyline
+  G4double dz1 = 2.*halfZ/(nz1 - 1);
+  for(G4int i = 0; i < nz1; ++i)
   {
-    zz[i] = zz[i-1] - dz;
-    rr[i] =std::sqrt(sqrtan1*zz[i]*zz[i]+k1);
+    G4int j = nz2 + i;
+    zz[j] = halfZ - dz1*i;
+    rr[j] = std::sqrt(sqrtan1*zz[j]*zz[j] + r1*r1);
   }
-  zz[n+n] = -halfZ;
-  rr[n+n] = rr[n];
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, 0., wholeCircle, n, n, zz, rr, -1, -1); 
+  RotateAroundZ(0, 0., wholeCircle, nz2, nz1, zz, rr, -1, -1);
   SetReferences();
 
   delete [] zz;

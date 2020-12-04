@@ -6,7 +6,7 @@
 
                     Examples basic History file
                     ----------------------------
-                    
+
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06/11/20,  I. Hrivnacova (exbasic-V10-06-03)
+- Updated category README
+
+02/11/20,  B. Morgan (exbasic-V10-06-02)
+- Support same CMake version range as core Geant4
+
+30/06/20,  G. Cosmo (exbasic-V10-06-01)
+- Migrated all basic examples to use G4RunManagerFactory, therefore
+  implicitly enabling tasking by default in MT builds.
 
 24/01/20,  A. Zaborowska (exbasic-V10-06-00)
 - Fix suggested in macros command /run/numberOfThreads
@@ -42,10 +52,10 @@ track of all tags.
 
 02/12/13 I. Hrivnacova (exbasic-V09-06-03)
 - Fixed gui.mac in B2, B4 and B5:
-  corrected wireframe parameter, removed run2.mac from gui 
+  corrected wireframe parameter, removed run2.mac from gui
 
 30/11/13 I. Hrivnacova (exbasic-V09-06-02)
-- Fixes in documentation 
+- Fixes in documentation
 - Fixed B2a/gui.mac and obsolete comments in a few more macros
 
 09/11/13 I. Hrivnacova (exbasic-V09-06-01)
@@ -54,7 +64,7 @@ track of all tags.
 
 28/02/13 I. Hrivnacova (exbasic-V09-06-00)
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   Thanks to V. Ivantchenko for pointing at this.
 
@@ -69,7 +79,7 @@ track of all tags.
 - Updated documentation:
   - Fixed .README files for artefacts from Markdown support
   - Removed obsolete instructions (how to compile & link)
-  - Updated info about used physics lists and needed data files 
+  - Updated info about used physics lists and needed data files
 
 02/11/12 I. Hrivnacova (exbasic-V09-05-02)
 - Fixed CMake build for added macros in B2, B4
@@ -84,20 +94,20 @@ track of all tags.
 18/09/12 I. Hrivnacova (exbasic-V09-05-00)
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
   where needed
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters
 - Updated .README
 
 29/11/11 B.Morgan (exbasic-V09-04-05)
 - Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
   to build directory so executable is runnable directly.
 
-23/11/11 I. Hrivnacova (exbasic-V09-04-04)     
+23/11/11 I. Hrivnacova (exbasic-V09-04-04)
 - Fixed the example name in the top comment line in init.mac and
-  init_vis.mac  
+  init_vis.mac
 
-21/11/11 I. Hrivnacova (exbasic-V09-04-03)     
-- Improved vis.mac 
-- Removed alternative detector construction class in B3 
+21/11/11 I. Hrivnacova (exbasic-V09-04-03)
+- Improved vis.mac
+- Removed alternative detector construction class in B3
 
 18/11/11 I. Hrivnacova (exbasic-V09-04-02)
 - Fixes in macros and README files
@@ -105,7 +115,7 @@ track of all tags.
 15/11/11 I. Hrivnacova (exbasic-V09-04-01)
 - Migration to new G4Exception in B2aDetectorConstruction.cc
   and B2bChamberParameterisation.cc.
-    
+
 14/11/11 I. Hrivnacova (exbasic-V09-04-00)
 - The first tagged version of the new basic examples.
 

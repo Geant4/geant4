@@ -366,19 +366,12 @@ DistanceToOut(const G4ThreeVector& pt, const G4ThreeVector& d,
   U3Vector v(d.x(), d.y(), d.z());
 
   G4double dist = UnplacedVolume_t::DistanceToOut(p, v, kInfinity);
-  if(calcNorm) // *norm=n, but only after calcNorm check and if convex volume
+  if(calcNorm)
   {
-    if (UnplacedVolume_t::IsConvex())
-    {
-      U3Vector n, hitpoint = p + dist * v;
-      UnplacedVolume_t::Normal(hitpoint, n);
-      *validNorm = true;
-      norm->set(n.x(), n.y(), n.z());
-    }
-    else
-    {
-      *validNorm = false;
-    }
+    *validNorm = UnplacedVolume_t::IsConvex();
+    U3Vector n, hitpoint = p + dist * v;
+    UnplacedVolume_t::Normal(hitpoint, n);
+    norm->set(n.x(), n.y(), n.z());
   }
 
   // Apply Geant4 distance conventions

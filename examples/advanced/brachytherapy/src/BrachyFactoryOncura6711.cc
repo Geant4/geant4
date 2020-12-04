@@ -48,21 +48,21 @@
 
 BrachyFactoryOncura6711:: BrachyFactoryOncura6711()
 {
-  Oncura6711IodineSource = new  BrachyDetectorConstructionOncura6711(); 
+  fOncura6711IodineSource = new  BrachyDetectorConstructionOncura6711(); 
 }
 
 BrachyFactoryOncura6711:: ~BrachyFactoryOncura6711()
 {
-  delete Oncura6711IodineSource;
+  delete fOncura6711IodineSource;
 }
  
 void BrachyFactoryOncura6711::CreateSource(G4VPhysicalVolume* mother)
 {
-  Oncura6711IodineSource -> ConstructOncura6711(mother);
+  fOncura6711IodineSource -> ConstructOncura6711(mother);
 }
 
 void BrachyFactoryOncura6711::CleanSource()
 {
-  Oncura6711IodineSource -> CleanOncura6711();
-  Oncura6711IodineSource = 0;
+  fOncura6711IodineSource -> CleanOncura6711();
+  fOncura6711IodineSource = nullptr;
 }

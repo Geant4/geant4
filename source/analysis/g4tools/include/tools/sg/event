@@ -22,9 +22,9 @@ public:
 #ifdef TOOLS_SG_EVENT_ID_CAST
   static cid id_class() {return 0;}
   virtual void* cast(cid) const = 0;
-#else  
+#else
   virtual void* cast(const std::string&) const = 0;
-#endif  
+#endif
   virtual event* copy() const = 0;
 public:
 #ifdef TOOLS_MEM
@@ -119,7 +119,7 @@ public:
     if(void* p = cmp_cast<down_event>(this,a_class)) {return p;}
     return 0;
   }
-#endif  
+#endif
   virtual event* copy() const {return new down_event(*this);}
 public:
   down_event(int a_x,int a_y) //signed because of wall.
@@ -162,7 +162,7 @@ public:
     if(void* p = cmp_cast<up_event>(this,a_class)) {return p;}
     return 0;
   }
-#endif  
+#endif
   virtual event* copy() const {return new up_event(*this);}
 public:
   up_event(int a_x,int a_y) //signed because of wall.
@@ -205,7 +205,7 @@ public:
     if(void* p = cmp_cast<move_event>(this,a_class)) {return p;}
     return 0;
   }
-#endif  
+#endif
   virtual event* copy() const {return new move_event(*this);}
 public:
   move_event(int a_x,int a_y, //signed because of wall.
@@ -268,7 +268,7 @@ public:
     if(void* p = cmp_cast<anim_event>(this,a_class)) {return p;}
     return 0;
   }
-#endif  
+#endif
   virtual event* copy() const {return new anim_event(*this);}
 public:
   typedef uint64 num_t;
@@ -326,11 +326,11 @@ inline bool get_event_xy(const sg::event& a_event,int& a_x,int& a_y) {
     a_y = devt->y();
     return true;
 
-  } else if(const up_evt_t* uevt = event_cast<evt_t,up_evt_t>(a_event)) {  
+  } else if(const up_evt_t* uevt = event_cast<evt_t,up_evt_t>(a_event)) {
     a_x = uevt->x();
     a_y = uevt->y();
     return true;
-  
+
   }
   a_x = 0;
   a_y = 0;

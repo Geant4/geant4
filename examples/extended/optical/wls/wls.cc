@@ -29,67 +29,43 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef WIN32
-#include <unistd.h>
-#endif
-
-#include "G4Types.hh"
-
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh"
-
-#include "FTFP_BERT.hh"
-#include "G4OpticalPhysics.hh"
-#include "G4EmStandardPhysics_option4.hh"
-
+#include "WLSActionInitialization.hh"
 #include "WLSDetectorConstruction.hh"
 
-#include "WLSActionInitialization.hh"
-
-#include "G4VisExecutive.hh"
+#include "FTFP_BERT.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4RunManagerFactory.hh"
+#include "G4Types.hh"
 #include "G4UIExecutive.hh"
-
-// argc holds the number of arguments (including the name) on the command line
-// -> it is ONE when only the name is  given !!!
-// argv[0] is always the name of the program
-// argv[1] points to the first argument, and so on
+#include "G4UImanager.hh"
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if(argc == 1)
+  {
     ui = new G4UIExecutive(argc, argv);
   }
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-#else
-  G4int seed = 123;
-  if (argc  > 2) seed = atoi(argv[argc-1]);
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+  G4int seed      = 123;
+  if(argc > 2)
+    seed = atoi(argv[argc - 1]);
 
   // Choose the Random engine and set the seed
-
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4Random::setTheSeed(seed);
 
-  G4RunManager * runManager = new G4RunManager;
-#endif
-
-  // Set mandatory initialization classes
-  //
   // Detector construction
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
   runManager->SetUserInitialization(detector);
-  // Physics list
 
+  // Physics list
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
   G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
@@ -104,44 +80,26 @@ int main(int argc,char** argv)
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
-
-#ifndef WIN32
-  G4int optmax = argc;
-  if (argc > 2)  { optmax = optmax-1; }
-
-  if (optind < optmax)
+  if(ui)
   {
-     G4String command = "/control/execute ";
-     for ( ; optind < optmax; optind++)
-     {
-         G4String macroFilename = argv[optind];
-         UImanager->ApplyCommand(command+macroFilename);
-     }
+    // Define (G)UI terminal for interactive mode
+    if(ui->IsGUI())
+      UImanager->ApplyCommand("/control/execute gui.mac");
+    ui->SessionStart();
+    delete ui;
   }
-#else  // Simple UI for Windows runs, no possibility of additional arguments
-  if (argc!=1)
+  else
   {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
-  }
-#endif
-  else  {
-     // Define (G)UI terminal for interactive mode
-     UImanager->ApplyCommand("/control/execute init.in");
-     if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");
-     ui->SessionStart();
-     delete ui;
+    G4String command  = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command + fileName);
   }
 
   // job termination
-
   delete visManager;
   delete runManager;
-
   return 0;
 }
 

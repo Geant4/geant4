@@ -21,7 +21,7 @@
 #elif defined(ANDROID)
 #elif _WIN32
 #include <GL/glext.h>
-#elif __APPLE__	
+#elif __APPLE__
 #include <OpenGL/glext.h> //Cocoa
 #else
 #include <GL/glext.h>

@@ -35,6 +35,32 @@ inline void buf2lines(char* a_buffer,std::vector<std::string>& a_lines) {
   }
 }
 
+inline void buf2lines(size_t a_size,const char* a_buffer,std::vector<std::string>& a_lines) {
+  a_lines.clear();
+  if(!a_size) return;
+  std::string line;
+  char* pos = (char*)a_buffer;
+  const char* end = a_buffer+a_size-1;
+  while(true) {
+    if(pos>end) {
+      if(line.size()) a_lines.push_back(line);
+      return;
+    }
+    if((*pos=='\r')&&((pos+1)<=end)&&(*(pos+1)=='\n')) {
+      a_lines.push_back(line);
+      line.clear();
+      pos += 2;
+    } else if(*pos=='\n') {
+      a_lines.push_back(line);
+      line.clear();
+      pos++;
+    } else {
+      line += *pos;
+      pos++;
+    }
+  }
+}
+
 }
 
 #include <string.h> //memcpy
@@ -49,10 +75,10 @@ inline bool strings2buf(size_t a_number,const char** a_strings,size_t& a_size,ch
   // For {}, it produces "0".
   a_size = 0;
   for(size_t index=0;index<a_number;index++) a_size += ::strlen(a_strings[index])+1;
-  a_size++;  
+  a_size++;
   a_buffer = new char[a_size];
   if(!a_buffer) {a_size = 0;return false;}
-  char* pos = a_buffer;  
+  char* pos = a_buffer;
   size_t array_size;
   for(size_t index=0;index<a_number;index++) {
     const char* s = a_strings[index];
@@ -60,7 +86,7 @@ inline bool strings2buf(size_t a_number,const char** a_strings,size_t& a_size,ch
     ::memcpy(pos,s,array_size);
     pos += array_size;
   }
-  *pos = '\0';  
+  *pos = '\0';
   return true;
 }
 */
@@ -72,10 +98,10 @@ inline bool strings2buf(const std::vector<std::string>& a_strings,size_t& a_size
   size_t number = a_strings.size();
   a_size = 0;
   for(size_t index=0;index<number;index++) a_size += a_strings[index].size()+1;
-  a_size++;  
+  a_size++;
   a_buffer = new char[a_size];
   if(!a_buffer) {a_size = 0;return false;}
-  char* pos = a_buffer;  
+  char* pos = a_buffer;
   size_t array_size;
   for(size_t index=0;index<number;index++) {
     const std::string& s = a_strings[index];
@@ -83,7 +109,7 @@ inline bool strings2buf(const std::vector<std::string>& a_strings,size_t& a_size
     ::memcpy(pos,s.c_str(),array_size);
     pos += array_size;
   }
-  *pos = '\0';  
+  *pos = '\0';
   return true;
 }
 

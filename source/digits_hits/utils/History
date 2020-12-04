@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15th, 2020  M.Asai (detutils-V10-06-10)
+- Adding Mutex lock to G4ScoringProbe::SetMaterial() to avoid the
+  race condition.
+
+September 16th, 2020  M.Asai (detutils-V10-06-09)
+- Adding /score/fill1D command that lets a primitive scorer to 
+  directly fill a 1D histogram.
+
+September 3rd, 2020  M.Asai (detutils-V10-06-08)
+- Move G4VPrimitivePlotter.hh to digits_hits/detector
+
 April 29th, 2020  M.Asai (detutils-V10-06-07)
 - G4ScoringProbe.cc : Minor cosmetic changes.
 

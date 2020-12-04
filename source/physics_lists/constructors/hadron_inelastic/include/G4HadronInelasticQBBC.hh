@@ -41,9 +41,6 @@
 #include "globals.hh"
 #include "G4VHadronPhysics.hh"
 
-class G4ComponentAntiNuclNuclearXS;
-class G4ComponentGGHadronNucleusXsc;
-
 class G4HadronInelasticQBBC : public G4VHadronPhysics
 {
 public: 
@@ -56,19 +53,18 @@ public:
 			G4bool chips = false, G4bool hp = false, 
 			G4bool glauber = false);
 
-  virtual ~G4HadronInelasticQBBC();
+  ~G4HadronInelasticQBBC() override;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
   void ConstructProcess() override;
 
-private:
-
   // copy constructor and hide assignment operator
-  G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
-  G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
+  G4HadronInelasticQBBC(G4HadronInelasticQBBC &) = delete;
+  G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right) = delete;
 
+private:
   G4int    verbose;
 };
 

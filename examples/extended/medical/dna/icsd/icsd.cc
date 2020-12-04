@@ -37,11 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -80,12 +76,8 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(2); // Is equal to 2 by default
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
 
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 4th, 2020  G.Cosmo
+- Fixed Coverity defect warnings for data initialisation and leaks in classes
+  G4WeightCutOffProcess, G4ImportanceProcess and G4WeightWindowProcess.
+
 February 17th, 2020  V.Ivanchenko 
 - G4ImportanceProcess: added process type as fParallel
 

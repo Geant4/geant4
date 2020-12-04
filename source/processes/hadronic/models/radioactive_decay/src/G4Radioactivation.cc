@@ -997,7 +997,7 @@ G4Radioactivation::DecayIt(const G4Track& theTrack, const G4Step&)
           //  G4cout << theTrack.GetWeight() <<"\t"<<weight1<<"\t"<<decayRate<< G4endl;
 
           // Add isotope to the radioactivity tables
-          // One table for each observation time window specifed in
+          // One table for each observation time window specified in
           // SetDecayBias(G4String filename)
 
           theRadioactivityTables[decayWindows[nbin-1]]

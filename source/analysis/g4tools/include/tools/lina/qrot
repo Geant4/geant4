@@ -96,12 +96,12 @@ public:
 
     // Optimize by doing 1 div and 4 muls instead of 4 divs.
     T inv = one() / length;
-  
+
     a_r.m_quat.set_value(-m_quat.v0() * inv,
                          -m_quat.v1() * inv,
                          -m_quat.v2() * inv,
                           m_quat.v3() * inv);
-  
+
     return true;
   }
 
@@ -124,7 +124,7 @@ public:
   bool set_value(const VEC3& a_from,const VEC3& a_to,T(*a_sqrt)(T),T(*a_fabs)(T)) {
     // code taken from coin3d/SbRotation.
     //NOTE : coin3d/SbMatrix logic is transposed relative to us.
-    
+
     VEC3 from(a_from);
     if(from.normalize()==T()) return false;
     VEC3 to(a_to);
@@ -210,10 +210,10 @@ public:
       unsigned int k = (j+1)%3;
 
       T _s = a_sqrt((a_m.value(i,i) - (a_m.value(j,j) + a_m.value(k,k))) + a_m.v33());
-  
+
       m_quat.set_value(i,_s * half());
       _s = half() / _s;
-  
+
       m_quat.v3((a_m.value(k,j) - a_m.value(j,k)) * _s);
       m_quat.set_value(j,(a_m.value(j,i) + a_m.value(i,j)) * _s);
       m_quat.set_value(k,(a_m.value(k,i) + a_m.value(i,k)) * _s);
@@ -228,7 +228,7 @@ public:
   void value(MAT4& a_m) const {
     //Return this rotation in the form of a matrix.
     //NOTE : in coin3d/SbRotation, it looks as if "w <-> -w", but coin3d/SbMatrix logic is transposed relative to us.
-    
+
     const T x = m_quat.v0();
     const T y = m_quat.v1();
     const T z = m_quat.v2();
@@ -240,19 +240,19 @@ public:
     a_m.v01(2*x*y - 2*w*z);
     a_m.v02(2*x*z + 2*w*y);
     a_m.v03(0);
-  
+
     // second row :
     a_m.v10(2*x*y + 2*w*z);
     a_m.v11(w*w - x*x + y*y - z*z);
     a_m.v12(2*y*z - 2*w*x);
     a_m.v13(0);
-  
+
     // third row :
     a_m.v20(2*x*z - 2*w*y);
     a_m.v21(2*y*z + 2*w*x);
     a_m.v22(w*w - x*x - y*y + z*z);
     a_m.v23(0);
-  
+
     // fourth row :
     a_m.v30(0);
     a_m.v31(0);
@@ -264,7 +264,7 @@ public:
   T value_3(MAT3& a_m) const {
     //Return this rotation in the form of a 3D matrix.
     //NOTE : in coin3d/SbRotation, it looks as if "w <-> -w", but coin3d/SbMatrix logic is transposed relative to us.
-    
+
     const T x = m_quat.v0();
     const T y = m_quat.v1();
     const T z = m_quat.v2();
@@ -275,17 +275,17 @@ public:
     a_m.v00(w*w + x*x - y*y - z*z);
     a_m.v01(2*x*y - 2*w*z);
     a_m.v02(2*x*z + 2*w*y);
-  
+
     // second row :
     a_m.v10(2*x*y + 2*w*z);
     a_m.v11(w*w - x*x + y*y - z*z);
     a_m.v12(2*y*z - 2*w*x);
-  
+
     // third row :
     a_m.v20(2*x*z - 2*w*y);
     a_m.v21(2*y*z + 2*w*x);
     a_m.v22(w*w - x*x - y*y + z*z);
-  
+
     // fourth row :
     //a_m.v30(0);
     //a_m.v31(0);
@@ -299,20 +299,20 @@ public:
     const T y = m_quat.v1();
     const T z = m_quat.v2();
     const T w = m_quat.v3();
-  
+
     // first row :
     T v0 =     (w*w + x*x - y*y - z*z) * a_in.v0()
               +        (2*x*y - 2*w*z) * a_in.v1()
               +        (2*x*z + 2*w*y) * a_in.v2();
-  
+
     T v1 =             (2*x*y + 2*w*z) * a_in.v0()
               +(w*w - x*x + y*y - z*z) * a_in.v1()
               +        (2*y*z - 2*w*x) * a_in.v2();
-  
+
     T v2 =             (2*x*z - 2*w*y) * a_in.v0()
               +        (2*y*z + 2*w*x) * a_in.v1()
               +(w*w - x*x - y*y + z*z) * a_in.v2();
-  
+
     a_out.set_value(v0,v1,v2);
   }
 
@@ -321,20 +321,20 @@ public:
     const T y = m_quat.v1();
     const T z = m_quat.v2();
     const T w = m_quat.v3();
-  
+
     // first row :
     T v0 =     (w*w + x*x - y*y - z*z) * a_v.v0()
               +        (2*x*y - 2*w*z) * a_v.v1()
               +        (2*x*z + 2*w*y) * a_v.v2();
-  
+
     T v1 =             (2*x*y + 2*w*z) * a_v.v0()
               +(w*w - x*x + y*y - z*z) * a_v.v1()
               +        (2*y*z - 2*w*x) * a_v.v2();
-  
+
     T v2 =             (2*x*z - 2*w*y) * a_v.v0()
               +        (2*y*z + 2*w*x) * a_v.v1()
               +(w*w - x*x - y*y + z*z) * a_v.v2();
-  
+
     a_v.set_value(v0,v1,v2);
   }
 
@@ -343,20 +343,20 @@ public:
     const T y = m_quat.v1();
     const T z = m_quat.v2();
     const T w = m_quat.v3();
-  
+
     // first row :
     T v0 =     (w*w + x*x - y*y - z*z) * a_x
               +        (2*x*y - 2*w*z) * a_y
               +        (2*x*z + 2*w*y) * a_z;
-  
+
     T v1 =             (2*x*y + 2*w*z) * a_x
               +(w*w - x*x + y*y - z*z) * a_y
               +        (2*y*z - 2*w*x) * a_z;
-  
+
     T v2 =             (2*x*z - 2*w*y) * a_x
               +        (2*y*z + 2*w*x) * a_y
               +(w*w - x*x - y*y + z*z) * a_z;
-  
+
     a_x = v0;
     a_y = v1;
     a_z = v2;

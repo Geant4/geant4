@@ -33,13 +33,8 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 #include <map>
 #include <fstream>
 #include "BrachyUserScoreWriter.hh"
-
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#ifdef ANALYSIS_USE  
+#include "G4SystemOfUnits.hh" 
 #include "BrachyAnalysisManager.hh"
-#endif
-
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
@@ -107,6 +102,26 @@ ofile << "# primitive scorer name: " << msMapItr -> first << G4endl;
 // Write quantity in the ASCII output file and in brachytherapy.root
 //
 ofile << std::setprecision(16); // for double value with 8 bytes
+ 
+auto analysisManager = G4AnalysisManager::Instance();
+
+G4bool fileOpen = analysisManager -> OpenFile("brachytherapy.root");
+ if (! fileOpen) {
+    G4cerr << "\n---> The ROOT output file has not been opened "
+           << analysisManager->GetFileName() << G4endl;
+  }
+  
+G4cout << "Using " << analysisManager -> GetType() << G4endl;
+analysisManager -> SetVerboseLevel(1);
+analysisManager -> SetActivation(true);
+
+// Create histograms
+G4int histo2= analysisManager-> CreateH2("h20","edep2Dxy", 801, -100.125, 100.125, 801, -100.125, 100.125);
+
+// Histo 0 with the energy spectrum will not be saved 
+// in brachytherapy.root
+analysisManager->SetH1Activation(0, false);
+analysisManager->SetH2Activation(histo2, true);
   
 for(int x = 0; x < fNMeshSegments[0]; x++) {
    for(int y = 0; y < fNMeshSegments[1]; y++) {
@@ -129,20 +144,20 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
          // Print in the ASCII output file the information
  
          ofile << xx << "  " << yy << "  " << zz <<"  " 
-               <<(value->second->sum_wx())/CLHEP::keV << G4endl;
-
-#ifdef ANALYSIS_USE          
-        // Save the same information in the output analysis file
-       BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
+               <<(value->second->sum_wx())/keV << G4endl;
+        
+        // Save the same information in the ROOT output file
    
-       if(zz> -0.125 *CLHEP::mm && zz < 0.125*CLHEP::mm)
-         analysis -> FillH2WithEnergyDeposition(xx,yy,
-                       (value->second->sum_wx())/CLHEP::keV);
-#endif
+    if(zz> -0.125 *CLHEP::mm && zz < 0.125/mm) 
+         analysisManager->FillH2(histo2, xx, yy, (value->second->sum_wx())/keV);
 }}}} 
 
 ofile << std::setprecision(6);
 
 // Close the output ASCII file
 ofile.close();
+
+// Close the output ROOT file
+analysisManager -> Write();
+analysisManager -> CloseFile();
 }

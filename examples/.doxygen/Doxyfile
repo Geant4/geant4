@@ -152,7 +152,7 @@ FULL_PATH_NAMES        = YES
 # will be relative from the directory where doxygen is started.
 # This tag requires that the tag FULL_PATH_NAMES is set to YES.
 
-STRIP_FROM_PATH        = /Users/ivana/work/packages/geant4/geant4_ref/examples/
+STRIP_FROM_PATH        = /Users/ivana/work/packages/geant4/geant4-dev/examples/
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
@@ -837,6 +837,7 @@ INPUT                  = Doxymain.h \
                          ../extended/exoticphysics/monopole/.README.txt \
                          ../extended/exoticphysics/phonon \
                          ../extended/exoticphysics/ucn \
+                         ../extended/exoticphysics/saxs \
                          ../extended/field \
                          ../extended/g3tog4 \
                          ../extended/geometry/.README.txt \
@@ -850,6 +851,7 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr06/.README.txt \
                          ../extended/hadronic/Hadr07/.README.txt \
                          ../extended/hadronic/Hadr08/.README.txt \
+                         ../extended/hadronic/Hadr09/.README.txt \
                          ../extended/hadronic/FissionFragment \
                          ../extended/hadronic/NeutronSource/.README.txt \
                          ../extended/medical/.README.txt \
@@ -866,6 +868,7 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/chem3/.README.txt \
                          ../extended/medical/dna/chem4/.README.txt \
                          ../extended/medical/dna/chem5/.README.txt \
+                         ../extended/medical/dna/chem6/.README.txt \
                          ../extended/medical/dna/clustering/.README.txt \
                          ../extended/medical/dna/dnadamage1/.README.txt \
                          ../extended/medical/dna/dnaphysics/.README.txt \

@@ -15,7 +15,13 @@ commit in the repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-May 28, 2019 B.Morgan (geommng-V10-06-04)
+November 8, 2020 E.Tcherniaev (geommng-V10-06-06)
+- Bug fix in calculation of normal in G4UAdapter::DistanceToOut()
+
+October 28, 2020 Ben Morgan (geommng-V10-06-05)
+- Remove include of obsolete CMake module
+
+May 28, 2020 B.Morgan (geommng-V10-06-04)
 - When using new CMake build, add location of generated G4GeomConfig.hh
   header to public include directories of G4geometrymng module.
 

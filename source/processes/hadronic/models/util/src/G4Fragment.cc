@@ -93,7 +93,7 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
 G4Fragment::~G4Fragment()
 {}
 
-G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
+G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4bool warning) :
   theA(A),
   theZ(Z),
   theExcitationEnergy(0.0),
@@ -113,7 +113,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
 {
   if(theA > 0) { 
     CalculateGroundStateMass();
-    CalculateExcitationEnergy(); 
+    CalculateExcitationEnergy(warning); 
   }
 }
 

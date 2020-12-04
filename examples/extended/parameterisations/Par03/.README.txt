@@ -1,0 +1,134 @@
+///\file "parameterisations/Par03/.README.txt"
+///\brief Example Par03 README page
+
+/*! \page ExamplePar03 Example Par03
+
+ This example demonstrates how to use G4FastSimHitMaker helper class
+ to create multiple energy deposits from the fast simulation model.
+
+ It requires sensitive detector class to inherit from both base classes:
+ - G4VSensitiveDetector: for processing of detailed/non-fast simulation hits
+ - G4VFastSimSensitiveDetector: for processing of fast sim (G4FastSim) hits
+ Hits are placed in the same hit collection, so they can be used to
+ compare between the full and the fast simulation.
+
+ The geometry used in the example is a homogeneous cylinder of lead, with
+ 3D readout geometry (cylindrical). Analysis of energy deposits is done
+ in the event action.
+
+\section Par03_s1 Detector description
+
+ The detector is a homogeneous cylinder of lead. It is segmented along
+ z, R and phi to create a readout geometry in the cylindrical coordinates.
+
+ Fast simulation is attached to the region of the detector.
+
+
+\section Par03_s2 Sensitive detector
+
+ Sensitive detector inherits from both base classes:
+ - G4VSensitiveDetector: for processing of detailed/non-fast simulation hits
+ - G4VFastSimSensitiveDetector: for processing of fast sim (G4FastSim) hits.
+ Hits are placed in the same hit collection, with a different flag to distinguish
+ between those originated in the full simulation, and those from the fast
+ simulation.
+ During visualisation, hits are represented as volumes of different colour:
+ green for full simulation and red for fast simulation.
+
+\section Par03_s3 Primary generation
+
+ Particle gun is used as a primary generator. The direction of particles is along
+ the axis of symmetry of the detector (cylinder). It is positioned 10 cm in front
+ of the entrance to the detector. 10 GeV electron is used by default. Those values
+ can be changed using /gun/ UI commands.
+
+\section Par03_s4 Physics List
+
+ FTFP_BERT modular physics list is used. On top of it, fast simulation physics
+ is registered for selected particles (electrons, positrons, and photons).
+
+
+\section Par03_s5 User actions
+
+ - Par03RunAction : run action used for initialization and termination
+                    of the run. Histograms for analysis of shower development
+                    in the detector are created.
+
+ - Par03EventAction : event action used for initialization and termination
+                      of the event. Analysis of shower development is performed
+                      on event-by-event basis.
+
+\section Par03_s6 Output
+
+ The execution of the program (examplePar03) produces an output with histograms.
+
+ The macro file examplePar03.in specifies three runs. Each run is made of 100
+ events, for single 10 GeV electron beams. The first run is executed with fast
+ simulation model activated with defualt parameters. The second run executes fast
+ simulation with modified parameters. For the third run the fast simulation model
+ is disactivated.
+ Three output files are produced: two with shower development from the fast
+ simulation (with different parameters), and from the full simulation.
+
+\section Par03_s7 How to build and run the example
+
+- Compile and link to generate the executable (in your CMAKE build directory):
+\verbatim
+% cmake <PAR03_SOURCE>
+% make
+\endverbatim
+
+- Execute the application (in batch mode):
+\verbatim
+% ./examplePar03 -m examplePar03.in
+\endverbatim
+  which produces three root files: Par03_fastsim_100events.root,
+  Par03_fastsimModified_100events.root, and Par03_fullsim_100events.root.
+
+- Execute the application (in interactive mode):
+\verbatim
+% ./examplePar03
+\endverbatim
+  which allows to visualize hits.
+
+\section Par03_s8 UI commands
+
+UI commands useful in this example:
+
+- activation/disactivation of the fast simulation model:
+\verbatim
+/param/ActivateModel model
+/param/InActivateModel model
+\endverbatim
+
+- particle gun commands
+\verbatim
+/gun/particle e+
+/gun/energy 50 GeV
+/gun/direction 0 0.2 1
+/gun/position 0 0 0
+\endverbatim
+
+UI commands defined in this example:
+- detector settings
+\verbatim
+/Par03/detector/print
+/Par03/detector/setDetectorRadius 10 cm
+/Par03/detector/setDetectorLength 30 cm
+/Par03/detector/setDetectorMaterial G4_Pb
+/Par03/detector/setNbOfLayers 100
+/Par03/detector/setNbOfPhiCells 20
+/Par03/detector/setNbOfRhoCells 100
+\endverbatim
+
+- fast simulation settings
+\verbatim
+/Par03/fastSim/print
+/Par03/fastSim/transverseProfile/sigma 20 mm
+/Par03/fastSim/longitudinalProfile/beta 0.6
+/Par03/fastSim/longitudinalProfile/alpha 2.
+/Par03/fastSim/longitudinalProfile/maxDepth 20
+/Par03/fastSim/numberOfHits 500
+\endverbatim
+
+*/

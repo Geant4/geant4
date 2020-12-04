@@ -16,19 +16,58 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 17th Gunter Folger, included in run-V10-06-07
-- Fixes for windows.
-  - G4MTRunManager:
-     - inline static functions split into declaration and definition:
-          GetMasterThreadId(), GetMasterScoringManager(), GetMasterWorlds(),
-	  addWorld(), SetSeedOncePerCommunication(), SetSeedOncePerCommunication()
-     - add  GetMasterTheadId()
-  - G4RunManager:
-     - impot/export static fGeometryHasBeenDestroyed using G4RUN_DLL, add
-        include for rundef.hh
-      	  
-    
-June 4th, 2020  J.Madsen (run-V10-06-07)
+November 21, 2020 Gabriele Cosmo (run-V10-06-19)
+- Fixed compilation warnings in G4RunManager.
+
+November 18, 2020 Jonathan Madsen (run-V10-06-18)
+- Added G4Profiler support.
+- Removed TIMEMORY_AUTO_TIMER.
+
+November 17, 2020 G.Cosmo (run-V10-06-17)
+- Protect activation of G4BackTrace within G4BT_DEBUG flag in
+  G4RunManagerKernel.
+
+November 16, 2020 G.Cosmo (run-V10-06-16)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+October 20th, 2020 Jonathan Madsen (run-V10-06-15)
+- Run-managers are friends of G4RunManagerFactory.
+
+October 20th, 2020  Jonathan Madsen (run-V10-06-14)
+- Added activation of G4Backtrace to G4RunManagerKernel.
+
+October 9th, 2020  Makoto Asai (run-V10-06-13)
+- Added protection for Windows on G4RunManager::GetRunManager()->rndmSaveThisEvent().
+
+October 5th, 2020  Makoto Asai (run-V10-06-12)
+- Fix the issue of G4RunManager::GetRunManager()->rndmSaveThisEvent() not working
+  in multithreaded mode. Addresses to Bug Report #2278.
+
+September 29th, 2020 Anna Zaborowska (run-V10-06-11)
+- Bug fix for bug #2276: /random/setSeeds parses arguments to int instead of long
+
+September 27th Vladimir Ivanchenko (run-V10-06-10)
+- G4VModularPhysicsList - fixed typos in printouts
+
+September 21st Jonathan Madsen (run-V10-06-09)
+- Added checks for currentRun before calling routines with currentRun
+- G4MTRunManager:
+    - added banner similar to G4TaskRunManager at CreateAndStartWorkers
+    - moved master scoring-manager, master worlds, fMasterRM from private to protected
+
+June 30th Gabriele Cosmo (run-V10-06-08)
+- Added dummy virtual methods Get/SetNumberOfThreads() in G4RunManager to
+  allow dispatching to inheriting MT/Tasking classes.
+
+June 17th Gunter Folger (run-V10-06-07)
+- Fixes for Windows DLLs. In G4MTRunManager: split inline static functions into
+  declaration and definition: GetMasterThreadId(), GetMasterScoringManager(),
+  GetMasterWorlds(), addWorld(), SetSeedOncePerCommunication(),
+  SetSeedOncePerCommunication(); added  GetMasterTheadId().
+  In G4RunManager: import/export static 'fGeometryHasBeenDestroyed' using
+  G4RUN_DLL, and include for rundefs.hh
+
+June 4th, 2020  J.Madsen
 - Minor class access changes in G4MTRunManager to enable inheritance
   for G4TaskRunManager
   June 17th Gunter Folger,   included in the above tag
@@ -53,7 +92,7 @@ April 9th, 2020  M.Asai (run-V10-06-02)
   option for the new "probe" scoring mesh.
 
 February 18th, 2020  V.Ivanchenko (run-V10-06-01)
-- G4RunManager - does not call G4ParticleTable for Messenger 
+- G4RunManager - does not call G4ParticleTable for Messenger
     deletion
 
 December 9th, 2019  B. Morgan (run-V10-06-00)

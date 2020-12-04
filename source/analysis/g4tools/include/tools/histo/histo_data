@@ -130,15 +130,15 @@ public:
     if(m_axes!=a_from.m_axes) return false;
     if(!vectors_are_equal(m_in_range_plane_Sxyw,a_from.m_in_range_plane_Sxyw,a_prec,a_fabs)) return false;
     if(m_annotations!=a_from.m_annotations) return false;
-    
+
     if(m_all_entries!=a_from.m_all_entries) return false;
     if(m_in_range_entries!=a_from.m_in_range_entries) return false;
-    
+
     if(!numbers_are_equal(m_in_range_Sw,a_from.m_in_range_Sw,a_prec,a_fabs)) return false;
     if(!numbers_are_equal(m_in_range_Sw2,a_from.m_in_range_Sw2,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_in_range_Sxw,a_from.m_in_range_Sxw,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_in_range_Sx2w,a_from.m_in_range_Sx2w,a_prec,a_fabs)) return false;
-    
+
     return true;
   }
   bool equals_TH(const histo_data& a_from,const TW& a_prec,TW(*a_fabs)(TW),bool a_cmp_bin_Sw2) const {
@@ -155,10 +155,10 @@ public:
     if(m_axes!=a_from.m_axes) return false;
     if(!vectors_are_equal(m_in_range_plane_Sxyw,a_from.m_in_range_plane_Sxyw,a_prec,a_fabs)) return false;
   //if(m_annotations!=a_from.m_annotations) return false;
-    
+
     if(m_all_entries!=a_from.m_all_entries) return false;
   //if(m_in_range_entries!=a_from.m_in_range_entries) return false;
-    
+
     if(!numbers_are_equal(m_in_range_Sw,a_from.m_in_range_Sw,a_prec,a_fabs)) return false;
     if(!numbers_are_equal(m_in_range_Sw2,a_from.m_in_range_Sw2,a_prec,a_fabs)) return false;
   //if(!vectors_are_equal(m_in_range_Sxw,a_from.m_in_range_Sxw,a_prec,a_fabs)) return false;

@@ -42,13 +42,13 @@ public:
       std::string s(a_argv[index]);
       std::string::size_type pos = s.find('=');
       if(pos==std::string::npos) {
-        m_args.push_back(arg(s,"")); 
+        m_args.push_back(arg(s,""));
       } else {
 	std::string key = s.substr(0,pos);
         pos++;
 	std::string value = s.substr(pos,s.size()-pos);
-        m_args.push_back(arg(key,value)); 
-      }     
+        m_args.push_back(arg(key,value));
+      }
     }
   }
   args(const std::vector<std::string>& a_args,bool a_strip = false){
@@ -67,7 +67,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
     std::vector<std::string> _args;
-    words(a_args,a_sep,false,_args);  
+    words(a_args,a_sep,false,_args);
     add(_args,a_strip);
   }
   virtual ~args(){
@@ -123,7 +123,7 @@ public:
       if((*it).first==a_key) a_vals.push_back((*it).second);
     }
   }
-  
+
   bool find(const std::string& a_string,bool& a_value,const bool& a_def = false) const {
     std::string s;
     if(!find(a_string,s)) {a_value = a_def;return false;}
@@ -135,7 +135,7 @@ public:
     if(!find(a_string,_s)) {a_value = a_def;return false;}
     return to<aT>(_s,a_value,a_def);
   }
-  
+
 #ifdef TOOLS_DEPRECATED
   std::vector<std::string> tovector() const {
     // Return a vector of string <name=value>
@@ -215,7 +215,7 @@ public:
           strip(left,both,' ');
           strip(right,both,' ');
         }
-        m_args.push_back(arg(left,right)); 
+        m_args.push_back(arg(left,right));
       }
     }
   }
@@ -258,7 +258,8 @@ public:
     return int(nbeg) - int(m_args.size());
   }
 
-  void remove_first(){m_args.erase(m_args.begin());}
+  void remove_first(){if(m_args.size()) m_args.erase(m_args.begin());}
+  void remove_last(){if(m_args.size()) m_args.erase(m_args.end()-1);}
 
   bool last(std::string& a_key,std::string& a_value) const {
     a_key.clear();
@@ -268,7 +269,7 @@ public:
     a_value = m_args.back().second;
     return true;
   }
-  
+
   bool prog_name(std::string& a_value) const {
     if(m_args.empty()) {a_value.clear();return false;}
     if(m_args[0].second.size()) {a_value.clear();return false;}
@@ -280,8 +281,8 @@ public:
     std::string slast;
     std::string s;
     if((m_args.size()>1) //first arg is the program name !
-       && last(slast,s) 
-       && (slast.find('-')!=0) 
+       && last(slast,s)
+       && (slast.find('-')!=0)
        && (s.empty()) ) {
       a_file = slast; //Last argument is not an option.
       return true;
@@ -295,8 +296,8 @@ public:
     std::string slast;
     std::string s;
     if((m_args.size()>1) //first arg is the program name !
-       && last(slast,s) 
-       && (slast.find('-')!=0) 
+       && last(slast,s)
+       && (slast.find('-')!=0)
        && (s.empty()) ) {
       a_file = slast; //Last argument is not an option.
       if(a_remove) m_args.erase(m_args.end()-1);
@@ -306,13 +307,13 @@ public:
       return false;
     }
   }
-    
+
   void not_hyphens(std::vector<std::string>& a_not_hyphens,bool a_skip_first = false) const {
     a_not_hyphens.clear();
     // Get the serie of trailing args not beginning with '-'
-    // and without a value (not of the form [-]xxx=yyy). 
+    // and without a value (not of the form [-]xxx=yyy).
     // Note that an argument like that in between arguments
-    // is NOT taken into account. 
+    // is NOT taken into account.
     if(m_args.empty()) return;
     std::vector<arg>::const_iterator it = m_args.begin();
     if(a_skip_first) it++;
@@ -328,7 +329,7 @@ public:
   void files(std::vector<std::string>& a_files,bool a_skip_first = true) const {  //true and not false as in the upper.
     return not_hyphens(a_files,a_skip_first);
   }
-  
+
   bool first_not_hyphen(std::string& a_first,bool a_skip_first = false) const {
     std::vector<std::string> _ss;
     not_hyphens(_ss,a_skip_first);
@@ -343,7 +344,7 @@ public:
     // If using with :
     //   int argc;
     //   char** argv;
-    //   args.argcv(argc,argv);  
+    //   args.argcv(argc,argv);
     // you can delete with :
     //   args::delete_argcv(argc,argv);
     if(m_args.empty()) {a_argc = 0;a_argv = 0;return true;}
@@ -385,7 +386,7 @@ public:
         tools_vforcit(std::string,a_knowns,it2) {
           if((*it).first==(*it2)) {
             found = true;
-            break;        
+            break;
           }
         }
         if(!found) return false; //one option not in a_knowns.
@@ -456,8 +457,8 @@ protected:
 
 inline bool check_args(const std::vector<std::string>& a_args,unsigned int a_number,std::ostream& a_out){
   if(a_args.size()==a_number) return true;
-  a_out << "bad argument number." 
-        << " Given " << (unsigned int)a_args.size() 
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)a_args.size()
         << " whilst " << a_number << " expected."
         << std::endl;
   return false;
@@ -478,8 +479,8 @@ inline bool check_min(const std::vector<std::string>& a_args,unsigned int a_numb
     }
     return true;
   }
-  a_out << "bad argument number." 
-        << " Given " << (unsigned int)a_args.size() 
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)a_args.size()
         << " whilst at least " << a_number << " expected."
         << std::endl;
   return false;
@@ -487,8 +488,8 @@ inline bool check_min(const std::vector<std::string>& a_args,unsigned int a_numb
 
 inline bool check_min_args(const std::vector<std::string>& aArgs,unsigned int a_number,std::ostream& a_out){
   if(aArgs.size()>=a_number) return true;
-  a_out << "bad argument number." 
-        << " Given " << (unsigned int)aArgs.size() 
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)aArgs.size()
         << " whilst at least " << a_number << " expected."
         << std::endl;
   return false;
@@ -496,8 +497,8 @@ inline bool check_min_args(const std::vector<std::string>& aArgs,unsigned int a_
 
 inline bool check_or_args(const std::vector<std::string>& aArgs,unsigned int a_1,unsigned int a_2,std::ostream& a_out){
   if((aArgs.size()==a_1)||(aArgs.size()==a_2)) return true;
-  a_out << "bad argument number." 
-        << " Given " << (unsigned int)aArgs.size() 
+  a_out << "bad argument number."
+        << " Given " << (unsigned int)aArgs.size()
         << " whilst " << a_1 << " or " << a_2 << " expected."
         << std::endl;
   return false;

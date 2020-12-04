@@ -13,6 +13,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 29, 2020 M. Asai (exampleRE04-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 May 10, 2018 J. Allison  (exampleRE04-V10-04-01)
 - Remove G4UI_USE and G4VIS_USE.
 - Move instantiation of G4UIExecutive to start of main.

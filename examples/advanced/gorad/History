@@ -1,0 +1,41 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 16th, 2020  Makoto Asai (gorad-V10-06-06)
+- GRGeomBiasMessenger.cc : Fix compilation warning.
+
+November 13th, 2020  Makoto Asai (gorad-V10-06-05)
+- Migration to G4RunManagerFactory.
+
+November 2nd, 2020  Ben Morgan (gorad-V10-06-04)
+- Support same CMake version range as core Geant4
+
+October 29th, 2020  Makoto Asai (gorad-V10-06-03)
+- Adding protection to disordered UI commands.
+
+October 26th, 2020  Makoto Asai (gorad-V10-06-02)
+- Updating and fixing some typos in printouts.
+
+September 23rd, 2020  Makoto Asai  (gorad-V10-06-01)
+- Update README.
+- Code cleanup.
+
+September 8th, 2020  Makoto Asai  (gorad-V10-06-00)
+- First introduction of Gorad.
+
+

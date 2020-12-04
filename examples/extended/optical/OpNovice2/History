@@ -13,6 +13,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 30, 2020 D.Sawkey (OpNovice2-V10-06-07)
+- migration to G4RunManagerFactory, and don't set number of threads in main
+- print histogram statistics at end of run
+- remove G4Timer
+- update macro verbosity, ignore threads except 0
+- apply clang-format style
+
+October 5, 2020 D.Sawkey (OpNovice2-V10-06-06)
+- new macro boundary.mac, exercising all 4 boundary models. Remove
+  glisur.mac and unified.mac.
+- rename OpNovice2.in to OpNovice2.mac
+
+August 4, 2020 D.Sawkey (OpNovice2-V10-06-05)
+- Add material properties using new interface with std::vectors
+
+July 10, 2020 D.Sawkey (OpNovice2-V10-06-04)
+- calculate reflection/transmission probabilities vs. angle
+    (new macro fresnel.mac)
+- histos: add axis labels, id's; refer to them by id in some places
+
 May 29, 2020 D.Sawkey (OpNovice2-V10-06-03)
 - add code to generate statistics for wavelength shifting
 - add wls.mac to test WLS and new process WLS2

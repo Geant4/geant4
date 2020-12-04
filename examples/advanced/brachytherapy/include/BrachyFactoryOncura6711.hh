@@ -56,6 +56,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionOncura6711* Oncura6711IodineSource;
+  BrachyDetectorConstructionOncura6711* fOncura6711IodineSource;
 };
 #endif

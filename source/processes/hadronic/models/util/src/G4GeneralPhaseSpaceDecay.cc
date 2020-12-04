@@ -496,7 +496,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
     }
   } while ( weight > G4UniformRand());  /* Loop checking, 02.11.2015, A.Ribon */
   if (GetVerboseLevel()>1) {
-      G4cout << "Start calulation of daughters momentum vector "<<G4endl;
+      G4cout << "Start calculation of daughters momentum vector "<<G4endl;
   }
   
   G4double costheta, sintheta, phi;

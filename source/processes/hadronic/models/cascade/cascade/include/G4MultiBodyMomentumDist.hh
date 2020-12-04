@@ -27,7 +27,7 @@
 // Date:    7 March 2013
 //
 // Description: Singleton class to evaluate multi-body momentum distribution
-//		functions based on intial state codes and multiplicity.
+//		functions based on initial state codes and multiplicity.
 //
 // NOTE:  Separate multiplicity-3 generators are not used, per V.Uzhinsky
 //

@@ -252,7 +252,6 @@ private:
   G4double theInitialNumberOfInteractionLength;   
 
   G4double aScaleFactor;
-  G4bool   xBiasOn;
   G4double theLastCrossSection;
 };
  

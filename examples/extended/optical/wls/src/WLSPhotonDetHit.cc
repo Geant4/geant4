@@ -30,7 +30,7 @@
 //
 #include "WLSPhotonDetHit.hh"
 
-G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator=0;
+G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,8 +43,7 @@ WLSPhotonDetHit::WLSPhotonDetHit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit,
-                                 G4ThreeVector pArrive,
+WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit, G4ThreeVector pArrive,
                                  G4double pTime)
 {
   fPosExit     = pExit;
@@ -54,11 +53,11 @@ WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::~WLSPhotonDetHit() { }
+WLSPhotonDetHit::~WLSPhotonDetHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
+WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit& right)
   : G4VHit()
 {
   *this = right;
@@ -66,7 +65,7 @@ WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
+const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit& right)
 {
   fPosExit     = right.fPosExit;
   fPosArrive   = right.fPosArrive;
@@ -79,7 +78,6 @@ const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
 
 G4bool WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
 {
-  return fPosExit     == right.fPosExit    &&
-         fPosArrive   == right.fPosArrive  &&
-         fArrivalTime == right.fArrivalTime;  
+  return fPosExit == right.fPosExit && fPosArrive == right.fPosArrive &&
+         fArrivalTime == right.fArrivalTime;
 }

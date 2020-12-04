@@ -125,8 +125,6 @@ geant4_define_module(NAME G4geometrymng
 
 # List any source specific properties here
 # For new system, must explicitly add path for generated header 
-if(GEANT4_USE_NEW_CMAKE)
-  geant4_module_include_directories(G4geometrymng
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    )
-endif()
+geant4_module_include_directories(G4geometrymng
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+  )

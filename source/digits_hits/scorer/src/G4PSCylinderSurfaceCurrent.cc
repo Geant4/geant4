@@ -36,6 +36,8 @@
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4VScoreHistFiller.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Current.
@@ -49,13 +51,15 @@
 //
 // Created: 2007-03-21  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. surface current * track weight (y)             (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
+  :G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -66,7 +70,7 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
 						       G4int direction, 
 						       const G4String& unit,
 						       G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
+  :G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
    weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -100,6 +104,20 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*
 
       G4int index = GetIndex(aStep);
       EvtMap->add(index,current);
+
+      if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+      {
+        auto filler = G4VScoreHistFiller::Instance();
+        if(!filler)
+        {
+           G4Exception("G4PSCylinderSurfaceCurrent::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+        }
+        else
+        {
+          filler->FillH1(hitIDMap[index],preStep->GetKineticEnergy(),current);
+        }
+      }
     }
 
   }

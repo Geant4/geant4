@@ -338,16 +338,16 @@ void G4PenelopeBremsstrahlungFS::BuildScaledXSTable(const G4Material* material,
 	(G4PhysicsFreeVector*) ((*thePhysicsTable)[ix]);
       for (size_t ie=0;ie<nBinsE;ie++)
 	{
-	  G4double logene = std::log(theEGrid[ie]);
+	  G4double logene = G4Log(theEGrid[ie]);
 	  G4double aValue = (*tempMatrix)[ie*nBinsX+ix];
 	  if (aValue < 1e-20*millibarn) //protection against log(0)
 	    aValue = 1e-20*millibarn;
-	  theVec->PutValue(ie+1,logene,std::log(aValue));
+	  theVec->PutValue(ie+1,logene,G4Log(aValue));
 	}
       //Add fake point at 1 eV using an extrapolation with the derivative
       //at the first valid point (Penelope approach)
       G4double derivative = ((*theVec)[2]-(*theVec)[1])/(theVec->Energy(2) - theVec->Energy(1));
-      G4double log1eV = std::log(1*eV);
+      G4double log1eV = G4Log(1*eV);
       G4double val1eV = (*theVec)[1]+derivative*(log1eV-theVec->Energy(1));
       //fake point at very low energy
       theVec->PutValue(0,log1eV,val1eV);
@@ -495,7 +495,7 @@ G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
 	  G4double b=dy/dx;
 	  G4double a=y1-b*x1;
 	  if (momOrder == -1)
-	    ds = a*std::log(xtc/x1)+b*(xtc-x1);
+	    ds = a*G4Log(xtc/x1)+b*(xtc-x1);
 	  else if (momOrder == 0) //speed it up, not using pow()
 	    ds = a*(xtc-x1) + 0.5*b*(xtc*xtc-x1*x1);
 	  else
@@ -578,7 +578,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 	  G4double y2=G4Exp((*v2)[ie+1]);
 	  G4double B = (y2-y1)/(x2-x1);
 	  G4double A = y1-B*x1;
-	  G4double dS = A*std::log(x2/x1)+B*(x2-x1);
+	  G4double dS = A*G4Log(x2/x1)+B*(x2-x1);
 	  value += dS;
 	  theVec->PutValue(ix,theXGrid[ix],value);
 	}

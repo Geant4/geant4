@@ -31,12 +31,11 @@
 // of two physical volumes.
 
 // Author: John Apostolakis (John.Apostolakis@cern.ch), 17-06-1997
-//
 // --------------------------------------------------------------------
-#ifndef G4LogicalBorderSurface_h
-#define G4LogicalBorderSurface_h 1
+#ifndef G4LogicalBorderSurface_hh
+#define G4LogicalBorderSurface_hh 1
 
-#include <vector>
+#include <map>
 
 #include "G4LogicalSurface.hh"
 #include "G4VPhysicalVolume.hh"
@@ -44,7 +43,9 @@
 class G4VPhysicalVolume;
 class G4LogicalBorderSurface;
 
-using G4LogicalBorderSurfaceTable = std::vector<G4LogicalBorderSurface*>;
+using G4LogicalBorderSurfaceTable
+      = std::map<std::pair<const G4VPhysicalVolume*,
+                           const G4VPhysicalVolume*>, G4LogicalBorderSurface*>;
 
 class G4LogicalBorderSurface : public G4LogicalSurface
 {
@@ -99,5 +100,5 @@ class G4LogicalBorderSurface : public G4LogicalSurface
 
 #include "G4LogicalBorderSurface.icc"
 
-#endif /* G4LogicalBorderSurface_h */
+#endif
 

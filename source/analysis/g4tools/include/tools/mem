@@ -69,15 +69,15 @@ public:
   static void balance(std::ostream& a_out){
     if(counter()) {
       a_out << "tools::mem::balance :"
-            << " bad global object balance : " << counter() 
+            << " bad global object balance : " << counter()
             << std::endl;
       if(check_by_class()) {
         a_out << "tools::mem::balance :"
-              << " check by class was enabled." 
+              << " check by class was enabled."
               << std::endl;
       } else {
         a_out << "tools::mem::balance :"
-              << " check by class was disabled." 
+              << " check by class was disabled."
               << std::endl;
       }
     }
@@ -85,21 +85,21 @@ public:
     for(it=list().begin();it!=list().end();++it) {
       if((*it).second) {
         a_out << "tools::mem::balance :"
-              << " for class " << (*it).first 
+              << " for class " << (*it).first
               << ", bad object balance : " << (*it).second
               << std::endl;
       }
     }
     list().clear();
   }
-  
+
 protected:
 public: //for MT disconnection (see test/mt_root_ntuple.cpp).
   static int& counter() {
     static int s_count = 0;
     return s_count;
   }
-  
+
   static bool& check_by_class() {
     static bool s_check_by_class = false;
     return s_check_by_class;

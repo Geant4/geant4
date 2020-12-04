@@ -65,7 +65,7 @@ public:
   ,m_color_mapping()
   ,m_enforced(false)
   ,m_translation(0,0,0)
-  ,m_front_face(winding_ccw)  
+  ,m_front_face(winding_ccw)
   ,m_hjust(left)
   ,m_vjust(bottom)
   ,m_coloring()
@@ -76,7 +76,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
   }
-  
+
   virtual ~style_parser(){
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
@@ -227,12 +227,12 @@ public:
     if(m_editable!=a_from.m_editable) return false;
     if(m_automated!=a_from.m_automated) return false;
     if(m_enforced!=a_from.m_enforced) return false;
-  
+
     //color
     if(m_color!=a_from.m_color) return false;
     if(m_highlight_color!=a_from.m_highlight_color) return false;
     if(m_back_color!=a_from.m_back_color) return false;
-  
+
     //std::string
     if(m_modeling!=a_from.m_modeling) return false;
     if(m_light_model!=a_from.m_light_model) return false;
@@ -242,7 +242,7 @@ public:
     if(m_font!=a_from.m_font) return false;
     if(m_options!=a_from.m_options) return false;
     if(m_color_mapping!=a_from.m_color_mapping) return false;
-  
+
     if(m_translation!=a_from.m_translation) return false;
 
     if(m_front_face!=a_from.m_front_face) return false;
@@ -253,7 +253,7 @@ public:
     if(m_coloring!=a_from.m_coloring) return false;
     if(m_title!=a_from.m_title) return false;
     if(m_pickable!=a_from.m_pickable) return false;
-    
+
     return true;
   }
 
@@ -293,7 +293,7 @@ public:
     m_strip_width = 0;
     m_visible = true;
     m_bar_offset = 0.25F;
-    m_bar_width = 0.5F;  
+    m_bar_width = 0.5F;
     m_editable = false;
     m_automated = true;
     m_options = "";
@@ -355,43 +355,43 @@ translation %g %g %g"
     ,m_bar_offset
     ,m_bar_width
     ,m_translation[0],m_translation[1],m_translation[2]);
-    
-    std::string lf("\n");
-    std::string s(ss);  
 
-    s += lf;  
+    std::string lf("\n");
+    std::string s(ss);
+
+    s += lf;
     s += "smoothing ";
     s += (m_smoothing?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "hinting ";
     s += (m_hinting?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "enforced ";
     s += (m_enforced?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "visible ";
     s += (m_visible?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "editable ";
     s += (m_editable?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "automated ";
     s += (m_automated?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "pickable ";
     s += (m_pickable?"true":"false");
 
-    s += lf;  
+    s += lf;
     s += "marker_style ";
     s += smarker_style(m_marker_style);
 
-    s += lf;  
+    s += lf;
     s += "area_style ";
     s += sarea_style(m_area_style);
 
@@ -465,11 +465,11 @@ translation %g %g %g"
     s += "front_face ";
     s += (m_front_face==winding_ccw?"ccw":"cw");
 
-    s += lf;  
+    s += lf;
     s += "hjust ";
     s += shjust(m_hjust);
 
-    s += lf;  
+    s += lf;
     s += "vjust ";
     s += svjust(m_vjust);
 
@@ -620,7 +620,7 @@ translation %g %g %g"
   void pickable(bool a_v){m_pickable  = a_v;}
   bool pickable() const {return m_pickable;}
 
-public:  
+public:
   bool parse(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s){
     // a_s = list of "name value" separated by \n
     //::printf("debug : style_parser::parse : \"%s\"\n",a_s.c_str());
@@ -949,7 +949,7 @@ public:
           }
           m_pattern = (lpat)ul;
         }
-	
+
       } else if(word0=="line_pattern") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         const std::string& word1 = ws[1];
@@ -1061,7 +1061,7 @@ public:
                 << " not a projection_type."
                 << std::endl;
           return false;
-        }   
+        }
       } else if(word0=="font") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         font(ws[1]);
@@ -1264,11 +1264,11 @@ public:
       } else if(word0=="coloring") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         m_coloring  = ws[1];
-	
+
       } else if(word0=="title") {
         if(!check_2(wordn,a_s,line,a_out)) return false;
         m_title  = ws[1];
-	
+
       } else {
         a_out << "style_parser::parse :"
               << " in " << sout(a_s)
@@ -1276,8 +1276,8 @@ public:
               << " bad option."
               << std::endl;
         return false;
-      }      
-    } 
+      }
+    }
     return true;
   }
 
@@ -1348,7 +1348,7 @@ protected:
     return true;
   }
 
-protected: 
+protected:
   colorf m_color;
   colorf m_highlight_color;
   colorf m_back_color;
@@ -1362,10 +1362,10 @@ protected:
   lpat m_line_pattern;
   sg::marker_style m_marker_style;
   sg::area_style m_area_style;
-  std::string m_modeling; 
-  std::string m_light_model; 
-  std::string m_tick_modeling; 
-  std::string m_encoding; 
+  std::string m_modeling;
+  std::string m_light_model;
+  std::string m_tick_modeling;
+  std::string m_encoding;
   bool m_smoothing;
   bool m_hinting;
   std::string m_cut;
@@ -1394,9 +1394,9 @@ protected:
   winding_type m_front_face;
   sg::hjust m_hjust;
   sg::vjust m_vjust;
-  std::string m_coloring; 
-  std::string m_title; 
-  bool m_pickable; 
+  std::string m_coloring;
+  std::string m_title;
+  bool m_pickable;
 };
 
 }}

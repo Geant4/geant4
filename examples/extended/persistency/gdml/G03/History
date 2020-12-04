@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13th, 2020 Ben Morgan G03-V10-06-01
+- Enforce use of Serial RunManager.
+
+November 10th, 2020 Ben Morgan G03-V10-06-00
+- Migration to G4RunManagerFactory.
+
 November 28th, 2019 I. Hrivnacova G03-V10-05-00
 - Fixed Doxygen warning in .README.txt
 

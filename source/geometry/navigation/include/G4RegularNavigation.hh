@@ -124,18 +124,16 @@ class G4RegularNavigation
     G4double kCarTolerance;  
     G4double fMinStep;
  
-    G4bool fLastStepWasZero;
+    G4bool fLastStepWasZero = false;
       // Whether the last ComputeStep moved Zero. Used to check for edges.
-    G4int fNumberZeroSteps;
+    G4int fNumberZeroSteps = 0;
       // Number of preceding moves that were Zero. Reset to 0 after finite step
-    G4int fActionThreshold_NoZeroSteps;  
+    G4int fActionThreshold_NoZeroSteps = 2;  
       // After this many failed/zero steps, act (push etc) 
-    G4int fAbandonThreshold_NoZeroSteps; 
+    G4int fAbandonThreshold_NoZeroSteps = 25; 
       // After this many failed/zero steps, abandon track
-    G4int fNoStepsAllowed;
+    G4int fNoStepsAllowed = 10000;
       // Maximum number of steps a track can travel skipping voxels (if there are more, track is assumed to be stuck and it is killed)
-    G4bool fWarnPush;
-      // Send warning message that a stuck particle has been pushed
 };
 
 #endif

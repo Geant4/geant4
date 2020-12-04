@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -47,8 +47,8 @@
 #include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-int main(int argc,char** argv) 
+
+int main(int argc,char** argv)
 {
 
   //detect interactive mode (if no arguments) and define UI session
@@ -57,9 +57,9 @@ int main(int argc,char** argv)
 
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-      
-  //construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+
+  //construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   //set mandatory initialization classes
   DetectorConstruction* detector;

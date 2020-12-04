@@ -1,10 +1,11 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -89,10 +90,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -207,21 +210,21 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : Aluminum
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.90532 keV    e-  597.637 keV    e+  574.097 keV proton 100 keV
+ Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Acrylic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.77708 keV    e-  389.292 keV    e+  376.471 keV proton 100 keV
+ Energy thresholds :  gamma  2.78665 keV    e-  389.196 keV    e+  376.336 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Quartz
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.0396 keV    e-  609.767 keV    e+  589.685 keV proton 100 keV
+ Energy thresholds :  gamma  6.03542 keV    e-  610.53 keV    e+  590.357 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -230,7 +233,7 @@ Index : 3     used in the geometry : Yes
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   2 kByte
+    Total memory consumed for geometry optimisation:   1 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
@@ -242,16 +245,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      52.81          1k         1       13         26         0.00    LensMotherLV
-      47.19          1k         3        9         22         0.00    World
+      52.31          0k         1       13         26         0.00    LensMotherLV
+      47.69          0k         3        9         22         0.00    World
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1593046427
- float_seed_table[] = 0.147597 0.980425 0.900216 0.380846 0.303985 0.791623 0.132859 0.350516 0.641343 0.866017 0.885685 0.873382 0.665981 0.724537 0.776523 0.937184 0.512054 0.420086 0.399701 0.749612 0.0040521 0.148756 0.382486 0.991302 
+ Initial seed = 1606871379
+ float_seed_table[] = 0.939458 0.62324 0.465535 0.0973256 0.406636 0.289566 0.762446 0.616188 0.268306 0.178795 0.36999 0.847358 0.199686 0.353497 0.919378 0.171744 0.360638 0.609156 0.807621 0.281062 0.462247 0.400262 0.252149 0.502587 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -262,8 +265,11 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.570000s Real=3.741177s Sys=0.010000s
+  User=2.060000s Real=2.096824s Sys=0.000000s
 ### Run 0 (global) ended.
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -277,9 +283,9 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 9
+Total navigation history collections cleaned: 10
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
@@ -290,9 +296,9 @@ Pool ID '17G4DynamicParticle', size : 0.024 MB
 Pool ID '7G4Track', size : 0.0471 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.000961 MB
+Pool ID '15UltraOpticalHit', size : 0.00385 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.091 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.096 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

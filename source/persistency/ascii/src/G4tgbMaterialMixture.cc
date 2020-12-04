@@ -23,52 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbMaterialMixture implementation
 //
-//
-//
-// class G4tgbMaterialMixture
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbMaterialMixture.hh"
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialMixture::G4tgbMaterialMixture()
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialMixture::~G4tgbMaterialMixture()
 {
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 const G4String& G4tgbMaterialMixture::GetComponent(G4int i) const
 {
-   return theTgrMate->GetComponent( i );
+  return theTgrMate->GetComponent(i);
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4double G4tgbMaterialMixture::GetFraction(G4int i) const
 {
-   return theTgrMate->GetFraction( i );
-} 
+  return theTgrMate->GetFraction(i);
+}
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterialMixture&
 G4tgbMaterialMixture::operator=(const G4tgbMaterialMixture&)
 {
-   return *this;
+  return *this;
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 void G4tgbMaterialMixture::TransformToFractionsByWeight()
 {
 }

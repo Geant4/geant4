@@ -4,8 +4,8 @@
 /* header style */			
 #g4header {
   color: black;
-  background-color: #CCCC99;
-  border: 1px solid #999966;
+  background-color: #cfd6ed;
+  border: 1px solid #9ca3ba;
 /*  border: 10px solid white; */
   padding-top: .5em;
   padding-right: 1em;
@@ -16,14 +16,14 @@
 
 #g4header img {
   padding-left: 1em;	
-  background: #cccc99;
+  background: #cfd6ed;
 }
 
 #breadcrumb { 
   color: #003366; 
-  background-color: #9999FF;
+  background-color: #cfd6ed;
   border: 0;
-  border-right: 1em solid white;
+/*  border-right: 1em solid white; */
   font-weight: bold;
   text-align: left;
   font-size: 90%;

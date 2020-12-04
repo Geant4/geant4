@@ -41,7 +41,7 @@ public:
 #endif
   }
 protected:
-  bufobj(const bufobj& a_from): iobject(a_from),buffer(a_from){  
+  bufobj(const bufobj& a_from): iobject(a_from),buffer(a_from){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif

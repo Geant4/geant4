@@ -110,6 +110,7 @@ private:
   G4UIcmdWithADoubleAndUnit* lowhEnCmd;
   G4UIcmdWithADouble*        lllCmd;
   G4UIcmdWithADoubleAndUnit* brCmd;
+  G4UIcmdWithADoubleAndUnit* br1Cmd;
   G4UIcmdWithADouble*        labCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
@@ -134,6 +135,7 @@ private:
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithAString*        msc1Cmd;
   G4UIcmdWithAString*        nffCmd;
+  G4UIcmdWithAString*        ssCmd;
 
   G4UIcommand*               dumpCmd;
 

@@ -23,77 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrPlaceParameterisation implementation
 //
-//
-//
-// class G4tgrPlaceParameterisation
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrPlaceParameterisation.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrVolume.hh"
 #include "G4tgrMessenger.hh"
 
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrPlaceParameterisation::G4tgrPlaceParameterisation()
 {
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrPlaceParameterisation::~G4tgrPlaceParameterisation()
 {
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrPlaceParameterisation::
-G4tgrPlaceParameterisation( const std::vector<G4String>& wl )
+G4tgrPlaceParameterisation(const std::vector<G4String>& wl)
 {
   theType = "PlaceParam";
 
-  //---------- Check for exact number of words read 
-  G4tgrUtils::CheckWLsize( wl, 7, WLSIZE_GE,
-                           "G4tgrPlaceParameterisation::ConstructVolume" );
-  
+  //---------- Check for exact number of words read
+  G4tgrUtils::CheckWLsize(wl, 7, WLSIZE_GE,
+                          "G4tgrPlaceParameterisation::ConstructVolume");
+
   //---------- the copy No
-  theCopyNo = G4tgrUtils::GetInt( wl[2] )-1;
+  theCopyNo = G4tgrUtils::GetInt(wl[2]) - 1;
 
   //---------- set the parent name
-  theParentName = G4tgrUtils::GetString( wl[3] ); 
+  theParentName = G4tgrUtils::GetString(wl[3]);
 
   //---------- set the type
-  theParamType = G4tgrUtils::GetString( wl[4] );
+  theParamType = G4tgrUtils::GetString(wl[4]);
 
   //---------- set the rotation matrix name
   theRotMatName = G4tgrUtils::GetString(wl[5]);
- 
-  //---------- set the extra data 
-  for( size_t ii = 6; ii < wl.size(); ii++)
+
+  //---------- set the extra data
+  for(size_t ii = 6; ii < wl.size(); ii++)
   {
-    theExtraData.push_back( G4tgrUtils::GetDouble(wl[ii]) );
+    theExtraData.push_back(G4tgrUtils::GetDouble(wl[ii]));
   }
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
-     G4cout << " Created " << *this << G4endl;
+    G4cout << " Created " << *this << G4endl;
   }
 #endif
 }
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os,
                          const G4tgrPlaceParameterisation& obj)
 {
   os << "G4tgrPlaceParameterisation= in " << obj.theParentName
      << " ParamTyep = " << obj.theParamType
      << " RotMatName= " << obj.theRotMatName << " EXTRA DATA= ";
-  for( size_t ii = 0; ii < obj.theExtraData.size(); ii++ )
+  for(size_t ii = 0; ii < obj.theExtraData.size(); ii++)
   {
     os << obj.theExtraData[ii] << " ";
   }
@@ -101,4 +94,3 @@ std::ostream& operator<<(std::ostream& os,
 
   return os;
 }
-

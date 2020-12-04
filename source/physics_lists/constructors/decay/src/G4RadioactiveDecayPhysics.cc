@@ -50,7 +50,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
 :  G4VPhysicsConstructor("G4RadioactiveDecay")
 {
-  G4EmParameters::Instance()->AddPhysics("World","G4RadioactiveDecay");
+  // hadronic physics extra configuration
   G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
   deex->SetStoreICLevelData(true);
   deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
@@ -78,12 +78,16 @@ void G4RadioactiveDecayPhysics::ConstructParticle()
 
 void G4RadioactiveDecayPhysics::ConstructProcess()
 {
+  // EM physics extra configuration
+  // this physics constructor should be defined after EM constructor
+  G4EmParameters::Instance()->SetAugerCascade(true);
+  G4EmParameters::Instance()->SetDeexcitationIgnoreCut(true);
+
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4VAtomDeexcitation* ad = man->AtomDeexcitation();
 
   // EM physics constructors are not used
-  if(!ad) {
-    G4EmParameters::Instance()->SetAugerCascade(true);
+  if( ad == nullptr ) {
     ad = new G4UAtomicDeexcitation();
     man->SetAtomDeexcitation(ad);
     man->ResetParameters();

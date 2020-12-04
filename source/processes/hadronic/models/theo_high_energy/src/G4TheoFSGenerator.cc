@@ -35,11 +35,15 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4IonTable.hh"
+#include "G4HadronicParameters.hh"
+#include "G4CRCoalescence.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
     , theTransport(nullptr), theHighEnergyGenerator(nullptr)
     , theQuasielastic(nullptr)
+    , theCosmicCoalescence(nullptr)
 {
   theParticleChange = new G4HadFinalState;
 }
@@ -69,7 +73,27 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   theParticleChange->Clear();
   theParticleChange->SetStatusChange(stopAndKill);
   G4double timePrimary=thePrimary.GetGlobalTime();
-  
+
+  // Temporarily dummy treatment of heavy (charm and bottom) hadron projectiles at low energies.
+  // Cascade models are currently not applicable for heavy hadrons and string models cannot
+  // handle them properly at low energies - let's say safely below ~100 MeV.
+  // In these cases, we return as final state the initial state unchanged.
+  // For most applications, this is a safe simplification, giving that the nearly all
+  // slowly moving charm and bottom hadrons decay before any hadronic interaction can occur.
+  // Note that we prefer not to use G4HadronicParameters::GetMinEnergyTransitionFTF_Cascade()
+  // (typicall ~3 GeV) because FTFP works reasonably well below such a value.
+  const G4double energyThresholdForCharmAndBottomHadrons = 100.0*CLHEP::MeV;
+  if ( thePrimary.GetKineticEnergy() < energyThresholdForCharmAndBottomHadrons  &&
+       ( thePrimary.GetDefinition()->GetQuarkContent( 4 )     != 0  ||    // Has charm       constituent quark
+	 thePrimary.GetDefinition()->GetAntiQuarkContent( 4 ) != 0  ||    // Has anti-charm  constituent anti-quark
+	 thePrimary.GetDefinition()->GetQuarkContent( 5 )     != 0  ||    // Has bottom      constituent quark
+	 thePrimary.GetDefinition()->GetAntiQuarkContent( 5 ) != 0 ) ) {  // Has anti-bottom constituent anti-quark
+    theParticleChange->SetStatusChange( isAlive );
+    theParticleChange->SetEnergyChange( thePrimary.GetKineticEnergy() );
+    theParticleChange->SetMomentumChange( thePrimary.Get4Momentum().vect().unit() );
+    return theParticleChange;
+  }
+      
   // check if models have been registered, and use default, in case this is not true @@
   
   const G4DynamicParticle aPart(thePrimary.GetDefinition(),thePrimary.Get4Momentum().vect());
@@ -195,6 +219,22 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     } 
   }
 
+  // If enabled, apply the Cosmic Rays (CR) coalescence to the list of secondaries produced so far.
+  // This algorithm can form deuterons and antideuterons by coalescence of, respectively,
+  // proton-neutron and antiproton-antineutron pairs close in momentum space.
+  // This can be useful in particular for Cosmic Ray applications.
+  if ( G4HadronicParameters::Instance()->EnableCRCoalescence() ) {
+    if(nullptr == theCosmicCoalescence) {
+      theCosmicCoalescence = (G4CRCoalescence*)
+        G4HadronicInteractionRegistry::Instance()->FindModel("G4CRCoalescence");
+      if(nullptr == theCosmicCoalescence) { 
+	theCosmicCoalescence = new G4CRCoalescence();
+      }
+    }
+    theCosmicCoalescence->SetP0Coalescence( thePrimary, theHighEnergyGenerator->GetModelName() );
+    theCosmicCoalescence->GenerateDeuterons( theTransportResult );
+  }
+    
   // Fill particle change
   for(auto & ptr : *theTransportResult)
   {

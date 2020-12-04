@@ -55,7 +55,8 @@ class G4ErrorSymMatrix
    // matrix, 1 means the identity matrix.
 
    G4ErrorSymMatrix(const G4ErrorSymMatrix &m1);
-   // Copy constructor.
+   G4ErrorSymMatrix(G4ErrorSymMatrix &&) = default;
+   // Copy and move constructor.
 
    // Constructor from DiagMatrix
 
@@ -94,7 +95,9 @@ class G4ErrorSymMatrix
    // Add or subtract a G4ErrorSymMatrix.
 
    G4ErrorSymMatrix & operator=( const G4ErrorSymMatrix &m2);
-   // Assignment operators. Notice that there is no G4ErrorSymMatrix = Matrix.
+   G4ErrorSymMatrix & operator=(G4ErrorSymMatrix &&) = default;
+   // Assignment and move operators.
+   // Notice that there is no G4ErrorSymMatrix = Matrix.
 
    G4ErrorSymMatrix operator- () const;
    // unary minus, ie. flip the sign of each element.

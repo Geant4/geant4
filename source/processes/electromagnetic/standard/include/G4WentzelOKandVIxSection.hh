@@ -110,6 +110,11 @@ public:
 
   inline G4double GetCosThetaElec() const;
 
+  //  hide assignment operator
+  G4WentzelOKandVIxSection & operator=
+  (const G4WentzelOKandVIxSection &right) = delete;
+  G4WentzelOKandVIxSection(const  G4WentzelOKandVIxSection&) = delete;
+
 protected:
 
   void ComputeMaxElectronScattering(G4double cut);
@@ -184,11 +189,6 @@ protected:
   static G4Mutex WentzelOKandVIxSectionMutex;
 #endif
 
-private:
-  //  hide assignment operator
-  G4WentzelOKandVIxSection & operator=
-  (const G4WentzelOKandVIxSection &right) = delete;
-  G4WentzelOKandVIxSection(const  G4WentzelOKandVIxSection&) = delete;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

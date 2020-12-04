@@ -50,6 +50,6 @@ class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   void GeneratePrimaries(G4Event* anEvent);
 
  private:
-  G4GeneralParticleSource* gun;
+  G4GeneralParticleSource* fGun;
 };
 #endif

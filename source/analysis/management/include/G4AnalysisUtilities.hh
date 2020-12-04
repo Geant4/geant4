@@ -38,9 +38,7 @@
 
 enum class G4AnalysisOutput {
   kCsv,
-#ifdef TOOLS_USE_HDF5
   kHdf5,
-#endif
   kRoot,
   kXml,
   kNone
@@ -90,7 +88,67 @@ std::unique_ptr<T> make_unique(Args&&... args)
 
 // get output type from name
 G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn = true);
+size_t GetOutputId(const G4String& outputName, G4bool warn = true);
 G4String GetOutputName(G4AnalysisOutput outputType);
+
+// get short hnType from the tools object
+template <typename HT>
+G4String GetHnType()
+{
+  // tools::histo::h1d etc.
+  G4String hnTypeLong = HT::s_class();
+
+  // tools::histo::h1d -> h1 etc.
+  return hnTypeLong.substr(14, 2);
+}
+
+// File names utilities
+
+// Get file base name (without dot)
+G4String GetBaseName(const G4String& fileName);
+
+// Get file base extension (without dot)
+G4String GetExtension(const G4String& fileName,
+            const G4String& defaultExtension = "");
+
+// Compose and return the histogram or profile specific file name:
+// - add _hn_hnName suffix to the file base name
+// - add file extension if not present
+G4String GetHnFileName(
+            const G4String& fileName,
+            const G4String& fileType, 
+            const G4String& hnType, 
+            const G4String& hnName);
+
+// Compose and return the ntuple specific file name:
+// - add _nt_ntupleName suffix to the file base name
+// - add _tN suffix if called on thread worker
+// - add file extension if not present
+G4String GetNtupleFileName(
+            const G4String& fileName,
+            const G4String& fileType, 
+            const G4String& ntupleName);
+
+// Compose and return the ntuple specific file name:
+// - add _nt_ntupleName suffix to the file base name
+// - add _tN suffix if called on thread worker
+// - add file extension if not present
+G4String GetNtupleFileName(
+            const G4String& fileName,
+            const G4String& fileType, 
+            G4int ntupleFileNumber);
+
+// Update file base name with the thread suffix:
+// - add _tN suffix if called on thread worker
+// - add file extension if not present
+G4String GetTnFileName(
+            const G4String& fileName,
+            const G4String& fileType);
+
+// Generate plot file name for an output file name
+G4String GetPlotFileName(const G4String& fileName);
+
+}
 
 /*
 // make possible to print enumerators in class enum as integer
@@ -102,10 +160,5 @@ auto as_integer(Enumeration const value)
 }
 */
 
-}
-
 #endif
-
-
-
 

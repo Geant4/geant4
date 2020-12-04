@@ -37,6 +37,7 @@
 #include "G4VP2Manager.hh"
 #include "G4VNtupleManager.hh"
 #include "G4VFileManager.hh"
+#include "G4NtupleBookingManager.hh"
 
 #include <iostream>
 
@@ -44,6 +45,7 @@ using namespace G4Analysis;
 
 namespace {
 
+//_____________________________________________________________________________
 void NtupleMergingWarning(const G4String& functionName, 
                           const G4String& outputType)
 {
@@ -62,6 +64,8 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
  : fState(type, isMaster),
    fVFileManager(nullptr),
    fPlotManager(nullptr),
+   fNtupleBookingManager(nullptr),
+   fVNtupleManager(nullptr),
    fMessenger(G4Analysis::make_unique<G4AnalysisMessenger>(this)),
    fH1HnManager(nullptr),
    fH2HnManager(nullptr),
@@ -72,16 +76,15 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
    fVH2Manager(nullptr),
    fVH3Manager(nullptr),
    fVP1Manager(nullptr),
-   fVP2Manager(nullptr),
-   fVNtupleManager(nullptr)
+   fVP2Manager(nullptr)
 {
-  //fMessenger = G4Analysis::make_unique<G4AnalysisMessenger>(this);
+   fNtupleBookingManager = std::make_shared<G4NtupleBookingManager>(fState);
 }
 
 //_____________________________________________________________________________
 G4VAnalysisManager::~G4VAnalysisManager()
 {
-  delete fVNtupleManager;
+  // delete fVNtupleManager;
 }
 
 // 
@@ -94,7 +97,8 @@ void G4VAnalysisManager::SetH1Manager(G4VH1Manager* h1Manager)
   fVH1Manager.reset(h1Manager);
   fH1HnManager = h1Manager->GetHnManager();
   fMessenger->SetH1HnManager(*fH1HnManager);
-} 
+  if (fVFileManager != nullptr ) fH1HnManager->SetFileManager(fVFileManager);
+}
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetH2Manager(G4VH2Manager* h2Manager)
@@ -102,7 +106,8 @@ void G4VAnalysisManager::SetH2Manager(G4VH2Manager* h2Manager)
   fVH2Manager.reset(h2Manager);
   fH2HnManager = h2Manager->GetHnManager();
   fMessenger->SetH2HnManager(*fH2HnManager);
-}  
+  if (fVFileManager != nullptr ) fH2HnManager->SetFileManager(fVFileManager);
+}
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetH3Manager(G4VH3Manager* h3Manager)
@@ -110,7 +115,8 @@ void G4VAnalysisManager::SetH3Manager(G4VH3Manager* h3Manager)
   fVH3Manager.reset(h3Manager);
   fH3HnManager = h3Manager->GetHnManager();
   fMessenger->SetH3HnManager(*fH3HnManager);
-}  
+  if (fVFileManager != nullptr ) fH3HnManager->SetFileManager(fVFileManager);
+}
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetP1Manager(G4VP1Manager* p1Manager)
@@ -118,7 +124,8 @@ void G4VAnalysisManager::SetP1Manager(G4VP1Manager* p1Manager)
   fVP1Manager.reset(p1Manager);
   fP1HnManager = p1Manager->GetHnManager();
   fMessenger->SetP1HnManager(*fP1HnManager);
-} 
+  if (fVFileManager != nullptr ) fP1HnManager->SetFileManager(fVFileManager);
+}
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetP2Manager(G4VP2Manager* p2Manager)
@@ -126,19 +133,27 @@ void G4VAnalysisManager::SetP2Manager(G4VP2Manager* p2Manager)
   fVP2Manager.reset(p2Manager);
   fP2HnManager = p2Manager->GetHnManager();
   fMessenger->SetP2HnManager(*fP2HnManager);
-} 
+  if (fVFileManager != nullptr ) fP2HnManager->SetFileManager(fVFileManager);
+}
 
 //_____________________________________________________________________________
-void G4VAnalysisManager::SetNtupleManager(G4VNtupleManager* ntupleManager)
+void G4VAnalysisManager::SetNtupleManager(std::shared_ptr<G4VNtupleManager> ntupleManager)
 {
-  // fVNtupleManager.reset(ntupleManager);
   fVNtupleManager = ntupleManager;
-}  
+  fVNtupleManager->SetFirstId(fNtupleBookingManager->GetFirstId());
+  fVNtupleManager->SetFirstNtupleColumnId(fNtupleBookingManager->GetFirstNtupleColumnId());
+}
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetFileManager(std::shared_ptr<G4VFileManager> fileManager)
 {
   fVFileManager = fileManager;
+
+  if ( fH1HnManager != nullptr ) fH1HnManager->SetFileManager(fileManager);
+  if ( fH2HnManager != nullptr ) fH2HnManager->SetFileManager(fileManager);
+  if ( fH3HnManager != nullptr ) fH3HnManager->SetFileManager(fileManager);
+  if ( fP1HnManager != nullptr ) fP1HnManager->SetFileManager(fileManager);
+  if ( fP2HnManager != nullptr ) fP2HnManager->SetFileManager(fileManager);
 }  
 
 //_____________________________________________________________________________
@@ -218,7 +233,7 @@ G4bool G4VAnalysisManager::OpenFile(const G4String& fileName)
       return false;
     }           
     return OpenFileImpl(fVFileManager->GetFileName());
-  }  
+  }
 } 
 
 //_____________________________________________________________________________
@@ -753,7 +768,7 @@ G4int G4VAnalysisManager::CreateNtuple(const G4String& name,
 {
   if ( ! CheckName(name, "Ntuple") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtuple(name, title);
+  return fNtupleBookingManager->CreateNtuple(name, title);
 }                                         
 
 //_____________________________________________________________________________
@@ -761,7 +776,7 @@ G4int G4VAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
   if ( ! CheckName(name, "NtupleIColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleIColumn(name, 0);
+  return fNtupleBookingManager->CreateNtupleIColumn(name, 0);
 }  
 
 //_____________________________________________________________________________
@@ -769,7 +784,7 @@ G4int G4VAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
   if ( ! CheckName(name, "NtupleFColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleFColumn(name, 0);
+  return fNtupleBookingManager->CreateNtupleFColumn(name, 0);
 }  
 
 //_____________________________________________________________________________
@@ -777,7 +792,7 @@ G4int G4VAnalysisManager::CreateNtupleDColumn(const G4String& name)
 {
   if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleDColumn(name, 0);
+  return fNtupleBookingManager->CreateNtupleDColumn(name, 0);
 }  
 
 //_____________________________________________________________________________
@@ -785,7 +800,7 @@ G4int G4VAnalysisManager::CreateNtupleSColumn(const G4String& name)
 {
   if ( ! CheckName(name, "NtupleSColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleSColumn(name);
+  return fNtupleBookingManager->CreateNtupleSColumn(name);
 }  
 
 //_____________________________________________________________________________
@@ -794,7 +809,7 @@ G4int G4VAnalysisManager::CreateNtupleIColumn(const G4String& name,
 {
   if ( ! CheckName(name, "NtupleIColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleIColumn(name, &vector);
+  return fNtupleBookingManager->CreateNtupleIColumn(name, &vector);
 }  
 
 //_____________________________________________________________________________
@@ -803,7 +818,7 @@ G4int G4VAnalysisManager::CreateNtupleFColumn(const G4String& name,
 {
   if ( ! CheckName(name, "NtupleFColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleFColumn(name, &vector);
+  return fNtupleBookingManager->CreateNtupleFColumn(name, &vector);
 }  
 
 //_____________________________________________________________________________
@@ -812,13 +827,17 @@ G4int G4VAnalysisManager::CreateNtupleDColumn(const G4String& name,
 {
   if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleDColumn(name, &vector);
+  return fNtupleBookingManager->CreateNtupleDColumn(name, &vector);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::FinishNtuple()
 { 
-  return fVNtupleManager->FinishNtuple();
+  auto ntupleBooking = fNtupleBookingManager->FinishNtuple();
+
+  if ( fVNtupleManager ) {
+    fVNtupleManager->CreateNtuple(ntupleBooking);
+  }
 }
 
 //_____________________________________________________________________________
@@ -865,7 +884,7 @@ G4int G4VAnalysisManager::CreateNtupleIColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleIColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleIColumn(ntupleId, name, 0);
+  return fNtupleBookingManager->CreateNtupleIColumn(ntupleId, name, 0);
 }                                         
 
 //_____________________________________________________________________________
@@ -874,7 +893,7 @@ G4int G4VAnalysisManager::CreateNtupleFColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleFColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleFColumn(ntupleId, name, 0);
+  return fNtupleBookingManager->CreateNtupleFColumn(ntupleId, name, 0);
 }                                         
 
 
@@ -884,7 +903,7 @@ G4int G4VAnalysisManager::CreateNtupleDColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleDColumn(ntupleId, name, 0);
+  return fNtupleBookingManager->CreateNtupleDColumn(ntupleId, name, 0);
 }                                         
 
 //_____________________________________________________________________________
@@ -893,7 +912,7 @@ G4int G4VAnalysisManager::CreateNtupleSColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleSColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleSColumn(ntupleId, name);
+  return fNtupleBookingManager->CreateNtupleSColumn(ntupleId, name);
 }                                         
 
 //_____________________________________________________________________________
@@ -903,7 +922,7 @@ G4int G4VAnalysisManager::CreateNtupleIColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleIColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleIColumn(ntupleId, name, &vector);
+  return fNtupleBookingManager->CreateNtupleIColumn(ntupleId, name, &vector);
 }  
 
 //_____________________________________________________________________________
@@ -913,7 +932,7 @@ G4int G4VAnalysisManager::CreateNtupleFColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleFColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleFColumn(ntupleId, name, &vector);
+  return fNtupleBookingManager->CreateNtupleFColumn(ntupleId, name, &vector);
 }  
 
 //_____________________________________________________________________________
@@ -923,13 +942,17 @@ G4int G4VAnalysisManager::CreateNtupleDColumn(G4int ntupleId,
 {
   if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
 
-  return fVNtupleManager->CreateNtupleDColumn(ntupleId, name, &vector);
+  return fNtupleBookingManager->CreateNtupleDColumn(ntupleId, name, &vector);
 }  
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::FinishNtuple(G4int ntupleId)
 { 
-  return fVNtupleManager->FinishNtuple(ntupleId);
+  auto ntupleBooking = fNtupleBookingManager->FinishNtuple(ntupleId);
+
+  if ( fVNtupleManager ) {
+    fVNtupleManager->CreateNtuple(ntupleBooking);
+  }
 }
    
 //_____________________________________________________________________________
@@ -996,13 +1019,33 @@ G4bool G4VAnalysisManager::SetFirstP2Id(G4int firstId)
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstNtupleId(G4int firstId) 
 {
-  return fVNtupleManager->SetFirstId(firstId);
+  auto finalResult = true;
+
+  auto result = fNtupleBookingManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+
+  if ( fVNtupleManager ) {
+    result = fVNtupleManager->SetFirstId(firstId);
+    finalResult = finalResult && result;
+  }
+
+  return finalResult;
 }  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstNtupleColumnId(G4int firstId) 
 {
-  return fVNtupleManager->SetFirstNtupleColumnId(firstId);
+  auto finalResult = true;
+
+  auto result = fNtupleBookingManager->SetFirstNtupleColumnId(firstId);
+  finalResult = finalResult && result;
+
+  if ( fVNtupleManager ) {
+    result = fVNtupleManager->SetFirstNtupleColumnId(firstId);
+    finalResult = finalResult && result;
+  }
+
+  return finalResult;
 }
 
 // Fill methods in .icc
@@ -1098,7 +1141,7 @@ G4int G4VAnalysisManager::GetFirstNtupleId() const
 {
 // Return first Ntuple id
 
-  return fVNtupleManager->GetFirstId();
+  return fNtupleBookingManager->GetFirstId();
 }  
 
 //_____________________________________________________________________________
@@ -1106,7 +1149,7 @@ G4int G4VAnalysisManager::GetFirstNtupleColumnId() const
 {
 // Return first Ntuple column id
 
-  return fVNtupleManager->GetFirstNtupleColumnId();
+  return fNtupleBookingManager->GetFirstNtupleColumnId();
 }  
 
 //_____________________________________________________________________________
@@ -1176,6 +1219,12 @@ void  G4VAnalysisManager::SetH1Plotting(G4int id, G4bool plotting)
 }    
 
 //_____________________________________________________________________________
+void  G4VAnalysisManager::SetH1FileName(G4int id, const G4String& fileName)
+{
+  fH1HnManager->SetFileName(id, fileName);  
+}
+
+//_____________________________________________________________________________
 void  G4VAnalysisManager::SetH2Activation(G4int id, G4bool activation)
 {
 // Set activation to a given H2 object
@@ -1204,6 +1253,12 @@ void  G4VAnalysisManager::SetH2Plotting(G4int id, G4bool plotting)
 }    
 
 //_____________________________________________________________________________
+void  G4VAnalysisManager::SetH2FileName(G4int id, const G4String& fileName)
+{
+  fH2HnManager->SetFileName(id, fileName);  
+}
+
+//_____________________________________________________________________________
 void  G4VAnalysisManager::SetH3Activation(G4int id, G4bool activation)
 {
 // Set activation to a given H3 object
@@ -1229,6 +1284,12 @@ void  G4VAnalysisManager::SetH3Ascii(G4int id, G4bool ascii)
 void  G4VAnalysisManager::SetH3Plotting(G4int id, G4bool plotting)
 {
   fH3HnManager->SetPlotting(id, plotting);
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetH3FileName(G4int id, const G4String& fileName)
+{
+  fH3HnManager->SetFileName(id, fileName);  
 }
 
 //_____________________________________________________________________________
@@ -1260,6 +1321,12 @@ void  G4VAnalysisManager::SetP1Plotting(G4int id, G4bool plotting)
 }  
 
 //_____________________________________________________________________________
+void  G4VAnalysisManager::SetP1FileName(G4int id, const G4String& fileName)
+{
+  fP1HnManager->SetFileName(id, fileName);  
+}
+
+//_____________________________________________________________________________
 void  G4VAnalysisManager::SetP2Activation(G4int id, G4bool activation)
 {
 // Set activation to a given P2 object
@@ -1288,20 +1355,48 @@ void  G4VAnalysisManager::SetP2Plotting(G4int id, G4bool plotting)
 } 
 
 //_____________________________________________________________________________
+void  G4VAnalysisManager::SetP2FileName(G4int id, const G4String& fileName)
+{
+  fP2HnManager->SetFileName(id, fileName);  
+}
+
+//_____________________________________________________________________________
 void  G4VAnalysisManager::SetNtupleActivation(G4int id, G4bool activation)
 {
-// Set activation to a given P2 object
+// Set activation to a given ntuple object
 
-  fVNtupleManager->SetActivation(id, activation);
-}    
+  fNtupleBookingManager->SetActivation(id, activation);
+  if ( fVNtupleManager ) {
+    fVNtupleManager->SetActivation(id, activation);
+  }
+}
 
 //_____________________________________________________________________________
 void  G4VAnalysisManager::SetNtupleActivation(G4bool activation)
 {
+// Set activation to all ntuple objects
+
+  fNtupleBookingManager->SetActivation(activation);
+  if ( fVNtupleManager ) {
+    fVNtupleManager->SetActivation(activation);
+  }
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetNtupleFileName(G4int id, const G4String& fileName)
+{
+// Set activation to a given P2 object
+
+  fNtupleBookingManager->SetFileName(id, fileName);
+}
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetNtupleFileName(const G4String& fileName)
+{
 // Set activation to all P2 objects
 
-  fVNtupleManager->SetActivation(activation);
-}    
+  fNtupleBookingManager->SetFileName(fileName);
+}
 
 // Access methods in .icc
 

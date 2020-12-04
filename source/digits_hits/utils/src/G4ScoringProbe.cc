@@ -117,6 +117,7 @@ void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys)
 
 G4bool G4ScoringProbe::SetMaterial(G4String val)
 {
+  G4AutoLock l(&logvolmutex);
   if(val == "none")
   {
     layeredMaterialName = val;

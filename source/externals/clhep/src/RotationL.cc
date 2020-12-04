@@ -8,10 +8,6 @@
 // pulling in of LorentzTransformation related code units.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/LorentzRotation.h"
 

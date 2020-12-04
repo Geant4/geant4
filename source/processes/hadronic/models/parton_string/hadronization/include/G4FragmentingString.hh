@@ -105,7 +105,7 @@ class G4FragmentingString
   private:
       G4ParticleDefinition *LeftParton, *RightParton; 
       G4ThreeVector Ptleft,Ptright;    // Pt (px,py) for partons (pz ignored!)
-      G4double Pplus, Pminus;        // p-, p+ of string, Plus ass. to Left!
+      G4double Pplus, Pminus;          // p-, p+ of string, Plus associated to Left!
   
       G4ParticleDefinition * theStableParton, * theDecayParton;
       
@@ -181,37 +181,23 @@ G4LorentzRotation G4FragmentingString::TransformToCenterOfMass()
 }
 
 inline
-G4LorentzRotation G4FragmentingString::TransformToAlignedCms()
-{
-     G4LorentzVector momentum=Pstring;
-     G4LorentzRotation toAlignedCms(-1*momentum.boostVector());
-
-     momentum= toAlignedCms* Pleft;
-     toAlignedCms.rotateZ(-1*momentum.phi());
-     toAlignedCms.rotateY(-1*momentum.theta());
-
-     Pleft   *= toAlignedCms;
-     Pright  *= toAlignedCms;
-     Pstring *= toAlignedCms;
-
-     Ptleft  = G4ThreeVector(0.,0.,0.);
-     Ptright = G4ThreeVector(0.,0.,0.);
-     Pplus  = Pstring.plus();
-     Pminus = Pstring.minus();
-
-     return toAlignedCms;
-}
-
-inline
 void G4FragmentingString::SetPleft(G4LorentzVector a4momentum)
 {    
-     Pleft = a4momentum;
+     Pleft   = a4momentum;
+     Ptleft  = Pleft.vect(); Ptleft.setZ(0.);
+     Pstring = Pleft + Pright;
+     Pplus   = Pstring.plus();
+     Pminus  = Pstring.minus();
 }
 
 inline
 void G4FragmentingString::SetPright(G4LorentzVector a4momentum)
 {    
-     Pright = a4momentum;
+     Pright  = a4momentum;
+     Ptright = Pright.vect(); Ptright.setZ(0.);
+     Pstring = Pleft + Pright;
+     Pplus   = Pstring.plus();
+     Pminus  = Pstring.minus();
 }
 
 #endif

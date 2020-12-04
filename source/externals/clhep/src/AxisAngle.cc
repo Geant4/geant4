@@ -12,6 +12,10 @@
 // ----------------------------------------------------------------------
 
 #include "CLHEP/Vector/AxisAngle.h"
+#include "CLHEP/Vector/ThreeVector.h"
+
+#include <cmath>
+#include <ostream>
 
 namespace CLHEP  {
 

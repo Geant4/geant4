@@ -36,13 +36,7 @@
 //   *******************************************************
 
 #include "G4Types.hh"
-
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -61,12 +55,9 @@ int main(int argc,char** argv) {
 
   G4Random::setTheEngine(new CLHEP::RanluxEngine);
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
 
   // UserInitialization classes - mandatory
   runManager->SetUserInitialization(new UltraDetectorConstruction);

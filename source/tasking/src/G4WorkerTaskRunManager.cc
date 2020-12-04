@@ -39,6 +39,7 @@
 #include "G4UserRunAction.hh"
 #include "G4UserWorkerInitialization.hh"
 #include "G4UserWorkerThreadInitialization.hh"
+#include "G4VScoreNtupleWriter.hh"
 #include "G4VScoringMesh.hh"
 #include "G4VUserActionInitialization.hh"
 #include "G4VUserDetectorConstruction.hh"
@@ -79,7 +80,6 @@ G4WorkerTaskRunManager::GetWorkerRunManagerKernel()
 
 G4WorkerTaskRunManager::G4WorkerTaskRunManager()
   : G4WorkerRunManager()
-  , fConfirmBeamOn(true)
 {}
 
 //============================================================================//
@@ -102,7 +102,6 @@ void G4WorkerTaskRunManager::RunInitialization()
   if(!(kernel->RunInitialization(fakeRun)))
     return;
 
-  TIMEMORY_AUTO_TIMER("");
   // Signal this thread can start event loop.
   // Note this will return only when all threads reach this point
   G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
@@ -131,12 +130,21 @@ void G4WorkerTaskRunManager::RunInitialization()
     currentRun = new G4Run();
 
   currentRun->SetRunID(runIDCounter);
+  G4TaskRunManager* mrm      = G4TaskRunManager::GetMasterRunManager();
+  numberOfEventToBeProcessed = mrm->GetNumberOfEventsToBeProcessed();
   currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
     currentRun->SetHCtable(fSDM->GetHCtable());
+
+  if(G4VScoreNtupleWriter::Instance())
+  {
+    auto hce            = fSDM->PrepareNewEvent();
+    isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
+    delete hce;
+  }
 
   std::ostringstream oss;
   G4Random::saveFullState(oss);
@@ -155,6 +163,15 @@ void G4WorkerTaskRunManager::RunInitialization()
 
   if(userRunAction)
     userRunAction->BeginOfRunAction(currentRun);
+
+#if defined(GEANT4_USE_TIMEMORY)
+  workerRunProfiler.reset(new ProfilerConfig(currentRun));
+#endif
+
+  if(isScoreNtupleWriter)
+  {
+    G4VScoreNtupleWriter::Instance()->OpenFile();
+  }
 
   if(storeRandomNumberStatus)
   {
@@ -177,7 +194,6 @@ void G4WorkerTaskRunManager::RunInitialization()
 void G4WorkerTaskRunManager::DoEventLoop(G4int n_event, const char* macroFile,
                                          G4int n_select)
 {
-  TIMEMORY_AUTO_TIMER("");
   if(!userPrimaryGeneratorAction)
   {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -374,8 +390,11 @@ G4Event* G4WorkerTaskRunManager::GenerateEvent(G4int i_event)
 
 void G4WorkerTaskRunManager::RunTermination()
 {
-  if(!fakeRun)
+  if(!fakeRun && currentRun)
   {
+#if defined(GEANT4_USE_TIMEMORY)
+    workerRunProfiler.reset();
+#endif
     MergePartialResults();
 
     // Call a user hook: note this is before the next barrier
@@ -387,7 +406,10 @@ void G4WorkerTaskRunManager::RunTermination()
       uwi->WorkerRunEnd();
   }
 
-  G4RunManager::RunTermination();
+  if(currentRun)
+  {
+    G4RunManager::RunTermination();
+  }
   // Signal this thread has finished envent-loop.
   // Note this will return only whan all threads reach this point
   G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
@@ -440,26 +462,20 @@ void G4WorkerTaskRunManager::StoreRNGStatus(const G4String& fn)
 
 //============================================================================//
 
-void G4WorkerTaskRunManager::DoWork()
-{
-  G4cout << "Error! " << __FUNCTION__ << G4endl;
-  throw std::runtime_error(__FUNCTION__);
-}
-
-//============================================================================//
-
 void G4WorkerTaskRunManager::ProcessUI()
 {
   G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
+  if(!mrm)
+    return;
 
   //------------------------------------------------------------------------//
   // Check UI commands not already processed
-  bool matching =
-    (processedCommandStack.size() == mrm->GetCommandStack().size());
+  auto command_stack = mrm->GetCommandStack();
+  bool matching      = (command_stack.size() == processedCommandStack.size());
   if(matching)
   {
-    for(uintmax_t i = 0; i < mrm->GetCommandStack().size(); ++i)
-      if(processedCommandStack.at(i) != mrm->GetCommandStack().at(i))
+    for(uintmax_t i = 0; i < command_stack.size(); ++i)
+      if(processedCommandStack.at(i) != command_stack.at(i))
       {
         matching = false;
         break;
@@ -470,43 +486,44 @@ void G4WorkerTaskRunManager::ProcessUI()
   // Execute UI commands stored in the master UI manager
   if(!matching)
   {
-    for(auto itr : mrm->GetCommandStack())
+    for(const auto& itr : command_stack)
       G4UImanager::GetUIpointer()->ApplyCommand(itr);
-    processedCommandStack = mrm->GetCommandStack();
+    processedCommandStack = command_stack;
   }
 }
 
 //============================================================================//
 
-void G4WorkerTaskRunManager::InitializeForNewRun()
+void G4WorkerTaskRunManager::DoCleanup()
 {
-  // The following deals with changing materials between runs
-  workerContext->UpdateGeometryAndPhysicsVectorFromMaster();
+  CleanUpPreviousEvents();
+  if(currentRun)
+    delete currentRun;
+  currentRun = nullptr;
+}
 
-  // read the command stack
-  ProcessUI();
+//============================================================================//
 
-  G4bool init = (fConfirmBeamOn) ? ConfirmBeamOnCondition() : true;
-
-  if(init)
+void G4WorkerTaskRunManager::DoWork()
+{
+  G4TaskRunManager* mrm           = G4TaskRunManager::GetMasterRunManager();
+  G4bool newRun                   = false;
+  const G4Run* run                = mrm->GetCurrentRun();
+  G4ThreadLocalStatic G4int runId = -1;
+  if(run && run->GetRunID() != runId)
   {
-    ConstructScoringWorlds();
-    RunInitialization();
+    runId  = run->GetRunID();
+    newRun = true;
+    if(runId > 0)
+    {
+      ProcessUI();
+      assert(workerContext != nullptr);
+    }
+    workerContext->UpdateGeometryAndPhysicsVectorFromMaster();
   }
 
-  fConfirmBeamOn = false;
-}
-
-//============================================================================//
-
-void G4WorkerTaskRunManager::DoBeamOn(G4int nevts)
-{
-  G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
-
-  // execute any UI commands
-  // ProcessUI();
-
   // Start this run
+  G4int nevts        = mrm->GetNumberOfEventsToBeProcessed();
   G4int numSelect    = mrm->GetNumberOfSelectEvents();
   G4String macroFile = mrm->GetSelectMacro();
   bool empty_macro   = (macroFile == "" || macroFile == " ");
@@ -514,26 +531,15 @@ void G4WorkerTaskRunManager::DoBeamOn(G4int nevts)
   const char* macro = (empty_macro) ? nullptr : macroFile.c_str();
   numSelect         = (empty_macro) ? -1 : numSelect;
 
-  BeamOn(nevts, macro, numSelect);
-}
-
-//============================================================================//
-
-void G4WorkerTaskRunManager::DoWork(G4int nevts)
-{
-  G4TaskRunManager* mrm = G4TaskRunManager::GetMasterRunManager();
-
-  // execute any UI commands
-  // ProcessUI();
-
-  // Start this run
-  G4int numSelect    = mrm->GetNumberOfSelectEvents();
-  G4String macroFile = mrm->GetSelectMacro();
-  bool empty_macro   = (macroFile == "" || macroFile == " ");
-
-  const char* macro = (empty_macro) ? nullptr : macroFile.c_str();
-  numSelect         = (empty_macro) ? -1 : numSelect;
-
+  if(newRun)
+  {
+    G4bool cond = ConfirmBeamOnCondition();
+    if(cond)
+    {
+      ConstructScoringWorlds();
+      RunInitialization();
+    }
+  }
   DoEventLoop(nevts, macro, numSelect);
 }
 

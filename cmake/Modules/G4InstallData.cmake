@@ -75,21 +75,6 @@
 #          If it is not installed, warn user that it will need installing
 #          manually in destination.
 #
-#
-# Private API
-# -----------
-# function _geant4_dataproject(<name>
-#                              PREFIX installdir
-#                              SOURCE_DIR wheretounpack
-#                              URL whattodownload
-#                              URL_MD5 expectedMD5ofdownload
-#                              TIMEOUT timeoutafter(seconds))
-#          Download, unpack and install a dataset for CMake < 2.8.2
-#          This largely replicates the functionality of ExternalProject
-#          so that CMake 2.6.4 can still be supported (It is also needed
-#          for CMake 2.8.{0,1} where ExternalProject does not provide MD5
-#          validation.
-#
 
 #-----------------------------------------------------------------------
 # GEANT4 PHYSICS DATA - GLOBAL CMAKE VARIABLES
@@ -419,28 +404,17 @@ function(geant4_install_dataset _name _destination _timeout)
 
   # - Dispatch to ExternalProject or our own implementation.
   # Use of URL_MD5 *and* TIMEOUT require CMake 2.8.2 or higher.
-  if(${CMAKE_VERSION} VERSION_GREATER "2.8.1")
-    include(ExternalProject)
-    ExternalProject_Add(${_name}
-      PREFIX Externals/${_name}-${_ds_version}
-      SOURCE_DIR ${GEANT4_BUILD_FULL_DATADIR}/${_ds_dir}
-      URL ${_ds_url}
-      URL_MD5 ${_ds_md5sum}
-      TIMEOUT ${_timeout}
-      CONFIGURE_COMMAND ""
-      BUILD_COMMAND ""
-      INSTALL_COMMAND ""
-      )
-  else()
-    _geant4_dataproject(${_name}
-      PREFIX Externals/${_name}-${_ds_version}
-      SOURCE_DIR ${GEANT4_BUILD_FULL_DATADIR}
-      URL ${_ds_url}
-      URL_MD5 ${_ds_md5sum}
-      TIMEOUT ${_timeout}
-      )
-  endif()
-
+  include(ExternalProject)
+  ExternalProject_Add(${_name}
+    PREFIX Externals/${_name}-${_ds_version}
+    SOURCE_DIR ${GEANT4_BUILD_FULL_DATADIR}/${_ds_dir}
+    URL ${_ds_url}
+    URL_MD5 ${_ds_md5sum}
+    TIMEOUT ${_timeout}
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    )
   # - Configure the dataset's build and install locations
   geant4_set_dataset_property(${_name} BUILD_DIR "${PROJECT_BINARY_DIR}/data/${_ds_dir}")
   geant4_set_dataset_property(${_name} INSTALL_DIR "${_destination}/${_ds_dir}")
@@ -471,119 +445,6 @@ function(geant4_reuse_dataset _name _destination _ispresent)
   geant4_set_dataset_property(${_name} BUILD_DIR "${_destination}/${_ds_dir}")
   geant4_set_dataset_property(${_name} INSTALL_DIR "${_destination}/${_ds_dir}")
 endfunction()
-
-
-#-----------------------------------------------------------------------
-# GEANT4 PHYSICS DATA - PRIVATE CMAKE API FOR DATASET HANDLING
-#-----------------------------------------------------------------------
-# function _geant4_dataproject(<name>
-#                              PREFIX installdir
-#                              SOURCE_DIR wheretounpack
-#                              URL whattodownload
-#                              URL_MD5 expectedMD5ofdownload
-#                              TIMEOUT timeoutafter(seconds))
-#          Download, unpack and install a dataset for CMake < 2.8.2
-#          This largely replicates the functionality of ExternalProject
-#          so that CMake 2.6.4 can still be supported (It is also needed
-#          for CMake 2.8.{0,1} where ExternalProject does not provide MD5
-#          validation.
-#
-function(_geant4_dataproject _name)
-  # - Parse arguments and create any extra needed variables
-  set(oneValueArgs PREFIX SOURCE_DIR URL URL_MD5 TIMEOUT)
-  cmake_parse_arguments(_G4DATA "" "${oneValueArgs}" "" ${ARGN})
-  get_filename_component(_G4DATA_FILE ${_G4DATA_URL} NAME)
-
-  # - Write Download script
-  file(WRITE ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-Download.cmake "
-  message(STATUS \"downloading ${_G4DATA_URL}...\")
-  file(DOWNLOAD
-    ${_G4DATA_URL}
-    \"${_G4DATA_PREFIX}/${_G4DATA_FILE}\"
-    TIMEOUT ${_G4DATA_TIMEOUT}
-    STATUS _status)
-    # LOG _log) - LOG with TIMEOUT fails due to curl issue, prefer TIMEOUT
-  list(GET _status 0 _status_code)
-  list(GET _status 1 _status_msg)
-  if(NOT _status_code EQUAL 0)
-    message(FATAL_ERROR \"error: downloading ${_G4DATA_URL} failed
-      status_code : \${_status_code}
-      status_msg  : \${_status_msg}
-      #log : \${_log}\"
-      )
-  endif()
-  ")
-
-  # - Write Verify script
-  file(WRITE ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-Verify.cmake "
-  message(STATUS \"verifying ${_G4DATA_FILE} ...\")
-  execute_process(
-    COMMAND \"${CMAKE_COMMAND}\" -E md5sum \"${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_G4DATA_FILE}\"
-    OUTPUT_VARIABLE ov
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    RESULT_VARIABLE _result_code
-    )
-  if(NOT _result_code EQUAL 0)
-    message(FATAL_ERROR \"error: computing md5sum of ${_G4DATA_FILE} failed\")
-  endif()
-  string(REGEX MATCH \"^([0-9A-Fa-f]+)\" md5_actual \"\${ov}\")
-  string(TOLOWER \"\${md5_actual}\" md5_actual)
-  string(TOLOWER \"${_G4DATA_URL_MD5}\" md5)
-  if(NOT \"\${md5}\" STREQUAL \"\${md5_actual}\")
-    message(FATAL_ERROR \"error: md5sum of '${_G4DATA_FILE}' does not match expected value
-  md5_expected: \${md5}
-    md5_actual: \${md5_actual}
-\")
-  endif()
-  message(STATUS \"verifying ${_G4DATA_FILE} ... done\")
-  ")
-
-  # - Write Unpack script
-  if(${_G4DATA_FILE} MATCHES "(\\.|=)(tar\\.gz|zip)$")
-  else()
-    message(FATAL_ERROR "error: do not know how to extract '${_G4DATA_FILE}' -- file needs to be .tar.gz or zip")
-  endif()
-  file(WRITE ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-Unpack.cmake "
-  message(STATUS \"unpacking ${_G4DATA_FILE} ...\")
-  file(MAKE_DIRECTORY ${_G4DATA_SOURCE_DIR})
-  execute_process(COMMAND
-    \${CMAKE_COMMAND} -E tar xfz \"${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_G4DATA_FILE}\"
-    WORKING_DIRECTORY ${_G4DATA_SOURCE_DIR}
-    RESULT_VARIABLE rv)
-  if(NOT rv EQUAL 0)
-    message(STATUS \"extracting... [error clean up]\")
-    file(REMOVE_RECURSE \"${_G4DATA_SOURCE_DIR}\")
-    message(FATAL_ERROR \"error: extract of '${_G4DATA_FILE}' failed\")
-  endif()
-  message(STATUS \"unpacking ${_G4DATA_FILE} ... done\")
-  ")
-
-  # - Add custom commands for each step, each depending on the last
-  foreach(_step Download Verify Unpack)
-    if(_last_step)
-      set(_deps DEPENDS ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-${_last_step}.stamp)
-    endif()
-
-    add_custom_command(
-      OUTPUT ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-${_step}.stamp
-      COMMENT "${_step} ${_name}"
-      COMMAND "${CMAKE_COMMAND}" -P ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-${_step}.cmake
-      COMMAND "${CMAKE_COMMAND}" -E touch ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-${_step}.stamp
-      VERBATIM
-      ${_deps}
-      )
-
-    set(_last_step ${_step})
-  endforeach()
-
-  # - Add the main target which will run all the above steps
-  add_custom_target(${_name} ALL
-    COMMENT "Completed ${_name}"
-    DEPENDS ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-${_last_step}.stamp
-    VERBATIM
-    )
-endfunction()
-
 
 #-----------------------------------------------------------------------
 # GEANT4 PHYSICS DATA - USER INTERFACE AND PROCESSING

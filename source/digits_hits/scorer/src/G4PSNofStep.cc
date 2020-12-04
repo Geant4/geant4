@@ -28,6 +28,7 @@
 // G4PSNofStep
 #include "G4PSNofStep.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
 
 // (Description)
 //   This is a primitive scorer class for scoring number of steps in the
@@ -35,10 +36,12 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of step length
+//              in mm vs. number of steps (not weighted)        (Makoto Asai)
 //
 
 G4PSNofStep::G4PSNofStep(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),boundaryFlag(false)
+    :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0),boundaryFlag(false)
 {
     SetUnit("");
 }
@@ -54,6 +57,21 @@ G4bool G4PSNofStep::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4int  index = GetIndex(aStep);
   G4double val = 1.0;
   EvtMap->add(index,val);  
+
+  if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception("G4PSNofStep::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index],aStep->GetStepLength(),val);
+    }
+  }
+
   return TRUE;
 }
 

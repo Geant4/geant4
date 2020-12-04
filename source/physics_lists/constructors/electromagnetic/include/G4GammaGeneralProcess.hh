@@ -59,9 +59,7 @@ class G4ParticleDefinition;
 class G4VParticleChange;
 class G4GammaConversionToMuons;
 class G4HadronicProcess;
-class G4LossTableManager;
 class G4MaterialCutsCouple;
-class G4EmParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,7 +71,7 @@ public:
 
   virtual ~G4GammaGeneralProcess();
 
-  G4bool IsApplicable(const G4ParticleDefinition&) final;
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
   void AddEmProcess(G4VEmProcess*);
 
@@ -81,37 +79,37 @@ public:
 
   void AddHadProcess(G4HadronicProcess*);
 
-  void ProcessDescription(std::ostream& outFile) const final;
+  void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
 
-  void InitialiseProcess(const G4ParticleDefinition*) final;
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 public:
 
   // Initialise for build of tables
-  void PreparePhysicsTable(const G4ParticleDefinition&) final;
+  void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // Build physics table during initialisation
-  void BuildPhysicsTable(const G4ParticleDefinition&) final;
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   // Called before tracking of each new G4Track
-  void StartTracking(G4Track*) final;
+  void StartTracking(G4Track*) override;
   
   // implementation of virtual method, specific for G4GammaGeneralProcess
   G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition) final;
+                             G4ForceCondition* condition) override;
 
   // implementation of virtual method, specific for G4GammaGeneralProcess
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) final;
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
   
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
                            const G4String& directory,
-                           G4bool ascii = false) final;
+                           G4bool ascii = false) override;
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
@@ -120,40 +118,47 @@ public:
   // should be placed under the directory specifed by the argument.
   G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                               const G4String& directory,
-                              G4bool ascii) final;
+                              G4bool ascii) override;
 
   const G4String& GetProcessName() const;
 
   G4int GetProcessSubType() const;
 
-  G4VEmProcess* GetEmProcess(const G4String& name) final;
+  G4VEmProcess* GetEmProcess(const G4String& name) override;
+
+  // hide copy constructor and assignment operator
+  G4GammaGeneralProcess(G4GammaGeneralProcess &) = delete;
+  G4GammaGeneralProcess & operator=
+  (const G4GammaGeneralProcess &right) = delete;
 
 protected:
 
   G4double GetMeanFreePath(const G4Track& track, G4double previousStepSize,
-                           G4ForceCondition* condition) final;
+                           G4ForceCondition* condition) override;
+
+  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt);
+
+  inline G4double GetProbability(size_t idxt);
+
+  inline void SelectedProcess(const G4Step& track, const G4VProcess* ptr);
+
+  inline G4VParticleChange* SampleEmSecondaries(const G4Track&, const G4Step&,
+                                                G4VEmProcess*);
+
+  G4VParticleChange* SampleHadSecondaries(const G4Track&, const G4Step&,
+                                          G4HadronicProcess*);
 
 private:
 
   // It returns the cross section per volume for energy/ material
   G4double TotalCrossSectionPerVolume();
 
-  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt);
+protected:
 
-  inline G4double GetProbability(size_t idxt);
+  G4HadronicProcess*           theGammaNuclear;
+  const G4VProcess*            selectedProc;
 
-  inline void SelectedProcess(const G4Track& track, G4VProcess* ptr);
-
-  inline G4VParticleChange* SampleSecondaries(const G4Track&, const G4Step&,
-					      G4VEmProcess*);
-
-  G4VParticleChange* SampleSecondaries(const G4Track&, const G4Step&,
-				       G4HadronicProcess*);
-
-  // hide copy constructor and assignment operator
-  G4GammaGeneralProcess(G4GammaGeneralProcess &);
-  G4GammaGeneralProcess & operator=(const G4GammaGeneralProcess &right);
-
+private:
   static G4EmDataHandler*      theHandler;
   static const size_t          nTables = 15;
   static G4bool                theT[nTables];
@@ -163,9 +168,7 @@ private:
   G4VEmProcess*                theCompton;
   G4VEmProcess*                theConversionEE;
   G4VEmProcess*                theRayleigh;
-  G4HadronicProcess*           theGammaNuclear;
   G4GammaConversionToMuons*    theConversionMM;
-  G4VProcess*                  selectedProc;
 
   G4double                     minPEEnergy;
   G4double                     minEEEnergy;
@@ -201,20 +204,19 @@ inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void 
-G4GammaGeneralProcess::SelectedProcess(const G4Track& track, G4VProcess* ptr)
+G4GammaGeneralProcess::SelectedProcess(const G4Step& step, const G4VProcess* ptr)
 {
   selectedProc = ptr;
-  const_cast<G4Track*>(&track)->SetCreatorProcess(ptr);
+  step.GetPostStepPoint()->SetProcessDefinedStep(ptr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* 
-G4GammaGeneralProcess::SampleSecondaries(const G4Track& track, const G4Step& step,
-	 			         G4VEmProcess* proc)
+inline G4VParticleChange* G4GammaGeneralProcess::SampleEmSecondaries(
+       const G4Track& track, const G4Step& step, G4VEmProcess* proc)
 {
   proc->CurrentSetup(currentCouple,preStepKinEnergy);
-  SelectedProcess(track, proc);
+  SelectedProcess(step, proc);
   return proc->PostStepDoIt(track, step);
 }
 

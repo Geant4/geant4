@@ -63,6 +63,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionI* iodiumSource;
+  BrachyDetectorConstructionI* fIodineSource;
 };
 #endif

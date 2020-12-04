@@ -14,13 +14,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10, 2020 B. Morgan - fieldex06-V10-06-00
+- Migration to G4RunManagerFactory.
+
 Nov   1, 2019 J.Apostolakis - fieldex06-V10-05-01
 - Adjusted for change in G4Transportation (need to inform of use of gravity)
-    and corrected creation of G4ChordFinder.  
+    and corrected creation of G4ChordFinder.
 
 July 27, 2018 I.Hrivnacova - fieldex06-V10-04-01
 - Macro review and code clean-up:
-  - Separated other than visualization settings from vis.mac in a 
+  - Separated other than visualization settings from vis.mac in a
     new init_vis.mac
   - Added "beamOn 10" button in gui.mac
   - Updated README files
@@ -39,7 +42,7 @@ July 18, 2016 I. Hrivnacova - fieldex06-V10-02-01
   by calling the new G4StepLimiterPhysics::SetApplyToAll() function
 
 July 01, 2016 I. Hrivnacova - fieldex06-V10-02-00
-- Replaced F06ExtraPhysics with use of G4StepLimiterPhysics, 
+- Replaced F06ExtraPhysics with use of G4StepLimiterPhysics,
   code clean-up
 
 June 26, 2015 P. Gumplinger - fieldex06-V10-01-01/02/03
@@ -85,7 +88,7 @@ May 06th, 2013 P. Gumplinger - fieldex06-V09-06-02
 
 April 1st, 2013 Andrea Dotti - fieldex06-V09-06-01
 ------------------------------------
-- Update to new G4VUserPhysicsList interface 
+- Update to new G4VUserPhysicsList interface
 
 December 2nd, 2012 John Allison - fieldex06-V09-06-00
 ------------------------------------

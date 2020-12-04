@@ -36,6 +36,8 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4RichTrajectory.hh"
 #include "G4ios.hh"
+#include "G4Profiler.hh"
+#include "G4TiMemory.hh"
 
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
@@ -85,52 +87,69 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   {
     fpUserTrackingAction->PreUserTrackingAction(fpTrack);
   }
-#ifdef G4_STORE_TRAJECTORY
-  // Construct a trajectory if it is requested
-  //
-  if(StoreTrajectory&&(fpTrajectory == nullptr))
-  { 
-    // default trajectory concrete class object
-    switch (StoreTrajectory)
-    {
-      default:
-      case 1: fpTrajectory = new G4Trajectory(fpTrack); break;
-      case 2: fpTrajectory = new G4SmoothTrajectory(fpTrack); break;
-      case 3: fpTrajectory = new G4RichTrajectory(fpTrack); break;
-      case 4: fpTrajectory = new G4RichTrajectory(fpTrack); break;
-    }
-  }
-#endif
 
-  // Give SteppingManger the maxmimum number of processes 
-  fpSteppingManager->GetProcessNumber();
-
-  // Give track the pointer to the Step
-  fpTrack->SetStep(fpSteppingManager->GetStep());
-
-  // Inform beginning of tracking to physics processes 
-  fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
-
-  // Track the particle Step-by-Step while it is alive
-  //
-  while( (fpTrack->GetTrackStatus() == fAlive) ||
-         (fpTrack->GetTrackStatus() == fStopButAlive) )
+  // we need this to scope the G4Track::ProfilerConfig b/t
+  // the PreUserTrackingAction and PostUserTrackingAction
   {
-    fpTrack->IncrementCurrentStepNumber();
-    fpSteppingManager->Stepping();
+#if defined(GEANT4_USE_TIMEMORY)
+    ProfilerConfig profiler{ fpTrack };
+#endif
+
 #ifdef G4_STORE_TRAJECTORY
-    if(StoreTrajectory)
+    // Construct a trajectory if it is requested
+    //
+    if(StoreTrajectory && (fpTrajectory == nullptr))
     {
-      fpTrajectory->AppendStep(fpSteppingManager->GetStep());
+      // default trajectory concrete class object
+      switch(StoreTrajectory)
+      {
+        default:
+        case 1:
+          fpTrajectory = new G4Trajectory(fpTrack);
+          break;
+        case 2:
+          fpTrajectory = new G4SmoothTrajectory(fpTrack);
+          break;
+        case 3:
+          fpTrajectory = new G4RichTrajectory(fpTrack);
+          break;
+        case 4:
+          fpTrajectory = new G4RichTrajectory(fpTrack);
+          break;
+      }
     }
 #endif
-    if(EventIsAborted)
+
+    // Give SteppingManger the maxmimum number of processes
+    fpSteppingManager->GetProcessNumber();
+
+    // Give track the pointer to the Step
+    fpTrack->SetStep(fpSteppingManager->GetStep());
+
+    // Inform beginning of tracking to physics processes
+    fpTrack->GetDefinition()->GetProcessManager()->StartTracking(fpTrack);
+
+    // Track the particle Step-by-Step while it is alive
+    //
+    while((fpTrack->GetTrackStatus() == fAlive) ||
+          (fpTrack->GetTrackStatus() == fStopButAlive))
     {
-      fpTrack->SetTrackStatus( fKillTrackAndSecondaries );
+      fpTrack->IncrementCurrentStepNumber();
+      fpSteppingManager->Stepping();
+#ifdef G4_STORE_TRAJECTORY
+      if(StoreTrajectory)
+      {
+        fpTrajectory->AppendStep(fpSteppingManager->GetStep());
+      }
+#endif
+      if(EventIsAborted)
+      {
+        fpTrack->SetTrackStatus(fKillTrackAndSecondaries);
+      }
     }
+    // Inform end of tracking to physics processes
+    fpTrack->GetDefinition()->GetProcessManager()->EndTracking();
   }
-  // Inform end of tracking to physics processes 
-  fpTrack->GetDefinition()->GetProcessManager()->EndTracking();
 
   // Post tracking user intervention process.
   if( fpUserTrackingAction != nullptr )

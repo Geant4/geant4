@@ -5,7 +5,7 @@
 //  Pure header version of gl2ps-1.4.0 done automatically from
 // the original source by using the bush/upgrade/tools_gl2ps script.
 //  The code had been "namespace protected" by changing :
-//    gl2ps_<xxx> to tools_gl2ps_<xxx> 
+//    gl2ps_<xxx> to tools_gl2ps_<xxx>
 // and :
 //    TOOLS_GL2PS_<xxx> to TOOLS_TOOLS_GL2PS_<xxx>
 //
@@ -5293,6 +5293,9 @@ static void tools_gl2psPrintSVGPrimitive(void *data)
       case TOOLS_GL2PS_LINE_CAP_SQUARE:
         sprintf (lcap, "%s", "square");
         break;
+      default: /*G.Barrand : to quiet Coverity :*/
+        sprintf (lcap, "%s", "butt");
+        break;
       }
       switch (prim->linejoin){
       case TOOLS_GL2PS_LINE_JOIN_MITER:
@@ -5303,6 +5306,9 @@ static void tools_gl2psPrintSVGPrimitive(void *data)
         break;
       case TOOLS_GL2PS_LINE_JOIN_BEVEL:
         sprintf (ljoin, "%s", "bevel");
+        break;
+      default: /*G.Barrand : to quiet Coverity :*/
+        sprintf (ljoin, "%s", "miter");
         break;
       }
       tools_gl2psPrintf("stroke-linecap=\"%s\" stroke-linejoin=\"%s\" ",

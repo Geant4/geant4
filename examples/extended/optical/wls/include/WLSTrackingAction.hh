@@ -36,15 +36,13 @@
 
 #include "G4UserTrackingAction.hh"
 
-class WLSTrackingAction : public G4UserTrackingAction {
+class WLSTrackingAction : public G4UserTrackingAction
+{
+ public:
+  WLSTrackingAction(){};
+  ~WLSTrackingAction(){};
 
-  public:
-
-    WLSTrackingAction() { };
-    virtual ~WLSTrackingAction() { };
-
-    virtual void PreUserTrackingAction(const G4Track*);
-
+  void PreUserTrackingAction(const G4Track*) override;
 };
 
 #endif

@@ -23,128 +23,138 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4HCIOcatalog.cc
+// G4HCIOcatalog implementation
 //
-// History:
-//   '01.09.12  Youhei Morita  Initial creation
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
 
 #include "G4HCIOcatalog.hh"
-
-// Addtional Include:
 #include "G4VHCIOentry.hh"
 
 G4ThreadLocal G4HCIOcatalog* G4HCIOcatalog::f_thePointer = 0;
 
-// Implementation of Constructor #1
+// --------------------------------------------------------------------
 G4HCIOcatalog::G4HCIOcatalog()
- : m_verbose(0)
-{}
+{
+}
 
-// Implementation of GetHCIOcatalog
+// --------------------------------------------------------------------
 G4HCIOcatalog* G4HCIOcatalog::GetHCIOcatalog()
 {
-  if ( f_thePointer == 0 ) f_thePointer = new G4HCIOcatalog;
+  if(f_thePointer == nullptr)
+    f_thePointer = new G4HCIOcatalog;
   return f_thePointer;
 }
 
-// Implementation of RegisterEntry
+// --------------------------------------------------------------------
 void G4HCIOcatalog::RegisterEntry(G4VHCIOentry* d)
 {
-  if ( m_verbose > 0 ) {
-    G4cout << "registering I/O manager entry \"" << d->GetName()
-           << "\" " << d << "." << G4endl;
+  if(m_verbose > 0)
+  {
+    G4cout << "registering I/O manager entry \"" << d->GetName() << "\" " << d
+           << "." << G4endl;
   }
-  if ( theCatalog.find(d->GetName()) != theCatalog.end() ) {
+  if(theCatalog.find(d->GetName()) != theCatalog.cend())
+  {
     G4cout << "Redefining I/O Managers list " << d->GetName() << G4endl;
-  } else {
+  }
+  else
+  {
     theCatalog[d->GetName()] = d;
   }
 }
 
-// Implementation of RegisterHCIOmanager
+// --------------------------------------------------------------------
 void G4HCIOcatalog::RegisterHCIOmanager(G4VPHitsCollectionIO* d)
 {
-  if ( m_verbose > 0 ) {
-    G4cout << "registering I/O manager \"" << d->SDname()
-           << "\" " << d << "." << G4endl;
+  if(m_verbose > 0)
+  {
+    G4cout << "registering I/O manager \"" << d->SDname() << "\" " << d << "."
+           << G4endl;
   }
-  if ( theStore.find(d->SDname()) != theStore.end() ) {
+  if(theStore.find(d->SDname()) != theStore.cend())
+  {
     G4cout << "Redefining I/O Manager " << d->SDname() << G4endl;
-  } else {
+  }
+  else
+  {
     theStore[d->SDname()] = d;
   }
 }
 
-// Implementation of GetEntry
-G4VHCIOentry* G4HCIOcatalog::GetEntry(std::string name)
+// --------------------------------------------------------------------
+G4VHCIOentry* G4HCIOcatalog::GetEntry(const G4String& name)
 {
-  if ( theCatalog.find(name) == theCatalog.end() ) {
-    G4cout << "Hit Collection I/O manager entry \"" << name
-           << "\" not found!" << std::endl;
-    return 0;
-  } else {
+  if(theCatalog.find(name) == theCatalog.end())
+  {
+    G4cout << "Hit Collection I/O manager entry \"" << name << "\" not found!"
+           << std::endl;
+    return nullptr;
+  }
+  else
+  {
     G4VHCIOentry* ds = theCatalog[name];
     return ds;
   }
 }
 
-// Implementation of GetHCIOmanager
-G4VPHitsCollectionIO* G4HCIOcatalog::GetHCIOmanager(std::string name)
+// --------------------------------------------------------------------
+G4VPHitsCollectionIO* G4HCIOcatalog::GetHCIOmanager(const G4String& name)
 {
-  if ( theStore.find(name) == theStore.end() ) {
-    G4cout << "Hit Collection I/O manager \"" << name
-           << "\" not found!" << G4endl;
-    return 0;
-  } else {
+  if(theStore.find(name) == theStore.cend())
+  {
+    G4cout << "Hit Collection I/O manager \"" << name << "\" not found!"
+           << G4endl;
+    return nullptr;
+  }
+  else
+  {
     G4VPHitsCollectionIO* ds = theStore[name];
     return ds;
   }
 }
 
-// Implementation of PrintEntries
+// --------------------------------------------------------------------
 void G4HCIOcatalog::PrintEntries()
 {
   G4cout << "I/O manager entries: ";
   G4cout << theCatalog.size() << G4endl;
-  HCIOmap::const_iterator it;
-  for ( it=theCatalog.begin(); it != theCatalog.end(); it++ ) {
+  for(auto it = theCatalog.cbegin(); it != theCatalog.cend(); ++it)
+  {
     G4cout << "  --- " << (*it).first << G4endl;
   }
 }
 
-// Implementation of CurrentHCIOmanager
-std::string G4HCIOcatalog::CurrentHCIOmanager()
+// --------------------------------------------------------------------
+G4String G4HCIOcatalog::CurrentHCIOmanager()
 {
-  std::string list = "";
-  HCIOstore::const_iterator it;
-  for ( it=theStore.begin(); it != theStore.end(); it++ ) {
+  G4String list = "";
+  for(auto it = theStore.cbegin(); it != theStore.cend(); ++it)
+  {
     list += (*it).first + " ";
   }
   return list;
 }
 
-// Implementation of PrintHCIOmanager
+// --------------------------------------------------------------------
 void G4HCIOcatalog::PrintHCIOmanager()
 {
   G4cout << "I/O managers: ";
   G4cout << theStore.size() << G4endl;
-  HCIOstore::const_iterator it;
-  for ( it=theStore.begin(); it != theStore.end(); it++ ) {
-    G4cout << "  --- " << (*it).first
-           << ", " << (*it).second << "." << G4endl;
+  for(auto it = theStore.cbegin(); it != theStore.cend(); ++it)
+  {
+    G4cout << "  --- " << (*it).first << ", " << (*it).second << "." << G4endl;
   }
 }
 
-// Implementation of GetHCIOmanager
-G4VPHitsCollectionIO* G4HCIOcatalog::GetHCIOmanager(int n)
+// --------------------------------------------------------------------
+G4VPHitsCollectionIO* G4HCIOcatalog::GetHCIOmanager(G4int n)
 {
-  int i = 0;
-  HCIOstore::const_iterator it;
-  for ( it=theStore.begin(); it != theStore.end(); it++ ) {
-    if (i++ == n) return (*it).second;
+  G4int i = 0;
+  for(auto it = theStore.cbegin(); it != theStore.cend(); ++it)
+  {
+    if(i++ == n)
+      return (*it).second;
   }
-  return 0;
+  return nullptr;
 }
-
-// End of G4HCIOcatalog.cc
-

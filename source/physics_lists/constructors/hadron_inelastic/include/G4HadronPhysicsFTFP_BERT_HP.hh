@@ -34,6 +34,7 @@
 //
 // Modified:
 // 18.07.2017: A.Dotti: refactoring code
+// 22.09.2020: V.Ivanchenko change design using G4HadProcess utility
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsFTFP_BERT_HP_h
@@ -46,15 +47,11 @@ class G4HadronPhysicsFTFP_BERT_HP : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsFTFP_BERT_HP(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsFTFP_BERT_HP() {}
+    ~G4HadronPhysicsFTFP_BERT_HP() override;
 
   protected:
     //Modify the minimum needed
-    virtual void Neutron() override;
-    virtual void DumpBanner() override;
-    virtual void ExtraConfiguration() override;
-
-    double minBERT_neutron;
+    void Neutron() override;
 };
 
 #endif

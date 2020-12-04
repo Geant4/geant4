@@ -83,6 +83,11 @@ public:
 				 const G4DynamicParticle*, 
 				 G4double, G4double) final;
 
+  //  hide assignment operator
+  G4ICRU49NuclearStoppingModel & operator=
+  (const  G4ICRU49NuclearStoppingModel &right) = delete;
+  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
+
 private:
 
   void InitialiseArray();
@@ -90,11 +95,6 @@ private:
   G4double NuclearStoppingPower(G4double kineticEnergy,
 				G4double Z1, G4double Z2,
 				G4double A1, G4double A2);
-
-  //  hide assignment operator
-  G4ICRU49NuclearStoppingModel & operator=
-  (const  G4ICRU49NuclearStoppingModel &right) = delete;
-  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
   G4Pow* g4calc;
   G4double theZieglerFactor;

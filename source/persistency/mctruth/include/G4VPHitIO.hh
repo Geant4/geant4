@@ -23,57 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPHitIO.hh
+// G4VPHitIO
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Class Description:
+//
+// Abstract base class for storing and retrieving hit collections.
 
-#ifndef V_P_HIT_I_O_HH
-#define V_P_HIT_I_O_HH 1
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
+#ifndef G4VPHITIO_HH
+#define G4VPHITIO_HH 1
 
 #include "G4HCofThisEvent.hh"
 #include "G4HCIOcatalog.hh"
 #include "G4VPHitsCollectionIO.hh"
 
-// Class Description:
-//   Abstract base class for storing and retrieving hit collections
-
 class G4VPHitIO
 {
-    public: // With description
-      G4VPHitIO();
+  public:
+
+    G4VPHitIO();
       // Constructor
 
-      virtual ~G4VPHitIO() {};
+    virtual ~G4VPHitIO() {}
       // Destructor
 
-    public: // With description
-      G4VPHitIO* GetVPHitIO() { return f_G4VPHitIO; };
-      // Returns the pointer of the hit collection I/O manager.
+    G4VPHitIO* GetVPHitIO() { return f_G4VPHitIO; }
+      // Returns the pointer of the hit collection I/O manager
 
-      virtual G4bool Store(const G4HCofThisEvent*) =0;
+    virtual G4bool Store(const G4HCofThisEvent*) = 0;
       // Pure virtual method for storing hit collections of this event.
       // Each persistency package should implement a concrete method
-      // of storing the hit collection of this event with this signature.
+      // of storing the hit collection of this event with this signature
 
-      virtual G4bool Retrieve(G4HCofThisEvent*&) =0;
+    virtual G4bool Retrieve(G4HCofThisEvent*&) = 0;
       // Pure virtual method for retrieving hit collections of this event.
       // Each persistency package should implement a concrete method
-      // of storing the hit collection of this event with this signature.
+      // of storing the hit collection of this event with this signature
 
-      void SetVerboseLevel(int v);
-      // Set verbose level.
+    void SetVerboseLevel(G4int v);
+      // Sets verbose level
 
-    protected:
-      void SetG4VPHitIO(G4VPHitIO* hitMan) { f_G4VPHitIO = hitMan; };
-      // Registers the hit collection I/O manager.
+  protected:
 
-    protected:
-      G4int m_verbose;
-      static G4ThreadLocal G4VPHitIO* f_G4VPHitIO;
-      G4HCIOcatalog*    f_catalog;
+    void SetG4VPHitIO(G4VPHitIO* hitMan) { f_G4VPHitIO = hitMan; }
+      // Registers the hit collection I/O manager
 
-}; // End of class G4VPHitIO
+  protected:
+
+    G4int m_verbose = 0;
+    static G4ThreadLocal G4VPHitIO* f_G4VPHitIO;
+    G4HCIOcatalog* f_catalog = nullptr;
+};
 
 #endif
-

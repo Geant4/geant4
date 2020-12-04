@@ -144,35 +144,35 @@ void G4PenelopeCrossSection::AddCrossSectionPoint(size_t binNumber,G4double ener
       G4cout << "Trying to register more points than originally declared" << G4endl;
       return;
     }
-   G4double logEne = std::log(energy);
+   G4double logEne = G4Log(energy);
 
    //XS0
-   G4double val = std::log(std::max(XS0,1e-42*cm2)); //avoid log(0)
+   G4double val = G4Log(std::max(XS0,1e-42*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XS1
    theVector = (G4PhysicsFreeVector*) (*softCrossSections)[1];
-   val =  std::log(std::max(XS1,1e-42*eV*cm2)); //avoid log(0)
+   val =  G4Log(std::max(XS1,1e-42*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XS2
    theVector = (G4PhysicsFreeVector*) (*softCrossSections)[2];
-   val =  std::log(std::max(XS2,1e-42*eV*eV*cm2)); //avoid log(0)
+   val =  G4Log(std::max(XS2,1e-42*eV*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XH0
    theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[0];
-   val =  std::log(std::max(XH0,1e-42*cm2)); //avoid log(0)
+   val =  G4Log(std::max(XH0,1e-42*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    //XH1
    theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[1];
-   val =  std::log(std::max(XH1,1e-42*eV*cm2)); //avoid log(0)
+   val =  G4Log(std::max(XH1,1e-42*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
     //XH2
    theVector = (G4PhysicsFreeVector*) (*hardCrossSections)[2];
-   val =  std::log(std::max(XH2,1e-42*eV*eV*cm2)); //avoid log(0)
+   val =  G4Log(std::max(XH2,1e-42*eV*eV*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    return;
@@ -212,8 +212,8 @@ void G4PenelopeCrossSection::AddShellCrossSectionPoint(size_t binNumber,
       G4cout << "Trying to register more points than originally declared" << G4endl;
       return;
     }
-   G4double logEne = std::log(energy);
-   G4double val = std::log(std::max(xs,1e-42*cm2)); //avoid log(0)
+   G4double logEne = G4Log(energy);
+   G4double val = G4Log(std::max(xs,1e-42*cm2)); //avoid log(0)
    theVector->PutValue(binNumber,logEne,val);
 
    return;
@@ -242,7 +242,7 @@ G4double G4PenelopeCrossSection::GetTotalCrossSection(G4double energy) const
       G4cout << "Soft cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
   G4double logXS = theVector->Value(logene);
   G4double softXS = G4Exp(logXS);
 
@@ -285,7 +285,7 @@ G4double G4PenelopeCrossSection::GetHardCrossSection(G4double energy) const
       G4cout << "Hard cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
   G4double logXS = theVector->Value(logene);
   result = G4Exp(logXS);
 
@@ -315,7 +315,7 @@ G4double G4PenelopeCrossSection::GetSoftStoppingPower(G4double energy) const
       G4cout << "Soft cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
   G4double logXS = theVector->Value(logene);
   result = G4Exp(logXS);
 
@@ -352,7 +352,7 @@ G4double G4PenelopeCrossSection::GetShellCrossSection(size_t shellID,G4double en
       G4cout << "Shell cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
   G4double logXS = theVector->Value(logene);
   result = G4Exp(logXS);
 
@@ -397,7 +397,7 @@ G4double G4PenelopeCrossSection::GetNormalizedShellCrossSection(size_t shellID,G
       G4cout << "Shell cross section table looks not filled" << G4endl;
       return result;
     }
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
   G4double logXS = theVector->Value(logene);
   result = G4Exp(logXS);
 
@@ -439,7 +439,7 @@ void G4PenelopeCrossSection::NormalizeShellCrossSections()
 
 	  normFactor += G4Exp((*theVec)[i]);
 	}
-      G4double logNormFactor = std::log(normFactor);
+      G4double logNormFactor = G4Log(normFactor);
       //Normalize
       for (size_t shellID=0;shellID<numberOfShells;shellID++)
 	{

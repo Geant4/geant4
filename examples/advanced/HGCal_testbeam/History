@@ -1,0 +1,18 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example HGCal_testbeam History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+02-Nov-20  A. Zaborowska (exhgcaltb-V10-06-00)
+- Create HGCal_testbeam example based on Thorben Quast application

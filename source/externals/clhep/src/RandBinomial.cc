@@ -20,6 +20,8 @@
 #include "CLHEP/Utility/thread_local.h"
 #include <algorithm>	// for min() and max()
 #include <cmath>	// for exp()
+#include <iostream>
+#include <vector>
 
 namespace CLHEP {
 

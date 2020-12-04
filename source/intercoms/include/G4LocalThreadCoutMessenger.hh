@@ -23,15 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4LocalThreadCoutMessenger
 //
+// Class description
 //
-// class description
-//
-// This class is the messenger for handling cout/cerr of local thread
-//
+// This class is the messenger for handling cout/cerr of a local thread
 
-#ifndef G4LocalThreadCoutMessenger_h
-#define G4LocalThreadCoutMessenger_h 1
+// Author: M.Asai, 2013
+// --------------------------------------------------------------------
+#ifndef G4LocalThreadCoutMessenger_hh
+#define G4LocalThreadCoutMessenger_hh 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -42,25 +43,24 @@ class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class G4LocalThreadCoutMessenger: public G4UImessenger
+class G4LocalThreadCoutMessenger : public G4UImessenger
 {
   public:
+
     G4LocalThreadCoutMessenger();
-   ~G4LocalThreadCoutMessenger();
-    
+    ~G4LocalThreadCoutMessenger();
+
     void SetNewValue(G4UIcommand*, G4String);
-    
-  private:    
-    G4UIdirectory*             coutDir;
-    G4UIcommand*               coutFileNameCmd;
-    G4UIcommand*               cerrFileNameCmd;
-    G4UIcmdWithABool*      bufferCoutCmd;
-    G4UIcmdWithAString*    prefixCmd;
-    G4UIcmdWithAnInteger*  ignoreCmd;
-    G4UIcmdWithABool*      ignoreInitCmd;
+
+  private:
+
+    G4UIdirectory* coutDir = nullptr;
+    G4UIcommand* coutFileNameCmd = nullptr;
+    G4UIcommand* cerrFileNameCmd = nullptr;
+    G4UIcmdWithABool* bufferCoutCmd = nullptr;
+    G4UIcmdWithAString* prefixCmd = nullptr;
+    G4UIcmdWithAnInteger* ignoreCmd = nullptr;
+    G4UIcmdWithABool* ignoreInitCmd = nullptr;
 };
 
 #endif
-

@@ -40,7 +40,7 @@
 RunAction::RunAction(const G4String& fileName)
  : G4UserRunAction(),
    fFileName(fileName)
-{ 
+{
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in Analysis.hh
@@ -59,7 +59,7 @@ RunAction::RunAction(const G4String& fileName)
   analysisManager->CreateNtupleIColumn("ID");      // column id = 0
   analysisManager->CreateNtupleIColumn("PDG");     // column id = 1
   analysisManager->CreateNtupleDColumn("Ekin");    // column id = 2
-  analysisManager->CreateNtupleDColumn("Xpos");    // column id = 3 
+  analysisManager->CreateNtupleDColumn("Xpos");    // column id = 3
   analysisManager->CreateNtupleDColumn("Ypos");    // column id = 4
   analysisManager->CreateNtupleDColumn("time");    // column id = 5
   analysisManager->FinishNtuple();
@@ -69,13 +69,13 @@ RunAction::RunAction(const G4String& fileName)
 
 RunAction::~RunAction()
 {
-  delete G4AnalysisManager::Instance();  
+  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* /*run*/)
-{ 
+{
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
 

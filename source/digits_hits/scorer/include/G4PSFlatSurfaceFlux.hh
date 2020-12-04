@@ -29,7 +29,7 @@
 #ifndef G4PSFlatSurfaceFlux_h
 #define G4PSFlatSurfaceFlux_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 #include "G4Box.hh"
 #include "G4PSDirectionFlag.hh"
@@ -56,9 +56,11 @@
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByArea options
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. cell flux * track weight             (Makoto Asai)
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSFlatSurfaceFlux : public G4VPrimitiveScorer
+class G4PSFlatSurfaceFlux : public G4VPrimitivePlotter
 {
   public: // with description
       G4PSFlatSurfaceFlux(G4String name,G4int direction, G4int depth=0);

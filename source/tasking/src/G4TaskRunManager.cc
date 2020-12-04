@@ -49,6 +49,7 @@
 #include "G4WorkerTaskRunManager.hh"
 #include "G4WorkerThread.hh"
 #include "G4UserTaskQueue.hh"
+#include "G4TiMemory.hh"
 
 #include <cstdlib>
 #include <cstring>
@@ -56,16 +57,8 @@
 
 //============================================================================//
 
-G4ScoringManager* G4TaskRunManager::masterScM = nullptr;
-G4TaskRunManager::masterWorlds_t G4TaskRunManager::masterWorlds =
-  G4TaskRunManager::masterWorlds_t();
-G4TaskRunManager* G4TaskRunManager::fMasterRM = nullptr;
-
-//============================================================================//
-
 namespace
 {
-//  G4Mutex cmdHandlingMutex;
   G4Mutex scorerMergerMutex;
   G4Mutex runMergerMutex;
   G4Mutex setUpEventMutex;
@@ -73,20 +66,9 @@ namespace
 
 //============================================================================//
 
-G4TaskRunManager* G4TaskRunManager::GetMasterRunManager() { return fMasterRM; }
-
-//============================================================================//
-
-G4RunManagerKernel* G4TaskRunManager::GetMasterRunManagerKernel()
-{
-  return fMasterRM->kernel;
-}
-
-//============================================================================//
-
 G4TaskRunManagerKernel* G4TaskRunManager::GetMTMasterRunManagerKernel()
 {
-  return fMasterRM->MTkernel;
+  return GetMasterRunManager()->MTkernel;
 }
 
 //============================================================================//
@@ -100,20 +82,12 @@ G4TaskRunManager::G4TaskRunManager(G4VUserTaskQueue* task_queue, G4bool useTBB,
   , numberOfTasks(-1)
   , masterRNGEngine(nullptr)
   , workTaskGroup(nullptr)
-  , workTaskGroupTBB(nullptr)
 {
   if(task_queue)
     taskQueue = task_queue;
 
   // override default of 2 from G4MTRunManager
-  nworkers = std::thread::hardware_concurrency();
-
-  if(fMasterRM)
-  {
-    G4Exception("G4TaskRunManager::G4TaskRunManager", "Run0130", FatalException,
-                "Another instance of a G4TaskRunManager already exists.");
-  }
-
+  nworkers  = std::thread::hardware_concurrency();
   fMasterRM = this;
   MTkernel  = static_cast<G4TaskRunManagerKernel*>(kernel);
 
@@ -157,12 +131,7 @@ G4TaskRunManager::G4TaskRunManager(G4VUserTaskQueue* task_queue, G4bool useTBB,
       forcedNwokers = _nthread_val;
 
     if(forcedNwokers > 0)
-    {
       nworkers = forcedNwokers;
-      G4cout << "\n### Number of threads is forced to " << forcedNwokers
-             << " by Environment variable G4FORCENUMBEROFTHREADS.\n"
-             << G4endl;
-    }
   }
 
   //------------------------------------------------------------------------//
@@ -197,12 +166,15 @@ G4TaskRunManager::G4TaskRunManager(G4bool useTBB)
 
 G4TaskRunManager::~G4TaskRunManager()
 {
-  if(workTaskGroupTBB)
-    workTaskGroupTBB->join();
   if(workTaskGroup)
+  {
     workTaskGroup->join();
-  delete workTaskGroupTBB;
-  delete workTaskGroup;
+    delete workTaskGroup;
+  }
+  // finalize profiler before shutting down the threads
+  G4Profiler::Finalize();
+  if(threadPool)
+    threadPool->destroy_threadpool();
   PTL::TaskRunManager::Terminate();
 }
 
@@ -264,14 +236,16 @@ void G4TaskRunManager::SetNumberOfThreads(G4int n)
 
 void G4TaskRunManager::Initialize()
 {
-  if(!threadPool)
+  G4bool firstTime = (!threadPool);
+  if(firstTime)
     InitializeThreadPool();
 
   G4RunManager::Initialize();
 
   // make sure all worker threads are set up.
   G4RunManager::BeamOn(0);
-  G4RunManager::SetRunIDCounter(0);
+  if(firstTime)
+    G4RunManager::SetRunIDCounter(0);
   // G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 }
 
@@ -279,7 +253,7 @@ void G4TaskRunManager::Initialize()
 
 void G4TaskRunManager::InitializeThreadPool()
 {
-  if(poolInitialized && threadPool && (workTaskGroup || workTaskGroupTBB))
+  if(poolInitialized && threadPool && workTaskGroup)
   {
     G4Exception("G4TaskRunManager::InitializeThreadPool", "Run1040",
                 JustWarning, "Threadpool already initialized. Ignoring...");
@@ -294,17 +268,12 @@ void G4TaskRunManager::InitializeThreadPool()
   PTL::TaskRunManager::SetVerbose(GetVerbose());
   PTL::TaskRunManager::Initialize(nworkers);
 
-  auto task_join = [](WorkerRunSet& _workers, G4WorkerTaskRunManager** _rm) {
-    _workers.insert(_rm);
-    return _workers;
-  };
-
   // create the joiners
   if(threadPool->using_tbb())
   {
     G4cout << "G4TaskRunManager :: Using TBB..." << G4endl;
-    if(!workTaskGroupTBB)
-      workTaskGroupTBB = new RunTaskGroupTBB(task_join, threadPool);
+    if(!workTaskGroup)
+      workTaskGroup = new RunTaskGroupTBB(threadPool);
   }
   else
   {
@@ -358,7 +327,7 @@ void G4TaskRunManager::ComputeNumberOfTasks()
   numberOfEventsPerTask = nEvtsPerTask;
   eventModulo           = numberOfEventsPerTask;
 
-  if(fakeRun)
+  if(fakeRun && verboseLevel > 1)
   {
     std::stringstream msg;
     msg << "--> G4TaskRunManager::ComputeNumberOfTasks() --> " << numberOfTasks
@@ -384,8 +353,25 @@ void G4TaskRunManager::CreateAndStartWorkers()
   // Currently we do not allow to change the
   // number of threads: threads area created once
   // Instead of pthread based workers, create tbbTask
+  static bool initializeStarted = false;
+
+  ComputeNumberOfTasks();
+
   if(fakeRun)
   {
+    if(initializeStarted)
+    {
+      auto initCmdStack = GetCommandStack();
+      if(!initCmdStack.empty())
+      {
+        threadPool->execute_on_all_threads([initCmdStack]() {
+          for(auto& itr : initCmdStack)
+            G4UImanager::GetUIpointer()->ApplyCommand(itr);
+          G4WorkerTaskRunManager::GetWorkerRunManager()->DoWork();
+        });
+      }
+    }
+    else
     {
       std::stringstream msg;
       msg << "--> G4TaskRunManager::CreateAndStartWorkers() --> "
@@ -399,52 +385,28 @@ void G4TaskRunManager::CreateAndStartWorkers()
              << msg.str() << "\n"
              << ss.str() << "\n"
              << G4endl;
-    }
-    if(workTaskGroupTBB)
-    {
+
       G4TaskRunManagerKernel::InitCommandStack() = GetCommandStack();
-
-      // init function which return 1 only once
-      auto _init = []() {
-        static thread_local G4int _once = 0;
-        if(_once++ == 0)
-        {
-          G4TaskRunManagerKernel::InitializeWorker();
-          return 1;
-        }
-        return 0;
-      };
-
-      static std::atomic<size_t> _total_init;
-      auto _init_task = [=]() {
-        if(G4ThisThread::get_id() == G4MTRunManager::GetMasterThreadId())
-          return;
-        auto _ret = _init();
-        _total_init += _ret;
-        if(_ret == 0)
-          std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      };
-
-      while(_total_init + 1 < threadPool->size())
-      {
-        std::cout << "repeating init..." << std::endl;
-        G4TBBTaskGroup<void> _tbb_init_tg(threadPool);
-        auto _n = 2 * threadPool->size();
-        while(--_n > 0)
-          _tbb_init_tg.exec(_init_task);
-        _tbb_init_tg.join();
-      }
+      threadPool->execute_on_all_threads(
+        []() { G4TaskRunManagerKernel::InitializeWorker(); });
     }
-
-    if(workTaskGroup)
-    {
-      threadPool->get_queue()->ExecuteOnAllThreads(
-        threadPool, G4TaskRunManagerKernel::InitializeWorker);
-    }
+    initializeStarted = true;
   }
   else
   {
-    ComputeNumberOfTasks();
+    auto initCmdStack = GetCommandStack();
+    if(!initCmdStack.empty())
+    {
+      threadPool->execute_on_all_threads([initCmdStack]() {
+        for(auto& itr : initCmdStack)
+          G4UImanager::GetUIpointer()->ApplyCommand(itr);
+      });
+    }
+
+    // cleans up a previous run and events in case a thread
+    // does not execute any tasks
+    threadPool->execute_on_all_threads(
+      []() { G4TaskRunManagerKernel::ExecuteWorkerInit(); });
 
     {
       std::stringstream msg;
@@ -463,42 +425,29 @@ void G4TaskRunManager::CreateAndStartWorkers()
     }
 
     G4int remaining = numberOfEventToBeProcessed;
-
-    for(G4int nt = 0; nt < numberOfTasks; ++nt)
+    for(G4int nt = 0; nt < numberOfTasks + 1; ++nt)
     {
-      if(remaining == 0)
-        break;
-      G4int evts = numberOfEventsPerTask;
-      if(evts > remaining)
-        evts = remaining;
-      if(nt + 1 == numberOfTasks)
-        evts = remaining;
-      AddEventTask(nt, evts);
-      remaining -= evts;
+      if(remaining > 0)
+        AddEventTask(nt);
+      remaining -= numberOfEventsPerTask;
     }
+    workTaskGroup->wait();
   }
 }
 
 //============================================================================//
 
-void G4TaskRunManager::AddEventTask(G4int, G4int evts)
+void G4TaskRunManager::AddEventTask(G4int nt)
 {
-  TIMEMORY_AUTO_TIMER("");
-
-  // check for TBB first since standard work task group could be valid
-  if(workTaskGroupTBB)
-    taskManager->exec(*workTaskGroupTBB,
-                      G4TaskRunManagerKernel::ExecuteWorkerTask, evts);
-  else
-    taskManager->exec(*workTaskGroup, G4TaskRunManagerKernel::ExecuteWorkerTask,
-                      evts);
+  if(verboseLevel > 1)
+    G4cout << "Adding task " << nt << " to task-group..." << G4endl;
+  workTaskGroup->exec([]() { G4TaskRunManagerKernel::ExecuteWorkerTask(); });
 }
 
 //============================================================================//
 
 void G4TaskRunManager::RefillSeeds()
 {
-  TIMEMORY_AUTO_TIMER("");
   G4RNGHelper* helper = G4RNGHelper::GetInstance();
   G4int nFill         = 0;
   switch(SeedOncePerCommunication())
@@ -528,7 +477,6 @@ void G4TaskRunManager::RefillSeeds()
 void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
                                            G4int n_select)
 {
-  TIMEMORY_AUTO_TIMER("");
   MTkernel->SetUpDecayChannels();
   numberOfEventToBeProcessed = n_event;
   numberOfEventProcessed     = 0;
@@ -595,7 +543,6 @@ void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
         _functor = initSeedsCallback(n_event, nSeedsPerEvent, nSeedsFilled);
       if(_overload == false && _functor == false)
       {
-        TIMEMORY_AUTO_TIMER("[reseed]");
         G4RNGHelper* helper = G4RNGHelper::GetInstance();
         switch(SeedOncePerCommunication())
         {
@@ -616,7 +563,7 @@ void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
             G4Exception("G4TaskRunManager::InitializeEventLoop()", "Run10036",
                         JustWarning, msgd);
             SetSeedOncePerCommunication(0);
-            nSeedsFilled             = n_event;
+            nSeedsFilled = n_event;
         }
 
         // Generates up to nSeedsMax seed pairs only.
@@ -632,20 +579,11 @@ void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
   if(userWorkerThreadInitialization == nullptr)
     userWorkerThreadInitialization = new G4UserTaskThreadInitialization();
 
-  // G4cout << "Preparing command stack..." << G4endl;
   // Prepare UI commands for threads
   PrepareCommandsStack();
 
-  // G4cout << "Create and start workers..." << G4endl;
   // Start worker threads
   CreateAndStartWorkers();
-
-  // G4cout << "Waiting for ready workers..." << G4endl;
-  // We need a barrier here. Wait for workers to start event loop.
-  // This will return only when all workers have started processing events.
-  WaitForReadyWorkers();
-
-  // G4cout << "Event loop initialized..." << G4endl;
 }
 
 //============================================================================//
@@ -687,7 +625,6 @@ void G4TaskRunManager::ConstructScoringWorlds()
 
 void G4TaskRunManager::MergeScores(const G4ScoringManager* localScoringManager)
 {
-  TIMEMORY_AUTO_TIMER("");
   G4AutoLock l(&scorerMergerMutex);
   if(masterScM)
     masterScM->Merge(localScoringManager);
@@ -697,7 +634,6 @@ void G4TaskRunManager::MergeScores(const G4ScoringManager* localScoringManager)
 
 void G4TaskRunManager::MergeRun(const G4Run* localRun)
 {
-  TIMEMORY_AUTO_TIMER("");
   G4AutoLock l(&runMergerMutex);
   if(currentRun)
     currentRun->Merge(localRun);
@@ -711,11 +647,9 @@ G4bool G4TaskRunManager::SetUpAnEvent(G4Event* evt, G4long& s1, G4long& s2,
   G4AutoLock l(&setUpEventMutex);
   if(numberOfEventProcessed < numberOfEventToBeProcessed)
   {
-    TIMEMORY_AUTO_TIMER("");
     evt->SetEventID(numberOfEventProcessed);
     if(reseedRequired)
     {
-      TIMEMORY_AUTO_TIMER("[reseed]");
       G4RNGHelper* helper = G4RNGHelper::GetInstance();
       G4int idx_rndm      = nSeedsPerEvent * nSeedsUsed;
       s1                  = helper->GetSeed(idx_rndm);
@@ -740,16 +674,18 @@ G4int G4TaskRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,
   G4AutoLock l(&setUpEventMutex);
   if(numberOfEventProcessed < numberOfEventToBeProcessed && !runAborted)
   {
-    TIMEMORY_AUTO_TIMER("");
-    G4int nev = eventModulo;
-    if(numberOfEventProcessed + nev > numberOfEventToBeProcessed)
-      nev = numberOfEventToBeProcessed - numberOfEventProcessed;
+    G4int nevt = numberOfEventsPerTask;
+    G4int nmod = eventModulo;
+    if(numberOfEventProcessed + nevt > numberOfEventToBeProcessed)
+    {
+      nevt = numberOfEventToBeProcessed - numberOfEventProcessed;
+      nmod = numberOfEventToBeProcessed - numberOfEventProcessed;
+    }
     evt->SetEventID(numberOfEventProcessed);
     if(reseedRequired)
     {
-      TIMEMORY_AUTO_TIMER("[reseed]");
       G4RNGHelper* helper = G4RNGHelper::GetInstance();
-      G4int nevRnd        = nev;
+      G4int nevRnd        = nmod;
       if(SeedOncePerCommunication() > 0)
         nevRnd = 1;
       for(G4int i = 0; i < nevRnd; ++i)
@@ -763,8 +699,8 @@ G4int G4TaskRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,
           RefillSeeds();
       }
     }
-    numberOfEventProcessed += nev;
-    return nev;
+    numberOfEventProcessed += nevt;
+    return nevt;
   }
   return 0;
 }
@@ -775,28 +711,13 @@ void G4TaskRunManager::TerminateWorkers()
 {
   // Force workers to execute (if any) all UI commands left in the stack
   RequestWorkersProcessCommandsStack();
-  // Ask workers to exit
-  NewActionRequest(WorkerActionRequest::ENDWORKER);
-
-  auto _terminate = [&](WorkerRunSet _workers) {
-    for(auto& itr : _workers)
-      G4TaskRunManagerKernel::TerminateWorker(itr);
-  };
-
-  // Now join threads.
-  if(workTaskGroupTBB)
-    _terminate(workTaskGroupTBB->join());
 
   if(workTaskGroup)
   {
     workTaskGroup->join();
-    // G4cout << "Terminating workers... (fakeRun: " << std::boolalpha
-    //       << fakeRun << ")..." << G4endl;
     if(!fakeRun)
-    {
-      auto _f = []() { G4TaskRunManagerKernel::TerminateWorker(); };
-      threadPool->get_queue()->ExecuteOnAllThreads(threadPool, _f);
-    }
+      threadPool->execute_on_all_threads(
+        []() { G4TaskRunManagerKernel::TerminateWorker(); });
   }
 }
 
@@ -829,22 +750,12 @@ void G4TaskRunManager::AbortEvent()
 
 void G4TaskRunManager::WaitForEndEventLoopWorkers()
 {
-  auto _terminate = [](WorkerRunSet _workers) {
-    for(auto& itr : _workers)
-      G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(itr);
-  };
-
-  if(workTaskGroupTBB)
-    _terminate(workTaskGroupTBB->join());
-
   if(workTaskGroup)
   {
     workTaskGroup->join();
     if(!fakeRun)
-    {
-      auto _f = []() { G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(); };
-      threadPool->get_queue()->ExecuteOnAllThreads(threadPool, _f);
-    }
+      threadPool->execute_on_all_threads(
+        []() { G4TaskRunManagerKernel::TerminateWorkerRunEventLoop(); });
   }
 }
 
@@ -855,21 +766,17 @@ void G4TaskRunManager::RequestWorkersProcessCommandsStack()
   PrepareCommandsStack();
 
   auto process_commands_stack = []() {
-    G4MTRunManager* mrm        = G4MTRunManager::GetMasterRunManager();
-    std::vector<G4String> cmds = mrm->GetCommandStack();
-    G4UImanager* uimgr         = G4UImanager::GetUIpointer();  // TLS instance
-    for(auto itr = cmds.cbegin(); itr != cmds.cend(); ++itr)
+    G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
+    if(mrm)
     {
-      G4cout << "Applying command \"" << *itr << "\" @ " << __FUNCTION__ << ":"
-             << __LINE__ << G4endl;
-      uimgr->ApplyCommand(*itr);
+      auto cmds = mrm->GetCommandStack();
+      for(const auto& itr : cmds)
+        G4UImanager::GetUIpointer()->ApplyCommand(itr);  // TLS instance
+      mrm->ThisWorkerProcessCommandsStackDone();
     }
-    mrm->ThisWorkerProcessCommandsStackDone();
   };
 
-  if(workTaskGroup)
-    threadPool->get_queue()->ExecuteOnAllThreads(threadPool,
-                                                 process_commands_stack);
+  threadPool->execute_on_all_threads(process_commands_stack);
 }
 
 //============================================================================//

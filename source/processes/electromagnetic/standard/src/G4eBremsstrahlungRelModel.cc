@@ -426,7 +426,7 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double tmin)
 //        v(k)=ln(k/E_t) -> dk/dv=E_t*e^v=k -> ds/dv= ds/dk*dk/dv=ds/dk*k so it
 //        would cnacell out the 1/k factor => 1/k don't included here
 //  (ii)  the constant factor C and Z don't depend on 'k' => not included here
-//  (iii) the 1/F(k) factor is accounted in the callers: explicitely (cross sec-
+//  (iii) the 1/F(k) factor is accounted in the callers: explicitly (cross sec-
 //        tion computation) or implicitly through further variable transformaton
 //        (in the final state sampling algorithm)
 // COMPLETE SCREENING: see more at the DCS without LPM effect below.
@@ -460,7 +460,7 @@ G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEnergy)
 // where f_c(Z) is the Coulomb correction factor and phi1(g),phi2(g) and psi1(e),
 // psi2(e) are coherent and incoherent screening functions. In the Thomas-Fermi
 // model of the atom, the screening functions will have a form that do not
-// depend on Z (not explicitely). These numerical screening functions can be
+// depend on Z (not explicitly). These numerical screening functions can be
 // approximated as Tsai Eqs. [3.38-3.41] with the variables g=gamma and
 // e=epsilon given by Tsai Eqs. [3.30 and 3.31] (see more details at the method
 // ComputeScreeningFunctions()). Note, that in case of complete screening i.e.

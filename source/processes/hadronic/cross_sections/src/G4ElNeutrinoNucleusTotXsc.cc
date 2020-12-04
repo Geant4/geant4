@@ -282,7 +282,7 @@ G4double G4ElNeutrinoNucleusTotXsc::GetNuElTotCsArray( G4int index)
   if( index >= 0 && index < fIndex) return fNuElTotXsc[index];
   else 
   {
-    G4cout<<"Inproper index of fNuElTotXsc array"<<G4endl;
+    G4cout<<"Improper index of fNuElTotXsc array"<<G4endl;
     return 0.;
   }
 }
@@ -296,7 +296,7 @@ G4double G4ElNeutrinoNucleusTotXsc::GetANuElTotCsArray( G4int index)
   if( index >= 0 && index < fIndex) return fANuElTotXsc[index];
   else 
   {
-    G4cout<<"Inproper index of fANuElTotXsc array"<<G4endl;
+    G4cout<<"Improper index of fANuElTotXsc array"<<G4endl;
     return 0.;
   }
 }

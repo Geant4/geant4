@@ -11,15 +11,15 @@ Institut de Physique Nucléaire (IPNO), Université Paris-Sud, CNRS-IN2P3
 
 
 Examples in the physicslist category show the possible ways how to define
-a physics list from Geant4 physics constructors. This example demonstrates 
+a physics list from Geant4 physics constructors. This example demonstrates
 the usage of G4PhysListFactory to build  the concrete physics list.
 
-Physics List can be defined by its name given by the -p argument of the of the 
-run command or by  the PHYSLIST environment variable. 
+Physics List can be defined by its name given by the -p argument of the of the
+run command or by  the PHYSLIST environment variable.
 
-./factory -m my.macro [ -p QGSP_BERT ]    
+./factory -m my.macro [ -p QGSP_BERT ]
 
-By default, FTFP_BERT Physics List will be instantiated if 
+By default, FTFP_BERT Physics List will be instantiated if
 -p argument is not set and the PHYSLIST environment variable is not defined.
 
 The same experimental setup is used for all examples in the physicslist category:
@@ -29,16 +29,16 @@ The same experimental setup is used for all examples in the physicslist category
 
 The geometry (defined in the DetectorConstruction class) consists in a box of scintillator material (CsI) followed by a thin box of air (screen) which is used to simplify scoring.
 
- 
+
 2- Primary generator
 --------------------
 
 The primary generator is defined with usage of G4ParticleGun.
-The default particle is proton which hits the box perpendicular to the input face. 
+The default particle is proton which hits the box perpendicular to the input face.
 The type of the particle and its energy are set in the PrimaryGeneratorAction class, and can
 be changed via the G4 built-in commands of the G4ParticleGun class.
 
- 
+
 3- Scoring (ntuples)
 --------------------
 
@@ -55,10 +55,10 @@ in RunAction class. The ntuple is saved in a Root file, which name is set to be 
 example name in main () function.
 
 4- How to build
----------------- 
+----------------
 
 An additional step is needed when building the example with GNUmake
-due to using the extra shared directory: 
+due to using the extra shared directory:
  % cd path_to_example/example
  % gmake setup
  % gmake

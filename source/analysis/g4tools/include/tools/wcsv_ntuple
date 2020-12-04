@@ -37,7 +37,7 @@ public:
     virtual void add() = 0;
     virtual const std::string& name() const = 0;
   };
-  
+
 public:
   template <class T>
   class column_ref : public virtual icol {
@@ -65,7 +65,7 @@ public:
     column_ref(const column_ref& a_from)
     :icol(a_from)
     ,m_writer(a_from.m_writer)
-    ,m_name(a_from.m_name) 
+    ,m_name(a_from.m_name)
     ,m_ref(a_from.m_ref)
     {}
     column_ref& operator=(const column_ref& a_from){
@@ -166,7 +166,7 @@ public:
     std_vector_column(const std_vector_column& a_from)
     :icol(a_from)
     ,m_writer(a_from.m_writer)
-    ,m_name(a_from.m_name) 
+    ,m_name(a_from.m_name)
     ,m_ref(a_from.m_ref)
     ,m_vec_sep(a_from.m_vec_sep)
     {}
@@ -243,15 +243,15 @@ public:
       else TOOLS_WCSV_NTUPLE_CREATE_COL(short)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(int)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(int64)
-      
+
       else TOOLS_WCSV_NTUPLE_CREATE_COL(float)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(double)
-      
-      else TOOLS_WCSV_NTUPLE_CREATE_COL(byte)      
+
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(byte)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(ushort)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(uint32)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(uint64)
-      
+
       else TOOLS_WCSV_NTUPLE_CREATE_COL(bool)
       else TOOLS_WCSV_NTUPLE_CREATE_COL(std::string)
 
@@ -259,10 +259,10 @@ public:
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(short)
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int)
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int64)
-      
+
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(float)
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(double)
-      
+
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uchar)
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(ushort)
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint32)
@@ -270,7 +270,7 @@ public:
 
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(std::string)
       else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(bool)
-      
+
 #undef TOOLS_WCSV_NTUPLE_CREATE_VEC_COL
 #undef TOOLS_WCSV_NTUPLE_CREATE_COL
 
@@ -282,7 +282,7 @@ public:
         //throw
         safe_clear<icol>(m_cols);
         return;
-      }      
+      }
     }
   }
 
@@ -325,7 +325,7 @@ public:
        std::string sid;
        if(!cid2s(_col->id_cls(),sid)) {
          a_out << "tools::wcsv::ntuple::write_commented_header :"
-               << " unknow column type id " << _col->id_cls() << std::endl;
+               << " unknown column type id " << _col->id_cls() << std::endl;
          status = false; //but we continue.
        } else {
          m_writer << "#column " << sid << " " << _col->name() << std::endl;

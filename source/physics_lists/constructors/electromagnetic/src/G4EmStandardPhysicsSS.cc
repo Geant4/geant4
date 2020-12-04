@@ -68,7 +68,8 @@
 #include "G4MuPairProductionModel.hh"
 #include "G4hBremsstrahlungModel.hh"
 #include "G4hPairProductionModel.hh"
-#include "G4eSingleCoulombScatteringModel.hh"
+//#include "G4eSingleCoulombScatteringModel.hh"
+#include "G4eDPWACoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -190,9 +191,10 @@ void G4EmStandardPhysicsSS::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4CoulombScattering* ss = new G4CoulombScattering();
-      if(G4EmParameters::Instance()->UseMottCorrection()) {
-	ss->SetEmModel(new G4eSingleCoulombScatteringModel());
-      }
+      ss->AddEmModel(0, new G4eDPWACoulombScatteringModel());
+//      if(G4EmParameters::Instance()->UseMottCorrection()) {
+// 	      ss->SetEmModel(new G4eSingleCoulombScatteringModel());
+//      }
 
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
@@ -201,9 +203,10 @@ void G4EmStandardPhysicsSS::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4CoulombScattering* ss = new G4CoulombScattering();
-      if(G4EmParameters::Instance()->UseMottCorrection()) {
-	ss->SetEmModel(new G4eSingleCoulombScatteringModel());
-      }
+      ss->AddEmModel(0, new G4eDPWACoulombScatteringModel());
+//      if(G4EmParameters::Instance()->UseMottCorrection()) {
+//        ss->SetEmModel(new G4eSingleCoulombScatteringModel());
+//      }
 
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
@@ -246,7 +249,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
       ph->RegisterProcess(kss, particle);
 
     } else if (particleName == "proton" ||
-	       particleName == "anti_proton") {
+         particleName == "anti_proton") {
 
       G4CoulombScattering* pss = new G4CoulombScattering();
       pss->SetEmModel(new G4hCoulombScatteringModel());
@@ -257,11 +260,11 @@ void G4EmStandardPhysicsSS::ConstructProcess()
       ph->RegisterProcess(pss, particle);
 
     } else if (particleName == "B+" ||
-	       particleName == "B-" ||
-	       particleName == "D+" ||
-	       particleName == "D-" ||
-	       particleName == "Ds+" ||
-	       particleName == "Ds-" ||
+         particleName == "B-" ||
+         particleName == "D+" ||
+         particleName == "D-" ||
+         particleName == "Ds+" ||
+         particleName == "Ds-" ||
                particleName == "anti_He3" ||
                particleName == "anti_alpha" ||
                particleName == "anti_deuteron" ||
@@ -274,8 +277,8 @@ void G4EmStandardPhysicsSS::ConstructProcess()
                particleName == "anti_triton" ||
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
-	       particleName == "deuteron" ||
-	       particleName == "lambda_c+" ||
+         particleName == "deuteron" ||
+         particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "sigma_c+" ||
                particleName == "sigma_c++" ||
@@ -283,7 +286,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
                particleName == "sigma-" ||
                particleName == "tau+" ||
                particleName == "tau-" ||
-	       particleName == "triton" ||
+         particleName == "triton" ||
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 

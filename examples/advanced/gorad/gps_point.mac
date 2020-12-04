@@ -1,0 +1,19 @@
+#######################################################
+#
+# Sample macro file to set General Particle Source
+# shooting protons from the center
+#
+#######################################################
+
+/gps/pos/centre   0.0  0.0  0.0  m
+/gps/direction 1 0 0
+/gps/pos/type Point
+/gps/number  1  
+/gps/particle proton
+/gps/ene/type Mono
+/gps/ene/mono  100.0 MeV 
+/gps/ang/type  iso
+/gps/ang/maxtheta   90.0 deg 
+/gps/ang/mintheta   60.0 deg 
+/gps/source/list 
+

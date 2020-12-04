@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -46,23 +46,23 @@ NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use
          hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,   neutronInelastic,           nCapture,           nFission
-    protonInelastic,       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic
-     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic
-anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic
-anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic
-  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic
-anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic
-anti_alphaInelastic,         ionElastic,         dInelastic,         tInelastic
-       He3Inelastic,     alphaInelastic,       ionInelastic,hFritiofCaptureAtRest
-hBertiniCaptureAtRest,muMinusCaptureAtRest,      photonNuclear,                msc
+         hadElastic,         hadElastic,         hadElastic,   neutronInelastic
+           nCapture,           nFission,    protonInelastic,       pi+Inelastic
+       pi-Inelastic,     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic
+    kaon0SInelastic,anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic
+anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic,    lambdaInelastic
+    sigma+Inelastic,    sigma-Inelastic,       xi0Inelastic,       xi-Inelastic
+    omega-Inelastic,anti_lambdaInelastic,anti_sigma+Inelastic,anti_sigma-Inelastic
+  anti_xi0Inelastic,  anti_xi-Inelastic,anti_omega-Inelastic,         ionElastic
+         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
+       ionInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
+      photonNuclear,                msc,              hIoni,                msc
               hIoni,                msc,              hIoni,                msc
               hIoni,                msc,              hIoni,                msc
               hIoni,                msc,              hIoni,                msc
-              hIoni,                msc,              hIoni,                msc
-            ionIoni,    nuclearStopping,                msc,            ionIoni
-    nuclearStopping,                msc,            ionIoni,    nuclearStopping
+              hIoni,                msc,            ionIoni,    nuclearStopping
+                msc,            ionIoni,    nuclearStopping,                msc
+            ionIoni,    nuclearStopping,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
@@ -71,23 +71,22 @@ hBertiniCaptureAtRest,muMinusCaptureAtRest,      photonNuclear,                m
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
+                msc,              hIoni,                msc,              eIoni
+              eBrem,            annihil,                msc,              eIoni
+              eBrem,               phot,              compt,               conv
                 msc,              hIoni,                msc,              hIoni
-                msc,              eIoni,              eBrem,            annihil
-                msc,              eIoni,              eBrem,               phot
-              compt,               conv,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,             muIoni,            muBrems,         muPairProd
-                msc,             muIoni,            muBrems,         muPairProd
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
+                msc,              hIoni,                msc,             muIoni
+            muBrems,         muPairProd,                msc,             muIoni
+            muBrems,         muPairProd,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
                 msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,              Decay,RadioactiveDecayBase
-
+                msc,              hIoni,                msc,              hIoni
+                msc,              hIoni,                msc,              hIoni
+              Decay,RadioactiveDecayBase
 #
 /gun/particle neutron
 /gun/energy 14.1 MeV
@@ -106,13 +105,26 @@ Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
 Auger electron emission enabled                   1
 Auger cascade enabled                             1
-Check EM cuts disabled for atomic de-excitation   0
+Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 ======================================================================
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
 NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
+
+=======================================================
+======       ParticleHP Physics Parameters     ========
+=======================================================
+ UseOnlyPhotoEvaporation ? 0
+ SkipMissingIsotopes ?     0
+ NeglectDoppler ?          0
+ DoNotAdjustFinalState ?   0
+ ProduceFissionFragments ? 0
+ UseWendtFissionModel ?    0
+ UseNRESP71Model ?         0
+=======================================================
+
 @@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 
@@ -166,9 +178,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: anti_He3Inelastic
-        Model:                      FTFP: 0 meV/n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
@@ -182,9 +192,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: anti_alphaInelastic
-        Model:                      FTFP: 0 meV/n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
@@ -198,10 +206,22 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
-        Model:                      FTFP: 0 meV/n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
+        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 0 meV ---> 25 GeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
 
@@ -214,9 +234,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: anti_neutronInelastic
-        Model:                      FTFP: 0 meV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 meV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
@@ -230,9 +248,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: anti_protonInelastic
-        Model:                      FTFP: 0 meV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 meV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
@@ -246,9 +262,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: anti_tritonInelastic
-        Model:                      FTFP: 0 meV/n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
+        Model:                      FTFP: 0 meV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 meV ---> 25.6 PeV
 
   Process: hFritiofCaptureAtRest
@@ -309,10 +323,9 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
   Process: lambdaInelastic
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-        Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
@@ -398,10 +411,9 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
   Process: sigma-Inelastic
-        Model:            BertiniCascade: 0 meV ---> 6 GeV
-        Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 meV ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 meV ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -442,7 +454,6 @@ Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ============================
@@ -482,51 +493,49 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=54.000000s Real=54.565888s Sys=0.030000s
+  User=7.670000s Real=7.998703s Sys=0.000000s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-                Decay=      1  RadioactiveDecayBase= 198252        Transportation=  72882
-              annihil=    203                 compt= 402743                  conv=    203
-           dInelastic=      1                 eIoni= 412404                 hIoni=    675
-           hadElastic= 181910          ionInelastic=      2               ionIoni= 198574
-                  msc=    221              nCapture=     31      neutronInelastic=  16416
-                 phot=  20816 
+ RadioactiveDecayBase= 195865        Transportation=  73025               annihil=    205
+                compt= 400940                  conv=    206            dInelastic=      3
+                eIoni= 410692                 hIoni=    672            hadElastic= 179590
+              ionIoni= 196197                   msc=    139              nCapture=     25
+     neutronInelastic=  16399                  phot=  20719 
 
  List of generated particles:
-            Be8:       1  Emean =  3.4584 MeV	( 3.4584 MeV --> 3.4584 MeV)
-  Be8[3030.000]:      31  Emean =  7.0394 keV	( 203.12 eV  --> 11.806 keV)
-            He6:     152  Emean =  1.2903 MeV	( 917.53 keV --> 1.3378 MeV)
-            Li6:     708  Emean =   1.571 MeV	( 70.683 eV  --> 9.2585 MeV)
-            Li7:  197330  Emean =  330.52 keV	( 0.83469 meV --> 6.221 MeV)
-            Li8:      31  Emean =  524.43 eV 	( 99.228 eV  --> 5.5222 keV)
-          alpha:     354  Emean =    1.26 MeV	( 93.121 keV --> 4.2344 MeV)
-      anti_nu_e:     183  Emean =   2.917 MeV	( 491.85 keV --> 12.106 MeV)
-       deuteron:     441  Emean =  3.5402 MeV	( 124.39 keV --> 23.77 MeV)
-             e+:     203  Emean =  1.4242 MeV	( 75.805 keV --> 4.0804 MeV)
-             e-:  412369  Emean =  87.508 keV	( 100 eV  --> 9.9872 MeV)
-          gamma:   46448  Emean =  1.2054 MeV	( 1.0009 keV --> 5.8834 MeV)
-        neutron:   17110  Emean =  3.3564 MeV	( 4.8097 keV --> 13.639 MeV)
-         triton:       1  Emean =   3.216 MeV	( 3.216 MeV --> 3.216 MeV)
+  Be8[3030.000]:      25  Emean =  6.5066 keV	( 576 eV  --> 12.036 keV)
+            He6:     130  Emean =  1.2825 MeV	( 899.67 keV --> 1.338 MeV)
+            Li6:     707  Emean =  1.6492 MeV	( 6.5416 eV  --> 8.294 MeV)
+            Li7:  194979  Emean =  332.68 keV	( 0.69805 meV --> 6.2218 MeV)
+            Li8:      25  Emean =   1.539 keV	( 98.565 eV  --> 15.763 keV)
+          alpha:     357  Emean =  1.2613 MeV	( 82.823 keV --> 7.8307 MeV)
+      anti_nu_e:     155  Emean =  2.7609 MeV	( 355.17 keV --> 12.413 MeV)
+       deuteron:     433  Emean =  3.7046 MeV	( 163.79 keV --> 21.188 MeV)
+             e+:     206  Emean =  1.4766 MeV	( 81.659 keV --> 3.9235 MeV)
+             e-:  410656  Emean =  87.612 keV	( 100 eV  --> 10.101 MeV)
+          gamma:   46386  Emean =   1.209 MeV	( 1.0003 keV --> 5.8821 MeV)
+        neutron:   17151  Emean =  3.3665 MeV	( 2.7041 keV --> 13.636 MeV)
 
- Mean energy deposit per event = 10.468 MeV  rms = 3.4678 MeV
- Mean energy flow per event    = 3.099 MeV  rms = 3.2613 MeV
+ Mean energy deposit per event = 10.43 MeV  rms = 3.4782 MeV
+ Mean energy flow per event    = 3.1161 MeV  rms = 3.2596 MeV
 
  List of particles emerging from the absorber :
-      anti_nu_e:     183  Emean =   2.917 MeV	( 491.85 keV --> 12.106 MeV) 	Eflow/event = 53.381 keV
-             e+:       1  Emean =  563.32 keV	( 563.32 keV --> 563.32 keV) 	Eflow/event = 56.332 eV 
-             e-:     154  Emean =  1.4173 MeV	( 40.303 keV --> 4.9832 MeV) 	Eflow/event = 21.826 keV
-          gamma:   25429  Emean =  778.78 keV	( 1.5781 keV --> 5.8811 MeV) 	Eflow/event = 1.9804 MeV
-        neutron:   10663  Emean =  978.49 keV	( 1.9386 meV --> 14.1 MeV) 	Eflow/event = 1.0434 MeV
+            Li7:       1  Emean =  1.8227 MeV	( 1.8227 MeV --> 1.8227 MeV) 	Eflow/event = 182.27 eV 
+      anti_nu_e:     155  Emean =  2.7609 MeV	( 355.17 keV --> 12.413 MeV) 	Eflow/event = 42.794 keV
+             e+:       1  Emean =  2.5051 MeV	( 2.5051 MeV --> 2.5051 MeV) 	Eflow/event = 250.51 eV 
+             e-:     160  Emean =  1.3423 MeV	( 6.0695 keV --> 4.9835 MeV) 	Eflow/event = 21.477 keV
+          gamma:   25461  Emean =  783.03 keV	( 3.4138 keV --> 5.8811 MeV) 	Eflow/event = 1.9937 MeV
+        neutron:   10727  Emean =  986.05 keV	( 2.7097 meV --> 14.1 MeV) 	Eflow/event = 1.0577 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1555750344, 1318550293
+ Current couple of seeds = 186864717, 1230361718
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.062 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.07 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

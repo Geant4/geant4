@@ -1,0 +1,25 @@
+# This file permits to customize, with commands,
+# the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
+# It has no effect with G4UIterminal.
+#
+# File :
+/gui/addMenu g4file G4File
+/gui/addButton g4file Continue "continue"
+/gui/addButton g4file Exit "exit"
+#
+# Run menu :
+/gui/addMenu run Run
+/gui/addButton run "test beam" 				"/control/execute test.in"
+/gui/addButton run "beamOn 1" 				"/run/beamOn 1"
+#
+# Gun menu :
+/gui/addMenu gun Gun
+/gui/addButton gun "gamma"  				"/gps/particle gamma"
+/gui/addButton gun "20 keV"  				"/gps/energy 20. keV"
+#
+# Viewer menu :
+/gui/addMenu viewer Viewer
+/gui/addButton viewer "Set lateral view" 	"/vis/viewer/set/viewpointThetaPhi 90 0"
+/gui/addButton viewer "Set front view" 	 	"/vis/viewer/set/viewpointThetaPhi 180 0"
+/gui/addButton viewer "Set top view"     	"/vis/viewer/set/viewpointThetaPhi 90 90"
+/gui/addButton viewer "geometry test" 	 	"/geometry/test/run"

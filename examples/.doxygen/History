@@ -17,6 +17,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9/11/20 I.Hrivnacova (doxygen-V10-06-03)
+- Added new extended example Hadr09 in documentation
+
+6/11/20 I.Hrivnacova (doxygen-V10-06-02)
+- Added new extended examples in documentation:
+  - exoticphysics/saxs
+  - medical/dna/chem6
+  - parameterisation/Par03
+
+6/8/20 I.Hrivnacova (doxygen-V10-06-01)
+- More fixes in header/footer.html links (thanks to Gunter)
+
+3/8/20 I.Hrivnacova (doxygen-V10-06-00)
+- Updated obsolete links to Geant4 pages in header/footer.html 
+- Removed not working links to search in Geant4 and web master
+- Updated logo and color style
+
 28/11/19 I.Hrivnacova (doxygen-V10-05-03)
 - Updated for reorganization of gflash examples,
   added new GB07 in modules

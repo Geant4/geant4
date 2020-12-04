@@ -49,6 +49,8 @@ class G4RootRFileManager : public G4BaseFileManager
     explicit G4RootRFileManager(const G4AnalysisManagerState& state);
     virtual ~G4RootRFileManager();
 
+    virtual G4String GetFileType() const final { return "Root"; }
+
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName,
                              G4bool isPerThread);

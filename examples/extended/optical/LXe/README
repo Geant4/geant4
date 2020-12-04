@@ -64,6 +64,19 @@ How to start?
     Then type commands, for instance
     Session: /run/beamOn 1
 
+---------------
+Macros included
+---------------
+
+Several macros are include in the distribution:
+
+cerenkov.mac: Shoot a 200 MeV mu+ and only allow it to take one step. The
+              Cerenkov cone and PMTs hit are visible. (Reduce the number 
+              of particles for visualization.)
+LXe.mac:      Shoot a 511 keV gamma with the default geometry.
+photon.mac:   Primary beam is an optical photon, with the default geometry.
+wls.mac:      Geometry includes 15 WLS fibers. A 511 keV electron is the
+              primary.
 
 -----------------------------------------------
 Detailed Explanation of Geometry Implementation

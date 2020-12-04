@@ -15,12 +15,19 @@ geant4_define_module(NAME G4analysisfac
   HEADERS
     g4analysis.hh
     g4analysis_defs.hh
+    G4GenericAnalysisManager.hh
+    G4GenericAnalysisManager.icc
+    G4GenericFileManager.hh
+    G4GenericFileManager.icc
   SOURCES
     g4analysis.cc
+    G4GenericAnalysisManager.cc
+    G4GenericFileManager.cc
   GRANULAR_DEPENDENCIES
     G4globman
     G4intercoms
     G4analysismng
+    G4hntools
     G4csv
     G4root
     G4xml

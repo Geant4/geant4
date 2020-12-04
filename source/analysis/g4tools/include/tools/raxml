@@ -37,11 +37,11 @@ protected:
 public:
   bool load_file(const std::string& a_file,bool a_compressed){
     m_objects.clear();
-    if(!parent::load_file(a_file,a_compressed)) return false;    
+    if(!parent::load_file(a_file,a_compressed)) return false;
     tools::xml::tree* top = top_item();
     if(!top) return false;
     const std::string& tag_name = top->tag_name();
-    if(tag_name!=s_aida()) return false;    
+    if(tag_name!=s_aida()) return false;
 
    {tools::xml::looper _for(*top);
     while(tools::xml::tree* _tree = _for.next_tree()) {
@@ -51,7 +51,7 @@ public:
       if(!rder) {
         m_out << "tools::raxml::load_file :"
               << " reader not found for " << tools::sout(_tag_name)
-              << std::endl;        
+              << std::endl;
         //m_objects.clear(); //keep already loaded objects.
         return false;
       } else {

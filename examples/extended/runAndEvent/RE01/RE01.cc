@@ -40,11 +40,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "RE01DetectorConstruction.hh"
@@ -59,18 +55,13 @@
 
 int main(int argc,char** argv)
 {
- // Instantiate G4UIExecutive if there are no arguments (interactive mode)
- G4UIExecutive* ui = nullptr;
- if ( argc == 1 ) {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
    ui = new G4UIExecutive(argc, argv);
- }
+  }
 
-#ifdef G4MULTITHREADED
- G4MTRunManager * runManager = new G4MTRunManager;
- //runManager->SetNumberOfThreads(4);
-#else
- G4RunManager * runManager = new G4RunManager;
-#endif
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // Visualization manager construction
   G4VisManager* visManager = new G4VisExecutive;

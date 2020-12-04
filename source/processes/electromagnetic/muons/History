@@ -16,6 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 October 20:  V.Ivanchenko (emmuons-V10-06-03)
+- G4ModifiedMephi - new angular generator for muon/hadron 
+    bremsstrahlung
+- G4MuPairProductionModel, G4MuBremmstrahlungModel - updated
+    sampling of final state using G4ModifiedMephi; implemented
+    check on energy transfer and if beyond the threshold, kill
+    primary particle and add it to the list of secondary particles
+- G4MuPairProduction, G4MuBremmstrahlung - added definition of 
+    the energy threshold for creation of a vertex, when energy 
+    transfer is above the threshold (CMS request)
+
+01 September 20: G.Amadio (emmuons-V10-06-02)
+- G4MuPairProductionModel - optimize ComputeDMiscroscopicCrossSection
+  to speedup initialization
+
 31 January 20:  V.Ivanchenko (emmuons-V10-06-01)
 - G4MuPairProductionModel - fixed Coverity warning 
 

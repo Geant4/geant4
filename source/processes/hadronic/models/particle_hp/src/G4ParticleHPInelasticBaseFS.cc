@@ -327,7 +327,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   {
     tmpHadrons = theEnergyAngData->Sample(eKinetic);
 
-    if ( !std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) {
+    if ( ! G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) {
       //141017 Fix BEGIN 
       //Adjust A and Z in the case of miss much between selected data and target nucleus 
       if ( tmpHadrons != NULL ) {
@@ -492,7 +492,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 #ifdef PHP_AS_HP 
     bAdjustPhotons = true; 
 #else
-    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) bAdjustPhotons = false;
+    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) bAdjustPhotons = false;    
 #endif
  
     if( bAdjustPhotons ) {

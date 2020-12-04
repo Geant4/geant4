@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 2020 B. Morgan (phononExample-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 24 June 2018 G.Folger        (phononExample-V10-04-03)
 - Correct Windows specific references for windows line ends
 
@@ -27,7 +30,7 @@ track of all tags.
 
 21 March 2018 G.Folger       (phononExample-V10-04-00)
 -  update references for caustic and timing
-     changed caused by new CLHEP 2.4.0.4 with changes in random 
+     changed caused by new CLHEP 2.4.0.4 with changes in random
 
 
 4 December 2017 G.Folger     (phononExample-V10-03-08)
@@ -40,7 +43,7 @@ track of all tags.
 24 October 2017 G.Folger    (phononExample-V10-03-06)
 -  create caustic and timings with \n at least line, drop first
      empty line; it is difficult to create file without final \nl
--  update references for this change.       
+-  update references for this change.
 
 24 October 2017 G.Folger    (phononExample-V10-03-05)
 -  update references for caustic and timing
@@ -74,7 +77,7 @@ track of all tags.
 
 19 November 2016 A.Dotti     (phononExample-V10-02-08)
 - explicit set of SD to manager
- 
+
 14 October 2016 G.Folger    (phononExample-V10-02-07)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
@@ -93,7 +96,7 @@ track of all tags.
 - run.in: do not set random seed, this changes caustic.ssv and timing.ssv
 
 26 July 2016: Gunter Folger (phononExample-V10-02-02)
-- add clang/icc specific references, and switch depending on compiler 
+- add clang/icc specific references, and switch depending on compiler
 
 17 February 2016: E. Bagli (phononExample-V10-02-01)
 - run.in: set the random seed in the macro file
@@ -199,7 +202,7 @@ NOTE:  XPhysicsList.cc still has process verbosity.
   to use of h_Planck.  Updated run.out to reflect reduced message output.
 
 13 June 2013: A. Dotti (phononExample-V09-06-03)
-- Adding reference files for MT mode, adding CTestDefinitions.txt 
+- Adding reference files for MT mode, adding CTestDefinitions.txt
   file containing new ctest with OS/Mode reference files
 
 6 June 2013: G. Cosmo (phononExample-V09-06-02)
@@ -215,7 +218,7 @@ NOTE:  XPhysicsList.cc still has process verbosity.
 - Fixed cases of variable shadowing.
 
 15 November 2012: I. Hrivnacova (phononExample-V09-05-08)
-- Fixed files descriptions, .README for a change in the example 
+- Fixed files descriptions, .README for a change in the example
   directory name.
 
 14 November 2012: I. Hrivnacova (phononExample-V09-05-07)
@@ -247,7 +250,7 @@ NOTE:  XPhysicsList.cc still has process verbosity.
 - Added explicit include of units and physical constants
 - Replaced own defined PI with pi from physical constants
 - Adding Copyright where missing
-- Allocate XLogicalLattice on heap to avoid a stack overflow 
+- Allocate XLogicalLattice on heap to avoid a stack overflow
 - Added file descriptions (for Doxygen documentation)
 - Added .README file
 - Replaced tabulations with space characters

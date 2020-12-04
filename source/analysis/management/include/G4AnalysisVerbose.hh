@@ -36,7 +36,7 @@
 class G4AnalysisVerbose
 {
   public:
-    G4AnalysisVerbose(const G4String& type, G4int verboseLevel);
+    G4AnalysisVerbose(G4int verboseLevel);
     ~G4AnalysisVerbose();
 
     void Message(const G4String& action, 
@@ -52,7 +52,6 @@ class G4AnalysisVerbose
   private:
     // data members
     //
-    G4String fType;
     G4String fToBeDoneText;
     G4String fDoneText;
     G4String fFailureText;

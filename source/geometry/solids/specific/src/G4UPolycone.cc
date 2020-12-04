@@ -266,7 +266,7 @@ G4bool G4UPolycone::Reset()
     message << "Solid " << GetName() << " built using generic construct."
             << G4endl << "Not applicable to the generic construct !";
     G4Exception("G4UPolycone::Reset()", "GeomSolids1001",
-                JustWarning, message, "Parameters NOT resetted.");
+                JustWarning, message, "Parameters NOT reset.");
     return true;  // error code set
   }
 

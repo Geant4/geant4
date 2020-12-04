@@ -78,7 +78,7 @@ G4FTFModel::G4FTFModel( const G4String& modelName ) :
   //
   NumberOfInvolvedNucleonsOfTarget = 0;
   NumberOfInvolvedNucleonsOfProjectile= 0;
-  for ( G4int i = 0; i < 250; i++ ) {
+  for ( G4int i = 0; i < 250; ++i ) {
     TheInvolvedNucleonsOfTarget[i] = 0;
     TheInvolvedNucleonsOfProjectile[i] = 0;
   }
@@ -132,7 +132,7 @@ G4FTFModel::~G4FTFModel() {
 
    // Erasing of target involved nucleons.
    if ( NumberOfInvolvedNucleonsOfTarget != 0 ) {
-     for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; i++ ) {
+     for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; ++i ) {
        G4VSplitableHadron* aNucleon = TheInvolvedNucleonsOfTarget[i]->GetSplitableHadron();
        if ( aNucleon ) delete aNucleon;
      }
@@ -140,7 +140,7 @@ G4FTFModel::~G4FTFModel() {
 
    // Erasing of projectile involved nucleons.
    if ( NumberOfInvolvedNucleonsOfProjectile != 0 ) {
-     for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
+     for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; ++i ) {
        G4VSplitableHadron* aNucleon = TheInvolvedNucleonsOfProjectile[i]->GetSplitableHadron();
        if ( aNucleon ) delete aNucleon;
      }
@@ -273,8 +273,15 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
   G4cout << "FTF end of Init" << G4endl << G4endl;
   #endif
 
-  //if ( std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ) <= 1  &&
-  //     aNucleus.GetA_asInt() < 2 ) theParameters->SetProbabilityOfElasticScatt( 0.0 );
+  // In the case of Hydrogen target, for non-ion hadron projectiles,
+  // do NOT simulate quasi-elastic (by forcing to 0 the probability of
+  // elastic scatering in theParameters - which is used only by FTF).
+  // This is necessary because in this case quasi-elastic on a target nucleus
+  // with only one nucleon would be identical to the hadron elastic scattering,
+  // and the latter is already included in the elastic process 
+  // (i.e. G4HadronElasticProcess).
+  if ( std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ) <= 1  &&
+       aNucleus.GetA_asInt() < 2 ) theParameters->SetProbabilityOfElasticScatt( 0.0 );
 }
 
 
@@ -358,14 +365,14 @@ G4ExcitedStringVector* G4FTFModel::GetStrings() {
   G4VSplitableHadron* aNucleon = 0;
 
   // Erase the projectile nucleons
-  for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
+  for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; ++i ) {
     aNucleon = TheInvolvedNucleonsOfProjectile[i]->GetSplitableHadron();
     if ( aNucleon ) delete aNucleon;
   } 
   NumberOfInvolvedNucleonsOfProjectile = 0;
 
   // Erase the target nucleons
-  for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; i++ ) {
+  for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; ++i ) {
     aNucleon = TheInvolvedNucleonsOfTarget[i]->GetSplitableHadron();
     if ( aNucleon ) delete aNucleon;
   } 
@@ -406,6 +413,7 @@ void G4FTFModel::StoreInvolvedNucleon() {
   G4cout << "NumberOfInvolvedNucleonsOfTarget " << NumberOfInvolvedNucleonsOfTarget
          << G4endl << G4endl;
   #endif
+
 
   if ( ! GetProjectileNucleus() ) return;  // The projectile is a hadron
 
@@ -970,7 +978,7 @@ G4bool G4FTFModel::ExciteParticipants() {
 
         // Return to the annihilation
         theParticipants.StartLoop(); 
-        for ( G4int I = 0; I < CurrentInteraction; I++ ) theParticipants.Next();
+        for ( G4int I = 0; I < CurrentInteraction; ++I ) theParticipants.Next();
 
         // At last, annihilation
         if ( ! HighEnergyInter ) {
@@ -1002,7 +1010,7 @@ G4bool G4FTFModel::ExciteParticipants() {
             }
           }
           theParticipants.StartLoop(); 
-          for ( G4int I = 0; I < CurrentInteraction; I++ ) theParticipants.Next();
+          for ( G4int I = 0; I < CurrentInteraction; ++I ) theParticipants.Next();
           */
 
         }
@@ -2287,7 +2295,7 @@ void G4FTFModel::GetResiduals() {
     G4LorentzVector DeltaPResidualNucleus = TargetResidual4Momentum /
                                             G4double( NumberOfInvolvedNucleonsOfTarget );
 
-    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; i++ ) {
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; ++i ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfTarget[i];
 
       #ifdef debugFTFmodel
@@ -2389,7 +2397,7 @@ void G4FTFModel::GetResiduals() {
     DeltaPResidualNucleus = ProjectileResidual4Momentum /
                             G4double( NumberOfInvolvedNucleonsOfProjectile );
 
-    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; ++i ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfProjectile[i];
 
       #ifdef debugFTFmodel
@@ -2493,7 +2501,7 @@ void G4FTFModel::GetResiduals() {
     #endif
 
     G4int NumberOfTargetParticipant( 0 );
-    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; i++ ) {
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; ++i ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfTarget[i];
       G4VSplitableHadron* targetSplitable = aNucleon->GetSplitableHadron();
       if ( targetSplitable->GetSoftCollisionCount() != 0 ) NumberOfTargetParticipant++;
@@ -2507,7 +2515,7 @@ void G4FTFModel::GetResiduals() {
       DeltaPResidualNucleus = TargetResidual4Momentum / G4double( NumberOfTargetParticipant );
     }
 
-    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; i++ ) {
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfTarget; ++i ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfTarget[i];
       G4VSplitableHadron* targetSplitable = aNucleon->GetSplitableHadron();
       if ( targetSplitable->GetSoftCollisionCount() != 0 ) {
@@ -2537,7 +2545,7 @@ void G4FTFModel::GetResiduals() {
     #endif
 
     G4int NumberOfProjectileParticipant( 0 );
-    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; ++i ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfProjectile[i];
       G4VSplitableHadron* projectileSplitable = aNucleon->GetSplitableHadron();
       if ( projectileSplitable->GetSoftCollisionCount() != 0 ) NumberOfProjectileParticipant++;
@@ -2556,7 +2564,7 @@ void G4FTFModel::GetResiduals() {
     }
     //G4cout << "DeltaExcitationE DeltaPResidualNucleus " << DeltaExcitationE
     //       << " " << DeltaPResidualNucleus << G4endl;
-    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; i++ ) {
+    for ( G4int i = 0; i < NumberOfInvolvedNucleonsOfProjectile; ++i ) {
       G4Nucleon* aNucleon = TheInvolvedNucleonsOfProjectile[i];
       G4VSplitableHadron* projectileSplitable = aNucleon->GetSplitableHadron();
       if ( projectileSplitable->GetSoftCollisionCount() != 0 ) {
@@ -2589,18 +2597,18 @@ void G4FTFModel::GetResiduals() {
 
 G4ThreeVector G4FTFModel::GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const {
 
-  G4double Pt2( 0.0 );
+  G4double Pt2( 0.0 ), Pt( 0.0 );
 
   if (AveragePt2 > 0.0) {
-    if (maxPtSquare/AveragePt2 < 1.0e+9) {
-      Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
-                                     ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
+    const G4double ymax = maxPtSquare/AveragePt2;
+    if ( ymax < 200. ) {
+      Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * ( G4Exp( -ymax ) -1.0 ) );
     } else {
       Pt2 = -AveragePt2 * G4Log( 1.0 - G4UniformRand() ); 
     }
+    Pt = std::sqrt( Pt2 );
   }
 
-  G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;
  
   return G4ThreeVector( Pt*std::cos(phi), Pt*std::sin(phi), 0.0 );    
@@ -2718,7 +2726,7 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
   G4int maxNumberOfDeltas = G4int( (sqrtS - sumMasses)/(400.0*MeV) );
   G4int numberOfDeltas = 0;
 
-  for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+  for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
 
     if ( G4UniformRand() < probDeltaIsobar  &&  numberOfDeltas < maxNumberOfDeltas ) {
       numberOfDeltas++;
@@ -2774,8 +2782,16 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
   // the action of this method consists in changing the properties of the nucleons
   // whose pointers are in the vector involvedNucleons, as well as changing the
   // variable mass2.
+#ifdef debugPutOnMassShell
+  G4cout << "G4FTFModel::SamplingNucleonKinematics:" << G4endl;
+  G4cout << " averagePt2= " << averagePt2 << " maxPt2= " << maxPt2
+	 << " dCor= " << dCor << " resMass(GeV)= " << residualMass/GeV
+	 << " resMassN= " << residualMassNumber 
+         << " nNuc= " << numberOfInvolvedNucleons
+	 << " lv= " << pResidual << G4endl;   
+#endif
 
-  if ( ! nucleus ) return false;
+  if ( ! nucleus || numberOfInvolvedNucleons < 1) return false;
 
   if ( residualMassNumber == 0  &&  numberOfInvolvedNucleons == 1 ) {
     dCor = 0.0; 
@@ -2785,14 +2801,10 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
   G4bool success = true;                            
 
   G4double SumMasses = residualMass; 
+  G4double invN = 1.0/(G4double)numberOfInvolvedNucleons;
 
-  for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
-    G4Nucleon* aNucleon = involvedNucleons[i];
-    if ( ! aNucleon ) continue;
-    SumMasses += aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass();
-  }
-  //
-
+  // to avoid problems due to precision lost a tolerance is added
+  const G4double eps = 1.e-10;  
   const G4int maxNumberOfLoops = 1000;
   G4int loopCounter = 0;
   do {
@@ -2801,21 +2813,22 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
 
     // Sampling of nucleon Pt 
     G4ThreeVector ptSum( 0.0, 0.0, 0.0 );
-
-    for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
-      G4Nucleon* aNucleon = involvedNucleons[i];
-      if ( ! aNucleon ) continue;
-      G4ThreeVector tmpPt = GaussianPt( averagePt2, maxPt2 );
-      ptSum += tmpPt;
-      G4LorentzVector tmp( tmpPt.x(), tmpPt.y(), 0.0, 0.0 );
-      aNucleon->SetMomentum( tmp );
+    if( averagePt2 > 0.0 ) {
+      for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
+	G4Nucleon* aNucleon = involvedNucleons[i];
+	if ( ! aNucleon ) continue;
+	G4ThreeVector tmpPt = GaussianPt( averagePt2, maxPt2 );
+	ptSum += tmpPt;
+	G4LorentzVector tmp( tmpPt.x(), tmpPt.y(), 0.0, 0.0 );
+	aNucleon->SetMomentum( tmp );
+      }
     }
 
-    G4double deltaPx = ( ptSum.x() - pResidual.x() ) / numberOfInvolvedNucleons;
-    G4double deltaPy = ( ptSum.y() - pResidual.y() ) / numberOfInvolvedNucleons;
+    G4double deltaPx = ( ptSum.x() - pResidual.x() )*invN;
+    G4double deltaPy = ( ptSum.y() - pResidual.y() )*invN;
 
     SumMasses = residualMass;
-    for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+    for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
       G4Nucleon* aNucleon = involvedNucleons[i];
       if ( ! aNucleon ) continue;
       G4double px = aNucleon->Get4Momentum().px() - deltaPx;
@@ -2830,88 +2843,77 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
     // Sampling X of nucleon
     G4double xSum = 0.0;
 
-    for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+    for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
       G4Nucleon* aNucleon = involvedNucleons[i];
       if ( ! aNucleon ) continue;
-
-      G4ThreeVector tmpX = GaussianPt( dCor*dCor, 1.0 );
-      //G4double x = tmpX.x() + aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()/SumMasses;
-      G4double x = tmpX.x() + aNucleon->Get4Momentum().e()/SumMasses;
-      if ( x < 0.0  ||  x > 1.0 ) { 
+     
+      G4double x = 0.0;
+      if( 0.0 != dCor ) {
+	G4ThreeVector tmpX = GaussianPt( dCor*dCor, 1.0 );
+        x = tmpX.x();
+      } 
+      x += aNucleon->Get4Momentum().e()/SumMasses;
+      if ( x < -eps  ||  x > 1.0 + eps ) { 
         success = false; 
         break;
       }
+      x = std::min(1.0, std::max(x, 0.0));
       xSum += x;
-      // The energy is in the lab (instead of cms) frame but it will not be used.
+      // The energy is in the lab (instead of cms) frame but it will not be used
 
-      G4LorentzVector tmp( aNucleon->Get4Momentum().x(), aNucleon->Get4Momentum().y(), 
+      G4LorentzVector tmp( aNucleon->Get4Momentum().x(), 
+                           aNucleon->Get4Momentum().y(), 
                            x, aNucleon->Get4Momentum().e() );
       aNucleon->SetMomentum( tmp );
     }
 
-    if ( xSum < 0.0  ||  xSum > 1.0 ) success = false;
-
+    if ( xSum < -eps || xSum > 1.0 + eps ) success = false;
     if ( ! success ) continue;
 
-    //G4double deltaPx = ( ptSum.x() - pResidual.x() ) / numberOfInvolvedNucleons;
-    //G4double deltaPy = ( ptSum.y() - pResidual.y() ) / numberOfInvolvedNucleons;
-    G4double delta = 0.0;
-    if ( residualMassNumber == 0 ) {
-      delta = ( xSum - 1.0 ) / numberOfInvolvedNucleons;
-    } else {
-      delta = 0.0;
-    }
+    G4double delta = ( residualMassNumber == 0 ) ? std::min(xSum - 1.0, 0.0)*invN : 0.0;
 
     xSum = 1.0;
     mass2 = 0.0;
-    for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+    for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
       G4Nucleon* aNucleon = involvedNucleons[i];
       if ( ! aNucleon ) continue;
       G4double x = aNucleon->Get4Momentum().pz() - delta;
-      xSum -= x;               
+      xSum -= x;
+
       if ( residualMassNumber == 0 ) {
-        if ( x <= 0.0  ||  x > 1.0 ) {
+        if ( x <= -eps || x > 1.0 + eps ) {
           success = false; 
           break;
         }
       } else {
-        if ( x <= 0.0  ||  x > 1.0  ||  xSum <= 0.0  ||  xSum > 1.0 ) {
+        if ( x <= -eps || x > 1.0 + eps || xSum <= -eps || xSum > 1.0 + eps ) {
           success = false; 
           break;
         }
-      }                                          
-
-      /*
-      G4double px = aNucleon->Get4Momentum().px() - deltaPx;
-      G4double py = aNucleon->Get4Momentum().py() - deltaPy;
-      mass2 += ( sqr( aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass() )
-               + sqr( px ) + sqr( py ) ) / x;
-      G4LorentzVector tmp( px, py, x, aNucleon->Get4Momentum().e() );
-      */
+      } 
+      x = std::min(1.0, std::max(x, eps));
 
       mass2 += sqr( aNucleon->Get4Momentum().e() ) / x;
-      G4LorentzVector tmp( aNucleon->Get4Momentum().px(), aNucleon->Get4Momentum().py(), 
+
+      G4LorentzVector tmp( aNucleon->Get4Momentum().px(), 
+                           aNucleon->Get4Momentum().py(), 
                            x, aNucleon->Get4Momentum().e() );
       aNucleon->SetMomentum( tmp );
     }
     if ( ! success ) continue;
+    xSum = std::min(1.0, std::max(xSum, eps));
 
-    if ( success  &&  residualMassNumber != 0 ) {
+    if ( residualMassNumber > 0 ) {
       mass2 += ( sqr( residualMass ) + pResidual.perp2() ) / xSum;
-      //mass2 += sqr( residualMass ) / xSum;
     }
-
     #ifdef debugPutOnMassShell
-    G4cout << "success " << success << G4endl << " Mt " << std::sqrt( mass2 )/GeV << G4endl;
+    G4cout << "success: " << success << " Mt(GeV)= " 
+	   << std::sqrt( mass2 )/GeV << G4endl;
     #endif
 
   } while ( ( ! success ) &&
             ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
-  if ( loopCounter >= maxNumberOfLoops ) {
-    return false;
-  }
-
-  return true;
+  return ( loopCounter < maxNumberOfLoops );
 }
 
 
@@ -2959,7 +2961,7 @@ CheckKinematics( const G4double sValue,                 // input parameter
          << "\t projectileY targetY " << projectileY << " " << targetY << G4endl;
   #endif
 
-  for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+  for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
     G4Nucleon* aNucleon = involvedNucleons[i];
     if ( ! aNucleon ) continue;
     G4LorentzVector tmp = aNucleon->Get4Momentum();
@@ -3015,7 +3017,7 @@ FinalizeKinematics( const G4double w,                            // input parame
 
   G4ThreeVector residual3Momentum( 0.0, 0.0, 1.0 );
 
-  for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
+  for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
     G4Nucleon* aNucleon = involvedNucleons[i];
     if ( ! aNucleon ) continue;
     G4LorentzVector tmp = aNucleon->Get4Momentum();

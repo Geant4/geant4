@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -144,9 +144,9 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax=   10 GeV  ModifiedTsai
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e-  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -157,9 +157,9 @@ eIoni:  for e-  SubType=2
       CSDA range table up to 10 GeV in 180 bins
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -174,9 +174,9 @@ annihil:  for e+, integral:1  SubType=5 BuildTable=0
             eplus2gg : Emin=    0 eV  Emax=   10 GeV
 
 msc:  for proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for proton  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
@@ -209,18 +209,18 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
- ---> NbofEvents= 1000   NbOfelectr= 70726   Tkin= 589.139 keV (0.000 %)   NbOfelec in cav= 4785   Dose/EnFluence= 29.592 cm2/g (0.000 %) 
+ ---> NbofEvents= 1000   NbOfelectr= 70758   Tkin= 588.474 keV (0.000 %)   NbOfelec in cav= 4567   Dose/EnFluence= 28.072 cm2/g (0.000 %) 
 
 --> Event 2000 starts.
- ---> NbofEvents= 2000   NbOfelectr= 140567   Tkin= 587.699 keV (-0.244 %)   NbOfelec in cav= 9836   Dose/EnFluence= 30.158 cm2/g (1.910 %) 
+ ---> NbofEvents= 2000   NbOfelectr= 141208   Tkin= 588.377 keV (-0.016 %)   NbOfelec in cav= 9408   Dose/EnFluence= 28.958 cm2/g (3.154 %) 
 
 --> Event 3000 starts.
- ---> NbofEvents= 3000   NbOfelectr= 211774   Tkin= 589.440 keV (0.296 %)   NbOfelec in cav= 14357   Dose/EnFluence= 30.536 cm2/g (1.254 %) 
+ ---> NbofEvents= 3000   NbOfelectr= 211737   Tkin= 588.491 keV (0.019 %)   NbOfelec in cav= 13787   Dose/EnFluence= 29.055 cm2/g (0.336 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=42.410000s Real=43.102396s Sys=0.030000s
+  User=7.270000s Real=7.680537s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -230,31 +230,31 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281945  Transportation= 78940  msc= 2584067  eIoni= 1716147
+ Process calls frequency --->  compt= 281455  Transportation= 76810  msc= 638362  eIoni= 2197055
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 589.2619 keV +- 0.1027 %  (--> range in wall material = 2.2263 mm )
- Mass_energy_transfer coef: 29.9174 cm2/g
+ Mean energy of secondary e- = 588.5850 keV +- 0.1030 %  (--> range in wall material = 2.2229 mm )
+ Mass_energy_transfer coef: 29.8830 cm2/g
 
- StoppingPower in wall   = 1.9638 MeV*cm2/g
-               in cavity = 1.9638 MeV*cm2/g
+ StoppingPower in wall   = 1.9642 MeV*cm2/g
+               in cavity = 1.9642 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19434	 Energy = 9.8009 GeV
-      Exit  --> nbParticles = 19434	 Energy = 9.8017 GeV
+      Enter --> nbParticles = 18773	 Energy = 9.5461 GeV
+      Exit  --> nbParticles = 18788	 Energy = 9.5512 GeV
 
- Total edep in cavity = 13.5332 MeV +- 3.1102 %	 Total charged trackLength = 54.6531 m     (mean value = 2.8122 mm )
- Total dose in cavity = 21.5387 MeV/mg
- Dose/EnergyFluence   = 30.4496 cm2/g
+ Total edep in cavity = 13.6012 MeV +- 3.4449 %	 Total charged trackLength = 52.6135 m     (mean value = 2.8026 mm )
+ Total dose in cavity = 21.6470 MeV/mg
+ Dose/EnergyFluence   = 30.6027 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.01779 +- 0.03167
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.02408 +- 0.03529
 
- StepSize of ch. tracks in wall   = 110.2904 um  +- 70.5163 um 	 (nbSteps/track = 15.2240)
- StepSize of ch. tracks in cavity = 689.7601 um  +- 763.7022 um 	 (nbSteps/track = 4.0771)
+ StepSize of ch. tracks in wall   = 167.5592 um  +- 186.2897 um 	 (nbSteps/track = 10.0496)
+ StepSize of ch. tracks in cavity = 691.0377 um  +- 756.9987 um 	 (nbSteps/track = 4.0557)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.07 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

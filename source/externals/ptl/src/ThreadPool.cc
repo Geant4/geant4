@@ -109,7 +109,7 @@ ThreadPool::set_use_tbb(bool enable)
 //======================================================================================//
 
 const ThreadPool::thread_id_map_t&
-ThreadPool::GetThreadIDs()
+ThreadPool::get_thread_ids()
 {
   return f_thread_ids;
 }
@@ -117,7 +117,7 @@ ThreadPool::GetThreadIDs()
 //======================================================================================//
 
 uintmax_t
-ThreadPool::GetThisThreadID()
+ThreadPool::get_this_thread_id()
 {
     auto _tid = ThisThread::get_id();
     {
@@ -154,13 +154,13 @@ ThreadPool::ThreadPool(const size_type& pool_size, VUserTaskQueue* task_queue,
 {
     m_verbose = GetEnv<int>("PTL_VERBOSE", m_verbose);
 
-    auto master_id = GetThisThreadID();
+    auto master_id = get_this_thread_id();
     if(master_id != 0 && m_verbose > 1)
         std::cerr << "ThreadPool created on non-master slave" << std::endl;
 
     thread_data() = new ThreadData(this);
 
-    // initialize after GetThisThreadID so master is zero
+    // initialize after get_this_thread_id so master is zero
     this->initialize_threadpool(pool_size);
 
     if(!m_task_queue)
@@ -171,76 +171,20 @@ ThreadPool::ThreadPool(const size_type& pool_size, VUserTaskQueue* task_queue,
 
 ThreadPool::~ThreadPool()
 {
-    //------------------------------------------------------------------------//
-    // set state to stopped
-    m_pool_state->store(thread_pool::state::STOPPED);
-
-    //------------------------------------------------------------------------//
-    // notify all threads we are shutting down
-    m_task_lock->lock();
-    CONDITIONBROADCAST(m_task_cond.get());
-    m_task_lock->unlock();
-
-    //--------------------------------------------------------------------//
-    // set to dead
-    m_alive_flag->store(false);
-
-    //--------------------------------------------------------------------//
-    // delete tbb task scheduler
-#ifdef PTL_USE_TBB
-    if(m_tbb_tp && tbb_global_control())
+    if(m_alive_flag->load())
     {
-        tbb_global_control_t*& _global_control = tbb_global_control();
-        delete _global_control;
-        _global_control = nullptr;
-        m_tbb_tp        = false;
-        std::cout << "ThreadPool [TBB] destroyed" << std::endl;
+        std::cerr << "Warning! ThreadPool was not properly destroyed! Call "
+                     "destroy_threadpool() before deleting the ThreadPool object to "
+                     "eliminate this message."
+                  << std::endl;
+        m_pool_state->store(thread_pool::state::STOPPED);
+        m_task_lock->lock();
+        CONDITIONBROADCAST(m_task_cond.get());
+        m_task_lock->unlock();
+        for(auto& itr : m_threads)
+            itr.join();
+        m_threads.clear();
     }
-
-    //--------------------------------------------------------------------//
-    // delete tbb task-group
-    if(m_tbb_task_group)
-    {
-        m_tbb_task_group->wait();
-        delete m_tbb_task_group;
-        m_tbb_task_group = nullptr;
-    }
-#endif
-
-    auto _tid = std::this_thread::get_id();
-    if(f_thread_ids.find(_tid) != f_thread_ids.end())
-        f_thread_ids.erase(f_thread_ids.find(_tid));
-
-    for(auto& itr : m_main_threads)
-        if(f_thread_ids.find(itr) != f_thread_ids.end())
-            f_thread_ids.erase(f_thread_ids.find(itr));
-
-    m_thread_awake.reset();
-
-    std::cout << "ThreadPool destroyed" << std::endl;
-
-    /*
-    // Release resources
-    if(m_pool_state.load() != thread_pool::state::STOPPED)
-    {
-        size_type ret = destroy_threadpool();
-        while(ret > 0)
-            ret = stop_thread();
-    }
-
-    // wait until thread pool is fully destroyed
-    while(is_alive())
-        ;
-
-    // delete thread-local allocator and erase thread IDS
-    auto      _tid = std::this_thread::get_id();
-
-    if(f_thread_ids.find(_tid) != f_thread_ids.end())
-        f_thread_ids.erase(f_thread_ids.find(_tid));
-
-    // deleted by ThreadData
-    // delete m_task_queue;
-    */
 }
 
 //======================================================================================//
@@ -319,25 +263,6 @@ ThreadPool::initialize_threadpool(size_type proposed_size)
             m_tbb_task_group = new tbb_task_group_t();
         return m_pool_size;
     }
-
-    // NOLINT(readability-else-after-return)
-    if(f_use_tbb && tbb_global_control())
-    {
-        m_tbb_tp                               = false;
-        tbb_global_control_t*& _global_control = tbb_global_control();
-        if(_global_control)
-        {
-            delete _global_control;
-            _global_control = nullptr;
-        }
-        // delete task group (used for async)
-        if(m_tbb_task_group)
-        {
-            m_tbb_task_group->wait();
-            delete m_tbb_task_group;
-            m_tbb_task_group = nullptr;
-        }
-    }
 #endif
 
     m_alive_flag->store(true);
@@ -379,24 +304,24 @@ ThreadPool::initialize_threadpool(size_type proposed_size)
         m_is_joined.reserve(proposed_size);
     }
 
-    auto this_tid = GetThisThreadID();
+    auto this_tid = get_this_thread_id();
     for(size_type i = m_pool_size; i < proposed_size; ++i)
     {
         // add the threads
         try
         {
-            Thread tid(ThreadPool::start_thread, this, this_tid + i + 1);
+            Thread thr(ThreadPool::start_thread, this, this_tid + i + 1);
             // only reaches here if successful creation of thread
             ++m_pool_size;
             // store thread
-            m_main_threads.push_back(tid.get_id());
+            m_main_threads.push_back(thr.get_id());
             // list of joined thread booleans
             m_is_joined.push_back(false);
             // set the affinity
             if(m_use_affinity)
-                set_affinity(i, tid);
-            // detach
-            tid.detach();
+                set_affinity(i, thr);
+            // store
+            m_threads.emplace_back(std::move(thr));
         } catch(std::runtime_error& e)
         {
             std::cerr << e.what() << std::endl;  // issue creating thread
@@ -450,6 +375,12 @@ ThreadPool::destroy_threadpool()
     //--------------------------------------------------------------------//
     // handle tbb task scheduler
 #ifdef PTL_USE_TBB
+    if(m_tbb_task_group)
+    {
+        m_tbb_task_group->wait();
+        delete m_tbb_task_group;
+        m_tbb_task_group = nullptr;
+    }
     if(m_tbb_tp && tbb_global_control())
     {
         tbb_global_control_t*& _global_control = tbb_global_control();
@@ -457,12 +388,6 @@ ThreadPool::destroy_threadpool()
         _global_control = nullptr;
         m_tbb_tp        = false;
         std::cout << "ThreadPool [TBB] destroyed" << std::endl;
-    }
-    if(m_tbb_task_group)
-    {
-        m_tbb_task_group->wait();
-        delete m_tbb_task_group;
-        m_tbb_task_group = nullptr;
     }
 #endif
 
@@ -488,6 +413,11 @@ ThreadPool::destroy_threadpool()
 
     for(size_type i = 0; i < m_is_joined.size(); i++)
     {
+        //--------------------------------------------------------------------//
+        //
+        if(i < m_threads.size())
+            m_threads.at(i).join();
+
         //--------------------------------------------------------------------//
         // if its joined already, nothing else needs to be done
         if(m_is_joined.at(i))
@@ -517,9 +447,9 @@ ThreadPool::destroy_threadpool()
         //--------------------------------------------------------------------//
     }
 
+    m_threads.clear();
     m_main_threads.clear();
     m_is_joined.clear();
-
     m_alive_flag->store(false);
 
     auto start   = std::chrono::steady_clock::now();

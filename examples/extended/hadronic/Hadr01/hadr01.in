@@ -6,7 +6,7 @@
 /run/verbose 2
 /tracking/verbose 0
 #
-/testhadr/TargetMat        G4_Al 
+/testhadr/TargetMat        G4_W
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
 /testhadr/NumberDivZ       100

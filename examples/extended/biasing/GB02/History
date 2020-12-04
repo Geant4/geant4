@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan - GB02-V10-06-00
+- Migration to G4RunManagerFactory.
+
 May 20, 2018 J. Allison - GB02-V10-04-01
 - Remove G4UI_USE and G4VIS_USE.
 - Move instantiation of G4UIExecutive nearer to start of main.
@@ -29,7 +32,7 @@ Nov 02, 2016 I. Hrivnacova
 - Added files description (for Doxygen)
 
 Jul 20, 2016 I. Hrivnacova
-- Coding guidelines 
+- Coding guidelines
   (redundant empty lines, class data member names, separators)
 
 Nov 6, 2015, M. Verderi

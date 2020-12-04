@@ -42,7 +42,6 @@ endif()
 #
 # This module includes the following modules:
 include(CMakeDependentOption)
-include(Geant4MacroDefineModule)
 include(Geant4MacroLibraryTargets)
 
 #-----------------------------------------------------------------------
@@ -118,6 +117,7 @@ function(enum_option _var)
       endif()
     endif()
   endif()
+  set_property(CACHE ${_var} PROPERTY STRINGS ${_ENUMOP_VALUES})
 endfunction()
 
 #-----------------------------------------------------------------------

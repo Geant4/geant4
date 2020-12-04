@@ -153,14 +153,18 @@ public:  // with description
   // Add an element, giving number of atoms
   //
   void AddElement(G4Element* element,				//the element
-                  G4int      nAtoms);				//nb of atoms in
-		    						// a molecule
+                  G4int      nAtoms);				//nb of atoms in a molecule
+  inline 
+  void AddElementByNumberOfAtoms(G4Element* elm, G4int nAtoms) {AddElement(elm, nAtoms);}
+
   //
   // Add an element or material, giving fraction of mass
   //
   void AddElement (G4Element* element ,				//the element
                    G4double   fraction);			//fractionOfMass
-                     
+  inline 
+  void AddElementByMassFraction(G4Element* elm, G4double frac)  {AddElement(elm, frac);}
+
   void AddMaterial(G4Material* material,			//the material
                    G4double   fraction);			//fractionOfMass
                      

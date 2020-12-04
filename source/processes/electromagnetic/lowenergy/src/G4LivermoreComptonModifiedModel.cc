@@ -206,7 +206,7 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
 
   G4double epsilon0Local = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0Local * epsilon0Local;
-  G4double alpha1 = -std::log(epsilon0Local);
+  G4double alpha1 = -G4Log(epsilon0Local);
   G4double alpha2 = 0.5 * (1. - epsilon0Sq);
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;

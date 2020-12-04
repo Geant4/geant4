@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2020 M. Asai (exampleRE02-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 08 May 2018   J.Allison (exampleRE02-V10-04-01)
 - RE02.cc:
   o Remove G4_VIS_USE and G4UI_USE.

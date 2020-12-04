@@ -18,6 +18,12 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+3 July 2020  John Allison  (VRML-V10-06-02)
+- G4VRML1/2FileSceneHandler.cc:
+  o Fix Unbuntu 20 compiler warning about ignoring return value
+    of ‘int system(const char*)’.
+
 31 May 2020 Ben Morgan (VRML-V10-06-01)
 - Use add_definitions to set PRIVATE-level compile add_definitions
   for compatibility between old and new CMake systems

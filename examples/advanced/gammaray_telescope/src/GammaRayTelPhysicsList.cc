@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
+// Authors: Francesco Longo, franzlongo1969@gmail.com
 //
 // Code based on the hadrontherapy && radioprotection advanced example
 
@@ -35,9 +34,10 @@
 
 // Physic lists (contained inside the Geant4 distribution)
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh" // to treat the new polarised process 
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
-#include "G4EmLivermorePolarizedPhysics.hh" // TBC
+#include "G4EmLivermorePolarizedPhysics.hh" // 
 
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -175,6 +175,11 @@ void GammaRayTelPhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePolarizedPhysics();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+  } else if (name == "Gamma_Polarized") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option4();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardOption_4" << G4endl;
 
     /////////////////////////////////////////////////////////////////////////////
     //   HADRONIC MODELS

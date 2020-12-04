@@ -117,6 +117,7 @@ mark_as_advanced(CMAKE_CXX_FLAGS_MAINTAINER)
 #
 if(NOT CMAKE_CONFIGURATION_TYPES)
   # Single mode build tools like Make, Ninja,
+  set(__g4buildmodes "" Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer)
   if(NOT CMAKE_BUILD_TYPE)
     # Default to a Release build if nothing else...
     set(CMAKE_BUILD_TYPE Release
@@ -130,6 +131,7 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
       FORCE
       )
   endif()
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${__g4buildmodes})
 else()
   # Multimode tools like VS, Xcode
   list(APPEND CMAKE_CONFIGURATION_TYPES Debug_FPE)
@@ -154,14 +156,19 @@ endif() #NOT WIN32
 #
 
 #.rst
-# - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, 17, c++11, c++14, c++17)
+# - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, 17, 20)
 #
 #   - Choose C++ Standard to build against from supported list.
 #   - Note that only C++17 is supported on Windows with MSVC
+#   - C++20 awareness is only available from CMake 3.12 onwards
 #
-set(__g4_default_cxxstd 11 14 17 c++11 c++14 c++17)
+set(__g4_default_cxxstd 11 14 17)
 if(MSVC)
-  set(__g4_default_cxxstd 17 c++17)
+  set(__g4_default_cxxstd 17)
+endif()
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
+  list(APPEND __g4_default_cxxstd 20)
 endif()
 
 enum_option(GEANT4_BUILD_CXXSTD
@@ -175,7 +182,9 @@ mark_as_advanced(GEANT4_BUILD_CXXSTD)
 geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
 
 
-# Require at least C++11 with no extensions and the following features
+# Require at minimal set of C++11 features plus user's selection of standard, no extensions
+# Explicit features are retained for C++11 to identify use of old compilers with partial support.
+# Here, the `cxx_std_11` epoch feature might not be sufficient.
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(GEANT4_TARGET_COMPILE_FEATURES
   cxx_alias_templates
@@ -190,36 +199,25 @@ set(GEANT4_TARGET_COMPILE_FEATURES
   cxx_range_for
   cxx_strong_enums
   cxx_uniform_initialization
-  # Features that MSVC 18.0 cannot support but in list of Geant4 coding
-  # guidelines - to be required once support for that compiler is dropped.
-  # Version 10.2 is coded without these being required.
-  #cxx_deleted_functions
-  #cxx_generalized_initializers
-  #cxx_constexpr
-  #cxx_inheriting_constructors
-  )
+  cxx_std_${GEANT4_BUILD_CXXSTD})
 
-# If a standard higher than 11 has been selected, check that compiler has
-# at least one feature from that standard and append these to the required
-# feature list
-if(GEANT4_BUILD_CXXSTD GREATER 11)
-  if(CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES)
-    list(APPEND GEANT4_TARGET_COMPILE_FEATURES ${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES})
-  else()
-    message(FATAL_ERROR "Geant4 requested to be compiled against C++ standard '${GEANT4_BUILD_CXXSTD}'\nbut detected compiler '${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\ndoes not support, or CMake (${CMAKE_VERSION}) is not aware of, any features of that standard.")
-  endif()
+# Emit early fatal error if we don't have a record of the core standard
+# in CMake's known features. CMake will check this for us as well, but doing
+# the check here only emits one error. We can also give a better hint on the
+# cause/resolution
+if(NOT ("${CMAKE_CXX_COMPILE_FEATURES}" MATCHES "cxx_std_${GEANT4_BUILD_CXXSTD}"))
+  message(FATAL_ERROR
+    "Geant4 requested compilation using C++ standard '${GEANT4_BUILD_CXXSTD}' using compiler\n"
+    "'${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\n"
+    "but CMake ${CMAKE_VERSION} is not aware of any support for that standard by this compiler. You may need a newer CMake and/or compiler.\n")
 endif()
 
 # - Check for Standard Library Implementation Features
-# Smart pointers are a library implementation feature
-# Hashed containers are a library implementation feature
-# Random numbers are a library implementation feature?
-# An example of where a workaround is needed
-# Rest of concurrency a library implementation feature
+# e.g. Smart pointers are a library implementation feature
+# and provide workarounds if needed
 
 # Hold any appropriate compile flag(s) in variable for later export to
-# config files. Needed to support clients using late CMake 2.8 where compile features
-# are not available.
+# non-cmake config files
 set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_STANDARD_COMPILE_OPTION}")
 
 #-----------------------------------------------------------------------
@@ -277,6 +275,27 @@ if(GEANT4_BUILD_MULTITHREADED)
 endif()
 
 #-----------------------------------------------------------------------
+# Physics
+#-----------------------------------------------------------------------
+#.rst:
+# - ``GEANT4_BUILD_PHP_AS_HP`` (Default: OFF, ON if ``PHP_AS_HP`` set in environment)
+#
+#   - Build ParticleHP as HP.
+#   - Use of the ``PHP_AS_HP`` environment variable to enable this build
+#     option is deprecated and will be removed in the next release
+#
+set(_default_build_php_as_hp OFF)
+if(DEFINED ENV{PHP_AS_HP})
+  message(WARNING "Use of the PHP_AS_HP environment variable to enable building ParticleHP as HP is deprecated. "
+  "Use the GEANT4_BUILD_PHP_AS_HP CMake option to enable this functionality.")
+  set(_default_build_php_as_hp ON)
+endif()
+
+option(GEANT4_BUILD_PHP_AS_HP "Build ParticleHP as HP" ${_default_build_php_as_hp})
+mark_as_advanced(GEANT4_BUILD_PHP_AS_HP)
+geant4_add_feature(GEANT4_BUILD_PHP_AS_HP "Building ParticleHP as HP")
+
+#-----------------------------------------------------------------------
 # Miscellaneous
 #-----------------------------------------------------------------------
 #.rst:
@@ -302,6 +321,20 @@ option(GEANT4_BUILD_VERBOSE_CODE
   "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
   ON)
 mark_as_advanced(GEANT4_BUILD_VERBOSE_CODE)
+
+#.rst:
+# - ``GEANT4_BUILD_BUILTIN_BACKTRACE`` (Unix only, Default: OFF)
+#
+#   - Setting to ``ON`` will build in automatic signal handling for ``G4RunManager``
+#     through ``G4Backtrace``. Applications requiring/implenting their own signal
+#     handling should not enable this option.
+#
+if(UNIX)
+  option(GEANT4_BUILD_BUILTIN_BACKTRACE
+    "Enable automatic G4Backtrace signal handling in G4RunManager. Switch off for applications implementing their own signal handling"
+    OFF)
+  mark_as_advanced(GEANT4_BUILD_BUILTIN_BACKTRACE)
+endif()
 
 #.rst:
 # - ``GEANT4_BUILD_MSVC_MP`` (Windows only, Default: OFF)

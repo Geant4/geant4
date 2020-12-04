@@ -13,7 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+10/11/20 I. Hrivnacova  (genericPL-V10-06-00)
+- Migration to G4RunManagerFactory
+- Removed trailing whitespaces
+
 26/11/19 I. Hrivnacova  (genericPL-V10-05-01)
 - Fixed Doxygen warnings
 

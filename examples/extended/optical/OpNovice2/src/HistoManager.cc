@@ -27,11 +27,12 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
+
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,10 +45,7 @@ HistoManager::HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager()
-{
-  delete G4AnalysisManager::Instance();
-}
+HistoManager::~HistoManager() { delete G4AnalysisManager::Instance(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,48 +54,75 @@ void HistoManager::Book()
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetFileName(fFileName);
-  analysisManager->SetVerboseLevel(1);
-  analysisManager->SetActivation(true);    // enable inactivation of histograms
+  G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
+  analysisMan->SetFileName(fFileName);
+  analysisMan->SetVerboseLevel(1);
+  analysisMan->SetActivation(true);  // enable inactivation of histograms
 
-  // Define histogram indices, titles
-  G4int maxHisto = 15;
-  G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                   "10","11","12","13","14","15","16","17","18","19" };
- 
-  // TODO change throughout code
-  G4String title[] = {
-      "dummy",                                        // 0
-      "Cerenkov spectrum",                            // 1
-      "scintillation spectrum",                       // 2
-      "scintillation photons creation time",          // 3
-      "WLS absorption spectrum",                      // 4
-      "WLS emission spectrum",                        // 5
-      "WLS emission time",                            // 6
-      "WLS2 absorption spectrum",                     // 7
-      "WLS2 emission spectrum",                       // 8
-      "WLS2 emission time",                           // 9
-      "boundary process status",                      //10
-      "X momentum dir of backward-going photons",     //11
-      "Y momentum dir of backward-going photons",     //12
-      "Z momentum dir of backward-going photons",     //13
-      "X momentum dir of forward-going photons",      //14
-      "Y momentum dir of forward-going photons",      //15
-      "Z momentum dir of forward-going photons",      //16
-      "X momentum dir of Fresnel-refracted photons",  //17
-      "Y momentum dir of Fresnel-refracted photons",  //18
-      "Z momentum dir of Fresnel-refracted photons",  //19
-  };
- 
-  // Default values (to be reset via /analysis/h1/set command)               
-  G4int nbins = 100;
-  G4double vmin = 0.;
-  G4double vmax = 100.;
+  // Define histograms
+  // Default values (to be reset via /analysis/h1/set command)
+  G4int n      = 100;
+  G4double xmn = 0.;
+  G4double xmx = 100.;
 
-  // Create all histograms as inactivated 
-  for (G4int k=0; k <= maxHisto; ++k) {
-      G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-      analysisManager->SetH1Activation(ih, false);
+  // 0
+  analysisMan->CreateH1("0", "dummy", n, xmn, xmx);
+  // 1
+  analysisMan->CreateH1("Cerenkov spectrum", "Cerenkov spectrum", n, xmn, xmx);
+  // 2
+  analysisMan->CreateH1("Scintillation spectrum", "Scintillation spectrum", n,
+                        xmn, xmx);
+  // 3
+  analysisMan->CreateH1("Scintillation time",
+                        "scintillation photons creation time", n, xmn, xmx);
+  // 4
+  analysisMan->CreateH1("WLS abs", "WLS absorption spectrum", n, xmn, xmx);
+  // 5
+  analysisMan->CreateH1("WLS em", "WLS emission spectrum", n, xmn, xmx);
+  // 6
+  analysisMan->CreateH1("WLS time", "WLS emission time", n, xmn, xmx);
+  // 7
+  analysisMan->CreateH1("WLS2 abs", "WLS2 absorption spectrum", n, xmn, xmx);
+  // 8
+  analysisMan->CreateH1("WLS2 em", "WLS2 emission spectrum", n, xmn, xmx);
+  // 9
+  analysisMan->CreateH1("WLS2 time", "WLS2 emission time", n, xmn, xmx);
+  // 10
+  analysisMan->CreateH1("bdry status", "boundary process status", n, xmn, xmx);
+  // 11
+  analysisMan->CreateH1(
+    "x_backward", "X momentum dir of backward-going photons", n, xmn, xmx);
+  // 12
+  analysisMan->CreateH1(
+    "y_backward", "Y momentum dir of backward-going photons", n, xmn, xmx);
+  // 13
+  analysisMan->CreateH1(
+    "z_backward", "Z momentum dir of backward-going photons", n, xmn, xmx);
+  // 14
+  analysisMan->CreateH1("x_forward", "X momentum dir of forward-going photons",
+                        n, xmn, xmx);
+  // 15
+  analysisMan->CreateH1("y_forward", "Y momentum dir of forward-going photons",
+                        n, xmn, xmx);
+  // 16
+  analysisMan->CreateH1("z_forward", "Z momentum dir of forward-going photons",
+                        n, xmn, xmx);
+  // 17
+  analysisMan->CreateH1(
+    "x_fresnel", "X momentum dir of Fresnel-refracted photons", n, xmn, xmx);
+  // 18
+  analysisMan->CreateH1(
+    "y_fresnel", "Y momentum dir of Fresnel-refracted photons", n, xmn, xmx);
+  // 19
+  analysisMan->CreateH1(
+    "z_fresnel", "Z momentum dir of Fresnel-refracted photons", n, xmn, xmx);
+  // 20
+  analysisMan->CreateH1("Transmitted", "Transmitted photons", n, xmn, xmx);
+  // 21
+  analysisMan->CreateH1("Reflected", "Reflected photons", n, xmn, xmx);
+
+  for(G4int i = 0; i < analysisMan->GetNofH1s(); ++i)
+  {
+    analysisMan->SetH1Activation(i, false);
   }
 }

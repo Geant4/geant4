@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(DICOM)
 
 option(WITH_GEANT4_UIVIS "Build example with Geant4 UI and Vis drivers" ON)
@@ -74,7 +77,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include
                     ${PROJECT_SOURCE_DIR}/dicomReader/include
                     ${Geant4_INCLUDE_DIR}
                     ${DCMTK_INCLUDE_DIRS})
-                    
+
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -116,7 +119,7 @@ set(DICOM_SCRIPTS
     Data.dat.new Data.dat.old
     Data.dat.new_dens Data.partial.dat
 )
- 
+
 # new DICOM data (in share directory)
 set(DICOM_SHARE
     AltData.dat SixSlice.dat

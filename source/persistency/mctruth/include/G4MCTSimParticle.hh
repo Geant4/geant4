@@ -23,162 +23,207 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//   G4MCTSimParticle.hh
-//
-// ====================================================================
-#ifndef MCT_SIM_PARTICLE_H
-#define MCT_SIM_PARTICLE_H
+// G4MCTSimParticle
 
-#include "G4Types.hh"
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4MCTSIMPARTICLE_HH
+#define G4MCTSIMPARTICLE_HH 1
+
 #include <vector>
 #include <string>
 #include <iostream>
+
+#include "G4Types.hh"
 #include "G4LorentzVector.hh"
 
-// ====================================================================
-//
-// class definition
-//
-// ====================================================================
 class G4MCTSimVertex;
 class G4MCTSimParticle;
 
-typedef std::vector<G4MCTSimParticle*> SimParticleList;
+using SimParticleList = std::vector<G4MCTSimParticle*>;
 
-class G4MCTSimParticle {
-protected:
-  G4MCTSimParticle* parentParticle;
-  std::vector<G4MCTSimParticle*> associatedParticleList;
+class G4MCTSimParticle
+{
+  public:
 
-  std::string name;
-  int pdgID;
-  int trackID;
-  int parentTrackID;
-  G4bool primaryFlag;
-  G4LorentzVector momentumAtVertex;
-  G4MCTSimVertex* vertex;
-  G4bool storeFlag;
-  
-public:
-  G4MCTSimParticle();
-  G4MCTSimParticle(std::string aname, int apcode, int atid, int ptid,
-		 const G4LorentzVector& p);
-  G4MCTSimParticle(std::string aname, int apcode, int atid, int ptid,
-		 const G4LorentzVector& p, const G4MCTSimVertex* v);
-  virtual ~G4MCTSimParticle();
- 
-  // copy constructor and assignment operator
-  G4MCTSimParticle(const G4MCTSimParticle& right);
-  const G4MCTSimParticle& operator=(const G4MCTSimParticle& right);
+    G4MCTSimParticle();
+    G4MCTSimParticle(const G4String& aname,
+                     G4int apcode, G4int atid, G4int ptid,
+                     const G4LorentzVector& p);
+    G4MCTSimParticle(const G4String& aname,
+                     G4int apcode, G4int atid, G4int ptid,
+                     const G4LorentzVector& p, const G4MCTSimVertex* v);
+    virtual ~G4MCTSimParticle();
 
-  // set/get functions
-  void SetParentParticle(const G4MCTSimParticle* p);
-  G4MCTSimParticle* GetParentParticle() const;
+    inline G4MCTSimParticle(const G4MCTSimParticle& right);
+    inline G4MCTSimParticle& operator=(const G4MCTSimParticle& right);
+      // copy constructor and assignment operator
 
-  void SetParticleName(std::string aname);
-  const std::string& GetParticleName() const;
+    inline void SetParentParticle(const G4MCTSimParticle* p);
+    inline G4MCTSimParticle* GetParentParticle() const;
 
-  void SetPdgID(int id);
-  int GetPdgID() const;
+    inline void SetParticleName(std::string aname);
+    inline const G4String& GetParticleName() const;
 
-  void SetTrackID(int id);
-  int GetTrackID() const;
+    inline void SetPdgID(G4int id);
+    inline G4int GetPdgID() const;
 
-  void SetParentTrackID(int id);
-  int GetParentTrackID() const;
+    inline void SetTrackID(G4int id);
+    inline G4int GetTrackID() const;
 
-  void SetPrimaryFlag(G4bool q);
-  G4bool GetPrimaryFlag() const;
+    inline void SetParentTrackID(G4int id);
+    inline G4int GetParentTrackID() const;
 
-  void SetMomentumAtVertex(const G4LorentzVector& p);
-  const G4LorentzVector& GetMomentumAtVertex() const;
+    inline void SetPrimaryFlag(G4bool q);
+    inline G4bool GetPrimaryFlag() const;
 
-  void SetVertex(const G4MCTSimVertex* v);
-  G4MCTSimVertex* GetVertex() const;
+    inline void SetMomentumAtVertex(const G4LorentzVector& p);
+    inline const G4LorentzVector& GetMomentumAtVertex() const;
 
-  void SetStoreFlag(G4bool q);
-  G4bool GetStoreFlag() const;
+    inline void SetVertex(const G4MCTSimVertex* v);
+    inline G4MCTSimVertex* GetVertex() const;
 
-  // methods...
-  int AssociateParticle(G4MCTSimParticle* p);
-  int GetNofAssociatedParticles() const;
-  G4MCTSimParticle* GetAssociatedParticle(int i) const;
-  int GetTreeLevel() const;  
-  void SetStoreFlagToParentTree(G4bool q=true);
+    inline void SetStoreFlag(G4bool q);
+    inline G4bool GetStoreFlag() const;
 
-  void Print(std::ostream& ostr= std::cout, G4bool qrevorder=false) const;
-  void PrintSingle(std::ostream& ostr= std::cout) const;
+    G4int AssociateParticle(G4MCTSimParticle* p);
+    G4int GetNofAssociatedParticles() const;
+    G4MCTSimParticle* GetAssociatedParticle(G4int i) const;
+    G4int GetTreeLevel() const;
+    void SetStoreFlagToParentTree(G4bool q = true);
+
+    void Print(std::ostream& ostr = std::cout, G4bool qrevorder = false) const;
+    void PrintSingle(std::ostream& ostr = std::cout) const;
+
+  protected:
+
+    G4MCTSimParticle* parentParticle = nullptr;
+    std::vector<G4MCTSimParticle*> associatedParticleList;
+
+    G4String name;
+    G4LorentzVector momentumAtVertex;
+    G4MCTSimVertex* vertex = nullptr;
+    G4int pdgID = 0;
+    G4int trackID = 0;
+    G4int parentTrackID = 0;
+    G4bool primaryFlag = false;
+    G4bool storeFlag = false;
 };
 
 // ====================================================================
-// inline functions
+// inline methods
 // ====================================================================
+
 inline G4MCTSimParticle::G4MCTSimParticle(const G4MCTSimParticle& right)
 {
-  *this= right;
+  *this = right;
 }
- 
-inline const G4MCTSimParticle& 
-  G4MCTSimParticle::operator=(const G4MCTSimParticle& right)
-{
-  parentParticle= right.parentParticle;
-  associatedParticleList= right.associatedParticleList;  // shallow copy
 
-  name= right.name;
-  pdgID= right.pdgID;
-  trackID= right.trackID;
-  parentTrackID= right.parentTrackID;
-  primaryFlag= right.primaryFlag;
-  momentumAtVertex= right.momentumAtVertex;
-  vertex= right.vertex;
+inline G4MCTSimParticle& G4MCTSimParticle::operator=(
+  const G4MCTSimParticle& right)
+{
+  parentParticle         = right.parentParticle;
+  associatedParticleList = right.associatedParticleList;  // shallow copy
+
+  name             = right.name;
+  pdgID            = right.pdgID;
+  trackID          = right.trackID;
+  parentTrackID    = right.parentTrackID;
+  primaryFlag      = right.primaryFlag;
+  momentumAtVertex = right.momentumAtVertex;
+  vertex           = right.vertex;
 
   return *this;
 }
 
 inline void G4MCTSimParticle::SetParentParticle(const G4MCTSimParticle* p)
-{ parentParticle= const_cast<G4MCTSimParticle*>(p); }
+{
+  parentParticle = const_cast<G4MCTSimParticle*>(p);
+}
 
 inline G4MCTSimParticle* G4MCTSimParticle::GetParentParticle() const
-{ return parentParticle; }
+{
+  return parentParticle;
+}
 
-inline void G4MCTSimParticle::SetParticleName(std::string aname) 
-{ name= aname; }
+inline void G4MCTSimParticle::SetParticleName(std::string aname)
+{
+  name = aname;
+}
 
-inline const std::string& G4MCTSimParticle::GetParticleName() const 
-{ return name; }
+inline const G4String& G4MCTSimParticle::GetParticleName() const
+{
+  return name;
+}
 
-inline  void G4MCTSimParticle::SetPdgID(int id) { pdgID= id; }
+inline void G4MCTSimParticle::SetPdgID(G4int id)
+{
+  pdgID = id;
+}
 
-inline  int G4MCTSimParticle::GetPdgID() const { return pdgID; }
+inline G4int G4MCTSimParticle::GetPdgID() const
+{
+  return pdgID;
+}
 
-inline void G4MCTSimParticle::SetTrackID(int id) { trackID= id; }
+inline void G4MCTSimParticle::SetTrackID(G4int id)
+{
+  trackID = id;
+}
 
-inline  int G4MCTSimParticle::GetTrackID() const { return trackID; }
+inline G4int G4MCTSimParticle::GetTrackID() const
+{
+  return trackID;
+}
 
-inline void G4MCTSimParticle::SetPrimaryFlag(G4bool q) { primaryFlag= q; }
+inline void G4MCTSimParticle::SetPrimaryFlag(G4bool q)
+{
+  primaryFlag = q;
+}
 
-inline G4bool G4MCTSimParticle::GetPrimaryFlag() const { return primaryFlag; }
+inline G4bool G4MCTSimParticle::GetPrimaryFlag() const
+{
+  return primaryFlag;
+}
 
-inline void G4MCTSimParticle::SetParentTrackID(int id) 
-{ parentTrackID= id; }
+inline void G4MCTSimParticle::SetParentTrackID(G4int id)
+{
+  parentTrackID = id;
+}
 
-inline  int G4MCTSimParticle::GetParentTrackID() const 
-{ return parentTrackID; }
+inline G4int G4MCTSimParticle::GetParentTrackID() const
+{
+  return parentTrackID;
+}
 
-inline  void G4MCTSimParticle::SetMomentumAtVertex(const G4LorentzVector& p)
-{ momentumAtVertex= p; }
+inline void G4MCTSimParticle::SetMomentumAtVertex(const G4LorentzVector& p)
+{
+  momentumAtVertex = p;
+}
 
-inline  const G4LorentzVector& G4MCTSimParticle::GetMomentumAtVertex() const
-{ return momentumAtVertex; }
+inline const G4LorentzVector& G4MCTSimParticle::GetMomentumAtVertex() const
+{
+  return momentumAtVertex;
+}
 
-inline  void G4MCTSimParticle::SetVertex(const G4MCTSimVertex* v)
-{ vertex= const_cast<G4MCTSimVertex*>(v); }
+inline void G4MCTSimParticle::SetVertex(const G4MCTSimVertex* v)
+{
+  vertex = const_cast<G4MCTSimVertex*>(v);
+}
 
 inline G4MCTSimVertex* G4MCTSimParticle::GetVertex() const
-{ return vertex; }
+{
+  return vertex;
+}
 
-inline void G4MCTSimParticle::SetStoreFlag(G4bool q) { storeFlag= q; }
+inline void G4MCTSimParticle::SetStoreFlag(G4bool q)
+{
+  storeFlag = q;
+}
 
-inline G4bool G4MCTSimParticle::GetStoreFlag() const { return storeFlag; }
+inline G4bool G4MCTSimParticle::GetStoreFlag() const
+{
+  return storeFlag;
+}
 
 #endif

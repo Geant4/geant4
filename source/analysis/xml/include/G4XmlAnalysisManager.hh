@@ -40,7 +40,7 @@
 #include <memory>
 
 class G4XmlFileManager;
-class G4XmlNtupleManager;
+class G4XmlNtupleFileManager;
 
 class G4XmlAnalysisManager : public G4ToolsAnalysisManager
 {
@@ -90,8 +90,8 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
     G4bool Reset();
 
     // data members
-    G4XmlNtupleManager*  fNtupleManager;
     std::shared_ptr<G4XmlFileManager>  fFileManager;
+    std::shared_ptr<G4XmlNtupleFileManager>  fNtupleFileManager;
 };
 
 #include "G4XmlAnalysisManager.icc"

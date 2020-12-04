@@ -12,6 +12,35 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-October-2020  Vladimir Ivanchenko (phys-builders-V10-06-13)
+-  G4HadronicBuilder - added methods for FTFQGSP_BERT physics
+
+17-September-2020  Alberto Ribon    (phys-builders-V10-06-12)
+-  G4HadronicBuilder : disabled QGSP for light anti-ions.
+
+21-August-2020  Vladimir Ivanchenko (phys-builders-V10-06-11)
+-  G4HadronicBuilder - added methods to configure anti light ions
+
+01-August-2020  Vladimir Ivanchenko (phys-builders-V10-06-10)
+-  G4HadronicBuilder - make added optional cross section factor
+     for systematics studies
+
+24-Jul-2020  Alberto Ribon          (phys-builders-V10-06-09)
+-  G4HadronicBuilder : added a new method, BuildDecayTableForBCHadrons,
+   to create some decays for heavy (charmed and bottom) hadrons.
+   This method is called by the methods BuildBCHadronsFTFP_BERT
+   and BuildBCHadronsQGSP_FTFP_BERT only if the flag for heavy hadrons
+   is enabled.
+
+19-July-2020  Vladimir Ivanchenko   (phys-builders-V10-06-08)
+-  G4HadronicBuilder - make two method private to avoid incorrect 
+     use, do not use Bertini cascade for b-, c - particles and 
+     anti-hyperons (only FTFP model)
+
+30-June-2020  Vladimir Ivanchenko   (phys-builders-V10-06-07)
+-  G4HadronicBuilder - added BuildElastic(..) method
+
 26-May-2020 Ben Morgan              (phys-builders-V10-06-06)
 -  Remove obsolete GRANULAR_DEPENDENCIES entries
 

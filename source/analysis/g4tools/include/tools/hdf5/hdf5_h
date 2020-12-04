@@ -20,6 +20,7 @@
 #define tools_H5Gcreate         H5Gcreate
 #define tools_H5Gopen           H5Gopen
 #define tools_H5Aiterate        H5Aiterate
+#define tools_H5free_memory     free
 #else
 #define tools_H5Dopen           H5Dopen1
 #define tools_H5Dcreate         H5Dcreate1
@@ -29,6 +30,7 @@
 #define tools_H5Gcreate         H5Gcreate1
 #define tools_H5Gopen           H5Gopen1
 #define tools_H5Aiterate        H5Aiterate1
+#define tools_H5free_memory     H5free_memory
 #endif
 
 #endif

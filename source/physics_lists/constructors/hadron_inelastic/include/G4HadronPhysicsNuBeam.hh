@@ -33,6 +33,8 @@
 //
 // Modified:
 // 18.07.2017 A.Dotti: refactoring following new standard
+// 02.10.2020 V.Ivanchenko: use more methods from G4HadronPhysicsFTFP_BERT 
+//            base class; code clean-up 
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsNuBeam_h
@@ -40,50 +42,27 @@
 
 #include "G4HadronPhysicsFTFP_BERT.hh"
 
-//#include "globals.hh"
-//#include "G4ios.hh"
-//
-//#include "G4VPhysicsConstructor.hh"
-//
-//#include "G4PiKBuilder.hh"
-//#include "G4BertiniPiKBuilder.hh"
-//#include "G4FTFPPiKBuilder.hh"
-//
-//#include "G4ProtonBuilder.hh"
-//#include "G4BertiniProtonBuilder.hh"
-//#include "G4FTFPNeutronBuilder.hh"
-//#include "G4FTFPProtonBuilder.hh"
-// specific to NuBeam case
-//#include "G4QGSPLundStrFragmProtonBuilder.hh"
-//
-//#include "G4NeutronBuilder.hh"
-//#include "G4BertiniNeutronBuilder.hh"
-//#include "G4FTFPNeutronBuilder.hh"
-//
-//#include "G4HyperonFTFPBuilder.hh"
-//#include "G4AntiBarionBuilder.hh"
-//#include "G4FTFPAntiBarionBuilder.hh"
-//
-//class G4ComponentGGHadronNucleusXsc;
-//
-
 class G4HadronPhysicsNuBeam : public G4HadronPhysicsFTFP_BERT
 {
 
-  public: 
-    G4HadronPhysicsNuBeam(G4int verbose =1);
-    G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsNuBeam() {}
+public: 
+  G4HadronPhysicsNuBeam(G4int verbose =1);
+  G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic=false);
+  ~G4HadronPhysicsNuBeam() override {}
 
-  private:
-    //Modify the minimum needed
-    virtual void Proton() override;
-    virtual void Pion() override;
-    virtual void Kaon() override;
-    virtual void DumpBanner() override {}
+  void ConstructProcess() override;
 
-    double maxFTFP_proton;
+  // copy constructor and hide assignment operator
+  G4HadronPhysicsNuBeam(G4HadronPhysicsNuBeam &) = delete;
+  G4HadronPhysicsNuBeam & operator =
+  (const G4HadronPhysicsNuBeam &right) = delete;
 
+protected:
+  //Modify the minimum needed
+  virtual void Proton() override;
+
+private:
+  G4double maxFTFP_proton;
 };
 
 #endif

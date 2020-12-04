@@ -33,7 +33,7 @@
 //
 // Class Description:
 //
-// Concrete class of G4VUserTrackInformation used to store information 
+// Concrete class of G4VUserTrackInformation used to store information
 // linked to the track generated in a scintillation process.
 //
 
@@ -43,38 +43,48 @@
 #include "G4VUserTrackInformation.hh"
 
 // Represents the scintillation type used to create the track (opticalphoton).
-enum G4ScintillationType {Fast, Medium, Slow};
+enum G4ScintillationType
+{
+  Fast,
+  Medium,
+  Slow
+};
 
 class G4ScintillationTrackInformation : public G4VUserTrackInformation
 {
-  public:
+ public:
+  explicit G4ScintillationTrackInformation(
+    const G4ScintillationType& aType = Slow);
+  virtual ~G4ScintillationTrackInformation();
 
-    explicit G4ScintillationTrackInformation(const G4ScintillationType& aType = Slow);
-    virtual ~G4ScintillationTrackInformation();
-    
-    // Required by G4VUserTrackInformation
-    void *operator new(size_t);
-    void operator delete(void *aScintillationTI);
-    
-    // Copy Constructor/instruction
-    G4ScintillationTrackInformation(const G4ScintillationTrackInformation&);
-    G4ScintillationTrackInformation& operator=(const G4ScintillationTrackInformation&);
- 
-    virtual void Print() const override;
- 
-    const G4ScintillationType& GetScintillationType() const {return scintillationType;}
-    
-    // Static class allowing to check if a G4VUserTrackInformation is a
-    // G4ScintillationTrackInformation and cast it without changing the
-    // pointer of the pointed data.
-    static G4bool IsScintillationTrackInformation(const G4VUserTrackInformation* const);
-    static G4ScintillationTrackInformation* Cast(const G4VUserTrackInformation* const);
- 
-  private:
+  // Required by G4VUserTrackInformation
+  void* operator new(size_t);
+  void operator delete(void* aScintillationTI);
 
-    G4ScintillationType scintillationType;
-    // String given to G4VUserTrackInformation to identify this concrete class
-    static const G4String BaseType;
+  // Copy Constructor/instruction
+  G4ScintillationTrackInformation(const G4ScintillationTrackInformation&);
+  G4ScintillationTrackInformation& operator=(
+    const G4ScintillationTrackInformation&);
+
+  virtual void Print() const override;
+
+  const G4ScintillationType& GetScintillationType() const
+  {
+    return scintillationType;
+  }
+
+  // Static class allowing to check if a G4VUserTrackInformation is a
+  // G4ScintillationTrackInformation and cast it without changing the
+  // pointer of the pointed data.
+  static G4bool IsScintillationTrackInformation(
+    const G4VUserTrackInformation* const);
+  static G4ScintillationTrackInformation* Cast(
+    const G4VUserTrackInformation* const);
+
+ private:
+  G4ScintillationType scintillationType;
+  // String given to G4VUserTrackInformation to identify this concrete class
+  static const G4String BaseType;
 };
 
 ///
@@ -84,23 +94,29 @@ class G4ScintillationTrackInformation : public G4VUserTrackInformation
 #include "G4Allocator.hh"
 
 // Forward declaration for the Allocator
-class G4ScintillationTrackInformation; 
+class G4ScintillationTrackInformation;
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4ScintillationTrackInformation>*& aScintillationTIAllocator();
+extern G4DLLEXPORT G4Allocator<G4ScintillationTrackInformation>*&
+aScintillationTIAllocator();
 #else
-extern G4DLLIMPORT G4Allocator<G4ScintillationTrackInformation>*& aScintillationTIAllocator();
+extern G4DLLIMPORT G4Allocator<G4ScintillationTrackInformation>*&
+aScintillationTIAllocator();
 #endif
 
 inline void* G4ScintillationTrackInformation::operator new(size_t)
 {
-  if (!aScintillationTIAllocator()) aScintillationTIAllocator() = new G4Allocator<G4ScintillationTrackInformation>;
-  return (void *) aScintillationTIAllocator()->MallocSingle();
+  if(!aScintillationTIAllocator())
+    aScintillationTIAllocator() =
+      new G4Allocator<G4ScintillationTrackInformation>;
+  return (void*) aScintillationTIAllocator()->MallocSingle();
 }
 
-inline void G4ScintillationTrackInformation::operator delete(void *aScintillationTI)
+inline void G4ScintillationTrackInformation::operator delete(
+  void* aScintillationTI)
 {
-  aScintillationTIAllocator()->FreeSingle((G4ScintillationTrackInformation *) aScintillationTI);
+  aScintillationTIAllocator()->FreeSingle(
+    (G4ScintillationTrackInformation*) aScintillationTI);
 }
 
-#endif // G4SCINTILLATIONTRACKINFORMATION_H
+#endif  // G4SCINTILLATIONTRACKINFORMATION_H

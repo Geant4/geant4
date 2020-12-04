@@ -10,13 +10,13 @@
 namespace tools {
 namespace wroot {
 
-inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swap,seek a_seek_directory,uint32 a_basket_size) { 
+inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swap,seek a_seek_directory,uint32 a_basket_size) {
   std::string oname;
   if(!a_mpi.sunpack(oname)) return 0;
   std::string otitle;
   if(!a_mpi.sunpack(otitle)) return 0;
 
-  uint32 last,nev_buf_size,nev;     
+  uint32 last,nev_buf_size,nev;
   if(!a_mpi.unpack(last)) return 0;
   if(!a_mpi.unpack(nev_buf_size)) return 0;
   if(!a_mpi.unpack(nev)) return 0;
@@ -27,7 +27,7 @@ inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swa
   if(not_null) {
     uint32 n;
     if(!a_mpi.unpack(n,entry_offset)) return 0;
-  }} 
+  }}
 
   int* displacement = 0;
  {bool not_null;
@@ -35,7 +35,7 @@ inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swa
   if(not_null) {
     uint32 n;
     if(!a_mpi.unpack(n,displacement)) {delete [] entry_offset;return 0;}
-  }} 
+  }}
 
   uint32 _size;
   char* _buffer;

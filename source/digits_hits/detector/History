@@ -15,6 +15,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 12, 2020 B. Morgan (det-V10-06-02)
+- Apply typo fixes from Gurkan Myczko (https://github.com/Geant4/geant4/pull/15)
+
+Sep 23, 2020  M.Asai (det-V10-06-01)
+- G4VScoreHistFiller and G4TScoreHistFiller :
+  Adding 2D and 3D histogram and 1P and 2P profile graph options.
+
+Sep 7, 2020  M.Asai (det-V10-06-00)
+- Introducing G4VScoreHistFiller and G4TScoreHistFiller that allow scorers to fill
+  histograms defined by G4Analysis
+- G4VPrimitivePlotter.hh is moved from digits_hits/util.
+
 April 28, 2020  John Apostolakis
 - Added ComputeSolid methods to G4VPrimitiveScorer
 
@@ -28,8 +41,8 @@ June 4, 2007, A.Howard
 
 May 31, 2007, A.Howard
 - Removed classes associated with old biasing/scoring scheme:
-  G4CellScoreComposer, G4CellScoreValues, G4CellStoreScorer 
-  (in module tag: "digits_hits-V08-03-02") 
+  G4CellScoreComposer, G4CellScoreValues, G4CellStoreScorer
+  (in module tag: "digits_hits-V08-03-02")
 - Files remain on the HEAD for testing purposes
 
 Jul,  1st 2004 G.Cosmo

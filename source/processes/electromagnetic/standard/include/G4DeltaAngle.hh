@@ -47,9 +47,8 @@
 #ifndef G4DeltaAngle_h
 #define G4DeltaAngle_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
 #include "G4VEmAngularDistribution.hh"
+#include <vector>
 
 class G4ParticleDefinition;
 
@@ -60,30 +59,27 @@ public:
 
   explicit G4DeltaAngle(const G4String& name = "");
 
-  virtual ~G4DeltaAngle();
+  ~G4DeltaAngle() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double kinEnergyFinal, G4int Z,
-                                         const G4Material* mat = nullptr) final;
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                 G4double kinEnergyFinal, G4int Z,
+                                 const G4Material* mat = nullptr) final;
 
-  virtual G4ThreeVector& SampleDirectionForShell(
-                                         const G4DynamicParticle* dp,
+  G4ThreeVector& SampleDirectionForShell(const G4DynamicParticle* dp,
                                          G4double kinEnergyFinal,
                                          G4int Z, G4int shellIdx,
                                          const G4Material* mat = nullptr) final;
 
-  virtual void PrintGeneratorInformation() const final;
+  // hide assignment operator 
+  G4DeltaAngle & operator=(const G4DeltaAngle &right) = delete;
+  G4DeltaAngle(const G4DeltaAngle&) = delete;
 
 private:
 
-  // hide assignment operator 
-  G4DeltaAngle & operator=(const  G4DeltaAngle &right) = delete;
-  G4DeltaAngle(const  G4DeltaAngle&) = delete;
-
   const G4ParticleDefinition* fElectron;
-  std::vector<G4double> prob;
   G4int                 nprob;
   G4int                 fShellIdx;
+  std::vector<G4double> prob;
 };
 
 #endif

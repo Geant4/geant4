@@ -28,6 +28,7 @@
 
 #include "G4RootRFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/rroot/file"
 #include <tools/zlib>

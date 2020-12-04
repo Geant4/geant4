@@ -37,8 +37,8 @@ using namespace PTL;
 UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
 : VUserTaskQueue(nworkers)
 , m_is_clone((parent) ? true : false)
-, m_thread_bin((parent) ? (ThreadPool::GetThisThreadID() % (nworkers + 1)) : 0)
-, m_insert_bin((parent) ? (ThreadPool::GetThisThreadID() % (nworkers + 1)) : 0)
+, m_thread_bin((parent) ? (ThreadPool::get_this_thread_id() % (nworkers + 1)) : 0)
+, m_insert_bin((parent) ? (ThreadPool::get_this_thread_id() % (nworkers + 1)) : 0)
 , m_hold((parent) ? parent->m_hold : new std::atomic_bool(false))
 , m_ntasks((parent) ? parent->m_ntasks : new std::atomic_uintmax_t(0))
 , m_subqueues((parent) ? parent->m_subqueues : new TaskSubQueueContainer())
@@ -55,7 +55,7 @@ UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
     {
         RecursiveAutoLock l(TypeRecursiveMutex<decltype(std::cout)>());
         std::stringstream ss;
-        ss << ThreadPool::GetThisThreadID() << "> " << ThisThread::get_id() << " ["
+        ss << ThreadPool::get_this_thread_id() << "> " << ThisThread::get_id() << " ["
            << __FUNCTION__ << ":" << __LINE__ << "] "
            << "this = " << this << ", "
            << "clone = " << std::boolalpha << m_is_clone << ", "
@@ -128,7 +128,7 @@ UserTaskQueue::GetThreadBin() const
 {
     // get a thread id number
     static thread_local intmax_t tl_bin =
-        (m_thread_bin + ThreadPool::GetThisThreadID()) % (m_workers + 1);
+        (m_thread_bin + ThreadPool::get_this_thread_id()) % (m_workers + 1);
     return tl_bin;
 }
 

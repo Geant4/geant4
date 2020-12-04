@@ -197,7 +197,7 @@ G4String G4VisCommandSceneHandlerCreate::GetCurrentValue(G4UIcommand*) {
   return graphicsSystemName + " " + NextName ();
 }
 
-void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
+void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 						  G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
@@ -276,14 +276,15 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
       }
     }
     if (iGS < 0 || iGS >= nSystems || loopCounter >=3) {
+      std::ostringstream oss;
+      oss << "\"" << gsl[iGSBeingTested]->GetNickname()
+      << "\" is not compatible with your chosen session,"
+      " and no fallback system found.";
       if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
-        "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue: \""
-        << gsl[iGSBeingTested]->GetNickname()
-        << "\" is not compatible with your chosen session,"
-        " and no fallback system found."
-        << G4endl;
+        G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue: "
+        << oss.str() << G4endl;
       }
+      command->CommandFailed(oss);
       return;
     }
     //  A fallback system found...but go back and check this too.

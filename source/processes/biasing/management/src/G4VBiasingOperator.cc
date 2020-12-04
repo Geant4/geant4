@@ -66,7 +66,7 @@ void G4VBiasingOperator::AttachTo(const G4LogicalVolume* logical)
       G4ExceptionDescription ed;
       ed << "Biasing operator `" << GetName() 
 	 << "' can not be attached to Logical volume `"
-	 << logical->GetName() << "' which is already used by an other operator !" << G4endl;
+	 << logical->GetName() << "' which is already used by another operator !" << G4endl;
       G4Exception("G4VBiasingOperator::AttachTo(...)",
 		  "BIAS.MNG.01",
 		  JustWarning,

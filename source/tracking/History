@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 12, 2020 Jonathan Madsen (tracking-V10-06-04)
+- Added G4Profiler support.
+
+Sep 9, 2020, G.Cosmo (tracking-V10-06-03)
+- Fixed minor Coverity defect in G4SteppingManager::ApplyProductionCut()
+  for use of potentially negative argument.
+
 Jun 4, 2020, G.Cosmo (tracking-V10-06-02)
 - Fixed minor Coverity defect for uninitialised data in G4SteppingManager.
 
@@ -60,7 +67,7 @@ Dec 22, 2016 L.Desorgher  (tracking-V10-03-00)
 
 Nov 17, 2016 L.Desorgher  (tracking-V10-02-05)
 - G4AdjointSteppingAction remove a test on weight with FPE issue.
-     
+
 Oct 27, 2016 L.Desorgher  (tracking-V10-02-04)
 - G4AdjointSteppingAction remove a print info on the weight, when stopping reverse tracking.
 for the implementation of the splitting of the reverse MC tracking.
@@ -73,7 +80,7 @@ for the implementation of the splitting of the reverse MC tracking.
 - G4VTrajectory.cc: Added std::endl at end of ShowTrajectory.
 
 18th Jan  2016 A. Dotti   (tracking-V10-02-01)
-- New G4Multi{Stepping,Tracking}Action to allow multiple user-actions in 
+- New G4Multi{Stepping,Tracking}Action to allow multiple user-actions in
  the same job
 
 27th January 2016 M. Asai (tracking-V10-02-00)
@@ -101,20 +108,20 @@ for the implementation of the splitting of the reverse MC tracking.
 - G4TrackingManager : Add handling for StoreTrajectory new case 4
 
 21st November2013 M.Asai (tracking-V09-06-07)
-- G4TrackingMessenger : Move invokation with G4TransportationManager 
-  in G4VisCommandsSceneAdd.cc to this G4TrakingMessenger. 
+- G4TrackingMessenger : Move invokation with G4TransportationManager
+  in G4VisCommandsSceneAdd.cc to this G4TrakingMessenger.
   Since G4TransportationManager is thread-local,
   G4VisCommandsSceneAdd.cc cannot access to G4TransportationManager.
 
 3rd November2013 L.Desorgher (tracking-V09-06-06)
--G4AdjointTrackingAction. Change order of initialization in constructor to 
+-G4AdjointTrackingAction. Change order of initialization in constructor to
   avoid compilation warning.
 
 31th October2013 L.Desorgher (tracking-V09-06-05)
--Create G4AdjointTrackingAction and modify G4AdjointSteppingAction in order to 
-treat the reverse tracking of an adjoint particle and tracking of its 
-equivalent forward particle in the same event.This is requested for the 
-migration of the ReverseMC to the MT mode.  
+-Create G4AdjointTrackingAction and modify G4AdjointSteppingAction in order to
+treat the reverse tracking of an adjoint particle and tracking of its
+equivalent forward particle in the same event.This is requested for the
+migration of the ReverseMC to the MT mode.
 
 29th August 2013 M.Asai (tracking-V09-06-04)
 - Add protection against null pointer for the process manager of
@@ -139,7 +146,7 @@ migration of the ReverseMC to the MT mode.
 
 26 October 2012 Laurent Desorgher (tracking-V09-05-04)
 - G4AdointSteppingAction.cc. Add test for adjoint particle reaching "out_of_the_world".
- 
+
 3rd July 2012  John Allison (tracking-V09-05-03)
 - G4Rich/SmoothTrajectory(Point).hh:
   o Fixes for Coverity warnings.
@@ -165,14 +172,14 @@ migration of the ReverseMC to the MT mode.
 - "Conditonally" in G4ForceCondition nore suppoted
 
 16 June 2011 G.Folger (tracking-V09-04-03)
-- stepStatus is not used, but fpSteppingManager->Stepping() improves 
+- stepStatus is not used, but fpSteppingManager->Stepping() improves
     performance ;-)
 
 9 June 2011 T Sasaki(tracking-V09-04-02)
 - stepStaus is no more used in G4TrackingManager.cc
 
 20 May 2011 Ben Morgan (tracking-V09-04-01)
-- CMakeLists.txt : Added G4TRACKING_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4TRACKING_ALLOC_EXPORT compiler definition via
   add_definitions so it's applied to all sources in this module.
 
 5 May 2011 Makoto Asai (tracking-V09-04-00)
@@ -193,7 +200,7 @@ migration of the ReverseMC to the MT mode.
   symbols.
 
 6 October 2010 Hisaya Kurashige (tracking-V09-03-06)
-- Modified G4SteppingManager::GetSecondary() to give const G4TrackVector* 
+- Modified G4SteppingManager::GetSecondary() to give const G4TrackVector*
   (co-work with track-V09-03-05)
 
 19 July 2010 Gabriele Cosmo (tracking-V09-03-05)
@@ -242,7 +249,7 @@ migration of the ReverseMC to the MT mode.
 
 20 Nov 2009 L.Desorgher (tracking-V09-02-06)
 - Small correction in G4AdjointSteppingAction to stop the reverse tracking
-  when adjoint particles reenter the adjoint source. 
+  when adjoint particles reenter the adjoint source.
   Reput the Nan test removed in  tracking-V09-02-05 but now as (x<0 && x>=0).
   This Nan test is still needed in very rare case where the weight of a
   particle goes to Nan. As such the code is stable! The reason for the Nan
@@ -283,7 +290,7 @@ G4RegularNavigation
 - Fixing bug of fN2ndaries variables in G4STeppingManager2.cc
 
 02 Oct 2008  T.Sasaki (tracking-V09-01-03)
-- G4SteppingManager2.cc: PhyscalStep etc was not updated when 
+- G4SteppingManager2.cc: PhyscalStep etc was not updated when
   any flaga for ForceCondition is set. (since begining of Geant4)
 
 25 Sep 2008  T.Sasaki (tracking-V09-01-02)
@@ -293,7 +300,7 @@ G4RegularNavigation
 - G4SteppingManager2.cc: Bug fix for PhysicalStep
 
 06 May 2008  T.Sasaki (tracking-V09-01-00)
-- G4SteppingManager.cc: fTouchableHandle was not properly updated 
+- G4SteppingManager.cc: fTouchableHandle was not properly updated
 
 08 Oct 2007 T.Sasaki (tracking-V09-00-01)
 - G4SteppingManager.hh: use kCarTolerance in CalculateSafety() instead of zero
@@ -307,7 +314,7 @@ G4RegularNavigation
 
 13 November 2006 T.Sasaki (tracking-V08-01-06)
 - Removed G4VSteppingVerbose::TrackBanner()  and add new methed
-  G4TrackingManager::TrackBanner() for the fix. 
+  G4TrackingManager::TrackBanner() for the fix.
 
 04 November 2006 M.Asai
 - Added new method G4VSteppingVerbose::TrackBanner() and moved the
@@ -341,7 +348,7 @@ G4RegularNavigation
 - Fix on G4StepingVerbose for ForceConditions
 
 09 June 2006 T. Sasaki
-- Secondary vector is now owned by G4Step and G4TrackVector class has 
+- Secondary vector is now owned by G4Step and G4TrackVector class has
   been moved in the track category
 
 15 June 2006 G. Cosmo (tracking-V08-00-04)
@@ -358,8 +365,8 @@ G4RegularNavigation
 24 May 2006 T. Sasaki (tracking-V08-00-01)
 - New flags are introduced in G4VSteppingVerbose to give more control
 24 May 2006 T. Sasaki
-- a bug fix for StepStatus when the track is outside of WorldBoundary 
-- New header was inserted to all of the files to check the last update 
+- a bug fix for StepStatus when the track is outside of WorldBoundary
+- New header was inserted to all of the files to check the last update
 09 March 2006 T. Sasaki
 - Added Silent and SilentStepInfo member to G4VStepverbose
 
@@ -375,7 +382,7 @@ G4RegularNavigation
 
 14 November 2005 Jane Tinslay (tracking-V07-01-02)
 - Modifications to G4VTrajectory::DrawTrajectory for enhanced
-  trajectory drawing. 
+  trajectory drawing.
 
 21 September 2005 T. Sasaki(tracking-V07-01-01)
 - fix for fastsimulation problem in G4SteppingManager2.cc
@@ -418,7 +425,7 @@ Aug.27, 2004 M.Asai (tracking-V06-02-03)
 
 Jul.08, 2004 K. Amako  (tracking-V06-02-02)
 - Modified G4SteppingVerbose.cc so that PostStep information is printed out
-  even when PostStep process is triggered by AlongStep process. 
+  even when PostStep process is triggered by AlongStep process.
 
 Jul.06, 2004 M.Asai (tracking-V06-02-01)
 - Remove the modification along tracking-V06-00-00 tag for G4SteppingManager2.cc
@@ -528,7 +535,7 @@ Nov 8, 2002, M.Asai (tracking-V04-01-09)
 - Tagged for Geant4 5.0 release
 
 Nov 8, 2002 J.Generowicz
-- Bodies introduced into SmoothTrajectory(Point) classes 
+- Bodies introduced into SmoothTrajectory(Point) classes
 
 Nov 8, 2002, J.Allison
 - Implemented default Show/DrawTrajectory in G4VTrajectory.
@@ -623,14 +630,14 @@ Nov 27, 01 J.Apostolakis (tracking-V03-02-04)
   Correction to the use the touchable Handle for secondary tracks,
        when it is available.
   Now the direction is used in locating a particle (primary or
-   secondary) in SetInitialStep. This is in order to assist in 
+   secondary) in SetInitialStep. This is in order to assist in
    starting particles that are on/near-to boundaries in the correct
-   volume. 
+   volume.
 
 Nov 27, 01 J.Apostolakis (tracking-V03-02-03)
-  Initial step now uses the touchable Handle of the secondary track, 
+  Initial step now uses the touchable Handle of the secondary track,
 when it exists and is valid.
-  
+
   To be useful this tag depends the tag track-V03-02-07,
    which enables touchable handles in secondaries.
 
@@ -648,7 +655,7 @@ Jun 06, 01 G.Cosmo (tracking-V03-01-02)
   fSelectedPostStepDoItVector in G4SteppingManager default constructor.
   This overcomes warnings detected on HP-aCC.
 
-May 10, 01 T.Sasaki (tracking-V03-01-01) 
+May 10, 01 T.Sasaki (tracking-V03-01-01)
 - fix for a suspneded track's vertex info.
 
 May 03, 01 T.Sasaki/J.Allison (tracking-V03-01-00)
@@ -666,30 +673,30 @@ Feb 05, 01 G.Cosmo (tracking-V03-00-02)
   Modified files: G4VSteppingVerbose.hh.
 
 Jan 12, 01 T.Sasaki (tracking-V03-00-01)
-- correction of class description 
+- correction of class description
 
 Nov 04, 00 T.Sasaki (tracking-V02-00-02)
 - G4TrackingManager.icc has been modified for new biasing schme
 - Descriptions are added too header files
 
 Aug 30, 00 T.Sasaki (tracking-V02-00-01)
-- Protection for no AtRestDoIt procs. 
+- Protection for no AtRestDoIt procs.
 
 June 2, 00 M.Asai (tracking-01-01-01)
 - Add SetUserTrackInformation(G4VUserTrackInformation*) to
   G4TrackingManager
-- Fix problems in deleteing Touchable in G4SteppingManager (Hisaya) 
+- Fix problems in deleteing Touchable in G4SteppingManager (Hisaya)
 
 Hune 1, 00 H.Kurashige
 - Add "const" to all G4VTouchable pointer
 
-Jan 23, 00 T.Sasaki 
+Jan 23, 00 T.Sasaki
 - GetCurrentValue() in G4TrackingMessenger.cc have a return value
 - SetUserAction in G4SteppingManager.hh protected null pointers
 
-Oct 22, 99 T.Sasaki G4SteppingMangaer.cc fixed the UserLmit problem     
+Oct 22, 99 T.Sasaki G4SteppingMangaer.cc fixed the UserLmit problem
 
-Oct 13, 99 T.Sasaki updated G4SteppingVerbose and G4VSteppingVerbose 
+Oct 13, 99 T.Sasaki updated G4SteppingVerbose and G4VSteppingVerbose
 
 Jun 29, 99 G.Folger have the ctor always assign a SteppingVerbose to fVerbose
 
@@ -699,7 +706,7 @@ Apr 15, 99 M.Asai (tracking-01-00-03)
 
 Mar 23, 99 T.Sasaki    (tracking-01-00-02)
 - Fix for precision problem of safety in SteppingManager by John Apostolakis
-- G4VSteppingVerbose is introduced  
+- G4VSteppingVerbose is introduced
 
 Feb 18, 99 T.Sasaki (tracking-01-00-01)
 - ShowStep() method was moved from G4Step to G4SteppingVerbose
@@ -717,19 +724,19 @@ August 25, 98 G.Cosmo (tracking-00-02-01)
 
 July  1, 98 K. Amako
 - Tag for tracking-00-07-02. This includes the following features.
-- Because J. Apostolakis changed  the way to calcluate safety in the 
+- Because J. Apostolakis changed  the way to calcluate safety in the
   transportation AlongStepGPIL, the way to set safety of the PostStepPoint
   was modified. Except the first step, the safety of the PreStepPoint
   is also valid in this scheme.
-- The coherent energy cut scheme is implemented. This means that 
+- The coherent energy cut scheme is implemented. This means that
   the energy of a secondary particle is checked against the energy
-  cut value and also safety. Also the 'GoodForTracking' flag is 
+  cut value and also safety. Also the 'GoodForTracking' flag is
   checked. A warning message will be issued if a secondary particle
   has illegal status (i.e. below energy cut and 'GoodForTracking' is off).
   Because processes don't set properly the 'GoodForTracking' yet, this
   waning message is temporary suppressed in the current tag.
 
-June 22, 98 J.Apostolakis 
+June 22, 98 J.Apostolakis
 
 - Added fix to implementation of new scheme of 'Safety'.
 
@@ -747,10 +754,10 @@ June 6, 98  M.Asai
 - GNUmakefile is modified to correspond to the new "digits+hits" structure.
 
 Jun  3, 98  P.Mora de Freitas/M.Verderi
-- Implement new scheme of 'Safety' where it becomes the 'range within 
+- Implement new scheme of 'Safety' where it becomes the 'range within
   the assumptions of all processes are valid'. In the G4SteppingManager
-  GetPIL loop the safety becomes "competitive" like the step limitation. 
-  This means that at the begining of every step the G4SteppingManager 
+  GetPIL loop the safety becomes "competitive" like the step limitation.
+  This means that at the begining of every step the G4SteppingManager
   will initialize it to DBLMAX and that processes can only decrease it.
 
 May 22, 98  T.Sasaki
@@ -759,7 +766,7 @@ April 21, 98 G.Cosmo (tracking-00-05-01)
 - Tagged.
 
 April 12, 98 H.Kuraashige
-- Implement new scheme of 'Particle Change'. Please see 
+- Implement new scheme of 'Particle Change'. Please see
   particle_change.asc in geant4alpha/documents/particles+matter/.
   G4SteppingManager.hh,  .cc have been modified.
 
@@ -769,25 +776,25 @@ April 9, 98 G.Cosmo
   return type for basic types by value. Modified files: G4Trajectory.hh
 
 March 18, 1998 K. Amako
-  Add following information to G4Track: 
-     1.Momentum direction at the start point (vertex position) of the track 
-     2.Kinetic energy at the start point (vertex position) of the track 
-     3.Pointer to the process which created the current track 
+  Add following information to G4Track:
+     1.Momentum direction at the start point (vertex position) of the track
+     2.Kinetic energy at the start point (vertex position) of the track
+     3.Pointer to the process which created the current track
   Due to this, the following files have modififed and committed.
-     1.NewDesignDoc.txt 
-     2.G4Track.hh, G4Track.cc 
-     3.G4SteppingManager.cc 
+     1.NewDesignDoc.txt
+     2.G4Track.hh, G4Track.cc
+     3.G4SteppingManager.cc
 
 January  29, 97 K. Amako
   Following changes have been done and committed/tagged to cvs.
-  Tag# is tracking-00-03-01. 
-    - G4SteppingManager.cc: Corrected so that the verbose 
+  Tag# is tracking-00-03-01.
+    - G4SteppingManager.cc: Corrected so that the verbose
       'AlongStepDoItAllDone' is invokded after the 'safety' update.
-    - G4SteppingManager.cc: Added a comment in the 'G4Step Information' 
-      table of the verbose output of 'AlongStepDoIt (process by process)' 
+    - G4SteppingManager.cc: Added a comment in the 'G4Step Information'
+      table of the verbose output of 'AlongStepDoIt (process by process)'
       so that 'safety' value in it is not updated yet.
     - G4TrackingMessanger.cc: Help for verbose has been updated.
-  
+
 
 December 19, 97 G. Cosmo - (alpha03)
 

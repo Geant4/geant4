@@ -408,7 +408,7 @@ Requires co-working base tag hadr-man-V09-05-16
 ------------------------------------------------------------
 23 May 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-08)
 ------------------------------------------------------------
-- G4EmCaptureCascade - fixed initilisation of mesoatomic K-shelll energies
+- G4EmCaptureCascade - fixed initialisation of mesoatomic K-shelll energies
 
 22 May 2012 Michael Kelsey (hadr-stopping-V09-05-07)
 ----------------------------------------------------

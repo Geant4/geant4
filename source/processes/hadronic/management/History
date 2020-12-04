@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 November 2020 V. Ivanchenko (hadr-man-V10-06-10)
+---------------------------------------------------
+- G4HadronicProcessStore : fixed Coverity report on the Print(..) method
+
+14 October 2020 A. Ribon (hadr-man-V10-06-09)
+---------------------------------------------------
+- G4HadronicProcess : removed the warnings when the environmental variables
+  G4Hadronic_*Level are used.
+  This is needed for system testing, in order to activate in some platforms
+  these conservation checks for all examples and tests.
+  Note that for advanced users, the use of UI commands are preferable.
+
+05 August 2020 A. Ribon (hadr-man-V10-06-08)
+---------------------------------------------------
+- G4HadronicEPTestMessenger, G4HadronicProcess : deprecated the three
+  environmental variables G4Hadronic_*Level and the corresponding old
+  UI commands "/heptst/*Level", recommending instead the new UI commands
+  "/process/had/heptst/*Level".
+
+04 August 2020 V. Ivanchenko (hadr-man-V10-06-07)
+---------------------------------------------------
+- G4HadronicProcessStore : use verbosity level from the G4HadronicParameters
+    class, add printout of cross section factor
+- G4HadronicProcess - removed unused flag
+
+20 July 2020 V. Ivanchenko (hadr-man-V10-06-06)
+---------------------------------------------------
+- G4HadronicProcessStore : extended default initialisation printout to
+  anti_lambda
+
 18 May 2020 G. Cosmo (hadr-man-V10-06-05)
 ---------------------------------------------------
 - G4HadronicProcessStore: removed unnecessary use of deprecated
@@ -175,7 +205,7 @@ code and to keep track of all tags.
 10 May 2017 V. Ivanchenko (hadr-man-V10-03-00)
 ---------------------------------------------------
 - G4HadronicProcess - correctly check charge and energy balance
-    in the case of e- internal convertion; improved initialisation
+    in the case of e- internal conversion; improved initialisation
     for constructors 
 
 01 July 2016 V. Ivanchenko (hadr-man-V10-02-03)

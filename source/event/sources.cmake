@@ -108,6 +108,12 @@ geant4_define_module(NAME G4event
     G4track
     G4tracking
   LINK_LIBRARIES
+    ${timemory_LIBRARIES}
 )
 
 # List any source specific properties here
+# Enable smart stack
+if(GEANT4_USE_SMARTSTACK)
+  geant4_module_compile_definitions(G4event PUBLIC G4_USESMARTSTACK)
+endif()
+

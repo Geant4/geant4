@@ -176,7 +176,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 
       if(!Axis_stream(a_buffer,a_data.m_axes[2])) return false; //fZAxis
       a_data.m_axes[2].m_offset = a_data.m_axes[1].m_offset * (a_data.m_axes[1].bins()+2);
-      
+
     } else if(a_data.m_dimension==2) {
       if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
       a_data.m_axes[1].m_offset = a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
@@ -219,7 +219,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 
     std::vector<double> sumw2; //fSumw2 TArrayD
     if(!Array_stream<double>(a_buffer,sumw2)) return false;
-    
+
    {std::string opt;
     if(!a_buffer.read(opt)) return false; //TString fOption
     //look if it is an "annotation trick" :
@@ -240,7 +240,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     if(vers>=4) {
       int BufferSize;
       if(!a_buffer.read(BufferSize)) return false;
-      
+
       //Double_t* Buffer; //[fBufferSize]
       if(!dummy_array_stream<double>(a_buffer,BufferSize)) return false;
     }
@@ -304,10 +304,10 @@ inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
 
     double Tsumwxy;
     if(!a_buffer.read(Tsumwxy)) return false;
-    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;  
+    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;
 
     if(!a_buffer.check_byte_count(s,c,"TH2")) return false;
-  
+
     return true;
 }
 
@@ -341,9 +341,9 @@ inline bool TH_read_3D(buffer& a_buffer,hd_data& a_data,
     double Tsumwyz;
     if(!a_buffer.read(Tsumwyz)) return false;
 
-    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;  
-    a_data.m_in_range_plane_Sxyw[1] = Tsumwyz;  
-    a_data.m_in_range_plane_Sxyw[2] = Tsumwxz;  
+    a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;
+    a_data.m_in_range_plane_Sxyw[1] = Tsumwyz;
+    a_data.m_in_range_plane_Sxyw[2] = Tsumwxz;
 
     if(!a_buffer.check_byte_count(s,c,"TH3")) return false;
 
@@ -514,7 +514,7 @@ inline histo::h2d* TH2F_stream(buffer& a_buffer){
     data.m_in_range_Sx2w[0] = fSx2w;
     data.m_in_range_Sxw[1] = fSyw;
     data.m_in_range_Sx2w[1] = fSy2w;
-    
+
     histo::h2d* h = new histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
     return h;
@@ -573,7 +573,7 @@ inline histo::h2d* TH2D_stream(buffer& a_buffer){
     data.m_in_range_Sx2w[0] = fSx2w;
     data.m_in_range_Sxw[1] = fSyw;
     data.m_in_range_Sx2w[1] = fSy2w;
-    
+
     histo::h2d* h = new histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
     return h;

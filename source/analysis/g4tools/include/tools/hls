@@ -37,7 +37,7 @@ inline void hls_to_rgb(T hue,T light,T satur,T& a_r,T& a_g,T& a_b){
 
   if (satur > 0) rs = satur;
   if (rs > 1)   rs = 1;
-  
+
   if (rl <= T(0.5)) {
     rm2 = rl*(1 + rs);
   } else {

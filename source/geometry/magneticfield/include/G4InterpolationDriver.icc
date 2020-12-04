@@ -57,7 +57,7 @@ G4InterpolationDriver ( G4double hminimum, T* pStepper,
     for (G4int i = 0; i < Base::GetMaxNoSteps(); ++i) 
     {
         fSteppers.push_back({
-            std::unique_ptr<T>(new T(pStepper->GetEquationOfMotion(), 
+            std::unique_ptr<T>(new T(pStepper->GetSpecificEquation(),   // Interpolating stepper must have this!
                                      pStepper->GetNumberOfVariables()) ),
             DBL_MAX, -DBL_MAX, 0.0
         });

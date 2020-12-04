@@ -81,7 +81,7 @@ public:
         m_out << "WARNING : arg " << sout(key) << " is not a test." << std::endl;
       }
     }}
-    
+
     bool some = false;
    {tools_vforit(named_test,*this,it) {
       const std::string& name = (*it).first;
@@ -156,7 +156,7 @@ public:
 
     return status;
   }
-  
+
   void list() {tools_vforit(named_test,*this,it) m_out << (*it).first << std::endl;}
 protected:
   std::ostream& m_out;

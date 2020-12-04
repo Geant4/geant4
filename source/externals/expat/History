@@ -14,6 +14,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20-October-2020: Ben Morgan (expat-V10-06-00)
+- Migrate build of G4expat to locally defined targets, allowing
+  cleaner specification of usage requirements. Fixes GitLab Issue #44.
+
 03-February-2017: Ben Morgan expat-V10-03-00
 - Set interface include directories on G4expat{-static} targets
   in CMakeLists.txt. This provides the needed interface to allow transparent
@@ -22,7 +26,7 @@ committal in the CVS repository !
   interface for consistency with other targets.
 
 24-September-2015: Ben Morgan  expat-V10-01-01
-- CMakeLists.txt : Add XML_STATIC to public compile definitions 
+- CMakeLists.txt : Add XML_STATIC to public compile definitions
   of G4expat-static. Required on Windows platforms to ensure correct
   linkage of symbols in static mode.
 
@@ -49,8 +53,8 @@ committal in the CVS repository !
 12-May-2011: Gunter Folger			expat-V09-04-00
 - Keep only Geant4 relevant parts of expat, lay out adapted to Geant4:
   GNUmakefile, and src & include
-     
 
-     
+
+
 April-2011: Gunter Folger			expat-2.0.1
 - Files of orginal expat 2.0.1 release, no G4 mods.

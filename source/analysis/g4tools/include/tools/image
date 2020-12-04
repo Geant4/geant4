@@ -13,7 +13,7 @@
 namespace tools {
 namespace image {
 
-// give a set of cols*rows same size rgb-image and build 
+// give a set of cols*rows same size rgb-image and build
 // a big image :
 inline unsigned char* concatenate(unsigned char** a_buffers,
                                   unsigned int a_w,unsigned int a_h,
@@ -41,8 +41,8 @@ inline unsigned char* concatenate(unsigned char** a_buffers,
 
   unsigned int wbw3 = wbw*a_bpp;
   unsigned int aw3 = a_w*a_bpp;
-  
-  //copy tiles :  
+
+  //copy tiles :
   unsigned int index = 0;
   for(unsigned int j=0;j<a_rows;j++) {
     for(unsigned int i=0;i<a_cols;i++) {
@@ -55,7 +55,7 @@ inline unsigned char* concatenate(unsigned char** a_buffers,
 
       for(unsigned int r=0;r<a_h;r++) {
         unsigned char* pos = rb + (j*hbh+r+a_bh)*a_rw*a_bpp + (i*wbw+a_bw)*a_bpp;
-        unsigned char* ptile = tile+r*aw3;        
+        unsigned char* ptile = tile+r*aw3;
         for(unsigned int c=0;c<aw3;c++,pos++,ptile++) *pos = *ptile;
       }
 
@@ -109,7 +109,7 @@ inline unsigned char* concatenate(std::ostream& a_out,
   unsigned int w1 = 0;
   unsigned int h1 = 0;
   unsigned int bpp1 = 0;
-   
+
   typedef unsigned char* buffer_t;
   buffer_t* bs = new buffer_t[number];
  {for(unsigned int i=0;i<number;i++) {bs[i] = 0;}}
@@ -187,7 +187,7 @@ inline unsigned char* concatenate(std::ostream& a_out,
     {for(unsigned int i=0;i<number;i++) {delete [] bs[i];}}
     a_bpp = a_w = a_h = 0;
     return 0;
-  } 
+  }
 
   {for(unsigned int i=0;i<number;i++) {delete [] bs[i];}}
 
@@ -205,7 +205,7 @@ inline bool convert(std::ostream& a_out,
                     reader a_reader,
                     const std::string& a_sout,
                     writer a_writer){
-  
+
   FILE* fin = ::fopen(a_sin.c_str(),"rb");
   if(!fin) {
     a_out << "tools::image::convert :"
@@ -294,7 +294,7 @@ public:
         if((*it)->is(file)) {
           unsigned char* buffer = _open(*(*it),file,a_w,a_h,a_bpp);
           end_file(file);
-          return buffer;        
+          return buffer;
         }
       }
       end_file(file);
@@ -371,7 +371,7 @@ protected:
         //  sw = 2;
         //  sh = sw/aspect;
         //}
-    
+
         unsigned int sw = 2;
         unsigned int sh = 2;
         while(true) {
@@ -379,10 +379,10 @@ protected:
           sw *=2;
           sh *=2;
         }
-    
+
         unsigned int sx = (a_w-sw)/2;
         unsigned int sy = (a_h-sh)/2;
-    
+
         buffer = a_reader.read_part
                    (m_out,a_path,sx,sy,sw,sh,a_w,a_h,a_bpp);
       } else {
@@ -391,7 +391,7 @@ protected:
     } else {
       buffer = a_reader.read(m_out,a_path,a_w,a_h,a_bpp);
     }
-  
+
     if(!buffer) {
       m_out << "tools::image::iterator_reader::_open :"
             << " for file " << sout(a_path)
@@ -400,7 +400,7 @@ protected:
       a_w = 0;a_h = 0;a_bpp = 0;
       return 0;
     }
-    
+
     return buffer;
   }
 
@@ -417,7 +417,7 @@ protected:
     tools_vforcit(ireader*,a_from,it) m_readers.push_back((*it)->copy());
   }
 protected:
-  std::ostream& m_out; 
+  std::ostream& m_out;
   unsigned int m_limit;
   std::vector<ireader*> m_readers;
 };

@@ -222,11 +222,19 @@ void G4VRML2FileSceneHandler::closePort()
 		G4cout << "    setenv  " << ENV_VRML_VIEWER << "  vrwave " << G4endl;
 	  }
 	} else {
-		std::ostringstream ossCommand;
-		ossCommand << viewer << ' ' << fVRMLFileName;
-		strncpy(command,ossCommand.str().c_str(),sizeof(command)-1);
-                command[sizeof(command)-1] = '\0';
-		(void) system( command );
+          std::ostringstream ossCommand;
+          ossCommand << viewer << ' ' << fVRMLFileName;
+          strncpy(command,ossCommand.str().c_str(),sizeof(command)-1);
+          command[sizeof(command)-1] = '\0';
+          int iErr = system( command );
+          if ( iErr != 0 ) {
+            G4ExceptionDescription ed;
+            ed << "Error " << iErr
+            << " when calling system with \"" << command
+            << "\".";
+            G4Exception("G4VRML2FileSceneHandler::closePort()",
+                        "VRML-2006", JustWarning, ed);
+          }
 	}
 }
 

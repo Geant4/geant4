@@ -72,7 +72,7 @@ inline directory* find_path_dir(directory& a_from,const std::string& a_path) {
 }
 
 inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
-  unsigned int sz;    
+  unsigned int sz;
   char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
   if(!buf) {
     a_out << "tools::rroot::read_key : can't get data buffer of " << a_key.object_name() << "." << std::endl;
@@ -183,7 +183,7 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
       if(a_dump) {
         tree.dump(a_out,"","  ");
 
-        uint64 entries = tree.entries();  
+        uint64 entries = tree.entries();
 
        /*
        {for(uint32 j=0;j<10;j++){ //to test memory.
@@ -192,16 +192,16 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
           if(!tree.find_entry(i,n)) {
             a_out << " can't find entry " << i
                   << std::endl;
-          }       
+          }
         }
         }}
         */
-  
+
        {for(uint32 i=0;i<5;i++){
           if(!tree.show(a_out,i)) {
             a_out << " show failed for entry " << i
                   << std::endl;
-          }       
+          }
         }}
        {for(uint64 i=mx<int64>(5,entries-5);i<entries;i++){
           if(!tree.show(a_out,(uint32)i)) {
@@ -209,10 +209,10 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
                   << std::endl;
           }
         }}
- 
+
       }
     }
-	
+
 #ifndef TOOLS_RROOT_NOT_OSC
   } else if(a_key.object_class()==osc::s_h1d()) {
 
@@ -272,7 +272,7 @@ inline bool read_key(std::ostream& a_out,ifile& a_file,key& a_key,bool a_dump){
 
   } else if(a_key.object_class()==THistogram_cls()) { //produced with osc/AIDA through BatchLab/Rio/THistogram.
 
-    pd_data_t data; 
+    pd_data_t data;
     annotations_t annotations;
     if(!read_THistogram(b,data,annotations)) {
       a_out << "tools::rroot::read_key : read_THistogram() failed." << std::endl;
@@ -447,7 +447,7 @@ inline tree* key_to_tree(ifile& a_file,ifac& a_fac,key& a_key,bool a_warn = true
     if(a_warn) out << "tools::rroot::key_to_tree : key not a TTree." << std::endl;
     return 0;
   }
-  unsigned int sz;    
+  unsigned int sz;
   char* buf = a_key.get_object_buffer(a_file,sz); //we don't have ownership of buf.
   if(!buf) {
     out << "tools::rroot::key_to_tree : can't get data buffer of " << a_key.object_name() << "." << std::endl;
@@ -462,7 +462,7 @@ inline tree* key_to_tree(ifile& a_file,ifac& a_fac,key& a_key,bool a_warn = true
     return 0;
   }
   return _tree;
-}	
+}
 
 inline void read(std::ostream& a_out,
                  ifile& a_file,
@@ -501,8 +501,8 @@ inline void read(std::ostream& a_out,
 
       if(!a_recursive) continue;
 
-      uint32 sz;    
-      char* buf = k.get_object_buffer(a_file,sz); 
+      uint32 sz;
+      char* buf = k.get_object_buffer(a_file,sz);
       if(!buf) {
         a_out  << "read :"
                << " can't get directory data buffer."

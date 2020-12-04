@@ -86,9 +86,9 @@ public:
   void value(T& a0,T& a1) const {
     a0 = m_data[0];
     a1 = m_data[1];
-  }    
+  }
 
-  //bool set_value(unsigned int a_index,const T& a_value) { 
+  //bool set_value(unsigned int a_index,const T& a_value) {
   //  if(a_index>=2) return false;
   //  m_[a_index] = a_value;
   //  return true;
@@ -106,13 +106,13 @@ public:
   }
 
   T dot(const vec2& aV) const {
-    return (m_data[0] * aV.m_data[0] + 
+    return (m_data[0] * aV.m_data[0] +
             m_data[1] * aV.m_data[1]);
-  }   
+  }
 
   T cross(const vec2& aV) const {
     return (m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
-  }    
+  }
 
   bool equal(const vec2& aV) const {
     if(m_data[0]!=aV.m_data[0]) return false;
@@ -130,22 +130,22 @@ public:
   void add(const vec2& a_v) {
     m_data[0] += a_v.m_data[0];
     m_data[1] += a_v.m_data[1];
-  }    
+  }
 
   void add(const T& a0,const T& a1) {
     m_data[0] += a0;
     m_data[1] += a1;
-  }    
+  }
 
   void subtract(const vec2& a_v) {
     m_data[0] -= a_v.m_data[0];
     m_data[1] -= a_v.m_data[1];
-  }    
+  }
 
   void subtract(const T& a0,const T& a1) {
     m_data[0] -= a0;
     m_data[1] -= a1;
-  }    
+  }
 
 public: //operators
   T& operator[](size_t a_index) {
@@ -160,17 +160,17 @@ public: //operators
   vec2 operator+(const vec2& a_v) const {
     return vec2(m_data[0]+a_v.m_data[0],
                 m_data[1]+a_v.m_data[1]);
-  }    
+  }
 
   vec2 operator-(const vec2& a_v) const {
     return vec2(m_data[0]-a_v.m_data[0],
                 m_data[1]-a_v.m_data[1]);
-  }    
+  }
 
   vec2 operator*(const T& a_v) const {
     return vec2(m_data[0]*a_v,
                 m_data[1]*a_v);
-  }    
+  }
 
   bool operator==(const vec2& a_v) const {return equal(a_v);}
   bool operator!=(const vec2& a_v) const {return !operator==(a_v);}
@@ -184,7 +184,7 @@ public: //for iv2sg
   void getValue(T& a0,T& a1) const {
     a0 = m_data[0];
     a1 = m_data[1];
-  }    
+  }
   void setValue(const T& a0,const T& a1) {
     m_data[0] = a0;
     m_data[1] = a1;

@@ -34,11 +34,13 @@ geant4_define_module(NAME G4materials
 		G4LatticeLogical.hh
 		G4LatticePhysical.hh
 		G4Material.hh
-    G4MaterialPropertiesIndex.hh
+                G4MaterialPropertiesIndex.hh
 		G4MaterialPropertiesTable.hh
 		G4MaterialPropertiesTable.icc
 		G4MaterialPropertyVector.hh
 		G4MaterialTable.hh
+                G4MicroElecMaterialStructure.hh
+                G4MicroElecSiStructure.hh
 		G4NistElementBuilder.hh
 		G4NistManager.hh
 		G4NistMaterialBuilder.hh
@@ -73,6 +75,8 @@ geant4_define_module(NAME G4materials
 		G4LatticePhysical.cc
 		G4Material.cc
 		G4MaterialPropertiesTable.cc
+                G4MicroElecMaterialStructure.cc
+                G4MicroElecSiStructure.cc
 		G4NistElementBuilder.cc
 		G4NistManager.cc
 		G4NistMaterialBuilder.cc
@@ -90,6 +94,7 @@ geant4_define_module(NAME G4materials
     G4global
     G4intercoms
   LINK_LIBRARIES
+    ${ZLIB_LIBRARIES}
 )
 
 # List any source specific properties here

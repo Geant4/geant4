@@ -8,6 +8,9 @@ Hi-------------------------------------------------------------------
                       Category History file
                       ---------------------
 
+02.11.2020 - B.Morgan (lAr_calorimeter-V10-06-00)
+             Support same CMake version range as core Geant4
+
 31.01.2019 - I.Hrivnacova (lAr_calorimeter-V10-05-00)
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -18,8 +21,8 @@ Hi-------------------------------------------------------------------
              G4VIS_USE and G4UI_USE deleted
 
 10.05.2018 - B. Morgan (lAr_calorimeter-V10-04-00)
-             Include G4Types before use of G4MULTITHREADED. For forward 
-             compatibility with move to #defines over -D for G4 preprocessor 
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
              symbols.
 
 02.11.2016 - L. Garnier (lAr_calorimeter-V10-02-00)
@@ -30,12 +33,12 @@ Hi-------------------------------------------------------------------
              provides crashes in MT mode, which are  difficult to explain
 
 31.10.2014 - L.Pandola Tag (lAr_calorimeter-V10-00-04)
-             Changed interface of FCALMaterialConsultant to avoid multiple 
+             Changed interface of FCALMaterialConsultant to avoid multiple
               definition of materials
 	     Fix casting warning in FCALSteppingVerbose.cc (seen on Win)
 
 16.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-02, lAr_calorimeter-V10-00-03)
-             Bug fixing for clang warnings	     
+             Bug fixing for clang warnings
 
 15.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-01)
              Removing output to txt file (non thread safe)
@@ -48,24 +51,24 @@ Hi-------------------------------------------------------------------
              Bug fixing for clang32 compilation warnings
 
 21.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-04)
-	     Remove other compiler warnings (showing up only for 
+	     Remove other compiler warnings (showing up only for
 	     some systems/compilers)
 
 19.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-03)
-	     Remove compiler warning (shadowing a class member by 
+	     Remove compiler warning (shadowing a class member by
 	     a local variable).
 
 14.03.2013 - A.Dotti and L.Pandola Tag (lAr_calorimeter-V09-06-02)
-             Changed CMakeLists.txt to copy the content of the directories 
+             Changed CMakeLists.txt to copy the content of the directories
 	     data-tracks and geom_data (used at run time). Modified macros.
              Cleaning in FCALPrimaryGeneratorAction
 
 12.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-01)
-	     Migrated analysis to g4tools (removed AIDA dependency) and other small 
+	     Migrated analysis to g4tools (removed AIDA dependency) and other small
              cosmetics. CMakeLists.txt and README updated accordingly
 
 12.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-00)
-	     Fix bug in the primary generator, which caused the abort 
+	     Fix bug in the primary generator, which caused the abort
 	     of all events in the run (run1.mac)
 
 02.11.2012 - L.Garnier Tag (lAr_calorimeter-V09-05-03)
@@ -78,7 +81,7 @@ Hi-------------------------------------------------------------------
              Explicit inclusion of units and constants headers.
 
 11.10.2012   Andrea Dotti (lAr_calorimeter-V09-05-00)
-	     Use of PhyListFactory instead of explicit instantiaion of 
+	     Use of PhyListFactory instead of explicit instantiaion of
 	     physics lists.
 	     Adding CMakeList.txt file
 
@@ -111,7 +114,7 @@ Hi-------------------------------------------------------------------
 	     Fixed some uninitialization problems.
 
 08.12.2005 - A.Ribon (lAr_calorimeter-V07-01-00)
-             Migration to CLHEP namespace. 
+             Migration to CLHEP namespace.
 	     Removed also old header files.
 
 3rd May 2005  John Allison  (examples-V07-00-03)

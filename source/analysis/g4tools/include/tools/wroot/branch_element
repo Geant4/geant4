@@ -131,7 +131,7 @@ protected:
   }
 public:
   const std::vector<T>& variable() const {return m_ref;}
-  std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}  
+  std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}
 protected:
   const std::vector<T>& m_ref;
 };

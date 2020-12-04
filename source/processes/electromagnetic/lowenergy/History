@@ -15,6 +15,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.11.2020 V.Ivanchenko, emlowen-V10-06-13
+- G4MicroElecInelasticModel_new, G4MicroElecInelastic_new,
+  G4MicroElecSurface - fixed Coverity warnings (non-initialized 
+    class members or dereferences)
+
+26.10.2020 V.Ivanchenko, emlowen-V10-06-12
+- removed obsolete G4MuElec* classes
+- Added new classes developed by ONERA and CEA group and provided
+  by D. Lambert: G4MicroElecElasticModel_new,
+  G4MicroElecInelasticModel_new, G4MicroElecInelastic_new,
+  G4MicroElecLOPhononModel, G4MicroElecLOPhononModel.
+  G4MicroElecSiStructure is moved to material category
+- G4MicroElecSurface - new boundary process for e- The code is 
+    updated compared with the original: instead of name comparisons 
+    pointers are compared; condition on surface is defined by kCarTolerance;
+    initialisation is done in the new BuildPhysicsTable(..) method
+    instead of Initialise(); no dependence on G4Electron; changed
+    process type and sub-types from optical to electromagnetic.
+15.10.2020 L. Pandola, emlowen-V10-06-11
+- Fix Coverity defects and material list in G4PenelopeRayleighModelMI
+
+12.10.2020 L. Pandola, emlowen-V10-06-10
+- replace std::log with G4Log in Penelope and Livermore models
+- use GetZasInt() in Penelope models, when applicable
+- fix typo in material name in G4PenelopeRayleighModelMI
+
+07.10.2020 L. Pandola, emlowen-V10-06-09
+- finalize G4PenelopeRayleighModelMI model of emlowen-V10-06-08: 
+make it compatible with Unit Tests, revise verbosity
+
+24.09.2020 G. Paternò, L. Pandola, emlowen-V10-06-08
+- added G4PenelopeRayleighModelMI model and ancillary class G4MIData
+ (provided by G. Paternò, INFN Ferrara)
+- create tests/CMakeLists.txt for Unit Tests and reshape Unit Test
+ G4PenelopeRayleighTest.cc
+
+04.09.2020 M. Omer, R. Hajima, L. Pandola, emlowen-V10-06-07
+- Added protections in G4JAEAPolarizedElasticScatteringModel.cc
+
 11.06.2020 Z. Li, emlowen-V10-06-06
 - Add InitialiseForElement() in G4LivermoreGammaConversionModel 
   and G4LivermoreGammaConversion5DModel, which was missing before
@@ -1608,7 +1648,7 @@ M. Omer and R. Hajima
 
 25.06.2009, A. Mantero, tag emlowen-V09-02-40
             Design update, Bug Fixes and models update for
-            atomic shell hadronic CS calulation.
+            atomic shell hadronic CS calculation.
 
 02.06.2009, A.Lechner, tag emlowen-V09-02-39
             Bug fix in class G4IonDEDXScalingICRU73: Compilation

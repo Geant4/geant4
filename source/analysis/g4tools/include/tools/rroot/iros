@@ -14,9 +14,9 @@
 namespace tools {
 namespace rroot {
 
-class iros : public virtual iro,public std::vector<iro*> {
+class iros : public virtual iro,protected std::vector<iro*> {  //proteced to avoid using std::vector::clear().
   typedef std::vector<iro*> parent;
-public:  
+public:
   static const std::string& s_store_class() {
     static const std::string s_v("TObjArray");
     return s_v;
@@ -86,7 +86,13 @@ public:
     return *this;
   }
 public:
-  void cleanup() {_clear();}
+  parent::const_iterator begin() const {return parent::begin();}
+  parent::iterator begin() {return parent::begin();}
+  parent::const_iterator end() const {return parent::end();}
+  parent::iterator end() {return parent::end();}
+  parent::size_type size() const {return parent::size();}
+public:
+  void cleanup() {_clear();}  //warning : clear is a function of the parent std::vector.
   void dump(std::ostream& a_out) {
     a_out << " iros : size " << size() << std::endl;
     tools_vforcit(iro*,*this,it) {
@@ -155,7 +161,7 @@ protected:
       bool own = (*itb);
       parent::erase(it);
       m_owns.erase(itb);
-      if(own) delete entry;    
+      if(own) delete entry;
     }
   }
 protected:

@@ -30,8 +30,8 @@ inline bool read_header(hid_t a_file,std::string& a_writer,int& a_data_schema_ve
   }
   ::H5Gclose(header);
   return true;
-} 
-  
+}
+
 }}
 
 #endif

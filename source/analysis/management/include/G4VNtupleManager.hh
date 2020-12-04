@@ -37,6 +37,8 @@
 
 #include <vector>
 
+struct G4NtupleBooking;
+
 class G4VNtupleManager : public G4BaseAnalysisManager
 {
   // Disable using the object managers outside G4VAnalysisManager and
@@ -54,33 +56,33 @@ class G4VNtupleManager : public G4BaseAnalysisManager
 
   protected:
     // Methods for handling ntuples
-    virtual G4int CreateNtuple(const G4String& name, const G4String& title) = 0;
+    virtual G4int CreateNtuple(G4NtupleBooking* booking) = 0;
 
-    // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(const G4String& name, 
-                              std::vector<int>* vector) = 0;
-    virtual G4int CreateNtupleFColumn(const G4String& name,
-                              std::vector<float>* vector) = 0;
-    virtual G4int CreateNtupleDColumn(const G4String& name,
-                              std::vector<double>* vector) = 0;
-    virtual G4int CreateNtupleSColumn(const G4String& name) = 0;
-    virtual void  FinishNtuple() = 0;   
+    // // Create columns in the last created ntuple
+    // virtual G4int CreateNtupleIColumn(const G4String& name, 
+    //                           std::vector<int>* vector) = 0;
+    // virtual G4int CreateNtupleFColumn(const G4String& name,
+    //                           std::vector<float>* vector) = 0;
+    // virtual G4int CreateNtupleDColumn(const G4String& name,
+    //                           std::vector<double>* vector) = 0;
+    // virtual G4int CreateNtupleSColumn(const G4String& name) = 0;
+    // virtual void  FinishNtuple() = 0;   
 
-    // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name,
-                                      std::vector<int>* vector) = 0;
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name,
-                                      std::vector<float>* vector) = 0;
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name,
-                                      std::vector<double>* vector) = 0;
-    virtual G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name) = 0;
-    virtual void  FinishNtuple(G4int ntupleId) = 0; 
+    // // Create columns in the ntuple with given id
+    // virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name,
+    //                                   std::vector<int>* vector) = 0;
+    // virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name,
+    //                                   std::vector<float>* vector) = 0;
+    // virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name,
+    //                                   std::vector<double>* vector) = 0;
+    // virtual G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name) = 0;
+    // virtual void  FinishNtuple(G4int ntupleId) = 0; 
     
     // The ntuple column ids are generated automatically starting from 0; 
     // with the following function it is possible to change it 
     // to start from another value
-    virtual G4bool SetFirstNtupleColumnId(G4int firstId) = 0; 
-    virtual G4int  GetFirstNtupleColumnId() const = 0;
+    // virtual void   SetFirstNtupleColumnId(G4int firstId) = 0; 
+    // virtual G4int  GetFirstNtupleColumnId() const = 0;
 
     // Methods to fill ntuples
     // Methods for ntuple with id = FirstNtupleId                     
@@ -103,9 +105,17 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     virtual void  SetActivation(G4int id, G4bool activation) = 0;
     virtual G4bool  GetActivation(G4int id) const = 0;
 
+    // // File name option
+    // virtual void  SetFileName(const G4String& fileName) = 0;
+    // virtual void  SetFileName(G4int id, const G4String& fileName) = 0;
+    // virtual G4String GetFileName(G4int id) const = 0;
+
     // Access methods
     virtual G4int GetNofNtuples() const = 0;
-    virtual G4int GetNofNtupleBookings() const = 0;
+    // virtual G4int GetNofNtupleBookings() const = 0;
+
+    // Set first column Id
+    virtual G4bool SetFirstNtupleColumnId(G4int firstId) = 0;
 };
 
 #endif

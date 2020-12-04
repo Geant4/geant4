@@ -788,7 +788,7 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
     {
       cps = kineticEnergy*rb;
       cp = std::sqrt(cps);
-      G4double XHDT0 = std::max(std::log(gam2)-beta2-delta,0.);
+      G4double XHDT0 = std::max(G4Log(gam2)-beta2-delta,0.);
       if (resEne > 1.0e-6*kineticEnergy)
 	{
 	  G4double cpp = std::sqrt((kineticEnergy-resEne)*(kineticEnergy-resEne+2.0*electron_mass_c2));
@@ -801,7 +801,7 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
 	}
       if (QM < cutoffEne)
 	{
-	  XHDL = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
+	  XHDL = G4Log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
 	    *invResEne;
 	  XHDT = XHDT0*invResEne;	  
 	}
@@ -832,7 +832,7 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
       G4double rl1 = 1.0-rcl;
       G4double rrl1 = 1.0/rl1;
       XHC = (amol*(0.5-rcl)+1.0/rcl-rrl1+
-	     (1.0-amol)*std::log(rcl*rrl1))/EE;
+	     (1.0-amol)*G4Log(rcl*rrl1))/EE;
     }
 
   //Total cross section per molecule for the active shell, in cm2
@@ -1002,7 +1002,7 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
     {
       cps = kineticEnergy*rb;
       cp = std::sqrt(cps);
-      G4double XHDT0 = std::max(std::log(gam2)-beta2-delta,0.);
+      G4double XHDT0 = std::max(G4Log(gam2)-beta2-delta,0.);
       if (resEne > 1.0e-6*kineticEnergy)
 	{
 	  G4double cpp = std::sqrt((kineticEnergy-resEne)*(kineticEnergy-resEne+2.0*electron_mass_c2));
@@ -1015,7 +1015,7 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
 	}
       if (QM < cutoffEne)
 	{
-	  XHDL = std::log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
+	  XHDL = G4Log(cutoffEne*(QM+2.0*electron_mass_c2)/(QM*(cutoffEne+2.0*electron_mass_c2)))
 	    *invResEne;
 	  XHDT = XHDT0*invResEne;	  
 	}
@@ -1042,7 +1042,7 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
   if (wcl < wmaxc)
     {
       G4double rl1 = 1.0-rcl;
-      XHC = ((1.0/rcl-1.0)+bha1*std::log(rcl)+bha2*rl1
+      XHC = ((1.0/rcl-1.0)+bha1*G4Log(rcl)+bha2*rl1
 	     + (bha3/2.0)*(rcl*rcl-1.0) 
 	     + (bha4/3.0)*(1.0-rcl*rcl*rcl))/kineticEnergy;
     }

@@ -196,7 +196,7 @@ inline const std::string* get_data(const std::vector<std::string>& a_v) {
 ///////////////////////////////////////////////////////////
 
 
-template <class T,class TT> 
+template <class T,class TT>
 class mf_vec : public bmf<T> {
   typedef bmf<T> parent;
 public:

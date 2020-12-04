@@ -138,7 +138,7 @@ public:
   // (return true if the Physics Table can be build by using file)
   // (return false if the process has no functionality or in case of failure)
   // File name should is constructed as processName+particleName and the
-  // should be placed under the directory specifed by the argument.
+  // should be placed under the directory specified by the argument.
   virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                                       const G4String& directory,
                                       G4bool ascii) override;

@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 October 2020 - G.Cosmo (ascii-V10-06-02)
+- Minor c++11 review. Code cleanup and formatting.
+
 4 March 2020 - P.Arce (ascii-V10-06-01)
 - G4tgbGeometryDumper.cc: Fix coverity warnings
 - G4tgbVolume.cc: Fix coverity warnings

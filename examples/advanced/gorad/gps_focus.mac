@@ -1,0 +1,18 @@
+#######################################################
+#
+# Sample macro file to set General Particle Source
+# shooting protons from the sphere inward to the center
+#
+#######################################################
+
+/gps/pos/shape Sphere
+/gps/pos/centre   0.0  0.0  0.0  m
+/gps/pos/radius   2.5  m
+/gps/pos/type Surface
+/gps/number  1
+/gps/particle proton
+/gps/ene/type Mono
+/gps/ene/mono  100.0 MeV 
+/gps/ang/type focused
+/gps/ang/focuspoint 0. 0. 0. m
+

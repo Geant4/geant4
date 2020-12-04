@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/11/20 B. Morgan (B1Con-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 28/11/19 I. Hrivnacova (B1Con-V10-05-00)
 - Fixed formatting in .README.txt
 
@@ -29,7 +32,7 @@ track of all tags.
 - Fixed tag name
 
 05/02/14 I. Hrivnacova (B1Con-V010-00-00)
-- Increasing number of events of run1.mac to fit the purpose 
+- Increasing number of events of run1.mac to fit the purpose
   of this example (T. Koi)
 
 10/10/13 I. Hrivnacova (B1Con-V09-06-03)
@@ -42,13 +45,13 @@ track of all tags.
   Update README and .README
 
 10/02/13 KOI, Tatsumi (B1Con-V09-06-01)
-- Added "name" for convergence tester in B1RunAction 
+- Added "name" for convergence tester in B1RunAction
   Added comments for FOM in README
   Changed output example in README
 
 09/30/13 I. Hrivnacova (B1Con-V09-06-00)
-- Added .README and tagged 
-     
+- Added .README and tagged
+
 09/27/13 KOI, Tatsumi
 - Incorporate comments from Ivana Hrivnacova
 

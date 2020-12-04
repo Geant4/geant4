@@ -5,10 +5,13 @@
                        Package History file
                        --------------------
 
+10 Nov 20 - tag slowing-V10-06-00 - B. Morgan
+- Migration to G4RunManagerFactory.
+
 26 Nov 19 - tag slowing-V10-05-00 - I. Hrivnacova
 - Fixed Doxygen warnings
 
-22 Jul 18 - tag slowing-V10-04-02 - S. Incerti 
+22 Jul 18 - tag slowing-V10-04-02 - S. Incerti
 - removed obsolete RanecuEngine
 
 13 June 2018 - tag slowing-V10-04-01 - S. Incerti

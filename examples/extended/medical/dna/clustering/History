@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-2020 B. Morgan (clustering-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 28-11-2017 I.Hrivnacova  (clustering-V10-03-01)
 - Fixed Doxygen warnings
 
@@ -31,6 +34,6 @@ track of all tags.
 
 15-06-16 Gunter Folger   (clustering-V10-02-00)
 - add GNUmakefile and reference output (clustering.out)
- 
+
 22-10-15 SI (clustering-V10-01-00)
 - created

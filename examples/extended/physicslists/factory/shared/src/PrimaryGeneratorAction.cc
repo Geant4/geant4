@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 
@@ -69,7 +69,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // This function is called at the begining of event
 
   // In order to avoid dependence of PrimaryGeneratorAction
-  // on DetectorConstruction class we get world volume 
+  // on DetectorConstruction class we get world volume
   // from G4LogicalVolumeStore
   //
   G4double worldZHalfLength = 0.;
@@ -82,7 +82,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   if ( worldBox ) {
-    worldZHalfLength = worldBox->GetZHalfLength();  
+    worldZHalfLength = worldBox->GetZHalfLength();
   }
   else  {
     G4ExceptionDescription msg;
@@ -91,8 +91,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     msg << "The gun will be place in the center.";
     G4Exception("PrimaryGeneratorAction::GeneratePrimaries()",
       "MyCode0002", JustWarning, msg);
-  } 
-  
+  }
+
   // Set gun position
   fParticleGun
     ->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));

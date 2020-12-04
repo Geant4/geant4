@@ -58,9 +58,6 @@ private:
   G4UIdirectory*        fRunDir;
   G4UIcmdWith3Vector*   fAccCmd;
   G4UIcmdWithAnInteger* fVerbCmd;
-            
-  G4UIdirectory*        fHistoDir;        
-  G4UIcmdWithAString*   fHFileCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

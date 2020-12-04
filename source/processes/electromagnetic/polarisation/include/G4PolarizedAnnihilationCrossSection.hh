@@ -88,7 +88,7 @@ private:
   G4double   polxx, polyy, polzz, polxz, polzx, polxy, polyx, polyz, polzy;
 
   G4double re2, diffXSFactor, totalXSFactor;
-  // - unpolarised + part depending on the polarization of the intial pair
+  // - unpolarised + part depending on the polarization of the initial pair
   G4double phi0;
   // - part depending on the polarization of the final positron
   G4ThreeVector phi2; 

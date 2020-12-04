@@ -20,10 +20,6 @@
 #ifndef HEP_THREEVECTOR_H
 #define HEP_THREEVECTOR_H
 
-#ifdef GNUPRAGMA
-#pragma interface
-#endif
-
 #include <iostream>
 #include "CLHEP/Utility/defs.h"
 
@@ -392,9 +388,7 @@ protected:
 
 protected:
 
-  double dx;
-  double dy;
-  double dz;
+  double data[3];
   // The components.
 
   DLL_API static double tolerance;

@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 15, 2020 - G.Cosmo (geomnav-V10-06-08)
+--------------------------
+- G4ReplicaNavigation: relaxed condition for step correction in ComputeStep().
+
+October 13, 2020 - E.Tcherniaev (geomnav-V10-06-07)
+-------------------------------
+- Added G4GeomTestVolume::TestOverlapInTree().
+
+September 8, 2020 - G.Cosmo (geomnav-V10-06-06)
+---------------------------
+- Fixed Coverity defects in G4RegularNavigation for uninitialised data.
+
 June 15, 2020 - G.Cosmo (geomnav-V10-06-05)
 -----------------------
 - Fixed Coverity defects in G4LocatorChangeRecord and some code cleanup.

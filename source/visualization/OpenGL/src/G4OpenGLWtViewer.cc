@@ -326,7 +326,7 @@ void G4OpenGLWtViewer::createPopupMenu()    {
   WAction *nurbs = mRepresentation->addAction("NURBS");
 
   WAction *ortho = mProjection->addAction("Orthographic");
-  WAction *perspective = mProjection->addAction("Persepective");
+  WAction *perspective = mProjection->addAction("Perspective");
 
   // INIT mRepresentation
   G4ViewParameters::RepStyle style;
@@ -2098,7 +2098,7 @@ bool G4OpenGLWtViewer::generateMpegEncoderParameters () {
   fprintf (fp,"# this must be ORIGINAL or DECODED\n");
   fprintf (fp,"REFERENCE_FRAME	ORIGINAL\n");
   fprintf (fp,"\n");
-  fprintf (fp,"# for parallel parameters see parallel.param in the exmaples subdirectory\n");
+  fprintf (fp,"# for parallel parameters see parallel.param in the examples subdirectory\n");
   fprintf (fp,"\n");
   fprintf (fp,"# if you want constant bit-rate mode, specify it as follows (number is bits/sec):\n");
   fprintf (fp,"#BIT_RATE  1000000\n");

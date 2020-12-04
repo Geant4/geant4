@@ -33,11 +33,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -63,27 +59,26 @@ int main(int argc,char** argv)
  }
 
  // Construct the stepping verbose class
- RE06SteppingVerbose* verbosity = new RE06SteppingVerbose;
+ auto verbosity = new RE06SteppingVerbose;
  G4VSteppingVerbose::SetInstance(verbosity);
 
  // Construct the run manager
  //
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-  runManager->SetUserInitialization(new RE06WorkerInitialization);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+ auto runManager = G4RunManagerFactory::CreateRunManager();
+ if(runManager->GetRunManagerType() == G4RunManager::masterRM)
+ {
+   runManager->SetNumberOfThreads(4);
+   runManager->SetUserInitialization(new RE06WorkerInitialization);
+ }
 
  // Set mandatory initialization classes
  //
  G4String parallelWorldName = "ParallelScoringWorld";
- G4VUserDetectorConstruction* detector = new RE06DetectorConstruction;
+ auto detector = new RE06DetectorConstruction;
  detector->RegisterParallelWorld(new RE06ParallelWorld(parallelWorldName));
  runManager->SetUserInitialization(detector);
  //
- G4VModularPhysicsList* physics = new FTFP_BERT;
+ auto physics = new FTFP_BERT;
  physics->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
  runManager->SetUserInitialization(physics);
 
@@ -93,7 +88,7 @@ int main(int argc,char** argv)
 
  // Visualization manager
  //
- G4VisManager* visManager = new G4VisExecutive;
+ auto visManager = new G4VisExecutive;
  visManager->Initialize();
 
  // Initialize G4 kernel
@@ -102,7 +97,7 @@ int main(int argc,char** argv)
 
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();
+ auto UImanager = G4UImanager::GetUIpointer();
 
  if (ui)   // Define UI session for interactive mode
  {

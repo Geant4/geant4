@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27-10-20 mma (testem12-V10-06-00)
+- add macros description in Readme
 
 09-09-18 SI (testem12-V10-04-04)
 - updated dna.mac

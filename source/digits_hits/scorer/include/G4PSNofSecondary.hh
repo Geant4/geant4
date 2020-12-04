@@ -29,7 +29,7 @@
 #ifndef G4PSNofSecondary_h
 #define G4PSNofSecondary_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 #include "G4ParticleTable.hh"
 
@@ -44,12 +44,14 @@
 //                       particleDef is not set, it accepts all secondaies.
 //                       But onece user sets it, it accepts only the particle.
 //          2010-07-22   Introduce Unit specification.
-//
+//          2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic
+//                       energy of the secondary in MeV (x) vs. track weight (y) 
+//                       (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class G4PSNofSecondary : public G4VPrimitiveScorer
+class G4PSNofSecondary : public G4VPrimitivePlotter
 {
  
  public: // with description

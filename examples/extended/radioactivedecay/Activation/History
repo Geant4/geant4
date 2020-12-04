@@ -12,6 +12,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-10-20 mma (activation-V10-06-03)
+- README : add macros description
+
+05-08-20 Alberto Ribon  (activation-V10-06-02)
+- envHadronic.(c)sh : removed deprecated HP environmental variables
+  and replaced them with corresponding C++ calls in the main.
+  (These two shell-script files will be removed in G4 11.0.)
      
 21-06-20 mma (activation-V10-06-01)
 - Run.cc, line 188 : correct a protection on maximum number of histos

@@ -64,28 +64,28 @@ public:
 
 private:
   
-  G4int detectorChoice; //Select brachytherapic seed
-  BrachyFactory* factory;
+  G4int fDetectorChoice; //Select brachytherapic seed
+  BrachyFactory* fFactory;
 
   // World ...
-  G4Box*             World;        //pointer to the solid World 
-  G4LogicalVolume*   WorldLog;     //pointer to the logical World
-  G4VPhysicalVolume* WorldPhys;    //pointer to the physical World
+  G4Box*             fWorld;        //pointer to the solid World 
+  G4LogicalVolume*   fWorldLog;     //pointer to the logical World
+  G4VPhysicalVolume* fWorldPhys;    //pointer to the physical World
 
   // Phantom ... 
-  G4Box*              Phantom;  //pointer to solid phantom
-  G4LogicalVolume*    PhantomLog; //pointer to logic phantom
-  G4VPhysicalVolume*  PhantomPhys; //pointer to physical phantom
-  G4Material*         phantomAbsorberMaterial;
+  G4Box*              fPhantom;  //pointer to solid phantom
+  G4LogicalVolume*    fPhantomLog; //pointer to logic phantom
+  G4VPhysicalVolume*  fPhantomPhys; //pointer to physical phantom
+  G4Material*         fPhantomAbsorberMaterial;
  
-  G4double phantomSizeX; //Phantom XSize
-  G4double phantomSizeY; //Phantom YSize
-  G4double phantomSizeZ; //Phantom ZSize  
-  G4double worldSizeX ; //World XSize
-  G4double worldSizeY ; //World YSize
-  G4double worldSizeZ ; //World XSize
-  BrachyDetectorMessenger* detectorMessenger; 
-  BrachyMaterial* pMaterial;   
+  G4double fPhantomSizeX; //Phantom XSize
+  G4double fPhantomSizeY; //Phantom YSize
+  G4double fPhantomSizeZ; //Phantom ZSize  
+  G4double fWorldSizeX ; //World XSize
+  G4double fWorldSizeY ; //World YSize
+  G4double fWorldSizeZ ; //World XSize
+  BrachyDetectorMessenger* fDetectorMessenger; 
+  BrachyMaterial* fMaterial;   
 };
 
 #endif

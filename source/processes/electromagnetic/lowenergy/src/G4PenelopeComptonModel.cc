@@ -326,7 +326,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double ek1 = eks-ek2-1.0;
 
   G4double taumin = 1.0/ek2;
-  G4double a1 = std::log(ek2);
+  G4double a1 = G4Log(ek2);
   G4double a2 = a1+2.0*ek*(1.0+ek)/(ek2*ek2);
 
   G4double TST = 0;
@@ -452,10 +452,10 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	      hartreeFunc = (*theTable)[targetOscillator]->GetHartreeFactor();
 	      oscStren = (*theTable)[targetOscillator]->GetOscillatorStrength();
 	      if (A < 0.5)
-		pzomc = (std::sqrt(0.5)-std::sqrt(0.5-std::log(2.0*A)))/
+		pzomc = (std::sqrt(0.5)-std::sqrt(0.5-G4Log(2.0*A)))/
 		  (std::sqrt(2.0)*hartreeFunc);
 	      else
-		pzomc = (std::sqrt(0.5-std::log(2.0-2.0*A))-std::sqrt(0.5))/
+		pzomc = (std::sqrt(0.5-G4Log(2.0-2.0*A))-std::sqrt(0.5))/
 		  (std::sqrt(2.0)*hartreeFunc);
 	    } while (pzomc < -1);
 
@@ -657,7 +657,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   */
 
 
-  //Always produce explicitely the electron
+  //Always produce explicitly the electron
   G4DynamicParticle* electron = 0;
 
   G4double xEl = sinThetaE * std::cos(phi+pi);
@@ -925,7 +925,7 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
   G4double ek1 = eks-ek2-1.0;
 
   G4double t0 = 1.0/ek2;
-  G4double csl = 0.5*eks*t0*t0+ek2*t0+ek1*std::log(t0)-(1.0/t0);
+  G4double csl = 0.5*eks*t0*t0+ek2*t0+ek1*G4Log(t0)-(1.0/t0);
 
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
 
@@ -936,7 +936,7 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
       G4double tau=(energy-ionEnergy)/energy;
       if (tau > t0)
 	{
-	  G4double csu = 0.5*eks*tau*tau+ek2*tau+ek1*std::log(tau)-(1.0/tau);
+	  G4double csu = 0.5*eks*tau*tau+ek2*tau+ek1*G4Log(tau)-(1.0/tau);
 	  G4double stre = theOsc->GetOscillatorStrength();
 
 	  cs += stre*(csu-csl);

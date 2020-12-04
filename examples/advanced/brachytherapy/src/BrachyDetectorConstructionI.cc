@@ -57,127 +57,128 @@
 #include "G4Colour.hh"
 
 BrachyDetectorConstructionI::BrachyDetectorConstructionI():
-defaultTub(0), capsule(0), capsuleTip(0),iodiumCore(0), defaultTubLog(0),
-capsuleLog(0), capsuleTipLog(0), iodiumCoreLog(0),defaultTubPhys(0), 
-capsulePhys(0),capsuleTipPhys1(0),capsuleTipPhys2(0), iodiumCorePhys(0),
-simpleiodiumVisAtt(0), simpleCapsuleVisAtt(0), simpleCapsuleTipVisAtt(0)
+fDefaultTub(nullptr), fCapsule(nullptr), fCapsuleTip(nullptr), fIodineCore(nullptr), fDefaultTubLog(nullptr),
+fCapsuleLog(nullptr), fCapsuleTipLog(nullptr), fIodineCoreLog(nullptr), fDefaultTubPhys(nullptr), 
+fCapsulePhys(nullptr),fCapsuleTipPhys1(nullptr),fCapsuleTipPhys2(nullptr), fIodineCorePhys(nullptr),
+fSimpleIodineVisAtt(nullptr), fSimpleCapsuleVisAtt(nullptr), fSimpleCapsuleTipVisAtt(nullptr)
 { 
-  pMaterial = new BrachyMaterial();
+  fMaterial = new BrachyMaterial();
 }
 
 BrachyDetectorConstructionI::~BrachyDetectorConstructionI()
 { 
-  delete pMaterial; 
+  delete fMaterial; 
 }
 
-void BrachyDetectorConstructionI::ConstructIodium(G4VPhysicalVolume* mother)
+void BrachyDetectorConstructionI::ConstructIodine(G4VPhysicalVolume* mother)
 {
   // source Bebig Isoseed I-125 ...
 
   //Get materials for source construction ...
-  G4Material* titanium = pMaterial -> GetMat("titanium");
-  G4Material* air = pMaterial -> GetMat("Air");
-  G4Material* iodium = pMaterial -> GetMat("Iodine");
+  G4Material* titanium = fMaterial -> GetMat("titanium");
+  G4Material* air = fMaterial -> GetMat("Air");
+  G4Material* Iodine = fMaterial -> GetMat("Iodine");
  
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  lblue   (0.0, 0.0, .75);
 
   // Air tub
-  defaultTub = new G4Tubs("DefaultTub",0.*mm, 0.40*mm, 1.84*mm, 0.*deg, 360.*deg);
-  defaultTubLog = new G4LogicalVolume(defaultTub,air,"DefaultTub_Log");
-  defaultTubPhys = new G4PVPlacement(0,
+  fDefaultTub = new G4Tubs("DefaultTub",0.*mm, 0.40*mm, 1.84*mm, 0.*deg, 360.*deg);
+  fDefaultTubLog = new G4LogicalVolume(fDefaultTub,air,"DefaultTub_Log");
+  fDefaultTubPhys = new G4PVPlacement(nullptr,
                                       G4ThreeVector(),
                                       "defaultTub_Phys",
-                                      defaultTubLog,
+                                      fDefaultTubLog,
                                       mother,
                                       false,
                                       0, true); 
-  //  Capsule main body ...
+  // Capsule main body ...
   G4double capsuleR = 0.35*mm;
-  capsule = new G4Tubs("Capsule", capsuleR,0.40*mm,1.84*mm,0.*deg,360.*deg);
-  capsuleLog = new G4LogicalVolume(capsule,titanium,"CapsuleLog");
-  capsulePhys = new G4PVPlacement(0,
+  fCapsule = new G4Tubs("fCapsule", capsuleR,0.40*mm,1.84*mm,0.*deg,360.*deg);
+  fCapsuleLog = new G4LogicalVolume(fCapsule,titanium,"fCapsuleLog");
+  fCapsulePhys = new G4PVPlacement(nullptr,
                                   G4ThreeVector(),
-                                  "CapsulePhys",
-                                  capsuleLog,
-                                  defaultTubPhys,
+                                  "fCapsulePhys",
+                                  fCapsuleLog,
+                                  fDefaultTubPhys,
                                   false,
                                   0, true);
-  // Capsule tips
-  capsuleTip = new G4Sphere("CapsuleTip",
+  // fCapsule tips
+  fCapsuleTip = new G4Sphere("fCapsuleTip",
                             0.*mm,
                             0.40*mm,
                             0.*deg,
                             360.*deg,
                             0.*deg,
                             90.*deg);
-  capsuleTipLog = new G4LogicalVolume(capsuleTip,titanium,"CapsuleTipLog");
-  capsuleTipPhys1 = new G4PVPlacement(0,
+                            
+  fCapsuleTipLog = new G4LogicalVolume(fCapsuleTip,titanium,"fCapsuleTipLog");
+  fCapsuleTipPhys1 = new G4PVPlacement(nullptr,
                                       G4ThreeVector(0.,0.,1.84*mm),
-                                      "IodineCapsuleTipPhys1",
-                                      capsuleTipLog,
+                                      "IodinefCapsuleTipPhys1",
+                                      fCapsuleTipLog,
                                       mother,
                                       false,
                                       0, true);
 
   G4RotationMatrix* rotateMatrix = new G4RotationMatrix();
   rotateMatrix -> rotateX(180.0*deg);
-  capsuleTipPhys2 = new G4PVPlacement(rotateMatrix, 
+  fCapsuleTipPhys2 = new G4PVPlacement(rotateMatrix, 
                                       G4ThreeVector(0,0,-1.84*mm),
-                                      "IodineCapsuleTipPhys2",
-                                      capsuleTipLog,
+                                      "IodinefCapsuleTipPhys2",
+                                      fCapsuleTipLog,
                                       mother,
                                       false,
                                       0, true);
  
   // Radiactive core ...
-  iodiumCore = new G4Tubs("ICore",0.085*mm,0.35*mm,1.75*mm,0.*deg,360.*deg);
-  iodiumCoreLog = new G4LogicalVolume(iodiumCore,iodium,"iodiumCoreLog");
-  iodiumCorePhys = new G4PVPlacement(0,
+  fIodineCore = new G4Tubs("ICore",0.085*mm,0.35*mm,1.75*mm,0.*deg,360.*deg);
+  fIodineCoreLog = new G4LogicalVolume(fIodineCore,Iodine,"IodineCoreLog");
+  fIodineCorePhys = new G4PVPlacement(nullptr,
                                      G4ThreeVector(0.,0.,0.),
-                                     "iodiumCorePhys",
-                                     iodiumCoreLog,
-                                     defaultTubPhys,
+                                     "IodineCorePhys",
+                                     fIodineCoreLog,
+                                     fDefaultTubPhys,
                                      false,
                                      0, true);
  
   // Visual attributes ...
   
-  simpleiodiumVisAtt= new G4VisAttributes(magenta);
-  simpleiodiumVisAtt -> SetVisibility(true);
-  simpleiodiumVisAtt -> SetForceSolid(true);
-  iodiumCoreLog -> SetVisAttributes(simpleiodiumVisAtt);
+  fSimpleIodineVisAtt = new G4VisAttributes(magenta);
+  fSimpleIodineVisAtt -> SetVisibility(true);
+  fSimpleIodineVisAtt -> SetForceSolid(true);
+  fIodineCoreLog -> SetVisAttributes(fSimpleIodineVisAtt);
 
-  simpleCapsuleVisAtt= new G4VisAttributes(red);
-  simpleCapsuleVisAtt -> SetVisibility(true);  
-  simpleCapsuleVisAtt -> SetForceWireframe(true);
-  capsuleLog -> SetVisAttributes( simpleCapsuleVisAtt);
+  fSimpleCapsuleVisAtt = new G4VisAttributes(red);
+  fSimpleCapsuleVisAtt -> SetVisibility(true);  
+  fSimpleCapsuleVisAtt -> SetForceWireframe(true);
+  fCapsuleLog -> SetVisAttributes( fSimpleCapsuleVisAtt);
 
-  simpleCapsuleTipVisAtt= new G4VisAttributes(red);
-  simpleCapsuleTipVisAtt -> SetVisibility(true); 
-  simpleCapsuleTipVisAtt -> SetForceSolid(true);
-  capsuleTipLog -> SetVisAttributes( simpleCapsuleTipVisAtt);
+  fSimpleCapsuleTipVisAtt = new G4VisAttributes(red);
+  fSimpleCapsuleTipVisAtt -> SetVisibility(true); 
+  fSimpleCapsuleTipVisAtt -> SetForceSolid(true);
+  fCapsuleTipLog -> SetVisAttributes(fSimpleCapsuleTipVisAtt);
 }
 
-void BrachyDetectorConstructionI::CleanIodium()
+void BrachyDetectorConstructionI::CleanIodine()
 {
-delete simpleiodiumVisAtt; simpleiodiumVisAtt = 0;
-delete simpleCapsuleVisAtt; simpleCapsuleVisAtt = 0;
-delete simpleCapsuleTipVisAtt; simpleCapsuleTipVisAtt = 0;
-delete capsuleTipPhys1; capsuleTipPhys1 = 0; 
-delete capsuleTipPhys2; capsuleTipPhys2 = 0;
-delete iodiumCorePhys; iodiumCorePhys = 0;
-delete capsulePhys; capsulePhys = 0;
-delete defaultTubPhys; defaultTubPhys = 0; 
-delete defaultTubLog; defaultTubLog = 0;
-delete capsuleLog; capsuleLog = 0;
-delete capsuleTipLog; capsuleTipLog = 0;
-delete iodiumCoreLog; iodiumCoreLog = 0;
-delete defaultTub; defaultTub = 0;
-delete capsule; capsule = 0;
-delete capsuleTip; capsuleTip = 0;
-delete iodiumCore; iodiumCore = 0;
+delete fSimpleIodineVisAtt; fSimpleIodineVisAtt = nullptr;
+delete fSimpleCapsuleVisAtt; fSimpleCapsuleVisAtt = nullptr;
+delete fSimpleCapsuleTipVisAtt; fSimpleCapsuleTipVisAtt = nullptr;
+delete fCapsuleTipPhys1; fCapsuleTipPhys1 = nullptr; 
+delete fCapsuleTipPhys2; fCapsuleTipPhys2 = nullptr;
+delete fIodineCorePhys; fIodineCorePhys = nullptr;
+delete fCapsulePhys; fCapsulePhys = nullptr;
+delete fDefaultTubPhys; fDefaultTubPhys = nullptr; 
+delete fDefaultTubLog; fDefaultTubLog = nullptr;
+delete fCapsuleLog; fCapsuleLog = nullptr;
+delete fCapsuleTipLog; fCapsuleTipLog = nullptr;
+delete fIodineCoreLog; fIodineCoreLog = nullptr;
+delete fDefaultTub; fDefaultTub = nullptr;
+delete fCapsule; fCapsule = nullptr;
+delete fCapsuleTip; fCapsuleTip = nullptr;
+delete fIodineCore; fIodineCore = nullptr;
 
 G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }

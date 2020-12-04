@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-20 B, Morgan (exExtHadFissFrag-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+05-08-20    A. Ribon		(exExtHadFissFrag-V10-06-00)
+- FissionFragment.cc , batch.in , README , .README.txt :
+  o Replaced deprecated HP environmental variables with corresponding
+    UI commands.
+
 08-05-18    J. Allison		(exExtHadFissFrag-V10-04-01)
 - FissionFragment.cc:
   o Move instantiation of G4UIExecutive beyond the point where the main
@@ -57,17 +65,17 @@ track of all tags.
 - Fixed fuel plate placement issue. Removed need for tag
   "exExtHadFissFrag-V10-00-08"
 - Fixed sampling location for neutron source
-	
-	
+
+
 23-06-14    B. Wendt            (exExtHadFissFrag-V10-00-08)
 - Attempt to correct compilation warnings on gcc-4.1 regarding a call
   to "int abs(int)" in FFDetectorConstruction.cc
-	
-	
+
+
 13-06-14    Gunter Folger       (exExtHadFissFrag-V10-00-07)
 - correct compilation warning on unused variable run in FFRunAction
 - add input file for testing: batch.in
-	
-	
+
+
 06-06-13    B. Wendt            (exExtHadFissFrag-V10-00-06)
 - First release

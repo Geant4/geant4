@@ -43,7 +43,7 @@ using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4CsvNtupleManager::G4CsvNtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::wcsv::ntuple>(state),
+ : G4TNtupleManager<tools::wcsv::ntuple, std::ofstream>(state),
    fFileManager(nullptr),
    fIsCommentedHeader(true),
    fIsHippoHeader(false)
@@ -58,40 +58,22 @@ G4CsvNtupleManager::~G4CsvNtupleManager()
 //
 
 //_____________________________________________________________________________
-void G4CsvNtupleManager::CreateTNtuple(
-  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription,
-  const G4String& /*name*/, const G4String& title)
-{
-  // Create ntuple if the file is open (what means here that
-  // a filename was already set)
-  if ( fFileManager->GetFileName().size() ) {
-    if ( fFileManager->CreateNtupleFile(ntupleDescription) ) {
-      ntupleDescription->fNtuple 
-        = new tools::wcsv::ntuple(*(ntupleDescription->fFile));
-           // ntuple object is deleted when closing a file
-      (ntupleDescription->fNtuple)->set_title(title); 
-      fNtupleVector.push_back(ntupleDescription->fNtuple);       
-    }       
-  }  
-}
-
-//_____________________________________________________________________________
 void G4CsvNtupleManager::CreateTNtupleFromBooking(
-  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription)
+  CsvNtupleDescription* ntupleDescription)
 {
-    // create a file for this ntuple
-    if ( ! fFileManager->CreateNtupleFile(ntupleDescription) ) return;
+  // create a file for this ntuple
+  if ( ! fFileManager->CreateNtupleFile(ntupleDescription) ) return;
 
-    // create ntuple
-    ntupleDescription->fNtuple
-      = new tools::wcsv::ntuple(
-              *(ntupleDescription->fFile), G4cerr, ntupleDescription->fNtupleBooking);
-    fNtupleVector.push_back(ntupleDescription->fNtuple);    
+  // create ntuple
+  ntupleDescription->fNtuple
+    = new tools::wcsv::ntuple(
+            *(ntupleDescription->fFile), G4cerr, ntupleDescription->fNtupleBooking);
+  fNtupleVector.push_back(ntupleDescription->fNtuple);
  }
 
 //_____________________________________________________________________________
 void G4CsvNtupleManager::FinishTNtuple(
-  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription,
+  CsvNtupleDescription* ntupleDescription,
   G4bool /*fromBooking*/)
 {
 
@@ -103,11 +85,20 @@ void G4CsvNtupleManager::FinishTNtuple(
     CreateTNtupleFromBooking(ntupleDescription);
   }
 
+  // Return if creating ntuple failed
+  if ( ! ntupleDescription->fNtuple ) {
+    G4ExceptionDescription description;
+    description << "Creating ntuple has failed. ";
+    G4Exception("G4CsvNtupleManager::FinishTNtuple()",
+                "Analysis_W022", JustWarning, description);
+    return;
+  }
+
+
   // Write header if ntuple already exists
   if ( ! WriteHeader(ntupleDescription->fNtuple) ) {
      G4ExceptionDescription description;
-     description << "      " 
-                 << "Writing ntuple header has failed. ";
+     description << "Writing ntuple header has failed. ";
      G4Exception("G4CsvNtupleManager::FinishTNtuple()",
                  "Analysis_W022", JustWarning, description);
   }

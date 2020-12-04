@@ -157,11 +157,11 @@ public:
                              G4double& eLoss,
                              G4int coupleIndex);
 
-private:
-
   // copy constructor and hide assignment operator
   G4VAtomDeexcitation(G4VAtomDeexcitation &) = delete;
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right) = delete;
+
+private:
 
   G4EmParameters*             theParameters;  
   const G4ParticleDefinition* gamma;

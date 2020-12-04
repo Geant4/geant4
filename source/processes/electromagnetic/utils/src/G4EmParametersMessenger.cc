@@ -227,10 +227,16 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   lllCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   brCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/bremThreshold",this);
-  brCmd->SetGuidance("Set bremsstrahlung energy threshold");
+  brCmd->SetGuidance("Set e+- bremsstrahlung energy threshold");
   brCmd->SetParameterName("emaxBrem",true);
   brCmd->SetUnitCategory("Energy");
-  brCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  brCmd->AvailableForStates(G4State_PreInit);
+
+  br1Cmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/bremMuHadThreshold",this);
+  br1Cmd->SetGuidance("Set muon/hadron bremsstrahlung energy threshold");
+  br1Cmd->SetParameterName("emaxMuHadBrem",true);
+  br1Cmd->SetUnitCategory("Energy");
+  br1Cmd->AvailableForStates(G4State_PreInit);
 
   labCmd = new G4UIcmdWithADouble("/process/eLoss/LambdaFactor",this);
   labCmd->SetGuidance("Set lambdaFactor parameter for integral option");
@@ -356,10 +362,16 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   dumpCmd->SetGuidance("Print all EM parameters.");
 
   nffCmd = new G4UIcmdWithAString("/process/em/setNuclearFormFactor",this);
-  nffCmd->SetGuidance("Define typy of nuclear form-factor");
+  nffCmd->SetGuidance("Define type of nuclear form-factor");
   nffCmd->SetParameterName("NucFF",true);
   nffCmd->SetCandidates("None Exponential Gaussian Flat");
   nffCmd->AvailableForStates(G4State_PreInit);
+
+  ssCmd = new G4UIcmdWithAString("/process/em/setSingleScattering",this);
+  ssCmd->SetGuidance("Define type of e+- single scattering model");
+  ssCmd->SetParameterName("SS",true);
+  ssCmd->SetCandidates("WVI Mott DPWA");
+  ssCmd->AvailableForStates(G4State_PreInit);
 
   tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
   tripletCmd->SetGuidance("gamma conversion triplet/nuclear generation type:");
@@ -419,6 +431,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete lowEn3Cmd;
   delete lllCmd;
   delete brCmd;
+  delete br1Cmd;
   delete labCmd;
   delete mscfCmd;
   delete angCmd;
@@ -443,6 +456,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete mscCmd;
   delete msc1Cmd;
   delete nffCmd;
+  delete ssCmd;
 
   delete dumpCmd;
 }
@@ -521,6 +535,9 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == brCmd) { 
     theParameters->SetBremsstrahlungTh(brCmd->GetNewDoubleValue(newValue));
+    physicsModified = true;
+  } else if (command == br1Cmd) { 
+    theParameters->SetMuHadBremsstrahlungTh(br1Cmd->GetNewDoubleValue(newValue));
     physicsModified = true;
   } else if (command == labCmd) {
     theParameters->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
@@ -604,6 +621,17 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
       return; 
     }
     theParameters->SetNuclearFormfactorType(x);
+  } else if (command == ssCmd) {
+    G4eSingleScatteringType x = fWVI;
+    if(newValue == "DPWA") { x = fDPWA; }
+    else if(newValue == "Mott") { x = fMott; }
+    else if(newValue != "WVI") { 
+      G4ExceptionDescription ed;
+      ed << " G4eSingleScatteringType type <" << newValue << "> unknown!"; 
+      G4Exception("G4EmParametersMessenger", "em0044", JustWarning, ed);
+      return; 
+    }
+    theParameters->SetSingleScatteringType(x);
   } else if ( command==tripletCmd ) {
     theParameters->SetConversionType(tripletCmd->GetNewIntValue(newValue));
     physicsModified = true;

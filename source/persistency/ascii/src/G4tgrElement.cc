@@ -23,21 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrElement implementation
 //
-//
-//
-// class G4tgrElement
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrElement.hh"
 
+// --------------------------------------------------------------------
 G4tgrElement::G4tgrElement()
 {
 }
 
+// --------------------------------------------------------------------
 G4tgrElement::~G4tgrElement()
 {
 }

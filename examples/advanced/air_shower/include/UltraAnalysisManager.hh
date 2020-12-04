@@ -41,7 +41,6 @@
 #ifndef ULTRAANALYSISMANAGER_HH
 #define ULTRAANALYSISMANAGER_HH 1
 
-//#include "g4root.hh"
-#include "g4xml.hh"
+#include "g4root.hh"
 
 #endif

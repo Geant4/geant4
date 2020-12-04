@@ -35,7 +35,7 @@ public:
   virtual const std::string& s_cls() const {return s_class();}
 public: //intuple
   virtual void start() {m_index = -1;}
-  virtual bool next() { 
+  virtual bool next() {
     m_index++;
     if((uint64)m_index>=m_tree.entries()) return false;
     return true;
@@ -82,8 +82,8 @@ public:
     :read::icol(a_from)
     ,parent(a_from)
     ,m_file(a_from.m_file)
-    ,m_branch(a_from.m_branch) 
-    ,m_leaf(a_from.m_leaf) 
+    ,m_branch(a_from.m_branch)
+    ,m_leaf(a_from.m_leaf)
     ,m_index(a_from.m_index)
     ,m_ref(a_from.m_ref)
     {}
@@ -91,7 +91,7 @@ public:
       if(&a_from==this) return *this;
       return *this;
     }
-  protected:    
+  protected:
     //typedef typename LEAF::value_t value_t;
     bool _fetch_entry() const {
       unsigned int n;
@@ -140,7 +140,7 @@ public:
       m_value = a_from.m_value;
       return *this;
     }
-  public:    
+  public:
     const T& get_value() const {return m_value;}
   protected:
     T m_value;
@@ -176,7 +176,7 @@ public:
     :parent(a_from)
     ,m_file(a_from.m_file)
     ,m_branch(a_from.m_branch)
-    ,m_leaf(a_from.m_leaf) 
+    ,m_leaf(a_from.m_leaf)
     ,m_index(a_from.m_index)
     ,m_ref(a_from.m_ref)
     {}
@@ -184,7 +184,7 @@ public:
       if(&a_from==this) return *this;
       return *this;
     }
-  public:    
+  public:
     bool get_entry(std::string& a_v) const {
       if(!_fetch_entry()) {a_v.clear();return false;}
       a_v = m_ref;
@@ -276,7 +276,7 @@ public:
       m_sep = a_from.m_sep;
       return *this;
     }
-  public:    
+  public:
     bool get_entry(std::vector<std::string>& a_v) const {
       if(!_fetch_entry()) {a_v.clear();return false;}
       a_v = m_ref;
@@ -363,8 +363,8 @@ public:
     :read::icol(a_from)
     ,parent(a_from)
     ,m_file(a_from.m_file)
-    ,m_branch(a_from.m_branch) 
-    ,m_leaf(a_from.m_leaf) 
+    ,m_branch(a_from.m_branch)
+    ,m_leaf(a_from.m_leaf)
     ,m_index(a_from.m_index)
     ,m_ref(a_from.m_ref)
     {}
@@ -422,7 +422,7 @@ public:
     :read::icol(a_from),parent(a_from)
     ,m_file(a_from.m_file)
     ,m_be(a_from.m_be)
-    ,m_leaf(a_from.m_leaf) 
+    ,m_leaf(a_from.m_leaf)
     ,m_index(a_from.m_index)
     ,m_ref(a_from.m_ref)
     {}
@@ -647,7 +647,7 @@ public:
             m_cols.push_back(col);\
 	  }\
 	}
-	  
+
              TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<char>",char)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<short>",short)
       //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<unsigned short>",unsigned short)
@@ -655,7 +655,7 @@ public:
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<int>",int)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<float>",float)
         else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<double>",double)
-	
+
       //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<string>",std::string)
       //else TOOLS_RROOT_NTUPLE_CREATE_VEC_COL("vector<unsigned long>",uint64) //beurk
 
@@ -736,7 +736,7 @@ protected:
 // for gopaw :
 
 class fac_tree_holder {
-public:  
+public:
   fac_tree_holder(ifac* a_fac,tree* a_tree):m_fac(a_fac),m_tree(a_tree){}  //own a_fac,a_tree.
   virtual ~fac_tree_holder() {delete m_tree;delete m_fac;}
 protected:
@@ -755,7 +755,7 @@ public:
     return s_v;
   }
   virtual const std::string& s_cls() const {return s_class();}
-public:  
+public:
   fac_tree_ntuple(ifac* a_fac,tree* a_tree) //own these.
   :fac_tree_holder(a_fac,a_tree)
   ,parent(*a_tree)  //deleted first.

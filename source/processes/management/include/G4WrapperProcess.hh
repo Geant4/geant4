@@ -140,7 +140,7 @@ class G4WrapperProcess : public G4VProcess
       // Return true if the Physics Table can be build by using file.
       // Return false if the process has no functionality or in case of failure.
       // File name should be defined by each process and the file should be
-      // placed under the directory specifed by the argument
+      // placed under the directory specified by the argument
 
     virtual void StartTracking(G4Track*);
     virtual void EndTracking();

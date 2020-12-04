@@ -10,6 +10,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 November 2020, B. Morgan (exparallel-V10-06-00)
+- Support same CMake version range as core Geant4
+
 31 January 2019,  I. Hrivnacova (exparallel-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
@@ -17,11 +20,11 @@
 - Fixed file descriptions (for Doxygen)
 
 10 November 2013, I. Hrivnacova (exparallel-V09-06-03)
-- Fixed README and CMake files 
+- Fixed README and CMake files
 
 08 November 2013, I. Hrivnacova (exparallel-V09-06-02)
 - Moved ParN02, ParN04 and info in a new TopC directory,
-  and removed ParN02tbb (its is still kept in the branch 
+  and removed ParN02tbb (its is still kept in the branch
   ParN02tbb_08_11_2013)
 
 27 August 2013, G. Cosmo (exparallel-V09-06-01)

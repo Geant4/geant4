@@ -34,21 +34,17 @@
 
 class LXeDetectorConstruction;
 
-/// Action initialization class.
-///
-
 class LXeActionInitialization : public G4VUserActionInitialization
 {
-  public:
-    LXeActionInitialization(const LXeDetectorConstruction* det);
-    virtual ~LXeActionInitialization();
+ public:
+  LXeActionInitialization(const LXeDetectorConstruction* det);
+  ~LXeActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  void BuildForMaster() const override;
+  void Build() const override;
 
-  private:
-
-    const LXeDetectorConstruction* fDetector;
+ private:
+  const LXeDetectorConstruction* fDetector;
 };
 
 #endif

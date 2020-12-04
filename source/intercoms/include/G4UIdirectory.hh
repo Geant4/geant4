@@ -23,27 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIdirectory
 //
+// Class description:
 //
-//
+// A concrete class of G4UIcommand. This class defines a command
+// directory which can have commands.
+// General information of G4UIcommand is given in G4UIcommand.hh
 
-#ifndef G4UIdirectory_H
-#define G4UIdirectory_H 1
+// Author: Makoto Asai, 1998
+// --------------------------------------------------------------------
+#ifndef G4UIdirectory_hh
+#define G4UIdirectory_hh 1
 
 #include "G4UIcommand.hh"
 
-// class description:
-//  A concrete class of G4UIcommand. This class defines a command
-// directory which can have commands.
-//  General information of G4UIcommand is given in G4UIcommand.hh.
-
 class G4UIdirectory : public G4UIcommand
 {
-  public: // with description
-    G4UIdirectory(char * theCommandPath,G4bool commandsToBeBroadcasted = true);
-    G4UIdirectory(const char * theCommandPath,G4bool commandsToBeBroadcasted = true);
-    // Constructors. The argument is a full path directory which
-    // starts and ends with "/".
+  public:
+
+    G4UIdirectory(char* theCommandPath, G4bool commandsToBeBroadcasted = true);
+    G4UIdirectory(const char* theCommandPath,
+                  G4bool commandsToBeBroadcasted = true);
+      // Constructors. The argument is a full path directory which
+      // starts and ends with "/".
 };
 
 #endif

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan - GB03-V10-06-00
+- Migration to G4RunManagerFactory.
+
 Sep 11th, 2018, M. Verderi - GB03-V10-04-02
 - Bug fix in GB03BOptnSplitOrKillOnBoundary.cc in
   the computation of the killing probability.

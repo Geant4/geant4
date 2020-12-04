@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +26,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -135,9 +137,9 @@ e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -289,11 +291,14 @@ See commands in /vis/modeling/trajectories/ for other options.
  S value for nucleus (N<-C) = 5.758 Gy/Bq.s  +- 8.772 Gy/Bq.s 
 
  Track length of primary track = 12.844 nm  +- 10.693 nm 
- Projected range               = 24155.325 fm  +- 30.009 nm 
+ Projected range               = 24155.558 fm  +- 30.009 nm 
 
  Nb of steps of primary track  = 43.48 +- 42.08
 
- Step size                     = 3.201 Ang +- 83299.663 fm 
+ Step size                     = 3.201 Ang +- 83299.677 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -313,6 +318,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 50.72 +- 45.14
 
  Step size                     = 3.961 Ang +- 1.121 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -332,6 +340,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 53.30 +- 39.45
 
  Step size                     = 4.700 Ang +- 1.313 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -351,6 +362,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 58.72 +- 40.37
 
  Step size                     = 5.482 Ang +- 1.675 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -370,6 +384,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 60.09 +- 37.44
 
  Step size                     = 6.220 Ang +- 1.880 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -389,6 +406,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 68.03 +- 41.33
 
  Step size                     = 6.926 Ang +- 2.131 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -396,7 +416,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Total Energy deposited in cytoplasm = 103.413 eV  +- 119.158 eV 
 
- S value for cytoplasm (C<-C) = 165.660 Gy/Bq.s  +- 190.882 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 165.660 Gy/Bq.s  +- 190.883 Gy/Bq.s 
 
  Total Energy deposited in nucleus = 243.686 eV  +- 280.069 eV 
 
@@ -408,6 +428,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 69.85 +- 37.85
 
  Step size                     = 7.780 Ang +- 2.314 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -427,6 +450,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 75.25 +- 40.33
 
  Step size                     = 8.558 Ang +- 2.628 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -446,6 +472,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 77.65 +- 39.50
 
  Step size                     = 9.337 Ang +- 2.703 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -465,6 +494,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 80.54 +- 37.61
 
  Step size                     = 1.016 nm  +- 2.826 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -484,6 +516,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 121.71 +- 45.00
 
  Step size                     = 1.787 nm  +- 4.505 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -491,7 +526,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Total Energy deposited in cytoplasm = 37.121 eV  +- 73.144 eV 
 
- S value for cytoplasm (C<-C) = 59.466 Gy/Bq.s  +- 117.171 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 59.466 Gy/Bq.s  +- 117.170 Gy/Bq.s 
 
  Total Energy deposited in nucleus = 120.594 eV  +- 244.212 eV 
 
@@ -503,6 +538,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 152.22 +- 44.44
 
  Step size                     = 2.550 nm  +- 5.611 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -522,6 +560,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 182.61 +- 45.23
 
  Step size                     = 3.319 nm  +- 6.720 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -541,6 +582,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 216.94 +- 53.92
 
  Step size                     = 4.062 nm  +- 7.889 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -560,6 +604,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 242.22 +- 53.16
 
  Step size                     = 4.773 nm  +- 8.351 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -579,6 +626,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 270.23 +- 56.23
 
  Step size                     = 5.554 nm  +- 8.792 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -598,6 +648,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 296.47 +- 60.79
 
  Step size                     = 6.234 nm  +- 1.000 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -611,12 +664,15 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  S value for nucleus (N<-C) = 14.056 Gy/Bq.s  +- 33.526 Gy/Bq.s 
 
- Track length of primary track = 2.279 um  +- 496.899 nm 
+ Track length of primary track = 2.279 um  +- 496.900 nm 
  Projected range               = 1.127 um  +- 601.529 nm 
 
  Nb of steps of primary track  = 327.70 +- 60.61
 
  Step size                     = 6.975 nm  +- 1.059 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -631,10 +687,13 @@ See commands in /vis/modeling/trajectories/ for other options.
  S value for nucleus (N<-C) = 11.912 Gy/Bq.s  +- 28.815 Gy/Bq.s 
 
  Track length of primary track = 2.737 um  +- 576.239 nm 
- Projected range               = 1.377 um  +- 745.672 nm 
+ Projected range               = 1.377 um  +- 745.673 nm 
 
  Nb of steps of primary track  = 354.98 +- 65.42
 
  Step size                     = 7.732 nm  +- 1.094 nm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

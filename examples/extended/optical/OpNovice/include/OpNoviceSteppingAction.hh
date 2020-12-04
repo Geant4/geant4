@@ -30,25 +30,21 @@
 #ifndef OpNoviceSteppingAction_h
 #define OpNoviceSteppingAction_h 1
 
-#include "G4UserSteppingAction.hh"
-#include "globals.hh"
+#include "OpNoviceEventAction.hh"
 
-/// Stepping action class
-/// 
+#include "globals.hh"
+#include "G4UserSteppingAction.hh"
 
 class OpNoviceSteppingAction : public G4UserSteppingAction
 {
-  public:
-    OpNoviceSteppingAction();
-    virtual ~OpNoviceSteppingAction();
+ public:
+  OpNoviceSteppingAction(OpNoviceEventAction*);
+  ~OpNoviceSteppingAction();
 
-    // method from the base class
-    virtual void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*) override;
 
-  private:
-    G4int fScintillationCounter;
-    G4int fCerenkovCounter;
-    G4int fEventNumber;
+ private:
+  OpNoviceEventAction* fEventAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

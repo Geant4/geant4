@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/11/20 I. Hrivnacova  (factory-V10-06-00)
+- Migration to G4RunManagerFactory
+- Removed trailing whitespaces
+
 26/11/19 I. Hrivnacova  (factory-V10-05-00)
 - Fixed Doxygen warnings
 
@@ -25,7 +29,7 @@ track of all tags.
 
 4/12/17  G.Folger       (factory-V10-03-02)
 - delete extraneous file(!) src
- 
+
 28/11/17 I. Hrivnacova  (factory-V10-03-01)
 - Fixed documentation
 

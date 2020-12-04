@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrVolumeDivision
+// G4tgrVolumeDivision
 //
 // Class description:
 //
@@ -38,41 +35,34 @@
 //   :DIV_STEP "volu_name" "parent_name" "material" step
 //             "replica_axis_name" offset
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrVolumeDivision_h
-#define G4tgrVolumeDivision_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrVolumeDivision_hh
+#define G4tgrVolumeDivision_hh 1
 
 #include <map>
 
+#include "globals.hh"
 #include "G4tgrVolume.hh"
 #include "G4tgrPlaceDivRep.hh"
 
-typedef std::multimap< G4String, G4String > G4mmss;
+using G4mmss = std::multimap<G4String, G4String>;
 
-//---------------------------------------------------------------------------- 
-class G4tgrVolumeDivision : public G4tgrVolume 
+class G4tgrVolumeDivision : public G4tgrVolume
 {
-  public:  // with description
+  public:
 
-    G4tgrVolumeDivision( const std::vector<G4String>& wl );
-   ~G4tgrVolumeDivision();
-
-    // G4bool SetSolid(G4tgrVolume* parentDU, G4bool byStep,
-    //                EAxis axis, G4double div_step, G4double offset);
-      // Set the solid type and parameters dividing the mother volune
+    G4tgrVolumeDivision(const std::vector<G4String>& wl);
+    ~G4tgrVolumeDivision();
 
     G4tgrPlaceDivRep* GetPlaceDivision() { return thePlaceDiv; }
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrVolumeDivision& obj);
+
   private:
 
-    G4tgrPlaceDivRep* thePlaceDiv;
+    G4tgrPlaceDivRep* thePlaceDiv = nullptr;
 };
 
 #endif

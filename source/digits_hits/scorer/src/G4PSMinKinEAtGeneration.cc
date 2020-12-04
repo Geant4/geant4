@@ -28,6 +28,7 @@
 // G4PSMinKinEAtGeneration
 #include "G4PSMinKinEAtGeneration.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
 
 // (Description)
 //   This is a primitive scorer class for scoring minimum energy of
@@ -36,10 +37,12 @@
 // Created: 2005-11-17  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
 // 2011-09-09   Modify comment in PrintAll().  T.Aso
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. track weight (y)                 (Makoto Asai)
 //
 
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+  :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit("MeV");
 }
@@ -47,7 +50,7 @@ G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, G4int depth)
 G4PSMinKinEAtGeneration::G4PSMinKinEAtGeneration(G4String name, 
 						 const G4String& unit,
 						 G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+  :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0)
 {
     SetUnit(unit);
 }
@@ -76,10 +79,24 @@ G4bool G4PSMinKinEAtGeneration::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   //
 
   // -Kinetic energy of this particle at the starting point.
+  G4int  index = GetIndex(aStep);
   G4double kinetic = aStep->GetPreStepPoint()->GetKineticEnergy();
 
+  if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception("G4PSMinKinEAtGeneration::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index],kinetic,aStep->GetPreStepPoint()->GetWeight());
+    }
+  }
+
   // -Stored value in the current HitsMap.
-  G4int  index = GetIndex(aStep);
   G4double*   mapValue=  ((*EvtMap)[index]);
 
   // -

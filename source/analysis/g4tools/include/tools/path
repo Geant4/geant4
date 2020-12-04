@@ -273,4 +273,51 @@ inline bool is_python(const std::string& a_path){
 
 }
 
+#include <sstream>
+
+namespace tools {
+
+inline bool url_parse(const std::string& a_url,std::string& a_host,unsigned int& a_port,std::string& a_path) {
+  std::string s;
+  if((a_url.size()>=7)&&(a_url.substr(0,7)=="http://")) {
+    s = a_url.substr(7,a_url.size()-7);
+  } else if((a_url.size()>=8)&&(a_url.substr(0,8)=="https://")) {
+    s = a_url.substr(8,a_url.size()-8);
+  } else {
+    a_host.clear();
+    a_port = 0;
+    a_path.clear();
+    return false;
+  }
+
+ {std::string::size_type pos = s.find('/');
+  if(pos==std::string::npos) {
+    a_host = s;
+    a_path = "/";
+  } else {
+    a_host = s.substr(0,pos);
+    a_path = s.substr(pos,s.size()-pos);
+  }}
+
+ {std::string::size_type pos = a_host.find(':');
+  if(pos==std::string::npos) {
+    a_port = 0;
+  } else {
+    std::string sport = a_host.substr(pos+1,a_host.size()-(pos+1));
+    std::istringstream strm(sport.c_str());
+    strm >> a_port;
+    if(strm.fail()) {
+      a_host.clear();
+      a_port = 0;
+      a_path.clear();
+      return false;
+    }
+    a_host = a_host.substr(0,pos);
+  }}
+
+  return true;
+}
+
+}
+
 #endif

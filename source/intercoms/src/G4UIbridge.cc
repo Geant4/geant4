@@ -23,46 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIbridge
 //
-// ====================================================================
-//   G4UIbridge.cc
-//
-// ====================================================================
+// Author: A.Dotti, 2013
+// --------------------------------------------------------------------
 #include "G4UIbridge.hh"
 #include "G4UImanager.hh"
 
-////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir)
-: localUImanager(localUI)
-////////////////////////////////////////////////////////////////////
+  : localUImanager(localUI)
 {
   // make sure dirName starts and ends with '/'
-  if(dir(0,1)=="/")
-  { dirName = dir; }
+  if(dir(0, 1) == "/")
+  {
+    dirName = dir;
+  }
   else
-  { dirName = "/"+dir; }
-  if(dirName(dirName.length()-1,1)!="/") 
-  { dirName += "/"; }
+  {
+    dirName = "/" + dir;
+  }
+  if(dirName(dirName.length() - 1, 1) != "/")
+  {
+    dirName += "/";
+  }
 
   // register to the master G4UImanager
   G4UImanager* masterUI = G4UImanager::GetMasterUIpointer();
   if(masterUI)
-  { masterUI->RegisterBridge(this); }
+  {
+    masterUI->RegisterBridge(this);
+  }
   else
   {
-    G4Exception("G4UIbridge::G4UIbridge()","UI7001",FatalException,
-     "G4UImanager for the master thread is not yet instantiated. Instantiate G4MTRunManager first.");
+    G4Exception("G4UIbridge::G4UIbridge()", "UI7001", FatalException,
+                "G4UImanager for the master thread is not yet instantiated. "
+                "Instantiate G4MTRunManager first.");
   }
 }
 
-
-///////////////////////
+// --------------------------------------------------------------------
 G4UIbridge::~G4UIbridge()
-///////////////////////
-{;}
+{
+}
 
-/////////////////////////////////
+// --------------------------------------------------------------------
 G4int G4UIbridge::ApplyCommand(const G4String& aCmd)
-/////////////////////////////////
-{ return localUImanager->ApplyCommand(aCmd); }
-
+{
+  return localUImanager->ApplyCommand(aCmd);
+}

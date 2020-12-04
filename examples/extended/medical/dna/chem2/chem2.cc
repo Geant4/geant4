@@ -38,11 +38,7 @@
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4DNAChemistryManager.hh"
 #include "G4UImanager.hh"
@@ -79,11 +75,10 @@ int main(int argc, char** argv)
   //
   Command* commandLine(nullptr);
 
-#ifdef G4MULTITHREADED
-  G4RunManager* runManager(nullptr);
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
-    runManager = new G4MTRunManager();
     int nThreads = 2;
     const G4String& option = commandLine->GetOption();
     if(option == "")
@@ -99,18 +94,11 @@ int main(int argc, char** argv)
       nThreads = G4UIcommand::ConvertToInt(option);
     }
 
-    G4cout << "===== Chem2 is started with " << nThreads
-           << " threads =====" << G4endl;
+    runManager->SetNumberOfThreads(nThreads);
 
-    ((G4MTRunManager*) runManager)->SetNumberOfThreads(nThreads);
+    G4cout << "===== Chem2 is started with " << runManager->GetNumberOfThreads()
+           << " threads =====" << G4endl;
   }
-  else
-  {
-    runManager = new G4RunManager();
-  }
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
 
   //////////
   // Set mandatory user initialization classes
@@ -152,7 +140,7 @@ int main(int argc, char** argv)
       UImanager->ApplyCommand("/control/execute vis.mac");
     }
 
-    if(ui->IsGUI()) 
+    if(ui->IsGUI())
     {
       UImanager->ApplyCommand("/control/execute gui.mac");
     }
@@ -169,7 +157,7 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption());
     UImanager->ApplyCommand("/control/execute vis.mac");
   }
- 
+
   if ((commandLine = parser->GetCommandIfActive("-mac")))
   {
     G4String command = "/control/execute ";
@@ -204,31 +192,29 @@ void Parse(int& argc, char** argv)
   // Parse options given in commandLine
   //
   parser = CommandLineParser::GetParser();
-  
-  parser->AddCommand("-gui", 
+
+  parser->AddCommand("-gui",
                      Command::OptionNotCompulsory,
                     "Select geant4 UI or just launch a geant4 terminal session",
                     "qt");
-  
-  parser->AddCommand("-mac", 
-                     Command::WithOption, 
+
+  parser->AddCommand("-mac",
+                     Command::WithOption,
                      "Give a mac file to execute",
                      "macFile.mac");
 
 // You cann your own command, as for instance:
-//  parser->AddCommand("-seed", 
+//  parser->AddCommand("-seed",
 //                     Command::WithOption,
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
-#ifdef G4MULTITHREADED
   parser->AddCommand("-mt", Command::OptionNotCompulsory,
                      "Launch in MT mode (events computed in parallel,"
                      " NOT RECOMMANDED WITH CHEMISTRY)",
                      "2");
-#endif
 
-  parser->AddCommand("-chemOFF", 
+  parser->AddCommand("-chemOFF",
                      Command::WithoutOption,
                      "Deactivate chemistry");
 

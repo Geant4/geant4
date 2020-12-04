@@ -6,6 +6,9 @@
                        Package History file
                        --------------------
 
+26 Nov 2020 B. Morgan - tag neuron-V10-06-00
+- Migration to G4RunManagerFactory.
+
 26 Nov 2019 I. Hrivnacova - tag neuron-V10-05-00
 - Fixed Doxygen warnings
 

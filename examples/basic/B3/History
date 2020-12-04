@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02/11/20 B.Morgan (exampleB3-V10-06-01)
+- Support same CMake version range as core Geant4
+
+30/06/20 G. Cosmo (exampleB3-V10-06-00)
+- Migrated examples to use G4RunManagerFactory, therefore implicitly enabling
+  tasking by default in MT builds.
+
 21/11/19 G. Cosmo (exampleB3-V10-05-02)
 - Use default MixMax random engine.
 
@@ -25,7 +32,7 @@ track of all tags.
 
 30/11/18 I. Hrivnacova (exampleB3-V10-04-05)
 - Moved the previous update from B3b in B3 documentation
-  and removed obsolete README files from B3a and B3b. 
+  and removed obsolete README files from B3a and B3b.
 
 16/11/18 J. Madsen (exampleB3-V10-04-04)
 - Updated documentation for example B3b
@@ -35,7 +42,7 @@ track of all tags.
   to demonstrate statistical computations in a basic example
 
 30/10/18 I. Hrivnacova (exampleB3-V10-04-02)
-- Removed usage of G4ScoreNtupleWriter; 
+- Removed usage of G4ScoreNtupleWriter;
   will be demonstrated in a new extended analysis example
 
 26/10/18 I. Hrivnacova (exampleB3-V10-04-01)
@@ -72,12 +79,12 @@ track of all tags.
 
 05/11/15 I. Hrivnacova (exampleB3-V10-01-01)
 - Splitting example in two variants of merging data:
-  -B3a (new) with the code based on G4Parameter 
+  -B3a (new) with the code based on G4Parameter
   -B3b (as previous B3) with the code based on G4Run
 
 04/05/15 I. Hrivnacova (exampleB3-V10-01-00)
 - Coding guidelines: removed empty lines
-     
+
 29/11/14 I. Hrivnacova
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with
@@ -91,12 +98,12 @@ track of all tags.
 
 04/11/14 L. Garnier (exampleB3-V10-00-01)
 - Remove old G4UI_USE/G4VIS_USE
-- Move G4UIExecutive at the beginning of main() 
+- Move G4UIExecutive at the beginning of main()
 
 29/10/13 I. Hrivnacova (exampleB3-V09-06-06)
 - Removed SetNumberOfThreads(4) from main (use Geant4 default)
 - Updated README
-     
+
 09/09/13 M.Asai (exampleB3-V09-06-05)
 - B3PrimaryGeneratorAction.cc : Change G4ParticleTable::GetIon() to
   G4IonTable::GetIon(), as the former method becomes obsolete.
@@ -107,44 +114,44 @@ track of all tags.
 - Get hits collection IDs in B3Run::RecordEvent (and not B3Run constructor)
 - Add a test for primary generator action in B3RunAction::EndOfRunAction()
   as it does not exist on master
-    
+
 05/06/13 mma (exampleB3-V09-06-03)
 - add section about ACTION INITALIZATION to README and .README
-     
+
 01/06/13 mma  (exampleB3-V09-06-02)
 - Migration for MT:
   forgotten to add B3Run
-     
+
 31/05/13 mma  (exampleB3-V09-06-01)
 - Migration for MT:
   Added B3ActionInitialization, B3Run
   Removed B3EventAction
   and updated actions classes accordingly.
   README files still need to be updated.
-  
+
 28/02/13 I. Hrivnacova
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   Thanks to V. Ivantchenko for pointing at this.
 
-21/11/11 I. Hrivnacova 
+21/11/11 I. Hrivnacova
 - Improved vis.mac
-- Removed alternative detector construction class  
+- Removed alternative detector construction class
 
 14/11/11 I. Hrivnacova
 - The first tagged version of the new B3 example
   (tagged in basic).
 
-11-11-11 (mma)     
+11-11-11 (mma)
 - EventAction: printModulo 10000
-     
-01-11-11 (mma)     
+
+01-11-11 (mma)
 - DetectorConstruction2: - add an offset when replicate dPhi
-			     
-29-09-11 (mma)     
+
+29-09-11 (mma)
 - DetectorConstruction: - replace crystal shape Trd by Box
                         - add a gap for wrapping
-    
-27-06-11 michel maire     
+
+27-06-11 michel maire
 - Created.

@@ -45,7 +45,7 @@
 #include "G4ParticleHPThermalScatteringData.hh"
 
 #include "G4BuilderType.hh"
-
+#include "G4PhysListUtil.hh"
 #include "G4SystemOfUnits.hh"
 
 G4ThermalNeutrons::G4ThermalNeutrons(G4int ver) :
@@ -60,7 +60,7 @@ void G4ThermalNeutrons::ConstructProcess() {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4Neutron* part = G4Neutron::Neutron();
-  G4HadronicProcess* hpel = FindElasticProcess(part);
+  G4HadronicProcess* hpel = G4PhysListUtil::FindElasticProcess(part);
   if(!hpel) {
     G4cout << "### " << GetPhysicsName() 
 	   << " WARNING: Fail to add thermal neutron scattering" << G4endl;

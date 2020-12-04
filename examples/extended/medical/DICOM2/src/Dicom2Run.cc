@@ -213,10 +213,10 @@ void Dicom2Run::Merge(const G4Run* aRun)
 
     Copy(fCollName, localRun->fCollName);
     Copy(fCollID, localRun->fCollID);
-    G4int ncopies = G4int(Copy(fRunMap, localRun->fRunMap));
+    std::size_t ncopies = Copy(fRunMap, localRun->fRunMap);
     // copy function returns the fRunMap size if all data is copied
     // so this loop isn't executed the first time around
-    for(G4int i = ncopies; i < G4int(fRunMap.size()); ++i)
+    for(std::size_t i = ncopies; i < fRunMap.size(); ++i)
         *fRunMap[i] += *localRun->fRunMap[i];
 }
 

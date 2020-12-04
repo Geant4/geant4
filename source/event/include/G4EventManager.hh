@@ -55,8 +55,10 @@ class G4VUserEventInformation;
 
 class G4EventManager 
 {
-  public:
+ public:
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
 
+ public:
     static G4EventManager* GetEventManager();
       // This method returns the singleton pointer of G4EventManager.
 
@@ -183,6 +185,9 @@ class G4EventManager
     G4String randomNumberStatusToG4Event;
 
     G4StateManager* stateManager = nullptr;
+
+ private:
+  std::unique_ptr<ProfilerConfig> eventProfiler;
 };
 
 #endif

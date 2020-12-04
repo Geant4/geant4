@@ -154,7 +154,7 @@ public:
     }
     return value;
   }
-  
+
   TH max_bin_height() const {
     TH value = 0;
     bool first = true;
@@ -189,7 +189,7 @@ public:
     a_value = value;
     return first?false:true; //return true if at least one bin with entries processed.
   }
-  
+
   bool max_bin_height_with_entries(TH& a_value) const {
     TH value = 0;
     bool first = true;
@@ -261,7 +261,7 @@ public: //histo_data
       a_sw2 += parent::m_bin_Sw2[ibin];
     }
   }
-  
+
 /*
   TW get_all_Sw() const {
     TW sw = 0;
@@ -314,12 +314,12 @@ protected:
     parent::m_in_range_Sw2 = 0;
     parent::m_in_range_Sxw.resize(a_dim,0);
     parent::m_in_range_Sx2w.resize(a_dim,0);
-    
+
     // Some checks :
     if(!a_dim) return false;
     parent::m_axes.resize(a_dim);
     // Setup axes :
-    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) { 
+    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) {
       if(!parent::m_axes[iaxis].configure(aNumbers[iaxis],aMins[iaxis],aMaxs[iaxis])) {
         // do not do :
         //   m_axes.clear()
@@ -330,7 +330,7 @@ protected:
         return false;
       }
     }
-  
+
     parent::m_dimension = a_dim;
 
     base_allocate(); //set m_bin_number.
@@ -364,13 +364,13 @@ protected:
     if(!a_dim) return false;
     parent::m_axes.resize(a_dim);
     // Setup axes :
-    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) { 
+    for(dim_t iaxis=0;iaxis<a_dim;iaxis++) {
       if(!parent::m_axes[iaxis].configure(a_edges[iaxis])) {
         //m_axes.clear();
         return false;
       }
     }
-  
+
     parent::m_dimension = a_dim;
 
     base_allocate(); //set m_bin_number.
@@ -411,14 +411,14 @@ protected:
     empty.resize(parent::m_dimension,0);
     parent::m_bin_Sxw.resize(n_bin,empty);
     parent::m_bin_Sx2w.resize(n_bin,empty);
-    
+
     parent::m_bin_number = n_bin; // All bins : [in-range, underflow, outflow] bins.
-  
+
     parent::m_axes[0].m_offset = 1;
     for(iaxis=1;iaxis<parent::m_dimension;iaxis++) {
       parent::m_axes[iaxis].m_offset = parent::m_axes[iaxis-1].m_offset * (parent::m_axes[iaxis-1].bins()+2);
     }
-    
+
     parent::m_in_range_plane_Sxyw.resize(dim_planes(parent::m_dimension),0);
   }
 
@@ -459,7 +459,7 @@ public: //annotations :
     a_out << " * ANNOTATIONS :" << std::endl;
     annotations_t::const_iterator it;
     for(it=parent::m_annotations.begin();it!=parent::m_annotations.end();++it) {
-    //out << " * (" << index << ") " 
+    //out << " * (" << index << ") "
       a_out << " *  " << (*it).first << " = " << (*it).second << std::endl;
     }
   }
@@ -510,14 +510,14 @@ protected:
     parent::update_fast_getters();
   }
 
-  bool base_multiply(const base_histo& a_histo) {  
+  bool base_multiply(const base_histo& a_histo) {
     //ill-defined operation. We keep that because of the "ill-defined past".
 
-    // We build a new histo with one entry in each bin of weight : 
+    // We build a new histo with one entry in each bin of weight :
     //   this.w * a_histo.w
     // The current histo is overriden with this new histo.
     // The m_bin_Sw2 computation is consistent with FreeHEP and CERN-ROOT.
-  
+
     if(!is_compatible(a_histo)) return false;
 
     std::vector<int> is(parent::m_dimension);
@@ -546,12 +546,12 @@ protected:
 
   bool base_divide(const base_histo& a_histo) {
     //ill-defined operation. We keep that because of the "ill-defined past".
-  
-    // We build a new histo with one entry in each bin of weight : 
+
+    // We build a new histo with one entry in each bin of weight :
     //   this.w / a_histo.w
     // The current histo is overriden with this new histo.
     // The m_bin_Sw2 computation is consistent with FreeHEP and ROOT.
-  
+
     if(!is_compatible(a_histo)) return false;
 
     std::vector<int> is(parent::m_dimension);

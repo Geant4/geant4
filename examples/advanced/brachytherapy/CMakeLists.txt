@@ -1,7 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(Brachy)
 
 #----------------------------------------------------------------------------
@@ -19,29 +21,13 @@ endif()
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-# Setup of ROOT ANALYSIS : optional. 
-find_package(ROOT QUIET)
-if(ROOT_FOUND)
-   option(WITH_ANALYSIS_USE "Build example with analysis objects" ON)
-else()
-   option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
-endif()
-if(WITH_ANALYSIS_USE)
-   #  ROOT was found already..
-   add_definitions(-DANALYSIS_USE)
-endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include  
+include_directories(${PROJECT_SOURCE_DIR}/include
                      ${Geant4_INCLUDE_DIR} )
 
 #----------------------------------------------------------------------------
-
-if(WITH_ANALYSIS_USE)
-	EXECUTE_PROCESS(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
-endif(WITH_ANALYSIS_USE) 
 
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -50,11 +36,6 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(Brachy Brachy.cc ${sources} ${headers})
-
-if(WITH_ANALYSIS_USE)
-	EXECUTE_PROCESS(COMMAND root-config --libs OUTPUT_VARIABLE ROOT_LD_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
-endif(WITH_ANALYSIS_USE)
 
 target_link_libraries(Brachy ${Geant4_LIBRARIES})
 
@@ -67,7 +48,7 @@ target_link_libraries(Brachy ${Geant4_LIBRARIES})
 set(brachy_SCRIPTS
    IodineSourceMacro.mac  LeipzigSourceMacro.mac VisualisationMacro.mac
    macro.C iridium_source_primary.mac iodine_source_primary.mac iridium_source_leipzig_primary.mac
-   plot_primary.C  iodine_decay.mac FlexiSourceMacro.mac 
+   plot_primary.C  iodine_decay.mac FlexiSourceMacro.mac
    TG186SourceMacro.mac TG186_iridium_decay.mac OncuraIodineSourceMacro.mac
   )
 

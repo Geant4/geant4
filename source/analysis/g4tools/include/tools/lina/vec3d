@@ -33,35 +33,35 @@ public: //operators
     return vec3d(m_data[0]*a_v,
                  m_data[1]*a_v,
                  m_data[2]*a_v);
-  }    
+  }
   vec3d operator+(const vec3d& a_v) const {
     return vec3d(m_data[0]+a_v.m_data[0],
                  m_data[1]+a_v.m_data[1],
                  m_data[2]+a_v.m_data[2]);
-  }    
+  }
   vec3d operator-(const vec3d& a_v) const {
     return vec3d(m_data[0]-a_v.m_data[0],
                  m_data[1]-a_v.m_data[1],
                  m_data[2]-a_v.m_data[2]);
-  }    
-  vec3d& operator+=(const vec3d& a_v) {   
+  }
+  vec3d& operator+=(const vec3d& a_v) {
     m_data[0] += a_v.m_data[0];
     m_data[1] += a_v.m_data[1];
     m_data[2] += a_v.m_data[2];
     return *this;
-  }    
+  }
   vec3d& operator-=(const vec3d& a_v) {
     m_data[0] -= a_v.m_data[0];
     m_data[1] -= a_v.m_data[1];
     m_data[2] -= a_v.m_data[2];
     return *this;
   }
-  vec3d& operator*=(double a_v) {   
+  vec3d& operator*=(double a_v) {
     m_data[0] *= a_v;
     m_data[1] *= a_v;
     m_data[2] *= a_v;
     return *this;
-  }    
+  }
   vec3d operator-() const {
     return vec3d(-m_data[0],-m_data[1],-m_data[2]);
   }

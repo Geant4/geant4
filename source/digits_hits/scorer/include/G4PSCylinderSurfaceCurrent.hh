@@ -29,11 +29,12 @@
 #ifndef G4PSCylinderSurfaceCurrent_h
 #define G4PSCylinderSurfaceCurrent_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 #include "G4Tubs.hh"
 #include "G4PSDirectionFlag.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring Surface Current.
@@ -51,10 +52,12 @@
 //
 // Created: 2007-03-21  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. surface current * track weight (y)             (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSCylinderSurfaceCurrent : public G4VPrimitiveScorer
+class G4PSCylinderSurfaceCurrent : public G4VPrimitivePlotter
 {
  
   public: // with description

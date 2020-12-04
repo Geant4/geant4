@@ -9,8 +9,6 @@
 #
 /run/initialize
 #
-/process/list
-#
 /gun/particle neutron
 /gun/energy 25 meV
 #

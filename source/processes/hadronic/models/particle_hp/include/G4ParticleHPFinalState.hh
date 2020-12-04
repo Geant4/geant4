@@ -62,8 +62,8 @@ public:
     theNDLDataM = 0;
 
     adjustResult = true;
-    if ( std::getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
-
+    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) adjustResult = false;
+    
     theProjectile = G4Neutron::Neutron();
 
     theResult.Put( 0 );

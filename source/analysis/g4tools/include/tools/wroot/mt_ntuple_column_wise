@@ -15,7 +15,7 @@ namespace wroot {
 
 class mt_ntuple_column_wise : public base_pntuple_column_wise, public virtual imt_ntuple {
   typedef base_pntuple_column_wise parent;
-protected:  
+protected:
   class basket_add : public mt_basket_add {
     typedef mt_basket_add parent;
   public:
@@ -64,7 +64,7 @@ protected:
     basket_add& operator=(const basket_add&){return *this;}
   protected:
     branch& m_parallel_branch;
-    std::vector<icol*>& m_cols;  
+    std::vector<icol*>& m_cols;
     std::vector<branch*>& m_main_branches;
     bool m_row_mode;
   };
@@ -77,8 +77,8 @@ public:
             << " m_main_branches.size() (" << m_main_branches.size() << ") != "
             << "m_cols.size() (" << m_cols.size() << ")."
             << std::endl;
-      return false;	  
-    }   
+      return false;
+    }
    {std::vector<branch*>::const_iterator itb = m_main_branches.begin();
     tools_vforit(icol*,m_cols,it) {
       branch* main_branch = (*itb);itb++;
@@ -94,8 +94,8 @@ public:
             << " m_main_branches.size() (" << m_main_branches.size() << ") != "
             << "m_cols.size() (" << m_cols.size() << ")."
             << std::endl;
-      return false;	  
-    }   
+      return false;
+    }
     std::vector<branch*>::const_iterator itb = m_main_branches.begin();
     tools_vforit(icol*,m_cols,it) {
       branch* main_branch = (*itb);itb++;
@@ -130,7 +130,7 @@ public:
       m_nev = 0;
     }
   }
-  
+
   mt_ntuple_column_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
                         std::vector<branch*>& a_main_branches,
                         const std::vector<uint32>& a_basket_sizes,
@@ -148,7 +148,7 @@ public:
       m_nev = 0;
     }
   }
-  
+
 #ifdef tools_wroot_mt_ntuple_column_wise   //g4tools backcomp :
   mt_ntuple_column_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
                         std::vector<branch*>& a_main_branches,
@@ -211,7 +211,7 @@ protected:
     a_mutex.unlock();
     return status;
   }
-  
+
   static bool flush_remaining_baskets(size_t& a_number,imutex& a_mutex,ifile& a_main_file,std::vector<icol*>& a_cols,std::vector<branch*>& a_main_branches) {
     a_number = 0;
     while(ready_to_flush_baskets(a_cols)) {
@@ -228,9 +228,9 @@ protected:
     }}
     return true;
   }
-  
+
   bool end_leaves(imutex& a_mutex) const {
-    
+
 #include "MT_SET_MAX.icc"
 
     std::vector<icol*>::const_iterator pit = m_cols.begin();
@@ -240,18 +240,18 @@ protected:
               << " branch " << (*mit)->name() << " without leaf." << std::endl;
         return false;
       }
-      
+
       base_leaf* _mleaf = *((*mit)->leaves().begin());
       base_leaf* _pleaf = (*pit)->get_leaf(); pit++; //WARNING.
 
       TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX
-      
+
     }
 #undef TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX
 
     return true;
   }
-protected:  
+protected:
   std::vector<branch*>& m_main_branches;
   bool m_row_mode;
   uint32 m_nev;

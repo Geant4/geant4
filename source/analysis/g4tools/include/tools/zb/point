@@ -3,7 +3,7 @@
 
 #ifndef tools_zb_point
 #define tools_zb_point
- 
+
 namespace tools {
 namespace zb {
 

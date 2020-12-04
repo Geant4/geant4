@@ -87,14 +87,7 @@
 #include "G4ParallelWorldPhysics.hh"
 #include <time.h>
 #include "G4Timer.hh"
-
-//************************MT*********************
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
 #include "HadrontherapyActionInitialization.hh"
 
 #include "G4VisExecutive.hh"
@@ -119,16 +112,13 @@ int main(int argc ,char ** argv)
     // in multithread
     CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
     G4Random::setTheEngine( &defaultEngine );
-    G4int seed = time( NULL );
+    G4int seed = (G4int) time( NULL );
     G4Random::setTheSeed( seed );
-    
-#ifdef G4MULTITHREADED
-    
-    G4MTRunManager* runManager = new G4MTRunManager;
-#else
-    G4RunManager* runManager = new G4RunManager;
-#endif
-    
+ 
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
+ G4int nThreads = 4;
+ runManager->SetNumberOfThreads(nThreads); 
+
     // Geometry controller is responsible for instantiating the
     // geometries. All geometry specific m tasks are now in class
     // HadrontherapyGeometryController.

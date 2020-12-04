@@ -7,7 +7,7 @@
                  Migration Notes & Main New Features
                  -----------------------------------
 
-  o Introducing new optional (experimental) tasking system, based on TBL
+  o Introducing new optional (experimental) tasking system, based on PTL
     (Parallel Tasking Library), dedicated run manager (G4TaskRunManager) and
     factory (G4RunManagerFactory), enabling use of tasks for the event loop.
     The tasking system is fully compatible with Intel TBB, which can be
@@ -740,7 +740,7 @@ List of features and fixes included in this Beta release since 10.6.p02:
   o Tasking
     -------
     + New module implementing a new Geant4 run manager, G4TaskRunManager,
-      enabling use of the TBL tasking system for the event loop. The tasking
+      enabling use of the PTL tasking system for the event loop. The tasking
       system is fully compatible with Intel TBB, which can be selected if
       GEANT4_USE_TBB=ON is specified when configuring CMake. The default
       behavior, however, is to submit the tasks to an internal thread-pool

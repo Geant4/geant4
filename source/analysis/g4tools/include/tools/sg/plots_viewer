@@ -54,7 +54,7 @@ public:
   plots_viewer(const plots_viewer& a_from)
   :parent(a_from)
   ,m_camera(a_from.m_camera)
-  ,m_plots(a_from.m_plots)  
+  ,m_plots(a_from.m_plots)
   ,m_wps(a_from.m_out)
   {
     create_sg();
@@ -77,7 +77,7 @@ public:
 public:
   typedef bool (*png_writer)(std::ostream&,const std::string&,
                              unsigned char*,unsigned int,unsigned int,unsigned int);
-  
+
   bool write_inzb_png(png_writer a_writer,const std::string& a_file,unsigned int a_width,unsigned int a_height) {
     // for example :
     //   #include <tools/png>
@@ -104,8 +104,8 @@ public:
         *pos = (uchar)(255.0F*r);pos++;
         *pos = (uchar)(255.0F*g);pos++;
         *pos = (uchar)(255.0F*b);pos++;
-      }    
-    }    
+      }
+    }
 
     bool status = (*a_writer)(m_out,a_file,buffer,a_width,a_height,bpp);
     if(!status) {
@@ -117,10 +117,10 @@ public:
   bool write_inzb_png(png_writer a_writer,const std::string& a_file) {
     return write_inzb_png(a_writer,a_file,width(),height());
   }
- 
+
   typedef bool (*jpeg_writer)(std::ostream&,const std::string&,
                               unsigned char*,unsigned int,unsigned int,unsigned int,int);
-  
+
   bool write_inzb_jpeg(jpeg_writer a_writer,const std::string& a_file,unsigned int a_width,unsigned int a_height,int a_quality = 100) {
     // for example :
     //   #include <tools/jpeg>
@@ -147,8 +147,8 @@ public:
         *pos = (uchar)(255.0F*r);pos++;
         *pos = (uchar)(255.0F*g);pos++;
         *pos = (uchar)(255.0F*b);pos++;
-      }    
-    }    
+      }
+    }
 
     bool status = (*a_writer)(m_out,a_file,buffer,a_width,a_height,bpp,a_quality);
     if(!status) {
@@ -206,7 +206,7 @@ public:
   }
   bool write_inzb_ps_page() {return write_inzb_ps_page(width(),height());}
   bool close_inzb_ps_file() {return m_wps.close_file();}
-  
+
   bool write_gl2ps(const std::string& a_file,int a_gl2ps_format,unsigned int a_width,unsigned int a_height) {
     gl2ps_action action(m_gl2ps_mgr,m_out,a_width,a_height);
     action.clear_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());

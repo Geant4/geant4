@@ -38,33 +38,39 @@ then 50 tasks of 10 events will be submitted.
     G4TaskRunManager(G4VUserTaskQueue* = nullptr, bool useTBB = false, G4int grainsize = 0);
 ```
 
-## G4RunManagerCreator
+## G4RunManagerFactory
 
-An enumeration `G4RunManagerType` and a function `G4RunManagerCreator::CreateRunManager(...)`
-was added to `"G4RunManagerCreator.hh"` to simplify the selection of the various run managers.
+An enumeration `G4RunManagerType` and a function `G4RunManagerFactory::CreateRunManager(...)`
+was added to `"G4RunManagerFactory.hh"` to simplify the selection of the various run managers.
 The first parameter is either one of the enumerated `G4RunManagerType` or a string identifier
 
-| Enumeration                 | String ID   | Class               |
-| --------------------------- | ----------- | ------------------- |
-| `G4RunManagerType::Serial`  | `"Serial"`  | `G4RunManager`      |
-| `G4RunManagerType::MT`      | `"MT"`      | `G4MTRunManager`    |
-| `G4RunManagerType::Tasking` | `"Tasking"` | `G4TaskRunManager`  |
-| `G4RunManagerType::TBB`     | `"TBB"`     | `G4TaskRunManager`  |
-| `G4RunManagerType::Default` | `"Default"` | Environment setting |
+| Enumeration                     | String ID   | Class               |
+| ------------------------------- | ----------- | ------------------- |
+| `G4RunManagerType::Serial`      | `"Serial"`  | `G4RunManager`      |
+| `G4RunManagerType::MT`          | `"MT"`      | `G4MTRunManager`    |
+| `G4RunManagerType::Tasking`     | `"Tasking"` | `G4TaskRunManager`  |
+| `G4RunManagerType::TBB`         | `"TBB"`     | `G4TaskRunManager`  |
+| `G4RunManagerType::Default`     | `"Default"` | Environment setting |
+| `G4RunManagerType::SerialOnly`  | `"Serial"`  | `G4RunManager`      |
+| `G4RunManagerType::MTOnly`      | `"MT"`      | `G4MTRunManager`    |
+| `G4RunManagerType::TaskingOnly` | `"Tasking"` | `G4TaskRunManager`  |
+| `G4RunManagerType::TBBOnly`     | `"TBB"`     | `G4TaskRunManager`  |
+
 
 The `Default` enumeration value will defer to the following environment variable `G4RUN_MANAGER_TYPE`
-if specified and will default to `"Tasking"` if MT is supported and serial if MT is not supported.
+if specified and will default to `"MT"` if MT is supported and serial if MT is not supported.
 If the `G4FORCE_RUN_MANAGER_TYPE` environment variable is set, this variable will override the
-value passed to the `CreateRunManager` function.
+value passed to the `CreateRunManager` function unless `G4RunManagerType` matches one of the `<TYPE>Only`
+values. In this case, the environment variable is ignored and the run manager will be `<TYPE>`.
 
 | Environment Variable       | Options                                  | Description                                                                            |
 | -------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------- |
 | `G4RUN_MANAGER_TYPE`       | `"Serial"`, `"MT"`, `"Tasking"`, `"TBB"` | Only applicable when `G4RunManagerType::Default` is used                               |
-| `G4FORCE_RUN_MANAGER_TYPE` | `"Serial"`, `"MT"`, `"Tasking"`, `"TBB"` | Will override explicitly specifed `G4RunManagerType` and fail if type is not available |
+| `G4FORCE_RUN_MANAGER_TYPE` | `"Serial"`, `"MT"`, `"Tasking"`, `"TBB"` | Will override explicitly specifed `G4RunManagerType` if application allows and fail if type is not available |
 
 ## Creating the G4RunManager
 
-- The `G4RunManagerCreator::CreateRunManager(...)` function takes either `G4RunManagerType` enumerated type or string to specify the desired G4RunManager
+- The `G4RunManagerFactory::CreateRunManager(...)` function takes either `G4RunManagerType` enumerated type or string to specify the desired G4RunManager
   - If a string is used, regex matching is used which is case-insensitive
   - Returns a `G4RunManager*`
   - Various overloads exist which just reorder passing in:
@@ -76,23 +82,30 @@ value passed to the `CreateRunManager` function.
       - default: `nullptr`
 
 ```cpp
-#include "G4RunManagerCreator.hh"
+#include "G4RunManagerFactory.hh"
 
 int main()
 {
     // specify {Serial, MT, Tasking, TBB} as the default, can be overridden
     // with "G4FORCE_RUN_MANAGER_TYPE" env variable
-    auto* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::Serial);
-    auto* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::MT);
-    auto* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::Tasking);
-    auto* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::TBB);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Tasking);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::TBB);
 
-    // defer to "G4RUN_MANAGER_TYPE" env variable and default to Tasking if
+    // specify {Serial, MT, Tasking, TBB} as the required type, cannot be overridden
+    // with "G4FORCE_RUN_MANAGER_TYPE" env variable
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MTOnly);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::TaskingOnly);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::TBBOnly);
+
+    // defer to "G4RUN_MANAGER_TYPE" env variable and default to MT if
     // env variable is not set
-    auto* runmanager = G4RunManagerCreator::CreateRunManager(G4RunManagerType::Default);
+    auto* runmanager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
     // same as above
-    auto* runmanager = G4RunManagerCreator::CreateRunManager();
+    auto* runmanager = G4RunManagerFactory::CreateRunManager();
 }
 ```
 

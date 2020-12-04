@@ -16,6 +16,20 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-October-2020 E.Tcherniaev       (geom-specific-V10-06-10)
+- G4Polycone: Revised GetPointOnSurface();
+  Added protected auxiliary method SetSurfaceElements();
+  Removed GetPointOnCone(), GetPointOnTubs(), GetPointOnCut(), GetPointOnRing();
+- G4GenericPolycone: Revised GetPointOnSurface();
+  Added protected auxiliary method SetSurfaceElements();
+- G4Polyhedra: Revised GetPointOnSurface();
+  Added protected auxiliary method SetSurfaceElements();
+  Removed GetPointOnPlane(), GetPointOnTriangle();
+
+01-October-2020 E.Tcherniaev       (geom-specific-V10-06-09)
+- G4Polycone, G4GenericPolycone, G4Polyhedra:
+  implemented GetSurfaceArea(), GetCubicVolume().
+
 May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 ----------------------------
 - Fix constructor signatures in G4UExtrudedSolid wrappers, to match those in G4 version.

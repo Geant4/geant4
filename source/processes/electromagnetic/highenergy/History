@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 October 2020: V.Ivantchenko (emhighenergy-V10-06-02)
+- G4hPairProductionModel, G4hBremsstrahlungModel, G4hPairProduction, 
+  G4hBremsstrahlung - added definition of the energy threshold 
+    for creation of a vertex, when energy transfer is above the 
+    threshold (CMS request)
+
+01 September 2020: G.Amadio (emhighenergy-V10-06-01)
+- G4hPairProductionModel - inherit ComputeDMicroscopicCrossSection
+  from G4MuPairProductionModel to avoid code duplication
+
 30 October 2019: I.Semeniouk (emhighenergy-V10-05-06)
 - G4GammaConversionToMuons - initialisation of the 5D model cuts size
 

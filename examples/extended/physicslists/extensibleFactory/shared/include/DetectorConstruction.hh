@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 
@@ -49,7 +49,7 @@ class G4GlobalMagFieldMessenger;
 ///
 /// In ConstructSDandField() sensitive detectors of CalorimeterSD type
 /// are created and associated with the Absorber and Gap volumes.
-/// In addition a transverse uniform magnetic field is defined 
+/// In addition a transverse uniform magnetic field is defined
 /// via G4GlobalMagFieldMessenger class.
 
 class DetectorConstruction : public G4VUserDetectorConstruction
@@ -61,11 +61,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-     
+
   private:
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

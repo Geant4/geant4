@@ -43,7 +43,7 @@ public:
   vec3(const T& a0,const T& a1,const T& a2
 #ifdef TOOLS_MEM
        ,bool a_inc = true
-#endif       
+#endif
        ) {
 #ifdef TOOLS_MEM
     if(a_inc) mem::increment(s_class().c_str());
@@ -103,9 +103,9 @@ public:
     a0 = m_data[0];
     a1 = m_data[1];
     a2 = m_data[2];
-  }    
+  }
 
-  //bool set_value(unsigned int a_index,const T& a_value) { 
+  //bool set_value(unsigned int a_index,const T& a_value) {
   //  if(a_index>=3) return false;
   //  m_[a_index] = a_value;
   //  return true;
@@ -123,16 +123,16 @@ public:
   }
 
   T dot(const vec3& aV) const {
-    return (m_data[0] * aV.m_data[0] + 
-            m_data[1] * aV.m_data[1] + 
+    return (m_data[0] * aV.m_data[0] +
+            m_data[1] * aV.m_data[1] +
             m_data[2] * aV.m_data[2]);
-  }   
+  }
 
   void cross(const vec3<T>& aV,vec3<T>& a_value) const {
     a_value.set_value(m_data[1] * aV.m_data[2] - m_data[2] * aV.m_data[1],
                       m_data[2] * aV.m_data[0] - m_data[0] * aV.m_data[2],
                       m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
-  }    
+  }
 
   bool equal(const vec3& aV) const {
     if(m_data[0]!=aV.m_data[0]) return false;
@@ -156,7 +156,7 @@ public:
     return vec3<T>(m_data[1] * aV.m_data[2] - m_data[2] * aV.m_data[1],
                    m_data[2] * aV.m_data[0] - m_data[0] * aV.m_data[2],
                    m_data[0] * aV.m_data[1] - m_data[1] * aV.m_data[0]);
-  }    
+  }
 
   bool divide(const T& a_T) {
     if(a_T==T()) return false;
@@ -176,25 +176,25 @@ public:
     m_data[0] += a_v.m_data[0];
     m_data[1] += a_v.m_data[1];
     m_data[2] += a_v.m_data[2];
-  }    
+  }
 
   void add(const T& a0,const T& a1,const T& a2) {
     m_data[0] += a0;
     m_data[1] += a1;
     m_data[2] += a2;
-  }    
+  }
 
   void subtract(const vec3& a_v) {
     m_data[0] -= a_v.m_data[0];
     m_data[1] -= a_v.m_data[1];
     m_data[2] -= a_v.m_data[2];
-  }    
+  }
 
   void subtract(const T& a0,const T& a1,const T& a2) {
     m_data[0] -= a0;
     m_data[1] -= a1;
     m_data[2] -= a2;
-  }    
+  }
 
   bool cos_angle(const vec3& a_v,T& a_cos,T(*a_sqrt)(T)) const {
     //WARNING : if ret false, a_cos is not set.
@@ -206,7 +206,7 @@ public:
     return true;
   }
 
-  bool theta_phi(T& a_theta,T& a_phi,T(*a_sqrt)(T),T(*a_atan2)(T,T)) const {    
+  bool theta_phi(T& a_theta,T& a_phi,T(*a_sqrt)(T),T(*a_atan2)(T,T)) const {
     //WARNING : if ret false, a_theta, a_phi are not set.
     if(length(a_sqrt)==T()) return false;
     a_phi = a_atan2(m_data[1],m_data[0]);
@@ -236,26 +236,26 @@ public: //operators
     return vec3(m_data[0]+a_v.m_data[0],
                 m_data[1]+a_v.m_data[1],
                 m_data[2]+a_v.m_data[2]);
-  }    
+  }
 
   vec3 operator-(const vec3& a_v) const {
     return vec3(m_data[0]-a_v.m_data[0],
                 m_data[1]-a_v.m_data[1],
                 m_data[2]-a_v.m_data[2]);
-  }    
+  }
 
   vec3 operator*(const T& a_v) const {
     return vec3(m_data[0]*a_v,
                 m_data[1]*a_v,
                 m_data[2]*a_v);
-  }    
+  }
 
   vec3 operator/(const T& a_v) const {
     if(a_v==T()) return vec3();
     return vec3(m_data[0]/a_v,
                 m_data[1]/a_v,
                 m_data[2]/a_v);
-  }    
+  }
 
   bool operator==(const vec3& a_v) const {return equal(a_v);}
   bool operator!=(const vec3& a_v) const {return !operator==(a_v);}
@@ -276,7 +276,7 @@ public: //for iv2sg
     a0 = m_data[0];
     a1 = m_data[1];
     a2 = m_data[2];
-  }    
+  }
   void setValue(const vec3& a_v) {
     m_data[0] = a_v.m_data[0];
     m_data[1] = a_v.m_data[1];

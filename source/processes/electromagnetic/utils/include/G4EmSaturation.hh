@@ -94,7 +94,7 @@ public:
   // dump G4 list
   void DumpG4BirksCoefficients();
 
-  // this method should not be overwitten
+  // this method should not be overwritten
   inline G4double VisibleEnergyDepositionAtAStep(const G4Step*) const; 
 
   inline void SetVerbose(G4int);

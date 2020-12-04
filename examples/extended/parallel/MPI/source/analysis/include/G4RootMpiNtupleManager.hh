@@ -42,21 +42,23 @@ class impi;
 
 class G4RootMpiNtupleManager : public G4RootNtupleManager
 {
-  friend class G4RootMpiAnalysisManager;
-  friend class G4RootMpiMainNtupleManager;
-
   public:
-    G4RootMpiNtupleManager(const G4AnalysisManagerState& state, 
-                           G4bool rowWise, G4bool rowMode,
-                           tools::impi* impi, G4int mpiSize);
+    G4RootMpiNtupleManager(const G4AnalysisManagerState& state,
+                std::shared_ptr<G4NtupleBookingManager> bookingManger,
+                G4bool rowWise, G4bool rowMode,
+                tools::impi* impi, G4int mpiSize);
     virtual ~G4RootMpiNtupleManager();
 
-    virtual void CreateNtuplesFromBooking() final;
+    virtual void CreateNtuplesFromBooking(
+                   const std::vector<G4NtupleBooking*>& ntupleBookings) final;
+
+    // Methods from the templated base class
     virtual G4bool Merge() final;
 
    private:
     // MPI
-    G4bool Send(G4int id, tools::wroot::ntuple* ntuple);
+    G4RootFile*  GetNtupleFile(G4int id);
+    G4bool Send(G4int id, RootNtupleDescription* ntupleDescription);
     G4bool InitializeRanks();
     G4bool WaitBuffer();
 

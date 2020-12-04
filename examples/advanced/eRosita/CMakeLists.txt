@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(eRosita)
 
 #----------------------------------------------------------------------------
@@ -17,13 +20,13 @@ endif()
 
 
 #-----------------------------------------------------------------------------------
-# Notice G4PIIDATA environment variable as appropriate to get acces to the PIXE data 
+# Notice G4PIIDATA environment variable as appropriate to get acces to the PIXE data
 #
 # message("G4PIIDATA: " $ENV{G4PIIDATA})
 if(DEFINED ENV{G4PIIDATA})
   message(STATUS "G4PIIDATA environment variable defined")
 else()
-  message(STATUS "Please set G4PIIDATA enviroment (e.g. G4PII1.3) in your system!")    
+  message(STATUS "Please set G4PIIDATA enviroment (e.g. G4PII1.3) in your system!")
 endif()
 
 
@@ -42,7 +45,7 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/application/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/application/include/*.hh)
 
 #-----------------------------------------------------------------------------------
-# Setup Geant4 physics mode 
+# Setup Geant4 physics mode
 #
 # ON : simulate Geant4 with PIXE data
 # OFF: simulate Geant4 with original Geant4 low energy physics processes
@@ -55,7 +58,7 @@ else()
   file(GLOB sourcesOriginal ${PROJECT_SOURCE_DIR}/physics/src/*.cc)
   file(GLOB headersOriginal ${PROJECT_SOURCE_DIR}/physics/include/*.hh)
   include_directories(${PROJECT_SOURCE_DIR}/physics/include)
-  add_executable(eRosita eRosita.cc ${sources} ${headers} 
+  add_executable(eRosita eRosita.cc ${sources} ${headers}
                                   ${sourcesOriginal} ${headersOriginal} )
 endif()
 

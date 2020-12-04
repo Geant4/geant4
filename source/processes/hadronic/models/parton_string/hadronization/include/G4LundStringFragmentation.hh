@@ -107,6 +107,9 @@ class G4LundStringFragmentation: public G4VLongitudinalStringDecay
                                        G4ParticleDefinition * & RightHadron );
 
     G4int SampleState(void);
+
+    G4double Tmt;  // "Temperature" for sampling Pt of hadrons
+
 };
 
 //******************************************************************************

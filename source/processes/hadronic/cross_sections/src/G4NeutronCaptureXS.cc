@@ -43,9 +43,9 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
-#include "G4PhysicsVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4IsotopeList.hh"
 #include "Randomize.hh"
 #include "G4Log.hh" 
 
@@ -53,33 +53,6 @@
 #include "G4CrossSectionFactory.hh"
 //
 G4_DECLARE_XS_FACTORY(G4NeutronCaptureXS);
-
-using namespace std;
-
-const G4int G4NeutronCaptureXS::amin[] = {
-  0,
-  1,   4,   6,   9, 10,  12,  14,  16,  19,  20,  //1-10
- 23,  24,  27,  28, 31,  32,  35,  36,  39,  40,  //11-20
- 45,  46,  50,  50, 55,  54,  59,  58,  63,  64,  //21-30
- 69,  70,  75,   0,  0,   0,   0,   0,   0,  90,  //31-40
-  0,  92,   0,   0,  0, 102, 107, 106, 113, 112,  //41-50
-  0,   0,   0,   0,  0,   0,   0,   0,   0,   0,  //51-60
-  0,   0,   0,   0,  0,   0,   0,   0,   0,   0,  //61-70
-  0,   0, 181, 180,  0,   0,   0, 192, 197,   0,  //71-80
-  0, 204, 209,   0,  0,   0,   0,   0,   0,   0,  //81-90
-  0, 235};
-const G4int G4NeutronCaptureXS::amax[] = {
-  0,
-  2,   4,   7,   9, 11,  13,  15,  18,  19,  22,  //1-10
- 23,  26,  27,  30, 31,  34,  37,  40,  41,  48,  //11-20
- 45,  50,  51,  54, 55,  58,  59,  64,  65,  70,  //21-30
- 71,  76,  75,   0,  0,   0,   0,   0,   0,  96,  //31-40
-  0, 100,   0,   0,  0, 110, 109, 116, 115, 124,  //41-50
-  0,   0,   0,   0,  0,   0,   0,   0,   0,   0,  //51-60
-  0,   0,   0,   0,  0,   0,   0,   0,   0,   0,  //61-70
-  0,   0, 181, 186,  0,   0,   0, 198, 197,   0,  //71-80
-  0, 208, 209,   0,  0,   0,   0,   0,   0,   0,  //81-90
-  0, 238};
 
 G4ElementData* G4NeutronCaptureXS::data = nullptr;
 G4String G4NeutronCaptureXS::gDataDirectory = "";
@@ -144,19 +117,18 @@ G4NeutronCaptureXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   if(ekin < elimit) { ekin = elimit; logEkin = logElimit; }
 
   auto pv = GetPhysicsVector(Z);
-  if(!pv) { return xs; }
+  if(pv == nullptr) { return xs; }
 
-  G4double e1 = pv->Energy(0);
-  if(ekin < e1) { 
-    xs = (*pv)[0]*std::sqrt(e1/ekin); 
-  } else if(ekin <= pv->GetMaxEnergy()) { 
-    xs = pv->LogVectorValue(ekin, logEkin); 
-  }
+  const G4double e1 = pv->Energy(1);
+  xs = (ekin >= e1) ? pv->LogVectorValue(ekin, logEkin) 
+    : (*pv)[1]*std::sqrt(e1/ekin); 
 
+#ifdef G4VERBOSE
   if(verboseLevel > 1){
     G4cout  << "Ekin= " << ekin/CLHEP::MeV 
             << " ElmXScap(b)= " << xs/CLHEP::barn << G4endl;
   }
+#endif
   return xs;
 }
 
@@ -186,37 +158,35 @@ G4double G4NeutronCaptureXS::IsoCrossSection(G4double eKin, G4double logE,
   }
 
   auto pv = GetPhysicsVector(Z);
-  if(!pv) { return xs; }
+  if(pv == nullptr) { return xs; }
 
   if(amin[Z] > 0 && A >= amin[Z] && A <= amax[Z]) {
     G4PhysicsVector* pviso = data->GetComponentDataByID(Z, A - amin[Z]);
-    if(pviso) { 
-      G4double e1 = pviso->Energy(1);
-      if(ekin < e1) { 
-	xs = (*pviso)[1]*std::sqrt(e1/ekin); 
-      } else if(ekin <= pviso->GetMaxEnergy()) { 
-	xs = pviso->LogVectorValue(ekin, logEkin); 
-      }
+    if(pviso != nullptr) { 
+      const G4double e1 = pviso->Energy(1);
+      xs = (ekin >= e1) ? pviso->LogVectorValue(ekin, logEkin)
+	: (*pviso)[1]*std::sqrt(e1/ekin); 
+#ifdef G4VERBOSE
       if(verboseLevel > 0) {
 	G4cout << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
 	       << "  xs(b)= " << xs/barn 
 	       << "  Z= " << Z << "  A= " << A << G4endl;
       }
+#endif
       return xs;
     }
   }
   // isotope data are not available or applicable
-  G4double e1 = pv->Energy(1);
-  if(ekin < e1) { 
-    xs = (*pv)[1]*std::sqrt(e1/ekin); 
-  } else if(ekin <= pv->GetMaxEnergy()) { 
-    xs = pv->LogVectorValue(ekin, logEkin); 
-  }
+  const G4double e1 = pv->Energy(1);
+  xs = (ekin >= e1) ? pv->LogVectorValue(ekin, logEkin)
+    : (*pv)[1]*std::sqrt(e1/ekin); 
+#ifdef G4VERBOSE
   if(verboseLevel > 0) {
     G4cout << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
            << "  xs(b)= " << xs/barn 
 	   << "  Z= " << Z << "  A= " << A << " no iso XS" << G4endl;
   }
+#endif
   return xs;
 }
 
@@ -283,10 +253,10 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     return; 
   }
 
-  if(!data) { 
+  if(nullptr == data) { 
 #ifdef G4MULTITHREADED
     G4MUTEXLOCK(&neutronCaptureXSMutex);
-    if(!data) { 
+    if(nullptr == data) { 
 #endif
       isMaster = true;
       data = new G4ElementData(); 
@@ -310,20 +280,10 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
       size_t numOfElem = mat->GetNumberOfElements();
       for (size_t ie = 0; ie < numOfElem; ++ie) {
 	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZCAPTURE-1));
-	if(!data->GetElementData(Z)) { Initialise(Z); }
+	if(nullptr == data->GetElementData(Z)) { Initialise(Z); }
       }
     }
   }
-}
-
-const G4PhysicsVector* G4NeutronCaptureXS::GetPhysicsVector(G4int Z)
-{
-  const G4PhysicsVector* pv = data->GetElementData(Z);
-  if(!pv) { 
-    InitialiseOnFly(Z);
-    pv = data->GetElementData(Z);
-  }
-  return pv;
 }
 
 const G4String& G4NeutronCaptureXS::FindDirectoryPath()
@@ -349,7 +309,7 @@ void G4NeutronCaptureXS::InitialiseOnFly(G4int Z)
 {
 #ifdef G4MULTITHREADED
    G4MUTEXLOCK(&neutronCaptureXSMutex);
-   if(!data->GetElementData(Z)) { 
+   if(nullptr == data->GetElementData(Z)) { 
 #endif
      Initialise(Z);
 #ifdef G4MULTITHREADED
@@ -360,7 +320,7 @@ void G4NeutronCaptureXS::InitialiseOnFly(G4int Z)
 
 void G4NeutronCaptureXS::Initialise(G4int Z)
 {
-  if(data->GetElementData(Z)) { return; }
+  if(nullptr != data->GetElementData(Z)) { return; }
 
   // upload element data 
   std::ostringstream ost;

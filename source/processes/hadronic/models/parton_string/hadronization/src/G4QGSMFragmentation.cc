@@ -38,7 +38,7 @@
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
-
+#include "G4HadronicParameters.hh"
 #include "G4Pow.hh"
 
 //#define debug_QGSMfragmentation 
@@ -54,10 +54,19 @@ G4QGSMFragmentation::G4QGSMFragmentation()
 
     SetStrangenessSuppression((1.0 - 0.12)/2.);  // Uzhi June 2020 0.16 -> 0.12
 
-    // For the time being, set to 0.0 the probabilities for c-cbar and b-bbar creation.
-    SetProbCCbar(0.0);  //(0.0033);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
-    SetProbBBbar(0.0);  //(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
-
+    // Check if charmed and bottom hadrons are enabled: if this is the case, then
+    // set the non-zero probabilities for c-cbar and b-bbar creation from the vacuum,
+    // else set them to 0.0. If these probabilities are/aren't zero then charmed or bottom
+    // hadrons can't/can be created during the string fragmentation of ordinary
+    // (i.e. not heavy) projectile hadron nuclear reactions.
+    if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
+      SetProbCCbar(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+      SetProbBBbar(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+    } else {
+      SetProbCCbar(0.0);
+      SetProbBBbar(0.0);
+    }
+    
     SetDiquarkSuppression(0.195);     // Uzhi June 2020 0.32 -> 0.195
     SetDiquarkBreakProbability(0.0);  // Uzhi June 2020 0.7  -> 0.0
 
@@ -136,7 +145,8 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
      if ( LeftVector != 0 ) G4cout<<"Non fragmentable - the string is converted to one hadron "<<G4endl;
      #endif
 
-     if ( LeftVector != 0 ) return LeftVector;
+     if ( LeftVector == nullptr ) LeftVector = new G4KineticTrackVector;
+     return LeftVector;
   }
 
   #ifdef debug_QGSMfragmentation
@@ -265,7 +275,7 @@ G4KineticTrackVector* G4QGSMFragmentation::FragmentString(const G4ExcitedString&
 
 //----------------------------------------------------------------------------------------------------------
 
-G4bool G4QGSMFragmentation::IsItFragmentable(const G4FragmentingString * const string)
+G4bool G4QGSMFragmentation::IsItFragmentable(const G4FragmentingString * string)
 {
         //Uzhi June 2020  return sqr( PossibleHadronMass(string) + MassCut ) < string->Mass2();
 	return sqr( MinimalStringMass + MassCut ) < string->Mass2();  // Uzhi June 2020
@@ -273,25 +283,20 @@ G4bool G4QGSMFragmentation::IsItFragmentable(const G4FragmentingString * const s
 
 //----------------------------------------------------------------------------------------------------------
 
-G4bool G4QGSMFragmentation::StopFragmenting(const G4FragmentingString * const string)
+G4bool G4QGSMFragmentation::StopFragmenting(const G4FragmentingString * string)
 {
 	SetMinimalStringMass(string);
         if ( MinimalStringMass < 0.0 ) return true;
 
-	if (string->IsAFourQuarkString())
-	{
-	  return G4UniformRand() < G4Exp(-0.005*(string->Mass() - MinimalStringMass));
-	} else { 
-	  G4bool Result = G4UniformRand() < 
-			  G4Exp(-0.66e-6*(string->Mass()*string->Mass() - MinimalStringMass*MinimalStringMass));
-          // G4bool Result = string->Mass() < MinimalStringMass + 150.*MeV*G4UniformRand();  // a'la LUND
+        G4double smass = string->Mass();
+	G4double x = (string->IsAFourQuarkString()) ? 0.005*(smass - MinimalStringMass)
+	  : 0.66e-6*(smass - MinimalStringMass)*(smass + MinimalStringMass);
 
-          #ifdef debug_QGSMfragmentation 
-          G4cout<<"StopFragmenting MinimalStringMass string->Mass() "<<MinimalStringMass<<" "<<string->Mass()<<G4endl;
-          G4cout<<"StopFragmenting - Yes/No "<<Result<<G4endl;
-          #endif	
-	  return Result;
+        G4bool res = true;
+        if(x > 0.0) {
+          res = (x < 200.) ? (G4UniformRand() < G4Exp(-x)) : false;
 	}
+	return res;
 }
 
 //-----------------------------------------------------------------------------

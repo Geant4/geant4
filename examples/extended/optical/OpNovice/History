@@ -14,6 +14,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 1, 2020 D. Sawkey (OpNovice-V10-06-01)
+- Print out process statistics at end of run. Added EventAction and Run
+  classes for this.
+- Update macros, especially to run more particles. Update gui.mac
+- Migrate to new G4RunManagerFactory
+- Remove G4Timer
+- Use default random number generator
+- Apply clang-format style
+
+August 4, 2020 D. Sawkey (OpNovice-V10-06-00)
+- Add material properties using new interface with std::vectors
+
 October 29, 2019 D. Sawkey (OpNovice-V10-05-00)
 - Use G4OpticalPhysics and G4SteppingVerbose
 - remove unused surface parameters

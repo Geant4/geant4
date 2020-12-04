@@ -14,6 +14,29 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 August 2020 Vladimir Ivanchenko  (hadr-deex-V10-06-07)
+- G4NuclearLevelData - use Zmax for initialisation before the run
+
+28 July 2020 Vladimir Ivanchenko  (hadr-deex-V10-06-06)
+- G4ExcitationHandler - verbose level is defined by G4HadronicParameters
+    class or by the hardcoded local verbose level defined only for
+    debugging
+- G4DeexPrecoParameters - verbose level is defined  by G4HadronicParameters
+    class or by the local verbose level
+- G4DeexParametersMessenger - removed obsolete UI command    
+
+24 July 2020 Vladimir Ivanchenko  (hadr-deex-V10-06-05)
+- G4NuclearLevelData - reduced usage of mutex locks; read all level data
+    begin of run 
+- G4ExcitationHandler - use Zmax+1 instead of Zmax for nuclear level 
+    initialisation
+
+13 July 2020 Vladimir Ivanchenko  (hadr-deex-V10-06-04)
+- G4NuclearLevelData - more safe initialisation of data in MT mode, use mutex
+    locks only within each method, whithout calls to other methods
+- G4ExcitationHandler - call to G4NuclearLevelData to initilise data for
+    levels for all elements possibly involved in the geometry
+
 12 May 2020   Alberto Ribon       (hadr-deex-V10-06-03)
 - G4DeexPrecoParameters : in the method Dump(), check the global verbosity
   level of hadronics (if zero, do not print anything).
@@ -225,7 +248,7 @@ code and to keep track of all tags.
   introduced in previous tag
 
 18 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-08)
-- G4LevelManager, G4NuclearLevelData, G4LevelReader - added intialisation 
+- G4LevelManager, G4NuclearLevelData, G4LevelReader - added initialisation 
     of level density and pairing correction per isotope, added 
     possibility to choose between two parameterisations of level
     density
@@ -251,7 +274,7 @@ code and to keep track of all tags.
 
 24 August 2018 Vladimir Ivanchenko (hadr-deex-V10-04-05)
 - G4LevelReader - attempt to fix problems #1986 and #2076 by
-    change of hadling of internal convertion data
+    change of hadling of internal conversion data
 
 06 August 2018 Alberto Ribon (hadr-deex-V10-04-04)
 - G4NeutronRadCapture : replaced the explicit high-energy limit of
@@ -1232,7 +1255,7 @@ code and to keep track of all tags.
 01 Dec 2014 Vladimir Ivanchenko (hadr-deex-V10-00-29)
 ----------------------------------------------------------
 - G4VGammaDeexcitation, G4PhotonEvaporation - propagate vacant
-    shell number after internal convertion allowing to enable 
+    shell number after internal conversion allowing to enable 
     atomic de-excitation in radioactive decay 
 
 28 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-28)

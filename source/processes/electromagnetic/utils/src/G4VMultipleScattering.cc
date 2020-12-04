@@ -348,7 +348,7 @@ void G4VMultipleScattering::StreamInfo(std::ostream& outFile,
   outFile << G4endl << indent << GetProcessName() << ": ";
   if (!rst) outFile << " for " << part.GetParticleName();
   outFile  << "  SubType= " << GetProcessSubType() << G4endl;
-  StreamProcessInfo(outFile);
+  //StreamProcessInfo(outFile);
   modelManager->DumpModelList(outFile, verboseLevel);
 }
 

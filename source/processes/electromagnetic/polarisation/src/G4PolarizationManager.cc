@@ -104,7 +104,7 @@ void G4PolarizationManager::SetVolumePolarization(const G4String & lVolName, con
       return;
     }
   }
-  G4cout<<" logical volume '"<<lVolName<<"'not registerd yet \n"
+  G4cout<<" logical volume '"<<lVolName<<"'not registered yet \n"
 	<<" please register before using '/polarization/volume/set' "<<G4endl;
 }
 

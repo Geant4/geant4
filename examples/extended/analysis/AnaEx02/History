@@ -14,13 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-20 B. Morgan (AnaEx02-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10-11-20 B. Morgan (AnaEx02-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 15-10-18 G. Cosmo (AnaEx02-V10-04-01)
 - Added missing include of G4SteateManager.hh in DetectorConstruction source.
 
 05-07-18 I. Hrivnacova (AnaEx02-V10-04-00)
 - Macro & commands review:
   - Removed obsolete /N03 top command directory
-  - Added protection against warnings issued from ReinitializeGeometry() if 
+  - Added protection against warnings issued from ReinitializeGeometry() if
     called in PreInit phase
   - Added test for all commands defined in this example in AnaEx01.in
   - Updated README files
@@ -48,8 +54,8 @@ track of all tags.
 
 27-08-15 I. Hrivnacova (AnaEx02-V10-01-00)
 - Introduced meaningful histograms and ntuple names instead of numbers
-  in all AnaEx0N examples and use histogram ids starting from 0  
-- Simplified HistoManager classes and fixed function names to follow 
+  in all AnaEx0N examples and use histogram ids starting from 0
+- Simplified HistoManager classes and fixed function names to follow
   coding guidelines
 
 06-11-14 I. Hrivnacova (AnaEx02-V10-00-04)
@@ -59,17 +65,17 @@ track of all tags.
 05-11-14 I. Hrivnacova (AnaEx02-V10-00-03)
 - Including shared directory directly in the example
   to avoid out-of-project sources
-  - based on analysisShared-V10-00-00 
+  - based on analysisShared-V10-00-00
 - Adding utility scripts for GNUmake build (much simpler replacement
   for scripts from common) \
-  - based on analysisScripts-V10-00-00 
+  - based on analysisScripts-V10-00-00
 
 13-08-14 mma (AnaEx02-V10-00-02)
 - update Readme and .Readme again
 
 12-08-14 mma (AnaEx02-V10-00-01)
 - restaure calorimeter drawing in Readme and .Readme
- 
+
 11-06-14 I. Hrivnacova (AnaEx02-V10-00-00)
 - Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
   (this makes GNUmake build working with Geant4 installation via
@@ -77,41 +83,41 @@ track of all tags.
 - Fixed SharedFilesList.txt - removed PhysicList class
 
 28-05-14 I. Hrivnacova
-- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03,
   removed PhysicList class from shared
   (tag in examples/analysis)
-    
+
 02-04-13 I. Hrivnacova (AnaEx02-V09-06-00)
-- Create two ntuples instead of one in order to demonstrate 
+- Create two ntuples instead of one in order to demonstrate
   how to do this with all tools.
-    
-28-11-12 G. Cosmo (AnaEx02-V09-05-04)      
+
+28-11-12 G. Cosmo (AnaEx02-V09-05-04)
 - Fixed cases of variable shadowing.
 
-31-08-12 I. Hrivnacova (AnaEx02-V09-05-03)      
+31-08-12 I. Hrivnacova (AnaEx02-V09-05-03)
 - Updated CMakeLists.tx:
   adding install target, minor fixes
-- Adding .README  
+- Adding .README
 
 21-06-12 Ivana Hrivnacova (AnaEx02-V09-05-02)
 - G4ANALYSIS_USE flag removed from both GNUmakefile and HistoManager.cc
 - ROOT support added in CMakeLists.txt
-     
+
 20-06-12 Gabriele Cosmo (AnaEx02-V09-05-01)
 - GNUmakefile: protect ROOT setup by G4ANALYSIS_USE flag.
 
 20-06-12 Ivana Hrivnacova
 - Added Doxygen comments.
 
-10-04-12 mma (AnaEx02-V09-05-00)      
-- AnaEx02.cc : change order of UI and Vis 
-    
-07-06-11 mma (AnaEx02-V09-04-02)     
+10-04-12 mma (AnaEx02-V09-05-00)
+- AnaEx02.cc : change order of UI and Vis
+
+07-06-11 mma (AnaEx02-V09-04-02)
 PhysicsList migrated to new scheme G4PhysListHelper
 
 3 February 2011 Jean Jacquemier (AnaEx02-V09-04-01)
   AnaEx02.cc: fixe in interactive session
-     
+
 2 February 2011 Jean Jacquemier (AnaEx02-V09-04-00)
 - identical to AnaEx01
   class HistoManager : direct interface to ROOT system

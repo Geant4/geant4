@@ -58,7 +58,16 @@ class G4ErrorSurfaceTrajParam
                            const G4Vector3D& vecV, const G4Vector3D& vecW );
   G4ErrorSurfaceTrajParam( const G4Point3D& pos, const G4Vector3D& mom,
                            const G4Plane3D& plane );
+
+  G4ErrorSurfaceTrajParam(const G4ErrorSurfaceTrajParam&) = default;
+  G4ErrorSurfaceTrajParam(G4ErrorSurfaceTrajParam&&) = default;
+    // The copy and move constructors
+
   virtual ~G4ErrorSurfaceTrajParam(){}
+
+  G4ErrorSurfaceTrajParam& operator = (const G4ErrorSurfaceTrajParam&) = default;
+  G4ErrorSurfaceTrajParam& operator = (G4ErrorSurfaceTrajParam&&) = default;
+    // The copy and move assignment operators
 
   friend
     std::ostream& operator<<(std::ostream&, const G4ErrorSurfaceTrajParam& ts);

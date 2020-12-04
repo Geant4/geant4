@@ -373,7 +373,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 
 
     } else {  // no interaction, return primary
-        if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return intial state ######### "<< G4endl;
+        if(std::getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction void, return initial state ######### "<< G4endl;
         theParticleChange.SetStatusChange(isAlive);
         theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
         theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());

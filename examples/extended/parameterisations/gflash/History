@@ -16,10 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-Nov-2020 B. Morgan (exgflash-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 28-Nov-2019 I. Hrivnacova (exgflash-V10-05-02)
 - Updated README files:
   changed text to correspond to a description of a set of examples;
-  fixed formatting in .README.txt 
+  fixed formatting in .README.txt
 - Fixed Doxygen warnings
 
 25-Nov-2019 I. Semeniouk (exgflash-V10-05-01)
@@ -63,7 +66,7 @@ committal in the CVS repository !
 
 30-Jul-2013, Peter Gumplinger (exgflash-V09-06-02)
 - fix MAC/clang32 compilation warnings
- 
+
 16-Jul-2013, Marc Verderi (exgflash-V09-06-01)
 - Migration to MT
 
@@ -82,9 +85,9 @@ committal in the CVS repository !
     create/new Collection before adding it to HCE
 
 26-January 2010, Gunter Folger   (exgflash-V09-04-00)
--  Finnish correcting namepsace problems on Windows, 
+-  Finnish correcting namepsace problems on Windows,
     removed using namespace, use G4cout,.. and few std::
-     
+
 03-December 2010, Gunter Folger  (exgflash-V09-03-04)
 -  Correct use of "using namespace std", needed for Windows VC
 

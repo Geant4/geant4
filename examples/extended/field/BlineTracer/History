@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th November 2020 Ben Morgan (BlineTracer-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 2nd May 2018  Ivana Hrivnacova (BlineTracer-V10-04-00)
 - Fixed compilation error (missing include)
 
@@ -21,8 +24,8 @@ track of all tags.
 - Fixed shadowed declarations
 
 8th November 2012  Ivana Hrivnacova (BlineTracer-V09-05-03)
-- Fixed testBlineTracer: 
-  now a physics list has to be instatiated first. 
+- Fixed testBlineTracer:
+  now a physics list has to be instatiated first.
 
 21st September 2012  Ivana Hrivnacova (BlineTracer-V09-05-02)
 - Fixed compiler warning (unused variable in G4BlineEventAction.cc)

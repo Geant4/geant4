@@ -56,7 +56,7 @@ public:
 
   key* find_key(const std::string& a_name) {
     if(m_file.verbose()) {
-      m_file.out() << "tools::rroot::directory::find_key :" 
+      m_file.out() << "tools::rroot::directory::find_key :"
                    << " " << sout(a_name) << " ..."
                    << std::endl;
     }
@@ -69,7 +69,7 @@ public:
 
   key* find_key_from_class(const std::string& a_class) {
     if(m_file.verbose()) {
-      m_file.out() << "tools::rroot::directory::find_key_from_class :" 
+      m_file.out() << "tools::rroot::directory::find_key_from_class :"
                    << " " << sout(a_class) << " ..."
                    << std::endl;
     }
@@ -124,19 +124,19 @@ public:
      {seek32 i;
       if(!rb.read(i)) return false;
       m_seek_directory = i;}
-  
+
      {seek32 i;
       if(!rb.read(i)) return false;
       m_seek_parent = i;}
-  
+
      {seek32 i;
       if(!rb.read(i)) return false;
       m_seek_keys = i;}
     }
     if(m_file.verbose()) {
       m_file.out() << "tools::rroot::key::from_buffer :"
-                   << " nbytes keys : " << m_nbytes_keys 
-                   << ", pos keys : " << m_seek_keys 
+                   << " nbytes keys : " << m_nbytes_keys
+                   << ", pos keys : " << m_seek_keys
                    << std::endl;
     }
     return true;
@@ -149,7 +149,7 @@ public:
     a_number = 0;
 
     clear_keys();
-  
+
     key headerkey(m_file.out(),m_seek_keys,m_nbytes_keys);
     if(!headerkey.read_file(m_file)) return false;
     char* buffer = headerkey.data_buffer();

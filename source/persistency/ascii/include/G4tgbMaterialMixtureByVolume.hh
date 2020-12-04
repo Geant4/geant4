@@ -23,36 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbMaterialMixtureByVolume
+// G4tgbMaterialMixtureByVolume
 //
 // Class description:
 //
 // Class to represent a material whose components are given by volume.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbMaterialMixtureByVolume_h
-#define G4tgbMaterialMixtureByVolume_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbMaterialMixtureByVolume_hh
+#define G4tgbMaterialMixtureByVolume_hh 1
 
 #include "globals.hh"
-
-#include <vector>
-#include <string>
-
 #include "G4tgbMaterialMixture.hh"
 
 class G4tgbMaterialMixtureByVolume : public G4tgbMaterialMixture
 {
-  public:  // with description
+  public:
 
     G4tgbMaterialMixtureByVolume();
-    G4tgbMaterialMixtureByVolume( G4tgrMaterial* tgr );
-   ~G4tgbMaterialMixtureByVolume();
+    G4tgbMaterialMixtureByVolume(G4tgrMaterial* tgr);
+    ~G4tgbMaterialMixtureByVolume();
 
     G4Material* BuildG4Material();
       // Return the associated G4Material and if does not exist build it

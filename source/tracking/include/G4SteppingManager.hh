@@ -73,8 +73,10 @@ class G4VSensitiveDetector;
 
 class G4SteppingManager 
 {
-  public:
+ public:
+  using ProfilerConfig = G4Step::ProfilerConfig;
 
+ public:
     // Constructor/Destructor
 
     G4SteppingManager();

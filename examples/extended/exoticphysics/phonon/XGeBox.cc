@@ -59,11 +59,7 @@ int main(int argc,char** argv) {
 
  // Construct the run manager
  //
-#ifdef G4MULTITHREADED
- G4MTRunManager* runManager = new G4MTRunManager;
-#else
- G4RunManager* runManager = new G4RunManager;
-#endif
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
 
  // Set mandatory initialization classes
  //
@@ -73,7 +69,7 @@ int main(int argc,char** argv) {
  G4VUserPhysicsList* physics = new XPhysicsList();
  physics->SetCuts();
  runManager->SetUserInitialization(physics);
-    
+
  // Set user action classes
  //
  runManager->SetUserInitialization(new XActionInitialization);
@@ -86,10 +82,10 @@ int main(int argc,char** argv) {
  // Initialize G4 kernel (replaces /run/initialize macro command)
  //
  runManager->Initialize();
-  
+
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+ G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
  if (ui)   // Define UI session for interactive mode
  {

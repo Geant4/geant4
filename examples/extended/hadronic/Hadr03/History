@@ -13,6 +13,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+22-10-20 mma (exhadr03-V10-06-04)
+- add fusion.mac 
+- README : add macros descrption
+
+05-08-20 A. Ribon (exhadr03-V10-06-03)
+- envHadronic.(c)sh , nFission.mac , Hadr03.cc : removed deprecated
+  HP environmental variables and replaced them with corresponding
+  C++ calls in the main, and UI commands in the macros. 
+  (The two shell-script files will be removed in G4 11.0.)
+
 04-06-20 mma (exhadr03-V10-06-02)
 - HistoManager, SteppingAction : add plot of e-
      

@@ -29,14 +29,13 @@
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
 #include "globals.hh"
+#include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4Event;
 class PrimaryGeneratorMessenger;
@@ -45,20 +44,26 @@ class PrimaryGeneratorMessenger;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PrimaryGeneratorAction();
-    virtual ~PrimaryGeneratorAction();
+ public:
+  PrimaryGeneratorAction();
+  virtual ~PrimaryGeneratorAction();
 
-    virtual void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
-    G4ParticleGun* GetParticleGun() {return fParticleGun;};
+  G4ParticleGun* GetParticleGun() { return fParticleGun; };
 
-    void SetOptPhotonPolar();
-    void SetOptPhotonPolar(G4double);
+  void SetOptPhotonPolar();
+  void SetOptPhotonPolar(G4double);
+  void SetRandomDirection(G4bool val = true);
+  G4bool GetPolarized() { return fPolarized; };
+  G4double GetPolarization() { return fPolarization; }
 
-  private:
-    G4ParticleGun* fParticleGun;
-    PrimaryGeneratorMessenger* fGunMessenger;
+ private:
+  G4ParticleGun* fParticleGun;
+  PrimaryGeneratorMessenger* fGunMessenger;
+  G4bool fRandomDirection;
+  G4bool fPolarized;
+  G4double fPolarization;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

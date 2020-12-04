@@ -1,9 +1,12 @@
-/run/initialize
 /control/verbose 2
 /run/verbose 2
 /tracking/verbose 0
-/LXe/eventVerbose 0
+/process/optical/verbose 1
+/process/optical/processActivation OpWLS2 false
 
+/run/initialize
+
+/LXe/eventVerbose 0
 /LXe/detector/defaults
 /LXe/oneStepPrimaries false
 
@@ -15,9 +18,9 @@
 /gun/energy 511 keV
 
 /analysis/setFileName wls
-/analysis/h1/set 3 100 -1 10000 
-/analysis/h1/set 4 100 -1 100
-/analysis/h1/set 5 100 -1 10000
+/analysis/h1/set 3 100 0 10000
+/analysis/h1/set 4 100 0 100
+/analysis/h1/set 5 100 0 10000
 
 /run/printProgress 10
 /run/beamOn 100

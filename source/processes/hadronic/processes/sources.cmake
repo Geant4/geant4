@@ -4,7 +4,7 @@
 # Package: Geant4.src.G4processes.G4hadronic.G4hadronic_proc
 #
 # Sources description for a library.
-# Lists the sources and headers of the code explicitely.
+# Lists the sources and headers of the code explicitly.
 # Lists include paths needed.
 # Lists the internal granular and global dependencies of the library.
 # Source specific properties should be added at the end.
@@ -14,78 +14,25 @@
 #
 #------------------------------------------------------------------------------
 
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
     HEADERS
         G4AlphaInelasticProcess.hh
         G4AntiAlphaInelasticProcess.hh
-        G4AntiBMesonZeroInelasticProcess.hh
-        G4AntiBsMesonZeroInelasticProcess.hh
         G4AntiDeuteronInelasticProcess.hh
-        G4AntiDMesonZeroInelasticProcess.hh
         G4AntiHe3InelasticProcess.hh
-        G4AntiLambdabInelasticProcess.hh
-        G4AntiLambdacPlusInelasticProcess.hh
         G4AntiLambdaInelasticProcess.hh
         G4AntiNeutronInelasticProcess.hh
-        G4AntiOmegabMinusInelasticProcess.hh
-        G4AntiOmegacZeroInelasticProcess.hh
         G4AntiOmegaMinusInelasticProcess.hh
         G4AntiProtonInelasticProcess.hh
         G4AntiSigmaMinusInelasticProcess.hh
         G4AntiSigmaPlusInelasticProcess.hh
         G4AntiTritonInelasticProcess.hh
-        G4AntiXibMinusInelasticProcess.hh
-        G4AntiXibZeroInelasticProcess.hh
-        G4AntiXicPlusInelasticProcess.hh
-        G4AntiXicZeroInelasticProcess.hh
         G4AntiXiMinusInelasticProcess.hh
         G4AntiXiZeroInelasticProcess.hh
-        G4BcMesonMinusInelasticProcess.hh
-        G4BcMesonPlusInelasticProcess.hh
-        G4BMesonMinusInelasticProcess.hh
-        G4BMesonPlusInelasticProcess.hh
-        G4BMesonZeroInelasticProcess.hh
-        G4BsMesonZeroInelasticProcess.hh
         G4DeuteronInelasticProcess.hh
-        G4DMesonMinusInelasticProcess.hh
-        G4DMesonPlusInelasticProcess.hh
-        G4DMesonZeroInelasticProcess.hh
-        G4DsMesonMinusInelasticProcess.hh
-        G4DsMesonPlusInelasticProcess.hh
         G4ElectronNuclearProcess.hh
 	G4ElNeutrinoNucleusProcess.hh
         G4HadronCaptureProcess.hh
@@ -97,15 +44,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonPlusInelasticProcess.hh
         G4KaonZeroLInelasticProcess.hh
         G4KaonZeroSInelasticProcess.hh
-        G4LambdabInelasticProcess.hh
-        G4LambdacPlusInelasticProcess.hh
         G4LambdaInelasticProcess.hh
 	G4MuNeutrinoNucleusProcess.hh
         G4MuonNuclearProcess.hh
         G4NeutrinoElectronProcess.hh
         G4NeutronInelasticProcess.hh
-        G4OmegabMinusInelasticProcess.hh
-        G4OmegacZeroInelasticProcess.hh
         G4OmegaMinusInelasticProcess.hh
 	G4PhotoCaptureProcess.hh
 	G4PhotoFissionProcess.hh
@@ -123,49 +66,23 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4UCNLoss.hh
         G4UCNAbsorption.hh
         G4UCNMultiScattering.hh
-        G4XibMinusInelasticProcess.hh
-        G4XibZeroInelasticProcess.hh
-        G4XicPlusInelasticProcess.hh
-        G4XicZeroInelasticProcess.hh
         G4XiMinusInelasticProcess.hh
         G4XiZeroInelasticProcess.hh
     SOURCES
         G4AlphaInelasticProcess.cc
         G4AntiAlphaInelasticProcess.cc
-        G4AntiBMesonZeroInelasticProcess.cc
-        G4AntiBsMesonZeroInelasticProcess.cc
         G4AntiDeuteronInelasticProcess.cc
-        G4AntiDMesonZeroInelasticProcess.cc
         G4AntiHe3InelasticProcess.cc
-        G4AntiLambdabInelasticProcess.cc
-        G4AntiLambdacPlusInelasticProcess.cc
         G4AntiLambdaInelasticProcess.cc
         G4AntiNeutronInelasticProcess.cc
-        G4AntiOmegabMinusInelasticProcess.cc
-        G4AntiOmegacZeroInelasticProcess.cc
         G4AntiOmegaMinusInelasticProcess.cc
         G4AntiProtonInelasticProcess.cc
         G4AntiSigmaMinusInelasticProcess.cc
         G4AntiSigmaPlusInelasticProcess.cc
         G4AntiTritonInelasticProcess.cc
-        G4AntiXibMinusInelasticProcess.cc
-        G4AntiXibZeroInelasticProcess.cc
-        G4AntiXicPlusInelasticProcess.cc
-        G4AntiXicZeroInelasticProcess.cc
         G4AntiXiMinusInelasticProcess.cc
         G4AntiXiZeroInelasticProcess.cc
-        G4BcMesonMinusInelasticProcess.cc
-        G4BcMesonPlusInelasticProcess.cc
-        G4BMesonMinusInelasticProcess.cc
-        G4BMesonPlusInelasticProcess.cc
-        G4BMesonZeroInelasticProcess.cc
-        G4BsMesonZeroInelasticProcess.cc
         G4DeuteronInelasticProcess.cc
-        G4DMesonMinusInelasticProcess.cc
-        G4DMesonPlusInelasticProcess.cc
-        G4DMesonZeroInelasticProcess.cc
-        G4DsMesonMinusInelasticProcess.cc
-        G4DsMesonPlusInelasticProcess.cc
 	G4ElNeutrinoNucleusProcess.cc
         G4ElectronNuclearProcess.cc
         G4HadronCaptureProcess.cc
@@ -177,15 +94,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonPlusInelasticProcess.cc
         G4KaonZeroLInelasticProcess.cc
         G4KaonZeroSInelasticProcess.cc
-        G4LambdabInelasticProcess.cc
-        G4LambdacPlusInelasticProcess.cc
         G4LambdaInelasticProcess.cc
 	G4MuNeutrinoNucleusProcess.cc
         G4MuonNuclearProcess.cc
         G4NeutrinoElectronProcess.cc
         G4NeutronInelasticProcess.cc
-        G4OmegabMinusInelasticProcess.cc
-        G4OmegacZeroInelasticProcess.cc
         G4OmegaMinusInelasticProcess.cc
 	G4PhotoCaptureProcess.cc
 	G4PhotoFissionProcess.cc
@@ -202,10 +115,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4UCNLoss.cc
         G4UCNAbsorption.cc
         G4UCNMultiScattering.cc
-        G4XibMinusInelasticProcess.cc
-        G4XibZeroInelasticProcess.cc
-        G4XicPlusInelasticProcess.cc
-        G4XicZeroInelasticProcess.cc
         G4XiMinusInelasticProcess.cc
         G4XiZeroInelasticProcess.cc
     GRANULAR_DEPENDENCIES

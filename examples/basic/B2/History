@@ -14,9 +14,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02/11/20 B.Morgan (exampleB2-V10-06-02)
+- Support same CMake version range as core Geant4
+
+30/06/20 G. Cosmo (exampleB2-V10-06-01)
+- Migrated examples to use G4RunManagerFactory, therefore implicitly enabling
+  tasking by default in MT builds.
+
 13/02/20 I. Hrivnacova  (exampleB2-V10-06-00)
 - Updated READMEs and added a comment in B2PrimaryGeneratorAction
-  that starting a primary particle on the world boundary  
+  that starting a primary particle on the world boundary
   requires shooting in a direction towards inside the world
 
 21/11/19 G. Cosmo (exampleB2-V10-05-00)
@@ -48,13 +55,13 @@ track of all tags.
   - Fix a warning "'ui' may be used uninitialized in this function"
 
 31/10/14 L. Garnier (exampleB2-V10-00-01)
- exampleB2a/exampleB2b : 
+ exampleB2a/exampleB2b :
   - Remove old G4UI_USE/G4VIS_USE
-  - Move G4UIExecutive at the beginning of main() 
+  - Move G4UIExecutive at the beginning of main()
 
-02 December 2013 Ivana Hrivnacova 
+02 December 2013 Ivana Hrivnacova
 - Fixed gui.mac:
-  corrected wireframe parameter, removed run2.mac from gui 
+  corrected wireframe parameter, removed run2.mac from gui
 
 30/11/13 I. Hrivnacova
 - Fixed B2a/gui.mac
@@ -66,7 +73,7 @@ track of all tags.
 - Fixed deleting fMagFieldMessenger with use of G4AutoDelete utility
 
 12/11/13 I. Hrivnacova (exampleB2-V09-06-10)
-- Avoid long lines 
+- Avoid long lines
 
 29/10/13 I. Hrivnacova (exampleB2-V09-06-09)
 - Using G4RunManager::SetPrintProgress()
@@ -100,13 +107,13 @@ track of all tags.
 10/05/13 I. Hrivnacova (exampleB2-V09-06-01)
 - Minor fixes in documentation
 - Added initialization of base class in constructors where missing
-  
+
 09/05/13 M. Asai
 - Migration to multi-threading
 
 28/02/13 I. Hrivnacova
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   Thanks to V. Ivantchenko for pointing at this.
 
@@ -118,64 +125,64 @@ track of all tags.
 - Updated vis.mac (on suggestions by John Al.):
   - Activating drawing hits in vis.mac macros
   - Increased hit screen size (from 2 to 4)
-  - In TrackerSD: removing obsolete line with 
+  - In TrackerSD: removing obsolete line with
   //newHit->Draw();
 - General changes (see basic/History)
 
-15/11/11 I. Hrivnacova 
+15/11/11 I. Hrivnacova
 - Migration to new G4Exception in B2aDetectorConstruction.cc
   and B2bChamberParameterisation.cc.
-    
+
 14/11/11 I. Hrivnacova
 - The first tagged version of the new B2 example created from N02
   example by P. Gumplinger (tagged in basic).
   Started from novice/N03.
 
-05-07-11 gum 
+05-07-11 gum
 migrate to new novice example code guidelines
 
-03-06-11 mma (exampleN02-V09-04-02)     
+03-06-11 mma (exampleN02-V09-04-02)
 PhysicsList migrated to new scheme G4PhysListHelper
-     
+
 10-02-11 mma (exampleN02-V09-04-01)
 - update SteppingVerbose
-     
+
 01-02-11 mma (exampleN02-V09-04-00)
 - /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
 
 04-06-10 J.Perl (exampleN02-V09-03-01)
 - Updated vis usage
-    
+
 22-01-10 mma (exampleN02-V09-03-00)
 - DetectorConstruction::SetMagField() : fpMagField->SetMagFieldValue()
-   
+
 15-11-09 mma (exampleN02-V09-02-01)
 - Use G4MuMultipleScattering for muons
-- Separate alpha from GenericIon 
-    
+- Separate alpha from GenericIon
+
 30 October 2009 John Allison (exampleN02-V09-02-00)
-- Introduced G4UIExecutive.     
+- Introduced G4UIExecutive.
 
 17-12-08 mma
-- vis.mac : /vis/scene/add/trajectories smooth  
+- vis.mac : /vis/scene/add/trajectories smooth
 
 31-10-08 mma (exampleN02-V09-01-04)
 - Use G4hMultipleScattering for muons and protons
-     
+
 26-10-08 mma (exampleN02-V09-01-03)
 - Update PhysicsList for proton and ions
-     
+
 22-09-08 mma (exampleN02-V09-01-02)
 - PhysicsList : AddStepMax() for G4StepLimiter
 - DetectorConstruction : SetMaxStep(value)
 - DetectorMessenger : /N02/det/stepMax
-     
+
 07-05-08 J.Allison (exampleN02-V09-01-01)
 - Protected "/control/execute vis.mac" with G4VIS_USE flag.
-     
+
 03-05-08 mma (exampleN02-V09-01-00)
 - PhysicsList : replace G4MultipleScattering by G4eMultipleScattering
-     
+
 17-10-07 G.Cosmo (exampleN02-V09-00-02)
 - Explicitely delete allocated parameterisation and step-limit objects
   in ExN02DetectorConstruction class.
@@ -205,16 +212,16 @@ PhysicsList migrated to new scheme G4PhysListHelper
 
 02-06-06 mma (exampleN02-V08-00-01)
 - ExN02TrackerSD.cc: replace Touchable by TouchableHandle
-          
+
 31-03-06 mma (exampleN02-V08-00-00)
 - Add a sentence in README for G4UserLimits and G4StepLimiter.
-     
+
 01-06-05 J.Allison  (exampleN02-V07-00-03)
 - ExN02TrackerHit.cc: Changed screen size to 2 pixels.
-     
+
 31-05-05 mma (exampleN02-V07-00-02)
 - G4UserLimits + G4StepLimiter become uncommented
-     
+
 30-05-05  J.Allison  (exampleN02-V07-00-01)
 - Completed replacement of vis manager with G4VisExecutive.
 
@@ -223,20 +230,20 @@ PhysicsList migrated to new scheme G4PhysListHelper
 
 28-01-05 mma (exampleN02-V07-00-00)
 - PhysicsList: add G4StepLimiter (in a commented line)
-     
+
 16-09-04 mma (exampleN02-V06-02-01)
 - DetectorConstruction: modify a comment in PVPlacement. // copy number
-     
+
 08-09-04 J.Allison (exampleN02-V06-02-00)
 - Removed trajectory printing from ExN02EventAction - now available
   with /vis/scene/add/trajectories, which is now included in vis.mac.
 
 05-04-04 mma (exampleN02-V06-01-00)
 - ExN02DetectorConstruction: correct definition of XenonGas
-     
+
 19-03-04 mma (exampleN02-V06-00-01)
 - ExN02PhysicsList: cleanup of include
-     
+
 08-03-04 mma (exampleN02-V06-00-00)
 - ExN02RunAction: removed ApplyCommand("/vis/...") statements.
 
@@ -249,7 +256,7 @@ PhysicsList migrated to new scheme G4PhysListHelper
 
 24-10-03 mma (exampleN02-V05-02-01)
 - PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
-     
+
 06-10-03 mma (exampleN02-V05-02-00)
 - cosmetic cleanup in material definitions
 
@@ -257,11 +264,11 @@ PhysicsList migrated to new scheme G4PhysListHelper
 - Get rid of pedantic warnings...
 
 25-03-03 mma (exampleN02-V05-00-02)
-- Use G4PVPlacement and G4PVParametrised constructors in logical mother. 
-    
+- Use G4PVPlacement and G4PVParametrised constructors in logical mother.
+
 11-02-03 mma (exampleN02-V05-00-00)
 - a blank in SteppingVerbose
-     
+
 27-11-01 mma (exampleN02-V03-02-04)
 - vis.mac: /vis/viewer/set/viewpointThetaPhi
 
@@ -269,21 +276,21 @@ PhysicsList migrated to new scheme G4PhysListHelper
 - Updated ExN02VisManager.cc for new graphics systems and defaults.
 
 07-11-01 S.Tanaka (exampleN02-V03-02-02)
-- vis.mac: /vis/viewer/refresh + /vis/viewer/update is replaced 
-  with their equivalent command /vis/viewer/flush. 
-     
+- vis.mac: /vis/viewer/refresh + /vis/viewer/update is replaced
+  with their equivalent command /vis/viewer/flush.
+
 24-10-01 mma (exampleN02-V03-02-01)
 - initInter.mac renamed vis.mac
-     
+
 19-10-01 S.O'Neale (examples-V03-02-00)
 - Update reference output
 
 11-10-01 mma (exampleN02-V03-02-00)
 - adapted to new visualisation commands (initInter and EventAction)
 - 80 columns max everywhere
-         
+
 12-07-01 mma
-- DetectorMessenger: setField, help: magnetic field in X dirction      
+- DetectorMessenger: setField, help: magnetic field in X dirction
 
 20-02-01 S.O'Neale (exampleN02-V03-00-03) update reference outputs following
    materials-V03-00-04 (tagset 268)
@@ -329,7 +336,7 @@ PhysicsList migrated to new scheme G4PhysListHelper
 - TrackerHit: a Hit = 4 informations: trackID, chamberNb, edep, position.
   Draw and Print
 - TrackerSD: ProcessHits.
-  Print HitsCollection at end of event 
+  Print HitsCollection at end of event
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut
@@ -354,11 +361,11 @@ June 17, 2000  John Allison  (exampleN02-V01-01-00)
 - Updated exampleN02.out for geant4-01-01-ref-06.
 
 25-02-00 H.Kurashige
-- removed RhoZeroDefinition from PhysicsList 
+- removed RhoZeroDefinition from PhysicsList
 
 15-11-99 M.Maire
 - example of user SteppingVerbose class: verbose with units
-     
+
 16th April 1999 H.Kurashige
 - modify ExN02SteppingAction::UserSteppingAction
 - modify ExN02PhysicsList::SetCuts
@@ -367,13 +374,13 @@ June 17, 2000  John Allison  (exampleN02-V01-01-00)
 
 - corrected the Magnetic Field  SetField methods
 - cosmetic change to the name of a volume (chamber), as it was too long.
-     
+
 12th Sptember 1998 Michel Maire
-- removed the function SetEmProcess() ( contained cin) 
+- removed the function SetEmProcess() ( contained cin)
   and the class ExN02PhysicsListMessenger
 
     Interchanged N02 and N03.
-  
+
 9th August 1998  John Allison
 - Removed trackerChamber_logVisAtt->SetForceWireframe(true);
 - Removed G4_SOLVE_TEMPLATES macros (now done in architecture.gmk).
@@ -392,7 +399,7 @@ June 17, 2000  John Allison  (exampleN02-V01-01-00)
 - Simplified ExN03VisManager.
 
 June 29 , 98 H.Kurashige
-- Modified ExN03PhysicsList. 
+- Modified ExN03PhysicsList.
 
 May   15, 98 G. Cosmo
 
@@ -413,8 +420,8 @@ May   05, 98 J. Apostolakis
 
 May   01, 98 J. Apostolakis
 
-- Files created by copying from exampleEmPhys2, renaming the files 
-    and the classes within them, changing the string "My" into 
+- Files created by copying from exampleEmPhys2, renaming the files
+    and the classes within them, changing the string "My" into
 
 - Major changes made:
   * Event action: deleted energy counting.

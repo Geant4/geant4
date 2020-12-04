@@ -23,42 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4GPILSelection
 //
+// Description:
 //
-//
-//---------------------------------------------------------------
-//
-// G4GPILSelection  
-//
-// Class Description:
-// This enumaration is used to control whether a AlongStepProcess
-//   can be a winner of the GPIL race or not. 
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
-//---------------------------------------------------------------
+// This enumeration is used to control whether a AlongStepProcess
+// can be a winner of the GPIL race or not.
 
-#ifndef G4GPILSelection_h
-#define G4GPILSelection_h 1
+// Authors:
+//   Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//   Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+// --------------------------------------------------------------------
+#ifndef G4GPILSelection_hh
+#define G4GPILSelection_hh 1
 
-/////////////////////
-enum G4GPILSelection  
-/////////////////////
+enum G4GPILSelection
 {
-  CandidateForSelection,            
-  // This AlongStep process partecipates in the process selection 
+  CandidateForSelection,
+  // This AlongStep process participates in the process selection
   // mechanism, i.e. it can be the winner of the GPIL race.
-  // (this case is default)
+  // (this case is the default)
 
-  NotCandidateForSelection          
+  NotCandidateForSelection
   // This AlongStep process does not partecipate in the
   // process selection mechanism even when it limits the Step.
-
 };
 
 #endif
-
-

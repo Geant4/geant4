@@ -47,7 +47,7 @@ public: //ibo
     if(!a_buffer.write(nobjects)) return false;
     int lowerBound = 0;
     if(!a_buffer.write(lowerBound)) return false;
-    
+
     typedef typename std::vector<T*>::const_iterator it_t;
     it_t it;
     for(it=std::vector<T*>::begin();it!=std::vector<T*>::end();++it) {
@@ -100,7 +100,7 @@ public: //ibo
     if(!a_buffer.write(std::string(""))) return false; //fName
     int nobjects = int(std::vector<T*>::size());
     if(!a_buffer.write(nobjects)) return false;
-    
+
     typedef typename std::vector<T*>::const_iterator it_t;
     it_t it;
     for(it=std::vector<T*>::begin();it!=std::vector<T*>::end();++it) {

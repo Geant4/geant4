@@ -96,15 +96,13 @@ public:
   // print description in html
   virtual void ProcessDescription(std::ostream&) const override;
 
+  G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right) = delete;
+  G4MuBremsstrahlung(const G4MuBremsstrahlung&) = delete;
+
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*) override;
-
-private:
-
-  G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right) = delete;
-  G4MuBremsstrahlung(const G4MuBremsstrahlung&) = delete;
 
 protected:
 

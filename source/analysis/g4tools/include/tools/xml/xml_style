@@ -10,7 +10,7 @@
 
 namespace tools {
 namespace xml {
-  
+
 inline bool load_style_file(std::ostream&,const std::string& a_file,tools::xml::styles& a_styles) {
   tools::xml::default_factory factory;
   tools::xml::loader ml(factory,a_styles.out(),false);

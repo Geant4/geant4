@@ -21,7 +21,7 @@
 //		    can never be properly captured without also saveing the
 //		    state of RandGauss!  RandGaussQ is, on the other hand,
 //		    stateless except for the engine used.
-// M Fisculer	  - Modified use of wrong engine when shoot (anEngine, mean)
+// M Fischler	  - Modified use of wrong engine when shoot (anEngine, mean)
 //		    is called.  This flaw was preventing any hope of proper
 //		    saving and restoring in the instance cases.
 // M Fischler     - fireArray using defaultMean 2/10/05
@@ -42,6 +42,9 @@
 #include "CLHEP/Random/Stat.h"
 #include "CLHEP/Utility/thread_local.h"
 #include <cmath>	// for std::pow()
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

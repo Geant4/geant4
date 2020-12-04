@@ -44,22 +44,22 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
   AB.setValue(listPoints[1+firstOffset].getValue()[0]-listPoints[0].getValue()[0],
               listPoints[1+firstOffset].getValue()[1]-listPoints[0].getValue()[1],
               listPoints[1+firstOffset].getValue()[2]-listPoints[0].getValue()[2]); // Vector A->B
-  
-  
-  fResolveResult = COLINEAR;
+
+
+  fResolveResult = RESOLVE_COLINEAR;
   unsigned int test = aNumber;
   while ((fResolveResult !=0) && (test>2+firstOffset)) {
     test--;
     AC.setValue(listPoints[test].getValue()[0]-listPoints[0].getValue()[0],
                 listPoints[test].getValue()[1]-listPoints[0].getValue()[1],
                 listPoints[test].getValue()[2]-listPoints[0].getValue()[2]);
-    
+
     // test if AB != AC*i
     resolve_system( AB,
                    AC,
                    vec3f(.0f,.0f,.0f));
   }
-  if (fResolveResult == COLINEAR) {
+  if (fResolveResult == RESOLVE_COLINEAR) {
 #ifdef TOOLS_HATCHER_DEBUG
     ::printf("hatcher::check_polyline : ERROR all the point you give are colinear!\n\n");
     for (unsigned int a =0;a<aNumber;a++) {
@@ -83,7 +83,7 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
       falsePoints++;
     }
   }
-  
+
   if (falsePoints !=0) {
 #ifdef TOOLS_HATCHER_DEBUG
     ::printf("hatcher::check_polyline : ERROR there is %d points on the polyline witch are not on the same plan!\n\n",falsePoints);
@@ -113,12 +113,12 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
 //    - All points are not in the same plan
 //    - There is a precision error on one or more point
 // Compute a first sequence of hacth, store results, compute a second sequence
-// and match all results to get the correct strip points 
+// and match all results to get the correct strip points
 //////////////////////////////////////////////////////////////////////////////
 /** Compute stripWidth
  * We have to use the conflictNumHatchLineTab, hatchNumber,listHatchStartPoint tables
- * also the HatchShiftToMacthPoint tab. 
- * and the hatch line just compute below 
+ * also the HatchShiftToMacthPoint tab.
+ * and the hatch line just compute below
  * We try to made a polyline with all points witch are on the current hatch and on the next hacth
  * (distant of stripwidth form current hatch)
  * conflictNumHatchLineTab give us something like this for current and next hatch
@@ -134,10 +134,10 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
  * current   next                                                current    next
  *    ,4             ,4
  *    '0    B(0,1)   '5
- *    ,1   
+ *    ,1
  *    '3             ,3
- *    ,5             '2 
- *    '2        
+ *    ,5             '2
+ *    '2
  *
  * Now we have to match a way to traverse all of theses lines. We have 3 solutions to go from
  * one line to another :
@@ -145,7 +145,7 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
  * - go to the same line but on another hatch
  * - go to the next tach point
  * If there is no solution, we have to close the polyline strip and go to another point until
- * all are compute  
+ * all are compute
  */
 
 /** first, we have to match 7 different cases
@@ -165,7 +165,7 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
   std::vector<bool> firstComputePointsEnable; // table of already compute points for first hatch
   std::vector<bool> secondComputePointsEnable;// table of already compute points for second hatch
   std::vector< std::vector<int> > firstComputeConflictNumHatchLineTab; // copy firstComputeConflictNumHatchLineTab in
-  
+
   int firstComputeFirstNumHatch =0;
   unsigned int firstComputeNumberHatchToDraw =0;
   float firstHatchShiftToMatchFirstPoint = FLT_MAX; // use in one case when there is no intersection points: to test we have to fill all the polygone
@@ -187,14 +187,14 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
     firstComputeConflictNumHatchLineTab[a].clear();
     for (unsigned int b=0;b<fConflictNumHatchLineTab[a].size();b++){
       firstComputeConflictNumHatchLineTab[a].push_back(fConflictNumHatchLineTab[a][b]);
-    } 
+    }
   }
   firstComputeFirstNumHatch = fFirstNumHatch;
   firstComputeNumberHatchToDraw = fNumberHatchToDraw;
-  firstHatchShiftToMatchFirstPoint = fHatchShiftToMatchPointVec[0];  
+  firstHatchShiftToMatchFirstPoint = fHatchShiftToMatchPointVec[0];
   //change the offset vector
   fOffset = fOffset+fShiftVec*fStripWidth;
-  
+
   //call compute for second set of hatch
   if ( !compute_single_polyline (tabPoints,aNumber))
     return false;
@@ -204,13 +204,13 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
     secondComputePoints.push_back(fPoints[a]);
   }
 
-  secondHatchShiftToMatchFirstPoint = fHatchShiftToMatchPointVec[0];  
+  secondHatchShiftToMatchFirstPoint = fHatchShiftToMatchPointVec[0];
 
-    
+
   // initialize values
   fPoints.clear();
   fVertices.clear();
-  
+
   int specialCase=1;
 
   //first hatch, case 1
@@ -256,11 +256,11 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
     firstComputeConflictNumHatchLineTab[0].clear();
     firstComputeNumberHatchToDraw ++;
     specialCase =5;
-    
+
   }   //second hatch, case 6
   else if (floorf(firstHatchShiftToMatchFirstPoint) != floorf(secondHatchShiftToMatchFirstPoint)) {
     specialCase =6;
-    
+
     //fill all the polygone !
     fVertices.push_back(aNumber);
     for (unsigned int a =0;a<aNumber;a++){
@@ -272,17 +272,17 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
     specialCase =7;
     return true;
   } else {
-#ifdef TOOLS_HATCHER_DEBUG 
+#ifdef TOOLS_HATCHER_DEBUG
     ::printf("hatcher::drawStripPolyline : WARNING there is a case witch was not done in the algotithm...possibly some drawing problems.\n\n");
 #endif
 
   }
 
-  
+
   bool result;
   bool find; // temp variable
-  int firstHatchComputePoint = 0; //first point number 
-  int secondHatchComputePoint = 0; //first point number 
+  int firstHatchComputePoint = 0; //first point number
+  int secondHatchComputePoint = 0; //first point number
   unsigned int lineNumber;
   unsigned int firstPointTabInd =0;
   unsigned int secondPointTabInd=0;
@@ -291,7 +291,7 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
   unsigned int indTmp;
   unsigned int oldSolution;
   for (unsigned int indHatch =0;indHatch<firstComputeNumberHatchToDraw;indHatch++) {
-    
+
 
     currentHatch =0; // 0 is first, 1 is second
     solution =99; //default for beginning
@@ -303,7 +303,7 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
       firstComputePointsEnable.push_back(false);}
     for (unsigned int a=0;a<fConflictNumHatchLineTab[indHatch].size();a++){
       secondComputePointsEnable.push_back(false);}
-    
+
     if ((indHatch == 0) && ((specialCase ==2) || (specialCase ==3) || (specialCase ==5))) {
       for (unsigned int a=0;a<firstComputeConflictNumHatchLineTab[indHatch].size();a++){
         firstComputePointsEnable[a] = true;
@@ -314,18 +314,18 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
         secondComputePointsEnable[a] = true;
       }
     }
-    
+
     result = false;
     while (result == false) {
-      
+
 
       //find a uncompute point for this set of hatch
       result =true;
       unsigned int b=0;
       while ((result == true) && (b<firstComputeConflictNumHatchLineTab[indHatch].size())) {
         if (firstComputePointsEnable[b] == false) {
-          result =false; 
-          firstHatchComputePoint = b; 
+          result =false;
+          firstHatchComputePoint = b;
           lineNumber = firstComputeConflictNumHatchLineTab[indHatch][b];
           fPoints.push_back(firstComputePoints[b+firstPointTabInd]);
           fVertices.push_back(1);
@@ -336,11 +336,11 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
       }
       if (result ==true) {
         //find a uncompute point for this set of hatch
-        
+
         while ((result == true) && (b<fConflictNumHatchLineTab[indHatch].size())) {
           if (secondComputePointsEnable[b] == false) {
             result =false;
-            secondHatchComputePoint = b; 
+            secondHatchComputePoint = b;
             lineNumber = fConflictNumHatchLineTab[indHatch][b];
             fPoints.push_back(secondComputePoints[b+secondPointTabInd]);
             fVertices.push_back(1);
@@ -428,8 +428,8 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
               }
             }
           } // end of current hatch
-          
-            //test of second hatch if currentHatch is second 
+
+            //test of second hatch if currentHatch is second
           if ((oldSolution != 0) && (solution !=2) && (currentHatch !=0)) {
 
             if (oldSolution != 3){                   // could go to first solution
@@ -503,11 +503,11 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
         //      } // if result
     } // while result
     for (unsigned int a =0;a<fVertices.size();a++){
-#ifdef TOOLS_HATCHER_DEBUG 
+#ifdef TOOLS_HATCHER_DEBUG
       if (fVertices[a] <4) ::printf("hatcher::drawStripPolyline : WARNING A strip polyline has been compute with less than 3 points, it could be an error in the algorithm or a special case.\n\n");
 #endif
     }
-    
+
     firstPointTabInd += firstComputeConflictNumHatchLineTab[indHatch].size();
     secondPointTabInd += fConflictNumHatchLineTab[indHatch].size();
   } //end for
@@ -561,20 +561,20 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
               listPoints[1].getValue()[1]-listPoints[0].getValue()[1],
               listPoints[1].getValue()[2]-listPoints[0].getValue()[2]); // Vector A->B
 
-  fResolveResult = COLINEAR;
+  fResolveResult = RESOLVE_COLINEAR;
   unsigned int test = numberOfPolylinePoints-1;
   while ((fResolveResult !=0) && (test>1)) {
     test--;
     AC.setValue(listPoints[test].getValue()[0]-listPoints[0].getValue()[0],
                 listPoints[test].getValue()[1]-listPoints[0].getValue()[1],
                 listPoints[test].getValue()[2]-listPoints[0].getValue()[2]);
-    
+
     // test if AB != AC*i
     resolve_system( AB,
                    AC,
                    vec3f(.0f,.0f,.0f));
   }
-  if (fResolveResult == COLINEAR) {
+  if (fResolveResult == RESOLVE_COLINEAR) {
 #ifdef TOOLS_HATCHER_DEBUG
     ::printf("hatcher::drawPolyline : ERROR all the point you give are colinear!\n\n");
     for (unsigned int a =0;a<aNumber;a++) {
@@ -592,20 +592,20 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
   // Normal plane Vector = AB x AC
   ///////////////////////////////////////////////////////////////
   if (fFirstPolyline) {
-    
+
     fFirstPolyline = false;
-    
+
     fNormal.setValue(AB[1]*AC[2]-AB[2]*AC[1],
                                AB[2]*AC[0]-AB[0]*AC[2],
                                AB[0]*AC[1]-AB[1]*AC[0]);
-    
-    
+
+
     // ABPerp Vector = normal x AB
     vec3f ABPerpVector;
     ABPerpVector.setValue(fNormal[1]*AB[2]-fNormal[2]*AB[1],
                           fNormal[2]*AB[0]-fNormal[0]*AB[2],
                           fNormal[0]*AB[1]-fNormal[1]*AB[0]);
-    
+
     float normAB =(float)sqrt(std::pow(AB[0],2)+
                         std::pow(AB[1],2)+
                         std::pow(AB[2],2));
@@ -616,7 +616,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
     float j = std::tan(fDirAngle)*normAB/normABPerpVector;
 
     if (normABPerpVector == 0){  // never done (should be test before)
-#ifdef TOOLS_HATCHER_DEBUG 
+#ifdef TOOLS_HATCHER_DEBUG
       ::printf("hatcher::drawPolyline : ERROR Impossible to compute the dir vector for hatch. Normal for this plan is null (normal for : point[0],point[1],lastPoint) point[0], point[1], last point are probably aligned\n\n");
 #endif
       delete [] listPoints;
@@ -631,16 +631,16 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
     } else {
       fDirVec = fDirVec/fDirVec.getValue()[0];
     }
-    
+
     ///////////////////////////////////////////////////////////////
     // creation of the shiftVec thanks to the shift field
     ///////////////////////////////////////////////////////////////
-    
+
     vec3f dirShiftVector;
     dirShiftVector.setValue(fNormal[1]*fDirVec.getValue()[2]-fNormal[2]*fDirVec.getValue()[1],
                             fNormal[2]*fDirVec.getValue()[0]-fNormal[0]*fDirVec.getValue()[2],
                             fNormal[0]*fDirVec.getValue()[1]-fNormal[1]*fDirVec.getValue()[0]);
-    
+
     // normalize vector to match the shift size
     float param = 1.0f;
     param = (float)sqrt((std::pow(fShift,2))/(
@@ -654,12 +654,12 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
       fOffset = listPoints[0]+fShiftVec*fOffsetValue;
     }
   }
- 
-  
+
+
   /////////////////////////////////////////////
-  // START to compute 
+  // START to compute
   // We compute each line one by one to know witch hatch will be draw thrue this line
-  // we try to know the result of 
+  // we try to know the result of
   // (origin_point_of_hatch)+i*(directionVector)+j*(shiftVector) = each_point_of_polyline
   // We will be interest only on j factor for the moment. This factor represent the offset
   // between the Origin point of the hatch and the compute point of the polyline
@@ -670,7 +670,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
   // hatchShiftToMatchPoint   5 7 2 6 7 8 5 ...2 5
   // min = 1 max = 8   -> 8 hatch to draw
   ////////////////////////////////////////////
-  
+
   fHatchShiftToMatchPointVec.resize(numberOfPolylinePoints+1);
   float minShiftHatch =FLT_MAX;
   float maxShiftHatch =-FLT_MAX;
@@ -699,7 +699,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
     }
   }
   // for the first point to close the polyline
-  fHatchShiftToMatchPointVec[numberOfPolylinePoints] = fHatchShiftToMatchPointVec[0]; 
+  fHatchShiftToMatchPointVec[numberOfPolylinePoints] = fHatchShiftToMatchPointVec[0];
   fFirstNumHatch = (int)(ceilf(minShiftHatch));
   fNumberHatchToDraw = (int)(floorf(maxShiftHatch)-fFirstNumHatch+1);
   if ((int)(floorf(maxShiftHatch)-fFirstNumHatch+1) <0) fNumberHatchToDraw =0;
@@ -708,7 +708,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
   std::vector<vec3f> listHatchStartPoint;
   std::vector<vec3f> listHatchEndPoint;
   std::vector<int> numberOfStartEndPointsVec;
-  
+
   fConflictNumHatchLineTab.resize(moreNumberHatchToDraw);
 
   // initialize tab
@@ -718,12 +718,12 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
       listHatchEndPoint.push_back(vec3f(.0f,.0f,.0f));
       fConflictNumHatchLineTab[a].clear();
     }
-    
+
   /////////////////////////////////////////////
   // Compute the normalize shift vector for all lines
   // the normal Vector for point 3 to 4 will be listNormalvec[2]
   /////////////////////////////////////////////
-  
+
   for (int a=0;a<numberOfPolylinePoints-1;a++) {
     res = resolve_system(fDirVec.getValue(),
                         vec3f(listPoints[a].getValue()[0]-listPoints[a+1].getValue()[0],
@@ -736,7 +736,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
                                        res[1]*(listPoints[a+1].getValue()[2]-listPoints[a].getValue()[2])
                                        ));
     }
-    else  if (fResolveResult ==Z_ERROR ) {  // never done (should be test before)
+    else  if (fResolveResult == RESOLVE_Z_ERROR ) {  // never done (should be test before)
 #ifdef TOOLS_HATCHER_DEBUG
       ::printf("hatcher::drawPolyline : ERROR one or more of your polyline points are not on the same plan !\n\n");
 #endif
@@ -748,27 +748,27 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
       //      listNormalVec.append(new vec3f(FLT_MAX,FLT_MAX,FLT_MAX));
     }
  }
- 
+
   /////////////////////////////////////////////
   // Compute the hatchShiftToMatchPointVec table to try to get the start
   // and end point of each hatch
   // if there is more than one start/end point, we will resolve it later. For the moment,
   // we put confict points into a table
   // HatchNumber        1     2     3      4      5      6      7     8    9
-  // listHatchStartPoint  1,0,0  1,1,0  0,0,1  0,1,0  1,1,0  0,2,0  1,1,4   
-  // listHatchEndPoint    .............. 
-  // conflictNumHatchLineTab 5 6 7    
+  // listHatchStartPoint  1,0,0  1,1,0  0,0,1  0,1,0  1,1,0  0,2,0  1,1,4
+  // listHatchEndPoint    ..............
+  // conflictNumHatchLineTab 5 6 7
   // line Number is 0 for (point[0]->point[1])
   // We put each line number into the conflict table to be sure to get all the lines
   //  in conflict. When we will thest the value of the conflicy table, it should
   // be greater than 2 to have a conflict
   /////////////////////////////////////////////
-  
+
   vec3f newPoint;
   int minHatch;
-  int maxHatch;   
+  int maxHatch;
   int hatchIndice =0;
-  
+
   for (int indPolyline=0;indPolyline<numberOfPolylinePoints-1;indPolyline++) {
     minHatch = (int)(ceilf(fHatchShiftToMatchPointVec[indPolyline]));
     maxHatch = (int)(floorf(fHatchShiftToMatchPointVec[indPolyline+1]));
@@ -793,7 +793,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
         // the start point will be :
         // Point_of_the_line + normalVec *
         //(number_of_hatch_to_compute - number_of_hatch_corresponding_to_first_point_of_line)
-        //        
+        //
         if ( (listNormalVec[indPolyline][0] != FLT_MAX)
             && (listNormalVec[indPolyline][1] != FLT_MAX)
             && (listNormalVec[indPolyline][2] != FLT_MAX)) {
@@ -837,7 +837,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
   float nextPointConflictHatchNumber = -FLT_MAX;
   float currentPointConflictHatchNumber = -FLT_MAX;
   std::vector<unsigned int> orderConflictLineNumber;
-  
+
   for (unsigned int hatchNumber =0;hatchNumber<fNumberHatchToDraw;hatchNumber++) {
     if ( fConflictNumHatchLineTab[hatchNumber].size() <= 2) {
       if (!listHatchStartPoint[hatchNumber].equals(listHatchEndPoint[hatchNumber],FLT_EPSILON*FLT_EPSILON*10)) {
@@ -851,7 +851,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
       // Compute the equation on the conflict line (called ABVec ):
       // i*dirVec - j*ABVec = A-(offset + shiftVec * numberHatchToDraw)
       // and store the i parameter
-      // then we 
+      // then we
 
       listConflictPoints.clear();
       listCoefDirHatch.clear();
@@ -877,7 +877,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
             res[1] = -res[1];
             listConflictPoints.push_back(vec3f(listPoints[fConflictNumHatchLineTab[hatchNumber][conflictLineNumber]]+ABVec*res[1]));
           }
-          else if (fResolveResult != COLINEAR){
+          else if (fResolveResult != RESOLVE_COLINEAR){
 #ifdef TOOLS_HATCHER_DEBUG
             printf("hatcher : Precision error during compute on hatch number%d\n\n",hatchNumber);
 #endif
@@ -904,9 +904,9 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
         for (unsigned int conflictLineNumber=0;conflictLineNumber<fConflictNumHatchLineTab[hatchNumber].size();conflictLineNumber++ ) {
         }
       }
-      if (listCoefDirHatch.size() != 0) { // all points are resolve_system errors (COLINEAR or Z_ERROR
+      if (listCoefDirHatch.size() != 0) { // all points are resolve_system errors (RESOLVE_COLINEAR or RESOLVE_Z_ERROR
 
-        // now, we have to sort all coef dir from minus to max 
+        // now, we have to sort all coef dir from minus to max
         // and at the same time, reorder the conflict ponts and the conflict line number
         // this algorithm is not optimum...
         valid = false;
@@ -928,7 +928,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
                   fConflictNumHatchLineTab[hatchNumber][sort+1] = tempInt;
                   valid= false;
                 }
-              } 
+              }
           }
 
         // once dir coef have been sort, we could draw lines !!
@@ -1003,7 +1003,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
               bool nextPointCrossLine = false;
               // if the conflict is on a line point, we have to look the hatch number
               // of the previous and next point to see if the hatch had to be draw or not
-              
+
               // test if conflictPoint == first line point
               if (listConflictPoints[conflictNumber].equals(listPoints[fConflictNumHatchLineTab[hatchNumber][conflictNumber]].getValue(),FLT_EPSILON*FLT_EPSILON*10)) {
                 // we look second point hatchNumber
@@ -1029,7 +1029,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
               }
               else { // case of two lines have intersection point on a hatch
                 // it is the same case as a "end of line" and a "begin of line" conflict
-                nextPointConflictHatchNumber = -1; 
+                nextPointConflictHatchNumber = -1;
                 nextPointCrossLine = true;
               }
 
@@ -1047,12 +1047,12 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
                   fPoints.push_back(listConflictPoints[conflictNumber].getValue());
                   orderConflictLineNumber.push_back(fConflictNumHatchLineTab[hatchNumber][conflictNumber]);
                   drawEnabled = false;
-                }                
+                }
               }
               // we draw
               else if( ( (currentPointConflictHatchNumber -
                           fHatchShiftToMatchPointVec[fConflictNumHatchLineTab[hatchNumber][conflictNumber]]) *
-                         (nextPointConflictHatchNumber - 
+                         (nextPointConflictHatchNumber -
                           fHatchShiftToMatchPointVec[fConflictNumHatchLineTab[hatchNumber][conflictNumber]]))
                         <=FLT_EPSILON) {
                 // try to see if we are trying to draw a hatch OVER a contour
@@ -1113,7 +1113,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
         fConflictNumHatchLineTab[hatchNumber].clear();
         for(unsigned int a=0;a<orderConflictLineNumber.size();a++) {
           fConflictNumHatchLineTab[hatchNumber].push_back(orderConflictLineNumber[a]);}
-        
+
         // test if it is correct
       } // end resolve system errors
     }  // end conflict
@@ -1143,7 +1143,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
 // Compute a vector system equation aA+bB=C
 // return vec2f(0,0) if there is an error
 // set the resolveResult variable to the error code :
-// COLINEAR if A and B are 
+// COLINEAR if A and B are
 // PRECISION_ERROR if there is a lack of precision in computing
 // Z_ERROR if there s no solution for Z
 // UNDEFINED never throw
@@ -1152,8 +1152,8 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
 
 inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& C) {
 
-  fResolveResult = UNDEFINED;
-  
+  fResolveResult = RESOLVE_UNDEFINED;
+
   double Ax = A[0];
   double Ay = A[1];
   double Az = A[2];
@@ -1173,32 +1173,32 @@ inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& 
     tmp = Cx; Cx = Cy; Cy = Cz; Cz = tmp;
 
     bDiv = (By*Ax-Ay*Bx);
-    
+
     if  (ffabs(float(bDiv)) <=FLT_EPSILON) {
       // we have to test in a other order
       tmp = Ax; Ax = Ay; Ay = Az; Az = tmp;
       tmp = Bx; Bx = By; By = Bz; Bz = tmp;
       tmp = Cx; Cx = Cy; Cy = Cz; Cz = tmp;
-      
+
       bDiv = (By*Ax-Ay*Bx);
       if (ffabs(float(bDiv)) <=FLT_EPSILON) {
-        fResolveResult = COLINEAR;
+        fResolveResult = RESOLVE_COLINEAR;
         return vec2f(0,0);
       }
     }
-  }    
+  }
   double b= (Cy*Ax-Ay*Cx)/bDiv;
-  double a= -(Cy*Bx-By*Cx)/bDiv;  
+  double a= -(Cy*Bx-By*Cx)/bDiv;
   double  bid = ffabs(float(a*Az+b*Bz - Cz));
-  
+
   if (bid <= FLT_EPSILON) {
-    fResolveResult = OK;
+    fResolveResult = RESOLVE_OK;
     return vec2f((float)a,(float)b);
   }
   else {
-    
+
     double minBoxValue = 1;
- 
+
     double minXValue =FLT_MAX;
     double minYValue =FLT_MAX;
     double minZValue =FLT_MAX;
@@ -1211,7 +1211,7 @@ inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& 
     if ((A[2] !=0) && ((A[2]) <minZValue)) minZValue = (A[2]);
     if ((B[2] !=0) && ((B[2]) <minZValue)) minZValue = (B[2]);
     if ((C[2] !=0) && ((C[2]) <minZValue)) minZValue = (C[2]);
-    
+
 
     double maxXValue =-FLT_MAX;
     double maxYValue =-FLT_MAX;
@@ -1225,17 +1225,17 @@ inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& 
     if ((A[2] !=0) && ((A[2]) >maxZValue)) maxZValue = (A[2]);
     if ((B[2] !=0) && ((B[2]) >maxZValue)) maxZValue = (B[2]);
     if ((C[2] !=0) && ((C[2]) >maxZValue)) maxZValue = (C[2]);
-    
+
     if (((maxXValue-minXValue) <= (maxYValue-minYValue)) && ((maxXValue-minXValue) <= (maxZValue-minZValue))) { minBoxValue = maxXValue-minXValue; }
-    else 
+    else
       if (((maxYValue-minYValue) <= (maxXValue-minXValue)) && ((maxYValue-minYValue) <= (maxZValue-minZValue))) { minBoxValue = maxYValue-minYValue; }
       else
         { minBoxValue = maxZValue-minZValue; }
-    
+
     minBoxValue *= fPrecisionFactor;
-    
+
     if (bid <= minBoxValue) {
-      fResolveResult = OK;
+      fResolveResult = RESOLVE_OK;
       return vec2f((float)a,(float)b);
     }
     else {
@@ -1243,14 +1243,14 @@ inline vec2f hatcher::resolve_system(const vec3f& A,const vec3f& B,const vec3f& 
 #ifdef TOOLS_HATCHER_DEBUG
         printf("hatcher : ***** PRECISON ERROR ON Z  ******* compare %f > %f res :%f %f test %f %f bDiv %e\n\n",bid,100*minBoxValue,a,b,a*Ax+b*Bx-Cx,a*Ay+b*By-Cy,bDiv);
 #endif
-        fResolveResult = Z_ERROR;
+        fResolveResult = RESOLVE_Z_ERROR;
       }
       else
         {
 #ifdef TOOLS_HATCHER_DEBUG
           printf("hatcher : ***** PRECISON ERROR  ******* compare %f > %f res :%f %f test %f %f bDiv %e\n\n",bid,100*minBoxValue,a,b,a*Ax+b*Bx-Cx,a*Ay+b*By-Cy,bDiv);
 #endif
-          fResolveResult = PRECISION_ERROR;
+          fResolveResult = RESOLVE_PRECISION_ERROR;
         }
       //return vec2f(0,0); //G.Barrand : commented out to quiet Coverity.
     }

@@ -35,6 +35,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
@@ -48,11 +50,13 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted option
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. cell flux * track weight (y)                (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
-  : G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
+  : G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
     EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
@@ -61,7 +65,7 @@ G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
 					 G4int depth)
-  : G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
+  : G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
     EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
@@ -83,6 +87,21 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     fCellFlux /= cubicVolume;
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCellFlux);
+
+    if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+    {
+      auto filler = G4VScoreHistFiller::Instance();
+      if(!filler)
+      {
+        G4Exception("G4PSPassageCellFlux::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+      }
+      else
+      {
+        filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),fCellFlux);
+      }
+    }
+
   }
 
   return TRUE;

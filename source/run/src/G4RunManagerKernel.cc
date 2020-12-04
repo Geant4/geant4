@@ -64,6 +64,10 @@
 #include "G4AutoLock.hh"
 #include "G4RNGHelper.hh"
 
+#ifdef G4BT_DEBUG
+#include "G4Backtrace.hh"
+#endif
+
 #ifdef G4FPE_DEBUG
 #  include "G4FPEDetection.hh"
 #endif
@@ -96,6 +100,19 @@ G4RunManagerKernel::G4RunManagerKernel()
 #ifdef G4FPE_DEBUG
   InvalidOperationDetection();
 #endif
+
+#ifdef G4BT_DEBUG
+  auto _signals = G4GetEnv<std::string>("G4BACKTRACE", "");
+  if(_signals.empty())
+  {
+    G4Backtrace::Enable();
+  }
+  else
+  {
+    G4Backtrace::Enable(_signals);
+  }
+#endif
+
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList)
     numberOfStaticAllocators = allocList->Size();
@@ -194,6 +211,18 @@ G4RunManagerKernel::G4RunManagerKernel(RMKType rmkType)
   if(G4Threading::IsMasterThread())
   {
     InvalidOperationDetection();
+  }
+#endif
+
+#ifdef G4BT_DEBUG
+  auto _signals = G4GetEnv<std::string>("G4BACKTRACE", "");
+  if(_signals.empty())
+  {
+    G4Backtrace::Enable();
+  }
+  else
+  {
+    G4Backtrace::Enable(_signals);
   }
 #endif
 
@@ -760,7 +789,6 @@ void G4RunManagerKernel::InitializePhysics()
 
 G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 {
-  TIMEMORY_AUTO_TIMER("");
   G4StateManager* stateManager    = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
 
@@ -894,7 +922,6 @@ void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
   if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified() ||
      physicsNeedsToBeReBuilt)
   {
-    TIMEMORY_AUTO_TIMER("");
 #ifdef G4MULTITHREADED
     if(runManagerKernelType == masterRMK)
     {

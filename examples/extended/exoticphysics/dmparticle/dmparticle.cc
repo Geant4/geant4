@@ -32,8 +32,7 @@
 
 #include "G4Types.hh"
 
-#include "G4RunManager.hh"
-#include "G4MTRunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "Randomize.hh"
@@ -47,7 +46,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
@@ -58,36 +57,32 @@ int main(int argc,char** argv)
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::Ranlux64Engine);
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UI = G4UImanager::GetUIpointer();
   PhysicsList* phys = new PhysicsList();
 
   // defined mass of LDM particles
-  if(argc > 2) { 
+  if(argc > 2) {
     G4String s = argv[2];
     UI->ApplyCommand("/control/verbose 1");
     UI->ApplyCommand("/testex/phys/setLDMPhotonMass " + s + " GeV");
   }
-  if(argc > 3) { 
+  if(argc > 3) {
     G4String s = argv[3];
     UI->ApplyCommand("/testex/phys/setLDMHiMass " + s + " GeV");
   }
-  
+
   // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
   runManager->SetNumberOfThreads(nThreads);
-  G4cout << "===== dmparticle is started with " 
+  G4cout << "===== dmparticle is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
 
   // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
   runManager->SetUserInitialization( phys );
   runManager->SetUserInitialization( det);
- 
+
   // set user action classes
   runManager->SetUserInitialization( new ActionInitialization(det));
 
@@ -101,10 +96,10 @@ int main(int argc,char** argv)
       UI->ApplyCommand(command+fileName);
     }
   else           //define visualization and UI terminal for interactive mode
-    { 
+    {
       ui->SessionStart();
       delete ui;
-    } 
+    }
   // job termination
   delete visManager;
   delete runManager;

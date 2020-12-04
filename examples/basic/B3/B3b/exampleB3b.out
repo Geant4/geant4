@@ -1,10 +1,11 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +27,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -231,7 +234,8 @@ G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
-... open Root analysis file : scoring.root - done
+... create file : scoring.root - done
+... open analysis file : scoring.root - done
 --> Event 0 starts.
 
 ---> end of event: 0
@@ -246,12 +250,15 @@ See commands in /vis/modeling/trajectories/ for other options.
 --> Event 9000 starts.
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1356
- Total dose in patient : 305.61 picoGy 
- Total dose in patient : 3.0561e-10 [sigma: 1.73976e-14 | error: 0.00569274 | coeff: 0.00569274 | eff: 1 | fom: 2805.2 | r2int: 3.24041e-05 | r2eff: 0 | hits: 10000 ] Gy
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1290
+ Total dose in patient : 307.356 picoGy 
+ Total dose in patient : 3.07356e-10 [sigma: 1.76019e-14 | error: 0.00572687 | coeff: 0.00572687 | eff: 1 | fom: 30490.6 | r2int: 3.27938e-05 | r2eff: 0 | hits: 10000 ] Gy
 ------------------------------------------------------------
 
-... write Root file : scoring.root - done
-... close Root file : scoring.root - done
+... write file : scoring.root - done
+... close file : scoring.root - done
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

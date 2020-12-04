@@ -94,7 +94,7 @@ public:
   void set_max(const T& a_value) {m_max = a_value;}
 public:
   const T& variable() const {return m_ref;}
-  T& variable() {return const_cast<T&>(m_ref);}  
+  T& variable() {return const_cast<T&>(m_ref);}
 protected:
   T m_min;    //Minimum value if leaf range is specified
   T m_max;    //Maximum value if leaf range is specified
@@ -178,7 +178,7 @@ public:
   void set_max(int a_value) {m_max = a_value;}
 public:
   const std::string& variable() const {return m_ref;}
-  std::string& variable() {return const_cast<std::string&>(m_ref);}  
+  std::string& variable() {return const_cast<std::string&>(m_ref);}
 protected:
   int m_min; //Minimum value if leaf range is specified
   int m_max; //Maximum value if leaf range is specified
@@ -251,12 +251,12 @@ public:
 protected:
   leaf_std_vector_ref(const leaf_std_vector_ref& a_from):ibo(a_from),parent(a_from),m_ref(a_from.m_ref){}
   leaf_std_vector_ref& operator=(const leaf_std_vector_ref&){return *this;}
-public:  
+public:
   T get_max() const {return m_max;}
   void set_max(const T& a_value) {m_max = a_value;}
 public:
   const std::vector<T>& variable() const {return m_ref;}
-  std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}  
+  std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}
 protected:
   T m_min;    //Minimum value if leaf range is specified
   T m_max;    //Maximum value if leaf range is specified

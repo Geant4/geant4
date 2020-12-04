@@ -39,7 +39,7 @@ public:
       mem::decrement(s_new().c_str());
 #endif
     }
-    return true;    
+    return true;
   }
   virtual bool dump(std::ostream&) {
     //a_out << parent::m_value << std::endl;

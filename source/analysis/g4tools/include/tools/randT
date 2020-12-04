@@ -34,7 +34,7 @@ public:
     return (v2 * fac) * m_std_dev + m_mean;
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
   void set(REAL a_mean = 0,REAL a_std_dev = 1) {m_mean = a_mean;m_std_dev = a_std_dev;}
 protected:
   FLAT& m_flat;
@@ -61,7 +61,7 @@ public:
     return m_mean + displ;
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
 protected:
   FLAT& m_flat;
   REAL m_mean;
@@ -86,7 +86,7 @@ public:
     return -a_log(v)/m_rate;
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
 protected:
   FLAT& m_flat;
   REAL m_rate;
@@ -114,7 +114,7 @@ public:
     a_y = REAL(2) * u * v / s;
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
 protected:
   FLAT& m_flat;
 };
@@ -143,7 +143,7 @@ public:
     a_y *= a;
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
 protected:
   FLAT& m_flat;
 };
@@ -186,7 +186,7 @@ public:
     return UINT(value);
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
 protected:
   FLAT& m_flat;
   REAL m_mean;
@@ -218,7 +218,7 @@ public:
     /// The normal approximation is then recommended instead
     /// (with mean =*ntot+0.5 and standard deviation sqrt(ntot*prob*(1-prob)).
     ////////////////////////////////////////////////////////////////////////////////
-    if((m_p<REAL(0))||(REAL(1)<m_p)) return 0;    
+    if((m_p<REAL(0))||(REAL(1)<m_p)) return 0;
     UINT n = 0;
     for(UINT i=0;i<m_n;i++) {
       if(m_flat.shoot()>m_p) continue;
@@ -227,7 +227,7 @@ public:
     return n;
   }
   FLAT& flat() {return m_flat;}
-  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}  
+  void set_seed(unsigned int a_seed) {m_flat.set_seed(a_seed);}
 protected:
   FLAT& m_flat;
   UINT m_n;

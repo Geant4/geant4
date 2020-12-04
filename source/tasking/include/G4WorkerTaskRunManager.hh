@@ -48,6 +48,9 @@ class G4WorkerTaskRunManagerKernel;
 class G4WorkerTaskRunManager : public G4WorkerRunManager
 {
  public:
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+
+ public:
   typedef std::vector<G4String> G4StrVector;
 
  public:
@@ -69,12 +72,9 @@ class G4WorkerTaskRunManager : public G4WorkerRunManager
     readStatusFromFile = flag;
   }
 
-  virtual void DoBeamOn(G4int evts);
-  virtual void DoWork(G4int nevts);
-  virtual void InitializeForNewRun();
-  void SetConfirmBeamOn(G4bool val) { fConfirmBeamOn = val; }
-  G4WorkerThread* GetWorkerThread() const { return workerContext; }
+  virtual void DoCleanup();
   virtual void ProcessUI();
+  G4WorkerThread* GetWorkerThread() const { return workerContext; }
   G4StrVector GetCommandStack() const { return processedCommandStack; }
 
  protected:
@@ -84,8 +84,10 @@ class G4WorkerTaskRunManager : public G4WorkerRunManager
   void SetupDefaultRNGEngine();
 
  private:
-  G4bool fConfirmBeamOn;
   G4StrVector processedCommandStack;
+
+ private:
+  std::unique_ptr<ProfilerConfig> workerRunProfiler;
 };
 
 #endif  // G4WorkerTaskRunManager_h

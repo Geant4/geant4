@@ -33,13 +33,9 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "RE05WorkerInitialization.hh"
-#else
-#include "G4RunManager.hh"
 #include "RE05SteppingVerbose.hh"
-#endif
 
 #include "G4UImanager.hh"
 
@@ -60,60 +56,57 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  G4int number_of_threads = 4; // default number of threads
-  runManager->SetNumberOfThreads(number_of_threads);
-  runManager->SetUserInitialization(new RE05WorkerInitialization);
-#else
-  G4VSteppingVerbose* verbosity = new RE05SteppingVerbose;
+  auto verbosity = new RE05SteppingVerbose;
   G4VSteppingVerbose::SetInstance(verbosity);
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+  if(runManager->GetRunManagerType() == G4RunManager::masterRM)
+  {
+    runManager->SetNumberOfThreads(4);
+    runManager->SetUserInitialization(new RE05WorkerInitialization);
+  }
 
   G4String parallelWorldName = "ReadoutWorld";
   // User Initialization classes (mandatory)
   //
-  G4VUserDetectorConstruction* detector = new RE05DetectorConstruction();
+  auto detector = new RE05DetectorConstruction();
   detector->RegisterParallelWorld
        (new RE05CalorimeterParallelWorld(parallelWorldName));
   runManager->SetUserInitialization(detector);
   //
-  G4VModularPhysicsList* physicsList = new QBBC;
+  auto physicsList = new QBBC;
   physicsList
    ->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
   runManager->SetUserInitialization(physicsList);
   //
-  G4VUserActionInitialization* actions = new RE05ActionInitialization;
+  auto actions = new RE05ActionInitialization;
   runManager->SetUserInitialization(actions);
 
   runManager->Initialize();
 
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   visManager->Initialize();
 
   //get the pointer to the User Interface manager   
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  auto UImanager = G4UImanager::GetUIpointer();  
 
   if (!ui)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
   else           // interactive mode : define UI session
-    {
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
-    }
-
-  delete visManager;
+  {
+    UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
+  delete visManager;
   delete runManager;
 
   return 0;

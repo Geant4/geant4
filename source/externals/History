@@ -16,6 +16,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 2020 - G.Cosmo (externals-V10-06-05)
+- Synchronised with CLHEP-2.4.4.0:
+  o Removed obsolete #pragma interface/implementation in Vector classes.
+  o Get rid of switch statement in operator()/operator[] of Hep3Vector
+    Replaced dx/dy/dz with operator[] in Hep3Vector.
+    Replaced private dx/dy/dz with public x()/y()/z() in Hep3Vector
+  o Added missing includes in Vector and Random classes for translation
+    unit encapsulation.
+
+17 July 2020 - G.Cosmo (externals-V10-06-04)
+- CLHEP: Updated values in SystemOfUnits.h and PhysicalConstants.h for:
+  - e_SI, electron charge
+  - h_Planck, Planck constant
+  - Avogadro, Avogadro constant
+  - k_Boltzmann, Boltzmann constant
+  based on May 2019 redefinition of SI units. References:
+  https://en.wikipedia.org/wiki/2019_redefinition_of_the_SI_base_units
+  https://www.britannica.com/science/electron-charge.
+
+14 July 2020 - G. Cosmo (externals-V10-06-03)
+- CLHEP: Use 32-bit internal seeds types coherently in MixMaxRng.
+  Addressing CLHEP JIRA ticket #156.
+
 10 June 2020 - J. Madsen (externals-V10-06-02)
 - Migrated PTL's used of CMAKE_BINARY_DIR to PROJECT_BINARY_DIR
 - Fixed PTLConfig.cmake.in for testing

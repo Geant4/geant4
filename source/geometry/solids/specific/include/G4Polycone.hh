@@ -106,6 +106,9 @@ class G4Polycone : public G4VCSGfaceted
                          const G4AffineTransform& pTransform,
                          G4double& pmin, G4double& pmax) const;
 
+  G4double GetCubicVolume();
+  G4double GetSurfaceArea();
+
   G4ThreeVector GetPointOnSurface() const;
 
   void ComputeDimensions(       G4VPVParameterisation* p,
@@ -161,23 +164,7 @@ class G4Polycone : public G4VCSGfaceted
 
   // Methods for random point generation
 
-  G4ThreeVector GetPointOnCone(G4double fRmin1, G4double fRmax1,
-                               G4double fRmin2, G4double fRmax2,
-                               G4double zOne,   G4double zTwo,
-                               G4double& totArea) const;
-
-  G4ThreeVector GetPointOnTubs(G4double fRMin, G4double fRMax,
-                               G4double zOne,  G4double zTwo,
-                               G4double& totArea) const;
-
-  G4ThreeVector GetPointOnCut(G4double fRMin1, G4double fRMax1,
-                              G4double fRMin2, G4double fRMax2,
-                              G4double zOne,   G4double zTwo,
-                              G4double& totArea) const;
-
-  G4ThreeVector GetPointOnRing(G4double fRMin, G4double fRMax,
-                               G4double fRMin2, G4double fRMax2,
-                               G4double zOne) const;
+  void SetSurfaceElements() const;
 
  protected:  // without description
 
@@ -190,10 +177,10 @@ class G4Polycone : public G4VCSGfaceted
   G4PolyconeSideRZ* corners = nullptr;  // Corner r,z points
   G4PolyconeHistorical* original_parameters = nullptr;  // Original input params
 
-  // Our quick test
+  G4EnclosingCylinder* enclosingCylinder = nullptr; // Our quick test
 
-  G4EnclosingCylinder* enclosingCylinder = nullptr;
-
+  struct surface_element { G4double area = 0.; G4int i0 = 0, i1 = 0, i2 = 0; };
+  mutable std::vector<surface_element>* fElements = nullptr;
 };
 
 #include "G4Polycone.icc"

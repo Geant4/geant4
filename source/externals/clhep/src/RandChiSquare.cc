@@ -18,6 +18,9 @@
 #include "CLHEP/Random/DoubConv.h"
 #include "CLHEP/Utility/thread_local.h"
 #include <cmath>	// for std::log()
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

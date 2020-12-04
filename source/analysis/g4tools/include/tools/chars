@@ -8,7 +8,7 @@ namespace tools {
 
 // some char ASCII code :
 // \0      : 0
-// \n = LF : 10 
+// \n = LF : 10
 // \r = CR : 13
 // \t = HT : 9
 // ,       : 44

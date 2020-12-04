@@ -148,7 +148,7 @@ inline bool pto(std::ostream& a_writer,const std::string& a_class,const PROF& a_
       a_writer << a_sep << _bin_Sxw[i][iaxis] << a_sep << _bin_Sx2w[i][iaxis];
     }
     a_writer << std::endl;
-  }  
+  }
 
   return true;
 }

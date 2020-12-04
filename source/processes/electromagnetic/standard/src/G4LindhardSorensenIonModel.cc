@@ -54,12 +54,14 @@
 #include "G4Log.hh"
 #include "G4DeltaAngle.hh"
 #include "G4LindhardSorensenData.hh"
+#include "G4BraggIonModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
 G4LindhardSorensenData* G4LindhardSorensenIonModel::lsdata = nullptr;
+std::vector<G4float>* G4LindhardSorensenIonModel::fact[] = {nullptr};
 
 G4LindhardSorensenIonModel::G4LindhardSorensenIonModel(const G4ParticleDefinition*, 
                                                        const G4String& nam)
@@ -73,6 +75,7 @@ G4LindhardSorensenIonModel::G4LindhardSorensenIonModel(const G4ParticleDefinitio
   SetParticle(theElectron);
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
+  fBraggIonModel = new G4BraggIonModel();
   SetLowEnergyLimit(2.0*MeV);
 }
 
@@ -84,23 +87,23 @@ G4LindhardSorensenIonModel::~G4LindhardSorensenIonModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4LindhardSorensenIonModel::Initialise(const G4ParticleDefinition* p,
-                                            const G4DataVector&)
+                                            const G4DataVector& ptr)
 {
+  fBraggIonModel->Initialise(p, ptr);
   SetParticle(p);
-
-  //G4cout << "G4LindhardSorensenIonModel::Initialise for " << p->GetParticleName()
-  //         << G4endl;
+  //G4cout << "G4LindhardSorensenIonModel::Initialise for " 
+  //       << p->GetParticleName() << G4endl;
 
   // always false before the run
   SetDeexcitationFlag(false);
 
   if(nullptr == fParticleChange) {
     fParticleChange = GetParticleChangeForLoss();
-    if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+    if(UseAngularGeneratorFlag() && nullptr == GetAngularDistribution()) {
       SetAngularDistribution(new G4DeltaAngle());
     }
   }
-  if(IsMaster() && !lsdata) { 
+  if(IsMaster() && nullptr == lsdata) { 
     lsdata = new G4LindhardSorensenData();
   }
 }

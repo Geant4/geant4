@@ -4,7 +4,7 @@
 # Package: Geant4.src.G4processes.G4electromagnetic.G4emutils
 #
 # Sources description for a library.
-# Lists the sources and headers of the code explicitely.
+# Lists the sources and headers of the code explicitly.
 # Lists include paths needed.
 # Lists the internal granular and global dependencies of the library.
 # Source specific properties should be added at the end.
@@ -14,32 +14,9 @@
 #
 #------------------------------------------------------------------------------
 
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emutils
     HEADERS
         G4AngleDirect.hh
@@ -62,6 +39,8 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmMultiModel.hh
         G4EmParameters.hh
         G4EmParametersMessenger.hh
+        G4OpticalParameters.hh
+        G4OpticalParametersMessenger.hh
         G4EmProcessOptions.hh
         G4EmProcessSubType.hh
         G4EmSaturation.hh
@@ -91,7 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmConfigurator.cc
         G4EmCorrections.cc
         G4EmDataHandler.cc
-        G4EmElementSelector.cc 
+        G4EmElementSelector.cc
         G4EmExtraParameters.cc
         G4EmExtraParametersMessenger.cc
         G4EmLowEParameters.cc
@@ -100,6 +79,8 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmMultiModel.cc
         G4EmParameters.cc
         G4EmParametersMessenger.cc
+        G4OpticalParameters.cc
+        G4OpticalParametersMessenger.cc
         G4EmProcessOptions.cc
         G4EmSaturation.cc
         G4EnergyLossTables.cc

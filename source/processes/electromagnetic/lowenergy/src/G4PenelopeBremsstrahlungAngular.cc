@@ -219,7 +219,7 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
 	  //fill vectors
 	  for (k=0;k<NumberofZPoints;k++)
 	    {
-	      QQ1vector->PutValue(k,pZ[k],std::log(QQ1[k][i][j]));
+	      QQ1vector->PutValue(k,pZ[k],G4Log(QQ1[k][i][j]));
 	      QQ2vector->PutValue(k,pZ[k],QQ2[k][i][j]);
 	    }
 
@@ -259,7 +259,7 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
 
       for (j=0;j<NumberofKPoints;j++)
 	{
-	  Q1vector->PutValue(j,pK[j],std::log(Q1[i][j])); //logarithmic
+	  Q1vector->PutValue(j,pK[j],G4Log(Q1[i][j])); //logarithmic
 	  Q2vector->PutValue(j,pK[j],Q2[i][j]);
 	}
 

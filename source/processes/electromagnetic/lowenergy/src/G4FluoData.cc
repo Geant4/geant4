@@ -330,7 +330,7 @@ void G4FluoData::PrintData()
 	{ 
 	  G4int id = StartShellId(k,i);
 	// let's start from 1 because the first (index = 0) element of the vector
-	// is the id of the intial vacancy
+	// is the id of the initial vacancy
 	  G4double e = StartShellEnergy(k,i) /MeV;
 	  G4double p = StartShellProb(k,i); 
 	  G4cout << k <<") Shell id: " << id <<G4endl;

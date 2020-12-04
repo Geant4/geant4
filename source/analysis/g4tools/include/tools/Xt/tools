@@ -27,7 +27,7 @@ inline Pixel XWidgetGetPixelResource(Widget aWidget,const std::string& aName){
 
 inline Pixel XWidgetConvertStringToPixel(Widget aWidget,const std::string& aString){
   if(aString.empty()) return 0L;
-  if( (aString=="None") || (aString=="none") ) 
+  if( (aString=="None") || (aString=="none") )
     return XWidgetGetPixelResource(aWidget,std::string(XtNbackground));
   XrmValue from,to;
   from.size = aString.size()+1;
@@ -74,7 +74,7 @@ inline bool XWidgetSendMessage(Widget aWidget,long a_1,long a_2) {
   event.data.l[2]      = 0L;
   event.data.l[3]      = 0L;
   event.data.l[4]      = 0L;
-  if(XSendEvent(event.display,event.window,False,0L,(XEvent*)&event)==0) 
+  if(XSendEvent(event.display,event.window,False,0L,(XEvent*)&event)==0)
     return false;
   XFlush(event.display);
   return true;
@@ -86,7 +86,7 @@ inline void XClassGetName(WidgetClass aClass,std::string& a_value){
   a_value = std::string((char*)aClass->core_class.class_name);
 }
 inline Boolean XClassIsSubclass(WidgetClass aClass,WidgetClass aParent){
-  for (WidgetClass wc = aClass; wc != NULL; wc = wc->core_class.superclass) 
+  for (WidgetClass wc = aClass; wc != NULL; wc = wc->core_class.superclass)
     if (wc == aParent) return True;
   return False;
 }
@@ -128,7 +128,7 @@ inline void XWidgetGetChildren(Widget aWidget,std::vector<Widget>& aList){
   aList.clear();
   if(!XtIsComposite(aWidget)) return;
   CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
-  for (unsigned int count=0;count<cwp->num_children;count++) 
+  for (unsigned int count=0;count<cwp->num_children;count++)
     aList.push_back(cwp->children[count]);
 }
 inline void XWidgetGetPopupChildren(Widget aWidget,std::vector<Widget>& aList){
@@ -142,7 +142,7 @@ inline Widget XWidgetFindChild(Widget aWidget,const std::string& aName){
   if(!XtIsComposite(aWidget)) return 0;
   CompositePart* cwp = &(((CompositeWidget)aWidget)->composite);
   for (unsigned int count=0;count<cwp->num_children;count++) {
-    if(aName==std::string(XtName(cwp->children[count]))) 
+    if(aName==std::string(XtName(cwp->children[count])))
       return cwp->children[count];
   }
   return 0;
@@ -151,7 +151,7 @@ inline Widget XWidgetFindChild(Widget aWidget,const std::string& aName){
 #include <ostream>
 
 inline void XWidgetPrintChildren(Widget aWidget,std::ostream& a_out){
-  int number = XWidgetGetChildrenNumber(aWidget); 
+  int number = XWidgetGetChildrenNumber(aWidget);
   a_out << "XWidgetPrintChildren :"
         << " " <<  (unsigned long)aWidget
         << " number " << number

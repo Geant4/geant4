@@ -203,7 +203,7 @@ if( !ES_Data_Buffer.is_open() )
    }
 
  dataCS[Z] = new G4LPhysicsFreeVector(300,0.01,3.);
- 
+
  for (G4int i=0;i<300;++i)
    dataCS[Z]->PutValue(i,10.*i*1e-3,Polarized_ES_Data[Z]->at(i)*1e-22);
 
@@ -326,7 +326,7 @@ G4int energyindex=round(100*photonEnergy0)-1;
     //G4double theta =45.*CLHEP::pi/180.;
     //Theta is in degree to call scattering amplitudes
     G4int theta_in_degree =round(theta*180./CLHEP::pi);
-    
+
     //theta_in_degree=45;
 
     G4double am1=0,am2=0,am3=0,am4=0,aparaSquare=0,aperpSquare=0,apara_aper_Asterisk=0,img_apara_aper_Asterisk=0;
@@ -347,7 +347,7 @@ G4int energyindex=round(100*photonEnergy0)-1;
     G4ThreeVector Polarization_Linear1(0.,0.,0.);
     G4ThreeVector Polarization_Linear2(0.,0.,0.);
     G4ThreeVector Polarization_Circular(0.,0.,0.);
-    
+
 
 //Stokes parameters for the incoming and outgoing photon
 G4double Xi1=0, Xi2=0, Xi3=0, Xi1_Prime=0,Xi2_Prime=0,Xi3_Prime=0;
@@ -358,13 +358,14 @@ Xi1=gammaPolarization0.x();
 Xi2=gammaPolarization0.y();
 Xi3=gammaPolarization0.z();
 
-//Polarization vector must be unit vector
-G4double polarization_magnitude=Xi1*Xi1+Xi2*Xi2+Xi3*Xi3;
-if ((polarization_magnitude)>1 || (Xi1*Xi1>1) || (Xi2*Xi2>1) || (Xi3*Xi3>1))
-{
-	G4cout<<"WARNING: G4JAEAPolarizedElasticScatteringModel is only compatible with a unit polarization vector."<<G4endl;
-	G4cout<<"The event is ignored."<<G4endl;
-	return;
+//Polarization vector must be unit vector (5% tolerance)
+
+if ((gammaPolarization0.mag())>1.05 || (Xi1*Xi1>1.05) || (Xi2*Xi2>1.05) || (Xi3*Xi3>1.05))
+  {
+     G4Exception("G4JAEAPolarizedElasticScatteringModel::SampleSecondaries()","em1006",
+		  JustWarning,
+		 "WARNING: G4JAEAPolarizedElasticScatteringModel is only compatible with a unit polarization vector.");
+     return;
 }
 //Unpolarized gamma rays
 if (Xi1==0 && Xi2==0 && Xi3==0)
@@ -509,10 +510,12 @@ G4double prob2=dsigmaL2/totalSigma;
 G4double probc=1-(prob1+prob2);
 
 //Check the Probability of polarization mixing
-if (abs(probc - dsigmaC)>=0.0001)
-{
-	G4cout<<"WARNING: Polarization mixing might be incorrect."<<G4endl;
-}
+ if (abs(probc - dsigmaC/totalSigma)>=0.0001)
+   {
+     G4Exception("G4JAEAPolarizedElasticScatteringModel::SampleSecondaries()","em1007",
+		 JustWarning,
+		 "WARNING: Polarization mixing might be incorrect.");
+   }
 
 // Generate outgoing photon direction
   G4ThreeVector finaldirection(0.0,0.0,0.0);

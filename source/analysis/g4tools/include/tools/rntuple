@@ -30,7 +30,7 @@ public:
   virtual void stop() {}
   virtual bool fetch_entry() const {return false;} //for binded column API.
 };
-  
+
 template <class T>
 class icolumn : public virtual icol {
 public:
@@ -71,13 +71,13 @@ public:
   virtual void stop() {}
 public:
   size_t number_of_columns() const {return columns().size();}
-  
+
   void column_names(std::vector<std::string>& a_names) const {
     a_names.clear();
     const std::vector<icol*>& _cols = columns();
     tools_vforcit(icol*,_cols,it) a_names.push_back((*it)->name());
   }
-  
+
   icol* find_icol_case_insensitive(const std::string& a_name) { //for gopaw and exlib::evaluator.
     std::string low_a_name = a_name;
     tolowercase(low_a_name);

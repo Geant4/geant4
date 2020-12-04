@@ -14,6 +14,68 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-Oct-2020 A. Ribon         (had-hadronization-V10-06-08)
+-  G4VLongitudinalStringDecay : fix by Vladimir Uzhinsky in the method
+   ProduceOneHadron to remove an inconsistency in the treatment of
+   low-mass strings with respect to the method
+   G4QGSMFragmentation::FragmentString .
+   (As consequence of this inconsistency, interactions with fewer
+    intra-nuclear collisions were favored, therefore producing
+    fewer secondary hadrons.)
+
+17-Oct-2020 V. Ivanchenko    (had-hadronization-V10-06-07)
+-  G4VLongitudinalStringDecay, G4QGSMFragmentation - added protections
+   for arguments of G4Exp to avoid precision lost in same cases
+
+29-Sep-2020 A. Ribon         (had-hadronization-V10-06-06)
+Changes made by Vladimir Uzhinsky in order to improve the agreement
+of FTF simulations with NA49 experimental data (on Pt-Xf correlations
+for various particles produced in pp interactions at 158 GeV/c):
+-  G4LundStringFragmentation : introduced a new parameter (as a class
+   data member), a kind of "temperature", for sampling the Pt of
+   produced hadrons; this parameter has been tuned for different
+   fragmentation processes.
+   Moreover, the string direction (one of string's properties,
+   whose value can be either +1 for projectile-like strings or
+   -1 for target-like strings) is now treated correctly and used
+   to invert the results of the string fragmentation (in the string
+   rest frame) when the string direction is -1.
+-  G4FragmentingString : erased some inconsistencies.
+-  G4VLongitudinalStringDecay : clean-up.
+   
+08-Sep-2020 A. Ribon         (had-hadronization-V10-06-05)
+-  G4VLongitudinalStringDecay : made the logic clearer for Coverity,
+   but without any effect on the results.
+
+28-Jul-2020 A. Ribon         (had-hadronization-V10-06-04)
+-  G4QGSMFragmentation : proper exit in the method FragmentString
+   when the string mass is below the threshold.
+
+24-Jul-2020 A. Ribon         (had-hadronization-V10-06-03)
+-  G4LundStringFragmentation, G4QGSMFragmentation : if the flag for
+   heavy (charmed and bottom) hadrons is enabled, then non-zero
+   probabilities for c-cbar and b-bbar creation from the vacuum are set,
+   allowing charmed and bottom hadrons to be created during the string
+   fragmentation of ordinary (i.e. not heavy) projectile hadron nuclear
+   reactions.
+-  G4VLongitudinalStringDecay : in the method SetMinMasses, set the
+   constituent masses of charm and bottom quarks; introduced also a new
+   pre-processor option for debugging heavy hadrons, switched off by
+   default; improved comments.
+-  G4LundStringFragmentation : extension to charm and bottom quarks of the
+   methods Quark_AntiQuark_lastSplitting and Quark_Diquark_lastSplitting;
+   added protections in the method FragmentString to avoid rare crashes
+   seen with heavy hadrons.
+-  G4HadronBuilder : fixed condition in the method Barion to take into
+   account the extension to charm and bottom quarks; moreover, for both
+   Meson and Barion methods, we have to force by hand that the heavy
+   hadron produced by the string fragmentation is one of the few available
+   in Geant4 (in particular, all heavy hadron resonances are transformed
+   into close heavy hadron ground states). Introduced also a new
+   pre-processor option for debugging heavy hadrons, switched off by default.
+-  G4ExcitedStringDecay : add protection in the FragmentStrings method
+   to avoid rare crashes seen with heavy hadrons.
+
 10-Jun-2020 A. Ribon         (had-hadronization-V10-06-02)
 -  Improved treatment of antibaryon interactions in QGS
    (made by Vladimir Uzhinsky):

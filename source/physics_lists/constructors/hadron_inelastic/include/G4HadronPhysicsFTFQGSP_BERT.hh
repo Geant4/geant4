@@ -35,124 +35,34 @@
 // Given that it is an experimental, and perhaps temporary, new type of
 // hadron physics, corresponding builders are not created and everything
 // is implemented directly in this class.
+//
+// Modified:
+// 19.10.2020 V.Ivanchenko use inheritance from G4HadronPhysicsFTFP_BERT
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsFTFQGSP_BERT_h
 #define G4HadronPhysicsFTFQGSP_BERT_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include "G4HadronPhysicsFTFP_BERT.hh"
 
-#include "G4VPhysicsConstructor.hh"
-
-#include "G4NeutronRadCapture.hh"
-
-#include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-#include "G4FTFModel.hh"
-#include "G4QGSMFragmentation.hh"
-#include "G4ExcitedStringDecay.hh"
-#include "G4CascadeInterface.hh"
-
-#include "G4HadronCaptureProcess.hh"
-
-#include "G4NeutronInelasticProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4PionMinusInelasticProcess.hh"
-#include "G4PionPlusInelasticProcess.hh"
-#include "G4KaonMinusInelasticProcess.hh"
-#include "G4KaonPlusInelasticProcess.hh"
-#include "G4KaonZeroLInelasticProcess.hh"
-#include "G4KaonZeroSInelasticProcess.hh"
-
-#include "G4LambdaInelasticProcess.hh"
-#include "G4AntiLambdaInelasticProcess.hh"
-#include "G4SigmaPlusInelasticProcess.hh"
-#include "G4SigmaMinusInelasticProcess.hh"
-#include "G4AntiSigmaPlusInelasticProcess.hh"
-#include "G4AntiSigmaMinusInelasticProcess.hh"
-#include "G4XiZeroInelasticProcess.hh"
-#include "G4XiMinusInelasticProcess.hh"
-#include "G4AntiXiZeroInelasticProcess.hh"
-#include "G4AntiXiMinusInelasticProcess.hh"
-#include "G4OmegaMinusInelasticProcess.hh"
-#include "G4AntiOmegaMinusInelasticProcess.hh"
-
-#include "G4AntiProtonInelasticProcess.hh"
-#include "G4AntiNeutronInelasticProcess.hh"
-#include "G4AntiDeuteronInelasticProcess.hh"
-#include "G4AntiTritonInelasticProcess.hh"
-#include "G4AntiHe3InelasticProcess.hh"
-#include "G4AntiAlphaInelasticProcess.hh"
-
-
-class G4HadronPhysicsFTFQGSP_BERT : public G4VPhysicsConstructor
+class G4HadronPhysicsFTFQGSP_BERT : public G4HadronPhysicsFTFP_BERT
 {
   public: 
     G4HadronPhysicsFTFQGSP_BERT(G4int verbose =1);
     G4HadronPhysicsFTFQGSP_BERT(const G4String& name, G4bool quasiElastic=false);
     virtual ~G4HadronPhysicsFTFQGSP_BERT();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructProcess() override;
 
-  private:
-    void CreateModels();
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsFTFQGSP_BERT(G4HadronPhysicsFTFQGSP_BERT &) = delete;
+    G4HadronPhysicsFTFQGSP_BERT & operator =
+    (const G4HadronPhysicsFTFQGSP_BERT &right) = delete;
 
-    G4NeutronRadCapture* theNeutronCaptureModel;
+  protected:
+    void DumpBanner() override;
 
-    G4PreCompoundModel* thePreEquilib;
-    G4GeneratorPrecompoundInterface* theCascade;
-    G4FTFModel* theStringModel;
-    G4ExcitedStringDecay* theStringDecay;
-    G4QGSMFragmentation* theQGSMFragmentation;
-    G4ExcitationHandler* theHandler;
-
-    G4TheoFSGenerator* theModel1;
-    G4TheoFSGenerator* theModel2;
-    G4TheoFSGenerator* theModel3;
-    G4CascadeInterface* theBertini1;
-    G4CascadeInterface* theBertini2;
-
-    G4HadronCaptureProcess* theNeutronCaptureProcess;
-
-    G4NeutronInelasticProcess*   theNeutronInelastic;
-    G4ProtonInelasticProcess*    theProtonInelastic;
-    G4PionMinusInelasticProcess* thePionMinusInelastic;
-    G4PionPlusInelasticProcess*  thePionPlusInelastic;
-    G4KaonMinusInelasticProcess* theKaonMinusInelastic;
-    G4KaonPlusInelasticProcess*  theKaonPlusInelastic;
-    G4KaonZeroLInelasticProcess* theKaonZeroLInelastic;
-    G4KaonZeroSInelasticProcess* theKaonZeroSInelastic;
-
-    G4LambdaInelasticProcess*         theLambdaInelastic;
-    G4AntiLambdaInelasticProcess*     theAntiLambdaInelastic;
-    G4SigmaMinusInelasticProcess*     theSigmaMinusInelastic;
-    G4AntiSigmaMinusInelasticProcess* theAntiSigmaMinusInelastic;
-    G4SigmaPlusInelasticProcess*      theSigmaPlusInelastic;
-    G4AntiSigmaPlusInelasticProcess*  theAntiSigmaPlusInelastic;
-    G4XiZeroInelasticProcess*         theXiZeroInelastic;
-    G4AntiXiZeroInelasticProcess*     theAntiXiZeroInelastic;
-    G4XiMinusInelasticProcess*        theXiMinusInelastic;
-    G4AntiXiMinusInelasticProcess*    theAntiXiMinusInelastic;
-    G4OmegaMinusInelasticProcess*     theOmegaMinusInelastic;
-    G4AntiOmegaMinusInelasticProcess* theAntiOmegaMinusInelastic;
-
-    G4AntiProtonInelasticProcess*   theAntiProtonInelastic;
-    G4AntiNeutronInelasticProcess*  theAntiNeutronInelastic;
-    G4AntiDeuteronInelasticProcess* theAntiDeuteronInelastic;
-    G4AntiTritonInelasticProcess*   theAntiTritonInelastic;
-    G4AntiHe3InelasticProcess*      theAntiHe3Inelastic;
-    G4AntiAlphaInelasticProcess*    theAntiAlphaInelastic;
-
-    G4VCrossSectionDataSet* thePiXS;
-    G4VCrossSectionDataSet* theKaonAndHyperonXS;
-    G4VCrossSectionDataSet* theAntiNucleonXS;
-    G4VCrossSectionDataSet* theNeutronInelasticXS;
-    G4VCrossSectionDataSet* theNeutronCaptureXS;
 };
 
 #endif

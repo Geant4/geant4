@@ -59,6 +59,8 @@ class G4VUserTrackInformation;
 class G4TrackingManager 
 ////////////////////////
 {
+ public:
+  using ProfilerConfig = G4Track::ProfilerConfig;
 
   public:
 

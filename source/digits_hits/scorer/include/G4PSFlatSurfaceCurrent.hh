@@ -29,7 +29,7 @@
 #ifndef G4PSFlatSurfaceCurrent_h
 #define G4PSFlatSurfaceCurrent_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 #include "G4Box.hh"
@@ -53,10 +53,12 @@
 // 17-Nov-2005 T.Aso, Bug fix for area definition.
 // 31-Mar-2007 T.Aso, Add option for normalizing by the area.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. Surface Current * track weight (y)    (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSFlatSurfaceCurrent : public G4VPrimitiveScorer
+class G4PSFlatSurfaceCurrent : public G4VPrimitivePlotter
 {
  
   public: // with description

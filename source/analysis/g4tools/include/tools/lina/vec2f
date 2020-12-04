@@ -32,25 +32,25 @@ public: //operators
   vec2f operator*(float a_v) const {
     return vec2f(m_data[0]*a_v,
                  m_data[1]*a_v);
-  }    
+  }
   vec2f operator+(const vec2f& a_v) const {
     return vec2f(m_data[0]+a_v.m_data[0],
                  m_data[1]+a_v.m_data[1]);
-  }    
+  }
   vec2f operator-(const vec2f& a_v) const {
     return vec2f(m_data[0]-a_v.m_data[0],
                  m_data[1]-a_v.m_data[1]);
-  }    
-  vec2f& operator+=(const vec2f& a_v) {   
+  }
+  vec2f& operator+=(const vec2f& a_v) {
     m_data[0] += a_v.m_data[0];
     m_data[1] += a_v.m_data[1];
     return *this;
-  }    
-  vec2f& operator*=(float a_v) {   
+  }
+  vec2f& operator*=(float a_v) {
     m_data[0] *= a_v;
     m_data[1] *= a_v;
     return *this;
-  }    
+  }
   vec2f operator-() const {
     return vec2f(-m_data[0],-m_data[1]);
   }
@@ -80,7 +80,7 @@ public: //iv2sg
   void negate() {
     m_data[0] = -m_data[0];
     m_data[1] = -m_data[1];
-  }    
+  }
 
 private:static void check_instantiation() {vec2f v(0,0);v.set_value(1,1);}
 };

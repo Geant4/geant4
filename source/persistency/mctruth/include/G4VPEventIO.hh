@@ -23,50 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPEventIO.hh
+// G4VPEventIO
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Class Description:
+//
+// Abstract base class for storing and retrieving an event object.
 
-#ifndef V_P_EVENT_I_O_HH
-#define V_P_EVENT_I_O_HH 1
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
+#ifndef G4VPEVENTIO_HH
+#define G4VPEVENTIO_HH 1
 
 #include "G4Event.hh"
 #include "G4Pevent.hh"
 
-// Class Description:
-//   Abstract base class for storing and retrieving an event object
-
 class G4VPEventIO
 {
-    public: // With description
-      G4VPEventIO();
+  public:
+
+    G4VPEventIO();
       // Constructor
 
-      virtual ~G4VPEventIO() {};
+    virtual ~G4VPEventIO() {}
       // Destructor
 
-    public: // With description
-      void SetVerboseLevel(int v) { m_verbose = v; };
-      // Set verbose level.
+    inline void SetVerboseLevel(G4int v) { m_verbose = v; }
+      // Sets verbose level
 
-      inline G4int CurrentEventID() { return m_currentEvtID; };
-      // Returns the current event id.
+    inline G4int CurrentEventID() { return m_currentEvtID; }
+      // Returns the current event id
 
-      virtual G4bool Store( const G4Event* anEvent ) =0;
-      // Store a Geant4 event.
+    virtual G4bool Store(const G4Event* anEvent) = 0;
+      // Store a Geant4 event
 
-      virtual G4bool Retrieve( G4Pevent*& anEvent ) =0;
-      // Retrieve a Geant4 event.
+    virtual G4bool Retrieve(G4Pevent*& anEvent) = 0;
+      // Retrieve a Geant4 event
 
-      virtual G4bool Retrieve( G4Event*& anEvent ) =0;
-      // Retrieve a Geant4 event.
+    virtual G4bool Retrieve(G4Event*& anEvent) = 0;
+      // Retrieve a Geant4 event
 
-    protected:
-      G4int m_verbose;
-      G4int m_currentEvtID;
+  protected:
 
-}; // End of class G4VPEventIO
+    G4int m_verbose = 0;
+    G4int m_currentEvtID = 0;
+};
 
 #endif
-

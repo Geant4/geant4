@@ -77,7 +77,7 @@ OpenGLAreaClassRec  openGLAreaClassRec = {
     XtInheritAcceptFocus,            /* assign input focus to widget     */
     XtVersion,                       /* version of intrinsics used       */
     NULL,                            /* list of callback offsets         */
-    XtInheritTranslations,           /* translations                     */        
+    XtInheritTranslations,           /* translations                     */
     XtInheritQueryGeometry,          /* return preferred geometry        */
     XtInheritDisplayAccelerator,     /* display your accelerator         */
     NULL                             /* pointer to extension record      */
@@ -92,9 +92,9 @@ OpenGLAreaClassRec  openGLAreaClassRec = {
 },
 /* OpenGLArea */
 {
-   NULL 
+   NULL
 }
-   
+
 };
 
 WidgetClass openGLAreaWidgetClass = (WidgetClass) &openGLAreaClassRec;
@@ -112,7 +112,7 @@ static void InitializeWidget(Widget a_request,Widget This,ArgList a_args,Cardina
   athis.visual          = CopyFromParent;
   athis.installColormap = False;
   athis.glContext       = NULL;
-  
+
  {Display* display;
   Screen* screen;
   int iscreen;
@@ -120,7 +120,7 @@ static void InitializeWidget(Widget a_request,Widget This,ArgList a_args,Cardina
   display = XtDisplay(This);
   screen = XtScreen(This);
   iscreen = XScreenNumberOfScreen(screen);
-  
+
  {int error,event;
   if(glXQueryExtension(display,&error,&event)==0) {
     CWarn ("X server does not have OpenGL extensions.\n");
@@ -171,8 +171,8 @@ static void InitializeWidget(Widget a_request,Widget This,ArgList a_args,Cardina
         None
       };
       vinfo = glXChooseVisual  (display,iscreen,atbs);
-    }      
-  }    
+    }
+  }
 
   if(vinfo==NULL) {
     CWarn ("Can't choose a visual.\n");
@@ -185,7 +185,7 @@ static void InitializeWidget(Widget a_request,Widget This,ArgList a_args,Cardina
       athis.installColormap = False;
     } else {
       This->core.colormap =
-	XCreateColormap (display,XRootWindow(display,iscreen),vinfo->visual, AllocNone); 
+	XCreateColormap (display,XRootWindow(display,iscreen),vinfo->visual, AllocNone);
       athis.installColormap = True;
     }
     if(This->core.colormap==0L) {
@@ -250,9 +250,9 @@ static void DestroyWidget(Widget This) {
 #define IFMOD(a_field)  if(athis.a_field != acur.a_field)
 static Boolean SetValues(Widget a_current,Widget a_request,Widget This,ArgList a_args,Cardinal* a_argn) {
   IFMOD(doubleBufferOn) {
-    /* Can't change buffering here if X window is created. 
+    /* Can't change buffering here if X window is created.
        With OpenGL, buffering fix parameter of the X window.
-       Buffering must be choosen before the execution of the 
+       Buffering must be choosen before the execution of the
        Realize method that create the window. */
     if(XtIsRealized(This) && (athis.installColormap==True)) {
       CWarn("Can't change buffering after \"realization\" of the widget.\n");
@@ -279,7 +279,7 @@ static void ChangeWidgetSize(Widget This) {
   printf("debug : OpenGLArea : ChangeWidgetSize : end\n");
 #endif
 }
-     
+
 static void DrawWidget(Widget  This,XEvent* a_event,Region a_region) {
 #ifdef DEBUG
   printf("debug : OpenGLArea : DrawWidget : %s\n",XtName(This));
@@ -354,28 +354,28 @@ int OpenGLAreaWrite_gl2ps(Widget This,const char* aFileName,const char* opts) {
 
   inlib_c_gl2ps_set_gl_funcs(&s_OpenGL_funcs);
 
-  options = TOOLS_GL2PS_OCCLUSION_CULL 
-    | TOOLS_GL2PS_BEST_ROOT 
+  options = TOOLS_GL2PS_OCCLUSION_CULL
+    | TOOLS_GL2PS_BEST_ROOT
     | TOOLS_GL2PS_SILENT
     | TOOLS_GL2PS_DRAW_BACKGROUND;
   sort = TOOLS_GL2PS_BSP_SORT;
   //sort = TOOLS_GL2PS_SIMPLE_SORT;
-    
+
   vp[0] = 0;
   vp[1] = 0;
   vp[2] = This->core.width;
   vp[3] = This->core.height;
 
-  inlib_c_gl2psBeginPage("title","exlib_Xt_OpenGLArea", 
-                 vp,TOOLS_GL2PS_EPS,sort,options, 
-                 TOOLS_GL_RGBA,0, NULL,0,0,0,bufsize, 
+  inlib_c_gl2psBeginPage("title","exlib_Xt_OpenGLArea",
+                 vp,TOOLS_GL2PS_EPS,sort,options,
+                 TOOLS_GL_RGBA,0, NULL,0,0,0,bufsize,
                  file,aFileName);
-    
+
  {XoAnyCallbackStruct value;
   value.reason = XoCR_PAINT;
   value.event = 0;
   XtCallCallbacks(This,XoNpaintCallback,(XtPointer)&value);}
-    
+
   inlib_c_gl2psEndPage();
 
   inlib_c_gl2ps_reset_gl_funcs();
@@ -417,7 +417,7 @@ static void EventHandler(Widget This,XtPointer a_tag,XEvent* a_event ,Boolean* a
 /*------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------*/
 static void XWidgetInstallColormap(Widget This) {
-/* 
+/*
   From Mesa/widgets/GLwDrawingArea.c/post_colormap routine.
   Could use also XtSetWMColormapWindows.
 */
@@ -458,7 +458,7 @@ static void XWidgetInstallColormap(Widget This) {
     if(ws!=NULL) XFree(ws);
     ws = (Window*)malloc ( 2 * sizeof(Window));
   } else {
-    ws = (Window*)realloc (ws,(wn + 2) * sizeof(Window));  
+    ws = (Window*)realloc (ws,(wn + 2) * sizeof(Window));
   }
   if(ws==NULL) return;
   if(found==-1) {

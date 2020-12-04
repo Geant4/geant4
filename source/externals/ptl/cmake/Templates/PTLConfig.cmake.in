@@ -85,6 +85,10 @@ else()
         find_package(TBB @TBB_VERSION@ REQUIRED)
     endif()
 
+    if(NOT TARGET @LIBNAME@-compile-options)
+      include("@PROJECT_BINARY_DIR@/@PROJECT_NAME@-interface.cmake")
+    endif()
+
     foreach(_COMPONENT ${_PTL_AVAILABLE_COMPONENTS})
         if(NOT TARGET @LIBNAME@-${_COMPONENT})
             include("@PROJECT_BINARY_DIR@/@PROJECT_NAME@-${_COMPONENT}.cmake")
@@ -104,21 +108,6 @@ endif()
 # internal PTL include directory
 #
 set(@PROJECT_NAME@_INCLUDE_DIRS ${@PROJECT_NAME@_INCLUDE_DIR})
-
-
-#------------------------------------------------------------------------------#
-#   CXX standard
-#
-if(DEFINED CMAKE_CXX_STANDARD)
-    if("${CMAKE_CXX_STANDARD}" VERSION_LESS 11)
-        set(CMAKE_CXX_STANDARD 11)
-        set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    endif()
-else(DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD @CMAKE_CXX_STANDARD@)
-endif(DEFINED CMAKE_CXX_STANDARD)
-
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 #------------------------------------------------------------------------------#

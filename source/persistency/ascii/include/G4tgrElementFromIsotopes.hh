@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrElementFromIsotopes
+// G4tgrElementFromIsotopes
 //
 // Class description:
 //
 // Transient class of a chemical element.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrElementFromIsotopes_h
-#define G4tgrElementFromIsotopes_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrElementFromIsotopes_hh
+#define G4tgrElementFromIsotopes_hh 1
 
 #include "globals.hh"
 
@@ -47,27 +42,27 @@
 
 class G4tgrElementFromIsotopes : public G4tgrElement
 {
-  public:  // with description
+  public:
 
     G4tgrElementFromIsotopes();
-   ~G4tgrElementFromIsotopes();
+    ~G4tgrElementFromIsotopes();
 
-    G4tgrElementFromIsotopes( const std::vector<G4String>& wl );
+    G4tgrElementFromIsotopes(const std::vector<G4String>& wl);
       // Construct the G4tgrElementFromIsotopes (fill its data members)
-      // interpreting the data in the list of words 'wl' 
+      // interpreting the data in the list of words 'wl'
 
-    G4int GetNumberOfIsotopes() const             { return theNoIsotopes;    }
-    const G4String& GetComponent( G4int n ) const { return theComponents[n]; }
-    G4double  GetAbundance( G4int n ) const       { return theAbundances[n]; }
+    G4int GetNumberOfIsotopes() const { return theNoIsotopes; }
+    const G4String& GetComponent(G4int n) const { return theComponents[n]; }
+    G4double GetAbundance(G4int n) const { return theAbundances[n]; }
 
     friend std::ostream& operator<<(std::ostream&,
-                                    const G4tgrElementFromIsotopes& );
+                                    const G4tgrElementFromIsotopes&);
+
   private:
 
-    G4int theNoIsotopes;
+    G4int theNoIsotopes = 0;
     std::vector<G4String> theComponents;
     std::vector<G4double> theAbundances;
-
 };
 
 #endif

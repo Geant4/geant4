@@ -191,6 +191,10 @@ public:
   // total number of models
   inline G4int NumberOfModels() const;
 
+  // hide  assignment operator
+  G4EmModelManager(G4EmModelManager &) = delete;
+  G4EmModelManager & operator=(const G4EmModelManager &right) = delete;
+
 private:
 
   inline G4double ComputeDEDX(G4VEmModel* model,
@@ -199,14 +203,7 @@ private:
                               G4double cutEnergy,
                               G4double minEnergy);
 
-  // hide  assignment operator
-
-  G4EmModelManager(G4EmModelManager &) = delete;
-  G4EmModelManager & operator=(const G4EmModelManager &right) = delete;
-
 // =====================================================================
-
-private:
 
   const G4DataVector*    theCuts;
   G4DataVector*          theCutsNew;

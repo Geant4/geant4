@@ -148,7 +148,7 @@ void G4EmParameters::Initialise()
   lowestTripletEnergy = 1.0*CLHEP::MeV;
   maxNIELEnergy = 0.0;
   linLossLimit = 0.01;
-  bremsTh = maxKinEnergy;
+  bremsTh = bremsMuHadTh = maxKinEnergy;
   lambdaFactor = 0.8;
   factorForAngleLimit = 1.0;
   thetaLimit = CLHEP::pi;
@@ -170,6 +170,7 @@ void G4EmParameters::Initialise()
   mscStepLimit = fUseSafety;
   mscStepLimitMuHad = fMinimal;
   nucFormfactor = fExponentialNF;
+  fSStype = fWVI;
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
@@ -681,6 +682,24 @@ G4double G4EmParameters::BremsstrahlungTh() const
   return bremsTh;
 }
 
+void G4EmParameters::SetMuHadBremsstrahlungTh(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) {
+    bremsMuHadTh = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of bremsstrahlung threshold is out of range: " 
+       << val/GeV << " GeV is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MuHadBremsstrahlungTh() const
+{
+  return bremsMuHadTh;
+}
+
 void G4EmParameters::SetLambdaFactor(G4double val)
 {
   if(IsLocked()) { return; }
@@ -991,6 +1010,17 @@ G4MscStepLimitType G4EmParameters::MscMuHadStepLimitType() const
   return mscStepLimitMuHad;
 }
 
+void G4EmParameters::SetSingleScatteringType(G4eSingleScatteringType val)
+{
+  if(IsLocked()) { return; }
+  fSStype = val;
+}
+
+G4eSingleScatteringType G4EmParameters::SingleScatteringType() const
+{
+  return fSStype;
+}
+
 void 
 G4EmParameters::SetNuclearFormfactorType(G4NuclearFormfactorType val)
 {
@@ -1256,8 +1286,11 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Verbose level                                      " <<verbose << "\n";
   os << "Verbose level for worker thread                    " <<workerVerbose << "\n";
   os << "Bremsstrahlung energy threshold above which \n" 
-     << "  primary is added to the list of secondary        " 
+     << "  primary e+- is added to the list of secondary    " 
      <<G4BestUnit(bremsTh,"Energy") << "\n";
+  os << "Bremsstrahlung energy threshold above which primary\n" 
+     << "  muon/hadron is added to the list of secondary    " 
+     <<G4BestUnit(bremsMuHadTh,"Energy") << "\n";
   os << "Lowest triplet kinetic energy                      " 
      <<G4BestUnit(lowestTripletEnergy,"Energy") << "\n";
   os << "Enable sampling of gamma linear polarisation       " <<fPolarisation << "\n";
@@ -1326,6 +1359,7 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      << thetaLimit/CLHEP::rad << " rad\n";
   os << "Upper energy limit for e+- multiple scattering     " 
      << energyLimit/CLHEP::MeV << " MeV\n";
+  os << "Type of electron single scattering model           " <<fSStype << "\n";
   os << "Type of nuclear form-factor                        " <<nucFormfactor << "\n";
   os << "Screening factor                                   " <<factorScreen << "\n";
   os << "=======================================================================" << "\n";

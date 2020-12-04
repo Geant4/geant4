@@ -1,0 +1,39 @@
+This example shows how to use Geant4 as a generator for simulating
+inelastic hadron-nuclear interactions.
+
+The class HadronicGenerator is the "generator".
+The main hadronic models (FTFP, QGSP, BERT, BIC, IonBIC, INCL)
+and some combinations of two of them - in a transition energy region,
+similarly to what happens in physics lists - are available.
+See include/HadronicGenerator.hh for more detailed information.
+
+The main, Hadr09.cc, shows an example of how to use it.
+It samples randomly the projectile hadron, its energy, its direction
+and the target material, and then it calls the generator.
+Some information regarding the secondaries which are produced can be
+printed out.
+See the comments in Hadr09.cc for more information and how eventually
+to change some of its configurations.
+Notice that Hadr09.cc does nothing really useful: users should consider
+to use eventually only the class HadronicGenerator.
+
+Notice that the Geant4 run-manager is not used.
+
+To build this example:
+  mkdir Build; cd Build
+  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DGeant4_DIR=/path-to-geant4-libraries ../.
+  make
+
+To run it:
+  ./Hadr09 [Hadr09.in]
+  
+which simulates 1000 hadron-nucleus collisions, randomnly selected, and
+prints out some information about the secondaries produced in these
+interactions. It takes only a few seconds to run.
+Notice that the input file, Hadr09.in, which is empty, is not needed
+by Hadr09, and can be omitted; however, it has been created because
+is expected by system testing.
+
+Note: this example has been included in Geant4 10.7, but it should work
+      also for early versions of Geant4, in particular 10.6, 10.5 and 10.4.

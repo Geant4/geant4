@@ -73,6 +73,11 @@
 #include "G4DiffElasticRatio.hh"
 #include "G4AutoDelete.hh"
 
+#include "G4HadronicParameters.hh"
+#include "G4HadronicBuilder.hh"
+#include "G4HadParticles.hh"
+
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -302,4 +307,10 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       }
     }
   }
+
+  // Charm and bottom hadrons
+  if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
+    G4HadronicBuilder::BuildElastic( G4HadParticles::GetBCHadrons() );
+  }
+
 }

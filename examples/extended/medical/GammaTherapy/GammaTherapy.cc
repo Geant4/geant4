@@ -43,11 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
@@ -72,16 +68,12 @@ int main(int argc,char** argv) {
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
   G4cout << "===== GammaTherapy is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
 
   //set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();

@@ -29,7 +29,7 @@ namespace tools {
 namespace xml {
 
 class aidas {
-public:  
+public:
   //tree,out,verbose,path.
   typedef raxml_out (*reader)(tree&,std::ostream&,bool,void*);
   typedef std::map<std::string,reader> readers;
@@ -38,7 +38,7 @@ public:
   {
     add_default_readers();
   }
-  virtual ~aidas(){ 
+  virtual ~aidas(){
     m_objects.clear(); //it may delete histos, etc...
   }
 protected:
@@ -212,26 +212,26 @@ protected:
   static raxml_out read_dps(tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     std::string sname;
     a_tree.attribute_value(s_name(),sname);
-  
+
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_dps :" 
+      a_out << "tools::xml::aidas::read_dps :"
             << " with name " << sout(sname)
             << "..." << std::endl;
     }
 
     std::string spath;
     a_tree.attribute_value(s_path(),spath);
-  
+
     std::string stitle;
     a_tree.attribute_value(s_title(),stitle);
-  
+
     // Booking parameters :
     unsigned int dim = 0;
     if(!a_tree.attribute_value(s_dimension(),dim)) return raxml_out();
-  
+
     // Create a BatchLab::DataPointSet :
     histo::dps* dps = new histo::dps(stitle,dim);
-  
+
     // Data sub items :
    {looper _for(a_tree);
     while(tree* _tree = _for.next_tree()) {
@@ -245,12 +245,12 @@ protected:
     std::string sclass = histo::dps::s_class();
 
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_dps :" 
+      a_out << "tools::xml::aidas::read_dps :"
             << " with name " << sout(sname)
             << " and title " << sout(stitle)
             << " done." << std::endl;
     }
-  
+
     return raxml_out(hdl,sclass,spath,sname);
   }
 
@@ -263,9 +263,9 @@ public: //used in BatchLab::XML_DataReader.
 
     std::string sname;
     a_tree.attribute_value(s_name(),sname);
-  
+
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_histo :" 
+      a_out << "tools::xml::aidas::read_histo :"
             << " with name " << sout(sname)
             << "..." << std::endl;
     }
@@ -275,13 +275,13 @@ public: //used in BatchLab::XML_DataReader.
 
     std::string stitle;
     a_tree.attribute_value(s_title(),stitle);
-  
+
     // Booking parameters :
     std::vector<bn_t> bins(a_dim);
     std::vector<double> mns(a_dim);
     std::vector<double> mxs(a_dim);
     std::vector< std::vector<double> > edges(a_dim);
-  
+
     // Jump in subitems to find axes items :
     int not_found = -1;
     unsigned int found = 0;
@@ -314,7 +314,7 @@ public: //used in BatchLab::XML_DataReader.
         if(edges[iaxis].size()<=2) return raxml_out();
       }
     }
-    
+
     // Create a native histogram :
 
     base_handle* hdl = 0;
@@ -330,7 +330,7 @@ public: //used in BatchLab::XML_DataReader.
 
         // Sub items :
         pd_data hd = histo->get_histo_data();
-        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}  
+        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}
 
        {looper _for(a_tree);
         while(tree* _tree = _for.next_tree()) {
@@ -358,7 +358,7 @@ public: //used in BatchLab::XML_DataReader.
         }
 
         pd_data hd = histo->get_histo_data();
-        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}  
+        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}
 
        {looper _for(a_tree);
         while(tree* _tree = _for.next_tree()) {
@@ -386,7 +386,7 @@ public: //used in BatchLab::XML_DataReader.
         }
 
         pd_data hd(histo->dac());
-        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}  
+        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}
 
        {looper _for(a_tree);
         while(tree* _tree = _for.next_tree()) {
@@ -413,7 +413,7 @@ public: //used in BatchLab::XML_DataReader.
         }
 
         pd_data hd(histo->dac());
-        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}  
+        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}
 
        {looper _for(a_tree);
         while(tree* _tree = _for.next_tree()) {
@@ -442,7 +442,7 @@ public: //used in BatchLab::XML_DataReader.
         }
 
         pd_data hd(histo->dac());
-        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}  
+        if(hd.m_bin_number<=0) {delete histo;return raxml_out();}
 
        {looper _for(a_tree);
         while(tree* _tree = _for.next_tree()) {
@@ -466,12 +466,12 @@ public: //used in BatchLab::XML_DataReader.
     if(!hdl) return raxml_out();
 
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_histo :" 
+      a_out << "tools::xml::aidas::read_histo :"
             << " with name " << sout(sname)
             << " and title " << sout(stitle)
             << " done." << std::endl;
     }
-  
+
     return raxml_out(hdl,sclass,spath,sname);
   }
 
@@ -481,7 +481,7 @@ public: //used in BatchLab::XML_DataReader.
     a_tree.attribute_value(s_name(),sname);
 
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_cloud :" 
+      a_out << "tools::xml::aidas::read_cloud :"
             << " name " << sout(sname)
             << "..." << std::endl;
     }
@@ -517,7 +517,7 @@ public: //used in BatchLab::XML_DataReader.
           return raxml_out();
         }
       }}
-  
+
       hdl = new handle<histo::c1d>(cloud);
       sclass = histo::c1d::s_class();
 
@@ -533,7 +533,7 @@ public: //used in BatchLab::XML_DataReader.
           return raxml_out();
         }
       }}
-  
+
       hdl = new handle<histo::c2d>(cloud);
       sclass = histo::c2d::s_class();
 
@@ -549,15 +549,15 @@ public: //used in BatchLab::XML_DataReader.
           return raxml_out();
         }
       }}
-    
+
       hdl = new handle<histo::c3d>(cloud);
       sclass = histo::c3d::s_class();
     }
-  
+
     if(!hdl) return raxml_out();
 
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_cloud :" 
+      a_out << "tools::xml::aidas::read_cloud :"
             << " with name " << sout(sname)
             << " and title " << sout(stitle)
             << " done." << std::endl;
@@ -572,7 +572,7 @@ protected:
   /// read histo ////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////
   static bool read_axis(
-   tree& a_tree                      
+   tree& a_tree
   ,unsigned int a_dim
   ,int& aAxis
   ,bn_t& aNumberOfBins
@@ -589,27 +589,27 @@ protected:
     aMax = 0;
     aEdges.clear();
     aVariableBins = false;
-  
+
     const std::string& tagName = a_tree.tag_name();
-  
+
     std::string svalue;
-  
+
     if(tagName==s_axis()) {
-   
+
      {bn_t ival;
       if(!a_tree.attribute_value(s_numberOfBins(),svalue)) return false;
       if(!to<bn_t>(svalue,ival)) return false;
       aNumberOfBins = ival;}
-  
+
       if(!a_tree.attribute_value(s_min(),svalue)) return false;
       if(!to<double>(svalue,aMin)) return false;
-  
+
       if(!a_tree.attribute_value(s_max(),svalue)) return false;
       if(!to<double>(svalue,aMax)) return false;
-  
+
       if(!a_tree.attribute_value(s_direction(),svalue)) return false;
       if(!axis_index(a_dim,svalue,aAxis)) return false;
-  
+
       aEdges.push_back(aMin);
 
      {looper _for(a_tree);
@@ -627,9 +627,9 @@ protected:
       if(aVariableBins) { // Variable bins histo.
         if(aEdges.size()!=aNumberOfBins+1) return false;
       }
-  
-    } 
-  
+
+    }
+
     return true;
   }
   static bool to_double(const std::string& a_s,double& a_v,std::ostream& a_out,const std::string& a_what) {
@@ -646,20 +646,20 @@ protected:
 
   static bool read_bins(tree& a_tree,pd_data& aData,std::ostream& a_out,bool a_is_prof){
     const std::string& tagName = a_tree.tag_name();
-  
+
     std::string svalue;
-  
+
     if(tagName==s_annotation()) { //FIXME
-  
+
       return true;
-   
+
     } else if(tagName=="statistics") {
-   
+
       if(!a_tree.attribute_value(s_entries(),svalue)) return false;
       //unsigned int ival;
       //if(!to<unsigned int>(svalue,ival)) return false;
       // aData.fEntries = ival;
-  
+
       unsigned int found = 0;
 
      {looper _for(a_tree);
@@ -669,31 +669,31 @@ protected:
           double mean,rms;
           if(!_elem->attribute_value(s_mean(),svalue)) return false;
           if(!to<double>(svalue,mean)) return false;
-            
+
           if(!_elem->attribute_value(s_rms(),svalue)) return false;
           if(!to<double>(svalue,rms)) return false;
-            
+
           if(!_elem->attribute_value(s_direction(),svalue)) return false;
           int iaxis;
           if(!axis_index(aData.m_dimension,svalue,iaxis)) return false;
-  
+
           //aData.m_axes[iaxis].fSxw = mean; //Temporarily put mean on fSxw.
           //aData.m_axes[iaxis].fSx2w = rms; //Temporarily put mean on fSx2w.
-  
+
           found++;
         }
       }}
 
       if(found!=aData.m_dimension) return false;
-  
+
       return true;
-  
+
     } else if(tagName==s_axis()) {
-   
+
       return true;
-  
-    } 
-  
+
+    }
+
     unsigned int dimension = 0;
     if(tagName==s_data1d()) {
       dimension = 1;
@@ -702,21 +702,21 @@ protected:
     } else if(tagName==s_data3d()) {
       dimension = 3;
     }
-  
+
     if(dimension) {
-  
+
       if(dimension!=aData.m_dimension) return false;
-  
+
       std::string sbin;
       sprintf(sbin,32,"bin%dd",dimension);
-  
+
      {looper _for(a_tree);
       while(element* _elem = _for.next_element()) {
 
         if(_elem->name()==sbin) {
-  
+
           std::vector<int> is(dimension);
-  
+
           unsigned int entries = 0;
           double height = 0;
           double error = 0;
@@ -729,7 +729,7 @@ protected:
           double weightedRmsY = 0;
           double weightedRmsZ = 0;
           double rms = 0;
-  
+
           // Required :
           if(!_elem->attribute_value(s_entries(),svalue)) {
             a_out << "tools::xml::aidas::read_bins :"
@@ -739,13 +739,13 @@ protected:
             return false;
           }
           if(!to<unsigned int>(svalue,entries)) {
-            a_out << "tools::xml::aidas::read_bins :" 
-              << " problem converting a entries attribute to an unsigned int." 
+            a_out << "tools::xml::aidas::read_bins :"
+              << " problem converting a entries attribute to an unsigned int."
                 << " Value was " << sout(svalue) << "."
                 << std::endl;
             return false;
           }
-  
+
           // Optional :
           bool height_given;
           if(_elem->attribute_value(s_height(),svalue)) { //FIXME : optional ?
@@ -753,13 +753,13 @@ protected:
             height_given = true;
           } else { // no "height".
             // It is assumed that at fill time the weight
-            // argument "w" had always been 1.          
+            // argument "w" had always been 1.
             //   w = 1
             //   sw = entries*1 = entries
             height = double(entries);
             height_given = false;
           }
-          
+
           if(_elem->attribute_value(s_error(),svalue)) { //FIXME : optional ?
             if(!to_double(svalue,error,a_out,s_error())) return false;
           } else { // no "error"
@@ -778,18 +778,18 @@ protected:
               }
             } else {
               // It is assumed that at fill time the weight
-              // argument "w" had always been 1.          
+              // argument "w" had always been 1.
               //   w = 1
               //   sw2 = entries*(w*w) = entries;
               //   error = sqrt(sw2) = sqrt(entries);
               error = ::sqrt(::fabs(double(entries)));
             }
           }
-  
+
           if(_elem->attribute_value(s_rms(),svalue)) {
             if(!to_double(svalue,rms,a_out,s_rms())) return false;
           }
-  
+
           if(dimension==1) {
             if(_elem->attribute_value(s_weightedMean(),svalue)) {
               if(!to_double(svalue,weightedMean,a_out,s_weightedMean())) return false;
@@ -830,7 +830,7 @@ protected:
               if(!to_double(svalue,weightedRmsZ,a_out,s_weightedRmsZ())) return false;
             }
           }
-            
+
          {for(unsigned int index=0;index<dimension;index++) {
             std::string s = "binNum";
             if(dimension!=1) {
@@ -839,7 +839,7 @@ protected:
               else if(index==2) s += "Z";
             }
             if(!_elem->attribute_value(s,svalue)) {
-              a_out << "tools::xml::aidas::read_bins :" 
+              a_out << "tools::xml::aidas::read_bins :"
                   << " a <bin1d> has no " << s << std::endl;
               return false;
             }
@@ -850,90 +850,90 @@ protected:
             } else {
               int ival = 0;
               if(!to<int>(svalue,ival)) {
-                a_out << "tools::xml::aidas::read_bins :" 
-                    << " problem converting binNum to an int." 
+                a_out << "tools::xml::aidas::read_bins :"
+                    << " problem converting binNum to an int."
                     << " Value was " << sout(svalue) << "."
                     << std::endl;
                 return false;
               }
               int ibin = ival;
-              if( (ibin<0) || (ibin>=(int)aData.m_axes[index].bins()) ) { 
-                a_out << "tools::xml::aidas::read_bins :" 
-                    << " a binNum is out of range." 
+              if( (ibin<0) || (ibin>=(int)aData.m_axes[index].bins()) ) {
+                a_out << "tools::xml::aidas::read_bins :"
+                    << " a binNum is out of range."
                     << std::endl;
                 return false;
               }
               is[index] = ibin;
             }
           }}
-  
+
           // If we are here, then we have a valid bin :
           bn_t offset;
           histo::get_offset(aData.m_axes,is,offset);
           aData.m_bin_entries[offset] = entries;
-  
+
           if(!a_is_prof) {
-  
+
             // From histo::base_histo, we have :
             //  height = sw
             //  error = sqrt(sw)
             //  weightedMean = sxw/sw
             //  weightedRms = sqrt(fabs(sx2w/sw - (sxw/sw)**2))
-  
+
             double sw = height;
             aData.m_bin_Sw[offset] = sw;
             aData.m_bin_Sw2[offset] = error * error;
             if(dimension==1) {
               aData.m_bin_Sxw[offset][0] = weightedMean * sw;
-              aData.m_bin_Sx2w[offset][0] = 
+              aData.m_bin_Sx2w[offset][0] =
                 (weightedRms * weightedRms + weightedMean * weightedMean) * sw;
             } else if(dimension==2){
               // X
               aData.m_bin_Sxw[offset][0] = weightedMeanX * sw;
-              aData.m_bin_Sx2w[offset][0] = 
+              aData.m_bin_Sx2w[offset][0] =
                 (weightedRmsX*weightedRmsX + weightedMeanX*weightedMeanX) * sw;
               // Y :
               aData.m_bin_Sxw[offset][1] = weightedMeanY * sw;
-              aData.m_bin_Sx2w[offset][1] = 
+              aData.m_bin_Sx2w[offset][1] =
                 (weightedRmsY*weightedRmsY + weightedMeanY*weightedMeanY) * sw;
             } else if(dimension==3){
               // X
               aData.m_bin_Sxw[offset][0] = weightedMeanX * sw;
-              aData.m_bin_Sx2w[offset][0] = 
+              aData.m_bin_Sx2w[offset][0] =
                 (weightedRmsX*weightedRmsX + weightedMeanX*weightedMeanX) * sw;
               // Y :
               aData.m_bin_Sxw[offset][1] = weightedMeanY * sw;
-              aData.m_bin_Sx2w[offset][1] = 
+              aData.m_bin_Sx2w[offset][1] =
                 (weightedRmsY*weightedRmsY + weightedMeanY*weightedMeanY) * sw;
               // Z :
               aData.m_bin_Sxw[offset][2] = weightedMeanZ * sw;
-              aData.m_bin_Sx2w[offset][2] = 
+              aData.m_bin_Sx2w[offset][2] =
                 (weightedRmsZ*weightedRmsZ + weightedMeanZ*weightedMeanZ) * sw;
             }
-  
+
           } else { // Profile :
-  
+
             // bin writing is :
             // " height=" << sout(aObj.bin_height(aIndex))
             // " error=" << sout(aObj.bin_error(aIndex))
             // " weightedMean=" << sout(aObj.bin_mean(aIndex))
             // " rms=" << sout(aObj.bin_rms_value(aIndex))
             // " weightedRms=" << sout(bin_rms(aIndex));
-  
+
             // From inlib profile, we have :
             //  height = svw / sw
             //  error = sqrt(fabs(sv2w/sw - (svw/sw)**2))/sqrt(sw)
             //  rms = sqrt(fabs(sv2w/sw - (svw/sw)**2))
             //  weightedMean = sxw/sw
             //  weightedRms = sqrt(fabs(sx2w/sw - (sxw/sw)**2))
-  
+
             // Then :
             //  sw = (rms/error)**2
             //  svw = sw * height
             //  sv2w = sw * (rms**2 + height**2)
             //  sxw = weightedMean * sw
             //  sx2w = (weightedRms*weightedRms+weightedMean*weightedMean) * sw;
-  
+
             double sw = 0;
             if(error==0) {
               // sv2w/sw = (svw/sw)**2
@@ -950,19 +950,19 @@ protected:
             aData.m_bin_Sw2[offset] = 0; //FIXME
             if(dimension==1) {
               aData.m_bin_Sxw[offset][0] = weightedMean * sw;
-              aData.m_bin_Sx2w[offset][0] = 
+              aData.m_bin_Sx2w[offset][0] =
                 (weightedRms * weightedRms + weightedMean * weightedMean) * sw;
             } else if(dimension==2){
               aData.m_bin_Sxw[offset][0] = weightedMeanX * sw;
               aData.m_bin_Sxw[offset][1] = weightedMeanY * sw;
-              aData.m_bin_Sx2w[offset][0] = 
+              aData.m_bin_Sx2w[offset][0] =
                 (weightedRmsX*weightedRmsX + weightedMeanX*weightedMeanX) * sw;
-              aData.m_bin_Sx2w[offset][1] = 
+              aData.m_bin_Sx2w[offset][1] =
                 (weightedRmsY*weightedRmsY + weightedMeanY*weightedMeanY) * sw;
             }
             aData.m_bin_Svw[offset] = sw * height;
             aData.m_bin_Sv2w[offset] = sw * (rms * rms + height * height);
-    
+
           }
         }
       }}
@@ -1030,10 +1030,10 @@ protected:
                                  std::vector<colbook>& a_booking,
                                  std::ostream& a_out){
     a_found = false;
-    a_booking.clear();  
+    a_booking.clear();
 
     const std::string& tag_name = a_tree.tag_name();
-  
+
     if(tag_name=="columns") {
 
      {looper _for(a_tree);
@@ -1042,14 +1042,14 @@ protected:
         if(_elem->name()=="column") {
           std::string stype;
           if(!_elem->attribute_value(s_type(),stype)) {
-            a_out << "tools::xml::aidas::read_ntu_columns :" 
+            a_out << "tools::xml::aidas::read_ntu_columns :"
                   << " atb type missing on <column>"
                   << std::endl;
             return false;
           }
           std::string sname;
           if(!_elem->attribute_value(s_name(),sname)) {
-            a_out << "tools::xml::aidas::read_ntu_columns :" 
+            a_out << "tools::xml::aidas::read_ntu_columns :"
                   << " atb name missing on <column>"
                   << std::endl;
             return false;
@@ -1068,34 +1068,34 @@ protected:
       }}
 
       a_found = true;
-    } 
+    }
     return true;
   }
-  
+
   static bool read_ntu_rows(tree& a_tree,
                                    aida::base_ntu& a_ntu,
                                    bool& a_found,
                                    std::ostream& a_out){
     a_found = false;
-  
+
     const std::string& tag_name = a_tree.tag_name();
-  
+
     if(tag_name==s_annotation()) { //FIXME
-  
+
       return true;
-   
+
     } else if(tag_name==s_columns()) {
-  
+
       return true;
-  
+
     } else if(tag_name==s_rows()) {
-  
+
       // Sub items :
      {looper _for(a_tree);
       while(tree* _tree = _for.next_tree()) {
 
         if(!read_ntu_rows(*_tree,a_ntu,a_found,a_out)) {
-          a_out << "tools::xml::aidas::read_ntu_rows :" 
+          a_out << "tools::xml::aidas::read_ntu_rows :"
                 << " sub read_ntu_rows failed."
                 << std::endl;
           return false;
@@ -1104,11 +1104,11 @@ protected:
       }}
 
       a_found = true;
-  
+
       return true;
-  
+
     } else if(tag_name==s_row()) {
-   
+
       const std::vector<aida::base_col*>& cols = a_ntu.columns();
 
       std::vector<unsigned int> intus;
@@ -1122,7 +1122,7 @@ protected:
         }
         index++;
       }}
-  
+
       std::string svalue;
 
      {unsigned int icol = 0;
@@ -1132,28 +1132,28 @@ protected:
 
         if(_elem->name()==s_entry()) {
           if(!_elem->attribute_value(s_value(),svalue)) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
                   << " can't get \"value\" attribute." << std::endl;
             return false;
           }
           if(icol>=inot_ntus.size()) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
                   << " too much <entry>." << std::endl;
             return false;
           }
           if(inot_ntus[icol]>=cols.size()) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
                   << " too much <entry>." << std::endl;
             return false;
           }
 
           aida::base_col* bcol = cols[inot_ntus[icol]];
 
-          aida::aida_base_col* abcol = 
+          aida::aida_base_col* abcol =
           safe_cast<aida::base_col,aida::aida_base_col>(*bcol);
 
           if(!abcol->s_fill(svalue)) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
                   << " can't get \"value\" attribute." << std::endl;
             return false;
           }
@@ -1161,7 +1161,7 @@ protected:
         }
 
       }}}
-  
+
       // Sub items (entryITuple) :
      {unsigned int icol = 0;
 
@@ -1172,31 +1172,31 @@ protected:
         if(  (_tag_name==s_entryITuple())  || //aida.dtd spec.
              (_tag_name==s_entryTuple())   ){ //backward comp.
           if(icol>=intus.size()) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
                   << " too much <entry>." << std::endl;
             return false;
-          }      
+          }
           if(intus[icol]>=cols.size()) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
                   << " too much <entry>." << std::endl;
             return false;
-          }      
+          }
 
           aida::base_col* bcol = cols[intus[icol]];
           aida::aida_col_ntu* col_ntu = safe_cast<aida::base_col,aida::aida_col_ntu>(*bcol);
           if(!col_ntu) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
-                  << " can't cast to bcol_ntu." 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
+                  << " can't cast to bcol_ntu."
                   << std::endl;
             return false;
           }
           aida::base_ntu* ntu = col_ntu->get_to_fill();
           if(!ntu) {
-            a_out << "tools::xml::aidas::read_ntu_rows :" 
-                  << " get_to_fill() returned null." 
+            a_out << "tools::xml::aidas::read_ntu_rows :"
+                  << " get_to_fill() returned null."
                   << std::endl;
             return false;
-          }         
+          }
 
          {looper _for2(*_tree);
           while(tree* _tree2 = _for2.next_tree()) {
@@ -1208,30 +1208,30 @@ protected:
         }
 
       }}}
-  
+
       if(!a_ntu.add_row()) {
-        a_out << "tools::xml::aidas::read_ntu_rows :" 
+        a_out << "tools::xml::aidas::read_ntu_rows :"
               << " can't add row to ntuple."
               << std::endl;
         return false;
       }
-  
+
       return true;
-  
+
     }
-  
-    a_out << "tools::xml::aidas::read_ntu_rows :" 
+
+    a_out << "tools::xml::aidas::read_ntu_rows :"
           << " unknown item class " << sout(tag_name) << std::endl;
-  
+
     return false;
   }
 
   static raxml_out read_ntu(tree& a_tree,std::ostream& a_out,bool a_verbose,void*){
     std::string sname;
     a_tree.attribute_value(s_name(),sname);
-  
+
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_ntu :" 
+      a_out << "tools::xml::aidas::read_ntu :"
             << " with name " << sout(sname)
             << "..." << std::endl;
     }
@@ -1241,12 +1241,12 @@ protected:
 
     std::string stitle;
     a_tree.attribute_value(s_title(),stitle);
-  
+
     //FIXME annotation
-  
+
     // Booking parameters :
     std::vector<colbook> booking;
-  
+
     // Jump in subitems to find columns items :
     bool found = false;
 
@@ -1257,12 +1257,12 @@ protected:
     }}
 
     if(!found) {
-      a_out << "tools::xml::aidas::read_ntu :" 
+      a_out << "tools::xml::aidas::read_ntu :"
             << " for ntuple name " << sout(sname)
             << " unable to read columns..." << std::endl;
       return raxml_out();
     }
-  
+
     // Create a aida::ntuple :
     aida::ntuple* ntu = new aida::ntuple(a_out,stitle);
    {tools_vforcit(colbook,booking,it) {
@@ -1277,7 +1277,7 @@ protected:
     }}
 
     if(!ntu->columns().size()) { //??? we could have an empty ntu !
-      a_out << "tools::xml::aidas::read_ntu :" 
+      a_out << "tools::xml::aidas::read_ntu :"
             << " for ntuple name " << sout(sname)
             << " unable to create a aida::ntuple." << std::endl;
       delete ntu;
@@ -1291,7 +1291,7 @@ protected:
     while(tree* _tree = _for.next_tree()) {
 
       if(!read_ntu_rows(*_tree,*ntu,found,a_out)) {
-        a_out << "tools::xml::aidas::read_ntu :" 
+        a_out << "tools::xml::aidas::read_ntu :"
               << " for ntuple name " << sout(sname)
               << " unable to read rows." << std::endl;
         delete ntu;
@@ -1300,13 +1300,13 @@ protected:
       if(found) break;
 
     }}
-    
+
     if(a_verbose) {
-      a_out << "tools::xml::aidas::read_ntu :" 
+      a_out << "tools::xml::aidas::read_ntu :"
             << " name " << sout(sname)
             << " done." << std::endl;
     }
-    
+
     std::string sclass = aida::ntuple::s_class();
     return raxml_out(new handle<aida::ntuple>(ntu),sclass,spath,sname);
   }
@@ -1325,9 +1325,9 @@ protected:
     if(tagName==s_annotation()) { //FIXME
 
       return true;
- 
+
     } else if(tagName==s_entries1d()) {
- 
+
      {looper _for(a_tree);
       while(element* _elem = _for.next_element()) {
         if(_elem->name()==s_entry1d()) {
@@ -1341,9 +1341,9 @@ protected:
         }
       }}
       return true;
-  
+
     } else if(tagName==s_histogram1d()) {
-  
+
       raxml_out ro = read_h1d(a_tree,a_out,a_verbose,0);
       if(ro.cls()==histo::h1d::s_class()) {
         histo::h1d* h = (histo::h1d*)ro.object();
@@ -1353,26 +1353,26 @@ protected:
         }
       }
       return true;
-  
+
     }
-  
+
     return false;
   }
-  
+
   static bool read_cloud_data(tree& a_tree,
                               histo::c2d& aCloud,
                               bool a_verbose,
                               std::ostream& a_out){
     const std::string& tagName = a_tree.tag_name();
-  
+
     std::string svalue;
-  
+
     if(tagName==s_annotation()) { //FIXME
-  
+
       return true;
-   
+
     } else if(tagName==s_entries2d()) {
-   
+
      {looper _for(a_tree);
       while(element* _elem = _for.next_element()) {
         if(_elem->name()==s_entry2d()) {
@@ -1388,9 +1388,9 @@ protected:
         }
       }}
       return true;
-  
+
     } else if(tagName==s_histogram2d()) {
-  
+
       raxml_out ro = read_h2d(a_tree,a_out,a_verbose,0);
       if(ro.cls()==histo::h2d::s_class()) {
         histo::h2d* h = (histo::h2d*)ro.object();
@@ -1400,9 +1400,9 @@ protected:
         }
       }
       return true;
-  
+
     }
-  
+
     return false;
   }
 
@@ -1411,15 +1411,15 @@ protected:
                               bool a_verbose,
                               std::ostream& a_out){
     const std::string& tagName = a_tree.tag_name();
-  
+
     std::string svalue;
-  
+
     if(tagName==s_annotation()) { //FIXME
-  
+
       return true;
-   
+
     } else if(tagName==s_entries3d()) {
-   
+
      {looper _for(a_tree);
       while(element* _elem = _for.next_element()) {
         if(_elem->name()==s_entry3d()) {
@@ -1437,9 +1437,9 @@ protected:
         }
       }}
       return true;
-  
+
     } else if(tagName==s_histogram3d()) {
-  
+
       raxml_out ro = read_h3d(a_tree,a_out,a_verbose,0);
       if(ro.cls()==histo::h3d::s_class()) {
         histo::h3d* h = (histo::h3d*)ro.object();
@@ -1449,25 +1449,25 @@ protected:
         }
       }
       return true;
-  
+
     }
-  
+
     return false;
   }
-  
+
   static bool read_dps_data(tree& a_tree,histo::dps& a_dps){
     const std::string& tagName = a_tree.tag_name();
 
     std::string svalue;
 
     if(tagName==s_annotation()) { //FIXME
-  
+
       return true;
-   
+
     } else if(tagName==s_dataPoint()) {
-   
+
       histo::data_point& point = a_dps.add_point();
-  
+
       unsigned int coord = 0;
 
      {looper _for(a_tree);
@@ -1484,19 +1484,19 @@ protected:
           if(_elem->attribute_value(s_errorMinus(),svalue)) {
             if(!to<double>(svalue,errorMinus)) return false;
           }
-  
+
           histo::measurement& m = point.coordinate(coord);
           m.set_value(value);
           m.set_error_plus(errorPlus);
           m.set_error_minus(errorMinus);
-  
+
           coord++;
         }
       }}
       return true;
-  
+
     }
-  
+
     return false;
   }
 

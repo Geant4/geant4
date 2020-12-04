@@ -72,6 +72,7 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ModifiedMephi.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
@@ -116,6 +117,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
       }
     }
   }
+  SetAngularDistribution(new G4ModifiedMephi());
 
   if(p) { SetParticle(p); }
 }
@@ -376,21 +378,18 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   const G4Element* anElement = SelectRandomAtom(couple,particle,kineticEnergy);
   G4double Z = anElement->GetZ();
 
-  G4double totalEnergy   = kineticEnergy + mass;
-  G4double totalMomentum = sqrt(kineticEnergy*(kineticEnergy + 2.0*mass));
-
   G4double func1 = tmin*
     ComputeDMicroscopicCrossSection(kineticEnergy,Z,tmin);
 
   G4double lnepksi, epksi;
   G4double func2;
 
-  G4double xmin = G4Log(tmin/MeV);
+  G4double xmin = G4Log(tmin/CLHEP::MeV);
   G4double xmax = G4Log(kineticEnergy/tmin);
 
   do {
     lnepksi = xmin + G4UniformRand()*xmax;
-    epksi   = MeV*G4Exp(lnepksi);
+    epksi   = CLHEP::MeV*G4Exp(lnepksi);
     func2   = epksi*ComputeDMicroscopicCrossSection(kineticEnergy,Z,epksi);
 
     // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
@@ -400,32 +399,34 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
 
   // ===== sample angle =====
 
-  G4double gam  = totalEnergy/mass;
-  G4double rmax = gam*std::min(1.0, totalEnergy/gEnergy - 1.0);
-  G4double rmax2= rmax*rmax;
-  G4double x = G4UniformRand()*rmax2/(1.0 + rmax2);
+  //
+  // angles of the emitted gamma using general interface
 
-  G4double theta = sqrt(x/(1.0 - x))/gam;
-  G4double sint  = sin(theta);
-  G4double phi   = twopi * G4UniformRand() ;
-  G4double dirx  = sint*cos(phi), diry = sint*sin(phi), dirz = cos(theta) ;
-
-  G4ThreeVector gDirection(dirx, diry, dirz);
-  gDirection.rotateUz(partDirection);
-
-  partDirection *= totalMomentum;
-  partDirection -= gEnergy*gDirection;
-  partDirection = partDirection.unit();
-
-  // primary change
-  kineticEnergy -= gEnergy;
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  fParticleChange->SetProposedMomentumDirection(partDirection);
-
-  // save secondary
-  G4DynamicParticle* aGamma = 
-    new G4DynamicParticle(theGamma,gDirection,gEnergy);
-  vdp->push_back(aGamma);
+  G4ThreeVector gamDir = 
+    GetAngularDistribution()->SampleDirection(dp, gEnergy, Z, 
+                                              couple->GetMaterial());
+  // create G4DynamicParticle object for the Gamma
+  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma, gamDir, gEnergy);
+  vdp->push_back(gamma);
+  // compute post-interaction kinematics of primary e-/e+ based on
+  // energy-momentum conservation
+  const G4double totMomentum = 
+    std::sqrt(kineticEnergy*(kineticEnergy + 2.0*mass));
+  G4ThreeVector dir =
+    (totMomentum*dp->GetMomentumDirection()-gEnergy*gamDir).unit();
+  const G4double finalE = kineticEnergy - gEnergy;
+  // if secondary gamma energy is higher than threshold(very high by default)
+  // then stop tracking the primary particle and create new secondary e-/e+
+  // instead of the primary one
+  if (gEnergy > SecondaryThreshold()) {
+    fParticleChange->ProposeTrackStatus(fStopAndKill);
+    fParticleChange->SetProposedKineticEnergy(0.0);
+    G4DynamicParticle* newdp = new G4DynamicParticle(particle, dir, finalE);
+    vdp->push_back(newdp);
+  } else { // continue tracking the primary e-/e+ otherwise
+    fParticleChange->SetProposedMomentumDirection(dir);
+    fParticleChange->SetProposedKineticEnergy(finalE);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

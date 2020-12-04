@@ -84,8 +84,8 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
                 // Fill the matrix with the information: voxel and associated energy deposit
                 // in the detector at the end of the event
                 
-                G4int HitCount = CHC -> entries();
-                for (G4int h=0; h<HitCount; h++)
+                size_t HitCount = CHC -> entries();
+                for (size_t h=0; h<HitCount; h++)
                 {
                     G4int i = ((*CHC)[h]) -> GetXID();
                     G4int j = ((*CHC)[h]) -> GetYID();

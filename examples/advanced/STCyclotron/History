@@ -1,18 +1,26 @@
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
-     =========================================================
- 		      Geant4 - radiprotection example
-     =========================================================
+     ==============================================================
+ 		      Geant4 - Solid-target cyclotron example
+     ==============================================================
 
                       Category History file
                       ---------------------
+12.11.2020 - S. Guatelli STCyclotron-V10-06-02
+- Migration to G4RunFactory
+
+05.11.2020 - Gunter Folger STCyclotron-V10-06-01
+- Update READme to recommended env variable G4PARTCILEHPDATA
+
+02.11.2020 - B.Morgan tag STCyclotron-V10-06-00
+- Support same CMake version range as core Geant4
 
 19.11.2019 - G. Cosmo tag STCyclotron-V10-05-01
 - Fixed compilation warnings for cases of implicit type conversions.
 
 08.11.2019 - S. Guatelli tag STCyclotron-V10-05-00
-             new example modelling a solid target of the cyclotron to study to 
+             new example modelling a solid target of the cyclotron to study to
              production of the radioisotope of interest for proton irradiation.
-             
+
 

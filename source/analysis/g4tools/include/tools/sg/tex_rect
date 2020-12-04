@@ -88,7 +88,7 @@ public:
 #ifdef TOOLS_SG_TEX_RECT_DEBUG
     a_action.out() << "tools::tex_rect::render : get_tex_id : " << _id << "." << std::endl;
 #endif
-  
+
     const state& state = a_action.state();
 
     //image must be 2^n,2^m in size !
@@ -182,7 +182,7 @@ public:
     int iy = int((imh*p.y()/h2+imh)*0.5f);
 
     //rgb of pixel :
-    std::vector<unsigned char> pixel;            
+    std::vector<unsigned char> pixel;
     if((ix<0)||(iy<0)||!_img.pixel(ix,iy,pixel)) {a_s.clear();return false;}
 
     a_s.clear();
@@ -235,7 +235,7 @@ public:
 
 protected:
   //virtual //NOTE : virtual for diaporama node. (but warning with clang -g4flags).
-  void update_sg(std::ostream& a_out) { 
+  void update_sg(std::ostream& a_out) {
     clean_gstos(); //must reset for all render_manager.
     if(height.value()<=0) {
       m_img.make_empty();

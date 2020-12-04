@@ -40,9 +40,9 @@ inline void tosu(T a_i,char a_s[],unsigned int& a_l) {
   char* end = a_s+a_l-1;
   for(unsigned int i=0;i<hl;i++) {
     char c = *end;
-    *end = *beg;      
+    *end = *beg;
     *beg = c;
-    beg++;end--;  
+    beg++;end--;
   }}
 }
 

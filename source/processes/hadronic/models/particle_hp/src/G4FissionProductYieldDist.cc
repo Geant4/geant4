@@ -79,6 +79,11 @@
 
 using CLHEP::pi;
 
+#ifdef G4MULTITHREADED
+#include "G4AutoLock.hh"
+G4Mutex G4FissionProductYieldDist::fissprodMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4FissionProductYieldDist::
 G4FissionProductYieldDist( G4int WhichIsotope,
                            G4FFGEnumerations::MetaState WhichMetaState,
@@ -107,42 +112,39 @@ G4FissionProductYieldDist( G4int WhichIsotope,
 }
 
 G4FissionProductYieldDist::
-G4FissionProductYieldDist( G4int WhichIsotope,
-                           G4FFGEnumerations::MetaState WhichMetaState,
-                           G4FFGEnumerations::FissionCause WhichCause,
-                           G4FFGEnumerations::YieldType WhichYieldType,
-                           G4int Verbosity,
-                           std::istringstream& dataStream)
-:   Isotope_(WhichIsotope),
-    MetaState_(WhichMetaState),
-    Cause_(WhichCause),
-    YieldType_(WhichYieldType),
-    Verbosity_(Verbosity)
+G4FissionProductYieldDist(G4int WhichIsotope,
+                          G4FFGEnumerations::MetaState WhichMetaState,
+                          G4FFGEnumerations::FissionCause WhichCause,
+                          G4FFGEnumerations::YieldType WhichYieldType,
+                          G4int Verbosity,
+                          std::istringstream& dataStream)
+ : Isotope_(WhichIsotope), MetaState_(WhichMetaState), Cause_(WhichCause),
+   YieldType_(WhichYieldType), Verbosity_(Verbosity)
 {
-    G4FFG_FUNCTIONENTER__
+  G4FFG_FUNCTIONENTER__
 
-    try
-    {
-        // Initialize the class
-        Initialize(dataStream);
-    } catch (std::exception& e)
-    {
-        G4FFG_FUNCTIONLEAVE__
-        throw e;
-    }
-
+  try
+  {
+    // Initialize the class
+    Initialize(dataStream);
+  } catch (std::exception& e)
+  {
     G4FFG_FUNCTIONLEAVE__
+    throw e;
+  }
+
+  G4FFG_FUNCTIONLEAVE__
 }
 
-void G4FissionProductYieldDist::
-Initialize( std::istringstream& dataStream )
+
+void G4FissionProductYieldDist::Initialize(std::istringstream& dataStream)
 {
 G4FFG_FUNCTIONENTER__
 
-    IncidentEnergy_ = 0.0;
-    TernaryProbability_ = 0;
-    AlphaProduction_ = 0;
-    SetNubar();
+  IncidentEnergy_ = 0.0;
+  TernaryProbability_ = 0;
+  AlphaProduction_ = 0;
+  SetNubar();
 
     // Set miscellaneous variables
     AlphaDefinition_ = reinterpret_cast<G4Ions*>(G4Alpha::Definition());
@@ -188,99 +190,98 @@ G4FFG_FUNCTIONENTER__
 G4FFG_FUNCTIONLEAVE__
 }
 
-G4DynamicParticleVector* G4FissionProductYieldDist::
-G4GetFission( void )
+G4DynamicParticleVector* G4FissionProductYieldDist::G4GetFission(void)
 {
 G4FFG_FUNCTIONENTER__
 
-    // Check to see if the user has set the alpha production to a somewhat
-    // reasonable level
-    CheckAlphaSanity();
+#ifdef G4MULTITHREADED
+  G4AutoLock lk(&G4FissionProductYieldDist::fissprodMutex);
+#endif
 
-    // Generate the new G4DynamicParticle pointers to identify key locations in
-    // the G4DynamicParticle chain that will be passed to the G4FissionEvent
-	G4ReactionProduct* FirstDaughter = NULL;
-	G4ReactionProduct* SecondDaughter = NULL;
-    std::vector< G4ReactionProduct* >* Alphas = new std::vector< G4ReactionProduct* >;
-    std::vector< G4ReactionProduct* >* Neutrons = new std::vector< G4ReactionProduct* >;
-    std::vector< G4ReactionProduct* >* Gammas = new std::vector< G4ReactionProduct* >;
+  // Check to see if the user has set the alpha production to a somewhat
+  // reasonable level
+  CheckAlphaSanity();
 
-    // Generate all the nucleonic fission products
-        // How many nucleons do we have to work with?
-        //TK modified 131108 
-        //const G4int ParentA = Isotope_ % 1000;
-        //const G4int ParentZ = (Isotope_ - ParentA) / 1000;
-        const G4int ParentA = (Isotope_/10) % 1000;
-        const G4int ParentZ = ((Isotope_/10) - ParentA) / 1000;
-        RemainingA_ = ParentA;
-        RemainingZ_ = ParentZ;
+  // Generate the new G4DynamicParticle pointers to identify key locations in
+  // the G4DynamicParticle chain that will be passed to the G4FissionEvent
+  G4ReactionProduct* FirstDaughter = NULL;
+  G4ReactionProduct* SecondDaughter = NULL;
+  std::vector< G4ReactionProduct* >* Alphas = new std::vector< G4ReactionProduct* >;
+  std::vector< G4ReactionProduct* >* Neutrons = new std::vector< G4ReactionProduct* >;
+  std::vector< G4ReactionProduct* >* Gammas = new std::vector< G4ReactionProduct* >;
 
-        // Don't forget the extra nucleons depending on the fission cause
-        switch(Cause_)
-        {
-        case G4FFGEnumerations::NEUTRON_INDUCED:
-            ++RemainingA_;
-            break;
+  // Generate all the nucleonic fission products
+  // How many nucleons do we have to work with?
+  //TK modified 131108 
+  const G4int ParentA = (Isotope_/10) % 1000;
+  const G4int ParentZ = ((Isotope_/10) - ParentA) / 1000;
+  RemainingA_ = ParentA;
+  RemainingZ_ = ParentZ;
 
-        case G4FFGEnumerations::PROTON_INDUCED:
-        	++RemainingZ_;
-        	break;
+  // Don't forget the extra nucleons depending on the fission cause
+  switch(Cause_)
+  {
+    case G4FFGEnumerations::NEUTRON_INDUCED:
+       ++RemainingA_;
+       break;
 
-        case G4FFGEnumerations::GAMMA_INDUCED:
-        case G4FFGEnumerations::SPONTANEOUS:
-        default:
-        	// Nothing to do here
-        	break;
-        }
+    case G4FFGEnumerations::PROTON_INDUCED:
+       ++RemainingZ_;
+       break;
 
-        // Ternary fission can be set by the user. Thus, it is necessary to
-        // sample the alpha particle first and the first daughter product
-        // second. See the discussion in
-        // G4FissionProductYieldDist::G4GetFissionProduct() for more information
-        // as to why the fission events are sampled this way.
-        GenerateAlphas(Alphas);
+    case G4FFGEnumerations::GAMMA_INDUCED:
+    case G4FFGEnumerations::SPONTANEOUS:
+    default:
+    // Nothing to do here
+    break;
+  }
 
-        // Generate the first daughter product
-        FirstDaughter = new G4ReactionProduct(GetFissionProduct());
-        RemainingA_ -= FirstDaughter->GetDefinition()->GetAtomicMass();
-        RemainingZ_ -= FirstDaughter->GetDefinition()->GetAtomicNumber();
-        if(Verbosity_ & G4FFGEnumerations::DAUGHTER_INFO)
-        {
-            G4FFG_SPACING__
-            G4FFG_LOCATION__
+  // Ternary fission can be set by the user. Thus, it is necessary to
+  // sample the alpha particle first and the first daughter product
+  // second. See the discussion in
+  // G4FissionProductYieldDist::G4GetFissionProduct() for more information
+  // as to why the fission events are sampled this way.
+  GenerateAlphas(Alphas);
+
+  // Generate the first daughter product
+  FirstDaughter = new G4ReactionProduct(GetFissionProduct());
+  RemainingA_ -= FirstDaughter->GetDefinition()->GetAtomicMass();
+  RemainingZ_ -= FirstDaughter->GetDefinition()->GetAtomicNumber();
+  if (Verbosity_ & G4FFGEnumerations::DAUGHTER_INFO) {
+    G4FFG_SPACING__
+    G4FFG_LOCATION__
             
-            G4cout << " -- First daughter product sampled" << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  Name:       " << FirstDaughter->GetDefinition()->GetParticleName() << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  Z:          " << FirstDaughter->GetDefinition()->GetAtomicNumber() << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  A:          " << FirstDaughter->GetDefinition()->GetAtomicMass() << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  Meta State: " << (FirstDaughter->GetDefinition()->GetPDGEncoding() % 10) << G4endl;
-        }
+    G4cout << " -- First daughter product sampled" << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  Name:       " << FirstDaughter->GetDefinition()->GetParticleName() << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  Z:          " << FirstDaughter->GetDefinition()->GetAtomicNumber() << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  A:          " << FirstDaughter->GetDefinition()->GetAtomicMass() << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  Meta State: " << (FirstDaughter->GetDefinition()->GetPDGEncoding() % 10) << G4endl;
+  }
 
-        GenerateNeutrons(Neutrons);
+  GenerateNeutrons(Neutrons);
 
-        // Now that all the nucleonic particles have been generated, we can
-        // calculate the composition of the second daughter product.
-        G4int NewIsotope = RemainingZ_ * 1000 + RemainingA_;
-        SecondDaughter = new G4ReactionProduct(GetParticleDefinition(NewIsotope, G4FFGEnumerations::GROUND_STATE));
-        if(Verbosity_ & G4FFGEnumerations::DAUGHTER_INFO)
-        {
-            G4FFG_SPACING__
-            G4FFG_LOCATION__
+  // Now that all the nucleonic particles have been generated, we can
+  // calculate the composition of the second daughter product.
+  G4int NewIsotope = RemainingZ_ * 1000 + RemainingA_;
+  SecondDaughter = new G4ReactionProduct(GetParticleDefinition(NewIsotope, G4FFGEnumerations::GROUND_STATE));
+  if (Verbosity_ & G4FFGEnumerations::DAUGHTER_INFO) {
+    G4FFG_SPACING__
+    G4FFG_LOCATION__
             
-            G4cout << " -- Second daughter product sampled" << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  Name:       " << SecondDaughter->GetDefinition()->GetParticleName() << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  Z:          " << SecondDaughter->GetDefinition()->GetAtomicNumber() << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  A:          " << SecondDaughter->GetDefinition()->GetAtomicMass() << G4endl;
-            G4FFG_SPACING__
-            G4cout << "  Meta State: " << (SecondDaughter->GetDefinition()->GetPDGEncoding() % 10) << G4endl;
-        }
+    G4cout << " -- Second daughter product sampled" << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  Name:       " << SecondDaughter->GetDefinition()->GetParticleName() << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  Z:          " << SecondDaughter->GetDefinition()->GetAtomicNumber() << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  A:          " << SecondDaughter->GetDefinition()->GetAtomicMass() << G4endl;
+    G4FFG_SPACING__
+    G4cout << "  Meta State: " << (SecondDaughter->GetDefinition()->GetPDGEncoding() % 10) << G4endl;
+  }
 
     // Calculate how much kinetic energy will be available
         // 195 to 205 MeV are available in a fission reaction, but about 20 MeV

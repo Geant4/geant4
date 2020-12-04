@@ -31,15 +31,21 @@
 
 #include "G4HadParticles.hh"
 
-// p, n, pi+, pi-, pbar, nbar
+// p, n, pi+, pi- 
 const std::vector<G4int> G4HadParticles::sLightHadrons = {
-  2212, 2112, 211, -211, -2212, -2112
+  2212, 2112, 211, -211
 };
 
-// Lambda, Sigma+, Sigma0, Sigma-, Xi0, Xi-, Omega-, anti_hyperons 
+// Lambda, Sigma+, Sigma-, Xi0, Xi-, Omega-
+// (note that Sigma0 has not been included because it decays very quickly)
 const std::vector<G4int> G4HadParticles::sHyperons = {
-  3122, 3222, 3212, 3112, 3322, 3312, 3334, 
-  -3122, -3222, -3212, -3112, -3322, -3312, -3334
+  3122, 3222, 3112, 3322, 3312, 3334
+};
+
+// anti_Lambda, anti_Sigma+, anti_Sigma-, anti_Xi0, anti_Xi-, anti_Omega- 
+// (note that anti_Sigma0 has not been included because it decays very quickly)
+const std::vector<G4int> G4HadParticles::sAntiHyperons = {
+  -3122, -3222, -3112, -3322, -3312, -3334
 };
 
 // K+, K-, KS, KL
@@ -47,26 +53,32 @@ const std::vector<G4int> G4HadParticles::sKaons = {
   321, -321, 310, 130
 };
 
+// Note: etac, JPsi, SigmaC++, SigmaC+, SigmaC0, Upsilon,
+//       SigmaB+, SigmaB0, SigmaB- are not included because
+// they decay very quickly (therefore, their hadronic
+// interactions can be neglected, as for pi0 and Sigma0).
 const std::vector<G4int> G4HadParticles::sBCHadrons = {
   // D+, D0, D-, D0bar, Ds+, Ds-
   411, 421, -411, -421, 431, -431,
   // B+, B0, B-, B0bar, Bs0, Bs0bar, Bc+, Bc-,
   521, 511, -521, -511, 531, -531, 541, -541,
-  // eta, eta', etaC, JPsi, Upsilon
-  221, 331, 441, 443, 553,
-  // LambdaC+, SigmaC++, SigmaC+, SigmaC0, XiC+, XiC0, OmegaC0
-  4122, 4222, 4212, 4112, 4232, 4132, 4332,  
-  // LambdaB, SigmaB+, SigmaB0, SigmaB-, XiB0, XiB-, OmegaB-
-  5122, 5222, 5212, 5112, 5232, 5132, 5332,
-  // anti_baryons
-  -4122, -4222, -4212, -4112, -4232, -4132, -4332,  
-  -5122, -5222, -5212, -5112, -5232, -5132, -5332
+  // LambdaC+, XiC+, XiC0, OmegaC0
+  4122, 4232, 4132, 4332,  
+  // LambdaB, XiB0, XiB-, OmegaB-
+  5122, 5232, 5132, 5332,
+  // corresponding anti_baryons
+  -4122, -4232, -4132, -4332,  
+  -5122, -5232, -5132, -5332
 };
 
-// d, t, He3, alpha, anti-ions
+// d, t, He3, alpha
 const std::vector<G4int> G4HadParticles::sLightIons = {
-  1000010020, 1000010030, 1000020030, 1000020040, 
-  -1000010020, -1000010030, -1000020030, -1000020040, 
+  1000010020, 1000010030, 1000020030, 1000020040 
+};
+
+// pbar, nbar, light anti-ions
+const std::vector<G4int> G4HadParticles::sLightAntiIons = {
+  -2212, -2112, -1000010020, -1000010030, -1000020030, -1000020040
 };
 
 // charged particles for EM physics
@@ -102,6 +114,11 @@ const std::vector<G4int>& G4HadParticles::GetHyperons()
   return sHyperons;
 }
 
+const std::vector<G4int>& G4HadParticles::GetAntiHyperons()
+{
+  return sAntiHyperons;
+}
+
 const std::vector<G4int>& G4HadParticles::GetKaons()
 {
   return sKaons;
@@ -115,6 +132,11 @@ const std::vector<G4int>& G4HadParticles::GetBCHadrons()
 const std::vector<G4int>& G4HadParticles::GetLightIons()
 {
   return sLightIons;
+}
+
+const std::vector<G4int>& G4HadParticles::GetLightAntiIons()
+{
+  return sLightAntiIons;
 }
 
 const std::vector<G4int>& G4HadParticles::GetHeavyChargedParticles()

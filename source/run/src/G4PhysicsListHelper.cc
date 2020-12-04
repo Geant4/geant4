@@ -330,7 +330,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
       }
 #endif
       G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable", "Run0105",
-                  JustWarning, "Fail to open ordering paramter table ");
+                  JustWarning, "Fail to open ordering parameter table ");
     }
     else
     {
@@ -540,7 +540,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess* process,
       G4cout << "G4PhysicsListHelper::RegisterProcess :" << pName << " for "
              << particle->GetParticleName() << " with  type/subtype =" << pType
              << "/" << pSubType
-             << "  is not reigstered in OrdingParameterTable  " << G4endl;
+             << "  is not registered in OrdingParameterTable  " << G4endl;
     }
 #endif
     G4Exception("G4PhysicsListHelper::RegisterProcess", "Run0109",
@@ -629,7 +629,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess* process,
     G4cout << "G4PhysicsListHelper::RegisterProcess :" << pName << " for "
            << particle->GetParticleName() << " with  type/subtype =" << pType
            << "/" << pSubType
-           << " is sucessfully registered with ordering parameters " << ord[0]
+           << " is successfully registered with ordering parameters " << ord[0]
            << ":" << ord[1] << ":" << ord[2] << G4endl;
   }
 #endif

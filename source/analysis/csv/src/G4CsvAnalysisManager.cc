@@ -28,7 +28,7 @@
 
 #include "G4CsvAnalysisManager.hh"
 #include "G4CsvFileManager.hh"
-#include "G4CsvNtupleManager.hh"
+#include "G4CsvNtupleFileManager.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4UnitsTable.hh"
@@ -75,8 +75,8 @@ G4bool G4CsvAnalysisManager::IsInstance()
 //_____________________________________________________________________________
 G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
  : G4ToolsAnalysisManager("Csv", isMaster),
-   fNtupleManager(nullptr),
-   fFileManager(nullptr)
+   fFileManager(nullptr),
+   fNtupleFileManager(nullptr)
 {
   if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
@@ -89,14 +89,15 @@ G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
    
   if ( isMaster ) fgMasterInstance = this;
   fgInstance = this;
-  fNtupleManager = new G4CsvNtupleManager(fState);
+
+  // File Manager
   fFileManager = std::make_shared<G4CsvFileManager>(fState);
-  fNtupleManager->SetFileManager(fFileManager);
-      // The managers will be deleted by the base class
-  
-  // Set managers to base class which takes then their ownreship
-  SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
+
+  // Ntuple file manager
+  fNtupleFileManager = std::make_shared<G4CsvNtupleFileManager>(fState);
+  fNtupleFileManager->SetFileManager(fFileManager);
+  fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 
 //_____________________________________________________________________________
@@ -109,30 +110,6 @@ G4CsvAnalysisManager::~G4CsvAnalysisManager()
 // 
 // private methods
 //
-
-//_____________________________________________________________________________
-G4bool G4CsvAnalysisManager::CloseNtupleFiles()
-{
-  auto ntupleVector
-    = fNtupleManager->GetNtupleDescriptionVector();
-
-  // Close ntuple files
-  for ( auto ntupleDescription : ntupleVector) {
-    fFileManager->CloseNtupleFile(ntupleDescription);
-  }
-
-  return true;
-}    
-
-
-// 
-// protected methods
-//
-
-// 
-// private methods
-//
-
 
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::WriteH1()
@@ -264,7 +241,7 @@ G4bool G4CsvAnalysisManager::Reset()
   auto result = G4ToolsAnalysisManager::Reset();
   finalResult = finalResult && result;
 
-  result = fNtupleManager->Reset(true);
+  result = fNtupleFileManager->Reset();
   finalResult = finalResult && result;
   
   return finalResult;
@@ -273,24 +250,23 @@ G4bool G4CsvAnalysisManager::Reset()
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
+  // Create ntuple manager(s)
+  // and set it to base class which takes then their ownership
+  SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
+
   auto finalResult = true;
-  auto result = fFileManager->SetFileName(fileName);
+
+  // Save file name in file manager
+  auto result = fFileManager->OpenFile(fileName);
   finalResult = finalResult && result;
 
-  // Only lock file name in file manager
-  result = fFileManager->OpenFile(fileName);
+  // Open ntuple files and create ntuples from bookings
+  result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
   finalResult = finalResult && result;
-
-  // Histogram and profile files are created/closed indivudually for each
-  // object in WriteHn{Pn] function
-
-  // Create ntuples if they are booked  
-  // (The files will be created with creating ntuples)
-  fNtupleManager->CreateNtuplesFromBooking();
 
   return finalResult;
-}  
-  
+}
+
 //_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::WriteImpl() 
 {
@@ -298,8 +274,9 @@ G4bool G4CsvAnalysisManager::WriteImpl()
   auto finalResult = true;
   
 #ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
+  if ( fState.GetVerboseL4() ) {
     fState.GetVerboseL4()->Message("write", "files", "");
+  }
 #endif
 
 
@@ -347,9 +324,9 @@ G4bool G4CsvAnalysisManager::WriteImpl()
   //}   
 
 #ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("write", "files", "", finalResult);
+  if ( fState.GetVerboseL2() ) {
+    fState.GetVerboseL2()->Message("write", "files", "", finalResult);
+  }
 #endif
 
   return result;
@@ -360,29 +337,26 @@ G4bool G4CsvAnalysisManager::CloseFileImpl(G4bool reset)
 {
   auto finalResult = true;
 
-  // Unlock file name only
-  auto result = fFileManager->CloseFile();
+  // close open files
+  auto result = fFileManager->CloseFiles();
   finalResult = finalResult && result;
    
   // Histogram and profile files are created/closed indivudually for each
   // object in WriteHn{Pn] function
-  // In sequential mode or in MT mode only on workers
-  result = CloseNtupleFiles();
+  
+  result = fNtupleFileManager->ActionAtCloseFile(reset);
   finalResult = finalResult && result;
 
-  // reset data
+  // Reset data
   if ( reset ) {
     result = Reset();
-  } else {
-    // ntuple must be reset 
-    result = fNtupleManager->Reset(true);
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "Resetting data failed";
+      G4Exception("G4CsvAnalysisManager::CloseFile()",
+                "Analysis_W021", JustWarning, description);
+    }
   }
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "      " << "Resetting data failed";
-    G4Exception("G4CsvAnalysisManager::CloseFile()",
-              "Analysis_W021", JustWarning, description);
-  } 
   finalResult = finalResult && result;
 
   return finalResult; 

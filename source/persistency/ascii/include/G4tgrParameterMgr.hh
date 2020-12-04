@@ -23,48 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrParameterMgr
+// G4tgrParameterMgr
 //
 // Class description:
 //
 // Class to manage parameters. It is a singleton.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrParameterMgr_h
-#define G4tgrParameterMgr_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrParameterMgr_hh
+#define G4tgrParameterMgr_hh 1
 
 #include <map>
 #include <vector>
 
-typedef std::map< G4String, G4String > G4mapss;
+#include "globals.hh"
 
-class G4tgrParameterMgr 
-{ 
-  public:   // with description
+using G4mapss = std::map<G4String, G4String>;
 
-    static G4tgrParameterMgr* GetInstance();  
-      // Get the only instance 
+class G4tgrParameterMgr
+{
+  public:
 
-    void AddParameterNumber( const std::vector<G4String>& wl,
-                                   G4bool mustBeNew = 0 );
-    void AddParameterString( const std::vector<G4String>& wl,
-                                   G4bool mustBeNew = 0 );
+    static G4tgrParameterMgr* GetInstance();
+      // Get the only instance
+
+    void AddParameterNumber(const std::vector<G4String>& wl,
+                            G4bool mustBeNew = false);
+    void AddParameterString(const std::vector<G4String>& wl,
+                            G4bool mustBeNew = false);
       // Add to theParameterList
 
-    void CheckIfNewParameter( const std::vector<G4String>& wl,
-                                    G4bool mustBeNew  );
+    void CheckIfNewParameter(const std::vector<G4String>& wl, G4bool mustBeNew);
       // Check if it is new and that there are 3 words
 
-    G4String FindParameter( const G4String& name, G4bool exists = true );
-     // Find a Parameter with name 'name'. 
+    G4String FindParameter(const G4String& name, G4bool exists = true);
+      // Find a Parameter with name 'name'.
 
     void DumpList();
       // Dump list of parameters
@@ -72,7 +66,7 @@ class G4tgrParameterMgr
   private:
 
     G4tgrParameterMgr();
-   ~G4tgrParameterMgr();
+    ~G4tgrParameterMgr();
 
   private:
 

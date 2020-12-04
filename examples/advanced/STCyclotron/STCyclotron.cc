@@ -34,13 +34,11 @@
 //
 // file STCyclotron.cc
 //
-#include "G4MTRunManager.hh"
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh" 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 #include "STCyclotronAnalysis.hh"
-
 #include "STCyclotronActionInitialization.hh"
 #include "STCyclotronDetectorConstruction.hh"
 #include "STCyclotronPhysicsList.hh"
@@ -49,13 +47,12 @@
 
 int main(int argc, char** argv)
 {
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4); // Is equal to 2 by default
-#else
- G4RunManager* runManager = new G4RunManager;
-#endif
-
+// Construct the default run manager
+ //
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager -> SetNumberOfThreads(nThreads);
+  
   //Set mandatory initialization classes
   STCyclotronDetectorConstruction* det = new STCyclotronDetectorConstruction();
   runManager->SetUserInitialization(det);  

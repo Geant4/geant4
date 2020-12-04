@@ -32,11 +32,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
@@ -56,19 +52,19 @@
 
 namespace {
   void PrintUsage() {
-    G4cerr 
+    G4cerr
       << " Usage: " << G4endl
       << " monopole [-m macro ] [-s setupMonopole] [-t nThreads]" << G4endl
       << "   Note: " << G4endl
       << "    -s should be followed by a composed string, eg. \'1 0 100 GeV\'" << G4endl
-      << "    -t option is available only for multi-threaded mode." << G4endl
+      << "    -t option is for multi-threaded mode." << G4endl
       << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Evaluate arguments
   //
@@ -79,35 +75,27 @@ int main(int argc,char** argv)
 
   G4String macro;
   G4String setupMonopole;
-#ifdef G4MULTITHREADED
   G4int nThreads = 1;
-#endif
   for ( G4int i=1; i<argc; i=i+2 ) {
     if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
     else if ( G4String(argv[i]) == "-s" ) setupMonopole = argv[i+1];
-#ifdef G4MULTITHREADED
     else if ( G4String(argv[i]) == "-t" ) {
       nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
     }
-#endif
     else {
       PrintUsage();
       return 1;
     }
-  }  
-   
+  }
+
   // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager();
-  if ( nThreads > 0 ) { 
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  if ( nThreads > 0 ) {
     runManager->SetNumberOfThreads(nThreads);
-  }  
+  }
   G4cout << "===== Example is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
-  
+
   // Instantiate G4UIExecutive if interactive
   G4UIExecutive* ui = nullptr;
   if ( macro.empty() ) {
@@ -153,7 +141,7 @@ int main(int argc,char** argv)
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+macro);
   }
-  else  {  
+  else  {
     // interactive mode : define UI session
     visManager = new G4VisExecutive();
     visManager->Initialize();

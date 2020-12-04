@@ -2018,6 +2018,13 @@ G4int G4UIQt::ReceiveG4cout (
     return ReceiveG4cerr(aString);
   }
 
+  // Workaround so that output is not lost after crash or G4Exception
+  // It seems workers write to std::cout anyway, so limit this to the master
+#ifdef G4MULTITHREADED
+  if (G4Threading::IsMasterThread())
+#endif
+    std::cout << aString;
+
   QStringList newStr;
 
   // Add to string
@@ -2060,6 +2067,14 @@ G4int G4UIQt::ReceiveG4cerr (
 #ifdef G4MULTITHREADED
   G4AutoLock al(&ReceiveG4cerrMutex);
 #endif
+
+  // Workaround so that output is not lost after crash or G4Exception
+  // It seems workers write to std::cerr anyway, so limit this to the master
+#ifdef G4MULTITHREADED
+  if (G4Threading::IsMasterThread())
+#endif
+    std::cerr << aString;
+
   QStringList newStr;
 
   // Add to string
@@ -4586,7 +4601,7 @@ void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
     if (list.at(i)->data().toString () == action) {
       list.at(i)->setChecked(TRUE);
       checked = list.at(i)->data().toString ();
-    } else if (list.at(i)->data().toString () == "persepective") {
+    } else if (list.at(i)->data().toString () == "perspective") {
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "ortho") {
       list.at(i)->setChecked(FALSE);

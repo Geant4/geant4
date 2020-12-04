@@ -31,7 +31,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -55,8 +55,8 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
-  //construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  //construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   //set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
@@ -85,13 +85,13 @@ int main(int argc,char** argv) {
     ui->SessionStart();
     delete ui;
   } else  {
-    //batch mode  
+    //batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 
-  //job termination 
+  //job termination
   delete visManager;
   delete runManager;
 }

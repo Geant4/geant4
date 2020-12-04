@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -91,7 +91,7 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:      Air    density:  0.000 kg/m3   RadL: 28329263.098 km   Nucl.Int.Length: 66178552.901 km 
+ Material:      Air    density:  0.000 mg/cm3  RadL: 28329262.634 km   Nucl.Int.Length: 66178558.148 km 
                        Imean:  85.664 eV   temperature: 273.15 K  pressure:   0.00 atm
 
    --->  Element: Nitrogen (N)   Z =  7.0   N =    14   A = 14.010 g/mole
@@ -121,7 +121,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -152,7 +152,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -208,11 +208,10 @@
 G4ExplicitEuler is chosen.
 The minimal step is equal to 1 mm
                  2. Creating ChordFinder.
- G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 1 numVar= 6
                  3. Updating Field Manager.
                  4. Updating Field Manager.
 
- FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
  for pions :   3 to 6 GeV
  for kaons :   3 to 6 GeV
  for proton :  3 to 6 GeV
@@ -233,10 +232,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -275,15 +276,340 @@ Some /vis commands (optionally) take a string to specify colour.
 G4DormandPrince745 Stepper is chosen
 The minimal step is equal to 1 mm
                  2. Creating ChordFinder.
- G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 1 numVar= 6
                  3. Updating Field Manager.
  F01FieldSetup::CreateStepperAndChordFinder() called. 
                  1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
 The minimal step is equal to 0.1 mm
                  2. Creating ChordFinder.
- G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.1 numVar= 6
                  3. Updating Field Manager.
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+================================================================
 =======================================================================
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
@@ -307,7 +633,6 @@ Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ============================
@@ -333,15 +658,18 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.14791e-13          1      500 MeV0.00387484 eV    1.58938 m     1.58938 m       World  Transportation
-    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43795e-06 eV          1 mm    1.59038 m    Absorber  Transportation
-    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31624e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
+    1          0 fm    1.01183 m     21.9895 m           0 8.14791e-13          1      500 MeV0.0038748 eV    1.58938 m     1.58938 m       World  Transportation
+    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43793e-06 eV          1 mm    1.59038 m    Absorber  Transportation
+    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31622e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001100s Sys=0.000000s
+  User=0.000000s Real=0.001360s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
 ========= Table of registered couples ============================
 
@@ -370,9 +698,12 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000169s Sys=0.000000s
+  User=0.000000s Real=0.000168s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
 ========= Table of registered couples ============================
 
@@ -395,15 +726,18 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.20161e-09          1      200 MeV0.00143691 eV    63.6725 cm    63.6725 cm      World  Transportation
-    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.25673e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
-    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14495e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
+    1          0 fm    40.5352 cm    21.9895 m           0 -2.20161e-09          1      200 MeV0.00143689 eV    63.6725 cm    63.6725 cm      World  Transportation
+    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.2567e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
+    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14492e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000169s Sys=0.000000s
+  User=0.000000s Real=0.000144s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
 ========= Table of registered couples ============================
 
@@ -426,15 +760,18 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm     20.319 cm    21.9895 m  5.03276e-08 3.37364e-08          1      100 MeV0.000676643 eV    31.9182 cm    31.9182 cm      World  Transportation
-    2    50328.4 fm    20.3185 cm    21.9905 m  5.03276e-08 -0.00984295   0.999952      100 MeV2.21971e-06 eV    1.04707 mm    32.0229 cm   Absorber  Transportation
-    3    5.29388 Ang   20.2645 cm         22 m  1.48908e-07  -0.103352   0.994645      100 MeV2.03474e-05 eV    9.59813 mm    32.9827 cm OutOfWorld  Transportation
+    1          0 fm     20.319 cm    21.9895 m  5.03276e-08 3.37364e-08          1      100 MeV0.000676633 eV    31.9182 cm    31.9182 cm      World  Transportation
+    2    50328.4 fm    20.3185 cm    21.9905 m  5.03276e-08 -0.00984295   0.999952      100 MeV2.21968e-06 eV    1.04707 mm    32.0229 cm   Absorber  Transportation
+    3    5.29388 Ang   20.2645 cm         22 m  1.48908e-07  -0.103352   0.994645      100 MeV2.03471e-05 eV    9.59814 mm    32.9827 cm OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000201s Sys=0.000000s
+  User=0.000000s Real=0.000185s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
 ========= Table of registered couples ============================
 
@@ -457,21 +794,23 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    10.2108 cm    21.9895 m  -8.42505e-09 -9.58672e-08          1       50 MeV0.000318191 eV    16.0399 cm    16.0399 cm      World  Transportation
-    2   -8425.59 fm    10.2098 cm    21.9905 m  -2.94296e-08 -0.0195872   0.999808       50 MeV2.02389e-06 eV    1.02024 mm     16.142 cm   Absorber  Transportation
-    3   -2.90229 Ang   10.1016 cm         22 m  -2.94296e-08  -0.205667   0.978622       50 MeV1.9007e-05 eV    9.58138 mm    17.1001 cm OutOfWorld  Transportation
+    1          0 fm    10.2108 cm    21.9895 m  -8.42505e-09 -9.58672e-08          1       50 MeV0.000318195 eV    16.0403 cm    16.0403 cm      World  Transportation
+    2   -8425.59 fm    10.2098 cm    21.9905 m  -2.94296e-08 -0.0195872   0.999808       50 MeV2.02392e-06 eV    1.02026 mm    16.1423 cm   Absorber  Transportation
+    3   -2.90229 Ang   10.1016 cm         22 m  -2.94296e-08  -0.205667   0.978622       50 MeV1.90072e-05 eV    9.58159 mm    17.1005 cm OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000155s Sys=0.000000s
+  User=0.000000s Real=0.000136s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
  F01FieldSetup::CreateStepperAndChordFinder() called. 
                  1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
 The minimal step is equal to 0.1 mm
                  2. Creating ChordFinder.
- G4ChordFinder: Creating G4MagInt_Driver with  stepMinimum = 0.1 numVar= 6
                  3. Updating Field Manager.
 Setting Field strength to (1000,0,0) Gauss.
 
@@ -496,15 +835,18 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    3.36956 m     21.9895 m  5.03344e-08 4.10621e-08          1       50 MeV0.0104997 eV    5.29289 m     5.29289 m       World  Transportation
-    2    50334.4 fm    3.36956 m     21.9905 m  2.36242e-08 -0.000593528          1       50 MeV2.02389e-06 eV    1.02024 mm    5.29391 m    Absorber  Transportation
-    3    2.74766 Ang   3.36953 m          22 m  1.69481e-08 -0.00623228   0.999981       50 MeV1.88457e-05 eV    9.50007 mm    5.30341 m  OutOfWorld  Transportation
+    1          0 fm    3.36956 m     21.9895 m  5.03344e-08 4.10621e-08          1       50 MeV0.0104996 eV     5.2929 m      5.2929 m       World  Transportation
+    2    50334.4 fm    3.36956 m     21.9905 m  2.97687e-07 -0.000593498          1       50 MeV2.02392e-06 eV    1.02026 mm    5.29392 m    Absorber  Transportation
+    3    2.87839 nm    3.36953 m          22 m  5.20032e-07 -0.00623232   0.999981       50 MeV1.88455e-05 eV    9.50007 mm    5.30342 m  OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000218s Sys=0.000000s
+  User=0.000000s Real=0.000161s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
 ========= Table of registered couples ============================
 
@@ -533,9 +875,12 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.008803s Sys=0.000000s
+  User=0.010000s Real=0.008762s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 #
 /calor/setAbsMat Xe20CO2
 /calor/setWorldMat Kr20CO2
@@ -587,7 +932,7 @@ Index : 1     used in the geometry : Yes
 Index : 2     used in the geometry : Yes
  Material : Xe20CO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  990 eV     e-  1.2778733697294 keV    e+  1.2558672945243 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  1.2894289741487 keV    e+  1.2671050631168 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -600,14 +945,17 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.014830s Sys=0.010000s
+  User=0.010000s Real=0.008322s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.33 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.28 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

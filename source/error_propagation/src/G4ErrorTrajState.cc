@@ -41,10 +41,70 @@ G4ErrorTrajState::G4ErrorTrajState( const G4String& partType,
                                     const G4Point3D& pos,
                                     const G4Vector3D& mom,
                                     const G4ErrorTrajErr& errmat)
-  : fParticleType(partType), fPosition(pos), fMomentum(mom), fCharge(0.),
-    fError(errmat), theTSType(G4eTS_FREE), theG4Track(0)
+  : fParticleType(partType), fPosition(pos), fMomentum(mom),
+    fError(errmat), theTSType(G4eTS_FREE)
 {
   iverbose = G4ErrorPropagatorData::verbose();
+}
+
+
+//--------------------------------------------------------------------------
+G4ErrorTrajState::G4ErrorTrajState(const G4ErrorTrajState& ts)
+{
+  *this = ts; 
+}
+
+
+//--------------------------------------------------------------------------
+G4ErrorTrajState::G4ErrorTrajState(G4ErrorTrajState&& ts)
+  : fParticleType(ts.fParticleType), fPosition(ts.fPosition),
+    fMomentum(ts.fMomentum), fCharge(ts.fCharge),
+    fError(ts.fError), theTSType(ts.theTSType),
+    theG4Track(ts.theG4Track), iverbose(ts.iverbose)
+{
+  // Release data from source object
+  ts.theG4Track = nullptr;
+}
+
+
+//--------------------------------------------------------------------------
+G4ErrorTrajState& G4ErrorTrajState::operator = (const G4ErrorTrajState& ts)
+{
+  if(this != &ts)
+  {
+    fParticleType = ts.fParticleType;
+    fPosition = ts.fPosition;
+    fMomentum = ts.fMomentum;
+    fCharge = ts.fCharge;
+    fError = ts.fError;
+    theTSType = ts.theTSType;
+    iverbose = ts.iverbose;
+    delete theG4Track;
+    theG4Track = new G4Track(*ts.theG4Track);
+  }
+  return *this;
+}
+
+
+//--------------------------------------------------------------------------
+G4ErrorTrajState& G4ErrorTrajState::operator = (G4ErrorTrajState&& ts)
+{
+  if(this != &ts)
+  {
+    fParticleType = ts.fParticleType;
+    fPosition = ts.fPosition;
+    fMomentum = ts.fMomentum;
+    fCharge = ts.fCharge;
+    fError = ts.fError;
+    theTSType = ts.theTSType;
+    iverbose = ts.iverbose;
+    delete theG4Track;
+    theG4Track = ts.theG4Track;
+
+    // Release data from source object
+    ts.theG4Track = nullptr;
+  }
+  return *this;
 }
 
 
@@ -85,7 +145,7 @@ void G4ErrorTrajState::BuildCharge()
 {
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle(fParticleType); 
-  if( particle == 0)
+  if( particle == nullptr )
   {
     std::ostringstream message;
     message << "Particle type not defined: " << fParticleType;

@@ -123,6 +123,19 @@
   		....
  		Idle> exit
 
+
+     Macros provided in this example:
+     - egs4.mac:
+          Fe; L = 20 radl; R = 5 radl; electron 30 GeV
+          (EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94)
+     - run01.mac: PbWO4; L = 20 radl; R = 5 radl; electron 5 GeV
+     - run02.mac: Al; L = 13.5 radl; R = 1.35 radl; electron 1 GeV
+          (Electron-induced cascade showers: J&H Crannel - Phys. Rev. 184-2 -    August69)
+     - run03.mac: H2O; L = 9.97 radl; R = 0.665 radl; electron 1 GeV
+          (Electron-induced cascade showers: J&H Crannel - Phys. Rev. 184-2 -    August69)
+     - test.mac: PbWO4; L = 20 radl; R = 5 radl; electron 5 GeV
+     - vis.mac: to activate visualization
+
  7- HISTOGRAMS
 
    TestEm2 produces several histograms:
@@ -145,7 +158,7 @@
 
  To define the output file name with histograms, use the UI command :
 
-   "/testem/histo/setFileName name"
+   "/analysis/setFileName name"
    
  The format of the histogram file can be : root (default),
  xml, csv, by selecting g4nnn.hh in RunAction.hh 

@@ -39,9 +39,7 @@
    A command allows to select or not ThermalScattering model.
  
    Several hadronic physics options are controlled by environment variables.
-   To trigger them, an envHadronic.csh has been added in this example.
-   One must select the options wished, and do
-        source envHadronic.csh  (or sh)
+   To select them, see Hadr04.cc
    
    NB. class NeutronHPphysics can be reused with other physicsConstructors,
    as neutron processes are deleted before to be re-created.	
@@ -116,3 +114,11 @@
  	Idle> type your commands
  	....
  	Idle> exit
+	
+ Macros provided in this example:
+  - graphite.mac: neutron (2 MeV) in graphite
+  - run01.mac: neutron (2 MeV) in Water_ts
+    
+ Macros to be run interactively:
+  - debug.mac: neutron (2 MeV) in Water_ts
+  - vis.mac: To activate visualization

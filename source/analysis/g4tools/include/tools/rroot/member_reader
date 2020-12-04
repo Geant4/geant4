@@ -49,7 +49,7 @@ public:
     size_t number = data.size();
     a_v.resize(number);
     for(size_t index=0;index<number;index++) {
-      a_v[index] = (data[index]==1?true:false);  
+      a_v[index] = (data[index]==1?true:false);
     }
     return true;
   }

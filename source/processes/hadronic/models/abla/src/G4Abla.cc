@@ -1317,14 +1317,12 @@ c       Clear BU_TAB (array of multifragmentation products)
          EV_TAB[i][3] = VYOUT;
          EV_TAB[i][4] = VZOUT;
         }
-
-
         if(IMULTBU>200)std::cout << "IMULTBU>200 " << IMULTBU << std::endl;
+        delete problamb;
+        delete Nblamb;
         }// if(T_diff>0.1)
-// End of multi-fragmentation
+        // End of multi-fragmentation
       mult7777:
-
-  // std::cout << "hola 100" << std::endl;
 
 // Start basic de-excitation of fragments
       aprfp = idnint(aprf);
@@ -5093,7 +5091,7 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
 			       - 3.0/4.0 * (1.0 + 9.0/(2.0*y0) + 7.0/std::pow(y0,2)
 					    + 7.0/(2.0 * std::pow(y0,3))) * std::exp(-2.0*y0));
 
-  // now calulation of total binding energy a.j. 16.7.96                   
+  // now calculation of total binding energy a.j. 16.7.96                   
 
   efl = -1.0 * av*(1.0 - kv*i*i)*a + as*(1.0 - ks*i*i)*b1 * std::pow(a,(2.0/3.0)) + a0
     + c1*z*z*b3/std::pow(a,(1.0/3.0)) - c4*std::pow(z,(4.0/3.0))/std::pow(a,(1.e0/3.e0))
@@ -5360,7 +5358,7 @@ C BARR - Barrier
 C OMEGA - Curvature of the potential
 C
 C BASS MODEL NPA 1974 - used only if expansion is considered (OPTEXP=1)
-C                        or one wants this model explicitely (OPTBAR=1)
+C                        or one wants this model explicitly (OPTBAR=1)
 C October 2011 - AK - new parametrization of the barrier and its position,
 C                    see W.W. Qu et al., NPA 868 (2011) 1; this is now
 C                    default option (OPTBAR=0)
@@ -7056,8 +7054,15 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
    G4double BBIMF[98][251];
    G4double SSBIMF[98][251];
    G4int OPTSHPIMF=opt->optshpimf;
+     
+   // Initialization
+   for (G4int ia = 0; ia < 98; ia++)
+    for (G4int ib = 0; ib < 251; ib++) {
+      BBIMF[ia][ib] = 0.0;
+      SSBIMF[ia][ib] = 0.0;
+    }
 
-// take the half of the CN and transform it in integer (floor it)
+   // take the half of the CN and transform it in integer (floor it)
    IZIMFMAX = idnint(ZCN / 2.0);
 
    if(IZIMFMAX<3){
@@ -7469,7 +7474,7 @@ G4int VISOSTAB[191][2]={
 void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_scission_post, G4double *A_scission, G4double *Z_scission,G4double &vx_eva,G4double &vy_eva,G4double &vz_eva,G4int *NbLam0_par){
 
 //  AK 2006 - Now in case of fission deexcitation between saddle and scission
-//            is explicitely calculated. Langevin calculations made by P. Nadtochy
+//            is explicitly calculated. Langevin calculations made by P. Nadtochy
 //            used to parametrise saddle-to-scission time
 
   G4double af,zf,ee;
@@ -9138,7 +9143,7 @@ G4double G4Abla::eflmac_profi(G4double ia, G4double iz)
 			       - 3.0/4.0 * (1.0 + 9.0/(2.0*y0) + 7.0/std::pow(y0,2)
 					    + 7.0/(2.0 * std::pow(y0,3))) * std::exp(-2.0*y0));
 
-  // now calulation of total binding energy                  
+  // now calculation of total binding energy                  
 
   efl = -1.0 * av*(1.0 - kv*i*i)*a + as*(1.0 - ks*i*i)*b1 * std::pow(a,(2.0/3.0)) + a0
     + c1*z*z*b3/std::pow(a,(1.0/3.0)) - c4*std::pow(z,(4.0/3.0))/std::pow(a,(1.e0/3.e0))
@@ -9857,7 +9862,9 @@ void G4Abla::unstable_tke(G4double ain,G4double zin,G4double anew,G4double znew,
       ianew = idnint(anew);
       iznew = idnint(znew);
       innew = ianew - iznew;
-//
+      //
+      if(ain==0)return;
+      //
       if(izin>12){
       mglms(ain,zin,3,&MASS);
       mglms(anew,znew,3,&MASS1);

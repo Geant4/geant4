@@ -48,9 +48,9 @@ public:
     m_group.render(a_action);
   }
   virtual void search(search_action& a_action) {
+    update_if_touched(a_action.out());
     parent::search(a_action);
     if(a_action.done()) return;
-    update_if_touched(a_action.out());
     m_group.search(a_action);
   }
   virtual void bbox(bbox_action& a_action) {

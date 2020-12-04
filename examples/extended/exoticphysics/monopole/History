@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 2020: B. Morgan (monopole-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 21 February 2020: V.Ivantchenko (monopole-V10-06-00)
 - G4MonopolePhysics - minor code clean-up for thread safety
 - monopole.cc - do not instantiate VisManager in the batch mode;
@@ -34,7 +37,7 @@ track of all tags.
 - monopole.cc - do not instantiate VisManager in the batch mode, default
     number of threads is now 1
 - Run, RunAction - extend histograms and printouts to restricted dEdx and
-    delta-electron cross section (needed to fix problem #2126)  
+    delta-electron cross section (needed to fix problem #2126)
 
 23 October 2018: I.Hrivnacova (monopole-V10-04-06)
 - Define the field setup data (fMonFieldSetup) in the DetectorConstruction class
@@ -43,11 +46,11 @@ track of all tags.
 19 October 2018: I.Hrivnacova (monopole-V10-04-05)
 Macro review and code clean-up:
 - Removed not used and not working commands:
-  /testex/det/setField  
+  /testex/det/setField
        not used, duplicates /testex/fld/setField 0.2 tesla
   /testex/det/update
        not used
-  /monopole/magCharge, elCharge, Mass 
+  /monopole/magCharge, elCharge, Mass
        not working, as these parameters need to be set at a very early stage
   /testex/run/verbose
        the set verbose level is not used
@@ -60,11 +63,11 @@ Macro review and code clean-up:
 15 October 2018: I.Hrivnacova (monopole-V10-04-04)
 - Removed run initialization from main and added init_vis.mac
   macro for interactive session
-- Explicitly define physics lists ("FTFP_BERT") 
+- Explicitly define physics lists ("FTFP_BERT")
 - Added the default value of magnetic field 0.2 tesla
   and also setting of this value in monopole.in and init_vis.mac
 - Fixed updating geometry parameters after initialization
-  by calling G4RunManager::ReinitializeGeometry() instead of 
+  by calling G4RunManager::ReinitializeGeometry() instead of
   GeometryHasBeenModified()
 - Added printing production cuts table in RunAction::EndOfRunAction
 
@@ -85,9 +88,9 @@ Macro review and code clean-up:
 
 8 March 2018: J. Apostolakis   (monopole-V10-04-00)
 - As equations of motion do not use Electric field, changed
-  G4MonopoleEquation to use G4MagneticField (instead of 
+  G4MonopoleEquation to use G4MagneticField (instead of
    G4ElectroMagneticField.)
-  This is needed due to correction of inheritance in 
+  This is needed due to correction of inheritance in
      magfield-V10-04-00 which is a co-working tag.
 
 21 November 17: V.Ivantchenko (monopole-V10-03-04)
@@ -106,32 +109,32 @@ Macro review and code clean-up:
 - switch to G4AnalysisManager
 
 01 September 15: I. Hrivnacova (monopole-V10-01-00)
-- Removed EventAction and EventActionMessenger classes, now obsolete, and 
-  replaced /testex/event/printModulo commands in macros with 
+- Removed EventAction and EventActionMessenger classes, now obsolete, and
+  replaced /testex/event/printModulo commands in macros with
   /run/printProgress
 
 16 October 14: I. Hrivnacova (monopole-V10-00-00)
-- Fixed coding guidelines (long lines) in G4MonopoleTransportation.cc  
+- Fixed coding guidelines (long lines) in G4MonopoleTransportation.cc
 
 03 December 13: I. Hrivnacova (monopole-V09-06-06)
 - Updated README for removing AIDA
 
 10 May 13: J.Apostolakis (monopole-V09-06-05)
-- G4MonopoleTransportation and G4MonopoleEquation: 
-      Adapted to use G4ChargeState to pass Magnetic & Electric Charge, 
-          and to changed signature of SetChargeMomentumMass. 
+- G4MonopoleTransportation and G4MonopoleEquation:
+      Adapted to use G4ChargeState to pass Magnetic & Electric Charge,
+          and to changed signature of SetChargeMomentumMass.
 
 19 February 13: V.Ivantchenko (monopole-V09-06-04)
 - G4MonopoleTransportation - removed local variable fVerboseLevel
-    and Get/Set methods; use instead verboseLevel variable from 
+    and Get/Set methods; use instead verboseLevel variable from
     the base class
 
 13 February 13: I.Hrivnacova (monopole-V09-06-03)
-- Applied coding guidelines 
+- Applied coding guidelines
   (virtual keyword, data members names and initialization)
 
 01 February 13: V.Ivant (monopole-V09-06-02)
-- G4MonopolePhysics - fixed warning at initialisation 
+- G4MonopolePhysics - fixed warning at initialisation
 
 31 January 13: V.Ivant (monopole-V09-06-01)
 - fixed initialisation after MT was introduced
@@ -142,15 +145,15 @@ Macro review and code clean-up:
 20 September 12: I.Hrivnacova (monopole-V09-05-03)
 - Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
   where needed
-- Replaced tabulators with space characters  
+- Replaced tabulators with space characters
 
 19 September 12: V.Ivant (monopole-V09-05-02)
 - remove not needed file
 
 4 September 12: I.Hrivnacova (monopole-V09-05-01)
 - Updated CMakeLists.txt:
-  adding visualization, copying macros, install target and comment lines 
-- Adding .README  
+  adding visualization, copying macros, install target and comment lines
+- Adding .README
 
 28 May 12: V.Ivant (monopole-V09-05-00)
 - applied code convention
@@ -166,10 +169,10 @@ Macro review and code clean-up:
 - Fix AIDA file option.
 
 6 June 10: J.Perl (monopole-V09-03-05)
-- Remove unused variable in EventAction 
+- Remove unused variable in EventAction
 
 4 June 10: J.Perl (monopole-V09-03-04)
-- Updated vis usage 
+- Updated vis usage
 
 04 June 10: V.Ivant (monopole-V09-03-03)
 - Substituted QGSP by QGSP_BERT
@@ -190,7 +193,7 @@ Macro review and code clean-up:
 
 11 June 08: V.Ivant (monopole-V09-01-00)
 - Remove AIDA from GNUmakefile
-- Fixed compillation warnings 
+- Fixed compillation warnings
 
 16 August 07: V.Ivant (monopole-V09-00-00)
 - First release

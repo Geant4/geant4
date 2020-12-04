@@ -45,6 +45,7 @@
 #include "G4EmParameters.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4VEmProcess.hh"
+#include "G4VEnergyLossProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -168,9 +169,7 @@ void G4EmDataHandler::SetMasterProcess(const G4VEmProcess* ptr)
 
 const G4VEmProcess* G4EmDataHandler::GetMasterProcess(size_t idx) const
 {
-  const G4VEmProcess* ptr = 
-    (idx < masterProcess.size()) ? masterProcess[idx] : nullptr;
-  return ptr;
+  return (idx < masterProcess.size()) ? masterProcess[idx] : nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

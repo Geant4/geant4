@@ -132,7 +132,7 @@ inline bool _equal(std::ostream& a_out,const char* a_file,int a_line,const NUMBE
   return true;
 }
 
-template <class REAL> 
+template <class REAL>
 inline bool equal(std::ostream& a_out,const char* a_file,int a_line,size_t a_size,const REAL* a_v,const REAL* a_expected,const REAL& a_tolerance,REAL(*a_fabs)(const REAL&)){
   for(size_t index=0;index<a_size;index++) {
     if(!equal<REAL>(a_out,a_file,a_line,a_v[index],a_expected[index],a_tolerance,a_fabs)) return false;
@@ -140,7 +140,7 @@ inline bool equal(std::ostream& a_out,const char* a_file,int a_line,size_t a_siz
   return true;
 }
 
-template <class VEC,class REAL> 
+template <class VEC,class REAL>
 inline bool equal(std::ostream& a_out,const char* a_file,int a_line,const VEC& a_1,const VEC& a_2,const REAL& a_tolerance,REAL(*a_fabs)(const REAL&)){
   if(a_1.dimension()!=a_2.dimension()) {
     a_out << "failed in file :" << std::endl
@@ -156,7 +156,7 @@ inline bool equal(std::ostream& a_out,const char* a_file,int a_line,const VEC& a
   return true;
 }
 
-template <class MAT,class REAL> 
+template <class MAT,class REAL>
 inline bool mat_equal(std::ostream& a_out,const char* a_file,int a_line,const MAT& a_1,const MAT& a_2,const REAL& a_tolerance,REAL(*a_fabs)(const REAL&)){
   if(a_1.dimension()!=a_2.dimension()) {
     a_out << "failed in file :" << std::endl

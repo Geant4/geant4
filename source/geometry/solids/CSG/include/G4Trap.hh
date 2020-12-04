@@ -252,6 +252,7 @@ class G4Trap : public G4CSGSolid
                       const G4ThreeVector& p3,
                       const G4ThreeVector& p4,
                             TrapSidePlane& plane ) ;
+    void SetCachedValues();
 
   private:
 
@@ -272,6 +273,7 @@ class G4Trap : public G4CSGSolid
     G4double fDy1,fDx1,fDx2,fTalpha1;
     G4double fDy2,fDx3,fDx4,fTalpha2;
     TrapSidePlane fPlanes[4];
+    G4double fAreas[6];
     G4int fTrapType;
 };
 

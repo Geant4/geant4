@@ -20,7 +20,7 @@
 /gun/energy 0 eV
 /gun/position 0 0 0 mm
 #
-###/grdm/nucleusLimits 210 210 82 82
+###/process/had/rdm/nucleusLimits 210 210 82 82
 #
 /analysis/setFileName rdecay
 /analysis/h1/set 4 100 0 3 MeV	#total edep

@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-20 B. Morgan (expar02-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 28-11-19 I. Hrivnacova (expar02-V10-05-00)
 - Fixed Doxygen warning
 

@@ -198,7 +198,7 @@ protected:
       bool own = (*itb);
       parent::erase(it);
       m_owns.erase(itb);
-      if(own) delete entry;    
+      if(own) delete entry;
     }
   }
 protected:

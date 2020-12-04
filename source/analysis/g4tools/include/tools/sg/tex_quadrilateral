@@ -68,7 +68,7 @@ public:
     if(corners.size()!=4) return;
 
     unsigned int _id = get_tex_id(a_action.out(),a_action.render_manager(),m_img,nearest.value());
-  
+
     const state& state = a_action.state();
 
     //image must be 2^n,2^m in size !
@@ -195,7 +195,7 @@ protected:
     int iy = int(float(_img.height())*a_y);
 
     //rgb of pixel :
-    std::vector<unsigned char> pixel;            
+    std::vector<unsigned char> pixel;
     if((ix<0)||(iy<0)||!_img.pixel(ix,iy,pixel)) {a_s.clear();return false;}
 
     a_s.clear();
@@ -329,7 +329,7 @@ protected:
   typedef float f12[12];
   void _front(f12& a_front,f12& a_nms,float a_epsil = 0.0f) {
     const std::vector<vec3f>& cs = corners.values();
-    
+
     a_front[0] =  cs[0].x()-a_epsil;
     a_front[1] =  cs[0].y()-a_epsil;
     a_front[2] =  cs[0].z();
@@ -365,7 +365,7 @@ protected:
 
   void _back(f12& a_back) {
     const std::vector<vec3f>& cs = corners.values();
-    
+
     a_back[0] =  cs[1].x();
     a_back[1] =  cs[1].y();
     a_back[2] =  cs[1].z();

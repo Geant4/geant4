@@ -127,20 +127,20 @@ inline hid_t compound_mem_type(hid_t a_file_type){
     //printf("debug : members :   %d (%d) : %s : begin\n",index,mn,mname);
 
    {H5T_class_t mclass = H5Tget_class(mtype);
-    if( (mclass==H5T_INTEGER) || 
+    if( (mclass==H5T_INTEGER) ||
         (mclass==H5T_STRING)  ||
         (mclass==H5T_FLOAT)   ) {
       hid_t mmem_type = basic_mem_type(mtype);
       if(mmem_type<0) {
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
       if(H5Tinsert(mem_type,mname,moffset,mmem_type)<0) {
         ::H5Tclose(mmem_type);
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
@@ -154,7 +154,7 @@ inline hid_t compound_mem_type(hid_t a_file_type){
         delete [] dims;
         delete [] perms;
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
@@ -163,7 +163,7 @@ inline hid_t compound_mem_type(hid_t a_file_type){
         delete [] dims;
         delete [] perms;
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
@@ -173,7 +173,7 @@ inline hid_t compound_mem_type(hid_t a_file_type){
         delete [] perms;
         ::H5Tclose(base_type);
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
@@ -184,7 +184,7 @@ inline hid_t compound_mem_type(hid_t a_file_type){
       if(array_type<0) {
         ::H5Tclose(mmem_type);
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
@@ -193,7 +193,7 @@ inline hid_t compound_mem_type(hid_t a_file_type){
       if(H5Tinsert(mem_type,mname,moffset,array_type)<0) {
         ::H5Tclose(array_type);
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
@@ -203,27 +203,27 @@ inline hid_t compound_mem_type(hid_t a_file_type){
       hid_t mmem_type = compound_mem_type(mtype);
       if(mem_type<0) {
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
       if(H5Tinsert(mem_type,mname,moffset,mmem_type)<0) {
         ::H5Tclose(mmem_type);
         ::H5Tclose(mtype);
-        if(mname) ::free(mname);
+        if(mname) tools_H5free_memory(mname);
         ::H5Tclose(mem_type);
         return failure();
       }
       ::H5Tclose(mmem_type);
     } else {
       ::H5Tclose(mtype);
-      if(mname) ::free(mname);
+      if(mname) tools_H5free_memory(mname);
       ::H5Tclose(mem_type);
       return failure();
     }}
     ::H5Tclose(mtype);
     //printf("debug : compound_mem_type :   %d (%d) : %s : end\n",index,mn,mname);
-    if(mname) ::free(mname);
+    if(mname) tools_H5free_memory(mname);
   }
 
   return mem_type;
@@ -323,7 +323,7 @@ inline bool write_atb(hid_t a_id,const std::string& a_name,const std::string& a_
   if(has_attr==1)  {
     if(H5Adelete(a_id,a_name.c_str())<0) return false;
   }
-    
+
   hid_t datatype = string_datatype(a_data.size()+1);
   if(datatype<0) return false;
 
@@ -332,28 +332,28 @@ inline bool write_atb(hid_t a_id,const std::string& a_name,const std::string& a_
     ::H5Tclose(datatype);
     return false;
   }
-    
+
   hid_t aid = tools_H5Acreate(a_id,a_name.c_str(),datatype,scalar,H5P_DEFAULT);
   if(aid<0) {
     ::H5Sclose(scalar);
     ::H5Tclose(datatype);
     return false;
   }
-    
+
   if(H5Awrite(aid,datatype,a_data.c_str())<0) {
     ::H5Aclose(aid);
     ::H5Sclose(scalar);
     ::H5Tclose(datatype);
     return false;
   }
-    
+
   ::H5Aclose(aid);
   ::H5Sclose(scalar);
   ::H5Tclose(datatype);
-    
+
   return true;
 }
-    
+
 inline bool write_bool(hid_t a_loc,const std::string& a_name,bool a_data) {
   hid_t scalar = ::H5Screate(H5S_SCALAR);
   if(scalar<0) return false;
@@ -363,7 +363,7 @@ inline bool write_bool(hid_t a_loc,const std::string& a_name,bool a_data) {
     ::H5Sclose(scalar);
     return false;
   }
-  if(H5Pset_layout(compact,H5D_COMPACT)<0) { 
+  if(H5Pset_layout(compact,H5D_COMPACT)<0) {
     ::H5Pclose(compact);
     ::H5Sclose(scalar);
     return false;
@@ -375,21 +375,21 @@ inline bool write_bool(hid_t a_loc,const std::string& a_name,bool a_data) {
     ::H5Sclose(scalar);
     return false;
   }
-  
+
   unsigned char data = a_data?1:0;
   if(::H5Dwrite(dataset,H5T_NATIVE_UCHAR,H5S_ALL,H5S_ALL,H5P_DEFAULT,&data)<0) {
     ::H5Pclose(compact);
     ::H5Sclose(scalar);
-    ::H5Dclose(dataset);                 
+    ::H5Dclose(dataset);
     return false;
   }
-  
+
   ::H5Pclose(compact);
   ::H5Sclose(scalar);
-  ::H5Dclose(dataset);                 
+  ::H5Dclose(dataset);
   return true;
 }
-  
+
 inline bool write_string(hid_t a_loc,const std::string& a_name,const std::string& a_string) {
   hid_t scalar = ::H5Screate(H5S_SCALAR);
   if(scalar<0) return false;
@@ -400,7 +400,7 @@ inline bool write_string(hid_t a_loc,const std::string& a_name,const std::string
     return false;
   }
 
-  if(H5Pset_layout(compact,H5D_COMPACT)<0) { 
+  if(H5Pset_layout(compact,H5D_COMPACT)<0) {
     ::H5Pclose(compact);
     ::H5Sclose(scalar);
     return false;
@@ -413,7 +413,7 @@ inline bool write_string(hid_t a_loc,const std::string& a_name,const std::string
     ::H5Sclose(scalar);
     return false;
   }
-  
+
   hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),file_type,scalar,compact);
   if(dataset<0) {
     ::H5Pclose(compact);
@@ -421,21 +421,21 @@ inline bool write_string(hid_t a_loc,const std::string& a_name,const std::string
     ::H5Tclose(file_type);
     return false;
   }
-  
+
   hid_t mem_type = file_type;
   if(H5Dwrite(dataset,mem_type,H5S_ALL,H5S_ALL,H5P_DEFAULT,a_string.c_str())<0) {
     ::H5Pclose(compact);
     ::H5Sclose(scalar);
-    ::H5Dclose(dataset);                 
+    ::H5Dclose(dataset);
     ::H5Tclose(file_type);
     return false;
   }
-  
+
   ::H5Pclose(compact);
   ::H5Sclose(scalar);
-  ::H5Dclose(dataset);                 
+  ::H5Dclose(dataset);
   ::H5Tclose(file_type);
-  
+
   return true;
 }
 
@@ -447,7 +447,7 @@ inline bool write_string_dataset(hid_t a_loc,const std::string& a_name,
     cpt = ::H5Pcreate(H5P_DATASET_CREATE);
     if(cpt<0) return false;
     if(a_chunked) {
-      if(H5Pset_layout(cpt,H5D_CHUNKED)<0) { 
+      if(H5Pset_layout(cpt,H5D_CHUNKED)<0) {
         ::H5Pclose(cpt);
         return false;
       }
@@ -458,7 +458,7 @@ inline bool write_string_dataset(hid_t a_loc,const std::string& a_name,
         return false;
       }
     } else {
-      if(H5Pset_layout(cpt,H5D_COMPACT)<0) { 
+      if(H5Pset_layout(cpt,H5D_COMPACT)<0) {
         ::H5Pclose(cpt);
         return false;
       }
@@ -485,9 +485,9 @@ inline bool write_string_dataset(hid_t a_loc,const std::string& a_name,
   if(a_chunked) {
     hsize_t mx_dims[1];
     mx_dims[0] = H5S_UNLIMITED; //extendable.
-    file_space = ::H5Screate_simple(1,dims,mx_dims); 
+    file_space = ::H5Screate_simple(1,dims,mx_dims);
   } else {
-    file_space = ::H5Screate_simple(1,dims,NULL); 
+    file_space = ::H5Screate_simple(1,dims,NULL);
   }
   if(file_space<0) {if(cpt>=0) ::H5Pclose(cpt);::H5Tclose(file_type);return false;}}
 
@@ -500,16 +500,16 @@ inline bool write_string_dataset(hid_t a_loc,const std::string& a_name,
   }
 
   hid_t mem_type = file_type;
-  
+
   const char* wdata[1];
   wdata[0] = a_string.c_str();
-  
+
   if(H5Dwrite(dataset,mem_type,H5S_ALL,H5S_ALL,H5P_DEFAULT,wdata)<0) {
-    ::H5Dclose(dataset);                 
+    ::H5Dclose(dataset);
     ::H5Tclose(file_type);
     return false;
   }
-  
+
   ::H5Tclose(file_type);
   ::H5Dclose(dataset);
 
@@ -525,8 +525,8 @@ inline bool write_string_dataset(hid_t a_loc,const std::string& a_name,
 inline bool write_append_string_dataset(hid_t a_dataset,const std::string& a_string) {
   hsize_t old_size = 0;
 
- {hid_t dataspace = H5Dget_space(a_dataset); 
-  if(dataspace<0) return false;  
+ {hid_t dataspace = H5Dget_space(a_dataset);
+  if(dataspace<0) return false;
   hsize_t dims[1];
   if(H5Sget_simple_extent_dims(dataspace,dims,NULL)<0) {
     ::H5Sclose(dataspace);
@@ -534,13 +534,13 @@ inline bool write_append_string_dataset(hid_t a_dataset,const std::string& a_str
   }
   old_size = dims[0];
   ::H5Sclose(dataspace);}
-  
+
  {hsize_t exts[1];
   exts[0] = old_size+1;
 //  if(H5Dextend(dataset,exts)<0) {
   if(H5Dset_extent(a_dataset,exts)<0) return false;}
 
-  hid_t file_space = H5Dget_space(a_dataset); 
+  hid_t file_space = H5Dget_space(a_dataset);
   if(file_space<0) return false;
 
  {hsize_t offset[1];
@@ -554,7 +554,7 @@ inline bool write_append_string_dataset(hid_t a_dataset,const std::string& a_str
 
   hsize_t dims[1];
   dims[0] = 1;
-  hid_t mem_space = ::H5Screate_simple(1,dims,NULL); 
+  hid_t mem_space = ::H5Screate_simple(1,dims,NULL);
   if(mem_space<0) {
     ::H5Sclose(file_space);
     return false;
@@ -566,10 +566,10 @@ inline bool write_append_string_dataset(hid_t a_dataset,const std::string& a_str
     ::H5Sclose(file_space);
     return false;
   }
-  
+
   const char* wdata[1];
   wdata[0] = a_string.c_str();
-  
+
   if(H5Dwrite(a_dataset,mem_type,mem_space,file_space,H5P_DEFAULT,wdata)<0) {
     ::H5Tclose(mem_type);
     ::H5Sclose(mem_space);
@@ -602,14 +602,14 @@ inline bool write_array_string(hid_t a_loc,const std::string& a_name,const std::
     ::H5Sclose(scalar);
     return false;
   }
-    
+
   hid_t file_type = string_datatype(sz);
   if(file_type<0) {
     delete [] buffer;
     ::H5Sclose(scalar);
     return false;
   }
-  
+
   hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),file_type,scalar,H5P_DEFAULT);
   if(dataset<0) {
     delete [] buffer;
@@ -617,19 +617,19 @@ inline bool write_array_string(hid_t a_loc,const std::string& a_name,const std::
     ::H5Sclose(scalar);
     return false;
   }
-  
+
   hid_t mem_type = file_type;
   if(H5Dwrite(dataset,mem_type,H5S_ALL,H5S_ALL,H5P_DEFAULT,buffer)<0) {
     delete [] buffer;
-    ::H5Dclose(dataset);                 
+    ::H5Dclose(dataset);
     ::H5Tclose(file_type);
     ::H5Sclose(scalar);
     return false;
   }
-  
+
   delete [] buffer;
 
-  ::H5Dclose(dataset);                 
+  ::H5Dclose(dataset);
   ::H5Tclose(file_type);
   ::H5Sclose(scalar);
   return true;
@@ -644,7 +644,7 @@ inline bool write_object(hid_t a_loc,const std::string& a_name,hid_t a_file_type
     cpt = ::H5Pcreate(H5P_DATASET_CREATE);
     if(cpt<0) return false;
     if(chunked) {
-      if(H5Pset_layout(cpt,H5D_CHUNKED)<0) { 
+      if(H5Pset_layout(cpt,H5D_CHUNKED)<0) {
         ::H5Pclose(cpt);
         return false;
       }
@@ -655,7 +655,7 @@ inline bool write_object(hid_t a_loc,const std::string& a_name,hid_t a_file_type
         return false;
       }
     } else {
-      if(H5Pset_layout(cpt,H5D_COMPACT)<0) { 
+      if(H5Pset_layout(cpt,H5D_COMPACT)<0) {
         ::H5Pclose(cpt);
         return false;
       }
@@ -669,7 +669,7 @@ inline bool write_object(hid_t a_loc,const std::string& a_name,hid_t a_file_type
   } else {
     cpt = H5P_DEFAULT;
   }
-  
+
   hsize_t dims[1];
   dims[0] = 1;
   hid_t simple = ::H5Screate_simple(1,dims,NULL);
@@ -684,31 +684,31 @@ inline bool write_object(hid_t a_loc,const std::string& a_name,hid_t a_file_type
     if(cpt>=0) ::H5Pclose(cpt);
     return false;
   }
-  
+
   hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),a_file_type,simple,cpt);
   if(dataset<0) {
-    ::H5Tclose(mem_type);                 
+    ::H5Tclose(mem_type);
     ::H5Sclose(simple);
     if(cpt>=0) ::H5Pclose(cpt);
     return false;
   }
-  
+
   if(H5Dwrite(dataset,mem_type,H5S_ALL,H5S_ALL,H5P_DEFAULT,a_data)<0) {
-    ::H5Dclose(dataset);                 
-    ::H5Tclose(mem_type);                 
+    ::H5Dclose(dataset);
+    ::H5Tclose(mem_type);
     ::H5Sclose(simple);
     if(cpt>=0) ::H5Pclose(cpt);
     return false;
   }
-  
-  ::H5Dclose(dataset);                 
-  ::H5Tclose(mem_type);                 
+
+  ::H5Dclose(dataset);
+  ::H5Tclose(mem_type);
   ::H5Sclose(simple);
   if(cpt>=0) ::H5Pclose(cpt);
 
   return true;
 }
-  
+
 inline bool read_string(hid_t a_loc,const std::string& a_name,std::string& a_string) {
   // From H5LTread_dataset_string.
   hid_t dataset = tools_H5Dopen(a_loc,a_name.c_str());
@@ -731,7 +731,7 @@ inline bool read_string(hid_t a_loc,const std::string& a_name,std::string& a_str
     a_string.clear();
     return false;
   }
-  
+
   size_t sz = H5Tget_size(file_type);
   ::H5Tclose(file_type);
   if(!sz) {
@@ -740,7 +740,7 @@ inline bool read_string(hid_t a_loc,const std::string& a_name,std::string& a_str
     return false;
   }
 
-  // We could have use file_type since, for string, 
+  // We could have use file_type since, for string,
   // file type is the same than memory type.
   hid_t mem_type = string_datatype(sz);
   if(mem_type<0) {
@@ -813,7 +813,7 @@ inline bool read_sub_string(hid_t a_loc,const std::string& a_name,unsigned int a
   }
 
   //  abcdef
-  //  012345 
+  //  012345
   int remain = sz-a_offset;
   if(remain<=0) {
     ::H5Sclose(file_space);
@@ -821,7 +821,7 @@ inline bool read_sub_string(hid_t a_loc,const std::string& a_name,unsigned int a
     a_string.clear();
     return false;
   }}
-  
+
  {hsize_t offset[1];
   offset[0] = a_offset;
   hsize_t count[1];
@@ -834,7 +834,7 @@ inline bool read_sub_string(hid_t a_loc,const std::string& a_name,unsigned int a
   }}
 
   dims[0] = 1;
-  hid_t mem_space = ::H5Screate_simple(1,dims,NULL); 
+  hid_t mem_space = ::H5Screate_simple(1,dims,NULL);
   if(mem_space<0) {
     ::H5Sclose(file_space);
     ::H5Dclose(dataset);
@@ -891,13 +891,13 @@ inline bool read_sub_string(hid_t a_loc,const std::string& a_name,unsigned int a
   }
 
   char* buff = rdata[0];
-  
+
   size_t len = ::strlen(buff);
   a_string.resize(len,0);
   for(size_t index=0;index<len;index++) a_string[index] = buff[index];
 
   ::H5Dvlen_reclaim(mem_type,mem_space, H5P_DEFAULT,rdata);
-  
+
   ::H5Tclose(mem_type);
   ::H5Sclose(mem_space);
   ::H5Sclose(file_space);
@@ -913,7 +913,7 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-  
+
   hid_t file_type = H5Dget_type(dataset);
   if(file_type<0) {
     ::H5Dclose(dataset);
@@ -921,7 +921,7 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-  
+
   H5T_class_t t_class = H5Tget_class(file_type);
   if(t_class!=H5T_COMPOUND) {
     ::H5Tclose(file_type);
@@ -930,7 +930,7 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-    
+
   size_t sz = H5Tget_size(file_type);
   if(!sz) {
     ::H5Tclose(file_type);
@@ -939,7 +939,7 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-  
+
   hid_t mem_type = compound_mem_type(file_type);
   if(mem_type<0) {
     ::H5Tclose(file_type);
@@ -948,9 +948,9 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-  
+
   ::H5Tclose(file_type);
-  
+
   hid_t dataspace = H5Dget_space(dataset);
   if(dataspace<0) {
     ::H5Tclose(mem_type);
@@ -959,7 +959,7 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-  
+
   hid_t scalar = ::H5Screate(H5S_SCALAR);
   if(scalar<0) {
     ::H5Sclose(dataspace);
@@ -981,14 +981,14 @@ inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,cha
     a_data = 0;
     return false;
   }
-  
+
   ::H5Sclose(scalar);
   ::H5Sclose(dataspace);
   ::H5Tclose(mem_type);
   ::H5Dclose(dataset);
-  
+
   a_size = sz;
-  a_data = buffer;  
+  a_data = buffer;
   return true;
 }
 
@@ -1009,7 +1009,7 @@ inline bool read_array_string(hid_t a_loc,const std::string& a_name,std::vector<
     ::H5Dclose(dataset);
     return false;
   }
-  
+
   size_t sz = H5Tget_size(file_type);
   ::H5Tclose(file_type);
   if(!sz) {
@@ -1017,7 +1017,7 @@ inline bool read_array_string(hid_t a_loc,const std::string& a_name,std::vector<
     return false;
   }
 
-  // We could have use file_type since, for string, 
+  // We could have use file_type since, for string,
   // file type is the same than memory type.
   hid_t mem_type = string_datatype(sz);
   if(mem_type<0) {
@@ -1042,7 +1042,7 @@ inline bool read_array_string(hid_t a_loc,const std::string& a_name,std::vector<
   delete [] buffer;
   return true;
 }
-                           
+
 }}
 
 #endif

@@ -27,7 +27,7 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,16 +44,15 @@
 
 class HistoManager
 {
-  public:
-    HistoManager();
-   ~HistoManager();
+ public:
+  HistoManager();
+  ~HistoManager();
 
-  private:
-    void Book();
-    G4String fFileName;
+ private:
+  void Book();
+  G4String fFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

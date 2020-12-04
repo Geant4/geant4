@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan G01-V10-06-02
+- Migration to G4RunManagerFactory.
+
+November 5th, 2020 Witek Pokorski G01-V10-06-01
+- Added a line (commented out) indicating the possibility to overwrite
+output files.
+
 May 14th, 2020 Gabriele Cosmo G01-V10-06-00
 - Use [] brackets in loop.gdml sample to show how to index names
   and dimensions in loops.
@@ -90,10 +97,10 @@ July 25th, 2012 Witek Pokorski G01-V09-05-02
 - a few more cosmetic changes to comply to coding convetions
 
 July 25th, 2012 Witek Pokorski G01-V09-05-01
-- making a number of cosmetic changes to comply to coding conventions 
+- making a number of cosmetic changes to comply to coding conventions
 
 April 4th, 2012 Witek Pokorski G01-V09-05-00
-- Added missing unit in opticalsurfaces.gdml 
+- Added missing unit in opticalsurfaces.gdml
 
 November 17th, 2010  Gabriele Cosmo  G01-V09-03-07
 - Added commented command for de-activating names stripping while reading.

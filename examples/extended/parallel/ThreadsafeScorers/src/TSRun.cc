@@ -202,42 +202,41 @@ void TSRun::RecordEvent(const G4Event* aEvent)
     else
       G4cout << " Error EvtMap Not Found " << G4endl;
 
-    TIMEMORY_AUTO_TIMER("[" + fCollNames.at(i) + "]");
-
+    G4USER_SCOPED_PROFILE(fCollNames.at(i));
     if(EvtMap)
     {
       //=== Sum up HitsMap of this event to HitsMap of RUN.===
       {
-        TIMEMORY_BASIC_AUTO_TIMER("[standard_run_map]");
+        G4USER_SCOPED_PROFILE("ThreadLocal");
         *fRunMaps[fCollID] += *EvtMap;
-      }
-      //=== Sum up HitsMap of this event to atomic HitsMap of RUN.===
-      {
-        TIMEMORY_BASIC_AUTO_TIMER("[atomic_run_map]");
-        *fAtomicRunMaps[fCollID] += *EvtMap;
       }
       //=== Sum up HitsMap of this event to StatMap of RUN.===
       {
-        TIMEMORY_BASIC_AUTO_TIMER("[stat_analysis_map]");
+        G4USER_SCOPED_PROFILE("ThreadLocal/G4StatAnalysis");
         // G4StatAnalysis map
         *fStatMaps[fCollID] += *EvtMap;
       }
-      //=== Sum up HitsMap of this event to MutexMap of RUN.===
+      //=== Sum up HitsMap of this event to atomic HitsMap of RUN.===
       {
-        TIMEMORY_BASIC_AUTO_TIMER("[convergence_test_map]");
-        // G4ConvergenceTester run map
-        static G4Mutex mtx = G4MUTEX_INITIALIZER;
-        G4AutoLock lock(&mtx);
-        *fConvMaps[fCollID] += *EvtMap;
+        G4USER_SCOPED_PROFILE("Global/Atomic");
+        *fAtomicRunMaps[fCollID] += *EvtMap;
       }
       //=== Sum up HitsMap of this event to MutexMap of RUN.===
       {
-        TIMEMORY_BASIC_AUTO_TIMER("[mutex_run_map]");
+        G4USER_SCOPED_PROFILE("Global/Mutex");
         // mutex run map
         static G4Mutex mtx = G4MUTEX_INITIALIZER;
         G4AutoLock lock(&mtx);
         for(const auto& itr : *EvtMap)
           fMutexRunMaps[fCollNames[fCollID]][itr.first] += *itr.second;
+      }
+      //=== Sum up HitsMap of this event to MutexMap of RUN.===
+      {
+        G4USER_SCOPED_PROFILE("Global/Mutex/G4ConvergenceTester");
+        // G4ConvergenceTester run map
+        static G4Mutex mtx = G4MUTEX_INITIALIZER;
+        G4AutoLock lock(&mtx);
+        *fConvMaps[fCollID] += *EvtMap;
       }
     }
   }

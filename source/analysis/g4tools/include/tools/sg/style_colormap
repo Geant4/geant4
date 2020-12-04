@@ -71,9 +71,9 @@ public:
 
     char ss[192]; //3*64 = 192
     snpf(ss,sizeof(ss),"%g %g %g",c[0],c[1],c[2]);
-    a_s = std::string(ss);  
+    a_s = std::string(ss);
     return true;
-  } 
+  }
 public:
   void add(const style_color& a_color) {
     (*this)[uint32((*this).size())] = a_color;
@@ -95,7 +95,7 @@ public:
     tmp.set_name(#a__name);\
     set_color_##a__name(tmp);\
     add(tmp);
-  
+
   style_default_colormap() {
     style_color tmp;
     STYLE_COLORMAP_ADD(aquamarine)
@@ -119,7 +119,7 @@ public:
     STYLE_COLORMAP_ADD(coral)
     STYLE_COLORMAP_ADD(cyan)
     STYLE_COLORMAP_ADD(firebrick)
-      
+
     STYLE_COLORMAP_ADD(brown)
     STYLE_COLORMAP_ADD(gold)
     STYLE_COLORMAP_ADD(goldenrod)
@@ -130,7 +130,7 @@ public:
     STYLE_COLORMAP_ADD(limegreen)
     STYLE_COLORMAP_ADD(mediumseagreen)
     STYLE_COLORMAP_ADD(mediumspringgreen)
-      
+
     STYLE_COLORMAP_ADD(palegreen)
     STYLE_COLORMAP_ADD(seagreen)
     STYLE_COLORMAP_ADD(springgreen)
@@ -141,7 +141,7 @@ public:
     STYLE_COLORMAP_ADD(grey)
     STYLE_COLORMAP_ADD(khaki)
     STYLE_COLORMAP_ADD(magenta)
-      
+
     STYLE_COLORMAP_ADD(maroon)
     STYLE_COLORMAP_ADD(orange)
     STYLE_COLORMAP_ADD(orchid)
@@ -152,7 +152,7 @@ public:
     STYLE_COLORMAP_ADD(red)
     STYLE_COLORMAP_ADD(indianred)
     STYLE_COLORMAP_ADD(mediumvioletred)
-      
+
     STYLE_COLORMAP_ADD(orangered)
     STYLE_COLORMAP_ADD(violetred)
     STYLE_COLORMAP_ADD(salmon)
@@ -163,7 +163,7 @@ public:
     STYLE_COLORMAP_ADD(darkturquoise)
     STYLE_COLORMAP_ADD(mediumturquoise)
     STYLE_COLORMAP_ADD(violet)
-      
+
     STYLE_COLORMAP_ADD(blueviolet)
     STYLE_COLORMAP_ADD(wheat)
     STYLE_COLORMAP_ADD(white)
@@ -246,7 +246,7 @@ public:
     // Initialize some additional greyish non saturated colors
 #define TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(a__i,a__name) \
     new_TColor(a__i,get_color_ROOT_##a__name<colorf>(),#a__name);
-    
+
     TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR( 8,Color8)
     TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR( 9,Color9)
     TOOLS_SG_STYLE_COLORMAP_ADD_TCOLOR(12,grey12)
@@ -282,9 +282,9 @@ public:
       new_TColor(i+51, r, g, b,head,i+51);
     }}
 
-    double h,l,s,r,g,b;    
+    double h,l,s,r,g,b;
 
-    // dark colors (index 101 to 150) :     
+    // dark colors (index 101 to 150) :
     // NOTE : 100 = "dark black" would overlap with "pretty 49" !
     //        then start to 1+100.
    {for(unsigned int i=1 ; i<=50 ; i++) {
@@ -296,8 +296,8 @@ public:
       hls_to_rgb<double>(h,0.7*l,s, r, g, b);
       new_TColor(i+100, r, g, b, nam+"_dark");
     }}
-    
-    // bright colors (index 151 to 200) :     
+
+    // bright colors (index 151 to 200) :
     // NOTE : 150 = "bright black" would overlap with "dark 50" !
     //        then start to 1+150.
    {for(unsigned int i=1 ; i<=50 ; i++) {
@@ -309,7 +309,7 @@ public:
       hls_to_rgb<double>(h,1.2*l,s, r, g, b);
       new_TColor(i+150, r, g, b, nam+"_bright");
     }}
-    
+
     // Initialize special colors for x3d
     // from 201 to 228=200+4*7 : 7*4 = 28.
    {std::string head("Color");
@@ -375,7 +375,7 @@ protected:
                             const std::string& a_name,
                             unsigned char a_rgb[]) {
     // Create the "circle" colors in the Color Wheel
-    for(unsigned int n=0;n<15;n++) {      
+    for(unsigned int n=0;n<15;n++) {
       int colorn = a_offset+n-10;
       if(colorn<0) continue;
       if(n>10) {
@@ -556,30 +556,30 @@ inline bool find_color(const cmaps_t& a_cmaps,const std::string& a_s,colorf& a_c
     cmaps_t::const_iterator it = a_cmaps.find(cmap);
     if(it==a_cmaps.end()) return false;
     return (*it).second.get_color(cnam,a_col);
-      
+
   } else {
 
     if( (a_s.size()==7) && (a_s[0]=='#') ) {
       // #RRGGBB format :
       //  1 3 5
       unsigned long rr,gg,bb;
-  
+
      {std::string s("0x");
       s += a_s.substr(1,2);
       if(!to_ulong(s,rr)) return false;}
-  
+
      {std::string s("0x");
       s += a_s.substr(3,2);
       if(!to_ulong(s,gg)) return false;}
-  
+
      {std::string s("0x");
       s += a_s.substr(5,2);
       if(!to_ulong(s,bb)) return false;}
-  
+
       a_col = colorf(((float)rr)/255,((float)gg)/255,((float)bb)/255);
       return true;
-    } 
-  
+    }
+
     //a_s of the form : <real:r> <real:g> <real:b>
     //a_s of the form : <real:r> <real:g> <real:b> <real:a>
 
@@ -610,10 +610,10 @@ inline bool find_color(const cmaps_t& a_cmaps,const std::string& a_s,colorf& a_c
    {cmaps_t::const_iterator it = a_cmaps.find(style_default_colormap::s_default());
     if(it!=a_cmaps.end()) {
       if((*it).second.get_color(a_s,a_col)) return true;
-    }}      
+    }}
 
   }
-  
+
   return false;
 }
 

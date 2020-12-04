@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbDetectorConstruction
+// G4tgbDetectorConstruction
 //
 // Class description:
 //
@@ -34,12 +31,10 @@
 // It passes to the G4RunManager the top volume in the hierarchy
 // constructed in G4tgbVolumeMgr.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbDetectorConstruction_H
-#define G4tgbDetectorConstruction_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbDetectorConstruction_hh
+#define G4tgbDetectorConstruction_hh 1
 
 #include "globals.hh"
 
@@ -47,12 +42,12 @@ class G4VPhysicalVolume;
 
 class G4tgbDetectorConstruction
 {
- public:  // with description
+  public:
 
-   G4tgbDetectorConstruction();
-   ~G4tgbDetectorConstruction();
-  
-   G4VPhysicalVolume* Construct();
+    G4tgbDetectorConstruction();
+    ~G4tgbDetectorConstruction();
+
+    G4VPhysicalVolume* Construct();
 };
 
 #endif

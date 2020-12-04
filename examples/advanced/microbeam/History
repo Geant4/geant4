@@ -7,6 +7,11 @@
 
                        Package History file
                        --------------------
+15 Nov 2020 - S. Guatelli - tag microbeam-V10-06-01
+- Migration to G4RunManagerFactory
+
+02 Nov 2020 - B.Morgan - tag microbeam-V10-06-00
+- Support same CMake version range as core Geant4
 
 04 Sep 2018 - S. Incerti - tag microbeam-V10-04-04
 - updated visualization
@@ -74,7 +79,7 @@ and SetMaximumEpsilonStep
 - switched to OGLIXm in vis.mac
 
 16 Jan 2015 - S.Incerti - tag microbeam-V10-01-00
-- added protection against loops 
+- added protection against loops
 
 14 Oct 2014 - S.Incerti - tag microbeam-V10-00-06
 - warnings fix for Windows
@@ -117,7 +122,7 @@ and SetMaximumEpsilonStep
 - Migration to MT
 
 30 May 2013 - L. Pandola - tag microbeam-V09-06-01
-- Migrate analysis from AIDA to g4tools (no AIDA 
+- Migrate analysis from AIDA to g4tools (no AIDA
   dependency any longer). Minor fix in the CMakeLists.txt
 
 19 April 2013 - S. Incerti - tag microbeam-V09-06-00
@@ -152,10 +157,10 @@ and SetMaximumEpsilonStep
 - more clean-up after Gunter's improvements
 
 03 October 2011 - G.Folger  - tag microbeam-V09-04-03
-- fix missed compilation warnings from gcc46 in MicrobeamEMField.cc 
+- fix missed compilation warnings from gcc46 in MicrobeamEMField.cc
 
 03 October 2011 - G.Folger  - tag microbeam-V09-04-02
-- fix compilation warnings from gcc46 in MicrobeamEMField.cc 
+- fix compilation warnings from gcc46 in MicrobeamEMField.cc
      and MicrobeamPhantomConfiguration.cc
 
 11 August 2011 - S. Incerti - tag microbeam-V09-04-01
@@ -186,7 +191,7 @@ and SetMaximumEpsilonStep
 - Have vis.mac disabled by default
 
 09 June 2010 - S. Incerti - tag microbeam-V09-03-04
-- Switched to physics_list library. microbeam.mac adapted. 
+- Switched to physics_list library. microbeam.mac adapted.
 
 06 June 2010 - S. Incerti - tag microbeam-V09-03-03
 - Removed unused variable (evt) in MicrobeamEventAction.cc
@@ -205,11 +210,11 @@ and SetMaximumEpsilonStep
 30 April 2009 - S. Incerti - tag microbeam-V09-02-01
 - Updated Physics list to migrated Livermore processes
 - Corrected plot.C
-- Corrected switching field value 
+- Corrected switching field value
 
 26 February 2009 - G.Folger  - tag microbeam-V09-02-00
 - Correct  MicrobeamEMField.cc to use logical &&, not bit & in if().
- 
+
 23 October 2008 - tag microbeam-V09-01-03
 - Corrected typos in zero field region in MicrobeamEMField.cc
 
@@ -217,7 +222,7 @@ and SetMaximumEpsilonStep
 - Modified process ordering of G4eBremsstrahlung and G4StepLimiter in MicrobeamPhysicstList.cc
 
 16 June 2008 - tag microbeam-V09-01-01
-- Added units in MicrobeamPhantomconfiguration.cc and 
+- Added units in MicrobeamPhantomconfiguration.cc and
   MicrobeamSteppingAction.cc
 
 28 August 2007 - tag microbeam-V09-00-03 - G. Cosmo
@@ -225,7 +230,7 @@ and SetMaximumEpsilonStep
   to allow for compilation on WIN32-VC systems.
 
 22 August 2007 - tag microbeam-V09-00-02 - S. Incerti
-- Updated dose computation to take into account volume edges in src/MicrobeamSteppingAction.cc 
+- Updated dose computation to take into account volume edges in src/MicrobeamSteppingAction.cc
 
 21 August 2007 - tag microbeam-V09-00-01 - S. Incerti
 - Changed number of incident alpha particles in microbeam.mac
@@ -237,13 +242,13 @@ and SetMaximumEpsilonStep
 - Updated dose computation for very low energy secondaries in src/MicrobeamSteppingAction.cc
 
 27 Fev 2007 - S. Incerti
-- Modified dE/dX calculation in src/MicrobeamSteppingAction.cc 
-in order to average on Pre/Post step. 
+- Modified dE/dX calculation in src/MicrobeamSteppingAction.cc
+in order to average on Pre/Post step.
 - Updated README and html files with publications.
 
 23 Nov 2006 - S. Incerti (microbeam-V08-01-01)
-- Replaced G4MultipleScattering process for alphas by 
-G4hMultipleScattering process in src/MicrobeamPhysicsList.cc. 
+- Replaced G4MultipleScattering process for alphas by
+G4hMultipleScattering process in src/MicrobeamPhysicsList.cc.
 
 22 Nov 2006 - G. Cosmo (microbeam-V08-01-00)
 - Removed obsolete vis-manager classes. Now using G4VisExecutive.

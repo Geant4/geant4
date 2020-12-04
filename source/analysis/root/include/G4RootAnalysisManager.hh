@@ -41,21 +41,13 @@
 #include <memory>
 
 class G4RootFileManager;
-class G4RootNtupleManager;
-class G4RootMainNtupleManager;
-class G4RootPNtupleManager;
+class G4RootNtupleFileManager;
 
 namespace tools {
 namespace wroot {
 class directory;    
 }
 }
-
-enum class G4NtupleMergeMode {
-  kNone,
-  kMain,
-  kSlave
-};
 
 class G4RootAnalysisManager : public  G4ToolsAnalysisManager
 {
@@ -89,11 +81,11 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
   protected:
     // virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName) override;
-    virtual G4bool WriteImpl() final;
+    virtual G4bool WriteImpl() override;
     virtual G4bool CloseFileImpl(G4bool reset) override; 
     virtual G4bool IsOpenFileImpl() const final;
+
     // virtual functions (overriden in MPI implementation)
-    virtual G4bool WriteNtuple();
     virtual G4bool Reset();
 
   private:
@@ -102,17 +94,9 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     static G4ThreadLocal G4RootAnalysisManager* fgInstance;
 
     // methods
-    void SetNtupleMergingMode(G4bool mergeNtuples, 
-                              G4int nofNtupleFiles);
-    void ClearNtupleManagers();
-    void CreateNtupleManagers();
-    G4int  GetNtupleFileNumber();
-    G4bool ResetNtuple();
-
     template <typename T>
     G4bool WriteT(const std::vector<T*>& htVector,
                   const std::vector<G4HnInformation*>& hnVector,
-                  tools::wroot::directory* directory,
                   const G4String& hnType);
     G4bool WriteH1();
     G4bool WriteH2();
@@ -121,13 +105,8 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     G4bool WriteP2();
 
     // data members 
-    G4int   fNofNtupleFiles;
-    G4bool  fNtupleRowWise;
-    G4bool  fNtupleRowMode;
-    G4NtupleMergeMode      fNtupleMergeMode;
-    G4RootNtupleManager*   fNtupleManager; 
-    G4RootPNtupleManager*  fSlaveNtupleManager;
     std::shared_ptr<G4RootFileManager> fFileManager;
+    std::shared_ptr<G4RootNtupleFileManager> fNtupleFileManager;
 };
 
 #include "G4RootAnalysisManager.icc"

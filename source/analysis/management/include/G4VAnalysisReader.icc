@@ -508,7 +508,7 @@ G4int G4VAnalysisReader::GetVerboseLevel() const
 inline
 G4String G4VAnalysisReader::GetType() const 
 {
-  return fState.GetType();
+  return fFileManager->GetFileType();
 }                 
 
 //_____________________________________________________________________________

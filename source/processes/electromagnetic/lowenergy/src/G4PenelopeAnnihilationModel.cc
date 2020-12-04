@@ -289,7 +289,7 @@ G4double G4PenelopeAnnihilationModel:: ComputeCrossSectionPerElectron(G4double e
   G4double gamma2 = gamma*gamma;
   G4double f2 = gamma2-1.0;
   G4double f1 = std::sqrt(f2);
-  G4double crossSection = fPielr2*((gamma2+4.0*gamma+1.0)*std::log(gamma+f1)/f2
+  G4double crossSection = fPielr2*((gamma2+4.0*gamma+1.0)*G4Log(gamma+f1)/f2
 			 - (gamma+3.0)/f1)/(gamma+1.0);
   return crossSection;
 }

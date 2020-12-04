@@ -114,44 +114,43 @@ public:
     // virtual uintmax_t operator--(int) = 0;
 
 public:
-    template <typename _Container, size_t... Idx>
-    static auto ContainerToTupleImpl(_Container&& container,
-                                     details::index_sequence<Idx...>)
-        -> decltype(std::make_tuple(std::forward<_Container>(container)[Idx]...))
+    template <typename ContainerT, size_t... Idx>
+    static auto ContainerToTupleImpl(ContainerT&& container, mpl::index_sequence<Idx...>)
+        -> decltype(std::make_tuple(std::forward<ContainerT>(container)[Idx]...))
     {
-        return std::make_tuple(std::forward<_Container>(container)[Idx]...);
+        return std::make_tuple(std::forward<ContainerT>(container)[Idx]...);
     }
 
-    template <std::size_t _N, typename _Container>
-    static auto ContainerToTuple(_Container&& container)
-        -> decltype(ContainerToTupleImpl(std::forward<_Container>(container),
-                                         details::make_index_sequence<_N>{}))
+    template <std::size_t N, typename ContainerT>
+    static auto ContainerToTuple(ContainerT&& container)
+        -> decltype(ContainerToTupleImpl(std::forward<ContainerT>(container),
+                                         mpl::make_index_sequence<N>{}))
     {
-        return ContainerToTupleImpl(std::forward<_Container>(container),
-                                    details::make_index_sequence<_N>{});
+        return ContainerToTupleImpl(std::forward<ContainerT>(container),
+                                    mpl::make_index_sequence<N>{});
     }
 
-    template <std::size_t _N, std::size_t _Nt, typename _Tuple,
-              enable_if_t<(_N == _Nt), int> = 0>
-    static void _Executor(_Tuple&& _t)
+    template <std::size_t N, std::size_t Nt, typename TupleT,
+              enable_if_t<(N == Nt), int> = 0>
+    static void TExecutor(TupleT&& _t)
     {
-        if(std::get<_N>(_t).get())
-            (*(std::get<_N>(_t)))();
+        if(std::get<N>(_t).get())
+            (*(std::get<N>(_t)))();
     }
 
-    template <std::size_t _N, std::size_t _Nt, typename _Tuple,
-              enable_if_t<(_N < _Nt), int> = 0>
-    static void _Executor(_Tuple&& _t)
+    template <std::size_t N, std::size_t Nt, typename TupleT,
+              enable_if_t<(N < Nt), int> = 0>
+    static void TExecutor(TupleT&& _t)
     {
-        if(std::get<_N>(_t).get())
-            (*(std::get<_N>(_t)))();
-        _Executor<_N + 1, _Nt, _Tuple>(std::forward<_Tuple>(_t));
+        if(std::get<N>(_t).get())
+            (*(std::get<N>(_t)))();
+        TExecutor<N + 1, Nt, TupleT>(std::forward<TupleT>(_t));
     }
 
-    template <typename _Tuple, std::size_t _N = std::tuple_size<decay_t<_Tuple>>::value>
-    static void Executor(_Tuple&& __t)
+    template <typename TupleT, std::size_t N = std::tuple_size<decay_t<TupleT>>::value>
+    static void Executor(TupleT&& __t)
     {
-        _Executor<0, _N - 1, _Tuple>(std::forward<_Tuple>(__t));
+        TExecutor<0, N - 1, TupleT>(std::forward<TupleT>(__t));
     }
 
     template <typename Container,

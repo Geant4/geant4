@@ -4,8 +4,9 @@
 # compute the csda range of the primary particle
 # with or without fluctuations
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setNbOfAbsor  1
 /testem/det/setAbsor 1 Water  5 mm
@@ -32,5 +33,4 @@
 /analysis/h1/set 3 200 0 4 mm	# csda range
 #	 
 /run/printProgress 2000
-#
 /run/beamOn 20000

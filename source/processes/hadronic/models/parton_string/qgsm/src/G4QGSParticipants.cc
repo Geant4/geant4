@@ -58,7 +58,8 @@ G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(),
   SetPt2ofNuclearDestruction( 0.075*GeV*GeV );
   SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
   SetExcitationEnergyPerWoundedNucleon( 40.0*MeV );
-  sigmaPt=0.0;  // Uzhi June 2020 : sigmaPt=0.25*sqrt(GeV);
+
+  sigmaPt=0.25*sqr(GeV);
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)
@@ -979,13 +980,14 @@ G4bool G4QGSParticipants::PutOnMassShell() {
 G4ThreeVector G4QGSParticipants::GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const {
   //  @@ this method is used in FTFModel as well. Should go somewhere common!
 
-  G4double Pt2( 0.0 );
-  if ( AveragePt2 <= 0.0 ) {
-    Pt2 = 0.0;
-  } else {
-    Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
+  G4double Pt2( 0.0 ), Pt(0.0);
+  if ( AveragePt2 > 0.0 ) {
+    G4double x = maxPtSquare/AveragePt2;
+    Pt2 = (x < 200) ?
+      -AveragePt2 * G4Log( 1.0 + G4UniformRand() * ( G4Exp( -x ) -1.0 ) )
+      : -AveragePt2 * G4Log( 1.0 - G4UniformRand() );
+    Pt = std::sqrt( Pt2 );
   }
-  G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;
 
   return G4ThreeVector( Pt*std::cos(phi), Pt*std::sin(phi), 0.0 );    

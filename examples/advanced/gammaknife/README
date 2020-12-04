@@ -7,18 +7,19 @@
                           --------------------------------------------
 
  AUTHORS:
- G. Cuttone (a), J. Pipek (b) F.Romano* (a), M.G.Sabini (c), A. Varisano (a)
+ F.Romano* (a)
 
  PAST AUTHORS:
- G.A.P. Cirrone (a), G.Russo (d), M.Russo (a)
+ J. Pipek (c), A. Varisano (b), G.Russo (e), G.A.P. Cirrone (b), M.Russo (e), G. Cuttone (b),  M.G.Sabini (d)
 
- (a) Laboratori Nazionali del Sud - INFN, Catania, Italy
- (b) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
- (c) UOS Fisica Sanitaria, Ospedale Cannizzaro, Catania, Italy
- (d) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
+ (a) INFN - Sezione di Catania, Catania, Italy
+ (b) INFN - Laboratori Nazionali del Sud, Catania, Italy
+ (c) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
+ (d) UOS Fisica Sanitaria, Ospedale Cannizzaro, Catania, Italy
+ (e) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
 
 
- *Corresponding author, email to francesco.romano@lns.infn.it
+ *Corresponding author, email to francesco.romano@ct.infn.it
 
 -------------------------------------------------------------------------------------------------
 
@@ -54,9 +55,7 @@ If some troubles are faced with the Geant4 installation please send an e-mail to
 
 ----> HOW TO RUN THE EXAMPLE                                          
 
-In interactive mode:
-> $G4WORKDIR/bin/Linux-g++/gammaknife
-The defaultMacro.mac is executed in this case.
+The defaultMacro.mac is executed if no macro file is specified.
 
 For a realistic simulation of the Gamma-Knife device, including the irradiation of all the sources, the macro simulation.mac has to be used, defining the number of particles shooted per each angle (that is, for each "source"). The following commands have to be used to this aim:
  /gammaknife/loadAngles MachineAngle.in	      --> rotation agles file is called
@@ -97,9 +96,7 @@ Important note: the GAMMAKNIFE application is meant as an example of simulation 
 
 Local PhysicsList is activated by default (GammaKnifePhysicsList.cc), which includes the G4EmStandardPhysics_option3.
 
-Anyhow, it is recommended the use of the Reference Physics List QGSP_BIC_EMY, which is the suggested on for medical applications. It is possible to activate that defining the environment variable PHYSLIST in such a way:
-> export PHYSLIST=QGSP_BIC_EMY
-
+Anyhow, it is recommended the use of the Reference Physics List QGSP_BIC_EMY, which is the suggested on for medical applications. 
 
 ---->  VISUALISATION
 
@@ -115,8 +112,8 @@ Alternatively, the dose deposited can be also stored using the appropriate scori
 
 
 For comments, advices and questions please contact: 
-francesco.romano@lns.infn.it
+francesco.romano@ct.infn.it
 
-last modified: F.Romano, 30/10/2012
+last modified: F.Romano, 03/11/2020
 
  

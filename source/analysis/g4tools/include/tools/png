@@ -53,7 +53,7 @@ inline unsigned char* read_FILE(FILE* a_file,unsigned int& a_width,unsigned int&
     return 0;
   }
 
-  png_structp png_ptr = 
+  png_structp png_ptr =
     ::png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
   if(!png_ptr) {
     a_width = 0;
@@ -119,8 +119,8 @@ inline unsigned char* read_FILE(FILE* a_file,unsigned int& a_width,unsigned int&
     a_width = 0;
     a_bpp = 0;
     return 0;
-  }  
-  
+  }
+
  {png_bytep* row_pointers = new png_bytep[height];
   png_byte* pos = buffer+info_ptr->rowbytes*(height-1);
   for(int y=0;y<height;y++) {
@@ -200,8 +200,8 @@ inline unsigned char* read_part(std::ostream& a_out,
   }
 
   // 012345
-  a_rw = tools::mn<unsigned int>(w-a_sx,a_sw); 
-  a_rh = tools::mn<unsigned int>(h-a_sy,a_sh); 
+  a_rw = tools::mn<unsigned int>(w-a_sx,a_sw);
+  a_rh = tools::mn<unsigned int>(h-a_sy,a_sh);
   a_rbpp = bpp;
 
   if(!a_rw||!a_rh||!a_rbpp){
@@ -219,7 +219,7 @@ inline unsigned char* read_part(std::ostream& a_out,
     a_rh = 0;
     a_rbpp = 0;
     return 0;
-  }  
+  }
 
   unsigned int rstride = a_rw * a_rbpp;
   unsigned char* rpos = rb;
@@ -233,7 +233,7 @@ inline unsigned char* read_part(std::ostream& a_out,
 
   delete [] buffer;
 
-  return rb;  
+  return rb;
 }
 
 inline bool write_FILE(FILE* a_file,unsigned char* a_buffer,unsigned int a_width,unsigned int a_height,unsigned int a_bpp) {
@@ -245,21 +245,21 @@ inline bool write_FILE(FILE* a_file,unsigned char* a_buffer,unsigned int a_width
   png_structp png_ptr;
   if(!(png_ptr = ::png_create_write_struct
                     (PNG_LIBPNG_VER_STRING,NULL,NULL,NULL))) return false;
-  
+
   png_infop info_ptr;
   if(!(info_ptr = ::png_create_info_struct(png_ptr))){
     ::png_destroy_write_struct(&png_ptr,NULL);
     return false;
   }
-  
+
   if(::setjmp(png_ptr->jmpbuf)) {
     ::png_destroy_write_struct(&png_ptr,&info_ptr);
     return false;
   }
-  
+
   ::png_init_io(png_ptr,a_file);
   ::png_set_compression_level(png_ptr,Z_DEFAULT_COMPRESSION);
-  ::png_set_IHDR(png_ptr,info_ptr,a_width,a_height,8, 
+  ::png_set_IHDR(png_ptr,info_ptr,a_width,a_height,8,
                  a_bpp==3?PNG_COLOR_TYPE_RGB:PNG_COLOR_TYPE_RGBA,
                  PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_BASE,PNG_FILTER_TYPE_BASE);
@@ -276,7 +276,7 @@ inline bool write_FILE(FILE* a_file,unsigned char* a_buffer,unsigned int a_width
 }
 
 inline bool write(std::ostream& a_out,
-                  const std::string& a_file,                      
+                  const std::string& a_file,
                   unsigned char* a_buffer,
                   unsigned int a_width,
                   unsigned int a_height,
@@ -299,7 +299,7 @@ inline bool write(std::ostream& a_out,
   return true;
 }
 
-inline bool infos_file(FILE* a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
+inline bool infos_FILE(FILE* a_file,unsigned int& a_width,unsigned int& a_height,unsigned int& a_bpp) {
   //a_bpp = number of bytes per pixel.
   png_byte header[8];	// 8 is the maximum size that can be checked
   if(::fread(header,1,8,a_file)!=8) {
@@ -315,7 +315,7 @@ inline bool infos_file(FILE* a_file,unsigned int& a_width,unsigned int& a_height
     return false;
   }
 
-  png_structp png_ptr = 
+  png_structp png_ptr =
     ::png_create_read_struct(PNG_LIBPNG_VER_STRING,NULL,NULL,NULL);
   if(!png_ptr) {
     a_width = 0;
@@ -365,7 +365,7 @@ inline bool infos(std::ostream& a_out,const std::string& a_file,unsigned int& a_
     a_height = 0;
     a_bpp = 0;
     return false;
-  } 
+  }
 
   FILE* file = ::fopen(a_file.c_str(),"rb");
   if(!file) {
@@ -379,7 +379,7 @@ inline bool infos(std::ostream& a_out,const std::string& a_file,unsigned int& a_
   }
 
   unsigned int w,h,bpp;
-  bool status = infos_file(file,w,h,bpp);
+  bool status = infos_FILE(file,w,h,bpp);
 
   ::fclose(file);
 
@@ -425,7 +425,7 @@ inline bool concatenate(std::ostream& a_out,
                         unsigned char a_bc,
                         const std::string& a_file) {
   unsigned int wa,ha,bppa;
-  unsigned char* ba = 
+  unsigned char* ba =
     tools::image::concatenate
       (a_out,a_files,a_cols,a_rows,a_bw,a_bh,a_bc,read,wa,ha,bppa);
   if(!ba) {
@@ -434,7 +434,7 @@ inline bool concatenate(std::ostream& a_out,
           << std::endl;
     delete [] ba;
     return false;
-  } 
+  }
 
   FILE* file = ::fopen(a_file.c_str(),"wb");
   if(!file) {

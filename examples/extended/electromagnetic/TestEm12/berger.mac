@@ -4,8 +4,9 @@
 # L. Ferrer et al. Cancer Bio. Rad. 22-1 (2007)
 # Mainegra et al. Med. Phys. 32, 685-699 (2005)       
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
@@ -21,9 +22,8 @@
 /gun/particle e-
 /gun/energy 100 keV
 #
-/analysis/setFileName berger/100keV_local
-/analysis/h1/set 8 120  0.  1.2 none	#normalized edep profile
+/analysis/setFileName 100keV_local
+/analysis/h1/set 8 120 0.0  1.2 none	#normalized edep profile
 #
 /run/printProgress 10000
-#
 /run/beamOn 160000

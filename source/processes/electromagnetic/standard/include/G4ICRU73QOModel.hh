@@ -131,7 +131,7 @@ private:
 
   G4double DEDXPerElement(G4int Z, G4double kineticEnergy);
 
-  // get number of shell, energy and oscillator strenghts for material
+  // get number of shell, energy and oscillator strengths for material
   G4int GetNumberOfShells(G4int Z) const;
 
   G4double GetShellEnergy(G4int Z, G4int nbOfTheShell) const; 
@@ -169,7 +169,7 @@ private:
   static const G4int NQODATA  = 130;
   static const G4int ZElementAvailable[NQOELEM];
   
-  // number, energy and oscillator strenghts
+  // number, energy and oscillator strengths
   // for an harmonic oscillator model of material
   static const G4int startElemIndex[NQOELEM];
   static const G4int nbofShellsForElement[NQOELEM];

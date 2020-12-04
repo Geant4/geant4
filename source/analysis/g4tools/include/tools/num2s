@@ -139,7 +139,7 @@ public:
 
 namespace tools {
 
-template <class VEC>  
+template <class VEC>
 inline bool nums2s(const VEC& a_vals,std::string& a_s,const std::string& a_sep = "\n",bool a_sep_at_end = false) {
   a_s.clear();
   typename VEC::size_type number = a_vals.size();
@@ -158,7 +158,7 @@ inline bool nums2s(const VEC& a_vals,std::string& a_s,const std::string& a_sep =
   return status;
 }
 
-template <class T>  
+template <class T>
 inline bool nums2s(const std::vector<T>& a_vals,std::string& a_s,const std::string& a_sep = "\n",bool a_sep_at_end = false) {
   return nums2s< std::vector<T> >(a_vals,a_s,a_sep,a_sep_at_end);
 }

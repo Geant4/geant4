@@ -1,5 +1,7 @@
 /control/verbose 2
 /tracking/verbose 0
+/process/optical/verbose 1
+/run/verbose 1
 /control/cout/ignoreThreadsExcept 0
 
 /opnovice2/boxMaterial G4_BGO
@@ -36,6 +38,9 @@
 
 /opnovice2/worldProperty RINDEX    0.000002 1.01 0.000008 1.01
 /opnovice2/worldProperty ABSLENGTH 0.000002 100  0.000005 100  0.000008 100
+## no scintillation in the world, but we want to exercise
+## this macro command
+/opnovice2/worldConstProperty SCINTILLATIONTIMECONSTANT1 1
 
 /process/optical/processActivation Cerenkov      false
 /process/optical/processActivation OpAbsorption  true
@@ -44,8 +49,6 @@
 /process/optical/processActivation OpRayleigh    false
 /process/optical/processActivation OpMieHG       false
 /process/optical/processActivation OpWLS         false
-
-/process/optical/verbose 0
 
 /process/optical/scintillation/setEnhancedTimeConstants true
 /process/optical/scintillation/setYieldFactor 10
@@ -62,12 +65,8 @@
 /process/optical/scintillation/verbose 0
 
 /analysis/setFileName scint_by_particle
-/analysis/h1/set      2  100 0 10
-/analysis/h1/setXaxis 2  "Energy [eV]"
-/analysis/h1/setYaxis 2  "Number of photons"
-/analysis/h1/set      3  400 0 200
-/analysis/h1/setXaxis 3  "Creation time [ns]"
-/analysis/h1/setYaxis 3  "Number of photons"
+/analysis/h1/set      2  100 0 10  # eV
+/analysis/h1/set      3  400 0 200 # ns
 
 #
 /gun/particle e-

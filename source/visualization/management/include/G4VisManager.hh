@@ -525,7 +525,6 @@ private:
   G4int                 fNoOfEventsDrawnThisRun;
   G4int                 fNKeepRequests;
   G4bool                fEventKeepingSuspended;
-  G4bool                fKeptLastEvent;
   G4bool                fDrawEventOnlyIfToBeKept;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
   G4bool                fReviewingKeptEvents;

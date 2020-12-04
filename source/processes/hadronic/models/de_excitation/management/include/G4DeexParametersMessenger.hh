@@ -69,9 +69,9 @@ class G4DeexParametersMessenger: public G4UImessenger
 public:   // with description
   
   explicit G4DeexParametersMessenger(G4DeexPrecoParameters*);
-  virtual ~G4DeexParametersMessenger();
+  ~G4DeexParametersMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String) override;
+  void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
 
@@ -86,7 +86,6 @@ private:
 
   G4UIcmdWithAnInteger*      maxjCmd;
   G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithAnInteger*      upCmd;
 
 };
 

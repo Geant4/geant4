@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -40,7 +40,7 @@
 
 #include "FTFP_BERT.hh"
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "G4VisExecutive.hh"
@@ -49,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
-{  
+{
 
   if(argc==1)
   {
@@ -77,14 +77,14 @@ int main(int argc, char** argv)
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // UserInitialization classes (mandatory)
   runManager->SetUserInitialization(det);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
-  
+
   // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
@@ -94,9 +94,9 @@ int main(int argc, char** argv)
 
   //Initialize G4 kernel
   runManager->Initialize();
-      
-  //get the pointer to the User Interface manager 
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+
+  //get the pointer to the User Interface manager
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
   UImanager->ApplyCommand("/control/execute vis.mac");
   ui->SessionStart();

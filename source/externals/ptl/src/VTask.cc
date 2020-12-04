@@ -78,7 +78,7 @@ VTask::operator--()
                 m_group->task_cond()->notify_all();
             } catch(std::system_error& e)
             {
-                auto     tid = ThreadPool::GetThisThreadID();
+                auto     tid = ThreadPool::get_this_thread_id();
                 AutoLock l(TypeMutex<decltype(std::cerr)>(), std::defer_lock);
                 if(!l.owns_lock())
                     l.lock();

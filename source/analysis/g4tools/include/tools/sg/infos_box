@@ -29,11 +29,11 @@ public:
   sf_vec<colorf,float> color;
   sf_string font;
   sf_enum<sg::font_modeling> font_modeling;
-  sf_string encoding; 
+  sf_string encoding;
   sf<float> line_width; // for text_hershey.
   sf_enum<winding_type> front_face; //no more used.
 
-  sf<bool> back_visible;  
+  sf<bool> back_visible;
   sf<float> wmargin_factor;
   sf<float> hmargin_factor;
   sf_enum<hjust> lhjust;
@@ -47,9 +47,11 @@ public:
       TOOLS_ARG_FIELD_DESC(rstrings),
       TOOLS_ARG_FIELD_DESC(num_spaces),
       TOOLS_ARG_FIELD_DESC(color),
-      
+
       TOOLS_ARG_FIELD_DESC_OPTS_BEG(font,8)
         font_hershey().c_str(),
+        font_lato_regular_ttf().c_str(),
+        font_roboto_bold_ttf().c_str(),
         font_arial_ttf().c_str(),
         font_arialbd_ttf().c_str(),
         font_timesbd_ttf().c_str(),
@@ -58,13 +60,13 @@ public:
         font_helvetica_ttf().c_str(),
         font_times_roman_ttf().c_str()
       TOOLS_ARG_FIELD_DESC_OPTS_END,
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
         TOOLS_ARG_ENUM(font_outline),
         TOOLS_ARG_ENUM(font_filled),
         TOOLS_ARG_ENUM(font_pixmap)
       TOOLS_ARG_FIELD_DESC_ENUMS_END,
-      
+
       TOOLS_ARG_FIELD_DESC(encoding),
       TOOLS_ARG_FIELD_DESC(line_width),
       TOOLS_ARG_FIELD_DESC(front_face),
@@ -87,7 +89,7 @@ private:
     add_field(&color);
     add_field(&font);
     add_field(&font_modeling);
-    add_field(&encoding); 
+    add_field(&encoding);
     add_field(&line_width);
     add_field(&front_face);
 
@@ -118,12 +120,12 @@ public:
     }
   }
   virtual void search(search_action& a_action) {
-    node::search(a_action);
-    if(a_action.done()) return;
     if(touched()) {
       update_sg();
       reset_touched();
     }
+    node::search(a_action);
+    if(a_action.done()) return;
     if(back_visible.value()) {
       m_back_sep.search(a_action);
       if(a_action.done()) return;
@@ -392,7 +394,7 @@ public:
 
       // from a text height of th=1, and a left/right sep
       // of num_spaces*th, get width of the box :
-  
+
       float th = 1;
 
       float lmn_x,lmn_y,lmn_z;
@@ -423,17 +425,17 @@ public:
       // to th, we get the th needed to match infos_box.width :
       // th -> winfos then to have fw :
       th = fw*th/winfos;
-  
+
       // place the left/right texts by rescaling them to
       // the new th :
       ltext->height = th;
       ltext->get_bounds(th,lmn_x,lmn_y,lmn_z,lmx_x,lmx_y,lmx_z);
       float hinfos = (lmx_x<lmn_x)?0:lmx_y-lmn_y;
-  
+
       float xx = -fw*0.5F; //left justified.
       float ty = -ltext->ascent(th)+hinfos*0.5f;
       ltsf->set_translate(xx,ty,zz);
-  
+
       rtext->height = th;
       if(rtext->hjust==right) {
         xx = fw*0.5F;
@@ -447,17 +449,17 @@ public:
         xx = fw*0.5F-rw*0.5F;
       }
       rtsf->set_translate(xx,ty,zz);
-  
+
       // set infos_box.height :
       height = hinfos/hmargin_factor;
-  
+
       //done last because of the upper height setup.
       parent::update_sg();
 
     }
 
     delete mtext;
-  
+
   }
 protected:
   const base_freetype& m_ttf;

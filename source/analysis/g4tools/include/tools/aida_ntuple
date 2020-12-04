@@ -191,7 +191,7 @@ public:
 
   // reading :
   void start() {m_index = -1;set_columns_index(0);}
-  bool next() { 
+  bool next() {
     // a tuple loop is of the form :
     //  tuple.start();
     //  while(tuple.next()) {
@@ -539,7 +539,7 @@ public:
             << " can't create aida_col<T> " << sout(a_name) << "."
             << std::endl;
       return 0;
-    }    
+    }
     m_cols.push_back(col);
     return col;
   }
@@ -614,7 +614,7 @@ public:
     }}
     return true;
   }
-  
+
   template <class T>
   bool column_max(unsigned int a_col,T& a_value) {
     a_value = T();
@@ -637,7 +637,7 @@ public:
     }}
     return true;
   }
-  
+
 };
 
 ////////////////////////////////////////////////////////////
@@ -755,13 +755,13 @@ inline bool create_cols_from_vals(ntuple& a_ntu,
 
     } else {
         if(a_verbose){
-          std::string stype;        
+          std::string stype;
           (*it).s_type(stype);
-          std::string sval;        
+          std::string sval;
           (*it).tos(sval);
           a_ntu.out() << "tools::aida::create_cols_from_vals :"
-                      << " " << stype << " : " 
-                      << (*it).label() << " : " 
+                      << " " << stype << " : "
+                      << (*it).label() << " : "
                       << sval
                       << std::endl;
         }
@@ -802,13 +802,13 @@ inline bool create_cols_from_vals(ntuple& a_ntu,
         }
 
         if(!col) {
-          std::string stype;        
+          std::string stype;
           (*it).s_type(stype);
-          std::string sval;        
+          std::string sval;
           (*it).tos(sval);
           a_ntu.out() << "tools::aida::create_cols_from_vals :"
-                      << " failed for " << stype << " : " 
-                      << (*it).label() << " : " 
+                      << " failed for " << stype << " : "
+                      << (*it).label() << " : "
                       << sval
                       << std::endl;
           return false;
@@ -828,14 +828,14 @@ inline bool create_col(ntuple& a_ntu,
   if(a_type==s_aida_type((char)0)) {
     char v = 0;
     if(a_s.size()&&!to<char>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<char>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -844,14 +844,14 @@ inline bool create_col(ntuple& a_ntu,
   } else*/ if(a_type==s_aida_type((short)0)) {
     short v = 0;
     if(a_s.size()&&!to<short>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<short>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -860,14 +860,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((int)0)) {
     int v = 0;
     if(a_s.size()&&!to<int>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<int>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -876,14 +876,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((int64)0)) {
     int64 v = 0;
     if(a_s.size()&&!to<int64>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<int64>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -892,14 +892,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((float)0)) {
     float v = 0;
     if(a_s.size()&&!to<float>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<float>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -909,14 +909,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((double)0)) {
     double v = 0;
     if(a_s.size()&&!to<double>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<double>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -925,21 +925,21 @@ inline bool create_col(ntuple& a_ntu,
 /*  } else if(a_type==s_aida_type((unsigned char)0)) { //byte
     unsigned int v = 0;
     if(a_s.size()&&!to<unsigned int>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
-    }    
+    }
     if(v>=256) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to byte."
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<unsigned char>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -948,14 +948,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((unsigned short)0)) {
     unsigned short v = 0;
     if(a_s.size()&&!to<unsigned short>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<unsigned short>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -964,14 +964,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((unsigned int)0)) {
     unsigned int v = 0;
     if(a_s.size()&&!to<unsigned int>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<unsigned int>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -980,14 +980,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((uint64)0)) {
     uint64 v = 0;
     if(a_s.size()&&!to<uint64>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<uint64>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -998,14 +998,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((bool)true)) {
     bool v = false;
     if(a_s.size()&&!to(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<bool>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -1013,7 +1013,7 @@ inline bool create_col(ntuple& a_ntu,
 
   } else if(a_type==s_aida_type(std::string())) {
     if(!a_ntu.create_col<std::string>(a_name,a_s)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -1022,14 +1022,14 @@ inline bool create_col(ntuple& a_ntu,
   } else if(a_type==s_aida_type((int64)0)) {
     int64 v = 0;
     if(a_s.size()&&!to<int64>(a_s,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't convert def " << sout(a_s)
                   << " to a " << a_type
                   << std::endl;
       return false;
     }
     if(!a_ntu.create_col<int64>(a_name,v)) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " can't create column of type " << sout(a_type)
                   << std::endl;
       return false;
@@ -1039,13 +1039,13 @@ inline bool create_col(ntuple& a_ntu,
     // we expect a booking string on a_s.
 
     if(!a_is_ntu) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " mismatch a_is_ntu/a_type."
                   << std::endl;
       return false;
     }
     if(a_s.empty()) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
                   << " empty booking string."
                   << std::endl;
       return false;
@@ -1053,7 +1053,7 @@ inline bool create_col(ntuple& a_ntu,
 
     columns::finder f(a_ntu.out(),a_s);
     if(!f.find_variables()) {
-      a_ntu.out() << "tools::aida::create_col :" 
+      a_ntu.out() << "tools::aida::create_col :"
             << " find_variables() failed for " << sout(a_s) << "."
             << std::endl;
       return false;
@@ -1078,7 +1078,7 @@ inline bool create_col(ntuple& a_ntu,
     //FIXME : double[]
 
   } else {
-    a_ntu.out() << "tools::aida::create_col :" 
+    a_ntu.out() << "tools::aida::create_col :"
                 << " col type " << sout(a_type)
                 << " not yet handled."
                 << std::endl;
@@ -1190,12 +1190,12 @@ protected:
   static bool find_is(const base_ntu& a_ntu,const base_col* a_col,
                              std::vector<unsigned int>& a_is,
                              bool& a_found){
-    // search the indices to reach the sub leaf a_col from the main a_ntu.    
+    // search the indices to reach the sub leaf a_col from the main a_ntu.
     // Note : it is assumed that a_is is empty and a_found = false before
     //        calling with function.
-  
+
     const std::vector<base_col*>& cols = a_ntu.columns();
-  
+
     // look if a_col is a leaf col of a_ntu :
    {unsigned int index = 0;
     tools_vforcit(base_col*,cols,it) {
@@ -1206,7 +1206,7 @@ protected:
       }
       index++;
     }}
-  
+
     // go down sub ntu :
    {unsigned int index = 0;
     tools_vforcit(base_col*,cols,it) {
@@ -1222,7 +1222,7 @@ protected:
       index++;
     }}
     return true;
-  }  
+  }
 protected:
   bool _looper(base_ntu& a_sub,
                       const std::vector<unsigned int>& a_is,
@@ -1230,7 +1230,7 @@ protected:
                       bool& a_stop) {
     if(a_depth>=a_is.size()) return false;
 
-    unsigned int coli = a_is[a_depth];  
+    unsigned int coli = a_is[a_depth];
     const std::vector<base_col*>& cols = a_sub.columns();
     if(coli>=cols.size()) return false;
 
@@ -1322,7 +1322,7 @@ public:
     m_S2 = T();
     m_counter = 0;
     return *this;
-  }  
+  }
 public:
   bool process() {
     m_counter = 0;
@@ -1375,13 +1375,13 @@ inline base_col* find_leaf_column(const base_ntu& a_ntu,const std::string& a_nam
       base_ntu* sub = col->get_to_fill(); //it holds the "sub" cols schema.
       if(!sub) return 0;
       base_col* fcol = find_leaf_column(*sub,a_name);
-      if(fcol) return fcol;      
+      if(fcol) return fcol;
     } else {
       if((*it)->name()==a_name) return *it;
     }
   }
   return 0;
-}  
+}
 
 template <class T>
 inline bool to_vector(base_ntu& a_ntu,std::vector<double>& a_vec,unsigned int a_col = 0) {

@@ -79,7 +79,7 @@ public:
     uint32 m_bits;
     if(!Object_stream(a_buffer,id,m_bits)) return false;
     a_buffer.set_offset(old);}
-    
+
     if(!Named_stream(a_buffer,m_name,m_title)) return false;
 
     //::printf("debug : branch::stream %s %s\n",m_name.c_str(),m_title.c_str());
@@ -287,7 +287,7 @@ public:
       return false;
     }}
     //::printf("debug : branch::stream : streamed_baskets : end\n");
-    
+
     //fNleaves = m_leaves.size();
 
     if(fMaxBaskets<=0) {
@@ -296,7 +296,7 @@ public:
             << std::endl;
       return false;
     }
-    
+
     fBasketEntry = new int[fMaxBaskets];
     fBasketBytes = new int[fMaxBaskets];
     fBasketSeek = new seek[fMaxBaskets];
@@ -446,7 +446,7 @@ public:
         delete [] v;
       }}
     }
-    
+
     if(vers>2) {
       //TString
       std::string fileName;
@@ -485,7 +485,7 @@ public:
     for(uint32 i=0;i<fMaxBaskets;i++) {
       if(!fBasketSeek[i]) continue;
       num++;
-      mxi = mx<uint32>(i,mxi);      
+      mxi = mx<uint32>(i,mxi);
     }
     if(m_write_basket) {
       if((num!=m_write_basket)||(mxi!=(m_write_basket-1))) {
@@ -512,10 +512,10 @@ public:
         }
         //in the below, false is to say m_baskets is not owner of *it.
         m_baskets[index] = std::pair<basket*,bool>(*it,false);
-      } 
+      }
       index++;
     }}
-    
+
     return true;
   }
 
@@ -525,7 +525,7 @@ public:
   virtual bool read_leaves(ifile&,buffer& a_buffer){
     tools_vforcit(base_leaf*,m_leaves,it) {
       if(!(*it)->read_buffer(a_buffer)) {
-        m_out << "tools::rroot::branch::read_leaves :" 
+        m_out << "tools::rroot::branch::read_leaves :"
               << " read_buffer failed."
               << std::endl;
         return false;
@@ -579,7 +579,7 @@ public:
         if((a_entry>=first)&&(a_entry<=last)) {
           m_read_basket++;
           found = true;
-        }   
+        }
       }
       if(!found) {
         uint32 count = 0;
@@ -591,7 +591,7 @@ public:
             m_read_basket = count;
             found = true;
             break;
-          }   
+          }
           count++;
         }
       }
@@ -666,7 +666,7 @@ public:
 
     // Set entry offset in buffer and read data from all leaves
     //buf->resetMap();
-  
+
     uint32 bufbegin;
    {int* entry_offset = m__read_basket->entry_offset();
     if(entry_offset) {
@@ -706,7 +706,7 @@ public:
       if(entry_offset) {
         uint32 nev = m__read_basket->nev();
         ::printf("debug : eoff : num %d\n",nev);
-        for(uint32 i=0;i<nev;i++){        
+        for(uint32 i=0;i<nev;i++){
           ::printf("debug : eoff %d : %d\n",i,entry_offset[i]);
         }
       }}
@@ -714,7 +714,7 @@ public:
     }
 */
 
-    buffer _buffer(m_out,a_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
+    buffer _buffer(m_out,a_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false);
     _buffer.set_offset(bufbegin);
     _buffer.set_map_objs(true);  //for MEMPHYS/applications/read.icc
 
@@ -825,28 +825,28 @@ public:
 protected:
   basket* get_basket(ifile& a_file,seek a_pos,uint32 a_len) {
     //if(fBranch.tree().memoryFull(fBufferSize)) fBranch.dropBaskets();
-    if(!a_len) return 0;  
+    if(!a_len) return 0;
 
     basket* _basket = new basket(m_out,a_pos,a_len); //basket is a key.
     if(!_basket->read_file(a_file)) {
-      m_out << "tools::rroot::branch::get_basket :" 
+      m_out << "tools::rroot::branch::get_basket :"
             << " read_file() failed."
             << std::endl;
       delete _basket;
       return 0;
     }
-   {buffer _buffer(m_out,a_file.byte_swap(),a_len,_basket->buf(),0,false); 
+   {buffer _buffer(m_out,a_file.byte_swap(),a_len,_basket->buf(),0,false);
     if(!_basket->stream(_buffer)) {
-      m_out << "tools::rroot::branch::get_basket :" 
+      m_out << "tools::rroot::branch::get_basket :"
             << " basket stream failed."
             << std::endl;
       delete _basket;
       return 0;
     }}
-    unsigned int sz;    
+    unsigned int sz;
     char* buf = _basket->get_object_buffer(a_file,sz); //basket owns buf.
     if(!buf) {
-      m_out << "tools::rroot::branch::get_basket :" 
+      m_out << "tools::rroot::branch::get_basket :"
             << " get_object_buffer() failed."
             << std::endl;
       delete _basket;
@@ -854,7 +854,7 @@ protected:
     }
 
     if(_basket->seek_key()!=a_pos) { //consistency check.
-      m_out << "tools::rroot::branch::get_basket :" 
+      m_out << "tools::rroot::branch::get_basket :"
             << " seek anomaly."
             << " a_pos " << a_pos
             << " seek_key() " << _basket->seek_key()
@@ -863,7 +863,7 @@ protected:
       return 0;
     }
     //if(_basket->nbytes()!=a_len) { //consistency check.
-    //  m_out << "tools::rroot::branch::get_basket :" 
+    //  m_out << "tools::rroot::branch::get_basket :"
     //        << " WARNING : length anomaly."
     //        << " a_len " << a_len
     //        << " nbytes() " << _basket->nbytes()
@@ -872,7 +872,7 @@ protected:
 
     if(fEntryOffsetLen) {
     if(!_basket->read_offset_tables(a_file.byte_swap())) {
-      m_out << "tools::rroot::branch::get_basket :" 
+      m_out << "tools::rroot::branch::get_basket :"
             << " read_offset_tables failed."
             << std::endl;
       delete _basket;
@@ -942,7 +942,7 @@ protected:
   uint32 m_write_basket;   //  Last basket number written
   uint32 m_entry_number;   // Current entry number (last one filled in this branch)
   uint32 m_read_basket;   //! Current basket number when reading
-  int* fBasketBytes;    //[fMaxBaskets] Lenght of baskets on file
+  int* fBasketBytes;    //[fMaxBaskets] Length of baskets on file
   int* fBasketEntry;    //[fMaxBaskets] Table of first entry in eack basket
   seek* fBasketSeek;    //[fMaxBaskets] Addresses of baskets on file
 };

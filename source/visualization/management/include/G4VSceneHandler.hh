@@ -181,7 +181,7 @@ public: // With description
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives2D
   // (const G4Transform3D& objectTransformation) {
-  //   G4VSceneHandler::BeginPrimitives2D ();
+  //   G4VSceneHandler::BeginPrimitives2D (objectTransformation);
   //   ...
   // }
 

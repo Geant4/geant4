@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrIsotope
+// G4tgrLineProcessor
 //
 // Class description:
 //
 // This service provides access to detector description data.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrLineProcessor_H
-#define G4tgrLineProcessor_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrLineProcessor_hh
+#define G4tgrLineProcessor_hh 1
 
 #include "globals.hh"
 
@@ -48,20 +43,20 @@ class G4tgrVolumeMgr;
 
 class G4tgrLineProcessor
 {
-  public:  // with description
+  public:
 
     G4tgrLineProcessor();
     virtual ~G4tgrLineProcessor();
 
-    virtual G4bool ProcessLine( const std::vector<G4String>& wl );
+    virtual G4bool ProcessLine(const std::vector<G4String>& wl);
 
   protected:
 
-    G4tgrVolume* FindVolume( const G4String& volname );
+    G4tgrVolume* FindVolume(const G4String& volname);
 
   private:
 
-    G4tgrVolumeMgr* volmgr;
+    G4tgrVolumeMgr* volmgr = nullptr;
 };
 
-# endif 
+#endif

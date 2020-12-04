@@ -39,20 +39,20 @@ namespace PTL
 //--------------------------------------------------------------------------------------//
 // use this function to get rid of "unused parameter" warnings
 //
-template <typename... _Args>
+template <typename... Args>
 void
-ConsumeParameters(_Args...)
+ConsumeParameters(Args...)
 {}
 
 //--------------------------------------------------------------------------------------//
 // a non-string environment option with a string identifier
-template <typename _Tp>
-using EnvChoice = std::tuple<_Tp, std::string, std::string>;
+template <typename Tp>
+using EnvChoice = std::tuple<Tp, std::string, std::string>;
 
 //--------------------------------------------------------------------------------------//
 // list of environment choices with non-string and string identifiers
-template <typename _Tp>
-using EnvChoiceList = std::set<EnvChoice<_Tp>>;
+template <typename Tp>
+using EnvChoiceList = std::set<EnvChoice<Tp>>;
 
 //--------------------------------------------------------------------------------------//
 
@@ -72,8 +72,8 @@ public:
     }
 
 public:
-    template <typename _Tp>
-    void insert(const std::string& env_id, _Tp val)
+    template <typename Tp>
+    void insert(const std::string& env_id, Tp val)
     {
         std::stringstream ss;
         ss << std::boolalpha << val;
@@ -91,10 +91,10 @@ public:
         m_mutex.unlock();
     }
 
-    template <typename _Tp>
-    void insert(const std::string& env_id, EnvChoice<_Tp> choice)
+    template <typename Tp>
+    void insert(const std::string& env_id, EnvChoice<Tp> choice)
     {
-        _Tp&         val      = std::get<0>(choice);
+        Tp&          val      = std::get<0>(choice);
         std::string& str_val  = std::get<1>(choice);
         std::string& descript = std::get<2>(choice);
 
@@ -150,23 +150,23 @@ private:
 //          GetEnv<int>("FORCENUMBEROFTHREADS",
 //                          std::thread::hardware_concurrency());
 //
-template <typename _Tp>
-_Tp
-GetEnv(const std::string& env_id, _Tp _default = _Tp())
+template <typename Tp>
+Tp
+GetEnv(const std::string& env_id, Tp _default = Tp())
 {
     char* env_var = std::getenv(env_id.c_str());
     if(env_var)
     {
         std::string        str_var = std::string(env_var);
         std::istringstream iss(str_var);
-        _Tp                var = _Tp();
+        Tp                 var = Tp();
         iss >> var;
         // record value defined by environment
-        EnvSettings::GetInstance()->insert<_Tp>(env_id, var);
+        EnvSettings::GetInstance()->insert<Tp>(env_id, var);
         return var;
     }
     // record default value
-    EnvSettings::GetInstance()->insert<_Tp>(env_id, _default);
+    EnvSettings::GetInstance()->insert<Tp>(env_id, _default);
 
     // return default if not specified in environment
     return _default;
@@ -207,25 +207,25 @@ GetEnv(const std::string& env_id, bool _default)
 //--------------------------------------------------------------------------------------//
 //  overload for GetEnv + message when set
 //
-template <typename _Tp>
-_Tp
-GetEnv(const std::string& env_id, _Tp _default, const std::string& msg)
+template <typename Tp>
+Tp
+GetEnv(const std::string& env_id, Tp _default, const std::string& msg)
 {
     char* env_var = std::getenv(env_id.c_str());
     if(env_var)
     {
         std::string        str_var = std::string(env_var);
         std::istringstream iss(str_var);
-        _Tp                var = _Tp();
+        Tp                 var = Tp();
         iss >> var;
         std::cout << "Environment variable \"" << env_id << "\" enabled with "
                   << "value == " << var << ". " << msg << std::endl;
         // record value defined by environment
-        EnvSettings::GetInstance()->insert<_Tp>(env_id, var);
+        EnvSettings::GetInstance()->insert<Tp>(env_id, var);
         return var;
     }
     // record default value
-    EnvSettings::GetInstance()->insert<_Tp>(env_id, _default);
+    EnvSettings::GetInstance()->insert<Tp>(env_id, _default);
 
     // return default if not specified in environment
     return _default;
@@ -241,9 +241,9 @@ GetEnv(const std::string& env_id, _Tp _default, const std::string& msg)
 //
 //      int eInterp = GetEnv<int>("INTERPOLATION", choices, CUBIC);
 //
-template <typename _Tp>
-_Tp
-GetEnv(const std::string& env_id, const EnvChoiceList<_Tp>& _choices, _Tp _default)
+template <typename Tp>
+Tp
+GetEnv(const std::string& env_id, const EnvChoiceList<Tp>& _choices, Tp _default)
 {
     auto asupper = [](std::string var) {
         for(auto& itr : var)
@@ -256,7 +256,7 @@ GetEnv(const std::string& env_id, const EnvChoiceList<_Tp>& _choices, _Tp _defau
     {
         std::string str_var = std::string(env_var);
         std::string upp_var = asupper(str_var);
-        _Tp         var     = _Tp();
+        Tp          var     = Tp();
         // check to see if string matches a choice
         for(const auto& itr : _choices)
         {
@@ -302,7 +302,7 @@ GetEnv(const std::string& env_id, const EnvChoiceList<_Tp>& _choices, _Tp _defau
         }
 
     // record default value
-    EnvSettings::GetInstance()->insert(env_id, EnvChoice<_Tp>(_default, _name, _desc));
+    EnvSettings::GetInstance()->insert(env_id, EnvChoice<Tp>(_default, _name, _desc));
 
     // return default if not specified in environment
     return _default;
@@ -310,9 +310,9 @@ GetEnv(const std::string& env_id, const EnvChoiceList<_Tp>& _choices, _Tp _defau
 
 //--------------------------------------------------------------------------------------//
 
-template <typename _Tp>
-_Tp
-GetChoice(const EnvChoiceList<_Tp>& _choices, const std::string str_var)
+template <typename Tp>
+Tp
+GetChoice(const EnvChoiceList<Tp>& _choices, const std::string str_var)
 {
     auto asupper = [](std::string var) {
         for(auto& itr : var)
@@ -321,7 +321,7 @@ GetChoice(const EnvChoiceList<_Tp>& _choices, const std::string str_var)
     };
 
     std::string upp_var = asupper(str_var);
-    _Tp         var     = _Tp();
+    Tp          var     = Tp();
     // check to see if string matches a choice
     for(const auto& itr : _choices)
     {

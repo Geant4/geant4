@@ -32,9 +32,7 @@
 #include "G4VisManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4Run.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ApplicationState.hh"
@@ -339,18 +337,16 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   fpVisManager->ResetTransientsDrawnFlags();
 
   // Are there any events currently kept...
-  size_t nCurrentlyKept = 0;
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if(G4Threading::IsMultithreadedApplication())
-  { runManager = G4MTRunManager::GetMasterRunManager(); }
-#endif
-  if (runManager) {
+  size_t nCurrentlyKept    = 0;
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+  if(runManager)
+  {
     const G4Run* currentRun = runManager->GetCurrentRun();
-    if (currentRun) {
-      const std::vector<const G4Event*>* events =
-	currentRun->GetEventVector();
-      if (events) nCurrentlyKept = events->size();
+    if(currentRun)
+    {
+      const std::vector<const G4Event*>* events = currentRun->GetEventVector();
+      if(events)
+        nCurrentlyKept = events->size();
     }
   }
 
@@ -768,9 +764,10 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     const G4int nViewers = viewerList.size ();
     if (nViewers) {
       pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
-      if (pCurrentViewer && pCurrentSceneHandler->GetScene()) {
-	pCurrentViewer -> SetView ();
-      }
+      // JA: I don't think we need this. SetView will be called when needed.
+      // if (pCurrentViewer && pCurrentSceneHandler->GetScene()) {
+      //   pCurrentViewer -> SetView ();
+      // }
     }
   }
 }

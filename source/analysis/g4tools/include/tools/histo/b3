@@ -154,7 +154,7 @@ public:
     if(!parent::m_dimension) return 0;
     bn_t ibin;
     if(!parent::m_axes[0].in_range_to_absolute_index(aI,ibin)) return 0;
-    bn_t jbin,kbin,offset;     
+    bn_t jbin,kbin,offset;
     bn_t ybins = parent::m_axes[1].bins()+2;
     bn_t zbins = parent::m_axes[2].bins()+2;
     TO yoffset = parent::m_axes[1].m_offset;
@@ -302,9 +302,9 @@ public:
   void hprint(std::ostream& a_out) {
     // A la HPRINT.
     a_out << parent::dimension() << parent::title() << std::endl;
-    a_out 
+    a_out
       << " * ENTRIES = " << parent::all_entries() << std::endl;
-  
+
   }
 public:
   b3(const std::string& a_title,

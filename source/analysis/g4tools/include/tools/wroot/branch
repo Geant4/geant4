@@ -89,7 +89,7 @@ public: //ibo
       }
     }}
     //GB : end
-   
+
     if(!a_buffer.write(isBigFile)) return false;
     if(isBigFile==2) {
       if(!a_buffer.write_fast_array(fBasketSeek,m_max_baskets)) return false;
@@ -120,7 +120,7 @@ public:
   :m_out(a_out)
   ,m_byte_swap(a_byte_swap)
   ,m_verbose(a_verbose)
-  ,m_seek_directory(a_seek_directory)  
+  ,m_seek_directory(a_seek_directory)
   ,m_name(a_name)
   ,m_title(a_title)
   ,fAutoDelete(false)
@@ -175,13 +175,13 @@ protected:
   branch(const branch& a_from)
   :ibo(a_from)
   ,m_out(a_from.m_out)
-  ,m_seek_directory(a_from.m_seek_directory)  
+  ,m_seek_directory(a_from.m_seek_directory)
   {}
   branch& operator=(const branch&){return *this;}
 public:
   const std::string& name() const {return m_name;}
   const std::string& title() const {return m_title;}
-  
+
   uint64 entries() const {return m_entries;}
 
   uint64 tot_bytes() const {return m_tot_bytes;}
@@ -211,7 +211,7 @@ public:
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
   ////////////////////////////////////////////////
-  
+
   template <class T>
   leaf<T>* create_leaf(const std::string& a_name){
     leaf<T>* lf = new leaf<T>(m_out,a_name);
@@ -243,14 +243,14 @@ public:
   const std::vector<base_leaf*>& leaves() const {return m_leaves;}
 
   void reset() {
-    m_baskets.clear_objs();  
+    m_baskets.clear_objs();
     delete [] fBasketBytes;
     delete [] fBasketEntry;
     delete [] fBasketSeek;
     fBasketBytes = 0;
     fBasketEntry = 0;
     fBasketSeek = 0;
-    
+
     m_max_baskets = 10;
 
     m_write_basket = 0;
@@ -258,7 +258,7 @@ public:
     m_entries = 0;
     m_tot_bytes = 0;
     m_zip_bytes = 0;
-  
+
     m_baskets.resize(m_max_baskets,0);
     fBasketBytes = new uint32[m_max_baskets];
     fBasketEntry = new uint32[m_max_baskets];
@@ -303,18 +303,18 @@ public:
     buf.reset_objs_map();
 
     uint32 lold = buf.length();
-  
+
     bk->update(bk->key_length()+lold);
     m_entries++;
     m_entry_number++;
-  
+
     if(!fill_leaves(buf)) {
       m_out << "tools::wroot::branch::fill :"
             << " fill_leaves() failed."
             << std::endl;
       return false;
     }
-    
+
     uint32 lnew   = buf.length();
     uint32 nbytes = lnew - lold;
     uint32 nsize  = 0;
@@ -324,8 +324,8 @@ public:
 
     // Should we create a new basket?
     // Compare expected next size with m_basket_size.
-    if((lnew+2*nsize+nbytes)>=m_basket_size) { 
-      if(!bk->write_on_file(a_file,m_write_basket,nout)) {//it set bk m_seek_key, set a_file.m_END. 
+    if((lnew+2*nsize+nbytes)>=m_basket_size) {
+      if(!bk->write_on_file(a_file,m_write_basket,nout)) {//it set bk m_seek_key, set a_file.m_END.
                                                           //Does a a_file.set_END().
         m_out << "tools::wroot::branch::fill :"
               << " basket.write_on_file() failed."
@@ -431,9 +431,9 @@ public:
     }
 
     buffer& buf = bk->datbuf();
-    
+
     uint32 lold = buf.length();
-  
+
     bk->update(bk->key_length()+lold);
 
     //m_entries++;      //not used by parallel branches.
@@ -448,7 +448,7 @@ public:
 
     uint32 lnew   = buf.length();
     uint32 nbytes = lnew - lold;
-    
+
     // Should we create a new basket?
     bool store_basket = false;
     if(a_nev) {
@@ -471,7 +471,7 @@ public:
                                              m_seek_directory,m_name,m_title,"TBasket",m_basket_size,
                                              main_branch_verbose);
     }
-    
+
     return true;
   }
 
@@ -485,7 +485,7 @@ public:
             << std::endl;
       return false;
     }
-    
+
     buffer& buf = bk->datbuf();
     uint32 lold = buf.length();
 
@@ -499,7 +499,7 @@ public:
     } else {
       delete bk;
     }
-    
+
     m_baskets[m_write_basket] = 0; // no need to recreate a basket since it is end of fill.
 
     return true;
@@ -564,7 +564,7 @@ protected:
   seek m_seek_directory;
   obj_array<basket> m_baskets;
   /// for parallelization :
-public:  
+public:
   std::vector<basket*> m_parallel_baskets;
 protected:
   //Object

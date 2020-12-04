@@ -175,9 +175,9 @@ protected:
 
       std::ios::fmtflags old_flags = m_out.flags();
       m_out << "tools::rroot::read_class_tag :"
-            << " tag unknown case ! "  
+            << " tag unknown case ! "
             << tag << " hex " << std::hex << tag
-            << std::endl;             
+            << std::endl;
       m_out.flags(old_flags);
 
       return false;
@@ -221,7 +221,7 @@ protected:
       //     if(!write((clIdx | Rio_kClassMask))) return false;
       //   or
       //     if(!write(Rio_kNewClassTag)) return false;
-      // + write object 
+      // + write object
       // + set byte cnt (cnt|kByteCountMask()) at skipped int.
 
       if(m_verbose) {
@@ -254,7 +254,7 @@ protected:
       }
 
       return true;
-            
+
     } else {
       if(m_verbose) {
         std::ios::fmtflags old_flags = m_out.flags();
@@ -269,9 +269,9 @@ protected:
       a_class.clear();
       return true;
     }
-    
+
     return false;
-  }  
+  }
 public:
   void remove_in_map(iro* a_obj) {
 #ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
@@ -318,7 +318,7 @@ public:
               << " class " << sout(sclass) << ", is_ref but map objs is not enabled on this buffer."
               << std::endl;
       }
-      
+
       if(m_map_objs) {
 #ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
         if(m_objs.find(obj_offset,a_obj)) {
@@ -387,7 +387,7 @@ public:
                 << " is_ref : streamed failed for class " << sout(scls)
                 << std::endl;
           //restore a good buffer position :
-          //m_pos = m_buffer+startpos+sizeof(unsigned int); 
+          //m_pos = m_buffer+startpos+sizeof(unsigned int);
           delete obj;
           return false;
         }
@@ -409,8 +409,8 @@ public:
 
       // in principle at this point m_pos should be
       //   m_buffer+startpos+sizeof(unsigned int)
-      // but enforce it anyway : 
-      m_pos = m_buffer+startpos+sizeof(unsigned int); 
+      // but enforce it anyway :
+      m_pos = m_buffer+startpos+sizeof(unsigned int);
       //check_byte_count(startpos,0,sclass) would always be ok.
 
       //a_obj = ???
@@ -419,7 +419,7 @@ public:
       if(sclass.empty()) {
         //m_out << "debug : tools::rroot::buffer::read_object : found empty class name." << std::endl;
 
-        m_pos = m_buffer+startpos+bcnt+sizeof(unsigned int); 
+        m_pos = m_buffer+startpos+bcnt+sizeof(unsigned int);
 
       } else {
         //m_out << "debug : tools::rroot::buffer::read_object : not a ref, create object." << std::endl;
@@ -433,7 +433,7 @@ public:
 #else
           obj_map::const_iterator it = m_objs.find(startpos);
           if(it!=m_objs.end()) {
-            a_obj = (*it).second;	
+            a_obj = (*it).second;
             ::printf("debug : find xxx : %d %lu\n",startpos,a_obj);
             //stay at current m_pos ?
             return true;
@@ -481,7 +481,7 @@ public:
         if(!check_byte_count(startpos,bcnt,sclass)) {
           m_out << "tools::rroot::buffer::read_object :"
                 << " check_byte_count failed "
-                << "for object of class " 
+                << "for object of class "
                 << sout(sclass) << "." << std::endl;
           delete obj;
           return false;
@@ -507,13 +507,13 @@ public:
     short version = 0;
     // not interested in byte count
     if(!parent::read(version)) return false;
-      
+
     // if this is a byte count, then skip next short and read version
     if(version & kByteCountVMask()) {
       if(!parent::read(version)) return false;
       if(!parent::read(version)) return false;
     }
-    
+
     a_version = version;
     return true;
   }
@@ -529,7 +529,7 @@ public:
 
     // before reading object save start position
     uint32 startpos = (uint32)(m_pos-m_buffer);
-      
+
     // read byte count (older files don't have byte count)
     // byte count is packed in two individual shorts, this to be
     // backward compatible with old files that have at this location
@@ -546,7 +546,7 @@ public:
       if(!parent::read(v.vers[0])) return false;
       if(!parent::read(v.vers[1])) return false;
     }
-    
+
     // no bytecount, backup and read version
     uint32 bcnt = 0;
     if(v.cnt & kByteCountMask()) {
@@ -557,11 +557,11 @@ public:
     if(!parent::read(version)) return false;
     //printf("Reading version=%d at pos=%d, bytecount=%d\n",
     //version,*startpos,*bcnt);
-    
+
     a_version = version;
     a_start_pos = startpos;
     a_byte_count = bcnt;
-  
+
     return true;
   }
 
@@ -570,21 +570,21 @@ public:
 
     size_t len = a_start_pos + a_byte_count + sizeof(unsigned int);
 
-    size_t diff = size_t(m_pos-m_buffer);  
+    size_t diff = size_t(m_pos-m_buffer);
 
     if(diff==len) return true;
 
     if(diff<len) {
       m_out << "tools::rroot::buffer::check_byte_count :"
             << " object of class " << sout(a_store_cls)
-            << " read too few bytes (" 
+            << " read too few bytes ("
             << long_out(long(len-diff)) << " missing)."
             << std::endl;
     }
     if(diff>len) {
       m_out << "tools::rroot::buffer::check_byte_count :"
             << " object of class " << sout(a_store_cls)
-            << " read too many bytes (" 
+            << " read too many bytes ("
             << long_out(long(diff-len)) << " in excess)." << std::endl;
     }
 
@@ -592,7 +592,7 @@ public:
           << " " << sout(a_store_cls)
           << " streamer not in sync with data on file, fix streamer."
           << std::endl;
-    
+
     m_pos = m_buffer+len;
 
     return false;

@@ -114,9 +114,9 @@ public:
     void StoreRBE();
 
     // Information about voxels
-    size_t GetNumberOfVoxelsAlongX() const { return fNumberOfVoxelsAlongX; }
-    size_t GetNumberOfVoxelsAlongY() const { return fNumberOfVoxelsAlongY; }
-    size_t GetNumberOfVoxelsAlongZ() const { return fNumberOfVoxelsAlongZ; }
+    G4int GetNumberOfVoxelsAlongX() const { return fNumberOfVoxelsAlongX; }
+    G4int GetNumberOfVoxelsAlongY() const { return fNumberOfVoxelsAlongY; }
+    G4int GetNumberOfVoxelsAlongZ() const { return fNumberOfVoxelsAlongZ; }
 
     // Some basic output to the screen
     void PrintParameters();

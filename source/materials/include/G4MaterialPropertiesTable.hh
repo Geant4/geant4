@@ -46,7 +46,6 @@
 //              1999-10-29 add method and class descriptors
 //              1997-03-25 by Peter Gumplinger
 //              > cosmetics (only)
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -76,9 +75,15 @@ class G4MaterialPropertiesTable
 
   public: // With description
 
+    inline void AddConstProperty(const G4String& key,
+                                 G4double PropertyValue);
     inline void AddConstProperty(const char     *key,
                                  G4double PropertyValue);
     // Add a new property to the table by giving a key-name and value 
+
+    G4MaterialPropertyVector* AddProperty(const G4String& key,
+                        const std::vector<G4double>& photonEnergies,
+                        const std::vector<G4double>& propertyValues);
 
     G4MaterialPropertyVector* AddProperty(const char     *key,
                                           G4double *PhotonEnergies,
@@ -87,22 +92,27 @@ class G4MaterialPropertiesTable
     // Add a new property to the table by giving a key-name and the
     // arrays x and y of size NumEntries.
 
+    void AddProperty(const G4String& key, G4MaterialPropertyVector* opv);
     void AddProperty(const char *key, G4MaterialPropertyVector *opv);
     // Add a new property to the table by giving a key-name and an
     // already constructed G4MaterialPropertyVector.
 
+    inline void RemoveConstProperty(const G4String& key);
     inline void RemoveConstProperty(const char *key);
     // Remove a constant property from the table.
 
+    inline void RemoveProperty(const G4String& key);
     inline void RemoveProperty(const char *key);
     // Remove a property from the table.
 
+    G4double GetConstProperty(const G4String& key) const;
     G4double GetConstProperty(const char *key) const;
     // Get the constant property from the table corresponding to the key-name
 
     G4double GetConstProperty(const G4int index) const;
     // Get the constant property from the table corresponding to the key-index
 
+    G4bool ConstPropertyExists(const G4String& key) const;
     G4bool ConstPropertyExists(const char *key) const;
     // Return true if a const property 'key' exists.
 
@@ -111,12 +121,16 @@ class G4MaterialPropertiesTable
 
     G4MaterialPropertyVector* GetProperty(const char *key,
                                           G4bool warning=false);
+    G4MaterialPropertyVector* GetProperty(const G4String& key,
+                                          G4bool warning=false);
     // Get the property from the table corresponding to the key-name.
 
     G4MaterialPropertyVector* GetProperty(const G4int index, 
                                           G4bool warning=false);
     // Get the property from the table corresponding to the key-index.
 
+    void AddEntry(const G4String& key, G4double aPhotonEnergy,
+                                       G4double aPropertyValue);
     void AddEntry(const char *key, G4double aPhotonEnergy,
                                    G4double aPropertyValue);
     // Add a new entry (pair of numbers) to the table for a given key.

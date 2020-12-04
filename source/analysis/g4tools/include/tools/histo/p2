@@ -23,19 +23,19 @@ protected:
   }
 public:
   bool equals(const p2& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
-    if(!parent::equals(a_from,a_prec,a_fabs)) return false;    
+    if(!parent::equals(a_from,a_prec,a_fabs)) return false;
     if(m_cut_v!=a_from.m_cut_v) return false;
     if(!numbers_are_equal(m_min_v,a_from.m_min_v,a_prec,a_fabs)) return false;
-    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;    
+    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Svw,a_from.m_bin_Svw,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Sv2w,a_from.m_bin_Sv2w,a_prec,a_fabs)) return false;
     return true;
   }
   bool equals_TH(const p2& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
-    if(!parent::equals_TH(a_from,a_prec,a_fabs,false)) return false;    
+    if(!parent::equals_TH(a_from,a_prec,a_fabs,false)) return false;
     if(m_cut_v!=a_from.m_cut_v) return false;
     if(!numbers_are_equal(m_min_v,a_from.m_min_v,a_prec,a_fabs)) return false;
-    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;    
+    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Svw,a_from.m_bin_Svw,a_prec,a_fabs)) return false;
     if(!vectors_are_equal(m_bin_Sv2w,a_from.m_bin_Sv2w,a_prec,a_fabs)) return false;
     return true;
@@ -44,7 +44,7 @@ public:
   virtual TH bin_error(int aI,int aJ) const { //TH should be the same as TV
     TO offset;
     if(!parent::_find_offset(aI,aJ,offset)) return 0;
-  
+
     //FIXME Is it correct ?
     // TProfile::GetBinError with kERRORMEAN mode does :
     //  Stat_t cont = fArray[bin];              //Svw (see TProfile::Fill)
@@ -55,9 +55,9 @@ public:
     //  Stat_t contsum = cont/sum;
     //  Stat_t eprim2  = TMath::Abs(err2/sum - contsum*contsum);
     //  eprim          = TMath::Sqrt(eprim2);
-    //  ... ??? 
+    //  ... ???
     //  if (fErrorMode == kERRORMEAN) return eprim/TMath::Sqrt(sum);
-  
+
     TW sw = parent::m_bin_Sw[offset];      //ROOT sum
     if(sw==0) return 0;
     TV svw = m_bin_Svw[offset];    //ROOT cont
@@ -125,33 +125,33 @@ public:
         return true;
       }
     }
-  
+
     bn_t ibin,jbin;
     if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
     if(!parent::m_axes[1].coord_to_absolute_index(aY,jbin)) return false;
     bn_t offset = ibin + jbin * parent::m_axes[1].m_offset;
-  
+
     parent::m_bin_entries[offset]++;
     parent::m_bin_Sw[offset] += aWeight;
     parent::m_bin_Sw2[offset] += aWeight * aWeight;
-  
+
     TC xw = aX * aWeight;
     TC x2w = aX * xw;
     parent::m_bin_Sxw[offset][0] += xw;
     parent::m_bin_Sx2w[offset][0] += x2w;
-  
+
     TC yw = aY * aWeight;
     TC y2w = aY * yw;
     parent::m_bin_Sxw[offset][1] += yw;
     parent::m_bin_Sx2w[offset][1] += y2w;
-  
+
     bool inRange = true;
     if(ibin==0) inRange = false;
     else if(ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
-  
+
     if(jbin==0) inRange = false;
     else if(jbin==(parent::m_axes[1].m_number_of_bins+1)) inRange = false;
-  
+
     parent::m_all_entries++;
     if(inRange) {
       parent::m_in_range_plane_Sxyw[0] += aX * aY * aWeight;
@@ -160,26 +160,26 @@ public:
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
       parent::m_in_range_Sw2 += aWeight*aWeight;
-  
+
       parent::m_in_range_Sxw[0] += xw;
       parent::m_in_range_Sx2w[0] += x2w;
 
       parent::m_in_range_Sxw[1] += yw;
       parent::m_in_range_Sx2w[1] += y2w;
     }
-   
+
     // Profile part :
     TV vw = aV * aWeight;
     m_bin_Svw[offset] += vw;
     m_bin_Sv2w[offset] += aV * vw;
-  
+
     return true;
   }
 
   TV bin_rms_value(int aI,int aJ) const {
     TO offset;
     if(!parent::_find_offset(aI,aJ,offset)) return 0;
-  
+
     TW sw = parent::m_bin_Sw[offset];
     if(sw==0) return 0;
     TV svw = m_bin_Svw[offset];
@@ -191,16 +191,16 @@ public:
   bool add(const p2& a_histo){
     parent::base_add(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
-      m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
-      m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
+      m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];
+      m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];
     }
     return true;
   }
   bool subtract(const p2& a_histo){
     parent::base_subtract(a_histo);
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
-      m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
-      m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
+      m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];
+      m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];
     }
     return true;
   }
@@ -254,7 +254,7 @@ public:
   ,m_cut_v(true)
   ,m_min_v(aVmin)
   ,m_max_v(aVmax)
-  { 
+  {
     m_bin_Svw.resize(parent::m_bin_number,0);
     m_bin_Sv2w.resize(parent::m_bin_number,0);
   }

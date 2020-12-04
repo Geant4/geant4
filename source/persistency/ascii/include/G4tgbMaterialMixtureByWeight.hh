@@ -23,36 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbMaterialMixtureByWeight
+// G4tgbMaterialMixtureByWeight
 //
 // Class description:
 //
 // Class to represent a material whose components are given by weight fractions.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbMaterialMixtureByWeight_h
-#define G4tgbMaterialMixtureByWeight_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbMaterialMixtureByWeight_hh
+#define G4tgbMaterialMixtureByWeight_hh 1
 
 #include "globals.hh"
-
-#include <vector>
-#include <string>
-
 #include "G4tgbMaterialMixture.hh"
 
 class G4tgbMaterialMixtureByWeight : public G4tgbMaterialMixture
 {
-  public:  // with description
+  public:
 
     G4tgbMaterialMixtureByWeight();
-    G4tgbMaterialMixtureByWeight( G4tgrMaterial* tgr );
-   ~G4tgbMaterialMixtureByWeight();
+    G4tgbMaterialMixtureByWeight(G4tgrMaterial* tgr);
+    ~G4tgbMaterialMixtureByWeight();
 
     G4Material* BuildG4Material();
       // Return the associated G4Material and if does not exist build it

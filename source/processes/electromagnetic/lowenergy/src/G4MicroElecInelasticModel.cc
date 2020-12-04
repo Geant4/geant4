@@ -1075,7 +1075,7 @@ G4double G4MicroElecInelasticModel::TransferedEnergy(G4ParticleDefinition* parti
                                                 nrjTransf21,
                                                 nrjTransf22);
 
-      // zeros are explicitely set
+      // zeros are explicitly set
 
       G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
 
@@ -1197,7 +1197,7 @@ G4double G4MicroElecInelasticModel::TransferedEnergy(G4ParticleDefinition* parti
                                                 nrjTransf21,
                                                 nrjTransf22);
 
-      // zeros are explicitely set
+      // zeros are explicitly set
 
       G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
 

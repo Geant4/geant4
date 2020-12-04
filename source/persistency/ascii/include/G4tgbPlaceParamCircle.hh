@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbPlaceParamCircle
+// G4tgbPlaceParamCircle
 //
 // Class description:
 //
 // Class to represent simple Cartesian parameterisations along a circle.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbPlaceParamCircle_H
-#define G4tgbPlaceParamCircle_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbPlaceParamCircle_hh
+#define G4tgbPlaceParamCircle_hh 1
 
 #include "globals.hh"
 
@@ -49,14 +44,14 @@ class G4tgrPlaceParameterisation;
 class G4VPhysicalVolume;
 
 class G4tgbPlaceParamCircle : public G4tgbPlaceParameterisation
-{ 
-  public:  // with description
+{
+  public:
 
-    G4tgbPlaceParamCircle( G4tgrPlaceParameterisation* );
+    G4tgbPlaceParamCircle(G4tgrPlaceParameterisation*);
     ~G4tgbPlaceParamCircle();
 
     void ComputeTransformation(const G4int copyNo,
-                               G4VPhysicalVolume *physVol) const;
+                               G4VPhysicalVolume* physVol) const;
 
   private:
 
@@ -64,12 +59,12 @@ class G4tgbPlaceParamCircle : public G4tgbPlaceParameterisation
 
   private:
 
-    G4double theRadius;
+    G4double theRadius = 0.0;
     G4ThreeVector theCircleAxis;
     G4ThreeVector theDirInPlane;
 
-    G4double theStep;
-    G4double theOffset;
+    G4double theStep = 0.0;
+    G4double theOffset = 0.0;
 };
 
 #endif

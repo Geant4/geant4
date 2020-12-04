@@ -9,6 +9,10 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 November 2020 I. Hrivnacova (MPI-V10-06-00)
+- Updated analysis classes for the design changes in analysis
+  tags analysis-V10-06-05,06
+
 21 October 2019 I. Hrivnacova (MPI-V10-05-02)
 - Fixed exMPI03, exMPI04, G4MPIscorerMerger.cc compilation which was broken
   after changes in scorers

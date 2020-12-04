@@ -14,19 +14,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-20 B. Morgan (exhadr01-V10-06-02)
+- Migration to G4RunManagerFactory.
+
+22-07-20  V.Ivanchenko (exhadr01-V10-06-01)
+- PhysicsList - make it coherent with current reference lists
+- RunAction - improved pritouts
+- hadr01.in - switched from Al to W
+
 18-01-20  V.Ivanchenko (exhadr01-V10-06-00)
 - HistoManager - removed FPE error (happens if check volume
     material is not vacuum)
 
 21-08-19  V.Ivanchenko (exhadr01-V10-05-01)
-- DetectorConstruction - added "Battery" material from problem 
+- DetectorConstruction - added "Battery" material from problem
     report 2175 and new macro test_battery.in
 
 17-12-18  V.Ivanchenko (exhadr01-V10-05-00)
 - HistoManager - added linear histogram for pion energy at production
 
 08-11-18  V.Ivanchenko (exhadr01-V10-04-05)
-- PhysicsList - make local PhysicsList to be coherent with 
+- PhysicsList - make local PhysicsList to be coherent with
    physics_list library
 
 14-08-18  V.Ivanchenko (exhadr01-V10-04-04)
@@ -51,7 +59,7 @@ track of all tags.
 - Hadr01.cc : remove G4UI_USE and G4VIS_USE
 
 21-11-17  V.Ivanchenko (exhadr01-V10-03-00)
-- Fixed histograms and radioactive decay 
+- Fixed histograms and radioactive decay
 
 09-11-16  V.Ivanchenko (exhadr01-V10-02-03)
 - PhysicsList - synchronisation with physics_list library of 10.3
@@ -63,7 +71,7 @@ track of all tags.
 30-08-16  I. Hrivnacova (exhadr01-V10-02-00)
 - Removed data. functions and commands to define cuts
   from PhysicsList and PhysicsListMessenger;
-  using Geant4 commands 
+  using Geant4 commands
 
 31-08-15  V.Ivanchenko (exhadr01-V10-01-00)
 - PhysicsList - syncronisation with physics_list library
@@ -73,18 +81,18 @@ track of all tags.
 
 21-11-13  A. Dotti      (exhadr01-V09-06-06)
 - USe G4RunManager::ReinitializeGeometry() to trigger geometry
-  rebuilds. 
+  rebuilds.
 - Remove ui command /testhadr/Update and corresponding
   DetectorConstruction::Update method
 - Mark UI command to change detector as ToBeBroadcasted(false)
-- Update README file for change in ui command 
-- Start migration to MT: added CreateSDandField method 
+- Update README file for change in ui command
+- Start migration to MT: added CreateSDandField method
 
 29-07-13  P. Gumplinger (exhadr01-V09-06-05)
 - fix MAC/clang32 compilation warnings
 
 05-06-13  I. Hrivnacova (exhadr01-V09-06-04)
-- Applied coding guidelines (data members names and initialization, 
+- Applied coding guidelines (data members names and initialization,
   tabulations, separators)
 
 05-04-13  V.Ivanchenko (exhadr01-V09-06-03)
@@ -129,7 +137,7 @@ track of all tags.
 - Applied code convension
 
 06-01-12  V.Ivant (exhadr01-V09-05-00)
-- DetectorMessenger - fixed deletion of objects 
+- DetectorMessenger - fixed deletion of objects
 
 21-04-11  V.Ivant (exhadr01-V09-04-01)
 - Added new builders for ions
@@ -141,11 +149,11 @@ track of all tags.
 - PhysicsList - update according to Physics List library
 
 25-10-10  V.Ivant (exhadr01-V09-03-09)
-- PhysicsList - removed unused headers and double definition of 
-                QGSP_BIC_EMY 
+- PhysicsList - removed unused headers and double definition of
+                QGSP_BIC_EMY
 
 11-10-10  V.Ivant (exhadr01-V09-03-08)
-- PhysicsList - removed TRV physics lists and cleanup elastic 
+- PhysicsList - removed TRV physics lists and cleanup elastic
 - Histo - use default options for AIDA
 
 17-08-10  V.Ivant (exhadr01-V09-03-07)
@@ -156,10 +164,10 @@ track of all tags.
 - Cleanup PhysList according to update of physics_list library
 
 06-06-10 J.Perl (exhadr01-V09-03-05)
-- Remove unused variable in EventAction 
+- Remove unused variable in EventAction
 
 04-06-10 J.Perl (exhadr01-V09-03-04)
-- Updated vis usage 
+- Updated vis usage
 
 26-05-10 J.Allsion (exhadr01-V09-03-03)
 - Introduced G4UIExecutive.
@@ -227,7 +235,7 @@ track of all tags.
 
 16-05-07 V.Ivant (exhadr01-V08-03-00)
 - Added histogram on total energy deposit in the target
-- Use renamed EM builders G4EmStandardPhysics_option1 and 
+- Use renamed EM builders G4EmStandardPhysics_option1 and
   G4EmStandardPhysics_option2
 
 26-04-07 V.Ivant (exhadr01-V08-02-01)
@@ -270,7 +278,7 @@ track of all tags.
 
 07-06-06 V.Ivant (exhadr01-V08-00-01)
 - cleanup output, README, visulisation, and histograms
-     
+
 06-06-06 V.Ivant (exhadr01-V08-00-00)
 - first release
-     
+

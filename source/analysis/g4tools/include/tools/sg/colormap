@@ -37,7 +37,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
   }
-  base_colormap& operator=(const base_colormap& aFrom){ 
+  base_colormap& operator=(const base_colormap& aFrom){
     m_values = aFrom.m_values;
     m_colors = aFrom.m_colors;
     return *this;
@@ -120,7 +120,7 @@ public:
     set_by_value(a_out,a_cmaps,aString,m_values,m_colors);
   }
   by_value_colormap(const by_value_colormap& aFrom):base_colormap(aFrom){}
-  by_value_colormap& operator=(const by_value_colormap& aFrom){ 
+  by_value_colormap& operator=(const by_value_colormap& aFrom){
     base_colormap::operator=(aFrom);
     return *this;
   }
@@ -230,7 +230,7 @@ protected:
           return;
         }}
       }
-    } 
+    }
   }
 
   static void get_by_value(float aValue,
@@ -242,12 +242,12 @@ protected:
     //                 aValues[n-2] aColors[n-1] aValues[n-1] aColors[n]
     //      black 10 cyan 50 green 100 orange 200 blue 300 pink 400 red
     // valuen = 6
-    // values[0] 10 
-    // values[1] 50 
-    // values[2] 100 
-    // values[3] 200 
-    // values[4] 300 
-    // values[5] 400 
+    // values[0] 10
+    // values[1] 50
+    // values[2] 100
+    // values[3] 200
+    // values[4] 300
+    // values[5] 400
     //
     // colors[0] black
     // colors[1] cyan
@@ -286,7 +286,7 @@ protected:
       a_col = colorf_black();
     }
   }
-  
+
 };
 
 class grey_scale_colormap : public base_colormap {
@@ -310,7 +310,7 @@ public:
     set_colors(get_grey,a_ncell);
   }
   grey_scale_colormap(const grey_scale_colormap& aFrom):base_colormap(aFrom){}
-  grey_scale_colormap& operator=(const grey_scale_colormap& aFrom){ 
+  grey_scale_colormap& operator=(const grey_scale_colormap& aFrom){
     base_colormap::operator=(aFrom);
     return *this;
   }
@@ -344,7 +344,7 @@ public:
     set_colors(get_grey_inverse,a_ncell);
   }
   grey_scale_inverse_colormap(const grey_scale_inverse_colormap& aFrom):base_colormap(aFrom){}
-  grey_scale_inverse_colormap& operator=(const grey_scale_inverse_colormap& aFrom){ 
+  grey_scale_inverse_colormap& operator=(const grey_scale_inverse_colormap& aFrom){
     base_colormap::operator=(aFrom);
     return *this;
   }
@@ -376,7 +376,7 @@ public:
     set(a_min,a_max,a_ncell);
   }
   violet_to_red_colormap(const violet_to_red_colormap& aFrom):base_colormap(aFrom){}
-  violet_to_red_colormap& operator=(const violet_to_red_colormap& aFrom){ 
+  violet_to_red_colormap& operator=(const violet_to_red_colormap& aFrom){
     base_colormap::operator=(aFrom);
     return *this;
   }
@@ -426,7 +426,7 @@ public:
 public:
   const_colormap(const colorf& aColor){m_colors.push_back(aColor);}
   const_colormap(const const_colormap& aFrom):base_colormap(aFrom){}
-  const_colormap& operator=(const const_colormap& aFrom){ 
+  const_colormap& operator=(const const_colormap& aFrom){
     base_colormap::operator=(aFrom);
     return *this;
   }

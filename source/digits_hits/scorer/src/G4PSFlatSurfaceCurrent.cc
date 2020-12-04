@@ -36,6 +36,8 @@
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4VScoreHistFiller.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Flux.
@@ -51,13 +53,15 @@
 // 17-Nov-2005 T.Aso, Bug fix for area definition.
 // 31-Mar-2007 T.Aso, Add option for normalizing by the area.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. Surface Current * track weight (y)    (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 
 G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
+    :G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
      weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -68,7 +72,7 @@ G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name,
 					       G4int direction, 
 					       const G4String& unit, 
 					       G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
+    :G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
      weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -110,6 +114,21 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 	   current = current/square;  // Normalized by Area
        }
        EvtMap->add(index,current);
+
+       if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+       {
+         auto filler = G4VScoreHistFiller::Instance();
+         if(!filler)
+         {
+           G4Exception("G4PSFlatSurfaceCurrent::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+         }
+         else
+         {
+           filler->FillH1(hitIDMap[index],preStep->GetKineticEnergy(),current);
+         }
+       }
+
    }
   }
 

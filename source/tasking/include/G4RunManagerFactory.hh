@@ -49,10 +49,14 @@
 
 enum class G4RunManagerType : G4int
 {
-  Serial  = 0,
-  MT      = 1,
-  Tasking = 2,
-  TBB     = 3,
+  Serial      = 0,
+  SerialOnly  = 1,
+  MT          = 2,
+  MTOnly      = 3,
+  Tasking     = 4,
+  TaskingOnly = 5,
+  TBB         = 6,
+  TBBOnly     = 7,
   Default
 };
 
@@ -61,7 +65,6 @@ enum class G4RunManagerType : G4int
 class G4RunManagerFactory
 {
  public:
-
   static G4RunManager* CreateRunManager(
     G4RunManagerType _type   = G4RunManagerType::Default,
     G4VUserTaskQueue* _queue = nullptr, G4bool fail_if_unavail = true,
@@ -70,15 +73,14 @@ class G4RunManagerFactory
   // provide a version which specifies to fail if unavailable
   static G4RunManager* CreateRunManager(G4RunManagerType _type,
                                         G4bool fail_if_unavail,
-                                        G4int nthreads = 0,
+                                        G4int nthreads           = 0,
                                         G4VUserTaskQueue* _queue = nullptr)
   {
     return CreateRunManager(_type, _queue, fail_if_unavail, nthreads);
   }
 
-  static G4RunManager* CreateRunManager(G4RunManagerType _type,
-                                        G4int nthreads,
-                                        G4bool fail_if_unavail = true,
+  static G4RunManager* CreateRunManager(G4RunManagerType _type, G4int nthreads,
+                                        G4bool fail_if_unavail   = true,
                                         G4VUserTaskQueue* _queue = nullptr)
   {
     return CreateRunManager(_type, _queue, fail_if_unavail, nthreads);
@@ -95,6 +97,9 @@ class G4RunManagerFactory
   static std::string GetName(G4RunManagerType);
   static G4RunManagerType GetType(const std::string&);
   static std::set<std::string> GetOptions();
+  static G4RunManager* GetMasterRunManager();
+  static G4MTRunManager* GetMTMasterRunManager();
+  static G4RunManagerKernel* GetMasterRunManagerKernel();
 };
 
 #endif  // G4TaskRunManagerCreator_h

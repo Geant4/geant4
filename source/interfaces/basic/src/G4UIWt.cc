@@ -2768,7 +2768,7 @@ void G4UIWt::ChangePerspectiveOrthoCallback(const Wt::WString& /* action */) {
     if (list.at(i)->data().toString () == action) {
       list.at(i)->setChecked(TRUE);
       checked = list.at(i)->data().toString ();
-    } else if (list.at(i)->data().toString () == "persepective") {
+    } else if (list.at(i)->data().toString () == "perspective") {
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "ortho") {
       list.at(i)->setChecked(FALSE);

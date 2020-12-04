@@ -149,7 +149,7 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
 
 	  for (size_t j=0;j<material->GetNumberOfElements();j++)
 	    {
-	      G4int iZ = (G4int) theElementVector->at(j)->GetZ();
+	      G4int iZ = theElementVector->at(j)->GetZasInt();
 	      //read data files only in the master
 	      if (!logAtomicShellXS->count(iZ))
 		ReadDataFile(iZ);
@@ -260,7 +260,7 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
 		   "Unable to retrieve the total cross section table");
        return 0;
      }
-   G4double logene = std::log(energy);
+   G4double logene = G4Log(energy);
    G4double logXS = totalXSLog->Value(logene);
    cross = G4Exp(logXS);
 
@@ -316,7 +316,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   // atom can be selected efficiently if element selectors are initialised
   const G4Element* anElement =
     SelectRandomAtom(couple,G4Gamma::GammaDefinition(),photonEnergy);
-  G4int Z = (G4int) anElement->GetZ();
+  G4int Z = anElement->GetZasInt();
   if (verboseLevel > 2)
     G4cout << "Selected " << anElement->GetName() << G4endl;
 
@@ -611,7 +611,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
       G4double aValue = 0;
       file >> energy ;
       energy *= eV;
-      G4double logene = std::log(energy);
+      G4double logene = G4Log(energy);
       //loop on the columns
       for (size_t i=0;i<nShells+1;i++)
 	{
@@ -620,7 +620,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
 	  G4PhysicsFreeVector* theVec = (G4PhysicsFreeVector*) ((*thePhysicsTable)[i]);
 	  if (aValue < 1e-40*cm2) //protection against log(0)
 	    aValue = 1e-40*cm2;
-	  theVec->PutValue(k,logene,std::log(aValue));
+	  theVec->PutValue(k,logene,G4Log(aValue));
 	}
     }
 
@@ -686,7 +686,7 @@ G4double G4PenelopePhotoElectricModel::GetShellCrossSection(G4int Z,size_t shell
 		   "Unable to retrieve the total cross section table");
        return 0;
      }
-   G4double logene = std::log(energy);
+   G4double logene = G4Log(energy);
    G4double logXS = totalXSLog->Value(logene);
    G4double cross = G4Exp(logXS);
    if (cross < 2e-40*cm2) cross = 0;
@@ -733,7 +733,7 @@ void G4PenelopePhotoElectricModel::SetParticle(const G4ParticleDefinition* p)
 
 size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
 {
-  G4double logEnergy = std::log(energy);
+  G4double logEnergy = G4Log(energy);
 
   //Check if data have been read (it should be!)
   if (!logAtomicShellXS->count(Z))

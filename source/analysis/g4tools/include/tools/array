@@ -39,16 +39,16 @@ public:
 #endif
     configure(a_orders);
   }
-  array(unsigned int a_dimension,unsigned int a_order) { 
+  array(unsigned int a_dimension,unsigned int a_order) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
     // A hypercube of dimension "a_dimension" and size "a_order".
     uints_t _orders(a_dimension);
-    for(unsigned int index=0;index<a_dimension;index++) 
+    for(unsigned int index=0;index<a_dimension;index++)
       _orders[index] = a_order;
     configure(_orders);
-  } 
+  }
   virtual ~array() {
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
@@ -72,7 +72,7 @@ public:
     return *this;
   }
 public: //operators:
-  array& operator*=(const T& a_T) {multiply(a_T);return *this;}    
+  array& operator*=(const T& a_T) {multiply(a_T);return *this;}
   bool operator==(const array& a_array) const {
     return equal(a_array);
   }
@@ -83,17 +83,17 @@ public: //operators:
     array a(*this);
     a.multiply(a_T);
     return a;
-  }    
+  }
   // the below would need exception to do it properly.
   //array operator+(const array& a_array) const {
   //  array a(*this);
   //  if(!a.add(a_array)) {} //throw
   //  return a;
-  //}    
-  //array& operator+=(const array& a_array) {   
+  //}
+  //array& operator+=(const array& a_array) {
   //  if(!add(a_array)) {} //throw
   //  return *this;
-  //}    
+  //}
 public:
   void copy(const array& a_from) {
     m_orders = a_from.m_orders;
@@ -126,7 +126,7 @@ public:
     m_vector.assign(_size,zero());
     m_offsets.resize(dim,0);
     m_offsets[0] = 1;
-    for(size_t iaxis=1;iaxis<dim;iaxis++) 
+    for(size_t iaxis=1;iaxis<dim;iaxis++)
       m_offsets[iaxis] = m_offsets[iaxis-1] * m_orders[iaxis-1];
     m_is.resize(dim);
     m_is.assign(dim,0);
@@ -200,7 +200,7 @@ public:
     cons_vec_it_t it = m_vector.begin();
     cons_vec_it_t ait = a_array.m_vector.begin();
     for(;it!=m_vector.end();++it,++ait) {
-      T diff = (*it) - (*ait);      
+      T diff = (*it) - (*ait);
       if(diff<0) diff *= -1;
       if(diff>=aEpsilon) return false;
     }
@@ -305,7 +305,7 @@ public:
         (*it) = zero(); //PAW convention.
         status = false;
       } else {
-        T _value = (*it); 
+        T _value = (*it);
         (*it) = v_one/_value;
       }
     }
@@ -316,7 +316,7 @@ public:
     a_offset = 0;
     if(a_is.size()!=dim) return false;
     if(dim==0) return false;
-    for(size_t iaxis=0;iaxis<dim;iaxis++) { 
+    for(size_t iaxis=0;iaxis<dim;iaxis++) {
       unsigned int i = a_is[iaxis];
       if(i>=m_orders[iaxis]) {
         a_offset = 0;
@@ -330,7 +330,7 @@ public:
     if(a_offset>=m_vector.size()) return false;
     size_t dim = m_orders.size();
     unsigned int off = a_offset;
-    for(int iaxis=int(dim)-1;iaxis>=0;iaxis--) { 
+    for(int iaxis=int(dim)-1;iaxis>=0;iaxis--) {
       a_is[iaxis] = off/m_offsets[iaxis];
       off -= a_is[iaxis] * m_offsets[iaxis];
     }
@@ -341,7 +341,7 @@ public:
     if(a_cut.size()!=dim) return false;
     if(!indices(a_index,const_cast<uints_t&>(m_is))) return false;
     bool good = true;
-    for(size_t iaxis=0;iaxis<dim;iaxis++) { 
+    for(size_t iaxis=0;iaxis<dim;iaxis++) {
       if(m_is[iaxis]<a_cut[iaxis].first) {good = false;break;}
       if(m_is[iaxis]>a_cut[iaxis].second) {good = false;break;}
     }
@@ -355,21 +355,21 @@ public:
   }
 public:
   static T zero() {
-    //return (T)0;    
-    //return T(0);    
-    return T();    
+    //return (T)0;
+    //return T(0);
+    return T();
   }
   static T one() {
-    //return (T)1;    
-    return T(1);    
+    //return (T)1;
+    return T(1);
   }
   static T minus_one() {
-    //return (T)-1;    
-    return T(-1);    
+    //return (T)-1;
+    return T(-1);
   }
   static T two() {
-    //return (T)2;    
-    return T(2);    
+    //return (T)2;
+    return T(2);
   }
 protected:
   uints_t m_orders;
@@ -393,7 +393,7 @@ inline bool contract(
 ,unsigned int aIB
 ,array<T>& aR
 ){
-  // Contract a tensor (aA) with a vector (aB) 
+  // Contract a tensor (aA) with a vector (aB)
   // on indice aIA of aA and aIB of aB.
   // aA.dimension must be > 1.
   // aB.dimension must be > 1.
@@ -411,7 +411,7 @@ inline bool contract(
 
   if((rdima+rdimb)==0) {
     std::vector<unsigned int> rorders(1);
-    rorders[0] = 1;   
+    rorders[0] = 1;
     if(!aR.configure(rorders)) return false;
     const std::vector<T>& vA = aA.vector();
     const std::vector<T>& vB = aB.vector();
@@ -425,14 +425,14 @@ inline bool contract(
 
   std::vector<unsigned int> rorders(rdima+rdimb);
   unsigned int index;
-  for(index=0;index<aIA;index++) 
+  for(index=0;index<aIA;index++)
     rorders[index] = aA.orders()[index];
-  for(index=aIA;index<rdima;index++) 
+  for(index=aIA;index<rdima;index++)
     rorders[index] = aA.orders()[index+1];
 
-  for(index=0;index<aIB;index++) 
+  for(index=0;index<aIB;index++)
     rorders[rdima+index] = aB.orders()[index];
-  for(index=aIB;index<rdimb;index++) 
+  for(index=aIB;index<rdimb;index++)
     rorders[rdima+index] = aB.orders()[index+1];
 
   if(!aR.configure(rorders)) return false;
@@ -505,9 +505,9 @@ inline bool swap(
     T value = vvec[offset];
 
     if(!aV.indices(offset,vis)) return false;
-    unsigned int i = vis[aI1]; 
-    vis[aI1] = vis[aI2]; 
-    vis[aI2] = i; 
+    unsigned int i = vis[aI1];
+    vis[aI1] = vis[aI2];
+    vis[aI2] = i;
     if(!aR.set_value(vis,value)) return false;
   }
 
@@ -515,7 +515,7 @@ inline bool swap(
 }
 
 //NOTE : print is a Python keyword.
-template <class T> 
+template <class T>
 inline void dump(std::ostream& a_out,const tools::array<T>& a_array,const std::string& a_title){
   if(a_title.size()) a_out << a_title << std::endl;
   const std::vector<T>& vec = a_array.vector();
@@ -525,7 +525,7 @@ inline void dump(std::ostream& a_out,const tools::array<T>& a_array,const std::s
   }
 }
 
-template <class T> 
+template <class T>
 inline void diff(std::ostream& a_out,const array<T>& aA,const array<T>& aB,T a_epsilon){
   if(aA.orders()!=aB.orders()) {
     a_out << "tools::arrays::diff : not same orders" << std::endl;
@@ -536,7 +536,7 @@ inline void diff(std::ostream& a_out,const array<T>& aA,const array<T>& aB,T a_e
   std::vector<unsigned int> is(dim);
   unsigned int vsize = aA.vector().size();
   for(unsigned int index=0;index<vsize;index++) {
-    T diff = aA.vector()[index]-aB.vector()[index];      
+    T diff = aA.vector()[index]-aB.vector()[index];
     if(diff<0) diff *= -1;
     if(diff>=a_epsilon) {
       aA.indices(index,is);
@@ -582,7 +582,7 @@ public:
       if(!good) continue;
       // All indicies are different.
       unsigned int n = 0;
-      for(unsigned int iaxis=0;iaxis<a_order;) { 
+      for(unsigned int iaxis=0;iaxis<a_order;) {
         unsigned int ival = is[iaxis];
         if(ival!=iaxis) {
           // Swap and add one permutation :

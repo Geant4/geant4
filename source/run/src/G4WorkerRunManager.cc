@@ -174,7 +174,6 @@ void G4WorkerRunManager::InitializeGeometry()
 
 void G4WorkerRunManager::RunInitialization()
 {
-  TIMEMORY_AUTO_TIMER("");
 #ifdef G4MULTITHREADED
   if(!visIsSetUp)
   {
@@ -250,6 +249,10 @@ void G4WorkerRunManager::RunInitialization()
   if(userRunAction)
     userRunAction->BeginOfRunAction(currentRun);
 
+#if defined(GEANT4_USE_TIMEMORY)
+  workerRunProfiler.reset(new ProfilerConfig(currentRun));
+#endif
+
   if(isScoreNtupleWriter)
   {
     G4VScoreNtupleWriter::Instance()->OpenFile();
@@ -274,7 +277,6 @@ void G4WorkerRunManager::RunInitialization()
 void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile,
                                      G4int n_select)
 {
-  TIMEMORY_AUTO_TIMER("");
   if(!userPrimaryGeneratorAction)
   {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -324,7 +326,6 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile,
 
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 {
-  TIMEMORY_AUTO_TIMER("");
   currentEvent = GenerateEvent(i_event);
   if(eventLoopOnGoing)
   {
@@ -338,7 +339,6 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 
 G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 {
-  TIMEMORY_AUTO_TIMER("");
   G4Event* anEvent          = new G4Event(i_event);
   long s1                   = 0;
   long s2                   = 0;
@@ -487,6 +487,9 @@ void G4WorkerRunManager::RunTermination()
 {
   if(!fakeRun)
   {
+#if defined(GEANT4_USE_TIMEMORY)
+    workerRunProfiler.reset();
+#endif
     MergePartialResults();
 
     // Call a user hook: note this is before the next barrier
@@ -725,9 +728,81 @@ void G4WorkerRunManager::StoreRNGStatus(const G4String& fn)
   G4Random::saveEngineStatus(os.str().c_str());
 }
 
+void G4WorkerRunManager::rndmSaveThisRun()
+{
+  G4int runNumber = 0;
+  if(currentRun) runNumber = currentRun->GetRunID();
+  if(!storeRandomNumberStatus)
+  {
+    G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
+           << " Random number status was not stored prior to this run."
+           << G4endl << "/random/setSavingFlag command must be issued. "
+           << "Command ignored." << G4endl;
+    return;
+  }
+
+  std::ostringstream oos;
+  oos << "G4Worker" << workerContext->GetThreadId()
+      << "_" << "currentRun.rndm" << "\0";
+  G4String fileIn = randomNumberStatusDir + oos.str();
+
+  std::ostringstream os;
+  os << "run" << runNumber << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();
+
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
+  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel > 0)
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
+}
+
+void G4WorkerRunManager::rndmSaveThisEvent()
+{
+  if(currentEvent == 0)
+  {
+    G4cerr
+      << "Warning from G4RunManager::rndmSaveThisEvent():"
+      << " there is no currentEvent available."
+      << G4endl << "Command ignored." << G4endl;
+    return;
+  }
+
+  if(!storeRandomNumberStatus)
+  {
+    G4cerr
+      << "Warning from G4RunManager::rndmSaveThisEvent():"
+      << " Random number engine status is not available."
+      << G4endl << "/random/setSavingFlag command must be issued "
+      << "prior to the start of the run. Command ignored." << G4endl;
+    return;
+  }
+
+  std::ostringstream oos;
+  oos << "G4Worker" << workerContext->GetThreadId()
+      << "_" << "currentEvent.rndm" << "\0";
+  G4String fileIn = randomNumberStatusDir + oos.str();
+
+  std::ostringstream os;
+  os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
+     << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();
+
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
+  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel > 0)
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
+}
+
 void G4WorkerRunManager::DoWork()
 {
-  TIMEMORY_AUTO_TIMER("");
   G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
   G4MTRunManager::WorkerActionRequest nextAction =
     mrm->ThisWorkerWaitForNextAction();

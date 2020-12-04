@@ -31,10 +31,10 @@ public:
   sf<lpat> line_pattern;
   sf_enum<sg::marker_style> marker_style;
   sf_enum<sg::area_style> area_style;
-  sf_string modeling; 
-  sf_string light_model; 
-  sf_string tick_modeling; 
-  sf_string encoding; 
+  sf_string modeling;
+  sf_string light_model;
+  sf_string tick_modeling;
+  sf_string encoding;
   sf<bool> smoothing;
   sf<bool> hinting;
   sf_string cut;
@@ -131,8 +131,8 @@ private:
     add_field(&marker_style);
     add_field(&area_style);
     add_field(&modeling);
-    add_field(&light_model); 
-    add_field(&tick_modeling); 
+    add_field(&light_model);
+    add_field(&tick_modeling);
     add_field(&encoding);
     add_field(&smoothing);
     add_field(&hinting);
@@ -356,7 +356,7 @@ public:
     coloring = "";
     title = "";
   }
-  
+
   bool from_string(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s) {
     style_parser sp;
 
@@ -406,14 +406,14 @@ public:
     sp.coloring(coloring.value());
     sp.title(title.value());
 
-    //if(!sp.parse(a_s,style_parser::def_error_func)) 
+    //if(!sp.parse(a_s,style_parser::def_error_func))
     //  return false;
 
     if(!sp.parse(a_out,a_cmaps,a_s)) {
       a_out << "tools::sg::style::from_string :"
             << " parse failed."
             << std::endl;
-      return false;    
+      return false;
     }
 
     color.value(sp.color());

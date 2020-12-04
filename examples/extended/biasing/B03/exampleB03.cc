@@ -57,11 +57,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4UImanager.hh"
@@ -90,15 +86,8 @@ int main(int , char **)
 
   G4long myseed = 345354;
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  G4cout << " Number of cores: " << G4Threading::G4GetNumberOfCores() << G4endl;
-  G4cout << " but using only two! " << G4endl;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(2);
-  //  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
-#else
-  G4RunManager * runManager = new G4RunManager;
-#endif
 
   G4Random::setTheSeed(myseed);
 

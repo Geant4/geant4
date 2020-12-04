@@ -27,48 +27,55 @@
 /// \brief Implementation of the OpNoviceRunAction class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Make this appear first!
-#include "G4Timer.hh"
 
 #include "OpNoviceRunAction.hh"
 
+#include "OpNovicePrimaryGeneratorAction.hh"
+#include "OpNoviceRun.hh"
+
+#include "G4ParticleDefinition.hh"
 #include "G4Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceRunAction::OpNoviceRunAction()
- : G4UserRunAction(),
-   fTimer(0)
+OpNoviceRunAction::OpNoviceRunAction(OpNovicePrimaryGeneratorAction* prim)
+  : G4UserRunAction()
+  , fRun(nullptr)
+  , fPrimary(prim)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+OpNoviceRunAction::~OpNoviceRunAction() {}
+
+G4Run* OpNoviceRunAction::GenerateRun()
 {
-  fTimer = new G4Timer;
+  fRun = new OpNoviceRun();
+  return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceRunAction::~OpNoviceRunAction()
+void OpNoviceRunAction::BeginOfRunAction(const G4Run*)
 {
-  delete fTimer;
+  if(fPrimary)
+  {
+    G4ParticleDefinition* particle =
+      fPrimary->GetParticleGun()->GetParticleDefinition();
+    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
+    fRun->SetPrimary(particle, energy);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void OpNoviceRunAction::BeginOfRunAction(const G4Run* aRun)
+void OpNoviceRunAction::EndOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  fTimer->Start();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void OpNoviceRunAction::EndOfRunAction(const G4Run* aRun)
-{
-  fTimer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent()
-         << " " << *fTimer << G4endl;
+  if(isMaster)
+    fRun->EndOfRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

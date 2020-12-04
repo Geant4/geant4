@@ -26,8 +26,8 @@
 #ifndef G4HadSignalHandler_hh
 #define G4HadSignalHandler_hh
 
-#ifndef G4HadSignalHandler_off
-
+//#ifndef G4HadSignalHandler_off
+#if 0
 #include <iostream>
 #include <signal.h>
 #include <vector>

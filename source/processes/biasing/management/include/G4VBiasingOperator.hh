@@ -70,7 +70,7 @@
 //   step and propose a final state.
 //   
 //   This method is the first operator method called, it is called at the
-//   by the PostStepGetPhysicalInterationLenght(...) method of the
+//   by the PostStepGetPhysicalInterationLength(...) method of the
 //   G4BiasingProcessInterface.
 //
 //   2) physics-based biasing:
@@ -95,7 +95,7 @@
 //   in the operator before returning the related operation to the process.
 //
 //   This method is the second operator one called in a step, it is called by
-//   the PostStepGetPhysicalInterationLenght(...) method of the
+//   the PostStepGetPhysicalInterationLength(...) method of the
 //   G4BiasingProcessInterface.
 //
 //   b) The biasing of the physics process final state is proposed by:
@@ -209,7 +209,7 @@ protected:
   // -- If a null pointer is returned, the analog -unbiased- behavior is adopted.
   // -- non-physics-based biasing:
   // -----------------------------
-  // -- [ First operator method called, at the PostStepGetPhysicalInterationLenght(...) level. ]
+  // -- [ First operator method called, at the PostStepGetPhysicalInterationLength(...) level. ]
   virtual G4VBiasingOperation* ProposeNonPhysicsBiasingOperation( const G4Track* track, const G4BiasingProcessInterface* callingProcess ) = 0;
   // -- physics-based biasing:
   // -------------------------
@@ -220,7 +220,7 @@ protected:
   // -- The informations provided by the G4BiasingProcessInterface calling process (previous occurrence operation, previous step length,
   // -- etc.) might be useful for doing this. They will be useful also to decide with continuing with a same operation proposed
   // -- in the previous step, updating the interaction law taking into account the new G4Track state and the previous step size.
-  // -- [ Second operator method called, at the PostStepGetPhysicalInterationLenght(...) level. ]
+  // -- [ Second operator method called, at the PostStepGetPhysicalInterationLength(...) level. ]
   virtual G4VBiasingOperation*  ProposeOccurenceBiasingOperation( const G4Track* track, const G4BiasingProcessInterface* callingProcess ) = 0;
   // -- [ Third operator method called, at the PostStepDoIt(...) level. ]
   virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation( const G4Track* track, const G4BiasingProcessInterface* callingProcess ) = 0;
@@ -245,9 +245,9 @@ protected:
 
   
 protected:
-  // -----------------------------------
-  // -- Delegation to an other operator:
-  // -----------------------------------
+  // ----------------------------------
+  // -- Delegation to another operator:
+  // ----------------------------------
   // -- An operator may wish to select a sequence of operations already implemented in an
   // -- existing biasing operator. In this case, this operator can delegate its work to
   // -- the "delegated" one by calling DelegateTo( G4VBiasingOperation* delegated );
@@ -296,7 +296,7 @@ public:
 
   
   
-  // -- used by biasing process interface, or used by an other operator (not expected to be invoked differently than with these two cases):
+  // -- used by biasing process interface, or used by another operator (not expected to be invoked differently than with these two cases):
 public:
   G4VBiasingOperation*  GetProposedOccurenceBiasingOperation( const G4Track* track, const G4BiasingProcessInterface* callingProcess );
   G4VBiasingOperation* GetProposedFinalStateBiasingOperation( const G4Track* track, const G4BiasingProcessInterface* callingProcess );

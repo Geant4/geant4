@@ -68,6 +68,12 @@ G4ParticleHPMessenger::G4ParticleHPMessenger( G4ParticleHPManager* man )
    ProduceFissionFragementCmd->SetCandidates("true false");
    ProduceFissionFragementCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+   WendtFissionModelCmd = new G4UIcmdWithAString("/process/had/particle_hp/use_Wendt_fission_model",this);
+   WendtFissionModelCmd->SetGuidance("Enable use of Wendt fission model.");
+   WendtFissionModelCmd->SetParameterName("choice",false);
+   WendtFissionModelCmd->SetCandidates("true false");
+   WendtFissionModelCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+      
    NRESP71Cmd = new G4UIcmdWithAString("/process/had/particle_hp/use_NRESP71_model",this);
    NRESP71Cmd->SetGuidance("Enable to use NRESP71 model for n on C reaction");
    NRESP71Cmd->SetParameterName("choice",false);
@@ -90,6 +96,8 @@ G4ParticleHPMessenger::~G4ParticleHPMessenger()
    delete NeglectDopplerCmd;
    delete DoNotAdjustFSCmd;
    delete ProduceFissionFragementCmd;
+   delete WendtFissionModelCmd;
+   delete NRESP71Cmd;
    delete VerboseCmd;
 }
 
@@ -112,6 +120,11 @@ void G4ParticleHPMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    }
    if ( command == ProduceFissionFragementCmd ) { 
       manager->SetProduceFissionFragments( bValue ); 
+   }
+   if ( command == WendtFissionModelCmd ) { 
+      manager->SetUseWendtFissionModel( bValue );
+      // Make sure both fission fragment models are not active at same time
+      if ( bValue ) manager->SetProduceFissionFragments( false );
    }
    if ( command == NRESP71Cmd ) { 
       manager->SetUseNRESP71Model( bValue ); 

@@ -40,6 +40,8 @@
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
 #include "Randomize.hh"
+#include "G4Profiler.hh"
+#include "G4TiMemory.hh"
 
 G4ThreadLocal G4EventManager* G4EventManager::fpEventManager = nullptr;
 
@@ -127,6 +129,10 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   { currentEvent->SetHCofThisEvent(sdManager->PrepareNewEvent()); }
 
   if(userEventAction) userEventAction->BeginOfEventAction(currentEvent);
+
+#if defined(GEANT4_USE_TIMEMORY)
+  eventProfiler.reset(new ProfilerConfig(currentEvent));
+#endif
 
 #ifdef G4VERBOSE
   if ( verboseLevel > 1 )
@@ -246,6 +252,10 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   {
     sdManager->TerminateCurrentEvent(currentEvent->GetHCofThisEvent());
   }
+
+#if defined(GEANT4_USE_TIMEMORY)
+  eventProfiler.reset();
+#endif
 
   if(userEventAction)
   {

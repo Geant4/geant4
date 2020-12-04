@@ -537,7 +537,7 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
        //the 32-point x grid. Interpolation is log-log
        size_t nBinsX = fPenelopeFSHelper->GetNBinsX();
        G4double* tempData = new G4double[nBinsX];
-       G4double logene = std::log(energy);
+       G4double logene = G4Log(energy);
        for (size_t ix=0;ix<nBinsX;ix++)
 	 {
 	   //find dSigma/dx for the given E. X belongs to the 32-point grid.
@@ -713,7 +713,7 @@ G4double G4PenelopeBremsstrahlungModel::GetPositronXSCorrection(const G4Material
   //by Kim et al. (1986) (cf. Berger and Seltzer, 1982). Here, it is used an
   //analytical approximation which reproduces the tabulated values with 0.5%
   //accuracy
-  G4double t=std::log(1.0+1e6*energy/
+  G4double t=G4Log(1.0+1e6*energy/
 		      (electron_mass_c2*fPenelopeFSHelper->GetEffectiveZSquared(mat)));
   G4double corr = 1.0-G4Exp(-t*(1.2359e-1-t*(6.1274e-2-t*
 					   (3.1516e-2-t*(7.7446e-3-t*(1.0595e-3-t*

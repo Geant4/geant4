@@ -131,12 +131,20 @@ class G4PrimaryTransformer;
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4RunManagerKernel.hh"
+#include "G4Profiler.hh"
 #include "globals.hh"
 #include <algorithm>
 #include <list>
 
+class G4RunManagerFactory;
+
 class G4RunManager
 {
+  friend class G4RunManagerFactory;
+ public:
+  // the profiler aliases are only used when compiled with GEANT4_USE_TIMEMORY
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+
  public:  // with description
   static G4RunManager* GetRunManager();
   //  Static method which returns the singleton pointer of G4RunManager or
@@ -264,6 +272,17 @@ class G4RunManager
   //  AnalyzeEvent() stores an event to a data base if a concrete
   //  G4VPersistentManager
   // class is defined.
+
+  virtual void ConfigureProfilers(const std::vector<std::string>& args = {});
+  // This method configures the global fallback query and label generators
+
+  void ConfigureProfilers(int argc, char** argv);
+  // calls the above virtual method
+
+  virtual void SetNumberOfThreads(G4int) {}
+  virtual G4int GetNumberOfThreads() const { return 1; }
+  // Dummy methods to dispatch generic inheritance calls from G4RunManager
+  // base class.
 
  public:  // with description
   //////////////////////////////////////////////////////void UpdateRegion();
@@ -690,6 +709,9 @@ class G4RunManager
   {
     geometryDirectlyUpdated = val;
   }
+
+ private:
+  std::unique_ptr<ProfilerConfig> masterRunProfiler;
 };
 
 #endif

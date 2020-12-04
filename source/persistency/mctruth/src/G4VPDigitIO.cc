@@ -23,33 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VPDigitIO.cc
+// G4VPDigitIO implementation
 //
-// History:
-//   '01.08.10  Youhei Morita  Initial creation (with "fadsclass3")
+// Author: Youhei Morita, 10.08.2001
+// --------------------------------------------------------------------
 
 #include "G4VPDigitIO.hh"
 
-G4ThreadLocal G4VPDigitIO* G4VPDigitIO::f_G4VPDigitIO = 0;
+G4ThreadLocal G4VPDigitIO* G4VPDigitIO::f_G4VPDigitIO = nullptr;
 
-// Implementation of Constructor #1
+// --------------------------------------------------------------------
 G4VPDigitIO::G4VPDigitIO()
- : m_verbose(0)
 {
   f_catalog = G4DCIOcatalog::GetDCIOcatalog();
 }
 
-// Implementation of SetVerboseLevel
-void G4VPDigitIO::SetVerboseLevel(int v)
+// --------------------------------------------------------------------
+void G4VPDigitIO::SetVerboseLevel(G4int v)
 {
   m_verbose = v;
 
   // Loop through the registered Digit I/O managers
-  for ( size_t i=0; i < f_catalog->NumberOfDCIOmanager(); i++ ) {
+  for(std::size_t i = 0; i < f_catalog->NumberOfDCIOmanager(); ++i)
+  {
     G4VPDigitsCollectionIO* digitIOman = f_catalog->GetDCIOmanager(i);
     digitIOman->SetVerboseLevel(v);
   }
 }
-
-// End of G4VPDigitIO.cc
-

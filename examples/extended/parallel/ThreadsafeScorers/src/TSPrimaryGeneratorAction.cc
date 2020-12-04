@@ -44,6 +44,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Profiler.hh"
 #include "G4TiMemory.hh"
 
 using namespace CLHEP;
@@ -71,7 +72,7 @@ TSPrimaryGeneratorAction::~TSPrimaryGeneratorAction() { delete fGun; }
 
 void TSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  TIMEMORY_AUTO_TIMER("");
+  G4USER_SCOPED_PROFILE(__FUNCTION__);
   static TSDetectorConstruction* detector = TSDetectorConstruction::Instance();
 
   G4ThreeVector dir(0., 0., 1.);

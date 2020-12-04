@@ -1,25 +1,45 @@
 #
 # macro file for TestEm18.cc
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
-/testem/det/setMat Tungsten
-/testem/det/setSize 100 um
+/testem/det/setMat G4_Au
+/testem/det/setSize 50 um
 #
+/testem/phys/addPhysics standard
+###/testem/phys/addPhysics livermore
+#
+# prevent any delta rays production
+/run/setCut 1 km
+/run/setCutForAGivenParticle gamma 0.5 um
+#
+# to (de)activate pixe or atomic deexcitation
 /process/em/pixe true
+/process/em/augerCascade false
+/process/em/deexcitationIgnoreCut false
 #
-/run/setCut 1 um
+/process/em/verbose 0
+/process/em/printParameters 
 #
 /run/initialize
 #
 /gun/particle proton 
-/gun/energy 10 MeV
+/gun/energy 20 MeV
+#
+/testem/trackSecondaries true
+#
+# to be run interactively  
+###/control/execute vis.mac
+###/tracking/verbose 2
+###/run/beamOn 100
 #
 /analysis/setFileName pixe 
-/analysis/h1/set  7 100 0 10 MeV    #total eLoss
-/analysis/h1/set 11 100 0 100 keV   #gamma energy spectrum
+/analysis/h1/set  7 100  0   2 MeV  #total eLoss
+/analysis/h1/set 11 1000 0 100 keV  #gamma energy spectrum
+/analysis/h1/set 12 1000 0  20 keV  #e- energy spectrum
 #
+/tracking/verbose 0
 /run/printProgress 10000
-#
 /run/beamOn 100000

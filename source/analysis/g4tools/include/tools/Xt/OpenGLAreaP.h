@@ -1,5 +1,5 @@
 #ifndef tools_Xt_OpenGLAreaP_h
-#define tools_Xt_OpenGLAreaP_h 
+#define tools_Xt_OpenGLAreaP_h
 
 #include "OpenGLArea.h"
 

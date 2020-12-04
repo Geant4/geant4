@@ -29,7 +29,7 @@
 #ifndef G4PSCellFlux_h
 #define G4PSCellFlux_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 class G4VSolid;
@@ -49,11 +49,13 @@ class G4VSolid;
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted option
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. cell flux * track weight (y)         (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class G4PSCellFlux : public G4VPrimitiveScorer
+class G4PSCellFlux : public G4VPrimitivePlotter
 {
    public: // with description
       G4PSCellFlux(G4String name, G4int depth=0);

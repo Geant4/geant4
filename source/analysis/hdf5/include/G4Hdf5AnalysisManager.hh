@@ -40,7 +40,7 @@
 #include <memory>
 
 class G4Hdf5FileManager;
-class G4Hdf5NtupleManager;
+class G4Hdf5NtupleFileManager;
 
 class G4Hdf5AnalysisManager : public G4ToolsAnalysisManager
 {
@@ -81,12 +81,10 @@ class G4Hdf5AnalysisManager : public G4ToolsAnalysisManager
     template <typename T>
     G4bool WriteHn(const std::vector<T*>& htVector,
                    const std::vector<G4HnInformation*>& hnVector,
-                   const G4String& directoryName,
                    const G4String& hnType);
     template <typename T>
     G4bool WritePn(const std::vector<T*>& htVector,
                    const std::vector<G4HnInformation*>& hnVector,
-                   const G4String& directoryName,
                    const G4String& hnType);
     G4bool WriteDirectory(); 
     G4bool WriteH1(); 
@@ -97,7 +95,7 @@ class G4Hdf5AnalysisManager : public G4ToolsAnalysisManager
     G4bool Reset();
 
     // data members
-    G4Hdf5NtupleManager*  fNtupleManager;
+    std::shared_ptr<G4Hdf5NtupleFileManager>  fNtupleFileManager;
     std::shared_ptr<G4Hdf5FileManager>  fFileManager;
 };
 

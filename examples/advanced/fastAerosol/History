@@ -7,7 +7,11 @@
 
                       Category History file
                       ---------------------
+14.11.2020 - S. Guatelli fastAerosol-V10-06-02
+             Migration to G4RunManagerFactory
+             
+02.11.2020 - B.Morgan fastAerosol-V10-06-01
+             Support same CMake version range as core Geant4
 
 20.04.2020 - S. Guatelli; New Advanced Example: fastAerosol-V10-06-00.
 
-            

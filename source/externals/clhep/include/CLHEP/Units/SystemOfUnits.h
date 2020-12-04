@@ -41,6 +41,7 @@
 // 03.11.08   use PDG 2008 value of e_SI
 // 19.08.15   added liter and its sub units (mma)
 // 12.01.16   added symbols for microsecond (us) and picosecond (ps) (mma)
+// 17.07.20   use PDG 2019 value of e_SI
 
 #ifndef HEP_SYSTEM_OF_UNITS_H
 #define HEP_SYSTEM_OF_UNITS_H
@@ -154,7 +155,7 @@ namespace CLHEP {
   // Electric charge [Q]
   //
   static constexpr double eplus = 1. ;// positron charge
-  static constexpr double e_SI  = 1.602176487e-19;// positron charge in coulomb
+  static constexpr double e_SI  = 1.602176634e-19;// positron charge in coulomb
   static constexpr double coulomb = eplus/e_SI;// coulomb = 6.24150 e+18 * eplus
 
   //

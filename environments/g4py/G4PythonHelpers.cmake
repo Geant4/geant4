@@ -4,7 +4,8 @@
 # any substructure
 set(GEANT4_PYTHON_OUTPUT_DIR "$<TARGET_FILE_DIR:G4global>/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages")
 
-set(CMAKE_INSTALL_PYTHONDIR "${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages")
+set(CMAKE_INSTALL_PYTHONDIR "${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages" CACHE PATH "Python modules/packages")
+mark_as_advanced(CMAKE_INSTALL_PYTHONDIR)
 if(NOT IS_ABSOLUTE "${CMAKE_INSTALL_PYTHONDIR}")
   set(CMAKE_INSTALL_FULL_PYTHONDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_PYTHONDIR}")
 else()
@@ -40,6 +41,10 @@ function(g4py_add_module target_name)
   # to be checked for Windows)
   target_include_directories(${target_name} PRIVATE ${PYTHON_INCLUDE_DIRS})
   target_link_libraries(${target_name} PRIVATE Boost::python "$<$<PLATFORM_ID:Darwin>:-undefined dynamic_lookup>")
+
+  # Workaround to suppress pragma message spam in Boost >= 1.73
+  # - See https://github.com/boostorg/python/pull/315
+  target_compile_definitions(${target_name} PRIVATE BOOST_BIND_GLOBAL_PLACEHOLDERS)
 endfunction()
 
 

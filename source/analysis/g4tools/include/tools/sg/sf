@@ -55,7 +55,7 @@ public:
     T v;
     strm >> v;
     if(strm.fail()) return false;
-    parent::value(v); 
+    parent::value(v);
     return true;
   }
 public:

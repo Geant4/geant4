@@ -120,7 +120,7 @@ public:
       return true;
     } else if( a_value >= m_maximum_value) {
       a_index = m_number_of_bins+1;
-      return true; 
+      return true;
     } else {
       if(m_fixed) {
         a_index = (bn_t)((a_value - m_minimum_value)/m_bin_width)+1;
@@ -203,14 +203,14 @@ public:
     m_fixed = true;
     return true;
   }
-  
+
   bool is_compatible(const axis& a_axis) const {
     if(m_number_of_bins!=a_axis.m_number_of_bins) return false;
     if(m_minimum_value!=a_axis.m_minimum_value) return false;
     if(m_maximum_value!=a_axis.m_maximum_value) return false;
     return true;
   }
-  
+
 public:
   axis()
   :m_offset(0)
@@ -256,7 +256,7 @@ public:
     if(m_edges!=a_from.m_edges) return false;
     return true;
   }
-  
+
   bool operator==(const axis& a_from) const {return equals(a_from);}
   bool operator!=(const axis& a_from) const {return !equals(a_from);}
 

@@ -49,19 +49,19 @@
 #/gps/ang/maxtheta .1 deg 
 
 ################### the beam energy is uniform profile from 4.0 MeV to 12 MeV
-/gps/ene/type User
-/gps/ene/type User
-/gps/hist/type energy
-/gps/hist/point 4.000001 0
-/gps/hist/point 12. 1
-/gps/direction 1 0 0
+#/gps/ene/type User
+#/gps/ene/type User
+#/gps/hist/type energy
+#/gps/hist/point 4.000001 0
+#/gps/hist/point 12. 1
+#/gps/direction 1 0 0
  
 #####################################################################
 # TARANIS energy spectrum without angular dipendence: exp(-.44E) for energy between 1. to 12 MeV
-###/gps/ene/type Exp
-###/gps/ene/min 1. MeV
-###/gps/ene/max 12. MeV
-###/gps/ene/ezero 2.272727273
+/gps/ene/type Exp
+/gps/ene/min 1. MeV
+/gps/ene/max 12. MeV
+/gps/ene/ezero 2.272727273
 
 ######################################################################
 ###/vis/scene/create 

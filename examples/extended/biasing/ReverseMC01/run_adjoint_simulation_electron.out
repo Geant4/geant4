@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +26,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -94,9 +96,9 @@ phot:  for gamma SubType=12 BuildTable=0
        PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -135,7 +137,7 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : Aluminum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  34.4583 keV    e+  33.7728 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  34.1725 keV    e+  33.9436 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -149,14 +151,14 @@ Index : 2     used in the geometry : Yes
 Index : 3     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  31.7971 keV    e+  31.374 keV proton 1 keV
+ Energy thresholds :  gamma  990 eV     e-  31.9516 keV    e+  31.7376 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Tantalum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  6.90532 keV    e-  74.9399 keV    e+  72.9588 keV proton 1 keV
+ Energy thresholds :  gamma  6.90363 keV    e-  75.0136 keV    e+  73.5164 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -181,366 +183,78 @@ nb event 1
 nb event 2
 nb event 3
 nb event 4
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000402802
-new rejected relative error 1
 nb event 5
 nb event 6
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000185516
-new rejected relative error 0.41211
 nb event 7
 nb event 8
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000140249
-new rejected relative error 0.495257
 nb event 9
 nb event 10
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.00100193
-new rejected relative error 0.772248
 nb event 11
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 9.27554e-05
-new rejected relative error 0.580111
 nb event 12
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000334681
-new rejected relative error 0.628093
 nb event 13
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000118272
-new rejected relative error 0.43814
 nb event 14
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 7.98278e-05
-new rejected relative error 0.596899
 nb event 15
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 6.95666e-05
-new rejected relative error 0.614976
 nb event 16
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 7.40083e-05
-new rejected relative error 0.568515
 nb event 17
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 6.18369e-05
-new rejected relative error 0.626166
 nb event 18
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000910166
-new rejected relative error 0.871749
 nb event 19
 nb event 20
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 5.58816e-05
-new rejected relative error 0.63175
 nb event 21
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 5.05939e-05
-new rejected relative error 0.642095
 nb event 22
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 9.97692e-05
-new rejected relative error 0.530503
 nb event 23
 nb event 24
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 4.64626e-05
-new rejected relative error 0.646551
 nb event 25
 nb event 26
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000128184
-new rejected relative error 0.650226
 nb event 27
 nb event 28
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 5.77777e-05
-new rejected relative error 0.513908
 nb event 29
 nb event 30
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 8.87616e-05
-new rejected relative error 0.599983
 nb event 31
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 3.47839e-05
-new rejected relative error 0.663835
 nb event 32
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000529755
-new rejected relative error 0.901478
 nb event 33
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 3.27372e-05
-new rejected relative error 0.666612
 nb event 34
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000148363
-new rejected relative error 0.757003
 nb event 35
 nb event 36
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000114416
-new rejected relative error 0.716767
 nb event 37
 nb event 38
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 0.000103493
-new rejected relative error 0.708329
 nb event 39
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.78266e-05
-new rejected relative error 0.673198
 nb event 40
 nb event 41
 nb event 42
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.68812e-05
-new rejected relative error 0.664576
 nb event 43
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.52969e-05
-new rejected relative error 0.676565
 nb event 44
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.55264e-05
-new rejected relative error 0.669938
 nb event 45
 nb event 46
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.42122e-05
-new rejected relative error 0.677561
 nb event 47
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.31889e-05
-new rejected relative error 0.679359
 nb event 48
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.48494e-05
-new rejected relative error 0.633238
 nb event 49
 nb event 50
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 8.07516e-05
-new rejected relative error 0.723109
 nb event 51
 nb event 52
 nb event 53
 nb event 54
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.0617e-05
-new rejected relative error 0.682591
 nb event 55
 nb event 56
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.98784e-05
-new rejected relative error 0.683644
 nb event 57
 nb event 58
 nb event 59
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.85511e-05
-new rejected relative error 0.685465
 nb event 60
 nb event 61
 nb event 62
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.79527e-05
-new rejected relative error 0.686248
 nb event 63
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.74834e-05
-new rejected relative error 0.683156
 nb event 64
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.73952e-05
-new rejected relative error 0.686835
 nb event 65
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.68646e-05
-new rejected relative error 0.687671
 nb event 66
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 2.18863e-05
-new rejected relative error 0.566672
 nb event 67
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.63686e-05
-new rejected relative error 0.688318
 nb event 68
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 3.04871e-05
-new rejected relative error 0.574544
 nb event 69
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.59009e-05
-new rejected relative error 0.688929
 nb event 70
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.59402e-05
-new rejected relative error 0.687135
 nb event 71
 nb event 72
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.5476e-05
-new rejected relative error 0.688717
 nb event 73
 nb event 74
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 1.51322e-05
-new rejected relative error 0.685698
 nb event 75
 nb event 76
-Potential wrong adjoint weight!
-The results of this event will not be registered!
-previous mean edep [MeV] 0.000278266
-previous relative error 0.0565247
-new rejected mean edep [MeV] 4.01439e-05
-new rejected relative error 0.666411
 nb event 77
 nb event 78
 nb event 79
@@ -611,17 +325,19 @@ nb event 155000
 nb event 160000
 nb event 165000
 nb event 170000
-nb event 175000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 175290 events processed.
-  User=554.170000s Real=561.761553s Sys=0.540000s
+  Run Aborted after 173590 events processed.
+  User=72.770000s Real=78.555971s Sys=0.110000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00166348
-error[MeV] = 1.66344e-05
+normalised edep [MeV] = 0.00165068
+error[MeV] = 1.65068e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

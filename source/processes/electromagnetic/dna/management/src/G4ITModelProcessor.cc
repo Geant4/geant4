@@ -254,7 +254,7 @@ fVerbose
                                                 " current global time."
                                              << " This may cause synchronization problem. If the process you"
                                                 " are using required "
-                                             << "such feature please contact the developpers." << G4endl
+                                             << "such feature please contact the developers." << G4endl
                                              << "The global time in the step manager : "
                                              << G4BestUnit(fGlobalTime, "Time")
                                              << G4endl

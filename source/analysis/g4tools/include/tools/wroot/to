@@ -17,9 +17,9 @@ inline bool to(directory& a_dir,const std::map<std::string,std::string>& a_annot
   std::string sas;
   tools_mforcit(std::string,std::string,a_annotations,it) {
     if(it!=a_annotations.begin()) sas += "\n";
-    sas += (*it).first;  
+    sas += (*it).first;
     sas += "\n";
-    sas += (*it).second;  
+    sas += (*it).second;
   }
   std::string key_name = "annotations_"+a_histo_name;
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,key_name,"annotations","TNamed");
@@ -164,7 +164,7 @@ inline bool write_histos(directory& a_dir,const std::vector< std::pair<std::stri
                          << " WARNING : class " << scls << " not handled."
                          << std::endl;
     }
- 
+
   }
   return true;
 }

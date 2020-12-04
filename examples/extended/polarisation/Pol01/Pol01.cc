@@ -26,13 +26,13 @@
 /// \file polarisation/Pol01/Pol01.cc
 /// \brief Main program of the polarisation/Pol01 example
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Types.hh"
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -48,9 +48,9 @@
 #include "G4UIExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 int main(int argc,char** argv) {
- 
+
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
@@ -60,9 +60,9 @@ int main(int argc,char** argv) {
   //choose the Random engine
   //  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine());
-  
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+
+  // Construct a serial run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // set mandatory initialization classes
   DetectorConstruction* det;
@@ -75,31 +75,31 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 
   // set user action classes
-  RunAction* run;  
-  runManager->SetUserAction(run = new RunAction(det,prim)); 
+  RunAction* run;
+  runManager->SetUserAction(run = new RunAction(det,prim));
   runManager->SetUserAction(new EventAction(run));
   runManager->SetUserAction(new SteppingAction(det,prim,run));
-   
-  // get the pointer to the User Interface manager 
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  // get the pointer to the User Interface manager
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)   // Define UI terminal for interactive mode
-    { 
+    {
       ui->SessionStart();
       delete ui;
     }
   else           // Batch mode
-    { 
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
 
-  // job termination     
+  // job termination
   delete visManager;
   delete runManager;
 
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

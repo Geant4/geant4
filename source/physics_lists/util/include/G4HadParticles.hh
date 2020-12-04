@@ -28,7 +28,7 @@
 //
 // Author V.Ivanchenko 09.05.2020
 //
-// Collections of pahadrons
+// Collections of hadrons pdg codes
 //
 
 #ifndef G4HadParticles_h
@@ -44,9 +44,11 @@ public:
   // several vectors of PDG codes for hadron physics
   static const std::vector<G4int>& GetLightHadrons();
   static const std::vector<G4int>& GetHyperons();
+  static const std::vector<G4int>& GetAntiHyperons();
   static const std::vector<G4int>& GetKaons();
   static const std::vector<G4int>& GetBCHadrons();
   static const std::vector<G4int>& GetLightIons();
+  static const std::vector<G4int>& GetLightAntiIons();
 
   // several vectors of PDG codes for EM physics
   static const std::vector<G4int>& GetHeavyChargedParticles();
@@ -56,9 +58,11 @@ private:
 
   static const std::vector<G4int> sLightHadrons;
   static const std::vector<G4int> sHyperons;
+  static const std::vector<G4int> sAntiHyperons;
   static const std::vector<G4int> sKaons;
   static const std::vector<G4int> sBCHadrons;
   static const std::vector<G4int> sLightIons;
+  static const std::vector<G4int> sLightAntiIons;
   static const std::vector<G4int> sHeavyChargedPart;
   static const std::vector<G4int> sBCChargedHadrons;
 };

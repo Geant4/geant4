@@ -47,6 +47,9 @@ class G4WorkerRunManagerKernel;
 class G4WorkerRunManager : public G4RunManager
 {
  public:
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+
+ public:
   static G4WorkerRunManager* GetWorkerRunManager();
   static G4WorkerRunManagerKernel* GetWorkerRunManagerKernel();
   G4WorkerRunManager();
@@ -76,6 +79,8 @@ class G4WorkerRunManager : public G4RunManager
  protected:
   virtual void ConstructScoringWorlds();
   virtual void StoreRNGStatus(const G4String& filenamePrefix);
+  virtual void rndmSaveThisRun();
+  virtual void rndmSaveThisEvent();
   virtual void MergePartialResults();
   // This method will merge (reduce) the results of this run into the
   // global run
@@ -114,6 +119,9 @@ class G4WorkerRunManager : public G4RunManager
   G4int luxury;
   G4SeedsQueue seedsQueue;
   G4bool readStatusFromFile;
+
+ private:
+  std::unique_ptr<ProfilerConfig> workerRunProfiler;
 
  public:
   virtual void RestoreRndmEachEvent(G4bool flag) { readStatusFromFile = flag; }

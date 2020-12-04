@@ -35,7 +35,7 @@
 //
 //  Author: V.Ivanchenko 20 June 2008
 //
-//  Modified: 
+//  Modified:
 //
 // -------------------------------------------------------------
 //
@@ -43,8 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-#include "G4MTRunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -65,8 +64,7 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
-#ifdef G4MULTITHREADED  
-  G4MTRunManager * runManager = new G4MTRunManager(); 
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // Number of threads can be defined via 3rd argument
   if (argc==4) {
@@ -75,11 +73,6 @@ int main(int argc,char** argv) {
   }
   G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads()
          << " threads" << " #####" << G4endl;
-#else
-  G4RunManager * runManager = new G4RunManager();
-  G4cout << "##### Hadr00 started in sequential mode"
-         << " #####" << G4endl;
-#endif
 
   //set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
@@ -116,7 +109,7 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = nullptr;
 
   //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)  {
     //interactive mode
@@ -125,13 +118,13 @@ int main(int argc,char** argv) {
     ui->SessionStart();
     delete ui;
   } else  {
-    //batch mode  
+    //batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 
-  //job termination 
+  //job termination
   delete visManager;
   delete runManager;
 }

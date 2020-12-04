@@ -12,7 +12,7 @@ namespace tools {
 inline void words(const std::string& a_string,const std::string& a_sep,bool a_take_empty,
                   std::vector<std::string>& a_words,bool a_clear = true){
   //  If a_sep is for exa "|" and for "xxx||xxx" :
-  //  - a_take_empty false : {"xxx","xxx"} will be created 
+  //  - a_take_empty false : {"xxx","xxx"} will be created
   //    (and NOT {"xxx","","xxx"}).
   //  - a_take_empty true : {"xxx","","xxx"} will be created.
   if(a_clear) a_words.clear();

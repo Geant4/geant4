@@ -29,7 +29,7 @@
 #ifndef G4PSMinKinEAtGeneration_h
 #define G4PSMinKinEAtGeneration_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,12 +39,14 @@
 //
 // Created: 2005-11-17  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
+//              vs. track weight (y)                 (Makoto Asai)
 //
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class G4PSMinKinEAtGeneration : public G4VPrimitiveScorer
+class G4PSMinKinEAtGeneration : public G4VPrimitivePlotter
 {
  
  public: // with description

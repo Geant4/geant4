@@ -14,6 +14,9 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+02.11.2020 Ben Morgan Tag:XRayFluo-V10-06-00
+- Support same CMake version range as core Geant4
+
 30.08.2019 Susanna Guatelli Tag:XRayFluo-V10-05-01
 - G4VIS_USE and G4UI_USE deleted
 
@@ -42,16 +45,16 @@ and keep track of all category-tags.
 - Updated macro livermore.mac
 
 06-06-2014 L.Pandola Tag: XrayFluo-V10-00-10
-- Changed verbosity in livermore.mac to bring the output 
+- Changed verbosity in livermore.mac to bring the output
 below 1 MB (as requested for system testing)
 
 20-05-2014 L.Pandola Tag: XrayFluo-V10-00-09
-- Migrated SteppingVerbose, registered now through the 
+- Migrated SteppingVerbose, registered now through the
  ActionInitialization class.
 
 16-05-2014 L.Pandola Tag: XrayFluo-V10-00-08
 - Real MT migration: use the G4MTRunManager
-- Add PhysicsHasBeenChanged() to the commands of the physics list 
+- Add PhysicsHasBeenChanged() to the commands of the physics list
  messenger
 
 13-05-2014 L.Pandola Tag: XrayFluo-V10-00-07
@@ -61,17 +64,17 @@ below 1 MB (as requested for system testing)
 08-05-2014 L.Pandola Tag: XrayFluo-V10-00-06
 - Updated hit class to make it MT-compliant
 - Fixed the procedure for the update of geometry between runs
-- Make const methods in the RunAction. Revised logic of RunAction: only 
+- Make const methods in the RunAction. Revised logic of RunAction: only
 the master RunAction loads data
 - Take RunAction pointer in XrayFluoPrimaryGeneratorAction
 - Remove unused verbosity in XrayFluoDataSet
-- Revise logic for reading external events (MT-compliant). 
+- Revise logic for reading external events (MT-compliant).
 - Protect methods of the singleton analysis class by Mutex.
 
 22-04-2014 L.Pandola Tag: XrayFluo-V10-00-05
-- Created and integrated an action initialization class. 
-- Make const methods and add ConstructSDandField() in the detector 
- construction classes. 
+- Created and integrated an action initialization class.
+- Make const methods and add ConstructSDandField() in the detector
+ construction classes.
 - Getting prepared for the MT migration
 
 17-04-2014 L.Pandola Tag: XrayFluo-V10-00-04
@@ -80,7 +83,7 @@ the master RunAction loads data
  (following the fix in analysis-V10-00-09)
 
 15-04-2014 L.Pandola Tag: XrayFluo-V10-00-03
-- Remove compiler warning which caused the rejection of 
+- Remove compiler warning which caused the rejection of
 XrayFluo-V10-00-02
 
 14-04-2014 L.Pandola Tag: XrayFluo-V10-00-02
@@ -89,23 +92,23 @@ Method XrayFluoAnalysisManager::LoadGunData() is restored by using the
 new G4AnalysisReader interface.
 
 13-12-2013 L.Pandola Tag: XrayFluo-V10-00-01
-- First partial migration to g4tools (internal tag). Removed AIDA 
-dependency. Output works properly, but the application is presently 
-unable to use the method 
+- First partial migration to g4tools (internal tag). Removed AIDA
+dependency. Output works properly, but the application is presently
+unable to use the method
  XrayFluoAnalysisManager::LoadGunData()
 to open a phase space file and feed data to the primary generator.
 
 13-12-2013 L.Pandola Tag: XrayFluo-V10-00-00
-- Fix shadowed variables and compilation errors due to the #include of 
-G4SystemOfUnits. Do not show up in system testing, but only when AIDA 
+- Fix shadowed variables and compilation errors due to the #include of
+G4SystemOfUnits. Do not show up in system testing, but only when AIDA
 is available.
 
 25-11-2013 G.Folger Tag: XrayFluo-V09-06-02
-- Fix  one more typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 
+- Fix  one more typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl;
 
 22-11-2013 G.Folger Tag: XrayFluo-V09-06-01
-- Fix typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 
- 
+- Fix typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl;
+
 18-06-2013 A. Dotti Tag: XrayFluo-V09-06-00
 - Fixed compilation warnings with most recent clang compiler
   (unused private data fields)
@@ -126,7 +129,7 @@ is available.
 - Fixed compilation warnings for extra parenthesis from MacOSX/clang.
 
 15-12-2011 P. Mato  Tag: XrayFluo-V09-05-01
-- XrayFluoNistMaterials.cc 
+- XrayFluoNistMaterials.cc
   Fixed the induced memory corruption problem only intermittently visible
   on MacOSX. The vectors to define materials needed to be cleared properly.
 
@@ -154,7 +157,7 @@ is available.
 07-02-2011 A.Mantero Tag: XrayFluo-V09-04-00
 - migrated physicslist to standard EM+Fluo (with PIXE)
 - added several files (XrayFluoPhysListEmStandardFLUO.cc, XrayFluoStepMax.cc
-  XrayFluoStepMaxMessenger.cc and relative headers) 
+  XrayFluoStepMaxMessenger.cc and relative headers)
   and modified accordingly others.
 
 18-11-2010 G.A.P.Cirrone, Tag: XrayFluo-V09-03-03
@@ -188,10 +191,10 @@ is available.
 10-12-2004 Alfonso Mantero: XrayFluo-V06-02-01
 - Can now be used in batch mode without histograms.
 
-8-12-2004 Alfonso Mantero: XrayFluo-V06-02-00 
+8-12-2004 Alfonso Mantero: XrayFluo-V06-02-00
 - General update, including migration to <cmath>.
 
-4-12-2003 Susanna Guatelli: XrayFluo-V05-02-08 
+4-12-2003 Susanna Guatelli: XrayFluo-V05-02-08
 - Removed the compilation warnings, introduction of VRML viewer.
   This tag referes to the tag  examples-V05-02-07 prepared for
   Geant4 6.0 release.

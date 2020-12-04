@@ -19,6 +19,31 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+20 October 2020  Jonathan Madsen (modeling-V10-06-05)
+- Implemented G4RunManagerFactory::GetMasterRunManager()
+
+18 September 2020  John Allison  (modeling-V10-06-04)
+- Part of vis-V10-06-07.
+- G4PhysicalVlumeModel.cc:
+  o Pick up default vis attributes.
+  o Improve operator<< G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
+
+04 August 2020. John Allison  (modeling-V10-06-03)
+- G4PhysicalVolumeModel:
+  o Introduce G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator!= and ==.
+  o G4PhysicalVolumeModel::G4PhysicalVolumeNodeID:
+    . Change default for flag "drawn" to false. It is set to true in
+      G4PhysicalVolumeModel::DescribeAndDescend for full path:
+        fFullPVPath.back().SetDrawn(thisToBeDrawn);
+      and for drawn path:
+        fDrawnPVPath.push_back
+          (G4PhysicalVolumeNodeID
+          (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
+      for volumes that are drawn.
+- G4PhysicalVolumesSearchScene.cc:
+  o G4PhysicalVolumesSearchScene::ProcessVolume:
+    . Make sure base path is also marked as "not drawn".
+
 07 April 2020. John Allison  (modeling-V10-06-02)
 * G4BoundingExtentScene.cc:
   * Minor tidy: Use G4VisExtent::GetNullExtent (rather than
@@ -57,7 +82,7 @@ History file for visualization/modeling
 - Rationalise trajectory line drawing.
   o There is a flag - DrawLine - which controls whether a trajectory
     should be drawn at all:
-      /vis/modeling/trajectories/drawByCharge-0/default/setDrawLine 
+      /vis/modeling/trajectories/drawByCharge-0/default/setDrawLine
     but there is also a lineVisible command, which should do the same.:
       /vis/modeling/trajectories/drawByCharge-0/default/setLineVisible
     This is fixed in this tag.
@@ -193,7 +218,7 @@ History file for visualization/modeling
 24 October 2018  John Allison  (modeling-V10-04-15)
 - G4TouchableUtils:
   o Remove FindGlobalTransform, introduce FindTouchableProperties. The
-    global transform is in properties.fTouchableGlobalTransform. 
+    global transform is in properties.fTouchableGlobalTransform.
 - Add G4TouchablePropertiesScene.
 - Delete G4TouchableDumpScene, G4TouchableGlobalTransformScene.
 - sources.cmake: Modify for above additions and deletions.
@@ -364,7 +389,7 @@ History file for visualization/modeling
 
 12th September 2016  John Allison (modeling-V10-02-12)
 - G4ModelingParameters.cc:
-  o Changed output of 
+  o Changed output of
     std::ostream& operator <<
     (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
     to correspond to arguments of /vis/set/touchable.
@@ -440,7 +465,7 @@ History file for visualization/modeling
     Added G4TrajectoryTouchedVolumeFilterFactory.
   o Added new files and classes:
     G4TrajectoryDrawByTouchedVolume.hh/cc
-    G4TrajectoryTouchedVolumeFilter.hh/cc  
+    G4TrajectoryTouchedVolumeFilter.hh/cc
   o G4ModelColourMap.hh: Added new access function:
     const std::map<T, G4Colour>& GetBasicMap() const;
     to allow access to the T objects (which are G4String objects,
@@ -473,7 +498,7 @@ History file for visualization/modeling
   o Replaced an assignment by a reference.
 
 19th May 2015  Laurent Garnier  (modeling-V10-01-02)
-- G4PhysicalVolumeSearchScene: Optimize ProcessVolume() by 
+- G4PhysicalVolumeSearchScene: Optimize ProcessVolume() by
   o setting variables only if needed
   o comparing string lenght before comparing all string
 
@@ -651,7 +676,7 @@ History file for visualization/modeling
 
 11th October 2012  John Allison  (modeling-V09-05-21)
 - G4PhysicalVolumeModel and G4ModelingParameters:
-  o Tidying. 
+  o Tidying.
 
 9th October 2012  John Allison  (modeling-V09-05-20)
 - G4PhysicalVolumeModel and G4ModelingParameters:
@@ -694,7 +719,7 @@ History file for visualization/modeling
     volume.
 - G4PhysicalVolumeSearchScene:
   o Added GetFoundFullPVPath.
- 
+
 1st October 2012  John Allison  (modeling-V09-05-13)
 - G4PhysicalVolumeModel:: GetAttDefs: Small bug fix.
 - G4TrajectoriesModel:
@@ -970,7 +995,7 @@ History file for visualization/modeling
 
 13th September 2006  John Allison
 - G4ModelingParameters: Improved setting and access to explode factor.
-- G4PhysicalVolumeModel.cc: 
+- G4PhysicalVolumeModel.cc:
   o Implemented explode factor(radial move) feature for top level drawn
     volumes.
 - G4TrajectoriesModel.cc: Improved debug checking and printing of G4Atts.
@@ -1000,7 +1025,7 @@ History file for visualization/modeling
 
 16th August 2006  John Allison  (modeling-V08-01-03)
 - G4TrajectoryDrawerUtils.cc: Improved robustness of time slicing.
-- G4ModelCommandsT.hh: In class G4ModelCmdSetTimeSliceInterval: 
+- G4ModelCommandsT.hh: In class G4ModelCmdSetTimeSliceInterval:
   cmd->SetUnitCategory("Time").
 - G4TrajectoriesModel.cc: Improved debug statement.
 
@@ -1061,17 +1086,17 @@ History file for visualization/modeling
 - Improved protection for null models and parameters.
 
 2nd May 2006 Jane Tinslay
-- Add context to trajectory drawers. Intended to replace imode. 
-  Allows to configure default drawing style for lines, step and 
-  auxiliary points. For example, colours, visibility, point sizes, 
+- Add context to trajectory drawers. Intended to replace imode.
+  Allows to configure default drawing style for lines, step and
+  auxiliary points. For example, colours, visibility, point sizes,
   fill styles..
-- Add generic drawer, G4TrajectoryGenericDrawer. Draws all trajectories 
+- Add generic drawer, G4TrajectoryGenericDrawer. Draws all trajectories
   in the same style, based on its default context.
 - Update generic commands
 - Add verbose to drawers
 
 21st April 2006 Jane Tinslay  (modeling-V08-00-07)
-- Get rid of some warning messages from G4ModelCommandsT 
+- Get rid of some warning messages from G4ModelCommandsT
   when compiling on Linux
 - Add Print method to G4VModelFactory
 
@@ -1084,7 +1109,7 @@ History file for visualization/modeling
 
 28th March 2006 Jane Tinslay (jst28032006)
 - Add G4TrajectoryFilterFactories and G4TrajectoryParticleFilter
-  for trajectory filtering. 
+  for trajectory filtering.
 - Add more generic commands to G4ModelCommandsT
 
 28th March 2006  John Allison (modeling-V08-00-05)
@@ -1099,9 +1124,9 @@ History file for visualization/modeling
   dynamic cast instead).
 
 24th March 2006 Jane Tinslay (jst24032006)
-- Add G4bool visibility parameter to trajectory draw 
+- Add G4bool visibility parameter to trajectory draw
   models "Draw" method.
- 
+
 16th March 2006 Jane Tinslay (jst16032006)
 - Template commands and colour map used in trajectory models
 - Introduce G4TrajectoryDrawByOriginVolume

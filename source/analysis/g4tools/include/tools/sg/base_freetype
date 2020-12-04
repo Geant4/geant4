@@ -20,7 +20,7 @@ public:
   sf_enum<winding_type> front_face; //default is ccw.
   sf_enum<font_modeling> modeling;
   typedef unsigned int unichar;
-  typedef std::vector<unichar> uniline;  
+  typedef std::vector<unichar> uniline;
   mf_std_vec<unichar> unitext;
   //mf_string font_dirs; //do we want that ? It is costly. We should have a sg::font node.
 public:
@@ -29,13 +29,13 @@ public:
     static const desc_fields s_v(parent::node_desc_fields(),4, //WARNING : take care of count.
       TOOLS_ARG_FIELD_DESC(font),
       TOOLS_ARG_FIELD_DESC(front_face),
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(modeling,3)
         TOOLS_ARG_ENUM(font_outline),
         TOOLS_ARG_ENUM(font_filled),
         TOOLS_ARG_ENUM(font_pixmap)
       TOOLS_ARG_FIELD_DESC_ENUMS_END,
-      
+
       TOOLS_ARG_FIELD_DESC(unitext)
       //TOOLS_ADD_FIELD_DESC(font_dirs)
     );
@@ -102,7 +102,7 @@ public:
       std::vector<unichar>::const_iterator it;
       for(it=line.begin();it!=line.end();++it) {
         a_out << ((unsigned int)*it) << std::endl;
-      }  
+      }
       a_out << "end line." << std::endl;
     }
   }

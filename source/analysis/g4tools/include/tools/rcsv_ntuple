@@ -50,7 +50,7 @@ public: //read::intuple
       skip_line(m_reader,m_sz);
     }
   }
-  virtual bool next() { 
+  virtual bool next() {
     if(!m_sep) return false; //not inited.
     if(m_reader.tellg()>=m_sz) return false;
     // first time we are at bol but else we are at eol.
@@ -130,7 +130,7 @@ public:
     column(const column& a_from)
     :read::icol(a_from)
     ,parent(a_from)
-    ,m_name(a_from.m_name) 
+    ,m_name(a_from.m_name)
     ,m_tmp(a_from.m_tmp)
     ,m_user_var(a_from.m_user_var)
     {}
@@ -442,8 +442,8 @@ public:
           m_sz = 0;
           m_rows = -1;
           return false;
-        }      
-      }      
+        }
+      }
 */
       std::string name = a_suffix;
       if(!numas<uint64>(m_cols.size(),name)){}
@@ -507,7 +507,7 @@ public:
     else TOOLS_RCSV_NTUPLE_IF_CID(short,short)
     else TOOLS_RCSV_NTUPLE_IF_CID(int,int)
     else TOOLS_RCSV_NTUPLE_IF_CID(int64,int64)
-    
+
     else TOOLS_RCSV_NTUPLE_IF_CID(float,float)
     else TOOLS_RCSV_NTUPLE_IF_CID(double,double)
 
@@ -909,7 +909,7 @@ protected:
                         char a_sep,const std::string& a_vec_sep,
                         std::vector<std::string>& a_v) {
     std::string _s;
-    if(!_read(a_reader,a_sz,a_sep,_s)) return false;    
+    if(!_read(a_reader,a_sz,a_sep,_s)) return false;
     //replace(_s,"\\"+a_vec_sep,"@@");
     words(_s,a_vec_sep,true,a_v);
     //tools_vforit(std::string,a_v,it) replace(*it,"@@",a_vec_sep);
@@ -922,7 +922,7 @@ protected:
                         char a_sep,const std::string& a_vec_sep,
                         std::vector<T>& a_v) {
     std::string _s;
-    if(!_read(a_reader,a_sz,a_sep,_s)) return false;    
+    if(!_read(a_reader,a_sz,a_sep,_s)) return false;
     if(!snums<T>(_s,a_iss,a_tmp,a_vec_sep,a_v)) return false;
     return true;
   }
@@ -1026,7 +1026,7 @@ protected:
 
       else {
         //std::cout << "column cast failed." << std::endl;
-        return false; 
+        return false;
       }
 
       if(index==(num-1)) { //read up to LF()

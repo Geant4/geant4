@@ -18,6 +18,14 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+23 September 2020 Ben Morgan (visxxx-V10-06-00)
+- Remove no longer required include_directories
+
+18 September 2020  John Allison  (visXXX-V10-05-05)
+- Part of vis-V10-06-07.
+- G4XXXSGViewer.cc and G4XXXStoredViewer.cc:
+  o CompareForKernelVisit; Force kernel visit if global parameters change.
+    . GlobalMarkerScale and GlobalLineWidthScale.
 
 18 June 2020 John Allison  (visXXX-V10-05-04)
 - G4XXXSGSceneHandler.cc: Fix a debug statement.
@@ -83,7 +91,7 @@ History file for visualization/XXX sub-category (a template graphics system)
 
 3rd January 2011  John Allison  (visXXX-V09-05-00)
 - Removed #ifdef ...XXXSG... protections.
-  o No longer any reliance on imported tree code; own tree code example used. 
+  o No longer any reliance on imported tree code; own tree code example used.
 
 11th November 2011  John Allison  (visXXX-V09-04-01)
 - G4XXXSGSceneHandler.cc: Fixed compiler warnings.

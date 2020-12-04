@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgbPlaceParamSquare
+// G4tgbPlaceParamSquare
 //
 // Class description:
 //
 // Class to represent parameterisations of placements.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgbPlaceParameterisation_H
-#define G4tgbPlaceParameterisation_H 1
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgbPlaceParameterisation_hh
+#define G4tgbPlaceParameterisation_hh 1
 
 #include "globals.hh"
 #include "geomdefs.hh"
@@ -50,28 +45,26 @@ class G4VPhysicalVolume;
 class G4tgrPlaceParameterisation;
 
 class G4tgbPlaceParameterisation : public G4VPVParameterisation
-{ 
-  public:  // with description
+{
+  public:
 
-    G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam );
+    G4tgbPlaceParameterisation(G4tgrPlaceParameterisation* tgrParam);
     virtual ~G4tgbPlaceParameterisation();
 
-    virtual void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
+    virtual void ComputeTransformation(const G4int, G4VPhysicalVolume*) const;
 
-    void CheckNExtraData( G4tgrPlaceParameterisation* tgrParam,
-                          G4int nWcheck, WLSIZEtype st,
-                          const G4String& methodName );
+    void CheckNExtraData(G4tgrPlaceParameterisation* tgrParam, G4int nWcheck,
+                         WLSIZEtype st, const G4String& methodName);
 
     G4int GetNCopies() const { return theNCopies; }
     EAxis GetAxis() const { return theAxis; }
 
   protected:
 
-    G4int theNCopies;
-    EAxis theAxis;
+    G4int theNCopies = 0;
+    EAxis theAxis = kUndefined;
     G4ThreeVector theTranslation;
-    G4RotationMatrix* theRotationMatrix;
-
+    G4RotationMatrix* theRotationMatrix = nullptr;
 };
 
 #endif

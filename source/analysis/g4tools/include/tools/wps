@@ -37,7 +37,7 @@ public:
     //m_param.shade = shade_color;
   }
 
-  virtual ~wps(){    
+  virtual ~wps(){
     if(m_file) close_file();
     m_string.clear();
     if(m_gsave) {
@@ -59,7 +59,7 @@ public:
   bool open_file(const std::string& a_name,bool a_anonymous = false){
     if(m_file) return false;
 
-    m_file = ::fopen(a_name.c_str(),"wb");    
+    m_file = ::fopen(a_name.c_str(),"wb");
     if(!m_file) return false;
     m_fname = a_name;
 
@@ -139,14 +139,14 @@ public:
 
     PS_SCALE(1/METAFILE_SCALE(),1/METAFILE_SCALE());
     PS_TRANSLATE(m_deviceWidth/20,m_deviceHeight/30);
-  
+
     float scale;
     if(m_deviceWidth<=m_deviceHeight) {
       scale = (a_height<=a_width?m_deviceWidth/a_width:m_deviceWidth/a_height);
     } else {
       scale = (a_height<=a_width?m_deviceHeight/a_width:m_deviceHeight/a_height);
     }
-  
+
    {float xtra,ytra;
     if(a_portrait) {
       xtra = (m_deviceWidth  - scale * a_width)/2;
@@ -158,7 +158,7 @@ public:
       ytra = (m_deviceWidth  - scale * a_height)/2;
     }
     PS_TRANSLATE(xtra,ytra);}
-  
+
     PS_SCALE(scale,scale);
   }
 
@@ -202,12 +202,12 @@ public:
     Uchar  red,green,blue,b;
 
     PS_SAVE();
-    in_buffer("%d %d scale ", a_width, a_height ); 
+    in_buffer("%d %d scale ", a_width, a_height );
     bool status = true;
     if(a_nbit==rgb_bw) { //grey or black_white
-      in_buffer   ("/picstr %d string def ",a_width); 
-      in_buffer   ("%d %d %d ",a_width,a_height,8); 
-      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",a_width,a_height,a_height); 
+      in_buffer   ("/picstr %d string def ",a_width);
+      in_buffer   ("%d %d %d ",a_width,a_height,8);
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",a_width,a_height,a_height);
       in_buffer   ("{ currentfile picstr readhexstring pop } " );
       PrintFLN ("image " );
       for ( row = 0; row < a_height; row++ ) {
@@ -218,12 +218,12 @@ public:
           WriteByte(grey);
         }
       }
-      int nbhex = a_width * a_height * 2; 
-      PrintFLN ("%%%% nbhex digit          :%d ",nbhex); 
+      int nbhex = a_width * a_height * 2;
+      PrintFLN ("%%%% nbhex digit          :%d ",nbhex);
       PrintFLN ("%%%% nbhex/record_length  :%d ",
-                int(nbhex/METAFILE_RECORD_LENGTH())); 
+                int(nbhex/METAFILE_RECORD_LENGTH()));
       PrintFLN ("%%%% nbhex%%record_length :%d ",
-                int(nbhex%METAFILE_RECORD_LENGTH())); 
+                int(nbhex%METAFILE_RECORD_LENGTH()));
 
     } else if(a_nbit==rgb_2) {
       int nbyte2 = (a_width   *  3)/4;
@@ -232,9 +232,9 @@ public:
       Uint col_max = (nbyte2  *  4)/3;
       // 2 bit for r and g and b.
       // rgbs following each other.
-      in_buffer   ("/rgbstr %d string def ",nbyte2); 
-      in_buffer   ("%d %d %d ",col_max,a_height,2); 
-      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",col_max,a_height,a_height); 
+      in_buffer   ("/rgbstr %d string def ",nbyte2);
+      in_buffer   ("%d %d %d ",col_max,a_height,2);
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",col_max,a_height,a_height);
       in_buffer   ("{ currentfile rgbstr readhexstring pop } " );
       in_buffer   ("false 3 " );
       PrintFLN ("colorimage " );
@@ -285,9 +285,9 @@ public:
       Uint col_max = (nbyte4 * 2)/3;
       // 4 bit for r and g and b.
       // rgbs following each other.
-      in_buffer   ("/rgbstr %d string def ",nbyte4); 
-      in_buffer   ("%d %d %d ",col_max,a_height,4); 
-      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",col_max,a_height,a_height); 
+      in_buffer   ("/rgbstr %d string def ",nbyte4);
+      in_buffer   ("%d %d %d ",col_max,a_height,4);
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",col_max,a_height,a_height);
       in_buffer   ("{ currentfile rgbstr readhexstring pop } " );
       in_buffer   ("false 3 " );
       PrintFLN ("colorimage " );
@@ -311,9 +311,9 @@ public:
     } else if(a_nbit==rgb_8) {
       int nbyte8 = a_width   * 3;
       // 8 bit for r and g and b.
-      in_buffer   ("/rgbstr %d string def ",nbyte8); 
-      in_buffer   ("%d %d %d ",a_width,a_height,8); 
-      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",a_width,a_height,a_height); 
+      in_buffer   ("/rgbstr %d string def ",nbyte8);
+      in_buffer   ("%d %d %d ",a_width,a_height,8);
+      in_buffer   ("[ %d 0 0 -%d 0 %d ] ",a_width,a_height,a_height);
       in_buffer   ("{ currentfile rgbstr readhexstring pop } " );
       in_buffer   ("false 3 " );
       PrintFLN   ("colorimage " );
@@ -335,13 +335,13 @@ public:
     }
     if(!status) {
       m_out << "PS_IMAGE :"
-            << " problem to retreive some pixel rgb."
+            << " problem to retrieve some pixel rgb."
             << std::endl;
     }
     PS_RESTORE();
   }
 
-protected:  
+protected:
   static size_t METAFILE_RECORD_LENGTH() {return 80;}
 
   static float METAFILE_SCALE() {return 1.0f;}
@@ -374,7 +374,7 @@ protected:
       m_out << "tools::wps::in_buffer : overflow." << std::endl;
       return false;
     }
-  
+
     size_t nlength = m_number + length;
     if(nlength>METAFILE_RECORD_LENGTH()) {
       m_buffer[m_number] = '\0';
@@ -453,7 +453,7 @@ protected:
   void PS_BACKGROUND(double a_r,double a_g,double a_b,
                      double a_width,double a_height,
                      bool a_do_back = true){
-    PS_NEWPATH(); 
+    PS_NEWPATH();
     PS_MOVE       (0.,0.);
     PS_RLINETO    (a_width,0.);
     PS_RLINETO    (0.,a_height);

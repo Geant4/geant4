@@ -60,11 +60,14 @@ enum G4EmProcessSubType
   fGammaConversion = 14,
   fGammaConversionToMuMu = 15,
   fGammaGeneralProcess = 16,
+  fPositronGeneralProcess = 17,
  
   fCerenkov = 21,
   fScintillation = 22,
   fSynchrotronRadiation = 23,
-  fTransitionRadiation = 24  
+  fTransitionRadiation = 24,
+
+  fSurfaceReflection = 25
 };
 
 #endif

@@ -22,7 +22,7 @@ public:
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<zb_manager>(this,a_class)) {return p;}
     else return 0;
-  }  
+  }
 public:
   virtual bool begin_render(int,int,unsigned int,unsigned int,float,float,float,float,bool = true) {return true;}
   virtual void end_render() {}

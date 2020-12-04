@@ -130,6 +130,9 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       // if status changes so that back plane culling can be switched.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+      (lastVP.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
+      (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetDefaultVisAttributes()->GetColour() !=
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
@@ -212,6 +215,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   if (!fNeedKernelVisit) {
     KernelVisitDecision ();
   }
+  fLastVP = fVP;
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
    

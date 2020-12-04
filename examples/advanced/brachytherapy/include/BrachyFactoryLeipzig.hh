@@ -58,6 +58,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionLeipzig* leipzigSource;
+  BrachyDetectorConstructionLeipzig* fLeipzigSource;
 };
 #endif

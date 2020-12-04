@@ -57,9 +57,7 @@ class impi_ntuple;
 
 class G4RootMpiPNtupleManager : public G4BaseNtupleManager 
 {
-  friend class G4RootMpiAnalysisManager;
-  friend class G4RootAnalysisManager;
-  friend class G4RootNtupleManager;
+  friend class G4RootMpiNtupleFileManager;
 
   public:
     explicit G4RootMpiPNtupleManager(const G4AnalysisManagerState& state, 
@@ -67,34 +65,25 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     ~G4RootMpiPNtupleManager();
 
   private:
-    enum class G4PNtupleCreateMode {
-      kSlaveBeforeOpen,
-      kSlaveAfterOpen,
-      kUndefined
-    };
-
     // Functions specific to the output type
-    void SetNtupleDirectory(tools::wroot::directory* directory);
+    // void SetNtupleDirectory(tools::wroot::directory* directory);
     void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
 
     // Methods to manipulate ntuples
     void CreateNtuple(G4RootMpiPNtupleDescription* ntupleDescription);
-    void CreateNtuplesFromBooking();
+    void CreateNtuplesFromBooking(const std::vector<G4NtupleBooking*>& ntupleBookings);
 
     // Methods to create ntuples
     //
-    virtual G4int CreateNtuple(const G4String& name, const G4String& title) final;
-    // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<int>* vector) final;
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<float>* vector) final;
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<double>* vector) final;
-    virtual G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name) final;
-    virtual void  FinishNtuple(G4int ntupleId) final;   
+    virtual G4int CreateNtuple(G4NtupleBooking* booking) final;
 
     // Methods to fill ntuples
+    // Methods for ntuple with id = FirstNtupleId (from base class)                    
+    using G4BaseNtupleManager::FillNtupleIColumn;
+    using G4BaseNtupleManager::FillNtupleFColumn;
+    using G4BaseNtupleManager::FillNtupleDColumn;
+    using G4BaseNtupleManager::FillNtupleSColumn;
+    using G4BaseNtupleManager::AddNtupleRow;
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
     virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) final;
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) final;
@@ -112,13 +101,9 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     virtual void  SetActivation(G4bool activation) final;
     virtual void  SetActivation(G4int ntupleId, G4bool activation) final;
     virtual G4bool  GetActivation(G4int ntupleId) const final;
-    virtual G4bool  IsEmpty() const final;
 
     // Access methods
     virtual G4int GetNofNtuples() const final;
-    virtual G4int GetNofNtupleBookings() const final;
-    const std::vector<G4RootMpiPNtupleDescription*>& GetNtupleDescriptionVector() const;
-    unsigned int GetBasketSize() const;
 
   private:
     G4RootMpiPNtupleDescription*  
@@ -127,20 +112,11 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
       GetNtupleInFunction(G4int id, G4String function, G4bool warn = true) const;
 
     template <typename T> 
-    G4int CreateNtupleTColumn(G4int ntupleId, 
-                    const G4String& name, std::vector<T>* vector);
-
-    template <typename T> 
-    G4int CreateNtupleTColumn(
-                    const G4String& name, std::vector<T>* vector);
-
-    template <typename T> 
     G4bool FillNtupleTColumn(G4int ntupleId, G4int columnId, const T& value);
 
     // Data members
     // G4RootMpiMainNtupleManager* fMpiMainNtupleManager;
     std::shared_ptr<G4RootFileManager> fFileManager;
-    tools::wroot::directory*  fNtupleDirectory;
     std::vector<G4RootMpiPNtupleDescription*> fNtupleDescriptionVector;
     std::vector<tools::wroot::impi_ntuple*> fNtupleVector;
     tools::impi*  fImpi;
@@ -151,55 +127,8 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
 // inline functions
 
 inline void 
-G4RootMpiPNtupleManager::SetNtupleDirectory(tools::wroot::directory* directory) 
-{ fNtupleDirectory = directory; }
-
-inline void 
 G4RootMpiPNtupleManager::SetFileManager(std::shared_ptr<G4RootFileManager> fileManager)
 { fFileManager = fileManager; }
-
-inline const std::vector<G4RootMpiPNtupleDescription*>& 
-G4RootMpiPNtupleManager::GetNtupleDescriptionVector() const
-{ return fNtupleDescriptionVector; }
-
-
-//_____________________________________________________________________________
-template <typename T>
-G4int G4RootMpiPNtupleManager::CreateNtupleTColumn(
-  G4int ntupleId, const G4String& name, std::vector<T>* vector)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fState.GetVerboseL4()->Message("create", "pntuple T column", description);
-  }  
-#endif
-  
-  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "CreateNtupleTColumn");
-  if ( ! ntupleDescription )  return G4Analysis::kInvalidId;   
-    
-  // Save column info in booking
-  auto& ntupleBooking = ntupleDescription->fNtupleBooking;
-  auto index = ntupleBooking.columns().size();
-  if ( ! vector )
-    ntupleBooking.template add_column<T>(name);
-  else
-    ntupleBooking.template add_column<T>(name, *vector);
- 
-  fLockFirstNtupleColumnId = true;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fState.GetVerboseL2()->Message("create", "pntuple T column", description);
-  }  
-#endif
-
-  return index + fFirstNtupleColumnId;       
-
-}
 
 //_____________________________________________________________________________
 template <>
@@ -319,4 +248,3 @@ G4bool G4RootMpiPNtupleManager::FillNtupleTColumn(
 }
 
 #endif
-

@@ -2,6 +2,7 @@
 # THE SIMULATION IS EXECUTE IN INTERACTIVE MODE
 #
 #
+/control/execute geometry.mac
 /control/execute physics.mac
 /run/initialize
 /control/execute primary.mac

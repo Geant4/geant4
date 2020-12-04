@@ -128,7 +128,7 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
   if(bmat) {
     G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
     G4cout << " New material <" << name << "> cannot be built because material"
-	   << " with the same name already exist" << G4endl;
+	   << " with the same name already exists." << G4endl;
     G4Exception("G4NistManager::BuildMaterialWithNewDensity()", "mat101",
                  FatalException, "Wrong material name");
     return 0;
@@ -138,7 +138,7 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
     G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
     G4cout << " New material <" << name << "> cannot be built because " 
 	   << G4endl;
-    G4cout << " base material <" << basename << "> does not exist" << G4endl;
+    G4cout << " base material <" << basename << "> does not exist." << G4endl;
     G4Exception("G4NistManager::BuildMaterialWithNewDensity()", "mat102",
                  FatalException, "Wrong material name");    
     return 0;

@@ -38,7 +38,7 @@ public:
                                        int& a_number,int* a_mx_point,
                                        float* aX,float* aY,float& a_width){
 
-    // Latin correspondance with HPLSOF                                         
+    // Latin correspondance with HPLSOF
     // ABCDEFGHIJKLMNOPQRSTUVWXYZ  done with H_ROMAN UPPER
     // abcdefghijklmnopqrstuvwxyz  done with H_ROMAN LOWER
     // 0123456789                  done with H_DIGIT
@@ -72,7 +72,7 @@ public:
     case 'X':extract(H_ROMAN,H_UPPER,'X',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'Y':extract(H_ROMAN,H_UPPER,'Y',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'Z':extract(H_ROMAN,H_UPPER,'Z',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-      
+
     case 'a':extract(H_ROMAN,H_LOWER,'A',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'b':extract(H_ROMAN,H_LOWER,'B',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'c':extract(H_ROMAN,H_LOWER,'C',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
@@ -99,7 +99,7 @@ public:
     case 'x':extract(H_ROMAN,H_LOWER,'X',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'y':extract(H_ROMAN,H_LOWER,'Y',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'z':extract(H_ROMAN,H_LOWER,'Z',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-      
+
     case '0':extract(H_DIGIT,H_UPPER,'0',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '1':extract(H_DIGIT,H_UPPER,'1',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '2':extract(H_DIGIT,H_UPPER,'2',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
@@ -110,7 +110,7 @@ public:
     case '7':extract(H_DIGIT,H_UPPER,'7',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '8':extract(H_DIGIT,H_UPPER,'8',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '9':extract(H_DIGIT,H_UPPER,'9',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-      
+
     case '.':extract(H_MATH,H_UPPER,'.',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case ',':extract(H_MATH,H_UPPER,',',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '/':extract(H_MATH,H_UPPER,'/',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
@@ -120,7 +120,7 @@ public:
     case '+':extract(H_MATH,H_UPPER,'+',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '=':extract(H_MATH,H_UPPER,'=',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '*':extract(H_MATH,H_UPPER,'*',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-      
+
     case '$':extract(H_SPECIAL,H_UPPER,'D',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '!':extract(H_SPECIAL,H_UPPER,'E',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '#':extract(H_SPECIAL,H_UPPER,'F',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
@@ -135,7 +135,7 @@ public:
     case '}':extract(H_SPECIAL,H_UPPER,'Q',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '%':extract(H_SPECIAL,H_UPPER,'Y',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case '&':extract(H_SPECIAL,H_UPPER,'W',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-  
+
     case '_':
       a_number = 1;
       a_mx_point[0] = 2;
@@ -145,12 +145,12 @@ public:
       aY[1] = 0;
       a_width = a_scale;
       break;
-  
-    case ' ': 
+
+    case ' ':
       a_number = 0;
       a_width = a_scale/2;
       break;
-  
+
     default :
       a_number = 0;
       a_width = a_scale;
@@ -188,7 +188,7 @@ public:
     case 'X':extract(H_GREEK,H_UPPER,'X',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'Y':extract(H_GREEK,H_UPPER,'Y',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'Z':extract(H_GREEK,H_UPPER,'Z',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-      
+
     case 'a':extract(H_GREEK,H_LOWER,'A',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'b':extract(H_GREEK,H_LOWER,'B',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'c':extract(H_GREEK,H_LOWER,'C',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
@@ -215,11 +215,11 @@ public:
     case 'x':extract(H_GREEK,H_LOWER,'X',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'y':extract(H_GREEK,H_LOWER,'Y',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     case 'z':extract(H_GREEK,H_LOWER,'Z',a_scale,a_number,a_mx_point,aX,aY,a_width);break;
-      
+
     default : latin_char_points(a_char,a_scale,a_number,a_mx_point,aX,aY,a_width);break;
     }
   }
-  
+
 private:
   static void extract(int aType,int aCase,char aC,float a_scale, //input
                              int& aN,int* a_mx_point,
@@ -228,7 +228,7 @@ private:
     int   npoly,ichr,iw,idif,ibit,kx,ky,iy0,ix0,dky,ipoint;
     float scale,size;
     float max_x;
-  
+
     ichr = 1;
     if    (aType==H_DIGIT) {
       switch(aC) {
@@ -354,9 +354,9 @@ private:
       case '*':ichr=105;break;
       }
     }
-    
+
     if (aCase==H_LOWER) ichr  += 105;
-  
+
     // scale :
     size = a_scale;
     if(size<0.001) size = 0.25F;
@@ -364,7 +364,7 @@ private:
     dky   = 21;
     if (aType==H_SPECIAL) rescale(ichr,iy0,dky);
     scale = size/dky;
-  
+
     iw    = hs(ichr-1) - 1;
     kx    = (hx(iw) % 64 ) - 32;
     ky    = (hy(iw) % 64 ) - 32;
@@ -402,10 +402,10 @@ private:
     aN = npoly;
     a_width = max_x;
   }
-  
+
   static void rescale(int aIchr,int& aIy0,int& aDky){
     int iw,ibit,idif,kx,ky,kymin,kymax;
-  
+
     iw    = hs(aIchr-1) - 1;
     kymin = 100;
     kymax = -100;
@@ -718,7 +718,7 @@ private: //data
   }
 
 
-  
+
 };
 
 

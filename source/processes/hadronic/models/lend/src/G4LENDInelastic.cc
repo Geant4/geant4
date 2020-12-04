@@ -106,7 +106,7 @@ G4HadFinalState* G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   // of events, this improves on average.
 
   if (loop > loopMax - 1) {
-//    G4cout << " too many loops, return intial state " << G4endl;
+//    G4cout << " too many loops, return initial state " << G4endl;
 
     theParticleChange.Clear();
     theParticleChange.SetStatusChange(isAlive);

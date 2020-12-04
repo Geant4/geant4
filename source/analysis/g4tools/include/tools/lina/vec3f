@@ -33,17 +33,17 @@ public: //operators
     return vec3f(m_data[0]*a_v,
                  m_data[1]*a_v,
                  m_data[2]*a_v);
-  }    
+  }
   vec3f operator+(const vec3f& a_v) const {
     return vec3f(m_data[0]+a_v.m_data[0],
                  m_data[1]+a_v.m_data[1],
                  m_data[2]+a_v.m_data[2]);
-  }    
+  }
   vec3f operator-(const vec3f& a_v) const {
     return vec3f(m_data[0]-a_v.m_data[0],
                  m_data[1]-a_v.m_data[1],
                  m_data[2]-a_v.m_data[2]);
-  }    
+  }
   vec3f& operator+=(const vec3f& a_v) {
     m_data[0] += a_v.m_data[0];
     m_data[1] += a_v.m_data[1];
@@ -56,12 +56,12 @@ public: //operators
     m_data[2] -= a_v.m_data[2];
     return *this;
   }
-  vec3f& operator*=(float a_v) {   
+  vec3f& operator*=(float a_v) {
     m_data[0] *= a_v;
     m_data[1] *= a_v;
     m_data[2] *= a_v;
     return *this;
-  }    
+  }
   vec3f operator-() const {
     return vec3f(-m_data[0],-m_data[1],-m_data[2]);
   }
@@ -107,7 +107,7 @@ public: //iv2sg
     m_data[0] = -m_data[0];
     m_data[1] = -m_data[1];
     m_data[2] = -m_data[2];
-  }    
+  }
 
 private:static void check_instantiation() {vec3f v(0,0,0);v.set_value(1,1,1);}
 };

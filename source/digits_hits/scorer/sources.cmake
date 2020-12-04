@@ -56,6 +56,8 @@ geant4_define_module(NAME G4detscorer
     G4PSTrackCounter3D.hh
     G4PSTrackLength.hh
     G4PSTrackLength3D.hh
+    G4PSVolumeFlux.hh
+    G4PSVolumeFlux3D.hh
     G4SDChargedFilter.hh
     G4SDKineticEnergyFilter.hh
     G4SDNeutralFilter.hh
@@ -109,6 +111,8 @@ geant4_define_module(NAME G4detscorer
     G4PSTrackCounter3D.cc
     G4PSTrackLength.cc
     G4PSTrackLength3D.cc
+    G4PSVolumeFlux.cc
+    G4PSVolumeFlux3D.cc
     G4SDChargedFilter.cc
     G4SDKineticEnergyFilter.cc
     G4SDNeutralFilter.cc

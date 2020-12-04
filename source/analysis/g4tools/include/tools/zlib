@@ -34,7 +34,9 @@ inline bool compress_buffer(std::ostream& a_out,
   stream.zalloc    = (alloc_func)0;
   stream.zfree     = (free_func)0;
   stream.opaque    = (voidpf)0;
-  
+  stream.total_in  = 0; /*to quiet Coverity.*/
+  stream.total_out = 0; /*to quiet Coverity.*/
+
   int err = deflateInit(&stream,a_level);
   if(err!=Z_OK) {
     a_out << "tools::compress_buffer :"
@@ -42,7 +44,7 @@ inline bool compress_buffer(std::ostream& a_out,
     a_irep = 0;
     return false;
   }
-  
+
   err = deflate(&stream, Z_FINISH);
   if(err!=Z_STREAM_END) {
     deflateEnd(&stream);
@@ -51,9 +53,9 @@ inline bool compress_buffer(std::ostream& a_out,
     a_irep = 0;
     return false;
   }
-  
+
   deflateEnd(&stream);
-   
+
   //a_out << "tools::compress_buffer : ok "
   //      << stream.total_out << std::endl;
 
@@ -76,14 +78,16 @@ inline bool decompress_buffer(std::ostream& a_out,
   stream.zalloc    = (alloc_func)0;
   stream.zfree     = (free_func)0;
   stream.opaque    = (voidpf)0;
-  
+  stream.total_in  = 0; /*to quiet Coverity.*/
+  stream.total_out = 0; /*to quiet Coverity.*/
+
   int err = inflateInit(&stream);
   if (err != Z_OK) {
     a_out << "tools::decompress_buffer :"
           << " error " << err << " in zlib/inflateInit." << std::endl;
     return false;
   }
-  
+
   err = inflate(&stream, Z_FINISH);
   if (err != Z_STREAM_END) {
     inflateEnd(&stream);
@@ -91,9 +95,9 @@ inline bool decompress_buffer(std::ostream& a_out,
           << " error " << err << " in zlib/inflate." << std::endl;
     return false;
   }
-  
+
   inflateEnd(&stream);
-   
+
   //a_out << "tools::decompress_buffer : zlib : ok "
   //      << stream.total_out << std::endl;
 
@@ -209,7 +213,7 @@ inline bool gunzip_buffer(std::ostream& a_out,
           << " error " << err << " in zlib/inflateInit2." << std::endl;
     return false;
   }
-  
+
   err = inflate(&stream, Z_FINISH);
   if (err != Z_STREAM_END) {
     inflateEnd(&stream);
@@ -217,9 +221,9 @@ inline bool gunzip_buffer(std::ostream& a_out,
           << " error " << err << " in zlib/inflate." << std::endl;
     return false;
   }
-  
+
   inflateEnd(&stream);
-   
+
   a_irep = stream.total_out;
 
   return true;

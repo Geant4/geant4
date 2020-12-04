@@ -34,6 +34,7 @@
 // ------------------------------------------------------------
 // debug switch
 //#define debug_PartonStringModel
+//#define debug_heavyHadrons
 // ------------------------------------------------------------
 
 #include "G4VPartonStringModel.hh"
@@ -157,6 +158,16 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     G4cout<<"------------ Parton-String model: Number of produced strings ---- "<<strings->size()<<G4endl;
     #endif
 
+    #ifdef debug_heavyHadrons
+    // Check charm and bottom numbers of the projectile:
+    G4int count_charm_projectile  = thePrimary.GetDefinition()->GetQuarkContent( 4 ) -
+                                        thePrimary.GetDefinition()->GetAntiQuarkContent( 4 );
+    G4int count_bottom_projectile = thePrimary.GetDefinition()->GetQuarkContent( 5 ) -
+                                        thePrimary.GetDefinition()->GetAntiQuarkContent( 5 );
+    G4int count_charm_strings = 0, count_bottom_strings = 0;
+    G4int count_charm_hadrons = 0, count_bottom_hadrons = 0;
+    #endif
+    
     for ( unsigned int astring=0; astring < strings->size(); astring++)
     {
       //    rotate string to lab frame, models have it aligned to z
@@ -172,6 +183,25 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
               <<" Partons   "<<(*strings)[astring]->GetLeftParton()->GetDefinition()->GetPDGEncoding()
               <<"          "<<(*strings)[astring]->GetRightParton()->GetDefinition()->GetPDGEncoding()<<G4endl;
         #endif
+
+        #ifdef debug_heavyHadrons
+	G4int left_charm =      (*strings)[astring]->GetLeftParton()->GetDefinition()->GetQuarkContent( 4 );
+	G4int left_anticharm =  (*strings)[astring]->GetLeftParton()->GetDefinition()->GetAntiQuarkContent( 4 );
+	G4int right_charm =     (*strings)[astring]->GetRightParton()->GetDefinition()->GetQuarkContent( 4 );
+	G4int right_anticharm = (*strings)[astring]->GetRightParton()->GetDefinition()->GetAntiQuarkContent( 4 );
+	G4int left_bottom =      (*strings)[astring]->GetLeftParton()->GetDefinition()->GetQuarkContent( 5 );
+	G4int left_antibottom =  (*strings)[astring]->GetLeftParton()->GetDefinition()->GetAntiQuarkContent( 5 );
+	G4int right_bottom =     (*strings)[astring]->GetRightParton()->GetDefinition()->GetQuarkContent( 5 );
+	G4int right_antibottom = (*strings)[astring]->GetRightParton()->GetDefinition()->GetAntiQuarkContent( 5 );
+	if ( left_charm  != 0  ||  left_anticharm  != 0  ||  right_charm  != 0  ||  right_anticharm  != 0  ||
+	     left_bottom != 0  ||  left_antibottom != 0  ||  right_bottom != 0  ||  right_antibottom != 0 ) {
+	  count_charm_strings  += left_charm  - left_anticharm  + right_charm  - right_anticharm;
+	  count_bottom_strings += left_bottom - left_antibottom + right_bottom - right_antibottom;
+	  G4cout << "G4VPartonStringModel::Scatter : string #" << astring << " ("
+		 << (*strings)[astring]->GetLeftParton()->GetDefinition()->GetParticleName() << " , "
+		 << (*strings)[astring]->GetRightParton()->GetDefinition()->GetParticleName() << ")" << G4endl;
+	}
+        #endif	
       }
       else
       {
@@ -184,9 +214,33 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
               <<(*strings)[astring]->GetKineticTrack()->Get4Momentum().mag()<<" "
               <<(*strings)[astring]->GetKineticTrack()->GetDefinition()->GetParticleName()<<G4endl;
         #endif
+
+        #ifdef debug_heavyHadrons
+	G4int charm =      (*strings)[astring]->GetKineticTrack()->GetDefinition()->GetQuarkContent( 4 );
+	G4int anticharm =  (*strings)[astring]->GetKineticTrack()->GetDefinition()->GetAntiQuarkContent( 4 );
+	G4int bottom =     (*strings)[astring]->GetKineticTrack()->GetDefinition()->GetQuarkContent( 5 );
+	G4int antibottom = (*strings)[astring]->GetKineticTrack()->GetDefinition()->GetAntiQuarkContent( 5 );
+        if ( charm != 0  ||  anticharm != 0  ||  bottom != 0  || antibottom != 0 ) {
+	  count_charm_strings +=  charm  - anticharm;
+	  count_bottom_strings += bottom - antibottom;
+	  G4cout << "G4VPartonStringModel::Scatter : track #" << astring << "\t"
+                 << (*strings)[astring]->GetKineticTrack()->GetDefinition()->GetParticleName() << G4endl;
+	}
+        #endif
       }
     }
 
+    #ifdef debug_heavyHadrons
+    if ( count_charm_projectile != count_charm_strings ) {
+      G4cout << "G4VPartonStringModel::Scatter : CHARM VIOLATION in String formation ! #projectile="
+	     << count_charm_projectile << " ; #strings=" << count_charm_strings << G4endl;
+    }
+    if ( count_bottom_projectile != count_bottom_strings ) {
+      G4cout << "G4VPartonStringModel::Scatter : BOTTOM VIOLATION in String formation ! #projectile="
+	     << count_bottom_projectile << " ; #strings=" << count_bottom_strings << G4endl;
+    }
+    #endif
+    
     #ifdef debug_PartonStringModel
     G4cout<<G4endl<<"SumString4Mom "<<SumStringMom<<G4endl;
     G4LorentzVector TargetResidual4Momentum(0.,0.,0.,0.);
@@ -328,7 +382,6 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     #endif
 
     SumMass=0.;
-
     for ( unsigned int i=0; i < theResult->size(); i++)
     {
       SumMass+=(*theResult)[i]->Get4Momentum().mag();
@@ -341,8 +394,32 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
       BsumSec += (*theResult)[i]->GetDefinition()->GetBaryonNumber();
       QsumSec += (*theResult)[i]->GetDefinition()->GetPDGCharge();
       #endif
+
+      #ifdef debug_heavyHadrons
+      G4int charm =      (*theResult)[i]->GetDefinition()->GetQuarkContent( 4 );
+      G4int anticharm =  (*theResult)[i]->GetDefinition()->GetAntiQuarkContent( 4 );
+      G4int bottom =     (*theResult)[i]->GetDefinition()->GetQuarkContent( 5 );
+      G4int antibottom = (*theResult)[i]->GetDefinition()->GetAntiQuarkContent( 5 );
+      if ( charm != 0  ||  anticharm != 0  ||  bottom != 0  || antibottom != 0 ) {
+        count_charm_hadrons +=  charm - anticharm;          
+        count_bottom_hadrons += bottom - antibottom;
+	G4cout << "G4VPartonStringModel::Scatter : hadron #" << i << "\t"
+               << (*theResult)[i]->GetDefinition()->GetParticleName() << G4endl;
+      }
+      #endif  
     }
 
+    #ifdef debug_heavyHadrons
+    if ( count_charm_projectile != count_charm_hadrons ) {
+      G4cout << "G4VPartonStringModel::Scatter : CHARM VIOLATION in String hadronization ! #projectile="
+	     << count_charm_projectile << " ; #hadrons=" << count_charm_hadrons << G4endl;
+    }
+    if ( count_bottom_projectile != count_bottom_hadrons ) {
+      G4cout << "G4VPartonStringModel::Scatter : BOTTOM VIOLATION in String hadronization ! #projectile="
+	     << count_bottom_projectile << " ; #hadrons=" << count_bottom_hadrons << G4endl;
+    }
+    #endif
+    
     #ifdef debug_PartonStringModel
     G4cout<<G4endl<<"-----------------------Parton-String model: balances -------------"<<G4endl;
     if(Qsum != QsumSec) {

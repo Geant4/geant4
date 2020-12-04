@@ -12,12 +12,9 @@
 #
 /run/initialize
 #
-/process/list
-#
 /testhadr/gun/setDefault
 /gun/particle neutron
 /gun/energy 14.1 MeV
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000

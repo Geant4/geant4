@@ -12,6 +12,7 @@ geant4_define_module(NAME G4intercoms
     G4AnyType.hh
     G4GenericMessenger.hh
     G4LocalThreadCoutMessenger.hh
+    G4ProfilerMessenger.hh
     G4UIaliasList.hh
     G4UIbatch.hh
     G4UIbridge.hh
@@ -22,6 +23,7 @@ geant4_define_module(NAME G4intercoms
     G4UIcmdWithADoubleAndUnit.hh
     G4UIcmdWithAString.hh
     G4UIcmdWithAnInteger.hh
+    G4UIcmdWithALongInt.hh
     G4UIcmdWithoutParameter.hh
     G4UIcommand.hh
     G4UIcommandStatus.hh
@@ -40,6 +42,7 @@ geant4_define_module(NAME G4intercoms
   SOURCES
     G4LocalThreadCoutMessenger.cc
     G4GenericMessenger.cc
+    G4ProfilerMessenger.cc
     G4UIaliasList.cc
     G4UIbatch.cc
     G4UIbridge.cc
@@ -50,6 +53,7 @@ geant4_define_module(NAME G4intercoms
     G4UIcmdWithADoubleAndUnit.cc
     G4UIcmdWithAString.cc
     G4UIcmdWithAnInteger.cc
+    G4UIcmdWithALongInt.cc
     G4UIcmdWithoutParameter.cc
     G4UIcommand.cc
     G4UIcommandTree.cc
@@ -66,6 +70,7 @@ geant4_define_module(NAME G4intercoms
   GLOBAL_DEPENDENCIES
     G4global
   LINK_LIBRARIES
+    ${timemory_LIBRARIES}
 )
 
 # List any source specific properties here

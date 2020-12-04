@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(lArCal)
 
 #----------------------------------------------------------------------------
@@ -59,13 +62,13 @@ endforeach()
 file( MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data-tracks)
 file(GLOB _datatracks ${PROJECT_SOURCE_DIR}/data-tracks/*.dat)
 foreach(_datatrackfile ${_datatracks})
-   configure_file( ${_datatrackfile} ${PROJECT_BINARY_DIR}/data-tracks)    
+   configure_file( ${_datatrackfile} ${PROJECT_BINARY_DIR}/data-tracks)
 endforeach()
 
 file( MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/geom_data)
 file(GLOB _geomdata ${PROJECT_SOURCE_DIR}/geom_data/*.dat)
 foreach(_geomdatafile ${_geomdata})
-   configure_file( ${_geomdatafile} ${PROJECT_BINARY_DIR}/geom_data)    
+   configure_file( ${_geomdatafile} ${PROJECT_BINARY_DIR}/geom_data)
 endforeach()
 
 

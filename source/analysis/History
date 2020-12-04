@@ -16,13 +16,74 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16, 2020 G. Cosmo (analysis-V10-06-11)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+November 12, 2020 B. Morgan (analysis-V10-06-10)
+- Apply typo fixes from Gurkan Myczko (https://github.com/Geant4/geant4/pull/15)
+
+November 10, 2020  I. Hrivnacova (analysis-V10-06-09)
+- Fixed the memory leak reported by valgrind in deleting files
+
+November 06, 2020  I. Hrivnacova (analysis-V10-06-08)
+- Make GenericAnalysisManager working with file names without extension
+  (needed for backward compatibility):
+  - Added fDefaultType data member and its setter, getter (with "root" default)
+- Fixed deleting empty files
+- Fixed minor memory leaks
+
+November 04, 2020  I. Hrivnacova (analysis-V10-06-07)
+- Changes to allow overriding Root classes in g4mpi/analysis
+- Removed redundant variable in G4RootNtupleFileManager::Reset()
+
+October 30, 2020  I. Hrivnacova (analysis-V10-06-06)
+- Implemented writing ntuples in multiple files of the same output type:
+  - New G4VAnalysisManager function:
+      void SetNtupleFileName(G4int objectId, const G4String& name);
+    and UI commands:
+      /analysis/ntuple/setFileName id fileName
+      /analysis/ntuple/setFileNameToAll fileName
+- Finalizes implementation of extra write of histograms
+  - Polished G4GenericAnalysisManager::WriteH1 and added
+    functions for other Hn types
+- This also fixes issues in the ntuple output introduced with previous tag
+  (observed in B4, TestEm1, microbeam)
+
+October 21, 2020  I. Hrivnacova (analysis-V10-06-05)
+- Major upgrade including the support for multiple files
+  and multiple output types:
+  - New G4GenericAnalysisManager,G4GenericFileManager classes
+    if factory category
+  - New G4VAnalysisManager functions:
+     void SetH1FileName(G4int objectId, const G4String& name);
+        ... etc. for H2, H3, P1, P2
+    and corresponding UI commands:
+     /analysis/h1/setFileName id name
+     /analysis/h1/setFileName id name
+        ... etc. for h2, h3, p1, p2
+  - Redesign of management classes to separate object file handling
+    from output specifuc analysis managers
+  - The multiple file output is tested in new test32
+
+October 14, 2020  I. Hrivnacova (analysis-V10-06-04)
+- Updated G4PlotManager.cc - using new wrap_viewplot_fonts_google_style
+  header
+- Updated to g4tools 5.2.1 (Guy Barrand):
+  - Change the usage of arialbd.ttf, helvetica.ttf with roboto_bold.ttf
+    and lato_regular.ttf (google fonts).
+  - Modifications in tools/hdf5 to use H5free_memory() instead free() at
+    some places (needed for HDF5/1.12.0).
+  - Modifations in graphics to be be in sync with the code in inlib/exlib
+    around Apple/Metal, but they should not have an impact on offscreen plotting.
+  See History_tools for the complete list of modifications.
+
 June 10, 2020  J. Madsen (analysis-V10-06-03)
 - (bug-fix) Added a null-pointer check to ntupleDescription->fNtuple in
   G4RootPNtupleManager::Merge. This happened during testing of new
   G4TaskRunManager in basic/B5, which defaults to a higher
   number of threads than G4MTRunManager.
 
-May 22, 2020   Hrivnacova (analysis-V10-06-02)
+May 22, 2020   I. Hrivnacova (analysis-V10-06-02)
 - Updated to g4tools 5.1.0 (Guy Barrand):
   Corrections to handle automatic min/max axes values in case of log scale.
   See History_tools for the complete list of modifications.
@@ -36,7 +97,7 @@ December 9, 2019 B. Morgan (analysis-V10-06-00)
 - Update granular dependencies in preparation for modularization
 - Remove uneeded links to externals in factory
 
-December 3, 2019 Hrivnacova (analysis-V10-05-13)
+December 3, 2019 I. Hrivnacova (analysis-V10-05-13)
 - Use consistently the same default value of rowMode
   in G4RootAnalysisManager::SetNtupleRowWise() as defined in the
   G4VAnalysisManager base class.
@@ -44,7 +105,7 @@ December 3, 2019 Hrivnacova (analysis-V10-05-13)
 November 19, 2019 G. Cosmo (analysis-V10-05-12)
 - Fixed more cases of implicit type conversions.
 
-November 17, 2019 Hrivnacova (analysis-V10-05-11)
+November 17, 2019 I. Hrivnacova (analysis-V10-05-11)
 - Updated to g4tools 5.0.5 (Guy Barrand):
   Fixed compilation warning from gl2ps showing up on gcc-9.2.
   See History_tools for the complete list of modifications.

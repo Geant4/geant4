@@ -25,7 +25,7 @@ TOOLS_COLORFS_STAT(darkslateblue)
 TOOLS_COLORFS_STAT(lightblue)
 TOOLS_COLORFS_STAT(lightsteelblue)
 TOOLS_COLORFS_STAT(mediumblue)
- 
+
 //10-19
 TOOLS_COLORFS_STAT(mediumslateblue)
 TOOLS_COLORFS_STAT(midnightblue)
@@ -37,7 +37,7 @@ TOOLS_COLORFS_STAT(steelblue)
 TOOLS_COLORFS_STAT(coral)
 TOOLS_COLORFS_STAT(cyan)
 TOOLS_COLORFS_STAT(firebrick)
-      
+
 //20-29
 TOOLS_COLORFS_STAT(brown)
 TOOLS_COLORFS_STAT(gold)
@@ -49,7 +49,7 @@ TOOLS_COLORFS_STAT(forestgreen)
 TOOLS_COLORFS_STAT(limegreen)
 TOOLS_COLORFS_STAT(mediumseagreen)
 TOOLS_COLORFS_STAT(mediumspringgreen)
-      
+
 //30-39
 TOOLS_COLORFS_STAT(palegreen)
 TOOLS_COLORFS_STAT(seagreen)
@@ -73,7 +73,7 @@ TOOLS_COLORFS_STAT(plum)
 TOOLS_COLORFS_STAT(red)
 TOOLS_COLORFS_STAT(indianred)
 TOOLS_COLORFS_STAT(mediumvioletred)
-      
+
 //50-59
 TOOLS_COLORFS_STAT(orangered)
 TOOLS_COLORFS_STAT(violetred)

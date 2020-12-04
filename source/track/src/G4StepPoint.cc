@@ -23,88 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4StepPoint class implementation
 //
-//
-//
-//---------------------------------------------------------------
-//
-//  G4StepPoint.cc
-//
-//  Description:
-//    This class represents information associated with the
-//    each end of a Step like the space/time data of the
-//    particle.
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Hisaya Kurashige  
-//
-// ---------------------------------------------------------------
+// Author: Hisaya Kurashige, 16 February 2000
+// --------------------------------------------------------------------
 
 #include "G4StepPoint.hh"
 
-//////////////////////////
+// --------------------------------------------------------------------
 G4StepPoint::G4StepPoint()
-//////////////////////////
-  : fGlobalTime(0.), fLocalTime(0.), fProperTime(0.),
-    fKineticEnergy(0.), fVelocity(0.), 
-    fpTouchable(0), fpMaterial(nullptr), fpMaterialCutsCouple(nullptr), 
-    fpSensitiveDetector(nullptr), 
-    fSafety(0.),
-    fStepStatus(fUndefined), fpProcessDefinedStep(nullptr), 
-    fMass(0.), fCharge(0.), fMagneticMoment(0.),
-    fWeight(0.)
-{
-}
+{}
 
-//////////////////////////
-G4StepPoint::G4StepPoint(const G4StepPoint &right) :
-//////////////////////////
-  fPosition(right.fPosition),
-  fGlobalTime(right.fGlobalTime),
-  fLocalTime(right.fLocalTime),
-  fProperTime(right.fProperTime),
-  fMomentumDirection(right.fMomentumDirection),
-  fKineticEnergy(right.fKineticEnergy),
-  fVelocity(right.fVelocity),
-  fpTouchable(right.fpTouchable),
-  fpMaterial(right.fpMaterial),
-  fpMaterialCutsCouple(right.fpMaterialCutsCouple),
-  fpSensitiveDetector(right.fpSensitiveDetector),
-  fSafety(right.fSafety),
-  fPolarization(right.fPolarization),
-  fStepStatus(right.fStepStatus),
-  fpProcessDefinedStep(right.fpProcessDefinedStep),
-  fMass(right.fMass),
-  fCharge(right.fCharge),
-  fMagneticMoment(right.fMagneticMoment),
-  fWeight(right.fWeight)
-{
-}
+// --------------------------------------------------------------------
+G4StepPoint::G4StepPoint(const G4StepPoint& right)
+  : fPosition(right.fPosition)
+  , fGlobalTime(right.fGlobalTime)
+  , fLocalTime(right.fLocalTime)
+  , fProperTime(right.fProperTime)
+  , fMomentumDirection(right.fMomentumDirection)
+  , fKineticEnergy(right.fKineticEnergy)
+  , fVelocity(right.fVelocity)
+  , fpTouchable(right.fpTouchable)
+  , fpMaterial(right.fpMaterial)
+  , fpMaterialCutsCouple(right.fpMaterialCutsCouple)
+  , fpSensitiveDetector(right.fpSensitiveDetector)
+  , fSafety(right.fSafety)
+  , fPolarization(right.fPolarization)
+  , fStepStatus(right.fStepStatus)
+  , fpProcessDefinedStep(right.fpProcessDefinedStep)
+  , fMass(right.fMass)
+  , fCharge(right.fCharge)
+  , fMagneticMoment(right.fMagneticMoment)
+  , fWeight(right.fWeight)
+{}
 
-//////////////////////////
-G4StepPoint & G4StepPoint::operator=(const G4StepPoint &right)
+// --------------------------------------------------------------------
+G4StepPoint& G4StepPoint::operator=(const G4StepPoint& right)
 {
-  if (this != &right) {
-    fPosition     = right.fPosition;
-    fGlobalTime   = right.fGlobalTime;
-    fLocalTime    = right.fLocalTime;
-    fProperTime   = right.fProperTime;
-    fMomentumDirection = right.fMomentumDirection;
-    fKineticEnergy = right.fKineticEnergy;
-    fVelocity     = right.fVelocity;
-    fpTouchable   = right.fpTouchable;
-    fpMaterial    = right.fpMaterial;
+  if(this != &right)
+  {
+    fPosition            = right.fPosition;
+    fGlobalTime          = right.fGlobalTime;
+    fLocalTime           = right.fLocalTime;
+    fProperTime          = right.fProperTime;
+    fMomentumDirection   = right.fMomentumDirection;
+    fKineticEnergy       = right.fKineticEnergy;
+    fVelocity            = right.fVelocity;
+    fpTouchable          = right.fpTouchable;
+    fpMaterial           = right.fpMaterial;
     fpMaterialCutsCouple = right.fpMaterialCutsCouple;
     fpSensitiveDetector  = right.fpSensitiveDetector;
-    fSafety       = right.fSafety;
-    fPolarization = right.fPolarization;
-    fStepStatus   = right.fStepStatus;
+    fSafety              = right.fSafety;
+    fPolarization        = right.fPolarization;
+    fStepStatus          = right.fStepStatus;
     fpProcessDefinedStep = right.fpProcessDefinedStep;
-    fMass         = right.fMass;
-    fCharge       = right.fCharge;
-    fMagneticMoment = right.fMagneticMoment;
-    fWeight       = right.fWeight;
+    fMass                = right.fMass;
+    fCharge              = right.fCharge;
+    fMagneticMoment      = right.fMagneticMoment;
+    fWeight              = right.fWeight;
   }
   return *this;
 }

@@ -1,0 +1,33 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/Qt3D sub-category
+-----------------------------------------------
+
+29-Oct-2020  Ben Morgan (visQt3D-V10-06-02)
+- Remove inclusion of obsolete CMake module
+
+26-Oct-2020  Gabriele Cosmo  (visQt3D-V10-06-01)
+- Corrected GNUmake setup and fixed compilation warnings.
+
+23-Oct-2020  John Allison  (visQt3D-V10-06-00)
+- First version.
+- Requires cmake-V10-06-34.
+
+27-Sep-2019  John Allison
+- First skeleton. Based on XXXSG driver.

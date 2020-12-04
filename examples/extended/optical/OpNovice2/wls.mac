@@ -1,6 +1,7 @@
 /control/verbose 2
 /tracking/verbose 0
-/process/optical/verbose 0
+/run/verbose 1
+/process/optical/verbose 1
 /control/cout/ignoreThreadsExcept 0
 
 /opnovice2/boxMaterial G4_BGO
@@ -28,25 +29,13 @@
 
 /analysis/setFileName wls
 ## WLS process
-/analysis/h1/set      4  100 0 10
-/analysis/h1/setXaxis 4  "Energy [eV]"
-/analysis/h1/setYaxis 4  "Number of photons"
-/analysis/h1/set      5  100 0 10
-/analysis/h1/setXaxis 5  "Energy [eV]"
-/analysis/h1/setYaxis 5  "Number of photons"
-/analysis/h1/set      6 100 0 10
-/analysis/h1/setXaxis 6 "Creation time [ns]"
-/analysis/h1/setYaxis 6 "Number of photons"
+/analysis/h1/set      4  100 0 10  # eV
+/analysis/h1/set      5  100 0 10  # eV
+/analysis/h1/set      6  100 0 10  # ns
 ## WLS2 process
-/analysis/h1/set      7  100 0 10
-/analysis/h1/setXaxis 7  "Energy [eV]"
-/analysis/h1/setYaxis 7  "Number of photons"
-/analysis/h1/set      8  100 0 10
-/analysis/h1/setXaxis 8  "Energy [eV]"
-/analysis/h1/setYaxis 8  "Number of photons"
-/analysis/h1/set      9 100 0 50
-/analysis/h1/setXaxis 9 "Creation time [ns]"
-/analysis/h1/setYaxis 9 "Number of photons"
+/analysis/h1/set      7  100 0 10  # eV
+/analysis/h1/set      8  100 0 10  # eV
+/analysis/h1/set      9  100 0 50  # ns
 
 
 /gun/particle opticalphoton

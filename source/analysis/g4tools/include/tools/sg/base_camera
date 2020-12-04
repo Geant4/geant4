@@ -224,7 +224,7 @@ public:
   }
 
   void rotate_to_dir(const vec3f& a_dir) {
-    //rotate around up so that a_dir is in (dir,up) plane 
+    //rotate around up so that a_dir is in (dir,up) plane
 
     //NOTE : it is the invert of orientation which is used
     //       in projection matrix.
@@ -234,7 +234,7 @@ public:
     vec3f up;
     orientation.value().mul_vec(vec3f(0,1,0),up);
     vec3f side;dir.cross(up,side);
-    vec3f v = side * (side.dot(a_dir)) + dir * (dir.dot(a_dir));    
+    vec3f v = side * (side.dot(a_dir)) + dir * (dir.dot(a_dir));
     if(v.normalize()) orientation.value(orientation.value()*rotf(dir,v));}
 
     //rotate around dir^up so that a_dir matches dir.
@@ -245,7 +245,7 @@ public:
 /*
     //check that dir is on a_dir :
    {vec3f dir;
-    orientation.value().mul_vec(vec3f(0,0,-1),dir); 
+    orientation.value().mul_vec(vec3f(0,0,-1),dir);
     float cos_angle; //it should be 1
     if(!dir.cos_angle(a_dir,cos_angle)) {
       ::printf("debug : can't get angle\n");
@@ -323,7 +323,7 @@ public:
 
     // Arrange so that camera points toward x with up along +z :
     rotf r(vec3f::s_y(),-fhalf_pi());
-    r *= rotf(vec3f::s_x(),fhalf_pi());    
+    r *= rotf(vec3f::s_x(),fhalf_pi());
     // Now -y is at right.
 
     // Then rotate it so that it points toward given (ra,dec) by keeping up upward +z direction.
@@ -353,13 +353,13 @@ public:
 
     if(a_move==move_rotate_right) { //should match camera_yaw().
       rotate_around_up(_da);
-      return true;    
+      return true;
     }
     if(a_move==move_rotate_left) {
       rotate_around_up(-_da);
       return true;
     }
-    
+
     if(a_move==move_rotate_up) {  //should match camera_pitch().
       rotate_around_x(_da);
       return true;
@@ -480,9 +480,9 @@ protected:
     if(touched()||m_lrbt.touched()) {
       update_sg(a_action.out());
       reset_touched();
-      m_lrbt.reset_touched(); 
+      m_lrbt.reset_touched();
     }
-    
+
     a_action.projection_matrix().mul_mtx(m_proj,m_tmp);
   }
 

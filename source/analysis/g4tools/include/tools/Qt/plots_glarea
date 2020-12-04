@@ -19,20 +19,20 @@ public:
   virtual void resizeGL(int a_w,int a_h){
     //::printf("debug : resize : %d %d\n",a_w,a_h);
 #if QT_VERSION < 0x050000
-#else    
+#else
     m_width = a_w;
     m_height = a_h;
-#endif    
+#endif
   }
   //virtual void paintGL();
   virtual void paintGL() {
 #if QT_VERSION < 0x050000
     //::printf("debug : exlib::Qt::plots_glarea::paintGL %d %d\n",width(),height());
     m_viewer.set_size(width(),height());
-#else  
+#else
     //::printf("debug : exlib::Qt::plots_glarea::paintGL %d %d\n",m_width,m_height);
     m_viewer.set_size(m_width,m_height);
-#endif  
+#endif
     m_viewer.render();
   }
 
@@ -45,11 +45,11 @@ public:
 protected:
   tools::sg::GL_plots_viewer& m_viewer;
 #if QT_VERSION < 0x050000
-#else  
+#else
 protected:
   int m_width;
   int m_height;
-#endif  
+#endif
 };
 
 }}

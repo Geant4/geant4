@@ -223,9 +223,13 @@ public:
 
   inline G4VEmProcess* GetGammaGeneralProcess(); 
 
-  inline void SetElectronGeneralProcess(G4VEnergyLossProcess*); 
+  inline void SetElectronGeneralProcess(G4VEmProcess*); 
 
-  inline G4VEnergyLossProcess* GetElectronGeneralProcess(); 
+  inline G4VEmProcess* GetElectronGeneralProcess(); 
+
+  inline void SetPositronGeneralProcess(G4VEmProcess*); 
+
+  inline G4VEmProcess* GetPositronGeneralProcess(); 
 
 private:
 
@@ -294,7 +298,8 @@ private:
 
   G4EmParameters*       theParameters;
   G4VEmProcess*         gGeneral;
-  G4VEnergyLossProcess* eGeneral;
+  G4VEmProcess*           eGeneral;
+  G4VEmProcess*           pGeneral;
 
   G4int verbose;
 };
@@ -431,19 +436,31 @@ inline G4VEmProcess* G4LossTableManager::GetGammaGeneralProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-void G4LossTableManager::SetElectronGeneralProcess(G4VEnergyLossProcess* ptr)
+inline void G4LossTableManager::SetElectronGeneralProcess(G4VEmProcess* ptr)
 {
   eGeneral = ptr;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEnergyLossProcess* G4LossTableManager::GetElectronGeneralProcess()
+inline G4VEmProcess* G4LossTableManager::GetElectronGeneralProcess()
 {
   return eGeneral;
 } 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4LossTableManager::SetPositronGeneralProcess(G4VEmProcess* ptr)
+{
+  pGeneral = ptr;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmProcess* G4LossTableManager::GetPositronGeneralProcess()
+{
+  return pGeneral;
+} 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

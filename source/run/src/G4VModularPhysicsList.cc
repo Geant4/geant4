@@ -45,9 +45,6 @@ G4VMPLManager G4VModularPhysicsList::G4VMPLsubInstanceManager;
 
 void G4VMPLData::initialize() { physicsVector = new G4PhysConstVectorData(); }
 
-// G4ThreadLocal G4VModularPhysicsList::G4PhysConstVector*
-// G4VModularPhysicsList::physicsVector = 0;
-
 G4VModularPhysicsList::G4VModularPhysicsList()
   : G4VUserPhysicsList()
   , verboseLevel(0)
@@ -177,7 +174,7 @@ void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
     if(verboseLevel > 1)
     {
       G4cout << "G4VModularPhysicsList::RegisterPhysics: " << pName
-             << "with type : " << pType << "  is added" << G4endl;
+             << " with type : " << pType << " is added" << G4endl;
     }
 #endif
     return;
@@ -199,7 +196,7 @@ void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
              << "a physics with given type already exists " << G4endl;
       G4cout << " Type = " << pType << " : "
              << "  existing physics is " << (*itr)->GetPhysicsName() << G4endl;
-      G4cout << pName << " can not be registered " << G4endl;
+      G4cout << " New " << pName << " can not be registered " << G4endl;
     }
 #endif
     G4String comment = "Duplicate type for ";
@@ -237,7 +234,7 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
     if(verboseLevel > 0)
     {
       G4cout << "G4VModularPhysicsList::ReplacePhysics: " << pName
-             << "with type : " << pType << "  is added" << G4endl;
+             << " with type : " << pType << " is added" << G4endl;
     }
 #endif
     return;
@@ -262,8 +259,8 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
     if(verboseLevel > 0)
     {
       G4cout << "G4VModularPhysicsList::ReplacePhysics: "
-             << (*itr)->GetPhysicsName() << "with type : " << pType
-             << "  is replaces with " << pName << G4endl;
+             << (*itr)->GetPhysicsName() << " with type : " << pType
+             << " is replaced with " << pName << G4endl;
     }
 #endif
 
@@ -296,7 +293,7 @@ void G4VModularPhysicsList::RemovePhysics(G4int pType)
       if(verboseLevel > 0)
       {
         G4cout << "G4VModularPhysicsList::RemovePhysics: " << pName
-               << "  is removed" << G4endl;
+               << " is removed" << G4endl;
       }
 #endif
       G4MT_physicsVector->erase(itr);
@@ -329,7 +326,7 @@ void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
       if(verboseLevel > 0)
       {
         G4cout << "G4VModularPhysicsList::RemovePhysics: " << pName
-               << "  is removed" << G4endl;
+               << " is removed" << G4endl;
       }
 #endif
       G4MT_physicsVector->erase(itr);
@@ -361,7 +358,7 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
       if(verboseLevel > 0)
       {
         G4cout << "G4VModularPhysicsList::RemovePhysics: " << pName
-               << "  is removed" << G4endl;
+               << " is removed" << G4endl;
       }
 #endif
       G4MT_physicsVector->erase(itr);

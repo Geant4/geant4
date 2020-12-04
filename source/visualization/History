@@ -23,10 +23,91 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+07 November 2020  John Allison  (vis-V10-06-12)
+- Update this History file to include summaries of sub-category updates
+
+29 October 2020  Ben Morgan
+- OpenGL-V10-06-11: Remove inclusion of obsolete CMake module
+- visQt3D-V10-06-01: Remove inclusion of obsolete CMake module
+
+28 October 2020  Gabriele Cosmo (vis-V10-06-11)
+- Fixed GNUmakefiles in sub-modules, based on changes recently done for
+  introducing use of G4RunManagerFactory and related new dependency on
+  the tasking module.
+
+26 October 2020  Ben Morgan    (vis-V10-06-10)
+- Only enable Qt3D when GEANT4_USE_QT3D is true
+
+26-Oct-2020  Gabriele Cosmo
+- visQt3D-V10-06-01: Corrected GNUmake setup and fixed compilation warnings.
+
+23 October 2020  John Allison  (vis-V10-06-09)
+- Introduce Qt3D vis driver.
+  o visQt3D-V10-06-00: First version.
+  o Requires cmake-V10-06-34.
+
+21 October 2020  Jonathan Madsen
+- visman-V10-06-11: Implemented G4RunManagerFactory::GetMasterRunManager()
+
+21 October 2020  John Allison
+- visman-V10-06-10: Improve logic of automatic event keeping.
+
+20 October 2020  Jonathan Madsen
+- modeling-V10-06-05: Implemented G4RunManagerFactory::GetMasterRunManager()
+- OpenGL-V10-06-10: Implemented G4RunManagerFactory::GetMasterRunManager()
+- raytracer-V10-06-03: Implemented G4RunManagerFactory::GetMasterRunManager()
+
+20 October 2020 Frederick Jones
+- openinventor-v10-06-11:
+  o Completed all the planned features of the OIQt viewer.
+
+15 October 2020  John Allison  (vis-V10-06-08)
+- visman-V10-06-09:
+  o Use command->CommandFailed() - remove internal fErrorCode.
+
+2 October 2020  John Allison
+- DAWN-V10-06-03:
+  o Fix "overlapping comparisons always evaluate to true".
+
+23 September 2020 Ben Morgan
+- visxxx-V10-06-00
+  o Remove no longer required include_directories
+
+18 September 2020  John Allison  (vis-V10-06-07)
+- modeling-V10-06-04:
+  o Pick up default vis attributes.
+  o Improve printing.
+- OpenGL-V10-06-09:
+  openinventor-V10-06-10:
+  visXXX-V10-05-05:
+  o CompareForKernelVisit; Force kernel visit if global parameters change.
+    . GlobalMarkerScale and GlobalLineWidthScale.
+  o Move fLastVP=fVP so always updated (avoids unnecessary redraw at start)
+
+10 August 2020  John Allison  (vis-V10-06-06)
+- visman-V10-06-08:
+  o Remove obsolete G4VIS_USE_STD11 and references to obsolete G4VIS_USE.
+- raytracer-V10-06-02:
+  o Suppress printing during RayTracer run.
+
+4 August 2020  John Allison  (vis-V10-06-05)
+- modeling-V10-06-03:
+  o Rationalise defaults for PVPaths - make sure all nodes are marked as
+    "not drawn" unless actually chosen for drawing.
+- visman-V10-06-07: Introduce extra protections in NotifyHandlers.
+
+3 July 2020  John Allison
+- VRML-V10-06-02, DAWN-V10-06-02:
+  o Fix Unbuntu 20 compiler warning about ignoring return value
+    of ‘int system(const char*)’.
+
+01 July 2020  John Allison
+- visexternals-V10-06-01: gl2ps.cc: Fix Coverity warning.
+
 19 June 2020  John Allison
 - opengl-V10-06-07: Fix Qt 5.15 deprecation warnings.
 
-18 June 2020 John Allison  (vis-V10-06-04)  
+18 June 2020  John Allison  (vis-V10-06-04)
 * visman-V10-06-06: /vis/scene/add/*Field: Correct guidance (red->green->blue).
 * visXXX-V10-05-04: Fix a debug statement.
 * From earlier:
@@ -46,6 +127,10 @@ History file for visualization category
 
 19 May 2020 John Allison
 * visman-V10-06-05: Very minor improvements.
+
+5 May 2020  Gunter Folger
+- gMocren-V10-06-01:
+  o Fix for clang10: for for warning on confusing indentation
 
 22 April 2020 Frederick Jones
 * visman-V10-06-04: Support fro OIQt driver.

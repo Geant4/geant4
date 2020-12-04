@@ -79,7 +79,7 @@ option(GEANT4_USE_PYTHON "Build Python bindings for Geant4" OFF)
 if(GEANT4_USE_PYTHON)
   # We can only build g4py with MT geant4 if TLS is global-dynamic (or auto?)
   if(GEANT4_BUILD_MULTITHREADED AND (NOT GEANT4_BUILD_TLS_MODEL MATCHES "global-dynamic"))
-    message(FATAL_ERROR "Geant4Py only supports 'global-dynamic' thread local storage
+    message(FATAL_ERROR "Geant4Py only supports 'global-dynamic' thread local storage, but
 '${GEANT4_BUILD_TLS_MODEL}' selected by GEANT4_BUILD_TLS_MODEL option
 ")
   endif()

@@ -69,6 +69,7 @@ PhysicsList::PhysicsList()
     G4NuclearLevelData::GetInstance()->GetParameters();
   deex->SetCorrelatedGamma(false);
   deex->SetStoreAllLevels(true);
+  deex->SetIsomerProduction(true);  
   deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
                 /std::log(2.));
 }
@@ -122,6 +123,7 @@ void PhysicsList::ConstructProcess()
   if (!deex) {
      ///G4EmParameters::Instance()->SetFluo(true);
      G4EmParameters::Instance()->SetAugerCascade(ARMflag);
+     G4EmParameters::Instance()->SetDeexcitationIgnoreCut(ARMflag);    
      deex = new G4UAtomicDeexcitation();
      deex->InitialiseAtomicDeexcitation();
      man->SetAtomDeexcitation(deex);

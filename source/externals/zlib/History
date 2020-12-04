@@ -19,6 +19,10 @@ committal in the CVS repository !
 History file for G4 zlib package
 --------------------------------
 
+29 October 2020 Ben Morgan (zlib-V10-06-01)
+- sources.cmake: remove include of obsolete CMake module,
+  update for full migration to new CMake system.
+
 28 May 2020 Ben Morgan (zlib-V10-06-00)
 - sources.cmake: Add needed include directories to G4zlib
   module when using new cmake system.

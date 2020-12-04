@@ -40,18 +40,14 @@ private:
 public:
   virtual void render(render_action& a_action) {
     if(!on.value()) return;
-
     state& state = a_action.state();
-
     if((state.m_light+1)>=a_action.max_lights()) {
-      a_action.out() 
+      a_action.out()
         << "GL_MAX_LIGHTS (" << a_action.max_lights() << ") reached."
         << std::endl;
       return;
     }
-
     state.m_GL_LIGHTING = true; //for separator
-
     a_action.enable_light(state.m_light,direction.value(),color.value());
     state.m_light++;
   }

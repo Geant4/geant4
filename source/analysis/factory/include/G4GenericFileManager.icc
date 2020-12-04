@@ -1,0 +1,154 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+#include "G4HnInformation.hh"
+
+//_____________________________________________________________________________
+inline G4String G4GenericFileManager::GetDefaultFileType() const
+{
+  return fDefaultFileType;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+inline 
+G4bool G4GenericFileManager::WriteT(const std::vector<T*>& htVector,
+                                    const std::vector<G4HnInformation*>& hnVector)
+{
+  auto finalResult = true;
+
+  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    auto info = hnVector[i];
+    auto activation = info->GetActivation();
+    // skip writing if activation is enabled and H1 is inactivated
+    if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
+
+    auto name = info->GetName();
+    auto ht = htVector[i];
+
+    auto fileName = info->GetFileName();
+
+    auto fileManager = fDefaultFileManager;
+    auto fileKind = "default";
+    if ( fileName == "" ) {
+      fileName = fileManager->GetFileName();
+    } else {
+      fileManager = GetFileManager(fileName);
+      fileKind = "extra";
+      // skip writing if cannot get file manager (wrong file extension)
+      if ( ! fileManager ) {
+        if ( G4Analysis::GetExtension(fileName) != "hdf5" || fHdf5Warn ) {
+          G4ExceptionDescription description;
+          description
+            << "Cannot get file manager for " << fileKind << " file " << fileName << "." << G4endl
+            << "Writing " << G4Analysis::GetHnType<T>() << " " <<  name
+            << " will be skipped.";
+          G4Exception("G4GenericFileManager::WriteT",
+                      "Analysis_W022", JustWarning, description);
+        }
+#ifdef G4VERBOSE
+       if ( fState.GetVerboseL3() ) {
+         G4ExceptionDescription description;
+         description << " " << name << " in the " << fileKind << " file " << fileName;
+         fState.GetVerboseL3()
+           ->Message("write", G4Analysis::GetHnType<T>(), description, false);
+       }
+#endif
+        continue;
+      }
+    }
+
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL4() ) {
+      G4ExceptionDescription description;
+      description << " " << name << " in the " << fileKind << " file " << fileName;
+      fState.GetVerboseL3()
+        ->Message("write", G4Analysis::GetHnType<T>(), description);
+    }
+#endif
+
+    auto result = fileManager->GetHnFileManager<T>()->Write(ht, name, fileName);
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description
+        << "Writing " << G4Analysis::GetHnType<T>() << " " <<  name
+        << " to file " <<  fileName << " failed.";
+      G4Exception("G4GenericManager::WriteT()",
+                "Analysis_W022", JustWarning, description);
+    }
+    finalResult = result && finalResult;
+
+    // notify that file has a written object
+    fileManager->SetIsEmpty(fileName, false);
+
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL3() ) {
+      G4ExceptionDescription description;
+      description << " " << name << " in the " << fileKind << " file " << fileName;
+      fState.GetVerboseL3()
+        ->Message("write", G4Analysis::GetHnType<T>(), description, finalResult);
+    }
+#endif
+  }
+
+  return finalResult;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+inline 
+G4bool G4GenericFileManager::WriteTExtra(
+  const G4String& fileName, T* ht, const G4String& htName)
+{
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description 
+      << fileName << " with " << G4Analysis::GetHnType<T>() << "  " << htName;
+    fState.GetVerboseL4()->Message("write", "extra file", description);
+  }
+
+  std::shared_ptr<G4VFileManager> fileManager = GetFileManager(fileName);
+  if ( ! fileManager ) {
+    G4ExceptionDescription description;
+    description
+      << "Cannot get file manager for file " << fileName << "." << G4endl
+      << "Writing " << G4Analysis::GetHnType<T>() << " " <<  htName 
+      << " failed.";
+    G4Exception("G4GenericFileManager::WriteTExtra",
+                "Analysis_W022", JustWarning, description);
+    return false;
+  }
+
+  auto result = fileManager->GetHnFileManager<T>()->WriteExtra(ht, htName, fileName);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL1() ) {
+    fState.GetVerboseL1()->Message("write", "extra file", fileName, result);
+  }
+#endif
+
+  return result; 
+}

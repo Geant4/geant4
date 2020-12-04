@@ -6,14 +6,13 @@
 // This is the implementation of the HepBoostX class.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/BoostX.h"
 #include "CLHEP/Vector/Boost.h"
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Vector/LorentzRotation.h"
+
+#include <cmath>
+#include <iostream>
 
 namespace CLHEP  {
 

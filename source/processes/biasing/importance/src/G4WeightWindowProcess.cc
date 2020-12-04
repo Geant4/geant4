@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WeightWindowProcess
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4WeightWindowProcess.cc
-//
-// ----------------------------------------------------------------------
+// Author: Michael Dressel, 2002
+// --------------------------------------------------------------------
 
 #include "G4WeightWindowProcess.hh"
 #include "G4VWeightWindowAlgorithm.hh"
@@ -61,13 +57,9 @@ G4WeightWindowProcess::G4WeightWindowProcess(
    fParticleChange(new G4ParticleChange),
    fWeightWindowAlgorithm(aWeightWindowAlgorithm),
    fWeightWindowStore(aWWStore),
-   fPostStepAction(0),
-   fPlaceOfAction(placeOfAction),
-   fGhostWorldName("NoParallelWorld"),fGhostWorld(0),
-   fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0'),
-   fParaflag(), fEndTrack('0'), feLimited(kDoNot)
+   fPlaceOfAction(placeOfAction)
 {
-  if (TrackTerminator)
+  if (TrackTerminator != nullptr)
   {
     fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
   }
@@ -75,7 +67,7 @@ G4WeightWindowProcess::G4WeightWindowProcess(
   {
     fPostStepAction = new G4SamplingPostStepAction(*this);
   }
-  if (!fParticleChange)
+  if (fParticleChange == nullptr)
   {
     G4Exception("G4WeightWindowProcess::G4WeightWindowProcess()",
                 "FatalError", FatalException,
@@ -104,7 +96,7 @@ G4WeightWindowProcess::~G4WeightWindowProcess()
 
   delete fPostStepAction;
   delete fParticleChange;
-  //  delete fGhostStep;
+  // delete fGhostStep;
 
 }
 
@@ -151,7 +143,7 @@ void G4WeightWindowProcess::StartTracking(G4Track* trk)
 // G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
 
   if(fParaflag) {
-    if(fGhostNavigator)
+    if(fGhostNavigator != nullptr)
       { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
     else
       {
@@ -381,7 +373,7 @@ AtRestGetPhysicalInteractionLength(const G4Track& ,
 G4VParticleChange* G4WeightWindowProcess::
 AtRestDoIt(const G4Track&, const G4Step&) 
 {
-  return 0;
+  return nullptr;
 }
 
 G4VParticleChange* G4WeightWindowProcess::
@@ -391,8 +383,6 @@ AlongStepDoIt(const G4Track& track, const G4Step&)
   // Expecting G4Transportation to move the track
   pParticleChange->Initialize(track);
   return pParticleChange; 
-
-  //  return 0;
 }
 
 void G4WeightWindowProcess::CopyStep(const G4Step & step)

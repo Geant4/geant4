@@ -39,6 +39,8 @@
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
 class G4HadronicParameters;
 
 
@@ -51,6 +53,8 @@ class G4HadronicParametersMessenger : public G4UImessenger {
     G4HadronicParameters* theHadronicParameters;
     G4UIdirectory* theDirectory;
     G4UIcmdWithAnInteger* theVerboseCmd;
+    G4UIcmdWithADoubleAndUnit* theMaxEnergyCmd;
+    G4UIcmdWithABool* theCRCoalescenceCmd;
 };
 
 #endif

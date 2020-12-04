@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrMaterialMixture implementation
 //
-//
-//
-// class G4tgrMaterialMixture
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrMaterialMixture.hh"
 
@@ -38,68 +34,66 @@
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 
-//-----------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterialMixture::G4tgrMaterialMixture()
 {
 }
 
-
-//-----------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterialMixture::~G4tgrMaterialMixture()
 {
 }
 
-
-//-----------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrMaterialMixture::G4tgrMaterialMixture(const G4String& matType,
                                            const std::vector<G4String>& wl)
 {
-  //---------- Check for miminum number of words read 
-  G4tgrUtils::CheckWLsize( wl, 6, WLSIZE_GE,
-                           "G4tgrMaterialMixture::G4tgrMaterialMixture" );
+  //---------- Check for miminum number of words read
+  G4tgrUtils::CheckWLsize(wl, 6, WLSIZE_GE,
+                          "G4tgrMaterialMixture::G4tgrMaterialMixture");
 
   theMateType = matType;
-  
-  //---------- Fill private data 
-  theName = G4tgrUtils::GetString( wl[1] );
-  theDensity = std::fabs(G4tgrUtils::GetDouble( wl[2], g/cm3 ) );
-  theNoComponents = G4tgrUtils::GetInt( wl[3] );
 
-  G4tgrUtils::CheckWLsize( wl, 4+theNoComponents*2, WLSIZE_GE,
-                           "G4tgrMaterialMixture::G4tgrMaterialMixture" );
-  for(G4int ii=0; ii<theNoComponents; ii++)
+  //---------- Fill private data
+  theName         = G4tgrUtils::GetString(wl[1]);
+  theDensity      = std::fabs(G4tgrUtils::GetDouble(wl[2], g / cm3));
+  theNoComponents = G4tgrUtils::GetInt(wl[3]);
+
+  G4tgrUtils::CheckWLsize(wl, 4 + theNoComponents * 2, WLSIZE_GE,
+                          "G4tgrMaterialMixture::G4tgrMaterialMixture");
+  for(G4int ii = 0; ii < theNoComponents; ++ii)
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 3 )
+    if(G4tgrMessenger::GetVerboseLevel() >= 3)
     {
-         G4cout << " G4tgrMaterialMixture::G4tgrMaterialMixture() -"
-                << " adding component: " << wl[ii*2+4] << " Fraction= "
-                << G4tgrUtils::GetDouble(wl[ii*2+1+4]) << G4endl;
+      G4cout << " G4tgrMaterialMixture::G4tgrMaterialMixture() -"
+             << " adding component: " << wl[ii * 2 + 4]
+             << " Fraction= " << G4tgrUtils::GetDouble(wl[ii * 2 + 1 + 4])
+             << G4endl;
     }
 #endif
-    theComponents.push_back(  G4tgrUtils::GetString( wl[ii*2+4] ) );
-    theFractions.push_back( G4tgrUtils::GetDouble(wl[ii*2+1+4]) );
+    theComponents.push_back(G4tgrUtils::GetString(wl[ii * 2 + 4]));
+    theFractions.push_back(G4tgrUtils::GetDouble(wl[ii * 2 + 1 + 4]));
   }
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
-     G4cout << " Created " << *this << G4endl;
+    G4cout << " Created " << *this << G4endl;
   }
 #endif
 }
 
-
-//-----------------------------------------------------------
-std::ostream& operator<<(std::ostream& os, const G4tgrMaterialMixture& mate) 
+// --------------------------------------------------------------------
+std::ostream& operator<<(std::ostream& os, const G4tgrMaterialMixture& mate)
 {
   os << "G4tgrMaterialMixture=: " << mate.theName << G4endl
-     << "density= " << mate.theDensity/g*cm3
+     << "density= " << mate.theDensity / g * cm3
      << " g/cm3. Number of Components: " << mate.theNoComponents << G4endl;
-  for (G4int ii=0; ii<mate.theNoComponents; ii++)
+  for(G4int ii = 0; ii < mate.theNoComponents; ii++)
   {
-    os << '\t' << mate.theComponents[ii]
-       << '\t' << mate.theFractions[ii] << G4endl;
+    os << '\t' << mate.theComponents[ii] << '\t' << mate.theFractions[ii]
+       << G4endl;
   }
   return os;
 }

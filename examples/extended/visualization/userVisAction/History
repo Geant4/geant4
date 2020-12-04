@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th November 2020 B. Morgan (exam-ext-vis-UVA-V10-06-01)
+- Migration to G4RunManagerFactory.
+
+3rd November 2020 B. Morgan (exam-ext-vis-UVA-V10-06-00)
+- Support same CMake version range as core Geant4
+
 24th January 2020  Anna Zaborowska  (exam-ext-vis-UVA-V10-06-00)
 - Fix suggested in macros command /run/numberOfThreads
 

@@ -592,7 +592,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
 #if QT_VERSION < 0x050600
   fProjectionOrtho = mProjection->addAction("Orthographic", fSignalMapperSurface, SLOT(map()));
-  fProjectionPerspective = mProjection->addAction("Persepective", fSignalMapperSurface, SLOT(map()));
+  fProjectionPerspective = mProjection->addAction("Perspective", fSignalMapperSurface, SLOT(map()));
 
  // INIT mProjection
   if (fVP.GetFieldHalfAngle() == 0) {
@@ -603,7 +603,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 #else
   // no more radioAction, not realy useful and could be confusing to use context menu and icon at the same time
   fProjectionOrtho = mProjection->addAction("Orthographic", this, [=](){ this->toggleProjection(1); });
-  fProjectionPerspective = mProjection->addAction("Persepective", this, [=](){ this->toggleProjection(2); });
+  fProjectionPerspective = mProjection->addAction("Perspective", this, [=](){ this->toggleProjection(2); });
 #endif
   // === Drawing Menu ===
   QMenu *mDrawing = mStyle->addMenu("&Drawing");
@@ -2353,7 +2353,7 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fprintf (fp,"# this must be ORIGINAL or DECODED\n");
   fprintf (fp,"REFERENCE_FRAME	ORIGINAL\n");
   fprintf (fp,"\n");
-  fprintf (fp,"# for parallel parameters see parallel.param in the exmaples subdirectory\n");
+  fprintf (fp,"# for parallel parameters see parallel.param in the examples subdirectory\n");
   fprintf (fp,"\n");
   fprintf (fp,"# if you want constant bit-rate mode, specify it as follows (number is bits/sec):\n");
   fprintf (fp,"#BIT_RATE  1000000\n");

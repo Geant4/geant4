@@ -18,41 +18,41 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   7.12
+  VERSION   7.13
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    0d3d46eeb7420f2b996242fec756ee52
+  MD5SUM    55922521aa331655a0494cdf8f9a70e8
   )
 
 # - Photon evaporation
 geant4_add_dataset(
   NAME      PhotonEvaporation
-  VERSION   5.5
+  VERSION   5.7
   FILENAME  G4PhotonEvaporation
   EXTENSION tar.gz
   ENVVAR    G4LEVELGAMMADATA
-  MD5SUM    707514c864414089af9671db0f656e35
+  MD5SUM    81ff27deb23af4aa225423e6b3a06b39
   )
 
 # - Radioisotopes
 geant4_add_dataset(
   NAME      RadioactiveDecay
-  VERSION   5.4
+  VERSION   5.6
   FILENAME  G4RadioactiveDecay
   EXTENSION tar.gz
   ENVVAR    G4RADIOACTIVEDATA
-  MD5SUM    08abe2bcc0bcd1ac4bbe09f5ae69cdbe
+  MD5SUM    acc1dbeb87b6b708b2874ced729a3a8f
   )
 
 # - Particle XS - replaces Neutron XS
 geant4_add_dataset(
   NAME      G4PARTICLEXS
-  VERSION   2.1
+  VERSION   3.1
   FILENAME  G4PARTICLEXS
   EXTENSION tar.gz
   ENVVAR    G4PARTICLEXSDATA
-  MD5SUM    24a68bb627a95629e2edcd098131d6b3
+  MD5SUM    35a3fe5cf0a29d453e6805e2cfacacee
   )
 
 # - PII
@@ -68,11 +68,11 @@ geant4_add_dataset(
 # - Optical Surfaces
 geant4_add_dataset(
   NAME      RealSurface
-  VERSION   2.1.1
+  VERSION   2.2
   FILENAME  G4RealSurface
   EXTENSION tar.gz
   ENVVAR    G4REALSURFACEDATA
-  MD5SUM    1d0fcc24c7082edae1e22a3d43fbb4d9
+  MD5SUM    ea8f1cfa8d8aafd64b71fb30b3e8a6d9
   )
 
 # - SAID
@@ -109,10 +109,26 @@ geant4_add_dataset(
 # - ENSDFSTATE
 geant4_add_dataset(
   NAME      G4ENSDFSTATE
-  VERSION   2.2
+  VERSION   2.3
   FILENAME  G4ENSDFSTATE
   EXTENSION tar.gz
   ENVVAR    G4ENSDFSTATEDATA
-  MD5SUM    495439cf600225753d7bd99825e5c6bc
+  MD5SUM    6f18fce8f217e7aaeaa3711be9b2c7bf
   )
+  
+# - TENDL
+option(GEANT4_INSTALL_DATASETS_TENDL "Install optional TENDL dataset" OFF)
+mark_as_advanced(GEANT4_INSTALL_DATASETS_TENDL)
+
+if(GEANT4_INSTALL_DATASETS_TENDL)
+  geant4_add_dataset(
+  NAME      G4TENDL
+  VERSION   1.4
+  FILENAME  G4TENDL
+  EXTENSION tar.gz
+  ENVVAR    G4PARTICLEHPDATA
+  MD5SUM    ecdad2f8234c10caecaac82ac0cb96f8
+  )
+
+endif()
 

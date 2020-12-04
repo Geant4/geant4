@@ -215,7 +215,7 @@ public:
     char* opos = m_pos;
     m_pos = (char*)(m_buffer+a_pos);
     if(m_byte_swap) {
-      if(!m_wb.write(short(v.vers[1]|kByteCountVMask()))) 
+      if(!m_wb.write(short(v.vers[1]|kByteCountVMask())))
         {m_pos = opos;return false;}
       if(!m_wb.write(v.vers[0])) {m_pos = opos;return false;}
     } else {
@@ -254,17 +254,17 @@ public:
         if(!expand2(m_size+sizeof(unsigned int))) return false;
       }
       m_pos += sizeof(unsigned int);
-    
+
       // write class of object first
       if(!write_class(a_obj.store_cls())) return false;
-    
+
       // add to map before writing rest of object (to handle self reference)
       // (+kMapOffset so it's != kNullTag)
       m_objs[(ibo*)&a_obj] = cntpos + kMapOffset();
-    
+
       // let the object write itself :
       if(!a_obj.stream(*this)) return false;
-    
+
       // write byte count
       if(!set_byte_count_obj(cntpos)) return false;
     }
@@ -311,7 +311,7 @@ public:
       unsigned int clIdx = id+a_num;
       if(!write(uint32(clIdx|kClassMask()))) {m_pos = opos;return false;}
     }}
-  
+
     //m_out << "tools::wroot::buffer::displace_mapped :"
     //      << " obj num " << m_obj_mapped.size()
     //      << std::endl;
@@ -327,7 +327,7 @@ public:
       unsigned int objIdx = id+a_num;
       if(!write(objIdx)) {m_pos = opos;return false;}
     }}
-  
+
     m_pos = opos;
     return true;
   }

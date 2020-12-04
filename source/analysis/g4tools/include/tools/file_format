@@ -43,6 +43,7 @@ TOOLS_GLOBAL_STRING(format_py)
 TOOLS_GLOBAL_STRING(format_kumac)
 TOOLS_GLOBAL_STRING(format_insh)
 TOOLS_GLOBAL_STRING(format_shp)
+TOOLS_GLOBAL_STRING(format_simbad)
 
 #define TOOLS_GLOBAL_EXT(a_name)\
 inline const std::string& s_ext_##a_name() {\
@@ -83,6 +84,7 @@ TOOLS_GLOBAL_EXT(py)
 TOOLS_GLOBAL_EXT(kumac)
 TOOLS_GLOBAL_EXT(insh)
 TOOLS_GLOBAL_EXT(shp)
+TOOLS_GLOBAL_EXT(simbad)
 
 #undef TOOLS_GLOBAL_EXT
 
@@ -119,6 +121,7 @@ inline void formats(std::vector<std::string>& a_v) {
   a_v.push_back(s_format_kumac());
   a_v.push_back(s_format_insh());
   a_v.push_back(s_format_shp());
+  a_v.push_back(s_format_simbad());
 }
 
 inline std::string ext_fmt(const std::string& a_ext) {
@@ -155,6 +158,7 @@ inline std::string ext_fmt(const std::string& a_ext) {
   if(a_ext==s_ext_kumac()) return s_format_kumac();
   if(a_ext==s_ext_insh()) return s_format_insh();
   if(a_ext==s_ext_shp()) return s_format_shp();
+  if(a_ext==s_ext_simbad()) return s_format_simbad();
   return s_format_guessed();
 }
 
@@ -189,7 +193,8 @@ inline bool need_placement(const std::string& a_format) {
 //if(a_format==s_format_py()) return true;
 //if(a_format==s_format_kumac()) return true;
 //if(a_format==s_format_insh()) return true;
-//if(a_format==s_format_shp()) return true;    //load in dynamic_sg.
+//if(a_format==s_format_shp()) return true;    //load in static_sg.
+//if(a_format==s_format_simbad()) return true; //load in arg sep.
   return false;
 }
 

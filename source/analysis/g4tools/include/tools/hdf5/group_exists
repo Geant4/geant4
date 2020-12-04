@@ -41,7 +41,7 @@ inline herr_t group_exists_visit(hid_t a_id,const char* a_name,void* a_tag){ //a
 inline bool group_exists(hid_t a_file_id,const std::string& a_name) {
   group_exists_struct visitor(a_name);
   ::H5Giterate(a_file_id,".",NULL,group_exists_visit,&visitor);
-  return visitor.m_found;  
+  return visitor.m_found;
 }
 
 }}

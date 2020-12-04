@@ -1,15 +1,21 @@
 /control/verbose 2
-/tracking/verbose 0
+/tracking/verbose 1
+/process/optical/verbose 1
+/run/verbose 1
+/control/cout/ignoreThreadsExcept 0
 #
-/process/optical/verbose 0
 /run/initialize
 #
 /gun/particle e+
 /gun/energy 500 keV
 #
-/run/beamOn 1
+/process/optical/cerenkov/setMaxBetaChange 1
+/run/beamOn 10
 #
+/tracking/verbose 0
 /process/optical/cerenkov/setMaxPhotons  15
+/process/optical/cerenkov/setTrackSecondariesFirst false
+/process/optical/scintillation/setYieldFactor 0.3
 #
-/run/beamOn 1
+/run/beamOn 1000
 

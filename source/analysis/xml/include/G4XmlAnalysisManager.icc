@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 
+#include "G4XmlNtupleFileManager.hh"
 #include "G4XmlNtupleManager.hh"
 #include "G4XmlFileManager.hh"
 
@@ -50,7 +51,7 @@ G4bool G4XmlAnalysisManager::WriteT(const std::vector<T*>& htVector,
 #endif
     G4String path = "/";
     path.append(directoryName);
-    std::shared_ptr<std::ofstream> hnFile = fFileManager->GetHnFile();
+    std::shared_ptr<std::ofstream> hnFile = fFileManager->GetFile();
     // Do nothing if there is no file
     if ( ! hnFile.get() ) return false;
 
@@ -63,7 +64,7 @@ G4bool G4XmlAnalysisManager::WriteT(const std::vector<T*>& htVector,
                 "Analysis_W022", JustWarning, description);
       return false;       
     } 
-    fFileManager->LockHistoDirectoryName();
+    fFileManager->LockDirectoryNames();
   }
 
   return true;
@@ -80,28 +81,28 @@ G4bool G4XmlAnalysisManager::IsOpenFileImpl() const
 inline
 tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple() const
 {
-  return fNtupleManager->GetNtuple();
+  return fNtupleFileManager->GetNtupleManager()->GetNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple(G4int ntupleId) const
 {
-  return fNtupleManager->GetNtuple(ntupleId);
+  return fNtupleFileManager->GetNtupleManager()->GetNtuple(ntupleId);
 }  
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::waxml::ntuple*>::iterator G4XmlAnalysisManager::BeginNtuple()
 {
-  return fNtupleManager->BeginNtuple();
+  return fNtupleFileManager->GetNtupleManager()->BeginNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::waxml::ntuple*>::iterator G4XmlAnalysisManager::EndNtuple()
 {
-  return fNtupleManager->EndNtuple();
+  return fNtupleFileManager->GetNtupleManager()->EndNtuple();
 }  
 
 //_____________________________________________________________________________
@@ -109,7 +110,7 @@ inline
 std::vector<tools::waxml::ntuple*>::const_iterator 
 G4XmlAnalysisManager::BeginConstNtuple() const
 {
-  return fNtupleManager->BeginConstNtuple();
+  return fNtupleFileManager->GetNtupleManager()->BeginConstNtuple();
 }  
 
 //_____________________________________________________________________________
@@ -117,5 +118,5 @@ inline
 std::vector<tools::waxml::ntuple*>::const_iterator 
 G4XmlAnalysisManager::EndConstNtuple() const
 {
-  return fNtupleManager->EndConstNtuple();
+  return fNtupleFileManager->GetNtupleManager()->EndConstNtuple();
 }  

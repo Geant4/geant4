@@ -73,7 +73,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   }}
 
   short TNamed_version = 1;
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TNamed");
   //base :
@@ -98,7 +98,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerInfo");
   //bases :
@@ -126,7 +126,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
  }
 
   short TStreamerElement_version = 2;
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerElement");
   //bases :
@@ -169,7 +169,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
 
   info->add(new streamer_string("fTypeName","Data type name of data member",72));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerBase");
   //bases :
@@ -185,7 +185,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));
   info->add(new streamer_int("fBaseVersion","version number of the base class",88));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerString");
   //bases :
@@ -197,7 +197,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerBasicType");
   //bases :
@@ -209,7 +209,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerBasicPointer");
   //bases :
@@ -233,7 +233,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_string("fCountName","name of data member holding the array count",92));
   info->add(new streamer_string("fCountClass","name of the class with the counter",100));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerObject");
   //bases :
@@ -245,7 +245,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerObjectPointer");
   //bases :
@@ -257,7 +257,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TStreamerObjectAny");
   //bases :
@@ -269,7 +269,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   // Elements :
   info->add(new streamer_base("TStreamerElement","base class for one element (data member) to be Streamed",0,TStreamerElement_version));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TArray");
   //members :
@@ -286,7 +286,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   //size_TArray = ofs; //8
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TArrayI");
   //base :
@@ -306,7 +306,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   //12
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TArrayD");
   //base :
@@ -326,7 +326,7 @@ inline void fill_infos_core(obj_list<streamer_info>& a_infos,std::ostream& a_out
   //12
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TArrayF");
   //base :
@@ -449,7 +449,7 @@ inline void fill_infos_graf(obj_list<streamer_info>& a_infos,std::ostream& a_out
   const int size_SHORT = 2;
   const int size_FLOAT = 4;
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TAttLine");
   //members :
@@ -479,7 +479,7 @@ inline void fill_infos_graf(obj_list<streamer_info>& a_infos,std::ostream& a_out
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TAttFill");
   //members :
@@ -502,7 +502,7 @@ inline void fill_infos_graf(obj_list<streamer_info>& a_infos,std::ostream& a_out
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TAttMarker");
   //members :
@@ -555,7 +555,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   short TBranch_version = 8;
   short TLeaf_version = 2;
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TTree");
   //bases :
@@ -663,7 +663,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   }
 
   //---------------------------------------------------------------------
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TBranch");
   //bases :
@@ -751,7 +751,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_object("fBaskets","-> List of baskets of this branch",ofs,"TObjArray"));ofs += size_TObjArray;
   ofs += size_INT; //!fNBasketRAM
   ofs += size_POINTER; //!*fBasketRAM
-  info->add(new streamer_basic_pointer("fBasketBytes","[fMaxBaskets] Lenght of baskets on file",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
+  info->add(new streamer_basic_pointer("fBasketBytes","[fMaxBaskets] Length of baskets on file",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
   info->add(new streamer_basic_pointer("fBasketEntry","[fMaxBaskets] Table of first entry in eack basket",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Int_t*"));ofs += size_POINTER;
   info->add(new streamer_basic_pointer("fBasketSeek","[fMaxBaskets] Addresses of baskets on file",ofs,streamer__info::INT,"fMaxBaskets","TBranch",6,"Seek_t*"));ofs += size_POINTER;
   ofs += size_POINTER; //!*fTree
@@ -764,7 +764,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TBranchObject");
   //bases :
@@ -784,7 +784,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   }
 
   //---------------------------------------------------------------------
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TBranchElement");
   //bases :
@@ -818,7 +818,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
 
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeaf");
   //bases :
@@ -864,7 +864,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafS");
   //bases :
@@ -888,7 +888,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
 
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafI");
   //bases :
@@ -913,7 +913,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   //size_TLeafI = ofs;
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //name :
   scs(check,"TLeafF");
   //bases :
@@ -938,7 +938,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   //size_TLeafF = ofs;
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafD");
   //bases :
@@ -960,10 +960,10 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_base("TLeaf","Leaf: description of a Branch data type",ofs,TLeaf_version));ofs += size_TLeaf();
   info->add(new streamer_double(ofs,"fMinimum","Minimum value if leaf range is specified"));
   info->add(new streamer_double(ofs,"fMaximum","Maximum value if leaf range is specified"));
- 
+
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafB");
   //bases :
@@ -984,10 +984,10 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_base("TLeaf","Leaf: description of a Branch data type",ofs,TLeaf_version));ofs += size_TLeaf();
   info->add(new streamer_basic_type("fMinimum","Minimum value if leaf range is specified",ofs,streamer__info::CHAR,"Char_t"));ofs += size_CHAR;
   info->add(new streamer_basic_type("fMaximum","Maximum value if leaf range is specified",ofs,streamer__info::CHAR,"Char_t"));ofs += size_CHAR;
- 
+
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafC");
   //bases :
@@ -1010,7 +1010,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_int(ofs,"fMinimum","Minimum value if leaf range is specified"));
   info->add(new streamer_int(ofs,"fMaximum","Maximum value if leaf range is specified"));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafObject");
   //bases :
@@ -1029,7 +1029,7 @@ inline void fill_infos_tree(obj_list<streamer_info>& a_infos,std::ostream& a_out
   info->add(new streamer_base("TLeaf","Leaf: description of a Branch data type",ofs,TLeaf_version));ofs += size_TLeaf();
   info->add(new streamer_bool(ofs,"fVirtual","Support for Virtuality"));}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TLeafElement");
   //bases :
@@ -1086,7 +1086,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
   short TAttAxis_version = 4;
 
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TAttAxis");
   //members :
@@ -1145,7 +1145,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TAxis");
   //bases :
@@ -1166,7 +1166,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
 
   scs(check,"fFirst");
   scs(check,"Int_t");
-    
+
   scs(check,"fLast");
   scs(check,"Int_t");
 
@@ -1201,7 +1201,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
   }}
 
   short TH1_version = 3;
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TH1");
   //bases :
@@ -1295,7 +1295,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TH1F");
   //base :
@@ -1311,7 +1311,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
 
   int size_TH1D = 0;
   short TH1D_version = 1;
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TH1D");
   //base :
@@ -1328,7 +1328,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
   //v3-05-07 : 588 = 576 + 12 = ok
   }
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TProfile");
   //base :
@@ -1369,7 +1369,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
   }
 
   short TH2_version = 3;
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TH2");
   //bases :
@@ -1403,7 +1403,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
           << std::endl;
   }}
 
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TH2F");
   //base :
@@ -1421,7 +1421,7 @@ inline void fill_infos_histo(obj_list<streamer_info>& a_infos,std::ostream& a_ou
   }
 
   short TH2D_version = 3;
- {unsigned int check = 0;  
+ {unsigned int check = 0;
   //this :
   scs(check,"TH2D");
   //base :

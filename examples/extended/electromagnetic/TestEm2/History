@@ -14,6 +14,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-08-20 I. Hrivnacova (testem2-V10-06-00)
+- Macro & commands review:
+  - Added macro descriptions in README
+  - Removed implementation of /testem/histo/setFileName and replaced its usage
+    with /analysis/setFileName
+  - Fixed file name in egs4.mac (do nous use egs4 directory which is not defined
+    in build area)
+  - Extended TestEm2.in with a command (missing in testing):
+    /testem/run/verbose 1
+
 26-11-19 I. Hrivnacova (testem2-V10-05-01)
 - Fixed Doxygen warnings
 

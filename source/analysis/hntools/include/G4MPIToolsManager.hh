@@ -148,7 +148,7 @@ G4bool G4MPIToolsManager::Receive(G4int nofActiveT,
     if ( G4int(hs.size()) != nofActiveT ) {
       G4ExceptionDescription description;
       description << "    srank: " << srank << " : got " << hs.size() << " objects, "
-                  << "while " << nofActiveT  << " were exepected." << G4endl;
+                  << "while " << nofActiveT  << " were expected." << G4endl;
       G4Exception("G4H1ToolsManager::Receieve",
               "Analysis_W031", JustWarning, description);
       return false;

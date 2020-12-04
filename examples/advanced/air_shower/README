@@ -104,11 +104,14 @@ the Geant4 application developer manual (Analysis Manager Classes)
 ------------------------------------------------------------------------
 ----> Simulation output                                                 
 
-the output is ultra.xml (or ultra.root) 		                             
+the output is ultra.root 		                             
  It contains:
  1)1Dhistogram with the detected photons energy (eV)                    
  2)1Dhistogram with the number of detected photons per event            
 
+
+To plot these histograms run the ROOT macro 'do_plots.C' :
+> root do_plots.C
 ------------------------------------------------------------------------
 
 for comments and questions: bernardo@lip.pt

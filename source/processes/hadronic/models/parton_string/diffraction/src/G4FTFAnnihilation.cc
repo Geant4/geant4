@@ -182,45 +182,45 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
 
   G4bool isUnknown = false;
   if ( TargetPDGcode == 2212  ||  TargetPDGcode == 2214 ) {  // Target proton or Delta+
-    if        ( ProjectilePDGcode == -2212  ||  ProjectilePDGcode == -2214 ) {
+    if        ( ProjectilePDGcode == -2212  ||  ProjectilePDGcode == -2214 ) {  // anti_proton  or anti_Delta+
       X_b *= 5.0; X_c *= 5.0; X_d *= 6.0;  // Pbar P
-    } else if ( ProjectilePDGcode == -2112  ||  ProjectilePDGcode == -2114 ) {
+    } else if ( ProjectilePDGcode == -2112  ||  ProjectilePDGcode == -2114 ) {  // anti_neutron or anti_Delta0
       X_b *= 4.0; X_c *= 4.0; X_d *= 4.0;  // NeutrBar P
-    } else if ( ProjectilePDGcode == -3122  ||  ProjectilePDGcode == -3124 ) {
+    } else if ( ProjectilePDGcode == -3122 ) {                                  // anti_Lambda (no anti_Lambda* in PDG)
       X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // LambdaBar P
-    } else if ( ProjectilePDGcode == -3112  ||  ProjectilePDGcode == -3114 ) {
+    } else if ( ProjectilePDGcode == -3112 ) {                                  // anti_Sigma- (no anti_Sigma*- in G4)
       X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Sigma-Bar P
-    } else if ( ProjectilePDGcode == -3212  ||  ProjectilePDGcode == -3214 ) {
+    } else if ( ProjectilePDGcode == -3212 ) {                                  // anti_Sigma0 (no anti_Sigma*0 in G4)
       X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // Sigma0Bar P
-    } else if ( ProjectilePDGcode == -3222  ||  ProjectilePDGcode == -3224 ) {
+    } else if ( ProjectilePDGcode == -3222 ) {                                  // anti_Sigma+ (no anti_Sigma*+ in G4)
       X_b *= 4.0; X_c *= 4.0; X_d *= 2.0;  // Sigma+Bar P
-    } else if ( ProjectilePDGcode == -3312  ||  ProjectilePDGcode == -3314 ) {
+    } else if ( ProjectilePDGcode == -3312 ) {                                  // anti_Xi-    (no anti_Xi*-    in G4)
       X_b *= 1.0; X_c *= 1.0; X_d *= 0.0;  // Xi-Bar P
-    } else if ( ProjectilePDGcode == -3322  ||  ProjectilePDGcode == -3324 ) {
+    } else if ( ProjectilePDGcode == -3322 ) {                                  // anti_Xi0    (no anti_Xi*0    in G4)
       X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Xi0Bar P
-    } else if ( ProjectilePDGcode == -3334 ) {
+    } else if ( ProjectilePDGcode == -3334 ) {                                  // anti_Omega- (no anti_Omega*- in PDG)
       X_b *= 0.0; X_c *= 0.0; X_d *= 0.0;  // Omega-Bar P
     } else {
       isUnknown = true;
     }
   } else if ( TargetPDGcode == 2112  ||  TargetPDGcode == 2114 ) {  // Target neutron or Delta0
-    if        ( ProjectilePDGcode == -2212  ||  ProjectilePDGcode == -2214 ) {
+    if        ( ProjectilePDGcode == -2212  ||  ProjectilePDGcode == -2214 ) {  // anti_proton  or anti_Delta+
       X_b *= 4.0; X_c *= 4.0; X_d *= 4.0;  // Pbar N
-    } else if ( ProjectilePDGcode == -2112  ||  ProjectilePDGcode == -2114 ) {
+    } else if ( ProjectilePDGcode == -2112  ||  ProjectilePDGcode == -2114 ) {  // anti_neutron or anti_Delta0
       X_b *= 5.0; X_c *= 5.0; X_d *= 6.0;  // NeutrBar N
-    } else if ( ProjectilePDGcode == -3122  ||  ProjectilePDGcode == -3124 ) {
+    } else if ( ProjectilePDGcode == -3122 ) {                                  // anti_Lambda (no anti_Lambda* in PDG)
       X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // LambdaBar N
-    } else if ( ProjectilePDGcode == -3112  ||  ProjectilePDGcode == -3114 ) {
-      X_b *= 4.0; X_c *= 4.0; X_d *= 2.0;  // Sigma-Bar N
-    } else if ( ProjectilePDGcode == -3212  ||  ProjectilePDGcode == -3214 ) {
+    } else if ( ProjectilePDGcode == -3112 ) {                                  // anti_Sigma- (no anti_Sigma*- in G4)
+      X_b *= 4.0; X_c *= 4.0; X_d *= 2.0;  // Sigma-Bar N                   
+    } else if ( ProjectilePDGcode == -3212 ) {                                  // anti_Sigma0 (no anti_Sigma*0 in G4)
       X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // Sigma0Bar N
-    } else if ( ProjectilePDGcode == -3222  ||  ProjectilePDGcode == -3224 ) {
+    } else if ( ProjectilePDGcode == -3222 ) {                                  // anti_Sigma+ (no anti_Sigma*+ in G4)
       X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Sigma+Bar N
-    } else if ( ProjectilePDGcode == -3312  ||  ProjectilePDGcode == -3314 ) {
+    } else if ( ProjectilePDGcode == -3312 ) {                                  // anti_Xi-    (no anti_Xi*-    in G4)
       X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Xi-Bar N
-    } else if ( ProjectilePDGcode == -3322  ||  ProjectilePDGcode == -3324 ) {
+    } else if ( ProjectilePDGcode == -3322 ) {                                  // anti_Xi0    (no anti_Xi*0    in G4)
       X_b *= 1.0; X_c *= 1.0; X_d *= 0.0;  // Xi0Bar N
-    } else if ( ProjectilePDGcode == -3334 ) {
+    } else if ( ProjectilePDGcode == -3334 ) {                                  // anti_Omega- (no anti_Omega*- in PDG)
       X_b *= 0.0; X_c *= 0.0; X_d *= 0.0;  // Omega-Bar N
     } else {
       isUnknown = true;
@@ -310,7 +310,7 @@ Create3QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
   // For simplicity only scalar is considered here.
   G4int NewCode = 0, antiQuark = 0, quark = 0;
   G4ParticleDefinition* TestParticle = nullptr;
-  for ( G4int iString = 0; iString < 3; iString++ ) {  // Loop over the 3 string cases
+  for ( G4int iString = 0; iString < 3; ++iString ) {  // Loop over the 3 string cases
     if ( iString == 0 ) {
       antiQuark = common.AQ[0];  quark = common.Q[0];
       projectile->SplitUp();
@@ -380,20 +380,20 @@ Create3QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
   G4int NumberOfTries = 0, loopCounter = 0;
   const G4int maxNumberOfLoops = 1000;
   do {
-    NumberOfTries++;
+    ++NumberOfTries;
     if ( NumberOfTries == 100*(NumberOfTries/100) ) {
       // At large number of tries it would be better to reduce the values of <Pt^2>
       ScaleFactor /= 2.0;
       AveragePt2 *= ScaleFactor;
     }
     G4ThreeVector PtSum( 0.0, 0.0, 0.0 );
-    for ( G4int i = 0; i < 6; i++ ) {
+    for ( G4int i = 0; i < 6; ++i ) {
       Quark_Mom [i] = GaussianPt( AveragePt2, maxPtSquare );
       PtSum += Quark_Mom[i];
     }
     PtSum /= 6.0;
     SumMt = 0.0;    
-    for ( G4int i = 0; i < 6; i++ ) {
+    for ( G4int i = 0; i < 6; ++i ) {
       Quark_Mom[i] -= PtSum;
       ModMom2[i] = Quark_Mom[i].mag2();
       SumMt += std::sqrt( ModMom2[i] + MassQ2 );
@@ -411,13 +411,13 @@ Create3QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
   NumberOfTries = 0; loopCounter = 0;
   do {
     Success = true;
-    NumberOfTries++;
+    ++NumberOfTries;
     if ( NumberOfTries == 100*(NumberOfTries/100) ) { 
       // At large number of tries it would be better to reduce the values of Pt's
       ScaleFactor /= 2.0;
     }
     G4double Alfa = 0.0, Beta = 0.0;
-    for ( G4int iCase = 0; iCase < 2; iCase++ ) {  // anti-baryon (1st case), baryon (2nd case)
+    for ( G4int iCase = 0; iCase < 2; ++iCase ) {  // anti-baryon (1st case), baryon (2nd case)
       G4double x1 = 0.0, x2 = 0.0;
       G4double r1 = G4UniformRand(), r2 = G4UniformRand();
       if ( Alfa_R == 1.0 ) {
@@ -430,7 +430,7 @@ Create3QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
       G4double x3 = 1.0 - x1 - x2;
       G4int index = iCase*3;  // 0 for anti-baryon, 3 for baryon
       Quark_Mom[index].setZ( x1 ); Quark_Mom[index+1].setZ( x2 ); Quark_Mom[index+2].setZ( x3 );
-      for ( G4int i = 0; i < 3; i++ ) {  // Loop over the 3 (anti-)quarks
+      for ( G4int i = 0; i < 3; ++i ) {  // Loop over the 3 (anti-)quarks
         if ( Quark_Mom[index+i].getZ() != 0.0 ) {
           G4double val = ( ScaleFactor * ModMom2[index+i] + MassQ2 ) / Quark_Mom[index+i].getZ();
           if ( iCase == 0 ) {  // anti-baryon
@@ -459,11 +459,11 @@ Create3QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
   }
 
   G4double SqrtScaleF = std::sqrt( ScaleFactor );
-  for ( G4int iCase = 0; iCase < 2; iCase++ ) {  // anti-baryon (1st case), baryon (2nd case)
+  for ( G4int iCase = 0; iCase < 2; ++iCase ) {  // anti-baryon (1st case), baryon (2nd case)
     G4int index = iCase*3;  // 0 for anti-baryon, 3 for baryon
     G4double w = WplusProjectile;          // for anti-baryon
     if ( iCase == 1 ) w = - WminusTarget;  // for baryon
-    for ( G4int i = 0; i < 3; i++ ) {
+    for ( G4int i = 0; i < 3; ++i ) {
       G4double Pz = w * Quark_Mom[index+i].getZ() / 2.0 -
                     ( ScaleFactor * ModMom2[index+i] + MassQ2 ) / 
                     ( 2.0 * w * Quark_Mom[index+i].getZ() ); 
@@ -476,7 +476,7 @@ Create3QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
   }
   G4LorentzVector Pstring1, Pstring2, Pstring3;
   G4double YstringMax = 0.0, YstringMin = 0.0;
-  for ( G4int i = 0; i < 3; i++ ) {
+  for ( G4int i = 0; i < 3; ++i ) {
     G4ThreeVector tmp = Quark_Mom[i] + Quark_Mom[i+3];
     G4LorentzVector Pstring( tmp, std::sqrt( Quark_Mom[i].mag2() + MassQ2 ) +
                                   std::sqrt( Quark_Mom[i+3].mag2() + MassQ2 ) );
@@ -563,9 +563,9 @@ Create1DiquarkAntiDiquarkString( G4VSplitableHadron* projectile,
   G4cout << "Process b, quark - anti-quark annihilation, di-q - anti-di-q string" << G4endl;
   #endif
 
-  G4int CandidatsN = 0, CandAQ[9][2], CandQ[9][2];
-  for ( G4int iAQ = 0; iAQ < 3; iAQ++ ) {  // index of the 3 constituent anti-quarks of the antibaryon projectile
-    for ( G4int iQ = 0; iQ < 3; iQ++ ) {   // index of the 3 constituent quarks of the nucleon target
+  G4int CandidatsN = 0, CandAQ[9][2] = {}, CandQ[9][2] = {};
+  for ( G4int iAQ = 0; iAQ < 3; ++iAQ ) {  // index of the 3 constituent anti-quarks of the antibaryon projectile
+    for ( G4int iQ = 0; iQ < 3; ++iQ ) {   // index of the 3 constituent quarks of the nucleon target
       if ( -common.AQ[iAQ] == common.Q[iQ] ) {  // antiquark - quark that can annihilate
         // Here "0", "1", "2" means, respectively, "first", "second" and "third" constituent
         // of the (anti-baryon) projectile or (nucleon) target.
@@ -575,7 +575,7 @@ Create1DiquarkAntiDiquarkString( G4VSplitableHadron* projectile,
         if ( iQ  == 0 ) { CandQ[CandidatsN][0]  = 1; CandQ[CandidatsN][1]  = 2; }
         if ( iQ  == 1 ) { CandQ[CandidatsN][0]  = 0; CandQ[CandidatsN][1]  = 2; }
         if ( iQ  == 2 ) { CandQ[CandidatsN][0]  = 0; CandQ[CandidatsN][1]  = 1; }
-        CandidatsN++;
+        ++CandidatsN;
       }
     }
   }
@@ -658,10 +658,10 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
          << G4endl;
   #endif
 
-  G4int CandidatsN = 0, CandAQ[9][2], CandQ[9][2];
+  G4int CandidatsN = 0, CandAQ[9][2] = {}, CandQ[9][2] = {};
   G4int LeftAQ1 = 0, LeftAQ2 = 0, LeftQ1 = 0, LeftQ2 = 0;
-  for ( G4int iAQ = 0; iAQ < 3; iAQ++ ) {  // index of the 3 constituent anti-quarks of the antibaryon projectile
-    for ( G4int iQ = 0; iQ < 3; iQ++ ) {   // index of the 3 constituent quarks of the nucleon target
+  for ( G4int iAQ = 0; iAQ < 3; ++iAQ ) {  // index of the 3 constituent anti-quarks of the antibaryon projectile
+    for ( G4int iQ = 0; iQ < 3; ++iQ ) {   // index of the 3 constituent quarks of the nucleon target
       if ( -common.AQ[iAQ] == common.Q[iQ] ) {  // antiquark - quark that can annihilate
         // Here "0", "1", "2" means, respectively, "first", "second" and "third" constituent
         // of the (anti-baryon) projectile or (nucleon) target.
@@ -671,7 +671,7 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
         if ( iQ  == 0 ) { CandQ[CandidatsN][0]  = 1; CandQ[CandidatsN][1]  = 2; }
         if ( iQ  == 1 ) { CandQ[CandidatsN][0]  = 0; CandQ[CandidatsN][1]  = 2; }
         if ( iQ  == 2 ) { CandQ[CandidatsN][0]  = 0; CandQ[CandidatsN][1]  = 1; }
-        CandidatsN++;
+        ++CandidatsN;
       }
     }
   }
@@ -694,7 +694,7 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
     // For simplicity only scalar is considered here.
     G4int NewCode = 0, antiQuark = 0, quark = 0;
     G4ParticleDefinition* TestParticle = nullptr;
-    for ( G4int iString = 0; iString < 2; iString++ ) {  // Loop over the 2 string cases
+    for ( G4int iString = 0; iString < 2; ++iString ) {  // Loop over the 2 string cases
       if ( iString == 0 ) {
         antiQuark = LeftAQ1; quark = LeftQ1;
         projectile->SplitUp();
@@ -753,20 +753,20 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
     G4int NumberOfTries = 0, loopCounter = 0;
     const G4int maxNumberOfLoops = 1000;
     do { 
-      NumberOfTries++;
+      ++NumberOfTries;
       if ( NumberOfTries == 100*(NumberOfTries/100) ) { 
         // At large number of tries it would be better to reduce the values of <Pt^2>
         ScaleFactor /= 2.0;
         AveragePt2 *= ScaleFactor;
       }
       G4ThreeVector PtSum( 0.0, 0.0, 0.0 );
-      for( G4int i = 0; i < 4; i++ ) {
+      for( G4int i = 0; i < 4; ++i ) {
         Quark_Mom[i] = GaussianPt( AveragePt2, maxPtSquare );
         PtSum += Quark_Mom[i];
       }
       PtSum /= 4.0;
       SumMt = 0.0;    
-      for ( G4int i = 0; i < 4; i++ ) {
+      for ( G4int i = 0; i < 4; ++i ) {
         Quark_Mom[i] -= PtSum;
         ModMom2[i] = Quark_Mom[i].mag2();
         SumMt += std::sqrt( ModMom2[i] + MassQ2 );
@@ -783,13 +783,13 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
     NumberOfTries = 0, loopCounter = 0;
     do { 
       Success = true;
-      NumberOfTries++;
+      ++NumberOfTries;
       if ( NumberOfTries == 100*(NumberOfTries/100) ) { 
         // At large number of tries it would be better to reduce the values of Pt's
         ScaleFactor /= 2.0;
       }
       G4double Alfa = 0.0, Beta = 0.0;
-      for ( G4int iCase = 0; iCase < 2; iCase++ ) {  // Loop over the two strings
+      for ( G4int iCase = 0; iCase < 2; ++iCase ) {  // Loop over the two strings
         G4double x = 0.0, r = G4UniformRand();
         if ( Alfa_R == 1.0 ) {
           if ( iCase == 0 ) {  // first string
@@ -802,7 +802,7 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
         }
         G4int index = iCase*2;  // 0 for the first string, 2 for the second string
         Quark_Mom[index].setZ( x ); Quark_Mom[index+1].setZ( 1.0 - x ); 
-        for ( G4int i = 0; i < 2; i++ ) {
+        for ( G4int i = 0; i < 2; ++i ) {
           if ( Quark_Mom[i].getZ() != 0.0 ) {
             G4double val = ( ScaleFactor * ModMom2[index+i] + MassQ2 ) / Quark_Mom[index+i].getZ();
             if ( iCase == 0 ) {  // first string
@@ -833,9 +833,9 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
     G4double SqrtScaleF = std::sqrt( ScaleFactor );
     G4LorentzVector Pstring1, Pstring2;
     G4double Ystring1 = 0.0, Ystring2 = 0.0;
-    for ( G4int iCase = 0; iCase < 2; iCase++ ) {  // Loop over the two strings
+    for ( G4int iCase = 0; iCase < 2; ++iCase ) {  // Loop over the two strings
       G4int index = iCase*2;  // 0 for the first string, 2 for the second string
-      for ( G4int i = 0; i < 2; i++ ) {
+      for ( G4int i = 0; i < 2; ++i ) {
         G4double w = WplusProjectile;          // For the first string
         if ( iCase == 1 ) w = - WminusTarget;  // For the second string
         G4double Pz = w * Quark_Mom[index+i].getZ() / 2.0
@@ -848,7 +848,7 @@ Create2QuarkAntiQuarkStrings( G4VSplitableHadron* projectile,
         }
       }
     }
-    for ( G4int iCase = 0; iCase < 2; iCase++ ) {  // Loop over the two strings
+    for ( G4int iCase = 0; iCase < 2; ++iCase ) {  // Loop over the two strings
       G4ThreeVector tmp = Quark_Mom[iCase] + Quark_Mom[iCase+2];
       G4LorentzVector Pstring( tmp, std::sqrt( Quark_Mom[iCase].mag2()   + MassQ2 ) +
                                     std::sqrt( Quark_Mom[iCase+2].mag2() + MassQ2 ) );
@@ -918,11 +918,11 @@ Create1QuarkAntiQuarkString( G4VSplitableHadron* projectile,
   // of the (anti-baryon) projectile or (nucleon) target.
   G4int CandidatsN = 0, CandAQ[36], CandQ[36];
   G4int LeftAQ = 0, LeftQ = 0;
-  for ( G4int iAQ1 = 0; iAQ1 < 3; iAQ1++ ) {
-    for ( G4int iAQ2 = 0; iAQ2 < 3; iAQ2++ ) {
+  for ( G4int iAQ1 = 0; iAQ1 < 3; ++iAQ1 ) {
+    for ( G4int iAQ2 = 0; iAQ2 < 3; ++iAQ2 ) {
       if ( iAQ1 != iAQ2 ) {
-        for ( G4int iQ1 = 0; iQ1 < 3; iQ1++ ) {
-          for ( G4int iQ2 = 0; iQ2 < 3; iQ2++ ) {
+        for ( G4int iQ1 = 0; iQ1 < 3; ++iQ1 ) {
+          for ( G4int iQ2 = 0; iQ2 < 3; ++iQ2 ) {
             if ( iQ1 != iQ2 ) {
               if ( -common.AQ[iAQ1] == common.Q[iQ1]  &&  -common.AQ[iAQ2] == common.Q[iQ2] ) {
                 if        ( ( iAQ1 == 0  &&  iAQ2 == 1 ) || ( iAQ1 == 1  &&  iAQ2 == 0 ) ) { 
@@ -939,7 +939,7 @@ Create1QuarkAntiQuarkString( G4VSplitableHadron* projectile,
                 } else if ( ( iQ1 == 1   &&   iQ2 == 2 ) || ( iQ1 == 2   &&   iQ2 == 1 ) ) {
                   CandQ[CandidatsN]  = 0;
                 }
-                CandidatsN++;
+                ++CandidatsN;
               }
             }
           }

@@ -91,5 +91,13 @@ Idle> /run/beamOn 1
 ....
 Idle> exit
 \endverbatim
-         
+
+\section Examplewls_s8 Macros provided
+
+ - wls.in: sets up the default geometry and provides the commands to change it.
+           Primary particle is an optical photon with energy 2.1 eV.
+ - Sr90.mac: Default geometry is used. Primary particle is a strontium ion.
+ - vis.mac: macro for visualization; called automatically when no macro is
+            given on command line.
+
 */         

@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrIsotope implementation
 //
-//
-//
-// class G4tgrIsotope
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrIsotope.hh"
 
@@ -38,46 +34,40 @@
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrIsotope::G4tgrIsotope()
-  : theName(""), theZ(0), theN(0), theA(0.)
 {
 }
 
-
-//-------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrIsotope::~G4tgrIsotope()
 {
 }
 
-
-//-------------------------------------------------------------
-G4tgrIsotope::G4tgrIsotope( const std::vector<G4String>& wl ) 
+// --------------------------------------------------------------------
+G4tgrIsotope::G4tgrIsotope(const std::vector<G4String>& wl)
 {
-  //---------- Check for miminum number of words read 
-  G4tgrUtils::CheckWLsize( wl, 5, WLSIZE_EQ, "G4tgrIsotope::G4tgIstotope");
+  //---------- Check for miminum number of words read
+  G4tgrUtils::CheckWLsize(wl, 5, WLSIZE_EQ, "G4tgrIsotope::G4tgIstotope");
 
-  theName = G4tgrUtils::GetString( wl[1] );
-  theZ = G4tgrUtils::GetInt( wl[2] );
-  theN = G4tgrUtils::GetInt( wl[3] );
-  theA = G4tgrUtils::GetDouble( wl[4], g/mole);
+  theName = G4tgrUtils::GetString(wl[1]);
+  theZ    = G4tgrUtils::GetInt(wl[2]);
+  theN    = G4tgrUtils::GetInt(wl[3]);
+  theA    = G4tgrUtils::GetDouble(wl[4], g / mole);
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
     G4cout << " Created " << *this << G4endl;
   }
 #endif
 }
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& os, const G4tgrIsotope& obj)
 {
-  os << "G4tgrIsotope= " << obj.theName
-     << " Z = " << obj.theZ
-     << " N= " << obj.theN
-     << " A= " << obj.theA << G4endl;
+  os << "G4tgrIsotope= " << obj.theName << " Z = " << obj.theZ
+     << " N= " << obj.theN << " A= " << obj.theA << G4endl;
 
   return os;
 }

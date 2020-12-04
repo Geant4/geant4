@@ -60,6 +60,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
 #include "G4HadronicParameters.hh"
+#include "G4HadronicProcessType.hh"
 #include <algorithm>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -88,25 +89,18 @@ G4HadronicProcessStore::~G4HadronicProcessStore()
 void G4HadronicProcessStore::Clean()
 {
   G4int i;
-  //std::cout << "G4HadronicProcessStore::Clean() Nproc= " << n_proc
-  //	    << "  Nextra= " << n_extra << std::endl;
   for (i=0; i<n_proc; ++i) {
     if( process[i] ) {
-      //G4cout << "G4HadronicProcessStore::Clean() delete hadronic "
-      //  << i << "  " <<  process[i]->GetProcessName() << G4endl;
       delete process[i];
       process[i] = nullptr;
     }
   }
   for(i=0; i<n_extra; ++i) {
     if(extraProcess[i]) {
-        // G4cout << "G4HadronicProcessStore::Clean() delete extra proc "
-        //<< i << "  " << extraProcess[i]->GetProcessName() << G4endl;
         delete extraProcess[i];
         extraProcess[i] = nullptr;
     }
   }
-  //std::cout << "G4HadronicProcessStore::Clean() done" << std::endl;
   n_extra = 0;
   n_proc = 0;
 }
@@ -123,7 +117,7 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   currentParticle = nullptr;
   theGenericIon = 
     G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-  verbose = 1;
+  param = G4HadronicParameters::Instance();
   buildTableStart = true;
   buildXSTable = false;
   theEPTestMessenger = new G4HadronicEPTestMessenger(this);
@@ -413,7 +407,7 @@ void G4HadronicProcessStore::Register(G4HadronicProcess* proc)
   for(G4int i=0; i<n_proc; ++i) {
     if(process[i] == proc) { return; }
   }
-  if(1 < verbose) {
+  if(1 < param->GetVerboseLevel()) {
     G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
 	   << "  " << proc->GetProcessName() << G4endl;
   }
@@ -431,7 +425,7 @@ void G4HadronicProcessStore::RegisterParticle(G4HadronicProcess* proc,
   G4int j=0;
   for(; j<n_part; ++j) {if(particle[j] == part) break;}
 
-  if(1 < verbose) {
+  if(1 < param->GetVerboseLevel()) {
     G4cout << "G4HadronicProcessStore::RegisterParticle " 
 	   << part->GetParticleName()
 	   << " for  " << proc->GetProcessName() << G4endl;
@@ -501,7 +495,7 @@ void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
       if(process[i] == hproc) { return; }
     }
   }
-  if(1 < verbose) {
+  if(1 < param->GetVerboseLevel()) {
     G4cout << "Extra Process: " << n_extra 
 	   << "  " <<  proc->GetProcessName() << G4endl;
   }
@@ -547,7 +541,7 @@ void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) {
       extraProcess[i] = nullptr;
-      if(1 < verbose) {
+      if(1 < param->GetVerboseLevel()) {
 	G4cout << "Extra Process: " << i << "  " 
 	       <<proc->GetProcessName()<< " is deregisted " << G4endl;
       }
@@ -578,7 +572,7 @@ void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part)
   // registered
   if(buildTableStart && part == particle[n_part - 1]) {
     buildTableStart = false;
-    Dump(verbose);
+    Dump(param->GetVerboseLevel());
     if (std::getenv("G4PhysListDocDir") ) DumpHtml();
     G4HadronicInteractionRegistry::Instance()->InitialiseModels();
   }
@@ -758,14 +752,15 @@ G4String G4HadronicProcessStore::HtmlFileName(const G4String & in) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4HadronicProcessStore::Dump(G4int level)
+void G4HadronicProcessStore::Dump(G4int verb)
 {
-  if (G4HadronicParameters::Instance()->GetVerboseLevel() == 0 || level == 0) return;
+  G4int level = std::max(param->GetVerboseLevel(), verb);
+  if (0 == level) return;
   
  G4cout 
    << "\n====================================================================\n"
-   << std::setw(60) << "HADRONIC PROCESSES SUMMARY (verbose level " << level
-   << ")" << G4endl;
+   << std::setw(60) << "HADRONIC PROCESSES SUMMARY (verbose level " 
+   << level << ")" << G4endl;
   
  for (G4int i=0; i<n_part; ++i) {
     PD part = particle[i];
@@ -788,6 +783,7 @@ void G4HadronicProcessStore::Dump(G4int level)
 		       pname == "kaon+" ||
 		       pname == "kaon-" ||
 		       pname == "lambda" ||
+		       pname == "anti_lambda" ||
 		       pname == "sigma-" ||
 		       pname == "D-" ||
 		       pname == "B-" ||
@@ -798,7 +794,7 @@ void G4HadronicProcessStore::Dump(G4int level)
                        pname == "anti_triton" ||
                        pname == "anti_He3" ||
                        pname == "anti_alpha")) yes = true;
-    if (level > 1) yes = true;			   
+    if (level > 1) yes = true;	   
     if (yes) {
       // main processes
       std::multimap<PD,HP,std::less<PD> >::iterator it;
@@ -840,6 +836,7 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 {
   G4HadronicProcess* proc = process[idxProc];
   const G4ParticleDefinition* part = particle[idxPart];
+  if(part == nullptr || proc == nullptr) { return; }
   if (wasPrinted[idxPart] == 0) {
     G4cout << "\n---------------------------------------------------\n"  
            << std::setw(50) << "Hadronic Processes for " 
@@ -851,10 +848,35 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 
   // Append the string "/n" (i.e. "per nucleon") on the kinetic energy of ions.
   G4String stringEnergyPerNucleon = "";
-  if ( part &&
-       ( part == G4GenericIon::Definition() || 
-         std::abs( part->GetBaryonNumber() ) > 1 ) ) {
+  if (part == G4GenericIon::Definition() || 
+      std::abs( part->GetBaryonNumber() ) > 1) {
     stringEnergyPerNucleon = "/n";
+  }
+  // print cross section factor
+  if(param->ApplyFactorXS()) {
+    G4int pdg = part->GetPDGEncoding();
+    G4int subType = proc->GetProcessSubType();
+    G4double fact = 1.0;
+    if(subType == fHadronInelastic) {
+      if(pdg == 2212 || pdg == 2112) {
+        fact = param->XSFactorNucleonInelastic();
+      } else if(std::abs(pdg) == 211) {
+        fact = param->XSFactorPionInelastic();
+      } else {
+        fact = param->XSFactorHadronInelastic();
+      }
+    } else if(subType == fHadronElastic) {
+      if(pdg == 2212 || pdg == 2112) {
+        fact = param->XSFactorNucleonElastic();
+      } else if(std::abs(pdg) == 211) {
+        fact = param->XSFactorPionElastic();
+      } else {
+        fact = param->XSFactorHadronElastic();
+      }
+    }
+    if(std::abs(fact - 1.0) > 1.e-6) {
+      G4cout << "        XSfactor= " << fact; 
+    }
   }
 
   HI hi = 0;
@@ -881,8 +903,8 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4HadronicProcessStore::SetVerbose(G4int val)
+// this code is obsolete - not optimal change verbose in each thread
 {
-  verbose = val;
   G4int i;
   for(i=0; i<n_proc; ++i) {
     if(process[i]) { process[i]->SetVerboseLevel(val); }
@@ -896,7 +918,7 @@ void G4HadronicProcessStore::SetVerbose(G4int val)
 
 G4int G4HadronicProcessStore::GetVerbose()
 {
-  return verbose;
+  return param->GetVerboseLevel();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -905,7 +927,7 @@ G4HadronicProcess* G4HadronicProcessStore::FindProcess(
    const G4ParticleDefinition* part, G4HadronicProcessType subType)
 {
   bool isNew = false;
-  G4HadronicProcess* hp = 0;
+  G4HadronicProcess* hp = nullptr;
   localDP.SetDefinition(part);
 
   if(part != currentParticle) {

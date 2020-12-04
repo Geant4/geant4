@@ -36,20 +36,20 @@
 G4StatMFMacroChemicalPotential & 
 G4StatMFMacroChemicalPotential::operator=(const G4StatMFMacroChemicalPotential & ) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator= meant to not be accessible");
     return *this;
 }
 
 G4bool G4StatMFMacroChemicalPotential::operator==(const G4StatMFMacroChemicalPotential & ) const 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator== meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator== meant to not be accessible");
     return false;
 }
 
 
 G4bool G4StatMFMacroChemicalPotential::operator!=(const G4StatMFMacroChemicalPotential & ) const 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator!= meant to not be accessable");
+    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroChemicalPotential::operator!= meant to not be accessible");
     return true;
 }
 

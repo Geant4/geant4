@@ -94,28 +94,46 @@ public: //with description
  private:
   G4RadioactiveDecay             *theRadioactiveDecayContainer;
   
-  G4UIdirectory                  *grdmDirectory;
-  G4UIcmdWithNucleusLimits       *nucleuslimitsCmd;
-  G4UIcmdWithAString             *sourcetimeprofileCmd;
-  G4UIcmdWithAString             *decaybiasprofileCmd;
-  G4UIcmdWithABool               *analoguemcCmd;
-  G4UIcmdWithABool               *fbetaCmd;
-  G4UIcmdWithABool               *brbiasCmd;
-  G4UIcmdWithAnInteger           *splitnucleiCmd;
-  G4UIcmdWithAnInteger           *verboseCmd;
-  G4UIcmdWithAString             *avolumeCmd;
-  G4UIcmdWithAString             *deavolumeCmd;
-  G4UIcmdWithoutParameter        *allvolumesCmd;
-  G4UIcmdWithoutParameter        *deallvolumesCmd;
-  G4UIcmdWithABool               *icmCmd;
-  G4UIcmdWithABool               *armCmd;
-  G4UIcmdWithADoubleAndUnit      *hlthCmd;
-
-  G4UIcommand					 *userDecayDataCmd;
-  G4UIcommand					 *userEvaporationDataCmd;
-
-  G4UIcmdWith3Vector             *colldirCmd;
-  G4UIcmdWithADoubleAndUnit      *collangleCmd;
+  G4UIdirectory                  *old_grdmDirectory;           // To be removed in G4 11.0
+  G4UIdirectory                       *rdmDirectory;	       
+  G4UIcmdWithNucleusLimits       *old_nucleuslimitsCmd;        // To be removed in G4 11.0
+  G4UIcmdWithNucleusLimits           *nucleuslimitsCmd;	       
+  G4UIcmdWithAString             *old_sourcetimeprofileCmd;    // To be removed in G4 11.0
+  G4UIcmdWithAString                 *sourcetimeprofileCmd;    
+  G4UIcmdWithAString             *old_decaybiasprofileCmd;     // To be removed in G4 11.0
+  G4UIcmdWithAString                 *decaybiasprofileCmd;     
+  G4UIcmdWithABool               *old_analoguemcCmd;           // To be removed in G4 11.0
+  G4UIcmdWithABool                   *analoguemcCmd;	       
+  G4UIcmdWithABool               *old_fbetaCmd;                // To be removed in G4 11.0
+  G4UIcmdWithABool                   *fbetaCmd;		       
+  G4UIcmdWithABool               *old_brbiasCmd;               // To be removed in G4 11.0
+  G4UIcmdWithABool                   *brbiasCmd;	       
+  G4UIcmdWithAnInteger           *old_splitnucleiCmd;          // To be removed in G4 11.0
+  G4UIcmdWithAnInteger               *splitnucleiCmd;	       
+  G4UIcmdWithAnInteger           *old_verboseCmd;              // To be removed in G4 11.0
+  G4UIcmdWithAnInteger               *verboseCmd;	       
+  G4UIcmdWithAString             *old_avolumeCmd;              // To be removed in G4 11.0
+  G4UIcmdWithAString                 *avolumeCmd;	       
+  G4UIcmdWithAString             *old_deavolumeCmd;            // To be removed in G4 11.0
+  G4UIcmdWithAString                 *deavolumeCmd;	       
+  G4UIcmdWithoutParameter        *old_allvolumesCmd;           // To be removed in G4 11.0
+  G4UIcmdWithoutParameter            *allvolumesCmd;	       
+  G4UIcmdWithoutParameter        *old_deallvolumesCmd;         // To be removed in G4 11.0
+  G4UIcmdWithoutParameter            *deallvolumesCmd;	       
+  G4UIcmdWithABool               *old_icmCmd;                  // To be removed in G4 11.0
+  G4UIcmdWithABool                   *icmCmd;		       
+  G4UIcmdWithABool               *old_armCmd;                  // To be removed in G4 11.0
+  G4UIcmdWithABool                   *armCmd;		       
+  G4UIcmdWithADoubleAndUnit      *old_hlthCmd;                 // To be removed in G4 11.0
+  G4UIcmdWithADoubleAndUnit          *hlthCmd;		       
+  G4UIcommand			 *old_userDecayDataCmd;        // To be removed in G4 11.0
+  G4UIcommand			     *userDecayDataCmd;
+  G4UIcommand			 *old_userEvaporationDataCmd;  // To be removed in G4 11.0
+  G4UIcommand			     *userEvaporationDataCmd;
+  G4UIcmdWith3Vector             *old_colldirCmd;              // To be removed in G4 11.0
+  G4UIcmdWith3Vector                 *colldirCmd;
+  G4UIcmdWithADoubleAndUnit      *old_collangleCmd;            // To be removed in G4 11.0
+  G4UIcmdWithADoubleAndUnit          *collangleCmd;
 
 };
 

@@ -65,7 +65,7 @@ public:
     return *this;
   }
 public:
-  enum e_move {  
+  enum e_move {
     none,
     up,
     down
@@ -107,7 +107,7 @@ protected: //gstos
     size_t ngsto = npts*3;     //3 coords.
     size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
-    float* pxyz = vec_data<float>(gsto_data)+sz;    
+    float* pxyz = vec_data<float>(gsto_data)+sz;
     const float* data = vec_data<float>(m_segs);
     gl::cvt_2to3(npts,data,pxyz);}
 
@@ -126,12 +126,12 @@ public:
     const state& state = a_action.state();
     if(state.m_use_gsto) {
       unsigned int _id = get_gsto_id(a_action.out(),a_action.render_manager());
-      if(_id) {        
+      if(_id) {
         a_action.begin_gsto(_id);
         a_action.draw_gsto_v(gl::lines(),m_gsto_sz/3,0);
         a_action.end_gsto();
         return;
-  
+
       } else { //!_id
         // use immediate rendering.
       }
@@ -141,7 +141,7 @@ public:
     }
 
     // immediate rendering :
-    a_action.draw_vertex_array_xy(gl::lines(),m_segs);         
+    a_action.draw_vertex_array_xy(gl::lines(),m_segs);
   }
 
   virtual void pick(pick_action& a_action) {
@@ -244,7 +244,7 @@ public:
         Y -= Y_ADVANCE;
         width = mx<float>(width,XL);
       }
-              
+
       a_mn_x = 0;
       a_mn_y = -Y_ADVANCE*(a_ss.size()-1)-_descent(a_height);
       a_mn_z = 0;
@@ -303,10 +303,10 @@ protected:
         Y -= szy;
       }
     }
-  
+
     float HEIGHT = height.value();
     float Y_ADVANCE = 2 * HEIGHT;
-  
+
     const std::string& encod = encoding.value();
 
     const std::vector<std::string>& ss = strings.values();
@@ -407,9 +407,9 @@ protected:
     }
 
     float ymax = 0;
-  
+
     int ipoint = 0;
-    for (int ipoly=0;ipoly<number;ipoly++) { 
+    for (int ipoly=0;ipoly<number;ipoly++) {
       int pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
@@ -424,7 +424,7 @@ protected:
         ipoint ++;
       }
     }
-  
+
     if(a_bar) { //Draw a bar on top of the character.
       float xbar = 0;
       float ybar = ymax * 1.3F;
@@ -446,23 +446,23 @@ protected:
   ){
     float oldX = 0;
     float HEIGHT = a_height;
-  
+
     bool encod_PAW = (a_encoding==encoding_PAW()?true:false);
-  
+
     sencoded sed;
     if(encod_PAW) decode_PAW(a_string,sed);
     else          decode_plain(a_string,sed);
-  
+
     tools_vforcit(hchar,sed,it) {
       const hchar& hc = *it;
-  
+
       font_type hershey_font = hc.m_font;
       if(encod_PAW) {
         hershey_font = hc.m_font;
       } else {
         hershey_font = a_font;
       }
-  
+
       float scale = HEIGHT;
       float ymove = 0;
       if(hc.m_y_move==hchar::up) {
@@ -484,10 +484,10 @@ protected:
       aY -= ymove;
     }
   }
-  
+
   static float char_segs(
    bool aGEN_POINTS // false = advance only.
-  ,char a_char 
+  ,char a_char
   ,font_type a_font
   ,float a_scale
   ,bool aBar
@@ -513,12 +513,12 @@ protected:
       hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     }
     if(!aGEN_POINTS) return width;
-  
+
     float ymax = 0;
-  
+
     int ipoint = 0;
     int pointn;
-    for (int ipoly=0;ipoly<number;ipoly++) { 
+    for (int ipoly=0;ipoly<number;ipoly++) {
       pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
@@ -537,23 +537,23 @@ protected:
         ipoint ++;
       }
     }
-    
+
     if(aBar) { //Draw a bar on top of the character.
       float xbar = 0;
       float ybar = ymax * 1.3F;
-  
+
       if(a_fill_segs) {
         a_segs.push_back(aX+xbar);
         a_segs.push_back(aY+ybar);
-  
+
         a_segs.push_back(aX+xbar+width);
         a_segs.push_back(aY+ybar);
       }
     }
-  
+
     return width;
   }
-  
+
   typedef std::vector<hchar> sencoded;
 
   static void decode_plain(const std::string& a_s,sencoded& a_sed){
@@ -585,13 +585,13 @@ protected:
   ///////////////////////////////////////////////////////////////////////////
   static void decode_PAW(const std::string& a_s,sencoded& a_sed){
     a_sed.clear();
-  
+
     font_type font = sg::latin;
     hchar::e_move move = hchar::none;
     bool back = false;
     bool bar = false;
   //bool upper = true; //to be done.
-  
+
     tools_sforcit(a_s,it) {
       char c = *it;
       // Control characters :
@@ -626,20 +626,20 @@ protected:
         //upper = true;
         continue;
       }
-  
+
       hchar hc;
       hc.m_y_move = move;
       hc.m_back = back;
       hc.m_bar = bar;
       hc.m_font = font;
       hc.m_char = c;
-  
+
       a_sed.push_back(hc);
-  
+
       back = false;
       bar = false;
     }
-  
+
     if(a_sed.size()) a_sed[a_sed.size()-1].m_cr = true;
   }
 

@@ -100,7 +100,7 @@ G4bool G4XmlRNtupleManager::SetNtupleIColumn(G4int ntupleId,
   if ( fState.GetVerboseL2() ) {
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple I colum", description, true);
+    fState.GetVerboseL2()->Message("set", "ntuple I column", description, true);
   }  
 #endif
 
@@ -138,7 +138,7 @@ G4bool G4XmlRNtupleManager::SetNtupleFColumn(G4int ntupleId,
   if ( fState.GetVerboseL2() ) {
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple F colum", description, true);
+    fState.GetVerboseL2()->Message("set", "ntuple F column", description, true);
   }  
 #endif
 
@@ -176,7 +176,7 @@ G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId,
   if ( fState.GetVerboseL2() ) {
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId << " " << columnName;  
-    fState.GetVerboseL2()->Message("set", "ntuple D colum", description, true);
+    fState.GetVerboseL2()->Message("set", "ntuple D column", description, true);
   }  
 #endif
 

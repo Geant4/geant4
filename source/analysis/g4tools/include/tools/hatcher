@@ -5,25 +5,25 @@
 #define tools_hatcher
 
 /**
- *  
+ *
  * hatcher is a class to draw Hatch in a 3D polyline plane
- * A hatch is caracterise by a direction (dirAngle), a spacing to get 
+ * A hatch is caracterise by a direction (dirAngle), a spacing to get
  * second hatch,
  * an offset, and a stripWidth :
  * - offset value : between 0-1, This value set the offset of
  *   the hatch.0 meen that the hatch  will touch the first point
  *   of the polyline, and 1 meen that first hatch will be draw
  *   at a 'spacing' distance to first point
- * - offsetVec : the 3D point from where a hatch had to pass. This is 
+ * - offsetVec : the 3D point from where a hatch had to pass. This is
  *   very usefull to have hach continuing in different polygones
  *
- * The compute_polyline() method<br> 
+ * The compute_polyline() method<br>
  * By default:
  * - spacing = .1;
  * - dirAngle = PI/4;
  * - offsetValue = 0;
  * - stripWidth=0.0;
- * 
+ *
  * A way to get all points and vertices and to draw them can be :
  * <pre>
  *  iindex =0;
@@ -65,7 +65,7 @@ public:
   ,fFirstNumHatch(0)
   ,fNumberHatchToDraw(0)
   ,fFirstPolyline(true)
-  ,fResolveResult(UNDEFINED)
+  ,fResolveResult(RESOLVE_UNDEFINED)
   {}
   virtual ~hatcher() {}
 protected:
@@ -108,7 +108,7 @@ protected:
     fResolveResult = a_from.fResolveResult;
     return *this;
   }
-public:  
+public:
   /**
   * draw the hatch into the polyline bounding box given in argument
   * You have to get all compute points by the get_points() method
@@ -138,7 +138,7 @@ public:
   void set_offset(float a) {fOffsetValue = a;}  //set the offset value for this hatch.
   void set_offset_point(vec3f a) {fOffset = a;}  //set the offset Point for this hatch.
   void set_precision_factor(float a) {fPrecisionFactor = a;} //set the precision factor for computing (0.0001 is default).
-  
+
   bool set_strip_width(float a) {
     // set the strip width value(0 is default and means no strip).
     if (a<0 || a>1) {
@@ -164,13 +164,13 @@ public:
    * to draw it, you have to use a tesselisation algorithm first
    */
   const std::vector<vec3f>& points() {return fPoints;}
-  
+
   //size_t number_of_vertices() const {return fVertices.size();} //get the number of vertices compute for this hatch.
   /** vector of numbers of vertices */
   const std::vector<unsigned int>& vertices() {return fVertices;}
 
 protected:
-  
+
   /**
   * draw the hatch into the polyline bounding box given in argument
   * @return FALSE if :
@@ -179,12 +179,12 @@ protected:
   */
   bool compute_single_polyline (vec3f* listPoints,unsigned int number);
 
-  
+
   /**
   * Compute a vector system equation aA+bB=C
   * return SbVec2f(0,0) if there is an error
   * set the resolveResult variable to the error code :
-  * COLINEAR if A and B are 
+  * COLINEAR if A and B are
   * PRECISION_ERROR if there is a lack of precision in computing
   * Z_ERROR if there s no solution for Z
   * UNDEFINED never throw
@@ -199,7 +199,7 @@ protected:
 
   /** Spacing vector between two hatch */
   float fShift; // Absloute distance between two hatch in the polyline plan  */
-  
+
   /** The angle (given in radians) is the one between the first
    * line (point 1-point0) and the hatch lines, in the polyline plan.
    * Given in the direct axis ((point1-point0),(lastPoint-point0),
@@ -208,16 +208,16 @@ protected:
    * perform correct hatching between the polylines
    */
   float fDirAngle;
-  
-  /** between 0-1. This value set the offset of the hatch.0 meen 
-  * that the hatch will touch the first point of the polyline, 
+
+  /** between 0-1. This value set the offset of the hatch.0 meen
+  * that the hatch will touch the first point of the polyline,
   * and 1 meen that first hatch will be draw
   * at a 'spacing' distance to first point
   */
   float fOffsetValue;
 
-  /** first point of the hatch. 
-   * offset = firstPolylinePoint+ShiftVec*offsetValue 
+  /** first point of the hatch.
+   * offset = firstPolylinePoint+ShiftVec*offsetValue
    */
   vec3f fOffset;
 
@@ -226,12 +226,12 @@ protected:
 
   /** factor for compute error between two points */
   float fPrecisionFactor;
-  
+
   /** hatch direction Vector */
   vec3f  fDirVec;
 
   /** strip with size : set to 0 by default
-   * between 0 and 1.0 means no strip, 0.5 means strip size is 
+   * between 0 and 1.0 means no strip, 0.5 means strip size is
    * half of distance between two hatches
    */
   float fStripWidth;
@@ -241,7 +241,7 @@ protected:
 
   /** vector vertices number */
   std::vector<unsigned int> fVertices;
- 
+
   /** conflict line table */
   std::vector< std::vector<int> > fConflictNumHatchLineTab;
 
@@ -256,11 +256,11 @@ protected:
 
   bool fFirstPolyline;
   enum ResolveErrors{
-    OK = 0,
-    COLINEAR,
-    Z_ERROR,
-    PRECISION_ERROR,
-    UNDEFINED
+    RESOLVE_OK = 0,
+    RESOLVE_COLINEAR,
+    RESOLVE_Z_ERROR,
+    RESOLVE_PRECISION_ERROR,
+    RESOLVE_UNDEFINED
   };
   ResolveErrors fResolveResult;
 };

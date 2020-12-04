@@ -44,6 +44,7 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4VVisManager.hh"
+#include "G4RunManagerFactory.hh"
 
 G4TheMTRayTracer* G4TheMTRayTracer::theInstance = nullptr;
 
@@ -129,8 +130,8 @@ void G4TheMTRayTracer::Trace(const G4String& fileName)
 }
 
 void G4TheMTRayTracer::StoreUserActions()
-{ 
-  G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
+{
+  G4MTRunManager* mrm         = G4RunManagerFactory::GetMTMasterRunManager();
   theUserWorkerInitialization = mrm->GetUserWorkerInitialization();
   theUserRunAction = mrm->GetUserRunAction();
 
@@ -143,8 +144,9 @@ void G4TheMTRayTracer::StoreUserActions()
 
 void G4TheMTRayTracer::RestoreUserActions()
 {
-  G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
-  mrm->SetUserInitialization(const_cast<G4UserWorkerInitialization*>(theUserWorkerInitialization));
+  G4MTRunManager* mrm = G4RunManagerFactory::GetMTMasterRunManager();
+  mrm->SetUserInitialization(
+    const_cast<G4UserWorkerInitialization*>(theUserWorkerInitialization));
   mrm->SetUserAction(const_cast<G4UserRunAction*>(theUserRunAction));
 }
 
@@ -154,12 +156,25 @@ G4bool G4TheMTRayTracer::CreateBitMap()
   visMan->IgnoreStateChanges(true);
   StoreUserActions();
 
-// Event loop
-  G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
+  G4MTRunManager* mrm = G4RunManagerFactory::GetMTMasterRunManager();
+
+  // Keep, then switch off any printing requests
+  auto runVerbosity      = mrm->GetVerboseLevel();
+  auto runPrintProgress  = mrm->GetPrintProgress();
+  G4UImanager::GetUIpointer()->ApplyCommand("/run/verbose 0");
+  G4UImanager::GetUIpointer()->ApplyCommand("/run/printProgress 0");
+
+  // Event loop
   G4int nEvent = nRow*nColumn;
 ////  mrm->BeamOn(nEvent);
 ////  Temporary work-around until direct invokation of G4RunManager::BeamOn() works.
   G4String str = "/run/beamOn " + G4UIcommand::ConvertToString(nEvent);
+  G4UImanager::GetUIpointer()->ApplyCommand(str);
+
+  // Restore printing requests
+  str = "/run/verbose " + G4UIcommand::ConvertToString(runVerbosity);
+  G4UImanager::GetUIpointer()->ApplyCommand(str);
+  str = "/run/printProgress " + G4UIcommand::ConvertToString(runPrintProgress);
   G4UImanager::GetUIpointer()->ApplyCommand(str);
 
   RestoreUserActions();

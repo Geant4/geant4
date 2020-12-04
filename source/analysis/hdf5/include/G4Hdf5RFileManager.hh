@@ -44,6 +44,8 @@ class G4Hdf5RFileManager : public G4BaseFileManager
     explicit G4Hdf5RFileManager(const G4AnalysisManagerState& state);
     virtual ~G4Hdf5RFileManager();
 
+    virtual G4String GetFileType() const final { return "hdf5"; }
+
     // Get methods
     hid_t GetRFile(const G4String& fileName, G4bool isPerThread) const;
     hid_t GetHistoRDirectory(const G4String& fileName, const G4String& dirName,

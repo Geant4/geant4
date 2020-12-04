@@ -81,11 +81,11 @@ private:
   G4double EquLinearFit(G4double X, G4int N, G4double X0, G4double DX, G4double* Y);
 // Body
 private:
-  G4double  lastSig; // Last value of the Cross Section
+  G4double  lastSig=0.; // Last value of the Cross Section
   G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
   G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
-  G4double  lastE;   // Last used in the cross section Energy
-  G4int     lastPDG; // The last projectile PDG
+  G4double  lastE=0.;  // Last used in the cross section Energy
+  G4int     lastPDG=0; // The last projectile PDG
   G4int     lastN;   // The last N of calculated nucleus
   G4int     lastZ;   // The last Z of calculated nucleus
   G4double  lastP;   // Last used in the cross section Momentum
@@ -95,7 +95,7 @@ private:
   std::vector<G4double*>* LEN;  // Vector of pointers to LowEnProtonCrossSection
   std::vector<G4double*>* HEN;  // Vector of pointers to HighEnProtonCrossSection
     
-  G4int j;                      // A#0f Z/N-records already tested in AMDB
+  G4int j=0;                    // A#0f Z/N-records already tested in AMDB
   std::vector <G4int> colN;  // Vector of N for calculated nuclei (isotops)
   std::vector <G4int> colZ;  // Vector of Z for calculated nuclei (isotops)
   std::vector <G4double> colP;  // Vector of last momenta for the reaction

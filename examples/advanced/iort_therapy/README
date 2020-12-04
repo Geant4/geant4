@@ -12,11 +12,11 @@
  Past Authors:
  G.Arnetta(c), S.E.Mazzaglia(d)
 
- (a) Fondazione Istituto San Raffaele G.Giglio, Cefalù, Italy
+ (a) Fondazione Istituto San Raffaele G.Giglio, CefalÃ¹, Italy
 
  (b) IBFM-CNR , Segrate (Milano), Italy
 
- (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
+ (c) LATO (Laboratorio di Tecnologie Oncologiche), CefalÃ¹, Italy
  
  (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
 
@@ -32,7 +32,7 @@ WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
 
 iort_therapy is a Geant4-based application specifically developed to address typical needs related to the Intra-Operative Radio-Therapy (IORT) technique. 
  
-iort_therapy is capable to simulate a well specified intra-operative electron radio-therapy facility: the collimator beam line system of a typical medical mobile linac and the relative target (water-phantom). iort_therapy application is currently used by the G.Russo team in clinical and research activities carried out in Fondazione Istituto San Raffaele G.Giglio Hospital (Cefalù, Italy) where a NOVAC7 linac is installed.
+iort_therapy is capable to simulate a well specified intra-operative electron radio-therapy facility: the collimator beam line system of a typical medical mobile linac and the relative target (water-phantom). iort_therapy application is currently used by the G.Russo team in clinical and research activities carried out in Fondazione Istituto San Raffaele G.Giglio Hospital (CefalÃ¹, Italy) where a NOVAC7 linac is installed.
 
 iort_therapy, is flexible and show many capabilities. Its geometrical set-up, for example, is completely interchangeable permitting a simple switch between different geometrical collimator system configurations; the possibility to simulate a composite metallic shielding disc inside the water-phantom was also implemented.
 

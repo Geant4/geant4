@@ -31,7 +31,9 @@ private:
   }
 public:
   virtual void render(render_action& a_action) {
-    a_action.normal(vec.value());
+    state& state = a_action.state();
+    state.m_normal = vec.value();
+    a_action.normal(state.m_normal);
   }
 public:
   normal()

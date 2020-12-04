@@ -36,8 +36,6 @@
 #include <sstream>
 #include <cctype>
 
-G4int G4VVisCommand::fErrorCode = 0;
-
 G4int           G4VVisCommand::fCurrentArrow3DLineSegmentsPerCircle = 6;
 G4Colour        G4VVisCommand::fCurrentColour = G4Colour::White();
 G4Colour        G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
@@ -291,10 +289,8 @@ void G4VVisCommand::InterpolateViews
     }
     // File-writing viewers need to close the file
     currentViewer->ShowView();
-#ifdef G4VIS_USE_STD11
     if (waitTimePerPointmilliseconds > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
-#endif
   } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
 }
 

@@ -80,17 +80,17 @@ protected:
         //      << " create_gsto() failed."
         //      << std::endl;
       } else {
-        m_gstos.push_back(std::pair<unsigned int,render_manager*>(_id,&a_mgr));    
+        m_gstos.push_back(std::pair<unsigned int,render_manager*>(_id,&a_mgr));
       }
     }
     return _id;
-  }  
+  }
 protected:
   void clean_gstos() {
     std::vector< std::pair<unsigned int,render_manager*> >::iterator it;
     for(it=m_gstos.begin();it!=m_gstos.end();){
       (*it).second->delete_gsto((*it).first);
-      it = m_gstos.erase(it);      
+      it = m_gstos.erase(it);
     }
   }
   void clean_gstos(render_manager* a_mgr) {
@@ -98,7 +98,7 @@ protected:
     for(it=m_gstos.begin();it!=m_gstos.end();){
       if((*it).second==a_mgr) {
         (*it).second->delete_gsto((*it).first);
-        it = m_gstos.erase(it);      
+        it = m_gstos.erase(it);
       } else {
         it++;
       }

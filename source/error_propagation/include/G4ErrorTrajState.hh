@@ -56,7 +56,15 @@ class G4ErrorTrajState
                     const G4ErrorTrajErr& errmat = G4ErrorTrajErr(5,0) );
     // Constructor by providing particle, position and momentum
 
+  G4ErrorTrajState(const G4ErrorTrajState&);
+  G4ErrorTrajState(G4ErrorTrajState&&);
+    // The copy and move constructors
+
   virtual ~G4ErrorTrajState(){}
+
+  G4ErrorTrajState& operator = (const G4ErrorTrajState&);
+  G4ErrorTrajState& operator = (G4ErrorTrajState&&);
+    // The copy and move assignment operators
 
   void SetData( const G4String& partType, const G4Point3D& pos,
                 const G4Vector3D& mom );
@@ -123,14 +131,14 @@ class G4ErrorTrajState
   G4String fParticleType;
   G4Point3D fPosition;
   G4Vector3D fMomentum;
-  G4double fCharge;
+  G4double fCharge = 0.;
   G4ErrorTrajErr fError;
 
   G4eTSType theTSType;
 
-  G4Track* theG4Track;
+  G4Track* theG4Track = nullptr;
 
-  G4int iverbose;
+  G4int iverbose = 0;
 };
 
 #endif

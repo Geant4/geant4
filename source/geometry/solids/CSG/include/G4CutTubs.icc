@@ -95,6 +95,8 @@ G4ThreeVector G4CutTubs::GetHighNorm () const
 inline
 void G4CutTubs::Initialize()
 {
+  fZMin = 0.;
+  fZMax = 0.;
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
@@ -271,16 +273,4 @@ inline
 G4double G4CutTubs::GetDPhi () const
 {
   return GetDeltaPhiAngle();
-}
-
-inline G4double G4CutTubs::GetCubicVolume()
-{
-  if (fCubicVolume == 0.) { fCubicVolume = G4VSolid::GetCubicVolume(); }
-  return fCubicVolume;
-}
-
-inline G4double G4CutTubs::GetSurfaceArea()
-{
-  if (fSurfaceArea == 0.) { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
-  return fSurfaceArea;
 }

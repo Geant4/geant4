@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8-Sep-2020 - G.Cosmo (error-propagation-V10-06-01)
+- Fixed Coverity defects warnings in G4ErrorPropagator for unreachable code.
+  Implemented move assignment operators in G4ErrorSymMatrix, G4ErrorSymMatrix,
+  G4ErrorFreeTrajParam, G4ErrorTrajState and G4ErrorSurfaceTrajParam.
+
 9-Dec-2019 - B.Morgan (error-propagation-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library option and
   explicit include_directories.

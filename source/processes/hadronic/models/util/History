@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 November 2020 Alberto Ribon (hadr-mod-util-V10-06-02)
+- G4Fragment : introduced an optional parameter to switch off some warnings.
+  By default, nothing is changed (i.e. the warnings are printed out as
+  usual). Only for electromagnetic dissociation, the parameter is set to
+  switch off otherwise too frequent warning messages.
+  This change has been suggested by Laurie Nevay and Andrey Abramov
+  (bug report #2254).
+
+08 September 2020 Alberto Ribon (hadr-mod-util-V10-06-01)
+- G4KineticTrack : added initialization of an array as suggested by
+  Coverity. Used consistently pre-increment and pre-decrement instead
+  of post-increment and post-decrement, respectively.
+
 05 May 2020 Gunter Folger  (hadr-mod-util-V10-06-00)
 - fixes for clang10: 
   - Fixes for warnings on confusing indentation, enclosing statements

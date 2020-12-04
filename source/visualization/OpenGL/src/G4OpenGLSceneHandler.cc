@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // Andrew Walkden  27th March 1996
 // OpenGL stored scene - creates OpenGL display lists.
 // OpenGL immediate scene - draws immediately to buffer
@@ -33,33 +33,31 @@
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLTransform3D.hh"
-#include "G4Point3D.hh"
-#include "G4Normal3D.hh"
-#include "G4Transform3D.hh"
-#include "G4Polyline.hh"
-#include "G4Polymarker.hh"
-#include "G4Text.hh"
-#include "G4Circle.hh"
-#include "G4Square.hh"
-#include "G4VMarker.hh"
-#include "G4Polyhedron.hh"
-#include "G4VisAttributes.hh"
-#include "G4PhysicalVolumeModel.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
-#include "G4Scene.hh"
-#include "G4VisExtent.hh"
-#include "G4AttHolder.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4RunManager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#endif
-#include "G4Run.hh"
+#  include "G4OpenGLSceneHandler.hh"
+#  include "G4OpenGLViewer.hh"
+#  include "G4OpenGLTransform3D.hh"
+#  include "G4Point3D.hh"
+#  include "G4Normal3D.hh"
+#  include "G4Transform3D.hh"
+#  include "G4Polyline.hh"
+#  include "G4Polymarker.hh"
+#  include "G4Text.hh"
+#  include "G4Circle.hh"
+#  include "G4Square.hh"
+#  include "G4VMarker.hh"
+#  include "G4Polyhedron.hh"
+#  include "G4VisAttributes.hh"
+#  include "G4PhysicalVolumeModel.hh"
+#  include "G4VPhysicalVolume.hh"
+#  include "G4LogicalVolume.hh"
+#  include "G4VSolid.hh"
+#  include "G4Scene.hh"
+#  include "G4VisExtent.hh"
+#  include "G4AttHolder.hh"
+#  include "G4PhysicalConstants.hh"
+#  include "G4RunManager.hh"
+#  include "G4Run.hh"
+#  include "G4RunManagerFactory.hh"
 
 const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
@@ -146,12 +144,7 @@ void G4OpenGLSceneHandler::ScaledFlush()
         fFlushAction = NthPrimitive;
       }
     }
-    G4RunManager* runMan = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-    if (G4Threading::IsMultithreadedApplication()) {
-      runMan = G4MTRunManager::GetMasterRunManager();
-    }
-#endif
+    G4RunManager* runMan = G4RunManagerFactory::GetMasterRunManager();
     if (!runMan) {
       // No run manager - shouldn't happen
       glFlush();

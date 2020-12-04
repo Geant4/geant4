@@ -54,6 +54,10 @@ ifdef G4VIS_BUILD_OI_DRIVER
   SUBLIBS += G4OpenInventor
   SUBLIBS += G4gl2ps
 endif
+ifdef G4VIS_BUILD_QT3D_DRIVER
+  SUBDIRS += Qt3D
+  SUBLIBS += G4visQt3D
+endif
 endif #G4VIS_BUILD
 
 .PHONY: granular obj glob global clean

@@ -691,6 +691,7 @@ void G4SteppingManager::ApplyProductionCut(G4Track* aSecondary)
     = G4ProductionCutsTable::GetProductionCutsTable();
   G4int tCoupleIdx
     = tCutsTbl->GetCoupleIndex(fPreStepPoint->GetMaterialCutsCouple());
+  if (tCoupleIdx<0)  { return; }
   G4double tProdThreshold
     = (*(tCutsTbl->GetEnergyCutsVector(tPtclIdx)))[tCoupleIdx];
   if( aSecondary->GetKineticEnergy()<tProdThreshold )

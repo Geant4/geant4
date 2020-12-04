@@ -74,7 +74,7 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
                               G4bool onlyIfActive = true) const;
     tools::histo::p2d*  GetP2(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
-    
+
     // Iterators
     std::vector<tools::histo::h1d*>::iterator BeginH1();
     std::vector<tools::histo::h1d*>::iterator EndH1();

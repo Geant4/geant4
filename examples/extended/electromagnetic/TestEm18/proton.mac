@@ -1,16 +1,19 @@
 #
 # macro file for TestEm18.cc
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat Water
 /testem/det/setSize 10 cm
 #
 /run/setCut 100 um
 #
+/process/em/verbose 0
+/process/em/printParameters 
+#
 /run/initialize
-/process/list
 #
 /gun/particle proton 
 /gun/energy 1 GeV
@@ -26,5 +29,4 @@
 /analysis/h1/set 12 100 0 5 MeV  #e- energy spectrum
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

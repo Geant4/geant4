@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(gammaray_telescope)
 
 #----------------------------------------------------------------------------
@@ -21,7 +24,7 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Add option to control storage 
+# Add option to control storage
 #
 option(G4STORE_DATA "Stores output data" OFF)
 
@@ -32,7 +35,7 @@ endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -49,7 +52,7 @@ target_link_libraries(GammaRayTel ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(gammaray_telescope_SCRIPTS
-    emlowe.mac emstd.mac gammaraytel.in gammaraytel.out macro1.mac macro2.mac macro3.mac macro4.mac macro5.mac macro6.mac physics.mac physics_polarized.mac prerunGammaRayTel.mac)
+    emlowe.mac emstd.mac gammaraytel.in gammaraytel_polarized.in gammaraytel.out macro1.mac macro2.mac macro3.mac macro4.mac macro5.mac macro6.mac physics.mac physics_polarized.mac physics_polarized_new.mac prerunGammaRayTel.mac)
 
 foreach(_script ${gammaray_telescope_SCRIPTS})
   configure_file(
@@ -69,4 +72,5 @@ add_custom_target(gammaray_telescope DEPENDS GammaRayTel)
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS GammaRayTel DESTINATION bin)
+
 

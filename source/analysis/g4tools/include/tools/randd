@@ -17,7 +17,7 @@ public:
   virtual ~irandd() {}
 public:
   virtual void* cast(const std::string&) const = 0;
-public:  
+public:
   virtual double shootd() const = 0;
 };
 

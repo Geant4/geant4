@@ -62,6 +62,7 @@
 #include "G4PSSphereSurfaceFlux3D.hh"
 #include "G4PSCylinderSurfaceCurrent3D.hh"
 #include "G4PSCylinderSurfaceFlux3D.hh"
+#include "G4PSVolumeFlux3D.hh"
 #include "G4PSNofCollision3D.hh"
 #include "G4PSPopulation3D.hh"
 #include "G4PSTrackCounter3D.hh"
@@ -217,6 +218,7 @@ G4ScoreQuantityMessenger::~G4ScoreQuantityMessenger()
     delete          qPassTrackLengthCmd;
     delete          qFlatSurfCurrCmd;
     delete          qFlatSurfFluxCmd;
+    delete          qVolFluxCmd;
 //    delete          qSphereSurfCurrCmd;
 //    delete          qSphereSurfFluxCmd;
 //    delete          qCylSurfCurrCmd;
@@ -437,6 +439,17 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
               }
               mesh->SetPrimitiveScorer(ps);
           }
+      } else if(command== qVolFluxCmd) {
+          if( CheckMeshPS(mesh, token[0],command )) {
+              G4PSVolumeFlux* ps = nullptr;
+              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
+              { ps = new G4PSVolumeFlux(token[0],StoI(token[2]),mesh->GetCopyNumberLevel()); }
+              else
+              { ps = new G4PSVolumeFlux3D(token[0],StoI(token[2])); }
+              ps->SetDivCos(StoI(token[1]));
+              mesh->SetPrimitiveScorer(ps);
+          }
+
 //    } else if(command== qSphereSurfCurrCmd){
 //        if( CheckMeshPS(mesh, token[0],command )) {
 //            G4PSSphereSurfaceCurrent3D* ps = 

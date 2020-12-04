@@ -21,7 +21,7 @@
 /gun/energy 5 GeV
 #
 # histogram file
-/testem/histo/setFileName run01
+/analysis/setFileName run01
 #
 /run/printProgress 50
 /testem/run/verbose 1

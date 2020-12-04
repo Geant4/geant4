@@ -51,24 +51,27 @@
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
 
-#include "Randomize.hh"
+#include "G4QuickRand.hh"
 
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
 
-#include <sstream>
+namespace
+{
+  G4Mutex surface_elementsMutex = G4MUTEX_INITIALIZER;
+}
 
 using namespace CLHEP;
 
 // Constructor (GEANT3 style parameters)
 //
 // GEANT3 PGON radii are specified in the distance to the norm of each face.
-//  
-G4Polyhedra::G4Polyhedra( const G4String& name, 
+//
+G4Polyhedra::G4Polyhedra( const G4String& name,
                                 G4double phiStart,
                                 G4double thePhiTotal,
-                                G4int theNumSide,  
+                                G4int theNumSide,
                                 G4int numZPlanes,
                           const G4double zPlane[],
                           const G4double rInner[],
@@ -96,7 +99,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   // Some historical stuff
   //
   original_parameters = new G4PolyhedraHistorical;
-  
+
   original_parameters->numSide = theNumSide;
   original_parameters->Start_angle = phiStart;
   original_parameters->Opening_angle = phiTotal;
@@ -129,34 +132,34 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
     original_parameters->Rmin[i] = rInner[i]/convertRad;
     original_parameters->Rmax[i] = rOuter[i]/convertRad;
   }
-  
-  
+
+
   //
   // Build RZ polygon using special PCON/PGON GEANT3 constructor
   //
   G4ReduciblePolygon* rz =
     new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
   rz->ScaleA( 1/convertRad );
-  
+
   //
   // Do the real work
   //
   Create( phiStart, phiTotal, theNumSide, rz );
-  
+
   delete rz;
 }
 
 // Constructor (generic parameters)
 //
-G4Polyhedra::G4Polyhedra( const G4String& name, 
+G4Polyhedra::G4Polyhedra( const G4String& name,
                                 G4double phiStart,
                                 G4double phiTotal,
-                                G4int    theNumSide,  
+                                G4int    theNumSide,
                                 G4int    numRZ,
                           const G4double r[],
                           const G4double z[]   )
   : G4VCSGfaceted( name ), genericPgon(true)
-{ 
+{
   if (theNumSide <= 0)
   {
     std::ostringstream message;
@@ -167,13 +170,13 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   }
 
   G4ReduciblePolygon* rz = new G4ReduciblePolygon( r, z, numRZ );
-  
+
   Create( phiStart, phiTotal, theNumSide, rz );
-  
+
   // Set original_parameters struct for consistency
   //
   SetOriginalParameters(rz);
-   
+
   delete rz;
 }
 
@@ -184,7 +187,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
 //
 void G4Polyhedra::Create( G4double phiStart,
                           G4double phiTotal,
-                          G4int    theNumSide,  
+                          G4int    theNumSide,
                           G4ReduciblePolygon* rz  )
 {
   //
@@ -212,9 +215,9 @@ void G4Polyhedra::Create( G4double phiStart,
     G4Exception("G4Polyhedra::Create()", "GeomSolids0002",
                 FatalErrorInArgument, message);
   }
-    
+
   if ( (!rz->RemoveDuplicateVertices( kCarTolerance ))
-    || (!rz->RemoveRedundantVertices( kCarTolerance )) ) 
+    || (!rz->RemoveRedundantVertices( kCarTolerance )) )
   {
     std::ostringstream message;
     message << "Illegal input parameters - " << GetName() << G4endl
@@ -223,7 +226,7 @@ void G4Polyhedra::Create( G4double phiStart,
                 FatalErrorInArgument, message);
   }
 
-  if (rz->CrossesItself( 1/kInfinity )) 
+  if (rz->CrossesItself( 1/kInfinity ))
   {
     std::ostringstream message;
     message << "Illegal input parameters - " << GetName() << G4endl
@@ -250,7 +253,7 @@ void G4Polyhedra::Create( G4double phiStart,
   else
   {
     phiIsOpen = true;
-    
+
     //
     // Convert phi into our convention
     //
@@ -258,14 +261,14 @@ void G4Polyhedra::Create( G4double phiStart,
     while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
       endPhi += twopi;
   }
-  
+
   //
   // Save number sides
   //
   numSide = theNumSide;
-  
+
   //
-  // Allocate corner array. 
+  // Allocate corner array.
   //
   corners = new G4PolyhedraSideRZ[numCorner];
 
@@ -273,7 +276,7 @@ void G4Polyhedra::Create( G4double phiStart,
   // Copy corners
   //
   G4ReduciblePolygonIterator iterRZ(rz);
-  
+
   G4PolyhedraSideRZ *next = corners;
   iterRZ.Begin();
   do    // Loop checking, 13.08.2015, G.Cosmo
@@ -281,13 +284,13 @@ void G4Polyhedra::Create( G4double phiStart,
     next->r = iterRZ.GetA();
     next->z = iterRZ.GetB();
   } while( ++next, iterRZ.Next() );
-  
+
   //
   // Allocate face pointer array
   //
   numFace = phiIsOpen ? numCorner+2 : numCorner;
   faces = new G4VCSGface*[numFace];
-  
+
   //
   // Construct side faces
   //
@@ -306,7 +309,7 @@ void G4Polyhedra::Create( G4double phiStart,
     if (next >= corners+numCorner) next = corners;
     nextNext = next+1;
     if (nextNext >= corners+numCorner) nextNext = corners;
-    
+
     if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
 /*
     // We must decide here if we can dare declare one of our faces
@@ -333,7 +336,7 @@ void G4Polyhedra::Create( G4double phiStart,
     *face++ = new G4PolyhedraSide( prev, corner, next, nextNext,
                  numSide, startPhi, endPhi-startPhi, phiIsOpen );
   } while( prev=corner, corner=next, corner > corners );
-  
+
   if (phiIsOpen)
   {
     //
@@ -342,12 +345,12 @@ void G4Polyhedra::Create( G4double phiStart,
     *face++ = new G4PolyPhiFace( rz, startPhi, phiTotal/numSide, endPhi );
     *face++ = new G4PolyPhiFace( rz, endPhi,   phiTotal/numSide, startPhi );
   }
-  
+
   //
   // We might have dropped a face or two: recalculate numFace
   //
   numFace = face-faces;
-  
+
   //
   // Make enclosingCylinder
   //
@@ -370,6 +373,13 @@ G4Polyhedra::~G4Polyhedra()
   delete [] corners;
   delete original_parameters;
   delete enclosingCylinder;
+  delete fElements;
+  delete fpPolyhedron;
+  corners = nullptr;
+  original_parameters = nullptr;
+  enclosingCylinder = nullptr;
+  fElements = nullptr;
+  fpPolyhedron = nullptr;
 }
 
 // Copy constructor
@@ -387,13 +397,13 @@ G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra& source )
   if (this == &source) return *this;
 
   G4VCSGfaceted::operator=( source );
-  
+
   delete [] corners;
   delete original_parameters;
   delete enclosingCylinder;
-  
+
   CopyStuff( source );
-  
+
   return *this;
 }
 
@@ -415,14 +425,14 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra& source )
   // The corner array
   //
   corners = new G4PolyhedraSideRZ[numCorner];
-  
+
   G4PolyhedraSideRZ* corn = corners,
                    * sourceCorn = source.corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
   } while( ++sourceCorn, ++corn < corners+numCorner );
-  
+
   //
   // Original parameters
   //
@@ -431,13 +441,23 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra& source )
     original_parameters =
       new G4PolyhedraHistorical( *source.original_parameters );
   }
-  
+
   //
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 
+  //
+  // Surface elements
+  //
+  delete fElements;
+  fElements = nullptr;
+
+  //
+  // Polyhedron
+  //
   fRebuildPolyhedron = false;
+  delete fpPolyhedron;
   fpPolyhedron = nullptr;
 }
 
@@ -464,6 +484,10 @@ G4bool G4Polyhedra::Reset()
   G4VCSGfaceted::DeleteStuff();
   delete [] corners;
   delete enclosingCylinder;
+  delete fElements;
+  corners = nullptr;
+  fElements = nullptr;
+  enclosingCylinder = nullptr;
 
   //
   // Rebuild polyhedra
@@ -512,7 +536,7 @@ G4double G4Polyhedra::DistanceToIn( const G4ThreeVector& p,
   //
   if (enclosingCylinder->ShouldMiss(p,v))
     return kInfinity;
-  
+
   //
   // Long answer
   //
@@ -783,274 +807,235 @@ std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
   return os;
 }
 
-// GetPointOnPlane
+//////////////////////////////////////////////////////////////////////////
 //
-// Auxiliary method for get point on surface
-//
-G4ThreeVector
-G4Polyhedra::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-                             G4ThreeVector p2, G4ThreeVector p3) const
+// Return volume
+
+G4double G4Polyhedra::GetCubicVolume()
 {
-  G4double lambda1, lambda2, chose,aOne,aTwo;
-  G4ThreeVector t, u, v, w, Area, normal;
-  aOne = 1.;
-  aTwo = 1.;
-
-  t = p1 - p0;
-  u = p2 - p1;
-  v = p3 - p2;
-  w = p0 - p3;
-
-  chose = G4RandFlat::shoot(0.,aOne+aTwo);
-  if( (chose>=0.) && (chose < aOne) )
+  if (fCubicVolume == 0.)
   {
-    lambda1 = G4RandFlat::shoot(0.,1.);
-    lambda2 = G4RandFlat::shoot(0.,lambda1);
-    return (p2+lambda1*v+lambda2*w);    
+    G4double total = 0.;
+    G4int nrz = GetNumRZCorner();
+    G4PolyhedraSideRZ a = GetCorner(nrz - 1);
+    for (G4int i=0; i<nrz; ++i)
+    {
+      G4PolyhedraSideRZ b = GetCorner(i);
+      total += (b.r*b.r + b.r*a.r + a.r*a.r)*(b.z - a.z);
+      a = b;
+    }
+    fCubicVolume = std::abs(total)*
+      std::sin((GetEndPhi() - GetStartPhi())/GetNumSide())*GetNumSide()/6.;
+  }
+  return fCubicVolume;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return surface area
+
+G4double G4Polyhedra::GetSurfaceArea()
+{
+  if (fSurfaceArea == 0.)
+  {
+    G4double total = 0.;
+    G4int nrz = GetNumRZCorner();
+    if (IsOpen())
+    {
+      G4PolyhedraSideRZ a = GetCorner(nrz - 1);
+      for (G4int i=0; i<nrz; ++i)
+      {
+        G4PolyhedraSideRZ b = GetCorner(i);
+        total += a.r*b.z - a.z*b.r;
+        a = b;
+      }
+      total = std::abs(total);
+    }
+    G4double alp = (GetEndPhi() - GetStartPhi())/GetNumSide();
+    G4double cosa = std::cos(alp);
+    G4double sina = std::sin(alp);
+    G4PolyhedraSideRZ a = GetCorner(nrz - 1);
+    for (G4int i=0; i<nrz; ++i)
+    {
+      G4PolyhedraSideRZ b = GetCorner(i);
+      G4ThreeVector p1(a.r, 0, a.z);
+      G4ThreeVector p2(a.r*cosa, a.r*sina, a.z);
+      G4ThreeVector p3(b.r*cosa, b.r*sina, b.z);
+      G4ThreeVector p4(b.r, 0, b.z);
+      total += GetNumSide()*(G4GeomTools::QuadAreaNormal(p1, p2, p3, p4)).mag();
+      a = b;
+    }
+    fSurfaceArea = total;
+  }
+  return fSurfaceArea;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Set vector of surface elements, auxiliary method for sampling
+// random points on surface
+
+void G4Polyhedra::SetSurfaceElements() const
+{
+  fElements = new std::vector<G4Polyhedra::surface_element>;
+  G4double total = 0.;
+  G4int nrz = GetNumRZCorner();
+
+  // set lateral surface elements
+  G4double dphi = (GetEndPhi() - GetStartPhi())/GetNumSide();
+  G4double cosa = std::cos(dphi);
+  G4double sina = std::sin(dphi);
+  G4int ia = nrz - 1;
+  for (G4int ib=0; ib<nrz; ++ib)
+  {
+    G4PolyhedraSideRZ a = GetCorner(ia);
+    G4PolyhedraSideRZ b = GetCorner(ib);
+    G4Polyhedra::surface_element selem;
+    selem.i0 = ia;
+    selem.i1 = ib;
+    ia = ib;
+    if (a.r == 0. && b.r == 0.) continue;
+    G4ThreeVector p1(a.r, 0, a.z);
+    G4ThreeVector p2(a.r*cosa, a.r*sina, a.z);
+    G4ThreeVector p3(b.r*cosa, b.r*sina, b.z);
+    G4ThreeVector p4(b.r, 0, b.z);
+    if (a.r > 0.)
+    {
+      selem.i2 = -1;
+      total += GetNumSide()*(G4GeomTools::TriangleAreaNormal(p1, p2, p3)).mag();
+      selem.area = total;
+      fElements->push_back(selem);
+    }
+    if (b.r > 0.)
+    {
+      selem.i2 = -2;
+      total += GetNumSide()*(G4GeomTools::TriangleAreaNormal(p1, p3, p4)).mag();
+      selem.area = total;
+      fElements->push_back(selem);
+    }
   }
 
-  lambda1 = G4RandFlat::shoot(0.,1.);
-  lambda2 = G4RandFlat::shoot(0.,lambda1);
-  return (p0+lambda1*t+lambda2*u);
+  // set elements for phi cuts
+  if (IsOpen())
+  {
+    G4TwoVectorList contourRZ;
+    std::vector<G4int> triangles;
+    for (G4int i=0; i<nrz; ++i)
+    {
+      G4PolyhedraSideRZ corner = GetCorner(i);
+      contourRZ.push_back(G4TwoVector(corner.r, corner.z));
+    }
+    G4GeomTools::TriangulatePolygon(contourRZ, triangles);
+    G4int ntria = triangles.size();
+    for (G4int i=0; i<ntria; i+=3)
+    {
+      G4Polyhedra::surface_element selem;
+      selem.i0 = triangles[i];
+      selem.i1 = triangles[i+1];
+      selem.i2 = triangles[i+2];
+      G4PolyhedraSideRZ a = GetCorner(selem.i0);
+      G4PolyhedraSideRZ b = GetCorner(selem.i1);
+      G4PolyhedraSideRZ c = GetCorner(selem.i2);
+      G4double stria =
+        std::abs(G4GeomTools::TriangleArea(a.r, a.z, b.r, b.z, c.r, c.z));
+      total += stria;
+      selem.area = total;
+      fElements->push_back(selem); // start phi
+      total += stria;
+      selem.area = total;
+      selem.i0 += nrz;
+      fElements->push_back(selem); // end phi
+    }
+  }
 }
 
-// GetPointOnTriangle
+//////////////////////////////////////////////////////////////////////////
 //
-// Auxiliary method for get point on surface
-//
-G4ThreeVector G4Polyhedra::GetPointOnTriangle(G4ThreeVector p1,
-                                              G4ThreeVector p2,
-                                              G4ThreeVector p3) const
-{
-  G4double lambda1,lambda2;
-  G4ThreeVector v=p3-p1, w=p1-p2;
+// Generate random point on surface
 
-  lambda1 = G4RandFlat::shoot(0.,1.);
-  lambda2 = G4RandFlat::shoot(0.,lambda1);
-
-  return (p2 + lambda1*w + lambda2*v);
-}
-
-// GetPointOnSurface
-//
 G4ThreeVector G4Polyhedra::GetPointOnSurface() const
 {
-  if( !genericPgon )  // Polyhedra by faces
+  // Set surface elements
+  if (!fElements)
   {
-    G4int j, numPlanes = original_parameters->Num_z_planes, Flag=0;
-    G4double chose, totArea=0., Achose1, Achose2,
-             rad1, rad2, sinphi1, sinphi2, cosphi1, cosphi2; 
-    G4double a, b, l2, rang, totalPhi, ksi,
-             area, aTop=0., aBottom=0., zVal=0.;
+    G4AutoLock l(&surface_elementsMutex);
+    SetSurfaceElements();
+    l.unlock();
+  }
 
-    G4ThreeVector p0, p1, p2, p3;
-    std::vector<G4double> aVector1;
-    std::vector<G4double> aVector2;
-    std::vector<G4double> aVector3;
+  // Select surface element
+  G4Polyhedra::surface_element selem;
+  selem = fElements->back();
+  G4double select = selem.area*G4QuickRand();
+  auto it = std::lower_bound(fElements->begin(), fElements->end(), select,
+                             [](const G4Polyhedra::surface_element& x, G4double val)
+                             -> G4bool { return x.area < val; });
 
-    totalPhi= (phiIsOpen) ? (endPhi-startPhi) : twopi;
-    ksi = totalPhi/numSide;
-    G4double cosksi = std::cos(ksi/2.);
-
-    // Below we generate the areas relevant to our solid
-    //
-    for(j=0; j<numPlanes-1; ++j)
+  // Generate random point
+  G4double x = 0, y = 0, z = 0;
+  G4double u = G4QuickRand();
+  G4double v = G4QuickRand();
+  if (u + v > 1.) { u = 1. - u; v = 1. - v; }
+  G4int i0 = (*it).i0;
+  G4int i1 = (*it).i1;
+  G4int i2 = (*it).i2;
+  if (i2 < 0) // lateral surface
+  {
+    // sample point
+    G4int nside = GetNumSide();
+    G4double dphi = (GetEndPhi() - GetStartPhi())/nside;
+    G4double cosa = std::cos(dphi);
+    G4double sina = std::sin(dphi);
+    G4PolyhedraSideRZ a = GetCorner(i0);
+    G4PolyhedraSideRZ b = GetCorner(i1);
+    G4ThreeVector p0(a.r, 0, a.z);
+    G4ThreeVector p1(b.r, 0, b.z);
+    G4ThreeVector p2(b.r*cosa, b.r*sina, b.z);
+    if (i2 == -1) p1.set(a.r*cosa, a.r*sina, a.z);
+    p0 += (p1 - p0)*u + (p2 - p0)*v;
+    // find selected side and rotate point
+    G4double scurr = (*it).area;
+    G4double sprev = (it == fElements->begin()) ? 0. : (*(--it)).area;
+    G4int iside = nside*(select - sprev)/(scurr - sprev);
+    if (iside == 0 && GetStartPhi() == 0.)
     {
-      a = original_parameters->Rmax[j+1];
-      b = original_parameters->Rmax[j];
-      l2 = sqr(original_parameters->Z_values[j]
-              -original_parameters->Z_values[j+1]) + sqr(b-a);
-      area = std::sqrt(l2-sqr((a-b)*cosksi))*(a+b)*cosksi;
-      aVector1.push_back(area);
-    }
-
-    for(j=0; j<numPlanes-1; ++j)
-    {
-      a = original_parameters->Rmin[j+1];//*cosksi;
-      b = original_parameters->Rmin[j];//*cosksi;
-      l2 = sqr(original_parameters->Z_values[j]
-              -original_parameters->Z_values[j+1]) + sqr(b-a);
-      area = std::sqrt(l2-sqr((a-b)*cosksi))*(a+b)*cosksi;
-      aVector2.push_back(area);
-    }
-  
-    for(j=0; j<numPlanes-1; ++j)
-    {
-      if(phiIsOpen == true)
-      {
-        aVector3.push_back(0.5*(original_parameters->Rmax[j]
-                               -original_parameters->Rmin[j]
-                               +original_parameters->Rmax[j+1]
-                               -original_parameters->Rmin[j+1])
-        *std::fabs(original_parameters->Z_values[j+1]
-                  -original_parameters->Z_values[j]));
-      }
-      else { aVector3.push_back(0.); } 
-    }
-  
-    for(j=0; j<numPlanes-1; ++j)
-    {
-      totArea += numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
-    }
-  
-    // Must include top and bottom areas
-    //
-    if(original_parameters->Rmax[numPlanes-1] != 0.)
-    {
-      a = original_parameters->Rmax[numPlanes-1];
-      b = original_parameters->Rmin[numPlanes-1];
-      l2 = sqr(a-b);
-      aTop = std::sqrt(l2-sqr((a-b)*cosksi))*(a+b)*cosksi; 
-    }
-
-    if(original_parameters->Rmax[0] != 0.)
-    {
-      a = original_parameters->Rmax[0];
-      b = original_parameters->Rmin[0];
-      l2 = sqr(a-b);
-      aBottom = std::sqrt(l2-sqr((a-b)*cosksi))*(a+b)*cosksi; 
-    }
-
-    Achose1 = 0.;
-    Achose2 = numSide*(aVector1[0]+aVector2[0])+2.*aVector3[0];
-
-    chose = G4RandFlat::shoot(0.,totArea+aTop+aBottom);
-    if( (chose >= 0.) && (chose < aTop + aBottom) )
-    {
-      chose = G4RandFlat::shoot(startPhi,startPhi+totalPhi);
-      rang = std::floor((chose-startPhi)/ksi-0.01);
-      if(rang<0) { rang=0; }
-      rang = std::fabs(rang);  
-      sinphi1 = std::sin(startPhi+rang*ksi);
-      sinphi2 = std::sin(startPhi+(rang+1)*ksi);
-      cosphi1 = std::cos(startPhi+rang*ksi);
-      cosphi2 = std::cos(startPhi+(rang+1)*ksi);
-      chose = G4RandFlat::shoot(0., aTop + aBottom);
-      if(chose>=0. && chose<aTop)
-      {
-        rad1 = original_parameters->Rmin[numPlanes-1];
-        rad2 = original_parameters->Rmax[numPlanes-1];
-        zVal = original_parameters->Z_values[numPlanes-1]; 
-      }
-      else 
-      {
-        rad1 = original_parameters->Rmin[0];
-        rad2 = original_parameters->Rmax[0];
-        zVal = original_parameters->Z_values[0]; 
-      }
-      p0 = G4ThreeVector(rad1*cosphi1,rad1*sinphi1,zVal);
-      p1 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,zVal);
-      p2 = G4ThreeVector(rad2*cosphi2,rad2*sinphi2,zVal);
-      p3 = G4ThreeVector(rad1*cosphi2,rad1*sinphi2,zVal);
-      return GetPointOnPlane(p0,p1,p2,p3); 
+      x = p0.x();
+      y = p0.y();
+      z = p0.z();
     }
     else
     {
-      for (j=0; j<numPlanes-1; ++j)
-      {
-        if( ((chose >= Achose1) && (chose < Achose2)) || (j == numPlanes-2) )
-        { 
-          Flag = j; break; 
-        }
-        Achose1 += numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
-        Achose2 = Achose1 + numSide*(aVector1[j+1]+aVector2[j+1])
-                          + 2.*aVector3[j+1];
-      }
+      if (iside == nside) --iside; // iside must be less then nside
+      G4double phi = iside*dphi + GetStartPhi();
+      G4double cosphi = std::cos(phi);
+      G4double sinphi = std::sin(phi);
+      x = p0.x()*cosphi - p0.y()*sinphi;
+      y = p0.x()*sinphi + p0.y()*cosphi;
+      z = p0.z();
     }
-
-    // At this point we have chosen a subsection
-    // between to adjacent plane cuts...
-
-    j = Flag; 
-    
-    totArea = numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
-    chose = G4RandFlat::shoot(0.,totArea);
-  
-    if( (chose>=0.) && (chose<numSide*aVector1[j]) )
-    {
-      chose = G4RandFlat::shoot(startPhi,startPhi+totalPhi);
-      rang = std::floor((chose-startPhi)/ksi-0.01);
-      if(rang<0) { rang=0; }
-      rang = std::fabs(rang);
-      rad1 = original_parameters->Rmax[j];
-      rad2 = original_parameters->Rmax[j+1];
-      sinphi1 = std::sin(startPhi+rang*ksi);
-      sinphi2 = std::sin(startPhi+(rang+1)*ksi);
-      cosphi1 = std::cos(startPhi+rang*ksi);
-      cosphi2 = std::cos(startPhi+(rang+1)*ksi);
-      zVal = original_parameters->Z_values[j];
-    
-      p0 = G4ThreeVector(rad1*cosphi1,rad1*sinphi1,zVal);
-      p1 = G4ThreeVector(rad1*cosphi2,rad1*sinphi2,zVal);
-
-      zVal = original_parameters->Z_values[j+1];
-
-      p2 = G4ThreeVector(rad2*cosphi2,rad2*sinphi2,zVal);
-      p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,zVal);
-      return GetPointOnPlane(p0,p1,p2,p3);
-    }
-    else if ( (chose >= numSide*aVector1[j])
-           && (chose <= numSide*(aVector1[j]+aVector2[j])) )
-    {
-      chose = G4RandFlat::shoot(startPhi,startPhi+totalPhi);
-      rang = std::floor((chose-startPhi)/ksi-0.01);
-      if(rang<0) { rang=0; }
-      rang = std::fabs(rang);
-      rad1 = original_parameters->Rmin[j];
-      rad2 = original_parameters->Rmin[j+1];
-      sinphi1 = std::sin(startPhi+rang*ksi);
-      sinphi2 = std::sin(startPhi+(rang+1)*ksi);
-      cosphi1 = std::cos(startPhi+rang*ksi);
-      cosphi2 = std::cos(startPhi+(rang+1)*ksi);
-      zVal = original_parameters->Z_values[j];
-
-      p0 = G4ThreeVector(rad1*cosphi1,rad1*sinphi1,zVal);
-      p1 = G4ThreeVector(rad1*cosphi2,rad1*sinphi2,zVal);
-
-      zVal = original_parameters->Z_values[j+1];
-    
-      p2 = G4ThreeVector(rad2*cosphi2,rad2*sinphi2,zVal);
-      p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,zVal);
-      return GetPointOnPlane(p0,p1,p2,p3);
-    }
-
-    chose = G4RandFlat::shoot(0.,2.2);
-    if( (chose>=0.) && (chose < 1.) )
-    {
-      rang = startPhi;
-    }
-    else
-    {
-      rang = endPhi;
-    } 
-
-    cosphi1 = std::cos(rang); rad1 = original_parameters->Rmin[j];
-    sinphi1 = std::sin(rang); rad2 = original_parameters->Rmax[j];
-
-    p0 = G4ThreeVector(rad1*cosphi1,rad1*sinphi1,
-                       original_parameters->Z_values[j]);
-    p1 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,
-                       original_parameters->Z_values[j]);
-
-    rad1 = original_parameters->Rmax[j+1];
-    rad2 = original_parameters->Rmin[j+1];
-
-    p2 = G4ThreeVector(rad1*cosphi1,rad1*sinphi1,
-                       original_parameters->Z_values[j+1]);
-    p3 = G4ThreeVector(rad2*cosphi1,rad2*sinphi1,
-                       original_parameters->Z_values[j+1]);
-    return GetPointOnPlane(p0,p1,p2,p3);
   }
-  else  // Generic polyhedra
+  else // phi cut
   {
-    return GetPointOnSurfaceGeneric(); 
+    G4int nrz = GetNumRZCorner();
+    G4double phi = (i0 < nrz) ? GetStartPhi() : GetEndPhi();
+    if (i0 >= nrz) { i0 -= nrz; }
+    G4PolyhedraSideRZ p0 = GetCorner(i0);
+    G4PolyhedraSideRZ p1 = GetCorner(i1);
+    G4PolyhedraSideRZ p2 = GetCorner(i2);
+    G4double r = (p1.r - p0.r)*u + (p2.r - p0.r)*v + p0.r;
+    x = r*std::cos(phi);
+    y = r*std::sin(phi);
+    z = (p1.z - p0.z)*u + (p2.z - p0.z)*v + p0.z;
   }
+  return G4ThreeVector(x, y, z);
 }
 
-// CreatePolyhedron
+//////////////////////////////////////////////////////////////////////////
 //
+// CreatePolyhedron
+
 G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
-{ 
+{
   if (!genericPgon)
   {
     return new G4PolyhedronPgon( original_parameters->Start_angle,
@@ -1077,8 +1062,8 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
      * array starts from 1 (like in fortran). The indexes can be positive
      * or negative. Negative sign means that the corresponding edge is
      * invisible. The normal of the face should be directed to exterior
-     * of the polyhedron. 
-     * 
+     * of the polyhedron.
+     *
      * @param  Nnodes number of nodes
      * @param  Nfaces number of faces
      * @param  xyz    nodes
@@ -1309,12 +1294,12 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
 //
 void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
 {
-  G4int numPlanes = numCorner;  
+  G4int numPlanes = numCorner;
   G4bool isConvertible = true;
   G4double Zmax=rz->Bmax();
   rz->StartWithZMin();
 
-  // Prepare vectors for storage 
+  // Prepare vectors for storage
   //
   std::vector<G4double> Z;
   std::vector<G4double> Rmin;
@@ -1330,24 +1315,24 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
   G4double Zprev=Z[0];
   if (Zprev == corners[1].z)
   {
-    Rmin.push_back(corners[0].r);  
-    Rmax.push_back (corners[1].r);icurr=1; 
+    Rmin.push_back(corners[0].r);
+    Rmax.push_back (corners[1].r);icurr=1;
   }
   else if (Zprev == corners[numPlanes-1].z)
   {
-    Rmin.push_back(corners[numPlanes-1].r);  
+    Rmin.push_back(corners[numPlanes-1].r);
     Rmax.push_back (corners[0].r);
-    icurl=numPlanes-1;  
+    icurl=numPlanes-1;
   }
   else
   {
-    Rmin.push_back(corners[0].r);  
+    Rmin.push_back(corners[0].r);
     Rmax.push_back (corners[0].r);
   }
 
   // next planes until last
   //
-  G4int inextr=0, inextl=0; 
+  G4int inextr=0, inextl=0;
   for (G4int i=0; i < numPlanes-2; ++i)
   {
     inextr=1+icurr;
@@ -1359,7 +1344,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
     G4double Zright = corners[inextr].z;
     if(Zright>Zleft)
     {
-      Z.push_back(Zleft);  
+      Z.push_back(Zleft);
       countPlanes++;
       G4double difZr=corners[inextr].z - corners[icurr].z;
       G4double difZl=corners[inextl].z - corners[icurl].z;
@@ -1375,7 +1360,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
         {
           Rmin.push_back(corners[inextl].r);
           Rmax.push_back(corners[icurr].r + (Zleft-corners[icurr].z)/difZr
-                                *(corners[inextr].r - corners[icurr].r)); 
+                                *(corners[inextr].r - corners[icurr].r));
         }
       }
       else if (difZl >= kCarTolerance)
@@ -1400,18 +1385,18 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
     }
     else if(std::fabs(Zright-Zleft)<kCarTolerance)  // Zright=Zleft
     {
-      Z.push_back(Zleft);  
+      Z.push_back(Zleft);
       ++countPlanes;
       ++icurr;
 
       icurl=(icurl == 0)? numPlanes-1 : icurl-1;
 
-      Rmin.push_back(corners[inextl].r);  
+      Rmin.push_back(corners[inextl].r);
       Rmax.push_back (corners[inextr].r);
     }
     else  // Zright<Zleft
     {
-      Z.push_back(Zright);  
+      Z.push_back(Zright);
       ++countPlanes;
 
       G4double difZr=corners[inextr].z - corners[icurr].z;
@@ -1421,8 +1406,8 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
         if(std::fabs(difZl) < kCarTolerance)
         {
           Rmax.push_back(corners[inextr].r);
-          Rmin.push_back(corners[icurr].r); 
-        } 
+          Rmin.push_back(corners[icurr].r);
+        }
         else
         {
           Rmin.push_back(corners[icurl].r + (Zright-corners[icurl].z)/difZl
@@ -1436,8 +1421,8 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
         if(std::fabs(difZl) < kCarTolerance)
         {
           Rmax.push_back(corners[inextr].r);
-          Rmin.push_back (corners[icurr].r); 
-        } 
+          Rmin.push_back (corners[icurr].r);
+        }
         else
         {
           Rmax.push_back(corners[inextr].r);
@@ -1459,7 +1444,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
   ++countPlanes;
   inextr=1+icurr;
   inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
- 
+
   Rmax.push_back(corners[inextr].r);
   Rmin.push_back(corners[inextl].r);
 
@@ -1472,7 +1457,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
    original_parameters->Z_values = new G4double[countPlanes];
    original_parameters->Rmin = new G4double[countPlanes];
    original_parameters->Rmax = new G4double[countPlanes];
-  
+
    for(G4int j=0; j < countPlanes; ++j)
    {
      original_parameters->Z_values[j] = Z[j];
@@ -1482,7 +1467,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
    original_parameters->Start_angle = startPhi;
    original_parameters->Opening_angle = endPhi-startPhi;
    original_parameters->Num_z_planes = countPlanes;
- 
+
   }
   else  // Set parameters(r,z) with Rmin==0 as convention
   {
@@ -1498,7 +1483,7 @@ void G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon* rz)
     original_parameters->Z_values = new G4double[numPlanes];
     original_parameters->Rmin = new G4double[numPlanes];
     original_parameters->Rmax = new G4double[numPlanes];
-  
+
     for(G4int j=0; j < numPlanes; ++j)
     {
       original_parameters->Z_values[j] = corners[j].z;

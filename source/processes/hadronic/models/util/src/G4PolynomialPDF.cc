@@ -87,7 +87,7 @@ void G4PolynomialPDF::SetDomain(G4double x1, G4double x2)
 { 
   if(x2 <= x1) {
     if(fVerbose > 0) {
-      G4cout << "G4PolynomialPDF::SetDomain() WARNING: Invalide domain! "
+      G4cout << "G4PolynomialPDF::SetDomain() WARNING: Invalid domain! "
 	     << "(x1 = " << x1 << ", x2 = " << x2 << ")." << G4endl;
     }
     return;

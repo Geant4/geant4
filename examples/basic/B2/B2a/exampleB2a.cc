@@ -30,11 +30,7 @@
 #include "B2aDetectorConstruction.hh"
 #include "B2ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
@@ -61,11 +57,8 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-#ifdef G4MULTITHREADED  
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto* runManager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Set mandatory initialization classes
   //

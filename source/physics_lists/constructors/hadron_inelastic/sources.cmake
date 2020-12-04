@@ -14,76 +14,9 @@
 #
 #------------------------------------------------------------------------------
 
-# List external includes needed.
-include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${EXPAT_INCLUDE_DIRS})
-
-# List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factory/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/qmd/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fission/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/fission/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/qgsm/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/radioactive_decay/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/theo_high_energy/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 #
 # Define the Geant4 Module.
 #
-include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
     HEADERS
         G4HadronInelasticQBBC.hh
@@ -104,7 +37,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsShielding.hh
         G4HadronPhysicsShieldingLEND.hh
         G4VHadronPhysics.hh
-        G4HadronPhysicsQGSP_BIC_AllHP.hh 
+        G4HadronPhysicsQGSP_BIC_AllHP.hh
     SOURCES
         G4HadronInelasticQBBC.cc
         G4HadronPhysicsFTF_BIC.cc
@@ -124,7 +57,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsShielding.cc
         G4HadronPhysicsShieldingLEND.cc
         G4VHadronPhysics.cc
-        G4HadronPhysicsQGSP_BIC_AllHP.cc 
+        G4HadronPhysicsQGSP_BIC_AllHP.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

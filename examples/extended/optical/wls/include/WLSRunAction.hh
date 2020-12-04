@@ -34,38 +34,24 @@
 #ifndef WLSRunAction_h
 #define WLSRunAction_h 1
 
-#include "globals.hh"
-
 #include "G4UserRunAction.hh"
+
+class WLSRun;
 
 class G4Run;
 
-class WLSRunActionMessenger;
-
 class WLSRunAction : public G4UserRunAction
 {
-  public:
+ public:
+  WLSRunAction();
+  ~WLSRunAction();
 
-    WLSRunAction();
-    virtual ~WLSRunAction();
+  void BeginOfRunAction(const G4Run*) override;
+  void EndOfRunAction(const G4Run*) override;
+  G4Run* GenerateRun() override;
 
-  public:
-
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
-
-    void  SetRndmFreq(G4int val) { fSaveRndm = val; }
-    G4int GetRndmFreq()          { return fSaveRndm; }
-
-    inline void SetAutoSeed (const G4bool val) { fAutoSeed = val; }
-
-  private:
- 
-    WLSRunActionMessenger* fRunMessenger;
-
-    G4int fSaveRndm;
-    G4bool fAutoSeed;
-
+ private:
+  WLSRun* fRun;
 };
 
 #endif

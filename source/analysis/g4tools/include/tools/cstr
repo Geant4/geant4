@@ -30,15 +30,15 @@ inline const std::string& s_cstr() {
 inline char* str_dup(const char* a_cstr
 #ifdef TOOLS_MEM
                      ,bool a_inc = true
-#endif		     
+#endif
 		     ) {
 #ifdef TOOLS_MEM
   if(a_inc) {
 #ifdef TOOLS_CSTR_DEBUG_MEM
     ::printf("debug : str_dup \"%s\"\n",a_cstr);
-#endif    
+#endif
     mem::increment(s_cstr().c_str());
-  }    
+  }
 #endif
   return ::strcpy((char*)::malloc(::strlen(a_cstr)+1),a_cstr);
 }
@@ -46,15 +46,15 @@ inline char* str_dup(const char* a_cstr
 inline char* str_from_buffer(const char* a_buffer,size_t a_len
 #ifdef TOOLS_MEM
                      ,bool a_inc = true
-#endif		     
+#endif
 		     ) {
 #ifdef TOOLS_MEM
   if(a_inc) {
 #ifdef TOOLS_CSTR_DEBUG_MEM
     ::printf("debug : str_from_buffer.\n");
-#endif    
+#endif
     mem::increment(s_cstr().c_str());
-  }    
+  }
 #endif
   char* s = (char*)::malloc(a_len+1);
   if(s==NULL) return NULL;
@@ -68,7 +68,7 @@ inline void str_del(char*& a_cstr) {
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_del \"%s\"\n",a_cstr);
-#endif    
+#endif
   mem::decrement(s_cstr().c_str());
 #endif
   ::free(a_cstr);
@@ -81,10 +81,10 @@ inline char* str_new(size_t a_l = 0,char a_char = ' ') {
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_new : len %lu\n",a_l);
-#endif    
+#endif
   mem::increment(s_cstr().c_str());
 #endif
-  char* pos = s; 
+  char* pos = s;
   for(size_t c=0;c<a_l;c++,pos++) *pos = a_char;
   *(s+a_l) = 0;
   return s;
@@ -97,7 +97,7 @@ inline bool str_cat(char*& a_1,const char a_c) {
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_cat \"%s\", char %d\n",a_1,a_c);
-#endif    
+#endif
   mem::increment(s_cstr().c_str());
 #endif
   ::memcpy(s,a_1,l1);
@@ -107,7 +107,7 @@ inline bool str_cat(char*& a_1,const char a_c) {
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_cat : dec\n");
-#endif    
+#endif
   mem::decrement(s_cstr().c_str());
 #endif
   a_1 = s;
@@ -122,7 +122,7 @@ inline bool str_cat(char*& a_1,const char* a_2) {
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_cat \"%s\" \"%s\"\n",a_1,a_2);
-#endif    
+#endif
   mem::increment(s_cstr().c_str());
 #endif
   ::memcpy(s,a_1,l1);
@@ -132,7 +132,7 @@ inline bool str_cat(char*& a_1,const char* a_2) {
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_cat : dec\n");
-#endif    
+#endif
   mem::decrement(s_cstr().c_str());
 #endif
   a_1 = s;
@@ -146,9 +146,9 @@ inline void str_rev(char* a_s) {
   char* end = a_s+l-1;
   for(size_t i=0;i<hl;i++) {
     char c = *end;
-    *end = *beg;      
+    *end = *beg;
     *beg = c;
-    beg++;end--;  
+    beg++;end--;
   }
 }
 
@@ -168,7 +168,7 @@ inline char* str_sub(const char* a_s,
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_sub \"%s\"\n",a_s);
-#endif    
+#endif
   mem::increment(s_cstr().c_str());
 #endif
   //abcdefgh  l=8
@@ -187,7 +187,7 @@ inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const 
   unsigned int num = a_sz<lan?a_sz:(unsigned int)lan;
   //abcdefghij : l = 10
   //0123456789
-  //   p  
+  //   p
   size_t le = las-(a_pos+a_sz);
   size_t ls = a_pos+num+le;
   char* s = (char*)::malloc(ls+1);
@@ -195,7 +195,7 @@ inline char* str_rep(const char* a_s,unsigned int a_pos,unsigned int a_sz,const 
 #ifdef TOOLS_MEM
 #ifdef TOOLS_CSTR_DEBUG_MEM
   ::printf("debug : str_rep \"%s\"\n",a_s);
-#endif    
+#endif
   mem::increment(s_cstr().c_str());
 #endif
   ::memcpy(s,a_s,a_pos);
@@ -273,10 +273,10 @@ inline size_t str_lcpy(char *dst, const char *src, size_t siz) {
   // Copy src to string dst of size siz.  At most siz-1 characters
   // will be copied.  Always NUL terminates (unless siz == 0).
   // Returns strlen(src); if retval >= siz, truncation occurred.
-  
+
   // code taken from CERN-ROOT/core/clib to compile exlib/tests/h2root.cpp.
   // strlcpy, strlcat are in string.h on BSD based systems.
-  
+
   // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
 
   /*register*/ char* d = dst;
@@ -308,7 +308,7 @@ inline size_t str_lcat(char *dst, const char *src, size_t siz) {
 
   // code taken from CERN-ROOT/core/clib to compile exlib/tests/h2root.cpp.
   // strlcpy, strlcat are in string.h on BSD based systems.
-  
+
   // Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>.
 
   /*register*/ char* d = dst;
@@ -342,7 +342,7 @@ inline bool str_2ds(char* a_s,const char* a_sep,VECTOR& a_v) {
   double d;
   for (tok = ::strtok(a_s,a_sep);tok && *tok;tok = ::strtok(NULL,a_sep)) {
     if(!str_2d(tok,d)) {a_v.clear();return false;}
-    a_v.push_back(d);    
+    a_v.push_back(d);
   }
   return true;
 }

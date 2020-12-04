@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 include(CMakeDependentOption)
 
 set(name ChargeExchangeMC)
@@ -15,7 +18,7 @@ endif()
 
 include(${Geant4_USE_FILE})
 
-# Setup of ROOT ANALYSIS : optional. 
+# Setup of ROOT ANALYSIS : optional.
 find_package(ROOT QUIET)
 cmake_dependent_option(CEXMC_USE_HISTOGRAMING "Build example with analysis objects" ON "ROOT_FOUND" OFF)
 
@@ -28,7 +31,7 @@ option(CEXMC_USE_PERSISTENCY
     (requires Boost Serialization library)" OFF)
 
 if(CEXMC_USE_PERSISTENCY)
-   find_package(Boost REQUIRED serialization) 
+   find_package(Boost REQUIRED serialization)
    add_definitions(-DCEXMC_USE_PERSISTENCY)
    list(APPEND EXTRA_LIBRARIES Boost::serialization)
     message(STATUS "Library Boost::serialization was added to the linkage list")
@@ -79,14 +82,14 @@ option(CEXMC_DEBUG_TP
 if(CEXMC_DEBUG_TP)
     add_definitions(-DCEXMC_DEBUG_TP)
 endif()
-    
+
 if(CEXMC_USE_HISTOGRAMING)
 	EXECUTE_PROCESS(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 	EXECUTE_PROCESS(COMMAND root-config --libs OUTPUT_VARIABLE ROOT_LD_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
 	set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
-endif(CEXMC_USE_HISTOGRAMING) 
-    
+endif(CEXMC_USE_HISTOGRAMING)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 

@@ -83,7 +83,8 @@ G4ParticleHPInelastic::G4ParticleHPInelastic(G4ParticleDefinition* projectile, c
 
     //G4cout << " entering G4ParticleHPInelastic constructor"<<G4endl;
     if ( !std::getenv("G4PARTICLEHPDATA") && !std::getenv(dataDirVariable) ) {
-      G4String message( "Please set the environement variable " + G4String(dataDirVariable) + " to point to the " + theProjectile->GetParticleName() + " cross-section files." );
+      G4String message("Please setenv G4PARTICLEHPDATA (recommended) or, at least setenv " +
+		       G4String(dataDirVariable) + " to point to the " + theProjectile->GetParticleName() + " cross-section files." );      
       throw G4HadronicException(__FILE__, __LINE__,message.c_str());
     }
     if ( std::getenv(dataDirVariable) ) {
@@ -345,9 +346,7 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
 const std::pair<G4double, G4double> G4ParticleHPInelastic::GetFatalEnergyCheckLevels() const
 {
       // max energy non-conservation is mass of heavy nucleus
-//      if ( getenv("G4PHP_DO_NOT_ADJUST_FINAL_STATE") ) return std::pair<G4double, G4double>(5*perCent,250*GeV);
       // This should be same to the hadron default value
-//      return std::pair<G4double, G4double>(10*perCent,10*GeV);
       return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }
 
@@ -501,7 +500,7 @@ void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projec
          throw G4HadronicException(__FILE__, __LINE__,message.c_str());
       }
       if(!std::getenv(dataDirVariable)){
-         G4String message("Please set the environement variable " + G4String(dataDirVariable) + " to point to the " + projectile.GetParticleName() + " cross-section files.");
+         G4String message("Please set the environment variable " + G4String(dataDirVariable) + " to point to the " + projectile.GetParticleName() + " cross-section files.");
          throw G4HadronicException(__FILE__, __LINE__,message.c_str());
       }
       dirName = std::getenv(dataDirVariable);
@@ -512,8 +511,10 @@ void G4ParticleHPInelastic::BuildPhysicsTable(const G4ParticleDefinition& projec
 
 */
       #ifdef G4VERBOSE
-      if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 )
+      if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 0 ) {
+	hpmanager->DumpSetting();
 	G4cout << "@@@ G4ParticleHPInelastic instantiated for particle " << projectile.GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << dirName << G4endl;
+      }
       #endif
       for (G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements(); i++)
       {

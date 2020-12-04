@@ -47,4 +47,14 @@
 #  define G4RUN_DLL
 #endif
 
+#if defined(WIN32) && defined(G4LIB_BUILD_DLL)
+#  if defined G4RUN_ALLOC_EXPORT
+#    define G4MTRUN_DLL __declspec(dllexport)
+#  else
+#    define G4MTRUN_DLL __declspec(dllimport)
+#  endif
+#else
+#  define G4MTRUN_DLL
+#endif
+
 #endif /* G4RUNDEFS_HH */

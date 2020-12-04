@@ -23,6 +23,8 @@ Analysis_W031: Merging data has failed
 
 Analysis_W041: Requested feature is not available with selected output.
 
+Analysis_W051: Selected output type is not supported.
+
 Analysis_WR001: Cannot open a file for reading
 
 Analysis_WR011: Cannot access an object in a file 

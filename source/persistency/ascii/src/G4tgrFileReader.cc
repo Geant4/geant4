@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgrFileReader implementation
 //
-//
-//
-// class G4tgrFileReader
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgrFileReader.hh"
 #include "G4tgrParameterMgr.hh"
@@ -48,76 +44,75 @@
 #include "G4tgrLineProcessor.hh"
 #include "G4tgrMessenger.hh"
 
+G4ThreadLocal G4tgrFileReader* G4tgrFileReader::theInstance = nullptr;
 
-G4ThreadLocal G4tgrFileReader* G4tgrFileReader::theInstance = 0;
-
-
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrFileReader::G4tgrFileReader()
 {
   theLineProcessor = new G4tgrLineProcessor;
 }
 
-
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrFileReader::~G4tgrFileReader()
 {
   delete theLineProcessor;
   delete theInstance;
 }
 
-
-//---------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgrFileReader* G4tgrFileReader::GetInstance()
 {
-  if( !theInstance ) {
+  if(theInstance == nullptr)
+  {
     theInstance = new G4tgrFileReader;
   }
   return theInstance;
 }
 
-//---------------------------------------------------------------
-G4bool G4tgrFileReader::ReadFiles() 
+// --------------------------------------------------------------------
+G4bool G4tgrFileReader::ReadFiles()
 {
+  std::vector<G4String> wl, wlnew;
 
-  std::vector< G4String > wl,wlnew;
-    
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 2 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 2)
   {
     G4cout << "   Number of geometry data files = " << theTextFiles.size()
            << G4endl;
   }
 #endif
 
-  if( theTextFiles.size() == 0 )
+  if(theTextFiles.size() == 0)
   {
-    G4Exception("G4tgrFileReader::ReadFiles()", "InvalidInput",
-                FatalException, "No files to read ...");
+    G4Exception("G4tgrFileReader::ReadFiles()", "InvalidInput", FatalException,
+                "No files to read ...");
   }
 
-  for( size_t ii = 0; ii < theTextFiles.size(); ii++ )
+  for(std::size_t ii = 0; ii < theTextFiles.size(); ++ii)
   {
 #ifdef G4VERBOSE
-    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    if(G4tgrMessenger::GetVerboseLevel() >= 1)
     {
       G4cout << "   Reading data file " << theTextFiles[ii] << G4endl;
     }
 #endif
-    
-    G4tgrFileIn fin = G4tgrFileIn::GetInstance( theTextFiles[ii] );
-    
+
+    G4tgrFileIn fin = G4tgrFileIn::GetInstance(theTextFiles[ii]);
+
     G4int nlines = 0;
     for(;;)
     {
-      nlines++;
-      if(! fin.GetWordsInLine( wlnew ) )  { break; }
-      // Check if it is continuation line or first line
-      if( wlnew[0].c_str()[0] != ':' )
+      ++nlines;
+      if(!fin.GetWordsInLine(wlnew))
       {
-        wl.insert( wl.end(), wlnew.begin(), wlnew.end() );
+        break;
+      }
+      // Check if it is continuation line or first line
+      if(wlnew[0].c_str()[0] != ':')
+      {
+        wl.insert(wl.end(), wlnew.begin(), wlnew.end());
 #ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 4 )
+        if(G4tgrMessenger::GetVerboseLevel() >= 4)
         {
           G4tgrUtils::DumpVS(wl, "!!!! adding line");
         }
@@ -128,29 +123,29 @@ G4bool G4tgrFileReader::ReadFiles()
       {
         //----- Process previous tag
 #ifdef G4VERBOSE
-        if( G4tgrMessenger::GetVerboseLevel() >= 4 )
+        if(G4tgrMessenger::GetVerboseLevel() >= 4)
         {
           G4tgrUtils::DumpVS(wl, "!!!! line read");
         }
 #endif
-        if( nlines != 1)   // first line has no previous tag
+        if(nlines != 1)  // first line has no previous tag
         {
-          if( ! theLineProcessor->ProcessLine( wl ) )
+          if(!theLineProcessor->ProcessLine(wl))
           {
-            fin.DumpException( "Tag not found: " + wl[0]);
+            fin.DumpException("Tag not found: " + wl[0]);
           }
         }
         wl = wlnew;
       }
     }
-    
-    if( wl.size() != 0 )
+
+    if(wl.size() != 0)
     {
-      if( ! theLineProcessor->ProcessLine( wl ) )
+      if(!theLineProcessor->ProcessLine(wl))
       {
-        fin.DumpException( "Tag not found: " + wl[0]);
+        fin.DumpException("Tag not found: " + wl[0]);
       }
     }
-  }  
-  return 1;
+  }
+  return true;
 }

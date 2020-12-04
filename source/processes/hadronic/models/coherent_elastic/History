@@ -13,11 +13,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22 July 2020 - V.Ivanchenko     (hadr-cohe-V10-06-03)
+---------------------------------------------------------------
+- G4HadronElastic - added numerical protection against precision lost
+    addressing problem #2253
+
 30 April 2020 - B. Morgan       (hadr-cohe-V10-06-02)
 ---------------------------------------------------------------
 -  Remove obsolete GRANULAR_DEPENDENCIES entries
 
-18 January 2019 - V.Ivanchenko  (hadr-cohe-V10-06-01)
+18 January 2020 - V.Ivanchenko  (hadr-cohe-V10-06-01)
 ---------------------------------------------------------------
 - G4ElasticHadrNucleusHE - for pi- and Z>1 reuse data structure
     computed for pi+ in order to reduce memory and CPU at

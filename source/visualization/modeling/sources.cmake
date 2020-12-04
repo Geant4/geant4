@@ -114,6 +114,7 @@ geant4_define_module(NAME G4modeling
     G4detutils
     G4digits
     G4run
+    G4tasking
     G4event
     G4geomBoolean
     G4geometrymng
@@ -133,6 +134,7 @@ geant4_define_module(NAME G4modeling
   GLOBAL_DEPENDENCIES
     G4digits_hits
     G4run
+    G4tasking
     G4event
     G4geometry
     G4global

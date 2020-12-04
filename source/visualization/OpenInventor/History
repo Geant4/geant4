@@ -18,6 +18,26 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+20 October 2020 Frederick Jones (openinventor-V10-06-11)
+- Completed all the planned features of the OIQt viewer.
+- This Qt based viewer implements all the functionality
+  of the older Xt/Xm based OIXE viewer and is ready to
+  be used as its replacement.
+
+18 September 2020  John Allison (openinventor-V10-06-10)
+- Part of vis-V10-06-07.
+- G4OpenInventorViewer.cc:
+  o CompareForKernelVisit; Force kernel visit if global parameters change.
+    . GlobalMarkerScale and GlobalLineWidthScale.
+
+07 September 2020 Gabriele Cosmo (openinventor-V10-06-09)
+- Corrected condition for inclusion of GL headers in SbGL.h.
+
+28 August 2020 Ben Morgan (openinventor-V10-06-08)
+- Ensure use of XQuartz/System GL on macOS with SoXt/SoQt
+  respectively.
+
 01 June 2020 Ben Morgan (openinventor-V10-06-07)
 - Use CMake AUTOMOC to automatically generate and compile Moc
   sources

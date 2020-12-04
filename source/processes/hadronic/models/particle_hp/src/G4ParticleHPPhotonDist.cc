@@ -369,7 +369,7 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
           thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
         }
         count++;
-	if (count > nSecondaries) throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist::GetPhotons inconsistancy");
+	if (count > nSecondaries) throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist::GetPhotons inconsistency");
       }
          
     } else {  // nDiscrete != 1 or nPartials != 1
@@ -400,7 +400,7 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
             thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
 	  }
           count++;
-          if (count > nSecondaries) throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist::GetPhotons inconsistancy");
+          if (count > nSecondaries) throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist::GetPhotons inconsistency");
         }
       }
     }
@@ -428,7 +428,7 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
 	{
           if (std::abs(currentEnergy-theGammas[ii])<0.1*keV) break;
 	}
-	if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistancy found in the ENDF 7N14 data. @@
+	if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistency found in the ENDF 7N14 data. @@
 	if(ii<nIso)
 	{
           // isotropic distribution
@@ -543,7 +543,7 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
       {
         if (std::abs(currentEnergy-theGammas[ii])<0.1*keV) break;
       }
-      if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistancy found in the ENDF 7N14 data. @@
+      if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistency found in the ENDF 7N14 data. @@
       if(ii<nIso)
       {
         //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 

@@ -37,7 +37,7 @@ public:
   sf<unsigned int> divisions;
   sf_string modeling; //hippo, hplot
   sf<bool> is_log;
-  // If modeling is hippo or hplot, 
+  // If modeling is hippo or hplot,
   // labels_enforced true let labels be an input field.
   sf<bool> labels_enforced;
   sf<bool> tick_up;
@@ -61,9 +61,9 @@ public:
   sf<float> label_to_axis;
   sf<float> label_height;
 
-  sf<bool>  labels_no_overlap_automated;  
+  sf<bool>  labels_no_overlap_automated;
   sf<float> labels_gap; //in percent of width.
-  
+
   // time labels only in hplot modeling for the moment.
   sf<bool> time_labels;
   sf_string time_format;
@@ -96,7 +96,7 @@ public:
       TOOLS_ARG_FIELD_DESC(label_height),
       TOOLS_ARG_FIELD_DESC(labels_no_overlap_automated),
       TOOLS_ARG_FIELD_DESC(labels_gap),
-      
+
       TOOLS_ARG_FIELD_DESC(time_labels),
       TOOLS_ARG_FIELD_DESC(time_format),
       TOOLS_ARG_FIELD_DESC(time_offset),
@@ -177,12 +177,12 @@ public:
     nodekit_pick(a_action,m_group,this);
   }
   virtual void search(search_action& a_action) {
-    parent::search(a_action);
-    if(a_action.done()) return;
     if(touched()) {
       update_sg(a_action.out());
       reset_touched();
     }
+    parent::search(a_action);
+    if(a_action.done()) return;
     m_group.search(a_action);
   }
   virtual void bbox(bbox_action& a_action) {
@@ -230,7 +230,7 @@ public:
 
   ,labels_no_overlap_automated(true)
   ,labels_gap(0.02f)
-  
+
   ,time_labels(false)
   ,time_format("%H:%M:%S")
   ,time_offset(0) //UTC_time_1970_01_01__00_00_00
@@ -271,7 +271,7 @@ public:
 
   ,labels_no_overlap_automated(a_from.labels_no_overlap_automated)
   ,labels_gap(a_from.labels_gap)
-  
+
   ,time_labels(a_from.time_labels)
   ,time_format(a_from.time_format)
   ,time_offset(a_from.time_offset)
@@ -314,7 +314,7 @@ public:
 
     labels_no_overlap_automated = a_from.labels_no_overlap_automated;
     labels_gap = a_from.labels_gap;
-    
+
     time_labels = a_from.time_labels;
     time_format = a_from.time_format;
     time_offset = a_from.time_offset;
@@ -341,7 +341,7 @@ public:
     m_labels_style.color = a_color;
     m_title_style.color = a_color;
     m_mag_style.color = a_color;
-  }  
+  }
 public:
   void update_sg(std::ostream& a_out) {
     //a_out << "debug : tools::axis::update_sg :" << std::endl;
@@ -388,9 +388,9 @@ public:
 
       vertices* vtxs = new vertices;
       vtxs->mode = gl::lines();
-  
+
       if(modeling==tick_modeling_hplot()) {
-  
+
         size_t num = m_sub_ticks.size()/4;
         size_t pos = 0;
         for(size_t index=0;index<num;index++) {
@@ -408,7 +408,7 @@ public:
         }
 
       } else {
-  
+
         float yy = tick_up ? tick_length.value():-tick_length.value();
         for(unsigned int index=0;index<tick_number;index++) {
           float xx = coords.values()[index];
@@ -416,9 +416,9 @@ public:
           vtxs->add(xx,yy,0);
         }
       }
-         
+
       if(vtxs->number()) {
-  
+
         rgba* mat = new rgba();
         mat->color = m_ticks_style.color;
         m_ticks_sep.add(mat);
@@ -433,7 +433,7 @@ public:
       } else {
         delete vtxs;
       }
-  
+
     }
 
     // labels scene graph :
@@ -442,7 +442,7 @@ public:
       m_labels_seps.clear();
       m_labels_xs.clear();
       m_labels_mtxs.clear();
-      
+
       rgba* mat = new rgba();
       mat->color = m_labels_style.color;
       m_labels_sep.add(mat);
@@ -456,7 +456,7 @@ public:
         ds->line_pattern = m_labels_style.line_pattern;
         ds->line_width = m_labels_style.line_width;
         m_labels_sep.add(ds);
-      } else { 
+      } else {
         m_labels_sep.add(new normal);
       }
 
@@ -484,7 +484,7 @@ public:
 	} else { // label on tick :
           xx = coords.values()[index];
 	}
-	
+
         vec.set_value(xx,-label_to_axis,0);
         vec += m_labels_style.translation.value();
 
@@ -509,7 +509,7 @@ public:
           m_labels_mtxs.push_back(_tsf);
         }
       }}
-      
+
       if(labels_no_overlap_automated.value()) avoid_labels_overlap(a_out);
       m_labels_seps.clear();
       m_labels_xs.clear();
@@ -527,7 +527,7 @@ public:
         snpf(string,sizeof(string),"x10+%d",magnitude.value());
       else
         snpf(string,sizeof(string),"x10-%d",::abs(magnitude));
-      
+
       vec3f vec(width*1.03f,0,0);
       vec += m_mag_style.translation.value();
 
@@ -540,7 +540,7 @@ public:
         ds->line_pattern = m_mag_style.line_pattern;
         ds->line_width = m_mag_style.line_width;
         m_mag_sep.add(ds);
-      }  
+      }
 
       add_string(m_mag_sep,
                          font,
@@ -583,14 +583,14 @@ public:
       } else if(title_hjust==right) {
          xx = width;
       }
-  
+
       vec3f vec(xx,-title_to_axis,0);
       vec += m_title_style.translation.value();
 
       //std::cout << "debug : axis : update_title :"
       //          << " pos : " << vec[0] << " " << vec[1] << " " << vec[2]
       //          << std::endl;
-  
+
       add_string(m_title_sep,
                          font,
                          m_title_style.font_modeling.value(),
@@ -639,10 +639,10 @@ public: //style
 
     labels_no_overlap_automated = true;
     labels_gap = 0.02f;
-    
+
     if(a_geom) {
     ////////////////////////////////////////////
-    // Take PAW default : 
+    // Take PAW default :
     float YSIZ = 20; //page height
     float YMGL = 2;  //low y margin (to data frame).
     float YMGU = 2;  //up y margin (to data frame).
@@ -669,7 +669,7 @@ public: //style
     label_height = vsiz;
 
     // The axis title is the PAW axis label.
-    // It is right justified at the end of axis 
+    // It is right justified at the end of axis
     // (at end right for XY_X, at end top for XY_Y)
     title_to_axis = ylab;
     title_height = asiz;
@@ -830,7 +830,7 @@ protected:
   }
   void avoid_labels_overlap(std::ostream& a_out) {
     bool overlap;
-    float first_scale = 1;     
+    float first_scale = 1;
     float first_overlap = get_overlap(a_out,overlap);
     if(overlap) {
       float second_scale = 1.1f; // greater than one to be sure to overlap again.
@@ -858,7 +858,7 @@ protected:
       }
     }
   }
-  
+
   static void style_failed(std::ostream& a_out,
                            const std::string& a_key,
                            const std::string& a_value) {
@@ -919,37 +919,37 @@ protected:
     }
 
     if (!a_is_log) {
-  
+
       tickSize  = calculate_ticks_hippo(mx-mn,magxxx);
       startTick = fceil( mn / tickSize) * tickSize;
-  
+
       if (ffabs(magxxx) <= 3)
         pmag = 0.0;
-      else 
+      else
         pmag = startTick != 0.0 ? ffloor(flog10(ffabs(startTick))) : magxxx;
-      
+
       snpf(pstr,sizeof(pstr),"%%1.%df",(int)max_of<float>((pmag-magxxx),0.0));
-      
+
       y = startTick;
       while (y <= mx*(1.0+NUM_FUZZ)) {
-        
+
         yr = ffloor(y/fpow(10,magxxx) + 0.5F);
-        
+
         snpf(tmp,sizeof(tmp),pstr,yr*fpow(10,magxxx-pmag));
-  
+
        {float val = yr * fpow(10.0,magxxx);
         if((val>=mn)&&(val<=mx)) { //G.Barrand : add this test.
           tick_values.push_back(val);
           tick_labels.push_back(tmp);
           tick_num++;
         }}
-  
+
         y += tickSize;
       }
       if (ffabs(magxxx) <= 3.0) magxxx = 0.0;
-  
+
     }  else {
-  
+
       if (mn <= 0) {
         if(tick_number) {
           tick_number.value(0);
@@ -962,15 +962,15 @@ protected:
         m_sub_ticks.clear();
         return;
       }
-  
+
       int nLogTicks;
       float logTicks[5];
       float magStep;
-  
+
       float maghigh = fceil(flog10(mx));
       float maglow  = ffloor(flog10(mn));
       float magrng  = maghigh - maglow;
-      
+
       if (magrng <=3) {
         nLogTicks   = 3;
         logTicks[0] = 1.0;
@@ -982,16 +982,16 @@ protected:
         logTicks[0] = 1.0;
         magStep     = magrng <= 7 ? 1.0F : 2.0F;
       }
-      
-      pmag = (nLogTicks == 3 && (ffabs(maglow)>3 || ffabs(maghigh)>3)) ? 
+
+      pmag = (nLogTicks == 3 && (ffabs(maglow)>3 || ffabs(maghigh)>3)) ?
         maglow : 0;
-      
+
       magxxx = maglow;
       int i = 0;
       while ((y=logTicks[i]*fpow(10,magxxx)) < mx*(1+NUM_FUZZ)) {
         if (y >= mn) {
-  
-          // be careful: there is a bug in the NeXT (s)printf 
+
+          // be careful: there is a bug in the NeXT (s)printf
           //   routine when you do, eg. printf("%1.0g",0.01);
           if ((magxxx-pmag) > 4 || (magxxx-pmag) < -3) {
             ::strcpy(pstr,"%1.0e");
@@ -1000,29 +1000,29 @@ protected:
                  "%%1.%df",(int)((magxxx-pmag)>0?0.:-(magxxx-pmag)));
           }
           snpf(tmp,sizeof(tmp),pstr,y*fpow(10.0,-pmag));
-  
+
          {float val = flog10(y);
           if((val>=flog10(mn))&&(val<=flog10(mx))) { //G.Barrand : add this if
             tick_values.push_back(val);
             tick_labels.push_back(tmp);
             tick_num++;
           }}
-  
+
         }
-        
+
         i++;
         if (i>=nLogTicks)        {
           i = 0;
           magxxx += magStep;
         }
       }
-  
+
       mn = flog10(mn);
       mx = flog10(mx);
     }
-  
-    float range = mx - mn;         
-  
+
+    float range = mx - mn;
+
     // it is assumes that tick_values are ordered min to max.
     tick_number.value(tick_num);
     values.clear();
@@ -1033,7 +1033,7 @@ protected:
       values.add(val);
       coords.add(coord);
     }
-  
+
     if(labels_enforced) {
       size_t n = labels.size();
       if(tick_num>n) {
@@ -1042,9 +1042,9 @@ protected:
     } else {
       labels = tick_labels;
     }
-  
+
     magnitude.value((int)pmag);
-  
+
     sub_coords.clear();
     m_sub_ticks.clear();
   }
@@ -1057,21 +1057,21 @@ protected:
       aSize = ffabs(aSize);
       if (aSize == 0.0) aSize = 1.0;
     }
-  
+
     a_mag = ffloor(flog10(aSize));
     if (aSize/fpow(10.0,a_mag) < MIN_TICKS) (a_mag)--;
-  
+
     // now fit the max number of ticks into this range
-  
+
     float  tickSize;
     int tickIndex;
     static const float goodTicks[] = {10.0, 5.0, 4.0, 2.0, 1.0};
     for(tickIndex = 0;
        aSize/(tickSize=goodTicks[tickIndex]*fpow(10.0,a_mag))<MIN_TICKS;
         tickIndex++){}
-  
+
     if (tickIndex == 0) a_mag++;
-     
+
     return tickSize;
   }
 
@@ -1090,42 +1090,42 @@ protected:
     //    coords
     //    labels (if labels_enforced is false)
     //    tick_number
-  
+
     float mn = minimum_value;
     float mx = maximum_value;
-  
+
     bool a_is_log = is_log;
     if(a_is_log) {
       if((mn<=0) || (mx<=0) ) a_is_log = false;
     }
-       
+
     // Use hplot::axis to get the ticks and subticks positions
     // and the labels text.
-  
+
     double xmin = 0;
     double ymin = 0;
     double xmax = width;
     double ymax = 0;
-  
+
     double gridlength = 0;
     std::string chopt;
     if(a_is_log) chopt += "G";
-  
+
     std::vector<float> linesGrid;
     std::vector<hplot::_text> texts;
-  
+
     hplot::axis sbAxisHPLOT(a_out);
-  
+
     chopt += "S";
     sbAxisHPLOT.set_tick_size(tick_length/width.value());
-  
+
     if(time_labels.value()) {
       chopt += "t";
       sbAxisHPLOT.set_time_format(time_format.value());
       sbAxisHPLOT.set_time_offset(time_offset,
                                   time_offset_is_GMT);
     }
-  
+
     // Get ticks :
    {double wmin = mn;
     double wmax = mx;
@@ -1135,16 +1135,16 @@ protected:
                       wmin,wmax,ndiv, //Modified
                       chopt,gridlength,false,
                       m_sub_ticks,linesGrid,texts);}
-  
+
     if(a_is_log) {
       mn = flog10(mn);
       mx = flog10(mx);
     }
-  
-    float range = mx - mn;         
-  
+
+    float range = mx - mn;
+
     size_t tick_num = texts.size();
-  
+
     // HPLOT stores the magnitude on the last label :
     magnitude.value(0);
     if(tick_num) {
@@ -1154,7 +1154,7 @@ protected:
         tick_num--;
       }
     }
-  
+
     tick_number.value(uint32(tick_num));
     values.clear();
     coords.clear();
@@ -1165,7 +1165,7 @@ protected:
       coords.add(coord);
       values.add(val);
     }
-  
+
     if(labels_enforced) {
       size_t n = labels.size();
       if(tick_num>n) {
@@ -1177,7 +1177,7 @@ protected:
         labels.add(texts[index].fString);
       }
     }
-   
+
    {sub_coords.clear();
     size_t num = m_sub_ticks.size()/4;
     size_t pos = 0;
@@ -1196,7 +1196,7 @@ protected:
       }
     }}
   }
-  
+
 protected:
   const base_freetype& m_ttf;
 

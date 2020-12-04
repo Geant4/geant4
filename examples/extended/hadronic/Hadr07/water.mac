@@ -1,4 +1,5 @@
 #
+# Macro file for "Hadr07.cc"
 #
 /control/verbose 2
 /run/verbose 2
@@ -19,5 +20,4 @@
 /analysis/h1/set 10 120 0.  24. mm		#edep profile
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000

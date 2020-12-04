@@ -49,6 +49,8 @@
 #include "G4HadFinalState.hh"
 #include "G4QuasiElasticChannel.hh"
 
+class G4CRCoalescence;
+
 class G4TheoFSGenerator : public G4HadronicInteraction 
 
 {
@@ -76,6 +78,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       G4DecayStrongResonances theDecay;
       G4HadFinalState * theParticleChange;
       G4QuasiElasticChannel * theQuasielastic;
+      G4CRCoalescence * theCosmicCoalescence;
 };
 
 inline void G4TheoFSGenerator::SetTransport(G4VIntraNuclearTransportModel *const  value)

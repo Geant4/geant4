@@ -39,10 +39,10 @@ G4AnalysisManagerState::G4AnalysisManagerState(
    fIsActivation(false),
    fVerboseLevel(0),
    fCompressionLevel(1),
-   fVerboseL1(type,1),
-   fVerboseL2(type,2),
-   fVerboseL3(type,3),
-   fVerboseL4(type,4),
+   fVerboseL1(1),
+   fVerboseL2(2),
+   fVerboseL3(3),
+   fVerboseL4(4),
    fpVerboseL1(0),
    fpVerboseL2(0),
    fpVerboseL3(0),
@@ -62,34 +62,33 @@ void G4AnalysisManagerState::SetVerboseLevel(G4int verboseLevel)
   fVerboseLevel = verboseLevel;
   
   if ( verboseLevel == 0 ) {
-    fpVerboseL1 = 0;
-    fpVerboseL2 = 0;
-    fpVerboseL3 = 0;
-    fpVerboseL4 = 0;
+    fpVerboseL1 = nullptr;
+    fpVerboseL2 = nullptr;
+    fpVerboseL3 = nullptr;
+    fpVerboseL4 = nullptr;
   }
   else if ( verboseLevel == 1 ) {  
     fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = 0;
-    fpVerboseL3 = 0;
-    fpVerboseL4 = 0;
+    fpVerboseL2 = nullptr;
+    fpVerboseL3 = nullptr;
+    fpVerboseL4 = nullptr;
   }
   else if ( verboseLevel == 2 ) {  
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = &fVerboseL2;
-    fpVerboseL3 = 0;
-    fpVerboseL4 = 0;
+    fpVerboseL3 = nullptr;
+    fpVerboseL4 = nullptr;
   }
   else if ( verboseLevel == 3 ) {  
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = &fVerboseL2;
     fpVerboseL3 = &fVerboseL3;
-    fpVerboseL4 = 0;
+    fpVerboseL4 = nullptr;
   }
-  else {
+  else if ( verboseLevel > 3 ) {
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = &fVerboseL2;
     fpVerboseL3 = &fVerboseL3;
     fpVerboseL4 = &fVerboseL4;
   }
-}  
-
+}

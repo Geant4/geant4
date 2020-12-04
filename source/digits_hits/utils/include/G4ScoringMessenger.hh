@@ -75,8 +75,8 @@ class G4ScoringMessenger: public G4UImessenger
   protected:    
 
     void FillTokenVec(G4String newValues,G4TokenVec& token);
-
     void MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token);
+    void Fill1D(G4UIcommand* cmd, G4String newValues);
 
   private:
 
@@ -138,6 +138,8 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcommand * dumpQtyWithFactorCmd;
     G4UIcommand * dumpAllQtsWithFactorCmd;
     //
+    // Command for direcly plotting to a histogram
+    G4UIcommand * fill1DCmd;
 
 };
 

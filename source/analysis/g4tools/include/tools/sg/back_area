@@ -35,7 +35,7 @@ public:
   sf<bool> gradient;
   sf_vec<colorf,float> color_top;
 
-  sf<bool> border_visible;  
+  sf<bool> border_visible;
   sf_vec<colorf,float> border_color;
   sf<float> border_line_width;
 
@@ -90,12 +90,12 @@ public:
     m_back_sep.render(a_action);
   }
   virtual void search(search_action& a_action) {
-    node::search(a_action);
-    if(a_action.done()) return;
     if(touched()) {
       update_sg();
       reset_touched();
     }
+    parent::search(a_action);
+    if(a_action.done()) return;
     m_back_sep.search(a_action);
     if(a_action.done()) return;
   }
@@ -345,16 +345,16 @@ protected:
       sg::rgba* mat = new sg::rgba();
       mat->color = border_color;
       m_back_sep.add(mat);
-  
+
       draw_style* ds = new draw_style;
       ds->style = draw_lines;
       ds->line_width = border_line_width;
       m_back_sep.add(ds);
-  
+
       vertices* vtxs = new vertices;
       vtxs->mode = gl::line_strip();
       m_back_sep.add(vtxs);
-  
+
       float r = height*corner_radius;
       if((r>(0.5f*height.value()))||(r>(0.5f*width.value()))) r = 0;
 

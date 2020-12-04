@@ -15,6 +15,7 @@ namespace tools {
 namespace sg {
 
 class get_matrix_action : public matrix_action {
+  TOOLS_ACTION(get_matrix_action,tools::sg::get_matrix_action,matrix_action)
 public:
   get_matrix_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
   :matrix_action(a_out,a_ww,a_wh)

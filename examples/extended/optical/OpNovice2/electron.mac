@@ -1,5 +1,7 @@
 /control/verbose 2
 /tracking/verbose 0
+/run/verbose 1
+/process/optical/verbose 1
 /control/cout/ignoreThreadsExcept 0
 
 /opnovice2/boxMaterial G4_BGO
@@ -38,9 +40,6 @@
 /opnovice2/surfaceProperty REFLECTIVITY  0.000002 0.8 0.000008 0.8
 /opnovice2/surfaceProperty EFFICIENCY    0.000002 0.1 0.000008 0.1
 
-
-/process/optical/verbose 0
-
 /process/optical/cerenkov/setMaxPhotons 3
 /process/optical/cerenkov/setMaxBetaChange 10
 
@@ -53,15 +52,9 @@
 /run/initialize
 
 /analysis/setFileName electron
-/analysis/h1/set      1  100 0 10
-/analysis/h1/setXaxis 1  "Energy [eV]"
-/analysis/h1/setYaxis 1  "Number of photons"
-/analysis/h1/set      2  100 0 10
-/analysis/h1/setXaxis 2  "Energy [eV]"
-/analysis/h1/setYaxis 2  "Number of photons"
-/analysis/h1/set      3  400 0 200
-/analysis/h1/setXaxis 3  "Creation time [ns]"
-/analysis/h1/setYaxis 3  "Number of photons"
+/analysis/h1/set      1  100 0 10  # eV
+/analysis/h1/set      2  100 0 10  # eV
+/analysis/h1/set      3  400 0 200 # ns
 
 
 /gun/particle e-

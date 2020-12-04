@@ -34,11 +34,7 @@
 #include "QGS_BIC.hh"
 #include "RE02ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "G4SystemOfUnits.hh"    
@@ -55,13 +51,7 @@ int main(int argc,char** argv) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(4);
-#else
-  G4RunManager * runManager = new G4RunManager;
-#endif
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 
   // UserInitialization classes (mandatory)
   //---

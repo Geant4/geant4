@@ -19,15 +19,15 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 # place the isotopes in the middle of the target, at rest.
 /gun/particle ion
 /gun/ion 33 74
 #
 # limit the decay chain
-/grdm/nucleusLimits 74 74 33 33  
+/process/had/rdm/nucleusLimits 74 74 33 33  
 # 
 #  Analogue MC
 /analysis/setFileName as74
@@ -37,7 +37,7 @@
 #
 #  VR MC
 /analysis/setFileName as74-b
-/grdm/analogueMC 0
+/process/had/rdm/analogueMC 0
 /run/beamOn 10
 
 

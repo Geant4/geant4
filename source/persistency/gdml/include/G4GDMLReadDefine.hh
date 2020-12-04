@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4GDMLReadDefine
+// G4GDMLReadDefine
 //
 // Class description:
 //
 // GDML class for positionings and transformations according to
 // specifications in Geant4.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLREADDEFINE_INCLUDED_
-#define _G4GDMLREADDEFINE_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLREADDEFINE_HH
+#define G4GDMLREADDEFINE_HH 1
 
 #include <map>
 
@@ -46,67 +44,65 @@
 
 class G4GDMLMatrix
 {
+  public:
 
- public:
+    G4GDMLMatrix();
+    G4GDMLMatrix(std::size_t rows0, std::size_t cols0);
+    G4GDMLMatrix(const G4GDMLMatrix& rhs);
+    G4GDMLMatrix& operator=(const G4GDMLMatrix& rhs);
+    ~G4GDMLMatrix();
 
-   G4GDMLMatrix();
-   G4GDMLMatrix(size_t rows0,size_t cols0);
-   G4GDMLMatrix(const G4GDMLMatrix& rhs);
-   G4GDMLMatrix& operator=(const G4GDMLMatrix& rhs); 
-  ~G4GDMLMatrix();
+    void Set(std::size_t r, std::size_t c, G4double a);
+    G4double Get(std::size_t r, std::size_t c) const;
+    std::size_t GetRows() const;
+    std::size_t GetCols() const;
 
-   void Set(size_t r,size_t c,G4double a);
-   G4double Get(size_t r,size_t c) const;
-   size_t GetRows() const;
-   size_t GetCols() const;
+  private:
 
- private:
-
-   G4double *m;
-   size_t rows,cols;
+    G4double* m = nullptr;
+    std::size_t rows = 0, cols = 0;
 };
 
 class G4GDMLReadDefine : public G4GDMLRead
 {
+  public:
 
- public:
+    G4bool IsValidID(const G4String&) const;
+    G4double GetConstant(const G4String&);
+    G4double GetVariable(const G4String&);
+    G4double GetQuantity(const G4String&);
+    G4ThreeVector GetPosition(const G4String&);
+    G4ThreeVector GetRotation(const G4String&);
+    G4ThreeVector GetScale(const G4String&);
+    G4GDMLMatrix GetMatrix(const G4String&);
 
-   G4bool IsValidID(const G4String&) const;
-   G4double GetConstant(const G4String&);
-   G4double GetVariable(const G4String&);
-   G4double GetQuantity(const G4String&);
-   G4ThreeVector GetPosition(const G4String&);
-   G4ThreeVector GetRotation(const G4String&);
-   G4ThreeVector GetScale(const G4String&);
-   G4GDMLMatrix GetMatrix(const G4String&);
+    virtual void DefineRead(const xercesc::DOMElement* const);
 
-   virtual void DefineRead(const xercesc::DOMElement* const);
+  protected:
 
- protected:
+    G4GDMLReadDefine();
+    virtual ~G4GDMLReadDefine();
 
-   G4GDMLReadDefine();
-   virtual ~G4GDMLReadDefine();
+    G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
+    void VectorRead(const xercesc::DOMElement* const, G4ThreeVector&);
+    G4String RefRead(const xercesc::DOMElement* const);
 
-   G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
-   void VectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
-   G4String RefRead(const xercesc::DOMElement* const);
+    void ConstantRead(const xercesc::DOMElement* const);
+    void MatrixRead(const xercesc::DOMElement* const);
+    void PositionRead(const xercesc::DOMElement* const);
+    void RotationRead(const xercesc::DOMElement* const);
+    void ScaleRead(const xercesc::DOMElement* const);
+    void VariableRead(const xercesc::DOMElement* const);
+    void QuantityRead(const xercesc::DOMElement* const);
+    void ExpressionRead(const xercesc::DOMElement* const);
 
-   void ConstantRead(const xercesc::DOMElement* const); 
-   void MatrixRead(const xercesc::DOMElement* const);
-   void PositionRead(const xercesc::DOMElement* const);
-   void RotationRead(const xercesc::DOMElement* const);
-   void ScaleRead(const xercesc::DOMElement* const);
-   void VariableRead(const xercesc::DOMElement* const); 
-   void QuantityRead(const xercesc::DOMElement* const);
-   void ExpressionRead(const xercesc::DOMElement* const);
+  protected:
 
- protected:
-
-   std::map<G4String,G4double> quantityMap;
-   std::map<G4String,G4ThreeVector> positionMap;
-   std::map<G4String,G4ThreeVector> rotationMap;
-   std::map<G4String,G4ThreeVector> scaleMap;
-   std::map<G4String,G4GDMLMatrix> matrixMap;
+    std::map<G4String, G4double> quantityMap;
+    std::map<G4String, G4ThreeVector> positionMap;
+    std::map<G4String, G4ThreeVector> rotationMap;
+    std::map<G4String, G4ThreeVector> scaleMap;
+    std::map<G4String, G4GDMLMatrix> matrixMap;
 };
 
 #endif

@@ -27,6 +27,7 @@
 //
 // G4PSNofSecondary
 #include "G4PSNofSecondary.hh"
+#include "G4VScoreHistFiller.hh"
 
 // (Description)
 //   This is a primitive scorer class for scoring number of secondaries 
@@ -34,10 +35,13 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // Modify:  2011-09-09  T.Aso modify comment in PrintAll().
+//          2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic
+//                       energy of the secondary in MeV (x) vs. track weight (y)
+//                       (Makoto Asai)
 //
 
 G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),particleDef(0),
+    :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0),particleDef(0),
      weighted(true)
 {;}
 
@@ -59,6 +63,21 @@ G4bool G4PSNofSecondary::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4double weight = 1.0;
   if ( weighted ) weight *= aStep->GetPreStepPoint()->GetWeight();
   EvtMap->add(index,weight);  
+
+  if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception("G4PSVolumeFlux::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),weight);
+    }
+  }
+
   return TRUE;
 }
 

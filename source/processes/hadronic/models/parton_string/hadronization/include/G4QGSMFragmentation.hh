@@ -51,8 +51,8 @@ class G4QGSMFragmentation:public G4VLongitudinalStringDecay
     G4bool operator!=(const G4QGSMFragmentation &right) const;
 
   private:
-    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
-    virtual G4bool IsItFragmentable(const G4FragmentingString * const string);
+    virtual G4bool StopFragmenting(const G4FragmentingString  * string);
+    virtual G4bool IsItFragmentable(const G4FragmentingString * string);
 
     virtual G4bool SplitLast(G4FragmentingString * string, 
 	 	             G4KineticTrackVector * LeftVector, 

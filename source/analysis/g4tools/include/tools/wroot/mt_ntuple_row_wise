@@ -25,7 +25,7 @@ public:
     return true;
   }
   virtual bool end_fill(imutex& a_mutex,ifile& a_main_file) {
-    mt_basket_add _badd(a_mutex,a_main_file,m_main_branch);    
+    mt_basket_add _badd(a_mutex,a_main_file,m_main_branch);
     if(!m_row_wise_branch.end_pfill(_badd)) return false;
     return end_leaves(a_mutex);
   }
@@ -38,7 +38,7 @@ public:
   :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_basket_size,a_verbose)
   ,m_main_branch(a_main_branch)
   {}
-  
+
   mt_ntuple_row_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
                      branch& a_main_branch,
                      uint32 a_basket_size,
@@ -46,7 +46,7 @@ public:
   :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_basket_size,a_bkg,a_verbose)
   ,m_main_branch(a_main_branch)
   {}
-  
+
   virtual ~mt_ntuple_row_wise() {}
 protected:
   mt_ntuple_row_wise(const mt_ntuple_row_wise& a_from)
@@ -62,7 +62,7 @@ protected:
             << " m_main_branch.leaves().size() (" << m_main_branch.leaves().size() << ") != "
             << "m_row_wise_branch.leaves().size() (" << m_row_wise_branch.leaves().size() << ")."
             << std::endl;
-      return false;	  
+      return false;
     }
 
 #include "MT_SET_MAX.icc"
@@ -79,7 +79,7 @@ protected:
       TOOLS_WROOT_MT_NTUPLE_SET_MAX(double)
 
       TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX
-      
+
     }
 #undef TOOLS_WROOT_MT_NTUPLE_SET_MAX
 #undef TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX

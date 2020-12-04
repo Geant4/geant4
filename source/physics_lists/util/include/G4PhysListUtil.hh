@@ -47,7 +47,11 @@ class G4PhysListUtil
 {
 public:
 
+  static void InitialiseParameters();
+
   static G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+
+  static G4HadronicProcess* FindElasticProcess(const G4ParticleDefinition*);
 
   static G4HadronicProcess* FindCaptureProcess(const G4ParticleDefinition*);
 

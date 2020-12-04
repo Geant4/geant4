@@ -14,7 +14,7 @@ namespace rroot {
 
 inline const std::string& TTree_cls(){
   static const std::string s_v("TTree");
-  return s_v;  
+  return s_v;
 }
 
 class tree : public virtual iobject {
@@ -61,7 +61,7 @@ protected:
   tree& operator=(const tree&){return *this;}
 public:
   std::ostream& out() const {return m_out;}
-  
+
   ifile& file() {return m_file;}
   ifac& fac() {return m_fac;}
 
@@ -90,7 +90,7 @@ public:
           << std::endl;
     _dump_branches(a_out,m_branches,a_spaces+a_indent,a_indent);
   }
- 
+
   branch* find_branch(const std::string& a_name,bool a_recursive = false) const {
     return _find_branch(m_branches,a_name,a_recursive);
   }
@@ -104,19 +104,19 @@ public:
   base_leaf* find_leaf(const std::string& a_name,bool a_recursive = false) const {
     return _find_leaf(m_branches,a_name,a_recursive);
   }
- 
+
   void find_leaves(std::vector<base_leaf*>& a_leaves) const {
     a_leaves.clear();
     _find_leaves(m_branches,a_leaves);
   }
- 
+
   void find_branches(std::vector<branch*>& a_branches) const {
     a_branches.clear();
     _find_branches(m_branches,a_branches);
   }
- 
+
   branch* find_leaf_branch(const base_leaf& a_leaf) const {return _find_leaf_branch(m_branches,a_leaf);}
- 
+
   bool show(std::ostream& a_out,uint64 a_entry){
     a_out << "======> EVENT:" << a_entry << std::endl;
     tools_vforit(branch*,m_branches,it) {
@@ -316,9 +316,9 @@ public:
 
     //TObjArray
     // We read leaves in order to keep streaming synchronisation.
-    // In fact m_leaves are references to existing leaves read by 
+    // In fact m_leaves are references to existing leaves read by
     // the branches in the upper line of code.
-    //::printf("debug : tree : read leaves : begin\n");    
+    //::printf("debug : tree : read leaves : begin\n");
    {obj_array<base_leaf> m_leaves(m_fac);
     //branch b(m_out,m_fac);
     ifac::args args;
@@ -339,7 +339,7 @@ public:
               << std::endl;
         return false;
       }
-    } 
+    }
 
     //m_saved_bytes = m_tot_bytes;
    {std::vector<double> v;
@@ -366,8 +366,8 @@ public:
               << std::endl;
         return false;
       }
-    } 
-    
+    }
+
     if(vers>=16) {
       //TList* fUserInfo
       if(!dummy_TXxx_pointer_stream(a_buffer,m_fac)) {
@@ -383,12 +383,12 @@ public:
               << std::endl;
         return false;
       }
-    } 
-    
+    }
+
     if(!a_buffer.check_byte_count(s,c,TTree_cls())) return false;
 
     return true;
-  }    
+  }
 protected:
   void _dump_branches(std::ostream& a_out,
                              const std::vector<branch*>& a_bs,
@@ -415,8 +415,8 @@ protected:
               << " entry_number=" << (*it)->entry_number()
               << std::endl;
       }
-  
-  
+
+
      {const std::vector<base_leaf*>& lvs = (*it)->leaves();
       tools_vforcit(base_leaf*,lvs,itl) {
         a_out << a_spaces << a_indent

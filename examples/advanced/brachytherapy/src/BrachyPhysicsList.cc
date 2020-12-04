@@ -55,6 +55,8 @@ Author: Susanna Guatelli
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "BrachyPhysicsListMessenger.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VModularPhysicsList()
 {
@@ -91,8 +93,19 @@ fEmPhysicsList -> ConstructProcess();
 // decay physics list
 fDecPhysicsList -> ConstructProcess();
 fRadDecayPhysicsList -> ConstructProcess();
-}
 
+// Deexcitation
+// Both Fluorescence and Auger e- emission activated
+G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+de -> SetFluo(true);
+de -> SetAuger(true);
+
+// To model full Auger cascade include in the macro file
+// the following UI commands:
+// process/em/augerCascade true
+// process/em/deexcitationIgnoreCut true
+}
 
 void BrachyPhysicsList::AddPhysicsList(const G4String& name)
 {

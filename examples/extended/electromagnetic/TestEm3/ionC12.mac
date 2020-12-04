@@ -1,6 +1,5 @@
 #
 # Macro file for "TestEm3.cc"
-# (can be run in batch, without graphic)
 #
 # CsI 1 layer;
 #
@@ -19,8 +18,6 @@
 /testem/det/setAbsor 1 CsI 1.99 cm
 /testem/det/setSizeYZ 3 cm
 #
-/gun/particle ion
-/gun/ion 6 12
 /run/initialize
 #
 /testem/gun/setDefault

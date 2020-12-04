@@ -37,7 +37,7 @@ class Component {
   typedef std::pair<std::string,Callbacks> NamedCallbacks;
 #ifdef TOOLS_MEM
   TOOLS_SCLASS(exlib::WinTk::Component)
-#endif  
+#endif
 public:
   Component(const std::string& aType):fType(aType),fWindow(0),fParent(0){
 #ifdef TOOLS_MEM
@@ -68,16 +68,16 @@ public:
   const std::string& type() const {return fType;}
   HWND nativeWindow() {return fWindow;}
   Component* parent() const {return fParent;}
-  virtual void show() { 
+  virtual void show() {
     //if(!fWindow) return;
     //::ShowWindow(fWindow,SW_SHOWDEFAULT);
   }
-  void hide() { 
+  void hide() {
     if(!fWindow) return;
     ::ShowWindow(fWindow,SW_HIDE);
   }
-  
-  virtual bool size(unsigned int& aWidth,unsigned int& aHeight) { 
+
+  virtual bool size(unsigned int& aWidth,unsigned int& aHeight) {
     aWidth = 0;
     aHeight = 0;
     if(!fWindow) return false;
@@ -87,7 +87,7 @@ public:
     aHeight = rect.bottom-rect.top;
     return true;
   }
-  virtual bool position(int& aX,int& aY) { 
+  virtual bool position(int& aX,int& aY) {
     aX = 0;
     aY = 0;
     if(!fWindow) return false;
@@ -97,7 +97,7 @@ public:
     aY = rect.top;
     return true;
   }
-  Component* findFather(const std::string& aType) { 
+  Component* findFather(const std::string& aType) {
     if(aType==type()) return this;
     Component* parent = fParent;
     while(parent) {
@@ -107,7 +107,7 @@ public:
     return 0;
   }
 
-  bool setBackground(double aR,double aG,double aB){ 
+  bool setBackground(double aR,double aG,double aB){
     if(!fWindow) return false;
 
     int r = int(aR*255.0);
@@ -116,45 +116,45 @@ public:
     if((g<0)||(g>255)) return false;
     int b = int(aB*255.0);
     if((b<0)||(b>255)) return false;
- 
+
 /*
     //COLORREF cr = RGB(r,g,b);
     HBRUSH brush = ::CreateSolidBrush(RGB(r,g,b));
     ::printf("debug : WinTk::Component::setBackground : brush  %lu\n",brush);
-  
+
     HBRUSH prev = (HBRUSH)::GetClassLongPtr(fWindow,GCLP_HBRBACKGROUND);
     ::printf("debug : WinTk::Component::setBackground : prev brush  %lu\n",prev);
-  
+
    {WNDCLASSEX wc;
     ::GetClassInfoEx(::GetModuleHandle(NULL),WC_STATIC,&wc);
     ::printf("debug : prev brush xxx %lu\n",wc.hbrBackground);}
-  
-    ULONG_PTR stat = 
+
+    ULONG_PTR stat =
       ::SetClassLongPtr(fWindow,GCLP_HBRBACKGROUND,(LONG_PTR)brush);
     if(prev && !stat) {
       ::printf("debug : WinTk::Component::setBackground : SetClassLongPtr failed.\n");
       return false;
     }
-  
-   {ULONG_PTR stat = 
+
+   {ULONG_PTR stat =
     ::SetClassLongPtr(fWindow,GCLP_HBRBACKGROUND,(LONG_PTR)brush);
     ::printf("debug : WinTk::Component::setBackground : SetClassLongPtr failed.yyy %lu.\n",stat);}
-  
+
    {WNDCLASSEX wc;
     ::GetClassInfoEx(::GetModuleHandle(NULL),WC_STATIC,&wc);
     ::printf("debug : prev brush yyy %lu\n",wc.hbrBackground);}
-  
+
     if(!::InvalidateRect(fWindow,NULL,TRUE)) {
       ::printf("debug : WinTk::Component::setBackground : InvalidateRect failed.\n");
       return false;
     }
-  
+
     //::DeleteObject(brush);
     return true;
   */
     return false;
   }
-public:  
+public:
   void addCallback(const std::string& aName,Callback aFunction,void* aTag) {
     NamedCallbacks* cbks = 0;
     std::vector<NamedCallbacks>::iterator it;
@@ -210,7 +210,7 @@ public:
               return false;
             }
           }
-        }      
+        }
         return true;
       }
     }
@@ -224,7 +224,7 @@ public:
     return false;
   }
 protected:
-  static void wm__destroy(HWND aWindow) { 
+  static void wm__destroy(HWND aWindow) {
     Component* This = (Component*)::GetWindowLongPtr(aWindow,GWLP_USERDATA);
     if(This) { //How to be sure that we have a Component* ???
       if(This->fWindow!=aWindow) {
@@ -249,10 +249,10 @@ protected:
   static LRESULT CALLBACK containerProc(HWND aWindow,UINT aMessage,WPARAM aWParam,LPARAM aLParam) {
     //////////////////////////////////////////////////////////////////////////////
     //  Some child send notification message to their parent (instead of sending
-    // the message to themselves !). This procedure is used by containers 
+    // the message to themselves !). This procedure is used by containers
     // to forward these messages to the child.
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-    switch(aMessage) { 
+    switch(aMessage) {
     case WM_PARENTNOTIFY:{
       if(aWParam==WM_CREATE) {
         ::PostMessage(aWindow,WM_TK_CHILDCREATED,TK_KEY,0);
@@ -283,8 +283,8 @@ protected:
       }
     }return 0;
     case WM_COMMAND:
-    case WM_VSCROLL: 
-    case WM_HSCROLL:{ 
+    case WM_VSCROLL:
+    case WM_HSCROLL:{
       ::SendMessage((HWND)aLParam,aMessage,aWParam,(LPARAM)0);
     }return 0;
     }
@@ -294,7 +294,7 @@ protected:
 #undef WM_TK_CHILDDELETED
 #undef TK_KEY
 protected:
-  void destroy() { 
+  void destroy() {
     if(hasCallbacks("delete")) {
       CallbackData data;
       executeCallbacks("delete",data);
@@ -305,7 +305,7 @@ protected:
       fWindow = 0;
     }
   }
-  void rubberDrawLine(POINT& aBegin,POINT& aEnd) { 
+  void rubberDrawLine(POINT& aBegin,POINT& aEnd) {
     if(!fWindow) return;
     HPEN pen = ::CreatePen(PS_SOLID,5,RGB(0,0,0));
     HDC hdc = ::GetWindowDC(fWindow);
@@ -319,7 +319,7 @@ protected:
     ::ReleaseDC(fWindow,hdc);
     ::DeletePen(pen);
   }
-  void rubberDrawRect(POINT& aBegin,POINT& aEnd) { 
+  void rubberDrawRect(POINT& aBegin,POINT& aEnd) {
     if(!fWindow) return;
     HPEN pen = ::CreatePen(PS_SOLID,0,RGB(0,0,0));
     HDC hdc = ::GetWindowDC(fWindow);
@@ -374,11 +374,11 @@ public:
       ::RegisterClass(&wc);
       done = true;
     }
-  
+
     fWindow = ::CreateWindow(sWindowClassName,
                              NULL,
                              aMask, //WS_OVERLAPPEDWINDOW,
-                             CW_USEDEFAULT,CW_USEDEFAULT, 
+                             CW_USEDEFAULT,CW_USEDEFAULT,
                              400,400,
                              NULL,NULL,
                              ::GetModuleHandle(NULL),
@@ -386,7 +386,7 @@ public:
     if(!fWindow) return;
     ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(this));
   }
-  virtual ~Shell() { 
+  virtual ~Shell() {
     if(fAcceleratorTable) {
       ::DestroyAcceleratorTable(fAcceleratorTable);
       fAcceleratorTable = 0;
@@ -396,19 +396,19 @@ public:
 protected:
   Shell(Shell& a_from):Component(a_from) {}
   Shell& operator=(Shell&) {return *this;}
-public:  
-  virtual void show()  { 
+public:
+  virtual void show()  {
     if(!fWindow) return;
     ::SetForegroundWindow(fWindow);
     ::ShowWindow(fWindow,SW_SHOWDEFAULT);
     ::UpdateWindow(fWindow);
     ::DrawMenuBar(fWindow);
   }
-  void setTitle(const std::string& aString) { 
+  void setTitle(const std::string& aString) {
     if(!fWindow) return;
     ::SetWindowText(fWindow,aString.c_str());
   }
-  void setGeometry(int aX,int aY,unsigned int aWidth,unsigned int aHeight) { 
+  void setGeometry(int aX,int aY,unsigned int aWidth,unsigned int aHeight) {
     //////////////////////////////////////////////////////////////////////////////
     // Given width, height is the desired client area.
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -418,7 +418,7 @@ public:
       hborder += ::GetSystemMetrics(SM_CYMENU);
     ::MoveWindow(fWindow,aX,aY,aWidth,hborder + aHeight,TRUE);
   }
-  void setSize(unsigned int aWidth,unsigned int aHeight) { 
+  void setSize(unsigned int aWidth,unsigned int aHeight) {
     //////////////////////////////////////////////////////////////////////////////
     // Given width, height is the desired client area.
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -431,17 +431,17 @@ public:
   void setFocusWindow(HWND aWindow) {fFocusWindow = aWindow;}
   HWND focusWindow() {return fFocusWindow;}
 
-  void setSetFocusCallback(SetFocusCallback aCallback,void* aTag) { 
+  void setSetFocusCallback(SetFocusCallback aCallback,void* aTag) {
     fSetFocusCallback = aCallback;
     fSetFocusTag = aTag;
   }
-  void callSetFocusCallback() { 
+  void callSetFocusCallback() {
     if(!fSetFocusCallback) return;
     fSetFocusCallback(this,fSetFocusTag);
   }
   HACCEL nativeAcceleratorTable() {return fAcceleratorTable;}
 
-  bool addAccelerator(const std::string& aString,int aID) { 
+  bool addAccelerator(const std::string& aString,int aID) {
     //printf("debug : accel : %s %d\n",aString.c_str(),aID);
     // aString should be of the form : "a" or "Ctrl+a".
     ACCEL acc;
@@ -469,7 +469,7 @@ public:
     } else {
       return false;
     }}
-  
+
     if(!fAcceleratorTable) {
       fAcceleratorTable = ::CreateAcceleratorTable(&acc,1);
     } else {
@@ -532,16 +532,16 @@ private:
     S_VK(F22)
     S_VK(F23)
     S_VK(F24)
-  
+
     //FIXME : handle other keys ? NUMPAD[0-9]
-  
+
 #undef S_VK
 
     return false;
   }
 
   static LRESULT CALLBACK proc(HWND aWindow,UINT aMessage,WPARAM aWParam,LPARAM aLParam) {
-    switch (aMessage) { 
+    switch (aMessage) {
     // Same logic as containerProc :
     case WM_NOTIFY:{ //Coming from a child (combobox, scrollbar, toolbar).
       NMHDR* nmhdr = (NMHDR*)aLParam;
@@ -589,7 +589,7 @@ private:
       } return 0;
     case WM_COMMAND:{ //Coming from a menu item, a toolbar !
       if(aLParam) {
-        // From a toolbar ; send it back to it :   
+        // From a toolbar ; send it back to it :
         ::SendMessage((HWND)aLParam,aMessage,aWParam,0);
       } else {
         //if(HIWORD(aWParam)==1) { //From an accelerator.
@@ -650,7 +650,7 @@ public:
       ::RegisterClass(&wc);
       done = true;
     }
-    
+
     // The WS_BORDER is needed. Else probleme of size at startup.
     RECT rect;
     ::GetClientRect(parent,&rect);
@@ -665,14 +665,14 @@ public:
                              NULL);
     if(!fWindow) return;
     ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(this));
-  
+
     // initialize OpenGL rendering :
     fHDC = ::GetDC(fWindow);
     if( fHDC && SetWindowPixelFormat(fHDC) ) {
       fContext = ::wglCreateContext(fHDC);
     }
   }
-  virtual ~OpenGLArea() { 
+  virtual ~OpenGLArea() {
     if(wglGetCurrentContext()!=NULL) wglMakeCurrent(NULL,NULL);
     if(fContext)        {
       wglDeleteContext(fContext);
@@ -687,7 +687,7 @@ public:
   bool write_gl2ps(const std::string&,const std::string&);
 private:
   static LRESULT CALLBACK proc(HWND aWindow,UINT aMessage,WPARAM aWParam,LPARAM aLParam) {
-    switch (aMessage) { 
+    switch (aMessage) {
     case WM_PAINT:{
       PAINTSTRUCT ps;
       HDC hDC = BeginPaint(aWindow,&ps);
@@ -698,12 +698,12 @@ private:
         if(hdc && context) {
           ::wglMakeCurrent(hdc,context);
           // User OpenGL paint code :
-  
+
           CallbackData data;
           data.wparam = aWParam;
           data.lparam = aLParam;
           This->executeCallbacks("paint",data);
-  
+
           ::SwapBuffers(hdc);
         }
       }
@@ -756,11 +756,11 @@ private:
     PIXELFORMATDESCRIPTOR pfd;
     pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
     pfd.nVersion = 1;
-    pfd.dwFlags = 
-      PFD_DRAW_TO_WINDOW | 
-      PFD_SUPPORT_OPENGL | 
-      PFD_DOUBLEBUFFER | 
-      PFD_STEREO_DONTCARE;  
+    pfd.dwFlags =
+      PFD_DRAW_TO_WINDOW |
+      PFD_SUPPORT_OPENGL |
+      PFD_DOUBLEBUFFER |
+      PFD_STEREO_DONTCARE;
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 32;
     pfd.cRedBits = 8;
@@ -771,7 +771,7 @@ private:
     pfd.cBlueShift = 0;
     pfd.cAlphaBits = 0;
     pfd.cAlphaShift = 0;
-    pfd.cAccumBits = 64;        
+    pfd.cAccumBits = 64;
     pfd.cAccumRedBits = 16;
     pfd.cAccumGreenBits = 16;
     pfd.cAccumBlueBits = 16;
@@ -784,19 +784,19 @@ private:
     pfd.dwLayerMask = 0;
     pfd.dwVisibleMask = 0;
     pfd.dwDamageMask = 0;
-    
+
     int pixelIndex = ::ChoosePixelFormat(aHdc,&pfd);
     if (pixelIndex==0) {
       // Let's choose a default index.
-      pixelIndex = 1;        
-      if (::DescribePixelFormat(aHdc, 
-                                pixelIndex, 
-                                sizeof(PIXELFORMATDESCRIPTOR), 
+      pixelIndex = 1;
+      if (::DescribePixelFormat(aHdc,
+                                pixelIndex,
+                                sizeof(PIXELFORMATDESCRIPTOR),
                                 &pfd)==0) {
         return false;
       }
     }
-  
+
     if (::SetPixelFormat(aHdc,pixelIndex,&pfd)==FALSE) return false;
     return true;
   }

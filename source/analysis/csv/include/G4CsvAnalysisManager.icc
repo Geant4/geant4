@@ -25,7 +25,9 @@
 //
 
 #include "G4CsvNtupleManager.hh"
+#include "G4CsvNtupleFileManager.hh"
 #include "G4CsvFileManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/wcsv_histo"
 
@@ -64,7 +66,6 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVec
     if ( fState.GetVerboseL1() ) 
       fState.GetVerboseL1()->Message("write", "file", fileName);
 #endif
-    fFileManager->LockHistoDirectoryName();
   }
 
   return true;
@@ -105,7 +106,6 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVec
     if ( fState.GetVerboseL1() ) 
       fState.GetVerboseL1()->Message("write", "file", fileName);
 #endif
-    fFileManager->LockHistoDirectoryName();
   }
 
   return true;
@@ -145,7 +145,6 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
     if ( fState.GetVerboseL1() ) 
       fState.GetVerboseL1()->Message("write", "file", fileName);
 #endif
-    fFileManager->LockHistoDirectoryName();
   }
 
   return true;
@@ -162,28 +161,28 @@ G4bool G4CsvAnalysisManager::IsOpenFileImpl() const
 inline
 tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple() const
 {
-  return fNtupleManager->GetNtuple();
+  return fNtupleFileManager->GetNtupleManager()->GetNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple(G4int ntupleId) const
 {
-  return fNtupleManager->GetNtuple(ntupleId);
+  return fNtupleFileManager->GetNtupleManager()->GetNtuple(ntupleId);
 }  
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::wcsv::ntuple*>::iterator G4CsvAnalysisManager::BeginNtuple()
 {
-  return fNtupleManager->BeginNtuple();
+  return fNtupleFileManager->GetNtupleManager()->BeginNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::wcsv::ntuple*>::iterator G4CsvAnalysisManager::EndNtuple()
 {
-  return fNtupleManager->EndNtuple();
+  return fNtupleFileManager->GetNtupleManager()->EndNtuple();
 }  
 
 //_____________________________________________________________________________
@@ -191,7 +190,7 @@ inline
 std::vector<tools::wcsv::ntuple*>::const_iterator 
 G4CsvAnalysisManager::BeginConstNtuple() const
 {
-  return fNtupleManager->BeginConstNtuple();
+  return fNtupleFileManager->GetNtupleManager()->BeginConstNtuple();
 }  
 
 //_____________________________________________________________________________
@@ -199,19 +198,19 @@ inline
 std::vector<tools::wcsv::ntuple*>::const_iterator 
 G4CsvAnalysisManager::EndConstNtuple() const
 {
-  return fNtupleManager->EndConstNtuple();
+  return fNtupleFileManager->GetNtupleManager()->EndConstNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 void G4CsvAnalysisManager::SetIsCommentedHeader(G4bool isCommentedHeader)
 {
-  fNtupleManager->SetIsCommentedHeader(isCommentedHeader);
+  fNtupleFileManager->GetNtupleManager()->SetIsCommentedHeader(isCommentedHeader);
 }  
 
 //_____________________________________________________________________________
 inline
 void G4CsvAnalysisManager::SetIsHippoHeader(G4bool isHippoHeader)
 {
-  fNtupleManager->SetIsHippoHeader(isHippoHeader);
+  fNtupleFileManager->GetNtupleManager()->SetIsHippoHeader(isHippoHeader);
 }  

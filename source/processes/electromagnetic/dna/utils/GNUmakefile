@@ -33,6 +33,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/electromagnetic/dna/molecules/management/include \
             -I$(G4BASE)/processes/electromagnetic/dna/molecules/types/include \
             -I$(G4BASE)/processes/electromagnetic/dna/management/include \
+            -I$(G4BASE)/analysis/g4tools/include \
             -I$(G4BASE)/analysis/management/include
 
 include $(G4INSTALL)/config/common.gmk

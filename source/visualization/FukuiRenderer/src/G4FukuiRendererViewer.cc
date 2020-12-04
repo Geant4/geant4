@@ -164,7 +164,7 @@ G4FukuiRendererViewer::SendDevice( FRDEV dev )
 
   //	enum {PS=1, XWIN=2, PS2=3, XWIN2=4, OPEN_GL=5, DEVICE_END=6};
   
-	if( dev >= FRDEV_PS || dev < FRDEV_DEVICE_END ) {
+	if( dev >= FRDEV_PS && dev < FRDEV_DEVICE_END ) {
 		fSceneHandler.SendStrInt ( FR_DEVICE, dev );
 	}
 }

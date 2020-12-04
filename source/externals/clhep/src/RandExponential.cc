@@ -20,6 +20,10 @@
 
 #include "CLHEP/Random/RandExponential.h"
 #include "CLHEP/Random/DoubConv.h"
+#include <cmath>
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

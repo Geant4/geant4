@@ -14,6 +14,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-09-20 I.Hrivnacova, mma (testem1-V10-06-02)
+- Revied macros:
+  Added macro description in README.
+
+05-08-20 A.Ribon (testem1-V10-06-01)
+- radioactive.mac : migrated UI command from "/grdm/nucleusLimits"
+  to "/process/had/rdm/nucleusLimits"
+  (this was done for completeness, although not necessary because
+  the comment is currently commented out).
+
 14-01-20 V.Ivanchenko (testem1-V10-06-00)
 - PhysicsList - use G4RadioactiveDecayBase instead of obsolete
     G4RadioactiveDecay and minor code cleanup

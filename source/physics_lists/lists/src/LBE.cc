@@ -70,7 +70,7 @@
 #include "G4StoppingPhysics.hh"
 
 #include "G4HadronicParameters.hh"
-
+#include "G4ShortLivedConstructor.hh"
 #include "LBE.hh"
 
 // Constructor /////////////////////////////////////////////////////////////
@@ -192,7 +192,8 @@ LBE::~LBE()
  void LBE::ConstructMyShortLiveds()
 {
   // ShortLiveds
-  ;
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();
 }
 
 

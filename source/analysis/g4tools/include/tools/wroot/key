@@ -214,7 +214,7 @@ public:
             << ", object name : " << sout(m_object_name)
             << ", object title : " << sout(m_object_title)
             << ", object size : " << m_object_size
-            << "." 
+            << "."
             << std::endl;
     }
     return true;

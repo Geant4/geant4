@@ -173,7 +173,8 @@ void G4EmBuilder::ConstructCharged(G4hMultipleScattering* hmsc,
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   G4EmParameters* param = G4EmParameters::Instance();
-  G4bool isHEP = ( param->MaxKinEnergy() > 1.1*CLHEP::GeV );
+  G4HadronicParameters* hpar = G4HadronicParameters::Instance();
+  G4bool isHEP = ( param->MaxKinEnergy() > hpar->EnergyThresholdForHeavyHadrons() );
 
   // muon bremsstrahlung and pair production
   G4MuBremsstrahlung* mub = ( isHEP ) ? new G4MuBremsstrahlung() : nullptr;
@@ -222,11 +223,11 @@ void G4EmBuilder::ConstructCharged(G4hMultipleScattering* hmsc,
   // hyperons and anti particles
   if( isHEP ) { 
     ConstructBasicEmPhysics(hmsc, G4HadParticles::GetHeavyChargedParticles());
-  }
 
-  // b- and c- charged particles
-  if( G4HadronicParameters::Instance()->EnableBCParticles() ) {
-    ConstructBasicEmPhysics(hmsc, G4HadParticles::GetBCChargedHadrons());
+    // b- and c- charged particles
+    if( hpar->EnableBCParticles() ) {
+      ConstructBasicEmPhysics(hmsc, G4HadParticles::GetBCChargedHadrons());
+    }
   }
 }
 

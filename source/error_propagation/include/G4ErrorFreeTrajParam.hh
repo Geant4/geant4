@@ -54,7 +54,15 @@ class G4ErrorFreeTrajParam
   G4ErrorFreeTrajParam( const G4Point3D& pos, const G4Vector3D& mom );
     // build parameters from position and momentum
 
+  G4ErrorFreeTrajParam(const G4ErrorFreeTrajParam&) = default;
+  G4ErrorFreeTrajParam(G4ErrorFreeTrajParam&&) = default;
+    // The copy and move constructors
+
   virtual ~G4ErrorFreeTrajParam(){}
+
+  G4ErrorFreeTrajParam& operator = (const G4ErrorFreeTrajParam&) = default;
+  G4ErrorFreeTrajParam& operator = (G4ErrorFreeTrajParam&&) = default;
+    // The copy and move assignment operators
 
   void Update( const G4Track* aTrack );
     // update parameters from G4Track

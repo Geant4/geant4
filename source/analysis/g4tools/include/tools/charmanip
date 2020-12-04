@@ -8,13 +8,13 @@ namespace tools {
 
 // some char ASCII code :
 // \0      : 0
-// \n = LF : 10 
+// \n = LF : 10
 // \r = CR : 13
 // \t = HT : 9
 // ,       : 44
 
 inline bool is_upper(char a_char) {
-  // do it myself: due to problem with ctype.h and 
+  // do it myself: due to problem with ctype.h and
   // isxxx macros on different platforms.
   switch(a_char) {
     case 'A':return true;
@@ -98,15 +98,15 @@ inline bool is_digit(char a_char) {
   return false;
 }
 
-inline bool is_letter(char a_char) { 
+inline bool is_letter(char a_char) {
   return (is_lower(a_char)||is_upper(a_char)) ? true : false;
 }
 
-//inline bool is_alpha(char a_char) { 
+//inline bool is_alpha(char a_char) {
 //  return (is_lower(a_char)||is_upper(a_char)||is_digit(a_char)) ? true : false;
 //}
 
-inline bool is_printable(char a_char) { 
+inline bool is_printable(char a_char) {
   if(is_lower(a_char)||is_upper(a_char)||is_digit(a_char)) return true;
   switch(a_char) {
     case ' ':return true;

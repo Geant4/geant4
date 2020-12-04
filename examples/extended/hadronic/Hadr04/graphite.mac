@@ -1,6 +1,5 @@
 #
 # Macro file for "Hadr04.cc"
-# (can be run in batch, without graphic)
 #
 # neutron 2 MeV; all processes
 #
@@ -13,8 +12,6 @@
 /testhadr/phys/thermalScattering true
 #
 /run/initialize
-#
-/process/list
 #
 /particle/createAllIsomer
 /gun/particle neutron
@@ -30,5 +27,4 @@
 /analysis/h1/set 7  100  0. 500. meV	#energy dist <1eV
 #
 /run/printProgress 200
-#
 /run/beamOn 2000

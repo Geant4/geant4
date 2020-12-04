@@ -83,7 +83,7 @@ public:
       a_out << "tools::sg::line_style::from_string :"
             << " parse failed."
             << std::endl;
-      return false;    
+      return false;
     }
 
     visible.value(sp.visible());

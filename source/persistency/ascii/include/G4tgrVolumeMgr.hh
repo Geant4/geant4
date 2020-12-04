@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrVolumeMgr
+// G4tgrVolumeMgr
 //
 // Class description:
 //
 // Class to manage the detector units. It is a singleton.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrVolumeMgr_h
-#define G4tgrVolumeMgr_h
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrVolumeMgr_hh
+#define G4tgrVolumeMgr_hh 1
 
 #include "globals.hh"
 #include "G4tgrSolid.hh"
@@ -50,80 +45,78 @@
 
 #include <map>
 
-typedef std::map< G4String, G4tgrSolid* > G4mapssol;
-typedef std::map< G4String, G4tgrVolume* > G4mapsvol;
-typedef std::multimap< G4String, const G4tgrPlace* > G4mmapspl;
+using G4mapssol = std::map<G4String, G4tgrSolid*>;
+using G4mapsvol = std::map<G4String, G4tgrVolume*>;
+using G4mmapspl = std::multimap<G4String, const G4tgrPlace*>;
 
-//----------------------------------------------------------------------------  
-class G4tgrVolumeMgr 
-{ 
-  public:  // with description  
+class G4tgrVolumeMgr
+{
+  public:
 
-    static G4tgrVolumeMgr* GetInstance();  
-      // Get the only instance 
+    static G4tgrVolumeMgr* GetInstance();
+      // Get the only instance
 
-    G4tgrSolid* CreateSolid( const std::vector<G4String>& wl, G4bool bVOLUtag );
+    G4tgrSolid* CreateSolid(const std::vector<G4String>& wl, G4bool bVOLUtag);
 
-    void RegisterParentChild( const G4String& parentName,
-                              const G4tgrPlace* pl );
+    void RegisterParentChild(const G4String& parentName, const G4tgrPlace* pl);
       // Add to theG4tgrVolumeTree
 
-    G4tgrSolid* FindSolid( const G4String& name, G4bool exists = false );
+    G4tgrSolid* FindSolid(const G4String& name, G4bool exists = false);
       // Find a G4tgrSolid with name 'name'. If it is not found:
-      // if exists is true, exit; if exists is false, return 0
+      // if exists is true, exit; if exists is false, return nullptr
 
-    G4tgrVolume* FindVolume( const G4String& volname, G4bool exists = false );
+    G4tgrVolume* FindVolume(const G4String& volname, G4bool exists = false);
       // Find a G4tgrVolume with name 'volname'. If it is not found:
-      // if exists is true, exit; if exists is false, return 0
+      // if exists is true, exit; if exists is false, return nullptr
 
-    std::vector<G4tgrVolume*> FindVolumes( const G4String& volname,
-                                                 G4bool exists ); 
-      // Find all G4tgrVolume's with name 'volname'. '*' can be used in the 
+    std::vector<G4tgrVolume*> FindVolumes(const G4String& volname,
+                                          G4bool exists);
+      // Find all G4tgrVolume's with name 'volname'. '*' can be used in the
       // name to mean 'any character' or 'any substring'. If it is not found:
-      // if exists is true, exit; if exists is false, return 0
+      // if exists is true, exit; if exists is false, return nullptr
 
-    const G4tgrVolume* GetTopVolume();  
+    const G4tgrVolume* GetTopVolume();
       // Find the top of the volume tree
 
     std::pair<G4mmapspl::iterator, G4mmapspl::iterator>
-    GetChildren( const G4String& name );
+    GetChildren(const G4String& name);
       // Find the list of G4tgrPlace children of G4tgrVolume 'name'
 
     void DumpSummary();
       // Dump summary
     void DumpVolumeTree();
       // Dump to cout the tree of G4tgrVolume's
-    void DumpVolumeLeaf( const G4tgrVolume* vol, unsigned int copyNo,
-                         unsigned int leafDepth);
+    void DumpVolumeLeaf(const G4tgrVolume* vol, unsigned int copyNo,
+                        unsigned int leafDepth);
       // Dump a G4tgrVolume indicating its copy no
       // and its depth (number of ancestors)
 
-    void RegisterMe( G4tgrSolid* vol);
-    void UnRegisterMe( G4tgrSolid* vol );
-    void RegisterMe( G4tgrVolume* vol);
-    void UnRegisterMe( G4tgrVolume* vol );
-    void RegisterMe( G4tgrPlace* pl ) { theG4tgrPlaceList.push_back( pl ); }
-    void RegisterMe( G4tgrIsotope* iso ) { theHgIsotList.push_back( iso ); }
-    void RegisterMe( G4tgrElement* ele ) { theHgElemList.push_back( ele ); }
-    void RegisterMe( G4tgrMaterial* mat ) { theHgMateList.push_back( mat ); }
-    void RegisterMe( G4tgrRotationMatrix* rm ) { theHgRotMList.push_back(rm); }
+    void RegisterMe(G4tgrSolid* vol);
+    void UnRegisterMe(G4tgrSolid* vol);
+    void RegisterMe(G4tgrVolume* vol);
+    void UnRegisterMe(G4tgrVolume* vol);
+    void RegisterMe(G4tgrPlace* pl) { theG4tgrPlaceList.push_back(pl); }
+    void RegisterMe(G4tgrIsotope* iso) { theHgIsotList.push_back(iso); }
+    void RegisterMe(G4tgrElement* ele) { theHgElemList.push_back(ele); }
+    void RegisterMe(G4tgrMaterial* mat) { theHgMateList.push_back(mat); }
+    void RegisterMe(G4tgrRotationMatrix* rm) { theHgRotMList.push_back(rm); }
 
     // Accessors
 
-    const G4mapssol& GetSolidMap() {return theG4tgrSolidMap;}
-    const G4mapsvol& GetVolumeMap() {return theG4tgrVolumeMap;}
-    const G4mmapspl& GetVolumeTree() {return theG4tgrVolumeTree;}
-    std::vector<G4tgrVolume*> GetVolumeList() {return theG4tgrVolumeList;}
-    std::vector<G4tgrPlace*> GetDetPlaceList() {return theG4tgrPlaceList;}
-    std::vector<G4tgrIsotope*> GetIsotopeList() {return theHgIsotList;}
-    std::vector<G4tgrElement*> GetElementList() {return theHgElemList;}
-    std::vector<G4tgrMaterial*> GetMaterialList() {return theHgMateList;}
-    std::vector<G4tgrRotationMatrix*> GetRotMList() {return theHgRotMList;}
+    const G4mapssol& GetSolidMap() { return theG4tgrSolidMap; }
+    const G4mapsvol& GetVolumeMap() { return theG4tgrVolumeMap; }
+    const G4mmapspl& GetVolumeTree() { return theG4tgrVolumeTree; }
+    std::vector<G4tgrVolume*> GetVolumeList() { return theG4tgrVolumeList; }
+    std::vector<G4tgrPlace*> GetDetPlaceList() { return theG4tgrPlaceList; }
+    std::vector<G4tgrIsotope*> GetIsotopeList() { return theHgIsotList; }
+    std::vector<G4tgrElement*> GetElementList() { return theHgElemList; }
+    std::vector<G4tgrMaterial*> GetMaterialList() { return theHgMateList; }
+    std::vector<G4tgrRotationMatrix*> GetRotMList() { return theHgRotMList; }
 
   private:
 
     G4tgrVolumeMgr();
-   ~G4tgrVolumeMgr();
+    ~G4tgrVolumeMgr();
 
   private:
 

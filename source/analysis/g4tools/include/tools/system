@@ -150,7 +150,7 @@ inline bool rep_env(std::string& a_string) {
   while((dollar=a_string.find('$'))!=std::string::npos){
     std::string::size_type slash = a_string.find('/',dollar+1);
     std::string::size_type back_slash = a_string.find('\\',dollar+1);
-    std::string::size_type pos = std::string::npos; 
+    std::string::size_type pos = std::string::npos;
     if(slash!=std::string::npos) {
       if(back_slash!=std::string::npos) {
         pos = slash<back_slash?slash:back_slash;
@@ -161,7 +161,7 @@ inline bool rep_env(std::string& a_string) {
       if(back_slash!=std::string::npos) {
         pos = back_slash;
       } else {
-        pos = std::string::npos; 
+        pos = std::string::npos;
       }
     }
     std::string env;

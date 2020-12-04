@@ -46,7 +46,6 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class PrimaryGeneratorAction;
 class HistoManager;
 class G4ParticleDefinition;
 class G4Track;
@@ -56,28 +55,25 @@ class G4Track;
 class Run : public G4Run
 {
  public:
-  Run(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+  Run(DetectorConstruction*, HistoManager*);
   ~Run();
 
  public:
-    
-   virtual void Merge(const G4Run*);
-   void EndOfRun();   
-  
+  virtual void Merge(const G4Run*);
+  void EndOfRun();
+
   void ScoreNewTrack(const G4Track* aTrack);
-  
-  void AddPhantomStep(G4double e, G4double r1, G4double z1, 
-                      G4double r2, G4double z2,
-                      G4double r0, G4double z0);
-  
+
+  void AddPhantomStep(G4double e, G4double r1, G4double z1, G4double r2,
+                      G4double z2, G4double r0, G4double z0);
+
   void AddPhantomGamma(G4double e, G4double r);
-  
-  bool GetVerbose() const                          { return fVerbose; }
-  inline void AddStepInTarget()                    { ++fNstepTarget;};
-  
-private:
-  
-  DetectorConstruction*  fDetector;
+
+  bool GetVerbose() const { return fVerbose; }
+  inline void AddStepInTarget() { ++fNstepTarget; };
+
+ private:
+  DetectorConstruction* fDetector;
   HistoManager* fHistoMgr;
   G4AnalysisManager* fAnalysisManager;
 
@@ -89,9 +85,9 @@ private:
   void AddPhantomElectron(const G4DynamicParticle*);
   void AddTargetElectron(const G4DynamicParticle*);
 
-  inline void AddPhoton()  { ++fNgam; };
-  inline void AddElectron(){ ++fNelec; };
-  inline void AddPositron(){ ++fNposit; };
+  inline void AddPhoton() { ++fNgam; };
+  inline void AddElectron() { ++fNelec; };
+  inline void AddPositron() { ++fNposit; };
 
   // Parameters retrived from DetectorConstructor
   const G4ParticleDefinition* fGamma;
@@ -137,11 +133,8 @@ private:
   G4DataVector fVolumeR;
   G4DataVector fGammaE;
   G4DataVector fEdep;
-
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

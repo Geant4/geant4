@@ -20,10 +20,6 @@
 #ifndef HEP_LORENTZVECTOR_H
 #define HEP_LORENTZVECTOR_H
 
-#ifdef GNUPRAGMA
-#pragma interface
-#endif
-
 #include <iostream>
 #include "CLHEP/Vector/ThreeVector.h"
 

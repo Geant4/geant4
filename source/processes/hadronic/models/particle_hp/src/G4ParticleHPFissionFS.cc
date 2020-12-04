@@ -151,7 +151,7 @@
        theFS.SampleNeutronMult(all, Prompt, delayed, eKinetic, 0);
        if(Prompt==0&&delayed==0) Prompt=all;
        theNeutrons = theFC.ApplyYourself(Prompt); // delayed always in FS 
-       // take 'U' into account explicitely (see 5.4) in the sampling of energy @@@@
+       // take 'U' into account explicitly (see 5.4) in the sampling of energy @@@@
        break;
      case 1:
        theFS.SampleNeutronMult(all, Prompt, delayed, eKinetic, 1);

@@ -47,28 +47,31 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
-#include "G4ComponentGGHadronNucleusXsc.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
-
+#include "G4HadronInelasticProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
+#include "G4ParticleInelasticXS.hh"
 
-#include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
-#include "G4CrossSectionPairGG.hh"
-#include "G4ComponentAntiNuclNuclearXS.hh"
 #include "G4CrossSectionInelastic.hh"
 
+#include "G4TheoFSGenerator.hh"
+#include "G4FTFModel.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4CascadeInterface.hh"
+#include "G4QGSMFragmentation.hh"
+
 #include "G4PhysListUtil.hh"
+#include "G4HadParticles.hh"
+#include "G4HadProcesses.hh"
 
 #include "G4HadronicParameters.hh"
+#include "G4HadronicBuilder.hh"
+#include "G4PhysicsListHelper.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -76,364 +79,101 @@
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFQGSP_BERT);
 
 G4HadronPhysicsFTFQGSP_BERT::G4HadronPhysicsFTFQGSP_BERT(G4int)
-    : G4VPhysicsConstructor("hInelastic FTFQGSP_BERT")
-    , theNeutronCaptureModel(0)
-    , thePreEquilib(0)
-    , theCascade(0)
-    , theStringModel(0)
-    , theStringDecay(0)
-    , theQGSMFragmentation(0)
-    , theHandler(0)
-    , theModel1(0)
-    , theModel2(0)
-    , theModel3(0)
-    , theBertini1(0)
-    , theBertini2(0)
-    , theNeutronCaptureProcess(0)
-    , theNeutronInelastic(0)
-    , theProtonInelastic(0)
-    , thePionMinusInelastic(0)
-    , thePionPlusInelastic(0)
-    , theKaonMinusInelastic(0)
-    , theKaonPlusInelastic(0)
-    , theKaonZeroLInelastic(0)
-    , theKaonZeroSInelastic(0)
-    , theLambdaInelastic(0)
-    , theAntiLambdaInelastic(0)
-    , theSigmaMinusInelastic(0)
-    , theAntiSigmaMinusInelastic(0)
-    , theSigmaPlusInelastic(0)
-    , theAntiSigmaPlusInelastic(0)
-    , theXiZeroInelastic(0)
-    , theAntiXiZeroInelastic(0)
-    , theXiMinusInelastic(0)
-    , theAntiXiMinusInelastic(0)
-    , theOmegaMinusInelastic(0)
-    , theAntiOmegaMinusInelastic(0)
-    , theAntiProtonInelastic(0)
-    , theAntiNeutronInelastic(0)
-    , theAntiDeuteronInelastic(0)
-    , theAntiTritonInelastic(0)
-    , theAntiHe3Inelastic(0)
-    , theAntiAlphaInelastic(0)
-    , thePiXS(0)
-    , theKaonAndHyperonXS(0)
-    , theAntiNucleonXS(0)
-    , theNeutronInelasticXS(0)
-    , theNeutronCaptureXS(0)
+  : G4HadronPhysicsFTFQGSP_BERT("hInelastic FTFQGSP_BERT", false)
 {}
 
-
-G4HadronPhysicsFTFQGSP_BERT::G4HadronPhysicsFTFQGSP_BERT(const G4String& name, G4bool /* quasiElastic */)
-    : G4VPhysicsConstructor(name) 
-    , theNeutronCaptureModel(0)
-    , thePreEquilib(0)
-    , theCascade(0)
-    , theStringModel(0)
-    , theStringDecay(0)
-    , theQGSMFragmentation(0)
-    , theHandler(0)
-    , theModel1(0)
-    , theModel2(0)
-    , theModel3(0)
-    , theBertini1(0)
-    , theBertini2(0)
-    , theNeutronCaptureProcess(0)
-    , theNeutronInelastic(0)
-    , theProtonInelastic(0)
-    , thePionMinusInelastic(0)
-    , thePionPlusInelastic(0)
-    , theKaonMinusInelastic(0)
-    , theKaonPlusInelastic(0)
-    , theKaonZeroLInelastic(0)
-    , theKaonZeroSInelastic(0)
-    , theLambdaInelastic(0)
-    , theAntiLambdaInelastic(0)
-    , theSigmaMinusInelastic(0)
-    , theAntiSigmaMinusInelastic(0)
-    , theSigmaPlusInelastic(0)
-    , theAntiSigmaPlusInelastic(0)
-    , theXiZeroInelastic(0)
-    , theAntiXiZeroInelastic(0)
-    , theXiMinusInelastic(0)
-    , theAntiXiMinusInelastic(0)
-    , theOmegaMinusInelastic(0)
-    , theAntiOmegaMinusInelastic(0)
-    , theAntiProtonInelastic(0)
-    , theAntiNeutronInelastic(0)
-    , theAntiDeuteronInelastic(0)
-    , theAntiTritonInelastic(0)
-    , theAntiHe3Inelastic(0)
-    , theAntiAlphaInelastic(0)
-    , thePiXS(0)
-    , theKaonAndHyperonXS(0)
-    , theAntiNucleonXS(0)
-    , theNeutronInelasticXS(0)
-    , theNeutronCaptureXS(0)
+G4HadronPhysicsFTFQGSP_BERT::G4HadronPhysicsFTFQGSP_BERT(const G4String& name, G4bool qe)
+  : G4HadronPhysicsFTFP_BERT(name, qe) 
 {}
-
-
-void G4HadronPhysicsFTFQGSP_BERT::CreateModels()
-{
-  G4double minFTFP = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
-  G4double maxBERT = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
-  G4cout << " FTFQGSP_BERT : similar to FTFP_BERT but with" << G4endl
-         << " QGS string fragmentation (instead of Lund string fragmentation)." << G4endl;
-
-  theStringModel = new G4FTFModel;
-
-  theStringDecay = new G4ExcitedStringDecay( theQGSMFragmentation = new G4QGSMFragmentation );
-  theStringModel->SetFragmentationModel( theStringDecay );
-  thePreEquilib = new G4PreCompoundModel( theHandler = new G4ExcitationHandler );
-  theCascade = new G4GeneratorPrecompoundInterface( thePreEquilib );
-
-  // FTF for neutrons, protons, pions, and kaons
-  theModel1 = new G4TheoFSGenerator( "FTFP" );
-  theModel1->SetMinEnergy( minFTFP );
-  theModel1->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  theModel1->SetTransport( theCascade );
-  theModel1->SetHighEnergyGenerator( theStringModel );
- 
-  // BERT for neutrons, protons, pions, and kaons
-  theBertini1 = new G4CascadeInterface;
-  theBertini1->SetMinEnergy( 0.0 );
-  theBertini1->SetMaxEnergy( maxBERT );
-
-  // FTF for hyperons
-  theModel2 = new G4TheoFSGenerator( "FTFP" );
-  theModel2->SetMinEnergy( G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade() );
-  theModel2->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  theModel2->SetTransport( theCascade );
-  theModel2->SetHighEnergyGenerator( theStringModel );
-  
-  // BERT for hyperons
-  theBertini2 = new G4CascadeInterface;
-  theBertini2->SetMinEnergy( 0.0 );
-  theBertini2->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade() );
-
-  // FTF for Antibaryons  
-  theModel3 = new G4TheoFSGenerator( "FTFP" );
-  theModel3->SetMinEnergy( 0.0 );
-  theModel3->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  theModel3->SetTransport( theCascade );
-  theModel3->SetHighEnergyGenerator( theStringModel );
-
-  // Neutron Capture
-  theNeutronCaptureModel = new G4NeutronRadCapture;
-  theNeutronCaptureModel->SetMinEnergy( 0.0 );
-  theNeutronCaptureModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-
-  // Cross sections
-  thePiXS = new G4BGGPionInelasticXS( G4PionMinus::Definition() );
-  theAntiNucleonXS = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
-  theKaonAndHyperonXS = new G4CrossSectionInelastic( new G4ComponentGGHadronNucleusXsc );
-  theNeutronInelasticXS = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet( G4NeutronInelasticXS::Default_Name() );
-  theNeutronCaptureXS   = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet( G4NeutronCaptureXS::Default_Name() );
-}
-
 
 G4HadronPhysicsFTFQGSP_BERT::~G4HadronPhysicsFTFQGSP_BERT()
+{}
+
+void G4HadronPhysicsFTFQGSP_BERT::DumpBanner()
 {
-  delete theStringDecay;
-  delete theStringModel;
-  delete thePreEquilib;
-  delete theCascade;
-  delete theQGSMFragmentation;
+  G4HadronPhysicsFTFP_BERT::DumpBanner();
+  G4cout << " QGS string fragmentation instead of Lund string fragmentation." 
+         << G4endl;
 }
 
-
-void G4HadronPhysicsFTFQGSP_BERT::ConstructParticle()
-{
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-}
-
-
-#include "G4ProcessManager.hh"
 void G4HadronPhysicsFTFQGSP_BERT::ConstructProcess()
 {
-  CreateModels();
+  if(G4Threading::IsMasterThread()) {
+      DumpBanner();
+  }
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+  G4double emax = param->GetMaxEnergy();
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  G4ProcessManager * aProcMan = 0;
+  auto theModel = new G4TheoFSGenerator("FTFQGSP");
+  auto theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay( new G4QGSMFragmentation() ) );
+  theModel->SetHighEnergyGenerator( theStringModel );
+  theModel->SetTransport( new G4GeneratorPrecompoundInterface() );
+  theModel->SetMinEnergy( param->GetMinEnergyTransitionFTF_Cascade() );
+  theModel->SetMaxEnergy( emax );
 
-  theNeutronInelastic = new G4NeutronInelasticProcess();
-  theNeutronInelastic->RegisterMe( theModel1 );
-  theNeutronInelastic->RegisterMe( theBertini1 );
-  theNeutronInelastic->AddDataSet( new G4BGGNucleonInelasticXS( G4Neutron::Neutron() ) );
-  theNeutronInelastic->AddDataSet( theNeutronInelasticXS );
-  aProcMan = G4Neutron::Neutron()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theNeutronInelastic );
-  theNeutronCaptureProcess = new G4HadronCaptureProcess();
-  theNeutronCaptureProcess->RegisterMe( theNeutronCaptureModel );
-  aProcMan->AddDiscreteProcess( theNeutronCaptureProcess );
+  auto theCascade = new G4CascadeInterface();
+  theCascade->SetMaxEnergy( param->GetMaxEnergyTransitionFTF_Cascade() );
 
-  theProtonInelastic = new G4ProtonInelasticProcess();
-  theProtonInelastic->RegisterMe( theModel1 );
-  theProtonInelastic->RegisterMe( theBertini1 );
-  theProtonInelastic->AddDataSet( new G4BGGNucleonInelasticXS( G4Proton::Proton() ) );
-  aProcMan = G4Proton::Proton()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theProtonInelastic );
+  // p
+  G4ParticleDefinition* particle = G4Proton::Proton();
+  G4HadronicProcess* proc = 
+    new G4HadronInelasticProcess( particle->GetParticleName()+"Inelastic", particle );
+  proc->AddDataSet(new G4ParticleInelasticXS(particle));
+  proc->RegisterMe(theModel);
+  proc->RegisterMe(theCascade);
+  ph->RegisterProcess(proc, particle);
+  if( useFactorXS ) proc->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
 
-  thePionMinusInelastic = new G4PionMinusInelasticProcess();
-  thePionMinusInelastic->RegisterMe( theModel1 );
-  thePionMinusInelastic->RegisterMe( theBertini1 );
-  thePionMinusInelastic->AddDataSet( thePiXS );
-  aProcMan = G4PionMinus::PionMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( thePionMinusInelastic );
+  // n
+  particle = G4Neutron::Neutron();
+  proc = new G4HadronInelasticProcess( particle->GetParticleName()+"Inelastic", particle );
+  proc->AddDataSet(new G4NeutronInelasticXS());
+  proc->RegisterMe(theModel);
+  proc->RegisterMe(theCascade);
+  ph->RegisterProcess(proc, particle);
+  if( useFactorXS ) proc->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+       
+  proc = new G4HadronCaptureProcess("nCapture");
+  proc->RegisterMe(new G4NeutronRadCapture());
+  ph->RegisterProcess(proc, particle);
 
-  thePionPlusInelastic = new G4PionPlusInelasticProcess();
-  thePionPlusInelastic->RegisterMe( theModel1 );
-  thePionPlusInelastic->RegisterMe( theBertini1 );
-  thePionPlusInelastic->AddDataSet( thePiXS );
-  aProcMan = G4PionPlus::PionPlus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( thePionPlusInelastic );
+  // pi+
+  particle = G4PionPlus::PionPlus();
+  proc = new G4HadronInelasticProcess( particle->GetParticleName()+"Inelastic", particle );
+  proc->AddDataSet(new G4BGGPionInelasticXS(particle));
+  proc->RegisterMe(theModel);
+  proc->RegisterMe(theCascade);
+  ph->RegisterProcess(proc, particle);
+  if( useFactorXS ) proc->MultiplyCrossSectionBy( param->XSFactorPionInelastic() );
 
-  theKaonMinusInelastic = new G4KaonMinusInelasticProcess();
-  theKaonMinusInelastic->RegisterMe( theModel1 );
-  theKaonMinusInelastic->RegisterMe( theBertini1 );
-  theKaonMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4KaonMinus::KaonMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theKaonMinusInelastic );
+  // pi-
+  particle = G4PionMinus::PionMinus();
+  proc = new G4HadronInelasticProcess( particle->GetParticleName()+"Inelastic", particle );
+  proc->AddDataSet(new G4BGGPionInelasticXS(particle));
+  proc->RegisterMe(theModel);
+  proc->RegisterMe(theCascade);
+  ph->RegisterProcess(proc, particle);
+  if( useFactorXS ) proc->MultiplyCrossSectionBy( param->XSFactorPionInelastic() );
 
-  theKaonPlusInelastic = new G4KaonPlusInelasticProcess();
-  theKaonPlusInelastic->RegisterMe( theModel1 );
-  theKaonPlusInelastic->RegisterMe( theBertini1 );
-  theKaonPlusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4KaonPlus::KaonPlus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theKaonPlusInelastic );
+  // kaons
+  G4HadronicBuilder::BuildKaonsFTFQGSP_BERT();
 
-  theKaonZeroLInelastic = new G4KaonZeroLInelasticProcess();
-  theKaonZeroLInelastic->RegisterMe( theModel1 );
-  theKaonZeroLInelastic->RegisterMe( theBertini1 );
-  theKaonZeroLInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theKaonZeroLInelastic );
+  // high energy particles
+  if( emax > param->EnergyThresholdForHeavyHadrons() ) {
 
-  theKaonZeroSInelastic = new G4KaonZeroSInelasticProcess();
-  theKaonZeroSInelastic->RegisterMe( theModel1 );
-  theKaonZeroSInelastic->RegisterMe( theBertini1 );
-  theKaonZeroSInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theKaonZeroSInelastic );
+    // pbar, nbar, anti light ions
+    G4HadronicBuilder::BuildAntiLightIonsFTFP();
 
-  theLambdaInelastic = new G4LambdaInelasticProcess();
-  theLambdaInelastic->RegisterMe( theModel2 );
-  theLambdaInelastic->RegisterMe( theBertini2 );
-  theLambdaInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4Lambda::Lambda()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theLambdaInelastic );
+    // hyperons
+    G4HadronicBuilder::BuildHyperonsFTFQGSP_BERT();
 
-  theAntiLambdaInelastic = new G4AntiLambdaInelasticProcess();
-  theAntiLambdaInelastic->RegisterMe( theModel3 );
-  theAntiLambdaInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4AntiLambda::AntiLambda()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiLambdaInelastic );
-
-  theSigmaMinusInelastic = new G4SigmaMinusInelasticProcess();
-  theSigmaMinusInelastic->RegisterMe( theModel2 );
-  theSigmaMinusInelastic->RegisterMe( theBertini2 );
-  theSigmaMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4SigmaMinus::SigmaMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theSigmaMinusInelastic );
-
-  theAntiSigmaMinusInelastic = new G4AntiSigmaMinusInelasticProcess();
-  theAntiSigmaMinusInelastic->RegisterMe( theModel3 );
-  theAntiSigmaMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiSigmaMinusInelastic );
-
-  theSigmaPlusInelastic = new G4SigmaPlusInelasticProcess();
-  theSigmaPlusInelastic->RegisterMe( theModel2 );
-  theSigmaPlusInelastic->RegisterMe( theBertini2 );
-  theSigmaPlusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4SigmaPlus::SigmaPlus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theSigmaPlusInelastic );
-
-  theAntiSigmaPlusInelastic = new G4AntiSigmaPlusInelasticProcess();
-  theAntiSigmaPlusInelastic->RegisterMe( theModel3 );
-  theAntiSigmaPlusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiSigmaPlusInelastic );
-
-  theXiMinusInelastic = new G4XiMinusInelasticProcess();
-  theXiMinusInelastic->RegisterMe( theModel2 );
-  theXiMinusInelastic->RegisterMe( theBertini2 );
-  theXiMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4XiMinus::XiMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theXiMinusInelastic );
-
-  theAntiXiMinusInelastic = new G4AntiXiMinusInelasticProcess();
-  theAntiXiMinusInelastic->RegisterMe( theModel3 );
-  theAntiXiMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4AntiXiMinus::AntiXiMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiXiMinusInelastic );
-
-  theXiZeroInelastic = new G4XiZeroInelasticProcess();
-  theXiZeroInelastic->RegisterMe( theModel2 );
-  theXiZeroInelastic->RegisterMe( theBertini2 );
-  theXiZeroInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4XiZero::XiZero()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theXiZeroInelastic );
-
-  theAntiXiZeroInelastic = new G4AntiXiZeroInelasticProcess();
-  theAntiXiZeroInelastic->RegisterMe( theModel3 );
-  theAntiXiZeroInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4AntiXiZero::AntiXiZero()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiXiZeroInelastic );
-
-  theOmegaMinusInelastic = new G4OmegaMinusInelasticProcess();
-  theOmegaMinusInelastic->RegisterMe( theModel2 );
-  theOmegaMinusInelastic->RegisterMe( theBertini2 );
-  theOmegaMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4OmegaMinus::OmegaMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theOmegaMinusInelastic );
-
-  theAntiOmegaMinusInelastic = new G4AntiOmegaMinusInelasticProcess();
-  theAntiOmegaMinusInelastic->RegisterMe( theModel3 );
-  theAntiOmegaMinusInelastic->AddDataSet( theKaonAndHyperonXS );
-  aProcMan = G4AntiOmegaMinus::AntiOmegaMinus()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiOmegaMinusInelastic );
-
-  theAntiProtonInelastic = new G4AntiProtonInelasticProcess();
-  theAntiProtonInelastic->RegisterMe( theModel3 );
-  theAntiProtonInelastic->AddDataSet( theAntiNucleonXS );
-  aProcMan = G4AntiProton::AntiProton()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiProtonInelastic );
-
-  theAntiNeutronInelastic = new G4AntiNeutronInelasticProcess();
-  theAntiNeutronInelastic->RegisterMe( theModel3 );
-  theAntiNeutronInelastic->AddDataSet( theAntiNucleonXS );
-  aProcMan = G4AntiNeutron::AntiNeutron()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiNeutronInelastic );
-
-  theAntiDeuteronInelastic = new G4AntiDeuteronInelasticProcess();
-  theAntiDeuteronInelastic->RegisterMe( theModel3 );
-  theAntiDeuteronInelastic->AddDataSet( theAntiNucleonXS );
-  aProcMan = G4AntiDeuteron::AntiDeuteron()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiDeuteronInelastic );
-
-  theAntiTritonInelastic = new G4AntiTritonInelasticProcess();
-  theAntiTritonInelastic->RegisterMe( theModel3 );
-  theAntiTritonInelastic->AddDataSet( theAntiNucleonXS );
-  aProcMan = G4AntiTriton::AntiTriton()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiTritonInelastic );
-
-  theAntiHe3Inelastic = new G4AntiHe3InelasticProcess();
-  theAntiHe3Inelastic->RegisterMe( theModel3 );
-  theAntiHe3Inelastic->AddDataSet( theAntiNucleonXS );
-  aProcMan = G4AntiHe3::AntiHe3()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiHe3Inelastic );
-
-  theAntiAlphaInelastic = new G4AntiAlphaInelasticProcess();
-  theAntiAlphaInelastic->RegisterMe( theModel3 );
-  theAntiAlphaInelastic->AddDataSet( theAntiNucleonXS );
-  aProcMan = G4AntiAlpha::AntiAlpha()->GetProcessManager();
-  aProcMan->AddDiscreteProcess( theAntiAlphaInelastic );
+    // b-, c- baryons and mesons
+    if( param->EnableBCParticles() ) {
+      G4HadronicBuilder::BuildBCHadronsFTFQGSP_BERT();
+    }
+  }
 }
 

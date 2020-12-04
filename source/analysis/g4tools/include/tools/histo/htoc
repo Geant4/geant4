@@ -255,7 +255,7 @@ inline void histo_data_duiuid_assign(histo_data<double,unsigned int,unsigned int
  {a_hd.m_annotations.clear();
   for(unsigned int i=0;i<a_c.m_number_of_annotations;i++) {
     a_hd.m_annotations[a_c.m_annotations[2*i+0]] = a_c.m_annotations[2*i+1];
-  }}  
+  }}
 
   a_hd.m_all_entries = a_c.m_all_entries;
   a_hd.m_in_range_entries = a_c.m_in_range_entries;

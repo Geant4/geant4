@@ -37,8 +37,11 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Utility/atomic_int.h"
 
+#include <atomic>
 #include <string.h>	// for strcmp
 #include <iostream>
+#include <string>
+#include <vector>
 
 // don't generate warnings about agressive loop optimization
 #if defined __GNUC__ 

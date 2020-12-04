@@ -98,7 +98,7 @@ public:
 
 
 
-  // Given the atomic number and the vacancy intial shell index  returns 
+  // Given the atomic number and the vacancy initial shell index  returns 
   // the AugerTransition object related to that shell
 
   G4AugerTransition* GetAugerTransition(G4int Z, G4int vacancyShellIndex);

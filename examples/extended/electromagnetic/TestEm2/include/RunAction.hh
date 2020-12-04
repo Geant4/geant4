@@ -59,10 +59,7 @@ public:
   virtual void   EndOfRunAction(const G4Run*);
 
   void SetVerbose(G4int val);
-     
-  // Histogram name 
-  void SetHistoName(G4String& val);
-    
+
   // Acceptance parameters
   void  SetEdepAndRMS(G4ThreeVector);
      
@@ -78,8 +75,6 @@ private:
 
   G4int    fVerbose;
     
-  G4String fHistoName[2];
-
   G4double fEdeptrue;
   G4double fRmstrue;
   G4double fLimittrue;

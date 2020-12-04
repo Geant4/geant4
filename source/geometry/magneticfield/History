@@ -15,6 +15,84 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 26, 2020 J.Apostolakis                   - field-V10-06-09
+-------------------------------
+- Fix to enable G4TDormandPrince45 to be used with G4InterpolationDriver.
+
+  This fix was needed because G4Interpolation driver creates additional
+  copies of the stepper class.  Due to this it must obtain the equation
+  with the type of the templated stepper.
+
+  For a stepper to be used with 'G4InterpolationDriver', it must
+  implement the method
+     Equation_type  GetSpecificEquation()
+  Templated steppers must ensure that the return type 'Equation_type'
+  is the specific equation type of the template.
+
+  This method was added to G4DormandPrince745 and G4TDormandPrince745.
+
+October 12, 2020 J.Apostolakis                    - field-V10-06-08
+------------------------------
+- Fixes & refinements - mostly in templated classes, tests.
+  Compilation fixes, e.g. missing include <cassert>.
+  Refinements, e.g. int -> unsigned int in templates
+
+October 9, 2020 J.Apostolakis                     - field-V10-06-07
+-----------------------------
+- Configure G4ChordFinder to use templated G4TDormandPrince45 as the
+  default stepper for magnetic fields (when one is not chosen 
+  explicitly by the application.)
+
+October 9, 2020 J.Apostolakis & J. Xie           - field-V10-06-06
+--------------------------------------
+- Adapted classes that avoid virtual calls for field, equation, stepper
+  created by Josh Xie (Google Summer of Code 2014), supervised by
+  S. Wenzel & J.A.
+
+  The revised design and implementations include:
+   * equation of motion templated on the field type;
+   * steppers templated on the type of equation and the number of integration
+     variables.
+  In addition the key methods are marked as 'inline' to enable compilers, where
+  they judge possible, to embed them and avoid any function calls.
+
+  These classes can be combined also with the templated drivers
+  (G4IntegrationStepper, G4FSALIntegrationStepper and/or G4InterpolationDriver
+  to avoid virtual calls in all the levels up to the chord finder's call to
+  the integration driver. ]
+
+  The types of stepper currently available are
+  i) the originally developed intermediate order stepper:
+
+   - Name (templated) -  original  --   Order/    - Comments
+                                           / Embdedded
+   ==============================================================================
+   G4TClassicalRK4:     G4ClassicalRK4   4th / no   robust, old default
+   G4TCashKarpRKF45:    G4CashKarpRKF45  5th / yes  first embedded RK in G4
+
+  ii) the original low order steppers (for specialised uses)   
+   G4TSimpleHeum:       G4SimpleHeum     3rd / no  lower order alternative
+   G4TSimpleRunge:      G4SimpleRunge    2nd / no  very low order
+   G4TExplicitEuler:    G4ExplicitEuler  1st / no  lowest order - for checks only
+
+  and
+  iii) some newly adapted stepper(s) /  ( J.A. Oct 2020 )
+   G4TDormandPrince45  G4DormandPrince745 5th/ yes  default / preferred
+   ==============================================================================
+   
+  Note: Additional lower-order steppers are not yet available.
+        'Vector' steppers (using blaze) are not supported.
+
+  Experimental versions of fields with inline methods:
+     G4TUniformMagField,  G4TQuadrupoleMagField
+  are included to show how the field evaluation GetFieldValue can also be inlined.
+
+  Note 2:
+  Steppers which are not embedded obtain their error estimates by
+  breaking the step into two halves, then comparing with the whole step.
+  As a result many more field / derivative evaluations are needed than
+  embedded steppers of the same order, but the reliability of their error
+  estimation has different properties; so it may be more robust in some cases. )
 
 June 15, 2020 G.Cosmo                            - field-V10-06-05
 ---------------------

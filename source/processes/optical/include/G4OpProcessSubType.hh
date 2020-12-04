@@ -40,8 +40,8 @@
 #ifndef G4OpProcessSubType_h
 #define G4OpProcessSubType_h 1
 
-enum G4OpProcessSubType 
-{ 
+enum G4OpProcessSubType
+{
   fOpAbsorption = 31,
   fOpBoundary   = 32,
   fOpRayleigh   = 33,

@@ -42,12 +42,12 @@ namespace PTL
 #define THREADSLEEP(tick) std::this_thread::sleep_for(std::chrono::seconds(tick))
 
 // will be used in the future when migrating threading to task-based style
-template <typename _Tp>
-using Future = std::future<_Tp>;
-template <typename _Tp>
-using SharedFuture = std::shared_future<_Tp>;
-template <typename _Tp>
-using Promise = std::promise<_Tp>;
+template <typename Tp>
+using Future = std::future<Tp>;
+template <typename Tp>
+using SharedFuture = std::shared_future<Tp>;
+template <typename Tp>
+using Promise = std::promise<Tp>;
 
 //
 //          NOTE ON Tasking SERIAL BUILDS AND MUTEX/UNIQUE_LOCK
@@ -94,12 +94,12 @@ using namespace std::this_thread;
 
 // will be used in the future when migrating threading to task-based style
 // and are currently used in unit tests
-template <typename _Tp>
-using Promise = std::promise<_Tp>;
-template <typename _Tp>
-using Future = std::future<_Tp>;
-template <typename _Tp>
-using SharedFuture = std::shared_future<_Tp>;
+template <typename Tp>
+using Promise = std::promise<Tp>;
+template <typename Tp>
+using Future = std::future<Tp>;
+template <typename Tp>
+using SharedFuture = std::shared_future<Tp>;
 
 // Some useful types
 typedef void* ThreadFunReturnType;
@@ -113,7 +113,7 @@ typedef int (*thread_unlock)(Mutex*);
 //		a template class "Cache<T>" that required a static
 //		mutex for specific to type T:
 //			AutoLock l(TypeMutex<Cache<T>>());
-template <typename _Tp>
+template <typename Tp>
 Mutex&
 TypeMutex(const unsigned int& _n = 0)
 {
@@ -135,7 +135,7 @@ TypeMutex(const unsigned int& _n = 0)
 //		a template class "Cache<T>" that required a static
 //		recursive_mutex for specific to type T:
 //			RecursiveAutoLock l(TypeRecursiveMutex<Cache<T>>());
-template <typename _Tp>
+template <typename Tp>
 RecursiveMutex&
 TypeRecursiveMutex(const unsigned int& _n = 0)
 {
@@ -175,11 +175,11 @@ typedef std::thread::id Pid_t;
 
 // Instead of previous macro taking one argument, define function taking
 // unlimited arguments
-template <typename _Worker, typename _Func, typename... _Args>
+template <typename WorkerT, typename FuncT, typename... Args>
 void
-THREADCREATE(_Worker*& worker, _Func func, _Args... args)
+THREADCREATE(WorkerT*& worker, FuncT func, Args... args)
 {
-    *worker = Thread(func, std::forward<_Args>(args)...);
+    *worker = Thread(func, std::forward<Args>(args)...);
 }
 
 // Conditions

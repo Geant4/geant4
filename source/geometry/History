@@ -16,13 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16, 2020 Gabriele Cosmo           geometry-V10-06-01
+--------------------------------
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
 December 10, 2019 Ben Morgan               geometry-V10-06-00
 ----------------------------
 - Cleanup CMake build, removing obsolete granular library options and
   explicit include_directories.
 
-June  5, 2019 J.Apostolakis                 geometry-V10-05-01
----------------------------
+June  5, 2019 John Apostolakis             geometry-V10-05-01
+------------------------------
 - Change CMakeLists.txt in test directories to allow optional use
   with integrated testing, while keeping existing use case for
   one-target builds when G4TARGET is defined.

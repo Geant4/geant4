@@ -35,33 +35,33 @@ public: //operators
                  m_data[1]*a_v,
                  m_data[2]*a_v,
                  m_data[3]*a_v);
-  }    
+  }
   vec4f operator+(const vec4f& a_v) const {
     return vec4f(m_data[0]+a_v.m_data[0],
                  m_data[1]+a_v.m_data[1],
                  m_data[2]+a_v.m_data[2],
                  m_data[3]+a_v.m_data[3]);
-  }    
+  }
   vec4f operator-(const vec4f& a_v) const {
     return vec4f(m_data[0]-a_v.m_data[0],
                  m_data[1]-a_v.m_data[1],
                  m_data[2]-a_v.m_data[2],
                  m_data[3]-a_v.m_data[3]);
-  }    
-  vec4f& operator+=(const vec4f& a_v) {   
+  }
+  vec4f& operator+=(const vec4f& a_v) {
     m_data[0] += a_v.m_data[0];
     m_data[1] += a_v.m_data[1];
     m_data[2] += a_v.m_data[2];
     m_data[3] += a_v.m_data[3];
     return *this;
-  }    
-  vec4f& operator*=(float a_v) {   
+  }
+  vec4f& operator*=(float a_v) {
     m_data[0] *= a_v;
     m_data[1] *= a_v;
     m_data[2] *= a_v;
     m_data[3] *= a_v;
     return *this;
-  }    
+  }
   vec4f operator-() const {
     return vec4f(-m_data[0],-m_data[1],-m_data[2],-m_data[3]);
   }

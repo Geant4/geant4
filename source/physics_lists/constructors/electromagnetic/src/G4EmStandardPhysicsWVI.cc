@@ -167,7 +167,7 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   ph->RegisterProcess(ss, particle);
 
   // e+
-  particle = G4Electron::Electron();
+  particle = G4Positron::Positron();
 
   msc = new G4eMultipleScattering;
   msc->SetEmModel(new G4WentzelVIModel());

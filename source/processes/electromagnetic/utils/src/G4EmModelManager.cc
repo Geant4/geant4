@@ -53,6 +53,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
+#include "G4VMscModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -795,7 +796,7 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
 	  if(table) {
 	    size_t kk = table->size();
 	    for(size_t k=0; k<kk; ++k) {
-	      G4PhysicsVector* v = (*table)[k];
+	      const G4PhysicsVector* v = (*table)[k];
 	      if(v) {
 		G4int nn = v->GetVectorLength() - 1;
 		out << " Nbins=" << nn << " "
@@ -812,6 +813,8 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
 	    out << " Fluo"; 
 	  }
 	  out << G4endl;
+          G4VMscModel* msc = dynamic_cast<G4VMscModel*>(model);
+          if(msc != nullptr) msc->DumpParameters(out);
 	}
       }  
     }

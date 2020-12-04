@@ -12,7 +12,7 @@
 // Take care, all the below is highly disgusting...
 // (You can even find.. gotos !)
 //
-// Except for the public methods we let the style "as it". 
+// Except for the public methods we let the style "as it".
 
 #include "mnmx"
 #include "lina/vec3f"
@@ -72,7 +72,7 @@ class axis {
 
   // Ok, you really want to read all that. You had been warned...
 
-  enum { 
+  enum {
     TAxis_kTickPlus      = (1<<(9)),
     TAxis_kTickMinus     = (1<<(10)),
     TAxis_kAxisRange     = (1<<(11)),
@@ -89,7 +89,7 @@ class axis {
     TAxis_kMoreLogLabels = (1<<(23)),
     TAxis_kDecimals      = (1<<(11))
   }; //in fBits2
-  
+
   enum {
     kIsOnHeap      = 0x01000000,    // object is on heap
     kNotDeleted    = 0x02000000,    // object has not been deleted
@@ -99,7 +99,7 @@ class axis {
 
   static int GetTextFont() { return 132;}
 
-  static double TMath_ATan2(double y, double x) { 
+  static double TMath_ATan2(double y, double x) {
     if (x != 0) return  ::atan2(y, x);
     if (y == 0) return  0;
     if (y >  0) return  half_pi();
@@ -111,7 +111,7 @@ class axis {
   //static long TMath_Abs(long d) { return (d >= 0) ? d : -d; }
   //static float TMath_Abs(float d) { return (d >= 0) ? d : -d; }
   static double TMath_Abs(double d) { return (d >= 0) ? d : -d; }
-  
+
   static void TGaxis_Rotate(
    double X,  double Y,  double CFI, double SFI
   ,double XT, double YT, double &U,   double &V)
@@ -138,12 +138,12 @@ private: //to discourage inheriting that.
   axis(const axis& a_from):m_out(a_from.m_out){}
   axis& operator=(const axis&){return *this;}
 public:
-  void set_title(const std::string& aTitle) { 
+  void set_title(const std::string& aTitle) {
     fTitle = aTitle;
   }
 private:
-  bool testBit(unsigned int f) { 
-    return (bool) ((fBits & f) != 0); 
+  bool testBit(unsigned int f) {
+    return (bool) ((fBits & f) != 0);
   }
 
   static void TGaxis_LabelsLimits(std::ostream& a_out,const char *label,
@@ -290,7 +290,7 @@ public:
     // Time representation.
     // --------------------
     //
-    //   Axis labels may be considered as times, plotted in a defined 
+    //   Axis labels may be considered as times, plotted in a defined
     //   time format.
     //   The format is set with SetTimeFormat().
     //   wmin and wmax are considered as two time values in seconds.
@@ -301,11 +301,11 @@ public:
     //
     //       chopt='t': Plot times with a defined format instead of values
     //
-  
+
      aLinesAxis.clear();
      aLinesGrid.clear();
      aTexts.clear();
-  
+
      double alfa, beta, ratio1, ratio2, grid_side;
      double axis_lengthN = 0;
      double axis_length0 = 0;
@@ -350,7 +350,7 @@ public:
      char LABEL[256];
      char CHTEMP[256];
      double rangeOffset = 0;
-  
+
      double epsilon   = 1e-5;
      const double kPI = pi(); //GB
      double textSize = 0.05; //GB
@@ -367,26 +367,26 @@ public:
      BinLow3 = 0; //GB
      first = 0; //GB
      last = 0; //GB
-  
+
      double rwmi = wmin;
      double rwma = wmax;
-  
+
      //out_error(m_out,"android_debug","start");
 
      bool noExponent = testBit(TAxis_kNoExponent);
-  
+
      // If MoreLogLabels = true more Log Intermediate Labels are drawn.
      bool MoreLogLabels = testBit(TAxis_kMoreLogLabels);
-  
+
      // the following parameters correspond to the pad range in NDC
      // and the WC coordinates in the pad
-  
+
      double padh   = 1;//FIXME gPad->GetWh()*gPad->GetAbsHNDC();
      double RWxmin = 0;
      double RWxmax = 1;
      double RWymin = 0;
      double RWymax = 1;
-  
+
      SETOPT(aCHOPT,'G',OptionLog);
      SETOPT(aCHOPT,'B',OptionBlank);
      SETOPT(aCHOPT,'V',OptionVert);
@@ -410,7 +410,7 @@ public:
      SETOPT(aCHOPT,'X',OptionX);
      SETOPT(aCHOPT,'t',OptionTime);
      SETOPT(aCHOPT,'.',OptionDot);
-  
+
      if (testBit(TAxis_kTickPlus))     OptionPlus  = 2;
      if (testBit(TAxis_kTickMinus))    OptionMinus = 2;
      if (testBit(TAxis_kCenterLabels)) OptionM     = 1;
@@ -422,26 +422,26 @@ public:
            ndiv = fAxis->GetLast()-fAxis->GetFirst()+1;
         }
      }*/
-  
+
      // Set the grid length
-  
+
      if (OptionGrid) {
         if (gridlength == 0) gridlength = 0.8;
   /*FIXME
         linegrid = new TLine();
         linegrid->SetLineColor(gStyle->GetGridColor());
-        if (linegrid->GetLineColor() == 0) 
+        if (linegrid->GetLineColor() == 0)
           linegrid->SetLineColor(GetLineColor());
         linegrid->SetLineStyle(gStyle->GetGridStyle());
         linegrid->SetLineWidth(gStyle->GetGridWidth());*/
      }
-  
-    
+
+
      if (OptionTime) {
        //printf("debug : SbAxisHPLOT::paint : fTimeFormat : \"%s\"\n",
        //    fTimeFormat.c_str());
      }
-  
+
      //out_error(m_out,"android_debug","0000");
      // Determine time format
      std::string timeformat;
@@ -451,7 +451,7 @@ public:
      } else {
        timeformat = fTimeFormat;
      }
-  
+
      //out_error(m_out,"android_debug","0001");
      // determine the time offset and correct for time offset not being integer
      double timeoffset = 0;
@@ -460,7 +460,7 @@ public:
            int LnF = int(fTimeFormat.size());
            std::string stringtimeoffset = fTimeFormat.substr(IdF+2,LnF-(IdF+2));
            int yy, mm, dd, hh, mi, ss;
-           if (::sscanf(stringtimeoffset.c_str(), 
+           if (::sscanf(stringtimeoffset.c_str(),
                    "%d-%d-%d %d:%d:%d", &yy, &mm, &dd, &hh, &mi, &ss) == 6) {
               struct tm tp;
               struct tm* tptest;
@@ -532,18 +532,18 @@ public:
      int NN2   = mx<int>(N2A,1)*NN3;
      int NN1   = mx<int>(N1A,1)*NN2+1;
      int Nticks= NN1;
-  
+
      // Axis bining optimization is ignored if:
      // - the first and the last label are equal
      // - the number of divisions is 0
      // - less than 1 primary division is requested
      // - logarithmic scale is requested
-  
+
      if (wmin == wmax || ndiv == 0 || N1A <= 1 || OptionLog) {
         OptionNoopt = 1;
         OptionInt   = 0;
      }
-  
+
      // Axis bining optimization
      if ( (wmax-wmin) < 1 && OptionInt) {
         out_error(m_out,"PaintAxis", "option I not available");
@@ -551,17 +551,17 @@ public:
      }
      //out_error(m_out,"android_debug","0002");
      if (!OptionNoopt || OptionInt ) {
-  
+
         // Primary divisions optimization
         // When integer labelling is required, Optimize is invoked first
-        // and only if the result is not an integer labelling, AdjustBinSize 
+        // and only if the result is not an integer labelling, AdjustBinSize
         // is invoked.
-  
+
         optimizeLimits(wmin,wmax,N1A,
                        BinLow,BinHigh,nbins,BinWidth,
                        aCHOPT);
         if (OptionInt) {
-           if (BinLow != double(int(BinLow)) || 
+           if (BinLow != double(int(BinLow)) ||
                BinWidth != double(int(BinWidth))) {
               adjustBinSize(wmin,wmax,N1A,BinLow,BinHigh,nbins,BinWidth);
            }
@@ -597,7 +597,7 @@ public:
            wmin = BinLow;
            wmax = BinHigh;
         }
-  
+
         // Secondary divisions optimization
         int NB2 = N2A;
         if (!OptionNoopt && N2A > 1 && BinWidth > 0) {
@@ -605,7 +605,7 @@ public:
                           BinLow2,BinHigh2,NB2,BinWidth2,
                           aCHOPT);
         }
-  
+
         // Tertiary divisions optimization
         int NB3 = N3A;
         if (!OptionNoopt && N3A > 1 && BinWidth2 > 0) {
@@ -621,10 +621,10 @@ public:
         NN1    = mx<int>(N1A,1)*NN2+1;
         Nticks = NN1;
      }
-  
+
      //out_error(m_out,"android_debug","0003");
      // Coordinates are normalized
-  
+
      ratio1 = 1/(RWxmax-RWxmin);
      ratio2 = 1/(RWymax-RWymin);
      X0     = ratio1*(xmin-RWxmin);
@@ -637,22 +637,22 @@ public:
         YY0 = ratio2*(Yymin-RWymin);
         YY1 = ratio2*(Yymax-RWymin);
      }
-  
+
      //out_error(m_out,"android_debug","0004");
      if ((X0 == X1) && (Y0 == Y1)) {
         out_error(m_out,"PaintAxis", "length of axis is 0");
         return;
      }
-  
+
      // Return wmin, wmax and the number of primary divisions
      if (OptionX) {
         ndiv = N1A;
         return;
      }
-  
+
      int maxDigits = 5;
      //FIXME if (fAxis) maxDigits = fMaxDigits;
-  
+
   /*FIXME
      TLatex *textaxis = new TLatex();
      lineaxis->SetLineColor(GetLineColor());
@@ -660,21 +660,21 @@ public:
      lineaxis->SetLineWidth(GetLineWidth());
      textaxis->SetTextColor(GetTextColor());
      textaxis->SetTextFont(GetTextFont());
-  
+
      if (!gPad->IsBatch()) {
         float chupxvsav, chupyvsav;
         gVirtualX->GetCharacterUp(chupxvsav, chupyvsav);
         gVirtualX->SetClipOFF(gPad->GetCanvasID());
      }
   */
-  
+
      // Compute length of axis
      double axis_length = ::sqrt((X1-X0)*(X1-X0)+(Y1-Y0)*(Y1-Y0));
      if (axis_length == 0) {
         out_error(m_out,"PaintAxis", "length of axis is 0");
         return; //goto L210;
      }
-  
+
      //out_error(m_out,"android_debug","0005");
      if (!OptionNoopt || OptionInt) {
         axis_lengthN = ::sqrt((XX1-XX0)*(XX1-XX0)+(YY1-YY0)*(YY1-YY0));
@@ -694,7 +694,7 @@ public:
            }
         }
      }
-  
+
      //out_error(m_out,"android_debug","0006");
      if (X0 == X1) {
         phi  = 0.5*kPI;
@@ -714,13 +714,13 @@ public:
      asinphi = TMath_Abs(sinphi);
      if (acosphi <= epsilon) { acosphi = 0;  cosphi  = 0; }
      if (asinphi <= epsilon) { asinphi = 0;  sinphi  = 0; }
-  
+
      //out_error(m_out,"android_debug","0007");
      // Mside positive, tick marks on positive side
      // Mside negative, tick marks on negative side
      // Mside zero, tick marks on both sides
      // Default is positive except for vertical axis
-  
+
      Mside=1;
      if (X0 == X1 && Y1 > Y0)       Mside = -1;
      if (OptionPlus)                Mside = 1;
@@ -734,24 +734,24 @@ public:
         if (OptionEqual) Lside=1;
      }
      XLside = Lside;
-  
+
      // Tick marks size
      double tick_side;
      if(XMside >= 0) tick_side = 1;
      else            tick_side = -1;
-  
+
      double atick[3];
      if (OptionSize) atick[0] = tick_side*axis_length*fTickSize;
      else            atick[0] = tick_side*axis_length*0.03;
-  
+
      atick[1] = 0.5*atick[0];
      atick[2] = 0.5*atick[1];
-  
+
      // Set the side of the grid
      if ((X0 == X1) && (Y1 > Y0))  grid_side =-1;
      else                          grid_side = 1;
-  
-  
+
+
      //out_error(m_out,"android_debug","0008");
      // Compute Values if Function is given
      /*GB if(fFunction) {
@@ -763,7 +763,7 @@ public:
            rwmi = t;
         }
      }*/
-  
+
      // Draw the axis if needed...
      if (!OptionBlank) {
         xpl1 = X0;
@@ -775,16 +775,16 @@ public:
         aLinesAxis.push_back((float)xpl2);
         aLinesAxis.push_back((float)ypl2);
      }
-  
+
      //out_error(m_out,"android_debug","0009");
      // No bining
-  
+
      if (ndiv == 0) return; //goto L210;
      if (wmin == wmax) {
         out_error(m_out,"PaintAxis", "wmin (%f) == wmax (%f)", wmin, wmax);
         return; //goto L210;
      }
-  
+
      // Draw axis title if it exists
      if (!drawGridOnly && fTitle.size()) {
         textSize = fTitleSize;
@@ -830,13 +830,13 @@ public:
                                              fTitle,textAlign));
         }
      }
-  
+
      //out_error(m_out,"android_debug","0010");
      // Labels preparation:
      // Get character height
      // Compute the labels orientation in case of overlaps
      // with alphanumeric labels for horizontal axis).
-  
+
      charheight = fLabelSize;
      if (OptionText) charheight *= 0.66666;
      //FIXME textaxis->SetTextFont(fLabelFont);
@@ -901,7 +901,7 @@ public:
            }*/
         }
      }
-  
+
      //out_error(m_out,"android_debug","0011");
      // Now determine orientation of labels on axis
   /*FIXME
@@ -913,7 +913,7 @@ public:
         if (OptionPara) gVirtualX->SetCharacterUp(-sinphi,cosphi);
         if (OptionDown) gVirtualX->SetCharacterUp(cosphi,sinphi);
      }*/
-  
+
      // Now determine text alignment
      Xalign = 2;
      Yalign = 1;
@@ -929,7 +929,7 @@ public:
         if (cosphi*sinphi < 0)  Xalign = 3;
      }
      textAlign = 10*Xalign+Yalign;
-  
+
      //out_error(m_out,"android_debug","0012");
      // Position of labels in Y
      if (X0 == X1) {
@@ -954,7 +954,7 @@ public:
         else                  Ylabel = -fLabelOffset;
      }
      if (OptionText) Ylabel /= 2;
-  
+
      //out_error(m_out,"android_debug","0013");
      // Draw the linear tick marks if needed...
      if (!OptionLog) {
@@ -1011,7 +1011,7 @@ public:
                 aLinesAxis.push_back((float)xpl2);
                 aLinesAxis.push_back((float)ypl2);
               }
-  
+
               if (OptionGrid) {
                  if (ltick == 0) {
                     if (OptionNoopt && !OptionInt) {
@@ -1034,7 +1034,7 @@ public:
            }
            Xtick0 = 0;
            Xtick1 = Xtick;
-  
+
            if ((!OptionNoopt || OptionInt) && axis_length0) {
               int Nticks0;
               /*GB if (fFunction) Nticks0 = int((BinLow-wmin)/DXtick);
@@ -1073,7 +1073,7 @@ public:
                    aLinesAxis.push_back((float)xpl2);
                    aLinesAxis.push_back((float)ypl2);
                  }
-  
+
                  if (OptionGrid) {
                     if (ltick == 0) {
                       TGaxis_Rotate(Xtick0,0,cosphi,sinphi,XX0,YY0,xpl2,ypl2);
@@ -1089,7 +1089,7 @@ public:
                  Xtick0 -= DXtick;
               }
            }
-  
+
            if ((!OptionNoopt || OptionInt) && axis_length1) {
               int Nticks1;
               /*GB if (fFunction) Nticks1 = int((wmax-BinHigh)/DXtick);
@@ -1128,7 +1128,7 @@ public:
                    aLinesAxis.push_back((float)xpl2);
                    aLinesAxis.push_back((float)ypl2);
                  }
-  
+
                  if (OptionGrid) {
                     if (ltick == 0) {
                       TGaxis_Rotate(Xtick1,0,cosphi,sinphi,XX0,YY0 ,xpl2,ypl2);
@@ -1146,7 +1146,7 @@ public:
            }
         }
      }
-  
+
      //out_error(m_out,"android_debug","0014");
      // Draw the numeric labels if needed...
      if (!drawGridOnly && !OptionUnlab) {
@@ -1161,12 +1161,12 @@ public:
               DWlabel = (wmax-wmin)/double(N1A);
               if (OptionNoopt && !OptionInt) DXlabel = axis_length/double(N1A);
               else                           DXlabel = axis_lengthN/double(N1A);
-  
+
               char CHCODED[8];
               int NEXE  = 0;
               bool FLEXE = false;
               if (!OptionText && !OptionTime) {
-  
+
                  // We have to decide what format to generate
                  // for numeric labels only)
                  // Test the magnitude, decide format
@@ -1175,9 +1175,9 @@ public:
                  bool FLEXPO = false;
                  bool FLEXNE = false;
                  WW  = mx<double>(TMath_Abs(wmin),TMath_Abs(wmax));
-  
+
                  // First case : (wmax-wmin)/N1A less than 0.001
-                 // 0.001 fMaxDigits of 5 (fMaxDigits) characters). 
+                 // 0.001 fMaxDigits of 5 (fMaxDigits) characters).
                  //  Then we use x 10 n
                  // format. If AF >=0 x10 n cannot be used
                  double xmicros = 0.00099;
@@ -1205,9 +1205,9 @@ public:
                  NF  = int(AF)+1;
                  if (!noExponent && NF > maxDigits)  FLEXPO = true;
                  if (!noExponent && NF < -maxDigits) FLEXNE = true;
-  
+
                  // Use x 10 n format. (only powers of 3 allowed)
-  
+
                  if (FLEXPO) {
                     FLEXE = true;
                     while (1) {
@@ -1218,7 +1218,7 @@ public:
                        if (NEXE%3 == 0 && WW <= ::pow(10.,maxDigits-1)) break;
                     }
                  }
-  
+
                  if (FLEXNE) {
                     FLEXE = true;
                     RNE   = 1/::pow(10.,maxDigits-2);
@@ -1230,7 +1230,7 @@ public:
                        if (NEXE%3 == 0 && WW >= RNE) break;
                     }
                  }
-  
+
                  NA = 0;
                  for (i=maxDigits-1; i>0; i--) {
                     if (TMath_Abs(WW) < ::pow(10.,i)) NA = maxDigits-i;
@@ -1244,13 +1244,13 @@ public:
                     }
                     else break;
                  }
-  
+
                  IF2 = NA;
                  IF1 = mx<int>(NF+NA,maxDigits)+1;
   L110:
                  if (mn<double>(wmin,wmax) < 0)IF1 = IF1+1;
                  IF1 = mn<int>(IF1,32);
-  
+
                  // In some cases, IF1 and IF2 are too small....
                  while (DWlabel < ::pow(10.,-IF2)) {
                     IF1++;
@@ -1262,9 +1262,9 @@ public:
                  if(IF2)snpf(CHCODED,sizeof(CHCODED),"%%%d.%df",IF1,IF2);
                  else   snpf(CHCODED,sizeof(CHCODED),"%%%d.%df",IF1+1,1);
               }
-  
+
               // We draw labels
-  
+
               snpf(CHTEMP,sizeof(CHTEMP),"%g",DWlabel);
 
               size_t ndecimals = 0;
@@ -1286,14 +1286,14 @@ public:
                     Xlabel = DXlabel*k;
                  }
                  if (OptionM)    Xlabel += 0.5*DXlabel;
-  
+
                  if (!OptionText && !OptionTime) {
                     snpf(LABEL,sizeof(LABEL),&CHCODED[0],Wlabel);
                     LABEL[28] = 0;
                     Wlabel += DWlabel;
-  
+
                     TGaxis_LabelsLimits(m_out,LABEL,first,last);  //Eliminate blanks
-  
+
                     if (LABEL[first] == '.') { //check if '.' is preceeded by a digit
                        ::strcpy(CHTEMP, "0");
                        ::strcat(CHTEMP, &LABEL[first]);
@@ -1306,7 +1306,7 @@ public:
                        ::strcpy(LABEL, CHTEMP);
                        first = 1; last = int(::strlen(LABEL));
                     }
-  
+
                     // We eliminate the non significant 0 after '.'
                     if (ndecimals) {
                        char *adot = ::strchr(LABEL,'.');
@@ -1319,9 +1319,9 @@ public:
                        if (!OptionDot) { LABEL[last] = 0; last--;}
                     }
                  }
-  
+
                  // Generate the time labels
-  
+
                  if (OptionTime) {
                     double timed = Wlabel + (int)(timeoffset) - rangeOffset;
                     time_t timelabel = (time_t)((long)(timed));
@@ -1334,33 +1334,33 @@ public:
                     std::string timeformattmp;
                     if (timeformat.size() < 220) timeformattmp = timeformat;
                     else timeformattmp = "#splitline{Format}{too long}";
-  
+
                     // Appends fractionnal part if seconds displayed
                     if (DWlabel<0.9) {
                        double tmpdb;
                        size_t tmplast;
                        snpf(LABEL,sizeof(LABEL),"%%S%7.5f",modf(timed,&tmpdb));
                        tmplast = ::strlen(LABEL)-1;
-  
+
                        // We eliminate the non significiant 0 after '.'
                        while (LABEL[tmplast] == '0') {
                           LABEL[tmplast] = 0; tmplast--;
                        }
-  
+
                        //FIXME timeformattmp.ReplaceAll("%S",LABEL);
                        // Replace the "0." at the begining by "s"
                        //FIXME timeformattmp.ReplaceAll("%S0.","%Ss");
-  
+
                     }
-  
+
                     ::strftime(LABEL,256,timeformattmp.c_str(),utctis);
                     ::strcpy(CHTEMP,&LABEL[0]);
                     first = 0; last=int(::strlen(LABEL))-1;
                     Wlabel = wTimeIni + (k+1)*DWlabel;
                  }
-  
+
                  // We generate labels (numeric or alphanumeric).
-  
+
                  if (OptionNoopt && !OptionInt)
                           TGaxis_Rotate (Xlabel,Ylabel,cosphi,sinphi,X0,Y0,XX,YY);
                  else     TGaxis_Rotate (Xlabel,Ylabel,cosphi,sinphi,XX0,YY0,XX,YY);
@@ -1397,7 +1397,7 @@ public:
                     }
                  }
                  else {
-  
+
                     // Text alignment is down
                     int LNLEN = 0;
                     if (!OptionText)     LNLEN = last-first+1;
@@ -1418,9 +1418,9 @@ public:
                     }
                  }
               }
-  
+
               // We use the format x 10 ** n
-  
+
               if (FLEXE && !OptionText && NEXE)  {
                  //G.Barrand ::sprintf(LABEL,"#times10^{%d}", NEXE);
                  snpf(LABEL,sizeof(LABEL),
@@ -1437,9 +1437,9 @@ public:
            }
         }
      }
-  
+
      // Log axis
-  
+
      //out_error(m_out,"android_debug","0015");
      if (OptionLog && ndiv) {
         unsigned int xi1=0,xi2 = 0,wi = 0,yi1=0,yi2,hi = 0;
@@ -1469,7 +1469,7 @@ public:
         int IH2    = 1+int(H2);
         int NBININ = IH2-IH1+1;
         double AXMUL  = (X11-X00)/(H2SAV-XMNLOG);
-  
+
         // Plot decade and intermediate tick marks
         decade      = IH1-2;
         int labelnumber = IH1;
@@ -1512,7 +1512,7 @@ public:
              aLinesAxis.push_back((float)xpl2);
              aLinesAxis.push_back((float)ypl2);
            }
-  
+
            if (OptionGrid) {
              TGaxis_Rotate(Xone,0,cosphi,sinphi,X0,Y0,xpl2,ypl2);
              TGaxis_Rotate(Xone,grid_side*gridlength,cosphi,sinphi,X0,Y0,
@@ -1522,9 +1522,9 @@ public:
              aLinesGrid.push_back((float)xpl2);
              aLinesGrid.push_back((float)ypl2);
            }
-  
+
            if (!drawGridOnly && !OptionUnlab)    {
-  
+
               // We generate labels (numeric only).
               if (noExponent) {
                  double rlab = ::pow(10.,labelnumber);
@@ -1589,7 +1589,7 @@ public:
            }
   L160:
            for (k=2;k<10;k++) {
-  
+
               // Plot intermediate tick marks
               //double Xone; //rm shadow warning.
               Xone = X00+AXMUL*(::log10(double(k))+double(decade)-XMNLOG);
@@ -1623,10 +1623,10 @@ public:
                    aLinesAxis.push_back((float)xpl2);
                    aLinesAxis.push_back((float)ypl2);
                  }
-  
+
                  // Draw the intermediate LOG labels if requested
-  
-                 if (MoreLogLabels && !OptionUnlab && 
+
+                 if (MoreLogLabels && !OptionUnlab &&
                      !drawGridOnly && !overlap) {
                     if (noExponent) {
                        double rlab = double(k)*::pow(10.,labelnumber-1);
@@ -1683,8 +1683,8 @@ public:
                        }
                     }
                  }
-  
-                 // Draw the intermediate LOG grid if only three 
+
+                 // Draw the intermediate LOG grid if only three
                  // decades are requested
                  if (OptionGrid && NBININ <= 5 && ndiv > 100) {
                    TGaxis_Rotate(Xone,0,cosphi,sinphi,X0,Y0,xpl2, ypl2);
@@ -1701,12 +1701,12 @@ public:
   L200:
         int kuku=0; if (kuku) { }
      }  //endif (OptionLog && ndiv)
-  
-  
+
+
      //out_error(m_out,"android_debug","end");
   //L210:
   }
-  
+
   /*
   void TGaxis_SetDecimals(bool dot)
   {
@@ -1716,11 +1716,11 @@ public:
   // is also stripped, unless this option is specified.
   // One can disable the option by calling axis.SetDecimals(true).
   // Note the bit is set in fBits (as opposed to fBits2 in TAxis!)
-  
+
      if (dot) SetBit(TAxis_kDecimals);
      else     ResetBit(TAxis_kDecimals);
   }
-  
+
   void TGaxis_SetMaxDigits(int maxd)
   {
      // static function to set fMaxDigits for axis with the bin content
@@ -1730,18 +1730,18 @@ public:
      //For example, to accept 6 digits number like 900000 on an axis
      //call TGaxis::SetMaxDigits(6). The default value is 5.
      //fMaxDigits must be greater than 0.
-  
+
      fMaxDigits = maxd;
      if (maxd < 1) fMaxDigits = 1;
   }
-  
+
   void TGaxis_SetMoreLogLabels(bool more)
   {
   // Set the kMoreLogLabels bit flag
   // When this option is selected more labels are drawn when in log scale
   // and there is a small number of decades  (<3).
   // Note that this option is automatically inherited from TAxis
-  
+
      if (more) SetBit(TAxis_kMoreLogLabels);
      else      ResetBit(TAxis_kMoreLogLabels);
   }
@@ -1751,16 +1751,16 @@ public:
   // By default, an exponent of the form 10^N is used when the label values
   // are either all very small or very large.
   // One can disable the exponent by calling axis.SetNoExponent(true).
-  
+
      if (noExponent) SetBit(TAxis_kNoExponent);
      else            ResetBit(TAxis_kNoExponent);
   }
-  void TGaxis_SetOption(const std::string& option)  
+  void TGaxis_SetOption(const std::string& option)
   {
      fCHOPT = option;
   }
   */
-  
+
   void set_time_format(const std::string& a_format)
   // Change the format used for time plotting
   // ========================================
@@ -1788,7 +1788,7 @@ public:
         //  fTimeFormat.c_str());
         return;
      }
-  
+
      std::string::size_type IdF = fTimeFormat.find("%F");
      if (IdF!=std::string::npos) {
         size_t LnF = fTimeFormat.size();
@@ -1799,54 +1799,54 @@ public:
         //  fTimeFormat.c_str());
      } else {
         fTimeFormat = a_format;
-  
+
         // In CERN-ROOT :
         //SetTimeOffset(gStyle->GetTimeOffset());
         //TAxis::fTimeOffset = 788918400; // UTC time at 01/01/95
         //double UTC_time_1995_01_01__00_00_00 = 788918400; //CERN-ROOT
         //setTimeOffset(UTC_time_1995_01_01__00_00_00);
-  
+
         //Be consistent with SoAxis::timeOffset being 0.
         double UTC_time_1970_01_01__00_00_00 = 0; //UNIX
         set_time_offset(UTC_time_1970_01_01__00_00_00);
-  
+
         //::printf("debug : SbAxisHPLOT::setTimeFormat : 002 : \"%s\"\n",
         //  fTimeFormat.c_str());
      }
   }
-  
+
   void set_time_offset(double toffset,bool a_is_gmt = false) {
      // Change the time offse  t
-  
+
      std::string::size_type IdF = fTimeFormat.find("%F");
      if (IdF!=std::string::npos) {
        fTimeFormat = fTimeFormat.substr(0,IdF);
      }
      fTimeFormat += "%F";
-  
+
      time_t timeoff = (time_t)((long)(toffset));
      struct tm* utctis = ::gmtime(&timeoff);
-  
+
      char tmp[256];
      ::strftime(tmp,256,"%Y-%m-%d %H:%M:%S",utctis);
      fTimeFormat += tmp;
-  
+
      // append the decimal part of the time offset
      double ds = toffset-(int)toffset;
      if(ds!= 0) {
         snpf(tmp,sizeof(tmp),"s%g",ds);
         fTimeFormat += tmp;
      }
-  
+
      // If the time is GMT, stamp fTimeFormat
      if (a_is_gmt) fTimeFormat += " GMT";
-  
+
      //::printf("debug : SbAxisHPLOT::setTimeOffset : \"%s\"\n",
      //  fTimeFormat.c_str());
   }
-  
-  
-  
+
+
+
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////
@@ -1865,7 +1865,7 @@ private:
   //  BinLow,BinHigh : New WMIN,WMAX .
   //  nold   : Old NDIV .
   //  nbins    : New NDIV   .
-  
+
      int lwid, kwid;
      int ntemp = 0;
      int jlog  = 0;
@@ -1873,10 +1873,10 @@ private:
      double alb, awidth, sigfig;
      double timemulti = 1;
      int roundmode =0;
-  
+
      int OptionTime;
      SETOPT(aCHOPT,'t',OptionTime);
-  
+
      double AL = mn<double>(A1,A2);
      double AH = mx<double>(A1,A2);
      if (AL == AH) AH = AL+1;
@@ -1884,16 +1884,16 @@ private:
      if (nold == -1 && BinWidth > 0 ) goto L90;
      ntemp = (int)mx<double>(nold,2);
      if (ntemp < 1) ntemp = 1;
-  
+
   L20:
      awidth = (AH-AL)/double(ntemp);
      timemulti = 1;
      if (awidth >= FLT_MAX) goto LOK;  //in float.h
      if (awidth <= 0)       goto LOK;
-  
+
   //      If time representation, bin width should be rounded to seconds
   //      minutes, hours or days
-  
+
      if (OptionTime && awidth>=60) { // if width in seconds, treat it as normal
         //   width in minutes
         awidth /= 60; timemulti *=60;
@@ -1920,7 +1920,7 @@ private:
         }
      }
   //      Get nominal bin width in exponential for  m
-  
+
      jlog   = int(::log10(awidth));
      if (jlog <-200 || jlog > 200) {
         BinLow   = 0;
@@ -1933,11 +1933,11 @@ private:
      sigfig = awidth* ::pow(10.,-jlog) -1e-10;
      //in the above statement, it is important to substract 1e-10
      //to avoid precision problems if the tests below
-     
+
   //      Round mantissa
-  
+
      switch (roundmode) {
-  
+
   //      Round mantissa up to 1, 1.5, 2, 3, or 6 in case of minutes
         case 1: // case 60
            if      (sigfig <= 1)    siground = 1;
@@ -1949,7 +1949,7 @@ private:
            else                     siground = 6;
            break;
         case 2: // case 12 and 24
-  
+
   //      Round mantissa up to 1, 1.2, 2, 2.4, 3 or 6 in case of hours or months
            if      (sigfig <= 1 && jlog==0)    siground = 1;
            else if (sigfig <= 1.2 && jlog==1)    siground = 1.2;
@@ -1960,7 +1960,7 @@ private:
            else if (jlog==0)        siground = 12;
            else                     siground = 2.4;
            break;
-  
+
   //-      Round mantissa up to 1, 1.4, 2, or 7 in case of days (weeks)
         case 3: // case 30
            if      (sigfig <= 1 && jlog==0)    siground = 1;
@@ -1969,7 +1969,7 @@ private:
            else                     siground = 7;
            break;
         default :
-        
+
   //      Round mantissa up to 1, 2, 2.5, 5, or 10 in case of decimal number
            if      (sigfig <= 1)    siground = 1;
            else if (sigfig <= 2)    siground = 2;
@@ -1978,12 +1978,12 @@ private:
            else                    {siground = 1;   jlog++; }
            break;
      }
-  
+
      BinWidth = siground* ::pow(10.,jlog);
      if (OptionTime) BinWidth *= timemulti;
-  
+
   //      Get new bounds from new width BinWidth
-  
+
   L90:
      alb  = AL/BinWidth;
      if (TMath_Abs(alb) > 1e9) {
@@ -2008,12 +2008,12 @@ private:
         goto LOK;
      }
      if (2*nbins == nold && !OptionTime) {ntemp++; goto L20; }
-  
+
   LOK:
      double oldBinLow = BinLow;
      double oldBinHigh = BinHigh;
      int oldnbins = nbins;
-  
+
      double atest = BinWidth*0.0001;
      //if (TMath_Abs(BinLow-A1)  >= atest) { BinLow  += BinWidth;  nbins--; } //replaced by Damir in 3.10/02
      //if (TMath_Abs(BinHigh-A2) >= atest) { BinHigh -= BinWidth;  nbins--; } //by the next two lines
@@ -2059,10 +2059,10 @@ private:
         int width = int(BinWidth/5) + 1;
         BinWidth = 5*width;
         BinLow   = int(A1/BinWidth)*BinWidth  ;
-  
+
   //     We determine BinLow to have one tick mark at 0
   //     if there are negative labels.
-  
+
         if (A1 < 0) {
            for (int ic=0; ic<1000; ic++) {
               double rbl = BinLow/BinWidth;
@@ -2078,8 +2078,8 @@ private:
         XB += BinWidth;
         nbins++;
      }
-     BinHigh = XB - BinWidth;  
-  }  
+     BinHigh = XB - BinWidth;
+  }
   void setLabelOffset(float aValue) { fLabelOffset = aValue;}
   void setLabelSize(float aValue) { fLabelSize = aValue;}
   void setTitleOffset(float aValue) { fTitleOffset = aValue;}
@@ -2089,8 +2089,8 @@ public:
 
 private:
   std::ostream& m_out;
-  //int fMaxDigits; //!Number of digits above which the 10>N notation is used 
-private:  
+  //int fMaxDigits; //!Number of digits above which the 10>N notation is used
+private:
   //TObject :
   unsigned int fBits;       //bit field status word
   float    fTickSize;            //Size of primary tick mark in NDC

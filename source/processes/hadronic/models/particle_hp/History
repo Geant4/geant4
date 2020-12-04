@@ -13,6 +13,63 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+05 November 2020 Alberto Ribon (hadr-hpp-V10-06-12)
+--------------------------------------------------
+-  G4ParticleHPInelastic, G4ParticleHPInelasticData : improved error message
+   in the case that both G4PARTICLEHPDATA and the related particle-specific
+   environmental variable (e.g. G4PROTONHPDATA) are not defined.
+   The recommandation is to define only G4PARTICLEHPDATA.
+
+27 October 2020 Alberto Ribon (hadr-hpp-V10-06-11)
+--------------------------------------------------
+-  G4ParticleHPInelastic, G4ParticleHPManager : enabled the print out of
+   the physics parameters (only once and with a format similar to
+   Precompound/de-excitation and RadioativeDecay; note that rather than
+   enabling the print out in G4ParticleHPInelastic::BuildPhysicsTable,
+   we could have used instead the analogous method BuildPhysicsTable of
+   one of the following classes: G4ParticleHPCapture, G4ParticleHPElastic
+   and G4ParticleHPFission).
+-  G4ParticleHPContAngularPar, G4ParticleHPInelasticBaseFS,
+   G4ParticleHPEnAngCorrelation, G4ParticleHPFinalState : replaced
+   the use of the environmental variable G4PHP_DO_NOT_ADJUST_FINAL_STATE
+   (the only one used outside the class G4ParticleHPManager - a part for
+   the one pointing to the data libraries) with the equivalent
+   G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState().
+
+05 August 2020 Alberto Ribon (hadr-hpp-V10-06-10)
+-------------------------------------------------
+- G4ParticleHPMessenger : added new UI macro command
+  "use_Wendt_fission_model" related to the use of Wendt fission
+  model; make sure that not more than one fission fragment model
+  is active.
+- G4ParticleHPManager : added a new variable related to the use of
+  Wendt fission model; throw a "JustWarning" exception when the
+  environmental variables are used (to remind that they are still
+  valid but deprecated, and will be removed in Geant4 version 11.0);
+  added new method "DumpSetting()" which needs to be called somewhere
+  to print out once the values of its parameters.
+- G4ParticleHPChannel : moved environmental variable related to
+  the use of Wendt fission model from this class to
+  G4ParticleHPManager.
+
+21 July 2020 Ben Morgan (hadr-hpp-V10-06-09)
+--------------------------------------------
+- Use GEANT4_BUILD_PHP_AS_HP option to enable PHP_AS_HP,
+  retiring use of PHP_AS_HP environment variable.
+
+17 July 2020  Dennis Wright  (hadr-hpp-V10-06-08)
+-------------------------------------------------
+- Fix bug #2233: two fission fragment models can be active at the same time
+  If Wendt model is active in ctor of G4ParticleHPChannel, turn off standard
+  fragment production model
+
+30 June 2020  Dennis Wright  (hadr-hpp-V10-06-07)
+-------------------------------------------------
+- Fix bug #2234: thread competition in method
+  G4FissionProductYieldDist::G4GetFission(void).  Place auto lock
+  on this method.
+
 28 May 2020  Ben Morgan      (hadr-hpp-V10-06-06)
 ---------------------------------------------------
 - Remove obsolete GRANULAR_DEPENDENCIES entries

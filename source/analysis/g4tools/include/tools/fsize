@@ -26,7 +26,7 @@ inline bool size(const std::string& a_file,long& a_size){
 inline bool is_empty(const std::string& a_file){
   long sz;
   if(!size(a_file,sz)) return true; //if not existing, consider it empty.
-  return (sz==0L)?true:false;  
+  return (sz==0L)?true:false;
 }
 
 }}

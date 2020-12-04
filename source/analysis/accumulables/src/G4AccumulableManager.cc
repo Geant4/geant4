@@ -100,7 +100,7 @@ G4bool G4AccumulableManager::CheckName(const G4String& name, const G4String& whe
  
   G4ExceptionDescription description;
   description << "      " << "Name " << name << " is already used." << G4endl;
-  description << "      " << "Paremeter will be not created/registered.";
+  description << "      " << "Parameter will be not created/registered.";
   G4String method("G4AccumulableManager::");
   method.append(where);
   G4Exception(method, "Analysis_W002", JustWarning, description);

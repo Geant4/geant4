@@ -29,11 +29,7 @@
 //
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
@@ -56,14 +52,8 @@ int main(int argc,char** argv)
  }
 
 // Construct the run manager
- //
-#ifdef G4MULTITHREADED
- G4MTRunManager * runManager = new G4MTRunManager;
- //runManager->SetNumberOfThreads(4);
-#else
- G4RunManager * runManager = new G4RunManager;
-#endif
-
+ auto* runManager = G4RunManagerFactory::CreateRunManager();
+ 
  G4ScoringManager::GetScoringManager();
 
  G4String paraWorldName = "ParallelWorld";

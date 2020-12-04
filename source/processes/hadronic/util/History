@@ -14,6 +14,33 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2020 Alberto Ribon (hadr-util-V10-06-08)
+--------------------------------------------------------
+- G4HadronicParameters, G4HadronicParametersMessenger : added boolean
+  switch that allows to apply the Cosmic Ray (CR) coalescence algorithm
+  to the secondaries produced by a string model.
+  This can be useful in particular for Cosmic Ray applications.
+  By default it is disabled.
+
+27 October 2020   Gunter Folger       (hadr-util-V10-06-07)
+--------------------------------------------------------
+-  disable G4HadSignalHandler
+
+02 September 2020 Vladimir Ivanchenko (hadr-util-V10-06-06)
+--------------------------------------------------------
+- G4HadronicParameters : added disable b-, c- particles by default
+
+05 August 2020 Alberto Ribon (hadr-util-V10-06-05)
+--------------------------------------------------------
+- G4HadronicParametersMessenger : added new macro command to set
+  the max hadronic energy (required by DAMPE/HERD Collaboration).
+
+29 July 2020 Vladimir Ivanchenko (hadr-util-V10-06-04)
+--------------------------------------------------------
+- G4HadronicParameters : added Get/Set methods for cross section factors
+    separately for nucleons, pions, other hadrons, and leptons; added
+    high energy limit for low-energy physics
+
 13 May 2020 Vladimir Ivanchenko (hadr-util-V10-06-03)
 --------------------------------------------------------
 - G4HadronicParameters : added Get/Set methods to enable b-, c- particles

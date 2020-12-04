@@ -23,36 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
-// Abstract interface for GEANT4 Global Fast Simulation Manager.
-// P. Mora de Freitas & M. Verderi 14/April/1999.
+// G4VGlobalFastSimulationManager
 //
 // Class description:
 //
-// G4GlobalFastSimulationManager is a "Singleton", i.e., only one instance 
-// of it may exist. This is ensured by making the constructor private.
+// Abstract interface for Global Fast Simulation Manager
+// G4GlobalFastSimulationManager is a "Singleton".
+// This class is an abstract interface for G4GlobalFastSimulationManager.
+// It has the public access function GetConcreteInstance(), which is used
+// to obtain a pointer to the concrete G4GlobalFastSimulationManager, should
+// it exist. Then:
 //
-// G4VGlobalFastSimulationManager is an abstract interface for the
-// G4GlobalFastSimulationManager one. It has the public access function
-// GetConcreteInstance(), which is used to obtain a pointer to the concrete 
-// G4GlobalFastSimulationManager, should it exist. After
-//
-// G4VGlobalFastSimulationManager* pVFSMan =  
+// G4VGlobalFastSimulationManager* pVFSMan =
 //     G4VGlobalFastSimulationManager::GetConcreteInstance ();
 //
-// pVFSMan points to the real (concrete) G4GlobalFastSimulationManager if
-// at least a parameterisation envelope exists, otherwise is zero.  
+// 'pVFSMan' points to the real (concrete) G4GlobalFastSimulationManager if
+// at least a parameterisation envelope exists, otherwise is null.
 //
 // Thus all code must be protected, for example by:
-//   if (pVFSMan) 
-//    G4FlavoredParallelWorld* =
-//      pVFSMan -> GetFlavoredWorldForThis(p);
-//
+//  if (pVFSMan)
+//    G4FlavoredParallelWorld* = pVFSMan -> GetFlavoredWorldForThis(p);
 
+// Authors: P. Mora de Freitas & M. Verderi, 14 April 1999
+// --------------------------------------------------------------------
 #ifndef G4VGLOBALFASTSIMULATIONMANAGER_HH
-#define G4VGLOBALFASTSIMULATIONMANAGER_HH
+#define G4VGLOBALFASTSIMULATIONMANAGER_HH 1
 
 #include "G4Types.hh"
 #include "icomsdefs.hh"
@@ -62,27 +57,26 @@ class G4ParticleDefinition;
 
 class G4VGlobalFastSimulationManager
 {
+  public:
 
-public:  // with description
+    static G4VGlobalFastSimulationManager* GetConcreteInstance();
+      // Returns pointer to the actual Global Fast Simulation manager if
+      // at least a parameterisation envelope exists
 
-  static G4VGlobalFastSimulationManager* GetConcreteInstance ();
-    // Returns pointer to actual Global Fast Simulation manager if
-    // at least a parameterisation envelope exists. Always check value.
+    virtual ~G4VGlobalFastSimulationManager() {}
 
-  virtual ~G4VGlobalFastSimulationManager () {}
+    virtual G4VFlavoredParallelWorld* GetFlavoredWorldForThis(
+                                                     G4ParticleDefinition*) = 0;
+      // VGlobalFastSimulationManager interface for visualisation
 
-  virtual
-  G4VFlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition*)=0;
-    // VGlobalFastSimulationManager interface for visualisation.
+  protected:
 
-protected:
+    static void SetConcreteInstance(G4VGlobalFastSimulationManager*);
+      // Sets the pointer to the actual Global Fast Simulation manager
 
-  static void SetConcreteInstance (G4VGlobalFastSimulationManager*);
-    // Sets the pointer to actual Global Fast Simulation manager.
-
-  G4ICOMS_DLL static G4ThreadLocal G4VGlobalFastSimulationManager* fpConcreteInstance;  
-    // Pointer to real G4GlobalFastSimulationManager.
-
+    G4ICOMS_DLL
+    static G4ThreadLocal G4VGlobalFastSimulationManager* fpConcreteInstance;
+      // Pointer to real G4GlobalFastSimulationManager
 };
 
 #endif

@@ -43,11 +43,6 @@ G4RegularNavigation::G4RegularNavigation()
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fMinStep = 101*kCarTolerance;
-
-  fActionThreshold_NoZeroSteps  = 2;
-  fAbandonThreshold_NoZeroSteps = 25;
-  fNoStepsAllowed = 10000;
-  fWarnPush = true;
 }
 
 
@@ -226,7 +221,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
     if( fLastStepWasZero )
     {
       ++fNumberZeroSteps;
-      //#ifdef G4DEBUG_NAVIGATION
+#ifdef G4DEBUG_NAVIGATION
       if( fNumberZeroSteps > 1 )
       {
         G4ThreeVector pGlobalpoint = history.GetTransform(ide)
@@ -238,34 +233,29 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 	       << ", Step= " << newStep
 	       << G4endl;
       }
-      //#endif
+#endif
       if( fNumberZeroSteps > fActionThreshold_NoZeroSteps-1 )
       {
 	// Act to recover this stuck track. Pushing it along direction
 	//
 	newStep = std::min(101*kCarTolerance*std::pow(10,fNumberZeroSteps-2),0.1);
 #ifdef G4VERBOSE
-	if (fWarnPush)
-	{
-          G4ThreeVector pGlobalpoint = history.GetTransform(ide)
+        G4ThreeVector pGlobalpoint = history.GetTransform(ide)
                                        .InverseTransformPoint(localPoint);
-	  std::ostringstream message;
-	  message.precision(16);
-	  message << "Track stuck or not moving." << G4endl
-		  << "          Track stuck, not moving for " 
-		  << fNumberZeroSteps << " steps" << G4endl
-		  << "- at point " << pGlobalpoint
-		  << " (local point " << localPoint << ")" << G4endl
-		  << "        local direction: " << localDirection 
-		  << "          Potential geometry or navigation problem !"
-		  << G4endl
-		  << "          Trying pushing it of " << newStep << " mm ...";
-	  G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-		      "GeomRegNav1002",
-		      JustWarning,
-		      message,
-		      "Potential overlap in geometry!");
-	}
+	std::ostringstream message;
+	message.precision(16);
+	message << "Track stuck or not moving." << G4endl
+                << "          Track stuck, not moving for " 
+                << fNumberZeroSteps << " steps" << G4endl
+                << "- at point " << pGlobalpoint
+                << " (local point " << localPoint << ")" << G4endl
+                << "        local direction: " << localDirection 
+                << "          Potential geometry or navigation problem !"
+                << G4endl
+                << "          Trying pushing it of " << newStep << " mm ...";
+        G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
+                    "GeomRegNav1002", JustWarning, message,
+                    "Potential overlap in geometry!");
 #endif
       }
       if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )

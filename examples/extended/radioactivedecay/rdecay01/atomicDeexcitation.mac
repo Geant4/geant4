@@ -1,0 +1,24 @@
+#
+# macro for rdecay01
+#
+# this macro is to survey atomic deexcitation
+# do not forget to set ARMflag = true in PhysicsList.cc
+# see S.Bakr et al. Geant4 collaboration meeting 2020 
+#
+/control/verbose 2
+/run/verbose 1
+#
+/run/setCut 0.1 um
+#
+# decay of Iodine 125 is pure electronic carpture
+/gun/particle ion
+/gun/ion 53 125
+#
+/rdecay01/fullChain false
+#
+/analysis/setFileName atomicDeexc
+/analysis/h1/set 1  50000  0.001  50 keV    #e-
+/analysis/h1/set 3  50000  0.001  50 keV    #gamma
+#
+/run/printProgress 100000  
+/run/beamOn 1000000

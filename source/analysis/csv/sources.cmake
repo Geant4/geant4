@@ -13,6 +13,9 @@ geant4_define_module(NAME G4csv
     G4CsvAnalysisReader.hh
     G4CsvAnalysisReader.icc
     G4CsvFileManager.hh
+    G4CsvHnFileManager.hh
+    G4CsvHnFileManager.icc
+    G4CsvNtupleFileManager.hh
     G4CsvNtupleManager.hh
     G4CsvRFileManager.hh
     G4CsvRNtupleManager.hh
@@ -22,6 +25,7 @@ geant4_define_module(NAME G4csv
     G4CsvAnalysisManager.cc
     G4CsvAnalysisReader.cc
     G4CsvFileManager.cc
+    G4CsvNtupleFileManager.cc
     G4CsvNtupleManager.cc
     G4CsvRFileManager.cc
     G4CsvRNtupleManager.cc

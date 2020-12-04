@@ -27,7 +27,7 @@
 // Date:    7 March 2013
 //
 // Description: Singleton class to evaluate multi-body momentum distribution
-//		functions based on intial state codes and multiplicity.
+//		functions based on initial state codes and multiplicity.
 //
 // 20130308  Use envvar to enable/disable use of 3-body generators.
 // 20130619  Change singleton instance to be thread-local, to avoid collisions.

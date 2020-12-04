@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbDetectorBuilder implementation
 //
-//
-//
-// class G4tgbDetectorBuilder
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbVolume.hh"
 #include "G4tgbDetectorBuilder.hh"
@@ -47,48 +43,46 @@
 #include "G4tgrMessenger.hh"
 #include "G4tgbVolumeMgr.hh"
 
-
-//---------------------------------------------------------------------
-G4tgbDetectorBuilder::G4tgbDetectorBuilder() 
+// --------------------------------------------------------------------
+G4tgbDetectorBuilder::G4tgbDetectorBuilder()
 {
 }
 
-//---------------------------------------------------------------------
-G4tgbDetectorBuilder::~G4tgbDetectorBuilder() 
+// --------------------------------------------------------------------
+G4tgbDetectorBuilder::~G4tgbDetectorBuilder()
 {
 }
 
-//---------------------------------------------------------------------
+// --------------------------------------------------------------------
 const G4tgrVolume* G4tgbDetectorBuilder::ReadDetector()
 {
   //------------------- construct g4 geometry
-  //---------- find top G4tgrVolume 
+  //---------- find top G4tgrVolume
   G4tgrFileReader::GetInstance()->ReadFiles();
-  G4tgrVolumeMgr* tgrVolmgr = G4tgrVolumeMgr::GetInstance();
-  const G4tgrVolume* tgrVoltop = tgrVolmgr->GetTopVolume();  
+  G4tgrVolumeMgr* tgrVolmgr    = G4tgrVolumeMgr::GetInstance();
+  const G4tgrVolume* tgrVoltop = tgrVolmgr->GetTopVolume();
   return tgrVoltop;
 }
 
-
-//---------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4VPhysicalVolume*
-G4tgbDetectorBuilder::ConstructDetector( const G4tgrVolume* tgrVoltop )
+G4tgbDetectorBuilder::ConstructDetector(const G4tgrVolume* tgrVoltop)
 {
   //---------- copy list of G4tgrVolume's to list of G4tgbVolume's
   //           (just a trick to make all GEANT4 volume building in this class)
   G4tgbVolumeMgr* tgbVolmgr = G4tgbVolumeMgr::GetInstance();
   tgbVolmgr->CopyVolumes();
   //---------- find corresponding volume in list of G4tgbVolume's
-  G4tgbVolume* tgbVoltop = tgbVolmgr->FindVolume( tgrVoltop->GetName() );
-  
+  G4tgbVolume* tgbVoltop = tgbVolmgr->FindVolume(tgrVoltop->GetName());
+
   //---------- ConstructG4Volumes of top G4tgbVolume
   //           (it will recursively build the whole tree)
-  tgbVoltop->ConstructG4Volumes( 0, (const G4LogicalVolume*)0 );
+  tgbVoltop->ConstructG4Volumes(0, (const G4LogicalVolume*) 0);
 
   G4VPhysicalVolume* physvol = tgbVolmgr->GetTopPhysVol();
 
 #ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+  if(G4tgrMessenger::GetVerboseLevel() >= 1)
   {
     G4cout << " G4tgbDetectorConstruction::ConstructDetector() - Volume: "
            << physvol->GetName() << G4endl;
@@ -96,5 +90,4 @@ G4tgbDetectorBuilder::ConstructDetector( const G4tgrVolume* tgrVoltop )
 #endif
 
   return physvol;
-
 }

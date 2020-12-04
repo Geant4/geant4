@@ -53,7 +53,7 @@ public:
   ,m_SESSION_EXIT_STEER_atom(None)
   {
     copy_dispatchers(a_from.m_dispatchers);
-    if(!initialize()) {} //throw    
+    if(!initialize()) {} //throw
   }
   base_session& operator=(const base_session& a_from){
     if(&a_from==this) return *this;
@@ -61,7 +61,7 @@ public:
     clear_dispatchers();
     finalize();
     copy_dispatchers(a_from.m_dispatchers);
-    if(!initialize()) {} //throw    
+    if(!initialize()) {} //throw
     return *this;
   }
 protected:
@@ -101,7 +101,7 @@ protected:
 
     return true;
   }
- 
+
   void finalize() {
     if(!m_display) return;
     ::XCloseDisplay(m_display);
@@ -116,11 +116,11 @@ public:
   bool is_valid() const {return m_display?true:false;}
 
   Display* display() const {return m_display;}
-  
+
   bool steer() {
     if(!m_display) return false;
 
-    while(true) { 
+    while(true) {
       XEvent xevent;
       ::XNextEvent(m_display,&xevent);
       if(xevent.type==ClientMessage) {
@@ -128,7 +128,7 @@ public:
       }
       dispatch(xevent);
     }
-  
+
     return true;
   }
 
@@ -136,7 +136,7 @@ public:
     if(!m_display) return false;
   //::glXWaitX();
     ::XSync(m_display,False);
-    while(true) { 
+    while(true) {
       XEvent xevent;
       if(::XPending(m_display)) {
         ::XNextEvent(m_display,&xevent);
@@ -165,7 +165,7 @@ public:
       if(xevent.xclient.data.l[0]==(long)m_SESSION_EXIT_STEER_atom) {
         a_to_exit = true;
         return true;
-      }	
+      }
     }
     dispatch(xevent);
     a_to_exit = false;
@@ -190,7 +190,7 @@ public:
        | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask
        | PointerMotionMask
        | KeyPressMask;
-       
+
     swa.background_pixel = ::XWhitePixel(m_display,m_monitor);
 
     Window window = ::XCreateWindow(m_display,
@@ -332,40 +332,40 @@ public:
   void add_dispatcher(dispatcher* a_dispatcher) {
     m_dispatchers.push_back(a_dispatcher); //take ownership.
   }
-  
+
   void invalidate_dispatchers_with_window(Window a_win){
-    tools_vforit(dispatcher*,m_dispatchers,it) {      
+    tools_vforit(dispatcher*,m_dispatchers,it) {
       if((*it)->window()==a_win) (*it)->invalidate();
-    }    
+    }
   }
 
   void remove_dispatchers_with_window(Window a_win){
-    tools_vforit_npp(dispatcher*,m_dispatchers,it) {      
+    tools_vforit_npp(dispatcher*,m_dispatchers,it) {
       if((*it)->window()==a_win) {
         dispatcher* obj = *it;
-        it = m_dispatchers.erase(it);        
+        it = m_dispatchers.erase(it);
         delete obj;
       } else {
         it++;
       }
-    }    
+    }
   }
 
   bool dispatch(XEvent& a_event) {
-   {tools_vforit_npp(dispatcher*,m_dispatchers,it) {      
+   {tools_vforit_npp(dispatcher*,m_dispatchers,it) {
       if(!(*it)->is_valid()) {
         dispatcher* obj = *it;
-        it = m_dispatchers.erase(it);        
+        it = m_dispatchers.erase(it);
         delete obj;
       } else {
         it++;
       }
     }}
-    tools_vforit(dispatcher*,m_dispatchers,it) {      
+    tools_vforit(dispatcher*,m_dispatchers,it) {
       if((*it)->is_valid()) {
         if((*it)->dispatch(a_event)) return true;
-      }    
-    }    
+      }
+    }
     return false;
   }
 protected:
@@ -392,18 +392,18 @@ protected:
     Window m_window;
   };
   static Bool wait_for(Display*,XEvent* a_event,char* a_arg){
-    wait_what* arg = (wait_what*)a_arg;    
-    return (a_event->type == arg->m_event_type) && 
+    wait_what* arg = (wait_what*)a_arg;
+    return (a_event->type == arg->m_event_type) &&
            (a_event->xmap.window == arg->m_window);
   }
 */
 
   void clear_dispatchers() {
-    tools_vforit_npp(dispatcher*,m_dispatchers,it) {      
+    tools_vforit_npp(dispatcher*,m_dispatchers,it) {
       dispatcher* obj = *it;
-      it = m_dispatchers.erase(it);        
+      it = m_dispatchers.erase(it);
       delete obj;
-    }    
+    }
     m_dispatchers.clear();
   }
 
@@ -411,7 +411,7 @@ protected:
     clear_dispatchers();
     tools_vforcit(dispatcher*,a_from,it) {
       m_dispatchers.push_back((*it)->copy());
-    }    
+    }
   }
 
 protected:

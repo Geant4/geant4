@@ -17,9 +17,10 @@ namespace tools {
 namespace sg {
 
 class search_action : public action {
+  TOOLS_ACTION(search_action,tools::sg::search_action,action)
 public:
   search_action(std::ostream& a_out)
-  :action(a_out)
+  :parent(a_out)
   ,m_what(search_node_of_class)
   ,m_stop_at_first(false)
   ,m_node(0) //not owner
@@ -29,7 +30,7 @@ public:
   virtual ~search_action(){}
 public:
   search_action(const search_action& a_from)
-  :action(a_from)
+  :parent(a_from)
   ,m_what(a_from.m_what)
   ,m_stop_at_first(a_from.m_stop_at_first)
   ,m_class(a_from.m_class)
@@ -38,7 +39,7 @@ public:
   ,m_done(false)
   {}
   search_action& operator=(const search_action& a_from){
-    action::operator=(a_from);
+    parent::operator=(a_from);
     if(&a_from==this) return *this;
     m_what = a_from.m_what;
     m_stop_at_first = a_from.m_stop_at_first;
@@ -62,7 +63,7 @@ public:
   };
   search_what what() const {return m_what;}
   void set_what(search_what a_v) {m_what = a_v;}
- 
+
   void set_done(bool a_value) {m_done = a_value;}
   bool done() const {return m_done;}
 

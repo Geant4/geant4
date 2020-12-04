@@ -122,6 +122,7 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetMscRangeFactor(0.08);    // error-free stepping for e-/e+ msc gs
   param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
+  param->SetUseICRU90Data(true);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
   SetPhysicsType(bElectromagnetic);
 }

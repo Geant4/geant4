@@ -877,7 +877,7 @@ G4VIntersectionLocator::ReportImmediateHit( const char*          MethodName,
      {
         numStill = 0; 
      }
-     G4cout << " Occured: " << ++occurredOnTop;  
+     G4cout << " Occurred: " << ++occurredOnTop;  
      G4cout <<  " out of total calls= " << numCalls;
      G4cout << G4endl;
      lastStart = StartPosition;

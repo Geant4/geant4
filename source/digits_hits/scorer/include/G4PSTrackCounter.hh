@@ -29,7 +29,7 @@
 #ifndef G4PSTrackCounter_h
 #define G4PSTrackCounter_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 #include "G4PSDirectionFlag.hh"
@@ -40,10 +40,12 @@
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy
+//              in MeV (x) vs. weighted number of track (y)    (Makoto Asai)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSTrackCounter : public G4VPrimitiveScorer
+class G4PSTrackCounter : public G4VPrimitivePlotter
 {
  
  public: // with description

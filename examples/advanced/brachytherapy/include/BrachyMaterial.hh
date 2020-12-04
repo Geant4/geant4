@@ -52,22 +52,22 @@ public:
   G4Material* GetMat(G4String); //returns the material
 
 private:
-  G4Material* matW; 
-  G4Material* matplexiglass;
-  G4Material* matPb;
-  G4Material* matir192;
-  G4Material* Titanium;
-  G4Material* matAir;
-  G4Material* matH2O;
-  G4Material* soft;
-  G4Material* matsteel;
-  G4Material* mat304steel;
-  G4Material* gold;
-  G4Material* matI; 
-  G4Material* ceramic;
-  G4Material*Vacuum; 
-  G4Material* bone;
-  G4Material* muscle;
-  G4Material* matAg;
+  G4Material* fW; 
+  G4Material* fPlexiglass;
+  G4Material* fPb;
+  G4Material* fIr192;
+  G4Material* fTi;
+  G4Material* fAir;
+  G4Material* fH2O;
+  G4Material* fSoft;
+  G4Material* fSteel;
+  G4Material* fMat304steel;
+  G4Material* fAu;
+  G4Material* fI; 
+  G4Material* fCeramic;
+  G4Material* fVacuum; 
+  G4Material* fBone;
+  G4Material* fMuscle;
+  G4Material* fAg;
 };
 #endif

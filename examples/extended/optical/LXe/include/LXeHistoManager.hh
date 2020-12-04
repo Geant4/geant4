@@ -27,7 +27,7 @@
 /// \brief Definition of the LXeHistoManager class
 //
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,21 +38,21 @@
 
 #include "g4root.hh"
 //#include "g4xml.hh"
+//#include "g4csv.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class LXeHistoManager
 {
-  public:
-    LXeHistoManager();
-   ~LXeHistoManager();
+ public:
+  LXeHistoManager();
+  ~LXeHistoManager();
 
-  private:
-    void Book();
-    G4String fFileName;
+ private:
+  void Book();
+  G4String fFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

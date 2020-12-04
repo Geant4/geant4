@@ -74,7 +74,7 @@ G4bool G4JAEAElasticScattering::IsApplicable(const G4ParticleDefinition& p)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//intialize the process
+//initialize the process
 void G4JAEAElasticScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
 if(!isInitialised) {

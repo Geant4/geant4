@@ -13,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13-11-20 B. Morgan (electromagnetic-V10-06-01)
+- Enforce use of Serial RunManager for serial-only examples.
+
+03-11-20 B. Morgan (electromagnetic-V10-06-00)
+- Support same CMake version range as core Geant4
+
 01-04-13 A.Dotti (electromagnetic-V09-06-00,electromagnetic-V09-06-01)
 - Collect tags needed for new physics list APIs needed for MT
 
@@ -20,9 +26,9 @@ track of all tags.
 - Updated documentation:
   - Fixed .README files for artefacts from Markdown support
   - Removed obsolete instructions (how to compile & link)
-    
+
 02-11-08 mma (electromagnetic-V09-01-01)
-- all PhysListEmStandard: update EM options (~option_3) 
-     
+- all PhysListEmStandard: update EM options (~option_3)
+
 27-08-08 mma (electromagnetic-V09-01-00)
 - create README

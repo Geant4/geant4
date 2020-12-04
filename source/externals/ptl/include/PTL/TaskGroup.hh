@@ -51,70 +51,97 @@ class ThreadPool;
 
 //--------------------------------------------------------------------------------------//
 
+#if !defined(PTL_DEFAULT_OBJECT)
+#    define PTL_DEFAULT_OBJECT(NAME)                                                     \
+        NAME()                = default;                                                 \
+        ~NAME()               = default;                                                 \
+        NAME(const NAME&)     = default;                                                 \
+        NAME(NAME&&) noexcept = default;                                                 \
+        NAME& operator=(const NAME&) = default;                                          \
+        NAME& operator=(NAME&&) noexcept = default;
+#endif
+
+//--------------------------------------------------------------------------------------//
+
+template <typename JoinT, typename JoinArg>
+struct JoinFunction
+{
+public:
+    using Type = std::function<JoinT(JoinT&, JoinArg&&)>;
+
+public:
+    PTL_DEFAULT_OBJECT(JoinFunction)
+
+    template <typename Func>
+    JoinFunction(Func&& func)
+    : m_func(std::forward<Func>(func))
+    {}
+
+    template <typename... Args>
+    JoinT& operator()(Args&&... args)
+    {
+        return std::move(m_func(std::forward<Args>(args)...));
+    }
+
+private:
+    Type m_func = [](JoinT& lhs, JoinArg&&) { return lhs; };
+};
+
+//--------------------------------------------------------------------------------------//
+
+template <typename JoinArg>
+struct JoinFunction<void, JoinArg>
+{
+public:
+    using Type = std::function<void(JoinArg)>;
+
+public:
+    PTL_DEFAULT_OBJECT(JoinFunction)
+
+    template <typename Func>
+    JoinFunction(Func&& func)
+    : m_func(std::forward<Func>(func))
+    {}
+
+    template <typename... Args>
+    void operator()(Args&&... args)
+    {
+        m_func(std::forward<Args>(args)...);
+    }
+
+private:
+    Type m_func = [](JoinArg) {};
+};
+
+//--------------------------------------------------------------------------------------//
+
+template <>
+struct JoinFunction<void, void>
+{
+public:
+    using Type = std::function<void()>;
+
+public:
+    PTL_DEFAULT_OBJECT(JoinFunction)
+
+    template <typename Func>
+    JoinFunction(Func&& func)
+    : m_func(std::forward<Func>(func))
+    {}
+
+    void operator()() { m_func(); }
+
+private:
+    Type m_func = []() {};
+};
+
+//--------------------------------------------------------------------------------------//
+
 template <typename Tp, typename Arg = Tp>
 class TaskGroup
 : public VTaskGroup
 , public TaskAllocator<TaskGroup<Tp, Arg>>
 {
-protected:
-    //----------------------------------------------------------------------------------//
-    template <typename JoinT, typename JoinArg>
-    struct JoinFunction
-    {
-    public:
-        typedef std::function<JoinT(JoinT&, JoinArg&&)> Type;
-
-    public:
-        JoinFunction()                    = default;
-        ~JoinFunction()                   = default;
-        JoinFunction(const JoinFunction&) = default;
-        JoinFunction(JoinFunction&&)      = default;
-
-        JoinFunction& operator=(const JoinFunction&) = default;
-        JoinFunction& operator=(JoinFunction&&) = default;
-
-        template <typename Func>
-        JoinFunction(Func&& func)
-        : m_func(std::forward<Func>(func))
-        {}
-
-        template <typename... Args>
-        JoinT& operator()(Args&&... args)
-        {
-            return std::move(m_func(std::forward<Args>(args)...));
-        }
-
-    private:
-        Type m_func = [](JoinT& lhs, JoinArg&&) { return lhs; };
-    };
-    //----------------------------------------------------------------------------------//
-    template <typename JoinArg>
-    struct JoinFunction<void, JoinArg>
-    {
-    public:
-        typedef std::function<void()> Type;
-
-    public:
-        JoinFunction()                    = default;
-        ~JoinFunction()                   = default;
-        JoinFunction(const JoinFunction&) = default;
-        JoinFunction(JoinFunction&&)      = default;
-
-        JoinFunction& operator=(const JoinFunction&) = default;
-        JoinFunction& operator=(JoinFunction&&) = default;
-
-        template <typename Func>
-        JoinFunction(Func&& func)
-        : m_func(std::forward<Func>(func))
-        {}
-
-        void operator()() { m_func(); }
-
-    private:
-        Type m_func = []() {};
-    };
-    //----------------------------------------------------------------------------------//
-
 public:
     //------------------------------------------------------------------------//
     typedef decay_t<Arg>                                 ArgTp;
@@ -131,7 +158,7 @@ public:
     typedef typename task_list_t::const_reverse_iterator const_reverse_iterator;
     //------------------------------------------------------------------------//
     template <typename... Args>
-    using task_type = Task<ArgTp, Args...>;
+    using task_type = Task<ArgTp, decay_t<Args>...>;
     //------------------------------------------------------------------------//
 
 public:
@@ -176,29 +203,29 @@ public:
 public:
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
-    task_type<Args...>* wrap(Func&& func, Args&&... args)
+    task_type<Args...>* wrap(Func&& func, Args... args)
     {
-        return operator+=(new task_type<Args...>(this, std::forward<Func>(func),
-                                                 std::forward<Args>(args)...));
+        return operator+=(
+            new task_type<Args...>(this, std::forward<Func>(func), args...));
     }
 
 public:
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
-    void exec(Func&& func, Args&&... args)
+    void exec(Func&& func, Args... args)
     {
-        m_pool->add_task(wrap(std::forward<Func>(func), std::forward<Args>(args)...));
+        m_pool->add_task(wrap(std::forward<Func>(func), args...));
     }
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
-    void run(Func&& func, Args&&... args)
+    void run(Func&& func, Args... args)
     {
-        m_pool->add_task(wrap(std::forward<Func>(func), std::forward<Args>(args)...));
+        m_pool->add_task(wrap(std::forward<Func>(func), args...));
     }
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
     void parallel_for(const intmax_t& nitr, const intmax_t& chunks, Func&& func,
-                      Args&&... args)
+                      Args... args)
     {
         auto nsplit = nitr / chunks;
         auto nmod   = nitr % chunks;
@@ -208,8 +235,7 @@ public:
         {
             auto _beg = n * chunks;
             auto _end = (n + 1) * chunks + ((n + 1 == nsplit) ? nmod : 0);
-            run(std::forward<Func>(func), std::move(_beg), std::move(_end),
-                std::forward<Args>(args)...);
+            run(std::forward<Func>(func), std::move(_beg), std::move(_end), args...);
         }
     }
 
@@ -244,27 +270,42 @@ public:
 
     //------------------------------------------------------------------------//
     // wait to finish
-    template <typename Up = Tp, enable_if_t<!std::is_same<Up, void>::value, int> = 0>
+    template <typename Up = Tp, enable_if_t<!std::is_void<Up>::value, int> = 0>
     inline Up join(Up accum = {})
     {
         this->wait();
         for(auto& itr : m_task_set)
         {
-            using RetType = decltype(itr.get());
-            accum = std::move(m_join(std::ref(accum), std::forward<RetType>(itr.get())));
+            using RetT = decay_t<decltype(itr.get())>;
+            accum = std::move(m_join(std::ref(accum), std::forward<RetT>(itr.get())));
         }
         this->clear();
         return accum;
     }
     //------------------------------------------------------------------------//
     // wait to finish
-    template <typename Up = Tp, enable_if_t<std::is_same<Up, void>::value, int> = 0>
+    template <typename Up = Tp, typename Rp = Arg,
+              enable_if_t<std::is_void<Up>::value && std::is_void<Rp>::value, int> = 0>
     inline void join()
     {
         this->wait();
         for(auto& itr : m_task_set)
             itr.get();
         m_join();
+        this->clear();
+    }
+    //------------------------------------------------------------------------//
+    // wait to finish
+    template <typename Up = Tp, typename Rp = Arg,
+              enable_if_t<std::is_void<Up>::value && !std::is_void<Rp>::value, int> = 0>
+    inline void join()
+    {
+        this->wait();
+        for(auto& itr : m_task_set)
+        {
+            using RetT = decay_t<decltype(itr.get())>;
+            m_join(std::forward<RetT>(itr.get()));
+        }
         this->clear();
     }
     //------------------------------------------------------------------------//

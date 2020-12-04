@@ -53,9 +53,7 @@
   to be accurate (see param->SetStepFunction(1., 1*mm)).
 
   Several hadronic physics options are controlled by environment variables.
-  To trigger them, an envHadronic.csh has been added in this example.
-  One must select the options wished, and do
-        source envHadronic.csh  (or sh) 
+  To trigger them, see Hadr06.cc
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -144,3 +142,14 @@
  	Idle> type your commands
  	....
  	Idle> exit
+	
+ Macros provided in this example:
+  - graphite.mac: neutron,14 MeV, in graphite
+  - run1.mac: neutron,14 MeV, in Li7
+  - singleFission.mac: single fission in U235
+  
+  Macros to be run interactively:
+  - debug.mac: water with thermal scattering
+  - fission.mac: U235
+  - vis.mac: To activate visualization
+   

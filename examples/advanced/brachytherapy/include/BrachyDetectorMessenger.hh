@@ -53,10 +53,10 @@ public:
   
 private:
 
-  BrachyDetectorConstruction*  detector;// pointer to detector
-  G4UIdirectory*               detectorDir; 
-  G4UIcmdWithAString*          phantomMaterialCmd; // change phantom material
-  G4UIcmdWithAString*          sourceCmd; // change brachytherapic source 
+  BrachyDetectorConstruction*  fDetector;// pointer to detector
+  G4UIdirectory*               fDetectorDir; 
+  G4UIcmdWithAString*          fPhantomMaterialCmd; // change phantom material
+  G4UIcmdWithAString*          fSourceCmd; // change brachytherapic source 
 };
 #endif
 

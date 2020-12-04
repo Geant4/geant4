@@ -1062,7 +1062,7 @@ void G4VisCommandsViewerSet::SetNewValue
     nSides = vp.SetNoOfSides(nSides);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout <<
-      "Number of line segements per circle in polygon approximation is "
+      "Number of line segments per circle in polygon approximation is "
       << nSides << G4endl;
     }
   }

@@ -64,11 +64,11 @@ public:
   }
   virtual bool touched() {
     if(parent::touched()) return true;
-     
+
      if(m_sep.empty()) return true;
      if(m_extras.size()!=m_extras_sep.size()) return true;
- 
-  //{size_t _number = m_sep.size();    
+
+  //{size_t _number = m_sep.size();
   // for(size_t index=0;index<_number;index++) {
   //   separator* sep = (separator*)m_sep[index];
   //   plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
@@ -110,7 +110,7 @@ private:
   typedef std::vector<plotprim*> prims_t;
 public:
 /*
-  class updater { 
+  class updater {
   public:
     virtual void update(plots&,size_t) = 0;
     virtual updater* copy() const = 0;
@@ -129,9 +129,9 @@ public:
     //m_group.pick(a_action);
   }
   virtual void search(search_action& a_action) {
+    update_if_touched();
     parent::search(a_action);
     if(a_action.done()) return;
-    update_if_touched();
     if(a_action.do_path()) a_action.path_push(this);
     m_group.search(a_action);
     if(a_action.done()) return;
@@ -224,7 +224,7 @@ public:
     //m_updater = a_from.m_updater?a_from.m_updater->copy():0;
     if(!copy_plotters(a_from)) {}
   }
-  plots& operator=(const plots& a_from){    
+  plots& operator=(const plots& a_from){
     parent::operator=(a_from);
     if(&a_from==this) return *this;
 
@@ -249,7 +249,7 @@ public:
     bottom_margin = a_from.bottom_margin;
     horizontal_spacing = a_from.horizontal_spacing;
     vertical_spacing = a_from.vertical_spacing;
-  
+
     m_old_cols = 0;
     m_old_rows = 0;
     m_origins = a_from.m_origins;
@@ -261,23 +261,23 @@ public:
     m_extras = a_from.m_extras;
 
     if(!copy_plotters(a_from)) {}
-    
+
     return *this;
   }
 public:
   unsigned int number() const {return cols*rows;}
   unsigned int current_index() const {return m_current;}
-  
+
   void adjust_size(unsigned int a_ww,unsigned int a_wh) {
     if(!a_ww||!a_wh) return;
     float aspect = float(a_ww)/float(a_wh);
     width = height * aspect;
-  }  
+  }
 
   //void enforce_update() { //used in geant4 plotting.
   //  update_sg();
   //  reset_touched();
-  //}  
+  //}
 
   const base_freetype& ttf() const {return m_ttf;}
 public:
@@ -290,7 +290,7 @@ public:
 */
   void clear() {
     update_if_touched();
-   {size_t _number = m_sep.size();    
+   {size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
@@ -305,7 +305,7 @@ public:
 
   bool has_data() {
     update_if_touched();
-   {size_t _number = m_sep.size();    
+   {size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
@@ -321,7 +321,7 @@ public:
 
   void touch_plotters() { //used in exlib/geant4/session.
     update_if_touched();
-   {size_t _number = m_sep.size();    
+   {size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
@@ -336,7 +336,7 @@ public:
 
   void next() {
     update_if_touched();
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     if(m_current>=(uint32(_number)-1)) {
       m_current = 0;
     } else {
@@ -355,7 +355,7 @@ public:
 
   bool set_current(plotter* a_plotter) { //for popup.
     update_if_touched();
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
@@ -364,7 +364,7 @@ public:
         update_current_border();
         return true;
       }
-    }    
+    }
     return false;
   }
 
@@ -425,7 +425,7 @@ public:
     float rh_wc = wh_wc/rows;
     float rw_wc = rh_wc*ra;
 
-    unsigned int _number = m_sep.size();    
+    unsigned int _number = m_sep.size();
     for(unsigned int index=0;index<_number;index++) {
       unsigned int row = index/cols;
       unsigned int col = index-cols*row;
@@ -438,10 +438,10 @@ public:
         a_index = index;
         return true;
       }
-    }    
+    }
 
     return false;
-  }  
+  }
 */
 
   void set_regions(unsigned int a_cols = 1,unsigned int a_rows = 1,bool a_transfer = false) {
@@ -451,8 +451,8 @@ public:
     std::vector<prims_t> primss;
     std::vector<todels_t> tdlss;
     std::vector<plotter> pls;
-    
-    if(a_transfer) {   
+
+    if(a_transfer) {
       ptbss.resize(oldn);
       primss.resize(oldn);
       tdlss.resize(oldn);
@@ -472,7 +472,7 @@ public:
     update_sg();
     set_current_plotter(0);
     clear();
-    if(a_transfer) {   
+    if(a_transfer) {
       //fill new plotters with old data :
       unsigned int num = min_of(oldn,cols*rows);
       for(unsigned int index=0;index<num;index++) {
@@ -504,30 +504,30 @@ public:
    {tools_vforcit(plottable*,ptbs,it) p.add_plottable(*it);}
    {tools_vforcit(plotprim*,prims,it) p.add_primitive(*it);}
    {tools_vforcit(node*,tdls,it) p.add_node_todel(*it);}
-    
+
   }
-  
+
   void plotters(std::vector<plotter*>& a_vec) { //a_vec do NOT get ownership of sg::plotter objects. Use in G4Analysis.
     a_vec.clear();
     update_if_touched();
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       a_vec.push_back(_plotter);
-    }    
+    }
   }
-  
+
   //////////////////////////////////////////////////////////////////////
   //// styling methods : ///////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////
   void set_line_width(float a_line_width) {
     update_if_touched();
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
-      
+
       _plotter->bins_style(0).line_width = a_line_width;
       _plotter->inner_frame_style().line_width = a_line_width;
       _plotter->grid_style().line_width = a_line_width;
@@ -539,20 +539,20 @@ public:
       _plotter->z_axis().ticks_style().width = a_line_width;
       _plotter->colormap_axis().line_style().width = a_line_width;
       _plotter->colormap_axis().ticks_style().width = a_line_width;
-  
+
       // needed if font is hershey :
       _plotter->title_style().line_width = a_line_width;
       _plotter->infos_style().line_width = a_line_width;
       _plotter->title_box_style().line_width = a_line_width;
-  
+
       _plotter->x_axis().labels_style().line_width = a_line_width;
       _plotter->x_axis().mag_style().line_width = a_line_width;
       _plotter->x_axis().title_style().line_width = a_line_width;
-  
+
       _plotter->y_axis().labels_style().line_width = a_line_width;
       _plotter->y_axis().mag_style().line_width = a_line_width;
       _plotter->y_axis().title_style().line_width = a_line_width;
-  
+
       _plotter->z_axis().labels_style().line_width = a_line_width;
       _plotter->z_axis().mag_style().line_width = a_line_width;
       _plotter->z_axis().title_style().line_width = a_line_width;
@@ -560,32 +560,32 @@ public:
       _plotter->colormap_axis().labels_style().line_width = a_line_width;
       _plotter->colormap_axis().mag_style().line_width = a_line_width;
       _plotter->colormap_axis().title_style().line_width = a_line_width;
-    }    
+    }
   }
 
 /*
   void set_border_style() {
     update_if_touched();
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       _plotter->background_style().visible = true;
       _plotter->background_style().color = colorf_black();
       _plotter->background_style().line_width = 0.003;
-    }    
+    }
     border_visible = true;
   }
 */
 
   void set_grids_visibility(bool a_visible = false) {
     update_if_touched();
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       _plotter->grid_style().visible = a_visible;
-    }    
+    }
     border_visible = true;
   }
 
@@ -594,50 +594,50 @@ public:
     // We assume that these parameters had been set previously according to one plot per page.
     // Then this function must be applied after all the styles had been applied (because
     // a plotting style may set these parameters).
-  
+
     float ww_wc = width.value();
     float wh_wc = height.value();
     float rw_wc = ww_wc/cols.value();
     float rh_wc = wh_wc/rows.value();
-  
+
     float cooking = 1.2f; //if increased the data area is diminished.
-  
+
     float wfac = (rw_wc/ww_wc)*cooking;
     float hfac = (rh_wc/wh_wc)*cooking;
-  
+
     float label_cooking = 1.6f; //if increased the labels are bigger.
-  
+
     if((cols.value()>=4)&&(cols.value()>rows.value())) label_cooking = 0.9f;
-  
+
     float title_cooking = 1.1f; //extra title cooking.
-  
+
     plotter_scale = a_plotter_scale;
-  
+
     update_if_touched();
-   {size_t _number = m_sep.size();    
+   {size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
-  
+
       _plotter->left_margin = _plotter->left_margin * wfac;
       _plotter->right_margin = _plotter->right_margin * wfac;
       _plotter->bottom_margin = _plotter->bottom_margin * hfac;
       _plotter->top_margin = _plotter->top_margin * hfac;
-  
+
       _plotter->x_axis().tick_length = _plotter->x_axis().tick_length * wfac;
       _plotter->y_axis().tick_length = _plotter->y_axis().tick_length * hfac;
-  
+
       _plotter->title_to_axis = _plotter->title_to_axis * hfac;
       _plotter->title_height = _plotter->title_height * hfac * title_cooking;
-  
+
       _plotter->x_axis().label_height = _plotter->x_axis().label_height * hfac * label_cooking;
       _plotter->y_axis().label_height = _plotter->y_axis().label_height * hfac * label_cooking;
     }}
   }
-  
+
   //gopaw:
   void configure_grid_PAW(unsigned int a_ww,unsigned int a_wh) {
-    
+
     m_origins.clear();
     m_sizes.clear();
 
@@ -651,9 +651,9 @@ public:
 
     float wdata = (width.value()-left_margin.value()-right_margin.value()-(_cols-1)*horizontal_spacing.value())/_cols;
     float hdata = (height.value()-bottom_margin.value()-top_margin.value()-(_rows-1)*vertical_spacing.value())/_rows;
-    
+
     if((wdata<=0)||(hdata<=0)) return;
-    
+
 /*
     //    wpix = w * wvp pixels
     //    hpix = h * hvp pixels
@@ -672,7 +672,7 @@ public:
       h = w * (wvp/hvp)/paspect;
       xo = 0;
       yo = (1-h)/2;
-    }    
+    }
     float xfac = w / width.value();
     float yfac = h / height.value();
 */
@@ -682,11 +682,11 @@ public:
       //iregion = col + row * cols
       unsigned int row = iregion/_cols;
       unsigned int col = iregion - row * _cols;
-      
+
       float wr,hr,x,y,lm,rm,bm,tm;
       wr = hr = x = y = 0;
       lm = rm = bm = tm = 0;
-      
+
       if(_cols==1) {
         wr = width.value();
         x = 0;
@@ -713,7 +713,7 @@ public:
           rm = horizontal_spacing.value()/2;
         }
       }
- 
+
       if(_rows==1) {
         hr = height.value();
         y = 0;
@@ -747,28 +747,28 @@ public:
 
       separator* sep = (separator*)m_sep[iregion];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
-      
+
       //_plotter->width = wr;
       _plotter->left_margin = lm;
       _plotter->right_margin = rm;
-      
+
       //_plotter->height = hr;
       _plotter->top_margin = tm;
       _plotter->bottom_margin = bm;
 
       // ignore margins and spacings :
       //float wr = w/_cols;
-      //float hr = h/_rows; 
+      //float hr = h/_rows;
       //float x = xo + col * wr;
       //float y = yo + (rows-1-row) * hr;
       //viewportRegion->setPositionPercent(x,y);
       //viewportRegion->setSizePercent(wr,hr);
-	    
+
     }
   }
-  
+
   void configure_extras_PAW(unsigned int a_ww,unsigned int a_wh) {
-    
+
     m_extras_origins.clear();
     m_extras_sizes.clear();
 
@@ -785,17 +785,17 @@ public:
 
       float wdata = (width.value()-left_margin.value()-right_margin.value()-(_cols-1)*horizontal_spacing.value())/_cols;
       float hdata = (height.value()-bottom_margin.value()-top_margin.value()-(_rows-1)*vertical_spacing.value())/_rows;
-    
+
       if((wdata<=0)||(hdata<=0)) continue;
-      
+
       unsigned int iregion = _extra.m_index;
       unsigned int row = iregion/_cols;
       unsigned int col = iregion - row * _cols;
-      
+
       float wr,hr,x,y,lm,rm,bm,tm;
       wr = hr = x = y = 0;
       lm = rm = bm = tm = 0;
-      
+
       if(_cols==1) {
         wr = width.value();
         x = 0;
@@ -822,7 +822,7 @@ public:
           rm = horizontal_spacing.value()/2;
         }
       }
- 
+
       if(_rows==1) {
         hr = height.value();
         y = 0;
@@ -856,25 +856,25 @@ public:
 
       separator* sep = _extra.m_sep;
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
-      
+
       //_plotter->width = wr;
       _plotter->left_margin = lm;
       _plotter->right_margin = rm;
-      
+
       //_plotter->height = hr;
       _plotter->top_margin = tm;
       _plotter->bottom_margin = bm;
 
       // ignore margins and spacings :
       //float wr = w/_cols;
-      //float hr = h/_rows; 
+      //float hr = h/_rows;
       //float x = xo + col * wr;
       //float y = yo + (rows-1-row) * hr;
       //viewportRegion->setPositionPercent(x,y);
       //viewportRegion->setSizePercent(wr,hr);
-	    
+
     } //tools_vforcit
-  } 
+  }
   void configure_PAW(unsigned int a_ww,unsigned int a_wh) {
     configure_grid_PAW(a_ww,a_wh);
     configure_extras_PAW(a_ww,a_wh);
@@ -904,7 +904,7 @@ public:
   plotter* last_extra_plotter() const {
     if(m_extras.empty()) return 0;
     separator* sep = m_extras.back().m_sep;
-    return (plotter*)(*sep)[PLOTTER()];    
+    return (plotter*)(*sep)[PLOTTER()];
   }
 public:
   void init_sg() {  // used also in gopaw::base_viewer::clean_gstos().
@@ -912,9 +912,9 @@ public:
     m_sep.clear();
     m_border_sep.clear();
     m_extras_sep.clear();
-    m_group.add(new noderef(m_sep)); 
-    m_group.add(new noderef(m_border_sep)); 
-    m_group.add(new noderef(m_extras_sep)); 
+    m_group.add(new noderef(m_sep));
+    m_group.add(new noderef(m_border_sep));
+    m_group.add(new noderef(m_extras_sep));
   }
   void clear_sg() { //used in GL_plots_viewer.
     m_group.clear();
@@ -960,8 +960,8 @@ protected:
           sep->add(new plotter(m_ttf)); //PLOTTER()
 
           index++;
-        } 
-      } 
+        }
+      }
 
       if(m_current>=m_sep.size()) m_current = 0;
     }
@@ -971,39 +971,39 @@ protected:
 
     if((width.value()>0)&&(height.value()>0)) {
       size_t _number = m_sep.size();
-      
+
       bool configure = (m_origins.size()==_number)&&(m_sizes.size()==_number)?true:false;
 
       // all window wc :
       float ww_wc = width;
       float wh_wc = height;
-  
+
       // plotter size in window wc :
       //float rw_wc = ww_wc/cols;
       //float rh_wc = wh_wc/rows;
-  
+
       for(size_t index=0;index<_number;index++) {
         separator* sep = (separator*)m_sep[index];
         set_plotter_layout(*sep,index,configure,cols.value(),rows.value(),
 	                   ww_wc,wh_wc,m_origins,m_sizes,plotter_scale.value());
-      }    
+      }
     }
-    
+
     update_extras();
-  }  
+  }
 
   bool copy_plotters(const plots& a_from) {
     update_if_touched();
     if(m_sep.size()==a_from.m_sep.size()) {
-      size_t _number = m_sep.size();    
+      size_t _number = m_sep.size();
       for(size_t index=0;index<_number;index++) {
         separator* _from_sep = (separator*)a_from.m_sep[index];
-        matrix* _from_matrix = (matrix*)(*_from_sep)[MATRIX()];	 
+        matrix* _from_matrix = (matrix*)(*_from_sep)[MATRIX()];
         //_switch* _border = (_switch*)(*_sep)[BORDER()];
         plotter* _from_plotter = (plotter*)(*_from_sep)[PLOTTER()];
 
         separator* _sep = (separator*)m_sep[index];
-        matrix* _matrix = (matrix*)(*_sep)[MATRIX()];	 
+        matrix* _matrix = (matrix*)(*_sep)[MATRIX()];
         plotter* _plotter = (plotter*)(*_sep)[PLOTTER()];
 
         _matrix->operator=(*_from_matrix);
@@ -1011,20 +1011,20 @@ protected:
       }
     }
     if(m_extras_sep.size()==a_from.m_extras_sep.size()) {
-      size_t _number = m_extras_sep.size();    
+      size_t _number = m_extras_sep.size();
       for(size_t index=0;index<_number;index++) {
         separator* _from_sep = (separator*)a_from.m_extras_sep[index];
-        matrix* _from_matrix = (matrix*)(*_from_sep)[MATRIX()];	 
+        matrix* _from_matrix = (matrix*)(*_from_sep)[MATRIX()];
         plotter* _from_plotter = (plotter*)(*_from_sep)[PLOTTER()];
-      
+
         separator* _sep = (separator*)m_extras_sep[index];
-        matrix* _matrix = (matrix*)(*_sep)[MATRIX()];	 
+        matrix* _matrix = (matrix*)(*_sep)[MATRIX()];
         plotter* _plotter = (plotter*)(*_sep)[PLOTTER()];
-       
+
         _matrix->operator=(*_from_matrix);
         _plotter->operator=(*_from_plotter);
       }
-    }    
+    }
     return true;
   }
 
@@ -1059,18 +1059,18 @@ protected:
   }
 
   void update_current_border() {
-    size_t _number = m_sep.size();    
+    size_t _number = m_sep.size();
     for(size_t index=0;index<_number;index++) {
       separator* sep = (separator*)m_sep[index];
       _switch* _border = (_switch*)(*sep)[BORDER()];
-      if(index==m_current) {  
+      if(index==m_current) {
         _border->which = view_border.value()?0:1;
         //if(m_updater) m_updater->update(*this,index);
       } else {
         _border->which = 1;
       }
-    }    
-  }  
+    }
+  }
 
   void update_border() {
     m_border_sep.clear();
@@ -1113,7 +1113,7 @@ protected:
 
     back_area* b = new back_area;
     b->border_visible = false;
-    b->color = border_color;      
+    b->color = border_color;
     b->width = wba;
     b->height = hba;
     sep->add(b);}
@@ -1133,7 +1133,7 @@ protected:
 
     back_area* b = new back_area;
     b->border_visible = false;
-    b->color = border_color;      
+    b->color = border_color;
     b->width = wba;
     b->height = hba;
     sep->add(b);}
@@ -1153,7 +1153,7 @@ protected:
 
     back_area* b = new back_area;
     b->border_visible = false;
-    b->color = border_color;      
+    b->color = border_color;
     b->width = wba;
     b->height = hba;
     sep->add(b);}
@@ -1173,7 +1173,7 @@ protected:
 
     back_area* b = new back_area;
     b->border_visible = false;
-    b->color = border_color;      
+    b->color = border_color;
     b->width = wba;
     b->height = hba;
     sep->add(b);}
@@ -1200,7 +1200,7 @@ protected:
     unsigned int m_index;
     separator* m_sep;
   };
-  
+
   void update_extras() {
     if(m_extras.size()!=m_extras_sep.size()) {
       m_extras_sep.clear();
@@ -1208,44 +1208,44 @@ protected:
         separator* sep = new separator;
         m_extras_sep.add(sep);
         (*it).m_sep = sep; //*it does not get ownership.
-        
+
         sep->add(new sg::matrix); //MATRIX()
-  
+
         //head_light* light = new head_light;
         //light->direction = vec3f(1,-1,-10);
         //light->on = false;
         //sep->add(light); //LIGHT()
-  
+
         _switch* border = new _switch;
         sep->add(border); //BORDER()
-  
+
         //matrix* tsf = new matrix;
         //sep->add(tsf); //TSF()
-  
-        sep->add(new plotter(m_ttf)); //PLOTTER()  
+
+        sep->add(new plotter(m_ttf)); //PLOTTER()
       }
     }
 
     if(width.value()<=0) return;
     if(height.value()<=0) return;
-    
+
     // all window wc :
     float ww_wc = width;
     float wh_wc = height;
-  
+
     size_t _number = m_extras.size();
-    
+
     bool configure = (m_extras_origins.size()==_number)&&(m_extras_sizes.size()==_number)?true:false;
-      
+
     tools_vforcit(extra,m_extras,it) {
       const extra& _extra = *it;
       unsigned int index = _extra.m_index;
       if(index>=(m_extras_sep.size())) index = 0;
-      
+
       separator* sep = _extra.m_sep;
       set_plotter_layout(*sep,index,configure,_extra.m_cols,_extra.m_rows,
                          ww_wc,wh_wc,m_extras_origins,m_extras_sizes,plotter_scale.value());
-    }    
+    }
 
   }
 protected:
@@ -1255,13 +1255,13 @@ protected:
                           const std::vector<vec2f>& a_origins,const std::vector<vec2f>& a_sizes,float a_scale) {
     size_t row = a_index/a_cols;
     size_t col = a_index-a_cols*row;
-      
+
     float rw_wc = a_ww_wc/a_cols;
     float rh_wc = a_wh_wc/a_rows;
 
-    matrix* _matrix = (matrix*)(a_sep)[MATRIX()];	
+    matrix* _matrix = (matrix*)(a_sep)[MATRIX()];
     plotter* _plotter = (plotter*)(a_sep)[PLOTTER()];
-        
+
     if(a_configure) {
       _plotter->width = a_sizes[a_index].x();
       _plotter->height = a_sizes[a_index].y();
@@ -1280,10 +1280,10 @@ protected:
     //_border->which = view_border.value()?(a_index==m_current?0:1):1;
     _border->which = 1;
     }
-        
+
     if(_plotter->shape.value()==plotter::xy) {
       _plotter->depth = min_of(rw_wc,rh_wc);
-    } else {      
+    } else {
       //if((rw_wc/rh_wc)>=1.0f) {
       //  _plotter->depth = rh_wc;
       //} else {
@@ -1291,7 +1291,7 @@ protected:
       //}
       _plotter->depth = rh_wc;
     }
-	  
+
     if(a_configure) {
     } else {
       if(_plotter->shape.value()==plotter::xy) {
@@ -1307,7 +1307,7 @@ protected:
         }
       }
     }
-  }      
+  }
 protected:
   const base_freetype& m_ttf;
 

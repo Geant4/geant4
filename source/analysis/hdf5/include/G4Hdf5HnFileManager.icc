@@ -1,0 +1,140 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Author: Ivana Hrivnacova, 15/09/2020 (ivana@ipno.in2p3.fr)
+
+#include "tools/hdf5/header"
+#include "tools/hdf5/h2file"
+#include "tools/histo/h1d"
+#include "tools/histo/h2d"
+#include "tools/histo/h3d"
+#include "tools/histo/p1d"
+#include "tools/histo/p2d"
+
+#include "tools/hdf5/h2file"
+
+//_____________________________________________________________________________
+template <>
+inline
+G4bool G4Hdf5HnFileManager<tools::histo::p1d>::WriteImpl(
+  hid_t hdirectory, tools::histo::p1d* ht, const G4String& htName)
+{
+  return tools::hdf5::write_profile(G4cout, hdirectory, htName, *ht);
+}
+
+//_____________________________________________________________________________
+template <>
+inline
+G4bool G4Hdf5HnFileManager<tools::histo::p2d>::WriteImpl(
+  hid_t hdirectory, tools::histo::p2d* ht, const G4String& htName)
+{
+  return tools::hdf5::write_profile(G4cout, hdirectory, htName, *ht);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4Hdf5HnFileManager<HT>::WriteImpl(
+  hid_t hdirectory, HT* ht, const G4String& htName)
+{
+  return tools::hdf5::write_histo(G4cout, hdirectory, htName, *ht);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4Hdf5HnFileManager<HT>::WriteExtra(
+  HT* ht, const G4String& htName, const G4String& fileName)
+{
+  // create a new file
+  // create new file
+  hid_t hfile = ::H5Fcreate(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);  
+
+  // Do nothing if there is no file
+  // (te error should be handled by caller)
+  if ( hfile < 0 ) {
+    G4cerr << "::H5Fcreate failed " << G4endl;
+    return false;
+  }
+
+  // create a header with general infos :
+  if(!tools::hdf5::write_header(hfile)) {
+    G4cerr << "tools::hdf5::write_header() failed." << std::endl;
+    return false;
+  }
+
+  // Create directories
+  hid_t hdirectory = tools_H5Gcreate(hfile, "histograms", 0);
+  if ( hdirectory < 0 ) {
+    G4cerr << "tools_H5Gcreate failed " << G4endl;
+    return false;
+  }
+
+  auto result = tools::hdf5::write_atb(hdirectory, "type", "directory");
+  if ( ! result) {
+    G4cerr << "tools::hdf5::write_atb failed " << G4endl;
+    return false;
+  }
+
+  result = WriteImpl(hdirectory, ht, htName);
+  if ( ! result) {
+    G4cerr << "Writing HT failed" << G4endl;
+    return false;
+  }
+
+  // close file
+  ::H5Gclose(hdirectory);
+  ::H5Gclose(hfile);
+  return true;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4Hdf5HnFileManager<HT>::Write(
+  HT* ht, const G4String& htName, G4String& fileName)
+{
+  if (fileName.empty()) {
+    // should not happen
+    G4cerr << "!!! Hdf5 file name not defined." << G4endl;
+    G4cerr << "!!! Write " << htName << " failed." << G4endl;
+    return false;
+  }
+
+  auto hdirectory = std::get<1>(*fFileManager->GetTFile(fileName));
+    if ( hdirectory < 0 ) {
+    G4ExceptionDescription description;
+    description 
+      << "Failed to get Hdf5 file " << fileName << " histo directory."; 
+    G4Exception("G4Hdf5HnFileManager<HT>::Write()",
+                "Analysis_W022", JustWarning, description);
+    return false;
+  }
+
+  auto result = WriteImpl(hdirectory, ht, htName);
+  fFileManager->LockDirectoryNames();
+  return result;
+}

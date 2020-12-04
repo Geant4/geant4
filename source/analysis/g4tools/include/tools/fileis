@@ -19,7 +19,7 @@ inline bool is_zip(const std::string& a_file,bool& a_is){
   if(head[1]!='K') {a_is = false;return true;}
   if(head[2]!=3) {a_is = false;return true;}
   if(head[3]!=4) {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -32,7 +32,7 @@ inline bool is_jpeg(const std::string& a_file,bool& a_is){
   if(head[1]!=216) {a_is = false;return true;}
   if(head[2]!=255) {a_is = false;return true;}
   //if(head[3]!=224) {a_is = false;return true;} //LRI.jpg is 225 !
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -58,7 +58,7 @@ inline bool is_png(const std::string& a_file,bool& a_is){
   if(head[1]!='P') {a_is = false;return true;}
   if(head[2]!='N') {a_is = false;return true;}
   if(head[3]!='G') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -71,7 +71,7 @@ inline bool is_root(const std::string& a_file,bool& a_is){
   if(head[1]!='o') {a_is = false;return true;}
   if(head[2]!='o') {a_is = false;return true;}
   if(head[3]!='t') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -89,7 +89,7 @@ inline bool is_iv(const std::string& a_file,bool& a_is){
   if(head[6]!='t') {a_is = false;return true;}
   if(head[7]!='o') {a_is = false;return true;}
   if(head[8]!='r') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -103,7 +103,7 @@ inline bool is_wrl(const std::string& a_file,bool& a_is){
   if(head[2]!='R') {a_is = false;return true;}
   if(head[3]!='M') {a_is = false;return true;}
   if(head[4]!='L') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -136,7 +136,7 @@ inline bool is_dcm(const std::string& a_file,bool& a_is){
   if(head[129]!='I') {a_is = false;return true;}
   if(head[130]!='C') {a_is = false;return true;}
   if(head[131]!='M') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -206,7 +206,7 @@ inline bool is_scenarios(const std::string& a_file,bool& a_is){
   if(head[7]!='i') {a_is = false;return true;}
   if(head[8]!='o') {a_is = false;return true;}
   if(head[9]!='s') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -222,7 +222,7 @@ inline bool is_slides(const std::string& a_file,bool& a_is){
   if(head[4]!='d') {a_is = false;return true;}
   if(head[5]!='e') {a_is = false;return true;}
   if(head[6]!='s') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -237,7 +237,7 @@ inline bool is_fits(const std::string& a_file,bool& a_is){
   if(head[3]!='P') {a_is = false;return true;}
   if(head[4]!='L') {a_is = false;return true;}
   if(head[5]!='E') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -250,7 +250,7 @@ inline bool is_hdf(const std::string& a_file,bool& a_is){
   if(head[1]!='H') {a_is = false;return true;}
   if(head[2]!='D') {a_is = false;return true;}
   if(head[3]!='F') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
   return true;
 }
 
@@ -263,7 +263,26 @@ inline bool is_ps(const std::string& a_file,bool& a_is){
   if(head[1]!='!') {a_is = false;return true;}
   if(head[2]!='P') {a_is = false;return true;}
   if(head[3]!='S') {a_is = false;return true;}
-  a_is = true;  
+  a_is = true;
+  return true;
+}
+
+inline bool is_simbad(const std::string& a_file,bool& a_is){
+  unsigned char head[10];
+ {unsigned int num = 10;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=10) {a_is = false;return true;}}
+  if(head[0]!=':') {a_is = false;return true;}
+  if(head[1]!=':') {a_is = false;return true;}
+  if(head[2]!='s') {a_is = false;return true;}
+  if(head[3]!='c') {a_is = false;return true;}
+  if(head[4]!='r') {a_is = false;return true;}
+  if(head[5]!='i') {a_is = false;return true;}
+  if(head[6]!='p') {a_is = false;return true;}
+  if(head[7]!='t') {a_is = false;return true;}
+  if(head[8]!=':') {a_is = false;return true;}
+  if(head[9]!=':') {a_is = false;return true;}
+  a_is = true;
   return true;
 }
 
@@ -335,7 +354,7 @@ inline bool is_shp(const std::string& a_file,bool& a_is){
   unsigned int _sz = (static_cast<unsigned int>(head[24])<<24)|(head[25]<<16)|(head[26]<<8)|head[27];
   if(_sz<(UINT_MAX/2)) _sz *= 2;
   else                 _sz = (UINT_MAX/2)*2;
-  a_is = sz==long(_sz)?true:false;  
+  a_is = sz==long(_sz)?true:false;
   return true;
 }
 

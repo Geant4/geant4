@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -56,7 +56,7 @@
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
           ElmMassFraction:   6.00 %  ElmAbundance  10.20 % 
 
-   --->  Element: Vanadium (Va)   Z = 23.0   N =    51   A = 50.941 g/mole
+   --->  Element: Vanadium (Va)   Z = 23.0   N =    51   A = 50.942 g/mole
          --->  Isotope:  Va50   Z = 23   N =  50   A =  49.95 g/mole   abundance:  0.250 %
          --->  Isotope:  Va51   Z = 23   N =  51   A =  50.94 g/mole   abundance: 99.750 %
           ElmMassFraction:   4.00 %  ElmAbundance   3.60 % 
@@ -82,7 +82,7 @@
           ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
 
 
- Material:   Helium    density:  0.166 kg/m3   RadL:   5.682 km   Nucl.Int.Length:   3.348 km 
+ Material:   Helium    density:  0.166 mg/cm3  RadL:   5.682 km   Nucl.Int.Length:   3.348 km 
                        Imean:  41.800 eV   temperature: 293.00 K  pressure:   1.00 atm
 
    --->  Element: Helium (He)   Z =  2.0   N =     4   A =  4.003 g/mole
@@ -142,7 +142,7 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -226,14 +226,14 @@ Index : 1     used in the geometry : Yes
 Index : 2     used in the geometry : Yes
  Material : Titanium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  12.7877 keV    e-  807.855 keV    e+  770.853 keV proton 100 keV
+ Energy thresholds :  gamma  12.8972 keV    e-  809.624 keV    e+  767.248 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Mylar
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.0095 keV    e-  419.056 keV    e+  405.255 keV proton 100 keV
+ Energy thresholds :  gamma  3.02067 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -247,7 +247,7 @@ Index : 4     used in the geometry : Yes
 Index : 5     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.90532 keV    e-  597.637 keV    e+  574.097 keV proton 100 keV
+ Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -268,15 +268,16 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      53.92          0k         2        2          9         0.00    Frame
-      46.08          0k         1        3          4         0.00    Gas
+      55.71          0k         2        2          9         0.00    Frame
+      44.29          0k         1        3          4         0.00    Gas
 ### Run 0 starts.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-... open Root analysis file : eScattering.root - done
+... create file : eScattering.root - done
+... open analysis file : eScattering.root - done
 --> Event 0 starts.
 --> Event 10000 starts.
 --> Event 20000 starts.
@@ -290,17 +291,17 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=8.460000s Real=8.765988s Sys=0.010000s
+  User=5.040000s Real=5.153386s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 13 MeV through 0 fm  of Air (density: 1.21 mg/cm3)
-... write Root file : eScattering.root - done
-... close Root file : eScattering.root - done
+... write file : eScattering.root - done
+... close file : eScattering.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2070692869, 1954342156
+ Current couple of seeds = 1313997431, 573874287
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

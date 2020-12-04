@@ -16,6 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 Nov 20: D. Sawkey (op-V10-06-07)
+- Fix reading Davis LUT out of bounds (addresses bug 2287)
+
+05 Oct 20: D. Sawkey (op-V10-06-06)
+- All files: apply clang-format style guidelines
+
+30 Sept 20: D. Sawkey (op-V10-06-05)
+- G4OpBoundaryProcess: increase geometry tolerance to kCarTolerance
+
+20 July 20: D. Sawkey (op-V10-06-04)
+- G4OpRayleigh, G4OpAbsorption, G4OpMieHG, G4OpWLS, G4OpWLS2: move to new
+  G4OpticalParameters class to control simulation parameters
+
 29 May 20: D. Sawkey (op-V10-06-03)
 - all files - thorough cleaning; shorten temporary variable names;
   improve readability

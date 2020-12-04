@@ -1,0 +1,16 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - ICRP110Phantoms example
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+15.11.2020 - S. Guatelli; ICRP110Phantoms-V10-06-01
+             Migration to G4RunManagerFactory
+                    
+27.10.2020 - S. Guatelli; ICRP110Phantoms-V10-06-00
+             New advanced example modelling ICRP110 phantom models
+

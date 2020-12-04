@@ -175,7 +175,7 @@ static constexpr double nanoampere  = 1.e-9 * ampere;
 // Electric charge [Q]
 //
 static constexpr double coulomb = ampere * second;
-static constexpr double e_SI  = 1.602176487e-19;  // positron charge in coulomb
+static constexpr double e_SI  = 1.602176634e-19;  // positron charge in coulomb
 static constexpr double eplus = e_SI * coulomb;   // positron charge
 
 //

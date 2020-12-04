@@ -28,6 +28,7 @@
 
 #include "G4XmlRFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/waxml/begend"
 

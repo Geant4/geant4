@@ -13,5 +13,5 @@ geant4_add_pymodule(pyG4materials
   pymodG4materials.cc
 )
 
-target_link_libraries(pyG4materials PRIVATE G4materials pyG4Boost)
+target_link_libraries(pyG4materials PRIVATE G4materials)
 install(TARGETS pyG4materials DESTINATION "${CMAKE_INSTALL_PYTHONDIR}/Geant4")

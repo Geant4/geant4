@@ -32,11 +32,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 
@@ -56,14 +52,10 @@ int main(int argc,char** argv) {
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
   // Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   G4int nThreads = G4Threading::G4GetNumberOfCores();
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
-#else
-  G4RunManager * runManager = new G4RunManager;
-#endif
 
   //set mandatory initialization classes
   GeometryConstruction* detector = new GeometryConstruction;

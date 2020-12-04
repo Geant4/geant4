@@ -23,27 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VFlavoredParallelWorld
 //
+// Class description:
 //
-// 
-// Abstract interface for GEANT4 Flavored Parallel World.
-// P. Mora de Freitas & M. Verderi 14/April/1999.
-//
+// Abstract interface for Flavored Parallel World.
 
+// Authors: P. Mora de Freitas & M. Verderi,  14 April 1999
+// --------------------------------------------------------------------
 #ifndef G4VFLAVOREDPARALLELWORLD_HH
-#define G4VFLAVOREDPARALLELWORLD_HH
+#define G4VFLAVOREDPARALLELWORLD_HH 1
 
 class G4VPhysicalVolume;
 
-class G4VFlavoredParallelWorld {
+class G4VFlavoredParallelWorld
+{
+  public:
 
-public:
+    virtual ~G4VFlavoredParallelWorld() {}
 
-  virtual ~G4VFlavoredParallelWorld () {}
-
-  // G4VFlavoredParallelWorld Interface for visualisation.
-
-  virtual 
-  G4VPhysicalVolume* GetThePhysicalVolumeWorld() const =0;
+    virtual G4VPhysicalVolume* GetThePhysicalVolumeWorld() const = 0;
+      // Interface for visualisation
 };
+
 #endif

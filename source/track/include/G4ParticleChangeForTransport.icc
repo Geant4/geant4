@@ -23,69 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParticleChangeForTransport inline methods implementation
 //
-//
-// 
-inline 
- void G4ParticleChangeForTransport::SetTouchableHandle(const G4TouchableHandle& 
-fTouchable)
+// Author: Hisaya Kurashige, 10 May 1998
+// --------------------------------------------------------------------
+
+inline void G4ParticleChangeForTransport::SetTouchableHandle(
+  const G4TouchableHandle& fTouchable)
 {
-  theTouchableHandle =   fTouchable;
+  theTouchableHandle = fTouchable;
 }
 
-inline 
- const G4TouchableHandle& G4ParticleChangeForTransport::GetTouchableHandle() const
+inline const G4TouchableHandle&
+G4ParticleChangeForTransport::GetTouchableHandle() const
 {
   return theTouchableHandle;
 }
 
-
-inline 
- void G4ParticleChangeForTransport::SetMaterialInTouchable(G4Material* fMaterial)
+inline void G4ParticleChangeForTransport::SetMaterialInTouchable(
+  G4Material* fMaterial)
 {
-  theMaterialChange =   fMaterial;
+  theMaterialChange = fMaterial;
 }
 
-inline 
- G4Material* G4ParticleChangeForTransport::GetMaterialInTouchable() const
+inline G4Material* G4ParticleChangeForTransport::GetMaterialInTouchable() const
 {
   return theMaterialChange;
 }
 
-inline 
- void G4ParticleChangeForTransport::SetMaterialCutsCoupleInTouchable(const G4MaterialCutsCouple* fMaterialCutsCouple)
+inline void G4ParticleChangeForTransport::SetMaterialCutsCoupleInTouchable(
+  const G4MaterialCutsCouple* fMaterialCutsCouple)
 {
-  theMaterialCutsCoupleChange =   fMaterialCutsCouple;
+  theMaterialCutsCoupleChange = fMaterialCutsCouple;
 }
 
-inline 
- const G4MaterialCutsCouple* G4ParticleChangeForTransport::GetMaterialCutsCoupleInTouchable() const
+inline const G4MaterialCutsCouple*
+G4ParticleChangeForTransport::GetMaterialCutsCoupleInTouchable() const
 {
   return theMaterialCutsCoupleChange;
 }
 
-inline 
- void G4ParticleChangeForTransport::SetSensitiveDetectorInTouchable(G4VSensitiveDetector* fSensitiveDetector)
+inline void G4ParticleChangeForTransport::SetSensitiveDetectorInTouchable(
+  G4VSensitiveDetector* fSensitiveDetector)
 {
-  theSensitiveDetectorChange =   fSensitiveDetector;
+  theSensitiveDetectorChange = fSensitiveDetector;
 }
 
-inline 
- G4VSensitiveDetector* G4ParticleChangeForTransport::GetSensitiveDetectorInTouchable() const
+inline G4VSensitiveDetector*
+G4ParticleChangeForTransport::GetSensitiveDetectorInTouchable() const
 {
   return theSensitiveDetectorChange;
 }
 
-inline
-G4bool G4ParticleChangeForTransport::GetMomentumChanged() const 
+inline G4bool G4ParticleChangeForTransport::GetMomentumChanged() const
 {
   return isMomentumChanged;
 }
 
-inline
-void G4ParticleChangeForTransport::SetMomentumChanged(G4bool b)
+inline void G4ParticleChangeForTransport::SetMomentumChanged(G4bool b)
 {
-  isMomentumChanged= b;
+  isMomentumChanged = b;
 }
 
 //----------------------------------------------------------------
@@ -96,46 +93,42 @@ inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
 {
   // use base class's method at first
   InitializeStatusChange(track);
-//  InitializeLocalEnergyDeposit(track);
+  //  InitializeLocalEnergyDeposit(track);
   InitializeSteppingControl(track);
-//  InitializeTrueStepLength(track);
-//  InitializeSecondaries(track);
+  //  InitializeTrueStepLength(track);
+  //  InitializeSecondaries(track);
 
   // set Energy/Momentum etc. equal to those of the parent particle
-  const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
-//  theEnergyChange          = pParticle->GetKineticEnergy();
-//  theMomentumChange        = pParticle->GetMomentumDirection();
-    theVelocityChange          = track.GetVelocity();
-    isVelocityChanged          = false;
-    thePolarizationChange    = pParticle->GetPolarization();
-//  theProperTimeChange      = pParticle->GetProperTime();
+  const G4DynamicParticle* pParticle = track.GetDynamicParticle();
+  //  theEnergyChange          = pParticle->GetKineticEnergy();
+  //  theMomentumChange        = pParticle->GetMomentumDirection();
+  theVelocityChange     = track.GetVelocity();
+  isVelocityChanged     = false;
+  thePolarizationChange = pParticle->GetPolarization();
+  //  theProperTimeChange      = pParticle->GetProperTime();
 
   // set Position/Time etc. equal to those of the parent track
   //  thePositionChange      = track.GetPosition();
   // set TimeChange equal to local time of the parent track
-  theTimeChange                = track.GetLocalTime();
+  theTimeChange = track.GetLocalTime();
   // set initial Local/Global time of the parent track
-  theLocalTime0           = track.GetLocalTime();
-  theGlobalTime0          = track.GetGlobalTime();
+  theLocalTime0  = track.GetLocalTime();
+  theGlobalTime0 = track.GetGlobalTime();
 
   // set touchable equal to the next touchable of the parent track
   // not set as for now
-  //theTouchableChange     = track.GetNextTouchable();
+  // theTouchableChange     = track.GetNextTouchable();
 
-// So almost nothing is initialized here.
-// theMomentumChange, theProperTimeChange, thePositionChange and theTimeChange
-// are set by G4Transportation::AlongStepDoIt;
-// the others are not needed.
-// Take care when implementing the PostStep related things!
-// (P. Urban)
+  // NOTE: almost nothing is initialized here.
+  // theMomentumChange, theProperTimeChange, thePositionChange
+  // and theTimeChange are set by G4Transportation::AlongStepDoIt();
+  // the others are not needed.
+  // Take care when implementing the PostStep related things!
+  // (P. Urban)
 }
 
-// Prototype implementation of smooth representation of curved trajectories.
-
-inline void
-G4ParticleChangeForTransport::
-SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>*
-                                     theNewVectorPointer )
+inline void G4ParticleChangeForTransport::SetPointerToVectorOfAuxiliaryPoints(
+  std::vector<G4ThreeVector>* theNewVectorPointer)
 {
   fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
 }
@@ -145,9 +138,3 @@ G4ParticleChangeForTransport::GetPointerToVectorOfAuxiliaryPoints() const
 {
   return fpVectorOfAuxiliaryPointsPointer;
 }
-
-
-
-
-
-

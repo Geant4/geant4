@@ -1052,7 +1052,7 @@ void BooleanProcessor::assembleFace(int what, int iface)
 {
   //   A S S E M B L E   N E W   F A C E 
 
-  int ihead;      // head of the list of edges for new face
+  int ihead = 0;  // head of the list of edges for new face
   int icur;       // current edge in the list - last edge inserted to the list
   int *ilink;     // pointer to the current link 
   int ifirst;     // first node of a contour

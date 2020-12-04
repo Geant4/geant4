@@ -33,23 +33,44 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 
 #include <iostream>
 
 using namespace G4Analysis;
+
+namespace {
+
+void WrongParametersException(
+  const G4String& commandName, std::size_t got, std::size_t expected)
+{
+  G4ExceptionDescription description;
+  description
+    << "Got wrong number of \"" << commandName
+    << "\" parameters: " << got << " instead of " << expected
+    << " expected" << G4endl;
+  G4Exception("G4NtupleMessenger::SetNewValue",
+              "Analysis_W013", JustWarning, description);
+}
+
+}
 
 //_____________________________________________________________________________
 G4NtupleMessenger::G4NtupleMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
     fSetActivationCmd(nullptr),
-    fSetActivationAllCmd(nullptr)
+    fSetActivationAllCmd(nullptr),
+    fSetFileNameCmd(nullptr),
+    fSetFileNameAllCmd(nullptr)
 {
   fNtupleDir = G4Analysis::make_unique<G4UIdirectory>("/analysis/ntuple/");
   fNtupleDir->SetGuidance("ntuple control");
   
   SetActivationCmd();
   SetActivationToAllCmd();
+  SetFileNameCmd();
+  SetFileNameToAllCmd();
 }
 
 //_____________________________________________________________________________
@@ -91,6 +112,36 @@ void G4NtupleMessenger::SetActivationToAllCmd()
   fSetActivationAllCmd->SetParameterName("AllNtupleActivation",false);
 }  
   
+//_____________________________________________________________________________
+void G4NtupleMessenger::SetFileNameCmd()
+{
+  auto ntupleId = new G4UIparameter("NtupleId", 'i', false);
+  ntupleId->SetGuidance("Ntuple id");
+  ntupleId->SetParameterRange("NtupleId>=0");
+
+  auto ntupleFileName = new G4UIparameter("NtupleFileName", 's', true);
+  ntupleFileName->SetGuidance("Ntuple file name");
+  ntupleFileName->SetDefaultValue("none");
+
+  fSetFileNameCmd = G4Analysis::make_unique<G4UIcommand>("/analysis/ntuple/setFileName", this);
+  G4String guidance("Set file name for the ntuple of given id");
+
+  fSetFileNameCmd->SetGuidance(guidance);
+  fSetFileNameCmd->SetParameter(ntupleId);
+  fSetFileNameCmd->SetParameter(ntupleFileName);
+  fSetFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}
+
+//_____________________________________________________________________________
+void G4NtupleMessenger::SetFileNameToAllCmd()
+{
+  fSetFileNameAllCmd
+    = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/ntuple/setFileNameToAll", this);
+  G4String guidance("Set file name to all ntuples");
+  fSetFileNameAllCmd->SetGuidance(guidance);
+  fSetFileNameAllCmd->SetParameterName("AllNtupleFileName",false);
+}
+
 //
 // public methods
 //
@@ -111,18 +162,33 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     }
     else {
       // Should never happen but let's check anyway for consistency
-      G4ExceptionDescription description;
-      description 
-        << "Got wrong number of \"" << command->GetCommandName() 
-        << "\" parameters: " << parameters.size()
-        << " instead of " << command->GetParameterEntries() 
-        << " expected" << G4endl;
-      G4Exception("G4NtupleMessenger::SetNewValue",
-                  "Analysis_W013", JustWarning, description);
+      WrongParametersException(command->GetCommandName(),
+        parameters.size(),command->GetParameterEntries());
     }  
   }
   else if ( command == fSetActivationAllCmd.get() ) {
     auto activation = fSetActivationAllCmd->GetNewBoolValue(newValues);
     fManager->SetNtupleActivation(activation);
   }  
-}  
+  else if ( command == fSetFileNameCmd.get() ) {
+    // tokenize parameters in a vector
+    std::vector<G4String> parameters;
+    G4Analysis::Tokenize(newValues, parameters);
+    // check consistency
+    if ( parameters.size() == command->GetParameterEntries() ) {
+      auto counter = 0;
+      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      auto fileName = parameters[counter++];
+      fManager->SetNtupleFileName(id, fileName);
+    }
+    else {
+      // Should never happen but let's check anyway for consistency
+      WrongParametersException(command->GetCommandName(),
+        parameters.size(),command->GetParameterEntries());
+    }
+  }
+  else if ( command == fSetFileNameAllCmd.get() ) {
+    auto fileName = newValues;
+    fManager->SetNtupleFileName(fileName);
+  }
+}

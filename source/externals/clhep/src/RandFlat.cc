@@ -28,7 +28,10 @@
 
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/DoubConv.h"
+#include <iostream>
+#include <string>
 #include <string.h>	// for strcmp
+#include <vector>
 
 namespace CLHEP {
 

@@ -19,6 +19,9 @@ include $(G4INSTALL)/config/architecture.gmk
 ifdef G4FPE_DEBUG
   CPPFLAGS += -DG4FPE_DEBUG
 endif
+ifdef G4BT_DEBUG
+  CPPFLAGS += -DG4BT_DEBUG
+endif
 
 CPPFLAGS += -DG4RUN_ALLOC_EXPORT
 CPPFLAGS += \

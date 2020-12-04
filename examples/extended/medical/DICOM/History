@@ -5,6 +5,14 @@
      =========================================================
 
                       Category History file
+10.11.2020 - Ben Morgan (DICOM-V10-06-01)
+             Migration to G4RunManagerFactory.
+
+21.10.2020 - Ben Morgan (DICOM-V10-06-00)
+             Distinguish output names of archive lib from DLL and application to
+             fix Windows LNK1149 errors for static libs.
+             Modernize cmake version detection and policy setting to follow main
+             Geant4 usage.
 
 19.11.2019 - Gabriele Cosmo (DICOM-V10-05-03)
              Fixed more cases of implicit type conversions.
@@ -15,8 +23,8 @@
 
 12.11.2019 - Gunter Folger (DICOM-V10-05-01)
              Correct DicomHandler singleton for use on Windows.
-	     DICOM2 was crashing 
-	     
+	     DICOM2 was crashing
+
 08.06.2019 - Gabriele Cosmo (DICOM-V10-05-00)
              Defaulted copy-ctr in DicomPhantomZSliceHeader, to fix deprecation
              compilation warnings on gcc-9.1.

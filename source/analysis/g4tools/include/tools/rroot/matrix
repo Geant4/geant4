@@ -43,12 +43,12 @@ public:
     if(!a_buffer.read_version(v,s,c)) return false;
 
     //printf("debug : tools::rroot::matrix::stream : version %d\n",v);
-  
+
     // Version 2 streaming (ROOT/v3-00-6).
-  
+
    {uint32 id,bits;
     if(!Object_stream(a_buffer,id,bits)) return false;}
-  
+
     int Nrows;
     if(!a_buffer.read(Nrows)) return false;
     int Ncols;
@@ -59,7 +59,7 @@ public:
     if(!a_buffer.read(RowLwb)) return false;
     int ColLwb;
     if(!a_buffer.read(ColLwb)) return false;
-  
+
     //Real_t* Elements; //[fNelems]
     if(!dummy_array_stream<float>(a_buffer,Nelems)) return false;
 

@@ -23,38 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrPlaceSimple
+// G4tgrPlaceSimple
 //
 // Class description:
 //
 // Class to describe a simple positioning of a G4tgrVolume inside
 // another G4tgrVolume.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrPlaceSimple_h
-#define G4tgrPlaceSimple_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrPlaceSimple_hh
+#define G4tgrPlaceSimple_hh 1
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4tgrPlace.hh"
 
 class G4tgrPlaceSimple : public G4tgrPlace
 {
-  public:  // with description
+  public:
 
     G4tgrPlaceSimple();
-   ~G4tgrPlaceSimple();
+    ~G4tgrPlaceSimple();
 
-    G4tgrPlaceSimple( const std::vector<G4String>& wl );
+    G4tgrPlaceSimple(const std::vector<G4String>& wl);
 
     // Accessors
 
@@ -63,6 +57,7 @@ class G4tgrPlaceSimple : public G4tgrPlace
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrPlaceSimple& obj);
+
   protected:
 
     G4ThreeVector thePlace;

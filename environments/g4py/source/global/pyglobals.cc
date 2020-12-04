@@ -29,7 +29,7 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4indexing.hh"
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "G4Version.hh"
 #include "G4strstreambuf.hh"
 #include "G4UImanager.hh"

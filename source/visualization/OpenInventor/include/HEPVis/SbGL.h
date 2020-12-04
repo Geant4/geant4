@@ -24,15 +24,18 @@
 // ********************************************************************
 //
 #ifndef HEPVis_SbGL_h
-#define HEPVis_SbGL_h 
+#define HEPVis_SbGL_h
 
 #ifdef WIN32
 #include <windows.h>
 #endif
 
-#ifdef APPLE_GL
-#include <gl.h>
-#include <glu.h>
+// Needs setting based on choice of driver
+// Apple system for SoQt on Apple
+// Native otherwise (Apple Framework)
+#if defined(__APPLE__) && (!defined(G4VIS_BUILD_OIX_DRIVER) || !defined(G4VIS_USE_OIX_DRIVER))
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>

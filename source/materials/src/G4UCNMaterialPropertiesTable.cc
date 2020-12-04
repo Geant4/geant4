@@ -245,7 +245,7 @@ G4double G4UCNMaterialPropertiesTable::
                   GetMRIntProbability(G4double theta_i, G4double Energy)
 {
   if (!theMicroRoughnessTable) {
-     G4cout << "Dont have theMicroRoughnessTable" << G4endl;
+     G4cout << "Do not have theMicroRoughnessTable" << G4endl;
      return 0.;
   }
 

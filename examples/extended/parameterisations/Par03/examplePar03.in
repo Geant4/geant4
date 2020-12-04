@@ -1,0 +1,38 @@
+#  examplePar03.in
+#
+
+# setup detector dimensions
+/Par03/detector/setDetectorRadius 10 cm
+/Par03/detector/setDetectorLength 30 cm
+/Par03/detector/setDetectorMaterial G4_Pb
+/Par03/detector/setNbOfLayers 100
+/Par03/detector/setNbOfPhiCells 20
+/Par03/detector/setNbOfRhoCells 100
+/Par03/detector/print
+
+# initialize
+/run/initialize
+
+/gun/energy 10 GeV
+/gun/position 0 0 0
+
+# run 100 events with parametrised simulation
+# by default all created models are active
+#/param/ActivateModel model
+/analysis/setFileName Par03_fastsim_100events.root
+/run/beamOn 100
+
+# run 100 events with modified parametrisation
+/Par03/fastSim/print
+/Par03/fastSim/transverseProfile/sigma 20 mm
+/Par03/fastSim/longitudinalProfile/beta 0.6
+/Par03/fastSim/longitudinalProfile/alpha 2.
+/Par03/fastSim/longitudinalProfile/maxDepth 20
+/Par03/fastSim/numberOfHits 500
+/analysis/setFileName Par03_fastsimModified_100events.root
+/run/beamOn 100
+
+# run 100 events with full (detailed) simulation
+/param/InActivateModel model
+/analysis/setFileName Par03_fullsim_100events.root
+/run/beamOn 100

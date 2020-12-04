@@ -61,7 +61,9 @@ This directory contains a set of Geant4-DNA examples.
    - chem3   Activate the full interactivity with the chemistry module.
    - chem4   Simulation of radiochemical yields with the chemistry module.
    - chem5   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and 
-             G4EmDNAChemistry_option1    
+             G4EmDNAChemistry_option1.
+   - chem6   Scoring of the radiochemical yield G defined as a function of time
+             and LET.
 
   Geometry and other
 

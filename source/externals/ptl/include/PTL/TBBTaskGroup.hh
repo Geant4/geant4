@@ -64,11 +64,11 @@ public:
     typedef typename base_type::packaged_task_type                   packaged_task_type;
     typedef typename base_type::future_type                          future_type;
     typedef typename base_type::promise_type                         promise_type;
-    typedef typename base_type::template JoinFunction<Tp, Arg>::Type join_type;
+    typedef typename JoinFunction<Tp, Arg>::Type                     join_type;
     typedef tbb::task_group                                          tbb_task_group_t;
     //------------------------------------------------------------------------//
     template <typename... Args>
-    using task_type = Task<ArgTp, Args...>;
+    using task_type = Task<ArgTp, decay_t<Args>...>;
     //------------------------------------------------------------------------//
 
 public:
@@ -119,36 +119,40 @@ public:
 public:
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
-    task_type<Args...>* wrap(Func&& func, Args&&... args)
+    task_type<Args...>* wrap(Func&& func, Args... args)
     {
-        return operator+=(new task_type<Args...>(this, std::forward<Func>(func),
-                                                 std::forward<Args>(args)...));
+        return operator+=(
+            new task_type<Args...>(this, std::forward<Func>(func), args...));
     }
 
 public:
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
-    void run(Func&& func, Args&&... args)
+    void run(Func&& func, Args... args)
     {
-        auto _task = wrap(std::forward<Func>(func), std::forward<Args>(args)...);
+        auto _func = [=]() { return func(args...); };
+        auto _task = wrap(std::move(_func));
         auto _lamb = [=]() { (*_task)(); };
         m_tbb_task_group->run(_lamb);
     }
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args>
-    void exec(Func&& func, Args&&... args)
+    void exec(Func&& func, Args... args)
     {
-        run(std::forward<Func>(func), std::forward<Args>(args)...);
+        auto _func = [=]() { return func(args...); };
+        auto _task = wrap(std::move(_func));
+        auto _lamb = [=]() { (*_task)(); };
+        m_tbb_task_group->run(_lamb);
     }
     //------------------------------------------------------------------------//
     template <typename Func, typename... Args, typename Up = Tp,
               enable_if_t<std::is_same<Up, void>::value, int> = 0>
-    void parallel_for(uintmax_t nitr, uintmax_t, Func&& func, Args&&... args)
+    void parallel_for(uintmax_t nitr, uintmax_t, Func&& func, Args... args)
     {
         tbb::parallel_for(tbb::blocked_range<size_t>(0, nitr),
                           [&](const tbb::blocked_range<size_t>& range) {
                               for(size_t i = range.begin(); i != range.end(); ++i)
-                                  func(std::forward<Args>(args)...);
+                                  func(args...);
                           });
     }
 
@@ -175,24 +179,42 @@ public:
 
     //------------------------------------------------------------------------//
     // wait to finish
-    template <typename Up = Tp, enable_if_t<!std::is_same<Up, void>::value, int> = 0>
+    template <typename Up = Tp, enable_if_t<!std::is_void<Up>::value, int> = 0>
     inline Up join(Up accum = {})
     {
         this->wait();
         for(auto& itr : m_task_set)
-            accum = m_join(std::ref(accum), std::forward<ArgTp>(itr.get()));
+        {
+            using RetT = decay_t<decltype(itr.get())>;
+            accum      = m_join(std::ref(accum), std::forward<RetT>(itr.get()));
+        }
         this->clear();
         return accum;
     }
     //------------------------------------------------------------------------//
     // wait to finish
-    template <typename Up = Tp, enable_if_t<std::is_same<Up, void>::value, int> = 0>
+    template <typename Up = Tp, typename Rp = Arg,
+              enable_if_t<std::is_void<Up>::value && std::is_void<Rp>::value, int> = 0>
     inline void join()
     {
         this->wait();
         for(auto& itr : m_task_set)
             itr.get();
         m_join();
+        this->clear();
+    }
+    //------------------------------------------------------------------------//
+    // wait to finish
+    template <typename Up = Tp, typename Rp = Arg,
+              enable_if_t<std::is_void<Up>::value && !std::is_void<Rp>::value, int> = 0>
+    inline void join()
+    {
+        this->wait();
+        for(auto& itr : m_task_set)
+        {
+            using RetT = decay_t<decltype(itr.get())>;
+            m_join(std::forward<RetT>(itr.get()));
+        }
         this->clear();
     }
 

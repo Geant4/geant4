@@ -151,9 +151,9 @@ void G4Sphere::InitializeThetaTrigonometry()
   sinETheta = std::sin(eTheta);
   cosETheta = std::cos(eTheta);
 
-  tanSTheta  = std::tan(fSTheta);
+  tanSTheta  = sinSTheta/cosSTheta;
   tanSTheta2 = tanSTheta*tanSTheta;
-  tanETheta  = std::tan(eTheta);
+  tanETheta  = sinETheta/cosETheta;
   tanETheta2 = tanETheta*tanETheta;
 }
 

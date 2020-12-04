@@ -273,7 +273,7 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       type  = GetProcessType(currentProcessName);
       if (type <0 )
       {
-        // no processes with specifed name
+        // no processes with specified name
         ed << " illegal process (or type) name ["
            << currentProcessName << "]";
         command->CommandFailed(ed);
@@ -303,7 +303,7 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
     if ( !isParticleFound )
     {
-      // no particle with specifed name
+      // no particle with specified name
       ed << " illegal particle name [" << currentParticleName << "]";
       command->CommandFailed(ed);
       currentParticleName = "";

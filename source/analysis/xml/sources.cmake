@@ -14,6 +14,9 @@ geant4_define_module(NAME G4xml
     G4XmlAnalysisReader.hh
     G4XmlAnalysisReader.icc
     G4XmlFileManager.hh
+    G4XmlHnFileManager.hh
+    G4XmlHnFileManager.icc
+    G4XmlNtupleFileManager.hh
     G4XmlNtupleManager.hh
     G4XmlRFileManager.hh
     G4XmlRNtupleManager.hh
@@ -22,6 +25,7 @@ geant4_define_module(NAME G4xml
   SOURCES
     G4XmlAnalysisManager.cc
     G4XmlAnalysisReader.cc
+    G4XmlNtupleFileManager.cc
     G4XmlFileManager.cc
     G4XmlNtupleManager.cc
     G4XmlRFileManager.cc

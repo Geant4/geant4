@@ -71,6 +71,7 @@ void G4XXXSGViewer::DrawView() {
   // /vis/viewer/rebuild, but if not, make decision and set flag only
   // if necessary...
   if (!fNeedKernelVisit) KernelVisitDecision();
+  fLastVP = fVP;
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
 
   ProcessView ();  // Clears store and processes scene only if necessary.
@@ -108,7 +109,6 @@ void G4XXXSGViewer::KernelVisitDecision () {
       || CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();  // Sets fNeedKernelVisit.
   }      
-  fLastVP = fVP;
 }
 
 G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
@@ -128,6 +128,8 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       // No need to visit kernel if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+      (lastVP.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (lastVP.GetDefaultVisAttributes()->GetColour() !=
        fVP.GetDefaultVisAttributes()->GetColour())                ||

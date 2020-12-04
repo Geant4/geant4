@@ -65,10 +65,10 @@ G4Run* TSRunAction::GenerateRun() { return new TSRun(fName); }
 
 void TSRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4int evts_to_process = aRun->GetNumberOfEventToBeProcessed();
-  G4RunManager::GetRunManager()->SetPrintProgress(
-    (evts_to_process > 100) ? evts_to_process / 100 : 1);
-  if(IsMaster())
+  // G4int evts_to_process = aRun->GetNumberOfEventToBeProcessed();
+  // G4RunManager::GetRunManager()->SetPrintProgress(
+  //  (evts_to_process > 1000) ? evts_to_process / 1000 : 1);
+  if(IsMaster() && aRun != nullptr)
     G4PrintEnv();
 }
 

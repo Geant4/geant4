@@ -33,6 +33,8 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4HadronicParameters.hh"
 
 
@@ -52,12 +54,29 @@ G4HadronicParametersMessenger::G4HadronicParametersMessenger( G4HadronicParamete
   theVerboseCmd->SetParameterName( "VerboseLevel", true );
   theVerboseCmd->SetDefaultValue( 1 );
   theVerboseCmd->SetRange( "VerboseLevel>=0" );
+  theVerboseCmd->AvailableForStates( G4State_PreInit );
+
+  // This command sets the max energy for hadronics.
+  theMaxEnergyCmd = new G4UIcmdWithADoubleAndUnit( "/process/had/maxEnergy", this );
+  theMaxEnergyCmd->SetGuidance( "Max energy for hadronics (default: 100 TeV)" );
+  theMaxEnergyCmd->SetParameterName( "MaxEnergy", false );
+  theMaxEnergyCmd->SetUnitCategory( "Energy" );
+  theMaxEnergyCmd->SetRange( "MaxEnergy>0.0" );
+  theMaxEnergyCmd->AvailableForStates( G4State_PreInit );
+
+  // This command enable the Cosmic Ray (CR) coalescence
+  theCRCoalescenceCmd = new G4UIcmdWithABool( "/process/had/enableCRCoalescence", this );
+  theCRCoalescenceCmd->SetGuidance( "Enable Cosmic Ray (CR) coalescence." );
+  theCRCoalescenceCmd->SetParameterName( "EnableCRCoalescence", false );
+  theCRCoalescenceCmd->SetDefaultValue( false );
 }
 
 
 G4HadronicParametersMessenger::~G4HadronicParametersMessenger() {
   delete theDirectory;
   delete theVerboseCmd;
+  delete theMaxEnergyCmd;
+  delete theCRCoalescenceCmd;
 }
 
 
@@ -67,5 +86,9 @@ void G4HadronicParametersMessenger::SetNewValue( G4UIcommand *command, G4String 
     // it is the responsibility of each hadronic model, cross section and process to check
     // this verbose level and behave accordingly.
     theHadronicParameters->SetVerboseLevel( theVerboseCmd->GetNewIntValue( newValues ) );
+  } else if ( command == theMaxEnergyCmd ) { 
+    theHadronicParameters->SetMaxEnergy( theMaxEnergyCmd->GetNewDoubleValue( newValues ) );
+  } else if ( command == theCRCoalescenceCmd ) {
+    theHadronicParameters->SetEnableCRCoalescence( theCRCoalescenceCmd->GetNewBoolValue( newValues ) );
   }
 }

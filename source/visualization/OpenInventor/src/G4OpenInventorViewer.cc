@@ -64,8 +64,6 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 ,fGroupCameraSensor(0)
 ,fCameraSensor(0)
 {
-  fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
-
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
   fVP.SetPicking(true);
@@ -151,7 +149,6 @@ void G4OpenInventorViewer::KernelVisitDecision () {
       CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();
   }      
-  fLastVP = fVP;
 }
  
 G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
@@ -175,6 +172,8 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // G4OpenGLStoredSceneHander::CreateSection/CutawayPolyhedron.
       (vp.IsExplode ()          != fVP.IsExplode ())          ||
       (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (vp.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
+      (vp.GetGlobalLineWidthScale() != fVP.GetGlobalLineWidthScale()) ||
       (vp.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
       (vp.GetDefaultVisAttributes()->GetColour() !=
        fVP.GetDefaultVisAttributes()->GetColour())            ||
@@ -374,6 +373,7 @@ G4OpenInventorViewer::lookedAt(SoCamera* camera,SbVec3f & dir, SbVec3f & up)
 void G4OpenInventorViewer::DrawView () {
   //G4cout << "debug Iv::DrawViewer " <<G4endl;
   if (!fNeedKernelVisit) KernelVisitDecision();
+  fLastVP= fVP;
   ProcessView();
   FinishView();
 }

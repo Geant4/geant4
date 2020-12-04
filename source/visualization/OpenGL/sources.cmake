@@ -6,9 +6,6 @@
 #
 # Module has optional sources
 #
-include(Geant4MacroDefineModule)
-
-#
 # Define the core sources, includes and libraries which all Geant4
 # OpenGL implementations use
 #
@@ -40,14 +37,6 @@ set(G4VIS_MODULE_OPENGL_SOURCES
   G4VisFeaturesOfOpenGL.cc
 )
 
-#
-# Core OpenGL settings
-#
-set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES OpenGL::GL)
-
-#
-# All files must have the G4VIS_BUILD_OPENGL_DRIVER definition
-#
 add_definitions(-DG4VIS_BUILD_OPENGL_DRIVER)
 
 #----------------------------------------------------------------------------
@@ -75,6 +64,8 @@ if(GEANT4_USE_OPENGL_X11)
   list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
   if(APPLE)
     list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES XQuartzGL::GL)
+  else()
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES OpenGL::GL)
   endif()
 endif()
 
@@ -149,6 +140,11 @@ if(GEANT4_USE_XM)
 
   # Add in Xm, X11 libraries, plus Xmu library
   set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES Motif::Xm X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES})
+  if(APPLE)
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES XQuartzGL::GL)
+  else()
+    set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES OpenGL::GL)
+  endif()
 endif()
 
 #----------------------------------------------------------------------------
@@ -184,39 +180,8 @@ if(GEANT4_USE_QT)
   add_definitions(-DG4VIS_BUILD_OPENGLQT_DRIVER -DG4INTY_BUILD_QT -DG4UI_BUILD_QT_SESSION)
 
   # Add in Qt libraries
-  list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets)
+  list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets OpenGL::GL)
 endif()
-
-#----------------------------------------------------------------------------
-# Add Wt OpenGL support if requested
-#
-#if(GEANT4_USE_WT)
-#    #
-#    # Add in the extra Wt GL sources
-#    #
-#    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
-#        G4OpenGLImmediateWt.hh
-#        G4OpenGLImmediateWtViewer.hh
-#        G4OpenGLVboDrawer.hh
-#        G4OpenGLWtViewer.hh)
-#
-#    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
-#        G4OpenGLImmediateWt.cc
-#        G4OpenGLImmediateWtViewer.cc
-#        G4OpenGLVboDrawer.cc
-#        G4OpenGLWtViewer.cc)
-#
-#    # Add the definitions - these will also be used to compile the moc sources
-#    # Argh.. Have to remember about INTY and UI because of their use...
-#    # Use the compile definitions to avoid "signal/slot" keyword
-#    # mixed with Qt and boost
-#    add_definitions(${WT_DEFINITIONS})
-#    add_definitions(-DG4VIS_BUILD_OPENGLWT_DRIVER -DG4INTY_BUILD_WT
-#        -DG4UI_BUILD_WT_SESSION)
-#
-#    # Add in Wt libraries
-#    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES Wt::Wt Wt::HTTP)
-#endif()
 
 
 #----------------------------------------------------------------------------
@@ -241,6 +206,7 @@ if(GEANT4_USE_OPENGL_WIN32)
 
   # Add the compile definitions
   add_definitions(-DG4VIS_BUILD_OPENGLWIN32_DRIVER)
+  list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES OpenGL::GL)
 endif()
 
 # May have duplicates in link list, so remove
@@ -260,6 +226,7 @@ geant4_define_module(NAME G4OpenGL
     G4csg
     G4event
     G4run
+    G4tasking
     G4particles
     G4processes
     G4track
@@ -279,6 +246,7 @@ geant4_define_module(NAME G4OpenGL
     G4digits_hits
     G4event
     G4run
+    G4tasking
     G4particles
     G4processes
     G4track

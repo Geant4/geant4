@@ -9,10 +9,10 @@ DIRNAME=$1
 
 for FILE in `ls $DIRNAME/include`; do
   rm -f include/$FILE
-done  
+done
 for FILE in `ls $DIRNAME/src`; do
   rm -f src/$FILE
-done  
+done
 
 echo "... clean_files.sh from $1 finished"
 

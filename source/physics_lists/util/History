@@ -12,6 +12,44 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-October-2020, Gabriele Cosmo         (phys-util-V10-06-10)
+- Added new dependencies to "processes/electromagnetic/utils" and
+  "processes/hadronic/models/de_excitation/management" modules in
+  GNUMakefile.
+
+07-October-2020, Vladimir Ivanchenko    (phys-util-V10-06-09)
+- G4PhysListUtil - added utility method InitialiseParameters() 
+
+22-August-2020, Vladimir Ivanchenko     (phys-util-V10-06-08)
+- G4HadProcesses - added optional GG nucl-nucl cross section 
+
+21-August-2020, Vladimir Ivanchenko     (phys-util-V10-06-07)
+- G4HadProcesses - use G4PhysListUtil to access processes
+- G4PhysListUtil - added method to access elastic x-section
+
+24-July-2020, Alberto Ribon             (phys-util-V10-06-06)
+- G4HadParticles : removed eta and eta_prime from the list of
+  charmed and bottom hadrons; removed the short-lived hadrons
+  (Sigma0, etac, JPsi, SigmaC++, SigmaC+, SigmaC0, Upsilon,
+  SigmaB+, SigmaB0, SigmaB-) whose hadronic interactions can be
+  neglected (consistently with what is done currently in Geant4
+  for pi0 and Sigma0) because they decay too quickly.
+
+19-July-2020, Vladimir Ivanchenko       (phys-util-V10-06-05)
+- G4HadParticles - subdivide for different methods hyperons and 
+    anti-hyperons
+
+11-July-2020, Vladimir Ivanchenko       (phys-util-V10-06-04)
+- G4HadProcesses - new utility class providing access to hadronic
+    processes and addition of a cross section per particle type
+    and hadronic process; Using this class it is possible to 
+    customise hadronic cross sections
+
+01-July-2020, Vladimir Ivanchenko       (phys-util-V10-06-03)
+- G4HadParticles - separated light anti-particles to the extra
+    vector and added extra access method
+
 28-May-2020 Ben Morgan                  (phys-util-V10-06-02)
 -  Remove obsolete GRANULAR_DEPENDENCIES entries
 

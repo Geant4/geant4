@@ -14,11 +14,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-2020 B. Morgan - tag exicsd-V10-06-00
+- Migration to G4RunManagerFactory.
+
 26-11-19 I. Hrivnacova - tag exicsd-V10-05-01
 - Fixed formatting in .README.txt and Doxygen warnings
 
 01-11-19 V. Ivanchenko - tag exicsd-V10-05-00
-- icsd.mac - reduce statistics to 75 in order not to hit time 
+- icsd.mac - reduce statistics to 75 in order not to hit time
     limit nightly
 
 07-11-18 I. Hrivnacova - tag exicsd-V10-04-04

@@ -34,7 +34,7 @@
 #include "G4Types.hh"
 
 #include "FTFP_BERT.hh"
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "ExN04DetectorConstruction.hh"
@@ -62,9 +62,9 @@ int main(int argc,char** argv)
   G4VSteppingVerbose* verbosity = new ExN04SteppingVerbose;
   G4VSteppingVerbose::SetInstance(verbosity);
 
-  // Run manager
+  // Serial only Run manager
   //
-  G4RunManager* runManager = new G4RunManager;
+  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // User Initialization classes (mandatory)
   //

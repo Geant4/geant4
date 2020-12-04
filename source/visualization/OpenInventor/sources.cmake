@@ -4,19 +4,6 @@
 #------------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------
-# Generic Inventor Headers, base library, OpenGL and Geant4 defines
-#
-include_directories(${INVENTOR_INCLUDE_DIR})
-set(G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS ${INVENTOR_INCLUDE_DIR})
-set(G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES ${INVENTOR_LIBRARY})
-
-include_directories(${OPENGL_INCLUDE_DIR})
-list(APPEND G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
-list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES ${OPENGL_LIBRARIES})
-
-add_definitions(-DG4VIS_BUILD_OI_DRIVER)
-
-#----------------------------------------------------------------------------
 # Geant4 OpenInventor Core sources and headers (all platforms)
 #
 set(G4VIS_MODULE_OPENINVENTOR_HEADERS
@@ -54,100 +41,87 @@ set(G4VIS_MODULE_OPENINVENTOR_SOURCES
   SoTubs.cc
   )
 
-
+set(G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES Coin::Coin)
+add_definitions(-DG4VIS_BUILD_OI_DRIVER)
 
 #----------------------------------------------------------------------------
 # UNIX Only (Xt) sources
 #
-if(UNIX)
-  if(NOT GEANT4_USE_INVENTOR_QT)
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
-       G4OpenInventorX.hh
-       G4OpenInventorXt.hh
-       G4OpenInventorXtExaminerViewerMessenger.hh
-       G4OpenInventorXtExaminerViewer.hh
-       G4OpenInventorXtExtended.hh
-       G4OpenInventorXtExtendedViewer.hh
-       G4OpenInventorXtViewer.hh
-       wheelmouse.h
-       SoXtInternal.h
-       console.h
-       favorites.h
-       saveViewPt.h
-       pickext.h
-       pickref.h
-       wireframe.h
-       )
+if(GEANT4_USE_INVENTOR_XT)
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
+    G4OpenInventorX.hh
+    G4OpenInventorXt.hh
+    G4OpenInventorXtExaminerViewerMessenger.hh
+    G4OpenInventorXtExaminerViewer.hh
+    G4OpenInventorXtExtended.hh
+    G4OpenInventorXtExtendedViewer.hh
+    G4OpenInventorXtViewer.hh
+    wheelmouse.h
+    SoXtInternal.h
+    console.h
+    favorites.h
+    saveViewPt.h
+    pickext.h
+    pickref.h
+    wireframe.h)
 
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
-       G4OpenInventorXt.cc
-       G4OpenInventorXtExaminerViewer.cc
-       G4OpenInventorXtExaminerViewerMessenger.cc
-       G4OpenInventorXtExtended.cc
-       G4OpenInventorXtExtendedViewer.cc
-       G4OpenInventorXtViewer.cc
-       wheelmouse.cc
-       )
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
+    G4OpenInventorXt.cc
+    G4OpenInventorXtExaminerViewer.cc
+    G4OpenInventorXtExaminerViewerMessenger.cc
+    G4OpenInventorXtExtended.cc
+    G4OpenInventorXtExtendedViewer.cc
+    G4OpenInventorXtViewer.cc
+    wheelmouse.cc)
 
   # Add the definitions for SoXt
-     add_definitions(-DG4INTY_BUILD_XT)
-     add_definitions(-DG4VIS_BUILD_OIX_DRIVER)
+  add_definitions(-DG4INTY_BUILD_XT)
+  add_definitions(-DG4VIS_BUILD_OIX_DRIVER)
 
-  # SoXt Library
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
-       ${INVENTOR_SOXT_LIBRARY}
-       )
-
-  # We also need Xm and X11
-     include_directories(${X11_INCLUDE_DIR})
-     include_directories(${MOTIF_INCLUDE_DIR})
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_INCLUDE_DIRS
-       ${OPENGL_INCLUDE_DIR}
-       ${MOTIF_INCLUDE_DIR}
-       )
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
-      ${MOTIF_LIBRARIES}
-      ${X11_LIBRARIES}
-      ${X11_Xpm_LIB}
-      )
-
+  # SoXt Library and others
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES SoXt::SoXt Motif::Xm)
+  if(APPLE)
+    list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES XQuartzGL::GL)
   else()
+    list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES OpenGL::GL)
+  endif()
+endif()
 
 #----------------------------------------------------------------------------
 # Open Inventor Qt
 #
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
-       G4OpenInventorQt.hh
-       G4OpenInventorQtExaminerViewer.hh
-       G4OpenInventorQtViewer.hh
-       G4SoQt.hh
-       )
+if(GEANT4_USE_INVENTOR_QT)
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
+    G4OpenInventorQt.hh
+    G4OpenInventorQtExaminerViewer.hh
+    G4OpenInventorQtViewer.hh
+    G4SoQt.hh
+    ui_OIQtListsDialog.h)
 
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
-       G4OpenInventorQt.cc
-       G4OpenInventorQtExaminerViewer.cc
-       G4OpenInventorQtViewer.cc
-       G4SoQt.cc
-       )
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
+    G4OpenInventorQt.cc
+    G4OpenInventorQtExaminerViewer.cc
+    G4OpenInventorQtViewer.cc
+    G4SoQt.cc)
 
-     # Add the definitions
-     # Argh.. Have to remember about INTY and UI because of their use...
-     add_definitions(-DG4VIS_BUILD_OIQT_DRIVER)
-     add_definitions(-DG4INTY_BUILD_QT)
-     add_definitions(-DG4UI_BUILD_QT_SESSION)
+  # Add the definitions
+  # Argh.. Have to remember about INTY and UI because of their use...
+  add_definitions(-DG4VIS_BUILD_OIQT_DRIVER)
+  add_definitions(-DG4INTY_BUILD_QT)
+  add_definitions(-DG4UI_BUILD_QT_SESSION)
 
-    # Add in Qt libraries
-     list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
-      ${INVENTOR_SOQT_LIBRARY}
-      Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets)
-  endif()
+  # Add libraries
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
+    SoQt::SoQt
+    OpenGL::GL
+    Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets)
 endif()
 
 
 #----------------------------------------------------------------------------
 # WIN32 Only (Win32) sources
 #
-if(WIN32)
+if(GEANT4_USE_INVENTOR_WIN)
   set(G4VIS_MODULE_OPENINVENTOR_HEADERS
     ${G4VIS_MODULE_OPENINVENTOR_HEADERS}
     G4OpenInventorWin.hh
@@ -161,16 +135,12 @@ if(WIN32)
     G4OpenInventorWinViewer.cc
     )
 
-  # Add the include for SoWin
-
   # Add the definitions for SoWin
   add_definitions(-DG4INTY_BUILD_WIN32)
   add_definitions(-DG4VIS_BUILD_OIWIN32_DRIVER)
 
   # SoWin Library
-  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
-    ${INVENTOR_SOWIN_LIBRARY}
-    )
+  list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES SoWin::SoWin OpenGL::GL)
 endif()
 
 #

@@ -56,15 +56,17 @@ void G4PhysicalVolumesSearchScene::ProcessVolume (const G4VSolid&)
   if (fMatcher.Match(name)) {
     if ((fRequiredCopyNo < 0 ||  // I.e., ignore negative request
          fRequiredCopyNo == copyNo)) {
-      auto path = fpSearchVolumesModel->GetFullPVPath();
-      path.pop_back();  // Base node is one up from found node
+      auto basePath = fpSearchVolumesModel->GetFullPVPath();
+      basePath.pop_back();  // Base node is one up from found node
+      // Mark base path nodes as not drawn
+      for (auto& node: basePath) node.SetDrawn(false);
       fFindings.push_back
       (Findings
        (fpSearchVolumesModel->GetTopPhysicalVolume(),
         pCurrentPV,
         copyNo,
         fpSearchVolumesModel->GetCurrentDepth(),
-        path,
+        basePath,
         *fpCurrentObjectTransformation));
     }
   }

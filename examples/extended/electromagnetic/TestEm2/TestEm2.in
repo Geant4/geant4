@@ -28,5 +28,6 @@
 /gun/energy 5 GeV
 #
 /run/printProgress 20
+/testem/run/verbose 1
 #
 /run/beamOn 100

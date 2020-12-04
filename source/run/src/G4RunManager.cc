@@ -61,6 +61,8 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4TiMemory.hh"
+#include "G4Profiler.hh"
 #include <sstream>
 
 using namespace CLHEP;
@@ -230,10 +232,13 @@ G4RunManager::G4RunManager(RMType rmType)
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun   = oss.str();
   randomNumberStatusForThisEvent = oss.str();
+  ConfigureProfilers();
 }
 
 G4RunManager::~G4RunManager()
 {
+  // finalize profiler before shutting down the threads
+  G4Profiler::Finalize();
   G4StateManager* pStateManager = G4StateManager::GetStateManager();
   // set the application state to the quite state
   if(pStateManager->GetCurrentState() != G4State_Quit)
@@ -320,7 +325,6 @@ void G4RunManager::DeleteUserInitializations()
 
 void G4RunManager::BeamOn(G4int n_event, const char* macroFile, G4int n_select)
 {
-  TIMEMORY_AUTO_TIMER("");
   if(n_event <= 0)
   {
     fakeRun = true;
@@ -381,7 +385,6 @@ void G4RunManager::RunInitialization()
   if(!(kernel->RunInitialization(fakeRun)))
     return;
 
-  TIMEMORY_AUTO_TIMER("");
   runAborted             = false;
   numberOfEventProcessed = 0;
 
@@ -435,6 +438,10 @@ void G4RunManager::RunInitialization()
   if(userRunAction)
     userRunAction->BeginOfRunAction(currentRun);
 
+#if defined(GEANT4_USE_TIMEMORY)
+  masterRunProfiler.reset(new ProfilerConfig(currentRun));
+#endif
+
   if(isScoreNtupleWriter)
   {
     G4VScoreNtupleWriter::Instance()->OpenFile();
@@ -456,7 +463,6 @@ void G4RunManager::RunInitialization()
 void G4RunManager::DoEventLoop(G4int n_event, const char* macroFile,
                                G4int n_select)
 {
-  TIMEMORY_AUTO_TIMER("");
   InitializeEventLoop(n_event, macroFile, n_select);
 
   // Event loop
@@ -500,7 +506,6 @@ void G4RunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
 
 void G4RunManager::ProcessOneEvent(G4int i_event)
 {
-  TIMEMORY_AUTO_TIMER("");
   currentEvent = GenerateEvent(i_event);
   eventManager->ProcessOneEvent(currentEvent);
   AnalyzeEvent(currentEvent);
@@ -511,7 +516,6 @@ void G4RunManager::ProcessOneEvent(G4int i_event)
 
 void G4RunManager::TerminateOneEvent()
 {
-  TIMEMORY_AUTO_TIMER("");
   StackPreviousEvent(currentEvent);
   currentEvent = 0;
   numberOfEventProcessed++;
@@ -543,7 +547,6 @@ void G4RunManager::TerminateEventLoop()
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
-  TIMEMORY_AUTO_TIMER("");
   if(!userPrimaryGeneratorAction)
   {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -584,7 +587,6 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
 void G4RunManager::StoreRNGStatus(const G4String& fnpref)
 {
-  TIMEMORY_AUTO_TIMER("");
   G4String fileN = randomNumberStatusDir + fnpref + ".rndm";
   G4Random::saveEngineStatus(fileN);
 }
@@ -602,17 +604,25 @@ void G4RunManager::RunTermination()
 {
   if(!fakeRun)
   {
+#if defined(GEANT4_USE_TIMEMORY)
+    masterRunProfiler.reset();
+#endif
     CleanUpUnnecessaryEvents(0);
-    if(userRunAction)
-      userRunAction->EndOfRunAction(currentRun);
-    G4VPersistencyManager* fPersM =
-      G4VPersistencyManager::GetPersistencyManager();
-    if(fPersM)
-      fPersM->Store(currentRun);
-    // write & close analysis output
-    if(isScoreNtupleWriter)
+    // tasking occasionally will call this function even
+    // if there was not a current run
+    if(currentRun)
     {
-      G4VScoreNtupleWriter::Instance()->Write();
+      if(userRunAction)
+        userRunAction->EndOfRunAction(currentRun);
+      G4VPersistencyManager* fPersM =
+        G4VPersistencyManager::GetPersistencyManager();
+      if(fPersM)
+        fPersM->Store(currentRun);
+      // write & close analysis output
+      if(isScoreNtupleWriter)
+      {
+        G4VScoreNtupleWriter::Instance()->Write();
+      }
     }
     runIDCounter++;
   }
@@ -824,13 +834,13 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManager::rndmSaveThisRun()
 {
   G4int runNumber = 0;
-  if(currentRun)
-    runNumber = currentRun->GetRunID();
+  if(currentRun) runNumber = currentRun->GetRunID();
   if(!storeRandomNumberStatus)
   {
     G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
            << " Random number status was not stored prior to this run."
-           << G4endl << "Command ignored." << G4endl;
+           << G4endl << "/random/setSavingFlag command must be issued. "
+           << "Command ignored." << G4endl;
     return;
   }
 
@@ -840,20 +850,34 @@ void G4RunManager::rndmSaveThisRun()
   os << "run" << runNumber << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();
 
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
   G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
   if(verboseLevel > 0)
-    G4cout << "currentRun.rndm is copied to file: " << fileOut << G4endl;
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
 }
 
 void G4RunManager::rndmSaveThisEvent()
 {
-  if(!storeRandomNumberStatus || currentEvent == 0)
+  if(currentEvent == 0)
   {
     G4cerr
       << "Warning from G4RunManager::rndmSaveThisEvent():"
-      << " there is no currentEvent or its RandomEngineStatus is not available."
+      << " there is no currentEvent available."
       << G4endl << "Command ignored." << G4endl;
+    return;
+  }
+
+  if(!storeRandomNumberStatus)
+  {
+    G4cerr
+      << "Warning from G4RunManager::rndmSaveThisEvent():"
+      << " Random number engine status is not available."
+      << G4endl << "/random/setSavingFlag command must be issued "
+      << "prior to the start of the run. Command ignored." << G4endl;
     return;
   }
 
@@ -864,10 +888,14 @@ void G4RunManager::rndmSaveThisEvent()
      << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();
 
+#ifdef WIN32
+  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
+#else
   G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
+#endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
   if(verboseLevel > 0)
-    G4cout << "currentEvent.rndm is copied to file: " << fileOut << G4endl;
+  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
 }
 
 void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
@@ -924,7 +952,6 @@ void G4RunManager::ConstructScoringWorlds()
   if(nPar < 1)
     return;
 
-  TIMEMORY_AUTO_TIMER("");
   G4ParticleTable::G4PTblDicIterator* theParticleIterator =
     G4ParticleTable::GetParticleTable()->GetIterator();
   for(G4int iw = 0; iw < nPar; iw++)
@@ -1002,7 +1029,6 @@ void G4RunManager::UpdateScoring()
   if(nPar < 1)
     return;
 
-  TIMEMORY_AUTO_TIMER("");
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
   if(!HCE)
     return;
@@ -1201,3 +1227,176 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
     }
   }
 }
+
+//---------------------------------------------------------------------------//
+
+void G4RunManager::ConfigureProfilers(int argc, char** argv)
+{
+  std::vector<std::string> _args;
+  for(int i = 0; i < argc; ++i)
+    _args.push_back(argv[i]);
+  ConfigureProfilers(_args);
+}
+
+//---------------------------------------------------------------------------//
+
+void G4RunManager::ConfigureProfilers(const std::vector<std::string>& args)
+{
+#ifdef GEANT4_USE_TIMEMORY
+  // parse command line if arguments were passed
+  G4Profiler::Configure(args);
+#else
+  G4ConsumeParameters(args);
+#endif
+}
+
+//---------------------------------------------------------------------------//
+
+#if !defined(GEANT4_USE_TIMEMORY)
+#  define TIMEMORY_WEAK_PREFIX
+#  define TIMEMORY_WEAK_POSTFIX
+#endif
+
+//---------------------------------------------------------------------------//
+
+extern "C"
+{
+  // this allows the default setup to be overridden by linking
+  // in an custom extern C function into the application
+  TIMEMORY_WEAK_PREFIX
+  void G4RunProfilerInit(void) TIMEMORY_WEAK_POSTFIX;
+
+  extern void G4ProfilerInit(void);
+
+  // this gets executed when the library gets loaded
+  void G4RunProfilerInit(void)
+  {
+#ifdef GEANT4_USE_TIMEMORY
+    G4ProfilerInit();
+
+    // guard against re-initialization
+    static bool _once = false;
+    if(_once)
+      return;
+    _once = true;
+
+    puts(">>> G4RunProfilerInit <<<");
+
+    using RunProfilerConfig   = G4ProfilerConfig<G4ProfileType::Run>;
+    using EventProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
+    using TrackProfilerConfig = G4ProfilerConfig<G4ProfileType::Track>;
+    using StepProfilerConfig  = G4ProfilerConfig<G4ProfileType::Step>;
+    using UserProfilerConfig  = G4ProfilerConfig<G4ProfileType::User>;
+
+    //
+    // these are the default functions for evaluating whether
+    // to start profiling
+    //
+    RunProfilerConfig::GetFallbackQueryFunctor() = [](const G4Run* _run) {
+      return G4Profiler::GetEnabled(G4ProfileType::Run) && _run;
+    };
+
+    EventProfilerConfig::GetFallbackQueryFunctor() = [](const G4Event* _event) {
+      return G4Profiler::GetEnabled(G4ProfileType::Event) && _event;
+    };
+
+    TrackProfilerConfig::GetFallbackQueryFunctor() = [](const G4Track* _track) {
+      return G4Profiler::GetEnabled(G4ProfileType::Track) && _track &&
+             _track->GetDynamicParticle();
+    };
+
+    StepProfilerConfig::GetFallbackQueryFunctor() = [](const G4Step* _step) {
+      return G4Profiler::GetEnabled(G4ProfileType::Step) && _step &&
+             _step->GetTrack();
+    };
+
+    UserProfilerConfig::GetFallbackQueryFunctor() =
+      [](const std::string& _user) {
+        return G4Profiler::GetEnabled(G4ProfileType::User) && !_user.empty();
+      };
+
+    //
+    // these are the default functions which encode the profiling label.
+    // Will not be called unless the query returned true
+    //
+    RunProfilerConfig::GetFallbackLabelFunctor() = [](const G4Run* _run) {
+      return TIMEMORY_JOIN('/', "G4Run", _run->GetRunID());
+    };
+
+    EventProfilerConfig::GetFallbackLabelFunctor() =
+      [](const G4Event* _event) -> std::string {
+      if(G4Profiler::GetPerEvent())
+        return TIMEMORY_JOIN('/', "G4Event", _event->GetEventID());
+      else
+        return "G4Event";
+    };
+
+    TrackProfilerConfig::GetFallbackLabelFunctor() = [](const G4Track* _track) {
+      auto pdef = _track->GetDynamicParticle()->GetParticleDefinition();
+      return TIMEMORY_JOIN('/', "G4Track", pdef->GetParticleName());
+    };
+
+    StepProfilerConfig::GetFallbackLabelFunctor() = [](const G4Step* _step) {
+      auto pdef = _step->GetTrack()->GetParticleDefinition();
+      return TIMEMORY_JOIN('/', "G4Step", pdef->GetParticleName());
+    };
+
+    UserProfilerConfig::GetFallbackLabelFunctor() =
+      [](const std::string& _user) { return _user; };
+
+    using RunTool   = typename RunProfilerConfig::type;
+    using EventTool = typename EventProfilerConfig::type;
+    using TrackTool = typename TrackProfilerConfig::type;
+    using StepTool  = typename StepProfilerConfig::type;
+    using UserTool  = typename UserProfilerConfig::type;
+
+    RunProfilerConfig::GetFallbackToolFunctor() =
+      [](const std::string& _label) { return new RunTool{ _label }; };
+
+    EventProfilerConfig::GetFallbackToolFunctor() =
+      [](const std::string& _label) { return new EventTool{ _label }; };
+
+    TrackProfilerConfig::GetFallbackToolFunctor() =
+      [](const std::string& _label) {
+        return new TrackTool(_label, tim::scope::config(tim::scope::flat{}));
+      };
+
+    StepProfilerConfig::GetFallbackToolFunctor() =
+      [](const std::string& _label) {
+        return new StepTool(_label, tim::scope::config(tim::scope::flat{}));
+      };
+
+    UserProfilerConfig::GetFallbackToolFunctor() =
+      [](const std::string& _label) { return new UserTool(_label); };
+
+    auto comps = "wall_clock, cpu_clock, cpu_util, peak_rss";
+    auto run_env_comps =
+      tim::get_env<std::string>("G4PROFILE_RUN_COMPONENTS", comps);
+    auto event_env_comps =
+      tim::get_env<std::string>("G4PROFILE_EVENT_COMPONENTS", comps);
+    auto track_env_comps =
+      tim::get_env<std::string>("G4PROFILE_TRACK_COMPONENTS", comps);
+    auto step_env_comps =
+      tim::get_env<std::string>("G4PROFILE_STEP_COMPONENTS", comps);
+    auto user_env_comps =
+      tim::get_env<std::string>("G4PROFILE_USER_COMPONENTS", comps);
+
+    tim::configure<G4RunProfiler>(run_env_comps);
+    tim::configure<G4EventProfiler>(event_env_comps);
+    tim::configure<G4TrackProfiler>(track_env_comps);
+    tim::configure<G4StepProfiler>(step_env_comps);
+    tim::configure<G4UserProfiler>(user_env_comps);
+#endif
+  }
+}  // extern "C"
+
+//---------------------------------------------------------------------------//
+
+#ifdef GEANT4_USE_TIMEMORY
+namespace
+{
+  static bool profiler_is_initialized = (G4RunProfilerInit(), true);
+}
+#endif
+
+//---------------------------------------------------------------------------//

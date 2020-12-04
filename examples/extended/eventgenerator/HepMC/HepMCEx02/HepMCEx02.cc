@@ -28,14 +28,14 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT 4 - example of HepMC-interface
 // --------------------------------------------------------------
 
 #include "G4Types.hh"
 
-#include "G4RunManager.hh"
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 
 #include "H02DetectorConstruction.hh"
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-  G4RunManager* runManager= new G4RunManager;
+  auto* runManager= G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // User Initialization classes (mandatory)
   //
@@ -82,14 +82,14 @@ int main(int argc, char** argv)
   visManager-> Initialize();
   G4cout << G4endl;
 
- //get the pointer to the User Interface manager   
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+ //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (!ui) { // batch mode
     visManager-> SetVerboseLevel("quiet");
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager-> ApplyCommand(command+fileName);    
+    UImanager-> ApplyCommand(command+fileName);
   } else {  // interactive mode : define UI session
     ui-> SessionStart();
     delete ui;

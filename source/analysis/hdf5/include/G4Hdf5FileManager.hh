@@ -31,75 +31,69 @@
 #ifndef G4Hdf5FileManager_h
 #define G4Hdf5FileManager_h 1
 
-#include "G4VFileManager.hh"
-#include "G4TNtupleDescription.hh"
+#include "G4VTFileManager.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple"
+#include "tools/hdf5/ntuple" // for hid_t
 
-#include <fstream>
 #include <memory>
+#include <tuple>
 
-class G4AnalysisManagerState;
+using G4Hdf5File = std::tuple<hid_t, hid_t, hid_t>;
+using Hdf5NtupleDescription = G4TNtupleDescription<tools::hdf5::ntuple, G4Hdf5File>;
 
-class G4Hdf5FileManager : public G4VFileManager
+class G4Hdf5FileManager : public G4VTFileManager<G4Hdf5File>
 {
   public:
     explicit G4Hdf5FileManager(const G4AnalysisManagerState& state);
     ~G4Hdf5FileManager();
 
-    // Type aliases
-    using NtupleType = tools::hdf5::ntuple;
-    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
+    using G4BaseFileManager::GetNtupleFileName;
+    using G4VTFileManager<G4Hdf5File>::WriteFile;
+    using G4VTFileManager<G4Hdf5File>::CloseFile;
 
     // Methods to manipulate output files
     virtual G4bool OpenFile(const G4String& fileName) final;
-    virtual G4bool WriteFile() final;
-    virtual G4bool CloseFile() final; 
 
-    G4bool WriteHistoDirectory();
-    G4bool WriteNtupleDirectory();
-    void   CloseAfterHnWrite();
+    virtual G4String GetFileType() const final { return "hdf5"; }
+
+    // Specific methods for files per objects
+    G4bool CreateNtupleFile(Hdf5NtupleDescription* ntupleDescription);
+    G4bool CloseNtupleFile(Hdf5NtupleDescription* ntupleDescription); 
 
     // Set methods
     void  SetBasketSize(unsigned int basketSize);
 
     // Get methods
-    hid_t GetFile() const;
     hid_t GetHistoDirectory() const;
     hid_t GetNtupleDirectory() const;
     unsigned int GetBasketSize() const; 
     
-   private:
-    G4bool CreateDirectory(const G4String& directoryType, 
-                           const G4String& directoryName, hid_t& directory);
-    G4bool WriteDirectory(const G4String& directoryType, 
-                          const G4String& directoryName, hid_t& directory);
+  protected:
+    // // Methods derived from templated base class
+    virtual std::shared_ptr<G4Hdf5File> CreateFileImpl(const G4String& fileName) final;
+    virtual G4bool WriteFileImpl(std::shared_ptr<G4Hdf5File> file) final;
+    virtual G4bool CloseFileImpl(std::shared_ptr<G4Hdf5File> file) final;    
+
+  private:
+    hid_t CreateDirectory(hid_t& file, const G4String& directoryName, 
+             const G4String& objectType);
+    G4String GetNtupleFileName(Hdf5NtupleDescription* ntupleDescription);
 
     // constants
     static const G4String fgkDefaultDirectoryName;
     
     // data members
-    hid_t  fFile;
-    hid_t  fHistoDirectory;
-    hid_t  fNtupleDirectory;
     unsigned int fBasketSize;
 };
 
 // inline functions
 
-inline void  G4Hdf5FileManager::SetBasketSize(unsigned int basketSize)  
+//_____________________________________________________________________________
+inline void G4Hdf5FileManager::SetBasketSize(unsigned int basketSize)  
 { fBasketSize = basketSize; }
 
-inline hid_t G4Hdf5FileManager::GetFile() const
-{ return fFile; }
-
-inline hid_t G4Hdf5FileManager::GetHistoDirectory() const
-{ return fHistoDirectory; }
-
-inline hid_t G4Hdf5FileManager::GetNtupleDirectory() const
-{ return fNtupleDirectory; }
-
+//_____________________________________________________________________________
 inline unsigned int G4Hdf5FileManager::GetBasketSize() const
 { return fBasketSize; }
 

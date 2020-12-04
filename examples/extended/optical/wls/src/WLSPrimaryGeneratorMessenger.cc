@@ -28,39 +28,45 @@
 /// \brief Implementation of the WLSPrimaryGeneratorMessenger class
 //
 //
-#include "G4UIdirectory.hh"
-
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "WLSPrimaryGeneratorMessenger.hh"
 
 #include "WLSPrimaryGeneratorAction.hh"
-#include "WLSPrimaryGeneratorMessenger.hh"
+
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPrimaryGeneratorMessenger::
-                   WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction* gun)
+WLSPrimaryGeneratorMessenger::WLSPrimaryGeneratorMessenger(
+  WLSPrimaryGeneratorAction* gun)
   : fAction(gun)
 {
   fGunDir = new G4UIdirectory("/WLS/gun/");
   fGunDir->SetGuidance("WLSPrimaryGenerator control");
 
   fSetPolarizationCmd =
-                 new G4UIcmdWithADoubleAndUnit("/WLS/gun/optPhotonPolar",this);
+    new G4UIcmdWithADoubleAndUnit("/WLS/gun/optPhotonPolar", this);
   fSetPolarizationCmd->SetGuidance("Set linear polarization");
   fSetPolarizationCmd->SetGuidance("  angle w.r.t. (k,n) plane");
-  fSetPolarizationCmd->SetParameterName("angle",true);
+  fSetPolarizationCmd->SetParameterName("angle", true);
   fSetPolarizationCmd->SetUnitCategory("Angle");
   fSetPolarizationCmd->SetDefaultValue(0.);
   fSetPolarizationCmd->AvailableForStates(G4State_Idle);
- 
+
   fSetDecayTimeConstantCmd =
-           new G4UIcmdWithADoubleAndUnit("/WLS/gun/setDecayTimeConstant",this);
+    new G4UIcmdWithADoubleAndUnit("/WLS/gun/setDecayTimeConstant", this);
   fSetDecayTimeConstantCmd->SetGuidance("Set the decay time constant");
   fSetDecayTimeConstantCmd->SetGuidance("for the starting time of each photon");
-  fSetDecayTimeConstantCmd->SetParameterName("time_const",false);
+  fSetDecayTimeConstantCmd->SetParameterName("time_const", false);
   fSetDecayTimeConstantCmd->SetUnitCategory("Time");
   fSetDecayTimeConstantCmd->SetRange("time_const>=0");
   fSetDecayTimeConstantCmd->AvailableForStates(G4State_Idle);
+
+  // fSetUseSampledEnergyCmd = new G4UIcmdWithABool("/WLS/gun/useSampledEnergy",
+  // this); fSetUseSampledEnergyCmd->SetGuidance("Enable sampling of primary
+  // energy."); fSetUseSampledEnergyCmd->SetGuidance("This is currently
+  // disabled."); fSetUseSampledEnergyCmd->AvailableForStates();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,17 +76,21 @@ WLSPrimaryGeneratorMessenger::~WLSPrimaryGeneratorMessenger()
   delete fGunDir;
   delete fSetPolarizationCmd;
   delete fSetDecayTimeConstantCmd;
+  // delete fSetUseSampledEnergyCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void WLSPrimaryGeneratorMessenger::
-                           SetNewValue(G4UIcommand * command,G4String val)
+void WLSPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String val)
 {
-  if ( command == fSetPolarizationCmd )
-     fAction->
-          SetOptPhotonPolar(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
-  else if ( command == fSetDecayTimeConstantCmd )
-     fAction->
-       SetDecayTimeConstant(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+  if(command == fSetPolarizationCmd)
+    fAction->SetOptPhotonPolar(
+      G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+  else if(command == fSetDecayTimeConstantCmd)
+    fAction->SetDecayTimeConstant(
+      G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+  // else if ( command == fSetUseSampledEnergyCmd )
+  //   fAction->
+  //     SetUseSampledEnergy(G4UIcmdWithABool::GetNewBoolValue(val));
 }

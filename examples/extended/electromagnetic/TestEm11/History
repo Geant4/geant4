@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-10-20 mma (testem11-V11-06-01)
+- add macros description in Readme
+    
 14-01-20 V.Ivanchenko (testem11-V11-06-00)
 - PhysicsList - use G4RadioactiveDecayBase instead of obsolete
     G4RadioactiveDecay and minor code cleanup

@@ -67,7 +67,7 @@ void*  ReadObject(std::istream& hnFile,
       << "Cannot get "<< objectType << " in file " << fileName; 
     G4String inFunctionFull = "G4CsvAnalysisReader::";
     inFunctionFull.append(inFunction);
-    G4Exception(inFunctionFull, "Analysis_WRnullptr11", JustWarning, description);
+    G4Exception(inFunctionFull, "Analysis_WR011", JustWarning, description);
     return nullptr;
   }
   if ( objectTypeInFile != objectType ) {

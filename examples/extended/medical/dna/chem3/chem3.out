@@ -1,10 +1,11 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -28,10 +29,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -118,9 +121,9 @@ e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -276,28 +279,35 @@ At time :  830.01 ps Reaction : OH^0 (-188) + OH^0 (-140) -> H2O2^0 (-226)
 At time :  1.1157 ns Reaction : OH^0 (-196) + OH^0 (-189) -> H2O2^0 (-227)
 At time :  1.3961 ns Reaction : H3O^1 (-129) + OH^-1 (-223) -> No product
 At time :  1.4661 ns Reaction : e_aq^-1 (-73) + OH^0 (-112) -> OH^-1 (-228)
-At time :  1.6213 ns Reaction : H3O^1 (-141) + OH^-1 (-228) -> No product
-At time :  1.6613 ns Reaction : H3O^1 (-159) + OH^-1 (-220) -> No product
+At time :  1.6212 ns Reaction : H3O^1 (-141) + OH^-1 (-228) -> No product
+At time :  1.6612 ns Reaction : H3O^1 (-159) + OH^-1 (-220) -> No product
 At time :  2.5623 ns Reaction : OH^0 (-207) + e_aq^-1 (-48) -> OH^-1 (-229)
-At time :  3.1785 ns Reaction : e_aq^-1 (-39) + H3O^1 (-172) -> H^0 (-230)
-At time :  3.1885 ns Reaction : OH^0 (-208) + OH^0 (-152) -> H2O2^0 (-231)
-At time :  3.2285 ns Reaction : H3O^1 (-211) + e_aq^-1 (-71) -> H^0 (-232)
+At time :  3.1786 ns Reaction : e_aq^-1 (-39) + H3O^1 (-172) -> H^0 (-230)
+At time :  3.1886 ns Reaction : OH^0 (-208) + OH^0 (-152) -> H2O2^0 (-231)
+At time :  3.2286 ns Reaction : H3O^1 (-211) + e_aq^-1 (-71) -> H^0 (-232)
 At time :  4.1871 ns Reaction : H3O^1 (-151) + OH^-1 (-229) -> No product
-At time :  6.3147 ns Reaction : e_aq^-1 (-60) + OH^0 (-154) -> OH^-1 (-233)
-At time :  7.6272 ns Reaction : OH^0 (-176) + e_aq^-1 (-93) -> OH^-1 (-234)
-At time :  8.5793 ns Reaction : e_aq^-1 (-70) + H^0 (-184) -> OH^-1 (-235) + H_2^0 (-236)
-At time :  11.003 ns Reaction : OH^-1 (-234) + H3O^1 (-163) -> No product
-At time :  19.706 ns Reaction : e_aq^-1 (-94) + H3O^1 (-133) -> H^0 (-237)
-At time :   24.18 ns Reaction : OH^0 (-205) + OH^0 (-110) -> H2O2^0 (-238)
-At time :  29.985 ns Reaction : OH^0 (-185) + e_aq^-1 (-37) -> OH^-1 (-239)
-At time :  37.594 ns Reaction : H3O^1 (-149) + OH^-1 (-233) -> No product
-At time :  56.585 ns Reaction : OH^0 (-198) + e_aq^-1 (-88) -> OH^-1 (-240)
-At time :  63.291 ns Reaction : e_aq^-1 (-65) + OH^0 (-164) -> OH^-1 (-241)
-At time :  63.991 ns Reaction : OH^0 (-214) + OH^0 (-160) -> H2O2^0 (-242)
-At time :  74.462 ns Reaction : OH^0 (-183) + H^0 (-199) -> No product
-At time :  96.001 ns Reaction : OH^-1 (-235) + H3O^1 (-121) -> No product
+At time :  6.3079 ns Reaction : e_aq^-1 (-60) + OH^0 (-154) -> OH^-1 (-233)
+At time :  10.504 ns Reaction : e_aq^-1 (-81) + H3O^1 (-157) -> H^0 (-234)
+At time :  10.904 ns Reaction : OH^0 (-116) + H^0 (-232) -> No product
+At time :  10.904 ns Reaction : e_aq^-1 (-86) + H3O^1 (-163) -> H^0 (-235)
+At time :  11.004 ns Reaction : OH^0 (-176) + OH^0 (-160) -> H2O2^0 (-236)
+At time :  13.404 ns Reaction : H^0 (-201) + OH^0 (-124) -> No product
+At time :  13.904 ns Reaction : e_aq^-1 (-55) + OH^0 (-165) -> OH^-1 (-237)
+At time :  14.004 ns Reaction : e_aq^-1 (-75) + H3O^1 (-143) -> H^0 (-238)
+At time :  16.415 ns Reaction : e_aq^-1 (-41) + OH^0 (-181) -> OH^-1 (-239)
+At time :  16.915 ns Reaction : e_aq^-1 (-91) + e_aq^-1 (-88) -> OH^-1 (-240) + OH^-1 (-241) + H_2^0 (-242)
+At time :  17.215 ns Reaction : e_aq^-1 (-94) + H3O^1 (-215) -> H^0 (-243)
+At time :   19.36 ns Reaction : OH^-1 (-241) + H3O^1 (-213) -> No product
+At time :  24.681 ns Reaction : H3O^1 (-123) + OH^-1 (-237) -> No product
+At time :  27.939 ns Reaction : e_aq^-1 (-93) + H3O^1 (-166) -> H^0 (-244)
+At time :  37.221 ns Reaction : OH^-1 (-239) + H3O^1 (-153) -> No product
+At time :  56.658 ns Reaction : OH^0 (-185) + e_aq^-1 (-95) -> OH^-1 (-245)
+At time :   80.73 ns Reaction : e_aq^-1 (-90) + OH^0 (-164) -> OH^-1 (-246)
 *** G4Scheduler ends at time : 100 ns
 ___________________________________
 Seed used :1
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

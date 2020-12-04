@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4HadSignalHandler_off
-
+//#ifndef G4HadSignalHandler_off
+#if 0
 #include "G4HadSignalHandler.hh"
 
 namespace G4HadSignalHandler_local

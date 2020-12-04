@@ -49,6 +49,7 @@ G4P1Messenger::G4P1Messenger(G4VAnalysisManager* manager)
     fSetP1TitleCmd(nullptr), 
     fSetP1XAxisCmd(nullptr), 
     fSetP1YAxisCmd(nullptr),
+    fXId(-1),
     fXData()
 {  
   fHelper = G4Analysis::make_unique<G4AnalysisMessengerHelper>("p1");

@@ -28,11 +28,7 @@
 /// \brief Main program of the Dicom2 example
 
 #include "G4Types.hh"
-#ifdef G4MULTITHREADED
-#   include "G4MTRunManager.hh"
-#else
-#   include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4GenericPhysicsList.hh"
 #include "G4tgrMessenger.hh"
@@ -79,18 +75,13 @@ int main(int argc,char** argv)
     CLHEP::HepRandom::setTheSeeds(seeds);
 
     // Construct the default run manager
-#ifdef G4MULTITHREADED
     G4int nthreads = G4GetEnv<G4int>("DICOM_NTHREADS", G4Thread::hardware_concurrency());
-    G4MTRunManager* runManager = new G4MTRunManager;
+    auto* runManager = G4RunManagerFactory::CreateRunManager();
     runManager->SetNumberOfThreads(nthreads);
 
-    G4cout << "\n\n\tDICOM2 running in multithreaded mode with "
+    G4cout << "\n\n\tDICOM2 running with "
            << runManager->GetNumberOfThreads()
            << " threads\n\n" << G4endl;
-#else
-    G4RunManager* runManager = new G4RunManager;
-    G4cout << "\n\n\tDICOM running in serial mode\n\n" << G4endl;
-#endif
 
     DicomDetectorConstruction* theGeometry = 0;
 

@@ -16,14 +16,14 @@
 /process/list
 #
 # rdm is applied only to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+/process/had/rdm/noVolumes
+/process/had/rdm/selectVolume Target
 #
 # rdm in variance mode
-/grdm/analogueMC 0
-/grdm/sourceTimeProfile beam.data
-/grdm/decayBiasProfile measures.data
-#/grdm/BRbias 0
+/process/had/rdm/analogueMC 0
+/process/had/rdm/sourceTimeProfile beam.data
+/process/had/rdm/decayBiasProfile measures.data
+#/process/had/rdm/BRbias 0
 #
 /gun/particle proton 
 /gun/energy 1 GeV

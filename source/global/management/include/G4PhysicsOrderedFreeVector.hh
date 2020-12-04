@@ -51,6 +51,8 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   // The vector will be filled from extern file using Retrieve()
   // or InsertValues() methods
 
+  G4PhysicsOrderedFreeVector(const std::vector<G4double>& Energies,
+                             const std::vector<G4double>& Values);
   G4PhysicsOrderedFreeVector(G4double* Energies, G4double* Values,
                              std::size_t VectorLength);
   // The vector is filled in this constructor.

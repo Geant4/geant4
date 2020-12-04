@@ -62,7 +62,7 @@ public:
     tools::mem::increment(s_class().c_str());
 #endif
   }
-  
+
   virtual ~loader(){
     delete m_compressed_reader;
     clear();
@@ -137,7 +137,7 @@ public:
     if(m_current) m_current->set_file(a_file);
     return true;
   }
-  
+
   bool load_string(const std::string& a_string){
     clear();
     if(!parse_buffer(a_string.size(),a_string.c_str(),
@@ -149,7 +149,7 @@ public:
     }
     return true;
   }
-  
+
   bool load_buffer(size_t aSize,const char* aBuffer){
     clear();
     if(!parse_buffer(aSize,aBuffer,
@@ -161,7 +161,7 @@ public:
     }
     return true;
   }
-  
+
   const tools::xml::tree* top_item() const {return m_current;}
 
   tools::xml::tree* top_item(){return m_current;}
@@ -175,11 +175,11 @@ public:
     }
     return false;
   }
-  
-protected:  
+
+protected:
   void clear(){
     // In case of problem, deleting m_current is not sufficient.
-    delete m_top; 
+    delete m_top;
     m_top = 0;
     m_current = 0;
   }
@@ -213,11 +213,11 @@ protected:
       size_t len = tools::mn<size_t>(l,BUFSIZ); //BUFSIZ in cstdio
       done = len < BUFSIZ ? 1 : 0;
       if(XML_Parse(_parser, buf, (int)len, done)==XML_STATUS_ERROR) {
-        m_out << "parse_buffer :" 
-            << " " << XML_ErrorString(XML_GetErrorCode(_parser)) 
-            << " at line " << (int)XML_GetCurrentLineNumber(_parser) 
+        m_out << "parse_buffer :"
+            << " " << XML_ErrorString(XML_GetErrorCode(_parser))
+            << " at line " << (int)XML_GetCurrentLineNumber(_parser)
             << " at byte index " << (int)XML_GetCurrentByteIndex(_parser)
-            << std::endl; 
+            << std::endl;
        {XML_Index pos = XML_GetCurrentByteIndex(_parser);
         XML_Index pmn = tools::mx<XML_Index>(pos-10,0);
         XML_Index pmx = tools::mn<XML_Index>(pos+10,XML_Index(aSize)-1);
@@ -239,20 +239,20 @@ protected:
     XML_ParserFree(_parser);
     return true;
   }
-  
+
   bool parse_file(const std::string& a_file,
                   XML_StartElementHandler a_start,XML_EndElementHandler a_end,
                   void* a_tag,bool a_compressed){
     if(m_verbose) {
-      m_out << "parse_file :" 
+      m_out << "parse_file :"
             << " parse file " << tools::sout(a_file) << "..." << std::endl;
     }
     m_errors = 0;
-  
+
     bool use_zlib = false;
     if(a_compressed) {
       if(m_verbose) {
-        m_out << "parse_file :" 
+        m_out << "parse_file :"
               << " uncompress requested for file "
               << tools::sout(a_file) << "."
               << std::endl;
@@ -289,11 +289,11 @@ protected:
             << " can't open file " << a_file << std::endl;
       if(delete_freader) delete freader;
       return false;
-    } 
-  
+    }
+
     m_depth = 0;
     m_abort = false;
-  
+
 #ifdef TOOLS_MEM
     XML_Memory_Handling_Suite mem;
     mem.malloc_fcn = xml_malloc;
@@ -309,8 +309,8 @@ protected:
     XML_SetCharacterDataHandler(_parser,(XML_CharacterDataHandler)character_data_handler);
     //XML_SetProcessingInstructionHandler(_parser,
     //      processingInstructionHandler);
-  
-  
+
+
     //char buf[1024 * BUFSIZ];
     char buf[BUFSIZ];
     int done = 0;
@@ -324,9 +324,9 @@ protected:
       }
       done = len < sizeof(buf) ? 1 : 0;
       if(XML_Parse(_parser, buf, (int)len, done)==XML_STATUS_ERROR) {
-        m_out << "parse_file :" 
+        m_out << "parse_file :"
             << " in file " << tools::sout(a_file)
-            << " " << XML_ErrorString(XML_GetErrorCode(_parser)) 
+            << " " << XML_ErrorString(XML_GetErrorCode(_parser))
             << " at line " << (int)XML_GetCurrentLineNumber(_parser)
             << std::endl;
         XML_ParserFree(_parser);
@@ -344,7 +344,7 @@ protected:
     XML_ParserFree(_parser);
     freader->close();
     if(m_verbose) {
-      m_out << "parse_file :" 
+      m_out << "parse_file :"
           << " parse file " << tools::sout(a_file) << " done." << std::endl;
     }
     if(delete_freader) delete freader;
@@ -363,7 +363,7 @@ protected:
         s[count] = *p;
         count++;
       }
-    }  
+    }
     if(count) {
       s.resize(count);
       This->m_value += s;
@@ -373,139 +373,139 @@ protected:
   static void start_element(void* aUserData,const XML_Char* a_name,const XML_Char** a_atbs){
     loader* This = (loader*)aUserData;
     if(This->m_abort) return; //Do nothing.
-  
+
     This->m_depth++;
     This->m_value = "";
-  
+
     std::string name = a_name; //Can't be empty
     if(This->is_tag(name)) {
-  
+
       if(!This->m_current) {
         if(This->m_depth==1) {
           // Ok. Head.
         } else {
-          This->m_out << "start_element :" 
+          This->m_out << "start_element :"
               << " no tag with a depth of " << This->m_depth
-              << std::endl; 
+              << std::endl;
           This->m_abort = true;
           return;
         }
       } else {
         int delta = This->m_current->depth() - This->m_depth;
         if(delta>=1) {
-          This->m_out << "start_element :" 
-              << " for element " << tools::sout(name) 
+          This->m_out << "start_element :"
+              << " for element " << tools::sout(name)
               << " tag with a delta depth of " << delta
-              << std::endl; 
+              << std::endl;
           This->m_abort = true;
           return;
         }
       }
-  
+
       std::vector<tools::xml::tree::atb> atbs;
      {const XML_Char** a_atts = a_atbs;
       while((*a_atts)&&(*(a_atts+1))) {
         atbs.push_back(tools::xml::tree::atb(*a_atts,*(a_atts+1)));
         a_atts+=2;
       }}
-  
+
       tools::xml::tree* parent = This->m_current;
       tools::xml::tree* _tree = This->m_factory.create(name,atbs,parent);
       if(!_tree) {
-        This->m_out << "start_element :" 
-            << " can't create a tree for tag " << tools::sout(name) 
-            << std::endl; 
+        This->m_out << "start_element :"
+            << " can't create a tree for tag " << tools::sout(name)
+            << std::endl;
         This->m_abort = true;
         return;
       }
-  
+
       //out << "start_element :" << std::endl;
       //_tree->print_xml(*(This->m_printer),"debug : ");
-  
+
       if(parent) parent->add_child(_tree);
 
 /*
       if(This->m_current && !This->m_current->parent()) {
-        This->m_out << "start_element :" 
+        This->m_out << "start_element :"
             << " warning : current tree without parent."
             << " Potential mem leak."
-            << std::endl; 
+            << std::endl;
       }
 */
-  
+
       This->m_current = _tree;
       _tree->set_depth(This->m_depth); // Internal only.
-  
+
       if(!This->m_top) This->m_top = _tree;
-  
+
     } else {
-  
+
       if(!This->m_current) {
-  
+
         // Can't be in a non-tag without a tag !
-        This->m_out << "start_element :" 
-            << " for element " << tools::sout(name) 
+        This->m_out << "start_element :"
+            << " for element " << tools::sout(name)
             << " non-tag without some parent tag."
-            << std::endl; 
+            << std::endl;
         This->m_abort = true;
         return;
-  
+
       } else {
-  
+
         int delta =  This->m_depth - This->m_current->depth();
         if(delta>1) {
-  
-          This->m_out << "start_element :" 
-              << " for element " << tools::sout(name) 
+
+          This->m_out << "start_element :"
+              << " for element " << tools::sout(name)
               << " grand child of a tag."
-              << std::endl; 
+              << std::endl;
           This->m_abort = true;
           return;
-  
+
         } else if(delta==1) { //ok
-  
+
           This->m_atbs.clear();
          {const XML_Char** a_atts = a_atbs;
           while((*a_atts)&&(*(a_atts+1))) {
             This->m_atbs.push_back(tools::xml::tree::atb(*a_atts,*(a_atts+1)));
             a_atts+=2;
           }}
-  
+
         } else {
-  
-          This->m_out << "start_element :" 
-              << " for element " << tools::sout(name) 
+
+          This->m_out << "start_element :"
+              << " for element " << tools::sout(name)
               << " non-tag with a delta depth of " << delta
-              << std::endl; 
+              << std::endl;
           This->m_abort = true;
           return;
-  
+
         }
       }
-  
+
     }
   }
-  
+
 
   static void end_element(void* aUserData,const XML_Char* a_name){
     loader* This = (loader*)aUserData;
     if(This->m_abort) return; //Do nothing.
-  
+
     if(This->m_current) {
-  
+
       tools::xml::tree* tr = This->m_current;
       int delta = This->m_depth - tr->depth();
       if(delta==0) { //Back to a tag :
-        
+
         tools::xml::tree* parent = tr->parent();
-  
+
         bool keep = false;
         bool cont = This->visit_end_element(*tr,keep);
         if(keep) {
           if(parent) {
 /*
             if(!This->m_current->parent()) {
-              This->m_out << "end_element :" 
+              This->m_out << "end_element :"
                   << " warning : current tree without parent (1)."
                   << " Potential mem leak."
                   << std::endl;
@@ -516,16 +516,16 @@ protected:
         } else {
           //FIXME : the top could be recreated !
           if(This->m_top==tr) This->m_top = 0;
-  
+
           if(parent) {
             parent->remove_child(tr); //delete the tr
           } else {
             delete tr;
           }
-  
+
 /*
           if(!This->m_current->parent()) {
-            This->m_out << "end_element :" 
+            This->m_out << "end_element :"
                    << " warning : current tree without parent (2)."
                    << " Potential mem leak."
                    << std::endl;
@@ -534,28 +534,28 @@ protected:
 
           This->m_current = parent; //parent could be 0 : ok.
         }
-  
+
         if(!cont) This->m_abort = true;
-  
+
       } else if(delta==1) { //Back to a child of tag :
-  
+
         //FIXME : correct m_value ? (Can we pick the one of a sub item ?)
-        tr->add_element(std::string(a_name),This->m_atbs,This->m_value); 
+        tr->add_element(std::string(a_name),This->m_atbs,This->m_value);
         //This->m_value = "";
-  
+
       } else {
-  
-        This->m_out << "end_element :" 
-            << " problem for element " << tools::sout(std::string(a_name)) 
+
+        This->m_out << "end_element :"
+            << " problem for element " << tools::sout(std::string(a_name))
             << " : delta depth of " << delta
-            << std::endl; 
+            << std::endl;
         This->m_abort = true;
-  
+
       }
-  
+
     }
-  
-  
+
+
     This->m_depth--;
   }
 

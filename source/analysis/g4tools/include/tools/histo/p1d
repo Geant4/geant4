@@ -33,7 +33,7 @@ public:
   {}
 
   p1d(const std::string& a_title,const std::vector<double>& a_edges,double aVmin,double aVmax)
-  :parent(a_title,a_edges,aVmin,aVmax) 
+  :parent(a_title,a_edges,aVmin,aVmax)
   {}
 
   virtual ~p1d(){}

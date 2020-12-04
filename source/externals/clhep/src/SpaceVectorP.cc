@@ -10,10 +10,6 @@
 // intrinsic properties or propeties relative to a second vector.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/ThreeVector.h"
 
 #include <cmath>
@@ -52,18 +48,18 @@ double Hep3Vector::gamma() const {
 }
 
 double Hep3Vector::rapidity() const {
-//  if (std::fabs(dz) == 1) {
+//  if (std::fabs(z()) == 1) {
 //    std::cerr << "Hep3Vector::rapidity() - "
 //      << "Rapidity in Z direction taken for Hep3Vector with |Z| = 1 -- \n"
 //      << "the log should return infinity" <, std::endl;
 //  }
-//  if (std::fabs(dz) > 1) {
+//  if (std::fabs(z()) > 1) {
 //    std::cerr << "Hep3Vector::rapidity() - "
 //      << "Rapidity in Z direction taken for Hep3Vector with |Z| > 1 -- \n"
 //      << "the log would return a NAN" << std::endl;
 //  }
   // Want inverse std::tanh(dz):
-  return (.5 * std::log((1+dz)/(1-dz)) );
+  return (.5 * std::log((1+z())/(1-z())) );
 }
 
 double Hep3Vector::coLinearRapidity() const {

@@ -153,7 +153,7 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition* part
 
 	  for (size_t j=0;j<material->GetNumberOfElements();j++)
 	    {
-	      G4int iZ = (G4int) theElementVector->at(j)->GetZ();
+	      G4int iZ = theElementVector->at(j)->GetZasInt();
 	      //read data files only in the master
 	      if (!logAtomicCrossSection->count(iZ))
 		ReadDataFile(iZ);
@@ -263,7 +263,7 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
      }
 
   G4double cs = 0;
-  G4double logene = std::log(energy);
+  G4double logene = G4Log(energy);
 
   G4PhysicsFreeVector* theVec = logAtomicCrossSection->find(iZ)->second;
 
@@ -480,7 +480,7 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
       G4cout << "Incoming photon energy: " << photonEnergy/keV << " keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
       if (electronKineEnergy)
-	G4cout << "Electron (explicitely produced) " << electronKineEnergy/keV << " keV"
+	G4cout << "Electron (explicitly produced) " << electronKineEnergy/keV << " keV"
 	       << G4endl;
       if (positronKineEnergy)
 	G4cout << "Positron (not at rest) " << positronKineEnergy/keV << " keV" << G4endl;
@@ -583,7 +583,7 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
       xs *= barn;
       if (xs < 1e-40*cm2) //protection against log(0)
 	xs = 1e-40*cm2;
-      theVec->PutValue(i,std::log(ene),std::log(xs));
+      theVec->PutValue(i,G4Log(ene),G4Log(xs));
     }
   file.close();
 
@@ -699,7 +699,7 @@ void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Materi
     fMaterialInvScreeningRadius->insert(std::make_pair(material,matRadius));
 
   std::pair<G4double,G4double> myPair(0,0);
-  G4double f0a = 4.0*std::log(fAtomicScreeningRadius[intZ-1]);
+  G4double f0a = 4.0*G4Log(fAtomicScreeningRadius[intZ-1]);
   G4double f0b = f0a - 4.0*fc;
   myPair.first = f0a;
   myPair.second = f0b;
@@ -732,7 +732,7 @@ G4PenelopeGammaConversionModel::GetScreeningFunctions(G4double B)
   //
   std::pair<G4double,G4double> result(0.,0.);
   G4double BSquared = B*B;
-  G4double f1 = 2.0-2.0*std::log(1.0+BSquared);
+  G4double f1 = 2.0-2.0*G4Log(1.0+BSquared);
   G4double f2 = f1 - 6.66666666e-1; // (-2/3)
   if (B < 1.0e-10)
     f1 = f1-twopi*B;
@@ -740,7 +740,7 @@ G4PenelopeGammaConversionModel::GetScreeningFunctions(G4double B)
     {
       G4double a0 = 4.0*B*std::atan(1./B);
       f1 = f1 - a0;
-      f2 += 2.0*BSquared*(4.0-a0-3.0*std::log((1.0+BSquared)/BSquared));
+      f2 += 2.0*BSquared*(4.0-a0-3.0*G4Log((1.0+BSquared)/BSquared));
     }
   G4double g1 = 0.5*(3.0*f1-f2);
   G4double g2 = 0.25*(3.0*f1+f2);

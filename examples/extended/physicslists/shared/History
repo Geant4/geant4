@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/11/20 I. Hrivnacova  (physicslistsShared-V10-06-00)
+- Removed trailing whitespaces
+
 24/3/19  J.Allison      (physicslistsShared-V10-05-00)
 - Part of Merge Request exampleB4-V10-05-00.
 - Corrected name of include file: csv.hh

@@ -23,33 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4tgbMaterial
 //
-//
-//
-// class G4tgbMaterial
-
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
 
 #include "G4tgbMaterial.hh"
 #include "G4tgrMaterial.hh"
 
-
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterial::G4tgbMaterial()
-  : theTgrMate(0), theG4Mate(0)
 {
 }
 
-// -------------------------------------------------------------------------
+// --------------------------------------------------------------------
 G4tgbMaterial::~G4tgbMaterial()
 {
 }
 
-// -------------------------------------------------------------------------
-G4tgbMaterial::G4tgbMaterial( G4tgrMaterial* hg )
-  : theTgrMate(hg), theG4Mate(0)
+// --------------------------------------------------------------------
+G4tgbMaterial::G4tgbMaterial(G4tgrMaterial* hg)
+  : theTgrMate(hg)
 {
 }
-

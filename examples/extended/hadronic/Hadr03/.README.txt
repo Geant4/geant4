@@ -31,11 +31,7 @@
    loss.  
  
    Several hadronic physics options are controlled by environment variables.
-   To trigger them, an envHadronic.csh has been added in this example.
-   One must select the options wished, and do
-\verbatim   
-        source envHadronic.csh  (or sh)
-\endverbatim	 
+   To select them, see Hadr03.cc
   	 
 \section Hadr03_s3 AN EVENT : THE PRIMARY GENERATOR
  
@@ -144,5 +140,19 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
- 
+	
+ Macros provided in this example:
+  - Au196.mac: neutron (1 MeV) on Au195
+  - elastic.mac: proton (10 MeV) on Mo100. Elastic collisions alone
+  - fusion.mac: deuteron (400 keV) on tritium  
+  - gamma.mac: gamma (10 MeV) on Au196
+  - inelastic.mac: proton (10 MaV) on Mo98. Inelastic interactions alone
+  - ion.mac: Li7 (140 MeV) on Be9
+  - nCapture.mac: neutron (1 eV) on Boron. Capture process alone
+  - nFission.mac: neutron (1 eV) on U235.  Fission process alone
+  - neutron.mac: neutron (1 MeV) on Boron 
+    
+ Macros to be run interactively:
+  - debug.mac: proton (10 MeV) on Boron
+  - vis.mac: To activate visualization 
 */

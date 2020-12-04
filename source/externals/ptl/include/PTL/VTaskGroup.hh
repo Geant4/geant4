@@ -50,15 +50,13 @@ namespace PTL
 {
 class ThreadPool;
 
-#define _MOVE_MEMBER(_member) _member = std::move(rhs._member)
-
 class VTaskGroup
 {
 public:
-    template <typename _Tp>
-    using container_type = std::vector<_Tp>;
-    template <typename _Tp>
-    using list_type = std::vector<_Tp>;
+    template <typename Tp>
+    using container_type = std::vector<Tp>;
+    template <typename Tp>
+    using list_type = std::vector<Tp>;
 
     typedef VTaskGroup                   this_type;
     typedef std::thread::id              tid_type;
@@ -153,8 +151,5 @@ VTaskGroup::clear()
 }
 
 //--------------------------------------------------------------------------------------//
-
-// don't pollute
-#undef _MOVE_MEMBER
 
 }  // namespace PTL

@@ -36,7 +36,7 @@ public:
   }
   virtual Window window() const {return m_win;}
 public:
-  simple_dispatcher(base_session& a_session,Window a_win)  
+  simple_dispatcher(base_session& a_session,Window a_win)
   :parent()
   ,m_session(a_session)
   ,m_win(a_win)

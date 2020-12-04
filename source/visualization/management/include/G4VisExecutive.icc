@@ -105,6 +105,10 @@
 #include "G4VRML2.hh"
 #endif
 
+#ifdef G4VIS_USE_QT3D
+#include "G4Qt3D.hh"
+#endif
+
 // The inline keyword prevents the compiler making an external
 // reference even though they cannot actually be inlined since they
 // are virtual functions.  This prevents a "multiple definition" error
@@ -236,6 +240,9 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4RayTracerX);
 #endif
 
+#ifdef G4VIS_USE_QT3D
+  RegisterGraphicsSystem (new G4Qt3D);
+#endif
 }
 
 // See comments about inlining above.

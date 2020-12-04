@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-20 B. Morgan (exhadr02-V10-06-01)
+- Migration to G4RunManagerFactory.
+
 07-05-20   A. Ribon   (exhadr02-V10-06-00)
 - HadronPhysicsCRMC_FTFP_BERT , HadronPhysicsHIJING , HadronPhysicsUrQMD :
   introduced the new class G4HyperonBuilder which is now needed when
@@ -26,7 +29,7 @@ track of all tags.
 02-08-19   G. Folger   (exhadr02-V10-05-02)
 - remove use of G4DataQuestionaire, following cleanup in
    physicslists, see phys-lists-V10-05-02 and phys-util-V10-04-02
-   
+
 12-06-19  A. Ribon  (exhadr02-V10-05-01)
 - G4CRMCModel : some improvements (e.g. considered the energy-per-nucleon,
   instead of the whole projectile, in the case of nucleus projectile) and
@@ -43,8 +46,8 @@ track of all tags.
   See the README file for more information.
 
 09-08-18  A. Ribon  (exhadr02-V10-04-02)
-- UrQMDProtonBuilder, IonUrQMDPhysics, UrQMDPiKBuilder, 
-  UrQMDAntiBarionBuilder, UrQMDNeutronBuilder, 
+- UrQMDProtonBuilder, IonUrQMDPhysics, UrQMDPiKBuilder,
+  UrQMDAntiBarionBuilder, UrQMDNeutronBuilder,
   HIJINGProtonBuilder, IonHIJINGPhysics, HIJINGNeutronBuilder :
   replaced the explicit high-energy limit of hadronic
   physics with the one from G4HadronicParameters .
@@ -143,7 +146,7 @@ track of all tags.
 17-05-11  G.Folger (exhadr02-V09-04-04)
 -  Allow to build without reference to DPMJET;
     all .cc files linking to DPMJet are pretected by #ifdef G4_USE_DPMJET
-    
+
 21-04-11  V.Ivant (exhadr02-V09-04-03)
 - Fixed problems of energy intervals for models for ions
   allowing to work with different reference Physics Lists

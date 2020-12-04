@@ -224,8 +224,8 @@ List of features and fixes included in this Beta release since 10.2.p02:
           hadrons.
         - G4EmStandardPhysicsGS: set default range factor to 0.1.
         - DNA and ModelActivator constructors: corrected model/process names;
-          adjusted high energy threshold of solvation (kill) in respect to the
-          energy range of the elastic model.
+          adjusted high energy threshold of solvation (kill) in respect to the
+          energy range of the elastic model.
           Added G4DNAElectronSolvation to all DNA constructors.
         - Updated G4EmDNAPhysics_option5 and G4EmDNAChemistry.
         - Updated G4EmDNAPhysics_option7 constructor.

@@ -214,7 +214,7 @@ class G4VProcess
       // Return true if the Physics Table can be built by using file.
       // Return false if the process has no functionality or in case
       // of failure. File name should be defined by each process and the
-      // file should be placed under the directory specifed by the argument
+      // file should be placed under the directory specified by the argument
 
     const G4String& GetPhysicsTableFileName(const G4ParticleDefinition* ,
                                             const G4String& directory,

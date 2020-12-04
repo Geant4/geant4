@@ -44,7 +44,7 @@ inline bool is_inside(const VEC2& a_P,const std::vector<VEC2>& a_V) {
           --wn;            // have a valid down intersect
     }
   }
-  
+
   return ((wn!=0)?true:false);
 }
 
@@ -85,7 +85,7 @@ inline bool inside(const std::pair<T,T>& a_P,const std::vector< std::pair<T,T> >
           --wn;            // have a valid down intersect
     }
   }
-  
+
   return ((wn!=0)?true:false);
 }
 
@@ -98,7 +98,7 @@ inline bool intersect(const VEC2& P1,const VEC2& Q1,const VEC2& P2,const VEC2& Q
   // (Q1-P1)*r - (Q2-P2)*s = P2-P1
   // r*(Q1-P1).v0 - s*(Q2-P2).v0 = (P2-P1).v0 //x
   // r*(Q1-P1).v1 - s*(Q2-P2).v1 = (P2-P1).v1 //y
-  
+
   // a*r + b*s = c
   // d*r + e*s = f
 

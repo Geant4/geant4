@@ -14,38 +14,42 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan (exampleP03-V10-06-00)
+--------------------------
+- Migration to G4RunManagerFactory.
+
 March 25th 2019 G.Cosmo (exampleP03-V10-05-00)
--------------------------- 
+--------------------------
 - Fixed compilation warnings on unused local iterators.
 
 May 19th 2018 J.Allison (exampleP03-V10-04-00)
--------------------------- 
+--------------------------
 - Add #include "G4Types.hh"
 - Remove G4UI_USE and G4VIS_USE.
 - Move instantiation of G4UIExecutive to start of main.
 
 19 November 2016 A. Dotti (exampleP03-V10-02-00)
--------------------------- 
+--------------------------
 - Explicit set of SD to manager
 
 17 September 2015 P. Arce (exampleP03-V10-01-01)
--------------------------- 
+--------------------------
 - Remove ExTGPhysicsList
 
 29 July 2014 P. Arce (exampleP03-V10-00-03)
--------------------------- 
+--------------------------
 - Remove ExTGPhysicsList
 
 25 July 2014 P. Arce (exampleP03-V10-00-02)
--------------------------- 
+--------------------------
 - Using G4GenericPhysicsList
 
 18 November 2013 I. Hrivnacova (exampleP03-V09-06-01)
--------------------------- 
+--------------------------
 - Fixed files description  (only comment lines modified)
 
 8 November 2013 P. Arce (exampleP03-V09-06-00)
--------------------------- 
+--------------------------
 - Porting to MT
 
 17 July 2012 I. Hrivnacova (exampleP03-V09-05-02)
@@ -104,7 +108,7 @@ May 19th 2018 J.Allison (exampleP03-V10-04-00)
 9 December 2008 - P Arce (exampleP03-V09-01-04)
 --------------------------
 - SUBS -> SUBTRACTION, INTERS -> INTERSECTION
-     
+
 21 November 2008 - G.Cosmo (exampleP03-V09-01-03)
 --------------------------
 - Replaced VRML with OGLIX as default visualization.

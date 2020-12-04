@@ -7,6 +7,11 @@
 
                        Package History file
                        --------------------
+15 Nov 2020 - S. Guatelli   tag nanobeam-V10-06-01
+- Migration to G4RunManagerFactory
+
+02 Nov 2020 - B.Morgan   tag nanobeam-V10-06-00
+- Support same CMake version range as core Geant4
 
 19 Nov 2019 - G. Folger  tag nanobeam-V10-05-01
 - remove using namespace std from header file TabulatedField3D.hh
@@ -97,15 +102,15 @@
 - Coding style cleaning
 
 29 May 2013 - tag nanobeam-V09-06-03  -L. Pandola
-- Migrate analysis from AIDA (in a singleton class) to the 
-g4analysis tools. AIDA dependency is removed. Output file is 
+- Migrate analysis from AIDA (in a singleton class) to the
+g4analysis tools. AIDA dependency is removed. Output file is
 unchanged (still a ROOT file named nanobeam.root)
 
 7 May 2013 - tag nanobeam-V09-06-02 - S. Incerti, B. Morgan
 - Updated CMakeLists.txt thanks to Ben (example requires external CLHEP)
 
 8 March 2013 - tag nanobeam-V09-06-01 - A. Dotti
-- Adding protection in case Geant4 is build with internal CLHEP 
+- Adding protection in case Geant4 is build with internal CLHEP
   (example requires external CLHEP)
 
 4 December 2012 - tag nanobeam-V09-06-00 - G. Cosmo
@@ -115,10 +120,10 @@ unchanged (still a ROOT file named nanobeam.root)
 - Fixed compilation warning and corrected CMakeLists.txt
 
 3 November 2012 - tag nanobeam-V09-05-05 - S. Incerti
-- Removed shadowing in SteppingAction and TabulatedField3D 
+- Removed shadowing in SteppingAction and TabulatedField3D
 
 1 November 2012 - tag nanobeam-V09-05-04 - S. Incerti
-- Switched to touchables 
+- Switched to touchables
 
 26 October 2012 - tag nanobeam-V09-05-03 - L. Pandola
 - Changed CMakeLists.txt to deal with UI and AIDA
@@ -132,10 +137,10 @@ unchanged (still a ROOT file named nanobeam.root)
 12 October 2012 - tag nanobeam-V09-05-00 - G. Cosmo
 - Explicit inclusion of units and constants headers.
 
-05 November 2011- tag nanobeam-V09-04-06 - S. Incerti  
+05 November 2011- tag nanobeam-V09-04-06 - S. Incerti
 - removed export=root option in HistoManager.cc
 
-03 October 2011- tag nanobeam-V09-04-05 - G. Folger  
+03 October 2011- tag nanobeam-V09-04-05 - G. Folger
 - fix compilation warnings from gcc46 in TabulatedField3D.cc
 
 19 August 2011- tag nanobeam-V09-04-04 - S. Incerti
@@ -172,11 +177,11 @@ unchanged (still a ROOT file named nanobeam.root)
 - updated multiple scattering class for e+- and mu
 
 2-March 2009 - tag nanobeam-V09-02-01 - G.Folger
-- correct for gcc4.3/slc5 warning 
+- correct for gcc4.3/slc5 warning
 
 26 February 2009 - tag nanobeam-V09-02-00 - G.Folger
 - Correct TabulatedField3D.cc to use logical AND (&&) in few if()
- 
+
 21 June 2008 - tag nanobeam-V09-01-11 - S. Incerti
 - several tags to try to resolve conflict with system testing
 

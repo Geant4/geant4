@@ -116,7 +116,7 @@ void HadrontherapyRBEAccumulable::Initialize()
     fVoxelsAlongX = rbe->GetNumberOfVoxelsAlongX();
     fVoxelsAlongY = rbe->GetNumberOfVoxelsAlongY();
     fVoxelsAlongZ = rbe->GetNumberOfVoxelsAlongZ();
-    fVoxels = fVoxelsAlongX * fVoxelsAlongY * fVoxelsAlongZ;
+    fVoxels = (size_t) (fVoxelsAlongX * fVoxelsAlongY * fVoxelsAlongZ);
 
     if (GetVerboseLevel() > 1)
     {

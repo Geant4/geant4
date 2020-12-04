@@ -64,12 +64,12 @@ public:
     m_sep.bbox(a_action);
   }
   virtual void search(search_action& a_action) {
-    parent::search(a_action);
-    if(a_action.done()) return;
     if(touched()) {
       update_sg(a_action.out());
       reset_touched();
     }
+    parent::search(a_action);
+    if(a_action.done()) return;
     if(a_action.do_path()) a_action.path_push(this);
     m_sep.search(a_action);
     if(a_action.done()) return;
@@ -107,14 +107,14 @@ public: //sg::base_text :
   virtual void get_bounds(float /*a_height*/,
                           float& a_mn_x,float& a_mn_y,float& a_mn_z,
                           float& a_mx_x,float& a_mx_y,float& a_mx_z) const {
-    text_valop& self = const_cast<text_valop&>(*this);			  
+    text_valop& self = const_cast<text_valop&>(*this);
     if(self.touched()) {
       self.update_sg(self.m_out);
       self.reset_touched();
     }
     vec3f mn,mx;
     mnmx(self.m_out,self.m_sep,mn,mx);
-    a_mn_x = mn[0];a_mn_y = mn[1];a_mn_z = mn[2];  
+    a_mn_x = mn[0];a_mn_y = mn[1];a_mn_z = mn[2];
     a_mx_x = mx[0];a_mx_y = mx[1];a_mx_z = mx[2];
     //::printf("debug : get_bounds : %g %g %g : %g %g %g\n",a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
   }

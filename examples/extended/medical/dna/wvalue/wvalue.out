@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +26,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -142,9 +144,9 @@ e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
 DNAEmfietzoglouIonisationModel : Emin=    0 eV  Emax=   10 keV  deltaBorn Fluo
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 3, latDisp: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -272,7 +274,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 61.37 +- 58.20
 
- Step size                     = 1.724 Ang +- 40341.767 fm 
+ Step size                     = 1.724 Ang +- 40341.774 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -289,7 +294,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 43.57 +- 38.47
 
- Step size                     = 1.837 Ang +- 48581.138 fm 
+ Step size                     = 1.837 Ang +- 48581.147 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -306,7 +314,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 59.45 +- 72.51
 
- Step size                     = 1.965 Ang +- 56108.183 fm 
+ Step size                     = 1.965 Ang +- 56108.192 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -323,7 +334,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 58.53 +- 58.36
 
- Step size                     = 2.116 Ang +- 53906.854 fm 
+ Step size                     = 2.116 Ang +- 53906.863 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -340,7 +354,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 56.44 +- 53.88
 
- Step size                     = 2.204 Ang +- 52897.101 fm 
+ Step size                     = 2.204 Ang +- 52897.110 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -357,7 +374,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 62.05 +- 52.75
 
- Step size                     = 2.250 Ang +- 53177.352 fm 
+ Step size                     = 2.250 Ang +- 53177.361 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -374,7 +394,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 61.94 +- 59.52
 
- Step size                     = 2.304 Ang +- 51042.109 fm 
+ Step size                     = 2.304 Ang +- 51042.118 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -391,7 +414,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 66.01 +- 61.06
 
- Step size                     = 2.382 Ang +- 55677.687 fm 
+ Step size                     = 2.382 Ang +- 55677.696 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -408,7 +434,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 62.66 +- 55.90
 
- Step size                     = 2.437 Ang +- 58312.927 fm 
+ Step size                     = 2.437 Ang +- 58312.937 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -425,7 +454,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 63.68 +- 51.82
 
- Step size                     = 2.473 Ang +- 56051.374 fm 
+ Step size                     = 2.473 Ang +- 56051.383 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -442,7 +474,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 64.01 +- 51.58
 
- Step size                     = 2.512 Ang +- 57595.334 fm 
+ Step size                     = 2.512 Ang +- 57595.343 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -459,7 +494,10 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  Nb of steps of primary track  = 75.74 +- 57.75
 
- Step size                     = 3.092 Ang +- 83363.142 fm 
+ Step size                     = 3.092 Ang +- 83363.156 fm 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -477,6 +515,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 81.20 +- 56.38
 
  Step size                     = 3.658 Ang +- 1.108 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -494,6 +535,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 84.70 +- 54.16
 
  Step size                     = 4.183 Ang +- 1.291 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -511,6 +555,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 92.55 +- 56.43
 
  Step size                     = 4.725 Ang +- 1.495 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -528,6 +575,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 95.59 +- 58.09
 
  Step size                     = 5.400 Ang +- 1.723 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -545,6 +595,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 99.69 +- 56.05
 
  Step size                     = 5.995 Ang +- 1.914 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -562,6 +615,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 105.95 +- 58.60
 
  Step size                     = 6.558 Ang +- 2.086 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -579,6 +635,9 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 107.18 +- 55.92
 
  Step size                     = 7.187 Ang +- 2.324 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 
  ======================== run summary =====================
 
@@ -596,5 +655,8 @@ See commands in /vis/modeling/trajectories/ for other options.
  Nb of steps of primary track  = 108.75 +- 53.70
 
  Step size                     = 8.021 Ang +- 2.473 Ang
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

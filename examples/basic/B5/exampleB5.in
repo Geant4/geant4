@@ -10,6 +10,8 @@
 /B5/generator/sigmaAngle 0.
 /run/printProgress 5
 #
+/analysis/ntuple/setFileName 0 B5ntuple
+#
 /B5/detector/armAngle 30. deg
 /gun/particle proton
 /B5/generator/momentum 100. GeV

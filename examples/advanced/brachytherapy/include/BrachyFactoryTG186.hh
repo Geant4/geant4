@@ -56,6 +56,6 @@ public:
   void CleanSource();
 
 private:
-  BrachyDetectorConstructionTG186* TG186iridiumSource;
+  BrachyDetectorConstructionTG186* fTG186iridiumSource;
 };
 #endif

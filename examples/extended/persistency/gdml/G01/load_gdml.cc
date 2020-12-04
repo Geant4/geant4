@@ -38,11 +38,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 
@@ -107,11 +103,7 @@ int main(int argc,char **argv)
       return -1;
    }
 
-#ifdef G4MULTITHREADED
-   G4MTRunManager* runManager = new G4MTRunManager;
-#else
-   G4RunManager* runManager = new G4RunManager;
-#endif
+   auto* runManager = G4RunManagerFactory::CreateRunManager();
 
    runManager->SetUserInitialization(new G01DetectorConstruction(
                                      parser.GetWorldVolume()));
@@ -163,7 +155,7 @@ int main(int argc,char **argv)
 
 
    runManager->BeamOn(0);
-   
+
    // example of writing out
 
    if (argc>=3)
@@ -189,6 +181,7 @@ int main(int argc,char **argv)
 
      parser.SetRegionExport(true);
      //     parser.SetEnergyCutsExport(true);
+     //     parser.SetOutputFileOverwrite(true);
      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
       ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
    }

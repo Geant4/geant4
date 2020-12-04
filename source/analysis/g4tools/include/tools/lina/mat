@@ -33,7 +33,7 @@ public:
   mat(
 #ifdef TOOLS_MEM
       bool a_inc = true
-#endif      
+#endif
       ) {
 #ifdef TOOLS_MEM
     if(a_inc) mem::increment(s_class().c_str());
@@ -155,7 +155,7 @@ protected:
 private:static void check_instantiation() {nmat<float> dummy(2);}
 };
 
-template <class T,unsigned int D> 
+template <class T,unsigned int D>
 inline nmat<T> copy(const mat<T,D>& a_from) {
   unsigned int D2 = D*D;
   nmat<T> v(D);
@@ -182,7 +182,7 @@ inline void multiply(VECTOR& a_vec,const typename VECTOR::value_type::elem_t& a_
 /// related to complex numbers : //////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-template <class MAT> 
+template <class MAT>
 inline void conjugate(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT::elem_t&)) {
   typedef typename MAT::elem_t T;
   T* pos = const_cast<T*>(a_m.data());
@@ -192,7 +192,7 @@ inline void conjugate(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT
   }
 }
 
-template <class MAT> 
+template <class MAT>
 inline bool is_real(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const typename MAT::elem_t&)) {
   typedef typename MAT::elem_t T;
   T* pos = const_cast<T*>(a_m.data());
@@ -201,7 +201,7 @@ inline bool is_real(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const ty
   return true;
 }
 
-template <class MAT,class PREC> 
+template <class MAT,class PREC>
 inline bool is_real_prec(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const typename MAT::elem_t&),
                          const PREC& a_prec,PREC(*a_fabs)(const typename MAT::elem_t::value_type&)) {\
   typedef typename MAT::elem_t T;
@@ -220,7 +220,7 @@ inline bool is_imag(MAT& a_m,typename MAT::elem_t::value_type (*a_real)(const ty
   return true;
 }
 
-template <class CMAT,class RMAT> 
+template <class CMAT,class RMAT>
 inline bool to_real(const CMAT& a_c,RMAT& a_r,typename CMAT::elem_t::value_type (*a_real)(const typename CMAT::elem_t&)) {
   if(a_r.dimension()!=a_c.dimension()) return false;
   typedef typename CMAT::elem_t CT;
@@ -232,7 +232,7 @@ inline bool to_real(const CMAT& a_c,RMAT& a_r,typename CMAT::elem_t::value_type 
   return true;
 }
 
-template <class RMAT,class CMAT> 
+template <class RMAT,class CMAT>
 inline bool to_complex(const RMAT& a_r,CMAT& a_c) {
   if(a_c.dimension()!=a_r.dimension()) return false;
   typedef typename RMAT::elem_t RT;
@@ -244,7 +244,7 @@ inline bool to_complex(const RMAT& a_r,CMAT& a_c) {
   return true;
 }
 
-template <class MAT> 
+template <class MAT>
 inline void dagger(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT::elem_t&)) {
   conjugate<MAT>(a_m,a_conj);
   a_m.transpose();
@@ -259,17 +259,17 @@ inline bool decomplex(const CMAT& a_c,RMAT& a_r,
   //         | -Y  X |
   typedef typename CMAT::elem_t CT; //std::complex<double>
   typedef typename RMAT::elem_t RT; //double
-  
+
   unsigned int cdim = a_c.dimension();
-  if(a_r.dimension()!=2*cdim) {a_r.set_zero();return false;}  
-  RT value;unsigned int r,c;  
+  if(a_r.dimension()!=2*cdim) {a_r.set_zero();return false;}
+  RT value;unsigned int r,c;
   for(r=0;r<cdim;r++) {
     for(c=0;c<cdim;c++) {
       const CT& cvalue = a_c.value(r,c);
-      value = a_real(cvalue);      
+      value = a_real(cvalue);
       a_r.set_value(r,c,value);
       a_r.set_value(r+cdim,c+cdim,value);
-      value = a_imag(cvalue);      
+      value = a_imag(cvalue);
       a_r.set_value(r,c+cdim,value);
       a_r.set_value(r+cdim,c,-value);
     }
@@ -466,7 +466,7 @@ inline nmat<T> operator*(const nmat<T>& a_m,const T& a_fac) {
 }
 */
 
-template <class MAT,class REAL> 
+template <class MAT,class REAL>
 inline bool mat_fabs(const MAT& a_in,MAT& a_ou,REAL(*a_fabs)(const typename MAT::elem_t&)) {
   if(a_in.dimension()!=a_ou.dimension()) {a_ou.set_zero();return false;}
   typedef typename MAT::elem_t T;

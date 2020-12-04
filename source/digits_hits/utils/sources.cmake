@@ -10,7 +10,6 @@ geant4_define_module(NAME G4detutils
   HEADERS
     G4DefaultLinearColorMap.hh
     G4ScoreLogColorMap.hh
-    G4VPrimitivePlotter.hh
     G4VScoreNtupleWriter.hh
     G4TScoreNtupleWriter.hh
     G4TScoreNtupleWriter.icc

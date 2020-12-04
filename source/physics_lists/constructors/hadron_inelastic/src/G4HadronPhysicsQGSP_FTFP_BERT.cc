@@ -44,32 +44,16 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_FTFP_BERT);
 
 
 G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(G4int)
-    : G4HadronPhysicsQGSP_FTFP_BERT("hInelastic QGSP_FTFP_BERT",true) {}
+    : G4HadronPhysicsQGSP_FTFP_BERT("hInelastic QGSP_FTFP_BERT",true) 
+{}
 
 G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(const G4String& name, 
 							 G4bool quasiElastic)
-    :  G4HadronPhysicsQGSP_BERT(name,quasiElastic), QuasiElastic(quasiElastic)
+    :  G4HadronPhysicsQGSP_BERT(name,quasiElastic)
 {
-  minFTFP_proton = minFTFP_neutron = minFTFP_pik = 
-    G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
-  maxBERT_proton = maxBERT_neutron = maxBERT_pik = 
-    G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
   G4HadronicParameters::Instance()->SetEnableBCParticles(true);
 }
 
-
-/*
-void G4HadronPhysicsQGSP_FTFP_BERT::DumpBanner()
-{
-  G4cout << " New QGSP_FTFP_BERT physics list, replaces LEP with FTF/P for p/n/pi (/K?)";
-  G4cout << "  Thresholds: " << G4endl;
-  G4cout << "    1) between BERT  and FTF/P over the interval " 
-	 << minFTFP_proton/GeV << " to " << maxBERT_proton/GeV << " GeV. " << G4endl;
-  G4cout << "    2) between FTF/P and QGS/P over the interval " 
-	 << minQGSP_proton/GeV << " to " << maxFTFP_proton/GeV << " GeV. " << G4endl;
-  G4cout << "  -- quasiElastic was asked to be " << QuasiElastic << G4endl
-	 << "     Changed to " << QuasiElasticQGS << " for QGS "
-	 << " and to " << QuasiElasticFTF << " (must be false) for FTF" << G4endl;
-}
-*/
+G4HadronPhysicsQGSP_FTFP_BERT::~G4HadronPhysicsQGSP_FTFP_BERT()
+{}
 

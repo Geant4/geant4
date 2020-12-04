@@ -43,8 +43,8 @@ namespace CLHEP {
   * @ingroup random
   */
 
-typedef unsigned long int myID_t;
-typedef unsigned long long int myuint_t;
+using myID_t = std::uint32_t;
+using myuint_t = unsigned long long int;
 
 class MixMaxRng: public HepRandomEngine {
 

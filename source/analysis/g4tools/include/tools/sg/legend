@@ -30,10 +30,10 @@ public:
   //sf<float> transparency;
   sf_string font;
   sf_enum<sg::font_modeling> font_modeling;
-  sf_string encoding; 
+  sf_string encoding;
   //sf<float> line_width;          // for text_hershey.
 
-  sf<bool> back_visible;  
+  sf<bool> back_visible;
   sf<float> wmargin_factor;
   sf<float> hmargin_factor;
   sf_enum<hjust> lhjust;
@@ -49,13 +49,13 @@ public:
       TOOLS_ARG_FIELD_DESC(strings),
       TOOLS_ARG_FIELD_DESC(color),
       TOOLS_ARG_FIELD_DESC(font),
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
         TOOLS_ARG_ENUM(font_outline),
         TOOLS_ARG_ENUM(font_filled),
         TOOLS_ARG_ENUM(font_pixmap)
       TOOLS_ARG_FIELD_DESC_ENUMS_END,
-      
+
       TOOLS_ARG_FIELD_DESC(encoding),
       TOOLS_ARG_FIELD_DESC(back_visible),
       TOOLS_ARG_FIELD_DESC(wmargin_factor),
@@ -74,7 +74,7 @@ private:
     add_field(&color);
     add_field(&font);
     add_field(&font_modeling);
-    add_field(&encoding); 
+    add_field(&encoding);
 
     add_field(&back_visible);
     add_field(&wmargin_factor);
@@ -104,12 +104,12 @@ public:
     }
   }
   virtual void search(search_action& a_action) {
-    node::search(a_action);
-    if(a_action.done()) return;
     if(touched()) {
       update_sg();
       reset_touched();
     }
+    node::search(a_action);
+    if(a_action.done()) return;
     if(back_visible.value()) {
       m_back_sep.search(a_action);
       if(a_action.done()) return;
@@ -145,7 +145,7 @@ public:
 
   ,marker_style(marker_dot)
   ,marker_size(10)
-  
+
   //,confine(false)
 
   ,m_ttf(a_ttf)
@@ -173,7 +173,7 @@ public:
 
   ,marker_style(a_from.marker_style)
   ,marker_size(a_from.marker_size)
-  
+
   //,confine(a_from.confine)
 
   ,m_ttf(a_from.m_ttf)
@@ -199,7 +199,7 @@ public:
 
     marker_style = a_from.marker_style;
     marker_size = a_from.marker_size;
-    
+
     //confine = a_from.confine;
 
     return *this;
@@ -278,17 +278,17 @@ public:
         _sep->add(ds);
         vertices* vtxs = new vertices;
         vtxs->mode = gl::points();
-        vtxs->add(-width*0.5f+height*0.5f,0,zz);    
+        vtxs->add(-width*0.5f+height*0.5f,0,zz);
         _sep->add(vtxs);
       } else {
         markers* vtxs = new markers;
         vtxs->size = marker_size;
-        vtxs->style = marker_style; 
-        vtxs->add(-width*0.5f+height*0.5f,0,zz);    
+        vtxs->style = marker_style;
+        vtxs->add(-width*0.5f+height*0.5f,0,zz);
         _sep->add(vtxs);
       }
     }
-    
+
     }
 
     ////////////////////////////////////////////////////////////
@@ -399,9 +399,9 @@ public:
       rtext->hjust = left;
       float yy = -(mn_y+mx_y)*0.5F;
       rtsf->set_translate(-width*0.5f+height,yy,zz);}
-      
+
     }
-    
+
     parent::update_sg();
 
   }

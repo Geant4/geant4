@@ -18,6 +18,16 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+2 October 2020  John Allison  (DAWN-V10-06-03)
+- G4FukuiRendererViewer.cc:
+  o Fix "overlapping comparisons always evaluate to true".
+
+3 July 2020  John Allison  (DAWN-V10-06-02)
+- G4DAWNFILEViewer.cc:
+  o Fix Unbuntu 20 compiler warning about ignoring return value
+    of ‘int system(const char*)’.
+
 31 May 2020 Ben Morgan (DAWN-V10-06-01)
 - Use add_definitions to set PRIVATE-level compile add_definitions
   for compatibility between old and new CMake systems

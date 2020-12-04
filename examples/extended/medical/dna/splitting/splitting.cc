@@ -27,9 +27,9 @@
 // Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
-// Ramos-Mendez, et. Al. Flagged uniform particle splitting for track  
-//                  structure of proton and light ions 
-//                  (accepted in Phys. Med. Biol) 
+// Ramos-Mendez, et. Al. Flagged uniform particle splitting for track
+//                  structure of proton and light ions
+//                  (accepted in Phys. Med. Biol)
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
@@ -42,11 +42,7 @@
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -65,14 +61,10 @@ int main(int argc,char** argv)
       ui = new G4UIExecutive(argc, argv);
     }
 
-#ifdef G4MULTITHREADED
-    G4MTRunManager* runManager= new G4MTRunManager;
+    auto* runManager= G4RunManagerFactory::CreateRunManager();
     G4int nThreads = 2;
     runManager->SetNumberOfThreads(nThreads);
-#else
-    G4RunManager* runManager = new G4RunManager();
-#endif
-  
+
     // Set user classes
     //
     runManager->SetUserInitialization(new DetectorConstruction());

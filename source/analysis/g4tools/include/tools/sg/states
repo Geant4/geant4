@@ -27,7 +27,7 @@ public:
     m_state.m_ww = a_ww;
     m_state.m_wh = a_wh;
   }
-#endif  
+#endif
   virtual ~states(){}
 protected:
 #ifdef TOOLS_SG_STATES_CUR
@@ -78,7 +78,7 @@ public:
   void pop_state() {
     //if(!m_states.size()) return; //throw.
     m_state = m_states.back();
-    m_states.pop_back();    
+    m_states.pop_back();
   }
   void push_state() {m_states.push_back(m_state);}
 #endif
@@ -93,7 +93,7 @@ protected:
   int m_cur_state;
 #else
   sg::state m_state;
-#endif  
+#endif
   sg::state m_saved_state;
 };
 

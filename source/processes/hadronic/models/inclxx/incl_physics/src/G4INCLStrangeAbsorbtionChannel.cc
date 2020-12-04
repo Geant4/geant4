@@ -92,7 +92,7 @@ namespace G4INCL {
     } else if(ParticleConfig::isPair(nucleon, strange, Neutron, SigmaPlus)) {
       finalType = Proton;
     } else {
-      INCL_ERROR("Unknown particle pair in Strange-N absorbtion: " << nucleon << '\t' << strange << '\n');
+      INCL_ERROR("Unknown particle pair in Strange-N absorption: " << nucleon << '\t' << strange << '\n');
       return;
     }
 

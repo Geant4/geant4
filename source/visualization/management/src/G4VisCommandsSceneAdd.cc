@@ -61,9 +61,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4Tokenizer.hh"
 #include "G4RunManager.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4StateManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
@@ -717,13 +715,9 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
 void G4VisCommandSceneAddEventID::EventID::operator()
 (G4VGraphicsScene& sceneHandler, const G4Transform3D&, const G4ModelingParameters* mp)
 {
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-  if (G4Threading::IsMultithreadedApplication()) {
-    runManager = G4MTRunManager::GetMasterRunManager();
-  }
-#endif
-  if (!runManager) return;
+  G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
+  if(!runManager)
+    return;
 
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (!currentRun) return;

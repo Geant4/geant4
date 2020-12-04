@@ -52,7 +52,21 @@ wls.mac implements a scintillating slab and wavelength shifting fibers.
     Then type commands, for instance
     Session: /run/beamOn 1
 
-\section LXe_s7 Detailed Explanation of Geometry Implementation
+\section LXe_s7 Macros included
+
+Several macros are include in the distribution:
+
+cerenkov.mac: Shoot a 200 MeV mu+ and only allow it to take one step. The
+              Cerenkov cone and PMTs hit are visible. (Reduce the number
+              of particles for visualization.)
+LXe.mac:      Shoot a 511 keV gamma with the default geometry.
+photon.mac:   Primary beam is an optical photon, with the default geometry.
+wls.mac:      Geometry includes 15 WLS fibers. A 511 keV electron is the
+              primary.
+
+-
+
+\section LXe_s8 Detailed Explanation of Geometry Implementation
 
 The way the geometry is constructed is an experiment for a new, more object
 oriented, way to construct geometry. It separates the concept of how a volume
@@ -100,7 +114,7 @@ and defined only once.
 The updated variable is to signal that the volume needs to be updated and a new
 logical volume made.
 
-\section LXe_s8 Modifying the geometry at runtime
+\section LXe_s9 Modifying the geometry at runtime
 
 This example allows the user to modify the geometry definition at runtime. This
 is accomplished through LXeDetectorMessenger, a derived class of G4UImessenger.
@@ -120,7 +134,7 @@ are used when constructing the geometry.
     }
 \endverbatim
 
-\section LXe_s9 PMT sensitive detector
+\section LXe_s10 PMT sensitive detector
 
 The PMT sensitive detector cannot be triggered like a normal sensitive detector
 because the sensitive volume does not allow photons to pass through it. Rather,
@@ -173,7 +187,7 @@ from G4SDManager and call its ProcessHits function.
       }
 \endverbatim
 
-\section LXe_s10 Selectively drawing trajectories or highlighting volumes
+\section LXe_s11 Selectively drawing trajectories or highlighting volumes
 
 In a simulation such as this one, where an average of 6000 trajectories are
 generated in a small space, there is little use in drawing all of them. There
@@ -219,7 +233,7 @@ the logic used in choosing which trajectories to draw.
 See /LXe/detector/volumes/sphere in "UI commands" below for info on what 
 trajectories are drawn in this simulation.
 
-\section LXe_s11 Saving random engine seeds
+\section LXe_s12 Saving random engine seeds
 
 At times it may be necessary to review a particular event of interest. To do
 this without redoing an entire run, which may take a long time, you must store
@@ -252,7 +266,7 @@ directory to save in must exist first. GEANT4 will not create it for you.
 G4RunManager::SetRandomNumberStoreDir(G4String)
 \endverbatim
 
-\section LXe_s12 UI commands
+\section LXe_s13 UI commands
 
 Directories:
 \verbatim

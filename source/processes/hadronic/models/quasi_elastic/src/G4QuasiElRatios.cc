@@ -583,10 +583,19 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetElTotXS(G4double p, G4int PDG, 
     else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) ind=1; // np/pn
     else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) ind=2; // pimp/pipn
     else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) ind=3; // pipp/pimn
-    else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) ind=4; // KmN/K0N
-    else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) ind=5; // KpN/aK0N
-    else if ( PDG >  3000 && PDG <  3335) ind=6; // @@ for all hyperons - take Lambda
-    else if ( PDG > -3335 && PDG < -2000) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
+    //AR-Jul2020: Extended to charmed and bottom hadrons:
+    // - treat mesons with constituent c quark or b quark as a meson with s quark (e.g. K-);
+    // - treat mesons with constituent cbar antiquark or bbar antiquark as a meson with sbar antiquark (e.g. K+);
+    // - treat all heavy baryons (i.e. hyperons, charmed and bottom baryons) as lambda;
+    // - treat all heavy anti-baryons (i.e. anti-hyperons, charmed and bottom anti-baryons) as anti-p/anti-n.
+    else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ||                      // mesons with s quark
+              PDG ==  411 || PDG ==  421 || PDG ==  431  ||                      // mesons with c quark
+	      PDG == -521 || PDG == -511 || PDG == -531  || PDG == -541 ) ind=4; // mesons with b quark
+    else if ( PDG ==  321 || PDG ==  311 || (kf && kfl)  ||                      // mesons with sbar antiquark
+              PDG == -411 || PDG == -421 || PDG == -431  ||                      // mesons with cbar antiquark
+	      PDG ==  521 || PDG ==  511 || PDG ==  531  || PDG ==  541 ) ind=5; // mesons with bbar antiquark
+    else if ( PDG >  3000 && PDG <  5333 ) ind=6; // @@ for all heavy baryons - take Lambda
+    else if ( PDG > -5333 && PDG < -2000 ) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
     else {
         G4cout<<"*Error*G4QuasiElRatios::CalcElTotXS: PDG="<<PDG
         <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
@@ -618,10 +627,19 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     else if ( (PDG == 2112 && F) || (PDG == 2212 && !F) ) ind=1; // np/pn
     else if ( (PDG == -211 && F) || (PDG == 211 && !F) ) ind=2; // pimp/pipn
     else if ( (PDG == 211 && F) || (PDG == -211 && !F) ) ind=3; // pipp/pimn
-    else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ) ind=4; // KmN/K0N
-    else if ( PDG == 321 || PDG == 311 || (kf && kfl) ) ind=5; // KpN/aK0N
-    else if ( PDG >  3000 && PDG <  3335) ind=6; // @@ for all hyperons - take Lambda
-    else if ( PDG > -3335 && PDG < -2000) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
+    //AR-Jul2020: Extended to charmed and bottom hadrons:
+    // - treat mesons with constituent c quark or b quark as a meson with s quark (e.g. K-);
+    // - treat mesons with constituent cbar antiquark or bbar antiquark as a meson with sbar antiquark (e.g. K+);
+    // - treat all heavy baryons (i.e. hyperons, charmed and bottom baryons) as lambda;
+    // - treat all heavy anti-baryons (i.e. anti-hyperons, charmed and bottom anti-baryons) as anti-p/anti-n.
+    else if ( PDG == -321 || PDG == -311 || (kf && !kfl) ||                      // mesons with s quark
+              PDG ==  411 || PDG ==  421 || PDG ==  431  ||                      // mesons with c quark
+	      PDG == -521 || PDG == -511 || PDG == -531  || PDG == -541 ) ind=4; // mesons with b quark
+    else if ( PDG ==  321 || PDG ==  311 || (kf && kfl)  ||                      // mesons with sbar antiquark
+              PDG == -411 || PDG == -421 || PDG == -431  ||                      // mesons with cbar antiquark
+	      PDG ==  521 || PDG ==  511 || PDG ==  531  || PDG ==  541 ) ind=5; // mesons with bbar antiquark
+    else if ( PDG >  3000 && PDG <  5333 ) ind=6; // @@ for all heavy baryons - take Lambda
+    else if ( PDG > -5333 && PDG < -2000 ) ind=7; // @@ for all anti-baryons (anti-p/anti-n)
     else {
         G4cout<<"*Error*G4QuasiElRatios::FetchElTot: PDG="<<PDG
         <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
@@ -827,7 +845,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
     }
     G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
     // @@ Temporary NN t-dependence for all hadrons
-    if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QE::Scatter: pPDG="<<pPDG<<G4endl;
+    //if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QE::Scatter: pPDG="<<pPDG<<G4endl;
     G4int PDG=2212;                                                // *TMP* instead of pPDG
     if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
     if(!Z && N==1)                 // Change for Quasi-Elastic on neutron
@@ -879,6 +897,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
 // scatter (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
 // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
 // User should himself change the charge (PDG) (e.g. pn->np, pi+n->pi0p, pi-p->pi0n etc.)
+//AR-Jul2020: No need to change this method in order to extended quasi-elastic to
+//            charmed and bottom mesons, because it is not used anywhere !
 std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
                                                                     G4LorentzVector N4M, G4int pPDG, G4LorentzVector p4M)
 {

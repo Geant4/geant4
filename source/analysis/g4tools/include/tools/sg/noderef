@@ -18,9 +18,9 @@ public:
   virtual void render(render_action& a_action) {
 #ifdef TOOLS_SG_NODEREF_DEBUG
     std::ostream& out = a_action.out();
-    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " begin : " << std::endl;   
+    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " begin : " << std::endl;
     m_node.render(a_action);
-    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " end," << std::endl;   
+    out << "debug : tools::sg::noderef::render : " << m_node.s_cls() << " end," << std::endl;
 #else
     m_node.render(a_action);
 #endif

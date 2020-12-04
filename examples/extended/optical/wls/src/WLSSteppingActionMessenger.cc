@@ -37,20 +37,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSSteppingActionMessenger::
-  WLSSteppingActionMessenger(WLSSteppingAction* steppingaction)
-  : fSteppingAction (steppingaction)
+WLSSteppingActionMessenger::WLSSteppingActionMessenger(
+  WLSSteppingAction* steppingaction)
+  : fSteppingAction(steppingaction)
 {
   fSteppingDir = new G4UIdirectory("/stepping/");
   fSteppingDir->SetGuidance("stepping control");
 
   fSetBounceLimitCmd =
-                   new G4UIcmdWithAnInteger("/stepping/setBounceLimit", this);
-  fSetBounceLimitCmd->
-                   SetGuidance("Select the maximum number of allowed bounce");
-  fSetBounceLimitCmd->
-              SetGuidance("Set this number to zero if you don't want to limit");
-  fSetBounceLimitCmd->SetParameterName("limit",false);
+    new G4UIcmdWithAnInteger("/stepping/setBounceLimit", this);
+  fSetBounceLimitCmd->SetGuidance(
+    "Select the maximum number of allowed bounce");
+  fSetBounceLimitCmd->SetGuidance(
+    "Set this number to zero if you don't want to limit");
+  fSetBounceLimitCmd->SetParameterName("limit", false);
   fSetBounceLimitCmd->SetRange("limit>=0");
   fSetBounceLimitCmd->AvailableForStates(G4State_Idle);
 }
@@ -68,9 +68,9 @@ WLSSteppingActionMessenger::~WLSSteppingActionMessenger()
 void WLSSteppingActionMessenger::SetNewValue(G4UIcommand* command,
                                              G4String newValue)
 {
-  if ( command == fSetBounceLimitCmd ) {
-
-     fSteppingAction->
-               SetBounceLimit(G4UIcmdWithAnInteger::GetNewIntValue(newValue));
+  if(command == fSetBounceLimitCmd)
+  {
+    fSteppingAction->SetBounceLimit(
+      G4UIcmdWithAnInteger::GetNewIntValue(newValue));
   }
 }

@@ -12,6 +12,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22-10-20 mma (exhadr04-V10-06-01)
+- README : add macros descrption
+
+05-08-20 A. Ribon (exhadr04-V10-06-00)
+- envHadronic.(c)sh , Hadr04.cc : removed deprecated HP environmental
+  variables and replaced them with corresponding C++ calls in the main.
+  (These two shell-script files will be removed in G4 11.0.)
 
 25-06-18 mma (exhadr04-V10-04-04)
 - envHadronic : add env variables for particleHP (PHP)

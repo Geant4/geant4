@@ -81,7 +81,7 @@ file(GLOB_RECURSE ptl_headers ${CMAKE_CURRENT_LIST_DIR}/include/PTL/*.hh
 file(GLOB_RECURSE ptl_sources ${CMAKE_CURRENT_LIST_DIR}/src/*.cc)
 
 get_property(PTL_INTERFACE_LIBRARIES GLOBAL PROPERTY ${PROJECT_NAME}_INTERFACE_LIBRARIES)
-
+export(TARGETS ${PTL_INTERFACE_LIBRARIES} FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-interface.cmake)
 ################################################################################
 #                                                                              #
 #                              PTL Library                                     #
@@ -89,7 +89,6 @@ get_property(PTL_INTERFACE_LIBRARIES GLOBAL PROPERTY ${PROJECT_NAME}_INTERFACE_L
 ################################################################################
 
 if(BUILD_SHARED_LIBS)
-
     build_library(VERSION
         TYPE SHARED
         TARGET_NAME ptl-shared
@@ -106,8 +105,7 @@ if(BUILD_SHARED_LIBS)
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
     list(APPEND INSTALL_LIBRARIES ptl-shared)
-    export(TARGETS ptl-shared ${PTL_INTERFACE_LIBRARIES}
-        FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-shared.cmake)
+    export(TARGETS ptl-shared FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-shared.cmake)
 endif()
 
 if(BUILD_STATIC_LIBS)
@@ -115,7 +113,7 @@ if(BUILD_STATIC_LIBS)
     build_library(
         TYPE STATIC
         TARGET_NAME ptl-static
-        OUTPUT_NAME G4ptl
+        OUTPUT_NAME $<IF:$<PLATFORM_ID:Windows>,G4ptl-static,G4ptl>
         SOURCES ${ptl_headers} ${ptl_sources}
         EXTRA_ARGS POSITION_INDEPENDENT_CODE ON)
 
@@ -127,8 +125,7 @@ if(BUILD_STATIC_LIBS)
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
     list(APPEND INSTALL_LIBRARIES ptl-static)
-    export(TARGETS ptl-static ${PTL_INTERFACE_LIBRARIES}
-        FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-static.cmake)
+    export(TARGETS ptl-static FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-static.cmake)
 endif()
 
 
@@ -140,9 +137,10 @@ endif()
 
 # Install the targets and export libraries
 install(TARGETS ${INSTALL_LIBRARIES}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
     EXPORT ${PROJECT_NAME}Targets
-    COMPONENT development)
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT development
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT runtime
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT runtime)
 
 # install export
 install(EXPORT ${PROJECT_NAME}Targets

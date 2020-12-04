@@ -43,7 +43,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
     m_name = a_name;
-    m_atbs = a_atbs; 
+    m_atbs = a_atbs;
     m_value = a_value;
   }
   virtual ~element(){
@@ -58,7 +58,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
     m_name = a_from.m_name;
-    m_atbs = a_from.m_atbs; 
+    m_atbs = a_from.m_atbs;
     m_value = a_from.m_value;
   }
   element& operator=(const element& a_from) {
@@ -102,7 +102,7 @@ public:
     return to<T>(sv,a_value);
   }
 
-  
+
   bool set_attribute_value(const std::string& a_atb,const std::string& a_value) {
     tools_vforit(atb,m_atbs,it) {
       if((*it).first==a_atb) {
@@ -120,7 +120,7 @@ public:
     for(it=m_atbs.begin();it!=m_atbs.end();) {
       if((*it).first==a_atb) {
         it = m_atbs.erase(it);
-      } else { 
+      } else {
         ++it;
       }
     }
@@ -133,7 +133,7 @@ public:
     }
     replace_(m_value,a_old,a_new);
   }
-  
+
 protected:
   std::string m_name;
   std::vector<atb> m_atbs;

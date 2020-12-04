@@ -25,6 +25,7 @@
 //
 
 #include "G4RootNtupleManager.hh"
+#include "G4RootNtupleFileManager.hh"
 #include "G4RootFileManager.hh"
 
 #include "tools/wroot/to"
@@ -35,12 +36,13 @@ template <typename T>
 inline 
 G4bool G4RootAnalysisManager::WriteT(const std::vector<T*>& htVector,
                                      const std::vector<G4HnInformation*>& hnVector,
-                                     tools::wroot::directory* directory,
                                      const G4String& hnType)
 {
   // Do nothing if there is no file
-  if ( ! directory ) return true;
+  if ( ! fFileManager->GetFile() ) return true;
 
+  auto directory = std::get<1>(*fFileManager->GetFile()); 
+  
   for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
     auto info = hnVector[i];
     auto activation = info->GetActivation();
@@ -77,28 +79,28 @@ G4bool G4RootAnalysisManager::IsOpenFileImpl() const
 inline
 tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple() const
 {
-  return fNtupleManager->GetNtuple();
+  return fNtupleFileManager->GetNtupleManager()->GetNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple(G4int ntupleId) const
 {
-  return fNtupleManager->GetNtuple(ntupleId);
+  return fNtupleFileManager->GetNtupleManager()->GetNtuple(ntupleId);
 }  
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::wroot::ntuple*>::iterator G4RootAnalysisManager::BeginNtuple()
 {
-  return fNtupleManager->BeginNtuple();
+  return fNtupleFileManager->GetNtupleManager()->BeginNtuple();
 }  
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::wroot::ntuple*>::iterator G4RootAnalysisManager::EndNtuple()
 {
-  return fNtupleManager->EndNtuple();
+  return fNtupleFileManager->GetNtupleManager()->EndNtuple();
 }  
 
 //_____________________________________________________________________________
@@ -106,7 +108,7 @@ inline
 std::vector<tools::wroot::ntuple*>::const_iterator 
 G4RootAnalysisManager::BeginConstNtuple() const
 {
-  return fNtupleManager->BeginConstNtuple();
+  return fNtupleFileManager->GetNtupleManager()->BeginConstNtuple();
 }  
 
 //_____________________________________________________________________________
@@ -114,5 +116,5 @@ inline
 std::vector<tools::wroot::ntuple*>::const_iterator 
 G4RootAnalysisManager::EndConstNtuple() const
 {
-  return fNtupleManager->EndConstNtuple();
+  return fNtupleFileManager->GetNtupleManager()->EndConstNtuple();
 }  

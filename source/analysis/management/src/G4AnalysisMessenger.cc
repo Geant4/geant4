@@ -115,9 +115,9 @@ void G4AnalysisMessenger::SetH2HnManager(G4HnManager& h2HnManager)
 }  
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetH3HnManager(G4HnManager& h2HnManager)
+void G4AnalysisMessenger::SetH3HnManager(G4HnManager& h3HnManager)
 {
-  fH2HnMessenger = G4Analysis::make_unique<G4HnMessenger>(h2HnManager);
+  fH3HnMessenger = G4Analysis::make_unique<G4HnMessenger>(h3HnManager);
 }  
 
 //_____________________________________________________________________________

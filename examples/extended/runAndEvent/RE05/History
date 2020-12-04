@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-11-20 M. Asai (exampleRE05-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 01-28-19 M. Asai       (exampleRE05-V10-05-00)
 - Reduce the number of events in pythia_event.data to make it
   smaller than 2 MB. Number of events executed by the macro

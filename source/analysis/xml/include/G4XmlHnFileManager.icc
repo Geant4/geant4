@@ -1,0 +1,92 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
+
+#include "tools/waxml/histos"
+#include "tools/waxml/begend"
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4XmlHnFileManager<HT>::WriteExtra(
+  HT* ht, const G4String& htName, const G4String& fileName)
+{
+  // create a new file
+  std::ofstream hnFile(fileName);
+
+  // Do nothing if there is no file
+  if ( ! hnFile.is_open() ) return false;
+
+  // Write file opening
+  tools::waxml::begin(hnFile);
+
+  // no directory supported in this mode
+  G4String path = "/";
+
+  // write histo
+  auto result = tools::waxml::write(hnFile, *ht, path, htName);
+  if ( ! result) {
+    // TO DO: give an exception about failure
+    return false;
+  }
+
+  // close file
+  tools::waxml::end(hnFile);
+  hnFile.close();
+  return true;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4XmlHnFileManager<HT>::Write(
+  HT* ht, const G4String& htName,  G4String& fileName)
+{  
+  if ( fileName.empty()) {
+    // should not happen
+    G4cerr << "!!! Xml file name not defined." << G4endl;
+    G4cerr << "!!! Write " << htName << " failed." << G4endl;
+    return false;
+  }
+
+  auto hnFile = fFileManager->GetTFile(fileName);
+  if ( hnFile == nullptr ) {
+    // TO DO: give an exception, 
+    // this prototype can be used only with OpenFile() mode
+    G4ExceptionDescription description;
+    description 
+      << "Failed to get Xml file " << fileName; 
+    G4Exception("G4XmlHnFileManager<HT>::Write()",
+                "Analysis_W022", JustWarning, description);
+    return false;
+  }
+
+  G4String path = "/";
+  path.append(fFileManager->GetHistoDirectoryName());
+
+  auto result = tools::waxml::write(*hnFile, *ht, path, htName);
+  fFileManager->LockDirectoryNames();
+  return result;
+}

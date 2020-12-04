@@ -23,14 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ImportanceProcess
 //
-//
-// ----------------------------------------------------------------------
-// GEANT 4 class source file
-//
-// G4ImportanceProcess.cc
-//
-// ----------------------------------------------------------------------
+// Author: Michael Dressel, 2002
+// --------------------------------------------------------------------
 
 #include "G4ImportanceProcess.hh"
 #include "G4VImportanceAlgorithm.hh"
@@ -59,13 +55,10 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
    fParticleChange(new G4ParticleChange),
    fImportanceAlgorithm(aImportanceAlgorithm),
    fIStore(aIstore),
-   fPostStepAction(0),
-   fGhostWorldName("NoParallelWorld"),fGhostWorld(0),
-   fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0'),
-   fParaflag(para), fEndTrack('0'), feLimited(kDoNot)  
+   fParaflag(para)
 {
   G4cout << "### G4ImportanceProcess:: Creating " << G4endl;
-  if (TrackTerminator)
+  if (TrackTerminator != nullptr)
   {
     fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
   }
@@ -73,7 +66,7 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
   {
     fPostStepAction = new G4SamplingPostStepAction(*this);
   }
-  if (!fParticleChange)
+  if (fParticleChange == nullptr)
   {
     G4Exception("G4ImportanceProcess::G4ImportanceProcess()",
                 "FatalError", FatalException,
@@ -103,7 +96,7 @@ G4ImportanceProcess::~G4ImportanceProcess()
 
   delete fPostStepAction;
   delete fParticleChange;
-  //  delete fGhostStep;
+  // delete fGhostStep;
   // delete fGhostWorld;
   // delete fGhostNavigator;
 
@@ -159,7 +152,7 @@ void G4ImportanceProcess::StartTracking(G4Track* trk)
 // G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
 
   if(fParaflag) {
-    if(fGhostNavigator)
+    if(fGhostNavigator != nullptr)
       { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
     else
       {
@@ -437,7 +430,7 @@ AtRestGetPhysicalInteractionLength(const G4Track& ,
 G4VParticleChange* G4ImportanceProcess::
 AtRestDoIt(const G4Track&, const G4Step&) 
 {
-  return 0;
+  return nullptr;
 }
 
 G4VParticleChange* G4ImportanceProcess::
@@ -448,7 +441,6 @@ AlongStepDoIt(const G4Track& aTrack, const G4Step& )
   //AH  G4cout << " along step do it " << G4endl;
   pParticleChange->Initialize(aTrack);
   return pParticleChange; 
-  //  return 0;
 }
 
 void G4ImportanceProcess::CopyStep(const G4Step & step)

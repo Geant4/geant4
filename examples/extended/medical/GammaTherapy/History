@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10-11-20 B. Morgan (gtherapy-V10-06-00)
+- Migration to G4RunManagerFactory.
+- Remove PrimaryGeneratorAction as data member of RunAction as
+  it is not used by generated Run objects.
+
 09-05-18 B.Morgan (gtherapy-V10-04-02)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
@@ -48,7 +53,7 @@ track of all tags.
 
 10-04-17 S.Elles (gtherapy-V10-03-01)
 - Fix gcc warnings
-- Fix package memory leaks 
+- Fix package memory leaks
 
 06-04-17 S.Elles (gtherapy-V10-03-00)
 - Porting to MT
@@ -69,21 +74,21 @@ track of all tags.
 - Cleanup README
 
 01-04-13 A.Dotti (gtherapy-V09-06-02)
-- Changes for MT physics list implemented 
-     
+- Changes for MT physics list implemented
+
 15-03-13 mma (gtherapy-V09-06-01)
 - G4 coding conventions
 
 28-02-13 I. Hrivnacova (gtherapy-V09-06-00)
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   (Thanks to V. Ivantchenko for pointing at this.)
 
 14-11-12 I. Hrivnacova (gtherapy-V09-05-06)
 - Fixed order of instatiating G4VisExecutive and G4UIExecutive
   (required when Qt driver is activated).
-- Added compilations options G4VIS_USE, G4UI_USE in main  
+- Added compilations options G4VIS_USE, G4UI_USE in main
 
 24-10-12 A. Ribon (gtherapy-V09-05-05)
 - Migrated to the new stopping physics.
@@ -96,9 +101,9 @@ track of all tags.
 
 04-09-12 I. Hrivnacova (gtherapy-V09-05-02)
 - Updated CMakeLists.txt:
-  adding visualization, copying macros, install target and comment lines 
-- Added .README  
-     
+  adding visualization, copying macros, install target and comment lines
+- Added .README
+
 14-08-12  V.Ivant (gtherapy-V09-05-01)
 - Added forgoten class
 
@@ -112,20 +117,20 @@ track of all tags.
 - Introduced G4UIExecutive.
 
 26-10-10  V.Ivant (gtherapy-V09-03-04)
-- in PrimaryGeneratorAction.hh remove unused methods 
+- in PrimaryGeneratorAction.hh remove unused methods
 
 25-10-10  G.Folger  (gtherapy-V09-03-03)
-- in PrimaryGeneratorAction.hh, comment unused definition of 
+- in PrimaryGeneratorAction.hh, comment unused definition of
     G4ThreeVector GetBeamEnergy()
 
 21-10-10  V.Ivant (gtherapy-V09-03-02)
 - Cleanup AIDA histograms and analysis
 
 06-06-10 J.Perl (gtherapy-V09-03-01)
-- Remove unused variable in EventAction 
+- Remove unused variable in EventAction
 
 04-06-10 J.Perl (gtherapy-V09-03-00)
-- Updated vis usage 
+- Updated vis usage
 
 21-11-09  V.Ivant (gtherapy-V09-02-00)
 - update EM physics according to 9.3
@@ -138,7 +143,7 @@ track of all tags.
 - Provide a possibility to change cuts between runs
 
 25-05-07  V.Ivant (gtherapy-V08-03-02)
-- Fixed singleton GetPointer method 
+- Fixed singleton GetPointer method
 
 24-05-07  V.Ivant (gtherapy-V08-03-01)
 - substitute autoptr by normal pointers in Histo to avoid crash
@@ -160,15 +165,15 @@ track of all tags.
 - Fix crash connected with non-static hadrons
 
 23 August 05: V.Ivant (gtherapy-V07-01-01)
-- Add g4v71 builder 
+- Add g4v71 builder
 
 23 August 05: V.Ivant (gtherapy-V07-01-00)
-- Add vis.mac; 
-- Use standard angular distribution for lowenergy PhotoElectric 
+- Add vis.mac;
+- Use standard angular distribution for lowenergy PhotoElectric
 - Add histogram type (aida, root, hbook)
 
 7 June 05: V.Ivant (gtherapy-V07-00-04)
-- Fix step limiter UI 
+- Fix step limiter UI
 
 6 June 05: V.Ivant (gtherapy-V07-00-03)
 - Use "ApplyCuts" option
@@ -188,7 +193,7 @@ track of all tags.
 
 15 Dec 04: V.Ivant (gtherapy-V06-02-07)
 - Uncomment out the StepFunction in GammaTherapy.in
-- Uncommnet line in PhysicsList constructor,w hich is needed to 
+- Uncommnet line in PhysicsList constructor,w hich is needed to
   get UI command
 
 13 Dec 04: S.Sadilov (gtherapy-V06-02-06)
@@ -206,12 +211,12 @@ track of all tags.
 
 01-11-04 V.Ivan. (gtherapy-V06-02-02)
 - cleanup for the release
-     
+
 13-09-04 V.Ivan. (gtherapy-V06-02-01)
-- fix normalisation of histograms; 
-- change position of plane for scoring radial distribution 
-  from 10 cm to 7 cm;  
+- fix normalisation of histograms;
+- change position of plane for scoring radial distribution
+  from 10 cm to 7 cm;
 
 03-08-04 V.Ivan. (gtherapy-V06-02-00)
 - created;
-     
+

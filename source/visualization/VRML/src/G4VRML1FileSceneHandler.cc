@@ -208,12 +208,20 @@ void G4VRML1FileSceneHandler::closePort()
 		G4cout << "    setenv  " << ENV_VRML_VIEWER << "  vrweb " << G4endl;
 	  }
 	} else {
-		std::ostringstream ossCommand;
-		ossCommand << viewer << ' ' << fVRMLFileName;
-		strncpy(command,ossCommand.str().c_str(),sizeof(command)-1);
-                command[sizeof(command)-1] = '\0';
-		(void) system( command );
-	}
+          std::ostringstream ossCommand;
+          ossCommand << viewer << ' ' << fVRMLFileName;
+          strncpy(command,ossCommand.str().c_str(),sizeof(command)-1);
+          command[sizeof(command)-1] = '\0';
+          int iErr = system( command );
+          if ( iErr != 0 ) {
+            G4ExceptionDescription ed;
+            ed << "Error " << iErr
+            << " when calling system with \"" << command
+            << "\".";
+            G4Exception("G4VRML1FileSceneHandler::closePort()",
+                        "VRML-1006", JustWarning, ed);
+          }
+        }
 }
 
 G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;

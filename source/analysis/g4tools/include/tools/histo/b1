@@ -107,42 +107,42 @@ public:
   void hprint(std::ostream& a_out) {
     // A la HPRINT.
     a_out << parent::dimension() << parent::title() << std::endl;
-    a_out 
+    a_out
       << " * ENTRIES = " << parent::all_entries()
       << " * ALL CHANNELS = " << parent::sum_bin_heights()
       << " * UNDERFLOW = " << bin_height(axis_t::UNDERFLOW_BIN)
       << " * OVERFLOW = " << bin_height(axis_t::OVERFLOW_BIN)
       << std::endl;
-    a_out 
+    a_out
       << " * BIN WID = " << axis().bin_width(0)
       << " * MEAN VALUE = " << mean()
       << " * R . M . S = " << rms()
       << std::endl;
-  
+
     // Some bins :
     bn_t bins = axis().bins();
-    a_out 
-      << " * ENTRIES[0]   = " 
-      << bin_entries(0)    
-      << " * HEIGHT[0] = " 
-      << bin_height(0)    
-      << " * ERROR[0] = "     
-      << bin_error(0)    
+    a_out
+      << " * ENTRIES[0]   = "
+      << bin_entries(0)
+      << " * HEIGHT[0] = "
+      << bin_height(0)
+      << " * ERROR[0] = "
+      << bin_error(0)
       << std::endl;
-    a_out 
-      << " * ENTRIES[N/2] = " 
-      << bin_entries(bins/2)    
-      << " * HEIGHT[N/2] = " 
+    a_out
+      << " * ENTRIES[N/2] = "
+      << bin_entries(bins/2)
+      << " * HEIGHT[N/2] = "
       << bin_height(bins/2)
-      << " * ERROR[N/2] = " 
+      << " * ERROR[N/2] = "
       << bin_error(bins/2)
       << std::endl;
-    a_out 
-      << " * ENTRIES[N-1] = " 
-      << bin_entries(bins-1)    
-      << " * HEIGHT[N-1] = " 
+    a_out
+      << " * ENTRIES[N-1] = "
+      << bin_entries(bins-1)
+      << " * HEIGHT[N-1] = "
       << bin_height(bins-1)
-      << " * ERROR[N-1] = " 
+      << " * ERROR[N-1] = "
       << bin_error(bins-1)
       << std::endl;
   }

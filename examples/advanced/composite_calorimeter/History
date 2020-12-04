@@ -8,6 +8,9 @@
                       Example History file
                       ---------------------
 
+02.11.2020 - B.Morgan (ccal-V10-06-00)
+- Support same CMake version range as core Geant4
+
 18.11.2019 - G.Cosmo (ccal-V10-05-01)
 - Fixed cases of type conversions from size_t to G4int in CCaloSD.
 - Some code cleanup.
@@ -46,7 +49,7 @@
 - Fixed compilation warning on gcc-7.1 in CCalAnalysis constructor.
 
 01.08.2016 - A. Dotti   (ccal-V10-02-02)
-- Fix issues with a char* length 
+- Fix issues with a char* length
 
 02.11.2016 - L. Garnier (ccal-V10-02-01)
 - Remove icons.mac. Automatically include since interfaces-V10-02-07
@@ -111,19 +114,19 @@
 - Updated vis usage.
 
 12.11.2009 - A.Ribon (ccal-V09-02-01)
-- Use QGSP_BIC_EMY as default Physics List to test the 
+- Use QGSP_BIC_EMY as default Physics List to test the
   low-energy electromagnetic.
 
 22.02.2009
  -  G.Folger;     Tag: ccal-V09-02-00
     Fix compilation warnings in CCalRunAction.cc and CCalEndOfEventAction.cc
 
-15.06.2008 
+15.06.2008
  - G.A.P.Cirrone; Tag: ccal-V09-01-00
     Removed no more necessary AIDA commands from GNUmakefile
 
 14.11.2006 - A.Ribon (ccal-V08-01-01)
-- Removed hadronic_lists.gmk after the inclusion of 
+- Removed hadronic_lists.gmk after the inclusion of
   Physics Lists in the Geant4 kernel.
 
 21.07.2006 - A.Ribon (ccal-V08-01-00)
@@ -185,7 +188,7 @@
   using G4TouchableHistory.
 
 31.10.03 - A.Ribon (ccal-V05-02-01)
-- Enables possibility of running the simulation in HCal alone or 
+- Enables possibility of running the simulation in HCal alone or
   HCal+ECal mode with the correct B-field + a few small bug corrections.
   Changed also the default stepper (in magnetic field).
 
@@ -193,7 +196,7 @@
 - Complete migration to model EM physics
 
 12.06.2003 - A.Ribon (ccal-V05-01-02)
-- Updated the LHEP, QGSP, and QGSC Physics Lists. 
+- Updated the LHEP, QGSP, and QGSC Physics Lists.
   Done also some clean up.
 
 23.05.2003 - A.Ribon (ccal-V05-01-01)
@@ -233,4 +236,4 @@
 
 30.09.2002 - M.G.Pia
 - Created directory
-             
+

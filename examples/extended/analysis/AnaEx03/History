@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-20 B. Morgan (AnaEx03-V10-06-01)
+- Enforce use of Serial RunManager.
+
+10-11-20 B. Morgan (AnaEx03-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 26-11-19 I. Hrivnacova (AnaEx03-V10-05-00)
 - Fixed Doxygen warning
 
@@ -23,7 +29,7 @@ track of all tags.
 05-07-18 I. Hrivnacova (AnaEx03-V10-04-00)
 - Macro & commands review:
   - Removed obsolete /N03 top command directory
-  - Added protection against warnings issued from ReinitializeGeometry() if 
+  - Added protection against warnings issued from ReinitializeGeometry() if
     called in PreInit phase
   - Added test for all commands defined in this example in AnaEx01.in
   - Updated README files
@@ -45,11 +51,11 @@ track of all tags.
 
 28-08-15 I. Hrivnacova (AnaEx03-V10-01-01)
 - Fixed compilation on Windows
-	 
+
 27-08-15 I. Hrivnacova (AnaEx03-V10-01-00)
 - Introduced meaningful histograms and ntuple names instead of numbers
-  in all AnaEx0N examples and use histogram ids starting from 0  
-- Simplified HistoManager classes and fixed function names to follow 
+  in all AnaEx0N examples and use histogram ids starting from 0
+- Simplified HistoManager classes and fixed function names to follow
   coding guidelines
 - Removed G4ANALYSIS_USE ifdefs from AnaEx03, as this example is now build
   only with AIDA
@@ -61,16 +67,16 @@ track of all tags.
 05-11-14 I. Hrivnacova (AnaEx03-V10-00-03)
 - Including shared directory directly in the example
   to avoid out-of-project sources
-  - based on analysisShared-V10-00-00 
+  - based on analysisShared-V10-00-00
 - Adding utility scripts for GNUmake build (much simpler replacement
   for scripts from common) \
-  - based on analysisScripts-V10-00-00 
+  - based on analysisScripts-V10-00-00
 
 13-08-14 mma (AnaEx03-V10-00-02)
 - update Readme and .Readme again
 
 12-08-14 mma (AnaEx03-V10-00-01)
-- restaure calorimeter drawing in Readme and .Readme 
+- restaure calorimeter drawing in Readme and .Readme
 
 11-06-14 I. Hrivnacova (AnaEx03-V10-00-00)
 - Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
@@ -79,44 +85,44 @@ track of all tags.
 - Fixed SharedFilesList.txt - removed PhysicList class
 
 28-05-14 I. Hrivnacova
-- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03,
   removed PhysicList class from shared
   (tag in examples/analysis)
-    
-13-11-12 I. Hrivnacova (AnaEx03-V09-05-05)   
+
+13-11-12 I. Hrivnacova (AnaEx03-V09-05-05)
 - Fixed order of instatiating G4VisExecutive and G4UIExecutive
   (required when Qt driver is activated).
 
-03-09-12 I. Hrivnacova (AnaEx03-V09-05-04)   
+03-09-12 I. Hrivnacova (AnaEx03-V09-05-04)
 - New tag to be synchronized with the update in tests/ctest;
-  no changes in the example itself   
+  no changes in the example itself
 
-31-08-12 I. Hrivnacova (AnaEx03-V09-05-03)      
+31-08-12 I. Hrivnacova (AnaEx03-V09-05-03)
 - Updated CMakeLists.tx:
   adding install target, minor fixes
 - Added .README
-- UseOpenScientist.txt, InstallAida.txt moved in A01 
+- UseOpenScientist.txt, InstallAida.txt moved in A01
   (as README.AIDA, README.OpenScientist)
 
-21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-02)   
-- Updated CMakeLists.txt to get FindAIDA.cmake module found 
+21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-02)
+- Updated CMakeLists.txt to get FindAIDA.cmake module found
   by CMake automatically
-     
-21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-01)   
+
+21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-01)
 - Added AIDA support in CMake build
 
-15 June 2012 Gabriele Cosmo (AnaEx03-V09-05-00)     
+15 June 2012 Gabriele Cosmo (AnaEx03-V09-05-00)
 - Fixed compilation warnings in case analysis is not used...
 
 16 April 2012 Ivana Hrivnacova
 - Restored AnaEx01 example with AIDA under new name AnaEx03.
 
-07 June 2011 mma (AnaEx01-V09-04-01)     
+07 June 2011 mma (AnaEx01-V09-04-01)
 - PhysicsList migrated to new scheme G4PhysListHelper
-     
+
 03 February 2011 mma (AnaEx01-V09-04-00)
 - delete subdirectory analysis
-     
+
 08 November 2010 Michel Maire (AnaEx01-V09-03-00)
 - revised version of example :
   class HistoManager to replace AnaEx01AnalysisManager
@@ -130,7 +136,7 @@ track of all tags.
   In fact the analysis directory should not be distributed anymore.
 - have a run.mac in the main example directory.
 - AnaEx01AnalysisManager : arrange to have histo and tuple name
-  as interger in case of hbook file format. 
+  as interger in case of hbook file format.
 
 5 March 2009 Guy Barrand
 - GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since

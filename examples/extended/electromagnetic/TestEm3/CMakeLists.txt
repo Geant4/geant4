@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(TestEm3)
 
 #----------------------------------------------------------------------------
@@ -40,7 +43,7 @@ target_link_libraries(TestEm3 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(TestEm3_SCRIPTS
-    atlashec.mac dedx.mac emtutor.mac ionC12.mac lhcb.mac linac.mac lockwood.mac retrieveTables.mac
+    atlashec.mac dedx.mac emtutor.mac geom.mac ionC12.mac lhcb.mac linac.mac lockwood.mac
     run01.mac run02.mac storeTables.mac TestEm3.in TestEm3.out tileCal.mac vis.mac
   )
 

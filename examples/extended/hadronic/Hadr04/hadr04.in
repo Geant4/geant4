@@ -1,6 +1,5 @@
 #
 # Macro file for "Hadr04.cc"
-# (can be run in batch, without graphic)
 #
 # neutron 2 MeV; all processes
 #
@@ -12,11 +11,8 @@
 #
 /run/initialize
 #
-/process/list
-#
 /gun/particle neutron
 /gun/energy 2 MeV
 #
 /run/printProgress 100
-#
 /run/beamOn 1000

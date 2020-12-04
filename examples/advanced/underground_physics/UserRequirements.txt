@@ -75,31 +75,31 @@ PHYSICS:
 
 The following areas of physics should be included:
 
-UR 3.1:  ·     Low Energy Electromagnetic - to 250eV for both e and photons
+UR 3.1:  Â·     Low Energy Electromagnetic - to 250eV for both e and photons
                Maximum energy range around 10 MeV for any particle
-UR 3.2:  ·     Compton Scattering
-UR 3.3:  ·     Photoelectric Effect
-UR 3.4:  ·     Bremsstrahlung
-UR 3.5:  ·     Rayleigh Scattering - for both optical photons and hard
+UR 3.2:  Â·     Compton Scattering
+UR 3.3:  Â·     Photoelectric Effect
+UR 3.4:  Â·     Bremsstrahlung
+UR 3.5:  Â·     Rayleigh Scattering - for both optical photons and hard
                X-rays/Gammas
-UR 3.6:  ·     Electromagnetic ionisation
-UR 3.7:  ·     Delta Rays
+UR 3.6:  Â·     Electromagnetic ionisation
+UR 3.7:  Â·     Delta Rays
 	       Produced discretely down to 250eV to allow secondaries and
                tertiaries to be properly handled
-UR 3.8:  ·     Heavy Ion Transport - to 250eV for protons, alphas and nuclei
+UR 3.8:  Â·     Heavy Ion Transport - to 250eV for protons, alphas and nuclei
 	       Allows separate scintillation time and yield compared to gammas
                (electrons)
-UR 3.9:  ·     Radioactive Decay - induced
+UR 3.9:  Â·     Radioactive Decay - induced
 	       All materials are sensitive to induced activity as a consequence
                of photo-nuclear or neutron capture
-UR 3.10: ·     Radioactive Decay - sources
+UR 3.10: Â·     Radioactive Decay - sources
 	       Specific nuclei can be decayed within the geometry to reproduce
                experimental calibration the experiment
-UR 3.11: ·     Neutron tracking from medium energy (few MeV) to thermal capture
+UR 3.11: Â·     Neutron tracking from medium energy (few MeV) to thermal capture
 	       Discretely transported through-out the volume to give full
                detector response for both neutron capture activation and
                elastic and inelastic interaction in the target volume
-UR 3.12: ·     Scintillation light production and ray-tracing to PMT
+UR 3.12: Â·     Scintillation light production and ray-tracing to PMT
 	       Optical photon transport introduced to allow realistic
                detector response to be produced.
 
@@ -212,7 +212,7 @@ The user should have the ability to change several features including
     /run/verbose 
     /tracking/verbose
     /hits/verbose
-    /grdm/verbose
+    /process/had/rdm/verbose
     /dmx/gun/verbose
     
 

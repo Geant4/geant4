@@ -12,11 +12,17 @@ geant4_define_module(NAME G4root
     G4RootAnalysisManager.icc
     G4RootAnalysisReader.hh
     G4RootAnalysisReader.icc
+    G4RootFileDef.hh
     G4RootFileManager.hh
+    G4RootHnFileManager.hh
+    G4RootHnFileManager.icc
     G4RootMainNtupleManager.hh
+    G4RootNtupleFileManager.hh
     G4RootNtupleManager.hh
+    G4RootNtupleManager.icc
     G4RootPNtupleDescription.hh
     G4RootPNtupleManager.hh
+    G4RootPNtupleManager.icc
     G4RootRFileManager.hh
     G4RootRNtupleManager.hh
     g4root_defs.hh
@@ -26,6 +32,7 @@ geant4_define_module(NAME G4root
     G4RootAnalysisReader.cc
     G4RootFileManager.cc
     G4RootMainNtupleManager.cc
+    G4RootNtupleFileManager.cc
     G4RootNtupleManager.cc
     G4RootPNtupleManager.cc
     G4RootRFileManager.cc

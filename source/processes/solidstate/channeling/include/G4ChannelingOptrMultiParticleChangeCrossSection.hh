@@ -29,7 +29,7 @@
 //
 // Class Description:
 //        A G4VBiasingOperator concrete implementation example to
-//    illustrate how an operator can make use of an other operator.
+//    illustrate how an operator can make use of another operator.
 //        In the present case, the G4ChannelingOptrChangeCrossSection
 //    operator, that is made to bias processes of one particle
 //    type is instancied several times, one for each particle type

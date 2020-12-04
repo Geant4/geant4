@@ -41,7 +41,7 @@ The following cache variables may also be set
 
 # Just don't run if we're on macOS
 if(NOT APPLE)
-  message(FATAL_ERROR "FindXquartzGL is only for use on macOS platforms")
+  message(FATAL_ERROR "FindXQuartzGL is only for use on macOS platforms")
 endif()
 
 # - This is for X11 GL drivers, so we DON'T want Framework!
@@ -79,7 +79,7 @@ mark_as_advanced(XQuartzGL_INCLUDE_DIR XQuartzGL_gl_LIBRARY XQuartzGL_glu_LIBRAR
 if(XQuartzGL_FOUND)
   if(NOT TARGET XQuartzGL::GL)
     add_library(XQuartzGL::GL UNKNOWN IMPORTED)
-    set_target_properties(XQuartzGL::GL PROPERTIES 
+    set_target_properties(XQuartzGL::GL PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${XQuartzGL_INCLUDE_DIR}"
       IMPORTED_LOCATION "${XQuartzGL_gl_LIBRARY}"
     )
@@ -87,7 +87,7 @@ if(XQuartzGL_FOUND)
 
   if(NOT TARGET XQuartzGL::GLU AND XQuartzGL_glu_LIBRARY)
     add_library(XQuartzGL::GLU UNKNOWN IMPORTED)
-    set_target_properties(XQuartzGL::GLU PROPERTIES 
+    set_target_properties(XQuartzGL::GLU PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${XQuartzGL_INCLUDE_DIR}"
       INTERFACE_LINK_LIBRARIES XQuartzGL::GL
       IMPORTED_LOCATION "${XQuartzGL_glu_LIBRARY}"

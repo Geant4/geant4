@@ -1,0 +1,94 @@
+# Macro file for the visualization settings of the HGCal testbeam simulation
+#
+
+# Use these open statements to open selected visualization
+#
+# Use this open statement to create an OpenGL view:
+/vis/open OGL 800x600-0+0
+#
+# Use this open statement to create an OpenInventor view:
+#/vis/open OI
+#
+# Use this open statement to create a .prim file suitable for
+# viewing in DAWN:
+#/vis/open DAWNFILE
+#
+# Use this open statement to create a .heprep file suitable for
+# viewing in HepRApp:
+#/vis/open HepRepFile
+#
+# Use this open statement to create a .wrl file suitable for
+# viewing in a VRML viewer:
+#/vis/open VRML2FILE
+#
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#
+
+#
+# Specify view angle:
+/vis/viewer/set/hiddenMarker true
+/vis/viewer/set/viewpointThetaPhi -45 30
+/vis/viewer/zoom 2
+
+#
+# Specify style (surface, wireframe, auxiliary edges,...)
+/vis/viewer/set/style surface
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/lineSegmentsPerCircle 100
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+#
+# To draw only gammas:
+/vis/filtering/trajectories/create/particleFilter particleFilter-0
+/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To invert the above, drawing all particles except gammas,
+# keep the above two lines but also add:
+/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Momentum selection for the drawing
+/vis/filtering/trajectories/create/attributeFilter
+/vis/filtering/trajectories/attributeFilter-0/setAttribute IMag
+/vis/filtering/trajectories/attributeFilter-0/addInterval 10. MeV 1000 GeV
+/vis/modeling/trajectories/create/drawByAttribute
+/vis/modeling/trajectories/drawByAttribute-0/setAttribute IMag
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval1 1 MeV 10 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval2 10 MeV 100 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval3 100 MeV 200 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval4 200.0 MeV 500 MeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval5 500 MeV 0.9 GeV
+/vis/modeling/trajectories/drawByAttribute-0/addInterval interval6 0.9 GeV 10000 GeV
+/vis/modeling/trajectories/drawByAttribute-0/interval1/setLineColourRGBA 0.1 0.1 0.1 0.3
+/vis/modeling/trajectories/drawByAttribute-0/interval2/setLineColourRGBA 1 0.3 0 1
+/vis/modeling/trajectories/drawByAttribute-0/interval3/setLineColourRGBA 1 1 0 1
+/vis/modeling/trajectories/drawByAttribute-0/interval4/setLineColourRGBA 0 1 0 1
+/vis/modeling/trajectories/drawByAttribute-0/interval5/setLineColourRGBA 1 0 0 1
+/vis/modeling/trajectories/drawByAttribute-0/interval6/setLineColourRGBA 0 0 1 1
+
+# Make the background white
+/vis/viewer/set/background 1 1 1 1.0
+
+# Make the "World" box invisible
+/vis/geometry/set/visibility World 0 false
+
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
+# For file-based drivers, use this to create an empty detector view:
+#/vis/viewer/flush
+
+# Change the display limits
+/vis/ogl/set/displayListLimit 500000
+
+# Choose geometry setup
+/HGCalTestbeam/setup/configuration 0

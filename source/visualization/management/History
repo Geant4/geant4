@@ -25,6 +25,35 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+16 November 2020 Gabriele Cosmo (visman-V10-06-12)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+21 October 2020  Jonathan Madsen (visman-V10-06-11)
+- Implemented G4RunManagerFactory::GetMasterRunManager()
+
+21 October 2020  John Allison  (visman-V10-06-10)
+- G4VisManager: Improve logic of automatic event keeping.
+  o In MT mode, now keeps one (random) event when end-of-event action is "refresh".
+  o In MT mode, keeps events (up to a user-adjustable maximum number).
+  o These may be in addition to events kept by a user in his/her user actions.
+  o Improved messaging.
+
+15 October 2020  John Allison  (visman-V10-06-09)
+- Part of vis-V10-06-08.
+- G4VVisCommand.hh/cc, G4VisCommandsCompound.cc, G4VisCommandsSceneHandler.cc:
+  o Use command->CommandFailed() - remove internal fErrorCode.
+
+10 August 2020 John Allison  (visman-V10-06-08)
+- G4VVisCommand.cc, G4VisCommandsViewer.cc, G4VisManager.cc:
+  o Remove obsolete G4VIS_USE_STD11 and references to obsolete G4VIS_USE.
+    (G4VIS_USE was removed in Geant4 10.6.)
+
+04 August 2020 John Allison  (visman-V10-06-07)
+- G4VisCommandsScene.cc:
+  o Remove superfluous/unnecessary SetView in G4VisCommandSceneNotifyHandlers.
+- G4VisManager.cc:
+  o Protect algorithm in NotifyHandlers with IsValidView.
+
 18 June 2020 John Allison  (visman-V10-06-06)
 * G4VisCommandsSceneAdd.cc:
   /vis/scene/add/*Field: Correct guidance (red->green->blue).
@@ -422,7 +451,7 @@ History file for visualization management sub-category
 - G4VViewer::G4Spline: Remove.
 - /vis/viewer/set/timeWindow/displayLightFront: change defaults.
 - /vis/viewer/colourByDensity: change defaults.
- 
+
 24 July 2018  John Allison  (visman-V10-04-13)
 - G4VisCommandsViewer.cc:
   o /vis/viewer/interpolate: Fix gcc8 warnings.
@@ -585,7 +614,7 @@ History file for visualization management sub-category
 - G4VisManager:
   o Moved SetUserAction out of line and added warning message:
     "Deprecated.  Use RegisterRunDurationUserVisAction."
- 
+
 9th December 2016  John Allison (visman-V10-03-00)
 - Coworks with modeling-V10-03-00.
 - G4VVisCommand:
@@ -720,7 +749,7 @@ std::ostream& operator <<
 - G4ViewParameters.cc:
   o G4ViewParameters::CatmullRomCubicSplineInterpolation:
     Improved interpolation of vis attributes modifiers.
-    
+
 14th August 2016  John Allison (visman-V10-02-19)
 -  Ooops.  Now as stated.
 
@@ -798,7 +827,7 @@ G4VisCommandViewerClone::SetNewValue
   available on Windows because it uses popen, a way of getting
   output from a system command. _popen (with an underscore) is
   said to be available in Windows but this has not been tried.
- 
+
 1st June 2016  John Allison  (visman-V10-02-11)
 - Introduced /vis/viewer/interpolate.  See History from development
   branch visman-V10-02-02-branch as follows:
@@ -850,7 +879,7 @@ G4VisCommandViewerClone::SetNewValue
 26th January 2016  John Allison
 - Merged visman-V10-02-03: G4VisManager::G4VisSubThread:
   GetNavigatorForTracking -> SetWorldVolume
-  This is required for OriginVolume drawing and filtering. 
+  This is required for OriginVolume drawing and filtering.
 24th January 2016  John Allison  (visman-V10-02-02-branch-04)
 - Refinements.
 23rd January 2016  John Allison  (visman-V10-02-02-branch-01)
@@ -916,7 +945,7 @@ G4VisCommandViewerClone::SetNewValue
 26th January 2016  John Allison  (visman-V10-02-03)
 - G4VisManager::G4VisSubThread:
   GetNavigatorForTracking -> SetWorldVolume
-  This is required for OriginVolume drawing and filtering. 
+  This is required for OriginVolume drawing and filtering.
 
 14th January 2016  John Allison  (visman-V10-02-02)
 - Improved /vis/viewer/save.
@@ -935,14 +964,14 @@ G4VisCommandViewerClone::SetNewValue
 - G4VViewer:
   o Add ComputeFlyThrough method (beta)
   o Add an G4Spline class for testing
-    
+
 1st November 2015  John Allison  (visman-V10-01-20)
 - Introduced (again!) <chrono> for queue handling in MT mode.
   o Except for Xeon Phi, which is protected by #ifndef __MIC__
 
 15th October 2015  John Allison  (visman-V10-01-19)
 - G4VisManager.cc:
-  o Corrected end-of-run printing for the case of 
+  o Corrected end-of-run printing for the case of
   "/vis/multithreading/actionOnEventQueueFull discard".
 - G4VisCommandsViewer.cc:
   o Improved guidance and confirmation printing for /vis/viewer/save.
@@ -1242,7 +1271,7 @@ G4VisCommandViewerClone::SetNewValue
 1st October 2014  Laurent Garnier
 -G4VSceneHandler.cc:
   o AddPrimitive (const G4Scale& scale) : Remove unnecessary initialization
--G4VisManager : 
+-G4VisManager :
   o Change G4cerr instead of G4cout on some error messages
   o Add a warning in SetCurrentViewer() when no scene handler present
 
@@ -1281,12 +1310,12 @@ G4VisCommandViewerClone::SetNewValue
 
 9th July 2014  Laurent Garnier (visman-V10-00-13)
 - Change some G4cout in G4err in case of error messages in
-  G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet, 
+  G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet,
   G4VisCommandsTouchable, G4VisCommandsTouchableSet, G4VisCommandViewerDefault, G4VisCommandsViewerSet
 
 8th July 2014  Laurent Garnier (visman-V10-00-12)
-- G4VisCommandViewer : 
-  o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples. 
+- G4VisCommandViewer :
+  o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples.
   o Set verbosity on "/vis/viewer/update" to G4cout instead of G4cerr and change the message
 
 7th July 2014  Laurent Garnier (visman-V10-00-11)
@@ -1369,9 +1398,9 @@ G4VisCommandViewerClone::SetNewValue
 
 21st November 2013  Makoto Asai (visman-V09-06-26)
 - Move invokation with G4TransportationManager in G4VisCommandsSceneAdd.cc
-  to G4TrakingMessenger. G4TransportationManager is thread-local. 
+  to G4TrakingMessenger. G4TransportationManager is thread-local.
   G4VisCommandsSceneAdd.cc cannot access to G4TransportationManager.
-   
+
 15th November 2013  John Allison
 - Some changes as suggested by PVS.
 - Fixes for Coverity.
@@ -1780,7 +1809,7 @@ G4VisCommandViewerClone::SetNewValue
       twice!!  This was an attempt to fix a curious problem whereby
       trajectories were not refreshed.  Probably the go only to the
       back buffer, because a second refresh seems to do the trick.
-  o /vis/scene/list: Improved. 
+  o /vis/scene/list: Improved.
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:
   o Small improvement to guidance and code readability.
 
@@ -1918,7 +1947,7 @@ G4VisCommandViewerClone::SetNewValue
 
 3rd January 2012  John Allison (visman-V09-05-01)
 - G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
-  o Downgraded "scene has changed" from WARNING to NOTE. 
+  o Downgraded "scene has changed" from WARNING to NOTE.
 
 2nd January 2012  John Allison
 - G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
@@ -2150,7 +2179,7 @@ G4VisCommandViewerClone::SetNewValue
 
 9th March 2010 Laurent Garnier
  - G4OpenGLViewer : Fix clipping when resizing non square size windows
-  
+
 8th March 2010 Laurent Garnier
 -G4VisManager.cc : Add protection against null pointer
 
@@ -2244,9 +2273,9 @@ G4VisCommandViewerClone::SetNewValue
   argument, such as "800x400" or "800x400-0+0".)
 
 2nd December, Laurent Garnier
- - G4ViewParameters.hh G4ViewParameters.icc G4VisManager.hh G4VisManager.icc 
+ - G4ViewParameters.hh G4ViewParameters.icc G4VisManager.hh G4VisManager.icc
    G4ViewParameters.cc G4VisManager.cc G4VViewer.cc G4VisCommandsViewer.cc,
-   do a lot of change to be able to pass XString like 400x600-0+0 to viewers 
+   do a lot of change to be able to pass XString like 400x600-0+0 to viewers
    and set position and location. It will work for Qt, X, Win32 for the moment.
 
 27th July 2008  John Allison (visman-V09-01-05)
@@ -2263,7 +2292,7 @@ G4VisCommandViewerClone::SetNewValue
  - Fixed gcc-4.3.0 compiler warnings.
 
 5th February 2008, Laurent Garnier
- - Implemented a function in order to IncrementPan with X,Y,Z values 
+ - Implemented a function in order to IncrementPan with X,Y,Z values
 
 29th January 2008  John Allison  (visman-V09-01-01)
  - G4VisExecutive.icc: Re-instated G4DAWNFILE (somehow got lost!!)
@@ -2569,7 +2598,7 @@ G4VisCommandViewerClone::SetNewValue
 4th May 2006  John Allison  (visman-V08-00-15)
 - Improved protection for null models and parameters.
 
-2nd May 2006 Jane Tinslay 
+2nd May 2006 Jane Tinslay
 - Add G4TrajectoryGenericDrawerFactory to G4VisExecutive
 - Add FilterTrajectory method to G4VisManager
 
@@ -2706,7 +2735,7 @@ G4VisCommandViewerClone::SetNewValue
   user has not instantiated a scene handler, e.g., in batch mode.
 
 29th November 2005  Jane Tinslay
-- Make G4VisManager::RegisterModelFactories() non-pure for 
+- Make G4VisManager::RegisterModelFactories() non-pure for
   backwards compatibility.
 - Add information message to G4VisManager::DispatchToModel when default trajectory
   model is used.

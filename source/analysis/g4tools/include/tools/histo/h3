@@ -41,42 +41,42 @@ public:
 
   bool fill(TC aX,TC aY,TC aZ,TW aWeight = 1) {
     if(parent::m_dimension!=3) return false;
-  
+
     bn_t ibin,jbin,kbin;
     if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
     if(!parent::m_axes[1].coord_to_absolute_index(aY,jbin)) return false;
     if(!parent::m_axes[2].coord_to_absolute_index(aZ,kbin)) return false;
     TO offset = ibin + jbin * parent::m_axes[1].m_offset + kbin * parent::m_axes[2].m_offset;
-  
+
     parent::m_bin_entries[offset]++;
     parent::m_bin_Sw[offset] += aWeight;
     parent::m_bin_Sw2[offset] += aWeight * aWeight;
-  
+
     TC xw = aX * aWeight;
     TC x2w = aX * xw;
     parent::m_bin_Sxw[offset][0] += xw;
     parent::m_bin_Sx2w[offset][0] += x2w;
-  
+
     TC yw = aY * aWeight;
     TC y2w = aY * yw;
     parent::m_bin_Sxw[offset][1] += yw;
     parent::m_bin_Sx2w[offset][1] += y2w;
-  
+
     TC zw = aZ * aWeight;
     TC z2w = aZ * zw;
     parent::m_bin_Sxw[offset][2] += zw;
     parent::m_bin_Sx2w[offset][2] += z2w;
-  
+
     bool inRange = true;
     if(ibin==0) inRange = false;
     else if(ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
-  
+
     if(jbin==0) inRange = false;
     else if(jbin==(parent::m_axes[1].m_number_of_bins+1)) inRange = false;
-  
+
     if(kbin==0) inRange = false;
     else if(kbin==(parent::m_axes[2].m_number_of_bins+1)) inRange = false;
-  
+
     parent::m_all_entries++;
     if(inRange) {
       parent::m_in_range_plane_Sxyw[0] += aX * aY * aWeight;
@@ -87,7 +87,7 @@ public:
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
       parent::m_in_range_Sw2 += aWeight*aWeight;
-  
+
       parent::m_in_range_Sxw[0] += xw;
       parent::m_in_range_Sx2w[0] += x2w;
 
@@ -97,7 +97,7 @@ public:
       parent::m_in_range_Sxw[2] += zw;
       parent::m_in_range_Sx2w[2] += z2w;
     }
-   
+
     return true;
   }
 
@@ -219,24 +219,24 @@ public:
     return true;
   }
 
-  bool multiply(const h3& a_histo) {  
+  bool multiply(const h3& a_histo) {
     return parent::base_multiply(a_histo);
   }
-  
+
   bool divide(const h3& a_histo) {
     return parent::base_divide(a_histo);
   }
 
   bool equals_TH(const h3& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
-    if(!parent::equals_TH(a_from,a_prec,a_fabs,true)) return false;    
+    if(!parent::equals_TH(a_from,a_prec,a_fabs,true)) return false;
     return true;
   }
-  
+
   void not_a_profile() const {}
 
 public: //CERN-ROOT API
   bool Fill(TC aX,TC aY,TC aZ,TW aWeight = 1) {return fill(aX,aY,aZ,aWeight);}
-  
+
 public:
 /*
   // Slices :

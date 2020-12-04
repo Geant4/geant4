@@ -35,20 +35,20 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
  
   The default geometry is constructed in DetectorConstruction class.
 
-  The size of detector can be controlled by PrimaryKiller class (see section 5.2)
+  The size of detector can be controlled by PrimaryKiller class (see section \ref CHEM6_s5)
   in order to prevent crash.
 
 \section CHEM6_s3 PHYSICS LIST
 
   PhysicsList is Geant4 modular physics list using:
 
-  G4EmDNAPhysics_option2 constructor
-  # the accelerated physics constructor based on G4EmDNAPhysics constructor.
+  G4EmDNAPhysics_option2 constructor:
+  - the accelerated physics constructor based on G4EmDNAPhysics constructor.
 
-  G4EmDNAChemistry_option3 constructor.
-  # the chemistry constructor is based on the pre-chemical stage of PARTRAC
+  G4EmDNAChemistry_option3 constructor:
+  - the chemistry constructor is based on the pre-chemical stage of PARTRAC
   and chemical parameters of RITRACKS.
-  # this chemistry constructor uses independent reaction time method as a
+  - this chemistry constructor uses independent reaction time method as a
   default.
 
 \section CHEM6_s4  ACTION INITALIZATION
@@ -58,13 +58,13 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
 
   While in sequential mode the action classes are instantiated just once,
   via invoking the method
-    ActionInitialization::Build()
+      ActionInitialization::Build()
   in multi-threading mode the same method is invoked for each thread worker
   and so all user action classes are defined thread-local.
 
   A run action class is instantiated both thread-local
   and global that's why its instance is created also in the method
-    ActionInitialization::BuildForMaster()
+      ActionInitialization::BuildForMaster()
   which is invoked only in multi-threading mode.
 
 \section CHEM6_s5 AN EVENT: PRIMARY GENERATOR
@@ -73,6 +73,7 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
    of the box. The type of the particle and its energy are set in the
   PrimaryGeneratorAction class, and can be changed via the G4 build-in
   commands of G4ParticleGun class.
+
   The chemistry module is triggered in the StackingAction class when all
   physical tracks have been processed.
 
@@ -141,8 +142,8 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
   The size of detector can be controlled by this class using user macro command:
 
 \verbatim
-  /primaryKiller/setSize 5 5 5 um
-  # kill the particles (primary and secondary) outside of the virtual volume
+/primaryKiller/setSize 5 5 5 um
+# kill the particles (primary and secondary) outside of the virtual volume
 \endverbatim
 
 \subsection CHEM6_s6_sub3 LET scorer
@@ -161,15 +162,14 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
   This method is not recommended for IRT method.
 
   These two method are called before and after every time steps:
-
-  TimeStepAction::UserPreTimeStepAction()
-  TimeStepAction::UserPostTimeStepAction()
+  - TimeStepAction::UserPreTimeStepAction()
+  - TimeStepAction::UserPostTimeStepAction()
 
   This method is called when a chemical reaction is occurred:
+  - TimeStepAction::UserReactionAction(const G4Track&, const G4Track&, const std::vector<G4Track*>*)
 
-  TimeStepAction::UserReactionAction(const G4Track&, const G4Track&, const std::vector<G4Track*>*)
+In order to access to molecular information:
 \verbatim
-In order to access to molecular information,
 #include "G4Molecule.hh"
 G4Molecule* thisIsMyMolecule = GetMolecule(thisIsMyTrack);
 const G4String& moleculeName = thisIsMyMolecule->GetName();
@@ -187,8 +187,9 @@ const G4String& moleculeName = thisIsMyMolecule->GetName();
   Physics initialization and the defined reaction table are printed.
   G4Scheduler processes the chemical stage time step after time step.
   Chemical reactions are printed.
-    The molecular reaction as a function of the elapsed time can be displayed
-   setting the macro command /scheduler/verbose 1
+
+  The molecular reaction as a function of the elapsed time can be displayed
+  setting the macro command /scheduler/verbose 1
    
 \section CHEM6_s10 RELEVANT MACRO FILES
 
@@ -208,10 +209,10 @@ const G4String& moleculeName = thisIsMyMolecule->GetName();
   Two root macros can be used:
 
 \verbatim
-  root plotG_time.root
-  # plot G values as a function of time according to the molecular species by importing Species0.root.
+root plotG_time.root
+# plot G values as a function of time according to the molecular species by importing Species0.root.
   
-  root plotG_LET.root
-  # plot G values as a function of LET according to the molecular species by importing Species.txt.
+root plotG_LET.root
+# plot G values as a function of LET according to the molecular species by importing Species.txt.
 \endverbatim
 */

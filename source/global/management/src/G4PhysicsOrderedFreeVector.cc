@@ -58,6 +58,30 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double* Energies,
 }
 
 // --------------------------------------------------------------------
+G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(
+  const std::vector<G4double>& Energies, const std::vector<G4double>& Values)
+  : G4PhysicsVector()
+{
+  if(Energies.size() != Values.size())
+  {
+    G4ExceptionDescription ed;
+    ed << "The sizes of the two std::vector arguments must be the same";
+    G4Exception("G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()",
+                "glob04", FatalException, ed);
+  }
+
+  type = T_G4PhysicsOrderedFreeVector;
+
+  dataVector.reserve(Energies.size());
+  binVector.reserve(Energies.size());
+
+  for(std::size_t i = 0; i < Energies.size(); ++i)
+  {
+    InsertValues(Energies[i], Values[i]);
+  }
+}
+
+// --------------------------------------------------------------------
 G4PhysicsOrderedFreeVector::~G4PhysicsOrderedFreeVector() {}
 
 // --------------------------------------------------------------------

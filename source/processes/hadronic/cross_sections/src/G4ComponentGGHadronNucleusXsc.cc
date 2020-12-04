@@ -293,7 +293,7 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4int A, G4int Z)
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// Returns hadron-nucleon total Xsc according to differnt parametrisations:
+// Returns hadron-nucleon total Xsc according to different parametrisations:
 
 G4double G4ComponentGGHadronNucleusXsc::GetHadronNucleonXsc(
          const G4DynamicParticle* aParticle, const G4Element* anElement)
@@ -306,7 +306,7 @@ G4double G4ComponentGGHadronNucleusXsc::GetHadronNucleonXsc(
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// Returns hadron-nucleon total Xsc according to differnt parametrisations:
+// Returns hadron-nucleon total Xsc according to different parametrisations:
 
 G4double G4ComponentGGHadronNucleusXsc::GetHadronNucleonXsc(
          const G4DynamicParticle* aParticle, G4int, G4int)

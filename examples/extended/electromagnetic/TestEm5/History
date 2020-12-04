@@ -13,7 +13,40 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05-10-20 mma (testem5-V10-06-04)
+- StackingAction - log histograms : revert to previous version 
+- clean up of pixe.mac and pixe.C
+- remove obsolete fluo.mac 
+       
+07-09-20 mma (testem5-V10-06-03)
+- Finalize macro & commands review:
+  - Added remaining macro descriptions
+  - Added geom.mac for testing remaining commands
+    and reverted previous modifications in TestEm5.in
 
+31-08-20 I.Hrivnacova (testem5-V10-06-02)
+- Macro & commands review:
+  - Added macro descriptions in README; removed info about geant3 directory
+    which was removed in the past
+  - Extended TestEm5.in with commands (missing in testing):
+    /testem/det/setAbsXpos
+    /testem/det/setWorldX
+    /testem/det/setWorldYZ
+    /testem/det/setWorldMat
+    /testem/gun/rndm 0.1
+
+03-07-20 mma (testem5-V10-06-01)
+- update hanson/hanson.C
+- add hanson/19um-wwols.ascii and 9um too
+  Proposed by Weronika Wolszczak (TU Delft University) 
+- update berger/berger.C 
+     
+27-06-20 mma (testem5-V10-06-00)
+- TrackingAction - correct weight for solid angle histograms
+- update hanson.mac and hanson/hanson.C
+- idem for berger.mac
+		  
 15-01-19 V.Ivant (testem5-V10-05-00)
 - StackinAction - fixed all log histograms, which where filled in a wrong 
                   way

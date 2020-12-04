@@ -63,7 +63,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, G4double theEmax,
   }
   type = T_G4PhysicsLogVector;
 
-  invdBin = 1. / (G4Log(theEmax / theEmin) / (G4double) numberOfNodes);
+  invdBin = 1. / (G4Log(theEmax / theEmin) / (G4double) (numberOfNodes - 1));
   baseBin = G4Log(theEmin) * invdBin;
 
   dataVector.reserve(numberOfNodes);

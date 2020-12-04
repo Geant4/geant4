@@ -98,7 +98,7 @@ private:
                             G4double zParticle) const;
   // returns the energy loss via the quantal harmonic oscillator model 
    
-  // get number of shell, energy and oscillator strenghts for material
+  // get number of shell, energy and oscillator strengths for material
   G4int GetNumberOfShell(const G4Material* material) const;
 
   G4double GetShellEnergy(const G4Material* material,G4int nbOfTheShell) const; 
@@ -117,7 +117,7 @@ private:
   // Z of element at now avaliable for the model
   static const G4int materialAvailable[6];
   
-  // number, energy and oscillator strenghts
+  // number, energy and oscillator strengths
   // for an harmonic oscillator model of material
   static const G4int nbofShellForMaterial[6];
   static const G4double alShellEnergy[3];

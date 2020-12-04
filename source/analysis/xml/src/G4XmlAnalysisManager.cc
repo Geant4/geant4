@@ -28,10 +28,13 @@
 
 #include "G4XmlAnalysisManager.hh"
 #include "G4XmlFileManager.hh"
-#include "G4XmlNtupleManager.hh"
+#include "G4XmlNtupleFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
+
+using std::make_shared;
 
 // mutex in a file scope
 
@@ -71,8 +74,8 @@ G4bool G4XmlAnalysisManager::IsInstance()
 //_____________________________________________________________________________
 G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
  : G4ToolsAnalysisManager("Xml", isMaster),
-   fNtupleManager(nullptr),
-   fFileManager(nullptr)
+   fFileManager(nullptr),
+   fNtupleFileManager(nullptr)
 {
   if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
@@ -86,15 +89,14 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
   if ( isMaster ) fgMasterInstance = this;
   fgInstance = this;
   
-  // Create managers
-  fNtupleManager = new G4XmlNtupleManager(fState);
+  // File Manager
   fFileManager = std::make_shared<G4XmlFileManager>(fState);
-  fNtupleManager->SetFileManager(fFileManager);
-      // The managers will be deleted by the base class
-  
-  // Set managers to base class which takes then their ownership
-  SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
+
+  // Ntuple file manager
+  fNtupleFileManager = std::make_shared<G4XmlNtupleFileManager>(fState);
+  fNtupleFileManager->SetFileManager(fFileManager);
+  fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 
 //_____________________________________________________________________________
@@ -234,32 +236,6 @@ G4bool G4XmlAnalysisManager::WriteP2()
 }
     
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::WriteNtuple()
-{
-  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
-
-  for ( auto ntuple : ntupleVector ) {
-    if ( ntuple->fNtuple ) ntuple->fNtuple->write_trailer();
-  }
-  
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CloseNtupleFiles()
-{
-  auto ntupleDescriptionVector = fNtupleManager->GetNtupleDescriptionVector();
-
-  // Close ntuple files
-  for ( auto ntupleDescription : ntupleDescriptionVector) {
-    fFileManager->CloseNtupleFile((ntupleDescription));
-  }
-  
-  return true;
-}    
-
-
-//_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::Reset()
 {
 // Reset histograms and ntuple
@@ -269,12 +245,12 @@ G4bool G4XmlAnalysisManager::Reset()
   auto result = G4ToolsAnalysisManager::Reset();
   finalResult = finalResult && result;
   
-  result = fNtupleManager->Reset(true);
+  result = fNtupleFileManager->Reset();
   finalResult = finalResult && result;
   
   return finalResult;
 }  
- 
+
 // 
 // protected methods
 //
@@ -282,36 +258,20 @@ G4bool G4XmlAnalysisManager::Reset()
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
+  // Create ntuple manager(s)
+  // and set it to base class which takes then their ownership
+  SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
+
   auto finalResult = true;
-  auto result = fFileManager->SetFileName(fileName);
+
+  // Save file name in file manager
+  auto result = fFileManager->OpenFile(fileName);
   finalResult = finalResult && result;
 
-#ifdef G4VERBOSE
-  auto name = fFileManager->GetFullFileName();
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("open", "analysis file", name);
-  }  
-#endif
-
-  // Only lock file name in file manager
-  result = fFileManager->OpenFile(fileName);
+  // Open ntuple files and create ntuples from bookings
+  result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
   finalResult = finalResult && result;
 
-  // Create histograms file (on master)
-  if ( fState.GetIsMaster() ) {
-    result = fFileManager->CreateHnFile();
-    finalResult = finalResult && result;
-  }  
-
-  // Create ntuples if they are booked
-  // (The files will be created with creating ntuples)
-  fNtupleManager->CreateNtuplesFromBooking();
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("open", "analysis file", name, finalResult);
-#endif
-  
   return finalResult;
 }  
   
@@ -321,13 +281,13 @@ G4bool G4XmlAnalysisManager::WriteImpl()
   auto finalResult = true;
 
 #ifdef G4VERBOSE
-  auto name = fFileManager->GetFullFileName();
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("write", "files", name);
+  if ( fState.GetVerboseL4() ) {
+    fState.GetVerboseL4()->Message("write", "files", "");
+  }
 #endif
 
   // ntuples 
-  WriteNtuple();
+  fNtupleFileManager->ActionAtWrite();
 
   if ( ! fgMasterInstance && 
        ( ( ! fH1Manager->IsEmpty() ) || ( ! fH2Manager->IsEmpty() ) || 
@@ -341,10 +301,6 @@ G4bool G4XmlAnalysisManager::WriteImpl()
       << "      " << "Histogram data will not be merged.";
       G4Exception("G4XmlAnalysisManager::Write()",
                 "Analysis_W031", JustWarning, description);
-                
-    // Create Hn file per thread
-    auto result = fFileManager->CreateHnFile();
-    if ( ! result ) return false;       
   }
 
   // H1
@@ -371,12 +327,12 @@ G4bool G4XmlAnalysisManager::WriteImpl()
   if ( IsAscii() ) {
     result = WriteAscii(fFileManager->GetFileName());
     finalResult = finalResult && result;
-  }   
+  }
 
 #ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("write", "file", fFileManager->GetFullFileName(), finalResult);
+  if ( fState.GetVerboseL2() ) {
+    fState.GetVerboseL2()->Message("write", "files", "", finalResult);
+  }
 #endif
 
   return finalResult;
@@ -392,36 +348,33 @@ G4bool G4XmlAnalysisManager::CloseFileImpl(G4bool reset)
     fState.GetVerboseL4()->Message("close", "files", "");
 #endif
 
-  // Unlock file name only
-  auto result = fFileManager->CloseFile();
+  // close open files
+  auto result = fFileManager->CloseFiles();
   finalResult = finalResult && result;
   
   // Close Hn file
-  result = fFileManager->CloseHnFile();  
-  finalResult = finalResult && result;
+  // result = fFileManager->CloseHnFile();  
+  // finalResult = finalResult && result;
   
   // Close ntuple files
-  result = CloseNtupleFiles();
+  result = fNtupleFileManager->ActionAtCloseFile(reset);
   finalResult = finalResult && result;
 
-  // reset data
+  // Reset data
   if ( reset ) {
     result = Reset();
-  } else {
-    // ntuple must be reset 
-    result = fNtupleManager->Reset(true);
+    if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "Resetting data failed";
+        G4Exception("G4XmlAnalysisManager::CloseFile()",
+                  "Analysis_W021", JustWarning, description);
+    }
+    finalResult = finalResult && result;
   }
-  if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Resetting data failed";
-      G4Exception("G4XmlAnalysisManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
-  } 
-  finalResult = finalResult && result;
 
   // delete files if empty
   // (ntuple files are created only if an ntuple is created)
-  if ( fFileManager->GetHnFile().get() && 
+  if ( fFileManager->GetFile() &&
        fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
        fP1Manager->IsEmpty() && fP2Manager->IsEmpty() ) {
     result = ! std::remove(fFileManager->GetFullFileName());

@@ -46,6 +46,8 @@ class G4XmlRFileManager : public G4BaseFileManager
     explicit G4XmlRFileManager(const G4AnalysisManagerState& state);
     ~G4XmlRFileManager();
 
+    virtual G4String GetFileType() const final { return "xml"; }
+
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName);
 

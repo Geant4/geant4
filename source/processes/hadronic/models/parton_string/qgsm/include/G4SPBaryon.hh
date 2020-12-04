@@ -48,6 +48,35 @@
 #include "G4AntiLambda.hh"
 #include "G4AntiOmegaMinus.hh"
 
+#include "G4LambdacPlus.hh"
+#include "G4AntiLambdacPlus.hh"
+#include "G4SigmacPlusPlus.hh"
+#include "G4AntiSigmacPlusPlus.hh"
+#include "G4SigmacPlus.hh"
+#include "G4AntiSigmacPlus.hh"
+#include "G4SigmacZero.hh"
+#include "G4AntiSigmacZero.hh"
+#include "G4XicPlus.hh"
+#include "G4AntiXicPlus.hh"
+#include "G4XicZero.hh"
+#include "G4AntiXicZero.hh"
+#include "G4OmegacZero.hh"
+#include "G4AntiOmegacZero.hh"
+#include "G4Lambdab.hh"
+#include "G4AntiLambdab.hh"
+#include "G4SigmabPlus.hh"
+#include "G4AntiSigmabPlus.hh"
+#include "G4SigmabZero.hh"
+#include "G4AntiSigmabZero.hh"
+#include "G4SigmabMinus.hh"
+#include "G4AntiSigmabMinus.hh"
+#include "G4XibZero.hh"
+#include "G4AntiXibZero.hh"
+#include "G4XibMinus.hh"
+#include "G4AntiXibMinus.hh"
+#include "G4OmegabMinus.hh"
+#include "G4AntiOmegabMinus.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4SPPartonInfo.hh"
 #include <vector>
@@ -79,6 +108,36 @@ class G4SPBaryon
     G4SPBaryon(G4ParticleDefinition * aDefinition);
 
     ~G4SPBaryon();
+  
+    // Extension to charmed and bottom baryons and anti-baryons
+    G4SPBaryon(G4LambdacPlus * aLambdacPlus);
+    G4SPBaryon(G4AntiLambdacPlus * aAntiLambdacPlus);
+    G4SPBaryon(G4SigmacPlusPlus * aSigmacPlusPlus);
+    G4SPBaryon(G4AntiSigmacPlusPlus * aAntiSigmacPlusPlus);
+    G4SPBaryon(G4SigmacPlus * aSigmacPlus);
+    G4SPBaryon(G4AntiSigmacPlus * aAntiSigmacPlus);
+    G4SPBaryon(G4SigmacZero * aSigmacZero);
+    G4SPBaryon(G4AntiSigmacZero * aAntiSigmacZero);
+    G4SPBaryon(G4XicPlus * aXicPlus);
+    G4SPBaryon(G4AntiXicPlus * aAntiXicPlus);
+    G4SPBaryon(G4XicZero * aXicZero);
+    G4SPBaryon(G4AntiXicZero * aAntiXicZero);
+    G4SPBaryon(G4OmegacZero * aOmegacZero);
+    G4SPBaryon(G4AntiOmegacZero * aAntiOmegacZero);
+    G4SPBaryon(G4Lambdab * aLambdab);
+    G4SPBaryon(G4AntiLambdab * aAntiLambdab);
+    G4SPBaryon(G4SigmabPlus * aSigmabPlus);
+    G4SPBaryon(G4AntiSigmabPlus * aAntiSigmabPlus);
+    G4SPBaryon(G4SigmabZero * aSigmabZero);
+    G4SPBaryon(G4AntiSigmabZero * aAntiSigmabZero);
+    G4SPBaryon(G4SigmabMinus * aSigmabMinus);
+    G4SPBaryon(G4AntiSigmabMinus * aAntiSigmabMinus);
+    G4SPBaryon(G4XibZero * aXibZero);
+    G4SPBaryon(G4AntiXibZero * aAntiXibZero);
+    G4SPBaryon(G4XibMinus * aXibMinus);
+    G4SPBaryon(G4AntiXibMinus * aAntiXibMinus);
+    G4SPBaryon(G4OmegabMinus * aOmegabMinus);
+    G4SPBaryon(G4AntiOmegabMinus * aAntiOmegabMinus);
 
   private:
     G4bool operator == ( const G4SPBaryon & aBaryon) const;

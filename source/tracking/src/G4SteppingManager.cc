@@ -41,6 +41,8 @@
 #include "G4UserLimits.hh"
 #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 #include "G4GeometryTolerance.hh"
+#include "G4Profiler.hh"
+#include "G4TiMemory.hh"
 
 //////////////////////////////////////
 G4SteppingManager::G4SteppingManager()
@@ -112,6 +114,10 @@ G4SteppingManager::~G4SteppingManager()
 G4StepStatus G4SteppingManager::Stepping()
 //////////////////////////////////////////
 {
+#ifdef GEANT4_USE_TIMEMORY
+  ProfilerConfig profiler{ fStep };
+#endif
+
   //--------
   // Prelude
   //--------
@@ -254,7 +260,8 @@ G4StepStatus G4SteppingManager::Stepping()
   G4UserSteppingAction* regionalAction = fStep->GetPreStepPoint()
         ->GetPhysicalVolume()->GetLogicalVolume()
         ->GetRegion()->GetRegionalSteppingAction();
-  if( regionalAction ) regionalAction->UserSteppingAction(fStep);
+  if(regionalAction)
+    regionalAction->UserSteppingAction(fStep);
 
   // Stepping process finish. Return the value of the StepStatus
   //

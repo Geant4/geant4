@@ -122,7 +122,7 @@ public:
   }
 
   bool get_cube_size(T_t& a_dx,T_t& a_dy,T_t& a_dz,T_t(*a_sqrt)(T_t)) const {
-    if(!get_size(a_dx,a_dy,a_dz)) return false;    
+    if(!get_size(a_dx,a_dy,a_dz)) return false;
     if((a_dx<=zero())&&(a_dy<=zero())&&(a_dz<=zero())) return false;
     if((a_dx<=zero())&&(a_dy<=zero())) { //dz not 0 :
       a_dx = T_t(0.1)*a_dz;

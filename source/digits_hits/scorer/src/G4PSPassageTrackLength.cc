@@ -30,6 +30,7 @@
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
+#include "G4VScoreHistFiller.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
@@ -39,11 +40,13 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of track length 
+//              vs. number of tracks (not weighted)             (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
+  :G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
    EvtMap(0),weighted(false)
 {
     SetUnit("mm");
@@ -52,7 +55,7 @@ G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, 
 					       const G4String& unit, 
 					       G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
+  :G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
    EvtMap(0),weighted(false)
 {
     SetUnit(unit);
@@ -68,6 +71,21 @@ G4bool G4PSPassageTrackLength::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   if ( IsPassed(aStep) ) {
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fTrackLength);
+
+    if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+    {
+      auto filler = G4VScoreHistFiller::Instance();
+      if(!filler)
+      {
+        G4Exception("G4PSPassageTrackLength::ProcessHits","SCORER0123",JustWarning,
+               "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+      }
+      else
+      {
+        filler->FillH1(hitIDMap[index],fTrackLength,1.);
+      }
+    }
+
   }
 
   return TRUE;

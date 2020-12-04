@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Novemebr 13th 2020 Ben Morgan (HepMCEx01-V10-06-01)
+- Enforce use of Serial RunManager.
+
+November 10th 2020 Ben Morgan (HepMCEx01-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 September 4th 2018 I. Hrivnacova (HepMCEx01-V10-04-00)
 - Coding guidelines
 - Updated CMake: removed gfortran (obsolete)

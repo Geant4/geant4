@@ -41,46 +41,45 @@
 
 class G4Hdf5FileManager;
 
+// Types alias
+using G4Hdf5File = std::tuple<hid_t, hid_t, hid_t>;
+using Hdf5NtupleDescription = G4TNtupleDescription<tools::hdf5::ntuple, G4Hdf5File>;
+
 // template specialization used by this class defined below
 
 template <>
 template <>
-G4bool G4TNtupleManager<tools::hdf5::ntuple>::FillNtupleTColumn(
+G4bool G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value);
 
 
-class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple> 
+class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple,
+                                                    G4Hdf5File> 
 {
   friend class G4Hdf5AnalysisManager;
+  friend class G4Hdf5NtupleFileManager;
 
   public:
     explicit G4Hdf5NtupleManager(const G4AnalysisManagerState& state);
     ~G4Hdf5NtupleManager();
 
   private:
-    // Types alias
-    using NtupleType = tools::hdf5::ntuple;
-    using NtupleDescriptionType = G4TNtupleDescription<NtupleType>;
-
     // Set methods
     void SetFileManager(std::shared_ptr<G4Hdf5FileManager> fileManager);
     
     // Access to ntuple vector (needed for Write())
-    const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
+    const std::vector<Hdf5NtupleDescription*>& GetNtupleDescriptionVector() const;
 
     // Utility function  
-    void CreateTNtuple(NtupleDescriptionType*  ntupleDescription, G4bool warn);
+    void CreateTNtuple(Hdf5NtupleDescription* ntupleDescription, G4bool warn);
 
     // Methods from the templated base class
     //
-    virtual void CreateTNtuple(
-                    NtupleDescriptionType*  ntupleDescription,
-                    const G4String& name, const G4String& title) final;
     virtual void CreateTNtupleFromBooking(
-                    NtupleDescriptionType* ntupleDescription) final;
+                    Hdf5NtupleDescription* ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType* ntupleDescription,
+                    Hdf5NtupleDescription* ntupleDescription,
                     G4bool fromBooking) final;
 
     // data members
@@ -94,13 +93,13 @@ inline void
 G4Hdf5NtupleManager::SetFileManager(std::shared_ptr<G4Hdf5FileManager> fileManager)
 { fFileManager = fileManager; }
 
-inline const std::vector<G4TNtupleDescription<tools::hdf5::ntuple>*>& 
+inline const std::vector<Hdf5NtupleDescription*>& 
 G4Hdf5NtupleManager::GetNtupleDescriptionVector() const
 { return fNtupleDescriptionVector; }
 
 template <>
 template <>
-inline G4bool G4TNtupleManager<tools::hdf5::ntuple>::FillNtupleTColumn(
+inline G4bool G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value)
 {
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
@@ -150,4 +149,3 @@ inline G4bool G4TNtupleManager<tools::hdf5::ntuple>::FillNtupleTColumn(
 }
 
 #endif
-

@@ -28,68 +28,69 @@
 /// \brief Implementation of the LXeTrackingAction class
 //
 //
-#include "LXeTrajectory.hh"
 #include "LXeTrackingAction.hh"
-#include "LXeUserTrackInformation.hh"
-#include "LXeDetectorConstruction.hh"
 
-#include "G4TrackingManager.hh"
+#include "LXeDetectorConstruction.hh"
+#include "LXeTrajectory.hh"
+#include "LXeUserTrackInformation.hh"
+
+#include "G4OpticalPhoton.hh"
 #include "G4Track.hh"
-#include "G4ParticleTypes.hh"
+#include "G4TrackingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeTrackingAction::LXeTrackingAction()
-{}
+LXeTrackingAction::LXeTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  //Let this be up to the user via vis.mac
+  // Let this be up to the user via vis.mac
   //  fpTrackingManager->SetStoreTrajectory(true);
 
-  //Use custom trajectory class
+  // Use custom trajectory class
   fpTrackingManager->SetTrajectory(new LXeTrajectory(aTrack));
 
-  //This user track information is only relevant to the photons
+  // This user track information is only relevant to the photons
   fpTrackingManager->SetUserTrackInformation(new LXeUserTrackInformation);
-
-  /*  const G4VProcess* creator = aTrack->GetCreatorProcess();
-  if(creator)
-    G4cout<<creator->GetProcessName()<<G4endl;
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){
+void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+{
   LXeTrajectory* trajectory =
-    (LXeTrajectory*)fpTrackingManager->GimmeTrajectory();
-  LXeUserTrackInformation*
-    trackInformation=(LXeUserTrackInformation*)aTrack->GetUserInformation();
+    (LXeTrajectory*) fpTrackingManager->GimmeTrajectory();
+  LXeUserTrackInformation* trackInformation =
+    (LXeUserTrackInformation*) aTrack->GetUserInformation();
 
-  //Lets choose to draw only the photons that hit the sphere and a pmt
-  if(aTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()){
-
-    const G4VProcess* creator=aTrack->GetCreatorProcess();
-    if(creator && creator->GetProcessName()=="OpWLS"){
+  // Let's choose to draw only the photons that hit the sphere and a pmt
+  if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
+  {
+    const G4VProcess* creator = aTrack->GetCreatorProcess();
+    if(creator && creator->GetProcessName() == "OpWLS")
+    {
       trajectory->WLS();
       trajectory->SetDrawTrajectory(true);
     }
 
-    if(LXeDetectorConstruction::GetSphereOn()){
-      if((trackInformation->GetTrackStatus()&hitPMT)&&
-         (trackInformation->GetTrackStatus()&hitSphere)){
+    if(LXeDetectorConstruction::GetSphereOn())
+    {
+      if((trackInformation->GetTrackStatus() & hitPMT) &&
+         (trackInformation->GetTrackStatus() & hitSphere))
+      {
         trajectory->SetDrawTrajectory(true);
       }
     }
-    else{
-      if(trackInformation->GetTrackStatus()&hitPMT)
+    else
+    {
+      if(trackInformation->GetTrackStatus() & hitPMT)
         trajectory->SetDrawTrajectory(true);
     }
   }
-  else //draw all other trajectories
+  // draw all other (not optical photon) trajectories
+  else
     trajectory->SetDrawTrajectory(true);
 
   if(trackInformation->GetForceDrawTrajectory())

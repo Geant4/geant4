@@ -40,7 +40,7 @@
 //
 // Class Description:
 //
-// Implementation of gamma convertion to e+e- in the field of a nucleus 
+// Implementation of gamma conversion to e+e- in the field of a nucleus 
 // including polarization transfer
 
 // -------------------------------------------------------------------

@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-08-20 I. Hrivnacova (testem4-V10-06-01)
+- Updated README: removed paw instructions (as the HBOOK output
+  is not supported anymore)
+
 07-04-20 V.Ivantchenko (testem4-V10-06-00)
 - do not call vis.mac automatically in interactive mode
 

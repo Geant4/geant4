@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -144,6 +144,7 @@ Absorber is 17.8491 cm  of G4_PbWO4  R= 4.46227 cm
 /gun/particle e-
 /gun/energy 5 GeV
 /run/printProgress 20
+/testem/run/verbose 1
 /run/beamOn 100
 
 phot:  for gamma SubType=12 BuildTable=0
@@ -169,10 +170,11 @@ Rayl:  for gamma SubType=11 BuildTable=1
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -196,10 +198,11 @@ CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -227,9 +230,9 @@ CoulombScat:  for e+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -243,14 +246,14 @@ hBrems:  for proton  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -259,9 +262,9 @@ CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for GenericIon  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -273,9 +276,9 @@ ionIoni:  for GenericIon  SubType=2
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 ionIoni:  for alpha  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -286,9 +289,9 @@ ionIoni:  for alpha  SubType=2
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
 
 msc:  for anti_proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for anti_proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -302,14 +305,14 @@ hBrems:  for anti_proton  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -318,9 +321,9 @@ CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for kaon+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -334,14 +337,14 @@ hBrems:  for kaon+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -350,9 +353,9 @@ CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for kaon-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -366,14 +369,14 @@ hBrems:  for kaon-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of kaon+
@@ -382,9 +385,9 @@ CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 muIoni:  for mu+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -399,14 +402,14 @@ muBrems:  for mu+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -415,9 +418,9 @@ CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 muIoni:  for mu-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -432,14 +435,14 @@ muBrems:  for mu-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of mu+
@@ -448,9 +451,9 @@ CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for pi+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -464,14 +467,14 @@ hBrems:  for pi+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -480,9 +483,9 @@ CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for pi-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -496,14 +499,14 @@ hBrems:  for pi-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of pi+
@@ -516,7 +519,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 Index : 0     used in the geometry : Yes
  Material : G4_PbWO4
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  89.7946 keV    e-  1.13679 MeV    e+  1.06315 MeV proton 100 keV
+ Energy thresholds :  gamma  89.3347 keV    e-  1.12535 MeV    e+  1.05931 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -539,37 +542,138 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.560000s Real=8.773186s Sys=0.010000s
+  User=2.420000s Real=2.458125s Sys=0.000000s
+                 LOGITUDINAL PROFILE                         CUMULATIVE LOGITUDINAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 0.50 radl:    0.19%       0.10%             0-> 0.50 radl:    0.19%     0.10% 
+    0.50-> 1.00 radl:    0.43%       0.25%             0-> 1.00 radl:    0.62%     0.31% 
+    1.00-> 1.50 radl:    0.94%       0.47%             0-> 1.50 radl:    1.56%     0.72% 
+    1.50-> 2.00 radl:    1.69%       0.76%             0-> 2.00 radl:    3.25%     1.34% 
+    2.00-> 2.50 radl:    2.70%       1.19%             0-> 2.50 radl:    5.95%     2.39% 
+    2.50-> 3.00 radl:    3.50%       1.39%             0-> 3.00 radl:    9.45%     3.53% 
+    3.00-> 3.50 radl:    4.38%       1.45%             0-> 3.50 radl:   13.83%     4.71% 
+    3.50-> 4.00 radl:    5.00%       1.52%             0-> 4.00 radl:   18.83%     5.86% 
+    4.00-> 4.50 radl:    5.48%       1.53%             0-> 4.50 radl:   24.31%     6.93% 
+    4.50-> 5.00 radl:    5.79%       1.39%             0-> 5.00 radl:   30.10%     7.81% 
+    5.00-> 5.50 radl:    6.02%       1.37%             0-> 5.50 radl:   36.13%     8.48% 
+    5.50-> 6.00 radl:    5.83%       1.33%             0-> 6.00 radl:   41.95%     8.92% 
+    6.00-> 6.50 radl:    5.65%       1.18%             0-> 6.50 radl:   47.61%     9.19% 
+    6.50-> 7.00 radl:    5.23%       1.14%             0-> 7.00 radl:   52.84%     9.24% 
+    7.00-> 7.50 radl:    4.89%       1.06%             0-> 7.50 radl:   57.73%     9.13% 
+    7.50-> 8.00 radl:    4.51%       1.02%             0-> 8.00 radl:   62.24%     8.90% 
+    8.00-> 8.50 radl:    4.13%       1.11%             0-> 8.50 radl:   66.37%     8.47% 
+    8.50-> 9.00 radl:    3.72%       0.97%             0-> 9.00 radl:   70.09%     8.04% 
+    9.00-> 9.50 radl:    3.32%       1.00%             0-> 9.50 radl:   73.41%     7.52% 
+    9.50->10.00 radl:    2.97%       0.95%             0->10.00 radl:   76.38%     7.00% 
+   10.00->10.50 radl:    2.66%       0.94%             0->10.50 radl:   79.04%     6.50% 
+   10.50->11.00 radl:    2.39%       1.01%             0->11.00 radl:   81.43%     5.94% 
+   11.00->11.50 radl:    2.02%       0.83%             0->11.50 radl:   83.45%     5.42% 
+   11.50->12.00 radl:    1.73%       0.76%             0->12.00 radl:   85.17%     4.93% 
+   12.00->12.50 radl:    1.44%       0.69%             0->12.50 radl:   86.61%     4.50% 
+   12.50->13.00 radl:    1.31%       0.61%             0->13.00 radl:   87.92%     4.08% 
+   13.00->13.50 radl:    1.15%       0.58%             0->13.50 radl:   89.07%     3.66% 
+   13.50->14.00 radl:    1.01%       0.58%             0->14.00 radl:   90.08%     3.26% 
+   14.00->14.50 radl:    0.86%       0.58%             0->14.50 radl:   90.94%     2.83% 
+   14.50->15.00 radl:    0.77%       0.55%             0->15.00 radl:   91.71%     2.42% 
+   15.00->15.50 radl:    0.62%       0.42%             0->15.50 radl:   92.33%     2.09% 
+   15.50->16.00 radl:    0.54%       0.36%             0->16.00 radl:   92.87%     1.85% 
+   16.00->16.50 radl:    0.48%       0.36%             0->16.50 radl:   93.35%     1.61% 
+   16.50->17.00 radl:    0.39%       0.30%             0->17.00 radl:   93.74%     1.42% 
+   17.00->17.50 radl:    0.33%       0.26%             0->17.50 radl:   94.07%     1.28% 
+   17.50->18.00 radl:    0.30%       0.26%             0->18.00 radl:   94.37%     1.12% 
+   18.00->18.50 radl:    0.29%       0.21%             0->18.50 radl:   94.66%     1.00% 
+   18.50->19.00 radl:    0.20%       0.17%             0->19.00 radl:   94.85%     0.93% 
+   19.00->19.50 radl:    0.18%       0.16%             0->19.50 radl:   95.03%     0.85% 
+   19.50->20.00 radl:    0.14%       0.16%             0->20.00 radl:   95.17%     0.79% 
+
+
+
+                  RADIAL PROFILE                         CUMULATIVE  RADIAL PROFILE
+
+        bin              Mean         rms                 bin            Mean      rms 
+
+    0.00-> 0.10 radl:   17.79%       2.18%             0-> 0.10 radl:   17.79%     2.18% 
+    0.10-> 0.20 radl:   13.38%       1.36%             0-> 0.20 radl:   31.16%     2.60% 
+    0.20-> 0.30 radl:   10.13%       1.07%             0-> 0.30 radl:   41.30%     2.68% 
+    0.30-> 0.40 radl:    7.81%       0.88%             0-> 0.40 radl:   49.11%     2.69% 
+    0.40-> 0.50 radl:    5.96%       0.72%             0-> 0.50 radl:   55.07%     2.57% 
+    0.50-> 0.60 radl:    4.83%       0.69%             0-> 0.60 radl:   59.91%     2.31% 
+    0.60-> 0.70 radl:    3.89%       0.70%             0-> 0.70 radl:   63.80%     2.18% 
+    0.70-> 0.80 radl:    3.21%       0.54%             0-> 0.80 radl:   67.01%     2.04% 
+    0.80-> 0.90 radl:    2.73%       0.52%             0-> 0.90 radl:   69.74%     1.91% 
+    0.90-> 1.00 radl:    2.32%       0.45%             0-> 1.00 radl:   72.06%     1.87% 
+    1.00-> 1.10 radl:    2.03%       0.38%             0-> 1.10 radl:   74.08%     1.81% 
+    1.10-> 1.20 radl:    1.81%       0.41%             0-> 1.20 radl:   75.90%     1.74% 
+    1.20-> 1.30 radl:    1.57%       0.35%             0-> 1.30 radl:   77.46%     1.72% 
+    1.30-> 1.40 radl:    1.46%       0.38%             0-> 1.40 radl:   78.92%     1.65% 
+    1.40-> 1.50 radl:    1.32%       0.31%             0-> 1.50 radl:   80.24%     1.58% 
+    1.50-> 1.60 radl:    1.21%       0.26%             0-> 1.60 radl:   81.46%     1.53% 
+    1.60-> 1.70 radl:    1.05%       0.25%             0-> 1.70 radl:   82.51%     1.47% 
+    1.70-> 1.80 radl:    1.00%       0.26%             0-> 1.80 radl:   83.51%     1.42% 
+    1.80-> 1.90 radl:    0.88%       0.21%             0-> 1.90 radl:   84.39%     1.37% 
+    1.90-> 2.00 radl:    0.78%       0.19%             0-> 2.00 radl:   85.17%     1.33% 
+    2.00-> 2.10 radl:    0.78%       0.23%             0-> 2.10 radl:   85.95%     1.31% 
+    2.10-> 2.20 radl:    0.67%       0.20%             0-> 2.20 radl:   86.63%     1.26% 
+    2.20-> 2.30 radl:    0.63%       0.18%             0-> 2.30 radl:   87.25%     1.21% 
+    2.30-> 2.40 radl:    0.58%       0.18%             0-> 2.40 radl:   87.84%     1.17% 
+    2.40-> 2.50 radl:    0.55%       0.18%             0-> 2.50 radl:   88.39%     1.14% 
+    2.50-> 2.60 radl:    0.51%       0.15%             0-> 2.60 radl:   88.89%     1.13% 
+    2.60-> 2.70 radl:    0.49%       0.15%             0-> 2.70 radl:   89.38%     1.10% 
+    2.70-> 2.80 radl:    0.45%       0.14%             0-> 2.80 radl:   89.83%     1.09% 
+    2.80-> 2.90 radl:    0.41%       0.14%             0-> 2.90 radl:   90.24%     1.07% 
+    2.90-> 3.00 radl:    0.39%       0.13%             0-> 3.00 radl:   90.63%     1.06% 
+    3.00-> 3.10 radl:    0.38%       0.14%             0-> 3.10 radl:   91.01%     1.01% 
+    3.10-> 3.20 radl:    0.35%       0.14%             0-> 3.20 radl:   91.36%     0.97% 
+    3.20-> 3.30 radl:    0.33%       0.12%             0-> 3.30 radl:   91.69%     0.94% 
+    3.30-> 3.40 radl:    0.32%       0.11%             0-> 3.40 radl:   92.01%     0.92% 
+    3.40-> 3.50 radl:    0.29%       0.11%             0-> 3.50 radl:   92.29%     0.90% 
+    3.50-> 3.60 radl:    0.26%       0.10%             0-> 3.60 radl:   92.56%     0.88% 
+    3.60-> 3.70 radl:    0.25%       0.10%             0-> 3.70 radl:   92.81%     0.86% 
+    3.70-> 3.80 radl:    0.25%       0.10%             0-> 3.80 radl:   93.06%     0.84% 
+    3.80-> 3.90 radl:    0.23%       0.09%             0-> 3.90 radl:   93.29%     0.84% 
+    3.90-> 4.00 radl:    0.22%       0.10%             0-> 4.00 radl:   93.51%     0.82% 
+    4.00-> 4.10 radl:    0.20%       0.08%             0-> 4.10 radl:   93.72%     0.81% 
+    4.10-> 4.20 radl:    0.20%       0.09%             0-> 4.20 radl:   93.92%     0.80% 
+    4.20-> 4.30 radl:    0.21%       0.10%             0-> 4.30 radl:   94.13%     0.78% 
+    4.30-> 4.40 radl:    0.18%       0.08%             0-> 4.40 radl:   94.31%     0.79% 
+    4.40-> 4.50 radl:    0.16%       0.08%             0-> 4.50 radl:   94.48%     0.78% 
+    4.50-> 4.60 radl:    0.16%       0.08%             0-> 4.60 radl:   94.64%     0.79% 
+    4.60-> 4.70 radl:    0.16%       0.08%             0-> 4.70 radl:   94.80%     0.80% 
+    4.70-> 4.80 radl:    0.14%       0.07%             0-> 4.80 radl:   94.94%     0.79% 
+    4.80-> 4.90 radl:    0.13%       0.06%             0-> 4.90 radl:   95.06%     0.79% 
+    4.90-> 5.00 radl:    0.11%       0.05%             0-> 5.00 radl:   95.17%     0.79% 
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7240.02
- Mean number of neutral steps:  4092.36
+ Mean number of charged steps:  7276.64
+ Mean number of neutral steps:  4120.93
 
- energy deposit :   95.16 % E0 +-    0.97 % E0
- charged traklen:  485.13 radl +-    5.13 radl
- neutral traklen: 4180.14 radl +-  123.39 radl
+ energy deposit :   95.17 % E0 +-    0.79 % E0
+ charged traklen:  484.99 radl +-    4.47 radl
+ neutral traklen: 4227.07 radl +-  115.66 radl
 
- 90.00 % confinement: radius = 2.87 radl  (2.56 cm )
+ 90.00 % confinement: radius = 2.84 radl  (2.53 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.951576  delEdep= 0.00257597 nrms= 3.14142
-Erms: 0.00969668  delErms= 0.00149668 nrms= 1.82522
+Edep: 0.951746  delEdep= 0.0027458 nrms= 3.34853
+Erms: 0.00785038  delErms= -0.000349624 nrms= -0.426371
 <<<<END>>>>   IS NOT ACCEPTED
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1988256241637042433, 1290128793852102062, 741993723810955011, 88626892286938908, 925842433676995178, 2027261143151211294, 1103835360358955530, 1225691208052109603, 2166253751576666731, 1752302890925742466, 22334852124403215, 2106258793908074719, 761035665999996224, 164180213923982943, 1383706058027854732, 2161396677910274468, 368251014461497353} counter= 17sumtot= 1830611641975251262
+N=17 V[N]={851434535752920704, 888539176679964768, 315678774786267687, 921965249393603455, 431656495543229842, 1479312182916538139, 638552150678385958, 388339336885198511, 382715861733027773, 2262160206525218158, 832818704021629363, 139561543447700225, 1422938963155495486, 118603380232983629, 2056990588665516613, 841707889787774152, 236456093093737758} counter= 9sumtot= 374373078017028515
 ---------------------------------------
-... write Root file : testem2.root - done
-... close Root file : testem2.root - done
+... write file : testem2.root - done
+... close file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -37,50 +37,41 @@
 #include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-#include "G4AffineTransform.hh"
-
-class G4GeneralParticleSource;
-
-class G4Event;
-class G4PhysicsTable;
-
 class WLSDetectorConstruction;
 class WLSPrimaryGeneratorMessenger;
 
+class G4Event;
+class G4GeneralParticleSource;
+class G4PhysicsTable;
+
 class WLSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
+ public:
+  WLSPrimaryGeneratorAction(WLSDetectorConstruction*);
+  ~WLSPrimaryGeneratorAction();
 
-    WLSPrimaryGeneratorAction(WLSDetectorConstruction*);
-    virtual ~WLSPrimaryGeneratorAction();
+  void GeneratePrimaries(G4Event*) override;
 
-  public:
+  void BuildEmissionSpectrum();
+  void SetOptPhotonPolar(G4double);
+  void SetDecayTimeConstant(G4double);
 
-    virtual void GeneratePrimaries(G4Event*);
+  void SetUseSampledEnergy(G4bool v) { fUseSampledEnergy = v; }
 
-    void BuildEmissionSpectrum();
+ protected:
+  G4PhysicsTable* fIntegralTable;
 
-    void SetOptPhotonPolar(G4double);
+ private:
+  void SetOptPhotonPolar();
+  void SetOptPhotonTime();
 
-    void SetDecayTimeConstant(G4double);
+  WLSDetectorConstruction* fDetector;
+  G4GeneralParticleSource* fParticleGun;
+  WLSPrimaryGeneratorMessenger* fGunMessenger;
 
-  protected:
-
-    G4PhysicsTable* fIntegralTable;
-
-  private:
-
-    void SetOptPhotonPolar();
-    void SetOptPhotonTime();
- 
-    WLSDetectorConstruction*   fDetector;
-    G4GeneralParticleSource*   fParticleGun;
-    WLSPrimaryGeneratorMessenger* fGunMessenger;
-
-    static G4bool fFirst;
-
-    G4double fTimeConstant;
-
+  static G4bool fFirst;
+  G4double fTimeConstant;
+  G4bool fUseSampledEnergy;
 };
 
 #endif

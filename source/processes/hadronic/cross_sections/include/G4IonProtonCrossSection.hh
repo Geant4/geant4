@@ -58,31 +58,49 @@ class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4IonProtonCrossSection();
+  explicit G4IonProtonCrossSection();
 
-  virtual ~G4IonProtonCrossSection();
+  ~G4IonProtonCrossSection() override;
 
-  G4double GetProtonCrossSection(G4double kinEnergy, G4int Z);
+  G4double GetProtonCrossSection(const G4DynamicParticle*, G4int Z);
 
-  virtual
+  G4double GetDeuteronCrossSection(const G4DynamicParticle*, G4int Z);
+
+  G4double GetTritonCrossSection(const G4DynamicParticle*, G4int Z);
+
+  G4double GetHe3CrossSection(const G4DynamicParticle*, G4int Z);
+
+  G4double GetAlphaCrossSection(const G4DynamicParticle*, G4int Z);
+
   G4bool IsElementApplicable(const G4DynamicParticle* aPart, G4int Z,
-			     const G4Material*);
+			     const G4Material*) override;
 
-  virtual
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,    
+			 const G4Element* elm = nullptr,
+			 const G4Material* mat = nullptr) override;
+
   G4double GetElementCrossSection(const G4DynamicParticle* aPart, 
-				  G4int Z, const G4Material*);
+				  G4int Z, const G4Material*) override;
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&); 
+  G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
+			      const G4Isotope* iso = nullptr,
+			      const G4Element* elm = nullptr,
+			      const G4Material* mat = nullptr) override;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
+
+  void CrossSectionDescription(std::ostream&) const override;
 
 private: // Without Description
 
   G4IonProtonCrossSection & operator=(const G4IonProtonCrossSection &right);
   G4IonProtonCrossSection(const G4IonProtonCrossSection&);
 
-  G4ParticleInelasticXS* theForward;
+  G4ParticleInelasticXS* xsProton;
+  G4ParticleInelasticXS* xsDeuteron;
+  G4ParticleInelasticXS* xsTriton;
+  G4ParticleInelasticXS* xsHe3;
+  G4ParticleInelasticXS* xsAlpha;
 
 };
 

@@ -210,10 +210,10 @@ void c2d::clear(){
 }
 
 inline
-bool c2d::convert( 
+bool c2d::convert(
  unsigned int a_bins_x,double a_lower_edge_x,double a_upper_edge_x
-,unsigned int a_bins_y,double a_lower_edge_y,double a_upper_edge_y 
-) { 
+,unsigned int a_bins_y,double a_lower_edge_y,double a_upper_edge_y
+) {
   if(m_histo) return true; // Done.
   m_histo = new histo::h2d(base_cloud::title(),
                            a_bins_x,a_lower_edge_x,a_upper_edge_x,
@@ -263,7 +263,7 @@ bool c2d::scale(double a_scale) {
 }
 
 inline
-bool c2d::reset() { 
+bool c2d::reset() {
   clear();
   delete m_histo;
   m_histo = 0;
@@ -286,7 +286,7 @@ bool c2d::fill(double aX,double aY,double aW){
       m_lower_x = aX;
       m_upper_x = aX;
     }
-    if(m_ys.size()) { 
+    if(m_ys.size()) {
       m_lower_y = mn<double>(aY,m_lower_y);
       m_upper_y = mx<double>(aY,m_upper_y);
     } else {
@@ -300,7 +300,7 @@ bool c2d::fill(double aX,double aY,double aW){
     double xw = aX * aW;
     m_Sxw += xw;
     m_Sx2w += aX * xw;
-    double yw = aY * aW; 
+    double yw = aY * aW;
     m_Syw += yw;
     m_Sy2w += aY * yw;
     return true;
@@ -308,7 +308,7 @@ bool c2d::fill(double aX,double aY,double aW){
 }
 
 inline
-bool c2d::convert(const std::vector<double>& a_edges_x,const std::vector<double>& a_edges_y) { 
+bool c2d::convert(const std::vector<double>& a_edges_x,const std::vector<double>& a_edges_y) {
   if(m_histo) return true;
   m_histo = new histo::h2d(base_cloud::title(),
                            a_edges_x,a_edges_y);
@@ -333,7 +333,7 @@ bool c2d::set_conversion_parameters(
 }
 
 inline
-const h2d& c2d::histogram() const { 
+const h2d& c2d::histogram() const {
   if(!m_histo) const_cast<c2d&>(*this).convert_to_histogram();
   return *m_histo;
 }

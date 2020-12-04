@@ -27,10 +27,10 @@ public:
     tools_vforit(icol*,m_cols,it) (*it)->set_def();
     return true;
   }
-  
+
   virtual bool end_fill(impi& a_mpi,int a_dest,int a_tag) {
     mpi_basket_add _badd(a_mpi,a_dest,a_tag,m_id,0);
-    if(!m_row_wise_branch.end_pfill(_badd)) return false;    
+    if(!m_row_wise_branch.end_pfill(_badd)) return false;
 
     a_mpi.pack_reset();
     if(!a_mpi.pack(mpi_protocol_end_fill())) return false;
@@ -40,7 +40,7 @@ public:
 
     return true;
   }
-  
+
 public:
   mpi_ntuple_row_wise(uint32 a_id,std::ostream& a_out,
                       bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
@@ -63,20 +63,20 @@ protected:
   mpi_ntuple_row_wise& operator=(const mpi_ntuple_row_wise& a_from){parent::operator=(a_from);return *this;}
 protected:
   bool end_leaves(impi& a_mpi) const {
-    
+
 #include "MPI_SET_MAX.icc"
-    
+
     tools_vforcit(base_leaf*,m_row_wise_branch.leaves(),pit) {
       base_leaf* _pleaf = *pit;
-      
+
       bool set_done = false;
-      
+
       TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(char)
       TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(short)
       TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(int)
       TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(float)
       TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(double)
-      
+
       TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(char)
       TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(short)
       TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(int)
@@ -91,7 +91,7 @@ protected:
 	return false;
       }
     }
-    
+
 #undef TOOLS_WROOT_MPI_NTUPLE_SET_MAX
 #undef TOOLS_WROOT_MPI_NTUPLE_STRING_SET_MAX
 

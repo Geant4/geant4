@@ -88,7 +88,7 @@ public:
     m_produce_out_bpp = a_from.m_produce_out_bpp;
     return *this;
   }
-public:  
+public:
   bool set_default_cursor_shape() {return set_cursor_shape(cursor_default);}
 
   group& sg() {return m_sg;}

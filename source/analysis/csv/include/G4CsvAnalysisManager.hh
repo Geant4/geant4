@@ -40,7 +40,7 @@
 #include <memory>
 
 class G4CsvFileManager;
-class G4CsvNtupleManager;
+class G4CsvNtupleFileManager;
 
 class G4CsvAnalysisManager : public G4ToolsAnalysisManager
 {
@@ -90,12 +90,11 @@ class G4CsvAnalysisManager : public G4ToolsAnalysisManager
     G4bool WriteH3();
     G4bool WriteP1();
     G4bool WriteP2();
-    G4bool CloseNtupleFiles();
     G4bool Reset();
  
     // data members
-    G4CsvNtupleManager* fNtupleManager;
     std::shared_ptr<G4CsvFileManager>  fFileManager;
+    std::shared_ptr<G4CsvNtupleFileManager> fNtupleFileManager;
 };
 
 #include "G4CsvAnalysisManager.icc"

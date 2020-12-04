@@ -62,7 +62,7 @@ committal in the CVS repository !
 
 06 October 15: V.Ivanchenko (empolar-V10-01-01)
 - G4PolarizedCompton, G4ePolarizedIonisation, G4eplusPolarizedAnnihilation
-    - changed intialisation taking into account MT mode, added
+    - changed initialisation taking into account MT mode, added
       method ComputeSaturationFactor used in mean free path and 
       step limit corrections, removed PreparePhysicsTable method (use 
       one from the base class), fixed computation of the value of number 

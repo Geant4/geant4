@@ -57,7 +57,7 @@ protected:
     leaf(const leaf& a_from):iobj(a_from){}
     leaf& operator=(const leaf&){return *this;}
   };
-  
+
   static const std::string& s_aida_type(int) {
     static const std::string s_v("int");
     return s_v;
@@ -105,7 +105,7 @@ public:
   protected:
     column(const column& a_from)
     :leaf(a_from)
-    ,m_name(a_from.m_name) 
+    ,m_name(a_from.m_name)
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)
     {}
@@ -188,7 +188,7 @@ public:
         } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
           std::string _sv;
           lf->s_value(_sv);
-          sout << m_spaces << "  <entry" 
+          sout << m_spaces << "  <entry"
                << " value=\"" << _sv
                << "\"/>" << std::endl;
         }
@@ -241,7 +241,7 @@ public:
   protected:
     std_vector_column(const std_vector_column& a_from)
     :leaf(a_from)
-    ,m_name(a_from.m_name) 
+    ,m_name(a_from.m_name)
     ,m_user_vec(a_from.m_user_vec)
     ,m_spaces(a_from.m_spaces)
     {}
@@ -259,7 +259,7 @@ public:
 
   static leaf* is_std_vector_column(iobj& a_obj) {
     //200+20+id(basic type) ?
-    int _id = (int)a_obj.id_cls()-220;    
+    int _id = (int)a_obj.id_cls()-220;
     if((_id<=0)||(_id>=20)) return 0;
     return id_cast<iobj,leaf>(a_obj);
   }
@@ -333,7 +333,7 @@ public:
         //throw
         safe_clear<iobj>(m_cols);
         return;
-      }      
+      }
     }
   }
   virtual ~ntuple() {
@@ -403,7 +403,7 @@ public:
     tools_vforcit(iobj*,m_cols,it) {
       if(leaf* vlf = is_std_vector_column(*(*it))) {
         m_writer << m_spaces << "      <column"
-                 << " name=" << sout(to_xml((*it)->name())) 
+                 << " name=" << sout(to_xml((*it)->name()))
                  << " type=" << sout("ITuple")
                  << " booking=\"{" << vlf->aida_type() << " " << to_xml((*it)->name())
                  << "}\""
@@ -424,7 +424,7 @@ public:
     }
 
     m_writer << m_spaces << "    </columns>" << std::endl;
-  
+
     // rows :
     m_writer << m_spaces << "    <rows>" << std::endl;
   }
@@ -445,7 +445,7 @@ public:
       } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
         std::string _sv;
         lf->s_value(_sv);
-        m_writer << m_spaces << "        <entry" 
+        m_writer << m_spaces << "        <entry"
                  << " value=" << sout(_sv)
                  << "/>" << std::endl;
       }
@@ -485,8 +485,8 @@ protected:
         get_booking(sub->columns(),a_xml_esc,a_string);
       } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
         a_string += (*it)->aida_type() + " " + sname + " = " + lf->s_def();
-      }  
-    }  
+      }
+    }
     a_string += "}";
   }
 

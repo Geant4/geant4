@@ -19,7 +19,7 @@ class buffer {
   static ZReal ZREAL_HUGE() {return DBL_MAX;}
 
 public:
-  typedef unsigned int ZPixel; 
+  typedef unsigned int ZPixel;
   //NOTE : with X11, bits_per_pixel can't be > 32.
 protected:
 
@@ -27,7 +27,7 @@ protected:
   public:
     virtual void write(ZPos,ZPos,ZZ) = 0;
   public:
-    writer(ZPixel a_pixel):m_pixel(a_pixel){}    
+    writer(ZPixel a_pixel):m_pixel(a_pixel){}
     virtual ~writer(){}
   public:
     writer(const writer& a_from):m_pixel(a_from.m_pixel){}
@@ -114,19 +114,19 @@ protected:
     virtual void write(ZPos a_x,ZPos a_y,ZZ) {
       if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX))  return;
       if((a_y<m_buffer.m_begY) || (a_y>m_buffer.m_endY))  return;
-  
+
       // Computing must be the same as in WriteScanLine routine.
       ZReal zpoint =
-        (ZReal)(- m_buffer.m_planeDC 
+        (ZReal)(- m_buffer.m_planeDC
                 - m_buffer.m_planeAC * a_x
                 - m_buffer.m_planeBC * a_y);
-  
+
       // for edge plane quite perpandicular to screen
       //if((zpoint<m_buffer.m_zmin)||(zpoint>m_buffer.m_zmax)) return;
-  
+
       unsigned long offset = a_y * m_buffer.m_zbw + a_x;
       ZReal* zbuff = m_buffer.m_zbuffer + offset;
-  
+
       if(m_buffer.m_depth_test) {if(zpoint<*zbuff) return;}
 
       ZPixel* zimage = m_buffer.m_zimage  + offset;
@@ -211,7 +211,7 @@ public:
       m_zbh = 0;
       return false;
     }
-  
+
     // Init buffer done by further call to ZBufferErase.
     /*
     unsigned int size = m_zbw * m_zbh;
@@ -222,7 +222,7 @@ public:
       *zbuffer  = - ZREAL_HUGE();
     }
     */
-  
+
     set_clip_region(0,0,m_zbw,m_zbh);
     m_polygon.clear();
     return true;
@@ -467,7 +467,7 @@ protected:
 
     if(a_beg>a_buffer.m_endX) return;
     if(a_end<a_buffer.m_begX) return;
-  
+
     // border clip :
     int beg = mx(a_beg,(int)a_buffer.m_begX);
     int end = mn(a_end,(int)a_buffer.m_endX);
@@ -479,14 +479,14 @@ protected:
     ZReal zpoint;
     for(int x=beg;x<=end;x++){
       // Computing must be the same as in edge_point_writer routine.
-      zpoint = 
-        (ZReal)(- a_buffer.m_planeDC 
+      zpoint =
+        (ZReal)(- a_buffer.m_planeDC
                 - a_buffer.m_planeAC * x
-                - a_buffer.m_planeBC * a_y); 
+                - a_buffer.m_planeBC * a_y);
       if(a_buffer.m_depth_test) {
         if((zpoint>=(*zbuff))
 //       &&(zpoint>=a_buffer.m_zmin) //for plane quite perpandicular to screen.
-//       &&(zpoint<=a_buffer.m_zmax) 
+//       &&(zpoint<=a_buffer.m_zmax)
           ){
           *zbuff = zpoint;
 	  *zimage = a_buffer.m_scan_pixel;
@@ -508,7 +508,7 @@ protected:
     ZZ   dz = a_end.z - a_beg.z;
 
     //  6  2
-    // 5     1     
+    // 5     1
     // 7     3
     //  8  4
     scan_writer_1 sw1(a_writer);
@@ -516,7 +516,7 @@ protected:
     scan_writer_3 sw3(a_writer);
     scan_writer_4 sw4(a_writer);
 
-    if( (dx==0) && (dy==0) ) { 
+    if( (dx==0) && (dy==0) ) {
       a_writer.write(a_beg.x,a_beg.y,a_beg.z);
       a_writer.write(a_end.x,a_end.y,a_end.z);
 
@@ -557,8 +557,8 @@ protected:
 
     ZPos end = a_x + a_dx;
     ZPos beg = a_y;
-    ZZ incz = a_dz/(ZZ)a_dx; 
-    if(a_dy==0) { 
+    ZZ incz = a_dz/(ZZ)a_dx;
+    if(a_dy==0) {
       a_proc.write(a_x,a_y,a_z,beg);
       while(a_x<end){
         a_x++;

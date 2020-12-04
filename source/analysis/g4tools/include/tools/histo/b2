@@ -212,15 +212,15 @@ public:
   void hprint(std::ostream& a_out) {
     // A la HPRINT.
     a_out << parent::dimension() << parent::title() << std::endl;
-    a_out 
+    a_out
       << " * ENTRIES = " << parent::all_entries() << std::endl;
-  
+
     //   6 | 7 | 8
     //  -----------
     //   3 | 4 | 5
     //  -----------
     //   0 | 1 | 2
-  
+
     TW height_0 = bin_height(axis_t::UNDERFLOW_BIN,
                                            axis_t::UNDERFLOW_BIN);
     TW height_2 = bin_height(axis_t::OVERFLOW_BIN,
@@ -229,62 +229,62 @@ public:
                                            axis_t::OVERFLOW_BIN);
     TW height_8 = bin_height(axis_t::OVERFLOW_BIN,
                                            axis_t::OVERFLOW_BIN);
-  
+
     bn_t i,j;
-  
+
     TW height_1 = 0;
     TW height_7 = 0;
     for(i=0;i<axis_x().bins();i++){
       height_1 += bin_height(i,axis_t::UNDERFLOW_BIN);
       height_7 += bin_height(i,axis_t::OVERFLOW_BIN);
     }
-  
+
     TW height_3 = 0;
     TW height_5 = 0;
     for(j=0;j<axis_y().bins();j++){
       height_3 += bin_height(axis_t::UNDERFLOW_BIN,j);
       height_5 += bin_height(axis_t::OVERFLOW_BIN,j);
     }
-  
+
     TW height_4 = 0;
     for(i=0;i<axis_x().bins();i++){
       for(j=0;j<axis_y().bins();j++){
         height_4 += bin_height(i,j);
       }
     }
-  
-    a_out 
+
+    a_out
       << " " << height_6 << " " << height_7 << " " << height_8 << std::endl;
-    a_out 
+    a_out
       << " " << height_3 << " " << height_4 << " " << height_5 << std::endl;
-    a_out 
+    a_out
       << " " << height_0 << " " << height_1 << " " << height_2 << std::endl;
-  
+
     // Some bins :
     bn_t xbins = axis_x().bins();
     bn_t ybins = axis_y().bins();
-    a_out 
-      << " * ENTRIES[0,0]     = " 
-      << bin_entries(0,0)    
-      << " * HEIGHT[0,0] = " 
-      << bin_height(0,0)    
-      << " * ERROR[0,0] = "     
-      << bin_error(0,0)    
+    a_out
+      << " * ENTRIES[0,0]     = "
+      << bin_entries(0,0)
+      << " * HEIGHT[0,0] = "
+      << bin_height(0,0)
+      << " * ERROR[0,0] = "
+      << bin_error(0,0)
       << std::endl;
-    a_out 
-      << " * ENTRIES[N/2,N/2] = " 
-      << bin_entries(xbins/2,ybins/2)    
-      << " * HEIGHT[N/2,N/2] = " 
+    a_out
+      << " * ENTRIES[N/2,N/2] = "
+      << bin_entries(xbins/2,ybins/2)
+      << " * HEIGHT[N/2,N/2] = "
       << bin_height(xbins/2,ybins/2)
-      << " * ERROR[N/2,N/2] = " 
+      << " * ERROR[N/2,N/2] = "
       << bin_error(xbins/2,ybins/2)
       << std::endl;
-    a_out 
-      << " * ENTRIES[N-1,N-1] = " 
-      << bin_entries(xbins-1,ybins-1)    
-      << " * HEIGHT[N-1,N-1] = " 
+    a_out
+      << " * ENTRIES[N-1,N-1] = "
+      << bin_entries(xbins-1,ybins-1)
+      << " * HEIGHT[N-1,N-1] = "
       << bin_height(xbins-1,ybins-1)
-      << " * ERROR[N-1,N-1] = " 
+      << " * ERROR[N-1,N-1] = "
       << bin_error(xbins-1,ybins-1)
       << std::endl;
   }

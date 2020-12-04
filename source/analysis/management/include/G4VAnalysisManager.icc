@@ -25,6 +25,7 @@
 //
 
 #include "G4HnManager.hh"
+#include "G4NtupleBookingManager.hh"
 #include "G4VH1Manager.hh"
 #include "G4VH2Manager.hh"
 #include "G4VH3Manager.hh"
@@ -713,8 +714,13 @@ G4bool G4VAnalysisManager::GetP2Plotting(G4int id) const
 inline 
 G4bool G4VAnalysisManager::GetNtupleActivation(G4int id) const
 {
-  return fVNtupleManager->GetActivation(id);
-}  
+  if ( fVNtupleManager ) {
+    return fVNtupleManager->GetActivation(id);
+  } else {
+    return fNtupleBookingManager->GetActivation(id);
+
+  }
+}
 
 //_____________________________________________________________________________
 inline 

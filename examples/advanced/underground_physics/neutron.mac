@@ -26,9 +26,8 @@
 /dmx/KillGammasInConcrete 0
 #
 # radioactive decay module
-/grdm/analogueMC 1
-/grdm/verbose 0
-/grdm/allVolumes
+/process/had/rdm/verbose 0
+/process/had/rdm/allVolumes
 #
 # gun: particle
 /dmx/gun/verbose 1

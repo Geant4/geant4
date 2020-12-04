@@ -9,11 +9,11 @@
 (2) Institut de Physique Nucléaire (IPNO), Université Paris-Sud, CNRS-IN2P3 \n
 
 Examples in the physicslist category show the possible ways how to define
-a physics list from Geant4 physics constructors. This example demonstrates 
-the usage of G4GenericPhysicsList to build  the concrete physics list at 
-the run time. 
+a physics list from Geant4 physics constructors. This example demonstrates
+the usage of G4GenericPhysicsList to build  the concrete physics list at
+the run time.
 
-In Geant4 versions < 10.4, the generic physics list was demonstrated in the 
+In Geant4 versions < 10.4, the generic physics list was demonstrated in the
 extended/hadronic/Hadr05 example.
 
 The G4GenericPhysicsList class allows to build the physics list at the run
@@ -27,7 +27,7 @@ To run the example you can call
 ./genericPL -m run.mac [ -p FTFP_BERT.mac ]
 \endverbatim
 
-where FTFP_BERT.mac is the macro file containing the 'physics list'. 
+where FTFP_BERT.mac is the macro file containing the 'physics list'.
 
 If you run this example by calling
 
@@ -43,15 +43,15 @@ The same experimental setup is used for all examples in the physicslist category
 \section genericPL_s1  Detector description
 
 The geometry (defined in the DetectorConstruction class) consists in a box of scintillator material (CsI) followed by a thin box of air (screen) which is used to simplify scoring.
- 
+
 \section genericPL_s2  Primary generator
 
 The primary generator is defined with usage of G4ParticleGun.
-The default particle is proton which hits the box perpendicular to the input face. 
+The default particle is proton which hits the box perpendicular to the input face.
 The type of the particle and its energy are set in the PrimaryGeneratorAction class, and can
 be changed via the G4 built-in commands of the G4ParticleGun class.
 
- 
+
 \section genericPL_s3  Scoring (ntuples)
 
 The screen volume is associated with a sensitive detector, ScreenSD,
@@ -69,18 +69,18 @@ example name in main () function.
 \section genericPL_s4  How to build
 
 An additional step is needed when building the example with GNUmake
-due to using the extra shared directory: 
-\verbatim      
+due to using the extra shared directory:
+\verbatim
  % cd path_to_example/example
  % gmake setup
  % gmake
-\endverbatim      
+\endverbatim
 
 This will copy the files from shared in the example include and src;
 to remove these files:
-\verbatim      
+\verbatim
  % gmake clean_setup
-\endverbatim      
+\endverbatim
 
 
 */

@@ -1195,7 +1195,7 @@ Re-tag with subdirectories "utils" and "evaporation" (excluded by mistake).
 ------------------------------------------------------
 - G4TwoBodyAngularDist:  NEW Factory singleton containing all of the
   angular-distribution generators created below.  Code from G4EPCollider to
-  choose generator based on intial and final states moved here, accessed
+  choose generator based on initial and final states moved here, accessed
   through static function.
 
 - G4ElementaryParticleCollider:  Angular distribution generators moved to
@@ -3662,7 +3662,7 @@ interfaces between pion/nucleon and kaon/hyperon samplers.
      conditional dimensioning (e.g., if N8==0, use [1]).  Define second
      9-body constructor to accept and initialize the new arrays.
 
-  4) Eliminate static intialization of index[], moving it into
+  4) Eliminate static initialization of index[], moving it into
      initialize().  Template specialization can't be used with data!
 
   5) Add separate "sum" (summed N-body cross-sections) and "tot" arrays

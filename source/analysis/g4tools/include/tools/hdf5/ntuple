@@ -90,14 +90,14 @@ public:
           m_basket_pos = 0;
           m_basket_end = 0;
           return false;
-	}	
+	}
 	if(m_want_new_basket_size) {
 	  delete [] m_basket;
 	  m_basket = new T[m_want_new_basket_size];
 	  m_basket_pos = 0;
 	  m_basket_size = m_want_new_basket_size;
 	  m_want_new_basket_size = 0;
-	}	
+	}
         tools::uint64 remain = m_branch.entries()-m_branch.pos();
         size_t n = tools::mn<size_t>((size_t)remain,m_basket_size);
         if(!m_branch.read_page<T>(n,m_basket)) {
@@ -107,7 +107,7 @@ public:
           return false;
         }
         m_basket_pos = 0;
-        m_basket_end = n;	
+        m_basket_end = n;
       }
       m_ref = m_basket[m_basket_pos];
       m_basket_pos++;
@@ -182,7 +182,7 @@ public:
       if(&a_from==this) return *this;
       m_name = a_from.m_name;
       m_basket_size = a_from.m_basket_size;
-      m_basket_pos = 0;      
+      m_basket_pos = 0;
       m_basket_end = 0;
       m_want_new_basket_size = 0;
       return *this;
@@ -257,9 +257,9 @@ public:
   TOOLS_CLASS_STRING_VALUE(vector_int,vector<int>)
   TOOLS_CLASS_STRING_VALUE(vector_float,vector<float>)
   TOOLS_CLASS_STRING_VALUE(vector_double,vector<double>)
-  
+
   TOOLS_CLASS_STRING_VALUE(string,string)
-  
+
   TOOLS_CLASS_STRING_VALUE(vector_int64,vector<tools::int64>)
   TOOLS_CLASS_STRING_VALUE(vector_uchar,vector<tools::uchar>)
   TOOLS_CLASS_STRING_VALUE(vector_ushort,vector<tools::ushort>)
@@ -434,7 +434,7 @@ public:
       m_name = a_from.m_name;
       return *this;
     }
-  public:    
+  public:
     //const std::vector<T>& ref() const {return m_ref;}
   protected:
     std::vector<T>& m_ref;
@@ -472,7 +472,7 @@ public:
       parent::operator=(a_from);
       return *this;
     }
-  public:    
+  public:
     //bool get_entry(std::vector<T>& a_v) const {
     //  a_v = m_tmp;
     //  return true;
@@ -635,7 +635,7 @@ public:
       m_name = a_from.m_name;
       return *this;
     }
-  public:    
+  public:
     //const std::string& ref() const {return m_ref;}
   protected:
     std::string& m_ref;
@@ -687,7 +687,7 @@ public:
   protected:
     std::string m_tmp;
   };
-  
+
 public:
   ntuple(std::ostream& a_out,hid_t a_group,const std::string& a_name,
          unsigned int a_compress,size_t /*a_basket_size*//* = 32000*/)
@@ -712,22 +712,22 @@ public:
         if(!col) {tools::safe_clear<icol>(m_cols);return;}\
         m_cols.push_back(col);\
       }
-	
+
            TOOLS_HDF5_NTUPLE_READ_CREATE_COL(char)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(short)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(int)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(tools::int64)
-      
+
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(float)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(double)
-      
-      else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(tools::byte)      
+
+      else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(tools::byte)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(tools::ushort)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(tools::uint32)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(tools::uint64)
 
     //else TOOLS_HDF5_NTUPLE_READ_CREATE_COL(bool) //use byte=uchar.
-    
+
       else
       if((*it)->form()==s_string()) {
         column_string* col = new column_string(*this,*(*it),false,(*it)->name(),0);
@@ -739,10 +739,10 @@ public:
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(short,short)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(int,int)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(int64,tools::int64)
-      
+
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(float,float)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(double,double)
-      
+
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(uchar,tools::uchar)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(ushort,tools::ushort)
       else TOOLS_HDF5_NTUPLE_READ_CREATE_VEC_COL(uint32,tools::uint32)
@@ -771,11 +771,11 @@ public:
     if(!initialize(a_out,a_bd)) {}
   }
 
-  ntuple(std::ostream& a_out,hid_t a_group,const tools::ntuple_booking& a_bkg,  
+  ntuple(std::ostream& a_out,hid_t a_group,const tools::ntuple_booking& a_bkg,
          unsigned int a_compress,size_t a_basket_size/* = 32000*/)
   :store(a_out,a_group,a_bkg.name(),true,a_compress) //true=write
   ,m_title(a_bkg.title())
-  {    
+  {
     const std::vector<tools::column_booking>& cols = a_bkg.columns();
     tools_vforcit(tools::column_booking,cols,it){
 
@@ -820,22 +820,22 @@ public:
           return;\
 	}\
       }
-      
+
            TOOLS_HDF5_NTUPLE_CREATE_COL(char)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(short)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(int)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(tools::int64)
-      
+
       else TOOLS_HDF5_NTUPLE_CREATE_COL(float)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(double)
-      
-      else TOOLS_HDF5_NTUPLE_CREATE_COL(tools::byte)      
+
+      else TOOLS_HDF5_NTUPLE_CREATE_COL(tools::byte)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(tools::ushort)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(tools::uint32)
       else TOOLS_HDF5_NTUPLE_CREATE_COL(tools::uint64)
 
     //else TOOLS_HDF5_NTUPLE_CREATE_COL(bool) //use byte=uchar.
-    
+
       else if((*it).cls_id()==tools::_cid(std::string())) {
         if(!create_column_string((*it).name(),a_basket_size)) {
           m_out << "tools::hdf5::ntuple :"
@@ -849,10 +849,10 @@ public:
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(short)
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(int)
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(tools::int64)
-      
+
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(float)
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(double)
-      
+
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(tools::uchar)
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(tools::ushort)
       else TOOLS_HDF5_NTUPLE_CREATE_VEC_COL(tools::uint32)
@@ -868,7 +868,7 @@ public:
               << std::endl;
         tools::safe_clear<icol>(m_cols);
         return;
-      }      
+      }
     }
 #undef TOOLS_HDF5_NTUPLE_CREATE_COL
 #undef TOOLS_HDF5_NTUPLE_CREATE_VEC_COL
@@ -885,9 +885,9 @@ public:
   bool initialize(std::ostream& a_out,const tools::ntuple_binding& a_bd = tools::ntuple_binding()) {
     tools::safe_clear<icol>(m_cols);
    {tools_vforcit(pages*,m_pagess,it) (*it)->reset_pos();}
-    
+
     tools_vforcit(pages*,m_pagess,it) {
-    
+
 #define TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(a__type) \
       if((*it)->form()==tools::stype(a__type())) {\
         a__type* user_var = a_bd.find_variable<a__type>((*it)->name());\
@@ -901,7 +901,7 @@ public:
           m_cols.push_back(col);\
 	}\
       }
-	
+
 #define TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(a__vec_type,a__type) \
       if((*it)->form()==s_vector_##a__vec_type()) {\
         std::vector<a__type>* user_var = a_bd.find_variable< std::vector<a__type> >((*it)->name());\
@@ -921,17 +921,17 @@ public:
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(short)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(int)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::int64)
-      
+
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(float)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(double)
-      
-      else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::byte)      
+
+      else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::byte)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::ushort)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::uint32)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(tools::uint64)
 
     //else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_COL(bool) //use byte=uchar.
-    
+
       else
       if((*it)->form()==s_string()) {
         std::string* user_var = a_bd.find_variable<std::string>((*it)->name());
@@ -945,15 +945,15 @@ public:
           m_cols.push_back(col);
         }
       }
-      
+
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(char,char)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(short,short)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(int,int)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(int64,tools::int64)
-      
+
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(float,float)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(double,double)
-      
+
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(uchar,tools::uchar)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(ushort,tools::ushort)
       else TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL(uint32,tools::uint32)
@@ -975,9 +975,9 @@ public:
 #undef TOOLS_HDF5_NTUPLE_READ_BINDING_CREATE_VEC_COL
     return true;
   }
-  
+
   const std::string& title() const {return m_title;}
-  
+
   const std::vector<icol*>& columns() const {return m_cols;}
   std::vector<icol*>& columns() {return m_cols;}
 
@@ -1024,7 +1024,7 @@ public:
     m_cols.push_back(col);
     return col;
   }
-  
+
   template <class T>
   column_ref<T>* find_column_ref(const std::string& a_name) {
     icol* col = tools::find_named<icol>(m_cols,a_name);
@@ -1037,7 +1037,7 @@ public:
     if(!col) return 0;
     return tools::id_cast<icol, column<T> >(*col);
   }
-  
+
   template <class T>
   std_vector_column_ref<T>* find_std_vector_column_ref(const std::string& a_name) {
     icol* col = tools::find_named<icol>(m_cols,a_name);
@@ -1050,13 +1050,13 @@ public:
     if(!col) return 0;
     return tools::id_cast<icol, std_vector_column<T> >(*col);
   }
-  
+
   column_string* find_column_string(const std::string& a_name) {
     icol* col = tools::find_named<icol>(m_cols,a_name);
     if(!col) return 0;
     return tools::id_cast<icol, column_string >(*col);
   }
-  
+
   bool add_row() { //write.
     if(m_cols.empty()) return false;
     bool status = true;
@@ -1074,7 +1074,7 @@ public:
     }
     return status;
   }
-  
+
   bool set_basket_size(size_t a_size) {
     tools_vforit(icol*,m_cols,it) {if(!(*it)->set_basket_size(a_size)) return false;}
     return true;

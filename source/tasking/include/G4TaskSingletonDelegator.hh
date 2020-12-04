@@ -45,85 +45,86 @@
 
 namespace G4Traits
 {
-template <typename T>
-struct TaskSingletonKey
-{
+  template <typename T>
+  struct TaskSingletonKey
+  {
     using type         = G4int;
     using compare_type = std::less<type>;
-};
-}
+  };
+}  // namespace G4Traits
 
-// ------------------------------------------------------------------------------------ //
+//----------------------------------------------------------------------------//
 
 /// \class G4TaskSingletonEvaluator
-/// \brief This structure must be specialized and use overloads to the constructor
+/// \brief This structure must be specialized and use overloads to the
+/// constructor
 ///
 template <typename T>
 struct G4TaskSingletonEvaluator;
 
-// ------------------------------------------------------------------------------------ //
+//----------------------------------------------------------------------------//
 
 template <typename T>
 class G4TaskSingletonDelegator;
 
-// ------------------------------------------------------------------------------------ //
+//----------------------------------------------------------------------------//
 
 template <typename T>
 class G4TaskSingletonData
 {
-    using key_type     = typename G4Traits::TaskSingletonKey<T>::type;
-    using compare_type = typename G4Traits::TaskSingletonKey<T>::compare_type;
+  using key_type     = typename G4Traits::TaskSingletonKey<T>::type;
+  using compare_type = typename G4Traits::TaskSingletonKey<T>::compare_type;
 
-    friend struct G4TaskSingletonEvaluator<T>;
-    friend class G4TaskSingletonDelegator<T>;
-    using this_type = G4TaskSingletonData<T>;
+  friend struct G4TaskSingletonEvaluator<T>;
+  friend class G4TaskSingletonDelegator<T>;
+  using this_type = G4TaskSingletonData<T>;
 
-private:
-    static std::unique_ptr<this_type>& GetInstance()
-    {
-        static auto _instance = std::unique_ptr<this_type>(new this_type);
-        return _instance;
-    }
+ private:
+  static std::unique_ptr<this_type>& GetInstance()
+  {
+    static auto _instance = std::unique_ptr<this_type>(new this_type);
+    return _instance;
+  }
 
-private:
-    std::map<key_type, T*, compare_type> m_data;
+ private:
+  std::map<key_type, T*, compare_type> m_data;
 };
 
-// ------------------------------------------------------------------------------------ //
+//----------------------------------------------------------------------------//
 
 template <typename T>
 struct G4TaskSingletonEvaluator
 {
-    using key_type  = typename G4Traits::TaskSingletonKey<T>::type;
-    using data_type = G4TaskSingletonData<T>;
+  using key_type  = typename G4Traits::TaskSingletonKey<T>::type;
+  using data_type = G4TaskSingletonData<T>;
 
-    template <typename... Args>
-    G4TaskSingletonEvaluator(key_type&, Args&&...)
-    {
-        throw std::runtime_error("Not specialized!");
-    }
+  template <typename... Args>
+  G4TaskSingletonEvaluator(key_type&, Args&&...)
+  {
+    throw std::runtime_error("Not specialized!");
+  }
 };
 
-// ------------------------------------------------------------------------------------ //
+//----------------------------------------------------------------------------//
 
 template <typename T>
 class G4TaskSingletonDelegator
 {
-public:
-    using pointer        = T*;
-    using evaluator_type = G4TaskSingletonEvaluator<T>;
-    using data_type      = G4TaskSingletonData<T>;
-    using key_type       = typename G4Traits::TaskSingletonKey<T>;
+ public:
+  using pointer        = T*;
+  using evaluator_type = G4TaskSingletonEvaluator<T>;
+  using data_type      = G4TaskSingletonData<T>;
+  using key_type       = typename G4Traits::TaskSingletonKey<T>;
 
-    template <typename... Args>
-    static void Configure(Args&&... args)
-    {
-        auto&          _data = data_type::GetInstance();
-        evaluator_type _eval(std::forward<Args>(args)...);
-        auto           _ptr = _data->m_data.at(_eval.index);
-        _eval.modifier(_ptr);
-        T::SetInstance(_data->m_data.at(_key));
-    }
+  template <typename... Args>
+  static void Configure(Args&&... args)
+  {
+    auto& _data = data_type::GetInstance();
+    evaluator_type _eval(std::forward<Args>(args)...);
+    auto _ptr = _data->m_data.at(_eval.index);
+    _eval.modifier(_ptr);
+    T::SetInstance(_data->m_data.at(_key));
+  }
 };
 
-// ------------------------------------------------------------------------------------ //
+//----------------------------------------------------------------------------//

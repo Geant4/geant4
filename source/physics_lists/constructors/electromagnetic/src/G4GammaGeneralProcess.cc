@@ -154,12 +154,6 @@ void G4GammaGeneralProcess::AddHadProcess(G4HadronicProcess* ptr)
 
 void G4GammaGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if(1 < verboseLevel) {
-    G4cout << "G4GammaGeneralProcess::PreparePhysicsTable() for "
-           << GetProcessName()
-           << " and particle " << part.GetParticleName()
-           << G4endl;
-  }
   SetParticle(&part);
   currentCouple = nullptr;
   currentMaterial = nullptr;
@@ -169,6 +163,13 @@ void G4GammaGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part
   isTheMaster = lManager->IsMaster(); 
   if(isTheMaster) { SetVerboseLevel(theParameters->Verbose()); }
   else { SetVerboseLevel(theParameters->WorkerVerbose()); }
+
+  if(1 < verboseLevel) {
+    G4cout << "G4GammaGeneralProcess::PreparePhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
+	   << " isMaster: " << isTheMaster << G4endl;
+  }
 
   if(thePhotoElectric) { thePhotoElectric->PreparePhysicsTable(part); }
   if(theCompton)       { theCompton->PreparePhysicsTable(part); }
@@ -258,32 +259,32 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
-  if(thePhotoElectric) { 
+  if(thePhotoElectric != nullptr) { 
     if(!isTheMaster) { 
       thePhotoElectric->SetEmMasterProcess(theHandler->GetMasterProcess(0)); 
     }
     thePhotoElectric->BuildPhysicsTable(part); 
   }
-  if(theCompton) { 
+  if(theCompton != nullptr) { 
     if(!isTheMaster) { 
       theCompton->SetEmMasterProcess(theHandler->GetMasterProcess(1)); 
     }
     theCompton->BuildPhysicsTable(part); 
   }
-  if(theConversionEE) { 
+  if(theConversionEE != nullptr) { 
     if(!isTheMaster) { 
       theConversionEE->SetEmMasterProcess(theHandler->GetMasterProcess(2)); 
     }
     theConversionEE->BuildPhysicsTable(part); 
   }
-  if(theRayleigh) { 
+  if(theRayleigh != nullptr) { 
     if(!isTheMaster) { 
       theRayleigh->SetEmMasterProcess(theHandler->GetMasterProcess(3)); 
     }
     theRayleigh->BuildPhysicsTable(part); 
   }
-  if(theGammaNuclear)  { theGammaNuclear->BuildPhysicsTable(part); }
-  if(theConversionMM)  { theConversionMM->BuildPhysicsTable(part); }
+  if(theGammaNuclear != nullptr)  { theGammaNuclear->BuildPhysicsTable(part); }
+  if(theConversionMM != nullptr)  { theConversionMM->BuildPhysicsTable(part); }
 
   if(isTheMaster) {
     const G4ProductionCutsTable* theCoupleTable=
@@ -595,13 +596,13 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
   switch (idxEnergy) {
   case 0:
     if(x <= peLambda) { 
-      return SampleSecondaries(track, step, thePhotoElectric);
+      return SampleEmSecondaries(track, step, thePhotoElectric);
     } else {
       p = GetProbability(1);
       if(x <= peLambda + (preStepLambda - peLambda)*p) {
-	return SampleSecondaries(track, step, theCompton);
-      } else if(theRayleigh) {
-	return SampleSecondaries(track, step, theRayleigh);
+	return SampleEmSecondaries(track, step, theCompton);
+      } else if(theRayleigh != nullptr) {
+	return SampleEmSecondaries(track, step, theRayleigh);
       }
     }
     break;
@@ -609,59 +610,59 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
   case 1:  
     p = GetProbability(3);
     if(q <= p) {
-      return SampleSecondaries(track, step, thePhotoElectric);
+      return SampleEmSecondaries(track, step, thePhotoElectric);
     }
     p = GetProbability(4);
     if(q <= p) {
-      return SampleSecondaries(track, step, theCompton);
+      return SampleEmSecondaries(track, step, theCompton);
     }
     p = GetProbability(5);
     if(q <= p) {
-      if(theRayleigh) {
-	return SampleSecondaries(track, step, theRayleigh);
+      if(theRayleigh != nullptr) {
+	return SampleEmSecondaries(track, step, theRayleigh);
       }
-    } else if(theGammaNuclear) {
-      return SampleSecondaries(track, step, theGammaNuclear);
+    } else if(theGammaNuclear != nullptr) {
+      return SampleHadSecondaries(track, step, theGammaNuclear);
     }
     break;
 
   case 2:  
     p = GetProbability(7);
     if(q <= p) {
-      return SampleSecondaries(track, step, theConversionEE);
+      return SampleEmSecondaries(track, step, theConversionEE);
     }
     p = GetProbability(8);
     if(q <= p) {
-      return SampleSecondaries(track, step, theCompton);
+      return SampleEmSecondaries(track, step, theCompton);
     }
     p = GetProbability(9);
     if(q <= p) {
-      return SampleSecondaries(track, step, thePhotoElectric);
-    } else if(theGammaNuclear) {
-      return SampleSecondaries(track, step, theGammaNuclear);
+      return SampleEmSecondaries(track, step, thePhotoElectric);
+    } else if(theGammaNuclear != nullptr) {
+      return SampleHadSecondaries(track, step, theGammaNuclear);
     }
     break;
 
   case 3:  
     p = 1.0 - GetProbability(11);
     if(q <= p) {
-      return SampleSecondaries(track, step, theConversionEE);
+      return SampleEmSecondaries(track, step, theConversionEE);
     }
     p = 1.0 - GetProbability(12);
     if(q <= p) {
-      return SampleSecondaries(track, step, theCompton);
+      return SampleEmSecondaries(track, step, theCompton);
     }
     p = 1.0 - GetProbability(13);
     if(q <= p) {
-      return SampleSecondaries(track, step, thePhotoElectric);
+      return SampleEmSecondaries(track, step, thePhotoElectric);
     } 
     p = 1.0 - GetProbability(14);
     if(q <= p) {
-      if(theGammaNuclear) {
-	return SampleSecondaries(track, step, theGammaNuclear);
+      if(theGammaNuclear != nullptr) {
+	return SampleHadSecondaries(track, step, theGammaNuclear);
       }
-    } else if(theConversionMM) {
-      SelectedProcess(track, theConversionMM);
+    } else if(theConversionMM != nullptr) {
+      SelectedProcess(step, theConversionMM);
       return theConversionMM->PostStepDoIt(track, step);
     }
     break;
@@ -673,13 +674,13 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* G4GammaGeneralProcess::SampleSecondaries(
+G4VParticleChange* G4GammaGeneralProcess::SampleHadSecondaries(
            const G4Track& track, const G4Step& step, G4HadronicProcess* proc)
 {
-  SelectedProcess(track, proc);
+  SelectedProcess(step, proc);
   proc->GetCrossSectionDataStore()->ComputeCrossSection(track.GetDynamicParticle(),
                                                         track.GetMaterial());
-  return theGammaNuclear->PostStepDoIt(track, step);
+  return proc->PostStepDoIt(track, step);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -690,16 +691,16 @@ G4bool G4GammaGeneralProcess::StorePhysicsTable(const G4ParticleDefinition* part
 {
   G4bool yes = true;
   if(!isTheMaster) { return yes; }
-  if(thePhotoElectric &&
+  if(thePhotoElectric != nullptr &&
      !thePhotoElectric->StorePhysicsTable(part, directory, ascii)) 
     { yes = false; }
-  if(theCompton && 
+  if(theCompton != nullptr && 
      !theCompton->StorePhysicsTable(part, directory, ascii))
     { yes = false; }
-  if(theConversionEE && 
+  if(theConversionEE != nullptr && 
      !theConversionEE->StorePhysicsTable(part, directory, ascii))
     { yes = false; }
-  if(theRayleigh &&
+  if(theRayleigh != nullptr &&
      !theRayleigh->StorePhysicsTable(part, directory, ascii))
     { yes = false; }
 
@@ -727,16 +728,16 @@ G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
            << GetProcessName() << G4endl;
   }
   G4bool yes = true;
-  if(thePhotoElectric &&
+  if(thePhotoElectric != nullptr &&
      !thePhotoElectric->RetrievePhysicsTable(part, directory, ascii)) 
     { yes = false; }
-  if(theCompton && 
+  if(theCompton != nullptr && 
      !theCompton->RetrievePhysicsTable(part, directory, ascii))
     { yes = false; }
-  if(theConversionEE && 
+  if(theConversionEE != nullptr && 
      !theConversionEE->RetrievePhysicsTable(part, directory, ascii))
     { yes = false; }
-  if(theRayleigh &&
+  if(theRayleigh != nullptr &&
      !theRayleigh->RetrievePhysicsTable(part, directory, ascii))
     { yes = false; }
 
@@ -796,13 +797,13 @@ G4int G4GammaGeneralProcess::GetProcessSubType() const
 G4VEmProcess* G4GammaGeneralProcess::GetEmProcess(const G4String& name)
 {
   G4VEmProcess* proc = nullptr;
-  if(thePhotoElectric && name == thePhotoElectric->GetProcessName()) {
+  if(thePhotoElectric != nullptr && name == thePhotoElectric->GetProcessName()) {
     proc = thePhotoElectric;
-  } else if(theCompton && name == theCompton->GetProcessName()) {
+  } else if(theCompton != nullptr && name == theCompton->GetProcessName()) {
     proc = theCompton;
-  } else if(theConversionEE && name == theConversionEE->GetProcessName()) {
+  } else if(theConversionEE != nullptr && name == theConversionEE->GetProcessName()) {
     proc = theConversionEE;
-  } else if(theRayleigh && name == theRayleigh->GetProcessName()) {
+  } else if(theRayleigh != nullptr && name == theRayleigh->GetProcessName()) {
     proc = theRayleigh;
   }
   return proc;

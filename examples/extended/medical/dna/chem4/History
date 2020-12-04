@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.11.2020 - Ben Morgan         - chem4-V10-06-01
+- Migration to G4RunManagerFactory.
+
+19.10.2020 - Ben Morgan         - chem4-V10-06-00
+- Call rootcint via full path and remove obsolete '-c' flag that
+  creates warnings and CTest failures with latest ROOT versions.
+
 11.09.2019 - Ivana Hrivnacova   - chem4-V10-05-03
 - Create the analysis manager (in ScoreSpecies) via the new factory
   function.
@@ -59,19 +66,19 @@ beam.in
 
 21 Oct 2016 - Mathieu Karamitros - chem4-V10-02-03
     -- General info --
-    The G-values are computing for a range of deposited energy [A;B]. 
-    We are in an infinite volume. Therefore the energy lost by the 
-    primary equals the deposited energy since all secondary particles 
-    will finally slow down to the thermal energy. 
-    The primary is killed once it has deposited more energy than the 
-    minimum threshold A. 
-    However, when the particle looses more energy in few interaction 
-    steps than the maximum allowed thresold B, the event is 
+    The G-values are computing for a range of deposited energy [A;B].
+    We are in an infinite volume. Therefore the energy lost by the
+    primary equals the deposited energy since all secondary particles
+    will finally slow down to the thermal energy.
+    The primary is killed once it has deposited more energy than the
+    minimum threshold A.
+    However, when the particle looses more energy in few interaction
+    steps than the maximum allowed thresold B, the event is
     disregarded (=aborted).
-    
-    Note that if the upper boundary of the energy lost by the primary is 
-    not set, the chemistry may take a lot of time to compute. 
-    
+
+    Note that if the upper boundary of the energy lost by the primary is
+    not set, the chemistry may take a lot of time to compute.
+
 - Abort event if the energy lost by the primary is larger than a
 user chosen threshold
 - Update README and .README.txt for new UI commands

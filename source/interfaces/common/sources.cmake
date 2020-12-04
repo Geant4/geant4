@@ -65,8 +65,8 @@ if(MSVC)
   add_definitions(-DG4INTY_BUILD_WIN32)
 endif()
 
-# X11 options - we only need this for Xm and/or Inventor UI
-if(UNIX AND (GEANT4_USE_XM OR GEANT4_USE_INVENTOR))
+# X11 options - we only need this for Xm (and Inventor, which activates XM)
+if(UNIX AND GEANT4_USE_XM)
   # Add the sources
   list(APPEND G4INTERFACES_COMMON_MODULE_HEADERS G4Xt.hh)
   list(APPEND G4INTERFACES_COMMON_MODULE_SOURCES G4Xt.cc)

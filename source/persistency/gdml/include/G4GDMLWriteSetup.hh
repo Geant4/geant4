@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLWriteSetup
+// G4GDMLWriteSetup
 //
 // Class description:
 //
 // GDML writer class for geometry setup of volumes.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLWRITESETUP_INCLUDED_
-#define _G4GDMLWRITESETUP_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLWRITESETUP_HH
+#define G4GDMLWRITESETUP_HH 1
 
 #include "G4GDMLWriteSolids.hh"
 
@@ -47,11 +42,10 @@ class G4GDMLWriteSetup : public G4GDMLWriteSolids
 
     virtual void SetupWrite(xercesc::DOMElement*, const G4LogicalVolume* const);
 
- protected:
+  protected:
 
-   G4GDMLWriteSetup();
-   virtual ~G4GDMLWriteSetup();
-
+    G4GDMLWriteSetup();
+    virtual ~G4GDMLWriteSetup();
 };
 
 #endif

@@ -128,7 +128,7 @@ G4bool G4GeometrySampler::IsConfigured() const
   if (fIsConfigured)
   {
    G4cout << "WARNING - G4GeometrySampler::IsConfigured()"
-          << "          Some initalization exists, use ClearSampling()"
+          << "          Some initialization exists, use ClearSampling()"
           << "          before a new initialization !" << G4endl;
    isconf = true;
   }

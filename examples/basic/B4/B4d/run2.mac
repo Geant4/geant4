@@ -4,6 +4,8 @@
 # % exampleB4[a,b,c,d] run2.mac
 #
 #/run/numberOfThreads 4
+#/control/cout/ignoreThreadsExcept 0
+#
 /run/initialize
 #
 # Default kinemtics: 

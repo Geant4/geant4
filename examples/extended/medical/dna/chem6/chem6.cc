@@ -44,11 +44,7 @@
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4DNAChemistryManager.hh"
 #include "G4UImanager.hh"
@@ -57,7 +53,7 @@
 
 /*
  * WARNING : Geant4 was initially not intended for this kind of application
- * This code is delivered as a prototype 
+ * This code is delivered as a prototype
  * We will be happy to hear from you, do not hesitate to send your feedback
  * and communicate on the difficulties you may encounter
  * The user interface may change in the next releases since a reiteration of
@@ -82,11 +78,7 @@ int main(int argc, char** argv)
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager= new G4MTRunManager();
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
+  auto* runManager= G4RunManagerFactory::CreateRunManager();
 
   // Set mandatory initialization classes
   runManager->SetUserInitialization(new PhysicsList());

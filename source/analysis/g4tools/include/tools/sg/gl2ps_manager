@@ -18,7 +18,7 @@ public:
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<gl2ps_manager>(this,a_class)) {return p;}
     else return 0;
-  }  
+  }
 public:
   virtual bool begin_render(int,int,unsigned int,unsigned int,float,float,float,float,bool = true) {return true;}
   virtual void end_render() {}
@@ -28,7 +28,7 @@ public:
     m_gstos[m_gen_id] = a_img;
     return m_gen_id;
   }
-  
+
   virtual unsigned int create_gsto_from_data(size_t,const float*) {return 0;}
 
   virtual bool is_gsto_id_valid(unsigned int a_id) const {

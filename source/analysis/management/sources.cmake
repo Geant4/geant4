@@ -29,6 +29,8 @@ geant4_define_module(NAME G4analysismng
     G4H3Messenger.hh
     G4P1Messenger.hh
     G4P2Messenger.hh
+    G4NtupleBookingManager.hh
+    G4NtupleBookingManager.icc
     G4NtupleMessenger.hh
     G4HnInformation.hh
     G4HnManager.hh
@@ -36,6 +38,9 @@ geant4_define_module(NAME G4analysismng
     G4PlotManager.hh
     G4PlotMessenger.hh
     G4PlotParameters.hh
+    G4TFileInformation.hh
+    G4TFileManager.hh
+    G4TFileManager.icc
     G4THnManager.hh
     G4THnManager.icc
     G4TNtupleDescription.hh
@@ -52,10 +57,13 @@ geant4_define_module(NAME G4analysismng
     G4VH1Manager.hh
     G4VH2Manager.hh
     G4VH3Manager.hh
+    G4VNtupleFileManager.hh
     G4VNtupleManager.hh
     G4VP1Manager.hh
     G4VP2Manager.hh
     G4VRNtupleManager.hh
+    G4VTFileManager.hh
+    G4VTHnFileManager.hh
   SOURCES
     G4AnalysisVerbose.cc
     G4AnalysisManagerState.cc
@@ -74,6 +82,7 @@ geant4_define_module(NAME G4analysismng
     G4H3Messenger.cc
     G4P1Messenger.cc
     G4P2Messenger.cc
+    G4NtupleBookingManager.cc
     G4NtupleMessenger.cc
     G4HnManager.cc
     G4HnMessenger.cc
@@ -83,6 +92,7 @@ geant4_define_module(NAME G4analysismng
     G4VAnalysisManager.cc
     G4VAnalysisReader.cc
     G4VFileManager.cc
+    G4VNtupleFileManager.cc
   GRANULAR_DEPENDENCIES
     G4globman
     G4intercoms

@@ -23,46 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4VMCTruthIO.hh
+// G4VMCTruthIO
 //
-// History:
-//   '01.11.18  Youhei Morita  Initial creation
+// Class Description:
+//
+// Abstract base class for storing and retrieving MCTruth events.
 
-#ifndef V_M_C_TRUTH_I_O_HH
-#define V_M_C_TRUTH_I_O_HH 1
+// Author: Youhei Morita, 18.11.2001
+// --------------------------------------------------------------------
+#ifndef G4VMCTRUTHIO_HH
+#define G4VMCTRUTHIO_HH 1
 
 #include "G4MCTEvent.hh"
 
-// Class Description:
-//   Abstract base class for storing and retrieving MCTruth events.
-
 class G4VMCTruthIO
 {
-    public: // With description
-      G4VMCTruthIO();
+  public:
+
+    G4VMCTruthIO();
       // Constructor
 
-      virtual ~G4VMCTruthIO();
+    virtual ~G4VMCTruthIO();
       // Destructor
 
-    public: // With description
-      virtual G4bool Store(G4MCTEvent*) =0;
+    virtual G4bool Store(G4MCTEvent*) = 0;
       // Pure virtual method for storing MCTruth Event.
       // Each persistency package should implement a concrete method
-      // of storing the G4MCTEvent with this signature.
+      // of storing the G4MCTEvent with this signature
 
-      virtual G4bool Retrieve(G4MCTEvent*&) =0;
+    virtual G4bool Retrieve(G4MCTEvent*&) = 0;
       // Pure virtual method for retrieving MCTruth Event.
       // Each persistency package should implement a concrete method
-      // of storing the G4MCTEvent with this signature.
+      // of storing the G4MCTEvent with this signature
 
-      void SetVerboseLevel(int v) { m_verbose = v; };
+    void SetVerboseLevel(G4int v) { m_verbose = v; }
       // Set verbose level.
 
-    protected:
-      G4int m_verbose;
+  protected:
 
-}; // End of class G4VMCTruthIO
+    G4int m_verbose = 0;
+};
 
 #endif
-

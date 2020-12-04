@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4GDMLReadParamvol
+// G4GDMLReadParamvol
 //
 // Class description:
 //
 // GDML class for importing parameterised geometrical entities.
 
-// History:
-// - Created.                                  Zoltan Torzsok, November 2007
-// -------------------------------------------------------------------------
-
-#ifndef _G4GDMLREADPARAMVOL_INCLUDED_
-#define _G4GDMLREADPARAMVOL_INCLUDED_
+// Author: Zoltan Torzsok, November 2007
+// --------------------------------------------------------------------
+#ifndef G4GDMLREADPARAMVOL_HH
+#define G4GDMLREADPARAMVOL_HH 1
 
 #include "G4GDMLReadSetup.hh"
 #include "G4GDMLParameterisation.hh"
@@ -46,51 +41,50 @@ class G4LogicalVolume;
 
 class G4GDMLReadParamvol : public G4GDMLReadSetup
 {
+  public:
 
- public:
+    virtual void ParamvolRead(const xercesc::DOMElement* const,
+                              G4LogicalVolume*);
+    virtual void Paramvol_contentRead(const xercesc::DOMElement* const);
 
-   virtual void ParamvolRead(const xercesc::DOMElement* const,G4LogicalVolume*);
+  protected:
 
-   virtual void Paramvol_contentRead(const xercesc::DOMElement* const);
+    G4GDMLReadParamvol();
+    virtual ~G4GDMLReadParamvol();
 
- protected:
+    void Box_dimensionsRead(const xercesc::DOMElement* const,
+                            G4GDMLParameterisation::PARAMETER&);
+    void Trd_dimensionsRead(const xercesc::DOMElement* const,
+                            G4GDMLParameterisation::PARAMETER&);
+    void Trap_dimensionsRead(const xercesc::DOMElement* const,
+                             G4GDMLParameterisation::PARAMETER&);
+    void Tube_dimensionsRead(const xercesc::DOMElement* const,
+                             G4GDMLParameterisation::PARAMETER&);
+    void Cone_dimensionsRead(const xercesc::DOMElement* const,
+                             G4GDMLParameterisation::PARAMETER&);
+    void Sphere_dimensionsRead(const xercesc::DOMElement* const,
+                               G4GDMLParameterisation::PARAMETER&);
+    void Orb_dimensionsRead(const xercesc::DOMElement* const,
+                            G4GDMLParameterisation::PARAMETER&);
+    void Torus_dimensionsRead(const xercesc::DOMElement* const,
+                              G4GDMLParameterisation::PARAMETER&);
+    void Ellipsoid_dimensionsRead(const xercesc::DOMElement* const,
+                                  G4GDMLParameterisation::PARAMETER&);
+    void Para_dimensionsRead(const xercesc::DOMElement* const,
+                             G4GDMLParameterisation::PARAMETER&);
+    void Hype_dimensionsRead(const xercesc::DOMElement* const,
+                             G4GDMLParameterisation::PARAMETER&);
+    void Polycone_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+    void Polyhedra_dimensionsRead(const xercesc::DOMElement* const,
+                                  G4GDMLParameterisation::PARAMETER&);
+    void ParameterisedRead(const xercesc::DOMElement* const);
 
-   G4GDMLReadParamvol();
-   virtual ~G4GDMLReadParamvol();
+    void ParametersRead(const xercesc::DOMElement* const);
 
-   void Box_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Trd_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Trap_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Tube_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Cone_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Sphere_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Orb_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Torus_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Ellipsoid_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Para_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Hype_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Polycone_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void Polyhedra_dimensionsRead(const xercesc::DOMElement* const,
-                                 G4GDMLParameterisation::PARAMETER&);
-   void ParameterisedRead(const xercesc::DOMElement* const);
+  protected:
 
-   void ParametersRead(const xercesc::DOMElement* const);
-
- protected:
-
-   G4GDMLParameterisation* parameterisation;
+    G4GDMLParameterisation* parameterisation = nullptr;
 };
 
 #endif

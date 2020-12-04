@@ -97,7 +97,7 @@ public:
       m_out << "tools::mpi::hmpi::wait_histos : rank " << m_rank << " : can't alloc buffer of size " << buffer_size << std::endl;
       return false;
     }
-  
+
     if(::MPI_Recv(buffer,buffer_size,MPI_CHAR,a_src,m_tag,m_comm,&status)!=MPI_SUCCESS) {
       m_out << "tools::mpi::hmpi::wait_histos : rank " << m_rank << " : MPI_Recv : failed." << std::endl;
       delete [] buffer;
@@ -111,7 +111,7 @@ public:
     num_t nhist;
     if(!_mpi.unpack(nhist)) return false;
 
-    if(m_verbose) 
+    if(m_verbose)
       m_out << "tools::mpi::hmpi::wait_histos : rank " << m_rank << " : number of histos to unpack " << nhist << std::endl;
 
    {for(num_t ihist=0;ihist<nhist;ihist++) {
@@ -177,7 +177,7 @@ public:
                 << std::endl;
         }
         a_hists.push_back(class_pointer(h->s_cls(),h)); //give ownership of h.
-  
+
       } else if(scls==tools::histo::p2d::s_class()) {
         tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pdata;
         if(!profile_data_duiuidd_unpack(_mpi,pdata)) return false;
@@ -206,11 +206,11 @@ public:
 
 public:
   virtual int rank() const { return m_rank;}
-  virtual bool comm_rank(int& a_rank) const { 
+  virtual bool comm_rank(int& a_rank) const {
     if(::MPI_Comm_rank(m_comm,&a_rank)!=MPI_SUCCESS) {a_rank=-1;return false;}
     return true;
   }
-  virtual bool comm_size(int& a_size) const { 
+  virtual bool comm_size(int& a_size) const {
     if(::MPI_Comm_size(m_comm,&a_size)!=MPI_SUCCESS) {a_size=0;return false;}
     return true;
   }

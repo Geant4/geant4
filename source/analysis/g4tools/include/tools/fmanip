@@ -52,7 +52,7 @@ inline bool find_with_dirs(std::ostream& a_out,
           << std::endl;
   }
 
-  return false;   
+  return false;
 }
 
 }
@@ -75,7 +75,7 @@ inline bool find_with_env(std::ostream& a_out,
       //      << std::endl;
       a_path = a_file;
       return true;
-    }      
+    }
     a_out << "tools::find_with_env : env variable " << sout(a_env) << " not defined." << std::endl;
     a_path.clear();
     return false;

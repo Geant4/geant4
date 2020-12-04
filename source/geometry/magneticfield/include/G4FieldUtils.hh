@@ -44,6 +44,9 @@ namespace field_utils
 
   using State = G4double[G4FieldTrack::ncompSVEC];
 
+  template <unsigned int N>
+  using ShortState = G4double[N];
+   
   enum class Value3D
   {
     Position = 0,

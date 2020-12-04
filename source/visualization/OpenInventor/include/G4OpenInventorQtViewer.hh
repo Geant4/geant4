@@ -34,24 +34,76 @@
 // Inheritance :
 #include "G4OpenInventorViewer.hh"
 
-// This causes clash with enum CursorShape in qnamespace.h !
-//#include <X11/Intrinsic.h>
-
 #include <Inventor/nodes/SoEventCallback.h>
 
 //class SoQtExaminerViewer;
 class G4OpenInventorQtExaminerViewer;
 
-class G4OpenInventorQtViewer: public G4OpenInventorViewer {
+#include <qobject.h>
+
+class QMenuBar;
+class QFont;
+class QAction;
+
+
+//class G4OpenInventorQtViewer: public G4OpenInventorViewer {
+class G4OpenInventorQtViewer: public QObject,
+                              public G4OpenInventorViewer {
+
+  Q_OBJECT 
+
+private Q_SLOTS :
+
+   // File menu
+   void FileWritePSCB();
+   void FileWritePDFCB();
+   void FileWriteIVCB();
+   void FileEscapeCB();
+
+   // Etc menu
+   void EtcEraseDetectorCB();
+   void EtcEraseEventCB();
+   void EtcSetSolidCB();
+   void EtcSetReducedWireframeCB();
+   void EtcSetFullWireframeCB();
+   void EtcVisibMInvisibDCB();
+   void EtcVisibMVisibDCB();
+   void EtcUpdateSceneCB();
+   void EtcSceneGraphStatsCB();
+
+private:
+
+   // File menu
+   QAction* FileWritePS;
+   QAction* FileWritePDF;
+   QAction* FileWriteIV;
+   QAction* FileEscape;
+
+   // Etc menu
+   QAction* EtcEraseDetector;
+   QAction* EtcEraseEvent;
+   QAction* EtcSetSolid;
+   QAction* EtcSetReducedWireframe;
+   QAction* EtcSetFullWireframe;
+   QAction* EtcVisibMInvisibD;
+   QAction* EtcVisibMVisibD;
+   QAction* EtcUpdateScene;
+   QAction* EtcSceneGraphStats;
+
 public:
+
   G4OpenInventorQtViewer(G4OpenInventorSceneHandler& scene,
 		         const G4String& name = "");
   virtual ~G4OpenInventorQtViewer();
   void Initialise();
+
 public: //G4VViewer
+
   virtual void FinishView();
   virtual void SetView();
+
 protected:
+
   virtual void ViewerRender();
   virtual SoCamera* GetCamera();
 
@@ -60,29 +112,6 @@ protected:
    //SoQtExaminerViewer* fViewer;
   G4OpenInventorQtExaminerViewer* fViewer;
 
-  // FWJ from OpenInventorXtViewer.hh
-  // Widget AddMenu(Widget,const G4String&,const G4String&);
-  // void AddButton(Widget,const G4String&,XtCallbackProc);
-  // static void PostScriptCbk(Widget,XtPointer,XtPointer);
-  // static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
-  // static void WriteInventorCbk(Widget,XtPointer,XtPointer);
-  // static void EscapeCbk(Widget,XtPointer,XtPointer);
-  // static void SceneGraphStatisticsCbk(Widget,XtPointer,XtPointer);
-  // static void EraseDetectorCbk(Widget,XtPointer,XtPointer);
-  // static void EraseEventCbk(Widget,XtPointer,XtPointer);
-  // static void SetSolidCbk(Widget,XtPointer,XtPointer);
-  // static void SetWireFrameCbk(Widget,XtPointer,XtPointer);
-  // static void SetReducedWireFrameCbk(Widget,XtPointer,XtPointer);
-  // static void SetFullWireFrameCbk(Widget,XtPointer,XtPointer);
-  // static void UpdateSceneCbk(Widget,XtPointer,XtPointer);
-  // static void HelpCbk(Widget,XtPointer,XtPointer);
-  // static void HelpCancelCbk(Widget,XtPointer,XtPointer);
-  // static void SetPreviewCbk(Widget,XtPointer,XtPointer);
-  // static void SetPreviewAndFullCbk(Widget,XtPointer,XtPointer);
-  // Widget fShell;
-  //  Widget fHelpForm;
-  //  Widget fHelpForm;
-  //  Widget fHelpText;
 };
 
 #endif

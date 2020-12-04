@@ -75,19 +75,27 @@ class G4ParticleHPManager
       void DumpDataSource();
 
       G4bool GetUseOnlyPhotoEvaporation() { return USE_ONLY_PHOTONEVAPORATION; };
-      void SetUseOnlyPhotoEvaporation( G4bool val ) { USE_ONLY_PHOTONEVAPORATION = val; };
       G4bool GetSkipMissingIsotopes() { return SKIP_MISSING_ISOTOPES; };
       G4bool GetNeglectDoppler() { return NEGLECT_DOPPLER; };
       G4bool GetDoNotAdjustFinalState() { return DO_NOT_ADJUST_FINAL_STATE; };
       G4bool GetProduceFissionFragments() { return PRODUCE_FISSION_FRAGMENTS; };
+      G4bool GetUseWendtFissionModel() { return USE_WENDT_FISSION_MODEL; };
       G4bool GetUseNRESP71Model() { return USE_NRESP71_MODEL; };
 
+      void SetUseOnlyPhotoEvaporation( G4bool val ) { USE_ONLY_PHOTONEVAPORATION = val; };
       void SetSkipMissingIsotopes( G4bool val ) { SKIP_MISSING_ISOTOPES = val; };
       void SetNeglectDoppler( G4bool val ) { NEGLECT_DOPPLER = val; };
       void SetDoNotAdjustFinalState( G4bool val ) { DO_NOT_ADJUST_FINAL_STATE = val; };
-      void SetProduceFissionFragments( G4bool val ) { PRODUCE_FISSION_FRAGMENTS = val; };
+      void SetProduceFissionFragments( G4bool val ) {
+	// Make sure both fission fragment models are not active at same time
+	USE_WENDT_FISSION_MODEL ? PRODUCE_FISSION_FRAGMENTS = false : PRODUCE_FISSION_FRAGMENTS = val ; };
+      void SetUseWendtFissionModel( G4bool val ) { USE_WENDT_FISSION_MODEL = val;
+	// Make sure both fission fragment models are not active at same time
+	if ( USE_WENDT_FISSION_MODEL ) PRODUCE_FISSION_FRAGMENTS = false; };
       void SetUseNRESP71Model( G4bool val ) { USE_NRESP71_MODEL = val; };
 
+      void DumpSetting(); // Needs to be called somewhere to print out information once per run.
+  
       void RegisterElasticCrossSections( G4PhysicsTable* val ){ theElasticCrossSections = val; };
       G4PhysicsTable* GetElasticCrossSections(){ return theElasticCrossSections; };
       void RegisterCaptureCrossSections( G4PhysicsTable* val ){ theCaptureCrossSections = val; };
@@ -134,6 +142,7 @@ class G4ParticleHPManager
       G4bool NEGLECT_DOPPLER;
       G4bool DO_NOT_ADJUST_FINAL_STATE;
       G4bool PRODUCE_FISSION_FRAGMENTS;
+      G4bool USE_WENDT_FISSION_MODEL;
       G4bool USE_NRESP71_MODEL;
 
       G4PhysicsTable* theElasticCrossSections;

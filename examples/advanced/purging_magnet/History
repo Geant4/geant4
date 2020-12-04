@@ -8,6 +8,12 @@
                       Category History file
                       ---------------------
 
+02.11.2020 B.Morgan      (purmag-V10-06-01)
+- Support same CMake version range as core Geant4
+
+13.07.2020 G. Cosmo      (purmag-V10-06-00)
+- Corrected README. No functional changes.
+
 20.11.2019 G. Folger     (purmag-V10-05-00)
 - remove using namespace std from header file PurgMagTabulatedField3D.hh
    and correct follow-on problems.
@@ -16,10 +22,10 @@
 - Switch back to csv output format.
 
 29.10.2018 - L. Pandola (purmag-V10-04-01)
-- Remove the useless buffer singleton PurgMagAnalysisManager class, 
-  and call directly G4AnalysisManager tools. Clean-up in the SteppingAction. 
+- Remove the useless buffer singleton PurgMagAnalysisManager class,
+  and call directly G4AnalysisManager tools. Clean-up in the SteppingAction.
   Use root instead of csv as output format.
-  
+
 10.05.2018 - B. Morgan     (purmag-V10-04-00)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
@@ -35,7 +41,7 @@
 - Actual MT migration: use G4MTRunManager, if applicable
 
 15.10.2014 - Luciano Pandola (purmag-V10-00-01)
-- Added ConstructSDandField() and registered magnetic field in a 
+- Added ConstructSDandField() and registered magnetic field in a
  G4Cache
 - Added a protection in the case the input field file is not found
 - Registered RunAction in master and workers
@@ -43,7 +49,7 @@
 14.10.2014 - Luciano Pandola (purmag-V10-00-00)
 - Added ActionInitialization class (first step for MT migration)
 - Add const qualifiers for methods of DetectorConstruction
-- Changed signature of SteppingAction, to get a const pointer to 
+- Changed signature of SteppingAction, to get a const pointer to
  geometry
 
 30.07.2013 - Andrea Dotti   (purmag-V09-06-02)
@@ -54,8 +60,8 @@
   analysis module.
 
 17.04.2013 - Luciano Pandola (purmag-V09-06-00)
-- Migrate analysis from AIDA to g4analysis (remove the 
-  external AIDA dependency). Some clean-up in other 
+- Migrate analysis from AIDA to g4analysis (remove the
+  external AIDA dependency). Some clean-up in other
   classe (RunAction, EventAction, StepAction)
 
 06.11.2012 - Luciano Pandola (purmag-V09-05-03)
@@ -107,10 +113,10 @@
 
 27.05.2004 . S. Larsson      purtag-V06-01-01
   Migration to PI - Setup in README updated
-  Tagged				
+  Tagged
 
 25.05.2004 - J. Apostolakis   purtag-V06-01-00
-  Tagged 
+  Tagged
 
 24.05.2004 - J. Apostolakis
   Modified README file

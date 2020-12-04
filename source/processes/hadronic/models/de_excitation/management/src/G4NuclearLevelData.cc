@@ -458,40 +458,39 @@ G4NuclearLevelData::~G4NuclearLevelData()
   for(G4int Z=1; Z<ZMAX; ++Z) {
     size_t nn = (fLevelManagers[Z]).size();
     for(size_t j=0; j<nn; ++j) { 
-      //G4cout << " G4NuclearLevelData delete Z= " << Z 
-      //       << " A= " << AMIN[Z]+j << G4endl;
       delete (fLevelManagers[Z])[j]; 
     }
   }
 }
 
 const G4LevelManager* 
-G4NuclearLevelData::GetLevelManager(G4int Z, G4int A, G4bool isLocked)
+G4NuclearLevelData::GetLevelManager(G4int Z, G4int A)
 {
-  const G4LevelManager* man = nullptr;
-  if(0 < Z && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) {
-    const G4int idx = A - AMIN[Z];
-    if(!(fLevelManagerFlags[Z])[idx]) {
-      if(isLocked) {
-        (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
-        (fLevelManagerFlags[Z])[idx] = true;
-      } else {
-        InitialiseForIsotope(Z, A);
-      }
+  if(Z < 1 || Z >= ZMAX || A < AMIN[Z] || A > AMAX[Z]) { return nullptr; } 
+  const G4int idx = A - AMIN[Z];
+  if( !(fLevelManagerFlags[Z])[idx] ) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nuclearLevelDataMutex);
+    if( !(fLevelManagerFlags[Z])[idx] ) {
+#endif
+      (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
+      (fLevelManagerFlags[Z])[idx] = true;
+#ifdef G4MULTITHREADED
     }
-    man = (fLevelManagers[Z])[idx];
+    G4MUTEXUNLOCK(&nuclearLevelDataMutex);
+#endif
   }
-  return man;
+  return (fLevelManagers[Z])[idx];
 }
 
 G4bool 
 G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& filename)
 {
   G4bool res = false; 
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&nuclearLevelDataMutex);
-#endif
   if(Z > 0 && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) { 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nuclearLevelDataMutex);
+#endif
     const G4LevelManager* newman = 
       fLevelReader->MakeLevelManager(Z, A, filename);
     if(newman) { 
@@ -504,6 +503,9 @@ G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& filename)
       (fLevelManagers[Z])[idx] = newman;
       (fLevelManagerFlags[Z])[idx] = true;
     }
+#ifdef G4MULTITHREADED
+    G4MUTEXUNLOCK(&nuclearLevelDataMutex);
+#endif
   } else {
     G4ExceptionDescription ed;
     ed << "private nuclear level data for Z= " << Z << " A= " << A
@@ -511,9 +513,6 @@ G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& filename)
     G4Exception("G4NuclearLevelData::AddPrivateData","had0433",FatalException,
                 ed,"Stop execution");
   }
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&nuclearLevelDataMutex);
-#endif
   return res;
 }
 
@@ -527,55 +526,29 @@ G4int G4NuclearLevelData::GetMaxA(G4int Z) const
   return (Z >= 0 && Z < ZMAX) ? AMAX[Z] : 0; 
 }
 
-void G4NuclearLevelData::InitialiseForIsotope(G4int Z, G4int A)
+void G4NuclearLevelData::UploadNuclearLevelData(G4int ZZ)
 {
-  if(Z < 1 || Z >= ZMAX || A < AMIN[Z] || A > AMAX[Z]) { return; } 
-  const G4int idx = A - AMIN[Z];
-#ifdef G4MULTITHREADED
-  if(!(fLevelManagerFlags[Z])[idx]) {
-    G4MUTEXLOCK(&nuclearLevelDataMutex);
-#endif
-    // initialise only once
-    // before 1st event fragments Z < zmax are initialized
-    if(!fInitialized) {
-      fInitialized = true;
-      InitialiseUp(fDeexPrecoParameters->GetUploadZ());
-    }
-    if(!(fLevelManagerFlags[Z])[idx]) {
-      (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
-      (fLevelManagerFlags[Z])[idx] = true;
-    }
-#ifdef G4MULTITHREADED
-    G4MUTEXUNLOCK(&nuclearLevelDataMutex);
-  }
-#endif
-}
-
-void G4NuclearLevelData::UploadNuclearLevelData(G4int Z)
-{
+  if(fInitialized) return;
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&nuclearLevelDataMutex);
 #endif
-  fDeexPrecoParameters->SetUploadZ(Z);
-  InitialiseUp(Z);
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&nuclearLevelDataMutex);
-#endif
-}
-
-void G4NuclearLevelData::InitialiseUp(G4int ZZ)
-{
-  G4int mZ = ZZ;
-  if(mZ >= ZMAX) { mZ = ZMAX; } 
-  for(G4int Z=1; Z<mZ; ++Z) {
-    for(G4int A=AMIN[Z]; A<=AMAX[Z]; ++A) {
-      G4int idx = A - AMIN[Z];
-      if(!(fLevelManagerFlags[Z])[idx]) {
-        (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
-        (fLevelManagerFlags[Z])[idx] = true;
+  if(!fInitialized) {
+    fInitialized = true;
+    G4int mZ = ZZ;
+    if(mZ > ZMAX) { mZ = ZMAX; }
+    for(G4int Z=1; Z<mZ; ++Z) {
+      for(G4int A=AMIN[Z]; A<=AMAX[Z]; ++A) {
+	G4int idx = A - AMIN[Z];
+	if( !(fLevelManagerFlags[Z])[idx] ) {
+	  (fLevelManagers[Z])[idx] = fLevelReader->CreateLevelManager(Z, A);
+	  (fLevelManagerFlags[Z])[idx] = true;
+	}
       }
     }
   }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&nuclearLevelDataMutex);
+#endif
 }
 
 G4double G4NuclearLevelData::GetMaxLevelEnergy(G4int Z, G4int A) const

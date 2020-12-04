@@ -20,7 +20,7 @@ public:
   base_poly():fX(0),fY(0) {}
   base_poly(double x,double y):fX(x),fY(y) {}
   virtual ~base_poly(){}
-public:   
+public:
   base_poly(base_poly const &a_from):fX(a_from.fX),fY(a_from.fY) {}
   base_poly& operator=(base_poly const &a_from) {
     if(this==&a_from) return *this;
@@ -42,7 +42,7 @@ class cubic_poly : public base_poly {
 public:
   cubic_poly():fB(0), fC(0), fD(0) {}
   cubic_poly(double x, double y, double b, double c, double d):base_poly(x,y), fB(b), fC(c), fD(d) {}
-public:   
+public:
   cubic_poly(cubic_poly const &a_from)
   :base_poly(a_from), fB(a_from.fB), fC(a_from.fC), fD(a_from.fD) {}
   cubic_poly& operator=(cubic_poly const &a_from) {
@@ -201,7 +201,7 @@ protected:
     return i;
   }
   static int TMath_FloorNint(double x) { return TMath_Nint(::floor(x)); }
-  
+
   size_t find_x(double x) const {
     int klow=0, khig=fNp-1;
     //
@@ -234,7 +234,7 @@ protected:
                   << " x(" << klow << ") = " << fPoly[klow].X() << " < x= " << x
                   << " < x(" << klow+1 << ") = " << fPoly[klow+1].X() << "."
 		  << "." << std::endl;
-         }     		  
+         }     
       }
     }
     return klow;
@@ -270,7 +270,7 @@ protected:
     ///        where h = x - tau(i). the function program *ppvalu* may be
     ///        used to evaluate f or its derivatives from tau,c, l = n-1,
     ///        and k=4.
-    
+
     int j, l;
     double   divdf1,divdf3,dtau,g=0;
     // ***** a tridiagonal linear system for the unknown slopes s(i) of
@@ -439,7 +439,7 @@ public:
     base_spline::operator=(a_from);
     fPoly = a_from.fPoly;
     return *this;
-  }  
+  }
 public:
   double eval(double x) const {if(!fNp) return 0;size_t klow=find_x(x);return fPoly[klow].eval(x);}
 
@@ -462,7 +462,7 @@ protected:
           khalf = (klow+khig)/2;
           if(x>fPoly[khalf].X()) klow=khalf;
           else                   khig=khalf;
-        }	       
+        }
       }
 
       // This could be removed, sanity check
@@ -471,11 +471,11 @@ protected:
               << " x(" << klow << ") = " << fPoly[klow].X() << " < x= " << x
               << " < x(" << klow+1<< ") = " << fPoly[klow+1].X() << "."
 	      << std::endl;
-      }     		  
+      }
     }
     return klow;
   }
-  
+
   void build_coeff() {
     ////////////////////////////////////////////////////////////////////////////////
     ///     algorithm 600, collected algorithms from acm.
@@ -560,7 +560,7 @@ protected:
     fPoly[0].D() = fPoly[0].E() = 0;
     if (q) fPoly[1].D() = q*6.*q2/(qr*qr);
     else fPoly[1].D() = 0;
- 
+
     if (m > 1) {
        for (i = 1; i < m; ++i) {
           p = q;
@@ -588,7 +588,7 @@ protected:
        }
     }
     if (r) fPoly[m-1].D() += r*6.*r2/(qr*qr);
- 
+
     //     First and second order divided differences of the given function
     //     values, stored in b from 2 to n and in c from 3 to n
     //     respectively. care is taken of double and triple knots.
@@ -610,14 +610,14 @@ protected:
           fPoly[i].B() = fPoly[i-1].B();
        }
     }
- 
-    //     Solve the linear system with c(i+2) - c(i+1) as right-hand side. 
+
+    //     Solve the linear system with c(i+2) - c(i+1) as right-hand side.
     if (m > 1) {
        p=fPoly[0].C()=fPoly[m-1].E()=fPoly[0].F()
           =fPoly[m-2].F()=fPoly[m-1].F()=0;
        fPoly[1].C() = fPoly[3].C()-fPoly[2].C();
        fPoly[1].D() = 1./fPoly[1].D();
- 
+
        if (m > 2) {
           for (i = 2; i < m; ++i) {
              q = fPoly[i-1].D()*fPoly[i-1].E();
@@ -629,13 +629,13 @@ protected:
           }
        }
     }
- 
+
     fPoly[fNp-2].C() = fPoly[fNp-1].C() = 0;
     if (fNp > 3)
        for (i=fNp-3; i > 0; --i)
           fPoly[i].C() = (fPoly[i].C()-fPoly[i].E()*fPoly[i+1].C()
                          -fPoly[i].F()*fPoly[i+2].C())*fPoly[i].D();
- 
+
     //     Integrate the third derivative of s(x)
     m = fNp-1;
     q = fPoly[1].X()-fPoly[0].X();
@@ -679,14 +679,14 @@ protected:
           fPoly[i].D() = fPoly[i].E() = fPoly[i].F() = 0;
        }
     }
- 
+
     //     End points x(1) and x(n)
     p = fPoly[1].X()-fPoly[0].X();
     s = fPoly[0].F()*p*p*p;
     fPoly[0].E() = fPoly[0].D() = 0;
     fPoly[0].C() = fPoly[1].C()-s*10;
     fPoly[0].B() = b1-(fPoly[0].C()+s)*p;
- 
+
     q = fPoly[fNp-1].X()-fPoly[fNp-2].X();
     t = fPoly[fNp-2].F()*q*q*q;
     fPoly[fNp-1].E() = fPoly[fNp-1].D() = 0;

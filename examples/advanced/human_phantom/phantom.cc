@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
-// Authors (since 2007): S. Guatelli,University of Wollongong, Australia
+// Maintener (since 2007): S. Guatelli,University of Wollongong, Australia
 // Contributions by F. Ambroglini, INFN Perugia, Italy
 
 #include <stdexcept>
@@ -35,26 +35,16 @@
 #include "G4TransportationManager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-
-
 #include "G4HumanPhantomConstruction.hh"
 #include "G4HumanPhantomPhysicsList.hh"
 #include "G4HumanPhantomActionInitialization.hh"
-
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 int main(int argc,char** argv)
 {
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4); // Is equal to 2 by default
-#else
- G4RunManager* runManager = new G4RunManager;
-#endif
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
   
  // Set mandatory initialization classes
   G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();

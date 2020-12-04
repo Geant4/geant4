@@ -127,7 +127,11 @@ G4double G4EMDissociationCrossSection::GetElementCrossSection
 {
   // VI protection for Hydrogen
   if(1 >= Z) { return 0.0; }
-     
+
+  // Zero cross-section for particles with kinetic energy less than 2 MeV to prevent
+  // possible abort signal from bad arithmetic in GetCrossSectionForProjectile
+  if ( theDynamicParticle->GetKineticEnergy() < 2.0*CLHEP::MeV ) { return 0.0; }
+  
   //
   // Get relevant information about the projectile and target (A, Z) and
   // velocity of the projectile.
@@ -237,7 +241,9 @@ G4EMDissociationCrossSection::GetWilsonProbabilityForProtonDissociation(G4double
 // from the nucleus in the EMD interaction.
 //
   G4double p = 0.0;
-  if (Z < 6.0)
+  if (Z < 2.0)
+    p = 0.0;  // To avoid to remove one proton from hydrogen isotopes
+  else if (Z < 6.0)
     p = 0.5;
   else if (Z < 8.0)
     p = 0.6;

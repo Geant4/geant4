@@ -1498,8 +1498,8 @@ SbBool G4OpenInventorXtExaminerViewer::processSoEvent(const SoEvent * const ev) 
          case SoKeyboardEvent::DELETE:
             if (viewPtList.size()
                 && (currentState != ANIMATION
-                    || currentState != REVERSED_ANIMATION
-                    || currentState != PAUSED_ANIMATION)) {
+                    && currentState != REVERSED_ANIMATION
+                    && currentState != PAUSED_ANIMATION)) {
                String dialogName = (char *) "Delete Viewpoint";
                std::string msg = "Are you sure you want to delete current viewpoint?";
                warningMsgDialog(msg, dialogName, deleteViewPtCB);
@@ -4493,6 +4493,8 @@ void G4OpenInventorXtExaminerViewer::evenOutRefParticlePts()
       numOfPts++;
       totalDistBtwPts += (p2 - p1).length();
    }
+   // Nothing useful to do (and fix Coverity)
+   if (numOfPts <= 2) return;
 
    avgDistBtwPts = totalDistBtwPts / numOfPts;
    float minDistAllowed = 0.75 * avgDistBtwPts;

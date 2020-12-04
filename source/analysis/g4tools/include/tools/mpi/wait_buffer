@@ -50,7 +50,7 @@ inline bool wait_buffer(std::ostream& a_out,int a_rank,int a_src,int a_tag,const
     a_probe_src = -1;
     return false;
   }
-  
+
   if(::MPI_Recv(a_buffer,a_buffer_size,MPI_CHAR,status.MPI_SOURCE,status.MPI_TAG,a_comm,&status)!=MPI_SUCCESS) {
     a_out << "tools::mpi::wait_buffer : rank " << a_rank << " : MPI_Recv : failed." << std::endl;
     a_buffer_size = 0;

@@ -28,7 +28,7 @@
 //         30 October 2008
 //         on base of G4LowEnergyPhotoElectric developed by A.Forti and M.G.Pia
 //
-// 15 Mar 2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
+// 15 Mar 2010   L. Pandola, removed methods to set explicitly fluorescence cuts.
 //               Main cuts from G4ProductionCutsTable are always used
 // 30 May 2011   A Mantero & V Ivanchenko Migration to model design for deexcitation
 // 22 Oct 2012   A & V Ivanchenko Migration data structure to G4PhysicsVector

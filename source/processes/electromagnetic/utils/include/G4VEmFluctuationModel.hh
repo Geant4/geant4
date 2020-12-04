@@ -55,7 +55,6 @@
 #ifndef G4VEmFluctuationModel_h
 #define G4VEmFluctuationModel_h 1
 
-
 #include "globals.hh"
 #include <CLHEP/Random/RandomEngine.h>
 
@@ -103,12 +102,12 @@ public:
 
   inline const G4String& GetName() const;
 
-private:
-
   // hide assignment operator
   G4VEmFluctuationModel & 
     operator=(const  G4VEmFluctuationModel &right) = delete;
   G4VEmFluctuationModel(const  G4VEmFluctuationModel&) = delete;
+
+private:
 
   const G4String      name;
   G4LossTableManager* fManager;

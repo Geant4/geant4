@@ -34,6 +34,7 @@
 #include "G4P2ToolsManager.hh"
 #include "G4PlotManager.hh"
 #include "G4MPIToolsManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 G4ThreadLocal G4ToolsAnalysisManager* G4ToolsAnalysisManager::fgToolsInstance = nullptr;
 
@@ -203,5 +204,3 @@ G4bool G4ToolsAnalysisManager::Reset()
   
   return finalResult;
 }  
- 
-

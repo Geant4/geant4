@@ -34,9 +34,24 @@
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
 // Updated:     moved to inline
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
+
+inline
+void G4MaterialPropertiesTable::AddConstProperty(const G4String& key,
+                                                 G4double PropertyValue)
+{
+  // Provides a way of adding a constant property to the Material Properties
+  // Table given a key
+  if (std::find(G4MaterialConstPropertyName.begin(),
+                G4MaterialConstPropertyName.end(), key) ==
+       G4MaterialConstPropertyName.end()) {
+    G4MaterialConstPropertyName.push_back(key);
+  }
+  G4int index = GetConstPropertyIndex(key);
+
+  MCP[index] = PropertyValue;
+}
 
 inline
 void G4MaterialPropertiesTable::AddConstProperty(const char *key,
@@ -44,28 +59,32 @@ void G4MaterialPropertiesTable::AddConstProperty(const char *key,
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
-  G4String k(key);
-  if (std::find(G4MaterialConstPropertyName.begin(),
-                G4MaterialConstPropertyName.end(), k) ==
-       G4MaterialConstPropertyName.end()) {
-    G4MaterialConstPropertyName.push_back(k);
-  }
-  G4int index = GetConstPropertyIndex(k);
-
-  MCP[index] = PropertyValue;
+  AddConstProperty(G4String(key), PropertyValue);
 }
 
 inline
-void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
+void G4MaterialPropertiesTable::RemoveConstProperty(const G4String& key)
 {
-  G4int index = GetConstPropertyIndex(G4String(key));
+  G4int index = GetConstPropertyIndex(key);
 
   MCP.erase(index);
 }
 
 inline
+void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
+{
+  GetConstPropertyIndex(G4String(key));
+}
+
+inline
+void G4MaterialPropertiesTable::RemoveProperty(const G4String& key)
+{
+  G4int index = GetPropertyIndex(key);
+  MP.erase(index);
+}
+
+inline
 void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
-  G4int index = GetPropertyIndex(G4String(key));
-  MP.erase(index);
+  RemoveProperty(G4String(key));
 }

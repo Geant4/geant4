@@ -17,7 +17,7 @@
 namespace tools {
 namespace rroot {
 
-class obj_list : public virtual iro, public std::vector<iro*> {
+class obj_list : public virtual iro, protected std::vector<iro*> {  //proteced to avoid using std::vector::clear().
   typedef std::vector<iro*> parent;
 public:
   static const std::string& s_store_class() {
@@ -135,12 +135,19 @@ public:
 
     return *this;
   }
-public:  
+public:
+  parent::const_iterator begin() const {return parent::begin();}
+  parent::iterator begin() {return parent::begin();}
+  parent::const_iterator end() const {return parent::end();}
+  parent::iterator end() {return parent::end();}
+  parent::size_type size() const {return parent::size();}
+  bool empty() const {return parent::empty();}
+public:
   void add_object(iro* a_obj) { //take ownership.
     parent::push_back(a_obj);
     m_owns.push_back(true);
   }
-  
+
   template <class T>
   T* get_entry(std::ostream& a_out,size_t a_index) const {
     if(a_index>=size()) return 0;
@@ -154,7 +161,7 @@ public:
     }
     return od;
   }
-  
+
   void safe_clear() {
     typedef parent::iterator it_t;
     typedef std::vector<bool>::iterator itb_t;
@@ -165,9 +172,11 @@ public:
       bool own = (*itb);
       parent::erase(it);
       m_owns.erase(itb);
-      if(own) delete entry;    
+      if(own) delete entry;
     }
   }
+
+  void cleanup() {safe_clear();}
 protected:
   ifac& m_fac;
   std::vector<bool> m_owns;

@@ -134,8 +134,6 @@ protected:
 
   static G4VisManager* fpVisManager;
 
-  static G4int fErrorCode;
-
   // Current quantities for use in appropriate commands
   static G4int fCurrentArrow3DLineSegmentsPerCircle;
   static G4Colour                   fCurrentColour;

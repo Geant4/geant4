@@ -36,7 +36,7 @@ public:
 
   const sg::cmaps_t& cmaps() const {return m_cmaps;}
   sg::cmaps_t& cmaps() {return m_cmaps;}
-  
+
   typedef std::pair<std::string,std::string> style_item_t;
   typedef std::vector<style_item_t> style_t;
   typedef std::pair<std::string,style_t> named_style_t;
@@ -118,7 +118,7 @@ public:
     std::map<std::string,style_t>::const_iterator it = m_styles.find(a_style);
     if(it==m_styles.end()) {a_v.clear();return false;}
     const style_t& sty = (*it).second;
-    if(!find(sty,a_key,a_v)) {a_v.clear();return false;}   
+    if(!find(sty,a_key,a_v)) {a_v.clear();return false;}
     return true;
   }
 */
@@ -143,7 +143,7 @@ public:
             << " in style " << sout(a_msg) << "."
             << " can't convert " << sout(_s) << " to value."
             << std::endl;
-      return false;   
+      return false;
     }
     a_v = v;
     return true;
@@ -229,7 +229,7 @@ public:
             << " in style " << sout(a_msg) << "."
             << " can't convert " << sout(s) << " to bool."
             << std::endl;
-      return false;   
+      return false;
     }
     a_v = v;
     return true;
@@ -255,7 +255,7 @@ public:
 
   // for plotter :
   template <class T> //T = [style,text_style,line_style]
-  bool res_sg_style(const std::string& a_style,T& a_sg_style) const {   
+  bool res_sg_style(const std::string& a_style,T& a_sg_style) const {
     //NOTE : a_sg_style is changed according to what is found.
     //       Then it is not fully reset by this method.
     const style_t* sty = find_style(a_style);
@@ -373,7 +373,7 @@ inline void load_style(styles& a_styles,const tree& a_tree) {
           << " <style> without name."
           << std::endl;
     return;
-  }  
+  }
 
   styles::style_t sty;
 
@@ -389,7 +389,7 @@ inline void load_style(styles& a_styles,const tree& a_tree) {
                          << " <copy> without from."
                          << std::endl;
           return;
-        } 
+        }
 
         const styles::style_t* csty = a_styles.find_style(from);
         if(!csty) {
@@ -406,7 +406,7 @@ inline void load_style(styles& a_styles,const tree& a_tree) {
       }
 
   }}
-  
+
   if(sty.size()) a_styles.add_style(name,sty);
 }
 
@@ -418,7 +418,7 @@ inline void load_plotter_style(styles& a_styles,const tree& a_tree) {
           << " <plotter_style> without name."
           << std::endl;
     return;
-  }  
+  }
 
  {styles::style_t sty;
   sty.push_back(styles::style_item_t("tag","plotter_style"));
@@ -435,7 +435,7 @@ inline void load_plotter_style(styles& a_styles,const tree& a_tree) {
                 << " <copy> without from."
                 << std::endl;
           return;
-        } 
+        }
 
         const styles::style_t* csty = a_styles.find_style(from);
         if(!csty) {
@@ -490,7 +490,7 @@ inline void load_plotter_style(styles& a_styles,const tree& a_tree) {
                 << std::endl;
           return;
         }
-  
+
        {styles::style_t sty;
 
        {looper _for2(*_tree);
@@ -503,7 +503,7 @@ inline void load_plotter_style(styles& a_styles,const tree& a_tree) {
                              << " <copy> without from."
                              << std::endl;
               return;
-            } 
+            }
             const styles::style_t* csty = a_styles.find_style(from);
             if(!csty) {
               a_styles.out() << "tools::sg::gui_viewer::load_plotter_style : (2) :"
@@ -535,7 +535,7 @@ inline void load_plotter_style(styles& a_styles,const tree& a_tree) {
 inline bool scan_style_tree(styles& a_styles,const tree& a_tree) {
 
   if(a_tree.tag_name()!="styles") return false;
-  
+
   // look for aliases :
  {looper _for(a_tree);
   while(element* _elem = _for.next_element()) {
@@ -556,14 +556,14 @@ inline bool scan_style_tree(styles& a_styles,const tree& a_tree) {
   while(tree* _tree = _for.next_tree()) {
 
       const std::string& tag = _tree->tag_name();
-      if(tag=="style") {   
+      if(tag=="style") {
         load_style(a_styles,*_tree);
-      } else if(tag=="plotter_style") {   
+      } else if(tag=="plotter_style") {
         load_plotter_style(a_styles,*_tree);
       }
 
   }}
-  
+
   return true;
 }
 }}

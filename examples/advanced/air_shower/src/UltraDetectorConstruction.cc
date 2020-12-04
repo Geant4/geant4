@@ -227,22 +227,20 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 // Construct Material Properties Tables
 /////////////////////////////////////////////
 
-  const G4int NUMENTRIES = 2;
-
   // Energy bins
-  G4double X_RINDEX[NUMENTRIES] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
+  std::vector<G4double> X_RINDEX = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ;
 
 
   // Air
-  G4double RINDEX_AIR[NUMENTRIES] = {1.00, 1.00} ; 
+  std::vector<G4double> RINDEX_AIR = {1.00, 1.00} ;
 
 // Air refractive index at 20 oC and 1 atm (from PDG) 
-  for(G4int j=0 ; j<NUMENTRIES ; j++){
+  for(size_t j=0 ; j<RINDEX_AIR.size(); ++j){
     RINDEX_AIR[j] = RINDEX_AIR[j] + 2.73*std::pow(10.0,-4) ; 
     }
 
   G4MaterialPropertiesTable *MPT_Air = new G4MaterialPropertiesTable();
-  MPT_Air->AddProperty("RINDEX", X_RINDEX, RINDEX_AIR, NUMENTRIES);
+  MPT_Air->AddProperty("RINDEX", X_RINDEX, RINDEX_AIR);
   Air->SetMaterialPropertiesTable(MPT_Air);
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -253,12 +251,11 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
   // Refractive index 
 
-  const G4int N_RINDEX_QUARTZ = 2 ;
-  G4double X_RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
-  G4double RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {1.54, 1.54};
+  std::vector<G4double> X_RINDEX_QUARTZ = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ;
+  std::vector<G4double> RINDEX_QUARTZ = {1.54, 1.54};
 
   G4MaterialPropertiesTable *MPT_PMT = new G4MaterialPropertiesTable();
-  MPT_PMT->AddProperty("RINDEX", X_RINDEX_QUARTZ, RINDEX_QUARTZ, N_RINDEX_QUARTZ);
+  MPT_PMT->AddProperty("RINDEX", X_RINDEX_QUARTZ, RINDEX_QUARTZ);
 
   Quartz->SetMaterialPropertiesTable(MPT_PMT);
 
@@ -270,38 +267,36 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 // Refractive index 
 
   const G4int NENTRIES = 11 ;
-  G4double LAMBDA_ACRYLIC[NENTRIES] ;
 
+  std::vector<G4double> RINDEX_ACRYLIC;
+  std::vector<G4double> ENERGY_ACRYLIC;
 
-  G4double RINDEX_ACRYLIC[NENTRIES] ;
-  G4double ENERGY_ACRYLIC[NENTRIES] ;
-
-// Parameterization for refractive index of High Grade PMMA 
+// Parameterization for refractive index of High Grade PMMA
 
   G4double bParam[4] = {1760.7010,-1.3687,2.4388e-3,-1.5178e-6} ; 
-  
-  for(G4int i=0;i<NENTRIES; i++){
+  G4double lambda = 0.;
+
+  for(G4int i=0;i<NENTRIES; ++i){
  
-    LAMBDA_ACRYLIC[i] = lambda_min + i*(lambda_max-lambda_min)/float(NENTRIES-1) ;
-    RINDEX_ACRYLIC[i] = 0.0 ;
+    lambda = lambda_min + i*(lambda_max-lambda_min)/float(NENTRIES-1);
+    RINDEX_ACRYLIC.push_back(0.0);
 
     for (G4int jj=0 ; jj<4 ; jj++)
     {
-      RINDEX_ACRYLIC[i] +=  (bParam[jj]/1000.0)*std::pow(LAMBDA_ACRYLIC[i]/nm,jj) ; 
+      RINDEX_ACRYLIC[i] +=  (bParam[jj]/1000.0)*std::pow(lambda/nm,jj) ;
     }
 
-    ENERGY_ACRYLIC[i] =   h_Planck*c_light/LAMBDA_ACRYLIC[i] ;  // Convert from wavelength to energy ;
-//  G4cout << ENERGY_ACRYLIC[i]/eV << " " << LAMBDA_ACRYLIC[i]/nm << " " << RINDEX_ACRYLIC[i] << G4endl ;
+    ENERGY_ACRYLIC.push_back(h_Planck*c_light/lambda);  // Convert from wavelength to energy ;
+//  G4cout << ENERGY_ACRYLIC[i]/eV << " " << lambda/nm << " " << RINDEX_ACRYLIC[i] << G4endl ;
 
   }
 
   G4MaterialPropertiesTable *MPT_Acrylic = new G4MaterialPropertiesTable();
-  MPT_Acrylic->AddProperty("RINDEX", ENERGY_ACRYLIC, RINDEX_ACRYLIC, NENTRIES);
+  MPT_Acrylic->AddProperty("RINDEX", ENERGY_ACRYLIC, RINDEX_ACRYLIC);
 
 
 // Absorption
-  const G4int NENT = 25 ;
-  G4double LAMBDAABS[NENT] = 
+  std::vector<G4double> LAMBDAABS =
   {
     100.0,
     246.528671, 260.605103, 263.853516, 266.019104, 268.726105,    
@@ -312,7 +307,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
     700.0    
   } ;
 
-  G4double ABS[NENT] =   // Transmission (in %) of  3mm thick PMMA 
+  std::vector<G4double> ABS =   // Transmission (in %) of  3mm thick PMMA
   { 
     0.0000000,
     0.0000000,  5.295952,  9.657321, 19.937695, 29.283491, 
@@ -325,7 +320,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
 
   MPT_Acrylic->AddProperty("ABSLENGTH", new G4MaterialPropertyVector()) ;
-  for(G4int i=0;i<NENT; i++){
+  for(size_t i=0;i<ABS.size(); ++i){
     G4double energy    = h_Planck*c_light/(LAMBDAABS[i]*nm) ;
     G4double abslength ;
 
@@ -382,12 +377,11 @@ void UltraDetectorConstruction::ConstructReflector()
   fReflectorOpticalSurface->SetModel(unified);
   fReflectorOpticalSurface->SetType(dielectric_dielectric);
 
-  const G4int NUM = 2;
-  G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
-  G4double ICEREFLECTIVITY[NUM]      = { 0.95, 0.95 };
+  std::vector<G4double> XX = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ;
+  std::vector<G4double> ICEREFLECTIVITY      = { 0.95, 0.95 };
 
   G4MaterialPropertiesTable *AirMirrorMPT = new G4MaterialPropertiesTable();
-  AirMirrorMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY,NUM);
+  AirMirrorMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY);
   fReflectorOpticalSurface->SetMaterialPropertiesTable(AirMirrorMPT);
 
   new G4LogicalSkinSurface("ReflectorSurface",fReflectorLog,fReflectorOpticalSurface);
@@ -557,13 +551,12 @@ void UltraDetectorConstruction::ConstructUVscope()
   OpticalAirPaint->SetType(dielectric_dielectric);
   OpticalAirPaint->SetFinish(groundfrontpainted);
 
-  const G4int NUM = 2;
-  G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
-  G4double BLACKPAINTREFLECTIVITY[NUM]      = { 0.05, 0.05 };
-  //G4double WHITEPAINTREFLECTIVITY[NUM]      = { 0.99, 0.99 };
+  std::vector<G4double> XX = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ;
+  std::vector<G4double> BLACKPAINTREFLECTIVITY      = { 0.05, 0.05 };
+  //std::vector<G4double> WHITEPAINTREFLECTIVITY      = { 0.99, 0.99 };
 
   G4MaterialPropertiesTable *AirPaintMPT = new G4MaterialPropertiesTable();
-  AirPaintMPT->AddProperty("REFLECTIVITY", XX, BLACKPAINTREFLECTIVITY,NUM);
+  AirPaintMPT->AddProperty("REFLECTIVITY", XX, BLACKPAINTREFLECTIVITY);
   OpticalAirPaint->SetMaterialPropertiesTable(AirPaintMPT);
 
   //OpticalAirPaint->DumpInfo();

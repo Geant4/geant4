@@ -41,11 +41,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4Types.hh"
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4Timer.hh"
 #include "G4UImanager.hh"
@@ -81,8 +77,7 @@ int main(int argc,char** argv)
   //
   Command* commandLine(0);
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager= new G4MTRunManager;
+  auto* runManager= G4RunManagerFactory::CreateRunManager();
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
     int nThreads = 2;
@@ -94,17 +89,12 @@ int main(int argc,char** argv)
     {
      nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
+    runManager->SetNumberOfThreads(nThreads);
+
     G4cout << "===== neuron is started with "
        << runManager->GetNumberOfThreads()
        << " threads of MT MODE =====" << G4endl;
-
-    runManager->SetNumberOfThreads(nThreads);
   }
-#else
-  G4RunManager* runManager = new G4RunManager();
-  G4cout << "===== neuron is started with "
-         << " SEQUENTIAL MODE =====" << G4endl;
-#endif
 
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
@@ -236,13 +226,11 @@ void Parse(int& argc, char** argv)
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
-#ifdef G4MULTITHREADED
   parser->AddCommand("-mt",
                      Command::WithOption,
                      "Launch in MT mode (events computed in parallel)",
       " NOT RECOMMANDED WITH CHEMISTRY)",
                      "2");
-#endif
 
   parser->AddCommand("-sXY", Command::OptionNotCompulsory,
                      "Initial beam position uniformly spread on a square!");

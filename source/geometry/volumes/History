@@ -16,6 +16,18 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 11th, 2020 E.Tcherniaev            - geomvol-V10-06-03
+- G4PVPlacement::CheckOverlaps(): Added keeping of bounding box from
+  previous solid and complementory comparison of bounding spheres.
+
+October 7th, 2020 G.Cosmo                  - geomvol-V10-06-02
+- Minor update to G4LogicalBorderSurface.
+
+October 6th, 2020 G.Cosmo                  - geomvol-V10-06-01
+- Use std::map instead of std::vector to define G4LogicalBorderSurfaceTable,
+  to speedup search of surfaces in large tables.
+  Based on GitHub PR #6 by J.Brodsky.
+
 December 10th, 2019 B.Morgan               - geomvol-V10-06-00
 - Cleanup CMake build, removing obsolete granular library options and
   explicit include_directories.

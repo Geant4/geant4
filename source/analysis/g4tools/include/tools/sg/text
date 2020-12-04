@@ -27,22 +27,22 @@ class text : public back_area {
 public:
   mf_string strings;
   sf<bool> confine;
- 
+
   sf_vec<colorf,float> color;
   sf_string font;
   sf_enum<sg::font_modeling> font_modeling;
-  
-  sf_string encoding; 
+
+  sf_string encoding;
   sf<float> line_width; // for text_hershey.
   sf_enum<winding_type> front_face; //no more used.
 
-  sf<bool> back_visible;  
+  sf<bool> back_visible;
 
   sf<bool> enforce_front_height;
   sf<float> front_height;
   sf<bool> enforce_front_width;
   sf<float> front_width;
-  
+
   sf<float> wmargin_factor;
   sf<float> hmargin_factor;
   sf_enum<sg::hjust> hjust;
@@ -58,6 +58,8 @@ public:
 
       TOOLS_ARG_FIELD_DESC_OPTS_BEG(font,8)
         font_hershey().c_str(),
+        font_lato_regular_ttf().c_str(),
+        font_roboto_bold_ttf().c_str(),
         font_arial_ttf().c_str(),
         font_arialbd_ttf().c_str(),
         font_timesbd_ttf().c_str(),
@@ -66,16 +68,16 @@ public:
         font_helvetica_ttf().c_str(),
         font_times_roman_ttf().c_str()
       TOOLS_ARG_FIELD_DESC_OPTS_END,
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(font_modeling,3)
         TOOLS_ARG_ENUM(font_outline),
         TOOLS_ARG_ENUM(font_filled),
         TOOLS_ARG_ENUM(font_pixmap)
       TOOLS_ARG_FIELD_DESC_ENUMS_END,
-      
+
       TOOLS_ARG_FIELD_DESC(encoding),
       TOOLS_ARG_FIELD_DESC(line_width),
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(front_face,2)
         TOOLS_ARG_ENUM(winding_ccw),
         TOOLS_ARG_ENUM(winding_cw)
@@ -89,13 +91,13 @@ public:
       TOOLS_ARG_FIELD_DESC(front_width),
       TOOLS_ARG_FIELD_DESC(wmargin_factor),
       TOOLS_ARG_FIELD_DESC(hmargin_factor),
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(hjust,3)
         TOOLS_ARG_ENUM(left),
         TOOLS_ARG_ENUM(center),
         TOOLS_ARG_ENUM(right)
       TOOLS_ARG_FIELD_DESC_ENUMS_END,
-      
+
       TOOLS_ARG_FIELD_DESC_ENUMS_BEG(vjust,3)
         TOOLS_ARG_ENUM(bottom),
         TOOLS_ARG_ENUM(middle),
@@ -112,7 +114,7 @@ private:
     add_field(&color);
     add_field(&font);
     add_field(&font_modeling);
-    add_field(&encoding); 
+    add_field(&encoding);
     add_field(&line_width);
     add_field(&front_face);
 
@@ -148,12 +150,12 @@ public:
     //m_sep.pick(a_action);
   }
   virtual void search(search_action& a_action) {
-    node::search(a_action);
-    if(a_action.done()) return;
     if(touched()) {
       update_sg();
       reset_touched();
     }
+    parent::search(a_action);
+    if(a_action.done()) return;
     if(a_action.do_path()) a_action.path_push(this);
     if(back_visible.value()) {
       m_back_sep.search(a_action);
@@ -382,10 +384,10 @@ public:
       tsf->set_translate(xx,yy,zz);
 
       return;
-    } 
+    }
 
     if(enforce_front_width) {
-    
+
       float th = fh;
       float mn_x,mn_y,mn_z;
       float mx_x,mx_y,mx_z;
@@ -398,7 +400,7 @@ public:
         th = th*front_width/bxw;
         m_base_text->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
       }
-	  
+
       bxw = mx_x-mn_x;
       float xtrans = 0;
       if(hjust==center) {
@@ -424,9 +426,9 @@ public:
       tsf->set_translate(xx,yy,zz);
 
       m_base_text->height = bxh; //=th?
-      
+
       return;
-    } 
+    }
 
     //various automatic text height strategies :
 
@@ -528,7 +530,7 @@ public:
      {float mn_x,mn_y,mn_z;
       float mx_x,mx_y,mx_z;
       m_base_text->get_bounds(th,mn_x,mn_y,mn_z,mx_x,mx_y,mx_z);
-      
+
       float bxw = mx_x-mn_x;
       float xtrans = 0;
       if(hjust==center) {
@@ -553,7 +555,7 @@ public:
       tsf->set_translate(xx,yy,zz);}
 
       // truncate text at right if out of border :
-     {std::vector<std::string> labcut; 
+     {std::vector<std::string> labcut;
       tools_vforcit(std::string,strings.values(),it) {
         std::string scut;
         m_base_text->truncate(*it,th,fw,scut);

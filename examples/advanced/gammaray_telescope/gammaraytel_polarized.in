@@ -1,0 +1,33 @@
+# Macro file for the test of
+# GammaRayTel
+#
+#
+
+/control/verbose 1
+/control/saveHistory
+/run/verbose 1
+#
+# this macro file activates G4EmStandard_option4
+# with BetheHeitler5D model
+/control/execute physics_polarized_new.mac
+
+/run/initialize
+
+#
+/gun/sourceGen true
+#/particle/select geantino
+/gun/particle gamma
+/gun/vertexRadius 25. cm
+/gun/polarization 1 0 0 
+/gun/energy 10 MeV
+/gun/sourceType 2
+
+# You can modify the geometry of the telescope via a messenger
+
+/payload/setConvMat Silicon
+/payload/setConvThick 1 micrometer
+/payload/setNbOfTKRLayers 25
+/payload/setNbOfCALLayers 2
+/payload/update
+/run/beamOn 100
+

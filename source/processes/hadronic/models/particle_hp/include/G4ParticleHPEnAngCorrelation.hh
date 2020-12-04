@@ -39,6 +39,7 @@
 #include "G4ParticleHPProduct.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Cache.hh"
+#include "G4ParticleHPManager.hh"
 
 class G4ParticleDefinition;
 
@@ -93,11 +94,7 @@ public:
   inline void Init(std::istream & aDataFile)
   {
     bAdjustFinalState = true;
-    const char* ctmp = std::getenv("G4PHP_DO_NOT_ADJUST_FINAL_STATE");
-    if( ctmp && G4String(ctmp) == "1" )
-    {
-      bAdjustFinalState = false;
-    }
+    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) bAdjustFinalState = false;
 
 // T.K. Comment out following line to keep the condition at the
 // validation efforts comparing NeutronHP and PartileHP for neutrons (2015 Sep.)

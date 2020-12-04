@@ -27,6 +27,7 @@
 //
 // G4PSEnergyDeposit
 #include "G4PSEnergyDeposit.hh"
+#include "G4VScoreHistFiller.hh"
 #include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // Description:
@@ -34,18 +35,20 @@
 // 
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2020-09-03   Use G4VPrimitivePlotter and fill 1-D histo of energy deposit (x)
+//              vs. track weight (y)                   (Makoto Asai)
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+  :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0)
 {
   SetUnit("MeV");
 }
 
 G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, const G4String& unit, 
 				     G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+  :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0)
 {
   SetUnit(unit);
 }
@@ -57,9 +60,25 @@ G4bool G4PSEnergyDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if ( edep == 0. ) return FALSE;
-  edep *= aStep->GetPreStepPoint()->GetWeight(); // (Particle Weight)
+  G4double wei = aStep->GetPreStepPoint()->GetWeight(); // (Particle Weight)
   G4int  index = GetIndex(aStep);
-  EvtMap->add(index,edep);  
+  G4double edepwei = edep*wei;
+  EvtMap->add(index,edepwei);  
+
+  if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+  {
+    auto filler = G4VScoreHistFiller::Instance();
+    if(!filler)
+    {
+      G4Exception("G4PSEnergyDeposit::ProcessHits","SCORER0123",JustWarning,
+             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+    }
+    else
+    {
+      filler->FillH1(hitIDMap[index],edep,wei);
+    }
+  }
+
   return TRUE;
 }
 
@@ -101,3 +120,4 @@ void G4PSEnergyDeposit::SetUnit(const G4String& unit)
 {
 	CheckAndSetUnit(unit,"Energy");
 }
+

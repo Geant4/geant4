@@ -81,6 +81,17 @@
 
 /** @} */
 
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr09 Hadr09
+ *  The Hadr09 hadronic classes have their
+ *  <a href="../html_Hadr09/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_hadronic_FissionFragment FissionFragment
  *  Hadronic example FissionFragment
  *  @ingroup extended_hadronic

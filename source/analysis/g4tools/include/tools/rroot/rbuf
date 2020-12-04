@@ -67,8 +67,8 @@ class rbuf {
   /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
-  
-  
+
+
   static const std::string& s_class() {
     static const std::string s_v("tools::rroot::rbuf");
     return s_v;
@@ -232,15 +232,15 @@ public:
       a_x.clear();
       return false;
     }
-    a_x.resize(nchars);  
+    a_x.resize(nchars);
     ::memcpy((char*)a_x.c_str(),m_pos,nchars);
     m_pos += nchars;
     return true;
   }
 
-  bool read(bool& x){ 
+  bool read(bool& x){
     unsigned char uc = 0;
-    bool status = read(uc); 
+    bool status = read(uc);
     x = uc?true:false;
     return status;
   }
@@ -309,7 +309,7 @@ public:
     }
     return true;
   }
-  
+
   template <class T>
   bool read_array(uint32 a_sz,T*& a_a,uint32& a_n) {
     a_n = 0;
@@ -318,7 +318,7 @@ public:
     a_n = n;}
 
     if(!a_n) return true;
-  
+
     uint32 l = a_n * sizeof(T);
     if(!check_eob(l)) return false;
 
@@ -333,7 +333,7 @@ public:
     }
 
     if(m_byte_swap) {
-      for(uint32 i=0;i<a_n;i++) {     
+      for(uint32 i=0;i<a_n;i++) {
         if(!read(*(a_a+i))) {
           if(owner) {delete [] a_a;a_a = 0;}
           a_n = 0;

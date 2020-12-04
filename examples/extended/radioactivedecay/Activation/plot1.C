@@ -5,7 +5,7 @@
   //   
   TCanvas* c1 = new TCanvas("c1", "  ");
   
-  c1->SetLogy(0);
+  c1->SetLogy(1);
   c1->cd();
   c1->Update();
   

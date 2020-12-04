@@ -52,7 +52,13 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   fVerbose(0), fEdeptrue(1.), fRmstrue(1.), fLimittrue(DBL_MAX)
 {
   fRunMessenger = new RunActionMessenger(this);
-  fHistoName[0] = "testem2";
+
+  // Create analysis manager
+  // The choice of analysis technology is done via selection of a namespace
+  fAnalysisManager = G4AnalysisManager::Instance();
+  // Set the default file name "testem2"
+  // which can be then redefine in a macro via UI command
+  fAnalysisManager->SetFileName("testem2");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,21 +72,12 @@ RunAction::~RunAction()
 
 void RunAction::BookHisto()
 {
-  // Create analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  //
-
+  // Get analysis manager
   fAnalysisManager = G4AnalysisManager::Instance();
     
   // Open an output file
-  //
-  ///fHistoName[0] = "testem2";
-
-  fAnalysisManager->OpenFile(fHistoName[0]); 
-
+  fAnalysisManager->OpenFile();
   fAnalysisManager->SetVerboseLevel(1);
-  G4String extension = fAnalysisManager->GetFileType();
-  fHistoName[1] = fHistoName[0] + "." + extension;  
 
   // Creating histograms
   //
@@ -132,14 +129,10 @@ void RunAction::BookHisto()
   fAnalysisManager->CreateH1("h11","rms on cumul radial Edep (% of E inc)",
                                   nRbin,Rmin,Rmax);                    
                                     
-  G4cout << "\n----> Histogram file is opened in " << fHistoName[1] << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::SetHistoName(G4String& val)
-{
-  fHistoName[0] = val;
+  G4String fileName = fAnalysisManager->GetFileName();
+  G4String extension = fAnalysisManager->GetFileType();
+  G4String fullFileName = fileName + "." + extension;
+  G4cout << "\n----> Histogram file is opened in " << fullFileName << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

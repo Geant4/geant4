@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//   G4MCTSimVertex.cc
+// G4MCTSimVertex implementation
 //
-// ====================================================================
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
 
 #include <sstream>
 #include <iomanip>
@@ -37,79 +38,61 @@
 #include "G4ios.hh"
 #include "G4MCTSimParticle.hh"
 
-// ====================================================================
-//
-// class description
-//
-// ====================================================================
-
-/////////////////////////////////////
-G4MCTSimVertex::G4MCTSimVertex()  
-  : inParticleTrackID(0),id(-1), time(0.),
-    volumeName(""), volumeNumber(-1),
-    creatorProcessName("none"),
-    storeFlag(false)
-/////////////////////////////////////
+// --------------------------------------------------------------------
+G4MCTSimVertex::G4MCTSimVertex()
 {
 }
 
-/////////////////////////////////////////////////////////
-G4MCTSimVertex::G4MCTSimVertex(const G4ThreeVector& x, double t)
-  : inParticleTrackID(0), id(-1), position(x), time(t),
-    volumeName(""), volumeNumber(-1),
-    creatorProcessName("none"), storeFlag(false)
-/////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
+G4MCTSimVertex::G4MCTSimVertex(const G4ThreeVector& x, G4double t)
+  : position(x)
+  , time(t)
 {
 }
 
-///////////////////////////////////////////////////////////////
-G4MCTSimVertex::G4MCTSimVertex(const G4ThreeVector& x, double t,
-	       std::string vname, int ncopy, std::string pname)
-  : inParticleTrackID(0), id(-1), position(x), time(t),
-    volumeName(vname), volumeNumber(ncopy),
-    creatorProcessName(pname), storeFlag(false)
-///////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
+G4MCTSimVertex::G4MCTSimVertex(const G4ThreeVector& x, G4double t,
+                               const G4String& vname, G4int ncopy,
+                               const G4String& pname)
+  : volumeName(vname)
+  , creatorProcessName(pname)
+  , position(x)
+  , time(t)
+  , volumeNumber(ncopy)
 {
 }
 
-/////////////////////////////
+// --------------------------------------------------------------------
 G4MCTSimVertex::~G4MCTSimVertex()
-/////////////////////////////
 {
   outParticleTrackIDList.clear();
 }
 
-//////////////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4MCTSimVertex::Print(std::ostream& ostr) const
-//////////////////////////////////////////////////
 {
   std::ostringstream os;
-  char cq=' ';
-  if(storeFlag) cq='+';
+  char cq = ' ';
+  if(storeFlag)
+    cq = '+';
   os << cq << id << '\0';
   std::string sid(os.str());
-  
+
   ostr.unsetf(std::ios::fixed);
-  ostr.setf(std::ios::scientific|std::ios::right|std::ios::showpoint);
-  //ostr << std::setw(4) << id;
+  ostr.setf(std::ios::scientific | std::ios::right | std::ios::showpoint);
+  // ostr << std::setw(4) << id;
   ostr << std::setw(6) << sid;
-  ostr << " : X(" << std::setw(9) << std::setprecision(2) 
-       << position.x()/mm 
-       << "," << std::setw(9) << std::setprecision(2) 
-       << position.y()/mm
-       << "," << std::setw(9) << std::setprecision(2) 
-       << position.z()/mm 
-       << "," << std::setw(9) << std::setprecision(2) 
-       << time/ns << ")";
+  ostr << " : X(" << std::setw(9) << std::setprecision(2) << position.x() / mm
+       << "," << std::setw(9) << std::setprecision(2) << position.y() / mm
+       << "," << std::setw(9) << std::setprecision(2) << position.z() / mm
+       << "," << std::setw(9) << std::setprecision(2) << time / ns << ")";
   ostr.unsetf(std::ios::scientific);
-  ostr << "@" << volumeName
-       << "-" << volumeNumber
-       << "%" << creatorProcessName
+  ostr << "@" << volumeName << "-" << volumeNumber << "%" << creatorProcessName
        << G4endl;
-  
+
   ostr << "      " << std::setw(4) << inParticleTrackID << "-> ";
-  size_t np= outParticleTrackIDList.size();
-  for (size_t i=0; i<np; i++) ostr << outParticleTrackIDList[i] << ", ";
+  std::size_t np = outParticleTrackIDList.size();
+  for(std::size_t i = 0; i < np; ++i)
+    ostr << outParticleTrackIDList[i] << ", ";
   ostr << G4endl;
 }
-

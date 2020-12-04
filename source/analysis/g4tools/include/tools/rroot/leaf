@@ -103,28 +103,28 @@ public: //base_leaf
 	      << " Size " << leaf_i->num_elem() << std::endl;
 	return false;
       }
-      
+
       if (len > leaf_i->get_max()) { //protection.
-        m_out << "tools::rroot::leaf::read_buffer : warning : " << sout(name()) 
-              << ", len = " << len << " > max = " 
+        m_out << "tools::rroot::leaf::read_buffer : warning : " << sout(name())
+              << ", len = " << len << " > max = "
               << leaf_i->get_max() << std::endl;
         len = leaf_i->get_max();
       }
-      
+
       uint32 ndata = len * m_length;
-      
+
       //if(!ndata) {
       //  delete [] m_value;
       //  m_value = new T[1];
       //  m_size = 0;
       //  return true;
       //}
-      
+
       if(ndata>m_size) {
         delete [] m_value;
         m_value = new T[ndata];
       }
-      
+
       m_size = ndata;
       if(!a_buffer.read_fast_array(m_value,ndata)) {
         m_out << "tools::rroot::leaf::read_buffer : \"" << name() << "\" :"
@@ -133,7 +133,7 @@ public: //base_leaf
         return false;
       }
       return true;
-	
+
     } else {
       if(m_length) {
         if(m_length>m_size) {
@@ -267,7 +267,7 @@ public: //base_leaf
       //  return false;
       //}
       //if(len >= m_length) len = m_length-1;
-      
+
       m_value = new char[len+1];
 
       if(!a_buffer.read_fast_array(m_value,len)) {
@@ -418,15 +418,15 @@ public: //base_leaf
     if (fVirtual) {
       unsigned char n;
       if(!a_buffer.read(n)) {
-        m_out << "tools::rroot::leaf_object::read_buffer :" 
-                       << " read(unsigned char) failed." 
+        m_out << "tools::rroot::leaf_object::read_buffer :"
+                       << " read(unsigned char) failed."
                        << std::endl;
         return false;
       }
       char classname[128];
       if(!a_buffer.read_fast_array(classname,n+1)) {
-        m_out << "tools::rroot::leaf_object::read_buffer :" 
-                       << " readFastArray failed." 
+        m_out << "tools::rroot::leaf_object::read_buffer :"
+                       << " readFastArray failed."
                        << std::endl;
         return false;
       }
@@ -440,8 +440,8 @@ public: //base_leaf
       //return false;
     }
     if(!m_obj->stream(a_buffer)) {
-      m_out << "tools::rroot::leaf_object::read_buffer :" 
-            << " object stream failed." 
+      m_out << "tools::rroot::leaf_object::read_buffer :"
+            << " object stream failed."
             << " Object store class was " << m_obj->store_class_name() << "."
             << std::endl;
       return false;
@@ -470,9 +470,9 @@ protected:
   leaf_object(const leaf_object& a_from)
   :iro(a_from),base_leaf(a_from),m_obj(0),fVirtual(true){}
   leaf_object& operator=(const leaf_object&){return *this;}
-public:  
+public:
   void set_object(iobject* a_obj) {m_obj = a_obj;} //do not get ownership.
-protected:  
+protected:
   iobject* m_obj;
 protected:
   bool fVirtual; // Support for Virtuality

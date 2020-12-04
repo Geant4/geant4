@@ -41,9 +41,9 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   c2d2plot_cp& operator=(const c2d2plot_cp& a_from){
-    c2d2plot::operator=(a_from);    
+    c2d2plot::operator=(a_from);
     m_cp = a_from.m_cp;
     return *this;
   }
@@ -83,9 +83,9 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   c3d2plot_cp& operator=(const c3d2plot_cp& a_from){
-    c3d2plot::operator=(a_from);    
+    c3d2plot::operator=(a_from);
     m_cp = a_from.m_cp;
     return *this;
   }

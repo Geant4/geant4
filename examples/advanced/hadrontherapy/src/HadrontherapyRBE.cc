@@ -172,7 +172,7 @@ void HadrontherapyRBE::LoadLEMTable(G4String path)
         }
         else
         {
-            columnIndices[columnName] = distance(header.begin(), pos);
+            columnIndices[columnName] = (G4int) distance(header.begin(), pos);
         }
     }
 
@@ -332,7 +332,7 @@ std::tuple<G4double, G4double> HadrontherapyRBE::GetHitAlphaAndBeta(G4double E, 
 
     // Find the row in energy tables
     const auto eLarger = upper_bound(begin(vecEnergy), end(vecEnergy), E);
-    const G4int lower = distance(begin(vecEnergy), eLarger) - 1;
+    const G4int lower = (G4int) distance(begin(vecEnergy), eLarger) - 1;
     const G4int upper = lower + 1;
 
     // Interpolation
@@ -358,11 +358,23 @@ void HadrontherapyRBE::ComputeAlphaAndBeta()
     {
         G4cout << "RBE: Computing alpha and beta..." << G4endl;
     }
-    fAlpha = fAlphaNumerator / (fDenominator * gray);
-    
-    fBeta = pow(fBetaNumerator / fDenominator * gray, 2.0);
-    
-    //g4pow -> powN(fBetaNumerator / fDenominator * gray, 2)
+    //Re-inizialize the number of voxels
+    fAlpha.resize(fAlphaNumerator.size()); //Initialize with the same number of elements
+    fBeta.resize(fBetaNumerator.size()); //Initialize with the same number of elements
+    for (size_t ii=0; ii<fDenominator.size();ii++)
+      {
+	if (fDenominator[ii] > 0)
+	  {
+	    fAlpha[ii] = fAlphaNumerator[ii] / (fDenominator[ii] * gray);    
+	    fBeta[ii] = std::pow(fBetaNumerator[ii] / (fDenominator[ii] * gray), 2.0);
+	  }
+	else
+	  {
+	    fAlpha[ii] = 0.;
+	    fBeta[ii] = 0.;
+	  }
+      }
+
 }
 
 void HadrontherapyRBE::ComputeRBE()
@@ -398,7 +410,9 @@ void HadrontherapyRBE::ComputeRBE()
             fDoseX[i] = ( (-fLnS[i] + ln_Scut) / smax ) + fDoseCut;
         }
     }
-    fRBE = fDoseX / fDose;
+    fRBE.resize(fDoseX.size());
+    for (size_t ii=0;ii<fDose.size();ii++)
+      fRBE[ii] = (fDose[ii] > 0) ? fDoseX[ii] / fDose[ii] : 0.;
     fSurvival = exp(fLnS);
 }
 

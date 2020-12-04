@@ -139,14 +139,14 @@ public:
   virtual const std::string& store_cls() const {return s_item();}
   virtual bool visit(iobj_const_visitor& a_visitor) const {
     if(!a_visitor.begin(*this,s_item(),Item::s_visit)) return false;
-  
+
     int version = 1;
     if(!a_visitor.visit("fVersion",version)) return false;
-  
+
     if(!a_visitor.visit("fKey",fKey)) return false;
     if(!a_visitor.visit("fValue",fValue)) return false;
     if(!a_visitor.visit("fSticky",fSticky)) return false;
-  
+
     if(!a_visitor.end(*this)) return false;
     return true;
   }
@@ -158,14 +158,14 @@ public:
 public:
   virtual bool read(iobj_visitor& a_visitor) {
     //if(!a_visitor.begin(*this)) return false;
-  
+
     int version;
     if(!a_visitor.visit(version)) return false;
-  
+
     if(!a_visitor.visit(fKey)) return false;
     if(!a_visitor.visit(fValue)) return false;
     if(!a_visitor.visit(fSticky)) return false;
-  
+
     //if(!a_visitor.end(*this)) return false;
     return true;
   }
@@ -249,7 +249,7 @@ protected:
 template <class T>
 inline bool std_vector_read(iobj_visitor& a_visitor,std::vector<T>& a_vec) {
   a_vec.clear();
-    
+
   //if(!a_visitor.begin(*this)) return false;
 
   int version;
@@ -281,10 +281,10 @@ protected:
     if(!a_v.begin(*this,s_annotation(),Annotation::s_visit)) return false;
 
     int version = 1;
-    if(!a_v.visit("fVersion",version)) return false;  
+    if(!a_v.visit("fVersion",version)) return false;
 
     Vector<Item> v(m_items,s_item());
-    if(!a_v.visit("fItems",v)) return false;  
+    if(!a_v.visit("fItems",v)) return false;
 
     if(!a_v.end(*this)) return false;
     return true;
@@ -307,9 +307,9 @@ public:
 inline bool Annotation_read(iobj_visitor& a_visitor) {
   //if(!a_visitor.begin(*this)) return false;
   int version;
-  if(!a_visitor.visit(version)) return false;  
+  if(!a_visitor.visit(version)) return false;
   std::vector<Item> fItems;
-  if(!std_vector_read<Item>(a_visitor,fItems)) return false;  
+  if(!std_vector_read<Item>(a_visitor,fItems)) return false;
   //if(!a_visitor.end(*this)) return false;
   return true;
 }
@@ -840,9 +840,9 @@ public:
   :istorable(a_from)
   ,parent(m_cp,a_from.m_cls)
   ,m_cp(a_from.m_cp)
-  {}  
+  {}
   Histogram_cp& operator=(const Histogram_cp& a_from){
-    parent::operator=(a_from);    
+    parent::operator=(a_from);
     m_cp = a_from.m_cp;
     return *this;
   }
@@ -868,9 +868,9 @@ public:
   :istorable(a_from)
   ,parent(m_cp,a_from.m_cls)
   ,m_cp(a_from.m_cp)
-  {}  
+  {}
   Profile_cp& operator=(const Profile_cp& a_from){
-    parent::operator=(a_from);    
+    parent::operator=(a_from);
     m_cp = a_from.m_cp;
     return *this;
   }

@@ -48,7 +48,7 @@ public: //plottable
     std::vector<std::string> ws;
     words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-  
+
   /*bool show_fit_ndf = false;
    {for(it=ws.begin();it!=ws.end();++it) {
       if((*it)=="fit_ndf") {show_fit_ndf = true;break;}
@@ -60,37 +60,37 @@ public: //plottable
         a_sinfos += "Name";
         a_sinfos += f_lf;
         a_sinfos += m_name;
-  
+
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries";
         a_sinfos += f_lf;
         if(!numas<unsigned int>(m_data.all_entries(),a_sinfos)){}
-  
+
       } else if((*it)=="mean") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Mean";
         a_sinfos += f_lf;
         if(!numas<double>(m_data.mean(),a_sinfos)) {}
-  
+
       } else if((*it)=="rms") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "RMS";
         a_sinfos += f_lf;
         if(!numas<double>(m_data.rms(),a_sinfos)) {}
-  
+
       } else if((*it)=="underflow") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "UDFLW";
         a_sinfos += f_lf;
         if(!numas<double>(m_data.bin_height(histo::axis_UNDERFLOW_BIN),a_sinfos)){}
-  
+
       } else if((*it)=="overflow") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "OVFLW";
         a_sinfos += f_lf;
         if(!numas<double>(m_data.bin_height(histo::axis_OVERFLOW_BIN),a_sinfos)){}
-  
+
 /*
       } else if((*it)=="fit_quality") {
         //look in m_data annotations for "fit.chi2" and "fit.ndf" keys :
@@ -101,9 +101,9 @@ public: //plottable
              m_data.annotation("fit.ndf",sndf)   ){
             if(a_sinfos.size()) a_sinfos += f_lf;
             a_sinfos += "[h]^2! / ndf";
-            a_sinfos += f_lf; 
+            a_sinfos += f_lf;
             a_sinfos += schi2;
-            a_sinfos += " / "; 
+            a_sinfos += " / ";
             a_sinfos += sndf;
           }
         } else { //show chi2 only.
@@ -123,7 +123,7 @@ public: //plottable
         annots_t::const_iterator it;
         for(it=annots.begin();it!=annots.end();++it) {
           const std::string& key = (*it).first;
-          if(key.substr(0,10)=="fit.param.") { 
+          if(key.substr(0,10)=="fit.param.") {
             //fit.param.mean 14
             //01234567890123
             std::string name = key.substr(10,key.size()-10);
@@ -184,7 +184,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   h1d2plot& operator=(const h1d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;
@@ -226,7 +226,7 @@ public: //plottable
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
         a_sinfos += m_name;
-  
+
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries\n";
@@ -247,7 +247,7 @@ public: //plottable
         a_sinfos += f_lf;
         a_sinfos += "RMS Y\n";
         if(!numas<double>(m_data.rms_y(),a_sinfos)) {}
-  
+
       }
     }
   }
@@ -346,7 +346,7 @@ public:
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
         a_sinfos += m_name;
-  
+
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries\n";
@@ -359,7 +359,7 @@ public:
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "RMS\n";
         if(!numas<double>(m_data.rms(),a_sinfos)) {}
-  
+
       }
     }
   }
@@ -401,7 +401,7 @@ public:
   ,m_data(a_from.m_data)
   ,m_name(a_from.m_name)
   ,m_legend(a_from.m_legend)
-  {}  
+  {}
   p1d2plot& operator=(const p1d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;
@@ -473,7 +473,7 @@ public: //SbPlottableBins2D
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
         a_sinfos += m_name;
-  
+
       } else if((*it)=="entries") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Entries\n";
@@ -492,7 +492,7 @@ public: //SbPlottableBins2D
         a_sinfos += f_lf;
         a_sinfos += "RMS Y\n";
         if(!numas<double>(m_data.rms_y(),a_sinfos)) {}
-  
+
       }
     }
   }
@@ -519,7 +519,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   p2d2plot& operator=(const p2d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;

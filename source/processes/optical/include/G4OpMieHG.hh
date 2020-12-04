@@ -31,7 +31,7 @@
 // Author: Xin Qian
 // Based on work from Vlasios Vasileiou
 //
-// This subroutine will mimic the Mie scattering based on 
+// This subroutine will mimic the Mie scattering based on
 // Henyey-Greenstein phase function
 // Forward and backward angles are treated separately.
 //
@@ -45,35 +45,34 @@
 
 class G4OpMieHG : public G4VDiscreteProcess
 {
-
-public:
-
+ public:
   explicit G4OpMieHG(const G4String& processName = "OpMieHG",
-                           G4ProcessType type = fOptical);
+                     G4ProcessType type          = fOptical);
   virtual ~G4OpMieHG();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
+  virtual G4bool IsApplicable(
+    const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable' only for an optical photon.
 
-  virtual G4double GetMeanFreePath(const G4Track& aTrack,
-                                   G4double,
+  virtual G4double GetMeanFreePath(const G4Track& aTrack, G4double,
                                    G4ForceCondition*) override;
   // Return the mean free path of Mie scattering
 
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                          const G4Step&  aStep) override;
+                                          const G4Step& aStep) override;
   // This is the method implementing Mie scattering.
 
-private:
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
+  virtual void Initialise();
 
-  G4OpMieHG(const G4OpMieHG &right) = delete;
-  G4OpMieHG& operator=(const G4OpMieHG &right) = delete;
+ private:
+  G4OpMieHG(const G4OpMieHG& right) = delete;
+  G4OpMieHG& operator=(const G4OpMieHG& right) = delete;
 
   size_t idx_mie = 0;
 };
 
-inline
-G4bool G4OpMieHG::IsApplicable(const G4ParticleDefinition& aParticleType)
+inline G4bool G4OpMieHG::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
   return (&aParticleType == G4OpticalPhoton::OpticalPhoton());
 }

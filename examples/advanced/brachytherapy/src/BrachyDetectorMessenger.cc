@@ -34,53 +34,49 @@
 //    *********************************
 //
 //
-//
-// 
-
 #include "BrachyDetectorMessenger.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
-
-BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det): detector(Det)
+BrachyDetectorMessenger::BrachyDetectorMessenger(BrachyDetectorConstruction* detector): fDetector(detector)
 { 
-  detectorDir = new G4UIdirectory("/phantom/");
-  detectorDir -> SetGuidance(" phantom control.");
+  fDetectorDir = new G4UIdirectory("/phantom/");
+  fDetectorDir -> SetGuidance(" phantom control.");
       
-  phantomMaterialCmd = new G4UIcmdWithAString("/phantom/selectMaterial",this);
-  phantomMaterialCmd -> SetGuidance("Select Material of the phantom.");
-  phantomMaterialCmd -> SetParameterName("choice",false);
-  phantomMaterialCmd -> AvailableForStates(G4State_Idle);
+  fPhantomMaterialCmd = new G4UIcmdWithAString("/phantom/selectMaterial",this);
+  fPhantomMaterialCmd -> SetGuidance("Select Material of the phantom.");
+  fPhantomMaterialCmd -> SetParameterName("choice",false);
+  fPhantomMaterialCmd -> AvailableForStates(G4State_Idle);
   
-  sourceCmd = new G4UIcmdWithAString("/source/switch",this);
-  sourceCmd -> SetGuidance("Assign the selected geometry to G4RunManager."); 
-  sourceCmd -> SetParameterName("choice",true);
-  sourceCmd -> SetDefaultValue(" ");
-  sourceCmd -> SetCandidates("TG186 Flexi Iodine Leipzig Oncura");
-  sourceCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fSourceCmd = new G4UIcmdWithAString("/source/switch",this);
+  fSourceCmd -> SetGuidance("Assign the selected geometry to G4RunManager."); 
+  fSourceCmd -> SetParameterName("choice",true);
+  fSourceCmd -> SetDefaultValue(" ");
+  fSourceCmd -> SetCandidates("TG186 Flexi Iodine Leipzig Oncura");
+  fSourceCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
 BrachyDetectorMessenger::~BrachyDetectorMessenger()
 {
-  delete sourceCmd;
-  delete phantomMaterialCmd; 
-  delete detectorDir;
+  delete fSourceCmd;
+  delete fPhantomMaterialCmd; 
+  delete fDetectorDir;
 }
 
 void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   // Change the material of the phantom
-  if( command == phantomMaterialCmd )
-   { detector -> SetPhantomMaterial(newValue);}
+  if( command == fPhantomMaterialCmd )
+   { fDetector -> SetPhantomMaterial(newValue);}
 
   // Switch the source in the phantom
-  if( command == sourceCmd )
+  if( command == fSourceCmd )
    {
     if(newValue=="Iodine" || newValue=="TG186"|| newValue=="Leipzig" || newValue== "Flexi" || newValue== "Oncura")
      { 
-       detector -> SelectBrachytherapicSeed(newValue); 
-       detector -> SwitchBrachytherapicSeed();
+       fDetector -> SelectBrachytherapicSeed(newValue); 
+       fDetector -> SwitchBrachytherapicSeed();
       }
    }
 }

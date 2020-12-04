@@ -1,0 +1,157 @@
+##############################
+####### BEST BEAM LINE #######
+##############################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Set of the physic models
+#
+/Physics/addPhysics QGSP_BIC_EMY
+/run/numberOfThreads 16
+
+######## Geometry selection #######
+/geometrySetup/selectGeometry BESTBeamLine
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+#---------------------------gps-----------------
+####### BEST beam parameters #######
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 3. mm
+/gps/particle proton
+/gps/pos/type Beam
+
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0.16 deg
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 70 MeV
+/gps/ene/sigma 0.3 MeV
+
+
+######## Range shifter settings #########
+#/beamLine/BESTRangeShifter/RSMat G4_PLEXIGLASS
+#/beamLine/BESTRangeShifter/thickness 13 mm
+/beamLine/BESTFinalCollimator/halfInnerRad 12.5 mm
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+# Set cuts OUTSIDE the detector
+# 
+/run/setCut 1 m
+
+
+
+# Set cuts ONLY inside the detector
+#
+/run/setCutForRegion DetectorLog 0.05 mm
+
+/Step/waterPhantomStepMax 1 mm 
+
+#########################
+############################################################################################################################## 
+# 							 DETECTOR DESCRIPTION
+###################################################
+# USE THE FOLLOWING FOUR LINES FOR DEFINITION OF PHANTOM
+###################################################
+#
+#/changePhantom/position 20. 0. 0. cm
+#/changePhantom/update
+
+/changePhantom/size 40 40 40  cm
+/changePhantom/position 20 0 0 cm
+
+###################################################
+# USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
+###################################################
+#
+
+
+/changeDetector/size 4 1 1 cm
+/changeDetector/voxelSize .1 10 10 mm
+
+# Put the detector in the lower left corner of the phantom
+#
+/changeDetector/displacement 0 19.5 19.5 cm
+/changePhantom/update
+
+
+# Visualisation 
+#
+#/vis/scene/create
+#/vis/open OGL
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 30 140 deg
+#/vis/viewer/zoomTo 1
+#/vis/viewer/panTo 100  20 cm
+#/vis/viewer/panTo -10  0 cm
+#/vis/scene/add/trajectories
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate -1
+#/vis/viewer/update
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 1
+/run/printProgress 1000
+
+# Default material is liquid water (G4_WATER)
+#/changePhantom/material G4_Pb
+
+/run/setCutForRegion DetectorLog 0.1 mm
+
+
+/run/setCutForAGivenParticle e- 0.1 mm
+/run/setCutForAGivenParticle e+ 0.1 mm
+/run/setCutForAGivenParticle proton 0.1 mm
+
+# For dose/fleunce computation of primary and secondary particles
+#/analysis/secondary true
+
+# For dose average LET computations of primary and secondary particles#
+
+/analysis/computeLet
+
+####### Dose scorer at the isocentre #######
+/score/create/boxMesh detector
+/score/mesh/boxSize  1 20 20 mm
+/score/mesh/nBin 1 80 80
+/score/mesh/translate/xyz 0.5 0 0 mm
+/score/quantity/doseDeposit dose_detector
+/score/close
+
+/run/beamOn 100
+#########################
+
+/score/dumpQuantityToFile detector dose_detector dose_70Mev.txt

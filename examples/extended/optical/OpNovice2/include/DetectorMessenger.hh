@@ -47,43 +47,39 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-  public:
+ public:
+  DetectorMessenger(DetectorConstruction*);
+  ~DetectorMessenger();
 
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+ private:
+  DetectorConstruction* fDetector;
 
-  private:
+  G4UIdirectory* fOpticalDir;
 
-    DetectorConstruction*      fDetector;
+  // the surface
+  G4UIcmdWithAString* fSurfaceTypeCmd;
+  G4UIcmdWithAString* fSurfaceFinishCmd;
+  G4UIcmdWithAString* fSurfaceModelCmd;
+  G4UIcmdWithADouble* fSurfaceSigmaAlphaCmd;
+  G4UIcmdWithADouble* fSurfacePolishCmd;
+  G4UIcmdWithAString* fSurfaceMatPropVectorCmd;
+  G4UIcmdWithAString* fSurfaceMatPropConstCmd;
 
-    G4UIdirectory*             fOpticalDir;
+  // the box
+  G4UIcmdWithAString* fTankMatPropVectorCmd;
+  G4UIcmdWithAString* fTankMatPropConstCmd;
+  G4UIcmdWithAString* fTankMaterialCmd;
 
-    // the surface
-    G4UIcmdWithAString*        fSurfaceTypeCmd;
-    G4UIcmdWithAString*        fSurfaceFinishCmd;
-    G4UIcmdWithAString*        fSurfaceModelCmd;
-    G4UIcmdWithADouble*        fSurfaceSigmaAlphaCmd;
-    G4UIcmdWithADouble*        fSurfacePolishCmd;
-    G4UIcmdWithAString*        fSurfaceMatPropVectorCmd;
-    G4UIcmdWithAString*        fSurfaceMatPropConstCmd;
-
-    // the box
-    G4UIcmdWithAString*        fTankMatPropVectorCmd;
-    G4UIcmdWithAString*        fTankMatPropConstCmd;
-    G4UIcmdWithAString*        fTankMaterialCmd;
-
-    // the world
-    G4UIcmdWithAString*        fWorldMatPropVectorCmd;
-    G4UIcmdWithAString*        fWorldMatPropConstCmd;
-    G4UIcmdWithAString*        fWorldMaterialCmd;
-
+  // the world
+  G4UIcmdWithAString* fWorldMatPropVectorCmd;
+  G4UIcmdWithAString* fWorldMatPropConstCmd;
+  G4UIcmdWithAString* fWorldMaterialCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

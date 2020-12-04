@@ -28,10 +28,13 @@
 
 #include "G4Hdf5AnalysisManager.hh"
 #include "G4Hdf5FileManager.hh"
-#include "G4Hdf5NtupleManager.hh"
+#include "G4Hdf5NtupleFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
+
+using namespace G4Analysis;
 
 // mutex in a file scope
 
@@ -75,7 +78,7 @@ G4bool G4Hdf5AnalysisManager::IsInstance()
 //_____________________________________________________________________________
 G4Hdf5AnalysisManager::G4Hdf5AnalysisManager(G4bool isMaster)
  : G4ToolsAnalysisManager("Hdf5", isMaster),
-   fNtupleManager(nullptr),
+   fNtupleFileManager(nullptr),
    fFileManager(nullptr)
 {
 #ifdef G4MULTITHREADED
@@ -84,7 +87,7 @@ G4Hdf5AnalysisManager::G4Hdf5AnalysisManager(G4bool isMaster)
     message 
       << "Your HDF5 lib is not built with H5_HAVE_THREADSAFE.";
     G4Exception("G4Hdf5AnalysisManager::G4Hdf5AnalysisManager",
-                "Analysis_F001", FatalException, message);
+                "Analysis_F002", FatalException, message);
 #endif
 #endif
 
@@ -105,11 +108,10 @@ G4Hdf5AnalysisManager::G4Hdf5AnalysisManager(G4bool isMaster)
   SetFileManager(fFileManager);
   fFileManager->SetBasketSize(fgkDefaultBasketSize);
 
-  // Ntuple manager
-  fNtupleManager = new G4Hdf5NtupleManager(fState);
-  fNtupleManager->SetFileManager(fFileManager);
-  SetNtupleManager(fNtupleManager);
-      // The managers will be deleted by the base class
+  // Ntuple file manager
+  fNtupleFileManager = std::make_shared<G4Hdf5NtupleFileManager>(fState);
+  fNtupleFileManager->SetFileManager(fFileManager);
+  fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 
 //_____________________________________________________________________________
@@ -134,8 +136,7 @@ G4bool G4Hdf5AnalysisManager::WriteH1()
   auto result = true;
 
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
-    result = WriteHn(h1Vector, hnVector, directoryName, "h1");
+    result = WriteHn(h1Vector, hnVector, "h1");
   }  
   else {
     // The worker manager just adds its histograms to the master
@@ -159,8 +160,7 @@ G4bool G4Hdf5AnalysisManager::WriteH2()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
-    result = WriteHn(h2Vector, hnVector, directoryName, "h2");
+    result = WriteHn(h2Vector, hnVector, "h2");
   }  
   else {
     // The worker manager just adds its histograms to the master
@@ -184,8 +184,7 @@ G4bool G4Hdf5AnalysisManager::WriteH3()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
-    result = WriteHn(h3Vector, hnVector, directoryName, "h3");
+    result = WriteHn(h3Vector, hnVector, "h3");
   }  
   else {
     // The worker manager just adds its histograms to the master
@@ -209,8 +208,7 @@ G4bool G4Hdf5AnalysisManager::WriteP1()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
-    result = WritePn(p1Vector, hnVector, directoryName, "p1");
+    result = WritePn(p1Vector, hnVector, "p1");
   }  
   else {
     // The worker manager just adds its profiles to the master
@@ -234,8 +232,7 @@ G4bool G4Hdf5AnalysisManager::WriteP2()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
-    result = WritePn(p2Vector, hnVector, directoryName, "p2");
+    result = WritePn(p2Vector, hnVector, "p2");
   }  
   else {
     // The worker manager just adds its profiles to the master
@@ -258,7 +255,7 @@ G4bool G4Hdf5AnalysisManager::Reset()
   auto result = G4ToolsAnalysisManager::Reset();
   finalResult = finalResult && result;
   
-  result = fNtupleManager->Reset(true);
+  result = fNtupleFileManager->Reset();
   finalResult = finalResult && result;
   
   return finalResult;
@@ -271,46 +268,33 @@ G4bool G4Hdf5AnalysisManager::Reset()
 //_____________________________________________________________________________
 G4bool G4Hdf5AnalysisManager::OpenFileImpl(const G4String& fileName)
 {
-  auto finalResult = true;
-  auto result = fFileManager->SetFileName(fileName);
-  finalResult = finalResult && result;
+  // Create ntuple manager(s)
+  // and set it to base class which takes then their ownership
+  SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
 
-#ifdef G4VERBOSE
-  G4String name = fFileManager->GetFullFileName();
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("open", "analysis file", name);
-#endif
+  auto finalResult = true;
 
   G4AutoLock lock(&openFileMutex);
-  result = fFileManager->OpenFile(fileName);
+  auto result = fFileManager->OpenFile(fileName);
   finalResult = finalResult && result;
 
-  // fNtupleManager->SetNtupleDirectory(fFileManager->GetNtupleDirectory());
-  fNtupleManager->CreateNtuplesFromBooking();
+  result = fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
+  finalResult = finalResult && result;
   lock.unlock();
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("open", "analysis file", name, finalResult);
-#endif
 
   return finalResult;
 }  
-  
+
 //_____________________________________________________________________________
 G4bool G4Hdf5AnalysisManager::WriteImpl() 
 {
   auto finalResult = true;
 
 #ifdef G4VERBOSE
-  auto name = fFileManager->GetFullFileName();
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("write", "files", name);
+  if ( fState.GetVerboseL4() ) {
+    fState.GetVerboseL4()->Message("write", "files", "");
+  }
 #endif
-
-  // Histo directory
-  // auto result = fFileManager->WriteHistoDirectory();
-  // if ( ! result ) return false;
 
   auto result = WriteH1();
   finalResult = finalResult && result;
@@ -331,10 +315,6 @@ G4bool G4Hdf5AnalysisManager::WriteImpl()
   result = WriteP2();
   finalResult = finalResult && result;
   
-  // // Ntuple directory
-  // result = fFileManager->WriteNtupleDirectory();
-  // if ( ! result ) return false;
-
   // Write ASCII if activated
   if ( IsAscii() ) {
     result = WriteAscii(fFileManager->GetFileName());
@@ -342,9 +322,9 @@ G4bool G4Hdf5AnalysisManager::WriteImpl()
   }   
 
 #ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("write", "file", fFileManager->GetFullFileName(), finalResult);
+  if ( fState.GetVerboseL2() ) {
+    fState.GetVerboseL2()->Message("write", "files", "", finalResult);
+  }
 #endif
 
   return finalResult;
@@ -356,27 +336,25 @@ G4bool G4Hdf5AnalysisManager::CloseFileImpl(G4bool reset)
   auto finalResult = true;
 
   G4AutoLock lock(&closeFileMutex);
-  auto result = fFileManager->CloseFile();
+  auto result = fFileManager->CloseFiles();
   finalResult = finalResult && result;
 
   if ( reset ) {
     // reset data
     result = Reset();
-  } else {
-    // ntuple must be reset 
-    result = fNtupleManager->Reset(true);
-  }
-  if ( ! result ) {
+    if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";
       G4Exception("G4Hdf5AnalysisManager::CloseFile()",
                 "Analysis_W021", JustWarning, description);
+    }
   }
-
-  lock.unlock();
   finalResult = finalResult && result;
 
-  // No files clean-up as ntuples are not supported in MT mode
+  result = fNtupleFileManager->ActionAtCloseFile(reset);
+  finalResult = finalResult && result;
+
+  lock.unlock();
 
   return finalResult; 
 }

@@ -200,7 +200,7 @@ public: //iro
   }
 public:
   void out(std::ostream& a_out) const {
-    a_out << "streamer_info for class :" 
+    a_out << "streamer_info for class :"
           << " " << m_name << ", version=" << m_streamed_class_version
           << std::endl;
     tools_vforcit(streamer_element*,m_elements,it) (*it)->out(a_out);
@@ -244,13 +244,13 @@ protected:
     m_streamed_class_version = a_from.m_streamed_class_version;
     m_elements = a_from.m_elements;
     return *this;
-  }  
+  }
 public:
   const std::string& name() const {return m_name;}
   streamer_element* find_streamer_element(size_t a_index) const {
     if(a_index>=m_elements.size()) return 0;
     return m_elements[a_index];
-  }    
+  }
 protected:
   ifac& m_fac;
 protected: //Named

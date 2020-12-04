@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrPlaceParameterisation
+// G4tgrPlaceParameterisation
 //
 // Class description:
 //
@@ -36,42 +33,40 @@
 // - Parameterisation also of the dimensions
 // - Parameterisation of the solid type
 // Data is just stored in this class, without any calculation of the
-// positions of each copy 
+// positions of each copy
 // :POS_PARAM "volu_name" copyNo "parent_name" "parametrisation_type"
 //            number_copies step offset extra_data(n words).
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrPlaceParameterisation_h
-#define G4tgrPlaceParameterisation_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrPlaceParameterisation_hh
+#define G4tgrPlaceParameterisation_hh 1
 
 #include <vector>
 
+#include "globals.hh"
 #include "G4tgrPlace.hh"
 
 class G4tgrPlaceParameterisation : public G4tgrPlace
 {
-  public:  // with description
+  public:
 
     G4tgrPlaceParameterisation();
-   ~G4tgrPlaceParameterisation();
+    ~G4tgrPlaceParameterisation();
 
-    G4tgrPlaceParameterisation( const std::vector<G4String>& p);
+    G4tgrPlaceParameterisation(const std::vector<G4String>& p);
       // Creates an object passing the parameters
 
     // Access functions
 
     const G4String& GetParamType() const { return theParamType; }
-     // GetType returns placement type
+      // GetType returns placement type
     std::vector<G4double> GetExtraData() const { return theExtraData; }
     const G4String& GetRotMatName() const { return theRotMatName; }
 
     friend std::ostream& operator<<(std::ostream& os,
                                     const G4tgrPlaceParameterisation& obj);
+
   private:
 
     G4String theParamType;

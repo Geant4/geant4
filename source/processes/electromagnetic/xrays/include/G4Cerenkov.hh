@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Definition
 ////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,6 @@
 //              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
-// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -66,21 +65,17 @@
 
 class G4Cerenkov : public G4VProcess
 {
-
-public:
-
-  explicit G4Cerenkov(const G4String& processName = "Cerenkov", 
-             G4ProcessType type = fElectromagnetic);
+ public:
+  explicit G4Cerenkov(const G4String& processName = "Cerenkov",
+                      G4ProcessType type          = fElectromagnetic);
   ~G4Cerenkov();
 
-  explicit G4Cerenkov(const G4Cerenkov &right);
+  explicit G4Cerenkov(const G4Cerenkov& right);
 
-private:
+ private:
+  G4Cerenkov& operator=(const G4Cerenkov& right) = delete;
 
-  G4Cerenkov& operator=(const G4Cerenkov &right) = delete;
-
-public:
-
+ public:
   G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable', for all charged particles
   // except short-lived particles.
@@ -88,43 +83,50 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) override;
   // Build table at a right time
 
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-                           G4double, G4ForceCondition* );
+  void PreparePhysicsTable(const G4ParticleDefinition& part) override;
+  void Initialise();
+
+  G4double GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*);
   // Returns the discrete step limit and sets the 'StronglyForced'
   // condition for the DoIt to be invoked at every step.
 
-  G4double PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-                                                G4double ,
-                                                G4ForceCondition* ) override;
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& aTrack, G4double,
+                                                G4ForceCondition*) override;
   // Returns the discrete step limit and sets the 'StronglyForced'
   // condition for the DoIt to be invoked at every step.
 
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-                                  const G4Step&  aStep) override;
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+                                  const G4Step& aStep) override;
   // This is the method implementing the Cerenkov process.
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
-  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
-                                                         G4double  ,
-                                                         G4double  ,
-                                                         G4double& ,
-                                                         G4GPILSelection*
-                                                ) override { return -1.0; };
+  virtual G4double AlongStepGetPhysicalInteractionLength(
+    const G4Track&, G4double, G4double, G4double&, G4GPILSelection*) override
+  {
+    return -1.0;
+  };
 
-  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
-                                                      G4ForceCondition*
-                                                 ) override { return -1.0; };
+  virtual G4double AtRestGetPhysicalInteractionLength(
+    const G4Track&, G4ForceCondition*) override
+  {
+    return -1.0;
+  };
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
-  virtual G4VParticleChange* AtRestDoIt(const G4Track& , const G4Step& ) 
-                             override {return nullptr;};
+  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override
+  {
+    return nullptr;
+  };
 
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track& , const G4Step&) 
-                             override {return nullptr;};
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&,
+                                           const G4Step&) override
+  {
+    return nullptr;
+  };
 
   void SetTrackSecondariesFirst(const G4bool state);
-  // If set, the primary particle tracking is interrupted and any 
-  // produced Cerenkov photons are tracked next. When all have 
+  // If set, the primary particle tracking is interrupted and any
+  // produced Cerenkov photons are tracked next. When all have
   // been tracked, the tracking of the primary resumes.
 
   G4bool GetTrackSecondariesFirst() const;
@@ -140,7 +142,7 @@ public:
   // Set the maximum number of Cerenkov photons allowed to be generated during
   // a tracking step. This is an average ONLY; the actual number will vary
   // around this average. If invoked, the maximum photon stack will roughly be
-  // of the size set. If not called, the step is not limited by the number of 
+  // of the size set. If not called, the step is not limited by the number of
   // photons generated.
 
   G4int GetMaxNumPhotonsPerStep() const;
@@ -162,68 +164,45 @@ public:
   void DumpPhysicsTable() const;
   // Prints the physics table.
 
-private:
-
-  void BuildThePhysicsTable();
-
-  G4double GetAverageNumberOfPhotons(const G4double charge,
-                                     const G4double beta,
-                                     const G4Material *aMaterial,
+  G4double GetAverageNumberOfPhotons(const G4double charge, const G4double beta,
+                                     const G4Material* aMaterial,
                                      G4MaterialPropertyVector* Rindex) const;
 
-protected:
-
+ protected:
   G4PhysicsTable* thePhysicsTable;
 
-private:
-
+ private:
   G4bool fTrackSecondariesFirst;
   G4double fMaxBetaChange;
-  G4int  fMaxPhotons;
+  G4int fMaxPhotons;
 
   G4bool fStackingFlag;
 
   G4int fNumPhotons;
 };
 
-inline
-G4bool G4Cerenkov::GetTrackSecondariesFirst() const
+inline G4bool G4Cerenkov::GetTrackSecondariesFirst() const
 {
   return fTrackSecondariesFirst;
 }
 
-inline
-G4double G4Cerenkov::GetMaxBetaChangePerStep() const
+inline G4double G4Cerenkov::GetMaxBetaChangePerStep() const
 {
   return fMaxBetaChange;
 }
 
-inline
-G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const
-{
-  return fMaxPhotons;
-}
+inline G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const { return fMaxPhotons; }
 
-inline
-void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
+inline void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
 {
   fStackingFlag = stackingFlag;
 }
 
-inline
-G4bool G4Cerenkov::GetStackPhotons() const
-{
-  return fStackingFlag;
-}
+inline G4bool G4Cerenkov::GetStackPhotons() const { return fStackingFlag; }
 
-inline
-G4int G4Cerenkov::GetNumPhotons() const
-{
-  return fNumPhotons;
-}
+inline G4int G4Cerenkov::GetNumPhotons() const { return fNumPhotons; }
 
-inline
-G4PhysicsTable* G4Cerenkov::GetPhysicsTable() const
+inline G4PhysicsTable* G4Cerenkov::GetPhysicsTable() const
 {
   return thePhysicsTable;
 }

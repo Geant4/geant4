@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -15,7 +15,7 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -87,7 +87,7 @@
                        Imean: 488.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Sn (Sn)   Z = 50.0   N =   119   A = 118.710 g/mole
-         --->  Isotope: Sn112   Z = 50   N = 112   A = 111.90 g/mole   abundance:  0.970 %
+         --->  Isotope: Sn112   Z = 50   N = 112   A = 111.91 g/mole   abundance:  0.970 %
          --->  Isotope: Sn114   Z = 50   N = 114   A = 113.90 g/mole   abundance:  0.660 %
          --->  Isotope: Sn115   Z = 50   N = 115   A = 114.90 g/mole   abundance:  0.340 %
          --->  Isotope: Sn116   Z = 50   N = 116   A = 115.90 g/mole   abundance: 14.540 %
@@ -157,7 +157,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7122 keV    e-  1.28245 MeV    e+  1.21554 MeV proton 100 keV
+ Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -189,14 +189,14 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.640000s Real=3.666902s Sys=0.010000s
+  User=1.530000s Real=1.635862s Sys=0.010000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5627	muIoni : 468416	muPairProd : 64240	muBrems : 671
+ Number of process calls --->	CoulombScat : 5678	muIoni : 464109	muPairProd : 63342	muBrems : 681
 
- Simulation: total CrossSection = 0.53895 /cm	 MeanFreePath = 1.8554 cm 	 massicCrossSection = 0.068482 cm2/g
- Theory:     total CrossSection = 0.53155 /cm	 MeanFreePath = 1.8813 cm 	 massicCrossSection = 0.067542 cm2/g
+ Simulation: total CrossSection = 0.53381 /cm	 MeanFreePath = 1.8733 cm 	 massicCrossSection = 0.067828 cm2/g
+ Theory:     total CrossSection = 0.52677 /cm	 MeanFreePath = 1.8984 cm 	 massicCrossSection = 0.066934 cm2/g
 #
 /gun/particle pi+
 /run/beamOn 10000
@@ -219,7 +219,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7122 keV    e-  1.28245 MeV    e+  1.21554 MeV proton 100 keV
+ Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -231,7 +231,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1232246224341559076, 502994183317362875, 827325684979959417, 1720626337570558479, 1497012769436038540, 8037863595463596, 1888147439567773511, 974628579536266092, 1560956143404819913, 1711028131601079341, 799316675237868649, 1523084131378296775, 630030747462457124, 1670125680287411096, 46032566829546818, 500464967571540463, 1478391931196980061} counter= 9sumtot= 123705983605430218
+N=17 V[N]={390989001462590597, 2165133204863311347, 854974819548217897, 2126485118342897292, 1043827090844452939, 1153945593924229687, 1492456639939297216, 170725670497924326, 271262107949827517, 605115632054846954, 986185566339304190, 439176016835494735, 879520380644875766, 793553958454628956, 1863967334887151092, 1831154685294334696, 265599519600268147} counter= 12sumtot= 1193171276987795697
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -246,13 +246,13 @@ N=17 V[N]={1232246224341559076, 502994183317362875, 827325684979959417, 17206263
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.520000s Real=3.563774s Sys=0.000000s
+  User=1.330000s Real=1.421897s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 431759	hPairProd : 59692	CoulombScat : 5632	hBrems : 313
+ Number of process calls --->	hIoni : 428839	hPairProd : 59634	CoulombScat : 5677	hBrems : 339
 
- Simulation: total CrossSection = 0.4974 /cm	 MeanFreePath = 2.0105 cm 	 massicCrossSection = 0.063202 cm2/g
+ Simulation: total CrossSection = 0.49449 /cm	 MeanFreePath = 2.0223 cm 	 massicCrossSection = 0.062832 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -275,7 +275,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7122 keV    e-  1.28245 MeV    e+  1.21554 MeV proton 100 keV
+ Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -287,7 +287,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1239851013584323680, 1884047011881242256, 1962019013740758705, 529750077334794390, 1730160679914441292, 936631940651041969, 217936981083359606, 76083804081386717, 1434765033052734404, 62677456950250436, 2136979579980948469, 664220050613025748, 961100655912898099, 2103494065683219891, 1748134006090445015, 1431415384565954, 1719132720252111699} counter= 12sumtot= 961671432481996722
+N=17 V[N]={189834841800119698, 933698143446158285, 303366963357487890, 1657727968765643003, 1931848314084735928, 528222828093349202, 2266763837204729526, 844778916719660478, 1553452260019614839, 701305615943610690, 1877080332352109664, 482776174036698067, 1692678699103286550, 1672171112634157092, 1348922200906541837, 2269046978341506103, 1319329630900893632} counter= 17sumtot= 820417734787056925
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -302,13 +302,13 @@ N=17 V[N]={1239851013584323680, 1884047011881242256, 1962019013740758705, 529750
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.480000s Real=2.485581s Sys=0.000000s
+  User=1.240000s Real=1.400102s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 431613	CoulombScat : 5617	hPairProd : 33976	hBrems : 12	msc : 1
+ Number of process calls --->	hIoni : 427382	hPairProd : 33807	CoulombScat : 5516	hBrems : 10
 
- Simulation: total CrossSection = 0.47122 /cm	 MeanFreePath = 2.1222 cm 	 massicCrossSection = 0.059875 cm2/g
+ Simulation: total CrossSection = 0.46671 /cm	 MeanFreePath = 2.1426 cm 	 massicCrossSection = 0.059303 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -326,12 +326,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0154 MB
-Pool ID '7G4Track', size : 0.0308 MB
+Pool ID '17G4DynamicParticle', size : 0.0163 MB
+Pool ID '7G4Track', size : 0.0327 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.062 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -241,7 +241,8 @@ G4eplusTo3GammaOKVIModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 {
 
   G4double posiKinEnergy = dp->GetKineticEnergy();
-  G4DynamicParticle *aGamma1, *aGamma2, *aGamma3;
+  G4DynamicParticle *aGamma1, *aGamma2;
+  G4DynamicParticle* aGamma3 = nullptr;
   G4double border;
 
   if(posiKinEnergy < 500*MeV) { 
@@ -376,7 +377,7 @@ G4eplusTo3GammaOKVIModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
  
   vdp->push_back(aGamma1);
   vdp->push_back(aGamma2);
-  vdp->push_back(aGamma3);
+  if(aGamma3 != nullptr) { vdp->push_back(aGamma3); }
 
   // kill primary positron
   fParticleChange->SetProposedKineticEnergy(0.0);

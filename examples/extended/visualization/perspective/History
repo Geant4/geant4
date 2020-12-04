@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd November 2020 B. Morgan (exam-ext-vis-persp-V10-06-00)
+- Support same CMake version range as core Geant4
+
 8th January 2017  John Allison  (exam-ext-vis-persp-V10-03-00)
 - perspective.cc:
   o Changed SetUserAction to RegisterRunDurationUserVisAction.
@@ -25,7 +28,7 @@ track of all tags.
 
 19th February 2013  Ivana Hrivnacova  (exam-ext-vis-persp-V09-06-00)
 - Applied coding guidelines (data members initialization)
-     
+
 11th June 2012  John Allison  (exam-ext-vis-persp-V09-05-03)
 - Added .README for doxygen.
 

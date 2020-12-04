@@ -30,11 +30,7 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 #include "GB04ActionInitialization.hh"
 
 #include "G4UImanager.hh"
@@ -97,17 +93,8 @@ int main(int argc,char** argv)
   }
 
   // -- Construct the run manager : MT or sequential one
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  G4cout << "      ********** Run Manager constructed in MT mode ************ "
-         << G4endl;
-  // -- Choose 4 threads:
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
   runManager->SetNumberOfThreads(4);
-#else
-  G4RunManager * runManager = new G4RunManager;
-  G4cout << "      ********** Run Manager constructed in sequential mode ************ "
-         << G4endl;
-#endif
 
   // -- Set mandatory initialization classes
   GB04DetectorConstruction* detector = new GB04DetectorConstruction();

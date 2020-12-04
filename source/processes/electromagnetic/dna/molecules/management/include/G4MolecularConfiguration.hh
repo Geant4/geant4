@@ -239,7 +239,7 @@ public:
    * For the time being, we will consider only one diffusion
    * coefficient for the all simulation => diffusion in one medium only
    * If the user needs to use the diffusion in different materials,
-   * she/he should contact the developpers/mainteners of this package
+   * she/he should contact the developers/maintainers of this package
    */
   inline void SetDiffusionCoefficient(G4double);
 

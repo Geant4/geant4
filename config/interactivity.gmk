@@ -31,6 +31,9 @@ endif
 ifdef LOAD_QT
   INTYLIBS += $(QTLIBS)
 endif
+ifdef LOAD_3DQT
+  INTYLIBS += $(QT3DLIBS)
+endif
 ifdef LOAD_GLQT
   INTYLIBS += $(GLQTLIBS)
 endif

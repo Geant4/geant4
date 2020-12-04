@@ -36,7 +36,7 @@ public: //idir
   virtual void append_object(iobject* a_object) {m_objs.push_back(a_object);} //take ownership of a_object
 public:
   directory(ifile& a_file)
-  :m_file(a_file)  
+  :m_file(a_file)
   ,m_parent(0)
   ,m_is_valid(false)
   ,m_date_C(0)
@@ -52,7 +52,7 @@ public:
 #endif
   }
   directory(ifile& a_file,const std::string& a_name,const std::string& a_title)
-  :m_file(a_file)  
+  :m_file(a_file)
   ,m_parent(0)
   ,m_is_valid(false)
   ,m_name(a_name)
@@ -89,7 +89,7 @@ public:
             directory* a_parent, //assume a_parent not nul.
             const std::string& a_name,
             const std::string& a_title)
-  :m_file(a_file)  
+  :m_file(a_file)
   ,m_parent(a_parent)
   ,m_is_valid(false)
   ,m_name(a_name)
@@ -116,7 +116,7 @@ public:
       m_file.out() << "tools::wroot::directory::directory :"
                    << " directory name " << sout(m_name)
                    << " cannot contain a slash."
-                   << std::endl; 
+                   << std::endl;
       return; //FIXME : throw
     }
 
@@ -160,7 +160,7 @@ public:
                    << " key.write_self() failed."
                    << std::endl;
       return; //FIXME : throw
-    }  
+    }
     uint32 n;
     if(!key->write_file(m_file,n)) {
       m_file.out() << "tools::wroot::directory::directory :"
@@ -168,7 +168,7 @@ public:
                    << " cannot write key to file."
                    << std::endl;
       return; //FIXME : throw
-    }  
+    }
 
     m_is_valid = true;
   }
@@ -202,13 +202,13 @@ public:
     // Create a sub-directory and return a pointer to the created directory.
     // Note that the directory name cannot contain slashes.
     if(a_name.empty()) {
-      m_file.out() << "tools::wroot::directory::mkdir :" 
-                   << " directory name cannot be \"\"." 
+      m_file.out() << "tools::wroot::directory::mkdir :"
+                   << " directory name cannot be \"\"."
                    << std::endl;
       return 0;
     }
     if(a_name.find('/')!=std::string::npos) {
-      m_file.out() << "tools::wroot::directory::mkdir :" 
+      m_file.out() << "tools::wroot::directory::mkdir :"
                    << " " << sout(a_name)
                    << " cannot contain a slash."
                    << std::endl;
@@ -216,7 +216,7 @@ public:
     }
     directory* dir = new directory(m_file,this,a_name,a_title.empty()?a_name:a_title);
     if(!dir->is_valid()) {
-      m_file.out() << "tools::wroot::directory::mkdir :" 
+      m_file.out() << "tools::wroot::directory::mkdir :"
                    << " directory badly created."
                    << std::endl;
       delete dir;
@@ -267,8 +267,8 @@ public:
 
     if(m_file.verbose()) {
       m_file.out() << "tools::wroot::key::to_buffer :"
-          << " nbytes keys : " << m_nbytes_keys 
-          << ", pos keys : " << m_seek_keys 
+          << " nbytes keys : " << m_nbytes_keys
+          << ", pos keys : " << m_seek_keys
           << std::endl;
     }
     return true;
@@ -318,7 +318,7 @@ public:
                    << std::endl;
       return false; //it will write keys of objects.
     }
-  
+
     a_nbytes = nbytes;
     return true;
   }
@@ -365,7 +365,7 @@ protected:
 
   key* find_key(const std::string& a_name) {
     if(m_file.verbose()) {
-      m_file.out() << "tools::wroot::directory::find_key :" 
+      m_file.out() << "tools::wroot::directory::find_key :"
                    << " " << sout(a_name) << " ..."
                    << std::endl;
     }
@@ -417,12 +417,12 @@ protected:
    {tools_lforit(key*,m_keys,it) {
       if(!((*it)->to_buffer(wb,m_file.verbose()))) return false;
     }}}
-  
+
     m_seek_keys = headerkey.seek_key();
     m_nbytes_keys = headerkey.number_of_bytes();
 
     if(m_file.verbose()) {
-      m_file.out() << "tools::wroot::directory::write_keys :" 
+      m_file.out() << "tools::wroot::directory::write_keys :"
                    << " write header key"
                    << " " << sout(m_name)
                    << " " << sout(m_title)
@@ -436,11 +436,11 @@ protected:
 
     headerkey.set_cycle(1);
     if(!headerkey.write_self(m_file)) {
-      m_file.out() << "tools::wroot::directory::write_keys :" 
+      m_file.out() << "tools::wroot::directory::write_keys :"
                    << " key.write_self() failed."
                    << std::endl;
       return false;
-    }  
+    }
 
     uint32 n;
     return headerkey.write_file(m_file,n);
@@ -458,7 +458,7 @@ protected:
       return false;
     }
     // do not overwrite the name/title part
-    seek pointer = m_seek_directory + m_nbytes_name; 
+    seek pointer = m_seek_directory + m_nbytes_name;
     //fModified = false;
     if(!m_file.set_pos(pointer)) {
       delete [] header;
@@ -479,9 +479,9 @@ protected:
   bool write_object(iobject& a_obj,uint32& a_nbytes){
     buffer bref(m_file.out(),m_file.byte_swap(),256*128); //32768
     if(!a_obj.stream(bref)) {
-      m_file.out() << "tools::wroot::directory::write_object :" 
+      m_file.out() << "tools::wroot::directory::write_object :"
                    << " cannot stream object of store class name "
-                   << " " << sout(a_obj.store_class_name()) << "." 
+                   << " " << sout(a_obj.store_class_name()) << "."
                    << std::endl;
       a_nbytes = 0;
       return false;
@@ -521,22 +521,22 @@ protected:
 
     uint16 cycle = append_key(key);
     key->set_cycle(cycle);
-    
+
     if(!key->write_self(m_file)) {
-      m_file.out() << "tools::wroot::directory::write_object :" 
+      m_file.out() << "tools::wroot::directory::write_object :"
                    << " key.write_self() failed."
                    << std::endl;
       return false;
-    }  
+    }
 
     //FIXME m_file.sumBuffer(key->object_size()); //uncompressed data size.
-  
+
     if(m_file.verbose()) {
-      m_file.out() << "tools::wroot::directory::_write_buffer :" 
+      m_file.out() << "tools::wroot::directory::_write_buffer :"
                    << " " << sout(a_obj.name()) << "."
                    << std::endl;
     }
-    
+
     return key->write_file(m_file,a_nbytes);
   }
 

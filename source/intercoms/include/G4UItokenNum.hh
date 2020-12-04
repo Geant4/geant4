@@ -23,68 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UItokenNum
 //
+// Description:
 //
-// G4UItokenNum.hh
+// Namespace with enumerator of tokens
 
+// Author: Makoto Asai, 1998
+// --------------------------------------------------------------------
 #ifndef G4UItokenNum_hh
 #define G4UItokenNum_hh 1
+
 #include "globals.hh"
 
 namespace G4UItokenNum
 {
-enum tokenNum
-{
-  NONE       = 0,
-  IDENTIFIER = 257,
-  CONSTINT   = 258,
-  CONSTDOUBLE= 259,
-  CONSTCHAR  = 260,
-  CONSTSTRING= 261,
-  GT         = 262,
-  GE         = 263,
-  LT         = 264,
-  LE         = 265,
-  EQ         = 266,
-  NE         = 267,
-  //LOGICALNOT = 268,
-  LOGICALOR  = 269,
-  LOGICALAND = 270,
-  SCAREAMER  = 33,
-  LPAREN     = 40,
-  PLUS       = 43,
-  MINUS      = 45
-};
+  enum tokenNum
+  {
+    NONE        = 0,
+    IDENTIFIER  = 257,
+    CONSTINT    = 258,
+    CONSTDOUBLE = 259,
+    CONSTCHAR   = 260,
+    CONSTSTRING = 261,
+    GT          = 262,
+    GE          = 263,
+    LT          = 264,
+    LE          = 265,
+    EQ          = 266,
+    NE          = 267,
+    // LOGICALNOT = 268,
+    CONSTLONG   = 268,
+    LOGICALOR  = 269,
+    LOGICALAND = 270,
+    SCAREAMER  = 33,
+    LPAREN     = 40,
+    PLUS       = 43,
+    MINUS      = 45
+  };
 
-typedef struct yystype
-{
+  typedef struct yystype
+  {
     tokenNum type;
     G4double D;
-    G4int    I;
-    char     C;
+    G4int I;
+    G4long L;
+    char C;
     G4String S;
 
-    yystype() : type(tokenNum::NONE), D(0.0), I(0), C(' '), S("")
-    {
-    }
+    yystype()
+      : type(tokenNum::NONE)
+      , D(0.0)
+      , I(0)
+      , L(0)
+      , C(' ')
+      , S("")
+    {}
     G4bool operator==(const yystype& right) const
     {
-      return (this == &right)?1:0;
+      return (this == &right) ? 1 : 0;
     }
     yystype& operator=(const yystype& right)
     {
-      if (&right==this) return *this;
+      if(&right == this)
+        return *this;
       type = right.type;
-      D = right.D;
-      I = right.I;
-      C = right.C;
-      S = right.S;
+      D    = right.D;
+      I    = right.I;
+      L    = right.L;
+      C    = right.C;
+      S    = right.S;
       return *this;
     }
-    yystype(const yystype& right)
-    {
-      *this=right;
-    }
-} yystype;
-}
+    yystype(const yystype& right) { *this = right; }
+  } yystype;
+}  // namespace G4UItokenNum
+
 #endif

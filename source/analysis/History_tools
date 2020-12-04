@@ -1,3 +1,52 @@
+5.2.1 :
+ - fonts : have lato_regular.ttf file and license_font_lato.txt, readme_font_lato.txt texts taken from :
+     https://www.latofonts.com/lato-free-fonts
+ 
+
+5.2.0 :
+ //////////////////////////////////////////////////
+ /// use google fonts : ///////////////////////////
+ //////////////////////////////////////////////////
+ - tools/test/cpp : viewplot.cpp and test/virewplot_ttf.cpp : use wrap_viewplot_fonts_google_style.
+ - tools/xml : viewplot.style replaced with viewplot_fonts_google.style,
+   wrap_viewplot_style replaced by wrap_viewplot_fonts_google_style in order to use 
+   roboto_bold.ttf instead of arialbd.ttf and lato_regular.ttf instead of helvetica.ttf.
+ - tools/sg/strings : font_roboto_bold() and lato_regular() functions.
+ - tools/test/cpp : add license_font_[roboto,lato].txt files.
+ - tools/test/cpp : add roboto_bold.ttf, lato_regular.ttf.
+ - tools/test/cpp : rm arialbd.ttf, helvetica.ttf.
+
+ //////////////////////////////////////////////////
+ /// hdf5 : ///////////////////////////////////////
+ //////////////////////////////////////////////////
+ - tools/hdf5/tools : replace the usage of free() by tools_H5free_memory(). (And then avoid a crash if using recent hdf5 lib).
+ - tools/hdf5/hdf5_h : #define tools_H5free_memory according hdf5 version.
+
+ //////////////////////////////////////////////////
+ /// ROOT file format : ///////////////////////////
+ //////////////////////////////////////////////////
+ - tools/rroot/iros, obj_list : inherit std::vector only protected to avoid using std::vector::clear()
+   (instead of [iros,obj_list].cleanup()).
+
+ //////////////////////////////////////////////////
+ /// around graphics : ////////////////////////////
+ //////////////////////////////////////////////////
+ - tools/sg/plotter : handle "min/max log logic" for the functions.
+ - tools/sg/text, infos_box : add font_lato_regular_ttf, font_roboto_bold_ttf in font fields options.
+ - tools/sg/state, GL_action, normal : handle m_normal field.
+ - tools/sg/head_light : in render(), mtx.mul_3f(dx,dy,dz) => mtx.mul_dir_3f(dx,dy,dz)
+ - tools/sg/holder : handle m_own.
+ - tools/sg/primitive_visitor, render_action, bbox_action, pick_action, gl2ps_action, zb_action, gstos_add, glprims :
+   handle normal for point, line, triangle.
+ - tools/sg/action, visible_action win_action write_action, read_action search_action, gl2ps_action,
+   matrix_action, render_action, get_matrix_action, event_action, bbox_action, pick_action : have a safe cast logic.
+
+ //////////////////////////////////////////////////
+ /// various : ////////////////////////////////////
+ //////////////////////////////////////////////////
+ - src/csz_inflate.cc : init some variable to quiet Coverity.
+ - * : cosmetic : rm trailing spaces.
+
 5.1.0:
  - tools/sg/plotter, data_axis, plottables, h2plot : corrections to handle automatic min/max in case of log scale.
  - tools/histo/base_histo : [min,max]_bin_height_with_entries(). Used by the plotter.

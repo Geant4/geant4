@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20th, 2020 B.Morgan (event-V10-06-09)
+- Bugfix of build to ensure SmartStack preprocessor define is propagated.
+  No changes to code.
+
+November 12th, 2020 - Jonathan Madsen (event-V10-06-08)
+- Added event profiler
+
+November 16th, 2020 G.Cosmo (event-V10-06-07)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+September 30th, 2020 M.Asai (event-V10-06-06)
+- G4SPSPosDistribution.cc: Fix misleading error message. Addressing to
+  Bugzilla report #2275.
+
 April 29th, 2020 M.Asai (event-V10-06-05)
 - G4GeneralParticleSourceMessenger: command structure clean-up.
 
@@ -57,11 +71,11 @@ October 1st, 2019 M. Asai (event-V10-05-05)
   Addressing to Bugzilla report #2177.
 
 June 3rd, 2019 M.Asai (event-V10-05-04)
-- G4SPSPosDistribution::GetConfineVolume() now returns 
+- G4SPSPosDistribution::GetConfineVolume() now returns
   const G4String&.
 
 May 29th, 2019 M.Asai (event-V10-05-03)
-- G4SPSPosDistribution.hh: Add get methods for volume confinement 
+- G4SPSPosDistribution.hh: Add get methods for volume confinement
   based on the Geant4 GitHub user request.
 
 March 11th, 2019 G.Cosmo (event-V10-05-02)
@@ -71,13 +85,13 @@ January 31st, 2019 I.Hrivnacova
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 January 28th, 2019 M.Asai (event-V10-05-01)
-- G4HEPEvtInterface.cc : Clean up G4Exception seviorities when 
+- G4HEPEvtInterface.cc : Clean up G4Exception seviorities when
   end-of-file is detected.
 
 December 14th, 2018 M.Asai (event-V10-05-00)
 - G4PrimaryTransformer.cc : Allowing absolute zero proper decay time.
   Co-working with particles-V10-05-00 and decay-V10-05-00.
- 
+
 November 9th, 2018 G.Cosmo (event-V10-04-08)
 - Fixed printout typos.
 
@@ -99,7 +113,7 @@ March 16, 2018  M.Asai (event-V10-04-04)
   report #2040.
 
 February 8, 2018  Dennis Wright  (event-V10-04-03)
-- add deprecation warning for /gun/ionL in 
+- add deprecation warning for /gun/ionL in
   G4ParticleGunMessenger::SetNewValue()
 
 January 9, 2018, M.Asai (event-V10-04-02)
@@ -149,7 +163,7 @@ July 22, 2016 L.Desorgher  (event-V10-02-05)
 - Modification of G4AdjointStackingAction to remove compilation error on Windows.
 
 July 21, 2016 L.Desorgher  (event-V10-02-04)
-- Modification of G4AdjointStackingAction 
+- Modification of G4AdjointStackingAction
 for the implementation of the splitting of the reverse MC tracking.
 
 May 16th, 2016 A.Dotti (event-V10-02-03)
@@ -174,9 +188,9 @@ June 6th, 2015 A.Dotti (event-V10-01-07)
   of out-of-bound index.
 
 June 5th, 2015 A.Dotti (event-V10-01-06)
-- Further refinement for bug #1744: address case in which 
-  /gps/source/clear is used  
-- Increase verbosity of error message for GPS in case 
+- Further refinement for bug #1744: address case in which
+  /gps/source/clear is used
+- Increase verbosity of error message for GPS in case
   no sources are defined
 
 May 28th, 2015 A.Dotti (event-V10-01-05)
@@ -189,13 +203,13 @@ April 6th, 2015 A.Dotti (event-V10-01-04)
 - Coverity fixes
 
 February 20th, 2015 A.Dotti (event-V10-01-03)
-- Clean code and remove not needed thread-local data that 
-  need to be shared for UI commands to work properly 
+- Clean code and remove not needed thread-local data that
+  need to be shared for UI commands to work properly
   (bug introduced in previous tag)
 
 February 20th, 2015 A.Dotti (event-V10-01-02)
 - Bug fixing: bringing back of sharing of random generator for SPSPosDistribution class, wrongly made thread-local
- 
+
 February 19th, 2015 A.Dotti (event-V10-01-01)
 - Bug fixing for unused variable
 
@@ -242,7 +256,7 @@ Aug 29th, 2014  A.Dotti (event-V10-00-07)
 - Coverity fix #56594
 
 July 21st, 2014 A.Dotti (event-V10-00-06)
-- Fix for bug #1656: G4SPSPosDistribution::GenerateOne() not 
+- Fix for bug #1656: G4SPSPosDistribution::GenerateOne() not
   working correctly for GeneratePointsOnSurface() and
   GeneratePointsInVolume()
 
@@ -254,11 +268,11 @@ June 4th, 2014 A.Dotti (event-V10-00-04)
 - Small changes to G4SPSEneDistribution: further memory reduction
 
 June 4th, 2013  L.Desorgher (event-V10-00-03)
-- G4AdjointPrimaryGenerator: Add splitting of fwd gamma primaries to improve 
-  convergence of G4RMC. 
+- G4AdjointPrimaryGenerator: Add splitting of fwd gamma primaries to improve
+  convergence of G4RMC.
 
 June 3rd, 2014 A.Dotti (event-V10-00-02)
-- First implementation of memory reduction mechanism in MT 
+- First implementation of memory reduction mechanism in MT
   courtesy of Andrew Green (Manchester U).
 
 February 21st, 2014  M.Asai (event-V10-00-01)
@@ -272,12 +286,12 @@ January 23rd, 2014  M.Asai (event-V10-00-00)
 November 7th, 2013  L.Desorgher (event-V09-06-21)
 - Modification of adjoint classes to migrate to the new RMC schema where reverse
  and forward trackings of  equivalent adjoint and forward primaries are processed
- in the same events. This in preparation for the migration to the G4MT mode. 
+ in the same events. This in preparation for the migration to the G4MT mode.
 
 September 9th, 2013  M.Asai (event-V09-06-20)
 - Change the warning message in G4StackManager on missing process
   manager to be issued only when the verbose level is greater than 0.
-  
+
 September 6th, 2013  M.Asai (event-V09-06-19)
 - Fix incorrect initialization in G4ParticleGunMessenger class for
   /gun/ionL command.
@@ -325,7 +339,7 @@ June 7th, 2013, M.Asai (event-V09-06-08)
   constructor of G4EventManager to reduce the use of TLS pointer.
 
 June 7th, 2013, L.Desorgher (event-V09-06-07)
-- Remove the call of aSolid->SurfaceNormal() in  G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary that was 
+- Remove the call of aSolid->SurfaceNormal() in  G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary that was
   generating warnings. Suggested by G. Cosmo
 
 May 26th, 2013, M.Asai (event-V09-06-06)
@@ -356,7 +370,7 @@ December 3rd, 2012, M.Asai (event-V09-06-00)
 - Remove obsolete classes G4CellScorer and G4CellScorerStore.
 
 November 27th, 2012, Hisaya Kurashige (event-V09-05-17)
-- Add clearAndDestory() method to G4TrackStack and G4SmartTrackStack 
+- Add clearAndDestory() method to G4TrackStack and G4SmartTrackStack
   and use this method in G4StackManager::clear()
   This fixes problem with memory leak
 
@@ -374,11 +388,11 @@ November 5th, 2012, P. Mato (event-V09-05-14)
     example-ext-radioactivedecay-rdecay01, example-nov-n04
 
 November 2nd, 2012, M.Asai (event-V09-05-13)
-- Removed inline keyword from G4EventManager::AbortEvent() to prevent incorrect 
+- Removed inline keyword from G4EventManager::AbortEvent() to prevent incorrect
   inlining for VC++ if SmartStack is used.
 
 October 15th, 2012, M.Asai (event-V09-05-12)
-- Added warning messages to G4CennScorer and G4CellScorerStore classes which will 
+- Added warning messages to G4CennScorer and G4CellScorerStore classes which will
 be dropped fromversion 10.0.
 
 October 11th, 2012, P.Mato (event-V09-05-11)
@@ -388,11 +402,11 @@ October 10th, 2012, P.Mato (event-V09-05-10)
 - Fixed problem with new implementation of G4StackManager::TransferOneStackedTrack
 
 October 5th, 2012, P.Mato (event-V09-05-09)
-- Fixed problem with G4SmartTrackStack not to use particle defitions 
+- Fixed problem with G4SmartTrackStack not to use particle defitions
   pointers and use PDG code instead
 
 October 5th, 2012, S. Kamperis, P.Mato (event-V09-05-08)
-- G4StackTrack, G4StackedTrack: Changed the implementation of G4StackTrack to use a 
+- G4StackTrack, G4StackedTrack: Changed the implementation of G4StackTrack to use a
   std::vector<G4StackedTrack> (by value!) instead of double linked list. Performance
   has been measured to be 35% better with a simple test program in test/testStackManager.cc
 
@@ -414,13 +428,13 @@ May 24th, 2012, G.Cosmo (event-V09-05-05)
 - Fixed trivial cases of variable shadowing.
 
 April 2nd, 2012, L.Desorgher (event-V09-05-04)
-- Correction for orthogonalization of rotation matrix in  
+- Correction for orthogonalization of rotation matrix in
   G4SPSPosDistribution::GenerateRotationMatrices() as suggested by
   Joaquin Phoenix (bug report #1299)
 
 March 8th, 2012, M.Asai (event-V09-05-03)
 - Correct the location of G4Exception to the constructor of
-  G4UserEventAction. 
+  G4UserEventAction.
 
 March 6th, 2012, M.Asai (event-V09-05-02)
 - Add dummy copy constructor and = operator to G4Event. (bug report 1277)
@@ -429,7 +443,7 @@ January 12th, 2012, L.Desorgher (event-V09-05-01)
 - Correction for settings of sigmaX and sigmaY in
   G4SPSPosDistribution::SetBeamSigmaInR () as suggested by
   Guan, Fada (bug report #1278).
-  
+
 November 10th, 2011, M.Asai (event-V09-04-09)
 - Fixing Coverity warnings.
 
@@ -452,7 +466,7 @@ June 18th, 2011, H.Kurashige (event-V09-04-04)
 - Modify G4ParticleGun (and related) to use momentum direction
 
 June 16th, 2011, H.Kurashige (event-V09-04-03)
-- Fix bugs in G4HEPEvtInterface. 
+- Fix bugs in G4HEPEvtInterface.
   In creation of G4PrimaryParticle, only PDG code is given to the constructor. Then mass and momentum is set .
 - Modify G4RayShooter and G4SingleParticleSource to use kinetic energy and momentum direction
   instead of momentum.
@@ -460,10 +474,10 @@ June 16th, 2011, H.Kurashige (event-V09-04-03)
 June 14th, 2011, H.Kurashige (event-V09-04-02)
 - Modify G4ParticleGun and G4PrimaryTransformer to use kinetic energy and momentum direction
   instead of momentum.
-  (It requires particles-V09-04-06) 
+  (It requires particles-V09-04-06)
 
 May 20th, 2011, B.Morgan (event-V09-04-01)
-- CMakeLists.txt : Added G4EVENT_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4EVENT_ALLOC_EXPORT compiler definition via
   add_definitions so it's applied to all sources in this module.
 
 February 10th, 2011, M.Asai (event-V09-04-00)
@@ -482,20 +496,20 @@ Novemver 10th, 2010, F.Lei (event-V09-03-08)
    /gps/hist/file your_file_name
 - Further update of the auto energy biasing implementation
 - Bug fix (new implementation) in the Spline interpolation implementation
-- Bug fix in the Logarithm interpolation implementation (alpha = -1 case).   
+- Bug fix in the Logarithm interpolation implementation (alpha = -1 case).
 
 November 8th, 2010, M.Asai (event-V09-03-07)
 - Setting touchable history of the origin to G4Track.
 
-November 2nd, 2010, F.Lei 
+November 2nd, 2010, F.Lei
 - Implemented concrete destructor for G4SPSEneDistribution (bug #1149)
 - Added automatic energy biasing scheme. Users now can bias the energy distribution
-  sampling to a given power-law distribution (index alpha) via the UI command  
+  sampling to a given power-law distribution (index alpha) via the UI command
     /gps/ene/biasAlpha alpha
   Files affected are
 	G4SingleParticleSource.hh .cc
-	G4SPSEneDistribution.hh .cc  
-	G4SPSRandomGenerator.hh .cc  
+	G4SPSEneDistribution.hh .cc
+	G4SPSRandomGenerator.hh .cc
 	G4GeneralParticleSourceMessenger.hh .cc
 
 October 27th, 2010, G.Cosmo (event-V09-03-06)
@@ -532,15 +546,15 @@ November 6, 2009, L.Desorgher (event-V09-02-04)
   New classes are G4AdjointPosOnPhysVolGenerator,G4AdjointPrimaryGenerator, G4AdjointStackingAction
 
 September 16, 2009, M.Asai (event-V09-02-03)
-- Improved the logic in G4SmartTrackStack. 
+- Improved the logic in G4SmartTrackStack.
 - Added /event/stack/verbose to have a short report of peak number of tracks in
   the urgent stack.
 
 August 17, 2009, M.Asai (event-V09-02-02)
 - Introducing G4SmartTrackStack class. By using this new stack as the urgent stack of
   G4StackManager, the next track poped up from the stack is not necessarily the last
-  track stored in the stack, but the track of same particle type as the previous one, 
-  as long as such a track exists in the urgent stack. This mechanism is expected to 
+  track stored in the stack, but the track of same particle type as the previous one,
+  as long as such a track exists in the urgent stack. This mechanism is expected to
   improve the performance for ultra-large scale simulation such as LHC, by increasing
   the cashe hit rate of the physics tables.
 - The use of G4SmartTrackStack is optional. To use it, uncomment the "#define" line
@@ -594,10 +608,10 @@ March 5, 2007, M.Asai (event-V08-02-00)
 default for random number status.
 
 November 17, 2006, F.Lei (event-V08-01-03)
-- Improved implementation of flat_sampling (biasing) for multiple sources in GPS. 
+- Improved implementation of flat_sampling (biasing) for multiple sources in GPS.
 
 November 17, 2006, F.Lei (event-V08-01-02)
-- First implementation of flat_sampling (biasing) for multiple sources. 
+- First implementation of flat_sampling (biasing) for multiple sources.
 
 November 10, 2006, F.Lei (event-V08-01-01)
 - Added line 468 to for initialization to G4PSEneDistribution.cc
@@ -643,7 +657,7 @@ October 20, 2005, Joseph Perl (event-V07-01-01)
 - Tag to co-work with vis-V07-01-05.
 
 Oct 17, 2005 Jane Tinslay
-- Modify GNUmakefile to follow intercoms->graphics_reps migration for 
+- Modify GNUmakefile to follow intercoms->graphics_reps migration for
   G4VGraphicsScene and G4VVisManager
 
 Sep 05, 2005, F.Lei (event-V07-01-00)
@@ -656,13 +670,13 @@ May 30, 2005, M.Asai (event-V07-00-04)
 - Modify G4PrimaryTransformer to accept exotic particles.
 
 May 10, 2005, F.Lei  (event-V07-00-03)
-- commentingt out line 157 in G4SinglePariclesource.cc. Fixing a bug in 
+- commentingt out line 157 in G4SinglePariclesource.cc. Fixing a bug in
    particle weight
 
 Apr 26, 2005, M.Asai (event-V07-00-02)
 - Modify G4PrimaryTransformer
  - to accept shortlived primary particle with proper decay table,
- - to issue a warning message if a shortlived primary does not have decay table nor 
+ - to issue a warning message if a shortlived primary does not have decay table nor
    pre-assigned decay mode,
  - and to add a new virtual method to alter the conversion of such shortlived into
    a track (default implementation converts it).
@@ -720,17 +734,17 @@ May 04, 2004, M.Asai (event-V06-01-03)
   to G4EventManager.
 
 Apr, 26, 2004, F. Lei (event-V06-01-02)
-- Restored a few methods to G4GeneralParticleSource.hh to maintain backward 
-  compatibility. 
+- Restored a few methods to G4GeneralParticleSource.hh to maintain backward
+  compatibility.
 
 Apr, 5, 2004, F. Lei (event-V06-01-01)
-- Added "UserWRTSurace = true", "UserAngRef= flase" to constructor of 
+- Added "UserWRTSurace = true", "UserAngRef= flase" to constructor of
   G4SPSAngDistribution.
 - Apply the Max/Min angle limits to the User defined angular distribution case.
 - New formula for conevrting integral spectrum to differential one.
- 
-Apr, 1, 2004, F. Lei (event-V06-01-00) 
-- Major design iteration of the G4GeneralParticleSource class. The following 
+
+Apr, 1, 2004, F. Lei (event-V06-01-00)
+- Major design iteration of the G4GeneralParticleSource class. The following
   new classes have been added:
 	- G4SingleParticleSource
 	- G4SPSEneDistribution
@@ -738,7 +752,7 @@ Apr, 1, 2004, F. Lei (event-V06-01-00)
 	- G4SPSPosDistribution
 	- G4SPSRandomGenerator
   See http://reat.space.qinetiq.com/gps for more details of the changes.
-	
+
 Mar. 15, 2004, M.Asai (event-V06-00-01)
 - LocateGlobalPointAndSetup() method of G4Navigator is now invoked at the
   beginning of each event to reset the navigator.
@@ -783,7 +797,7 @@ Aug 13 2003, M.Asai (event-V05-02-03)
   Now they have negative trackID.
 
 Aug 11 2003, M.Asai (event-V05-02-02)
-- Maintain links between pre-assigned decay products and corresponding primary 
+- Maintain links between pre-assigned decay products and corresponding primary
   particle. Becuse of this, G4PrimaryParticle objects of pre-assigned decay
   have proper track ID.
 
@@ -898,9 +912,9 @@ Aug 17 2001, M.Asai (event-V03-02-04)
 - G4EventManager.cc is debugged according to bug report 289.
 
 July 19 2001, M.Asai (event-V03-02-03)
-- Tagged 
+- Tagged
 
-July 19 2001, F.Lei 
+July 19 2001, F.Lei
 - Most commands under G4ParticleGun class are now available under GPS
 
     e.g..
@@ -973,13 +987,13 @@ Feb 5 2001, M.Asai (event-V03-00-00)
 
 Jan 26 2001, F. Lei
 - bug fixing in G4GeneralSourceParticle.cc
- replace: 
+ replace:
           posphi = acos(tx/sin(posthe));
- 
+
  with:
-          if (posthe != 0. && posthe != pi) 
-             posphi = acos(tx/sin(posthe)); 
-          else 
+          if (posthe != 0. && posthe != pi)
+             posphi = acos(tx/sin(posthe));
+          else
              posphi = 0.0;
 	  endif
 
@@ -994,7 +1008,7 @@ Nov 10 2000, F.Lei
    G4GeneralParticleSource::GenerateCoslawFlux()
 -    some bug fixing:
           i) dclared ' G4int count' in all ****Interpolation functions
-          ii) added ' return (0.) ' to GenerateUserDefTheta and GenerateUserDefPhi 
+          ii) added ' return (0.) ' to GenerateUserDefTheta and GenerateUserDefPhi
               as default.
 	  iii) changed
 	       #include <iostream.h>
@@ -1006,10 +1020,10 @@ Nov 9 2000, M.Asai (tag event-V02-00-02)
 
 Oct 31 2000, F.Lei
   G4GeneralParticleSource:
-  G4GeneralParticleSourceMessenger: 
+  G4GeneralParticleSourceMessenger:
  	G4GeneralParticleSource is an alternative primary source
-	generator to G4ParticleGun. It has all the functions of 
-	G4ParticleGun plus many options for specifing the primary 
+	generator to G4ParticleGun. It has all the functions of
+	G4ParticleGun plus many options for specifing the primary
 	event particle and vertex.
 
  - added  -I$(G4BASE)/global/HEPNumerics/include \
@@ -1025,7 +1039,7 @@ Oct 19 2000, M.Asai (tag event-V02-00-01)
   G4PrimaryVertex : Add weight
   G4PrimaryTransformer : Use G4PrimaryParticle::GetCharge to give dynamic charge
                          in G4DynamicParticle
-                       : Set weight of G4Track 
+                       : Set weight of G4Track
 
 July 22 2000, M.Asai (tag event-V02-00-00)
 - Adding some new Set methods to G4PrimaryVertex and G4PrimaryParticle

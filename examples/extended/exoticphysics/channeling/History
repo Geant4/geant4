@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10, 2020 B. Morgan (channelingExample-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 May 08, 2018 B. Morgan (channelingExample-V10-04-00)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

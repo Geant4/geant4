@@ -177,7 +177,7 @@ namespace sg {
 class plottable_text : public virtual plotprim {
   typedef plotprim parent;
 public:
-  TOOLS_SCLASS(plottable_text)  
+  TOOLS_SCLASS(plottable_text)
 public: //tools::sg::plotprim
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<plottable_text>(this,a_class)) {return p;}
@@ -267,7 +267,7 @@ public:
 class plottable_box : public virtual plotprim {
   typedef plotprim parent;
 public:
-  TOOLS_SCLASS(plottable_box)  
+  TOOLS_SCLASS(plottable_box)
 public: //tools::sg::plotprim
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<plottable_box>(this,a_class)) {return p;}
@@ -326,7 +326,7 @@ public:
 class plottable_ellipse : public virtual plotprim {
   typedef plotprim parent;
 public:
-  TOOLS_SCLASS(plottable_ellipse)  
+  TOOLS_SCLASS(plottable_ellipse)
 public: //tools::sg::plotprim
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<plottable_ellipse>(this,a_class)) {return p;}
@@ -393,7 +393,7 @@ namespace sg {
 class plottable_img : public virtual plotprim {
   typedef plotprim parent;
 public:
-  TOOLS_SCLASS(plottable_img)  
+  TOOLS_SCLASS(plottable_img)
 public: //tools::sg::plotprim
   virtual void* cast(const std::string& a_class) const {
     if(void* p = cmp_cast<plottable_img>(this,a_class)) {return p;}

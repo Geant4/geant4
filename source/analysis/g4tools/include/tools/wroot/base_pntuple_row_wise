@@ -28,7 +28,7 @@ public:
   {
     m_row_wise_branch.set_basket_size(a_basket_size);
   }
-  
+
   base_pntuple_row_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
                         uint32 a_basket_size,
 	                const ntuple_booking& a_bkg,bool a_verbose)
@@ -36,9 +36,9 @@ public:
   ,m_row_wise_branch(a_out,a_byte_swap,a_compression,a_seek_directory,"row_wise_branch","row_wise_branch",a_verbose)
   {
     m_row_wise_branch.set_basket_size(a_basket_size);
-    
+
     const std::vector<column_booking>& cols = a_bkg.columns();
-    
+
     tools_vforcit(column_booking,cols,it){
 
 #define TOOLS_WROOT_PNTUPLE_CREATE_COL(a__type) \
@@ -58,7 +58,7 @@ public:
 	  }\
         }\
       }
-	
+
 #define TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(a__type) \
       if((*it).cls_id()==_cid_std_vector<a__type>()) {\
         std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
@@ -80,13 +80,13 @@ public:
 	  }\
         }\
       }
-	
+
            TOOLS_WROOT_PNTUPLE_CREATE_COL(char)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(short)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(int)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(float)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(double)
-      
+
       else if((*it).cls_id()==_cid(std::string())) {
         std::string* user = (std::string*)(*it).user_obj();
         if(user) {
@@ -103,13 +103,13 @@ public:
 	  }
         }
       }
-      
+
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(char)
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(short)
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(int)
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(float)
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(double)
-      
+
       else if((*it).cls_id()==_cid_std_vector<std::string>()) {\
         std::vector<std::string>* user = (std::vector<std::string>*)(*it).user_obj();
         char sep = '\n';
@@ -129,9 +129,9 @@ public:
 	  }
         }
       }
-      
+
       // no leaf_store_class() defined for the other types.
-      
+
       else {
         a_out << "tools::wroot::base_pntuple_row_wise :"
               << " for column " << sout((*it).name())
@@ -141,7 +141,7 @@ public:
         safe_clear<icol>(m_cols);
         return;
       }
-      
+
 #undef TOOLS_WROOT_PNTUPLE_CREATE_COL
 #undef TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL
     }

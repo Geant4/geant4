@@ -10,19 +10,20 @@ namespace tools {
 namespace sg {
 
 class visible_action : public matrix_action {
+  TOOLS_ACTION(visible_action,tools::sg::visible_action,matrix_action)
 public:
   visible_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
-  :matrix_action(a_out,a_ww,a_wh)
+  :parent(a_out,a_ww,a_wh)
   ,m_count(0)
   {}
   virtual ~visible_action(){}
 public:
   visible_action(const visible_action& a_from)
-  :matrix_action(a_from)
+  :parent(a_from)
   ,m_count(0)
   {}
   visible_action& operator=(const visible_action& a_from){
-    matrix_action::operator=(a_from);
+    parent::operator=(a_from);
     m_count = 0;
     return *this;
   }

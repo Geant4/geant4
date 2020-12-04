@@ -70,7 +70,7 @@ protected:
 
 #define TOOLS_ARG_FIELD_DESC(a__field) \
   new tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),true)
-  
+
 #define TOOLS_ARG_FIELD_DESC_NOT_EDITABLE(a__field) \
   new tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),false)
 

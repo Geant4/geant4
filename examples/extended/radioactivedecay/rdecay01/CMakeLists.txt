@@ -1,6 +1,9 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 project(rdecay01)
 
 #----------------------------------------------------------------------------
@@ -42,7 +45,7 @@ target_link_libraries(rdecay01 ${Geant4_LIBRARIES} )
 set(rdecay01_SCRIPTS
     alpha.mac Cf238.mac Co60.mac debug.mac Gd158.mac electronicCapture.mac fullChain.mac neutron.mac
     proton.mac No252.mac Po212.mac Ra228.mac rdecay01.in singleDecay.mac timeWindow.mac
-    timeWindowBiased.mac timeWindowBiased.data vis.mac
+    timeWindowBiased.mac timeWindowBiased.data atomicDeexcitation.mac vis.mac
   )
 
 foreach(_script ${rdecay01_SCRIPTS})

@@ -1,10 +1,11 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -16,6 +17,10 @@
 Checking overlaps for volume Envelope (G4Box) ... OK! 
 Checking overlaps for volume Shape1 (G4Cons) ... OK! 
 Checking overlaps for volume Shape2 (G4Trd) ... OK! 
+### HadronInelasticQBBC Construct Process:
+    Emin(FTFP)= 3 GeV Emax(FTFP)= 100000 GeV
+    Emin(BERT)= 1 GeV Emax(BERT)= 6 GeV Emax(BERTpions)= 12 GeV
+    Emin(BIC) = 0 GeV Emax(BIC)= 1.5 GeV.
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -31,10 +36,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -92,10 +99,11 @@ Rayl:  for gamma SubType=11 BuildTable=1
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -119,10 +127,11 @@ CoulombScat:  for e-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -150,9 +159,9 @@ CoulombScat:  for e+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
 msc:  for proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -166,14 +175,14 @@ hBrems:  for proton  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -182,9 +191,9 @@ CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for GenericIon  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 ionIoni:  for GenericIon  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -196,9 +205,9 @@ ionIoni:  for GenericIon  SubType=2
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 ionIoni:  for alpha  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -209,9 +218,9 @@ ionIoni:  for alpha  SubType=2
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
 
 msc:  for anti_proton  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for anti_proton  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -225,14 +234,14 @@ hBrems:  for anti_proton  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -241,9 +250,9 @@ CoulombScat:  for anti_proton, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for kaon+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -257,14 +266,14 @@ hBrems:  for kaon+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -273,9 +282,9 @@ CoulombScat:  for kaon+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for kaon-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for kaon-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -289,14 +298,14 @@ hBrems:  for kaon-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of kaon+
@@ -305,9 +314,9 @@ CoulombScat:  for kaon-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 muIoni:  for mu+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -322,14 +331,14 @@ muBrems:  for mu+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -338,9 +347,9 @@ CoulombScat:  for mu+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for mu-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0, polarAngLim(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 muIoni:  for mu-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -355,14 +364,14 @@ muBrems:  for mu-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem : Emin=    0 eV  Emax=  100 TeV
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd : Emin=    0 eV  Emax=  100 TeV
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of mu+
@@ -371,9 +380,9 @@ CoulombScat:  for mu-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi+  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for pi+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -387,14 +396,14 @@ hBrems:  for pi+  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
@@ -403,9 +412,9 @@ CoulombScat:  for pi+, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
 msc:  for pi-  SubType= 10
-      RangeFactor= 0.2, stepLimType: 0, latDisp: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
 
 hIoni:  for pi-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -419,14 +428,14 @@ hBrems:  for pi-  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem : Emin=    0 eV  Emax=  100 TeV
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd : Emin=    0 eV  Emax=  100 TeV
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       Used Lambda table of pi+
@@ -455,6 +464,28 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
 
   Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for GenericIon
@@ -531,6 +562,19 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
 
@@ -674,7 +718,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:            BertiniCascade: 1 GeV ---> 12 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -686,7 +731,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:            BertiniCascade: 1 GeV ---> 12 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -754,7 +800,6 @@ Store e- internal conversion data                   0
 Electron internal conversion ID                     2
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
@@ -781,55 +826,58 @@ See commands in /vis/modeling/trajectories/ for other options.
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.183
-             MEAN =   4.51187e-14
-              VAR =   1.62192e-26
-               SD =   1.27355e-13
-                R =     0.0892602
-            SHIFT =   1.81003e-13
-              VOV =    0.00872467
-              FOM =       2091.86
-THE LARGEST SCORE =   5.45677e-13 and it happened at 548th event
-    Affected Mean =   4.56188e-14 and its ratio to original is 1.01108
-     Affected VAR =   1.64533e-26 and its ratio to original is 1.01443
-       Affected R =     0.0888721 and its ratio to original is 0.995652
-   Affected SHIFT =   1.81308e-13 and its ratio to original is 1.00168
-     Affected FOM =       2091.86 and its ratio to original is 1
-MEAN distribution is  RANDOM
+       EFFICIENCY =         0.193
+             MEAN =   4.43668e-14
+              VAR =   1.51198e-26
+               SD =   1.22963e-13
+                R =     0.0876424
+            SHIFT =   1.76359e-13
+              VOV =    0.00902062
+              FOM =       4339.61
+THE LARGEST SCORE =   5.48793e-13 and it happened at 830th event
+    Affected Mean =   4.48708e-14 and its ratio to original is 1.01136
+     Affected VAR =   1.53589e-26 and its ratio to original is 1.01581
+       Affected R =     0.0872969 and its ratio to original is 0.996058
+   Affected SHIFT =   1.76859e-13 and its ratio to original is 1.00284
+     Affected FOM =       4339.61 and its ratio to original is 1
+MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0892602
+r is less than 0.1. r = 0.0876424
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
 Number of non zero history too small to calculate SLOPE
-This result passes 6 / 8 Convergence Test.
+This result passes 5 / 8 Convergence Test.
 
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  5.69479e-14  1.89462e-26  1.37645e-13     0.304518     0.104968      179.731  1.64797e-13     0.222222    0.0555556    0.0357037
-   2   124  5.87962e-14  2.02755e-26  1.42392e-13     0.216612    0.0459599       355.21  1.63432e-13        0.208    0.0304615    0.0160837
-   3   187  5.18731e-14  1.88947e-26  1.37458e-13     0.193263    0.0386885      446.223  1.78758e-13     0.191489    0.0224586    0.0146933
-   4   249  5.71229e-14  2.08688e-26   1.4446e-13     0.159944    0.0261199      651.494  1.77164e-13          0.2        0.016   0.00947988
-   5   312  5.35407e-14   1.9449e-26   1.3946e-13     0.147229    0.0229338      768.887  1.79066e-13     0.191693    0.0134718   0.00813531
-   6   374  4.95449e-14  1.82308e-26  1.35022e-13     0.140731    0.0209222      841.533  1.82063e-13     0.186667     0.011619   0.00813325
-   7   437  5.17856e-14  1.87494e-26  1.36929e-13     0.126342    0.0167059      1044.13   1.7796e-13     0.194064    0.0094816   0.00644426
-   8   499   4.9677e-14  1.79468e-26  1.33966e-13     0.120602    0.0153676      1145.89  1.78511e-13        0.188    0.0086383   0.00587739
-   9   562   4.7757e-14  1.72812e-26  1.31458e-13      0.11601    0.0143126      1238.39  1.79434e-13     0.182948   0.00793254    0.0055019
-  10   624  4.90168e-14   1.7609e-26  1.32699e-13     0.108288    0.0126029       1421.3  1.78721e-13       0.1888   0.00687458   0.00483305
-  11   687  5.01267e-14  1.80129e-26  1.34212e-13     0.102077     0.011144      1599.53  1.78415e-13     0.196221   0.00595392   0.00445067
-  12   749  4.87848e-14  1.73539e-26  1.31734e-13    0.0986014    0.0105946      1714.28  1.78062e-13        0.196   0.00546939   0.00423989
-  13   812  4.77853e-14  1.71614e-26  1.31002e-13    0.0961473    0.0099899      1802.91  1.79434e-13     0.190652    0.0052216   0.00401134
-  14   874  4.71515e-14  1.69692e-26  1.30266e-13    0.0933968   0.00944027      1910.66  1.80087e-13     0.189714   0.00488124   0.00383176
-  15   937  4.55234e-14  1.63593e-26  1.27903e-13    0.0917373   0.00920023      1980.42  1.80741e-13     0.184435   0.00471425   0.00369252
-  16   999  4.51187e-14  1.62192e-26  1.27355e-13    0.0892602   0.00872467      2091.86  1.81003e-13        0.183   0.00446448   0.00349494
+   1    62  3.26925e-14  1.06557e-26  1.03226e-13     0.397807     0.182008      210.637  1.65604e-13     0.190476    0.0674603    0.0882781
+   2   124  3.01629e-14  1.03554e-26  1.01762e-13     0.301757     0.110967      366.071  1.81297e-13        0.168     0.039619    0.0507095
+   3   187  4.52477e-14  1.42501e-26  1.19374e-13     0.192413    0.0451544      900.349  1.63982e-13     0.218085    0.0190711    0.0177547
+   4   249  4.43685e-14   1.3749e-26  1.17256e-13     0.167144    0.0350421      1193.16   1.6364e-13         0.22    0.0141818    0.0136436
+   5   312  4.63181e-14  1.50697e-26  1.22759e-13     0.149806    0.0266475      1485.32  1.68124e-13     0.210863    0.0119566    0.0104135
+   6   374    4.523e-14  1.45197e-26  1.20498e-13     0.137574    0.0230128      1761.19  1.67707e-13     0.210667   0.00999156   0.00888457
+   7   437  4.64687e-14  1.51816e-26  1.23214e-13     0.126696    0.0190601      2076.62  1.69223e-13     0.207763   0.00870591    0.0073092
+   8   499  4.33295e-14  1.42511e-26  1.19378e-13     0.123213      0.01854      2195.68  1.72957e-13        0.202   0.00790099   0.00724998
+   9   562  4.40804e-14  1.44485e-26  1.20202e-13     0.114924    0.0159061       2523.8  1.71001e-13     0.202487   0.00699573   0.00618842
+  10   624  4.49388e-14  1.48585e-26  1.21895e-13     0.108499     0.013961      2831.57  1.71452e-13       0.2016   0.00633651   0.00541668
+  11   687   4.4329e-14  1.47346e-26  1.21386e-13     0.104397    0.0129914      3058.48  1.72902e-13     0.196221   0.00595392    0.0049289
+  12   749  4.52769e-14  1.53981e-26  1.24089e-13     0.100075    0.0117715      3328.33  1.75967e-13     0.198667   0.00537808   0.00462361
+  13   812  4.53974e-14  1.52164e-26  1.23355e-13    0.0952969    0.0107777      3670.46  1.73851e-13     0.199262   0.00494283   0.00412751
+  14   874  4.46889e-14  1.50095e-26  1.22513e-13    0.0926786     0.010344      3880.79  1.75406e-13     0.197714   0.00463749   0.00394201
+  15   937  4.48557e-14  1.51884e-26  1.23241e-13    0.0897092   0.00958155      4141.95   1.7601e-13     0.196162   0.00436868   0.00367048
+  16   999  4.43668e-14  1.51198e-26  1.22963e-13    0.0876424   0.00902062      4339.61  1.76359e-13        0.193   0.00418135   0.00349216
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 45.1187 picoGy  +- 4.02529 picoGy 
+ Dose in scoring volume : 44.3668 picoGy  +- 3.88647 picoGy 
 ------------------------------------------------------------
 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 ### Run 1 start.
 
 ---> Begin of event: 0
@@ -853,24 +901,24 @@ i/16 till_ith      mean          var           sd            r          vov     
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.635
-             MEAN =   5.14496e-12
-              VAR =   2.13357e-23
-               SD =   4.61906e-12
-                R =     0.0283904
-            SHIFT =  -9.70653e-14
-              VOV =   0.000164761
-              FOM =       1159.51
-THE LARGEST SCORE =   1.07769e-11 and it happened at 790th event
-    Affected Mean =   5.15058e-12 and its ratio to original is 1.00109
-     Affected VAR =    2.1346e-23 and its ratio to original is 1.00049
-       Affected R =     0.0283521 and its ratio to original is 0.998651
-   Affected SHIFT =  -1.01172e-13 and its ratio to original is 1.04231
-     Affected FOM =       1159.51 and its ratio to original is 1
+       EFFICIENCY =         0.642
+             MEAN =   5.14718e-12
+              VAR =   2.08772e-23
+               SD =   4.56916e-12
+                R =     0.0280716
+            SHIFT =  -9.60659e-14
+              VOV =   0.000195338
+              FOM =       4880.82
+THE LARGEST SCORE =   1.06991e-11 and it happened at 20th event
+    Affected Mean =   5.15273e-12 and its ratio to original is 1.00108
+     Affected VAR =   2.08872e-23 and its ratio to original is 1.00047
+       Affected R =      0.028034 and its ratio to original is 0.998662
+   Affected SHIFT =  -1.00143e-13 and its ratio to original is 1.04244
+     Affected FOM =       4880.82 and its ratio to original is 1
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0283904
+r is less than 0.1. r = 0.0280716
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -880,27 +928,30 @@ This result passes 5 / 8 Convergence Test.
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  4.06696e-12  2.08244e-23  4.56337e-12     0.141366   0.00497919      46.7654  8.68644e-13      0.52381      0.01443   0.00523719
-   2   124  4.69201e-12  2.16925e-23  4.65752e-12    0.0887853   0.00126154      118.559  3.17884e-13        0.584   0.00569863   0.00212114
-   3   187  4.90719e-12  2.13484e-23  4.62043e-12    0.0686706  0.000848507      198.187  1.32292e-13      0.62766   0.00315543   0.00153514
-   4   249  4.93084e-12   2.1369e-23  4.62266e-12    0.0592927  0.000645691      265.836  1.00732e-13        0.628   0.00236943   0.00113214
-   5   312  5.11497e-12  2.14231e-23  4.62851e-12    0.0511477  0.000515882      357.243 -6.28894e-14     0.642173   0.00178024  0.000827492
-   6   374  5.08663e-12  2.13819e-23  4.62406e-12    0.0469437   0.00043953      424.094 -2.73376e-14         0.64       0.0015  0.000697834
-   7   437  5.10279e-12  2.15696e-23   4.6443e-12    0.0434886  0.000350757      494.157 -4.99938e-14     0.639269   0.00128832   0.00059862
-   8   499  5.11133e-12  2.16605e-23  4.65409e-12    0.0407207  0.000299299      563.618 -6.94908e-14         0.63    0.0011746  0.000480258
-   9   562   5.0492e-12  2.14282e-23  4.62906e-12    0.0386381  0.000282423      626.015 -1.62212e-14     0.628774   0.00104866  0.000441592
-  10   624  5.11934e-12  2.14353e-23  4.62983e-12    0.0361752  0.000258651      714.158 -7.84205e-14        0.632  0.000931646  0.000374905
-  11   687  5.16249e-12  2.13357e-23  4.61906e-12    0.0341115   0.00024384      803.184 -1.18682e-13     0.638081  0.000824416  0.000337485
-  12   749  5.19529e-12  2.13729e-23  4.62309e-12    0.0324931  0.000221215      885.183 -1.48593e-13     0.641333  0.000745669  0.000308728
-  13   812  5.18032e-12  2.12478e-23  4.60954e-12    0.0312073  0.000208488      959.633 -1.30774e-13     0.643296  0.000682034  0.000290661
-  14   874  5.14851e-12   2.1225e-23  4.60706e-12    0.0302509   0.00019327      1021.27 -1.00706e-13         0.64  0.000642857  0.000271213
-  15   937  5.14102e-12  2.12664e-23  4.61155e-12    0.0292884  0.000177807      1089.49 -9.28526e-14     0.637527  0.000606143  0.000250754
-  16   999  5.14496e-12  2.13357e-23  4.61906e-12    0.0283904  0.000164761      1159.51 -9.70653e-14        0.635  0.000574803  0.000230406
+   1    62   4.5253e-12  2.34085e-23  4.83823e-12       0.1347    0.0022136      211.977  5.15321e-13     0.603175    0.0104428   0.00741344
+   2   124  5.07914e-12  2.24777e-23  4.74106e-12    0.0834893   0.00110103      551.779 -2.27529e-14        0.648   0.00434568   0.00256902
+   3   187  5.00811e-12  2.20288e-23  4.69348e-12    0.0683506  0.000830051       823.27  3.22726e-14      0.62234   0.00322786   0.00141909
+   4   249  4.92216e-12  2.15564e-23  4.64289e-12    0.0596572  0.000658972      1080.69  8.75362e-14        0.612   0.00253595    0.0010088
+   5   312  5.06441e-12  2.17141e-23  4.65984e-12     0.052008  0.000521823      1421.96 -2.82951e-14     0.619808   0.00195975   0.00073644
+   6   374  5.10571e-12  2.16318e-23    4.651e-12    0.0470408  0.000439654      1738.11 -6.06809e-14     0.626667   0.00158865  0.000618279
+   7   437  5.11358e-12    2.142e-23  4.62817e-12    0.0432461  0.000391003      2056.52 -8.02445e-14     0.625571   0.00136653  0.000499424
+   8   499  5.04846e-12  2.12203e-23  4.60654e-12    0.0408067  0.000357707      2309.74 -2.29392e-14        0.624   0.00120513  0.000456729
+   9   562  4.84078e-12  2.11742e-23  4.60154e-12    0.0400621  0.000326485      2396.39  1.70206e-13     0.605684   0.00115635  0.000445772
+  10   624  4.87931e-12  2.10272e-23  4.58554e-12    0.0375917  0.000301029      2721.71  1.34783e-13       0.6128   0.00101097   0.00039991
+  11   687  4.95198e-12  2.09917e-23  4.58167e-12    0.0352737  0.000273146      3091.19  7.24355e-14     0.619186  0.000893929  0.000348493
+  12   749  4.97479e-12   2.1078e-23  4.59108e-12    0.0336984   0.00024486      3386.94  5.48528e-14     0.621333  0.000812589  0.000321481
+  13   812  5.07739e-12  2.11261e-23  4.59632e-12    0.0317486  0.000223897      3815.73 -3.22864e-14     0.630996  0.000719305  0.000287428
+  14   874  5.10773e-12  2.09814e-23  4.58054e-12    0.0303169  0.000215807      4184.63  -5.5276e-14     0.636571  0.000652475  0.000265589
+  15   937    5.112e-12  2.09475e-23  4.57684e-12    0.0292331  0.000203931      4500.68 -5.62272e-14     0.636461  0.000608944  0.000244717
+  16   999  5.14718e-12  2.08772e-23  4.56916e-12    0.0280716  0.000195338      4880.82 -9.60659e-14        0.642  0.000557632  0.000229594
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.14496 nanoGy  +- 145.994 picoGy 
+ Dose in scoring volume : 5.14718 nanoGy  +- 144.417 picoGy 
 ------------------------------------------------------------
 
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...

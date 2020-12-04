@@ -29,9 +29,8 @@
 /dmx/KillGammasInConcrete 0
 #
 # radioactive decay module
-/grdm/analogueMC 1
-/grdm/verbose 0
-/grdm/allVolumes
+/process/had/rdm/verbose 0
+/process/had/rdm/allVolumes
 #
 #
 # using GPS for ambe_spectrum:

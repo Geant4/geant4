@@ -58,25 +58,25 @@
 
 BrachyDetectorConstructionOncura6711::BrachyDetectorConstructionOncura6711()
   : 
-   OncuraCapsule(0),OncuraCapsuleLog(0),
-   OncuraCapsulePhys(0),
-   OncuraCapsuleTip1(0),OncuraCapsuleTip1Log(0),
-   OncuraCapsuleTip1Phys(0),
-   OncuraCapsuleTip2(0),OncuraCapsuleTip2Log(0),
-   OncuraCapsuleTip2Phys(0),
-   OncuraAirGap(0),OncuraAirGapLog(0),
-   OncuraAirGapPhys(0),
-   OncuraSilverCore(0), OncuraSilverCoreLog(0),
-   OncuraSilverCorePhys(0),
-   OncuraCapsuleShellVisAtt(0),OncuraCapsuleTipVisAtt(0),
-   OncuraSilverCoreVisAtt(0)
+   fOncuraCapsule(nullptr), fOncuraCapsuleLog(nullptr),
+   fOncuraCapsulePhys(nullptr),
+   fOncuraCapsuleTip1(nullptr), fOncuraCapsuleTip1Log(nullptr),
+   fOncuraCapsuleTip1Phys(nullptr),
+   fOncuraCapsuleTip2(nullptr), fOncuraCapsuleTip2Log(nullptr),
+   fOncuraCapsuleTip2Phys(nullptr),
+   fOncuraAirGap(nullptr), fOncuraAirGapLog(nullptr),
+   fOncuraAirGapPhys(nullptr),
+   fOncuraSilverCore(nullptr), fOncuraSilverCoreLog(nullptr),
+   fOncuraSilverCorePhys(nullptr),
+   fOncuraCapsuleShellVisAtt(nullptr), fOncuraCapsuleTipVisAtt(nullptr),
+   fOncuraSilverCoreVisAtt(nullptr)
 {
-  pMat = new BrachyMaterial();
+  fMat = new BrachyMaterial();
 }
 
 BrachyDetectorConstructionOncura6711::~BrachyDetectorConstructionOncura6711()
 { 
-  delete pMat; 
+  delete fMat; 
 }
 
 void BrachyDetectorConstructionOncura6711::ConstructOncura6711(G4VPhysicalVolume* mother)
@@ -84,122 +84,120 @@ void BrachyDetectorConstructionOncura6711::ConstructOncura6711(G4VPhysicalVolume
 G4Colour  red     (1.0, 0.0, 0.0) ;
 G4Colour  magenta (1.0, 0.0, 1.0) ; 
 
-G4Material* titaniumMat = pMat -> GetMat("titanium");
-G4Material* airMat = pMat -> GetMat("Air");
-G4Material* silverMat = pMat -> GetMat("Silver");
+G4Material* titaniumMat = fMat -> GetMat("titanium");
+G4Material* airMat = fMat -> GetMat("Air");
+G4Material* silverMat = fMat -> GetMat("Silver");
 
 //Capsule shell
-OncuraCapsule = new G4Tubs("OncuraCapsule",0,0.4*mm,1.875*mm,0.*deg,360.*deg);
-OncuraCapsuleLog = new G4LogicalVolume(OncuraCapsule,titaniumMat,"OncuraCapsuleLog", 0,0,0);
-OncuraCapsulePhys = new G4PVPlacement(0, G4ThreeVector(0,0,0), 
-  								"OncuraCapsulePhys", OncuraCapsuleLog, 
-  								mother, false,
-                                0, true);
+fOncuraCapsule = new G4Tubs("OncuraCapsule",0,0.4*mm,1.875*mm,0.*deg,360.*deg);
+fOncuraCapsuleLog = new G4LogicalVolume(fOncuraCapsule,titaniumMat,"OncuraCapsuleLog", 0,0,0);
+fOncuraCapsulePhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
+  								"OncuraCapsulePhys", fOncuraCapsuleLog, 
+  								mother, false, 0, true);
 						
 //Capsule tips
-OncuraCapsuleTip1 = new G4Sphere("OncuraCapsuleTip1", 0, 0.4*mm, 0., 360*deg, 0., 90*deg);
-OncuraCapsuleTip1Log = new G4LogicalVolume(OncuraCapsuleTip1, titaniumMat, "OncuraCapsuleTip1Log",0,0,0);
-OncuraCapsuleTip1Phys = new G4PVPlacement(0, G4ThreeVector(0,0,1.875*mm), 
-								"OncuraCapsuleTip1Phys", OncuraCapsuleTip1Log,
+fOncuraCapsuleTip1 = new G4Sphere("OncuraCapsuleTip1", 0, 0.4*mm, 0., 360*deg, 0., 90*deg);
+fOncuraCapsuleTip1Log = new G4LogicalVolume(fOncuraCapsuleTip1, titaniumMat, "OncuraCapsuleTip1Log",0,0,0);
+fOncuraCapsuleTip1Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,1.875*mm), 
+								"OncuraCapsuleTip1Phys", fOncuraCapsuleTip1Log,
 								mother, false, 
 								0, true);
 
-OncuraCapsuleTip2 = new G4Sphere("OncuraCapsuleTip2", 0, 0.4*mm, 0., 360*deg, 90*deg, 90*deg);
-OncuraCapsuleTip2Log = new G4LogicalVolume(OncuraCapsuleTip2, titaniumMat, "OncuraCapsuleTip2Log",0,0,0);
-OncuraCapsuleTip2Phys = new G4PVPlacement(0, G4ThreeVector(0,0,-1.875*mm), 
-								"OncuraCapsuleTip2Phys", OncuraCapsuleTip2Log,
+fOncuraCapsuleTip2 = new G4Sphere("OncuraCapsuleTip2", 0, 0.4*mm, 0., 360*deg, 90*deg, 90*deg);
+fOncuraCapsuleTip2Log = new G4LogicalVolume(fOncuraCapsuleTip2, titaniumMat, "OncuraCapsuleTip2Log",0,0,0);
+fOncuraCapsuleTip2Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,-1.875*mm), 
+								"OncuraCapsuleTip2Phys", fOncuraCapsuleTip2Log,
 								mother, false, 
 								0, true);
 
-//Airgap
-OncuraAirGap = new G4Tubs("OncuraAirGap",0,0.33*mm,1.825*mm,0.*deg,360.*deg);
-OncuraAirGapLog = new G4LogicalVolume(OncuraAirGap, airMat, "OncuraAirGapLog");
-OncuraAirGapPhys = new G4PVPlacement(0, G4ThreeVector(0,0,0), 
-                                "OncuraAirGapPhys", OncuraAirGapLog, 
-                                OncuraCapsulePhys, false,
+//Air gap
+fOncuraAirGap = new G4Tubs("OncuraAirGap",0,0.33*mm,1.825*mm,0.*deg,360.*deg);
+fOncuraAirGapLog = new G4LogicalVolume(fOncuraAirGap, airMat, "OncuraAirGapLog");
+fOncuraAirGapPhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
+                                "OncuraAirGapPhys", fOncuraAirGapLog, 
+                                fOncuraCapsulePhys, false,
                                 0, true);
 
 //Silver core
-OncuraSilverCore = new G4Tubs("OncuraSilverCore",0,0.25*mm,1.4*mm,0.*deg,360.*deg);
-OncuraSilverCoreLog = new G4LogicalVolume(OncuraSilverCore, silverMat, "silverCoreLog");
-OncuraSilverCorePhys = new G4PVPlacement(0, G4ThreeVector(0,0,0), 
-								"OncuraSilverCorePhys", OncuraSilverCoreLog,
-                                OncuraAirGapPhys, false,
+fOncuraSilverCore = new G4Tubs("OncuraSilverCore",0,0.25*mm,1.4*mm,0.*deg,360.*deg);
+fOncuraSilverCoreLog = new G4LogicalVolume(fOncuraSilverCore, silverMat, "silverCoreLog");
+fOncuraSilverCorePhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
+								"OncuraSilverCorePhys", fOncuraSilverCoreLog,
+                                fOncuraAirGapPhys, false,
                                 0, true);
 
-OncuraCapsuleShellVisAtt = new G4VisAttributes(red);
-OncuraCapsuleShellVisAtt -> SetVisibility(true);  
-OncuraCapsuleShellVisAtt -> SetForceWireframe(true);
-OncuraCapsuleLog -> SetVisAttributes(OncuraCapsuleShellVisAtt);
+fOncuraCapsuleShellVisAtt = new G4VisAttributes(red);
+fOncuraCapsuleShellVisAtt -> SetVisibility(true);  
+fOncuraCapsuleShellVisAtt -> SetForceWireframe(true);
+fOncuraCapsuleLog -> SetVisAttributes(fOncuraCapsuleShellVisAtt);
 
-OncuraCapsuleTipVisAtt = new G4VisAttributes(red);
-OncuraCapsuleTipVisAtt -> SetVisibility(true);  
-OncuraCapsuleTipVisAtt -> SetForceSolid(true);
-OncuraCapsuleTip1Log -> SetVisAttributes(OncuraCapsuleTipVisAtt);
-OncuraCapsuleTip2Log -> SetVisAttributes(OncuraCapsuleTipVisAtt);
+fOncuraCapsuleTipVisAtt = new G4VisAttributes(red);
+fOncuraCapsuleTipVisAtt -> SetVisibility(true);  
+fOncuraCapsuleTipVisAtt -> SetForceSolid(true);
+fOncuraCapsuleTip1Log -> SetVisAttributes(fOncuraCapsuleTipVisAtt);
+fOncuraCapsuleTip2Log -> SetVisAttributes(fOncuraCapsuleTipVisAtt);
 
-OncuraSilverCoreVisAtt = new G4VisAttributes(magenta);
-OncuraSilverCoreVisAtt -> SetVisibility(true);
-OncuraSilverCoreVisAtt -> SetForceSolid(true);
-OncuraSilverCoreLog -> SetVisAttributes(OncuraSilverCoreVisAtt);
-
+fOncuraSilverCoreVisAtt = new G4VisAttributes(magenta);
+fOncuraSilverCoreVisAtt -> SetVisibility(true);
+fOncuraSilverCoreVisAtt -> SetForceSolid(true);
+fOncuraSilverCoreLog -> SetVisAttributes(fOncuraSilverCoreVisAtt);
 }
 
 void BrachyDetectorConstructionOncura6711::CleanOncura6711()
 { 
- delete OncuraSilverCoreVisAtt;
- OncuraSilverCoreVisAtt = 0;
+ delete fOncuraSilverCoreVisAtt;
+ fOncuraSilverCoreVisAtt = nullptr;
 
- delete OncuraCapsuleTipVisAtt;
- OncuraCapsuleTipVisAtt = 0;
+ delete fOncuraCapsuleTipVisAtt;
+ fOncuraCapsuleTipVisAtt = nullptr;
 
- delete OncuraCapsuleShellVisAtt;
- OncuraCapsuleShellVisAtt = 0;
+ delete fOncuraCapsuleShellVisAtt;
+ fOncuraCapsuleShellVisAtt = nullptr;
 
- delete OncuraSilverCorePhys;
- OncuraSilverCorePhys = 0;
+ delete fOncuraSilverCorePhys;
+ fOncuraSilverCorePhys = nullptr;
 
- delete OncuraSilverCoreLog;
- OncuraSilverCoreLog = 0;
+ delete fOncuraSilverCoreLog;
+ fOncuraSilverCoreLog = nullptr;
 
- delete OncuraSilverCore;
- OncuraSilverCore = 0;
+ delete fOncuraSilverCore;
+ fOncuraSilverCore = nullptr;
 
- delete OncuraAirGapPhys;
- OncuraAirGapPhys = 0;
+ delete fOncuraAirGapPhys;
+ fOncuraAirGapPhys = nullptr;
 
- delete OncuraAirGapLog;
- OncuraAirGapLog = 0;
+ delete fOncuraAirGapLog;
+ fOncuraAirGapLog = nullptr;
 
- delete OncuraAirGap;
- OncuraAirGap = 0;
+ delete fOncuraAirGap;
+ fOncuraAirGap = nullptr;
 
- delete OncuraCapsuleTip2Phys;
- OncuraCapsuleTip2Phys = 0;
+ delete fOncuraCapsuleTip2Phys;
+ fOncuraCapsuleTip2Phys = nullptr;
 
- delete OncuraCapsuleTip2Log;
- OncuraCapsuleTip2Log = 0;
+ delete fOncuraCapsuleTip2Log;
+ fOncuraCapsuleTip2Log = nullptr;
  
- delete OncuraCapsuleTip2;
- OncuraCapsuleTip2 = 0;
+ delete fOncuraCapsuleTip2;
+ fOncuraCapsuleTip2 = nullptr;
 
- delete OncuraCapsuleTip1Phys;
- OncuraCapsuleTip1Phys = 0;
+ delete fOncuraCapsuleTip1Phys;
+ fOncuraCapsuleTip1Phys = nullptr;
 
- delete OncuraCapsuleTip1Log;
- OncuraCapsuleTip1Log = 0;
+ delete fOncuraCapsuleTip1Log;
+ fOncuraCapsuleTip1Log = nullptr;
 
- delete OncuraCapsuleTip1;
- OncuraCapsuleTip1 = 0;
+ delete fOncuraCapsuleTip1;
+ fOncuraCapsuleTip1 = nullptr;
 
- delete OncuraCapsulePhys;
- OncuraCapsulePhys = 0;
+ delete fOncuraCapsulePhys;
+ fOncuraCapsulePhys = nullptr;
 	
- delete OncuraCapsuleLog;
- OncuraCapsuleLog = 0;
+ delete fOncuraCapsuleLog;
+ fOncuraCapsuleLog = nullptr;
 
- delete OncuraCapsule;
- OncuraCapsule = 0;
+ delete fOncuraCapsule;
+ fOncuraCapsule = nullptr;
   
  G4RunManager::GetRunManager() -> GeometryHasBeenModified();
 }

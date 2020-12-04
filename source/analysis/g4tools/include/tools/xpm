@@ -30,7 +30,7 @@ inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::stri
   }
 
   // get colormap :
-  
+
   typedef unsigned int color;
   std::vector<color> colors;
 
@@ -48,7 +48,7 @@ inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::stri
       ca[1] = g;
       ca[2] = b;
       ca[3] = 0;
-     
+
       //printf("debug : get : %d %d %d : %lu\n",r,g,b,colors.size());
 
       bool found = false;
@@ -71,7 +71,7 @@ inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::stri
  {for(unsigned char c=0;c<255;c++) {
     if(is_letter(c)||is_digit(c)) {
       chars.push_back(c);
-    }    
+    }
   }}
 
   unsigned int base = (unsigned int)chars.size();
@@ -141,7 +141,7 @@ inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::stri
       ca[1] = g;
       ca[2] = b;
       ca[3] = 0;
-     
+
       bool found = false;
      {for(unsigned int index=0;index<colorn;index++) {
         //unsigned char c1 = index%base;
@@ -171,12 +171,12 @@ inline bool to_xpm(std::ostream& a_out,const std::string& a_file,const std::stri
       }
 
     }
-    if(j==(h-1)) 
+    if(j==(h-1))
       ::fprintf(out,"%s\n","\"");
     else
       ::fprintf(out,"%s\n","\",");
   }}
-  
+
   ::fprintf(out,"%s","};");
 
   ::fclose(out);

@@ -136,18 +136,28 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 
   G4bool ProjectileDiffraction = true;
 
+  // Also for heavy hadrons, assume 50% probability of projectile diffraction.
   if ( absPDGcode > 1000 )                          { ProjectileDiffraction = G4UniformRand() <= 0.5; }
   if ( (absPDGcode == 211) || (absPDGcode == 111) ) { ProjectileDiffraction = G4UniformRand() <= 0.66; }
   if ( (absPDGcode == 321) || (absPDGcode == 311)  || 
        (   PDGcode == 130) || (   PDGcode == 310) ) { ProjectileDiffraction = G4UniformRand() <= 0.5; }
+  if ( absPDGcode > 400  &&  absPDGcode < 600 )     { ProjectileDiffraction = G4UniformRand() <= 0.5; }
 
   //G4cout<<"ProjectileDiffr "<<ProjectileDiffraction<<G4endl;
 
   if ( ProjectileDiffraction ) {
     if ( absPDGcode > 1000 )                            //------Projectile is baryon --------
     {
-      ProjectileMinDiffrMass = 1.16;              // GeV
-      AveragePt2 = 0.3;                           // GeV^2
+      if ( absPDGcode > 4000 && absPDGcode < 6000 )  // Projectile is a charm or bottom baryon
+      {
+        ProjectileMinDiffrMass = projectile->GetDefinition()->GetPDGMass()/CLHEP::GeV + 0.25;  // GeV
+        AveragePt2 = 0.3;                                                                      // GeV^2
+      }
+      else
+      {
+        ProjectileMinDiffrMass = 1.16;              // GeV
+        AveragePt2 = 0.3;                           // GeV^2
+      }
     }
     else if( absPDGcode == 211 || absPDGcode ==  111) //------Projectile is Pion -----------
     {
@@ -163,6 +173,11 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
     {
       ProjectileMinDiffrMass = 0.25;             // GeV
       AveragePt2 = 0.36;                         // GeV^2
+    }
+    else if( absPDGcode > 400 && absPDGcode < 600)  // Projectile is a charm or bottom meson
+    {
+      ProjectileMinDiffrMass = projectile->GetDefinition()->GetPDGMass()/CLHEP::GeV + 0.25;  // GeV
+      AveragePt2 = 0.3;                                                                      // GeV^2
     }
     else                                             //------Projectile is undefined, Nucleon assumed
     {
@@ -190,7 +205,7 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 
   AveragePt2 = AveragePt2 * GeV*GeV;
 
-  if ( SqrtS - (ProjectileMinDiffrMass+TargetMinDiffrMass) < 220* MeV ) return false;
+  if ( SqrtS - (ProjectileMinDiffrMass+TargetMinDiffrMass) < 220.0*MeV ) return false;
 
   //----------------------- 
   G4double Pt2, PZcms, PZcms2;

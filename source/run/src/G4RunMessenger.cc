@@ -617,7 +617,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4String vl;
     while(!(vl = next()).isNull())
     {
-      seeds[idx] = (long) (StoI(vl));
+      seeds[idx] = StoL(vl);
       idx++;
     }
     if(idx < 2)

@@ -84,13 +84,13 @@ public:
 
   virtual void DefineMaterial(const G4MaterialCutsCouple* cup);
 
-private:
-
-  void ComputeEffectiveMass();
-
   //  hide assignment operator
   G4WentzelVIRelModel & operator=(const  G4WentzelVIRelModel &right) = delete;
   G4WentzelVIRelModel(const  G4WentzelVIRelModel&) = delete;
+
+private:
+
+  void ComputeEffectiveMass();
 
   static std::vector<G4double> effMass;
   G4NistManager* fNistManager;

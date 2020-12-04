@@ -26,7 +26,6 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
 #include "UserActionInitialization.hh"
 
 #include "PrimaryGeneratorAction.hh"
@@ -52,4 +51,3 @@ void UserActionInitialization::Build() const {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#endif

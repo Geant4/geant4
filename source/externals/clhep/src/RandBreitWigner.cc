@@ -23,6 +23,9 @@
 #include "CLHEP/Random/DoubConv.h"
 #include <algorithm>	// for min() and max()
 #include <cmath>
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace CLHEP {
 

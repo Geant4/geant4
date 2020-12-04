@@ -23,6 +23,7 @@
 #include "CLHEP/Random/engineIDulong.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace CLHEP {
 

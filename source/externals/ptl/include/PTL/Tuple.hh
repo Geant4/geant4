@@ -25,10 +25,10 @@
 
 namespace PTL
 {
-template <typename _Tp, typename _Up>
+template <typename Tp, typename Up>
 struct SmallerThanT
 {
-    static constexpr bool value = sizeof(_Tp) < sizeof(_Up);
+    static constexpr bool value = sizeof(Tp) < sizeof(Up);
 };
 
 //======================================================================================//
@@ -38,54 +38,54 @@ struct SmallerThanT
 // useful to work with sequences of compile-time values, such as the bounds of a
 // multidimensional array or indices into another typelist.
 
-template <typename _Tp, _Tp Value>
+template <typename Tp, Tp Value>
 struct CTValue
 {
-    static constexpr _Tp value = Value;
+    static constexpr Tp value = Value;
 };
 
 //======================================================================================//
 
-template <std::size_t Height, typename _Tp,
-          bool = std::is_class<_Tp>::value && !std::is_final<_Tp>::value>
+template <std::size_t Height, typename Tp,
+          bool = std::is_class<Tp>::value && !std::is_final<Tp>::value>
 class TupleElt;
 
 //--------------------------------------------------------------------------------------//
 //  specialization that does not satisfy is_class<> and not is_final<>
 //
-template <std::size_t Height, typename _Tp>
-class TupleElt<Height, _Tp, false>
+template <std::size_t Height, typename Tp>
+class TupleElt<Height, Tp, false>
 {
-    _Tp value;
+    Tp value;
 
 public:
     TupleElt() = default;
 
-    template <typename _Up>
-    TupleElt(_Up&& other)
-    : value(std::forward<_Up>(other))
+    template <typename Up>
+    TupleElt(Up&& other)
+    : value(std::forward<Up>(other))
     {}
 
-    _Tp&       get() { return value; }
-    _Tp const& get() const { return value; }
+    Tp&       get() { return value; }
+    Tp const& get() const { return value; }
 };
 
 //--------------------------------------------------------------------------------------//
 //  specialization that does satisfy is_class<> and not is_final<>
 //
-template <std::size_t Height, typename _Tp>
-class TupleElt<Height, _Tp, true> : private _Tp
+template <std::size_t Height, typename Tp>
+class TupleElt<Height, Tp, true> : private Tp
 {
 public:
     TupleElt() = default;
 
-    template <typename _Up>
-    explicit TupleElt(_Up&& other)
-    : _Tp(std::forward<_Up>(other))
+    template <typename Up>
+    explicit TupleElt(Up&& other)
+    : Tp(std::forward<Up>(other))
     {}
 
-    _Tp&       get() { return *this; }
-    const _Tp& get() const { return *this; }
+    Tp&       get() { return *this; }
+    const Tp& get() const { return *this; }
 };
 
 //======================================================================================//
@@ -141,8 +141,8 @@ get(Tuple<Elements...>& t) -> decltype(get_height<sizeof...(Elements) - I - 1>(t
     return get_height<sizeof...(Elements) - I - 1>(t);
 }
 
-template <typename... _Tp>
-using TypeList = Tuple<_Tp...>;
+template <typename... Tp>
+using TypeList = Tuple<Tp...>;
 
 //======================================================================================//
 

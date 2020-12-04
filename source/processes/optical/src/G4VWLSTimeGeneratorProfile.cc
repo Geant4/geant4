@@ -31,33 +31,26 @@
 //
 // File name:     G4VWLSTimeGeneratorProfile.cc
 //
-// Author:        Pedro Rodrigues, Andreia Trindade 
-//               
-// 
+// Author:        Pedro Rodrigues, Andreia Trindade
+//
+//
 //
 // Creation date: 2006-05-07
 //
-// Modifications: 
+// Modifications:
 //
-// Class Description: 
+// Class Description:
 //
 // Abstract base class
 //
-// Class Description: End 
+// Class Description: End
 
 // -------------------------------------------------------------------
 //
-//    
+//
 
 #include "G4VWLSTimeGeneratorProfile.hh"
 
-//    
+G4VWLSTimeGeneratorProfile::G4VWLSTimeGeneratorProfile(const G4String&) {}
 
-G4VWLSTimeGeneratorProfile::G4VWLSTimeGeneratorProfile(const G4String& ) // name
-{;}
-
-//    
-
-G4VWLSTimeGeneratorProfile::~G4VWLSTimeGeneratorProfile() 
-{;} 
-
+G4VWLSTimeGeneratorProfile::~G4VWLSTimeGeneratorProfile() {}

@@ -107,6 +107,15 @@
  		....
  		Idle> exit
 		
+ Macros provided in this example:
+  - berger.mac: e- (100 keV) on water
+  - dna.mac: e- (1 keV) on water. DNA physics list
+  - run01.mac: e- (4 MeV) on water. Step max from histos 1 and 8
+  - run02.mac: e- (4 MeV) on water. Step max from geometry
+  
+  Macros to be run interactively:
+  - vis.mac: To activate visualization
+  		
  6- TRACKING and STEP MAX
  
      TestDm12 computes the total energy deposited along the trajectory of 

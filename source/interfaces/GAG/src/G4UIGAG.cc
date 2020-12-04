@@ -531,7 +531,7 @@ G4UIcommandTree * G4UIGAG::FindDirPath(const G4String& newCommand)
 void G4UIGAG::SendCommandProperties(G4UIcommandTree * tree)
 {
   if( tree == NULL ) { 
-    G4cerr << "GetTree() returnes null." << G4endl;
+    G4cerr << "GetTree() returns null." << G4endl;
     return;
   }
   if (uiMode == java_mode){
@@ -549,7 +549,7 @@ void G4UIGAG::SendCommandProperties(G4UIcommandTree * tree)
 void G4UIGAG::SendParameterProperties(G4UIcommandTree * tree)
 {
   if( tree == NULL ) { 
-    G4cerr << "GetTree() returnes null." << G4endl;
+    G4cerr << "GetTree() returns null." << G4endl;
     return;
   }
   if (uiMode == java_mode){

@@ -1,0 +1,25 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example Par03 History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+06-Nov-20  I. Hrivnacova (expar03-V10-06-02)
+- Added missing README for Doxygen
+- Fixed section numbering in README
+
+26-Oct-20  A. Zaborowska (expar03-V10-06-01)
+- Fix errors from Windows build
+
+06-Oct-20  A. Zaborowska (expar03-V10-06-00)
+- Create Par03 example

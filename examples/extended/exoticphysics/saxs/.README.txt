@@ -1,0 +1,254 @@
+
+///\file "exoticphysics/saxs/.README.txt"
+///\brief Example SAXS README page
+
+/*! \page Examplesaxs Example saxs
+
+\author Gianfranco Patern&ograve; - INFN and University Ferrara (Italy) \n
+ paterno@fe.infn.it
+
+The example saxs implements the typical setup of a Small Angle X-ray 
+Scattering (SAXS) experiment. It is meant to illustrate the 
+usage of molecular interference (MI) of Rayleigh (coherent) scattering
+of photons inside the matter, which is implemented in the
+G4PenelopeRayleighModelMI model.
+
+
+\section saxs_s1 Geometry
+
+The setup consists of a phantom/sample under investigation, slits
+to collimate the photon beam and a shielded detector to collect
+the photons scattered by the phantom (see SAXSDetectorConstruction).  
+   
+The geometry is scalable through the interactive commands defined 
+in the SAXSDetectorConstructionMessenger class. All the significant
+quantities, such as the setup (scattering) rotation angle, the position 
+and size of all the volumes, as well as the phantom material can be
+set via macro commands. 
+   
+Two macro files come with this example: saxs.in and saxs_slits.in.
+
+-#  In the saxs.in macro, the phantom is a cylinder with a diameter and
+a height of 10 mm made of a mixture of 80% fat and 20% water. 
+In general, if the argument of <code>/det/setPhantomMaterial</code> command is 2, 
+as in this case, the material is a biological tissue ("MedMat") 
+defined as a mixture of fat, water, collagen and hydroxyapatite. 
+The weight fraction of the mixture components can be set through commands 
+\verbatim
+ /det/setComp0
+ /det/setComp1
+ /det/setComp2
+ /det/setComp3
+\endverbatim
+respectively. 
+The tissue form factor (including MI) is automatically calculated as a 
+weighed sum of the form factors of the basis components.     
+In this case, no slits are foreseen and the sensitive detector 
+positioned 400 mm downstream of the phantom collects all the photons 
+transmitted and scattered by the phantom, which is irradiated 
+by a pencil beam with an energy of 20 keV.
+   
+-# In the saxs_slits.in macro, the phantom is again a cylinder with a
+diameter and a height of 10 mm. The phantom is made of a custom
+material ("CustomMat") whose density and composition is set through
+\verbatim
+ /det/setCustomMatDensity
+ /det/setCustomMatHmassfract,
+ /det/setCustomMatNmassfract
+ /det/setCustomMatOmassfract
+\endverbatim
+commands. In general, a custom material can be defined by 
+specifying the mass fraction of H, C, N, O, Na, P, S, Cl, K, and Ca via
+commands analogous to those mentioned above. In this case, the material 
+composition corresponds to that of ammonium nitrate
+(NH<sub>4</sub>NO<sub>3</sub>).
+For a custom material, the user can provide the path of the file with
+the material form factor (with MI) through the
+\verbatim
+ /det/SetCustomMatFF
+\endverbatim
+command. As an example, the file myFF.dat contains the form factor of 
+NH<sub>4</sub>NO<sub>3</sub> measured by Harding in 1999. 
+In this case the slits upstream and downstream the phantom 
+are present. This setup is suitable for both monochromatic and 
+polychromatic beams. To speed-up the simulation, a monochromatic 
+photon beam was chosen, but a polychromatic beam can be easily defined.    
+
+\section saxs_s2 Physics
+
+In this example, only electromagnetic processes and decays are considered.
+
+They are defined in a custom physics list that allows the user to
+choose among various EM PhysicsList constructors. In particular,
+by choosing G4EmPenelopePhysicsMI and setting fUseMIFlag as true, 
+it is possible to enable the molecular interference effects. This
+is the default configuration.
+
+\section saxs_s3 Action Initialization
+
+SAXSActionInitialization class instantiates and registers to 
+Geant4 kernel all user action classes. While in sequential mode 
+the action classes are instatiated just once, by invoking the 
+method: SAXSActionInitialization::Build(),
+in multi-threading mode the same method is invoked for each thread 
+worker and so all user action classes are defined thread-local.
+
+A run action class is instantiated both thread-local and global.
+That's why its instance is created also in the method
+SAXSActionInitialization::BuildForMaster(), which is 
+invoked only in multi-threading mode.
+
+\section saxs_s4 Primary generator
+
+The primary generator action class employs the G4GeneralParticleSource (GPS)
+generator. The primary beam has to be defined via the G4 built-in 
+commands of the G4GeneralParticleSource in a input macro file. 
+In particular, a photon beam directed toward the phantom must be defined
+to test the MI effects. The X-ray beam can be monochromatic or
+polychromatic, parallel or divergent.     
+
+
+\section saxs_s5 Event and Detector Response
+
+An event consists of the generation of a single particle which is 
+transported through the phantom and then to the sensitive detector. 
+   
+The interactions of the photons inside the phantom, and in particular,
+the scattering events, are scored in a dedicated ntuple through the
+SAXSSteppingAction class.
+   
+The hits of the particles on the sensitive detector positioned 
+downstream of the phantom (SAXSSensitiveDetectorHit) are recorded
+in a dedicated ntuple through the SAXSSensitiveDetector class. 
+
+\section saxs_s6 Analysis
+
+The analysis tools are used to accumulate statistics.
+ntuple are created in SAXSRunAction::SAXSRunAction() 
+constructor for the following quantities:
+  
+Ntuple1 (<code>part</code>) - Particles impinging on the Sensitive Detector (SD):
+
+- energy of the particles
+- position of the hits
+- momentum of the particles
+- time of the hits
+- type of impinging particles
+- ID number of the impinging particles 
+- number of scattering events a primary had before hitting the SD
+- event number of the hits
+   
+Ntuple2 (<code>scatt</code>) - Interactions of photons inside the phantom:
+
+- ID of the process occurred 
+      (0-> transportation, 1->Rayleigh, 2->Compton, 3->Photoelectic)
+- initial energy of the particles
+- scattering angle
+
+The ntuples are saved in the output file in a format
+selected in SAXSAnalysis.hh.
+When running in multi-threading mode, the ntuples accumulated 
+on threads are automatically merged in a single output file.
+   
+The default output format is root. Two root scripts come with 
+this example to analyze the output file: scattAnalysis.C and 
+ADXRD.C. The first can be used to analyze the <code>scatt</code> ntuple, while 
+the second can be used for <code>part</code> ntuple.
+
+\section saxs_s7 How to run
+
+Execute <code>saxs</code> in the 'interactive mode' with visualization:
+\verbatim
+  % ./saxs
+\endverbatim
+and type in the commands line by line:
+\verbatim
+  Idle> /control/verbose 2
+  Idle> /tracking/verbose 1
+  Idle> ...
+  Idle> /run/beamOn 10 
+  Idle> ...
+  Idle> exit
+\endverbatim
+or it is possible to run a macro file (test.in is a simple macro where the 
+primary beam is defined through the usual GPS commands):
+\verbatim
+  Idle> /control/execute test.in
+  Idle> /run/beamOn 10 
+  ....
+  Idle> exit
+\endverbatim
+
+Execute saxs in the 'batch' mode from macro files (without visualization)
+\verbatim
+  % ./saxs saxs.in [Ncores]   
+  % ./saxs saxs_slits.in [Ncores]
+\endverbatim
+  <code>Ncores</code> (optional argument) is the number of threads the user wants
+  to use in MT mode.
+      
+\section saxs_s8 Appendix
+
+The following paragraphs are common to all basic examples
+
+\subsection saxs_s8a Visualization
+
+The visualization manager is set via the G4VisExecutive class
+in the main() function in saxs.cc.    
+The initialisation of the drawing is done via a set of /vis/ commands
+in the macro vis.mac. This macro is automatically read from
+the main function when the example is used in interactive running mode.
+
+By default, vis.mac opens an OpenGL viewer (<code>/vis/open OGL</code>).
+The user can change the initial viewer by commenting out this line
+and instead uncommenting one of the other <code>/vis/open</code>
+statements, such as
+HepRepFile or DAWNFILE (which produce files that can be viewed with the
+HepRApp and DAWN viewers, respectively).  Note that one can always
+open new viewers at any time from the command line.  For example, if
+you already have a view in, say, an OpenGL window with a name
+"viewer-0", then
+\verbatim
+  /vis/open DAWNFILE
+\endverbatim      
+then to get the same view
+\verbatim
+  /vis/viewer/copyView viewer-0
+\endverbatim
+or to get the same view *plus* scene-modifications
+\verbatim
+  /vis/viewer/set/all viewer-0
+\endverbatim
+then to see the result
+\verbatim
+  /vis/viewer/flush
+\endverbatim
+
+The DAWNFILE, HepRepFile drivers are always available
+(since they require no external libraries), but the OGL driver requires
+that the Geant4 libraries have been built with the OpenGL option.
+
+vis.mac has additional commands that demonstrate additional functionality
+of the vis system, such as displaying text, axes, scales, date, logo and
+shows how to change viewpoint and style.
+To see even more commands use <code>help</code> or <code>ls</code> or
+browse the available UI commands in the Application Developers Guide.
+
+For more information on visualization, including information on how to
+install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+for example,
+   http://geant4.slac.stanford.edu/Presentations/vis/G4[VIS]Tutorial/G4[VIS]Tutorial.html
+(where [VIS] can be replaced by DAWN, OpenGL and HepRApp)
+
+The tracks are automatically drawn at the end of each event, accumulated
+for all events and erased at the beginning of the next run.
+
+\subsection saxs_s8b User Interfaces
+ 
+The user command interface is set via the G4UIExecutive class
+in the main() function in saxs.cc 
+The selection of the user command interface is then done automatically 
+according to the Geant4 configuration or it can be done explicitly via 
+the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
+
+*/

@@ -292,14 +292,14 @@ public:
       u.m_string = new std::string(*a_from.u.m_string);
 
     //} else if(a_from.m_type==ARRAY_UNSIGNED_CHAR) {
-    //  u.m_array_unsigned_char = 
+    //  u.m_array_unsigned_char =
     //    new array<unsigned char>(*a_from.u.m_array_unsigned_char);
 
     //} else if(a_from.m_type==ARRAY_CHAR) {
     //  u.m_array_char = new array<char>(*a_from.u.m_array_char);
 
     } else if(a_from.m_type==ARRAY_UNSIGNED_SHORT) {
-      u.m_array_unsigned_short = 
+      u.m_array_unsigned_short =
         new array<unsigned short>(*a_from.u.m_array_unsigned_short);
 
     } else if(a_from.m_type==ARRAY_SHORT) {
@@ -339,9 +339,9 @@ public:
 
     delete m_label;m_label = 0;
     if(a_from.m_label) m_label = new std::string(*a_from.m_label);
-    
+
     m_itag = a_from.m_itag;
-    
+
     reset();
 
     m_type = a_from.m_type;
@@ -385,7 +385,7 @@ public:
 
     } else if(a_from.m_type==ARRAY_STRING) {
       u.m_array_string = new array<std::string>(*a_from.u.m_array_string);
-  
+
     } else {
       u = a_from.u;
     }
@@ -394,30 +394,30 @@ public:
   }
 /* for tests/symbolic.cpp.
 public:
-  value operator*(const value& a_from) const {   
+  value operator*(const value& a_from) const {
     value tmp(*this);
     std::string serr;
     multiply(tmp,a_from,serr);
     return tmp;
   }
-  value operator+(const value& a_from) const {   
+  value operator+(const value& a_from) const {
     value tmp(*this);
     std::string serr;
     add(tmp,a_from,serr);
     return tmp;
   }
-  value operator-(const value& a_from) const {   
+  value operator-(const value& a_from) const {
     value tmp(*this);
     std::string serr;
     subtract(tmp,a_from,serr);
     return tmp;
   }
-  value operator+=(const value& a_from) {   
+  value operator+=(const value& a_from) {
     value s = operator+(a_from);
     *this = s;
     return s;
   }
-  value operator-=(const value& a_from) {   
+  value operator-=(const value& a_from) {
     value s = operator-(a_from);
     *this = s;
     return s;
@@ -462,18 +462,18 @@ public:
     //case ARRAY_UNSIGNED_CHAR:
     //  u.m_array_unsigned_char = new array<unsigned char>();break;
     //case ARRAY_CHAR:u.m_array_char = new array<char>();break;
-  
+
     case ARRAY_UNSIGNED_SHORT:
       u.m_array_unsigned_short = new array<unsigned short>();break;
     case ARRAY_SHORT:u.m_array_short = new array<short>();break;
-  
+
     case ARRAY_UNSIGNED_INT:
       u.m_array_unsigned_int = new array<unsigned int>();break;
     case ARRAY_INT:u.m_array_int = new array<int>();break;
     case ARRAY_UNSIGNED_INT64:
       u.m_array_unsigned_int64 = new array<uint64>();break;
     case ARRAY_INT64:u.m_array_int64 = new array<int64>();break;
-  
+
     case ARRAY_FLOAT:u.m_array_float = new array<float>();break;
     case ARRAY_DOUBLE:u.m_array_double = new array<double>();break;
     case ARRAY_BOOL:u.m_array_bool = new array<bool>();break;
@@ -766,22 +766,22 @@ public:
     //case ARRAY_CHAR:
     //  a_s = tos<char>(a_v.u.m_array_char->vector());
     //  return true;
-  
+
     case ARRAY_UNSIGNED_SHORT:
       return nums2s<unsigned short>(a_v.u.m_array_unsigned_short->vector(),a_s);
     case ARRAY_SHORT:
       return nums2s<short>(a_v.u.m_array_short->vector(),a_s);
-  
+
     case ARRAY_UNSIGNED_INT:
       return nums2s<unsigned int>(a_v.u.m_array_unsigned_int->vector(),a_s);
     case ARRAY_INT:
       return nums2s<int>(a_v.u.m_array_int->vector(),a_s);
-  
+
     case ARRAY_UNSIGNED_INT64:
       return nums2s<uint64>(a_v.u.m_array_unsigned_int64->vector(),a_s);
     case ARRAY_INT64:
       return nums2s<int64>(a_v.u.m_array_int64->vector(),a_s);
-  
+
     case ARRAY_FLOAT:
       return nums2s<float>(a_v.u.m_array_float->vector(),a_s);
     case ARRAY_DOUBLE:
@@ -792,7 +792,7 @@ public:
     case ARRAY_STRING:
       return nums2s<std::string>(a_v.u.m_array_string->vector(),a_s);
     default:
-      a_s.clear();  
+      a_s.clear();
       return false;
     }
   }
@@ -806,14 +806,14 @@ public:
     case BOOL:           return 5;
   //case UNSIGNED_CHAR:  return 1;
   //case CHAR:           return 1;
-    
+
     case INT:
     case UNSIGNED_SHORT:
     case SHORT:
     case FLOAT:
     case UNSIGNED_INT:   return 8;
-    
-    
+
+
     case DOUBLE:
     case INT64:
     case UNSIGNED_INT64:
@@ -825,7 +825,7 @@ public:
 
     //case ARRAY_UNSIGNED_CHAR:
     //case ARRAY_CHAR:
-  
+
     case ARRAY_UNSIGNED_SHORT:
     case ARRAY_SHORT:
     case ARRAY_UNSIGNED_INT:
@@ -1030,7 +1030,7 @@ public: // for valop :
   static bool subtract(value&,const value&,std::string&);
   static bool multiply(value&,const value&,std::string&);
   static bool divide(value&,const value&,std::string&);
-    
+
   static bool if_gt(value&,const value&,std::string&);
   static bool if_eq(value&,const value&,std::string&);
 
@@ -1054,14 +1054,14 @@ public: // for valop :
   static bool if_lt(value& aThis,const value& aV,
                     std::string& aError){
     if(!if_ge(aThis,aV,aError)) return false;
-    aThis.u.m_bool = (aThis.u.m_bool?false:true);  
+    aThis.u.m_bool = (aThis.u.m_bool?false:true);
     return true;
   }
 
   static bool if_le(value& aThis,const value& aV,
                     std::string& aError){
     if(!if_gt(aThis,aV,aError)) return false;
-    aThis.u.m_bool = (aThis.u.m_bool?false:true);  
+    aThis.u.m_bool = (aThis.u.m_bool?false:true);
     return true;
   }
 
@@ -1079,7 +1079,7 @@ protected:
     if(m_type==STRING) {
       delete u.m_string;
       u.m_string = 0;
-  
+
     //} else if(m_type==ARRAY_UNSIGNED_CHAR) {
     //  delete u.m_array_unsigned_char;u.m_array_unsigned_char = 0;
 

@@ -80,6 +80,7 @@ public:
 
   void NeutrinoActivated(G4bool val);
   void NuETotXscActivated(G4bool val);
+  void SetUseGammaNuclearXS(G4bool val);
   void SetNuEleCcBias(G4double bf);
   void SetNuEleNcBias(G4double bf);
   void SetNuNucleusBias(G4double bf);
@@ -103,6 +104,7 @@ private:
   G4bool phadActivated;
   G4bool fNuActivated;
   G4bool fNuETotXscActivated;
+  G4bool fUseGammaNuclearXS;
 
   G4double gmumuFactor;
   G4double pmumuFactor;

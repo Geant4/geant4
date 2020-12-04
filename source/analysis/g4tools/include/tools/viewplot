@@ -44,7 +44,7 @@ public:
     m_styles = a_from.m_styles;
     return *this;
   }
-public: 
+public:
 #ifdef tools_viewplot
   //deprecated, use set_current_plotter_style().
   void style_from_res(const std::string& a_path,bool a_verbose = false) {
@@ -69,7 +69,7 @@ public:
   bool open_file(const std::string& a_file,bool a_anonymous = false) {return open_inzb_ps_file(a_file,a_anonymous);}
   bool write_page() {return write_inzb_ps_page();}
   bool close_file() {return close_inzb_ps_file();}
-//#endif  
+//#endif
 
 
   const xml::styles& styles() const {return m_styles;}

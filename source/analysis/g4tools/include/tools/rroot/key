@@ -94,7 +94,7 @@ public:
     m_buffer = new char[a_nbytes];
     if(!m_buffer) {
       m_out << "tools::rroot::key::key(cpcstor) :"
-                   << " can't alloc " << a_nbytes << "." 
+                   << " can't alloc " << a_nbytes << "."
                    << std::endl;
     } else {
       m_buf_size = a_nbytes;
@@ -130,7 +130,7 @@ protected:
       m_buffer = new char[a_from.m_buf_size];
       if(!m_buffer) {
         m_out << "tools::rroot::key::key(cpcstor) :"
-                     << " can't alloc " << a_from.m_buf_size << "." 
+                     << " can't alloc " << a_from.m_buf_size << "."
                      << std::endl;
       } else {
         m_buf_size = a_from.m_buf_size;
@@ -161,7 +161,7 @@ public:
       m_buffer = new char[a_from.m_buf_size];
       if(!m_buffer) {
         m_out << "tools::rroot::key::operator=() :"
-                     << " can't alloc " << a_from.m_buf_size << "." 
+                     << " can't alloc " << a_from.m_buf_size << "."
                      << std::endl;
       } else {
         m_buf_size = a_from.m_buf_size;
@@ -191,7 +191,7 @@ public:
       m_out << "tools::rroot::key::read_file :"
                    << " reading " << m_nbytes << " bytes"
                    << " at position " << m_seek_key
-                   << "." 
+                   << "."
                    << std::endl;
     }
     return true;
@@ -243,7 +243,7 @@ public:
     } else {
      {seek32 i;
       if(!rb.read(i)) return false;
-      m_seek_key = i;}    
+      m_seek_key = i;}
      {seek32 i;
       if(!rb.read(i)) return false;
       m_seek_parent_dir = i;}
@@ -258,7 +258,7 @@ public:
                    << ", object name : " << sout(m_object_name)
                    << ", object title : " << sout(m_object_title)
                    << ", object size : " << m_object_size
-                   << "." 
+                   << "."
                    << std::endl;
     }
     return true;
@@ -266,7 +266,7 @@ public:
 
   char* get_object_buffer(ifile& a_file,uint32& a_size) {
     if(!m_key_length) {
-      m_out << "tools::rroot::key::get_object_buffer :" 
+      m_out << "tools::rroot::key::get_object_buffer :"
                    << " WARNING : m_key_length is zero."
                    << std::endl;
       //delete [] m_buffer;
@@ -276,7 +276,7 @@ public:
       //return 0;
     }
     if(!m_nbytes) {
-      m_out << "tools::rroot::key::get_object_buffer :" 
+      m_out << "tools::rroot::key::get_object_buffer :"
                    << " m_nbytes is zero."
                    << std::endl;
       delete [] m_buffer;
@@ -286,13 +286,13 @@ public:
       return 0;
     }
     if(!m_object_size) {
-      m_out << "tools::rroot::key::get_object_buffer :" 
+      m_out << "tools::rroot::key::get_object_buffer :"
                    << " WARNING : m_object_size is zero."
                    << std::endl;
     }
 
     if(a_file.verbose()) {
-      m_out << "tools::rroot::key::get_object_buffer :" 
+      m_out << "tools::rroot::key::get_object_buffer :"
                    << " m_nbytes : " << m_nbytes
                    << " m_key_length : " << m_key_length
                    << " m_object_size : " << m_object_size << "."
@@ -304,7 +304,7 @@ public:
       delete [] m_buffer;
       m_buf_size = m_key_length+m_object_size;
       if(m_buf_size<m_nbytes) {
-        m_out << "tools::rroot::key::get_object_buffer :" 
+        m_out << "tools::rroot::key::get_object_buffer :"
                      << " WARNING : m_buf_size<m_nbytes."
                      << " m_buf_size " << m_buf_size
                      << " m_nbytes " << m_nbytes
@@ -314,7 +314,7 @@ public:
       }
       m_buffer = new char[m_buf_size];
       if(!m_buffer) {
-        m_out << "tools::rroot::key::get_object_buffer :" 
+        m_out << "tools::rroot::key::get_object_buffer :"
                      << " can't alloc " << m_buf_size
                      << std::endl;
         m_buffer = 0;
@@ -337,7 +337,7 @@ public:
       uint32 decsiz = m_key_length+m_object_size;
       char* decbuf = new char[decsiz];
       if(!decbuf) {
-        m_out << "tools::rroot::key::get_object_buffer :" 
+        m_out << "tools::rroot::key::get_object_buffer :"
                      << " can't alloc " << decsiz
                      << std::endl;
         a_size = 0;
@@ -389,7 +389,7 @@ public:
         return 0;
       }
       if(noutot!=m_object_size) {
-        m_out << "tools::rroot::key::get_object_buffer :" 
+        m_out << "tools::rroot::key::get_object_buffer :"
                      << " decompression mismatch."
                      << " noutot " << noutot
                      << " m_object_size " << m_object_size
@@ -413,7 +413,7 @@ public:
           << ", name : " << sout(m_object_name)
           << ", title : " << sout(m_object_title)
           << ", size : " << m_object_size
-          << "." 
+          << "."
           << std::endl;
   }
 
@@ -432,13 +432,13 @@ protected:
       _nbytes += sizeof(seek);
       _nbytes += sizeof(seek);        //18+2*8=34
     } else {
-      _nbytes += sizeof(seek32); 
+      _nbytes += sizeof(seek32);
       _nbytes += sizeof(seek32);      //18+2*4=26
     }
     _nbytes += std_string_record_size(m_object_class);
     _nbytes += std_string_record_size(m_object_name);
     _nbytes += std_string_record_size(m_object_title);
-    //::printf("debug : record_size %d\n",_nbytes);   
+    //::printf("debug : record_size %d\n",_nbytes);
     return _nbytes;
   }
 
@@ -496,7 +496,7 @@ protected:
               << " zlib unziper not found." << std::endl;
         return false;
       }
-  
+
       unsigned int irep;
       char* src = (char*)(a_src + HDRSIZE);
       if(!func(a_out,
@@ -512,7 +512,7 @@ protected:
 #ifdef TOOLS_USE_CSZ
     } else if (a_src[0] == 'C' && a_src[1] == 'S') {
       //compressed with Chernyaev & Smirnov
-      
+
       csz__Init_Inflate(_ibufcnt,a_src + HDRSIZE,a_tgtsize,a_tgt);
 
       if (csz__Inflate()) {

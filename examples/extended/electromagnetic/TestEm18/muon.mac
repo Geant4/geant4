@@ -1,4 +1,9 @@
+#
 # macro file for TestEm18.cc
+#
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 2
+/run/verbose 1
 #
 /testem/det/setMat G4_Cu
 /testem/det/setSize 1 m
@@ -8,7 +13,6 @@
 /run/setCut 1 mm
 #
 /run/initialize
-/process/list
 #
 /gun/particle mu+
 /gun/energy 1 TeV
@@ -28,5 +32,4 @@
 /analysis/h1/set 13 100 0 1000 GeV  #e+ energy spectrum
 #
 /run/printProgress 10000
-
 /run/beamOn 100000

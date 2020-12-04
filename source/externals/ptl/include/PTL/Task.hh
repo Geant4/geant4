@@ -46,38 +46,38 @@ class ThreadPool;
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
-template <typename _Ret, typename... _Args>
+template <typename RetT, typename... Args>
 class PackagedTask : public VTask
 {
 public:
-    typedef PackagedTask<_Ret, _Args...>       this_type;
-    typedef std::promise<_Ret>                 promise_type;
-    typedef std::future<_Ret>                  future_type;
-    typedef std::packaged_task<_Ret(_Args...)> packaged_task_type;
-    typedef _Ret                               result_type;
-    typedef std::tuple<_Args...>               tuple_type;
+    typedef PackagedTask<RetT, Args...>       this_type;
+    typedef std::promise<RetT>                promise_type;
+    typedef std::future<RetT>                 future_type;
+    typedef std::packaged_task<RetT(Args...)> packaged_task_type;
+    typedef RetT                              result_type;
+    typedef std::tuple<Args...>               tuple_type;
 
 public:
     // pass a free function pointer
-    template <typename _Func>
-    PackagedTask(_Func&& func, _Args&&... args)
+    template <typename FuncT>
+    PackagedTask(FuncT&& func, Args... args)
     : VTask()
-    , m_ptask(std::forward<_Func>(func))
-    , m_args(std::forward<_Args>(args)...)
+    , m_ptask(std::forward<FuncT>(func))
+    , m_args(args...)
     {}
 
-    template <typename _Func>
-    PackagedTask(VTaskGroup* tg, _Func&& func, _Args&&... args)
+    template <typename FuncT>
+    PackagedTask(VTaskGroup* tg, FuncT&& func, Args... args)
     : VTask(tg)
-    , m_ptask(std::forward<_Func>(func))
-    , m_args(std::forward<_Args>(args)...)
+    , m_ptask(std::forward<FuncT>(func))
+    , m_args(args...)
     {}
 
-    template <typename _Func>
-    PackagedTask(ThreadPool* _pool, _Func&& func, _Args&&... args)
+    template <typename FuncT>
+    PackagedTask(ThreadPool* _pool, FuncT&& func, Args... args)
     : VTask(_pool)
-    , m_ptask(std::forward<_Func>(func))
-    , m_args(std::forward<_Args>(args)...)
+    , m_ptask(std::forward<FuncT>(func))
+    , m_args(args...)
     {}
 
     virtual ~PackagedTask() {}
@@ -86,8 +86,7 @@ public:
     // execution operator
     virtual void operator()() override
     {
-        details::apply(std::forward<packaged_task_type>(m_ptask),
-                       std::forward<tuple_type>(m_args));
+        mpl::apply(std::move(m_ptask), std::move(m_args));
     }
     future_type  get_future() { return m_ptask.get_future(); }
     virtual bool is_native_task() const override { return true; }
@@ -100,37 +99,37 @@ private:
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
-template <typename _Ret, typename... _Args>
+template <typename RetT, typename... Args>
 class Task : public VTask
 {
 public:
-    typedef Task<_Ret, _Args...>               this_type;
-    typedef std::promise<_Ret>                 promise_type;
-    typedef std::future<_Ret>                  future_type;
-    typedef std::packaged_task<_Ret(_Args...)> packaged_task_type;
-    typedef _Ret                               result_type;
-    typedef std::tuple<_Args...>               tuple_type;
+    typedef Task<RetT, Args...>               this_type;
+    typedef std::promise<RetT>                promise_type;
+    typedef std::future<RetT>                 future_type;
+    typedef std::packaged_task<RetT(Args...)> packaged_task_type;
+    typedef RetT                              result_type;
+    typedef std::tuple<Args...>               tuple_type;
 
 public:
-    template <typename _Func>
-    Task(_Func&& func, _Args&&... args)
+    template <typename FuncT>
+    Task(FuncT&& func, Args... args)
     : VTask()
-    , m_ptask(std::forward<_Func>(func))
-    , m_args(std::forward<_Args>(args)...)
+    , m_ptask(std::forward<FuncT>(func))
+    , m_args(args...)
     {}
 
-    template <typename _Func>
-    Task(VTaskGroup* tg, _Func&& func, _Args&&... args)
+    template <typename FuncT>
+    Task(VTaskGroup* tg, FuncT&& func, Args... args)
     : VTask(tg)
-    , m_ptask(std::forward<_Func>(func))
-    , m_args(std::forward<_Args>(args)...)
+    , m_ptask(std::forward<FuncT>(func))
+    , m_args(args...)
     {}
 
-    template <typename _Func>
-    Task(ThreadPool* tp, _Func&& func, _Args&&... args)
+    template <typename FuncT>
+    Task(ThreadPool* tp, FuncT&& func, Args... args)
     : VTask(tp)
-    , m_ptask(std::forward<_Func>(func))
-    , m_args(std::forward<_Args>(args)...)
+    , m_ptask(std::forward<FuncT>(func))
+    , m_args(args...)
     {}
 
     virtual ~Task() {}
@@ -139,8 +138,7 @@ public:
     // execution operator
     virtual void operator()() final
     {
-        details::apply(std::forward<packaged_task_type>(m_ptask),
-                       std::forward<tuple_type>(m_args));
+        mpl::apply(std::move(m_ptask), std::move(m_args));
         // decrements the task-group counter on active tasks
         // when the counter is < 2, if the thread owning the task group is
         // sleeping at the TaskGroup::wait(), it signals the thread to wake
@@ -160,33 +158,33 @@ private:
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
-template <typename _Ret>
-class Task<_Ret, void> : public VTask
+template <typename RetT>
+class Task<RetT, void> : public VTask
 {
 public:
-    typedef Task<_Ret>                 this_type;
-    typedef std::promise<_Ret>         promise_type;
-    typedef std::future<_Ret>          future_type;
-    typedef std::packaged_task<_Ret()> packaged_task_type;
-    typedef _Ret                       result_type;
+    typedef Task<RetT>                 this_type;
+    typedef std::promise<RetT>         promise_type;
+    typedef std::future<RetT>          future_type;
+    typedef std::packaged_task<RetT()> packaged_task_type;
+    typedef RetT                       result_type;
 
 public:
-    template <typename _Func>
-    Task(_Func&& func)
+    template <typename FuncT>
+    Task(FuncT&& func)
     : VTask()
-    , m_ptask(std::forward<_Func>(func))
+    , m_ptask(std::forward<FuncT>(func))
     {}
 
-    template <typename _Func>
-    Task(VTaskGroup* tg, _Func&& func)
+    template <typename FuncT>
+    Task(VTaskGroup* tg, FuncT&& func)
     : VTask(tg)
-    , m_ptask(std::forward<_Func>(func))
+    , m_ptask(std::forward<FuncT>(func))
     {}
 
-    template <typename _Func>
-    Task(ThreadPool* tp, _Func&& func)
+    template <typename FuncT>
+    Task(ThreadPool* tp, FuncT&& func)
     : VTask(tp)
-    , m_ptask(std::forward<_Func>(func))
+    , m_ptask(std::forward<FuncT>(func))
     {}
 
     virtual ~Task() {}
@@ -218,30 +216,30 @@ template <>
 class Task<void, void> : public VTask
 {
 public:
-    typedef void                       _Ret;
+    typedef void                       RetT;
     typedef Task<void, void>           this_type;
-    typedef std::promise<_Ret>         promise_type;
-    typedef std::future<_Ret>          future_type;
-    typedef std::packaged_task<_Ret()> packaged_task_type;
-    typedef _Ret                       result_type;
+    typedef std::promise<RetT>         promise_type;
+    typedef std::future<RetT>          future_type;
+    typedef std::packaged_task<RetT()> packaged_task_type;
+    typedef RetT                       result_type;
 
 public:
-    template <typename _Func>
-    explicit Task(_Func&& func)
+    template <typename FuncT>
+    explicit Task(FuncT&& func)
     : VTask()
-    , m_ptask(std::forward<_Func>(func))
+    , m_ptask(std::forward<FuncT>(func))
     {}
 
-    template <typename _Func>
-    Task(VTaskGroup* tg, _Func&& func)
+    template <typename FuncT>
+    Task(VTaskGroup* tg, FuncT&& func)
     : VTask(tg)
-    , m_ptask(std::forward<_Func>(func))
+    , m_ptask(std::forward<FuncT>(func))
     {}
 
-    template <typename _Func>
-    Task(ThreadPool* tp, _Func&& func)
+    template <typename FuncT>
+    Task(ThreadPool* tp, FuncT&& func)
     : VTask(tp)
-    , m_ptask(std::forward<_Func>(func))
+    , m_ptask(std::forward<FuncT>(func))
     {}
 
     virtual ~Task() {}

@@ -126,8 +126,16 @@ ExciteParticipants( G4VSplitableHadron *projectile, G4VSplitableHadron *target,
   if ( ProjectileDiffraction ) {
     if ( absPDGcode > 1000 )                            //------Projectile is baryon --------
     {
-      ProjectileMinDiffrMass = 1.16;              // GeV
-      AveragePt2 = 0.3;                           // GeV^2
+      if ( absPDGcode > 4000 && absPDGcode < 6000 )  // Projectile is a charm or bottom baryon
+      {
+        ProjectileMinDiffrMass = projectile->GetDefinition()->GetPDGMass()/CLHEP::GeV + 0.25;  // GeV
+        AveragePt2 = 0.3;                                                                      // GeV^2
+      }
+      else
+      {
+        ProjectileMinDiffrMass = 1.16;              // GeV
+        AveragePt2 = 0.3;                           // GeV^2
+      }
     }
     else if( absPDGcode == 211 || absPDGcode ==  111) //------Projectile is Pion -----------
     {
@@ -143,6 +151,11 @@ ExciteParticipants( G4VSplitableHadron *projectile, G4VSplitableHadron *target,
     {
       ProjectileMinDiffrMass = 0.25;             // GeV
       AveragePt2 = 0.36;                         // GeV^2
+    }
+    else if( absPDGcode > 400 && absPDGcode < 600)  // Projectile is a charm or bottom meson
+    {
+      ProjectileMinDiffrMass = projectile->GetDefinition()->GetPDGMass()/CLHEP::GeV + 0.25;  // GeV
+      AveragePt2 = 0.3;                                                                      // GeV^2
     }
     else                                             //------Projectile is undefined, Nucleon assumed
     {

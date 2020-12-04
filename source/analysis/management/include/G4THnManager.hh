@@ -31,6 +31,7 @@
 #ifndef G4THnManager_h
 #define G4THnManager_h 1
 
+#include "G4Threading.hh"
 #include "G4Fcn.hh"
 #include "G4BinScheme.hh"
 #include "globals.hh"
@@ -55,11 +56,13 @@ class G4THnManager
     // Return true if the H1 vector is empty
     G4bool IsEmpty() const;   
 
-  protected:
-
     // Method for merge (MT)
     void  AddTVector(const std::vector<T*>& tVector);
 
+    // New method for merge
+    void  Merge(G4Mutex& mergeMutex, G4THnManager<T>* masterInstance);
+
+  protected:
     // Iterators
     typename std::vector<T*>::iterator BeginT();
     typename std::vector<T*>::iterator EndT();

@@ -62,16 +62,16 @@ public:
   ,m_file(a_out,a_byte_swap,a_compression,a_verbose)
   {
     const std::vector<column_booking>& cols = a_bkg.columns();
-    
+
     if(a_basket_sizes.size()!=cols.size()) {
       a_out << "tools::wroot::base_pntuple_column_wise :"
             << " a_basket_sizes.size() (" << a_basket_sizes.size() << ") != "
             << "a_bkg.columns().size() (" << a_bkg.columns().size() << ")."
             << std::endl;
-      return;	  
+      return;
     }
     std::vector<uint32>::const_iterator itb = a_basket_sizes.begin();
-    
+
     tools_vforcit(column_booking,cols,it){
 
 #define TOOLS_WROOT_PNTUPLE_CREATE_COL(a__type) \
@@ -95,7 +95,7 @@ public:
 	  itb++;\
         }\
       }
-	
+
 #define TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(a__type) \
       if((*it).cls_id()==_cid_std_vector<a__type>()) {\
         std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
@@ -121,13 +121,13 @@ public:
 	  itb++;\
         }\
       }
-      
+
            TOOLS_WROOT_PNTUPLE_CREATE_COL(char)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(short)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(int)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(float)
       else TOOLS_WROOT_PNTUPLE_CREATE_COL(double)
-      
+
       else if((*it).cls_id()==_cid(std::string())) {
         std::string* user = (std::string*)(*it).user_obj();
         if(user) {
@@ -155,7 +155,7 @@ public:
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(int)
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(float)
       else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(double)
-      
+
       else if((*it).cls_id()==_cid_std_vector<std::string>()) {\
         std::vector<std::string>* user = (std::vector<std::string>*)(*it).user_obj();
         char sep = '\n';
@@ -181,7 +181,7 @@ public:
       }
 
       // no leaf_store_class() defined for the other types.
-      
+
       else {
         a_out << "tools::wroot::base_pntuple_column_wise :"
               << " for column " << sout((*it).name())
@@ -191,7 +191,7 @@ public:
         safe_clear<icol>(m_cols);
         safe_clear<branch>(m_branches);
         return;
-      }      
+      }
 
 #undef TOOLS_WROOT_PNTUPLE_CREATE_COL
 #undef TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL
@@ -295,7 +295,7 @@ public:
     m_cols.push_back(col);
     return col;
   }
-  
+
   template <class T>
   std_vector_column<T>* create_column_vector(uint32 a_basket_size,const std::string& a_name,const std::vector<T>& a_def = std::vector<T>()) {
     if(find_named<icol>(m_cols,a_name)) return 0;

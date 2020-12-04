@@ -8,10 +8,6 @@
 // the angle/axis representation of a Rotation.
 //
 
-#ifdef GNUPRAGMA
-#pragma implementation
-#endif
-
 #include "CLHEP/Vector/Rotation.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 

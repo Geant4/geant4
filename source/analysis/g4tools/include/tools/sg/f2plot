@@ -61,7 +61,7 @@ public: //func1D
   virtual unsigned int x_steps() const {return m_data.xdomain_number_of_steps();}
   virtual float x_min() const {return (float)m_data.xdomain_min();}
   virtual float x_max() const {return (float)m_data.xdomain_max();}
-  
+
 public:
   f1d2plot(const T& a_data):m_data(a_data){
 #ifdef TOOLS_MEM
@@ -84,7 +84,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   f1d2plot& operator=(const f1d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;
@@ -120,9 +120,9 @@ public:
   ,func1D(a_from)
   ,f1d2plot<T>(m_cp)
   ,m_cp(a_from.m_cp)
-  {}  
+  {}
   f1d2plot_cp& operator=(const f1d2plot_cp& a_from){
-    f1d2plot<T>::operator=(a_from);    
+    f1d2plot<T>::operator=(a_from);
     m_cp = a_from.m_cp;
     return *this;
   }
@@ -195,7 +195,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-  }  
+  }
   f2d2plot& operator=(const f2d2plot& a_from){
     m_name = a_from.m_name;
     m_legend = a_from.m_legend;
@@ -231,9 +231,9 @@ public:
   ,func2D(a_from)
   ,f2d2plot<T>(m_cp)
   ,m_cp(a_from.m_cp)
-  {}  
+  {}
   f2d2plot_cp& operator=(const f2d2plot_cp& a_from){
-    f2d2plot<T>::operator=(a_from);    
+    f2d2plot<T>::operator=(a_from);
     m_cp = a_from.m_cp;
     return *this;
   }

@@ -98,6 +98,17 @@ geant4_define_module(NAME G4magneticfield
     G4RKIntegrationDriver.icc
     G4SimpleHeum.hh
     G4SimpleRunge.hh
+    G4TExplicitEuler.hh
+    G4TSimpleHeum.hh
+    G4TSimpleRunge.hh
+    G4TCashKarpRKF45.hh    
+    G4TClassicalRK4.hh
+    G4TDormandPrince45.hh
+    G4TMagFieldEquation.hh
+    G4TMagErrorStepper.hh
+    G4TQuadrupoleMagField.hh
+    G4TUniformMagneticField.hh
+    G4TCachedMagneticField.hh
     G4TrialsCounter.hh
     G4TrialsCounter.icc
     G4TsitourasRK45.hh

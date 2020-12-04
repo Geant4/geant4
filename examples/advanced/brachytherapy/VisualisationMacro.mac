@@ -1,3 +1,8 @@
+/run/initialize
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
 # Use this open statement to create an OpenGL view:
 /vis/open OGLIX 600x600-0+0
 #

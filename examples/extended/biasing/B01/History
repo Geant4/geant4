@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2020 Ben Morgan - B01-V10-06-00
+- Migration to G4RunManagerFactory.
+
 May 8th, 2018 B. Morgan - B01-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
@@ -32,35 +35,35 @@ Nov 22nd, 2013 A. Howard - B01-V09-06-12
 
 Nov 22nd, 2013 A. Howard - B01-V09-06-11
 - changed main() to standard number of threads
-- co-working with 
+- co-working with
   	     	  geombias-V09-06-05
   	     	  phys-ctor-limiters-V09-06-012
   	     	  procbiasing-V09-06-09
 
 Nov 22nd, 2013 A. Howard - B01-V09-06-10
 - updated History file for the co-working tags
-- co-working with 
+- co-working with
   	     	  geombias-V09-06-05
   	     	  phys-ctor-limiters-V09-06-012
   	     	  procbiasing-V09-06-09
 
 Nov 22nd, 2013 A. Howard - B01-V09-06-09
 - updated History file for the co-working tags
-- co-working with 
+- co-working with
   	     	  geombias-V09-06-05
   	     	  phys-ctor-limiters-V09-06-012
   	     	  procbiasing-V09-06-09
 
 Nov 22nd, 2013 A. Howard - B01-V09-06-08
 - fixed erroneous pointer reference and cleaned code a little
-- co-working with 
+- co-working with
   	     	  geombias-V09-06-05
   	     	  phys-ctor-limiters-V09-06-012
   	     	  procbiasing-V09-06-09
 
 Nov 22nd, 2013 A. Howard - B01-V09-06-07
 - migrated to MT (new modular physicslist based implementation)
-- co-working with 
+- co-working with
   	     	  geombias-V09-06-05
   	     	  phys-ctor-limiters-V09-06-012
   	     	  procbiasing-V09-06-09
@@ -81,7 +84,7 @@ May 22nd, 2013 A.Howard - B01-V09-06-02
 - Applied coding guidelines for extended examples more correctly
 
 May 22nd, 2013 A.Howard - B01-V09-06-01
-- Applied coding guidelines for extended examples 
+- Applied coding guidelines for extended examples
 
 Dec 17th, 2012 A.Howard - B01-V09-06-00
 - Removed reference to obsolete G4CellScorer classes

@@ -32,7 +32,7 @@
 // 080603 bug fix for Hadron Hyper News #932 by T. Koi 
 // 080612 bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4,6
 // 080717 bug fix of calculation of residual momentum by T. Koi
-// 080801 protect negative avalable energy by T. Koi
+// 080801 protect negative available energy by T. Koi
 //        introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 // 090514 Fix bug in IC electron emission case 

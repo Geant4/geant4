@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07-Nov-2020, Vladimir Ivanchenko        (had-theo-HE-V10-06-04)
+- G4CRCoalescence : use inheritance from G4HadronicInteraction
+- G4TheoFSGenerator : instantiate G4CRCoalescence once in the thread
+
+05-Nov-2020, Alberto Ribon              (had-theo-HE-V10-06-03)
+- G4CRCoalescence : new class, based on the work by Diego Mauricio
+  Gomez Coral for the GAPS Collaboration, for applying coalescence to
+  the secondaries produced by string model to form deuterons and
+  antideuterons from, respectively, proton-neutron and
+  antiproton-antineutron pairs with close momenta.
+  This class can be useful in particular for Cosmic Ray applications.
+- G4TheoFSGenerator : in the method ApplyYourself, apply G4CRCoalescence
+  to the candidate secondaries produced by the string model, if the
+  corresponding switch is enabled (by default it is disabled).
+
+24-Jul-2020, Alberto Ribon              (had-theo-HE-V10-06-02)
+- G4TheoFSGenerator : introduced a temporarily dummy treatment of
+  heavy (charm and bottom) projectile hadrons at low energies
+  (below 100 MeV).
+  Cascade models are currently not applicable for heavy hadrons and
+  string models cannot handle them properly at very low energies,
+  so we return as final state the initial state unchanged.
+  Note that, for most applications, this is a safe simplification,
+  giving that the nearly all slowly moving charm and bottom hadrons
+  decay before any hadronic interaction can occur.
+
 05-Mar-2020, Vladimir Ivanchenko        (had-theo-HE-V10-06-01)
 - G4QuasiElasticChannel, G4TheoFSGenerator - clean-up: use C++11
     keywords and loops, removed unused methods, coherently aline

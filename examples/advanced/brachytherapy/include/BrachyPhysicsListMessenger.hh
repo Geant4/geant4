@@ -36,7 +36,6 @@ class G4UIcmdWithAString;
 class BrachyPhysicsListMessenger: public G4UImessenger
 {
   public:
-  
     BrachyPhysicsListMessenger(BrachyPhysicsList* );
    ~BrachyPhysicsListMessenger();
 
@@ -44,12 +43,9 @@ class BrachyPhysicsListMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-  
-    BrachyPhysicsList*         fPhysicsList;
-    
+    BrachyPhysicsList*         fPhysicsList;  
     G4UIdirectory*             fPhysDir;
     G4UIcmdWithAString*        fListCmd;
-  
 };
 
 #endif

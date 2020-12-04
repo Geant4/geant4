@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +26,12 @@ Registered graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLImmediateXm (OGLIXm, OGLI)
-  OpenGLStoredXm (OGLSXm, OGL, OGLS)
-  OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -63,7 +65,8 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-... open Root analysis file : pol01.root - done
+... create file : pol01.root - done
+... open analysis file : pol01.root - done
 /run/verbose 2
 #
 /testem/det/setMat G4_Fe
@@ -117,9 +120,9 @@ pol-conv:  for gamma SubType=14 BuildTable=1
              polConv : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 msc:  for e-  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 pol-eIoni:  for e-  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -135,9 +138,9 @@ pol-eBrem:  for e-  SubType=3
              PolBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 msc:  for e+  SubType= 10
-      RangeFactor= 0.04, stepLimType: 1, latDisp: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
 
 pol-eIoni:  for e+  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -181,7 +184,7 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  6.28725 keV    e-  235.568 keV    e+  227.81 keV proton 10 keV
+ Energy thresholds :  gamma  6.28375 keV    e-  235.116 keV    e+  228.88 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -201,41 +204,44 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.133702s Sys=0.000000s
+  User=0.070000s Real=0.069545s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31156
-	pol-compt = 287
-	pol-eBrem = 331
-	msc = 1720
-	pol-conv = 222
-	pol-eIoni = 677
-	pol-annihil = 66
-	pol-phot = 166
+	Transportation = 31150
+	pol-compt = 288
+	pol-eBrem = 336
+	msc = 1703
+	pol-conv = 208
+	pol-eIoni = 680
+	pol-annihil = 64
+	pol-phot = 174
  Gamma: 
-Mean Number per Event :1.0066
-Mean Energy :9.5835 MeV +- 1.8873 MeV
-Mean Polarization :-0.9656 +- 0.17926
+Mean Number per Event :1.0075
+Mean Energy :9.5879 MeV +- 1.873 MeV
+Mean Polarization :-0.96606 +- 0.17867
  Electron: 
-Mean Number per Event :0.0353
-Mean Energy :5.1761 MeV +- 2.628 MeV
-Mean Polarization :-0.70068 +- 0.31751
+Mean Number per Event :0.0351
+Mean Energy :5.0764 MeV +- 2.6308 MeV
+Mean Polarization :-0.70158 +- 0.30574
  Positron: 
-Mean Number per Event :0.0159
-Mean Energy :4.4843 MeV +- 2.0721 MeV
-Mean Polarization :-0.65478 +- 0.30832
-... write Root file : pol01.root - done
-... close Root file : pol01.root - done
+Mean Number per Event :0.0149
+Mean Energy :4.2903 MeV +- 2.0442 MeV
+Mean Polarization :-0.64106 +- 0.30908
+... write file : pol01.root - done
+... close file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.346031 0.0859698 0.387714 0.673094 0.510114 0.676633 0.621628 0.0509967 0.274995 0.641216 0.225294 0.281374 0.0779726 0.578032 0.769554 0.0366569 0.467441 0.252705 0.206082 0.62185 0.0818613 0.321281 0.408123 0.638862 
- i_lag = 3, j_lag = 13
- carry = 0, count24 = 12
+ float_seed_table[] = 0.833699 0.78332 0.0652168 0.500713 0.232817 0.0598344 0.0871152 0.627404 0.0401857 0.252922 0.831884 0.0136842 0.406118 0.820797 0.13577 0.449864 0.770882 0.364361 0.729599 0.943753 0.876379 0.253382 0.754363 0.37449 
+ i_lag = 7, j_lag = 17
+ carry = 0, count24 = 2
  luxury = 3 nskip = 199
 ----------------------------------------
+0 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 #
 Graphics systems deleted.
 Visualization Manager deleting...

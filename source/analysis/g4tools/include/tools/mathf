@@ -24,13 +24,13 @@ inline float frad2deg() {
   return s_v;
 }
 
-inline int fround(float a_x) {
+inline int fround(const float& a_x) {
   // From CoinGL/src/base/SbViewportRegion.cpp.
   if (a_x == (float) (int(a_x))) return int(a_x);
   else return (a_x>0.0f) ? int(a_x+0.5f) : -int(0.5f-a_x);
 }
 
-inline float fstep(float a_x) {return a_x<0.0f?0.0f:1.0f;}
+inline float fstep(const float& a_x) {return a_x<0.0f?0.0f:1.0f;}
 
 }
 
@@ -39,26 +39,23 @@ inline float fstep(float a_x) {return a_x<0.0f?0.0f:1.0f;}
 
 namespace tools {
 
-inline float fcos(float x) {return (float)::cos(double(x));}
-inline float fsin(float x) {return (float)::sin(double(x));}
-inline float facos(float x) {return (float)::acos(double(x));}
-inline float fasin(float x) {return (float)::asin(double(x));}
-inline float ftan(float x) {return (float)::tan(double(x));}
-inline float fatan(float x) {return (float)::atan(double(x));}
-inline float fatan2(float x,float y) {return (float)::atan2(double(x),double(y));}
-inline float fsqrt(float x) {return (float)::sqrt(double(x));}
-inline float fpow(float x,float y) {return (float)::pow(double(x),(double)(y));}
-inline float fexp(float x) {return (float)::exp(double(x));}
-inline float flog(float x) {return (float)::log(double(x));}
-inline float flog10(float x) {return (float)::log10(double(x));}
-inline float ffloor(float x) {return (float)::floor(double(x));}
-inline float fceil(float x) {return (float)::ceil(double(x));}
-inline float fcosh(float x) {return (float)::cosh(double(x));}
-inline float fsinh(float x) {return (float)::sinh(double(x));}
-
-inline float ffabs(float x) {return (float)::fabs(double(x));}
-
-inline float ffabsc(const float& x) {return (float)::fabs(double(x));}
+inline float fcos(const float& x) {return (float)::cos(double(x));}
+inline float fsin(const float& x) {return (float)::sin(double(x));}
+inline float facos(const float& x) {return (float)::acos(double(x));}
+inline float fasin(const float& x) {return (float)::asin(double(x));}
+inline float ftan(const float& x) {return (float)::tan(double(x));}
+inline float fatan(const float& x) {return (float)::atan(double(x));}
+inline float fatan2(const float& x,const float& y) {return (float)::atan2(double(x),double(y));}
+inline float fsqrt(const float& x) {return (float)::sqrt(double(x));}
+inline float fpow(const float& x,const float& y) {return (float)::pow(double(x),(double)(y));}
+inline float fexp(const float& x) {return (float)::exp(double(x));}
+inline float flog(const float& x) {return (float)::log(double(x));}
+inline float flog10(const float& x) {return (float)::log10(double(x));}
+inline float ffloor(const float& x) {return (float)::floor(double(x));}
+inline float fceil(const float& x) {return (float)::ceil(double(x));}
+inline float fcosh(const float& x) {return (float)::cosh(double(x));}
+inline float fsinh(const float& x) {return (float)::sinh(double(x));}
+inline float ffabs(const float& x) {return (float)::fabs(double(x));}
 
 }
 

@@ -84,12 +84,12 @@ public:
 
     //NOTE : Z(x,y, z,1) = -2z/(f-n)+tz = [-2z-f-n]/(f-n)
     //       W(x,y, z,1) =  1 -> Z/W = Z
-    //       Z(x,y,-n,1) = -1 
-    //       Z(x,y,-f,1) =  1 
+    //       Z(x,y,-n,1) = -1
+    //       Z(x,y,-f,1) =  1
 
     //       Z(x,y,-(f+n)/2,1) = 0
 
-    //       X(x,0, z,1) = 2x/(r-l)+tx = [2x-r-l]/(r-l) 
+    //       X(x,0, z,1) = 2x/(r-l)+tx = [2x-r-l]/(r-l)
     //       X(r,0, z,1) = 1
 
     // the view direction is then (0,0,1) in the final projection.
@@ -124,7 +124,7 @@ public:
 
     //       Z(x,y,-2fn/(f+n),1) = 0
     // ->  Z/W                   = 0
- 
+
     //       Z(x,y,-f,1) = -[-ff-fn+2fn]/(f-n) = -[fn-ff]/(f-n) = f
     //       W(x,y,-f,1) = f
     // ->  Z/W(x,y,-f,1) = 1
@@ -150,6 +150,12 @@ public:
     a_x = pr::m_vec[12];
     a_y = pr::m_vec[13];
     a_z = pr::m_vec[14];
+  }
+
+  void no_translate() {
+    pr::m_vec[12] = 0;
+    pr::m_vec[13] = 0;
+    pr::m_vec[14] = 0;
   }
 
 //void set_translate_only(const T& a_x,const T& a_y,const T& a_z) {
@@ -352,8 +358,8 @@ protected:
   static void _set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T v[],T(*a_sin)(T),T(*a_cos)(T)) {
     //WARNING : (a_x,a_y,a_z) must be a normalized vector.
     // v[] = exp(-a_angle*n(a_x,a_y,a_z)*Rs). It models the rotation of an object in the same coordinate system (active rotation).
-    T si = a_sin(a_angle);    
-    T co = a_cos(a_angle);    
+    T si = a_sin(a_angle);
+    T co = a_cos(a_angle);
     T x = a_x;
     T y = a_y;
     T z = a_z;
@@ -394,7 +400,7 @@ public:
     //pr::m_vec[1] = 10;pr::m_vec[5] = 11;pr::m_vec[ 9] = 12;pr::m_vec[13] = 13;
     //pr::m_vec[2] = 20;pr::m_vec[6] = 21;pr::m_vec[10] = 22;pr::m_vec[14] = 23;
     //pr::m_vec[3] = 30;pr::m_vec[7] = 31;pr::m_vec[11] = 32;pr::m_vec[15] = 33;
-    
+
     T tv_0  = tv[0];
     T tv_1  = tv[1];
     T tv_2  = tv[2];
@@ -453,6 +459,13 @@ public:
     tv[15] = tv_15;
   }
 
+  template <class MAT3>
+  void set_mat3(MAT3& a_m3) {
+    a_m3.set_matrix(pr::m_vec[0],pr::m_vec[4],pr::m_vec[ 8],   //1 row
+                    pr::m_vec[1],pr::m_vec[5],pr::m_vec[ 9],   //2 row
+                    pr::m_vec[2],pr::m_vec[6],pr::m_vec[10]);  //3 row
+  }
+  
 private:static void check_instantiation() {mat4<float> dummy;}
 };
 
@@ -489,14 +502,10 @@ namespace tools {
 template <class T>
 inline std::ostream& operator<<(std::ostream& a_out,const mat4<T>& a_mtx){
   const T* v = a_mtx.data();
-  a_out << v[0] << "," << v[4] << "," << v[ 8] << "," << v[12]
-        << std::endl
-        << v[1] << "," << v[5] << "," << v[ 9] << "," << v[13]
-        << std::endl
-        << v[2] << "," << v[6] << "," << v[10] << "," << v[14]
-        << std::endl
-        << v[3] << "," << v[7] << "," << v[11] << "," << v[15]
-        << std::endl;
+  a_out << v[0] << "," << v[4] << "," << v[ 8] << "," << v[12] << std::endl
+        << v[1] << "," << v[5] << "," << v[ 9] << "," << v[13] << std::endl
+        << v[2] << "," << v[6] << "," << v[10] << "," << v[14] << std::endl
+        << v[3] << "," << v[7] << "," << v[11] << "," << v[15] << std::endl;
   return a_out;
 }
 

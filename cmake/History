@@ -30,6 +30,93 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+20th November 2020 - Ben Morgan (cmake-V10-06-46)
+- Make GEANT4_USE_SYSTEM_PTL option advanced
+
+12th November 2020 - Jonathan Madsen (cmake-V10-06-45)
+- Updated find package routines for timemory
+
+19th November 2020 - Ben Morgan (cmake-V10-06-44)
+- Require VecGeom 1.1.8 or newer
+
+18th November 2020 - Ben Morgan (cmake-V10-06-43)
+- Add GEANT4_BUILD_BUILTIN_BACKTRACE option to enable automatic
+  use of G4BackTrace signal handling in G4RunManager.
+
+17th November 2020 - Gunter Folger (cmake-V10-06-42)
+- Bump CLHEP minimum required version to 2.4.4.0
+
+4th November 2020 - Ben Morgan (cmake-V10-06-41)
+- Make Qt53D driver optional based on find of required Qt5 modules
+
+2nd/3rd November 2020 - Gunter Folger   (cmake-V10-06-40)
+- Update to dataset RadioactiveDecay5.6 and PhotonEvaporation5.7 as
+    provided by Laurent
+
+30th October 2020 - Gunter Folger   (cmake-V10-06-39)
+- Update datasets as provided by Laurent:
+  - G4ENSDFSTATE2.3
+  - PhotonEvaporation5.6
+  - RadioactiveDecay5.5
+
+29th October 2020 - Ben Morgan (cmake-V10-06-38)
+- Remove obsolete Geant4MacroDefineModule and G4DeveloperAPI_OLD modules
+- Make Geant4MacroLibraryTargets module a no-op pending final removal in
+  2021
+- Remove GEANT4_USE_NEW_CMAKE option to complete migration to new system
+- Use STRINGS cache property for enum options and CMAKE_BUILD_TYPE to
+  give easier interface in (G)UIs
+- Remove pre CMake3 functionality from G4InstallData module
+
+27th October 2020 - Gunter Folger   (cmake-V10-06-37)
+- Add optional TENDL dataset
+
+26th October 2020 - Ben Morgan (cmake-V10-06-36)
+- Explicitly initialize GEANT4_USE_QT3D to OFF to prevent
+  user override.
+
+26th October 2020 - Gunter Folger   (cmake-V10-06-35)
+- Switch to G4PARTICLEXS 3.1
+
+23rd October 2020 - John Allison (cmake-V10-06-34)
+- Introduce changes for Qt3D vis driver.
+
+20th October 2020 - Ben Morgan (cmake-V10-06-33)
+- Update functions to use G4expat{-static} as custom built targets.
+  Fixes GitLab Issue #44.
+
+19th October 2020 - Ben Morgan (cmake-V10-06-32)
+- Support CMake 3.8 through 3.18
+- Allow specification of C++20 for CMake 3.12 and above
+
+12th October 2020 - Daren Sawkey (cmake-V10-06-31)
+- Switch to new data set G4RealSurface 2.2
+
+12th October 2020 - Gunter Folger   (cmake-V10-06-30)
+- Switch to G4PARTICLEXS 3.0
+
+24th September 2020 - Gunter Folger (cmake-V10-06-29)
+- Switch to G4EMLOW 7.13
+
+15 September 2020 - Jonathan Madsen (cmake-V10-06-28)
+- Updated GEANT4_TEST_ENVIRONMENT to set G4RUN_MANAGER_TYPE=TBB when MT and
+  GEANT4_USE_TBB=ON
+
+28 August - Ben Morgan (cmake-V10-06-27)
+- Improve support for Inventor (Coin)
+  - Simplify configuration options, handling co-working ones both
+    at configure time and by client applications.
+  - Separate out dependency finding to keep these in one place.
+  - Improve consistency of using XQuartz vs System OpenGL on
+    macOS.
+  - Remove obsolete FindInventor module
+
+21 July 2020 - Ben Morgan (cmake-V10-06-26)
+- Provide new GEANT4_BUILD_PHP_AS_HP option to enable ParticleHP as
+  HP in G4processes. Replaces PHP_AS_HP environment variable.
+- Add PHP_AS_HP "feature" in Geant4Config.cmake/geant4-config to allow
+  clients to check availability.
+
 17th June 2020 - Jonathan Madsen (cmake-V10-06-25)
 - Moved TBB before PTL
 - Forced PTL_USE_TBB to be set to GEANT4_USE_TBB when not

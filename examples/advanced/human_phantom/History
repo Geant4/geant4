@@ -16,9 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 15, 2020, S. Guatelli tag human_phantom-V10-06-01
+- Migration to G4RunManagerFactory
+
+Nov 2, 2020, B.Morgan tag human_phantom-V10-06-00
+- Support same CMake version range as core Geant4
 
 Dec 5, 201, S. Guatelli tag human_phantom_V10-05-01
-- Geometry bug resolved (Left and right clavicles in the MIRD model, 
+- Geometry bug resolved (Left and right clavicles in the MIRD model,
   position translated of 2 cm in the y direction
 
 Jan 31, 2019, I.Hrivnacova tag human_phantom-V10-05-00
@@ -39,7 +44,7 @@ May 19, 2016, G. Cosmo tag human_phantom-V10-02-00
 - Fixed compilation warning on gcc-6.1 in G4CustomFemalBuilder.
 
 Mar 7, 2015, A. Dotti tag human_phantom-V10-01-01
-- Fixing compilaiton warning from previous tag on clang35 
+- Fixing compilaiton warning from previous tag on clang35
 
 Mar 6, 2015, A. Dotti tag human_phantom-V10-01-00
 - removing unnecessary GPS in master
@@ -58,7 +63,7 @@ Nov 6, 2013, S. Guatelli tag human_phantom-V09-06-05
 
 Nov 6, 2013, S. Guatelli tag human_phantom-V09-06-04
 - Testes and Genitalia modelling added for MIRD model
-- MT mode 
+- MT mode
 
 Jul 30, 2013, A. Dotti, tag human_phantom-V09-06-03
 - Bug fixing for compilation warning for clang32
@@ -71,7 +76,7 @@ May 17, 2013, S. Guatelli, tag human_phantom-V09-06-01
 - G4 analysis component introduced
 - G4 General Particle Source used
 - General cleaning in macro files
-- macro.C added to print the content of the ntuple generated 
+- macro.C added to print the content of the ntuple generated
   in the simulation.
 
 December 12, 2012, V.Ivanchenko tag human_phantom-V09-06-00
@@ -97,7 +102,7 @@ December 8, 2011, P. Mato, tag human_phantom-V09-05-00
 
 November 17, 2011, G. Folger, tag human_phantom-V09-04-04
 - Fix compilation warning at end of G4HumanPhantomConstruction::Construct().
-   (delete must be before return) 
+   (delete must be before return)
 
 November 3, 2011, G. Folger, tag human_phantom-V09-04-03
 - Add batch.mac to allow testing without display.
@@ -109,7 +114,7 @@ September 27, 2011, S. Guatelli, tag human_phantom-V09-04-01
 - G4Analysis component introduced, subtituting PI-AIDA analysis
 
 January 17, 2011, L. Pandola, tag human_phantom-V09-04-00
-- edited G4VoxelLeftBreast and G4VoxelRightBreast to ensure 
+- edited G4VoxelLeftBreast and G4VoxelRightBreast to ensure
   compliance with CLHEP 2.1.0.0
 
 November 26, 2010, S. Guatelli, tag human_phantom-V09-03-05
@@ -127,7 +132,7 @@ June 4, 2010, J. Perl, tag: human_phantom-V09-03-02
 - Updated vis usage
 
 June 4, 2010, S. Guatelli, tag: human_phantom-V09-03-01
-- Migration of Physics List 
+- Migration of Physics List
 
 April 29, 2010, G. Cosmo, tag: human_phantom-V09-03-00
 - Added missing includes of G4PVPlacement, causing compilation error.
@@ -182,13 +187,13 @@ February 21, 2007, S. Guatelli tag:human_phantom-V08-02-02
 January 17, 2007, S. Guatelli tag:human_phantom-V08-02-00
 
 November 30, 2006, S. Guatelli tag: human_phantom-V08-01-03
-- Corrected bug in the definition of materials for MIRD phantom model. 
+- Corrected bug in the definition of materials for MIRD phantom model.
 
 November 30, 2006, S. Guatelli tag: human_phantom-V08-01-01
 				    human_phantom-V08-01-02
 - Geantino introduced as primary particles
 - MIRD model is hard-coded
-- ORNL model is defined through GDML files  
+- ORNL model is defined through GDML files
 - No overlapping volumes
 - Translation for the legs is set to:x="-7.01" y="-39.1" z="0"
   instead of x="-7." y="-39." z="0", to avoid volume overlaps
@@ -218,6 +223,6 @@ June 20, 2005 G. Guerrieri
 -- Model pf Phantom
 -- Name of body part to be built and their sensitivity
 
-June 15rd, 2005 G. Guerrieri 
+June 15rd, 2005 G. Guerrieri
 - First implementation of phantom using GDML file for description persistency.
 

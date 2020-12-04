@@ -41,7 +41,7 @@ inline const char* upointer_format() {static const char s[] = "%lu";return s;}
 inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
 #endif
 
-#elif defined(_LP64) 
+#elif defined(_LP64)
 
 // 64 Bit Platforms
 typedef int int32;
@@ -60,7 +60,7 @@ typedef unsigned long upointer;
 inline const char* upointer_format() {static const char s[] = "%lu";return s;}
 inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
 
-#else 
+#else
 
 // 32-Bit Platforms
 typedef int int32;
@@ -83,13 +83,13 @@ inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s
 
 inline uint32 uint32_mx() { //4 294 967 295
   uint32 n = 0;
-  for(unsigned int i=0;i<32;i++)  n += 1<<i;  
+  for(unsigned int i=0;i<32;i++)  n += 1<<i;
   return n;
 }
 inline uint64 uint64_mx() { //18 446 744 073 709 551 615
   uint64 one = 1;
   uint64 n = 0;
-  for(unsigned int i=0;i<64;i++)  n += one<<i;  
+  for(unsigned int i=0;i<64;i++)  n += one<<i;
   return n;
 }
 

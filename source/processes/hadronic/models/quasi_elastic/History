@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24-Jul-2020, A.Ribon hadr-qelastic-V10-06-01
+- G4QuasiElRatios : extended to charmed and bottom hadrons.
+  (The simplified treatment adopted here is the following:
+   to treat all heavy mesons having constituent charm or bottom quark
+   as a meson with strange quark - like K- - and all heavy mesons
+   having constituent anti-charm or anti-bottom anti-quark as a
+   meson with anti-strange quark - like K+;
+   for baryons, all heavy baryons are treated as Lambda and all heavy
+   anti-baryons are treated as anti-proton/anti-neutron.
+   Only two methods have been changed: G4QuasiElRatios::GetElTotXS and
+   G4QuasiElRatios::FetchElTot, whereas G4QuasiElRatios::ChExer does
+   not need to be changed because it is not used anywhere.)
+
 10-Mar-2020, V.Ivanchenko hadr-qelastic-V10-06-00
 - G4QuasiElRatios : fixed memory leak at exit
 

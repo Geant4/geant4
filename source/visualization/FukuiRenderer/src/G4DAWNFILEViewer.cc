@@ -186,10 +186,18 @@ void G4DAWNFILEViewer::ShowView( void )
 
 		} else 	if( strcmp( GetG4PrimViewerInvocation(), "" ) )  
 		{
-			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
-			G4cout << "  is generated." << G4endl;
-			G4cout << GetG4PrimViewerInvocation() << G4endl;
-			(void) system( GetG4PrimViewerInvocation() );
+                  G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
+                  G4cout << "  is generated." << G4endl;
+                  G4cout << GetG4PrimViewerInvocation() << G4endl;
+                  int iErr = system( GetG4PrimViewerInvocation() );
+                  if ( iErr != 0) {
+                    G4ExceptionDescription ed;
+                    ed << "Error " << iErr
+                    << " when calling system with \"" << GetG4PrimViewerInvocation()
+                    << "\".";
+                    G4Exception("G4DAWNFILEViewer::ShowView()",
+                                "dawn0005", JustWarning, ed);
+                  }
 
 		} else { // no view, i.e., only file generation
 			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ; 

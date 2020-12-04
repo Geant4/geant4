@@ -409,7 +409,11 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   //  If the volume does not have any vis attributes, create it.
   G4VisAttributes* tempVisAtts = nullptr;
   if (!pVisAttribs) {
-    tempVisAtts = new G4VisAttributes; // Default value.
+    if (fpMP->GetDefaultVisAttributes()) {
+      tempVisAtts = new G4VisAttributes(*fpMP->GetDefaultVisAttributes());
+    } else {
+      tempVisAtts = new G4VisAttributes;
+    }
     // The user may request /vis/viewer/set/colourByDensity.
     if (fpMP->GetCBDAlgorithmNumber() == 1) {
       // Algorithm 1: 3 parameters: Simple rainbow mapping.
@@ -973,6 +977,17 @@ G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator<
   return false;
 }
 
+G4bool G4PhysicalVolumeModel::G4PhysicalVolumeNodeID::operator!=
+  (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& right) const
+{
+  if (fpPV            != right.fpPV ||
+      fCopyNo         != right.fCopyNo ||
+      fNonCulledDepth != right.fNonCulledDepth ||
+      fTransform      != right.fTransform ||
+      fDrawn          != right.fDrawn) return true;
+  return false;
+}
+
 std::ostream& operator<<
   (std::ostream& os, const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& node)
 {
@@ -987,7 +1002,7 @@ std::ostream& operator<<
 //    if (!node.GetDrawn()) os << "not ";
 //    os << "drawn)";
   } else {
-    os << " (Null node)";
+    os << " (Null PV node)";
   }
   return os;
 }

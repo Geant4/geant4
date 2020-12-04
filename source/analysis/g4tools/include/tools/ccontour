@@ -9,30 +9,30 @@
 
 // Contour.h: interface for the ccontour class.
 //
-// ccontour implements Contour plot algorithm descrided in 
+// ccontour implements Contour plot algorithm descrided in
 //		IMPLEMENTATION OF
 //		AN IMPROVED CONTOUR
 //		PLOTTING ALGORITHM
-//		BY 
+//		BY
 //
-//		MICHAEL JOSEPH ARAMINI 
+//		MICHAEL JOSEPH ARAMINI
 //
-//		B.S., Stevens Institute of Technology, 1980 
+//		B.S., Stevens Institute of Technology, 1980
 // See http://www.ultranet.com/~aramini/thesis.html
 //
 // Ported to C++ by Jonathan de Halleux.
 //
 // Using ccontour :
 //
-// ccontour is not directly usable. The user has to 
-//	1. derive the function ExportLine that is 
+// ccontour is not directly usable. The user has to
+//	1. derive the function ExportLine that is
 //		supposed to draw/store the segment of the contour
 //	2. Set the function draw contour of. (using  SetFieldFn
 //		The function must be declared as follows
 //		double (*myF)(double x , double y);
 //
 //	History:
-//		31-07-2002: 
+//		31-07-2002:
 //			- A lot of contribution from Chenggang Zhou (better strip compressions, merging, area, weight),
 //			- Got rid of ugly MFC lists for STL.
 //////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@
 
 namespace tools {
 
-class ccontour  
+class ccontour
 {
 #ifdef TOOLS_MEM
     static const std::string& s_class() {
@@ -83,7 +83,7 @@ protected: //G.Barrand
 	virtual void CleanMemory();
 	// generates contour
 	// Before calling this functions you must
-	//	1. derive the function ExportLine that is 
+	//	1. derive the function ExportLine that is
 	//		supposed to draw/store the segment of the contour
 	//	2. Set the function draw contour of. (using  SetFieldFn
 	//		The function must be declared as follows
@@ -95,7 +95,7 @@ public: //G.Barrand
 	void set_first_grid(int iCol, int iRow);
 	// Set the dimension of the base grid
 	void set_secondary_grid(int iCol, int iRow);
-	// Sets the region [left, right, bottom,top] to generate contour 
+	// Sets the region [left, right, bottom,top] to generate contour
 	void set_limits(double pLimits[4]);
 	// Sets the isocurve values
 	void set_planes(const std::vector<double>& vPlanes);
@@ -150,7 +150,7 @@ private:
       mem::decrement(s_class().c_str());
 #endif
     }
-  protected:    
+  protected:
     CFnStr(const CFnStr&){}
     CFnStr& operator=(const CFnStr&){return *this;}
   public:
@@ -189,8 +189,8 @@ protected:
 private:
         //G.Barrand : have the below in the class.
         // A simple test function
-        static double ContourTestFunction(double x,double y,void*) {  
-          return 0.5*(::cos(x+3.14/4)+::sin(y+3.14/4)); 
+        static double ContourTestFunction(double x,double y,void*) {
+          return 0.5*(::cos(x+3.14/4)+::sin(y+3.14/4));
         }
 
 protected:
@@ -212,10 +212,10 @@ protected:
 
 // implementation :
 //
-//  Code get on the web at : 
+//  Code get on the web at :
 //    http://www.codeproject.com/cpp/contour.asp
-//  
-//  G.Barrand 
+//
+//  G.Barrand
 //
 
 //////////////////////////////////////////////////////////////////////
@@ -282,7 +282,7 @@ inline void ccontour::generate()
 	const int cols=m_iColSec+1;
 	const int rows=m_iRowSec+1;
 	//double xoff,yoff;
-	
+
 	// Initialize memroy if needed
 	InitMemory();
 
@@ -295,7 +295,7 @@ inline void ccontour::generate()
 	oldx3 = 0;
 	x3 = (cols-1)/m_iRowFir;
 	x4 = ( 2*(cols-1) )/m_iRowFir;
-	for (x = oldx3; x <= x4; x++) 
+	for (x = oldx3; x <= x4; x++)
 	{	  /* allocate new columns needed
 		*/
 		if (x >= cols)
@@ -308,17 +308,17 @@ inline void ccontour::generate()
 	}
 
 	y4 = 0;
-	for (j = 0; j < m_iColFir; j++) 
+	for (j = 0; j < m_iColFir; j++)
 	{
 		y3 = y4;
 		y4 = ((j+1)*(rows-1))/m_iColFir;
 		Cntr1(oldx3, x3, y3, y4);
 	}
 
-	for (i = 1; i < m_iRowFir; i++) 
+	for (i = 1; i < m_iRowFir; i++)
 	{
 		y4 = 0;
-		for (j = 0; j < m_iColFir; j++) 
+		for (j = 0; j < m_iColFir; j++)
 		{
 			y3 = y4;
 			y4 = ((j+1)*(rows-1))/m_iColFir;
@@ -326,27 +326,27 @@ inline void ccontour::generate()
 		}
 
 		y4 = 0;
-		for (j = 0; j < m_iColFir; j++) 
+		for (j = 0; j < m_iColFir; j++)
 		{
 			y3 = y4;
 			y4 = ((j+1)*(rows-1))/m_iColFir;
 			Pass2(oldx3,x3,y3,y4);
 		}
 
-		if (i < (m_iRowFir-1)) 
+		if (i < (m_iRowFir-1))
 		{	 /* re-use columns no longer needed */
 			oldx3 = x3;
 			x3 = x4;
 			x4 = ((i+2)*(cols-1))/m_iRowFir;
-			for (x = x3+1; x <= x4; x++) 
+			for (x = x3+1; x <= x4; x++)
 			{
-				if (xlow < oldx3) 
+				if (xlow < oldx3)
 				{
 					if (m_ppFnData[x])
 						delete[] m_ppFnData[x];
 					m_ppFnData[x] = m_ppFnData[xlow];
 					m_ppFnData[ xlow++ ] = NULL;
-				} 
+				}
 				else
 					if (m_ppFnData[x]==NULL)
 						m_ppFnData[x] = new CFnStr[rows];
@@ -358,7 +358,7 @@ inline void ccontour::generate()
 	}
 
 	y4 = 0;
-	for (j = 0; j < m_iColFir; j++) 
+	for (j = 0; j < m_iColFir; j++)
 	{
 		y3 = y4;
 		y4 = ((j+1)*(rows-1))/m_iColFir;
@@ -370,7 +370,7 @@ inline void ccontour::Cntr1(int x1, int x2, int y1, int y2)
 {
 	double f11, f12, f21, f22, f33;
 	int x3, y3, i, j;
-	
+
 	if ((x1 == x2) || (y1 == y2))	/* if not a real cell, punt */
 		return;
 	f11 = Field(x1, y1);
@@ -387,7 +387,7 @@ inline void ccontour::Cntr1(int x1, int x2, int y1, int y2)
 		if (f33 < f21) i++; else if (f33 > f21) j++;
 		if (f33 < f22) i++; else if (f33 > f22) j++;
 		if ((i > 2) || (j > 2)) /* should we divide cell? */
-		{	
+		{
 			/* subdivide cell */
 			Cntr1(x1, x3, y1, y3);
 			Cntr1(x3, x2, y1, y3);
@@ -408,7 +408,7 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 	double v, f11, f12, f21, f22, f33, fold, fnew, f;
 	double xoff=m_pLimits[0];
 	double yoff=m_pLimits[2];
-	
+
 	if ((x1 == x2) || (y1 == y2))	/* if not a real cell, punt */
 		return;
 	f11 = FnctData(x1,y1)->m_dFnVal;
@@ -416,7 +416,7 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 	f21 = FnctData(x2,y1)->m_dFnVal;
 	f22 = FnctData(x2,y2)->m_dFnVal;
 	if ((x2 > x1+1) || (y2 > y1+1)) /* is cell divisible? */
-	{	
+	{
 		x3 = (x1+x2)/2;
 		y3 = (y1+y2)/2;
 		f33 = FnctData(x3, y3)->m_dFnVal;
@@ -425,8 +425,8 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 		if (f33 < f12) i++; else if (f33 > f12) j++;
 		if (f33 < f21) i++; else if (f33 > f21) j++;
 		if (f33 < f22) i++; else if (f33 > f22) j++;
-		if ((i > 2) || (j > 2)) /* should we divide cell? */ 
-		{	
+		if ((i > 2) || (j > 2)) /* should we divide cell? */
+		{
 			/* subdivide cell */
 			Pass2(x1, x3, y1, y3);
 			Pass2(x3, x2, y1, y3);
@@ -436,7 +436,7 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 		}
 	}
 
-	for (i = 0; i < (int)m_vPlanes.size(); i++) 
+	for (i = 0; i < (int)m_vPlanes.size(); i++)
 	{
 		v = m_vPlanes[i];
 		j = 0;
@@ -444,14 +444,14 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 		if (f11 > v) j |= 2;
 		if (f22 > v) j |= 4;
 		if (f12 > v) j |= 010;
-		if ((f11 > v) ^ (f12 > v)) 
+		if ((f11 > v) ^ (f12 > v))
 		{
 			if ((FnctData(x1,y1)->m_sLeftLen != 0) &&
-				(FnctData(x1,y1)->m_sLeftLen < FnctData(x1,y1)->m_sRightLen)) 
+				(FnctData(x1,y1)->m_sLeftLen < FnctData(x1,y1)->m_sRightLen))
 			{
 				old = y1;
 				fold = f11;
-				while (1) 
+				while (1)
 				{
 					iNew = old+FnctData(x1,old)->m_sLeftLen;
 					fnew = FnctData(x1,iNew)->m_dFnVal;
@@ -461,20 +461,20 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 					fold = fnew;
 				}
 				yy0 = ((old-y1)+(iNew-old)*(v-fold)/(fnew-fold))/(y2-y1);
-			} 
+			}
 			else
 				yy0 = (v-f11)/(f12-f11);
 
 			left = (int)(y1+(y2-y1)*yy0+0.5);
 		}
-		if ((f21 > v) ^ (f22 > v)) 
+		if ((f21 > v) ^ (f22 > v))
 		{
 			if ((FnctData(x2,y1)->m_sRightLen != 0) &&
-				(FnctData(x2,y1)->m_sRightLen < FnctData(x2,y1)->m_sLeftLen)) 
+				(FnctData(x2,y1)->m_sRightLen < FnctData(x2,y1)->m_sLeftLen))
 			{
 				old = y1;
 				fold = f21;
-				while (1) 
+				while (1)
 				{
 					iNew = old+FnctData(x2,old)->m_sRightLen;
 					fnew = FnctData(x2,iNew)->m_dFnVal;
@@ -484,13 +484,13 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 					fold = fnew;
 				}
 				yy1 = ((old-y1)+(iNew-old)*(v-fold)/(fnew-fold))/(y2-y1);
-			} 
+			}
 			else
 				yy1 = (v-f21)/(f22-f21);
 
 			right = (int)(y1+(y2-y1)*yy1+0.5);
 		}
-		if ((f21 > v) ^ (f11 > v)) 
+		if ((f21 > v) ^ (f11 > v))
 		{
 			if ((FnctData(x1,y1)->m_sBotLen != 0) &&
 				(FnctData(x1,y1)->m_sBotLen < FnctData(x1,y1)->m_sTopLen)) {
@@ -505,13 +505,13 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 					fold = fnew;
 				}
 				xx0 = ((old-x1)+(iNew-old)*(v-fold)/(fnew-fold))/(x2-x1);
-			} 
+			}
 			else
 				xx0 = (v-f11)/(f21-f11);
 
 			bot = (int)(x1+(x2-x1)*xx0+0.5);
 		}
-		if ((f22 > v) ^ (f12 > v)) 
+		if ((f22 > v) ^ (f12 > v))
 		{
 			if ((FnctData(x1,y2)->m_sTopLen != 0) &&
 				(FnctData(x1,y2)->m_sTopLen < FnctData(x1,y2)->m_sBotLen)) {
@@ -526,14 +526,14 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 					fold = fnew;
 				}
 				xx1 = ((old-x1)+(iNew-old)*(v-fold)/(fnew-fold))/(x2-x1);
-			} 
+			}
 			else
 				xx1 = (v-f12)/(f22-f12);
 
 			top = (int)(x1+(x2-x1)*xx1+0.5);
 		}
 
-		switch (j) 
+		switch (j)
 		{
 			case 7:
 			case 010:
@@ -589,7 +589,7 @@ inline void ccontour::Pass2(int x1, int x2, int y1, int y2)
 inline double ccontour::Field(int x, int y)  /* evaluate funct if we must,*/
 {
 	double x1, y1;
-	
+
 	if (FnctData(x,y)->m_sTopLen != -1)  /* is it already in the array */
 		return(FnctData(x,y)->m_dFnVal);
 
@@ -604,15 +604,15 @@ inline double ccontour::Field(int x, int y)  /* evaluate funct if we must,*/
 }
 
 inline void ccontour::set_planes(const std::vector<double>& vPlanes)
-{	
+{
 	// cleaning memory
 	CleanMemory();
 
 	m_vPlanes = vPlanes;
 }
 
-inline void ccontour::set_field_fcn(double (*_pFieldFcn)(double, double,void*),void* aData) 
-{	
+inline void ccontour::set_field_fcn(double (*_pFieldFcn)(double, double,void*),void* aData)
+{
         m_pFieldFcnData = aData;
 	m_pFieldFcn=_pFieldFcn;
 }
@@ -639,7 +639,7 @@ inline void ccontour::set_limits(double pLimits[])
 	for (int i=0;i<4;i++)
 	{
 		m_pLimits[i]=pLimits[i];
-	}	
+	}
 }
 
 inline void ccontour::get_limits(double pLimits[])

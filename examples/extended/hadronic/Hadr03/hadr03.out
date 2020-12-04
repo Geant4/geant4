@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -40,7 +40,7 @@ NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
 ### ===  Auger cascade flag: 1
-### ===  Ignore cuts flag:   0
+### ===  Ignore cuts flag:   1
 #
 /process/list
      Transportation,         hadElastic,         hadElastic,         hadElastic
@@ -50,17 +50,16 @@ NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use
          hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
          hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,   neutronInelastic,           nCapture,           nFission
-    protonInelastic,       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic
-     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic
-anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic
-anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic
-  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic
-anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic
-anti_alphaInelastic,         ionElastic,         dInelastic,         tInelastic
-       He3Inelastic,     alphaInelastic,       ionInelastic,      photonNuclear
-RadioactiveDecayBase
+         hadElastic,         hadElastic,         hadElastic,   neutronInelastic
+           nCapture,           nFission,    protonInelastic,       pi+Inelastic
+       pi-Inelastic,     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic
+    kaon0SInelastic,anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic
+anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic,    lambdaInelastic
+    sigma+Inelastic,    sigma-Inelastic,       xi0Inelastic,       xi-Inelastic
+    omega-Inelastic,anti_lambdaInelastic,anti_sigma+Inelastic,anti_sigma-Inelastic
+  anti_xi0Inelastic,  anti_xi-Inelastic,anti_omega-Inelastic,         ionElastic
+         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
+       ionInelastic,      photonNuclear,RadioactiveDecayBase
 #
 /gun/particle proton
 /gun/energy 10 MeV
@@ -79,13 +78,26 @@ Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
 Auger electron emission enabled                   1
 Auger cascade enabled                             1
-Check EM cuts disabled for atomic de-excitation   0
+Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 ======================================================================
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
 NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
+
+=======================================================
+======       ParticleHP Physics Parameters     ========
+=======================================================
+ UseOnlyPhotoEvaporation ? 0
+ SkipMissingIsotopes ?     0
+ NeglectDoppler ?          0
+ DoNotAdjustFinalState ?   0
+ ProduceFissionFragments ? 0
+ UseWendtFissionModel ?    0
+ UseNRESP71Model ?         0
+=======================================================
+
 @@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 
@@ -139,9 +151,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_He3Inelastic
-        Model:                      FTFP: 0 eV /n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
@@ -153,9 +163,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_alphaInelastic
-        Model:                      FTFP: 0 eV /n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
@@ -167,10 +175,20 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_deuteronInelastic
-        Model:                      FTFP: 0 eV /n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+  Process: anti_lambdaInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 25 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_neutron
@@ -181,9 +199,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_neutronInelastic
-        Model:                      FTFP: 0 eV  ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+        Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
@@ -195,9 +211,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_protonInelastic
-        Model:                      FTFP: 0 eV  ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+        Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
@@ -209,9 +223,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
   Process: anti_tritonInelastic
-        Model:                      FTFP: 0 eV /n ---> 25 GeV/n
-        Model:                      FTFP: 12 GeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
@@ -268,10 +280,9 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: lambdaInelastic
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -350,10 +361,9 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: sigma-Inelastic
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:                      QGSP: 12 GeV ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -392,7 +402,6 @@ Store e- internal conversion data                   1
 Electron internal conversion ID                     0
 Correlated gamma emission flag                      0
 Max 2J for sampling of angular correlations         10
-Upload data before 1st event for                Z < 9
 =======================================================================
 
 ========= Table of registered couples ============================
@@ -400,7 +409,7 @@ Upload data before 1st event for                Z < 9
 Index : 0     used in the geometry : Yes
  Material : Molybdenum98
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  42.9817 keV    e-  1.43711 MeV    e+  1.35304 MeV proton 0 eV 
+ Energy thresholds :  gamma  42.9443 keV    e-  1.44302 MeV    e+  1.36749 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -425,7 +434,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.280000s Real=0.299211s Sys=0.010000s
+  User=0.100000s Real=0.117273s Sys=0.000000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
@@ -447,7 +456,7 @@ Run Summary
                         proton + Mo98 --> N gamma or e- + Tc99:       1   Q =  6.4945 MeV
                proton + Mo98 --> N gamma or e- + Tc99[142.683]:       1   Q =  6.3518 MeV
               proton + Mo98 --> N gamma or e- + neutron + Tc98:    1873   Q = -2.4771 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:      13   Q = -9.3784e-06 eV 
+               proton + Mo98 --> N gamma or e- + proton + Mo98:      13   Q = -8.6404e-06 eV 
                                proton + Mo98 --> proton + Mo98:    8112   Q = -5.6975e-06 eV 
 
                           number of gamma or e- (ic): N = 1 --> 10

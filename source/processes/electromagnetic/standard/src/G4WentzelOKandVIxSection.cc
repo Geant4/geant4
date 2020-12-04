@@ -151,8 +151,8 @@ void G4WentzelOKandVIxSection::InitialiseA()
   // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex);
-#endif
   if(0.0 == ScreenRSquare[0]) {
+#endif
     G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
     G4double fct = G4EmParameters::Instance()->ScreeningFactor();
@@ -170,8 +170,8 @@ void G4WentzelOKandVIxSection::InitialiseA()
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
-  }
 #ifdef G4MULTITHREADED
+  }
   G4MUTEXUNLOCK(&G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex);
 #endif
   

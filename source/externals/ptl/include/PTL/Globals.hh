@@ -42,7 +42,7 @@
 
 #if !defined(PTL_FOLD_EXPRESSION)
 #    define PTL_FOLD_EXPRESSION(...)                                                     \
-        ::PTL::details::consume_parameters(                                              \
+        ::PTL::mpl::consume_parameters(                                                  \
             ::std::initializer_list<int>{ (__VA_ARGS__, 0)... })
 #endif
 
@@ -55,7 +55,7 @@ template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
 
 // for pre-C++14 tuple expansion to arguments
-namespace details
+namespace mpl
 {
 //--------------------------------------------------------------------------------------//
 
@@ -71,84 +71,83 @@ namespace impl
 //--------------------------------------------------------------------------------------//
 // Stores a tuple of indices.  Used by tuple and pair, and by bind() to
 // extract the elements in a tuple.
-template <size_t... _Indexes>
-struct _Index_tuple
+template <size_t... Indexes>
+struct Index_tuple
 {};
 
-// Concatenates two _Index_tuples.
-template <typename _Itup1, typename _Itup2>
-struct _Itup_cat;
+// Concatenates two Index_tuples.
+template <typename Itup1, typename Itup2>
+struct Itup_cat;
 
-template <size_t... _Ind1, size_t... _Ind2>
-struct _Itup_cat<_Index_tuple<_Ind1...>, _Index_tuple<_Ind2...>>
+template <size_t... Ind1, size_t... Ind2>
+struct Itup_cat<Index_tuple<Ind1...>, Index_tuple<Ind2...>>
 {
-    using __type = _Index_tuple<_Ind1..., (_Ind2 + sizeof...(_Ind1))...>;
+    using __type = Index_tuple<Ind1..., (Ind2 + sizeof...(Ind1))...>;
 };
 
-// Builds an _Index_tuple<0, 1, 2, ..., _Num-1>.
-template <size_t _Num>
-struct _Build_index_tuple
-: _Itup_cat<typename _Build_index_tuple<_Num / 2>::__type,
-            typename _Build_index_tuple<_Num - _Num / 2>::__type>
+// Builds an Index_tuple<0, 1, 2, ..., NumT-1>.
+template <size_t NumT>
+struct Build_index_tuple
+: Itup_cat<typename Build_index_tuple<NumT / 2>::__type,
+           typename Build_index_tuple<NumT - NumT / 2>::__type>
 {};
 
 template <>
-struct _Build_index_tuple<1>
+struct Build_index_tuple<1>
 {
-    typedef _Index_tuple<0> __type;
+    typedef Index_tuple<0> __type;
 };
 
 template <>
-struct _Build_index_tuple<0>
+struct Build_index_tuple<0>
 {
-    typedef _Index_tuple<> __type;
+    typedef Index_tuple<> __type;
 };
 
 /// Class template integer_sequence
-template <typename _Tp, _Tp... _Idx>
+template <typename Tp, Tp... Idx>
 struct integer_sequence
 {
-    typedef _Tp             value_type;
-    static constexpr size_t size() noexcept { return sizeof...(_Idx); }
+    typedef Tp              value_type;
+    static constexpr size_t size() noexcept { return sizeof...(Idx); }
 };
 
-template <typename _Tp, _Tp _Num,
-          typename _ISeq = typename _Build_index_tuple<_Num>::__type>
-struct _Make_integer_sequence;
+template <typename Tp, Tp NumT, typename ISeq = typename Build_index_tuple<NumT>::__type>
+struct Make_integer_sequence;
 
-template <typename _Tp, _Tp _Num, size_t... _Idx>
-struct _Make_integer_sequence<_Tp, _Num, _Index_tuple<_Idx...>>
+template <typename Tp, Tp NumT, size_t... Idx>
+struct Make_integer_sequence<Tp, NumT, Index_tuple<Idx...>>
 {
-    static_assert(_Num >= 0, "Cannot make integer sequence of negative length");
+    static_assert(NumT >= 0, "Cannot make integer sequence of negative length");
 
-    typedef integer_sequence<_Tp, static_cast<_Tp>(_Idx)...> __type;
+    typedef integer_sequence<Tp, static_cast<Tp>(Idx)...> __type;
 };
 
 /// Alias template make_integer_sequence
-template <typename _Tp, _Tp _Num>
-using make_integer_sequence = typename _Make_integer_sequence<_Tp, _Num>::__type;
+template <typename Tp, Tp NumT>
+using make_integer_sequence = typename Make_integer_sequence<Tp, NumT>::__type;
 
 /// Alias template index_sequence
-template <size_t... _Idx>
-using index_sequence = integer_sequence<size_t, _Idx...>;
+template <size_t... Idx>
+using index_sequence = integer_sequence<size_t, Idx...>;
 
 /// Alias template make_index_sequence
-template <size_t _Num>
-using make_index_sequence = make_integer_sequence<size_t, _Num>;
+template <size_t NumT>
+using make_index_sequence = make_integer_sequence<size_t, NumT>;
 
 /// Alias template index_sequence_for
-template <typename... _Types>
-using index_sequence_for = make_index_sequence<sizeof...(_Types)>;
+template <typename... Types>
+using index_sequence_for = make_index_sequence<sizeof...(Types)>;
 
-template <size_t I, typename Tup>
-using index_type_t = decay_t<decltype(std::get<I>(std::declval<Tup>()))>;
+template <size_t Idx, typename Tup>
+using index_type_t = decay_t<decltype(std::get<Idx>(std::declval<Tup>()))>;
 
-template <typename _Fn, typename _Tuple, size_t... _Idx>
-static inline void
-apply(_Fn&& __f, _Tuple&& __t, impl::index_sequence<_Idx...>)
+template <typename FnT, typename TupleT, size_t... Idx>
+static inline auto
+apply(FnT&& __f, TupleT&& __t, impl::index_sequence<Idx...>)
+    -> decltype(std::forward<FnT>(__f)(std::get<Idx>(__t)...))
 {
-    std::forward<_Fn>(__f)(std::get<_Idx>(std::forward<_Tuple>(__t))...);
-    // __f(std::get<_Idx>(std::forward<_Tuple>(__t))...);
+    return std::forward<FnT>(__f)(std::get<Idx>(__t)...);
 }
 
 //--------------------------------------------------------------------------------------//
@@ -158,29 +157,29 @@ apply(_Fn&& __f, _Tuple&& __t, impl::index_sequence<_Idx...>)
 //--------------------------------------------------------------------------------------//
 
 /// Alias template index_sequence
-template <size_t... _Idx>
-using index_sequence = impl::integer_sequence<size_t, _Idx...>;
+template <size_t... Idx>
+using index_sequence = impl::integer_sequence<size_t, Idx...>;
 
 /// Alias template make_index_sequence
-template <size_t _Num>
-using make_index_sequence = impl::make_integer_sequence<size_t, _Num>;
+template <size_t NumT>
+using make_index_sequence = impl::make_integer_sequence<size_t, NumT>;
 
 /// Alias template index_sequence_for
-template <typename... _Types>
-using index_sequence_for = impl::make_index_sequence<sizeof...(_Types)>;
+template <typename... Types>
+using index_sequence_for = impl::make_index_sequence<sizeof...(Types)>;
 
-template <typename _Fn, typename _Tuple>
+template <typename FnT, typename TupleT>
 static inline void
-apply(_Fn&& __f, _Tuple&& __t)
+apply(FnT&& __f, TupleT&& __t)
 {
-    constexpr auto _N = std::tuple_size<_Tuple>::value;
-    impl::apply(std::forward<_Fn>(__f), std::forward<_Tuple>(__t),
-                impl::make_index_sequence<_N>{});
+    constexpr auto N = std::tuple_size<TupleT>::value;
+    impl::apply(std::forward<FnT>(__f), std::forward<TupleT>(__t),
+                impl::make_index_sequence<N>{});
 }
 
 //--------------------------------------------------------------------------------------//
 
-}  // namespace details
+}  // namespace mpl
 
 namespace thread_pool
 {
@@ -192,7 +191,6 @@ static const short STOPPED = 2;
 static const short NONINIT = 3;
 
 }  // namespace state
-
 }  // namespace thread_pool
 
 //--------------------------------------------------------------------------------------//

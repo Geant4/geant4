@@ -35,65 +35,108 @@
 # Specific UI/Vis options are also handled here.
 #
 
+#-----------------------------------------------------------------------
+# Select options first because these are interdependent
+#
+# - Coin3D/So{XT,Win,Qt}
+option(GEANT4_USE_INVENTOR "Build Geant4 OpenInventor Xt/Win Visualization Driver" OFF)
+geant4_add_feature(GEANT4_USE_INVENTOR "Build OpenInventor Xt/Win Driver")
+
+option(GEANT4_USE_INVENTOR_QT "Build Geant4 OpenInventor Qt Visualization Driver" OFF)
+geant4_add_feature(GEANT4_USE_INVENTOR_QT "Build OpenInventor Qt Driver")
+
+# GEANT4_USE_INVENTOR is a dual-purpose variable - it marks use of Xt/Win driver for
+# user, and marks enablement of G4OpenInventor internally. Check that user-set options
+# are consistent before setting *internal* value
+if(GEANT4_USE_INVENTOR AND GEANT4_USE_INVENTOR_QT)
+  message(FATAL_ERROR "Only one of GEANT4_USE_INVENTOR and GEANT4_USE_INVENTOR_QT can be set ON, but both are ON.")
+endif()
+
+# User settings o.k., so mark that we're enabling G4OpenInventor
+if(GEANT4_USE_INVENTOR_QT)
+  set(GEANT4_USE_INVENTOR ON)
+endif()
+
+# - Qt (may be required by Coin driver)
+option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
+if(GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_QT)
+  set(GEANT4_USE_QT ON CACHE BOOL "Build Geant4 with Qt support" FORCE)
+  message(STATUS "Forcing GEANT4_USE_QT to ON, required by GEANT4_USE_INVENTOR_QT")
+endif()
+
+geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt support")
+
+# - Unix only
+if(UNIX)
+  # - Client/Server DAWN driver
+  # mark as advanced because user should know what they're doing here
+  option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
+  geant4_add_feature(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support")
+  mark_as_advanced(GEANT4_USE_NETWORKDAWN)
+
+  # - Client/Server VRML driver
+  option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support" OFF)
+  geant4_add_feature(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support")
+  mark_as_advanced(GEANT4_USE_NETWORKVRML)
+
+  # - Motif UI/Vis (may be required by Coin Vis driver)
+  option(GEANT4_USE_XM "Build Geant4 with Motif (X11) support" OFF)
+  if(GEANT4_USE_INVENTOR AND NOT GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_XM)
+    set(GEANT4_USE_XM ON CACHE BOOL "Build Geant4 with Motif (X11) support" FORCE)
+    message(STATUS "Forcing GEANT4_USE_XM to ON, required by GEANT4_USE_INVENTOR")
+  endif()
+
+  geant4_add_feature(GEANT4_USE_XM "Build Geant4 with Xm Support")
+
+  # OpenGL/X11 Vis Driver
+  option(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support" OFF)
+  geant4_add_feature(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support")
+
+  # RayTracer driver with X11 support
+  option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
+  geant4_add_feature(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support")
+endif()
+
+# Windows only
+if(WIN32)
+  option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+  geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+endif()
+
+#-----------------------------------------------------------------------
+# Find dependencies
+#
 # Prefer Legacy GL when using CMake >= 3.10
 set(OpenGL_GL_PREFERENCE "LEGACY")
 
-#-----------------------------------------------------------------------
-# Configure OpenInventor support
-#
-option(GEANT4_USE_INVENTOR "Build Geant4 OpenInventor Visualization Driver" OFF)
-option(GEANT4_USE_INVENTOR_QT "Build Geant4 OpenInventor Qt Visualization Driver" OFF)
-
-if(GEANT4_USE_INVENTOR_QT)
-  set(GEANT4_USE_INVENTOR ON)
-  set(GEANT4_USE_QT ON)
-endif()
-
+# - Coin plus So{Xt,Qt,Win}
 if(GEANT4_USE_INVENTOR)
-  # Always need Inventor and OpenGL
-  find_package(Inventor REQUIRED)
-  find_package(OpenGL REQUIRED)
+  find_package(Coin 4.0.0 REQUIRED)
+  geant4_save_package_variables(Inventor Coin_DIR)
 
-  # On UNIX, we also require Xm and X11 (inc. Xpm)...
-  if(UNIX)
-    if (GEANT4_USE_INVENTOR_QT)
-      if (NOT INVENTOR_SOQT_LIBRARY OR NOT INVENTOR_SOQT_INCLUDE_DIR)
-        message(FATAL_ERROR "Could not find SoQt library and/or headers")
-      endif()
-      set(INVENTOR_INCLUDE_DIR "${INVENTOR_INCLUDE_DIR}" "${INVENTOR_SOQT_INCLUDE_DIR}")
-    else()
-      if(NOT INVENTOR_SOXT_LIBRARY OR NOT INVENTOR_SOXT_INCLUDE_DIR)
-        message(FATAL_ERROR "Could not find SoXt library and/or headers")
-      endif()
-      set(INVENTOR_INCLUDE_DIR "${INVENTOR_INCLUDE_DIR}" "${INVENTOR_SOXT_INCLUDE_DIR}")
-      set(GEANT4_USE_XM ON)
-      find_package(Motif REQUIRED)
-    endif()
-
-    find_package(X11 REQUIRED)
-
-    if(NOT X11_Xpm_FOUND)
-      message(FATAL_ERROR "Could not find X11 Xpm headers and/or library (Required by GEANT4_USE_INVENTOR)")
+  if(GEANT4_USE_INVENTOR_QT)
+    find_package(SoQt 1.6.0 REQUIRED)
+    geant4_save_package_variables(Inventor SoQt_DIR)
+  else()
+    if(UNIX)
+      find_package(SoXt 1.4.0 REQUIRED)
+      geant4_save_package_variables(Inventor SoXt_DIR)
+      set(GEANT4_USE_INVENTOR_XT ON)
+    elseif(WIN32)
+      find_package(SoWin 1.4.0 REQUIRED)
+      geant4_save_package_variables(Inventor SoWin_DIR)
+      set(GEANT4_USE_INVENTOR_WIN ON)
     endif()
   endif()
-
-  geant4_add_feature(GEANT4_USE_INVENTOR "Build OpenInventor Driver")
 endif()
 
-
-#-----------------------------------------------------------------------
-# Configure Qt Support if needed (CROSSPLATFORM).
-#
-option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
-
+# - Qt5
 if(GEANT4_USE_QT)
-  # Find and configure Qt and OpenGL
   find_package(Qt5Core REQUIRED)
   find_package(Qt5Gui REQUIRED)
   find_package(Qt5Widgets REQUIRED)
   find_package(Qt5OpenGL REQUIRED)
   find_package(Qt5PrintSupport REQUIRED)
-
   set(QT_QTCORE_LIBRARY Qt5::Core Qt5::PrintSupport)
   set(QT_QTGUI_LIBRARY Qt5::Gui Qt5::Widgets)
   set(QT_OPENGL_LIBRARY Qt5::Gui Qt5::OpenGL)
@@ -101,90 +144,72 @@ if(GEANT4_USE_QT)
   get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
   geant4_save_package_variables(Qt5 Qt5Core_DIR Qt5Gui_DIR Qt5Widgets_DIR Qt5OpenGL_DIR Qt5PrintSupport_DIR)
 
-  find_package(OpenGL REQUIRED)
-  geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
+  # Qt3D is only supported on 5.15 and above, but always on if available
+  set(QT3D_MINIMUM_VERSION 5.15.0)
+  set(GEANT4_USE_QT3D OFF)
 
+  if(Qt5Core_VERSION GREATER_EQUAL QT3D_MINIMUM_VERSION)
+    find_package(Qt53DCore ${QT3D_MINIMUM_VERSION} QUIET)
+    find_package(Qt53DExtras ${QT3D_MINIMUM_VERSION} QUIET)
+    find_package(Qt53DRender ${QT3D_MINIMUM_VERSION} QUIET)
+
+    if(Qt53DCore_FOUND AND Qt53DExtras_FOUND AND Qt53DRender_FOUND)
+      set(GEANT4_USE_QT3D ON)
+      geant4_save_package_variables(Qt5 Qt53DCore_DIR Qt53DExtras_DIR Qt53DRender_DIR)
+      geant4_add_feature(GEANT4_USE_QT3D "Build Geant4 Qt3D driver")
+    else()
+      set(_g4_qt53d_missing)
+      if(NOT Qt53DCore_FOUND)
+        list(APPEND _g4_qt53d_missing "Qt53DCore")
+      endif()
+      if(NOT Qt53DExtras_FOUND)
+        list(APPEND _g4_qt53d_missing "Qt53DExtras")
+      endif()
+      if(NOT Qt53DRender_FOUND)
+        list(APPEND _g4_qt53d_missing "Qt53DRender")
+      endif()
+
+      message(STATUS "Disabling Geant4 Qt3D driver, missing Qt5 packages: ${_g4_qt53d_missing}")
+    endif()
+  endif()
   # Variables for export to GNUmake
   execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PREFIX OUTPUT_VARIABLE G4QTHOME OUTPUT_STRIP_TRAILING_WHITESPACE)
   execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS OUTPUT_VARIABLE G4QTLIBPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 
-  # OpenGL part of Qt is in OpenGL component so mark the need to
-  # add OpenGL.
+# - OpenGL
+if(GEANT4_USE_INVENTOR
+   OR GEANT4_USE_QT
+   OR GEANT4_USE_OPENGL_X11
+   OR GEANT4_USE_XM
+   OR GEANT4_USE_OPENGL_WIN32)
+  find_package(OpenGL REQUIRED)
+  geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
+
+  # X11 drivers on macOS need XQuartzGL
+  if(APPLE AND (GEANT4_USE_INVENTOR_XT OR GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM))
+    find_package(XQuartzGL REQUIRED)
+    geant4_save_package_variables(XQuartzGL XQuartzGL_INCLUDE_DIR XQuartzGL_gl_LIBRARY)
+  endif()
+
+  # Enable driver
   set(GEANT4_USE_OPENGL ON)
-  geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt support")
 endif()
 
-#-----------------------------------------------------------------------
-# Configure Wt Support
-#
-if(GEANT4_USE_WT)
-  message(WARNING "Support for Wt in Geant4 is no longer available and may be removed in future releases")
-endif()
-set(GEANT4_USE_WT OFF)
-
-#option(GEANT4_USE_WT "Build Geant4 with Wt4 support" OFF)
-#mark_as_advanced(GEANT4_USE_WT)
-#
-#if(GEANT4_USE_WT)
-#  # Find and configure Wt and OpenGL
-#  find_package(Wt REQUIRED)
-#  find_package(OpenGL REQUIRED)
-#
-#  geant4_save_package_variables(Wt Wt_INCLUDE_DIR Wt_LIBRARY_RELEASE Wt_LIBRARY_DEBUG Wt_HTTP_LIBRARY_RELEASE Wt_HTTP_LIBRARY_DEBUG)
-#  geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
-#
-#  set(WT_DEFINITIONS "-DQT_NO_KEYWORDS")
-#
-#  # WebGL part of Wt is in OpenGL component so mark the need to
-#  # add OpenGL.
-#  set(GEANT4_USE_OPENGL ON)
-#  geant4_add_feature(GEANT4_USE_WT "Build Geant4 with Wt support")
-#endif()
-
-
-#-----------------------------------------------------------------------
-# UNIX PLATFORMS ONLY
-#-----------------------------------------------------------------------
 if(UNIX)
-  # - Support for Client/Server DAWN driver
-  # mark as advanced because user should know what they're doing here
-  option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
-  #
-  # Possible headers checks for needed network parts?
-  #
-  geant4_add_feature(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support")
-  mark_as_advanced(GEANT4_USE_NETWORKDAWN)
-
-  # - Support for Client/Server VRML driver
-  # mark as advanced because user should know what they're doing to use this
-  option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support" OFF)
-  geant4_add_feature(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support")
-  mark_as_advanced(GEANT4_USE_NETWORKVRML)
-
-  # - Configure Xm support if requested
-  option(GEANT4_USE_XM "Build Geant4 with Motif (X11) support" OFF)
-
-  # - Configure OpenGL X11 support if requested
-  option(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support" OFF)
-
-  # - X11 Support for RayTracer driver
-  option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
-
-  # -- Now configure needed X11, Motif and OpenGL packages
-  # We also have to be concerned with Inventor on UNIX, because
-  # that also needs the Xt configuration...
   # - X11
-  if(GEANT4_USE_XM OR GEANT4_USE_OPENGL_X11 OR GEANT4_USE_RAYTRACER_X11 OR GEANT4_USE_INVENTOR)
+  if(GEANT4_USE_OPENGL_X11
+     OR GEANT4_USE_RAYTRACER_X11
+     OR GEANT4_USE_XM
+     OR GEANT4_USE_INVENTOR_XT)
     find_package(X11 REQUIRED)
     include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 
     # Check for additional required X11 libraries
-    # - Xmu
     if(NOT X11_Xmu_FOUND)
       message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
     endif()
 
-    # - Xt
     if(NOT X11_Xt_FOUND)
       message(FATAL_ERROR "could not find X11 Xt library and/or headers")
     endif()
@@ -201,60 +226,14 @@ if(UNIX)
       X11_Xmu_INCLUDE_PATH
       X11_Xmu_LIB
       X11_Xt_INCLUDE_PATH
-      X11_Xt_LIB
-    )
-
-    # - If we got to this point, RayTracer is o.k., so add the feature
-    geant4_add_feature(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support")
+      X11_Xt_LIB)
   endif()
 
-  #- OpenGL : we also do this for Inventor so that we pick up Mac X11 GL...
-  if(GEANT4_USE_INVENTOR OR GEANT4_USE_XM OR GEANT4_USE_OPENGL_X11)
-    # - Find native GL first
-    find_package(OpenGL REQUIRED)
-    geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
-
-    # - If we're on Apple, also find the XQuartz GL libraries and append t.
-    if(APPLE)
-      find_package(XQuartzGL REQUIRED)
-      geant4_save_package_variables(XQuartzGL XQuartzGL_INCLUDE_DIR XQuartzGL_gl_LIBRARY)
-    endif()
-
-    # Add feature for X11 GL
-    geant4_add_feature(GEANT4_USE_OPENGL_X11 "Build Geant4 OpenGL driver with X11 support")
-  endif()
-
-  # - Add need for OpenGL in X11 case
-  if(GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM)
-    set(GEANT4_USE_OPENGL ON)
-  endif()
-
-  # - Motif last of all, then can add the feature
+  # - Motif
   if(GEANT4_USE_XM)
     find_package(Motif REQUIRED)
     include("${CMAKE_CURRENT_LIST_DIR}/G4MotifShim.cmake")
     geant4_save_package_variables(Motif MOTIF_INCLUDE_DIR MOTIF_LIBRARIES)
-    geant4_add_feature(GEANT4_USE_XM "Build Geant4 with Xm Support")
   endif()
 endif()
-
-#-----------------------------------------------------------------------
-# WINDOWS PLATFORMS ONLY
-#-----------------------------------------------------------------------
-if(WIN32)
-  # - OpenGL Win32...
-  option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
-
-  if(GEANT4_USE_OPENGL_WIN32)
-    # Just need OpenGL and on Windows, this should be easy...
-    find_package(OpenGL REQUIRED)
-
-    # This is part of the G4OpenGL component, so mark it as needed
-    set(GEANT4_USE_OPENGL ON)
-    geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
-    geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
-  endif()
-endif()
-
-# - and we're done...
 

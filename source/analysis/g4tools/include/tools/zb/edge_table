@@ -43,7 +43,7 @@ inline void InsertEdgeInET (
      */
     pPrevSLL = &ET->scanlines;
     pSLL = pPrevSLL->next;
-    while (pSLL && (pSLL->scanline < scanline)) 
+    while (pSLL && (pSLL->scanline < scanline))
     {
         pPrevSLL = pSLL;
         pSLL = pSLL->next;
@@ -52,9 +52,9 @@ inline void InsertEdgeInET (
     /*
      * reassign pSLL (pointer to ScanLineList) if necessary
      */
-    if ( (pSLL==NULL) || (pSLL->scanline > scanline)) 
+    if ( (pSLL==NULL) || (pSLL->scanline > scanline))
     {
-        if (*iSLLBlock > SLLSPERBLOCK-1) 
+        if (*iSLLBlock > SLLSPERBLOCK-1)
         {
             tmpSLLBlock = cmem_alloc<ScanLineListBlock>(1);
             (*SLLBlock)->next = tmpSLLBlock;
@@ -75,7 +75,7 @@ inline void InsertEdgeInET (
      */
     prev = (EdgeTableEntry *)NULL;
     start = pSLL->edgelist;
-    while (start && (start->bres.minor_axis < ETE->bres.minor_axis)) 
+    while (start && (start->bres.minor_axis < ETE->bres.minor_axis))
     {
         prev = start;
         start = start->next;
@@ -102,7 +102,7 @@ inline void CreateETandAET (
  *     CreateEdgeTable
  *
  *     This routine creates the edge table for
- *     scan converting polygons. 
+ *     scan converting polygons.
  *     The Edge Table (ET) looks like:
  *
  *    EdgeTable
@@ -155,19 +155,19 @@ inline void CreateETandAET (
      *  In this loop we are dealing with two vertices at
      *  a time -- these make up one edge of the polygon.
      */
-    while (count--) 
+    while (count--)
     {
         CurrPt = pts++;
 
         /*
          *  find out which point is above and which is below.
          */
-        if (PrevPt->y > CurrPt->y) 
+        if (PrevPt->y > CurrPt->y)
         {
             bottom = PrevPt, top = CurrPt;
             pETEs->ClockWise = 0;
         }
-        else 
+        else
         {
             bottom = CurrPt, top = PrevPt;
             pETEs->ClockWise = 1;
@@ -176,7 +176,7 @@ inline void CreateETandAET (
         /*
          * don't add horizontal edges to the Edge table.
          */
-        if (bottom->y != top->y) 
+        if (bottom->y != top->y)
         {
             pETEs->ymax = (int)(bottom->y-1);  /* -1 so we don't get last scanline */
 
@@ -212,7 +212,7 @@ inline void LoadAET(EdgeTableEntry* AET,EdgeTableEntry* ETEs) {
   pPrevAET = AET;
   AET = AET->next;
   while(ETEs) {
-        while (AET && (AET->bres.minor_axis < ETEs->bres.minor_axis)) 
+        while (AET && (AET->bres.minor_axis < ETEs->bres.minor_axis))
         {
             pPrevAET = AET;
             AET = AET->next;
@@ -235,13 +235,13 @@ inline void ComputeWAET(EdgeTableEntry* AET) {
  *
  *     This routine links the AET by the
  *     nextWETE (winding EdgeTableEntry) link for
- *     use by the winding number rule.  The final 
+ *     use by the winding number rule.  The final
  *     Active Edge Table (AET) might look something
  *     like:
  *
  *     AET
  *     ----------  ---------   ---------
- *     |ymax    |  |ymax    |  |ymax    | 
+ *     |ymax    |  |ymax    |  |ymax    |
  *     | ...    |  |...     |  |...     |
  *     |next    |->|next    |->|next    |->...
  *     |nextWETE|  |nextWETE|  |nextWETE|
@@ -264,7 +264,7 @@ inline void ComputeWAET(EdgeTableEntry* AET) {
             isInside--;
 
         if (( (inside==0) && (isInside==0) ) ||
-            ( (inside!=0) && (isInside!=0) )) 
+            ( (inside!=0) && (isInside!=0) ))
         {
             pWETE->nextWETE = AET;
             pWETE = AET;
@@ -294,7 +294,7 @@ inline int InsertAndSort(EdgeTableEntry* AET) {
             pETEchase = pETEchase->back;
 
         AET = AET->next;
-        if (pETEchase != pETEinsert) 
+        if (pETEchase != pETEinsert)
         {
             pETEchaseBackTMP = pETEchase->back;
             pETEinsert->back->next = AET;

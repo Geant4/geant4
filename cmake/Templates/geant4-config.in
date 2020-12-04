@@ -8,7 +8,7 @@
 #-----------------------------------------------------------------------
 # Determine location of this script.
 # NB, we don't always use the result of this calculation, but it does not
-# hurt to do it. Only possible error is if too long a chain of symbolic 
+# hurt to do it. Only possible error is if too long a chain of symbolic
 # links are used to point to the physical script.
 #
 # Resolve symbolic links to script - we should end up with a physical file
@@ -32,8 +32,8 @@ while [ "x`readlink $script`" != "x" ] ; do
   fi
 done
 
-# If we still have a relative path, then it must be relative to the 
-# calling dir. NB we don't attempt to resolve directory symbolic 
+# If we still have a relative path, then it must be relative to the
+# calling dir. NB we don't attempt to resolve directory symbolic
 # links or remove '.' or '..'
 if [ ${script##/} = ${script##~} ] ; then
   script="$calldir/$script"
@@ -101,6 +101,10 @@ feature_list="${feature_list} smartstack[${have_smartstack}]"
 if test "x${have_smartstack}" = "xyes" ; then
   cflags="-DG4_USESMARTSTACK ${cflags}"
 fi
+
+# - ParticleHP was built as HP. Pure feature
+have_php_as_hp="@G4_BUILTWITH_PHP_AS_HP@"
+feature_list="${feature_list} php_as_hp[${have_php_as_hp}]"
 
 # - Includes and Libs
 for g4incdir in ${includedirs} ; do
@@ -199,6 +203,12 @@ feature_list="${feature_list} qt[${have_qt}]"
 if test "x${have_qt}" = "xyes" ; then
   vis_cflags="${vis_cflags} \
   -DG4INTY_USE_QT -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT @G4_QT_CFLAGS@"
+
+if test "x${qt_version}" \< "5.15.0" ; then 
+  vis_libs="-lG4visQt3D ${vis_libs}"
+  libs="-lG4visQt3D ${libs}"
+  vis_cflags="${vis_cflags} -DG4UI_USE_QT3D"
+fi
 
   geant4_uses_opengl="yes"
 fi
@@ -395,7 +405,7 @@ install_datasets()
 
       # Unpack bundle
       echo "+ untar ${dataset_file}"
-      ${G4TAR} -C ${g4downloaddir} -xf ${g4downloaddir}/${dataset_file} 
+      ${G4TAR} -C ${g4downloaddir} -xf ${g4downloaddir}/${dataset_file}
       tar_status="$?"
       if [ "$tar_status" != "0" ] ; then
         echo "- untar of '${dataset_file}' failed : tar error $?"
@@ -600,6 +610,9 @@ while test $# -gt 0 ; do
           ;;
         openinventor)
           echo ${have_openinventor}
+          ;;
+        php_as_hp)
+          echo ${have_php_as_hp}
           ;;
         *)
           echo "no"

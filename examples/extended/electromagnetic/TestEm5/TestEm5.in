@@ -9,6 +9,7 @@
 /testem/det/setAbsMat Silicon
 /testem/det/setAbsThick 20 um
 /testem/det/setAbsYZ    50 um
+/testem/det/setAbsXpos   0 um
 #
 /testem/phys/addPhysics  emstandard_opt3
 #

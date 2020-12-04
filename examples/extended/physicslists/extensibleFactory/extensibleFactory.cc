@@ -53,11 +53,7 @@
 #include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 // The following change is the _only_ required changed to move from
@@ -188,13 +184,11 @@ int main(int argc,char** argv)
   G4Random::setTheEngine(new CLHEP::RanecuEngine());
 
   // Construct the run manager
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
 #ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager();
   if ( nofThreads > 0 ) {
     runManager->SetNumberOfThreads(nofThreads);
   }
-#else
-  G4RunManager * runManager = new G4RunManager();
 #endif
 
   // g4alt::G4PhysListFactoryAlt is the extensible factory
@@ -279,7 +273,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physList);
 
   // set user action classes
-  ActionInitialization* actinit = 
+  ActionInitialization* actinit =
     new ActionInitialization("extensibleFactory");
   runManager->SetUserInitialization(actinit);
 

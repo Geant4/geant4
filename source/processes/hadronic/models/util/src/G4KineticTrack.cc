@@ -99,7 +99,6 @@ G4KineticTrack::G4KineticTrack() :
 
 G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon()
 {
- G4int i;
  theDefinition = right.GetDefinition();
  theFormationTime = right.GetFormationTime();
  thePosition = right.GetPosition();
@@ -110,14 +109,14 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon(
  nChannels = right.GetnChannels();
  theActualMass = right.GetActualMass();
  theActualWidth = new G4double[nChannels];
- for (i = 0; i < nChannels; i++)
+ for (G4int i = 0; i < nChannels; i++)
   {
     theActualWidth[i] = right.theActualWidth[i];
   }
-  theDaughterMass = 0;
-  theDaughterWidth = 0;
-  theStateToNucleus=right.theStateToNucleus;
-  theProjectilePotential=right.theProjectilePotential;
+ theDaughterMass = 0;
+ theDaughterWidth = 0;
+ theStateToNucleus=right.theStateToNucleus;
+ theProjectilePotential=right.theProjectilePotential;
  
 ////////////////
 //    DEBUG   //
@@ -197,7 +196,7 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 
   //  cout << " ****CONSTR*** ActualMass ******* " << theActualMass << G4endl;
   G4int index;
-  for (index = nChannels - 1; index >= 0; index--)
+  for (index = nChannels - 1; index >= 0; --index)
     {
       G4VDecayChannel* theChannel = theDecayTable->GetDecayChannel(index);
       G4int nDaughters = theChannel->GetNumberOfDaughters();
@@ -211,8 +210,7 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
           theDaughterMass = new G4double[nDaughters];
           theDaughterWidth = new G4double[nDaughters];
 	  theDaughterIsShortLived = new G4bool[nDaughters];
-          G4int n;
-          for (n = 0; n < nDaughters; n++)
+          for (G4int n = 0; n < nDaughters; ++n)
 	    {
               aDaughter = theChannel->GetDaughter(n);
               theDaughterMass[n] = aDaughter->GetPDGMass();
@@ -331,17 +329,17 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 	      G4int nShortLived = 0;
 	      if ( theDaughterIsShortLived[0] ) 
 		{ 
-		  nShortLived++; 
+		  ++nShortLived; 
 		}
 	      if ( theDaughterIsShortLived[1] )
 		{ 
-		  nShortLived++; 
+		  ++nShortLived; 
 		  G4SwapObj(theDaughterMass, theDaughterMass + 1);
 		  G4SwapObj(theDaughterWidth, theDaughterWidth + 1);	    
 		}
 	      if ( theDaughterIsShortLived[2] )
 		{ 
-		  nShortLived++; 
+		  ++nShortLived; 
 		  G4SwapObj(theDaughterMass, theDaughterMass + 2);
 		  G4SwapObj(theDaughterWidth, theDaughterWidth + 2);	    
 		}
@@ -399,7 +397,7 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 //    DEBUG   //
 ////////////////
 
-// for (G4int y = nChannels - 1; y >= 0; y--)
+// for (G4int y = nChannels - 1; y >= 0; --y)
 //     {
 //      G4cout << G4endl << theActualWidth[y];
 //     }
@@ -459,10 +457,7 @@ G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      if (theActualWidth != 0) delete [] theActualWidth;
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
-     for ( G4int i = 0; i < nChannels; i++)
-        {
-         theActualWidth[i] = right.theActualWidth[i];
-        }
+     for (G4int i = 0; i < nChannels; ++i) theActualWidth[i] = right.theActualWidth[i];
     }
  return *this;
 }
@@ -490,7 +485,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 //
 /*
     G4int index1;
-    for (index1 = nChannels - 1; index1 >= 0; index1--)
+    for (index1 = nChannels - 1; index1 >= 0; --index1)
       G4cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
       G4cout << "DECAY Actual Mass " << theActualMass << G4endl;
 */
@@ -536,10 +531,9 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 
      do {       
 
-       G4int index;
        G4double theSumActualWidth = 0.0;
-       G4double* theCumActualWidth = new G4double[nChannels];
-       for (index = nChannels - 1; index >= 0; index--)
+       G4double* theCumActualWidth = new G4double[nChannels]{};
+       for (G4int index = nChannels - 1; index >= 0; --index)
           {
            theSumActualWidth += theActualWidth[index];
            theCumActualWidth[index] = theSumActualWidth;
@@ -550,7 +544,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
        G4double r = theTotalActualWidth * G4UniformRand();
        G4VDecayChannel* theDecayChannel(0);
        chosench=-1;
-       for (index = nChannels - 1; index >= 0; index--)
+       for (G4int index = nChannels - 1; index >= 0; --index)
           {
            if (r < theCumActualWidth[index])
               {
@@ -573,7 +567,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
        }
        theParentName = theDecayChannel->GetParentName();
        theParentMass = this->GetActualMass();
-       theBR = theActualWidth[index];
+       theBR = theActualWidth[chosench];
        //     cout << "**BR*** DECAYNEW  " << theBR << G4endl;
        theNumberOfDaughters = theDecayChannel->GetNumberOfDaughters();
        theDaughtersName1 = "";
@@ -581,18 +575,18 @@ G4KineticTrackVector* G4KineticTrack::Decay()
        theDaughtersName3 = "";
        theDaughtersName4 = "";
 
-       for (G4int i=0; i < 4; i++) masses[i]=0.;
+       for (G4int i=0; i < 4; ++i) masses[i]=0.;
        G4int shortlivedDaughters[4];
        G4int numberOfShortliveds(0);
        G4double SumLongLivedMass(0);
-       for (G4int aD=0; aD < theNumberOfDaughters ; aD++)
+       for (G4int aD=0; aD < theNumberOfDaughters ; ++aD)
        {
           const G4ParticleDefinition* aDaughter = theDecayChannel->GetDaughter(aD);
           masses[aD] = aDaughter->GetPDGMass();
           if ( aDaughter->IsShortLived() ) 
 	  {
 	      shortlivedDaughters[numberOfShortliveds]=aD;
-	      numberOfShortliveds++;
+	      ++numberOfShortliveds;
 	  } else {
 	      SumLongLivedMass += aDaughter->GetPDGMass();
 	  }
@@ -666,7 +660,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
           //               If this is still not the case, but the max number of attempts has been reached,
           //               then the subsequent call thePhaseSpaceDecayChannel.DecayIt() will throw an exception.
           G4double sumDaughterMasses = 0.0;
-          for (G4int i=0; i < 4; i++) sumDaughterMasses += masses[i];
+          for (G4int i=0; i < 4; ++i) sumDaughterMasses += masses[i];
           if ( theParentMass - sumDaughterMasses > 0.0 ) isChannelBelowThreshold = false;
 
      } while ( isChannelBelowThreshold && ++loopCounter < maxNumberOfLoops );   /* Loop checking, 16.08.2016, A.Ribon */
@@ -710,7 +704,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
      const G4ParticleDefinition * aProduct = 0;
-     for (G4int i=dEntries; i > 0; i--)
+     for (G4int i=dEntries; i > 0; --i)
         {
 	 theDynamicParticle = theDecayProducts->PopProducts();
          aProduct = theDynamicParticle->GetDefinition();

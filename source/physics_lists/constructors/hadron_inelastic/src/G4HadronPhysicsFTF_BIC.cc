@@ -41,9 +41,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
 #include "G4PionBuilder.hh"
 #include "G4KaonBuilder.hh"
 #include "G4BinaryPionBuilder.hh"
@@ -57,18 +54,14 @@
 #include "G4NeutronBuilder.hh"
 #include "G4FTFBinaryNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
-#include "G4HyperonBuilder.hh"
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhysListUtil.hh"
+#include "G4HadParticles.hh"
 #include "G4HadronicParameters.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
@@ -77,12 +70,9 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTF_BIC);
 G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(G4int)
     : G4HadronPhysicsFTF_BIC("hInelastic FTF_BIC",false) {}
 
-G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(const G4String& name, G4bool quasiElastic)
-    :  G4VPhysicsConstructor(name)
-    , QuasiElastic(quasiElastic)
+G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(const G4String& name, G4bool qe)
+    :  G4HadronPhysicsFTFP_BERT(name, qe)
 {
-    maxBIC_neutron = maxBIC_proton = maxBERT_kaon = maxBERT_pion =
-       G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
     maxBIC_pion =  1.5*GeV;
     minBERT_pion = 1.0*GeV;
 }
@@ -90,17 +80,10 @@ G4HadronPhysicsFTF_BIC::G4HadronPhysicsFTF_BIC(const G4String& name, G4bool quas
 G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC()
 {} 
 
-void G4HadronPhysicsFTF_BIC::CreateModels()
-{
-    Neutron();
-    Proton();
-    Pion();
-    Kaon();
-    Others();
-}
-
 void G4HadronPhysicsFTF_BIC::Neutron()
 {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
   //General schema:
   // 1) Create a builder
   // 2) Call AddBuilder
@@ -115,12 +98,27 @@ void G4HadronPhysicsFTF_BIC::Neutron()
   AddBuilder(bicn);
   neu->RegisterMe(bicn);
   bicn->SetMinEnergy(0.0);
-  bicn->SetMaxEnergy(maxBIC_neutron);
+  bicn->SetMaxEnergy(maxBERT_neutron);
   neu->Build();
+
+  // add cross section factor
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
+  if(inel) { 
+    inel->AddDataSet(new G4NeutronInelasticXS()); 
+    if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+  }
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    capture->RegisterMe(new G4NeutronRadCapture());
+  }
 }
 
 void G4HadronPhysicsFTF_BIC::Proton()
 {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+
   auto pro = new G4ProtonBuilder;
   AddBuilder(pro);
   auto ftfp = new G4FTFBinaryProtonBuilder(QuasiElastic);
@@ -129,12 +127,22 @@ void G4HadronPhysicsFTF_BIC::Proton()
   auto bicp = new G4BinaryProtonBuilder;
   AddBuilder(bicp);
   pro->RegisterMe(bicp);
-  bicp->SetMaxEnergy(maxBIC_proton);
+  bicp->SetMaxEnergy(maxBERT_proton);
   pro->Build();
+
+  // add cross section factor
+  const G4ParticleDefinition* proton = G4Proton::Proton();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(proton);
+  if(inel) { 
+    if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+  }
 } 
 
 void G4HadronPhysicsFTF_BIC::Pion()
 {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+
   auto pi = new G4PionBuilder;
   AddBuilder(pi);
   auto ftfpi = new G4FTFBinaryPionBuilder(QuasiElastic);
@@ -150,10 +158,27 @@ void G4HadronPhysicsFTF_BIC::Pion()
   pi->RegisterMe(bicpi);
   bicpi->SetMaxEnergy(maxBIC_pion);
   pi->Build();
+
+  // add cross section factor
+  if( useFactorXS ) {
+    const G4ParticleDefinition* pion = G4PionPlus::PionPlus();
+    G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(pion);
+    if(inel) {
+      inel->MultiplyCrossSectionBy( param->XSFactorPionInelastic() );
+    }
+    pion = G4PionMinus::PionMinus();
+    inel = G4PhysListUtil::FindInelasticProcess(pion);
+    if(inel) { 
+      inel->MultiplyCrossSectionBy( param->XSFactorPionInelastic() );
+    }
+  }
 }
 
 void G4HadronPhysicsFTF_BIC::Kaon()
 {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+
   auto k = new G4KaonBuilder;
   AddBuilder(k);
   auto ftfk = new G4FTFBinaryKaonBuilder(QuasiElastic);
@@ -164,58 +189,17 @@ void G4HadronPhysicsFTF_BIC::Kaon()
   k->RegisterMe(bertk);
   bertk->SetMaxEnergy(maxBERT_kaon);
   k->Build();
+  // add cross section factor
+  if( useFactorXS ) {
+    G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+    for( auto & pdg : G4HadParticles::GetKaons() ) {
+      auto part = table->FindParticle( pdg );
+      if ( part == nullptr ) { continue; }
+      G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(part);
+      if(inel) { 
+        inel->MultiplyCrossSectionBy( param->XSFactorHadronInelastic() );
+      }
+    }
+  }
 }  
-
-void G4HadronPhysicsFTF_BIC::Others()
-{
-  // Hyperons (and anti-hyperons)
-  auto hyp = new G4HyperonBuilder;
-  AddBuilder(hyp);
-  auto ftfphyp = new G4HyperonFTFPBuilder;
-  AddBuilder(ftfphyp);
-  hyp->RegisterMe(ftfphyp);
-  hyp->Build();
-  // Anti-barions
-  auto abar = new G4AntiBarionBuilder;
-  AddBuilder(abar);
-  auto ftfpabar = new G4FTFPAntiBarionBuilder(QuasiElastic);
-  AddBuilder(ftfpabar);
-  abar->RegisterMe(ftfpabar);
-  abar->Build();
-}
-
-void G4HadronPhysicsFTF_BIC::ConstructParticle()
-{
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-}
-
-void G4HadronPhysicsFTF_BIC::ConstructProcess()
-{
-  if(G4Threading::IsMasterThread()) {
-      DumpBanner();
-  }
-  CreateModels();
-  ExtraConfiguration();
-}
-
-//#include "G4ProcessManager.hh"
-#include "G4PhysListUtil.hh"
-void G4HadronPhysicsFTF_BIC::ExtraConfiguration() 
-{
-  // --- Neutrons ---
-  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
-  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
-  if(inel) { inel->AddDataSet(new G4NeutronInelasticXS()); }
-  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
-  if (capture) {
-    capture->RegisterMe(new G4NeutronRadCapture());
-  }
-}
 

@@ -39,6 +39,8 @@
 
 #include <vector>
 
+class G4VFileManager;
+
 class G4HnManager : public G4BaseAnalysisManager
 {
   public:
@@ -82,13 +84,18 @@ class G4HnManager : public G4BaseAnalysisManager
     // return true otherwise
     G4bool IsPlotting() const;
 
+    // Return false if there is no object with a specific file name
+    G4bool IsFileName() const;
+
     // Function implementing public analysis manager interface
     //
     void  SetActivation(G4bool activation);
     void  SetActivation(G4int id, G4bool activation);
     void  SetAscii(G4int id, G4bool ascii);
-    void  SetPlotting(G4bool plotting);
     void  SetPlotting(G4int id, G4bool plotting);
+    void  SetPlotting(G4bool plotting);
+    void  SetFileName(G4int id, const G4String& fileName);
+    void  SetFileName(const G4String& fileName);
     G4bool  SetXAxisIsLog(G4int id, G4bool isLogAxis);
     G4bool  SetYAxisIsLog(G4int id, G4bool isLogAxis);
     G4bool  SetZAxisIsLog(G4int id, G4bool isLogAxis);
@@ -105,16 +112,26 @@ class G4HnManager : public G4BaseAnalysisManager
     G4bool   GetActivation(G4int id) const;
     G4bool   GetAscii(G4int id) const;
     G4bool   GetPlotting(G4int id) const;
+    G4String GetFileName(G4int id) const;
+
+    void SetFileManager(std::shared_ptr<G4VFileManager> fileManager);
 
   private:
+    // Methods
+    void  SetActivation(G4HnInformation* info, G4bool activation);
+    void  SetPlotting(G4HnInformation* info, G4bool plotting);
+    void  SetFileName(G4HnInformation* info, const G4String& fileName);
+
     // Data members
     G4String  fHnType;
     G4int     fNofActiveObjects;
     G4int     fNofAsciiObjects;
     G4int     fNofPlottingObjects;
+    G4int     fNofFileNameObjects;
 
     // Additional histograms/ntuple properties not included in tools
     std::vector<G4HnInformation*> fHnVector;
+    std::shared_ptr<G4VFileManager> fFileManager;
 };
 
 inline G4int G4HnManager::GetNofHns() const
@@ -125,6 +142,9 @@ inline G4String G4HnManager::GetHnType() const
 
 inline const std::vector<G4HnInformation*>& G4HnManager::GetHnVector() const
 { return fHnVector; }
+
+inline void G4HnManager::SetFileManager(std::shared_ptr<G4VFileManager> fileManager)
+{ fFileManager = fileManager; }
 
 #endif
 

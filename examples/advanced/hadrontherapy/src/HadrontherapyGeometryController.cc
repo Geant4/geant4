@@ -32,6 +32,7 @@
 #include "HadrontherapyDetectorROGeometry.hh"
 #include "HadrontherapyTIFPAPassiveProtonBeamLine.hh"
 #include "PassiveProtonBeamLine.hh"
+#include "BESTPassiveProtonBeamLine.hh"
 #include "PassiveCarbonBeamLine.hh"
 #include "LaserDrivenBeamLine.hh"
 #include "G4RunManager.hh"
@@ -67,6 +68,11 @@ void HadrontherapyGeometryController::SetGeometry(G4String name)
     {
         registerGeometry(new TrentoPassiveProtonBeamLine());
     }
+    else if(name == "BESTBeamLine")
+    {
+        registerGeometry(new BESTPassiveProtonBeamLine());
+    }
+
     else
     {
         G4cout <<"Unknown geometry: " << name << ". Geometry not changed." << G4endl;

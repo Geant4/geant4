@@ -150,7 +150,7 @@ class G4AdjointProcessEquivalentToDirectProcess : public G4VProcess
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
       // File name should be defined by each process 
-      // and the file should be placed under the directory specifed by the argument. 
+      // and the file should be placed under the directory specified by the argument. 
   ////////////////////////////
       virtual void StartTracking(G4Track*);
       virtual void EndTracking();

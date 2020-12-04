@@ -8,11 +8,14 @@
 
 #include <tools/sg/render_action>
 
+//#include <tools/mathf>
+//#include <tools/matout>
+
 namespace tools {
 namespace sg {
 
 class GL_action : public tools::sg::render_action {
-  typedef tools::sg::render_action parent;
+  TOOLS_ACTION(GL_action,exlib::sg::GL_action,tools::sg::render_action)
 public:
   virtual void draw_vertex_array(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs){
     size_t num = a_floatn/3;
@@ -206,7 +209,7 @@ public:
 
     case tools::sg::gsto_gl_list:{
 #ifdef TOOLS_HAS_GL_LIST
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       if(m_gl_id && m_created) {
@@ -221,7 +224,7 @@ public:
       }break;
 
     case tools::sg::gsto_memory:{
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       _draw_v(a_mode,a_elems,pos_xyzs);
@@ -241,7 +244,7 @@ public:
 
     case tools::sg::gsto_gl_list:{
 #ifdef TOOLS_HAS_GL_LIST
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       void* pos_rgbas = (char*)buffer+a_pos_rgbas;
@@ -259,7 +262,7 @@ public:
       }break;
 
     case tools::sg::gsto_memory:{
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       void* pos_rgbas = (char*)buffer+a_pos_rgbas;
@@ -280,7 +283,7 @@ public:
 
     case tools::sg::gsto_gl_list:{
 #ifdef TOOLS_HAS_GL_LIST
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       //void* pos_nms = (char*)buffer+a_pos_nms;
@@ -296,7 +299,7 @@ public:
       }break;
 
     case tools::sg::gsto_memory:{
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       void* pos_nms = (char*)buffer+a_pos_nms;
@@ -317,7 +320,7 @@ public:
 
     case tools::sg::gsto_gl_list:{
 #ifdef TOOLS_HAS_GL_LIST
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       void* pos_rgbas = (char*)buffer+a_pos_rgbas;
@@ -339,7 +342,7 @@ public:
       }break;
 
     case tools::sg::gsto_memory:{
-      float* buffer = m_mgr.gsto_data(m_gsto);      
+      float* buffer = m_mgr.gsto_data(m_gsto);
       if(!buffer) return;
       void* pos_xyzs = (char*)buffer+a_pos_xyzs;
       void* pos_rgbas = (char*)buffer+a_pos_rgbas;
@@ -363,7 +366,7 @@ public:
   virtual void line_width(float a_v){::glLineWidth(a_v);}
   virtual void point_size(float a_v){::glPointSize(a_v);}
   virtual void set_polygon_offset(bool a_v) {
-    if(a_v) ::glEnable(GL_POLYGON_OFFSET_FILL);	
+    if(a_v) ::glEnable(GL_POLYGON_OFFSET_FILL);
     else    ::glDisable(GL_POLYGON_OFFSET_FILL);
     ::glPolygonOffset(1.,1.);
   }
@@ -377,7 +380,7 @@ public:
     else
       ::glFrontFace(GL_CW);
   }
-  
+
   virtual void set_shade_model(tools::sg::shade_type a_v) {
     if(a_v==tools::sg::shade_smooth)
       ::glShadeModel(GL_SMOOTH);
@@ -406,13 +409,32 @@ public:
   }
 
   virtual void load_proj_matrix(const tools::mat4f& a_mtx) {
-    ::glMatrixMode(GL_PROJECTION); 
+    ::glMatrixMode(GL_PROJECTION);
     ::glLoadMatrixf(a_mtx.data());
   }
 
   virtual void load_model_matrix(const tools::mat4f& a_mtx) {
-    ::glMatrixMode(GL_MODELVIEW); 
+    ::glMatrixMode(GL_MODELVIEW);
     ::glLoadMatrixf(a_mtx.data());
+/*
+    tools::mat4f tmp(a_mtx);
+    tmp.no_translate();
+    tools::mat4f normal_matrix;
+    if(!tmp.invert(normal_matrix)) {
+      m_out << "tools::WebGL::render::load_model_matrix :"
+            << " can't invert model matrix."
+            << std::endl;
+    }
+    normal_matrix.transpose();
+
+    tools::mat4f to_check(a_mtx);
+    to_check.no_translate();
+    float fepsilon = 1e-10;
+    if(!normal_matrix.equal_prec(to_check,fepsilon,inlib::ffabs)) {
+      mat_dump(m_out,"problem with normal_matrix ",normal_matrix);
+      mat_dump(m_out,"expected",to_check);
+    }
+*/
   }
 
   virtual unsigned int max_lights() {return GL_MAX_LIGHTS;}
@@ -472,10 +494,10 @@ public:
 
   virtual void restore_state(unsigned int a_ret_num_light) {
     const tools::sg::state& _state = state();
-    ::glMatrixMode(GL_PROJECTION); 
+    ::glMatrixMode(GL_PROJECTION);
     ::glLoadMatrixf(_state.m_proj.data());
-  
-    ::glMatrixMode(GL_MODELVIEW); 
+
+    ::glMatrixMode(GL_MODELVIEW);
     ::glLoadMatrixf(_state.m_model.data());
 
     if(_state.m_GL_LIGHTING) ::glEnable(GL_LIGHTING);
@@ -512,11 +534,15 @@ public:
       ::glShadeModel(GL_SMOOTH);
     else
       ::glShadeModel(GL_FLAT);
-      
+
     ::glColor4f(_state.m_color.r(),
                 _state.m_color.g(),
                 _state.m_color.b(),
                 _state.m_color.a());
+
+    ::glNormal3f(_state.m_normal.x(),
+                 _state.m_normal.y(),
+                 _state.m_normal.z());
 
     // The "return of separator" state had ret_num_light.
     // The restored state has m_light.
@@ -621,7 +647,7 @@ protected:
   }
 
 protected:
-  GL_manager& m_mgr;  
+  GL_manager& m_mgr;
   gstoid m_gsto;
 #ifdef TOOLS_HAS_GL_LIST
   bool m_created;

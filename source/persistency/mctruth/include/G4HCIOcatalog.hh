@@ -23,77 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// File: G4HCIOcatalog.hh
+// G4HCIOcatalog
 //
-// History:
-//   '01.09.12  Youhei Morita  Initial creation
+// Class Description:
+//
+// Catalog for the I/O manager of hits collection for each detector.
 
-#ifndef HCIO_CATALOG_HH
-#define HCIO_CATALOG_HH 1
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4HCIOCATALOG_HH
+#define G4HCIOCATALOG_HH 1
 
 #include <map>
 #include "G4Types.hh"
+#include "G4String.hh"
 #include "G4VPHitsCollectionIO.hh"
 
 class G4VHCIOentry;
 
-typedef std::map<std::string, G4VHCIOentry*, std::less<std::string> > HCIOmap;
+using HCIOmap = std::map<std::string, G4VHCIOentry*, std::less<std::string>>;
 
-typedef std::map<std::string, G4VPHitsCollectionIO*, std::less<std::string> > HCIOstore;
-
-// Class Description:
-//   Catalog for the I/O manager of hits collection for each detector.
+using HCIOstore = std::map<G4String, G4VPHitsCollectionIO*,
+                           std::less<G4String>>;
 
 class G4HCIOcatalog
 {
-    public: // With description
-      G4HCIOcatalog();
+  public:
+
+    G4HCIOcatalog();
       // Constructor
 
-      virtual ~G4HCIOcatalog() {};
+    virtual ~G4HCIOcatalog() {}
       // Destructor
 
-    public: // With description
-      static G4HCIOcatalog* GetHCIOcatalog();
+    static G4HCIOcatalog* GetHCIOcatalog();
       // Construct G4HCIOcatalog and returns the pointer
 
-      void SetVerboseLevel(int v) { m_verbose = v; };
-      // Set verbose level.
+    void SetVerboseLevel(G4int v) { m_verbose = v; }
+      // Set verbose level
 
-      void RegisterEntry(G4VHCIOentry* d);
+    void RegisterEntry(G4VHCIOentry* d);
       // Register I/O manager entry
 
-      void RegisterHCIOmanager(G4VPHitsCollectionIO* d);
+    void RegisterHCIOmanager(G4VPHitsCollectionIO* d);
       // Register I/O manager
 
-      G4VHCIOentry* GetEntry(std::string name);
+    G4VHCIOentry* GetEntry(const G4String& name);
       // Returns the I/O manager entry
 
-      G4VPHitsCollectionIO* GetHCIOmanager(std::string name);
+    G4VPHitsCollectionIO* GetHCIOmanager(const G4String& name);
       // Returns the registered I/O manager entry
 
-      void PrintEntries();
+    void PrintEntries();
       // Prints the list of I/O manager entries
 
-      std::string CurrentHCIOmanager();
+    G4String CurrentHCIOmanager();
       // Returns the list of I/O managers
 
-      void PrintHCIOmanager();
+    void PrintHCIOmanager();
       // Prints the list of I/O managers
 
-      size_t NumberOfHCIOmanager() { return theStore.size(); };
+    std::size_t NumberOfHCIOmanager() { return theStore.size(); }
       // Returns the number of registered I/O managers.
 
-      G4VPHitsCollectionIO* GetHCIOmanager(int n);
+    G4VPHitsCollectionIO* GetHCIOmanager(G4int n);
       // Returns the n-th registered I/O manager entry
 
-    private:
-      int m_verbose;
-      static G4ThreadLocal G4HCIOcatalog* f_thePointer;
-      HCIOmap theCatalog;
-      HCIOstore theStore;
+  private:
 
-}; // End of class G4HCIOcatalog
+    G4int m_verbose = 0;
+    static G4ThreadLocal G4HCIOcatalog* f_thePointer;
+    HCIOmap theCatalog;
+    HCIOstore theStore;
+};
 
 #endif
-

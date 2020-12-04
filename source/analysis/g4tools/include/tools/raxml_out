@@ -34,7 +34,7 @@ public:
     m_name = a_from.m_name;
 
     return *this;
-  } 
+  }
 public:
   void* object() const {
     if(!m_hdl) return 0;

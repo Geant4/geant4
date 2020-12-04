@@ -255,15 +255,15 @@ namespace PTL
 // Note: Note that TemplateAutoLock by itself is not thread-safe and
 //       cannot be shared among threads due to the locked switch
 //
-template <typename _Mutex_t>
-class TemplateAutoLock : public std::unique_lock<_Mutex_t>
+template <typename MutexT>
+class TemplateAutoLock : public std::unique_lock<MutexT>
 {
 public:
     //------------------------------------------------------------------------//
     // Some useful typedefs
     //------------------------------------------------------------------------//
-    typedef std::unique_lock<_Mutex_t>         unique_lock_t;
-    typedef TemplateAutoLock<_Mutex_t>         this_type;
+    typedef std::unique_lock<MutexT>           unique_lock_t;
+    typedef TemplateAutoLock<MutexT>           this_type;
     typedef typename unique_lock_t::mutex_type mutex_type;
 
 public:
@@ -350,26 +350,26 @@ public:
 
 private:
 // helpful macros
-#define _is_stand_mutex(_Tp) (std::is_same<_Tp, Mutex>::value)
-#define _is_recur_mutex(_Tp) (std::is_same<_Tp, RecursiveMutex>::value)
-#define _is_other_mutex(_Tp) (!_is_stand_mutex(_Tp) && !_is_recur_mutex(_Tp))
+#define _is_stand_mutex(Tp) (std::is_same<Tp, Mutex>::value)
+#define _is_recur_mutex(Tp) (std::is_same<Tp, RecursiveMutex>::value)
+#define _is_other_mutex(Tp) (!_is_stand_mutex(Tp) && !_is_recur_mutex(Tp))
 
-    template <typename _Tp                                             = _Mutex_t,
-              typename std::enable_if<_is_stand_mutex(_Tp), int>::type = 0>
+    template <typename Tp                                             = MutexT,
+              typename std::enable_if<_is_stand_mutex(Tp), int>::type = 0>
     std::string GetTypeString()
     {
         return "AutoLock<Mutex>";
     }
 
-    template <typename _Tp                                             = _Mutex_t,
-              typename std::enable_if<_is_recur_mutex(_Tp), int>::type = 0>
+    template <typename Tp                                             = MutexT,
+              typename std::enable_if<_is_recur_mutex(Tp), int>::type = 0>
     std::string GetTypeString()
     {
         return "AutoLock<RecursiveMutex>";
     }
 
-    template <typename _Tp                                             = _Mutex_t,
-              typename std::enable_if<_is_other_mutex(_Tp), int>::type = 0>
+    template <typename Tp                                             = MutexT,
+              typename std::enable_if<_is_other_mutex(Tp), int>::type = 0>
     std::string GetTypeString()
     {
         return "AutoLock<UNKNOWN_MUTEX>";
@@ -381,8 +381,8 @@ private:
 #undef _is_other_mutex
 
     // used in _lock_deferred chrono variants to avoid ununsed-variable warning
-    template <typename _Tp>
-    void suppress_unused_variable(const _Tp&)
+    template <typename Tp>
+    void suppress_unused_variable(const Tp&)
     {}
 
     //========================================================================//
@@ -485,7 +485,7 @@ typedef TemplateAutoLock<RecursiveMutex> RecursiveAutoLock;
 
 // provide abbriviated type if another mutex type is desired to be used
 // aside from above
-template <typename _Tp>
-using TAutoLock = TemplateAutoLock<_Tp>;
+template <typename Tp>
+using TAutoLock = TemplateAutoLock<Tp>;
 
 }  // namespace PTL

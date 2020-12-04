@@ -128,6 +128,7 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
     G4EmParameters* param = G4EmParameters::Instance();
     mod->SetLowEnergyLimit(param->MinKinEnergy());
     mod->SetHighEnergyLimit(param->MaxKinEnergy());
+    mod->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
     AddEmModel(1, mod, fm);
   }
 }

@@ -23,25 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-// class G4tgrMaterialFactory
+// G4tgrMaterialFactory
 //
 // Class description:
 //
 // Singleton class to manage the building of transient materials.
 
-// History:
-// - Created.                                 P.Arce, CIEMAT (November 2007)
-// -------------------------------------------------------------------------
-
-#ifndef G4tgrMaterialFactory_h
-#define G4tgrMaterialFactory_h
-
-#include "globals.hh"
+// Author: P.Arce, CIEMAT (November 2007)
+// --------------------------------------------------------------------
+#ifndef G4tgrMaterialFactory_hh
+#define G4tgrMaterialFactory_hh 1
 
 #include <map>
+
+#include "globals.hh"
 
 #include "G4tgrIsotope.hh"
 #include "G4tgrElementSimple.hh"
@@ -50,31 +45,33 @@
 #include "G4tgrMaterialSimple.hh"
 #include "G4tgrMaterialMixture.hh"
 
-typedef std::map< G4String, G4tgrIsotope* > G4mstgrisot;
-typedef std::map< G4String, G4tgrElement* > G4mstgrelem;
-typedef std::map< G4String, G4tgrMaterial* > G4mstgrmate;
+using G4mstgrisot = std::map<G4String, G4tgrIsotope*>;
+using G4mstgrelem = std::map<G4String, G4tgrElement*>;
+using G4mstgrmate = std::map<G4String, G4tgrMaterial*>;
 
-class G4tgrMaterialFactory 
+class G4tgrMaterialFactory
 {
-  public:  // with decription
+  public:
 
     ~G4tgrMaterialFactory();
-  
+
     static G4tgrMaterialFactory* GetInstance();
       // Get only instance (it it does not exist, create it)
 
-    G4tgrIsotope* AddIsotope( const std::vector<G4String>& wl );
+    G4tgrIsotope* AddIsotope(const std::vector<G4String>& wl);
       // Build a G4tgrIsotope
 
-    G4tgrElementSimple* AddElementSimple( const std::vector<G4String>& wl );
+    G4tgrElementSimple* AddElementSimple(const std::vector<G4String>& wl);
       // Build a G4tgrElementSimple
-    G4tgrElementFromIsotopes* AddElementFromIsotopes( const std::vector<G4String>& wl );
+    G4tgrElementFromIsotopes*
+    AddElementFromIsotopes(const std::vector<G4String>& wl);
       // Build a G4tgrElementFromIsotopes
 
-    G4tgrMaterialSimple* AddMaterialSimple( const std::vector<G4String>& wl );
+    G4tgrMaterialSimple* AddMaterialSimple(const std::vector<G4String>& wl);
       // Build a G4tgrMaterialSimple and add it to the Materials list
 
-    G4tgrMaterialMixture* AddMaterialMixture( const std::vector<G4String>& wl, const G4String& mixtType );
+    G4tgrMaterialMixture* AddMaterialMixture(const std::vector<G4String>& wl,
+                                             const G4String& mixtType);
       // Build a G4tgrMaterialByWeight or G4tgrMaterialByNoAtoms
       // or G4tgrMaterialByVolume and add it to the Materials list
 
@@ -94,11 +91,9 @@ class G4tgrMaterialFactory
     void DumpMaterialList() const;
       // Dump detailed list of materials
 
-  public:  // without description
-
-    const G4mstgrisot& GetIsotopeList()  const {return theG4tgrIsotopes; }
-    const G4mstgrelem& GetElementList()  const {return theG4tgrElements; }
-    const G4mstgrmate& GetMaterialList() const {return theG4tgrMaterials;}
+    const G4mstgrisot& GetIsotopeList() const { return theG4tgrIsotopes; }
+    const G4mstgrelem& GetElementList() const { return theG4tgrElements; }
+    const G4mstgrmate& GetMaterialList() const { return theG4tgrMaterials; }
 
   private:
 
@@ -107,7 +102,8 @@ class G4tgrMaterialFactory
 
     void ErrorAlreadyExists(const G4String& object,
                             const std::vector<G4String>& wl,
-                            const G4bool bNoRepeating = true );
+                            const G4bool bNoRepeating = true);
+
   private:
 
     static G4ThreadLocal G4tgrMaterialFactory* theInstance;

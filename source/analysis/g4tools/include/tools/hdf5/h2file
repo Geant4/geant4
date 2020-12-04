@@ -63,7 +63,7 @@ inline bool write_hdata(hid_t a_loc,const histo_data_t& a_hdata) {
   if(!write_std_vec<double>(a_loc,"bin_Sw2",a_hdata.m_bin_Sw2)) return false;
   if(!write_std_vec_vec<double>(a_loc,"bin_Sxw",a_hdata.m_bin_Sxw)) return false;
   if(!write_std_vec_vec<double>(a_loc,"bin_Sx2w",a_hdata.m_bin_Sx2w)) return false;
-  
+
   // axes :
  {std::string name,saxis;
   for(unsigned int iaxis=0;iaxis<a_hdata.m_dimension;iaxis++) {
@@ -76,15 +76,15 @@ inline bool write_hdata(hid_t a_loc,const histo_data_t& a_hdata) {
     if(!write_scalar<double>(a_loc,name+"maximum_value",_axis.m_maximum_value)) return false;
     if(!write_scalar<bool>(a_loc,name+"fixed",_axis.m_fixed)) return false;
     if(!write_scalar<double>(a_loc,name+"bin_width",_axis.m_bin_width)) return false;
-    if(!write_std_vec<double>(a_loc,name+"edges",_axis.m_edges)) return false;    
+    if(!write_std_vec<double>(a_loc,name+"edges",_axis.m_edges)) return false;
   }}
-  
+
   // etc :
   if(!write_std_vec<double>(a_loc,"in_range_plane_Sxyw",a_hdata.m_in_range_plane_Sxyw)) return false;
-  
+
   // m_annotations :
   if(!write_std_map_ss(a_loc,"annotations",a_hdata.m_annotations)) return false;
-  
+
   return true;
 }
 
@@ -116,7 +116,7 @@ inline bool write_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_nam
   }
 
   if(!write_hdata(histo,a_histo.dac())) {::H5Gclose(histo);return false;}
-  
+
   ::H5Gclose(histo);
 
   a_histo.not_a_profile(); //trick to be sure to use this function on an histo and not a profile.
@@ -151,7 +151,7 @@ inline bool write_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_n
     return false;
   }
 
-  typename PROFILE::pd_t pdata = a_histo.get_histo_data();  
+  typename PROFILE::pd_t pdata = a_histo.get_histo_data();
 
   if(!write_hdata(histo,pdata)) {::H5Gclose(histo);return false;}
 
@@ -175,10 +175,10 @@ inline bool read_hdata(hid_t a_loc,histo_data_t& a_hdata) {
   if(!read_std_vec<unsigned int>(a_loc,"bin_entries",a_hdata.m_bin_entries)) return false;
   if(!read_std_vec<double>(a_loc,"bin_Sw",a_hdata.m_bin_Sw)) return false;
   if(!read_std_vec<double>(a_loc,"bin_Sw2",a_hdata.m_bin_Sw2)) return false;
-  
+
   if(!read_std_vec_vec<double>(a_loc,"bin_Sxw",a_hdata.m_bin_Sxw)) return false;
   if(!read_std_vec_vec<double>(a_loc,"bin_Sx2w",a_hdata.m_bin_Sx2w)) return false;
-  
+
   // axes :
  {a_hdata.m_axes.resize(a_hdata.m_dimension);
   std::string name,saxis;
@@ -192,15 +192,15 @@ inline bool read_hdata(hid_t a_loc,histo_data_t& a_hdata) {
     if(!read_scalar<double>(a_loc,name+"maximum_value",_axis.m_maximum_value)) return false;
     if(!read_scalar<bool>(a_loc,name+"fixed",_axis.m_fixed)) return false;
     if(!read_scalar<double>(a_loc,name+"bin_width",_axis.m_bin_width)) return false;
-    if(!read_std_vec<double>(a_loc,name+"edges",_axis.m_edges)) return false;    
+    if(!read_std_vec<double>(a_loc,name+"edges",_axis.m_edges)) return false;
   }}
-  
+
   // etc :
   if(!read_std_vec<double>(a_loc,"in_range_plane_Sxyw",a_hdata.m_in_range_plane_Sxyw)) return false;
-  
+
   // m_annotations :
   if(!read_std_map_ss(a_loc,"annotations",a_hdata.m_annotations)) return false;
-  
+
   return true;
 }
 
@@ -227,11 +227,11 @@ inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name
     if(a_verb_class) {
       a_out << "tools::hdf5::read_histo :"
             << " read class " << tools::sout(sclass) << " not " << tools::sout(HISTO::s_class()) << std::endl;
-    }	    
+    }
     ::H5Gclose(histo);
     return false;
   }
-  
+
   int v;
   if(!read_atb(histo,"version",v)) {
     a_out << "tools::hdf5::read_histo : read_atb version failed." << std::endl;
@@ -244,9 +244,9 @@ inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name
   if(!read_hdata(histo,hdata)) {::H5Gclose(histo);return false;}
 
   ::H5Gclose(histo);
-  
+
   hdata.update_fast_getters();
-  
+
   a_histo = new HISTO;
   a_histo->copy_from_data(hdata);
   a_histo->not_a_profile(); //trick to be sure to use this function on an histo and not a profile.
@@ -278,7 +278,7 @@ inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_na
     ::H5Gclose(histo);
     return false;
   }
-  
+
   int v;
   if(!read_atb(histo,"version",v)) {
     a_out << "tools::hdf5::read_profile : read_atb version failed." << std::endl;
@@ -298,9 +298,9 @@ inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_na
   if(!read_scalar<double>(histo,"max_v",pdata.m_max_v)) {::H5Gclose(histo);return false;}
 
   ::H5Gclose(histo);
-  
+
   pdata.update_fast_getters();
-  
+
   a_histo = new PROFILE;
   a_histo->copy_from_data(pdata);
   return true;

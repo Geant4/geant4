@@ -30,6 +30,7 @@
 #include "G4BinScheme.hh"
 #include "G4UnitsTable.hh"
 #include "G4String.hh"
+#include "G4Threading.hh"
 
 namespace {
 
@@ -190,9 +191,7 @@ void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
 //_____________________________________________________________________________
 G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn) {
   if      ( outputName == "csv"  )  { return G4AnalysisOutput::kCsv;  }
-#ifdef TOOLS_USE_HDF5
   else if ( outputName == "hdf5" )  { return G4AnalysisOutput::kHdf5; }
-#endif
   else if ( outputName == "root" )  { return G4AnalysisOutput::kRoot; }
   else if ( outputName == "xml"  )  { return G4AnalysisOutput::kXml;  }
   else if ( outputName == "none" )  { return G4AnalysisOutput::kNone; }
@@ -202,7 +201,7 @@ G4AnalysisOutput GetOutput(const G4String& outputName, G4bool warn) {
       description 
         << "    \"" << outputName << "\" output type is not supported." << G4endl;
       G4Exception("G4Analysis::GetOutputType",
-                  "Analysis_W013", JustWarning, description);
+                  "Analysis_W051", JustWarning, description);
     }
     return G4AnalysisOutput::kNone; 
   }
@@ -214,11 +213,9 @@ G4String GetOutputName(G4AnalysisOutput output) {
     case G4AnalysisOutput::kCsv:
       return "csv";
       break;
-#ifdef TOOLS_USE_HDF5
     case G4AnalysisOutput::kHdf5: 
       return "hdf5";
       break;
-#endif
     case G4AnalysisOutput::kRoot: 
       return "root";
       break;
@@ -235,8 +232,171 @@ G4String GetOutputName(G4AnalysisOutput output) {
     << "    \"" << static_cast<int>(output) << "\" is not handled." << G4endl
     << "    " << "none type will be used.";
   G4Exception("G4Analysis::GetOutputName",
-              "Analysis_W013", JustWarning, description);
+              "Analysis_W051", JustWarning, description);
   return "none";
+}
+
+//_____________________________________________________________________________
+G4String GetBaseName(const G4String& fileName)
+{
+// Get file base name (without dot)
+
+  G4String name = fileName;
+  if ( name.rfind(".") != std::string::npos ) { 
+    name = name.substr(0, name.rfind("."));
+  }
+  return name;
+}    
+
+//_____________________________________________________________________________
+G4String GetExtension(const G4String& fileName,
+                      const G4String& defaultExtension)
+{
+// Get file base extension (without dot)
+// If fileName is provided without extension, return defaultExtension
+
+  G4String extension;
+  if ( fileName.rfind(".") != std::string::npos ) { 
+    extension = fileName.substr(fileName.rfind(".") + 1);
+  }
+  if ( ! extension.size() ) {
+    extension = defaultExtension;
+  }
+  return extension;
+}
+
+//_____________________________________________________________________________
+G4String GetHnFileName(
+            const G4String& fileName,
+            const G4String& fileType, 
+            const G4String& hnType, 
+            const G4String& hnName)
+{
+// Compose and return the histogram or profile specific file name:
+// - add _hn_hnName suffix to the file base name
+// - add file extension if not present
+
+  auto name = GetBaseName(fileName);
+ 
+  // Add _hnType_hnName
+  name.append("_");
+  name.append(hnType);
+  name.append("_");
+  name.append(hnName);
+
+  // Add file extension
+  auto extension = GetExtension(fileName, fileType);
+  if ( extension.size() ) {
+    name.append(".");
+    name.append(extension);
+  }
+
+  return name;
+}
+
+//_____________________________________________________________________________
+G4String GetNtupleFileName(
+            const G4String& fileName,
+            const G4String& fileType, 
+            const G4String& ntupleName)
+{
+// Compose and return the ntuple specific file name:
+// - add _nt_ntupleName suffix to the file base name
+// - add _tN suffix if called on thread worker
+// - add file extension if not present
+
+  auto name = GetBaseName(fileName);
+    
+  // Add ntupleName
+  name.append("_nt_");
+  name.append(ntupleName);
+
+  // Add thread Id to a file name if MT processing
+  if ( ! G4Threading::IsMasterThread() ) {
+    std::ostringstream os;
+    os << G4Threading::G4GetThreadId();
+    name.append("_t");
+    name.append(os.str());
+  }  
+
+  // Add file extension
+  auto extension = GetExtension(fileName, fileType);
+  if ( extension.size() ) {
+    name.append(".");
+    name.append(extension);
+  }
+  
+  return name;
+}
+
+//_____________________________________________________________________________
+G4String GetNtupleFileName(
+            const G4String& fileName,
+            const G4String& fileType, 
+            G4int ntupleFileNumber)
+{
+// Compose and return the ntuple specific file name:
+// - add _mFN suffix to the file base name where FN = ntupleFileNumber
+// - add file extension if not present
+
+  auto name = GetBaseName(fileName);
+    
+  // Add _M followed by ntupleFileNumber
+  std::ostringstream os;
+  os << ntupleFileNumber;
+  name.append("_m");
+  name.append(os.str());
+
+  // Add file extension
+  auto extension = GetExtension(fileName, fileType);
+  if ( extension.size() ) {
+    name.append(".");
+    name.append(extension);
+  }
+  
+  return name;
+}
+
+//_____________________________________________________________________________
+G4String GetTnFileName(
+            const G4String& fileName,
+            const G4String& fileType)
+{
+// Update file base name with the thread suffix:
+// - add _tN suffix if called on thread worker
+// - add file extension if not present
+
+  auto name = GetBaseName(fileName);
+
+  // Add thread Id to a file name if MT processing
+  if ( !  G4Threading::IsMasterThread() ) {
+    std::ostringstream os;
+    os << G4Threading::G4GetThreadId();
+    name.append("_t");
+    name.append(os.str());
+  }
+
+  // Add file extension
+  auto extension = GetExtension(fileName, fileType);
+  if ( extension.size() ) {
+    name.append(".");
+    name.append(extension);
+  }
+
+  return name;
+}
+
+//_____________________________________________________________________________
+G4String GetPlotFileName(const G4String& fileName)
+{
+// Generate plot file name for an output file name
+
+  auto name = GetBaseName(fileName);
+
+  // Add .ps extension
+  name.append(".ps");
+
+  return name;
 }
 
 }

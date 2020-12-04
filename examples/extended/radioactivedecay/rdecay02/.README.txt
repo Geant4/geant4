@@ -39,8 +39,8 @@
      - Radioactive Decay
          By default radioactive decay is applied through out the geometry.
 	 The user can limit it to just the target by commands :
-	        /grdm/noVolumes
-	        /grdm/selectVolume Target
+	        /process/had/rdm/noVolumes
+	        /process/had/rdm/selectVolume Target
 
      - Hadronic processes
 

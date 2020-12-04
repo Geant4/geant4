@@ -24,11 +24,11 @@ public:
   sf_vec<colorf,float> back_color;
   sf<float> back_shadow;
 
-  sf_string modeling; 
+  sf_string modeling;
   sf_string font;
   sf<float> font_size;
   sf_enum<sg::font_modeling> font_modeling;
-  sf_string encoding; 
+  sf_string encoding;
   sf<bool> smoothing;
   sf<bool> hinting;
   sf_enum<sg::hjust> hjust;
@@ -86,11 +86,11 @@ private:
     add_field(&visible);
     add_field(&color);
 
-    add_field(&modeling); 
+    add_field(&modeling);
     add_field(&font);
     add_field(&font_size);
     add_field(&font_modeling);
-    add_field(&encoding); 
+    add_field(&encoding);
     add_field(&smoothing);
     add_field(&hinting);
     add_field(&hjust);
@@ -226,7 +226,7 @@ public:
       a_out << "tools::sg::text_style::from_string :"
             << " parse failed."
             << std::endl;
-      return false;    
+      return false;
     }
 
     visible.value(sp.visible());

@@ -40,6 +40,7 @@
 // 05.05.2020 A.Ribon: Use QGSP for antibaryons at high energies
 // 07.05.2020 A.Ribon: Use QGSP for hyperons (and anti-hyperons) at high energies
 // 20.05.2020 A.Ribon: Refactoring of the class (keeping same functionalities)
+// 02.10.2020 V.Ivanchenko: added c-,b- particles and cross section biasing
 //
 //----------------------------------------------------------------------------
 
@@ -53,11 +54,16 @@ class G4HadronPhysicsQGSP_BIC_HP : public G4HadronPhysicsQGSP_BIC {
   public: 
     G4HadronPhysicsQGSP_BIC_HP( G4int verbose = 1 );
     G4HadronPhysicsQGSP_BIC_HP( const G4String& name, G4bool quasiElastic = true );
-    virtual ~G4HadronPhysicsQGSP_BIC_HP() {}
+    ~G4HadronPhysicsQGSP_BIC_HP() override {};
+
+    // copy constructor and hide assignment operator
+    G4HadronPhysicsQGSP_BIC_HP(G4HadronPhysicsQGSP_BIC_HP &) = delete;
+    G4HadronPhysicsQGSP_BIC_HP & operator =
+    (const G4HadronPhysicsQGSP_BIC_HP &right) = delete;
+
   protected:
-    virtual void Neutron() override;
-    virtual void ExtraConfiguration() override;
-    G4double minBIC_neutron;
+    void Neutron() override;
+
 };
 
 #endif

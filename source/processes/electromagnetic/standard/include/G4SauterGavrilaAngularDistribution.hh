@@ -47,8 +47,6 @@
 #ifndef G4SauterGavrilaAngularDistribution_h
 #define G4SauterGavrilaAngularDistribution_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
 #include "G4VEmAngularDistribution.hh"
 
 class G4SauterGavrilaAngularDistribution : public G4VEmAngularDistribution
@@ -58,16 +56,14 @@ public:
 
   explicit G4SauterGavrilaAngularDistribution();
 
-  virtual ~G4SauterGavrilaAngularDistribution();
+  ~G4SauterGavrilaAngularDistribution() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double e = 0.0,
-                                         G4int shellId = 0,
-                                         const G4Material* mat = 0) final;
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                 G4double e = 0.0,
+                                 G4int shellId = 0,
+                                 const G4Material* mat = 0) final;
 
-  virtual void PrintGeneratorInformation() const final;
-
-private:
+  void PrintGeneratorInformation() const;
 
   // hide assignment operator 
   G4SauterGavrilaAngularDistribution & operator=

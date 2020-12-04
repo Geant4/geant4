@@ -13,6 +13,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+16-10-20 mma (exhadr06-V10-06-03)
+- add macro singleFission.mac
+- TrackingAction : add commented code for singleFission
+
+05-08-20 A. Ribon (exhadr06-V10-06-02)
+- Hadr06.cc , fission.mac , envHadronic.(c)sh : removed deprecated
+  HP environmental variables and replaced them with corresponding
+  C++ calls in the main, and UI commands in the macros. 
+  (The two shell-script files will be removed in G4 11.0.)
+
 10-06-20 mma (exhadr06-V10-06-01)
 - HistoManager, TrackingAction : plot particle energy at creation
      

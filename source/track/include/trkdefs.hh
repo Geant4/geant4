@@ -23,28 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
-//
 
+// Author: G.Cosmo, CERN
+// --------------------------------------------------------------------
 #ifndef TRKDEFS_HH
-#define TRKDEFS_HH
+#define TRKDEFS_HH 1
 
 #include "G4Types.hh"
 
 #ifdef WIN32
-  //
-  // Unique identifier for global module
-  //
-  #if defined G4TRACK_ALLOC_EXPORT
-    #define G4TRACK_DLL G4DLLEXPORT
-  #else
-    #define G4TRACK_DLL G4DLLIMPORT
-  #endif
+//
+// Unique identifier for global module
+//
+#  if defined G4TRACK_ALLOC_EXPORT
+#    define G4TRACK_DLL G4DLLEXPORT
+#  else
+#    define G4TRACK_DLL G4DLLIMPORT
+#  endif
 #else
-  #define G4TRACK_DLL
+#  define G4TRACK_DLL
 #endif
 
 #endif /* G4TRKDEFS_HH */

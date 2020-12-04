@@ -44,6 +44,7 @@
 class G4coutDestination
 {
  public:
+
   G4coutDestination() = default;
   virtual ~G4coutDestination();
   // Note: limitation on ICC for MIC cannot use 'default'
@@ -83,7 +84,8 @@ class G4coutDestination
   // Transformers cannot remove an error message from stream
 
  protected:
-  G4coutDestination* masterG4coutDestination = nullptr;
+
+  G4MTGLOB_DLL static G4coutDestination* masterG4coutDestination;
   // For MT: if master G4coutDestination derived class wants to
   // intercept the thread outputs, derived class should set this pointer.
   // Needed for some G4UIsession like GUIs

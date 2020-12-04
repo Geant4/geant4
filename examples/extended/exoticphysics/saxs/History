@@ -1,0 +1,28 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Exotic Examples History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 10, 2020, B. Morgan (saxs-V10-06-03)
+- Migration to G4RunManagerFactory.
+
+Nov 6, 2020, I. Hrivnacova (saxs-V10-06-02)
+- Fixed doxygen documentation
+
+Nov 2, 2020, G. Paternò and L. Pandola (saxs-V10-06-01)
+- Finalize documentation (README and .README.txt)
+
+Oct 13, 2020, G. Paternò and L. Pandola (saxs-V10-06-00)
+- First import.
+

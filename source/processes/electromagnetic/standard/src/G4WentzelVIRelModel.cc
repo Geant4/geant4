@@ -67,7 +67,7 @@
 std::vector<G4double> G4WentzelVIRelModel::effMass;
 
 #ifdef G4MULTITHREADED
-G4Mutex G4WentzelVIRelModel::WentzelVIRelModelMutex;
+G4Mutex G4WentzelVIRelModel::WentzelVIRelModelMutex  = G4MUTEX_INITIALIZER;
 #endif
 
 G4WentzelVIRelModel::G4WentzelVIRelModel() :
@@ -152,13 +152,13 @@ G4double G4WentzelVIRelModel::ComputeCrossSectionPerAtom(
 
 void G4WentzelVIRelModel::ComputeEffectiveMass()
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4WentzelVIRelModel::WentzelVIRelModelMutex);
-#endif
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t ncouples = theCoupleTable->GetTableSize();
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4WentzelVIRelModel::WentzelVIRelModelMutex);
   if(ncouples != effMass.size()) {
+#endif
     effMass.resize(ncouples, 0.0);
     for(size_t i=0; i<ncouples; ++i) {
       const G4Material* mat = 
@@ -168,16 +168,16 @@ void G4WentzelVIRelModel::ComputeEffectiveMass()
       G4double sum = 0.0;
       G4double norm= 0.0;
       for(G4int j=0; j<nelm; ++j) {
-        G4int Z = (*elmVector)[j]->GetZasInt();
-        G4double mass = fNistManager->GetAtomicMassAmu(Z)*CLHEP::amu_c2;
-        G4int Z2 = Z*Z;
-        sum += mass*Z2;
-        norm += Z2;
+	G4int Z = (*elmVector)[j]->GetZasInt();
+	G4double mass = fNistManager->GetAtomicMassAmu(Z)*CLHEP::amu_c2;
+	G4int Z2 = Z*Z;
+	sum += mass*Z2;
+	norm += Z2;
       }
       effMass[i] = sum/norm;
     }
-  }
 #ifdef G4MULTITHREADED
+  }
   G4MUTEXUNLOCK(&G4WentzelVIRelModel::WentzelVIRelModelMutex);
 #endif
 }

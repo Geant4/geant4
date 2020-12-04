@@ -74,11 +74,11 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition* par
   // 4 = entering in methods
 
   //build the energy grid. It is the same for all materials
-  G4double logenergy = std::log(fIntrinsicLowEnergyLimit/2.);
-  G4double logmaxenergy = std::log(1.5*fIntrinsicHighEnergyLimit);
+  G4double logenergy = G4Log(fIntrinsicLowEnergyLimit/2.);
+  G4double logmaxenergy = G4Log(1.5*fIntrinsicHighEnergyLimit);
   //finer grid below 160 keV
-  G4double logtransitionenergy = std::log(160*keV);
-  G4double logfactor1 = std::log(10.)/250.;
+  G4double logtransitionenergy = G4Log(160*keV);
+  G4double logfactor1 = G4Log(10.)/250.;
   G4double logfactor2 = logfactor1*10;
   logEnergyGridPMax.push_back(logenergy);
   do{
@@ -129,7 +129,7 @@ void G4PenelopeRayleighModel::ClearTables()
        for (auto& item : (*logFormFactorTable))
 	 if (item.second) delete item.second;
        delete logFormFactorTable;
-       logFormFactorTable = nullptr; //zero explicitely
+       logFormFactorTable = nullptr; //zero explicitly
      }
 
    if (pMaxTable)
@@ -137,7 +137,7 @@ void G4PenelopeRayleighModel::ClearTables()
        for (auto& item : (*pMaxTable))
 	 if (item.second) delete item.second;
        delete pMaxTable;
-       pMaxTable = nullptr; //zero explicitely
+       pMaxTable = nullptr; //zero explicitly
      }
 
    if (samplingTable)
@@ -145,7 +145,7 @@ void G4PenelopeRayleighModel::ClearTables()
        for (auto& item : (*samplingTable))
 	 if (item.second) delete item.second;
        delete samplingTable;
-       samplingTable = nullptr; //zero explicitely
+       samplingTable = nullptr; //zero explicitly
      }
 
    return;
@@ -198,7 +198,7 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* part,
 
 	  for (size_t j=0;j<material->GetNumberOfElements();j++)
 	    {
-	      G4int iZ = (G4int) theElementVector->at(j)->GetZ();
+	      G4int iZ = theElementVector->at(j)->GetZasInt();
 	      //read data files only in the master
 	      if (!logAtomicCrossSection->count(iZ))
 		ReadDataFile(iZ);
@@ -326,7 +326,7 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
 		   "em2041",FatalException,ed);
        return 0;
      }
-   G4double logene = std::log(energy);
+   G4double logene = G4Log(energy);
    G4double logXS = atom->Value(logene);
    cross = G4Exp(logXS);
 
@@ -394,13 +394,13 @@ void G4PenelopeRayleighModel::BuildFormFactorTable(const G4Material* material)
       G4double ff2 = 0; //squared form factor
       for (G4int i=0;i<nElements;i++)
 	{
-	  G4int iZ = (G4int) (*elementVector)[i]->GetZ();
+	  G4int iZ = (*elementVector)[i]->GetZasInt();
 	  G4PhysicsFreeVector* theAtomVec = atomicFormFactor->find(iZ)->second;
 	  G4double f = (*theAtomVec)[k]; //the q-grid is always the same
 	  ff2 += f*f*(*StechiometricFactors)[i];
 	}
       if (ff2)
-	theFFVec->PutValue(k,logQSquareGrid[k],std::log(ff2)); //NOTICE: THIS IS log(Q^2) vs. log(F^2)
+	theFFVec->PutValue(k,logQSquareGrid[k],G4Log(ff2)); //NOTICE: THIS IS log(Q^2) vs. log(F^2)
     }
   logFormFactorTable->insert(std::make_pair(material,theFFVec));
 
@@ -489,7 +489,7 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
       G4AutoLock lock(&PenelopeRayleighModelMutex);
       for (size_t j=0;j<theMat->GetNumberOfElements();j++)
 	{
-	  G4int iZ = (G4int) theElementVector->at(j)->GetZ();
+	  G4int iZ = theElementVector->at(j)->GetZasInt();
 	  if (!logAtomicCrossSection->count(iZ))
 	    {
 	      lock.lock();
@@ -636,7 +636,7 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
       //dimensional quantities
       ene *= eV;
       xs *= cm2;
-      theVec->PutValue(i,std::log(ene),std::log(xs));
+      theVec->PutValue(i,G4Log(ene),G4Log(xs));
       if (file.eof() && i != (nPoints-1)) //file ended too early
 	{
 	  G4ExceptionDescription ed ;
@@ -694,7 +694,7 @@ void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
       theFFVec->PutValue(i,q,ff);
       if (fillQGrid)
 	{
-	  logQSquareGrid.push_back(2.0*std::log(q));
+	  logQSquareGrid.push_back(2.0*G4Log(q));
 	}
       if (file.eof() && i != (nPoints-1)) //file ended too early
 	{
@@ -726,7 +726,7 @@ G4double G4PenelopeRayleighModel::GetFSquared(const G4Material* mat, const G4dou
   //Input value QSquared could be zero: protect the log() below against
   //the FPE exception
   //If Q<1e-10, set Q to 1e-10
-  G4double logQSquared = (QSquared>1e-10) ? std::log(QSquared) : -23.;
+  G4double logQSquared = (QSquared>1e-10) ? G4Log(QSquared) : -23.;
   //last value of the table
   G4double maxlogQ2 = logQSquareGrid[logQSquareGrid.size()-1];
 

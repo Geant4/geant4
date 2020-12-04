@@ -41,30 +41,39 @@
 
 #include "globals.hh"
 
+#include <cstddef>
+#include <functional>
+#include <string>
+#include <utility>
+
 //----------------------------------------------------------------------------//
+
 #ifdef GEANT4_USE_TIMEMORY
 
 #  include <timemory/timemory.hpp>
 
-using G4AutoTimer = tim::auto_timer;
+namespace g4tim
+{
+using namespace tim;
+}  // namespace g4tim
+
+using G4AutoTimer = g4tim::auto_timer;
 
 #else
 
 #  include <ostream>
 #  include <string>
 
-namespace tim
+namespace g4tim
 {
-  template <typename... _Args>
-  void timemory_init(_Args...)
-  {}
-  inline void timemory_finalize() {}
-  inline void print_env() {}
 
   /// this provides "functionality" for *_HANDLE macros
   /// and can be omitted if these macros are not utilized
   struct dummy
   {
+    template <typename... _Types, typename... _Args>
+    static void configure(_Args&&...)
+    {}
     template <typename... _Args>
     dummy(_Args&&...)
     {}
@@ -74,10 +83,12 @@ namespace tim
     dummy& operator=(const dummy&) = default;
     dummy& operator=(dummy&&) = default;
 
+    void record() {}
     void start() {}
     void stop() {}
-    void conditional_start() {}
-    void conditional_stop() {}
+    void push() {}
+    void pop() {}
+    void reset() {}
     void report_at_exit(bool) {}
     template <typename... _Args>
     void mark_begin(_Args&&...)
@@ -91,7 +102,7 @@ namespace tim
     }
   };
 
-}  // namespace tim
+}  // namespace g4tim
 
 // startup/shutdown/configure
 #  define TIMEMORY_INIT(...)
@@ -128,8 +139,8 @@ namespace tim
 #  define TIMEMORY_CALIPER_TYPE_APPLY(...)
 
 // get an object
-#  define TIMEMORY_BLANK_HANDLE(...) tim::dummy()
-#  define TIMEMORY_BASIC_HANDLE(...) tim::dummy()
+#    define TIMEMORY_BLANK_HANDLE(...) g4tim::dummy()
+#    define TIMEMORY_BASIC_HANDLE(...) g4tim::dummy()
 #  define TIMEMORY_HANDLE(...) tim::dummy()
 
 // get a pointer to an object
@@ -152,7 +163,7 @@ namespace tim
 #  define TIMEMORY_DEBUG_BASIC_AUTO_TIMER(...)
 #  define TIMEMORY_DEBUG_AUTO_TIMER(...)
 
-using G4AutoTimer = tim::dummy;
+using G4AutoTimer = g4tim::dummy;
 
 #endif
 

@@ -91,7 +91,7 @@ public:
         } else if(c=='{') {
           tree* _tree = new tree(prev,s);
           s.clear();
-	  
+
           prev = _tree;
         } else if(c=='}') {
           if(s.size()) {
@@ -124,7 +124,7 @@ namespace columns {
 inline void delete_columns(std::vector<value>& a_vars) {
   tools_vforit(value,a_vars,it) {
     if((*it).type()==value::VOID_STAR) {
-      std::vector<value>* vars = 
+      std::vector<value>* vars =
         (std::vector<value>*)(*it).get_void_star();
       delete_columns(*vars);
       delete vars;
@@ -141,8 +141,8 @@ inline void copy_columns(const std::vector<value>& a_from,std::vector<value>& a_
       value v((void*)vars);
       v.set_label((*it).label());
       a_to.push_back(v);
-      std::vector<value>* p = 
-        (std::vector<value>*)(*it).get_void_star(); 
+      std::vector<value>* p =
+        (std::vector<value>*)(*it).get_void_star();
       copy_columns(*p,*vars);
     } else {
       a_to.push_back(*it);
@@ -163,14 +163,14 @@ inline void dump_columns(std::ostream& a_out,const std::vector<value>& a_vars,co
       //      << "ITuple : " << (*it).label() << " : end "
       //      << std::endl;
     } else {
-      std::string stype;        
+      std::string stype;
       (*it).s_type(stype);
-      std::string sval;        
+      std::string sval;
       (*it).tos(sval);
 
       a_out << a_margin
-            << stype << " : " 
-            << (*it).label() << " : " 
+            << stype << " : "
+            << (*it).label() << " : "
             << sval
             << std::endl;
     }
@@ -180,7 +180,7 @@ inline void dump_columns(std::ostream& a_out,const std::vector<value>& a_vars,co
 class finder : public columns::parser {
   typedef columns::parser parent;
 public:
-  finder(std::ostream& a_out,const std::string& a_script) 
+  finder(std::ostream& a_out,const std::string& a_script)
   :m_out(a_out)
   ,m_script(a_script)
   //,fSuccess(false)
@@ -195,7 +195,7 @@ public:
   bool find_variables() {
     clear();
     if(m_script.empty()) return false; //keep old version logic.
-    if(!parse(m_script)) return false;    
+    if(!parse(m_script)) return false;
     //dump(m_out);
     //analyse m_top :
     if(!analyse(m_top,m_stack)) {clear();return false;}
@@ -267,14 +267,14 @@ protected:
         strip(swords[1]);
 
         if(swords[0]=="ITuple") {
-  
+
           //create a value::VOID_STAR :
           value* v = new value((void*)0);
           v->set_label(swords[1]);
           return v;
-  
+
         } else {
-  
+
           value::e_type type;
           if(!s2type(swords[0],type)){
             m_out << "tools::columns::finder::analyse_dcl :"
@@ -335,7 +335,7 @@ protected:
         strip(swords[1]);
 
         if(swords[0]=="ITuple") {
-  
+
           //create a value::VOID_STAR :
           value* v = new value((void*)0);
           v->set_label(swords[1]);
@@ -372,7 +372,7 @@ protected:
         }
 
         value* v = new value();
-        v->set_type(m_cur_type);       
+        v->set_type(m_cur_type);
         v->set_label(swords[0]);
         return v;
 
@@ -395,23 +395,23 @@ protected:
 protected:
   static bool s2type(const std::string& a_s,value::e_type& a_type){
            if(a_s=="float") {
-      a_type = value::FLOAT;    
+      a_type = value::FLOAT;
     } else if(a_s=="double") {
-      a_type = value::DOUBLE;    
+      a_type = value::DOUBLE;
     //} else if(a_s=="char") {
-    //  a_type = value::CHAR;    
+    //  a_type = value::CHAR;
     } else if(a_s=="short") {
-      a_type = value::SHORT;    
+      a_type = value::SHORT;
     } else if(a_s=="int") {
-      a_type = value::INT;    
+      a_type = value::INT;
     } else if(a_s=="long") {
-      a_type = value::INT64;    
+      a_type = value::INT64;
     } else if((a_s=="bool")||(a_s=="boolean")) {
-      a_type = value::BOOL;    
+      a_type = value::BOOL;
     } else if((a_s=="string")||(a_s=="java.lang.String")){
-      a_type = value::STRING;    
+      a_type = value::STRING;
     //} else if(a_s=="byte") {
-    //  a_type = value::UNSIGNED_CHAR;    
+    //  a_type = value::UNSIGNED_CHAR;
 
     } else if(a_s=="float[]") {
       a_type = value::ARRAY_FLOAT;
@@ -434,13 +434,13 @@ protected:
 
     // not AIDA :
     //} else if(a_s=="uchar") {
-    //  a_type = value::UNSIGNED_CHAR;    
+    //  a_type = value::UNSIGNED_CHAR;
     } else if(a_s=="ushort") {
-      a_type = value::UNSIGNED_SHORT;    
+      a_type = value::UNSIGNED_SHORT;
     } else if(a_s=="uint") {
-      a_type = value::UNSIGNED_INT;    
+      a_type = value::UNSIGNED_INT;
     } else if(a_s=="ulong") {
-      a_type = value::UNSIGNED_INT64;    
+      a_type = value::UNSIGNED_INT64;
     } else {
       return false;
     }
@@ -450,62 +450,62 @@ protected:
            if(a_type==value::FLOAT) {
       float v = 0;
       if(a_v.size()) {if(!to<float>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
     } else if(a_type==value::DOUBLE) {
       double v = 0;
       if(a_v.size()) {if(!to<double>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
     //} else if(a_type==value::CHAR) {
     //  char v = 0;
     //  if(a_v.size()) {if(!to<char>(a_v,v)) return 0;}
-    //  return new value(v);    
+    //  return new value(v);
     } else if(a_type==value::SHORT) {
       short v = 0;
       if(a_v.size()) {if(!to<short>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
     } else if(a_type==value::INT) {
       int v = 0;
       if(a_v.size()) {if(!to<int>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
 
     } else if(a_type==value::INT64) {
       int64 v = 0;
       if(a_v.size()) {if(!to<int64>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
     } else if(a_type==value::BOOL) {
       bool v = false;
       if(a_v.size()) {if(!to(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
 
     } else if(a_type==value::STRING) {
       if( (a_v.size()>=2) && (a_v[0]=='"') && (a_v[a_v.size()-1]=='"') ){
         return new value(a_v.substr(1,a_v.size()-2));
       } else {
-        return new value(a_v);    
+        return new value(a_v);
       }
 
     //} else if(a_type==value::UNSIGNED_CHAR) {
     //  unsigned short v = 0;
     //  if(a_v.size()) {if(!to<unsigned short>(a_v,v)) return 0;}
-    //  return new value((unsigned char)v);    
+    //  return new value((unsigned char)v);
 
     } else if(a_type==value::UNSIGNED_SHORT) {
       unsigned short v = 0;
       if(a_v.size()) {if(!to<unsigned short>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
     } else if(a_type==value::UNSIGNED_INT) {
       unsigned int v = 0;
       if(a_v.size()) {if(!to<unsigned int>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
 
     } else if(a_type==value::UNSIGNED_INT64) {
       uint64 v = 0;
       if(a_v.size()) {if(!to<uint64>(a_v,v)) return 0;}
-      return new value(v);    
+      return new value(v);
 
     } else if(a_type==value::ARRAY_FLOAT) {
       if(a_v.size()) return 0;
-      value* v = new value();    
+      value* v = new value();
       v->set_type(value::ARRAY_FLOAT);
       return v;
     } else if(a_type==value::ARRAY_DOUBLE) {

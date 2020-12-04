@@ -30,7 +30,10 @@
 #define G4Run_h 1
 
 #include "globals.hh"
+#include "G4Profiler.hh"
+
 #include <vector>
+
 class G4Event;
 class G4HCtable;
 class G4DCtable;
@@ -44,6 +47,9 @@ class G4DCtable;
 
 class G4Run
 {
+ public:
+  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+
  public:
   G4Run();
   virtual ~G4Run();

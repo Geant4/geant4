@@ -23,54 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UIsession
 //
+// Class description:
 //
-// $id$
+// This is a base class of all (G)UI sessions.
+// SessionStart() method should be called to start the session
 
-#ifndef G4UIsession_h
-#define G4UIsession_h 1
+// Author: Makoto Asai, 1998
+// --------------------------------------------------------------------
+#ifndef G4UIsession_hh
+#define G4UIsession_hh 1
 
 #include "G4coutDestination.hh"
 #include "globals.hh"
 #include "icomsdefs.hh"
 
-// class description:
-//
-//  This is a base class of all (G)UI session.
-//  SessionStart() method should be called to start the session.
-//
-
 class G4UIsession : public G4coutDestination
 {
-  // Base class of UI/GUI session
-  
   public:
-      G4UIsession();
-      G4UIsession(G4int iBatch);
-      virtual ~G4UIsession();
 
-      virtual G4UIsession * SessionStart();
+    G4UIsession();
+    G4UIsession(G4int iBatch);
+    virtual ~G4UIsession();
+
+    virtual G4UIsession* SessionStart();
       // This method will be invoked by main().
-      // Optionally, it can be invoked by another session.
-      
-      virtual void PauseSessionStart(const G4String& Prompt);
+      // Optionally, it can be invoked by another session
+
+    virtual void PauseSessionStart(const G4String& Prompt);
       // This method will be invoked by G4UImanager
-      // when G4kernel becomes to Pause state.
-      
-      virtual G4int ReceiveG4cout(const G4String& coutString);
-      virtual G4int ReceiveG4cerr(const G4String& cerrString);
-      // These two methods will be invoked by G4strstreambuf.
+      // when the kernel comes to Pause state
+
+    virtual G4int ReceiveG4cout(const G4String& coutString);
+    virtual G4int ReceiveG4cerr(const G4String& cerrString);
+      // These two methods will be invoked by G4strstreambuf
+
+    static G4int InSession();
+    inline G4int GetLastReturnCode() const { return lastRC; }
 
   protected:
-      G4ICOMS_DLL static G4int inSession;
-      G4int ifBatch;
-      G4int lastRC;
-  public:
-      static G4int InSession() { return inSession; }
-      G4int GetLastReturnCode() const { return lastRC; }
+
+    G4ICOMS_DLL static G4int inSession;
+    G4int ifBatch = 0;
+    G4int lastRC = 0;
 };
 
-
-
 #endif
-

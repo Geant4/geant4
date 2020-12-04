@@ -12,6 +12,29 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-Oct-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-06)
+- G4ThermalNeutrons - use G4PhysListUtils to access neutron elastic
+    process
+
+17-Sep-2020, A. Ribon       (phys-ctor-helastic-V10-06-05)
+- G4HadronHElasticPhysics : added elastic scattering for charm and bottom
+  hadrons (needed for FTFP_BERT_TRV).
+
+24-Aug-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-04)
+- G4HadronElasticPhysics - use G4HadProcesses and G4PhysListUtil
+
+01-Aug-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-03)
+- G4HadronElasticPhysics - added optional cross section factor
+    for systematics studies
+
+20-Jul-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-02)
+- G4HadronElasticPhysics - instantiate anti-hyperons
+
+02-Jul-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-01)
+- G4HadronElasticPhysics - use coherently with inelastic physics
+    builder new utilities: G4HadParticles and G4HadronicBuilder 
+
 30-Apr-2020 Ben Morgan      (phys-ctor-helastic-V10-06-00)
 -  Remove obsolete GRANULAR_DEPENDENCIES entries
 

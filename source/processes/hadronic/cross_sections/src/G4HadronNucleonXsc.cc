@@ -1260,7 +1260,7 @@ G4double G4HadronNucleonXsc::HadronNucleonXscVU(
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Returns hadron-nucleon Xsc according to differnt parametrisations:
+// Returns hadron-nucleon Xsc according to different parametrisations:
 // [2] E. Levin, hep-ph/9710546
 // [3] U. Dersch, et al, hep-ex/9910052
 // [4] M.J. Longo, et al, Phys.Rev.Lett. 33 (1974) 725 

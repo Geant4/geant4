@@ -1,10 +1,11 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -47,7 +48,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -89,7 +90,7 @@
           ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
 
 
- Material: G4_METHANE    density:  0.667 kg/m3   RadL: 696.482 m    Nucl.Int.Length: 907.273 m  
+ Material: G4_METHANE    density:  0.667 mg/cm3  RadL: 696.482 m    Nucl.Int.Length: 907.273 m  
                        Imean:  41.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
@@ -131,7 +132,7 @@
           ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
 
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
+ Material: G4_Galactic    density:  0.000 mg/cm3  RadL: 204310098.490 pc   Nucl.Int.Length: 113427284.261 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -172,7 +173,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -231,7 +232,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -290,7 +291,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -357,7 +358,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -399,7 +400,7 @@
           ElmMassFraction:   8.00 %  ElmAbundance  27.59 % 
 
 
- Material: TPC_Ne-CO2-2    density:  0.939 kg/m3   RadL: 320.739 m    Nucl.Int.Length: 993.359 m  
+ Material: TPC_Ne-CO2-2    density:  0.939 mg/cm3  RadL: 320.739 m    Nucl.Int.Length: 993.359 m  
                        Imean: 126.355 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ne (Ne)   Z = 10.0   N =    20   A = 20.180 g/mole
@@ -420,7 +421,7 @@
           ElmMassFraction:   5.35 %  ElmAbundance   8.37 % 
 
 
- Material: TPC_Ne-CO2-2p    density:  0.939 kg/m3   RadL: 320.749 m    Nucl.Int.Length: 993.343 m  
+ Material: TPC_Ne-CO2-2p    density:  0.939 mg/cm3  RadL: 320.749 m    Nucl.Int.Length: 993.343 m  
                        Imean: 126.350 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ne (Ne)   Z = 10.0   N =    20   A = 20.180 g/mole
@@ -450,7 +451,7 @@
          --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
          --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
          --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
          --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
          --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
          --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
@@ -525,14 +526,14 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 0 fm 
- Energy thresholds :  gamma  2.28625 keV    e-  263.228 keV    e+  258.933 keV proton 0 eV 
+ Energy thresholds :  gamma  2.28293 keV    e-  264.842 keV    e+  257.302 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
- Energy thresholds :  gamma  25 eV     e-  5.4285 keV    e+  5.3616 keV proton 180 keV
+ Energy thresholds :  gamma  25 eV     e-  5.46578 keV    e+  5.39804 keV proton 180 keV
  Region(s) which use this couple : 
     GasDetector
 
@@ -542,12 +543,13 @@ Index : 2     used in the geometry : Yes
 ### Run 0 start analysis activation: 
  BinsCluster= 1    BinsE= 20   Emax(keV)= 60
  WidthALICE(keV)= 0      FactorALICE= 325
-... open Root analysis file : testem8.root - done
+... create file : testem8.root - done
+... open analysis file : testem8.root - done
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.030000s Real=1.043348s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0157782
+  User=0.070000s Real=0.189282s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0166175
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -556,34 +558,34 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0157782
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 15.778 +- 0.40999 keV    RMS/Emean = 0.82169
-   Mean number of steps in absorber= 1.227  mean number of ion-clusters = 788.7 MeanCluster= 788.53
+   Mean energy deposit in absorber = 16.618 +- 0.44107 keV    RMS/Emean = 0.83934
+   Mean number of steps in absorber= 1.255  mean number of ion-clusters = 829.9 MeanCluster= 830.82
 
- ====== Energy deposit distribution   Noverflows= 0.011 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.017 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           4       0.004
-    2         6         103       0.103
-    3         9         280        0.28
-    4        12         252       0.252
-    5        15         150        0.15
-    6        18          70        0.07
-    7        21          49       0.049
-    8        24          33       0.033
-    9        27          16       0.016
-   10        30           6       0.006
-   11        33           5       0.005
-   12        36           7       0.007
-   13        39           1       0.001
-   14        42           4       0.004
-   15        45           2       0.002
-   16        48           2       0.002
-   17        51           1       0.001
+    1         3           3       0.003
+    2         6          93       0.093
+    3         9         259       0.259
+    4        12         268       0.268
+    5        15         143       0.143
+    6        18          84       0.084
+    7        21          42       0.042
+    8        24          28       0.028
+    9        27          20        0.02
+   10        30          10        0.01
+   11        33           3       0.003
+   12        36           5       0.005
+   13        39           2       0.002
+   14        42           5       0.005
+   15        45           6       0.006
+   16        48           7       0.007
+   17        51           2       0.002
    18        54           2       0.002
-   19        57           2       0.002
+   19        57           1       0.001
  ================== run end ==========================
-... write Root file : testem8.root - done
-... close Root file : testem8.root - done
+... write file : testem8.root - done
+... close file : testem8.root - done
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

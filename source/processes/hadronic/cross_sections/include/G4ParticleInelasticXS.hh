@@ -45,6 +45,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
 #include "G4ElementData.hh"
+#include "G4PhysicsVector.hh"
 #include "G4Threading.hh"
 #include <vector>
 
@@ -53,10 +54,7 @@ const G4int MAXZINELP = 93;
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
-class G4PhysicsVector;
-class G4ComponentGGHadronNucleusXsc;
-class G4ComponentGGNuclNuclXsc;
-class G4NistManager;
+class G4VComponentCrossSection;
 
 class G4ParticleInelasticXS final : public G4VCrossSectionDataSet
 {
@@ -67,18 +65,19 @@ public:
   ~G4ParticleInelasticXS() final;
 
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
-			     const G4Material*) final;
+			     const G4Material* mat = nullptr) final;
 
   G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
-			 const G4Element*, const G4Material*) final;
+			 const G4Element* elm = nullptr,
+                         const G4Material* mat = nullptr) final;
 
-  G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, const G4Material* mat) final;
+  G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+                                  const G4Material* mat = nullptr) final;
 
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
-                              const G4Isotope* iso,
-                              const G4Element* elm,
-                              const G4Material* mat) final;
+                              const G4Isotope* iso = nullptr,
+                              const G4Element* elm = nullptr,
+                              const G4Material* mat = nullptr) final;
 
   const G4Isotope* SelectIsotope(const G4Element*, 
                                  G4double kinEnergy, G4double logE) final;
@@ -89,6 +88,10 @@ public:
 
   G4double IsoCrossSection(G4double ekin, G4double logE, G4int Z, G4int A);
 
+  G4ParticleInelasticXS & operator=
+  (const G4ParticleInelasticXS &right) = delete;
+  G4ParticleInelasticXS(const G4ParticleInelasticXS&) = delete;
+
 private: 
 
   void Initialise(G4int Z);
@@ -97,34 +100,37 @@ private:
 
   const G4String& FindDirectoryPath();
 
-  const G4PhysicsVector* GetPhysicsVector(G4int Z);
+  inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
-  G4ParticleInelasticXS & operator=(const G4ParticleInelasticXS &right);
-  G4ParticleInelasticXS(const G4ParticleInelasticXS&);
-  
-  G4ComponentGGHadronNucleusXsc* ggXsection;
-  G4ComponentGGNuclNuclXsc* nnXsection;
-  G4NistManager* fNist;
+  G4VComponentCrossSection* highEnergyXsection;
 
   const G4ParticleDefinition* particle;
-  const G4ParticleDefinition* proton;
 
   std::vector<G4double> temp;
 
-  G4bool  isMaster;
+  G4int index;
+  G4bool isMaster;
 
-  static G4ElementData* data;
-  static G4double   coeff[MAXZINELP];
-  static G4double    aeff[MAXZINELP];
-  static const G4int amin[MAXZINELP];
-  static const G4int amax[MAXZINELP];
-  static G4String gDataDirectory;
+  static G4ElementData* data[5];
+  static G4double coeff[MAXZINELP][5];
+  static G4String gDataDirectory[5];
 
 #ifdef G4MULTITHREADED
   static G4Mutex particleInelasticXSMutex;
 #endif
 };
+
+inline
+const G4PhysicsVector* G4ParticleInelasticXS::GetPhysicsVector(G4int Z)
+{
+  const G4PhysicsVector* pv = data[index]->GetElementData(Z);
+  if(pv == nullptr) { 
+    InitialiseOnFly(Z);
+    pv = data[index]->GetElementData(Z);
+  }
+  return pv;
+}
 
 #endif

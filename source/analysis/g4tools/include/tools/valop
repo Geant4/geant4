@@ -75,7 +75,7 @@ public:
     default:
       return false;
     }
-  }  
+  }
 /*
   static bool is_unary(e_type a_type) {
     switch(a_type) {
@@ -84,7 +84,7 @@ public:
     default:
       return false;
     }
-  }  
+  }
   static bool is_edition(e_type a_type) { //for valop2s
     switch(a_type) {
     case SYMBOL:
@@ -285,7 +285,7 @@ public:
     delete m_C;
     delete m_D;
     delete m_E;
-    delete m_F;    
+    delete m_F;
     m_A = a_from.m_A?new valop(*a_from.m_A):0;
     m_B = a_from.m_B?new valop(*a_from.m_B):0;
     m_C = a_from.m_C?new valop(*a_from.m_C):0;
@@ -350,7 +350,7 @@ public:
     default:
       return false;
     }
-  }  
+  }
   bool is_unary() const {
     switch(m_type) {
     case MINUS:
@@ -365,7 +365,7 @@ public:
     default:
       return false;
     }
-  }  
+  }
 
   //const value& variable() const {return m_variable;}
   //value& variable() {return m_variable;}
@@ -387,7 +387,7 @@ public:
   value m_variable;
   std::string m_name;
   int m_index;
-  valop* m_A; 
+  valop* m_A;
   valop* m_B;
   valop* m_C;
   valop* m_D;
@@ -485,7 +485,7 @@ public:
       break;
     }
     return false;
-  }  
+  }
 };
 
 class get_path : public virtual valop_visitor {

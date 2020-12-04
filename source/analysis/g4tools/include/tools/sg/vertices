@@ -58,7 +58,7 @@ public:
       if(_id) {
 #ifdef __APPLE__
         bool restore_blend = check_set_blend(a_action);
-#endif	
+#endif
         a_action.begin_gsto(_id);
         size_t npt = xyzs.values().size()/3;
         bufpos pos = 0;
@@ -73,7 +73,7 @@ public:
         a_action.end_gsto();
 #ifdef __APPLE__
         if(restore_blend) a_action.set_blend(true);
-#endif	
+#endif
         return;
       } else { //!_id
         // use immediate rendering.
@@ -96,10 +96,10 @@ public:
     } else {
       a_action.draw_vertex_array(mode.value(),xyzs.values());
     }
-    
+
 #ifdef __APPLE__
     if(restore_blend) a_action.set_blend(true);
-#endif    
+#endif
   }
   virtual void pick(pick_action& a_action) {
     if(touched()) {clean_gstos();reset_touched();}
@@ -204,7 +204,7 @@ public:
     float py = a_by;
     float pz = a_bz;
 
-    for(unsigned int idash=0;idash<a_num_dash;idash++) { 
+    for(unsigned int idash=0;idash<a_num_dash;idash++) {
       add(px,py,pz);
       add(px+sx,py+sy,pz+sz);
       px += two_sx;

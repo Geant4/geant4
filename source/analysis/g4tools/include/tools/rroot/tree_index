@@ -52,7 +52,7 @@ public:
     int64 m_n;
     if(!a_buffer.read(m_n)) return false; //fN
     //::printf("debug : tree_index::stream : fN %ld\n",m_n);
-    
+
     if(!dummy_array_stream<int64>(a_buffer,int(m_n))) return false;
     if(!dummy_array_stream<int64>(a_buffer,int(m_n))) return false;
 

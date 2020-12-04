@@ -119,5 +119,4 @@ inline const G4AnalysisVerbose* G4AnalysisManagerState::GetVerboseL4() const
 inline G4int  G4AnalysisManagerState::GetCompressionLevel() const
 { return fCompressionLevel; }
 
-#endif  
-
+#endif

@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-20 Ben Morgan (exgps-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 08-05-18 B. Morgan (exgps-V10-04-02)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
@@ -36,13 +39,13 @@ track of all tags.
 
 23/01/2015 I. Hrivnacova  (exgps-V10-01-00)
 - fixed .README, files description for Doxygen
-    
+
 27/10/2014 mma  (exgps-V10-00-07)
 - put /run/initialize at begin of macro
-     
+
 24/10/2014 mma  (exgps-V10-00-06)
 - restaure exgps_batch.in
-     
+
 22/10/2014 M.Maire  (exgps-V10-00-05)
 - fileNames: suppress prefix exGPS
 - PhysicsList: Transportation alone
@@ -57,7 +60,7 @@ track of all tags.
 - Migrated to new messenger strategy. Requires event-V10-00-14
 - Adding ctest example for PhysicsChecks group. Requires
   ctest-V10-00-17, cmake-V10-00-26 and stattest-V10-00-V10-00-03
-  for test to be active. 
+  for test to be active.
 
 04/06/2014 A. Dotti (exgps-V10-00-03)
 - Correct macros to use /run/printProgress instead of /event/printModulo
@@ -71,7 +74,7 @@ track of all tags.
 
 31/05/2014  L.Desorgher (exgps-V10-00-00)
 - Migrate to use of G4 built-in physics list
-- Remove  drawTracks and printModulo commands and adapt the macro files to use 
+- Remove  drawTracks and printModulo commands and adapt the macro files to use
   the equivalent Geant4 built-in macro commands
 
 3/12/2013  I.Hrivnacova (exgps-V09-06-05)
@@ -98,10 +101,10 @@ track of all tags.
 
 15/11/2012  Ivana Hrivnacova  (exgps-V09-05-04)
 - Fixed exgps.cc  file description (for Doxygen)
-    
+
 14/06/2012  Laurent Desorgher  (exgps-V09-05-03)
-- Add .README file for doxygen documentation    
-     
+- Add .README file for doxygen documentation
+
 11/06/2012  Laurent Desorgher  (exgps-V09-05-02)
 - Update/Review of the code according to coding guide lines 2.2 to 3.3
 
@@ -116,18 +119,18 @@ track of all tags.
   test35,36,37 for automatic energy biasing
   test38 for import energy spectrum in ascii file
 - Changed all test*.g4mac files to produced .root rather than .aida files
-- Added plotfiles.py and plotall.py and plottest35.C for plotting the results 
-  using pyRoot and Root.  
+- Added plotfiles.py and plotall.py and plottest35.C for plotting the results
+  using pyRoot and Root.
 
 09/11/2010 - J.Allison (exgps-V09-03-04)
 - Removed #include G4UIXm.hh (causes conflict with G4UIExecutive.hh)
 
 22/10/2010 - G.Folger (exgps-V09-03-03)
-- Correct exgps_batch.in removing Vis 
+- Correct exgps_batch.in removing Vis
 
 18/10/2010 - G.Folger (exgps-V09-03-02)
 - Fix compilation warning; occurs only if G4ANALYSIS_USE not set
-- add exgps_batch.in, a copy of exgpgs.in without /analysis commands 
+- add exgps_batch.in, a copy of exgpgs.in without /analysis commands
 
 03/06/2010 - J.Perl (exgps-V09-03-01)
 - Updated vis usage
@@ -142,7 +145,7 @@ track of all tags.
 - updated g4mac files in ./macros
 
 05/12/2008 G.Barrand
-- exGPSAnalysisManager : have a comment in case the 
+- exGPSAnalysisManager : have a comment in case the
   AIDA_createAnalysisFactory or the AIDA::ITree creation
   fails ; which is something that may happen.
 - exGPSAnalysisManager : have the creation of the AIDA::IPlotter
@@ -179,7 +182,7 @@ track of all tags.
 -  Changed particle_name to PDGcode in the ntuple
 exit
 19/07/2005 F.Lei (exgps-V07-01-00)
--  Changing in GNUmakefile 
+-  Changing in GNUmakefile
    LOADLIBS += `aida-config --lib`
     by
    LDLIBS += `aida-config --lib`

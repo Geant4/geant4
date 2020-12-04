@@ -55,7 +55,7 @@ HadrontherapyRunAction::HadrontherapyRunAction()
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyRunAction::~HadrontherapyRunAction()
 {
-    //delete G4AnalysisManager::Instance();
+    delete G4AnalysisManager::Instance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -108,9 +108,10 @@ void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
         rbe->StoreRBE();
     }
     
-    analysisManager->Write();
-    analysisManager->CloseFile();
-
+    if (analysisManager->IsOpenFile()) {
+      analysisManager->Write();
+      analysisManager->CloseFile();
+    }
 }
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyRunAction::AddEMProcess()

@@ -53,7 +53,7 @@ public:
 
     //::printf("debug : stl_vector : %d\n",num);
 
-    if(num) {    
+    if(num) {
       T* vec = new T[num];
       if(!a_buffer.read_fast_array<T>(vec,num)) {
         delete [] vec;
@@ -61,7 +61,7 @@ public:
       }
       std::vector<T>::resize(num);
       T* pos = vec;
-      for(unsigned int index=0;index<num;index++,pos++) {    
+      for(unsigned int index=0;index<num;index++,pos++) {
         std::vector<T>::operator[](index) = *pos;
       }
       delete [] vec;
@@ -98,7 +98,7 @@ public:
 template <class T>
 class stl_vector_vector
 :public virtual iro
-,public std::vector< std::vector<T> > 
+,public std::vector< std::vector<T> >
 {
   static const std::string& s_store_class() {
     static const std::string s_v("vector<vector<"+stype(T())+"> >");
@@ -147,7 +147,7 @@ public:
         return false;
       }
       //::printf("debug : stl_vector_vector :   index %d num %d\n",veci,num);
-      if(num) {    
+      if(num) {
         T* vec = new T[num];
         if(!a_buffer.read_fast_array<T>(vec,num)) {
           delete [] vec;
@@ -231,7 +231,7 @@ public:
     //::printf("debug : stl_vector_string : %d\n",num);
 
     std::vector<std::string>::resize(num);
-    for(unsigned int index=0;index<num;index++) {    
+    for(unsigned int index=0;index<num;index++) {
       std::string& vs = std::vector<std::string>::operator[](index);
       if(!a_buffer.read(vs)) {
         std::vector<std::string>::clear();

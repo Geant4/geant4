@@ -19,10 +19,6 @@
 #ifndef HEP_BOOSTZ_H
 #define HEP_BOOSTZ_H
 
-#ifdef GNUPRAGMA
-#pragma interface
-#endif
-
 #include "CLHEP/Vector/RotationInterfaces.h"
 #include "CLHEP/Vector/LorentzVector.h"
 

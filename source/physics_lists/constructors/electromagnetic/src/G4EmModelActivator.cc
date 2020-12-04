@@ -185,50 +185,35 @@ void G4EmModelActivator::ActivateEmOptions()
 
     if("G4EmStandard" == typesPhys[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
-      msc->SetRangeFactor(0.04);
-      msc->SetSkin(1);
-      msc->SetStepLimitType(fUseSafety);
-      AddStandardScattering(elec, em_config, msc, reg,  mscEnergyLimit, highEnergy);
+      AddStandardScattering(elec, em_config, msc, reg,  mscEnergyLimit, highEnergy, typesPhys[i]);
       
       msc = new G4UrbanMscModel();
-      msc->SetRangeFactor(0.04);
-      msc->SetSkin(1);
-      msc->SetStepLimitType(fUseSafety);
-      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
-    } else if("G4EmStandard_opt1" == typesPhys[i] || 
-	      "G4EmStandard_opt2" == typesPhys[i]) {
+    } else if("G4EmStandard_opt1" == typesPhys[i] || "G4EmStandard_opt2" == typesPhys[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
-      msc->SetStepLimitType(fMinimal);
-      msc->SetRangeFactor(0.2);
-      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
       msc = new G4UrbanMscModel();
-      msc->SetStepLimitType(fMinimal);
-      msc->SetRangeFactor(0.2);
-      AddStandardScattering(posi, em_config, msc, reg,  mscEnergyLimit, highEnergy);
+      AddStandardScattering(posi, em_config, msc, reg,  mscEnergyLimit, highEnergy, typesPhys[i]);
       
     } else if("G4EmStandard_opt3" == typesPhys[i]) { 
 
       G4DummyModel* dummy = new G4DummyModel();
       G4UrbanMscModel* msc = new G4UrbanMscModel();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      msc->SetLocked(true);
+      SetMscParameters(elec, msc, typesPhys[i]);
       em_config->SetExtraEmModel("e-", "msc", msc, reg);
       FindOrAddProcess(elec, "CoulombScat");
       em_config->SetExtraEmModel("e-", "CoulombScat", dummy, reg);
 
       msc = new G4UrbanMscModel();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      msc->SetLocked(true);
+      SetMscParameters(posi, msc, typesPhys[i]);
       em_config->SetExtraEmModel("e+", "msc", msc, reg);
       FindOrAddProcess(posi, "CoulombScat");
       em_config->SetExtraEmModel("e+", "CoulombScat", dummy, reg);
 
       msc = new G4UrbanMscModel();
-      msc->SetStepLimitType(fMinimal);
-      msc->SetRangeFactor(0.2);
-      msc->SetLocked(true);
+      SetMscParameters(prot, msc, typesPhys[i]);
       em_config->SetExtraEmModel("proton", "msc", msc, reg);
       FindOrAddProcess(prot, "CoulombScat");
       em_config->SetExtraEmModel("proton", "CoulombScat", dummy, reg);
@@ -249,11 +234,11 @@ void G4EmModelActivator::ActivateEmOptions()
       em_config->SetExtraEmModel("gamma", "compt", mod, reg);
 
     } else if("G4EmStandard_opt4" == typesPhys[i]) {
-      G4VMscModel* msc = GetGSModel();
-      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      G4VMscModel* msc = new G4GoudsmitSaundersonMscModel();
+      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
-      msc = GetGSModel();
-      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      msc = new G4GoudsmitSaundersonMscModel();
+      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
       theParameters->SetNumberOfBinsPerDecade(20);
       theParameters->SetUseMottCorrection(true);  
@@ -274,22 +259,20 @@ void G4EmModelActivator::ActivateEmOptions()
 
     } else if("G4EmStandardGS" == typesPhys[i]) {
       G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();
-      msc->SetRangeFactor(0.06);
-      msc->SetLocked(true);
-      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
       msc = new G4GoudsmitSaundersonMscModel();
-      msc->SetRangeFactor(0.06);
-      msc->SetLocked(true);
-      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
     } else if("G4EmStandardWVI" == typesPhys[i]) {
       G4WentzelVIModel* msc = new G4WentzelVIModel();
-      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
       msc = new G4WentzelVIModel();
-      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
+      theParameters->SetMscThetaLimit(0.15);
+ 
       if(G4Threading::IsMasterThread()) {
         theParameters->SetDeexActiveRegion(regnamesPhys[i], true, false, false);
       }
@@ -322,11 +305,11 @@ void G4EmModelActivator::ActivateEmOptions()
 
     } else if("G4EmLivermore" == typesPhys[i]) {
 
-      G4VMscModel* msc = GetGSModel();
-      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      G4VMscModel* msc = new G4GoudsmitSaundersonMscModel();
+      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
-      msc = GetGSModel();
-      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      msc = new G4GoudsmitSaundersonMscModel();
+      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
       mod = new G4LivermorePhotoElectricModel();
       em_config->SetExtraEmModel("gamma", "phot", mod, reg);
@@ -354,11 +337,11 @@ void G4EmModelActivator::ActivateEmOptions()
 
     } else if("G4EmPenelope" == typesPhys[i]) {
 
-      G4VMscModel* msc = GetGSModel();
-      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      G4VMscModel* msc = new G4GoudsmitSaundersonMscModel();
+      AddStandardScattering(elec, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
-      msc = GetGSModel();
-      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy);
+      msc = new G4GoudsmitSaundersonMscModel();
+      AddStandardScattering(posi, em_config, msc, reg, mscEnergyLimit, highEnergy, typesPhys[i]);
 
       mod = new G4PenelopePhotoElectricModel();
       em_config->SetExtraEmModel("gamma", "phot", mod, reg);
@@ -389,14 +372,6 @@ void G4EmModelActivator::ActivateEmOptions()
       theParameters->SetUseMottCorrection(true);  
       if(G4Threading::IsMasterThread()) {
         theParameters->SetDeexActiveRegion(regnamesPhys[i], true, false, false);
-      }
-      theParameters->DefineRegParamForDeex(adeexc);
-
-    } else if("G4RadioactiveDecay" == typesPhys[i]) {
-
-      if(G4Threading::IsMasterThread()) {
-        theParameters->SetAugerCascade(true);
-        theParameters->SetDeexcitationIgnoreCut(true);
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
@@ -473,6 +448,10 @@ void G4EmModelActivator::ActivatePAI()
 	   namep != "eIoni" && namep != "ionIoni")
 	  { continue; }
       }
+      G4double emin = 50*CLHEP::keV;
+      if(namep == "eIoni") emin = 110*CLHEP::eV;
+      else if(namep == "muIoni") emin = 5*CLHEP::keV;
+
       G4VEmModel* em = nullptr;
       G4VEmFluctuationModel* fm = nullptr;
       if(typesPAI[i] == "PAIphoton" || typesPAI[i] == "pai_photon") {
@@ -484,11 +463,29 @@ void G4EmModelActivator::ActivatePAI()
 	em = mod;
 	fm = mod;
       }
+      // added PAI model above low energy limit
+      em->SetLowEnergyLimit(emin);
       proc->AddEmModel(0, em, fm, r);
+
+      // added low energy model
+      if(namep == "eIoni") {
+	em = new G4MollerBhabhaModel();
+	fm = new G4UniversalFluctuation();
+      } else if(namep == "ionIoni") {
+	em = new G4BraggIonModel();
+        fm = new G4IonFluctuations();
+      } else {
+	em = new G4BraggModel();
+	fm = new G4UniversalFluctuation();
+      }
+      em->SetHighEnergyLimit(emin);
+      proc->AddEmModel(-1, em, fm, r);
+
       if(verbose > 0) {
 	G4cout << "### G4EmModelActivator: add <" << typesPAI[i]
 	       << "> model for " << particlesPAI[i]
-	       << " in the " << regnamesPAI[i] << G4endl;
+	       << " in the " << regnamesPAI[i] 
+               << " Emin(keV)= " << emin/CLHEP::keV << G4endl;
       }
     }
   }
@@ -687,34 +684,22 @@ G4bool G4EmModelActivator::HasMsc(G4ProcessManager* pm) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VMscModel* G4EmModelActivator::GetGSModel()
-{
-  G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();
-  msc->SetStepLimitType(fUseSafetyPlus);
-  msc->SetRangeFactor(0.08);
-  msc->SetSkin(3);
-  msc->SetOptionMottCorrection(true);
-  msc->SetLocked(true);
-  return msc;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4EmModelActivator::AddStandardScattering(const G4ParticleDefinition* part,
                                                G4EmConfigurator* em_config,
                                                G4VMscModel* mscmod,
                                                const G4String& reg, 
-                                               G4double e1, G4double e2)
+                                               G4double e1, G4double e2,
+                                               const G4String& type)
 {
   G4String pname = part->GetParticleName();
 
   // low-energy msc model
-  mscmod->SetLocked(true);
+  SetMscParameters(part, mscmod, type);
   em_config->SetExtraEmModel(pname, "msc", mscmod, reg, 0.0, e1);
 
   // high energy msc model
   G4WentzelVIModel* msc = new G4WentzelVIModel();
-  msc->SetLocked(true);
+  SetMscParameters(part, msc, type);
   em_config->SetExtraEmModel(pname, "msc", msc, reg, e1, e2);
 
   // high energy single scattering model
@@ -723,6 +708,32 @@ void G4EmModelActivator::AddStandardScattering(const G4ParticleDefinition* part,
   mod->SetActivationLowEnergyLimit(e1);
   mod->SetLocked(true);
   em_config->SetExtraEmModel(pname, "CoulombScat", mod, reg, 0.0, e2);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmModelActivator::SetMscParameters(const G4ParticleDefinition* part, 
+                                          G4VMscModel* msc, const G4String& phys) 
+{
+  if(part == G4Electron::Electron() || part == G4Positron::Positron()) {
+    if(phys == "G4EmStandard_opt1" || phys == "G4EmStandard_opt2") {
+      msc->SetRangeFactor(0.2);
+      msc->SetStepLimitType(fMinimal);
+    } else if(phys == "G4EmStandard_opt3") {
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+    } else if(phys == "G4EmStandard_opt4" || phys == "G4EmLivermore" || phys == "G4EmPenelope") {
+      msc->SetRangeFactor(0.08);
+      msc->SetStepLimitType(fUseSafetyPlus);
+      msc->SetSkin(3);
+    } else if(phys == "G4EmStandardGS") {
+      msc->SetRangeFactor(0.06);
+    }
+  } else {
+    if(phys != "G4EmStandard" && phys != "G4EmStandard_opt1" && phys != "G4EmStandard_opt2") {
+      msc->SetLateralDisplasmentFlag(true); 
+    }
+  }
+  msc->SetLocked(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

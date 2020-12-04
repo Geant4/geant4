@@ -84,6 +84,8 @@ public:
 
   void InitialiseParameters(const G4ParticleDefinition*);
 
+  void DumpParameters(std::ostream& out) const;
+
   // empty method
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 			 const G4MaterialCutsCouple*,
@@ -172,11 +174,11 @@ public:
                                     G4double kinEnergy,
                                     G4double logKinEnergy);
 
-private:
-
   //  hide assignment operator
   G4VMscModel & operator=(const  G4VMscModel &right) = delete;
   G4VMscModel(const  G4VMscModel&) = delete;
+
+private:
 
   G4SafetyHelper* safetyHelper;
   G4VEnergyLossProcess* ionisation;

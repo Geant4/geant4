@@ -10,7 +10,7 @@ namespace sg {
 enum cursor_shape {
   cursor_default = 0,
   cursor_target
-};  
+};
 
 }}
 

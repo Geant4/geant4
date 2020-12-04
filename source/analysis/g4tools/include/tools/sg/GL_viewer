@@ -14,8 +14,6 @@ namespace sg {
 
 class GL_viewer : public tools::sg::viewer {
   TOOLS_HEADER(GL_viewer,tools::sg::GL_viewer,tools::sg::viewer)
-//public:
-  //virtual void after_render() {}
 public:
   void render() {
     if(!m_ww) return;
@@ -32,7 +30,7 @@ public:
 
     m_sg.render(action);
     if(!action.end()) { //check that matrices stack are ok.
-      m_out << "exib::sg::GL_viewer :" 
+      m_out << "exib::sg::GL_viewer :"
             << " bad gl_action end."
             << std::endl;
     }

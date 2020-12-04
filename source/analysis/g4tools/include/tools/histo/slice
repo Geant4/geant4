@@ -17,7 +17,7 @@ template <class H2,class H1>
 inline bool fill_slice_x(const H2& a_from,int aJbeg,int aJend,H1& a_to) {
 
   if(!a_from.dimension()) return false;
-  
+
   typedef typename H2::bn_t bn_t;
 
   bn_t jbeg;
@@ -31,9 +31,9 @@ inline bool fill_slice_x(const H2& a_from,int aJbeg,int aJend,H1& a_to) {
   typedef typename H1::hd_t hd_t;
   hd_t hdata = a_to.dac();
 
-  bn_t aoffset,offset,jbin;     
+  bn_t aoffset,offset,jbin;
   bn_t yoffset = a_from.axis_y().m_offset;
-  
+
   typedef typename H2::num_entries_t TN;
   typedef typename H2::weight_t TW;
   typedef typename H2::coordinate_t TC;
@@ -99,7 +99,7 @@ inline bool fill_slice_y(const H2& a_from,int aIbeg,int aIend,H1& a_to) {
   typedef typename H1::hd_t hd_t;
   hd_t hdata = a_to.dac();
 
-  bn_t aibin,aoffset,offset,ibin;     
+  bn_t aibin,aoffset,offset,ibin;
   bn_t yoffset = a_from.axis_y().m_offset;
 
   typedef typename H2::num_entries_t TN;
@@ -156,7 +156,7 @@ inline H1* projection_y(const H2& a_from,const std::string& a_title) {
 template <class H2,class P1>
 inline bool fill_profile_x(const H2& a_from,int aJbeg,int aJend,P1& a_to) {
   if(!a_from.dimension()) return false;
-  
+
   typedef typename H2::bn_t bn_t;
 
   bn_t jbeg;
@@ -170,9 +170,9 @@ inline bool fill_profile_x(const H2& a_from,int aJbeg,int aJend,P1& a_to) {
   typedef typename P1::pd_t pd_t;
   pd_t hdata = a_to.get_histo_data();
 
-  bn_t aoffset,offset,jbin;     
+  bn_t aoffset,offset,jbin;
   bn_t yoffset = a_from.axis_y().m_offset;
-  
+
   typedef typename H2::num_entries_t TN;
   typedef typename H2::weight_t TW;
   typedef typename H2::coordinate_t TC;
@@ -230,7 +230,7 @@ inline bool fill_profile_y(const H2& a_from,int aIbeg,int aIend,P1& a_to) {
   typedef typename P1::pd_t pd_t;
   pd_t hdata = a_to.get_histo_data();
 
-  bn_t aibin,aoffset,offset,ibin;     
+  bn_t aibin,aoffset,offset,ibin;
   bn_t yoffset = a_from.axis_y().m_offset;
 
   typedef typename H2::num_entries_t TN;
@@ -293,13 +293,13 @@ inline bool fill_slice_yz(const H3& a_from,int aIbeg,int aIend,H2& a_to) {
 
   typedef typename H2::hd_t hd_t;
   hd_t hdata = a_to.dac();
-  
-  bn_t aibin,ajbin,aoffset,offset,ibin;     
-  
+
+  bn_t aibin,ajbin,aoffset,offset,ibin;
+
   bn_t ayoffset = hdata.m_axes[1].m_offset;
   bn_t yoffset = a_from.axis_y().m_offset;
   bn_t zoffset = a_from.axis_z().m_offset;
-  
+
   bn_t axbins = hdata.m_axes[0].bins()+2;
   bn_t aybins = hdata.m_axes[1].bins()+2;
 
@@ -344,7 +344,7 @@ inline bool fill_slice_yz(const H3& a_from,int aIbeg,int aIend,H2& a_to) {
 
 template <class H3,class H2>
 inline bool fill_slice_xy(const H3& a_from,int aKbeg,int aKend,H2& a_to) {
-  
+
   if(!a_from.dimension()) return false;
 
   typedef typename H3::bn_t bn_t;
@@ -354,20 +354,20 @@ inline bool fill_slice_xy(const H3& a_from,int aKbeg,int aKend,H2& a_to) {
   bn_t kend;
   if(!a_from.axis_z().in_range_to_absolute_index(aKend,kend)) return false;
   if(kbeg>kend) return false;
-  
+
   if(a_from.axis_x().bins()!=a_to.axis_x().bins()) return false;
   if(a_from.axis_y().bins()!=a_to.axis_y().bins()) return false;
 
   typedef typename H2::hd_t hd_t;
   hd_t hdata = a_to.dac();
-  
+
   bn_t kbin;
-  bn_t aibin,ajbin,aoffset,offset;     
-  
+  bn_t aibin,ajbin,aoffset,offset;
+
   bn_t ayoffset = hdata.m_axes[1].m_offset;
   bn_t yoffset = a_from.axis_y().m_offset;
   bn_t zoffset = a_from.axis_z().m_offset;
-  
+
   bn_t axbins = hdata.m_axes[0].bins()+2;
   bn_t aybins = hdata.m_axes[1].bins()+2;
 
@@ -412,7 +412,7 @@ inline bool fill_slice_xy(const H3& a_from,int aKbeg,int aKend,H2& a_to) {
 
 template <class H3,class H2>
 inline bool fill_slice_xz(const H3& a_from,int aJbeg,int aJend,H2& a_to) {
-  
+
   if(!a_from.dimension()) return false;
 
   typedef typename H3::bn_t bn_t;
@@ -425,16 +425,16 @@ inline bool fill_slice_xz(const H3& a_from,int aJbeg,int aJend,H2& a_to) {
 
   if(a_from.axis_x().bins()!=a_to.axis_x().bins()) return false;
   if(a_from.axis_z().bins()!=a_to.axis_y().bins()) return false;
-  
+
   typedef typename H2::hd_t hd_t;
   hd_t hdata = a_to.dac();
 
-  bn_t aibin,ajbin,aoffset,offset,jbin;     
-  
+  bn_t aibin,ajbin,aoffset,offset,jbin;
+
   bn_t ayoffset = hdata.m_axes[1].m_offset;
   bn_t yoffset = a_from.axis_y().m_offset;
   bn_t zoffset = a_from.axis_z().m_offset;
-  
+
   bn_t axbins = hdata.m_axes[0].bins()+2;
   bn_t aybins = hdata.m_axes[1].bins()+2;
 
@@ -457,7 +457,7 @@ inline bool fill_slice_xz(const H3& a_from,int aJbeg,int aJend,H2& a_to) {
         //offset3D = ibin + jbin * m_axes[1].m_offset + kbin*m_axes[2].m_offset;
         // hdata booked with x-z then :
         offset = aibin + jbin * yoffset + ajbin * zoffset;
-  
+
         // Bin :
         hdata.m_bin_entries[aoffset] += af_bin_entries[offset];
         hdata.m_bin_Sw[aoffset] += af_bin_Sw[offset];
@@ -469,7 +469,7 @@ inline bool fill_slice_xz(const H3& a_from,int aJbeg,int aJend,H2& a_to) {
       }
     }
   }
-  
+
   hdata.m_in_range_plane_Sxyw.assign(a_to.number_of_planes(),0); //ill-defined.
 
   hdata.update_fast_getters();

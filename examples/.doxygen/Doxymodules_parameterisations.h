@@ -51,6 +51,24 @@ class Par02TrackingAction {};
 
 /** @} */
 
+/** @defgroup extended_parameterisations_Par03 Par03
+ *  parameterisations example Par03
+ *  @{
+ */
+
+class Par03ActionInitialisation {};
+class Par03DetectorConstruction {};
+class Par03DetectorMessenger {};
+class Par03EMShowerMessenger {};
+class Par03EMShowerModel {};
+class Par03EventAction {};
+class Par03Hit {};
+class Par03PrimaryGeneratorAction {};
+class Par03RunAction {};
+class Par03SensitiveDetector {};
+
+/** @} */
+
 /** @defgroup extended_parameterisations_gflash gflash
  *  Extended examples parameterisations gflash classes
  *  @{

@@ -37,9 +37,6 @@
 //
 // Modifications:
 //
-//
-
-//
 // Class Description:
 //
 // Implementation of energy loss for gamma emission by hadrons
@@ -58,22 +55,19 @@ class G4hBremsstrahlungModel : public G4MuBremsstrahlungModel
 public:
 
   explicit G4hBremsstrahlungModel(const G4ParticleDefinition* p = nullptr,
-			 const G4String& nam = "hBrem");
+				  const G4String& nam = "hBrem");
 
-  virtual ~G4hBremsstrahlungModel();
-
-protected:
-
-  virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
-						   G4double Z,
-						   G4double gammaEnergy) override;
-private:
+  ~G4hBremsstrahlungModel() override;
 
   // hide assignment operator
   G4hBremsstrahlungModel & 
     operator=(const  G4hBremsstrahlungModel &right) = delete;
   G4hBremsstrahlungModel(const  G4hBremsstrahlungModel&) = delete;
 
+protected:
+
+  G4double ComputeDMicroscopicCrossSection(G4double tkin, G4double Z,
+					   G4double gammaEnergy) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

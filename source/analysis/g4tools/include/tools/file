@@ -177,7 +177,7 @@ inline bool read_bytes(const std::string& a_file,char*& a_buffer,long& a_length)
   a_buffer[filesize] = 0;
   a_length = filesize;
   return true;
-}  
+}
 
 inline bool write_bytes(const std::string& a_file,const char* a_buffer,size_t a_length){
   FILE* file = ::fopen(a_file.c_str(),"wb");
@@ -189,7 +189,7 @@ inline bool write_bytes(const std::string& a_file,const char* a_buffer,size_t a_
   size_t nitem = ::fwrite((char*)a_buffer,a_length,(size_t)1,file);
   ::fclose(file);
   return (nitem!=1?false:true);
-}  
+}
 
 inline bool num_csv_doubles(const std::string& a_string,char& a_sep,unsigned int& a_number){
   if(a_string.empty()) {a_sep=0;a_number=0;return true;} //it is ok.
@@ -235,7 +235,7 @@ inline bool num_csv_doubles(const std::string& a_string,char& a_sep,unsigned int
     pos = end+1;
     if(pos>mx) break;
   }
-  
+
   a_sep = sep;
   a_number = number;
   return true;
@@ -269,7 +269,7 @@ inline bool is_hippo(const std::string& a_file,bool& a_is){
     if(end==pos) {all_doubles=false;break;}
   }
   a_is = all_doubles?false:true; //all_double=false then we assume the second line is labels of columns.
-  return true;  
+  return true;
 }
 
 // NOTE : the below is_csv() does not take into account a column with strings.
@@ -315,10 +315,10 @@ inline bool is_csv(const std::vector<std::string>& a_txt,bool& a_is){
     if(it==a_txt.begin()) {
       first_coln = coln;
     } else {
-      if(coln!=first_coln) return true;      
+      if(coln!=first_coln) return true;
     }
   }
-  
+
   //a_sep = sep;
   a_is = true;
   return true;
@@ -358,11 +358,18 @@ inline bool is_kumac(const std::string& a_file,bool& a_is){
 }
 
 inline bool is_insh(const std::string& a_file,bool& a_is){
-  // look at suffix. Some file can't be guessed.
   if(suffix(a_file)=="insh") {a_is = true;return true;}
-  //try to guess ?
-  // have a first line : #!insh ?
-  a_is = false;
+  unsigned char head[6];
+ {unsigned int num = 6;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=6) {a_is = false;return true;}}
+  if(head[0]!='#') {a_is = false;return true;}
+  if(head[1]!='!') {a_is = false;return true;}
+  if(head[2]!='i') {a_is = false;return true;}
+  if(head[3]!='n') {a_is = false;return true;}
+  if(head[4]!='s') {a_is = false;return true;}
+  if(head[5]!='h') {a_is = false;return true;}
+  a_is = true;
   return true;
 }
 
@@ -526,10 +533,10 @@ inline bool std_remove(std::vector<std::string>& a_files) {
 inline bool std_rename(const std::string& a_from,const std::string& a_to) {
   //NOTE : a_from must not be a path !
   //       Darwin is ok with a path but not Linux !
-  //       For example : 
+  //       For example :
   //         ::rename("/tmp/tmp01","x");
   //       return -1 on Linux.
-  //       To do the upper then someone must use move. 
+  //       To do the upper then someone must use move.
   //       But there is no move in the standard lib C !
   return (::rename(a_from.c_str(),a_to.c_str()) == 0 ? true : false);
 }

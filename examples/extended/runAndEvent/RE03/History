@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 29, 2020 M. Asai (exampleRE03-V10-06-00)
+- Migration to G4RunManagerFactory.
+
 Sep 20, 2019 M. Asai (exampleRE03-V10-05-00)
 - Add G4VScoringMesh:: scope identifier to RE03UserScoreWriter.cc.
 - Co-working with detutils-V10-05-01

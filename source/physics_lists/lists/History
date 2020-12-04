@@ -12,6 +12,11 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-November-2020  Alberto Ribon (phys-lists-V10-06-02)
+ - LBE : added G4ShortLivedConstructor (to avoid crashes, e.g. when rho0
+   is produced by the decay of eta_prime).
+
 30-April-2020 Ben Morgan       (phys-lists-V10-06-01)
  - Remove obsolete GRANULAR_DEPENDENCIES entries
 

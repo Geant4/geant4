@@ -140,13 +140,31 @@ inline const std::string& modeling_markers() { //used in sg::plotter.
 }
 
 ///////////////////////////////////////////////////////////////
+/// EsbRootView : /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
-inline const std::string& modeling_arrow() { //used in EsbRootView.
+
+inline const std::string& modeling_arrow() {
   static const std::string s_v("arrow");
+  return s_v;
+}
+inline const std::string& modeling_cube() {
+  static const std::string s_v("cube");
   return s_v;
 }
 inline const std::string& modeling_cone() { //used in EsbRootView.
   static const std::string s_v("cone");
+  return s_v;
+}
+inline const std::string& modeling_cone_detector() { //used in EsbRootView.
+  static const std::string s_v("cone_detector");
+  return s_v;
+}
+inline const std::string& modeling_detector() { //used in EsbRootView.
+  static const std::string s_v("detector");
+  return s_v;
+}
+inline const std::string& modeling_firework() { //used in EsbRootView.
+  static const std::string s_v("firework");
   return s_v;
 }
 
@@ -185,6 +203,9 @@ TOOLS_FONT_TTF(courbd)
 TOOLS_FONT_TTF(couri)
 TOOLS_FONT_TTF(courbi)
 TOOLS_FONT_TTF(lucidagrandebd)
+
+TOOLS_FONT_TTF(roboto_bold)    //free replacement of arialbd
+TOOLS_FONT_TTF(lato_regular)   //free replacement of helvetica
 
 #undef TOOLS_FONT_TTF
 
@@ -274,6 +295,7 @@ TOOLS_GLOBAL_STRING(camera_height)
 
 TOOLS_GLOBAL_STRING(none)
 
+TOOLS_GLOBAL_STRING(placement)
 // send sg options :
 TOOLS_GLOBAL_STRING_VALUE(send_placement,placement)
 TOOLS_GLOBAL_STRING_VALUE(placement_static,static)

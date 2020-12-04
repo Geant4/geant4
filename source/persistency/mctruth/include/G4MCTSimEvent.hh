@@ -23,120 +23,137 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//   G4MCTSimEvent.hh
-//
-// ====================================================================
-#ifndef MCT_SIM_EVENT_H
-#define MCT_SIM_EVENT_H
+// G4MCTSimEvent
 
-#include "G4Types.hh"
+// Author: Youhei Morita, 12.09.2001
+// --------------------------------------------------------------------
+#ifndef G4MCTSIMEVENT_HH
+#define G4MCTSIMEVENT_HH 1
+
 #include <iostream>
 #include <vector>
 #include <map>
- 
-// ====================================================================
-//
-// class definition
-//
-// ====================================================================
+
+#include "G4Types.hh"
+
 class G4MCTSimParticle;
 class G4MCTSimVertex;
 
-typedef std::map<int, G4MCTSimParticle*> G4MCTSimParticleContainer;
-typedef std::vector<G4MCTSimVertex*> G4MCTSimVertexContainer;
+using G4MCTSimParticleContainer = std::map<int, G4MCTSimParticle*>;
+using G4MCTSimVertexContainer = std::vector<G4MCTSimVertex*>;
 
-class G4MCTSimEvent {
-protected:
-G4MCTSimParticleContainer particleMap;
-G4MCTSimVertexContainer vertexVec;
- 
-public:
-  G4MCTSimEvent();
-  ~G4MCTSimEvent();
- 
-  // copy constructor and assignment operator
-  G4MCTSimEvent(const G4MCTSimEvent& right);
-  const G4MCTSimEvent& operator=(const G4MCTSimEvent& right);
+class G4MCTSimEvent
+{
+  public:
 
-  // methods...
-  G4bool AddParticle(const G4MCTSimParticle* aparticle);
-  int GetNofParticles() const;
-  int GetNofVertices() const;
-  int GetNofStoredParticles() const;
-  int GetNofStoredVertices() const;
-  G4MCTSimParticle* FindParticle(int tid) const;
-  G4MCTSimVertex* GetVertex(int vid) const;
+    G4MCTSimEvent();
+    ~G4MCTSimEvent();
 
-  void BuildVertexContainer();
-  void ClearEvent();
-  void Print(std::ostream& ostr= std::cout) const;  
+    inline G4MCTSimEvent(const G4MCTSimEvent& right);
+    inline G4MCTSimEvent& operator=(const G4MCTSimEvent& right);
+      // copy constructor and assignment operator
 
-  // iterators
-  typedef G4MCTSimParticleContainer::iterator particle_iterator;
-  typedef G4MCTSimParticleContainer::const_iterator particle_const_iterator;
-  particle_iterator particles_begin();
-  particle_iterator particles_end();
-  particle_const_iterator particles_begin() const;
-  particle_const_iterator particles_end() const;
-  
-  typedef G4MCTSimVertexContainer::iterator vertex_iterator;
-  typedef G4MCTSimVertexContainer::const_iterator vertex_const_iterator;
-  vertex_iterator vertices_begin();
-  vertex_iterator vertices_end();
-  vertex_const_iterator vertices_begin() const;
-  vertex_const_iterator vertices_end() const;
+    G4bool AddParticle(const G4MCTSimParticle* aparticle);
+    inline G4int GetNofParticles() const;
+    inline G4int GetNofVertices() const;
+    G4int GetNofStoredParticles() const;
+    G4int GetNofStoredVertices() const;
+    G4MCTSimParticle* FindParticle(G4int tid) const;
+    G4MCTSimVertex* GetVertex(G4int vid) const;
+
+    void BuildVertexContainer();
+    void ClearEvent();
+    void Print(std::ostream& ostr = std::cout) const;
+
+    // iterators
+    using particle_iterator = G4MCTSimParticleContainer::iterator;
+    using particle_const_iterator = G4MCTSimParticleContainer::const_iterator;
+    inline particle_iterator particles_begin();
+    inline particle_iterator particles_end();
+    inline particle_const_iterator particles_begin() const;
+    inline particle_const_iterator particles_end() const;
+
+    using vertex_iterator = G4MCTSimVertexContainer::iterator;
+    using vertex_const_iterator = G4MCTSimVertexContainer::const_iterator;
+    inline vertex_iterator vertices_begin();
+    inline vertex_iterator vertices_end();
+    inline vertex_const_iterator vertices_begin() const;
+    inline vertex_const_iterator vertices_end() const;
+
+  protected:
+
+    G4MCTSimParticleContainer particleMap;
+    G4MCTSimVertexContainer vertexVec;
 };
 
 // ====================================================================
-// inline functions
+// inline methods
 // ====================================================================
 
 inline G4MCTSimEvent::G4MCTSimEvent(const G4MCTSimEvent& right)
 {
-  *this= right;
+  *this = right;
 }
- 
-inline const G4MCTSimEvent& G4MCTSimEvent::operator=(const G4MCTSimEvent& right)
+
+inline G4MCTSimEvent& G4MCTSimEvent::operator=(const G4MCTSimEvent& right)
 {
-  particleMap= right.particleMap; // shallow copy
+  particleMap = right.particleMap;  // shallow copy
 
   return *this;
 }
 
-inline int G4MCTSimEvent::GetNofParticles() const
+inline G4int G4MCTSimEvent::GetNofParticles() const
 {
   return particleMap.size();
 }
 
-inline int G4MCTSimEvent::GetNofVertices() const
+inline G4int G4MCTSimEvent::GetNofVertices() const
 {
   return vertexVec.size();
 }
 
 // iterators
 inline G4MCTSimEvent::particle_iterator G4MCTSimEvent::particles_begin()
-{ return particleMap.begin(); }
+{
+  return particleMap.begin();
+}
 
 inline G4MCTSimEvent::particle_iterator G4MCTSimEvent::particles_end()
-{ return particleMap.end(); }
+{
+  return particleMap.end();
+}
 
-inline G4MCTSimEvent::particle_const_iterator 
-                    G4MCTSimEvent::particles_begin() const
-{ return particleMap.begin(); }
+inline G4MCTSimEvent::particle_const_iterator G4MCTSimEvent::particles_begin()
+  const
+{
+  return particleMap.cbegin();
+}
 
-inline G4MCTSimEvent::particle_const_iterator G4MCTSimEvent::particles_end() const
-{ return particleMap.end(); }
+inline G4MCTSimEvent::particle_const_iterator G4MCTSimEvent::particles_end()
+  const
+{
+  return particleMap.cend();
+}
 
 inline G4MCTSimEvent::vertex_iterator G4MCTSimEvent::vertices_begin()
-{ return vertexVec.begin(); }
+{
+  return vertexVec.begin();
+}
 
 inline G4MCTSimEvent::vertex_iterator G4MCTSimEvent::vertices_end()
-{ return vertexVec.end(); }
+{
+  return vertexVec.end();
+}
 
-inline G4MCTSimEvent::vertex_const_iterator G4MCTSimEvent::vertices_begin() const
-{ return vertexVec.begin(); }
+inline G4MCTSimEvent::vertex_const_iterator G4MCTSimEvent::vertices_begin()
+  const
+{
+  return vertexVec.cbegin();
+}
 
 inline G4MCTSimEvent::vertex_const_iterator G4MCTSimEvent::vertices_end() const
-{ return vertexVec.end(); }
+{
+  return vertexVec.cend();
+}
 
 #endif

@@ -14,5 +14,5 @@ geant4_add_pymodule(pyG4processes
   pymodG4processes.cc
 )
 
-target_link_libraries(pyG4processes PRIVATE G4processes pyG4Boost)
+target_link_libraries(pyG4processes PRIVATE G4processes)
 install(TARGETS pyG4processes DESTINATION "${CMAKE_INSTALL_PYTHONDIR}/Geant4")

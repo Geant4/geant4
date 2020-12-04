@@ -106,7 +106,25 @@
 	Idle> type your commands
 	....
 	Idle> exit
-		
+
+  Macros provided in this example:
+  - brems.mac: Bremsstrahlung only
+  - erange.mac: compute the csda range of primary particle
+  - geantino.mac: geantino as primary particle
+  - ionis.mac: Ionisation only
+  - photoelec.mac: 100 keV photon photoelectric effect
+  - radioactive.mac: use radioactive ion as primary particle
+  - range.mac: compute the csda range of the primary particle
+               with or without fluctuations
+  - runs.mac: electron 100 MeV; all processes
+
+  Macros to be run interactively:
+  - annihil.mac: To visualise 100 MeV e+ annihilation
+  - decayinfly.mac: To visualise decay in fly of N16
+  - gammaconversion.mac: To visualise gamma conversion and e+ annihilation
+  - photon.mac: To visualiza p300 keV photon beam
+  - vis.mac: To activate visualization
+
  7 - TRACKING : StepMax
  
   In order to control the accuracy of the deposition, the user can limit

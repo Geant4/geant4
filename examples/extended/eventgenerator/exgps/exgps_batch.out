@@ -1,10 +1,11 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-06-ref-06    (26-June-2020)
+ Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -14,7 +15,8 @@
 
 Set file name: exgps
 ### Run 0 starts.
-... open Root analysis file : exgps.root - done
+... create file : exgps.root - done
+... open analysis file : exgps.root - done
 --> Event 0 starts.
 --> Event 10000 starts.
 --> Event 20000 starts.
@@ -25,5 +27,5 @@ Set file name: exgps
 --> Event 70000 starts.
 --> Event 80000 starts.
 --> Event 90000 starts.
-... write Root file : exgps.root - done
-... close Root file : exgps.root - done
+... write file : exgps.root - done
+... close file : exgps.root - done

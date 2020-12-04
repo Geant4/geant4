@@ -28,7 +28,7 @@
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
-// Phys. Med. Biol. 63(10) (2018) 105014-12pp 
+// Phys. Med. Biol. 63(10) (2018) 105014-12pp
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 //
@@ -39,11 +39,7 @@
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4DNAChemistryManager.hh"
 #include "G4UImanager.hh"
@@ -80,12 +76,11 @@ int main(int argc, char** argv)
   Parse(argc, argv);
   Command* commandLine(0);
   SetSeed();
-  
+
   // Construct the run manager according to whether MT is activated or not
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager= new G4MTRunManager();
-  
+  auto* runManager= G4RunManagerFactory::CreateRunManager();
+
   if((commandLine = parser->GetCommandIfActive("-mt")))
   {
     int nThreads = 2;
@@ -97,29 +92,26 @@ int main(int argc, char** argv)
     {
       nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
-    
+
     runManager->SetNumberOfThreads(nThreads);
   }
-  
+
   G4cout << "**************************************************************"
          << "******\n===== Chem5 is started with "
          << runManager->GetNumberOfThreads() << " of "
          << G4Threading::G4GetNumberOfCores()
          << " available threads =====\n\n*************************************"
-         <<"*******************************" 
+         <<"*******************************"
          << G4endl;
-#else
-  G4RunManager* runManager = new G4RunManager();
-#endif
-  
+
   // Set mandatory initialization classes
   runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new ActionInitialization());
-  
+
   // Initialize G4 kernel
   runManager->Initialize();
-  
+
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive();
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
@@ -129,14 +121,14 @@ int main(int argc, char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4UIExecutive* ui(0);
-  
+
   // interactive mode : define UI session
   if((commandLine = parser->GetCommandIfActive("-gui")))
   {
     ui = new G4UIExecutive(argc, argv, commandLine->GetOption());
-    
+
     if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
-    
+
     if (parser->GetCommandIfActive("-novis") == 0)
     {
       // visualization is used by default
@@ -166,7 +158,7 @@ int main(int argc, char** argv)
       UImanager->ApplyCommand("/control/execute vis.mac");
     }
   }
-  
+
   if((commandLine = parser->GetCommandIfActive("-mac")))
   {
     G4String command = "/control/execute ";
@@ -182,7 +174,7 @@ int main(int argc, char** argv)
     ui->SessionStart();
     delete ui;
   }
-  
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   // owned and deleted by the run manager, so they should not be deleted
@@ -210,25 +202,25 @@ bool IsBracket(char c)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SetSeed()
-{  
+{
   Command* commandLine(0);
-  
+
   if((commandLine = parser->GetCommandIfActive("-seed")))
   {
     seed = atoi(commandLine->GetOption().c_str());
   }
-  
+
   if(seed == 0) // If no seed given in argument, setup the seed
   {
     long jobID_int = 0;
     long noice = 0;
-    
+
     //____________________________________
     // In case on cluster
     if((commandLine = parser->GetCommandIfActive("-cluster")))
     {
       noice = labs((long) noise());
-      
+
       const char * env = std::getenv("PBS_JOBID");
 
       if(env)
@@ -247,11 +239,11 @@ void SetSeed()
         if(env) jobID_int = atoi(env);
       }
     } // end cluster
-    
+
     //____________________________________
     seed = ((long) time(NULL)) + jobID_int + noice;
   }
-  
+
   G4cout << "Seed used : " << seed << G4endl;
   G4Random::setTheEngine(new CLHEP::MixMaxRng());
   G4Random::setTheSeed(seed);
@@ -298,37 +290,35 @@ void Parse(int& argc, char** argv)
   // Parse options given in commandLine
   //
   parser = CommandLineParser::GetParser();
-  
+
   parser->AddCommand("-gui", Command::OptionNotCompulsory,
                      "Select geant4 UI or just launch a geant4 terminal"
                      "session",
                      "qt");
-                     
+
   parser->AddCommand("-mac", Command::WithOption, "Give a mac file to execute",
                      "macFile.mac");
 
   parser->AddCommand("-seed",
                      Command::WithOption,
                      "Give a seed value in argument to be tested", "seed");
-  
-#ifdef G4MULTITHREADED
+
   parser->AddCommand("-mt",Command::WithOption,
                      "Launch in MT mode (events computed in parallel,"
                      " NOT RECOMMANDED WITH CHEMISTRY)", "2");
-#endif
-  
+
   parser->AddCommand("-chemOFF", Command::WithoutOption,
                      "Deactivate chemistry");
-                     
+
   parser->AddCommand("-vis", Command::WithOption,
                      "Select a visualization driver", "OGL 600x600-0+0");
-                     
+
   parser->AddCommand("-novis", Command::WithoutOption,
                      "Deactivate visualization when using GUI");
-  
+
   parser->AddCommand("-cluster", Command::WithoutOption,
                      "Launch the code on a cluster, avoid dupplicated seeds");
-  
+
   //////////
   // If -h or --help is given in option : print help and exit
   //
@@ -339,7 +329,7 @@ void Parse(int& argc, char** argv)
     CommandLineParser::DeleteInstance();
     std::exit(0);
   }
-  
+
   ///////////
   // Kill application if wrong argument in command line
   //

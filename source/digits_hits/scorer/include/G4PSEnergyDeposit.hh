@@ -29,7 +29,7 @@
 #ifndef G4PSEnergyDeposit_h
 #define G4PSEnergyDeposit_h 1
 
-#include "G4VPrimitiveScorer.hh"
+#include "G4VPrimitivePlotter.hh"
 #include "G4THitsMap.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,9 +39,12 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura
 // 2010-07-22   Introduce Unit specification.
 // 
+// 2020-09-03   Use G4VPrimitivePlotter and fill 1-D histo of energy deposit (x)
+//              vs. track weight (y)                   (Makoto Asai)
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-class G4PSEnergyDeposit : public G4VPrimitiveScorer
+class G4PSEnergyDeposit : public G4VPrimitivePlotter
 {
  
  public: // with description

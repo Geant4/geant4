@@ -28,11 +28,7 @@
 /// \brief Main program of the medical/electronScattering2 example
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
@@ -65,11 +61,7 @@ int main(int argc,char** argv) {
     G4cout << "Output File   : " << outputFile << G4endl;
 
     // Instantiate the run manager
-#ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
-#else
-    G4RunManager* runManager = new G4RunManager;
-#endif
+    auto* runManager = G4RunManagerFactory::CreateRunManager();
 
     // Instantiate the random engine
     G4Random::setTheEngine(new CLHEP::MTwistEngine);

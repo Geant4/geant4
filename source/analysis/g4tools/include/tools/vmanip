@@ -21,7 +21,7 @@ inline void safe_clear(std::vector<T*>& a_vec){
     it_t it = a_vec.begin();
     T* entry  = *it;
     a_vec.erase(it);
-    delete entry;    
+    delete entry;
   }
 }
 
@@ -78,7 +78,7 @@ inline void append(std::vector<T>& a_vec,typename std::vector<T>::size_type a_nu
   typedef typename std::vector<T>::size_type sz_t;
   sz_t vsize = a_vec.size();
   a_vec.resize(vsize+a_num);
-  sz_t offset = vsize; 
+  sz_t offset = vsize;
   for(sz_t index=0;index<a_num;index++,offset++) {
     a_vec[offset] = a_from[index];
   }
@@ -90,7 +90,7 @@ inline void removep(std::vector<T*>& a_vec,const T* a_elem) {
   for(it_t it=a_vec.begin();it!=a_vec.end();) {
     if(*it==a_elem) {
       it = a_vec.erase(it);
-    } else { 
+    } else {
       ++it;
     }
   }
@@ -160,7 +160,7 @@ inline void unique(std::vector<T>& a_vec) {
     for(;it2!=a_vec.end();) {
       if((*it2)==(*it)) {
         it2 = a_vec.erase(it2);
-      } else { 
+      } else {
         ++it2;
       }
     }
@@ -199,7 +199,7 @@ inline bool belong(const std::vector<T>& a_vec,const T& a_item){
   return false;
 }
 
-template <class T>  
+template <class T>
 inline bool minimum(const std::vector<T>& a_vec,T& a_value) {
   if(a_vec.empty()) {a_value = T();return false;}
   a_value = a_vec[0];
@@ -210,7 +210,7 @@ inline bool minimum(const std::vector<T>& a_vec,T& a_value) {
   return true;
 }
 
-template <class T>  
+template <class T>
 inline bool maximum(const std::vector<T>& a_vec,T& a_value) {
   if(a_vec.empty()) {a_value = T();return false;}
   a_value = a_vec[0];
@@ -221,7 +221,7 @@ inline bool maximum(const std::vector<T>& a_vec,T& a_value) {
   return true;
 }
 
-template <class T>  
+template <class T>
 inline T sum(const std::vector<T>& a_vec) {
   T sum = T();
   typedef typename std::vector<T>::const_iterator it_t;
@@ -229,7 +229,7 @@ inline T sum(const std::vector<T>& a_vec) {
   return sum;
 }
 
-template <class T>  
+template <class T>
 inline void filter(std::vector<T>& a_vec,unsigned int a_min,unsigned int a_max){
   unsigned int imx = a_vec.size()-1;
   unsigned int mx = a_max<imx?a_max:imx;
@@ -356,7 +356,7 @@ inline void convert(const std::vector<FROM>& a_from,std::vector<TO>& a_to) {
   for(;ait!=a_from.end();++ait,++toit) {*toit = (TO)*ait;}
 }
 
-template <class T>  
+template <class T>
 inline bool min_max(const std::vector<T>& a_vec,T& a_min,T& a_max) {
   if(a_vec.empty()) {a_min=T();a_max=T();return false;}
   a_min = *(a_vec.begin());
@@ -369,7 +369,10 @@ inline bool min_max(const std::vector<T>& a_vec,T& a_min,T& a_max) {
   return true;
 }
 
-template <class T>  
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// T(*a_fabs)(T) : ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template <class T>
 inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms,T(*a_sqrt)(T),T(*a_fabs)(T)) {
   if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
   T S = T();
@@ -384,9 +387,47 @@ inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms,T(*a_sqrt)(T
   return true;
 }
 
-template <class T>  
+template <class T>
 inline bool min_max_mean_rms(const std::vector<T>& a_vec,T& a_min,T& a_max,T& a_mean,T& a_rms,
                              T(*a_sqrt)(T),T(*a_fabs)(T)) {
+  if(a_vec.empty()) {a_min=T();a_max=T();a_mean=T();a_rms=T();return false;}
+  a_min = *(a_vec.begin());
+  a_max = a_min;
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_min = *it<a_min?*it:a_min;
+    a_max = *it>a_max?*it:a_max;
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  a_rms = a_sqrt(a_fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// T(*a_fabs)(const T&) : ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+template <class T>
+inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms,T(*a_sqrt)(const T&),T(*a_fabs)(const T&)) {
+  if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  a_rms = a_sqrt(a_fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
+}
+
+template <class T>
+inline bool min_max_mean_rms(const std::vector<T>& a_vec,T& a_min,T& a_max,T& a_mean,T& a_rms,
+                             T(*a_sqrt)(const T&),T(*a_fabs)(const T&)) {
   if(a_vec.empty()) {a_min=T();a_max=T();a_mean=T();a_rms=T();return false;}
   a_min = *(a_vec.begin());
   a_max = a_min;
