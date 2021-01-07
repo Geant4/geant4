@@ -1,0 +1,34 @@
+# test07
+#
+/run/initialize
+#
+/gps/particle gamma
+
+# source
+/gps/pos/type Surface
+/gps/pos/shape Cylinder
+/gps/pos/centre 2. 2. 2. cm
+/gps/pos/radius 2.5 cm
+/gps/pos/halfz 5. cm
+
+# angular distribution
+/gps/ang/type cos
+
+# energy distribution
+/gps/ene/type Cdg
+/gps/ene/min 20 keV
+/gps/ene/max 1 MeV
+/gps/ene/calculate
+
+# commands below are independent of gps
+#
+/analysis/setFileName test07
+/analysis/h1/set 1 100 10 1500 keV
+/analysis/h2/setX 4 120 0 360 deg 
+/analysis/h2/setY 4 100 -1 1 none 
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

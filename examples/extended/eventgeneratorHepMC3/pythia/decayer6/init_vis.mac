@@ -1,0 +1,14 @@
+# Macro file for the initialization phase of "pythia6Decayer" 
+# when running in interactive mode with visualization
+#
+# Sets some default verbose
+#
+/control/verbose 1
+/control/saveHistory
+/run/verbose 1
+#
+# Initialize kernel
+/run/initialize
+#
+# Visualization setting
+/control/execute vis.mac

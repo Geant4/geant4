@@ -1,0 +1,27 @@
+# test01
+#
+/run/initialize
+#
+/gps/particle proton
+
+/gps/pos/type Point
+/gps/pos/centre 1. 2. 1. cm
+# the above two can be replaced by a single command
+# /gps/position 1. 2. 1. cm
+#
+/gps/ang/type iso
+/gps/energy 2. MeV
+
+# commands below are independent of gps
+#
+/analysis/setFileName test01
+/analysis/h1/set 3 110 -1.1 1.1 none  #cos(theta)
+/analysis/h1/set 4 130 -15  375 deg   #phi
+/analysis/h2/setX 4 120 0 360 deg 
+/analysis/h2/setY 4 100 -1 1 none 
+# 
+###/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

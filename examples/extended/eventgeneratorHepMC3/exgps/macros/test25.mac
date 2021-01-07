@@ -1,0 +1,59 @@
+# test25
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre 1. 2. 1. cm
+/gps/pos/radius 2. cm
+
+# angular distribution
+/gps/ang/type iso
+#
+/gps/hist/type biast
+/gps/hist/point 0. 0.
+/gps/hist/point 0.1 1.
+/gps/hist/point 0.9 0.
+/gps/hist/point 1. 1.
+#
+/gps/hist/type biasp
+/gps/hist/point 0. 0.
+/gps/hist/point 0.25 1.
+/gps/hist/point 0.5 0.
+/gps/hist/point 0.75 1.
+/gps/hist/point 1. 0.
+
+# energy distribution
+/gps/ene/type User
+/gps/ene/emspec 0
+/gps/hist/type energy
+/gps/hist/point 0. 0.
+/gps/hist/point 1.0 1.
+/gps/hist/point 2.0 2.
+/gps/hist/point 3.0 3.
+/gps/hist/point 4.0 2.
+/gps/hist/point 5.0 1.
+/gps/hist/point 6.0 1.
+/gps/hist/point 7.0 2.
+/gps/hist/point 8.0 3.
+/gps/hist/point 9.0 4.
+/gps/hist/point 10. 5.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test25
+/analysis/h1/set 1 100 0 15 MeV
+/analysis/h1/set 2 100 0 10 cm
+/analysis/h1/set 3 110 -1.1 1.1 none  #cos(theta)
+/analysis/h1/set 4 130 -15  375 deg   #phi
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+/analysis/h2/set 5 120 0 360 deg none linear  90 0 180 deg none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

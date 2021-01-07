@@ -1,0 +1,14 @@
+# to bun run interactively with visualization
+#
+/control/verbose 2
+/run/verbose 1
+#
+/run/initialize
+#
+/gunExample/selectGunAction 1
+#
+/tracking/verbose 1
+/run/beamOn 1
+#
+/tracking/verbose 0
+/run/beamOn 5

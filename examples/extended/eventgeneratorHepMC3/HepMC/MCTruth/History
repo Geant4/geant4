@@ -1,0 +1,46 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example MCTruth History file
+                    ----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+4 September 2018 I. Hrivnacova (mctruthex-V10-04-00)
+- coding guidelines
+
+20 March 2017 W. Pokorski (mctruthex-V10-03-00)
+- fixing bug (typo) introduced in previous tag
+
+07 October 2016 W. Pokorski (mctruthex-V10-02-00)
+- changes to comply with coding conventions
+
+11 June 2014 W. Pokorski (mctruthex-V10-00-00)
+- changes to comply with coding conventions
+
+30 August 2012 W. Pokorski (mctruthex-V09-05-02)
+- fixes in Cmake file
+
+29 August 2012 W. Pokorski (mctruthex-V09-05-01)
+- updating README files
+
+29 August 2012 W. Pokorski (mctruthex-V09-05-00)
+- adding CMake file and fixing uninitialized variable
+
+3 May 2011 G.Cosmo (mctruthex-V09-04-00)
+- Fixed compilation errors on MacOS for use of std::fmod() in MCTruthManager.
+
+2 December 2010 W.Pokorski (mctruthex-V09-03-00)
+- Updated to use HepMC-2.06.03; reviewd use of 4-vectors.
+- Migrated to use particle-based multiple-scattering.
+
+22 November 2006 G.Cosmo
+- Created from original example provided by W.Pokorski.

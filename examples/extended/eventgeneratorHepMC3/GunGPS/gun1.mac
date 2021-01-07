@@ -1,0 +1,10 @@
+# for PrimaryGeneratorGun1
+#
+/control/verbose 2
+/run/verbose 1
+#
+/analysis/setFileName gun1
+/analysis/h1/set 4  110  -1.1  1.1 none   #cosalpha
+/analysis/h1/set 5  130  -15.  375. deg   #psi
+# 
+/run/beamOn 100000

@@ -1,0 +1,48 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            HepMCEx02
+                            ---------
+
+  This example demonstrates how to interface primary particles in Geant4
+with various event generators via the HepMC Monte Carlo event interface.
+This is another example having the same generator action as HepMCEx01, 
+but much simpler user control.
+
+1. Primary Generator
+
+ H02PrimaryGeneratorAction has HepMCG4Interface as the generator.
+There are two types of generators provided as samples. One generator reads 
+primary information from a HepMC Ascii file (data/example_MyPythia.dat).
+The other one generates primaries directly invoking PYTHIA routines 
+in every event.
+
+2. Geometry
+
+  A simplified collider-type geometry, which consists of 
+    - endcap calorimeter (a set of tubes filled with lead), 
+    - barrel calorimeter (tube filled with lead),
+    - barrel muon detector (8 sets of plates filled with Ar),
+    - endcap muon detecror, (a set of tubes filled with Ar) and
+    - uniform magnetic field along the z axis of 3 Tesla at the 
+      central region.
+
+3. Physics List 
+
+  FTFP_BERT predefined physics list
+
+4. User actions
+
+  All particles except muons are killed in the calorimeter section.
+
+5. Installation
+ 
+ See HepMC/README how to build this example.
+
+6. Execution
+ 
+ % HepMCEx02 hepmc_pygen.in
+   

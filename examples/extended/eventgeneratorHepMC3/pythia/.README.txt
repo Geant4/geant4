@@ -1,0 +1,23 @@
+
+///\file "eventgenerator/pythia/.README.txt"
+///\brief Examples pythia README page
+
+/*! \page Examples_pythia Category "eventgenerator/pythia"  
+
+Examples for Pythia-Geant4 interface.
+
+This directory contains examples for using Pythia as Monte Carlo event
+generator, interfaced with Geant4, and showing how to implement an external
+decayer.
+
+\section pythia_s1 Requirements for external software packages
+
+\subsection pythia_sub_s11 PYTHIA
+  - Tested version 6.4.28
+  - URL: http://www.thep.lu.se/~torbjorn/Pythia.html
+
+\section pythia_s2 Example decayer6
+  The \link Exampledecayer6 decayer6 \endlink example demonstrates the use 
+  of Pythia6 as an external decayer.  
+
+*/

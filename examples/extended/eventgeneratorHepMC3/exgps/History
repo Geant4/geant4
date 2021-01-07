@@ -1,0 +1,196 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    example/extended/eventgenerator/exgps History file
+                    ------------------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08-05-18 B. Morgan (exgps-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+13-04-18 mma (exgps-V10-04-01)
+- exgps.cc : set visualisation only in interactive mode
+
+27-03-18 mma (exgps-V10-04-00)
+- exgps.cc : remove G4UI_USE and G4VIS_USE
+
+05-07-16 I. Hrivnacova  (exgps-V10-02-00)
+- Fixes for Doxygen documentation
+
+11-05-2015  mma  (exgps-V10-01-02)
+- HistoManager: SetNtupleActivation(false)
+- macros: new commands for H2
+
+18/02/2015 A. Dotti       (exgps-V10-01-01)
+- Addint addtional ctest with distribution from histogram for
+  PhysicsChecks
+
+23/01/2015 I. Hrivnacova  (exgps-V10-01-00)
+- fixed .README, files description for Doxygen
+    
+27/10/2014 mma  (exgps-V10-00-07)
+- put /run/initialize at begin of macro
+     
+24/10/2014 mma  (exgps-V10-00-06)
+- restaure exgps_batch.in
+     
+22/10/2014 M.Maire  (exgps-V10-00-05)
+- fileNames: suppress prefix exGPS
+- PhysicsList: Transportation alone
+- review exgps.cc;  vis.mac
+- GeometryConstruction: world_r = 18 cm
+- replace EventAction by TrackingAction
+- refresh HistoManager. Adapt RunAction, TrackingAction, ActionInitialization.
+- update macros
+- /run/initialize in macros
+
+10/10/2014 A.Dotti (exgps-V10-00-04)
+- Migrated to new messenger strategy. Requires event-V10-00-14
+- Adding ctest example for PhysicsChecks group. Requires
+  ctest-V10-00-17, cmake-V10-00-26 and stattest-V10-00-V10-00-03
+  for test to be active. 
+
+04/06/2014 A. Dotti (exgps-V10-00-03)
+- Correct macros to use /run/printProgress instead of /event/printModulo
+
+04/06/2014 L. Desorgher (exgps-V10-00-02)
+- Migrate to use of  QGSP_BIC physics list to avoid dependency on data
+
+03/06/2014 A. Dotti (exgps-V10-00-01)
+- Implemented changes needed for new GPS that substantially reduces
+  memory footprint in MT mode. Requires event-V10-00-02
+
+31/05/2014  L.Desorgher (exgps-V10-00-00)
+- Migrate to use of G4 built-in physics list
+- Remove  drawTracks and printModulo commands and adapt the macro files to use 
+  the equivalent Geant4 built-in macro commands
+
+3/12/2013  I.Hrivnacova (exgps-V09-06-05)
+- Fixed file descriptions (for Doxygen)
+
+3/12/2013  I.Hrivnacova (exgps-V09-06-04)
+- Updated README for removing AIDA
+
+9/11/2013  L.Desorgher (exgps-V09-06-03)
+- Migration to g4tools
+- Migration to G4MT
+
+12/06/2013  I.Hrivnacova (exgps-V09-06-02)
+- Code clean-up: indention, redundant public/protected/private keywords
+
+06/06/2013  L.Desorgher (exgps-V09-06-01)
+- Applied coding guidelines (tabs and long lines)
+
+13/02/2013  I.Hrivnacova (exgps-V09-06-00)
+- Applied coding guidelines (data member initialization)
+
+20/11/2012  Ivana Hrivnacova  (exgps-V09-05-05)
+- Fixed the list of scripts in CMakeLists.txt
+
+15/11/2012  Ivana Hrivnacova  (exgps-V09-05-04)
+- Fixed exgps.cc  file description (for Doxygen)
+    
+14/06/2012  Laurent Desorgher  (exgps-V09-05-03)
+- Add .README file for doxygen documentation    
+     
+11/06/2012  Laurent Desorgher  (exgps-V09-05-02)
+- Update/Review of the code according to coding guide lines 2.2 to 3.3
+
+05/04/2012  Laurent Desorgher  (exgps-V09-05-01)
+- Update/Review of the code according to coding guide lines 2.1
+
+04/04/2012  Laurent Desorgher  (exgps-V09-05-00)
+- Update/Review of the code according to coding guide lines 1.3, 1.4, and 1.5
+
+10/11/2010 - F.Lei (exgps-V09-03-05)
+- Added extra tests in the macros directory
+  test35,36,37 for automatic energy biasing
+  test38 for import energy spectrum in ascii file
+- Changed all test*.g4mac files to produced .root rather than .aida files
+- Added plotfiles.py and plotall.py and plottest35.C for plotting the results 
+  using pyRoot and Root.  
+
+09/11/2010 - J.Allison (exgps-V09-03-04)
+- Removed #include G4UIXm.hh (causes conflict with G4UIExecutive.hh)
+
+22/10/2010 - G.Folger (exgps-V09-03-03)
+- Correct exgps_batch.in removing Vis 
+
+18/10/2010 - G.Folger (exgps-V09-03-02)
+- Fix compilation warning; occurs only if G4ANALYSIS_USE not set
+- add exgps_batch.in, a copy of exgpgs.in without /analysis commands 
+
+03/06/2010 - J.Perl (exgps-V09-03-01)
+- Updated vis usage
+
+12/05/2010 J.Allison (exgps-V09-03-00)
+- Introduced GUIExecutive.
+
+08/12/2008 G.Barrand
+- correct / compleete the part concerning AIDA in the README file.
+
+06/12/2008 F.Lei (exgps-V09-01-02)
+- updated g4mac files in ./macros
+
+05/12/2008 G.Barrand
+- exGPSAnalysisManager : have a comment in case the 
+  AIDA_createAnalysisFactory or the AIDA::ITree creation
+  fails ; which is something that may happen.
+- exGPSAnalysisManager : have the creation of the AIDA::IPlotter
+  on the same footing than other AIDA objects. Remove then
+  the createPlotter method.
+- exGPSAnalysisManager : have t,hFactories local in BeginOfRun
+  and then rm getHistogram,getTupleFactories.
+
+04/12/2008 F.Lei (exgps-V09-01-01)
+- updated README
+- tag Guy's changes
+
+04/12/2008 G.Barrand
+- exGPSAnalysisManager.hh : have the destructor private.
+- exGPS.cc : then use the exGPSAnalysisManager::dispose() method.
+- exGPS.cc : rm the aMgr which is no more used.
+- exGPSAnalysisManager::createPlotter : rm the "Plotter" string
+  and then ask to the AIDA implementation the default plotter.
+- exGPSAnalysisManager::EndOfRun : reset the variable after the deletions.
+- exGPS.cc and exGPSEventAction : use #ifdef G4VIS_USE in case
+  somone want to build without the G4 vis system.
+- exGPSAnalysisManager.cc : revisit : createPlotter : delete
+  of plotterFactory and plotter where lacking. (Seen with the
+  OpenScientist object decount).
+- exGPSRunAction : #ifdef G4VIS_USE.
+
+02/12/2008 F.Lei (exgps-V09-01-00)
+- updated exGPSAnalysisManager class to improve the AIDA output
+- removed AIDA setup from GNUmakefile (use G4 default one)
+- removed the ROOT file option
+
+21/12/2006 F.Lei (exgps-V08-02-00)
+-  Added the option for output results in .root file
+-  Changed particle_name to PDGcode in the ntuple
+exit
+19/07/2005 F.Lei (exgps-V07-01-00)
+-  Changing in GNUmakefile 
+   LOADLIBS += `aida-config --lib`
+    by
+   LDLIBS += `aida-config --lib`
+  Fixing link with AIDA on WIN32-VC (bug#767)
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+03/12/2004, G.Cosmo,  (exgps-V06-02-01)
+- Implemented migration to <cmath>.
+
+mplemented changes needed for new GPS that substantially reduces
+  memory footprint in MT mode. Requires event-V10-00-0228/10/2004, F.Lei,  (exgps-V06-02-00)
+- Created.

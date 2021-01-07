@@ -1,0 +1,4 @@
+/generator/select pythia
+/control/execute pyh4mu.mac
+/generator/pythia/pyinit cms p p 14000
+

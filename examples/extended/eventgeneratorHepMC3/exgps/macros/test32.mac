@@ -1,0 +1,76 @@
+# test32
+#
+/run/initialize
+#
+/gps/verbose 0
+/gps/particle geantino
+
+# source
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/radius 5. cm
+#
+# biasing the positional theta - phi generator
+# it is used only in for sphere, cylinder and ellipsoid surface distribution 
+# incident surface is a section of the sphere only
+#
+/gps/hist/type biaspt
+/gps/hist/point 0. 0.
+/gps/hist/point 0.5 0.
+/gps/hist/point 1. 1.
+#
+/gps/hist/type biaspp
+/gps/hist/point 0. 0.
+/gps/hist/point 0.75 0.
+/gps/hist/point 1. 1.
+
+# angular distribution
+/gps/ang/type iso
+/gps/ang/surfnorm false
+#
+# biasing the angular theta 
+/gps/hist/type biast
+/gps/hist/point 0. 0.
+/gps/hist/point 0.1 1.
+/gps/hist/point 0.5 0.
+/gps/hist/point 1. 1.
+# biasing the angular phi
+/gps/hist/type biasp
+/gps/hist/point 0. 0.
+/gps/hist/point 0.125 1.
+/gps/hist/point 0.375 4.
+/gps/hist/point 0.625 0.
+/gps/hist/point 0.875 4.
+/gps/hist/point 1. 1.
+
+# energy distribution
+/gps/ene/type Arb
+/gps/ene/diffspec 0
+/gps/hist/type arb
+/gps/hist/point 0.0 11.
+/gps/hist/point 1.0 10.
+/gps/hist/point 2.0 9.
+/gps/hist/point 3.0 8.
+/gps/hist/point 4.0 7.
+/gps/hist/point 7.0 4.
+/gps/hist/point 8.0 3.
+/gps/hist/point 9.0 2.
+/gps/hist/point 10.0 1.
+/gps/hist/point 11.0 0.
+/gps/hist/inter Lin
+
+# commands below are independent of gps
+#
+/analysis/setFileName test32
+/analysis/h1/set 1 100 0 15 MeV
+/analysis/h2/set 1 100 -5 5 cm none linear 100 -5 5 cm none linear #x-y
+/analysis/h2/set 2 100 -5 5 cm none linear 100 -5 5 cm none linear #y-z
+/analysis/h2/set 3 100 -5 5 cm none linear 100 -5 5 cm none linear #z-x
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+/analysis/h2/set 5 120 0 360 deg none linear 60 60 120 deg none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

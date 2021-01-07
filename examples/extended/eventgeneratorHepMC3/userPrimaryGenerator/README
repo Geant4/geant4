@@ -1,0 +1,49 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            userPrimaryGenerator 
+                            --------------------
+		
+ The example shows how to create a primary event including several vertices and 
+ several primary particles per vertex
+
+ 1- Geometry construction
+    ---------------------
+
+ It is a simple box which represents an 'infinite' homogeneous medium.
+  
+ 2- Physics list
+    ------------
+
+ PhysicsList.cc defines only geantino and transportation process.
+         	
+ 3- Primary generator : several vertices and particles per event
+    ------------------------------------------------------------
+
+ vertex A and particle 1 : a geantino uniformly randomized on a cylinder surface.
+ vertex B and particles 2 and 3 : symetric to vertex A.
+
+ 4- Visualisation
+    -------------
+ 
+ Visualization Manager is set in the main().
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+ 
+ 5- How to start ?
+    --------------
+ 
+  - execute basic in 'batch' mode from macro files
+	% basic   run1.mac
+
+  - execute basic in 'interactive mode' with visualization
+	% basic
+	....
+	Idle>      ---> type your commands. For instance:
+	Idle> /run/beamOn 1
+	....
+	Idle> exit

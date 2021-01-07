@@ -1,0 +1,32 @@
+#-*-python-*-
+# Configuration file for QA tests
+# This file should be a valid python file.
+# To test if format is correct, tye:
+# python testconf.qa
+# no output is produced if the code is correct
+#
+# The general format is:
+#     variable = value
+# There are few top-level variables: Binned and UnBinned for
+# binned and unbinned distributions respectively.
+# The value of the top-level variables is a dictionary of variable:values pairs.
+# See the following file as an example: <StatTest main Direcotry>/example/testconf.qa
+
+#Configuration for Binned distributions
+#These are tests to be performed on Histograms
+#Binned = { 'Histos':[{'Name':'hsito/fake'}] }
+
+#No TTrees to check
+UnBinned = {
+    'DefaultTestName':'KolmogorovSmirnovTest',
+    'DefaultThresholds':[0.05,0.1],
+    'DataSet' : [
+    {'Name':'/ntuple/101:Ekin','Type':'DOUBLE','Size':1},
+    #{'Name':'/ntuple/MyTuple:PosX','Type':'DOUBLE','Size':1},
+    #{'Name':'/ntuple/101:posY','Type':'DOUBLE','Size':1},
+    #{'Name':'/ntuple/101:posZ','Type':'DOUBLE','Size':1},
+    {'Name':'/ntuple/101:dirTheta','Type':'DOUBLE','Size':1},
+    {'Name':'/ntuple/101:dirPhi','Type':'DOUBLE','Size':1},
+    #{'Name':'/ntuple/MyTuple:weight','Type':'DOUBLE','Size':1},
+    ]
+    } 

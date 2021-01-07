@@ -1,0 +1,37 @@
+# test10
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre 2. 2. 2. cm
+/gps/pos/radius 2.5 cm
+
+# angular distribution
+/gps/ang/type iso
+
+# energy distribution
+/gps/ene/type Lin
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/gradient 1.
+/gps/ene/intercept 0.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test10
+/analysis/h1/set 1 100 1 15 MeV
+/analysis/h1/set 2 100 0 10 cm
+/analysis/h1/set 3 110 -1.1 1.1 none  #cos(theta)
+/analysis/h1/set 4 130 -15  375 deg   #phi
+/analysis/h2/setX 4 120 0 360 deg
+/analysis/h2/setY 4 100 -1 1 none 
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

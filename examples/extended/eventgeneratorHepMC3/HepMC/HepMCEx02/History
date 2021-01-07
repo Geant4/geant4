@@ -1,0 +1,75 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example HepMCEx02 History file
+                    ----- ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+September 4th 2018 I. Hrivnacova (HepMCEx02-V10-04-00)
+- Coding guidelines
+- Updated CMake: removed gfortran (obsolete)
+
+May 15th 2018 J.Allison
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+November 13th 2013 K. Murakami
+- new coding guideline
+
+November 21th, 2012 K. Murakami (exHepMC-V09-05-01)
+- changed that AsciiReader uses IO_GenEvent instead of IO_AsciiParticles
+- migration to CMake. CMakeLists.txt, added link to -lgfortran/-lg2c
+- data files and outputs are updateds
+- physics list is changed to FTFP_BERT
+
+December 10th 2010 K.Murakami
+- change physics list from GGSP to QGSP_BERT
+- update outputs
+- update data/ directory for latest HEPMC version
+
+Nov 2, 2010 J.Allison
+- hepmcEx02.cc: Removed #include "G4UIterminal.hh" and #include "G4UItcsh.hh".
+
+May 24, 2010 K.Murakami
+- use QGSP physics list instead of old flag physics list
+- introduce G4UIExective
+- modify for HepMC ver.2 (2.06.00)
+
+Nov, 22nd, 2006 G.Cosmo
+- Corrected GNUmakefile.
+
+Jul, 5th, 2006 G.Cosmo
+- Updated to current version of exampleN02 for the physics-lists.
+  Now working with release series 8.
+- Corrected GNUmakefile, now requiring CERNLIB 2005 for PYTHIA-8.0.4
+  and HepMC 1.27 or greater.
+
+May, 3rd, 2005  John Allison
+- Replaced vis manager with G4VisExecutive.
+
+Nov, 13th, 2003  John Allison
+- Reconstructed Vis Manager.
+
+Jul, 4th, 2003  G.Cosmo
+- Fixed compilation errors due to incorrect code migration from g4std wrappers.
+- Fixed pedantic compilation warnings on Linux-g++.
+
+Nov, 19th, 2002  K.Murakami
+- Modified physics lists as is ExN02.
+- "std" namespace modified to "G4std".
+
+May, 28th, 2002  K.Murakami
+- Renamed classes and filenames.
+
+Apr, 15th, 2002  K.Murakami
+- Created.

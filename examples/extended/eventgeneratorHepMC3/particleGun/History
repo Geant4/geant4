@@ -1,0 +1,136 @@
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    ParticleGun History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+
+08-04-18 B. Morgan (particleGunExample-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+13-04-18 mma (particleGunExample-V10-04-01)
+- particleGun.cc : set visualisation only in interactive mode
+
+14-03-18 mma (particleGunExample-V10-04-00)
+- particleGun.cc : remove G4UI_USE and G4VIS_USE
+
+03-10-2016 mma (particleGunExample-V10-02-03)
+- cosmetic in PrimaryGeneratorAction2
+
+01-10-2016 mma (particleGunExample-V10-02-02)
+- PrimaryGeneratorAction2: more on coding conventions
+
+06-08-2016 mma (particleGunExample-V10-02-01)
+- PrimaryGeneratorAction2: apply coding conventions
+
+05-07-16 I. Hrivnacova  (particleGunExample-V10-02-00)
+- Fixes for Doxygen documentation
+
+27-04-2015 mma (particleGunExample-V10-01-01)
+- PrimaryGeneratorAction1: add randomization of time zero of each event
+	 
+23-01-2015 I. Hrivnacova (particleGunExample-V10-01-00)
+- fixed .README
+    
+21-10-14 mma (particleGunExample-V10-00-05) 
+- mv /run/initialize in macros
+
+20-10-14 mma (particleGunExample-V10-00-04) 
+- particleGun.cc: nThreads via commands
+
+26-09-14 mma (particleGunExample-V10-00-03) 
+- migration to MT: add class ActionInitialization
+	 
+22-09-14 mma (particleGunExample-V10-00-02) 
+- add PrimaryGeneratorAction0 class and run0.mac
+
+21-09-14 mma (particleGunExample-V10-00-01) 
+- simplify histograms
+
+01-09-14 mma (particleGunExample-V10-00-00) 
+- modify plots of angles
+   
+11-07-13 I.Hrivnacova (particleGunExample-V09-06-06) 
+- In HistoManager: use new analysis manager method SetH1Activation()   
+     
+07-06-13 mma (particleGunExample-V09-06-05)
+- Cosmetic in SteppingAction.     
+     
+28-03-13 mma (particleGunExample-V09-06-04)
+- simplify histos management
+     
+24-03-13 mma (particleGunExample-V09-06-03)
+- polish coding conventions
+     
+17-03-13 mma (particleGunExample-V09-06-02)
+- G4 coding conventions
+
+14-02-13  I.Hrivnacova (particleGunExample-V09-06-01)
+- Do not declare virtual functions in PrimaryGeneratorActionN
+  classes which do not derive from Geant4 base class.
+
+13-02-13  I.Hrivnacova (particleGunExample-V09-06-00)
+- Applied coding guidelines (virtual keyword, data member initialization)
+
+17-11-12 I. Hrivnacova (particleGunExample-V09-05-05)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
+13-11-12 I. Hrivnacova (particleGunExample-V09-05-04)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+     
+26-03-12 mma (particleGunExample-V09-05-03)
+- all classes : apply G4 coding conventions
+     
+14-02-12 mma (particleGunExample-V09-05-02)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+      
+16-01-12 mma (particleGunExample-V09-05-01) 
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)
+- HistoManager and HistoMessenger : coding conventions
+- Functions Normalize() and saveAscii() re-activated
+       
+11-01-12 mma (particleGunExample-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- Functions Normalize() and saveAscii() temporarily empty  
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+      
+08-11-11 mma (particleGunExample-V09-04-01)
+- modify SteppingVerbose for OutOfWorld
+          
+28-01-11 mma (particleGunExample-V09-04-00)
+- HistoManager : fix aida fileOption
+     
+15-07-10 mma (particleGunExample-V09-03-03)      
+- remove static data members and functions.
+- UI commands : /testem/ -> /gunExample/
+     
+06-07-10 mma (particleGunExample-V09-03-02) 
+- split PrimaryGeneratorAction2 in two : sampling methods
+                                         rotateUz
+     
+11-06-10 mma (particleGunExample-V09-03-01)
+- update vis.mac
+- split run1.mac
+     
+10-06-10 Makoto Asai (particleGunExample-V09-03-00)
+- Combine three original examples into one.
+
+13-05-10 Michel Maire 
+- Created.

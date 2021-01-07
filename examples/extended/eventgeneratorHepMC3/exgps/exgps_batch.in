@@ -1,0 +1,42 @@
+# focused beam
+#
+/run/initialize
+#
+/gps/verbose 0
+/gps/particle geantino
+#
+# the incident surface is in the y-z plane
+/gps/pos/type Plane
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+#
+# the incident surface is a disc of 10 cm
+/gps/pos/shape Circle 
+/gps/pos/centre -10. 0. 0. cm
+/gps/pos/radius 10. cm
+
+# set the focusing point, default is (0, 0, 0)
+/gps/ang/type focused
+/gps/ang/focuspoint 10 -5 0 cm
+#
+# the beam energy is in gaussian profile centered at 400 MeV
+/gps/ene/type Gauss
+/gps/ene/mono 400 MeV
+/gps/ene/sigma 50 MeV
+
+#
+# commands below are independent of gps
+#
+/analysis/setFileName exgps
+/analysis/h1/set 1 100 200 800 MeV
+/analysis/h2/setX 2 100 -10 10 cm  #y-z
+/analysis/h2/setY 2 100 -10 10 cm  #y-z
+#
+/run/printProgress 10000
+#
+#/tracking/verbose 1
+#
+#/control/execute vis.mac
+#
+/run/beamOn 100000
+

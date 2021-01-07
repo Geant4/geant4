@@ -1,0 +1,81 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04DetectorParameterDef.icc
+/// \brief The file with detector paremeter definistions
+//
+//
+
+fexpHall_x = 600.*cm;
+fexpHall_y = 600.*cm;
+fexpHall_z = 600.*cm;
+
+ftrkTubs_rmax =  50.*cm;
+ftrkTubs_rmin =  20.*cm;
+ftrkTubs_dz   = 100.*cm;
+ftrkTubs_sphi =   0.*deg;
+ftrkTubs_dphi = 360.*deg;
+
+fnotrkLayers = 5;
+ftracker_radius[0] = 25.*cm;
+ftracker_radius[1] = 30.*cm;
+ftracker_radius[2] = 35.*cm;
+ftracker_radius[3] = 40.*cm;
+ftracker_radius[4] = 45.*cm;
+ftracker_thick     =  0.5*cm;
+for( int il=0; il < 5; il++ ) {
+  ftracker_length[il] = ftracker_radius[il];
+}
+
+fcaloTubs_rmax = 300.*cm;
+fcaloTubs_rmin =  50.*cm;
+fcaloTubs_dz   = 200.*cm;
+fcaloTubs_sphi =   0.*deg;
+fcaloTubs_dphi = 360.*deg;
+
+fabsorber_thick = 3.*cm;
+fscinti_thick = 2.*cm;
+fnocaloLayers = int( (fcaloTubs_rmax - fcaloTubs_rmin) /
+                    (fabsorber_thick + fscinti_thick) );
+
+fsegmentsinPhi = 48;
+fcaloCell_rmax = fcaloTubs_rmax;
+fcaloCell_rmin = fcaloTubs_rmin;
+fcaloCell_dz   = fcaloTubs_dz;
+fcaloCell_sphi = fcaloTubs_sphi;
+fcaloCell_dphi = fcaloTubs_dphi / fsegmentsinPhi;
+
+fsegmentsinZ = 20;
+fcaloRing_rmax = fcaloCell_rmax;
+fcaloRing_rmin = fcaloCell_rmin;
+fcaloRing_dz   = fcaloCell_dz / fsegmentsinZ ;
+fcaloRing_sphi = fcaloCell_sphi;
+fcaloRing_dphi = fcaloCell_dphi;
+
+fnomucounter = 4;
+fmuBox_radius = 350.*cm;
+fmuBox_width  = fmuBox_radius - 5.*cm;
+fmuBox_thick  = 1.*cm;
+fmuBox_length = fexpHall_z - 10.*cm;

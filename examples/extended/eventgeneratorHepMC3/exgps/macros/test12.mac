@@ -1,0 +1,35 @@
+# test12
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source
+/gps/pos/type Volume
+/gps/pos/shape Ellipsoid
+/gps/pos/centre 2. 2. 2. cm
+/gps/pos/halfx 2. cm
+/gps/pos/halfy 3. cm
+/gps/pos/halfz 4. cm
+
+# angular distribution
+/gps/ang/type iso
+
+# energy distribution
+/gps/ene/type Pow
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/alpha 0.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test12
+/analysis/h1/set 1 100 1 15 MeV
+/analysis/h2/setX 4 120 0 360 deg
+/analysis/h2/setY 4 100 -1 1 none
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

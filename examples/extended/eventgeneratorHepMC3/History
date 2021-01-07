@@ -1,0 +1,43 @@
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                 Event generator Examples History file
+                 ---------------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+31st January, 2019, I. Hrivnacova (exEventgenerator-V10-04-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+4th November, 2015 I. Hrivnacova (exEventgenerator-V10-01-00)
+- Renaming basicPrimary example to userPrimaryGenerator
+
+16th September, 2013 I. Hrivnacova (exEventgenerator-V09-06-00)
+- Fixed handling required packages in CMake files
+
+20th November 2012 Ivana Hrivnacova (exEventgenerator-V09-05-02)
+- Updated README files
+  - instructions how to build examples now with both CMake and GNUmake
+   - updated test versions of HepMC, pythia6
+- Added missing explicit include of system of units (in pythia6_decayer.cc)
+     
+28th September 2012 Ivana Hrivnacova (exEventgenerator-V09-05-01)
+- Renamed exGPS.cc to exgps.cc to match exactly with the example directory name
+  (this allows to configure CMake build in the same way on both case sensitive
+  and case insensitive platforms).
+
+26th September 2012 Ivana Hrivnacova (exEventgenerator-V09-05-00)
+- Added/updated CMakeLists.txt files:
+  adding visualization, external packages, copying macros, install target 
+  and comment lines
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters
+- Fixed G4Exception in HepMCEx02

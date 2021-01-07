@@ -1,0 +1,34 @@
+# test29
+#
+/run/initialize
+#
+/gps/particle geantino
+
+# source
+/gps/pos/type Plane
+/gps/pos/shape Annulus
+/gps/pos/radius 3. cm
+/gps/pos/inner_radius 1. cm
+/gps/pos/centre 0.5 1. 0. cm
+
+# angular distribution
+/gps/ang/type cos
+
+# energy distribution
+/gps/ene/type Exp
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/ezero 2.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test29
+/analysis/h1/set 1 100 0 15 MeV
+/analysis/h2/set 1 100 -5 5 cm none linear 100 -5 5 cm none linear #x-y
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

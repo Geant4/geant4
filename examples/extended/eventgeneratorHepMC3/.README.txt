@@ -1,0 +1,37 @@
+
+///\file "eventgenerator/.README.txt"
+///\brief Examples eventgenerator README page
+
+/*! \page Examples_eventgenerator Category "eventgenerator"
+
+ Examples in this directory demonstrate various ways of primary event
+ generation.
+
+\link ExampleparticleGun particleGun \endlink
+
+This example demonstrates 4 ways of the usage of G4ParticleGun shooting
+primary particles in different cases.
+
+\link Exampleexgps exgps \endlink
+
+This example demonstrates the usage of G4GeneralParticleSource for generating 
+primary incident particle according to user defined distributions.
+
+\link ExampleuserPrimaryGenerator userPrimaryGenerator \endlink
+
+This example shows how to create a primary event including several vertices and 
+several primary particles per vertex.
+
+\link Examples_HepMC HepMC \endlink
+
+This directory contains examples for using HepMC as an interface with 
+various Monte Carlo event generators, such as PYTHIA.
+It also include an example for demonstrating MC truth handling with HepMC. 
+
+\link Examples_pythia pythia \endlink
+
+This directory contains examples for using Pythia as Monte Carlo event
+generator, interfaced with Geant4, and showing how to implement an external
+decayer. 
+
+*/

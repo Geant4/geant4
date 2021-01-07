@@ -1,0 +1,115 @@
+----------------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      examples History file
+                      ---------------------
+This file should be used by the test developer to briefly summarize all major
+modifications introduced in the code and keep track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+29/09/2017 I.Hrivnacova   (p6decayer-V10-03-00,01)
+- Updated for changes in common classes
+- Updated main (removed G4UI_USE, G4VIS_USE macros, moved initialization 
+  in macros)
+
+24/10/2016 I.Hrivnacova   (p6decayer-V10-02-05)
+- Do not use svn:extternal in the tag
+
+14/10/2016 G.Folger       (p6decayer-V10-02-04)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+21/07/2016 I.Hrivnacova   (p6decayer-V10-02-03)                        
+-  Adding extern keyword to data declarations in pythia6_common_address.c
+   This fixes problem on MAC OSX, where no decay happenned.
+
+20/07/2016 I.Hrivnacova   (p6decayer-V10-02-02)                        
+-  Fixed compiler warning
+-  Coding guidelines in common
+
+04/07/2016 I.Hrivnacova   (p6decayer-V10-02-01)                        
+                          (p6decayer-V10-02-00)                        
+-  Fixes for Doxygen documentation
+
+04/11/2015 - I.Hrivnacova (p6decayer-V10-01-01)
+- Restored common directory (missing in previous tag)
+
+09/06/2015 - I.Hrivnacova (p6decayer-V10-01-00)
+-------------------------
+- Set a specific prefix to common library and test 
+  to avoid name clashes when building all extended examples at once
+
+06/11/2014 - I.Hrivnacova (p6decayer-V10-00-03)
+-------------------------
+- Fixed CMakeLists.txt in common (excommon-V10-00-06)
+
+05/11/2014 - I.Hrivnacova (p6decayer-V10-00-02)
+-------------------------
+- Added common directory via svn:externals property;
+  in this tag based on excommon-V10-00-05;
+  updated CMake and GNUmake files and documentation
+
+11/06/2014 - I.Hrivnacova (p6decayer-V10-00-01)
+-------------------------
+- Fixed path to copy_files.sh, clean_files.sh in GNUmakefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+
+28/05/2014 - I.Hrivnacova (p6decayer-V10-00-00)
+-------------------------
+Code clean-up:
+- Removed P6DPhysicsList
+- Fixed order of instantiating Vis/UI (according to B1)
+- replaced std::cerr with G4cerr
+
+02/12/2013 - I.Hrivnacova (p6decayer-V09-06-01)
+-------------------------
+- Fixed warnings about shadowed variables; removed tabulations
+
+11/07/2013 - I.Hrivnacova (p6decayer-V09-06-00)
+-------------------------
+- Fixed use of particle iterator in P6DExtDecayerPhysics.cc
+  (which was changed with changes for MT)
+
+24/08/2012 - I.Hrivnacova (p6decayer-V09-05-02)
+-------------------------
+- Fixed documentation files
+
+05/06/2012 - I.Hrivnacova (p6decayer-V09-05-01)
+-------------------------
+- Updated pythia6_decayer.in macro:
+  - added initialization (now required)
+  - added call to /pythia6Decayer/verbose
+- Fixed SharedFilesList.txt
+- Limited G4Pythia6Decayer verbose levels to 0, 1
+- Updated reference output
+- Updated Pythia6 version in README file
+
+11/04/2012 - I.Hrivnacova (p6decayer-V09-05-00)
+-------------------------
+- Introduced use of classes from common
+- Introduced a physics builder for adding the external decayer to
+  an existing physics list 
+- Applied coding guidelines
+
+02/12/2010 - I.Hrivnacova (p6decayer-V09-03-02)
+-------------------------
+- Migrated to use particle-based multiple-scattering.
+
+04/06/2010 - J.Perl (p6decayer-V09-03-01)
+-------------------
+- Updated vis usage
+
+12/05/2010 - J.Allison (p6decayer-V09-03-00)
+----------------------
+- pythia6_decayer.cc: Introduced GUIExecutive.
+
+03/11/2008 - G.Cosmo (p6decayer-V09-01-00)
+--------------------
+- First version from original code by I.Hrivnakova.

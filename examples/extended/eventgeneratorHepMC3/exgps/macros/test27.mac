@@ -1,0 +1,49 @@
+# test27
+#
+/run/initialize
+#
+/gps/particle e-
+
+# source
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/centre 1. 2. 1. cm
+/gps/pos/halfx 2. cm
+/gps/pos/halfy 2. cm
+
+# angular distribution
+/gps/ang/type user
+/gps/hist/type theta
+/gps/hist/point 0.   0.
+/gps/hist/point 0.25 1.
+/gps/hist/point 1.   0.
+
+# energy distribution
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/ene/emspec 0
+/gps/hist/point 0. 0.
+/gps/hist/point 0.1 1.
+/gps/hist/point 0.2 2.
+/gps/hist/point 0.3 3.
+/gps/hist/point 0.4 2.
+/gps/hist/point 0.5 1.
+/gps/hist/point 0.6 1.
+/gps/hist/point 0.7 2.
+/gps/hist/point 0.8 3.
+/gps/hist/point 0.9 4.
+/gps/hist/point 1.0 5.
+/gps/hist/inter Lin
+
+# commands below are independent of gps
+#
+/analysis/setFileName test27
+/analysis/h1/set 1 100 0 2 MeV
+/analysis/h2/set 1 100 -5 5 cm none linear 100 -5 5 cm none linear #x-y
+/analysis/h2/set 5 120 0 360 deg none linear  90 0 180 deg none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

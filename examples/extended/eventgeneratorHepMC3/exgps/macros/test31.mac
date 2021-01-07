@@ -1,0 +1,75 @@
+# test31 : two beams in a generator
+#
+/run/initialize
+#
+# beam 1
+# default intensity is 1 now change to 5.
+/gps/source/intensity 5.
+#
+/gps/particle proton
+/gps/pos/type Beam
+#
+# the incident surface is in the y-z plane
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+#
+# the beam spot is centered at the origin 
+# it is 1D gaussian shape with a 1 mm central plateau
+/gps/pos/shape Circle 
+/gps/pos/centre 0. 0. 0. mm
+/gps/pos/radius 1. mm
+/gps/pos/sigma_r .2 mm
+#
+# the beam is travelling along the x_axis with 5 degrees dispersion
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/ang/type beam1d  
+/gps/ang/sigma_r 5. deg
+#  
+# the beam energy is in gaussian profile centered at 400 MeV
+/gps/ene/type Gauss
+/gps/ene/mono 400 MeV
+/gps/ene/sigma 50. MeV
+
+# beam 2
+# twice the instensity of beam 1
+/gps/source/add 10.
+#
+# this is a electron beam
+/gps/particle e-
+/gps/pos/type Beam
+#
+# the beam spot is  2D gaussian profile with a 1x2 mm2 central plateau
+# it is in the x-y plane centred at the orgin
+/gps/pos/centre 0. 0. 0. mm
+/gps/pos/halfx 0.5 mm
+/gps/pos/halfy 1. mm
+/gps/pos/sigma_x 0.1 mm
+/gps/pos/sigma_y 0.2 mm
+#
+# the beam is travelling along -z_axis
+/gps/ang/type beam2d
+/gps/ang/sigma_x 2. deg
+/gps/ang/sigma_y 1. deg
+#
+# gaussian energy profile 
+/gps/ene/type Gauss
+/gps/ene/mono 600 MeV
+/gps/ene/sigma 50. MeV
+
+#
+# commands below are independent of gps
+#
+/analysis/setFileName test31
+/analysis/h1/set 1 100 200 800 MeV
+/analysis/h2/set 1 100 -5 5 mm none linear 100 -5 5 mm none linear #x-y
+/analysis/h2/set 2 100 -5 5 mm none linear 100 -5 5 mm none linear #y-z
+/analysis/h2/set 3 100 -5 5 mm none linear 100 -5 5 mm none linear #z-x
+/analysis/h2/set 5 120 0 360 deg none linear 60 60 120 deg none linear
+#
+##/control/execute vis.mac
+##/tracking/verbose 1
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

@@ -1,0 +1,31 @@
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    userPrimaryGenerator History file
+                    ---------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+
+13-04-18 mma (userPrimaryGenerator-V10-04-01)
+- userPrimaryGenerator.cc : set visualisation only in interactive mode
+
+14-03-18 mma (userPrimaryGenerator-V10-04-00)
+- userPrimaryGenerator.cc : remove G4UI_USE and G4VIS_USE
+
+04-07-16 I. Hrivnacova  (userPrimaryGenerator-V10-02-00)
+- Fixes for Doxygen documentation
+
+04-11-15 I.Hrivnacova (userPrimaryGenerator-V10-01-02)
+- renaming example to userPrimaryGenerator
+
+02-11-15 mma (basicPrimary-V10-01-01)
+- add class PrimaryGenerator.
+
+02-05-15 Michel Maire (basicPrimary-V10-01-00)
+- Created.

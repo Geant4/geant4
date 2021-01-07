@@ -1,0 +1,70 @@
+# test23
+#
+/run/initialize
+#
+/gps/particle alpha
+
+# source
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/centre 1. 2. 1. cm
+/gps/pos/halfx 2. cm
+/gps/pos/halfy 2. cm
+#
+/gps/hist/type biasx
+/gps/hist/point 0. 0.
+/gps/hist/point 0.2 1.
+/gps/hist/point 0.8 0.
+/gps/hist/point 1. 1.
+#
+/gps/hist/type biasy
+/gps/hist/point 0. 0.
+/gps/hist/point 0.2 1.
+/gps/hist/point 0.8 0.
+/gps/hist/point 1. 1.
+
+# angular distribution
+/gps/ang/type user
+#
+/gps/hist/type theta
+/gps/hist/point 0. 0.
+/gps/hist/point 1. 1.
+/gps/hist/point 2. 5.
+/gps/hist/point 2.5 1.
+#
+/gps/hist/type phi
+/gps/hist/point 0. 0.
+/gps/hist/point 1. 0.1
+/gps/hist/point 3. 4.
+/gps/hist/point 5. 6.
+/gps/hist/point 6.25 1.
+
+# energy distribution
+/gps/ene/type Epn
+/gps/hist/type epn
+/gps/hist/point 0.0 0.
+/gps/hist/point 1.0 5.
+/gps/hist/point 2.0 2.
+/gps/hist/point 3.0 1.
+/gps/hist/point 4.0 1.
+/gps/hist/point 5.0 4.
+/gps/hist/point 6.0 5.
+/gps/hist/point 7.0 5.
+/gps/hist/point 8.0 1.
+/gps/hist/point 9.0 1.
+/gps/hist/point 10. 1.
+
+
+# commands below are independent of gps
+#
+/analysis/setFileName test23
+/analysis/h1/set 1 100 0 15 MeV
+/analysis/h2/set 1 100 -5 5 cm none linear 100 -5 5 cm none linear #x-y
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+/analysis/h2/set 5 120 0 360 deg none linear  90 0 180 deg none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000

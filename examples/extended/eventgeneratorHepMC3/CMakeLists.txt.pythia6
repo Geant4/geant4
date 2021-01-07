@@ -1,0 +1,35 @@
+# CMake configuration file for building Pythia6 from the source
+# downloaded from the PYTHIA6 download site:
+# http://www.hepforge.org/downloads/pythia6
+#
+# To build Pythia6 library:
+# % cd mydir
+# % mkdir pythia6_source
+# % mkdir pythia6_build
+# % mkdir pythia6
+# % cp CMakeLists.txt.pythia6 pythia6_source/CMakeLists.txt
+# % cp pythia6-version.f pythia6_source 
+# % cd pythia6_build
+# % cmake -DCMAKE_INSTALL_PREFIX=../pythia6 ../pythia6_source
+# % make
+# % make install
+
+#----------------------------------------------------------------------------
+# Setup the project
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+project(pythia6 Fortran)
+
+#----------------------------------------------------------------------------
+# Locate sources and headers for this project
+#
+file(GLOB sources ${PROJECT_SOURCE_DIR}/*.f)
+
+#----------------------------------------------------------------------------
+# Add library
+#
+add_library(Pythia6 SHARED ${sources})
+
+#----------------------------------------------------------------------------
+# Install library
+#
+install(TARGETS Pythia6 DESTINATION lib)

@@ -1,0 +1,17 @@
+/control/verbose 2
+/run/verbose 1
+#
+/run/initialize
+#
+/gunExample/selectGunAction 4
+#
+/analysis/setFileName run4
+/analysis/h1/set 2  100   0.   10. mm     #vertex dN/dv = f(r) for gun #4
+/analysis/h1/set 3  110  -1.1  1.1 none   #vertex cos(theta) for gun #4
+/analysis/h1/set 4  130  -15.  375 deg    #vertex phi for gun  #4
+/analysis/h1/set 5  110  -1.1  1.1 none   #direct cos(alpha) for gun #4
+/analysis/h1/set 6  130  -15.  375 deg    #direct psi for gun  #4
+#
+/run/printProgress 100000
+#
+/run/beamOn 1000000

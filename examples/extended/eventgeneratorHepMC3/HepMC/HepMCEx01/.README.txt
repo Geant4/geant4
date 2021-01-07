@@ -1,0 +1,56 @@
+
+///\file "eventgenerator/HepMC/HepMCEx01/.README.txt"
+///\brief Example HepMCEx01 README page
+
+/*! \page ExampleHepMCEx01 Example HepMCEx01
+
+ HepMCEx01 is based on Example N04, which has a simplified collider detector
+geometry. Only part of the primary generator action is replaced with new one.
+This example demonstrates the following features.
+
+\section ExampleHepMCEx01_s1 HepMC interface
+
+ ExN04PrimaryGeneratorAction has HepMCG4Interface as the generator.
+There are two types of generators provided as samples. One generator reads
+primary information from a HepMC Ascii file (data/example_MyPythia.dat).
+The other one generates primaries directly invoking PYTHIA routines
+in every event.
+
+\section ExampleHepMCEx01_s2 Readout geometry
+
+ ExN04DetectorConstruction defines a simplified collider detecor
+geometry, tracker made of cylindrical tubes, calorimeter made of
+cylindrical tubes, and muon trackers made of planes.
+ Cylindrical calorimeter is made of tubes of lead and scintirator
+without cut in phi nor z direction. Energy deposition in scintirator
+is accumulated by ExN04CalorimeterSD sensitive detector, which has
+a readout geometry to find the phi-z cell.
+
+\section ExampleHepMCEx01_s3 Full set of "ordinary" physics processes
+
+FTFP_BERT physics list defines almost all of leptons and hadrons which
+Geant4 has dedicated classes for. Also almost all physics processes
+Geant4 has are defined.
+
+\section ExampleHepMCEx01_s4 Event filtering by the stacking mechanism.
+
+ Higgs events in "pythia_event.data" have two lepton pairs produced
+by the Higgs decay via Z0. At the first stage of each event, only the
+primary muons are tracked without tracking secondaries. then the number
+of hits on the muon trackers are examined. At the next stage, only
+the primary charged particles are tracked only inside the barrel
+tracking area and the isolation of the primary muons are examined.
+At the third stage, all particles in the RoI (Region of Interest) along
+the isolated muons are tracked. All these examinations are applied in
+ExN04StackingAction.
+
+\section ExampleHepMCEx01_s5 Installation
+
+ See \ref Examples_HepMC how to build this example.
+
+\section ExampleHepMCEx01_s6 Execution
+\verbatim
+% HepMCEx01 hepmc_pygen.in
+\endverbatim
+
+*/

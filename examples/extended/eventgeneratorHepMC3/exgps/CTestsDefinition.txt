@@ -1,0 +1,53 @@
+GEANT4_ADD_TEST(gps-build
+		SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps
+		BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps
+		BUILD exgps
+		LABELS PhysicsChecks)
+
+SET(_wd ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/stattest)
+SET(_wd2 ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/stattest-full)
+FILE(MAKE_DIRECTORY ${_wd})
+FILE(MAKE_DIRECTORY ${_wd2})
+
+
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/x-ray-spectrum-geant4-180kV.dat
+	       ${_wd2}/x-ray-spectrum-geant4-180kV.dat COPYONLY)
+
+GEANT4_ADD_TEST(gps-run-simple
+		WORKING_DIRECTORY ${_wd}
+		DEPENDS gps-build
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		LABELS PhysicsChecks
+		COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
+  			${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/exgps_MT.in
+	        )
+
+GEANT4_ADD_TEST(gps-run
+		WORKING_DIRECTORY ${_wd2}
+		DEPENDS gps-build
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+		LABELS PhysicsChecks
+		COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
+  			${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/run.mac
+	        )
+
+FIND_PACKAGE(StatTest QUIET)
+IF(STATTEST_FOUND)	
+	STATTEST_ADD_TEST(gps-simple-checkOutput
+			  G4TEST gps-run-simple
+			  CONFIG "${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/conf-simple.qa"
+			  REFERENCE "${GEANT4_TEST_REFERENCES_URL}/examples/extended/eventgenerator/exgps/reference-V10-01-ref-01-simple.root"
+			  INPUT "${_wd}/exgps_t*.root"
+			  IMG "${_wd}/gps-simple.pdf"
+			  LABELS PhysicsChecks
+			  )
+	STATTEST_ADD_TEST(gps-checkOutput
+			  G4TEST gps-run
+			  CONFIG "${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/stattest/conf.qa"
+			  REFERENCE "${GEANT4_TEST_REFERENCES_URL}/examples/extended/eventgenerator/exgps/reference-V10-01-ref-01.root"
+			  INPUT "${_wd2}/exgps_t*.root"
+			  IMG "${_wd2}/gps.pdf"
+			  LABELS PhysicsChecks
+			  )
+				
+ENDIF()

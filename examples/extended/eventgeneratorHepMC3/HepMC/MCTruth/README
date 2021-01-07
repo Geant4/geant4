@@ -1,0 +1,165 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                          MCTRUTH using HepMC
+                          -------------------
+
+This example demonstrates a mechanism for Monte Carlo truth handling
+using HepMC as the event record. The user does not interact directly
+with the HepMC classes but with the MCTruthManager class which takes
+care with storing all the necessary information about particles,
+vertices and relations between them. A specialized tracking action is
+used to test whether given particle is to be stored or not. The
+decision criteria for storing particle are configurable via the
+MCTruthConfig class. 
+
+HOW TO BUILD THE EXAMPLE ?
+
+- if you do not have it yet, install HepMC event record (tested with version 2.06.08)
+
+- set HEPMC_ROOT_DIR variable to point to the directory where HepMC is installed; 
+  if the HepMC is installed in your system directory (/usr/local) you do not need to set anything
+
+- run the CMake configuration and build mctruthex target in your build directory
+      
+- execute the application:
+        % your_binary_directory/mctruthex
+
+DESCRIPTION OF THE MCTRUTH HANDLING MECHANISM
+ 
+The main element of the MC truth handling machinery is the
+MCTruthManager class. This class is responsible for all the
+interaction with the HepMC event and does not depend on Geant4. It is
+a singleton, therefore it is guaranteed to be instanciated only once
+and the static 'GetInstance' method allows to access it from anywhere
+in the code. It contains methods like 'NewEvent' to start a new event,
+'AddParticle' to add particle to the current event, as well as
+'PrintEvent' for the purpose of the debugging.  The core of the
+algorithm which deals with building up the MC truth event tree within
+the HepMC event is implemented in AddParticle method.
+ 
+The AddParticle method is called with the following arguments:
+four-momentum, production position and 'end' position of the particle,
+PDG code of the particle, as well as the particle ID (unique identifier,
+as we will see later, corresponding to Geant4 TrackID) and the ID of
+the mother. Finally, there is a boolean flag specifying whether the
+direct mother of the given particle has been stored, or not.
+ 
+The first step, which always takes place, is to instanciate a new
+HepMC::GenParticle with the barcode corresponding to particle ID, as
+well as to instanciate a new HepMC::GenVertex which will represent the
+'end' vertex of the particle. The barcode of the 'end vertex' is equal
+to minus the barcode of the particle.
+ 
+We can now distinguish several cases:
+ 
+1) the particle is a primary in the Geant4 language, i.e. its
+   mother ID is 0
+ 
+   This is the simplest case, we just instanciate a new 'primary'
+   (without any incoming particles) GenVertex, we add to it the
+   particle and we put it all in the event. Additionally we store the
+   ID of the particle in a special vector, where all the IDs of
+   primary particles will be stored, allowing quick access to each of
+   the main 'branches' of the event. We return from the method.
+ 
+2) the particle is not a primary
+
+   We use the 'event->barcode_to_particle(motherID)' method to get the
+   pointer to its mother.
+    
+   We check if the 'end vertex' of the mother corresponds to the
+   'production vertex' of the particle in question.
+ 
+   2.1) If the two vertices do match, we attach the new particle to
+        the 'end vertex' of the mother. We return from the method.
+ 
+   2.2) If the two vertices do not match, i.e. the new particle is not
+        a product of the 'end vertex' of the mother particle, we can
+        have two cases:
+                
+        2.2.1) The boolean flag says that the direct mother of the
+               particle has _not_ been stored. This means that the
+               particle has been 'adopted' by one of its ancestors, or
+               in other words, the mother ID of the particle does not
+               correspond to its direct mother (so clearly the
+               vertices cannot match). This for instance could happen
+               if we decided not to store gamma coming from pi0 decay
+               but did decide to store e+/- coming from the gamma
+               conversion (so the gamma between pi0 and e+/- was
+               missing). In such a case we instanciate (or use one of
+               the existing ones, if vertices match) a 'dummy'
+               particle (with pdg = -999999) which then acts as the
+               link between the 'adopted' particle and the
+               (non-direct) mother. In such a way, the navigability up
+               in the event is still possible, but in the same time,
+               we can clearly see that the link is not a direct
+               one. We return from the method.
+ 
+        2.2.2) The boolean flag says that direct mother of the
+               particle _has_ been stored. Taking into account that
+               the vertices do not match, it can mean only one
+               thing. The new particle has been produced 'on the
+               flight', i.e. somewhere 'before' the 'end vertex' of
+               the mother. This can be the case, for instace, for
+               delta electrons, bremsstrahlung gammas, etc.  In such a
+               situation, we 'split' the mother particle in two
+               particles and create a new vertex from which the
+               secondary will be going out. The complication, however,
+               arises when we have more than one generated 'on the
+               flight' particle attached to the same mother. In such a
+               case, for each secondary we need to locate the right
+               'segment' of the mother particle (i.e. we need to find
+               between which two vertices we need to add a new
+               one). To keep track of those segmentations we introduce
+               a map where each particle ID we map into the number of
+               existing segments (in the normal case one). Each new
+               'segment' gets barcode equal to the barcode of the
+               original particle + N*10000000, where N is the segment
+               number. In such a way, one can easily follow the
+               'segmentation' (if any) of each particle.  We return
+               from the method.
+ 
+This concludes the description of MCTruthManager. The MCTruthConfig
+class is a collection of criteria (minimal energy, PDG, creator
+process, etc) that we want to apply when deciding whether to store or
+not given particle. These values are used by the
+'MCTruthTrackingAction' which we describe below. This class can
+certainly be extended with other members.
+ 
+The actual Geant4-dependent part of the MCTruth handling machinery
+consists of a few 'G4 user actions' as well as an implementation of
+G4VUserTrackInformation. The later one is, for the moment, used only
+to store one boolean flag indicating whether the direct mother of the
+given track has been stored or not.
+ 
+The first user action is MCTruthEventAction which is only reponsible
+for calling MCTruthManager::GetInstance()->NewEvent() at the beginning
+of each event. It can also be used for printing out events for the
+purpose of debugging.
+ 
+The actual 'decision making' concerning which particle to store is
+done in MCTruthTrackingAction. At the end of each track the method
+trackToBeStored(track) is called to check for various characteristics
+of the particle. These, for instance can be energy, particle ID,
+creator process, etc.
+ 
+If the particle satisfies the conditions the
+MCTruthManager::GetInstance()->AddParticle is called and all the
+procedure described above is performed. The important element here is
+that the Geant4 TrackID is used as the unique particle ID in
+MCTruthManager and eventually as the barcode of the
+HepMC::GenParticle.
+ 
+If the particle does not qualify to be stored, there are two actions
+performed. First the 'ParentID' of the _daughters_ is set to the
+'ParentID' of the currenly processed particle. In other words, the
+'ParentID' of the daughters is set to the ID of the last stored
+particle. Second, the 'directParent' flag from MCTruthTrackInformation
+of the __daughters__ is set to FALSE. In such a way, one is still able
+to navigate up in the event (to get the ancestors of the particle),
+but in the same time, the particle is flagged as 'not having direct
+parent'.

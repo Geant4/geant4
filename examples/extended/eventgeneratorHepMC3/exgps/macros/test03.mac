@@ -1,0 +1,38 @@
+# test03
+#
+/run/initialize
+#
+/gps/particle gamma
+
+#rectangle plane source
+/gps/pos/type Plane
+/gps/pos/shape Rectangle
+/gps/pos/centre 0. 2. 1. cm
+/gps/pos/halfx 1. cm
+/gps/pos/halfy 3. cm
+
+# isotropic angular distri.
+/gps/ang/type iso
+
+# power-law energy distr.
+/gps/ene/type Pow
+/gps/ene/min 2. MeV
+/gps/ene/max 10. MeV
+/gps/ene/alpha -2.
+
+# commands below are independent of gps
+#
+/analysis/setFileName test03
+/analysis/h1/set 1 100 1 20 MeV
+/analysis/h2/set 1 100 -5 5 cm none linear 100 -5 5 cm none linear 
+/analysis/h2/set 4 120 0 360 deg none linear 100 -1 1 none none linear
+#
+#/control/execute vis.mac
+#
+/run/printProgress 10000
+#
+/run/beamOn 100000
+
+
+
+

@@ -1,0 +1,87 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example HepMCEx01 History file
+                    ------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+September 4th 2018 I. Hrivnacova (HepMCEx01-V10-04-00)
+- Coding guidelines
+- Updated CMake: removed gfortran (obsolete)
+
+May 15th 2018 J.Allison
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+November 13th 2013 K. Murakami
+- new coding guideline
+
+August 27th, 2013 G. Cosmo
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+November 21th, 2012 K. Murakami
+- changed that AsciiReader uses IO_GenEvent instead of IO_AsciiParticles
+- migration to CMake. CMakeLists.txt, added link to -lgfortran/-lg2c
+- data files and outputs are updateds
+- physics list is changed to FTFP_BERT
+
+December 10th 2010 K.Murakami
+- update codes for latest HEPMC version (2.06.03)
+- change physics list from GGSP to QGSP_BERT
+- update outputs
+- update data/ directory for latest HEPMC version
+
+June 4th 2010 J.Perl
+- Updated vis usage
+
+May 12th 2010 J.Allison
+- Introduced GUIExecutive.
+
+November, 22nd 2006 G.Cosmo
+- Corrected GNUmakefile.
+
+November 20th 2006 K.Murakami
+- GNUmakefile was modified for new place for physics list package
+
+October 18th 2006 J.Allison
+- Migrate to new trajectory modeling commands.
+
+July 5th, 2006 G.Cosmo
+- Updated to current version of exampleN04. Now working with release series 8.
+- Corrected GNUmakefile, now requiring CERNLIB 2005 for PYTHIA-8.0.4 and
+  HepMC 1.27 or greater.
+
+May 3rd, 2005  John Allison
+- Replaced vis manager with G4VisExecutive.
+
+December 2nd, 2003  G.Cosmo
+- Brought up-to-date with examples/novice/N04.
+
+November 13th, 2003  J.Allison
+- Removed OPACS from Vis Manager.
+
+July 4th, 2003  G.Cosmo
+- fixed compilation errors due to incorrect code migration from g4std wrappers.
+- fixed pedantic compilation warnings on Linux-g++.
+
+November 19th, 2002  K.Murakami
+- modified as is ExN04. (physics lists and vis. manager)
+- "std" namespace left/not cared was modified to "G4std".
+
+May 28th, 2002  K.Murakami
+- renamed classes and filenames.
+
+April 15th, 2002  K.Murakami
+- Creared from examples/novice/N04.
+- Replace N04PrimaryGeneatorAction with HepMC-interface version.
+- Resize the world volume.

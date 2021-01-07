@@ -1,0 +1,11 @@
+/control/verbose 2
+/run/verbose 1
+#
+/run/initialize
+#
+/gunExample/selectGunAction 2
+#
+/analysis/setFileName run2
+/analysis/h1/set 1  100  0. 200. keV	#energy spectrum for gun #2
+#  
+/run/beamOn 100000

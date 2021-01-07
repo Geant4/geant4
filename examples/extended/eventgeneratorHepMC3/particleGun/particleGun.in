@@ -1,0 +1,10 @@
+#
+/control/verbose 2
+/run/verbose 1
+#
+/run/initialize
+#
+/gunExample/selectGunAction 3
+#
+/run/printProgress 10000
+/run/beamOn 100000
