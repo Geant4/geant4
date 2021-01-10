@@ -25,6 +25,16 @@ else()
 endif()   
 
 #----------------------------------------------------------------------------
+# HepMC3 examples require HepMC3
+#
+find_package(HepMC3 QUIET)
+if(HEPMC3_FOUND)
+  add_subdirectory(HepMC3)
+else()
+  message(STATUS "G4 Examples: HepMC3 package not found. --> HepMC3 examples disabled.") 
+endif()
+
+#----------------------------------------------------------------------------
 # decayer6 example requires Pythia6
 #
 find_package(Pythia6 QUIET)
