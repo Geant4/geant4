@@ -115,6 +115,6 @@ PYTHIA6_VERSION   the pythia version
 
 \section HepMC_s3 Example MCTruth
 
-Application \link ExampleMCTruth MCTruth \endlink demonstrating handling of Monte-Carlo truth information through the HepMC package.
+Application \link ExampleMCTruth MCTruth \endlink demonstrating handling of Monte-Carlo truth information through the HepMC3 package.
 
 */

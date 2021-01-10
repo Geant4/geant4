@@ -42,15 +42,11 @@
 
 #include "G4Types.hh"
 #include "G4LorentzVector.hh"
-#ifdef G4LIB_USE_HEPMC3
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Print.h"
-#else
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#endif
+
 
 #include "MCTruthConfig.hh"
 
@@ -62,11 +58,8 @@ public:
   static MCTruthManager* GetInstance();
 
   void NewEvent();
-#ifdef G4LIB_USE_HEPMC3
   HepMC3::GenEvent* GetCurrentEvent() const {return fEvent;}
-#else
-  HepMC::GenEvent* GetCurrentEvent() const {return fEvent;}
-#endif
+
   void PrintEvent();
 
   void AddParticle(G4LorentzVector&, G4LorentzVector&, G4LorentzVector&, 
@@ -82,13 +75,9 @@ protected:
   virtual ~MCTruthManager( ); 
 
 private:
-#ifdef G4LIB_USE_HEPMC3
   HepMC3::GenEvent* fEvent;
   std::map<int,HepMC3::GenParticlePtr> fpartID_to_particle;
   std::map<int,HepMC3::GenParticlePtr> fbarcode_to_particle;
-#else
-  HepMC::GenEvent* fEvent;
-#endif
   // vector containing barcodes of primary particles (not having any mother)
   //
   std::vector<G4int> fPrimarybarcodes;
@@ -105,10 +94,7 @@ private:
 
   // recursive printing of the tree
   //
-#ifdef G4LIB_USE_HEPMC3
   void PrintTree(HepMC3::GenParticlePtr, G4String);
-#else
-  void PrintTree(HepMC::GenParticle*, G4String);
-#endif  
+ 
 };
 #endif // INCLUDE_MCTRUTHMANAGER_H

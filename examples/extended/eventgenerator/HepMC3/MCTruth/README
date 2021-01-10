@@ -4,12 +4,12 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                          MCTRUTH using HepMC
+                          MCTRUTH using HepMC3
                           -------------------
 
 This example demonstrates a mechanism for Monte Carlo truth handling
-using HepMC as the event record. The user does not interact directly
-with the HepMC classes but with the MCTruthManager class which takes
+using HepMC3 as the event record. The user does not interact directly
+with the HepMC3 classes but with the MCTruthManager class which takes
 care with storing all the necessary information about particles,
 vertices and relations between them. A specialized tracking action is
 used to test whether given particle is to be stored or not. The
@@ -18,7 +18,7 @@ MCTruthConfig class.
 
 HOW TO BUILD THE EXAMPLE ?
 
-- if you do not have it yet, install HepMC event record (tested with version 2.06.08)
+- if you do not have it yet, install HepMC event record (tested with version 3.2.3)
 
 - set HEPMC_ROOT_DIR variable to point to the directory where HepMC is installed; 
   if the HepMC is installed in your system directory (/usr/local) you do not need to set anything

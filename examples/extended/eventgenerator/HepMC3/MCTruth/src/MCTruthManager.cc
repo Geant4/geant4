@@ -73,11 +73,7 @@ void MCTruthManager::NewEvent()
   // first delete the old event
   delete fEvent;
   // and now instaciate a new one
-#ifdef G4LIB_USE_HEPMC3  
   fEvent = new HepMC3::GenEvent();
-#else
-  fEvent = new HepMC::GenEvent();
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,30 +85,19 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
                                  G4bool directParent)
 {
   // we create a new particle with barcode = partID
-#ifdef G4LIB_USE_HEPMC3  
   HepMC3::GenParticlePtr particle = std::make_shared<HepMC3::GenParticle>(
   HepMC3::FourVector(momentum.x(),momentum.y(),momentum.z(),momentum.t())
   , pdg_id);
   fpartID_to_particle[partID]=particle;
-#else
-  HepMC::GenParticle* particle = new HepMC::GenParticle(momentum, pdg_id);
-  particle->suggest_barcode(partID);
-#endif
   // we initialize the 'segmentations' map
   // for the moment particle is not 'segmented' 
   fSegmentations[partID] = 1;
 
   // we create the GenVertex corresponding to the end point of the track
-#ifdef G4LIB_USE_HEPMC3
   HepMC3::GenVertexPtr endvertex = std::make_shared<HepMC3::GenVertex>(
   HepMC3::FourVector(endpos.x(),endpos.y(),endpos.z(),endpos.t())
   
   );
-#else
-  HepMC::GenVertex* endvertex = new HepMC::GenVertex(endpos);
-  // barcode of the endvertex = - barcode of the track
-  endvertex->suggest_barcode(-partID);
-#endif  
   endvertex->add_particle_in(particle);
   fEvent->add_vertex(endvertex);
   
@@ -120,24 +105,15 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   {
     // here we could try to improve speed by searching only through particles which 
     // belong to the given primary tree
-#ifdef G4LIB_USE_HEPMC3
     HepMC3::GenParticlePtr mother{nullptr}; 
     if (fpartID_to_particle.find(motherID)!=fpartID_to_particle.end()) mother=fpartID_to_particle.at(motherID);
-#else
-    HepMC::GenParticle* mother = fEvent->barcode_to_particle(motherID);
-#endif
     //
     if(mother)
     {
       // we first check whether the mother's end vertex corresponds to the particle's
       // production vertex
-#ifdef G4LIB_USE_HEPMC3
       HepMC3::GenVertexPtr motherendvtx = mother->end_vertex();
       HepMC3::FourVector mp0 = motherendvtx->position();
-#else
-      HepMC::GenVertex* motherendvtx = mother->end_vertex();
-      HepMC::FourVector mp0 = motherendvtx->position();
-#endif
       G4LorentzVector motherendpos(mp0.x(), mp0.y(), mp0.z(), mp0.t());
       
       if( motherendpos.x() == prodpos.x() &&
@@ -155,7 +131,6 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           // first check if any of the dummy particles
           // has the end vertex at the right place
           //
-#ifdef G4LIB_USE_HEPMC3
           for(auto it: motherendvtx->particles_out())
           {
             if(it->pdg_id()==-999999)
@@ -173,46 +148,20 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
               }
             }
           }
-#else
-          for(HepMC::GenVertex::particles_out_const_iterator 
-                it=motherendvtx->particles_out_const_begin();
-              it!=motherendvtx->particles_out_const_end();it++)
-          {
-            if((*it)->pdg_id()==-999999)
-            {
-              HepMC::FourVector dp0 = (*it)->end_vertex()->position();
-              G4LorentzVector dummypos(dp0.x(), dp0.y(), dp0.z(), dp0.t());;
-              
-              if( dummypos.x() == prodpos.x() &&
-                  dummypos.y() == prodpos.y() &&
-                  dummypos.z() == prodpos.z() ) 
-              {
-                (*it)->end_vertex()->add_particle_out(particle);
-                found = true;
-                break;
-              }
-            }
-          }
-#endif
           // and if not, create a dummy particle connecting
           // to the end vertex of the mother
           //
           if(!found)
           {
-#ifdef G4LIB_USE_HEPMC3
             HepMC3::GenVertexPtr childvtx = std::make_shared<HepMC3::GenVertex>(
             HepMC3::FourVector(prodpos.x(),prodpos.y(),prodpos.z(),prodpos.t())
             
             );
-#else
-            HepMC::GenVertex* childvtx = new HepMC::GenVertex(prodpos);
-#endif
             childvtx->add_particle_out(particle);
 
             // the dummy vertex gets the barcode -500000
             // minus the daughter particle barcode
             //
-#ifdef G4LIB_USE_HEPMC3
             
             fEvent->add_vertex(childvtx);
             // FIXME  SET SHITTY BARCODE childvtx->suggest_barcode(-500000-partID);
@@ -228,20 +177,6 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
             motherendvtx->add_particle_out(dummypart);
 
 
-#else
-            childvtx->suggest_barcode(-500000-partID);
-            fEvent->add_vertex(childvtx);
-           
-            HepMC::GenParticle* dummypart =
-               new HepMC::GenParticle(G4LorentzVector(),-999999);
-
-            // the dummy particle gets the barcode 500000
-            // plus the daughter particle barcode
-            //
-            dummypart->suggest_barcode(500000+partID);
-            childvtx->add_particle_in(dummypart);
-            motherendvtx->add_particle_out(dummypart);
-#endif 
           }
         }
         else // biological
@@ -261,36 +196,23 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
             segment++;
             if (segment == number_of_segments) 
               G4cerr << "Problem!!!! Time coordinates incompatible!" << G4endl;
-#ifdef G4LIB_USE_HEPMC3            
             //WTF???
             mother = fbarcode_to_particle.at(segment*10000000 + motherID);
-#else
-            mother = fEvent->barcode_to_particle(segment*10000000 + motherID);
-#endif
           }
           
           // now, we 'split' the appropriate 'segment' of the mother particle
           // into two particles and create a new vertex
           //
-#ifdef G4LIB_USE_HEPMC3 
           HepMC3::GenVertexPtr childvtx = std::make_shared<HepMC3::GenVertex>(
           HepMC3::FourVector(prodpos.x(),prodpos.y(),prodpos.z(),prodpos.t()));
-#else
-          HepMC::GenVertex* childvtx = new HepMC::GenVertex(prodpos);
-#endif
           childvtx->add_particle_out(particle);
           fEvent->add_vertex(childvtx);
 
           // we first detach the mother from its original vertex
           //
-#ifdef G4LIB_USE_HEPMC3 
           HepMC3::GenVertexPtr orig_mother_end_vtx = mother->end_vertex();
           orig_mother_end_vtx->remove_particle_in(mother);
           orig_mother_end_vtx->remove_particle_out(mother);
-#else
-          HepMC::GenVertex* orig_mother_end_vtx = mother->end_vertex();
-          orig_mother_end_vtx->remove_particle(mother);
-#endif
 
 
           // and attach it to the new vertex
@@ -301,7 +223,6 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           // interaction the barcode of the new particle is 10000000 + the
           // original barcode
           //
-#ifdef G4LIB_USE_HEPMC3 
           HepMC3::GenParticlePtr mothertwo = std::make_shared<HepMC3::GenParticle>(mother->momentum(),mother->pdg_id());
           //fbarcode_to_particle[fSegmentations[motherID]*10000000+ mother->barcode()];
            
@@ -310,17 +231,6 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           //FIXME orig_mother_end_vtx->suggest_barcode(-fSegmentations[motherID]*10000000 - mother->barcode());
           //FIXME childvtx->suggest_barcode(-mother->barcode());
 
-#else
-          HepMC::GenParticle* mothertwo = new HepMC::GenParticle(*mother);
-          mothertwo->suggest_barcode(fSegmentations[motherID]*10000000
-                                    + mother->barcode());
-
-          // we also reset the barcodes of the vertices
-          //
-          orig_mother_end_vtx->suggest_barcode(-fSegmentations[motherID]
-                                               *10000000 - mother->barcode());
-          childvtx->suggest_barcode(-mother->barcode());
-#endif
           // we attach it to the new vertex where interaction took place
           //
           childvtx->add_particle_out(mothertwo);
@@ -346,12 +256,8 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   }
   else // primary
   {
-#ifdef G4LIB_USE_HEPMC3
     HepMC3::GenVertexPtr primaryvtx = std::make_shared<HepMC3::GenVertex>(
     HepMC3::FourVector(prodpos.x(),prodpos.y(),prodpos.z(),prodpos.t()));
-#else    
-    HepMC::GenVertex* primaryvtx = new HepMC::GenVertex(prodpos);
-#endif
     primaryvtx->add_particle_out(particle);
     fEvent->add_vertex(primaryvtx);
 
@@ -365,26 +271,17 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
 
 void MCTruthManager::PrintEvent()
 {
-#ifdef G4LIB_USE_HEPMC3
   HepMC3::Print::content(*fEvent);
-#else
-  fEvent->print();
-#endif
   // looping over primaries and print the decay tree for each of them
   //
   for(std::vector<int>::const_iterator primarybar=fPrimarybarcodes.begin();
       primarybar!=fPrimarybarcodes.end();primarybar++)
   {
-#ifdef G4LIB_USE_HEPMC3
     PrintTree(fpartID_to_particle.at(*primarybar), " | ");
-#else
-    PrintTree(fEvent->barcode_to_particle(*primarybar), " | ");
-#endif
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#ifdef G4LIB_USE_HEPMC3  
 void MCTruthManager::PrintTree(HepMC3::GenParticlePtr particle, G4String offset)
 {
   G4cout << offset << "---  barcode: " << particle->id() << " pdg: "//FIXME 
@@ -410,34 +307,4 @@ void MCTruthManager::PrintTree(HepMC3::GenParticlePtr particle, G4String offset)
     PrintTree(it, offset + deltaoffset);
   } 
 }
-#else
-void MCTruthManager::PrintTree(HepMC::GenParticle* particle, G4String offset)
-{
-  G4cout << offset << "---  barcode: " << particle->barcode() << " pdg: " 
-         << particle->pdg_id() << " energy: " << particle->momentum().e() 
-         << " production vertex: "
-         << particle->production_vertex()->position().x() << ", " 
-         << particle->production_vertex()->position().y() << ", " 
-         << particle->production_vertex()->position().z() << ", " 
-         << particle->production_vertex()->position().t() 
-         << G4endl;
-
-  for(HepMC::GenVertex::particles_out_const_iterator 
-        it=particle->end_vertex()->particles_out_const_begin();
-        it!=particle->end_vertex()->particles_out_const_end();
-      it++)
-  {
-    G4String deltaoffset = "";
-
-    G4int curr = std::fmod(double((*it)->barcode()),10000000.);
-    G4int part = std::fmod(double(particle->barcode()),10000000.);
-    if( curr != part )
-      {
-        deltaoffset = " | ";
-      }
-
-    PrintTree((*it), offset + deltaoffset);
-  } 
-}
-#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
