@@ -21,37 +21,25 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find HepMC (required package)
+# Find HepMC3 (required package)
 #
-if (USE_HEPMC3)
- add_definitions(-DG4LIB_USE_HEPMC3)
- find_package(HepMC3 REQUIRED)
- set (EVENT_RECORD_INCLUDE_DIR ${HEPMC3_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/external)
- set (EVENT_RECORD_LIBRARIES ${HEPMC3_LIB})
- set (interface_sources
-${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReader.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReaderMessenger.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4Interface.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaInterface.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaMessenger.cc 
-)
-else()
- find_package(HepMC2 REQUIRED)
- set (EVENT_RECORD_INCLUDE_DIR ${HEPMC2_INCLUDE_DIR})
- set (EVENT_RECORD_LIBRARIES ${HEPMC2_LIBRARIES} ${HEPMC2_FIO_LIBRARIES})
- set (interface_sources
- ${PROJECT_SOURCE_DIR}/src/HepMCG4AsciiReader.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4AsciiReaderMessenger.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4Interface.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4PythiaInterface.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4PythiaMessenger.cc
-${PROJECT_SOURCE_DIR}/src/HEPEvtcom.cc)
-endif()
+
+add_definitions(-DG4LIB_USE_HEPMC3)
+find_package(HepMC3 REQUIRED)
+set (EVENT_RECORD_INCLUDE_DIR ${HEPMC3_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/external)
+set (EVENT_RECORD_LIBRARIES ${HEPMC3_LIB})
+set (interface_sources
+                        ${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReader.cc
+                        ${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReaderMessenger.cc
+                        ${PROJECT_SOURCE_DIR}/src/HepMC3G4Interface.cc
+                        ${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaInterface.cc
+                        ${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaMessenger.cc 
+                        )
 
 #----------------------------------------------------------------------------
 # Find Pythia6 (optional package)
 #
-find_package(Pythia6 REQUIRED)
+find_package(Pythia6)
 include(CheckLanguage)
 check_language(Fortran)
 if(PYTHIA6_FOUND AND CMAKE_Fortran_COMPILER)
@@ -78,43 +66,73 @@ include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${EVENT_RECORD_INCLUDE_DIR})
 set(sources 
-${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterHit.cc
-${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterParametrisation.cc
-${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterROGeometry.cc
-${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterSD.cc
-${PROJECT_SOURCE_DIR}/src/ExN04DetectorConstruction.cc
-${PROJECT_SOURCE_DIR}/src/ExN04DetectorParameterDef.icc
-${PROJECT_SOURCE_DIR}/src/ExN04EventAction.cc
-${PROJECT_SOURCE_DIR}/src/ExN04Field.cc
-${PROJECT_SOURCE_DIR}/src/ExN04MuonHit.cc
-${PROJECT_SOURCE_DIR}/src/ExN04MuonSD.cc
-${PROJECT_SOURCE_DIR}/src/ExN04PrimaryGeneratorAction.cc
-${PROJECT_SOURCE_DIR}/src/ExN04PrimaryGeneratorMessenger.cc
-${PROJECT_SOURCE_DIR}/src/ExN04RunAction.cc
-${PROJECT_SOURCE_DIR}/src/ExN04StackingAction.cc
-${PROJECT_SOURCE_DIR}/src/ExN04StackingActionMessenger.cc
-${PROJECT_SOURCE_DIR}/src/ExN04SteppingAction.cc
-${PROJECT_SOURCE_DIR}/src/ExN04SteppingVerbose.cc
-${PROJECT_SOURCE_DIR}/src/ExN04TrackerHit.cc
-${PROJECT_SOURCE_DIR}/src/ExN04TrackerParametrisation.cc
-${PROJECT_SOURCE_DIR}/src/ExN04TrackerSD.cc
-${PROJECT_SOURCE_DIR}/src/ExN04TrackingAction.cc
-
-
+              ${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterHit.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterParametrisation.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterROGeometry.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04CalorimeterSD.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04DetectorConstruction.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04DetectorParameterDef.icc
+              ${PROJECT_SOURCE_DIR}/src/ExN04EventAction.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04Field.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04MuonHit.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04MuonSD.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04PrimaryGeneratorAction.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04PrimaryGeneratorMessenger.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04RunAction.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04StackingAction.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04StackingActionMessenger.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04SteppingAction.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04SteppingVerbose.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04TrackerHit.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04TrackerParametrisation.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04TrackerSD.cc
+              ${PROJECT_SOURCE_DIR}/src/ExN04TrackingAction.cc
 )
 
 
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+set( headers 
+                    ${PROJECT_SOURCE_DIR}/include/ExN04CalorimeterHit.hh                  
+                    ${PROJECT_SOURCE_DIR}/include/ExN04Field.hh                           
+                    ${PROJECT_SOURCE_DIR}/include/ExN04SteppingAction.hh                  
+                    ${PROJECT_SOURCE_DIR}/include/ExN04CalorimeterParametrisation.hh      
+                    ${PROJECT_SOURCE_DIR}/include/ExN04MuonHit.hh                         
+                    ${PROJECT_SOURCE_DIR}/include/ExN04SteppingVerbose.hh                 
+                    ${PROJECT_SOURCE_DIR}/include/ExN04CalorimeterROGeometry.hh           
+                    ${PROJECT_SOURCE_DIR}/include/ExN04MuonSD.hh                          
+                    ${PROJECT_SOURCE_DIR}/include/ExN04TrackerHit.hh                      
+                    ${PROJECT_SOURCE_DIR}/include/ExN04CalorimeterSD.hh                   
+                    ${PROJECT_SOURCE_DIR}/include/ExN04PrimaryGeneratorAction.hh          
+                    ${PROJECT_SOURCE_DIR}/include/ExN04TrackerParametrisation.hh          
+                    ${PROJECT_SOURCE_DIR}/include/ExN04DetectorConstruction.hh            
+                    ${PROJECT_SOURCE_DIR}/include/ExN04PrimaryGeneratorMessenger.hh       
+                    ${PROJECT_SOURCE_DIR}/include/ExN04TrackerSD.hh                       
+                    ${PROJECT_SOURCE_DIR}/include/ExN04DetectorParameterDef.hh            
+                    ${PROJECT_SOURCE_DIR}/include/ExN04RunAction.hh                       
+                    ${PROJECT_SOURCE_DIR}/include/ExN04TrackingAction.hh                  
+                    ${PROJECT_SOURCE_DIR}/include/ExN04DummySD.hh                         
+                    ${PROJECT_SOURCE_DIR}/include/ExN04StackingAction.hh                  
+                    ${PROJECT_SOURCE_DIR}/include/ExN04EventAction.hh                     
+                    ${PROJECT_SOURCE_DIR}/include/ExN04StackingActionMessenger.hh         
 
-
+                    ${PROJECT_SOURCE_DIR}/include/HepMCG4Interface.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMCG4AsciiReaderMessenger.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMC3G4AsciiReader.hh                  
+                    ${PROJECT_SOURCE_DIR}/include/HepMCG4PythiaInterface.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMC3G4AsciiReaderMessenger.hh         
+                    ${PROJECT_SOURCE_DIR}/include/HepMCG4PythiaMessenger.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMCG4AsciiReader.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMC3G4PythiaMessenger.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMC3G4PythiaInterface.hh
+                    ${PROJECT_SOURCE_DIR}/include/HepMC3G4Interface.hh 
+                    )
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(HepMCEx01 HepMCEx01.cc ${sources} ${generator_sources} ${interface_sources} ${headers})
 target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
-                      ${EVENT_RECORD_LIBRARIES}
-                      ${GENERATOR_LIBRARIES})
+                                ${EVENT_RECORD_LIBRARIES}
+                                ${GENERATOR_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

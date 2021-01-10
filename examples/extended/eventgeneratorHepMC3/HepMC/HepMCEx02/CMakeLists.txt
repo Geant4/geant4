@@ -21,38 +21,25 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find HepMC (required package)
+# Find HepMC3 (required package)
 #
-if (USE_HEPMC3)
- find_package(HepMC3 REQUIRED)
-  add_definitions(-DG4LIB_USE_HEPMC3)
- set (EVENT_RECORD_INCLUDE_DIR ${HEPMC3_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/external)
- set (EVENT_RECORD_LIBRARIES ${HEPMC3_LIB})
- set (interface_sources
-${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReader.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReaderMessenger.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4Interface.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaInterface.cc
-${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaMessenger.cc 
-#${PROJECT_SOURCE_DIR}/src/HEPEvtcom.cc
+find_package(HepMC3 REQUIRED)
+add_definitions(-DG4LIB_USE_HEPMC3)
+set (EVENT_RECORD_INCLUDE_DIR ${HEPMC3_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/external)
+set (EVENT_RECORD_LIBRARIES ${HEPMC3_LIB})
 
-)
-else()
- find_package(HepMC2 REQUIRED)
- set (EVENT_RECORD_INCLUDE_DIR ${HEPMC2_INCLUDE_DIR})
- set (EVENT_RECORD_LIBRARIES ${HEPMC2_LIBRARIES} ${HEPMC2_FIO_LIBRARIES})
- set (interface_sources
- ${PROJECT_SOURCE_DIR}/src/HepMCG4AsciiReader.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4AsciiReaderMessenger.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4Interface.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4PythiaInterface.cc
-${PROJECT_SOURCE_DIR}/src/HepMCG4PythiaMessenger.cc
-${PROJECT_SOURCE_DIR}/src/HEPEvtcom.cc)
-endif()
+set (interface_sources
+              ${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReader.cc
+              ${PROJECT_SOURCE_DIR}/src/HepMC3G4AsciiReaderMessenger.cc
+              ${PROJECT_SOURCE_DIR}/src/HepMC3G4Interface.cc
+              ${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaInterface.cc
+              ${PROJECT_SOURCE_DIR}/src/HepMC3G4PythiaMessenger.cc 
+              #${PROJECT_SOURCE_DIR}/src/HEPEvtcom.cc
+              )
 #----------------------------------------------------------------------------
 # Find Pythia6 (optional package)
 #
-find_package(Pythia6 REQUIRED)
+find_package(Pythia6)
 include(CheckLanguage)
 check_language(Fortran)
 if(PYTHIA6_FOUND AND CMAKE_Fortran_COMPILER)
@@ -67,7 +54,6 @@ if(PYTHIA6_FOUND AND CMAKE_Fortran_COMPILER)
   # ${PROJECT_SOURCE_DIR}/external/upveto.F
   ""
   )
-
 else()
   set(GENERATOR_LIBRARIES "")  
  set (generator_sources "")
@@ -82,26 +68,46 @@ include_directories(${PROJECT_SOURCE_DIR}/include
 
 set (sources 
 
-${PROJECT_SOURCE_DIR}/src/H02DetectorConstruction.cc
-${PROJECT_SOURCE_DIR}/src/H02EventAction.cc
-${PROJECT_SOURCE_DIR}/src/H02Field.cc
-${PROJECT_SOURCE_DIR}/src/H02MuonHit.cc
-${PROJECT_SOURCE_DIR}/src/H02MuonSD.cc
-${PROJECT_SOURCE_DIR}/src/H02PrimaryGeneratorAction.cc
-${PROJECT_SOURCE_DIR}/src/H02PrimaryGeneratorMessenger.cc
-${PROJECT_SOURCE_DIR}/src/H02SteppingAction.cc
+              ${PROJECT_SOURCE_DIR}/src/H02DetectorConstruction.cc
+              ${PROJECT_SOURCE_DIR}/src/H02EventAction.cc
+              ${PROJECT_SOURCE_DIR}/src/H02Field.cc
+              ${PROJECT_SOURCE_DIR}/src/H02MuonHit.cc
+              ${PROJECT_SOURCE_DIR}/src/H02MuonSD.cc
+              ${PROJECT_SOURCE_DIR}/src/H02PrimaryGeneratorAction.cc
+              ${PROJECT_SOURCE_DIR}/src/H02PrimaryGeneratorMessenger.cc
+              ${PROJECT_SOURCE_DIR}/src/H02SteppingAction.cc
 ) 
 
 
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+set( headers 
+                   ${PROJECT_SOURCE_DIR}/include/H02DetectorConstruction.hh      
+                   ${PROJECT_SOURCE_DIR}/include/H02MuonSD.hh                    
+                   ${PROJECT_SOURCE_DIR}/include/H02EventAction.hh               
+                   ${PROJECT_SOURCE_DIR}/include/H02PrimaryGeneratorAction.hh    
+                   ${PROJECT_SOURCE_DIR}/include/H02Field.hh                     
+                   ${PROJECT_SOURCE_DIR}/include/H02PrimaryGeneratorMessenger.hh 
+                   ${PROJECT_SOURCE_DIR}/include/H02MuonHit.hh                   
+                   ${PROJECT_SOURCE_DIR}/include/H02SteppingAction.hh            
+
+                   ${PROJECT_SOURCE_DIR}/include/HepMC3G4Interface.hh            
+                   ${PROJECT_SOURCE_DIR}/include/HepMCG4AsciiReaderMessenger.hh
+                   ${PROJECT_SOURCE_DIR}/include/HepMC3G4AsciiReaderMessenger.hh 
+                   ${PROJECT_SOURCE_DIR}/include/HepMCG4AsciiReader.hh           
+                   ${PROJECT_SOURCE_DIR}/include/HepMCG4PythiaMessenger.hh                   
+                   ${PROJECT_SOURCE_DIR}/include/HepMC3G4PythiaInterface.hh      
+                   ${PROJECT_SOURCE_DIR}/include/HepMCG4Interface.hh 
+                   ${PROJECT_SOURCE_DIR}/include/HepMC3G4AsciiReader.hh          
+                   ${PROJECT_SOURCE_DIR}/include/HepMC3G4PythiaMessenger.hh      
+                   ${PROJECT_SOURCE_DIR}/include/HepMCG4PythiaInterface.hh
+                   )
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(HepMCEx02 HepMCEx02.cc ${sources} ${generator_sources} ${interface_sources} ${headers})
 target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}
-                      ${EVENT_RECORD_LIBRARIES}
-                      ${GENERATOR_LIBRARIES})
+                                ${EVENT_RECORD_LIBRARIES}
+                                ${GENERATOR_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

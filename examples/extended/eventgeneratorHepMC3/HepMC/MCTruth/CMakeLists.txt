@@ -15,26 +15,38 @@ include(${Geant4_USE_FILE})
 
 
 #----------------------------------------------------------------------------
-# Find HepMC (required package)
+# Find HepMC3 (required package)
 #
-if (USE_HEPMC3)
- add_definitions(-DG4LIB_USE_HEPMC3)
- find_package(HepMC3 REQUIRED)
- set (EVENT_RECORD_INCLUDE_DIR ${HEPMC3_INCLUDE_DIR})
- set (EVENT_RECORD_LIBRARIES ${HEPMC3_LIB})
-else()
- find_package(HepMC2 REQUIRED)
- set (EVENT_RECORD_INCLUDE_DIR ${HEPMC2_INCLUDE_DIR})
- set (EVENT_RECORD_LIBRARIES ${HEPMC2_LIBRARIES} )
-endif()
+add_definitions(-DG4LIB_USE_HEPMC3)
+find_package(HepMC3 REQUIRED)
+set (EVENT_RECORD_INCLUDE_DIR ${HEPMC3_INCLUDE_DIR})
+set (EVENT_RECORD_LIBRARIES ${HEPMC3_LIB})
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
                     ${Geant4_INCLUDE_DIR}
-                    ${GENERATOR_INCLUDE_DIR})
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+                    ${GENERATOR_INCLUDE_DIR}
+                    ${EVENT_RECORD_INCLUDE_DIR}
+                    )
+set( sources 
+               ${PROJECT_SOURCE_DIR}/src/DetectorConstruction.cc         
+               ${PROJECT_SOURCE_DIR}/src/MCTruthEventAction.cc           
+               ${PROJECT_SOURCE_DIR}/src/MCTruthTrackInformation.cc      
+               ${PROJECT_SOURCE_DIR}/src/PrimaryGeneratorAction.cc
+               ${PROJECT_SOURCE_DIR}/src/MCTruthConfig.cc                
+               ${PROJECT_SOURCE_DIR}/src/MCTruthManager.cc               
+               ${PROJECT_SOURCE_DIR}/src/MCTruthTrackingAction.cc )
+
+set( headers 
+               ${PROJECT_SOURCE_DIR}/include/DetectorConstruction.hh         
+               ${PROJECT_SOURCE_DIR}/include/MCTruthEventAction.hh           
+               ${PROJECT_SOURCE_DIR}/include/MCTruthTrackInformation.hh      
+               ${PROJECT_SOURCE_DIR}/include/PrimaryGeneratorAction.hh
+               ${PROJECT_SOURCE_DIR}/include/MCTruthConfig.hh                
+               ${PROJECT_SOURCE_DIR}/include/MCTruthManager.hh               
+               ${PROJECT_SOURCE_DIR}/include/MCTruthTrackingAction.hh )
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
