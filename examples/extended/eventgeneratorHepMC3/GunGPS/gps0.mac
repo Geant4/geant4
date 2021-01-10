@@ -1,9 +1,0 @@
-# for PrimaryGeneratorGPS
-#
-/gps/particle geantino
-/gps/energy 1 eV
-#
-/gps/position 0. 0. 0. cm
-/gps/ang/type iso
-# 
-/run/beamOn 50
