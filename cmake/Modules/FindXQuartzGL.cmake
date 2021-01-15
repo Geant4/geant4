@@ -49,17 +49,17 @@ set(CMAKE_FIND_FRAMEWORK_SAVE ${CMAKE_FIND_FRAMEWORK})
 set(CMAKE_FIND_FRAMEWORK NEVER)
 
 find_path(XQuartzGL_INCLUDE_DIR GL/gl.h
-  PATHS /usr/X11R6/include /opt/X11/include
+  PATHS /usr/X11R6/include /opt/X11/include /usr/local/include
   NO_DEFAULT_PATH
   )
 
 find_library(XQuartzGL_gl_LIBRARY GL
-  PATHS /usr/X11R6/lib /opt/X11/lib
+  PATHS /usr/X11R6/lib /opt/X11/lib /usr/local/lib
   NO_DEFAULT_PATH
   )
 
 find_library(XQuartzGL_glu_LIBRARY GLU
-  PATHS /usr/X11R6/lib /opt/X11/lib
+  PATHS /usr/X11R6/lib /opt/X11/lib /usr/local/lib
   NO_DEFAULT_PATH
   )
 
