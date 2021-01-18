@@ -59,7 +59,7 @@ MCTruthManager::~MCTruthManager()
 
 MCTruthManager* MCTruthManager::GetInstance()
 {
-  if( !instance )
+  if( instance == 0 )
   {
     instance = new MCTruthManager();
   }
@@ -96,7 +96,6 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   // we create the GenVertex corresponding to the end point of the track
   HepMC3::GenVertexPtr endvertex = std::make_shared<HepMC3::GenVertex>(
   HepMC3::FourVector(endpos.x(),endpos.y(),endpos.z(),endpos.t())
-  
   );
   endvertex->add_particle_in(particle);
   fEvent->add_vertex(endvertex);
@@ -148,6 +147,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
               }
             }
           }
+
           // and if not, create a dummy particle connecting
           // to the end vertex of the mother
           //
@@ -155,7 +155,6 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           {
             HepMC3::GenVertexPtr childvtx = std::make_shared<HepMC3::GenVertex>(
             HepMC3::FourVector(prodpos.x(),prodpos.y(),prodpos.z(),prodpos.t())
-            
             );
             childvtx->add_particle_out(particle);
 

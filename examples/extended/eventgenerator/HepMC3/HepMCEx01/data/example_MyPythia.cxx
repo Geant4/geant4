@@ -32,6 +32,8 @@
 // Events are read into the HepMC event record from the FORTRAN HEPEVT 
 // common block using the IO_HEPEVT strategy and then output to file in
 // ascii format using the IO_Ascii strategy.
+// Modified by Andrii Verbytskyi for the Geant4, January 2021
+// Includes HepMC3 support
 //////////////////////////////////////////////////////////////////////////
 // To Compile: go to the HepMC directory and type:
 // gmake examples/example_MyPythia.exe
@@ -45,10 +47,10 @@
 //
 
 #include <iostream>
-#include "HepMC/PythiaWrapper.h"
-#include "HepMC/IO_HEPEVT.h"
-#include "HepMC/IO_GenEvent.h"
-#include "HepMC/GenEvent.h"
+#include "PythiaWrapper6_4.h"
+#include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/GenEvent.h"
     
 int main() { 
     //
@@ -88,7 +90,7 @@ int main() {
     //
     // Instantial an IO strategy to write the data to file - it uses the 
     //  same ParticleDataTable
-    HepMC::IO_GenEvent ascii_io("example_MyPythia.dat",std::ios::out);
+    HepMC3::WriterAscii ascii_io("example_MyPythia.dat");
     //
     //........................................EVENT LOOP
     for ( int i = 1; i <= 10; i++ ) {
@@ -97,18 +99,19 @@ int main() {
 	call_pyevnt();      // generate one event with Pythia
 	// pythia pyhepc routine converts common PYJETS in common HEPEVT
 	call_pyhepc( 1 );
-	HepMC::GenEvent* evt = hepevtio.read_next_event();
+	//FIXME HepMC::GenEvent* evt = hepevtio.read_next_event();
 	// add some information to the event
 	evt->set_event_number(i);
-	evt->set_signal_process_id(20);
+	//FIXME evt->set_signal_process_id(20);
 	// write the event out to the ascii file
-	ascii_io << evt;
+	ascii_io.write_event(evt);
 	// we also need to delete the created event from memory
 	delete evt;
     }
     //........................................TERMINATION
     // write out some information from Pythia to the screen
     call_pystat( 1 );    
+    ascii_io.close();    
 
     return 0;
 }

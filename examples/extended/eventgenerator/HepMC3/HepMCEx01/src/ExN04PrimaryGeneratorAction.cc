@@ -33,13 +33,9 @@
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#ifdef  G4LIB_USE_HEPMC3
 #include "HepMC3G4AsciiReader.hh"
 #include "HepMC3G4PythiaInterface.hh"
-#else
-#include "HepMCG4AsciiReader.hh"
-#include "HepMCG4PythiaInterface.hh"
-#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
  : G4VUserPrimaryGeneratorAction()
@@ -47,17 +43,9 @@ ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
   // default generator is particle gun.
   fCurrentGenerator = fParticleGun= new G4ParticleGun();
   fCurrentGeneratorName = "fParticleGun";
-#ifdef  G4LIB_USE_HEPMC3
   fHepmcAscii = new HepMC3G4AsciiReader();
-#else
-  fHepmcAscii = new HepMCG4AsciiReader();
-#endif
 #ifdef G4LIB_USE_PYTHIA
-#ifdef  G4LIB_USE_HEPMC3
   fPythiaGen = new HepMC3G4PythiaInterface();
-#else
-  fPythiaGen = new HepMCG4PythiaInterface();
-#endif
 #else
   fPythiaGen = 0;
 #endif

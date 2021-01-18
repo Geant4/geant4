@@ -42,11 +42,11 @@
 
 #include "G4Types.hh"
 #include "G4LorentzVector.hh"
+
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Print.h"
-
 
 #include "MCTruthConfig.hh"
 
@@ -59,7 +59,6 @@ public:
 
   void NewEvent();
   HepMC3::GenEvent* GetCurrentEvent() const {return fEvent;}
-
   void PrintEvent();
 
   void AddParticle(G4LorentzVector&, G4LorentzVector&, G4LorentzVector&, 
@@ -95,6 +94,6 @@ private:
   // recursive printing of the tree
   //
   void PrintTree(HepMC3::GenParticlePtr, G4String);
- 
+  
 };
 #endif // INCLUDE_MCTRUTHMANAGER_H
