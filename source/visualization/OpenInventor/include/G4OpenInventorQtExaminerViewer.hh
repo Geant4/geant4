@@ -127,6 +127,7 @@ private Q_SLOTS :
 private:
 
    static G4OpenInventorQtExaminerViewer* viewer;
+   const char* fName;
 
    void (*escapeCallback)();
    //   void (*escapeCallback)(void*);

@@ -925,7 +925,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
   //
   if( ourStep<fMinStep )
   {
-    ourStep = 100*kCarTolerance;
+    ourStep = 2*kCarTolerance;
   }
 
   if ( motherSafety<ourSafety )

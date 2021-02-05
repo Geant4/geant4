@@ -73,7 +73,7 @@ G4GammaNuclearXS::G4GammaNuclearXS()
   //  verboseLevel = 0;
   if(verboseLevel > 0){
     G4cout  << "G4GammaNuclearXS::G4GammaNuclearXS Initialise for Z < " 
-	    << MAXZEL << G4endl;
+	    << MAXZGAMMAN << G4endl;
   }
   ggXsection = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet("PhotoNuclearXS");
   if(ggXsection == nullptr) ggXsection = new G4PhotoNuclearCrossSection();
@@ -83,7 +83,7 @@ G4GammaNuclearXS::G4GammaNuclearXS()
 G4GammaNuclearXS::~G4GammaNuclearXS()
 {
   if(isMaster) {
-    for(G4int i=0; i<MAXZEL; ++i) {
+    for(G4int i=0; i<MAXZGAMMAN; ++i) {
       delete data[i];
       data[i] = nullptr;
     }
@@ -120,7 +120,7 @@ G4GammaNuclearXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
 
-  G4int Z = (ZZ >= MAXZEL) ? MAXZEL - 1 : ZZ; 
+  G4int Z = (ZZ >= MAXZGAMMAN) ? MAXZGAMMAN - 1 : ZZ; 
 
   auto pv = GetPhysicsVector(Z);
   if(pv == nullptr) { return xs; }
@@ -217,7 +217,7 @@ G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
       auto elmVec = mat->GetElementVector();
       size_t numOfElem = mat->GetNumberOfElements();
       for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZEL-1));
+	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZGAMMAN-1));
 	if(data[Z] == nullptr) { Initialise(Z); }
       }
     }

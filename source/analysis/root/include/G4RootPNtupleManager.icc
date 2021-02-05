@@ -31,6 +31,10 @@ template <>
 inline G4bool G4RootPNtupleManager::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value)
 {
+  if (fCreateNtuples) {
+    CreateNtuplesFromMain();
+  }
+
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
     G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
     return false; 
@@ -88,6 +92,10 @@ template <typename T>
 G4bool G4RootPNtupleManager::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const T& value)
 {
+  if (fCreateNtuples) {
+    CreateNtuplesFromMain();
+  }
+
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
     G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl; 
     return false; 

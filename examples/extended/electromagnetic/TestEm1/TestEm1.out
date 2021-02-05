@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -425,7 +425,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.610000s Real=1.619178s Sys=0.000000s
+  User=1.100000s Real=1.126079s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -494,37 +494,37 @@ N=17 V[N]={511862276547668598, 1471172288461575206, 1128851390031159049, 9861769
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.070000s Real=0.071886s Sys=0.000000s
+  User=0.060000s Real=0.064040s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
  Total energy deposit:   100 MeV
- NIEL energy calculated: 230.53 eV 
+ NIEL energy calculated: 226.62 eV 
 
- Nb tracks/event   neutral:       0   charged:   1.011
- Nb  steps/event   neutral:       0   charged:  19.311
+ Nb tracks/event   neutral:       0   charged:  1.0095
+ Nb  steps/event   neutral:       0   charged:  19.299
 
  Process calls frequency :
-          CoulombScat=     55  RadioactiveDecayBase=     22                 hIoni=  38524
-              ionIoni=     22 
+          CoulombScat=     50  RadioactiveDecayBase=     19                 hIoni=  38509
+              ionIoni=     19 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 3.7132 cm    rms = 412.14 um 
- proj Range = 3.7048 cm    rms = 425.83 um 
- proj/true  = 0.99775
- transverse dispersion at end = 1.1239 mm 
+ true Range = 3.7133 cm    rms = 409.61 um 
+ proj Range = 3.7049 cm    rms = 435.36 um 
+ proj/true  = 0.99774
+ transverse dispersion at end = 1.1429 mm 
       mass true Range from simulation = 10.026 g/cm2 
-       from PhysicsTable (csda range) = 10.013 g/cm2 
+       from PhysicsTable (csda range) = 10.011 g/cm2 
 ---------------------------------------------------------
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2242478760734191844, 367404330490087245, 45194397492864290, 1268791187056359920, 1662323814748851017, 1464932188731583832, 562075691796711105, 1863622584876278003, 1704574723025588234, 963592955979266590, 543515433432620312, 464598867962878693, 641770506223233834, 2042532019127553785, 346259490809042034, 998315733089559582, 244586720294023349} counter= 8sumtot= 1285668341374836012
+N=17 V[N]={913425094942195650, 1669804377416371868, 676410091410990968, 1285517587114154658, 125323819510907687, 1370135114624171332, 1168103701194230878, 2238977698225572169, 1302655875947126391, 2300980640291497885, 1798177981595136014, 402371273733732173, 1760031994401657307, 997255217082257182, 1964862088753589191, 1126655732531703662, 431701229884682265} counter= 7sumtot= 779802435736731721
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

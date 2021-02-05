@@ -19,6 +19,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 28, 2021 I.Hrivnacova, E.Tcherniaev  geom-bool-V10-06-01
+- Added protection against using invalid normal
+  in G4ScaledSolid::DistanceToOut(p,v, ...)
+
 December 10, 2019 B.Morgan               geom-bool-V10-06-00
 - Cleanup CMake build, removing obsolete granular library options and
   explicit include_directories.

@@ -40,8 +40,8 @@
 #include <algorithm> // For using sort on a vector
 
 #include "G4ios.hh"
-//#include "G4UImanager.hh"
-//#include "G4UIQt.hh"
+#include "G4UImanager.hh"
+#include "G4UIQt.hh"
 
 #include <Inventor/Qt/SoQt.h>
 #include <Inventor/Qt/SoQtCursor.h>
@@ -131,7 +131,7 @@ G4OpenInventorQtExaminerViewer(QWidget* parent, const char* name, SbBool embed,
    // FWJ THIS DOESN'T WORK APPARENTLY NO MAINWINDOW
    //   QMenuBar* menubar = ((QMainWindow*)parent)->menuBar();
    //   G4cout << "G4OpenInventorQtExaminerViewer menubar=" << menubar << G4endl;
-
+   fName = name;
    viewer = this;
    construct(TRUE);
 }
@@ -163,12 +163,6 @@ void G4OpenInventorQtExaminerViewer::construct(const SbBool)
    newEvents = false;
 
    buildWidget(getParentWidget());
-
-   // TRY TO EMBED IN Qt UI
-   // Works but dumps core on a subsequent vis/open OIQt
-   //   auto UI = G4UImanager::GetUIpointer();
-   //   auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
-   //   if (uiQt) uiQt->AddTabWidget(getParentWidget(), "OIQt");
 
    fileName = "bookmarkFile"; // Default viewpoint file name
    viewPtIdx = -1; // index of the most recent viewpoint in viewPtList vector
@@ -762,6 +756,11 @@ void G4OpenInventorQtExaminerViewer::afterRealizeHook()
    AuxWindow->show();
    AuxWindow->raise();
    AuxWindow->activateWindow();
+
+   auto UI = G4UImanager::GetUIpointer();
+   auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
+   // This explicitly sets the TabWidget as parent before addTab():
+   if (uiQt) uiQt->AddTabWidget(getParentWidget(), QString(fName));
 }
 
 

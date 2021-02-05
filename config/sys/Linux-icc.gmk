@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------         Intel icc 15.x.x and higher
+# ------ GNU/LINUX ------         Intel icc 19.x.x and higher
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
@@ -78,6 +78,68 @@ ifeq ($(G4SYSTEM),Linux-icc)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGL
   endif
+
+# ---- QT Setup block -------------------------------------------------------
+
+  ifndef QTHOME
+    QTHOME     := /usr
+  endif
+  ifndef QTMOC
+    QTMOC      := $(QTHOME)/bin/moc
+  endif
+
+  ifndef QT_VERSION
+    QT_VERSION := 5
+  endif
+
+  ifeq ($(QT_VERSION),5)
+    ifndef QTFLAGS              # Qt5
+      QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtCore
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtGui
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtWidgets
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtOpenGL
+      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DCore
+      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DExtras
+      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DRender
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtPrintSupport
+    endif
+  else                          # Qt4
+    ifndef QTFLAGS
+      QTFLAGS   := -I$(QTHOME)/include -I$(QTHOME)/include/Qt
+      QTFLAGS   += -I$(QTHOME)/include/QtCore 
+      QTFLAGS   += -I$(QTHOME)/include/QtGui 
+      QTFLAGS   += -I$(QTHOME)/include/QtOpenGL 
+    endif
+  endif
+  ifndef QTLIBPATH
+    QTLIBPATH := $(QTHOME)/lib
+    QT_SEARCH_LIB := $(shell ls  $(QTLIBPATH)/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
+    ifneq ($(QT_SEARCH_LIB),0)
+      QTLIBPATH := $(QTHOME)/lib/qt$(QT_VERSION)
+    endif
+  endif
+  ifeq ($(QT_VERSION),5)
+    ifndef QTLIBS              # Qt5
+      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
+    endif
+    ifndef QT3DLIBS
+      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender -lQt5PrintSupport
+    endif
+    ifndef GLQTLIBS
+      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport
+    endif
+  else                         # Qt4
+    ifndef QTLIBS
+      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui
+    endif
+    ifndef GLQTLIBS
+      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
+    endif
+  endif
+
+#----------------------------------------------------------------------------
+
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \

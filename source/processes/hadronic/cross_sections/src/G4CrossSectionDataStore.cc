@@ -57,16 +57,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4CrossSectionDataStore::G4CrossSectionDataStore() :
-  nDataSetList(0), verboseLevel(0),fastPathFlags(),fastPathParams(),
-  counters(),fastPathCache()
-{
-  nist = G4NistManager::Instance();
-  currentMaterial = elmMaterial = nullptr;
-  currentElement = nullptr;  //ALB 14-Aug-2012 Coverity fix.
-  matParticle = elmParticle = nullptr;
-  matKinEnergy = elmKinEnergy = matCrossSection = elmCrossSection = 0.0;
-}
+G4CrossSectionDataStore::G4CrossSectionDataStore()
+  : nist(G4NistManager::Instance())
+  , currentMaterial(nullptr)
+  , matParticle(nullptr)
+  , matKinEnergy(0.0)
+  , matCrossSection(0.0)
+  , nDataSetList(0)
+  , verboseLevel(0)
+  , fastPathFlags()
+  , fastPathParams()
+  , counters()
+  , fastPathCache()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -268,10 +271,10 @@ G4double
 G4CrossSectionDataStore::ComputeCrossSection(const G4DynamicParticle* part,
 					     const G4Material* mat)
 {
-  if(mat == currentMaterial && part->GetDefinition() == matParticle
-     && part->GetKineticEnergy() == matKinEnergy) {
+  if(part->GetKineticEnergy() == matKinEnergy && mat == currentMaterial &&
+     part->GetDefinition() == matParticle)
     return matCrossSection;
-  }
+
   currentMaterial = mat;
   matParticle = part->GetDefinition();
   matKinEnergy = part->GetKineticEnergy();
@@ -292,58 +295,36 @@ G4CrossSectionDataStore::ComputeCrossSection(const G4DynamicParticle* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4double
-G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
-                                         const G4Element* elm,
-					 const G4Material* mat)
+G4double G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
+                                                  const G4Element* elm,
+                                                  const G4Material* mat)
 {
-  if(mat == elmMaterial && elm == currentElement &&
-     part->GetDefinition() == elmParticle &&
-     part->GetKineticEnergy() == elmKinEnergy) 
-    { return elmCrossSection; }
-
-  elmMaterial = mat;
-  currentElement = elm;
-  elmParticle = part->GetDefinition();
-  elmKinEnergy = part->GetKineticEnergy();
-  elmCrossSection = 0.0;
-
-  G4int i = nDataSetList-1;  
+  G4int i = nDataSetList - 1;
   G4int Z = elm->GetZasInt();
-  if (elm->GetNaturalAbundanceFlag() &&
-      dataSetList[i]->IsElementApplicable(part, Z, mat)) {
 
+  if(elm->GetNaturalAbundanceFlag() &&
+     dataSetList[i]->IsElementApplicable(part, Z, mat))
+  {
     // element wise cross section
-    elmCrossSection = dataSetList[i]->GetElementCrossSection(part, Z, mat);
-
-    //G4cout << "Element wise " << elmParticle->GetParticleName() 
-    //	   << " xsec(barn)= " <<  elmCrossSection/barn 
-    //	   << "  E(MeV)= " << elmKinEnergy/MeV 
-    //	   << " Z= " << Z << " AbundFlag= " << elm->GetNaturalAbandancesFlag()
-    //	   <<G4endl;
-
-  } else {
-    // isotope wise cross section
-    size_t nIso = elm->GetNumberOfIsotopes();    
-
-    // user-defined isotope abundances        
-    const G4double* abundVector = elm->GetRelativeAbundanceVector();
-
-    for (size_t j=0; j<nIso; ++j) {
-      if(abundVector[j] > 0.0) {
-	const G4Isotope* iso = elm->GetIsotope(j);
-	elmCrossSection += abundVector[j]*
-	  GetIsoCrossSection(part, Z, iso->GetN(), iso, elm, mat, i);
-	//G4cout << "Isotope wise " << elmParticle->GetParticleName() 
-	//       << " xsec(barn)= " <<  elmCrossSection/barn 
-	//       << "  E(MeV)= " << elmKinEnergy/MeV 
-	//       << " Z= " << Z << "  A= " << iso->GetN() << "  j= " << j << G4endl;
-      }
-    }
+    return dataSetList[i]->GetElementCrossSection(part, Z, mat);
   }
-  //G4cout << "  E(MeV)= " << elmKinEnergy/MeV 
-  //	 << "xsec(barn)= " <<  elmCrossSection/barn <<G4endl;
-  return elmCrossSection;
+
+  // isotope wise cross section
+  size_t nIso = elm->GetNumberOfIsotopes();
+
+  // user-defined isotope abundances
+  const G4double* abundVector = elm->GetRelativeAbundanceVector();
+
+  G4double sigma = 0.0;
+
+  for(size_t j = 0; j < nIso; ++j)
+  {
+    const G4Isotope* iso = elm->GetIsotope(j);
+    sigma += abundVector[j] *
+             GetIsoCrossSection(part, Z, iso->GetN(), iso, elm, mat, i);
+  }
+
+  return sigma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -480,9 +480,8 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
     first = false;
     G4Exception("G4Qt3DSceneHandler::AddPrimitive(const G4Text& text)",
                 "qt3D-0002", JustWarning,
-                "Text drawing not yet implemented");
-  }
-  return;
+                "Text drawing doesn't work yet");
+  }  // OK. Not working, but let it execute, which it does without error.
 
   auto currentNode = CreateNewNode();
   if (!currentNode) return;  // Node not available
@@ -493,32 +492,34 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
   auto transform = G4Qt3DUtils::CreateQTransformFrom(position);
   transform->setScale(10);
 
+//  auto currentEntity = new Qt3DCore::QEntity(currentNode);
+
   // This simply does not work
-  //  auto qtext = new Qt3DExtras::QText2DEntity(currentNode);
-  //  qtext->setText(text.GetText().c_str());
-  //  qtext->setHeight(100);
-  //  qtext->setWidth(1000);
-  //  qtext->setColor(Qt::green);
-  //  qtext->setFont(QFont("Courier New", 10));
-  //
-  //  qtext->addComponent(transform);
-  //  qtext->addComponent(material);
+  auto qtext = new Qt3DExtras::QText2DEntity();
+  qtext->setParent(currentNode);
+//  qtext->setParent(currentEntity);  // ??  Doesn't help
+  qtext->setText(text.GetText().c_str());
+  qtext->setHeight(100);
+  qtext->setWidth(1000);
+  qtext->setColor(Qt::green);
+  qtext->setFont(QFont("Courier New", 10));
+  qtext->addComponent(transform);
 
   // This produces text in 3D facing +z - not what we want
-  const auto& colour = GetTextColour(text);
-  auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
-  material->setObjectName("materialForText");
-  material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
-  if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
-
-  auto textMesh = new Qt3DExtras::QExtrudedTextMesh();
-  textMesh->setText(text.GetText().c_str());
-  textMesh->setFont(QFont("Courier New", 10));
-  textMesh->setDepth(.01f);
-
-  currentNode->addComponent(material);
-  currentNode->addComponent(transform);
-  currentNode->addComponent(textMesh);
+//  const auto& colour = GetTextColour(text);
+//  auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
+//  material->setObjectName("materialForText");
+//  material->setAmbient(G4Qt3DUtils::ConvertToQColor(colour));
+//  if (colour.GetAlpha() < 1.) material->setAlphaBlendingEnabled(true);
+//
+//  auto textMesh = new Qt3DExtras::QExtrudedTextMesh();
+//  textMesh->setText(text.GetText().c_str());
+//  textMesh->setFont(QFont("Courier New", 10));
+//  textMesh->setDepth(.01f);
+//
+//  currentNode->addComponent(material);
+//  currentNode->addComponent(transform);
+//  currentNode->addComponent(textMesh);
 }
 
 void G4Qt3DSceneHandler::AddPrimitive(const G4Circle& circle)
@@ -671,6 +672,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     lines.push_back(newLine);
   };
 
+  G4bool isAuxilaryEdgeVisible = fpViewer->GetViewParameters().IsAuxEdgeVisible();
   G4bool notLastFace;
   do {
     G4int      nEdges;
@@ -684,12 +686,12 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     normals.push_back(normal[0]);
     normals.push_back(normal[1]);
     normals.push_back(normal[2]);
-    insertIfNew(Line(vertex[0],vertex[1]));
-    insertIfNew(Line(vertex[1],vertex[2]));
+    if(isAuxilaryEdgeVisible||edgeFlag[0]>0)insertIfNew(Line(vertex[0],vertex[1]));
+    if(isAuxilaryEdgeVisible||edgeFlag[1]>0)insertIfNew(Line(vertex[1],vertex[2]));
     if (nEdges == 3) {
       // Face is a triangle
       // One more line for wireframe, triangles for surfaces are complete
-      insertIfNew(Line(vertex[2],vertex[0]));
+      if(isAuxilaryEdgeVisible||edgeFlag[2]>0)insertIfNew(Line(vertex[2],vertex[0]));
     } else if (nEdges == 4) {
       // Face is a quadrilateral
       // Create another triangle for surfaces, add two more lines for wireframe
@@ -699,8 +701,8 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       normals.push_back(normal[2]);
       normals.push_back(normal[3]);
       normals.push_back(normal[0]);
-      insertIfNew(Line(vertex[2],vertex[3]));
-      insertIfNew(Line(vertex[3],vertex[0]));
+      if(isAuxilaryEdgeVisible||edgeFlag[2]>0)insertIfNew(Line(vertex[2],vertex[3]));
+      if(isAuxilaryEdgeVisible||edgeFlag[3]>0)insertIfNew(Line(vertex[3],vertex[0]));
     } else {
       G4cerr << "ERROR: polyhedron face with more than 4 edges" << G4endl;
       return;

@@ -1,13 +1,13 @@
 
 Usage: gdml_det <intput_gdml_file:mandatory>
 
-G4GDML: Reading '/mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc9/LABEL/centos7/THREAD/Seq/geant4/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
+G4GDML: Reading '/geant4/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc9/LABEL/centos7/THREAD/Seq/geant4/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
+G4GDML: Reading '/geant4/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
@@ -16,7 +16,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1074,7 +1074,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.001441s Sys=0.000000s
+  User=0.010000s Real=0.001112s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1329,7 +1329,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000865s Sys=0.000000s
+  User=0.000000s Real=0.000864s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1385,7 +1385,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000132s Sys=0.000000s
+  User=0.000000s Real=0.000162s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1440,7 +1440,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000116s Sys=0.000000s
+  User=0.000000s Real=0.000102s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1495,7 +1495,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000115s Sys=0.000000s
+  User=0.000000s Real=0.000103s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

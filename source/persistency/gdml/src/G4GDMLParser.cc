@@ -83,9 +83,9 @@ G4GDMLParser::~G4GDMLParser()
   if(!uwcode)
   {
     delete writer;
-    delete ullist;
-    delete rlist;
   }
+  delete ullist;
+  delete rlist;
 
   delete messenger;
 }
@@ -98,7 +98,7 @@ void G4GDMLParser::ImportRegions()
   for(auto iaux = auxInfoList->cbegin(); iaux != auxInfoList->cend(); ++iaux)
   {
     if(iaux->type != "Region")
-      return;
+      continue;
 
     G4String name = iaux->value;
     if(strip)

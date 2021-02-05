@@ -19,6 +19,26 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+06 January 2021 Frederick Jones (openinventor-V10-06-12)
+- G4OpenInventorQtViewer, G4OpenInventorQtExaminerViewer
+  o Under UIQt: viewer fails (root node is null) if
+    /vis/open/OI command is entered.  Suspected a timing
+    problem and moved uiQt->addTabWidget() from G4OIQtViewer
+    to G4OIQtExaminerviewer::afterRealizeHook().
+
+08 December 2020 Frederick Jones
+- G4OpenInventorQtViewer.hh,cc:
+  o Fixed the uiQt->addTabWidget() call with correct arguments
+    so that tabbed viewer opens correctly.
+  o For UIQt case suppressed the viewer window titling which was
+    changing the UI window title. 
+
+22 October 2020 John Allison
+- Some changes to instantiation and initialisation.
+  o G4OpenInventorQtViewer now opens in a tab with correct name.
+  o The main window name is left unchanged (it has same name as executable).
+  o But the G4OpenInventorQtExaminerViewer still opens in a detached window.
+
 20 October 2020 Frederick Jones (openinventor-V10-06-11)
 - Completed all the planned features of the OIQt viewer.
 - This Qt based viewer implements all the functionality

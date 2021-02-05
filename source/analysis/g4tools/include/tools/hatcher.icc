@@ -606,10 +606,10 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
                           fNormal[2]*AB[0]-fNormal[0]*AB[2],
                           fNormal[0]*AB[1]-fNormal[1]*AB[0]);
 
-    float normAB =(float)sqrt(std::pow(AB[0],2)+
+    float normAB =(float)std::sqrt(std::pow(AB[0],2)+
                         std::pow(AB[1],2)+
                         std::pow(AB[2],2));
-    float normABPerpVector =(float)sqrt(std::pow(ABPerpVector[0],2)+
+    float normABPerpVector =(float)std::sqrt(std::pow(ABPerpVector[0],2)+
                         std::pow(ABPerpVector[1],2)+
                         std::pow(ABPerpVector[2],2));
 
@@ -643,7 +643,7 @@ inline bool hatcher::compute_single_polyline (vec3f* tabPoints,unsigned int aNum
 
     // normalize vector to match the shift size
     float param = 1.0f;
-    param = (float)sqrt((std::pow(fShift,2))/(
+    param = (float)std::sqrt((std::pow(fShift,2))/(
                                         std::pow(dirShiftVector[0],2)+
                                         std::pow(dirShiftVector[1],2)+
                                         std::pow(dirShiftVector[2],2)));

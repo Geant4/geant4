@@ -226,12 +226,16 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
       {
         G4ThreeVector pGlobalpoint = history.GetTransform(ide)
                                      .InverseTransformPoint(localPoint);
-	G4cout << "G4RegularNavigation::ComputeStepSkippingEqualMaterials(): another 'zero' step, # "
+	std::ostringstream message;
+	message.precision(16);
+	message << "G4RegularNavigation::ComputeStepSkippingEqualMaterials(): another 'zero' step, # "
 	       << fNumberZeroSteps
 	       << ", at " << pGlobalpoint
 	       << ", nav-comp-step calls # " << ii
-	       << ", Step= " << newStep
-	       << G4endl;
+	       << ", Step= " << newStep;
+        G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
+                    "GeomRegNav1002", JustWarning, message,
+                    "Potential overlap in geometry!");
       }
 #endif
       if( fNumberZeroSteps > fActionThreshold_NoZeroSteps-1 )
@@ -239,7 +243,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 	// Act to recover this stuck track. Pushing it along direction
 	//
 	newStep = std::min(101*kCarTolerance*std::pow(10,fNumberZeroSteps-2),0.1);
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_NAVIGATION
         G4ThreeVector pGlobalpoint = history.GetTransform(ide)
                                        .InverseTransformPoint(localPoint);
 	std::ostringstream message;
@@ -254,7 +258,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
                 << G4endl
                 << "          Trying pushing it of " << newStep << " mm ...";
         G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-                    "GeomRegNav1002", JustWarning, message,
+                    "GeomRegNav1003", JustWarning, message,
                     "Potential overlap in geometry!");
 #endif
       }
@@ -273,7 +277,7 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
 		<< "- at point " << pGlobalpoint << G4endl	
 		<< "        local direction: " << localDirection << G4endl;
 	G4Exception("G4RegularNavigation::ComputeStepSkippingEqualMaterials()",
-		    "GeomRegNav1003",
+		    "GeomRegNav1004",
 		    EventMustBeAborted,
 		    message);
       }

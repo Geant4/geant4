@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 07, 2020 Vladimir Ivanchenko (run-V10-06-20)
+- G4PhysicsListHelper - added forgotten processes (general positron 
+    and surface reflection) 
+
 November 21, 2020 Gabriele Cosmo (run-V10-06-19)
 - Fixed compilation warnings in G4RunManager.
 

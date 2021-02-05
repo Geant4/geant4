@@ -16,6 +16,16 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 2, 2021 I. Hrivnacova (analysis-V10-06-13)
+- Fixed the problem with merging ntuples with columns of vector type
+  reported by Riccardo Pilato in G4 Forum.
+
+January 5, 2021 I. Hrivnacova (analysis-V10-06-12)
+- Updated to g4tools 5.2.3 (Guy Barrand):
+  Bug fix in tools/histo/h2,h3 : get_bin_content(): have '&' in "get" arguments.
+  Addressing the problem report #2306.
+  See History_tools for the complete list of modifications.
+
 November 16, 2020 G. Cosmo (analysis-V10-06-11)
 - Fixed typos in printed-out text. Addressing problem report #2285.
 

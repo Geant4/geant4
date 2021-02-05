@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 25th, 2021 Makoto Asai (tasking-V10-06-14)
+- G4WorkerTaskRunManager.cc : Correct the way to count the number of events
+  processed in a worker thread. This correction also fixes a rare crash due to
+  accessing to the seed vector more than necessary.
+- G4TaskRunManager.cc : Reduce number of events per task to evenly distribute
+  evnets to all available threads.
+
 Nov 12th, 2020 Jonathan Madsen (tasking-V10-06-13)
 - Added G4Profiler support
 - Removed TIMEMORY_AUTO_TIMER

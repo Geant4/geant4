@@ -31,14 +31,7 @@
 // this :
 #include "G4OpenInventorQt.hh"
 
-#include <Inventor/Qt/SoQt.h>
-
 #include "G4SoQt.hh"
-#include "G4UIQt.hh"
-#include "G4Qt.hh"
-#include "G4UImanager.hh"
-#include <qobject.h>
-//#include "G4Qt.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4OpenInventorQtViewer.hh"
 
@@ -119,20 +112,28 @@ G4OpenInventorQt::~G4OpenInventorQt()
 G4VViewer* G4OpenInventorQt::CreateViewer(G4VSceneHandler& scene,
                                           const G4String& name)
 {
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4UIQt *uiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
-  if (uiQt) {
-    if (!((G4Qt*)(GetInteractorManager()->GetMainInteractor()))->IsExternalApp()) {
-      QWidget* mainWin = (QWidget*)(GetInteractorManager()->GetMainInteractor());
-      // Trying to get around git by adding this comment 2
-      uiQt->AddTabWidget((QWidget*)mainWin,QString(name));
+  auto pView = new G4OpenInventorQtViewer(static_cast<G4OpenInventorSceneHandler&>(scene), name);
+
+  if (pView) {
+    if (pView->GetViewId() < 0) {
+      G4cerr <<
+      "G4OpenInventorQt::CreateViewer: ERROR flagged by negative"
+      " view id in G4OpenInventorQtViewer creation."
+      "\n Destroying view and returning null pointer."
+      << G4endl;
+      delete pView;
+      pView = 0;
     }
+  }
+  if (!pView) {
+    G4cerr <<
+    "G4OpenInventorQt::CreateViewer: ERROR: null pointer on new G4OpenInventorQtViewer."
+    << G4endl;
   }
 
   Initialize();
-
-  G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
-  return new G4OpenInventorQtViewer(*pScene, name);
+  
+  return pView;
 }
 
 #endif

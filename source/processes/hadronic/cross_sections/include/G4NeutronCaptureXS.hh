@@ -51,8 +51,6 @@
 #include <vector>
 #include <iostream>
 
-const G4int MAXZCAPTURE = 93;
-
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
@@ -113,6 +111,7 @@ private:
 
   G4bool   isMaster;
 
+  static const G4int MAXZCAPTURE = 93;
   static G4ElementData* data;
   static G4String gDataDirectory;
 

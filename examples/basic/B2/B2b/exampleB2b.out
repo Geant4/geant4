@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1207,67 +1207,67 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 68
     81 hits stored in this event
 >>> Event: 69
-    76 hits stored in this event
+    86 hits stored in this event
 >>> Event: 70
-    53 hits stored in this event
+    358 hits stored in this event
 >>> Event: 71
-    74 hits stored in this event
+    68 hits stored in this event
 >>> Event: 72
-    61 hits stored in this event
+    305 hits stored in this event
 >>> Event: 73
-    85 hits stored in this event
+    295 hits stored in this event
 >>> Event: 74
-    217 hits stored in this event
+    45 hits stored in this event
 >>> Event: 75
-    63 hits stored in this event
+    296 hits stored in this event
 >>> Event: 76
-    69 hits stored in this event
+    48 hits stored in this event
 >>> Event: 77
-    72 hits stored in this event
+    68 hits stored in this event
 >>> Event: 78
-    248 hits stored in this event
+    110 hits stored in this event
 >>> Event: 79
-    94 hits stored in this event
+    126 hits stored in this event
 >>> Event: 80
-    1352 hits stored in this event
->>> Event: 81
-    2476 hits stored in this event
->>> Event: 82
-    138 hits stored in this event
->>> Event: 83
-    80 hits stored in this event
->>> Event: 84
-    72 hits stored in this event
->>> Event: 85
-    97 hits stored in this event
->>> Event: 86
-    91 hits stored in this event
->>> Event: 87
-    149 hits stored in this event
->>> Event: 88
-    310 hits stored in this event
->>> Event: 89
-    75 hits stored in this event
->>> Event: 90
-    90 hits stored in this event
->>> Event: 91
-    94 hits stored in this event
->>> Event: 92
-    105 hits stored in this event
->>> Event: 93
-    108 hits stored in this event
->>> Event: 94
-    1445 hits stored in this event
->>> Event: 95
     65 hits stored in this event
+>>> Event: 81
+    39 hits stored in this event
+>>> Event: 82
+    73 hits stored in this event
+>>> Event: 83
+    81 hits stored in this event
+>>> Event: 84
+    83 hits stored in this event
+>>> Event: 85
+    233 hits stored in this event
+>>> Event: 86
+    160 hits stored in this event
+>>> Event: 87
+    91 hits stored in this event
+>>> Event: 88
+    62 hits stored in this event
+>>> Event: 89
+    439 hits stored in this event
+>>> Event: 90
+    148 hits stored in this event
+>>> Event: 91
+    60 hits stored in this event
+>>> Event: 92
+    186 hits stored in this event
+>>> Event: 93
+    69 hits stored in this event
+>>> Event: 94
+    119 hits stored in this event
+>>> Event: 95
+    88 hits stored in this event
 >>> Event: 96
-    66 hits stored in this event
+    110 hits stored in this event
 >>> Event: 97
-    149 hits stored in this event
->>> Event: 98
     103 hits stored in this event
+>>> Event: 98
+    954 hits stored in this event
 >>> Event: 99
-    102 hits stored in this event
+    139 hits stored in this event
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

@@ -59,7 +59,7 @@
 class G4MicroElecLOPhononModel : public G4VEmModel
 {
 public:
-  G4MicroElecLOPhononModel(const G4ParticleDefinition*p = 0,
+  G4MicroElecLOPhononModel(const G4ParticleDefinition*p = nullptr,
 		  const G4String& nam = "G4MicroElecLOPhononModel");
   ~G4MicroElecLOPhononModel() override;
   
@@ -81,14 +81,13 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
   
 private:
-  G4bool Interband;
   G4MicroElecLOPhononModel & operator=(const  G4MicroElecLOPhononModel &right);
   G4MicroElecLOPhononModel(const  G4MicroElecLOPhononModel&);
   
-  G4bool isOkToBeInitialised;
-  G4bool isInitialised;
-  G4bool abs = false;
-  G4double Eprim = 0, signe = -1,phononEnergy=0;
+  G4bool Interband = false;
+  G4bool isInitialised = false;
+  G4bool absor = false;
+  G4double phononEnergy = 0.;
 };
 
 #endif 

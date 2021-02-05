@@ -16,6 +16,9 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 2, 2021 Gabriele (global-V10-06-28)
+- Updated tag IDs for release 10.7.p01.
+
 December 2, 2020 Gabriele (global-V10-06-27)
 - Removed condition restricting to __x86_64__ architectures for macOS
   configuration in tls.hh.

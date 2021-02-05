@@ -373,22 +373,22 @@ void G4HadronicBuilder::BuildDecayTableForBCHadrons() {
         break;
       // Bottom mesons  
       case  521 :  // B+ 
-        mode[0] = new G4PhaseSpaceDecayChannel( "B+", 1.0, 2, "anti_D0", "rho+" );
+        mode[0] = new G4PhaseSpaceDecayChannel( "B+", 1.0, 3, "anti_D0", "pi+", "pi0" );
         break;
       case -521 :  // B- 
-        mode[0] = new G4PhaseSpaceDecayChannel( "B-", 1.0, 2, "D0", "rho-" );
+        mode[0] = new G4PhaseSpaceDecayChannel( "B-", 1.0, 3, "D0", "pi-", "pi0" );
         break;
       case  511 :  // B0
-        mode[0] = new G4PhaseSpaceDecayChannel( "B0", 1.0, 2, "D-", "rho+" );
+        mode[0] = new G4PhaseSpaceDecayChannel( "B0", 1.0, 3, "D-", "pi+", "pi0" );
         break;
       case -511 :  // anti_B0
-        mode[0] = new G4PhaseSpaceDecayChannel( "anti_B0", 1.0, 2, "D+", "rho-" );
+        mode[0] = new G4PhaseSpaceDecayChannel( "anti_B0", 1.0, 3, "D+", "pi-", "pi0" );
         break;
       case  531 :  // Bs0
-        mode[0] = new G4PhaseSpaceDecayChannel( "Bs0", 1.0, 2, "Ds-", "rho+" );
+        mode[0] = new G4PhaseSpaceDecayChannel( "Bs0", 1.0, 3, "Ds-", "pi+", "pi0" );
         break;
       case -531 :  // anti_Bs0
-        mode[0] = new G4PhaseSpaceDecayChannel( "anti_Bs0", 1.0, 2, "Ds+", "rho-" );
+        mode[0] = new G4PhaseSpaceDecayChannel( "anti_Bs0", 1.0, 3, "Ds+", "pi-", "pi0" );
         break;
       case  541 :  // Bc+ 
         mode[0] = new G4PhaseSpaceDecayChannel( "Bc+", 1.0, 2, "J/psi", "pi+" );

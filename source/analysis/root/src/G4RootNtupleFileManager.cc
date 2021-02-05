@@ -312,7 +312,7 @@ std::shared_ptr<G4VNtupleManager> G4RootNtupleFileManager::CreateNtupleManager()
         = fNtupleManager->GetMainNtupleManager(GetNtupleFileNumber()); 
       fSlaveNtupleManager 
         = make_shared<G4RootPNtupleManager>(
-            fState, fgMasterInstance->fBookingManager, mainNtupleManager, fNtupleRowWise, fNtupleRowMode); 
+            fState, fBookingManager, mainNtupleManager, fNtupleRowWise, fNtupleRowMode);
       activeNtupleManager = fSlaveNtupleManager;
       break;
   }
@@ -374,10 +374,11 @@ G4bool G4RootNtupleFileManager::ActionAtOpenFile(const G4String& /*fileName*/)
 #endif
   }
 
-  if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave )  {
-    // G4cout << "Going to create slave ntuples from main" << G4endl;
-    fSlaveNtupleManager->CreateNtuplesFromMain();
-  }
+  // Creating ntuples from main is triggered from the first Fill call
+  // if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave )  {
+  //   // G4cout << "Going to create slave ntuples from main" << G4endl;
+  //   fSlaveNtupleManager->CreateNtuplesFromMain();
+  // }
 
   return finalResult;
 }  

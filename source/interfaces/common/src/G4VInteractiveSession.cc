@@ -62,6 +62,11 @@ void G4VInteractiveSession::AddIcon (const char*,const char*,const char*,const c
 }
 
 /***************************************************************************/
+void G4VInteractiveSession::OutputStyle(const char*,const char*,const char*)
+{
+}
+
+/***************************************************************************/
 void G4VInteractiveSession::AddInteractor (G4String a_name,
                                            G4Interactor a_interactor)
 {

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -189,7 +189,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.530000s Real=1.635862s Sys=0.010000s
+  User=1.300000s Real=1.323472s Sys=0.010000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -246,13 +246,13 @@ N=17 V[N]={390989001462590597, 2165133204863311347, 854974819548217897, 21264851
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.330000s Real=1.421897s Sys=0.000000s
+  User=1.270000s Real=1.345879s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 428839	hPairProd : 59634	CoulombScat : 5677	hBrems : 339
+ Number of process calls --->	hIoni : 434607	hPairProd : 59197	CoulombScat : 5635	hBrems : 365
 
- Simulation: total CrossSection = 0.49449 /cm	 MeanFreePath = 2.0223 cm 	 massicCrossSection = 0.062832 cm2/g
+ Simulation: total CrossSection = 0.4998 /cm	 MeanFreePath = 2.0008 cm 	 massicCrossSection = 0.063507 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -287,7 +287,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={189834841800119698, 933698143446158285, 303366963357487890, 1657727968765643003, 1931848314084735928, 528222828093349202, 2266763837204729526, 844778916719660478, 1553452260019614839, 701305615943610690, 1877080332352109664, 482776174036698067, 1692678699103286550, 1672171112634157092, 1348922200906541837, 2269046978341506103, 1319329630900893632} counter= 17sumtot= 820417734787056925
+N=17 V[N]={2298238080532625205, 1178087240650624566, 1997045959359451701, 1839152004624977817, 17394026815102248, 750372274557854376, 1884977897583905302, 992851946312358541, 2003537805941153099, 1052213940802144931, 1875254901294267785, 667592037758835967, 830020360070016604, 582202057381135542, 1032263805990655081, 2204166422926943861, 1021198113789617211} counter= 8sumtot= 1473981793468424278
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -302,13 +302,13 @@ N=17 V[N]={189834841800119698, 933698143446158285, 303366963357487890, 165772796
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.240000s Real=1.400102s Sys=0.000000s
+  User=1.110000s Real=1.126027s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 427382	hPairProd : 33807	CoulombScat : 5516	hBrems : 10
+ Number of process calls --->	hIoni : 435051	hPairProd : 34071	CoulombScat : 5507	hBrems : 6
 
- Simulation: total CrossSection = 0.46671 /cm	 MeanFreePath = 2.1426 cm 	 massicCrossSection = 0.059303 cm2/g
+ Simulation: total CrossSection = 0.47463 /cm	 MeanFreePath = 2.1069 cm 	 massicCrossSection = 0.060309 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

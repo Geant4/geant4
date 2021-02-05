@@ -586,7 +586,7 @@ protected:
   uint64 m_tot_bytes;
   uint64 m_zip_bytes;
   uint32 m_max_baskets;
-  uint32* fBasketBytes;  //[m_max_baskets] Lenght of baskets on file
+  uint32* fBasketBytes;  //[m_max_baskets] Length of baskets on file
   uint32* fBasketEntry;  //[m_max_baskets] Table of first entry in eack basket
   seek* fBasketSeek;     //[m_max_baskets] Addresses of baskets on file
 };

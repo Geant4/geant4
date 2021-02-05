@@ -80,6 +80,7 @@
 #include "G4HadParticles.hh"
 #include "G4HadronicParameters.hh"
 #include "G4HadronicBuilder.hh"
+#include "G4BuilderType.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -93,6 +94,7 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(G4int) :
 G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool qe)
   : G4VPhysicsConstructor(name), QuasiElastic(qe)
 {
+  SetPhysicsType(bHadronInelastic);
   G4HadronicParameters* param = G4HadronicParameters::Instance();
   minFTFP_pion = param->GetMinEnergyTransitionFTF_Cascade();
   maxBERT_pion = param->GetMaxEnergyTransitionFTF_Cascade();

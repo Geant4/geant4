@@ -221,36 +221,34 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
   if (aTrack.GetStepLength()<=kCarTolerance)
     { 
       theStatus = StepTooSmallSurf;       
-      if (pPostStepPoint) {
 	
-	WorkFunctionTable::iterator postStepWF;
-	postStepWF = tableWF.find(pPostStepPoint->GetMaterial()->GetName());
-	WorkFunctionTable::iterator preStepWF;
-	preStepWF = tableWF.find(pPreStepPoint->GetMaterial()->GetName());
+      WorkFunctionTable::iterator postStepWF;
+      postStepWF = tableWF.find(pPostStepPoint->GetMaterial()->GetName());
+      WorkFunctionTable::iterator preStepWF;
+      preStepWF = tableWF.find(pPreStepPoint->GetMaterial()->GetName());
 	
-	if (postStepWF == tableWF.end()) {
-	  G4String str = "Material ";
-	  str += pPostStepPoint->GetMaterial()->GetName() + " not found!";
-	  G4Exception("G4Surface::G4Surface", "em0002", FatalException, str);
-	  return 0;
-	}
+      if (postStepWF == tableWF.end()) {
+	G4String str = "Material ";
+	str += pPostStepPoint->GetMaterial()->GetName() + " not found!";
+	G4Exception("G4Surface::G4Surface", "em0002", FatalException, str);
+	return 0;
+      }
 	
-	else if (preStepWF == tableWF.end()) {
-	  G4String str = "Material ";
-	  str += pPreStepPoint->GetMaterial()->GetName() + " not found!";
-	  G4Exception("G4Surface::G4Surface", "em0002", FatalException, str);
-	  return 0;
-	}
+      else if (preStepWF == tableWF.end()) {
+	G4String str = "Material ";
+	str += pPreStepPoint->GetMaterial()->GetName() + " not found!";
+	G4Exception("G4Surface::G4Surface", "em0002", FatalException, str);
+	return 0;
+      }
       
-	if (pPreStepPoint->GetMaterial() != pPostStepPoint->GetMaterial()) {
+      if (pPreStepPoint->GetMaterial() != pPostStepPoint->GetMaterial()) {
 	
-	  flag_franchissement_surface = false;
+	flag_franchissement_surface = false;
 
-	  if (flag_reflexion == true && flag_normal == true) {
-	    aParticleChange.ProposeMomentumDirection(-Reflexion(aStep.GetPostStepPoint()));
-	    flag_reflexion = false;
-	    flag_normal = false;
-	  }
+	if (flag_reflexion == true && flag_normal == true) {
+	  aParticleChange.ProposeMomentumDirection(-Reflexion(aStep.GetPostStepPoint()));
+	  flag_reflexion = false;
+	  flag_normal = false;
 	}
       }
       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);

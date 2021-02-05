@@ -212,6 +212,14 @@ G4UIQt::G4UIQt (
   }
   CreateIcons();
 
+  // Set default output styles
+  for (const auto& destination: {"cout","cerr","warnings","errors"}) {
+    G4UIQtStyle defaultStyle;
+    defaultStyle.fixed = true;
+    defaultStyle.highlight = true;
+    fOutputStyles[destination] = defaultStyle;
+  }
+
   fMainWindow = new QMainWindow();
   fMainWindow->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -2025,10 +2033,34 @@ G4int G4UIQt::ReceiveG4cout (
 #endif
     std::cout << aString;
 
-  QStringList newStr;
+  G4String aStringWithStyle;
+  // aString has a \n on the end (maybe it comes from G4endl or from the
+  // Enter key on the command line) - ignore it. That’s why
+  // i < aString.length() - 1
+  // But other \n need to be translated to an HTML newline.
+  // Similarly, spaces need to be translated to an HTML "non-breaking space".
+  // Tabs (\t) are more tricky since the number of equivalent spaces depends
+  // on how many characters precede it. Probably needs an HTML table. For now
+  // we replace \t with four spaces.
+  for (size_t i = 0; i < aString.length() - 1; ++i) {
+    if (aString[i] == '\n') {
+      aStringWithStyle += "<br>";
+    } else if (aString[i] == ' ') {
+      aStringWithStyle += "&nbsp;";
+    } else if (aString[i] == '\t') {
+      aStringWithStyle += "&nbsp;&nbsp;&nbsp;&nbsp;";
+    } else {
+      aStringWithStyle += aString[i];
+    }
+  }
+  if (fOutputStyles["cout"].fixed) {
+    aStringWithStyle = "<span style='font-family:courier;'>" + aStringWithStyle + "</span>";
+  } else {
+    aStringWithStyle = "<span>" + aStringWithStyle + "</span>";
+  }
 
   // Add to string
-  G4UIOutputString txt = G4UIOutputString(QString((char*)aString.data()).trimmed(),GetThreadPrefix());
+  G4UIOutputString txt = G4UIOutputString(QString((char*)aStringWithStyle.data()),GetThreadPrefix());
   fG4OutputString.push_back(txt);
 
 #ifdef G4MULTITHREADED
@@ -2040,6 +2072,17 @@ G4int G4UIQt::ReceiveG4cout (
   if (result.isEmpty()) {
     return 0;
   }
+
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if (fOutputStyles["cout"].highlight) {
+    if (!UI->IsLastCommandOutputTreated() ) {
+      QPalette pal;
+      result = QString("<span style='background:") + pal.link().color().name() + ";'>&nbsp;</span>"
+      + "<span style='background:" + pal.highlight().color().name() +";'> " + result + "</span>";
+    }
+  }
+  UI->SetLastCommandOutputTreated();
+
   fCoutTBTextArea->append(result);
   fCoutTBTextArea->ensureCursorVisible ();
 
@@ -2075,11 +2118,35 @@ G4int G4UIQt::ReceiveG4cerr (
 #endif
     std::cerr << aString;
 
-  QStringList newStr;
+  G4String aStringWithStyle;
+  // aString has a \n on the end (maybe it comes from G4endl or from the
+  // Enter key on the command line) - ignore it. That’s why
+  // i < aString.length() - 1
+  // But other \n need to be translated to an HTML newline.
+  // Similarly, spaces need to be translated to an HTML "non-breaking space".
+  // Tabs (\t) are more tricky since the number of equivalent spaces depends
+  // on how many characters precede it. Probably needs an HTML table. For now
+  // we replace \t with four spaces.
+  for (size_t i = 0; i < aString.length() - 1; ++i) {
+    if (aString[i] == '\n') {
+      aStringWithStyle += "<br>";
+    } else if (aString[i] == ' ') {
+      aStringWithStyle += "&nbsp;";
+    } else if (aString[i] == '\t') {
+      aStringWithStyle += "&nbsp;&nbsp;&nbsp;&nbsp;";
+    } else {
+      aStringWithStyle += aString[i];
+    }
+  }
+  if (fOutputStyles["cerr"].fixed) {
+    aStringWithStyle = "<span style='font-family:courier;'>" + aStringWithStyle + "</span>";
+  } else {
+    aStringWithStyle = "<span>" + aStringWithStyle + "</span>";
+  }
 
   // Add to string
 
-  G4UIOutputString txt = G4UIOutputString(QString((char*)aString.data()).trimmed(),
+  G4UIOutputString txt = G4UIOutputString(QString((char*)aStringWithStyle.data()).trimmed(),
                                           GetThreadPrefix(),
                                           "error");
   fG4OutputString.push_back(txt);
@@ -2501,6 +2568,25 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
   }
 }
 
+
+void G4UIQt::OutputStyle (const char* destination,const char* style,const char* highlight)
+{
+  // Specify an output style
+  // First argument destination (cout cerr warnings errors all)
+  // Second argument is the style (fixed proportional)
+  // Third argument highlights commands if "highlight" (and if /control/verbose > 0)
+  G4String uiQtDestination(destination);
+  G4UIQtStyle uiQtStyle;
+  if (G4String(style) == "fixed") uiQtStyle.fixed = true; else uiQtStyle.fixed = false;
+  if (G4String(highlight) == "highlight") uiQtStyle.highlight = true; else uiQtStyle.highlight = false;
+  if (uiQtDestination == "all") {
+    for (auto& i: fOutputStyles) {
+      i.second = uiQtStyle;
+    }
+  } else {
+    fOutputStyles[uiQtDestination] = uiQtStyle;
+  }
+}
 
 
 void G4UIQt::ActivateCommand(

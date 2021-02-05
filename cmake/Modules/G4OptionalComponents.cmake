@@ -177,7 +177,7 @@ option(GEANT4_USE_SYSTEM_PTL "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_PTL)
   find_package(PTL REQUIRED)
   # Backward compatibility for sources.cmake using the variable
-  set(PTL_LIBRARIES PTL::PTL)
+  set(PTL_LIBRARIES PTL::ptl)
   geant4_save_package_variables(PTL PTL_DIR)
 else()
   set(PTL_USE_TBB ${GEANT4_USE_TBB})

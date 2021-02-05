@@ -40,8 +40,7 @@
 //       classes to work with multi-threading. 
 
 // Authors: John Apostolakis (CERN), Andrea Dotti (SLAC), July 2013
-// ------------------------------------------------------------
-
+// --------------------------------------------------------------------
 #ifndef G4GEOMETRYWORKSPACE_HH
 #define G4GEOMETRYWORKSPACE_HH
 

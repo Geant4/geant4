@@ -13,6 +13,19 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-January-2021  Alberto Ribon       (phys-builders-V10-06-15)
+-  G4HadronicBuilder : replaced 2-body decays of bottom mesons into
+   charmed mesons and charged rho resonance, with 3-body decays into
+   the same charmed mesons and charged pion and neutral pion.
+   This allows to get a more precise numerical treatment of the decay
+   kinematics in the rest frame, avoiding spurious energy-momentum
+   violations reported by G4DecayProducts::IsChecked.
+
+07-December-2020  Vladimir Ivanchenko (phys-builders-V10-06-14)
+-  OrderingParameterTable - added forgotten processes (general 
+   positron, surface reflection, DNA) coherently with 
+   G4PhysicsListHelper 
+
 19-October-2020  Vladimir Ivanchenko (phys-builders-V10-06-13)
 -  G4HadronicBuilder - added methods for FTFQGSP_BERT physics
 

@@ -1129,7 +1129,6 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
                                        +fTthetaSphi*fTthetaSphi));
   G4double alpha1 = std::atan(fTalpha1);
   G4double alpha2 = std::atan(fTalpha2);
-  G4String signDegree = "\u00B0";
 
   G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
@@ -1144,10 +1143,10 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
      << "    half length Y, face +Dz: " << fDy2/mm << " mm\n"
      << "    half length X, face +Dz, side -Dy2: " << fDx3/mm << " mm\n"
      << "    half length X, face +Dz, side +Dy2: " << fDx4/mm << " mm\n"
-     << "    theta: " << theta/degree << signDegree << "\n"
-     << "    phi: " << phi/degree << signDegree << "\n"
-     << "    alpha, face -Dz: " << alpha1/degree << signDegree << "\n"
-     << "    alpha, face +Dz: " << alpha2/degree << signDegree << "\n"
+     << "    theta: " << theta/degree << "degrees\n"
+     << "    phi: " << phi/degree << "degrees\n"
+     << "    alpha, face -Dz: " << alpha1/degree << "degrees\n"
+     << "    alpha, face +Dz: " << alpha2/degree << "degrees\n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 

@@ -16,6 +16,11 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-January-2021 G.Cosmo            (geom-specific-V10-06-11)
+- Reduce cases of bad speculation in G4PolyhedraSide::Inside() and
+  G4PolyPhiFace::InsideEdges(), based on report in profiling analysis
+  by G.Amadio.
+
 30-October-2020 E.Tcherniaev       (geom-specific-V10-06-10)
 - G4Polycone: Revised GetPointOnSurface();
   Added protected auxiliary method SetSurfaceElements();

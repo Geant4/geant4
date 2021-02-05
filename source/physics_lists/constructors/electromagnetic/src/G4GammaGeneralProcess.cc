@@ -76,15 +76,15 @@
 
 G4EmDataHandler* G4GammaGeneralProcess::theHandler = nullptr;
 G4bool G4GammaGeneralProcess::theT[nTables] = 
-  {true,false,true,true,false,false,true,true,true,
-   false,true,true,true,false,false};
+  {true,false,true,true,true,false,true,true,true,
+   true,true,true,true,true,true};
 G4String G4GammaGeneralProcess::nameT[nTables] = 
   {"0","1","2","3","4","5","6","7","8",
    "9","10","11","12","13","14"};
 
 G4GammaGeneralProcess::G4GammaGeneralProcess():
   G4VEmProcess("GammaGeneralProc", fElectromagnetic),
-  minPEEnergy(50*CLHEP::keV),
+  minPEEnergy(150*CLHEP::keV),
   minEEEnergy(2*CLHEP::electron_mass_c2),
   minMMEnergy(100*CLHEP::MeV),
   peLambda(0.0),
@@ -109,8 +109,6 @@ G4GammaGeneralProcess::G4GammaGeneralProcess():
 
 G4GammaGeneralProcess::~G4GammaGeneralProcess()
 {
-  //std::cout << "G4GammaGeneralProcess::~G4GammaGeneralProcess " << isTheMaster
-  //	    << "  " << theHandler << G4endl;
   if(isTheMaster) {
     delete theHandler;
     theHandler = nullptr;
@@ -128,7 +126,7 @@ G4bool G4GammaGeneralProcess::IsApplicable(const G4ParticleDefinition&)
 
 void G4GammaGeneralProcess::AddEmProcess(G4VEmProcess* ptr)
 {
-  if(!ptr) { return; }
+  if(nullptr == ptr) { return; }
   G4int stype = ptr->GetProcessSubType();
   if(stype == fRayleigh)                 { theRayleigh = ptr; }
   else if(stype == fPhotoElectricEffect) { thePhotoElectric = ptr; }
@@ -171,6 +169,18 @@ void G4GammaGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part
 	   << " isMaster: " << isTheMaster << G4endl;
   }
 
+  // 3 sub-processes must be always defined
+  if(thePhotoElectric == nullptr || theCompton == nullptr ||
+     theConversionEE == nullptr) {
+    G4ExceptionDescription ed;
+    ed << "### G4GeneralGammaProcess is initialized incorrectly"
+       << "\n Photoelectric: " << thePhotoElectric 
+       << "\n Compton: " << theCompton 
+       << "\n Conversion: " << theConversionEE;
+    G4Exception("G4GeneralGammaProcess","em0004",
+		FatalException, ed,"");
+  }
+
   if(thePhotoElectric) { thePhotoElectric->PreparePhysicsTable(part); }
   if(theCompton)       { theCompton->PreparePhysicsTable(part); }
   if(theConversionEE)  { theConversionEE->PreparePhysicsTable(part); }
@@ -188,11 +198,9 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
   if(isTheMaster) { 
 
     // tables are created and its size is defined only once
-    if(!theHandler) { 
+    if(nullptr == theHandler) { 
       theHandler = new G4EmDataHandler(nTables);  
-      if(theRayleigh) { theT[1] = theT[4] = true; } 
-      if(theGammaNuclear) { theT[9] = theT[13] = true; } 
-      if(theConversionMM) { theT[14] = true; } 
+      if(theRayleigh) { theT[1] = true; } 
 
       theHandler->SetMasterProcess(thePhotoElectric);
       theHandler->SetMasterProcess(theCompton);
@@ -216,7 +224,7 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
     G4PhysicsLogVector bVector(minPEEnergy,minEEEnergy,nLowE);
     G4PhysicsLogVector cVector(minEEEnergy,minMMEnergy,nHighE);
     G4PhysicsLogVector dVector(minMMEnergy,maxe,nbin2);
-    if(splineFlag) { 
+    if(splineFlag) {
       aVector.SetSpline(splineFlag);
       bVector.SetSpline(splineFlag);
       cVector.SetSpline(splineFlag);
@@ -224,25 +232,24 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
     }
 
     for(size_t i=0; i<nTables; ++i) { 
+      if(!theT[i]) { continue; }
       //G4cout << "## PreparePhysTable " << i << "." << G4endl;
-      if(theT[i]) { 
-	G4PhysicsTable* table = theHandler->MakeTable(i);        
-	//G4cout << "   make table " << table << G4endl;
-	for(size_t j=0; j<numOfCouples; ++j) {
-          vec = (*table)[j];
-	  if (bld->GetFlag(j) && !vec) {
-	    //G4cout << " i= " << i << " j= " << j << " make new vector" << G4endl;
-	    if(i<=1) { 
-	      vec = new G4PhysicsVector(aVector);
-	    } else if(i<=5) {
-	      vec = new G4PhysicsVector(bVector);
-	    } else if(i<=9) {
-	      vec = new G4PhysicsVector(cVector);
-	    } else { 
-	      vec = new G4PhysicsVector(dVector);
-	    }
-	    G4PhysicsTableHelper::SetPhysicsVector(table, j, vec);
+      G4PhysicsTable* table = theHandler->MakeTable(i);        
+      //G4cout << "   make table " << table << G4endl;
+      for(size_t j=0; j<numOfCouples; ++j) {
+	vec = (*table)[j];
+	if (bld->GetFlag(j) && nullptr == vec) {
+	  //G4cout <<" i= "<<i<<" j= "<< j <<" make new vector"<< G4endl;
+	  if(i<=1) { 
+	    vec = new G4PhysicsVector(aVector);
+	  } else if(i<=5) {
+	    vec = new G4PhysicsVector(bVector);
+	  } else if(i<=9) {
+	    vec = new G4PhysicsVector(cVector);
+	  } else { 
+	    vec = new G4PhysicsVector(dVector);
 	  }
+	  G4PhysicsTableHelper::SetPhysicsVector(table, j, vec);
 	}
       }
     }
@@ -259,24 +266,21 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
-  if(thePhotoElectric != nullptr) { 
-    if(!isTheMaster) { 
-      thePhotoElectric->SetEmMasterProcess(theHandler->GetMasterProcess(0)); 
-    }
-    thePhotoElectric->BuildPhysicsTable(part); 
+  if(!isTheMaster) { 
+    thePhotoElectric->SetEmMasterProcess(theHandler->GetMasterProcess(0)); 
   }
-  if(theCompton != nullptr) { 
-    if(!isTheMaster) { 
-      theCompton->SetEmMasterProcess(theHandler->GetMasterProcess(1)); 
-    }
-    theCompton->BuildPhysicsTable(part); 
+  thePhotoElectric->BuildPhysicsTable(part); 
+
+  if(!isTheMaster) { 
+    theCompton->SetEmMasterProcess(theHandler->GetMasterProcess(1)); 
   }
-  if(theConversionEE != nullptr) { 
-    if(!isTheMaster) { 
-      theConversionEE->SetEmMasterProcess(theHandler->GetMasterProcess(2)); 
-    }
-    theConversionEE->BuildPhysicsTable(part); 
+  theCompton->BuildPhysicsTable(part); 
+ 
+  if(!isTheMaster) { 
+    theConversionEE->SetEmMasterProcess(theHandler->GetMasterProcess(2)); 
   }
+  theConversionEE->BuildPhysicsTable(part); 
+ 
   if(theRayleigh != nullptr) { 
     if(!isTheMaster) { 
       theRayleigh->SetEmMasterProcess(theHandler->GetMasterProcess(3)); 
@@ -294,7 +298,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4LossTableBuilder* bld = lManager->GetTableBuilder();
     const std::vector<G4PhysicsTable*>& tables = theHandler->GetTables();
 
-    G4CrossSectionDataStore* gn = (theGammaNuclear) 
+    G4CrossSectionDataStore* gn = (nullptr != theGammaNuclear) 
       ? theGammaNuclear->GetCrossSectionDataStore() : nullptr;
     G4DynamicParticle* dynParticle = 
       new G4DynamicParticle(G4Gamma::Gamma(),G4ThreeVector(1,0,0),1.0);
@@ -313,15 +317,16 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 	// energy interval 0
         size_t nn = (*(tables[0]))[idx]->GetVectorLength();
-	if(1 < verboseLevel) {
-	  G4cout << "======= Zone 0 ======= N= " << nn 
+	if(1 < verboseLevel) { 
+          G4cout << "======= Zone 0 ======= N= " << nn 
 		 << " for " << material->GetName() << G4endl; 
 	}
         for(size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[0]))[idx]->Energy(j);
           G4double loge = G4Log(e);
-          sigComp = (theCompton) ? theCompton->GetLambda(e, couple, loge) : 0.0;
-          sigR = (theRayleigh) ? theRayleigh->GetLambda(e, couple, loge) : 0.0;
+          sigComp = theCompton->GetLambda(e, couple, loge);
+          sigR = (nullptr != theRayleigh) ? 
+            theRayleigh->GetLambda(e, couple, loge) : 0.0;
           G4double sum = sigComp + sigR;
 	  if(1 < verboseLevel) {
 	    G4cout << j << ". E= " << e << " xs= " << sum 
@@ -329,7 +334,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	  }
           (*(tables[0]))[idx]->PutValue(j, sum);
 	  if(theT[1]) {
-            val = (sum > 0.0) ? sigComp/sum : 0.0;
+            val = sigR/sum;
 	    (*(tables[1]))[idx]->PutValue(j, val);
 	  } 
 	}
@@ -342,16 +347,11 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
         for(size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[2]))[idx]->Energy(j);
           G4double loge = G4Log(e);
-          sigComp = (theCompton) ? theCompton->GetLambda(e, couple, loge) : 0.0;
-          sigR = (theRayleigh) ? theRayleigh->GetLambda(e, couple, loge) : 0.0;
-          sigPE = (thePhotoElectric) 
-	    ? thePhotoElectric->GetLambda(e, couple, loge) : 0.0;
-          sigN = 0.0;
-          if(gn) {
-	    dynParticle->SetKineticEnergy(e);
-	    sigN = gn->ComputeCrossSection(dynParticle, material);
-	  }
-          G4double sum = sigComp + sigR + sigPE + sigN;
+          sigComp = theCompton->GetLambda(e, couple, loge);
+          sigR = (nullptr != theRayleigh) ? 
+            theRayleigh->GetLambda(e, couple, loge) : 0.0;
+          sigPE = thePhotoElectric->GetLambda(e, couple, loge);
+          G4double sum = sigComp + sigR + sigPE;
 	  if(1 < verboseLevel) {
 	    G4cout << j << ". E= " << e << " xs= " << sum 
 		   << " compt= " << sigComp << " conv= " << sigConv 
@@ -359,16 +359,12 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 		   << " GN= " << sigN << G4endl; 
 	  }
           (*(tables[2]))[idx]->PutValue(j, sum);
-          val = (sum > 0.0) ? sigPE/sum : 0.0;
+
+          val = sigPE/sum;
 	  (*(tables[3]))[idx]->PutValue(j, val);
-	  if(theT[4]) {
-            val = (sum > 0.0) ? (sigComp + sigPE)/sum : 0.0;
-	    (*(tables[4]))[idx]->PutValue(j, val);
-	  } 
-	  if(theT[5]) {
-            val = (sum > 0.0) ? (sigComp + sigPE + sigR)/sum : 0.0;
-	    (*(tables[5]))[idx]->PutValue(j, val);
-	  } 
+
+	  val = (sigR > 0.0) ? (sigComp + sigPE)/sum : 1.0;
+	  (*(tables[4]))[idx]->PutValue(j, val);
 	}
 
 	// energy interval 2
@@ -379,13 +375,11 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
         for(size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[6]))[idx]->Energy(j);
           G4double loge = G4Log(e);
-          sigComp = (theCompton) ? theCompton->GetLambda(e, couple, loge) : 0.0;
-          sigConv = (theConversionEE) 
-	    ? theConversionEE->GetLambda(e, couple, loge) : 0.0;
-          sigPE = (thePhotoElectric) 
-	    ? thePhotoElectric->GetLambda(e, couple, loge) : 0.0;
+          sigComp = theCompton->GetLambda(e, couple, loge);
+          sigConv = theConversionEE->GetLambda(e, couple, loge);
+          sigPE = thePhotoElectric->GetLambda(e, couple, loge);
           sigN = 0.0;
-          if(gn) {
+          if(nullptr != gn) {
 	    dynParticle->SetKineticEnergy(e);
 	    sigN = gn->ComputeCrossSection(dynParticle, material);
 	  }
@@ -397,14 +391,15 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 		   << " GN= " << sigN << G4endl;
 	  } 
           (*(tables[6]))[idx]->PutValue(j, sum);
-          val = (sum > 0.0) ? sigConv/sum : 0.0;
+
+          val = sigConv/sum;
 	  (*(tables[7]))[idx]->PutValue(j, val);
-          val = (sum > 0.0) ? (sigConv + sigComp)/sum : 0.0;
+
+          val = (sigConv + sigComp)/sum;
 	  (*(tables[8]))[idx]->PutValue(j, val);
-	  if(theT[9]) {
-            val = (sum > 0.0) ? (sigConv + sigComp + sigPE)/sum : 0.0;
-	    (*(tables[9]))[idx]->PutValue(j, val);
-	  } 
+
+	  val = (sigN > 0.0) ? (sigConv + sigComp + sigPE)/sum : 1.0;
+	  (*(tables[9]))[idx]->PutValue(j, val); 
 	}
 
 	// energy interval 3
@@ -416,18 +411,16 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
         for(size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[10]))[idx]->Energy(j);
           G4double loge = G4Log(e);
-          sigComp = (theCompton) ? theCompton->GetLambda(e, couple, loge) : 0.0;
-          sigConv = (theConversionEE) 
-	    ? theConversionEE->GetLambda(e, couple, loge) : 0.0;
-          sigPE = (thePhotoElectric) 
-	    ? thePhotoElectric->GetLambda(e, couple, loge) : 0.0;
+          sigComp = theCompton->GetLambda(e, couple, loge);
+          sigConv = theConversionEE->GetLambda(e, couple, loge);
+          sigPE = thePhotoElectric->GetLambda(e, couple, loge);
           sigN = 0.0;
-          if(gn) {
+          if(nullptr != gn) {
 	    dynParticle->SetKineticEnergy(e);
 	    sigN = gn->ComputeCrossSection(dynParticle, material);
 	  }
           sigM = 0.0;
-          if(theConversionMM) {
+          if(nullptr != theConversionMM) {
 	    val = theConversionMM->ComputeMeanFreePath(e, material);
 	    sigM = (val < DBL_MAX) ? 1./val : 0.0;
 	  }
@@ -439,22 +432,21 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 		   << " GN= " << sigN << G4endl;
 	  } 
           (*(tables[10]))[idx]->PutValue(j, sum);
-          val = (sum > 0.0) ? 1.0 - sigConv/sum : 1.0;
+
+          val = (sigComp + sigPE + sigN + sigM)/sum;
 	  (*(tables[11]))[idx]->PutValue(j, val);
-          val = (sum > 0.0) ? 1.0 - (sigConv + sigComp)/sum : 1.0;
+
+          val = (sigPE + sigN + sigM)/sum;
 	  (*(tables[12]))[idx]->PutValue(j, val);
-	  if(theT[13]) {
-            val = (sum > 0.0) ? 1.0 - (sigConv + sigComp + sigPE)/sum : 1.0;
-	    (*(tables[13]))[idx]->PutValue(j, val);
-	  } 
-	  if(theT[14]) {
-            val = (sum > 0.0) 
-	      ? 1.0 - (sigConv + sigComp + sigPE + sigN)/sum : 1.0;
-	    (*(tables[14]))[idx]->PutValue(j, val);
-	  } 
+
+	  val = (sigN + sigM)/sum;
+	  (*(tables[13]))[idx]->PutValue(j, val);
+	   
+	  val = sigN/sum;
+	  (*(tables[14]))[idx]->PutValue(j, val);
 	}
 	for(size_t k=0; k<nTables; ++k) {
-	  if(theT[k] && splineFlag) { 
+	  if(splineFlag) { 
 	    (*(tables[k]))[idx]->FillSecondDerivatives(); 
 	  } 
 	}
@@ -553,8 +545,7 @@ G4double G4GammaGeneralProcess::TotalCrossSectionPerVolume()
   if(preStepKinEnergy < minPEEnergy) {
     cross = ComputeGeneralLambda(0, 0);
     //G4cout << "XS1: " << cross << G4endl;
-    peLambda = (thePhotoElectric) ? thePhotoElectric
-      ->GetLambda(preStepKinEnergy, currentCouple, preStepLogE) : 0.0;
+    peLambda = thePhotoElectric->GetLambda(preStepKinEnergy, currentCouple, preStepLogE);
     cross += peLambda; 
     //G4cout << "XS2: " << cross << G4endl;
     
@@ -585,9 +576,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
 {
   // In all cases clear number of interaction lengths
   theNumberOfInteractionLengthLeft = -1.0;
-  G4double q = G4UniformRand(); 
-  G4double x = preStepLambda*G4UniformRand(); 
-  G4double p;
+  selectedProc = nullptr;
+  G4double q = G4UniformRand();
   /*  
   G4cout << "PostStep: preStepLambda= " << preStepLambda << " x= " << x 
          << " PE= " << peLambda << " q= " << q << " idxE= " << idxEnergy 
@@ -595,92 +585,70 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
   */
   switch (idxEnergy) {
   case 0:
-    if(x <= peLambda) { 
-      return SampleEmSecondaries(track, step, thePhotoElectric);
+    if(preStepLambda*q <= peLambda) { 
+      SelectEmProcess(step, thePhotoElectric);
     } else {
-      p = GetProbability(1);
-      if(x <= peLambda + (preStepLambda - peLambda)*p) {
-	return SampleEmSecondaries(track, step, theCompton);
-      } else if(theRayleigh != nullptr) {
-	return SampleEmSecondaries(track, step, theRayleigh);
+      if(theT[1] && preStepLambda*q < preStepLambda*GetProbability(1) + peLambda) {
+	SelectEmProcess(step, theRayleigh);
+      } else {
+	SelectEmProcess(step, theCompton);
       }
     }
     break;
 
-  case 1:  
-    p = GetProbability(3);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, thePhotoElectric);
-    }
-    p = GetProbability(4);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, theCompton);
-    }
-    p = GetProbability(5);
-    if(q <= p) {
-      if(theRayleigh != nullptr) {
-	return SampleEmSecondaries(track, step, theRayleigh);
-      }
-    } else if(theGammaNuclear != nullptr) {
-      return SampleHadSecondaries(track, step, theGammaNuclear);
+  case 1:
+    if(q <= GetProbability(3)) {
+      SelectEmProcess(step, thePhotoElectric);
+    } else if(q <= GetProbability(4)) {
+      SelectEmProcess(step, theCompton);
+    } else if(theRayleigh) {
+      SelectEmProcess(step, theRayleigh);
     }
     break;
 
   case 2:  
-    p = GetProbability(7);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, theConversionEE);
-    }
-    p = GetProbability(8);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, theCompton);
-    }
-    p = GetProbability(9);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, thePhotoElectric);
-    } else if(theGammaNuclear != nullptr) {
-      return SampleHadSecondaries(track, step, theGammaNuclear);
+    if(q <= GetProbability(7)) {
+      SelectEmProcess(step, theConversionEE);
+    } else if(q <= GetProbability(8)) {
+      SelectEmProcess(step, theCompton);
+    } else if(q <= GetProbability(9)) {
+      SelectEmProcess(step, thePhotoElectric);
+    } else if(theGammaNuclear) {
+      SelectHadProcess(track, step, theGammaNuclear);
     }
     break;
 
   case 3:  
-    p = 1.0 - GetProbability(11);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, theConversionEE);
-    }
-    p = 1.0 - GetProbability(12);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, theCompton);
-    }
-    p = 1.0 - GetProbability(13);
-    if(q <= p) {
-      return SampleEmSecondaries(track, step, thePhotoElectric);
-    } 
-    p = 1.0 - GetProbability(14);
-    if(q <= p) {
-      if(theGammaNuclear != nullptr) {
-	return SampleHadSecondaries(track, step, theGammaNuclear);
-      }
-    } else if(theConversionMM != nullptr) {
+    if(q + GetProbability(11) <= 1.0) {
+      SelectEmProcess(step, theConversionEE);
+    } else if(q + GetProbability(12) <= 1.0) {
+      SelectEmProcess(step, theCompton);
+    } else if(q + GetProbability(13) <= 1.0) {
+      SelectEmProcess(step, thePhotoElectric);
+    } else if(theGammaNuclear && q + GetProbability(14) <= 1.0) {
+      SelectHadProcess(track, step, theGammaNuclear);
+    } else if(theConversionMM) {
       SelectedProcess(step, theConversionMM);
-      return theConversionMM->PostStepDoIt(track, step);
     }
     break;
   }
-  // no interaction
+  // sample secondaries
+  if(selectedProc != nullptr) { 
+    return selectedProc->PostStepDoIt(track, step); 
+  }
+  // no interaction - exception case
   fParticleChange.InitializeForPostStep(track);
   return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* G4GammaGeneralProcess::SampleHadSecondaries(
-           const G4Track& track, const G4Step& step, G4HadronicProcess* proc)
+void G4GammaGeneralProcess::SelectHadProcess(const G4Track& track,
+            const G4Step& step, G4HadronicProcess* proc)
 {
   SelectedProcess(step, proc);
   proc->GetCrossSectionDataStore()->ComputeCrossSection(track.GetDynamicParticle(),
                                                         track.GetMaterial());
-  return proc->PostStepDoIt(track, step);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -691,14 +659,11 @@ G4bool G4GammaGeneralProcess::StorePhysicsTable(const G4ParticleDefinition* part
 {
   G4bool yes = true;
   if(!isTheMaster) { return yes; }
-  if(thePhotoElectric != nullptr &&
-     !thePhotoElectric->StorePhysicsTable(part, directory, ascii)) 
+  if(!thePhotoElectric->StorePhysicsTable(part, directory, ascii)) 
     { yes = false; }
-  if(theCompton != nullptr && 
-     !theCompton->StorePhysicsTable(part, directory, ascii))
+  if(!theCompton->StorePhysicsTable(part, directory, ascii))
     { yes = false; }
-  if(theConversionEE != nullptr && 
-     !theConversionEE->StorePhysicsTable(part, directory, ascii))
+  if(!theConversionEE->StorePhysicsTable(part, directory, ascii))
     { yes = false; }
   if(theRayleigh != nullptr &&
      !theRayleigh->StorePhysicsTable(part, directory, ascii))
@@ -728,14 +693,11 @@ G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
            << GetProcessName() << G4endl;
   }
   G4bool yes = true;
-  if(thePhotoElectric != nullptr &&
-     !thePhotoElectric->RetrievePhysicsTable(part, directory, ascii)) 
+  if(!thePhotoElectric->RetrievePhysicsTable(part, directory, ascii)) 
     { yes = false; }
-  if(theCompton != nullptr && 
-     !theCompton->RetrievePhysicsTable(part, directory, ascii))
+  if(!theCompton->RetrievePhysicsTable(part, directory, ascii))
     { yes = false; }
-  if(theConversionEE != nullptr && 
-     !theConversionEE->RetrievePhysicsTable(part, directory, ascii))
+  if(!theConversionEE->RetrievePhysicsTable(part, directory, ascii))
     { yes = false; }
   if(theRayleigh != nullptr &&
      !theRayleigh->RetrievePhysicsTable(part, directory, ascii))
@@ -767,9 +729,9 @@ G4double G4GammaGeneralProcess::GetMeanFreePath(const G4Track& track,
 
 void G4GammaGeneralProcess::ProcessDescription(std::ostream& out) const
 {
-  if(thePhotoElectric) { thePhotoElectric->ProcessDescription(out); }
-  if(theCompton)       { theCompton->ProcessDescription(out); }
-  if(theConversionEE)  { theConversionEE->ProcessDescription(out); }
+  thePhotoElectric->ProcessDescription(out);
+  theCompton->ProcessDescription(out); 
+  theConversionEE->ProcessDescription(out);
   if(theRayleigh)      { theRayleigh->ProcessDescription(out); }
   if(theGammaNuclear)  { theGammaNuclear->ProcessDescription(out); }
   if(theConversionMM)  { theConversionMM->ProcessDescription(out); }
@@ -777,16 +739,15 @@ void G4GammaGeneralProcess::ProcessDescription(std::ostream& out) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4String& G4GammaGeneralProcess::GetProcessName() const
+const G4String& G4GammaGeneralProcess::GetSubProcessName() const
 {
-  //G4cout << "GetProcessName(): " << selectedProc << G4endl;
   return (selectedProc) ? selectedProc->GetProcessName() 
     : G4VProcess::GetProcessName();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4GammaGeneralProcess::GetProcessSubType() const
+G4int G4GammaGeneralProcess::GetSubProcessSubType() const
 {
   return (selectedProc) ? selectedProc->GetProcessSubType() 
     : fGammaGeneralProcess; 
@@ -797,11 +758,11 @@ G4int G4GammaGeneralProcess::GetProcessSubType() const
 G4VEmProcess* G4GammaGeneralProcess::GetEmProcess(const G4String& name)
 {
   G4VEmProcess* proc = nullptr;
-  if(thePhotoElectric != nullptr && name == thePhotoElectric->GetProcessName()) {
+  if(name == thePhotoElectric->GetProcessName()) {
     proc = thePhotoElectric;
-  } else if(theCompton != nullptr && name == theCompton->GetProcessName()) {
+  } else if(name == theCompton->GetProcessName()) {
     proc = theCompton;
-  } else if(theConversionEE != nullptr && name == theConversionEE->GetProcessName()) {
+  } else if(name == theConversionEE->GetProcessName()) {
     proc = theConversionEE;
   } else if(theRayleigh != nullptr && name == theRayleigh->GetProcessName()) {
     proc = theRayleigh;

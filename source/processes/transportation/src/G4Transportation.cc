@@ -492,9 +492,12 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
+#if defined(G4VERBOSE) || defined(G4DEBUG_TRANSPORT)
   static G4ThreadLocal G4long noCallsASDI=0;
-  const char *methodName= "AlongStepDoIt";
   noCallsASDI++;
+#else
+  #define noCallsASDI 0
+#endif
 
   fParticleChange.Initialize(track) ;
 
@@ -591,7 +594,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
         if( endEnergy > fThreshold_Warning_Energy && ! fSilenceLooperWarnings )
         {
           fpLogger->ReportLoopingTrack( track, stepData, fNoLooperTrials,
-                                        noCallsASDI, methodName );
+                                        noCallsASDI, __func__ );
         }
         fNoLooperTrials=0; 
       }
@@ -606,7 +609,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 #ifdef G4VERBOSE
         if( verboseLevel > 2 && ! fSilenceLooperWarnings )
         {
-          G4cout << "   " << methodName  
+          G4cout << "   " << __func__
                  << " Particle is looping but is saved ..."  << G4endl             
                  << "   Number of trials = " << fNoLooperTrials << G4endl
                  << "   No of calls to  = " << noCallsASDI << G4endl;

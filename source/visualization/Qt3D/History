@@ -19,6 +19,12 @@ committal in the CVS repository !
 History file for visualization/Qt3D sub-category
 -----------------------------------------------
 
+29-Dec-2020  John Allison  (visQt3D-V10-06-03)
+- G4Qt3DViewer: Move code from constructor to G4Qt3DViewer::Initialise().
+- G4Qt3DSceneHandler:
+  o Implement auxiliary edge suppression.
+  o Tidy up G4Qt3DSceneHandler::AddPrimitive(const G4Text& - still doesn't work.
+
 29-Oct-2020  Ben Morgan (visQt3D-V10-06-02)
 - Remove inclusion of obsolete CMake module
 

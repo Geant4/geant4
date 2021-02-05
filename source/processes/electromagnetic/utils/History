@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 January 21: V.Ivanchenko (emutils-V10-06-16)
+- G4VEnergyLossProcess, G4VEmProcess, - improved printout
+  G4EmExtraParameters, G4EmExtraParametersMessenger - fixed #2292
+
+11 January 21: V.Ivanchenko
+- G4EmCorrections - fix 2-D interpolation of shell corrections 
+    (problem #2308), which provides minor change of ranges of 
+    charge particles (< 0.1 mm)
+
 12 November 20: B. Morgan (emutils-V10-06-15)
 - Apply typo fixes from Gurkan Myczko (https://github.com/Geant4/geant4/pull/15)
 

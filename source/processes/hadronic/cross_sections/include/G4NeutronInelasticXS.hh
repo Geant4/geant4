@@ -48,8 +48,6 @@
 #include "G4Threading.hh"
 #include <vector>
 
-const G4int MAXZINEL = 93;
-
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
@@ -111,6 +109,7 @@ private:
 
   G4bool  isMaster;
 
+  static const G4int MAXZINEL = 93;
   static G4ElementData* data;
   static G4double coeff[MAXZINEL];
   static G4String gDataDirectory;

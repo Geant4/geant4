@@ -65,73 +65,18 @@ G4ParticleHPThermalScattering::G4ParticleHPThermalScattering()
    SetMaxEnergy( 4*eV );
    theXSection = new G4ParticleHPThermalScatteringData();
 
-   //sizeOfMaterialTable = G4Material::GetMaterialTable()->size();
-   //buildPhysicsTable();
    nMaterial = 0;
    nElement = 0;
 }
- 
+
 
 
 G4ParticleHPThermalScattering::~G4ParticleHPThermalScattering()
 {
-
-/*
-   for ( std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* >::iterator it = incoherentFSs->begin() ; it != incoherentFSs->end() ; it++ )
-   {
-      std::map < G4double , std::vector < E_isoAng* >* >::iterator itt;
-      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
-      {
-         std::vector< E_isoAng* >::iterator ittt;
-         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
-         {
-            delete *ittt;
-         }
-         delete itt->second;
-      }
-      delete it->second;
-   }
-
-   for ( std::map < G4int , std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* >::iterator it = coherentFSs->begin() ; it != coherentFSs->end() ; it++ )
-   {
-      std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >::iterator itt;
-      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
-      {
-         std::vector < std::pair< G4double , G4double >* >::iterator ittt;
-         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
-         {
-            delete *ittt;
-         }
-         delete itt->second;
-      }
-      delete it->second;
-   }
-
-   for ( std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* >::iterator it = inelasticFSs->begin() ; it != inelasticFSs->end() ; it++ )
-   {
-      std::map < G4double , std::vector < E_P_E_isoAng* >* >::iterator itt;
-      for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
-      {
-         std::vector < E_P_E_isoAng* >::iterator ittt;
-         for ( ittt = itt->second->begin(); ittt != itt->second->end() ; ittt++ )
-         {
-            std::vector < E_isoAng* >::iterator it4;
-            for ( it4 = (*ittt)->vE_isoAngle.begin() ; it4 != (*ittt)->vE_isoAngle.end() ; it4++ )
-            {
-               delete *it4;
-            }
-            delete *ittt;
-         }
-         delete itt->second;
-      }
-      delete it->second;
-   }
-*/
-
    delete theHPElastic;
-   //TKDB 160506
-   //delete theXSection;
 }
+
+
 
 void G4ParticleHPThermalScattering::clearCurrentFSData() {
 
@@ -392,20 +337,11 @@ E_isoAng* G4ParticleHPThermalScattering::readAnE_isoAng( std::istream* file )
 G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
 {
 
-/*
-   //Trick for dynamically generated materials
-   if ( sizeOfMaterialTable != G4Material::GetMaterialTable()->size() ) { 
-      sizeOfMaterialTable = G4Material::GetMaterialTable()->size();
-      buildPhysicsTable();
-      theXSection->BuildPhysicsTable( *aTrack.GetDefinition() );
-   }
-*/
 // Select Element > Reaction >
 
    const G4Material * theMaterial = aTrack.GetMaterial();
    G4double aTemp = theMaterial->GetTemperature();
    G4int n = theMaterial->GetNumberOfElements();
-   //static const G4ElementTable* theElementTable = G4Element::GetElementTable();
 
    G4bool findThermalElement = false;
    G4int ielement;
@@ -521,10 +457,11 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
      
          //set 
          theParticleChange.SetEnergyChange( sE );
-         theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu );
+         G4double phi = CLHEP::twopi*G4UniformRand();
+         G4double sint= std::sqrt ( 1 - mu*mu );
+         theParticleChange.SetMomentumChange( sint*std::cos(phi), sint*std::sin(phi), mu );
 
       } 
-      //else if ( random <= ( inelastic + theXSection->GetCoherentCrossSection( dp , (*theElementTable)[ ielement ] , aTemp ) ) / total )
       else if ( random <= ( inelastic + theXSection->GetCoherentCrossSection( dp , theElement , theMaterial ) ) / total )
       {
          // Coherent Elastic 
@@ -582,7 +519,6 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
          std::vector< G4double > vp_T;
 
          G4int n1 = pvE_p_TL->size();  
-         //G4int n2 = pvE_p_TH->size();  
 
          //171005 fix bug, contribution from H.N. TRAN@CEA
          for ( G4int i=0 ; i < n1 ; i++ ) 
@@ -623,7 +559,9 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
          //G4cout << "E= " << E/eV << ", Ei= " << Ei << ", mu= " << mu << G4endl;
 
          theParticleChange.SetEnergyChange( E );
-         theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu );
+         G4double phi = CLHEP::twopi*G4UniformRand();
+         G4double sint= std::sqrt ( 1 - mu*mu );
+         theParticleChange.SetMomentumChange( sint*std::cos(phi), sint*std::sin(phi), mu );
 
       }
       else
@@ -693,7 +631,9 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
 
          // Set Final State
          theParticleChange.SetEnergyChange( aTrack.GetKineticEnergy() );  // No energy change in Elastic
-         theParticleChange.SetMomentumChange( 0.0 , std::sqrt ( 1 - mu*mu ) , mu ); 
+         G4double phi = CLHEP::twopi*G4UniformRand();
+         G4double sint= std::sqrt ( 1 - mu*mu );
+         theParticleChange.SetMomentumChange( sint*std::cos(phi), sint*std::sin(phi), mu );
 
       } 
       delete dp;

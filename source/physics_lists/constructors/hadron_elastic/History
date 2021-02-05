@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-December-2020, Vladimir Ivanchenko (phys-ctor-helastic-V10-06-07)
+- G4HadronElasticPhysics : fixed type of builder in all hadron 
+    elastic constructors (problem #2183)
+  G4IonElasticPhysics, G4ThermalNeutrons - added comments
+
 01-Oct-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-06)
 - G4ThermalNeutrons - use G4PhysListUtils to access neutron elastic
     process

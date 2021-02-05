@@ -68,6 +68,7 @@
 #include "G4HadParticles.hh"
 #include "G4HadProcesses.hh"
 #include "G4PhysListUtil.hh"
+#include "G4BuilderType.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -82,6 +83,7 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver, const G4String& nam)
     G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
+  SetPhysicsType(bHadronElastic);
 }
 
 G4HadronElasticPhysics::~G4HadronElasticPhysics()

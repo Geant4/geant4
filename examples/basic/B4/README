@@ -192,8 +192,7 @@
    subdirectory.  They can be tried as:
         % cd B4/B4[a,b,c,d]
         % ln -s ../macros/visTutor visTutor
-        % exampleB4[a,b,c,d]
-	Idle > /control/execute visTutor/exN03VisX.mac
+        % exampleB4[a,b,c,d] -m visTutor/exN03VisX.mac
    For details, see comment lines  described in the macro files.
    These macros are designed to help your understanding of the User's Guide.
    

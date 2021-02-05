@@ -17,6 +17,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+26 January 21:  V.Ivanchenko  (emstand-V10-06-20)
+- G4BetheBlochModel, G4LindhardSorensenIonModel - fixed problem #2312,
+    restore computation of maximum energy transfer from Geant4 10.4,
+    affect only ultrarelativistic ions
+
 11 November 20:  V.Ivanchenko  (emstand-V10-06-19)
 - G4UrbanMscModel - restored parameterisation of step limit to 
     the variant of emstand-V10-06-13 

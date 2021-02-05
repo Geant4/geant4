@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1143,7 +1143,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005882s Sys=0.000000s
+  User=0.010000s Real=0.005362s Sys=0.000000s
 
  ======================== run summary =====================
 Average number per event:
@@ -1224,7 +1224,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=18.700000s Real=21.433475s Sys=0.020000s
+  User=17.380000s Real=19.123124s Sys=0.030000s
 
  ======================== run summary =====================
 Average number per event:

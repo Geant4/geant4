@@ -42,6 +42,7 @@ public:
 
   G4Qt3DViewer(G4Qt3DSceneHandler&,const G4String& name);
   virtual ~G4Qt3DViewer();
+  void Initialise();
   void SetView();
   void ClearView();
   void DrawView();

@@ -45,6 +45,9 @@ G4Qt3DViewer::G4Qt3DViewer
 , fMousePressed(false)
 , fMousePressedX(0.)
 , fMousePressedY(0.)
+{}
+
+void G4Qt3DViewer::Initialise()
 {
   setObjectName(fName.c_str());
 

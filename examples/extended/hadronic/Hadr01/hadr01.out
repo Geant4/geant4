@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -539,11 +539,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: ionElastic
         Model:          NNDiffuseElastic: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
@@ -555,7 +555,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
@@ -567,7 +567,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -676,7 +676,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -820,7 +820,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -896,7 +896,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=1.710000s Real=6.139790s Sys=0.210000s
+Initialisation time:  User=1.540000s Real=7.818855s Sys=0.190000s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
 EventAction: Event # 20 started
@@ -910,34 +910,34 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.050000s Real=1.065735s Sys=0.000000s
-RunAction::EndOfRunAction:  User=1.050000s Real=1.065825s Sys=0.000000s
+  User=0.880000s Real=1.211092s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.880000s Real=1.211249s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         609.9   RMS(MeV) 347.3
-Average number of steps              1038
-Average number of gamma              71.42
-Average number of e-                 92.88
-Average number of e+                 4.79
-Average number of neutrons           23.78
-Average number of protons            4.84
+Average energy deposit (MeV)         604.3   RMS(MeV) 404.6
+Average number of steps              1110
+Average number of gamma              79.76
+Average number of e-                 103.8
+Average number of e+                 5.67
+Average number of neutrons           20.2
+Average number of protons            4.24
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.75
-Average number of pi0                0.34
-Average number of kaons              0.01
-Average number of muons              0.12
-Average number of deuterons+tritons  2.31
-Average number of He3+alpha          0.52
-Average number of ions               6.12
+Average number of pi+ & pi-          0.6
+Average number of pi0                0.33
+Average number of kaons              0
+Average number of muons              0.03
+Average number of deuterons+tritons  2.02
+Average number of He3+alpha          0.43
+Average number of ions               4.88
 Average number of forward neutrons   0
-Average number of reflected neutrons 19.33
+Average number of reflected neutrons 16.83
 Average number of leaked neutrons    0
-Average number of proton leak        1.14
-Average number of pion leak          0.42
+Average number of proton leak        1.03
+Average number of pion leak          0.38
 ========================================================
 
 #
@@ -951,22 +951,22 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 26
+Total navigation history collections cleaned: 28
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0375 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0413 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0125 MB
-Pool ID '7G4Track', size : 0.024 MB
-Pool ID '18G4TouchableHistory', size : 0.00288 MB
+Pool ID '17G4DynamicParticle', size : 0.0135 MB
+Pool ID '7G4Track', size : 0.0269 MB
+Pool ID '18G4TouchableHistory', size : 0.00385 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00673 MB
 Pool ID '17G4ReactionProduct', size : 0.00673 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.096 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.1 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -48,6 +48,7 @@ private:
   G4UIcommand* addIcon;
   G4UIcommand* defaultIcons;
   G4UIcommand* sys;
+  G4UIcommand* outputStyle;
 };
 
 #endif

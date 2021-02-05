@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 December 2020 - Vladimir Ivanchenko (hadr-cross-V10-06-18)
+- G4GammaNuclearXS - fixed duplicated name of static variable
+- G4ParticleInelasticXS, G4NeutronCaptureXS, G4NeutronElasticXS,
+  G4NeutronInelasticXS - make MAXZ variable static class member
+
+16 December 2020 - Guilherme Amadio
+- Drop cache for per-element G4CrossSectionDataStore::GetCrossSection(),
+  since the cache is never used in practice. This method is always called
+  by G4CrossSectionDataStore::ComputeCrossSection() inside a for loop in
+  which the element changes for each iteration, which ensures the cache
+  is always missed. Note that material, particle, and energy are still
+  cached by G4CrossSectionDataStore::ComputeCrossSection(), and that cache
+  hit rate has been measured to be about 6.9% for a full CMS ttbar event
+  simulation at 14 TeV. The condition to check for the cache in that case
+  has been optimized to minimize unnecessary checks by reordering checked
+  conditions from most to least discriminant.
+
+11 December 2020 - Vladimir Ivanchenko
+- G4VCrossSectionRatio - use inheritance from G4VCrossSectionDataSet
+  in order to guarantee deletion of object end of run
+
+06 December 2020 - Vladimir Ivanchenko
+- G4ParticleInelasticXS, G4CrossSectionInelastic, G4CrossSectionElastic
+    extended maximum energy range for ion cross sections (QBBC and other
+    Physics Lists has the same high energy limits)
+
 24 November 2020 - A. Ribon (hadr-cross-V10-06-17)
 - G4EMDissociationCrossSection : apply fixes suggested by Laurie Nevay and
   Andrey Abramov (bug report #2254) to avoid numerical crashes for ions

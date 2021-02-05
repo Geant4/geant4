@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th December 2020 Gabriele Cosmo (config-V10-06-08)
+- Updated Qt5 settings in Linux targets.
+
 22nd October 2020 Gabriele Cosmo (config-V10-06-07)
 - Added configuration for Qt3D visualization driver.
 

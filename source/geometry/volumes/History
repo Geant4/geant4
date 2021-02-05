@@ -16,6 +16,14 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 20th, 2021 G.Cosmo                 - geomvol-V10-06-04
+- Added creation order index in G4LogicalBorderSurface.
+  Addressing problem report #2311.
+
+December 10th, 2020 G.Cosmo
+- G4GeometryWorkspace: added protection for thread contention in function
+  DestroyWorkspace(). Some code cleanup.
+
 October 11th, 2020 E.Tcherniaev            - geomvol-V10-06-03
 - G4PVPlacement::CheckOverlaps(): Added keeping of bounding box from
   previous solid and complementory comparison of bounding spheres.

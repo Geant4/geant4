@@ -130,12 +130,31 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter->SetDefaultValue("");
   sys->SetParameter (parameter);
 
+  // /gui/outputStyle :
+  outputStyle = new G4UIcommand("/gui/outputStyle",this);
+  outputStyle->SetGuidance("Set output style.");
+  outputStyle->SetGuidance("Highlights commands if requested and if /control/verbose > 0.");
+  parameter = new G4UIparameter("destination",'s',true);  // Omitable
+  parameter->SetParameterCandidates("cout cerr warnings errors all");
+  parameter->SetDefaultValue("all");
+  outputStyle->SetParameter (parameter);
+  parameter = new G4UIparameter("type",'s',true);  // Omitable
+  parameter->SetParameterCandidates("fixed proportional");
+  parameter->SetDefaultValue("fixed");
+  outputStyle->SetParameter (parameter);
+  parameter = new G4UIparameter("highlight",'s',true);  // Omitable
+  parameter->SetParameterCandidates("highlight no-highlight");
+  parameter->SetDefaultValue("highlight");
+  outputStyle->SetParameter (parameter);
 }
 
 G4InteractorMessenger::~G4InteractorMessenger()
 {
-  delete addButton;
+  delete outputStyle;
+  delete sys;
+  delete defaultIcons;
   delete addIcon;
+  delete addButton;
   delete addMenu;
   delete interactorDirectory;
 }
@@ -159,6 +178,8 @@ void G4InteractorMessenger::SetNewValue (
     } else if(command==sys) {
       int rc = system((const char*)params[0]);
       if ( rc < 0 ){ } 
+    } else if(command==outputStyle) {
+      session->OutputStyle((const char*)params[0],(const char*)params[1],(const char*)params[2]);
     }
   }
   delete [] params;

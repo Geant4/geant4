@@ -63,7 +63,8 @@ G4RootPNtupleManager::G4RootPNtupleManager(const G4AnalysisManagerState& state,
    fNtupleDescriptionVector(),
    fNtupleVector(),
    fRowWise(rowWise),
-   fRowMode(rowMode)
+   fRowMode(rowMode),
+   fCreateNtuples(true)
 {}
 
 //_____________________________________________________________________________
@@ -213,7 +214,7 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
 void G4RootPNtupleManager::CreateNtuplesFromMain()
 {
 // Create ntuple from booking (if not yet done) and main ntuple 
-// This function is called from G4RootNtupleFileManager::ActionAtOpenFile.
+// This function is called from the first Fill call.
 
   // Create pntuple descriptions from ntuple booking.
   auto g4NtupleBookings = fBookingManager->GetNtupleBookingVector();
@@ -230,6 +231,8 @@ void G4RootPNtupleManager::CreateNtuplesFromMain()
     auto& ntupleDescription = fNtupleDescriptionVector[lcounter++];
     CreateNtupleFromMain(ntupleDescription, mainNtuple);
   }
+
+  fCreateNtuples = false;
 }
 
 //_____________________________________________________________________________
@@ -272,6 +275,10 @@ G4bool G4RootPNtupleManager::FillNtupleSColumn(
 //_____________________________________________________________________________
 G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
 { 
+  if (fCreateNtuples) {
+    CreateNtuplesFromMain();
+  }
+
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
     //G4cout << "Skipping AddNtupleRow for " << ntupleId << G4endl; 
     return false; 
@@ -287,7 +294,7 @@ G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
   if ( ! ntupleDescription ) return false;
-  
+
   auto rfile = std::get<0>(*ntupleDescription->fDescription.fFile);
 
   G4AutoLock lock(&pntupleMutex);
