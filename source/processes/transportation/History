@@ -16,8 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 26th 2020, G. Amadio & J.Apostolakis transport-V10-06-00
+Dec 16th 2020, G. Amadio transport-V10-06-01
+----------------------------
+Limit reporting of number of calls to G4Transportation::AlongStepDoIt()
+to when either G4VERBOSE or G4DEBUG_TRANSPORT is defined, which allows to
+avoid using a thread local variable for a slight performance gain.
 
+Oct 26th 2020, G. Amadio & J.Apostolakis transport-V10-06-00
+----------------------------
 A substantial reorganisation of G4Transportation::AlongStepGPIL
 to use values already in cache, reduce the number of branches, and
 use extra local variables for track properties to avoid indirections.

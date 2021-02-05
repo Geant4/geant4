@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-December-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-19)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT, G4HadronInelasticQBBC,
+  G4HadronPhysicsQGSP_BIC : fixed type of builder in all hadron 
+    inelatic constructors (problem #2296)
+
 26-November-2020, Alberto Ribon (phys-ctor-hinelastic-V10-06-18)
 - Update README.
 

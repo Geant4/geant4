@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -384,12 +384,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=28.400000s Real=30.006842s Sys=0.000000s
+  User=27.100000s Real=28.645847s Sys=0.020000s
 Number and type of particles created outside region "Target" :
-N e- : 745
+N e- : 753
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 46184
+N e- : 45410
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -412,12 +412,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 1.08 MB
-Pool ID '7G4Track', size : 2.15 MB
+Pool ID '17G4DynamicParticle', size : 1.09 MB
+Pool ID '7G4Track', size : 2.17 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 3.2 MB
+Dynamic pools deleted: 9 / Total memory freed: 3.3 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

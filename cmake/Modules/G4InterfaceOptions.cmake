@@ -132,6 +132,11 @@ endif()
 
 # - Qt5
 if(GEANT4_USE_QT)
+  # Must have CMake > 3.8 to support automoc (Bugzilla 2303)
+  if(CMAKE_VERSION VERSION_LESS 3.9)
+    message(FATAL_ERROR "GEANT4_USE_QT requires CMake 3.9 or newer to support automatic MOC for UI/Vis libraries")
+  endif()
+
   find_package(Qt5Core REQUIRED)
   find_package(Qt5Gui REQUIRED)
   find_package(Qt5Widgets REQUIRED)

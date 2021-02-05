@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -64,7 +64,7 @@ sigma+ sigma- sigma0 sigma_b+ sigma_b- sigma_b0 sigma_c+ sigma_c++ sigma_c0 ss1_
 su0_diquark su1_diquark t_quark tau+ tau- triton u_quark ud0_diquark ud1_diquark uu1_diquark 
 xi(1530)- xi(1530)0 xi(1690)- xi(1690)0 xi(1820)- xi(1820)0 xi(1950)- xi(1950)0 xi(2030)- xi(2030)0 
 xi- xi0 xi_b- xi_b0 xi_c+ xi_c0 
-/control/execute /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc9/LABEL/centos7/THREAD/Seq/build/examples/advanced/medical_linac/batch.mac
+/control/execute /build/jenkins/workspace/examples/advanced/medical_linac/batch.mac
 ########### Launch parameters #########
 ###
 ###  Visualization
@@ -889,10 +889,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.420000s Real=18.202365s Sys=0.010000s
+  User=14.400000s Real=14.597300s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 137
-loop elapsed time [s] : 16.47
+loop elapsed time [s] : 14.44
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1116,10 +1116,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.430000s Real=17.183352s Sys=0.020000s
+  User=14.250000s Real=14.502926s Sys=0.030000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 206
-loop elapsed time [s] : 16.47
+loop elapsed time [s] : 14.29
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1413,10 +1413,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.660000s Real=18.976479s Sys=0.020000s
+  User=14.180000s Real=14.309413s Sys=0.010000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 102
-loop elapsed time [s] : 16.7
+loop elapsed time [s] : 14.22
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1640,13 +1640,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=17.220000s Real=19.530983s Sys=0.050000s
+  User=14.390000s Real=14.777959s Sys=0.030000s
  PrimitiveScorer RUN PhantomSD,TotalDose
  Number of entries 117
-loop elapsed time [s] : 17.26
+loop elapsed time [s] : 14.43
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 70.17
+loop elapsed time [s] : 60.51
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 January 2020  John Allison (intercoms-V10-06-07)
+- G4UImanager:
+  o Introduce flag and access functions for LastCommandOutputTreated.
+  o This flag is set to false at the point in ApplyCommand where, if
+    verbosity>0, the command is sent G4cout.
+  o The treating UI must reset to true when the line has been treated.
+  o Of course, the UI may simply ignore it.
+
 12 November, 2020  J. Madsen (intercoms-V10-06-06)
 - Added G4ProfilerMessenger
 - See examples/extended/parallel/ThreadsafeScorers/run.mac for example usage

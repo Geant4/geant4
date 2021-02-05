@@ -16,6 +16,15 @@ committal in the code repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 Jan 2021 - B.Morgan (ptl-V10-06-10)
+- Apply patch from Gunter to fix component installs on Windows
+
+8 Nov 2020 - B.Morgan (ptl-V10-06-09)
+- Force installation of PTL headers to CMAKE_INSTALL_INCLUDEDIR/Geant4, following
+  behaviour for other builtins
+- Don't override CMAKE_INSTALL_CONFIGDIR variable as this should be set in the parent
+  directory.
+
 2 Nov 2020 - B.Morgan (ptl-V10-06-08)
 - BUGFIX #2286: Install PTL DLL/archive into appropriate platform dependent
   locations.

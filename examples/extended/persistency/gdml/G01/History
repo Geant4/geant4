@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 3rd, 2021 Gabriele Cosmo G01-V10-06-03
+- Fixed auxiliary.gdml sample to define proper Region tags.
+
+January 11th, 2021 Gabriele Cosmo
+- Added scaledSolids.gdml sample setup.
+
 November 10th, 2020 Ben Morgan G01-V10-06-02
 - Migration to G4RunManagerFactory.
 

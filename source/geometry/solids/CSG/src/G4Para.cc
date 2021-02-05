@@ -815,7 +815,6 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
   G4double theta = std::atan(std::sqrt(fTthetaCphi*fTthetaCphi +
                                        fTthetaSphi*fTthetaSphi));
   G4double phi   = std::atan2(fTthetaSphi,fTthetaCphi);
-  G4String signDegree = "\u00B0";
 
   G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
@@ -826,9 +825,9 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
      << "    half length X: " << fDx/mm << " mm\n"
      << "    half length Y: " << fDy/mm << " mm\n"
      << "    half length Z: " << fDz/mm << " mm\n"
-     << "    alpha: " << alpha/degree << signDegree << "\n"
-     << "    theta: " << theta/degree << signDegree << "\n"
-     << "    phi: " << phi/degree << signDegree << "\n"
+     << "    alpha: " << alpha/degree << "degrees\n"
+     << "    theta: " << theta/degree << "degrees\n"
+     << "    phi: " << phi/degree << "degrees\n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 

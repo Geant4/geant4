@@ -951,7 +951,7 @@ FUNCTION(PTL_ADD_INTERFACE_LIBRARY _TARGET)
         install(TARGETS ${_TARGET}
             DESTINATION ${CMAKE_INSTALL_LIBDIR}
             EXPORT ${PROJECT_NAME}Targets
-            COMPONENT development)
+            COMPONENT Development)
     endif()
 ENDFUNCTION()
 

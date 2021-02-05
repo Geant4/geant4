@@ -91,8 +91,9 @@ void G4CrossSectionElastic::BuildPhysicsTable(const G4ParticleDefinition& p)
   // often shared between the different types of ions (d, t, He3, alpha, and
   // genericIon) therefore we scale by Zmax - which is safely larger than the
   // number of nucleons of the heaviest nuclides.
-  SetMaxKinEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() *
-		   ( std::abs( p.GetBaryonNumber() ) > 1 ? Zmax : 1 ) );
+  G4int fact = (std::abs(p.GetBaryonNumber()) > 1 || 
+		p.GetParticleName() == "GenericIon") ? Zmax : 1;
+  SetMaxKinEnergy(G4HadronicParameters::Instance()->GetMaxEnergy() * fact);
 }
 
 void G4CrossSectionElastic::DumpPhysicsTable(const G4ParticleDefinition& p)

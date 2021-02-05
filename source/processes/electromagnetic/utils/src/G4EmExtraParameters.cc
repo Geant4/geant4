@@ -284,7 +284,7 @@ const std::vector<G4String>& G4EmExtraParameters::TypesPhysics() const
 
 void G4EmExtraParameters::SetSubCutoff(G4bool val, const G4String& region)
 {
-  G4String r = CheckRegion(region);
+  const G4String& r = CheckRegion(region);
   G4int nreg =  m_regnamesSubCut.size();
   for(G4int i=0; i<nreg; ++i) {
     if(r == m_regnamesSubCut[i]) { 
@@ -326,13 +326,13 @@ G4EmExtraParameters::ActivateForcedInteraction(const G4String& procname,
                                                G4double length, 
                                                G4bool wflag)
 {
-  G4String r = CheckRegion(region);
+  const G4String& r = CheckRegion(region);
   if(length >= 0.0) {
     G4int n =  m_procForced.size();
     for(G4int i=0; i<n; ++i) {
       if(procname == m_procForced[i] && r == m_regnamesForced[i] ) { 
 	m_lengthForced[i] = length;
-	m_weightForced[i]= wflag;
+	m_weightForced[i] = wflag;
 	return; 
       }
     }
@@ -355,7 +355,7 @@ G4EmExtraParameters::ActivateSecondaryBiasing(const G4String& procname,
                                               G4double factor,
                                               G4double energyLim)
 {
-  G4String r = CheckRegion(region);
+  const G4String& r = CheckRegion(region);
   if(factor >= 0.0 && energyLim >= 0.0) {
     G4int n =  m_procBiasedSec.size();
     for(G4int i=0; i<n; ++i) {

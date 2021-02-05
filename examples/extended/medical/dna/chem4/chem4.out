@@ -1,4 +1,4 @@
-Seed used : 1606871288
+Seed used : 1612446674
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -6,7 +6,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -273,19 +273,15 @@ Start event 2
 Start event 3
 Start event 4
 Start event 5
- * PrimaryKiller: aborts event 5, energy loss is too large. 
- * Energy loss by primary is: 4.0459 keV. Event is aborted if the Eloss is > 2 keV
 Start event 6
 Start event 7
 Start event 8
- * PrimaryKiller: aborts event 8, energy loss is too large. 
- * Energy loss by primary is: 5.0182 keV. Event is aborted if the Eloss is > 2 keV
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 8 events 
-Number of events recorded by the species scorer = 8
- Total energy deposited in the world volume : 8373.7 eV
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 11226 eV
  ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.

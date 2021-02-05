@@ -48,8 +48,6 @@
 #include "G4Threading.hh"
 #include <vector>
 
-const G4int MAXZEL = 93;
-
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
@@ -101,8 +99,9 @@ private:
   G4VCrossSectionDataSet* ggXsection;
   const G4ParticleDefinition* gamma;
 
-  static G4PhysicsVector* data[MAXZEL];
-  static G4double coeff[MAXZEL];
+  static const G4int MAXZGAMMAN = 93;
+  static G4PhysicsVector* data[MAXZGAMMAN];
+  static G4double coeff[MAXZGAMMAN];
   static G4String gDataDirectory;
 
   G4bool  isMaster;

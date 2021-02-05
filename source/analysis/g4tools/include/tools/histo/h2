@@ -140,8 +140,9 @@ public:
   }
 
   bool get_bin_content(bn_t a_ibin,bn_t a_jbin,
-                       TN a_entries,TW a_Sw,TW a_Sw2,
-                       TC a_Sxw,TC a_Sx2w,TC a_Syw,TC a_Sy2w) {
+                       TN& a_entries,TW& a_Sw,TW& a_Sw2,
+                       TC& a_Sxw,TC& a_Sx2w,
+                       TC& a_Syw,TC& a_Sy2w) {
     if(parent::m_dimension!=2) {
       a_entries = 0;a_Sw = 0;a_Sw2 = 0;
       a_Sxw = 0;a_Sx2w = 0;

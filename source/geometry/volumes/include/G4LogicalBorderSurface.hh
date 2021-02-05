@@ -50,7 +50,7 @@ using G4LogicalBorderSurfaceTable
 class G4LogicalBorderSurface : public G4LogicalSurface
 {
 
-  public:  // with description
+  public:
 
     G4LogicalBorderSurface( const G4String& name,
                                   G4VPhysicalVolume* vol1, 
@@ -65,7 +65,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
 
     G4bool operator==( const G4LogicalBorderSurface& right ) const;
     G4bool operator!=( const G4LogicalBorderSurface& right ) const;
-      // Operators.
+      // Operators
 
     static G4LogicalBorderSurface* GetSurface( const G4VPhysicalVolume* vol1,
                                                const G4VPhysicalVolume* vol2 );
@@ -73,7 +73,8 @@ class G4LogicalBorderSurface : public G4LogicalSurface
                                     G4VPhysicalVolume* vol2 );
     inline const G4VPhysicalVolume* GetVolume1() const;
     inline const G4VPhysicalVolume* GetVolume2() const;
-      // Generic accessors.
+    inline std::size_t GetIndex() const;
+      // Generic accessors
 
     inline void SetVolume1( G4VPhysicalVolume* vol1 );
     inline void SetVolume2( G4VPhysicalVolume* vol2 );
@@ -81,17 +82,19 @@ class G4LogicalBorderSurface : public G4LogicalSurface
 
     static void CleanSurfaceTable();
     static const G4LogicalBorderSurfaceTable* GetSurfaceTable();
-    static size_t GetNumberOfBorderSurfaces();
+    static std::size_t GetNumberOfBorderSurfaces();
     static void DumpInfo(); 
-      // To handle the table of surfaces.
+      // To handle the table of surfaces
 
   private:
 
     G4VPhysicalVolume* Volume1;  // Physical Volume pointer on side 1
     G4VPhysicalVolume* Volume2;  // Physical Volume pointer on side 2
 
+    std::size_t Index;           // Creation order index
+
     static G4LogicalBorderSurfaceTable *theBorderSurfaceTable;
-      // The static Table of BorderSurfaces.
+      // The static Table of BorderSurfaces
 };
 
 // ********************************************************************
@@ -101,4 +104,3 @@ class G4LogicalBorderSurface : public G4LogicalSurface
 #include "G4LogicalBorderSurface.icc"
 
 #endif
-

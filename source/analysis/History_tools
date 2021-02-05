@@ -1,3 +1,13 @@
+5.2.3 :
+ - tools/wroot/infos, branch, rroot/branch : Lenght => Length in comments.
+ - tools/hatcher.icc : pow, sqrt, tan => std::pow, std::sqrt, std::tan.
+ - tools/wps : retreive => retrieve.
+ - tools/wcsv_ntuple, value.icc, test/cpp/wcsv_ntuple.cpp : unknow => unkown.
+ 
+5.2.2 :
+ - tools/histo/h2,h3 : get_bin_content : bugfix : have '&' in "get" arguments.
+   Thanks to Dmitri Konstantinov and Grigory Latyshev for the report.
+
 5.2.1 :
  - fonts : have lato_regular.ttf file and license_font_lato.txt, readme_font_lato.txt texts taken from :
      https://www.latofonts.com/lato-free-fonts

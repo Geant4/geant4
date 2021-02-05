@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -865,7 +865,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  mean Energy in Absorber : 452.725 MeV +- 15.8845 MeV
  mean Energy in Gap      : 24.7025 MeV +- 7.34604 MeV
 
- mean trackLength in Absorber : 32.576 cm  +- 1.26658 cm 
+ mean trackLength in Absorber : 32.576 cm  +- 1.26659 cm 
  mean trackLength in Gap      : 12.2313 cm  +- 3.75875 cm 
 ------------------------------------------------------------
 
@@ -874,7 +874,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 EAbs: mean = 452.725 MeV rms = 15.8845 MeV
 EGap: mean = 24.7025 MeV rms = 7.34604 MeV
-LAbs: mean = 32.576 cm  rms = 1.26658 cm 
+LAbs: mean = 32.576 cm  rms = 1.26659 cm 
 LGap: mean = 12.2313 cm  rms = 3.75875 cm 
 ... write file : AnaEx01.root - done
 ... close file : AnaEx01.root - done

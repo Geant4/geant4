@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -494,11 +494,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: ionElastic
         Model:          NNDiffuseElastic: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
@@ -510,7 +510,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
@@ -522,7 +522,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -631,7 +631,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -775,7 +775,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -885,9 +885,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 G4HEPEvtInterface - reading 484 HEPEvt particles from pythia_event.data.
 >>> Event 0
-     39 hits are stored in RE05TrackerHitsCollection.
-     41 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.5873690545693 (GeV)
+     31 hits are stored in RE05TrackerHitsCollection.
+     40 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.3116211187142 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
 >>> Event 1
@@ -905,43 +905,19 @@ G4HEPEvtInterface - reading 448 HEPEvt particles from pythia_event.data.
 >>> Event 3
      0 hits are stored in RE05TrackerHitsCollection.
      3 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.52996999970149 (GeV)
+     Total energy deposition in calorimeter : 0.52252110777967 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 945 HEPEvt particles from pythia_event.data.
 >>> Event 4
-     97 hits are stored in RE05TrackerHitsCollection.
-     66 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 12.008245159804 (GeV)
+     124 hits are stored in RE05TrackerHitsCollection.
+     70 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 12.136396773625 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 837 HEPEvt particles from pythia_event.data.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 1.000000577888008e-07 mm long
-          and its vector is (5.675065040122718e-08,-5.951574166829232e-08,5.689685167453717e-08) mm 
-          Endpoint of ComputeStep() was     (-1163.120810724368,1748.47075468823,284.9755530495673)
-          and current position to locate is (-1163.120810667618,1748.470754628714,284.9755531064642)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 1.00000024294349e-07 mm long
-          and its vector is (7.538380941696232e-08,-6.54800373922626e-08,-5.445258466352243e-09) mm 
-          Endpoint of ComputeStep() was     (-566.957892777153,151.9159095573704,802.8230326802734)
-          and current position to locate is (-566.9578927017692,151.9159094918904,802.8230326748281)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 >>> Event 5
-     173 hits are stored in RE05TrackerHitsCollection.
-     64 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.9935894733682 (GeV)
+     40 hits are stored in RE05TrackerHitsCollection.
+     7 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.8916593870727 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
 >>> Event 6
@@ -951,50 +927,26 @@ G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 627 HEPEvt particles from pythia_event.data.
 >>> Event 7
-     33 hits are stored in RE05TrackerHitsCollection.
-     33 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.2827726242516 (GeV)
+     35 hits are stored in RE05TrackerHitsCollection.
+     34 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.9088562040224 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 682 HEPEvt particles from pythia_event.data.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 1.000000519838055e-07 mm long
-          and its vector is (9.724681149236858e-08,-4.401954356580973e-10,2.329966264369432e-08) mm 
-          Endpoint of ComputeStep() was     (-1321.909282173135,-2293.43348178148,552.2918822484413)
-          and current position to locate is (-1321.909282075888,-2293.43348178192,552.291882271741)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 >>> Event 8
-     81 hits are stored in RE05TrackerHitsCollection.
-     43 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.9783484008544 (GeV)
+     52 hits are stored in RE05TrackerHitsCollection.
+     54 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.9376085310049 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 330 HEPEvt particles from pythia_event.data.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 9.999996106638701e-08 mm long
-          and its vector is (6.064738045097329e-09,8.873485057847574e-08,4.570927103486611e-08) mm 
-          Endpoint of ComputeStep() was     (1043.658858514701,-1077.393237041303,-433.9449361501453)
-          and current position to locate is (1043.658858520766,-1077.393236952568,-433.944936104436)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 >>> Event 9
-     64 hits are stored in RE05TrackerHitsCollection.
-     29 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.0376000874489 (GeV)
+     16 hits are stored in RE05TrackerHitsCollection.
+     23 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.3594125759405 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.110000s Real=2.170333s Sys=0.000000s
+  User=1.420000s Real=1.437123s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -1012,9 +964,9 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 414
+Total navigation history collections cleaned: 426
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.679 MB
+Pool ID '20G4NavigationLevelRep', size : 0.697 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.13 MB
@@ -1022,20 +974,20 @@ Pool ID '16G4HEPEvtParticle', size : 0.0221 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.674 MB
-Pool ID '7G4Track', size : 1.14 MB
-Pool ID '18G4TouchableHistory', size : 0.05 MB
+Pool ID '17G4DynamicParticle', size : 0.693 MB
+Pool ID '7G4Track', size : 1.18 MB
+Pool ID '18G4TouchableHistory', size : 0.0509 MB
 Pool ID '15G4CountedObjectIvE', size : 0.00673 MB
 Pool ID '12G4Trajectory', size : 0.0279 MB
-Pool ID '17G4TrajectoryPoint', size : 0.152 MB
-Pool ID '14RE05TrackerHit', size : 0.00673 MB
+Pool ID '17G4TrajectoryPoint', size : 0.167 MB
+Pool ID '14RE05TrackerHit', size : 0.00481 MB
 Pool ID '18RE05CalorimeterHit', size : 0.00961 MB
 Pool ID '11RE05MuonHit', size : 0.000961 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
-Pool ID '10G4Fragment', size : 0.00769 MB
+Pool ID '10G4Fragment', size : 0.00673 MB
 Pool ID '17G4ReactionProduct', size : 0.0106 MB
 Number of memory pools allocated: 20 of which, static: 0
-Dynamic pools deleted: 20 / Total memory freed: 2.9 MB
+Dynamic pools deleted: 20 / Total memory freed: 3 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -806,11 +806,13 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
   G4PolyPhiFaceEdge* edge = edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    G4PolyPhiFaceVertex* testMe;
+    G4PolyPhiFaceVertex* testMe = nullptr;
+    G4PolyPhiFaceVertex* v0_vertex = edge->v0;
+    G4PolyPhiFaceVertex* v1_vertex = edge->v1;
     //
     // Get distance perpendicular to the edge
     //
-    G4double dr = (r-edge->v0->r), dz = (z-edge->v0->z);
+    G4double dr = (r-v0_vertex->r), dz = (z-v0_vertex->z);
 
     G4double distOut = dr*edge->tz - dz*edge->tr;
     G4double distance2 = distOut*distOut;
@@ -827,17 +829,13 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
     if (q < 0)
     {
       distance2 += q*q;
-      testMe = edge->v0;
+      testMe = v0_vertex;
     }
     else if (q > edge->length)
     {
       G4double s2 = q-edge->length;
       distance2 += s2*s2;
-      testMe = edge->v1;
-    }
-    else
-    {
-      testMe = nullptr;
+      testMe = v1_vertex;
     }
     
     //
@@ -846,11 +844,11 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
     if (distance2 < bestDistance2)
     {
       bestDistance2 = distance2;
-      if (testMe)
+      if (testMe != nullptr)
       {
         G4double distNorm = dr*testMe->rNorm + dz*testMe->zNorm;
         answer = (distNorm <= 0);
-        if (base3Dnorm)
+        if (base3Dnorm != nullptr)
         {
           *base3Dnorm = testMe;
           *head3Dnorm = &testMe->norm3D;
@@ -859,9 +857,9 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
       else
       {
         answer = (distOut <= 0);                        
-        if (base3Dnorm)
+        if (base3Dnorm != nullptr)
         {
-          *base3Dnorm = edge->v0;
+          *base3Dnorm = v0_vertex;
           *head3Dnorm = &edge->norm3D;
         }
       }

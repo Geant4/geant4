@@ -166,15 +166,14 @@ void G4BetheBlochModel::SetupParameters()
   formfact = 0.0;
   tlimit = DBL_MAX;
   if(particle->GetLeptonNumber() == 0) {
-    G4int iz = G4lrint(q);
-    if(iz <= 1) {
-      formfact = (spin == 0.0 && mass < GeV) ? 1.181e-6 : 1.548e-6;
-    } else {
-      G4double x = nist->GetA27(iz);
-      formfact = 3.969e-6*x*x;
+    G4double x = 0.8426*CLHEP::GeV;
+    if(spin == 0.0 && mass < GeV) { x = 0.736*CLHEP::GeV; }
+    else if (mass > CLHEP::GeV) {
+      G4int iz = G4lrint(std::abs(q));
+      if(iz > 1) { x /= nist->GetA27(iz); }  
     }
-    tlimit = std::sqrt(0.414/formfact +
-                       electron_mass_c2*electron_mass_c2) - electron_mass_c2;
+    formfact = 2.0*CLHEP::electron_mass_c2/(x*x);
+    tlimit = 2.0/formfact;
   }
 }
 
@@ -252,7 +251,8 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
                                                  G4double cut)
 {
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double cutEnergy = std::min(cut,tmax);
+  // projectile formfactor limit energy loss 
+  G4double cutEnergy = std::min(std::min(cut,tmax), tlimit);
 
   G4double tau   = kineticEnergy/mass;
   G4double gam   = tau + 1.0;
@@ -405,7 +405,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   // projectile formfactor - suppresion of high energy
   // delta-electron production at high energy
   
-  G4double x = formfact*deltaKinEnergy*(deltaKinEnergy + 2*electron_mass_c2);
+  G4double x = formfact*deltaKinEnergy;
   if(x > 1.e-6) {
 
     G4double x1 = 1.0 + x;
@@ -440,8 +440,8 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
       sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
     G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
       (deltaMomentum * dp->GetTotalMomentum());
-    if(cost > 1.0) { cost = 1.0; }
-    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+    cost = std::min(cost, 1.0);
+    G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
 
     G4double phi = twopi*rndmEngineMod->flat();
 
@@ -479,12 +479,12 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 G4double G4BetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
                                                G4double kinEnergy) 
 {
-  // here particle type is checked for any method
+  // here particle type is checked for the case, 
+  // when this model is shared between particles
   SetParticle(pd);
   G4double tau  = kinEnergy/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return std::min(tmax,tlimit);
+  return 2.0*CLHEP::electron_mass_c2*tau*(tau + 2.) /
+    (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -48,8 +48,6 @@
 #include "G4Threading.hh"
 #include <vector>
 
-const G4int MAXZEL = 93;
-
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
@@ -102,6 +100,7 @@ private:
   G4VComponentCrossSection* ggXsection;
   const G4ParticleDefinition* neutron;
 
+  static const G4int MAXZEL = 93;
   static G4PhysicsVector* data[MAXZEL];
   static G4double coeff[MAXZEL];
   static G4String gDataDirectory;

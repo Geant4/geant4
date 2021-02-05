@@ -11,6 +11,9 @@ the development repository of Geant4, to be included in a future release or
 patch.
 
 For simple bug-fixes, it is anyhow recommended to use the official
-`Bugzilla problem reporting system <https://bugzilla-geant4.kek.jp/>`.
+Bugzilla problem reporting system.
+- Problem reports: `Bugzilla problem reporting system <https://bugzilla-geant4.kek.jp>`_.
+- User Forum: `Geant4 Forum <https://geant4-forum.web.cern.ch>`_.
+- Documentation: `User Documentation <https://cern.ch/geant4/support/user_documentation>`_.
 
 The Geant4 Collaboration

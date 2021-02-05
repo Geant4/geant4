@@ -69,7 +69,7 @@ public:
 
   explicit G4GammaGeneralProcess();
 
-  virtual ~G4GammaGeneralProcess();
+  ~G4GammaGeneralProcess() override;
 
   G4bool IsApplicable(const G4ParticleDefinition&) override;
 
@@ -120,11 +120,15 @@ public:
                               const G4String& directory,
                               G4bool ascii) override;
 
-  const G4String& GetProcessName() const;
+  // Temporary method
+  const G4String& GetSubProcessName() const;
 
-  G4int GetProcessSubType() const;
+  // Temporary method
+  G4int GetSubProcessSubType() const;
 
   G4VEmProcess* GetEmProcess(const G4String& name) override;
+
+  inline const G4VProcess* GetSelectedProcess() const;
 
   // hide copy constructor and assignment operator
   G4GammaGeneralProcess(G4GammaGeneralProcess &) = delete;
@@ -140,13 +144,11 @@ protected:
 
   inline G4double GetProbability(size_t idxt);
 
-  inline void SelectedProcess(const G4Step& track, const G4VProcess* ptr);
+  inline void SelectedProcess(const G4Step& step, G4VProcess* ptr);
 
-  inline G4VParticleChange* SampleEmSecondaries(const G4Track&, const G4Step&,
-                                                G4VEmProcess*);
+  inline void SelectEmProcess(const G4Step&, G4VEmProcess*);
 
-  G4VParticleChange* SampleHadSecondaries(const G4Track&, const G4Step&,
-                                          G4HadronicProcess*);
+  void SelectHadProcess(const G4Track&, const G4Step&, G4HadronicProcess*);
 
 private:
 
@@ -156,7 +158,7 @@ private:
 protected:
 
   G4HadronicProcess*           theGammaNuclear;
-  const G4VProcess*            selectedProc;
+  G4VProcess*                  selectedProc;
 
 private:
   static G4EmDataHandler*      theHandler;
@@ -197,14 +199,14 @@ G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt)
 
 inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt)
 {
-  return (theT[idxt]) ? theHandler->GetVector(idxt, basedCoupleIndex)
-    ->LogVectorValue(preStepKinEnergy, preStepLogE) : 1.0;
+  return theHandler->GetVector(idxt, basedCoupleIndex)
+    ->LogVectorValue(preStepKinEnergy, preStepLogE);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void 
-G4GammaGeneralProcess::SelectedProcess(const G4Step& step, const G4VProcess* ptr)
+G4GammaGeneralProcess::SelectedProcess(const G4Step& step, G4VProcess* ptr)
 {
   selectedProc = ptr;
   step.GetPostStepPoint()->SetProcessDefinedStep(ptr);
@@ -212,12 +214,17 @@ G4GammaGeneralProcess::SelectedProcess(const G4Step& step, const G4VProcess* ptr
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* G4GammaGeneralProcess::SampleEmSecondaries(
-       const G4Track& track, const G4Step& step, G4VEmProcess* proc)
+inline void G4GammaGeneralProcess::SelectEmProcess(const G4Step& step, G4VEmProcess* proc)
 {
   proc->CurrentSetup(currentCouple,preStepKinEnergy);
   SelectedProcess(step, proc);
-  return proc->PostStepDoIt(track, step);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4VProcess* G4GammaGeneralProcess::GetSelectedProcess() const
+{
+  return selectedProc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

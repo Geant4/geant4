@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -208,14 +208,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0x2589460
+##### Create analysis manager   0x117c790
 Using Root analysis manager
 ... create file : microelectronics.root - done
 ... open analysis file : microelectronics.root - done
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.005601s Sys=0.000000s
+  User=0.000000s Real=0.004988s Sys=0.000000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 Number and type of particles created outside region "Target" :

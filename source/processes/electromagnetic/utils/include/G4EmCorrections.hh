@@ -287,9 +287,8 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv,
                                         G4double z11, G4double z21, 
                                         G4double z12, G4double z22) const
 {
-  return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) +
-          0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+
-               z21*((xv-x1)*(y2-yv)+(yv-y1)*(x2-xv))))
+  return ( z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) +
+	   z12*(x2-xv)*(yv-y1) + z21*(xv-x1)*(y2-yv) )
          / ((x2-x1)*(y2-y1));
 }
 

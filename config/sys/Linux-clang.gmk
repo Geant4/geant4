@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------ clang 3.6 and higher
+# ------ GNU/LINUX ------ clang 9.0 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -46,6 +46,7 @@ ifeq ($(G4SYSTEM),Linux-clang)
     CCFLAGS   += -O2 -g
   endif
   ifdef G4LIB_BUILD_SHARED
+    CPPFLAGS  += -fPIC
     CXXFLAGS  += -fPIC
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
@@ -106,14 +107,14 @@ ifeq ($(G4SYSTEM),Linux-clang)
   ifeq ($(QT_VERSION),5)
     ifndef QTFLAGS              # Qt5
       QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
-      QTFLAGS   += -I $(QTHOME)/include/QtCore
-      QTFLAGS   += -I $(QTHOME)/include/QtGui
-      QTFLAGS   += -I $(QTHOME)/include/QtWidgets
-      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
-      QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
-      QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
-      QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
-      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtCore
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtGui
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtWidgets
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtOpenGL
+      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DCore
+      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DExtras
+      QTFLAGS   += -I $(QTHOME)/include/qt5/Qt3DRender
+      QTFLAGS   += -I $(QTHOME)/include/qt5/QtPrintSupport
     endif
   else                          # Qt4
     ifndef QTFLAGS

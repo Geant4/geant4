@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 December 2020 - B.Morgan (externals-V10-06-06)
+- Force PTL to install its CMake configuration files within the directory
+  where Geant4 installs its own.
+- Force PTL to install its headers under CMAKE_INSTALL_INCLUDEDIR/Geant4
+
 11 November 2020 - G.Cosmo (externals-V10-06-05)
 - Synchronised with CLHEP-2.4.4.0:
   o Removed obsolete #pragma interface/implementation in Vector classes.

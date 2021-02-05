@@ -30,6 +30,25 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+30th January 2021 - Gunter Folger (cmake-V10-06-51)
+- Update to patched dataset G4PARTICLEXS 3.1.1 as provided by Vladimir I. 
+
+22nd January 2021 - Ben Morgan (cmake-V10-06-50)
+- Update for GitHub PR #17: Provide same fix for MacPorts
+- Address Bugzilla #2303: Fail configuration if Qt is enabled with CMake < 3.9
+
+15th January 2021 - Ben Morgan (cmake-V10-06-49)
+- Apply GitHub PR #17 from Florian Uhlig: Fix installation
+  error with Homebrew X11/GL. 
+
+11th January 2021 - Ben Morgan (cmake-V10-06-48)
+- Apply GitHub PR #16 from andriish: Fix configure/build with
+  system PTL 1.0.0.
+
+14th December 2020 - Ben Morgan (cmake-V10-06-47)
+- Install/Use builtin PTL CMake scripts from PTL subdirectory
+  alongside Geant4Config.cmake
+
 20th November 2020 - Ben Morgan (cmake-V10-06-46)
 - Make GEANT4_USE_SYSTEM_PTL option advanced
 

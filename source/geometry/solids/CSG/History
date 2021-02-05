@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 1, 2021 G.Cosmo geom-csg-V10-06-06
+- G4Trap, G4Para: removed spurious character in printout in StreamInfo().
+  Addressed problem report #2318.
+
 November 12, 2020 E.Tcherniaev geom-csg-V10-06-05
 - G4Sphere::InitializeThetaTrigonometry(): tan() replaced with sin()/cos(),
   it addresses problem report #2289

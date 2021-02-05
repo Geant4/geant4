@@ -1,5 +1,5 @@
 Starting run with
-Macro File    : /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc9/LABEL/centos7/THREAD/Seq/geant4/examples/extended/medical/electronScattering2/electronScattering2.in
+Macro File    : /geant4/examples/extended/medical/electronScattering2/electronScattering2.in
 Starting Seed : 1
 Output File   : output.csv
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
@@ -9,7 +9,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -772,4 +772,4 @@ Number of Events Processed:20000
      230  0.0094012  0.0054497         12          7 
      231  0.0033159  0.0025909          4          3 
      232  0.0056869  0.0014459          7          2 
-### deleting electronFilter 0x17d95b0
+### deleting electronFilter 0xe78130

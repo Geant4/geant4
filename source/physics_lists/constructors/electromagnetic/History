@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 January 2021, V.Ivanchenko (phys-ctor-em-V10-06-21)
+- G4GammaGeneralProcess - changed 1st energy limit from 50 keV to 150 keV
+    to guarantee K-shell energy for any element be within 1st energy area;
+    changed logic for selection of a concrete process - maximally reduced
+    use 'if' operators; reduce number of 'return' in run time methods;
+    remove shadowing of base class methods; expected more performant code;
+    fixed problem #2309
+
 04 November 2020, V.Ivanchenko (phys-ctor-em-V10-06-20)
 - G4GammaGeneralProcess - improved printouts and make some methods 
     protected 

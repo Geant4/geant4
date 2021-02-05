@@ -70,6 +70,7 @@
 #include "G4HadronicBuilder.hh"
 #include "G4HadParticles.hh"
 #include "G4HadProcesses.hh"
+#include "G4BuilderType.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -79,6 +80,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
   : G4VHadronPhysics("hInelasticQBBC"),verbose(ver)
 {
+  SetPhysicsType(bHadronInelastic);
   G4HadronicParameters::Instance()->SetEnableBCParticles(true);
 }
 

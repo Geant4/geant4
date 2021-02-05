@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4PathFinder Implementation
+// G4PathFinder Implementation
 //
 // Original author: John Apostolakis, April 2006
 // --------------------------------------------------------------------
@@ -464,13 +464,16 @@ void G4PathFinder::Locate( const G4ThreeVector& position,
 {
   // Locate the point in each geometry
 
+  auto pNavIter = fpTransportManager->GetActiveNavigatorsIterator(); 
+
+  G4ThreeVector lastEndPosition = fRelocatedPoint
+                                ? fLastLocatedPosition
+                                : fEndState.GetPosition();
+  fLastLocatedPosition = position; 
+
+#ifdef G4DEBUG_PATHFINDER
   static const G4double movLenTol = 10*sqr(kCarTolerance);
 
-  std::vector<G4Navigator*>::iterator pNavIter =
-             fpTransportManager->GetActiveNavigatorsIterator(); 
-
-  G4ThreeVector lastEndPosition = fRelocatedPoint ?
-             fLastLocatedPosition : fEndState.GetPosition();
   G4ThreeVector moveVec = ( position - lastEndPosition );
   G4double      moveLenSq = moveVec.mag2();
   if( (!fNewTrack) && ( moveLenSq > movLenTol ) )
@@ -478,9 +481,7 @@ void G4PathFinder::Locate( const G4ThreeVector& position,
      ReportMove( lastEndPosition, position,
                  " (End) Position / G4PathFinder::Locate" ); 
   }
-  fLastLocatedPosition = position; 
 
-#ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
     G4cout << G4endl; 

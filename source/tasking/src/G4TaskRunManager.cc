@@ -313,6 +313,26 @@ void G4TaskRunManager::ComputeNumberOfTasks()
                          ? (numberOfEventToBeProcessed / grainSize)
                          : 1;
 
+  if(eventModuloDef > 0)
+  { eventModulo = eventModuloDef; }
+  else
+  {
+    eventModulo = G4int(std::sqrt(G4double(numberOfEventToBeProcessed)));
+    if(eventModulo < 1) eventModulo = 1;
+  }
+  if(eventModulo > nEvtsPerTask)
+  {
+    G4int oldMod = eventModulo;
+    eventModulo  = nEvtsPerTask;
+
+    G4ExceptionDescription msgd;
+    msgd << "Event modulo is reduced to " << eventModulo << " (was "
+         << oldMod << ")" << " to distribute events to all threads.";
+    G4Exception("G4TaskRunManager::InitializeEventLoop()", "Run10035",
+                JustWarning, msgd);
+  }
+  nEvtsPerTask = eventModulo;
+
   if(fakeRun)
     nEvtsPerTask = G4GetEnv<G4int>(
       "G4FORCE_EVENTS_PER_TASK", nEvtsPerTask,
@@ -510,30 +530,6 @@ void G4TaskRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
     // initialize seeds
     // If user did not implement InitializeSeeds,
     // use default: nSeedsPerEvent seeds per event
-    if(eventModuloDef > 0)
-    {
-      eventModulo = eventModuloDef;
-      if(eventModulo > numberOfEventsPerTask)
-      {
-        G4int oldMod = eventModulo;
-        eventModulo  = numberOfEventsPerTask;
-        if(eventModulo < 1)
-          eventModulo = 1;
-
-        G4ExceptionDescription msgd;
-        msgd << "Event modulo is reduced to " << eventModulo << " (was "
-             << oldMod << ")"
-             << " to distribute events to all threads.";
-        G4Exception("G4TaskRunManager::InitializeEventLoop()", "Run10035",
-                    JustWarning, msgd);
-      }
-    }
-    else
-    {
-      eventModulo = G4int(std::sqrt(G4double(numberOfEventsPerTask)));
-      if(eventModulo < 1)
-        eventModulo = 1;
-    }
 
     if(n_event > 0)
     {
@@ -682,6 +678,7 @@ G4int G4TaskRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,
       nmod = numberOfEventToBeProcessed - numberOfEventProcessed;
     }
     evt->SetEventID(numberOfEventProcessed);
+
     if(reseedRequired)
     {
       G4RNGHelper* helper = G4RNGHelper::GetInstance();

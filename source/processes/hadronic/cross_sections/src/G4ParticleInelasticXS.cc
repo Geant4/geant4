@@ -49,6 +49,7 @@
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4IsotopeList.hh"
+#include "G4HadronicParameters.hh"
 
 #include <fstream>
 #include <sstream>
@@ -296,6 +297,9 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
+
+  G4int fact = (p.GetParticleName() == "proton") ? 1 : 256;
+  SetMaxKinEnergy(G4HadronicParameters::Instance()->GetMaxEnergy() * fact);
 
   if(data[index] == nullptr) { 
 #ifdef G4MULTITHREADED

@@ -897,10 +897,7 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
     yes = theLambdaTable->StorePhysicsTable(nam,ascii);
 
     if ( yes ) {
-      G4cout << "Physics table is stored for " << particle->GetParticleName()
-             << " and process " << GetProcessName()
-             << " in the directory <" << directory
-             << "> " << G4endl;
+      if(0 < verboseLevel) G4cout << "Stored: " << nam << G4endl;
     } else {
       G4cout << "Fail to store Physics Table for " 
              << particle->GetParticleName()
@@ -915,11 +912,13 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
     yes = theLambdaTablePrim->StorePhysicsTable(name,ascii);
 
     if ( yes ) {
-      G4cout << "Physics table prim is stored for " 
-             << particle->GetParticleName()
-             << " and process " << GetProcessName()
-             << " in the directory <" << directory
-             << "> " << G4endl;
+      if(0 < verboseLevel) {
+	G4cout << "Physics table prim is stored for " 
+	       << particle->GetParticleName()
+	       << " and process " << GetProcessName()
+	       << " in the directory <" << directory
+	       << "> " << G4endl;
+      }
     } else {
       G4cout << "Fail to store Physics Table Prim for " 
              << particle->GetParticleName()

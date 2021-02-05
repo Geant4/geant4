@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 January 2021 Vladimir Ivanchenko (hadr-hpp-V10-06-13)
+--------------------------------------------------------
+-  G4ParticleHPThermalScattering - add final state phi-rotation;
+     fixed problems #2290 and #1856 
+
 05 November 2020 Alberto Ribon (hadr-hpp-V10-06-12)
 --------------------------------------------------
 -  G4ParticleHPInelastic, G4ParticleHPInelasticData : improved error message

@@ -16,9 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 February 2021 Gabriele Cosmo (gdml-V10-06-06)
+- Fixed parsing of regions in G4GDMLParser::ImportRegions().
+  Allow for proper deletion of meta-data lists in destructor.
+  Based on GitHub PR#19 by shangjiaxuan.
+- Fixed reading of units for GenericTrap in G4GDMLReadSolids.
+  Addressing problem report #2317.
+
+18 January 2021 Witek Pokorski
+- Fixed importing of skin/border-surface properties by changing the key of
+  the G4GDMLReadSolids property vector map from 'name' to 'name + ref'.
+  Addressing problem report #2305
+
 5 November 2020 Witek Pokorski (gdml-V10-06-05)
 - Adding new method to the parser SetOutputFileOverwrite(G4bool flag) which 
-allows to set the flag to enable overwriting of the output GDML file.
+  allows to set the flag to enable overwriting of the output GDML file.
 
 19 October 2020 Witek Pokorski (gdml-V10-06-04)
 - Fix for problem 2273 (fixing loops when from == to).

@@ -16,6 +16,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 January 2020  John Allison (interfaces-V10-06-12)
+- G4UIQt.cc: Get colour and background from OS.
+  o Instead of fixed background <span style='background:#EEEEEE...
+    use <span style='background:" + pal.highlight().color().name()...
+  o This picks up colour from the OS and even allows for change of
+    OS display style, e.g., dark mode on MacOS.
+
+20 January 2020  John Allison
+- G4UIQt.cc: Fix bug in command-line-echo highlighting whereby there
+  could be a crash in some circumstances.
+  o Use <span> instead of <div> in HTML wrappers.
+
+16 January 2020  John Allison
+- Requires intercoms-V10-07-00.
+- Introduce choice of output styles:
+  o /gui/outputStyle
+    <cout|cerr|warnings|errors|all>
+    <fixed|proportional>
+    <highlight|no-highlight>
+  o Highlighting applies to the echoed command line if echoing is
+    requested with /control/verbose > 0.
+    
+29 December 2020  John Allison
+- G4UIQt.cc: Use 12pt Courier for G4UIQt output window.
+
 29 November 2020  Gabriele Cosmo (interfaces-V10-06-11)
 - G4UIQt.cc: protected MT code within G4MULTITHREADED in workaround
   introduced previously.

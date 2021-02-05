@@ -94,6 +94,12 @@ G4EmExtraParametersMessenger::G4EmExtraParametersMessenger(G4EmExtraParameters* 
   SubSecCmd->SetGuidance("  Region   : region name");
   SubSecCmd->AvailableForStates(G4State_PreInit);
 
+  G4UIparameter* subSec = new G4UIparameter("subSec",'s',false);
+  SubSecCmd->SetParameter(subSec);
+
+  G4UIparameter* subSecReg = new G4UIparameter("Region",'s',false);
+  SubSecCmd->SetParameter(subSecReg);
+
   StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters for e+-.");
   StepFuncCmd->SetGuidance("  dRoverR   : max Range variation per step");
@@ -166,12 +172,6 @@ G4EmExtraParametersMessenger::G4EmExtraParametersMessenger(G4EmExtraParameters* 
   G4UIparameter* unitPrm3 = new G4UIparameter("unit",'s',true);
   unitPrm3->SetDefaultValue("mm");
   StepFuncCmd3->SetParameter(unitPrm3);
-
-  G4UIparameter* subSec = new G4UIparameter("subSec",'s',false);
-  SubSecCmd->SetParameter(subSec);
-
-  G4UIparameter* subSecReg = new G4UIparameter("Region",'s',false);
-  SubSecCmd->SetParameter(subSecReg);
 
   bfCmd = new G4UIcommand("/process/em/setBiasingFactor",this);
   bfCmd->SetGuidance("Set factor for the process cross section.");

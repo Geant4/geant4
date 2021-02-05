@@ -19,8 +19,7 @@ endif()
 
 # PTL requires additional pre and post inclusion steps as it's a true subproject
 if(NOT GEANT4_USE_SYSTEM_PTL)
-  set(CMAKE_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}
-        CACHE PATH "CMake install directory" FORCE)
+  set(CMAKE_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}/PTL)
   add_subdirectory(ptl)
   # Needs to be in defined category list for static/shared to be linked correctly.
   set_property(GLOBAL APPEND PROPERTY GEANT4_DEFINED_CATEGORIES G4ptl)

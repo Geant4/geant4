@@ -1738,21 +1738,6 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
   if(!StoreTable(part,theSubLambdaTable,ascii,directory,"SubLambda")) 
     {res = false;}
 
-  if ( !res ) {
-    if(1 < verboseLevel) {
-      G4cout << "Physics tables are stored for " 
-             << particle->GetParticleName()
-             << " and process " << GetProcessName()
-             << " in the directory <" << directory
-             << "> " << G4endl;
-    }
-  } else {
-    G4cout << "Fail to store Physics Tables for " 
-           << particle->GetParticleName()
-           << " and process " << GetProcessName()
-           << " in the directory <" << directory
-           << "> " << G4endl;
-  }
   return res;
 }
 
@@ -1765,7 +1750,7 @@ G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 {
   G4bool res = true;
   if (!isMaster) return res;
-  const G4String particleName = part->GetParticleName();
+  const G4String& particleName = part->GetParticleName();
 
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::RetrievePhysicsTable() for "
@@ -1830,14 +1815,15 @@ G4bool G4VEnergyLossProcess::StoreTable(const G4ParticleDefinition* part,
                                         const G4String& directory,
                                         const G4String& tname)
 {
-  //G4cout << "G4VEnergyLossProcess::StoreTable: " << aTable
-  //         << "  " << directory << "  " << tname << G4endl;
   G4bool res = true;
   if ( aTable ) {
-    const G4String name = GetPhysicsTableFileName(part,directory,tname,ascii);
-    G4cout << name << G4endl;
-    //G4cout << *aTable << G4endl;
-    if( !aTable->StorePhysicsTable(name,ascii)) res = false;
+    const G4String& name = GetPhysicsTableFileName(part, directory, tname, ascii);
+    if ( aTable->StorePhysicsTable(name,ascii) ) {
+      if (0 < verboseLevel) G4cout << "Stored: " << name << G4endl;
+    } else {
+      res = false;
+      G4cout << "Fail to store: " << name << G4endl;
+    }
   }
   return res;
 }

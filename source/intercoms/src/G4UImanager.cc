@@ -487,8 +487,10 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   G4String aCommand = SolveAlias(aCmd);
   if(aCommand.isNull())
     return fAliasNotFound;
-  if(verboseLevel)
+  if(verboseLevel) {
+    fLastCommandOutputTreated = false;
     G4cout << aCommand << G4endl;
+  }
   G4String commandString;
   G4String commandParameter;
 

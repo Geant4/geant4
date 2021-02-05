@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -913,7 +913,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 200
-  User=8.490000s Real=9.083991s Sys=0.040000s
+  User=7.590000s Real=8.031280s Sys=0.050000s
 
  ======================== run summary ======================
 The run was 200 events.
@@ -1427,7 +1427,7 @@ Unaccounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.230000s Real=0.232047s Sys=0.000000s
+  User=0.210000s Real=0.208584s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 5 events.
@@ -2636,7 +2636,7 @@ Unaccounted for photons in this event : 0
 ./currentEvent.rndm is copied to ./run2evt0.rndm Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.083158s Sys=0.040000s
+  User=0.000000s Real=0.050141s Sys=0.000000s
 
  ======================== run summary ======================
 The run was 1 events.

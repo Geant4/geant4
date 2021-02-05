@@ -135,20 +135,18 @@ void G4LindhardSorensenIonModel::SetupParameters()
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   charge = particle->GetPDGCharge()*inveplus;
-  Zin = G4lrint(charge);
+  Zin = G4lrint(std::abs(charge));
   chargeSquare = charge*charge;
   ratio = electron_mass_c2/mass;
   static const G4double aMag = 1./(0.5*eplus*hbar_Planck*c_squared);
   G4double magmom = particle->GetPDGMagneticMoment()*mass*aMag;
   magMoment2 = magmom*magmom - 1.0;
-  if(Zin <= 1) {
-    formfact = (spin == 0.0 && mass < GeV) ? 1.181e-6 : 1.548e-6;	
-  } else {
-    G4double x = nist->GetA27(Zin);
-    formfact = 3.969e-6*x*x;
-  }
-  tlimit = std::sqrt(0.414/formfact +
-		     electron_mass_c2*electron_mass_c2) - electron_mass_c2;
+  G4double x = 0.8426*CLHEP::GeV;
+  if(spin == 0.0 && mass < GeV) { x = 0.736*CLHEP::GeV; }
+  else if (Zin > 1) { x /= nist->GetA27(Zin); }  
+
+  formfact = 2.0*CLHEP::electron_mass_c2/(x*x);
+  tlimit = 2.0/formfact;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,7 +168,7 @@ G4LindhardSorensenIonModel::ComputeCrossSectionPerElectron(
 {
   G4double cross = 0.0;
   // take into account formfactor
-  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy),tlimit);
+  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
   G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
@@ -228,7 +226,7 @@ G4LindhardSorensenIonModel::ComputeDEDXPerVolume(const G4Material* material,
 {
   // formfactor is taken into account in CorrectionsAlongStep(..)
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double cutEnergy = std::min(cut,tmax);
+  G4double cutEnergy = std::min(std::min(cut,tmax), tlimit);
 
   G4double tau   = kineticEnergy/mass;
   G4double gam   = tau + 1.0;
@@ -317,8 +315,7 @@ void G4LindhardSorensenIonModel::SampleSecondaries(
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   // take into account formfactor
-  G4double tmax = 
-    std::min(MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy),tlimit);
+  G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
 
   G4double maxKinEnergy = std::min(maxEnergy,tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
@@ -356,7 +353,7 @@ void G4LindhardSorensenIonModel::SampleSecondaries(
   // projectile formfactor - suppresion of high energy
   // delta-electron production at high energy
   
-  G4double x = formfact*deltaKinEnergy*(deltaKinEnergy + 2*electron_mass_c2);
+  G4double x = formfact*deltaKinEnergy;
   if(x > 1.e-6) {
 
     G4double x1 = 1.0 + x;
@@ -391,7 +388,7 @@ void G4LindhardSorensenIonModel::SampleSecondaries(
       sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
     G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
       (deltaMomentum * dp->GetTotalMomentum());
-    if(cost > 1.0) { cost = 1.0; }
+    cost = std::min(cost, 1.0);
     G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
     G4double phi = twopi*rndmEngineMod->flat();
@@ -434,10 +431,8 @@ G4LindhardSorensenIonModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
   // here particle type is checked for any method
   SetParticle(pd);
   G4double tau  = kinEnergy/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  // formfactor is not taken into account
-  return tmax;
+  return 2.0*CLHEP::electron_mass_c2*tau*(tau + 2.) /
+    (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

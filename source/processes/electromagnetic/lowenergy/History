@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29.01.2021 V.Ivanchenko, emlowen-V10-06-14
+- G4MicroElecLOPhononModel - fixed Coverity warning; removed debug
+    printout; rename member of class
+
+06.12.2020 V.Ivanchenko, 
+- G4MicroElecSurface, G4MicroElecLOPhononModel - fixed trivial
+    Coverity warnings 
+
 17.11.2020 V.Ivanchenko, emlowen-V10-06-13
 - G4MicroElecInelasticModel_new, G4MicroElecInelastic_new,
   G4MicroElecSurface - fixed Coverity warnings (non-initialized 

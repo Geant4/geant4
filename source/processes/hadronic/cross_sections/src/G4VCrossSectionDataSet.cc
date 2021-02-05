@@ -47,9 +47,9 @@
 #include "G4HadronicParameters.hh"
 
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
-  verboseLevel(0),minKinEnergy(0.0),
+  verboseLevel(0),name(nam),minKinEnergy(0.0),
   maxKinEnergy(G4HadronicParameters::Instance()->GetMaxEnergy()),
-  isForAllAtomsAndEnergies(false),name(nam) 
+  isForAllAtomsAndEnergies(false) 
 {
   registry = G4CrossSectionDataSetRegistry::Instance();
   registry->Register(this);

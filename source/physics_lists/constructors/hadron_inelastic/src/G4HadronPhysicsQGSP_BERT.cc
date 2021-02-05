@@ -82,6 +82,7 @@
 #include "G4HadParticles.hh"
 #include "G4HadronicParameters.hh"
 #include "G4HadronicBuilder.hh"
+#include "G4BuilderType.hh"
 
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -93,6 +94,7 @@ G4HadronPhysicsQGSP_BERT::G4HadronPhysicsQGSP_BERT(G4int)
 G4HadronPhysicsQGSP_BERT::G4HadronPhysicsQGSP_BERT(const G4String& name, G4bool)
     :  G4VPhysicsConstructor(name)
 {
+  SetPhysicsType(bHadronInelastic);
   QuasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
   QuasiElasticQGS= true;    // For QGS, it must use it.
   G4HadronicParameters* param = G4HadronicParameters::Instance();

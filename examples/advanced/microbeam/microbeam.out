@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -773,7 +773,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
-##### Create analysis manager   0x1147c00
+##### Create analysis manager   0x154bac0
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -781,8 +781,8 @@ All Ntuples have been created
 
 -> Event # 2 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.29742495970773
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.037565763424155
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.29742504062042
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.037565765905129
 
 -> Event # 3 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -798,8 +798,8 @@ All Ntuples have been created
 
 -> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32122858198003
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.058497168531552
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32122858192571
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.058497168523494
 
 -> Event # 8 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -809,8 +809,8 @@ All Ntuples have been created
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30452574139331
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.048417545393397
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.30452573909279
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.048417545311347
 
 -> Total number of particles detected by the gas detector : 3
 

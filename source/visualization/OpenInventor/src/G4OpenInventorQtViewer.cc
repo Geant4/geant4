@@ -51,6 +51,8 @@
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 #include "G4VisManager.hh"
+#include "G4UImanager.hh"
+#include "G4UIQt.hh"
 
 #include "G4SoQt.hh"
 
@@ -64,7 +66,7 @@ G4OpenInventorQtViewer::G4OpenInventorQtViewer(
 {
    // FWJ fName is in G4VViewer parent of G4OpenInventorViewer
    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
-       G4cout << "Window name: " << fName << G4endl;
+     G4cout << "Window name: " << fName << G4endl;
 }
 
 
@@ -77,8 +79,23 @@ void G4OpenInventorQtViewer::Initialise()
    //  G4cout << "G4OIQtViewer: Creating G4OIQtExaminerViewer with parent " <<
    //     parent << G4endl;
 
-   //  fViewer = new SoQtExaminerViewer(parent, "Geant4", TRUE);
-   fViewer = new G4OpenInventorQtExaminerViewer(parent, "Geant4", TRUE);
+   fViewer = new G4OpenInventorQtExaminerViewer(parent, fName, TRUE);
+
+   auto UI = G4UImanager::GetUIpointer();
+   auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
+
+   // Moved this to G4OpenInventorQtExaminerViewer::afterRealizeHook()
+   ///////////////////////////////////////////////////////////
+   //
+   // This explicitly sets the TabWidget as parent before addTab():
+   //   if (uiQt) uiQt->AddTabWidget(parent, QString(fName));
+   ///////////////////////////////////////////////////////////
+
+   // Simpler: calls addTab(), but causes viewer parts to show (temporarily)
+   // in the "Useful tips" page !!
+   //   if (uiQt) uiQt->AddViewerTab(parent, fName);
+   // Leaves an empty viewer window frame hanging around:
+   //   if (uiQt) uiQt->AddTabWidget(fViewer->getWidget(), QString(fName));
 
    //  G4String wName = fName;
    //
@@ -215,7 +232,8 @@ void G4OpenInventorQtViewer::Initialise()
   fViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
   fViewer->viewAll();
   fViewer->saveHomePosition();
-  fViewer->setTitle(fName);
+  // SOMEHOW this also the OIQt main window title
+  if (!uiQt) fViewer->setTitle(fName);
   fViewer->show();
 
   // This SHOULD invoke the event loop:

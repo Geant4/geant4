@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -117,12 +117,12 @@ Use Bearden atomic level energies                 0
 
   Process: ionElastic
         Model:          NNDiffuseElastic: 0 meV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
 
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 25.6 PeV
 
   Process: RadioactiveDecayBase
 
@@ -136,7 +136,7 @@ Use Bearden atomic level energies                 0
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
@@ -148,7 +148,7 @@ Use Bearden atomic level energies                 0
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -244,7 +244,7 @@ Use Bearden atomic level energies                 0
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for gamma
@@ -384,7 +384,7 @@ Use Bearden atomic level energies                 0
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 meV/n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 meV ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -456,7 +456,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.480000s Real=11.101290s Sys=0.000000s
+  User=8.080000s Real=9.038143s Sys=0.040000s
 
  The run is 10000 Am241 of 0 meV within BeO (D =  3 cm  L = 6 cm )
 
@@ -480,14 +480,14 @@ Run Summary
   At217[537.500]:       1  Emean =   107.3 keV	( 107.3 keV --> 107.3 keV)
   At217[568.500]:       1  Emean =  106.73 keV	( 106.73 keV --> 106.73 keV)
   At217[577.000]:       6  Emean =  106.58 keV	( 106.58 keV --> 106.58 keV)
-            Be9:       1  Emean =  1.2601 MeV	( 1.2601 MeV --> 1.2601 MeV)
+            Be9:       1  Emean =    1.26 MeV	( 1.26 MeV --> 1.26 MeV)
           Bi209:   10000  Emean =  1.2274 eV 	( 4.482 meV --> 2.7334 eV )
           Bi213:    9991  Emean =  132.94 keV	( 112.64 keV --> 132.95 keV)
   Bi213[1050.000]:       1  Emean =  113.55 keV	( 113.55 keV --> 113.55 keV)
   Bi213[257.870]:       7  Emean =  127.24 keV	( 121.63 keV --> 128.18 keV)
   Bi213[593.180]:       3  Emean =  121.99 keV	( 121.99 keV --> 121.99 keV)
   Bi213[758.900]:       1  Emean =  113.26 keV	( 113.26 keV --> 113.26 keV)
-            C12:       8  Emean =  1.1498 MeV	( 192.86 keV --> 2.4915 MeV)
+            C12:       8  Emean =  1.1498 MeV	( 192.87 keV --> 2.4914 MeV)
           Fr221:   10000  Emean =  104.86 keV	( 47.352 meV --> 105.65 keV)
   Fr221[100.890]:     183  Emean =  102.67 keV	( 94.115 keV --> 103.85 keV)
   Fr221[108.410]:     442  Emean =  102.94 keV	( 84.285 meV --> 103.72 keV)
@@ -637,12 +637,12 @@ Run Summary
    U233[40.350]:    1456  Emean =   287.4 meV	( 6.17 meV --> 908.77 meV)
   U233[415.758]:    2585  Emean =  130.86 meV	( 1.4261 meV --> 395.9 meV)
    U233[92.160]:     154  Emean =  161.54 meV	( 9.1677 meV --> 768.57 meV)
-          alpha:   80001  Emean =  5.9271 MeV	( 4.2731 MeV --> 8.3755 MeV)
+          alpha:   80001  Emean =  5.9271 MeV	( 4.2727 MeV --> 8.3755 MeV)
       anti_nu_e:   40000  Emean =     425 keV	( 10.667 keV --> 1.8259 MeV)
              e+:       1  Emean =  255.46 keV	( 255.46 keV --> 255.46 keV)
              e-: 1276636  Emean =  11.534 keV	( 1.3878e-05 meV --> 1.6129 MeV)
           gamma:   75206  Emean =  83.965 keV	( 34.16 eV  --> 4.4696 MeV)
-        neutron:      10  Emean =  4.8532 MeV	( 1.2557 MeV --> 10.866 MeV)
+        neutron:      10  Emean =  4.8531 MeV	( 1.2557 MeV --> 10.866 MeV)
 
  Mean energy deposit per event = 49.746 MeV  rms = 478.88 keV
  Mean energy flow per event    = 2.0664 MeV  rms = 524.66 keV
@@ -651,7 +651,7 @@ Run Summary
       anti_nu_e:   40000  Emean =     425 keV	( 10.667 keV --> 1.8259 MeV) 	Eflow/event = 1.7 MeV
              e-:      14  Emean =  266.67 keV	( 10.041 keV --> 1.0454 MeV) 	Eflow/event = 373.33 eV 
           gamma:   15176  Emean =  238.33 keV	( 5.3768 keV --> 4.4696 MeV) 	Eflow/event = 361.68 keV
-        neutron:       9  Emean =  4.8317 MeV	( 1.2557 MeV --> 10.866 MeV) 	Eflow/event = 4.3486 keV
+        neutron:       9  Emean =  4.8317 MeV	( 1.2557 MeV --> 10.866 MeV) 	Eflow/event = 4.3485 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

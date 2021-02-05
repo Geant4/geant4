@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-00    (4-December-2020)
+ Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -504,11 +504,11 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
   Process: ionElastic
         Model:          NNDiffuseElastic: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for He3
@@ -520,7 +520,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
@@ -532,7 +532,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -641,7 +641,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -785,7 +785,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
 ================================================================
 =======================================================================
@@ -1025,7 +1025,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.001576s Sys=0.000000s
+  User=0.000000s Real=0.001290s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 5 gamma of 6 MeV
@@ -1112,14 +1112,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     7       62    -4.12     58.2       101     12.6     19.7       209    Envelope hIoni
     8       61    -2.67     74.1      89.1       12       16       225    Envelope hIoni
     9     60.5    -1.44     86.8      78.6     10.5     12.8       238    Envelope hIoni
-   10       60   -0.653       96        70     8.62     9.22       247      Shape2 Transportation
-   11     59.7   -0.374      100      63.4     6.54     4.04       251    Envelope Transportation
+   10       60   -0.654       96        70     8.62     9.21       247      Shape2 Transportation
+   11     59.7   -0.374      100      63.4     6.55     4.04       251    Envelope Transportation
    12     59.5    0.146      107      55.4     8.04     7.03       258    Envelope hIoni
-   13     59.3    0.564      113      48.5     6.89     5.54       263    Envelope hIoni
-   14     59.1    0.898      117      42.6      5.9      4.4       268    Envelope hIoni
+   13     59.3    0.563      113      48.5     6.89     5.54       263    Envelope hIoni
+   14     59.1    0.897      117      42.6      5.9      4.4       268    Envelope hIoni
    15     58.9     1.21      120      37.3     5.27     3.51       271    Envelope hIoni
    16     58.8     1.53      123      32.7     4.65      2.8       274    Envelope hIoni
-   17     58.7     1.74      125      28.5     4.15     2.24       276    Envelope hIoni
+   17     58.7     1.74      125      28.5     4.14     2.24       276    Envelope hIoni
    18     58.5     1.91      127      24.8     3.72     1.79       278    Envelope hIoni
    19     58.4     2.05      129      21.5     3.28     1.42       280    Envelope hIoni
    20     58.3     2.15      130      18.8     2.78     1.14       281    Envelope hIoni
@@ -1129,10 +1129,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    24     58.2     2.39      132      9.57     2.04    0.478       283    Envelope hIoni
    25     58.1     2.42      133      7.58     1.99    0.382       284    Envelope hIoni
    26     58.1     2.44      133      5.72     1.86    0.301       284    Envelope hIoni
-   27     58.1     2.46      133      3.79     1.93    0.235       284    Envelope hIoni
+   27     58.1     2.46      133      3.79     1.92    0.235       284    Envelope hIoni
    28     58.1     2.47      134       1.7     2.09    0.169       285    Envelope hIoni
-   29     58.1     2.48      134    0.0905     1.61    0.058       285    Envelope hIoni
-   30     58.1     2.48      134         0   0.0905  0.00161       285    Envelope hIoni
+   29     58.1     2.47      134    0.0904     1.61   0.0578       285    Envelope hIoni
+   30     58.1     2.47      134         0   0.0904  0.00161       285    Envelope hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -1152,11 +1152,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000580s Sys=0.000000s
+  User=0.000000s Real=0.000609s Sys=0.000000s
 
 --------------------End of Global Run-----------------------
  The run consists of 1 proton of 210 MeV
- Dose in scoring volume : 0.6049982071340138 picoGy  +- 0 picoGy 
+ Dose in scoring volume : 0.6059272985946964 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
 0 events have been kept for refreshing and/or reviewing.

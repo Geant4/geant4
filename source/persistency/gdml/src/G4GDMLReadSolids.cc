@@ -2323,7 +2323,7 @@ void G4GDMLReadSolids::GenTrapRead(
     }
     else if(attName == "lunit")
     {
-      G4UnitDefinition::GetValueOf(attValue);
+      lunit = G4UnitDefinition::GetValueOf(attValue);
       if(G4UnitDefinition::GetCategory(attValue) != "Length")
       {
         G4Exception("G4GDMLReadSolids::GenTrapRead()", "InvalidRead",
@@ -3558,8 +3558,10 @@ void G4GDMLReadSolids::PropertyRead(
   else  // build the material properties vector
   {
     G4MaterialPropertyVector* propvect;
+    G4String temp = name + ref;
+    std::cout << temp << std::endl;
     // first check if it was already built
-    if(mapOfMatPropVects.find(Strip(name)) == mapOfMatPropVects.end())
+    if(mapOfMatPropVects.find(temp) == mapOfMatPropVects.end())
     {
       // if not create a new one
       propvect = new G4MaterialPropertyVector();
@@ -3568,11 +3570,11 @@ void G4GDMLReadSolids::PropertyRead(
         propvect->InsertValues(matrix.Get(i, 0), matrix.Get(i, 1));
       }
       // and add it to the list for potential future reuse
-      mapOfMatPropVects[Strip(name)] = propvect;
+      mapOfMatPropVects[temp] = propvect;
     }
     else
     {
-      propvect = mapOfMatPropVects[Strip(name)];
+      propvect = mapOfMatPropVects[temp];
     }
 
     matprop->AddProperty(Strip(name), propvect);

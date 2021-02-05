@@ -147,6 +147,11 @@ public: // With description
   // Third argument is the Geant4 command executed when the button is fired.
   // Fourth argument is the path to the icon file if "user_icon" selected
   // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
+  void OutputStyle (const char*,const char*,const char*);
+  // Specify an output style
+  // First argument destination (cout cerr warnings errors all)
+  // Second argument is the style (fixed proportional)
+  // Third argument highlights commands if "highlight" (and if /control/verbose > 0)
 
   void DefaultIcons(bool aVal);
   // Enable/Disable the default icon ToolBar in Qt
@@ -376,6 +381,10 @@ private:
   bool fPickSelected;
   bool fZoomInSelected;
   bool fZoomOutSelected;
+  struct G4UIQtStyle {
+    G4bool fixed, highlight;
+  };
+  std::map<G4String,G4UIQtStyle> fOutputStyles;
 
 private Q_SLOTS :
   void ExitSession();

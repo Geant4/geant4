@@ -60,11 +60,10 @@
 
 G4MicroElecLOPhononModel::G4MicroElecLOPhononModel(const G4ParticleDefinition*,
 				 const G4String& nam) 
-  : G4VEmModel(nam),isInitialised(false)
+  : G4VEmModel(nam)
 {
-  abs = false;
   fParticleChangeForGamma = GetParticleChangeForGamma();
-  G4cout << "SiO2 Phonon model is constructed " << G4endl;  
+  //G4cout << "SiO2 Phonon model is constructed " << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,60 +73,42 @@ G4MicroElecLOPhononModel::~G4MicroElecLOPhononModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MicroElecLOPhononModel::Initialise(const G4ParticleDefinition* /*particle*/,
-				 const G4DataVector& /*cuts*/)
+void G4MicroElecLOPhononModel::Initialise(const G4ParticleDefinition*,
+				          const G4DataVector& /*cuts*/)
 {  
- 
-  if (isOkToBeInitialised == true && isInitialised == false) {
-    G4cout << "Calling G4MicroElecLOPhononModel" << "::Initialise()" << G4endl;
-    
-    if (isInitialised) { return; }
-    fParticleChangeForGamma = GetParticleChangeForGamma();
-    isInitialised = true;
-  }
+  if (isInitialised) { return; }
+  //G4cout << "Calling G4MicroElecLOPhononModel::Initialise()" << G4endl;
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MicroElecLOPhononModel::CrossSectionPerVolume(const G4Material* material,
-						const G4ParticleDefinition* p,
+						const G4ParticleDefinition*,
 						G4double ekin,
 						G4double, G4double)
 {
-  G4double e = CLHEP::eplus / coulomb,
+  if (material->GetName()!="G4_SILICON_DIOXIDE") return 0.0;
 
-    m0 = CLHEP::electron_mass_c2 / c_squared / kg,
-    h = CLHEP::hbar_Planck / (m2*kg / s),
-    eps0 = CLHEP::epsilon0 / (farad / m),
-    kb = CLHEP::k_Boltzmann / (joule / kelvin);
-  G4double eps = 9,
-    einf = 3,
-    T = 300;
-    
-  isOkToBeInitialised = true;
+  const G4double e = CLHEP::eplus / CLHEP::coulomb;
+  const G4double m0 = CLHEP::electron_mass_c2 / (CLHEP::c_squared*CLHEP::kg);
+  const G4double h = CLHEP::hbar_Planck * CLHEP::s/ (CLHEP::m2*CLHEP::kg);
+  const G4double eps0 = CLHEP::epsilon0 * CLHEP::m/ (CLHEP::farad);
+  const G4double kb = CLHEP::k_Boltzmann * CLHEP::kelvin/ CLHEP::joule;
 
-  const G4DataVector cuts;
-  Initialise(p, cuts);
-  
-  if (material->GetName()!="G4_SILICON_DIOXIDE") return 1/DBL_MAX;
-  
-  G4double E =(ekin/eV)*e;
-  
   // Parameters SiO2  
-  eps = 3.84;
-  einf = 2.25;	
-  phononEnergy = (0.75*0.153+0.25*0.063 )* eV;
-  G4double hw = (phononEnergy / eV) * e;
-  G4double n = 1.0 / (std::exp(hw / (kb*T)) - 1); //Phonon distribution
+  phononEnergy = (0.75*0.153+0.25*0.063 )* CLHEP::eV;
+  const G4double eps = 3.84;
+  const G4double einf = 2.25;
+  const G4double T = 300;  // should be taken from material property
+      
+  G4double E =(ekin/CLHEP::eV)*e;
   
-  if (abs) { //Absorption
-    Eprim = E + hw;
-    signe = -1;
-  }
-  else { //Emission 
-    Eprim = E - hw;
-    signe = +1;
-  }
+  G4double hw = (phononEnergy / CLHEP::eV) * e;
+  G4double n = 1.0 / (std::exp(hw / (kb*T)) - 1); //Phonon distribution
+    
+  G4double signe = (absor) ? -1. : 1.;
     
   G4double racine = std::sqrt(1. + ((-signe*hw) / E));
   
@@ -135,7 +116,7 @@ G4double G4MicroElecLOPhononModel::CrossSectionPerVolume(const G4Material* mater
   
   G4double MFP = (std::sqrt(2. * E / m0) / P)*m;
 
-  return 2 / MFP;   
+  return 2. / MFP;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,13 +129,8 @@ void G4MicroElecLOPhononModel::SampleSecondaries(
 {
 
   G4double E = aDynamicElectron->GetKineticEnergy();
-  
-  if (abs) {
-    Eprim = E + phononEnergy;
-  }
-  else {
-    Eprim = E - phononEnergy;
-  }
+  G4double Eprim = (absor) ? E + phononEnergy : E - phononEnergy;   
+
   G4double rand = G4UniformRand();
   G4double B = (E + Eprim + 2 * std::sqrt(E*Eprim)) / (E + Eprim - 2 * std::sqrt(E*Eprim));
   G4double cosTheta = ((E + Eprim) / (2 * std::sqrt(E*Eprim)))*(1 - std::pow(B, rand)) + std::pow(B, rand);
@@ -162,7 +138,7 @@ void G4MicroElecLOPhononModel::SampleSecondaries(
   if(Interband){
     cosTheta = 1 - 2 * G4UniformRand(); //Isotrope
   }
-  G4double phi = 2. * pi * G4UniformRand();
+  G4double phi = twopi * G4UniformRand();
   G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
   G4ThreeVector xVers = zVers.orthogonal();
   G4ThreeVector yVers = zVers.cross(xVers);

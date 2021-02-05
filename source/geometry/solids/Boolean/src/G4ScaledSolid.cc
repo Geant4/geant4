@@ -268,7 +268,7 @@ G4ScaledSolid::DistanceToOut( const G4ThreeVector& p,
   {
     G4ThreeVector normal;
     fScale->TransformNormal(solNorm, normal);
-    *n = normal/normal.mag();
+    *n = normal.unit();
   }
 
   // Return distance converted to global

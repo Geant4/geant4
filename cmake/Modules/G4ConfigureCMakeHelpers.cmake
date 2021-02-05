@@ -87,7 +87,7 @@ endif()
 if(NOT GEANT4_USE_SYSTEM_PTL)
   list(APPEND GEANT4_EXTERNALS_TARGETS G4ptl)
   set(PTL_BUILDTREE_PREFIX "${PROJECT_BINARY_DIR}/source/externals/ptl")
-  set(PTL_INSTALLTREE_PREFIX "\${_geant4_thisdir}/../PTL")
+  set(PTL_INSTALLTREE_PREFIX "\${_geant4_thisdir}/PTL")
 endif()
 
 # - USolids

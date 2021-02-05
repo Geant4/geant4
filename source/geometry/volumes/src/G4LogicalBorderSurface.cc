@@ -47,7 +47,8 @@ G4LogicalBorderSurface(const G4String& name,
                              G4VPhysicalVolume* vol2,
                              G4SurfaceProperty* surfaceProperty)
   : G4LogicalSurface(name, surfaceProperty),
-    Volume1(vol1), Volume2(vol2)
+    Volume1(vol1), Volume2(vol2),
+    Index(theBorderSurfaceTable != nullptr ? theBorderSurfaceTable->size() : 0)
 {
   if (theBorderSurfaceTable == nullptr)
   {

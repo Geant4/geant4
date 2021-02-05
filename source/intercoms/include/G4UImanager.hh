@@ -246,6 +246,9 @@ class G4UImanager : public G4VStateDependent
 
     inline G4int GetLastReturnCode() const { return lastRC; }
 
+    inline bool IsLastCommandOutputTreated() { return fLastCommandOutputTreated; }
+    inline void SetLastCommandOutputTreated() { fLastCommandOutputTreated = true; }
+
   protected:
 
     G4UImanager();
@@ -297,6 +300,8 @@ class G4UImanager : public G4VStateDependent
     G4ICOMS_DLL static G4bool doublePrecisionStr;
 
     G4int lastRC = 0;
+
+    G4bool fLastCommandOutputTreated = true;
 };
 
 #endif

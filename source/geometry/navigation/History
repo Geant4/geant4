@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 27, 2021 - P.Arce (geomnav-V10-06-09)
+-------------------------
+- G4RegularNavigation: Addressing problem report #2314.
+  Added a #ifdef G4DEBUG_NAVIGATION to avoid excessive warnings.
+  Substituted G4cout by G4Exception GeomRegNav1002 (renumbering of exceptions).
+
+December 16, 2020 - G.Cosmo
+---------------------------
+- G4ReplicaNavigation: reduced step correction in ComputeStep().
+  Addressing problem report #2302.
+- G4PathFinder: moved debug printout within debug block in Locate().
+
 October 15, 2020 - G.Cosmo (geomnav-V10-06-08)
 --------------------------
 - G4ReplicaNavigation: relaxed condition for step correction in ComputeStep().

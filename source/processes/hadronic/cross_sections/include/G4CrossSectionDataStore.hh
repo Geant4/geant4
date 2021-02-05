@@ -122,12 +122,6 @@ private:
   G4double matKinEnergy;
   G4double matCrossSection;
 
-  const G4Material* elmMaterial;
-  const G4Element* currentElement;
-  const G4ParticleDefinition* elmParticle;
-  G4double elmKinEnergy;
-  G4double elmCrossSection;
-
   G4int nDataSetList;
   G4int verboseLevel;
   //Fast path: caching

@@ -151,6 +151,7 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     std::vector<tools::wroot::imt_ntuple*> fNtupleVector;
     G4bool fRowWise;
     G4bool fRowMode;
+    G4bool fCreateNtuples;
 };
 
 #include "G4RootPNtupleManager.icc"

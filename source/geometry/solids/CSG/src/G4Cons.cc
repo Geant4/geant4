@@ -1990,7 +1990,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         if( p.x() != 0. || p.y() != 0.)
         {
            message << "point phi = "   << std::atan2(p.y(),p.x())/degree
-                   << " degree" << G4endl << G4endl ; 
+                   << " degrees" << G4endl << G4endl ; 
         }
         message << "Direction:" << G4endl << G4endl
                 << "v.x() = "   << v.x() << G4endl
@@ -2034,7 +2034,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
     if( (p.x() != 0.) || (p.x() != 0.) )
     {
       G4cout << "point phi = "   << std::atan2(p.y(),p.x())/degree
-             << " degree" << G4endl << G4endl ; 
+             << " degrees" << G4endl << G4endl ; 
     }
     G4cout.precision(oldprc) ;
     G4Exception("G4Cons::DistanceToOut(p)", "GeomSolids1002",
