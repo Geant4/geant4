@@ -57,8 +57,19 @@ private:
   static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
   static bool SetWindowPixelFormat(HDC);
 private:
+  void TrackMouse(G4int, G4int);
+  void ReleaseMouse();
+  void SetShift(G4int, G4int);
+  void SetRotation(G4int, G4int);
+  void SetZoom(G4int);;
+private:
   HWND fWindow;
   HGLRC fHGLRC;
+
+protected:
+  G4bool fMouseHovered;
+  G4bool fMousePressed;
+  G4int fMousePressedX, fMousePressedY;
 };
 
 #endif

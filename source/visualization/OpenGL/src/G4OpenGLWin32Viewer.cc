@@ -37,6 +37,7 @@
 #include "G4VViewer.hh"
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLSceneHandler.hh"
+#include "G4Scene.hh"
 
 #include "G4ios.hh"
 #include "G4VisExtent.hh"
@@ -44,6 +45,8 @@
 #include "G4VSolid.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
+
+#include "G4SystemOfUnits.hh"
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -162,6 +165,10 @@ G4OpenGLWin32Viewer::G4OpenGLWin32Viewer (
 ,fWindow(0)
 ,fHDC(0)
 ,fHGLRC(0)
+,fMouseHovered(false)
+,fMousePressed(false)
+,fMousePressedX(0)
+,fMousePressedY(0)
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
@@ -190,46 +197,132 @@ G4OpenGLWin32Viewer::~G4OpenGLWin32Viewer (
 }
 
 //////////////////////////////////////////////////////////////////////////////
-LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc ( 
- HWND   aWindow
-,UINT   aMessage
-,WPARAM aWParam
-,LPARAM aLParam
-)
+LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc(HWND aWindow, UINT aMessage,
+                                                 WPARAM aWParam, LPARAM aLParam)
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-/*
-  switch (aMessage) { 
-  case WM_PAINT:{
-    printf("debug : PAINT\n");
-    HDC	hDC;
-    PAINTSTRUCT	ps;
-    hDC = BeginPaint(aWindow,&ps);
-    if(This) {
-      // FIXME : To have an automatic refresh someone have to redraw here.
-    }
-    EndPaint(aWindow, &ps);
+    switch (aMessage) {
+        case WM_SIZE: {
+            //FIXME : have to handle WM_RESIZE
+            // Seems to be done (ovidio.pena AT upm.es, 2021/02/23)
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->fWinSize_x = (G4int) LOWORD(aLParam);
+            This->fWinSize_y = (G4int) HIWORD(aLParam);
+            if (This) {
+                This->SetView();
+                glViewport(0, 0, This->fWinSize_x, This->fWinSize_y);
+                This->DrawView();
+            }
+            return 0;
+        }
 
-    //FIXME : have to handle WM_RESIZE
-    //pView->fWinSize_x = (G4int) width;
-    //pView->fWinSize_y = (G4int) height;
-    G4OpenGLWin32Viewer* This = 
-      (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
-    if(This) {
-      This->SetView();
-      glViewport(0,0,This->fWinSize_x,This->fWinSize_y);
-      This->ClearView();
-      This->DrawView();
-      // WARNING : the below empty the Windows message queue...
-      This->FinishView();
+        case WM_PAINT: {
+            PAINTSTRUCT ps;
+            BeginPaint(aWindow, &ps);
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            if (This) {
+                //FIXME : To have an automatic refresh someone have to redraw here.
+                // Seems to be done (ovidio.pena AT upm.es, 2021/02/23)
+                This->SetView();
+                This->ClearView();
+                This->DrawView();
+            }
+            EndPaint(aWindow, &ps);
+            return 0;
+        }
+
+        case WM_LBUTTONDOWN: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->TrackMouse(LOWORD(aLParam), HIWORD(aLParam));
+            return 0;
+        }
+
+        case WM_RBUTTONDOWN: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->TrackMouse(LOWORD(aLParam), HIWORD(aLParam));
+            return 0;
+        }
+
+        case WM_LBUTTONUP: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->ReleaseMouse();
+            return 0;
+        }
+
+        case WM_RBUTTONUP: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->ReleaseMouse();
+            return 0;
+        }
+
+        case WM_MOUSEHOVER: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->fMouseHovered = true;
+            return 0;
+        }
+
+        case WM_MOUSELEAVE: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+            This->fMouseHovered = false;
+            return 0;
+        }
+
+        case WM_MOUSEMOVE: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+
+            if (!This->fMouseHovered) {
+                // mouse hover/leave tracking
+                TRACKMOUSEEVENT tme;
+                tme.cbSize = sizeof(tme);
+                tme.dwFlags = TME_HOVER | TME_LEAVE;
+                tme.hwndTrack = aWindow;
+                tme.dwHoverTime = HOVER_DEFAULT;
+                ::TrackMouseEvent(&tme);
+                This->fMouseHovered = true;
+            }
+
+            if (This->fMousePressed) {
+                G4int x = (G4int) LOWORD(aLParam);
+                G4int y = (G4int) HIWORD(aLParam);
+                G4int dx = x - This->fMousePressedX;
+                G4int dy = y - This->fMousePressedY;
+                This->fMousePressedX = x;
+                This->fMousePressedY = y;
+
+                if (aWParam == MK_LBUTTON) {  // Rotation
+                    This->SetRotation(dx, dy);
+                }
+
+                if (aWParam == MK_RBUTTON) {  // Shift
+                    This->SetShift(dx, dy);
+                }
+
+                This->SetView();
+                This->ClearView();
+                This->DrawView();
+            }
+
+            return 0;
+        }
+
+        case WM_MOUSEWHEEL: {
+            auto* This = (G4OpenGLWin32Viewer*) ::GetWindowLongPtr(aWindow, GWLP_USERDATA);
+
+            G4int delta = (short) HIWORD(aWParam);
+
+            This->SetZoom(delta);
+
+            This->SetView();
+            This->ClearView();
+            This->DrawView();
+            return 0;
+        }
+
+        default:
+            return DefWindowProc(aWindow, aMessage, aWParam, aLParam);
     }
-  } return 0;
-  default:
-    return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
-  }
-*/
-  return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
+//  return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -287,5 +380,52 @@ bool G4OpenGLWin32Viewer::SetWindowPixelFormat(
   return true;
 }
 
+void G4OpenGLWin32Viewer::TrackMouse(G4int x, G4int y) {
+    fMousePressed = true;
+    fMousePressedX = x;
+    fMousePressedY = y;
+}
+
+void G4OpenGLWin32Viewer::ReleaseMouse() {
+    fMousePressed = false;
+    fMousePressedX = 0;
+    fMousePressedY = 0;
+}
+
+void G4OpenGLWin32Viewer::SetShift(G4int dx, G4int dy) {
+    const G4double sceneRadius = GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius();
+    const G4double scale = 300;  // Roughly pixels per window, empirically chosen
+    const G4double dxScene = dx*sceneRadius/scale;
+    const G4double dyScene = dy*sceneRadius/scale;
+    fVP.IncrementPan(-dxScene,dyScene);
+}
+
+void G4OpenGLWin32Viewer::SetRotation(G4int dx, G4int dy) {
+    // Simple ad-hoc algorithms (borrowed from G4Qt3DViewer)
+    const G4Vector3D& x_prime = fVP.GetViewpointDirection().cross(fVP.GetUpVector());
+    const G4Vector3D& y_prime = x_prime.cross(fVP.GetViewpointDirection());
+    const G4double scale = 200;  // Roughly pixels per window, empirically chosen
+    G4Vector3D newViewpointDirection = fVP.GetViewpointDirection();
+    newViewpointDirection += dx*x_prime/scale;
+    newViewpointDirection += dy*y_prime/scale;
+    fVP.SetViewpointDirection(newViewpointDirection.unit());
+
+    if (fVP.GetRotationStyle() == G4ViewParameters::freeRotation) {
+        G4Vector3D newUpVector = fVP.GetUpVector();
+        newUpVector += dx*x_prime/scale;
+        newUpVector += dy*y_prime/scale;
+        fVP.SetUpVector(newUpVector.unit());
+    }
+}
+
+void G4OpenGLWin32Viewer::SetZoom(G4int delta) {
+    if (fVP.GetFieldHalfAngle() == 0.) {  // Orthographic projection
+        const G4double scale = 500;  // Empirically chosen
+        fVP.MultiplyZoomFactor(1. + delta/scale);
+    } else {                              // Perspective projection
+        const G4double scale = fVP.GetFieldHalfAngle()/(10.*deg);  // Empirical
+        fVP.SetDolly(fVP.GetDolly() + delta/scale);
+    }
+}
 
 #endif

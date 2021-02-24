@@ -286,6 +286,10 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
 void G4UIExecutive::SelectSessionByBestGuess()
 {
   if ( qt_build ) selected = kQt;
+#ifdef WIN32
+  // Ensure that in Windows 'win32' is selected as second choice (Ovidio Pena, 2021/02/24)
+  else if ( win32_build ) selected = kWin32;
+#endif
   else if ( tcsh_build ) selected = kTcsh;
   else if ( xm_build ) selected = kXm;
 }
