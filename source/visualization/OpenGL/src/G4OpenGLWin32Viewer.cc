@@ -126,7 +126,7 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
   int y_res=GetSystemMetrics(SM_CYSCREEN);
   
   //FIXME : NOT tested !
-  fWindow = ::CreateWindow(className,fName.c_str(), 
+  fWindow = ::CreateWindowEx(0, className,fName.c_str(),
 			   WS_OVERLAPPEDWINDOW,
 			   //WS_CHILD | WS_VISIBLE,
                            //			   0,0,

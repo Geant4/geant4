@@ -41,3 +41,12 @@ add_subdirectory(visualization)
 
 # - Compose libs
 geant4_compose_targets()
+
+# Ensure that the CommCtrl library is loaded in Windows
+if(MSVC)
+  foreach(__target G4interfaces G4interfaces-static)
+    if(TARGET ${__target})
+      target_link_libraries(${__target} COMCTL32)
+    endif()
+  endforeach()
+endif()
