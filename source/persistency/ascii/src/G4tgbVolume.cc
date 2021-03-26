@@ -451,7 +451,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
       return nullptr;
     }
 
-    if(!genericPoly)
+    if(genericPoly)
     {
       std::vector<G4double>* z_p    = new std::vector<G4double>;
       std::vector<G4double>* rmin_p = new std::vector<G4double>;
