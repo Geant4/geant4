@@ -50,6 +50,8 @@ geant4_define_module(NAME G4geomtext
     G4tgrRotationMatrixFactory.hh
     G4tgrSolid.hh
     G4tgrSolidBoolean.hh
+    G4tgrSolidMulti.hh
+    G4tgrSolidScale.hh
     G4tgrUtils.hh
     G4tgrVolume.hh
     G4tgrVolumeAssembly.hh
@@ -98,6 +100,8 @@ geant4_define_module(NAME G4geomtext
     G4tgrRotationMatrixFactory.cc
     G4tgrSolid.cc
     G4tgrSolidBoolean.cc
+    G4tgrSolidMulti.cc
+    G4tgrSolidScale.cc
     G4tgrUtils.cc
     G4tgrVolume.cc
     G4tgrVolumeAssembly.cc
