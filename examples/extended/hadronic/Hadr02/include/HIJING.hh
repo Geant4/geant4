@@ -35,50 +35,24 @@
 //   created from FTFP_BERT
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Migrated to non-templated physics list.
 //
 //----------------------------------------------------------------------------
 //
-#ifndef THIJING_h
-#define THIJING_h 1
+#ifndef HIJING_h
+#define HIJING_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class THIJING: public T
-{
-public:
-  THIJING(G4int ver = 1);
-  virtual ~THIJING();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
 
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+class HIJING : public G4VModularPhysicsList {
+  public:
+    HIJING( G4int ver = 1 );
+    virtual ~HIJING() = default;
+
+    HIJING( const HIJING & ) = delete;
+    HIJING & operator=( const HIJING & ) = delete;  
 };
-#ifdef G4_USE_HIJING
-#include "HIJING.icc"
-#else
-template<class T>
-THIJING<T>::THIJING(G4int) : T()
-{
-  G4ExceptionDescription de;
-  de<<"Support for HIJING not enabled"<<G4endl;
-  G4Exception(__FILE__,"HIJING-01",FatalException,de,
-  "Code should be compiled with G4_USE_HIJING environment variable set.");
-}
 
-template<class T>
-THIJING<T>::~THIJING() { }
-template<class T>
-void THIJING<T>::SetCuts() { }
 #endif
-
-typedef THIJING<G4VModularPhysicsList> HIJING;
-
-#endif //THIJING_h
-
-

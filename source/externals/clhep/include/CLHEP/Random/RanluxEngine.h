@@ -47,8 +47,8 @@ public:
 
   RanluxEngine( std::istream& is );
   RanluxEngine();
-  RanluxEngine( long seed, int lux = 3 );
-  RanluxEngine( int rowIndex, int colIndex, int lux );
+  RanluxEngine( long seed, int lxr = 3 );
+  RanluxEngine( int rowIndex, int colIndex, int lxr );
   virtual ~RanluxEngine();
   // Constructors and destructor
 
@@ -70,10 +70,10 @@ public:
   void flatArray (const int size, double* vect);
   // Fills the array "vect" of specified size with flat random values.
 
-  void setSeed(long seed, int lux=3);
+  void setSeed(long seed, int lxr=3);
   // Sets the state of the algorithm according to seed.
 
-  void setSeeds(const long * seeds, int lux=3);
+  void setSeeds(const long * seeds, int lxr=3);
   // Sets the state of the algorithm according to the zero terminated
   // array of seeds. Only the first seed is used.
 

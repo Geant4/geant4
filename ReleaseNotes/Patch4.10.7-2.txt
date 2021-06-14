@@ -1,0 +1,185 @@
+
+                 Geant4 10.7 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                            11 June 2021
+
+List of fixes included in this public patch since the public release 10.7.p01:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Fixed optional G4TENDL version to 1.3.2. Addressing problem report #2341.
+    + GNUmake:
+      o Fixed name of internal PTL module library for DLL build in WIN32-VC
+        configuration.
+
+  o Analysis:
+    --------
+    + Fixed n-tuple indexing when FinishNtuple() is called in different order
+      than CreateNtuple(). Addressing problem report #2335.
+
+  o Event:
+    -----
+    + G4GeneralParticleSourceMessenger: fixed default value of
+      "/gps/ang/maxphi" UI command. Addressing problem report #2383.
+
+  o Externals:
+    ----------
+    + CLHEP: Fixed trivial compilation warnings on gcc-11 in Random headers.
+    + zlib: Use separate genexes in G4zlib include directories to prevent
+      parsing issues.
+
+  o Geometry:
+    --------
+    + solids/CSG:
+      o G4Sphere: bux fix in GetSurfaceArea(); revised implementation of
+        GetPointOnSurface(); moved to source GetCubicVolume() implementation.
+    + solids/specific:
+      o G4Polyhedra, G4Polycone: fixed setting of 'endPhi' for the case
+        of negative 'phiStart'. It addresses also problem report #2362.
+      o Fixed use of conversion factor in G4UPolyhedra wrapper for "generic"
+        polyhedra constructs.
+      o G4Voxelizer: fixed calculation of bounding box position in function
+        BuildVoxelLimits(), resolving cases of skipped components in G4MultiUnion
+        structures. Addressing problem report #2301.
+
+  o Global:
+    ------
+    + Zero terminate buffer in G4strstreambuf destructor before flushing.
+      Addressing problem report #2350.
+    + Removed spurious spaces in #define in G4Version header.
+      Addressing problem report #2384.
+    + Updated date and version for 10.7.p02.
+
+  o Graphics Representations:
+    ------------------------
+    + Fixed shadowing compilation warning in G4Colours on gcc-11.
+
+  o Intercoms:
+    ---------
+    + Fixed shadowing compilation warning in G4UImanager on gcc-11.
+
+  o Interfaces:
+    ----------
+    + G4UIQt::ReceiveG4cout/G4cerr: trap empty string with empty() instead of
+      using unary operator. Addressing problem report #2347.
+
+  o Materials:
+    ---------
+    + G4DensityEffectData: fixed typo in Z=37 elementary material name.
+      Addressing problem report #2324.
+    + In G4AtomicShells and G4AtomicShells_XDB_EADL, fixed method
+      GetNumberOfFreeElectrons(). Addressing problem report #2356.
+    + Fixed shadowing compilation warning in G4Isotope on gcc-11.
+
+  o Particles:
+    ---------
+    + Fixed shadowing compilation warning in G4IonTable on gcc-11.
+
+  o Persistency:
+    -----------
+    + ASCII
+      o G4tgbVolume: fixed definition of generic polyhedra in function
+        FindOrConstructG4Solid() for POLYHEDRA tag.
+        Based on findings in GitHub PR#24.
+    + GDML
+      o G4GDMLReadSolids: updated optical surface properties to reflect
+        introduction of DAVIS interface. Addressing problem report #2371.
+      o Removed hardcoded size 10000 in G4GDMLWrite causing the values in GDML
+        truncated. Adressing problem report #2336.
+      o Fixed case of writing degenerated names (position, rotation and nodes)
+        for multiUnion and assembly entities. Addressing problem report #2342.
+      o Fixed problem of not complete writing of assemblies to GDML file.
+        Addressing problem report #2343.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic
+      o G4EmBuilder: added geantinos to the minimal list of EM particles.
+      o GeneralGammaProcess: reduced usage of protected variables.
+      o G4EmStandardPhysics, G4EmStandardPhysicsGS: set default verbosity to 1.
+    + constructors/hadron_inelastic
+      o G4HadronPhysicsShielding: corrected parameters of the M variant
+        of the Shielding physics list.
+    + lists
+      o Updated list of EM extension shorthands known to extensible factory to
+        match old factory.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + muons
+      o G4EnergyLossForExtrapolator, G4TablesForExtrapolator: allow several runs
+        with extrapolator; fixed extrapolation for hadrons.
+        More thread safe initialisation and destruction.
+    + utils
+      o G4EmParameters: fixed line breaking in printouts.
+        Addressing problem report #2350.
+      o Fixed shadowing compilation warning in G4EmCorrections on gcc-11.
+    + xrays
+      o G4Scintillation: changed 'IsApplicable' to all particles except
+        optical-photon and short-lived. Addressing problem report #2372.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/de_excitation
+      o G4DeexPrecoParameters: changed half-life time threshold for isomer
+        production from 1 microsecond to 1 nanosecond.
+        The goal is to avoid unphysical missing energy cases as reported by
+        NA61/SHINE Collaboration.
+        Fixed line breaking in printouts. Addressing problem report #2350.
+      o G4PolarizationTransition: fixed sampling of angular correlations.
+        Addressing problem report #2344.
+    + models/particle_hp
+      o Fixed condition in G4ParticleHPInelasticCompFS:::CompositeApply().
+        Addressing problem report #2333.
+    + radioactive_decay
+      o G4RadioactiveDecayBase: set the weight of secondaries tracks to the
+        mother's weight value in the method G4RadioactiveDecayBase::DecayAnalog().
+        This bug, present since a long time, affects only simulations that use
+        Radioactive Decay in analogue mode with "external" biasing (e.g. generic
+        biasing, GPS generator with weights, etc.).
+        Corresponding fix was done also in deprecated class G4RadioactiveDecay.
+        Fixed line breaking in printouts. Addressing problem report #2350.
+
+  o Processes - Management
+    ----------------------
+    + G4ProcessTable: added missing checks, protecting against null elements.
+
+  o Examples:
+    --------
+    + advanced/gammaknife:
+      o Use default MixMax random number engine.
+      o Fixed interactive run to just execute defaultMacro.mac.
+      o Added forgotten header in GammaKnifePhysicsList.
+    + advanced/purging_magnet:
+      o Removed call to obsolete ResetCuts() in PurgMagPhysicsList.
+    + advanced/STCyclotron:
+      o Update README to recommend correct version of G4TENDL-1.3.2.
+        Addressing problem report #2341.
+      o Fixed gui.mac macro to invoke init_parameters.mac.
+        Addressing GitHub PR#25.
+    + advanced/xray_telescope:
+      o Removed calls to obsolete ResetCuts() in XrayTelPhysicsList.
+    + extended/hadronic/Hadr02:
+      o Migrated to newer CRMC and more modern approach to physics lists.
+    + extended/hadronic/FissionFragment:
+      o Fixed CMake build script to define target properly.
+      o Improved comments.
+    + extended/medical/GammaTherapy:
+      o Use default MixMax generator instead of obsolete RanecuEngine.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.7 or 10.7.p01.
+  o  Technical notes distributed for release 10.7 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.7.p02 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

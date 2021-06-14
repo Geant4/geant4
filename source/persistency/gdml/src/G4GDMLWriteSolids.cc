@@ -116,19 +116,19 @@ void G4GDMLWriteSolids::MultiUnionWrite(xercesc::DOMElement* solElement,
     xercesc::DOMElement* solidElement = NewElement("solid");
     solidElement->setAttributeNode(NewAttribute("ref", solidref));
     xercesc::DOMElement* multiUnionNodeElement = NewElement("multiUnionNode");
-    multiUnionNodeElement->setAttributeNode(NewAttribute("name", nodeName));
+    multiUnionNodeElement->setAttributeNode(NewAttribute("name", name+"_"+nodeName));
     multiUnionNodeElement->appendChild(solidElement);  // Append solid to node
     if((std::fabs(pos.x()) > kLinearPrecision) ||
        (std::fabs(pos.y()) > kLinearPrecision) ||
        (std::fabs(pos.z()) > kLinearPrecision))
     {
-      PositionWrite(multiUnionNodeElement, name + "_pos", pos);
+      PositionWrite(multiUnionNodeElement,name+"_"+nodeName+"_pos",pos);
     }
     if((std::fabs(rot.x()) > kAngularPrecision) ||
        (std::fabs(rot.y()) > kAngularPrecision) ||
        (std::fabs(rot.z()) > kAngularPrecision))
     {
-      RotationWrite(multiUnionNodeElement, name + "_rot", rot);
+      RotationWrite(multiUnionNodeElement,name+"_"+nodeName+"_rot",rot);
     }
     multiUnionElement->appendChild(multiUnionNodeElement);  // Append node
   }

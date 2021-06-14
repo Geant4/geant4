@@ -404,14 +404,16 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
         //Use QI value for calculating excitation energy of residual.
         G4bool useQI=false;
         G4double dqi = QI[it]; 
-        if ( dqi < 0 || 849 < dqi ) useQI = true; //Former libraies does not have values of this range
+        if (dqi < 0 || 849 < dqi) useQI = true; // Former libraries do not have values in this range
  
         if (useQI) {
           // QI introudced since G4NDL3.15
           // G4double QM=(incidReactionProduct.GetMass()+targetMass)-(aHadron.GetMass()+residualMass);
           // eExcitation = QM-QI[it];
-          eExcitation = QI[0] - QI[it];   // Bug fix #1838
-          if(eExcitation < 20*CLHEP::keV) eExcitation = 0;
+          // eExcitation = QI[0] - QI[it];   // Bug fix #1838
+          // if(eExcitation < 20*CLHEP::keV) eExcitation = 0;
+
+          eExcitation = std::max(0.,QI[0] - QI[it]);  // Bug fix 2333
 
           // Re-evluate iLevel based on this eExcitation
           iLevel = 0;
@@ -592,14 +594,17 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack
       }
     }
     //G4cout << "nothingWasKnownOnHadron " << nothingWasKnownOnHadron << G4endl;
-    if(nothingWasKnownOnHadron)
+    if (nothingWasKnownOnHadron)
     {
 //    In this case, hadron should be isotropic in CM
 // Next 12 lines are Emilio's replacement 
       // G4double QM=(incidReactionProduct.GetMass()+targetMass)-(aHadron.GetMass()+residualMass);
       // G4double eExcitation = QM-QI[it];
-      G4double eExcitation = QI[0] - QI[it];  // Fix of bug #1838
-      if(eExcitation<20*CLHEP::keV){eExcitation=0;}
+      // G4double eExcitation = QI[0] - QI[it];  // Fix of bug #1838
+      // if(eExcitation<20*CLHEP::keV){eExcitation=0;}
+
+      G4double eExcitation = std::max(0.,QI[0] - QI[it]);  // Fix of bug #2333
+
       two_body_reaction(&incidReactionProduct,&theTarget,&aHadron,eExcitation);
       if(thePhotons==0 && eExcitation>0){
         for(iLevel=theGammas.GetNumberOfLevels()-1; iLevel>=0; iLevel--)

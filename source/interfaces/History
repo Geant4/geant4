@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 March 2021  John Allison  (interfaces-V10-06-13)
+- G4UIQt::ReceiveG4cout/G4cerr:
+  o Trap empty string with empty() instead of using unary operator!
+    (The latter may work for std::string but G4String has a conversion
+    operator to char*, so ! is always false.)
+  o Fixes bug report #2347.
+
 26 January 2020  John Allison (interfaces-V10-06-12)
 - G4UIQt.cc: Get colour and background from OS.
   o Instead of fixed background <span style='background:#EEEEEE...

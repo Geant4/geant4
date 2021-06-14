@@ -131,6 +131,12 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4int,
 {
   minFTFP_pion = minFTFPEnergy;
   maxBERT_pion = maxBertiniEnergy;
+  minFTFP_kaon = minFTFPEnergy;
+  maxBERT_kaon = maxBertiniEnergy;
+  minFTFP_proton = minFTFPEnergy;
+  maxBERT_proton = maxBertiniEnergy;
+  minFTFP_neutron = minFTFPEnergy;
+  maxBERT_neutron = maxBertiniEnergy;
 }
 
 G4HadronPhysicsShielding::~G4HadronPhysicsShielding()

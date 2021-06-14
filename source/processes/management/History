@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Apr. 26, 2021  Alberto Ribon (procman-V10-06-04)
+- G4ProcessTable : added missing checks against null elements.
+  (Thanks to Ivana Hrivnacova for reporting it.)
+
 - Jun. 4, 2020  Gabriele Cosmo (procman-V10-06-03)
 - Fixed Coverity warning for uninitialised data in G4VProcess.
 

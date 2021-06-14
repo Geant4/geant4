@@ -13,6 +13,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 April 2021, V.Ivanchenko (phys-ctor-em-V10-06-22)
+- G4EmStandardPhysics, G4EmStandardPhysicsGS - set default verbosity 1
+
+18 March 2021, V.Ivanchenko
+- GeneralGammaProcess - reduced usage of protected variables
+
+12 Febuary 2021, V.Ivanchenko
+- G4EmBuilder - added geantinos to the minimal list of EM particles
+
 18 January 2021, V.Ivanchenko (phys-ctor-em-V10-06-21)
 - G4GammaGeneralProcess - changed 1st energy limit from 50 keV to 150 keV
     to guarantee K-shell energy for any element be within 1st energy area;

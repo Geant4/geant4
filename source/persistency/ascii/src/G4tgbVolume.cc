@@ -429,11 +429,11 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
     G4bool genericPoly = false;
     if(solParam.size() == 4 + nplanes * 3)
     {
-      genericPoly = true;
+      genericPoly = false;
     }
     else if(solParam.size() == 4 + nplanes * 2)
     {
-      genericPoly = false;
+      genericPoly = true;
     }
     else
     {

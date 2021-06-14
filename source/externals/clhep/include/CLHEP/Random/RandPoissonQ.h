@@ -71,29 +71,29 @@ public:
 
   // Static methods to shoot random values using the static generator
 
-  static  long shoot( double m=1.0 );
+  static  long shoot( double mean=1.0 );
 
-  static  void shootArray ( const int size, long* vect, double m=1.0 );
+  static  void shootArray ( const int size, long* vect, double mean=1.0 );
 
   //  Static methods to shoot random values using a given engine
   //  by-passing the static generator.
 
-  static  long shoot( HepRandomEngine* anEngine, double m=1.0 );
+  static  long shoot( HepRandomEngine* anEngine, double mean=1.0 );
 
   static  void shootArray ( HepRandomEngine* anEngine,
-                            const int size, long* vect, double m=1.0 );
+                            const int size, long* vect, double mean=1.0 );
 
   //  Methods using the localEngine to shoot random values, by-passing
   //  the static generator.
 
   long  fire();
-  long  fire( double m );
+  long  fire( double mean );
 
   void fireArray ( const int size, long* vect );
-  void fireArray ( const int size, long* vect, double m);
+  void fireArray ( const int size, long* vect, double mean);
 
   double operator()();
-  double operator()( double m );
+  double operator()( double mean );
 
   std::string name() const;
   HepRandomEngine & engine();

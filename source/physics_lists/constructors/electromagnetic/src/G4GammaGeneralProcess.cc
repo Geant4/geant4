@@ -68,6 +68,7 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4GammaConversionToMuons.hh"
+#include "G4Gamma.hh"
 
 #include "G4Log.hh"
 #include <iostream>
@@ -86,22 +87,10 @@ G4GammaGeneralProcess::G4GammaGeneralProcess():
   G4VEmProcess("GammaGeneralProc", fElectromagnetic),
   minPEEnergy(150*CLHEP::keV),
   minEEEnergy(2*CLHEP::electron_mass_c2),
-  minMMEnergy(100*CLHEP::MeV),
-  peLambda(0.0),
-  nLowE(40),
-  nHighE(50),
-  splineFlag(false)
+  minMMEnergy(100*CLHEP::MeV)
 {
-  thePhotoElectric = theCompton = theConversionEE = theRayleigh = nullptr;
-  theGammaNuclear = nullptr;
-  theConversionMM = nullptr;
-  selectedProc = nullptr;
-
-  idxEnergy = 0;
-  preStepLogE = factor = 1.0;
-
   SetVerboseLevel(1);
-  SetParticle(theGamma);
+  SetParticle(G4Gamma::Gamma());
   SetProcessSubType(fGammaGeneralProcess);
 }
 
@@ -153,14 +142,16 @@ void G4GammaGeneralProcess::AddHadProcess(G4HadronicProcess* ptr)
 void G4GammaGeneralProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   SetParticle(&part);
-  currentCouple = nullptr;
-  currentMaterial = nullptr;
   preStepLambda = 0.0;
   idxEnergy = 0;
+  currentCouple = nullptr;
 
-  isTheMaster = lManager->IsMaster(); 
-  if(isTheMaster) { SetVerboseLevel(theParameters->Verbose()); }
-  else { SetVerboseLevel(theParameters->WorkerVerbose()); }
+  G4EmParameters* param = G4EmParameters::Instance();
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  
+  isTheMaster = man->IsMaster(); 
+  if(isTheMaster) { SetVerboseLevel(param->Verbose()); }
+  else { SetVerboseLevel(param->WorkerVerbose()); }
 
   if(1 < verboseLevel) {
     G4cout << "G4GammaGeneralProcess::PreparePhysicsTable() for "
@@ -197,6 +188,9 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isTheMaster) { 
 
+    G4EmParameters* param = G4EmParameters::Instance();
+    G4LossTableManager* man = G4LossTableManager::Instance();
+
     // tables are created and its size is defined only once
     if(nullptr == theHandler) { 
       theHandler = new G4EmDataHandler(nTables);  
@@ -207,15 +201,15 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
       theHandler->SetMasterProcess(theConversionEE);
       theHandler->SetMasterProcess(theRayleigh);
     }
-    auto bld = lManager->GetTableBuilder();
+    auto bld = man->GetTableBuilder();
      
     const G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
 
-    G4double mine = theParameters->MinKinEnergy();
-    G4double maxe = theParameters->MaxKinEnergy();
-    G4int nd = theParameters->NumberOfBinsPerDecade();
+    G4double mine = param->MinKinEnergy();
+    G4double maxe = param->MaxKinEnergy();
+    G4int nd = param->NumberOfBinsPerDecade();
     size_t nbin1 = std::max(5, nd*G4lrint(std::log10(minPEEnergy/mine)));
     size_t nbin2 = std::max(5, nd*G4lrint(std::log10(maxe/minMMEnergy)));
 
@@ -230,7 +224,6 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
       cVector.SetSpline(splineFlag);
       dVector.SetSpline(splineFlag);
     }
-
     for(size_t i=0; i<nTables; ++i) { 
       if(!theT[i]) { continue; }
       //G4cout << "## PreparePhysTable " << i << "." << G4endl;
@@ -295,7 +288,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       G4ProductionCutsTable::GetProductionCutsTable();
     size_t numOfCouples = theCoupleTable->GetTableSize();
 
-    G4LossTableBuilder* bld = lManager->GetTableBuilder();
+    G4LossTableBuilder* bld = G4LossTableManager::Instance()->GetTableBuilder();
     const std::vector<G4PhysicsTable*>& tables = theHandler->GetTables();
 
     G4CrossSectionDataStore* gn = (nullptr != theGammaNuclear) 
@@ -468,7 +461,6 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 void G4GammaGeneralProcess::StartTracking(G4Track*)
 {
   theNumberOfInteractionLengthLeft = -1.0;
-  currentMaterial = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -482,17 +474,24 @@ G4double G4GammaGeneralProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   G4double energy = track.GetKineticEnergy();
-  currentCouple = track.GetMaterialCutsCouple();
-  const G4Material* mat = currentCouple->GetMaterial();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
 
   // compute mean free path
-  if(mat != currentMaterial || energy != preStepKinEnergy) {
-    currentCoupleIndex = currentCouple->GetIndex();
+  G4bool recompute = false;
+  if(couple != currentCouple) {
+    currentCouple = couple;
+    currentCoupleIndex = couple->GetIndex();
     basedCoupleIndex = (*theDensityIdx)[currentCoupleIndex];
     factor = (*theDensityFactor)[currentCoupleIndex];
-    currentMaterial = mat;
+    currentMaterial = couple->GetMaterial();
+    recompute = true;
+  }
+  if(energy != preStepKinEnergy) {
     preStepKinEnergy = energy;
     preStepLogE = track.GetDynamicParticle()->GetLogKineticEnergy();
+    recompute = true;
+  }
+  if(recompute) {
     preStepLambda = TotalCrossSectionPerVolume();
 
     // zero cross section
@@ -578,8 +577,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
   theNumberOfInteractionLengthLeft = -1.0;
   selectedProc = nullptr;
   G4double q = G4UniformRand();
-  /*  
-  G4cout << "PostStep: preStepLambda= " << preStepLambda << " x= " << x 
+  /*
+  G4cout << "PostStep: preStepLambda= " << preStepLambda 
          << " PE= " << peLambda << " q= " << q << " idxE= " << idxEnergy 
          << G4endl;
   */
@@ -648,7 +647,7 @@ void G4GammaGeneralProcess::SelectHadProcess(const G4Track& track,
 {
   SelectedProcess(step, proc);
   proc->GetCrossSectionDataStore()->ComputeCrossSection(track.GetDynamicParticle(),
-                                                        track.GetMaterial());
+                                                        currentMaterial);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

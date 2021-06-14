@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 17, 2021 E.Tcherniaev geom-csg-V10-06-07
+- Bux fix in G4Sphere::GetSurfaceArea()
+- G4Sphere::GetCubicVolume() moved to source
+- Revised G4Sphere::GetPointOnSurface()
+
 February 1, 2021 G.Cosmo geom-csg-V10-06-06
 - G4Trap, G4Para: removed spurious character in printout in StreamInfo().
   Addressed problem report #2318.

@@ -72,11 +72,16 @@ public:
 
   ~G4EnergyLossForExtrapolator();
 
-  G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*);
+  void Initialisation();
 
-  G4double ComputeRange(G4double kinEnergy, const G4ParticleDefinition*);
+  G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*,
+                       const G4Material*);
 
-  G4double ComputeEnergy(G4double range, const G4ParticleDefinition*);
+  G4double ComputeRange(G4double kinEnergy, const G4ParticleDefinition*,
+                       const G4Material*);
+
+  G4double ComputeEnergy(G4double range, const G4ParticleDefinition*,
+                       const G4Material*);
 
   G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
 			   const G4Material*, const G4ParticleDefinition*);
@@ -95,9 +100,9 @@ public:
 				   const G4Material*, 
                                    const G4String& particleName);
 
-  inline G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
-					 const G4Material*, 
-					 const G4ParticleDefinition* part);
+  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
+				  const G4Material*, 
+				  const G4ParticleDefinition* part);
 
   inline G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
 					 const G4Material*, 
@@ -107,9 +112,9 @@ public:
 				  const G4ParticleDefinition* part, 
 				  G4double kinEnergy, G4double stepLength);
 
-  inline G4double EnergyDispersion(G4double kinEnergy, G4double step, 
-				   const G4Material*, 
-                                   const G4ParticleDefinition*);
+  G4double EnergyDispersion(G4double kinEnergy, G4double step, 
+			    const G4Material*, 
+			    const G4ParticleDefinition*);
 
   inline G4double EnergyDispersion(G4double kinEnergy, G4double step, 
 				   const G4Material*, 
@@ -122,12 +127,13 @@ public:
   inline void SetMaxKinEnergy(G4double);
 
   inline void SetMaxEnergyTransfer(G4double);
+
+  // hide assignment operator
+  G4EnergyLossForExtrapolator & operator=
+  (const G4EnergyLossForExtrapolator &right) = delete;
+  G4EnergyLossForExtrapolator(const G4EnergyLossForExtrapolator&) = delete;
    
 private:
-
-  void Initialisation();
-
-  void BuildTables();
 
   G4bool SetupKinematics(const G4ParticleDefinition*, const G4Material*, 
 			 G4double kinEnergy);
@@ -135,63 +141,45 @@ private:
   const G4ParticleDefinition* FindParticle(const G4String& name);
 
   inline G4double ComputeValue(G4double x, const G4PhysicsTable* table,
-			       size_t idx);
+			       size_t idxMat);
 
   inline const G4PhysicsTable* GetPhysicsTable(ExtTableType type) const;
 
-  // hide assignment operator
-  G4EnergyLossForExtrapolator & operator=(const G4EnergyLossForExtrapolator &right);
-  G4EnergyLossForExtrapolator(const G4EnergyLossForExtrapolator&);
-
 #ifdef G4MULTITHREADED
-  static G4Mutex extrapolatorMutex;
+  static G4Mutex extrMutex;
 #endif
   static G4TablesForExtrapolator* tables;
 
-  const G4ParticleDefinition* currentParticle;
-  const G4ParticleDefinition* electron;
-  const G4ParticleDefinition* positron;
-  const G4ParticleDefinition* muonPlus;
-  const G4ParticleDefinition* muonMinus;
-  const G4ParticleDefinition* proton;
+  const G4ParticleDefinition* currentParticle = nullptr;
+  const G4ParticleDefinition* electron = nullptr;
+  const G4ParticleDefinition* positron = nullptr;
+  const G4ParticleDefinition* muonPlus = nullptr;
+  const G4ParticleDefinition* muonMinus= nullptr;
+  const G4ParticleDefinition* proton = nullptr;
+  const G4Material* currentMaterial = nullptr;
+   
+  G4double electronDensity = 0.0;
+  G4double radLength = 0.0;
+  G4double charge2 = 0.0;
+  G4double kineticEnergy = 0.0;
+  G4double gam = 1.0;
+  G4double bg2 = 0.0;
+  G4double beta2 = 0.0;
+  G4double tmax = 0.0;
 
-  G4String currentParticleName;
-  
-  size_t idxDedxElectron;
-  size_t idxDedxPositron;
-  size_t idxDedxMuon;
-  size_t idxDedxProton;
-  size_t idxRangeElectron;
-  size_t idxRangePositron;
-  size_t idxRangeMuon;
-  size_t idxRangeProton;
-  size_t idxInvRangeElectron;
-  size_t idxInvRangePositron;
-  size_t idxInvRangeMuon;
-  size_t idxInvRangeProton;
-  size_t idxMscElectron;
- 
-  const G4Material* currentMaterial;
-  G4int       index;
+  G4double linLossLimit = 0.01;
+  G4double emin = 0.0;
+  G4double emax = 0.0;
+  G4double maxEnergyTransfer = 0.0;
 
-  G4double    electronDensity;
-  G4double    radLength;
-  G4double    mass;
-  G4double    charge2;
-  G4double    kineticEnergy;
-  G4double    gam;
-  G4double    bg2;
-  G4double    beta2;
-  G4double    tmax;
+  size_t index = 0;
+  size_t  nmat = 0;
+  G4int  nbins = 80;
+  G4int  verbose = 0;
 
-  G4double    linLossLimit;
-  G4double    emin;
-  G4double    emax;
-  G4double    maxEnergyTransfer;
+  G4bool isMaster = false;
 
-  G4int       nbins;
-  G4int       nmat;
-  G4int       verbose;
+  G4String currentParticleName = "";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -248,24 +236,6 @@ G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(
-                        G4double kinEnergy, 
-			G4double stepLength, 
-			const G4Material* mat, 
-			const G4ParticleDefinition* part)
-{
-  G4double theta = 0.0;
-  if(SetupKinematics(part, mat, kinEnergy)) {
-    G4double t = stepLength/radLength;
-    G4double y = std::max(0.001, t); 
-    theta = 19.23*CLHEP::MeV*std::sqrt(charge2*t)*(1.0 + 0.038*G4Log(y))
-      /(beta2*gam*mass);
-  }
-  return theta;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double 
 G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat, 
 					     const G4ParticleDefinition* part,
@@ -277,32 +247,13 @@ G4EnergyLossForExtrapolator::ComputeTrueStep(const G4Material* mat,
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4double 
-G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy, 
-					      G4double stepLength, 
-					      const G4Material* mat, 
-					      const G4ParticleDefinition* part)
-{
-  G4double sig2 = 0.0;
-  if(SetupKinematics(part, mat, kinEnergy)) {
-    G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
-    sig2 = (1.0/beta2 - 0.5)
-      *CLHEP::twopi_mc2_rcl2*tmax*step*electronDensity*charge2;
-  }
-  return sig2;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double 
 G4EnergyLossForExtrapolator::ComputeValue(G4double x, 
 					  const G4PhysicsTable* table,
-					  size_t idx)
+					  size_t idxMat)
 {
-  G4double res = 0.0;
-  if(table) { res = ((*table)[index])->Value(x, idx); }
-  return res;
+  return (nullptr != table) ? ((*table)[idxMat])->Value(x, index) : 0.0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

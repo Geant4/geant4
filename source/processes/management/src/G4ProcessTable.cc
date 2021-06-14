@@ -386,7 +386,7 @@ G4ProcessTable::Find(const G4String& processName)
   {
     anElement = (*itr);
     // check name
-    if ( anElement->GetProcessName() == processName )
+    if ( anElement != nullptr && anElement->GetProcessName() == processName )
     {
       isFound = true;
       tmpTblVector->push_back(anElement);
@@ -417,7 +417,7 @@ G4ProcessTable::Find(G4ProcessType processType)
   {
     anElement = (*itr);
     // check name
-    if ( anElement->GetProcess()->GetProcessType() == processType )
+    if ( anElement != nullptr && anElement->GetProcess()->GetProcessType() == processType )
     {
       isFound = true;
       tmpTblVector->push_back(anElement);
@@ -446,7 +446,7 @@ G4ProcessTable::ExtractProcesses(G4ProcTableVector* procTblVector) const
   for (auto itr=procTblVector->cbegin(); itr!=procTblVector->cend(); ++itr)
   {
     G4ProcTblElement* anElement = (*itr);
-    procList->insert( anElement->GetProcess() );
+    if ( anElement != nullptr) procList->insert( anElement->GetProcess() );
   }
   return procList;
 }
@@ -506,6 +506,7 @@ void G4ProcessTable::SetProcessActivation( const G4String& processName,
   for (auto itr=pTblVector->cbegin(); itr!=pTblVector->cend(); ++itr)
   {
     anElement = (*itr);
+    if ( anElement == nullptr ) continue;
     G4VProcess* process = anElement->GetProcess();
     for (G4int idx = 0 ; idx < anElement->Length(); ++idx)
     {
@@ -572,6 +573,7 @@ void G4ProcessTable::SetProcessActivation( G4ProcessType processType,
   for (auto itr=pTblVector->cbegin(); itr!=pTblVector->cend(); ++itr)
   {
     anElement = (*itr);
+    if ( anElement == nullptr ) continue;
     G4VProcess* process = anElement->GetProcess();
 #ifdef G4VERBOSE
     if (verboseLevel>1)
@@ -643,6 +645,7 @@ void G4ProcessTable::DumpInfo(G4VProcess* process,
             itr!=fProcTblVector->cend(); ++itr, ++idxTbl)
   {
     anElement = (*itr);
+    if ( anElement == nullptr ) continue;
     if (process == anElement->GetProcess() )
     {
       if (particle != nullptr)

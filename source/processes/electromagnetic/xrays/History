@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 May 21: D. Sawkey (xrays-V10-06-09)
+- G4Scintillation: change IsApplicable to all particles except opticalphoton
+  and short-lived.  Address bug 2372.
+
 5 October 20: D. Sawkey (xrays-V10-06-08)
 - G4Cerenkov, G4Scintillation: apply clang-format style guidelines
 

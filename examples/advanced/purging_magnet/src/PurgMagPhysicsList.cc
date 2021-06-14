@@ -296,7 +296,6 @@ void PurgMagPhysicsList::SetGELowLimit(G4double lowcut)
 }
 void PurgMagPhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
 }
 
@@ -304,7 +303,6 @@ void PurgMagPhysicsList::SetGammaCut(G4double val)
 
 void PurgMagPhysicsList::SetElectronCut(G4double val)
 {
-  //  ResetCuts();
   cutForElectron = val;
 }
 
@@ -312,7 +310,6 @@ void PurgMagPhysicsList::SetElectronCut(G4double val)
 
 void PurgMagPhysicsList::SetPositronCut(G4double val)
 {
-  //  ResetCuts();
   cutForPositron = val;
 }
 
@@ -320,7 +317,6 @@ void PurgMagPhysicsList::SetPositronCut(G4double val)
 
 void PurgMagPhysicsList::SetProtonCut(G4double val)
 {
-  //ResetCuts();
   cutForProton = val;
 }
 

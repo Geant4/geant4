@@ -235,7 +235,7 @@ class G4UImanager : public G4VStateDependent
                          G4bool ifAppend       = true);
     void SetCerrFileName(const G4String& fileN = "G4cerr.txt",
                          G4bool ifAppend       = true);
-    void SetThreadPrefixString(const G4String& s = "W");
+    void SetThreadPrefixString(const G4String& prefix = "W");
     void SetThreadUseBuffer(G4bool flg = true);
     void SetThreadIgnore(G4int tid = 0);
     void SetThreadIgnoreInit(G4bool flg = true);

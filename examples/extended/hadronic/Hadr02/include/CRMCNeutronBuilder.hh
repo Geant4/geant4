@@ -33,11 +33,12 @@
 //
 // Author:    2018 Alberto Ribon
 //
-// Physics builder to treat the final state of inelastic proton-nuclear
+// Physics builder to treat the final state of inelastic neutron-nuclear
 // interactions with the wrapper hadronic model around CRMC.
 // For fission and capture the usual Geant4 models are used.
 //
 // Modified:
+// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -47,29 +48,29 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VNeutronBuilder.hh"
-#include "G4CRMCModel.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4LFission.hh"
+
+class HadronicInelasticModelCRMC;
 
 
 class CRMCNeutronBuilder : public G4VNeutronBuilder {
   public:
-    CRMCNeutronBuilder();
+    CRMCNeutronBuilder( const G4int crmcModelId, const std::string & crmcModelName );
     virtual ~CRMCNeutronBuilder();
     virtual void Build( G4HadronElasticProcess* aP ) final override;
     virtual void Build( G4HadronFissionProcess* aP ) final override;
     virtual void Build( G4HadronCaptureProcess* aP ) final override;
-    virtual void Build( G4NeutronInelasticProcess* aP ) final override;
+    virtual void Build( G4NeutronInelasticProcess* aP ) final override;  
     inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
     inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
     using G4VNeutronBuilder::Build;  // Prevent compiler warning
   private:
     G4double fMin;
     G4double fMax;
-    G4CRMCModel* fModel;    
-    G4NeutronRadCapture* captureModel;
-    G4LFission* fissionModel;
+    HadronicInelasticModelCRMC* fModel;
+    G4NeutronRadCapture* fCaptureModel;
+    G4LFission* fFissionModel;
 };
 
 #endif
-

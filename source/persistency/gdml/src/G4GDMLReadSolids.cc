@@ -3654,6 +3654,10 @@ void G4GDMLReadSolids::OpticalSurfaceRead(
   {
     model = LUT;
   }
+  else if((smodel == "DAVIS") || (smodel == "3"))
+  {
+    model = DAVIS;
+  }
   else
   {
     model = dichroic;
@@ -3775,9 +3779,45 @@ void G4GDMLReadSolids::OpticalSurfaceRead(
   {
     finish = groundvm2000air;
   }
-  else
+  else if((sfinish == "groundvm2000glue") || (sfinish == "29"))
   {
     finish = groundvm2000glue;
+  }
+  else if((sfinish == "Rough_LUT") || (sfinish == "30"))
+  {
+    finish = Rough_LUT;
+  }
+  else if((sfinish == "RoughTeflon_LUT") || (sfinish == "31"))
+  {
+    finish = RoughTeflon_LUT;
+  }
+  else if((sfinish == "RoughESR_LUT") || (sfinish == "32"))
+  {
+    finish = RoughESR_LUT;
+  }
+  else if((sfinish == "RoughESRGrease_LUT") || (sfinish == "33"))
+  {
+    finish = RoughESRGrease_LUT;
+  }
+  else if((sfinish == "Polished_LUT") || (sfinish == "34"))
+  {
+    finish = Polished_LUT;
+  }
+  else if((sfinish == "PolishedTeflon_LUT") || (sfinish == "35"))
+  {
+    finish = PolishedTeflon_LUT;
+  }
+  else if((sfinish == "PolishedESR_LUT") || (sfinish == "36"))
+  {
+    finish = PolishedESR_LUT;
+  }
+  else if((sfinish == "PolishedESRGrease_LUT") || (sfinish == "37"))
+  {
+    finish = PolishedESRGrease_LUT;
+  }
+  else
+  {
+    finish = Detector_LUT;
   }
 
   if((stype == "dielectric_metal") || (stype == "0"))
@@ -3792,11 +3832,15 @@ void G4GDMLReadSolids::OpticalSurfaceRead(
   {
     type = dielectric_LUT;
   }
-  else if((stype == "dielectric_dichroic") || (stype == "3"))
+  else if((stype == "dielectric_LUTDAVIS") || (stype == "3"))
+  {
+    type = dielectric_LUTDAVIS;
+  }
+  else if((stype == "dielectric_dichroic") || (stype == "4"))
   {
     type = dielectric_dichroic;
   }
-  else if((stype == "firsov") || (stype == "4"))
+  else if((stype == "firsov") || (stype == "5"))
   {
     type = firsov;
   }

@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-05-21 G.Cosmo (materials-V10-06-14)
+- Fixed shadowing compilation warning in G4Isotope reported with gcc-11.
+
+16-04-21 V.Ivanchenko (materials-V10-06-13)
+- G4AtomicShells, G4AtomicShells_XDB_EADL - fixed method
+    GetNumberOfFreeElectrons(..) - problem #2356
+
+05-02-21 V.Ivanchenko 
+- G4DensityEffectData - fixed typo in Z=37 elementary material name 
+    (problem #2324)
+
 16-11-20 G.Cosmo (materials-V10-06-12)
 - Fixed typos in printed-out text. Addressing problem report #2285.
 

@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-05-21 A. Ribon (exhadr02-V10-06-02)
+- Migration to newer CRMC, and more modern approach to physics lists.
+
 10-11-20 B. Morgan (exhadr02-V10-06-01)
 - Migration to G4RunManagerFactory.
 

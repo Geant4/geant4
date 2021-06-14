@@ -2014,7 +2014,7 @@ G4int G4UIQt::ReceiveG4cout (
  const G4String& aString
  )
 {
-  if (!aString) return 0;
+  if(aString.empty()) return  0;
 
 #ifdef G4MULTITHREADED
   G4AutoLock al(&ReceiveG4coutMutex);
@@ -2105,7 +2105,7 @@ G4int G4UIQt::ReceiveG4cerr (
  const G4String& aString
 )
 {
-  if (!aString) return 0;
+  if (aString.empty()) return 0;
 
 #ifdef G4MULTITHREADED
   G4AutoLock al(&ReceiveG4cerrMutex);

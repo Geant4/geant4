@@ -40,51 +40,28 @@
 // For the remaining inelastic interactions (i.e. hyperon- , antihyperon- ,
 // antinucleon- and light anti-ion-nuclear interactions, as well as
 // for all elastic final-state interactions, and for all elastic and
-// inelastic hadronic cross sections, the usual Geant4 approach, as in
+// inelastic hadronic cross sections), the usual Geant4 approach, as in
 // FTFP_BERT is used.
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Migrated to non-templated physics list.
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TCRMC_FTFP_BERT_h
-#define TCRMC_FTFP_BERT_h 1
+#ifndef CRMC_FTFP_BERT_h
+#define CRMC_FTFP_BERT_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
+#include "G4VModularPhysicsList.hh"
 
 
-template<class T> 
-class TCRMC_FTFP_BERT: public T {
+class CRMC_FTFP_BERT : public G4VModularPhysicsList {
   public:
-    TCRMC_FTFP_BERT( G4int ver = 1 );
-    virtual ~TCRMC_FTFP_BERT();
-    virtual void SetCuts();
-  private:
-    enum { ok = CompileTimeConstraints::IsA< T, G4VModularPhysicsList >::ok };
+    CRMC_FTFP_BERT( G4int ver = 1 );
+    virtual ~CRMC_FTFP_BERT() = default;
+
+    CRMC_FTFP_BERT( const CRMC_FTFP_BERT & ) = delete;
+    CRMC_FTFP_BERT & operator=( const CRMC_FTFP_BERT & ) = delete;  
 };
 
-
-#ifdef G4_USE_CRMC
-#include "CRMC_FTFP_BERT.icc"
-#else
-template<class T>
-TCRMC_FTFP_BERT<T>::TCRMC_FTFP_BERT( G4int ) : T() {
-  G4ExceptionDescription de;
-  de << "Support for CRMC_FTFP_BERT not enabled" << G4endl;
-  G4Exception( __FILE__, "CRMC_FTFP_BERT-01", FatalException, de,
-              "Code should be compiled with G4_USE_CRMC environment variable set.");
-}
-
-template<class T>
-TCRMC_FTFP_BERT<T>::~TCRMC_FTFP_BERT() { }
-template<class T>
-void TCRMC_FTFP_BERT<T>::SetCuts() {}
 #endif
-
-
-typedef TCRMC_FTFP_BERT< G4VModularPhysicsList > CRMC_FTFP_BERT;
-
-#endif //TCRMC_FTFP_BERT_h
-

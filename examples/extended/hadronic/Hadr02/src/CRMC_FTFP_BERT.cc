@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/CRMC_FTFP_BERT.icc
-/// \brief Implementation of the CRMC_FTFP_BERT class inline functions
-//
+/// \file hadronic/Hadr02/src/CRMC_FTFP_BERT.cc
+/// \brief Implementation of the CRMC_FTFP_BERT class methods
 //
 //---------------------------------------------------------------------------
 //
@@ -34,46 +33,51 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Migrated to non-templated physics list.
 //
 //----------------------------------------------------------------------------
 //
-
+#include <iomanip>   
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "CRMC_FTFP_BERT.hh"
+
+#ifdef G4_USE_CRMC
+
+#include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4DecayPhysics.hh"
-#include "G4HadronElasticPhysics.hh"
-#include "HadronPhysicsCRMC_FTFP_BERT.hh"
 #include "G4StoppingPhysics.hh"
-#include "IonCRMCPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
-#include "G4SystemOfUnits.hh"
+#include "HadronPhysicsCRMC_FTFP_BERT.hh"
+#include "IonCRMCPhysics.hh"
 
 
-template<class T> TCRMC_FTFP_BERT<T>::TCRMC_FTFP_BERT( G4int ver ):  T() {
-  G4cout << "<<< Geant4 Physics List simulation engine: CRMC_FTFP_BERT 0.1" << G4endl;
-  G4cout << G4endl;
-  this->defaultCutValue = 0.7*CLHEP::mm;  
-  this->SetVerboseLevel( ver );
-
-  this->RegisterPhysics( new G4EmStandardPhysics( ver ) );          // EM physics  
-  this->RegisterPhysics( new G4EmExtraPhysics( ver ) );             // Synchroton & GN physics
-  this->RegisterPhysics( new G4DecayPhysics( ver ) );               // Decays
-  this->RegisterPhysics( new G4HadronElasticPhysics( ver ) );       // Hadron Elastic scattering
-  this->RegisterPhysics( new HadronPhysicsCRMC_FTFP_BERT( ver ) );  // Hadron Inelastic scattering
-  this->RegisterPhysics( new G4StoppingPhysics( ver ) );            // Stopping physics
-  this->RegisterPhysics( new IonCRMCPhysics( ver ) );               // Ion physics
-  this->RegisterPhysics( new G4NeutronTrackingCut( ver ) );         // Neutron tracking cut
+CRMC_FTFP_BERT::CRMC_FTFP_BERT( G4int ver ) {
+  if ( ver > 0 ) {
+    G4cout << "<<< Geant4 Physics List simulation engine: CRMC_FTFP_BERT" << G4endl << G4endl;
+  }
+  defaultCutValue = 0.7*CLHEP::mm;  
+  SetVerboseLevel( ver );
+  RegisterPhysics( new G4EmStandardPhysics( ver ) );          // EM Physics
+  RegisterPhysics( new G4EmExtraPhysics( ver ) );             // Synchroton Radiation & GN Physics
+  RegisterPhysics( new G4DecayPhysics( ver ) );               // Decays
+  RegisterPhysics( new G4HadronElasticPhysics( ver ) );       // Hadron Elastic physics  
+  RegisterPhysics( new HadronPhysicsCRMC_FTFP_BERT( ver ) );  // Hadron Inelastic physics
+  RegisterPhysics( new G4StoppingPhysics( ver ) );            // Stopping Physics
+  RegisterPhysics( new IonCRMCPhysics( ver ) );               // Ion Physics
+  RegisterPhysics( new G4NeutronTrackingCut( ver ) );         // Neutron tracking cut
 }
 
-template<class T> TCRMC_FTFP_BERT<T>::~TCRMC_FTFP_BERT() {}
+#else  //i.e. G4_USE_CRMC not defined
 
-template<class T> void TCRMC_FTFP_BERT<T>::SetCuts() {
-  if ( this->verboseLevel > 1 ) {
-    G4cout << "CRMC_FTFP_BERT::SetCuts:";
-  }  
-  this->SetCutsWithDefault();   
+CRMC_FTFP_BERT::CRMC_FTFP_BERT( G4int ) {
+  G4ExceptionDescription de;
+  de << "Support for CRMC_FTFP_BERT not enabled" << G4endl;
+  G4Exception( __FILE__, "CRMC_FTFP_BERT-01", FatalException, de,
+               "Code should be compiled with G4_USE_CRMC environment variable set." );
 }
 
+#endif  //G4_USE_CRMC

@@ -53,7 +53,7 @@ TENDL data:
 - or, download via download page searching for TENDL download 
   https://cern.ch/geant4/support/download
 - or direct download:
-  https://cern.ch/geant4-data/datasets/G4TENDL.1.4.tar.gz
+  https://cern.ch/geant4-data/datasets/G4TENDL.1.3.2.tar.gz
 
 ENDF-VII0:
 ftp://gdo-nuclear.ucllnl.org/pub/G4LEND/ (G4 Low Energy Nuclear Data)

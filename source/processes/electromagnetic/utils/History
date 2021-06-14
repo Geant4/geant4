@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 May 21: G.Cosmo (emutils-V10-06-18)
+- Fixed shadowing compilation warning in G4EmCorrections reported with gcc-11.
+
+14 April 21: V.Ivanchenko (emutils-V10-06-17)
+- G4EmParameters - fix problem #2350 (correct line break)
+
 30 January 21: V.Ivanchenko (emutils-V10-06-16)
 - G4VEnergyLossProcess, G4VEmProcess, - improved printout
   G4EmExtraParameters, G4EmExtraParametersMessenger - fixed #2292

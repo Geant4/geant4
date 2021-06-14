@@ -62,7 +62,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4MULTITHREADED
-G4Mutex G4EnergyLossForExtrapolator::extrapolatorMutex = G4MUTEX_INITIALIZER;
+G4Mutex G4EnergyLossForExtrapolator::extrMutex = G4MUTEX_INITIALIZER;
 #endif
 
 G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = nullptr;
@@ -70,43 +70,17 @@ G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = nullptr;
 G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
   : maxEnergyTransfer(DBL_MAX), verbose(verb)
 {
-  currentParticle = nullptr;
-  currentMaterial = nullptr;
-
-  linLossLimit = 0.01;
-  emin         = 1.*MeV;
-  emax         = 10.*TeV;
-  nbins        = 70;
-
-  nmat = index = 0;
-
-  mass = charge2 = electronDensity = radLength = bg2 = beta2 
-    = kineticEnergy = tmax = 0.0;
-  gam = 1.0;
-
-  idxDedxElectron = idxDedxPositron = idxDedxMuon = idxDedxProton 
-    = idxRangeElectron = idxRangePositron = idxRangeMuon = idxRangeProton
-    = idxInvRangeElectron = idxInvRangePositron = idxInvRangeMuon
-    = idxInvRangeProton = idxMscElectron = 0;
- 
-  electron = positron = proton = muonPlus = muonMinus = nullptr;
+  emin = 1.*CLHEP::MeV;
+  emax = 100.*CLHEP::TeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EnergyLossForExtrapolator::~G4EnergyLossForExtrapolator()
 {
-  if(tables) {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&extrapolatorMutex);
-    if (tables) {
-#endif
-      delete tables;
-      tables = nullptr;
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&extrapolatorMutex);
-#endif
+  if(isMaster) {
+    delete tables;
+    tables = nullptr;
   }
 }
 
@@ -118,18 +92,17 @@ G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy,
 					     const G4Material* mat, 
 					     const G4ParticleDefinition* part)
 {
-  if(0 == nmat) { Initialisation(); }
   G4double kinEnergyFinal = kinEnergy;
   if(SetupKinematics(part, mat, kinEnergy)) {
     G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
-    G4double r  = ComputeRange(kinEnergy,part);
+    G4double r  = ComputeRange(kinEnergy,part,mat);
     if(r <= step) {
       kinEnergyFinal = 0.0;
     } else if(step < linLossLimit*r) {
-      kinEnergyFinal -= step*ComputeDEDX(kinEnergy,part);
+      kinEnergyFinal -= step*ComputeDEDX(kinEnergy,part,mat);
     } else {  
       G4double r1 = r - step;
-      kinEnergyFinal = ComputeEnergy(r1,part);
+      kinEnergyFinal = ComputeEnergy(r1,part,mat);
     }
   }
   return kinEnergyFinal;
@@ -143,19 +116,18 @@ G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 					      const G4Material* mat, 
 					      const G4ParticleDefinition* part)
 {
-  //G4cout << "G4EnergyLossForExtrapolator::EnergyBeforeStep" << G4endl;
-  if(0 == nmat) { Initialisation(); }
+  // G4cout << "G4EnergyLossForExtrapolator::EnergyBeforeStep" << G4endl;
   G4double kinEnergyFinal = kinEnergy;
 
   if(SetupKinematics(part, mat, kinEnergy)) {
     G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
-    G4double r  = ComputeRange(kinEnergy,part);
+    G4double r = ComputeRange(kinEnergy,part,mat);
 
     if(step < linLossLimit*r) {
-      kinEnergyFinal += step*ComputeDEDX(kinEnergy,part);
+      kinEnergyFinal += step*ComputeDEDX(kinEnergy,part,mat);
     } else {  
       G4double r1 = r + step;
-      kinEnergyFinal = ComputeEnergy(r1,part);
+      kinEnergyFinal = ComputeEnergy(r1,part,mat);
     }
   }
   return kinEnergyFinal;
@@ -170,17 +142,16 @@ G4EnergyLossForExtrapolator::TrueStepLength(G4double kinEnergy,
 					    const G4ParticleDefinition* part)
 {
   G4double res = stepLength;
-  if(0 == nmat) { Initialisation(); }
   //G4cout << "## G4EnergyLossForExtrapolator::TrueStepLength L= " << res 
   //	 <<  "  " << part->GetParticleName() << G4endl;
   if(SetupKinematics(part, mat, kinEnergy)) {
     if(part == electron || part == positron) {
-      G4double x = stepLength*
-	ComputeValue(kinEnergy, GetPhysicsTable(fMscElectron), idxMscElectron);
+      const G4double x = stepLength*
+	ComputeValue(kinEnergy, GetPhysicsTable(fMscElectron), mat->GetIndex());
       //G4cout << " x= " << x << G4endl;
       if(x < 0.2)         { res *= (1.0 + 0.5*x + x*x/3.0); }
       else if(x < 0.9999) { res = -G4Log(1.0 - x)*stepLength/x; }
-      else                { res = ComputeRange(kinEnergy,part); }
+      else { res = ComputeRange(kinEnergy, part, mat); }
     } else {
       res = ComputeTrueStep(mat,part,kinEnergy,stepLength);
     }
@@ -195,31 +166,29 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
 					     const G4Material* mat, 
 					     G4double kinEnergy)
 {
-  if(0 == nmat) { Initialisation(); }
-  if(!part || !mat || kinEnergy < keV) { return false; }
-  G4bool flag = false;
+  if(mat->GetNumberOfMaterials() != nmat) { Initialisation(); }
+  if(nullptr == part || nullptr == mat || kinEnergy < CLHEP::keV) 
+    { return false; }
   if(part != currentParticle) {
-    flag = true;
     currentParticle = part;
-    mass = part->GetPDGMass();
     G4double q = part->GetPDGCharge()/eplus;
     charge2 = q*q;
   }
   if(mat != currentMaterial) {
-    G4int i = mat->GetIndex();
+    size_t i = mat->GetIndex();
     if(i >= nmat) {
-      G4cout << "### G4EnergyLossForExtrapolator WARNING:index i= " 
-	     << i << " is out of table - NO extrapolation" << G4endl;
+      G4cout << "### G4EnergyLossForExtrapolator WARNING: material index i= " 
+	     << i << " above number of materials " << nmat << G4endl;
+      return false;
     } else {
-      flag = true;
       currentMaterial = mat;
       electronDensity = mat->GetElectronDensity();
       radLength       = mat->GetRadlen();
-      index           = i;
     }
   }
-  if(flag || kinEnergy != kineticEnergy) {
+  if(kinEnergy != kineticEnergy) {
     kineticEnergy = kinEnergy;
+    G4double mass = part->GetPDGMass();
     G4double tau  = kinEnergy/mass;
 
     gam   = tau + 1.0;
@@ -228,10 +197,10 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
     tmax  = kinEnergy;
     if(part == electron) tmax *= 0.5;
     else if(part != positron) {
-      G4double r = electron_mass_c2/mass;
-      tmax = 2.0*bg2*electron_mass_c2/(1.0 + 2.0*gam*r + r*r);
+      G4double r = CLHEP::electron_mass_c2/mass;
+      tmax = 2.0*bg2*CLHEP::electron_mass_c2/(1.0 + 2.0*gam*r + r*r);
     }
-    if(tmax > maxEnergyTransfer) { tmax = maxEnergyTransfer; }
+    tmax = std::min(tmax, maxEnergyTransfer);
   }
   return true;
 } 
@@ -241,36 +210,38 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
 const G4ParticleDefinition* 
 G4EnergyLossForExtrapolator::FindParticle(const G4String& name)
 {
-  const G4ParticleDefinition* p = nullptr;
   if(name != currentParticleName) {
-    p = G4ParticleTable::GetParticleTable()->FindParticle(name);
-    if(!p) {
+    currentParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
+    currentParticleName = name;
+    if(nullptr == currentParticle) {
       G4cout << "### G4EnergyLossForExtrapolator WARNING: "
 	     << "FindParticle() fails to find " 
 	     << name << G4endl;
+      currentParticleName = "";
     }
-  } else {
-    p = currentParticle;
   }
-  return p;
+  return currentParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double 
 G4EnergyLossForExtrapolator::ComputeDEDX(G4double ekin, 
-					 const G4ParticleDefinition* part)
+					 const G4ParticleDefinition* part,
+                                         const G4Material* mat)
 {
+  if(mat->GetNumberOfMaterials() != nmat) { Initialisation(); }
   G4double x = 0.0;
   if(part == electron)  { 
-    x = ComputeValue(ekin, GetPhysicsTable(fDedxElectron), idxDedxElectron);
+    x = ComputeValue(ekin, GetPhysicsTable(fDedxElectron), mat->GetIndex());
   } else if(part == positron) {
-    x = ComputeValue(ekin, GetPhysicsTable(fDedxPositron), idxDedxPositron);
+    x = ComputeValue(ekin, GetPhysicsTable(fDedxPositron), mat->GetIndex());
   } else if(part == muonPlus || part == muonMinus) {
-    x = ComputeValue(ekin, GetPhysicsTable(fDedxMuon), idxDedxMuon);
+    x = ComputeValue(ekin, GetPhysicsTable(fDedxMuon), mat->GetIndex());
   } else {
-    G4double e = ekin*proton_mass_c2/mass;
-    x = ComputeValue(e, GetPhysicsTable(fDedxProton), idxDedxProton)*charge2;
+    G4double e = ekin*CLHEP::proton_mass_c2/part->GetPDGMass();
+    G4double q = part->GetPDGCharge()/CLHEP::eplus;
+    x = ComputeValue(e, GetPhysicsTable(fDedxProton), mat->GetIndex())*q*q;
   }
   return x;
 }
@@ -279,20 +250,23 @@ G4EnergyLossForExtrapolator::ComputeDEDX(G4double ekin,
 
 G4double 
 G4EnergyLossForExtrapolator::ComputeRange(G4double ekin, 
-					  const G4ParticleDefinition* part)
+					  const G4ParticleDefinition* part,
+					  const G4Material* mat)
 {
+  if(mat->GetNumberOfMaterials() != nmat) { Initialisation(); }
   G4double x = 0.0;
   if(part == electron) { 
-    x = ComputeValue(ekin, GetPhysicsTable(fRangeElectron), idxRangeElectron);
+    x = ComputeValue(ekin, GetPhysicsTable(fRangeElectron), mat->GetIndex());
   } else if(part == positron) {
-    x = ComputeValue(ekin, GetPhysicsTable(fRangePositron), idxRangePositron);
+    x = ComputeValue(ekin, GetPhysicsTable(fRangePositron), mat->GetIndex());
   } else if(part == muonPlus || part == muonMinus) { 
-    x = ComputeValue(ekin, GetPhysicsTable(fRangeMuon), idxRangeMuon);
+    x = ComputeValue(ekin, GetPhysicsTable(fRangeMuon), mat->GetIndex());
   } else {
-    G4double massratio = proton_mass_c2/mass;
+    G4double massratio = CLHEP::proton_mass_c2/part->GetPDGMass();
     G4double e = ekin*massratio;
-    x = ComputeValue(e, GetPhysicsTable(fRangeProton), idxRangeProton)
-      /(charge2*massratio);
+    G4double q = part->GetPDGCharge()/CLHEP::eplus;
+    x = ComputeValue(e, GetPhysicsTable(fRangeProton), mat->GetIndex())
+      /(q*q*massratio);
   }
   return x;
 }
@@ -301,71 +275,107 @@ G4EnergyLossForExtrapolator::ComputeRange(G4double ekin,
 
 G4double 
 G4EnergyLossForExtrapolator::ComputeEnergy(G4double range, 
-					   const G4ParticleDefinition* part)
+					   const G4ParticleDefinition* part,
+					   const G4Material* mat)
 {
+  if(mat->GetNumberOfMaterials() != nmat) { Initialisation(); }
   G4double x = 0.0;
   if(part == electron) {
-    x = ComputeValue(range, GetPhysicsTable(fInvRangeElectron), 
-		     idxInvRangeElectron);
+    x = ComputeValue(range,GetPhysicsTable(fInvRangeElectron),mat->GetIndex());
   } else if(part == positron) {
-    x = ComputeValue(range, GetPhysicsTable(fInvRangePositron), 
-		     idxInvRangePositron);
+    x = ComputeValue(range,GetPhysicsTable(fInvRangePositron),mat->GetIndex());
   } else if(part == muonPlus || part == muonMinus) {
-    x = ComputeValue(range, GetPhysicsTable(fInvRangeMuon), idxInvRangeMuon);
+    x = ComputeValue(range, GetPhysicsTable(fInvRangeMuon), mat->GetIndex());
   } else {
-    G4double massratio = proton_mass_c2/mass;
-    G4double r = range*massratio*charge2;
-    x = ComputeValue(r, GetPhysicsTable(fInvRangeProton), 
-		     idxInvRangeProton)/massratio;
+    G4double massratio = CLHEP::proton_mass_c2/part->GetPDGMass();
+    G4double q = part->GetPDGCharge()/CLHEP::eplus;
+    G4double r = range*massratio*q*q;
+    x = ComputeValue(r, GetPhysicsTable(fInvRangeProton), mat->GetIndex())/massratio;
   }
   return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+G4double 
+G4EnergyLossForExtrapolator::EnergyDispersion(G4double kinEnergy, 
+					      G4double stepLength, 
+					      const G4Material* mat, 
+					      const G4ParticleDefinition* part)
+{
+  G4double sig2 = 0.0;
+  if(SetupKinematics(part, mat, kinEnergy)) {
+    G4double step = ComputeTrueStep(mat,part,kinEnergy,stepLength);
+    sig2 = (1.0/beta2 - 0.5)
+      *CLHEP::twopi_mc2_rcl2*tmax*step*electronDensity*charge2;
+  }
+  return sig2;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(
+                        G4double kinEnergy, 
+			G4double stepLength, 
+			const G4Material* mat, 
+			const G4ParticleDefinition* part)
+{
+  G4double theta = 0.0;
+  if(SetupKinematics(part, mat, kinEnergy)) {
+    G4double t = stepLength/radLength;
+    G4double y = std::max(0.001, t); 
+    theta = 19.23*CLHEP::MeV*std::sqrt(charge2*t)*(1.0 + 0.038*G4Log(y))
+      /(beta2*gam*part->GetPDGMass());
+  }
+  return theta;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EnergyLossForExtrapolator::Initialisation()
 {
-  if(verbose>1) {
+  if(verbose>0) {
     G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
   }
-  currentParticle = nullptr;
-  currentMaterial = nullptr;
-  kineticEnergy   = 0.0;
-
   electron = G4Electron::Electron();
   positron = G4Positron::Positron();
   proton   = G4Proton::Proton();
   muonPlus = G4MuonPlus::MuonPlus();
   muonMinus= G4MuonMinus::MuonMinus();
 
-  currentParticleName = "";
-  BuildTables(); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EnergyLossForExtrapolator::BuildTables()
-{
+  // initialisation for the 1st run
+  if(nullptr == tables) {
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&extrapolatorMutex);
+    G4MUTEXLOCK(&extrMutex);
+    if(nullptr == tables) {
 #endif
-  if(verbose > 0) {
-    G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
-	   << G4Material::GetNumberOfMaterials() << " materials Nbins= " 
-           << nbins << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax 
-           << G4endl;
-  }
-  G4int newmat = G4Material::GetNumberOfMaterials();
-  if(!tables) {
-    tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
-  } else if(nmat != newmat) {
+      isMaster = true;
+      tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
+      tables->Initialisation();
+      nmat = G4Material::GetNumberOfMaterials();
+      if(verbose > 0) {
+        G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
+               << nmat << " materials Nbins= " 
+               << nbins << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax 
+               << G4endl;
+      }
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&extrMutex);
+#endif
+  } 
+
+  // initialisation for the next run
+  if(isMaster && G4Material::GetNumberOfMaterials() != nmat) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&extrMutex);
+#endif
     tables->Initialisation();
-  }
-  nmat = newmat;
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&extrapolatorMutex);
+    G4MUTEXUNLOCK(&extrMutex);
 #endif
+  }
+  nmat = G4Material::GetNumberOfMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

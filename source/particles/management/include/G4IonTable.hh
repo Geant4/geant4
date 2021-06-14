@@ -111,21 +111,21 @@ class G4IonTable
     // Find/Get "ground state" and "excited state"
     //
     G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int lvl=0);
-    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4int lvl);
+    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int nL, G4int lvl);
     G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, G4int J=0);
     G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, 
                                  G4Ions::G4FloatLevelBase flb, G4int J=0);
     G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, 
                                  char flbChar, G4int J=0);
-    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int nL, G4double E,
                                  G4int J=0);
-    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int nL, G4double E,
                                  G4Ions::G4FloatLevelBase flb, G4int J=0);
-    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int nL, G4double E,
                                  char flbChar, G4int J=0);
     // Z: Atomic Number
     // A: Atomic Mass (nn + np +nlambda)
-    // L: Number of Lmabda
+    // nL: Number of Lambda
     // E: Excitation energy
     // lvl:  Isomer Level 0: ground state)
     // flb:  Floating level base (enum defined in G4Ions.hh)
@@ -140,21 +140,21 @@ class G4IonTable
     // Find/Get "excited state"
     //
     G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int lvl=0);
-    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4int lvl);
+    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int nL, G4int lvl);
     G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
     G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E,
                                   G4Ions::G4FloatLevelBase flb, G4int J=0);
     G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E,
                                   char flbChar, G4int J=0);
-    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int nL, G4double E,
                                   G4int J=0);
-    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int nL, G4double E,
                                   G4Ions::G4FloatLevelBase flb, G4int J=0);
-    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int nL, G4double E,
                                   char flbChar, G4int J=0);
     // Z: Atomic Number
     // A: Atomic Mass (nn + np +nlambda)
-    // L: Number of Lmabda
+    // nL: Number of Lambda
     // E: Excitaion energy
     // lvl:  Isomer Level 0: ground state)
     // flb:  Floating level base (enum defined in G4Ions.hh)
@@ -171,9 +171,9 @@ class G4IonTable
     const G4String& GetIonName(G4int Z, G4int A, G4int lvl=0) const;
     const G4String& GetIonName(G4int Z, G4int A, G4double E,
        G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
-    const G4String& GetIonName(G4int Z, G4int A, G4int L, G4double E,
+    const G4String& GetIonName(G4int Z, G4int A, G4int nL, G4double E,
        G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
-    const G4String& GetIonName(G4int Z, G4int A, G4int L, G4int  lvl) const;
+    const G4String& GetIonName(G4int Z, G4int A, G4int nL, G4int  lvl) const;
       // Get ion name
   
     static G4int GetNucleusEncoding(G4int Z,        G4int A, 
@@ -185,13 +185,13 @@ class G4IonTable
       // I gives the isomer level, with I = 0 corresponding 
       // to the ground state and I >0 to excitations
   
-    static G4int GetNucleusEncoding(G4int Z,   G4int A,  G4int L,        
+    static G4int GetNucleusEncoding(G4int Z,   G4int A,  G4int nL,        
                                     G4double E=0.0, G4int lvl=0);
       // Get PDG code for Hyper-Nucleus Ions.
       // Nuclear codes are given as 10-digit numbers +-10LZZZAAAI.
       // For a nucleus consisting of np protons and nn neutrons
       // A = np + nn +nlambda and Z = np.
-      // L = nlambda
+      // nL = nlambda
       // I gives the isomer level, with I = 0 corresponding 
       // to the ground state and I >0 to excitations
 
@@ -203,13 +203,13 @@ class G4IonTable
                                        G4double& E, G4int& lvl);
       // Energy will not be given even for excited state!!  
  
-    G4double   GetIonMass(G4int Z, G4int A, G4int L=0, G4int lvl=0) const;
-    G4double   GetNucleusMass(G4int Z, G4int A, G4int L=0, G4int lvl=0) const;
+    G4double   GetIonMass(G4int Z, G4int A, G4int nL=0, G4int lvl=0) const;
+    G4double   GetNucleusMass(G4int Z, G4int A, G4int nL=0, G4int lvl=0) const;
     G4double   GetIsomerMass(G4int Z, G4int A, G4int lvl=0) const;
       // These methods returns Nucleus (i.e. full ionized atom) mass, where
       //  Z is Atomic Number (number of protons) and
       //  A is Atomic Number (number of nucleons and hyperons)
-      //  L is number of lambda (A= nn + np + nlambda)
+      //  nL is number of lambda (A= nn + np + nlambda)
       //  lvl is isomer level
  
     G4double GetLifeTime(const G4ParticleDefinition*) const;
@@ -270,18 +270,18 @@ class G4IonTable
   protected:
 
     G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int lvl=0);
-    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L, G4int lvl);
+    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int nL, G4int lvl);
     G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4double E,
                           G4Ions::G4FloatLevelBase flb, G4int J=0);
-    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L,
+    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int nL,
                           G4double E, G4Ions::G4FloatLevelBase flb, G4int J=0);
 
     G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E,
                           G4Ions::G4FloatLevelBase flb);
-    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4double E,
+    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int nL, G4double E,
                           G4Ions::G4FloatLevelBase flb);
     G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int lvl=0);
-    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4int lvl);
+    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int nL, G4int lvl);
 
     void InsertWorker(const G4ParticleDefinition* particle);
 

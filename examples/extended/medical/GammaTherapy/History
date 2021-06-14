@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-04-21 V. Ivanchenko (gtherapy-V10-06-01)
+- Use default random number generator instead of RanecuEngine
+
 10-11-20 B. Morgan (gtherapy-V10-06-00)
 - Migration to G4RunManagerFactory.
 - Remove PrimaryGeneratorAction as data member of RunAction as

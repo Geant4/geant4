@@ -144,6 +144,7 @@ private:
 #if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#pragma GCC diagnostic ignored "-Wuninitialized"
 #endif
   inline double convert1double(myuint_t u)
   {

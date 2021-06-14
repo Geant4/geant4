@@ -101,6 +101,7 @@ G4int G4NtupleBookingManager::CreateNtuple(
   // Save name & title in ntuple booking
   ntupleBooking->fNtupleBooking.set_name(name);
   ntupleBooking->fNtupleBooking.set_title(title);
+  ntupleBooking->fNtupleId = G4int(index + fFirstId);
 
   // Create ntuple
   fLockFirstId = true;
@@ -108,12 +109,12 @@ G4int G4NtupleBookingManager::CreateNtuple(
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) {
     G4ExceptionDescription description;
-    description << name << " ntupleId " << index + fFirstId;
+    description << name << " ntupleId " << ntupleBooking->fNtupleId;
     fState.GetVerboseL2()->Message("create", "ntuple booking", description);
   } 
 #endif
 
-  return G4int(index + fFirstId);
+  return ntupleBooking->fNtupleId;
 }                                         
 
 //_____________________________________________________________________________

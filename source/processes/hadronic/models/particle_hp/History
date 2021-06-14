@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 May 2021 Dennis Wright (hadr-hpp-V10-06-14)
+----------------------------------------------
+- G4ParticleHPInelasticCompFS:::CompositeApply():
+  in two places, replace line
+     if (eExcitation < 20*CLHEP::keV) {eExcitation=0;}
+   with  eExcitation = std::max(0.,QI[0] - QI[it]) 
+  in order to implement fix of bug #2333
+
 05 January 2021 Vladimir Ivanchenko (hadr-hpp-V10-06-13)
 --------------------------------------------------------
 -  G4ParticleHPThermalScattering - add final state phi-rotation;

@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13,7 +13,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x253a1b0
+##### Create analysis manager   0xce3790
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : Analysis_W013
@@ -647,7 +647,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=4.310000s Real=4.779340s Sys=0.030000s
+  User=4.840000s Real=5.170886s Sys=0.050000s
 ... write file : dna.root - done
 ... close file : dna.root - done
 0 events have been kept for refreshing and/or reviewing.

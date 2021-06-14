@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for G4 zlib package
 --------------------------------
 
+23 February 2021 Ben Morgan (zlib-V10-06-02)
+- Use separate genexes in G4zlib include directories to prevent parsing issues.
+
 29 October 2020 Ben Morgan (zlib-V10-06-01)
 - sources.cmake: remove include of obsolete CMake module,
   update for full migration to new CMake system.

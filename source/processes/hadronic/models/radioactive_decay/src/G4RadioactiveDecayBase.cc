@@ -495,7 +495,7 @@ G4RadioactiveDecayBase::StreamInfo(std::ostream& os, const G4String& endline)
   os << "Use Bearden atomic level energies                 "
      << emparam->BeardenFluoDir() << endline;
   os << "======================================================================"
-     << endline;
+     << G4endl;
   os.precision(prec);
 }
 
@@ -1151,6 +1151,7 @@ void G4RadioactiveDecayBase::DecayAnalog(const G4Track& theTrack)
   for (G4int index = 0; index < numberOfSecondaries; index++) {
     G4Track* secondary = new G4Track(products->PopProducts(), finalGlobalTime,
                                      theTrack.GetPosition() );
+    secondary->SetWeight(theTrack.GetWeight());
     secondary->SetCreatorModelIndex(theRadDecayMode);
     //Change for atomics relaxation
     if (theRadDecayMode == IT  && index>0){

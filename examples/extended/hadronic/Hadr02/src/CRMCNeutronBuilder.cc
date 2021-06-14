@@ -34,6 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
+// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -46,24 +47,21 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4LFission.hh"
+#include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 
-CRMCNeutronBuilder::CRMCNeutronBuilder() {
+
+CRMCNeutronBuilder::CRMCNeutronBuilder( const G4int crmcModelId, const std::string & crmcModelName ) {
   fMin = 0.0*MeV;  // For CRMC, this value does not matter in practice because
                    // we are going to use this model only at high energies.
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
-  fModel = new G4CRMCModel;
-  captureModel = new G4NeutronRadCapture;
-  fissionModel = new G4LFission;
-}
-
-
-void CRMCNeutronBuilder::Build( G4NeutronInelasticProcess* aP ) {
-  fModel->SetMinEnergy( fMin );
-  fModel->SetMaxEnergy( fMax );
-  aP->RegisterMe( fModel );
+  fModel = new HadronicInelasticModelCRMC( crmcModelId, crmcModelName );
+  fCaptureModel = new G4NeutronRadCapture;
+  fFissionModel = new G4LFission;
 }
 
 
@@ -73,16 +71,22 @@ CRMCNeutronBuilder::~CRMCNeutronBuilder() {}
 void CRMCNeutronBuilder::Build( G4HadronElasticProcess* ) {}
 
 
+void CRMCNeutronBuilder::Build( G4NeutronInelasticProcess* aP ) {
+  fModel->SetMinEnergy( fMin );
+  fModel->SetMaxEnergy( fMax );
+  aP->RegisterMe( fModel );
+}
+
+
 void CRMCNeutronBuilder::Build( G4HadronFissionProcess* aP ) {
-  fissionModel->SetMinEnergy( 0.0 );
-  fissionModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe( fissionModel );
+  fFissionModel->SetMinEnergy( 0.0 );
+  fFissionModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+  aP->RegisterMe( fFissionModel );
 }
 
 
 void CRMCNeutronBuilder::Build( G4HadronCaptureProcess* aP ) {
-  aP->RegisterMe( captureModel );
+  aP->RegisterMe( fCaptureModel );
 }
 
 #endif //G4_USE_CRMC
-

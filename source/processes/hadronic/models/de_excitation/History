@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 April 2021 Vladimir Ivanchenko  (hadr-deex-V10-06-08)
+- G4DeexPrecoParameters - fixed problem #2350 
+
+07 March 2021 Vladimir Ivanchenko 
+- G4PolarizationTransition - J.Detwiler fixed sampling of angular 
+  correlations (problem #2344)
+
+18 February 2021 Alberto Ribon 
+- G4DeexPrecoParameters - changed half-life time threshold for isomer
+  production from 1 microsecond to 1 nanosecond.
+  The goal is to avoid unphysical missing energy cases as reported by
+  NA61/SHINE Collaboration. According to our CPU benchmarks, the
+  overhead due to this change is below the ~ 1% level.
+
 12 August 2020 Vladimir Ivanchenko  (hadr-deex-V10-06-07)
 - G4NuclearLevelData - use Zmax for initialisation before the run
 

@@ -154,8 +154,8 @@ public:
                                       G4double kineticEnergy);
 
   // ionisation models for ions
-  inline void SetIonisationModels(G4VEmModel* m1 = nullptr, 
-                                  G4VEmModel* m2 = nullptr);
+  inline void SetIonisationModels(G4VEmModel* mod1 = nullptr, 
+                                  G4VEmModel* mod2 = nullptr);
 
   inline G4int GetNumberOfStoppingVectors() const;
 

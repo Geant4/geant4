@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,6 +22,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/HadronPhysicsCRMC_FTFP_BERT.hh
+/// \brief Definition of the HadronPhysicsCRMC_FTFP_BERT class
+//
 //
 //---------------------------------------------------------------------------
 //
@@ -31,54 +33,46 @@
 // Author:    2018 Alberto Ribon
 //
 // This is a variant of HadronPhysicsFTFP_BERT whereby CRMC is used 
-// for modeling final-state for pion- , kaon- , proton- and neutron-nuclear
-// inelastic interactions at very high energies.
+// for modeling final-state for pion- , kaon- , proton- and neutron-
+// nuclear inelastic interactions at very high energies.
 // For other hadron projectile types (e.g. hyperons, antinucleons and
 // antihyperons) the usual FTFP_BERT approach is used at all energies.
 // The inelastic hadronic cross sections are, for all hadron projectiles
 // and energies, the usual ones (exactly as in FTFP_BERT).
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Migrated to newer physics constructor
+//                                and used the latest Geant4-CRMC interface.
+//
 //----------------------------------------------------------------------------
 //
 #ifndef HadronPhysicsCRMC_FTFP_BERT_h
 #define HadronPhysicsCRMC_FTFP_BERT_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4Cache.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-class G4VCrossSectionDataSet;
+#include "G4HadronPhysicsFTFP_BERT.hh"
 
 
-class HadronPhysicsCRMC_FTFP_BERT : public G4VPhysicsConstructor {
-  public:
+class HadronPhysicsCRMC_FTFP_BERT : public G4HadronPhysicsFTFP_BERT {
+  public: 
     HadronPhysicsCRMC_FTFP_BERT( G4int verbose = 1 );
-    HadronPhysicsCRMC_FTFP_BERT( const G4String& name );
-    virtual ~HadronPhysicsCRMC_FTFP_BERT();
-    virtual void ConstructParticle() override;
-    virtual void ConstructProcess() override;
+    HadronPhysicsCRMC_FTFP_BERT( const G4String& name, G4bool quasiElastic = false );
+    ~HadronPhysicsCRMC_FTFP_BERT() override;
+
+    // copy constructor and hide assignment operator
+    HadronPhysicsCRMC_FTFP_BERT( HadronPhysicsCRMC_FTFP_BERT & ) = delete;
+    HadronPhysicsCRMC_FTFP_BERT & operator=( const HadronPhysicsCRMC_FTFP_BERT &right ) = delete;
+
   protected:
-    void CreateModels();
-    virtual void Neutron();
-    virtual void Proton();
-    virtual void Pion();
-    virtual void Kaon();
-    virtual void Others();
-    virtual void DumpBanner();
-    // This contains extra configurataion specific to this PL
-    virtual void ExtraConfiguration();
+    virtual void Neutron() override;
+    virtual void Proton() override;
+    virtual void Pion() override;
+    virtual void Kaon() override;
+
+  private:
+    G4int model;                                            // 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
+    static const std::array< std::string, 13 > modelNames;  // 7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
     G4double minCRMC;
-    G4double minFTFP;
     G4double maxFTFP;
-    G4double minBERT;
-    G4double maxBERT;
-    // Thread-private data write them here to delete them
-    G4VectorCache< G4VCrossSectionDataSet* > xs_ds;
-    G4Cache< G4ComponentGGHadronNucleusXsc* > xs_k;
 };
 
 #endif
-

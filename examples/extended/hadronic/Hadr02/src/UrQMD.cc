@@ -23,90 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/HIJING.icc
-/// \brief Implementation of the HIJING class inline functions
-//
+/// \file hadronic/Hadr02/src/UrQMD.cc
+/// \brief Implementation of the UrQMD class methods
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   
 //
-// Author: 2012 Andrea Dotti
-//
+// Author: 2012  Andrea Dotti
 //   created from FTFP_BERT
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Migrated to non-templated physics list.
 //
 //----------------------------------------------------------------------------
 //
-
-#include "globals.hh"
-//#include "G4ProcessManager.hh"
-//#include "G4ProcessVector.hh"
-//#include "G4ParticleTypes.hh"
-//#include "G4ParticleTable.hh"
-
-//#include "G4Material.hh"
-//#include "G4MaterialTable.hh"
-#include "G4ios.hh"
 #include <iomanip>   
+#include <CLHEP/Units/SystemOfUnits.h>
+#include "globals.hh"
+#include "G4ios.hh"
+#include "UrQMD.hh"
+
+#ifdef G4_USE_URQMD
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "IonHIJINGPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
-#include "G4StoppingPhysics.hh"
+#include "HadronPhysicsUrQMD.hh"
+#include "IonUrQMDPhysics.hh"
 
-#include "HadronPhysicsHIJING.hh"
 
-template<class T> THIJING<T>::THIJING(G4int ver):  T()
-{
-  // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
-  G4cout << "<<< Geant4 Physics List simulation engine: HIJING 0.1"<<G4endl;
-  G4cout <<G4endl;
-  this->defaultCutValue = 0.7*mm;  
-  this->SetVerboseLevel(ver);
-
- // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
-
-  // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
-
-  // Decays 
-  this->RegisterPhysics( new G4DecayPhysics(ver) );
-
-   // Hadron Elastic scattering
-  this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
-
-   // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsHIJING(ver));
-
-  // Stopping Physics
-  this->RegisterPhysics( new G4StoppingPhysics(ver) );
-
-  // Ion Physics
-  this->RegisterPhysics( new IonHIJINGPhysics(ver));
-  
-  // Neutron tracking cut
-  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
-
+UrQMD::UrQMD( G4int ver ) {
+  if ( ver > 0 ) {
+    G4cout << "<<< Geant4 Physics List simulation engine: UrQMD" << G4endl << G4endl;
+  }
+  defaultCutValue = 0.7*CLHEP::mm;  
+  SetVerboseLevel( ver );
+  RegisterPhysics( new G4EmStandardPhysics( ver ) );     // EM Physics
+  RegisterPhysics( new G4EmExtraPhysics( ver ) );        // Synchroton Radiation & GN Physics
+  RegisterPhysics( new G4DecayPhysics( ver ) );          // Decays
+  RegisterPhysics( new G4HadronElasticPhysics( ver ) );  // Hadron Elastic physics  
+  RegisterPhysics( new HadronPhysicsUrQMD( ver ) );      // Hadron Inelastic physics
+  RegisterPhysics( new G4StoppingPhysics( ver ) );       // Stopping Physics
+  RegisterPhysics( new IonUrQMDPhysics( ver ) );         // Ion Physics
+  RegisterPhysics( new G4NeutronTrackingCut( ver ) );    // Neutron tracking cut
 }
 
-template<class T> THIJING<T>::~THIJING()
-{
+#else  //i.e. G4_USE_URQMD not defined
+
+UrQMD::UrQMD( G4int ) {
+  G4ExceptionDescription de;
+  de << "Support for UrQMD not enabled" << G4endl;
+  G4Exception( __FILE__, "UrQMD-01", FatalException, de,
+               "Code should be compiled with G4_USE_URQMD environment variable set." );
 }
 
-template<class T> void THIJING<T>::SetCuts()
-{
-  if (this->verboseLevel >1){
-    G4cout << "HIJING::SetCuts:";
-  }  
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-
-  this->SetCutsWithDefault();   
-}
+#endif  //G4_USE_URQMD

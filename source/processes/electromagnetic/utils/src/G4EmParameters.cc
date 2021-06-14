@@ -1392,7 +1392,7 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      << fCParameters->DNAElectronMsc() << "\n";
   os << "Use DNA e- solvation model type                    " 
      << fCParameters->DNAeSolvationSubType() << "\n";
-  os << "=======================================================================" << "\n";
+  os << "=======================================================================" << G4endl;
   }
   os.precision(prec);
 }

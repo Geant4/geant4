@@ -115,7 +115,7 @@ G4double G4Sphere::GetCosEndTheta () const
   return cosETheta;
 }
 
-inline 
+inline
 void G4Sphere::Initialize()
 {
   fCubicVolume = 0.;
@@ -127,7 +127,7 @@ inline
 void G4Sphere::InitializePhiTrigonometry()
 {
   hDPhi = 0.5*fDPhi;                       // half delta phi
-  cPhi  = fSPhi + hDPhi; 
+  cPhi  = fSPhi + hDPhi;
   ePhi  = fSPhi + fDPhi;
 
   sinCPhi    = std::sin(cPhi);
@@ -310,7 +310,7 @@ void G4Sphere::SetDeltaThetaAngle(G4double newDTheta)
 // Old access functions
 
 inline
-G4double G4Sphere::GetRmin() const 
+G4double G4Sphere::GetRmin() const
 {
   return GetInsideRadius();
 }
@@ -343,13 +343,4 @@ inline
 G4double G4Sphere::GetDTheta() const
 {
   return GetDeltaThetaAngle();
-}
-
-inline
-G4double G4Sphere::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) {;}
-  else { fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
-                              (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; }
-  return fCubicVolume;
 }
