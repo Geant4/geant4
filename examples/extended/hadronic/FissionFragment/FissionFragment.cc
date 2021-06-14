@@ -54,7 +54,7 @@
 //
 //  Modified:
 //
-//  ??-??-20                                              ARibon
+//  05-08-20                                              ARibon
 //  Replaced deprecated HP environmental variables with UI commands
 //  23-06-14                                              BWendt
 //  Added check for NeutronHP fission generator environment variable

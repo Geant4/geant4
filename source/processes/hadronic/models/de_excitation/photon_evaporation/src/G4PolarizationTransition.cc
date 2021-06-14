@@ -253,24 +253,24 @@ void G4PolarizationTransition::SampleGammaTransition(
     G4cout << *nucpol << G4endl;
   }
 
+  const POLAR& pol = nucpol->GetPolarization();
+
   if(fTwoJ1 == 0) {
     nucpol->Unpolarize();
     cosTheta = 2*G4UniformRand() - 1.0;
     phi = CLHEP::twopi*G4UniformRand();
-    return;
   }
-  
-  const POLAR& pol = nucpol->GetPolarization();
-
-  cosTheta = GenerateGammaCosTheta(pol);
-  if(fVerbose > 2) {
-    G4cout << "G4PolarizationTransition::SampleGammaTransition: cosTheta= " 
-	   << cosTheta << G4endl;
-  }
-  phi = GenerateGammaPhi(cosTheta, pol);
-  if(fVerbose > 2) {
-    G4cout << "G4PolarizationTransition::SampleGammaTransition: phi= " 
-	   << phi << G4endl;
+  else {
+    cosTheta = GenerateGammaCosTheta(pol);
+    if(fVerbose > 2) {
+      G4cout << "G4PolarizationTransition::SampleGammaTransition: cosTheta= "
+	     << cosTheta << G4endl;
+    }
+    phi = GenerateGammaPhi(cosTheta, pol);
+    if(fVerbose > 2) {
+      G4cout << "G4PolarizationTransition::SampleGammaTransition: phi= "
+	     << phi << G4endl;
+    }
   }
 
   if(fTwoJ2 == 0) {

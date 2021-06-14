@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -375,7 +375,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000556s Sys=0.000000s
+  User=0.000000s Real=0.000457s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -430,7 +430,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000208s Sys=0.000000s
+  User=0.000000s Real=0.000271s Sys=0.000000s
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

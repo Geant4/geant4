@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -831,7 +831,7 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
@@ -876,28 +876,28 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.080000s Real=0.115968s Sys=0.010000s
+  User=0.090000s Real=0.107368s Sys=0.000000s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.76   RMS(GeV) 4.262
-Average number of steps              57.92
-Average number of gamma              0.95
+Average energy deposit (GeV)         6.578   RMS(GeV) 4.218
+Average number of steps              56.24
+Average number of gamma              0.91
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           10.07
-Average number of protons            10.87
+Average number of neutrons           10.01
+Average number of protons            10.69
 Average number of antiprotons        0
-Average number of pi+ & pi-          7.33
-Average number of pi0                3.84
-Average number of kaons              0.06
+Average number of pi+ & pi-          6.94
+Average number of pi0                3.56
+Average number of kaons              0.12
 Average number of muons              0
-Average number of deuterons+tritons  2.14
-Average number of He3+alpha          0.97
-Average number of ions               1.01
+Average number of deuterons+tritons  2.23
+Average number of He3+alpha          0.91
+Average number of ions               1.07
 ========================================================
 
 0 events have been kept for refreshing and/or reviewing.
@@ -908,6 +908,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.088 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.087 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

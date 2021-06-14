@@ -789,7 +789,7 @@ G4AtomicShells::GetNumberOfFreeElectrons(G4int Z, G4double th)
   G4int idxmax = idx +  fNumberOfShells[Z];
   G4int n = 0;
   for (G4int i=idx; i<idxmax; ++i) {
-    if(fBindingEnergies[i] <= th) { n += fNumberOfElectrons[i]; } 
+    if(fBindingEnergies[i]*CLHEP::eV <= th) { n += fNumberOfElectrons[i]; } 
   }
   return n;
 }

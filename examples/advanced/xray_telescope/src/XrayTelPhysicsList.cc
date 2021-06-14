@@ -298,13 +298,11 @@ void XrayTelPhysicsList::SetCuts()
 
 void XrayTelPhysicsList::SetCutForGamma(G4double cut)
 {
-  ResetCuts();
   cutForGamma = cut;
 }
 
 void XrayTelPhysicsList::SetCutForElectron(G4double cut)
 {
-  ResetCuts();
   cutForElectron = cut;
 }
 

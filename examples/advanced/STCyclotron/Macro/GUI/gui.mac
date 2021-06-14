@@ -7,7 +7,7 @@
 # Add icons of general interest
 #
 /control/execute Macro/GUI/icons.mac
-/control/execute Macro/init_beam.mac
+/control/execute Macro/init_parameters.mac
 
 # File menu :
 /gui/addMenu file File

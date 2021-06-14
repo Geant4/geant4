@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 7th, 2021 M. Asai (event-V10-06-10)
+- Fix the default value of /gps/ang/maxphi command. Addressing to 
+  the bug report 2383.
+
 November 20th, 2020 B.Morgan (event-V10-06-09)
 - Bugfix of build to ensure SmartStack preprocessor define is propagated.
   No changes to code.

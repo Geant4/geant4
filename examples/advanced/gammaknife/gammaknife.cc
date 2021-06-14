@@ -71,7 +71,6 @@
 int main(int argc ,char ** argv)
 {
 
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4int seconds =  time(NULL);
   G4Random::setTheSeed(seconds);
 
@@ -133,8 +132,6 @@ int main(int argc ,char ** argv)
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
     UImanager->ApplyCommand("/control/execute defaultMacro.mac");
-
-    UImanager->ApplyCommand("/control/execute batch.mac");
 
     ui->SessionStart();
     delete ui;

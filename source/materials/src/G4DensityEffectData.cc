@@ -271,9 +271,9 @@ void G4DensityEffectData::Initialize()
   indexZ[36]=36;
   state[36]=kStateGas;
 
-//G4_Ru  index=37
+//G4_Rb  index=37
   G4double M37[NDENSARRAY]={23.467,1.823,6.4776,0.5737,3.7995,0.07261,3.4177,0.14,0.026,363. };
-  AddMaterial(M37,"G4_Ru");
+  AddMaterial(M37,"G4_Rb");
   indexZ[37]=37;
 
 //G4_Sr  index=38

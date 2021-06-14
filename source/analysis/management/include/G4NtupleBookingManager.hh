@@ -42,12 +42,14 @@ struct G4NtupleBooking
 {
   G4NtupleBooking() 
     :  fNtupleBooking(),
+       fNtupleId(-1),
        fFileName(),
        fActivation(true) {}
 
   ~G4NtupleBooking() {}    
 
   tools::ntuple_booking fNtupleBooking;
+  G4int fNtupleId;
   G4String fFileName;
   G4bool fActivation;
 };

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 May, 2021  G. Cosmo (intercoms-V10-06-08)
+- Fixed shadowing compilation warning in G4UImanager reported with gcc-11.
+
 16 January 2020  John Allison (intercoms-V10-06-07)
 - G4UImanager:
   o Introduce flag and access functions for LastCommandOutputTreated.

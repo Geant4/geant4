@@ -86,7 +86,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     GLOBLIBS += libG4clhep.lib
   endif
   ifdef G4LIB_USE_PTL
-    GLOBLIBS += libptl.lib
+    GLOBLIBS += libG4ptl.lib
   endif
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\

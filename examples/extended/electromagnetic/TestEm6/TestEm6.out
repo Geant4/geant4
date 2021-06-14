@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -194,7 +194,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000762s Sys=0.000000s
+  User=0.000000s Real=0.000792s Sys=0.000000s
 
  Number of process calls --->	GammaToMuPair : 5... write file : testem6_0.root - done
 ... write files - done
@@ -301,7 +301,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000562s Sys=0.000000s
+  User=0.010000s Real=0.000440s Sys=0.000000s
 
  Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write file : testem6_1.root - done
 ... write files - done

@@ -85,51 +85,43 @@ example.
                            ACTIVATION OF CRMC INTERFACE                        
 
 The CRMC (Cosmic Ray Monte Carlo) interface is NOT provided with Geant4 code-base.
-Moreover, the CRMC code that is publicly available in: https://github.com/alisw/crmc
-is not appropriate for Geant4 (because CRMC assumes that a large number of
-interactions of the same type - i.e. hadron projectile type, projectile energy,
-and target nucleus - should be simulated, whereas for Geant4 we need from CRMC
-the simulation of one, single hadron-nucleus interaction, for different types of
-interaction at each call).
 A modified version of the CRMC interface for Geant4 applications has been kindly
-prepared by Tanguy Pierog (IKP), and can be obtained via the following command:
-  svn co https://devel-ik.fzk.de/svn/mc/crmc/branches/geant4
-but you need to contact him (email: Tanguy.Pierog@kit.edu ) to get the access
-permission (i.e. a username and password to access this repository).
-
-We are pleased to acknowledge here also the contribution of Andrii Tykhonov
-(Universite' de Geneve, and member of the DAMPE Collaboration) who made the
-first prototype interface between Geant4 and CRMC, and shared his expertise
-and implementation with us. 
+prepared by Tanguy Pierog (IKP) and Andrii Tykhonov (Universite' de Geneve)
+and can be obtained here:
+ https://gitlab.ikp.kit.edu/AirShowerPhysics/crmc/-/tree/svn/geant4
 
 Assuming that this special version of CRMC is installed in the subdirectory
-crmc_interface/ , you need first to build it : please look at the README file,
-crmc_interface/README for detailed instructions on how to build it. In short:
+crmc-svn-geant4/ , you need first to build it : please look at the README and
+README_GEANT4_CRMC_INTERFACE files for detailed instructions on how to build it.
+In short:
 
-1. Install ROOT
-2. Install HepMC (and define the corresponding environmental variable HEPMC_PREFIX)
-3. Define the following environmental variables:
-   export HEP_ROOT=${HEPMC_PREFIX}
-   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HEP_ROOT}/lib
-   export CPATH=${CPATH}:${PWD}/Build/src
-   export CPATH=${CPATH}:${PWD}/src
-   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PWD}/crmc_interface/Build/lib
-4. cd crmc_interface/
-5. mkdir Build/ ; cd Build/   # Subdirectory where to build and install CRMC
-6. cmake ../
-7. make
-8. make install   # Yes, you need also to install it (in the same directory)!
+1.  Install BOOST
+2.  Install HepMC (and define the corresponding environmental variable HEP_ROOT)
+3.  Install FASTJET (and define the corresponding environmental variable
+                     FASTJET_ROOT_DIR)
+4.  Set the LD_LIBRARY_PATH as follows:
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HEP_ROOT}/lib:${FASTJET_ROOT_DIR}/lib
+5.  Source the Geant4 script geant4make.sh , e.g.
+    source /your-geant4-installation-dir/share/Geant4-10.7.2/geant4make/geant4make.sh
+6.  cd crmc-svn-geant4/
+7.  mkdir Build/ ; cd Build/   # Subdirectory where to build and install CRMC
+8.  cmake ../
+9.  make
+10. make install   # Yes, you need also to install it (in the same directory)!
 
 After you have built CRMC you can build the Hadr02 application that uses it as follows:
 
 1. Define the following environmental variable (in addition to the environmental
    variables defined above, needed to build CRMC):
    export G4_USE_CRMC=1
+   export CRMCROOT=/your-crmc-installation-dir/crmc-svn-geant4/
+   export CPATH=${CPATH}:${CRMCROOT}/Build/src:${CRMCROOT}/src
+   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CRMCROOT}/Build/lib
+   export CRMC_CONFIG_FILE=${CRMCROOT}/Build/crmc.param 
 2. cd /your-geant4/examples/extended/hadronic/Hadr02
-2. mkdir Build/ ; cd Build/   #  Subdirectory where to build Hadr02
-3. cmake -DG4_USE_CRMC=ON -DCRMCROOT=${PWD}/crmc_interface/ \
-         -DCMAKE_PREFIX_PATH=/your/geant4/installation ../
-4. make
+3. mkdir Build/ ; cd Build/   #  Subdirectory where to build Hadr02
+4. cmake -DG4_USE_CRMC=ON -DGeant4_DIR=/your-geant4-installation-dir/ ../
+5. make
 
 To run the application:
 

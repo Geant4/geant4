@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -182,7 +182,7 @@ nuclearStopping:  for GenericIon SubType=8 BuildTable=0
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-Max life time                                     1e+06 ps
+Max life time                                     1000 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           0
 Enable correlated gamma emission                  0
@@ -432,7 +432,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=0.600000s Real=0.612273s Sys=0.000000s
+  User=0.670000s Real=0.903690s Sys=0.000000s
 
  ======================== run summary =====================
 

@@ -16,6 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 May 2021 Gabriele Cosmo (gdml-V10-06-07)
+- G4GDMLReadSolids: updated optical surface properties based on relatively
+  recent introduction of DAVIS interface.
+  Addressing problem report #2371.
+
+17 March 2021 Witek Pokorski
+- Solves the problem #2343 of not all assemblies being written out to the GDML file.
+  Fix provided by Laurie Nevay.
+
+16 March 2021 Witek Pokorski
+- Solves the problem #2342 of multiUnion and assembly write creating degenerated names
+ (position, rotation and nodes). Fix provided by Laurie Nevay.
+
+4 March 2021 Witek Pokorski
+- Removed the hardcoded size 10000 in G4GDMLWrite causing the values in GDML truncated.
+  Adressing problem report #2336. Fix by Tao Lin.
+
 3 February 2021 Gabriele Cosmo (gdml-V10-06-06)
 - Fixed parsing of regions in G4GDMLParser::ImportRegions().
   Allow for proper deletion of meta-data lists in destructor.

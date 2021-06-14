@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Implementation of G4UPolycone wrapper class
+// Implementation of G4UPolyhedra wrapper class
 //
 // 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
@@ -116,11 +116,10 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
     wrDelta = twopi;
   }
   wrNumSide = numSide;
-  G4double convertRad = 1./std::cos(0.5*wrDelta/wrNumSide);
   rzcorners.resize(0);
   for (G4int i=0; i<numRZ; ++i)
   {
-    rzcorners.push_back(G4TwoVector(r[i]*convertRad,z[i]));
+    rzcorners.push_back(G4TwoVector(r[i],z[i]));
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -261,7 +260,8 @@ void G4UPolyhedra::SetOriginalParameters()
   fOriginalParameters.Rmin = new G4double[numPlanes];
   fOriginalParameters.Rmax = new G4double[numPlanes];
 
-  G4double convertRad = std::cos(0.5*deltaPhi/numSides);
+  G4double convertRad = fGenericPgon
+                      ? 1.0 : std::cos(0.5*deltaPhi/numSides);
   for (G4int i=0; i<numPlanes; ++i)
   {
     fOriginalParameters.Z_values[i] = GetZPlanes()[i];

@@ -8,6 +8,9 @@
                       Category History file
                       ---------------------
 
+10.04.2021 G.Cosmo       (purmag-V10-06-02)
+- Removed call to obsolete ResetCuts() in PurgMagPhysicsList.
+
 02.11.2020 B.Morgan      (purmag-V10-06-01)
 - Support same CMake version range as core Geant4
 

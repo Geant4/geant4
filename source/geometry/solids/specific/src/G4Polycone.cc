@@ -220,11 +220,16 @@ void G4Polycone::Create( G4double phiStart,
 
   numCorner = rz->NumVertices();
 
+  startPhi = phiStart;
+
+  while( startPhi < 0. )    // Loop checking, 13.08.2015, G.Cosmo
+    startPhi += twopi;
+
   //
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
   //
-  if (phiTotal <= 0 || phiTotal > twopi-1E-10)
+  if ( (phiTotal <= 0) || (phiTotal > twopi*(1-DBL_EPSILON)) )
   {
     phiIsOpen = false;
     startPhi = 0.;
@@ -233,17 +238,7 @@ void G4Polycone::Create( G4double phiStart,
   else
   {
     phiIsOpen = true;
-
-    //
-    // Convert phi into our convention
-    //
-    startPhi = phiStart;
-    while( startPhi < 0. )    // Loop checking, 13.08.2015, G.Cosmo
-      startPhi += twopi;
-
-    endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
-      endPhi += twopi;
+    endPhi = startPhi + phiTotal;
   }
 
   //

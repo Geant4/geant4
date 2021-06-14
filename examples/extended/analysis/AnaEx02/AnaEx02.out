@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -823,7 +823,7 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
@@ -859,20 +859,20 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 452.725 MeV +- 15.8845 MeV
- mean Energy in Gap      : 24.7025 MeV +- 7.34604 MeV
+ mean Energy in Absorber : 452.959 MeV +- 12.8319 MeV
+ mean Energy in Gap      : 24.6926 MeV +- 7.32907 MeV
 
- mean trackLength in Absorber : 32.576 cm  +- 1.26659 cm 
- mean trackLength in Gap      : 12.2313 cm  +- 3.75875 cm 
+ mean trackLength in Absorber : 32.6104 cm  +- 9.85533 mm 
+ mean trackLength in Gap      : 12.2482 cm  +- 3.76083 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 452.725 MeV rms = 15.8845 MeV
-EGap: mean = 24.7025 MeV rms = 7.34604 MeV
-LAbs: mean = 32.576 cm  rms = 1.26659 cm 
-LGap: mean = 12.2313 cm  rms = 3.75875 cm 
+EAbs: mean = 452.959 MeV rms = 12.8319 MeV
+EGap: mean = 24.6926 MeV rms = 7.32907 MeV
+LAbs: mean = 32.6104 cm  rms = 9.85533 mm 
+LGap: mean = 12.2482 cm  rms = 3.76083 cm 
 
 ----> Histograms and ntuples are saved
 
@@ -1271,20 +1271,20 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 234.77 MeV +- 0 eV 
- mean Energy in Gap      : 57.6799 MeV +- 0 eV 
+ mean Energy in Absorber : 210.854 MeV +- 0 eV 
+ mean Energy in Gap      : 56.6356 MeV +- 0 eV 
 
- mean trackLength in Absorber : 57.4741 cm  +- 0 fm 
- mean trackLength in Gap      : 29.6956 cm  +- 0 fm 
+ mean trackLength in Absorber : 52.0449 cm  +- 0 fm 
+ mean trackLength in Gap      : 28.3931 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 234.77 MeV rms = 0 eV 
-EGap: mean = 57.6799 MeV rms = 0 eV 
-LAbs: mean = 57.4741 cm  rms = 0 fm 
-LGap: mean = 29.6956 cm  rms = 0 fm 
+EAbs: mean = 210.854 MeV rms = 0 eV 
+EGap: mean = 56.6356 MeV rms = 0 eV 
+LAbs: mean = 52.0449 cm  rms = 0 fm 
+LGap: mean = 28.3931 cm  rms = 0 fm 
 
 ----> Histograms and ntuples are saved
 

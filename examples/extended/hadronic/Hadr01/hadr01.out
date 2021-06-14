@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -839,7 +839,7 @@ Limit excitation energy for Fermi BreakUp (MeV)     20
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
 Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
@@ -896,7 +896,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-Initialisation time:  User=1.540000s Real=7.818855s Sys=0.190000s
+Initialisation time:  User=1.830000s Real=5.352235s Sys=0.230000s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
 EventAction: Event # 20 started
@@ -910,34 +910,34 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.880000s Real=1.211092s Sys=0.000000s
-RunAction::EndOfRunAction:  User=0.880000s Real=1.211249s Sys=0.000000s
+  User=0.910000s Real=1.057413s Sys=0.000000s
+RunAction::EndOfRunAction:  User=0.910000s Real=1.057496s Sys=0.000000s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         604.3   RMS(MeV) 404.6
-Average number of steps              1110
-Average number of gamma              79.76
-Average number of e-                 103.8
-Average number of e+                 5.67
-Average number of neutrons           20.2
-Average number of protons            4.24
+Average energy deposit (MeV)         567.5   RMS(MeV) 364
+Average number of steps              875.6
+Average number of gamma              57.09
+Average number of e-                 75.51
+Average number of e+                 3.87
+Average number of neutrons           20.07
+Average number of protons            4.4
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.6
-Average number of pi0                0.33
-Average number of kaons              0
-Average number of muons              0.03
-Average number of deuterons+tritons  2.02
-Average number of He3+alpha          0.43
-Average number of ions               4.88
+Average number of pi+ & pi-          0.73
+Average number of pi0                0.29
+Average number of kaons              0.01
+Average number of muons              0.06
+Average number of deuterons+tritons  1.92
+Average number of He3+alpha          0.51
+Average number of ions               5.17
 Average number of forward neutrons   0
-Average number of reflected neutrons 16.83
+Average number of reflected neutrons 16.38
 Average number of leaked neutrons    0
-Average number of proton leak        1.03
-Average number of pion leak          0.38
+Average number of proton leak        1.06
+Average number of pion leak          0.5
 ========================================================
 
 #
@@ -951,22 +951,22 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 28
+Total navigation history collections cleaned: 23
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0413 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0336 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0135 MB
-Pool ID '7G4Track', size : 0.0269 MB
-Pool ID '18G4TouchableHistory', size : 0.00385 MB
+Pool ID '17G4DynamicParticle', size : 0.0125 MB
+Pool ID '7G4Track', size : 0.025 MB
+Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00673 MB
 Pool ID '17G4ReactionProduct', size : 0.00673 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.1 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.093 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

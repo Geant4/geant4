@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-March-2021, Krzysztof Genser (phys-ctor-hinelastic-V10-06-20)
+- G4HadronPhysicsShielding: corrected parameters of the M variant
+
 05-December-2020, Vladimir Ivanchenko (phys-ctor-hinelastic-V10-06-19)
 - G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BERT, G4HadronInelasticQBBC,
   G4HadronPhysicsQGSP_BIC : fixed type of builder in all hadron 

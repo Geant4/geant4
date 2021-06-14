@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1060,7 +1060,7 @@ Event = 0 z0 = -779.999  Primary direction = (0,0,1)
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.760000s Real=0.886060s Sys=0.000000s
+  User=0.880000s Real=0.917291s Sys=0.000000s
 RunAction: End of run actions are started 1  Nevt=  100  Edep= 4211.27
  ====================================================
    Beam Particle: proton

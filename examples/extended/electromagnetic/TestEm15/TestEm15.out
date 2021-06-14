@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -490,7 +490,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.034457s Sys=0.000000s
+  User=0.040000s Real=0.054917s Sys=0.000000s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -562,7 +562,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.050836s Sys=0.000000s
+  User=0.070000s Real=0.066656s Sys=0.000000s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 

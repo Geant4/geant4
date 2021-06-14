@@ -412,28 +412,28 @@ G4GeneralParticleSourceMessenger(G4GeneralParticleSource* fPtclGun)
 
   minthetaCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/mintheta",this);
   minthetaCmd1->SetGuidance("Set minimum theta");
-  minthetaCmd1->SetParameterName("MinTheta",false,false);
+  minthetaCmd1->SetParameterName("MinTheta",true,false);
   minthetaCmd1->SetDefaultValue(0.);
   minthetaCmd1->SetDefaultUnit("rad");
   // minthetaCmd1->SetUnitCandidates("rad deg");
 
   maxthetaCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/maxtheta",this);
   maxthetaCmd1->SetGuidance("Set maximum theta");
-  maxthetaCmd1->SetParameterName("MaxTheta",false,false);
+  maxthetaCmd1->SetParameterName("MaxTheta",true,false);
   maxthetaCmd1->SetDefaultValue(pi);
   maxthetaCmd1->SetDefaultUnit("rad");
   // maxthetaCmd1->SetUnitCandidates("rad deg");
 
   minphiCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/minphi",this);
   minphiCmd1->SetGuidance("Set minimum phi");
-  minphiCmd1->SetParameterName("MinPhi",false,false);
+  minphiCmd1->SetParameterName("MinPhi",true,false);
   minphiCmd1->SetDefaultUnit("rad");
   // minphiCmd1->SetUnitCandidates("rad deg");
 
   maxphiCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/maxphi",this);
   maxphiCmd1->SetGuidance("Set maximum phi");
-  maxphiCmd1->SetParameterName("MaxPhi",false,false);
-  maxphiCmd1->SetDefaultValue(pi);
+  maxphiCmd1->SetParameterName("MaxPhi",true,false);
+  maxphiCmd1->SetDefaultValue(2.*pi);
   maxphiCmd1->SetDefaultUnit("rad");
   // maxphiCmd1->SetUnitCandidates("rad deg");
 

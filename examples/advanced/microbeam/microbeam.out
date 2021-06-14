@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -773,7 +773,7 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
-##### Create analysis manager   0x154bac0
+##### Create analysis manager   0x21e7c80
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 

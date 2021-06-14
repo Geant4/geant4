@@ -16,6 +16,15 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 9, 2021 Gabriele (global-V10-06-29)
+- Removed spurious spaces in #define in G4Version header.
+  Addressing problem report #2384.
+- Updated tag IDs for release 10.7.p02.
+
+March 26, 2021 Gabriele Cosmo
+- Zero terminate buffer in G4strstreambuf destructor before flushing.
+  Addressing problem report #2350.
+
 February 2, 2021 Gabriele (global-V10-06-28)
 - Updated tag IDs for release 10.7.p01.
 

@@ -132,7 +132,7 @@ class G4GDMLWrite
     xercesc::DOMDocument* doc = nullptr;
     xercesc::DOMElement* extElement = nullptr;
     xercesc::DOMElement* userinfoElement = nullptr;
-    XMLCh tempStr[10000];
+
     G4GDMLAuxListType auxList;
     G4bool overwriteOutputFile = false;
 };

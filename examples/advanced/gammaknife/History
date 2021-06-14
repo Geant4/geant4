@@ -6,7 +6,15 @@ francesco.romano@lns.infn.it
          ====================================================
              History file of the GammaKnife application
          ====================================================
-07.11.2020 S. Guatelli    Tag: gammaknife-V10-06-02
+
+13.04.2021 G. Cosmo    Tag: gammaknife-V10-06-03
+           - Use default MixMax random number engine.
+           - Fixed interactive run to just execute defaultMacro.mac.
+
+11.04.2021 V. Ivanchenko
+           - GammaKnifePhysicsList - added forgotten header
+
+07.11.2020 S. Guatelli Tag: gammaknife-V10-06-02
            - Migration to G4RunManagerFactory
            
 07.11.2020 F.Romano    Tag: gammaknife-V10-06-01

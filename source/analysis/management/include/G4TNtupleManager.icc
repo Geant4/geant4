@@ -152,12 +152,39 @@ G4bool G4TNtupleManager<TN, TF>::FillNtupleTColumn(
 template <typename TN, typename TF>
 G4int G4TNtupleManager<TN, TF>::CreateNtuple(G4NtupleBooking* ntupleBooking)
 {
-  // This ntuple id
-  auto ntupleId = G4int(fNtupleDescriptionVector.size()) + fFirstId;
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    fState.GetVerboseL4()
+      ->Message("create from booking", "ntuple",
+                ntupleBooking->fNtupleBooking.name());
+  }
+#endif
+
+  // The ntuple index
+  auto index = ntupleBooking->fNtupleId - fFirstId;
+
+  // Check if the ntuple description of this id already exists
+  // (what should normally never happen)
+  // delete it and print a warning
+  if ( index < G4int(fNtupleDescriptionVector.size()) &&
+       fNtupleDescriptionVector[index] ) {
+    delete fNtupleDescriptionVector[index];
+    G4ExceptionDescription description;
+    description
+      << "Ntuple description " << ntupleBooking->fNtupleId << " already exists.";
+    G4Exception("G4TNtupleManager::CreateNtuple",
+                "Analysis_W002", JustWarning, description);
+  }
+
+  // Allocate the vector element(s)
+  while ( index >= G4int(fNtupleDescriptionVector.size()) ) {
+    fNtupleDescriptionVector.push_back(nullptr);
+  }
 
   // Create ntuple description from ntuple booking.
   auto ntupleDescription = new G4TNtupleDescription<TN, TF>(ntupleBooking);
-  fNtupleDescriptionVector.push_back(ntupleDescription);
+  fNtupleDescriptionVector[index] = ntupleDescription;
 
   // Do not create ntuple if it is inactivated 
   if ( fState.GetIsActivation() && 
@@ -167,18 +194,11 @@ G4int G4TNtupleManager<TN, TF>::CreateNtuple(G4NtupleBooking* ntupleBooking)
   if ( ntupleDescription->fNtuple ) {
     G4ExceptionDescription description;
     description 
-      << "Ntuple " << ntupleId << " already exists.";
+      << "Ntuple " << ntupleBooking->fNtupleId << " already exists.";
     G4Exception("G4TNtupleManager::CreateNtuple",
                 "Analysis_W002", JustWarning, description);
-    return ntupleId;
+    return ntupleBooking->fNtupleId;
   }
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()
-      ->Message("create from booking", "ntuple", 
-                ntupleDescription->fNtupleBooking.name());
-#endif
 
   // create ntuple
   CreateTNtupleFromBooking(ntupleDescription);
@@ -191,12 +211,11 @@ G4int G4TNtupleManager<TN, TF>::CreateNtuple(G4NtupleBooking* ntupleBooking)
   if ( fState.GetVerboseL3() ) 
     fState.GetVerboseL3()
       ->Message("create from booking", "ntuple", 
-                ntupleDescription->fNtupleBooking.name());
+                ntupleBooking->fNtupleBooking.name());
 #endif
 
-  return ntupleId;      
+  return ntupleBooking->fNtupleId;
 }
-
 
 //_____________________________________________________________________________
 template <typename TN, typename TF>

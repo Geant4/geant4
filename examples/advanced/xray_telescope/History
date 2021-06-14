@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.04.2021  G. Cosmo, tag xraytel-V10-06-02
+            Removed calls to obsolete ResetCuts() in XrayTelPhysicsList.
+
 17.11.2020  S. Guatelli, tag xraytel-V10-06-01
             Migration to G4RunManagerFactory
 

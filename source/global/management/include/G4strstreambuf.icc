@@ -43,7 +43,10 @@ inline G4strstreambuf::~G4strstreambuf()
   // flushing buffer...
   // std::cout is used because destination object may not be alive.
   if(count != 0)
+  {
+    buffer[count] = '\0';
     std::cout << buffer;
+  }
 
   delete[] buffer;
 }

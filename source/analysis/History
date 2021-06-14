@@ -16,6 +16,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 26, 2021 I. Hrivnacova (analysis-V10-06-14)
+- Fixed ntuple indexing when FinishNtuple is called in different order
+  than CreateNtuple.
+  Addressing the problem report #2335.
+
 February 2, 2021 I. Hrivnacova (analysis-V10-06-13)
 - Fixed the problem with merging ntuples with columns of vector type
   reported by Riccardo Pilato in G4 Forum.

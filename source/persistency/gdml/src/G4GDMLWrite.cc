@@ -155,10 +155,15 @@ G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
 xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
                                             const G4String& value)
 {
-  xercesc::XMLString::transcode(name, tempStr, 9999);
+  XMLCh* tempStr = NULL;
+  tempStr = xercesc::XMLString::transcode(name);
   xercesc::DOMAttr* att = doc->createAttribute(tempStr);
-  xercesc::XMLString::transcode(value, tempStr, 9999);
+  xercesc::XMLString::release(&tempStr);
+
+  tempStr = xercesc::XMLString::transcode(value);
   att->setValue(tempStr);
+  xercesc::XMLString::release(&tempStr);
+
   return att;
 }
 
@@ -166,22 +171,32 @@ xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
 xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
                                             const G4double& value)
 {
-  xercesc::XMLString::transcode(name, tempStr, 9999);
+  XMLCh* tempStr = NULL;
+  tempStr = xercesc::XMLString::transcode(name);
   xercesc::DOMAttr* att = doc->createAttribute(tempStr);
+  xercesc::XMLString::release(&tempStr);
+
   std::ostringstream ostream;
   ostream.precision(15);
   ostream << value;
   G4String str = ostream.str();
-  xercesc::XMLString::transcode(str, tempStr, 9999);
+
+  tempStr = xercesc::XMLString::transcode(str);
   att->setValue(tempStr);
+  xercesc::XMLString::release(&tempStr);
+
   return att;
 }
 
 // --------------------------------------------------------------------
 xercesc::DOMElement* G4GDMLWrite::NewElement(const G4String& name)
 {
-  xercesc::XMLString::transcode(name, tempStr, 9999);
-  return doc->createElement(tempStr);
+  XMLCh* tempStr = NULL;
+  tempStr = xercesc::XMLString::transcode(name);
+  xercesc::DOMElement* elem = doc->createElement(tempStr);
+  xercesc::XMLString::release(&tempStr);
+
+  return elem;
 }
 
 // --------------------------------------------------------------------
@@ -212,13 +227,17 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
   VolumeMap().clear();  // The module map is global for all modules,
                         // so clear it only at once!
 
-  xercesc::XMLString::transcode("LS", tempStr, 9999);
+  XMLCh* tempStr = NULL;
+  tempStr = xercesc::XMLString::transcode("LS");
   xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
-  xercesc::XMLString::transcode("Range", tempStr, 9999);
+  xercesc::XMLString::release(&tempStr);
+  tempStr = xercesc::XMLString::transcode("Range");
   xercesc::DOMImplementation* impl =
     xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
-  xercesc::XMLString::transcode("gdml", tempStr, 9999);
+  xercesc::XMLString::release(&tempStr);
+  tempStr = xercesc::XMLString::transcode("gdml");
   doc                       = impl->createDocument(0, tempStr, 0);
+  xercesc::XMLString::release(&tempStr);
   xercesc::DOMElement* gdml = doc->getDocumentElement();
 
 #if XERCES_VERSION_MAJOR >= 3

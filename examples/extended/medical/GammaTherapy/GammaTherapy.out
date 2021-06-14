@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -580,39 +580,41 @@ Index : 5     used in the geometry : Yes
    14-th bin in Z is used for R distribution
 ### Run 0 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.940000s Real=2.997759s Sys=0.000000s
+  User=3.430000s Real=3.861801s Sys=0.000000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.31
-Average number of gamma                      19.58
-Average number of e+                         0.7636
-Average number of steps in the phantom       11.81
-Average number of e- steps in the target     18.04
-Average number of g  produced in the target  18.72
-Average number of e- produced in the target  20.87
-Average number of g produced in the phantom  0.4977
-Average number of e- produced in the phantom 6.027
-Total fGamma fluence in front of the phantom 8.121 MeV 
+Average number of e-                         32.97
+Average number of gamma                      19.61
+Average number of e+                         0.7678
+Average number of steps in the phantom       11.12
+Average number of e- steps in the target     18.02
+Average number of g  produced in the target  18.79
+Average number of e- produced in the target  20.96
+Average number of g produced in the phantom  0.4683
+Average number of e- produced in the phantom 5.764
+Total fGamma fluence in front of the phantom 8.051 MeV 
 ========================================================
 
 
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 303801085, 5678945
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={146852324890694936, 40598099182000989, 2278322493458335272, 680962189384522455, 777078279426398302, 1921341844737769214, 1372476925460755989, 459714681053495417, 913722882814603010, 1824076615549079118, 2030649607264386178, 115914777488158708, 1278469833054199101, 899449087536093962, 2118877310913732664, 1524346189280552991, 1749512754296806379} counter= 4sumtot= 1685621822082033077
+---------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.055 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.058 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

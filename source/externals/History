@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 May 2021 - G.Cosmo (externals-V10-06-07)
+- CLHEP: Fixed trivial compilation warnings on gcc-11 in Random headers.
+
 8 December 2020 - B.Morgan (externals-V10-06-06)
 - Force PTL to install its CMake configuration files within the directory
   where Geant4 installs its own.

@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 March 2021 - G.Cosmo (ascii-V10-06-03)
+- Fixed definition of generic polyhedra in G4tgbVolume::FindOrConstructG4Solid()
+  for POLYHEDRA tag. Based on findings in GitHub PR#24 by P.Heidary.
+
 8 October 2020 - G.Cosmo (ascii-V10-06-02)
 - Minor c++11 review. Code cleanup and formatting.
 

@@ -14,6 +14,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 April 2021  Vladimir Ivanchenko  radioactive_decay-V10-06-11
+---------------------------------------------------------------
+- G4RadioactiveDecayBase - fix #2350
+
+16 February 2021  Alberto Ribon  radioactive_decay-V10-06-10
+------------------------------------------------------------
+- G4RadioactiveDecayBase : set the weight of secondaries tracks to the
+  mother's weight value in the method G4RadioactiveDecayBase::DecayAnalog.
+  Thanks to Michael Dressel (Desy) for spotting this.
+  This bug, present since a long time, affects only simulations that
+  use Radioactive Decay in analogue mode with "external" biasing
+  (e.g. generic biasing, GPS generator with weights, etc.).
+  For completeness (but useless because this deprecated class will be
+  removed in Geant4 11), the corresponding fix was done also in the
+  class G4RadioactiveDecay in the method DecayIt.
+
 05 August 2020  Alberto Ribon  radioactive_decay-V10-06-09
 ----------------------------------------------------------
 - G4RadioactiveDecayBaseMessenger, G4RadioactiveDecaymessenger,

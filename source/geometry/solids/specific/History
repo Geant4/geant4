@@ -16,6 +16,18 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-April-2021 G.Cosmo              (geom-specific-V10-06-12)
+- Fixed use of conversion factor in G4UPolyhedra wrapper for "generic"
+  polyhedra constructs.
+
+19-April-2021 E.Tcherniaev
+- G4Polyhedra, G4Polycone: Fix calculation of endPhi for the case
+  of negative phiStart, it addresses also problem report #2362
+
+18-March-2021 E.Tcherniaev
+- Fix calculation of bounding box position in G4Voxelizer::BuildVoxelLimits(),
+  it addresses problem report #2301
+
 13-January-2021 G.Cosmo            (geom-specific-V10-06-11)
 - Reduce cases of bad speculation in G4PolyhedraSide::Inside() and
   G4PolyPhiFace::InsideEdges(), based on report in profiling analysis

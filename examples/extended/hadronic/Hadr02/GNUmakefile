@@ -8,7 +8,7 @@ G4EXLIB := true
 
 URQMDDIR= urqmd1_3
 HIJINGDIR= hijing1_383
-CRMCDIR= crmc_interface
+CRMCDIR= ${CRMCROOT}
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
@@ -23,8 +23,8 @@ all: urqmd hijing crmc lib bin
 urqmd:
 ifdef G4_USE_URQMD
 	(cd ${URQMDDIR} && \
-         cp GNUmakefile urqmd-1.3cr && cp *.f urqmd-1.3cr &&\
-	 cd urqmd-1.3cr && ${MAKE} TYPE="G4INTERFACE");
+	cp GNUmakefile urqmd-1.3cr && cp *.f urqmd-1.3cr &&\
+	cd urqmd-1.3cr && ${MAKE} TYPE="G4INTERFACE");
 	( mv ${URQMDDIR}/urqmd-1.3cr/obj_G4INTERFACE/*.o ${G4TMPDIR} );
 endif
 
@@ -32,7 +32,7 @@ ifdef G4_USE_URQMD
   CPPFLAGS += -DG4_USE_URQMD
 
   EXTRALIBS = -lgfortran -lgmp -lmpfr \
-              -L${CERNLIB}/lib -lmathlib -lkernlib -lpacklib 
+	-L${CERNLIB}/lib -lmathlib -lkernlib -lpacklib 
 endif
 
 hijing:
@@ -43,9 +43,8 @@ endif
 
 ifdef G4_USE_HIJING
   CPPFLAGS += -DG4_USE_HIJING
-  EXTRALIBS = -lgfortran 
-              -lgmp -lmpfr \
-	      -L${CERNROOT}/lib -lmathlib -lkernlib -lpacklib -lpawlib
+  EXTRALIBS = -lgfortran -lgmp -lmpfr \
+	-L${CERNROOT}/lib -lmathlib -lkernlib -lpacklib -lpawlib
 endif
 
 crmc:
@@ -57,7 +56,8 @@ endif
 ifdef G4_USE_CRMC
   CPPFLAGS += -DG4_USE_CRMC -I${CRMCDIR}/Build/src -I${CRMCDIR}/src
   EXTRALIBS = -lgfortran -lgmp -lmpfr \
-              -L${CRMCDIR}/Build/lib/ -lCrmc 
+	-L${CRMCDIR}/Build/lib/ -lCrmc
+###	-L${CRMCDIR}/Build/lib/ -lCrmc -lGeantCrmc 
 endif
 
 include $(G4INSTALL)/config/binmake.gmk

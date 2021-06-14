@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-01    (5-February-2021)
+ Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -200,4 +200,4 @@ Index : 2     used in the geometry : Yes
 ---- eRosita event counter: 9000
 ---- eRosita event counter: 10000
 --- Run 00 ends (Number of events = 10000).
-  User=30.760000s Real=31.940029s Sys=0.020000s
+  User=34.850000s Real=36.939362s Sys=0.020000s

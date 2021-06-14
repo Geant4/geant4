@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
+06 May 2021 Gabriele Cosmo (greps-V10-06-07)
+- Fixed shadowing compilation warning in G4Colours reported with gcc-11.
+
 01 December 2020 Evgueni Tcherniaev (greps-V10-06-06)
 - HepPolyhedron: revised HepPolyhedronHype,
   it addresses problem report #2295.

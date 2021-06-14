@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 April 21: V.Ivanchenko (emmuons-V10-06-04)
+- G4EnergyLossForExtrapolator, G4TablesForExtrapolator - added
+  more thread safety for initialisation of the next runs
+
+06 April 21: V.Ivanchenko
+- G4EnergyLossForExtrapolator, G4TablesForExtrapolator - allowed
+    several runs with extrapolator; fixed extrapolation for
+    hadrons
+
 29 October 20:  V.Ivanchenko (emmuons-V10-06-03)
 - G4ModifiedMephi - new angular generator for muon/hadron 
     bremsstrahlung

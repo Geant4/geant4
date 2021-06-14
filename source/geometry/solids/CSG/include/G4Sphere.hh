@@ -121,7 +121,7 @@ class G4Sphere : public G4CSGSolid
 
     // Methods for solid
 
-    inline G4double GetCubicVolume();
+    G4double GetCubicVolume();
     G4double GetSurfaceArea();
 
     void ComputeDimensions(      G4VPVParameterisation* p,

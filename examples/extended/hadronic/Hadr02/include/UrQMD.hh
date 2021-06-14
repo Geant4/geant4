@@ -35,50 +35,24 @@
 //   created from FTFP_BERT
 //
 // Modified:
+// -  18-May-2021 Alberto Ribon : Migrated to non-templated physics list.
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TUrQMD_h
-#define TUrQMD_h 1
+#ifndef UrQMD_h
+#define UrQMD_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TUrQMD: public T
-{
-public:
-  TUrQMD(G4int ver = 1);
-  virtual ~TUrQMD();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
 
-private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+class UrQMD : public G4VModularPhysicsList {
+  public:
+    UrQMD( G4int ver = 1 );
+    virtual ~UrQMD() = default;
+
+    UrQMD( const UrQMD & ) = delete;
+    UrQMD & operator=( const UrQMD & ) = delete;  
 };
-#ifdef G4_USE_URQMD
-#include "UrQMD.icc"
-#else
-template<class T>
-TUrQMD<T>::TUrQMD(G4int) : T()
-{
-  G4ExceptionDescription de;
-  de<<"Support for UrQMD not enabled"<<G4endl;
-  G4Exception(__FILE__,"UrQMD-01",FatalException,de,
-    "Code should be compiled with G4_USE_URQMD environment variable set.");
-}
 
-template<class T>
-TUrQMD<T>::~TUrQMD() { }
-template<class T>
-void TUrQMD<T>::SetCuts() { }
 #endif
-
-typedef TUrQMD<G4VModularPhysicsList> UrQMD;
-
-#endif //TUrQMD_h
-
-

@@ -248,18 +248,12 @@ void G4Polyhedra::Create( G4double phiStart,
   if ( (phiTotal <= 0) || (phiTotal > twopi*(1-DBL_EPSILON)) )
   {
     phiIsOpen = false;
-    endPhi = phiStart+twopi;
+    endPhi = startPhi + twopi;
   }
   else
   {
     phiIsOpen = true;
-
-    //
-    // Convert phi into our convention
-    //
-    endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
-      endPhi += twopi;
+    endPhi = startPhi + phiTotal;
   }
 
   //

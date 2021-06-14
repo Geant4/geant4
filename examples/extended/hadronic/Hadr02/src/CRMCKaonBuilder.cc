@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/CRMCPiKBuilder.cc
+/// \file hadronic/Hadr02/src/CRMCKaonBuilder.cc
 /// \brief Implementation of the CRMCKaonBuilder class
 //
 //
@@ -34,6 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
+// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -47,15 +48,16 @@
 #include "G4KaonMinusInelasticProcess.hh"
 #include "G4KaonZeroLInelasticProcess.hh"
 #include "G4KaonZeroSInelasticProcess.hh"
+#include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 
-CRMCKaonBuilder::CRMCKaonBuilder() {
+CRMCKaonBuilder::CRMCKaonBuilder( const G4int crmcModelId, const std::string & crmcModelName ) {
   fMin = 0.0*MeV;  // This value does not matter in practice because we are going
                    // to use this model only at high energies.
   fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
-  fModel = new G4CRMCModel;
+  fModel = new HadronicInelasticModelCRMC( crmcModelId, crmcModelName );
 }
 
 
@@ -93,4 +95,3 @@ void CRMCKaonBuilder::Build( G4KaonZeroSInelasticProcess* aP ) {
 }
 
 #endif //G4_USE_CRMC
-

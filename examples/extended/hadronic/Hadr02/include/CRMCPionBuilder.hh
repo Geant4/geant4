@@ -37,6 +37,7 @@
 // interactions with the wrapper hadronic model around CRMC.
 //
 // Modified:
+// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -46,12 +47,13 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VPionBuilder.hh"
-#include "G4CRMCModel.hh"
+
+class HadronicInelasticModelCRMC;
 
 
 class CRMCPionBuilder : public G4VPionBuilder {
   public:
-    CRMCPionBuilder();
+    CRMCPionBuilder( const G4int crmcModelId, const std::string & crmcModelName );
     virtual ~CRMCPionBuilder();
     virtual void Build( G4HadronElasticProcess* aP ) final override;
     virtual void Build( G4PionPlusInelasticProcess* aP ) final override;
@@ -60,10 +62,9 @@ class CRMCPionBuilder : public G4VPionBuilder {
     inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
     using G4VPionBuilder::Build;  // Prevent compiler warning
   private:
-    G4CRMCModel* fModel;
+    HadronicInelasticModelCRMC* fModel;
     G4double fMin;
     G4double fMax;
 };
 
 #endif
-

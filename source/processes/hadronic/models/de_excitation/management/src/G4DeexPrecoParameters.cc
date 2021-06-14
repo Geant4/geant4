@@ -68,7 +68,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoHighEnergy = 30*CLHEP::MeV;
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
-  fMaxLifeTime = 1*CLHEP::microsecond;
+  fMaxLifeTime = 1*CLHEP::nanosecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
@@ -330,7 +330,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << fInternalConversionID << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
   os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";
-  os << "=======================================================================" << "\n";
+  os << "=======================================================================" << G4endl;
   os.precision(prec);
   return os;
 }

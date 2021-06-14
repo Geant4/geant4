@@ -41,13 +41,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4Types.hh"
 
 #include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
-#include "Randomize.hh"
-
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
@@ -63,9 +62,6 @@ int main(int argc,char** argv) {
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
-
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager();

@@ -7,6 +7,14 @@
 
                       Category History file
                       ---------------------
+
+21.04.2021 - Gabriele Cosmo STCyclotron-V10-06-04
+- Fixed gui.mac macro to invoke init_parameters.mac.
+  Addressing GitHub PR#25.
+
+18.03.2021 - Gunter Folger STCyclotron-V10-06-03
+- Update README to recommend G4TENDL 1.3.2
+
 12.11.2020 - S. Guatelli STCyclotron-V10-06-02
 - Migration to G4RunFactory
 

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 06 May 2021 Gabriele Cosmo (particles-V10-06-11)
+- Fixed shadowing compilation warning in G4IonTable reported with gcc-11.
+
 - 16 November 2020 Gabriele Cosmo (particles-V10-06-10)
 - Fixed typos in printed-out text. Addressing problem report #2285.
 

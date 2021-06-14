@@ -1809,7 +1809,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       for (index=0; index < numberOfSecondaries; index++) {
         G4Track* secondary = new G4Track(products->PopProducts(),
                                          finalGlobalTime, currentPosition);
-
+        secondary->SetWeight(theTrack.GetWeight());
         secondary->SetCreatorModelIndex(theRadDecayMode);
         //Change for atomics relaxation
         if (theRadDecayMode == IT  && index>0){

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 May 2021 - G.Cosmo
+- Fixed trivial compilation warnings on gcc-11 in Random headers.
+
 11 November 2020 - G.Cosmo
 - Synchronised with CLHEP-2.4.4.0:
   * Vector (G.Amadio <amadio@cern.ch>)

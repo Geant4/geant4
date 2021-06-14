@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-February-2021  Robert Hatcher (phys-lists-V10-06-03)
+ - Update list of EM extension shorthands known to extensible factory to
+   match old factory
+
 24-November-2020  Alberto Ribon (phys-lists-V10-06-02)
  - LBE : added G4ShortLivedConstructor (to avoid crashes, e.g. when rho0
    is produced by the decay of eta_prime).

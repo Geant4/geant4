@@ -66,6 +66,9 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
+#include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
+
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4PionPlus.hh"
@@ -233,6 +236,9 @@ void G4EmBuilder::ConstructCharged(G4hMultipleScattering* hmsc,
 
 void G4EmBuilder::ConstructMinimalEmSet()
 {
+  // pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
   // gamma
   G4Gamma::Gamma();
   // leptons

@@ -123,9 +123,11 @@ G4Scintillation::~G4Scintillation()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-  return (aParticleType.GetPDGCharge() == 0.0 || aParticleType.IsShortLived())
-           ? false
-           : true;
+  if (aParticleType.GetParticleName() == "opticalphoton")
+    return false;
+  if (aParticleType.IsShortLived())
+    return false;
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
