@@ -842,7 +842,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   if (DecaySchemeFile.good()) {
     // Initialize variables used for reading in radioactive decay data
     G4bool floatMatch(false);
-    const G4int nMode = 12;
+    const G4int nMode = G4RadioactiveDecayModeSize;
     G4double modeTotalBR[nMode] = {0.0};
     G4double modeSumBR[nMode];
     for (G4int i = 0; i < nMode; i++) {
@@ -921,23 +921,23 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 }
                 break;
               case BetaMinus:
-                modeTotalBR[1] = decayModeTotal; break;
+                modeTotalBR[BetaMinus] = decayModeTotal; break;
               case BetaPlus:
-                modeTotalBR[2] = decayModeTotal; break;
+                modeTotalBR[BetaPlus] = decayModeTotal; break;
               case KshellEC:
-                modeTotalBR[3] = decayModeTotal; break;
+                modeTotalBR[KshellEC] = decayModeTotal; break;
               case LshellEC:
-                modeTotalBR[4] = decayModeTotal; break;
+                modeTotalBR[LshellEC] = decayModeTotal; break;
               case MshellEC:
-                modeTotalBR[5] = decayModeTotal; break;
+                modeTotalBR[MshellEC] = decayModeTotal; break;
               case NshellEC:
-                modeTotalBR[6] = decayModeTotal; break;
+                modeTotalBR[NshellEC] = decayModeTotal; break;
               case Alpha:
-                modeTotalBR[7] = decayModeTotal; break;
+                modeTotalBR[Alpha] = decayModeTotal; break;
               case Proton:
-                modeTotalBR[8] = decayModeTotal; break;
+                modeTotalBR[Proton] = decayModeTotal; break;
               case Neutron:
-                modeTotalBR[9] = decayModeTotal; break;
+                modeTotalBR[Neutron] = decayModeTotal; break;
               case BDProton:
                 break;
               case BDNeutron:
@@ -951,9 +951,9 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
               case Neutron2:
                 break;
               case SpFission:
-                modeTotalBR[10] = decayModeTotal;  break;
+                modeTotalBR[SpFission] = decayModeTotal;  break;
               case Triton:
-                modeTotalBR[11] = decayModeTotal;  break;
+                modeTotalBR[Triton] = decayModeTotal;  break;
               case RDM_ERROR:
 
               default:
@@ -985,7 +985,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              aBetaMinusChannel->DumpNuclearInfo();
                 aBetaMinusChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(aBetaMinusChannel);
-                modeSumBR[1] += b;
+                modeSumBR[BetaMinus] += b;
               }
               break;
 
@@ -997,7 +997,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              aBetaPlusChannel->DumpNuclearInfo();
                 aBetaPlusChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(aBetaPlusChannel);
-                modeSumBR[2] += b;
+                modeSumBR[BetaPlus] += b;
               }
               break;
 
@@ -1010,7 +1010,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 aKECChannel->SetHLThreshold(halflifethreshold);
                 aKECChannel->SetARM(applyARM);
                 theDecayTable->Insert(aKECChannel);
-                modeSumBR[3] += b;
+                modeSumBR[KshellEC] += b;
               }
               break;
 
@@ -1023,7 +1023,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 aLECChannel->SetHLThreshold(halflifethreshold);
                 aLECChannel->SetARM(applyARM);
                 theDecayTable->Insert(aLECChannel);
-                modeSumBR[4] += b;
+                modeSumBR[LshellEC] += b;
               }
               break;
 
@@ -1036,7 +1036,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 aMECChannel->SetHLThreshold(halflifethreshold);
                 aMECChannel->SetARM(applyARM);
                 theDecayTable->Insert(aMECChannel);
-                modeSumBR[5] += b;
+                modeSumBR[MshellEC] += b;
               }
               break;
 
@@ -1049,7 +1049,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 aNECChannel->SetHLThreshold(halflifethreshold);
                 aNECChannel->SetARM(applyARM);
                 theDecayTable->Insert(aNECChannel);
-                modeSumBR[6] += b;
+                modeSumBR[NshellEC] += b;
               }
               break;
 
@@ -1061,7 +1061,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              anAlphaChannel->DumpNuclearInfo();
                 anAlphaChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(anAlphaChannel);
-                modeSumBR[7] += b;
+                modeSumBR[Alpha] += b;
               }
               break;
 
@@ -1073,7 +1073,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              aProtonChannel->DumpNuclearInfo();
                 aProtonChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(aProtonChannel);
-                modeSumBR[8] += b;
+                modeSumBR[Proton] += b;
               }
               break;
 
@@ -1085,7 +1085,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              aNeutronChannel->DumpNuclearInfo();
                 aNeutronChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(aNeutronChannel);
-                modeSumBR[9] += b;
+                modeSumBR[Neutron] += b;
               }
               break;
 
@@ -1120,7 +1120,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                   new G4SFDecay(&theParentNucleus, b, c*MeV, a*MeV,
                                 daughterFloatLevel);
                 theDecayTable->Insert(aSpontFissChannel);
-                modeSumBR[10] += b;
+                modeSumBR[SpFission] += b;
               }
               break;
               case Triton:
@@ -1131,7 +1131,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                     //              anTritonChannel->DumpNuclearInfo();
                  aTritonChannel->SetHLThreshold(halflifethreshold);
                  theDecayTable->Insert(aTritonChannel);
-                 modeSumBR[11] += b;
+                 modeSumBR[Triton] += b;
                 }
                     break;
 
@@ -1293,7 +1293,7 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
   G4double TaoPlus;
   G4int nS = 0;        // Running index of first decay in a given generation
   G4int nT = nEntry;   // Total number of decays accumulated over entire history
-  const G4int nMode = 12;
+  const G4int nMode = G4RadioactiveDecayModeSize;
   G4double brs[nMode];
 
   //
@@ -1380,60 +1380,60 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
       for (i = 0; i < nMode; i++) {                 // loop over decay modes
         if (brs[i] > 0.) {
           switch (i) {
-          case 0:
+          case IT:
             // Decay mode is isomeric transition
-            theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0,
+            theITChannel = new G4ITDecay(aParentNucleus, brs[IT], 0.0, 0.0,
                                          photonEvaporation);
 
             summedDecayTable->Insert(theITChannel);
             break;
 
-          case 1:
+          case BetaMinus:
             // Decay mode is beta-
-            theBetaMinusChannel = new G4BetaMinusDecay(aParentNucleus, brs[1],
+            theBetaMinusChannel = new G4BetaMinusDecay(aParentNucleus, brs[BetaMinus],
                                                        0.*MeV, 0.*MeV,
                                                        noFloat, allowed);
             summedDecayTable->Insert(theBetaMinusChannel);
             break;
 
-          case 2:
+          case BetaPlus:
             // Decay mode is beta+ + EC.
-            theBetaPlusChannel = new G4BetaPlusDecay(aParentNucleus, brs[2],    // DHW: April 2015
+            theBetaPlusChannel = new G4BetaPlusDecay(aParentNucleus, brs[BetaPlus],    // DHW: April 2015
                                                      0.*MeV, 0.*MeV,
                                                      noFloat, allowed);
             summedDecayTable->Insert(theBetaPlusChannel);
             break;
 
-          case 7:
+          case Alpha:
             // Decay mode is alpha.
-            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[7], 0.*MeV,
+            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[Alpha], 0.*MeV,
                                                0.*MeV, noFloat);
             summedDecayTable->Insert(theAlphaChannel);
             break;
 
-	  case 8:
+	  case Proton:
             // Decay mode is proton.
-            theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[8], 0.*MeV,
+            theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[Proton], 0.*MeV,
                                                  0.*MeV, noFloat);
             summedDecayTable->Insert(theProtonChannel);
             break;
 
-	  case 9:
+	  case Neutron:
             // Decay mode is neutron.
-            theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[9], 0.*MeV,
+            theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[Neutron], 0.*MeV,
                                                    0.*MeV, noFloat);
             summedDecayTable->Insert(theNeutronChannel);
             break;
 
-          case 10:
+          case SpFission:
             // Decay mode is spontaneous fission
-            theFissionChannel = new G4SFDecay(aParentNucleus, brs[10], 0.*MeV,
+            theFissionChannel = new G4SFDecay(aParentNucleus, brs[SpFission], 0.*MeV,
                                               0.*MeV, noFloat);
             summedDecayTable->Insert(theFissionChannel);
             break;
-          case 11:
+          case Triton:
             // Decay mode is triton.
-            theTritonChannel = new G4TritonDecay(aParentNucleus, brs[11], 0.*MeV,
+            theTritonChannel = new G4TritonDecay(aParentNucleus, brs[Triton], 0.*MeV,
                                                 0.*MeV, noFloat);
             summedDecayTable->Insert(theTritonChannel);
             break;

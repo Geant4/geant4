@@ -412,7 +412,7 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
   G4double TaoPlus;
   G4int nS = 0;        // Running index of first decay in a given generation
   G4int nT = nEntry;   // Total number of decays accumulated over entire history
-  const G4int nMode = 12;
+  const G4int nMode = G4RadioactiveDecayModeSize;
   G4double brs[nMode];
   //
   theIonTable =
@@ -495,65 +495,65 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
 
       } // Combine decay channels (loop i)
 
-      brs[2] = brs[2]+brs[3]+brs[4]+brs[5]+brs[6];  // Combine beta+ and EC 
-      brs[3] = brs[4] = brs[5] = brs[6] = 0.0;
+      brs[BetaPlus] = brs[BetaPlus]+brs[KshellEC]+brs[LshellEC]+brs[MshellEC]+brs[NshellEC];  // Combine beta+ and EC 
+      brs[KshellEC] = brs[LshellEC] = brs[MshellEC] = brs[NshellEC] = 0.0;
       for (G4int i = 0; i < nMode; i++) {                 // loop over decay modes
         if (brs[i] > 0.) {
           switch (i) {
-          case 0:
+          case IT:
             // Decay mode is isomeric transition
-            theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0,
+            theITChannel = new G4ITDecay(aParentNucleus, brs[IT], 0.0, 0.0,
                                          photonEvaporation);
 
             summedDecayTable->Insert(theITChannel);
             break;
 
-          case 1:
+          case BetaMinus:
             // Decay mode is beta-
-            theBetaMinusChannel = new G4BetaMinusDecay(aParentNucleus, brs[1],
+            theBetaMinusChannel = new G4BetaMinusDecay(aParentNucleus, brs[BetaMinus],
                                                        0.*MeV, 0.*MeV,
                                                        noFloat, allowed);
             summedDecayTable->Insert(theBetaMinusChannel);
             break;
 
-          case 2:
+          case BetaPlus:
             // Decay mode is beta+ + EC.
-            theBetaPlusChannel = new G4BetaPlusDecay(aParentNucleus, brs[2],
+            theBetaPlusChannel = new G4BetaPlusDecay(aParentNucleus, brs[BetaPlus],
                                                      0.*MeV, 0.*MeV,
                                                      noFloat, allowed);
             summedDecayTable->Insert(theBetaPlusChannel);
             break;
 
-          case 7:
+          case Alpha:
             // Decay mode is alpha.
-            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[7], 0.*MeV,
+            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[Alpha], 0.*MeV,
                                                0.*MeV, noFloat);
             summedDecayTable->Insert(theAlphaChannel);
             break;
 
-          case 8:
+          case Proton:
             // Decay mode is proton.
-            theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[8], 0.*MeV,
+            theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[Proton], 0.*MeV,
                                                  0.*MeV, noFloat);
             summedDecayTable->Insert(theProtonChannel);
             break;
 
-          case 9:
+          case Neutron:
             // Decay mode is neutron.
-            theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[9], 0.*MeV,
+            theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[Neutron], 0.*MeV,
                                                    0.*MeV, noFloat);
             summedDecayTable->Insert(theNeutronChannel);
             break;
 
-          case 10:
+          case SpFission:
             // Decay mode is spontaneous fission
-            theFissionChannel = new G4SFDecay(aParentNucleus, brs[10], 0.*MeV,
+            theFissionChannel = new G4SFDecay(aParentNucleus, brs[SpFission], 0.*MeV,
                                               0.*MeV, noFloat);
             summedDecayTable->Insert(theFissionChannel);
             break;
-          case 11:
+          case Triton:
             // Decay mode is Triton.
-            theTritonChannel = new G4TritonDecay(aParentNucleus, brs[9], 0.*MeV,
+            theTritonChannel = new G4TritonDecay(aParentNucleus, brs[Triton], 0.*MeV,
                                                 0.*MeV, noFloat);
             summedDecayTable->Insert(theTritonChannel);
             break;
