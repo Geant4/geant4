@@ -34,7 +34,6 @@
 
 class DetectorConstruction;
 class PhysicsList;
-class G4VSteppingVerbose;
 
 /// Action initialization class.
 ///
@@ -42,14 +41,12 @@ class G4VSteppingVerbose;
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization(DetectorConstruction* detector, PhysicsList* physics);
-    virtual ~ActionInitialization();
+    ActionInitialization(DetectorConstruction*, PhysicsList* );
+   ~ActionInitialization() override;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
-    
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
-   
+    void BuildForMaster() const override;
+    void Build() const override;
+
   private:
     DetectorConstruction* fDetector;
     PhysicsList* fPhysics;    

@@ -45,26 +45,24 @@
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
 
-class G4ErrorPhysicsList: public G4VUserPhysicsList
+class G4ErrorPhysicsList : public G4VUserPhysicsList
 {
  public:  // with description
-
   G4ErrorPhysicsList();
   virtual ~G4ErrorPhysicsList();
-  
- protected:
 
+ protected:
   virtual void ConstructParticle();
-    // constructs gamma, e+/-, mu+/- and stable hadrons
+  // constructs gamma, e+/-, mu+/- and stable hadrons
 
   virtual void ConstructProcess();
-    // construct physical processes
+  // construct physical processes
 
-  virtual void SetCuts();  
-    // SetCutsWithDefault
+  virtual void SetCuts();
+  // SetCutsWithDefault
 
   virtual void ConstructEM();
-    // constructs electromagnetic processes
+  // constructs electromagnetic processes
 };
 
 #endif

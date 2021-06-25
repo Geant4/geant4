@@ -45,7 +45,7 @@ class G4AttValue;
 ///
 /// It records:
 /// - the cell ID
-/// - the energy deposit 
+/// - the energy deposit
 /// - the cell logical volume, its position and rotation
 
 class B5EmCalorimeterHit : public G4VHit
@@ -58,15 +58,15 @@ class B5EmCalorimeterHit : public G4VHit
 
     const B5EmCalorimeterHit& operator=(const B5EmCalorimeterHit &right);
     G4bool operator==(const B5EmCalorimeterHit &right) const;
-    
+
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);
-    
+
     virtual void Draw();
     virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
     virtual std::vector<G4AttValue>* CreateAttValues() const;
     virtual void Print();
-    
+
     void SetCellID(G4int z) { fCellID = z; }
     G4int GetCellID() const { return fCellID; }
 
@@ -82,7 +82,7 @@ class B5EmCalorimeterHit : public G4VHit
 
     void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
     const G4LogicalVolume* GetLogV() const { return fPLogV; }
-    
+
   private:
     G4int fCellID;
     G4double fEdep;

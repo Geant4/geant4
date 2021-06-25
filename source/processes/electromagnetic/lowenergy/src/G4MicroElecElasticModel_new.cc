@@ -148,7 +148,7 @@ G4MicroElecElasticModel_new::~G4MicroElecElasticModel_new()
   
   energyMap::iterator iterator_energy;
   for (iterator_energy = eIncidentEnergyStorage.begin(); iterator_energy != eIncidentEnergyStorage.end(); ++iterator_energy) {
-    std::vector<double>* eTdummyVec = iterator_energy->second;
+    std::vector<G4double>* eTdummyVec = iterator_energy->second;
     eTdummyVec->clear();
     delete eTdummyVec;
   }
@@ -235,15 +235,15 @@ void G4MicroElecElasticModel_new::Initialise(const G4ParticleDefinition* /*parti
       // Added clear for MT
       // Diff Cross Sections in cumulated mode      
       TriDimensionMap* eDiffCrossSectionData = new TriDimensionMap(); //Angles 
-      std::vector<double>* eTdummyVec = new std::vector<double>; //Incident energy vector
+      std::vector<G4double>* eTdummyVec = new std::vector<G4double>; //Incident energy vector
       VecMap* eProbVec = new VecMap; //Probabilities
       
       eTdummyVec->push_back(0.);
       
       while (!eDiffCrossSection.eof())
 	{
-	  double tDummy; //incident energy
-	  double eProb; //Proba
+	  G4double tDummy; //incident energy
+	  G4double eProb; //Proba
 	  eDiffCrossSection >> tDummy >> eProb;
 	  
 	  // SI : mandatory eVecm initialization	  
@@ -553,15 +553,15 @@ G4double G4MicroElecElasticModel_new::Theta
     if (iterator_angle != thetaDataStorage.end() && iterator_energy != eIncidentEnergyStorage.end() && iterator_proba != eProbaStorage.end())
       {
 	TriDimensionMap* eDiffCrossSectionData = iterator_angle->second; //Theta points
-	std::vector<double>* eTdummyVec = iterator_energy->second;
+	std::vector<G4double>* eTdummyVec = iterator_energy->second;
 	VecMap* eVecm = iterator_proba->second;
 	
-	std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec->begin(), eTdummyVec->end(), k);
-	std::vector<double>::iterator t1 = t2 - 1;	
-	std::vector<double>::iterator e12 = std::upper_bound((*eVecm)[(*t1)].begin(), (*eVecm)[(*t1)].end(), integrDiff);
-	std::vector<double>::iterator e11 = e12 - 1;	
-	std::vector<double>::iterator e22 = std::upper_bound((*eVecm)[(*t2)].begin(), (*eVecm)[(*t2)].end(), integrDiff);
-	std::vector<double>::iterator e21 = e22 - 1;
+	auto t2 = std::upper_bound(eTdummyVec->begin(), eTdummyVec->end(), k);
+	auto t1 = t2 - 1;	
+        auto e12 = std::upper_bound((*eVecm)[(*t1)].begin(), (*eVecm)[(*t1)].end(), integrDiff);
+	auto e11 = e12 - 1;	
+	auto e22 = std::upper_bound((*eVecm)[(*t2)].begin(), (*eVecm)[(*t2)].end(), integrDiff);
+	auto e21 = e22 - 1;
 	
 	valueT1 = *t1;
 	valueT2 = *t2;

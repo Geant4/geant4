@@ -1124,11 +1124,10 @@ G4VSolid* G4Trap::Clone() const
 
 std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
 {
-  G4double phi    = std::atan2(fTthetaSphi,fTthetaCphi);
-  G4double theta  = std::atan(std::sqrt(fTthetaCphi*fTthetaCphi
-                                       +fTthetaSphi*fTthetaSphi));
-  G4double alpha1 = std::atan(fTalpha1);
-  G4double alpha2 = std::atan(fTalpha2);
+  G4double phi    = GetPhi();   
+  G4double theta  = GetTheta();
+  G4double alpha1 = GetAlpha1();
+  G4double alpha2 = GetAlpha2();
 
   G4int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
@@ -1143,10 +1142,10 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
      << "    half length Y, face +Dz: " << fDy2/mm << " mm\n"
      << "    half length X, face +Dz, side -Dy2: " << fDx3/mm << " mm\n"
      << "    half length X, face +Dz, side +Dy2: " << fDx4/mm << " mm\n"
-     << "    theta: " << theta/degree << "degrees\n"
-     << "    phi: " << phi/degree << "degrees\n"
-     << "    alpha, face -Dz: " << alpha1/degree << "degrees\n"
-     << "    alpha, face +Dz: " << alpha2/degree << "degrees\n"
+     << "    theta: " << theta/degree << " degrees\n"
+     << "    phi:   " << phi/degree << " degrees\n"
+     << "    alpha, face -Dz: " << alpha1/degree << " degrees\n"
+     << "    alpha, face +Dz: " << alpha2/degree << " degrees\n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 

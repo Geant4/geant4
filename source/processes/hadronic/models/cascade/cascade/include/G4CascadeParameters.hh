@@ -135,8 +135,6 @@ private:	// Singleton -- no public constructor
 
   G4CascadeParamMessenger* messenger;		// For access via UI commands
   friend class G4CascadeParamMessenger;
-
-  static G4CascadeParameters* fpInstance;
 };
 
 #endif	/* G4CascadeParameters_hh */

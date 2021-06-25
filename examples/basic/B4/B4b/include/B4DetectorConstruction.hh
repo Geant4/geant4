@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4DetectorConstruction.hh
 /// \brief Definition of the B4DetectorConstruction class
 
@@ -47,7 +47,7 @@ class G4GlobalMagFieldMessenger;
 /// - the number of layers,
 /// - the transverse size of the calorimeter (the input face is a square).
 ///
-/// In addition a transverse uniform magnetic field is defined 
+/// In addition a transverse uniform magnetic field is defined
 /// via G4GlobalMagFieldMessenger class.
 
 class B4DetectorConstruction : public G4VUserDetectorConstruction
@@ -64,34 +64,34 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
     //
     const G4VPhysicalVolume* GetAbsorberPV() const;
     const G4VPhysicalVolume* GetGapPV() const;
-     
+
   private:
     // methods
     //
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
-  
+
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
                                       // magnetic field messenger
-     
+
     G4VPhysicalVolume*   fAbsorberPV; // the absorber physical volume
     G4VPhysicalVolume*   fGapPV;      // the gap physical volume
-    
+
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };
 
 // inline functions
 
-inline const G4VPhysicalVolume* B4DetectorConstruction::GetAbsorberPV() const { 
-  return fAbsorberPV; 
+inline const G4VPhysicalVolume* B4DetectorConstruction::GetAbsorberPV() const {
+  return fAbsorberPV;
 }
 
-inline const G4VPhysicalVolume* B4DetectorConstruction::GetGapPV() const  { 
-  return fGapPV; 
+inline const G4VPhysicalVolume* B4DetectorConstruction::GetGapPV() const  {
+  return fGapPV;
 }
-     
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -1050,6 +1050,19 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     << ' ' << v.fDisplayLightFrontGreen << ' ' << v.fDisplayLightFrontBlue;
   }
 
+  os << "\n  Special Mesh Rendering: ";
+  if (v.fSpecialMeshRendering) {
+    os << "on: ";
+    if (v.fSpecialMeshVolumes.empty()) {
+      os << "all meshes";
+    } else {
+      os << "selected meshes";
+      for (const auto& vol: v.fSpecialMeshVolumes) {
+	os << "\n    " << vol.GetName() << ':' << vol.GetCopyNo();
+      }
+    }
+  } else os << "off";
+
   return os;
 }
 
@@ -1094,7 +1107,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     ||
       (fPicking              != v.fPicking)              ||
-      (fRotationStyle        != v.fRotationStyle)
+      (fRotationStyle        != v.fRotationStyle)        ||
+      (fSpecialMeshRendering != v.fSpecialMeshRendering)
       )
     return true;
 
@@ -1152,6 +1166,11 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
         fDisplayLightFrontBlue  != v.fDisplayLightFrontBlue) {
       return true;
     }
+  }
+
+  if (fSpecialMeshRendering) {
+    if (fSpecialMeshVolumes != v.fSpecialMeshVolumes)
+      return true;;
   }
 
   return false;

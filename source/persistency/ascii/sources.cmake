@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4geomtext
-# Package: Geant4.src.G4persistency.G4geomtext
-#------------------------------------------------------------------------------
+# - G4geomtext module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4geomtext
-  HEADERS
+geant4_add_module(G4geomtext
+  PUBLIC_HEADERS
     G4tgbDetectorBuilder.hh
     G4tgbDetectorConstruction.hh
     G4tgbElement.hh
@@ -102,27 +97,19 @@ geant4_define_module(NAME G4geomtext
     G4tgrVolume.cc
     G4tgrVolumeAssembly.cc
     G4tgrVolumeDivision.cc
-    G4tgrVolumeMgr.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4geomBoolean
-    G4geomdivision
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4intercoms
-    G4materials
-    G4partman
-    G4specsolids
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4particles
-)
+    G4tgrVolumeMgr.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4geomtext
+  PUBLIC
+    G4geometrymng
+    G4materials
+    G4intercoms
+    G4globman
+    G4hepgeometry
+  PRIVATE
+    G4volumes
+    G4geomBoolean
+    G4csg
+    G4specsolids
+    G4geomdivision
+    G4graphics_reps)

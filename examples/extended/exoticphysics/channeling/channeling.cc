@@ -42,7 +42,7 @@
 
 #include "FTFP_BERT.hh"
 
-#include "G4EmStandardPhysics_option4_channeling.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4ChannelingPhysics.hh"
 #include "G4GenericBiasingPhysics.hh"
 
@@ -69,8 +69,7 @@ int main(int argc,char** argv)
     G4VModularPhysicsList* physlist= new FTFP_BERT();
     G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
     physlist->RegisterPhysics(new G4ChannelingPhysics());
-    physlist->ReplacePhysics(new G4EmStandardPhysics_option4_channeling());
-    //physlist->ReplacePhysics(new G4EmStandardPhysicsSS_channeling());
+    physlist->ReplacePhysics(new G4EmStandardPhysics_option4());
     biasingPhysics->PhysicsBiasAllCharged();
     physlist->RegisterPhysics(biasingPhysics);
     runManager->SetUserInitialization(physlist);

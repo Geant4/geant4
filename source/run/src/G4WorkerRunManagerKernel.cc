@@ -23,10 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WorkerRunManagerKernel implementation
+//
+// Authors: M.Asai, A.Dotti (SLAC), 2013
+// --------------------------------------------------------------------
 
 #include "G4WorkerRunManagerKernel.hh"
 #include "G4ParticleTable.hh"
 
+// --------------------------------------------------------------------
 G4WorkerRunManagerKernel::G4WorkerRunManagerKernel()
   : G4RunManagerKernel(workerRMK)
 {
@@ -43,18 +48,20 @@ G4WorkerRunManagerKernel::G4WorkerRunManagerKernel()
 #endif
 }
 
+// --------------------------------------------------------------------
 G4WorkerRunManagerKernel::~G4WorkerRunManagerKernel()
 {
   G4ParticleTable::GetParticleTable()->DestroyWorkerG4ParticleTable();
 }
 
+// --------------------------------------------------------------------
 void G4WorkerRunManagerKernel::SetupShadowProcess() const
 {
   // Master thread has created processes and setup a pointer
   // to the master process, get it and copy it in this instance
+
   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator =
-    theParticleTable->GetIterator();
+  auto theParticleIterator = theParticleTable->GetIterator();
   theParticleIterator->reset();
   // loop on particles and get process manager from there list of processes
   while((*theParticleIterator)())
@@ -62,16 +69,16 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
     G4ParticleDefinition* pd = theParticleIterator->value();
     G4ProcessManager* pm     = pd->GetProcessManager();
     G4ProcessManager* pmM    = pd->GetMasterProcessManager();
-    if(!pm || !pmM)
+    if(pm == nullptr || pmM == nullptr)
     {
       G4ExceptionDescription msg;
       msg
         << "Process manager or process manager shadow to master are not set.\n";
       msg << "Particle : " << pd->GetParticleName() << " (" << pd
-          << "), proc-manager: " << pm;
+        << "), proc-manager: " << pm;
       msg << " proc-manager-shadow: " << pmM;
-      G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()", "Run0116",
-                  FatalException, msg);
+      G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()",
+                  "Run0116", FatalException, msg);
       return;
     }
     G4ProcessVector& procs  = *(pm->GetProcessList());

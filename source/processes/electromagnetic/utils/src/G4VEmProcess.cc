@@ -72,74 +72,34 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
-  G4VDiscreteProcess(name, type),
-  secondaryParticle(nullptr),
-  buildLambdaTable(true),
-  numberOfModels(0),
-  theLambdaTable(nullptr),
-  theLambdaTablePrim(nullptr),
-  integral(false),
-  applyCuts(false),
-  startFromNull(false),
-  splineFlag(true),
-  isIon(false),
-  currentCouple(nullptr),
-  isTheMaster(true),
-  masterProc(nullptr),
-  theData(nullptr),
-  currentModel(nullptr),
-  particle(nullptr),
-  currentParticle(nullptr)
+  G4VDiscreteProcess(name, type)
 {
   theParameters = G4EmParameters::Instance();
   SetVerboseLevel(1);
 
-  // Size of tables assuming spline
+  // Size of tables
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*TeV;
-  nLambdaBins  = 84;
-  minKinEnergyPrim = DBL_MAX;
-  actBinning = actSpline = actMinKinEnergy = actMaxKinEnergy = false;
 
   // default lambda factor
-  lambdaFactor    = 0.8;
   logLambdaFactor = G4Log(lambdaFactor);
-
-  // default limit on polar angle
-  biasFactor = fFactor = 1.0;
 
   // particle types
   theGamma     = G4Gamma::Gamma();
   theElectron  = G4Electron::Electron();
   thePositron  = G4Positron::Positron();
 
-  theCuts = theCutsGamma = theCutsElectron = theCutsPositron = nullptr;
-
   pParticleChange = &fParticleChange;
   fParticleChange.SetSecondaryWeightByProcess(true);
   secParticles.reserve(5);
 
-  baseMaterial = currentMaterial = nullptr;
-
-  preStepLambda = preStepKinEnergy = 0.0;
-  preStepLogKinEnergy = LOG_EKIN_MIN;
-  mfpKinEnergy  = DBL_MAX;
-  massRatio     = 1.0;
-
-  currentCoupleIndex = basedCoupleIndex = 0;
-
   modelManager = new G4EmModelManager();
-  biasManager  = nullptr;
-  biasFlag     = false; 
-  weightFlag   = false;
   lManager = G4LossTableManager::Instance();
   lManager->Register(this);
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
 
-  secID = fluoID = augerID = biasID = -1;
-  mainSecondaries = 100;
   if("phot" == GetProcessName() || "compt" == GetProcessName()
       || "e-_G4DNAIonisation" == GetProcessName()
       || "hydrogen_G4DNAIonisation" == GetProcessName()
@@ -165,7 +125,7 @@ G4VEmProcess::~G4VEmProcess()
   */
   if(isTheMaster) {
     delete theData;
-    theData = nullptr;
+    delete theEnergyOfCrossSectionMax;
   }
   delete modelManager;
   delete biasManager;
@@ -190,63 +150,24 @@ G4double G4VEmProcess::MinPrimaryEnergy(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, 
+void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* ptr, 
                               const G4Region* region)
 {
+  if(nullptr == ptr) { return; }
   G4VEmFluctuationModel* fm = nullptr;
-  modelManager->AddEmModel(order, p, fm, region);
-  if(p) { p->SetParticleChange(pParticleChange); }
+  modelManager->AddEmModel(order, ptr, fm, region);
+  ptr->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEmProcess::SetEmModel(G4VEmModel* ptr, G4int) 
 {
-  for(auto & em : emModels) { if(em == ptr) { return; } }
-  emModels.push_back(ptr);  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VEmModel* G4VEmProcess::EmModel(size_t index) const
-{
-  return (index < emModels.size()) ? emModels[index] : nullptr; 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::UpdateEmModel(const G4String& nam, 
-                                 G4double emin, G4double emax)
-{
-  modelManager->UpdateEmModel(nam, emin, emax);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4int G4VEmProcess::GetNumberOfModels() const
-{
-  return modelManager->NumberOfModels();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4int G4VEmProcess::GetNumberOfRegionModels(size_t couple_index) const
-{
-  return modelManager->NumberOfRegionModels(couple_index);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VEmModel* G4VEmProcess::GetRegionModel(G4int idx, size_t couple_index) const
-{
-  return modelManager->GetRegionModel(idx, couple_index);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver) const
-{
-  return modelManager->GetModel(idx, ver);
+  if(nullptr == ptr) { return; }
+  if(!emModels.empty()) {
+    for(auto & em : emModels) { if(em == ptr) { return; } }
+  }
+  emModels.push_back(ptr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -254,8 +175,7 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver) const
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   isTheMaster = lManager->IsMaster();
-
-  if(!particle) { SetParticle(&part); }
+  if(nullptr == particle) { SetParticle(&part); }
 
   if(part.GetParticleType() == "nucleus" && 
      part.GetParticleSubType() == "generic") {
@@ -281,28 +201,29 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   if(particle != &part) { return; }
 
-  G4LossTableBuilder* bld = lManager->GetTableBuilder();
-
   lManager->PreparePhysicsTable(&part, this, isTheMaster);
 
   Clear();
   InitialiseProcess(particle);
 
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t n = theCoupleTable->GetTableSize();
-
-  theEnergyOfCrossSectionMax.resize(n, 0.0);
-  theCrossSectionMax.resize(n, DBL_MAX);
 
   // initialisation of the process  
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
   if(!actMaxKinEnergy) { maxKinEnergy = theParameters->MaxKinEnergy(); }
-  if(!actSpline) { splineFlag = theParameters->Spline(); }
 
   if(isTheMaster) { 
     SetVerboseLevel(theParameters->Verbose());
-    if(!theData) { theData = new G4EmDataHandler(2); }
+    if(nullptr == theData) { theData = new G4EmDataHandler(2); }
+    if(fEmOnePeak == fXSType) { 
+      if(nullptr == theEnergyOfCrossSectionMax) {
+	theEnergyOfCrossSectionMax = new std::vector<G4double>;
+      }
+      size_t n = theCoupleTable->GetTableSize();
+      theEnergyOfCrossSectionMax->resize(n, DBL_MAX);
+    }
   } else {  
     SetVerboseLevel(theParameters->WorkerVerbose()); 
   }
@@ -315,17 +236,22 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   numberOfModels = modelManager->NumberOfModels();
   for(G4int i=0; i<numberOfModels; ++i) {
     G4VEmModel* mod = modelManager->GetModel(i);
-    if(0 == i) { currentModel = mod; }
+    if(nullptr == mod) { continue; }
+    if(nullptr == currentModel) { currentModel = mod; }
     mod->SetPolarAngleLimit(theParameters->MscThetaLimit());
     mod->SetMasterThread(isTheMaster);
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
     }
+    SetEmModel(mod);
   }
 
-  if(lManager->AtomDeexcitation()) { modelManager->SetFluoFlag(true); }
-  theCuts = modelManager->Initialise(particle,secondaryParticle,
-                                     2.,verboseLevel);
+  if(nullptr != lManager->AtomDeexcitation()) { 
+    modelManager->SetFluoFlag(true); 
+  }
+  fLambdaEnergy = 0.0;
+
+  theCuts = modelManager->Initialise(particle,secondaryParticle,1.0,verboseLevel);
   theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
   theCutsElectron = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
   theCutsPositron = theCoupleTable->GetEnergyCutsVector(idxG4PositronCut);
@@ -348,7 +274,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
   // defined ID of secondary particles
   G4String nam1 = GetProcessName();
-  secID   = G4PhysicsModelCatalog::Register(nam1); 
+  secID = G4PhysicsModelCatalog::Register(nam1); 
   if(100 > mainSecondaries) {
     G4String nam2 = nam1 + "_fluo" ;
     G4String nam3 = nam1 + "_auger";
@@ -363,7 +289,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(!masterProc) {
+  if(nullptr == masterProc) {
     if(isTheMaster) { masterProc = this; }
     else { masterProc = static_cast<const G4VEmProcess*>(GetMasterProcess());}
   }
@@ -385,12 +311,10 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(!isTheMaster) {
       theLambdaTable = masterProc->LambdaTable();
       theLambdaTablePrim = masterProc->LambdaTablePrim();
-
-      if(theLambdaTable) { FindLambdaMax(); }
+      theEnergyOfCrossSectionMax = masterProc->EnergyOfCrossSectionMax();
 
       // local initialisation of models
       G4bool printing = true;
-      numberOfModels = modelManager->NumberOfModels();
       for(G4int i=0; i<numberOfModels; ++i) {
         G4VEmModel* mod = GetModelByIndex(i, printing);
         G4VEmModel* mod0= masterProc->GetModelByIndex(i, printing);
@@ -484,28 +408,25 @@ void G4VEmProcess::BuildLambdaTable()
         if(emax <= emin) { emax = 2*emin; }
         G4int bin = G4lrint(nbin*G4Log(emax/emin)/scale);
         if(bin < 3) { bin = 3; }
-        aVector = new G4PhysicsLogVector(emin, emax, bin);
-        aVector->SetSpline(splineFlag);
+        aVector = new G4PhysicsLogVector(emin, emax, bin, splineFlag);
         modelManager->FillLambdaVector(aVector, couple, startNull);
         if(splineFlag) { aVector->FillSecondDerivatives(); }
         G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
       }
-      // build high energy table 
+      // build high energy table
       if(minKinEnergyPrim < maxKinEnergy) { 
         delete (*theLambdaTablePrim)[i];
 
-        // start not from zero
+        // start not from zero and always use spline
         if(!bVectorPrim) {
           G4int bin = G4lrint(nbin*G4Log(maxKinEnergy/minKinEnergyPrim)/scale);
           if(bin < 3) { bin = 3; }
           aVectorPrim = 
-            new G4PhysicsLogVector(minKinEnergyPrim, maxKinEnergy, bin);
+            new G4PhysicsLogVector(minKinEnergyPrim, maxKinEnergy, bin, true);
           bVectorPrim = aVectorPrim;
         } else {
           aVectorPrim = new G4PhysicsLogVector(*bVectorPrim);
         }
-        // always use spline
-        aVectorPrim->SetSpline(splineFlag);
         modelManager->FillLambdaVector(aVectorPrim, couple, false, 
                                        fIsCrossSectionPrim);
         aVectorPrim->FillSecondDerivatives();
@@ -515,7 +436,7 @@ void G4VEmProcess::BuildLambdaTable()
     }
   }
 
-  if(buildLambdaTable) { FindLambdaMax(); }
+  if(buildLambdaTable && fXSType == fEmOnePeak) { FindLambdaMax(); }
 
   if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
@@ -534,9 +455,8 @@ void G4VEmProcess::StreamInfo(std::ostream& out,
   out << G4endl << indent << GetProcessName() << ": ";
   if (!rst) {
     out << " for " << part.GetParticleName();
-    if (integral) { out << ","; }
   }
-  if(integral)  { out << " integral:1 "; }
+  if(fXSType != fEmNoIntegral)  { out << " XStype:" << fXSType; }
   if(applyCuts) { out << " applyCuts:1 "; }
   out << " SubType=" << GetProcessSubType();
   if(biasFactor != 1.0) { out << "  BiasingFactor= " << biasFactor; }
@@ -629,11 +549,14 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   DefineMaterial(track.GetMaterialCutsCouple());
-  preStepKinEnergy      = track.GetKineticEnergy();
-  preStepLogKinEnergy   = track.GetDynamicParticle()->GetLogKineticEnergy();
-  G4double scaledEnergy = preStepKinEnergy*massRatio;
+  preStepKinEnergy    = track.GetKineticEnergy();
+  preStepLogKinEnergy = track.GetDynamicParticle()->GetLogKineticEnergy();
+  const G4double scaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(scaledEnergy, currentCoupleIndex);
-
+  /*
+  G4cout << "PostStepGetPhysicalInteractionLength: idx= " << currentCoupleIndex
+	 << "  couple: " << currentCouple << G4endl;
+  */
   if(!currentModel->IsActive(scaledEnergy)) { 
     theNumberOfInteractionLengthLeft = -1.0;
     currentInteractionLength = DBL_MAX;
@@ -651,27 +574,20 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   }
 
   // compute mean free path
-  if(preStepKinEnergy < mfpKinEnergy) {
-    if (integral) {
-      ComputeIntegralLambda(preStepKinEnergy, preStepLogKinEnergy);
-    } else {
-      preStepLambda = GetCurrentLambda(preStepKinEnergy, preStepLogKinEnergy);
-    }
+  ComputeIntegralLambda(preStepKinEnergy, preStepLogKinEnergy);
 
-    // zero cross section
-    if(preStepLambda <= 0.0) { 
-      theNumberOfInteractionLengthLeft = -1.0;
-      currentInteractionLength = DBL_MAX;
-    }
-  }
+  // zero cross section
+  if(preStepLambda <= 0.0) { 
+    theNumberOfInteractionLengthLeft = -1.0;
+    currentInteractionLength = DBL_MAX;
 
-  // non-zero cross section
-  if(preStepLambda > 0.0) { 
+  } else {
 
+    // non-zero cross section
     if (theNumberOfInteractionLengthLeft < 0.0) {
 
       // beggining of tracking (or just after DoIt of this process)
-      theNumberOfInteractionLengthLeft =  -G4Log( G4UniformRand() );
+      theNumberOfInteractionLengthLeft = -G4Log( G4UniformRand() );
       theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 
     } else if(currentInteractionLength < DBL_MAX) {
@@ -693,28 +609,37 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 
 void G4VEmProcess::ComputeIntegralLambda(G4double e, G4double loge)
 {
-  // condition to skip recomputation of cross section
-  const G4double epeak = theEnergyOfCrossSectionMax[currentCoupleIndex];
-  if(e <= epeak && e/lambdaFactor >= mfpKinEnergy) { return; }
-
-  // recomputation is needed 
-  if (e <= epeak) {
+  if(fXSType == fEmNoIntegral) {
     preStepLambda = GetCurrentLambda(e, loge);
-    mfpKinEnergy  = e;
-  } else {
-    const G4double e1 = e*lambdaFactor;
-    if (e1 > epeak) {
-      preStepLambda = GetCurrentLambda(e, loge);
-      mfpKinEnergy  = e;
-      const G4double preStepLambda1 = GetCurrentLambda(e1,loge+logLambdaFactor);
-      if (preStepLambda1 > preStepLambda) {
-        mfpKinEnergy  = e1;
-        preStepLambda = preStepLambda1;
-      }
-    } else {
-      preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
-      mfpKinEnergy  = epeak;
+
+  } else if(fXSType == fEmIncreasing) {
+    if(e/lambdaFactor < mfpKinEnergy) {
+      mfpKinEnergy = e;
+      preStepLambda = GetCurrentLambda(e, loge); 
     }
+
+  } else if(fXSType == fEmDecreasing) {
+    if(e < mfpKinEnergy) { 
+      const G4double e1 = e*lambdaFactor;
+      preStepLambda = GetCurrentLambda(e1); 
+      mfpKinEnergy = e1;
+    }
+
+  } else if(fXSType == fEmOnePeak) {
+    const G4double epeak = (*theEnergyOfCrossSectionMax)[currentCoupleIndex];
+    if(e <= epeak) {
+      if(e/lambdaFactor < mfpKinEnergy) {
+	mfpKinEnergy = e;
+	preStepLambda = GetCurrentLambda(e, loge); 
+      }
+    } else if(e < mfpKinEnergy) { 
+      const G4double e1 = std::max(epeak, e*lambdaFactor);
+      preStepLambda = GetCurrentLambda(e1); 
+      mfpKinEnergy = e1;
+    }
+
+  } else {
+    preStepLambda = GetCurrentLambda(e, loge); 
   }
 }
 
@@ -725,7 +650,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 {
   // In all cases clear number of interaction lengths
   theNumberOfInteractionLengthLeft = -1.0;
-  mfpKinEnergy = DBL_MAX; 
+  mfpKinEnergy = DBL_MAX;
 
   fParticleChange.InitializeForPostStep(track);
 
@@ -734,7 +659,6 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if (track.GetTrackStatus() == fStopButAlive) { return &fParticleChange; }
 
   const G4double finalT    = track.GetKineticEnergy();
-  const G4double logFinalT = track.GetDynamicParticle()->GetLogKineticEnergy();
 
   // forced process - should happen only once per track
   if(biasFlag) {
@@ -743,27 +667,33 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     }
   }
 
+  // check active and select model
+  const G4double scaledEnergy = finalT*massRatio;
+  SelectModel(scaledEnergy, currentCoupleIndex);
+  if(!currentModel->IsActive(scaledEnergy)) { return &fParticleChange; }
+
   // Integral approach
-  if (integral) {
-    G4double lx = GetLambda(finalT, currentCouple, logFinalT);
-    if(preStepLambda<lx && 1 < verboseLevel) {
+  if (fXSType != fEmNoIntegral) {
+    const G4double logFinalT = track.GetDynamicParticle()->GetLogKineticEnergy();
+    const G4double lx = std::max(GetCurrentLambda(finalT, logFinalT), 0.0);
+    const G4double lg = preStepLambda;
+    if(finalT < mfpKinEnergy) {
+      mfpKinEnergy = finalT;
+      preStepLambda = lx;
+    }
+#ifdef G4VERBOSE
+    if(lg < lx && 1 < verboseLevel) {
       G4cout << "WARNING: for " << currentParticle->GetParticleName() 
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
-             << " preLambda= " << preStepLambda << " < " 
-             << lx << " (postLambda) "
+             << " preLambda= " << lg << " < " << lx << " (postLambda) "
              << G4endl;  
     }
-
-    if(preStepLambda*G4UniformRand() > lx) {
-      ClearNumberOfInteractionLengthLeft();
+#endif
+    if(lg*G4UniformRand() >= lx) {
       return &fParticleChange;
     }
   }
-
-  G4double scaledEnergy = finalT*massRatio;
-  SelectModel(scaledEnergy, currentCoupleIndex);
-  if(!currentModel->IsActive(scaledEnergy)) { return &fParticleChange; }
 
   // define new weight for primary and secondaries
   G4double weight = fParticleChange.GetParentWeight();
@@ -772,7 +702,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     fParticleChange.ProposeWeight(weight);
   }
   
-
+#ifdef G4VERBOSE
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PostStepDoIt: Sample secondary; E= "
            << finalT/MeV
@@ -780,7 +710,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
            << ", " <<  currentModel->HighEnergyLimit() << ")"
            << G4endl;
   }
-
+#endif
 
   // sample secondaries
   secParticles.clear();
@@ -815,8 +745,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     G4double time = track.GetGlobalTime();
      
     for (G4int i=0; i<num; ++i) {
-      if (secParticles[i]) {
-        G4DynamicParticle* dp = secParticles[i];
+      G4DynamicParticle* dp = secParticles[i];
+      if (nullptr != dp) {
         const G4ParticleDefinition* p = dp->GetParticleDefinition();
         G4double e = dp->GetKineticEnergy();
         G4bool good = true;
@@ -952,7 +882,8 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
     const G4String& filename = 
       GetPhysicsTableFileName(part,directory,"Lambda",ascii);
     yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,
-                                                     filename,ascii);
+                                                     filename,ascii,
+                                                     splineFlag);
     if ( yes ) {
       if (0 < verboseLevel) {
         G4cout << "Lambda table for " << particleName 
@@ -960,14 +891,12 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
                << filename << ">"
                << G4endl;
       }
-      if(theParameters->Spline()) {
-        size_t n = theLambdaTable->length();
-        for(size_t i=0; i<n; ++i) {
-          if((* theLambdaTable)[i]) {
-            (* theLambdaTable)[i]->SetSpline(true);
-          }
-        }
+      if(splineFlag) {
+	for(auto & v : *theLambdaTable) {
+	  if(nullptr != v) { v->FillSecondDerivatives(); }
+	}
       }
+
     } else {
       if (1 < verboseLevel) {
         G4cout << "Lambda table for " << particleName << " in file <"
@@ -980,7 +909,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
     const G4String& filename = 
       GetPhysicsTableFileName(part,directory,"LambdaPrim",ascii);
     yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTablePrim,
-                                                     filename,ascii);
+                                                     filename,ascii,true);
     if ( yes ) {
       if (0 < verboseLevel) {
         G4cout << "Lambda table prim for " << particleName 
@@ -988,13 +917,8 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
                << filename << ">"
                << G4endl;
       }
-      if(theParameters->Spline()) {
-        size_t n = theLambdaTablePrim->length();
-        for(size_t i=0; i<n; ++i) {
-          if((* theLambdaTablePrim)[i]) {
-            (* theLambdaTablePrim)[i]->SetSpline(true);
-          }
-        }
+      for(auto & v : *theLambdaTablePrim) {
+	if(nullptr != v) { v->FillSecondDerivatives(); }
       }
     } else {
       if (1 < verboseLevel) {
@@ -1074,6 +998,7 @@ void G4VEmProcess::FindLambdaMax()
            << " and process " << GetProcessName() << "  " << G4endl; 
   }
   size_t n = theLambdaTable->length();
+  
   G4PhysicsVector* pv;
   G4double e, ss, emax, smax;
 
@@ -1082,7 +1007,7 @@ void G4VEmProcess::FindLambdaMax()
   // first loop on existing vectors
   for (i=0; i<n; ++i) {
     pv = (*theLambdaTable)[i];
-    if(pv) {
+    if(nullptr != pv) {
       size_t nb = pv->GetVectorLength();
       emax = DBL_MAX;
       smax = 0.0;
@@ -1093,11 +1018,12 @@ void G4VEmProcess::FindLambdaMax()
           if(ss > smax) {
             smax = ss;
             emax = e;
-          }
+          } else {
+            break;
+	  }
         }
       }
-      theEnergyOfCrossSectionMax[i] = emax;
-      theCrossSectionMax[i] = smax;
+      (*theEnergyOfCrossSectionMax)[i] = emax;
       if(1 < verboseLevel) {
         G4cout << "For " << particle->GetParticleName() 
                << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
@@ -1108,10 +1034,9 @@ void G4VEmProcess::FindLambdaMax()
   // second loop using base materials
   for (i=0; i<n; ++i) {
     pv = (*theLambdaTable)[i];
-    if(!pv){
+    if(nullptr == pv) {
       G4int j = (*theDensityIdx)[i];
-      theEnergyOfCrossSectionMax[i] = theEnergyOfCrossSectionMax[j];
-      theCrossSectionMax[i] = (*theDensityFactor)[i]*theCrossSectionMax[j];
+      (*theEnergyOfCrossSectionMax)[i] = (*theEnergyOfCrossSectionMax)[j];
     }
   }
 }
@@ -1119,21 +1044,24 @@ void G4VEmProcess::FindLambdaMax()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsVector* 
-G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
+G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
-  G4PhysicsVector* v = 
-    new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
-  v->SetSpline(theParameters->Spline());
-  return v;
+  DefineMaterial(couple);
+  G4PhysicsVector* newv = nullptr;
+  if(nullptr == theLambdaTable) {
+    newv = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, 
+				  nLambdaBins, splineFlag);
+  } else {   
+    newv = new G4PhysicsVector(*((*theLambdaTable)[basedCoupleIndex]));
+  }
+  return newv;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4Element* G4VEmProcess::GetCurrentElement() const
 {
-  const G4Element* elm = 
-    (currentModel) ? currentModel->GetCurrentElement() : nullptr; 
-  return elm;
+  return (nullptr != currentModel) ? currentModel->GetCurrentElement() : nullptr; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1159,7 +1087,7 @@ void
 G4VEmProcess::ActivateForcedInteraction(G4double length, const G4String& r,
                                         G4bool flag)
 {
-  if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+  if(nullptr == biasManager) { biasManager = new G4EmBiasingManager(); }
   if(1 < verboseLevel) {
     G4cout << "### ActivateForcedInteraction: for " 
            << particle->GetParticleName() 

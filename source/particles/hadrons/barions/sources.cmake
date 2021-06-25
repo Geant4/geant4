@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4baryons
-# Package: Geant4.src.G4particles..G4baryons
-#------------------------------------------------------------------------------
+# - G4baryons module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4baryons
-  HEADERS
+geant4_add_module(G4baryons
+  PUBLIC_HEADERS
     G4AntiLambda.hh
     G4AntiLambdab.hh
     G4AntiLambdacPlus.hh
@@ -29,7 +24,7 @@ geant4_define_module(NAME G4baryons
     G4AntiXiZero.hh
     G4AntiXicPlus.hh
     G4AntiXicZero.hh
-    G4AntiXibMinus.hh 
+    G4AntiXibMinus.hh
     G4AntiXibZero.hh
     G4BaryonConstructor.hh
     G4Lambda.hh
@@ -53,7 +48,7 @@ geant4_define_module(NAME G4baryons
     G4XiZero.hh
     G4XicPlus.hh
     G4XicZero.hh
-    G4XibMinus.hh 
+    G4XibMinus.hh
     G4XibZero.hh
   SOURCES
     G4AntiLambda.cc
@@ -102,14 +97,6 @@ geant4_define_module(NAME G4baryons
     G4XicPlus.cc
     G4XicZero.cc
     G4XibMinus.cc
-    G4XibZero.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4materials
-    G4partman
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4materials
-)
+    G4XibZero.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4baryons PUBLIC G4partman G4globman)

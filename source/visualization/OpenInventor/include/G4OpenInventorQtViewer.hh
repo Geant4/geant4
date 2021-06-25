@@ -36,8 +36,9 @@
 
 #include <Inventor/nodes/SoEventCallback.h>
 
-//class SoQtExaminerViewer;
 class G4OpenInventorQtExaminerViewer;
+
+class SoQtViewer;
 
 #include <qobject.h>
 
@@ -46,7 +47,6 @@ class QFont;
 class QAction;
 
 
-//class G4OpenInventorQtViewer: public G4OpenInventorViewer {
 class G4OpenInventorQtViewer: public QObject,
                               public G4OpenInventorViewer {
 
@@ -92,20 +92,22 @@ private:
 
 public:
 
-  G4OpenInventorQtViewer(G4OpenInventorSceneHandler& scene,
+   G4OpenInventorQtViewer(G4OpenInventorSceneHandler& scene,
 		         const G4String& name = "");
-  virtual ~G4OpenInventorQtViewer();
-  void Initialise();
+   virtual ~G4OpenInventorQtViewer();
+   void Initialise();
 
 public: //G4VViewer
 
-  virtual void FinishView();
-  virtual void SetView();
+   virtual void FinishView();
+   virtual void SetView();
 
 protected:
 
-  virtual void ViewerRender();
-  virtual SoCamera* GetCamera();
+   virtual void ViewerRender();
+   virtual SoCamera* GetCamera();
+   // FWJ found insufficient to replace group and camera sensors
+   // static void FinishCB(void*, SoQtViewer*);
 
 protected:
 

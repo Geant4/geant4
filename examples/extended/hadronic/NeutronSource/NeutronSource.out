@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,6 +26,9 @@
 ##/testhadr/det/setAbsorRadius 15 mm
 ##/testhadr/det/setAbsorLength 60 mm
 ##/testhadr/det/setContThick  2.4 mm
+#
+/process/em/verbose 0
+/process/had/verbose 1
 #
 /run/initialize
 
@@ -93,15 +103,16 @@ Auger electron emission enabled                   1
 Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
+Threshold for very long decay time at rest        1e+27  ns
 ======================================================================
 
 =======================================================
 ======       ParticleHP Physics Parameters     ========
 =======================================================
- UseOnlyPhotoEvaporation ? 0
+ UseOnlyPhotoEvaporation ? 1
  SkipMissingIsotopes ?     0
  NeglectDoppler ?          0
- DoNotAdjustFinalState ?   0
+ DoNotAdjustFinalState ?   1
  ProduceFissionFragments ? 0
  UseWendtFissionModel ?    0
  UseNRESP71Model ?         0
@@ -320,7 +331,7 @@ Use Bearden atomic level energies                 0
         Model:          NeutronHPFission: 0 meV ---> 20 MeV
         Model:                G4LFission: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPFissionXS: 0 meV ---> 20 MeV
-     Cr_sctns:          GheishaFissionXS: 0 meV ---> 100 TeV
+     Cr_sctns:                    ZeroXS: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -456,210 +467,59 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.570000s Real=12.752483s Sys=0.030000s
+  User=7.770000s Real=8.478907s Sys=0.030000s
 
  The run is 10000 Am241 of 0 meV within BeO (D =  3 cm  L = 6 cm )
 
  Process calls frequency :
- RadioactiveDecayBase= 234968        Transportation= 190593        alphaInelastic=     13
-              annihil=      1                 compt=  35785                  conv=      1
-                eIoni=1276609               ionIoni= 198777                   msc=  12689
-     neutronInelastic=      1                  phot=  60029 
+ RadioactiveDecayBase= 234961                  Rayl=   6693        Transportation= 190668
+       alphaInelastic=      5                 compt=  35813                 eIoni=1273272
+              ionIoni= 198786                   msc=  13164                  phot=  59755
+
 
  List of generated particles:
-          Ac225:    9999  Emean =  162.92 meV	( 3.5216 meV --> 1.1268 eV )
-  Ac225[40.090]:    7016  Emean =  376.25 meV	( 0.37835 meV --> 973.58 meV)
-          At217:    9991  Emean =  116.38 keV	( 105.89 keV --> 117.05 keV)
-  At217[100.250]:     148  Emean =  114.57 keV	( 106.48 keV --> 115.23 keV)
-  At217[218.120]:    1533  Emean =  112.98 keV	( 105.83 keV --> 113.09 keV)
-  At217[272.070]:      23  Emean =  111.65 keV	( 110.22 keV --> 112.11 keV)
-  At217[368.230]:      51  Emean =  109.98 keV	( 106.14 keV --> 110.37 keV)
-  At217[382.340]:       5  Emean =  110.11 keV	( 110.11 keV --> 110.11 keV)
-  At217[410.640]:      14  Emean =   109.6 keV	( 109.6 keV --> 109.6 keV)
-  At217[424.350]:       4  Emean =  109.35 keV	( 109.35 keV --> 109.35 keV)
-  At217[537.500]:       1  Emean =   107.3 keV	( 107.3 keV --> 107.3 keV)
-  At217[568.500]:       1  Emean =  106.73 keV	( 106.73 keV --> 106.73 keV)
-  At217[577.000]:       6  Emean =  106.58 keV	( 106.58 keV --> 106.58 keV)
-            Be9:       1  Emean =    1.26 MeV	( 1.26 MeV --> 1.26 MeV)
-          Bi209:   10000  Emean =  1.2274 eV 	( 4.482 meV --> 2.7334 eV )
-          Bi213:    9991  Emean =  132.94 keV	( 112.64 keV --> 132.95 keV)
-  Bi213[1050.000]:       1  Emean =  113.55 keV	( 113.55 keV --> 113.55 keV)
-  Bi213[257.870]:       7  Emean =  127.24 keV	( 121.63 keV --> 128.18 keV)
-  Bi213[593.180]:       3  Emean =  121.99 keV	( 121.99 keV --> 121.99 keV)
-  Bi213[758.900]:       1  Emean =  113.26 keV	( 113.26 keV --> 113.26 keV)
-            C12:       8  Emean =  1.1498 MeV	( 192.87 keV --> 2.4914 MeV)
-          Fr221:   10000  Emean =  104.86 keV	( 47.352 meV --> 105.65 keV)
-  Fr221[100.890]:     183  Emean =  102.67 keV	( 94.115 keV --> 103.85 keV)
-  Fr221[108.410]:     442  Emean =  102.94 keV	( 84.285 meV --> 103.72 keV)
-  Fr221[145.910]:       9  Emean =  100.26 keV	( 92.232 keV --> 103.05 keV)
-  Fr221[150.070]:     150  Emean =  102.89 keV	( 100.29 keV --> 102.97 keV)
-  Fr221[195.770]:     433  Emean =  102.13 keV	( 95.327 keV --> 102.16 keV)
-  Fr221[224.640]:     119  Emean =  101.47 keV	( 98.479 keV --> 101.65 keV)
-  Fr221[234.510]:       2  Emean =  101.47 keV	( 101.47 keV --> 101.47 keV)
-  Fr221[253.560]:     118  Emean =  101.11 keV	( 98.603 keV --> 101.13 keV)
-  Fr221[26.000]:     307  Emean =  102.82 keV	( 94.558 keV --> 105.18 keV)
-  Fr221[272.600]:       2  Emean =  100.79 keV	( 100.79 keV --> 100.79 keV)
-  Fr221[279.210]:      12  Emean =  100.51 keV	( 98.682 keV --> 100.67 keV)
-  Fr221[288.080]:       9  Emean =   99.16 keV	( 98.336 keV --> 100.52 keV)
-  Fr221[294.660]:       3  Emean =  66.933 keV	( 1.3718 eV  --> 100.4 keV)
-  Fr221[36.640]:    2630  Emean =  104.38 keV	( 148.63 meV --> 105 keV)
-  Fr221[38.540]:    1080  Emean =  104.45 keV	( 98.523 keV --> 104.96 keV)
-  Fr221[393.350]:      11  Emean =  98.641 keV	( 98.641 keV --> 98.641 keV)
-  Fr221[400.750]:       8  Emean =  98.509 keV	( 98.509 keV --> 98.509 keV)
-  Fr221[517.810]:       6  Emean =  96.424 keV	( 96.424 keV --> 96.424 keV)
-  Fr221[552.050]:      18  Emean =  95.814 keV	( 95.814 keV --> 95.814 keV)
-  Fr221[570.810]:       2  Emean =   95.48 keV	( 95.48 keV --> 95.48 keV)
-  Fr221[602.200]:       1  Emean =  94.921 keV	( 94.921 keV --> 94.921 keV)
-  Fr221[630.710]:       4  Emean =  94.413 keV	( 94.413 keV --> 94.413 keV)
-  Fr221[749.160]:       1  Emean =  92.303 keV	( 92.303 keV --> 92.303 keV)
-  Fr221[824.200]:       1  Emean =  90.967 keV	( 90.967 keV --> 90.967 keV)
-  Fr221[99.620]:     913  Emean =  103.64 keV	( 92.388 keV --> 103.87 keV)
-  Fr221[99.850]:     158  Emean =  103.47 keV	( 96.549 keV --> 103.87 keV)
-          Np237:   10000  Emean =  92.568 keV	( 86.705 keV --> 93.678 keV)
-  Np237[102.959]:    1469  Emean =  91.871 keV	( 86.836 keV --> 91.966 keV)
-  Np237[158.497]:     168  Emean =  91.028 keV	( 88.733 keV --> 91.042 keV)
-  Np237[225.957]:       2  Emean =  88.458 keV	( 86.996 keV --> 89.92 keV)
-  Np237[305.050]:       1  Emean =  88.605 keV	( 88.605 keV --> 88.605 keV)
-  Np237[33.196]:    2163  Emean =  92.556 keV	( 86.752 keV --> 93.126 keV)
-  Np237[395.530]:       1  Emean =  87.101 keV	( 87.101 keV --> 87.101 keV)
-  Np237[59.541]:    9942  Emean =  92.563 keV	( 86.732 keV --> 92.688 keV)
-  Np237[75.899]:       4  Emean =  92.416 keV	( 92.416 keV --> 92.416 keV)
-          Pa233:   10000  Emean =   81.95 keV	( 77.276 keV --> 83.776 keV)
-  Pa233[103.635]:    3357  Emean =  81.895 keV	( 77.175 keV --> 82.024 keV)
-  Pa233[109.070]:    1023  Emean =  81.885 keV	( 78.494 keV --> 81.932 keV)
-  Pa233[133.200]:       1  Emean =  81.524 keV	( 81.524 keV --> 81.524 keV)
-  Pa233[163.510]:     119  Emean =  81.011 keV	( 81.011 keV --> 81.011 keV)
-  Pa233[169.166]:     107  Emean =  80.916 keV	( 80.916 keV --> 80.916 keV)
-  Pa233[179.000]:      51  Emean =  80.749 keV	( 80.749 keV --> 80.749 keV)
-  Pa233[201.634]:     103  Emean =  79.719 keV	( 78.597 keV --> 79.881 keV)
-  Pa233[212.341]:     331  Emean =  80.186 keV	( 80.186 keV --> 80.186 keV)
-  Pa233[218.000]:      57  Emean =   80.09 keV	( 80.09 keV --> 80.09 keV)
-  Pa233[237.890]:     646  Emean =  79.726 keV	( 78.543 keV --> 79.754 keV)
-  Pa233[257.183]:       1  Emean =  79.428 keV	( 79.428 keV --> 79.428 keV)
-  Pa233[279.720]:      36  Emean =  79.047 keV	( 79.047 keV --> 79.047 keV)
-  Pa233[283.000]:       9  Emean =  78.991 keV	( 78.991 keV --> 78.991 keV)
-  Pa233[300.500]:      37  Emean =  78.695 keV	( 78.695 keV --> 78.695 keV)
-  Pa233[303.590]:       4  Emean =  78.643 keV	( 78.643 keV --> 78.643 keV)
-  Pa233[365.840]:       4  Emean =  77.591 keV	( 77.591 keV --> 77.591 keV)
-  Pa233[57.100]:    7380  Emean =  81.916 keV	( 77.258 keV --> 82.81 keV)
-   Pa233[6.671]:     317  Emean =  81.681 keV	( 78.419 keV --> 83.663 keV)
-  Pa233[70.544]:     265  Emean =  81.863 keV	( 78.597 keV --> 82.583 keV)
-  Pa233[86.468]:    5624  Emean =  81.937 keV	( 78.415 keV --> 82.314 keV)
-  Pa233[94.646]:     717  Emean =  80.016 keV	( 78.572 keV --> 81.13 keV)
-          Pb209:   10000  Emean =  157.13 keV	( 5.2021 eV  --> 160.59 keV)
-  Pb209[1423.000]:       4  Emean =  6.8173 eV 	( 6.8173 eV  --> 6.8173 eV )
-  Pb209[1567.090]:     211  Emean =  601.02 meV	( 555.82 meV --> 3.5222 eV )
-  Pb209[2032.220]:     209  Emean =  55.102 meV	( 35.303 meV --> 340.14 meV)
-  Pb209[2149.430]:     208  Emean =  7.4452 eV 	( 333.38 meV --> 12.997 eV )
-  Pb209[2315.900]:       1  Emean =  10.779 eV 	( 10.779 eV  --> 10.779 eV )
-  Pb209[2738.000]:       2  Emean =   70.81 meV	( 70.81 meV --> 70.81 meV)
-  Pb209[2904.000]:       2  Emean =  2.4778 eV 	( 2.4179 eV  --> 2.5377 eV )
-  Pb209[3052.000]:       4  Emean = 0.81491 meV	( 0.81491 meV --> 0.81491 meV)
-  Pb209[3069.920]:       4  Emean =  2.1772 eV 	( 116.15 meV --> 4.097 eV )
-  Pb209[3389.090]:       1  Emean =  1.5249 eV 	( 1.5249 eV  --> 1.5249 eV )
-  Pb209[778.800]:       1  Emean =  145.92 keV	( 145.92 keV --> 145.92 keV)
-          Po213:    9785  Emean =  137.24 eV 	( 26.63 meV --> 145.62 keV)
-  Po213[1003.553]:       8  Emean =  528.27 meV	( 156.43 meV --> 1.117 eV )
-  Po213[1045.670]:       3  Emean =  615.11 meV	( 291.33 meV --> 948.29 meV)
-  Po213[1100.167]:      70  Emean =   379.4 meV	( 61.555 meV --> 907.25 meV)
-  Po213[1119.291]:       6  Emean =  433.91 meV	( 117.38 meV --> 927.36 meV)
-  Po213[292.800]:      78  Emean =   2.185 eV 	( 54.948 meV --> 5.6422 eV )
-  Po213[440.450]:    3058  Emean =  2.4247 eV 	( 12.515 meV --> 4.9019 eV )
-  Po213[600.730]:       1  Emean =   893.6 meV	( 893.6 meV --> 893.6 meV)
-  Po213[867.980]:       1  Emean =  1.1183 eV 	( 1.1183 eV  --> 1.1183 eV )
-          Ra221:       9  Emean =  335.41 meV	( 39.261 meV --> 630.91 meV)
-          Ra225:   10000  Emean =  96.712 keV	( 16.997 meV --> 338.53 keV)
-  Ra225[100.500]:    2822  Emean =   96.92 keV	( 15.396 meV --> 338.98 keV)
-  Ra225[111.600]:    2217  Emean =  96.354 keV	( 51.572 meV --> 336.16 keV)
-  Ra225[120.360]:      32  Emean =  90.956 keV	( 14.096 keV --> 315.09 keV)
-  Ra225[149.960]:    2404  Emean =  95.943 keV	( 35.478 meV --> 334.76 keV)
-  Ra225[179.750]:    1671  Emean =  96.803 keV	( 421.17 eV  --> 337.22 keV)
-  Ra225[203.500]:       3  Emean =  86.805 keV	( 86.805 keV --> 86.805 keV)
-  Ra225[215.800]:       1  Emean =   86.59 keV	( 86.59 keV --> 86.59 keV)
-  Ra225[220.550]:      79  Emean =  108.32 keV	( 30.514 keV --> 323.92 keV)
-  Ra225[225.200]:       3  Emean =  83.034 keV	( 79.862 keV --> 84.623 keV)
-  Ra225[226.900]:      19  Emean =  87.121 keV	( 50.231 keV --> 175.22 keV)
-  Ra225[236.250]:    5989  Emean =  95.765 keV	( 563.47 eV  --> 335.84 keV)
-  Ra225[243.560]:     540  Emean =  98.523 keV	( 2.9721 keV --> 335.86 keV)
-  Ra225[248.500]:      22  Emean =  91.537 keV	( 86.018 keV --> 207.43 keV)
-  Ra225[25.410]:    8057  Emean =  96.511 keV	( 30.937 meV --> 338.67 keV)
-  Ra225[267.920]:     898  Emean =  95.498 keV	( 1.3699 keV --> 333.26 keV)
-  Ra225[272.150]:      41  Emean =  90.157 keV	( 6.0311 keV --> 311.56 keV)
-  Ra225[284.490]:     126  Emean =  95.313 keV	( 577.21 eV  --> 315.22 keV)
-  Ra225[293.000]:       2  Emean =  83.469 keV	( 83.467 keV --> 83.47 keV)
-  Ra225[31.560]:     506  Emean =  97.977 keV	( 9.7645 keV --> 331.37 keV)
-  Ra225[321.760]:     104  Emean =  96.256 keV	( 6.0268 keV --> 311.28 keV)
-  Ra225[328.000]:       7  Emean =  83.264 keV	( 79.844 keV --> 84.627 keV)
-  Ra225[390.000]:      15  Emean =  87.409 keV	( 50.137 keV --> 174.96 keV)
-  Ra225[394.720]:      18  Emean =  103.41 keV	( 83.459 keV --> 271.49 keV)
-  Ra225[42.770]:    3985  Emean =  96.312 keV	( 7.9744 meV --> 337.06 keV)
-  Ra225[478.400]:       2  Emean =  81.995 keV	( 81.995 keV --> 81.995 keV)
-  Ra225[487.000]:       1  Emean =  81.845 keV	( 81.845 keV --> 81.845 keV)
-  Ra225[55.160]:      69  Emean =  89.741 keV	( 14.079 keV --> 327.19 keV)
-  Ra225[603.000]:       2  Emean =  79.815 keV	( 79.815 keV --> 79.815 keV)
-  Ra225[609.000]:       2  Emean =   79.71 keV	( 79.71 keV --> 79.71 keV)
-  Ra225[69.360]:     382  Emean =  96.735 keV	( 4.1939 keV --> 323.89 keV)
-          Rn217:       9  Emean =  123.09 keV	( 121.85 keV --> 124.71 keV)
-  Rn217[149.180]:       3  Emean =  122.01 keV	( 122.01 keV --> 122.01 keV)
-  Rn217[184.000]:       1  Emean =  121.37 keV	( 121.37 keV --> 121.37 keV)
-  Rn217[93.020]:       3  Emean =  122.72 keV	( 122.11 keV --> 123.03 keV)
-          Rn221:       1  Emean =  90.201 keV	( 90.201 keV --> 90.201 keV)
-  Rn221[30.000]:       1  Emean =  90.179 keV	( 90.179 keV --> 90.179 keV)
-          Th229:    8777  Emean =  84.321 keV	( 77.469 keV --> 84.358 keV)
-   Th229[0.008]:    1223  Emean =  83.518 keV	( 78.654 keV --> 83.962 keV)
-  Th229[125.439]:       9  Emean =  82.057 keV	( 81.445 keV --> 82.201 keV)
-  Th229[146.357]:       4  Emean =  81.841 keV	( 81.841 keV --> 81.841 keV)
-  Th229[163.254]:       4  Emean =  81.551 keV	( 81.551 keV --> 81.551 keV)
-  Th229[189.990]:       2  Emean =  81.091 keV	( 81.091 keV --> 81.091 keV)
-  Th229[217.160]:       1  Emean =  80.624 keV	( 80.624 keV --> 80.624 keV)
-  Th229[287.895]:       1  Emean =  78.756 keV	( 78.756 keV --> 78.756 keV)
-  Th229[288.491]:       1  Emean =  77.668 keV	( 77.668 keV --> 77.668 keV)
-  Th229[29.193]:    1473  Emean =  83.523 keV	( 78.673 keV --> 83.856 keV)
-  Th229[317.173]:       3  Emean =  78.904 keV	( 78.904 keV --> 78.904 keV)
-  Th229[320.548]:       1  Emean =  78.846 keV	( 78.846 keV --> 78.846 keV)
-  Th229[374.815]:       1  Emean =  77.913 keV	( 77.913 keV --> 77.913 keV)
-  Th229[42.435]:    1436  Emean =  83.561 keV	( 81.089 keV --> 83.628 keV)
-  Th229[67.800]:       2  Emean =  83.192 keV	( 83.192 keV --> 83.192 keV)
-  Th229[71.826]:      59  Emean =  82.532 keV	( 78.667 keV --> 83.123 keV)
-  Th229[75.100]:       1  Emean =  83.067 keV	( 83.067 keV --> 83.067 keV)
-  Th229[97.136]:     157  Emean =   82.66 keV	( 81.078 keV --> 82.688 keV)
-          Tl209:     215  Emean =  112.02 keV	( 106.09 keV --> 112.51 keV)
-  Tl209[323.810]:      17  Emean =  106.41 keV	( 106.41 keV --> 106.41 keV)
-           U233:   10000  Emean =  362.44 meV	( 3.7544 meV --> 2.019 eV )
-  U233[155.230]:      46  Emean =  111.36 meV	( 90.833 meV --> 553.61 meV)
-  U233[298.810]:    2232  Emean =  98.522 meV	( 3.9872 meV --> 571.51 meV)
-  U233[301.940]:      28  Emean =  4.0725 meV	( 0.7858 meV --> 6.1991 meV)
-  U233[311.904]:    5272  Emean =  173.44 meV	( 1.8626 meV --> 717.15 meV)
-  U233[320.830]:      33  Emean =  95.947 meV	( 0.90222 meV --> 240.25 meV)
-  U233[340.477]:    2592  Emean =  225.21 meV	( 0.40745 meV --> 617.5 meV)
-  U233[353.790]:    2561  Emean =  116.76 meV	( 98.4 meV --> 150.93 meV)
-  U233[398.496]:    1554  Emean =   154.6 meV	( 1.2224 meV --> 452.62 meV)
-   U233[40.350]:    1456  Emean =   287.4 meV	( 6.17 meV --> 908.77 meV)
-  U233[415.758]:    2585  Emean =  130.86 meV	( 1.4261 meV --> 395.9 meV)
-   U233[92.160]:     154  Emean =  161.54 meV	( 9.1677 meV --> 768.57 meV)
-          alpha:   80001  Emean =  5.9271 MeV	( 4.2727 MeV --> 8.3755 MeV)
-      anti_nu_e:   40000  Emean =     425 keV	( 10.667 keV --> 1.8259 MeV)
-             e+:       1  Emean =  255.46 keV	( 255.46 keV --> 255.46 keV)
-             e-: 1276636  Emean =  11.534 keV	( 1.3878e-05 meV --> 1.6129 MeV)
-          gamma:   75206  Emean =  83.965 keV	( 34.16 eV  --> 4.4696 MeV)
-        neutron:      10  Emean =  4.8531 MeV	( 1.2557 MeV --> 10.866 MeV)
+          Ac225:    9997  Emean =  163.22 meV	( 3.8417 meV --> 1.1312 eV )	mean life = 14.427 d  
+          At217:    9988  Emean =  116.39 keV	( 105.65 keV --> 117.05 keV)	mean life = 46.599 ms 
+          Bi209:   10000  Emean =  1.2167 eV 	( 4.2201 meV --> 2.6873 eV )	stable
+          Bi213:    9989  Emean =  132.93 keV	( 10.185 eV  --> 132.95 keV)	mean life = 1.0962 h  
+            C12:       4  Emean =  2.2124 MeV	( 1.6285 MeV --> 2.6655 MeV)	stable
+          Fr221:    9999  Emean =  104.89 keV	( 18.19 meV --> 105.65 keV)	mean life = 7.0692 min
+           Ne21:       1  Emean =  1.6925 MeV	( 1.6925 MeV --> 1.6925 MeV)	stable
+          Np237:   10000  Emean =  92.567 keV	( 90.102 keV --> 93.678 keV)	mean life = 3.0953e+06 y  
+          Pa233:   10000  Emean =  81.961 keV	( 77.341 keV --> 83.776 keV)	mean life = 38.917 d  
+          Pb209:   10000  Emean =  156.67 keV	( 5.2021 eV  --> 160.59 keV)	mean life = 4.6931 h  
+          Pb213:       1  Emean =  122.98 keV	( 122.98 keV --> 122.98 keV)	mean life = 14.715 min
+          Po213:    9756  Emean =  167.46 eV 	( 14.901 meV --> 145.62 keV)	mean life = 5.3668 us 
+          Po217:       1  Emean =  111.69 keV	( 111.69 keV --> 111.69 keV)	mean life = 2.1063 s  
+          Ra221:      11  Emean =  337.27 meV	( 88.447 meV --> 693.25 meV)	mean life = 40.395 s  
+          Ra225:   10000  Emean =  97.065 keV	( 16.997 meV --> 340.07 keV)	mean life = 21.496 d  
+          Rn217:      11  Emean =  123.05 keV	( 121.94 keV --> 124.71 keV)	mean life = 779.06 us 
+          Rn221:       3  Emean =  90.535 keV	( 90.178 keV --> 90.714 keV)	mean life = 36.067 min
+          Th229:    8788  Emean =  84.322 keV	( 77.94 keV --> 84.358 keV)	mean life = 11376 y  
+          Tl209:     244  Emean =  112.15 keV	( 105.97 keV --> 112.51 keV)	mean life = 3.1739 min
+           U233:   10000  Emean =  355.94 meV	( 3.7544 meV --> 1.9901 eV )	mean life = 2.2983e+05 y  
+          alpha:   80000  Emean =  5.9264 MeV	( 4.4558 MeV --> 8.3755 MeV)	stable
+      anti_nu_e:   40000  Emean =  424.22 keV	( 7.8244 keV --> 1.8128 MeV)	stable
+             e-: 1271709  Emean =  11.629 keV	( 1.3878e-05 meV --> 7.9739 MeV)	stable
+          gamma:   74906  Emean =  85.003 keV	( 34.56 eV  --> 9.6206 MeV)	stable
+        neutron:       5  Emean =  4.4639 MeV	( 1.535 MeV --> 7.6945 MeV)	mean life = 14.67 min
 
- Mean energy deposit per event = 49.746 MeV  rms = 478.88 keV
- Mean energy flow per event    = 2.0664 MeV  rms = 524.66 keV
+ Mean energy deposit per event = 49.747 MeV  rms = 498.75 keV
+ Mean energy flow per event    = 2.0624 MeV  rms = 519.31 keV
 
  List of particles emerging from the container :
-      anti_nu_e:   40000  Emean =     425 keV	( 10.667 keV --> 1.8259 MeV) 	Eflow/event = 1.7 MeV
-             e-:      14  Emean =  266.67 keV	( 10.041 keV --> 1.0454 MeV) 	Eflow/event = 373.33 eV 
-          gamma:   15176  Emean =  238.33 keV	( 5.3768 keV --> 4.4696 MeV) 	Eflow/event = 361.68 keV
-        neutron:       9  Emean =  4.8317 MeV	( 1.2557 MeV --> 10.866 MeV) 	Eflow/event = 4.3485 keV
+      anti_nu_e:   40000  Emean =  424.22 keV	( 7.8244 keV --> 1.8128 MeV) 	Eflow/event = 1.6969 MeV
+             e-:      19  Emean =   283.7 keV	( 14.372 keV --> 909.24 keV) 	Eflow/event = 539.02 eV 
+          gamma:   15151  Emean =  239.44 keV	( 6.3627 keV --> 4.5158 MeV) 	Eflow/event = 362.78 keV
+        neutron:       5  Emean =  4.4639 MeV	( 1.535 MeV --> 7.6945 MeV) 	Eflow/event = 2.232 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1631299237, 47044555
+ Current couple of seeds = 399684090, 1044084741
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.061 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.059 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

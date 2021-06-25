@@ -30,11 +30,11 @@
 // 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
 //  24-Mar-2011  T.Aso  Add StepChecker for debugging.
 //  24-Mar-2011  T.Aso  Size and segmentation for replicated cylinder.
-//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options 
+//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options
 //                      in flatCurrent and flatFulx commands.
-//  27-Mar-2013  T.Aso  Unit option in the kineticEnergy filter was 
+//  27-Mar-2013  T.Aso  Unit option in the kineticEnergy filter was
 //                     supported.
-//                       
+//
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -115,7 +115,7 @@
 #include "G4UnitsTable.hh"
 
 G4ScoreQuantityMessenger::G4ScoreQuantityMessenger(G4ScoringManager* SManager)
-:fSMan(SManager)
+  : fSMan(SManager)
 {
   QuantityCommands();
   FilterCommands();
@@ -126,71 +126,78 @@ void G4ScoreQuantityMessenger::FilterCommands()
   G4UIparameter* param;
 
   //
-  // Filter commands 
+  // Filter commands
   filterDir = new G4UIdirectory("/score/filter/");
   filterDir->SetGuidance("  Scoring filter commands.");
   //
-  fchargedCmd = new G4UIcmdWithAString("/score/filter/charged",this);
+  fchargedCmd = new G4UIcmdWithAString("/score/filter/charged", this);
   fchargedCmd->SetGuidance("Charged particle filter.");
-  fchargedCmd->SetParameterName("fname",false);
+  fchargedCmd->SetParameterName("fname", false);
   //
-  fneutralCmd = new G4UIcmdWithAString("/score/filter/neutral",this);
+  fneutralCmd = new G4UIcmdWithAString("/score/filter/neutral", this);
   fneutralCmd->SetGuidance("Neutral particle filter.");
-  fneutralCmd->SetParameterName("fname",false);
+  fneutralCmd->SetParameterName("fname", false);
   //
-  fkinECmd = new G4UIcommand("/score/filter/kineticEnergy",this);
+  fkinECmd = new G4UIcommand("/score/filter/kineticEnergy", this);
   fkinECmd->SetGuidance("Kinetic energy filter.");
-  fkinECmd->SetGuidance("[usage] /score/filter/kineticEnergy fname Elow Ehigh unit");
+  fkinECmd->SetGuidance(
+    "[usage] /score/filter/kineticEnergy fname Elow Ehigh unit");
   fkinECmd->SetGuidance("  fname     :(String) Filter Name ");
   fkinECmd->SetGuidance("  Elow      :(Double) Lower edge of kinetic energy");
   fkinECmd->SetGuidance("  Ehigh     :(Double) Higher edge of kinetic energy");
   fkinECmd->SetGuidance("  unit      :(String) unit of given kinetic energy");
-  param = new G4UIparameter("fname",'s',false);
+  param = new G4UIparameter("fname", 's', false);
   fkinECmd->SetParameter(param);
-  param = new G4UIparameter("elow",'d',true);
+  param = new G4UIparameter("elow", 'd', true);
   param->SetDefaultValue("0.0");
   fkinECmd->SetParameter(param);
-  param = new G4UIparameter("ehigh",'d',true);
+  param = new G4UIparameter("ehigh", 'd', true);
   fkinECmd->SetParameter(param);
   G4String smax = DtoS(DBL_MAX);
   param->SetDefaultValue(smax);
-  param = new G4UIparameter("unit",'s',true);
+  param = new G4UIparameter("unit", 's', true);
   param->SetDefaultUnit("keV");
   fkinECmd->SetParameter(param);
   //
-  fparticleCmd = new G4UIcommand("/score/filter/particle",this);
+  fparticleCmd = new G4UIcommand("/score/filter/particle", this);
   fparticleCmd->SetGuidance("Particle filter.");
   fparticleCmd->SetGuidance("[usage] /score/filter/particle fname p0 .. pn");
   fparticleCmd->SetGuidance("  fname     :(String) Filter Name ");
   fparticleCmd->SetGuidance("  p0 .. pn  :(String) particle names");
-  param = new G4UIparameter("fname",'s',false);
+  param = new G4UIparameter("fname", 's', false);
   fparticleCmd->SetParameter(param);
-  param = new G4UIparameter("particlelist",'s',false);
+  param = new G4UIparameter("particlelist", 's', false);
   param->SetDefaultValue("");
   fparticleCmd->SetParameter(param);
   //
   //
   //
-  fparticleKinECmd = new G4UIcommand("/score/filter/particleWithKineticEnergy",this);
+  fparticleKinECmd =
+    new G4UIcommand("/score/filter/particleWithKineticEnergy", this);
   fparticleKinECmd->SetGuidance("Particle with kinetic energy filter.");
-  fparticleKinECmd->SetGuidance("[usage] /score/filter/particleWithKineticEnergy fname Elow Ehigh unit p0 .. pn");
+  fparticleKinECmd->SetGuidance(
+    "[usage] /score/filter/particleWithKineticEnergy fname Elow Ehigh unit p0 "
+    ".. pn");
   fparticleKinECmd->SetGuidance("  fname     :(String) Filter Name ");
-  fparticleKinECmd->SetGuidance("  Elow      :(Double) Lower edge of kinetic energy");
-  fparticleKinECmd->SetGuidance("  Ehigh     :(Double) Higher edge of kinetic energy");
-  fparticleKinECmd->SetGuidance("  unit      :(String) unit of given kinetic energy");
+  fparticleKinECmd->SetGuidance(
+    "  Elow      :(Double) Lower edge of kinetic energy");
+  fparticleKinECmd->SetGuidance(
+    "  Ehigh     :(Double) Higher edge of kinetic energy");
+  fparticleKinECmd->SetGuidance(
+    "  unit      :(String) unit of given kinetic energy");
   fparticleKinECmd->SetGuidance("  p0 .. pn  :(String) particle names");
-  param = new G4UIparameter("fname",'s',false);
+  param = new G4UIparameter("fname", 's', false);
   fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("elow",'d',false);
+  param = new G4UIparameter("elow", 'd', false);
   param->SetDefaultValue("0.0");
   fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("ehigh",'d',true);
+  param = new G4UIparameter("ehigh", 'd', true);
   param->SetDefaultValue(smax);
   fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("unit",'s',true);
+  param = new G4UIparameter("unit", 's', true);
   param->SetDefaultUnit("keV");
   fparticleKinECmd->SetParameter(param);
-  param = new G4UIparameter("particlelist",'s',false);
+  param = new G4UIparameter("particlelist", 's', false);
   param->SetDefaultValue("");
   fparticleKinECmd->SetParameter(param);
   //
@@ -199,474 +206,675 @@ void G4ScoreQuantityMessenger::FilterCommands()
 
 G4ScoreQuantityMessenger::~G4ScoreQuantityMessenger()
 {
-    delete         quantityDir;
-    delete         qTouchCmd;
-    delete         qGetUnitCmd;
-    delete         qSetUnitCmd;
+  delete quantityDir;
+  delete qTouchCmd;
+  delete qGetUnitCmd;
+  delete qSetUnitCmd;
 
-    //
-    delete    qCellChgCmd;
-    delete    qCellFluxCmd;
-    delete    qPassCellFluxCmd;
-    delete    qeDepCmd;
-    delete    qdoseDepCmd;
-    delete    qnOfStepCmd;
-    delete    qnOfSecondaryCmd;
-    //
-    delete          qTrackLengthCmd;
-    delete          qPassCellCurrCmd;
-    delete          qPassTrackLengthCmd;
-    delete          qFlatSurfCurrCmd;
-    delete          qFlatSurfFluxCmd;
-    delete          qVolFluxCmd;
-//    delete          qSphereSurfCurrCmd;
-//    delete          qSphereSurfFluxCmd;
-//    delete          qCylSurfCurrCmd;
-//    delete          qCylSurfFluxCmd;
-    delete          qNofCollisionCmd;
-    delete          qPopulationCmd;
-    delete          qTrackCountCmd;
-    delete          qTerminationCmd;
-    delete          qMinKinEAtGeneCmd;
-    //
-    delete          qStepCheckerCmd;
-    //
-    delete   filterDir;
-    delete   fchargedCmd;
-    delete   fneutralCmd;
-    delete   fkinECmd;
-    delete   fparticleCmd;
-    delete   fparticleKinECmd;
+  //
+  delete qCellChgCmd;
+  delete qCellFluxCmd;
+  delete qPassCellFluxCmd;
+  delete qeDepCmd;
+  delete qdoseDepCmd;
+  delete qnOfStepCmd;
+  delete qnOfSecondaryCmd;
+  //
+  delete qTrackLengthCmd;
+  delete qPassCellCurrCmd;
+  delete qPassTrackLengthCmd;
+  delete qFlatSurfCurrCmd;
+  delete qFlatSurfFluxCmd;
+  delete qVolFluxCmd;
+  //    delete          qSphereSurfCurrCmd;
+  //    delete          qSphereSurfFluxCmd;
+  //    delete          qCylSurfCurrCmd;
+  //    delete          qCylSurfFluxCmd;
+  delete qNofCollisionCmd;
+  delete qPopulationCmd;
+  delete qTrackCountCmd;
+  delete qTerminationCmd;
+  delete qMinKinEAtGeneCmd;
+  //
+  delete qStepCheckerCmd;
+  //
+  delete filterDir;
+  delete fchargedCmd;
+  delete fneutralCmd;
+  delete fkinECmd;
+  delete fparticleCmd;
+  delete fparticleKinECmd;
 }
 
-void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
+void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
+                                           G4String newVal)
 {
-      using MeshShape = G4VScoringMesh::MeshShape;
+  using MeshShape = G4VScoringMesh::MeshShape;
 
-      G4ExceptionDescription ed;
+  G4ExceptionDescription ed;
 
-      //
-      // Get Current Mesh
-      //
-      G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
-      if(!mesh)
+  //
+  // Get Current Mesh
+  //
+  G4VScoringMesh* mesh = fSMan->GetCurrentMesh();
+  if(!mesh)
+  {
+    ed << "ERROR : No mesh is currently open. Open/create a mesh first. "
+          "Command ignored.";
+    command->CommandFailed(ed);
+    return;
+  }
+  // Mesh type
+  auto shape = mesh->GetShape();
+  // Tokens
+  G4TokenVec token;
+  FillTokenVec(newVal, token);
+  //
+  // Commands for Current Mesh
+  if(command == qTouchCmd)
+  {
+    mesh->SetCurrentPrimitiveScorer(newVal);
+  }
+  else if(command == qGetUnitCmd)
+  {
+    G4cout << "Unit:  " << mesh->GetCurrentPSUnit() << G4endl;
+  }
+  else if(command == qSetUnitCmd)
+  {
+    mesh->SetCurrentPSUnit(newVal);
+  }
+  else if(command == qCellChgCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSCellCharge* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
       {
-        ed << "ERROR : No mesh is currently open. Open/create a mesh first. Command ignored.";
+        ps = new G4PSCellCharge(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSCellCharge3D(token[0]);
+      }
+      ps->SetUnit(token[1]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qCellFluxCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSCellFlux* ps = nullptr;
+      if(shape == MeshShape::box)
+      {
+        ps = new G4PSCellFlux3D(token[0]);
+      }
+      else if(shape == MeshShape::cylinder)
+      {
+        G4PSCellFluxForCylinder3D* pps =
+          new G4PSCellFluxForCylinder3D(token[0]);
+        G4ThreeVector msize = mesh->GetSize();     // gevin in R Z N/A
+        pps->SetCylinderSize(msize[0], msize[1]);  // given in dr dz
+        G4int nSeg[3];
+        mesh->GetNumberOfSegments(nSeg);
+        pps->SetNumberOfSegments(nSeg);
+        ps = pps;
+      }
+      else if(shape == MeshShape::realWorldLogVol)
+      {
+        ed << "Cell flux for real world volume is not yet supported. Command "
+              "ignored.";
         command->CommandFailed(ed);
         return;
       }
-      // Mesh type
-      auto shape = mesh->GetShape();
-      // Tokens
-      G4TokenVec token;
-      FillTokenVec(newVal,token);
-      //
-      // Commands for Current Mesh
-      if(command==qTouchCmd) {
-              mesh->SetCurrentPrimitiveScorer(newVal);
-      } else if(command == qGetUnitCmd ){
-          G4cout << "Unit:  "<< mesh->GetCurrentPSUnit() <<G4endl;
-      } else if(command == qSetUnitCmd ){
-          mesh->SetCurrentPSUnit(newVal);
-      } else if(command== qCellChgCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-              G4PSCellCharge* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSCellCharge(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSCellCharge3D(token[0]); }
-              ps->SetUnit(token[1]);
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qCellFluxCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-            G4PSCellFlux* ps = nullptr;
-            if( shape==MeshShape::box ) {
-              ps = new G4PSCellFlux3D(token[0]);
-            } else if( shape==MeshShape::cylinder ) {
-              G4PSCellFluxForCylinder3D* pps = new G4PSCellFluxForCylinder3D(token[0]);
-              G4ThreeVector msize = mesh->GetSize(); // gevin in R Z N/A
-              pps->SetCylinderSize(msize[0],msize[1]); // given in dr dz
-              G4int nSeg[3];
-              mesh->GetNumberOfSegments(nSeg);
-              pps->SetNumberOfSegments(nSeg);
-              ps = pps;
-            } else if(shape==MeshShape::realWorldLogVol) {
-              ed<<"Cell flux for real world volume is not yet supported. Command ignored.";
-              command->CommandFailed(ed);
-              return;
-            } else if(shape==MeshShape::probe) {
-              ps = new G4PSCellFlux(token[0]);
-            }
-            ps->SetUnit(token[1]);
-            mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qPassCellFluxCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-            G4PSPassageCellFlux* ps = nullptr;
-            if( shape==MeshShape::box ) {
-              ps = new G4PSPassageCellFlux3D(token[0]);
-            } else if( shape==MeshShape::cylinder ) {
-              G4PSPassageCellFluxForCylinder3D* pps = new G4PSPassageCellFluxForCylinder3D(token[0]);
-              G4ThreeVector msize = mesh->GetSize();  // gevin in R Z N/A
-              pps->SetCylinderSize(msize[0],msize[1]); // given in dr dz
-              G4int nSeg[3];
-              mesh->GetNumberOfSegments(nSeg);
-              pps->SetNumberOfSegments(nSeg);
-              ps = pps;
-            } else if(shape==MeshShape::realWorldLogVol) {
-              ed<<"Passing cell flux for real world volume is not yet supported. Command ignored.";
-              command->CommandFailed(ed);
-              return;
-            } else if(shape==MeshShape::probe) {
-              ps = new G4PSPassageCellFlux(token[0]);
-            }
-            ps->SetUnit(token[1]);
-            mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command==qeDepCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-              G4PSEnergyDeposit* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps =new G4PSEnergyDeposit(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps =new G4PSEnergyDeposit3D(token[0]); }
-              ps->SetUnit(token[1]);
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qdoseDepCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-            G4PSDoseDeposit* ps = nullptr;
-            if( shape==MeshShape::box ) {
-              ps = new G4PSDoseDeposit3D(token[0]);
-            } else if( shape==MeshShape::cylinder ) {
-              G4PSDoseDepositForCylinder3D* pps = new G4PSDoseDepositForCylinder3D(token[0]);
-              pps->SetUnit(token[1]);
-              G4ThreeVector msize = mesh->GetSize(); // gevin in R Z N/A
-              pps->SetCylinderSize(msize[0],msize[1]); // given in dr dz
-              G4int nSeg[3];
-              mesh->GetNumberOfSegments(nSeg);
-              pps->SetNumberOfSegments(nSeg);
-              ps = pps;
-            } else if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe) {
-              ps = new G4PSDoseDeposit(token[0],mesh->GetCopyNumberLevel());
-            }
-            ps->SetUnit(token[1]);
-            mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qnOfStepCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-              G4PSNofStep* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSNofStep(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSNofStep3D(token[0]); }
-              ps->SetBoundaryFlag(StoB(token[1]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qnOfSecondaryCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-              G4PSNofSecondary* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSNofSecondary(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSNofSecondary3D(token[0]); }
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qTrackLengthCmd) {
-          if ( CheckMeshPS(mesh,token[0],command) ){
-              G4PSTrackLength* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSTrackLength(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSTrackLength3D(token[0]); }
-              ps->Weighted(StoB(token[1]));
-              ps->MultiplyKineticEnergy(StoB(token[2]));
-              ps->DivideByVelocity(StoB(token[3]));
-              ps->SetUnit(token[4]);
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qPassCellCurrCmd){
-          if( CheckMeshPS(mesh,token[0],command) ) {
-              G4PSPassageCellCurrent* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSPassageCellCurrent(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSPassageCellCurrent3D(token[0]); }
-              ps->Weighted(StoB(token[1]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qPassTrackLengthCmd){
-          if( CheckMeshPS(mesh,token[0],command) ) {
-              G4PSPassageTrackLength* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSPassageTrackLength(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSPassageTrackLength3D(token[0]); }
-              ps->Weighted(StoB(token[1]));
-              ps->SetUnit(token[2]);
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qFlatSurfCurrCmd){
-          if( CheckMeshPS(mesh,token[0],command)) {
-              G4PSFlatSurfaceCurrent* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSFlatSurfaceCurrent(token[0],StoI(token[1]),mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSFlatSurfaceCurrent3D(token[0],StoI(token[1])); }
-              ps->Weighted(StoB(token[2]));
-              ps->DivideByArea(StoB(token[3]));
-              if ( StoB(token[3]) ){
-                ps->SetUnit(token[4]);
-              }else{
-                ps->SetUnit("");
-              }
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qFlatSurfFluxCmd){
-          if( CheckMeshPS(mesh, token[0],command )) {
-              G4PSFlatSurfaceFlux* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSFlatSurfaceFlux(token[0],StoI(token[1]),mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSFlatSurfaceFlux3D(token[0],StoI(token[1])); }
-              ps->Weighted(StoB(token[2]));
-              ps->DivideByArea(StoB(token[3]));
-              if ( StoB(token[3]) ){
-                ps->SetUnit(token[4]);
-              }else{
-                ps->SetUnit("");
-              }
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qVolFluxCmd) {
-          if( CheckMeshPS(mesh, token[0],command )) {
-              G4PSVolumeFlux* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSVolumeFlux(token[0],StoI(token[2]),mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSVolumeFlux3D(token[0],StoI(token[2])); }
-              ps->SetDivCos(StoI(token[1]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-
-//    } else if(command== qSphereSurfCurrCmd){
-//        if( CheckMeshPS(mesh, token[0],command )) {
-//            G4PSSphereSurfaceCurrent3D* ps = 
-//              new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
-//            ps->Weighted(StoB(token[2]));
-//            ps->DivideByArea(StoB(token[3]));
-//            if ( StoB(token[3]) ){
-//              ps->SetUnit(token[4]);
-//            }else{
-//              ps->SetUnit("");
-//            }
-//            mesh->SetPrimitiveScorer(ps);
-//        }
-//   } else if(command== qSphereSurfFluxCmd){
-//        if( CheckMeshPS(mesh,token[0],command)) {
-//            G4PSSphereSurfaceFlux3D* ps = new G4PSSphereSurfaceFlux3D(token[0], StoI(token[1]));
-//            ps->Weighted(StoB(token[2]));
-//            ps->DivideByArea(StoB(token[3]));
-//            if ( StoB(token[3]) ){
-//              ps->SetUnit(token[4]);
-//            }else{
-//              ps->SetUnit("");
-//            }
-//            mesh->SetPrimitiveScorer(ps);
-//        }
-//   } else if(command== qCylSurfCurrCmd){
-//        if( CheckMeshPS(mesh, token[0],command ) ) {
-//            G4PSCylinderSurfaceCurrent3D* ps = 
-//              new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
-//            ps->Weighted(StoB(token[2]));
-//            ps->DivideByArea(StoB(token[3]));
-//            if ( StoB(token[3]) ){
-//              ps->SetUnit(token[4]);
-//            }else{
-//              ps->SetUnit("");
-//            }
-//            ps->SetUnit(token[4]);
-//            mesh->SetPrimitiveScorer(ps);
-//        }
-//   } else if(command== qCylSurfFluxCmd){
-//        if( CheckMeshPS(mesh, token[0],command ) {
-//            G4PSCylinerSurfaceFlux3D* ps =new G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1]));
-//            ps->Weighted(StoB(token[2]));
-//            ps->DivideByArea(StoB(token[3]));
-//            if ( StoB(token[3]) ){
-//              ps->SetUnit(token[4]);
-//            }else{
-//              ps->SetUnit("");
-//            }
-//            mesh->SetPrimitiveScorer(ps);
-//        }
-      } else if(command== qNofCollisionCmd){
-          if( CheckMeshPS(mesh,token[0],command)) {
-              G4PSNofCollision* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSNofCollision3D(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSNofCollision3D(token[0]); }
-              ps->Weighted(StoB(token[1]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qPopulationCmd){
-          if( CheckMeshPS(mesh,token[0],command) ) {
-              G4PSPopulation* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSPopulation(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSPopulation3D(token[0]); }
-              ps->Weighted(StoB(token[1]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qTrackCountCmd){
-          if( CheckMeshPS(mesh,token[0],command)) {
-              G4PSTrackCounter* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSTrackCounter(token[0],StoI(token[1]),mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSTrackCounter3D(token[0],StoI(token[1])); }
-              ps->Weighted(StoB(token[2]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qTerminationCmd){
-          if( CheckMeshPS(mesh,token[0],command)) {
-              G4PSTermination* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSTermination(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSTermination3D(token[0]); }
-              ps->Weighted(StoB(token[1]));
-              mesh->SetPrimitiveScorer(ps);
-          }
-
-      } else if(command== qMinKinEAtGeneCmd){
-          if( CheckMeshPS(mesh,token[0],command) ){
-              G4PSMinKinEAtGeneration* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSMinKinEAtGeneration(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSMinKinEAtGeneration3D(token[0]); }
-              ps->SetUnit(token[1]);
-              mesh->SetPrimitiveScorer(ps);
-          }
-      } else if(command== qStepCheckerCmd){
-          if( CheckMeshPS(mesh,token[0],command) ){
-              G4PSStepChecker* ps = nullptr;
-              if(shape==MeshShape::realWorldLogVol || shape==MeshShape::probe)
-              { ps = new G4PSStepChecker(token[0],mesh->GetCopyNumberLevel()); }
-              else
-              { ps = new G4PSStepChecker3D(token[0]); }
-              mesh->SetPrimitiveScorer(ps);
-          }
-
-            //
-            // Filters 
-            // 
-      }else if(command== fchargedCmd){
-            if(!mesh->IsCurrentPrimitiveScorerNull()) {
-              mesh->SetFilter(new G4SDChargedFilter(token[0])); 
-            } else {
-              ed << "WARNING[" << fchargedCmd->GetCommandPath()
-                 << "] : Current quantity is not set. Set or touch a quantity first.";
-              command->CommandFailed(ed);
-            }
-      }else if(command== fneutralCmd){
-            if(!mesh->IsCurrentPrimitiveScorerNull()) {
-              mesh->SetFilter(new G4SDNeutralFilter(token[0])); 
-            } else {
-              ed << "WARNING[" << fneutralCmd->GetCommandPath()
-                 << "] : Current quantity is not set. Set or touch a quantity first.";
-              command->CommandFailed(ed);
-            }
-      }else if(command== fkinECmd){
-            if(!mesh->IsCurrentPrimitiveScorerNull()) {
-              G4String& name = token[0];
-              G4double elow  = StoD(token[1]);
-              G4double ehigh = StoD(token[2]);
-              G4double unitVal = G4UnitDefinition::GetValueOf(token[3]);
-              mesh->SetFilter(new G4SDKineticEnergyFilter(name,elow*unitVal,ehigh*unitVal));
-            } else {
-              ed << "WARNING[" << fkinECmd->GetCommandPath()
-                 << "] : Current quantity is not set. Set or touch a quantity first.";
-              command->CommandFailed(ed);
-            }
-      }else if(command== fparticleKinECmd){
-            if(!mesh->IsCurrentPrimitiveScorerNull()) {
-              FParticleWithEnergyCommand(mesh,token); 
-            } else {
-              ed << "WARNING[" << fparticleKinECmd->GetCommandPath()
-                 << "] : Current quantity is not set. Set or touch a quantity first.";
-              command->CommandFailed(ed);
-            }
-      } else if(command==fparticleCmd) {
-            if(!mesh->IsCurrentPrimitiveScorerNull()) {
-              FParticleCommand(mesh,token);
-            } else {
-              ed << "WARNING[" << fparticleCmd->GetCommandPath()
-                 << "] : Current quantity is not set. Set or touch a quantity first.";
-              command->CommandFailed(ed);
-            }
+      else if(shape == MeshShape::probe)
+      {
+        ps = new G4PSCellFlux(token[0]);
       }
+      ps->SetUnit(token[1]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qPassCellFluxCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSPassageCellFlux* ps = nullptr;
+      if(shape == MeshShape::box)
+      {
+        ps = new G4PSPassageCellFlux3D(token[0]);
+      }
+      else if(shape == MeshShape::cylinder)
+      {
+        G4PSPassageCellFluxForCylinder3D* pps =
+          new G4PSPassageCellFluxForCylinder3D(token[0]);
+        G4ThreeVector msize = mesh->GetSize();     // gevin in R Z N/A
+        pps->SetCylinderSize(msize[0], msize[1]);  // given in dr dz
+        G4int nSeg[3];
+        mesh->GetNumberOfSegments(nSeg);
+        pps->SetNumberOfSegments(nSeg);
+        ps = pps;
+      }
+      else if(shape == MeshShape::realWorldLogVol)
+      {
+        ed << "Passing cell flux for real world volume is not yet supported. "
+              "Command ignored.";
+        command->CommandFailed(ed);
+        return;
+      }
+      else if(shape == MeshShape::probe)
+      {
+        ps = new G4PSPassageCellFlux(token[0]);
+      }
+      ps->SetUnit(token[1]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qeDepCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSEnergyDeposit* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSEnergyDeposit(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSEnergyDeposit3D(token[0]);
+      }
+      ps->SetUnit(token[1]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qdoseDepCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSDoseDeposit* ps = nullptr;
+      if(shape == MeshShape::box)
+      {
+        ps = new G4PSDoseDeposit3D(token[0]);
+      }
+      else if(shape == MeshShape::cylinder)
+      {
+        G4PSDoseDepositForCylinder3D* pps =
+          new G4PSDoseDepositForCylinder3D(token[0]);
+        pps->SetUnit(token[1]);
+        G4ThreeVector msize = mesh->GetSize();     // gevin in R Z N/A
+        pps->SetCylinderSize(msize[0], msize[1]);  // given in dr dz
+        G4int nSeg[3];
+        mesh->GetNumberOfSegments(nSeg);
+        pps->SetNumberOfSegments(nSeg);
+        ps = pps;
+      }
+      else if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSDoseDeposit(token[0], mesh->GetCopyNumberLevel());
+      }
+      ps->SetUnit(token[1]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qnOfStepCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSNofStep* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSNofStep(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSNofStep3D(token[0]);
+      }
+      ps->SetBoundaryFlag(StoB(token[1]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qnOfSecondaryCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSNofSecondary* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSNofSecondary(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSNofSecondary3D(token[0]);
+      }
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qTrackLengthCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSTrackLength* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSTrackLength(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSTrackLength3D(token[0]);
+      }
+      ps->Weighted(StoB(token[1]));
+      ps->MultiplyKineticEnergy(StoB(token[2]));
+      ps->DivideByVelocity(StoB(token[3]));
+      ps->SetUnit(token[4]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qPassCellCurrCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSPassageCellCurrent* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSPassageCellCurrent(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSPassageCellCurrent3D(token[0]);
+      }
+      ps->Weighted(StoB(token[1]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qPassTrackLengthCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSPassageTrackLength* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSPassageTrackLength(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSPassageTrackLength3D(token[0]);
+      }
+      ps->Weighted(StoB(token[1]));
+      ps->SetUnit(token[2]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qFlatSurfCurrCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSFlatSurfaceCurrent* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSFlatSurfaceCurrent(token[0], StoI(token[1]),
+                                        mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSFlatSurfaceCurrent3D(token[0], StoI(token[1]));
+      }
+      ps->Weighted(StoB(token[2]));
+      ps->DivideByArea(StoB(token[3]));
+      if(StoB(token[3]))
+      {
+        ps->SetUnit(token[4]);
+      }
+      else
+      {
+        ps->SetUnit("");
+      }
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qFlatSurfFluxCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSFlatSurfaceFlux* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSFlatSurfaceFlux(token[0], StoI(token[1]),
+                                     mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSFlatSurfaceFlux3D(token[0], StoI(token[1]));
+      }
+      ps->Weighted(StoB(token[2]));
+      ps->DivideByArea(StoB(token[3]));
+      if(StoB(token[3]))
+      {
+        ps->SetUnit(token[4]);
+      }
+      else
+      {
+        ps->SetUnit("");
+      }
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qVolFluxCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSVolumeFlux* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSVolumeFlux(token[0], StoI(token[2]),
+                                mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSVolumeFlux3D(token[0], StoI(token[2]));
+      }
+      ps->SetDivCos(StoI(token[1]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+
+    //    } else if(command== qSphereSurfCurrCmd){
+    //        if( CheckMeshPS(mesh, token[0],command )) {
+    //            G4PSSphereSurfaceCurrent3D* ps =
+    //              new G4PSSphereSurfaceCurrent3D(token[0],StoI(token[1]));
+    //            ps->Weighted(StoB(token[2]));
+    //            ps->DivideByArea(StoB(token[3]));
+    //            if ( StoB(token[3]) ){
+    //              ps->SetUnit(token[4]);
+    //            }else{
+    //              ps->SetUnit("");
+    //            }
+    //            mesh->SetPrimitiveScorer(ps);
+    //        }
+    //   } else if(command== qSphereSurfFluxCmd){
+    //        if( CheckMeshPS(mesh,token[0],command)) {
+    //            G4PSSphereSurfaceFlux3D* ps = new
+    //            G4PSSphereSurfaceFlux3D(token[0], StoI(token[1]));
+    //            ps->Weighted(StoB(token[2]));
+    //            ps->DivideByArea(StoB(token[3]));
+    //            if ( StoB(token[3]) ){
+    //              ps->SetUnit(token[4]);
+    //            }else{
+    //              ps->SetUnit("");
+    //            }
+    //            mesh->SetPrimitiveScorer(ps);
+    //        }
+    //   } else if(command== qCylSurfCurrCmd){
+    //        if( CheckMeshPS(mesh, token[0],command ) ) {
+    //            G4PSCylinderSurfaceCurrent3D* ps =
+    //              new G4PSCylinderSurfaceCurrent3D(token[0],StoI(token[1]));
+    //            ps->Weighted(StoB(token[2]));
+    //            ps->DivideByArea(StoB(token[3]));
+    //            if ( StoB(token[3]) ){
+    //              ps->SetUnit(token[4]);
+    //            }else{
+    //              ps->SetUnit("");
+    //            }
+    //            ps->SetUnit(token[4]);
+    //            mesh->SetPrimitiveScorer(ps);
+    //        }
+    //   } else if(command== qCylSurfFluxCmd){
+    //        if( CheckMeshPS(mesh, token[0],command ) {
+    //            G4PSCylinerSurfaceFlux3D* ps =new
+    //            G4PSCylinderSurfaceFlux3D(token[0], StoI(token[1]));
+    //            ps->Weighted(StoB(token[2]));
+    //            ps->DivideByArea(StoB(token[3]));
+    //            if ( StoB(token[3]) ){
+    //              ps->SetUnit(token[4]);
+    //            }else{
+    //              ps->SetUnit("");
+    //            }
+    //            mesh->SetPrimitiveScorer(ps);
+    //        }
+  }
+  else if(command == qNofCollisionCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSNofCollision* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSNofCollision3D(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSNofCollision3D(token[0]);
+      }
+      ps->Weighted(StoB(token[1]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qPopulationCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSPopulation* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSPopulation(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSPopulation3D(token[0]);
+      }
+      ps->Weighted(StoB(token[1]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qTrackCountCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSTrackCounter* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSTrackCounter(token[0], StoI(token[1]),
+                                  mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSTrackCounter3D(token[0], StoI(token[1]));
+      }
+      ps->Weighted(StoB(token[2]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qTerminationCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSTermination* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSTermination(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSTermination3D(token[0]);
+      }
+      ps->Weighted(StoB(token[1]));
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qMinKinEAtGeneCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSMinKinEAtGeneration* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSMinKinEAtGeneration(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSMinKinEAtGeneration3D(token[0]);
+      }
+      ps->SetUnit(token[1]);
+      mesh->SetPrimitiveScorer(ps);
+    }
+  }
+  else if(command == qStepCheckerCmd)
+  {
+    if(CheckMeshPS(mesh, token[0], command))
+    {
+      G4PSStepChecker* ps = nullptr;
+      if(shape == MeshShape::realWorldLogVol || shape == MeshShape::probe)
+      {
+        ps = new G4PSStepChecker(token[0], mesh->GetCopyNumberLevel());
+      }
+      else
+      {
+        ps = new G4PSStepChecker3D(token[0]);
+      }
+      mesh->SetPrimitiveScorer(ps);
+    }
+
+    //
+    // Filters
+    //
+  }
+  else if(command == fchargedCmd)
+  {
+    if(!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      mesh->SetFilter(new G4SDChargedFilter(token[0]));
+    }
+    else
+    {
+      ed << "WARNING[" << fchargedCmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
+  else if(command == fneutralCmd)
+  {
+    if(!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      mesh->SetFilter(new G4SDNeutralFilter(token[0]));
+    }
+    else
+    {
+      ed << "WARNING[" << fneutralCmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
+  else if(command == fkinECmd)
+  {
+    if(!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      G4String& name   = token[0];
+      G4double elow    = StoD(token[1]);
+      G4double ehigh   = StoD(token[2]);
+      G4double unitVal = G4UnitDefinition::GetValueOf(token[3]);
+      mesh->SetFilter(
+        new G4SDKineticEnergyFilter(name, elow * unitVal, ehigh * unitVal));
+    }
+    else
+    {
+      ed << "WARNING[" << fkinECmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
+  else if(command == fparticleKinECmd)
+  {
+    if(!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      FParticleWithEnergyCommand(mesh, token);
+    }
+    else
+    {
+      ed << "WARNING[" << fparticleKinECmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
+  else if(command == fparticleCmd)
+  {
+    if(!mesh->IsCurrentPrimitiveScorerNull())
+    {
+      FParticleCommand(mesh, token);
+    }
+    else
+    {
+      ed << "WARNING[" << fparticleCmd->GetCommandPath()
+         << "] : Current quantity is not set. Set or touch a quantity first.";
+      command->CommandFailed(ed);
+    }
+  }
 }
 
-G4String G4ScoreQuantityMessenger::GetCurrentValue(G4UIcommand * /*command*/)
+G4String G4ScoreQuantityMessenger::GetCurrentValue(G4UIcommand* /*command*/)
 {
   G4String val;
 
   return val;
 }
 
-void G4ScoreQuantityMessenger::FillTokenVec(G4String newValues, G4TokenVec& token){
-
-    G4Tokenizer next(newValues);
-    G4String val;
-    while ( !(val = next()).isNull() ) { // Loop checking 12.18.2015 M.Asai
-        token.push_back(val);
-    }
+void G4ScoreQuantityMessenger::FillTokenVec(G4String newValues,
+                                            G4TokenVec& token)
+{
+  G4Tokenizer next(newValues);
+  G4String val;
+  while(!(val = next()).isNull())
+  {  // Loop checking 12.18.2015 M.Asai
+    token.push_back(val);
+  }
 }
 
-
-void G4ScoreQuantityMessenger::FParticleCommand(G4VScoringMesh* mesh, G4TokenVec& token){
-    //
-    // Filter name
-    G4String name = token[0];
-    //
-    // particle list
-    std::vector<G4String> pnames;
-    for ( G4int i = 1; i<(G4int)token.size(); i++){
-        pnames.push_back(token[i]);
-    }
-    //
-    // Attach Filter
-    mesh->SetFilter(new G4SDParticleFilter(name,pnames));
-}    
-
-void G4ScoreQuantityMessenger::FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token){
-    G4String& name = token[0];
-    G4double  elow = StoD(token[1]);
-    G4double  ehigh= StoD(token[2]);
-    G4double  unitVal = G4UnitDefinition::GetValueOf(token[3]);
-    G4SDParticleWithEnergyFilter* filter = 
-        new G4SDParticleWithEnergyFilter(name,elow*unitVal,ehigh*unitVal);
-    for ( G4int i = 4; i < (G4int)token.size(); i++){
-        filter->add(token[i]);
-    }
-    mesh->SetFilter(filter);
+void G4ScoreQuantityMessenger::FParticleCommand(G4VScoringMesh* mesh,
+                                                G4TokenVec& token)
+{
+  //
+  // Filter name
+  G4String name = token[0];
+  //
+  // particle list
+  std::vector<G4String> pnames;
+  for(G4int i = 1; i < (G4int) token.size(); i++)
+  {
+    pnames.push_back(token[i]);
+  }
+  //
+  // Attach Filter
+  mesh->SetFilter(new G4SDParticleFilter(name, pnames));
 }
 
-G4bool G4ScoreQuantityMessenger::CheckMeshPS(G4VScoringMesh* mesh, G4String& psname,
-                                             G4UIcommand* command){
-    if(!mesh->FindPrimitiveScorer(psname)) {
-        return true;
-    } else {
-        G4ExceptionDescription ed;
-        ed << "WARNING[" << qTouchCmd->GetCommandPath()
-           << "] : Quantity name, \"" << psname << "\", is already existing.";
-        command->CommandFailed(ed);
-        mesh->SetNullToCurrentPrimitiveScorer();
-        return false;
-    }
+void G4ScoreQuantityMessenger::FParticleWithEnergyCommand(G4VScoringMesh* mesh,
+                                                          G4TokenVec& token)
+{
+  G4String& name   = token[0];
+  G4double elow    = StoD(token[1]);
+  G4double ehigh   = StoD(token[2]);
+  G4double unitVal = G4UnitDefinition::GetValueOf(token[3]);
+  G4SDParticleWithEnergyFilter* filter =
+    new G4SDParticleWithEnergyFilter(name, elow * unitVal, ehigh * unitVal);
+  for(G4int i = 4; i < (G4int) token.size(); i++)
+  {
+    filter->add(token[i]);
+  }
+  mesh->SetFilter(filter);
+}
+
+G4bool G4ScoreQuantityMessenger::CheckMeshPS(G4VScoringMesh* mesh,
+                                             G4String& psname,
+                                             G4UIcommand* command)
+{
+  if(!mesh->FindPrimitiveScorer(psname))
+  {
+    return true;
+  }
+  else
+  {
+    G4ExceptionDescription ed;
+    ed << "WARNING[" << qTouchCmd->GetCommandPath() << "] : Quantity name, \""
+       << psname << "\", is already existing.";
+    command->CommandFailed(ed);
+    mesh->SetNullToCurrentPrimitiveScorer();
+    return false;
+  }
 }

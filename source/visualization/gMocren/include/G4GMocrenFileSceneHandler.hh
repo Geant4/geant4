@@ -63,18 +63,12 @@ public:
   virtual ~G4GMocrenFileSceneHandler ();
 
 	//----- overriding base class methods
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive (const G4Polyline& line);
   void AddPrimitive (const G4Polyhedron& p);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-
-	//----- explicitly invoke base class methods to avoid warnings about
-        //----- hiding of base class methods.
-  void AddPrimitive (const G4Polymarker& polymarker) 
-       { G4VSceneHandler::AddPrimitive (polymarker); }
-  void AddPrimitive (const G4Scale& scale) 
-       { G4VSceneHandler::AddPrimitive (scale); }
 
   virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
   virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}
@@ -82,6 +76,7 @@ public:
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives ();
 
+  using G4VSceneHandler::AddSolid;
   void AddSolid ( const G4Box&    box    );
   void AddSolid ( const G4Cons&   cons   );
   void AddSolid ( const G4Tubs&   tubs   );
@@ -90,22 +85,9 @@ public:
   void AddSolid ( const G4Sphere& sphere );
   void AddSolid ( const G4Para&   para   );
   void AddSolid ( const G4Torus&  torus  );
-  void AddSolid ( const G4Polycone& polycone ) {
-    G4VSceneHandler::AddSolid (polycone);
-  }
-  void AddSolid ( const G4Polyhedra& polyhedra) {
-    G4VSceneHandler::AddSolid (polyhedra);
-  }
-  void AddSolid ( const G4Orb& orb ) {
-    G4VSceneHandler::AddSolid (orb);
-  }
-  void AddSolid ( const G4Ellipsoid& ellipsoid) {
-    G4VSceneHandler::AddSolid (ellipsoid);
-  }
-  void AddSolid ( const G4TessellatedSolid& tess) {
-    G4VSceneHandler::AddSolid (tess);
-  }
   void AddSolid ( const G4VSolid& solid  );
+
+  using G4VSceneHandler::AddCompound;
   void AddCompound ( const G4VTrajectory& traj);
   void AddCompound ( const G4VHit& hit);
   void AddCompound ( const G4VDigi& hit);

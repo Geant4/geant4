@@ -122,15 +122,15 @@ protected:
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*, 
                               G4double kinEnergy) final;
 
+  // hide assignment operator 
+  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
+  G4PAIModel(const  G4PAIModel&) = delete;
+
 private:
 
   inline G4int FindCoupleIndex(const G4MaterialCutsCouple*);
 
   inline void SetParticle(const G4ParticleDefinition* p);
-
-  // hide assignment operator 
-  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
-  G4PAIModel(const  G4PAIModel&) = delete;
 
   G4int                       fVerbose; 
 

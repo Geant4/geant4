@@ -64,23 +64,16 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
-  energyHighLimit  = 20.0*MeV;
-  energyLowLimit   = 1.0*keV;
-  energyBohr       = 25.*keV;
-  massFactor       = amu_c2/(proton_mass_c2*keV);
+  energyHighLimit  = 20.0*CLHEP::MeV;
+  energyLowLimit   = 1.0*CLHEP::keV;
+  energyBohr       = 25.*CLHEP::keV;
+  massFactor       = CLHEP::amu_c2/(CLHEP::proton_mass_c2*CLHEP::keV);
   minCharge        = 1.0;
-  lastPart         = 0;
-  lastMat          = 0;
   lastKinEnergy    = 0.0;
-  effCharge        = eplus;
+  effCharge        = CLHEP::eplus;
   inveplus         = 1.0/CLHEP::eplus;
   g4calc = G4Pow::GetInstance();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4ionEffectiveCharge::~G4ionEffectiveCharge()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -107,12 +100,12 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
-  G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
+  G4double reducedEnergy = kineticEnergy * CLHEP::proton_mass_c2/mass ;
 
   //G4cout << "e= " << reducedEnergy << " Zi= " << Zi << "  " 
   //<< material->GetName() << G4endl;
 
-  if(Zi < 1.5 || !material || reducedEnergy > Zi*energyHighLimit ) {
+  if(Zi < 1.5 || reducedEnergy > Zi*energyHighLimit ) {
     return charge;
   }
   G4double z    = material->GetIonisation()->GetZeffective();
@@ -131,9 +124,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
       y *= Q;
       x += y * c[i] ;
     }
-    G4double ex;
-    if(x < 0.2) { ex = x * (1 - 0.5*x); }
-    else        { ex = 1. - G4Exp(-x); }
+    G4double ex = (x < 0.2) ? x * (1 - 0.5*x) : 1. - G4Exp(-x);
 
     G4double tq = 7.6 - Q;
     G4double tq2= tq*tq;
@@ -165,18 +156,18 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
       y = 0.692308 * vF * (1.0 + 0.666666*v1sq + v1sq*v1sq/15.0) / zi23 ;
     }
 
-    G4double q;
-    G4double y3 = std::pow(y, 0.3) ;
+    G4double y3 = G4Exp(0.3*G4Log(y));
     // G4cout<<"y= "<<y<<" y3= "<<y3<<" v1= "<<v1<<" vF= "<<vF<<G4endl; 
-    q = 1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y);   
-    q = std::max(q,  minCharge/Zi); 
+    G4double q = std::max(1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y
+                                     - 0.008983*y*y), minCharge/Zi); 
   
     effCharge = q*charge;
     
-    G4double tq = 7.6 - G4Log(reducedEnergy/keV);
+    // compute chage correction
+
+    G4double tq = 7.6 - G4Log(reducedEnergy/CLHEP::keV);
     G4double tq2= tq*tq;
-    G4double sq = 1.0 + ( 0.18 + 0.0015 * z )*G4Exp(-tq2)/ (Zi*Zi);
- 
+    G4double sq = 1.0 + ( 0.18 + 0.0015 * z )*G4Exp(-tq2)/ (Zi*Zi); 
     //    G4cout << "sq= " << sq << G4endl;
 
     // Screen length according to
@@ -199,5 +190,3 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-

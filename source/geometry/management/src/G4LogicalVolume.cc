@@ -142,6 +142,16 @@ G4LogicalVolume::~G4LogicalVolume()
 }
 
 // ********************************************************************
+// SetName - Set volume name and notify store of the change
+// ********************************************************************
+//
+void G4LogicalVolume::SetName(const G4String& pName)
+{
+  fName = pName;
+  G4LogicalVolumeStore::GetInstance()->SetMapValid(false);
+}
+
+// ********************************************************************
 // InitialiseWorker
 //
 // This method is similar to the constructor. It is used by each worker

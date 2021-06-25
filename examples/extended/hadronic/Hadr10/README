@@ -1,0 +1,71 @@
+This is an example that aims to test the treatment of decays in Geant4.
+In particular, we want to test the decays of the tau lepton, charmed and
+bottom hadrons, and the use of pre-assigned decays.
+
+Note that pre-assigned decays are decays that are usually specified by
+Monte Carlo event generators. For simplicity, and to avoid dependencies
+on external code, in this test we don't use any MC generator, and we
+pre-assign decays by hand (using the Geant4 decay table: this is done
+in the method SteppingAction::UserSteppingAction). But this does not
+change anything regarding the testing of the pre-assignment mechanism
+of Geant4.
+
+The set-up is very simple: a cylindrical layer, 2 meter long, whose radii
+(inner and outer) and material can be specified via UI commands. By default,
+the material is Beryllium, with inner radius of 9 mm and outer radius of
+11 mm (i.e. the default thickness is 2 mm). In the rest of the world volume,
+is filled with G4_Galactic material (i.e. very low density gas).
+There is an uniform and constant magnetic field along the z-axis, whose
+value is set via UI command.
+
+The primary particle, tau- by default, is shot along the x-axis, starting
+from the center (0, 0, 0).
+Its kinetic energy, by default 500 GeV, can be set via UI command.
+
+All secondaries are killed immediately, so only the primary particle
+is studied.
+
+The only interesting part of this example is the SteppingAction.
+The decay of the primary particle is pre-assigned there.
+When the primary particle decays, the properties of the decay -
+position, momentum, energy, etc. of the particle at the moment
+of the decay - are collected and then used to:
+-  compute the difference between the "MC-truth" decay radius
+   (defined as the radius at which the primary would have decayed
+    if there were no magnetic field and interactions with matter,
+    i.e. no energy loss and no multiple scattering) and the real
+   decay radius
+-  compute the angular deflection (in degrees) between the initial
+   direction of the primary and its final direction at the moment
+   it decays
+-  the energy loss (i.e. the difference between the initial kinetic energy
+   of the primary and the its kinetic energy at the moment of the decay)
+-  the energy-momentum violation of the decay (i.e. the difference between
+   the sum of the 4-momenta of the decay products and the 4-momentum of
+   primary particle at the moment of its decay).
+Some of these information are printed out for each decay, and a summary
+statistics is printed out at the end of the application.
+
+Look for the string "***LOOKHERE***" for those parameters/options that
+are hardwired in the code (i.e. not available via UI command).
+
+This example uses the physics list factory, therefore you can specify
+the reference physics list you want to use via the PHYSLIST
+environmental variable (by default, if you don't set it, the FTFP_BERT
+physics list is used).
+
+To build this example:
+
+  mkdir Build; cd Build
+  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DGeant4_DIR=/path-to-geant4-libraries ../.
+  make
+
+To run it:
+
+  ./Hadr10 hadr10.in
+
+which shoots 500 GeV TeV particles - one run of 10'000 events for each
+type of particle - along the x-axis, and print out some information
+regarding their decays, as well as some summary information at the end
+of each run.

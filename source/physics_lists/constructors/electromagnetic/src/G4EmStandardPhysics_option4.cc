@@ -53,9 +53,12 @@
 #include "G4RayleighScattering.hh"
 #include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaModel.hh"
-#include "G4LowEPComptonModel.hh"
 #include "G4BetheHeitler5DModel.hh"
 #include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermorePolarizedRayleighModel.hh"
+#include "G4PhotoElectricAngularGeneratorPolarized.hh"
+#include "G4LowEPComptonModel.hh"
+#include "G4LowEPPolarizedComptonModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
@@ -103,11 +106,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option4);
 
 G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver, 
                                                          const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard_opt4"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandard_opt4")
 {
+  SetVerboseLevel(ver);
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   param->SetMinEnergy(100*CLHEP::eV);
   param->SetLowestElectronEnergy(100*CLHEP::eV);
   param->SetNumberOfBinsPerDecade(20);
@@ -144,58 +148,76 @@ void G4EmStandardPhysics_option4::ConstructParticle()
 
 void G4EmStandardPhysics_option4::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4EmParameters* param = G4EmParameters::Instance();
 
   // processes used by several particles
-  G4ePairProduction* ee = new G4ePairProduction();
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
-  // nuclear stopping
-  G4double nielEnergyLimit = G4EmParameters::Instance()->MaxNIELEnergy();
-  G4NuclearStopping* pnuc = new G4NuclearStopping();
-  pnuc->SetMaxKinEnergy(nielEnergyLimit);
+  // nuclear stopping is enabled if the energy limit above zero
+  G4double nielEnergyLimit = param->MaxNIELEnergy();
+  G4NuclearStopping* pnuc = nullptr;
+  if(nielEnergyLimit > 0.0) {
+    pnuc = new G4NuclearStopping();
+    pnuc->SetMaxKinEnergy(nielEnergyLimit);
+  }
 
   // high energy limit for e+- scattering models and bremsstrahlung
-  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
+  G4double highEnergyLimit = param->MscEnergyLimit();
 
   // Add gamma EM Processes
   G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4bool polar = param->EnablePolarisation();
 
   // Photoelectric
   G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
-  G4VEmModel* theLivermorePEModel = new G4LivermorePhotoElectricModel();
-  pe->SetEmModel(theLivermorePEModel);
+  G4VEmModel* peModel = new G4LivermorePhotoElectricModel();
+  pe->SetEmModel(peModel);
+  if(polar) {
+    peModel->SetAngularDistribution(new G4PhotoElectricAngularGeneratorPolarized());
+  }
 
   // Compton scattering
   G4ComptonScattering* cs = new G4ComptonScattering;
   cs->SetEmModel(new G4KleinNishinaModel());
-  G4VEmModel* theLowEPComptonModel = new G4LowEPComptonModel();
-  theLowEPComptonModel->SetHighEnergyLimit(20*CLHEP::MeV);
-  cs->AddEmModel(0, theLowEPComptonModel);
+  G4VEmModel* cModel = nullptr;
+  if(polar) { 
+    cModel = new G4LowEPPolarizedComptonModel();
+  } else {
+    cModel = new G4LowEPComptonModel();
+  }
+  cModel->SetHighEnergyLimit(20*CLHEP::MeV);
+  cs->AddEmModel(0, cModel);
 
   // Gamma conversion
   G4GammaConversion* gc = new G4GammaConversion();
   G4VEmModel* conv = new G4BetheHeitler5DModel();
   gc->SetEmModel(conv);
 
-  if(G4EmParameters::Instance()->GeneralProcessActive()) {
+  // default Rayleigh scattering is Livermore
+  G4RayleighScattering* rl = new G4RayleighScattering();
+  if(polar) {
+    rl->SetEmModel(new G4LivermorePolarizedRayleighModel());
+  }
+
+  if(param->GeneralProcessActive()) {
     G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
     sp->AddEmProcess(pe);
     sp->AddEmProcess(cs);
     sp->AddEmProcess(gc);
-    sp->AddEmProcess(new G4RayleighScattering());
+    sp->AddEmProcess(rl);
     G4LossTableManager::Instance()->SetGammaGeneralProcess(sp);
     ph->RegisterProcess(sp, particle);
   } else {
     ph->RegisterProcess(pe, particle);
     ph->RegisterProcess(cs, particle);
     ph->RegisterProcess(gc, particle);
-    ph->RegisterProcess(new G4RayleighScattering(), particle);
+    ph->RegisterProcess(rl, particle);
   }
 
   // e-
@@ -234,6 +256,8 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   brem->SetEmModel(br1);
   brem->SetEmModel(br2);
   br1->SetHighEnergyLimit(CLHEP::GeV);
+
+  G4ePairProduction* ee = new G4ePairProduction();
 
   // register processes
   ph->RegisterProcess(msc, particle);
@@ -293,7 +317,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   ionIoni->SetEmModel(new G4IonParametrisedLossModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
-  ph->RegisterProcess(pnuc, particle);
+  if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }
 
   // muons, hadrons, ions
   G4EmBuilder::ConstructCharged(hmsc, pnuc);

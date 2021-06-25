@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4detector
-# Package: Geant4.src.G4digits_hits.G4detector
-#------------------------------------------------------------------------------
+# - G4detector module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4detector
-  HEADERS
+geant4_add_module(G4detector
+  PUBLIC_HEADERS
     G4CellScoreComposer.hh
     G4CellScoreValues.hh
     G4CollectionNameVector.hh
@@ -42,25 +37,8 @@ geant4_define_module(NAME G4detector
     G4VSDFilter.cc
     G4VScoreHistFiller.cc
     G4VSensitiveDetector.cc
-    G4MultiSensitiveDetector.cc
-  GRANULAR_DEPENDENCIES
-    G4geombias
-    G4geometrymng
-    G4globman
-    G4hits
-    G4intercoms
-    G4materials
-    G4navigation
-    G4partman
-    G4track
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4intercoms
-    G4materials
-    G4particles
-    G4track
-)
+    G4MultiSensitiveDetector.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4detector
+  PUBLIC G4track G4hits G4geometrymng G4volumes G4intercoms G4globman
+  PRIVATE G4navigation)

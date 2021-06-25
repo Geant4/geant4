@@ -34,11 +34,13 @@
 
 #include <vector>
 #include "globals.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 typedef G4String nameType;
 
 class CCalSDList
 {
+friend class G4ThreadLocalSingleton< CCalSDList >;
 private: 
   CCalSDList();
   ~CCalSDList();
@@ -58,7 +60,7 @@ public:
   G4int getNumberOfTrackerSD();
   
 private:
-  static CCalSDList* theList;
+  static G4ThreadLocal CCalSDList* theList;
   std::vector<nameType> caloSD;
   std::vector<nameType> trackerSD;
   

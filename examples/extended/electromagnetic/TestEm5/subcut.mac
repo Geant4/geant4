@@ -1,0 +1,43 @@
+#
+# macro file for TestEm5.cc
+#
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setAbsMat Iron
+/testem/det/setAbsThick 5 cm
+/testem/det/setAbsYZ    5 cm
+#
+###/testem/phys/addPhysics emstandard_opt3
+###/testem/phys/addPhysics emstandard_opt4
+/testem/phys/addPhysics emstandard_opt0
+#
+/run/setCut 1 mm
+#
+# to control sub-cutoff production
+/process/eLoss/subsec true World
+/process/eLoss/minsubsec 0.01
+#
+/process/em/verbose 1
+/process/em/printParameters
+#
+/run/initialize
+#
+###/process/inactivate msc
+###/process/inactivate eBrem
+#
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 500 MeV
+#
+/analysis/setFileName subcut
+/analysis/h1/set 2 100 0. 2. MeV     #tkin of secondaries
+/analysis/h1/set 6 100 -3. +3. cm    #x-vertex of secondaries
+#
+/run/beamOn 1000
+#
+# to be run interactively  
+###/control/execute vis.mac
+###/run/beamOn 100
+#

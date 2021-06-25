@@ -34,7 +34,6 @@
 #include "G4Types.hh"
 
 #include "G4RunManagerFactory.hh"
-#include "RE05WorkerInitialization.hh"
 #include "RE05SteppingVerbose.hh"
 
 #include "G4UImanager.hh"
@@ -56,14 +55,11 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
+  // Setting the application-sepcific SteppingVerbose
   auto verbosity = new RE05SteppingVerbose;
-  G4VSteppingVerbose::SetInstance(verbosity);
+
+  // Creating the run manager
   auto runManager = G4RunManagerFactory::CreateRunManager();
-  if(runManager->GetRunManagerType() == G4RunManager::masterRM)
-  {
-    runManager->SetNumberOfThreads(4);
-    runManager->SetUserInitialization(new RE05WorkerInitialization);
-  }
 
   G4String parallelWorldName = "ReadoutWorld";
   // User Initialization classes (mandatory)
@@ -108,6 +104,7 @@ int main(int argc,char** argv)
   //                 be deleted in the main() program !
   delete visManager;
   delete runManager;
+  delete verbosity;
 
   return 0;
 }

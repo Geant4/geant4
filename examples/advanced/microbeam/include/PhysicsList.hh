@@ -37,22 +37,20 @@
 
 #include "G4VModularPhysicsList.hh"
 
+class PhysicsListMessenger;
 class G4VPhysicsConstructor;
 class G4StepLimiter;
-class PhysicsListMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
 
-  PhysicsList();
-  virtual ~PhysicsList();
+  explicit PhysicsList();
+  ~PhysicsList() override;
 
-  virtual void ConstructParticle();
+  void ConstructParticle()override;
 
-  virtual void ConstructProcess();
+  void ConstructProcess()override;
     
   void AddPhysicsList(const G4String& name);
     
@@ -60,7 +58,6 @@ public:
   G4StepLimiter* GetStepMaxProcess() {return fStepMaxProcess;};
 
 private:
-
   G4String               fEmName;
   G4VPhysicsConstructor* fEmPhysicsList;
   G4VPhysicsConstructor* fDecPhysicsList;
@@ -69,6 +66,5 @@ private:
 
   PhysicsListMessenger* fMessenger;
 };
-
 #endif
 

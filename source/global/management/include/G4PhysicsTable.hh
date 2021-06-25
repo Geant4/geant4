@@ -100,7 +100,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   G4bool StorePhysicsTable(const G4String& filename, G4bool ascii = false);
   // Stores PhysicsTable in a file (returns false in case of failure)
 
-  G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii = false);
+  G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii = false, G4bool spline = false);
   // Retrieves Physics from a file (returns false in case of failure)
 
   void ResetFlagArray();
@@ -115,7 +115,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   friend std::ostream& operator<<(std::ostream& out, G4PhysicsTable& table);
 
  protected:
-  G4PhysicsVector* CreatePhysicsVector(G4int type);
+  G4PhysicsVector* CreatePhysicsVector(G4int type, G4bool spline);
   G4FlagCollection vecFlag;
 };
 

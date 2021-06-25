@@ -54,7 +54,7 @@
 
 #include "G4IonStoppingData.hh" 
 #include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -329,7 +329,7 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
 
   if ( !ifilestream.is_open() ) return false;
   
-  G4LPhysicsFreeVector* physicsVector = new G4LPhysicsFreeVector(); 
+  G4PhysicsFreeVector* physicsVector = new G4PhysicsFreeVector(true); 
 
   if( !physicsVector -> Retrieve(ifilestream, true) ) {
  
@@ -338,7 +338,6 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   }
 
   physicsVector -> ScaleVector( MeV, MeV * cm2 /( 0.001 * g) ); 
-  physicsVector -> SetSpline( true );
   physicsVector -> FillSecondDerivatives();
 
   // Retrieved vector is added to material store
@@ -379,7 +378,7 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   std::ifstream ifilestream( fileName );
 
   if ( !ifilestream.is_open() ) return false;  
-  G4LPhysicsFreeVector* physicsVector = new G4LPhysicsFreeVector(); 
+  G4PhysicsFreeVector* physicsVector = new G4PhysicsFreeVector(true); 
 
   if( !physicsVector -> Retrieve(ifilestream, true) ) {
      ifilestream.close();
@@ -387,7 +386,6 @@ G4bool G4IonStoppingData::BuildPhysicsVector(
   }
 
   physicsVector -> ScaleVector( MeV, MeV * cm2 /( 0.001 * g) ); 
-  physicsVector -> SetSpline( true );
   physicsVector -> FillSecondDerivatives();
 
   // Retrieved vector is added to material store

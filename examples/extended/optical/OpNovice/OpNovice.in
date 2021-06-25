@@ -4,6 +4,8 @@
 /run/verbose 1
 /control/cout/ignoreThreadsExcept 0
 #
+/OpNovice/DetectorConstruction/enable_verbose false
+/OpNovice/DetectorConstruction/dumpgdml false
 /run/initialize
 #
 /gun/particle e+
@@ -15,7 +17,6 @@
 /tracking/verbose 0
 /process/optical/cerenkov/setMaxPhotons  15
 /process/optical/cerenkov/setTrackSecondariesFirst false
-/process/optical/scintillation/setYieldFactor 0.3
 #
 /run/beamOn 1000
 

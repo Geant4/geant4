@@ -23,18 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UserWorkerInitialization implementation
+//
+// Author: A.Dotti (SLAC), 25 February 2013
+// --------------------------------------------------------------------
+
 #include "G4UserWorkerInitialization.hh"
 
+// --------------------------------------------------------------------
 G4UserWorkerInitialization::G4UserWorkerInitialization() { ; }
 
+// --------------------------------------------------------------------
 G4UserWorkerInitialization::~G4UserWorkerInitialization() { ; }
 
+// --------------------------------------------------------------------
 void G4UserWorkerInitialization::WorkerInitialize() const { ; }
 
+// --------------------------------------------------------------------
 void G4UserWorkerInitialization::WorkerStart() const { ; }
 
+// --------------------------------------------------------------------
 void G4UserWorkerInitialization::WorkerRunStart() const { ; }
 
+// --------------------------------------------------------------------
 void G4UserWorkerInitialization::WorkerRunEnd() const { ; }
 
+// --------------------------------------------------------------------
 void G4UserWorkerInitialization::WorkerStop() const { ; }

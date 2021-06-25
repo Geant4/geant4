@@ -38,43 +38,26 @@
 #ifndef G4HadronHElasticPhysics_h
 #define G4HadronHElasticPhysics_h 1
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4HadronElasticPhysics.hh"
 
-class G4DiffElasticRatio;
-
-class G4HadronHElasticPhysics : public G4VPhysicsConstructor
+class G4HadronHElasticPhysics : public G4HadronElasticPhysics
 {
 public: 
 
-  G4HadronHElasticPhysics(G4int ver = 0, G4bool diffraction=false); 
+  G4HadronHElasticPhysics(G4int ver = 1, G4bool diffraction = false); 
 
   virtual ~G4HadronHElasticPhysics();
 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  void ConstructParticle() override;
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
   void ConstructProcess() override;
 
-  inline void SetDiffraction(G4bool val) {fDiffraction = val;};
-
-private:
+  inline void SetDiffraction(G4bool val) { fDiffraction = val; };
 
   G4HadronHElasticPhysics(G4HadronHElasticPhysics &) = delete;
   G4HadronHElasticPhysics & operator=
   (const G4HadronHElasticPhysics &right) = delete;
 
-  G4int  verbose;
   G4bool fDiffraction;
-
-  static G4ThreadLocal G4DiffElasticRatio* diffRatio;
-
 };
-
 
 #endif
 

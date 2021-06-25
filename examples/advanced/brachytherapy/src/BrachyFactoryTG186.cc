@@ -33,6 +33,8 @@
 //    *******************************
 //
 //
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionTG186.hh"
 #include "globals.hh"
 #include "BrachyFactoryTG186.hh"
 #include "G4ParticleTable.hh"
@@ -42,8 +44,6 @@
 #include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh" 
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstructionTG186.hh"
 
 BrachyFactoryTG186:: BrachyFactoryTG186()
 {

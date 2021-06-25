@@ -15,6 +15,25 @@ commit in the repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 15, 2021  J.Apostolakis (geommng-V10-07-04)
+- G4UAdapter: added std::ostream& operator << to avoid compilation clash
+  between similar methods for G4VSolid and VecGeom UnplacedVolume.
+
+April 12, 2021 G.Cosmo (geommng-V10-07-03)
+- Fixed potential thread contention in stores when clearing/updating maps
+  at initialisation.
+
+April 9, 2021 G.Cosmo (geommng-V10-07-02)
+- Added missing implementation of inline method GetMap() in stores.
+
+March 30, 2021 B.Morgan (geommng-V10-07-01)
+- Migrate sources.cmake to modular build API
+
+March 23, 2021 G.Cosmo (geommng-V10-07-00)
+- Added map for fast search based on name in G4SolidStore, G4RegionStore,
+  G4logicalVolumeStore and G4PhysicalVolumeStore. Pointers to elements are
+  stored in the map as buckets, grouping elements with same name.
+
 November 8, 2020 E.Tcherniaev (geommng-V10-06-06)
 - Bug fix in calculation of normal in G4UAdapter::DistanceToOut()
 

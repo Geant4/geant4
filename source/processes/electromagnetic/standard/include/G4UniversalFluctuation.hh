@@ -48,7 +48,6 @@
 #ifndef G4UniversalFluctuation_h
 #define G4UniversalFluctuation_h 1
 
-
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Poisson.hh"
@@ -61,24 +60,22 @@ public:
 
   explicit G4UniversalFluctuation(const G4String& nam = "UniFluc");
 
-  virtual ~G4UniversalFluctuation();
+  ~G4UniversalFluctuation() override;
 
-  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-                                      const G4DynamicParticle*,
-                                      G4double,
-                                      G4double,
-                                      G4double) override;
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+			      const G4DynamicParticle*,
+			      G4double, G4double,
+			      G4double) override;
 
-  virtual G4double Dispersion(const G4Material*,
-                              const G4DynamicParticle*,
-                              G4double,
-                              G4double) override;
+  G4double Dispersion(const G4Material*,
+		      const G4DynamicParticle*,
+		      G4double, G4double) override;
 
-  virtual void InitialiseMe(const G4ParticleDefinition*) final;
+  void InitialiseMe(const G4ParticleDefinition*) final;
 
   // Initialisation prestep
-  virtual void SetParticleAndCharge(const G4ParticleDefinition*, 
-                                    G4double q2) final;
+  void SetParticleAndCharge(const G4ParticleDefinition*, 
+			    G4double q2) final;
 
 private:
 
@@ -127,7 +124,6 @@ private:
 
   G4int     sizearray;
   G4double* rndmarray;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

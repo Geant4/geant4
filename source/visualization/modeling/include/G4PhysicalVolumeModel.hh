@@ -95,7 +95,7 @@ public: // With description
      G4int iCopyNo = 0,
      G4int depth = 0,
      const G4Transform3D& transform = G4Transform3D(),
-     G4bool drawn = false):
+     G4bool drawn = true):
       fpPV(pPV),
       fCopyNo(iCopyNo),
       fNonCulledDepth(depth),

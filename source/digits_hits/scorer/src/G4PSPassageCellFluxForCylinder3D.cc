@@ -43,45 +43,45 @@
 // 2011-03-24   Give Size and Segmentation for relicated volume in cylinder.
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(G4String name,
-					     G4int ni, G4int nj, G4int nk,
-					     G4int di, G4int dj, G4int dk)
-  :G4PSPassageCellFlux3D(name,ni,nj,nk,di,dj,dk)
+G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(
+  G4String name, G4int ni, G4int nj, G4int nk, G4int di, G4int dj, G4int dk)
+  : G4PSPassageCellFlux3D(name, ni, nj, nk, di, dj, dk)
 {
   nSegment[0] = nSegment[1] = nSegment[2] = 0;
 }
 
-G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(G4String name,const G4String& unit,
-					     G4int ni, G4int nj, G4int nk,
-					     G4int di, G4int dj, G4int dk)
-  :G4PSPassageCellFlux3D(name,unit,ni,nj,nk,di,dj,dk)
+G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(
+  G4String name, const G4String& unit, G4int ni, G4int nj, G4int nk, G4int di,
+  G4int dj, G4int dk)
+  : G4PSPassageCellFlux3D(name, unit, ni, nj, nk, di, dj, dk)
 {
   nSegment[0] = nSegment[1] = nSegment[2] = 0;
 }
 
-G4PSPassageCellFluxForCylinder3D::~G4PSPassageCellFluxForCylinder3D()
-{;}
+G4PSPassageCellFluxForCylinder3D::~G4PSPassageCellFluxForCylinder3D() { ; }
 
-void G4PSPassageCellFluxForCylinder3D::SetCylinderSize(G4double dr, G4double dz){
-  cylinderSize.setX(dz);    //Z Phi R
-  cylinderSize.setY(twopi); //Z Phi R
-  cylinderSize.setZ(dr);    //Z Phi R
+void G4PSPassageCellFluxForCylinder3D::SetCylinderSize(G4double dr, G4double dz)
+{
+  cylinderSize.setX(dz);     // Z Phi R
+  cylinderSize.setY(twopi);  // Z Phi R
+  cylinderSize.setZ(dr);     // Z Phi R
 }
-void G4PSPassageCellFluxForCylinder3D::SetNumberOfSegments(G4int nSeg[3]){
+void G4PSPassageCellFluxForCylinder3D::SetNumberOfSegments(G4int nSeg[3])
+{
   nSegment[0] = nSeg[0];  // Z
   nSegment[1] = nSeg[1];  // Phi
   nSegment[2] = nSeg[2];  // R
 }
-G4double G4PSPassageCellFluxForCylinder3D::ComputeVolume(G4Step*, G4int idx){
-  G4double r0 = (cylinderSize[2]/nSegment[2])*(idx);
-  G4double r1 = (cylinderSize[2]/nSegment[2])*(idx+1);
-  G4double dRArea = (r1*r1-r0*r0)*pi;
+G4double G4PSPassageCellFluxForCylinder3D::ComputeVolume(G4Step*, G4int idx)
+{
+  G4double r0     = (cylinderSize[2] / nSegment[2]) * (idx);
+  G4double r1     = (cylinderSize[2] / nSegment[2]) * (idx + 1);
+  G4double dRArea = (r1 * r1 - r0 * r0) * pi;
 
   // cylinderSize is given in Half Size
-  G4double fullz      = cylinderSize[0]/nSegment[0]*2.;  
-  G4double phiRatio  = 1./nSegment[1];
-  G4double v = dRArea*fullz*phiRatio;
+  G4double fullz    = cylinderSize[0] / nSegment[0] * 2.;
+  G4double phiRatio = 1. / nSegment[1];
+  G4double v        = dRArea * fullz * phiRatio;
 
   return v;
 }
-

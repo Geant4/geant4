@@ -37,54 +37,53 @@
 
 #include "G4VScoreHistFiller.hh"
 
-G4VScoreHistFiller* G4VScoreHistFiller::fgMasterInstance = nullptr;    
-G4ThreadLocal G4VScoreHistFiller* G4VScoreHistFiller::fgInstance = nullptr;    
+G4VScoreHistFiller* G4VScoreHistFiller::fgMasterInstance         = nullptr;
+G4ThreadLocal G4VScoreHistFiller* G4VScoreHistFiller::fgInstance = nullptr;
 
 G4VScoreHistFiller* G4VScoreHistFiller::Instance()
 {
-// This function invokes creating the objects on workes,
-// The master instance should be created by the user 
-// via the concrete class constructor
+  // This function invokes creating the objects on workes,
+  // The master instance should be created by the user
+  // via the concrete class constructor
 
-  G4bool isMaster = ! G4Threading::IsWorkerThread();
+  G4bool isMaster = !G4Threading::IsWorkerThread();
 
-  if ( ( ! isMaster ) && ( ! fgInstance ) ) {
-    if ( fgMasterInstance ) {
+  if((!isMaster) && (!fgInstance))
+  {
+    if(fgMasterInstance)
+    {
       fgInstance = fgMasterInstance->CreateInstance();
     }
   }
 
   return fgInstance;
-}    
+}
 
 G4VScoreHistFiller::G4VScoreHistFiller()
 {
-  G4bool isMaster = ! G4Threading::IsWorkerThread();
+  G4bool isMaster = !G4Threading::IsWorkerThread();
 
-  if ( isMaster && fgMasterInstance  ) {
+  if(isMaster && fgMasterInstance)
+  {
     G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "G4VScoreHistFiller on master already exists." 
-      << "Cannot create another instance.";
-    G4Exception("G4VScoreHistFiller::G4VScoreHistFiller()",
-                "Analysis_F001", FatalException, description);
+    description << "      "
+                << "G4VScoreHistFiller on master already exists."
+                << "Cannot create another instance.";
+    G4Exception("G4VScoreHistFiller::G4VScoreHistFiller()", "Analysis_F001",
+                FatalException, description);
   }
-  if ( fgInstance ) {
+  if(fgInstance)
+  {
     G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "G4VScoreHistFiller on worker already exists." 
-      << "Cannot create another instance.";
-    G4Exception("G4VScoreHistFiller::G4VScoreHistFiller()",
-                "Analysis_F001", FatalException, description);
+    description << "      "
+                << "G4VScoreHistFiller on worker already exists."
+                << "Cannot create another instance.";
+    G4Exception("G4VScoreHistFiller::G4VScoreHistFiller()", "Analysis_F001",
+                FatalException, description);
   }
-  if ( isMaster ) fgMasterInstance = this;
+  if(isMaster)
+    fgMasterInstance = this;
   fgInstance = this;
 }
 
-G4VScoreHistFiller::~G4VScoreHistFiller()
-{
-  fgInstance = 0;
-}
-
+G4VScoreHistFiller::~G4VScoreHistFiller() { fgInstance = 0; }

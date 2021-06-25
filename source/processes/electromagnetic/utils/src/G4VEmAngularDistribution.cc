@@ -88,3 +88,8 @@ void G4VEmAngularDistribution::SamplePairDirections(const G4DynamicParticle* dp,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmAngularDistribution::PrintGeneratorInformation() const
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

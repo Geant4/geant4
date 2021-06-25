@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4partadj
-# Package: Geant4.src.G4particles.G4partadj
-#------------------------------------------------------------------------------
+# - G4partadj module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4partadj
-  HEADERS
+geant4_add_module(G4partadj
+  PUBLIC_HEADERS
     G4AdjointAlpha.hh
     G4AdjointDeuteron.hh
     G4AdjointElectron.hh
@@ -30,14 +25,6 @@ geant4_define_module(NAME G4partadj
     G4AdjointIons.cc
     G4AdjointPositron.cc
     G4AdjointProton.cc
-    G4AdjointTriton.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4materials
-    G4partman
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4materials
-)
+    G4AdjointTriton.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4partadj PUBLIC G4partman G4globman)

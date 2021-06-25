@@ -1,11 +1,5 @@
 #
 # Macro file for "Hadr06.cc"
-#
-# To "force" primary fission only, kill secondary neutrons:
-# in TrackingAction.cc,uncomment lines below "to force only 1 fission ..."
-# ( ~ end of PreUserTrackingAction() )
-# Also, to limit the printout, do not fill ParticleCount()
-# ( ~ begin of PreUserTrackingAction() )
 #  
 /run/verbose 2
 #
@@ -17,6 +11,12 @@
 /process/inactivate nCapture
 /process/had/particle_hp/produce_fission_fragment true
 #
+# To "force" primary fission only, kill secondary neutrons:
+# Also, to limit the printout, do not fill ParticleCount()
+#
+/testhadr/tracking/killNeutrons true
+/testhadr/tracking/countParticles false
+#
 /gun/particle neutron
 /gun/energy 0.025 eV
 #
@@ -24,5 +24,5 @@
 /analysis/h1/set  1 100  100. 300. MeV	#Edep
 /analysis/h1/set  3 100    0.  20. MeV	#Eflow
 #
-/run/printProgress 10000
-/run/beamOn 100000
+/run/printProgress 1000
+/run/beamOn 10000

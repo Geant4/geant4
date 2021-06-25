@@ -13,6 +13,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11-05-21 mma (testem15-V10-07-01)
+- Migration to G4SteppingVerboseWithUnits.
+
+19-03-2021 V.Ivanchenko (testem15-V10-07-00)
+- PhysicsList - clean-up for 11.0; removed PhysList5DStandard,
+  because 5D model is a part of Opt4 EM physics
+
 30-10-2019 IgS (testem15-V10-05-01)
 - SteppingAction, PhysList5DStandard : added G4GammaConversionToMuons process
 

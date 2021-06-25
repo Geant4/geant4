@@ -58,23 +58,16 @@ G4LogicalVolume* CCalG4Ecal::crystalmatrixLog = 0;
 //Initialize static prefix name
 G4String CCalG4Ecal::idName = "CrystalMatrix";
 
-////////////////////////////////////////////////////////////////////
-// CCalG4Ecal constructor & destructor...
-////////////////////////////////////////////////////////////////////
 
-CCalG4Ecal::CCalG4Ecal(const G4String &name):
-  CCalEcal(name), CCalG4Able(name), type(module1) {}
+CCalG4Ecal::CCalG4Ecal(const G4String &name) : CCalEcal(name), CCalG4Able(name), type(module1) {}
+
 
 CCalG4Ecal::~CCalG4Ecal() {}
 
-////////////////////////////////////////////////////////////////////
-// CCalG4Ecal methods...
-////////////////////////////////////////////////////////////////////
 
-G4VPhysicalVolume* CCalG4Ecal::constructIn(G4VPhysicalVolume* mother) {
+G4VPhysicalVolume* CCalG4Ecal::constructIn( G4VPhysicalVolume* mother ) {
   G4cout << "==>> Constructing CCalG4Ecal..." << G4endl;
 
-  ///////////////////////////////////////////////////////////////
   // Construction of global volume as a Box
 
   if (!crystalmatrixLog) {
@@ -273,8 +266,8 @@ G4LogicalVolume* CCalG4Ecal::constructGlobal() {
   return glog;
 }
 
-void CCalG4Ecal::constructSensitive() {
 
+void CCalG4Ecal::constructSensitive() {
 #ifdef debug
   G4cout << "Now registering CrystalMatrix LogicalVolume's to SD's:" << G4endl;
 #endif
@@ -290,6 +283,4 @@ void CCalG4Ecal::constructSensitive() {
 #endif
     }
   }
-
 }
-  

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th, 2021,  B. Morgan (exPersistency-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 November 13th, 2020 Ben Morgan (exPersistency-V10-06-02)
 - Enforce use of Serial RunManager for serial-only examples.
 

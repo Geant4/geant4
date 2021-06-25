@@ -30,7 +30,7 @@
 #pragma once
 
 #include "PTL/AutoLock.hh"
-#include "PTL/TaskAllocator.hh"
+#include "PTL/Globals.hh"
 #include "PTL/Threading.hh"
 
 #include <atomic>
@@ -45,7 +45,6 @@
 
 namespace PTL
 {
-class VTaskGroup;
 class ThreadPool;
 
 //======================================================================================//
@@ -56,51 +55,32 @@ class VTask
 public:
     typedef std::thread::id       tid_type;
     typedef size_t                size_type;
-    typedef VTask                 this_type;
-    typedef std::atomic_uintmax_t count_t;
-    typedef VTask*                iterator;
-    typedef const VTask*          const_iterator;
     typedef std::function<void()> void_func_t;
 
 public:
-    VTask();
-    explicit VTask(VTaskGroup* task_group);
-    explicit VTask(ThreadPool* pool);
-    virtual ~VTask();
+    VTask(bool _is_native, intmax_t _depth);
+
+    VTask()          = default;
+    virtual ~VTask() = default;
+
+    VTask(const VTask&) = delete;
+    VTask& operator=(const VTask&) = delete;
+
+    VTask(VTask&&) = default;
+    VTask& operator=(VTask&&) = default;
 
 public:
     // execution operator
     virtual void operator()() = 0;
 
 public:
-    // used by thread_pool
-    void                operator--();
-    virtual bool        is_native_task() const;
-    virtual ThreadPool* pool() const;
-    VTaskGroup*         group() const { return m_group; }
-
-public:
-    // used by task tree
-    iterator begin() { return this; }
-    iterator end() { return this + 1; }
-
-    const_iterator begin() const { return this; }
-    const_iterator end() const { return this + 1; }
-
-    const_iterator cbegin() const { return this; }
-    const_iterator cend() const { return this + 1; }
-
-    intmax_t&       depth() { return m_depth; }
-    const intmax_t& depth() const { return m_depth; }
+    bool     is_native_task() const { return m_is_native; }
+    intmax_t depth() const { return m_depth; }
 
 protected:
-    static tid_type this_tid() { return std::this_thread::get_id(); }
-
-protected:
-    intmax_t    m_depth;
-    VTaskGroup* m_group;
-    ThreadPool* m_pool;
-    void_func_t m_func = []() {};
+    bool        m_is_native = false;
+    intmax_t    m_depth     = 0;
+    void_func_t m_func      = []() {};
 };
 
 //======================================================================================//

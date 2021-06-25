@@ -42,9 +42,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4DeuteronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VDeuteronBuilder.hh"
 
 #include "G4BinaryCascade.hh"   
@@ -56,7 +54,7 @@ class G4BinaryDeuteronBuilder : public G4VDeuteronBuilder
     virtual ~G4BinaryDeuteronBuilder() {}
 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4DeuteronInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
     virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}

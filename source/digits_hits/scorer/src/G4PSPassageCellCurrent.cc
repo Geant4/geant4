@@ -36,7 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring number of tracks,
-//   where only tracks passing through the geometry are taken 
+//   where only tracks passing through the geometry are taken
 //  into account.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
@@ -44,65 +44,80 @@
 // 2010-07-22   Add weighted option
 // 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
 //              vs. current * track weight (y)               (Makoto Asai)
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
-    :G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
-     EvtMap(0),weighted(true)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , fCurrentTrkID(-1)
+  , fCurrent(0)
+  , EvtMap(0)
+  , weighted(true)
 {
-    SetUnit("");
+  SetUnit("");
 }
 
-G4PSPassageCellCurrent::~G4PSPassageCellCurrent()
-{;}
+G4PSPassageCellCurrent::~G4PSPassageCellCurrent() { ; }
 
-G4bool G4PSPassageCellCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSPassageCellCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-
-  if ( IsPassed(aStep) ) {
+  if(IsPassed(aStep))
+  {
     fCurrent = 1.;
-    if(weighted) fCurrent = aStep->GetPreStepPoint()->GetWeight();
+    if(weighted)
+      fCurrent = aStep->GetPreStepPoint()->GetWeight();
     G4int index = GetIndex(aStep);
-    EvtMap->add(index,fCurrent);
+    EvtMap->add(index, fCurrent);
 
-    if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+    if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
     {
       auto filler = G4VScoreHistFiller::Instance();
       if(!filler)
       {
-        G4Exception("G4PSVolumeFlux::ProcessHits","SCORER0123",JustWarning,
-             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+        G4Exception(
+          "G4PSVolumeFlux::ProcessHits", "SCORER0123", JustWarning,
+          "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
       }
       else
       {
-        filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),fCurrent);
+        filler->FillH1(hitIDMap[index],
+                       aStep->GetPreStepPoint()->GetKineticEnergy(), fCurrent);
       }
     }
-
   }
 
   return TRUE;
 }
 
-G4bool G4PSPassageCellCurrent::IsPassed(G4Step* aStep){
+G4bool G4PSPassageCellCurrent::IsPassed(G4Step* aStep)
+{
   G4bool Passed = FALSE;
 
   G4bool IsEnter = aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary;
   G4bool IsExit  = aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary;
 
-  G4int  trkid  = aStep->GetTrack()->GetTrackID();
+  G4int trkid = aStep->GetTrack()->GetTrackID();
 
-  if ( IsEnter &&IsExit ){         // Passed at one step
-    Passed = TRUE;                 
-  }else if ( IsEnter ){            // Enter a new geometry
-    fCurrentTrkID = trkid;         // Resetting the current track.
-  }else if ( IsExit ){             // Exit a current geometry
-    if ( fCurrentTrkID == trkid ) {
-      Passed = TRUE;               // if the track is same as entered.
+  if(IsEnter && IsExit)
+  {  // Passed at one step
+    Passed = TRUE;
+  }
+  else if(IsEnter)
+  {                         // Enter a new geometry
+    fCurrentTrkID = trkid;  // Resetting the current track.
+  }
+  else if(IsExit)
+  {  // Exit a current geometry
+    if(fCurrentTrkID == trkid)
+    {
+      Passed = TRUE;  // if the track is same as entered.
     }
-  }else{                           // Inside geometry
-    if ( fCurrentTrkID == trkid ){ // Adding the track length to current one ,
+  }
+  else
+  {  // Inside geometry
+    if(fCurrentTrkID == trkid)
+    {  // Adding the track length to current one ,
     }
   }
   return Passed;
@@ -112,47 +127,43 @@ void G4PSPassageCellCurrent::Initialize(G4HCofThisEvent* HCE)
 {
   fCurrentTrkID = -1;
 
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),
-				    GetName());
-  if ( HCID < 0 ) HCID = GetCollectionID(0);
-  HCE->AddHitsCollection(HCID,EvtMap);
-
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+    HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSPassageCellCurrent::EndOfEvent(G4HCofThisEvent*)
-{
-}
+void G4PSPassageCellCurrent::EndOfEvent(G4HCofThisEvent*) {}
 
-void G4PSPassageCellCurrent::clear(){
-  EvtMap->clear();
-}
+void G4PSPassageCellCurrent::clear() { EvtMap->clear(); }
 
-void G4PSPassageCellCurrent::DrawAll()
-{;}
+void G4PSPassageCellCurrent::DrawAll() { ; }
 
 void G4PSPassageCellCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
-  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
+  G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell current : " << *(itr->second)
-	   << " [tracks] "
-	   << G4endl;
+           << "  cell current : " << *(itr->second) << " [tracks] " << G4endl;
   }
 }
 
 void G4PSPassageCellCurrent::SetUnit(const G4String& unit)
 {
-  if (unit == "" ){
-    unitName = unit;
+  if(unit == "")
+  {
+    unitName  = unit;
     unitValue = 1.0;
-  }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-    G4Exception("G4PSPassageCellCurrent::SetUnit","DetPS0012",JustWarning,msg);
+  }
+  else
+  {
+    G4String msg = "Invalid unit [" + unit + "] (Current  unit is [" +
+                   GetUnit() + "] ) for " + GetName();
+    G4Exception("G4PSPassageCellCurrent::SetUnit", "DetPS0012", JustWarning,
+                msg);
   }
 }
-
-

@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-02-21 V. Ivanchenko (testem9-V10-07-01)
+- removed unused header
+
+18-01-21 V. Ivanchenko (testem9-V10-07-00)
+- Updated for 10.7: replaced local Physics List by clone of the 
+  default EM standard; recover analysis of process calls for the
+  case of gamma general process; improved macro files
+  
+
 13-11-20 B. Morgan (testem9-V10-06-01)
 - Enforce use of Serial RunManager.
 

@@ -28,6 +28,7 @@
 #include "PTL/Globals.hh"
 #include "PTL/Types.hh"
 
+#include <array>
 #include <chrono>
 #include <condition_variable>
 #include <future>
@@ -113,42 +114,12 @@ typedef int (*thread_unlock)(Mutex*);
 //		a template class "Cache<T>" that required a static
 //		mutex for specific to type T:
 //			AutoLock l(TypeMutex<Cache<T>>());
-template <typename Tp>
-Mutex&
+template <typename Tp, typename MutexTp = Mutex, size_t N = 4>
+MutexTp&
 TypeMutex(const unsigned int& _n = 0)
 {
-    static Mutex* _mutex = new Mutex();
-    if(_n == 0)
-        return *_mutex;
-
-    static std::vector<Mutex*> _mutexes;
-    if(_n > _mutexes.size())
-        _mutexes.resize(_n, nullptr);
-    if(!_mutexes[_n])
-        _mutexes[_n] = new Mutex();
-    return *(_mutexes[_n - 1]);
-}
-
-// Helper function for getting a unique static recursive_mutex for a
-// specific class or type
-// Usage example:
-//		a template class "Cache<T>" that required a static
-//		recursive_mutex for specific to type T:
-//			RecursiveAutoLock l(TypeRecursiveMutex<Cache<T>>());
-template <typename Tp>
-RecursiveMutex&
-TypeRecursiveMutex(const unsigned int& _n = 0)
-{
-    static RecursiveMutex* _mutex = new RecursiveMutex();
-    if(_n == 0)
-        return *(_mutex);
-
-    static std::vector<RecursiveMutex*> _mutexes;
-    if(_n > _mutexes.size())
-        _mutexes.resize(_n, nullptr);
-    if(!_mutexes[_n])
-        _mutexes[_n] = new RecursiveMutex();
-    return *(_mutexes[_n - 1]);
+    static std::array<MutexTp, N> _mutex_array{};
+    return _mutex_array[_n % N];
 }
 
 //======================================================================================//
@@ -157,47 +128,14 @@ TypeRecursiveMutex(const unsigned int& _n = 0)
 typedef std::thread                     Thread;
 typedef std::thread::native_handle_type NativeThread;
 
-// mutex macros
-#define MUTEXLOCK(mutex)                                                                 \
-    {                                                                                    \
-        (mutex)->lock();                                                                 \
-    }
-#define MUTEXUNLOCK(mutex)                                                               \
-    {                                                                                    \
-        (mutex)->unlock();                                                               \
-    }
-
-// Macro to join thread
-#define THREADJOIN(worker) (worker).join()
-
 // std::thread::id does not cast to integer
 typedef std::thread::id Pid_t;
 
-// Instead of previous macro taking one argument, define function taking
-// unlimited arguments
-template <typename WorkerT, typename FuncT, typename... Args>
-void
-THREADCREATE(WorkerT*& worker, FuncT func, Args... args)
-{
-    *worker = Thread(func, std::forward<Args>(args)...);
-}
-
-// Conditions
-//
-// See MTRunManager for example on how to use these
-//
+// Condition
 typedef std::condition_variable Condition;
-#define CONDITION_INITIALIZER                                                            \
-    {}
-#define CONDITIONWAIT(cond, lock) (cond)->wait(*lock);
-#define CONDITIONWAITLAMBDA(cond, lock, lambda) (cond)->wait(*lock, lambda);
-#define CONDITIONNOTIFY(cond) (cond)->notify_one();
-#define CONDITIONBROADCAST(cond) (cond)->notify_all();
 //
 
-//======================================================================================//
-
-// Define here after Thread has been typedef
+// Thread identifier
 typedef Thread::id ThreadId;
 
 //======================================================================================//
@@ -214,24 +152,18 @@ enum
 
 Pid_t
 GetPidId();
+
 unsigned
 GetNumberOfCores();
+
 int
 GetThreadId();
-bool
-IsWorkerThread();
-bool
-IsMasterThread();
+
 void
 SetThreadId(int aNewValue);
+
 bool
 SetPinAffinity(int idx, NativeThread& at);
-int
-WorkerThreadLeavesPool();
-int
-WorkerThreadJoinsPool();
-int
-GetNumberOfRunningWorkerThreads();
-}  // namespace Threading
 
+}  // namespace Threading
 }  // namespace PTL

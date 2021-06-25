@@ -145,9 +145,8 @@ public:
   void SetUseMottCorrection(G4bool val);
   G4bool UseMottCorrection() const;
 
-  void SetIntegral(G4bool val);
-  G4bool Integral() const;
-
+  void SetIntegral(G4bool) {};
+ 
   void SetBirksActive(G4bool val);
   G4bool BirksActive() const;
 
@@ -163,6 +162,8 @@ public:
   void SetDNAElectronMsc(G4bool val);
   G4bool DNAElectronMsc() const;
 
+  // if general interaction is enabled then 
+  // force interaction options should be disabled
   void SetGeneralProcessActive(G4bool val);
   G4bool GeneralProcessActive() const;
 
@@ -188,8 +189,6 @@ public:
   void  ActivateDNA();
 
   // double parameters with values
-  void SetMinSubRange(G4double val);
-  G4double MinSubRange() const;
 
   void SetMinEnergy(G4double val);
   G4double MinKinEnergy() const;
@@ -269,11 +268,10 @@ public:
   G4ThreeVector GetDirectionalSplittingTarget() const;
 
   // integer parameters 
-  void SetNumberOfBins(G4int val);
-  G4int NumberOfBins() const;
-
+  
   void SetNumberOfBinsPerDecade(G4int val);
   G4int NumberOfBinsPerDecade() const;
+  G4int NumberOfBins() const;
 
   void SetVerbose(G4int val);
   G4int Verbose() const;
@@ -329,7 +327,7 @@ public:
   const std::vector<G4String>& RegionsPhysics() const;
   const std::vector<G4String>& TypesPhysics() const;
 
-  void SetSubCutoff(G4bool val, const G4String& region = "");
+  void SetSubCutRegion(const G4String& region = "");
 
   void SetDeexActiveRegion(const G4String& region, G4bool fdeex,
 			   G4bool fauger, G4bool fpixe);
@@ -347,7 +345,9 @@ public:
 				G4double factor,
 				G4double energyLimit);
 
+  // define external saturation class
   void SetEmSaturation(G4EmSaturation*);
+  // create and access saturation class
   G4EmSaturation* GetEmSaturation();
 
   // initialisation methods
@@ -379,7 +379,6 @@ private:
   G4bool lossFluctuation;
   G4bool buildCSDARange;
   G4bool flagLPM;
-  G4bool spline;
   G4bool cutAsFinalRange;
   G4bool applyCuts;
   G4bool lateralDisplacement;
@@ -387,7 +386,6 @@ private:
   G4bool muhadLateralDisplacement;
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
-  G4bool integral;
   G4bool birks;
   G4bool fICRU90;
   G4bool gener;
@@ -397,7 +395,6 @@ private:
   G4bool onIsolated; // 5d model conversion on free ions
   G4bool fDNA;
   
-  G4double minSubRange;
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyCSDA;
@@ -421,7 +418,6 @@ private:
   G4double skin;
   G4double factorScreen;
 
-  G4int nbins;
   G4int nbinsPerDecade;
   G4int verbose;
   G4int workerVerbose;

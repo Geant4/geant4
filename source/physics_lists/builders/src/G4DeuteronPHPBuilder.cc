@@ -45,7 +45,7 @@ Build(G4HadronElasticProcess *)
 }
 
 void G4DeuteronPHPBuilder::
-Build(G4DeuteronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   G4ParticleHPInelasticData* theDeuteronHPInelasticData=new G4ParticleHPInelasticData(G4Deuteron::Deuteron());
   theDeuteronHPInelasticData->SetMinKinEnergy(theMin);

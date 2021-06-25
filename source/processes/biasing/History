@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 16th, 2021 Ben Morgan (procbiasing-V10-07-00)
+- Migrate build to modular CMake API
+
 September 4th, 2020  Gabriele Cosmo (procbiasing-V10-06-01)
 - Fixed Coverity defect warnings for data initialisation and leaks in classes
   G4WeightCutOffProcess, G4ImportanceProcess and G4WeightWindowProcess.
@@ -66,12 +69,12 @@ Nov 30th, 2013 Alex Howard (procbiasing-V09-06-18)
       and G4ImportanceConfigurator
 
 Nov 30th, 2013 Alex Howard (procbiasing-V09-06-17)
-    - Fixed coverity errors (uninitialised variables), 
+    - Fixed coverity errors (uninitialised variables),
       EXCEPT for fGhostStep in G4ImportanceProcess, G4WeightWindowProcess
       and G4WeightCutOffProcess
 
 Nov 29th, 2013 Alex Howard (procbiasing-V09-06-16)
-    - Put back RemoveProcess for both G4WeightWindowConfigurator and 
+    - Put back RemoveProcess for both G4WeightWindowConfigurator and
       G4ImportanceConfigurator - makes test33 work.
 
 Nov 28th, 2013 Marc Verderi (procbiasing-V09-06-15)
@@ -158,8 +161,8 @@ Oct 21st, 2011 Alex Howard (procbiasing-V09-04-01)
 - G4ProcessPlacer: Migrated to new G4Exception
 
 May 30th, 2011 Alex Howard (procbiasing-V09-04-00)
-- G4ProcessPlacer: Using SetProcessOrderingToSecond for biasing process, and 
-leaving transportation where it is (hopefully first). Previously biasing was 
+- G4ProcessPlacer: Using SetProcessOrderingToSecond for biasing process, and
+leaving transportation where it is (hopefully first). Previously biasing was
 moved first, then transportation moved back to first.
 
 June 2nd, 2010 Gabriele Cosmo (procbiasing-V09-03-00)
@@ -168,10 +171,10 @@ June 2nd, 2010 Gabriele Cosmo (procbiasing-V09-03-00)
 - Requires tag geombias-V09-03-00.
 
 April 22nd, 2008 Alex Howard (procbiasing-V09-01-02)
-- Removed G4CellFinder and associated dependency in G4WeigthCutOffProcess and 
-  G4WeightCutOffConfigurator- was a hang-up from previous implementation 
+- Removed G4CellFinder and associated dependency in G4WeigthCutOffProcess and
+  G4WeightCutOffConfigurator- was a hang-up from previous implementation
   which was erroneously left in the G4WeightCutOffProcess.
-  This meant the WeightCutOff could only work in a MASS geometry 
+  This meant the WeightCutOff could only work in a MASS geometry
   (by coincidence between the ImportanceBiasing and the GeometryCells).
 
 April 21st, 2008 Alex Howard (procbiasing-V09-01-01)
@@ -198,8 +201,8 @@ June 1st, 2007 Alex Howard (procbiasing-V08-03-04)
 - HEAD maintains inheritance for backward comparisons/testing
 
 June 1st, 2007 Alex Howard (procbiasing-V08-03-03)
-- Renamed New classes back to normal classes, simultaneously 
-  processes/transportation old biasing classes renamed with 
+- Renamed New classes back to normal classes, simultaneously
+  processes/transportation old biasing classes renamed with
   suffix 8 to avoid clashes.
 - includes modified G4GeometrySampler (without scoring)
 - HEAD contains un-modifier G4GeometrySampler and depends on old scoring scheme

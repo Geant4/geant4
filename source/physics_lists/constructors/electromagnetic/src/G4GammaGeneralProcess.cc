@@ -214,16 +214,11 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
     size_t nbin2 = std::max(5, nd*G4lrint(std::log10(maxe/minMMEnergy)));
 
     G4PhysicsVector* vec = nullptr;
-    G4PhysicsLogVector aVector(mine,minPEEnergy,nbin1);
-    G4PhysicsLogVector bVector(minPEEnergy,minEEEnergy,nLowE);
-    G4PhysicsLogVector cVector(minEEEnergy,minMMEnergy,nHighE);
-    G4PhysicsLogVector dVector(minMMEnergy,maxe,nbin2);
-    if(splineFlag) {
-      aVector.SetSpline(splineFlag);
-      bVector.SetSpline(splineFlag);
-      cVector.SetSpline(splineFlag);
-      dVector.SetSpline(splineFlag);
-    }
+    G4PhysicsLogVector aVector(mine,minPEEnergy,nbin1,splineFlag);
+    G4PhysicsLogVector bVector(minPEEnergy,minEEEnergy,nLowE,splineFlag);
+    G4PhysicsLogVector cVector(minEEEnergy,minMMEnergy,nHighE,splineFlag);
+    G4PhysicsLogVector dVector(minMMEnergy,maxe,nbin2,splineFlag);
+
     for(size_t i=0; i<nTables; ++i) { 
       if(!theT[i]) { continue; }
       //G4cout << "## PreparePhysTable " << i << "." << G4endl;
@@ -683,8 +678,8 @@ G4bool G4GammaGeneralProcess::StorePhysicsTable(const G4ParticleDefinition* part
 
 G4bool 
 G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
-                                          const G4String& directory,
-                                          G4bool ascii)
+                                            const G4String& directory,
+                                            G4bool ascii)
 {
   if(1 < verboseLevel) {
     G4cout << "G4GammaGeneralProcess::RetrievePhysicsTable() for "
@@ -707,14 +702,16 @@ G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
       G4String nam = (0==i || 2==i || 6==i || 10==i) 
 	? "LambdaGeneral" + nameT[i] : "ProbGeneral" + nameT[i];
       G4String fnam =  GetPhysicsTableFileName(part,directory,nam,ascii);
-      if(!theHandler->RetrievePhysicsTable(i, part, fnam, ascii)) 
+      if(!theHandler->RetrievePhysicsTable(i, part, fnam, ascii, splineFlag)) 
 	{ yes = false; }
     }
+  }
+  if(yes) {
   }
   return yes;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....Ooooo0ooooo ........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4GammaGeneralProcess::GetMeanFreePath(const G4Track& track,
                                               G4double,

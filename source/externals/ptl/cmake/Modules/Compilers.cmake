@@ -23,6 +23,9 @@
 #       - MSVC
 #
 
+# include guard
+include_guard(DIRECTORY)
+
 include(CheckLanguage)
 
 include(CheckCCompilerFlag)

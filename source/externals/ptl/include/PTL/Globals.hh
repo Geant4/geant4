@@ -46,6 +46,22 @@
             ::std::initializer_list<int>{ (__VA_ARGS__, 0)... })
 #endif
 
+#if !defined(PTL_NO_SANITIZE_THREAD)
+// expect that sanitizer is from compiler which supports __has_attribute
+#    if defined(__has_attribute)
+#        if __has_attribute(no_sanitize)
+#            define PTL_NO_SANITIZE_THREAD __attribute__((no_sanitize("thread")))
+#        else
+#            define PTL_NO_SANITIZE_THREAD
+#        endif
+#    elif defined(__clang__) || defined(__GNUC__)
+#        define PTL_NO_SANITIZE_THREAD __attribute__((no_sanitize("thread")))
+#    else
+// otherwise, make blank
+#        define PTL_NO_SANITIZE_THREAD
+#    endif
+#endif
+
 namespace PTL
 {
 template <typename T>
@@ -144,10 +160,17 @@ using index_type_t = decay_t<decltype(std::get<Idx>(std::declval<Tup>()))>;
 
 template <typename FnT, typename TupleT, size_t... Idx>
 static inline auto
-apply(FnT&& __f, TupleT&& __t, impl::index_sequence<Idx...>)
-    -> decltype(std::forward<FnT>(__f)(std::get<Idx>(__t)...))
+apply(FnT&& _func, TupleT _args, impl::index_sequence<Idx...>)
+    -> decltype(std::forward<FnT>(_func)(std::get<Idx>(std::move(_args))...))
 {
-    return std::forward<FnT>(__f)(std::get<Idx>(__t)...);
+    // GCC 5.3 warns about unused variable _args when the index sequence is empty
+#if defined(__GNUC__) && (__GNUC__ < 6)
+    if(sizeof...(Idx) == 0)
+    {
+        consume_parameters(_args);
+    }
+#endif
+    return std::forward<FnT>(_func)(std::get<Idx>(std::move(_args))...);
 }
 
 //--------------------------------------------------------------------------------------//
@@ -170,10 +193,11 @@ using index_sequence_for = impl::make_index_sequence<sizeof...(Types)>;
 
 template <typename FnT, typename TupleT>
 static inline void
-apply(FnT&& __f, TupleT&& __t)
+apply(FnT&& _func, TupleT&& _args)
 {
-    constexpr auto N = std::tuple_size<TupleT>::value;
-    impl::apply(std::forward<FnT>(__f), std::forward<TupleT>(__t),
+    using tuple_type = typename std::decay<TupleT>::type;
+    constexpr auto N = std::tuple_size<tuple_type>::value;
+    impl::apply(std::forward<FnT>(_func), std::forward<TupleT>(_args),
                 impl::make_index_sequence<N>{});
 }
 

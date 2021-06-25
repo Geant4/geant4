@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4GMocren
-# Package: Geant4.src.G4visualization.G4GMocren
-#------------------------------------------------------------------------------
+# - G4GMocren module definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4GMocren
-  HEADERS
+geant4_add_module(G4GMocren
+  PUBLIC_HEADERS
     G4GMocrenFile.hh
     G4GMocrenFileCTtoDensityMap.hh
     G4GMocrenFileSceneHandler.hh
@@ -21,38 +16,21 @@ geant4_define_module(NAME G4GMocren
     G4GMocrenFileSceneHandler.cc
     G4GMocrenFileViewer.cc
     G4GMocrenIO.cc
-    G4GMocrenMessenger.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4detutils
-    G4digits
-    G4event
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
+    G4GMocrenMessenger.cc)
+
+geant4_module_link_libraries(G4GMocren
+  PUBLIC
     G4hits
     G4intercoms
-    G4materials
-    G4modeling
-    G4navigation
-    G4partman
-    G4specsolids
-    G4tracking
     G4vis_management
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
-    G4geometry
-    G4global
+    G4geometrymng
+    G4globman
+  PRIVATE
     G4graphics_reps
-    G4intercoms
-    G4materials
+    G4csg
     G4modeling
-    G4particles
-    G4tracking
-    G4vis_management
-)
-
-# List any source specific properties here
-
+    G4materials
+    G4navigation
+    G4hepgeometry
+    G4detutils
+    G4tracking)

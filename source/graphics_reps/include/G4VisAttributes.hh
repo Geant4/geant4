@@ -83,15 +83,6 @@ public: // With description
   ~G4VisAttributes ();
   G4VisAttributes& operator= (const G4VisAttributes&);
 
-#ifndef WIN32
-  // Deprecated 14 July 2016  JA
-  // Use GetInvisible() instead.  E.g.:
-  //   logical_volume->SetVisAttributes(G4VisAttributes::GetInvisible());
-  // or use one of the above constructors or SetVisibility and
-  //   logical_volume->SetVisAttributes(my_vis_attributes);
-  static const G4VisAttributes Invisible;
-#endif
-
   static const G4VisAttributes& GetInvisible();
 
   G4bool operator != (const G4VisAttributes& a) const;

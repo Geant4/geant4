@@ -54,7 +54,6 @@
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
 #include "G4NeutronPHPBuilder.hh"
-#include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4ParticleHPCaptureData.hh"
@@ -70,9 +69,11 @@
 G4_DECLARE_PHYSCONSTR_FACTORY( G4HadronPhysicsQGSP_BIC_HP );
 
 
-G4HadronPhysicsQGSP_BIC_HP::G4HadronPhysicsQGSP_BIC_HP( G4int )
+G4HadronPhysicsQGSP_BIC_HP::G4HadronPhysicsQGSP_BIC_HP(G4int verb)
   : G4HadronPhysicsQGSP_BIC_HP( "hInelastic QGSP_BIC_HP" )
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsQGSP_BIC_HP::G4HadronPhysicsQGSP_BIC_HP( const G4String& name, G4bool quasiElastic )
   :  G4HadronPhysicsQGSP_BIC( name, quasiElastic )

@@ -63,20 +63,15 @@ TaskRunManager::GetInstance(bool useTBB)
 //======================================================================================//
 
 TaskRunManager::TaskRunManager(bool useTBB)
-: m_is_initialized(false)
-, m_verbose(0)
-, m_workers(std::thread::hardware_concurrency())
-, m_task_queue(nullptr)
-, m_thread_pool(nullptr)
-, m_task_manager(nullptr)
+: m_workers(std::thread::hardware_concurrency())
 {
     if(!GetPrivateMasterRunManager(false))
     {
         GetPrivateMasterRunManager(false) = this;
     }
 
-#ifdef PTL_USE_TBB
-    auto _useTBB = GetEnv<bool>("FORCE_TBB", useTBB);
+#if defined(PTL_USE_TBB)
+    auto _useTBB = GetEnv<bool>("PTL_FORCE_TBB", GetEnv<bool>("FORCE_TBB", useTBB));
     if(_useTBB)
         useTBB = true;
 #endif
@@ -85,10 +80,6 @@ TaskRunManager::TaskRunManager(bool useTBB)
     ThreadPool::set_use_tbb(useTBB);
     m_workers = GetEnv<uint64_t>("PTL_NUM_THREADS", m_workers);
 }
-
-//======================================================================================//
-
-TaskRunManager::~TaskRunManager() {}
 
 //======================================================================================//
 
@@ -142,7 +133,8 @@ void
 TaskRunManager::Terminate()
 {
     m_is_initialized = false;
-    m_thread_pool->destroy_threadpool();
+    if(m_thread_pool)
+        m_thread_pool->destroy_threadpool();
     delete m_task_manager;
     delete m_thread_pool;
     m_task_manager = nullptr;

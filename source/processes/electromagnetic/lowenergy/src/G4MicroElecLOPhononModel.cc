@@ -63,7 +63,6 @@ G4MicroElecLOPhononModel::G4MicroElecLOPhononModel(const G4ParticleDefinition*,
   : G4VEmModel(nam)
 {
   fParticleChangeForGamma = GetParticleChangeForGamma();
-  //G4cout << "SiO2 Phonon model is constructed " << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,7 +76,6 @@ void G4MicroElecLOPhononModel::Initialise(const G4ParticleDefinition*,
 				          const G4DataVector& /*cuts*/)
 {  
   if (isInitialised) { return; }
-  //G4cout << "Calling G4MicroElecLOPhononModel::Initialise()" << G4endl;
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -112,10 +110,10 @@ G4double G4MicroElecLOPhononModel::CrossSectionPerVolume(const G4Material* mater
     
   G4double racine = std::sqrt(1. + ((-signe*hw) / E));
   
-  G4double P = (std::pow(e, 2) / (4 * pi*eps0*h*h)) * (n + 0.5 + signe*0.5) * ((1 / einf) - (1 / eps)) * std::sqrt(m0 / (2 * E)) *hw* std::log((1 + racine) / (signe * 1 + ((-signe)*racine)));
+  G4double P = (std::pow(e, 2) / (4 * pi*eps0*h*h)) * (n + 0.5 + signe*0.5) * ((1 / einf) - (1 / eps)) 
+    * std::sqrt(m0 / (2 * E)) *hw* std::log((1 + racine) / (signe * 1 + ((-signe)*racine)));
   
   G4double MFP = (std::sqrt(2. * E / m0) / P)*m;
-
   return 2. / MFP;   
 }
 

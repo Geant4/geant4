@@ -18,7 +18,7 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics QGSP_BIC_EMY
+/Physics/addPhysics HADRONTHERAPY_1
 
 /run/numberOfThreads 4
 
@@ -36,26 +36,6 @@
 #
 /run/initialize
 
-##########################
-# Visualisation 
-#
-#/vis/open OGLI 600x600-0+0
-
-# Disable auto refresh and quieten vis messages whilst scene and
-# trajectories are established:
-/vis/viewer/set/autoRefresh false
-#/vis/verbose errors
-
-/vis/drawVolume
-/vis/viewer/set/viewpointThetaPhi 30 140 deg
-#/vis/viewer/zoom 1
-#/vis/viewer/pan -10  0 cm
-/vis/scene/add/trajectories smooth
-
-/vis/scene/endOfEventAction accumulate
-
-/vis/viewer/set/autoRefresh true
-/vis/verbose warnings
 
 ##########################
 # Set here the cut and the step max for the tracking. 
@@ -117,6 +97,29 @@
 /changeDetector/displacement 0 18 18 cm
 /changePhantom/update
 
+
+##########################
+# Visualisation 
+#
+#/vis/open OGLI 600x600-0+0
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+#/vis/verbose errors
+
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+#/vis/viewer/zoom 1
+#/vis/viewer/pan -10  0 cm
+/vis/scene/add/trajectories smooth
+
+/vis/scene/endOfEventAction accumulate
+
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+/vis/viewer/flush
 #########################
 # Display the event number
 # during the run
@@ -132,6 +135,4 @@
 #
 #########################
 
-/run/beamOn 1000
-
-
+/run/beamOn 10

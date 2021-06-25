@@ -43,7 +43,6 @@
 /process/optical/cerenkov/setMaxPhotons 3
 /process/optical/cerenkov/setMaxBetaChange 10
 
-/process/optical/scintillation/setEnhancedTimeConstants true
 /process/optical/scintillation/setByParticleType false
 /process/optical/scintillation/setTrackInfo      false
 /process/optical/scintillation/setFiniteRiseTime true

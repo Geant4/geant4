@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4mctruth
-# Package: Geant4.src.G4persistency.G4mctruth
-#------------------------------------------------------------------------------
+# - G4mctruth module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4mctruth
-  HEADERS
+geant4_add_module(G4mctruth
+  PUBLIC_HEADERS
     G4DCIOcatalog.hh
     G4DCIOentryT.hh
     G4FileUtilities.hh
@@ -53,30 +48,8 @@ geant4_define_module(NAME G4mctruth
     G4VPDigitsCollectionIO.cc
     G4VPEventIO.cc
     G4VPHitIO.cc
-    G4VPHitsCollectionIO.cc
-  GRANULAR_DEPENDENCIES
-    G4digits
-    G4event
-    G4geometrymng
-    G4globman
-    G4hits
-    G4intercoms
-    G4partman
-    G4run
-    G4track
-    G4tracking
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
-    G4geometry
-    G4global
-    G4intercoms
-    G4particles
-    G4run
-    G4track
-    G4tracking
-  LINK_LIBRARIES
-)
+    G4VPHitsCollectionIO.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4mctruth
+  PUBLIC G4run G4event G4digits G4hits G4intercoms G4hepgeometry G4globman)
 

@@ -50,9 +50,7 @@
 class G4VDataSetAlgorithm {
  
 public:
-
-  G4VDataSetAlgorithm() { }
-
+  explicit G4VDataSetAlgorithm() { }
   virtual ~G4VDataSetAlgorithm() { }
  
   virtual G4double Calculate(G4double point, G4int bin, 
@@ -67,11 +65,8 @@ public:
 
   virtual G4VDataSetAlgorithm* Clone() const = 0;
 
-private:
-  
-  // Hide copy constructor and assignment operator
-  G4VDataSetAlgorithm(const G4VDataSetAlgorithm&);
-  G4VDataSetAlgorithm& operator=(const G4VDataSetAlgorithm& right);
+  G4VDataSetAlgorithm(const G4VDataSetAlgorithm&) = delete;
+  G4VDataSetAlgorithm& operator=(const G4VDataSetAlgorithm& right) = delete;
 
 };
  

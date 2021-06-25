@@ -1,13 +1,7 @@
-#------------------------------------------------------------------------------
-# Module : G4intercoms
-# Package: Geant4.src.G4intercoms
-#------------------------------------------------------------------------------
+# - G4intercoms module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4intercoms
-  HEADERS
+geant4_add_module(G4intercoms
+  PUBLIC_HEADERS
     G4AnyMethod.hh
     G4AnyType.hh
     G4GenericMessenger.hh
@@ -64,13 +58,6 @@ geant4_define_module(NAME G4intercoms
     G4UIparameter.cc
     G4UIsession.cc
     G4UnitsMessenger.cc
-    G4VGlobalFastSimulationManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-  GLOBAL_DEPENDENCIES
-    G4global
-  LINK_LIBRARIES
-    ${timemory_LIBRARIES}
-)
+    G4VGlobalFastSimulationManager.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4intercoms PUBLIC G4globman PRIVATE ${timemory_LIBRARIES})

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24, 2021 B. Morgan (exerrprop-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 Nov 03, 2020 B.Morgan (exerrprop-V10-06-00)
 - Support same CMake version range as core Geant4
 

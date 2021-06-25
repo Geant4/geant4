@@ -58,10 +58,10 @@ class B5DriftChamberHit : public G4VHit
 
     const B5DriftChamberHit& operator=(const B5DriftChamberHit &right);
     G4bool operator==(const B5DriftChamberHit &right) const;
-    
+
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);
-    
+
     virtual void Draw();
     virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
     virtual std::vector<G4AttValue>* CreateAttValues() const;
@@ -78,7 +78,7 @@ class B5DriftChamberHit : public G4VHit
 
     void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
     G4ThreeVector GetWorldPos() const { return fWorldPos; }
-    
+
   private:
     G4int fLayerID;
     G4double fTime;

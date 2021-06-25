@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4UserWorkerThreadInitialization implementation
+//
+// Authors: M.Asai, A.Dotti (SLAC), 16 September 2013
+// --------------------------------------------------------------------
+
+#include <sstream>
+
 #include "G4UserWorkerThreadInitialization.hh"
 #include "G4AutoLock.hh"
 #include "G4MTRunManagerKernel.hh"
@@ -31,7 +38,6 @@
 #include "G4VUserPhysicsList.hh"
 #include "G4WorkerRunManager.hh"
 #include "G4WorkerThread.hh"
-#include <sstream>
 
 // Will need this for TPMalloc
 //#ifdef G4MULTITHREADED
@@ -39,53 +45,64 @@
 //#include "tpmalloc/tpmallocstub.h"
 //#endif
 
+// --------------------------------------------------------------------
 #ifdef G4MULTITHREADED
-G4Thread* G4UserWorkerThreadInitialization::CreateAndStartWorker(
-  G4WorkerThread* wTC)
+G4Thread* G4UserWorkerThreadInitialization::
+CreateAndStartWorker(G4WorkerThread* wTC)
 {
-  // Note: this method is called by G4MTRunManager, here we are still sequential
+  // Note: this method is called by G4MTRunManager,
+  // here we are still sequential.
   // Create a new thread/worker structure
   G4Thread* worker = new G4Thread;
   G4THREADCREATE(worker, &G4MTRunManagerKernel::StartThread, wTC);
   return worker;
 }
 #else
-G4Thread* G4UserWorkerThreadInitialization::CreateAndStartWorker(
-  G4WorkerThread*)
+G4Thread* G4UserWorkerThreadInitialization::
+CreateAndStartWorker(G4WorkerThread*)
 {
   return new G4Thread;
 }
 #endif
 
-// Avoid compilation warning in sequential
+// --------------------------------------------------------------------
 #ifdef G4MULTITHREADED
 void G4UserWorkerThreadInitialization::JoinWorker(G4Thread* aThread)
 {
   G4THREADJOIN(*aThread);
 }
-#else
-void G4UserWorkerThreadInitialization::JoinWorker(G4Thread*) {}
+#else  // Avoid compilation warning in sequential
+void G4UserWorkerThreadInitialization::JoinWorker(G4Thread*)
+{
+}
 #endif
 
-G4UserWorkerThreadInitialization::G4UserWorkerThreadInitialization() { ; }
+// --------------------------------------------------------------------
+G4UserWorkerThreadInitialization::G4UserWorkerThreadInitialization()
+{
+}
 
-G4UserWorkerThreadInitialization::~G4UserWorkerThreadInitialization() { ; }
+// --------------------------------------------------------------------
+G4UserWorkerThreadInitialization::~G4UserWorkerThreadInitialization()
+{
+}
 
+// --------------------------------------------------------------------
 namespace
 {
   G4Mutex rngCreateMutex = G4MUTEX_INITIALIZER;
 }
 
-#include "globals.hh"
-void G4UserWorkerThreadInitialization::SetupRNGEngine(
-  const CLHEP::HepRandomEngine* aNewRNG) const
+// --------------------------------------------------------------------
+void G4UserWorkerThreadInitialization::
+SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
   G4AutoLock l(&rngCreateMutex);
   // No default available, let's create the instance of random stuff
   // A Call to this just forces the creation to defaults
   G4Random::getTheEngine();
   // Poor man's solution to check which RNG Engine is used in master thread
-  CLHEP::HepRandomEngine* retRNG = 0;
+  CLHEP::HepRandomEngine* retRNG = nullptr;
 
   // Need to make these calls thread safe
   if(dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG))
@@ -125,7 +142,7 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(
     retRNG = new CLHEP::RanshiEngine;
   }
 
-  if(retRNG != 0)
+  if(retRNG != nullptr)
   {
     G4Random::setTheEngine(retRNG);
   }
@@ -138,13 +155,14 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(
         << " MTwistEngine, DualRand, Ranlux or Ranshi." << G4endl
         << " Cannot clone this type of RNG engine, as required for this thread"
         << G4endl << " Aborting " << G4endl;
-    G4Exception("G4UserWorkerInitializition::SetupRNGEngine()", "Run0122",
-                FatalException, msg);
+    G4Exception("G4UserWorkerThreadInitialization::SetupRNGEngine()",
+                "Run0122", FatalException, msg);
   }
 }
 
-G4WorkerRunManager* G4UserWorkerThreadInitialization::CreateWorkerRunManager()
-  const
+// --------------------------------------------------------------------
+G4WorkerRunManager*
+G4UserWorkerThreadInitialization::CreateWorkerRunManager() const
 {
   return new G4WorkerRunManager();
 }

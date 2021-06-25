@@ -30,7 +30,6 @@
 // History:
 // -----------
 // 27 May 2002   VI                  Created
-//
 // 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
 //                                   to enhance computing performance of interpolation
 //
@@ -50,27 +49,21 @@
 class G4LinLogInterpolation : public G4VDataSetAlgorithm {
  
 public:
-
-  G4LinLogInterpolation();
-
+  explicit G4LinLogInterpolation();
   ~G4LinLogInterpolation();
  
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
-		     const G4DataVector& data) const;
+		     const G4DataVector& data) const override;
 
   G4double Calculate(G4double point, G4int bin,
                      const G4DataVector& energies,
                      const G4DataVector& data, 
 		     const G4DataVector& log_energies, 
-		     const G4DataVector& log_data) const;
+		     const G4DataVector& log_data) const override;
 
-  virtual G4VDataSetAlgorithm* Clone() const { return new G4LinLogInterpolation; }
-
-private:
-
-  
-  // Hide copy constructor and assignment operator
+  G4VDataSetAlgorithm* Clone() const override 
+  { return new G4LinLogInterpolation; }
 
 };
  

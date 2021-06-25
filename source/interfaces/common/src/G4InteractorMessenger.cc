@@ -146,10 +146,24 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter->SetParameterCandidates("highlight no-highlight");
   parameter->SetDefaultValue("highlight");
   outputStyle->SetParameter (parameter);
+
+  // /gui/nativeMenuBar :
+  nativeMenu = new G4UIcommand("/gui/nativeMenuBar",this);
+  nativeMenu->SetGuidance("Allow native menu bar in Geant4 Qt driver.");
+  nativeMenu->SetGuidance("By default, enable.");
+
+  parameter = new G4UIparameter("bool",'b',true);
+  parameter->SetDefaultValue("true");
+  nativeMenu->SetParameter (parameter);
+  // /gui/clearMenu
+  clearMenu = new G4UIcommand("/gui/clearMenu",this);
+  clearMenu->SetGuidance("Clear menu bar, remove all user defined menu entries.");
 }
 
 G4InteractorMessenger::~G4InteractorMessenger()
 {
+  delete clearMenu;
+  delete nativeMenu;
   delete outputStyle;
   delete sys;
   delete defaultIcons;
@@ -180,6 +194,10 @@ void G4InteractorMessenger::SetNewValue (
       if ( rc < 0 ){ } 
     } else if(command==outputStyle) {
       session->OutputStyle((const char*)params[0],(const char*)params[1],(const char*)params[2]);
+    } else if(command==nativeMenu) {
+      session->NativeMenu(command->ConvertToBool(newValue));
+    } else if(command==clearMenu) {
+      session->ClearMenu();
     }
   }
   delete [] params;

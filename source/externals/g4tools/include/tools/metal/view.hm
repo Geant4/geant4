@@ -1,0 +1,185 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_metal_view_hm
+#define tools_metal_view_hm
+
+#import <MetalKit/MetalKit.h>
+
+#include "ui_viewer"
+
+@interface tools_metal_view : MTKView {
+  @public tools::metal::ui_viewer* m_viewer;
+  NSCursor* m_cursor_default;
+  NSCursor* m_cursor_target;
+  NSCursor* m_cursor_current;
+}
+- (BOOL)acceptsFirstResponder;
+- (nonnull id)init:(NSRect)a_rect device:(nonnull id<MTLDevice>)a_device viewer:(nonnull tools::metal::ui_viewer*)a_viewer;
+- (void)dealloc;
+#ifdef TOOLS_METAL_DRAW_WHEN_NEEDED    
+- (void)drawRect:(NSRect)a_rect;
+#endif
+- (void)resetCursorRects;
+- (void)set_cursor:(tools::sg::cursor_shape)a_cursor;
+- (void)mouseDown:(nonnull NSEvent*)a_event;
+- (void)mouseUp:(nonnull NSEvent*)a_event;
+- (void)mouseDragged:(nonnull NSEvent*)a_event;
+@end
+
+@implementation tools_metal_view
+- (BOOL)acceptsFirstResponder {return YES;}
+- (nonnull id)init:(NSRect)a_rect device:(nonnull id<MTLDevice>)a_device viewer:(nonnull tools::metal::ui_viewer*)a_viewer {
+  //::printf("debug : tools::metal::tools_metal_view::init\n");
+  self = [super initWithFrame:a_rect device:a_device];
+  if(!self) return self;
+  m_viewer = a_viewer;
+  m_cursor_default = [NSCursor arrowCursor];
+  m_cursor_target = [NSCursor crosshairCursor];
+  m_cursor_current = m_cursor_default;
+  
+  NSTrackingAreaOptions _options = NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways | NSTrackingInVisibleRect;
+  NSTrackingArea* tracking_area =
+    [[NSTrackingArea alloc] initWithRect:NSZeroRect
+				 options:_options
+				   owner:self userInfo:nil];
+  [self addTrackingArea:tracking_area];
+
+  return self;
+}
+
+- (void)dealloc {[super dealloc];}
+
+#ifdef TOOLS_METAL_DRAW_WHEN_NEEDED    
+- (void)drawRect:(NSRect)a_rect {
+  [super drawRect:a_rect];
+  if(!m_viewer) return;
+  int w = a_rect.size.width;
+  int h = a_rect.size.height;
+  ::printf("debug : tools::metal::view::drawRect : %d %d\n",w,h);
+  m_viewer->set_size(w,h);
+  m_viewer->win_render();
+}
+#endif
+
+- (void)mouseDown:(nonnull NSEvent*)a_event {
+  [super mouseDown:a_event];
+  ::printf("debug : tools::metal::view::mouse_down : begin :\n");
+  //NSPoint p = [a_event locationInWindow];
+  //(0,0) = bottom left of window.
+  //NSLog(@"debug : tools_metal_view::mouseDown %g %g",p.x,p.y);
+  if(!m_viewer) return;
+  /*
+  bool to_render = m_viewer->touch_down(p.x,p.y);
+  if(m_viewer->do_works()) to_render = true;
+  if(to_render) {
+#ifdef TOOLS_METAL_DRAW_WHEN_NEEDED    
+    ::printf("debug : tools::metal::view::mouse_down : to render...\n");
+    m_viewer->win_render();
+#else    
+    [self setNeedsDisplay:YES];
+#endif
+  }
+  ::printf("debug : tools::metal::view::mouse_down : end.\n");
+  */
+}
+
+- (void)mouseUp:(nonnull NSEvent*)a_event {
+  [super mouseUp:a_event];
+  ::printf("debug : tools::metal::view::mouse_up : begin :\n");
+  //NSPoint p = [a_event locationInWindow];
+  //(0,0) = bottom left of window.
+  //NSLog(@"debug : tools_metal_view::mouseUp %g %g",p.x,p.y);
+  if(!m_viewer) return;
+  /*
+  m_viewer->add_work_check_arm_buttons();
+  bool to_render = m_viewer->touch_up(p.x,p.y);
+  //if(m_viewer->do_works()) to_render = true;
+  if(to_render) {
+#ifdef TOOLS_METAL_DRAW_WHEN_NEEDED    
+    ::printf("debug : tools::metal::view::mouse_up : to render...\n");
+    m_viewer->win_render();
+#else    
+    [self setNeedsDisplay:YES];
+#endif
+  }
+  */
+  NSRect rect;
+  rect.origin.x = 0;
+  rect.origin.y = 0;
+  rect.size.width = 700;
+  rect.size.height = 500;
+  //  [self setNeedsDisplayInRect:rect];
+  [self display];
+  /*
+  if(m_viewer->touch_up(p.x,p.y)) {
+    //m_viewer->win_render();
+    [self setNeedsDisplay:YES];
+  }
+  */
+  ::printf("debug : tools::metal::view::mouse_up : end.\n");
+}
+
+- (void)mouseDragged:(nonnull NSEvent*)a_event {
+  [super mouseDragged:a_event];
+  ::printf("debug : tools::metal::view::mouse_dragged\n");
+  //NSPoint p = [a_event locationInWindow];
+  //(0,0) = bottom left of window.
+  //NSLog(@"debug : tools_metal_view::mouseDragged %g %g",p.x,p.y);
+  if(!m_viewer) return;
+  //if(m_viewer->touch_move(p.x,p.y)) m_viewer->win_render();
+}
+
+- (void)resetCursorRects {
+  [super resetCursorRects];
+  //NSLog(@"debug : resetCursorRects");
+  [self discardCursorRects];
+  [self addCursorRect:self.bounds cursor:m_cursor_default];
+  [self addCursorRect:self.bounds cursor:m_cursor_target];
+  [m_cursor_current set];
+}
+
+- (void)mouseEntered:(nonnull NSEvent*)a_event {
+  [super mouseEntered:a_event];
+  [m_cursor_current set];
+}
+
+- (void)set_cursor:(tools::sg::cursor_shape)a_cursor {
+  if(a_cursor==tools::sg::cursor_default) {
+    [m_cursor_default set];
+    m_cursor_current = m_cursor_default;
+  } else if(a_cursor==tools::sg::cursor_target) {
+    [m_cursor_target set];
+    m_cursor_current = m_cursor_target;
+  }
+}
+@end
+
+@interface tools_metal_view_controller : NSViewController<MTKViewDelegate>
+@end
+
+@implementation tools_metal_view_controller {
+}
+-(void)drawInMTKView:(nonnull MTKView*)a_view {
+  //static unsigned int s_count = 0;
+  //::printf("debug : tools::metal::tools_metal_view_controller::drawInMtkView : %d\n",s_count);s_count++;
+  tools_metal_view* _view = static_cast<tools_metal_view*>(a_view);
+  @autoreleasepool { 
+    _view->m_viewer->win_render();
+  }
+}
+- (void)mtkView:(nonnull MTKView*)a_view drawableSizeWillChange:(CGSize)a_size {
+  int w = a_size.width*0.5;
+  int h = a_size.height*0.5;
+//static unsigned int s_count = 0;
+//::printf("debug : tools::metal::tools_metal_view_controller::drawableSizeWillChange : %d :%d %d : %d %d\n",
+//         s_count,(int)a_size.width,(int)a_size.height,w,h);
+  tools_metal_view* _view = static_cast<tools_metal_view*>(a_view);
+  @autoreleasepool { 
+    _view->m_viewer->set_size(w,h);
+  //_view->m_viewer->win_render(); //no.
+  }
+}
+@end
+
+#endif

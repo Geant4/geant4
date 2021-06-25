@@ -94,6 +94,14 @@ G4VPhysicalVolume::~G4VPhysicalVolume()
   G4PhysicalVolumeStore::DeRegister(this);
 }
 
+// Set volume name and notify store of the change
+//
+void G4VPhysicalVolume::SetName(const G4String& pName)
+{
+  fname = pName;
+  G4PhysicalVolumeStore::GetInstance()->SetMapValid(false);
+}
+
 // This method is similar to the constructor. It is used by each worker
 // thread to achieve the same effect as that of the master thread exept
 // to register the new created instance. This method is invoked explicitly.

@@ -70,7 +70,7 @@ G4QGSPProtonBuilder(G4bool quasiElastic)
  }
 
 void G4QGSPProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
  {
    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
    theModel->SetMinEnergy(theMin);

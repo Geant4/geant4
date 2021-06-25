@@ -200,7 +200,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   
   //x-vertex of charged secondaries
   //
-  if ((aTrack->GetParentID() == 1) && charged && energy > 0.0) {
+  if ((aTrack->GetParentID() == 1) && charged ) {
     G4double xVertex = (aTrack->GetVertexPosition()).x();
     analysisManager->FillH1(6, xVertex);
     if (notabsor) analysisManager->FillH1(7, xVertex); 

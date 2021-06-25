@@ -10,6 +10,9 @@
 ##/testhadr/det/setAbsorLength 60 mm
 ##/testhadr/det/setContThick  2.4 mm
 #
+/process/em/verbose 0
+/process/had/verbose 1
+#
 /run/initialize
 #
 /process/inactivate hadElastic

@@ -12,7 +12,6 @@
 # UI category : Built on supported platforms when Third Party
 # library(libraries) available
 #  G4UIQt  : UNIX, WIN32 (Requires : Qt5)
-#  G4UIWt  : Web (Requires : Wt) DEPRECATED
 #  G4UIXm  : UNIX
 #
 # Vis Category: Always built on supported platforms
@@ -95,12 +94,30 @@ if(UNIX)
   # RayTracer driver with X11 support
   option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
   geant4_add_feature(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support")
+
+  # ToolsSG X11/GLES driver
+  option(GEANT4_USE_TOOLSSG_X11_GLES "Build Geant4 ToolsSG driver with X11/GLES support" OFF)
+  geant4_add_feature(GEANT4_USE_TOOLSSG_X11_GLES "Build Geant4 ToolsSG driver with X11/GLES support")
+
+  # ToolsSG Xt/GLES driver
+  option(GEANT4_USE_TOOLSSG_XT_GLES "Build Geant4 ToolsSG driver with Xt/GLES support" OFF)
+  geant4_add_feature(GEANT4_USE_TOOLSSG_XT_GLES "Build Geant4 ToolsSG driver with Xt/GLES support")
+
+  # ToolsSG Qt/GLES driver
+  option(GEANT4_USE_TOOLSSG_QT_GLES "Build Geant4 ToolsSG driver with Qt/GLES support" OFF)
+  geant4_add_feature(GEANT4_USE_TOOLSSG_QT_GLES "Build Geant4 ToolsSG driver with Qt/GLES support")
+
 endif()
 
 # Windows only
 if(WIN32)
   option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
   geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
+
+  # ToolsSG Windows/GLES driver
+  option(GEANT4_USE_TOOLSSG_WINDOWS_GLES "Build Geant4 ToolsSG driver with Windows/GLES support" OFF)
+  geant4_add_feature(GEANT4_USE_TOOLSSG_WINDOWS_GLES "Build Geant4 ToolsSG driver with Windows/GLES support")
+
 endif()
 
 #-----------------------------------------------------------------------
@@ -132,11 +149,6 @@ endif()
 
 # - Qt5
 if(GEANT4_USE_QT)
-  # Must have CMake > 3.8 to support automoc (Bugzilla 2303)
-  if(CMAKE_VERSION VERSION_LESS 3.9)
-    message(FATAL_ERROR "GEANT4_USE_QT requires CMake 3.9 or newer to support automatic MOC for UI/Vis libraries")
-  endif()
-
   find_package(Qt5Core REQUIRED)
   find_package(Qt5Gui REQUIRED)
   find_package(Qt5Widgets REQUIRED)

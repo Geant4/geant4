@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+23 Mar 21 - tag splitting-V10-07-00 - V. Ivanchenko
+- PhysicsList - updated to 11.0
+
 26 Nov 20 - tag splitting-V10-06-00 - B. Morgan
 - Migration to G4RunManagerFactory.
 

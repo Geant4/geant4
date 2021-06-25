@@ -39,6 +39,7 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4AttCheck.hh"
+#include "G4AxesModel.hh"
 
 G4VisCommandsTouchable::G4VisCommandsTouchable()
 {
@@ -100,6 +101,11 @@ G4VisCommandsTouchable::G4VisCommandsTouchable()
   parameter -> SetDefaultValue (-1);
   fpCommandFindPath -> SetParameter (parameter);
 
+  fpCommandLocalAxes = new G4UIcmdWithoutParameter("/vis/touchable/localAxes",this);
+  fpCommandLocalAxes->SetGuidance("Draw local axes.");
+  // Pick up additional guidance from /vis/viewer/centreAndZoomInOn
+  CopyGuidanceFrom(fpCommandCentreAndZoomInOn,fpCommandLocalAxes,1);
+
   fpCommandShowExtent = new G4UIcmdWithABool("/vis/touchable/showExtent",this);
   fpCommandShowExtent->SetGuidance("Print extent of touchable.");
   fpCommandShowExtent->SetGuidance("If parameter == true, also draw.");
@@ -120,6 +126,7 @@ G4VisCommandsTouchable::G4VisCommandsTouchable()
 G4VisCommandsTouchable::~G4VisCommandsTouchable() {
   delete fpCommandVolumeForField;
   delete fpCommandShowExtent;
+  delete fpCommandLocalAxes;
   delete fpCommandFindPath;
   delete fpCommandExtentForField;
   delete fpCommandDump;
@@ -338,6 +345,7 @@ void G4VisCommandsTouchable::SetNewValue
       G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
       G4ModelingParameters mp;  // Default - no culling.
       searchModel.SetModelingParameters (&mp);
+      // Find all instances at any position in the tree
       G4PhysicalVolumesSearchScene searchScene (&searchModel, pvName, copyNo);
       searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
       for (const auto& findings: searchScene.GetFindings()) {
@@ -364,6 +372,20 @@ void G4VisCommandsTouchable::SetNewValue
       if (copyNo >= 0) G4cout << ':' << copyNo;
       G4cout << " not found" << G4endl;
     }
+
+  } else if (command == fpCommandLocalAxes) {
+
+    const auto& transform = fCurrentTouchableProperties.fTouchableGlobalTransform;
+    const auto& extent = fCurrentTouchableProperties.fpTouchablePV->GetLogicalVolume()->GetSolid()->GetExtent();
+    const G4double lengthMax = extent.GetExtentRadius()/2.;
+    const G4double intLog10LengthMax = std::floor(std::log10(lengthMax));
+    G4double length = std::pow(10,intLog10LengthMax);
+    if (5.*length < lengthMax) length *= 5.;
+    else if (2.*length < lengthMax) length *= 2.;
+    G4AxesModel axesModel(0.,0.,0.,length);
+    axesModel.SetTransformation(transform);
+    axesModel.SetGlobalTag("LocalAxesModel");
+    axesModel.DescribeYourselfTo(*fpVisManager->GetCurrentSceneHandler());
 
   } else if (command == fpCommandShowExtent) {
 

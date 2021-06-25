@@ -43,26 +43,24 @@
 //////////////////
 enum G4PSFluxFlag
 //////////////////
-{ 
-    fFlux_InOut, 
-    // For both direction In / Out.
-    fFlux_In, 
-    // IN : Direction which comes into the geometry
-    fFlux_Out 
+{
+  fFlux_InOut,
+  // For both direction In / Out.
+  fFlux_In,
+  // IN : Direction which comes into the geometry
+  fFlux_Out
 };
 
 /////////////////////
 enum G4PSCurrentFlag
 /////////////////////
-{ 
-    fCurrent_InOut, 
-    // For both direction In / Out.
-    fCurrent_In, 
-    // IN : Direction which comes into the geometry
-    fCurrent_Out 
-    // OUT : Direction which goes out fromthe geometry
+{
+  fCurrent_InOut,
+  // For both direction In / Out.
+  fCurrent_In,
+  // IN : Direction which comes into the geometry
+  fCurrent_Out
+  // OUT : Direction which goes out fromthe geometry
 };
 
 #endif
-
-

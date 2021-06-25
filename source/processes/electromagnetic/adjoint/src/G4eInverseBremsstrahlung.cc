@@ -22,23 +22,26 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-#include "G4eInverseBremsstrahlung.hh"
-#include "G4VEmAdjointModel.hh"
-#include "G4AdjointBremsstrahlungModel.hh"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-G4eInverseBremsstrahlung::G4eInverseBremsstrahlung(G4bool whichScatCase,G4String process_name,
-                    G4VEmAdjointModel* aBremAdjointModel):
-				G4VAdjointReverseReaction(process_name,whichScatCase)
-{theAdjointEMModel = aBremAdjointModel;
- theAdjointEMModel->SetSecondPartOfSameType(false);
- if (IsScatProjToProjCase) SetIntegralMode(true);
- else   SetIntegralMode(false);
+#include "G4eInverseBremsstrahlung.hh"
+
+#include "G4VEmAdjointModel.hh"
+
+////////////////////////////////////////////////////////////////////////////////
+G4eInverseBremsstrahlung::G4eInverseBremsstrahlung(
+  G4bool whichScatCase, G4String process_name,
+  G4VEmAdjointModel* aBremAdjointModel)
+  : G4VAdjointReverseReaction(process_name, whichScatCase)
+{
+  fAdjointModel = aBremAdjointModel;
+  fAdjointModel->SetSecondPartOfSameType(false);
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-G4eInverseBremsstrahlung::~G4eInverseBremsstrahlung(){
+
+////////////////////////////////////////////////////////////////////////////////
+G4eInverseBremsstrahlung::~G4eInverseBremsstrahlung() {}
+
+////////////////////////////////////////////////////////////////////////////////
+void G4eInverseBremsstrahlung::ProcessDescription(std::ostream& out) const
+{
+  out << "Inverse bremsstrahlung process.\n";
 }

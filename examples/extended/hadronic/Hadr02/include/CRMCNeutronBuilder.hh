@@ -38,7 +38,7 @@
 // For fission and capture the usual Geant4 models are used.
 //
 // Modified:
-// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -48,10 +48,10 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VNeutronBuilder.hh"
-#include "G4NeutronRadCapture.hh"
-#include "G4LFission.hh"
 
 class HadronicInelasticModelCRMC;
+class G4NeutronRadCapture;
+class G4LFission;
 
 
 class CRMCNeutronBuilder : public G4VNeutronBuilder {
@@ -59,9 +59,9 @@ class CRMCNeutronBuilder : public G4VNeutronBuilder {
     CRMCNeutronBuilder( const G4int crmcModelId, const std::string & crmcModelName );
     virtual ~CRMCNeutronBuilder();
     virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4HadronFissionProcess* aP ) final override;
-    virtual void Build( G4HadronCaptureProcess* aP ) final override;
-    virtual void Build( G4NeutronInelasticProcess* aP ) final override;  
+    virtual void Build( G4NeutronFissionProcess* aP ) final override;
+    virtual void Build( G4NeutronCaptureProcess* aP ) final override;
+    virtual void Build( G4HadronInelasticProcess* aP ) final override;
     inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
     inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
     using G4VNeutronBuilder::Build;  // Prevent compiler warning

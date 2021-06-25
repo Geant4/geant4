@@ -57,7 +57,7 @@
 #ifndef G4SPSEneDistribution_hh
 #define G4SPSEneDistribution_hh 1
 
-#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DataInterpolation.hh"
@@ -182,9 +182,9 @@ class G4SPSEneDistribution
 
     G4double Getcept() const;
 
-    G4PhysicsOrderedFreeVector GetUserDefinedEnergyHisto();
+    G4PhysicsFreeVector GetUserDefinedEnergyHisto();
 
-    G4PhysicsOrderedFreeVector GetArbEnergyHisto();
+    G4PhysicsFreeVector GetArbEnergyHisto();
 
     G4double GenerateOne(G4ParticleDefinition*);
        // Generate one random energy for the specified particle
@@ -246,12 +246,12 @@ class G4SPSEneDistribution
     G4bool EnergySpec = true; // energy spectra, false - momentum spectra
     G4bool DiffSpec = true; // differential spec, false integral spec
 
-    G4PhysicsOrderedFreeVector UDefEnergyH; // energy hist data
-    G4PhysicsOrderedFreeVector IPDFEnergyH;
+    G4PhysicsFreeVector UDefEnergyH; // energy hist data
+    G4PhysicsFreeVector IPDFEnergyH;
     G4bool IPDFEnergyExist = false, IPDFArbExist = false, Epnflag = false;
-    G4PhysicsOrderedFreeVector ArbEnergyH; // Arb x,y histogram
-    G4PhysicsOrderedFreeVector IPDFArbEnergyH; // IPDF for Arb
-    G4PhysicsOrderedFreeVector EpnEnergyH;
+    G4PhysicsFreeVector ArbEnergyH; // Arb x,y histogram
+    G4PhysicsFreeVector IPDFArbEnergyH; // IPDF for Arb
+    G4PhysicsFreeVector EpnEnergyH;
     G4double CDGhist[3]; // cumulative histo for cdg
     
     std::vector<G4double>* BBHist = nullptr;
@@ -287,7 +287,7 @@ class G4SPSEneDistribution
 
     G4int verbosityLevel;
 
-    G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
+    G4PhysicsFreeVector ZeroPhysVector; // for re-set only
 
     std::vector<G4DataInterpolation*> SplineInt;
       // Holds Spline stuff required for sampling

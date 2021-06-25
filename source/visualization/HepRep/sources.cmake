@@ -1,13 +1,8 @@
-#-----------------------------------------------------------------------
-# Module : G4visHepRep
-# Package: Geant4.src.G4visualization.G4visHepRep
-#-----------------------------------------------------------------------
+# - G4visHepRep module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4visHepRep
-  HEADERS
+geant4_add_module(G4visHepRep
+  PUBLIC_HEADERS
     G4HepRep.hh
     G4HepRepFile.hh
     G4HepRepFileSceneHandler.hh
@@ -47,31 +42,24 @@ geant4_define_module(NAME G4visHepRep
     XMLHepRepWriter.cc
     XMLWriter.cc
     ZipOutputStream.cc
-    ZipOutputStreamBuffer.cc
-  GRANULAR_DEPENDENCIES
+    ZipOutputStreamBuffer.cc)
+
+geant4_module_link_libraries(G4visHepRep
+  PUBLIC
     G4csg
     G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hits
-    G4intercoms
     G4materials
     G4modeling
     G4specsolids
-    G4tracking
-    G4vis_management
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4geometry
-    G4global
-    G4graphics_reps
+    G4globman
     G4intercoms
-    G4materials
-    G4modeling
-    G4tracking
     G4vis_management
-  LINK_LIBRARIES
-    ${ZLIB_LIBRARIES}
-  )
+    G4graphics_reps
+  PRIVATE
+    G4hepgeometry
+    G4hits
+    G4UIcommon
+    G4tracking
+    ${ZLIB_LIBRARIES})
 
 # List any source specific properties here

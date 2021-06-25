@@ -109,7 +109,8 @@ G4int& G4RadioactiveDecayBase::NumberOfInstances()
 G4RadioactiveDecayBase::G4RadioactiveDecayBase(const G4String& processName)
  : G4VRestDiscreteProcess(processName, fDecay), isInitialised(false),
    forceDecayDirection(0.,0.,0.), forceDecayHalfAngle(0.*deg), dirPath(""),
-   verboseLevel(1)
+   verboseLevel(1),
+   fThresholdForVeryLongDecayTime( 1.0e+27*CLHEP::nanosecond )  // Longer than twice Universe's age
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 1) {
@@ -240,77 +241,78 @@ G4DecayTable* G4RadioactiveDecayBase::GetDecayTable(const G4ParticleDefinition* 
 }
 
 
-void G4RadioactiveDecayBase::SelectAVolume(const G4String aVolume)
+void G4RadioactiveDecayBase::SelectAVolume(const G4String& aVolume)
 {
-  G4LogicalVolumeStore* theLogicalVolumes;
-  G4LogicalVolume* volume;
-  theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
-  for (size_t i = 0; i < theLogicalVolumes->size(); i++) {
-    volume = (*theLogicalVolumes)[i];
-    if (volume->GetName() == aVolume) {
-      ValidVolumes.push_back(aVolume);
-      std::sort(ValidVolumes.begin(), ValidVolumes.end());
-      // sort need for performing binary_search
+  G4LogicalVolumeStore* theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolume* volume = nullptr;
+  volume = theLogicalVolumes->GetVolume(aVolume);
+  if (volume != nullptr)
+  {
+    ValidVolumes.push_back(aVolume);
+    std::sort(ValidVolumes.begin(), ValidVolumes.end());
+    // sort need for performing binary_search
 
-      if (GetVerboseLevel() > 0)
-	G4cout << " Radioactive decay applied to " << aVolume << G4endl; 
-
-    } else if (i == theLogicalVolumes->size() ) {
-      G4ExceptionDescription ed;
-      ed << aVolume << " is not a valid logical volume name.  Decay not activated for it."
-         << G4endl;
-      G4Exception("G4RadioactiveDecayBase::SelectAVolume()", "HAD_RDM_300",
-                  JustWarning, ed);
-    }
+    if (GetVerboseLevel() > 0)
+      G4cout << " Radioactive decay applied to " << aVolume << G4endl;
+  }
+  else
+  {
+    G4ExceptionDescription ed;
+    ed << aVolume << " is not a valid logical volume name."
+       << " Decay not activated for it."
+       << G4endl;
+    G4Exception("G4RadioactiveDecayBase::SelectAVolume()", "HAD_RDM_300",
+                JustWarning, ed);
   }
 }
 
 
-void G4RadioactiveDecayBase::DeselectAVolume(const G4String aVolume)
+void G4RadioactiveDecayBase::DeselectAVolume(const G4String& aVolume)
 {
-  G4LogicalVolumeStore* theLogicalVolumes;
-  G4LogicalVolume* volume;
-  theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
-  for (size_t i = 0; i < theLogicalVolumes->size(); i++) {
-    volume = (*theLogicalVolumes)[i];
-    if (volume->GetName() == aVolume) {
-      std::vector<G4String>::iterator location;
-      location = std::find(ValidVolumes.begin(),ValidVolumes.end(),aVolume);
-      if (location != ValidVolumes.end() ) {
-        ValidVolumes.erase(location);
-        std::sort(ValidVolumes.begin(), ValidVolumes.end());
-        isAllVolumesMode = false;
-        if (GetVerboseLevel() > 0)
-          G4cout << " G4RadioactiveDecay::DeselectAVolume: " << aVolume
-                 << " is removed from list " << G4endl;
-      } else {
-        G4ExceptionDescription ed;
-        ed << aVolume << " is not in the list.  No action taken." << G4endl;
-        G4Exception("G4RadioactiveDecayBase::DeselectAVolume()", "HAD_RDM_300",
-                    JustWarning, ed);
-      }
-    } else if (i ==  theLogicalVolumes->size()) {
+  G4LogicalVolumeStore* theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolume* volume = nullptr;
+  volume = theLogicalVolumes->GetVolume(aVolume);
+  if (volume != nullptr)
+  {
+    auto location= std::find(ValidVolumes.cbegin(),ValidVolumes.cend(),aVolume);
+    if (location != ValidVolumes.cend() )
+    {
+      ValidVolumes.erase(location);
+      std::sort(ValidVolumes.begin(), ValidVolumes.end());
+      isAllVolumesMode = false;
+      if (GetVerboseLevel() > 0)
+        G4cout << " G4RadioactiveDecay::DeselectAVolume: " << aVolume
+               << " is removed from list " << G4endl;
+    }
+    else
+    {
       G4ExceptionDescription ed;
-      ed << aVolume << " is not a valid logical volume name.  No action taken." 
-         << G4endl;
+      ed << aVolume << " is not in the list.  No action taken." << G4endl;
       G4Exception("G4RadioactiveDecayBase::DeselectAVolume()", "HAD_RDM_300",
                   JustWarning, ed);
     }
+  }
+  else
+  {
+    G4ExceptionDescription ed;
+    ed << aVolume << " is not a valid logical volume name.  No action taken." 
+       << G4endl;
+    G4Exception("G4RadioactiveDecayBase::DeselectAVolume()", "HAD_RDM_300",
+                JustWarning, ed);
   }
 }
 
 
 void G4RadioactiveDecayBase::SelectAllVolumes() 
 {
-  G4LogicalVolumeStore* theLogicalVolumes;
-  G4LogicalVolume* volume;
-  theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolumeStore* theLogicalVolumes = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolume* volume = nullptr;
   ValidVolumes.clear();
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
     G4cout << " RDM Applies to all Volumes"  << G4endl;
 #endif
-  for (size_t i = 0; i < theLogicalVolumes->size(); i++){
+  for (std::size_t i = 0; i < theLogicalVolumes->size(); ++i){
     volume = (*theLogicalVolumes)[i];
     ValidVolumes.push_back(volume->GetName());    
 #ifdef G4VERBOSE
@@ -494,6 +496,8 @@ G4RadioactiveDecayBase::StreamInfo(std::ostream& os, const G4String& endline)
      << emparam->DeexcitationIgnoreCut() << endline;
   os << "Use Bearden atomic level energies                 "
      << emparam->BeardenFluoDir() << endline;
+  os << "Threshold for very long decay time at rest        "
+     << fThresholdForVeryLongDecayTime/CLHEP::ns << "  ns" << endline;
   os << "======================================================================"
      << G4endl;
   os.precision(prec);
@@ -1129,6 +1133,24 @@ void G4RadioactiveDecayBase::DecayAnalog(const G4Track& theTrack)
     finalGlobalTime += temptime;
     finalLocalTime += temptime;
     energyDeposit += theParticle->GetKineticEnergy();
+    
+    // Kill the parent particle, and ignore its decay, if it decays later than the
+    // threshold fThresholdForVeryLongDecayTime (whose default value corresponds
+    // to more than twice the age of the universe).
+    // This kind of cut has been introduced (in April 2021) in order to avoid to
+    // account energy depositions happening after many billions of years in
+    // ordinary materials used in calorimetry, in particular Tungsten and Lead
+    // (via their natural unstable, but very long lived, isotopes, such as
+    // W183, W180 and Pb204).
+    // Note that the cut is not on the average, mean lifetime, but on the actual
+    // sampled global decay time.
+    if ( finalGlobalTime > fThresholdForVeryLongDecayTime ) {
+      fParticleChangeForRadDecay.SetNumberOfSecondaries(0);
+      fParticleChangeForRadDecay.ProposeTrackStatus(fStopAndKill) ;
+      fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
+      ClearNumberOfInteractionLengthLeft();
+      return;
+    }     
   }
   products->Boost(ParentEnergy, ParentDirection);
 

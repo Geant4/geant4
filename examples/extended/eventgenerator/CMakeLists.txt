@@ -1,9 +1,6 @@
 #---Adding all eventgenerator examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 3.8...3.18)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20)
 
 find_package(Geant4)
 include(${Geant4_USE_FILE})
@@ -32,4 +29,14 @@ if(PYTHIA6_FOUND)
   add_subdirectory(pythia/decayer6)
 else()
   message(STATUS "G4 Examples: Pythia6 package not found. --> decayer6 example disabled.") 
-endif()   
+endif()
+
+#----------------------------------------------------------------------------
+# py8decayer example requires Pythia8
+#
+find_package(Pythia8 QUIET)
+if (PYTHIA8_FOUND)
+  add_subdirectory(pythia/py8decayer)
+else()
+  message(STATUS "G4 Examples: Pythia8 package not found. --> py8decayer example disabled.") 
+endif()

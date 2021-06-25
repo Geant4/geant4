@@ -133,6 +133,10 @@ public:
     G4double w = std::sqrt(fW2);
     return w + 0.5*( (mP+mF)*(mP+mF)-(w+mI)*(w+mI) )/mI;
   };
+  G4double GetQEratioA(){ return fQEratioA; };
+  void     SetQEratioA( G4double qea ){ fQEratioA = qea; };
+
+
   G4double FinalMomentum(G4double mI, G4double mF, G4double mP, G4LorentzVector lvX); // for cluster decay
 
   // nucleon binding
@@ -148,6 +152,8 @@ public:
 
   G4int    GetOnePionIndex(G4double energy);
   G4double GetNuMuOnePionProb(G4int index, G4double energy);
+
+  G4double CalculateQEratioA( G4int Z, G4int A, G4double energy, G4int nepdg);
   
   virtual void ModelDescription(std::ostream&) const;
 
@@ -166,7 +172,7 @@ protected:
 
   G4double fM1, fM2, fMt, fMu, fW2,  fMpi, fW2pi, fMinNuEnergy, fDp, fTr;
 
-  G4double fEmu, fEmuPi, fEx, fMr, fCosTheta, fCosThetaPi; // final lepton
+  G4double fEmu, fEmuPi, fEx, fMr, fCosTheta, fCosThetaPi, fQEratioA; 
 
   G4LorentzVector fLVh, fLVl, fLVt, fLVcpi;
 
@@ -205,6 +211,11 @@ protected:
   static G4double fNuMuQarrayKR[50][51][51];
   static G4double fNuMuQdistrKR[50][51][50];
 
+  // QEratio(Z,A,Enu)
+
+  static const G4double fQEnergy[50];
+  static const G4double fANeMuQEratio[50];
+  static const G4double fNeMuQEratio[50];
  
 };
 

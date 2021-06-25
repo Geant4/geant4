@@ -57,15 +57,15 @@ class B5HodoscopeHit : public G4VHit
 
     const B5HodoscopeHit& operator=(const B5HodoscopeHit &right);
     G4bool operator==(const B5HodoscopeHit &right) const;
-    
+
     inline void *operator new(size_t);
     inline void operator delete(void*aHit);
-    
+
     void Draw();
     virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
     virtual std::vector<G4AttValue>* CreateAttValues() const;
     void Print();
-    
+
     G4int GetID() const { return fId; }
 
     void SetTime(G4double val) { fTime = val; }
@@ -79,7 +79,7 @@ class B5HodoscopeHit : public G4VHit
 
     void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
     const G4LogicalVolume* GetLogV() const { return fPLogV; }
-    
+
   private:
     G4int fId;
     G4double fTime;

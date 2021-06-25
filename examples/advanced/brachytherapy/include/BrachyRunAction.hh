@@ -24,14 +24,7 @@
 // ********************************************************************
 //
 //
-//
-//
-//
-//    ********************************************
-//    *                                          *
-//    *      BrachyRunAction.hh                  *
-//    *                                          *
-//    ********************************************
+//  Author: Susanna Guatelli
 //
 #ifndef BrachyRunAction_h
 #define BrachyRunAction_h 1
@@ -40,19 +33,18 @@
 #include "G4RunManager.hh"
 #include "globals.hh"
 
-class G4Run;
 class BrachyRunMessenger;
-
+class G4Run;
 
 class BrachyRunAction : public G4UserRunAction
 {
 public:
-  BrachyRunAction();
+  explicit BrachyRunAction();
   ~BrachyRunAction();
 
 public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run* );
+  void BeginOfRunAction(const G4Run*) override;
+  void EndOfRunAction(const G4Run*) override;
 };
 #endif
 

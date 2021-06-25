@@ -42,14 +42,13 @@ class BrachyDetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
-
 class BrachyDetectorMessenger: public G4UImessenger
 {
 public:
-  BrachyDetectorMessenger(BrachyDetectorConstruction* );
+  explicit BrachyDetectorMessenger(BrachyDetectorConstruction* );
   ~BrachyDetectorMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
   
 private:
 

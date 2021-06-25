@@ -7,10 +7,16 @@
 
                       Category History file
                       ---------------------
+24.05.2021 - B. Morgan (ICRP110Phantoms-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+29.03.2021 - J. Allison; ICRP110Phantoms-V10-07-00
+             Introduced ICRP110PhantomVisAction
+             See vis.mac for how to activate
 
 15.11.2020 - S. Guatelli; ICRP110Phantoms-V10-06-01
              Migration to G4RunManagerFactory
-                    
+
 27.10.2020 - S. Guatelli; ICRP110Phantoms-V10-06-00
              New advanced example modelling ICRP110 phantom models
 

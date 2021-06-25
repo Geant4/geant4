@@ -573,11 +573,11 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << G4endl;
   }
   if (!found) {
-    G4cout << "No scenes found";
+    G4cerr << "No scenes found";
     if (name != "all") {
-      G4cout << " of name \"" << name << "\"";
+      G4cerr << " of name \"" << name << "\"";
     }
-    G4cout << "." << G4endl;
+    G4cerr << "." << G4endl;
   }
 }
 

@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24-05-21  B. Morgan (electromagnetic-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 13-11-20 B. Morgan (electromagnetic-V10-06-01)
 - Enforce use of Serial RunManager for serial-only examples.
 

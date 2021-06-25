@@ -82,7 +82,7 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
     isInitialised(false)
 {
   theElectron = G4Electron::Electron();
-  if(p) { SetParticle(p); }
+  if(nullptr != p) { SetParticle(p); }
   fParticleChange = nullptr;
 }
 
@@ -106,7 +106,7 @@ G4double G4MollerBhabhaModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
-  if(!particle) { SetParticle(p); }
+  if(p != particle) { SetParticle(p); }
 
   if(isInitialised) { return; }
 
@@ -119,13 +119,11 @@ void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double 
-G4MollerBhabhaModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
-                                                    G4double kineticEnergy,
-                                                    G4double cutEnergy,
-                                                    G4double maxEnergy)
+G4double G4MollerBhabhaModel::ComputeCrossSectionPerElectron(
+         const G4ParticleDefinition* p, G4double kineticEnergy,
+	 G4double cutEnergy, G4double maxEnergy)
 {
-  if(!particle) { SetParticle(p); }
+  if(p != particle) { SetParticle(p); }
 
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
@@ -205,7 +203,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
                                                 G4double kineticEnergy,
                                                 G4double cut)
 {
-  if(nullptr == particle) { SetParticle(p); }
+  if(p != particle) { SetParticle(p); }
   // calculate the dE/dx due to the ionization by Seltzer-Berger formula
   // checl low-energy limit
   G4double electronDensity = material->GetElectronDensity();

@@ -36,7 +36,7 @@ class G4HadronPhysicsQGSP_BIC_AllHP : public G4HadronPhysicsQGSP_BIC_HP {
   public: 
     G4HadronPhysicsQGSP_BIC_AllHP( G4int verbose = 1 );
     G4HadronPhysicsQGSP_BIC_AllHP( const G4String& name, G4bool quasiElastic = true );
-    ~G4HadronPhysicsQGSP_BIC_AllHP() override {}
+    virtual ~G4HadronPhysicsQGSP_BIC_AllHP() {}
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGSP_BIC_AllHP(G4HadronPhysicsQGSP_BIC_AllHP &) = delete;

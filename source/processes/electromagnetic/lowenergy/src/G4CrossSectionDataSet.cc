@@ -60,17 +60,15 @@
 #include <fstream>
 #include <sstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4CrossSectionDataSet::G4CrossSectionDataSet(G4VDataSetAlgorithm* argAlgorithm, 
-						   G4double argUnitEnergies, 
-						   G4double argUnitData)
-  :
+					     G4double argUnitEnergies, 
+					     G4double argUnitData) :
    algorithm(argAlgorithm), unitEnergies(argUnitEnergies), unitData(argUnitData)
-{
-  z = 0;
+{;}
 
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4CrossSectionDataSet::~G4CrossSectionDataSet()
 {
@@ -79,6 +77,8 @@ G4CrossSectionDataSet::~G4CrossSectionDataSet()
   if (algorithm)
     delete algorithm;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4CrossSectionDataSet::LoadData(const G4String & argFileName)
 {
@@ -246,6 +246,7 @@ G4bool G4CrossSectionDataSet::LoadData(const G4String & argFileName)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4CrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 {
@@ -391,6 +392,7 @@ G4bool G4CrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4CrossSectionDataSet::SaveData(const G4String & argFileName) const
 {
@@ -459,6 +461,7 @@ G4bool G4CrossSectionDataSet::SaveData(const G4String & argFileName) const
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4String G4CrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
@@ -477,6 +480,7 @@ G4String G4CrossSectionDataSet::FullFileName(const G4String& argFileName) const
   return G4String(fullFileName.str().c_str());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4CrossSectionDataSet::FindValue(G4double argEnergy, G4int /* argComponentId */) const
 {
@@ -495,6 +499,7 @@ G4double G4CrossSectionDataSet::FindValue(G4double argEnergy, G4int /* argCompon
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionDataSet::PrintData(void) const
 {
@@ -513,6 +518,7 @@ void G4CrossSectionDataSet::PrintData(void) const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies, 
 					 G4DataVector* argData, 
@@ -533,6 +539,7 @@ void G4CrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies,
 		   "em0005",FatalException,message.str().c_str());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergies, 
 					 G4DataVector* argData,
@@ -555,6 +562,7 @@ void G4CrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergies,
 		   "em0005",FatalException,message.str().c_str());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionDataSet::CleanUpComponents()
 {

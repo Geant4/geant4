@@ -45,7 +45,7 @@ class G4AttValue;
 ///
 /// It records:
 /// - the cell column ID and row ID
-/// - the energy deposit 
+/// - the energy deposit
 /// - the cell position and rotation
 
 class B5HadCalorimeterHit : public G4VHit
@@ -58,15 +58,15 @@ class B5HadCalorimeterHit : public G4VHit
 
     const B5HadCalorimeterHit& operator=(const B5HadCalorimeterHit &right);
     G4bool operator==(const B5HadCalorimeterHit &right) const;
-    
+
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);
-    
+
     virtual void Draw();
     virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
     virtual std::vector<G4AttValue>* CreateAttValues() const;
     virtual void Print();
-    
+
     void SetColumnID(G4int z) { fColumnID = z; }
     G4int GetColumnID() const { return fColumnID; }
 
@@ -82,7 +82,7 @@ class B5HadCalorimeterHit : public G4VHit
 
     void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
     G4RotationMatrix GetRot() const { return fRot; }
-    
+
   private:
     G4int fColumnID;
     G4int fRowID;

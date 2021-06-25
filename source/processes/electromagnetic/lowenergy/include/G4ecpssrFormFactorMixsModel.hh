@@ -39,7 +39,6 @@
 
 #include <map>
 #include <vector>
-
 #include "G4Types.hh"
 #include "G4VecpssrMiModel.hh"
 
@@ -47,26 +46,26 @@ class G4VDataSetAlgorithm;
 class G4VEMDataSet;
 
 class G4ecpssrFormFactorMixsModel : public G4VecpssrMiModel
-
 {
 public:
-
-  G4ecpssrFormFactorMixsModel();
-
+  explicit G4ecpssrFormFactorMixsModel();
   virtual ~G4ecpssrFormFactorMixsModel();
 			     
-  G4double CalculateM1CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-  G4double CalculateM2CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-  G4double CalculateM3CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);				     
-  G4double CalculateM4CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);				     
-  G4double CalculateM5CrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);				     
+  G4double CalculateM1CrossSection (G4int zTarget, 
+				    G4double massIncident, G4double energyIncident) override;
+  G4double CalculateM2CrossSection (G4int zTarget, 
+				    G4double massIncident, G4double energyIncident) override;
+  G4double CalculateM3CrossSection (G4int zTarget, 
+				    G4double massIncident, G4double energyIncident) override;				     
+  G4double CalculateM4CrossSection (G4int zTarget, 
+				    G4double massIncident, G4double energyIncident) override;				     
+  G4double CalculateM5CrossSection (G4int zTarget, 
+				    G4double massIncident, G4double energyIncident) override;				     
+  G4ecpssrFormFactorMixsModel(const G4ecpssrFormFactorMixsModel&) = delete;
+  G4ecpssrFormFactorMixsModel & operator = (const G4ecpssrFormFactorMixsModel &right) = delete;
+
 private:
-
   G4double CalculateMiCrossSection (G4int zTarget, G4double massIncident, G4double energyIncident, G4int mShellId);
-
-  G4ecpssrFormFactorMixsModel(const G4ecpssrFormFactorMixsModel&);
-  G4ecpssrFormFactorMixsModel & operator = (const G4ecpssrFormFactorMixsModel &right);
-
   G4VDataSetAlgorithm* interpolation;
 
   std::vector< std::map<G4int,G4VEMDataSet*> > protonMiXsVector;

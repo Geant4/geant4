@@ -16,9 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 21st, 2021 J. Madsen (digit_hits-V10-07-01)
+- make G4digits_hits-format
+
+April 1st, 2021 B. Morgan (digits_hits-V10-07-00)
+- Migrate build to modular CMake API
+
 May 29th, 2020, G. Cosmo (digits_hits-V10-06-02)
 - Fixed cases of comparison between int and size_t in templated classes
-  and some cleanup. 
+  and some cleanup.
 
 May 2nd, 2020, J. Apostolakis (digits_hits-V10-06-01)
 - Added two ComputeSolid method to G4VPrimitiveScorer, to consolidate code.
@@ -57,15 +63,15 @@ December 20th, 2018 G. Cosmo (digits_hits-V10-05-00)
 
 October 30th, 2018 I. Hrivnacova (digits_hits-V10-04-11,12)
 - Removed the dependence on analysis:
-  Introduced a new interface class, G4VScoreNtupleWriter, in 
-  digits_hits/utils and moved the G4ScoreNtupleWriter, G4ScoreNtupleWriterMessenger 
+  Introduced a new interface class, G4VScoreNtupleWriter, in
+  digits_hits/utils and moved the G4ScoreNtupleWriter, G4ScoreNtupleWriterMessenger
   classes in a new extended example analysis/B3aScoreWriter.
 
 October 27th, 2018 I. Hrivnacova (digits_hits-V10-04-10)
 - Fixed utils/GNUmakefile: added analysis includes
 
 October 26th, 2018 I. Hrivnacova (digits_hits-V10-04-08,09)
-- Removed digiwdefs.hh (added in digits_hits-V10-04-06) - not used 
+- Removed digiwdefs.hh (added in digits_hits-V10-04-06) - not used
 
 October 26th, 2018 J. Madsen (digits_hits-V10-04-07)
 - Fix to Windows problems for G4ScoreNtupleWriter, it turns out that
@@ -118,7 +124,7 @@ May 2, 2017 J. Madsen (digits_hits-V10-03-01)
 - Update to G4THitsMap to fix issue where G4Colour was
   using G4THitsMap<G4StatDouble> and the allocation
   was causing += to white instead of += to black
-  
+
 April 20, 2017 J. Madsen (digit_hits-V10-03-00)
 - Files modified : hits/include/G4THitsMap.hh
 - Extension of the G4THitsMap class + bug fix
@@ -154,9 +160,9 @@ April 20, 2017 J. Madsen (digit_hits-V10-03-00)
   - defined begin(), end(), cbegin(), cend() so now
     G4VTHitsMap can be used in range-based loops
     - e.g. for(auto itr : hitMap) { ... }
-  
+
 Nov 15, 2016, A.Dotti (digits_hits-V10-02-09,-10)
-- Fix bug #1908, remove implicit addition to manager of 
+- Fix bug #1908, remove implicit addition to manager of
   SD passed via G4MultiSD proxy
 
 Sep 8, 2016, G.Cosmo (digits_hits-V10-02-08)
@@ -198,7 +204,7 @@ Dec 7, 2015, M.Asai (digits_hits-V10-02-00)
 
 Sept 4, 2015, A.Dotti (digits_hits-V10-01-01)
 - Removing sporious cout
- 
+
 Aug 14, 2015, A.Dotti (digits_hits-V10-01-00)
 - Adding new G4MultiSensitiveDetector functionality
 
@@ -222,7 +228,7 @@ May 16, 2014, A.Dotti (digits_hits-V10-00-03)
 - Coverity fixes
 
 Apr 27, 2014, M.Asai (digits_hits-V10-00-02)
-- G4PSCylinderSurfaceCurrent.cc : remove unnecessary cout. 
+- G4PSCylinderSurfaceCurrent.cc : remove unnecessary cout.
   Addressing to Bug Report #1610.
 
 Mar 5, 2014, G.Cosmo (digits_hits-V10-00-01)
@@ -273,7 +279,7 @@ Mar 4, 2013, A. Dotti (digits_hits-V09-06-01)
 - Fixing unused variables warnings
 
 Feb 26, 2013, A.Dotti (digits_hits-V09-06-00)
-- Adding of protoype cloning mechansim for SD (needed for multi-threaded) 
+- Adding of protoype cloning mechansim for SD (needed for multi-threaded)
 
 Jun 14, 2012, G.Cosmo (digits_hits-V09-05-05)
 - Explicitly use inclusion of headers for system of units and physical
@@ -308,7 +314,7 @@ Jul 07, 2011, G.Cosmo (digits_hits-V09-04-06)
   not meant to be directly used.
 
 May 20, 2011, B.Morgan (digits_hits-V09-04-05)
-- CMakeLists.txt : Added G4DIGI_ALLOC_EXPORT compiler definition via 
+- CMakeLists.txt : Added G4DIGI_ALLOC_EXPORT compiler definition via
   add_definitions so all submodules pick it up.
 
 Mar 31, 2011, G.Cosmo (digits_hits-V09-04-04)
@@ -622,7 +628,7 @@ June 6, 98 M.Asai
 - New sub-directories (detector, hits, digits) are introduced.
 - All codes which used to be in include and src directories are
  moved to the newly created sub-directories.
-- GNUmakefile is completely changed to catch up the new directory 
+- GNUmakefile is completely changed to catch up the new directory
  structure.
 
 April 21, 98 M.Asai

@@ -40,25 +40,23 @@
 #include "G4ThreeVector.hh"
 #include "G4ErrorTarget.hh"
 #include "G4Plane3D.hh"
-  
+
 class G4Step;
 class G4String;
 
 class G4ErrorGeomVolumeTarget : public G4ErrorTarget
 {
  public:  // with description
-
-  G4ErrorGeomVolumeTarget( const G4String& name );
-  virtual ~G4ErrorGeomVolumeTarget(){}
+  G4ErrorGeomVolumeTarget(const G4String& name);
+  virtual ~G4ErrorGeomVolumeTarget() {}
 
   virtual G4bool TargetReached(const G4Step* aStep);
-    // return true when particle is entering the volume
+  // return true when particle is entering the volume
 
-  virtual void Dump( const G4String& msg ) const;
+  virtual void Dump(const G4String& msg) const;
 
  private:
-
-  G4String  theName;
+  G4String theName;
 };
 
 #endif

@@ -1,0 +1,196 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_histo_data
+#define tools_histo_histo_data
+
+#include <vector>
+#include <map> //for annotations
+
+#include "axes"
+#include "../eqT"
+//#include "../vmanip" //vequ
+
+namespace tools {
+namespace histo {
+
+inline unsigned int dim_planes(unsigned int a_dim) {
+  // m_dim = 1 -> 0
+  // m_dim = 2 -> 0+1=1
+  // m_dim = 3 -> 0+1+2=3
+  // m_dim = 4 -> 0+1+2+3=6
+  typedef unsigned int dim_t;
+  dim_t n = 0;
+  for(dim_t i=0;i<a_dim;i++) n += i;
+  return n;
+}
+
+//TC is for a coordinate.
+//TO is for an offset used to identify a bin.
+//TN is for a number of entries.
+//TW is for a weight.
+
+template <class TC,class TO,class TN,class TW>
+class histo_data {
+public:
+  typedef axis<TC,TO> axis_t;
+  typedef unsigned int dim_t;
+  typedef std::map<std::string,std::string> annotations_t;
+public:
+  histo_data()
+  :m_dimension(0)
+  ,m_bin_number(0)
+  ,m_all_entries(0)
+  ,m_in_range_entries(0)
+  ,m_in_range_Sw(0)
+  ,m_in_range_Sw2(0)
+  {}
+public:
+  histo_data(const histo_data& a_from)
+  :m_title(a_from.m_title)
+  ,m_dimension(a_from.m_dimension)
+  ,m_bin_number(a_from.m_bin_number)
+  ,m_bin_entries(a_from.m_bin_entries)
+  ,m_bin_Sw(a_from.m_bin_Sw)
+  ,m_bin_Sw2(a_from.m_bin_Sw2)
+  ,m_bin_Sxw(a_from.m_bin_Sxw)
+  ,m_bin_Sx2w(a_from.m_bin_Sx2w)
+  ,m_axes(a_from.m_axes)
+  ,m_in_range_plane_Sxyw(a_from.m_in_range_plane_Sxyw)
+  ,m_annotations(a_from.m_annotations)
+  ,m_all_entries(a_from.m_all_entries)
+  ,m_in_range_entries(a_from.m_in_range_entries)
+  ,m_in_range_Sw(a_from.m_in_range_Sw)
+  ,m_in_range_Sw2(a_from.m_in_range_Sw2)
+  ,m_in_range_Sxw(a_from.m_in_range_Sxw)
+  ,m_in_range_Sx2w(a_from.m_in_range_Sx2w)
+  {}
+
+  histo_data& operator=(const histo_data& a_from) {
+    if(&a_from==this) return *this;
+    m_title = a_from.m_title;
+    m_dimension = a_from.m_dimension;
+    m_bin_number = a_from.m_bin_number;
+    m_bin_entries = a_from.m_bin_entries;
+    m_bin_Sw = a_from.m_bin_Sw;
+    m_bin_Sw2 = a_from.m_bin_Sw2;
+    m_bin_Sxw = a_from.m_bin_Sxw;
+    m_bin_Sx2w = a_from.m_bin_Sx2w;
+    m_axes = a_from.m_axes;
+    m_in_range_plane_Sxyw = a_from.m_in_range_plane_Sxyw;
+    m_annotations = a_from.m_annotations;
+    m_all_entries = a_from.m_all_entries;
+    m_in_range_entries = a_from.m_in_range_entries;
+    m_in_range_Sw = a_from.m_in_range_Sw;
+    m_in_range_Sw2 = a_from.m_in_range_Sw2;
+    m_in_range_Sxw = a_from.m_in_range_Sxw;
+    m_in_range_Sx2w = a_from.m_in_range_Sx2w;
+    return *this;
+  }
+
+  virtual ~histo_data(){}
+protected:
+  void reset_fast_getters(){
+    //m_in_range_plane_Sxyw is not a fast getter.
+    m_all_entries = 0;
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sw2 = 0;
+    m_in_range_Sxw.assign(m_dimension,0);
+    m_in_range_Sx2w.assign(m_dimension,0);
+  }
+public:
+  void update_fast_getters() {
+    reset_fast_getters();
+   {for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
+        m_in_range_entries += m_bin_entries[ibin];
+        m_in_range_Sw += m_bin_Sw[ibin];
+        m_in_range_Sw2 += m_bin_Sw2[ibin];
+        for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+           m_in_range_Sxw[iaxis] += m_bin_Sxw[ibin][iaxis];
+           m_in_range_Sx2w[iaxis] += m_bin_Sx2w[ibin][iaxis];
+        }
+      }
+      m_all_entries += m_bin_entries[ibin];
+    }}
+  }
+
+  bool equals(const histo_data& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    if(&a_from==this) return true;
+    if(m_title!=a_from.m_title) return false;
+    if(m_dimension!=a_from.m_dimension) return false;
+    if(m_bin_number!=a_from.m_bin_number) return false;
+    if(m_bin_entries!=a_from.m_bin_entries) return false;
+  //if(!vequ(m_bin_entries,a_from.m_bin_entries)) return false;
+    if(!vectors_are_equal(m_bin_Sw,a_from.m_bin_Sw,a_prec,a_fabs)) return false;
+    if(!vectors_are_equal(m_bin_Sw2,a_from.m_bin_Sw2,a_prec,a_fabs)) return false;
+    if(!vecvecs_are_equal(m_bin_Sxw,a_from.m_bin_Sxw,a_prec,a_fabs)) return false;
+    if(!vecvecs_are_equal(m_bin_Sx2w,a_from.m_bin_Sx2w,a_prec,a_fabs)) return false;
+    if(m_axes!=a_from.m_axes) return false;
+    if(!vectors_are_equal(m_in_range_plane_Sxyw,a_from.m_in_range_plane_Sxyw,a_prec,a_fabs)) return false;
+    if(m_annotations!=a_from.m_annotations) return false;
+
+    if(m_all_entries!=a_from.m_all_entries) return false;
+    if(m_in_range_entries!=a_from.m_in_range_entries) return false;
+
+    if(!numbers_are_equal(m_in_range_Sw,a_from.m_in_range_Sw,a_prec,a_fabs)) return false;
+    if(!numbers_are_equal(m_in_range_Sw2,a_from.m_in_range_Sw2,a_prec,a_fabs)) return false;
+    if(!vectors_are_equal(m_in_range_Sxw,a_from.m_in_range_Sxw,a_prec,a_fabs)) return false;
+    if(!vectors_are_equal(m_in_range_Sx2w,a_from.m_in_range_Sx2w,a_prec,a_fabs)) return false;
+
+    return true;
+  }
+  bool equals_TH(const histo_data& a_from,const TW& a_prec,TW(*a_fabs)(TW),bool a_cmp_bin_Sw2) const {
+    // used to compare with an histo built from a TH stream out from a CERN-ROOT file.
+    if(&a_from==this) return true;
+    if(m_title!=a_from.m_title) return false;
+    if(m_dimension!=a_from.m_dimension) return false;
+    if(m_bin_number!=a_from.m_bin_number) return false;
+  //if(m_bin_entries!=a_from.m_bin_entries) return false;
+    if(!vectors_are_equal(m_bin_Sw,a_from.m_bin_Sw,a_prec,a_fabs)) return false;
+    if(a_cmp_bin_Sw2) if(!vectors_are_equal(m_bin_Sw2,a_from.m_bin_Sw2,a_prec,a_fabs)) return false;
+  //if(!vecvecs_are_equal(m_bin_Sxw,a_from.m_bin_Sxw,a_prec,a_fabs)) return false;
+  //if(!vecvecs_are_equal(m_bin_Sx2w,a_from.m_bin_Sx2w,a_prec,a_fabs)) return false;
+    if(m_axes!=a_from.m_axes) return false;
+    if(!vectors_are_equal(m_in_range_plane_Sxyw,a_from.m_in_range_plane_Sxyw,a_prec,a_fabs)) return false;
+  //if(m_annotations!=a_from.m_annotations) return false;
+
+    if(m_all_entries!=a_from.m_all_entries) return false;
+  //if(m_in_range_entries!=a_from.m_in_range_entries) return false;
+
+    if(!numbers_are_equal(m_in_range_Sw,a_from.m_in_range_Sw,a_prec,a_fabs)) return false;
+    if(!numbers_are_equal(m_in_range_Sw2,a_from.m_in_range_Sw2,a_prec,a_fabs)) return false;
+  //if(!vectors_are_equal(m_in_range_Sxw,a_from.m_in_range_Sxw,a_prec,a_fabs)) return false;
+  //if(!vectors_are_equal(m_in_range_Sx2w,a_from.m_in_range_Sx2w,a_prec,a_fabs)) return false;
+
+    return true;
+  }
+public:
+  // General :
+  std::string m_title;
+  dim_t m_dimension;
+  // Bins :
+  TO m_bin_number;
+  std::vector<TN> m_bin_entries;
+  std::vector<TW> m_bin_Sw;
+  std::vector<TW> m_bin_Sw2;
+  std::vector< std::vector<TC> > m_bin_Sxw;
+  std::vector< std::vector<TC> > m_bin_Sx2w;
+  // Axes :
+  std::vector<axis_t> m_axes;
+  // etc :
+  std::vector<TC> m_in_range_plane_Sxyw; // ill-defined relative to slicing, sub, div, mult operations. Handled because of CERN-ROOT.
+  std::map<std::string,std::string> m_annotations;
+  // fast getters :
+  TN m_all_entries; //used if reading from a ROOT file.
+  TN m_in_range_entries;
+  TW m_in_range_Sw;
+  TW m_in_range_Sw2;
+  std::vector<TC> m_in_range_Sxw;
+  std::vector<TC> m_in_range_Sx2w;
+};
+
+}}
+
+#endif

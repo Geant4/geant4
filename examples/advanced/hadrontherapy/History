@@ -8,9 +8,29 @@ https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+24.05.21,  B. Morgan (hadrontherapy-V10-07-05)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+18.05.21 J. Madsen; harontherapy-V10-07-04
+    - Removed G4AutoDelete of StepProcessMax in physics list
+
+12.02.21 S. Guatelli; hadrontherapy-V10-07-03
+	- Dependence to G4EmProcessOptions.hh removed
+
+12.01.21 G.A.P. Cirrone, S. Fattori, G. Milluzzo, G. Petringa; hadrontherapy-V10-07-02
+	- Modified HadrontherapyLet.cc for file generation
+
+29.12.20 J.Allison; hadrontherapy-V10-07-01
+         - Replace deprecated G4VisAttributes::Invisible by
+           G4VisAttributes::GetInvisible().
+
+04.12.20 G.A.P. Cirrone, S. Fattori, G. Milluzzo, G. Petringa; Tag hadrontherapy-V10-07-00
+	- Geometry modification in CarbonBeamLine
+	- Minor changes in macro files
+
 15.11.20 S. Guatelli; Tag hadrontherapy-V10-06-07
 	- Migration to G4RunManagerFactory
-        
+
 05.11.20 G.A.P. Cirrone; Tag hadrontherapy-V10-06-06
 	- README update
         - Minor changes in macro files
@@ -837,9 +857,3 @@ Tag: hadrontherapy-V10-04-02: History file not updated
 
 27.02.2004 - G.A.P. Cirrone
              	Created, first version.
-
-
-
-
-
-

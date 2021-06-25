@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProfilerMessenger
 //
-//
-// class description
+// Class description
 //
 // This class is the messenger of the class which maintain the profiling
 // controls (located in global/management/include/G4Profiler.hh).
-// In general, it forwards to the argument parser provided by timemory
+// In general, it forwards to the argument parser provided by timemory.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef G4ProfilerMessenger_h
-#define G4ProfilerMessenger_h 1
+// Author: J.Madsen, 12 November 2020
+// --------------------------------------------------------------------
+#ifndef G4ProfilerMessenger_hh
+#define G4ProfilerMessenger_hh 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -44,7 +44,7 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithABool;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------------
 
 class G4ProfilerMessenger : public G4UImessenger
 {

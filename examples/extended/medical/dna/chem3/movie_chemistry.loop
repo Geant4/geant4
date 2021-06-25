@@ -8,8 +8,8 @@
 #/control/echo Theta: {newTheta}
 
 /vis/set/textColour black
-/vis/ogl/set/startTime {startTime} ns
-/vis/ogl/set/endTime {upTo} ns
+/vis/viewer/set/timeWindow/startTime {startTime} ns
+/vis/viewer/set/timeWindow/endTime {upTo} ns
 /vis/set/textColour black
 #/vis/ogl/printEPS
 # {timeRange} ps

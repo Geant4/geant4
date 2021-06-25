@@ -167,15 +167,34 @@ G4AxesModel::G4AxesModel
   }
 }
 
+void G4AxesModel::SetTransformation (const G4Transform3D& transform)
+{
+  fTransform = transform;
+
+  if (fXAxisModel)       fXAxisModel->      SetTransformation(fTransform);
+  if (fXLabelModel)      fXLabelModel->     SetTransformation(fTransform);
+  if (fXAnnotationModel) fXAnnotationModel->SetTransformation(fTransform);
+
+  if (fYAxisModel)       fYAxisModel->      SetTransformation(fTransform);
+  if (fYLabelModel)      fYLabelModel->     SetTransformation(fTransform);
+  if (fYAnnotationModel) fYAnnotationModel->SetTransformation(fTransform);
+
+  if (fZAxisModel)       fZAxisModel->      SetTransformation(fTransform);
+  if (fZLabelModel)      fZLabelModel->     SetTransformation(fTransform);
+  if (fZAnnotationModel) fZAnnotationModel->SetTransformation(fTransform);
+}
+
 void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  if (fXAxisModel)       fXAxisModel->DescribeYourselfTo(sceneHandler);
-  if (fXLabelModel)      fXLabelModel->DescribeYourselfTo(sceneHandler);
+  if (fXAxisModel)       fXAxisModel->      DescribeYourselfTo(sceneHandler);
+  if (fXLabelModel)      fXLabelModel->     DescribeYourselfTo(sceneHandler);
   if (fXAnnotationModel) fXAnnotationModel->DescribeYourselfTo(sceneHandler);
-  if (fYAxisModel)       fYAxisModel->DescribeYourselfTo(sceneHandler);
-  if (fYLabelModel)      fYLabelModel->DescribeYourselfTo(sceneHandler);
+
+  if (fYAxisModel)       fYAxisModel->      DescribeYourselfTo(sceneHandler);
+  if (fYLabelModel)      fYLabelModel->     DescribeYourselfTo(sceneHandler);
   if (fYAnnotationModel) fYAnnotationModel->DescribeYourselfTo(sceneHandler);
-  if (fZAxisModel)       fZAxisModel->DescribeYourselfTo(sceneHandler);
-  if (fZLabelModel)      fZLabelModel->DescribeYourselfTo(sceneHandler);
+
+  if (fZAxisModel)       fZAxisModel->      DescribeYourselfTo(sceneHandler);
+  if (fZLabelModel)      fZLabelModel->     DescribeYourselfTo(sceneHandler);
   if (fZAnnotationModel) fZAnnotationModel->DescribeYourselfTo(sceneHandler);
 }

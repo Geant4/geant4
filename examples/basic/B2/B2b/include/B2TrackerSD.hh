@@ -50,10 +50,10 @@ class G4HCofThisEvent;
 class B2TrackerSD : public G4VSensitiveDetector
 {
   public:
-    B2TrackerSD(const G4String& name, 
+    B2TrackerSD(const G4String& name,
                 const G4String& hitsCollectionName);
     virtual ~B2TrackerSD();
-  
+
     // methods from base class
     virtual void   Initialize(G4HCofThisEvent* hitCollection);
     virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);

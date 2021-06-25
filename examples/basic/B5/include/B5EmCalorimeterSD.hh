@@ -41,14 +41,14 @@ class G4TouchableHistory;
 /// EM calorimeter sensitive detector
 
 class B5EmCalorimeterSD : public G4VSensitiveDetector
-{   
+{
   public:
     B5EmCalorimeterSD(G4String name);
     virtual ~B5EmCalorimeterSD();
-    
+
     virtual void Initialize(G4HCofThisEvent*HCE);
     virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-    
+
   private:
     B5EmCalorimeterHitsCollection* fHitsCollection;
     G4int fHCID;

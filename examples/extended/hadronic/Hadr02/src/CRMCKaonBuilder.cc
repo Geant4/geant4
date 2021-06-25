@@ -34,7 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
-// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -44,10 +44,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4KaonPlusInelasticProcess.hh"
-#include "G4KaonMinusInelasticProcess.hh"
-#include "G4KaonZeroLInelasticProcess.hh"
-#include "G4KaonZeroSInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
@@ -67,28 +64,7 @@ CRMCKaonBuilder::~CRMCKaonBuilder() {}
 void CRMCKaonBuilder::Build( G4HadronElasticProcess* ) {}
 
 
-void CRMCKaonBuilder::Build( G4KaonPlusInelasticProcess* aP ) {
-  fModel->SetMinEnergy( fMin );
-  fModel->SetMaxEnergy( fMax );
-  aP->RegisterMe( fModel );
-}
-
-
-void CRMCKaonBuilder::Build( G4KaonMinusInelasticProcess* aP ) {
-  fModel->SetMinEnergy( fMin );
-  fModel->SetMaxEnergy( fMax );
-  aP->RegisterMe( fModel );
-}
-
-
-void CRMCKaonBuilder::Build( G4KaonZeroLInelasticProcess* aP ) {
-  fModel->SetMinEnergy( fMin );
-  fModel->SetMaxEnergy( fMax );
-  aP->RegisterMe( fModel );
-}
-
-
-void CRMCKaonBuilder::Build( G4KaonZeroSInelasticProcess* aP ) {
+void CRMCKaonBuilder::Build( G4HadronInelasticProcess* aP ) {
   fModel->SetMinEnergy( fMin );
   fModel->SetMaxEnergy( fMax );
   aP->RegisterMe( fModel );

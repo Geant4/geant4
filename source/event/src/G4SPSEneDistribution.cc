@@ -285,13 +285,13 @@ G4double G4SPSEneDistribution::Getcept() const
   return threadLocalData.Get().cept;
 }
 
-G4PhysicsOrderedFreeVector G4SPSEneDistribution::GetUserDefinedEnergyHisto()
+G4PhysicsFreeVector G4SPSEneDistribution::GetUserDefinedEnergyHisto()
 {
   G4AutoLock l(&mutex);
   return UDefEnergyH;
 }
 
-G4PhysicsOrderedFreeVector G4SPSEneDistribution::GetArbEnergyHisto()
+G4PhysicsFreeVector G4SPSEneDistribution::GetArbEnergyHisto()
 {
   G4AutoLock l(&mutex);
   return ArbEnergyH;

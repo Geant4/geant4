@@ -23,50 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPhysicsConstructor implementation
 //
-//
-//
-// ------------------------------------------------------------
-//	GEANT 4 class header file
-//
-// ------------------------------------------------------------
+// Original author: H.Kurashige (Kobe University), 12 November 2000
+// --------------------------------------------------------------------
+
+#include <algorithm>
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronicParameters.hh"
 #include "G4PhysicsBuilderInterface.hh"
-#include <algorithm>
+
 // This field helps to use the class G4VPCManager
 //
 G4VPCManager G4VPhysicsConstructor::subInstanceManager;
 
+// --------------------------------------------------------------------
 void G4VPCData::initialize()
 {
   _aParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
   _builders          = new PhysicsBuilders_V;
 }
 
+// --------------------------------------------------------------------
 G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name)
-  : verboseLevel(0)
-  , namePhysics(name)
-  , typePhysics(0)
+  : namePhysics(name)
 {
   g4vpcInstanceID = subInstanceManager.CreateSubInstance();
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  // aParticleIterator = theParticleTable->GetIterator();
-
-  // PhysicsListHelper
-  // aPLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-
-  // Harmless call (setting a default value) needed to build the
-  // G4HadronicParameters instance before run initialization.
-  if(G4HadronicParameters::Instance())
-    G4HadronicParameters::Instance()->SetVerboseLevel(1);
 }
 
+// --------------------------------------------------------------------
 G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name, G4int type)
-  : verboseLevel(0)
-  , namePhysics(name)
+  : namePhysics(name)
   , typePhysics(type)
 {
   g4vpcInstanceID = subInstanceManager.CreateSubInstance();
@@ -76,34 +65,29 @@ G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name, G4int type)
 
   if(type < 0)
     typePhysics = 0;
-
-  // PhysicsListHelper
-  // aPLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-
-  // Harmless call (setting a default value) needed to build the
-  // G4HadronicParameters instance before run initialization.
-  if(G4HadronicParameters::Instance())
-    G4HadronicParameters::Instance()->SetVerboseLevel(1);
 }
 
+// --------------------------------------------------------------------
 G4VPhysicsConstructor::~G4VPhysicsConstructor()
 {
   // Master/Sequential needs to cleanup too
   G4VPhysicsConstructor::TerminateWorker();
 }
 
-G4ParticleTable::G4PTblDicIterator* G4VPhysicsConstructor::GetParticleIterator()
-  const
+// --------------------------------------------------------------------
+G4ParticleTable::G4PTblDicIterator*
+G4VPhysicsConstructor::GetParticleIterator() const
 {
   return (subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator;
 }
 
-G4VPhysicsConstructor::PhysicsBuilder_V G4VPhysicsConstructor::GetBuilders()
-  const
+// --------------------------------------------------------------------
+G4VPhysicsConstructor::PhysicsBuilder_V
+G4VPhysicsConstructor::GetBuilders() const
 {
   const auto& tls = *((subInstanceManager.offset[g4vpcInstanceID])._builders);
   PhysicsBuilder_V copy(tls.size());
-  int i = 0;
+  G4int i = 0;
   for(const auto& el : tls)
   {
     copy[i++] = el;
@@ -111,11 +95,13 @@ G4VPhysicsConstructor::PhysicsBuilder_V G4VPhysicsConstructor::GetBuilders()
   return copy;
 }
 
+// --------------------------------------------------------------------
 void G4VPhysicsConstructor::AddBuilder(G4PhysicsBuilderInterface* bld)
 {
   (subInstanceManager.offset[g4vpcInstanceID])._builders->push_back(bld);
 }
 
+// --------------------------------------------------------------------
 void G4VPhysicsConstructor::TerminateWorker()
 {
   if(subInstanceManager.offset[g4vpcInstanceID]._builders != nullptr)

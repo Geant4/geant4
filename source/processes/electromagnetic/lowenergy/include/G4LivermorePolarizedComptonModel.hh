@@ -31,7 +31,7 @@
 #define G4LivermorePolarizedComptonModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
 class G4ParticleChangeForGamma;
 class G4VAtomDeexcitation;
@@ -41,57 +41,36 @@ class G4DopplerProfile;
 #include "G4VEMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
 
-
-//#include "G4Electron.hh"
-//#include "G4CrossSectionHandler.hh"
-//#include "G4LogLogInterpolation.hh"
-//#include "G4CompositeEMDataSet.hh"
-//#include "G4ForceCondition.hh"
-//#include "G4Gamma.hh"
-
 class G4LivermorePolarizedComptonModel : public G4VEmModel
 {
-
 public:
-
-  G4LivermorePolarizedComptonModel(const G4ParticleDefinition* p = 0, 
+  explicit G4LivermorePolarizedComptonModel(const G4ParticleDefinition* p = nullptr, 
 		                   const G4String& nam = "LivermorePolarizedCompton");
 
   virtual ~G4LivermorePolarizedComptonModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  virtual void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel* masterModel);
-
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
-
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel* masterModel) override;
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
                                       G4double A=0, 
                                       G4double cut=0,
-                                      G4double emax=DBL_MAX);
+                                      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+
+  G4LivermorePolarizedComptonModel & operator=(const  G4LivermorePolarizedComptonModel &right) = delete;
+  G4LivermorePolarizedComptonModel(const  G4LivermorePolarizedComptonModel&) = delete;
 
 private:
-
-  G4ParticleChangeForGamma* fParticleChange;
-  G4VAtomDeexcitation* fAtomDeexcitation;
-
-  G4bool isInitialised;
-  G4int verboseLevel;
-
-  G4LivermorePolarizedComptonModel & operator=(const  G4LivermorePolarizedComptonModel &right);
-  G4LivermorePolarizedComptonModel(const  G4LivermorePolarizedComptonModel&);
-
-  // specific methods for polarization 
-  
+   // specific methods for polarization   
   G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
   G4ThreeVector GetPerpendicularPolarization(const G4ThreeVector& direction0, const G4ThreeVector& polarization0) const;
   G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); // temporary
@@ -100,22 +79,26 @@ private:
   G4double SetPhi(G4double, G4double);
   void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1, 
 			 G4ThreeVector& polarization0, G4ThreeVector& polarization1);
-  
+  void ReadData(size_t Z, const char* path = 0);
+
+
+  G4ParticleChangeForGamma* fParticleChange;
+  G4VAtomDeexcitation* fAtomDeexcitation;
+
   // Doppler Broadening
-  
   static G4ShellData* shellData;
   static G4DopplerProfile* profileData;
 
   // Cross Section Handling 
+  static const G4int maxZ = 99;
+  static G4PhysicsFreeVector* data[100];
  
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* data[100];
-  void ReadData(size_t Z, const char* path = 0);
-
   // Scattering function 
-
   static G4CompositeEMDataSet* scatterFunctionData;
 
+  G4int verboseLevel;
+  G4bool isInitialised;
+  G4int fEntanglementModelIndex;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -41,12 +41,9 @@ G4MicroElecCrossSectionDataSet::G4MicroElecCrossSectionDataSet(G4VDataSetAlgorit
 						   G4double argUnitData)
   :
    algorithm(argAlgorithm), unitEnergies(argUnitEnergies), unitData(argUnitData)
-{
-  z = 0;
+{;}
 
-}
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4MicroElecCrossSectionDataSet::~G4MicroElecCrossSectionDataSet()
 {
   CleanUpComponents();
@@ -55,6 +52,7 @@ G4MicroElecCrossSectionDataSet::~G4MicroElecCrossSectionDataSet()
     delete algorithm;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4bool G4MicroElecCrossSectionDataSet::LoadData(const G4String & argFileName)
 {
   CleanUpComponents();
@@ -107,47 +105,41 @@ G4bool G4MicroElecCrossSectionDataSet::LoadData(const G4String & argFileName)
                         }
       
 		      columns[i]->push_back(value);
-
-// N. A. Karakatsanis
-// A condition is applied to check if negative or zero values are present in the dataset.
-// If yes, then a near-zero value is applied to allow the computation of the logarithmic value
-// If a value is zero, this simplification is acceptable
-// If a value is negative, then it is not acceptable and the data of the particular column of
-// logarithmic values should not be used by interpolation methods.
-//
-// Therefore, G4LogLogInterpolation and G4LinLogLogInterpolation should not be used if negative values are present.
-// Instead, G4LinInterpolation is safe in every case
-// SemiLogInterpolation is safe only if the energy columns are non-negative
-// G4LinLogInterpolation is safe only if the cross section data columns are non-negative
+		      // N. A. Karakatsanis
+		      // A condition is applied to check if negative or zero values are present in the dataset.
+		      // If yes, then a near-zero value is applied to allow the computation of the logarithmic value
+		      // If a value is zero, this simplification is acceptable
+		      // If a value is negative, then it is not acceptable and the data of the particular column of
+		      // logarithmic values should not be used by interpolation methods.
+		      //
+		      // Therefore, G4LogLogInterpolation and G4LinLogLogInterpolation should not be used if negative values are present.
+		      // Instead, G4LinInterpolation is safe in every case
+		      // SemiLogInterpolation is safe only if the energy columns are non-negative
+		      // G4LinLogInterpolation is safe only if the cross section data columns are non-negative
 
                       if (value <=0.) value = 1e-300;
                       log_columns[i]->push_back(std::log10(value));
        
 		      i++;
-		    }
-      
+		    }      
 		  delete stream;
 		  stream=new std::stringstream;
 		}
-     
-	      first=true;
-	      comment=false;
-	      space=true;
-	      break;
-
+	    first=true;
+	    comment=false;
+	    space=true;
+	    break;
+	    
 	    case '#':
 	      comment=true;
-	      break;
-     
+	      break;	      
 	    case '\t':
 	    case ' ':
 	      space = true;
-              break;
-
+	    break;
 	    default:
 	      if (comment) { break; }
-	      if (space && (!first)) { (*stream) << ' '; }
-
+	      if (space && (!first)) { (*stream) << ' '; }	      
 	      first=false;
 	      (*stream) << c;
 	      space=false;
@@ -190,12 +182,12 @@ G4bool G4MicroElecCrossSectionDataSet::LoadData(const G4String & argFileName)
 	}
 
       G4DataVector::size_type j(0);
-
+      
       G4DataVector *argEnergies=new G4DataVector;
       G4DataVector *argData=new G4DataVector;
       G4DataVector *argLogEnergies=new G4DataVector;
       G4DataVector *argLogData=new G4DataVector;
-
+      
       while(j<maxJ)
 	{
 	  argEnergies->push_back(columns[0]->operator[] (j)*GetUnitEnergies());
@@ -204,8 +196,9 @@ G4bool G4MicroElecCrossSectionDataSet::LoadData(const G4String & argFileName)
 	  argLogData->push_back(log_columns[i]->operator[] (j) + std::log10(GetUnitData()));
 	  j++;
 	}
-
-      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, argLogEnergies, argLogData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
+      
+      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, argLogEnergies, argLogData, 
+				   GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
   
       i++;
     }
@@ -221,6 +214,7 @@ G4bool G4MicroElecCrossSectionDataSet::LoadData(const G4String & argFileName)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4MicroElecCrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 {
@@ -366,11 +360,11 @@ G4bool G4MicroElecCrossSectionDataSet::LoadNonLogData(const G4String & argFileNa
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4MicroElecCrossSectionDataSet::SaveData(const G4String & argFileName) const
 {
-  const size_t n(NumberOfComponents());
- 
+  const size_t n(NumberOfComponents()); 
   if (n==0)
     {
       G4Exception("G4MicroElecCrossSectionDataSet::SaveData","em0005",
@@ -424,17 +418,15 @@ G4bool G4MicroElecCrossSectionDataSet::SaveData(const G4String & argFileName) co
 	  iData[k]++;
 	  k++;
 	}
-  
-      out << std::endl;
-  
+      out << std::endl;      
       iEnergies++;
     }
- 
   delete[] iData;
 
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4String G4MicroElecCrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
@@ -454,6 +446,7 @@ G4String G4MicroElecCrossSectionDataSet::FullFileName(const G4String& argFileNam
   return G4String(fullFileName.str().c_str());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MicroElecCrossSectionDataSet::FindValue(G4double argEnergy, G4int /* argComponentId */) const
 {
@@ -472,6 +465,7 @@ G4double G4MicroElecCrossSectionDataSet::FindValue(G4double argEnergy, G4int /* 
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MicroElecCrossSectionDataSet::PrintData(void) const
 {
@@ -490,6 +484,7 @@ void G4MicroElecCrossSectionDataSet::PrintData(void) const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MicroElecCrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies, 
 					 G4DataVector* argData, 
@@ -511,6 +506,7 @@ void G4MicroElecCrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies,
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MicroElecCrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergies, 
 					 G4DataVector* argData,
@@ -534,6 +530,7 @@ void G4MicroElecCrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergie
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MicroElecCrossSectionDataSet::CleanUpComponents()
 {

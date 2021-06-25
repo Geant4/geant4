@@ -23,25 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // -------------------------------------------------------------------
-//
 //
 // File name:     G4PolarizedGammaConversion
 //
 // Author:        Karim Laihem based on code by Michel Maire
 //
-// Creation date: 01.05.2005
-//
-// Modifications:
-// 21-08-06 Modified to work in g4.8.1 framework (A.Schaelicke)
-//
 // Class Description:
-//
-// polarized version of G4GammaConversion
+//   polarized version of G4GammaConversion
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4PolarizedGammaConversion_h
@@ -49,9 +39,6 @@
 
 #include "globals.hh"
 #include "G4VEmProcess.hh"
-#include "G4Gamma.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4ParticleDefinition;
 class G4VEmModel;
@@ -61,34 +48,27 @@ class G4DynamicParticle;
 class G4PolarizedGammaConversion : public G4VEmProcess
 
 {
-public:  // with description
+ public:
+  explicit G4PolarizedGammaConversion(const G4String& processName = "pol-conv",
+                                      G4ProcessType type = fElectromagnetic);
 
-  explicit G4PolarizedGammaConversion(const G4String& processName ="pol-conv",
-			     G4ProcessType type = fElectromagnetic);
-
-  virtual ~G4PolarizedGammaConversion();
+  virtual ~G4PolarizedGammaConversion() override;
 
   // true for Gamma only.
   G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo() override;
+  virtual void ProcessDescription(std::ostream&) const override;
+  virtual void DumpInfo() const override { ProcessDescription(G4cout); };
 
-protected:
+  G4PolarizedGammaConversion& operator=(
+    const G4PolarizedGammaConversion& right) = delete;
+  G4PolarizedGammaConversion(const G4PolarizedGammaConversion&) = delete;
 
+ protected:
   virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
-private:
-  
-  // hide assignment operator as private 
-  G4PolarizedGammaConversion& 
-    operator=(const G4PolarizedGammaConversion &right) = delete;
-  G4PolarizedGammaConversion(const G4PolarizedGammaConversion& ) = delete;
-     
-  G4bool          isInitialised;
+ private:
+  G4bool fIsInitialised;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
 #endif
- 

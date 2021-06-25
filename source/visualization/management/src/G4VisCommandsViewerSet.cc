@@ -368,6 +368,26 @@ fViewpointVector (G4ThreeVector(0.,0.,1.))
   parameter  -> SetGuidance      ("Component of plane normal.");
   fpCommandSectionPlane->SetParameter(parameter);
 
+  fpCommandSpecialMeshRendering = new G4UIcmdWithABool
+  ("/vis/viewer/set/specialMeshRendering",this);
+  fpCommandSpecialMeshRendering -> SetGuidance
+  ("Request special rendering of volumes (meshes) that use G4VNestedParameterisation.");
+  fpCommandSpecialMeshRendering->SetParameterName("render",omitable = true);
+  fpCommandSpecialMeshRendering->SetDefaultValue(true);
+
+  fpCommandSpecialMeshVolumes = new G4UIcommand
+  ("/vis/viewer/set/specialMeshVolumes",this);
+  fpCommandSpecialMeshVolumes -> SetGuidance
+  ("Specify the volumes for special rendering. No arguments resets the list"
+   "\nand is interpreted to mean \"all found meshes\".");
+  fpCommandSpecialMeshVolumes->SetGuidance
+  ("Please provide a list of space-separated physical volume names and copy"
+   "\nnumber pairs. Negative copy number means \"all volumes of that name\".");
+  parameter = new G4UIparameter("volumes",'s',omitable = true);
+  parameter->SetGuidance
+  ("List of physical volume names and copy number pairs");
+  fpCommandSpecialMeshVolumes->SetParameter(parameter);
+
   fpCommandStyle = new G4UIcmdWithAString ("/vis/viewer/set/style",this);
   fpCommandStyle->SetGuidance
   ("Set style of drawing - w[ireframe] or s[urface] or c[loud].");
@@ -609,6 +629,8 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandUpThetaPhi;
   delete fpCommandTargetPoint;
   delete fpCommandStyle;
+  delete fpCommandSpecialMeshVolumes;
+  delete fpCommandSpecialMeshRendering;
   delete fpCommandSectionPlane;
   delete fpCommandRotationStyle;
   delete fpCommandProjection;
@@ -1134,6 +1156,26 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
+  else if (command == fpCommandRotationStyle) {
+    G4ViewParameters::RotationStyle style;
+    if (newValue == "constrainUpDirection")
+      style = G4ViewParameters::constrainUpDirection;
+    else if (newValue == "freeRotation")
+      style = G4ViewParameters::freeRotation;
+    else {
+      if (verbosity >= G4VisManager::errors) {
+	G4cerr << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
+      }
+      return;
+    }
+    vp.SetRotationStyle(style);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Rotation style of viewer \"" << currentViewer->GetName()
+      << "\" set to " << vp.GetRotationStyle()
+      << G4endl;
+    }
+  }
+
   else if (command == fpCommandSectionPlane) {
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz, F = 1.;
@@ -1180,23 +1222,75 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
-  else if (command == fpCommandRotationStyle) {
-    G4ViewParameters::RotationStyle style;
-    if (newValue == "constrainUpDirection")
-      style = G4ViewParameters::constrainUpDirection;
-    else if (newValue == "freeRotation")
-      style = G4ViewParameters::freeRotation;
-    else {
-      if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: \"" << newValue << "\" not recognised." << G4endl;
-      }
-      return;
-    }
-    vp.SetRotationStyle(style);
+  else if (command == fpCommandSpecialMeshRendering) {
+    vp.SetSpecialMeshRendering(G4UIcommand::ConvertToBool(newValue));
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Rotation style of viewer \"" << currentViewer->GetName()
-      << "\" set to " << vp.GetRotationStyle()
-      << G4endl;
+      G4cout << "Special mesh rendering ";
+      if (vp.IsSpecialMeshRendering()) G4cout << "requested.";
+      else G4cout << "inhibited.";
+      G4cout << G4endl;
+    }
+  }
+
+  else if (command == fpCommandSpecialMeshVolumes) {
+    std::vector<G4ModelingParameters::PVNameCopyNo> requestedMeshes;
+    if (newValue.isNull()) {
+      vp.SetSpecialMeshVolumes(requestedMeshes);  // Empty list
+    } else {
+      // Algorithm from Josuttis p.476.
+      G4String::size_type iBegin, iEnd;
+      iBegin = newValue.find_first_not_of(' ');
+      while (iBegin != G4String::npos) {
+	iEnd = newValue.find_first_of(' ',iBegin);
+	if (iEnd == G4String::npos) {
+	  iEnd = newValue.length();
+	}
+	G4String name(newValue.substr(iBegin,iEnd-iBegin));
+	iBegin = newValue.find_first_not_of(' ',iEnd);
+	if (iBegin == G4String::npos) {
+	  if (verbosity >= G4VisManager::warnings) {
+	    G4cout <<
+	    "WARNING: G4VisCommandsViewerSet::SetNewValue: /vis/viewer/set/specialMeshVolumes"
+	    "\n  A pair not found.  (There should be an even number of parameters.)"
+	    "\n  Command ignored."
+	    << G4endl;
+	    return;
+	  }
+	}
+	iEnd = newValue.find_first_of(' ',iBegin);
+	if (iEnd == G4String::npos) {
+	  iEnd = newValue.length();
+	}
+	G4int copyNo;
+	std::istringstream iss(newValue.substr(iBegin,iEnd-iBegin));
+	if (!(iss >> copyNo)) {
+	  if (verbosity >= G4VisManager::warnings) {
+	    G4cout <<
+	    "WARNING: G4VisCommandsViewerSet::SetNewValue: /vis/viewer/set/specialMeshVolumes"
+	    "\n  Error reading copy number - it was not numeric?"
+	    "\n  Command ignored."
+	    << G4endl;
+	    return;
+	  }
+	}
+	requestedMeshes.push_back(G4ModelingParameters::PVNameCopyNo(name,copyNo));
+	iBegin = newValue.find_first_not_of(' ',iEnd);
+      }
+      vp.SetSpecialMeshVolumes(requestedMeshes);
+    }
+    if (verbosity >= G4VisManager::confirmations) {
+      if (vp.GetSpecialMeshVolumes().empty()) {
+	G4cout <<
+	"Special mesh list empty, which means \"all meshes\"."
+	<< G4endl;
+      } else {
+	G4cout << "Selected special mesh volumes are:";
+	for (const auto& pvNameCopyNo: vp.GetSpecialMeshVolumes()) {
+	  G4cout << "\n  " << pvNameCopyNo.GetName();
+	  if (pvNameCopyNo.GetCopyNo() >= 0) G4cout << ':' << pvNameCopyNo.GetCopyNo();
+	}
+	G4cout << G4endl;
+      }
     }
   }
 

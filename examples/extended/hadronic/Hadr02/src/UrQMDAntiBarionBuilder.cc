@@ -77,7 +77,7 @@ void UrQMDAntiBarionBuilder::Build(G4HadronElasticProcess * )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UrQMDAntiBarionBuilder::Build(G4AntiProtonInelasticProcess * aP)
+void UrQMDAntiBarionBuilder::Build(G4HadronInelasticProcess * aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);
@@ -85,53 +85,4 @@ void UrQMDAntiBarionBuilder::Build(G4AntiProtonInelasticProcess * aP)
   aP->RegisterMe(fModel);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDAntiBarionBuilder::Build(G4AntiNeutronInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->AddDataSet(fAntiNucleonData);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDAntiBarionBuilder::Build(G4AntiDeuteronInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->AddDataSet(fAntiNucleonData);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDAntiBarionBuilder::Build(G4AntiTritonInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->AddDataSet(fAntiNucleonData);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDAntiBarionBuilder::Build(G4AntiHe3InelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->AddDataSet(fAntiNucleonData);
-  aP->RegisterMe(fModel);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UrQMDAntiBarionBuilder::Build(G4AntiAlphaInelasticProcess * aP)
-{
-  fModel->SetMinEnergy(fMin);
-  fModel->SetMaxEnergy(fMax);
-  aP->AddDataSet(fAntiNucleonData);
-  aP->RegisterMe(fModel);
-}
 #endif //G4_USE_URQMD

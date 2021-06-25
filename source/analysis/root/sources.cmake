@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4root
-# Package: Geant4.src.G4analysis.G4root
-#------------------------------------------------------------------------------
+# - G4root module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4root
-  HEADERS
+geant4_add_module(G4root
+  PUBLIC_HEADERS
     G4RootAnalysisManager.hh
     G4RootAnalysisManager.icc
     G4RootAnalysisReader.hh
@@ -36,17 +31,8 @@ geant4_define_module(NAME G4root
     G4RootNtupleManager.cc
     G4RootPNtupleManager.cc
     G4RootRFileManager.cc
-    G4RootRNtupleManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-    G4analysismng
-    G4hntools
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-  LINK_LIBRARIES
-    ${ZLIB_LIBRARIES}
-)
+    G4RootRNtupleManager.cc)
 
-# List any source specific properties here
+# Depends on ZLIB PUBLICally because of inclusion of tools/zlib in G4RootHnFileManager.icc
+# (No, it't not obvious!)
+geant4_module_link_libraries(G4root PUBLIC G4analysismng G4hntools G4globman G4tools ${ZLIB_LIBRARIES})

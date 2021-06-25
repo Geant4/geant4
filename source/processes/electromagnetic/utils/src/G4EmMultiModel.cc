@@ -46,11 +46,12 @@
 
 #include "G4EmMultiModel.hh"
 #include "Randomize.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmMultiModel::G4EmMultiModel(const G4String& nam)
-  : G4VEmModel(nam), nModels(0)
+  : G4VEmModel(nam)
 {
   model.clear();
   cross_section.clear();
@@ -75,32 +76,30 @@ void G4EmMultiModel::AddModel(G4VEmModel* p)
 void G4EmMultiModel::Initialise(const G4ParticleDefinition* p, 
                                 const G4DataVector& cuts)
 {
-  if(nModels > 0) {
+  G4EmParameters* param = G4EmParameters::Instance();
+  G4int verb = IsMaster() ? param->Verbose() : param->WorkerVerbose();
+  if(verb > 0) {
     G4cout << "### Initialisation of EM MultiModel " << GetName()
-           << " including following list of models:" << G4endl;
-    for(G4int i=0; i<nModels; ++i) {
-      G4cout << "    " << (model[i])->GetName();
-      (model[i])->SetParticleChange(pParticleChange, GetModelOfFluctuations());
-      (model[i])->Initialise(p, cuts);
-    }
-    G4cout << G4endl;
+	   << " including following list of " << nModels << " models:" << G4endl;
   }
+  for(G4int i=0; i<nModels; ++i) {
+    G4cout << "    " << (model[i])->GetName();
+    (model[i])->SetParticleChange(pParticleChange, GetModelOfFluctuations());
+    (model[i])->Initialise(p, cuts);
+  }
+  if(verb > 0) { G4cout << G4endl; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4EmMultiModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
-                                     const G4ParticleDefinition* p,
-                                     G4double kineticEnergy,
-                                     G4double cutEnergy)
+G4double G4EmMultiModel::ComputeDEDXPerVolume(const G4Material* mat,
+					      const G4ParticleDefinition* p,
+					      G4double kineticEnergy,
+					      G4double cutEnergy)
 {
-  SetCurrentCouple(couple);
   G4double dedx = 0.0;
-
-  if(nModels > 0) {
-    for(G4int i=0; i<nModels; i++) {
-      dedx += (model[i])->ComputeDEDX(couple, p, cutEnergy, kineticEnergy);
-    }
+  for(G4int i=0; i<nModels; ++i) {
+    dedx += (model[i])->ComputeDEDXPerVolume(mat, p, cutEnergy, kineticEnergy);
   } 
 
   return dedx;
@@ -116,12 +115,10 @@ G4double G4EmMultiModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* 
                                                     G4double maxEnergy)
 {
   G4double cross = 0.0;
-  if(nModels>0) {
-    for(G4int i=0; i<nModels; ++i) {
-      (model[i])->SetCurrentCouple(CurrentCouple());
-      cross += (model[i])->ComputeCrossSectionPerAtom(p, kinEnergy, Z, A, 
-                                                      cutEnergy, maxEnergy);
-    }
+  for(G4int i=0; i<nModels; ++i) {
+    (model[i])->SetCurrentCouple(CurrentCouple());
+    cross += (model[i])->ComputeCrossSectionPerAtom(p, kinEnergy, Z, A, 
+						    cutEnergy, maxEnergy);
   } 
   return cross;
 }

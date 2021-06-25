@@ -137,13 +137,13 @@ G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTable)
 // --------------------------------------------------------------------
 G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
                                                   const G4String& fileName,
-                                                  G4bool ascii )
+                                                  G4bool ascii, G4bool spline)
 {
   if (physTable == nullptr ) return false;
   
   // retrieve physics table from the given file
   G4PhysicsTable* tempTable = new G4PhysicsTable();
-  if (! tempTable->RetrievePhysicsTable(fileName,ascii) )
+  if (! tempTable->RetrievePhysicsTable(fileName,ascii,spline) )
   {
 #ifdef G4VERBOSE  
     if (verboseLevel>1)

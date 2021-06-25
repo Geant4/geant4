@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -16,17 +23,14 @@
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
 LPM effect enabled                                 1
-Spline of EM tables enabled                        1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
-Use integral approach for tracking                 1
 Use general process                                0
 Enable linear polarisation for gamma               0
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
 Max kinetic energy for tables                      10 TeV
-Number of bins in tables                           120
 Number of bins per decade of a table               10
 Verbose level                                      0
 Verbose level for worker thread                    0
@@ -54,9 +58,8 @@ Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
-Factor of cut reduction for sub-cutoff method      1
 Max kinetic energy for CSDA tables                 1 GeV
-Max kinetic energy for NIEL computation            0 eV 
+Max kinetic energy for NIEL computation            0 meV
 Linear loss limit                                  0.01
 Read data from file for e+e- pair production by mu 0
 =======================================================================
@@ -176,7 +179,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.360000s Real=3.478362s Sys=0.000000s
+  User=3.080000s Real=3.110162s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -246,38 +249,42 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.900000s Real=3.325603s Sys=0.000000s
+  User=3.050000s Real=3.075968s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 608555	eIoni = 391445
+ Process calls frequency --->	eBrem = 608449	eIoni = 391551
 
- MeanFreePath:	1.6102 cm  +- 1.6103 cm 	massic: 1.6102 g/cm2 
- CrossSection:	0.62103 cm^-1 			massic: 62.103 mm2/g 
+ MeanFreePath:	1.6125 cm  +- 1.6128 cm 	massic: 1.6125 g/cm2 
+ CrossSection:	0.62015 cm^-1 			massic: 62.015 mm2/g 
 
- mean energy of charged secondaries: 743.85 keV
-     ---> mass_energy_transfer coef: 461.95 um2/mg
+ mean energy of charged secondaries: 740.99 keV
+     ---> mass_energy_transfer coef: 459.52 um2/mg
 
  Verification : crossSections from G4EmCalculator 
    eBrem= 37.788 mm2/g    eIoni= 24.337 mm2/g    total= 62.125 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 419401041, 1685305101
+ Current couple of seeds = 116422662, 1893707566
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
 Total navigation history collections cleaned: 5
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00481 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
@@ -295,3 +302,4 @@ G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

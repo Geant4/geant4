@@ -13,39 +13,55 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+12 May 2021 V. Grichine (hadr-lepnuc-V10-07-04)
+--------------------------------------------------
+- Bug fixed in G4NeutrinoNucleusModel.cc, calls for QE ratio of muon/electron (anti-)neutrino updated
+
+16 April 2021 Ben Morgan (hadr-lepnuc-V10-07-03)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021 A. Ribon (hadr-lepnuc-V10-07-02)
+---------------------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
+  Clean-up of old directories no longer present.
+
+25 March 2021 V. Grichine (hadr-lepnuc-V10-07-01)
+----------------------------------------------
+- G4NeutrinoNucleusModel.cc - Calculation of fQEratioA(Z,A,Enu) depending of QE ratios for nucleons
+
+10 March 2021 V. Grichine (hadr-lepnuc-V10-07-00)
+----------------------------------------------
+- G4NeutrinoNucleusModel.cc - Set,  Get methods for XS_qe/XS_tot(A), fQEratioA class member
+
 26 May 2020 B. Morgan   (hadr-lepnuc-V10-06-08)
 ---------------------------------------------------------------
 -  Remove obsolete GRANULAR_DEPENDENCIES entries
 
 11 May 2020 V. Grichine (hadr-lepnuc-V10-06-07)
 ----------------------------------------------
-
 - G4NeutrinoNucleusModel.cc - K+, K- in final state were added
 
 02 May 2020 V. Grichine (hadr-lepnuc-V10-06-06)
 ----------------------------------------------
-
 - coverity fixes in neutrino-nucleus models
 
 17 April 2020 V. Grichine (hadr-lepnuc-V10-06-05)
 ----------------------------------------------
-
 - G4ANuElNucleusCcModel, G4ANuElNucleusNcModel, were added for anti_nu_e. Initialization: G4PARTICLEXS-dir/neutrino/anti_nu_e
-
-       ---------------------------------------------------------------
 
 17 April 2020 V. Grichine (hadr-lepnuc-V10-06-04)
 ----------------------------------------------
-
 - G4NuElNucleusCcModel, G4NuElNucleusNcModel, were added for nu_e. Initialization: G4PARTICLEXS-dir/neutrino/nu_e
-
-     ---------------------------------------------------------------
 
 15 April 2020 V. Grichine (hadr-lepnuc-V10-06-03)
 ----------------------------------------------
-
 - G4ANuMuNucleusCcModel, G4ANuMuNucleusNcModel, were added for anti_mu_nu. Initialization: G4PARTICLEXS/neutrino/anti_nu_mu
-
 
 12 April 2020 V. Grichine (hadr-lepnuc-V10-06-02)
 ----------------------------------------------
@@ -54,8 +70,6 @@ code and to keep track of all tags.
 06 April 2020 V. Grichine (hadr-lepnuc-V10-06-01)
 ----------------------------------------------
 - G4NuMuNucleusCcModel, G4NuMuNucleusNcModel, G4NeutrinoNucleusModel, fixes in CoherentPion method, clean-up of Cc and Nc
-
----------------------------------------------------------------
 
 30 November 2019 V. Grichine (hadr-lepnuc-V10-06-00)
 ----------------------------------------------
@@ -97,7 +111,6 @@ code and to keep track of all tags.
 20 June 2019 V. Grichine (hadr-lepnuc-V10-05-01)
 ----------------------------------------------
 - bug fixed in G4NuMuNucelusCc(Nc)Model, kinematics of quasi-elastic neutrino scattering
-
 
 03 May 2019 V. Grichine (hadr-lepnuc-V10-05-00)
 ----------------------------------------------

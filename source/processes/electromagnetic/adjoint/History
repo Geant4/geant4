@@ -16,39 +16,76 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+16 Apr 2021: B. Morgan (emadjoint-V10-07-05)
+- Migrate build to modular CMake API
+
+28 Mar 2021: V. Ivanchenko (emadjoint-V10-07-04)
+- G4ContinuousGainOfEnergy - used updated signature for ion ionisation
+
+22 Mar 2021: V. Ivanchenko (emadjoint-V10-07-03)
+- G4VEmAdjointModel - minor clean-up
+
+12 Mar 2021: D. Sawkey (emadjoint-V10-07-02)
+- free resources in destructors
+- fix uninitialized variables
+
+8 Mar 2021: D. Sawkey (emadjoint-V10-07-01)
+- Second large round of cleaning for v11 release
+ - use 'virtual' and 'override' methods consistently
+ - member variables start with f; shorten long names
+ - remove unused variables; make class variables local where appropriate
+ - order declarations of class variables
+ - define class variables
+ - removed unused functions
+ - mark copy/assignment operators as 'delete'
+ - add ProcessDescriptions
+ - remove ChangeHistory from top of code
+ - replace 2.*3.14... with CLHEP::twopi
+ - remove more unused headers
+
+20 Feb 2021: D. Sawkey (emadjoint-V10-07-00)
+- First pass on large cleaning for v11 release
+ - apply clang-format style guidelines
+ - apply C++11 codewords to method declarations: virtual, override, explicit
+ - delete unused variables and methods
+ - start naming class member variables with f
+ - use nullptr instead of 0
+ - remove unused headers
+ - use constexpr for numbers
+
 11 Mar 2019: G. Cosmo (emadjoint-V10-05-00)
 -Fixed typos in printouts and comments.
 
 06 Nov 2017: V. Ivanchenko (emadjoint-V10-03-01)
 -Extended correction of occurrence of FPE in G4AdjointForcedInteractionForGamma.
--G4eAdjointMultipleScattering - change index of the default accourding to recent 
+-G4eAdjointMultipleScattering - change index of the default accourding to recent
    modifications in emutils
 
 27 Jan 2017: L. Desorgher (emadjoint-V10-03-00)
 -Correction of occurrence of FPE in G4AdjointForcedInteractionForGamma.
- 
+
 27 Octb 2016: L. Desorgher (emadjoint-V10-02-03)
 -Correction in  G4AdjointForcedInteractionForGamma to avoid high weight of forced gamma
  when only the brem is used.
--Modification in G4AdjointBremsstrahlungModel to use the  direcet angular model to compute the direction of the 
+-Modification in G4AdjointBremsstrahlungModel to use the  direcet angular model to compute the direction of the
  adjoint secondary
 -Add G4UrbanAdjointMscModel.cc and G4eAdjointMultipleScattering.cc
-   
+
 18 Octb 2016: L. Desorgher (emadjoint-V10-02-02)
 -Correct use of logical or in  G4AdjointForcedInteractionForGamma for compilation
-  error under windows.     
-      
+  error under windows.
+
 17 Octb 2016: L. Desorgher (emadjoint-V10-02-01)
--Correct G4AdjointForcedInteractionForGamma for compilation error under windows. 
+-Correct G4AdjointForcedInteractionForGamma for compilation error under windows.
 
 26 Sept 2016: L. Desorgher (emadjoint-V10-02-00)
--Add new adjoint process G4AdjointForcedInteractionForGamma to force the 
+-Add new adjoint process G4AdjointForcedInteractionForGamma to force the
  reverse interaction of adjoint gamma.
 -Slight modifications of G4VEmAdjointModel for new forced interaction
 -Some corrections in G4AdjointBremsstrahlungModel
 
 24 Oct 2015: V.Ivanchenko (emadjoint-V10-01-03)
-- G4AdjointCSManager - use G4ThreadLocalSingleton pattern, 
+- G4AdjointCSManager - use G4ThreadLocalSingleton pattern,
     fixed computation of A of an element, added initialisation
     of all class members in the constructor
 
@@ -61,12 +98,12 @@ committal in the CVS repository !
   G4AdjointCSManager - add checks for while loops
 
 21 May 2015: V.Ivanchenko (emadjoint-V10-01-00)
-- G4AdjointhMultipleScattering - make it coherent with the forward 
+- G4AdjointhMultipleScattering - make it coherent with the forward
     msc processes
 
 10 Apr 2014: V.Ivanchenko (emadjoint-V10-00-00)
-- G4VAdjointReverseReaction - added protection against infinite 
-    loop in ReverseMC01 example: if cross section correction 
+- G4VAdjointReverseReaction - added protection against infinite
+    loop in ReverseMC01 example: if cross section correction
     exceed 100 the total cross section is set to zero
 
 31 Oct 2013: L.Desorgher (emadjoint-V09-06-09)
@@ -90,9 +127,9 @@ committal in the CVS repository !
 24 Jan 2013: V.Ivanchenko (emadjoint-V09-06-04)
 - G4AdjointPhotoElectricModel - define current G4MaterialCutsCouple
     for the direct model
-     
+
 22 Feb 2013: L.Desorgher (emadjoint-V09-06-03)
--Remove of unused variables detected by compilation warnings.     
+-Remove of unused variables detected by compilation warnings.
 
 23 Jan 2013: V.Ivanchenko (emadjoint-V09-06-02)
 11 Jan 2013: V.Ivanchenko (emadjoint-V09-06-01)
@@ -109,9 +146,9 @@ committal in the CVS repository !
 26 Oct 2012: L.Desorgher (emadjoint-V09-05-03)
 -G4AdjointBremsstrahlungModel changed to use G4SeltzerBergerModel as forward model  by default
 -Correct differential CS expression in G4VEmAdjointModel
--Get the weight from PostStepPoint instead of from Track when correcting the step in along stepping actions of 
- G4ContinuousGainOfEnergy and G4AdjointAlongStepWeightCorrection. THis is needed for a correct propagation 
- of weight correction in different along step actions. 
+-Get the weight from PostStepPoint instead of from Track when correcting the step in along stepping actions of
+ G4ContinuousGainOfEnergy and G4AdjointAlongStepWeightCorrection. THis is needed for a correct propagation
+ of weight correction in different along step actions.
 
 10 Jul 2012: G.Cosmo (emadjoint-V09-05-02)
 - Explicitly use inclusion of headers for system of units and physical
@@ -125,7 +162,7 @@ committal in the CVS repository !
 
 24 Jun 2011: V.Ivanchenko (emadjoint-V09-04-03)
 - G4AdjointAlongStepWeightCorrection,G4ContinuousGainOfEnergy,
-   G4VEmAdjointModel - fixed initialisation of currentCouple 
+   G4VEmAdjointModel - fixed initialisation of currentCouple
    class member in constructor (Valgrind report)
 
 10 Jun 2011: G.Cosmo (emadjoint-V09-04-02)
@@ -165,24 +202,24 @@ Coverity fixes
 -G4VEmAdjointModel
 	-Comment dead code in GetAdjointCrossSection (defect 23168)
 	-Neglect at the moment coverity bug 20612-20618.
-	
-		 
+
+
 27 May 2011: L. Desorgher (emadjoint-V09-04-00)
 -Remove few unused variables to avoid compilation warning with gcc-4.6.0.
 
 11 Nov 2010: L. Desorgher (emadjoint-V09-03-02)
 -G4AdjointBremsstrahlungModel: add a G4EmModelManager to initialise properly,
-  the G4eBremsstrahlungModel used as forward model. This allows to fix the 
+  the G4eBremsstrahlungModel used as forward model. This allows to fix the
   floating point exception detected when compiling with G4FPE_DEBUG=1.
 -G4AdjointhIonisation:
-   Remove a negative term in the expression of the adjoint 
+   Remove a negative term in the expression of the adjoint
    cross section (AdjointCrossSection method) and adapt the RapidSampleSecondaries method.
--G4VEmAdjointModel: 
+-G4VEmAdjointModel:
     Add a check on null cross section to avoid FPE.
 
 3 Sep 2010: G.Cosmo (emadjoint-V09-03-01)
 - G4AdjointAlongStepWeightCorrection: get rid of call to non-Standard isnan(),
-  replaced by explicit validity test.  
+  replaced by explicit validity test.
 
 12 Apr 2010: V.Ivanchenko (emadjoint-V09-03-00)
 - G4AdjointhMultipleScattering: removed obsolete unused header.
@@ -196,8 +233,8 @@ Coverity fixes
 10 Nov 2009: L.Desorgher (emadjoint-V09-02-00)
 - Commit of the electromagnetic  adjoint processes for the release of the all adjoint machinery into Geant4.
   Compared to the first commit, all e- processes have been improved and adjoint proton and ion ionisation have been added.
-  The use of adjoint cross section matrices can be now limited only to e- Ionisation and Ion ionisation. 
-  The GNUmakefile has been modified by adding  -I$(G4BASE)/geometry/navigation/include  in CPPFLAGS.  	    
+  The use of adjoint cross section matrices can be now limited only to e- Ionisation and Ion ionisation.
+  The GNUmakefile has been modified by adding  -I$(G4BASE)/geometry/navigation/include  in CPPFLAGS.
 
 14 Nov 2008: G.Cosmo (emadjoint-V09-01-00)
 - First commit.

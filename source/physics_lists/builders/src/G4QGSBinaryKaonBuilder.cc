@@ -36,7 +36,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4CrossSectionPairGG.hh"
 #include "G4HadronicParameters.hh"
 
 
@@ -66,34 +65,9 @@ G4QGSBinaryKaonBuilder::
 }
 
 void G4QGSBinaryKaonBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   aP->RegisterMe(theModel);
 }
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSBinaryKaonBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->RegisterMe(theModel);
-}
-

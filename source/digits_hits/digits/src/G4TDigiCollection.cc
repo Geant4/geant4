@@ -30,20 +30,37 @@
 
 G4Allocator<G4DigiCollection>*& aDCAllocator_G4MT_TLS_()
 {
-    G4ThreadLocalStatic G4Allocator<G4DigiCollection>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4DigiCollection>* _instance = nullptr;
+  return _instance;
 }
 
-G4DigiCollection::G4DigiCollection() : theCollection((void*)0)
-{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
+G4DigiCollection::G4DigiCollection()
+  : theCollection((void*) 0)
+{
+  if(!aDCAllocator_G4MT_TLS_())
+    aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
+  ;
+}
 
-G4DigiCollection::G4DigiCollection(G4String detName,G4String colNam)
-: G4VDigiCollection(detName,colNam), theCollection((void*)0)
-{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
+G4DigiCollection::G4DigiCollection(G4String detName, G4String colNam)
+  : G4VDigiCollection(detName, colNam)
+  , theCollection((void*) 0)
+{
+  if(!aDCAllocator_G4MT_TLS_())
+    aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
+  ;
+}
 
 G4DigiCollection::~G4DigiCollection()
-{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
+{
+  if(!aDCAllocator_G4MT_TLS_())
+    aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
+  ;
+}
 
-G4bool G4DigiCollection::operator==(const G4DigiCollection &right) const
-{ if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ; return (collectionName==right.collectionName); }
-
+G4bool G4DigiCollection::operator==(const G4DigiCollection& right) const
+{
+  if(!aDCAllocator_G4MT_TLS_())
+    aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
+  return (collectionName == right.collectionName);
+}

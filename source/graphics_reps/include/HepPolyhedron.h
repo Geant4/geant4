@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Class Description:
 // HepPolyhedron is an intermediate class between description of a shape
 // and visualization systems. It is intended to provide some service like:
@@ -125,7 +122,7 @@
 // - added GetNextVertexIndex, GetVertex by Yasuhide Sawada
 // - added GetNextUnitNormal, GetNextEdgeIndices, GetNextEdge
 // - improvements: angles now expected in radians
-//                 int -> G4int, double -> G4double  
+//                 int -> G4int, double -> G4double
 // - G4ThreeVector replaced by either G4Point3D or G4Normal3D
 //
 // 15.12.96 E.Chernyaev
@@ -170,14 +167,26 @@
 // 20.06.05 G.Cosmo
 // - added HepPolyhedronEllipsoid
 //
+// 18.07.07 T.Nikitina
+// - added HepPolyhedronParaboloid;
+//
 // 21.10.09 J.Allison
 // - removed IsErrorBooleanProcess (now error is returned through argument)
+//
+// 22.02.20 E.Chernyaev
+// - added HepPolyhedronTet, HepPolyhedronHyberbolicMirror
+//
+// 12.05.21 E.Chernyaev
+// - added TriangulatePolygon(), RotateContourAroundZ()
+// - added HepPolyhedronPgon, HepPolyhedronPcon given by rz-countour
 //
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
 
+#include <vector>
 #include "G4Types.hh"
+#include "G4TwoVector.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 #include "G4Transform3D.hh"
@@ -195,7 +204,7 @@ class G4Facet {
   G4Edge edge[4];
 
  public:
-  G4Facet(G4int v1=0, G4int f1=0, G4int v2=0, G4int f2=0, 
+  G4Facet(G4int v1=0, G4int f1=0, G4int v2=0, G4int f2=0,
           G4int v3=0, G4int f3=0, G4int v4=0, G4int f4=0)
   { edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;
     edge[2].v=v3; edge[2].f=f3; edge[3].v=v4; edge[3].f=f4; }
@@ -238,6 +247,20 @@ class HepPolyhedron {
                      const G4double *z, G4double *r,
                      G4int nodeVis, G4int edgeVis);
 
+  // Create HepPolyhedron for body of revolution around Z-axis
+  void RotateContourAroundZ(G4int nstep, G4double phi, G4double dphi,
+                            const std::vector<G4TwoVector> &rz,
+                            G4int nodeVis, G4int edgeVis);
+
+  // Triangulate closed polygon (contour)
+  G4bool TriangulatePolygon(const std::vector<G4TwoVector> &polygon,
+                            std::vector<G4int> &result);
+
+  // Helper function for TriangulatePolygon()
+  G4bool CheckSnip(const std::vector<G4TwoVector> &contour,
+                   G4int a, G4int b, G4int c,
+                   G4int n, const G4int* V);
+
   // For each edge set reference to neighbouring facet
   void SetReferences();
 
@@ -276,7 +299,7 @@ class HepPolyhedron {
   // Get next vertex index of the quadrilateral
   G4bool GetNextVertexIndex(G4int & index, G4int & edgeFlag) const;
 
-  // Get vertex by index 
+  // Get vertex by index
   G4Point3D GetVertex(G4int index) const;
 
   // Get next vertex + edge visibility of the quadrilateral
@@ -326,10 +349,10 @@ class HepPolyhedron {
   // Get normal of the next face
   G4bool GetNextNormal(G4Normal3D &normal) const;
 
-  // Get normal of unit length of the next face 
+  // Get normal of unit length of the next face
   G4bool GetNextUnitNormal(G4Normal3D &normal) const;
 
-  // Boolean operations 
+  // Boolean operations
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
@@ -352,7 +375,7 @@ class HepPolyhedron {
   /**
    * Creates polyhedron for twisted trapezoid.
    * The trapezoid is given by two bases perpendicular to the z-axis.
-   * 
+   *
    * @param  Dz  half length in z
    * @param  xy1 1st base (at z = -Dz)
    * @param  xy2 2nd base (at z = +Dz)
@@ -370,8 +393,8 @@ class HepPolyhedron {
    * array starts from 1 (like in fortran). The indexes can be positive
    * or negative. Negative sign means that the corresponding edge is
    * invisible. The normal of the face should be directed to exterior
-   * of the polyhedron. 
-   * 
+   * of the polyhedron.
+   *
    * @param  Nnodes number of nodes
    * @param  Nfaces number of faces
    * @param  xyz    nodes
@@ -449,16 +472,16 @@ class HepPolyhedronHype : public HepPolyhedron
 class HepPolyhedronCons : public HepPolyhedron
 {
  public:
-  HepPolyhedronCons(G4double Rmn1, G4double Rmx1, 
+  HepPolyhedronCons(G4double Rmn1, G4double Rmx1,
                     G4double Rmn2, G4double Rmx2, G4double Dz,
-                    G4double Phi1, G4double Dphi); 
+                    G4double Phi1, G4double Dphi);
   virtual ~HepPolyhedronCons();
 };
 
 class HepPolyhedronCone : public HepPolyhedronCons
 {
  public:
-  HepPolyhedronCone(G4double Rmn1, G4double Rmx1, 
+  HepPolyhedronCone(G4double Rmn1, G4double Rmx1,
                     G4double Rmn2, G4double Rmx2, G4double Dz);
   virtual ~HepPolyhedronCone();
 };
@@ -466,7 +489,7 @@ class HepPolyhedronCone : public HepPolyhedronCons
 class HepPolyhedronTubs : public HepPolyhedronCons
 {
  public:
-  HepPolyhedronTubs(G4double Rmin, G4double Rmax, G4double Dz, 
+  HepPolyhedronTubs(G4double Rmin, G4double Rmax, G4double Dz,
                     G4double Phi1, G4double Dphi);
   virtual ~HepPolyhedronTubs();
 };
@@ -485,6 +508,8 @@ class HepPolyhedronPgon : public HepPolyhedron
                     const G4double *z,
                     const G4double *rmin,
                     const G4double *rmax);
+  HepPolyhedronPgon(G4double phi, G4double dphi, G4int npdv,
+                    const std::vector<G4TwoVector> &rz);
   virtual ~HepPolyhedronPgon();
 };
 
@@ -495,6 +520,8 @@ class HepPolyhedronPcon : public HepPolyhedronPgon
                     const G4double *z,
                     const G4double *rmin,
                     const G4double *rmax);
+  HepPolyhedronPcon(G4double phi, G4double dphi,
+                    const std::vector<G4TwoVector> &rz);
   virtual ~HepPolyhedronPcon();
 };
 
@@ -528,7 +555,7 @@ class HepPolyhedronTet : public HepPolyhedron
 class HepPolyhedronEllipsoid : public HepPolyhedron
 {
  public:
-  HepPolyhedronEllipsoid(G4double dx, G4double dy, G4double dz, 
+  HepPolyhedronEllipsoid(G4double dx, G4double dy, G4double dz,
                          G4double zcut1, G4double zcut2);
   virtual ~HepPolyhedronEllipsoid();
 };

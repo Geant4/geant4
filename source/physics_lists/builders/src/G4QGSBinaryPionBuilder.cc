@@ -66,19 +66,14 @@ G4QGSBinaryPionBuilder::
 }
 
 void G4QGSBinaryPionBuilder::
-Build(G4PionPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
-  aP->RegisterMe(theModel);
-}
-
-void G4QGSBinaryPionBuilder::
-Build(G4PionMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+  if ( aP->GetParticleDefinition() == G4PionPlus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  } else if ( aP->GetParticleDefinition() == G4PionMinus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+  }
   aP->RegisterMe(theModel);
 }

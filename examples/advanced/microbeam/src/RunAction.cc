@@ -31,30 +31,26 @@
 // 
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
+//
+#include "RunAction.hh"
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
-
-#include "RunAction.hh"
 #include "Analysis.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::RunAction(const DetectorConstruction* det) 
 :fDetector(det)
 {   
   fSaveRndm = 0;  
+  fDose3DDose = nullptr;
+  fMapVoxels =  nullptr;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::~RunAction()
 {
-  delete[] fDose3DDose;
-  delete[] fMapVoxels;
+  if (fDose3DDose) delete[] fDose3DDose;
+  if (fMapVoxels) delete[] fMapVoxels;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
@@ -150,10 +146,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
     fMapVoxels [i]=fMyCellParameterisation->GetVoxelThreeVector(i);
     fDose3DDose[i]=0;
   }
-  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
 {     
@@ -189,5 +182,4 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
   
   // Complete clean-up
   delete G4AnalysisManager::Instance();
-
 }

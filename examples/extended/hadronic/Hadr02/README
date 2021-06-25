@@ -102,7 +102,7 @@ In short:
 4.  Set the LD_LIBRARY_PATH as follows:
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HEP_ROOT}/lib:${FASTJET_ROOT_DIR}/lib
 5.  Source the Geant4 script geant4make.sh , e.g.
-    source /your-geant4-installation-dir/share/Geant4-10.7.2/geant4make/geant4make.sh
+    source /your-geant4-installation-dir/share/Geant4-10.7.1/geant4make/geant4make.sh
 6.  cd crmc-svn-geant4/
 7.  mkdir Build/ ; cd Build/   # Subdirectory where to build and install CRMC
 8.  cmake ../

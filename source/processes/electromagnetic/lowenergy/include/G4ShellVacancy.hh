@@ -54,19 +54,15 @@ class G4Element;
 class G4ShellVacancy
 {
 public:
-
-  G4ShellVacancy();
-
+  explicit G4ShellVacancy();
   ~G4ShellVacancy();
 
   std::vector<G4int> GenerateNumberOfIonisations(const G4MaterialCutsCouple* couple,
 						   G4double incidentEnergy,
 						   G4double eLoss) const;
-
   void AddXsiTable(G4VEMDataSet* p);
 
 private:
-
   G4double AverageNOfIonisations(const G4MaterialCutsCouple* couple,
 			               G4int index, 
 			               G4double energy, 

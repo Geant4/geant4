@@ -1,0 +1,144 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_carray
+#define tools_carray
+
+//fixed array manips
+
+namespace tools {
+
+template <class T>
+inline void destroy(T*& a_v){
+  delete [] a_v;
+  a_v = 0;
+}
+
+template <class T,class I>
+inline bool carray_copy(T*& a_v,I a_n,const T* a_from){
+  delete [] a_v;
+  a_v = 0;
+  if(a_n) {
+    a_v = new T[a_n];
+    if(!a_v) return false;
+  }
+  for(I i=0;i<a_n;i++) a_v[i] = a_from[i];
+  return true;
+}
+
+template <class T,class I>
+inline bool copy(T*& a_v,I a_n,const T* a_from) {return carray_copy<T,I>(a_v,a_n,a_from);}
+
+/*
+template <class T>
+inline T value(const T* a_v,
+               unsigned int a_q,
+               unsigned int a_i,unsigned int a_j){
+  // to get value in the case a x[p][q] is stored in a x[p*q].
+  // (used in hep/polyhedron_arb8)
+  // WARNING : no check is done on a_i, a_j
+  return a_v[a_i*a_q+a_j];
+}
+
+template <class I,class T,class I>
+inline bool normalize(I a_n,T*& a_v,T(*a_sqrt)(T)){
+  T sz = T();
+  I i;
+  for(i=0;i<a_n;i++) sz += a_v[i]*a_v[i];
+  sz = a_sqrt(sz);
+  if(sz==T()) return false;
+  for(i=0;i<a_n;i++) a_v[i] /= sz;
+  return true;
+}
+
+template <class T>
+inline T value(const T* a_v,
+               unsigned int a_q,
+               unsigned int a_i,unsigned int a_j){
+  // to get value x[i][j] in the case a x[p][q] is stored in a x[p*q].
+  // (used in hep/polyhedron_arb8)
+  // WARNING : no check is done on a_i, a_j
+  return a_v[a_i*a_q+a_j];
+}
+*/
+
+}
+
+#include "mnmx"
+
+namespace tools {
+
+template <class I,class T,class TO>
+inline bool min_max(I a_n,const void* a_v,TO& a_mn,TO& a_mx){
+  if(a_n<=I(0)) {a_mn = TO(0);a_mx = TO(0);return false;}
+  T* pos = (T*)a_v;
+  a_mn = *pos;
+  a_mx = *pos;
+  for(I i=0;i<a_n;i++,pos++) {
+    a_mn = mn<TO>(a_mn,*pos);
+    a_mx = mx<TO>(a_mx,*pos);
+  }
+  return true;
+}
+
+template <class I,class T,class TO>
+inline bool min_max_S_S2(I a_n,const void* a_v,TO& a_mn,TO& a_mx,TO& a_S,TO& a_S2){
+  if(a_n<=0) {a_mn = TO(0);a_mx = TO(0);a_S=TO(0);a_S2=TO(0);return false;}
+  T* pos = (T*)a_v;
+  a_mn = *pos;
+  a_mx = *pos;
+  a_S = TO(0);
+  a_S2 = TO(0);
+  for(I i=0;i<a_n;i++,pos++) {
+    a_mn = mn<TO>(a_mn,*pos);
+    a_mx = mx<TO>(a_mx,*pos);
+    a_S += TO(*pos);
+    a_S2 += TO(*pos) * TO(*pos);
+  }
+  return true;
+}
+
+template <class I,class T,class TO>
+inline bool min_max_mean_rms(I a_n,const void* a_v,TO& a_mn,TO& a_mx,TO& a_mean,TO& a_rms,
+                             TO(*a_sqrt)(TO),TO(*a_fabs)(TO)){
+  TO S = TO(0);
+  TO S2 = TO(0);
+  if(!min_max_S_S2<I,T,TO>(a_n,a_v,a_mn,a_mx,S,S2)) {
+    a_mn = TO(0);a_mx = TO(0);a_mean=TO(0);a_rms=TO(0);
+    return false;
+  }
+  a_mean = S/TO(a_n);
+  a_rms = a_sqrt(a_fabs(S2/TO(a_n) - a_mean * a_mean));
+  return true;
+}
+
+template <class I,class T,class HISTO>
+inline bool h1_fill(I a_n,const void* a_v,HISTO& a_histo) {
+  a_histo.reset();
+  if(a_n<=0) return false;
+  typedef typename HISTO::coordinate_t TC;
+  T* pos = (T*)a_v;
+  for(I i=0;i<a_n;i++,pos++) a_histo.fill(TC(*pos));
+  return true;
+}
+
+template <class T,class I>
+inline T* _4s_to_3s(const T* a_4s,const I& a_w,const I& a_h) {
+  T* _3s = new T[a_w*a_h*3];
+  if(!_3s) return 0;
+  T* pfrom = (T*)a_4s;
+  T* pto = _3s;
+ {I _sz = a_w*a_h*4;
+  for(I i=0;i<_sz;i+=4) {
+    *(pto+0) = *(pfrom+0);
+    *(pto+1) = *(pfrom+1);
+    *(pto+2) = *(pfrom+2);
+    pfrom += 4;
+    pto += 3;
+  }}
+  return _3s;
+}
+
+}
+
+#endif

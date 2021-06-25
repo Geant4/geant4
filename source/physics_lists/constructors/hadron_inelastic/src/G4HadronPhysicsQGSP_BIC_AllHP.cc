@@ -49,10 +49,11 @@
 G4_DECLARE_PHYSCONSTR_FACTORY( G4HadronPhysicsQGSP_BIC_AllHP );
 
 
-G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( G4int )
+G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP(G4int verb)
   :  G4HadronPhysicsQGSP_BIC_AllHP( "hInelastic QGSP_BIC_AllHP" )
-{}
-
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsQGSP_BIC_AllHP::G4HadronPhysicsQGSP_BIC_AllHP( const G4String& name, G4bool quasiElastic )
   :  G4HadronPhysicsQGSP_BIC_HP( name, quasiElastic )
@@ -90,7 +91,7 @@ void G4HadronPhysicsQGSP_BIC_AllHP::Proton() {
 
   const G4ParticleDefinition* proton = G4Proton::Proton();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(proton);
-  if(inel) { 
+  if(nullptr != inel) { 
     if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
   }
 }

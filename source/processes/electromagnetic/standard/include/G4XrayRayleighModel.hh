@@ -47,29 +47,30 @@ public:
   explicit G4XrayRayleighModel(const G4ParticleDefinition* p = 0, 
 			       const G4String& nam = "XrayRayleigh");
 
-  virtual ~G4XrayRayleighModel();
+  ~G4XrayRayleighModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
                                       G4double A=0, 
                                       G4double cut=0,
-                                      G4double emax=DBL_MAX);
+                                      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
+  G4XrayRayleighModel & operator=(const  G4XrayRayleighModel &right) = delete;
+  G4XrayRayleighModel(const  G4XrayRayleighModel&) = delete;
 
 private:
+
+  G4ParticleChangeForGamma* fParticleChange;
 
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
@@ -80,9 +81,6 @@ private:
 
   static const G4double fCofA;
   static const G4double fCofR;
-
-  G4XrayRayleighModel & operator=(const  G4XrayRayleighModel &right);
-  G4XrayRayleighModel(const  G4XrayRayleighModel&);
 
 };
 

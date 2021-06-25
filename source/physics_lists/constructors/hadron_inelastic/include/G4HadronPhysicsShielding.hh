@@ -57,7 +57,7 @@ class G4HadronPhysicsShielding : public G4HadronPhysicsFTFP_BERT
                                       G4double minFTFPEnergy, 
                                       G4double maxBertiniEnergy);
 
-    ~G4HadronPhysicsShielding() override;
+    virtual ~G4HadronPhysicsShielding();
 
     void ConstructProcess() override;
 

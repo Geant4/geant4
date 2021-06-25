@@ -168,6 +168,7 @@ configure_file(
   COPYONLY
   )
 
+# Required for CMake clients between 3.8 and 3.10
 configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/Modules/G4FreetypeShim.cmake
   ${PROJECT_BINARY_DIR}/G4FreetypeShim.cmake
@@ -199,7 +200,7 @@ configure_file(
 )
 
 
-foreach(_mod AIDA HepMC Pythia6 StatTest TBB XQuartzGL)
+foreach(_mod AIDA HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake

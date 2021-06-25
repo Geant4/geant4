@@ -150,6 +150,12 @@ public:  // without description
   inline G4bool GetLowerI1() {return fLowerI1;};
   inline void   SetLowerI1(G4bool flag) {fLowerI1=flag;};
 
+  // operators       
+  G4bool operator==(const G4SandiaTable&) const = delete;
+  G4bool operator!=(const G4SandiaTable&) const = delete;
+  G4SandiaTable(G4SandiaTable &) = delete;
+  G4SandiaTable & operator=(const G4SandiaTable &right) = delete;
+
 private:
 
   void ComputeMatTable();
@@ -159,12 +165,6 @@ private:
   void SandiaSort(G4double** da, G4int sz);
 
   G4double** GetPointerToCof(); 
-
-  // operators       
-  G4bool operator==(const G4SandiaTable&) const;
-  G4bool operator!=(const G4SandiaTable&) const;
-  G4SandiaTable(G4SandiaTable &);
-  G4SandiaTable & operator=(const G4SandiaTable &right);
 
   static const G4double fSandiaTable[981][5];
   static const G4int fNumberOfElements;

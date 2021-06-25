@@ -2,6 +2,9 @@
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V10-07-00 1-April-2021 B.Morgan
+- Migrate build to modular CMake API
+
 g3tog4-V10-06-01 28-May-2020 B.Morgan
 - Remove obsolete G4brep module dependency
 

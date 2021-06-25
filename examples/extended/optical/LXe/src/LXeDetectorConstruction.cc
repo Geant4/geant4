@@ -178,17 +178,14 @@ void LXeDetectorConstruction::DefineMaterials()
   // Set the Birks Constant for the LXe scintillator
   fLXe->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);
 
-  std::vector<G4double> glass_RIND      = { 1.49, 1.49, 1.49 };
   std::vector<G4double> glass_AbsLength = { 420. * cm, 420. * cm, 420. * cm };
   G4MaterialPropertiesTable* glass_mt   = new G4MaterialPropertiesTable();
   glass_mt->AddProperty("ABSLENGTH", lxe_Energy, glass_AbsLength);
-  glass_mt->AddProperty("RINDEX", lxe_Energy, glass_RIND);
+  glass_mt->AddProperty("RINDEX", "Fused Silica");
   fGlass->SetMaterialPropertiesTable(glass_mt);
 
-  std::vector<G4double> vacuum_Energy  = { 2.0 * eV, 7.0 * eV, 7.14 * eV };
-  std::vector<G4double> vacuum_RIND    = { 1., 1., 1. };
   G4MaterialPropertiesTable* vacuum_mt = new G4MaterialPropertiesTable();
-  vacuum_mt->AddProperty("RINDEX", vacuum_Energy, vacuum_RIND);
+  vacuum_mt->AddProperty("RINDEX", "Air");
   fVacuum->SetMaterialPropertiesTable(vacuum_mt);
   fAir->SetMaterialPropertiesTable(vacuum_mt);  // Give air the same rindex
 
@@ -210,11 +207,10 @@ void LXeDetectorConstruction::DefineMaterials()
   // Set the Birks Constant for the Polystyrene scintillator
   fPstyrene->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);
 
-  std::vector<G4double> RefractiveIndexFiber = { 1.6, 1.6, 1.6, 1.6 };
   std::vector<G4double> AbsFiber    = { 9.0 * m, 9.0 * m, 0.1 * mm, 0.1 * mm };
   std::vector<G4double> EmissionFib = { 1.0, 1.0, 0.0, 0.0 };
   G4MaterialPropertiesTable* fiberProperty = new G4MaterialPropertiesTable();
-  fiberProperty->AddProperty("RINDEX", wls_Energy, RefractiveIndexFiber);
+  fiberProperty->AddProperty("RINDEX", "PMMA");
   fiberProperty->AddProperty("WLSABSLENGTH", wls_Energy, AbsFiber);
   fiberProperty->AddProperty("WLSCOMPONENT", wls_Energy, EmissionFib);
   fiberProperty->AddConstProperty("WLSTIMECONSTANT", 0.5 * ns);

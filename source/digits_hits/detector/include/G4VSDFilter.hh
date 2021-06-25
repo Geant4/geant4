@@ -35,27 +35,24 @@ class G4Step;
 // class description:
 //
 //  This is the abstract base class of a filter to be associated with a
-// sensitive detector or a primitive scorer. 
+// sensitive detector or a primitive scorer.
 
-class G4VSDFilter 
+class G4VSDFilter
 {
+ public:  // with description
+  G4VSDFilter(G4String name);
 
-  public: // with description
-      G4VSDFilter(G4String name);
+ public:
+  virtual ~G4VSDFilter();
 
-  public:
-      virtual ~G4VSDFilter();
+ public:  // with description
+  virtual G4bool Accept(const G4Step*) const = 0;
 
-  public: // with description
-      virtual G4bool Accept(const G4Step*) const = 0;
+ protected:
+  G4String filterName;
 
-  protected:
-      G4String filterName;
-
-  public:
-      inline G4String GetName() const
-      { return filterName; }
+ public:
+  inline G4String GetName() const { return filterName; }
 };
 
 #endif
-

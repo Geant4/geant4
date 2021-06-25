@@ -52,20 +52,18 @@ class G4ErrorEnergyLoss;
 class G4ErrorMessenger : public G4UImessenger
 {
  public:  // with description
-
   G4ErrorMessenger(G4ErrorStepLengthLimitProcess* lengthAct,
                    G4ErrorMagFieldLimitProcess* magAct,
                    G4ErrorEnergyLoss* elossAct);
   ~G4ErrorMessenger();
-  
+
   void SetNewValue(G4UIcommand*, G4String);
 
  private:
-
   G4ErrorStepLengthLimitProcess* StepLengthAction;
   G4ErrorMagFieldLimitProcess* MagFieldAction;
   G4ErrorEnergyLoss* EnergyLossAction;
-  
+
   G4UIdirectory* myDir;
   G4UIdirectory* myDirLimits;
 

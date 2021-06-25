@@ -43,25 +43,27 @@
 
 #include "G4ParticleHPThermalScattering.hh"
 #include "G4ParticleHPThermalScatteringData.hh"
+#include "G4HadronicParameters.hh"
 
 #include "G4BuilderType.hh"
 #include "G4PhysListUtil.hh"
 #include "G4SystemOfUnits.hh"
 
 G4ThermalNeutrons::G4ThermalNeutrons(G4int ver) :
-  G4VHadronPhysics("G4ThermalNeutrons"), verbose(ver) {
+  G4VHadronPhysics("ThermalNeutrons", ver) {
+  // because it is an addition, the type of this constructor is 0
 }
 
 G4ThermalNeutrons::~G4ThermalNeutrons() {}
 
 void G4ThermalNeutrons::ConstructProcess() {
 
-  if(verbose > 0) {
+  if(G4HadronicParameters::Instance()->GetVerboseLevel() > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4Neutron* part = G4Neutron::Neutron();
   G4HadronicProcess* hpel = G4PhysListUtil::FindElasticProcess(part);
-  if(!hpel) {
+  if(nullptr == hpel) {
     G4cout << "### " << GetPhysicsName() 
 	   << " WARNING: Fail to add thermal neutron scattering" << G4endl;
     return;

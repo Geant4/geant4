@@ -32,53 +32,46 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
 
-
 //////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring Number of Steps in the cell.
-// 
+//
 // Created: 2007-2-2  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class G4PSNofCollision : public G4VPrimitiveScorer
 {
- 
- public: // with description
-      G4PSNofCollision(G4String name, G4int depth=0);
+ public:  // with description
+  G4PSNofCollision(G4String name, G4int depth = 0);
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  public:
-      virtual ~G4PSNofCollision();
+ public:
+  virtual ~G4PSNofCollision();
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
 
-  public:
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  private:
-      G4int HCID;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool weighted;
+ private:
+  G4int HCID;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
 
-  public:
-
-
+ public:
 };
-
-
 
 #endif

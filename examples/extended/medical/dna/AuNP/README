@@ -1,0 +1,84 @@
+-------------------------------------------------------------------
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - AuNP example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHOR 
+
+D. Sakata 
+National Institute of Radiological Science
+* e-mail:dosatsu.sakata@cern.ch
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The AuNP example simulates the track-structure of electrons in microscopic gold volume.
+The example also simulates that in liquid water medium surrunding the gold volume.
+
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+We also suggest these other references related to this example:
+Phys. Med. 63 (2019), 98-104
+Med. Phys. 45 (2018), 2230-2242
+J. App. Phys. 120 (2016), 244901 
+
+
+---->1. GEOMETRY SET-UP.
+  
+The geometry is a sphere (World) made of liquid water containing a smaller sphererical target volume of Gold.
+
+--->2. SET-UP 
+                                                                        
+Make sure G4LEDATA points to the low energy electromagnetic libraries.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+Run:
+./AuNP AuNP.mac
+
+---->4. PHYSICS
+
+This example shows:
+- how to use the Geant4-DNA processes for gold
+- how to count and save occurrences of processes
+
+Look at the PhyscisList.cc file.
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The output results consists in an AuNP.root file, containing for the run:
+- the energy spectra of secondary particles generated in AuNP
+- the energy spectra of secondary particles at AuNP surface
+- the energy spectra of secondary particles generated in liquid water
+- the energy deposit and the position in the absorber surrunding AuNP
+
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the microdosimetry directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+* alternatively you can type directly under your session : root plot.C
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+sakata.dousatsu@qst.go.jp, dosatsu.sakata@cern.ch

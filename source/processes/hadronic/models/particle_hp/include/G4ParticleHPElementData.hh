@@ -38,12 +38,8 @@
 #include "G4ParticleHPIsoData.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4Material.hh"
-#include "G4HadronCrossSections.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
-//#include "G4NeutronInelasticProcess.hh"
-//#include "G4HadronFissionProcess.hh"
-//#include "G4HadronCaptureProcess.hh"
 #include "G4ParticleHPElasticData.hh"
 #include "G4ParticleHPFissionData.hh"
 #include "G4ParticleHPCaptureData.hh"
@@ -51,7 +47,6 @@
 #include "G4StableIsotopes.hh"
 #include "G4Neutron.hh"
 
-//class G4ParticleHPElementData : public G4HadronCrossSections
 class G4ParticleHPElementData
 {
 public:

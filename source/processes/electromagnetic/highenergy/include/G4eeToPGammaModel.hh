@@ -64,23 +64,23 @@ public:
   explicit G4eeToPGammaModel(G4eeCrossSections*, const G4String&,
                              G4double,G4double);
 
-  virtual ~G4eeToPGammaModel();
+  ~G4eeToPGammaModel() override;
 
-  virtual G4double PeakEnergy() const override;
+  G4double PeakEnergy() const override;
 
-  virtual G4double ComputeCrossSection(G4double) const override;
+  G4double ComputeCrossSection(G4double) const override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&) override;
-
-private:
 
   // hide assignment operator
   G4eeToPGammaModel & operator=(const  G4eeToPGammaModel &right) = delete;
   G4eeToPGammaModel(const  G4eeToPGammaModel&) = delete;
 
-  G4ParticleDefinition* particle;
-  G4ParticleDefinition* pi0;
+private:
+
+  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* pi0;
 
   G4double massP;
   G4double massR;

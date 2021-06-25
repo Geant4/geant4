@@ -36,12 +36,9 @@
 #include <iomanip>
 #include <iostream>
 
-#include "G4LPhysicsFreeVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4PhysicsLnVector.hh"
 #include "G4PhysicsLogVector.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsVectorType.hh"
@@ -147,7 +144,7 @@ G4bool G4PhysicsTable::ExistPhysicsTable(const G4String& fileName) const
 
 // --------------------------------------------------------------------
 G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
-                                            G4bool ascii)
+                                            G4bool ascii, G4bool spline)
 {
   std::ifstream fIn;
   // open input file
@@ -199,7 +196,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     {
       fIn >> vType;
     }
-    G4PhysicsVector* pVec = CreatePhysicsVector(vType);
+    G4PhysicsVector* pVec = CreatePhysicsVector(vType, spline);
     if(pVec == nullptr)
     {
 #ifdef G4VERBOSE
@@ -269,33 +266,21 @@ void G4PhysicsTable::ResetFlagArray()
 }
 
 // --------------------------------------------------------------------
-G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type)
+G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type, G4bool spline)
 {
   G4PhysicsVector* pVector = nullptr;
   switch(type)
   {
     case T_G4PhysicsLinearVector:
-      pVector = new G4PhysicsLinearVector();
+      pVector = new G4PhysicsLinearVector(spline);
       break;
 
     case T_G4PhysicsLogVector:
-      pVector = new G4PhysicsLogVector();
-      break;
-
-    case T_G4PhysicsLnVector:
-      pVector = new G4PhysicsLogVector();
+      pVector = new G4PhysicsLogVector(spline);
       break;
 
     case T_G4PhysicsFreeVector:
-      pVector = new G4PhysicsFreeVector();
-      break;
-
-    case T_G4PhysicsOrderedFreeVector:
-      pVector = new G4PhysicsOrderedFreeVector();
-      break;
-
-    case T_G4LPhysicsFreeVector:
-      pVector = new G4PhysicsFreeVector();
+      pVector = new G4PhysicsFreeVector(spline);
       break;
 
     default:

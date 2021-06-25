@@ -23,29 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// GEANT4 Class header file
+// Geant4 Class header file
 //
 // File name:     G4StokesVector
 //
 // Author:        Andreas Schaelicke
 //
-// Creation date: 01.05.2005
-//
-// Modifications:
-// 27-07-06 added some test routines (P.Starovoitov)
-// 25-08-06 modified name of test routines (A.Schaelicke)
-//
 // Class Description:
-//
-// Provides Stokesvector representation employed in implementation of
-// polarized processes.
-//
-// aim:
+//   Provides Stokesvector representation employed in implementation of
+//   polarized processes.
 //   - store three components of a stokesvector
 //   - distinguish between boson or fermion state (different transformations)
 //   - provide unique definition of reference frame (cf. G4PolarizationHelper)
-//
 
 #ifndef G4StokesVector_h
 #define G4StokesVector_h 1
@@ -53,48 +42,40 @@
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 
-
-class G4StokesVector: public G4ThreeVector
+class G4StokesVector : public G4ThreeVector
 {
  public:
-  // standard vectors:
-  static const G4StokesVector ZERO;
-  static const G4StokesVector P1;
-  static const G4StokesVector P2;
-  static const G4StokesVector P3;
-  static const G4StokesVector M1;
-  static const G4StokesVector M2;
-  static const G4StokesVector M3;
-public:
   G4StokesVector();
-  G4StokesVector(const G4ThreeVector & v);
+  explicit G4StokesVector(const G4ThreeVector& v);
   ~G4StokesVector() = default;
 
-  G4bool IsZero() const; 
+  G4bool IsZero() const;
 
   inline G4double p1() const { return x(); }
   inline G4double p2() const { return y(); }
   inline G4double p3() const { return z(); }
 
-  inline G4double Transverse() const { return perp(); } 
+  inline G4double Transverse() const { return perp(); }
 
-  inline G4ThreeVector PolSqr() const { 
-    return G4ThreeVector(x()*x(),y()*y(),z()*z()); 
+  inline G4ThreeVector PolSqr() const
+  {
+    return G4ThreeVector(x() * x(), y() * y(), z() * z());
   }
-  inline G4ThreeVector PolSqrt() const { 
-    return G4ThreeVector(std::sqrt(x()),std::sqrt(y()),std::sqrt(z())); 
+  inline G4ThreeVector PolSqrt() const
+  {
+    return G4ThreeVector(std::sqrt(x()), std::sqrt(y()), std::sqrt(z()));
   }
-  G4ThreeVector PolError(const G4StokesVector & sum2, long n);
+  G4ThreeVector PolError(const G4StokesVector& sum2, long n);
 
   // Ratio of 3-vectors.
-  G4ThreeVector PolDiv( const G4StokesVector & );
+  G4ThreeVector PolDiv(const G4StokesVector&);
 
-  inline void SetPhoton() { isPhoton=true; }
+  inline void SetPhoton() { fIsPhoton = true; }
 
-  void RotateAz(G4ThreeVector nInteractionFrame, 
-		G4ThreeVector particleDirection);
-  void InvRotateAz(G4ThreeVector nInteractionFrame, 
-		   G4ThreeVector particleDirection);
+  void RotateAz(G4ThreeVector nInteractionFrame,
+                G4ThreeVector particleDirection);
+  void InvRotateAz(G4ThreeVector nInteractionFrame,
+                   G4ThreeVector particleDirection);
   void RotateAz(G4double cosphi, G4double sinphi);
   G4double GetBeta();
 
@@ -104,9 +85,18 @@ public:
   void DiceP3();
 
   void FlipP3();
-private:
-  G4bool isPhoton;
-};
 
+  // standard vectors:
+  static const G4StokesVector ZERO;
+  static const G4StokesVector P1;
+  static const G4StokesVector P2;
+  static const G4StokesVector P3;
+  static const G4StokesVector M1;
+  static const G4StokesVector M2;
+  static const G4StokesVector M3;
+
+ private:
+  G4bool fIsPhoton;
+};
 
 #endif

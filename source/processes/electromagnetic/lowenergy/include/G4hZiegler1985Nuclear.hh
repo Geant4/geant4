@@ -57,21 +57,15 @@
 
 class G4hZiegler1985Nuclear : public G4VhNuclearStoppingPower
 {
-
 public:
 
-  G4hZiegler1985Nuclear();
-
+  explicit G4hZiegler1985Nuclear();
   ~G4hZiegler1985Nuclear();
 
   G4double NuclearStoppingPower(G4double kineticEnergy,
                                 G4double z1, G4double z2, 
-                                G4double m1, G4double m2) const;
+                                G4double m1, G4double m2) const override;
  
-protected:
-
-private:
-
 };
 
 #endif

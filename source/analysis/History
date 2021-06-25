@@ -16,16 +16,26 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 26, 2021 I. Hrivnacova (analysis-V10-06-14)
+May 25, 2021 B. Morgan (analysis-V10-07-05)
+- Move fonts/ directory and install logic to g4tools external, as prime interface
+  to Freetype.
+
+March 30, 2021 B. Morgan (analysis-V10-07-04)
+- Migrate build to modular CMake API
+
+February 26, 2021 I. Hrivnacova (analysis-V10-07-03)
 - Fixed ntuple indexing when FinishNtuple is called in different order
   than CreateNtuple.
   Addressing the problem report #2335.
 
-February 2, 2021 I. Hrivnacova (analysis-V10-06-13)
+February 18, 2021 B. Morgan (analysis-V10-07-02)
+- Move g4tools to externals category
+
+February 2, 2021 I. Hrivnacova (analysis-V10-07-01)
 - Fixed the problem with merging ntuples with columns of vector type
   reported by Riccardo Pilato in G4 Forum.
 
-January 5, 2021 I. Hrivnacova (analysis-V10-06-12)
+January 5, 2021 I. Hrivnacova (analysis-V10-07-00)
 - Updated to g4tools 5.2.3 (Guy Barrand):
   Bug fix in tools/histo/h2,h3 : get_bin_content(): have '&' in "get" arguments.
   Addressing the problem report #2306.

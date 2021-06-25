@@ -30,99 +30,92 @@
 #include "G4SDManager.hh"
 
 G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
-:verboseLevel(0),active(true),
- ROgeometry(nullptr),filter(nullptr)
+  : verboseLevel(0)
+  , active(true)
+  , ROgeometry(nullptr)
+  , filter(nullptr)
 {
   size_t sLast = name.last('/');
-  if(sLast==std::string::npos)
-  { // detector name only
+  if(sLast == std::string::npos)
+  {  // detector name only
     SensitiveDetectorName = name;
-    thePathName = "/";
+    thePathName           = "/";
   }
   else
-  { // name conatin the directory path
+  {  // name conatin the directory path
     SensitiveDetectorName = name;
-    SensitiveDetectorName.remove(0,sLast+1);
+    SensitiveDetectorName.remove(0, sLast + 1);
     thePathName = name;
-    thePathName.remove(sLast+1,name.length()-sLast);
-    if(thePathName(0)!='/') thePathName.prepend("/");
+    thePathName.remove(sLast + 1, name.length() - sLast);
+    if(thePathName(0) != '/')
+      thePathName.prepend("/");
   }
   fullPathName = thePathName + SensitiveDetectorName;
 }
 
-G4VSensitiveDetector::G4VSensitiveDetector(const G4VSensitiveDetector &right)
+G4VSensitiveDetector::G4VSensitiveDetector(const G4VSensitiveDetector& right)
 {
   SensitiveDetectorName = right.SensitiveDetectorName;
-  thePathName = right.thePathName;
-  fullPathName = right.fullPathName;
-  verboseLevel = right.verboseLevel;
-  active = right.active;
-  ROgeometry = right.ROgeometry;
-  filter = right.filter;
+  thePathName           = right.thePathName;
+  fullPathName          = right.fullPathName;
+  verboseLevel          = right.verboseLevel;
+  active                = right.active;
+  ROgeometry            = right.ROgeometry;
+  filter                = right.filter;
 }
 
-G4VSensitiveDetector::~G4VSensitiveDetector()
-{
-}
+G4VSensitiveDetector::~G4VSensitiveDetector() {}
 
 G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
 {
-    G4ExceptionDescription msg;
-    msg << "Derived class does not implement cloning,\n"
-    << "but Clone method called.\n"
-    << "Cannot continue;";
-    G4Exception("G4VSensitiveDetector::Clone","Det0010",FatalException,msg);
-    return nullptr;
+  G4ExceptionDescription msg;
+  msg << "Derived class does not implement cloning,\n"
+      << "but Clone method called.\n"
+      << "Cannot continue;";
+  G4Exception("G4VSensitiveDetector::Clone", "Det0010", FatalException, msg);
+  return nullptr;
 }
 
-G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)
+G4VSensitiveDetector& G4VSensitiveDetector::operator=(
+  const G4VSensitiveDetector& right)
 {
-  if (this == &right ) return *this;
+  if(this == &right)
+    return *this;
   SensitiveDetectorName = right.SensitiveDetectorName;
-  thePathName = right.thePathName;
-  fullPathName = right.fullPathName;
-  verboseLevel = right.verboseLevel;
-  active = right.active;
-  ROgeometry = right.ROgeometry;
-  filter = right.filter;
+  thePathName           = right.thePathName;
+  fullPathName          = right.fullPathName;
+  verboseLevel          = right.verboseLevel;
+  active                = right.active;
+  ROgeometry            = right.ROgeometry;
+  filter                = right.filter;
   return *this;
 }
 
-G4bool G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
+G4bool G4VSensitiveDetector::operator==(const G4VSensitiveDetector& right) const
 {
-   return (this==&right);
+  return (this == &right);
 }
 
-G4bool G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
+G4bool G4VSensitiveDetector::operator!=(const G4VSensitiveDetector& right) const
 {
-   return (this!=&right);
+  return (this != &right);
 }
 
 G4int G4VSensitiveDetector::GetCollectionID(G4int i)
 {
-   return G4SDManager::GetSDMpointer()->GetCollectionID(SensitiveDetectorName+"/"+collectionName[i]); 
+  return G4SDManager::GetSDMpointer()->GetCollectionID(SensitiveDetectorName +
+                                                       "/" + collectionName[i]);
 }
 
 //----- following methoods are abstract methods to be
 //----- implemented in the concrete classes
 
-void G4VSensitiveDetector::Initialize(G4HCofThisEvent*)
-{
-}
+void G4VSensitiveDetector::Initialize(G4HCofThisEvent*) {}
 
-void G4VSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
-{
-}
+void G4VSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {}
 
-void G4VSensitiveDetector::clear()
-{
-}
+void G4VSensitiveDetector::clear() {}
 
-void G4VSensitiveDetector::DrawAll()
-{
-}
+void G4VSensitiveDetector::DrawAll() {}
 
-void G4VSensitiveDetector::PrintAll()
-{
-}
-
+void G4VSensitiveDetector::PrintAll() {}

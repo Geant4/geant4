@@ -40,23 +40,18 @@
 
 class RunAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class EventAction : public G4UserEventAction
 {
   public:
-  
-    EventAction(RunAction*);
-    virtual ~EventAction();
+    explicit EventAction(RunAction*);
+    ~EventAction() override;
 
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
     
-  private:
-  
+  private:  
     RunAction* fRun;
 };
-
 #endif
 
     

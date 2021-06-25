@@ -45,7 +45,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4DecayTable.hh"
 #include "G4VDecayChannel.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4TrackVector.hh"
 #include "G4VProcess.hh"
 #include "G4Tubs.hh"

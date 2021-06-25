@@ -52,10 +52,6 @@
              
   Physics lists and options can be (re)set with UI commands
     
-  Please, notice that options set through G4EmProcessOptions are global, eg
-  for all particle types. In G4 builders (geant4/source/physics_lists/builders)
-  it is shown how to set options per particle type. 
- 		
   A few commands have been added to PhysicsList, in order to set the production
   threshold for secondaries for gamma and e-/e+.
   
@@ -126,6 +122,7 @@ Idle> exit
   - decayinfly.mac: To visualise decay in fly of N16
   - gammaconversion.mac: To visualise gamma conversion and e+ annihilation
   - photon.mac: To visualiza p300 keV photon beam
+  - stepMax.mac: to test command /testem/stepMax
   - vis.mac: To activate visualization
 
 \section TestEm1_s7 TRACKING : StepMax

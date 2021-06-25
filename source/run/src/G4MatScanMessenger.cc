@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MatScanMessenger implementation
 //
-//
-//
-//
+// Author: M.Asai, May 2006
+// --------------------------------------------------------------------
 
 #include "G4MatScanMessenger.hh"
 
@@ -43,6 +43,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIparameter.hh"
 
+// --------------------------------------------------------------------
 G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
 {
   theScanner = p1;
@@ -147,6 +148,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   regionCmd->SetDefaultValue("DefaultRegionForTheWorld");
 }
 
+// --------------------------------------------------------------------
 G4MatScanMessenger::~G4MatScanMessenger()
 {
   delete scanCmd;
@@ -160,6 +162,7 @@ G4MatScanMessenger::~G4MatScanMessenger()
   delete msDirectory;
 }
 
+// --------------------------------------------------------------------
 G4String G4MatScanMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String currentValue;
@@ -198,6 +201,7 @@ G4String G4MatScanMessenger::GetCurrentValue(G4UIcommand* command)
   return currentValue;
 }
 
+// --------------------------------------------------------------------
 void G4MatScanMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if(command == scanCmd)

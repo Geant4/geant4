@@ -1,6 +1,6 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.8/9/10/11, clang-3.6 and higher
+#                                 macOS 11, Apple clang-12 and higher
 #
 # Original author: Gabriele Cosmo - CERN
 #
@@ -11,18 +11,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
   CPPFLAGS  += -DGL_SILENCE_DEPRECATION
-  ifdef G4USE_STD14
-    CPPFLAGS  += -std=c++14
-    CXXFLAGS  += -std=c++14
-  else
-    ifdef G4USE_STD17
-      CPPFLAGS  += -std=c++17
-      CXXFLAGS  += -std=c++17
-    else
-      CXXFLAGS  += -std=c++11
-      CPPFLAGS  += -std=c++11
-    endif
-  endif
+  CPPFLAGS  += -std=c++17
+  CXXFLAGS  += -std=c++17
+  G4USE_STD17 := 1
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec
   endif

@@ -302,11 +302,25 @@ void G4UnitDefinition::BuildUnitsTable()
   new G4UnitDefinition("microsecond", "us", "Time", microsecond);
   new G4UnitDefinition("nanosecond", "ns", "Time", nanosecond);
   new G4UnitDefinition("picosecond", "ps", "Time", picosecond);
+  new G4UnitDefinition("minute", "min", "Time", minute);
+  new G4UnitDefinition("hour",   "h",   "Time", hour);
+  new G4UnitDefinition("day",    "d",   "Time", day);
+  new G4UnitDefinition("year",   "y",   "Time", year);
 
   // Frequency
   new G4UnitDefinition("hertz", "Hz", "Frequency", hertz);
   new G4UnitDefinition("kilohertz", "kHz", "Frequency", kilohertz);
   new G4UnitDefinition("megahertz", "MHz", "Frequency", megahertz);
+  
+  // Velocity
+  new G4UnitDefinition("cm/ns", "cm/ns", "Velocity", cm/ns);
+  new G4UnitDefinition("mm/ns", "mm/ns", "Velocity", mm/ns);
+  new G4UnitDefinition("cm/us", "cm/us", "Velocity", cm/us);
+  new G4UnitDefinition("km/s" , "km/s" , "Velocity", km/s);
+  new G4UnitDefinition("cm/ms", "cm/ms", "Velocity", cm/ms);
+  new G4UnitDefinition( "m/s" ,  "m/s" , "Velocity",  m/s);
+  new G4UnitDefinition("cm/s" , "cm/s" , "Velocity", cm/s);
+  new G4UnitDefinition("mm/s" , "mm/s" , "Velocity", mm/s);      
 
   // Electric charge
   new G4UnitDefinition("eplus", "e+", "Electric charge", eplus);
@@ -319,8 +333,16 @@ void G4UnitDefinition::BuildUnitsTable()
   new G4UnitDefinition("gigaelectronvolt", "GeV", "Energy", gigaelectronvolt);
   new G4UnitDefinition("teraelectronvolt", "TeV", "Energy", teraelectronvolt);
   new G4UnitDefinition("petaelectronvolt", "PeV", "Energy", petaelectronvolt);
+  new G4UnitDefinition("millielectronVolt", "meV", "Energy", millielectronvolt);
   new G4UnitDefinition("joule", "J", "Energy", joule);
-
+  
+  //Momentum
+  new G4UnitDefinition( "eV/c",  "eV/c", "Momentum", eV);
+  new G4UnitDefinition("keV/c", "keV/c", "Momentum", keV);
+  new G4UnitDefinition("MeV/c", "MeV/c", "Momentum", MeV);
+  new G4UnitDefinition("GeV/c", "GeV/c", "Momentum", GeV);
+  new G4UnitDefinition("TeV/c", "TeV/c", "Momentum", TeV);
+  
   // Energy/Length
   new G4UnitDefinition("GeV/cm", "GeV/cm", "Energy/Length", GeV / cm);
   new G4UnitDefinition("MeV/cm", "MeV/cm", "Energy/Length", MeV / cm);

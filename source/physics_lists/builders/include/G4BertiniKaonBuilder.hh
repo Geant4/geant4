@@ -42,9 +42,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VKaonBuilder.hh"
 
 #include "G4CascadeInterface.hh"   
@@ -57,19 +55,14 @@ class G4BertiniKaonBuilder : public G4VKaonBuilder
 
   public: 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4KaonPlusInelasticProcess * aP) final override;
-    virtual void Build(G4KaonMinusInelasticProcess * aP) final override;
-    virtual void Build(G4KaonZeroLInelasticProcess * aP) final override;
-    virtual void Build(G4KaonZeroSInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
 
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
     virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
 
     using G4VKaonBuilder::Build; //Prevent compier warning
   private:
-    G4VCrossSectionDataSet * KaonMinusCrossSection;
-    G4VCrossSectionDataSet * KaonPlusCrossSection;
-    G4VCrossSectionDataSet * KaonZeroCrossSection;
+    G4VCrossSectionDataSet * kaonCrossSection;
 
     G4CascadeInterface * theModel;    
     G4double theMin;

@@ -83,16 +83,16 @@ public:  // with description
   explicit G4PhotoElectricEffect(const G4String& processName ="phot",
 				 G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4PhotoElectricEffect();
+  ~G4PhotoElectricEffect() override;
 
   // true for Gamma only.
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
-
-  // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo() override;
+  G4bool IsApplicable(const G4ParticleDefinition&) final;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
+
+  G4PhotoElectricEffect & operator=(const G4PhotoElectricEffect &right) = delete;
+  G4PhotoElectricEffect(const G4PhotoElectricEffect&) = delete;
 
 protected:
 
@@ -100,7 +100,7 @@ protected:
 
 private:
 
-  G4bool  isInitialised;
+  G4bool isInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

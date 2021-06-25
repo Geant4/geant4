@@ -7,15 +7,40 @@
 
                           History file
                           ------------
+24.05.2021 - B. Morgan (gammaraytel-V10-07-05)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+18.03.2021 - A. Ribon, Tag gammaraytel-V10-07-04
+             GammaRayTelHadronPhysics : replaced G4HadronCaptureProcess with
+             G4NeutronCaptureProcess, and G4HadronFissionProcess with
+             G4NeutronFissionProcess.
+
+11.03.2021 - A. Ribon, Tag gammaraytel-V10-07-03
+             GammaRayTelHadronPhysics : replaced stopping processes that
+	     have been deleted.
+
+08.03.2021 - A. Ribon, Tag gammaraytel-V10-07-02
+             GammaRayTelHadronPhysics : replaced old pion inelastic cross
+	     sections (that have been deleted) with G4BGGPionInelasticXS.
+
+04.03.2021 - A. Ribon, Tag gammaraytel-V10-07-01
+             GammaRayTelHadronPhysics, GammaRayTelIonPhysics : replaced
+	     G4PhotoNuclearProcess (that has been deleted) with
+	     G4HadronInelasticProcess.
+
+12.02.2021 - S. Guatelli, Tag gammaraytel-V10-07-00
+             Removed the dependency towards G4EmProcessOptions.hh.
+             Removed SetCuts method from local Physics List as it is not thread-safe.
+
 14.11.2020 - S. Guatelli, Tag gammaraytel-V10-06-03
              Migration to G4RunManagerFactory
 
 12.11.2020 - S. Guatelli, Tag gammaraytel-V10-06-02
              Added the option to use G4EmStandard_Option4 with BetheHeitler5D model
              by using the macro file physics_polarized_new.mac to
-             select the EM physics processes and models. 
-             Added macro gammaray_polarized.in for system testing. 
-    
+             select the EM physics processes and models.
+             Added macro gammaray_polarized.in for system testing.
+
 02.11.2020 - B.Morgan, Tag gammaraytel-V10-06-01
              Support same CMake version range as core Geant4
 

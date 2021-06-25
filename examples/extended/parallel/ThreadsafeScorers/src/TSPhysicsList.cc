@@ -62,7 +62,6 @@
 
 // Process options
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
 
 // Physics List Helper
 #include "G4PhysicsListHelper.hh"
@@ -85,18 +84,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TSPhysicsList* TSPhysicsList::fgInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TSPhysicsList* TSPhysicsList::Instance() { return fgInstance; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 TSPhysicsList::TSPhysicsList()
-  : fDefaultCutValue(1. * CLHEP::mm)
 {
-  fgInstance = this;
+  defaultCutValue = 1. * CLHEP::mm;
 
   fConstructors.push_back(new G4EmStandardPhysics_option4);
   fConstructors.push_back(new G4DecayPhysics);
@@ -113,8 +103,6 @@ TSPhysicsList::~TSPhysicsList()
 {
   for(auto ite : fConstructors)
     delete ite;
-
-  fgInstance = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,16 +159,6 @@ void TSPhysicsList::ConstructProcess()
       ph->RegisterProcess(new G4StepLimiter, particle);
     }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TSPhysicsList::SetCuts()
-{
-  SetCutValue(fDefaultCutValue, "e-");
-  SetCutValue(fDefaultCutValue, "e+");
-  SetCutValue(fDefaultCutValue, "gamma");
-  SetCutValue(fDefaultCutValue, "proton");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

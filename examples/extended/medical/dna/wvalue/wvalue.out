@@ -3,8 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -94,7 +100,7 @@ PhysicsList::AddPhysicsList: <dna_opt4>
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld  1  1  0
-### ===  Auger cascade flag: 1
+### ===  Auger flag: 1
 ### ===  Ignore cuts flag:   1
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
@@ -108,154 +114,154 @@ PhysicsList::AddPhysicsList: <dna_opt4>
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+ LivermorePhElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila Fluo
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-    LivermoreCompton : Emin=    0 eV  Emax=  100 TeV Fluo
+    LivermoreCompton : Emin=    0 meV Emax=  100 TeV Fluo
 
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermoreConversion : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+ LivermoreConversion : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
       Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
       LambdaPrime table from 100 keV to 100 TeV in 63 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+   LivermoreRayleigh : Emin=    0 meV Emax=  100 TeV  CullenGenerator
 
 e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=   10 eV 
+DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 meV Emax=   10 eV 
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAUeharaScreenedRutherfordElasticModel : Emin=    0 eV  Emax=    1 MeV
+DNAUeharaScreenedRutherfordElasticModel : Emin=    0 meV Emax=    1 MeV
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAEmfietzoglouExcitationModel : Emin=    0 eV  Emax=   10 keV
+DNAEmfietzoglouExcitationModel : Emin=    0 meV Emax=   10 keV
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAEmfietzoglouIonisationModel : Emin=    0 eV  Emax=   10 keV  deltaBorn Fluo
+DNAEmfietzoglouIonisationModel : Emin=    0 meV Emax=   10 keV  deltaBorn Fluo
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e+  SubType=2
+eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+        MollerBhabha : Emin=    0 meV Emax=  100 TeV
 
-eBrem:  for e+  SubType=3
+eBrem:  for e+  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+             eBremSB : Emin=    0 meV Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 
-annihil:  for e+, integral:1  SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+            eplus2gg : Emin=    0 meV Emax=  100 TeV
 
 proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  500 keV
 DNABornExcitationModel : Emin=  500 keV Emax=  100 MeV
 
 proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
+DNARuddIonisationModel : Emin=    0 meV Emax=  500 keV  deltaRudd Fluo
 DNABornIonisationModel : Emin=  500 keV Emax=  100 MeV  deltaBorn Fluo
 
 proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  100 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 meV Emax=  100 MeV
 
 GenericIon_G4DNAIonisation:  for GenericIon SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=    1 TeV  deltaRudd Fluo
+DNARuddIonisationExtendedModel : Emin=    0 meV Emax=    1 TeV  deltaRudd Fluo
 
 alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  400 MeV
 
 alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+DNARuddIonisationModel : Emin=    0 meV Emax=  400 MeV  deltaRudd Fluo
 
 alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 meV Emax=  400 MeV
 
 alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  400 MeV
 
 alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+DNARuddIonisationModel : Emin=    0 meV Emax=  400 MeV  deltaRudd Fluo
 
 alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  400 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 meV Emax=  400 MeV
 
 alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 meV Emax=  400 MeV
 
 helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  400 MeV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  400 MeV
 
 helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  400 MeV  deltaRudd Fluo
+DNARuddIonisationModel : Emin=    0 meV Emax=  400 MeV  deltaRudd Fluo
 
 helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  400 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 meV Emax=  400 MeV
 
 hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  500 keV
 
 hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  100 MeV  deltaRudd Fluo
+DNARuddIonisationModel : Emin=    0 meV Emax=  100 MeV  deltaRudd Fluo
 
 hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  100 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 meV Emax=  100 MeV
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 
@@ -267,7 +273,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 210.526 eV  +- 856.298 eV 
 
- Total Energy deposited        = 12.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 12.000 eV  +- 0.002 meV
 
  Track length of primary track = 11.005 nm  +- 10.740 nm 
  Projected range               = 1.934 Ang +- 1.438 nm 
@@ -287,7 +293,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 66.372 eV  +- 122.828 eV 
 
- Total Energy deposited        = 15.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 15.000 eV  +- 0.002 meV
 
  Track length of primary track = 8.407 nm  +- 7.666 nm 
  Projected range               = 2.887 Ang +- 1.296 nm 
@@ -307,7 +313,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 41.408 eV  +- 42.841 eV 
 
- Total Energy deposited        = 20.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 20.000 eV  +- 0.003 meV
 
  Track length of primary track = 11.562 nm  +- 13.405 nm 
  Projected range               = 3.431 Ang +- 1.546 nm 
@@ -327,7 +333,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 31.088 eV  +- 14.895 eV 
 
- Total Energy deposited        = 30.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 30.000 eV  +- 0.004 meV
 
  Track length of primary track = 11.799 nm  +- 10.840 nm 
  Projected range               = 4.119 Ang +- 1.617 nm 
@@ -347,7 +353,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 28.229 eV  +- 11.254 eV 
 
- Total Energy deposited        = 40.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 40.000 eV  +- 0.007 meV
 
  Track length of primary track = 11.878 nm  +- 10.474 nm 
  Projected range               = 5.588 Ang +- 1.654 nm 
@@ -367,7 +373,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 27.159 eV  +- 8.897 eV 
 
- Total Energy deposited        = 50.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 50.000 eV  +- 0.000 meV
 
  Track length of primary track = 13.209 nm  +- 10.275 nm 
  Projected range               = 6.614 Ang +- 1.849 nm 
@@ -387,7 +393,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 26.098 eV  +- 7.441 eV 
 
- Total Energy deposited        = 60.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 60.000 eV  +- 0.008 meV
 
  Track length of primary track = 13.360 nm  +- 11.404 nm 
  Projected range               = 9.811 Ang +- 1.864 nm 
@@ -407,7 +413,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 25.473 eV  +- 6.545 eV 
 
- Total Energy deposited        = 70.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 70.000 eV  +- 0.000 meV
 
  Track length of primary track = 14.589 nm  +- 11.619 nm 
  Projected range               = 9.734 Ang +- 2.102 nm 
@@ -427,7 +433,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 24.669 eV  +- 5.862 eV 
 
- Total Energy deposited        = 80.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 80.000 eV  +- 0.013 meV
 
  Track length of primary track = 14.150 nm  +- 11.072 nm 
  Projected range               = 1.047 nm  +- 2.109 nm 
@@ -447,7 +453,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 24.637 eV  +- 5.209 eV 
 
- Total Energy deposited        = 90.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 90.000 eV  +- 0.000 meV
 
  Track length of primary track = 14.632 nm  +- 10.234 nm 
  Projected range               = 1.126 nm  +- 2.154 nm 
@@ -467,7 +473,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 24.414 eV  +- 4.903 eV 
 
- Total Energy deposited        = 100.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 100.000 eV  +- 0.000 meV
 
  Track length of primary track = 15.009 nm  +- 10.450 nm 
  Projected range               = 1.052 nm  +- 2.380 nm 
@@ -487,7 +493,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 23.318 eV  +- 3.185 eV 
 
- Total Energy deposited        = 200.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 200.000 eV  +- 0.000 meV
 
  Track length of primary track = 20.744 nm  +- 11.606 nm 
  Projected range               = 2.832 nm  +- 3.429 nm 
@@ -507,7 +513,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 23.109 eV  +- 2.551 eV 
 
- Total Energy deposited        = 300.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 300.000 eV  +- 0.000 meV
 
  Track length of primary track = 25.991 nm  +- 12.094 nm 
  Projected range               = 4.225 nm  +- 4.530 nm 
@@ -527,7 +533,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 23.073 eV  +- 2.181 eV 
 
- Total Energy deposited        = 400.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 400.000 eV  +- 0.000 meV
 
  Track length of primary track = 31.192 nm  +- 12.359 nm 
  Projected range               = 6.767 nm  +- 5.983 nm 
@@ -547,7 +553,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 22.899 eV  +- 1.881 eV 
 
- Total Energy deposited        = 500.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 500.000 eV  +- 0.059 meV
 
  Track length of primary track = 38.362 nm  +- 13.660 nm 
  Projected range               = 9.194 nm  +- 8.102 nm 
@@ -567,7 +573,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 22.896 eV  +- 1.744 eV 
 
- Total Energy deposited        = 600.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 600.000 eV  +- 0.000 meV
 
  Track length of primary track = 45.236 nm  +- 14.937 nm 
  Projected range               = 11.827 nm  +- 9.637 nm 
@@ -587,7 +593,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 22.824 eV  +- 1.619 eV 
 
- Total Energy deposited        = 700.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 700.000 eV  +- 0.040 meV
 
  Track length of primary track = 52.930 nm  +- 16.589 nm 
  Projected range               = 14.870 nm  +- 12.387 nm 
@@ -607,7 +613,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 22.866 eV  +- 1.531 eV 
 
- Total Energy deposited        = 800.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 800.000 eV  +- 0.000 meV
 
  Track length of primary track = 61.521 nm  +- 17.703 nm 
  Projected range               = 17.864 nm  +- 14.364 nm 
@@ -627,7 +633,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 22.739 eV  +- 1.431 eV 
 
- Total Energy deposited        = 900.000 eV  +- 0.000 eV 
+ Total Energy deposited        = 900.000 eV  +- 0.000 meV
 
  Track length of primary track = 68.839 nm  +- 20.072 nm 
  Projected range               = 21.323 nm  +- 16.567 nm 
@@ -647,7 +653,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 
  w = 22.806 eV  +- 1.397 eV 
 
- Total Energy deposited        = 1.000 keV +- 0.000 eV 
+ Total Energy deposited        = 1.000 keV +- 0.118 meV
 
  Track length of primary track = 78.702 nm  +- 21.160 nm 
  Projected range               = 26.391 nm  +- 19.549 nm 

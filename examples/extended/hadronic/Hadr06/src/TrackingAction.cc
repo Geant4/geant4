@@ -35,6 +35,7 @@
 #include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "TrackingMessenger.hh"
 
 #include "G4RunManager.hh"
 #include "G4Track.hh"
@@ -47,27 +48,41 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(EventAction* event)
-:G4UserTrackingAction(), fEventAction(event)
-{ }
+:G4UserTrackingAction(), fEventAction(event), fTrackMessenger(nullptr),
+ fParticleCount(true) , fKillNeutron(false)
+{   
+  fTrackMessenger = new TrackingMessenger(this);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TrackingAction::~TrackingAction()
+{
+  delete fTrackMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {  
   //count secondary particles
-  if (track->GetTrackID() == 1) return;  
-  G4String name   = track->GetDefinition()->GetParticleName();
-  G4double energy = track->GetKineticEnergy();
+  if (track->GetTrackID() == 1) return;
+    
   Run* run = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun());    
-  run->ParticleCount(name,energy);
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+	
+  const G4ParticleDefinition* particle = track->GetParticleDefinition();
+  G4String name     = particle->GetParticleName();
+  G4double meanLife = particle->GetPDGLifeTime();
+  G4double energy   = track->GetKineticEnergy();
+  if (fParticleCount && (meanLife != 0.))  
+     run->ParticleCount(name,energy,meanLife);
        
   // histograms: energy at creation
   //
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
  
   G4int ih = 0;
-  const G4ParticleDefinition* particle = track->GetParticleDefinition(); 
   G4String type   = particle->GetParticleType();      
   G4double charge = particle->GetPDGCharge();
   if (charge > 3.)  ih = 10; 
@@ -85,11 +100,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   if (ih > 0) analysis->FillH1(ih,energy);
    
   //to force only 1 fission : kill secondary neutrons
-  ///if (particle == G4Neutron::Neutron()) {
-  ///  fEventAction->AddEdep(energy);  
-  ///  G4Track* aTrack = (G4Track*)track;
-  ///  aTrack->SetTrackStatus(fStopAndKill);
-  ///}
+  if (fKillNeutron && (particle == G4Neutron::Neutron())) {
+    fEventAction->AddEdep(energy);  
+    G4Track* aTrack = (G4Track*)track;
+    aTrack->SetTrackStatus(fStopAndKill);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

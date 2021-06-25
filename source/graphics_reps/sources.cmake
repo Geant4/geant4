@@ -1,13 +1,7 @@
-#------------------------------------------------------------------------------
-# Module : G4graphics_reps
-# Package: Geant4.src.G4graphics_reps
-#------------------------------------------------------------------------------
+# - G4graphics_reps module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4graphics_reps
-  HEADERS
+geant4_add_module(G4graphics_reps
+  PUBLIC_HEADERS
     G4AttCheck.hh
     G4AttDef.hh
     G4AttDefStore.hh
@@ -79,14 +73,7 @@ geant4_define_module(NAME G4graphics_reps
     G4VisExtent.cc
     G4Visible.cc
     HepPolyhedron.cc
-    HepPolyhedronProcessor.src
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-  LINK_LIBRARIES
-)
+    HepPolyhedronProcessor.src)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4graphics_reps PUBLIC G4globman G4hepgeometry G4intercoms)
+

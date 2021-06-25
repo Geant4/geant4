@@ -35,15 +35,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4bRunData::B4bRunData() 
+B4bRunData::B4bRunData()
  : G4Run(),
    fVolumeNames{ { "Absorber", "Gap" } }
 {
-  for ( auto& edep : fEdep ) { 
-    edep = 0.; 
+  for ( auto& edep : fEdep ) {
+    edep = 0.;
   }
   for ( auto& trackLength : fTrackLength ) {
-    trackLength = 0.; 
+    trackLength = 0.;
   }
 }
 
@@ -69,19 +69,19 @@ void B4bRunData::FillPerEvent()
   for ( auto trackLength : fTrackLength ) {
     analysisManager->FillH1(counter, trackLength);
     analysisManager->FillNtupleDColumn(counter++, trackLength);
-  }  
-  analysisManager->AddNtupleRow();  
+  }
+  analysisManager->AddNtupleRow();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4bRunData::Reset()
-{ 
-  for ( auto& edep : fEdep ) { 
-    edep = 0.; 
+{
+  for ( auto& edep : fEdep ) {
+    edep = 0.;
   }
   for ( auto& trackLength : fTrackLength ) {
-    trackLength = 0.; 
+    trackLength = 0.;
   }
 }
 

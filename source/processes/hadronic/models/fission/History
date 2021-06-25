@@ -13,6 +13,23 @@ code and to keep track of all tags.
     ---------------------------------------------------------------
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
+
+16 April 2021 Ben Morgan (hadr-fission-V10-07-02)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+03 May 2021  Vladimir Ivanchenko (hadr-fission-V10-07-01)
+---------------------------------------------------------
+- G4LFission - removed unused headers
+
+13 April 2021  Alberto Ribon  (hadr-fission-V10-07-00)
+------------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
+
 30 April 2020  B. Morgan    (hadr-fission-V10-06-00)
 ----------------------------------------------------
 -  Remove obsolete GRANULAR_DEPENDENCIES entries

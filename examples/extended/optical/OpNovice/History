@@ -13,6 +13,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 9, 2021 H. Wenzel (OpNovice-V10-07-03)
+- add option to define detector via a gdml file
+- add outer world volume to avoid surfaces including world volume.
+
+May 21, 2021 D. Sawkey (OpNovice-V10-07-02)
+- fix incorrect material property name
+
+March 30, 2021 D. Sawkey (OpNovice-V10-07-01)
+- Excercise creating material property table element by element
+  (testing fix of bug 2313).
+
+February 24, 2021 D. Sawkey (OpNovice-V10-07-00)
+- Replace deprecated optical commands and parameters with new ones.
 
 November 1, 2020 D. Sawkey (OpNovice-V10-06-01)
 - Print out process statistics at end of run. Added EventAction and Run

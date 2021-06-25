@@ -1,0 +1,215 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_Cocoa_session_hm
+#define tools_Cocoa_session_hm
+
+#include <Cocoa/Cocoa.h>
+
+namespace tools {
+namespace Cocoa {
+
+class isession {
+public:
+  virtual ~isession(){}
+public:
+  virtual void terminate() = 0;
+};
+
+}}
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1050
+@interface tools_Cocoa_session_app_delegate : NSObject {
+#else
+@interface tools_Cocoa_session_app_delegate : NSObject<NSApplicationDelegate> {
+#endif
+  NSApplication* m_app;
+  tools::Cocoa::isession* m_session;
+}
+- (id)init:(NSApplication*)a_app;
+- (void)dealloc;
+- (void)applicationDidFinishLaunching:(NSNotification*)a_notification;
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)a_app;
+- (void)set_session:(tools::Cocoa::isession*)a_session;
+@end
+@implementation tools_Cocoa_session_app_delegate
+- (id)init:(NSApplication*)a_app {
+  if(self = [super init]) {}
+  m_app = a_app;
+  m_session = 0;
+  return self;
+}
+- (void)dealloc {[super dealloc];}
+- (void)applicationDidFinishLaunching:(NSNotification*)a_notification {
+  [m_app activateIgnoringOtherApps:YES];
+}
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)a_app {
+  if(m_session) m_session->terminate();
+  return NSTerminateNow;
+}
+- (void)set_session:(tools::Cocoa::isession*)a_session {
+  m_session = a_session;
+}
+@end
+
+#include <ostream>
+
+namespace tools {
+namespace Cocoa {
+
+class session : public virtual isession {
+  typedef isession parent;
+public:
+  virtual void terminate() {}
+public:
+  session(std::ostream& a_out)
+  :m_out(a_out),m_pool(0),m_app(0),m_to_exit(false)
+  {
+    m_pool = [[NSAutoreleasePool alloc] init];
+    m_app = [NSApplication sharedApplication];
+
+    tools_Cocoa_session_app_delegate* app_del = [[tools_Cocoa_session_app_delegate alloc] init:m_app];
+    [m_app setDelegate:app_del];
+    [app_del set_session:this];
+
+    [m_app setActivationPolicy:NSApplicationActivationPolicyRegular]; //so that change of NSCursor works.
+    //[m_app activateIgnoringOtherApps:YES]; //done in the app_delegate, so that menu works at startup.
+
+   {id menubar = [[NSMenu new] autorelease];
+    id appMenuItem = [[NSMenuItem new] autorelease];
+    [menubar addItem:appMenuItem];
+    id appMenu = [[NSMenu new] autorelease];
+    id appName = [[NSProcessInfo processInfo] processName];
+    id quitTitle = [@"Quit " stringByAppendingString:appName];
+    id quitMenuItem = [[[NSMenuItem alloc] initWithTitle:quitTitle action:@selector(terminate:) keyEquivalent:@"q"] autorelease];
+    [appMenu addItem:quitMenuItem];
+    [appMenuItem setSubmenu:appMenu];
+    [m_app setMainMenu:menubar];}
+  }
+  virtual ~session() {
+    [m_pool release];
+  }
+protected:
+  session(const session& a_from):parent(a_from),m_out(a_from.m_out),m_pool(0),m_app(0),m_to_exit(false) {}
+  session& operator=(const session&){return *this;}
+public:
+  std::ostream& out() const {return m_out;}
+  bool is_valid() const {return true;}
+  bool steer() {
+    if(!m_app) return false;
+    m_to_exit = false;
+    NSDate* date = [NSDate distantFuture]; //it will permit to block on the below.
+    while(!m_to_exit) {
+      NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060   //macarts.
+      NSEvent* event = [m_app nextEventMatchingMask:NSAnyEventMask
+#else
+      NSEvent* event = [m_app nextEventMatchingMask:NSEventMaskAny
+#endif
+                             untilDate:date inMode:NSDefaultRunLoopMode dequeue:YES];
+      if(event) {
+        [m_app sendEvent:event];
+        [m_app updateWindows];
+      }
+      [pool release];
+    }
+    return true;
+  }
+
+  bool sync() {
+    if(!m_app) return false;
+    NSDate* date = [NSDate distantPast];   //not blocking.
+  //NSDate* date = [NSDate distantFuture]; //blocking.
+    while(true) {
+      NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060   //macarts.
+      NSEvent* event = [m_app nextEventMatchingMask:NSAnyEventMask
+#else
+      NSEvent* event = [m_app nextEventMatchingMask:NSEventMaskAny
+#endif
+                             untilDate:date inMode:NSDefaultRunLoopMode dequeue:YES];
+      if(event) {
+        [m_app sendEvent:event];
+        [m_app updateWindows];
+      }
+      [pool release];
+      if(!event) break;
+    }
+    return true;
+  }
+
+public:
+  NSWindow* create_window(const char* a_title,int a_x,int a_y,unsigned int a_width,unsigned int a_height) {
+    if(!m_app) return 0L;
+
+    NSScreen* screen = 0;
+   {unsigned int monitor = 0;
+    NSArray* scrs = [NSScreen screens];
+    int number = [scrs count];
+    if(int(monitor)<number) {
+      screen = (NSScreen*)[scrs objectAtIndex:monitor];
+    }}
+
+    NSRect screen_rect = [screen frame];
+
+    // origin = bottom, left.
+    NSRect rect;
+    rect.origin.x = a_x;
+    rect.origin.y = screen_rect.size.height-(a_y+a_height),
+    rect.size.width = a_width;
+    rect.size.height = a_height;
+    //if(args.is_arg("-no_decos")) {
+    //  rect.origin.y -= 23; //size of APPLE menubar.
+    //}
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1060   //macarts.
+    unsigned int mask = NSTitledWindowMask;
+    mask |= NSResizableWindowMask;
+    mask |= NSClosableWindowMask;
+    mask |= NSMiniaturizableWindowMask;
+#else
+    unsigned int mask = NSWindowStyleMaskTitled;
+    mask |= NSWindowStyleMaskResizable;
+    mask |= NSWindowStyleMaskClosable;
+    mask |= NSWindowStyleMaskMiniaturizable;
+#endif
+    //if(args.is_arg("-no_decos")) mask = 0;
+    NSWindow* window = [[NSWindow alloc] initWithContentRect:rect styleMask:mask backing:NSBackingStoreBuffered
+                                                       defer:NO /*we are the owner.*/ screen:screen];
+    NSString* title = [NSString stringWithUTF8String:a_title];
+    [window setTitle:title];
+    [window setShowsResizeIndicator:YES];
+    [window setAcceptsMouseMovedEvents:YES];
+
+    return window;
+  }
+
+  void delete_window(NSWindow* a_window) const {
+    if(!m_app) return;
+    if([a_window isReleasedWhenClosed]==YES) {
+      [a_window close];
+    } else {
+      [a_window close];
+      [a_window release];
+    }
+  }
+
+  void show_window(NSWindow* a_window){
+    if(!m_app) return;
+    [a_window makeKeyAndOrderFront:m_app];
+    [m_app finishLaunching];
+  }
+
+public: //not in SWIG.
+  void set_to_exit() {m_to_exit = true;}
+  bool to_exit() const {return m_to_exit;}
+protected:
+  std::ostream& m_out;
+  NSAutoreleasePool* m_pool;
+  NSApplication* m_app;
+  bool m_to_exit;
+};
+
+}}
+
+#endif

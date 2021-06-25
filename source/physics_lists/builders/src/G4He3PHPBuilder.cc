@@ -45,7 +45,7 @@ Build(G4HadronElasticProcess *)
 }
 
 void G4He3PHPBuilder::
-Build(G4He3InelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   G4ParticleHPInelasticData* theHe3HPInelasticData=new G4ParticleHPInelasticData(G4He3::He3());
   theHe3HPInelasticData->SetMinKinEnergy(theMin);

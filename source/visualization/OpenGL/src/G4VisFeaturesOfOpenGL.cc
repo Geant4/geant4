@@ -98,8 +98,3 @@ G4String G4VisFeaturesOfOpenGLSQt () {
   return
     "\n It runs everywhere ";
 }
-
-G4String G4VisFeaturesOfOpenGLIWt () {
-  return
-    "\n It runs everywhere";
-}

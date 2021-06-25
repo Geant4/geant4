@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4event
-# Package: Geant4.src.G4event
-#------------------------------------------------------------------------------
+# - G4event module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4event
-  HEADERS
+geant4_add_module(G4event
+  PUBLIC_HEADERS
     G4AdjointPosOnPhysVolGenerator.hh
     G4AdjointPrimaryGenerator.hh
     G4AdjointStackingAction.hh
@@ -72,48 +67,30 @@ geant4_define_module(NAME G4event
     G4UserEventAction.cc
     G4MultiEventAction.cc
     G4UserStackingAction.cc
-    G4VPrimaryGenerator.cc
-  GRANULAR_DEPENDENCIES
-    G4baryons
-    G4bosons
-    G4detector
-    G4digits
-    G4emutils
-    G4geombias
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4hits
-    G4intercoms
-    G4ions
-    G4leptons
-    G4materials
-    G4mesons
-    G4navigation
-    G4partman
-    G4procman
-    G4track
-    G4tracking
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4particles
-    G4processes
-    G4track
-    G4tracking
-  LINK_LIBRARIES
-    ${timemory_LIBRARIES}
-)
+    G4VPrimaryGenerator.cc)
 
-# List any source specific properties here
 # Enable smart stack
 if(GEANT4_USE_SMARTSTACK)
   geant4_module_compile_definitions(G4event PUBLIC G4_USESMARTSTACK)
 endif()
 
+geant4_module_link_libraries(G4event
+  PUBLIC
+    G4track
+    G4tracking
+    G4digits
+    G4hits
+    G4partman
+    G4geometrymng
+    G4navigation
+    G4intercoms
+    G4hepnumerics
+    G4globman
+    ${timemory_LIBRARIES}
+  PRIVATE
+    G4procman
+    G4bosons
+    G4detector
+    G4graphics_reps
+    G4materials
+    G4heprandom)

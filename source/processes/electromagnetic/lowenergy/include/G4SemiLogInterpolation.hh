@@ -39,7 +39,6 @@
 // Log-Log interpolation of a data set
 // Part of a strategy pattern to encapsulate algorithms for interpolation of data sets
 // Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
-
 // -------------------------------------------------------------------
 
 #ifndef G4SEMILOGINTERPOLATION_HH
@@ -50,29 +49,22 @@
 #include "G4DataVector.hh"
 
 class G4SemiLogInterpolation : public G4VDataSetAlgorithm {
- 
-public:
-
-  G4SemiLogInterpolation();
+ public:
+  explicit G4SemiLogInterpolation();
 
   ~G4SemiLogInterpolation();
  
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
-		     const G4DataVector& data) const;
+		     const G4DataVector& data) const override;
 
   G4double Calculate(G4double point, G4int bin,
                      const G4DataVector& energies,
                      const G4DataVector& data, 
 		     const G4DataVector& log_energies, 
-		     const G4DataVector& log_data) const;
+		     const G4DataVector& log_data) const override;
 
-  virtual G4VDataSetAlgorithm* Clone() const;
-
-private:
-
-  
-  // Hide copy constructor and assignment operator
+  G4VDataSetAlgorithm* Clone() const override;
 
 };
  

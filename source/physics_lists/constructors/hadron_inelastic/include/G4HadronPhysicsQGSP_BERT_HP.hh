@@ -50,7 +50,7 @@ class G4HadronPhysicsQGSP_BERT_HP : public G4HadronPhysicsQGSP_BERT
   public: 
     G4HadronPhysicsQGSP_BERT_HP(G4int verbose =1);
     G4HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool quasiElastic=true);
-    ~G4HadronPhysicsQGSP_BERT_HP() override {}
+    virtual ~G4HadronPhysicsQGSP_BERT_HP() {}
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsQGSP_BERT_HP(G4HadronPhysicsQGSP_BERT_HP &) = delete;

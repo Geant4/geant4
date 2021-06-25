@@ -7,12 +7,24 @@
       History file for the Electromagnetic Dissociation model
       -------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+16 April 2021 - Ben Morgan (hadr-emd-V10-07-01)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021 - Alberto Ribon  (hadr-emd-V10-07-00)
+-----------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 24 November 2020 - Alberto Ribon  (hadr-emd-V10-06-00)
 -----------------------------------------------------
@@ -23,7 +35,7 @@ code and to keep track of all tags.
 
 07 March 2017 - Vladimir Ivanchenko  (hadr-emd-V10-03-00)
 -----------------------------------------------------
-- G4EMDissociation.cc : removed explicit instantiation of 
+- G4EMDissociation.cc : removed explicit instantiation of
     FermiBreakUp, Evaporation and MultiFragmentation models
 
 13 August 2015 - Alberto Ribon  (hadr-emd-V10-01-01)

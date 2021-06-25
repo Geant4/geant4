@@ -23,81 +23,81 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -----------------------------------------------------------------------------
-//
-// GEANT4 Class file
 //
 // File name:     G4eAdjointMultipleScattering
 //
 // Author:        Vladimir Ivanchenko
 //
 // Creation date: 10 March 2008
-// 
-// Modifications:
 //
 // -----------------------------------------------------------------------------
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eAdjointMultipleScattering.hh"
-#include "G4UrbanAdjointMscModel.hh"
-#include "G4MscStepLimitType.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+
 #include "G4DynamicParticle.hh"
+#include "G4Electron.hh"
+#include "G4MscStepLimitType.hh"
+#include "G4UrbanAdjointMscModel.hh"
+#include "G4VMultipleScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
-
-G4eAdjointMultipleScattering::G4eAdjointMultipleScattering(const G4String& processName)
+G4eAdjointMultipleScattering::G4eAdjointMultipleScattering(
+  const G4String& processName)
   : G4VMultipleScattering(processName)
-{
-  isInitialized = false;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4eAdjointMultipleScattering::~G4eAdjointMultipleScattering()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4eAdjointMultipleScattering::~G4eAdjointMultipleScattering() {}
 
-G4bool G4eAdjointMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4eAdjointMultipleScattering::ProcessDescription(std::ostream& out) const
+{
+  out << "Inverse multiple scattering for e-.\n";
+  StreamProcessInfo(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool G4eAdjointMultipleScattering::IsApplicable(const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4eAdjointMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
+void G4eAdjointMultipleScattering::InitialiseProcess(
+  const G4ParticleDefinition*)
 {
-  if(isInitialized) { return; }
-  if(!EmModel(0)) { SetEmModel(new G4UrbanAdjointMscModel(), 0); }
+  if(fIsInitialized)
+  {
+    return;
+  }
+  if(EmModel(0) == nullptr)
+  {
+    SetEmModel(new G4UrbanAdjointMscModel());
+  }
   AddEmModel(1, EmModel(0));
-  isInitialized = true;
+  fIsInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4eAdjointMultipleScattering::PrintInfo()
+void G4eAdjointMultipleScattering::StreamProcessInfo(std::ostream& out) const
 {
-  G4cout << "      RangeFactor= " << RangeFactor()
-	 << ", stepLimitType: " << StepLimitType()
-         << ", latDisplacement: " << LateralDisplasmentFlag();
-  if(StepLimitType() == fUseDistanceToBoundary) {
-    G4cout  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
-  }  
-  G4cout << G4endl;
+  out << "      RangeFactor= " << RangeFactor()
+      << ", stepLimType: " << StepLimitType()
+      << ", latDisp: " << LateralDisplasmentFlag();
+  if(StepLimitType() == fUseDistanceToBoundary)
+  {
+    out << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
+  }
+  out << "\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4eAdjointMultipleScattering::StartTracking(G4Track* )
-{   G4DynamicParticle* aDynPart = new  G4DynamicParticle(G4Electron::Electron(), G4ThreeVector(0.,0.,1.),1.);
-	G4Track* tempTrack = new G4Track(aDynPart,0.,G4ThreeVector(0.,0.,0.));
-	G4VMultipleScattering::StartTracking( tempTrack);
-	delete tempTrack;
+void G4eAdjointMultipleScattering::StartTracking(G4Track*)
+{
+  G4DynamicParticle* aDynPart = new G4DynamicParticle(
+    G4Electron::Electron(), G4ThreeVector(0., 0., 1.), 1.);
+  G4Track* tempTrack = new G4Track(aDynPart, 0., G4ThreeVector(0., 0., 0.));
+  G4VMultipleScattering::StartTracking(tempTrack);
+  delete tempTrack;
 }

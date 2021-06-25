@@ -22,6 +22,7 @@
 #
 /process/em/verbose 1
 /process/em/workerVerbose 0
+/process/em/printParameters
 /run/initialize
 #
 /gun/particle e-

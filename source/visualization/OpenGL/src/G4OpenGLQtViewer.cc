@@ -3352,6 +3352,16 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(
   catch (const std::bad_cast&) {
     color = fSceneHandler.GetColour();
   }
+
+  // Special case for marker
+  try {
+    const G4VMarker& g4Marker = dynamic_cast<const G4VMarker&>(visible);
+    if (g4Marker.GetInfo() != "") {
+      modelShortName = g4Marker.GetInfo();
+    }
+  }
+  catch (const std::bad_cast&) {}
+
   if (modelShortName == "") {
     return ;
   }

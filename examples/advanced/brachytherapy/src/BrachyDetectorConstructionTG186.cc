@@ -38,9 +38,9 @@
 //    ****************************************
 //
 //
+#include "BrachyDetectorConstructionTG186.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyDetectorConstructionTG186.hh"
 #include "G4Sphere.hh"
 #include "G4RunManager.hh"
 #include "G4Box.hh"
@@ -51,12 +51,11 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4TransportationManager.hh"
-#include "BrachyMaterial.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4NistManager.hh"
 
-BrachyDetectorConstructionTG186::BrachyDetectorConstructionTG186()
-  : 
+BrachyDetectorConstructionTG186::BrachyDetectorConstructionTG186(): 
    fTG186capsule(nullptr), fTG186capsuleLog(nullptr),
    fTG186capsulePhys(nullptr),
    fTG186capsuleTip(nullptr), fTG186capsuleTipLog(nullptr),
@@ -67,22 +66,34 @@ BrachyDetectorConstructionTG186::BrachyDetectorConstructionTG186()
    fTG186cablePhys(nullptr),
    fTG186simpleCapsuleVisAtt(nullptr), fTG186simpleCapsuleTipVisAtt(nullptr), fTG186simpleIridiumVisAtt(nullptr),
    fTG186simpleCableVisAtt(nullptr)
-{
-  fMat = new BrachyMaterial();
-}
+{}
 
 BrachyDetectorConstructionTG186::~BrachyDetectorConstructionTG186()
-{ 
-  delete fMat; 
-}
+{}
 
 void BrachyDetectorConstructionTG186::ConstructTG186(G4VPhysicalVolume* mother)
 {
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
 
-  G4Material* capsuleMat = fMat -> GetMat("Stainless steel");
-  G4Material* iridiumMat = fMat -> GetMat("Iridium");
+  G4NistManager* nist = G4NistManager::Instance();
+  G4Material* iridium = nist -> FindOrBuildMaterial("G4_Ir");
+ 
+  // Stainless steel (Medical Physics, Vol 25, No 10, Oct 1998)
+  constexpr G4double d = 8.02*g/cm3;
+  G4int Z; //atomic number of the element
+  G4Element* elMn = nist -> FindOrBuildElement(Z=12);
+  G4Element* elSi = nist -> FindOrBuildElement(Z=14);
+  G4Element* elCr = nist -> FindOrBuildElement(Z=24);
+  G4Element* elFe = nist -> FindOrBuildElement(Z=26);
+  G4Element* elNi = nist -> FindOrBuildElement(Z=28);
+  G4Material* capsuleMat = new G4Material("Stainless steel",d,5);
+  capsuleMat -> AddElement(elMn, 0.02);
+  capsuleMat -> AddElement(elSi, 0.01);
+  capsuleMat -> AddElement(elCr, 0.19);
+  capsuleMat -> AddElement(elNi, 0.10);
+  capsuleMat -> AddElement(elFe, 0.68);
+  
 
   // Capsule main body
   fTG186capsule = new G4Tubs("TG186-Capsule",0,0.5*mm,2.25*mm,0.*deg,360.*deg);
@@ -107,6 +118,7 @@ void BrachyDetectorConstructionTG186::ConstructTG186(G4VPhysicalVolume* mother)
   fTG186capsuleTipLog = new G4LogicalVolume(fTG186capsuleTip,
                                       capsuleMat,
                                       "CapsuleTipIridumLog");
+                                      
   fTG186capsuleTipPhys = new G4PVPlacement(nullptr,
                                      G4ThreeVector(0.,0.,1.85*mm),
                                      "TG186-CapsuleTipIridiumPhys",
@@ -138,7 +150,7 @@ void BrachyDetectorConstructionTG186::ConstructTG186(G4VPhysicalVolume* mother)
   fTG186iridiumCore = new G4Tubs("TG186-IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
   
   fTG186iridiumCoreLog = new G4LogicalVolume(fTG186iridiumCore,
-                                       iridiumMat,
+                                       iridium,
                                        "TG186-IridiumCoreLog");
                                        
   fTG186iridiumCorePhys = new G4PVPlacement(nullptr,

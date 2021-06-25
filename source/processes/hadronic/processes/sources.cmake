@@ -1,156 +1,58 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4hadronic_proc
-# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_proc
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitly.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - G4hadronic_proc module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
-    HEADERS
-        G4AlphaInelasticProcess.hh
-        G4AntiAlphaInelasticProcess.hh
-        G4AntiDeuteronInelasticProcess.hh
-        G4AntiHe3InelasticProcess.hh
-        G4AntiLambdaInelasticProcess.hh
-        G4AntiNeutronInelasticProcess.hh
-        G4AntiOmegaMinusInelasticProcess.hh
-        G4AntiProtonInelasticProcess.hh
-        G4AntiSigmaMinusInelasticProcess.hh
-        G4AntiSigmaPlusInelasticProcess.hh
-        G4AntiTritonInelasticProcess.hh
-        G4AntiXiMinusInelasticProcess.hh
-        G4AntiXiZeroInelasticProcess.hh
-        G4DeuteronInelasticProcess.hh
-        G4ElectronNuclearProcess.hh
-	G4ElNeutrinoNucleusProcess.hh
-        G4HadronCaptureProcess.hh
-        G4HadronElasticProcess.hh
-        G4HadronFissionProcess.hh
-        G4He3InelasticProcess.hh
-        G4IonInelasticProcess.hh
-        G4KaonMinusInelasticProcess.hh
-        G4KaonPlusInelasticProcess.hh
-        G4KaonZeroLInelasticProcess.hh
-        G4KaonZeroSInelasticProcess.hh
-        G4LambdaInelasticProcess.hh
-	G4MuNeutrinoNucleusProcess.hh
-        G4MuonNuclearProcess.hh
-        G4NeutrinoElectronProcess.hh
-        G4NeutronInelasticProcess.hh
-        G4OmegaMinusInelasticProcess.hh
-	G4PhotoCaptureProcess.hh
-	G4PhotoFissionProcess.hh
-        G4PhotoNuclearProcess.hh
-        G4PionMinusInelasticProcess.hh
-        G4PionPlusInelasticProcess.hh
-        G4PositronNuclearProcess.hh
-        G4ProtonInelasticProcess.hh
-        G4SigmaMinusInelasticProcess.hh
-        G4SigmaPlusInelasticProcess.hh
-        G4TritonInelasticProcess.hh
-        G4UCNProcessSubType.hh
-        G4UCNBoundaryProcess.hh
-        G4UCNBoundaryProcessMessenger.hh
-        G4UCNLoss.hh
-        G4UCNAbsorption.hh
-        G4UCNMultiScattering.hh
-        G4XiMinusInelasticProcess.hh
-        G4XiZeroInelasticProcess.hh
-    SOURCES
-        G4AlphaInelasticProcess.cc
-        G4AntiAlphaInelasticProcess.cc
-        G4AntiDeuteronInelasticProcess.cc
-        G4AntiHe3InelasticProcess.cc
-        G4AntiLambdaInelasticProcess.cc
-        G4AntiNeutronInelasticProcess.cc
-        G4AntiOmegaMinusInelasticProcess.cc
-        G4AntiProtonInelasticProcess.cc
-        G4AntiSigmaMinusInelasticProcess.cc
-        G4AntiSigmaPlusInelasticProcess.cc
-        G4AntiTritonInelasticProcess.cc
-        G4AntiXiMinusInelasticProcess.cc
-        G4AntiXiZeroInelasticProcess.cc
-        G4DeuteronInelasticProcess.cc
-	G4ElNeutrinoNucleusProcess.cc
-        G4ElectronNuclearProcess.cc
-        G4HadronCaptureProcess.cc
-        G4HadronElasticProcess.cc
-        G4HadronFissionProcess.cc
-        G4He3InelasticProcess.cc
-        G4IonInelasticProcess.cc
-        G4KaonMinusInelasticProcess.cc
-        G4KaonPlusInelasticProcess.cc
-        G4KaonZeroLInelasticProcess.cc
-        G4KaonZeroSInelasticProcess.cc
-        G4LambdaInelasticProcess.cc
-	G4MuNeutrinoNucleusProcess.cc
-        G4MuonNuclearProcess.cc
-        G4NeutrinoElectronProcess.cc
-        G4NeutronInelasticProcess.cc
-        G4OmegaMinusInelasticProcess.cc
-	G4PhotoCaptureProcess.cc
-	G4PhotoFissionProcess.cc
-        G4PhotoNuclearProcess.cc
-        G4PionMinusInelasticProcess.cc
-        G4PionPlusInelasticProcess.cc
-        G4PositronNuclearProcess.cc
-        G4ProtonInelasticProcess.cc
-        G4SigmaMinusInelasticProcess.cc
-        G4SigmaPlusInelasticProcess.cc
-        G4TritonInelasticProcess.cc
-        G4UCNBoundaryProcess.cc
-        G4UCNBoundaryProcessMessenger.cc
-        G4UCNLoss.cc
-        G4UCNAbsorption.cc
-        G4UCNMultiScattering.cc
-        G4XiMinusInelasticProcess.cc
-        G4XiZeroInelasticProcess.cc
-    GRANULAR_DEPENDENCIES
-        G4baryons
-        G4bosons
-        G4cuts
-        G4geometrymng
-        G4globman
-        G4had_mod_man
-        G4hadronic_mgt
-        G4hadronic_util
-        G4hadronic_xsect
-        G4magneticfield
-        G4ions
-        G4leptons
-        G4mesons
-        G4materials
-        G4navigation
-        G4partman
-        G4procman
-        G4track
-        G4volumes
-        G4digits
-        G4hits
-        G4scoring
-        G4intercoms
-    GLOBAL_DEPENDENCIES
-        G4digits_hits
-        G4geometry
-        G4global
-        G4materials
-        G4particles
-        G4track
-        G4intercoms
-    LINK_LIBRARIES
-)
+geant4_add_module(G4hadronic_proc
+  PUBLIC_HEADERS
+    G4ElectronNuclearProcess.hh
+    G4ElNeutrinoNucleusProcess.hh
+    G4HadronElasticProcess.hh
+    G4HadronInelasticProcess.hh
+    G4MuNeutrinoNucleusProcess.hh
+    G4MuonNuclearProcess.hh
+    G4NeutrinoElectronProcess.hh
+    G4NeutronCaptureProcess.hh
+    G4NeutronFissionProcess.hh
+    G4PositronNuclearProcess.hh
+    G4UCNProcessSubType.hh
+    G4UCNBoundaryProcess.hh
+    G4UCNBoundaryProcessMessenger.hh
+    G4UCNLoss.hh
+    G4UCNAbsorption.hh
+    G4UCNMultiScattering.hh
+  SOURCES
+    G4ElectronNuclearProcess.cc
+    G4ElNeutrinoNucleusProcess.cc
+    G4HadronElasticProcess.cc
+    G4HadronInelasticProcess.cc
+    G4MuNeutrinoNucleusProcess.cc
+    G4MuonNuclearProcess.cc
+    G4NeutrinoElectronProcess.cc
+    G4NeutronCaptureProcess.cc
+    G4NeutronFissionProcess.cc
+    G4PositronNuclearProcess.cc
+    G4UCNBoundaryProcess.cc
+    G4UCNBoundaryProcessMessenger.cc
+    G4UCNLoss.cc
+    G4UCNAbsorption.cc
+    G4UCNMultiScattering.cc)
 
-# List any source specific properties here
-
+geant4_module_link_libraries(G4hadronic_proc
+  PUBLIC
+    G4baryons
+    G4globman
+    G4hadronic_mgt
+    G4intercoms
+    G4materials
+    G4procman
+  PRIVATE
+    G4cuts
+    G4detector
+    G4geometrymng
+    G4hadronic_util
+    G4hadronic_xsect
+    G4ions
+    G4leptons
+    G4navigation
+    G4partman
+    G4scoring
+    G4track)

@@ -52,6 +52,8 @@
 #include "G4IonINCLXXPhysics.hh"
 
 #include "GammaNuclearPhysics.hh"
+#include "GammaNuclearPhysicsLEND.hh"
+
 #include "G4RadioactiveDecayPhysics.hh"
 
 // particles
@@ -106,6 +108,7 @@ PhysicsList::PhysicsList()
   // Gamma physics
   //
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
+  ////RegisterPhysics( new GammaNuclearPhysicsLEND("gamma")); 
   
   // Radioactive decay
   RegisterPhysics(new G4RadioactiveDecayPhysics());

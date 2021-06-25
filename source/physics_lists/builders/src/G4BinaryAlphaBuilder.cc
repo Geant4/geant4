@@ -53,7 +53,7 @@ G4BinaryAlphaBuilder()
 }
 
 void G4BinaryAlphaBuilder::
-Build(G4AlphaInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

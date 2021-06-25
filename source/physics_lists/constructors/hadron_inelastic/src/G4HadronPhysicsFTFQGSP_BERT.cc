@@ -48,7 +48,7 @@
 #include "G4ParticleTable.hh"
 
 #include "G4HadronInelasticProcess.hh"
-#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -78,9 +78,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFQGSP_BERT);
 
-G4HadronPhysicsFTFQGSP_BERT::G4HadronPhysicsFTFQGSP_BERT(G4int)
+G4HadronPhysicsFTFQGSP_BERT::G4HadronPhysicsFTFQGSP_BERT(G4int verb)
   : G4HadronPhysicsFTFQGSP_BERT("hInelastic FTFQGSP_BERT", false)
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsFTFQGSP_BERT::G4HadronPhysicsFTFQGSP_BERT(const G4String& name, G4bool qe)
   : G4HadronPhysicsFTFP_BERT(name, qe) 
@@ -136,7 +138,7 @@ void G4HadronPhysicsFTFQGSP_BERT::ConstructProcess()
   ph->RegisterProcess(proc, particle);
   if( useFactorXS ) proc->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
        
-  proc = new G4HadronCaptureProcess("nCapture");
+  proc = new G4NeutronCaptureProcess("nCapture");
   proc->RegisterMe(new G4NeutronRadCapture());
   ph->RegisterProcess(proc, particle);
 

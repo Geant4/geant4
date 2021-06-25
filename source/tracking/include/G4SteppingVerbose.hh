@@ -46,25 +46,36 @@ class G4SteppingVerbose : public G4VSteppingVerbose
     // Constructor/Destructor
 
     G4SteppingVerbose();
-   ~G4SteppingVerbose();
+    virtual ~G4SteppingVerbose();
+
+    virtual G4VSteppingVerbose* Clone()
+    { return new G4SteppingVerbose; }
 
     // Methods to be invoked in the SteppingManager
 
-    void NewStep();
-    void AtRestDoItInvoked();
-    void AlongStepDoItAllDone();
-    void PostStepDoItAllDone();
-    void AlongStepDoItOneByOne();
-    void PostStepDoItOneByOne();
-    void StepInfo();
-    void TrackingStarted();
-    void DPSLStarted();
-    void DPSLUserLimit();
-    void DPSLPostStep();
-    void DPSLAlongStep();
-    void VerboseTrack();
-    void VerboseParticleChange();
-    void ShowStep() const;
+    virtual void NewStep();
+    virtual void AtRestDoItInvoked();
+    virtual void AlongStepDoItAllDone();
+    virtual void PostStepDoItAllDone();
+    virtual void AlongStepDoItOneByOne();
+    virtual void PostStepDoItOneByOne();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
+    virtual void DPSLStarted();
+    virtual void DPSLUserLimit();
+    virtual void DPSLPostStep();
+    virtual void DPSLAlongStep();
+    virtual void VerboseTrack();
+    virtual void VerboseParticleChange();
+    virtual void ShowStep() const;
+
+  private:
+    static G4int useBestUnitPrecision;
+
+  public:
+    static void UseBestUnit(G4int prec = 4);
+    static G4int BestUnitPrecision();
+
 };
 
 #endif

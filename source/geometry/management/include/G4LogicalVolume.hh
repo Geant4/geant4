@@ -209,7 +209,7 @@ class G4LogicalVolume
       // Copy-constructor and assignment operator not allowed.
 
     inline const G4String& GetName() const;
-    inline void SetName(const G4String& pName);
+    void SetName(const G4String& pName);
       // Returns and sets the name of the logical volume.
 
     inline size_t GetNoDaughters() const;

@@ -39,18 +39,12 @@
 #include "RunAction.hh"
 #include "Analysis.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 EventAction::EventAction(RunAction* run)
 :fRun(run)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 EventAction::~EventAction()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {  
@@ -59,8 +53,6 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   fRun->SetDoseN(0);
   fRun->SetDoseC(0);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::EndOfEventAction(const G4Event* )
 {  

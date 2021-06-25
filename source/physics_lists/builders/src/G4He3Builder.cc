@@ -54,7 +54,7 @@
 
  G4He3Builder::G4He3Builder()
  {
-   theHe3Inelastic=new G4He3InelasticProcess;
+   theHe3Inelastic=new G4HadronInelasticProcess( "he3Inelastic", G4He3::Definition() );
  }
 
  void G4He3Builder::RegisterMe(G4PhysicsBuilderInterface* aB) {

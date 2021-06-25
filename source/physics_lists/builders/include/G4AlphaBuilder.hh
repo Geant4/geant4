@@ -39,7 +39,7 @@
 #include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
-#include "G4AlphaInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VAlphaBuilder.hh"
 #include <vector>
 
@@ -53,7 +53,7 @@ class G4AlphaBuilder : public G4PhysicsBuilderInterface
     void RegisterMe(G4PhysicsBuilderInterface * aB) final override;// {theModelCollections.push_back(aB);}
 
   private:
-    G4AlphaInelasticProcess * theAlphaInelastic;
+    G4HadronInelasticProcess * theAlphaInelastic;
     
     std::vector<G4VAlphaBuilder *> theModelCollections;
 };

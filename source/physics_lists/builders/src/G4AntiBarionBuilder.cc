@@ -39,15 +39,18 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "G4VAntiBarionBuilder.hh"
+
 
 G4AntiBarionBuilder::G4AntiBarionBuilder()
 {  
-  theAntiProtonInelastic=new G4AntiProtonInelasticProcess;
-  theAntiNeutronInelastic=new G4AntiNeutronInelasticProcess;
-  theAntiDeuteronInelastic=new G4AntiDeuteronInelasticProcess;
-  theAntiTritonInelastic=new G4AntiTritonInelasticProcess;
-  theAntiHe3Inelastic=new G4AntiHe3InelasticProcess;
-  theAntiAlphaInelastic=new G4AntiAlphaInelasticProcess;
+  theAntiProtonInelastic=new   G4HadronInelasticProcess( "anti_protonInelastic",   G4AntiProton::Definition() );
+  theAntiNeutronInelastic=new  G4HadronInelasticProcess( "anti_neutronInelastic",  G4AntiNeutron::Definition() );
+  theAntiDeuteronInelastic=new G4HadronInelasticProcess( "anti_deuteronInelastic", G4AntiDeuteron::Definition() );
+  theAntiTritonInelastic=new   G4HadronInelasticProcess( "anti_tritonInelastic",   G4AntiTriton::Definition() );
+  theAntiHe3Inelastic=new      G4HadronInelasticProcess( "anti_He3Inelastic",      G4AntiHe3::Definition() );
+  theAntiAlphaInelastic=new    G4HadronInelasticProcess( "anti_alpha_Inelastic",   G4AntiAlpha::Definition() );
 }
 
 void G4AntiBarionBuilder::Build()

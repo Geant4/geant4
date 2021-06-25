@@ -47,13 +47,13 @@ UserTaskQueue::UserTaskQueue(intmax_t nworkers, UserTaskQueue* parent)
     if(!parent)
     {
         for(intmax_t i = 0; i < nworkers + 1; ++i)
-            m_subqueues->push_back(new TaskSubQueue(m_ntasks));
+            m_subqueues->emplace_back(new TaskSubQueue(m_ntasks));
     }
 
 #if defined(DEBUG)
     if(GetEnv<int>("PTL_VERBOSE", 0) > 3)
     {
-        RecursiveAutoLock l(TypeRecursiveMutex<decltype(std::cout)>());
+        RecursiveAutoLock l(TypeMutex<decltype(std::cout), RecursiveMutex>());
         std::stringstream ss;
         ss << ThreadPool::get_this_thread_id() << "> " << ThisThread::get_id() << " ["
            << __FUNCTION__ << ":" << __LINE__ << "] "
@@ -79,7 +79,7 @@ UserTaskQueue::~UserTaskQueue()
     {
         for(auto& itr : *m_subqueues)
         {
-            assert(itr->size() == 0);
+            assert(itr->empty());
             delete itr;
         }
         m_subqueues->clear();
@@ -99,7 +99,7 @@ UserTaskQueue::resize(intmax_t n)
     {
         while(m_workers < n)
         {
-            m_subqueues->push_back(new TaskSubQueue(m_ntasks));
+            m_subqueues->emplace_back(new TaskSubQueue(m_ntasks));
             ++m_workers;
         }
     }
@@ -235,9 +235,9 @@ UserTaskQueue::GetTask(intmax_t subq, intmax_t nitr)
 //======================================================================================//
 
 intmax_t
-UserTaskQueue::InsertTask(task_pointer task, ThreadData* data, intmax_t subq)
+UserTaskQueue::InsertTask(task_pointer&& task, ThreadData* data, intmax_t subq)
 {
-    // skip increment here (handled externally)
+    // increment number of tasks
     ++(*m_ntasks);
 
     bool     spin = m_hold->load(std::memory_order_relaxed);
@@ -267,7 +267,7 @@ UserTaskQueue::InsertTask(task_pointer task, ThreadData* data, intmax_t subq)
         if(task_subq->AcquireClaim())
         {
             // push the task into the bin
-            task_subq->PushTask(task);
+            task_subq->PushTask(std::move(task));
             // release the claim on the bin
             task_subq->ReleaseClaim();
             // return success
@@ -304,8 +304,8 @@ UserTaskQueue::InsertTask(task_pointer task, ThreadData* data, intmax_t subq)
 void
 UserTaskQueue::ExecuteOnAllThreads(ThreadPool* tp, function_type func)
 {
-    typedef TaskGroup<int, int>     task_group_type;
-    typedef std::map<int64_t, bool> thread_execute_map_t;
+    using task_group_type      = TaskGroup<int, int>;
+    using thread_execute_map_t = std::map<int64_t, bool>;
 
     if(!tp->is_alive())
     {
@@ -313,18 +313,16 @@ UserTaskQueue::ExecuteOnAllThreads(ThreadPool* tp, function_type func)
         return;
     }
 
-    auto join_func = [=](int& ref, int i) {
-        ref += i;
-        return ref;
-    };
-    task_group_type* tg = new task_group_type(join_func, tp);
+    task_group_type tg{ [](int& ref, int i) { return (ref += i); }, tp };
 
     // wait for all threads to finish any work
     // NOTE: will cause deadlock if called from a task
     while(tp->get_active_threads_count() > 0)
         ThisThread::sleep_for(std::chrono::milliseconds(10));
 
-    thread_execute_map_t* thread_execute_map = new thread_execute_map_t();
+    thread_execute_map_t                thread_execute_map{};
+    std::vector<std::shared_ptr<VTask>> _tasks{};
+    _tasks.reserve(m_workers + 1);
 
     AcquireHold();
     for(int i = 0; i < (m_workers + 1); ++i)
@@ -334,9 +332,10 @@ UserTaskQueue::ExecuteOnAllThreads(ThreadPool* tp, function_type func)
 
         //--------------------------------------------------------------------//
         auto thread_specific_func = [&]() {
-            static Mutex _mtx;
+            ScopeDestructor _dtor = tg.get_scope_destructor();
+            static Mutex    _mtx;
             _mtx.lock();
-            bool& _executed = (*thread_execute_map)[GetThreadBin()];
+            bool& _executed = thread_execute_map[GetThreadBin()];
             _mtx.unlock();
             if(!_executed)
             {
@@ -348,25 +347,18 @@ UserTaskQueue::ExecuteOnAllThreads(ThreadPool* tp, function_type func)
         };
         //--------------------------------------------------------------------//
 
-        auto _task = tg->wrap(thread_specific_func);
-        //++(*m_ntasks);
-        // TaskSubQueue* task_subq = (*m_subqueues)[i];
-        // task_subq->PushTask(_task);
-        InsertTask(_task, ThreadData::GetInstance(), i);
+        InsertTask(tg.wrap(thread_specific_func), ThreadData::GetInstance(), i);
     }
 
     tp->notify_all();
-    int nexecuted = tg->join();
+    int nexecuted = tg.join();
     if(nexecuted != m_workers)
     {
         std::stringstream msg;
         msg << "Failure executing routine on all threads! Only " << nexecuted
-            << " threads executed function out of " << m_workers;
+            << " threads executed function out of " << m_workers << " workers";
         std::cerr << msg.str() << std::endl;
-        // Exception("UserTaskQueue::ExecuteOnAllThreads", "TaskQueue0000",
-        //            JustWarning, msg);
     }
-    delete thread_execute_map;
     ReleaseHold();
 }
 
@@ -376,14 +368,10 @@ void
 UserTaskQueue::ExecuteOnSpecificThreads(ThreadIdSet tid_set, ThreadPool* tp,
                                         function_type func)
 {
-    typedef TaskGroup<int, int>     task_group_type;
-    typedef std::map<int64_t, bool> thread_execute_map_t;
+    using task_group_type      = TaskGroup<int, int>;
+    using thread_execute_map_t = std::map<int64_t, bool>;
 
-    auto join_func = [=](int& ref, int i) {
-        ref += i;
-        return ref;
-    };
-    task_group_type* tg = new task_group_type(join_func, tp);
+    task_group_type tg{ [](int& ref, int i) { return (ref += i); }, tp };
 
     // wait for all threads to finish any work
     // NOTE: will cause deadlock if called from a task
@@ -396,15 +384,16 @@ UserTaskQueue::ExecuteOnSpecificThreads(ThreadIdSet tid_set, ThreadPool* tp,
         return;
     }
 
-    thread_execute_map_t* thread_execute_map = new thread_execute_map_t();
+    thread_execute_map_t thread_execute_map{};
 
     //========================================================================//
     // wrap the function so that it will only be executed if the thread
     // has an ID in the set
-    auto thread_specific_func = [=]() {
-        static Mutex _mtx;
+    auto thread_specific_func = [&]() {
+        ScopeDestructor _dtor = tg.get_scope_destructor();
+        static Mutex    _mtx;
         _mtx.lock();
-        bool& _executed = (*thread_execute_map)[GetThreadBin()];
+        bool& _executed = thread_execute_map[GetThreadBin()];
         _mtx.unlock();
         if(!_executed && tid_set.count(ThisThread::get_id()) > 0)
         {
@@ -425,21 +414,17 @@ UserTaskQueue::ExecuteOnSpecificThreads(ThreadIdSet tid_set, ThreadPool* tp,
         if(i == GetThreadBin())
             continue;
 
-        auto _task = tg->wrap(thread_specific_func);
-        InsertTask(_task, ThreadData::GetInstance(), i);
+        InsertTask(tg.wrap(thread_specific_func), ThreadData::GetInstance(), i);
     }
     tp->notify_all();
-    int nexecuted = tg->join();
-    if(nexecuted != m_workers)
+    decltype(tid_set.size()) nexecuted = tg.join();
+    if(nexecuted != tid_set.size())
     {
         std::stringstream msg;
-        msg << "Failure executing routine on all threads! Only " << nexecuted
-            << " threads executed function out of " << tid_set.size();
+        msg << "Failure executing routine on specific threads! Only " << nexecuted
+            << " threads executed function out of " << tid_set.size() << " workers";
         std::cerr << msg.str() << std::endl;
-        // Exception("UserTaskQueue::ExecuteOnSpecificThreads", "TaskQueue0001",
-        //            JustWarning, msg);
     }
-    delete thread_execute_map;
     ReleaseHold();
 }
 

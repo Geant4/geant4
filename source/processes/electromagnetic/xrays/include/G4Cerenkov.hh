@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Definition
 ////////////////////////////////////////////////////////////////////////
@@ -46,22 +43,19 @@
 #ifndef G4Cerenkov_h
 #define G4Cerenkov_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
-#include "templates.hh"
-#include "Randomize.hh"
-#include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
-#include "G4Step.hh"
-#include "G4VProcess.hh"
-#include "G4OpticalPhoton.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Material.hh"
-#include "G4PhysicsTable.hh"
+#include "G4ForceCondition.hh"
+#include "G4GPILSelection.hh"
 #include "G4MaterialPropertyVector.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4VProcess.hh"
+
+class G4Material;
+class G4ParticleDefinition;
+class G4PhysicsTable;
+class G4Step;
+class G4Track;
+class G4VParticleChange;
 
 class G4Cerenkov : public G4VProcess
 {
@@ -72,10 +66,8 @@ class G4Cerenkov : public G4VProcess
 
   explicit G4Cerenkov(const G4Cerenkov& right);
 
- private:
   G4Cerenkov& operator=(const G4Cerenkov& right) = delete;
 
- public:
   G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable', for all charged particles
   // except short-lived particles.
@@ -168,17 +160,21 @@ class G4Cerenkov : public G4VProcess
                                      const G4Material* aMaterial,
                                      G4MaterialPropertyVector* Rindex) const;
 
+  void DumpInfo() const override {ProcessDescription(G4cout);};
+  void ProcessDescription(std::ostream& out) const override;
+
  protected:
   G4PhysicsTable* thePhysicsTable;
 
  private:
-  G4bool fTrackSecondariesFirst;
   G4double fMaxBetaChange;
+  
   G4int fMaxPhotons;
+  G4int fNumPhotons;
 
   G4bool fStackingFlag;
+  G4bool fTrackSecondariesFirst;
 
-  G4int fNumPhotons;
 };
 
 inline G4bool G4Cerenkov::GetTrackSecondariesFirst() const

@@ -66,7 +66,7 @@ inline void G4PhysicsVector::PutValue(std::size_t index, G4double theValue)
 {
   if(index >= numberOfNodes)
   {
-    PrintPutValueError(index);
+    PrintPutValueError(index, theValue, theValue);
   }
   dataVector[index] = theValue;
 }
@@ -101,6 +101,10 @@ inline void G4PhysicsVector::SetSpline(G4bool val)
     secDerivative.clear();
   }
 }
+
+// ---------------------------------------------------------------
+
+inline G4bool G4PhysicsVector::GetSpline() const { return useSpline; }
 
 // ---------------------------------------------------------------
 

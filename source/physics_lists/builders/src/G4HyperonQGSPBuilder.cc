@@ -35,18 +35,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4LambdaInelasticProcess.hh"
-#include "G4AntiLambdaInelasticProcess.hh"
-#include "G4SigmaMinusInelasticProcess.hh"
-#include "G4AntiSigmaMinusInelasticProcess.hh"
-#include "G4SigmaPlusInelasticProcess.hh"
-#include "G4AntiSigmaPlusInelasticProcess.hh"
-#include "G4XiMinusInelasticProcess.hh"
-#include "G4AntiXiMinusInelasticProcess.hh"
-#include "G4XiZeroInelasticProcess.hh"
-#include "G4AntiXiZeroInelasticProcess.hh"
-#include "G4OmegaMinusInelasticProcess.hh"
-#include "G4AntiOmegaMinusInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4CrossSectionInelastic.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4HadronicParameters.hh"
@@ -80,89 +69,7 @@ G4HyperonQGSPBuilder::G4HyperonQGSPBuilder( G4bool quasiElastic ) {
 G4HyperonQGSPBuilder::~G4HyperonQGSPBuilder() {}
 
 
-void G4HyperonQGSPBuilder::Build( G4LambdaInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonQGSPBuilder::Build( G4AntiLambdaInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}   
-
-
-void G4HyperonQGSPBuilder::Build( G4SigmaMinusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonQGSPBuilder::Build( G4AntiSigmaMinusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonQGSPBuilder::Build( G4SigmaPlusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonQGSPBuilder::Build( G4AntiSigmaPlusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonQGSPBuilder::Build( G4XiMinusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonQGSPBuilder::Build( G4AntiXiMinusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonQGSPBuilder::Build( G4XiZeroInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonQGSPBuilder::Build( G4AntiXiZeroInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonQGSPBuilder::Build( G4OmegaMinusInelasticProcess* aP ) {
-  theHyperonQGSP->SetMinEnergy( theMin );
-  theHyperonQGSP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theHyperonQGSP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonQGSPBuilder::Build( G4AntiOmegaMinusInelasticProcess* aP ) {
+void G4HyperonQGSPBuilder::Build( G4HadronInelasticProcess* aP ) {
   theHyperonQGSP->SetMinEnergy( theMin );
   theHyperonQGSP->SetMaxEnergy( theMax );
   aP->RegisterMe( theHyperonQGSP );

@@ -50,13 +50,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -71,9 +64,10 @@
 
 QGSP_BERT_HP::QGSP_BERT_HP(G4int ver)
 {
-
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_HP"<<G4endl;
-  G4cout <<G4endl<<G4endl;
+  if(ver > 0) {
+    G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_HP"<<G4endl;
+    G4cout <<G4endl;
+  }
 
   defaultCutValue = 0.7*CLHEP::mm;  
   SetVerboseLevel(ver);

@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 April, 21 B. Morgan (mctruth-V10-07-00)
+- Migrate build to modular CMake API
+
 8 October, 20 G.Cosmo (mctruth-V10-06-01)
 - Minor c++11 review. Code cleanup and formatting. Use of G4 types.
 
@@ -136,7 +139,7 @@ committal in the CVS repository !
 - added more SRM descriptions
 
 4 July, 01    Y.Morita (persistency-V03-02-00)
-- STL migration: 
+- STL migration:
    modified: G4Pglobals.hh, G4PGeometryObjectMap.ddl, G4PGeometryObjectMap.cc
    removed: G4VPhysVolRefArray.hh, G4LogVolRefArray.hh G4VSolidRefArray.hh
 
@@ -266,7 +269,7 @@ November 4, 99  Y.Morita
   persistency/geometry/management to avoid circular dependency
 - G4PersistencyManager: Allow constructor with the name of Boot file
 
-October 27, 99  J.Allison 
+October 27, 99  J.Allison
 - Created persistency/global/include.
 - Moved management/include/G4PersistentTypes.hh to global/include.
 - Modified GNUmakefiles to add persistency/global/include to -I path.
@@ -290,12 +293,12 @@ November 10, 98  Y.Morita (persistency-00-03-02)
 - G4PersistentGeomMan now handle Replica geometry
 
 November 10, 98  Y.Morita (persistency-00-03-01)
-- G4PersistencyManager splitted into G4PersistentEventMan, 
+- G4PersistencyManager splitted into G4PersistentEventMan,
   G4PersistentGeomMan, G4PersistentRunMan
 - G4Run is now persistent
 
 July 23, 98   Y.Morita (persistency-00-01-09)
-- G4PVPhysicalVolume: protect declare of d_Double with 
+- G4PVPhysicalVolume: protect declare of d_Double with
   OO_VARRAY_D_DOUBLE for different version of HepODBMS
 - G4PVPhysicalVolume: added G4Exception for restoring rotation matrix
   (for now)
@@ -323,7 +326,7 @@ July 10, 98   Y.Morita (persistency-00-01-03)
 - moved GNUmakefile targes 'headers' and 'd_files' to common.gmk and
   globlib.gmk.
 - a few bug fix in G4PPVPlacement.cc, G4PVSolid.cc,
-  G4PGeometryObjectMap.ddl, G4PersistencyManager.hh, 
+  G4PGeometryObjectMap.ddl, G4PersistencyManager.hh,
   G4PGeometryObjectMap.cc, G4PersistencyManager.cc
 
 July  9, 98   Y.Morita

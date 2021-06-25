@@ -23,71 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
-// GEANT4 Class header file
-//
+// Geant4 Class header file
 //
 // File name:     G4PolarizedGammaConversionModel
 //
 // Author:        Karim Laihem
 //
-// Creation date: 19.04.2005
-//
-// Modifications:
-// 21-08-06 Modified to work in g4.8.1 framework (A.Schaelicke)
-//
 // Class Description:
-//
-// Implementation of gamma conversion to e+e- in the field of a nucleus 
-// including polarization transfer
-
+//   Implementation of gamma conversion to e+e- in the field of a nucleus
+//   including polarization transfer
 // -------------------------------------------------------------------
-//
 
 #ifndef G4PolarizedGammaConversionModel_h
 #define G4PolarizedGammaConversionModel_h 1
 
 #include "G4BetheHeitlerModel.hh"
-#include "G4PhysicsTable.hh"
 
+class G4DynamicParticle;
+class G4Element;
+class G4MaterialCutsCouple;
 class G4ParticleChangeForGamma;
-class G4VPolarizedCrossSection;
+class G4ParticleDefinition;
+class G4PolarizedGammaConversionXS;
+
 class G4PolarizedGammaConversionModel : public G4BetheHeitlerModel
 {
+ public:
+  explicit G4PolarizedGammaConversionModel(
+    const G4ParticleDefinition* p = nullptr, const G4String& nam = "polConv");
 
-public:
+  virtual ~G4PolarizedGammaConversionModel() override;
 
-  explicit G4PolarizedGammaConversionModel(const G4ParticleDefinition* p = nullptr, 
-		      const G4String& nam = "polConv");
-
-  virtual ~G4PolarizedGammaConversionModel();
- 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*, G4double tmin,
+                                 G4double maxEnergy) override;
 
   inline const G4Element* SelectedAtom();
 
- protected:
-  G4VPolarizedCrossSection*           crossSectionCalculator;
+  G4PolarizedGammaConversionModel& operator=(
+    const G4PolarizedGammaConversionModel& right) = delete;
+  G4PolarizedGammaConversionModel(const G4PolarizedGammaConversionModel&) =
+    delete;
 
+ private:
+  G4PolarizedGammaConversionXS* fCrossSectionCalculator;
 };
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline const G4Element* G4PolarizedGammaConversionModel::SelectedAtom()
 {
   return GetCurrentElement();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

@@ -27,299 +27,232 @@
 
 #include "G4ContinuousGainOfEnergy.hh"
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Step.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4VEmModel.hh"
-#include "G4VEmFluctuationModel.hh"
-#include "G4VParticleChange.hh"
-#include "G4AdjointCSManager.hh"
+#include "G4EmCorrections.hh"
 #include "G4LossTableManager.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4ParticleChange.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VEmFluctuationModel.hh"
+#include "G4VEmModel.hh"
+#include "G4VEnergyLossProcess.hh"
+#include "G4VParticleChange.hh"
 
 ///////////////////////////////////////////////////////
-//
-G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name, 
-  G4ProcessType type): G4VContinuousProcess(name, type)
+G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name,
+                                                   G4ProcessType type)
+  : G4VContinuousProcess(name, type)
+{}
+
+///////////////////////////////////////////////////////
+G4ContinuousGainOfEnergy::~G4ContinuousGainOfEnergy() {}
+
+///////////////////////////////////////////////////////
+void G4ContinuousGainOfEnergy::ProcessDescription(std::ostream& out) const
 {
-
-
-  linLossLimit=0.05;
-  lossFluctuationArePossible =true;
-  lossFluctuationFlag=true;
-  is_integral = false;
-  
-  //Will be properly set in SetDirectParticle()
-  IsIon=false;
-  massRatio =1.;
-  chargeSqRatio=1.;
-  preStepChargeSqRatio=1.;
-  
-  //Some initialization
-  currentCoupleIndex=9999999;
-  currentCutInRange=0.;
-  currentMaterialIndex=9999999;
-  currentTcut=0.;
-  preStepKinEnergy=0.;
-  preStepRange=0.;
-  preStepScaledKinEnergy=0.;
-  
-  currentCouple=0;  
+  out << "Continuous process acting on adjoint particles to compute the "
+         "continuous gain of energy of charged particles when they are "
+         "tracked back.\n";
 }
 
 ///////////////////////////////////////////////////////
-//
-G4ContinuousGainOfEnergy::~G4ContinuousGainOfEnergy()
+void G4ContinuousGainOfEnergy::SetDirectParticle(G4ParticleDefinition* p)
 {
- 
-}
-///////////////////////////////////////////////////////
-//
-
-void G4ContinuousGainOfEnergy::PreparePhysicsTable(
-     const G4ParticleDefinition& )
-{//theDirectEnergyLossProcess->PreparePhysicsTable(part);
-
-; 
-}
-
-///////////////////////////////////////////////////////
-//
-
-void G4ContinuousGainOfEnergy::BuildPhysicsTable(const G4ParticleDefinition&)
-{//theDirectEnergyLossProcess->BuildPhysicsTable(part);
-;
-}
-
-///////////////////////////////////////////////////////
-//
-void  G4ContinuousGainOfEnergy::SetDirectParticle(G4ParticleDefinition* p)
-{theDirectPartDef=p;
- if (theDirectPartDef->GetParticleType()== "nucleus") {
- 	 IsIon=true;
-	 massRatio = proton_mass_c2/theDirectPartDef->GetPDGMass();
-	 G4double q=theDirectPartDef->GetPDGCharge();
-	 chargeSqRatio=q*q;
-	
-	 
- }
- 
-}
-
-///////////////////////////////////////////////////////
-//
-// 
-G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
-                                                       const G4Step& step)
-{
-   
-  //Caution in this method the  step length should be the true step length
-  // A problem is that this is compute by the multiple scattering that does not know the energy at the end of the adjoint step. This energy is used during the 
-  //Forward sim. Nothing we can really do against that at this time. This is inherent to the MS method
-  //
-  
-  
-  
-  aParticleChange.Initialize(track);
-  
-  // Get the actual (true) Step length
-  //----------------------------------
-  G4double length = step.GetStepLength();
-  G4double degain  = 0.0;
-  
-  
- 
-  // Compute this for weight change after continuous energy loss
-  //-------------------------------------------------------------
-  G4double DEDX_before = theDirectEnergyLossProcess->GetDEDX(preStepKinEnergy, currentCouple);
-   
-  
-  
-  // For the fluctuation we generate a new dynamic particle with energy =preEnergy+egain
-  // and then compute the fluctuation given in  the direct case.
-  //-----------------------------------------------------------------------
-  G4DynamicParticle* dynParticle = new G4DynamicParticle();
-  *dynParticle = *(track.GetDynamicParticle());
-  dynParticle->SetDefinition(theDirectPartDef);
-  G4double Tkin = dynParticle->GetKineticEnergy(); 
-
-
-  size_t n=1;
-  if (is_integral ) n=10;
-  n=1;
-  G4double dlength= length/n; 
-  for (size_t i=0;i<n;i++) {
-  	if (Tkin != preStepKinEnergy && IsIon) {
-  		chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,Tkin);
-		theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio); 
-	
-  	}
-  
-  	G4double r = theDirectEnergyLossProcess->GetRange(Tkin, currentCouple);
-   	if( dlength <= linLossLimit * r ) {
-    		degain = DEDX_before*dlength;		
-	} 
-  	else {
-    		G4double x = r + dlength;
-    		//degain = theDirectEnergyLossProcess->GetKineticEnergy(x,currentCouple) - theDirectEnergyLossProcess->GetKineticEnergy(r,currentCouple);
-		G4double E = theDirectEnergyLossProcess->GetKineticEnergy(x,currentCouple);
-		if (IsIon){
-			chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,E);
-			theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio);
-			G4double x1= theDirectEnergyLossProcess->GetRange(E, currentCouple);
-
-                        // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-                        G4int ii=0;
-                        const G4int iimax = 100;
-			while (std::abs(x-x1)>0.01*x) {
-				E = theDirectEnergyLossProcess->GetKineticEnergy(x,currentCouple);
-				chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,E);
-				theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio);
-				x1= theDirectEnergyLossProcess->GetRange(E, currentCouple);
-				++ii;
-			        if(ii >= iimax) { break; }
-			} 
-		}
-		
-		degain=E-Tkin;	
-		
-		
-		
-  	}
-	//G4cout<<degain<<G4endl;
-  	G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
- 	tmax = std::min(tmax,currentTcut);
- 	
-	
-	dynParticle->SetKineticEnergy(Tkin+degain);
-
-	// Corrections, which cannot be tabulated for ions
-	//----------------------------------------
-	G4double esecdep=0;//not used in most models
-	currentModel->CorrectionsAlongStep(currentCouple, dynParticle, degain,esecdep, dlength); 
-
-  	// Sample fluctuations
-  	//-------------------
-	
-  	
-	G4double deltaE =0.;
-  	if (lossFluctuationFlag ) {
-      	  deltaE = currentModel->GetModelOfFluctuations()->
-      	    SampleFluctuations(currentCouple,dynParticle,tmax,dlength,degain)-degain;
-  	}
-	
-	G4double egain=degain+deltaE;
-	if (egain <=0) egain=degain;
-	Tkin+=egain;
-	dynParticle->SetKineticEnergy(Tkin);
- }
- 
- 
-  
-
-  
-  delete dynParticle;
- 
-  if (IsIon){
-	chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,Tkin);
-	theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatio);
-		
+  fDirectPartDef = p;
+  if(fDirectPartDef->GetParticleType() == "nucleus")
+  {
+    fIsIon     = true;
+    fMassRatio = proton_mass_c2 / fDirectPartDef->GetPDGMass();
   }
-  
-  G4double DEDX_after = theDirectEnergyLossProcess->GetDEDX(Tkin, currentCouple);
-  
-  
-  G4double weight_correction=DEDX_after/DEDX_before;
- 
-  
+}
+
+///////////////////////////////////////////////////////
+G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
+                                                           const G4Step& step)
+{
+  // Caution in this method the step length should be the true step length
+  // A problem is that this is computed by the multiple scattering that does
+  // not know the energy at the end of the adjoint step. This energy is used
+  // during the forward sim. Nothing we can really do against that at this
+  // time. This is inherent to the MS method
+
+  aParticleChange.Initialize(track);
+
+  // Get the actual (true) Step length
+  G4double length = step.GetStepLength();
+  G4double degain = 0.0;
+
+  // Compute this for weight change after continuous energy loss
+  G4double DEDX_before =
+    fDirectEnergyLossProcess->GetDEDX(fPreStepKinEnergy, fCurrentCouple);
+
+  // For the fluctuation we generate a new dynamic particle with energy
+  // = preEnergy+egain and then compute the fluctuation given in the direct
+  // case.
+  G4DynamicParticle* dynParticle = new G4DynamicParticle();
+  *dynParticle                   = *(track.GetDynamicParticle());
+  dynParticle->SetDefinition(fDirectPartDef);
+  G4double Tkin = dynParticle->GetKineticEnergy();
+
+  G4double dlength = length;
+  if(Tkin != fPreStepKinEnergy && fIsIon)
+  {
+    G4double chargeSqRatio = fCurrentModel->GetChargeSquareRatio(
+      fDirectPartDef, fCurrentMaterial, Tkin);
+    fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio, chargeSqRatio);
+  }
+
+  G4double r = fDirectEnergyLossProcess->GetRange(Tkin, fCurrentCouple);
+  if(dlength <= fLinLossLimit * r)
+  {
+    degain = DEDX_before * dlength;
+  }
+  else
+  {
+    G4double x = r + dlength;
+    G4double E = fDirectEnergyLossProcess->GetKineticEnergy(x, fCurrentCouple);
+    if(fIsIon)
+    {
+      G4double chargeSqRatio = fCurrentModel->GetChargeSquareRatio(
+        fDirectPartDef, fCurrentMaterial, E);
+      fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio, chargeSqRatio);
+      G4double x1 = fDirectEnergyLossProcess->GetRange(E, fCurrentCouple);
+
+      G4int ii              = 0;
+      constexpr G4int iimax = 100;
+      while(std::abs(x - x1) > 0.01 * x)
+      {
+        E = fDirectEnergyLossProcess->GetKineticEnergy(x, fCurrentCouple);
+        chargeSqRatio = fCurrentModel->GetChargeSquareRatio(
+          fDirectPartDef, fCurrentMaterial, E);
+        fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio,
+                                                       chargeSqRatio);
+        x1 = fDirectEnergyLossProcess->GetRange(E, fCurrentCouple);
+        ++ii;
+        if(ii >= iimax)
+        {
+          break;
+        }
+      }
+    }
+
+    degain = E - Tkin;
+  }
+  G4double tmax = fCurrentModel->MaxSecondaryKinEnergy(dynParticle);
+  tmax          = std::min(tmax, fCurrentTcut);
+
+  dynParticle->SetKineticEnergy(Tkin + degain);
+
+  // Corrections, which cannot be tabulated for ions
+  fCurrentModel->CorrectionsAlongStep(fCurrentCouple, dynParticle, dlength, degain);
+
+  // Sample fluctuations
+  G4double deltaE = 0.;
+  if(fLossFluctuationFlag)
+  {
+    deltaE = fCurrentModel->GetModelOfFluctuations()->SampleFluctuations(
+               fCurrentCouple, dynParticle, tmax, dlength, degain) -
+             degain;
+  }
+
+  G4double egain = degain + deltaE;
+  if(egain <= 0.)
+    egain = degain;
+  Tkin += egain;
+  dynParticle->SetKineticEnergy(Tkin);
+
+  delete dynParticle;
+
+  if(fIsIon)
+  {
+    G4double chargeSqRatio = fCurrentModel->GetChargeSquareRatio(
+      fDirectPartDef, fCurrentMaterial, Tkin);
+    fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio, chargeSqRatio);
+  }
+
+  G4double DEDX_after = fDirectEnergyLossProcess->GetDEDX(Tkin, fCurrentCouple);
+  G4double weight_correction = DEDX_after / DEDX_before;
+
   aParticleChange.ProposeEnergy(Tkin);
 
+  // Caution!!! It is important to select the weight of the post_step_point
+  // as the current weight and not the weight of the track, as the  weight of
+  // the track is changed after having applied all the along_step_do_it.
 
-  //Caution!!!
-  // It is important  to select the weight of the post_step_point
-  // as the current weight and not the weight of the track, as t
-  // the  weight of the track is changed after having applied all
-  // the along_step_do_it.
-
-  // G4double new_weight=weight_correction*track.GetWeight(); //old
-  G4double new_weight=weight_correction*step.GetPostStepPoint()->GetWeight();
+  G4double new_weight =
+    weight_correction * step.GetPostStepPoint()->GetWeight();
   aParticleChange.SetParentWeightByProcess(false);
   aParticleChange.ProposeParentWeight(new_weight);
 
-
   return &aParticleChange;
-
 }
+
 ///////////////////////////////////////////////////////
-//
 void G4ContinuousGainOfEnergy::SetLossFluctuations(G4bool val)
 {
-  if(val && !lossFluctuationArePossible) return;
-  lossFluctuationFlag = val;
+  if(val && !fLossFluctuationArePossible)
+    return;
+  fLossFluctuationFlag = val;
 }
+
 ///////////////////////////////////////////////////////
-//
-
-
-
 G4double G4ContinuousGainOfEnergy::GetContinuousStepLimit(const G4Track& track,
-                G4double , G4double , G4double& )
-{ 
-  G4double x = DBL_MAX;
-  x=.1*mm;
- 
- 
+                                                          G4double, G4double,
+                                                          G4double&)
+{
   DefineMaterial(track.GetMaterialCutsCouple());
- 
-  preStepKinEnergy = track.GetKineticEnergy(); 
-  preStepScaledKinEnergy = track.GetKineticEnergy()*massRatio;
-  currentModel = theDirectEnergyLossProcess->SelectModelForMaterial(preStepScaledKinEnergy,currentCoupleIndex);
-  G4double emax_model=currentModel->HighEnergyLimit();
-  if (IsIon) {
-  	chargeSqRatio =  currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,preStepKinEnergy);
-	preStepChargeSqRatio = chargeSqRatio;
-	theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,preStepChargeSqRatio);
-  } 
-  
-  
-  G4double maxE =1.1*preStepKinEnergy;
-  /*if (preStepKinEnergy< 0.05*MeV) maxE =2.*preStepKinEnergy;
-  else if (preStepKinEnergy< 0.1*MeV) maxE =1.5*preStepKinEnergy;
-  else if (preStepKinEnergy< 0.5*MeV) maxE =1.25*preStepKinEnergy;*/
-   
-  if (preStepKinEnergy < currentTcut) maxE = std::min(currentTcut,maxE);
- 
-  maxE=std::min(emax_model*1.001,maxE);
-  	
-  preStepRange = theDirectEnergyLossProcess->GetRange(preStepKinEnergy, currentCouple);
-  
-  if (IsIon) {
-  	G4double chargeSqRatioAtEmax = currentModel->GetChargeSquareRatio(theDirectPartDef,currentMaterial,maxE);
-	theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,chargeSqRatioAtEmax);
-  }	
-  
-  G4double r1 = theDirectEnergyLossProcess->GetRange(maxE, currentCouple);
-  
-  if (IsIon) theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,preStepChargeSqRatio);
-  
-  
 
-  x=r1-preStepRange;
-  x=std::max(r1-preStepRange,0.001*mm);
- 
-  return x;
-  
- 
+  fPreStepKinEnergy = track.GetKineticEnergy();
+  fCurrentModel     = fDirectEnergyLossProcess->SelectModelForMaterial(
+    track.GetKineticEnergy() * fMassRatio, fCurrentCoupleIndex);
+  G4double emax_model           = fCurrentModel->HighEnergyLimit();
+  G4double preStepChargeSqRatio = 0.;
+  if(fIsIon)
+  {
+    G4double chargeSqRatio = fCurrentModel->GetChargeSquareRatio(
+      fDirectPartDef, fCurrentMaterial, fPreStepKinEnergy);
+    preStepChargeSqRatio = chargeSqRatio;
+    fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio,
+                                                   preStepChargeSqRatio);
+  }
+
+  G4double maxE = 1.1 * fPreStepKinEnergy;
+
+  if(fPreStepKinEnergy < fCurrentTcut)
+    maxE = std::min(fCurrentTcut, maxE);
+
+  maxE = std::min(emax_model * 1.001, maxE);
+
+  G4double preStepRange =
+    fDirectEnergyLossProcess->GetRange(fPreStepKinEnergy, fCurrentCouple);
+
+  if(fIsIon)
+  {
+    G4double chargeSqRatioAtEmax = fCurrentModel->GetChargeSquareRatio(
+      fDirectPartDef, fCurrentMaterial, maxE);
+    fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio,
+                                                   chargeSqRatioAtEmax);
+  }
+
+  G4double r1 = fDirectEnergyLossProcess->GetRange(maxE, fCurrentCouple);
+
+  if(fIsIon)
+    fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio,
+                                                   preStepChargeSqRatio);
+
+  return std::max(r1 - preStepRange, 0.001 * mm);
 }
-#include "G4EmCorrections.hh"
+
 ///////////////////////////////////////////////////////
-//
-
-void G4ContinuousGainOfEnergy::SetDynamicMassCharge(const G4Track& ,G4double energy)
-{ 
-
-  G4double ChargeSqRatio= G4LossTableManager::Instance()->EmCorrections()->EffectiveChargeSquareRatio(theDirectPartDef,currentMaterial,energy); 
-  if (theDirectEnergyLossProcess) theDirectEnergyLossProcess->SetDynamicMassCharge(massRatio,ChargeSqRatio);
+void G4ContinuousGainOfEnergy::SetDynamicMassCharge(const G4Track&,
+                                                    G4double energy)
+{
+  G4double ChargeSqRatio =
+    G4LossTableManager::Instance()->EmCorrections()->EffectiveChargeSquareRatio(
+      fDirectPartDef, fCurrentMaterial, energy);
+  if(fDirectEnergyLossProcess)
+    fDirectEnergyLossProcess->SetDynamicMassCharge(fMassRatio, ChargeSqRatio);
 }

@@ -40,9 +40,9 @@
 
 B4bRunAction::B4bRunAction()
  : G4UserRunAction()
-{ 
+{
   // set printing event number per each event
-  G4RunManager::GetRunManager()->SetPrintProgress(1);     
+  G4RunManager::GetRunManager()->SetPrintProgress(1);
 
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
@@ -50,7 +50,7 @@ B4bRunAction::B4bRunAction()
   auto analysisManager = G4AnalysisManager::Instance();
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
-  // Create directories 
+  // Create directories
   //analysisManager->SetHistoDirectoryName("histograms");
   //analysisManager->SetNtupleDirectoryName("ntuple");
   analysisManager->SetVerboseLevel(1);
@@ -59,7 +59,7 @@ B4bRunAction::B4bRunAction()
 
   // Book histograms, ntuple
   //
-  
+
   // Creating histograms
   analysisManager->CreateH1("Eabs","Edep in absorber", 100, 0., 800*MeV);
   analysisManager->CreateH1("Egap","Edep in gap", 100, 0., 100*MeV);
@@ -80,7 +80,7 @@ B4bRunAction::B4bRunAction()
 
 B4bRunAction::~B4bRunAction()
 {
-  delete G4AnalysisManager::Instance();  
+  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,12 +93,12 @@ G4Run* B4bRunAction::GenerateRun()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4bRunAction::BeginOfRunAction(const G4Run* run)
-{ 
+{
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
   //inform the runManager to save random number seed
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  
+
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
 
@@ -118,30 +118,30 @@ void B4bRunAction::EndOfRunAction(const G4Run* /*aRun*/)
   if ( analysisManager->GetH1(1) ) {
     G4cout << G4endl << " ----> print histograms statistic ";
     if(isMaster) {
-      G4cout << "for the entire run " << G4endl << G4endl; 
+      G4cout << "for the entire run " << G4endl << G4endl;
     }
     else {
-      G4cout << "for the local thread " << G4endl << G4endl; 
+      G4cout << "for the local thread " << G4endl << G4endl;
     }
-    
-    G4cout << " EAbs : mean = " 
-       << G4BestUnit(analysisManager->GetH1(0)->mean(), "Energy") 
-       << " rms = " 
+
+    G4cout << " EAbs : mean = "
+       << G4BestUnit(analysisManager->GetH1(0)->mean(), "Energy")
+       << " rms = "
        << G4BestUnit(analysisManager->GetH1(0)->rms(),  "Energy") << G4endl;
-    
-    G4cout << " EGap : mean = " 
-       << G4BestUnit(analysisManager->GetH1(1)->mean(), "Energy") 
-       << " rms = " 
+
+    G4cout << " EGap : mean = "
+       << G4BestUnit(analysisManager->GetH1(1)->mean(), "Energy")
+       << " rms = "
        << G4BestUnit(analysisManager->GetH1(1)->rms(),  "Energy") << G4endl;
-    
-    G4cout << " LAbs : mean = " 
-      << G4BestUnit(analysisManager->GetH1(2)->mean(), "Length") 
-      << " rms = " 
+
+    G4cout << " LAbs : mean = "
+      << G4BestUnit(analysisManager->GetH1(2)->mean(), "Length")
+      << " rms = "
       << G4BestUnit(analysisManager->GetH1(2)->rms(),  "Length") << G4endl;
 
-    G4cout << " LGap : mean = " 
-      << G4BestUnit(analysisManager->GetH1(3)->mean(), "Length") 
-      << " rms = " 
+    G4cout << " LGap : mean = "
+      << G4BestUnit(analysisManager->GetH1(3)->mean(), "Length")
+      << " rms = "
       << G4BestUnit(analysisManager->GetH1(3)->rms(),  "Length") << G4endl;
   }
 

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4shortlived
-# Package: Geant4.src.G4particles.G4shortlived
-#------------------------------------------------------------------------------
+# - G4shortlived module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4shortlived
-  HEADERS
+geant4_add_module(G4shortlived
+  PUBLIC_HEADERS
     G4DiQuarks.hh
     G4ExcitedBaryonConstructor.hh
     G4ExcitedBaryons.hh
@@ -36,14 +31,6 @@ geant4_define_module(NAME G4shortlived
     G4Gluons.cc
     G4Quarks.cc
     G4ShortLivedConstructor.cc
-    G4VShortLivedParticle.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4materials
-    G4partman
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4materials
-)
+    G4VShortLivedParticle.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4shortlived PUBLIC G4globman G4partman)

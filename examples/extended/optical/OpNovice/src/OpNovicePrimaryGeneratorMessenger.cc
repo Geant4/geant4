@@ -32,9 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNovicePrimaryGeneratorMessenger.hh"
-
 #include "OpNovicePrimaryGeneratorAction.hh"
-
 #include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
@@ -86,5 +84,4 @@ void OpNovicePrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     }
   }
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,73 +1,46 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4muons
-# Package: Geant4.src.G4processes.G4electromagnetic.G4muons
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitly.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - G4muons module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4muons
-    HEADERS
-        G4EnergyLossForExtrapolator.hh
-        G4ErrorEnergyLoss.hh
-        G4ModifiedMephi.hh
-        G4MuBetheBlochModel.hh
-        G4MuBremsstrahlung.hh
-        G4MuBremsstrahlungModel.hh
-        G4MuIonisation.hh
-        G4MuMultipleScattering.hh
-        G4MuPairProduction.hh
-        G4MuPairProductionModel.hh
-        G4TablesForExtrapolator.hh
-        G4ePairProduction.hh
-    SOURCES
-        G4EnergyLossForExtrapolator.cc
-        G4ErrorEnergyLoss.cc
-        G4ModifiedMephi.cc
-        G4MuBetheBlochModel.cc
-        G4MuBremsstrahlung.cc
-        G4MuBremsstrahlungModel.cc
-        G4MuIonisation.cc
-        G4MuMultipleScattering.cc
-        G4MuPairProduction.cc
-        G4MuPairProductionModel.cc
-        G4TablesForExtrapolator.cc
-        G4ePairProduction.cc
-    GRANULAR_DEPENDENCIES
-        G4baryons
-        G4bosons
-        G4cuts
-        G4emstandard
-        G4emutils
-        G4geometrymng
-        G4globman
-        G4leptons
-        G4materials
-        G4mesons
-        G4navigation
-        G4partman
-        G4procman
-        G4track
-        G4volumes
-    GLOBAL_DEPENDENCIES
-        G4geometry
-        G4global
-        G4materials
-        G4particles
-        G4track
-    LINK_LIBRARIES
-)
+geant4_add_module(G4muons
+  PUBLIC_HEADERS
+    G4EnergyLossForExtrapolator.hh
+    G4ErrorEnergyLoss.hh
+    G4ModifiedMephi.hh
+    G4MuBetheBlochModel.hh
+    G4MuBremsstrahlung.hh
+    G4MuBremsstrahlungModel.hh
+    G4MuIonisation.hh
+    G4MuMultipleScattering.hh
+    G4MuPairProduction.hh
+    G4MuPairProductionModel.hh
+    G4TablesForExtrapolator.hh
+    G4ePairProduction.hh
+  SOURCES
+    G4EnergyLossForExtrapolator.cc
+    G4ErrorEnergyLoss.cc
+    G4ModifiedMephi.cc
+    G4MuBetheBlochModel.cc
+    G4MuBremsstrahlung.cc
+    G4MuBremsstrahlungModel.cc
+    G4MuIonisation.cc
+    G4MuMultipleScattering.cc
+    G4MuPairProduction.cc
+    G4MuPairProductionModel.cc
+    G4TablesForExtrapolator.cc
+    G4ePairProduction.cc)
 
-# List any source specific properties here
-
+geant4_module_link_libraries(G4muons
+  PUBLIC
+    G4emutils
+    G4globman
+    G4materials
+    G4procman
+  PRIVATE
+    G4baryons
+    G4bosons
+    G4cuts
+    G4emstandard
+    G4heprandom
+    G4leptons
+    G4partman
+    G4track)

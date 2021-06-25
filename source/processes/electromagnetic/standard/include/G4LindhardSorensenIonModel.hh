@@ -108,8 +108,8 @@ public:
 
   void CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                             const G4DynamicParticle* dp,
-                            G4double& eloss, G4double&,
-			    G4double length) override;
+                            const G4double& length,
+                            G4double& eloss) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                          const G4MaterialCutsCouple*,

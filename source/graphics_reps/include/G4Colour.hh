@@ -139,6 +139,8 @@ public: // With description
   static void InitialiseColourMap();
   static const std::map<G4String, G4Colour>& GetMap();
 
+  G4bool operator< (const G4Colour& rhs) const;
+
 private:
   G4double red, green, blue, alpha;
 

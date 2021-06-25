@@ -37,15 +37,18 @@
 //
 
 #include "G4HadronPhysicsShieldingLEND.hh"
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsShieldingLEND);
 
-G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND( G4int )
+G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(G4int verb)
   :  G4HadronPhysicsShieldingLEND()
-{} 
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+} 
 
 G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(const G4String& name)
   :  G4HadronPhysicsShieldingLEND(name, false)
@@ -59,9 +62,11 @@ G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(
 }
 
 G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(
-                              const G4String& name, G4int) 
+                              const G4String& name, G4int verb) 
   :  G4HadronPhysicsShieldingLEND(name, false)
-{} 
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+} 
 
 G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(
                               const G4String& name, G4int verb,

@@ -29,10 +29,9 @@
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNoviceDetectorConstruction.hh"
-
+#include "OpNoviceDetectorConstructionMessenger.hh"
 #include "G4Box.hh"
 #include "G4Element.hh"
 #include "G4LogicalBorderSurface.hh"
@@ -43,49 +42,48 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
+#include "G4GDMLParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   : G4VUserDetectorConstruction()
 {
+  DumpgdmlFile = "OpNovice_dump.gdml";
+  verbose      = false;
+  dumpgdml     = false;
+  // create a messenger for this class
+  fDetectorMessenger = new OpNoviceDetectorConstructionMessenger(this);
+  fWorld_x = fWorld_y = fWorld_z = 15.0 * m;
   fExpHall_x = fExpHall_y = fExpHall_z = 10.0 * m;
   fTank_x = fTank_y = fTank_z = 5.0 * m;
   fBubble_x = fBubble_y = fBubble_z = 0.5 * m;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceDetectorConstruction::~OpNoviceDetectorConstruction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 {
+  G4bool checkOverlaps = true;
   // ------------- Materials -------------
-
   G4double a, z, density;
   G4int nelements;
-
   // Air
   //
   G4Element* N = new G4Element("Nitrogen", "N", z = 7, a = 14.01 * g / mole);
   G4Element* O = new G4Element("Oxygen", "O", z = 8, a = 16.00 * g / mole);
-
   G4Material* air =
     new G4Material("Air", density = 1.29 * mg / cm3, nelements = 2);
   air->AddElement(N, 70. * perCent);
   air->AddElement(O, 30. * perCent);
-
   // Water
   //
   G4Element* H = new G4Element("Hydrogen", "H", z = 1, a = 1.01 * g / mole);
-
   G4Material* water =
     new G4Material("Water", density = 1.0 * g / cm3, nelements = 2);
   water->AddElement(H, 2);
   water->AddElement(O, 1);
-
   // ------------ Generate & Add Material Properties Table ------------
   //
   std::vector<G4double> photonEnergy = {
@@ -96,7 +94,6 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     3.353 * eV, 3.446 * eV, 3.545 * eV, 3.649 * eV, 3.760 * eV, 3.877 * eV,
     4.002 * eV, 4.136 * eV
   };
-
   // Water
   //
   std::vector<G4double> refractiveIndex1 = {
@@ -105,7 +102,6 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     1.3522, 1.3530, 1.3535, 1.354,  1.3545, 1.355,  1.3555, 1.356,
     1.3568, 1.3572, 1.358,  1.3585, 1.359,  1.3595, 1.36,   1.3608
   };
-
   std::vector<G4double> absorption = {
     3.448 * m,  4.082 * m,  6.329 * m,  9.174 * m,  12.346 * m, 13.889 * m,
     15.152 * m, 17.241 * m, 18.868 * m, 20.000 * m, 26.316 * m, 35.714 * m,
@@ -114,35 +110,45 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     30.000 * m, 28.500 * m, 27.000 * m, 24.500 * m, 22.000 * m, 19.500 * m,
     17.500 * m, 14.500 * m
   };
-
   std::vector<G4double> scintilFast = {
     1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
     1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
     1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00
   };
-
   std::vector<G4double> scintilSlow = {
     0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
     7.00, 6.00, 4.00, 3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00, 4.00,
     5.00, 6.00, 7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 5.00, 4.00
   };
-
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
-
-  myMPT1->AddProperty("RINDEX", photonEnergy, refractiveIndex1)
+  // Values can be added to the material property table individually.
+  // Check that group velocity is calculated from RINDEX
+  myMPT1->AddProperty("RINDEX", &photonEnergy[0], &refractiveIndex1[0], 1)
     ->SetSpline(true);
+  for(size_t i = 1; i < photonEnergy.size(); ++i)
+  {
+    myMPT1->AddEntry("RINDEX", photonEnergy[i], refractiveIndex1[i]);
+  }
+  if(myMPT1->GetProperty("RINDEX")->GetVectorLength() !=
+     myMPT1->GetProperty("GROUPVEL")->GetVectorLength())
+  {
+    G4ExceptionDescription ed;
+    ed << "Error calculating group velocities. Incorrect number of entries "
+          "in group velocity material property vector.";
+    G4Exception("OpNovice::OpNoviceDetectorConstruction", "OpNovice001",
+                FatalException, ed);
+  }
   myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption)->SetSpline(true);
-  myMPT1->AddProperty("FASTCOMPONENT", photonEnergy, scintilFast)
+  myMPT1->AddProperty("SCINTILLATIONCOMPONENT1", photonEnergy, scintilFast)
     ->SetSpline(true);
-  myMPT1->AddProperty("SLOWCOMPONENT", photonEnergy, scintilSlow)
+  myMPT1->AddProperty("SCINTILLATIONCOMPONENT2", photonEnergy, scintilSlow)
     ->SetSpline(true);
-
   myMPT1->AddConstProperty("SCINTILLATIONYIELD", 50. / MeV);
   myMPT1->AddConstProperty("RESOLUTIONSCALE", 1.0);
-  myMPT1->AddConstProperty("FASTTIMECONSTANT", 1. * ns);
-  myMPT1->AddConstProperty("SLOWTIMECONSTANT", 10. * ns);
-  myMPT1->AddConstProperty("YIELDRATIO", 0.8);
-
+  myMPT1->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 1. * ns);
+  myMPT1->AddConstProperty("SCINTILLATIONTIMECONSTANT2", 10. * ns);
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD1", 0.8);
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD2", 0.2);
   std::vector<G4double> energy_water = {
     1.56962 * eV, 1.58974 * eV, 1.61039 * eV, 1.63157 * eV, 1.65333 * eV,
     1.67567 * eV, 1.69863 * eV, 1.72222 * eV, 1.74647 * eV, 1.77142 * eV,
@@ -159,7 +165,6 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   };
 
   // Rayleigh scattering length calculated by G4OpRayleigh
-
   // assume 100 times larger than the rayleigh scattering for now.
   std::vector<G4double> mie_water = {
     167024.4 * m, 158726.7 * m, 150742 * m,   143062.5 * m, 135680.2 * m,
@@ -209,39 +214,35 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   air->SetMaterialPropertiesTable(myMPT2);
 
   // ------------- Volumes --------------
-
+  //
+  // The world
+  G4Box* world_box = new G4Box("World", fWorld_x, fWorld_y, fWorld_z);
+  G4LogicalVolume* world_log =
+    new G4LogicalVolume(world_box, air, "World", 0, 0, 0);
+  G4VPhysicalVolume* world_phys = new G4PVPlacement(
+    0, G4ThreeVector(), world_log, "world", 0, false, 0, checkOverlaps);
   // The experimental Hall
   //
-  G4Box* expHall_box = new G4Box("World", fExpHall_x, fExpHall_y, fExpHall_z);
-
+  G4Box* expHall_box = new G4Box("expHall", fExpHall_x, fExpHall_y, fExpHall_z);
   G4LogicalVolume* expHall_log =
-    new G4LogicalVolume(expHall_box, air, "World", 0, 0, 0);
-
-  G4VPhysicalVolume* expHall_phys =
-    new G4PVPlacement(0, G4ThreeVector(), expHall_log, "World", 0, false, 0);
-
+    new G4LogicalVolume(expHall_box, air, "expHall", 0, 0, 0);
+  G4VPhysicalVolume* expHall_phys = new G4PVPlacement(
+    0, G4ThreeVector(), expHall_log, "expHall", world_log, false, 0);
   // The Water Tank
   //
   G4Box* waterTank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
-
   G4LogicalVolume* waterTank_log =
     new G4LogicalVolume(waterTank_box, water, "Tank", 0, 0, 0);
-
   G4VPhysicalVolume* waterTank_phys = new G4PVPlacement(
     0, G4ThreeVector(), waterTank_log, "Tank", expHall_log, false, 0);
-
   // The Air Bubble
   //
   G4Box* bubbleAir_box = new G4Box("Bubble", fBubble_x, fBubble_y, fBubble_z);
-
   G4LogicalVolume* bubbleAir_log =
     new G4LogicalVolume(bubbleAir_box, air, "Bubble", 0, 0, 0);
-
   new G4PVPlacement(0, G4ThreeVector(0, 2.5 * m, 0), bubbleAir_log, "Bubble",
                     waterTank_log, false, 0);
-
   // ------------- Surfaces --------------
-
   // Water Tank
   //
   G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
@@ -285,13 +286,43 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
   myST2->AddProperty("REFLECTIVITY", ephoton, reflectivity);
   myST2->AddProperty("EFFICIENCY", ephoton, efficiency);
-
-  G4cout << "Air Surface G4MaterialPropertiesTable:" << G4endl;
-  myST2->DumpTable();
-
+  if(verbose)
+  {
+    G4cout << "Air Surface G4MaterialPropertiesTable:" << G4endl;
+    myST2->DumpTable();
+  }
   opAirSurface->SetMaterialPropertiesTable(myST2);
 
-  return expHall_phys;
+  if(dumpgdml)
+  {
+    G4GDMLParser* parser = new G4GDMLParser();
+    parser->Write(DumpgdmlFile, world_phys);
+  }
+  return world_phys;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void OpNoviceDetectorConstruction::SetDumpgdml(G4bool dumpgdml1)
+{
+  this->dumpgdml = dumpgdml1;
+}
+
+G4bool OpNoviceDetectorConstruction::IsDumpgdml() const { return dumpgdml; }
+
+void OpNoviceDetectorConstruction::SetVerbose(G4bool verbose1)
+{
+  this->verbose = verbose1;
+}
+
+G4bool OpNoviceDetectorConstruction::IsVerbose() const { return verbose; }
+
+void OpNoviceDetectorConstruction::SetDumpgdmlFile(G4String DumpgdmlFile1)
+{
+  this->DumpgdmlFile = DumpgdmlFile1;
+}
+
+G4String OpNoviceDetectorConstruction::GetDumpgdmlFile() const
+{
+  return DumpgdmlFile;
+}

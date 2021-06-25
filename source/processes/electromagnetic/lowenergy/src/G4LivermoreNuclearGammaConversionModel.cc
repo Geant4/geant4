@@ -33,21 +33,23 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+namespace { G4Mutex LivermoreNuclearGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4LivermoreNuclearGammaConversionModel::maxZ = 100;
-G4LPhysicsFreeVector* G4LivermoreNuclearGammaConversionModel::data[] = {0};
+G4PhysicsFreeVector* G4LivermoreNuclearGammaConversionModel::data[] = {nullptr};
 
 G4LivermoreNuclearGammaConversionModel::G4LivermoreNuclearGammaConversionModel
 (const G4ParticleDefinition*, const G4String& nam)
-:G4VEmModel(nam),isInitialised(false),smallEnergy(2.*MeV)
+  :G4VEmModel(nam),smallEnergy(2.*MeV),
+   isInitialised(false)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   lowEnergyLimit = 2.0*electron_mass_c2;
   	 
@@ -83,26 +85,23 @@ void G4LivermoreNuclearGammaConversionModel::Initialise(
                                 const G4ParticleDefinition* particle,
 				const G4DataVector& cuts)
 {
-
   if (verboseLevel > 1) 
-  {
+    {
     G4cout << "Calling Initialise() of G4LivermoreNuclearGammaConversionModel." 
 	   << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
 	   << HighEnergyLimit() / GeV << " GeV"
 	   << G4endl;
-  }
+    }
 
   if(IsMaster()) 
   {
 
     // Initialise element selector
-
     InitialiseElementSelectors(particle, cuts);
 
-    // Access to elements
-  
+    // Access to elements  
     char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =
@@ -176,11 +175,7 @@ void G4LivermoreNuclearGammaConversionModel::ReadData(size_t Z, const char* path
     }
   }
 
-  //
-  
-  data[Z] = new G4LPhysicsFreeVector();
-  
-  //
+  data[Z] = new G4PhysicsFreeVector(0,/*spline=*/true);
   
   std::ostringstream ost;
   ost << datadir << "/livermore/pairdata/pp-pair-cs-" << Z <<".dat";
@@ -196,19 +191,17 @@ void G4LivermoreNuclearGammaConversionModel::ReadData(size_t Z, const char* path
 		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
     return;
   } 
-  
   else 
-  {
-    
-    if(verboseLevel > 3) { G4cout << "File " << ost.str() 
-	     << " is opened by G4LivermoreNuclearGammaConversionModel" << G4endl;}
-    
-    data[Z]->Retrieve(fin, true);
-  } 
-
-  // Activation of spline interpolation
-  data[Z] ->SetSpline(true);  
+    {
+      
+      if(verboseLevel > 3) { G4cout << "File " << ost.str() 
+				    << " is opened by G4LivermoreNuclearGammaConversionModel" << G4endl;}
+      
+      data[Z]->Retrieve(fin, true);
+    } 
   
+  // Activation of spline interpolation
+  data[Z] ->FillSecondDerivatives();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -233,7 +226,7 @@ G4LivermoreNuclearGammaConversionModel::ComputeCrossSectionPerAtom(const G4Parti
   
   if(intZ < 1 || intZ > maxZ) { return xs; }
 
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
 
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -256,9 +249,7 @@ G4LivermoreNuclearGammaConversionModel::ComputeCrossSectionPerAtom(const G4Parti
     G4cout  <<  "    -> last  cs value in EADL data file (iu) =" << (*pv)[n] << G4endl;
     G4cout  <<  "*********************************************************" << G4endl;
     }
-
   return xs;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -269,17 +260,16 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(
 				 const G4DynamicParticle* aDynamicGamma,
 				 G4double, G4double)
 {
-
-// The energies of the e+ e- secondaries are sampled using the Bethe - Heitler
-// cross sections with Coulomb correction. A modified version of the random
-// number techniques of Butcher & Messel is used (Nuc Phys 20(1960),15).
-
-// Note 1 : Effects due to the breakdown of the Born approximation at low
-// energy are ignored.
-// Note 2 : The differential cross section implicitly takes account of
-// pair creation in both nuclear and atomic electron fields. However triplet
-// prodution is not generated.
-
+  // The energies of the e+ e- secondaries are sampled using the Bethe - Heitler
+  // cross sections with Coulomb correction. A modified version of the random
+  // number techniques of Butcher & Messel is used (Nuc Phys 20(1960),15).
+  
+  // Note 1 : Effects due to the breakdown of the Born approximation at low
+  // energy are ignored.
+  // Note 2 : The differential cross section implicitly takes account of
+  // pair creation in both nuclear and atomic electron fields. However triplet
+  // prodution is not generated.
+  
   if (verboseLevel > 1) {
     G4cout << "Calling SampleSecondaries() of G4LivermoreNuclearGammaConversionModel" 
 	   << G4endl;
@@ -299,18 +289,17 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(
   else
   {
     // Select randomly one element in the current material
-
     const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
     const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
 
-    if (element == 0)
+    if (element == nullptr)
       {
 	G4cout << "G4LivermoreNuclearGammaConversionModel::SampleSecondaries - element = 0" 
 	       << G4endl;
 	return;
       }
     G4IonisParamElm* ionisation = element->GetIonisation();
-    if (ionisation == 0)
+    if (ionisation == nullptr)
       {
 	G4cout << "G4LivermoreNuclearGammaConversionModel::SampleSecondaries - ionisation = 0" 
 	       << G4endl;
@@ -354,12 +343,10 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(
 	    screen = screenFactor / (epsilon * (1 - epsilon));
 	    gReject = (ScreenFunction2(screen) - fZ) / f20 ;
 	  }
-      } while ( gReject < G4UniformRand() );
-    
+      } while ( gReject < G4UniformRand() );    
   }   //  End of epsilon sampling
 
   // Fix charges randomly
-
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
@@ -377,13 +364,11 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)
-
+  
   G4double u;
   const G4double a1 = 0.625;
   G4double a2 = 3. * a1;
-  //  G4double d = 27. ;
 
-  //  if (9. / (9. + d) > G4UniformRand())
   if (0.25 > G4UniformRand())
     {
       u = - G4Log(G4UniformRand() * G4UniformRand()) / a1 ;
@@ -399,8 +384,7 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(
 
   G4double dxEle= std::sin(thetaEle)*std::cos(phi),dyEle= std::sin(thetaEle)*std::sin(phi),dzEle=std::cos(thetaEle);
   G4double dxPos=-std::sin(thetaPos)*std::cos(phi),dyPos=-std::sin(thetaPos)*std::sin(phi),dzPos=std::cos(thetaPos);
-  
-  
+    
   // Kinematics of the created pair:
   // the electron and positron are assumed to have a symetric angular 
   // distribution with respect to the Z axis along the parent photon
@@ -457,7 +441,6 @@ G4double
 G4LivermoreNuclearGammaConversionModel::ScreenFunction2(G4double screenVariable)
 {
   // Compute the value of the screening function 1.5*phi1 - 0.5*phi2
-  
   G4double value;
   
   if (screenVariable > 1.)
@@ -470,16 +453,11 @@ G4LivermoreNuclearGammaConversionModel::ScreenFunction2(G4double screenVariable)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex LivermoreNuclearGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
-
 void G4LivermoreNuclearGammaConversionModel::InitialiseForElement(
 								    const G4ParticleDefinition*, 
 								    G4int Z)
 {
-  G4AutoLock l(&LivermoreNuclearGammaConversionModelMutex);
-  //  G4cout << "G4LivermoreNuclearGammaConversionModel::InitialiseForElement Z= " 
-  //	 << Z << G4endl;
+  G4AutoLock l(&LivermoreNuclearGammaConversionModelMutex);  
   if(!data[Z]) { ReadData(Z); }
   l.unlock();
 }

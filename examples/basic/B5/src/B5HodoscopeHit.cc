@@ -48,7 +48,7 @@ G4ThreadLocal G4Allocator<B5HodoscopeHit>* B5HodoscopeHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HodoscopeHit::B5HodoscopeHit(G4int id,G4double time)
-: G4VHit(), 
+: G4VHit(),
   fId(id), fTime(time), fPos(0.), fPLogV(nullptr)
 {}
 
@@ -112,19 +112,19 @@ const std::map<G4String,G4AttDef>* B5HodoscopeHit::GetAttDefs() const
   auto store = G4AttDefStore::GetInstance("B5HodoscopeHit",isNew);
 
   if (isNew) {
-    (*store)["HitType"] 
+    (*store)["HitType"]
       = G4AttDef("HitType","Hit Type","Physics","","G4String");
-    
-    (*store)["ID"] 
+
+    (*store)["ID"]
       = G4AttDef("ID","ID","Physics","","G4int");
-    
-    (*store)["Time"] 
+
+    (*store)["Time"]
       = G4AttDef("Time","Time","Physics","G4BestUnit","G4double");
-    
-    (*store)["Pos"] 
+
+    (*store)["Pos"]
       = G4AttDef("Pos","Position","Physics","G4BestUnit","G4ThreeVector");
-    
-    (*store)["LVol"] 
+
+    (*store)["LVol"]
       = G4AttDef("LVol","Logical Volume","Physics","","G4String");
   }
   return store;
@@ -135,7 +135,7 @@ const std::map<G4String,G4AttDef>* B5HodoscopeHit::GetAttDefs() const
 std::vector<G4AttValue>* B5HodoscopeHit::CreateAttValues() const
 {
   auto values = new std::vector<G4AttValue>;
-  
+
   values
     ->push_back(G4AttValue("HitType","HodoscopeHit",""));
   values
@@ -144,12 +144,12 @@ std::vector<G4AttValue>* B5HodoscopeHit::CreateAttValues() const
     ->push_back(G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
   values
     ->push_back(G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
-  
+
   if (fPLogV)
     values->push_back(G4AttValue("LVol",fPLogV->GetName(),""));
   else
     values->push_back(G4AttValue("LVol"," ",""));
-  
+
   return values;
 }
 

@@ -85,7 +85,8 @@ public:
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
   void AddCompound (const G4THitsMap<G4StatDouble>&);
-  
+  void AddCompound (const G4Mesh&);
+
   // enum for /vis/ogl/flushAt.
   enum FlushAction {
     endOfEvent,
@@ -124,13 +125,8 @@ public:
   void drawVBOArray(std::vector<double> vertices);
   
   // Buffers used to access vertex and indices elements
-#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
-  Wt::WGLWidget::Buffer fVertexBufferObject;
-  Wt::WGLWidget::Buffer fIndicesBufferObject;
-#else
   GLuint fVertexBufferObject;
   GLuint fIndicesBufferObject;
-#endif // G4VIS_BUILD_OPENGLWT_DRIVER
   
 #endif //G4OPENGL_VERSION_2
   

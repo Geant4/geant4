@@ -56,17 +56,11 @@ private:
   G4UIcmdWithoutParameter* fpCommandPrintEPS;
 
   G4UIdirectory* fpDirectorySet;
-  G4UIcommand*          fpCommandDisplayHeadTime;
-  G4UIcommand*          fpCommandDisplayLightFront;
   G4UIcmdWithAnInteger* fpCommandDisplayListLimit;
-  G4UIcommand*          fpCommandEndTime;
-  G4UIcmdWithAnInteger* fpCommandEventsDrawInterval;
   G4UIcommand*          fpCommandExportFormat;
-  G4UIcmdWithADouble*   fpCommandFade;
   G4UIcommand*          fpCommandPrintFilename;
   G4UIcmdWithAString*   fpCommandPrintMode;
   G4UIcommand*          fpCommandPrintSize;
-  G4UIcommand*          fpCommandStartTime;
   G4UIcmdWithABool*     fpCommandTransparency;
 };
 

@@ -92,6 +92,11 @@ G4Track& G4Track::operator=(const G4Track& right)
     fWeight      = right.fWeight;
     fStepLength  = right.fStepLength;
 
+    // additional fields required for geometrical splitting
+    fpTouchable = right.fpTouchable;
+    fpNextTouchable = right.fpNextTouchable;
+    fpOriginTouchable = right.fpOriginTouchable;
+
     // Track ID (and Parent ID) is not copied and set to zero for new track
     fTrackID  = 0;
     fParentID = 0;

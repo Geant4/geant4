@@ -99,7 +99,5 @@ class OpNoviceRun : public G4Run
   G4ParticleDefinition* fParticle;
   G4double fEnergy;
 };
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

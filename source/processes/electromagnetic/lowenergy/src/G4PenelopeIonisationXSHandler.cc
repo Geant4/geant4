@@ -44,62 +44,61 @@
 #include "G4PhysicsLogVector.hh" 
 
 G4PenelopeIonisationXSHandler::G4PenelopeIonisationXSHandler(size_t nb)
-  :XSTableElectron(0),XSTablePositron(0),
-   theDeltaTable(0),energyGrid(0)
+  :fXSTableElectron(nullptr),fXSTablePositron(nullptr),
+   fDeltaTable(nullptr),fEnergyGrid(nullptr)
 {
-  nBins = nb;
+  fNBins = nb;
   G4double LowEnergyLimit = 100.0*eV;
   G4double HighEnergyLimit = 100.0*GeV;
-  oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
-  XSTableElectron = new 
+  fOscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
+  fXSTableElectron = new 
     std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
-  XSTablePositron = new 
+  fXSTablePositron = new 
     std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
 
-  theDeltaTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
-  energyGrid = new G4PhysicsLogVector(LowEnergyLimit,
+  fDeltaTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+  fEnergyGrid = new G4PhysicsLogVector(LowEnergyLimit,
 				      HighEnergyLimit, 
-				      nBins-1); //one hidden bin is added
-
-  verboseLevel = 0;
+				      fNBins-1); //one hidden bin is added
+  fVerboseLevel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
 {
-  if (XSTableElectron)
+  if (fXSTableElectron)
     {
-      for (auto& item : (*XSTableElectron))
+      for (auto& item : (*fXSTableElectron))
 	{	  
 	  //G4PenelopeCrossSection* tab = i->second;
 	  delete item.second;
 	}
-      delete XSTableElectron;
-      XSTableElectron = nullptr;
+      delete fXSTableElectron;
+      fXSTableElectron = nullptr;
     }
 
-  if (XSTablePositron)
+  if (fXSTablePositron)
     {
-      for (auto& item : (*XSTablePositron))
+      for (auto& item : (*fXSTablePositron))
 	{
 	  //G4PenelopeCrossSection* tab = i->second;
 	  delete item.second;
 	}
-      delete XSTablePositron;
-      XSTablePositron = nullptr;
+      delete fXSTablePositron;
+      fXSTablePositron = nullptr;
     }
-  if (theDeltaTable)
+  if (fDeltaTable)
     {      
-      for (auto& item : (*theDeltaTable))
+      for (auto& item : (*fDeltaTable))
  	delete item.second;     
-      delete theDeltaTable;
-      theDeltaTable = nullptr;
+      delete fDeltaTable;
+      fDeltaTable = nullptr;
     } 
-  if (energyGrid)
-    delete energyGrid;
+  if (fEnergyGrid)
+    delete fEnergyGrid;
   
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     G4cout << "G4PenelopeIonisationXSHandler. Tables have been cleared" 
 	   << G4endl;
 }
@@ -122,7 +121,7 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
 
   if (part == G4Electron::Electron())
     {
-      if (!XSTableElectron)
+      if (!fXSTableElectron)
 	{
 	  G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
 		      "em0028",FatalException,  
@@ -130,15 +129,15 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
 	  return nullptr;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-      if (XSTableElectron->count(theKey)) //table already built	
-	return XSTableElectron->find(theKey)->second;
+      if (fXSTableElectron->count(theKey)) //table already built	
+	return fXSTableElectron->find(theKey)->second;
       else	 
         return nullptr;	 
     }
   
   if (part == G4Positron::Positron())
     {
-      if (!XSTablePositron)
+      if (!fXSTablePositron)
 	{
 	  G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
 		      "em0028",FatalException,  
@@ -146,8 +145,8 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
 	  return nullptr;
 	}
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-      if (XSTablePositron->count(theKey)) //table already built	
-	return XSTablePositron->find(theKey)->second;
+      if (fXSTablePositron->count(theKey)) //table already built	
+	return fXSTablePositron->find(theKey)->second;
       else
         return nullptr;  
    }
@@ -171,7 +170,7 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
   //individual shells.
   //Equivalent of subroutines EINaT and PINaT of Penelope
   //
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     {
       G4cout << "G4PenelopeIonisationXSHandler: going to build cross section table " << G4endl;
       G4cout << "for " << part->GetParticleName() << " in " << mat->GetName() << G4endl;
@@ -182,46 +181,46 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
   //Check if the table already exists
   if (part == G4Electron::Electron())
     {
-      if (XSTableElectron->count(theKey)) //table already built	
+      if (fXSTableElectron->count(theKey)) //table already built	
 	return;
     }
   if (part == G4Positron::Positron())
     {
-      if (XSTablePositron->count(theKey)) //table already built	
+      if (fXSTablePositron->count(theKey)) //table already built	
 	return;
     }
   
   //check if the material has been built
-  if (!(theDeltaTable->count(mat)))
+  if (!(fDeltaTable->count(mat)))
     BuildDeltaTable(mat);
 
 
   //Tables have been already created (checked by GetCrossSectionTableForCouple)
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
+  G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableIonisation(mat);
   size_t numberOfOscillators = theTable->size();
 
-  if (energyGrid->GetVectorLength() != nBins) 
+  if (fEnergyGrid->GetVectorLength() != fNBins) 
     {
       G4ExceptionDescription ed;
       ed << "Energy Grid looks not initialized" << G4endl;
-      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
+      ed << fNBins << " " << fEnergyGrid->GetVectorLength() << G4endl;
       G4Exception("G4PenelopeIonisationXSHandler::BuildXSTable()",
 		  "em2030",FatalException,ed);
     }
 
-  G4PenelopeCrossSection* XSEntry = new G4PenelopeCrossSection(nBins,numberOfOscillators);
+  G4PenelopeCrossSection* XSEntry = new G4PenelopeCrossSection(fNBins,numberOfOscillators);
  
   //loop on the energy grid
-  for (size_t bin=0;bin<nBins;bin++)
+  for (size_t bin=0;bin<fNBins;bin++)
     {
-       G4double energy = energyGrid->GetLowEdgeEnergy(bin);
+       G4double energy = fEnergyGrid->GetLowEdgeEnergy(bin);
        G4double XH0=0, XH1=0, XH2=0;
        G4double XS0=0, XS1=0, XS2=0;
    
        //oscillator loop
        for (size_t iosc=0;iosc<numberOfOscillators;iosc++)
 	 {
-	   G4DataVector* tempStorage = 0;
+	   G4DataVector* tempStorage = nullptr;
 
 	   G4PenelopeOscillator* theOsc = (*theTable)[iosc];
 	   G4double delta = GetDensityCorrection(mat,energy);
@@ -260,7 +259,7 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
 	   if (tempStorage)
 	     {
 	       delete tempStorage;
-	       tempStorage = 0;
+	       tempStorage = nullptr;
 	     }
 	 }       
        XSEntry->AddCrossSectionPoint(bin,energy,XH0,XH1,XH2,XS0,XS1,XS2);
@@ -270,9 +269,9 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
 
   //Insert in the appropriate table
   if (part == G4Electron::Electron())      
-    XSTableElectron->insert(std::make_pair(theKey,XSEntry));
+    fXSTableElectron->insert(std::make_pair(theKey,XSEntry));
   else if (part == G4Positron::Positron())
-    XSTablePositron->insert(std::make_pair(theKey,XSEntry));
+    fXSTablePositron->insert(std::make_pair(theKey,XSEntry));
   else
     delete XSEntry;
   
@@ -286,7 +285,7 @@ G4double G4PenelopeIonisationXSHandler::GetDensityCorrection(const G4Material* m
 							     const G4double energy) const
 {
   G4double result = 0;
-  if (!theDeltaTable)
+  if (!fDeltaTable)
     {
       G4Exception("G4PenelopeIonisationXSHandler::GetDensityCorrection()",
 		  "em2032",FatalException,
@@ -301,9 +300,9 @@ G4double G4PenelopeIonisationXSHandler::GetDensityCorrection(const G4Material* m
     }
   G4double logene = G4Log(energy);
  
-  if (theDeltaTable->count(mat))
+  if (fDeltaTable->count(mat))
     {
-      const G4PhysicsFreeVector* vec = theDeltaTable->find(mat)->second;
+      const G4PhysicsFreeVector* vec = fDeltaTable->find(mat)->second;
       result = vec->Value(logene); //the table has delta vs. ln(E)      
     }
   else
@@ -321,27 +320,27 @@ G4double G4PenelopeIonisationXSHandler::GetDensityCorrection(const G4Material* m
 
 void G4PenelopeIonisationXSHandler::BuildDeltaTable(const G4Material* mat)
 {
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
-  G4double plasmaSq = oscManager->GetPlasmaEnergySquared(mat);
-  G4double totalZ = oscManager->GetTotalZ(mat);
+  G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableIonisation(mat);
+  G4double plasmaSq = fOscManager->GetPlasmaEnergySquared(mat);
+  G4double totalZ = fOscManager->GetTotalZ(mat);
   size_t numberOfOscillators = theTable->size();
 
-  if (energyGrid->GetVectorLength() != nBins) 
+  if (fEnergyGrid->GetVectorLength() != fNBins) 
     {
       G4ExceptionDescription ed;
       ed << "Energy Grid for Delta table looks not initialized" << G4endl;
-      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
+      ed << fNBins << " " << fEnergyGrid->GetVectorLength() << G4endl;
       G4Exception("G4PenelopeIonisationXSHandler::BuildDeltaTable()",
 		  "em2030",FatalException,ed);
     }
 
-  G4PhysicsFreeVector* theVector = new G4PhysicsFreeVector(nBins);
+  G4PhysicsFreeVector* theVector = new G4PhysicsFreeVector(fNBins);
 
   //loop on the energy grid
-  for (size_t bin=0;bin<nBins;bin++)
+  for (size_t bin=0;bin<fNBins;bin++)
     {
       G4double delta = 0.;
-      G4double energy = energyGrid->GetLowEdgeEnergy(bin);
+      G4double energy = fEnergyGrid->GetLowEdgeEnergy(bin);
 
       //Here calculate delta
       G4double gam = 1.0+(energy/electron_mass_c2);
@@ -417,7 +416,7 @@ void G4PenelopeIonisationXSHandler::BuildDeltaTable(const G4Material* mat)
       energy = std::max(1e-9*eV,energy); //prevents log(0)
       theVector->PutValue(bin,G4Log(energy),delta);
     }
-  theDeltaTable->insert(std::make_pair(mat,theVector));
+  fDeltaTable->insert(std::make_pair(mat,theVector));
   return;
 }
 							
@@ -639,7 +638,6 @@ G4DataVector* G4PenelopeIonisationXSHandler::ComputeShellCrossSectionsPositron(G
 	    }
 	}
     }
-
   //
   // Close collisions (Bhabha's cross section)
   //

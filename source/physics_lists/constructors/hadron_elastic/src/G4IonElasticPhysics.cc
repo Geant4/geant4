@@ -46,6 +46,7 @@
 #include "G4NuclNuclDiffuseElastic.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4CrossSectionElastic.hh"
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -54,9 +55,11 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4IonElasticPhysics);
 //
 
 G4IonElasticPhysics::G4IonElasticPhysics(G4int ver)
-  : G4VPhysicsConstructor("IonElasticPhysics"), verbose(ver)
+  : G4VPhysicsConstructor("IonElasticPhysics")
 {
-  if(verbose > 1) { 
+  // because it is an addition, the type of this constructor is 0
+  G4HadronicParameters::Instance()->SetVerboseLevel(ver);
+  if(ver > 1) { 
     G4cout << "### G4IonElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
@@ -89,8 +92,9 @@ void G4IonElasticPhysics::ConstructProcess()
   G4ProcessManager* ionManager = G4GenericIon::GenericIon()->GetProcessManager();
   ionManager->AddDiscreteProcess( ionElasticProcess );
 
-  if ( verbose > 1 ) {
+  if (G4HadronicParameters::Instance()->GetVerboseLevel() > 1 ) {
     G4cout << "### IonElasticPhysics: " << ionElasticProcess->GetProcessName()
-	   << " added for " << G4GenericIon::GenericIon()->GetParticleName() << G4endl;
+	   << " added for " << G4GenericIon::GenericIon()->GetParticleName() 
+	   << G4endl;
   }
 }

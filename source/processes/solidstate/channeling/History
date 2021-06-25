@@ -16,6 +16,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 April 2021 Ben Morgan channeling-V10-07-00
+-----------------------------------------------------
+- Migrate build to modular CMake API
+
 28 May 2019 B. Morgan channeling-V10-06-00
 -----------------------------------------------------
 - Name module "G4solidstate_channeling" for use with new CMake system,
@@ -39,7 +43,7 @@ committal in the SVN repository !
 
 20 April 2017  G. Cosmo
 -----------------------------------------------------
-- Removed inclusion if non-existing G4ChargeState.hh header in G4Channeling.cc. 
+- Removed inclusion if non-existing G4ChargeState.hh header in G4Channeling.cc.
 - Corrected GNUmakefile and sources.cmake scripts.
 
 6 April 2017  E. Bagli

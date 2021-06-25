@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4detutils
-# Package: Geant4.src.G4digits_hits.G4detutils
-#------------------------------------------------------------------------------
+# - G4detutils module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4detutils
-  HEADERS
+geant4_add_module(G4detutils
+  PUBLIC_HEADERS
     G4DefaultLinearColorMap.hh
     G4ScoreLogColorMap.hh
     G4VScoreNtupleWriter.hh
@@ -39,31 +34,8 @@ geant4_define_module(NAME G4detutils
     G4ScoringProbe.cc
     G4VScoreColorMap.cc
     G4VScoreWriter.cc
-    G4VScoringMesh.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4detector
-    G4detscorer
-    G4digits
-    G4geomdivision
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hits
-    G4intercoms
-    G4materials
-    G4navigation
-    G4partman
-    G4track
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4particles
-    G4track
-)
+    G4VScoringMesh.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4detutils
+  PUBLIC G4hits G4intercoms G4hepnumerics G4globman
+  PRIVATE G4detector G4detscorer G4volumes G4geomdivision G4csg G4geometrymng G4graphics_reps G4materials)

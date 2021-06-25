@@ -44,7 +44,6 @@
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -63,9 +62,10 @@
 
 QBBC::QBBC( G4int ver, const G4String&)
 {
-  G4cout << "<<< Reference Physics List QBBC " <<G4endl;	
+  if(ver > 0) 
+    G4cout << "<<< Reference Physics List QBBC " <<G4endl;	
 
-  defaultCutValue = 0.7*mm;  
+  defaultCutValue = 0.7*CLHEP::mm;
   SetVerboseLevel(ver);
 
   // EM Physics

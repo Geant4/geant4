@@ -147,7 +147,7 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   parameter = new G4UIparameter ("graphics-system-name",
 				 's', omitable = false);
   const G4GraphicsSystemList& gslist =
-    fpVisManager -> GetAvailableGraphicsSystems ();
+  fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;
   for (const auto gs: gslist) {
     const G4String& name = gs -> GetName ();
@@ -210,13 +210,13 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4int nSystems = gsl.size ();
   if (nSystems <= 0) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
-	" no graphics systems available."
-	"\n  Did you instantiate any in"
-	" YourVisManager::RegisterGraphicsSystems()?"
-	     << G4endl;
-    }
+    G4ExceptionDescription ed;
+    ed <<
+    "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+    " no graphics systems available."
+    "\n  Did you instantiate any in"
+    " YourVisManager::RegisterGraphicsSystems()?";
+    command->CommandFailed(ed);
     return;
   }
   G4int iGS;  // Selector index.
@@ -241,16 +241,28 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     }
   }
   if (!found) {
-    // Invalid command line argument or none.
-    // This shouldn't happen!!!!!!
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
-      "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
-      "\n  invalid graphics system \""
-      << graphicsSystem
-      << "\" requested."
-      << G4endl;
+    // Shouldn't happen, since graphicsSystem should be a candidate
+    // Use set to get alphabetical order
+    std::set<G4String> candidates;
+    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
+      // Just list nicknames, but exclude FALLBACK nicknames
+      for (const auto& nickname: gs->GetNicknames()) {
+	if (!nickname.contains("FALLBACK")) {
+	  candidates.insert(nickname);
+	}
+      }
     }
+    G4ExceptionDescription ed;
+    ed <<
+    "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+    "\n  Invalid graphics system \""
+    << graphicsSystem
+    << "\" requested."
+    << "\n  Candidates are:";
+    for (const auto& candidate: candidates) {
+      ed << ' ' << candidate;
+    };
+    command->CommandFailed(ed);
     return;
   }
 
@@ -276,15 +288,11 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
       }
     }
     if (iGS < 0 || iGS >= nSystems || loopCounter >=3) {
-      std::ostringstream oss;
-      oss << "\"" << gsl[iGSBeingTested]->GetNickname()
+      G4ExceptionDescription ed;
+      ed << "\"" << gsl[iGSBeingTested]->GetNickname()
       << "\" is not compatible with your chosen session,"
       " and no fallback system found.";
-      if (verbosity >= G4VisManager::errors) {
-        G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue: "
-        << oss.str() << G4endl;
-      }
-      command->CommandFailed(oss);
+      command->CommandFailed(ed);
       return;
     }
     //  A fallback system found...but go back and check this too.
@@ -328,10 +336,11 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   for (iScene = 0; iScene < list.size (); iScene++) {
     G4VSceneHandler* sceneHandler = list [iScene];
     if (sceneHandler -> GetName () == newName) {
-      if (verbosity >= G4VisManager::errors) {
-	G4cerr << "ERROR: Scene handler \"" << newName
-	       << "\" already exists." << G4endl;
-      }
+      G4ExceptionDescription ed;
+      ed <<
+      "ERROR: Scene handler \"" << newName
+      << "\" already exists.";
+      command->CommandFailed(ed);
       return;
     }
   }
@@ -339,24 +348,22 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   //Create scene handler.
   fpVisManager -> CreateSceneHandler (newName);
   if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
-	" Curious name mismatch."
-	"\n Current name \""
-	     << fpVisManager -> GetCurrentSceneHandler () -> GetName ()
-	     << "\" is not the new name \""
-	     << newName
-	     << "\".\n  Please report to vis coordinator."
-	     << G4endl;
-    }
+    G4ExceptionDescription ed;
+    ed <<
+    "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
+    " Curious name mismatch."
+    "\n Current name \""
+    << fpVisManager -> GetCurrentSceneHandler () -> GetName ()
+    << "\" is not the new name \""
+    << newName
+    << "\".\n  Please report to vis coordinator.";
+    command->CommandFailed(ed);
     return;
   }
 
-  if (verbosity >= G4VisManager::confirmations) {
+  if (verbosity >= G4VisManager::confirmations)
     G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
-  }
 
-  // Attach scene.
   if (fpVisManager -> GetCurrentScene ())
     G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
 }

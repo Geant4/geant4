@@ -488,7 +488,7 @@ G4int G4UImanager::ApplyCommand(const char* aCmd)
   if(aCommand.isNull())
     return fAliasNotFound;
   if(verboseLevel) {
-    fLastCommandOutputTreated = false;
+    if (isMaster) fLastCommandOutputTreated = false;
     G4cout << aCommand << G4endl;
   }
   G4String commandString;

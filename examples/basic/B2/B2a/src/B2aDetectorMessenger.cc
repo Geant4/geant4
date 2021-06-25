@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B2aDetectorMessenger.cc
 /// \brief Implementation of the B2aDetectorMessenger class
 
@@ -87,7 +87,7 @@ void B2aDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fStepMaxCmd ) {
     fDetectorConstruction
       ->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue));
-  }   
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

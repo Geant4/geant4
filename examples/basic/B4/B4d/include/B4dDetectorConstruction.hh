@@ -47,8 +47,8 @@ class G4GlobalMagFieldMessenger;
 /// - the number of layers,
 /// - the transverse size of the calorimeter (the input face is a square).
 ///
-/// In ConstructSDandField() sensitive detectors of G4MultiFunctionalDetector 
-/// type with primitive scorers are created and associated with the Absorber 
+/// In ConstructSDandField() sensitive detectors of G4MultiFunctionalDetector
+/// type with primitive scorers are created and associated with the Absorber
 /// and Gap volumes.  In addition a transverse uniform magnetic field is defined
 /// via G4GlobalMagFieldMessenger class.
 
@@ -61,16 +61,16 @@ class B4dDetectorConstruction : public G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-     
+
   private:
     // methods
     //
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
-  
+
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
                             // magnetic field messenger
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps

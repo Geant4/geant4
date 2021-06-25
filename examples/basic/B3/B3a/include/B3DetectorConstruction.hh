@@ -38,7 +38,7 @@ class G4LogicalVolume;
 
 /// Detector construction class to define materials and geometry.
 ///
-/// Crystals are positioned in Ring, with an appropriate rotation matrix. 
+/// Crystals are positioned in Ring, with an appropriate rotation matrix.
 /// Several copies of Ring are placed in the full detector.
 
 class B3DetectorConstruction : public G4VUserDetectorConstruction
@@ -50,7 +50,7 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-               
+
   private:
     void DefineMaterials();
 

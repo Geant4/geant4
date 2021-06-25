@@ -49,11 +49,13 @@
 #include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
 #include "G4VHadronModelBuilder.hh"
+#include "G4HadronicParameters.hh"
 
 G4VHadronPhysics::G4VHadronPhysics(const G4String& aName, G4int verb)
   : G4VPhysicsConstructor(aName)
 {
   SetVerboseLevel(verb);
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
   if (verboseLevel>1) {
     G4cout << "### G4VHadronPhysics: <" << aName << "> is created "
 	   << G4endl;
@@ -101,7 +103,7 @@ G4VHadronPhysics::NewModel(G4HadronicInteraction* model,
 			   G4double emin, 
 			   G4double emax)
 {
-  if(!model) return model;
+  if(nullptr == model) return model;
   model->SetMinEnergy(emin);
   model->SetMaxEnergy(emax);
   if (verboseLevel>1) {

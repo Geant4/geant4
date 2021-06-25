@@ -44,7 +44,7 @@ Build(G4HadronElasticProcess *)
 }
 
 void G4TritonPHPBuilder::
-Build(G4TritonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   G4ParticleHPInelasticData* theTritonHPInelasticData=new G4ParticleHPInelasticData(G4Triton::Triton());
   theTritonHPInelasticData->SetMinKinEnergy(theMin);

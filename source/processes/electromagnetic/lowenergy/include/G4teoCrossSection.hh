@@ -41,7 +41,6 @@
 
 // -------------------------------------------------------------------
 
-
 #ifndef G4TEOCROSSSECTION_HH
 #define G4TEOCROSSSECTION_HH 1
 
@@ -55,43 +54,37 @@ class G4VecpssrMiModel;
 class G4teoCrossSection : public G4VhShellCrossSection 
 {
 public:
-
-  G4teoCrossSection(const G4String& name);
-
+  explicit G4teoCrossSection(const G4String& name);
   virtual ~G4teoCrossSection();
 			     
   std::vector<G4double> GetCrossSection(G4int Z,
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy = 0,
-					const G4Material* mat=0);
+					const G4Material* mat=nullptr) override;
 
   G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
 			G4double mass,
-			const G4Material* mat);
+			const G4Material* mat) override;
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
 				      G4double mass,
 				      G4double deltaEnergy = 0,
-				      const G4Material* mat=0);
+				      const G4Material* mat=nullptr) override;
   
-  
-  void SetTotalCS(G4double);
+  void SetTotalCS(G4double) override;
+
+  G4teoCrossSection(const G4teoCrossSection&) = delete;
+  G4teoCrossSection & operator = (const G4teoCrossSection &right) = delete;
     
 private:
-  
-  G4double totalCS;
-              
   G4VecpssrKModel*  ecpssrShellK;
   G4VecpssrLiModel*  ecpssrShellLi;
   G4VecpssrMiModel*  ecpssrShellMi;
 			
-			
-  G4teoCrossSection(const G4teoCrossSection&);
-  G4teoCrossSection & operator = (const G4teoCrossSection &right);
-  
+  G4double totalCS;
 };
 
 #endif

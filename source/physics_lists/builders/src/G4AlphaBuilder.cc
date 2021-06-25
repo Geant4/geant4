@@ -52,7 +52,7 @@
 
  G4AlphaBuilder::G4AlphaBuilder()
  {
-   theAlphaInelastic=new G4AlphaInelasticProcess;
+   theAlphaInelastic=new G4HadronInelasticProcess( "alphaInelastic", G4Alpha::Definition() );
  }
 
  void G4AlphaBuilder::RegisterMe(G4PhysicsBuilderInterface* ab) {

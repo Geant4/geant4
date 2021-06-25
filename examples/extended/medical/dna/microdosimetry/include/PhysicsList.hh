@@ -46,13 +46,11 @@ class PhysicsList: public G4VUserPhysicsList
 public:
 
   PhysicsList();
-  virtual ~PhysicsList();
+  ~PhysicsList() override;
 
-  void SetGammaCut(G4double);
-  void SetElectronCut(G4double);
-  void SetPositronCut(G4double);
-  void SetProtonCut(G4double);
-  
+  void ConstructParticle() override;
+  void ConstructProcess() override;
+
 protected:
 
   void ConstructBosons();
@@ -61,18 +59,6 @@ protected:
 
   void ConstructGeneral();
   void ConstructEM();
-
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  
-  void SetCuts();
     
-private:
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
-  G4double fCutForProton;
-  
 };
 #endif

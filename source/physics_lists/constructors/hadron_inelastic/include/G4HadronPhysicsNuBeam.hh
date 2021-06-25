@@ -48,7 +48,7 @@ class G4HadronPhysicsNuBeam : public G4HadronPhysicsFTFP_BERT
 public: 
   G4HadronPhysicsNuBeam(G4int verbose =1);
   G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic=false);
-  ~G4HadronPhysicsNuBeam() override {}
+  virtual ~G4HadronPhysicsNuBeam() {}
 
   void ConstructProcess() override;
 

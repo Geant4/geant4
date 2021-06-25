@@ -34,7 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
-// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -44,9 +44,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "G4NeutronFissionProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4LFission.hh"
 #include "HadronicInelasticModelCRMC.hh"
@@ -65,27 +65,27 @@ CRMCNeutronBuilder::CRMCNeutronBuilder( const G4int crmcModelId, const std::stri
 }
 
 
-CRMCNeutronBuilder::~CRMCNeutronBuilder() {}
-
-
-void CRMCNeutronBuilder::Build( G4HadronElasticProcess* ) {}
-
-
-void CRMCNeutronBuilder::Build( G4NeutronInelasticProcess* aP ) {
+void CRMCNeutronBuilder::Build( G4HadronInelasticProcess* aP ) {
   fModel->SetMinEnergy( fMin );
   fModel->SetMaxEnergy( fMax );
   aP->RegisterMe( fModel );
 }
 
 
-void CRMCNeutronBuilder::Build( G4HadronFissionProcess* aP ) {
+CRMCNeutronBuilder::~CRMCNeutronBuilder() {}
+
+
+void CRMCNeutronBuilder::Build( G4HadronElasticProcess* ) {}
+
+
+void CRMCNeutronBuilder::Build( G4NeutronFissionProcess* aP ) {
   fFissionModel->SetMinEnergy( 0.0 );
   fFissionModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   aP->RegisterMe( fFissionModel );
 }
 
 
-void CRMCNeutronBuilder::Build( G4HadronCaptureProcess* aP ) {
+void CRMCNeutronBuilder::Build( G4NeutronCaptureProcess* aP ) {
   aP->RegisterMe( fCaptureModel );
 }
 

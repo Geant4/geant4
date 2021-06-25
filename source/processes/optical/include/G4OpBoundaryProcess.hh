@@ -202,7 +202,7 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   G4double Rindex1;
   G4double Rindex2;
 
-  G4double cost1, cost2, sint1, sint2;
+  G4double sint1;
 
   G4OpBoundaryProcessStatus theStatus;
 

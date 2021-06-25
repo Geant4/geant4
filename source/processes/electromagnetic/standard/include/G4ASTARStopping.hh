@@ -55,7 +55,7 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include <vector>
 
 class G4ASTARStopping 
@@ -76,22 +76,22 @@ public:
 
   inline G4double GetElectronicDEDX(const G4Material*, G4double energy) const;
 
+  // hide assignment operator
+  G4ASTARStopping & operator=(const G4ASTARStopping &right) = delete;
+  G4ASTARStopping(const  G4ASTARStopping&) = delete;
+
 private:
 
-  void AddData(const G4float* s, const G4Material*);
+  void AddData(const G4float* ss, const G4Material*);
 
   void FindData(G4int idx, const G4Material*);
 
   void PrintWarning(G4int idx) const;
 
-  // hide assignment operator
-  G4ASTARStopping & operator=(const  G4ASTARStopping &right) = delete;
-  G4ASTARStopping(const  G4ASTARStopping&) = delete;
-
   size_t nvectors;
   G4double emin;
   std::vector<const G4Material*> materials;
-  std::vector<G4LPhysicsFreeVector*> sdata;
+  std::vector<G4PhysicsFreeVector*> sdata;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

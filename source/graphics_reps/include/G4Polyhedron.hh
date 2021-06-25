@@ -67,7 +67,7 @@
 //   G4PolyhedronTorus(rmin,rmax,rtor,
 //                     phi,dphi)            - create G4Polyhedron for Torus;
 //   G4PolyhedronTet(p0[3],p1[3],p2[3],p3[3]) - create polyhedron for Tet;
-//                                          
+//
 //   G4PolyhedronEllipsoid(dx,dy,dz,
 //                         zcut1,zcut2)     - create G4Polyhedron for Ellipsoid;
 //   G4PolyhedronEllipticalCone(dx,dy,z,
@@ -143,14 +143,14 @@ public:
 
 class G4PolyhedronCone: public G4Polyhedron {
 public:
-  G4PolyhedronCone (G4double Rmn1, G4double Rmx1, 
+  G4PolyhedronCone (G4double Rmn1, G4double Rmx1,
                     G4double Rmn2, G4double Rmx2, G4double Dz);
-  virtual ~G4PolyhedronCone (); 
+  virtual ~G4PolyhedronCone ();
 };
 
 class G4PolyhedronCons: public G4Polyhedron {
 public:
-  G4PolyhedronCons (G4double Rmn1, G4double Rmx1, 
+  G4PolyhedronCons (G4double Rmn1, G4double Rmx1,
                     G4double Rmn2, G4double Rmx2, G4double Dz,
                     G4double Phi1, G4double Dphi);
   virtual ~G4PolyhedronCons ();
@@ -169,6 +169,8 @@ public:
                     const G4double *z,
                     const G4double *rmin,
                     const G4double *rmax);
+  G4PolyhedronPcon (G4double phi, G4double dphi,
+                    const std::vector<G4TwoVector> &rz);
   virtual ~G4PolyhedronPcon ();
 };
 
@@ -178,6 +180,9 @@ public:
                     const G4double *z,
                     const G4double *rmin,
                     const G4double *rmax);
+  G4PolyhedronPgon (G4double phi, G4double dphi, G4int npdv,
+                    const std::vector<G4TwoVector> &rz);
+
   virtual ~G4PolyhedronPgon ();
 };
 
@@ -237,7 +242,7 @@ public:
 
 class G4PolyhedronTubs: public G4Polyhedron {
 public:
-  G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz, 
+  G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz,
                     G4double Phi1, G4double Dphi);
   virtual ~G4PolyhedronTubs ();
 };
@@ -258,14 +263,14 @@ class G4PolyhedronHype: public G4Polyhedron {
 
 class G4PolyhedronEllipsoid : public G4Polyhedron {
  public:
-  G4PolyhedronEllipsoid(G4double dx, G4double dy, G4double dz, 
+  G4PolyhedronEllipsoid(G4double dx, G4double dy, G4double dz,
                         G4double zcut1, G4double zcut2);
   virtual ~G4PolyhedronEllipsoid ();
 };
 
 class G4PolyhedronEllipticalCone : public G4Polyhedron {
  public:
-  G4PolyhedronEllipticalCone(G4double dx, G4double dy, G4double z, 
+  G4PolyhedronEllipticalCone(G4double dx, G4double dy, G4double z,
                              G4double zcut1);
   virtual ~G4PolyhedronEllipticalCone ();
 };

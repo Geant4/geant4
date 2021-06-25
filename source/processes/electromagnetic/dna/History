@@ -14,10 +14,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+31-05-2021, D.Sakata S. Guatelli, emdna-V10-07-08
+- Added new classes G4DNADiracRMatrixExcitationModel
+                    G4DNAQuinnPlasmonExcitationModel
+                    G4DNARelativisticIonisationModel
+                    G4DNAPlasmonExcitation
+- Modified G4DNAELSEPAElasticModel for gold
+
+9-05-2021, H.Tran, tag emdna-V10-07-07
+- Add IRT-syn model
+
+16-04-2021, B.Morgan, tag emdna-V10-07-06
+- Migrate build to modular CMake API
+
+27-04-2021, H.Tran, tag emdna-V10-07-05
+- G4DNAElectronHoleRecombination: added OctreeFinder
+- G4DNABrownianTransportation: modified AlongStepDoIt
+- added OctreeFinder and IRTUtils
+
+26-04-2021, V.Ivanchenko,  tag emdna-V10-07-04
+- G4DNABornAngle, G4DNARuddAngle - updated print method
+
+12-03-2021, L.Pandola, tag emdna-V10-07-03
+- Move DNA-related Unit Tests from lowenergy/tests to dna/test
+
+24-02-2021, G.Cosmo, tag emdna-V10-07-02
+- Fixed dependency on g4tools, now moved to externals module.
+
+16-02-2021, W.G.Shin, tag emdna-V10-07-01
+- G4DNAElectronHoleRecombination
+  Dissociation channel of electron-hole recombination moved to
+  G4EmDNAChemistry, _option1, _option2, _option3
+- G4DNAWaterDissociationDisplacer
+  Added the fragment displacement for new dissociation channel
+
 29-10-2020, G.Cosmo,  tag emdna-V10-06-12
 - Fix thread contention on mutable data in G4DNAMolecularMaterial; might
   help resolving observed crashes in MT runs.
-  Some code cleanup.  
+  Some code cleanup.
 
 27-10-2020, V.Ivanchenko,  tag emdna-V10-06-11
 - G4DNAMolecularMaterial - removed commented lines

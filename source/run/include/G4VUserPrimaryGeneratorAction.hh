@@ -23,36 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserPrimaryGeneratorAction
 //
+// Class description:
 //
+// Abstract base class for user's mandatory action class for primary
+// vertex/particle generation. This class has only one pure virtual
+// method GeneratePrimaries() which is invoked from G4RunManager
+// during the event loop.
+// This class is NOT intended for generating primary vertex/particle
+// by itself. This class should:
+// - have one or more G4VPrimaryGenerator concrete classes such as G4ParticleGun
+// - set/change properties of generator(s)
+// - pass G4Event object so that the generator(s) can generate primaries.
 
-#ifndef G4VUserPrimaryGeneratorAction_h
-#define G4VUserPrimaryGeneratorAction_h 1
+// Original author: M.Asai, 1999
+// --------------------------------------------------------------------
+#ifndef G4VUserPrimaryGeneratorAction_hh
+#define G4VUserPrimaryGeneratorAction_hh 1
 
 class G4Event;
 
-// class description:
-//
-//  This is the abstract base class of the user's mandatory action class
-// for primary vertex/particle generation. This class has only one pure
-// virtual method GeneratePrimaries() which is invoked from G4RunManager
-// during the event loop.
-//  Note that this class is NOT intended for generating primary vertex/particle
-// by itself. This class should
-//  - have one or more G4VPrimaryGenerator concrete classes such as
-//  G4ParticleGun
-//  - set/change properties of generator(s)
-//  - pass G4Event object so that the generator(s) can generate primaries.
-//
-
 class G4VUserPrimaryGeneratorAction
 {
- public:
-  G4VUserPrimaryGeneratorAction();
-  virtual ~G4VUserPrimaryGeneratorAction();
+  public:
 
- public:
-  virtual void GeneratePrimaries(G4Event* anEvent) = 0;
+    G4VUserPrimaryGeneratorAction();
+    virtual ~G4VUserPrimaryGeneratorAction();
+
+    virtual void GeneratePrimaries(G4Event* anEvent) = 0;
 };
 
 #endif

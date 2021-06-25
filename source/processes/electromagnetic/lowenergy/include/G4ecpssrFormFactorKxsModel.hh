@@ -48,23 +48,19 @@ class G4ecpssrFormFactorKxsModel : public G4VecpssrKModel
 
 {
 public:
-
-  G4ecpssrFormFactorKxsModel();
+  explicit G4ecpssrFormFactorKxsModel();
 
   virtual ~G4ecpssrFormFactorKxsModel();
 			     
-  G4double CalculateCrossSection (G4int zTarget, G4double massIncident, G4double energyIncident);
-				     
+  G4double CalculateCrossSection (G4int zTarget, G4double massIncident, G4double energyIncident) override;
+  G4ecpssrFormFactorKxsModel(const G4ecpssrFormFactorKxsModel&) = delete;
+  G4ecpssrFormFactorKxsModel & operator = (const G4ecpssrFormFactorKxsModel &right) = delete;
+
 private:
-
-  G4ecpssrFormFactorKxsModel(const G4ecpssrFormFactorKxsModel&);
-  G4ecpssrFormFactorKxsModel & operator = (const G4ecpssrFormFactorKxsModel &right);
-
   G4VDataSetAlgorithm* interpolation;
 
   std::map< G4int , G4VEMDataSet* > protonDataSetMap;
   std::map< G4int , G4VEMDataSet* > alphaDataSetMap;
-
 };
 
 #endif

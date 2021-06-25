@@ -23,44 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
 ///////////////////////////////////////////////////////////////////////////
-// 
-// Process describing a radiator of X-ray transition radiation.  
+//
+// Process describing a radiator of X-ray transition radiation.
 // Thicknesses of plates and gas gaps are fixed.
 // We suppose that:
 // formation zone ~ mean thickness << absorption length
 // for each material and in the range 1-100 keV. This allows us to simplify
 // interference effects in radiator stack (GetStackFactor method).
-// 
-// 
+//
 // History:
 //
-// 05.04.05 V. Grichine, first version 
+// 05.04.05 V. Grichine, first version
 //
-
 
 #ifndef G4XTRTransparentRegRadModel_h
 #define G4XTRTransparentRegRadModel_h 1
 
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4VXTRenergyLoss.hh"
 
 class G4XTRTransparentRegRadModel : public G4VXTRenergyLoss
 {
-public:
+ public:
+  explicit G4XTRTransparentRegRadModel(
+    G4LogicalVolume* anEnvelope, G4Material*, G4Material*, G4double, G4double,
+    G4int, const G4String& processName = "XTRTransparentRegRadModel");
+  ~G4XTRTransparentRegRadModel();
 
-  explicit G4XTRTransparentRegRadModel (G4LogicalVolume *anEnvelope,G4Material*,
-                        G4Material*, G4double,G4double,G4int,
-                        const G4String & processName = "XTRTransparentRegRadModel");
-  ~G4XTRTransparentRegRadModel ();
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
 
   // reimplementation of base class function in analytical way
-
   G4double SpectralXTRdEdx(G4double energy) override;
 
-  // Pure virtual function from base class
-
-  G4double GetStackFactor(G4double energy, G4double gamma, 
+  G4double GetStackFactor(G4double energy, G4double gamma,
                           G4double varAngle) override;
 };
 

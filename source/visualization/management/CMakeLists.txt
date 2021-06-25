@@ -1,6 +1,3 @@
-#------------------------------------------------------------------------------
-# Module : G4vis_management
-# Package: Geant4.src.G4visualization.G4vis_management
-#------------------------------------------------------------------------------
+# - G4vis_management category build
 
 geant4_global_library_target(COMPONENTS sources.cmake)

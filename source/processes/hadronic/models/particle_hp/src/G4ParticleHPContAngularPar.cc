@@ -106,6 +106,9 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   G4ParticleHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
                                     G4int angularRep, G4int /*interpolE*/ )
   {
+    // The following line is needed because it may change between runs by UI command
+    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) adjustResult = false;
+ 
     if( std::getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << anEnergy << " " << massCode << " " << angularRep << G4endl; //GDEB
     if ( fCache.Get() == 0 ) cacheInit();
     G4ReactionProduct * result = new G4ReactionProduct;

@@ -75,7 +75,7 @@ G4QGSPNeutronBuilder::~G4QGSPNeutronBuilder()
 }
 
 void G4QGSPNeutronBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );

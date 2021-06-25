@@ -560,11 +560,12 @@ G4double G4PhysicsVector::FindLinearEnergy(G4double rand) const
 
 //---------------------------------------------------------------
 
-void G4PhysicsVector::PrintPutValueError(std::size_t index)
+void G4PhysicsVector::PrintPutValueError(std::size_t index, G4double e1, G4double e2)
 {
   G4ExceptionDescription ed;
   ed << "Vector type " << type << " length= " << numberOfNodes
-     << " an attempt to put data at index= " << index;
+     << " an attempt to put data at index= " << index
+     << " E[index - 1]= " << e1 << "; E[index]= " << e2;
   G4Exception("G4PhysicsVector::PutValue()", "gl0005", FatalException, ed,
               "Memory overwritten");
 }

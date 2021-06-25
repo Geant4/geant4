@@ -16,6 +16,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 April 2021 Ben Morgan (prophonon-V10-07-00)
+-----------------------------------------------------
+- Migrate build to modular CMake API
+
 28 May 2020 Ben Morgan (prophonon-V10-06-00)
 -----------------------------------------------------
 - Name module "G4solidstate_phonon" for use with new CMake system,

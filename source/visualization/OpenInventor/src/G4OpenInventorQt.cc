@@ -56,48 +56,12 @@ void G4OpenInventorQt::Initialize()
   SetInteractorManager(G4SoQt::getInstance());
 
   // FWJ DEBUG
-  //  G4cout << "G4OpenInventorQt: GETINTERACTORMANAGER " << GetInteractorManager()
-  //         << G4endl;
-
-  // FWJ from G4OIXt: these have no counterpart in Qt
-  //  GetInteractorManager() ->
-  //    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);
-  //  GetInteractorManager() ->
-  //    AddDispatcher((G4DispatchFunction)SoXt::dispatchEvent);
-  //  Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
-
-  // FWJ apparently not used in OpenGLQt:
-  // if(getenv("XENVIRONMENT")==NULL) {
-  //   XrmDatabase database = XrmGetDatabase(QtDisplay(top));
-  //   if(database!=NULL) {
-  //     XrmPutLineResource(&database,"*topShadowColor:white");
-  //     XrmPutLineResource(&database,"*bottomShadowColor:black");
-  //     XrmPutLineResource(&database,"*foreground:black");
-  //     XrmPutLineResource(&database,"*background:lightgrey");
-  //     XrmPutLineResource(&database,"*borderColor:lightgrey");
-  //     XrmPutLineResource(&database,"*fontList:-*-helvetica-bold-r-*-*-*-120-*-*-*-*-iso8859-1");
-  //     XrmPutLineResource(&database,"*help_popup.title:Help");
-  //     XrmPutLineResource(&database,"*helpCancel.labelString:Cancel");
-  //     XrmPutLineResource(&database,"*helpText.editMode:multi_line_edit");
-  //     XrmPutLineResource(&database,"*helpText.columns:60");
-  //     XrmPutLineResource(&database,"*helpText.rows:20");
-  //     XrmPutLineResource(&database,"*helpText.background:white");
-  //     XrmPutLineResource(&database,"*helpText.fontList:*courier*-r-*--14-*");
-  //     XrmPutLineResource(&database,"*helpText.maxLength:8000");
-  //   }
-  // }
+  // G4cout << "G4OpenInventorQt: GETINTERACTORMANAGER " << 
+  //    GetInteractorManager() << G4endl;
 
   // FWJ for now, create an independent main window
-
   // NOW should be done in G4SoQt [public G4VInteractorManager]
-  //QWidget* mainWin = SoQt::init("Geant4");
-
-  // Note that GetMainInteractor() returns G4Interactor [typedef void*]
-  //QWidget* mainWin = (QWidget*)(GetInteractorManager()->GetMainInteractor());
-
-  //  FWJ DEBUG
-  //  G4cout << "OpenInventorQt: OBTAINED SoQt main window " << mainWin << G4endl;
-  //  G4cout << "SoQt::getTopLevelWidget()" << SoQt::getTopLevelWidget() << G4endl;
+  // QWidget* mainWin = SoQt::init("Geant4");
 
   // In parent G4OpenInventor
   InitNodes();

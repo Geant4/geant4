@@ -1,8 +1,5 @@
 #---Adding all advanced examples subdirectories explicitly
-cmake_minimum_required(VERSION 3.8...3.18)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20)
 
 #----------------------------------------------------------------------------
 # some examples require Geant4 build with optional packages
@@ -50,3 +47,4 @@ add_subdirectory(underground_physics)
 add_subdirectory(xray_fluorescence)
 add_subdirectory(STCyclotron)
 add_subdirectory(HGCal_testbeam)
+add_subdirectory(ICRP110_HumanPhantoms)

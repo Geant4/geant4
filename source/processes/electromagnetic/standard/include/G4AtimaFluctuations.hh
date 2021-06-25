@@ -62,37 +62,36 @@ public:
 
   explicit G4AtimaFluctuations(const G4String& nam = "IonFlucAtima");
 
-  virtual ~G4AtimaFluctuations();
+  ~G4AtimaFluctuations() override;
 
   // Sample fluctuations
-  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-                                      const G4DynamicParticle*,
-                                      G4double tmax,
-                                      G4double length,
-                                      G4double meanLoss) override;
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+			      const G4DynamicParticle*,
+			      G4double tmax,
+			      G4double length,
+			      G4double meanLoss) override;
 
   // Compute dispertion 
-  virtual G4double Dispersion(const G4Material*,
-                              const G4DynamicParticle*,
-                              G4double tmax,
-                              G4double length) override;
+  G4double Dispersion(const G4Material*,
+		      const G4DynamicParticle*,
+		      G4double tmax,
+		      G4double length) override;
 
   // Initialisation prerun
-  virtual void InitialiseMe(const G4ParticleDefinition*) override;
+  void InitialiseMe(const G4ParticleDefinition*) override;
 
   // Initialisation prestep
-  virtual void SetParticleAndCharge(const G4ParticleDefinition*, 
-                                    G4double q2) override;
-
-private:
-
-  G4double EnergyTable_interpolate(const G4double* table,G4double xval, const G4double* y);
+  void SetParticleAndCharge(const G4ParticleDefinition*, 
+			    G4double q2) override;
 
   // hide assignment operator
   G4AtimaFluctuations & operator=(const  G4AtimaFluctuations &right) = delete;
   G4AtimaFluctuations(const  G4AtimaFluctuations&) = delete;
 
-  G4UniversalFluctuation      uniFluct;
+private:
+
+  G4double EnergyTable_interpolate(const G4double* table,G4double xval, const G4double* y);
+
   const G4ParticleDefinition* particle;
 
   G4Pow*   g4calc; 
@@ -125,4 +124,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

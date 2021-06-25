@@ -41,10 +41,10 @@ class G4ParticleDefinition;
 /// Primary generator
 ///
 /// A single particle is generated.
-/// User can select 
+/// User can select
 /// - the initial momentum and angle
 /// - the momentum and angle spreads
-/// - random selection of a particle type from proton, kaon+, pi+, muon+, e+ 
+/// - random selection of a particle type from proton, kaon+, pi+, muon+, e+
 
 
 class B5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
@@ -52,9 +52,9 @@ class B5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
     B5PrimaryGeneratorAction();
     virtual ~B5PrimaryGeneratorAction();
-    
+
     virtual void GeneratePrimaries(G4Event*);
-    
+
     void SetMomentum(G4double val) { fMomentum = val; }
     G4double GetMomentum() const { return fMomentum; }
 
@@ -66,7 +66,7 @@ class B5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     void SetRandomize(G4bool val) { fRandomizePrimary = val; }
     G4bool GetRandomize() const { return fRandomizePrimary; }
-    
+
   private:
     void DefineCommands();
 

@@ -35,7 +35,7 @@
 //   This is a primitive scorer class for scoring Surface Current.
 //  Current version assumes only for G4Sphere shape, and the surface
 //  is defined at the inside of the sphere.
-//   The current is given in the unit of area. 
+//   The current is given in the unit of area.
 //    e.g.  (Number of tracks)/mm2.
 //
 // Surface is defined  at the inside of sphere.
@@ -46,32 +46,27 @@
 //
 // Created: 2007-08-14  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSSphereSurfaceCurrent3D : public G4PSSphereSurfaceCurrent
 {
- 
-  public: // with description
-      G4PSSphereSurfaceCurrent3D(G4String name, G4int direction, 
-				 G4int ni=1,G4int nj=1, G4int nk=1,
-				 G4int depi=2, G4int depj=1, G4int depk=0);
-      G4PSSphereSurfaceCurrent3D(G4String name, G4int direction, 
-				 const G4String& unit,
-				 G4int ni=1,G4int nj=1, G4int nk=1,
-				 G4int depi=2, G4int depj=1, G4int depk=0);
+ public:  // with description
+  G4PSSphereSurfaceCurrent3D(G4String name, G4int direction, G4int ni = 1,
+                             G4int nj = 1, G4int nk = 1, G4int depi = 2,
+                             G4int depj = 1, G4int depk = 0);
+  G4PSSphereSurfaceCurrent3D(G4String name, G4int direction,
+                             const G4String& unit, G4int ni = 1, G4int nj = 1,
+                             G4int nk = 1, G4int depi = 2, G4int depj = 1,
+                             G4int depk = 0);
 
-			       
-      virtual ~G4PSSphereSurfaceCurrent3D();
+  virtual ~G4PSSphereSurfaceCurrent3D();
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
-
-
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
 
 #endif
-

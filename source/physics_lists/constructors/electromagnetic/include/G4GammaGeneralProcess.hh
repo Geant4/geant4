@@ -153,6 +153,9 @@ private:
   // It returns the cross section per volume for energy/ material
   G4double TotalCrossSectionPerVolume();
 
+  G4bool RetrieveTable(G4VEmProcess*, const G4String& directory, 
+                       G4bool ascii);
+
 protected:
 
   G4HadronicProcess*           theGammaNuclear = nullptr;

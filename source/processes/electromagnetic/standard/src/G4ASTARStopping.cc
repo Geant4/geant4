@@ -351,9 +351,10 @@ static const G4float e73[78] = { 18.11f, 23.3f, 27.86f, 31.99f, 35.83f, 42.84f, 
 
 void G4ASTARStopping::AddData(const G4float* stop, const G4Material* mat)
 {
-  G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(78, T0[0], T0[77]);
-  for(size_t i=0; i<78; ++i) { v->PutValues(i, T0[i], ((G4double)stop[i])*fac); }
-  v->SetSpline(true);
+  G4PhysicsFreeVector* v = new G4PhysicsFreeVector(78, T0[0], T0[77], true);
+  for(size_t i=0; i<78; ++i) { 
+    v->PutValues(i, T0[i], ((G4double)stop[i])*fac);
+  }
   v->FillSecondDerivatives();
   materials.push_back(mat);
   sdata.push_back(v);

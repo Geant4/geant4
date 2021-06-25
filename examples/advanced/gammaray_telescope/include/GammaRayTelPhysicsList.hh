@@ -24,9 +24,7 @@
 // ********************************************************************
 //
 // Authors: Susanna Guatelli, susanna@uow.edu.au,
-// Authors: Jeremy Davis, jad028@uowmail.edu.au
 //
-// Code based on the hadrontherapy advanced example && radioprotection example
 
 #ifndef GammaRayTelPhysicsList_h
 #define GammarayTelPhysicsList_h 1
@@ -47,7 +45,6 @@ public:
 
   void ConstructParticle();
 
-  void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
@@ -60,10 +57,6 @@ public:
 private:
 
   G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
 
   G4bool helIsRegisted;
   G4bool bicIsRegisted;

@@ -1,0 +1,27 @@
+----------------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      examples History file
+                      ---------------------
+This file should be used by the test developer to briefly summarize all major
+modifications introduced in the code and keep track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21 June 2021 J. Yarba (p8decayer-V10-07-02)
+- Add GNUmakefile as required
+
+18 June 2021 J. Yarba (p8decayer-V10-07-01)
+- In CmakeLists.txt, use newly added Pythia8 finder module
+- Minor code cleanup
+
+16 June 2021 J. Yarba (p8decayer-V10-07-00)
+- First version of the example showing how to interface Pythia8 
+  as an "external decayer", to decay desired resonances in Geant4 
+
+

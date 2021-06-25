@@ -33,6 +33,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -42,7 +43,6 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 #include "StackingAction.hh"
 
 #include "G4UIExecutive.hh"
@@ -59,9 +59,10 @@ int main(int argc,char** argv) {
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-
+  //Use SteppingVerbose with Unit
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+  
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

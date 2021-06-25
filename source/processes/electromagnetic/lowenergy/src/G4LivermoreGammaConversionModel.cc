@@ -36,32 +36,34 @@
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4AutoLock.hh"
 #include "G4EmParameters.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Exp.hh"
 
+namespace { G4Mutex LivermoreGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+const G4int G4LivermoreGammaConversionModel::maxZ;
 G4double G4LivermoreGammaConversionModel::lowEnergyLimit = 2.*CLHEP::electron_mass_c2;
-G4int G4LivermoreGammaConversionModel::verboseLevel = 0;
-constexpr G4int G4LivermoreGammaConversionModel::maxZ; 
-G4LPhysicsFreeVector* G4LivermoreGammaConversionModel::data[] = {nullptr};
+G4PhysicsFreeVector* G4LivermoreGammaConversionModel::data[] = {nullptr};
 
 G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel
 (const G4ParticleDefinition* p, const G4String& nam)
 : G4PairProductionRelModel(p,nam),fParticleChange(nullptr)
 {
+  verboseLevel = 0;
   // Verbosity scale for debugging purposes:
   // 0 = nothing 
   // 1 = calculation of cross sections, file openings...
   // 2 = entering in methods
-
   if(verboseLevel > 0) 
   {
     G4cout << "G4LivermoreGammaConversionModel is constructed " << G4endl;
@@ -157,7 +159,7 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
       return;
     }
   }
-  data[Z] = new G4LPhysicsFreeVector();
+  data[Z] = new G4PhysicsFreeVector();
   std::ostringstream ost;
   ost << datadir << "/epics2017/pair/pp-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
@@ -180,8 +182,6 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
     
     data[Z]->Retrieve(fin, true);
   } 
-  // Activation of linear interpolation
-  data[Z] ->SetSpline(false);  // EPICS2017 has more points -> linear is fine
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -202,7 +202,7 @@ G4double G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(
   
   G4int intZ = std::max(1, std::min(G4lrint(Z), maxZ));
 
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
 
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -216,26 +216,20 @@ G4double G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(
   xs = pv->Value(GammaEnergy); 
 
   if(verboseLevel > 0)
-  {
-    G4cout  <<  "*** Gamma conversion xs for Z=" << Z << " at energy E(MeV)=" 
-	    << GammaEnergy/MeV <<  "  cs=" << xs/millibarn << " mb" << G4endl;
-  }
-
+    {
+      G4cout  <<  "*** Gamma conversion xs for Z=" << Z << " at energy E(MeV)=" 
+	      << GammaEnergy/MeV <<  "  cs=" << xs/millibarn << " mb" << G4endl;
+    }
   return xs;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#include "G4AutoLock.hh"
-namespace { G4Mutex LivermoreGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
 void G4LivermoreGammaConversionModel::InitialiseForElement(
 				      const G4ParticleDefinition*, 
 				      G4int Z)
 {
   G4AutoLock l(&LivermoreGammaConversionModelMutex);
-  //  G4cout << "G4LivermoreGammaConversionModel::InitialiseForElement Z= " 
-  //   << Z << G4endl;
   if(!data[Z]) { ReadData(Z); }
   l.unlock();
 }

@@ -7,12 +7,22 @@
           History file for hadronic/models/de_excitation
           ----------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16-April-2021 B. Morgan hadr-pre-V10-07-01
+- Migrate build to modular CMake API
+
+13-April-2021 A.Ribon hadr-pre-V10-07-00
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 22-August-2019 V.Ivanchenko hadr-pre-V10-05-03
 - G4PreCompoundModel: remove added warning instead send highly excited
@@ -21,7 +31,7 @@ code and to keep track of all tags.
 
 14-August-2019 V.Ivanchenko hadr-pre-V10-05-02
 - G4PreCompoundModel: added check on excitation energy per nucleon
-    for initial fragment (30 MeV) and issue warning 
+    for initial fragment (30 MeV) and issue warning
 
 16-May-2019 V.Ivanchenko hadr-pre-V10-05-01
 - G4LowEGammaNuclearModel - new model based on pre-compound de-excitation
@@ -35,8 +45,8 @@ code and to keep track of all tags.
 - G4PreCompoundModel: fixed printout typos.
 
 18-Oct-2018 V.Ivanchenko hadr-pre-V10-04-01
-- G4VPreCompoundFragment, G4HETCChargedFragment, G4HETCFragment, 
-  G4HETCNeutron, G4PreCompoundFragment, G4PreCompoundIon, 
+- G4VPreCompoundFragment, G4HETCChargedFragment, G4HETCFragment,
+  G4HETCNeutron, G4PreCompoundFragment, G4PreCompoundIon,
   G4PreCompoundNucleon, G4PreCompoundModel, G4PreCompoundEmission,
   G4PreCompoundTransitions, G4GNASHTransitions - updaed usage
     of level density parameterisation according de-excitation
@@ -68,13 +78,13 @@ code and to keep track of all tags.
 
 19-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-08
 - G4PreCompoundEmission, G4VPreCompoundFragment, G4HETCFragment,
-  G4PreCompoundIon, G4PreCompoundNucleon - changed identificator 
+  G4PreCompoundIon, G4PreCompoundNucleon - changed identificator
     names in order to have more clean code
 
 11-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-07
 - G4VPreCompoundFragment, G4PreCompoundEmission, G4PreCompoundFragment,
-  G4PreCompoundNucleon - use Coulomb barrier from standard 
-    parametersation instead of hard-coded one in computation of 
+  G4PreCompoundNucleon - use Coulomb barrier from standard
+    parametersation instead of hard-coded one in computation of
     probability of a fragment emission
 
 23-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-06
@@ -92,7 +102,7 @@ code and to keep track of all tags.
 -------------------------------------------------
 - G4GNASHTransitions, G4PreCompoundModel, G4VPreCompoundFragment,
   G4HETCFragment, G4PreCompoundIon, G4HETCChargedFragment,
-  G4PreCompoundEmission, G4PreCompoundTransitions - migration from 
+  G4PreCompoundEmission, G4PreCompoundTransitions - migration from
   G4PreCompoundParameters to G4DeexPrecoParameters
 - G4PreCompoundParameters - removed
 
@@ -129,7 +139,7 @@ code and to keep track of all tags.
 
 15-April-2015 V.Ivanchenko  hadr-pre-V10-01-02
 -------------------------------------------------
-- G4PreCompoundTransition - extended protection against numerical 
+- G4PreCompoundTransition - extended protection against numerical
     problem; use G4Log and G4Exp instead of G4Pow; cleanup sampling of
     number of charged excitons
 - G4PreCompoundModel - cleanup
@@ -152,7 +162,7 @@ code and to keep track of all tags.
 - G4PreCompoundIon - cleanup transition probability computation
 - G4PreCompoundAlpha, G4PreCompoundHe3, G4PreCompoundTriton - fixed
     FactorialFactor method - correct denominator
-- G4PreCompoundAlpha - fixed bug #1646 - integer overflow 
+- G4PreCompoundAlpha - fixed bug #1646 - integer overflow
 
 28-March-2014 - Gunter Folger (hadr-pre-V10-00-01)
 -----------------------------------------------------
@@ -190,7 +200,7 @@ code and to keep track of all tags.
 14-February-2013 V.Ivanchenko  hadr-pre-V09-06-00
 -------------------------------------------------
 - G4PreCompoundParameters - removed G4TreadLocal because data are not mutable
-- G4LowEIonFragmentation - moved static members to be private 
+- G4LowEIonFragmentation - moved static members to be private
 - G4HETCFragment, G4GNASHTransitions use GetZ_asInt and GetA_asInt
 
 27-September-2012 G.Cosmo  hadr-pre-V09-05-06
@@ -212,25 +222,25 @@ code and to keep track of all tags.
 
 27-June-2012 V.Ivanchenko  hadr-pre-V09-05-02
 -----------------------------------------------
-- G4VPreCompoundFragment - move computation of Z13 after check of 
+- G4VPreCompoundFragment - move computation of Z13 after check of
     consistency - fixed rare bug for abnormal fragments
 
 24-April-2012 Gunter Folger  hadr-pre-V09-05-01
 -----------------------------------------------
 G4PreCompoundModel - add Description() method, actual description
     from phys. ref. manual, and improved by Jose Manuel
-    
+
 18-January 2012 V.Ivanchenko hadr-pre-V09-05-00
 -----------------------------------------------
-G4PreCompoundModel - added pointer to G4ExcitationHandler to the 
-   constructor; added deletion of G4ExcitationHandler in the destructor 
+G4PreCompoundModel - added pointer to G4ExcitationHandler to the
+   constructor; added deletion of G4ExcitationHandler in the destructor
 
 31-October 2011 V.Ivanchenko hadr-pre-V09-04-06
 20-October 2011 V.Ivanchenko hadr-pre-V09-04-05
 ----------------------------------------------
 G4PreCompoundModel - set low limit for excitation 1 MeV;
-      set maxZ = 3 and maxA = 5 allowing pre-compound emission 
-      for light fragments (old formulation of the model) 
+      set maxZ = 3 and maxA = 5 allowing pre-compound emission
+      for light fragments (old formulation of the model)
 
 30-August-2011 M. Kelsey    hadr-pre-V09-04-04
 ----------------------------------------------
@@ -277,7 +287,7 @@ G4PreCompoundProton, G4PreCompoundNeutron, G4PreCompoundHe3 - fixed
 28-October 2010 V.Ivanchenko   hadr-pre-V09-03-13
 -------------------------------------------------
 G4PreCompoundModel - use more safe constructor of G4DynamicParticle
-G4LowEIonFragmentation - complete transition to integar Z and A, 
+G4LowEIonFragmentation - complete transition to integar Z and A,
                          use of updated methods for G4Fragment
 
 20-October 2010 V.Ivanchenko   hadr-pre-V09-03-12
@@ -304,7 +314,7 @@ G4PreCompoundTransition - fixed typo introduced in previous tag
 
 28-August 2010 V.Ivanchenko    hadr-pre-V09-03-07
 ---------------------------------------------------
-General cleaup of all classes: constructors and destructors moved to the 
+General cleaup of all classes: constructors and destructors moved to the
                                source, integer Z and A, G4Pow class
                                is used to speedup computations
 G4PreCompoundModel - Emission and Transition classes become members created
@@ -327,8 +337,8 @@ G4LowEIonFragmentation - (J.M.Quesada) fixed exciton state
 ---------------------------------------------------
 G4PreCompoundProton, G4PreCompoundDeuteron, G4PreCompoundTriton,
 G4PreCompoundHe3, G4PreCompoundAlpha - (JMQ) return back to published
-               varian of OPT3 (Kalbach) parameterization of inverse 
-	       cross section 
+               varian of OPT3 (Kalbach) parameterization of inverse
+	       cross section
 
 01-March 2010 V.Ivanchenko  hadr-pre-V09-03-03
 ---------------------------------------------------
@@ -336,15 +346,15 @@ G4VPreCompoundIon, G4VPreCompoundNucleon - removed dummy classes
 
 25-February 2010 V.Ivanchenko  hadr-pre-V09-03-02
 ---------------------------------------------------
-G4PreCompoundEmission - more protections for numerical computations are added 
+G4PreCompoundEmission - more protections for numerical computations are added
 
 17-February  2010 V.Ivanchenko  hadr-pre-V09-03-01
 ---------------------------------------------------
-G4PreCompoundEmission - (JMQ) return back value of Ef as it was in 9.3 
+G4PreCompoundEmission - (JMQ) return back value of Ef as it was in 9.3
 
 19-January  2010 V.Ivanchenko   hadr-pre-V09-03-00
 ---------------------------------------------------
-G4PreCompoundEmission - (JMQ) added protection against unphysical value of 
+G4PreCompoundEmission - (JMQ) added protection against unphysical value of
                               parameter "an" when exitation energy is huge
                               to avoid numerical problem
                       -       simplified algorithm of sampling
@@ -355,8 +365,8 @@ G4PreCompoundTransitions - return back transition probability
 
 19-November 2009 V.Ivanchenko   hadr-pre-V09-02-06
 ---------------------------------------------------
-G4PreCompoundModel       - (JMQ) CEM transition probabilities are set 
-                                 as a default 
+G4PreCompoundModel       - (JMQ) CEM transition probabilities are set
+                                 as a default
 G4PreCompoundTransitions - (JMQ) CEM transition probabilities have been
                                  renormalized (transitions with Delta N=+2
                                  are increased by factor 5)
@@ -371,15 +381,15 @@ G4PrecompoundEmission - modifiy AngularDistribution() to avoid floating point
                         exceptions.
 		      - remove calls to log in rho() replaced by use of new
 		        logfactorial()
-				
+
 13-February 2009 V.Ivanchenko   hadr-pre-V09-02-03
 ---------------------------------------------------
-G4PreCompoundXXX - changed the shape of probabilities (return back to 9.2)  
+G4PreCompoundXXX - changed the shape of probabilities (return back to 9.2)
                    for d, t, He3, alpha (JMQ)
 
 12-February 2009 V.Ivanchenko   hadr-pre-V09-02-02
 ---------------------------------------------------
-G4PreCompoundXXX - changed the shape of probabilities 
+G4PreCompoundXXX - changed the shape of probabilities
                    for d, t, He3, alpha near the Coulomb barrier (JMQ)
 
 11-February 2009 V.Ivanchenko   hadr-pre-V09-02-01
@@ -391,17 +401,17 @@ G4PreCompoundXXX - set default Opt3 back, add decrease Coulomb barrier
 ---------------------------------------------------
 Some clean up of comments
 G4PreCompoundIon - fixed probability of light ion emmision (JMQ)
-G4PreCompoundXXX - by default Opt1 is used for d, t, a, he3, 
+G4PreCompoundXXX - by default Opt1 is used for d, t, a, he3,
                    Opt3 for n, p (JMQ)
 
 09-December 2008 A.Howard   hadr-pre-V09-01-15
 ---------------------------------------------------
-Added protection for close to zero excitation energy in 
+Added protection for close to zero excitation energy in
 G4PreCompoundModel.cc (according to JMQ, MAC) to not try to de-excite.
 
 09-December 2008 A.Howard   hadr-pre-V09-01-14
 ---------------------------------------------------
-Added protection for close to zero excitation energy in 
+Added protection for close to zero excitation energy in
 G4PreCompoundTransitions.cc (returns 0.0), prevents FPE later on.
 
 27-November 2008 A.Howard   hadr-pre-V09-01-13
@@ -425,25 +435,25 @@ options (SICB, Never Go Back,...).  In addition Gunter's fix to the factorials
 is included from hadr-pre-V09-01-09.
 Added new files: G4PreCompoundAlpha.cc G4PreCompoundDeuteron.cc
 G4PreCompoundHe3.cc G4PreCompoundNeutron.cc G4PreCompoundProton.cc
-G4PreCompoundTriton.cc (Classes previously existed.  Now they have more 
+G4PreCompoundTriton.cc (Classes previously existed.  Now they have more
 involved cross-section calculations).
 
 19-September 2008 A.Howard   hadr-pre-V09-01-09
 ---------------------------------------------------
-Including Gunter's fix (see 11-August below) on top of ref-07 
+Including Gunter's fix (see 11-August below) on top of ref-07
 (hadr-pre-V09-00-04), i.e. without JMQ's developments.
 
-11-August 2008 G.Folger      
+11-August 2008 G.Folger
 -----------------------------------------------
-Rewrite algorithm in G4PreCompoundEmission::rho() to avoid frequent 
-floating point overflow when using Precompund in combination 
-with Binary Cascade. 
+Rewrite algorithm in G4PreCompoundEmission::rho() to avoid frequent
+floating point overflow when using Precompund in combination
+with Binary Cascade.
 
 
 24 July 2008 J. M. Quesada   hadr-pre-V09-01-08
 ---------------------------------------------------
-Minor fixes and Coulomb barrier just for Wellisch's proton cross section 
-(OPT=2) 
+Minor fixes and Coulomb barrier just for Wellisch's proton cross section
+(OPT=2)
 
 
 23 July 2008 V.Ivanchenko    hadr-pre-V09-01-07
@@ -469,45 +479,45 @@ to 0); OPT=1 ( OPT=2 in previous tag)
 
 15-May 2008 J. M.Quesada     hadr-pre-V09-01-03
 -----------------------------------------------
-The retrieval of transition probabilities in G4PreCompoundModel.cc 
-(for protection against unphysically crossing the landa_+=landa_- condition) 
-was misplaced.  Now it has been placed inside the preequilibrium transitions 
-loop. 
+The retrieval of transition probabilities in G4PreCompoundModel.cc
+(for protection against unphysically crossing the landa_+=landa_- condition)
+was misplaced.  Now it has been placed inside the preequilibrium transitions
+loop.
 
 8-May 2008 J. M.Quesada     hadr-pre-V09-01-02
 -----------------------------------------------
-Protection against non physical situation has been set: Equilibrium exciton number 
-Neq (when reached, equilibrium regime starts) should correspond to equal transition 
-probabilities "back" and "forth". Nevertheless,  for heavy target (Neq is big even 
-for low incident energies) after first emission this condition (equal trans. prob.) 
-is reached far before reaching corresponding Neq of the residual. Unless this "jump" 
-to equilibrium is forced in this case, preequilibrium will be 
-spuriously prolonged (as a side effect, with huge CPU consumption).  
+Protection against non physical situation has been set: Equilibrium exciton number
+Neq (when reached, equilibrium regime starts) should correspond to equal transition
+probabilities "back" and "forth". Nevertheless,  for heavy target (Neq is big even
+for low incident energies) after first emission this condition (equal trans. prob.)
+is reached far before reaching corresponding Neq of the residual. Unless this "jump"
+to equilibrium is forced in this case, preequilibrium will be
+spuriously prolonged (as a side effect, with huge CPU consumption).
 G4PreCompoundModel and G4PreCompoundTransitions classes have been modified.
 
 
 1-May 2008 J. M.Quesada     hadr-pre-V09-01-01
 -----------------------------------------------
-- First trial with cvs. 00 skipped by mistake. 
+- First trial with cvs. 00 skipped by mistake.
 New inverse cross sections:
         OPT=1 Chetterjee's parameterization to reaction cross sections from optical potential global fittings.
         OPT=2 as OPT=1 but for protons the Wellisch's parameterization for protons is used  (DEFAULT)
         OPT=3 Kalbach's modifications of Chatterjee's parameterization of cross sections
         OPT=4 as OPT=3 but for protons the Wellisch's parameterization for protons is used
 
-Coulomb barrier has been suppressed as it enters through inverse cross sections. Also methods related to former Dostrovski's cross sections (alpha , beta and C parameters) have been suppressed. In all particle header files: 
+Coulomb barrier has been suppressed as it enters through inverse cross sections. Also methods related to former Dostrovski's cross sections (alpha , beta and C parameters) have been suppressed. In all particle header files:
 G4PreCompoundNucleon.hh ,G4PreCompoundNeutron.hh,G4PreCompoundProton.hh, G4PreCompoundIon.hh, G4PreCompoundDeuteron.hh, G4PreCompoundTriton.hh ,G4PreCompoundHe3.hh , G4PreCompoundAlpha.hh
 
 
-Soft cutoff transition from equilibrium to equilibrium has been suppressed (unphysical and not necessary anymore).In G4PreCompoundModel. 
+Soft cutoff transition from equilibrium to equilibrium has been suppressed (unphysical and not necessary anymore).In G4PreCompoundModel.
 
 New transition probabilities :
         OPT=1  Gudima's formulae
         OPT=2  Machner parameterization of matrix elements for transitions (DEFAULT)
-  
-Level density is set to A/10 (Gudima's prescription). 
 
-Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.cc and  emission probability formula in G4PreCompoundIon.cc ) .  
+Level density is set to A/10 (Gudima's prescription).
+
+Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.cc and  emission probability formula in G4PreCompoundIon.cc ) .
 
 25-October 2007 A.Howard     hadr-pre-V09-00-04
 -----------------------------------------------
@@ -516,7 +526,7 @@ Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.
 
 11-October 2007 A.Howard     hadr-pre-V09-00-03
 -----------------------------------------------
-- Corrected for integer arithmetic bug in G4PreCompoundModel.cc 
+- Corrected for integer arithmetic bug in G4PreCompoundModel.cc
   (ratio of charged to neutral excitons)
 
 
@@ -524,14 +534,14 @@ Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.
 -----------------------------------------------
 - Protected Rj (Q_beta) factor against divide by zeroes (should never happen?)
   The following files have been modified:
-  G4PreCompoundAlpha.hh, G4PreCompoundDeuteron.hh, G4PreCompoundHe3.hh, 
+  G4PreCompoundAlpha.hh, G4PreCompoundDeuteron.hh, G4PreCompoundHe3.hh,
   G4PreCompoundTriton.hh, G4PreCompoundNeutron.hh, G4PreCompoundProton.hh
-  
+
 
 23-August 2007 A.Howard     hadr-pre-V09-00-01
 ----------------------------------------------
-- Development tag incorporating further suggestions/corrections from 
-  Jose-Manuel Quesada particularly with respect to light ion production. 
+- Development tag incorporating further suggestions/corrections from
+  Jose-Manuel Quesada particularly with respect to light ion production.
   The following files have been modified:
   G4PreCompoundIon.cc, G4PreCompoundDeuteron.hh, G4PreCompoundHe3.hh,
   G4PreCompoundTriton.hh, G4PreCompoundAlpha.hh, G4PreCompoundIon.hh,
@@ -550,7 +560,7 @@ Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.
   G4VPreCompoundFragment.cc, G4PreCompoundTransitions.cc,
   G4PreCompoundNucleon.cc, G4VPreCompoundNucleon.cc
   The main changes are:
-  - introducing an Rj factor into the probability calculation, 
+  - introducing an Rj factor into the probability calculation,
   - correcting the units for the Pauli Blocking Factor - missing a g factor,
   - decreasing the number of charged particles if the number excitons is
     decreased (previously this number was only increased with increasing
@@ -564,8 +574,8 @@ Several bugs fixed (average xs in nucleon-nucleon xs in G4PreCompundTransitions.
 19 Aug 2006 Dennis Wright (hadr-pre-V08-01-00)
 ----------------------------------------------
 - exciton_model
-   G4VPreCompoundFragment.hh, .icc : remove meaningless const from 
+   G4VPreCompoundFragment.hh, .icc : remove meaningless const from
    methods GetA, GetZ, GetRestA, GetRestZ, GetCoulombBarrier, GetBindingEnergy,
-   GetMaximalKineticEnergy, GetEnergyThreshold, GetEmissionProbability, 
+   GetMaximalKineticEnergy, GetEnergyThreshold, GetEmissionProbability,
    GetNuclearMass, GetRestNuclearMass and GetReducedMass
 

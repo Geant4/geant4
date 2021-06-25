@@ -73,7 +73,7 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
   SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
-  eth = 8*MeV;
+  eth = 8*CLHEP::MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,10 +83,9 @@ G4alphaIonisation::~G4alphaIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4alphaIonisation::IsApplicable(const G4ParticleDefinition& p)
+G4bool G4alphaIonisation::IsApplicable(const G4ParticleDefinition&)
 {
-  return (!p.IsShortLived() &&
-	  std::abs(p.GetPDGCharge()/CLHEP::eplus - 2) < 0.01);
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,7 +112,7 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
 
     // define base particle
     const G4ParticleDefinition* theBaseParticle = nullptr;
-    if(bpart == 0) { 
+    if(bpart == nullptr) { 
       if(pname != "alpha") { theBaseParticle = G4Alpha::Alpha(); }
     } else { theBaseParticle = bpart; }
 
@@ -123,7 +122,7 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    if (!EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
+    if (nullptr == EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
 
     G4EmParameters* param = G4EmParameters::Instance();
     G4double emin = param->MinKinEnergy();
@@ -134,9 +133,11 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     EmModel(0)->SetHighEnergyLimit(eth);
     AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
-    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
+    if (nullptr == FluctModel()) { 
+      SetFluctModel(new G4UniversalFluctuation()); 
+    }
 
-    if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
+    if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
     EmModel(1)->SetLowEnergyLimit(eth);
     EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(2, EmModel(1), FluctModel());    
@@ -144,11 +145,6 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     isInitialised = true;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4alphaIonisation::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

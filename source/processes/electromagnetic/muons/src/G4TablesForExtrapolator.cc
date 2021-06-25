@@ -200,6 +200,7 @@ void G4TablesForExtrapolator::Initialisation()
   }
   G4int num = G4Material::GetNumberOfMaterials();
   if(nmat == num) { return; }
+  nmat = num;
   nmat = G4Material::GetNumberOfMaterials();
   cuts.resize(nmat, DBL_MAX);
   couples.resize(nmat, nullptr);
@@ -250,14 +251,15 @@ void G4TablesForExtrapolator::Initialisation()
   ComputeMuonDEDX(muonPlus, dedxMuon);
   builder->BuildRangeTable(dedxMuon, rangeMuon);  
   builder->BuildInverseRangeTable(rangeMuon, invRangeMuon);  
-  /*
-  G4cout << "DEDX MUON" << G4endl
-  G4cout << *dedxMuon << G4endl;
-  G4cout << "RANGE MUON" << G4endl
-  G4cout << *rangeMuon << G4endl;
-  G4cout << "INVRANGE MUON" << G4endl
-  G4cout << *invRangeMuon << G4endl;
-  */
+  
+  if(verbose>2) {
+    G4cout << "DEDX MUON" << G4endl;
+    G4cout << *dedxMuon << G4endl;
+    G4cout << "RANGE MUON" << G4endl;
+    G4cout << *rangeMuon << G4endl;
+    G4cout << "INVRANGE MUON" << G4endl;
+    G4cout << *invRangeMuon << G4endl;
+  }
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator Builds proton tables" 
 	   << G4endl;
@@ -277,8 +279,7 @@ G4PhysicsTable* G4TablesForExtrapolator::PrepareTable(G4PhysicsTable* ptr)
   if(nullptr == ptr) { table = new G4PhysicsTable(); }
   G4int n = table->length();
   for(G4int i=n; i<nmat; ++i) {  
-    G4PhysicsVector* v = new G4PhysicsLogVector(emin, emax, nbins);
-    v->SetSpline(splineFlag);
+    G4PhysicsVector* v = new G4PhysicsLogVector(emin, emax, nbins, splineFlag);
     table->push_back(v);
   }
   return table;

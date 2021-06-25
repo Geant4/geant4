@@ -61,7 +61,7 @@ class G4PenelopeBremsstrahlungFS
 {
 public:
   //! Only master models are supposed to create instances
-  G4PenelopeBremsstrahlungFS(G4int verbosity=0);
+  explicit G4PenelopeBremsstrahlungFS(G4int verbosity=0);
   ~G4PenelopeBremsstrahlungFS();
  
   //!
@@ -69,7 +69,7 @@ public:
   //! All of them are const
   //!
   G4double GetEffectiveZSquared(const G4Material* mat) const;
-  size_t GetNBinsX() const {return nBinsX;};
+  size_t GetNBinsX() const {return fNBinsX;};
   G4double GetMomentumIntegral(G4double* y,			   
 			       G4double up,G4int momOrder) const;
   const G4PhysicsTable* GetScaledXSTable(const G4Material*,
@@ -85,51 +85,48 @@ public:
   void SetVerbosity(G4int ver){fVerbosity=ver;};
   G4int GetVerbosity(){return fVerbosity;};
 
-private:
-  //assignment operator
-  G4PenelopeBremsstrahlungFS & operator=(const G4PenelopeBremsstrahlungFS &right);
-  //copy constructor
-  G4PenelopeBremsstrahlungFS(const G4PenelopeBremsstrahlungFS&);
+  G4PenelopeBremsstrahlungFS & operator=(const G4PenelopeBremsstrahlungFS &right) = delete;
+  G4PenelopeBremsstrahlungFS(const G4PenelopeBremsstrahlungFS&) = delete;
   
+private:
+   void ReadDataFile(G4int Z);  
+  //Tables for energy sampling
+  void InitializeEnergySampling(const G4Material*,G4double cut);
+
   //Differential cross section tables
   //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) 
   //for a grid of 32 values in x (= reduced photon energy)
   std::map< std::pair<const G4Material*,G4double> , 
-	    G4PhysicsTable*> *theReducedXSTable; 
+	    G4PhysicsTable*> *fReducedXSTable; 
 
-  std::map<const G4Material*,G4double> *theEffectiveZSq;
+  std::map<const G4Material*,G4double> *fEffectiveZSq;
   
-
-  //Element data table
-  static const size_t nBinsE = 57;
-  static const size_t nBinsX = 32;
-  //x and E grids used in the data tables
-  G4double theXGrid[nBinsX]; 
-  G4double theEGrid[nBinsE];
-  void ReadDataFile(G4int Z);  
-
   //Map of element data vs. Z. 
   //This is conceptually an array [57][33] with 57 energy 
   //points and 32 points in x. The 33-th column gives the total XS vs. E.
   //It is implemented as a one-dimensional array of dimension
   //57*33=1881 elements. data[e][x] --> theElementData[e*(nBinsX+1)+x]
-  std::map<G4int,G4DataVector*> *theElementData;
+  std::map<G4int,G4DataVector*> *fElementData;
 
-  //Tables for energy sampling
-  void InitializeEnergySampling(const G4Material*,G4double cut);
-  
   //Table contains G4PhysicsVectors of integral_XS(E,x) vs. x for a grid of 
   //57 values in energy
   std::map< std::pair<const G4Material*,G4double> , 
-	    G4PhysicsTable*> *theSamplingTable;
+	    G4PhysicsTable*> *fSamplingTable;
   std::map< std::pair<const G4Material*,G4double> , 
-	    G4PhysicsFreeVector* > *thePBcut;
+	    G4PhysicsFreeVector* > *fPBcut;
  
   //temporary vector. Used as member variable to avoid to book/release the 
   //memory on the fly. This vector is over-written at every call of 
   //SampleGammaEnergy(). It is thread-local (each thread has its own) 
   //and managed by G4Cache
   G4Cache<G4PhysicsFreeVector*> fCache;
+
+  //Element data table
+  static const size_t fNBinsE = 57;
+  static const size_t fNBinsX = 32;
+  //x and E grids used in the data tables
+  G4double theXGrid[fNBinsX]; 
+  G4double theEGrid[fNBinsE];
 
   G4int fVerbosity;
 

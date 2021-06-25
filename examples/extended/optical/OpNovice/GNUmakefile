@@ -12,6 +12,9 @@ endif
 
 .PHONY: all
 all: lib bin
+ifndef XERCESCROOT      
+        @echo XERCESCROOT not defined!
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
 

@@ -8,6 +8,35 @@
                       Example History file
                       ---------------------
 
+24.05.2021 - B. Morgan (ccal-V10-07-02)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+07.05.2021 - A.Ribon (ccal-V10-07-01)
+-  CCalEcal, CCalHcal, CCalHall, CCalEcalOrganization, CCalHcalOrganization :
+   fixed compilation warning (overriden virtual member function not marked
+   as 'override').
+
+04.05.2021 - A.Ribon (ccal-V10-07-00)
+- Migrated to multi-threaded, using G4RunManagerFactory.
+  These are the main changes:
+  1. Introduced the action initializer.
+  2. Split the definition of the sensitive part of the detector
+     from the detector construction itself.
+     (A new method, sensitiveHandling(), has been introduced in
+      the base class CCalG4Able.)
+  3. Made the following three classes thread-local singletons
+     (instead of global singletons): CCalSDList, CCalSensAssign
+     and CCalSensitiveDetectors.
+     (The class CCalSensitiveConfiguration can still remain as a
+      global singleton.)
+  4. Multi-threaded use of the G4AnalysisManager in the run action
+     (with the merging of histograms and ntuple of of all working
+      threads at the end of the run).
+  The most tricky part of this migration was the treatment of the
+  sensitive detectors (i.e. the steps 2. and 3. above), because
+  it was originally done together with the building of the geometry
+  and via thread-unsafe singletons.
+
 02.11.2020 - B.Morgan (ccal-V10-06-00)
 - Support same CMake version range as core Geant4
 

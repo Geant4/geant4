@@ -32,8 +32,9 @@
 //    *                              *
 //    ********************************
 //
-// 
-//
+
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionOncura6711.hh"
 #include "globals.hh"
 #include "BrachyFactoryOncura6711.hh"
 #include "G4ParticleTable.hh"
@@ -43,8 +44,6 @@
 #include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh" 
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstructionOncura6711.hh"
 
 BrachyFactoryOncura6711:: BrachyFactoryOncura6711()
 {

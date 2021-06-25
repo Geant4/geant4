@@ -36,7 +36,7 @@
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
 //   The Cell Flux is defined by  a track length divided by a geometry
-//   volume, where only tracks passing through the geometry are taken 
+//   volume, where only tracks passing through the geometry are taken
 //  into account. e.g. the unit of Cell Flux is mm/mm3.
 //
 //   If you want to score all tracks in the geometry volume,
@@ -47,46 +47,43 @@
 // 2010-07-22   Add weighted option
 // 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
 //              vs. cell flux * track weight (y)                (Makoto Asai)
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSPassageCellFlux : public G4VPrimitivePlotter
 {
- 
-  public: // with description
-      G4PSPassageCellFlux(G4String name, G4int depth=0);
-      G4PSPassageCellFlux(G4String name, const G4String& unit, G4int depth=0);
+ public:  // with description
+  G4PSPassageCellFlux(G4String name, G4int depth = 0);
+  G4PSPassageCellFlux(G4String name, const G4String& unit, G4int depth = 0);
 
-      virtual ~G4PSPassageCellFlux();
+  virtual ~G4PSPassageCellFlux();
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      virtual G4bool IsPassed(G4Step*);
-      virtual G4double ComputeVolume(G4Step*, G4int idx);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  virtual G4bool IsPassed(G4Step*);
+  virtual G4double ComputeVolume(G4Step*, G4int idx);
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  protected:
-      virtual void DefineUnitAndCategory();
+ protected:
+  virtual void DefineUnitAndCategory();
 
-  private:
-      G4int HCID;
-      G4int fCurrentTrkID;
-      G4double fCellFlux;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool  weighted;
-
+ private:
+  G4int HCID;
+  G4int fCurrentTrkID;
+  G4double fCellFlux;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
 };
 
 #endif
-

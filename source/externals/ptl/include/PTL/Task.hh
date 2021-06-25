@@ -31,7 +31,6 @@
 #pragma once
 
 #include "Globals.hh"
-#include "TaskAllocator.hh"
 #include "VTask.hh"
 
 #include <cstdint>
@@ -40,14 +39,46 @@
 
 namespace PTL
 {
-class VTaskGroup;
 class ThreadPool;
 
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
+template <typename RetT>
+class TaskFuture : public VTask
+{
+public:
+    typedef std::promise<RetT> promise_type;
+    typedef std::future<RetT>  future_type;
+    typedef RetT               result_type;
+
+public:
+    // pass a free function pointer
+    template <typename... Args>
+    TaskFuture(Args&&... args)
+    : VTask{ std::forward<Args>(args)... }
+    {}
+
+    virtual ~TaskFuture() = default;
+
+    TaskFuture(const TaskFuture&) = delete;
+    TaskFuture& operator=(const TaskFuture&) = delete;
+
+    TaskFuture(TaskFuture&&) = default;
+    TaskFuture& operator=(TaskFuture&&) = default;
+
+public:
+    // execution operator
+    virtual future_type get_future() = 0;
+    virtual void        wait()       = 0;
+    virtual RetT        get()        = 0;
+};
+
+//======================================================================================//
+
+/// \brief The task class is supplied to thread_pool.
 template <typename RetT, typename... Args>
-class PackagedTask : public VTask
+class PackagedTask : public TaskFuture<RetT>
 {
 public:
     typedef PackagedTask<RetT, Args...>       this_type;
@@ -60,36 +91,33 @@ public:
 public:
     // pass a free function pointer
     template <typename FuncT>
-    PackagedTask(FuncT&& func, Args... args)
-    : VTask()
-    , m_ptask(std::forward<FuncT>(func))
-    , m_args(args...)
+    PackagedTask(FuncT func, Args... args)
+    : TaskFuture<RetT>{ true, 0 }
+    , m_ptask{ std::move(func) }
+    , m_args{ args... }
     {}
 
     template <typename FuncT>
-    PackagedTask(VTaskGroup* tg, FuncT&& func, Args... args)
-    : VTask(tg)
-    , m_ptask(std::forward<FuncT>(func))
-    , m_args(args...)
+    PackagedTask(bool _is_native, intmax_t _depth, FuncT func, Args... args)
+    : TaskFuture<RetT>{ _is_native, _depth }
+    , m_ptask{ std::move(func) }
+    , m_args{ args... }
     {}
 
-    template <typename FuncT>
-    PackagedTask(ThreadPool* _pool, FuncT&& func, Args... args)
-    : VTask(_pool)
-    , m_ptask(std::forward<FuncT>(func))
-    , m_args(args...)
-    {}
+    virtual ~PackagedTask() = default;
 
-    virtual ~PackagedTask() {}
+    PackagedTask(const PackagedTask&) = delete;
+    PackagedTask& operator=(const PackagedTask&) = delete;
+
+    PackagedTask(PackagedTask&&) = default;
+    PackagedTask& operator=(PackagedTask&&) = default;
 
 public:
     // execution operator
-    virtual void operator()() override
-    {
-        mpl::apply(std::move(m_ptask), std::move(m_args));
-    }
-    future_type  get_future() { return m_ptask.get_future(); }
-    virtual bool is_native_task() const override { return true; }
+    virtual void operator()() final { mpl::apply(std::move(m_ptask), std::move(m_args)); }
+    virtual future_type get_future() final { return m_ptask.get_future(); }
+    virtual void        wait() final { return m_ptask.get_future().wait(); }
+    virtual RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
     packaged_task_type m_ptask;
@@ -100,7 +128,7 @@ private:
 
 /// \brief The task class is supplied to thread_pool.
 template <typename RetT, typename... Args>
-class Task : public VTask
+class Task : public TaskFuture<RetT>
 {
 public:
     typedef Task<RetT, Args...>               this_type;
@@ -112,54 +140,48 @@ public:
 
 public:
     template <typename FuncT>
-    Task(FuncT&& func, Args... args)
-    : VTask()
-    , m_ptask(std::forward<FuncT>(func))
-    , m_args(args...)
+    Task(FuncT func, Args... args)
+    : TaskFuture<RetT>{}
+    , m_ptask{ std::move(func) }
+    , m_args{ args... }
     {}
 
     template <typename FuncT>
-    Task(VTaskGroup* tg, FuncT&& func, Args... args)
-    : VTask(tg)
-    , m_ptask(std::forward<FuncT>(func))
-    , m_args(args...)
+    Task(bool _is_native, intmax_t _depth, FuncT func, Args... args)
+    : TaskFuture<RetT>{ _is_native, _depth }
+    , m_ptask{ std::move(func) }
+    , m_args{ args... }
     {}
 
-    template <typename FuncT>
-    Task(ThreadPool* tp, FuncT&& func, Args... args)
-    : VTask(tp)
-    , m_ptask(std::forward<FuncT>(func))
-    , m_args(args...)
-    {}
+    virtual ~Task() = default;
 
-    virtual ~Task() {}
+    Task(const Task&) = delete;
+    Task& operator=(const Task&) = delete;
+
+    Task(Task&&)  = default;
+    Task& operator=(Task&&) = default;
 
 public:
     // execution operator
     virtual void operator()() final
     {
-        mpl::apply(std::move(m_ptask), std::move(m_args));
-        // decrements the task-group counter on active tasks
-        // when the counter is < 2, if the thread owning the task group is
-        // sleeping at the TaskGroup::wait(), it signals the thread to wake
-        // up and check if all tasks are finished, proceeding if this
-        // check returns as true
-        this_type::operator--();
+        if(m_ptask.valid())
+            mpl::apply(std::move(m_ptask), std::move(m_args));
     }
-
-    virtual bool is_native_task() const override { return true; }
-    future_type  get_future() { return m_ptask.get_future(); }
+    virtual future_type get_future() final { return m_ptask.get_future(); }
+    virtual void        wait() final { return m_ptask.get_future().wait(); }
+    virtual RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
-    packaged_task_type m_ptask;
-    tuple_type         m_args;
+    packaged_task_type m_ptask{};
+    tuple_type         m_args{};
 };
 
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
 template <typename RetT>
-class Task<RetT, void> : public VTask
+class Task<RetT, void> : public TaskFuture<RetT>
 {
 public:
     typedef Task<RetT>                 this_type;
@@ -170,50 +192,41 @@ public:
 
 public:
     template <typename FuncT>
-    Task(FuncT&& func)
-    : VTask()
-    , m_ptask(std::forward<FuncT>(func))
+    Task(FuncT func)
+    : TaskFuture<RetT>()
+    , m_ptask{ std::move(func) }
     {}
 
     template <typename FuncT>
-    Task(VTaskGroup* tg, FuncT&& func)
-    : VTask(tg)
-    , m_ptask(std::forward<FuncT>(func))
+    Task(bool _is_native, intmax_t _depth, FuncT func)
+    : TaskFuture<RetT>{ _is_native, _depth }
+    , m_ptask{ std::move(func) }
     {}
 
-    template <typename FuncT>
-    Task(ThreadPool* tp, FuncT&& func)
-    : VTask(tp)
-    , m_ptask(std::forward<FuncT>(func))
-    {}
+    virtual ~Task() = default;
 
-    virtual ~Task() {}
+    Task(const Task&) = delete;
+    Task& operator=(const Task&) = delete;
+
+    Task(Task&&)  = default;
+    Task& operator=(Task&&) = default;
 
 public:
     // execution operator
-    virtual void operator()() final
-    {
-        m_ptask();
-        // decrements the task-group counter on active tasks
-        // when the counter is < 2, if the thread owning the task group is
-        // sleeping at the TaskGroup::wait(), it signals the thread to wake
-        // up and check if all tasks are finished, proceeding if this
-        // check returns as true
-        this_type::operator--();
-    }
-
-    virtual bool is_native_task() const override { return true; }
-    future_type  get_future() { return m_ptask.get_future(); }
+    virtual void        operator()() final { m_ptask(); }
+    virtual future_type get_future() final { return m_ptask.get_future(); }
+    virtual void        wait() final { return m_ptask.get_future().wait(); }
+    virtual RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
-    packaged_task_type m_ptask;
+    packaged_task_type m_ptask{};
 };
 
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
 template <>
-class Task<void, void> : public VTask
+class Task<void, void> : public TaskFuture<void>
 {
 public:
     typedef void                       RetT;
@@ -225,43 +238,34 @@ public:
 
 public:
     template <typename FuncT>
-    explicit Task(FuncT&& func)
-    : VTask()
-    , m_ptask(std::forward<FuncT>(func))
+    explicit Task(FuncT func)
+    : TaskFuture<RetT>{}
+    , m_ptask{ std::move(func) }
     {}
 
     template <typename FuncT>
-    Task(VTaskGroup* tg, FuncT&& func)
-    : VTask(tg)
-    , m_ptask(std::forward<FuncT>(func))
+    Task(bool _is_native, intmax_t _depth, FuncT func)
+    : TaskFuture<RetT>{ _is_native, _depth }
+    , m_ptask{ std::move(func) }
     {}
 
-    template <typename FuncT>
-    Task(ThreadPool* tp, FuncT&& func)
-    : VTask(tp)
-    , m_ptask(std::forward<FuncT>(func))
-    {}
+    virtual ~Task() = default;
 
-    virtual ~Task() {}
+    Task(const Task&) = delete;
+    Task& operator=(const Task&) = delete;
+
+    Task(Task&&)  = default;
+    Task& operator=(Task&&) = default;
 
 public:
     // execution operator
-    virtual void operator()() final
-    {
-        m_ptask();
-        // decrements the task-group counter on active tasks
-        // when the counter is < 2, if the thread owning the task group is
-        // sleeping at the TaskGroup::wait(), it signals the thread to wake
-        // up and check if all tasks are finished, proceeding if this
-        // check returns as true
-        this_type::operator--();
-    }
-
-    virtual bool is_native_task() const override { return true; }
-    future_type  get_future() { return m_ptask.get_future(); }
+    virtual void        operator()() final { m_ptask(); }
+    virtual future_type get_future() final { return m_ptask.get_future(); }
+    virtual void        wait() final { return m_ptask.get_future().wait(); }
+    virtual RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
-    packaged_task_type m_ptask;
+    packaged_task_type m_ptask{};
 };
 
 //======================================================================================//

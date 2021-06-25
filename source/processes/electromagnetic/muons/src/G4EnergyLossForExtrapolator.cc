@@ -116,7 +116,7 @@ G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 					      const G4Material* mat, 
 					      const G4ParticleDefinition* part)
 {
-  // G4cout << "G4EnergyLossForExtrapolator::EnergyBeforeStep" << G4endl;
+  //G4cout << "G4EnergyLossForExtrapolator::EnergyBeforeStep" << G4endl;
   G4double kinEnergyFinal = kinEnergy;
 
   if(SetupKinematics(part, mat, kinEnergy)) {
@@ -210,15 +210,10 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
 const G4ParticleDefinition* 
 G4EnergyLossForExtrapolator::FindParticle(const G4String& name)
 {
-  if(name != currentParticleName) {
-    currentParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
-    currentParticleName = name;
-    if(nullptr == currentParticle) {
-      G4cout << "### G4EnergyLossForExtrapolator WARNING: "
-	     << "FindParticle() fails to find " 
-	     << name << G4endl;
-      currentParticleName = "";
-    }
+  currentParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
+  if(nullptr == currentParticle) {
+    G4cout << "### G4EnergyLossForExtrapolator WARNING: "
+	   << "FindParticle() fails to find " << name << G4endl;
   }
   return currentParticle;
 }
@@ -335,7 +330,8 @@ G4double G4EnergyLossForExtrapolator::AverageScatteringAngle(
 void G4EnergyLossForExtrapolator::Initialisation()
 {
   if(verbose>0) {
-    G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
+    G4cout << "### G4EnergyLossForExtrapolator::Initialisation tables= " 
+	   << tables << G4endl;
   }
   electron = G4Electron::Electron();
   positron = G4Positron::Positron();

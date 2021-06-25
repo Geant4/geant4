@@ -23,48 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-////
+// G4WorkerRunManagerKernel
 //
+// Class description:
+//
+// This is a class for mandatory control of the Geant4 kernel.
+// Implements Worker behavior in a MT application.
+// This class is constructed by G4WorkerRunManager. If a user uses his/her
+// own class instead of G4WorkerRunManager, this class must be instantiated
+// at the very beginning of the application and must be deleted at the very
+// end. Also, following methods must be invoked in the proper order:
+//   DefineWorldVolume()
+//   InitializePhysics()
+//   RunInitialization()
+//   RunTermination()
+//
+// User must provide his/her own classes derived from the following
+// abstract class and register it to the RunManagerKernel:
+//   G4VUserPhysicsList - Particle types, Processes and Cuts
+//
+// G4WorkerRunManagerKernel does not have any event loop. Handling of events
+// is managed by G4RunManager.
+//
+// This class re-implements only the method that require special treatment
+// to implement worker behavior
 
-// class description:
-//
-//     This is a class for mandatory control of GEANT4 kernel.
-//     This class implements Worker behavior in a MT application.
-//
-//     This class is constructed by G4WorkerRunManager. If a user uses his/her
-//     own class instead of G4WorkerRunManager, this class must be instantiated
-//     by him/herself at the very beginning of the application and must be
-//     deleted at the very end of the application. Also, following methods must
-//     be invoked in the proper order.
-//       DefineWorldVolume
-//       InitializePhysics
-//       RunInitialization
-//       RunTermination
-//
-//     User must provide his/her own classes derived from the following
-//     abstract class and register it to the RunManagerKernel.
-//        G4VUserPhysicsList - Particle types, Processes and Cuts
-//
-//     G4WorkerRunManagerKernel does not have any eveny loop. Handling of events
-//     is managed by G4RunManager.
-//
-//     This class re-implements only the method that require special treatment
-//     to implement worker behavior
-
-#ifndef G4WorkerRunManagerKernel_h
-#define G4WorkerRunManagerKernel_h 1
+// Authors: M.Asai, A.Dotti (SLAC), 2013
+// --------------------------------------------------------------------
+#ifndef G4WorkerRunManagerKernel_hh
+#define G4WorkerRunManagerKernel_hh 1
 
 #include "G4RunManagerKernel.hh"
 
 class G4WorkerRunManagerKernel : public G4RunManagerKernel
 {
- public:
-  G4WorkerRunManagerKernel();
-  virtual ~G4WorkerRunManagerKernel();
+  public:
 
- protected:
-  // Overwrite default behavior
-  void SetupShadowProcess() const;
+    G4WorkerRunManagerKernel();
+    virtual ~G4WorkerRunManagerKernel();
+
+  protected:
+
+    void SetupShadowProcess() const;
+      // Overwrite default behavior.
 };
 
-#endif  // G4WorkerRunManagerKernel_h
+#endif

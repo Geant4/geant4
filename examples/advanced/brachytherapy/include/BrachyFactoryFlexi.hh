@@ -40,24 +40,23 @@
 #include "BrachyFactory.hh"
 #include "G4RunManager.hh"
 
+class BrachyFactory;
+class BrachyDetectorConstructionFlexi;
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyFactory;
-class BrachyDetectorConstructionFlexi;
 
 // This class manages the creation of the Nucletron Flexi Source
 
 class BrachyFactoryFlexi : public BrachyFactory
 {
 public:
-  BrachyFactoryFlexi();
+  explicit BrachyFactoryFlexi();
   ~BrachyFactoryFlexi();
-  void CreateSource(G4VPhysicalVolume*);
-  void CleanSource();
+  void CreateSource(G4VPhysicalVolume*)override;
+  void CleanSource() override;
 
 private:
   BrachyDetectorConstructionFlexi* fFlexiSource; 
- 
 };
 #endif

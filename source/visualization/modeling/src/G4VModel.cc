@@ -62,6 +62,10 @@ const G4VisExtent& G4VModel::GetTransformedExtent () const {
   return transformedExtent;
 }
 
+void G4VModel::SetTransformation (const G4Transform3D& transform) {
+  fTransform = transform;
+}
+
 G4bool G4VModel::Validate (G4bool) {
   return true;
 }

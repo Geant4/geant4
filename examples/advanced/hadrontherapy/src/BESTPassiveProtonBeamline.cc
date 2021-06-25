@@ -392,7 +392,7 @@ void BESTPassiveProtonBeamLine::ConstructBESTPassiveProtonBeamLine()
     
     
     // The treatment room is invisible in the Visualisation
-    //logicTreatmentRoom -> SetVisAttributes(G4VisAttributes::Invisible);
+    //logicTreatmentRoom -> SetVisAttributes(G4VisAttributes::GetInvisible());
     
     // Components of the BEST Passive Proton Beam Line
    BESTBeamLineSupport();

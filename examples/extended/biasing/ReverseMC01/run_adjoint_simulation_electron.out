@@ -3,8 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -78,9 +84,9 @@ G4AdjointPhysicsList::SetCuts:CutLength : 10 um
 /tracking/verbose 0
 /adjoint/start_run 100000
 ****************************************************************
-*** Geant4 Reverse/Adjoint Monte Carlo mode		      ***
-*** Author:	L.Desorgher				      ***
-*** Company:	SpaceIT GmbH, Bern, Switzerland 	      ***
+*** Geant4 Reverse/Adjoint Monte Carlo mode                  ***
+*** Author:       L.Desorgher                                ***
+*** Company:      SpaceIT GmbH, Bern, Switzerland            ***
 *** Sponsored by: ESA/ESTEC contract contract 21435/08/NL/AT ***
 ****************************************************************
 
@@ -88,31 +94,31 @@ compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
+       Klein-Nishina : Emin=    0 meV Emax=  100 TeV
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
+       PhotoElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e-  SubType=2
+eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+        MollerBhabha : Emin=    0 meV Emax=  100 TeV
 
-eBrem:  for e-  SubType=3
+eBrem:  for e-  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+             eBremSB : Emin=    0 meV Emax=    1 GeV  ModifiedTsai
             eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
 ========== Computation of cross section matrices for adjoint models ==========
 Build adjoint cross section matrices for Inv_eIon_model
@@ -328,11 +334,11 @@ nb event 170000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 173590 events processed.
-  User=75.310000s Real=89.863326s Sys=0.260000s
+  Run Aborted after 171412 events processed.
+  User=64.090000s Real=67.508702s Sys=0.180000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00165068
-error[MeV] = 1.65068e-05
+normalised edep [MeV] = 0.00164111
+error[MeV] = 1.64111e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
 0 events have been kept for refreshing and/or reviewing.

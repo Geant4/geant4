@@ -25,7 +25,7 @@
 //
 //
 // ------------------------------------------------------------
-//      GEANT 4 class implementation file 
+//      GEANT 4 class implementation file
 // ------------------------------------------------------------
 //
 
@@ -36,61 +36,62 @@
 #include <iomanip>
 
 //------------------------------------------------------------------------
-G4ErrorFreeTrajParam::G4ErrorFreeTrajParam( const G4Point3D& pos,
-                                            const G4Vector3D& mom )
+G4ErrorFreeTrajParam::G4ErrorFreeTrajParam(const G4Point3D& pos,
+                                           const G4Vector3D& mom)
 {
-  SetParameters( pos, mom );
+  SetParameters(pos, mom);
 }
 
-
 //------------------------------------------------------------------------
-void G4ErrorFreeTrajParam::SetParameters( const G4Point3D& pos,
-                                          const G4Vector3D& mom )
+void G4ErrorFreeTrajParam::SetParameters(const G4Point3D& pos,
+                                         const G4Vector3D& mom)
 {
-  fInvP = 1./mom.mag();
-  fDir = mom*fInvP;
-  fLambda = 90.*deg - mom.theta();
-  fPhi = mom.phi();
-  G4Vector3D vxPerp(0.,0.,0.);
-  if( mom.mag() > 0.) {
-    vxPerp = mom/mom.mag();
+  fInvP   = 1. / mom.mag();
+  fDir    = mom * fInvP;
+  fLambda = 90. * deg - mom.theta();
+  fPhi    = mom.phi();
+  G4Vector3D vxPerp(0., 0., 0.);
+  if(mom.mag() > 0.)
+  {
+    vxPerp = mom / mom.mag();
   }
-  G4Vector3D vyPerp = G4Vector3D( -vxPerp.y(), vxPerp.x(), 0.);
+  G4Vector3D vyPerp = G4Vector3D(-vxPerp.y(), vxPerp.x(), 0.);
   vyPerp /= vyPerp.mag();
-  G4Vector3D vzPerp = vxPerp.cross( vyPerp );
+  G4Vector3D vzPerp = vxPerp.cross(vyPerp);
   vzPerp /= vzPerp.mag();
   // check if right handed
   //  fXPerp = pos.proj( mom );
   G4ThreeVector posv(pos);
-  if( vyPerp.mag() != 0. ) {
+  if(vyPerp.mag() != 0.)
+  {
     // now all 2 scalar memeber variables retain the signs
     //  fYPerp = posv.project( vyPerp ).mag();
     //  fZPerp = posv.project( vzPerp ).mag();
-    fYPerp = posv.dot( vyPerp );
-    fZPerp = posv.dot( vzPerp );
-  } else {
+    fYPerp = posv.dot(vyPerp);
+    fZPerp = posv.dot(vzPerp);
+  }
+  else
+  {
     fYPerp = 0.;
     fZPerp = 0.;
   }
 }
 
 //------------------------------------------------------------------------
-void G4ErrorFreeTrajParam::Update( const G4Track* aTrack )
+void G4ErrorFreeTrajParam::Update(const G4Track* aTrack)
 {
-  SetParameters( aTrack->GetPosition(), aTrack->GetMomentum() );
-
+  SetParameters(aTrack->GetPosition(), aTrack->GetMomentum());
 }
-
 
 //------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajParam& tp)
 {
   G4int oldprc = out.precision(8);
-  out << " InvP= " << tp.fInvP << " Theta= "
-      << tp.fLambda << " Phi= " << tp.fPhi << " YPerp= " << tp.fYPerp
+  out << " InvP= " << tp.fInvP << " Theta= " << tp.fLambda
+      << " Phi= " << tp.fPhi << " YPerp= " << tp.fYPerp
       << " ZPerp= " << tp.fZPerp << G4endl;
   out << " momentum direction= " << tp.fDir << G4endl;
   out.precision(oldprc);
-    
+
   return out;
 }

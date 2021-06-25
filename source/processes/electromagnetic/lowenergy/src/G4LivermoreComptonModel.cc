@@ -48,6 +48,7 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
+#include "G4AutoLock.hh"
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
 #include "G4Log.hh"
@@ -55,12 +56,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+namespace { G4Mutex LivermoreComptonModelMutex = G4MUTEX_INITIALIZER; }
 using namespace std;
 
-G4int G4LivermoreComptonModel::maxZ = 99;
-G4LPhysicsFreeVector* G4LivermoreComptonModel::data[] = {0};
-G4ShellData*       G4LivermoreComptonModel::shellData = 0;
-G4DopplerProfile*  G4LivermoreComptonModel::profileData = 0;
+G4PhysicsFreeVector* G4LivermoreComptonModel::data[] = {nullptr};
+G4ShellData*       G4LivermoreComptonModel::shellData = nullptr;
+G4DopplerProfile*  G4LivermoreComptonModel::profileData = nullptr;
 
 static const G4double ln10 = G4Log(10.);
 
@@ -93,13 +94,13 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
 {  
   if(IsMaster()) {
     delete shellData;
-    shellData = 0;
+    shellData = nullptr;
     delete profileData;
-    profileData = 0;
+    profileData = nullptr;
     for(G4int i=0; i<maxZ; ++i) {
       if(data[i]) { 
 	delete data[i];
-	data[i] = 0;
+	data[i] = nullptr;
       }
     }
   }
@@ -114,12 +115,9 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
     G4cout << "Calling G4LivermoreComptonModel::Initialise()" << G4endl;
   }
 
-  // Initialise element selector
-  
+  // Initialise element selector  
   if(IsMaster()) {
-
     // Access to elements
-
     char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable = 
@@ -203,11 +201,8 @@ void G4LivermoreComptonModel::ReadData(size_t Z, const char* path)
     }
   }
   
-  data[Z] = new G4LPhysicsFreeVector();
-  
-  // Activation of spline interpolation
-  data[Z]->SetSpline(false);
-  
+  data[Z] = new G4PhysicsFreeVector();
+    
   std::ostringstream ost;
   ost << datadir << "/livermore/comp/ce-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
@@ -251,7 +246,7 @@ G4LivermoreComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   G4int intZ = G4lrint(Z);
   if(intZ < 1 || intZ > maxZ) { return cs; } 
 
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
 
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -423,13 +418,10 @@ void G4LivermoreComptonModel::SampleSecondaries(
 	  photonE = -1.;
 	}
    } while (iteration <= maxDopplerIterations && photonE > eMax); 
-  // (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
-	    
- 
+	     
   // End of recalculation of photon energy with Doppler broadening
   // Revert to original if maximum number of iterations threshold 
   // has been reached
-
   if (iteration >= maxDopplerIterations)
     {
       photonE = photonEoriginal;
@@ -437,7 +429,6 @@ void G4LivermoreComptonModel::SampleSecondaries(
     }
 
   // Update G4VParticleChange for the scattered photon
-
   G4ThreeVector photonDirection1(dirx,diry,dirz);
   photonDirection1.rotateUz(photonDirection0);
   fParticleChange->ProposeMomentumDirection(photonDirection1) ;
@@ -490,8 +481,6 @@ void G4LivermoreComptonModel::SampleSecondaries(
   fvect->push_back(dp);
 
   // sample deexcitation
-  //
-
   if (verboseLevel > 3) {
     G4cout << "Started atomic de-excitation " << fAtomDeexcitation << G4endl;
   }
@@ -554,18 +543,12 @@ G4LivermoreComptonModel::ComputeScatteringFunction(G4double x, G4int Z)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4AutoLock.hh"
-namespace { G4Mutex LivermoreComptonModelMutex = G4MUTEX_INITIALIZER; }
 
 void 
 G4LivermoreComptonModel::InitialiseForElement(const G4ParticleDefinition*, 
 					      G4int Z)
 {
   G4AutoLock l(&LivermoreComptonModelMutex);
-  //  G4cout << "G4LivermoreComptonModel::InitialiseForElement Z= " 
-  //   << Z << G4endl;
   if(!data[Z]) { ReadData(Z); }
   l.unlock();
 }

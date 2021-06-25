@@ -70,7 +70,7 @@ Build(G4HadronElasticProcess * aP)
 }
 
 void G4NeutronLENDBuilder::
-Build(G4HadronFissionProcess * aP)
+Build(G4NeutronFissionProcess * aP)
 {
   if(theLENDFission == 0) theLENDFission = new G4LENDFission( G4Neutron::Neutron() );
   theLENDFission->SetMinEnergy(theMin);
@@ -87,7 +87,7 @@ Build(G4HadronFissionProcess * aP)
 }
 
 void G4NeutronLENDBuilder::
-Build(G4HadronCaptureProcess * aP)
+Build(G4NeutronCaptureProcess * aP)
 {
   if(theLENDCapture==0) theLENDCapture = new G4LENDCapture( G4Neutron::Neutron() );
   theLENDCapture->SetMinEnergy(theMin);
@@ -104,7 +104,7 @@ Build(G4HadronCaptureProcess * aP)
 }
 
 void G4NeutronLENDBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   if(theLENDInelastic==0) theLENDInelastic = new G4LENDInelastic( G4Neutron::Neutron() );
   theLENDInelastic->SetMinEnergy(theIMin);

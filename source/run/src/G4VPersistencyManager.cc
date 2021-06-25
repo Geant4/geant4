@@ -23,19 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPersistencyManager implementation.
 //
-//
+// Author: Youhei Morita, 2001
+// --------------------------------------------------------------------
 
 #include "G4VPersistencyManager.hh"
 
 G4ThreadLocal G4VPersistencyManager*
-  G4VPersistencyManager::fPersistencyManager = 0;
+  G4VPersistencyManager::fPersistencyManager = nullptr;
 
+// --------------------------------------------------------------------
 G4VPersistencyManager* G4VPersistencyManager::GetPersistencyManager()
 {
   return fPersistencyManager;
 }
 
-G4VPersistencyManager::G4VPersistencyManager() { fPersistencyManager = this; }
+// --------------------------------------------------------------------
+G4VPersistencyManager::G4VPersistencyManager()
+{
+  fPersistencyManager = this;
+}
 
-G4VPersistencyManager::~G4VPersistencyManager() { fPersistencyManager = 0; }
+// --------------------------------------------------------------------
+G4VPersistencyManager::~G4VPersistencyManager()
+{
+  fPersistencyManager = nullptr;
+}

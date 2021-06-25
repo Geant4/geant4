@@ -187,30 +187,3 @@ void  G4SafetyHelper::Locate( const G4ThreeVector& newPosition,
     fpPathFinder->Locate( newPosition, newDirection ); 
   }
 }
-
-G4bool G4SafetyHelper::RecheckDistanceToCurrentBoundary(
-                                        const G4ThreeVector& pGlobalPoint,
-                                        const G4ThreeVector& pDirection,
-                                        const G4double aProposedMove,
-                                        G4double* prDistance,
-                                        G4double* prNewSafety) const
-{
-  G4bool retval;
-  if( !fUseParallelGeometries )
-  {
-    retval = fpMassNavigator->RecheckDistanceToCurrentBoundary(pGlobalPoint,
-                                                               pDirection,
-                                                               aProposedMove,
-                                                               prDistance,
-                                                               prNewSafety);
-  }
-  else
-  {
-    retval = fpPathFinder->RecheckDistanceToCurrentBoundary(pGlobalPoint,
-                                                            pDirection,
-                                                            aProposedMove,
-                                                            prDistance,
-                                                            prNewSafety);
-  }
-  return retval;
-}

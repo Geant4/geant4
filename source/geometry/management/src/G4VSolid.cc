@@ -120,6 +120,16 @@ std::ostream& operator<< ( std::ostream& os, const G4VSolid& e )
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Set solid name and notify store of the change
+
+void G4VSolid::SetName(const G4String& name)
+{
+  fshapeName = name;
+  G4SolidStore::GetInstance()->SetMapValid(false);
+}	
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Throw exception if ComputeDimensions called for illegal derived class
 
 void G4VSolid::ComputeDimensions(G4VPVParameterisation*,

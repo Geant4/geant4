@@ -44,7 +44,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <math.h>
+#include <cmath>
 
 #define MAX_ENERGY_LAB_GEV 10000000.
 #define MAX_ENERGY_CMS_GEV 30000.      // assuming that the target is <=100 times heavier than the projectile
@@ -217,7 +217,7 @@ G4HadFinalState * HadronicInelasticModelCRMC::ApplyYourself(const G4HadProjectil
 		}
 
 		// Check if we need to resample again...
-		double diff = fabs(e_final - e_initial);
+		double diff = std::fabs(e_final - e_initial);
 		if(e_final!=0. && e_initial!=0. && USE_ENERGY_CORR) energy_diff_coef = e_final / e_initial;
 		if(fPrintDebug){
 			std::cout<< "# e_initial = " << e_initial << " GeV" << std::endl;

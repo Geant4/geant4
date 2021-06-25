@@ -51,7 +51,6 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
-#include "G4EmParameters.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmExtraPhysics.hh"
@@ -80,12 +79,12 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
      LEN_model="LEND";
   }
 
-  G4cout << "<<< Geant4 Physics List simulation engine: Shielding"
-         << HadrPhysVariant << G4endl;
-  if ( LEN_model=="LEND" ) G4cout << 
-    "<<< LEND will be used for low energy neutron and gamma projectiles"
-    << G4endl;
-
+  if(verbose > 0) {
+    G4cout << "<<< Geant4 Physics List simulation engine: Shielding"
+	   << HadrPhysVariant << G4endl;
+    if ( LEN_model=="LEND" ) 
+      G4cout << "<<< LEND will be used for low energy neutron and gamma projectiles" << G4endl;
+  }
   defaultCutValue = 0.7*CLHEP::mm;  
   SetCutValue(0, "proton");  
   SetVerboseLevel(verbose);
@@ -116,10 +115,12 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   }
   else 
   {
-     G4cout << "Shielding Physics List: Warning!" <<G4endl;
-     G4cout << "\"" << LEN_model 
-            << "\" is not valid for the low energy neutron model." <<G4endl;
-     G4cout << "Neutron HP package will be used." <<G4endl;
+     if(verbose > 0) {
+       G4cout << "Shielding Physics List: Warning!" <<G4endl;
+       G4cout << "\"" << LEN_model 
+              << "\" is not valid for the low energy neutron model." <<G4endl;
+       G4cout << "Neutron HP package will be used." <<G4endl;
+     }
      RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   } 
 

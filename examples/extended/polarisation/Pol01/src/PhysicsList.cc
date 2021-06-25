@@ -37,7 +37,10 @@
 #include "G4EmStandardPhysics.hh"
 #include "PhysListEmPolarized.hh"
 
+#include "G4ProcessManager.hh"
+#include "StepMax.hh"
 #include "G4EmParameters.hh"
+#include "G4EmBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,41 +67,13 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4BosonConstructor.hh"
-#include "G4LeptonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructParticle()
 {
-  G4BosonConstructor  pBosonConstructor;
-  pBosonConstructor.ConstructParticle();
-
-  G4LeptonConstructor pLeptonConstructor;
-  pLeptonConstructor.ConstructParticle();
-
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  G4IonConstructor pIonConstructor;
-  pIonConstructor.ConstructParticle();
-
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();
-
+  // minimal set of particles for EM physics
+  G4EmBuilder::ConstructMinimalEmSet();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -145,9 +120,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {

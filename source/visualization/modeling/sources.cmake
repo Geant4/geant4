@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4modeling
-# Package: Geant4.src.G4visualization.G4modeling
-#------------------------------------------------------------------------------
+# - G4modeling module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4modeling
-  HEADERS
+geant4_add_module(G4modeling
+  PUBLIC_HEADERS
     G4ArrowModel.hh
     G4AttFilterUtils.hh
     G4AttValueFilterT.hh
@@ -24,6 +19,7 @@ geant4_define_module(NAME G4modeling
     G4HitsModel.hh
     G4LogicalVolumeModel.hh
     G4MagneticFieldModel.hh
+    G4Mesh.hh
     G4ModelApplyCommandsT.hh
     G4ModelColourMap.hh
     G4ModelCommandUtils.hh
@@ -79,6 +75,7 @@ geant4_define_module(NAME G4modeling
     G4HitsModel.cc
     G4LogicalVolumeModel.cc
     G4MagneticFieldModel.cc
+    G4Mesh.cc
     G4ModelingParameters.cc
     G4NullModel.cc
     G4PSHitsModel.cc
@@ -86,6 +83,7 @@ geant4_define_module(NAME G4modeling
     G4PhysicalVolumeModel.cc
     G4PhysicalVolumeSearchScene.cc
     G4PhysicalVolumesSearchScene.cc
+    G4PseudoScene.cc
     G4ScaleModel.cc
     G4TextModel.cc
     G4TouchablePropertiesScene.cc
@@ -107,44 +105,29 @@ geant4_define_module(NAME G4modeling
     G4VFieldModel.cc
     G4VModel.cc
     G4VTrajectoryModel.cc
-    G4VisTrajContext.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4detector
-    G4detutils
-    G4digits
-    G4run
-    G4tasking
-    G4event
-    G4geomBoolean
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4hits
-    G4intercoms
-    G4materials
-    G4navigation
-    G4partman
-    G4procman
-    G4specsolids
-    G4track
-    G4tracking
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4run
-    G4tasking
-    G4event
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4particles
-    G4processes
-    G4track
-    G4tracking
-)
+    G4VisTrajContext.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4modeling
+  PUBLIC
+    G4graphics_reps
+    G4csg
+    G4geometrymng
+    G4hepgeometry
+    G4specsolids
+    G4hepnumerics
+    G4intercoms
+    G4globman
+    G4digits
+    G4hits
+    G4tracking
+  PRIVATE
+    G4geomBoolean
+    G4navigation
+    G4event
+    G4magneticfield
+    G4materials
+    G4volumes
+    G4run
+    G4tasking
+    G4detutils
+    G4detector)

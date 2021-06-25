@@ -61,8 +61,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4hCoulombScatteringModel::G4hCoulombScatteringModel(G4bool combined)
   : G4VEmModel("hCoulombScattering"),
     cosThetaMin(1.0),
@@ -114,7 +112,7 @@ void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   } else if(tet >= CLHEP::pi) { 
     cosThetaMin = -1.0; 
   } else { 
-    cosThetaMin = cos(tet); 
+    cosThetaMin = std::cos(tet); 
   }
 
   wokvi->Initialise(part, cosThetaMin);
@@ -135,7 +133,7 @@ void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   if(!fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
   }
-  if(IsMaster() && mass < GeV && part->GetParticleName() != "GenericIon") {
+  if(IsMaster() && mass < CLHEP::GeV && part->GetParticleName() != "GenericIon") {
     InitialiseElementSelectors(part, cuts);
   } 
 }
@@ -172,7 +170,7 @@ G4hCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
   G4double targetMass = G4NucleiProperties::GetNuclearMass(A, Z);
-  G4double t = std::max(cut, 0.5*(cut + sqrt(2*cut*targetMass)));
+  G4double t = std::max(cut, 0.5*(cut + std::sqrt(2*cut*targetMass)));
 
   return t;
 }
@@ -263,7 +261,7 @@ void G4hCoulombScatteringModel::SampleSecondaries(
     wokvi->SampleSingleScattering(costmin, costmax, ratio);
 
   // kinematics in the Lab system
-  G4double ptot = sqrt(kinEnergy*(kinEnergy + 2.0*mass));
+  G4double ptot = std::sqrt(kinEnergy*(kinEnergy + 2.0*mass));
   G4double e1   = mass + kinEnergy;
   
   // Lab. system kinematics along projectile direction

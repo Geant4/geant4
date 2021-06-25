@@ -23,42 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VPhysicsConstructor
 //
+// Class description:
 //
+// This class is a virtual class for constructing particles and processes.
+// This class objects is being registered to G4VPhysicsList.
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file
-// Class Description:
-//      This class is an virtual class for constructing
-//      particles and processes. This class objects will be
-//      registered to G4VPhysicsList.
+// User must implement following four virtual methods in the concrete class
+// derived from this class:
 //
-//      User must implement following four virtual methods
-//      in his own concrete class derived from this class.
+// - virtual void ConstructParticle();
+//     All necessary particle type will be instantiated.
+// - virtual void ConstructProcess();
+//     All physics processes will be instantiated and
+//     registered to the process manager of each particle type.
 //
-//      all necessary particle type will be instantiated
-//      virtual void ConstructParticle();
-//
-//      all physics processes will be instantiated and
-//      registered to the process manager of each particle type
-//      virtual void ConstructProcess();
-//
-//      Only one physics constructor can be registered to
-//      Modular Physics List for each "physics_type".
-//      Physics constructors with same "physics_type" can be
-//      replaced by using the method of
-//      G4VModularPhysicsList::ReplacePhysics()
-//
-//
-// -------------------------------------------
-//   History
-//    first version                      12 Nov. 2000 by H.Kurashige
-//    Add   physicsType                  14 Mar. 2011 by H.Kurashige
-//    Add   RegisterProcess               1 May  2011 by H.Kurashige
-//    Add   G4PhysicsBuilderInterface	 21 Apr	 2017 by A.Dotti
-// ------------------------------------------------------------
-#ifndef G4VPhysicsConstructor_h
-#define G4VPhysicsConstructor_h 1
+// Only one physics constructor can be registered to a Modular Physics List
+// for each "physics_type". Physics constructors with same "physics_type"
+// can be replaced by using the method:
+//   G4VModularPhysicsList::ReplacePhysics().
+
+// Original author: H.Kurashige (Kobe University), 12 November 2000
+// --------------------------------------------------------------------
+#ifndef G4VPhysicsConstructor_hh
+#define G4VPhysicsConstructor_hh 1
+
+#include <vector>
 
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListHelper.hh"
@@ -66,7 +57,6 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "rundefs.hh"
-#include <vector>
 
 class G4PhysicsBuilderInterface;
 
@@ -74,11 +64,14 @@ class G4VPCData
 {
   // Encapsulate the fields of class G4VPhysicsConstructor
   // that are per-thread.
- public:
-  using PhysicsBuilders_V = std::vector<G4PhysicsBuilderInterface*>;
-  void initialize();
-  G4ParticleTable::G4PTblDicIterator* _aParticleIterator;
-  PhysicsBuilders_V* _builders;
+
+  public:
+
+    using PhysicsBuilders_V = std::vector<G4PhysicsBuilderInterface*>;
+    void initialize();
+    G4ParticleTable::G4PTblDicIterator* _aParticleIterator;
+
+    PhysicsBuilders_V* _builders = nullptr;
 };
 
 // The type G4VPCManager is introduced to encapsulate the methods used by
@@ -103,90 +96,82 @@ class G4VPCData
 // Important Note: you may wonder why we are introducing this mechanism
 //                 since there is only one PL for each application.
 //                 This is true, in the sense that only one PL is allowed
-//                 to be associated to a G4RunManager, however user can
-//                 instantiate as many PLs are needed and at run-time select one
-//                 of the PLs to be used we thus need this mechanism to
+//                 to be associated to a G4RunManager, however a user can
+//                 instantiate as many PLs are needed and at run-time select
+//                 one of the PLs to be used we thus need this mechanism to
 //                 guarantee that the system works without problems in case of
 //                 this (unusual) case. This may be reviewed in the future
-typedef G4VUPLSplitter<G4VPCData> G4VPCManager;
-typedef G4VPCManager G4VPhyscicsConstructorManager;
-
-// This macros change the references to fields that are now encapsulated
-// in the class G4VPCData.
 //
-// Note1:  the use of this-> this is needed to avoid compilation errors
-// when using templated class with T=G4VUserPhysicsList. Don't know why.
-// Note2: the name of the first #define is different, because otherwise
-//        we need to change its use in all classes that inherits from
-//        this base class (all examples). However one should note comment
-//        on JIRA task: http://jira-geant4.kek.jp/browse/DEV-27
-
-//#define aParticleIterator
-//((subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator)
+using G4VPCManager = G4VUPLSplitter<G4VPCData>;
+using G4VPhyscicsConstructorManager = G4VPCManager;
 
 class G4VPhysicsConstructor
 {
- public:  // with description
-  G4VPhysicsConstructor(const G4String& = "");
-  G4VPhysicsConstructor(const G4String& name, G4int physics_type);
-  virtual ~G4VPhysicsConstructor();
+  public:
 
-  virtual void ConstructParticle() = 0;
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
+    G4VPhysicsConstructor(const G4String& = "");
+    G4VPhysicsConstructor(const G4String& name, G4int physics_type);
+    virtual ~G4VPhysicsConstructor();
 
-  virtual void ConstructProcess() = 0;
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
+    virtual void ConstructParticle() = 0;
+      // This method will be invoked in the Construct() method.
+      // Each particle type will be instantiated.
 
-  inline void SetPhysicsName(const G4String& = "");
-  inline const G4String& GetPhysicsName() const;
+    virtual void ConstructProcess() = 0;
+      // This method will be invoked in the Construct() method.
+      // Each physics process will be instantiated and
+      // registered to the process manager of each particle type.
 
-  inline void SetPhysicsType(G4int);
-  inline G4int GetPhysicsType() const;
+    inline void SetPhysicsName(const G4String& = "");
+    inline const G4String& GetPhysicsName() const;
 
-  inline void SetVerboseLevel(G4int value);
-  inline G4int GetVerboseLevel() const;
-  // set/get controle flag for output message
-  //  0: Silent
-  //  1: Warning message
-  //  2: More
-  // verbose level is set equal to physics list when registered
+    inline void SetPhysicsType(G4int);
+    inline G4int GetPhysicsType() const;
 
- protected:
-  inline G4bool RegisterProcess(G4VProcess* process,
-                                G4ParticleDefinition* particle);
-  // Register a process to the particle type
-  // according to the ordering parameter table
-  // 'true' is returned if the process is registerd successfully
+    inline G4int GetInstanceID() const;
+    static const G4VPCManager& GetSubInstanceManager();
 
- protected:
-  G4int verboseLevel;
-  G4String namePhysics;
-  G4int typePhysics;
+    virtual void TerminateWorker();
+      // Method called by kernel to destroy thread-local data, equivalent to
+      // destructor in sequential mode. Derived classes implementing this
+      // method, must also call this base class method.
 
-  G4ParticleTable* theParticleTable;
-  G4int g4vpcInstanceID;
-  G4RUN_DLL static G4VPCManager subInstanceManager;
-  G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
-  using PhysicsBuilder_V = G4VPCData::PhysicsBuilders_V;
-  // This returns a copy of the vector of pointers
-  PhysicsBuilder_V GetBuilders() const;
-  void AddBuilder(G4PhysicsBuilderInterface* bld);
+    inline void SetVerboseLevel(G4int value);
+    inline G4int GetVerboseLevel() const;
+      // Set/get control flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
+      // verbose level is set equal to physics list when registered.
 
- public:
-  inline G4int GetInstanceID() const;
-  static const G4VPCManager& GetSubInstanceManager();
+  protected:
 
-  // Method called by kernel to destroy thread-local
-  // data, equivalent to destructor in sequential mode
-  // Derived classes implementing this method, must also call
-  // this base class method.
-  virtual void TerminateWorker();
+    using PhysicsBuilder_V = G4VPCData::PhysicsBuilders_V;
+
+    inline G4bool RegisterProcess(G4VProcess* process,
+                                  G4ParticleDefinition* particle);
+      // Register a process to the particle type according to the ordering
+      // parameter table. 'true' is returned if the process is registered
+      // successfully.
+
+    G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
+
+    PhysicsBuilder_V GetBuilders() const;
+      // This returns a copy of the vector of pointers.
+    void AddBuilder(G4PhysicsBuilderInterface* bld);
+
+  protected:
+
+    G4int verboseLevel = 0;
+    G4String namePhysics = "";
+    G4int typePhysics = 0;
+
+    G4ParticleTable* theParticleTable = nullptr;
+    G4int g4vpcInstanceID = 0;
+    G4RUN_DLL static G4VPCManager subInstanceManager;
 };
 
-// Inlined methods
+// Inline methods implementations
 
 inline void G4VPhysicsConstructor::SetVerboseLevel(G4int value)
 {
@@ -210,8 +195,7 @@ inline const G4String& G4VPhysicsConstructor::GetPhysicsName() const
 
 inline void G4VPhysicsConstructor::SetPhysicsType(G4int val)
 {
-  if(val > 0)
-    typePhysics = val;
+  if(val > 0)  { typePhysics = val; }
 }
 
 inline G4int G4VPhysicsConstructor::GetPhysicsType() const
@@ -222,13 +206,13 @@ inline G4int G4VPhysicsConstructor::GetPhysicsType() const
 inline G4bool G4VPhysicsConstructor::RegisterProcess(
   G4VProcess* process, G4ParticleDefinition* particle)
 {
-  return G4PhysicsListHelper::GetPhysicsListHelper()->RegisterProcess(process,
-                                                                      particle);
-  // return aPLHelper->RegisterProcess(process, particle);
+  return G4PhysicsListHelper::GetPhysicsListHelper()
+         ->RegisterProcess(process, particle);
 }
 
 inline const G4VPCManager& G4VPhysicsConstructor::GetSubInstanceManager()
 {
   return subInstanceManager;
 }
+
 #endif

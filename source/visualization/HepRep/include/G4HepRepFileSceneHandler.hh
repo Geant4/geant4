@@ -78,19 +78,13 @@ public:
   void AddSolid(const G4Ellipsoid&);
   void AddSolid(const G4TessellatedSolid&);
   void AddSolid(const G4VSolid&);
+
+  using G4VSceneHandler::AddCompound;
   void AddCompound (const G4VTrajectory&);
   void InitTrajectory();
   void AddCompound (const G4VHit&);
   void InitHit();
-  void AddCompound (const G4THitsMap<G4double>& hits) {
-    G4VSceneHandler::AddCompound(hits);
-  }
-  void AddCompound (const G4THitsMap<G4StatDouble>& hits) {
-    G4VSceneHandler::AddCompound(hits);
-  }
-  void AddCompound (const G4VDigi& digi) {
-    G4VSceneHandler::AddCompound(digi);
-  }
+
   // void PreAddSolid(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddSolid();
@@ -98,6 +92,7 @@ public:
   ////////////////////////////////////////////////////////////////
   // Required implementation of pure virtual functions...
 
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive(const G4Polyline&);
   void AddPrimitive(const G4Text&);
   void AddPrimitive(const G4Circle&);
@@ -110,9 +105,6 @@ public:
   // class methods if not otherwise defined to avoid warnings about
   // hiding of base class methods.
   void AddPrimitive(const G4Polymarker&);
-  void AddPrimitive(const G4Scale& scale) {
-    G4VSceneHandler::AddPrimitive (scale);
-  }
 
   ////////////////////////////////////////////////////////////////
   // Further optional virtual functions...

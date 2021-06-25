@@ -66,9 +66,7 @@ typedef std::vector<G4PenelopeOscillator*> G4PenelopeOscillatorTable ;
 
 // This class is a singleton
 class G4PenelopeOscillatorManager {
-
 public: 
-
   // The only way to get an instance of this class is to call the 
   // function GetOscillatorManager() 
   static G4PenelopeOscillatorManager* GetOscillatorManager();
@@ -85,8 +83,8 @@ public:
   G4PenelopeOscillatorTable* GetOscillatorTableCompton(const G4Material*);  
   G4PenelopeOscillator* GetOscillatorCompton(const G4Material*,G4int);
 
-  void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};
-  G4int GetVerbosityLevel(){return verbosityLevel;};
+  void SetVerbosityLevel(G4int vl){fVerbosityLevel = vl;};
+  G4int GetVerbosityLevel(){return fVerbosityLevel;};
   
   //!These are cumulative for the molecule
   //! Returns the total Z for the molecule
@@ -103,47 +101,40 @@ public:
   //Components of each molecule
   G4double GetNumberOfZAtomsPerMolecule(const G4Material*,G4int Z);
   
+  G4PenelopeOscillatorManager& operator=(const 
+					 G4PenelopeOscillatorManager& right) = delete;
+  G4PenelopeOscillatorManager(const G4PenelopeOscillatorManager&) = delete;
+
 protected:
-  G4PenelopeOscillatorManager();
+  explicit G4PenelopeOscillatorManager();
   ~G4PenelopeOscillatorManager();
 
 private:
-  // Hide copy constructor and assignment operator 
-  G4PenelopeOscillatorManager& operator=(const 
-					 G4PenelopeOscillatorManager& right);
-  G4PenelopeOscillatorManager(const G4PenelopeOscillatorManager&);
- 
+  //create both tables simultaneously
+  void CheckForTablesCreated();
+  void ReadElementData();
+  void BuildOscillatorTable(const G4Material*);
+
   static G4ThreadLocal G4PenelopeOscillatorManager* instance;
   
   //In Penelope2008, the Ionisation and Compton oscillator tables are 
   //slightly different!
   std::map<const G4Material*,G4PenelopeOscillatorTable*> 
-  *oscillatorStoreIonisation;
+  *fOscillatorStoreIonisation;
 
   std::map<const G4Material*,G4PenelopeOscillatorTable*> 
-  *oscillatorStoreCompton;
+  *fOscillatorStoreCompton;
 
-  std::map<const G4Material*,G4double> *atomicNumber;
-  std::map<const G4Material*,G4double> *atomicMass;
+  std::map<const G4Material*,G4double> *fAtomicNumber;
+  std::map<const G4Material*,G4double> *fAtomicMass;
+  std::map<const G4Material*,G4double> *fExcitationEnergy;
+  std::map<const G4Material*,G4double> *fPlasmaSquared;
+  std::map<const G4Material*,G4double> *fAtomsPerMolecule;
+  std::map< std::pair<const G4Material*,G4int>, G4double> *fAtomTablePerMolecule;
 
-  std::map<const G4Material*,G4double> *excitationEnergy;
-  std::map<const G4Material*,G4double> *plasmaSquared;
-
-  std::map<const G4Material*,G4double> *atomsPerMolecule;
-
-  std::map< std::pair<const G4Material*,G4int>, G4double> *atomTablePerMolecule;
-
-  //create both tables simultaneously
-  void CheckForTablesCreated();
-
-  void ReadElementData();
-  G4double elementData[5][2000];
+  G4double fElementData[5][2000];
+  G4int fVerbosityLevel;
   G4bool fReadElementData;
-
-  void BuildOscillatorTable(const G4Material*);
-
-  G4int verbosityLevel;
-
 };
 
 #endif

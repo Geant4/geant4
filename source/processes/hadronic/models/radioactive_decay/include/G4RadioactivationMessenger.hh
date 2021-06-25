@@ -61,21 +61,13 @@ class G4RadioactivationMessenger: public G4UImessenger
   private:
     G4Radioactivation* theRadioactivationContainer;
   
-    G4UIdirectory* old_grdmDirectory;              // To be removed in G4 11.0
-    G4UIdirectory*      rdmDirectory;            
-    G4UIcmdWithABool* old_analoguemcCmd;           // To be removed in G4 11.0
-    G4UIcmdWithABool*     analoguemcCmd;
-    G4UIcmdWithAString* old_sourcetimeprofileCmd;  // To be removed in G4 11.0
-    G4UIcmdWithAString*     sourcetimeprofileCmd;
-    G4UIcmdWithAString* old_decaybiasprofileCmd;   // To be removed in G4 11.0
-    G4UIcmdWithAString*     decaybiasprofileCmd;
-    G4UIcmdWithABool* old_brbiasCmd;               // To be removed in G4 11.0
-    G4UIcmdWithABool*     brbiasCmd;
-    G4UIcmdWithAnInteger* old_splitnucleiCmd;      // To be removed in G4 11.0
-    G4UIcmdWithAnInteger*     splitnucleiCmd;
-    G4UIcmdWithADoubleAndUnit* old_hlthCmd;        // To be removed in G4 11.0
-    G4UIcmdWithADoubleAndUnit*     hlthCmd;
-
+    G4UIdirectory* rdmDirectory;            
+    G4UIcmdWithABool* analoguemcCmd;
+    G4UIcmdWithAString* sourcetimeprofileCmd;
+    G4UIcmdWithAString* decaybiasprofileCmd;
+    G4UIcmdWithABool* brbiasCmd;
+    G4UIcmdWithAnInteger* splitnucleiCmd;
+    G4UIcmdWithADoubleAndUnit* hlthCmd;
 };
 
 #endif

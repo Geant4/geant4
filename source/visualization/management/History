@@ -25,6 +25,100 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+07 June 2021  John Allison  (visman-V10-07-10)
+- G4VSceneHandler:
+  o Implement a default AddCompound (const G4Mesh&).
+    . Just draws the "container" volume and prints a G4Exception
+      with guidance.
+- G4ViewParameters:
+  o Add new data members and accessors and operator<< and operator!=
+    G4bool fSpecialMeshRendering;  // Request special rendering
+    std::vector<G4ModelingParameters::PVNameCopyNo> fSpecialMeshVolumes;
+- G4VisCommandsViewerSet:
+  o Implement new commands:
+    /vis/viewer/set/specialMeshRendering
+    /vis/viewer/set/specialMeshVolumes
+- G4VisCommandsSet: Minor improvement to guidance.
+
+28 May 2021 Ben Morgan (visman-V10-07-09)
+- Migrate to modular CMake build
+
+22 May 2021  John Allison  (visman-V10-07-08)
+- Exploit C++17 to parse saved files in /vis/viewer/interpolate.
+  o Unifies Unix and Windows code.
+  o Avoids the use of Unix-specific system call to popen.
+  o Uses <filesystem>.
+
+11 May 2021  John Allison  (visman-V10-07-07)
+- Introduce /vis/scene/add/localAxes and /vis/touchable/localAxes.
+
+05 May 2021  Guy Barrand  (visman-V10-07-06)
+- G4VisExecutive.icc
+  o Four new (mutually exclusive) vis drivers (in vis_toolsg-V10-07-00):
+    . TOOLSSG_X11_GLES
+    . TOOLSSG_WINDOWS_GLES
+    . TOOLSSG_XT_GLES
+    . TOOLSSG_QT_GLE
+
+31 March 2021  Gabriele Cosmo  (visman-V10-07-05)
+- Use existing facility to find logical volume in store, rather than looping
+  through in G4VisCommandSceneAddLogicalVolume::SetNewValue().
+
+28 March 2021  John Allison  (visman-V10-07-04)
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/volume (and /vis/drawVolume, which calls it):
+    . Exploit G4PhysicalVolumesSearchScene to streamline geometry tree searches.
+    . Avoid calculating extent of a temporary physical volume when not
+      necessary.
+- G4VisCommandsSet.cc, G4VisCommandsTouchable.cc and G4VisCommandsViewer.cc:
+  o Add comment of explanation where using G4PhysicalVolumesSearchScene.
+- The above does introduce a change of behaviour for the case that a user
+  names the volume(s) requested, e.g., "/vis/drawVolume Shape1". The user will
+  not normally see any difference - but it does avoid extravagant computation
+  in some circumstances. The issue is this (I copy and paste a snippet from the
+  code for /vis/scene/add/volume):
+  // When it comes to determining the extent of a physical volume we normally
+  // assume the user wishes to ignore "invisible" volumes. For example, most
+  // users make the world volume invisible. So we ask the physical volume
+  // model to traverse the geometry hierarchy, starting at the named physical
+  // volume, until it finds non-invisible ones, whose extents are accumulated
+  // to determine the overall extent. (Once a non-invisible volume is found,
+  // the search is curtailed - daughters are always contained within the mother
+  // so they have no subsequent influence on the extent of the mother - but the
+  // search continues at the same level until all highest level non-invisible
+  // volumes are found an their extents accumulated.) So the default is
+  G4bool useFullExtent = false;
+  // However, the above procedure can be time consuming in some situations, such
+  // as a nested parameterisation whose ultimate volumes are the first non-
+  // visible ones, which are typical of a medical "phantom". So we assume here
+  // below that if a user specifies a name other than "world" or "worlds" he/she
+  // wished the extent to be determined by the volume, whether it is visible
+  // or not. So we set useFullExtent true at that point below.
+
+09 March 2021  John Allison  (visman-V10-07-03)
+- G4VisExecutive.icc: Remove Wt.
+
+02 February 2021  John Allison  (visman-V10-07-02)
+- Interrupt macro (vis.mac) if graphics system invalid/unavailable.
+  o Issues "Batch is interrupted" and avoids long litany of further errors.
+
+30 December 2020  John Allison  (visman-V10-07-01)
+- Remove deprecated G4VisManager::SetUserAction.
+  o Use RegisterRunDurationUserVisAction or similar instead. These functions
+    represent quite an advanced use of G4 visualisation and are rarely used.
+    They have been deprecated and a warning printed since 2016.
+    examples/extended/visualization were updated long ago.
+
+29 December 2020  John Allison  (visman-V10-07-00)
+- G4VisCommandsSet.cc: /vis/set/extentForField:
+  o Parameters are no longer omitable.
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/electricField and magneticField:
+  o Improve guidance to take note of change to G4VFieldModel - see
+    modeling-V10-07-00 - namely that the number of data points is now
+    calculated on the basis of the extent, which can be set as above.
+    (If not set, the extent is null, and in G4VFieldModel, is taken to be
+    the extent of the current scene.)
+
 16 November 2020 Gabriele Cosmo (visman-V10-06-12)
 - Fixed typos in printed-out text. Addressing problem report #2285.
 

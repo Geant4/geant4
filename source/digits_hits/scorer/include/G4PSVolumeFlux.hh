@@ -42,33 +42,30 @@
 
 class G4PSVolumeFlux : public G4VPrimitivePlotter
 {
-  public: // with description
-      G4PSVolumeFlux(G4String name,G4int direction=1, G4int depth=0);
-      virtual ~G4PSVolumeFlux();
+ public:  // with description
+  G4PSVolumeFlux(G4String name, G4int direction = 1, G4int depth = 0);
+  virtual ~G4PSVolumeFlux();
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-  private:
-      G4int  HCID;
-      G4int  fDirection;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool divare = false; // divide by the surface area
-      G4bool divcos = false; // divide by cos(theta)
+ private:
+  G4int HCID;
+  G4int fDirection;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool divare = false;  // divide by the surface area
+  G4bool divcos = false;  // divide by cos(theta)
 
-  public:
-      void SetDivAre(G4bool val)
-      { divare = val; }
-      void SetDivCos(G4bool val)
-      { divcos = val; }
+ public:
+  void SetDivAre(G4bool val) { divare = val; }
+  void SetDivCos(G4bool val) { divcos = val; }
 };
 
 #endif
-

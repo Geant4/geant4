@@ -349,7 +349,7 @@ void G4Navigator::SetVerboseLevel(G4int level)
 {
   fVerbose = level;
   fnormalNav.SetVerboseLevel(level);
-  fvoxelNav.SetVerboseLevel(level);
+  GetVoxelNavigator().SetVerboseLevel(level);
   fparamNav.SetVerboseLevel(level);
   freplicaNav.SetVerboseLevel(level);
   fregularNav.SetVerboseLevel(level);
@@ -407,7 +407,7 @@ void  G4Navigator::CheckMode(G4bool mode)
 {
   fCheck = mode;
   fnormalNav.CheckMode(mode);
-  fvoxelNav.CheckMode(mode);
+  GetVoxelNavigator().CheckMode(mode);
   fparamNav.CheckMode(mode);
   freplicaNav.CheckMode(mode);
   fregularNav.CheckMode(mode);
@@ -474,12 +474,25 @@ G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 }
 
 // ********************************************************************
+// GetVoxelNavigator
+// ********************************************************************
+//
+inline
+G4VoxelNavigation& G4Navigator::GetVoxelNavigator() {
+#ifdef ALTERNATIVE_VOXEL_NAV
+      return *fpvoxelNav;
+#else
+      return fvoxelNav;
+#endif      
+}
+
+// ********************************************************************
 // EnableBestSafety
 // ********************************************************************
 //
 inline void G4Navigator::EnableBestSafety( G4bool value )
 {
-  fvoxelNav.EnableBestSafety( value );
+  GetVoxelNavigator().EnableBestSafety( value );
 }
 
 // ********************************************************************

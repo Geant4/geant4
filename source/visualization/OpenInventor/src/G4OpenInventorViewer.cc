@@ -24,6 +24,11 @@
 // ********************************************************************
 //
 
+// 03-MAY-2021 F.W. Jones: removed the camera sensor which is redundant
+// since the group node sensor receives all camera motion events and
+// can update the view parameters, irrespective of any changes to the
+// camera type.
+
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // this :
@@ -62,7 +67,7 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 ,fSoImageWriter(0)
 ,fGL2PSAction(0) //To be set be suclass.
 ,fGroupCameraSensor(0)
-,fCameraSensor(0)
+ //,fCameraSensor(0)
 {
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
@@ -123,14 +128,15 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fGroupCameraSensor = new SoNodeSensor(GroupCameraSensorCB,this);
   fGroupCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
   fGroupCameraSensor->attach(group);
-
-  fCameraSensor = new SoNodeSensor(CameraSensorCB,this);
-  fCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
+  // FWJ Upgraded the group sensor so the camera sensor is not needed
+  //  fCameraSensor = new SoNodeSensor(CameraSensorCB,this);
+  //  fCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
+  //  fCameraSensor->attach(camera);
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
-  fCameraSensor->detach();
-  delete fCameraSensor;
+   //  fCameraSensor->detach();
+   //  delete fCameraSensor;
   fGroupCameraSensor->detach();
   delete fGroupCameraSensor;
   fSoSelection->unref();
@@ -188,8 +194,10 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // If G4OpenInventor ever introduces VAMs, the following might need
       // changing to a complete comparison, i.e., remove ".size()".  See
       // G4OpenGLStoredViewer::CompareForKernelVisit.
-      (vp.GetVisAttributesModifiers().size() !=
-       fVP.GetVisAttributesModifiers().size())
+      (vp.GetVisAttributesModifiers() !=
+       fVP.GetVisAttributesModifiers())                           ||
+      (vp.IsSpecialMeshRendering() !=
+       fVP.IsSpecialMeshRendering())
       )
     return true;
 
@@ -218,6 +226,10 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       (vp.GetExplodeFactor () != fVP.GetExplodeFactor ()))
     return true;
       
+  if (vp.IsSpecialMeshRendering() &&
+      (vp.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
+    return true;
+
   return false;
 }
 
@@ -382,29 +394,51 @@ void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 
-void G4OpenInventorViewer::GroupCameraSensorCB(void* aThis,SoSensor* aSensor){ 
+// FWJ This sensor now performs the fVP updates
+void G4OpenInventorViewer::GroupCameraSensorCB(void* aThis, SoSensor* aSensor)
+{ 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
   SoNode* node = ((SoNodeSensor*)aSensor)->getTriggerNode();
-  //printf("debug : GroupCameraSensorCB %s\n",
-  //node->getTypeId().getName().getString());
+  //  printf("debug : GroupCameraSensorCB %s\n",
+  //         node->getTypeId().getName().getString());
 
   if(node->isOfType(SoCamera::getClassTypeId())) {
+    SoCamera* camera = (SoCamera*)node;
+
+    // FWJ DEBUG
+    //    G4cout << "   UPDATING fVP FROM CAMERA " << camera << G4endl;
+    SbVec3f direction, up;
+    lookedAt(camera, direction, up);
+    This->fVP.SetViewpointDirection
+      (G4Vector3D(-direction[0], -direction[1], -direction[2]));
+    This->fVP.SetUpVector(G4Vector3D(up[0], up[1], up[2]));
+
+    SbVec3f pos = camera->position.getValue();
+    SbVec3f target = pos + direction * camera->focalDistance.getValue();
+
+    This->fVP.SetCurrentTargetPoint(G4Point3D(target[0], target[1], target[2]));
+    
+    // FWJ camera sensor no longer needed
     // Viewer had changed the camera type, 
     // attach the fCameraSensor to the new camera.
-    SoCamera* camera = (SoCamera*)node;
-    This->fCameraSensor->detach();
-    This->fCameraSensor->attach(camera);
+    // FWJ DEBUG
+    //    G4cout << "   SWITCHING TO CAMERA " << camera << G4endl;
+    //    This->fCameraSensor->detach();
+    //    This->fCameraSensor->attach(camera);
   }
 
 }
 
+/* FWJ This sensor is no longer needed
 void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor* aSensor) { 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
-  //printf("debug : CameraSensorCB\n");
+  //  printf("debug : CameraSensorCB\n");
 
   SoNode* node = ((SoNodeSensor*)aSensor)->getTriggerNode();
+//  printf("debug : CameraSensorCB %s\n",
+//         node->getTypeId().getName().getString());
 
   if(node->isOfType(SoCamera::getClassTypeId())) {
     SoCamera* camera = (SoCamera*)node;
@@ -421,6 +455,7 @@ void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor* aSensor) {
     This->fVP.SetCurrentTargetPoint(G4Point3D(target[0],target[1],target[2]));
   }
 }
+*/
 
 void G4OpenInventorViewer::SelectionCB(
  void* aThis

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /*
-Author: Susanna Guatelli
+Author: Susanna Guatelli, susanna@uow.edu.au
 
 The class BrachyAnalysisManager creates and manages histograms and ntuples
 */

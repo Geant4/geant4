@@ -2,11 +2,11 @@
 
 # end time of chemistry in ns (change units in chemistry.loop
 /control/alias endTime 95
-/vis/ogl/set/startTime 0 ps
-#/vis/ogl/set/endTime 1 ps
+/vis/viewer/set/timeWindow/startTime 0 ps
+#/vis/viewer/set/timeWindow/endTime 1 ps
 
-/vis/ogl/set/fade 0
-/vis/ogl/set/displayHeadTime true -0.1 -0.8 24 1.0 0.0 0.0
+/vis/viewer/set/timeWindow/fadeFactor 0
+/vis/viewer/set/timeWindow/displayHeadTime true -0.1 -0.8 24 1.0 0.0 0.0
 /control/alias timeWindow 5
 /control/loop movie_chemistry.loop startTime -{timeWindow} {endTime} 1
 

@@ -33,6 +33,8 @@ Author: Susanna Guatelli
 //    *                                *
 //    **********************************
 //
+#include "BrachyPhysicsList.hh"
+#include "BrachyPhysicsListMessenger.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -43,7 +45,6 @@ Author: Susanna Guatelli
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmPenelopePhysics.hh"
-#include "BrachyPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProductionCutsTable.hh"
@@ -54,14 +55,17 @@ Author: Susanna Guatelli
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyPhysicsListMessenger.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VModularPhysicsList()
 {
 SetVerboseLevel(1); 
- 
+
+G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV, 1*GeV);
+SetDefaultCutValue(0.05 *mm);
+DumpCutValuesTable();
+
 // EM physics: default
 fEmPhysicsList = new G4EmLivermorePhysics();
 fEmName="emlivermore";
@@ -159,30 +163,3 @@ void BrachyPhysicsList::AddPhysicsList(const G4String& name)
            << G4endl;
 }
 
-void BrachyPhysicsList::SetCuts()
-{
-// Definition of  threshold of production 
-// of secondary particles
-// This is defined in range.
-defaultCutValue = 0.05 * mm;
-SetCutValue(defaultCutValue, "gamma");
-SetCutValue(defaultCutValue, "e-");
-SetCutValue(defaultCutValue, "e+");
-  
-// By default the low energy limit to produce 
-// secondary particles is 990 eV.
-// This value is correct when using the EM Standard Physics.
-// When using the Low Energy Livermore this value can be 
-// changed to 250 eV corresponding to the limit
-// of validity of the physics models.
-// Comment out following three lines if the 
-// Standard electromagnetic Package is adopted.
-G4double lowLimit = 250. * eV;
-G4double highLimit = 100. * GeV;
-
-G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowLimit,
-                                                                highLimit);
-
-// Print the cuts 
-if (verboseLevel>0) DumpCutValuesTable();
-}

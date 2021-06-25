@@ -52,9 +52,6 @@
   GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
 
   ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
-  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
-  This is enough when spatial distribution of deposited energy do not need
-  to be accurate (see param->SetStepFunction(1., 1*mm)).
 
   In PhysicsList::ConstructProcess() we give an example of how to access hadronic models.
 

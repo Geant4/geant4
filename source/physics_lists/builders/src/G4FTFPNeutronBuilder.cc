@@ -76,7 +76,7 @@ G4FTFPNeutronBuilder::
 }
 
 void G4FTFPNeutronBuilder::
-Build(G4NeutronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

@@ -88,7 +88,6 @@ void G4EmExtraParameters::Initialise()
   m_lengthForced.clear();
   m_weightForced.clear();
   m_regnamesSubCut.clear();
-  m_subCuts.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -282,18 +281,16 @@ const std::vector<G4String>& G4EmExtraParameters::TypesPhysics() const
   return m_typesPhys;
 }
 
-void G4EmExtraParameters::SetSubCutoff(G4bool val, const G4String& region)
+void G4EmExtraParameters::SetSubCutRegion(const G4String& region)
 {
   const G4String& r = CheckRegion(region);
   G4int nreg =  m_regnamesSubCut.size();
   for(G4int i=0; i<nreg; ++i) {
     if(r == m_regnamesSubCut[i]) { 
-      m_subCuts[i] = val;
       return; 
     }
   }
   m_regnamesSubCut.push_back(r);
-  m_subCuts.push_back(val);
 }
 
 void 
@@ -380,11 +377,11 @@ G4EmExtraParameters::ActivateSecondaryBiasing(const G4String& procname,
 
 void G4EmExtraParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr) const
 {
-  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  const G4RegionStore* regionStore = G4RegionStore::GetInstance();
   G4int n = m_regnamesSubCut.size();
   for(G4int i=0; i<n; ++i) { 
     const G4Region* reg = regionStore->GetRegion(m_regnamesSubCut[i], false);
-    if(reg) { ptr->ActivateSubCutoff(m_subCuts[i], reg); }
+    if(nullptr != reg) { ptr->ActivateSubCutoff(reg); }
   }
   n = m_procBiasedXS.size();
   for(G4int i=0; i<n; ++i) {

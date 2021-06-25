@@ -15,6 +15,51 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+June 21, 2021 M. Asai (tracking-V10-07-12)
+- G4SteppingVerbose.hh : add explicit virtual keyward to all virtual
+  methods.
+- G4SteppingVerboseWithUnits.hh : add override keyword.
+
+June 1, 2021 M. Maire (tracking-V10-07-11)
+- fix a format in G4VSteppingVerboseWithUnits
+     
+May 25, 2021 M. Maire (tracking-V10-07-10)
+- complete G4VSteppingVerboseWithUnits
+  
+May 4, 2021 G. Cosmo (tracking-V10-07-09)
+- Export protected static symbols in G4VSteppingVerbose for DLL builds
+  on Windows.
+
+April 1, 2021 B. Morgan (tracking-V10-07-08)
+- Migrate build to modular CMake API
+
+Mar 31, 2021 G. Cosmo (tracking-V10-07-07)
+- Use existing facility to find locgical volume in store, rather than
+  looping through in G4AdjointCrossSurfChecker.
+
+Mar 24, 2021 M. Asai (tracking-V10-07-05, -06)
+- G4SteppingVerbose, G4STeppingManager
+  : add a switch to instantiate G4SteppingVerboseWithUnits
+
+Feb 27, 2021 M. Asai (tracking-V10-07-04)
+- G4SteppingVerboseWithUnits : Cosmetic changes
+
+Feb 24, 2021 G. Cosmo (tracking-V10-07-03)
+- Removed unnecessary header inclusion in G4SteppingVerboseWithUnits
+  causing extra dependencies on particles submodules.
+
+Feb 22, 2021 M. Asai (tracking-V10-07-02)
+- Introducing G4SteppingVerboseWithUnits : An alternative to
+  G4SteppingVerbose with printing proper units.
+
+Feb 4, 2021 M. Asai (tracking-V10-07-01)
+- Simplify the way of defining a user-specific stepping verbose, that
+  is now common to all sequential, MT and tasking modes.
+
+Dec 16, 2020 G.Amadio (tracking-V10-07-00)
+- Avoid unnecessary indirections when checking for regional stepping
+  action by reusing the value of current volume in stepping manager.
 
 Nov 12, 2020 Jonathan Madsen (tracking-V10-06-04)
 - Added G4Profiler support.

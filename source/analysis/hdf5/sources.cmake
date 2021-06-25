@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4hdf5
-# Package: Geant4.src.G4analysis.G4hdf5
-#------------------------------------------------------------------------------
+# - G4hdf5 module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4hdf5
-  HEADERS
+geant4_add_module(G4hdf5
+  PUBLIC_HEADERS
     G4Hdf5AnalysisManager.hh
     G4Hdf5AnalysisManager.icc
     G4Hdf5AnalysisReader.hh
@@ -28,17 +23,6 @@ geant4_define_module(NAME G4hdf5
     G4Hdf5NtupleManager.cc
     G4Hdf5NtupleFileManager.cc
     G4Hdf5RFileManager.cc
-    G4Hdf5RNtupleManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-    G4analysismng
-    G4hntools
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-  LINK_LIBRARIES
-    ${HDF5_LIBRARIES}
-)
+    G4Hdf5RNtupleManager.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4hdf5 PUBLIC G4analysismng G4hntools G4globman G4tools ${HDF5_LIBRARIES})

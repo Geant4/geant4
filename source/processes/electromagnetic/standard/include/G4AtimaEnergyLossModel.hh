@@ -62,62 +62,60 @@ public:
   explicit G4AtimaEnergyLossModel(const G4ParticleDefinition* p = nullptr,
                                   const G4String& nam = "Atima");
 
-  virtual ~G4AtimaEnergyLossModel();
+  ~G4AtimaEnergyLossModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple* couple) override;
+  G4double MinEnergyCut(const G4ParticleDefinition*,
+			const G4MaterialCutsCouple* couple) override;
 
-  virtual G4double ComputeCrossSectionPerElectron(
+  G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
 				 
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
 				 G4double maxEnergy) override;
 				 				 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
+  G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy) override;
 				 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double) override;
+  G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double) override;
 
-  virtual G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
-					const G4Material* mat,
-					G4double kineticEnergy) override;
+  G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
+				const G4Material* mat,
+				G4double kineticEnergy) override;
 
-  virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
-				     const G4Material* mat,
-				     G4double kineticEnergy) override;
+  G4double GetParticleCharge(const G4ParticleDefinition* p,
+			     const G4Material* mat,
+			     G4double kineticEnergy) override;
 
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double&,
-				    G4double&,
-				    G4double) override;
+  void CorrectionsAlongStep(const G4MaterialCutsCouple*,
+			    const G4DynamicParticle*,
+			    const G4double&,
+			    G4double&) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
 protected:
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy) override;
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+			      G4double kinEnergy) override;
 
   inline G4double GetChargeSquareRatio() const;
 
@@ -143,7 +141,7 @@ private:
   G4AtimaEnergyLossModel(const  G4AtimaEnergyLossModel&) = delete;
 
   const G4ParticleDefinition* particle;
-  G4ParticleDefinition*       theElectron;
+  const G4ParticleDefinition* theElectron;
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;
   G4NistManager*              nist;

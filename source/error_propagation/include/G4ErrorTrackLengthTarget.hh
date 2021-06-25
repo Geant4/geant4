@@ -39,53 +39,55 @@
 #ifndef G4ErrorTrackLengthTarget_hh
 #define G4ErrorTrackLengthTarget_hh
 
-#include "G4ios.hh" 
+#include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ElementTable.hh"
-#include "G4Step.hh" 
+#include "G4Step.hh"
 #include "G4ErrorTarget.hh"
 
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 
-class G4ErrorTrackLengthTarget : public G4VDiscreteProcess,
-                                 public G4ErrorTarget
+class G4ErrorTrackLengthTarget
+  : public G4VDiscreteProcess
+  , public G4ErrorTarget
 {
  public:  // with description
+  G4ErrorTrackLengthTarget(const G4double maxTrkLength);
+  // Constructs and add this process to G4ProcessManager of all particles
+  virtual ~G4ErrorTrackLengthTarget() {}
 
-  G4ErrorTrackLengthTarget(const G4double maxTrkLength );
-    // Constructs and add this process to G4ProcessManager of all particles
-  virtual ~G4ErrorTrackLengthTarget(){}
-  
-    // These methods are dummy, as the step limitation is done in the
-    // PostStepGetPhysicalInteractionLength().
+  // These methods are dummy, as the step limitation is done in the
+  // PostStepGetPhysicalInteractionLength().
 
-  virtual G4double GetDistanceFromPoint( const G4ThreeVector&,
-                                         const G4ThreeVector& ) const
-    { return DBL_MAX; }   
-  virtual G4double GetDistanceFromPoint( const G4ThreeVector& ) const
-    { return DBL_MAX; } 
+  virtual G4double GetDistanceFromPoint(const G4ThreeVector&,
+                                        const G4ThreeVector&) const
+  {
+    return DBL_MAX;
+  }
+  virtual G4double GetDistanceFromPoint(const G4ThreeVector&) const
+  {
+    return DBL_MAX;
+  }
 
-  virtual G4double
-  PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                              G4double previousStepSize,
-                                              G4ForceCondition* condition );
-    // Checks if the maximum track length has been reached
+  virtual G4double PostStepGetPhysicalInteractionLength(
+    const G4Track& track, G4double previousStepSize,
+    G4ForceCondition* condition);
+  // Checks if the maximum track length has been reached
 
-  virtual  G4double GetMeanFreePath(const class G4Track & track,
-                                    G4double, G4ForceCondition *);
-    // Mean free path = theMaximumTrackLength - track.GetTrackLength()
+  virtual G4double GetMeanFreePath(const class G4Track& track, G4double,
+                                   G4ForceCondition*);
+  // Mean free path = theMaximumTrackLength - track.GetTrackLength()
 
-   virtual G4VParticleChange* PostStepDoIt( const G4Track&, const G4Step& );
-                       
-   virtual void Dump( const G4String& msg ) const;
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  virtual void Dump(const G4String& msg) const;
 
  private:
-
   G4double theMaximumTrackLength;
   G4VParticleChange theParticleChange;
 };
-   
+
 #endif

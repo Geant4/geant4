@@ -56,23 +56,23 @@ B4dEventAction::~B4dEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4THitsMap<G4double>* 
+G4THitsMap<G4double>*
 B4dEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  auto hitsCollection 
+  auto hitsCollection
     = static_cast<G4THitsMap<G4double>*>(
         event->GetHCofThisEvent()->GetHC(hcID));
-  
+
   if ( ! hitsCollection ) {
     G4ExceptionDescription msg;
-    msg << "Cannot access hitsCollection ID " << hcID; 
+    msg << "Cannot access hitsCollection ID " << hcID;
     G4Exception("B4dEventAction::GetHitsCollection()",
       "MyCode0003", FatalException, msg);
-  }         
+  }
 
   return hitsCollection;
-}    
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,8 +83,8 @@ G4double B4dEventAction::GetSum(G4THitsMap<G4double>* hitsMap) const
     // hitsMap->GetMap() returns the map of std::map<G4int, G4double*>
     sumValue += *(it.second);
   }
-  return sumValue;  
-}  
+  return sumValue;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,14 +95,14 @@ void B4dEventAction::PrintEventStatistics(
   // Print event statistics
   //
   G4cout
-     << "   Absorber: total energy: " 
+     << "   Absorber: total energy: "
      << std::setw(7) << G4BestUnit(absoEdep, "Energy")
-     << "       total track length: " 
+     << "       total track length: "
      << std::setw(7) << G4BestUnit(absoTrackLength, "Length")
      << G4endl
-     << "        Gap: total energy: " 
+     << "        Gap: total energy: "
      << std::setw(7) << G4BestUnit(gapEdep, "Energy")
-     << "       total track length: " 
+     << "       total track length: "
      << std::setw(7) << G4BestUnit(gapTrackLength, "Length")
      << G4endl;
 }
@@ -115,55 +115,55 @@ void B4dEventAction::BeginOfEventAction(const G4Event* /*event*/)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4dEventAction::EndOfEventAction(const G4Event* event)
-{  
+{
    // Get hist collections IDs
   if ( fAbsoEdepHCID == -1 ) {
-    fAbsoEdepHCID 
+    fAbsoEdepHCID
       = G4SDManager::GetSDMpointer()->GetCollectionID("Absorber/Edep");
-    fGapEdepHCID 
+    fGapEdepHCID
       = G4SDManager::GetSDMpointer()->GetCollectionID("Gap/Edep");
-    fAbsoTrackLengthHCID 
+    fAbsoTrackLengthHCID
       = G4SDManager::GetSDMpointer()->GetCollectionID("Absorber/TrackLength");
-    fGapTrackLengthHCID 
+    fGapTrackLengthHCID
       = G4SDManager::GetSDMpointer()->GetCollectionID("Gap/TrackLength");
   }
-  
+
   // Get sum values from hits collections
   //
   auto absoEdep = GetSum(GetHitsCollection(fAbsoEdepHCID, event));
   auto gapEdep = GetSum(GetHitsCollection(fGapEdepHCID, event));
 
-  auto absoTrackLength 
+  auto absoTrackLength
     = GetSum(GetHitsCollection(fAbsoTrackLengthHCID, event));
-  auto gapTrackLength 
+  auto gapTrackLength
     = GetSum(GetHitsCollection(fGapTrackLengthHCID, event));
 
   // get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
 
   // fill histograms
-  //  
+  //
   analysisManager->FillH1(0, absoEdep);
   analysisManager->FillH1(1, gapEdep);
   analysisManager->FillH1(2, absoTrackLength);
   analysisManager->FillH1(3, gapTrackLength);
-  
+
   // fill ntuple
   //
   analysisManager->FillNtupleDColumn(0, absoEdep);
   analysisManager->FillNtupleDColumn(1, gapEdep);
   analysisManager->FillNtupleDColumn(2, absoTrackLength);
   analysisManager->FillNtupleDColumn(3, gapTrackLength);
-  analysisManager->AddNtupleRow();  
-  
+  analysisManager->AddNtupleRow();
+
   //print per event (modulo n)
   //
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;     
+    G4cout << "---> End of event: " << eventID << G4endl;
     PrintEventStatistics(absoEdep, absoTrackLength, gapEdep, gapTrackLength);
   }
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

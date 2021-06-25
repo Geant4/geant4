@@ -61,19 +61,15 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
 						   G4ProcessType type)
   : G4VDiscreteProcess (processName, type),
     Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
-    Rc(elm_coupling/Mmuon),
+    Rc(CLHEP::elm_coupling/Mmuon),
     LimitEnergy (5.*Mmuon), 
     LowestEnergyLimit (2.*Mmuon), 
-    HighestEnergyLimit(1e12*GeV), // ok to 1e12GeV, then LPM suppression
-    Energy5DLimit(0.0),
-    CrossSecFactor(1.),
-    f5Dmodel(nullptr),
+    HighestEnergyLimit(1e12*CLHEP::GeV), // ok to 1e12GeV, then LPM suppression
     theGamma(G4Gamma::Gamma()),
     theMuonPlus(G4MuonPlus::MuonPlus()),
     theMuonMinus(G4MuonMinus::MuonMinus())
 { 
   SetProcessSubType(fGammaConversionToMuMu);
-  MeanFreePath = DBL_MAX;
   fManager = G4LossTableManager::Instance();
   fManager->Register(this);
 }
@@ -98,7 +94,7 @@ void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition& p)
 // Build cross section and mean free path tables
 {  //here no tables, just calling PrintInfoDefinition
   Energy5DLimit = G4EmParameters::Instance()->MaxEnergyFor5DMuPair();
-  if(Energy5DLimit > 0.0 && !f5Dmodel) { 
+  if(Energy5DLimit > 0.0 && nullptr != f5Dmodel) { 
     f5Dmodel = new G4BetheHeitler5DModel();
     f5Dmodel->SetLeptonPair(theMuonPlus, theMuonMinus);
     const size_t numElems = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
@@ -120,11 +116,7 @@ G4double G4GammaConversionToMuons::GetMeanFreePath(const G4Track& aTrack,
    const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
    G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
    const G4Material* aMaterial = aTrack.GetMaterial();
-
-   MeanFreePath = (GammaEnergy <= LowestEnergyLimit) 
-     ? DBL_MAX : ComputeMeanFreePath(GammaEnergy,aMaterial);
-
-   return MeanFreePath;
+   return ComputeMeanFreePath(GammaEnergy, aMaterial);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -207,7 +199,7 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
   G4double Eg=G4Exp(G4Log(1.-4.*Mmuon/Egam)*PowThres)*
     G4Exp(G4Log( G4Exp(G4Log(Wsatur)*PowSat)+G4Exp(G4Log(Egam)*PowSat))/PowSat);
   G4double CrossSection=7./9.*sigfac*G4Log(1.+WMedAppr*CorFuc*Eg);
-  CrossSection*=CrossSecFactor; // increase the CrossSection by  (by default 1)
+  CrossSection *= CrossSecFactor; // increase the CrossSection by  (by default 1)
   return CrossSection;
 }
 
@@ -216,6 +208,7 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
 // Set the factor to artificially increase the cross section
 { 
+  if(fac < 0.0) return;
   CrossSecFactor=fac;
   G4cout << "The cross section for GammaConversionToMuons is artificially "
          << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;

@@ -43,48 +43,48 @@ class G4HCofThisEvent;
 // structure of the user's sensitive detector names.
 //
 
-class G4SDStructure 
+class G4SDStructure
 {
-  public:
-      G4SDStructure(const G4String &aPath);
-      ~G4SDStructure();
+ public:
+  G4SDStructure(const G4String& aPath);
+  ~G4SDStructure();
 
-      G4bool operator==(const G4SDStructure &right) const;
+  G4bool operator==(const G4SDStructure& right) const;
 
-      void AddNewDetector(G4VSensitiveDetector*aSD, const G4String &treeStructure);
-      void Activate(const G4String &aName, G4bool sensitiveFlag);
-      void Initialize(G4HCofThisEvent*HCE);
-      void Terminate(G4HCofThisEvent*HCE);
-      G4VSensitiveDetector* FindSensitiveDetector(const G4String &aName, G4bool warning = true);
-      G4VSensitiveDetector* GetSD(const G4String &aName);
-      void ListTree();
+  void AddNewDetector(G4VSensitiveDetector* aSD, const G4String& treeStructure);
+  void Activate(const G4String& aName, G4bool sensitiveFlag);
+  void Initialize(G4HCofThisEvent* HCE);
+  void Terminate(G4HCofThisEvent* HCE);
+  G4VSensitiveDetector* FindSensitiveDetector(const G4String& aName,
+                                              G4bool warning = true);
+  G4VSensitiveDetector* GetSD(const G4String& aName);
+  void ListTree();
 
-  private:
-      G4SDStructure* FindSubDirectory(const G4String &subD);
-      G4String ExtractDirName(const G4String &aPath);
-      void RemoveSD(G4VSensitiveDetector*);
+ private:
+  G4SDStructure* FindSubDirectory(const G4String& subD);
+  G4String ExtractDirName(const G4String& aPath);
+  void RemoveSD(G4VSensitiveDetector*);
 
-  private:
-      std::vector<G4SDStructure*> structure;
-      std::vector<G4VSensitiveDetector*> detector;
-      G4String pathName;
-      G4String dirName;
-      G4int verboseLevel;
+ private:
+  std::vector<G4SDStructure*> structure;
+  std::vector<G4VSensitiveDetector*> detector;
+  G4String pathName;
+  G4String dirName;
+  G4int verboseLevel;
 
-  public:
-      inline void SetVerboseLevel(G4int vl) 
-      {
-        verboseLevel = vl;
-        for(size_t i=0; i<structure.size(); i++)
-        { structure[i]->SetVerboseLevel(vl); }
-        for(size_t j=0; j<detector.size(); j++)
-        { detector[j]->SetVerboseLevel(vl); }
-      };
-
+ public:
+  inline void SetVerboseLevel(G4int vl)
+  {
+    verboseLevel = vl;
+    for(size_t i = 0; i < structure.size(); i++)
+    {
+      structure[i]->SetVerboseLevel(vl);
+    }
+    for(size_t j = 0; j < detector.size(); j++)
+    {
+      detector[j]->SetVerboseLevel(vl);
+    }
+  };
 };
 
-
-
-
 #endif
-

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 #include "FTFPCMS_BERT_EMM.hh"
-#include "CMSEmStandardPhysicsHcal.hh"
 
+#include "G4EmStandardPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -34,6 +34,7 @@
 #include "G4StoppingPhysics.hh"
 
 #include "G4HadronPhysicsFTFP_BERT.hh"
+#include "CMSHadronPhysicsFTFP_BERT.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +47,7 @@ FTFPCMS_BERT_EMM::FTFPCMS_BERT_EMM(G4int ver) {
          << "FTFP_BERT_EMM " << G4endl;
 
   // EM Physics
-  RegisterPhysics(new CMSEmStandardPhysicsHcal(ver));
+  RegisterPhysics(new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
   RegisterPhysics(new G4EmExtraPhysics(ver));
@@ -57,7 +58,8 @@ FTFPCMS_BERT_EMM::FTFPCMS_BERT_EMM(G4int ver) {
   // Hadron Elastic scattering
   RegisterPhysics(new G4HadronElasticPhysics(ver));
 
-  RegisterPhysics(new G4HadronPhysicsFTFP_BERT(ver));
+  // Hadron Inelastic physics
+  RegisterPhysics(new CMSHadronPhysicsFTFP_BERT(ver));
 
   // Stopping Physics
   RegisterPhysics(new G4StoppingPhysics(ver));

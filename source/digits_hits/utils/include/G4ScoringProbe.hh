@@ -36,51 +36,51 @@ class G4Material;
 
 class G4ScoringProbe : public G4VScoringMesh
 {
-public:
-  G4ScoringProbe(G4String lvName,G4double half_size,G4bool checkOverlap=false);
+ public:
+  G4ScoringProbe(G4String lvName, G4double half_size,
+                 G4bool checkOverlap = false);
   ~G4ScoringProbe();
 
-protected:
+ protected:
   // construct scoring volume
-  virtual void SetupGeometry(G4VPhysicalVolume* );
+  virtual void SetupGeometry(G4VPhysicalVolume*);
 
-protected:
+ protected:
   G4String logVolName;
   std::vector<G4ThreeVector> posVec;
   G4double probeSize;
   G4bool chkOverlap;
   G4String layeredMaterialName;
   G4Material* layeredMaterial;
-  G4String   regName;
+  G4String regName;
 
-public:
+ public:
   void LocateProbe(G4ThreeVector pos)
   {
     posVec.push_back(pos);
-    G4int nbin[] = {static_cast<G4int>(posVec.size()),1,1};
+    G4int nbin[] = { static_cast<G4int>(posVec.size()), 1, 1 };
     SetNumberOfSegments(nbin);
   }
-  G4int GetNumberOfProbes() const
-  { return posVec.size(); }
-  void SetProbeSize(G4double val)
-  { probeSize = val; }
-  G4double GetProbeSize() const
-  { return probeSize; }
+  G4int GetNumberOfProbes() const { return posVec.size(); }
+  void SetProbeSize(G4double val) { probeSize = val; }
+  G4double GetProbeSize() const { return probeSize; }
   G4bool SetMaterial(G4String val);
 
-public:
+ public:
   virtual void List() const;
 
-public:
-    //++++++++++ visualization method not yet implemented
-    virtual void Draw(RunScore * /*map*/, G4VScoreColorMap* /*colorMap*/, G4int /*axflg=111*/)
-    {;}
-    virtual void DrawColumn(RunScore * /*map*/, G4VScoreColorMap* /*colorMap*/,
+ public:
+  //++++++++++ visualization method not yet implemented
+  virtual void Draw(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
+                    G4int /*axflg=111*/)
+  {
+    ;
+  }
+  virtual void DrawColumn(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
                           G4int /*idxProj*/, G4int /*idxColumn*/)
-    {;}
+  {
+    ;
+  }
 };
-
-
-
 
 #endif

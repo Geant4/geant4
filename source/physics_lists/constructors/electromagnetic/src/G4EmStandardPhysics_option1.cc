@@ -82,11 +82,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option1);
 
 G4EmStandardPhysics_option1::G4EmStandardPhysics_option1(G4int ver, 
 							 const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard_opt1"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandard_opt1")
 {
+  SetVerboseLevel(ver);
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   param->SetApplyCuts(true);
   param->SetGeneralProcessActive(true);
   param->SetStepFunction(0.8, 1*CLHEP::mm);
@@ -112,7 +113,7 @@ void G4EmStandardPhysics_option1::ConstructParticle()
 
 void G4EmStandardPhysics_option1::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();

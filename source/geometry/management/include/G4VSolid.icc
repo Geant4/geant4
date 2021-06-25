@@ -46,12 +46,6 @@ G4String G4VSolid::GetName() const
 }	
 
 inline
-void G4VSolid::SetName(const G4String& name)
-{
-  fshapeName = name;
-}	
-
-inline
 G4double G4VSolid::GetTolerance() const
 {
   return kCarTolerance;

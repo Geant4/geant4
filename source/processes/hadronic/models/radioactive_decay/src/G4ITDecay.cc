@@ -38,7 +38,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShells.hh"
 #include "G4Electron.hh"

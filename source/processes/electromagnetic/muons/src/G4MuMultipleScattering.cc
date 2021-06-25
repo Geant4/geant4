@@ -55,15 +55,13 @@ using namespace std;
 
 G4MuMultipleScattering::G4MuMultipleScattering(const G4String& pnam)
   : G4VMultipleScattering(pnam)
-{
-  isInitialized = false;  
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4MuMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
+G4bool G4MuMultipleScattering::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +70,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
   if(isInitialized) { return; }
-  if(!EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
+  if(nullptr == EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
   AddEmModel(1, EmModel(0));
   isInitialized = true;
 }

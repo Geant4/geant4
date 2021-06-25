@@ -53,7 +53,7 @@
 #ifndef G4SPSAngDistribution_hh
 #define G4SPSAngDistribution_hh 1
 
-#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4DataInterpolation.hh"
 #include "G4ParticleMomentum.hh"
 
@@ -184,10 +184,10 @@ class G4SPSAngDistribution
     G4double Theta, Phi; // Store these for use with DEBUG
     G4ThreeVector FocusPoint ; // the focusing point in mother coordinates
     G4bool IPDFThetaExist, IPDFPhiExist; // tell whether IPDF histos exist
-    G4PhysicsOrderedFreeVector UDefThetaH; // Theta histo data
-    G4PhysicsOrderedFreeVector IPDFThetaH; //Cumulative Theta histogram.
-    G4PhysicsOrderedFreeVector UDefPhiH; // Phi histo bins
-    G4PhysicsOrderedFreeVector IPDFPhiH; // Cumulative phi histogram.
+    G4PhysicsFreeVector UDefThetaH; // Theta histo data
+    G4PhysicsFreeVector IPDFThetaH; //Cumulative Theta histogram.
+    G4PhysicsFreeVector UDefPhiH; // Phi histo bins
+    G4PhysicsFreeVector IPDFPhiH; // Cumulative phi histogram.
     G4String UserDistType; //String to hold user distributions
     G4bool UserWRTSurface; // G4bool to tell whether user wants distribution wrt
                            // surface normals or co-ordinate system
@@ -200,7 +200,7 @@ class G4SPSAngDistribution
 
     G4int verbosityLevel; // Verbosity
 
-    G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
+    G4PhysicsFreeVector ZeroPhysVector; // for re-set only
 
     G4Mutex mutex; // Protect access to shared resources
 };

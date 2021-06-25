@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
 // 
 // G4PAIySection.hh -- header file
 //
@@ -140,6 +137,9 @@ public:
   inline G4double GetIntegralPlasmon(G4int i) const;
 
   inline void SetVerbose(G4int v) { fVerbose = v; };
+
+  G4PAIySection & operator=(const G4PAIySection &right) = delete;
+  G4PAIySection(const G4PAIySection&) = delete;
 
 private :
 

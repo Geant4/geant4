@@ -1,14 +1,8 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4xml
-# Package: Geant4.src.G4analysis.G4xml
-#------------------------------------------------------------------------------
+# - G4xml module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4xml
-  HEADERS
+geant4_add_module(G4xml
+  PUBLIC_HEADERS
     G4XmlAnalysisManager.hh
     G4XmlAnalysisManager.icc
     G4XmlAnalysisReader.hh
@@ -29,17 +23,8 @@ geant4_define_module(NAME G4xml
     G4XmlFileManager.cc
     G4XmlNtupleManager.cc
     G4XmlRFileManager.cc
-    G4XmlRNtupleManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-    G4analysismng
-    G4hntools
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-  LINK_LIBRARIES
-    ${EXPAT_LIBRARIES}
-)
+    G4XmlRNtupleManager.cc)
 
-# List any source specific properties here
+# EXPAT is a PUBLIC dependency by virtue of inclusion of tools/raxml
+# (No, it's not obvious!) and exposure of that in G4Xml{RFileManager/AnalysisReader}
+geant4_module_link_libraries(G4xml PUBLIC G4analysismng G4hntools G4globman G4tools ${EXPAT_LIBRARIES})

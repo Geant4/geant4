@@ -71,7 +71,7 @@ G4NuclearStopping::~G4NuclearStopping()
 
 G4bool G4NuclearStopping::IsApplicable (const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +81,9 @@ void G4NuclearStopping::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialized) {
     isInitialized = true;
 
-    if(!EmModel(0)) { SetEmModel(new G4ICRU49NuclearStoppingModel()); }
+    if(nullptr == EmModel(0)) { 
+      SetEmModel(new G4ICRU49NuclearStoppingModel());
+    }
     AddEmModel(1, EmModel());
     EmModel()->SetActivationHighEnergyLimit(10*GeV);
     EmModel()->SetParticleChange(&nParticleChange);
@@ -140,11 +142,6 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
   }
   return &nParticleChange;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NuclearStopping::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

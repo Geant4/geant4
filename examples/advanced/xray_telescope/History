@@ -15,8 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24.05.2021  B. Morgan (xraytel-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
 
-10.04.2021  G. Cosmo, tag xraytel-V10-06-02
+10.04.2021  G. Cosmo, tag xraytel-V10-07-00
             Removed calls to obsolete ResetCuts() in XrayTelPhysicsList.
 
 17.11.2020  S. Guatelli, tag xraytel-V10-06-01

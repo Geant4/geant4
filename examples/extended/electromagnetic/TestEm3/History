@@ -13,7 +13,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+06-05-21 mma (testem3-V10-07-01)
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
+       
+14-12-20 mma (testem3-V10-07-00)
+- updated PhysListEmStandard.cc
+- StepMax, StepMaxMessenger, PhysicsList, PhysicsListMessenger :
+    revert, to make command /testem/stepMax working in interactive mode
+- added macro stepMax.mac
+      
 14-09-20 I. Hrivnacova (testem3-V10-06-01)
 - Renamed TestEm3_2.in in geom.mac
 

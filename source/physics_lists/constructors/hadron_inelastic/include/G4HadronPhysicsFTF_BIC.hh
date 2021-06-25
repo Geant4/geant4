@@ -45,7 +45,7 @@ class G4HadronPhysicsFTF_BIC : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsFTF_BIC(G4int verbose =1);
     G4HadronPhysicsFTF_BIC(const G4String& name, G4bool quasiElastic=false);
-    ~G4HadronPhysicsFTF_BIC() override;
+    virtual ~G4HadronPhysicsFTF_BIC();
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsFTF_BIC(G4HadronPhysicsFTF_BIC &) = delete;

@@ -112,11 +112,11 @@ inline G4PhysicsTable* G4OpWLS::GetIntegralTable() const
 inline void G4OpWLS::DumpPhysicsTable() const
 {
   G4int PhysicsTableSize = theIntegralTable->entries();
-  G4PhysicsOrderedFreeVector* v;
+  G4PhysicsFreeVector* v;
 
   for(G4int i = 0; i < PhysicsTableSize; ++i)
   {
-    v = (G4PhysicsOrderedFreeVector*) (*theIntegralTable)[i];
+    v = (G4PhysicsFreeVector*) (*theIntegralTable)[i];
     v->DumpValues();
   }
 }

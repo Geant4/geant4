@@ -51,7 +51,6 @@
     (name="Vacuum", z=1., a=1.*g/mole, density=1.e-20*g/cm3,
      kStateGas, temperature=0.1*kelvin, pressure=1.e-20*bar);
 
-
   // xenons
   G4Element* elementXe = new G4Element( "Xenon", "Xe", 54., 131.29*g/mole );
   G4Material* LXe = new G4Material
@@ -66,39 +65,67 @@
   std::vector<G4double> LXe_SCINT = { 0.1, 1.0, 0.1 };
   std::vector<G4double> LXe_RIND  = { 1.59 , 1.57, 1.54 };
   std::vector<G4double> LXe_ABSL  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
+  std::vector<G4double> LXe_scint_e = { 0.*MeV, 10.*MeV };
+  std::vector<G4double> LXe_scint_default = { 0., 120000.};
+  std::vector<G4double> LXe_scint_alpha = { 0., 132000.};
+  std::vector<G4double> LXe_scint_ion = { 0., 24000.};
   G4MaterialPropertiesTable *LXe_mt = new G4MaterialPropertiesTable();
-  LXe_mt->AddProperty("FASTCOMPONENT", LXe_PP, LXe_SCINT);
-  LXe_mt->AddProperty("SLOWCOMPONENT", LXe_PP, LXe_SCINT);
+  LXe_mt->AddProperty("SCINTILLATIONCOMPONENT1", LXe_PP, LXe_SCINT);
+  LXe_mt->AddProperty("SCINTILLATIONCOMPONENT2", LXe_PP, LXe_SCINT);
   LXe_mt->AddProperty("RINDEX",        LXe_PP, LXe_RIND);
   LXe_mt->AddProperty("ABSLENGTH",     LXe_PP, LXe_ABSL);
-  LXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
+  LXe_mt->AddProperty("ELECTRONSCINTILLATIONYIELD", LXe_scint_e, LXe_scint_default); // include QE 20%
   // and 13eV creation energy for photons - may be 15eV?
   // Fano factor assumed 1; should be much less for Xe ~ 0.13
   // but the Fano factor is already partially included in the correlated 
   // electron production - therefore not the absolute Fano factor here:
+  LXe_mt->AddConstProperty("ELECTRONSCINTILLATIONYIELD1", 0.);
+  LXe_mt->AddConstProperty("ELECTRONSCINTILLATIONYIELD2", 1.);
+
+  LXe_mt->AddProperty("ALPHASCINTILLATIONYIELD", LXe_scint_e, LXe_scint_alpha); // include QE 20%
+  LXe_mt->AddConstProperty("ALPHASCINTILLATIONYIELD1", 1.);
+  LXe_mt->AddConstProperty("ALPHASCINTILLATIONYIELD2", 0.);
+
+  LXe_mt->AddProperty("IONSCINTILLATIONYIELD", LXe_scint_e, LXe_scint_ion); // include QE 20%
+  LXe_mt->AddConstProperty("IONSCINTILLATIONYIELD1", 1.);
+  LXe_mt->AddConstProperty("IONSCINTILLATIONYIELD2", 0.);
+
   LXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
-  LXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
-  LXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
-  LXe_mt->AddConstProperty("YIELDRATIO",1.0);
+  LXe_mt->AddConstProperty("SCINTILLATIONTIMECONSTANT1",20.*ns);
+  LXe_mt->AddConstProperty("SCINTILLATIONTIMECONSTANT2",45.*ns);
   LXe->SetMaterialPropertiesTable(LXe_mt);
 
-  //  std::vector<G4double> GXe_PP    = { 7.07*eV, 7.07*eV };
   std::vector<G4double> GXe_PP = { 7.0*eV, 7.07*eV, 7.14*eV };
   std::vector<G4double> GXe_SCINT = { 0.1, 1.0, 0.1 };
   std::vector<G4double> GXe_RIND  = { 1.00, 1.00, 1.00 };
   std::vector<G4double> GXe_ABSL  = { 100*m, 100*m, 100*m}; //atten length
+  std::vector<G4double> GXe_scint_e = { 0.*MeV, 10.*MeV };
+  std::vector<G4double> GXe_scint_default = { 0., 120000.};
+  std::vector<G4double> GXe_scint_alpha = { 0., 132000.};
+  std::vector<G4double> GXe_scint_ion = { 0., 24000.};
   G4MaterialPropertiesTable *GXe_mt = new G4MaterialPropertiesTable();
-  GXe_mt->AddProperty("FASTCOMPONENT", GXe_PP, GXe_SCINT);
-  GXe_mt->AddProperty("SLOWCOMPONENT", GXe_PP, GXe_SCINT);
+  GXe_mt->AddProperty("SCINTILLATIONCOMPONENT1", GXe_PP, GXe_SCINT);
+  GXe_mt->AddProperty("SCINTILLATIONCOMPONENT2", GXe_PP, GXe_SCINT);
   GXe_mt->AddProperty("RINDEX",        GXe_PP, GXe_RIND);
   GXe_mt->AddProperty("ABSLENGTH",     GXe_PP, GXe_ABSL);
   GXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
-  GXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
-  GXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
-  GXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
-  GXe_mt->AddConstProperty("YIELDRATIO",1.0);
-  GXe->SetMaterialPropertiesTable(GXe_mt);
 
+  GXe_mt->AddProperty("ELECTRONSCINTILLATIONYIELD", GXe_scint_e, GXe_scint_default); // include QE 20%
+  GXe_mt->AddConstProperty("ELECTRONSCINTILLATIONYIELD1", 0.);
+  GXe_mt->AddConstProperty("ELECTRONSCINTILLATIONYIELD2", 1.);
+
+  GXe_mt->AddProperty("ALPHASCINTILLATIONYIELD", GXe_scint_e, GXe_scint_alpha); // include QE 20%
+  GXe_mt->AddConstProperty("ALPHASCINTILLATIONYIELD1", 1.);
+  GXe_mt->AddConstProperty("ALPHASCINTILLATIONYIELD2", 0.);
+
+  GXe_mt->AddProperty("IONSCINTILLATIONYIELD", LXe_scint_e, LXe_scint_ion); // include QE 20%
+  GXe_mt->AddConstProperty("IONSCINTILLATIONYIELD1", 1.);
+  GXe_mt->AddConstProperty("IONSCINTILLATIONYIELD2", 0.);
+
+  GXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  GXe_mt->AddConstProperty("SCINTILLATIONTIMECONSTANT1",20.*ns);
+  GXe_mt->AddConstProperty("SCINTILLATIONTIMECONSTANT2",45.*ns);
+  GXe->SetMaterialPropertiesTable(GXe_mt);
 
   // making quartz
   G4Element* O  = new G4Element
@@ -112,7 +139,6 @@
 
   std::vector<G4double> quartz_PP   = { 5.0*eV, 6.69*eV, 7.50*eV }; // lambda range 4 ri
   std::vector<G4double> quartz_RIND = { 1.51, 1.57, 1.61 };     // ref index
-  //  std::vector<G4double> quartz_RIND = { 1.45, 1.51, 1.54 };     // ref index
   std::vector<G4double> quartz_ABSL = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
   G4MaterialPropertiesTable *quartz_mt = new G4MaterialPropertiesTable();
   quartz_mt->AddProperty("RINDEX", quartz_PP, quartz_RIND);
@@ -136,7 +162,6 @@
   std::vector<G4double> cathmetal_PP   = { 5.0*eV, 6.69*eV, 7.50*eV };
   std::vector<G4double> cathmetal_RIND = { 1.51, 1.57, 1.61 };     // ref index
   std::vector<G4double> cathmetal_ABSL = { 1.e-20*m,  1.e-20*m,  1.e-20*m };// atten length
-//  std::vector<G4double> cathmetal_ABSL = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
   G4MaterialPropertiesTable *cathmetal_mt = new G4MaterialPropertiesTable();
   cathmetal_mt->AddProperty("RINDEX", cathmetal_PP, cathmetal_RIND);
   cathmetal_mt->AddProperty("ABSLENGTH", cathmetal_PP, cathmetal_ABSL);

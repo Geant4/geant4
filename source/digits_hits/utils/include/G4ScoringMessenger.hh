@@ -31,7 +31,6 @@
 //  18-Feb-2008  T.Aso Command for cylindrical scorer.
 //  18-Feb-2008  T.Aso Command for color chart display.
 
-
 #ifndef G4ScoringMessenger_h
 #define G4ScoringMessenger_h 1
 
@@ -56,95 +55,88 @@ typedef std::vector<G4String> G4TokenVec;
 // class description:
 //
 //  This is a concrete class of G4UImessenger which handles the commands for
-// G4ScoringManager. 
+// G4ScoringManager.
 //
 
-class G4ScoringMessenger: public G4UImessenger
+class G4ScoringMessenger : public G4UImessenger
 {
+ public:
+  G4ScoringMessenger(G4ScoringManager* SManager);
 
-  public:
-    G4ScoringMessenger(G4ScoringManager * SManager);
+  ~G4ScoringMessenger();
 
-    ~G4ScoringMessenger();
+  void SetNewValue(G4UIcommand* command, G4String newValues);
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+  G4String GetCurrentValue(G4UIcommand* command);
 
-    G4String GetCurrentValue(G4UIcommand * command);
+ protected:
+  void FillTokenVec(G4String newValues, G4TokenVec& token);
+  void MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token);
+  void Fill1D(G4UIcommand* cmd, G4String newValues);
 
-
-  protected:    
-
-    void FillTokenVec(G4String newValues,G4TokenVec& token);
-    void MeshBinCommand(G4VScoringMesh* mesh, G4TokenVec& token);
-    void Fill1D(G4UIcommand* cmd, G4String newValues);
-
-  private:
-
-    G4ScoringManager*        fSMan;
-    G4UIdirectory*           scoreDir;
-    G4UIcmdWithoutParameter* listCmd;
-    G4UIcmdWithoutParameter* dumpCmd;
-    G4UIcmdWithAnInteger*    verboseCmd;
-    //
-    G4UIdirectory*             meshCreateDir;
-    G4UIcmdWithAString*        meshBoxCreateCmd;
-    G4UIcmdWithAString*        meshCylinderCreateCmd;
-//    G4UIcmdWithAString*        meshSphereCreateCmd;
-    G4UIcommand*               meshRWLogVolCreateCmd;
-    G4UIcommand*               probeCreateCmd;
-    //
-    // Mesh commands
-    G4UIdirectory*             meshDir;
-    G4UIcmdWithAString*        meshOpnCmd;
-    //
-    G4UIcmdWithoutParameter*   meshClsCmd;
-//    G4UIcmdWithABool*        meshActCmd;
-    //
-    //   Size commands
-    G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;
-    G4UIcommand* mCylinderSizeCmd;
-//    G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
-    //
-    //   Division command
-    G4UIcommand*               mBinCmd;
-    //
-    //   Placement command
-    G4UIdirectory*             mTransDir;
-    G4UIcmdWithoutParameter*   mTResetCmd;
-    G4UIcmdWith3VectorAndUnit* mTXyzCmd;
-    G4UIdirectory*             mRotDir;
-//    G4UIcmdWithoutParameter*   mRResetCmd;
-    G4UIcmdWithADoubleAndUnit* mRotXCmd;
-    G4UIcmdWithADoubleAndUnit* mRotYCmd;
-    G4UIcmdWithADoubleAndUnit* mRotZCmd;
-    //
-    // Probe commands
-    G4UIdirectory*             probeDir;
-    G4UIcmdWithAString*        probeMatCmd;
-    G4UIcmdWith3VectorAndUnit* probeLocateCmd;
-    //
-    // Draw Command
-    G4UIcommand *             drawCmd;
-    G4UIcommand *             drawColumnCmd;
-    G4UIdirectory *           colorMapDir;
-    G4UIcmdWithoutParameter * listColorMapCmd;
-    G4UIcmdWithAString *      floatMinMaxCmd;
-    G4UIcommand *             colorMapMinMaxCmd;
-    //G4UIcommand *             chartCmd;
-    //
-    // Dump scoring result to file
-    G4UIcommand * dumpQtyToFileCmd;
-    G4UIcommand * dumpAllQtsToFileCmd;
-    G4UIcommand * dumpQtyWithFactorCmd;
-    G4UIcommand * dumpAllQtsWithFactorCmd;
-    //
-    // Command for direcly plotting to a histogram
-    G4UIcommand * fill1DCmd;
-
+ private:
+  G4ScoringManager* fSMan;
+  G4UIdirectory* scoreDir;
+  G4UIcmdWithoutParameter* listCmd;
+  G4UIcmdWithoutParameter* dumpCmd;
+  G4UIcmdWithAnInteger* verboseCmd;
+  //
+  G4UIdirectory* meshCreateDir;
+  G4UIcmdWithAString* meshBoxCreateCmd;
+  G4UIcmdWithAString* meshCylinderCreateCmd;
+  //    G4UIcmdWithAString*        meshSphereCreateCmd;
+  G4UIcommand* meshRWLogVolCreateCmd;
+  G4UIcommand* probeCreateCmd;
+  //
+  // Mesh commands
+  G4UIdirectory* meshDir;
+  G4UIcmdWithAString* meshOpnCmd;
+  //
+  G4UIcmdWithoutParameter* meshClsCmd;
+  //    G4UIcmdWithABool*        meshActCmd;
+  //
+  //   Size commands
+  G4UIcmdWith3VectorAndUnit* mBoxSizeCmd;
+  G4UIcommand* mCylinderSizeCmd;
+  G4UIcmdWithADoubleAndUnit* mCylinderRMinCmd;
+  G4UIcommand* mCylinderAngleCmd;
+  //    G4UIcmdWith3VectorAndUnit* mSphereSizeCmd;
+  //
+  //   Division command
+  G4UIcommand* mBinCmd;
+  //
+  //   Placement command
+  G4UIdirectory* mTransDir;
+  G4UIcmdWithoutParameter* mTResetCmd;
+  G4UIcmdWith3VectorAndUnit* mTXyzCmd;
+  G4UIdirectory* mRotDir;
+  //    G4UIcmdWithoutParameter*   mRResetCmd;
+  G4UIcmdWithADoubleAndUnit* mRotXCmd;
+  G4UIcmdWithADoubleAndUnit* mRotYCmd;
+  G4UIcmdWithADoubleAndUnit* mRotZCmd;
+  //
+  // Probe commands
+  G4UIdirectory* probeDir;
+  G4UIcmdWithAString* probeMatCmd;
+  G4UIcmdWith3VectorAndUnit* probeLocateCmd;
+  //
+  // Draw Command
+  G4UIcommand* drawCmd;
+  G4UIcommand* drawColumnCmd;
+  G4UIdirectory* colorMapDir;
+  G4UIcmdWithoutParameter* listColorMapCmd;
+  G4UIcmdWithAString* floatMinMaxCmd;
+  G4UIcommand* colorMapMinMaxCmd;
+  // G4UIcommand *             chartCmd;
+  //
+  // Dump scoring result to file
+  G4UIcommand* dumpQtyToFileCmd;
+  G4UIcommand* dumpAllQtsToFileCmd;
+  G4UIcommand* dumpQtyWithFactorCmd;
+  G4UIcommand* dumpAllQtsWithFactorCmd;
+  //
+  // Command for direcly plotting to a histogram
+  G4UIcommand* fill1DCmd;
 };
 
-
-
-
 #endif
-

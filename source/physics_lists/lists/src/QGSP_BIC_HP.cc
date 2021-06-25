@@ -55,9 +55,10 @@
 
 QGSP_BIC_HP::QGSP_BIC_HP(G4int ver)
 {
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_HP"<<G4endl;
-  G4cout <<G4endl;
-
+  if(ver > 0) {
+    G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_HP"<<G4endl;
+    G4cout <<G4endl;
+  }
   defaultCutValue = 0.7*CLHEP::mm;  
   SetCutValue(0, "proton");  
   SetVerboseLevel(ver);

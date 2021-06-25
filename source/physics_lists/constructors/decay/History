@@ -13,19 +13,27 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-April-2021 Ben Morgan                (phys-ctor-decay-V10-07-01)
+- Migrate build to modular CMake API
+
+13-April-2021 Alberto Ribon             (phys-ctor-decay-V10-07-00)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
 18-August-2020 Vladimir Ivanchenko      (phys-ctor-decay-V10-06-05)
 - G4RadioactiveDecayPhysics - defined EM parameters in ConstructProcess(..)
     instead definition inside the constructor
 
 02-July-2020 Vladimir Ivanchenko        (phys-ctor-decay-V10-06-04)
-- G4RadioactiveDecayPhysics - improved initialisation: added 
+- G4RadioactiveDecayPhysics - improved initialisation: added
     EM parameters definition in the class constructor; if atomic
-    de-excitation is not defined add it in each thread but not 
-    change EM parameters in a thread; should address several 
+    de-excitation is not defined add it in each thread but not
+    change EM parameters in a thread; should address several
     problems reported recently in the Forum and privately
 
 03-June-2020 Vladimir Ivanchenko        (phys-ctor-decay-V10-06-03)
-- G4RadioactiveDecayPhysics - coherent initialisation with recent 
+- G4RadioactiveDecayPhysics - coherent initialisation with recent
     updates of initialisation of atomic de-excitation
 
 30-Apr-2020 Ben Morgan                  (phys-ctor-decay-V10-06-02)

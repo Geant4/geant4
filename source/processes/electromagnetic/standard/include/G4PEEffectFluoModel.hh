@@ -61,33 +61,32 @@ public:
 
   explicit G4PEEffectFluoModel(const G4String& nam = "PhotoElectric");
 
-  virtual ~G4PEEffectFluoModel();
+  ~G4PEEffectFluoModel() override;
 
-  virtual 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual 
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 				      G4double kinEnergy,
 				      G4double Z,
 				      G4double A,
 				      G4double, G4double) override;
 				      
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy) override;
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
 				 G4double maxEnergy) override;
-private:
+
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
   G4PEEffectFluoModel & operator=(const G4PEEffectFluoModel &right) = delete;
   G4PEEffectFluoModel(const G4PEEffectFluoModel&) = delete;
+
+private:
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;

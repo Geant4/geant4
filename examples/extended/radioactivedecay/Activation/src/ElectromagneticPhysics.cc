@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file ElectromagneticPhysics.cc
+/// \brief Implementation of the ElectromagneticPhysics class
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +40,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
@@ -69,8 +73,10 @@ ElectromagneticPhysics::ElectromagneticPhysics(const G4String& name)
     G4EmParameters* param = G4EmParameters::Instance();
     param->SetDefaults();
     param->SetVerbose(0);
-    param->SetStepFunction(1., 1*mm);        //default= 0.1, 100*um
-    param->SetStepFunctionMuHad(1., 1*mm);
+    param->SetStepFunction(0.2, 1*mm);        //default= 0.1, 100*um
+    param->SetStepFunctionMuHad(0.2, 1*mm);
+    param->SetStepFunctionLightIons(0.2, 100*um);
+    param->SetStepFunctionIons(0.2, 50*um);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +99,8 @@ void ElectromagneticPhysics::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-
+    
+      ph->RegisterProcess(new G4RayleighScattering,  particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);
       ph->RegisterProcess(new G4ComptonScattering,   particle);
       ph->RegisterProcess(new G4GammaConversion,     particle);

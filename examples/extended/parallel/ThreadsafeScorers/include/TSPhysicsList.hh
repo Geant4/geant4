@@ -57,15 +57,11 @@ class TSPhysicsList : public G4VUserPhysicsList
   virtual ~TSPhysicsList();
 
  public:
-  static TSPhysicsList* Instance();
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
  private:
-  static TSPhysicsList* fgInstance;
   PhysicsSet_t fConstructors;
-  G4double fDefaultCutValue;
 };
 
 #endif

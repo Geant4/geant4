@@ -194,10 +194,10 @@ G4ScreenedCoulombCrossSection::SelectRandomUnweightedTarget(
     }
 
         G4int N=0;
-        G4int Z=(G4int)std::floor(element->GetZ()+0.5);
+        G4int Z=element->GetZasInt();
         
         G4int nIsotopes=element->GetNumberOfIsotopes();
-        if(!nIsotopes) {
+        if(0<nIsotopes) {
           if(Z<=92) {
             // we have no detailed material isotopic info available, 
             // so use G4StableIsotopes table up to Z=92

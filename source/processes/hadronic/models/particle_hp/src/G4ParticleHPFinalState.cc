@@ -43,10 +43,6 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 
-G4bool G4ParticleHPFinalState::DoNotAdjustFinalState()
-{
-   return !G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState();
-}
 
 void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 {

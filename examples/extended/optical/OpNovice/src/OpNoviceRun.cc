@@ -32,7 +32,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNoviceRun.hh"
-
 #include "G4ParticleDefinition.hh"
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"

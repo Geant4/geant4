@@ -75,6 +75,7 @@ public:
   G4CT_COUNT_DEF(Ionisation_DissociationDecay)
   G4CT_COUNT_DEF(A1B1_DissociationDecay)
   G4CT_COUNT_DEF(B1A1_DissociationDecay)
+  G4CT_COUNT_DEF(B1A1_DissociationDecay2)
   G4CT_COUNT_DEF(AutoIonisation)
   G4CT_COUNT_DEF(DissociativeAttachment)
   

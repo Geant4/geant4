@@ -151,7 +151,7 @@ class G4VPhysicalVolume
 
     inline const G4String& GetName() const;
       // Return the volume's name.
-    inline void SetName(const G4String& pName);
+    void SetName(const G4String& pName);
       // Set the volume's name.
 
     virtual G4int GetMultiplicity() const;

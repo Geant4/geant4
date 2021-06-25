@@ -45,6 +45,10 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
+#include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionInelastic.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+
 
 G4QMDReaction::G4QMDReaction()
 : G4HadronicInteraction("QMDModel")
@@ -55,11 +59,7 @@ G4QMDReaction::G4QMDReaction()
 , gem ( true )
 , frag ( false )
 {
-
-   //090331
-   shenXS = new G4IonsShenCrossSection();
-   //genspaXS = new G4GeneralSpaceNNCrossSection();
-
+   theXS = new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc );
    pipElNucXS = new G4BGGPionElasticXS(G4PionPlus::PionPlus() );
    pipElNucXS->BuildPhysicsTable(*(G4PionPlus::PionPlus() ) );
 
@@ -143,11 +143,10 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    //const G4Element* targ_ele =  nistMan->FindOrBuildElement( targ_Z ); 
    //G4double aTemp = projectile.GetMaterial()->GetTemperature();
 
-     //090331
-  
-   G4VCrossSectionDataSet* theXS = shenXS;
-
-   G4double xs_0 = theXS->GetIsoCrossSection ( proj_dp , targ_Z , targ_A );
+   // Glauber-Gribov nucleus-nucleus cross section does not have GetIsoCrossSection,
+   // therefore call GetElementCrossSection instead.
+   //G4double xs_0 = theXS->GetIsoCrossSection ( proj_dp , targ_Z , targ_A );
+   G4double xs_0 = theXS->GetElementCrossSection( proj_dp , targ_Z , projectile.GetMaterial() );
 
    // When the projectile is a pion
    if (proj_pd == G4PionPlus::PionPlus() ) {

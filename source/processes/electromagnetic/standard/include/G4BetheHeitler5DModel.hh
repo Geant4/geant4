@@ -69,10 +69,9 @@ public:
   explicit G4BetheHeitler5DModel(const G4ParticleDefinition* p = nullptr,
                                  const G4String& nam = "BetheHeitler5D");
 
-  virtual ~G4BetheHeitler5DModel();
+  ~G4BetheHeitler5DModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*,
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
                          const G4MaterialCutsCouple* couple,
@@ -85,11 +84,11 @@ public:
   void SetLeptonPair(const G4ParticleDefinition* p1,
 		     const G4ParticleDefinition* p2);
 
-private:
-
   // hide assignment operator
   G4BetheHeitler5DModel& operator=(const G4BetheHeitler5DModel& right) = delete;
   G4BetheHeitler5DModel(const  G4BetheHeitler5DModel&) = delete;
+
+private:
 
   G4double MaxDiffCrossSection(const G4double* par, G4double eZ,
                                G4double e, G4double loge) const;
@@ -98,16 +97,15 @@ private:
 
   G4IonTable* theIonTable;
 
-  G4int  fVerbose;
-  G4int  fConversionType;
-  G4bool iraw;
-
   const G4ParticleDefinition*  fLepton1;
   const G4ParticleDefinition*  fLepton2;
 
-  G4int     fConvMode;
   const G4ParticleDefinition*  fTheMuPlus;
   const G4ParticleDefinition*  fTheMuMinus;
 
+  G4int  fVerbose;
+  G4int  fConversionType;
+  G4int  fConvMode;
+  G4bool iraw;
 };
 #endif

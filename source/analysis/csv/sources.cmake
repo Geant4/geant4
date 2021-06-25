@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4csv
-# Package: Geant4.src.G4analysis.G4csv
-#------------------------------------------------------------------------------
+# - G4csv module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4csv
-  HEADERS
+geant4_add_module(G4csv
+  PUBLIC_HEADERS
     G4CsvAnalysisManager.hh
     G4CsvAnalysisManager.icc
     G4CsvAnalysisReader.hh
@@ -28,15 +23,6 @@ geant4_define_module(NAME G4csv
     G4CsvNtupleFileManager.cc
     G4CsvNtupleManager.cc
     G4CsvRFileManager.cc
-    G4CsvRNtupleManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-    G4analysismng
-    G4hntools
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-)
+    G4CsvRNtupleManager.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4csv PUBLIC G4analysismng G4hntools G4globman G4tools)

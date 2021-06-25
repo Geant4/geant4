@@ -13,6 +13,20 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16 April 2021 Ben Morgan (hadr-gammanuc-V10-07-01)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021 Alberto Ribon (hadr-gammanuc-V10-07-00)
+-----------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
+  Clean-up of old directories no longer present.
+
 30 April 2020 Ben Morgan    (hadr-gammanuc-V10-06-00)
 -----------------------------------------------------
 -  Remove obsolete GRANULAR_DEPENDENCIES entries

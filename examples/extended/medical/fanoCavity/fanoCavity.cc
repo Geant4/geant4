@@ -29,15 +29,12 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -49,7 +46,6 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 #include "StackingAction.hh"
 
 #include "G4UIExecutive.hh"
@@ -62,21 +58,19 @@ int main(int argc,char** argv) {
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
-
-  //Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  G4int nThreads = 2;
-  if (argc==3) {
-    int iTmp = G4UIcommand::ConvertToInt(argv[2]);
-    nThreads = (iTmp<0)? G4Threading::G4GetNumberOfCores() : iTmp;
+  
+  //Use SteppingVerbose with Unit
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+  
+  //Creating run manager
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+    
+  if (argc==3) { 
+     G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+     runManager->SetNumberOfThreads(nThreads);
   }
-  runManager->SetNumberOfThreads(nThreads);
-#else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
+  
   //set mandatory initialization classes
   DetectorConstruction* det;
   PhysicsList* phys;

@@ -52,7 +52,7 @@ G4BinaryProtonBuilder()
 }
 
 void G4BinaryProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

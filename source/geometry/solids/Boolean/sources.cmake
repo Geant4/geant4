@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4geomBoolean
-# Package: Geant4.src.G4geometry.G4geomBoolean
-#------------------------------------------------------------------------------
+# - G4geomBoolean module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4geomBoolean
-  HEADERS
+geant4_add_module(G4geomBoolean
+  PUBLIC_HEADERS
     G4BooleanSolid.hh
     G4BooleanSolid.icc
     G4DisplacedSolid.hh
@@ -23,21 +18,8 @@ geant4_define_module(NAME G4geomBoolean
     G4MultiUnion.cc
     G4ScaledSolid.cc
     G4SubtractionSolid.cc
-    G4UnionSolid.cc
-  GRANULAR_DEPENDENCIES
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4intercoms
-    G4volumes
-    G4csg
-    G4specsolids
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-  LINK_LIBRARIES
-    ${VECGEOM_LIBRARIES}
-)
+    G4UnionSolid.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4geomBoolean
+  PUBLIC G4geometrymng G4hepgeometry G4globman G4specsolids ${VECGEOM_LIBRARIES}
+  PRIVATE G4graphics_reps G4heprandom)

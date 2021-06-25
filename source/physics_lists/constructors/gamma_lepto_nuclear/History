@@ -13,10 +13,23 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 April 2021 Ben Morgan (phys-ctor-glnuclear-V10-07-02)
+- Migrate build to modular CMake API
+
+13 April 2021  Alberto Ribon (phys-ctor-glnuclear-V10-07-01)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+04 March 2021  Alberto Ribon (phys-ctor-glnuclear-V10-07-00)
+- G4EmExtraPhysics, G4BertiniElectroNuclearBuilder,
+  G4LENDBertiniGammaElectroNuclearBuilder : replaced G4PhotoNuclearProcess
+  (now deleted) with G4HadronInelasticProcess.
+
 04 November 2020  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-06-04)
 - G4EmExtraPhysics, G4EmMessenger - added a flag to enable G4GammaNuclearXS
-    cross section and possibility to use general process for electron and 
-    positron; fixed several UI commands 
+    cross section and possibility to use general process for electron and
+    positron; fixed several UI commands
 
 28 May 2020 Ben Morgan           (phys-ctor-glnuclear-V10-06-03)
 - Remove obsolete GRANULAR_DEPENDENCIES entries

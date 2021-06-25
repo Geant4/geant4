@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4gdml
-# Package: Geant4.src.G4persistency.G4gdml
-#------------------------------------------------------------------------------
+# - G4gdml module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4gdml
-  HEADERS
+geant4_add_module(G4gdml
+  PUBLIC_HEADERS
     G4GDMLAuxStructType.hh
     G4GDMLEvaluator.hh
     G4GDMLMessenger.hh
@@ -48,48 +43,28 @@ geant4_define_module(NAME G4gdml
     G4GDMLWriteSetup.cc
     G4GDMLWriteSolids.cc
     G4GDMLWriteStructure.cc
-    G4STRead.cc
-  GRANULAR_DEPENDENCIES
+    G4STRead.cc)
+
+geant4_module_link_libraries(G4gdml
+  PUBLIC
     G4csg
-    G4digits
-    G4event
+    G4specsolids
     G4geomBoolean
-    G4geomdivision
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4hits
-    G4intercoms
-    G4materials
     G4navigation
-    G4partman
-    G4baryons
+    G4geometrymng
+    G4materials
+    G4intercoms
+    G4hepgeometry
+    G4globman
+    XercesC::XercesC
+  PRIVATE
+    G4run
+    G4cuts
     G4bosons
     G4leptons
-    G4procman
-    G4cuts
-    G4emutils
-    G4run
-    G4specsolids
+    G4baryons
     G4track
-    G4tracking
+    G4detector
+    G4geomdivision
     G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4particles
-    G4processes
-    G4run
-    G4track
-    G4tracking
-  LINK_LIBRARIES
-    XercesC::XercesC
-)
-
-# List any source specific properties here
+    G4graphics_reps)

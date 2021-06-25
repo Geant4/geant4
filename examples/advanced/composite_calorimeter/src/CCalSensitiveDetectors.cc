@@ -32,29 +32,29 @@
 
 //#define debug
 
-CCalSensitiveDetectors* CCalSensitiveDetectors::theInstance = 0;
+G4ThreadLocal CCalSensitiveDetectors* CCalSensitiveDetectors::theInstance = nullptr;
 
 
-CCalSensitiveDetectors* CCalSensitiveDetectors::getInstance()
-{
- if (!theInstance) theInstance = new CCalSensitiveDetectors;
- return theInstance;
+CCalSensitiveDetectors* CCalSensitiveDetectors::getInstance() {
+  if ( theInstance == nullptr ) {
+    static G4ThreadLocalSingleton< CCalSensitiveDetectors > inst;
+    theInstance = inst.Instance();
+  }
+  return theInstance;
 }
 
 
-void CCalSensitiveDetectors::registerVolume (const G4String& string, 
-                                             G4LogicalVolume* logv)
-{
+void CCalSensitiveDetectors::registerVolume( const G4String& string, G4LogicalVolume* logv ) {
   theLVs.insert(mmslv::value_type(string, logv));
 #ifdef debug
-  G4cout << "CCalSensitiveDetectors : Register " << logv->GetName() 
-       << " in category " << string << G4endl;
+  G4cout << "CCalSensitiveDetectors : Register " << logv->GetName()
+	 << " in category " << string << G4endl;
 #endif
 }
 
+
 std::vector<G4LogicalVolume*>
-CCalSensitiveDetectors::getVolumes (const G4String& string, G4bool exist)
-{
+CCalSensitiveDetectors::getVolumes( const G4String& string, G4bool exist ) {
   mmslv::const_iterator mmscite;
   std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
@@ -62,17 +62,13 @@ CCalSensitiveDetectors::getVolumes (const G4String& string, G4bool exist)
   for (mmscite = mmsdi.first; mmscite != mmsdi.second; mmscite++ ) {
     lvs.push_back(const_cast<G4LogicalVolume*>((*mmscite).second));
   }
-
-  if (exist) G4cout << "CCalSensitiveDetector : " << lvs.size() 
-                  << " detectors for " << string << G4endl;
-  
+  if (exist) G4cout << "CCalSensitiveDetector : " << lvs.size()
+		    << " detectors for " << string << G4endl;
   return lvs;
 }
 
 
-G4bool CCalSensitiveDetectors::setSensitive(const G4String& string, 
-                                          G4VSensitiveDetector* sens)
-{
+G4bool CCalSensitiveDetectors::setSensitive( const G4String& string, G4VSensitiveDetector* sens ) {
   G4bool result=false;
   mmslv::const_iterator mmscite;
   std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
@@ -82,8 +78,7 @@ G4bool CCalSensitiveDetectors::setSensitive(const G4String& string,
     lv ->SetSensitiveDetector(sens);
     result = true;
 #ifdef debug
-    G4cout << " Associate SD " << sens->GetName() << " to " << lv->GetName() 
-         << G4endl;
+    G4cout << " Associate SD " << sens->GetName() << " to " << lv->GetName() << G4endl;
 #endif
   }
   return result;

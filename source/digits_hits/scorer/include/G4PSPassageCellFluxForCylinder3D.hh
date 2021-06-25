@@ -45,29 +45,27 @@
 // 2011-03-24   Give Size and Segmentation for relicated volume in cylinder.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class G4PSPassageCellFluxForCylinder3D : public G4PSPassageCellFlux3D
 {
-   public: // with description
-      G4PSPassageCellFluxForCylinder3D(G4String name,
-			    G4int ni=1,G4int nj=1, G4int nk=1,
-			    G4int depi=2, G4int depj=1, G4int depk=0);
-      G4PSPassageCellFluxForCylinder3D(G4String name,const G4String& unit,
-			    G4int ni=1,G4int nj=1, G4int nk=1,
-			    G4int depi=2, G4int depj=1, G4int depk=0);
-      virtual ~G4PSPassageCellFluxForCylinder3D();
+ public:  // with description
+  G4PSPassageCellFluxForCylinder3D(G4String name, G4int ni = 1, G4int nj = 1,
+                                   G4int nk = 1, G4int depi = 2, G4int depj = 1,
+                                   G4int depk = 0);
+  G4PSPassageCellFluxForCylinder3D(G4String name, const G4String& unit,
+                                   G4int ni = 1, G4int nj = 1, G4int nk = 1,
+                                   G4int depi = 2, G4int depj = 1,
+                                   G4int depk = 0);
+  virtual ~G4PSPassageCellFluxForCylinder3D();
 
-      void SetCylinderSize(G4double dr, G4double dz);
-      void SetNumberOfSegments(G4int nSeg[3]);
+  void SetCylinderSize(G4double dr, G4double dz);
+  void SetNumberOfSegments(G4int nSeg[3]);
 
-  protected: // with description
-      virtual G4double ComputeVolume(G4Step*, G4int idx);
+ protected:  // with description
+  virtual G4double ComputeVolume(G4Step*, G4int idx);
 
-  private:
+ private:
   // Order of segmentation (Z PHI R) in CylinderMesh
-   G4ThreeVector cylinderSize;  
-   G4int nSegment[3];
-
+  G4ThreeVector cylinderSize;
+  G4int nSegment[3];
 };
 #endif
-

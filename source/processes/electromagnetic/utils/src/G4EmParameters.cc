@@ -120,7 +120,6 @@ void G4EmParameters::Initialise()
   lossFluctuation = true;
   buildCSDARange = false;
   flagLPM = true;
-  spline = true;
   cutAsFinalRange = false;
   applyCuts = false;
   lateralDisplacement = true;
@@ -128,7 +127,6 @@ void G4EmParameters::Initialise()
   muhadLateralDisplacement = false;
   useAngGeneratorForIonisation = false;
   useMottCorrection = false;
-  integral = true;
   birks = false;
   fICRU90 = false;
   gener = false;
@@ -138,7 +136,6 @@ void G4EmParameters::Initialise()
   fMuDataFromFile = false;
   fDNA = false;
 
-  minSubRange = 1.0;
   minKinEnergy = 0.1*CLHEP::keV;
   maxKinEnergy = 100.0*CLHEP::TeV;
   maxKinEnergyCSDA = 1.0*CLHEP::GeV;
@@ -161,7 +158,6 @@ void G4EmParameters::Initialise()
   lambdaLimit  = 1.0*CLHEP::mm;
   factorScreen = 1.0;
 
-  nbins  = 84;
   nbinsPerDecade = 7;
   verbose = 1;
   workerVerbose = 0;
@@ -206,15 +202,12 @@ G4bool G4EmParameters::LPM() const
   return flagLPM;
 }
 
-void G4EmParameters::SetSpline(G4bool val)
-{
-  if(IsLocked()) { return; }
-  spline = val;
-}
-
+// are obsolete
+void G4EmParameters::SetSpline(G4bool)
+{}
 G4bool G4EmParameters::Spline() const
 {
-  return spline;
+  return true;
 }
 
 void G4EmParameters::SetUseCutAsFinalRange(G4bool val)
@@ -272,10 +265,10 @@ G4bool G4EmParameters::Auger() const
   return fCParameters->Auger();
 }
 
+// obsolete
 void G4EmParameters::SetAugerCascade(G4bool val)
 {
-  if(IsLocked()) { return; }
-  fCParameters->SetAuger(val);
+  SetAuger(val);
 }
 
 G4bool G4EmParameters::AugerCascade() const
@@ -360,17 +353,6 @@ G4bool G4EmParameters::UseMottCorrection() const
   return useMottCorrection;
 }
 
-void G4EmParameters::SetIntegral(G4bool val)
-{
-  if(IsLocked()) { return; }
-  integral = val;
-}
-
-G4bool G4EmParameters::Integral() const
-{
-  return integral;
-}
-
 void G4EmParameters::SetEnablePolarisation(G4bool val)
 {
   if(IsLocked()) { return; }
@@ -384,17 +366,9 @@ G4bool G4EmParameters::EnablePolarisation() const
 
 void G4EmParameters::SetBirksActive(G4bool val)
 {
+  if(IsLocked()) { return; }
   birks = val;
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4EmParameters::emParametersMutex);
-#endif
-  if(birks) {
-    if(!emSaturation) { emSaturation = new G4EmSaturation(1); }
-    emSaturation->InitialiseG4Saturation();
-  }
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4EmParameters::emParametersMutex);
-#endif
+  if(birks && nullptr == emSaturation) { emSaturation = new G4EmSaturation(1); }
 }
 
 G4bool G4EmParameters::BirksActive() const
@@ -453,9 +427,6 @@ void G4EmParameters::SetGeneralProcessActive(G4bool val)
 {
   if(IsLocked()) { return; }
   gener = val;
-  // if general interaction is enabled then sub-cutoff and 
-  // force interaction options should be disabled
-  if(gener) { fBParameters->Initialise(); }
 }
 
 G4bool G4EmParameters::GeneralProcessActive() const
@@ -465,10 +436,11 @@ G4bool G4EmParameters::GeneralProcessActive() const
 
 void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
 {
+  if(IsLocked()) { return; }
+  birks = (nullptr != ptr);
   if(emSaturation != ptr) {
     delete emSaturation;
     emSaturation = ptr;
-    SetBirksActive(true);
   }
 }
 
@@ -512,37 +484,29 @@ void G4EmParameters::ActivateDNA()
 
 G4EmSaturation* G4EmParameters::GetEmSaturation()
 {
-  if(!emSaturation) { SetBirksActive(true); }
-  return emSaturation;
-}
-
-void G4EmParameters::SetMinSubRange(G4double val)
-{
-  if(IsLocked()) { return; }
-  if(val > 0.0 && val < 1.0) {
-    minSubRange = val;
-  } else {
-    G4ExceptionDescription ed;
-    ed << "Value of MinSubRange is out of range (0 - 1): " << val
-       << " is ignored"; 
-    PrintWarning(ed);
+  if(nullptr == emSaturation) { 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&emParametersMutex);
+    if(nullptr == emSaturation) { 
+#endif
+      emSaturation = new G4EmSaturation(1);
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&emParametersMutex);
+#endif
   }
-}
-
-G4double G4EmParameters::MinSubRange() const
-{
-  return minSubRange;
+  birks = true;
+  return emSaturation;
 }
 
 void G4EmParameters::SetMinEnergy(G4double val)
 {
   if(IsLocked()) { return; }
-  if(val > 1.e-3*eV && val < maxKinEnergy) {
+  if(val > 1.e-3*CLHEP::eV && val < maxKinEnergy) {
     minKinEnergy = val;
-    nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
   } else {
     G4ExceptionDescription ed;
-    ed << "Value of MinKinEnergy - is out of range: " << val/MeV 
+    ed << "Value of MinKinEnergy - is out of range: " << val/CLHEP::MeV 
        << " MeV is ignored"; 
     PrintWarning(ed);
   }
@@ -556,13 +520,13 @@ G4double G4EmParameters::MinKinEnergy() const
 void G4EmParameters::SetMaxEnergy(G4double val)
 {
   if(IsLocked()) { return; }
-  if(val > std::max(minKinEnergy,9.99*MeV) && val < 1.e+7*TeV) {
+  if(val > std::max(minKinEnergy,9.99*CLHEP::MeV) && val < 1.e+7*CLHEP::TeV) {
     maxKinEnergy = val;
-    nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
   } else {
     G4ExceptionDescription ed;
     ed << "Value of MaxKinEnergy is out of range: " 
-       << val/GeV << " GeV is ignored; allowed range 10 MeV - 1.e+7 TeV"; 
+       << val/CLHEP::GeV 
+       << " GeV is ignored; allowed range 10 MeV - 1.e+7 TeV"; 
     PrintWarning(ed);
   }
 }
@@ -575,12 +539,12 @@ G4double G4EmParameters::MaxKinEnergy() const
 void G4EmParameters::SetMaxEnergyForCSDARange(G4double val)
 {
   if(IsLocked()) { return; }
-  if(val > minKinEnergy && val <= 100*TeV) {
+  if(val > minKinEnergy && val <= 100*CLHEP::TeV) {
     maxKinEnergyCSDA = val;
   } else {
     G4ExceptionDescription ed;
     ed << "Value of MaxKinEnergyCSDA is out of range: " 
-       << val/GeV << " GeV is ignored; allowed range "
+       << val/CLHEP::GeV << " GeV is ignored; allowed range "
        << minKinEnergy << " MeV - 100 TeV"; 
     PrintWarning(ed);
   }
@@ -927,23 +891,9 @@ void G4EmParameters::FillStepFunction(const G4ParticleDefinition* part, G4VEnerg
   fBParameters->FillStepFunction(part, proc);
 }
 
-void G4EmParameters::SetNumberOfBins(G4int val)
-{
-  if(IsLocked()) { return; }
-  if(val >= 5 && val < 10000000) {
-    nbins = val;
-    nbinsPerDecade = G4lrint(nbins/std::log10(maxKinEnergy/minKinEnergy));
-  } else {
-    G4ExceptionDescription ed;
-    ed << "Value of number of bins is out of range: " 
-       << val << " is ignored"; 
-    PrintWarning(ed);
-  }
-}
-
 G4int G4EmParameters::NumberOfBins() const 
 {
-  return nbins;
+  return nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
 }
 
 void G4EmParameters::SetNumberOfBinsPerDecade(G4int val)
@@ -951,7 +901,6 @@ void G4EmParameters::SetNumberOfBinsPerDecade(G4int val)
   if(IsLocked()) { return; }
   if(val >= 5 && val < 1000000) {
     nbinsPerDecade = val;
-    nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
   } else {
     G4ExceptionDescription ed;
     ed << "Value of number of bins per decade is out of range: " 
@@ -1161,10 +1110,10 @@ const std::vector<G4String>& G4EmParameters::TypesPhysics() const
   return fBParameters->TypesPhysics();
 }
 
-void G4EmParameters::SetSubCutoff(G4bool val, const G4String& region)
+void G4EmParameters::SetSubCutRegion(const G4String& region)
 {
-  if(IsLocked() && !gener) { return; }
-  fBParameters->SetSubCutoff(val, region);
+  if(IsLocked()) { return; }
+  fBParameters->SetSubCutRegion(region);
 }
 
 void 
@@ -1268,10 +1217,8 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "======                 Electromagnetic Physics Parameters      ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
-  os << "Spline of EM tables enabled                        " <<spline << "\n";
   os << "Enable creation and use of sampling tables         " <<fSamplingTable << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
-  os << "Use integral approach for tracking                 " <<integral << "\n";
   os << "Use general process                                " <<gener << "\n";
   os << "Enable linear polarisation for gamma               " <<fPolarisation << "\n";
   os << "Enable sampling of quantum entanglement            " 
@@ -1281,7 +1228,6 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      <<G4BestUnit(minKinEnergy,"Energy") << "\n";
   os << "Max kinetic energy for tables                      " 
      <<G4BestUnit(maxKinEnergy,"Energy") << "\n";
-  os << "Number of bins in tables                           " <<nbins   << "\n";
   os << "Number of bins per decade of a table               " <<nbinsPerDecade << "\n";
   os << "Verbose level                                      " <<verbose << "\n";
   os << "Verbose level for worker thread                    " <<workerVerbose << "\n";
@@ -1329,7 +1275,6 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";
   os << "Enable angular generator interface                 " 
      <<useAngGeneratorForIonisation << "\n";
-  os << "Factor of cut reduction for sub-cutoff method      " << minSubRange << "\n";
   os << "Max kinetic energy for CSDA tables                 " 
      <<G4BestUnit(maxKinEnergyCSDA,"Energy") << "\n";
   os << "Max kinetic energy for NIEL computation            " 

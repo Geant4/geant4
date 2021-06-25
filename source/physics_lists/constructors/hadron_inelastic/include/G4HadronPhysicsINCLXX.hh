@@ -64,7 +64,7 @@ class G4HadronPhysicsINCLXX : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsINCLXX(G4int verbose =1);
     G4HadronPhysicsINCLXX(const G4String& name, const G4bool quasiElastic=true, const G4bool neutronHP=false, const G4bool ftfp=false);
-    ~G4HadronPhysicsINCLXX() override;
+    virtual ~G4HadronPhysicsINCLXX();
 
     void ConstructProcess() override;
 

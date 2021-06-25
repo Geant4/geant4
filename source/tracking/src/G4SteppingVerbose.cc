@@ -45,6 +45,8 @@
 #define G4BestUnit(a,b) a
 #endif
 
+G4int G4SteppingVerbose::useBestUnitPrecision = -1;
+
 //////////////////////////////////////////////////
 G4SteppingVerbose::G4SteppingVerbose()
 //////////////////////////////////////////////////
@@ -1033,3 +1035,14 @@ void G4SteppingVerbose::ShowStep() const
    G4cout << "      -------------------------------------------------------" 
           << "----------------" << G4endl;
 }
+
+//////////////////////////////////////////////////
+void G4SteppingVerbose::UseBestUnit(G4int prec)
+//////////////////////////////////////////////////
+{ useBestUnitPrecision = prec; }
+
+//////////////////////////////////////////////////
+G4int G4SteppingVerbose::BestUnitPrecision()
+//////////////////////////////////////////////////
+{ return useBestUnitPrecision; }
+

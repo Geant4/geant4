@@ -89,6 +89,8 @@ public:
 				    G4int Z = 0,
 				    const G4Material* mat = nullptr);
 
+  virtual void PrintGeneratorInformation() const;
+
   inline const G4String& GetName() const;
 
   // hide assignment operator

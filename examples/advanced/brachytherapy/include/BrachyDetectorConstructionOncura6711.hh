@@ -47,13 +47,12 @@ class G4Tubs;
 class G4Box;
 class G4Sphere;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionOncura6711
 {
 public:
-  BrachyDetectorConstructionOncura6711();
+  explicit BrachyDetectorConstructionOncura6711();
   ~BrachyDetectorConstructionOncura6711();
 
   void  ConstructOncura6711(G4VPhysicalVolume*);
@@ -78,9 +77,6 @@ private:
   G4Tubs* fOncuraSilverCore;
   G4LogicalVolume* fOncuraSilverCoreLog;
   G4VPhysicalVolume* fOncuraSilverCorePhys;
-
-  BrachyMaterial* fMat;    
-
   G4VisAttributes* fOncuraCapsuleShellVisAtt;
   G4VisAttributes* fOncuraCapsuleTipVisAtt;
   G4VisAttributes* fOncuraSilverCoreVisAtt;

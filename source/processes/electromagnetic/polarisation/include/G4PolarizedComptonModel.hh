@@ -23,114 +23,108 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
-// GEANT4 Class header file
-//
+// Geant4 Class header file
 //
 // File name:     G4PolarizedComptonModel
 //
 // Author:        Andreas Schaelicke
 //
-// Creation date: 01.05.2005
-//
-// Modifications:
-// 18-07-06 use newly calculated cross sections (P. Starovoitov)
-// 21-08-05 update interface (A. Schaelicke)
-//
-//
 // Class Description:
-//
-// Implementation of polarized gamma Compton scattering on free electron
-// 
-
-// -------------------------------------------------------------------
-//
+//   Implementation of polarized gamma Compton scattering on free electron
 
 #ifndef G4PolarizedComptonModel_h
 #define G4PolarizedComptonModel_h 1
 
+#include "globals.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4StokesVector.hh"
+#include "G4ThreeVector.hh"
 
+class G4DynamicParticle;
+class G4MaterialCutsCouple;
+class G4ParticleDefinition;
 class G4ParticleChangeForGamma;
-class G4PolarizedComptonCrossSection;
+class G4VPolarizedXS;
 
 class G4PolarizedComptonModel : public G4KleinNishinaCompton
 {
-
-public:
-
+ public:
   explicit G4PolarizedComptonModel(const G4ParticleDefinition* p = nullptr,
-			const G4String& nam = "Polarized-Compton");
+                                   const G4String& nam = "Polarized-Compton");
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax) override;
+  virtual ~G4PolarizedComptonModel() override;
+  
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                              G4double kinEnergy, G4double Z,
+                                              G4double A, G4double cut,
+                                              G4double emax) override;
   G4double ComputeAsymmetryPerAtom(G4double gammaEnergy, G4double Z);
-  virtual ~G4PolarizedComptonModel();
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*, G4double tmin,
+                                 G4double maxEnergy) override;
 
-  // polarized routines 
-  inline void SetTargetPolarization(const G4ThreeVector & pTarget);
-  inline void SetBeamPolarization(const G4ThreeVector & pBeam);
-  inline const G4ThreeVector & GetTargetPolarization() const;
-  inline const G4ThreeVector & GetBeamPolarization() const;
-  inline const G4ThreeVector & GetFinalGammaPolarization() const;
-  inline const G4ThreeVector & GetFinalElectronPolarization() const;
-private:
-
-  void PrintWarning(const G4DynamicParticle*, G4int, G4double grej, 
-		    G4double onecos, G4double phi, const G4String) const;
+  // polarized routines
+  inline void SetTargetPolarization(const G4ThreeVector& pTarget);
+  inline void SetBeamPolarization(const G4ThreeVector& pBeam);
+  inline const G4ThreeVector& GetTargetPolarization() const;
+  inline const G4ThreeVector& GetBeamPolarization() const;
+  inline const G4ThreeVector& GetFinalGammaPolarization() const;
+  inline const G4ThreeVector& GetFinalElectronPolarization() const;
 
   // hide assignment operator
-  G4PolarizedComptonModel & operator=(const  G4PolarizedComptonModel &right) = delete;
-  G4PolarizedComptonModel(const  G4PolarizedComptonModel&) = delete;
+  G4PolarizedComptonModel& operator=(const G4PolarizedComptonModel& right) =
+    delete;
+  G4PolarizedComptonModel(const G4PolarizedComptonModel&) = delete;
 
-  G4PolarizedComptonCrossSection * crossSectionCalculator;
-  // incomming
-  G4StokesVector theBeamPolarization;    // photon
-  G4StokesVector theTargetPolarization;  // electron
+ private:
+  void PrintWarning(const G4DynamicParticle*, G4int, G4double grej,
+                    G4double onecos, G4double phi, const G4String) const;
+
+  static constexpr G4int fLoopLim = 10000;
+
+  G4VPolarizedXS* fCrossSectionCalculator;
+  // incoming
+  G4StokesVector fBeamPolarization;    // photon
+  G4StokesVector fTargetPolarization;  // electron
   // outgoing
-  G4StokesVector finalGammaPolarization;
+  G4StokesVector fFinalGammaPolarization;
   G4StokesVector finalElectronPolarization;
 
-  G4int verboseLevel;
+  G4int fVerboseLevel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4PolarizedComptonModel::SetTargetPolarization(const G4ThreeVector & pTarget)
+inline void G4PolarizedComptonModel::SetTargetPolarization(
+  const G4ThreeVector& pTarget)
 {
-  theTargetPolarization = pTarget;
+  fTargetPolarization = G4StokesVector(pTarget);
 }
-inline void G4PolarizedComptonModel::SetBeamPolarization(const G4ThreeVector & pBeam)
+inline void G4PolarizedComptonModel::SetBeamPolarization(
+  const G4ThreeVector& pBeam)
 {
-  theBeamPolarization = pBeam;
+  fBeamPolarization = G4StokesVector(pBeam);
 }
-inline const G4ThreeVector & G4PolarizedComptonModel::GetTargetPolarization() const
+inline const G4ThreeVector& G4PolarizedComptonModel::GetTargetPolarization()
+  const
 {
-  return theTargetPolarization;
+  return fTargetPolarization;
 }
-inline const G4ThreeVector & G4PolarizedComptonModel::GetBeamPolarization() const
+inline const G4ThreeVector& G4PolarizedComptonModel::GetBeamPolarization() const
 {
-  return theBeamPolarization;
+  return fBeamPolarization;
 }
-inline const G4ThreeVector &  G4PolarizedComptonModel::GetFinalGammaPolarization() const
+inline const G4ThreeVector& G4PolarizedComptonModel::GetFinalGammaPolarization()
+  const
 {
-  return finalGammaPolarization;
+  return fFinalGammaPolarization;
 }
-inline const G4ThreeVector & G4PolarizedComptonModel::GetFinalElectronPolarization() const
+inline const G4ThreeVector&
+G4PolarizedComptonModel::GetFinalElectronPolarization() const
 {
   return finalElectronPolarization;
 }

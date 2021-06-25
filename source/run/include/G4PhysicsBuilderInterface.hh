@@ -22,60 +22,55 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-////
-//---------------------------------------------------------------
 //
-// G4BuilderInterface.hh
+// G4BuilderInterface
 //
 // Class Description:
-//      Provides the common interface to all types of builders.
 //
-// Creation date: 09.04.2016 adotti
-// Modifications:
-//
-//---------------------------------------------------------------
-#ifndef G4BUILDERINTERFACE_HH
-#define G4BUILDERINTERFACE_HH
+// Provides the common interface to all types of builders.
+
+// Author: A.Dotti, 9 April 2016
+// --------------------------------------------------------------------
+#ifndef G4PhysicsBuilderInterface_hh
+#define G4PhysicsBuilderInterface_hh 1
 
 #include "globals.hh"
 
 class G4PhysicsBuilderInterface
 {
- public:
-  G4PhysicsBuilderInterface() = default;
-  virtual ~G4PhysicsBuilderInterface() {}
-  virtual void Build()
-  {
-    G4Exception("G4PhysicsBuilderInterface::Build", "PHYSBLD001",
-                FatalException,
-                "Called based class method. Should be implemented in"
-                " inherited class");
-    ;
-  }
-  virtual void RegisterMe(G4PhysicsBuilderInterface*)
-  {
-    G4Exception("G4PhysicsBuilderInterface::RegisterMe", "PHYSBLD001",
-                FatalException,
-                "Called based class method. Should be implemented in"
-                " inherited class, or wrong type of parameter passed.");
-    ;
-  }
-  virtual void SetMinEnergy(G4double)
-  {
-    G4Exception("G4PhysicsBuilderInterface::SetMinEnergy", "PHYSBLD001",
-                FatalException,
-                "Called based class method. Should be implemented in"
-                " inherited class");
-    ;
-  }
-  virtual void SetMaxEnergy(G4double)
-  {
-    G4Exception("G4PhysicsBuilderInterface::SetMaxEnergy", "PHYSBLD001",
-                FatalException,
-                "Called based class method. Should be implemented in"
-                " inherited class");
-    ;
-  }
+  public:
+
+    G4PhysicsBuilderInterface() = default;
+    virtual ~G4PhysicsBuilderInterface() {}
+
+    virtual void Build()
+    {
+      G4Exception("G4PhysicsBuilderInterface::Build", "PHYSBLD001",
+                  FatalException,
+                  "Called based class method. Should be implemented in"
+                  " inherited class");
+    }
+    virtual void RegisterMe(G4PhysicsBuilderInterface*)
+    {
+      G4Exception("G4PhysicsBuilderInterface::RegisterMe", "PHYSBLD001",
+                  FatalException,
+                  "Called based class method. Should be implemented in"
+                  " inherited class, or wrong type of parameter passed.");
+    }
+    virtual void SetMinEnergy(G4double)
+    {
+      G4Exception("G4PhysicsBuilderInterface::SetMinEnergy", "PHYSBLD001",
+                  FatalException,
+                  "Called based class method. Should be implemented in"
+                  " inherited class");
+    }
+    virtual void SetMaxEnergy(G4double)
+    {
+      G4Exception("G4PhysicsBuilderInterface::SetMaxEnergy", "PHYSBLD001",
+                  FatalException,
+                  "Called based class method. Should be implemented in"
+                  " inherited class");
+    }
 };
 
 #endif

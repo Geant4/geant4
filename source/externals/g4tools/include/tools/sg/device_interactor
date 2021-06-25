@@ -1,0 +1,27 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_device_interactor
+#define tools_sg_device_interactor
+
+#include "event"
+
+namespace tools {
+namespace sg {
+
+class device_interactor {
+public:
+  virtual ~device_interactor(){}
+public:  
+  virtual void key_press          (const key_down_event&) = 0;
+  virtual void key_release        (const key_up_event&) = 0;
+  virtual void mouse_press        (const mouse_down_event&) = 0;
+  virtual void mouse_release      (const mouse_up_event&) = 0;
+  virtual void mouse_move         (const mouse_move_event&) = 0;
+//virtual void mouse_double_click (const mouse_double_click_event&) = 0;
+  virtual void wheel_rotate       (const wheel_rotate_event&) = 0;
+};
+
+}}
+
+#endif

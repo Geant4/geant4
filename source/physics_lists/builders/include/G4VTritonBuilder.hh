@@ -39,7 +39,7 @@
 
 #include "G4PhysicsBuilderInterface.hh"
 
-class G4TritonInelasticProcess;
+class G4HadronInelasticProcess;
 class G4HadronElasticProcess;
 
 class G4VTritonBuilder : public G4PhysicsBuilderInterface
@@ -48,7 +48,7 @@ public:
   G4VTritonBuilder() = default;
   virtual ~G4VTritonBuilder() {}
   virtual void Build(G4HadronElasticProcess * aP) = 0;
-  virtual void Build(G4TritonInelasticProcess * aP) = 0;
+  virtual void Build(G4HadronInelasticProcess * aP) = 0;
   using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 

@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WorkerThread implementation
+//
+// Authors: X.Dong, A.Dotti, 2013
+// --------------------------------------------------------------------
+
 #include "G4WorkerThread.hh"
 #include "G4MTRunManager.hh"
 #include "G4WorkerRunManager.hh"
@@ -38,14 +43,31 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 
-void G4WorkerThread::SetThreadId(G4int tid) { threadId = tid; }
+// --------------------------------------------------------------------
+void G4WorkerThread::SetThreadId(G4int tid)
+{
+  threadId = tid;
+}
 
-G4int G4WorkerThread::GetThreadId() const { return threadId; }
+// --------------------------------------------------------------------
+G4int G4WorkerThread::GetThreadId() const
+{
+  return threadId;
+}
 
-void G4WorkerThread::SetNumberThreads(G4int nw) { numThreads = nw; }
+// --------------------------------------------------------------------
+void G4WorkerThread::SetNumberThreads(G4int nw)
+{
+  numThreads = nw;
+}
 
-G4int G4WorkerThread::GetNumberThreads() const { return numThreads; }
+// --------------------------------------------------------------------
+G4int G4WorkerThread::GetNumberThreads() const
+{
+  return numThreads;
+}
 
+// --------------------------------------------------------------------
 void G4WorkerThread::BuildGeometryAndPhysicsVector()
 {
   // Initialise all split classes
@@ -57,6 +79,7 @@ void G4WorkerThread::BuildGeometryAndPhysicsVector()
   G4PhysicsListWorkspace::GetPool()->CreateAndUseWorkspace();
 }
 
+// --------------------------------------------------------------------
 void G4WorkerThread::DestroyGeometryAndPhysicsVector()
 {
   // Clear all split classes
@@ -67,6 +90,7 @@ void G4WorkerThread::DestroyGeometryAndPhysicsVector()
   G4PhysicsListWorkspace::GetPool()->CleanUpAndDestroyAllWorkspaces();
 }
 
+// --------------------------------------------------------------------
 void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
 {
   // =================================================
@@ -75,18 +99,16 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
   // First remember SD and Filed Associated with worker
   // in order to re-use it
   // (note that all the stuff after this will reset SD and Field)
-  typedef std::map<G4LogicalVolume*,
-                   std::pair<G4VSensitiveDetector*, G4FieldManager*>>
-    LV2SDFM;
+  using LV2SDFM = std::map<G4LogicalVolume*,
+                  std::pair<G4VSensitiveDetector*, G4FieldManager*>>;
   LV2SDFM lvmap;
 
-  typedef std::map<G4Region*,
-                   std::pair<G4FastSimulationManager*, G4UserSteppingAction*>>
-    R2FSM;
+  using R2FSM = std::map<G4Region*,
+                std::pair<G4FastSimulationManager*, G4UserSteppingAction*>>;
   R2FSM rgnmap;
 
   G4LogicalVolumeStore* mLogVolStore = G4LogicalVolumeStore::GetInstance();
-  for(size_t ip = 0; ip < mLogVolStore->size(); ip++)
+  for(std::size_t ip = 0; ip < mLogVolStore->size(); ++ip)
   {
     G4LogicalVolume* lv = (*mLogVolStore)[ip];
 
@@ -113,28 +135,28 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     // shadow are !=0 it means that user wants an SD and FM to be
     // associated with LV, we get the values and we remember them.
     //
-    G4VSensitiveDetector* sd = 0;
-    G4FieldManager* fmgr     = 0;
-    if(lv->GetMasterSensitiveDetector() != 0)
+    G4VSensitiveDetector* sd = nullptr;
+    G4FieldManager* fmgr     = nullptr;
+    if(lv->GetMasterSensitiveDetector() != nullptr)
     {
       sd = lv->GetSensitiveDetector();
     }
-    if(lv->GetMasterFieldManager() != 0)
+    if(lv->GetMasterFieldManager() != nullptr)
     {
       fmgr = lv->GetFieldManager();
     }
-    if(sd || fmgr)
+    if(sd != nullptr || fmgr != nullptr)
     {
       lvmap[lv] = std::make_pair(sd, fmgr);
     }
   }
   G4RegionStore* mRegStore = G4RegionStore::GetInstance();
-  for(size_t ir = 0; ir < mRegStore->size(); ir++)
+  for(std::size_t ir = 0; ir < mRegStore->size(); ++ir)
   {
     G4Region* reg                = (*mRegStore)[ir];
     G4FastSimulationManager* fsm = reg->GetFastSimulationManager();
     G4UserSteppingAction* usa    = reg->GetRegionalSteppingAction();
-    if(reg || usa)
+    if(reg != nullptr || usa != nullptr)
     {
       rgnmap[reg] = std::make_pair(fsm, usa);
     }
@@ -159,13 +181,13 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
   //===================================================
   // Step-4: Restore sensitive detector and field manaer
   //===================================================
-  for(LV2SDFM::const_iterator it = lvmap.begin(); it != lvmap.end(); ++it)
+  for(auto it = lvmap.cbegin(); it != lvmap.cend(); ++it)
   {
     G4LogicalVolume* lv      = it->first;
     G4VSensitiveDetector* sd = (it->second).first;
     G4FieldManager* fmgr     = (it->second).second;
-    if(fmgr)  // What should be the second parameter?
-    {         // We use always false for MT mode
+    if(fmgr != nullptr)  // What should be the second parameter?
+    {                    // We use always false for MT mode
       lv->SetFieldManager(fmgr, false);
     }
     if(sd)
@@ -173,18 +195,19 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
       lv->SetSensitiveDetector(sd);
     }
   }
-  for(R2FSM::const_iterator it3 = rgnmap.begin(); it3 != rgnmap.end(); it3++)
+  for(auto it3 = rgnmap.cbegin(); it3 != rgnmap.cend(); ++it3)
   {
     G4Region* reg                = it3->first;
     G4FastSimulationManager* fsm = (it3->second).first;
-    if(fsm)
+    if(fsm != nullptr)
       reg->SetFastSimulationManager(fsm);
     G4UserSteppingAction* usa = (it3->second).second;
-    if(usa)
+    if(usa != nullptr)
       reg->SetRegionalSteppingAction(usa);
   }
 }
 
+// --------------------------------------------------------------------
 void G4WorkerThread::SetPinAffinity(G4int affinity) const
 {
   if(affinity == 0)

@@ -63,6 +63,6 @@ void B4bActionInitialization::Build() const
   SetUserAction(new B4bRunAction);
   SetUserAction(new B4bEventAction);
   SetUserAction(new B4bSteppingAction(fDetConstruction));
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

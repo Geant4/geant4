@@ -52,7 +52,7 @@ G4BinaryDeuteronBuilder()
 }
 
 void G4BinaryDeuteronBuilder::
-Build(G4DeuteronInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

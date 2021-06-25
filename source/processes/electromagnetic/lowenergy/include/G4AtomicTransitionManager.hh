@@ -39,8 +39,6 @@
 // Class description:
 // Low Energy Electromagnetic Physics: create or fills and manages G4AtomicShell, 
 // G4FluoTransition, G4AugerTransition objects.
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
 
 #ifndef G4AtomicTransitionManager_h
@@ -59,64 +57,60 @@ class G4AugerData;
 class G4AtomicTransitionManager {
 
 public: 
-
-  // The only way to get an instance of this class is to call the 
-  // function Instance() 
+  /// The only way to get an instance of this class is to call the 
+  /// function Instance() 
   static G4AtomicTransitionManager* Instance();
 
-  // needs to be called once from other code before start of run
+  /// needs to be called once from other code before start of run
   void Initialise();
  
-  // Z is the atomic number of the element, shellIndex is the 
-  // index (in EADL) of the shell
+  /// Z is the atomic number of the element, shellIndex is the 
+  /// index (in EADL) of the shell
   G4AtomicShell* Shell(G4int Z, size_t shellIndex) const;
    
-  // Z is the atomic number of the element, shellIndex is the 
-  // index (in EADL) of the final shell for the transition
-  // This function gives, upon Z and the Index of the initial shell where 
-  // the vacancy is, the radiative transition that can happen (originating 
-  // shell, energy, probability)
+  /// Z is the atomic number of the element, shellIndex is the 
+  /// index (in EADL) of the final shell for the transition
+  /// This function gives, upon Z and the Index of the initial shell where 
+  /// the vacancy is, the radiative transition that can happen (originating 
+  /// shell, energy, probability)
   const G4FluoTransition* ReachableShell(G4int Z, size_t shellIndex) const;
 
-  // This function gives, upon Z and the Index of the initial shell where 
-  // the vacancy is, the NON-radiative transition that can happen with 
-  // originating shell for the transition, and the data for the possible 
-  // auger electrons emitted (originating vacancy, energy amnd probability)
-  
+  /// This function gives, upon Z and the Index of the initial shell where 
+  /// the vacancy is, the NON-radiative transition that can happen with 
+  /// originating shell for the transition, and the data for the possible 
+  /// auger electrons emitted (originating vacancy, energy amnd probability)  
   const G4AugerTransition* ReachableAugerShell(G4int Z, G4int shellIndex) const;
   
-  // This function returns the number of shells of the element
-  // whose atomic number is Z
+  /// This function returns the number of shells of the element
+  /// whose atomic number is Z
   G4int NumberOfShells(G4int Z) const;
   
-  // This function returns the number of those shells of the element
-  // whose atomic number is Z which are reachable through a radiative
-  // transition
+  /// This function returns the number of those shells of the element
+  /// whose atomic number is Z which are reachable through a radiative
+  /// transition
   G4int NumberOfReachableShells(G4int Z) const;
 
-  // This function returns the number of possible NON-radiative transitions 
-  // for the atom with atomic number Z i.e. the number of shell in wich 
-  // a vacancy can be filled by a NON-radiative transition 
-
+  /// This function returns the number of possible NON-radiative transitions 
+  /// for the atom with atomic number Z i.e. the number of shell in wich 
+  /// a vacancy can be filled by a NON-radiative transition 
   G4int NumberOfReachableAugerShells(G4int Z) const;
 
-  // Gives the sum of the probabilities of radiative transition towards the
-  // shell whose index is shellIndex
+  /// Gives the sum of the probabilities of radiative transition towards the
+  /// shell whose index is shellIndex
   G4double 
   TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex) const;
   
-  // Gives the sum of the probabilities of non radiative transition from the
-  // shell whose index is shellIndex
+  /// Gives the sum of the probabilities of non radiative transition from the
+  /// shell whose index is shellIndex
   G4double 
   TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const; 
 
-  // Verbosity control
+  /// Verbosity control
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
   G4int GetVerboseLevel(){return verboseLevel;};
 
 private:
-
-  G4AtomicTransitionManager();
+  explicit G4AtomicTransitionManager();
 
   ~G4AtomicTransitionManager();
 
@@ -125,7 +119,10 @@ private:
   G4AtomicTransitionManager(const G4AtomicTransitionManager&);
  
   static G4AtomicTransitionManager* instance;
-  
+  // since Augereffect data r stored as a table in G4AugerData, we have 
+  // here a pointer to an element of that class itself.
+  G4AugerData* augerData;
+
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicShell*.
   std::map<G4int,std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
@@ -134,23 +131,17 @@ private:
   // the second element is a vector of G4AtomicTransition*.
   std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> > transitionTable;
  
-  // since Augereffect data r stored as a table in G4AugerData, we have 
-  // here a pointer to an element of that class itself.
-  G4AugerData* augerData;
-
   // Minimum and maximum Z in EADL table containing identities and binding
   // energies of shells
-  G4int zMin;
-  G4int zMax;
+  G4int zMin = 1; 
+  G4int zMax = 100;
   
   // Minimum and maximum Z in EADL table containing identities, transition 
   // energies and transition probabilities of shells
-  G4int infTableLimit;
-  G4int supTableLimit;
- 
-  G4bool   isInitialized;
-
+  G4int infTableLimit = 6;
+  G4int supTableLimit = 100;
   G4int verboseLevel;
+  G4bool isInitialized;
 };
 
 #endif

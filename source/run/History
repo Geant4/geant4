@@ -16,9 +16,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 07, 2020 Vladimir Ivanchenko (run-V10-06-20)
-- G4PhysicsListHelper - added forgotten processes (general positron 
-    and surface reflection) 
+May 20, 2021 Vladimir Ivanchenko (run-V10-07-06)
+- G4VPhysicsConstructor - fix initialisation of hadronic parameters
+    avoiding uncontrolled override of the verbosityLevel 
+
+May 17, 2021 Jonathan Madsen (run-V10-07-05)
+- Removed calling physicsList->TerminateWorker() in G4WorkerRunManager
+  as this appears to cause errors at termination
+  
+April 25, 2021 Hoang Tran (run-V10-07-04)
+- Added new G4DNAStaticMoleculeReactionProcess in PhysicsListHelper for DNA processs
+
+April 14, 2021 Ben Morgan (run-V10-07-03)
+- Migrate to modular CMake build
+
+April 13, 2021 Alberto Ribon (run-V10-07-02)
+- GNUmakefile : removed deleted directories (hadronic/models/util/
+  and hadronic/models/management/).
+
+April 09, 2021 Gabriele Cosmo (run-V10-07-01)
+- Optimised access to volumes and regions stores.
+- Minor c++11 review in use of iterators, initialisers, etc...
+- Removed obsolete ResetCuts() method in G4VUserPhysicsList.
+- General code cleanup and formatting.
+
+December 07, 2020 Vladimir Ivanchenko (run-V10-07-00)
+- G4PhysicsListHelper - added forgotten processes (general positron
+    and surface reflection)
 
 November 21, 2020 Gabriele Cosmo (run-V10-06-19)
 - Fixed compilation warnings in G4RunManager.

@@ -44,22 +44,13 @@
 class G4ChargeExchangePhysics : public G4VPhysicsConstructor
 {
 public: 
-  explicit G4ChargeExchangePhysics(G4int ver = 0);
+  explicit G4ChargeExchangePhysics(G4int ver = 1);
   virtual ~G4ChargeExchangePhysics();
 
-public: 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
   void ConstructParticle() override;
  
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
   void ConstructProcess() override;
 
-private:
-
-  G4int    verbose;
 };
 
 

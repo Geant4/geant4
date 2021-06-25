@@ -101,13 +101,13 @@ private:
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
   
-  G4VComponentCrossSection* ggXsection;
+  G4VComponentCrossSection* ggXsection = nullptr;
 
   const G4ParticleDefinition* neutron;
 
   std::vector<G4double> temp;
 
-  G4bool  isMaster;
+  G4bool  isMaster = false;
 
   static const G4int MAXZINEL = 93;
   static G4ElementData* data;

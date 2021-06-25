@@ -23,93 +23,73 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4AdjointBremsstrahlungModel
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
+////////////////////////////////////////////////////////////////////////////////
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Class:		G4AdjointBremsstrahlungModel
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	15 June 2007 creation by L. Desorgher. Adapted from G4eBremsstrahlungModel  
-//		20-10-2009 Remove all the screening effect that are not considered in the direct models blow 10 GeV. L.Desorgher
-//		4-11-2009  Implement the use of a simple biased differential cross section (C(Z)/Egamma) allowing a rapid computation of adjoint CS
-//			   and rapid sampling of adjoint secondaries. By this way cross section matrices are not used anymore, avoiding a rather 
-//			   time consuming computation of adjoint brem cross section matrices for each material at initialisation. This mode is switch on/off
-//			   by selecting SetUseMatrix(false)/ SetUseMatrix(true) in the constructor. L.Desorgher	
-//		  	  		
+//  Adjoint Model for e- Bremsstrahlung.Adapted from G4eBremsstrahlungModel
+//  Use of a simple biased differential cross section (C(Z)/Egamma) allowing a
+//  rapid computation of adjoint CS and rapid sampling of adjoint secondaries.
+//  In this way cross section matrices are not used anymore, avoiding a long
+//  computation of adjoint brem cross section matrices for each material
+//  at initialisation. This mode can be switched on/off by selecting
+//  SetUseMatrix(false)/ SetUseMatrix(true) in the constructor.
 //
 //-------------------------------------------------------------
-//	Documentation:
-//		Adjoint Model for e- Bremsstrahlung
-//
-
-
 
 #ifndef G4AdjointBremsstrahlungModel_h
 #define G4AdjointBremsstrahlungModel_h 1
+
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
-#include "G4VEmAngularDistribution.hh"
-#include "G4PhysicsTable.hh"
-#include "G4EmModelManager.hh"
-class G4Timer;
-class G4AdjointBremsstrahlungModel: public G4VEmAdjointModel
 
+class G4AdjointCSManager;
+class G4EmModelManager;
+class G4ParticleDefinition;
+
+class G4AdjointBremsstrahlungModel : public G4VEmAdjointModel
 {
-public:
+ public:
+  explicit G4AdjointBremsstrahlungModel(G4VEmModel* aModel);
 
-  G4AdjointBremsstrahlungModel(G4VEmModel* aModel);
   G4AdjointBremsstrahlungModel();
-  ~G4AdjointBremsstrahlungModel();
-  virtual void SampleSecondaries(const G4Track& aTrack,
-                                G4bool IsScatProjToProjCase,
-				G4ParticleChange* fParticleChange);
-  void RapidSampleSecondaries(const G4Track& aTrack,
-                                G4bool IsScatProjToProjCase,
-				G4ParticleChange* fParticleChange);
-  virtual G4double DiffCrossSectionPerVolumePrimToSecond(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      ); 
-  G4double DiffCrossSectionPerVolumePrimToSecondApproximated1(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      ); 
-  G4double DiffCrossSectionPerVolumePrimToSecondApproximated2(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      ); 
-  virtual G4double AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
-				             G4double primEnergy,
-				             G4bool IsScatProjToProjCase);
-  virtual G4double GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
-				             G4double primEnergy,
-				             G4bool IsScatProjToProjCase);
-  
- 
- // private void InitialiseFwdModels();
 
+  ~G4AdjointBremsstrahlungModel() override;
 
-private:
-  G4VEmModel* theDirectStdBremModel;
-  G4EmModelManager* theEmModelManagerForFwdModels;
-  G4bool isDirectModelInitialised ;
+  void SampleSecondaries(const G4Track& aTrack, G4bool isScatProjToProj,
+                         G4ParticleChange* fParticleChange) override;
 
-  G4double highKinEnergy;
-  G4double lowKinEnergy, lastCZ;
-  std::vector<G4DataVector*> partialSumSigma;
-  std::vector<float> SigmaPerAtom; 
-  
+  void RapidSampleSecondaries(const G4Track& aTrack, G4bool isScatProjToProj,
+                              G4ParticleChange* fParticleChange);
 
+  G4double DiffCrossSectionPerVolumePrimToSecond(
+    const G4Material* aMaterial,
+    G4double kinEnergyProj,  // kinetic energy of the primary particle before
+                             // the interaction
+    G4double kinEnergyProd   // kinetic energy of the secondary particle
+    ) override;
+
+  G4double AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+                               G4double primEnergy,
+                               G4bool isScatProjToProj) override;
+
+  G4AdjointBremsstrahlungModel(G4AdjointBremsstrahlungModel&) = delete;
+  G4AdjointBremsstrahlungModel& operator=(
+    const G4AdjointBremsstrahlungModel& right) = delete;
+
+ private:
+  void Initialize();
+
+  G4EmModelManager* fEmModelManagerForFwdModels;
+  G4AdjointCSManager* fCSManager;
+  G4ParticleDefinition* fElectron;
+  G4ParticleDefinition* fGamma;
+
+  G4double fLastCZ = 0.;
+
+  G4bool fIsDirectModelInitialised = false;
 };
-
 
 #endif

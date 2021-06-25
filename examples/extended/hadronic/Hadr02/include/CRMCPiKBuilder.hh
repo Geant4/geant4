@@ -37,7 +37,7 @@
 // nuclear interactions with the wrapper hadronic model around CRMC.
 //
 // Modified:
-// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -56,12 +56,7 @@ class CRMCPiKBuilder : public G4VPiKBuilder {
     CRMCPiKBuilder( const G4int crmcModelId, const std::string & crmcModelName );
     virtual ~CRMCPiKBuilder();
     virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4PionPlusInelasticProcess* aP ) final override;
-    virtual void Build( G4PionMinusInelasticProcess* aP ) final override;
-    virtual void Build( G4KaonPlusInelasticProcess* aP ) final override;
-    virtual void Build( G4KaonMinusInelasticProcess* aP ) final override;
-    virtual void Build( G4KaonZeroLInelasticProcess* aP ) final override;
-    virtual void Build( G4KaonZeroSInelasticProcess* aP ) final override;  
+    virtual void Build( G4HadronInelasticProcess* aP ) final override;
     inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
     inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
     using G4VPiKBuilder::Build;  // Prevent compiler warning

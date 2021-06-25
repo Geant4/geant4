@@ -1,9 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.8...3.18)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20)
 project(TestEm3)
 
 #----------------------------------------------------------------------------
@@ -44,7 +41,7 @@ target_link_libraries(TestEm3 ${Geant4_LIBRARIES})
 #
 set(TestEm3_SCRIPTS
     atlashec.mac dedx.mac emtutor.mac geom.mac ionC12.mac lhcb.mac linac.mac lockwood.mac
-    run01.mac run02.mac storeTables.mac TestEm3.in TestEm3.out tileCal.mac vis.mac
+    run01.mac run02.mac stepMax.mac storeTables.mac TestEm3.in TestEm3.out tileCal.mac vis.mac
   )
 
 foreach(_script ${TestEm3_SCRIPTS})

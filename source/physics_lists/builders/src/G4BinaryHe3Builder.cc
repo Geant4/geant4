@@ -52,7 +52,7 @@ G4BinaryHe3Builder()
 }
 
 void G4BinaryHe3Builder::
-Build(G4He3InelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

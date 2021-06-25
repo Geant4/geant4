@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HadCalorimeterSD::B5HadCalorimeterSD(G4String name)
-: G4VSensitiveDetector(name), 
+: G4VSensitiveDetector(name),
   fHitsCollection(nullptr), fHCID(-1)
 {
   collectionName.insert("HadCalorimeterColl");
@@ -56,13 +56,13 @@ B5HadCalorimeterSD::~B5HadCalorimeterSD()
 
 void B5HadCalorimeterSD::Initialize(G4HCofThisEvent* hce)
 {
-  fHitsCollection 
+  fHitsCollection
     = new B5HadCalorimeterHitsCollection(SensitiveDetectorName,collectionName[0]);
-  if (fHCID<0) { 
-    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
+  if (fHCID<0) {
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
   }
   hce->AddHitsCollection(fHCID,fHitsCollection);
-  
+
   // fill calorimeter hits with zero energy deposition
   for (auto column=0;column<kNofHadColumns;column++) {
     for (auto row=0;row<kNofHadRows;row++) {
@@ -77,13 +77,13 @@ G4bool B5HadCalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
   auto edep = step->GetTotalEnergyDeposit();
   if (edep==0.) return true;
-  
-  auto touchable = step->GetPreStepPoint()->GetTouchable(); 
+
+  auto touchable = step->GetPreStepPoint()->GetTouchable();
   auto rowNo = touchable->GetCopyNumber(2);
   auto columnNo = touchable->GetCopyNumber(3);
   auto hitID = kNofHadRows*columnNo+rowNo;
   auto hit = (*fHitsCollection)[hitID];
-  
+
   // check if it is first touch
   if (hit->GetColumnID()<0) {
     hit->SetColumnID(columnNo);
@@ -96,7 +96,7 @@ G4bool B5HadCalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   }
   // add energy deposition
   hit->AddEdep(edep);
-  
+
   return true;
 }
 

@@ -209,27 +209,19 @@
 
    The ROOT histograms and ntuple can be plotted with ROOT using the plotHisto.C
    and plotNtuple.C macros.
- 
-\section B4_s8 VISUALIZATION TUTORIAL
-
-   Additional visualization tutorial macros are available in the visTutor
-   subdirectory.  They can be tried as:
-\verbatim
-% cd B4/B4[a,b,c,d]
-% ln -s ../macros/visTutor visTutor
-% exampleB4[a,b,c,d] -m visTutor/exN03VisX.mac
-\endverbatim
-   For details, see comment lines  described in the macro files.
-   These macros are designed to help your understanding of the User's Guide.
- 
-\section B4_s9 HOW TO RUN
+  
+\section B4_s8 HOW TO RUN
 
    This example handles the program arguments in a new way.
    It can be run with the following optional arguments:
 \verbatim
-% exampleB4a [-m macro ] [-u UIsession] [-t nThreads]
+% exampleB4a [-m macro ] [-u UIsession] [-t nThreads] [-vDefault]
 \endverbatim 
     
+   The -vDefault option will activate using the default Geant4 stepping verbose
+   class (G4SteppingVerbose) instead of the enhanced stepping verbose with best
+   units (G4SteppingVerboseWithUnits) used in the example by default.
+
    The -t option is available only in multi-threading mode
    and it allows the user to override the Geant4 default number of 
    threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS

@@ -85,6 +85,7 @@ function(geant4_add_module _name)
     "PUBLIC_HEADERS;SOURCES"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4ADDMOD geant4_add_module)
 
   # - Check required directory structure at definition point
   # Headers always
@@ -151,14 +152,14 @@ function(geant4_module_include_directories _module)
     "PUBLIC;PRIVATE;INTERFACE"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4MODINCDIR geant4_module_include_directories)
 
   foreach(_dir ${G4MODINCDIR_PUBLIC})
-    geant4_set_module_property(${_module} APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${_dir})
-    geant4_set_module_property(${_module} APPEND PROPERTY INCLUDE_DIRECTORIES ${_dir})
+    geant4_set_module_property(${_module} APPEND PROPERTY PUBLIC_INCLUDE_DIRECTORIES ${_dir})
   endforeach()
 
   foreach(_dir ${G4MODINCDIR_PRIVATE})
-    geant4_set_module_property(${_module} APPEND PROPERTY INCLUDE_DIRECTORIES ${_dir})
+    geant4_set_module_property(${_module} APPEND PROPERTY PRIVATE_INCLUDE_DIRECTORIES ${_dir})
   endforeach()
 
   foreach(_dir ${G4MODINCDIR_INTERFACE})
@@ -187,13 +188,14 @@ function(geant4_module_link_libraries _module)
     "PUBLIC;PRIVATE;INTERFACE"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4MODLINKLIB geant4_module_link_libraries)
+
   foreach(_lib ${G4MODLINKLIB_PUBLIC})
-    geant4_set_module_property(${_module} APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${_lib})
-    geant4_set_module_property(${_module} APPEND PROPERTY LINK_LIBRARIES ${_lib})
+    geant4_set_module_property(${_module} APPEND PROPERTY PUBLIC_LINK_LIBRARIES ${_lib})
   endforeach()
 
   foreach(_lib ${G4MODLINKLIB_PRIVATE})
-    geant4_set_module_property(${_module} APPEND PROPERTY LINK_LIBRARIES ${_lib})
+    geant4_set_module_property(${_module} APPEND PROPERTY PRIVATE_LINK_LIBRARIES ${_lib})
   endforeach()
 
   foreach(_dir ${G4MODLINKLIB_INTERFACE})
@@ -231,14 +233,14 @@ function(geant4_module_compile_definitions _module)
     "PUBLIC;PRIVATE;INTERFACE"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4MODCOMPILEDEF geant4_module_compile_definitions)
 
   foreach(_lib ${G4MODCOMPILEDEF_PUBLIC})
-    geant4_set_module_property(${_module} APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS ${_lib})
-    geant4_set_module_property(${_module} APPEND PROPERTY COMPILE_DEFINITIONS ${_lib})
+    geant4_set_module_property(${_module} APPEND PROPERTY PUBLIC_COMPILE_DEFINITIONS ${_lib})
   endforeach()
 
   foreach(_lib ${G4MODCOMPILEDEF_PRIVATE})
-    geant4_set_module_property(${_module} APPEND PROPERTY COMPILE_DEFINITIONS ${_lib})
+    geant4_set_module_property(${_module} APPEND PROPERTY PRIVATE_COMPILE_DEFINITIONS ${_lib})
   endforeach()
 
   foreach(_dir ${G4MODCOMPILEDEF_INTERFACE})
@@ -297,12 +299,15 @@ endfunction()
 # * ``PUBLIC_HEADERS``
 # * ``PRIVATE_HEADERS``
 # * ``SOURCES``
+# * ``PRIVATE_COMPILE_DEFINITIONS``
+# * ``PUBLIC_COMPILE_DEFINITIONS``
 # * ``INTERFACE_COMPILE_DEFINITIONS``
-# * ``COMPILE_DEFINITIONS``
+# * ``PRIVATE_INCLUDE_DIRECTORIES``
+# * ``PUBLIC_INCLUDE_DIRECTORIES``
 # * ``INTERFACE_INCLUDE_DIRECTORIES``
-# * ``INCLUDE_DIRECTORIES``
+# * ``PRIVATE_LINK_LIBRARIES``
+# * ``PUBLIC_LINK_LIBRARIES``
 # * ``INTERFACE_LINK_LIBRARIES``
-# * ``LINK_LIBRARIES``
 # * ``PARENT_TARGET``
 # * ``CMAKE_LIST_FILE``
 # * ``GLOBAL_DEPENDENCIES``
@@ -352,14 +357,15 @@ endfunction()
 #   emitted.
 #
 function(geant4_set_module_property _module)
+  __geant4_module_assert_exists(${_module})
   cmake_parse_arguments(G4SMP
     "APPEND;APPEND_STRING"
     ""
     "PROPERTY"
     ${ARGN}
     )
-  # module must exist!
-  __geant4_module_assert_exists(${_module})
+  __geant4_assert_no_unparsed_arguments(G4SMP geant4_set_module_property)
+
 
   # Append/Append_string are mutually exclusive
   if(G4SMP_APPEND AND G4SMP_APPEND_STRING)
@@ -490,6 +496,19 @@ function(geant4_compose_targets)
     endif()
   endforeach()
 
+  # - For each module, write out files for
+  # 1. module -> used modules adjacency list for detecting module-module cycles
+  file(WRITE "${PROJECT_BINARY_DIR}/G4ModuleAdjacencyList.txt" "# Geant4 Module - Module Adjacencies\n")
+  foreach(__module ${__g4definedmodules})
+    # Adjacency list - take all dependencies
+    geant4_get_module_property(__publicdeps ${__module} PUBLIC_LINK_LIBRARIES)
+    geant4_get_module_property(__privatedeps ${__module} PRIVATE_LINK_LIBRARIES)
+    geant4_get_module_property(__interfacedeps ${__module} INTERFACE_LINK_LIBRARIES)
+    set(__alldeps_l ${__publicdeps} ${__privatedeps} ${__interfacedeps})
+    list(JOIN __alldeps_l " " __alldeps)
+    file(APPEND "${PROJECT_BINARY_DIR}/G4ModuleAdjacencyList.txt" "${__module} ${__alldeps}\n")
+  endforeach()
+
   # Process all defined libraries, except for G4{clhep,expat,ptl}{-static}
   # These are corner cases because its call to add_library happens
   # at a different (lower) directory level than all the other targets
@@ -563,6 +582,7 @@ function(geant4_define_module)
     "HEADERS;SOURCES;GRANULAR_DEPENDENCIES;GLOBAL_DEPENDENCIES;LINK_LIBRARIES;HEADERS_EXCLUDE_FORMAT;SOURCES_EXCLUDE_FORMAT"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4DEFMOD geant4_define_module)
   # HEADERS -> PUBLIC_HEADERS
   # SOURCES -> SOURCES
   # Don't support clang-formatting yet.
@@ -613,6 +633,7 @@ function(geant4_global_library_target)
     "COMPONENTS"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4GLOBLIB geant4_global_library_target)
 
   # Because components are sources.cmake files, must know currently defined modules
   # so we can pick up the newly defined ones
@@ -671,6 +692,8 @@ function(geant4_library_target)
     "SOURCES;GEANT4_LINK_LIBRARIES;LINK_LIBRARIES"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4GLOBLIB geant4_library_target)
+
   # Currently a hack to get G4clhep to build, so an error if used elsewhere
   if(NOT (${G4GLOBLIB_NAME} MATCHES "G4clhep|G4expat"))
     message(FATAL_ERROR "geant4_library_target called for '${G4GLOBLIB_NAME}' in '${CMAKE_CURRENT_LIST_DIR}'")
@@ -740,6 +763,7 @@ macro(geant4_add_compile_definitions)
     "SOURCES;COMPILE_DEFINITIONS"
     ${ARGN}
     )
+  __geant4_assert_no_unparsed_arguments(G4ADDDEF geant4_add_compile_definitions)
 
   # We assume that the sources have been added at the level of a
   # a sources.cmake, so are inside the src subdir of the sources.cmake
@@ -775,6 +799,29 @@ endmacro()
 # These macros and functions are for use in the implementation of the
 # module and library functions. They should never be used directly
 # in developer-level scripts.
+
+#-----------------------------------------------------------------------
+#.rst:
+# .. cmake:command:: __geant4_assert_no_unparsed_arguments
+#
+#  .. code-block:: cmake
+#
+#    __geant4_assert_no_unparsed_arguments(<prefix> <function>)
+#
+#  Emit a ``FATAL_ERROR`` if ``<prefix>_UNPARSED_ARGUMENTS`` is non-empty
+#  in ``<function>``
+#
+#  This is a macro intended for use in G4DeveloperAPI functions that cannot
+#  have unparsed arguments to validate their input.
+#
+#  From CMake 3.17, the ``<function>`` argument is no longer required and
+#  ``CMAKE_CURRENT_FUNCTION`` can be used
+#
+macro(__geant4_assert_no_unparsed_arguments _prefix _function)
+  if(${_prefix}_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "${_function} called with unparsed arguments: '${${_prefix}_UNPARSED_ARGUMENTS}'")
+  endif()
+endmacro()
 
 #-----------------------------------------------------------------------
 #.rst:
@@ -829,7 +876,7 @@ endmacro()
 #  This is used internally by the property get/set functions.
 #
 function(__geant4_module_validate_property _property)
-  if(NOT (${_property} MATCHES "PUBLIC_HEADERS|PRIVATE_HEADERS|SOURCES|INTERFACE_COMPILE_DEFINITIONS|COMPILE_DEFINITIONS|INTERFACE_INCLUDE_DIRECTORIES|INCLUDE_DIRECTORIES|INTERFACE_LINK_LIBRARIES|LINK_LIBRARIES|PARENT_TARGET|CMAKE_LIST_FILE|GLOBAL_DEPENDENCIES"))
+  if(NOT (${_property} MATCHES "PUBLIC_HEADERS|PRIVATE_HEADERS|SOURCES|PRIVATE_COMPILE_DEFINITIONS|PUBLIC_COMPILE_DEFINITIONS|INTERFACE_COMPILE_DEFINITIONS|PRIVATE_INCLUDE_DIRECTORIES|PUBLIC_INCLUDE_DIRECTORIES|INTERFACE_INCLUDE_DIRECTORIES|PRIVATE_LINK_LIBRARIES|PUBLIC_LINK_LIBRARIES|INTERFACE_LINK_LIBRARIES|PARENT_TARGET|CMAKE_LIST_FILE|GLOBAL_DEPENDENCIES"))
     message(FATAL_ERROR "Undefined property '${_property}'")
   endif()
 endfunction()
@@ -918,16 +965,16 @@ function(__geant4_add_library _name _type)
     target_sources(${_target_name} PRIVATE ${_headers} ${_srcs} ${_cmakescript})
 
     # - Process usage properties
-    # Include dirs and compile definitions can be handled together
+    # Include dirs, compile definitions and libraries can be handled together
     # Important to note that these promote PUBLIC/PRIVATE/INTERFACE
     # from module level to library level. I.e. other modules in the
     # library can see each other's PRIVATE include paths/compile defs.
     # The only known way to fully wall things off is OBJECT libs,
     # but then run into issues mentioned at start - linking and
-    # use in IDEs.
+    # use in IDEs (though newer CMake versions should resolve these)
     # This "promotion" is probably correct though - interfaces are
     # at physical library level rather than module, and in Geant4
-    # all files must have globally unique names (no nested hedaers
+    # all files must have globally unique names (no nested headers
     # nor namespaces). Also, DLL export symbols may need this
     # behaviour (esp. ALLOC_EXPORT).
     # Only really an issue if header names/definitions aren't
@@ -937,15 +984,17 @@ function(__geant4_add_library _name _type)
     # "Module" level really means "Source file" level, so same
     # sets of rules should apply (i.e. can't specify inc dirs
     # at source level).
-    foreach(_prop IN ITEMS INCLUDE_DIRECTORIES INTERFACE_INCLUDE_DIRECTORIES COMPILE_DEFINITIONS INTERFACE_COMPILE_DEFINITIONS)
-      geant4_get_module_property(_value ${__g4mod} ${_prop})
-      set_property(TARGET ${_target_name} APPEND PROPERTY ${_prop} ${_value})
-    endforeach()
+    foreach(_prop IN ITEMS PRIVATE PUBLIC INTERFACE)
+      geant4_get_module_property(_incdirs ${__g4mod} ${_prop}_INCLUDE_DIRECTORIES)
+      target_include_directories(${_target_name} ${_prop} ${_incdirs})
 
-    # Link libraries
-    foreach(_link_prop IN ITEMS LINK_LIBRARIES INTERFACE_LINK_LIBRARIES)
-      geant4_get_module_property(_linklibs ${__g4mod} ${_link_prop})
+      geant4_get_module_property(_defs ${__g4mod} ${_prop}_COMPILE_DEFINITIONS)
+      target_compile_definitions(${_target_name} ${_prop} ${_defs})
+
+      # Target linking requires additional processing to resolve
+      geant4_get_module_property(_linklibs ${__g4mod} ${_prop}_LINK_LIBRARIES)
       geant4_resolve_link_libraries(_linklibs)
+
       # Remove self-linking
       if(_linklibs)
         list(REMOVE_ITEM _linklibs ${_name})
@@ -966,17 +1015,17 @@ function(__geant4_add_library _name _type)
         set(_linklibs ${_g4linklibs})
       endif()
 
-      set_property(TARGET ${_target_name} APPEND PROPERTY ${_link_prop} ${_linklibs})
-
-      # Temp workaround for modules needing Qt. We use AUTOMOC, but can't yet set
-      # it on a per module basis. However, only have three modules that require
-      # moc-ing, so hard code for now.
-      # TODO: likely need an additional "module target properties" to hold things
-      # that can be passed to set_target_properties
-      if(__g4mod MATCHES "G4UIbasic|G4OpenGL|G4OpenInventor" AND GEANT4_USE_QT)
-        set_target_properties(${_target_name} PROPERTIES AUTOMOC ON)
-      endif()
+      target_link_libraries(${_target_name} ${_prop} ${_linklibs})
     endforeach()
+
+    # Temp workaround for modules needing Qt. We use AUTOMOC, but can't yet set
+    # it on a per module basis. However, only have three modules that require
+    # moc-ing, so hard code for now.
+    # TODO: likely need an additional "module target properties" to hold things
+    # that can be passed to set_target_properties
+    if(__g4mod MATCHES "G4UIbasic|G4OpenGL|G4OpenInventor" AND GEANT4_USE_QT)
+      set_target_properties(${_target_name} PROPERTIES AUTOMOC ON)
+    endif()
   endforeach()
 
   # - Use stored total list of sources to create format target for one mode only
@@ -985,6 +1034,8 @@ function(__geant4_add_library _name _type)
   endif()
 
   # - Postprocess target properties to remove duplicates
+  # NB: This makes the assumption that there is no order dependence here (and any is considered a bug!)
+  #     CMake will handle static link ordering internally
   foreach(_link_prop IN ITEMS LINK_LIBRARIES INTERFACE_LINK_LIBRARIES INCLUDE_DIRECTORIES INTERFACE_INCLUDE_DIRECTORIES COMPILE_DEFINITIONS INTERFACE_COMPILE_DEFINITIONS)
     get_target_property(__g4lib_link_libs ${_target_name} ${_link_prop})
     if(__g4lib_link_libs)

@@ -28,11 +28,15 @@
 #include <cstddef>
 #include <cstdint>
 #include <deque>
+#include <thread>
 
 #if defined(PTL_USE_TBB)
+#    if !defined(TBB_PREVIEW_GLOBAL_CONTROL)
+#        define TBB_PREVIEW_GLOBAL_CONTROL 1
+#    endif
 #    include <tbb/global_control.h>
+#    include <tbb/task_arena.h>
 #    include <tbb/task_group.h>
-#    include <tbb/task_scheduler_init.h>
 #endif
 
 namespace PTL
@@ -43,6 +47,8 @@ namespace PTL
 
 using tbb_global_control_t = ::tbb::global_control;
 using tbb_task_group_t     = ::tbb::task_group;
+using tbb_task_arena_t     = ::tbb::task_arena;
+
 #else
 
 namespace tbb
@@ -82,10 +88,37 @@ public:
     static size_t active_value(parameter param);
 };
 
+class task_arena
+{
+public:
+    enum parameter
+    {
+        not_initialized = -2,
+        automatic       = -1
+    };
+
+    task_arena(int max_concurrency = automatic, unsigned reserved_for_masters = 1)
+    {
+        (void) max_concurrency;
+        (void) reserved_for_masters;
+    }
+
+    ~task_arena() = default;
+
+    void initialize(int max_concurrency = automatic, unsigned reserved_for_masters = 1);
+
+    template <typename FuncT>
+    auto execute(FuncT&& _func) -> decltype(_func())
+    {
+        return _func();
+    }
+};
+
 }  // namespace tbb
 
 using tbb_global_control_t = tbb::global_control;
 using tbb_task_group_t     = tbb::task_group;
+using tbb_task_arena_t     = tbb::task_arena;
 
 #endif
 
@@ -103,17 +136,17 @@ public:
     using TaskStack = std::deque<Tp>;
 
     ThreadData(ThreadPool* tp);
-    ~ThreadData();
+    ~ThreadData() = default;
 
     void update();
 
 public:
-    bool                       is_master;
-    bool                       within_task;
-    intmax_t                   task_depth;
-    ThreadPool*                thread_pool;
-    VUserTaskQueue*            current_queue;
-    TaskStack<VUserTaskQueue*> queue_stack;
+    bool                       is_main       = false;
+    bool                       within_task   = false;
+    intmax_t                   task_depth    = 0;
+    ThreadPool*                thread_pool   = nullptr;
+    VUserTaskQueue*            current_queue = nullptr;
+    TaskStack<VUserTaskQueue*> queue_stack   = {};
 
 public:
     // Public functions

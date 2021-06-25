@@ -66,7 +66,6 @@
 // -------------------------------------------------------------------
 //
 
-
 #ifndef G4EmModelManager_h
 #define G4EmModelManager_h 1
 
@@ -77,6 +76,11 @@
 #include "G4EmTableType.hh"
 #include "G4EmProcessSubType.hh"
 #include "G4Region.hh"
+
+#include "G4VEmModel.hh"
+#include "G4VEmFluctuationModel.hh"
+#include "G4DynamicParticle.hh"
+#include <iostream>
 
 class G4RegionModels
 {
@@ -126,10 +130,7 @@ private:
 
 };
 
-#include "G4VEmModel.hh"
-#include "G4VEmFluctuationModel.hh"
-#include "G4DynamicParticle.hh"
-#include <iostream>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Region;
 class G4ParticleDefinition;
@@ -150,8 +151,7 @@ public:
 
   const G4DataVector* Initialise(const G4ParticleDefinition* part,
                                  const G4ParticleDefinition* secPart,
-                                 G4double minSubRange,
-                                 G4int verb);
+                                 G4double, G4int verb);
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                       G4EmTableType t = fRestricted);
@@ -160,7 +160,8 @@ public:
                         G4bool startFromNull = true, 
                         G4EmTableType t = fRestricted);
 
-  void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*); 
+  void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fm, 
+                  const G4Region* r);
 
   void UpdateEmModel(const G4String& model_name, G4double emin, G4double emax);
 
@@ -179,11 +180,10 @@ public:
   void DumpModelList(std::ostream& out, G4int verb);
 
   // Select model for given material cuts couple index
-  inline G4VEmModel* SelectModel(G4double& energy, size_t& index);
+  inline G4VEmModel* SelectModel(G4double energy, size_t index);
 
   // Access to cuts
   inline const G4DataVector* Cuts() const;
-  inline const G4DataVector* SubCutoff() const;
 
   // Set flag of fluorescence
   inline void SetFluoFlag(G4bool val);
@@ -197,48 +197,36 @@ public:
 
 private:
 
-  inline G4double ComputeDEDX(G4VEmModel* model,
-                              const G4MaterialCutsCouple*,
-                              G4double kinEnergy,
-                              G4double cutEnergy,
-                              G4double minEnergy);
+  const G4ParticleDefinition* particle = nullptr;
+  const G4DataVector*         theCuts = nullptr;
+  G4DataVector*               theCutsNew = nullptr;
 
-// =====================================================================
+  // may be changed in run time
+  G4RegionModels*             currRegionModel = nullptr;
+  G4VEmModel*                 currModel = nullptr;
 
-  const G4DataVector*    theCuts;
-  G4DataVector*          theCutsNew;
-  G4DataVector*          theSubCuts;
+  G4int                       nEmModels = 0;
+  G4int                       nRegions = 0;
 
-  std::vector<G4VEmModel*>                models;
-  std::vector<G4VEmFluctuationModel*>     flucModels;
-  std::vector<const G4Region*>            regions;
-  std::vector<G4int>                      orderOfModels;
-  std::vector<G4int>                      isUsed;
+  G4int                       verboseLevel = 0;
+  G4bool                      severalModels = true;
+  G4bool                      fluoFlag = false;
 
-  G4int                       nEmModels;
-  G4int                       nRegions;
+  std::vector<G4VEmModel*>             models;
+  std::vector<G4VEmFluctuationModel*>  flucModels;
+  std::vector<const G4Region*>         regions;
+  std::vector<G4int>                   orderOfModels;
+  std::vector<G4int>                   isUsed;
 
   std::vector<G4int>            idxOfRegionModels;
   std::vector<G4RegionModels*>  setOfRegionModels;
-
-  G4double                    maxSubCutInRange;
-
-  const G4ParticleDefinition* particle;
-
-  G4int                       verboseLevel;
-  G4bool                      severalModels;
-  G4bool                      fluoFlag;
-
-  // may be changed in run time
-  G4RegionModels*             currRegionModel;
-  G4VEmModel*                 currModel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
-                                                 size_t& index)
+inline 
+G4VEmModel* G4EmModelManager::SelectModel(G4double kinEnergy, size_t index)
 {
   if(severalModels) {
     if(nRegions > 1) {
@@ -258,13 +246,6 @@ inline const G4DataVector* G4EmModelManager::Cuts() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4DataVector* G4EmModelManager::SubCutoff() const
-{
-  return theSubCuts;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4EmModelManager::SetFluoFlag(G4bool val)
 {
   fluoFlag = val;
@@ -275,23 +256,6 @@ inline void G4EmModelManager::SetFluoFlag(G4bool val)
 inline G4int G4EmModelManager::NumberOfModels() const
 {
   return nEmModels;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double 
-G4EmModelManager::ComputeDEDX(G4VEmModel* model,
-                              const G4MaterialCutsCouple* couple,
-                              G4double e,
-                              G4double cut,
-                              G4double emin)
-{
-  G4double dedx = 0.0;
-  if(model && cut > emin) {
-    dedx = model->ComputeDEDX(couple,particle,e,cut); 
-    if(emin > 0.0) {dedx -= model->ComputeDEDX(couple,particle,e,emin);} 
-  }
-  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

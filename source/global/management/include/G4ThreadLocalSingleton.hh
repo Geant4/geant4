@@ -95,10 +95,14 @@
 #ifndef G4TLSSINGLETON_HH
 #define G4TLSSINGLETON_HH 1
 
-#include <list>
-
 #include "G4AutoLock.hh"
 #include "G4Cache.hh"
+#include "G4Backtrace.hh"
+#include "G4Threading.hh"
+
+#include <list>
+#include <vector>
+#include <functional>
 
 // Forward declaration. See G4AutoDelete.hh
 //
@@ -107,6 +111,35 @@ namespace G4AutoDelete
   template <class T>
   void Register(T*);
 }
+
+template <class T>
+class G4ThreadLocalSingleton;
+
+// this explicit specialization holds all the callbacks
+// to explicitly invoke the auto-deletion
+template <>
+class G4ThreadLocalSingleton<void>
+{
+ private:
+  using fvector_t = std::vector<std::function<void()>>;
+
+  template <class T>
+  friend class G4ThreadLocalSingleton;
+
+  static fvector_t& GetCallbacks();
+  static G4Mutex& GetMutex();
+
+ public:
+  static void Clear();
+
+  template <typename FuncT>
+  static typename fvector_t::iterator Insert(FuncT&& _func)
+  {
+    G4AutoLock _lk{ GetMutex() };
+    return GetCallbacks().emplace(GetCallbacks().end(),
+                                  std::forward<FuncT>(_func));
+  }
+};
 
 template <class T>
 class G4ThreadLocalSingleton : private G4Cache<T*>
@@ -119,11 +152,16 @@ class G4ThreadLocalSingleton : private G4Cache<T*>
 
   ~G4ThreadLocalSingleton();
 
+  G4ThreadLocalSingleton(const G4ThreadLocalSingleton&) = delete;
+  G4ThreadLocalSingleton(G4ThreadLocalSingleton&&)      = default;
+
+  G4ThreadLocalSingleton& operator=(const G4ThreadLocalSingleton&) = delete;
+  G4ThreadLocalSingleton& operator=(G4ThreadLocalSingleton&&) = default;
+
   T* Instance() const;
   // Returns a pointer to a thread-private instance of T
 
  private:
-  G4ThreadLocalSingleton(G4ThreadLocalSingleton& rhs);
   void Register(T* i) const;
 
   void Clear();
@@ -142,6 +180,23 @@ G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton()
 {
   G4MUTEXINIT(listm);
   G4Cache<T*>::Put(static_cast<T*>(0));
+  // Uncomment below to find the origin of where instantiation happened
+  /*
+  auto bt = G4Backtrace::GetDemangled<4, 1>(
+    [](const char* cstr) { return std::string{ cstr }; });
+  std::cout << "Backtrace to G4ThreadLocalSingleton<"
+            << G4Demangle<T>().c_str() << ">:\n";
+  for(auto& itr : bt)
+  {
+    if(!itr.empty())
+      std::cout << "\t" << itr << "\n";
+  }
+  */
+  G4ThreadLocalSingleton<void>::Insert([&]() {
+    printf("Deleting G4ThreadLocalSingletons for type %s ...\n",
+           G4Demangle<T>().c_str());
+    this->Clear();
+  });
 }
 
 template <class T>
@@ -165,10 +220,6 @@ T* G4ThreadLocalSingleton<T>::Instance() const
 }
 
 template <class T>
-G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton(G4ThreadLocalSingleton&)
-{}
-
-template <class T>
 void G4ThreadLocalSingleton<T>::Register(T* i) const
 {
   G4AutoLock l(&listm);
@@ -178,6 +229,8 @@ void G4ThreadLocalSingleton<T>::Register(T* i) const
 template <class T>
 void G4ThreadLocalSingleton<T>::Clear()
 {
+  if(instances.empty())
+    return;
   G4AutoLock l(&listm);
   while(!instances.empty())
   {

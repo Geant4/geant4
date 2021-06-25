@@ -42,7 +42,7 @@ class B3bRunAction : public G4UserRunAction
   public:
     B3bRunAction();
     virtual ~B3bRunAction();
-    
+
     virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);

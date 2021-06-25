@@ -353,10 +353,10 @@ void WLSMaterials::CreateMaterials()
   G4MaterialPropertiesTable* mptPolystyrene = new G4MaterialPropertiesTable();
   mptPolystyrene->AddProperty("RINDEX", energySmall, refractiveIndexPS);
   mptPolystyrene->AddProperty("ABSLENGTH", energySmall, absPS);
-  mptPolystyrene->AddProperty("FASTCOMPONENT", energy, scintilFast);
+  mptPolystyrene->AddProperty("SCINTILLATIONCOMPONENT1", energy, scintilFast);
   mptPolystyrene->AddConstProperty("SCINTILLATIONYIELD", 10. / keV);
   mptPolystyrene->AddConstProperty("RESOLUTIONSCALE", 1.0);
-  mptPolystyrene->AddConstProperty("FASTTIMECONSTANT", 10. * ns);
+  mptPolystyrene->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 10. * ns);
 
   fPolystyrene->SetMaterialPropertiesTable(mptPolystyrene);
 

@@ -16,7 +16,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jan 25th, 2021 Makoto Asai (tasking-V10-06-14)
+June 6th, 2021 Jonathan Madsen (tasking-V10-07-05)
+- Check for valid threadPool pointer in
+  G4TaskRunManager::RequestWorkersProcessCommandsStack()
+  (causes seg-fault when ui/viz inited but run not inited)
+
+May 24th, 2021 Jonathan Madsen (tasking-V10-07-04)
+- Update to PTL v2.0.0 (shared_ptr usage) included some minor API
+  changes to direct async usage
+
+May 17th, 2021 Jonathan Madsen (tasking-V10-07-03)
+- Fixes to TBB task-group usage
+
+Apr 21st, 2021 Jonathan Madsen (tasking-V10-07-02)
+- Fix for G4FORCENUMBEROFTHREADS env lookup
+
+Mar 30th, 2021 Makoto Asai (tasking-V10-07-01)
+- G4RunManagerFactory : Set default run manager type to Tasking for
+  release 11.0.
+
+Jan 25th, 2021 Makoto Asai (tasking-V10-07-00)
 - G4WorkerTaskRunManager.cc : Correct the way to count the number of events
   processed in a worker thread. This correction also fixes a rare crash due to
   accessing to the seed vector more than necessary.

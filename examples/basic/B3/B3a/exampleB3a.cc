@@ -30,7 +30,7 @@
 #include "G4Types.hh"
 
 #include "G4RunManagerFactory.hh"
-
+#include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -49,14 +49,15 @@ int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
-    ui = new G4UIExecutive(argc, argv);
-  }
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv);}
 
   // Optionally: choose a different Random engine...
-  //
   // G4Random::setTheEngine(new CLHEP::MTwistEngine);
+
+  //use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
 
   // Construct the default run manager
   //

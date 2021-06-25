@@ -36,7 +36,6 @@
 
 // Class description:
 // Low Energy Electromagnetic Physics, a data container
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
@@ -52,45 +51,44 @@ class G4FluoTransition {
 
 public:
 
-  G4FluoTransition(G4int,const std::vector<G4int>&,const G4DataVector&,
-		     const G4DataVector&);
+  explicit G4FluoTransition(G4int,const std::vector<G4int>&,const G4DataVector&,
+		   const G4DataVector&);
 
-  ~G4FluoTransition();
+  ~G4FluoTransition(){;};
   
-  // All the data stored and provided by this class are relative to a
-  // given vacancy, whose identity is provided by the FinalShellId() method,
-  // in an atom of a given material
+  /// All the data stored and provided by this class are relative to a
+  /// given vacancy, whose identity is provided by the FinalShellId() method,
+  /// in an atom of a given material
 
-  // Returns the identities of the originating shells for the transitions 
+  /// Returns the identities of the originating shells for the transitions 
   const std::vector<G4int>& OriginatingShellIds() const;
   
-  // Return the energies of the transitions
+  /// Return the energies of the transitions
   const G4DataVector& TransitionEnergies() const;
 
-  // Return the probabilities of the transitions
+  /// Return the probabilities of the transitions
   const G4DataVector& TransitionProbabilities() const;
   
-  // Return the identity if the vacancy
+  /// Return the identity if the vacancy
   G4int FinalShellId() const;
 
-  // Given the index of the originating shells returns its identity
+  /// Given the index of the originating shells returns its identity
   G4int OriginatingShellId(G4int index) const;
 
-  // Given the index of the originating shells returns the energy
-  // of the transition starting from it
+  /// Given the index of the originating shells returns the energy
+  /// of the transition starting from it
   G4double TransitionEnergy(G4int index) const;
 
-  // Given the index of the originating shells returns the probability
-  // of the transition starting from it
+  /// Given the index of the originating shells returns the probability
+  /// of the transition starting from it
   G4double TransitionProbability(G4int index) const;
 
-private:
-
-  G4int finalShellId;
+private: 
   std::vector<G4int> originatingShellIds;
+
   G4DataVector transitionEnergies;
   G4DataVector transitionProbabilities;
-  
+  G4int finalShellId;
 };
 
 #endif

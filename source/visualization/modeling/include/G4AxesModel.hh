@@ -56,7 +56,9 @@ public: // With description
    
   virtual ~G4AxesModel ();
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
+  void SetTransformation (const G4Transform3D& transform) override;
+
+  void DescribeYourselfTo (G4VGraphicsScene&) override;
   // The main task of a model is to describe itself to the graphics scene.
 
 private:

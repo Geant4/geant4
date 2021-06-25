@@ -33,12 +33,12 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "SteppingVerbose.hh"
 
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
@@ -48,15 +48,16 @@
 int main(int argc,char** argv) {
 
   //detect interactive mode (if no arguments) and define UI session
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-
+  //use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+  
   //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -71,19 +72,19 @@ int main(int argc,char** argv) {
   runManager->Initialize();
 
   //initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisManager* visManager = nullptr;
 
   //get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)  {
    //interactive mode
-   UImanager->ApplyCommand("/control/execute vis.mac");
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   ///UImanager->ApplyCommand("/control/execute vis.mac");
    ui->SessionStart();
    delete ui;
-  }
-  else  {
+  } else  {
    //batch mode  
    G4String command = "/control/execute ";
    G4String fileName = argv[1];

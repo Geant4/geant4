@@ -41,11 +41,9 @@ ThreadData::GetInstance()
 //======================================================================================//
 
 ThreadData::ThreadData(ThreadPool* tp)
-: is_master(tp->is_master())
-, within_task(false)
-, task_depth(0)
+: is_main((tp) ? tp->is_main() : false)
 , thread_pool(tp)
-, current_queue(tp->get_queue())
+, current_queue((tp) ? tp->get_queue() : nullptr)
 , queue_stack({ current_queue })
 {}
 
@@ -54,12 +52,10 @@ ThreadData::ThreadData(ThreadPool* tp)
 void
 ThreadData::update()
 {
+    if(!thread_pool)
+        return;
     current_queue = thread_pool->get_queue();
     queue_stack.push_back(current_queue);
 }
-
-//======================================================================================//
-
-ThreadData::~ThreadData() {}
 
 //======================================================================================//

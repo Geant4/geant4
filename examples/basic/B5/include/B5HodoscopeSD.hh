@@ -44,10 +44,10 @@ class B5HodoscopeSD : public G4VSensitiveDetector
   public:
     B5HodoscopeSD(G4String name);
     virtual ~B5HodoscopeSD();
-    
+
     virtual void Initialize(G4HCofThisEvent*HCE);
     virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-    
+
   private:
     B5HodoscopeHitsCollection* fHitsCollection;
     G4int fHCID;

@@ -45,9 +45,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_ATL);
 
-G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(G4int) :
+G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(G4int verb) :
     G4HadronPhysicsFTFP_BERT_ATL("hInelastic FTFP_BERT_ATL",false)
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsFTFP_BERT_ATL::G4HadronPhysicsFTFP_BERT_ATL(const G4String& name, G4bool quasiElastic)
     : G4HadronPhysicsFTFP_BERT(name,quasiElastic)
@@ -71,7 +73,8 @@ G4HadronPhysicsFTFP_BERT_ATL::~G4HadronPhysicsFTFP_BERT_ATL()
 
 void G4HadronPhysicsFTFP_BERT_ATL::ConstructProcess()
 {
-  if(G4Threading::IsMasterThread()) {
+  if(G4Threading::IsMasterThread() &&
+     G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
       DumpBanner();
   }
   CreateModels();

@@ -73,11 +73,6 @@ void G4RayleighScattering::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4RayleighScattering::PrintInfo()
-{}         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4RayleighScattering::ProcessDescription(std::ostream& out) const
 {
   out << "  Rayleigh scattering";

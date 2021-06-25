@@ -70,7 +70,7 @@ G4FTFPProtonBuilder(G4bool quasiElastic)
 }
 
 void G4FTFPProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

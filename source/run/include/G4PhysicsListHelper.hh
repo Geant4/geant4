@@ -23,23 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsListHelper
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file
-// Class Description:
-//      This class is a helper class for physics lists to register processes
-//      according to the ordering parameter table
-//      This class is a singleton
-// -------------------------------------------
-//	History
-//        first version                   29 Apr. 2011 by H.Kurashige
-// ------------------------------------------------------------
+// Class description:
+//
+// Helper class for physics lists, to register processes according
+// to the ordering parameter table. This class is a singleton.
 
-#ifndef G4PhysicsListHelper_h
-#define G4PhysicsListHelper_h 1
+// Author: H.Kurashige, 29 April 2011
+// --------------------------------------------------------------------
+#ifndef G4PhysicsListHelper_hh
+#define G4PhysicsListHelper_hh 1
+
+#include <vector>
+
 #include "G4ios.hh"
 #include "globals.hh"
-#include <vector>
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -52,76 +51,72 @@ class G4PhysicsListHelper
 {
   friend class G4ThreadLocalSingleton<G4PhysicsListHelper>;
 
- private:
-  // Hide constructor and destructor
-  G4PhysicsListHelper();
-  ~G4PhysicsListHelper();
+  public:
 
- public:  // with description
-  // This method gives the ponter to the physics list helper
-  static G4PhysicsListHelper* GetPhysicsListHelper();
+    static G4PhysicsListHelper* GetPhysicsListHelper();
+      // Returns the pointer to the physics list helper
 
-  // Register a process to the particle type
-  // according to the ordering parameter table
-  //  'true' is returned if the process is registerd successfully
-  G4bool RegisterProcess(G4VProcess* process, G4ParticleDefinition* particle);
+    G4bool RegisterProcess(G4VProcess* process, G4ParticleDefinition* particle);
+      // Registers a process to the particle type according to the ordering
+      // parameter table. Returns 'true' if process is successfully registered.
 
-  //  User must invoke this method in his ConstructProcess()
-  //  implementation in order to insures particle transportation.
-  void AddTransportation();
+    void AddTransportation();
+      // User must invoke this method in his ConstructProcess() implementation
+      // in order to enable particle transportation.
 
-  //  Set flag for using CoupledTransportation
-  void UseCoupledTransportation(G4bool vl = true);
+    void UseCoupledTransportation(G4bool vl = true);
+      // Set flag for using G4CoupledTransportation.
 
-  //  Change the thresholds for killing looping tracks of the
-  //    transportation (simple or coupled.)
-  void UseHighLooperThresholds() { theLooperThresholds = 2; }
-  void UseLowLooperThresholds() { theLooperThresholds = 0; }
+    void UseHighLooperThresholds() { theLooperThresholds = 2; }
+    void UseLowLooperThresholds() { theLooperThresholds = 0; }
+      // Change the thresholds for killing looping tracks in transportation.
 
-  /////////////////////////////////////////////////////////////////
- public:
-  // check consistencies of list of particles
-  void CheckParticleList() const;
+    void CheckParticleList() const;
+      // Check consistencies of list of particles.
 
-  ///////////////////////////////////////////////////////////////////////
- public:
-  // Dump OrdingParameterTable
-  void DumpOrdingParameterTable(G4int subType = -1) const;
-  G4PhysicsListOrderingParameter GetOrdingParameter(G4int subType) const;
+    void DumpOrdingParameterTable(G4int subType = -1) const;
+      // Dump OrdingParameterTable.
 
- private:
-  void ReadOrdingParameterTable();
-  void ReadInDefaultOrderingParameter();
+    G4PhysicsListOrderingParameter GetOrdingParameter(G4int subType) const;
 
-  ///////////////////////////////////////////////////////////////////////
- public:  // with description
-  void SetVerboseLevel(G4int value);
-  G4int GetVerboseLevel() const;
-  // set/get controle flag for output message
-  //  0: Silent
-  //  1: Warning message
-  //  2: More
+    void SetVerboseLevel(G4int value);
+    G4int GetVerboseLevel() const;
+      // set/get controle flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
 
-  ////////////////////////////////////////////////////////////////////////
- private:
-  static G4ThreadLocal G4PhysicsListHelper* pPLHelper;
+  private:
 
-  // the particle table has the complete List of existing particle types
-  G4ParticleTable* theParticleTable;
-  G4ParticleTable::G4PTblDicIterator* aParticleIterator;
+    G4PhysicsListHelper();
+    ~G4PhysicsListHelper();
+      // Hidden constructor and destructor.
 
-  G4bool useCoupledTransportation;
-  G4int theLooperThresholds = 1;  //  0 = Low,  1 = default, 2 = high
-  G4VProcess* theTransportationProcess;
+    void ReadOrdingParameterTable();
+    void ReadInDefaultOrderingParameter();
 
-  G4int verboseLevel;
+  private:
 
- private:
-  typedef std::vector<G4PhysicsListOrderingParameter> G4OrdParamTable;
-  G4OrdParamTable* theTable;
-  G4int sizeOfTable;
-  G4String ordParamFileName;
+    using G4OrdParamTable = std::vector<G4PhysicsListOrderingParameter>;
+
+    static G4ThreadLocal G4PhysicsListHelper* pPLHelper;
+
+    G4ParticleTable* theParticleTable = nullptr;
+    G4ParticleTable::G4PTblDicIterator* aParticleIterator = nullptr;
+      // The particle table has the complete List of existing particle types.
+
+    G4bool useCoupledTransportation = false;
+    G4int theLooperThresholds = 1;  //  0 = Low,  1 = default, 2 = high
+    G4VProcess* theTransportationProcess = nullptr;
+
+    G4int verboseLevel = 1;
+
+    G4OrdParamTable* theTable = nullptr;
+    G4int sizeOfTable = 0;
+    G4String ordParamFileName = "";
 };
+
+// Inline methods implementations
 
 inline void G4PhysicsListHelper::UseCoupledTransportation(G4bool vl)
 {

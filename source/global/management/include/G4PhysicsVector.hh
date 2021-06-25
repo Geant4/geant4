@@ -179,6 +179,9 @@ class G4PhysicsVector
   inline void SetSpline(G4bool);
   // Activate/deactivate Spline interpolation
 
+  inline G4bool GetSpline() const;
+  // True if using spline interpolation
+
   G4bool Store(std::ofstream& fOut, G4bool ascii = false) const;
   virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii = false);
   // To store/retrieve persistent data to/from file streams.
@@ -194,7 +197,7 @@ class G4PhysicsVector
   void CopyData(const G4PhysicsVector& vec);
   // Internal methods for allowing copy of objects
 
-  void PrintPutValueError(std::size_t index);
+  void PrintPutValueError(std::size_t index, G4double e1, G4double e2);
 
   G4PhysicsVectorType type = T_G4PhysicsVector;
   // The type of PhysicsVector (enumerator)

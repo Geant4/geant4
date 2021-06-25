@@ -3,8 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -95,10 +101,10 @@ GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
 AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
 
-ee2hadr:  for e+, integral:1  SubType=7 BuildTable=0
+ee2hadr:  for e+ XStype:3 SubType=7 BuildTable=0
       e+ annihilation into hadrons active from 76.2411 GeV to 19999.5 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         eeToHadrons : Emin=    0 eV  Emax=  100 TeV
+         eeToHadrons : Emin=    0 meV Emax=  100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
  This region is in the mass world.
@@ -156,45 +162,45 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -249 m       0 fm      0 fm      0 eV      0 eV   98.8 cm   98.8 cm       Iron   GammaToMuPair
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1    -249 m        0 fm       0 fm       0 meV          0 meV  98.78 cm   98.78 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -249 m       0 fm      0 fm      0 eV      0 eV   78.3 cm   78.3 cm       Iron   GammaToMuPair
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -249.2 m        0 fm       0 fm       0 meV          0 meV  78.31 cm   78.31 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   2.21 cm   2.21 cm       Iron   GammaToMuPair
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1    -250 m        0 fm       0 fm       0 meV          0 meV  2.209 cm   2.209 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   22.7 cm   22.7 cm       Iron   GammaToMuPair
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -249.8 m        0 fm       0 fm       0 meV          0 meV  22.66 cm   22.66 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -249 m       0 fm      0 fm      0 eV      0 eV   57.4 cm   57.4 cm       Iron   GammaToMuPair
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm     100 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -249.4 m        0 fm       0 fm       0 meV          0 meV  57.42 cm   57.42 cm       Iron   GammaToMuPair
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.000792s Sys=0.000000s
+  User=0.000000s Real=0.007300s Sys=0.000000s
 
  Number of process calls --->	GammaToMuPair : 5... write file : testem6_0.root - done
 ... write files - done
@@ -262,48 +268,47 @@ Index : 0     used in the geometry : Yes
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m       0 fm      0 fm      1 TeV     0 eV   11.1 cm   11.1 cm       Iron      ee2hadr
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -249.9 m        0 fm       0 fm       1 TeV          0 meV  12.21 cm   12.21 cm       Iron     ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -245 m       0 fm      0 fm      1 TeV     0 eV   4.94 m    4.94 m        Iron      ee2hadr
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -244.5 m        0 fm       0 fm       1 TeV          0 meV  5.457 m    5.457 m        Iron     ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m       0 fm      0 fm      1 TeV     0 eV   13.8 cm   13.8 cm       Iron      ee2hadr
-    2   -249 m       0 fm      0 fm      1 TeV     0 eV   50.7 cm   64.5 cm       Iron      ee2hadr
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -249.8 m        0 fm       0 fm       1 TeV          0 meV  15.27 cm   15.27 cm       Iron     ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -246 m       0 fm      0 fm      0 eV      0 eV   3.54 m    3.54 m        Iron   AnnihiToMuPair
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -246.2 m        0 fm       0 fm       1 TeV          0 meV  3.764 m    3.764 m        Iron     ee2hadr
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m       0 fm      0 fm      1 TeV     0 eV   36.6 cm   36.6 cm       Iron      ee2hadr
+Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
+    0    -250 m        0 fm       0 fm       1 TeV          0 meV      0 fm       0 fm       Iron   initStep
+    1  -245.4 m        0 fm       0 fm       1 TeV          0 meV  4.568 m    4.568 m        Iron     ee2hadr
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.010000s Real=0.000440s Sys=0.000000s
+  User=0.000000s Real=0.000365s Sys=0.000000s
 
- Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write file : testem6_1.root - done
+ Number of process calls --->	ee2hadr : 5... write file : testem6_1.root - done
 ... write files - done
 ... close file : testem6_1.root - done
 
@@ -315,13 +320,18 @@ Run Summary
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
 Total navigation history collections cleaned: 4
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00385 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
@@ -339,3 +349,4 @@ G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

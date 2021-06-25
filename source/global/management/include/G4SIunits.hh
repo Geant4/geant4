@@ -140,6 +140,11 @@ static constexpr double millisecond = 1.e-3 * second;
 static constexpr double microsecond = 1.e-6 * second;
 static constexpr double picosecond  = 1.e-12 * second;
 
+static constexpr double minute = 60*second;
+static constexpr double hour   = 60*minute;
+static constexpr double day    = 24*hour;
+static constexpr double year   = 365*day;  
+
 static constexpr double hertz     = 1. / second;
 static constexpr double kilohertz = 1.e+3 * hertz;
 static constexpr double megahertz = 1.e+6 * hertz;
@@ -189,6 +194,7 @@ static constexpr double megaelectronvolt = 1.e+6 * electronvolt;
 static constexpr double gigaelectronvolt = 1.e+9 * electronvolt;
 static constexpr double teraelectronvolt = 1.e+12 * electronvolt;
 static constexpr double petaelectronvolt = 1.e+15 * electronvolt;
+static constexpr double millielectronvolt = 1.e-3 * electronvolt;  
 
 // symbols
 static constexpr double MeV = megaelectronvolt;

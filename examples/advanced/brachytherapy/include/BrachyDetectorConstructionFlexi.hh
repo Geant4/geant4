@@ -46,20 +46,19 @@ class G4LogicalVolume;
 class G4Tubs;
 class G4Cons;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionFlexi
 {
 public:
-   BrachyDetectorConstructionFlexi();
+   explicit BrachyDetectorConstructionFlexi();
   ~BrachyDetectorConstructionFlexi();
 
   void  ConstructFlexi(G4VPhysicalVolume*);
   // Model the Flexi iridium source
 
   void  CleanFlexi(); 
-  // Destroy the Iridium source in the experimental set-up
+  // Clean the Iridium source in the experimental set-up
 
 private:   
   G4Tubs* fSteelShell;
@@ -89,8 +88,6 @@ private:
   G4VisAttributes* fSteelAttributes;
   G4VisAttributes* fEndAttributes;
   G4VisAttributes* fSimpleIridiumVisAtt;
- 
-  BrachyMaterial* fMat;    
 };
 #endif
 

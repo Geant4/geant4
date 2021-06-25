@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4leptons
-# Package: Geant4.src.G4particles.G4leptons
-#------------------------------------------------------------------------------
+# - G4leptons module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4leptons
-  HEADERS
+geant4_add_module(G4leptons
+  PUBLIC_HEADERS
     G4AntiNeutrinoE.hh
     G4AntiNeutrinoMu.hh
     G4AntiNeutrinoTau.hh
@@ -34,14 +29,6 @@ geant4_define_module(NAME G4leptons
     G4NeutrinoTau.cc
     G4Positron.cc
     G4TauMinus.cc
-    G4TauPlus.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4materials
-    G4partman
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4materials
-)
+    G4TauPlus.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4leptons PUBLIC G4globman G4partman)

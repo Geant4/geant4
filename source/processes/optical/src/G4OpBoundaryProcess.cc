@@ -121,7 +121,7 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
   iTE = iTM         = 0;
   thePhotonMomentum = 0.;
   Rindex1 = Rindex2 = 1.;
-  cost1 = cost2 = sint1 = sint2 = 0.;
+  sint1 = 0.;
   idx = idy      = 0;
   DichroicVector = nullptr;
 }
@@ -1033,6 +1033,18 @@ void G4OpBoundaryProcess::DielectricDielectric()
   G4bool Inside = false;
   G4bool Swap   = false;
 
+  if(theFinish == polished)
+  {
+    theFacetNormal = theGlobalNormal;
+  }
+  else
+  {
+    theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
+  }
+  G4double cost1 = -OldMomentum * theFacetNormal;
+  G4double cost2 = 0.;
+  G4double sint2 = 0.;
+
   G4bool SurfaceRoughnessCriterionPass = true;
   if(theSurfaceRoughness != 0. && Rindex1 > Rindex2)
   {
@@ -1404,7 +1416,7 @@ void G4OpBoundaryProcess::CalculateReflectivity()
     theFacetNormal = theGlobalNormal;
   }
 
-  cost1 = -OldMomentum * theFacetNormal;
+  G4double cost1 = -OldMomentum * theFacetNormal;
   if(std::abs(cost1) < 1.0 - kCarTolerance)
   {
     sint1 = std::sqrt(1. - cost1 * cost1);

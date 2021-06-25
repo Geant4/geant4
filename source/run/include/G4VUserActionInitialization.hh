@@ -23,32 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserActionInitialization
 //
+// Class description:
 //
-
-#ifndef G4VUserActionInitialization_h
-#define G4VUserActionInitialization_h 1
-
-// class description:
-//
-//  This is the abstract base class for instantiating all the user action
-//  classes.
+// This is the abstract base class for instantiating all user action classes.
 // It has a pure virtual method Build() which is invoked by G4RunManager for
-// sequential execution and G4WorkerRunManager for multi-threaded execution.
+// sequential execution, and G4WorkerRunManager for multi-threaded execution.
 // The additional virtual method BuildForMaster() will be invoked from
 // G4MTRunManager for multi-threaded execution.
 //
-//  Note that these virtual methods are const. It means the user may construct
+// Note that these virtual methods are const. It means the user may construct
 // user action objects, but should not store the pointers of these objects as
 // data members of the derived class.
 //
-// Note for multi-threaded mode:
-//  The only action class the user may set to G4MTRunManager is a run action. It
-//  is
-// then used at the beginning and the end of a run. It may be the same class or
-// a dedicated class different from the run action instantiated for
-// G4WorkerRunManager.
-//
+// Note for multi-threaded mode: the only action class the user may set to
+// G4MTRunManager is a run action. It is then used at the beginning and the
+// end of a run. It may be the same class or a dedicated class different from
+// the run action instantiated for G4WorkerRunManager.
+
+// Author: M.Asai (SLAC), 17 April 2013
+// --------------------------------------------------------------------
+#ifndef G4VUserActionInitialization_hh
+#define G4VUserActionInitialization_hh 1
 
 class G4VUserPrimaryGeneratorAction;
 class G4UserRunAction;
@@ -60,35 +57,39 @@ class G4VSteppingVerbose;
 
 class G4VUserActionInitialization
 {
- public:
-  G4VUserActionInitialization();
-  virtual ~G4VUserActionInitialization();
+  public:
 
- public:  // with description
-  virtual void Build() const = 0;
-  // Virtual method to be implemented by the user to instantiate user action
-  // class objects.
-  virtual void BuildForMaster() const;
-  // Virtual method to be implemented by the user to instantiate user run action
-  // class object to be used by G4MTRunManager. This method is not invoked in
-  // the sequential mode. The user should not use this method to instantiate
-  // user action classes rather than user run action.
-  virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
-  // Virtual method to be implemented by the user if (s)he has a concrete
-  // SteppingVerbose class to be used by the worker thread. In this case
-  // (s)he should instantiate her/his SteppingVerbose in the concrete
-  // implementation of this method and return its pointer. If this method is
-  // not implemented, the default G4SteppingVerbose will be used. Please note
-  // that this method affects only for the worker thread.
+    G4VUserActionInitialization();
+    virtual ~G4VUserActionInitialization();
 
- protected:  // with description
-  void SetUserAction(G4VUserPrimaryGeneratorAction*) const;
-  void SetUserAction(G4UserRunAction*) const;
-  void SetUserAction(G4UserEventAction*) const;
-  void SetUserAction(G4UserStackingAction*) const;
-  void SetUserAction(G4UserTrackingAction*) const;
-  void SetUserAction(G4UserSteppingAction*) const;
-  // These methods should be used to define user's action classes.
+    virtual void Build() const = 0;
+      // Virtual method to be implemented by the user to instantiate
+      // user action class objects.
+
+    virtual void BuildForMaster() const;
+      // Virtual method to be implemented by the user to instantiate user
+      // run action class object to be used by G4MTRunManager. This method
+      // is not invoked in the sequential mode. The user should not use
+      // this method to instantiate user action classes except for user
+      // run action.
+
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+      // Virtual method to be implemented by the user if having a concrete
+      // SteppingVerbose class to be used by the worker thread. In this case
+      // one should instantiate a SteppingVerbose in the concrete
+      // implementation of this method and return its pointer. If this method
+      // is not implemented, the default G4SteppingVerbose will be used.
+      // Please note that this method affects only for the worker thread.
+
+  protected:
+
+    void SetUserAction(G4VUserPrimaryGeneratorAction*) const;
+    void SetUserAction(G4UserRunAction*) const;
+    void SetUserAction(G4UserEventAction*) const;
+    void SetUserAction(G4UserStackingAction*) const;
+    void SetUserAction(G4UserTrackingAction*) const;
+    void SetUserAction(G4UserSteppingAction*) const;
+      // These methods should be used to define user's action classes.
 };
 
 #endif

@@ -4,8 +4,14 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13,7 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x13e86c0
+##### Create analysis manager   0xd67960
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : Analysis_W013
@@ -36,15 +42,15 @@ e-_G4DNAPTBAugerModel is constructed
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_elastic_interaction : Emin=    0 eV  Emax=  100 TeV
+e-_elastic_interaction : Emin=    0 meV Emax=  100 TeV
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_excitation_interaction : Emin=    0 eV  Emax=  100 TeV
+e-_excitation_interaction : Emin=    0 meV Emax=  100 TeV
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_ionisation_interaction : Emin=    0 eV  Emax=  100 TeV
+e-_ionisation_interaction : Emin=    0 meV Emax=  100 TeV
 ... create file : ICSD.root - done
 ... open analysis file : ICSD.root - done
 ... write file : ICSD.root - done

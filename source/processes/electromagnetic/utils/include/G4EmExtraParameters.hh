@@ -111,7 +111,7 @@ public:
   const std::vector<G4String>& RegionsPhysics() const;
   const std::vector<G4String>& TypesPhysics() const;
 
-  void SetSubCutoff(G4bool val, const G4String& region = "");
+  void SetSubCutRegion(const G4String& region);
 
   void SetProcessBiasingFactor(const G4String& procname, 
                                G4double val, G4bool wflag);
@@ -165,7 +165,6 @@ private:
   std::vector<G4String>  m_typesPhys;
 
   std::vector<G4String>  m_regnamesSubCut;
-  std::vector<G4bool>    m_subCuts;
 
   std::vector<G4String>  m_procBiasedXS;
   std::vector<G4double>  m_factBiasedXS;

@@ -49,15 +49,15 @@ G4ThreadLocal G4Allocator<B5HadCalorimeterHit>* B5HadCalorimeterHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HadCalorimeterHit::B5HadCalorimeterHit()
-: G4VHit(), 
-  fColumnID(-1), fRowID(-1), fEdep(0.), fPos(0)
+: G4VHit(),
+  fColumnID(-1), fRowID(-1), fEdep(0.), fPos()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HadCalorimeterHit::B5HadCalorimeterHit(G4int columnID,G4int rowID)
-: G4VHit(), 
-  fColumnID(columnID), fRowID(rowID), fEdep(0.), fPos(0)
+: G4VHit(),
+  fColumnID(columnID), fRowID(rowID), fEdep(0.), fPos()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,20 +121,20 @@ const std::map<G4String,G4AttDef>* B5HadCalorimeterHit::GetAttDefs() const
   auto store = G4AttDefStore::GetInstance("B5HadCalorimeterHit",isNew);
 
   if (isNew) {
-    (*store)["HitType"] 
+    (*store)["HitType"]
       = G4AttDef("HitType","Hit Type","Physics","","G4String");
-    
-    (*store)["Column"] 
+
+    (*store)["Column"]
       = G4AttDef("Column","Column ID","Physics","","G4int");
-    
-    (*store)["Row"] 
+
+    (*store)["Row"]
       = G4AttDef("Row","Row ID","Physics","","G4int");
-    
-    (*store)["Energy"] 
+
+    (*store)["Energy"]
       = G4AttDef("Energy","Energy Deposited","Physics","G4BestUnit",
                  "G4double");
-    
-    (*store)["Pos"] 
+
+    (*store)["Pos"]
       = G4AttDef("Pos", "Position", "Physics","G4BestUnit",
                  "G4ThreeVector");
   }
@@ -146,7 +146,7 @@ const std::map<G4String,G4AttDef>* B5HadCalorimeterHit::GetAttDefs() const
 std::vector<G4AttValue>* B5HadCalorimeterHit::CreateAttValues() const
 {
   auto values = new std::vector<G4AttValue>;
-  
+
   values
     ->push_back(G4AttValue("HitType","HadCalorimeterHit",""));
   values
@@ -158,7 +158,7 @@ std::vector<G4AttValue>* B5HadCalorimeterHit::CreateAttValues() const
     ->push_back(G4AttValue("Energy",G4BestUnit(fEdep,"Energy"),""));
   values
     ->push_back(G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
-  
+
   return values;
 }
 
@@ -168,6 +168,6 @@ void B5HadCalorimeterHit::Print()
 {
   G4cout << "  Cell[" << fRowID << ", " << fColumnID << "] "
     << fEdep/MeV << " (MeV) " << fPos << G4endl;
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

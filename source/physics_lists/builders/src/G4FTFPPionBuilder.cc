@@ -68,20 +68,14 @@ G4FTFPPionBuilder::~G4FTFPPionBuilder()
 }
 
 void G4FTFPPionBuilder::
-Build(G4PionPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  if ( aP->GetParticleDefinition() == G4PionPlus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  } else if ( aP->GetParticleDefinition() == G4PionMinus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+  }
   aP->RegisterMe(theModel);
 }
-
-void G4FTFPPionBuilder::
-Build(G4PionMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
-  aP->RegisterMe(theModel);
-}
-

@@ -36,20 +36,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B2bChamberParameterisation::B2bChamberParameterisation(  
-        G4int    noChambers, 
-        G4double startZ,          //  Z of center of first 
+B2bChamberParameterisation::B2bChamberParameterisation(
+        G4int    noChambers,
+        G4double startZ,          //  Z of center of first
         G4double spacingZ,        //  Z spacing of centers
-        G4double widthChamber, 
-        G4double lengthInitial, 
+        G4double widthChamber,
+        G4double lengthInitial,
         G4double lengthFinal )
  : G4VPVParameterisation()
 {
-   fNoChambers =  noChambers; 
-   fStartZ     =  startZ; 
+   fNoChambers =  noChambers;
+   fStartZ     =  startZ;
    fHalfWidth  =  0.5*widthChamber;
    fSpacing    =  spacingZ;
-   fRmaxFirst = 0.5 * lengthInitial; 
+   fRmaxFirst = 0.5 * lengthInitial;
    if( noChambers > 0 ){
       fRmaxIncr =  0.5 * (lengthFinal-lengthInitial)/(noChambers-1);
       if (spacingZ < widthChamber) {
@@ -74,7 +74,7 @@ void B2bChamberParameterisation::ComputeTransformation
   G4double Zposition = fStartZ + copyNo * fSpacing;
   G4ThreeVector origin(0,0,Zposition);
   physVol->SetTranslation(origin);
-  physVol->SetRotation(0);
+  physVol->SetRotation(nullptr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

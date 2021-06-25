@@ -23,88 +23,89 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// GEANT4 Class file
-//
+// Geant4 Class file
 //
 // File name:     G4PolarizationManager
 //
 // Author:        Andreas Schaelicke
 //
-// Creation date: 01.05.2005
-//
-// Modifications:
-//
 // Class Description:
-//
-// Provides polarization information for logical volumes, and some basic 
-// transformation routines.
-//
+//   Provides polarization information for logical volumes, and some basic
+//   transformation routines.
+
 #include "G4PolarizationManager.hh"
+
+#include "G4LogicalVolume.hh"
 #include "G4PolarizationMessenger.hh"
 #include "G4StokesVector.hh"
 
-#include "G4LogicalVolume.hh"
-
-G4ThreadLocal G4PolarizationManager * G4PolarizationManager::instance = nullptr;
+G4ThreadLocal G4PolarizationManager* G4PolarizationManager::fInstance = nullptr;
 
 G4PolarizationManager* G4PolarizationManager::GetInstance()
 {
-  if (instance == nullptr) instance = new G4PolarizationManager();
-  return instance;
+  if(fInstance == nullptr)
+    fInstance = new G4PolarizationManager();
+  return fInstance;
 }
 
 void G4PolarizationManager::Dispose()
 {
-  if (instance != nullptr)
+  if(fInstance != nullptr)
   {
-    delete instance;
-    instance = nullptr;
+    delete fInstance;
+    fInstance = nullptr;
   }
 }
 
 G4PolarizationManager::G4PolarizationManager()
-  : messenger(nullptr), verboseLevel(0), activated(true)
+  : fMessenger(nullptr)
+  , fVerboseLevel(0)
+  , fActivated(true)
 {
-  messenger = new G4PolarizationMessenger(this);  
+  fMessenger = new G4PolarizationMessenger(this);
 }
 
-G4PolarizationManager::~G4PolarizationManager()
-{  
-}
+G4PolarizationManager::~G4PolarizationManager() {}
 
 void G4PolarizationManager::ListVolumes()
 {
-  if (volumePolarizations.size()==0) return;
-  G4cout<<" Polarization for "<<volumePolarizations.size()
-	<<" registered volume(s) : "<<G4endl;
-  if (!activated) 
-    G4cout<<" but polarization deactivated "<<G4endl;
-  for (auto vp : volumePolarizations) {
+  if(fVolumePolarizations.empty())
+    return;
+  G4cout << " Polarization for " << fVolumePolarizations.size()
+         << " registered volume(s) : " << G4endl;
+  if(!fActivated)
+    G4cout << " but polarization deactivated " << G4endl;
+  for(auto vp : fVolumePolarizations)
+  {
     G4cout << vp.first->GetName() << " : " << vp.second << G4endl;
   }
 }
 
-void G4PolarizationManager::SetVolumePolarization(G4LogicalVolume* lVol, const G4ThreeVector & pol)
+void G4PolarizationManager::SetVolumePolarization(G4LogicalVolume* lVol,
+                                                  const G4ThreeVector& pol)
 {
-  volumePolarizations[lVol]=pol;
-  if (verboseLevel>=1) G4cout<<" SetVolumePolarization "
-			     <<lVol->GetName()<<" "
-			     <<pol<<G4endl;
+  fVolumePolarizations[lVol] = pol;
+  if(fVerboseLevel >= 1)
+    G4cout << " SetVolumePolarization " << lVol->GetName() << " " << pol
+           << G4endl;
 }
 
-void G4PolarizationManager::SetVolumePolarization(const G4String & lVolName, const G4ThreeVector & pol)
+void G4PolarizationManager::SetVolumePolarization(const G4String& lVolName,
+                                                  const G4ThreeVector& pol)
 {
-  for (auto& vp : volumePolarizations) {
-    if (vp.first->GetName()==lVolName) {
-      vp.second=pol;
-      if (verboseLevel>=1) G4cout<<" SetVolumePolarization "
-				 <<lVolName<<" "
-				 <<pol<<G4endl;
+  for(auto& vp : fVolumePolarizations)
+  {
+    if(vp.first->GetName() == lVolName)
+    {
+      vp.second = pol;
+      if(fVerboseLevel >= 1)
+        G4cout << " SetVolumePolarization " << lVolName << " " << pol << G4endl;
       return;
     }
   }
-  G4cout<<" logical volume '"<<lVolName<<"'not registered yet \n"
-	<<" please register before using '/polarization/volume/set' "<<G4endl;
+  G4ExceptionDescription ed;
+  ed << " Logical volume '" << lVolName << "'not registered yet.\n"
+     << " Please register before using '/polarization/volume/set'\n";
+  G4Exception("G4PolarizationManager::SetVolumePolarization", "pol040",
+              FatalException, ed);
 }
-

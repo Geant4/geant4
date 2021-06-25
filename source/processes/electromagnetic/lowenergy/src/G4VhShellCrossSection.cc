@@ -44,24 +44,32 @@
 #include "G4VhShellCrossSection.hh"
 #include "Randomize.hh"
 
-G4VhShellCrossSection::G4VhShellCrossSection(const G4String& xname):name(xname)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4VhShellCrossSection::G4VhShellCrossSection(const G4String& xname)
+ :name(xname)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4VhShellCrossSection::~G4VhShellCrossSection() 
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VhShellCrossSection :: SetTotalCS(G4double)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
                                                G4double incidentEnergy,
 					       G4double mass, 
 					       G4double deltaEnergy,
 					       const G4Material* mat)
-//  returns the shell ionized if the shell exists. If the shell is not counted, it returns -1
-
+//  returns the shell ionized if the shell exists. If the shell is 
+// not counted, it returns -1
 {
-  std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy,mat);
+  std::vector<G4double> p = 
+    Probabilities(Z,incidentEnergy,mass,deltaEnergy,mat);
   G4int shell = -1;
   size_t nShells = p.size();
   G4double q = G4UniformRand();

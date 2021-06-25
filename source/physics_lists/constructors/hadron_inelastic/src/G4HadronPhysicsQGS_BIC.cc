@@ -65,7 +65,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -78,8 +77,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGS_BIC);
 
-G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(G4int)
-    : G4HadronPhysicsQGS_BIC("hInelastic QGS_BIC",true) {}
+G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(G4int verb)
+    : G4HadronPhysicsQGS_BIC("hInelastic QGS_BIC",true) 
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(const G4String& name, G4bool qe)
   : G4HadronPhysicsQGSP_BERT(name, qe) 

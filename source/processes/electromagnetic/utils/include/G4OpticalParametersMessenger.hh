@@ -43,7 +43,6 @@
 #define G4OpticalParametersMessenger_h 1
 
 #include "G4UImessenger.hh"
-//#include "G4OpticalProcessIndex.hh"
 
 #include "globals.hh"
 
@@ -75,19 +74,21 @@ private:
   G4OpticalParametersMessenger(const G4OpticalParametersMessenger& right) = delete;
   G4OpticalParametersMessenger& operator=(const G4OpticalParametersMessenger& right) = delete;
 
-  void Deprecated(void);
-
   // data members
 
   /// associated class
   G4OpticalParameters*      params;
 
   /// command directory
-  G4UIdirectory*         fDir;
-  G4UIdirectory*         fDir2;
-
-  /// selected optical process
-  //G4OpticalProcessIndex  fSelectedProcessIndex;
+  G4UIdirectory*    fDir;
+  G4UIdirectory*    fCerenkovDir;
+  G4UIdirectory*    fScintDir;
+  G4UIdirectory*    fWlsDir;
+  G4UIdirectory*    fWls2Dir;
+  G4UIdirectory*    fBoundaryDir;
+  G4UIdirectory*    fMieDir;
+  G4UIdirectory*    fAbsDir;
+  G4UIdirectory*    fRaylDir;
 
   /// selectOpProcess command
   G4UIcommand*           fActivateProcessCmd;
@@ -95,54 +96,35 @@ private:
   /// setProcessVerbose command
   G4UIcmdWithAnInteger*  fVerboseCmd;
 
-  /// setTrackSecondariesFirst command
-  G4UIcommand*           fTrackSecondariesFirstCmd;
-
   // Cerenkov
 
   // setCerenkovMaxPhotons command
   G4UIcmdWithAnInteger*  fCerenkovMaxPhotonsCmd;
-  G4UIcmdWithAnInteger*  fCerenkovMaxPhotons1Cmd;
 
   /// setCerenkovMaxBetaChange command
   G4UIcmdWithADouble*    fCerenkovMaxBetaChangeCmd;
-  G4UIcmdWithADouble*    fCerenkovMaxBetaChange1Cmd;
 
   /// setStackPhotons command
   G4UIcmdWithABool*      fCerenkovStackPhotonsCmd;
-  G4UIcmdWithABool*      fCerenkovStackPhotons1Cmd;
 
   G4UIcmdWithABool*      fCerenkovTrackSecondariesFirstCmd;
   G4UIcmdWithAnInteger*  fCerenkovVerboseLevelCmd;
 
   // Scintillation
 
-  // setScintillationYieldFactor command
-  G4UIcmdWithADouble*    fScintYieldFactorCmd;
-  G4UIcmdWithADouble*    fScintYieldFactor1Cmd;
-
   /// setScintillationByParticleType command
   G4UIcmdWithABool*      fScintByParticleTypeCmd;
-  G4UIcmdWithABool*      fScintByParticleType1Cmd;
 
   /// setScintillationTrackInfo command
   G4UIcmdWithABool*      fScintTrackInfoCmd;
-  G4UIcmdWithABool*      fScintTrackInfo1Cmd;
 
   /// setStackPhotons command
   G4UIcmdWithABool*      fScintStackPhotonsCmd;
-  G4UIcmdWithABool*      fScintStackPhotons1Cmd;
-
-  G4UIcmdWithADouble*    fScintExcitationRatioCmd;
 
   G4UIcmdWithABool*      fScintTrackSecondariesFirstCmd;
 
   /// setFiniteRiseTime command
   G4UIcmdWithABool*      fScintFiniteRiseTimeCmd;
-  G4UIcmdWithABool*      fScintFiniteRiseTime1Cmd;
-
-  // setEnhancedTimeConstants commnad
-  G4UIcmdWithABool*      fScintEnhancedTimeConstantsCmd;
 
   G4UIcmdWithAnInteger*  fScintVerboseLevelCmd;
 
@@ -150,7 +132,6 @@ private:
 
   /// setWLSTimeProfile command
   G4UIcmdWithAString*    fWLSTimeProfileCmd;
-  G4UIcmdWithAString*    fWLSTimeProfile1Cmd;
   G4UIcmdWithAnInteger*  fWLSVerboseLevelCmd;
 
   // WLS2
@@ -161,7 +142,6 @@ private:
   
   /// setInvokeSD command
   G4UIcmdWithABool*      fBoundaryInvokeSDCmd;
-  G4UIcmdWithABool*      fBoundaryInvokeSD1Cmd;
   G4UIcmdWithAnInteger*  fBoundaryVerboseLevelCmd;
 
   G4UIcmdWithAnInteger*  fAbsorptionVerboseLevelCmd;

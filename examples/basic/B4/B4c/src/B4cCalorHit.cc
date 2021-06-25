@@ -36,7 +36,7 @@
 
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<B4cCalorHit>* B4cCalorHitAllocator = 0;
+G4ThreadLocal G4Allocator<B4cCalorHit>* B4cCalorHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -81,9 +81,9 @@ G4bool B4cCalorHit::operator==(const B4cCalorHit& right) const
 void B4cCalorHit::Print()
 {
   G4cout
-     << "Edep: " 
+     << "Edep: "
      << std::setw(7) << G4BestUnit(fEdep,"Energy")
-     << " track length: " 
+     << " track length: "
      << std::setw(7) << G4BestUnit( fTrackLength,"Length")
      << G4endl;
 }

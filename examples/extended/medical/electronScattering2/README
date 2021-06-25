@@ -74,11 +74,7 @@ This present example, electronScattering2, was the Geant4 code used for this pub
    - "emlowenergy"  low-energy EM physics implementing experimental
                     low-energy models
    
- Physics lists and options can be (re)set with UI commands
-    
- Note that options set through G4EmProcessOptions are global, eg for all particle types.
- In G4 builders, it is shown how to set options per particle type.
-
+ Physics lists and options can be (re)set with UI commands.
        	
  3- PRIMARY GENERATOR
  

@@ -25,7 +25,7 @@
 //
 //
 // ------------------------------------------------------------
-//      GEANT 4 class implementation file 
+//      GEANT 4 class implementation file
 // ------------------------------------------------------------
 //
 
@@ -37,67 +37,66 @@
 #include <iomanip>
 
 //--------------------------------------------------------------------------
-G4ErrorTrajState::G4ErrorTrajState( const G4String& partType,
-                                    const G4Point3D& pos,
-                                    const G4Vector3D& mom,
-                                    const G4ErrorTrajErr& errmat)
-  : fParticleType(partType), fPosition(pos), fMomentum(mom),
-    fError(errmat), theTSType(G4eTS_FREE)
+G4ErrorTrajState::G4ErrorTrajState(const G4String& partType,
+                                   const G4Point3D& pos, const G4Vector3D& mom,
+                                   const G4ErrorTrajErr& errmat)
+  : fParticleType(partType)
+  , fPosition(pos)
+  , fMomentum(mom)
+  , fError(errmat)
+  , theTSType(G4eTS_FREE)
 {
   iverbose = G4ErrorPropagatorData::verbose();
 }
 
-
 //--------------------------------------------------------------------------
-G4ErrorTrajState::G4ErrorTrajState(const G4ErrorTrajState& ts)
-{
-  *this = ts; 
-}
-
+G4ErrorTrajState::G4ErrorTrajState(const G4ErrorTrajState& ts) { *this = ts; }
 
 //--------------------------------------------------------------------------
 G4ErrorTrajState::G4ErrorTrajState(G4ErrorTrajState&& ts)
-  : fParticleType(ts.fParticleType), fPosition(ts.fPosition),
-    fMomentum(ts.fMomentum), fCharge(ts.fCharge),
-    fError(ts.fError), theTSType(ts.theTSType),
-    theG4Track(ts.theG4Track), iverbose(ts.iverbose)
+  : fParticleType(ts.fParticleType)
+  , fPosition(ts.fPosition)
+  , fMomentum(ts.fMomentum)
+  , fCharge(ts.fCharge)
+  , fError(ts.fError)
+  , theTSType(ts.theTSType)
+  , theG4Track(ts.theG4Track)
+  , iverbose(ts.iverbose)
 {
   // Release data from source object
   ts.theG4Track = nullptr;
 }
 
-
 //--------------------------------------------------------------------------
-G4ErrorTrajState& G4ErrorTrajState::operator = (const G4ErrorTrajState& ts)
+G4ErrorTrajState& G4ErrorTrajState::operator=(const G4ErrorTrajState& ts)
 {
   if(this != &ts)
   {
     fParticleType = ts.fParticleType;
-    fPosition = ts.fPosition;
-    fMomentum = ts.fMomentum;
-    fCharge = ts.fCharge;
-    fError = ts.fError;
-    theTSType = ts.theTSType;
-    iverbose = ts.iverbose;
+    fPosition     = ts.fPosition;
+    fMomentum     = ts.fMomentum;
+    fCharge       = ts.fCharge;
+    fError        = ts.fError;
+    theTSType     = ts.theTSType;
+    iverbose      = ts.iverbose;
     delete theG4Track;
     theG4Track = new G4Track(*ts.theG4Track);
   }
   return *this;
 }
 
-
 //--------------------------------------------------------------------------
-G4ErrorTrajState& G4ErrorTrajState::operator = (G4ErrorTrajState&& ts)
+G4ErrorTrajState& G4ErrorTrajState::operator=(G4ErrorTrajState&& ts)
 {
   if(this != &ts)
   {
     fParticleType = ts.fParticleType;
-    fPosition = ts.fPosition;
-    fMomentum = ts.fMomentum;
-    fCharge = ts.fCharge;
-    fError = ts.fError;
-    theTSType = ts.theTSType;
-    iverbose = ts.iverbose;
+    fPosition     = ts.fPosition;
+    fMomentum     = ts.fMomentum;
+    fCharge       = ts.fCharge;
+    fError        = ts.fError;
+    theTSType     = ts.theTSType;
+    iverbose      = ts.iverbose;
     delete theG4Track;
     theG4Track = ts.theG4Track;
 
@@ -107,31 +106,27 @@ G4ErrorTrajState& G4ErrorTrajState::operator = (G4ErrorTrajState&& ts)
   return *this;
 }
 
-
 //--------------------------------------------------------------------------
-G4int G4ErrorTrajState::PropagateError( const G4Track* )
-{ 
-   std::ostringstream message;
-   message << "Wrong trajectory state type !" << G4endl
-           << "Called for trajectory state type: " << G4int(GetTSType());
-   G4Exception("G4ErrorTrajState::PropagateError()", "GEANT4e-Error",
-               FatalException, message);
-   return -1; 
+G4int G4ErrorTrajState::PropagateError(const G4Track*)
+{
+  std::ostringstream message;
+  message << "Wrong trajectory state type !" << G4endl
+          << "Called for trajectory state type: " << G4int(GetTSType());
+  G4Exception("G4ErrorTrajState::PropagateError()", "GEANT4e-Error",
+              FatalException, message);
+  return -1;
 }
 
-
 //--------------------------------------------------------------------------
-void G4ErrorTrajState::UpdatePosMom( const G4Point3D& pos,
-                                     const G4Vector3D& mom )
+void G4ErrorTrajState::UpdatePosMom(const G4Point3D& pos, const G4Vector3D& mom)
 {
   fPosition = pos;
   fMomentum = mom;
 }
 
-
 //--------------------------------------------------------------------------
-void G4ErrorTrajState::SetData( const G4String& partType,
-                                const G4Point3D& pos, const G4Vector3D& mom )
+void G4ErrorTrajState::SetData(const G4String& partType, const G4Point3D& pos,
+                               const G4Vector3D& mom)
 {
   fParticleType = partType;
   BuildCharge();
@@ -139,18 +134,17 @@ void G4ErrorTrajState::SetData( const G4String& partType,
   fMomentum = mom;
 }
 
-
 //--------------------------------------------------------------------------
 void G4ErrorTrajState::BuildCharge()
 {
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle(fParticleType); 
-  if( particle == nullptr )
+  G4ParticleDefinition* particle = particleTable->FindParticle(fParticleType);
+  if(particle == nullptr)
   {
     std::ostringstream message;
     message << "Particle type not defined: " << fParticleType;
-    G4Exception( "G4ErrorTrajState::BuildCharge()", "GEANT4e-error",
-                  FatalException, message);
+    G4Exception("G4ErrorTrajState::BuildCharge()", "GEANT4e-error",
+                FatalException, message);
   }
   else
   {
@@ -158,25 +152,21 @@ void G4ErrorTrajState::BuildCharge()
   }
 }
 
-
 //------------------------------------------------------------------------
-void G4ErrorTrajState::DumpPosMomError( std::ostream& out ) const
+void G4ErrorTrajState::DumpPosMomError(std::ostream& out) const
 {
   out << *this;
 }
-
 
 //--------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4ErrorTrajState& ts)
 {
   //  long mode = out.setf(std::ios::fixed,std::ios::floatfield);
-  out  
-    << " G4ErrorTrajState of type " << ts.theTSType << " : partycle: "
-    << ts.fParticleType << "  position: " << std::setw(6) << ts.fPosition
-    << "              momentum: " << ts.fMomentum
-    << "   error matrix ";
+  out << " G4ErrorTrajState of type " << ts.theTSType
+      << " : partycle: " << ts.fParticleType << "  position: " << std::setw(6)
+      << ts.fPosition << "              momentum: " << ts.fMomentum
+      << "   error matrix ";
   G4cout << ts.fError << G4endl;
 
   return out;
 }
-

@@ -276,28 +276,14 @@ void G4SPSPosDistribution::ConfineSourceToVolume(const G4String& Vname)
   }
 
   G4VPhysicalVolume* tempPV = nullptr;
-  G4PhysicalVolumeStore* PVStore = nullptr;
-  G4String theRequiredVolumeName = VolName;
-  PVStore = G4PhysicalVolumeStore::GetInstance();
-  G4int i = 0;
-  G4bool found = false;
+  G4PhysicalVolumeStore* PVStore = G4PhysicalVolumeStore::GetInstance();
   if(verbosityLevel == 2) { G4cout << PVStore->size() << G4endl; }
 
-  while (!found && i<G4int(PVStore->size()))
-  {
-    tempPV = (*PVStore)[i];
-    found  = tempPV->GetName() == theRequiredVolumeName;
-    if(verbosityLevel == 2)
-    {
-      G4cout << i << " " << " " << tempPV->GetName()
-             << " " << theRequiredVolumeName << " " << found << G4endl;
-    }
-    if (!found) { ++i; }
-  }
+  tempPV = PVStore->GetVolume(VolName);
 
-  // found = true then the volume exists else it doesn't
+  // the volume exists else it doesn't
   //
-  if(found == true)
+  if (tempPV != nullptr)
   {
     if(verbosityLevel >= 1)
     {
@@ -307,7 +293,8 @@ void G4SPSPosDistribution::ConfineSourceToVolume(const G4String& Vname)
   }
   else
   {
-    G4cout << " **** Error: Volume <" << VolName << "> does not exist **** " << G4endl;
+    G4cout << " **** Error: Volume <" << VolName
+           << "> does not exist **** " << G4endl;
     G4cout << " Ignoring confine condition" << G4endl;
     Confine = false;
     VolName = "NULL";

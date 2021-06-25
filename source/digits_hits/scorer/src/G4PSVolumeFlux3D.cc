@@ -36,26 +36,27 @@
 // G4PSVolumeFlux3D
 #include "G4PSVolumeFlux3D.hh"
 
-G4PSVolumeFlux3D::G4PSVolumeFlux3D(G4String name,G4int direction,
-			       G4int ni, G4int nj, G4int nk,
-			       G4int depi, G4int depj, G4int depk)
-    :G4PSVolumeFlux(name,direction),
-     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+G4PSVolumeFlux3D::G4PSVolumeFlux3D(G4String name, G4int direction, G4int ni,
+                                   G4int nj, G4int nk, G4int depi, G4int depj,
+                                   G4int depk)
+  : G4PSVolumeFlux(name, direction)
+  , fDepthi(depi)
+  , fDepthj(depj)
+  , fDepthk(depk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
 }
 
-G4PSVolumeFlux3D::~G4PSVolumeFlux3D()
-{;}
+G4PSVolumeFlux3D::~G4PSVolumeFlux3D() { ; }
 
 G4int G4PSVolumeFlux3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int i = touchable->GetReplicaNumber(fDepthi);
-  G4int j = touchable->GetReplicaNumber(fDepthj);
-  G4int k = touchable->GetReplicaNumber(fDepthk);
-  
-  return i*fNj*fNk+j*fNk+k;
+  G4int i                       = touchable->GetReplicaNumber(fDepthi);
+  G4int j                       = touchable->GetReplicaNumber(fDepthj);
+  G4int k                       = touchable->GetReplicaNumber(fDepthk);
+
+  return i * fNj * fNk + j * fNk + k;
 }

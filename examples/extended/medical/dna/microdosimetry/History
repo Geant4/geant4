@@ -8,6 +8,13 @@
                        Package History file
                        --------------------
 
+23-03-21 V.Ivanchenko - microdosimetry-V10-07-01
+- updated PhysicsList for 11.0: use updated SetEmModel method
+
+03-03-21 V.Ivanchenko - microdosimetry-V10-07-00
+- updated PhysicsList for 11.0: removed thread unsafe SetCuts method,
+  use SetEmModel(..) for multiple scattering.
+
 10-11-20 B. Morgan - microdosimetry-V10-06-00
 - Migration to G4RunManagerFactory.
 

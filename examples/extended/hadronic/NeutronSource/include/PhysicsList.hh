@@ -40,11 +40,11 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
- ~PhysicsList();
+ ~PhysicsList() override;
 
 public:
-  virtual void ConstructProcess();
-  virtual void SetCuts();
+  void ConstructProcess() override;
+  void SetCuts()override;
 
 private:
    G4VPhysicsConstructor* fHadronElastic;

@@ -42,52 +42,28 @@
 G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRadioactivationContainer1)
  :theRadioactivationContainer(theRadioactivationContainer1)
 {
-  old_grdmDirectory = new G4UIdirectory("/grdm/");                                    // To be removed in G4 11.0
-  old_grdmDirectory->SetGuidance("Controls the biased version of radioactive decay");
-
   rdmDirectory = new G4UIdirectory("/process/had/rdm/");
   rdmDirectory->SetGuidance("Controls the biased version of radioactive decay");
 
   // Command to turn on/off variance reduction options
-  old_analoguemcCmd = new G4UIcmdWithABool("/grdm/analogueMC",this);                 // To be removed in G4 11.0
-  old_analoguemcCmd->SetGuidance("false: variance reduction method; true: analogue method");
-  old_analoguemcCmd->SetParameterName("OldAnalogueMC",true);
-  old_analoguemcCmd->SetDefaultValue(true);
-
   analoguemcCmd = new G4UIcmdWithABool("/process/had/rdm/analogueMC",this);
   analoguemcCmd->SetGuidance("false: variance reduction method; true: analogue method");
   analoguemcCmd->SetParameterName("AnalogueMC",true);
   analoguemcCmd->SetDefaultValue(true);
   
   // Command to use branching ratio biasing or not
-  old_brbiasCmd = new G4UIcmdWithABool("/grdm/BRbias",this);                         // To be removed in G4 11.0
-  old_brbiasCmd->SetGuidance("false: no biasing; true: all branches are treated as equal");
-  old_brbiasCmd->SetParameterName("OldBRBias",true);
-  old_brbiasCmd->SetDefaultValue(true);
-
   brbiasCmd = new G4UIcmdWithABool("/process/had/rdm/BRbias",this);
   brbiasCmd->SetGuidance("false: no biasing; true: all branches are treated as equal");
   brbiasCmd->SetParameterName("BRBias",true);
   brbiasCmd->SetDefaultValue(true);
   
   // Command to set the half-life thresold for isomer production
-  old_hlthCmd = new G4UIcmdWithADoubleAndUnit("/grdm/hlThreshold",this);              // To be removed in G4 11.0
-  old_hlthCmd->SetGuidance("Set the h-l threshold for isomer production");
-  old_hlthCmd->SetParameterName("OldhlThreshold",false);
-  old_hlthCmd->SetUnitCategory("Time");
-
   hlthCmd = new G4UIcmdWithADoubleAndUnit("/process/had/rdm/hlThreshold",this);
   hlthCmd->SetGuidance("Set the h-l threshold for isomer production");
   hlthCmd->SetParameterName("hlThreshold",false);
   hlthCmd->SetUnitCategory("Time");
   
   // Command to define the incident particle source time profile
-  old_sourcetimeprofileCmd = new G4UIcmdWithAString("/grdm/sourceTimeProfile",this);  // To be removed in G4 11.0
-  old_sourcetimeprofileCmd->SetGuidance 
-    ("Supply the name of the ascii file containing the source particle time profile");
-  old_sourcetimeprofileCmd->SetParameterName("OldSTimeProfile",true);
-  old_sourcetimeprofileCmd->SetDefaultValue("source.data");
-
   sourcetimeprofileCmd = new G4UIcmdWithAString("/process/had/rdm/sourceTimeProfile",this);
   sourcetimeprofileCmd->SetGuidance 
     ("Supply the name of the ascii file containing the source particle time profile");
@@ -95,12 +71,6 @@ G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRad
   sourcetimeprofileCmd->SetDefaultValue("source.data");
   
   // Command to define the incident particle source time profile
-  old_decaybiasprofileCmd = new G4UIcmdWithAString("/grdm/decayBiasProfile",this);    // To be removed in G4 11.0
-  old_decaybiasprofileCmd->SetGuidance 
-    ("Supply the name of the ascii file containing the decay bias time profile");
-  old_decaybiasprofileCmd->SetParameterName("OldDBiasProfile",true);
-  old_decaybiasprofileCmd->SetDefaultValue("bias.data");
-
   decaybiasprofileCmd = new G4UIcmdWithAString("/process/had/rdm/decayBiasProfile",this);
   decaybiasprofileCmd->SetGuidance 
     ("Supply the name of the ascii file containing the decay bias time profile");
@@ -108,12 +78,6 @@ G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRad
   decaybiasprofileCmd->SetDefaultValue("bias.data");
   
   // Command to set nuclei splitting parameter
-  old_splitnucleiCmd = new G4UIcmdWithAnInteger("/grdm/splitNuclei",this);            // To be removed in G4 11.0
-  old_splitnucleiCmd->SetGuidance("Set number of splitting for the isotopes.");
-  old_splitnucleiCmd->SetParameterName("OldNSplit",true);
-  old_splitnucleiCmd->SetDefaultValue(1);
-  old_splitnucleiCmd->SetRange("OldNSplit>=1");
-
   splitnucleiCmd = new G4UIcmdWithAnInteger("/process/had/rdm/splitNuclei",this);
   splitnucleiCmd->SetGuidance("Set number of splitting for the isotopes.");
   splitnucleiCmd->SetParameterName("NSplit",true);
@@ -124,65 +88,18 @@ G4RadioactivationMessenger::G4RadioactivationMessenger(G4Radioactivation* theRad
 
 G4RadioactivationMessenger::~G4RadioactivationMessenger()
 {
-  delete old_grdmDirectory;         // To be removed in G4 11.0
   delete rdmDirectory;
-  delete old_analoguemcCmd;         // To be removed in G4 11.0
   delete analoguemcCmd;
-  delete old_sourcetimeprofileCmd;  // To be removed in G4 11.0
   delete sourcetimeprofileCmd;
-  delete old_decaybiasprofileCmd;   // To be removed in G4 11.0
   delete decaybiasprofileCmd;
-  delete old_brbiasCmd;             // To be removed in G4 11.0
   delete brbiasCmd;
-  delete old_splitnucleiCmd;        // To be removed in G4 11.0
   delete splitnucleiCmd;
-  delete old_hlthCmd;               // To be removed in G4 11.0
   delete hlthCmd;
 }
 
 
 void G4RadioactivationMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  // Old commands to be removed in G4 11.0
-  if ( command == old_analoguemcCmd ) { theRadioactivationContainer->
-    SetAnalogueMonteCarlo( old_analoguemcCmd->GetNewBoolValue( newValues ) );
-    G4ExceptionDescription ed;
-    ed << "This command is valid but deprecated and will be replaced with the command:\n"
-       << "/process/had/rdm/analogueMC in the next major release, Geant4 version 11.0";
-    G4Exception( "G4RadioactivationMessenger", "HAD_RDM_871", JustWarning, ed );        
-  } else if ( command == old_brbiasCmd ) { theRadioactivationContainer->
-    SetBRBias( old_brbiasCmd->GetNewBoolValue( newValues ) );
-    G4ExceptionDescription ed;
-    ed << "This command is valid but deprecated and will be replaced with the command:\n"
-       << "/process/had/rdm/BRbias in the next major release, Geant4 version 11.0";
-    G4Exception( "G4RadioactivationMessenger", "HAD_RDM_872", JustWarning, ed );        
-  } else if ( command == old_sourcetimeprofileCmd ) { theRadioactivationContainer->
-    SetSourceTimeProfile( newValues );
-    G4ExceptionDescription ed;
-    ed << "This command is valid but deprecated and will be replaced with the command:\n"
-       << "/process/had/rdm/sourceTimeProfile in the next major release, Geant4 version 11.0";
-    G4Exception( "G4RadioactivationMessenger", "HAD_RDM_873", JustWarning, ed );        
-  } else if ( command == old_decaybiasprofileCmd ) { theRadioactivationContainer->
-    SetDecayBias( newValues );
-    G4ExceptionDescription ed;
-    ed << "This command is valid but deprecated and will be replaced with the command:\n"
-       << "/process/had/rdm/decayBiasProfile in the next major release, Geant4 version 11.0";
-    G4Exception( "G4RadioactivationMessenger", "HAD_RDM_874", JustWarning, ed );        
-  } else if ( command == old_splitnucleiCmd ) { theRadioactivationContainer->
-    SetSplitNuclei( old_splitnucleiCmd->GetNewIntValue( newValues ) );
-    G4ExceptionDescription ed;
-    ed << "This command is valid but deprecated and will be replaced with the command:\n"
-       << "/process/had/rdm/splitNuclei in the next major release, Geant4 version 11.0";
-    G4Exception( "G4RadioactivationMessenger", "HAD_RDM_875", JustWarning, ed );        
-  } else if ( command == old_hlthCmd ) { theRadioactivationContainer->
-    SetHLThreshold( old_hlthCmd->GetNewDoubleValue( newValues ) );
-    G4ExceptionDescription ed;
-    ed << "This command is valid but deprecated and will be replaced with the command:\n"
-       << "/process/had/rdm/hlThreshold in the next major release, Geant4 version 11.0";
-    G4Exception( "G4RadioactivationMessenger", "HAD_RDM_876", JustWarning, ed );        
-  }
-
-  // New commands
   if ( command == analoguemcCmd ) { theRadioactivationContainer->
     SetAnalogueMonteCarlo( analoguemcCmd->GetNewBoolValue( newValues ) );
   } else if ( command == brbiasCmd ) { theRadioactivationContainer->

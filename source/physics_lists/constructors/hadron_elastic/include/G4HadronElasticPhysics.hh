@@ -55,8 +55,8 @@ class G4HadronElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  explicit G4HadronElasticPhysics(G4int ver = 0, 
-				  const G4String& nam = "hElasticWEL_CHIPS_XS"); 
+  explicit G4HadronElasticPhysics(G4int ver = 1, 
+				  const G4String& nam = "hElasticWEL_CHIPS_XS");
 
   virtual ~G4HadronElasticPhysics();
 
@@ -79,14 +79,10 @@ public:
 
   void AddXSection(const G4ParticleDefinition*, G4VCrossSectionDataSet*) const; 
 
-private:
-
   // copy constructor and hide assignment operator
   G4HadronElasticPhysics(G4HadronElasticPhysics &) = delete;
   G4HadronElasticPhysics & operator=(const G4HadronElasticPhysics &right) = delete;
 
-protected:
-  G4int verbose;
 };
 #endif
 

@@ -13,7 +13,35 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07-January-2021  Alberto Ribon       (phys-builders-V10-06-15)
+16-April-2021 Ben Morgan             (phys-builder-V10-07-06)
+- Migrate build to modular CMake API
+
+13-April-2021  Alberto Ribon         (phys-builders-V10-07-05)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+18-March-2021  Alberto Ribon         (phys-builders-V10-07-04)
+-  G4BinaryDeuteronBuilder, G4BinaryTritonBuilder, G4BinaryHe3Builder,
+   G4BinaryAlphaBuilder : removed unused header files.
+-  G4VNeutronBuilder, G4NeutronBuilder, G4NeutronPHPBuilder,
+   G4NeutronLENDBuilder, G4PrecoNeutronBuilder,
+   G4BertiniNeutronBuilder, G4BinaryNeutronBuilder, G4INCLXXNeutronBuilder,
+   G4FTFPNeutronBuilder, G4QGSPNeutronBuilder,
+   G4FTFBinaryNeutronBuilder, G4QGSBinaryNeutronBuilder :
+   replace G4HadronCaptureProcess with G4NeutronCaptureProcess,
+   and G4HadronFissionProcess with G4NeutronFissionProcess.
+
+08-March-2021  Alberto Ribon         (phys-builders-V10-07-03)
+-  G4PrecoNeutronBuilder, G4PrecoProtonBuilder, G4INCLXXNeutronBuilder,
+   G4QGSBinaryKaonBuilder : replaced obsoleted cross sections
+   (that have been deleted) with better ones.
+
+04-March-2021  Alberto Ribon         (phys-builders-V10-07-02)
+-  Replaced particle-specific hadronic inelastic processes (that have
+   been deleted) with G4HadronInelasticProcess.
+
+07-January-2021  Alberto Ribon       (phys-builders-V10-07-01)
 -  G4HadronicBuilder : replaced 2-body decays of bottom mesons into
    charmed mesons and charged rho resonance, with 3-body decays into
    the same charmed mesons and charged pion and neutral pion.
@@ -21,10 +49,10 @@ introduced in the code and keeptrack of all tags.
    kinematics in the rest frame, avoiding spurious energy-momentum
    violations reported by G4DecayProducts::IsChecked.
 
-07-December-2020  Vladimir Ivanchenko (phys-builders-V10-06-14)
--  OrderingParameterTable - added forgotten processes (general 
-   positron, surface reflection, DNA) coherently with 
-   G4PhysicsListHelper 
+07-December-2020  Vladimir Ivanchenko (phys-builders-V10-07-00)
+-  OrderingParameterTable - added forgotten processes (general
+   positron, surface reflection, DNA) coherently with
+   G4PhysicsListHelper
 
 19-October-2020  Vladimir Ivanchenko (phys-builders-V10-06-13)
 -  G4HadronicBuilder - added methods for FTFQGSP_BERT physics
@@ -47,8 +75,8 @@ introduced in the code and keeptrack of all tags.
    is enabled.
 
 19-July-2020  Vladimir Ivanchenko   (phys-builders-V10-06-08)
--  G4HadronicBuilder - make two method private to avoid incorrect 
-     use, do not use Bertini cascade for b-, c - particles and 
+-  G4HadronicBuilder - make two method private to avoid incorrect
+     use, do not use Bertini cascade for b-, c - particles and
      anti-hyperons (only FTFP model)
 
 30-June-2020  Vladimir Ivanchenko   (phys-builders-V10-06-07)

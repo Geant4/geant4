@@ -30,13 +30,13 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
+#include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
+#include "Randomize.hh"
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
@@ -44,7 +44,6 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
-#include "SteppingVerbose.hh"
 
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
@@ -62,16 +61,17 @@ int main(int argc,char** argv) {
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  //construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
-#else
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  //use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
 
+  //construct the run manager
+  auto runManager = G4RunManagerFactory::CreateRunManager();  
+  if (argc==3) {
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+  }  
+  
   //set mandatory initialization classes
   DetectorConstruction* det= new DetectorConstruction;
   runManager->SetUserInitialization(det);
@@ -85,19 +85,12 @@ int main(int argc,char** argv) {
 
   // Replaced HP environmental variables with C++ calls
   G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes( false );
-  G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState( false );
-  G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation( false );
+  G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState( true );
+  G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation( true );
   G4ParticleHPManager::GetInstance()->SetNeglectDoppler( false );
   G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( false );
   G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel( false );
   G4ParticleHPManager::GetInstance()->SetUseNRESP71Model( false );
-  //G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes( true );
-  //G4ParticleHPManager::GetInstance()->SetDoNotAdjustFinalState( true );
-  //G4ParticleHPManager::GetInstance()->SetUseOnlyPhotoEvaporation( true );
-  //G4ParticleHPManager::GetInstance()->SetNeglectDoppler( true );
-  //G4ParticleHPManager::GetInstance()->SetProduceFissionFragments( true );
-  //G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel( true );
-  //G4ParticleHPManager::GetInstance()->SetUseNRESP71Model( true );
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

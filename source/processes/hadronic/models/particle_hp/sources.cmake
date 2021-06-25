@@ -1,24 +1,8 @@
-#-----------------------------------------------------------------------
-# sources.cmake
-# Module : G4had_par_hp
-# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4had_par_hp
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitly.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#-----------------------------------------------------------------------
+# - G4had_par_hp module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4had_par_hp
-  HEADERS
+geant4_add_module(G4had_par_hp
+  PUBLIC_HEADERS
     G4InterpolationIterator.hh
     G4InterpolationManager.hh
     G4InterpolationScheme.hh
@@ -393,48 +377,28 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
 	G4FPYNormalFragmentDist.cc
 	G4FPYSamplingOps.cc
 	G4ShiftedGaussian.cc
-	G4WendtFissionFragmentGenerator.cc
+	G4WendtFissionFragmentGenerator.cc)
 ### Fission Fragment Generator - end
-  GRANULAR_DEPENDENCIES
+
+geant4_module_link_libraries(G4had_par_hp
+  PUBLIC
     G4baryons
     G4bosons
-    G4geometrymng
     G4globman
-    G4had_mod_man
-    G4had_mod_util
-    G4hadronic_deex_management
-    G4hadronic_deex_photon_evaporation
-    G4hadronic_deex_util
     G4hadronic_mgt
-    G4hadronic_proc
     G4hadronic_util
     G4hadronic_xsect
-    G4ions
+    G4heprandom
+    G4intercoms
     G4leptons
     G4materials
-    G4mesons
     G4partman
-    G4procman
-    G4track
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4materials
-    G4particles
-    G4track
-  LINK_LIBRARIES
-    ${ZLIB_LIBRARIES}
-  SOURCES_EXCLUDE_FORMAT
-    G4ParticleHPFastLegendre.cc
-    G4ParticleHPFastLegendre_14.cc
-    G4ParticleHPFastLegendre_18.cc
-    G4ParticleHPFastLegendre_21.cc
-    G4ParticleHPFastLegendre_24.cc
-    G4ParticleHPFastLegendre_26.cc
-    G4ParticleHPFastLegendre_28.cc
-    G4ParticleHPFastLegendre_30.cc
-  )
+  PRIVATE
+    G4hadronic_deex_photon_evaporation
+    G4hepgeometry
+    G4ions
+    ${ZLIB_LIBRARIES})
+
 
 # List any source specific properties here
 if(GEANT4_BUILD_PHP_AS_HP)

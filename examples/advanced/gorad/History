@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th, 2021 B. Morgan (gorad-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+March 29th, 2021  Gabriele Cosmo (gorad-V10-07-00)
+- Fixed shadowing compilation warnings in GRInitialization.
+
 November 16th, 2020  Makoto Asai (gorad-V10-06-06)
 - GRGeomBiasMessenger.cc : Fix compilation warning.
 

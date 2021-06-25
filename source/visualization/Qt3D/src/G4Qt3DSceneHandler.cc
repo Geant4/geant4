@@ -128,7 +128,8 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
 
   if (fReadyForTransients) {  // All transients hang from this node
     newNode = new G4Qt3DQEntity(fpTransientObjects);
-    newNode->setObjectName(fpModel->GetGlobalTag().c_str());
+    G4String name = fpModel? fpModel->GetGlobalTag(): "User";
+    newNode->setObjectName(name.c_str());
     return newNode;
   }
 
@@ -467,7 +468,7 @@ void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   }
 }
 
-void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
+void G4Qt3DSceneHandler::AddPrimitive(const G4Text& /*text*/) {
 #ifdef G4QT3DDEBUG
   G4cout <<
   "G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) called.\n"
@@ -483,6 +484,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
                 "Text drawing doesn't work yet");
   }  // OK. Not working, but let it execute, which it does without error.
 
+  /* But it crashes after /vis/viewer/rebuild!!!
   auto currentNode = CreateNewNode();
   if (!currentNode) return;  // Node not available
 
@@ -490,7 +492,8 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
 
   auto position = fObjectTransformation*G4Translate3D(text.GetPosition());
   auto transform = G4Qt3DUtils::CreateQTransformFrom(position);
-  transform->setScale(10);
+//  transform->setScale(10);
+  transform->setScale(0.1);
 
 //  auto currentEntity = new Qt3DCore::QEntity(currentNode);
 
@@ -499,8 +502,10 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
   qtext->setParent(currentNode);
 //  qtext->setParent(currentEntity);  // ??  Doesn't help
   qtext->setText(text.GetText().c_str());
-  qtext->setHeight(100);
-  qtext->setWidth(1000);
+//  qtext->setHeight(100);
+//  qtext->setWidth(1000);
+  qtext->setHeight(20);
+  qtext->setWidth(100);
   qtext->setColor(Qt::green);
   qtext->setFont(QFont("Courier New", 10));
   qtext->addComponent(transform);
@@ -520,6 +525,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Text& text) {
 //  currentNode->addComponent(material);
 //  currentNode->addComponent(transform);
 //  currentNode->addComponent(textMesh);
+   */
 }
 
 void G4Qt3DSceneHandler::AddPrimitive(const G4Circle& circle)
@@ -704,7 +710,10 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       if(isAuxilaryEdgeVisible||edgeFlag[2]>0)insertIfNew(Line(vertex[2],vertex[3]));
       if(isAuxilaryEdgeVisible||edgeFlag[3]>0)insertIfNew(Line(vertex[3],vertex[0]));
     } else {
-      G4cerr << "ERROR: polyhedron face with more than 4 edges" << G4endl;
+      G4cerr
+      << "ERROR: polyhedron face with unexpected number of edges (" << nEdges << ')'
+      << "\n  Tag: " << fpModel->GetCurrentTag()
+      << G4endl;
       return;
     }
   } while (notLastFace);

@@ -6,6 +6,9 @@
                        Package History file
                        --------------------
 
+31 Dec 2020 J. Allison - tag neuron-V10-07-00
+- Change /vis/ogl/set/ to /vis/viewer/set/timeWindow/.
+
 26 Nov 2020 B. Morgan - tag neuron-V10-06-00
 - Migration to G4RunManagerFactory.
 

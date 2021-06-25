@@ -11,7 +11,7 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics QGSP_BIC_EMY
+/Physics/addPhysics HADRONTHERAPY_1
 /run/numberOfThreads 16
 
 ######## Geometry selection #######

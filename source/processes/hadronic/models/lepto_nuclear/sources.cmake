@@ -1,89 +1,51 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4had_muon_nuclear
-# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4lepto_nuclear
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitly.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - G4had_lept_nuclear module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
-    HEADERS
-        G4ANuElNucleusCcModel.hh
-        G4ANuElNucleusNcModel.hh
-        G4ANuMuNucleusCcModel.hh
-        G4ANuMuNucleusNcModel.hh
-        G4ElectroVDNuclearModel.hh
-        G4MuonVDNuclearModel.hh
-        G4NeutrinoElectronCcModel.hh
-        G4NeutrinoNucleusModel.hh
-        G4NuElNucleusCcModel.hh
-        G4NuElNucleusNcModel.hh
-        G4NuMuNucleusCcModel.hh
-        G4NuMuNucleusNcModel.hh
-    SOURCES
-        G4ANuElNucleusCcModel.cc
-        G4ANuElNucleusNcModel.cc
-        G4ANuMuNucleusCcModel.cc
-        G4ANuMuNucleusNcModel.cc
-        G4ElectroVDNuclearModel.cc
-        G4MuonVDNuclearModel.cc
-        G4NeutrinoElectronCcModel.cc
-        G4NeutrinoNucleusModel.cc
-        G4NuElNucleusCcModel.cc
-        G4NuElNucleusNcModel.cc
-        G4NuMuNucleusCcModel.cc
-        G4NuMuNucleusNcModel.cc
-    GRANULAR_DEPENDENCIES
-        G4baryons
-        G4bosons
-        G4geometrymng
-        G4globman
-        G4had_mod_man
-        G4had_mod_util
-        G4had_preequ_exciton
-        G4had_string_diff
-        G4had_string_frag
-        G4had_string_man
-        G4had_theo_max
-        G4hadronic_bert_cascade
-        G4hadronic_deex_evaporation
-        G4hadronic_deex_fermi_breakup
-        G4hadronic_deex_handler
-        G4hadronic_deex_management
-        G4hadronic_deex_multifragmentation
-        G4hadronic_deex_photon_evaporation
-        G4hadronic_deex_util
-        G4hadronic_mgt
-        G4hadronic_proc
-        G4hadronic_util
-        G4hadronic_xsect
-        G4ions
-        G4leptons
-        G4materials
-        G4mesons
-        G4partman
-        G4procman
-        G4track
-        G4volumes
-    GLOBAL_DEPENDENCIES
-        G4geometry
-        G4global
-        G4materials
-        G4particles
-        G4track
-    LINK_LIBRARIES
-)
+geant4_add_module(G4had_lept_nuclear
+  PUBLIC_HEADERS
+    G4ANuElNucleusCcModel.hh
+    G4ANuElNucleusNcModel.hh
+    G4ANuMuNucleusCcModel.hh
+    G4ANuMuNucleusNcModel.hh
+    G4ElectroVDNuclearModel.hh
+    G4MuonVDNuclearModel.hh
+    G4NeutrinoElectronCcModel.hh
+    G4NeutrinoNucleusModel.hh
+    G4NuElNucleusCcModel.hh
+    G4NuElNucleusNcModel.hh
+    G4NuMuNucleusCcModel.hh
+    G4NuMuNucleusNcModel.hh
+  SOURCES
+    G4ANuElNucleusCcModel.cc
+    G4ANuElNucleusNcModel.cc
+    G4ANuMuNucleusCcModel.cc
+    G4ANuMuNucleusNcModel.cc
+    G4ElectroVDNuclearModel.cc
+    G4MuonVDNuclearModel.cc
+    G4NeutrinoElectronCcModel.cc
+    G4NeutrinoNucleusModel.cc
+    G4NuElNucleusCcModel.cc
+    G4NuElNucleusNcModel.cc
+    G4NuMuNucleusCcModel.cc
+    G4NuMuNucleusNcModel.cc)
 
-# List any source specific properties here
-
+geant4_module_link_libraries(G4had_lept_nuclear
+  PUBLIC
+    G4globman
+    G4hadronic_mgt
+    G4hadronic_util
+    G4hepgeometry
+    G4partman
+  PRIVATE
+    G4had_preequ_exciton
+    G4had_string_diff
+    G4had_string_frag
+    G4had_theo_max
+    G4hadronic_bert_cascade
+    G4hadronic_binary
+    G4hadronic_deex_handler
+    G4hadronic_qgstring
+    G4hadronic_xsect
+    G4heprandom
+    G4leptons
+    G4materials)

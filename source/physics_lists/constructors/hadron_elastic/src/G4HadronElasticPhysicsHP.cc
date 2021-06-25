@@ -45,6 +45,7 @@
 #include "G4HadronElastic.hh"
 #include "G4ParticleHPElastic.hh"
 #include "G4ParticleHPElasticData.hh"
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -54,7 +55,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsHP);
 G4HadronElasticPhysicsHP::G4HadronElasticPhysicsHP(G4int ver)
   : G4HadronElasticPhysics(ver, "hElasticWEL_CHIPS_HP")
 {
-  if(verbose > 1) { 
+  if(ver > 1) { 
     G4cout << "### G4HadronElasticPhysicsHP: " << GetPhysicsName() 
 	   << G4endl; 
   }
@@ -76,7 +77,7 @@ void G4HadronElasticPhysicsHP::ConstructProcess()
     hel->AddDataSet(new G4ParticleHPElasticData());
   }
 
-  if(verbose > 1) {
+  if(G4HadronicParameters::Instance()->GetVerboseLevel() > 1) {
     G4cout << "### HadronElasticPhysicsHP is constructed " 
 	   << G4endl;
   }

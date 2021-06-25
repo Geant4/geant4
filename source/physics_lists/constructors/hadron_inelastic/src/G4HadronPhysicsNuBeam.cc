@@ -55,9 +55,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsNuBeam);
 
-G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(G4int) :
+G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(G4int verb) :
     G4HadronPhysicsNuBeam("hInelasticNuBeam",false)
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsNuBeam::G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic)
     :  G4HadronPhysicsFTFP_BERT(name,quasiElastic)
@@ -110,14 +112,15 @@ void G4HadronPhysicsNuBeam::Proton()
 
   const G4ParticleDefinition* proton = G4Proton::Proton();
   G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(proton);
-  if(inel) { 
+  if(nullptr != inel) { 
     if( useFactorXS ) inel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
   }
 }
 
 void G4HadronPhysicsNuBeam::ConstructProcess()
 {
-  if(G4Threading::IsMasterThread()) {
+  if(G4Threading::IsMasterThread() &&
+     G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
       DumpBanner();
   }
   CreateModels();

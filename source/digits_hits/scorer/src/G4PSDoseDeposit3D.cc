@@ -34,54 +34,55 @@
 //
 // Created: 2008-08-14  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name,
-				     G4int ni, G4int nj, G4int nk,
-				     G4int di, G4int dj, G4int dk)
-    :G4PSDoseDeposit(name),
-     fDepthi(di),fDepthj(dj),fDepthk(dk)
+G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name, G4int ni, G4int nj,
+                                     G4int nk, G4int di, G4int dj, G4int dk)
+  : G4PSDoseDeposit(name)
+  , fDepthi(di)
+  , fDepthj(dj)
+  , fDepthk(dk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
 }
 
-G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name,
-				     const G4String& unit,
-				     G4int ni, G4int nj, G4int nk,
-				     G4int di, G4int dj, G4int dk)
-    :G4PSDoseDeposit(name),
-     fDepthi(di),fDepthj(dj),fDepthk(dk)
+G4PSDoseDeposit3D::G4PSDoseDeposit3D(G4String name, const G4String& unit,
+                                     G4int ni, G4int nj, G4int nk, G4int di,
+                                     G4int dj, G4int dk)
+  : G4PSDoseDeposit(name)
+  , fDepthi(di)
+  , fDepthj(dj)
+  , fDepthk(dk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
   SetUnit(unit);
 }
 
-G4PSDoseDeposit3D::~G4PSDoseDeposit3D()
-{;}
+G4PSDoseDeposit3D::~G4PSDoseDeposit3D() { ; }
 
 G4int G4PSDoseDeposit3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int i = touchable->GetReplicaNumber(fDepthi);
-  G4int j = touchable->GetReplicaNumber(fDepthj);
-  G4int k = touchable->GetReplicaNumber(fDepthk);
-  
-if(i<0||j<0||k<0)
-{ 
-  G4ExceptionDescription ED;
-  ED << "GetReplicaNumber is negative" << G4endl
-     << "touchable->GetReplicaNumber(fDepthi) returns i,j,k = "
-     << i << "," << j << "," << k << " for volume " 
-     << touchable->GetVolume(fDepthi)->GetName() << ","
-     << touchable->GetVolume(fDepthj)->GetName() << ","
-     << touchable->GetVolume(fDepthk)->GetName() << G4endl;
-  G4Exception("G4PSDoseDeposit3D::GetIndex","DetPS0005",JustWarning,ED);
-}
+  G4int i                       = touchable->GetReplicaNumber(fDepthi);
+  G4int j                       = touchable->GetReplicaNumber(fDepthj);
+  G4int k                       = touchable->GetReplicaNumber(fDepthk);
 
-  return i*fNj*fNk+j*fNk+k;
+  if(i < 0 || j < 0 || k < 0)
+  {
+    G4ExceptionDescription ED;
+    ED << "GetReplicaNumber is negative" << G4endl
+       << "touchable->GetReplicaNumber(fDepthi) returns i,j,k = " << i << ","
+       << j << "," << k << " for volume "
+       << touchable->GetVolume(fDepthi)->GetName() << ","
+       << touchable->GetVolume(fDepthj)->GetName() << ","
+       << touchable->GetVolume(fDepthk)->GetName() << G4endl;
+    G4Exception("G4PSDoseDeposit3D::GetIndex", "DetPS0005", JustWarning, ED);
+  }
+
+  return i * fNj * fNk + j * fNk + k;
 }

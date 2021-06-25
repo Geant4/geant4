@@ -80,18 +80,10 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddSolid (const G4Ellipsoid& ellipsoid);
         void AddSolid (const G4TessellatedSolid& tess);
         void AddSolid (const G4VSolid& solid);
-        
+
+        using G4VSceneHandler::AddCompound;
         void AddCompound (const G4VTrajectory&);
         void AddCompound (const G4VHit& hit);
-        void AddCompound (const G4VDigi& digi) {
-	  G4VSceneHandler::AddCompound(digi);
-	}
-        void AddCompound (const G4THitsMap<G4double>& hits) {
-	  G4VSceneHandler::AddCompound(hits);
-	}
-        void AddCompound (const G4THitsMap<G4StatDouble>& hits) {
-	  G4VSceneHandler::AddCompound(hits);
-	}
 
         void PreAddSolid (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
         void PostAddSolid ();

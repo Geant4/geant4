@@ -1,0 +1,32 @@
+
+
+This example demonstrates integration of the navigation elements of
+[VecGeom](https://gitlab.cern.ch/VecGeom/VecGeom), to investigate the
+performance benefits.
+
+This integration is in development. Supporting Placement volumes -- other
+volumes would be handled by existing Geant4 navigation.
+
+The example loads a GDML file for the geometry, and can execute a batch
+file (first) or run interactive commands or both.
+
+# Installation / Configuration
+
+## Dependencies
+
+In addition to Geant4, two projects: are required VecGeom and G4VecGeomNav.
+VecCore is also required, but can be found through VecGeom.
+
+It is optionally possible to use Root in G4VecGeomNav to store voxel
+information for safety computation.  These can require significant computation
+to calculate if at least one logical volume contains many daughter volume.
+
+## Configuration
+- To configure you must set:
+
+     setenv CMAKE_PREFIX_PATH "${VECCORE_DIR}:${VECGEOM_DIR}"
+
+or if you are using Vc from Root
+     setenv CMAKE_PREFIX_PATH "${ROOTSYS}:${VECGEOM_DIR}"
+where VecGeom has also been built with the same installation of Vc from Root.
+

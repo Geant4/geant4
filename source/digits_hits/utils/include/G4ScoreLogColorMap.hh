@@ -34,18 +34,16 @@
 
 class G4ScoreLogColorMap : public G4VScoreColorMap
 {
-  public:
-      G4ScoreLogColorMap(G4String mName);
-      virtual ~G4ScoreLogColorMap();
+ public:
+  G4ScoreLogColorMap(G4String mName);
+  virtual ~G4ScoreLogColorMap();
 
-  public:
-      virtual void GetMapColor(G4double val, G4double color[4]);
+ public:
+  virtual void GetMapColor(G4double val, G4double color[4]);
 
   // draw a color chart
   virtual void DrawColorChartBar(G4int nPoint);
   virtual void DrawColorChartText(G4int nPoint);
-
 };
 
 #endif
-

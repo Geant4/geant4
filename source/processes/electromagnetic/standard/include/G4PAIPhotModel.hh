@@ -112,6 +112,10 @@ public:
 
   inline void SetVerboseLevel(G4int verbose);
 
+  // hide assignment operator 
+  G4PAIPhotModel & operator=(const  G4PAIPhotModel &right) = delete;
+  G4PAIPhotModel(const  G4PAIPhotModel&) = delete;
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -122,10 +126,6 @@ private:
   inline G4int FindCoupleIndex(const G4MaterialCutsCouple*);
 
   inline void SetParticle(const G4ParticleDefinition* p);
-
-  // hide assignment operator 
-  G4PAIPhotModel & operator=(const  G4PAIPhotModel &right) = delete;
-  G4PAIPhotModel(const  G4PAIPhotModel&) = delete;
 
   G4int                       fVerbose; 
 

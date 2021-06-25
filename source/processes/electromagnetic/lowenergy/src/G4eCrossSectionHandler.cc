@@ -31,19 +31,22 @@
 // 1  Jun 2011   V.Ivanchenko  Created
 //
 // -------------------------------------------------------------------
-
 #include "G4eCrossSectionHandler.hh"
 #include "G4VDataSetAlgorithm.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4eCrossSectionHandler::G4eCrossSectionHandler(G4VDataSetAlgorithm* alg,
   G4double emin, G4double emax, G4int nbin): G4VCrossSectionHandler()
 { 
   G4VCrossSectionHandler::Initialise(alg, emin, emax, nbin);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4eCrossSectionHandler::~G4eCrossSectionHandler()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 std::vector<G4VEMDataSet*>*
 G4eCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector&,
 						       const G4DataVector*)
@@ -52,3 +55,4 @@ G4eCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector&,
   return matCrossSections;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

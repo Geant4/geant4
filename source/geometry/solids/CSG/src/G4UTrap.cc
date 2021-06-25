@@ -174,6 +174,25 @@ G4double G4UTrap::GetThetaSphi() const
 {
   return GetTanThetaSinPhi();
 }
+G4double G4UTrap::GetPhi() const       
+{
+   return std::atan2(GetTanThetaSinPhi(),GetTanThetaCosPhi());
+}
+G4double G4UTrap::GetTheta() const
+{
+   const G4double tanThetaCphi=GetTanThetaSinPhi();
+   const G4double tanThetaSphi=GetTanThetaCosPhi();
+   return std::atan( std::sqrt(tanThetaCphi*tanThetaCphi
+                               +tanThetaSphi*tanThetaSphi));
+}
+G4double G4UTrap::GetAlpha1() const
+{
+   return std::atan(GetTanAlpha1());
+}
+G4double G4UTrap::GetAlpha2() const
+{
+  return std::atan(GetTanAlpha2());
+}
 TrapSidePlane G4UTrap::GetSidePlane(G4int n) const
 {
   TrapSidePlane plane;

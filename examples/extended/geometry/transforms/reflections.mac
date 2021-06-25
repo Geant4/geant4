@@ -1,0 +1,16 @@
+## macro for example transforms
+## in interactive mode
+#
+/control/verbose  1
+/run/verbose 0
+/tracking/verbose 1
+#
+/placement/setMethod WithReflections
+#
+/control/execute vis.mac
+# Specify view angle:
+/vis/viewer/set/viewpointThetaPhi 90. 120.
+#
+/gun/direction 1.732 1. -2.
+/run/beamOn 1
+

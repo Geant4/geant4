@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "CCalActionInitializer.hh"
 
@@ -33,52 +31,23 @@
 #include "CCalRunAction.hh"
 #include "CCalPrimaryGeneratorAction.hh"
 #include "CCalSteppingAction.hh"
+#include "CCalStackingAction.hh"
 
-#include "G4RunManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+CCalActionInitializer::CCalActionInitializer() {}
 
-CCalActionInitializer::CCalActionInitializer() 
-{;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void CCalActionInitializer::Build() const 
-{
-  ////////////////////////////
-  //  User action classes.  //
-  //  --------------------  //
-  ////////////////////////////
-
-  //////////////////////////////////
-  // PRIMARY PARTICLEs GENERATION //
-  //////////////////////////////////
-
-  CCalPrimaryGeneratorAction* primaryGenerator = 
-    new CCalPrimaryGeneratorAction;
-  SetUserAction(primaryGenerator);
-
-  //////////
-  // STEP //
-  //////////
-  CCalSteppingAction* theSteppingAction = 
-    new CCalSteppingAction;  
-  SetUserAction(theSteppingAction);
-
-  /////////
-  // RUN //
-  /////////
-
-  SetUserAction(new CCalRunAction);
-  
-  ///////////
-  // EVENT //
-  ///////////
-  SetUserAction(new CCalEventAction(primaryGenerator,theSteppingAction));
+void CCalActionInitializer::Build() const {
+  CCalPrimaryGeneratorAction* primaryGenerator = new CCalPrimaryGeneratorAction;
+  SetUserAction( primaryGenerator );
+  CCalSteppingAction* theSteppingAction = new CCalSteppingAction;  
+  SetUserAction( theSteppingAction );
+  SetUserAction( new CCalRunAction );
+  SetUserAction( new CCalEventAction( primaryGenerator, theSteppingAction ) );
+  SetUserAction( new CCalStackingAction );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void CCalActionInitializer::BuildForMaster() const
-{;}
-
+void CCalActionInitializer::BuildForMaster() const {
+  SetUserAction( new CCalRunAction );
+}

@@ -1,31 +1,19 @@
-#------------------------------------------------------------------------------
-# Module : G4globman
-# Package: Geant4.src.G4global.G4globman
-#------------------------------------------------------------------------------
+# - G4globman module build definition
 
-# Configure header for preprocessor symbols
-#
+# - Configure header for preprocessor symbols
 # Convert CMake variables -> #cmakedefine symbols
 set(G4MULTITHREADED ${GEANT4_BUILD_MULTITHREADED})
 set(G4_STORE_TRAJECTORY ${GEANT4_BUILD_STORE_TRAJECTORY})
 set(G4VERBOSE ${GEANT4_BUILD_VERBOSE_CODE})
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/include/G4GlobalConfig.hh.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/G4GlobalConfig.hh
-  )
-
-# WORKAROUND: When building/testing examples uing ROOT, ROOT's
-# dictionary generation is not smart enough to handle target usage
-# requirements for include paths. Explicitly add the path to the
-# generated header into build time include paths...
-set_property(GLOBAL APPEND
-  PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")
+  ${CMAKE_CURRENT_BINARY_DIR}/include/G4GlobalConfig.hh)
 
 #
 # Define the Geant4 Module.
 #
-geant4_define_module(NAME G4globman
-  HEADERS
+geant4_add_module(G4globman
+  PUBLIC_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/include/G4GlobalConfig.hh
     globals.hh
     templates.hh
@@ -56,12 +44,12 @@ geant4_define_module(NAME G4globman
     G4ExceptionSeverity.hh
     G4Exp.hh
     G4FilecoutDestination.hh
+    G4Filesystem.hh
     G4FPEDetection.hh
     G4FastVector.hh
     G4GeometryTolerance.hh
     G4LockcoutDestination.hh
     G4Log.hh
-    G4LPhysicsFreeVector.hh
     G4MasterForwardcoutDestination.hh
     G4MTBarrier.hh
     G4MTcoutDestination.hh
@@ -70,10 +58,8 @@ geant4_define_module(NAME G4globman
     G4PhysicalConstants.hh
     G4PhysicsFreeVector.hh
     G4PhysicsLinearVector.hh
-    G4PhysicsLnVector.hh
     G4PhysicsLogVector.hh
     G4PhysicsModelCatalog.hh
-    G4PhysicsOrderedFreeVector.hh
     G4PhysicsTable.hh
     G4PhysicsTable.icc
     G4PhysicsVector.hh
@@ -127,7 +113,6 @@ geant4_define_module(NAME G4globman
     G4GeometryTolerance.cc
     G4ios.cc
     G4LockcoutDestination.cc
-    G4LPhysicsFreeVector.cc
     G4MasterForwardcoutDestination.cc
     G4MTBarrier.cc
     G4MTcoutDestination.cc
@@ -136,7 +121,6 @@ geant4_define_module(NAME G4globman
     G4PhysicsLinearVector.cc
     G4PhysicsLogVector.cc
     G4PhysicsModelCatalog.cc
-    G4PhysicsOrderedFreeVector.cc
     G4PhysicsTable.cc
     G4PhysicsVector.cc
     G4Physics2DVector.cc
@@ -145,20 +129,31 @@ geant4_define_module(NAME G4globman
     G4ReferenceCountedHandle.cc
     G4SliceTimer.cc
     G4StateManager.cc
+    G4ThreadLocalSingleton.cc
     G4Threading.cc
     G4Timer.cc
     G4UnitsTable.cc
     G4VExceptionHandler.cc
     G4VNotifier.cc
-    G4VStateDependent.cc
-  LINK_LIBRARIES
+    G4VStateDependent.cc)
+
+# - Add path to generated header
+geant4_module_include_directories(G4globman
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>)
+
+geant4_module_link_libraries(G4globman
+  PUBLIC
     ${CLHEP_LIBRARIES}
     ${timemory_LIBRARIES}
     ${PTL_LIBRARIES}  # for index_sequence implementation. Remove after C++14
-)
+    ${GEANT4_CXX_FILESYSTEM_LIBRARY} # to temporarily support libstdc++fs, libc++fs
+    )
 
-# List any source specific properties here
-# For new system, must explicitly add path for generated header
-geant4_module_include_directories(G4globman
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-)
+# TEMP WORKAROUND: When building/testing examples uing ROOT, ROOT's
+# dictionary generation is not smart enough to handle target usage
+# requirements for include paths. Explicitly add the path to the
+# generated header into build time include paths...
+# We eventually want to do this through "..._include_directories" or to
+# remove entirely and require a min version of ROOT
+set_property(GLOBAL APPEND
+  PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")

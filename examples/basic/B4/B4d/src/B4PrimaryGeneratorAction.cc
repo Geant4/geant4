@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4PrimaryGeneratorAction.cc
 /// \brief Implementation of the B4PrimaryGeneratorAction class
 
@@ -51,7 +51,7 @@ B4PrimaryGeneratorAction::B4PrimaryGeneratorAction()
 
   // default particle kinematic
   //
-  auto particleDefinition 
+  auto particleDefinition
     = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particleDefinition);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
@@ -72,7 +72,7 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // This function is called at the begining of event
 
   // In order to avoid dependence of PrimaryGeneratorAction
-  // on DetectorConstruction class we get world volume 
+  // on DetectorConstruction class we get world volume
   // from G4LogicalVolumeStore
   //
   G4double worldZHalfLength = 0.;
@@ -85,7 +85,7 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
   if ( worldBox ) {
-    worldZHalfLength = worldBox->GetZHalfLength();  
+    worldZHalfLength = worldBox->GetZHalfLength();
   }
   else  {
     G4ExceptionDescription msg;
@@ -94,8 +94,8 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     msg << "The gun will be place in the center.";
     G4Exception("B4PrimaryGeneratorAction::GeneratePrimaries()",
       "MyCode0002", JustWarning, msg);
-  } 
-  
+  }
+
   // Set gun position
   fParticleGun
     ->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));

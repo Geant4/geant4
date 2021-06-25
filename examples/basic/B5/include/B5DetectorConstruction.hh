@@ -52,23 +52,23 @@ class B5DetectorConstruction : public G4VUserDetectorConstruction
   public:
     B5DetectorConstruction();
     virtual ~B5DetectorConstruction();
-    
+
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 
     void SetArmAngle(G4double val);
     G4double GetArmAngle() { return fArmAngle; }
-    
+
     void ConstructMaterials();
-    
+
   private:
     void DefineCommands();
 
     G4GenericMessenger* fMessenger;
-    
+
     static G4ThreadLocal B5MagneticField* fMagneticField;
     static G4ThreadLocal G4FieldManager* fFieldMgr;
-    
+
     G4LogicalVolume* fHodoscope1Logical;
     G4LogicalVolume* fHodoscope2Logical;
     G4LogicalVolume* fWirePlane1Logical;
@@ -76,9 +76,9 @@ class B5DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fCellLogical;
     G4LogicalVolume* fHadCalScintiLogical;
     G4LogicalVolume* fMagneticLogical;
-    
+
     std::vector<G4VisAttributes*> fVisAttributes;
-    
+
     G4double fArmAngle;
     G4RotationMatrix* fArmRotation;
     G4VPhysicalVolume* fSecondArmPhys;

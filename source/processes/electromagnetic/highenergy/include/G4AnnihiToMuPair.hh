@@ -58,9 +58,9 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
   public:  // with description
 
      explicit G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
-		            G4ProcessType type = fElectromagnetic);
+                               G4ProcessType type = fElectromagnetic);
 
-    ~G4AnnihiToMuPair();
+    ~G4AnnihiToMuPair() override;
 
      G4bool IsApplicable(const G4ParticleDefinition&) override;
        // true for positron only.
@@ -77,7 +77,7 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
      void SetCrossSecFactor(G4double fac);
        // Set the factor to artificially increase the crossSection (default 1)
 
-     G4double GetCrossSecFactor() {return CrossSecFactor;};
+     G4double GetCrossSecFactor() {return fCrossSecFactor;};
        // Get the factor to artificially increase the cross section
 
      G4double CrossSectionPerVolume(G4double PositronEnergy, 
@@ -104,20 +104,18 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
-  private:
-
-     // hide assignment operator as private
+       // hide assignment operator as private
      G4AnnihiToMuPair& operator=(const G4AnnihiToMuPair &right) = delete;
      G4AnnihiToMuPair(const G4AnnihiToMuPair& ) = delete;
 
-     G4double LowestEnergyLimit;     // Energy threshold of e+
-     G4double HighestEnergyLimit;    // Limit of validity of the model
+  private:
 
-     G4double CurrentSigma;          // the last value of cross section per volume 
-
-     G4double CrossSecFactor;        // factor to artificially increase 
-                                     // the cross section, static to make sure
-				     // to have single value
+     G4double fLowEnergyLimit;  // Energy threshold of e+
+     G4double fHighEnergyLimit; // Limit of validity of the model
+     G4double fCurrentSigma; // the last value of cross section per volume 
+     G4double fCrossSecFactor;  // factor to artificially increase 
+                                // the cross section, static to make sure
+				// to have single value
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -61,9 +61,6 @@ public:
     theNDLDataA = 0;
     theNDLDataM = 0;
 
-    adjustResult = true;
-    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) adjustResult = false;
-    
     theProjectile = G4Neutron::Neutron();
 
     theResult.Put( 0 );
@@ -121,9 +118,6 @@ public:
 protected:
   
     void adjust_final_state ( G4LorentzVector );
-    G4bool DoNotAdjustFinalState();
-
-protected:
   
     G4bool hasXsec;
     G4bool hasFSData;
@@ -141,8 +135,5 @@ protected:
     G4int theNDLDataA;
     G4int theNDLDataM;
 
-private:
-
-    G4bool adjustResult;
 };
 #endif

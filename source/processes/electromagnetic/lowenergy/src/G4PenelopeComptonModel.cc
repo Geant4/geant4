@@ -59,23 +59,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition* part,
 					       const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),fParticle(0),
-   isInitialised(false),fAtomDeexcitation(0),
-   oscManager(0)
+  :G4VEmModel(nam),fParticleChange(nullptr),fParticle(nullptr),
+   fAtomDeexcitation(nullptr),
+   fOscManager(nullptr),fIsInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
-  oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
+  fOscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
 
   if (part)
     SetParticle(part);
 
-  verboseLevel= 0;
+  fVerboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing
   // 1 = warning for energy non-conservation
@@ -99,7 +98,7 @@ G4PenelopeComptonModel::~G4PenelopeComptonModel()
 void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 					  const G4DataVector&)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling G4PenelopeComptonModel::Initialise()" << G4endl;
 
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
@@ -118,7 +117,7 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
   if (IsMaster() && part == fParticle)
     {
 
-      if (verboseLevel > 0)
+      if (fVerboseLevel > 0)
 	{
 	  G4cout << "Penelope Compton model v2008 is initialized " << G4endl
 		 << "Energy range: "
@@ -141,9 +140,9 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 	}
     }
 
-  if(isInitialised) return;
+  if(fIsInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
-  isInitialised = true;
+  fIsInitialised = true;
 
 }
 
@@ -152,9 +151,8 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 void G4PenelopeComptonModel::InitialiseLocal(const G4ParticleDefinition* part,
                                                      G4VEmModel *masterModel)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling  G4PenelopeComptonModel::InitialiseLocal()" << G4endl;
-
   //
   //Check that particle matches: one might have multiple master models (e.g.
   //for e+ and e-).
@@ -166,9 +164,8 @@ void G4PenelopeComptonModel::InitialiseLocal(const G4ParticleDefinition* part,
         static_cast<G4PenelopeComptonModel*> (masterModel);
 
       //Same verbosity for all workers, as the master
-      verboseLevel = theModel->verboseLevel;
+      fVerboseLevel = theModel->fVerboseLevel;
     }
-
   return;
 }
 
@@ -192,10 +189,9 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
   // distribution profiles for the atomic shells, that are tabulated from Hartree-Fock calculations
   // from F. Biggs et al., At. Data Nucl. Data Tables 16 (1975) 201
   //
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4PenelopeComptonModel" << G4endl;
   SetupForMaterial(p, material, energy);
-
 
   G4double cs = 0;
   //Force null cross-section if below the low-energy edge of the table
@@ -203,7 +199,7 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
     return cs;
 
   //Retrieve the oscillator table for this material
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
+  G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableCompton(material);
 
   if (energy < 5*MeV) //explicit calculation for E < 5 MeV
     {
@@ -223,11 +219,10 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
 
   //Now, cs is the cross section *per molecule*, let's calculate the
   //cross section per volume
-
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
-  G4double atPerMol =  oscManager->GetAtomsPerMolecule(material);
+  G4double atPerMol =  fOscManager->GetAtomsPerMolecule(material);
 
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Material " << material->GetName() << " has " << atPerMol <<
       "atoms per molecule" << G4endl;
 
@@ -238,7 +233,7 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
 
   G4double csvolume = cs*moleculeDensity;
 
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     G4cout << "Compton mean free path at " << energy/keV << " keV for material " <<
             material->GetName() << " = " << (1./csvolume)/mm << " mm" << G4endl;
   return csvolume;
@@ -271,7 +266,6 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 					      G4double,
 					      G4double)
 {
-
   // Penelope model v2008 to sample the Compton scattering final state.
   // D. Brusa et al., Nucl. Instrum. Meth. A 379 (1996) 167
   // The model determines also the original shell from which the electron is expelled,
@@ -292,7 +286,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   // Doppler broadening is included.
   //
 
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4PenelopeComptonModel" << G4endl;
 
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -305,7 +299,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
   const G4Material* material = couple->GetMaterial();
 
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
+  G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableCompton(material);
 
   const G4int nmax = 64;
   G4double rn[nmax]={0.0};
@@ -349,7 +343,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	cosTheta = 1.0 - (1.0-tau)/(ek*tau);
 
 	//Target shell electrons
-	TST = oscManager->GetTotalZ(material)*G4UniformRand();
+	TST = fOscManager->GetTotalZ(material)*G4UniformRand();
 	targetOscillator = numberOfOscillators-1; //last level
 	S=0.0;
 	G4bool levelFound = false;
@@ -589,74 +583,6 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	}
     }
 
-
-  /*
-  if(DeexcitationFlag() && Z > 5 && shellId>0) {
-
-    const G4ProductionCutsTable* theCoupleTable=
-      G4ProductionCutsTable::GetProductionCutsTable();
-
-    size_t index = couple->GetIndex();
-    G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-    G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-
-    // Generation of fluorescence
-    // Data in EADL are available only for Z > 5
-    // Protection to avoid generating photons in the unphysical case of
-    // shell binding energy > photon energy
-    if (localEnergyDeposit > cutg || localEnergyDeposit > cute)
-      {
-	G4DynamicParticle* aPhoton;
-	deexcitationManager.SetCutForSecondaryPhotons(cutg);
-	deexcitationManager.SetCutForAugerElectrons(cute);
-
-	photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-	if(photonVector)
-	  {
-	    size_t nPhotons = photonVector->size();
-	    for (size_t k=0; k<nPhotons; k++)
-	      {
-		aPhoton = (*photonVector)[k];
-		if (aPhoton)
-		  {
-		    G4double itsEnergy = aPhoton->GetKineticEnergy();
-		    G4bool keepIt = false;
-		    if (itsEnergy <= localEnergyDeposit)
-		      {
-			//check if good!
-			if(aPhoton->GetDefinition() == G4Gamma::Gamma()
-			   && itsEnergy >= cutg)
-			  {
-			    keepIt = true;
-			    energyInFluorescence += itsEnergy;
-			  }
-			if (aPhoton->GetDefinition() == G4Electron::Electron() &&
-			    itsEnergy >= cute)
-			  {
-			    energyInAuger += itsEnergy;
-			    keepIt = true;
-			  }
-		      }
-		    //good secondary, register it
-		    if (keepIt)
-		      {
-			localEnergyDeposit -= itsEnergy;
-			fvect->push_back(aPhoton);
-		      }
-		    else
-		      {
-			delete aPhoton;
-			(*photonVector)[k] = 0;
-		      }
-		  }
-	      }
-	    delete photonVector;
-	  }
-      }
-  }
-  */
-
-
   //Always produce explicitly the electron
   G4DynamicParticle* electron = 0;
 
@@ -669,7 +595,6 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 				    eDirection,eKineticEnergy) ;
   fvect->push_back(electron);
 
-
   if (localEnergyDeposit < 0) //Should not be: issue a G4Exception (warning)
     {
       G4Exception("G4PenelopeComptonModel::SampleSecondaries()",
@@ -681,7 +606,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double electronEnergy = 0.;
   if (electron)
     electronEnergy = eKineticEnergy;
-  if (verboseLevel > 1)
+  if (fVerboseLevel > 1)
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Energy balance from G4PenelopeCompton" << G4endl;
@@ -699,7 +624,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
-  if (verboseLevel > 0)
+  if (fVerboseLevel > 0)
     {
       G4double energyDiff = std::fabs(photonEnergy1+
 				      electronEnergy+energyInFluorescence+
@@ -903,7 +828,6 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
       }
   }while(Ctol < 1.0 && loopAgain);
 
-
   G4double xs = stre*sumga;
 
   return xs;
@@ -916,7 +840,6 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
 {
   // use Klein-Nishina formula
   // total cross section in units of pi*classic_electr_radius^2
-
   G4double cs = 0;
 
   G4double ek =energy/electron_mass_c2;
@@ -927,7 +850,7 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
   G4double t0 = 1.0/ek2;
   G4double csl = 0.5*eks*t0*t0+ek2*t0+ek1*G4Log(t0)-(1.0/t0);
 
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
+  G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableCompton(material);
 
   for (size_t i=0;i<theTable->size();i++)
     {
@@ -942,7 +865,6 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
 	  cs += stre*(csu-csl);
 	}
     }
-
   cs /= (ek*eks);
 
   return cs;

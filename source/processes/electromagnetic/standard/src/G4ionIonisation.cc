@@ -78,8 +78,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(nullptr),
@@ -90,7 +88,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
   corr = G4LossTableManager::Instance()->EmCorrections();
-  eth = 2*MeV;
+  eth = 2*CLHEP::MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -100,10 +98,9 @@ G4ionIonisation::~G4ionIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition& p)
+G4bool G4ionIonisation::IsApplicable(const G4ParticleDefinition&)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived() &&
-          p.GetParticleType() == "nucleus");
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -112,8 +109,7 @@ G4double G4ionIonisation::MinPrimaryEnergy(const G4ParticleDefinition* p,
 					   const G4Material*, 
 					   G4double cut)
 {
-  return 
-    p->GetPDGMass()*(std::sqrt(1. + 0.5*cut/CLHEP::electron_mass_c2) - 1.0);
+  return p->GetPDGMass()*(std::sqrt(1. + 0.5*cut/CLHEP::electron_mass_c2) - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,7 +121,6 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
   const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
 
   if(!isInitialised) {
-
     theParticle = part;
 
     // define base particle
@@ -137,7 +132,7 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
     SetBaseParticle(theBaseParticle);
 
-    if (!EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
+    if (nullptr == EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
 
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
@@ -146,12 +141,12 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     eth = (EmModel(0)->HighEnergyLimit())*part->GetPDGMass()/proton_mass_c2;
     EmModel(0)->SetHighEnergyLimit(eth);
 
-    if (!FluctModel()) { SetFluctModel(new G4IonFluctuations()); }
+    if (nullptr == FluctModel()) { SetFluctModel(new G4IonFluctuations()); }
     AddEmModel(1, EmModel(0), FluctModel());
 
     G4double emax = param->MaxKinEnergy();
     if(eth < emax) {
-      if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
+      if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
       EmModel(1)->SetLowEnergyLimit(eth);
       EmModel(1)->SetHighEnergyLimit(emax);
       AddEmModel(2, EmModel(1), FluctModel());    

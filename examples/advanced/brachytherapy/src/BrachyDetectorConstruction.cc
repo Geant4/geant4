@@ -37,6 +37,13 @@
 //    *                                      *
 //    ****************************************
 //
+#include "BrachyFactoryLeipzig.hh"
+#include "BrachyFactoryTG186.hh"
+#include "BrachyFactoryI.hh"
+#include "BrachyFactoryFlexi.hh"
+#include "BrachyFactoryOncura6711.hh"
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4CSGSolid.hh"
 #include "G4MaterialPropertyVector.hh"
@@ -52,21 +59,16 @@
 #include "G4Colour.hh"
 #include "G4UserLimits.hh"
 #include "G4VisAttributes.hh"
-#include "BrachyMaterial.hh"
-#include "BrachyFactoryLeipzig.hh"
-#include "BrachyFactoryTG186.hh"
-#include "BrachyFactoryI.hh"
-#include "BrachyFactoryFlexi.hh"
-#include "BrachyFactoryOncura6711.hh"
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstruction.hh"
+#include "G4NistManager.hh"
 
 BrachyDetectorConstruction::BrachyDetectorConstruction(): 
-  fDetectorChoice(0), fFactory(nullptr),
-  fWorld(nullptr), fWorldLog(nullptr), fWorldPhys(nullptr),
+  fFactory(nullptr), fWorld(nullptr), fWorldLog(nullptr), fWorldPhys(nullptr),
   fPhantom(nullptr), fPhantomLog(nullptr), fPhantomPhys(nullptr),
-  fPhantomAbsorberMaterial(nullptr)
+  fDetectorChoice(0)
 {
+ // Define the messenger of the Detector component
+ fDetectorMessenger = new BrachyDetectorMessenger(this);
+
  // Define half size of the phantom along the x, y, z axis
  fPhantomSizeX = 15.*cm;
  fPhantomSizeY = 15.*cm;
@@ -77,29 +79,18 @@ BrachyDetectorConstruction::BrachyDetectorConstruction():
  fWorldSizeY = 4.0*m;
  fWorldSizeZ = 4.0*m;
 
- // Define the messenger of the Detector component
- // It is possible to modify geometrical parameters through UI
- fDetectorMessenger = new BrachyDetectorMessenger(this);
-
   // Define the Flexi source as default source modelled in the geometry
  fFactory = new BrachyFactoryFlexi();
-
-  // BrachyMaterial defined the all the materials necessary
-  // for the experimental set-up 
- fMaterial = new BrachyMaterial();
 }
 
 BrachyDetectorConstruction::~BrachyDetectorConstruction()
 { 
-  delete fMaterial;
+  delete fDetectorMessenger; 
   delete fFactory;
-  delete fDetectorMessenger;
 }
 
 G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 {
- fMaterial -> DefineMaterials();
-
  // Model the phantom (water box)
  ConstructPhantom();
 
@@ -113,7 +104,7 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 {
   // Change the source in the water phantom
   fFactory -> CleanSource();
-  G4cout << "Old Source is deleted ..." << G4endl;
+  G4cout << "Old brachy source is deleted ..." << G4endl;
   delete fFactory;
 
   switch(fDetectorChoice)
@@ -139,7 +130,7 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
    }
 
   fFactory -> CreateSource(fPhantomPhys);
-  G4cout << "... New source is created ..." << G4endl;
+  G4cout << "New brachy source is created ..." << G4endl;
 
   // Notify run manager that the new geometry has been built
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
@@ -171,7 +162,7 @@ void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
             			}
        	}		
   }
- G4cout << "Now the source is " << val << G4endl;
+ G4cout << "Now the brachy source is " << val << G4endl;
 }
 
 void BrachyDetectorConstruction::ConstructPhantom()
@@ -181,8 +172,10 @@ void BrachyDetectorConstruction::ConstructPhantom()
   // Define the light blue color
   G4Colour  lblue   (0.0, 0.0, .75);
   
-  G4Material* air = fMaterial -> GetMat("Air") ;
-  G4Material* water = fMaterial -> GetMat("Water");
+   //Get nist material manager
+  G4NistManager* nist = G4NistManager::Instance();
+  G4Material* air = nist -> FindOrBuildMaterial("G4_AIR");
+  G4Material* water = nist -> FindOrBuildMaterial("G4_WATER");
 
   // World volume
   fWorld = new G4Box("World", fWorldSizeX, fWorldSizeY, fWorldSizeZ);
@@ -222,7 +215,7 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
          << fPhantomSizeZ *2./cm
          << " cm" << G4endl
          << "The phantom is made of "
-         << fPhantomAbsorberMaterial -> GetName() <<G4endl
+         << fPhantomLog -> GetMaterial() -> GetName() <<G4endl
          << "the source is at the center of the phantom" << G4endl
          << "----------------"
          << G4endl;
@@ -230,17 +223,16 @@ void BrachyDetectorConstruction::PrintDetectorParameters()
 
 void BrachyDetectorConstruction::SetPhantomMaterial(G4String materialChoice)
 {
-  // It is possible to change the material of the phantom
-  // interactively
+  // Method to change the material of the phantom
+ 
+  G4NistManager* nist = G4NistManager::Instance();
 
   // Search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+  G4Material* pttoMaterial =  nist -> FindOrBuildMaterial(materialChoice);
 
   if (pttoMaterial)
   {
-    fPhantomAbsorberMaterial = pttoMaterial;
     fPhantomLog -> SetMaterial(pttoMaterial);
     PrintDetectorParameters();
-  } else 
-    { G4cout << "WARNING: material '" << materialChoice << "' not available!" << G4endl;}
+  } else  G4cout << "WARNING: material '" << materialChoice << "' not available!" << G4endl;
 }

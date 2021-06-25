@@ -39,7 +39,7 @@
 //   This is a primitive scorer class for scoring Surface Current.
 //  Current version assumes only for G4Box shape, and the surface
 //  is defined at the -Z plane of the box.
-//   The current is given in the unit of area. 
+//   The current is given in the unit of area.
 //    e.g.  (Number of tracks)/mm2.
 //
 // Surface is defined at the -Z surface.
@@ -55,48 +55,45 @@
 // 2010-07-22   Introduce Unit specification.
 // 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
 //              vs. Surface Current * track weight (y)    (Makoto Asai)
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSFlatSurfaceCurrent : public G4VPrimitivePlotter
 {
- 
-  public: // with description
-      G4PSFlatSurfaceCurrent(G4String name ,G4int direction, G4int depth=0);
-      G4PSFlatSurfaceCurrent(G4String name ,G4int direction, 
-			     const G4String& unit, G4int depth=0);
-      virtual ~G4PSFlatSurfaceCurrent();
+ public:  // with description
+  G4PSFlatSurfaceCurrent(G4String name, G4int direction, G4int depth = 0);
+  G4PSFlatSurfaceCurrent(G4String name, G4int direction, const G4String& unit,
+                         G4int depth = 0);
+  virtual ~G4PSFlatSurfaceCurrent();
 
-      // Scoring options
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
-      inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
-      // Divided By Area
+  // Scoring options
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
+  inline void DivideByArea(G4bool flg = true) { divideByArea = flg; }
+  // Divided By Area
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      G4int IsSelectedSurface(G4Step*,G4Box*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  G4int IsSelectedSurface(G4Step*, G4Box*);
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);    
+  virtual void SetUnit(const G4String& unit);
 
-  protected:
-      virtual void DefineUnitAndCategory();
+ protected:
+  virtual void DefineUnitAndCategory();
 
-  private:
-      G4int  HCID;
-      G4int  fDirection;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool weighted;
-      G4bool divideByArea;
-
+ private:
+  G4int HCID;
+  G4int fDirection;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
+  G4bool divideByArea;
 };
 
 #endif
-

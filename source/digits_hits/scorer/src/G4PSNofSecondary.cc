@@ -30,7 +30,7 @@
 #include "G4VScoreHistFiller.hh"
 
 // (Description)
-//   This is a primitive scorer class for scoring number of secondaries 
+//   This is a primitive scorer class for scoring number of secondaries
 // in the Cell.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
@@ -41,96 +41,110 @@
 //
 
 G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
-    :G4VPrimitivePlotter(name,depth),HCID(-1),EvtMap(0),particleDef(0),
-     weighted(true)
-{;}
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
+  , particleDef(0)
+  , weighted(true)
+{
+  ;
+}
 
-G4PSNofSecondary::~G4PSNofSecondary()
-{;}
+G4PSNofSecondary::~G4PSNofSecondary() { ; }
 
-G4bool G4PSNofSecondary::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSNofSecondary::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   //- check for newly produced particle. e.g. first step.
-  if ( aStep->GetTrack()->GetCurrentStepNumber() != 1) return FALSE;
+  if(aStep->GetTrack()->GetCurrentStepNumber() != 1)
+    return FALSE;
   //- check for this is not a primary particle. e.g. ParentID > 0 .
-  if ( aStep->GetTrack()->GetParentID() == 0 ) return FALSE;
+  if(aStep->GetTrack()->GetParentID() == 0)
+    return FALSE;
   //- check the particle if the partifle definition is given.
-  if ( particleDef && particleDef != aStep->GetTrack()->GetDefinition() )
-      return FALSE;
+  if(particleDef && particleDef != aStep->GetTrack()->GetDefinition())
+    return FALSE;
   //
   //- This is a newly produced secondary particle.
-  G4int  index = GetIndex(aStep);
+  G4int index     = GetIndex(aStep);
   G4double weight = 1.0;
-  if ( weighted ) weight *= aStep->GetPreStepPoint()->GetWeight();
-  EvtMap->add(index,weight);  
+  if(weighted)
+    weight *= aStep->GetPreStepPoint()->GetWeight();
+  EvtMap->add(index, weight);
 
-  if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
   {
     auto filler = G4VScoreHistFiller::Instance();
     if(!filler)
     {
-      G4Exception("G4PSVolumeFlux::ProcessHits","SCORER0123",JustWarning,
-             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+      G4Exception(
+        "G4PSVolumeFlux::ProcessHits", "SCORER0123", JustWarning,
+        "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
     }
     else
     {
-      filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),weight);
+      filler->FillH1(hitIDMap[index],
+                     aStep->GetPreStepPoint()->GetKineticEnergy(), weight);
     }
   }
 
   return TRUE;
 }
 
-void G4PSNofSecondary::SetParticle(const G4String& particleName){
+void G4PSNofSecondary::SetParticle(const G4String& particleName)
+{
   G4ParticleDefinition* pd =
-      G4ParticleTable::GetParticleTable()->FindParticle(particleName);
-  if(!pd) {
-      G4String msg = "Particle <";
-      msg += particleName;
-      msg += "> not found.";
-      G4Exception("G4PSNofSecondary::SetParticle",
-		  "DetPS0101",FatalException,msg);
+    G4ParticleTable::GetParticleTable()->FindParticle(particleName);
+  if(!pd)
+  {
+    G4String msg = "Particle <";
+    msg += particleName;
+    msg += "> not found.";
+    G4Exception("G4PSNofSecondary::SetParticle", "DetPS0101", FatalException,
+                msg);
   }
   particleDef = pd;
 }
 
 void G4PSNofSecondary::Initialize(G4HCofThisEvent* HCE)
 {
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),GetName());
-  if(HCID < 0) {HCID = GetCollectionID(0);}
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+  {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSNofSecondary::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSNofSecondary::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSNofSecondary::clear(){
-  EvtMap->clear();
-}
+void G4PSNofSecondary::clear() { EvtMap->clear(); }
 
-void G4PSNofSecondary::DrawAll()
-{;}
+void G4PSNofSecondary::DrawAll() { ; }
 
 void G4PSNofSecondary::PrintAll()
 {
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  num of secondaries: " << *(itr->second)/GetUnitValue()
-	   << G4endl;
+           << "  num of secondaries: " << *(itr->second) / GetUnitValue()
+           << G4endl;
   }
 }
 
 void G4PSNofSecondary::SetUnit(const G4String& unit)
 {
-  if (unit == "" ){
-    unitName = unit;
+  if(unit == "")
+  {
+    unitName  = unit;
     unitValue = 1.0;
-  }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-    G4Exception("G4PSNofSecondary::SetUnit","DetPS0010",JustWarning,msg);
+  }
+  else
+  {
+    G4String msg = "Invalid unit [" + unit + "] (Current  unit is [" +
+                   GetUnit() + "] ) for " + GetName();
+    G4Exception("G4PSNofSecondary::SetUnit", "DetPS0010", JustWarning, msg);
   }
 }
-

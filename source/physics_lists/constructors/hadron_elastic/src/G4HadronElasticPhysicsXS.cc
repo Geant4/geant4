@@ -55,7 +55,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsXS);
 G4HadronElasticPhysicsXS::G4HadronElasticPhysicsXS(G4int ver)
   : G4HadronElasticPhysics(ver, "hElasticWEL_CHIPS_XS")
 {
-  if(verbose > 1) { 
+  if(ver > 1) { 
     G4cout << "### G4HadronElasticPhysicsHP: " << GetPhysicsName() 
 	   << G4endl; 
   }

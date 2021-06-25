@@ -40,57 +40,94 @@
 // - 06 Jun. 1996, K.Amako: Implemented the 1st version
 // Revisions:
 // - 11 Nov. 2000, H.Kurashige: Use STL vector for dataVector and binVector
+// - 04 Feb. 2021, V.Ivanchenko moved implementation of all free vectors 
+//                 to this class
 // --------------------------------------------------------------------
 #ifndef G4PhysicsFreeVector_hh
 #define G4PhysicsFreeVector_hh 1
 
-#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4PhysicsFreeVector : public G4PhysicsVector
 {
- public:
-  G4PhysicsFreeVector();
-  // The vector will be filled from external file using Retrieve() method
+public:
+  explicit G4PhysicsFreeVector(std::size_t length = 0, G4bool spline = false);
+  explicit G4PhysicsFreeVector(std::size_t length, G4double emin,
+                               G4double emax, G4bool spline = false);
+  // The vector with 'length' elements will be filled using the PutValues(..)
+  // method; energy and data vectors are initialized with zeros.
 
-  explicit G4PhysicsFreeVector(std::size_t length);
-  // The vector with 'length' elements will be filled using PutValue()
-  // method; by default the vector is initialized with zeros
-
-  G4PhysicsFreeVector(const G4DataVector& eVector,
-                      const G4DataVector& dataVector);
-  // The vector is filled in this constructor.
-  // 'eVector' and 'dataVector' need to have the same vector length
-  // 'eVector' assumed to be ordered
+  explicit G4PhysicsFreeVector(const std::vector<G4double>& energies,
+                               const std::vector<G4double>& values,
+                               G4bool spline = false);
+  // The vector is filled in this constructor;
+  // 'energies' and 'values' need to have the same vector length;
+  // 'energies' assumed to be ordered and controlled in the user code.
+  
+  explicit G4PhysicsFreeVector(const G4double* energies, const G4double* values,
+                               std::size_t length, G4bool spline = false);
+  // The vector is filled in this constructor;
+  // 'energies' and 'values' need to have the same vector length;
+  // 'energies' assumed to be ordered in the user code.
 
   virtual ~G4PhysicsFreeVector();
 
-  inline void PutValue(std::size_t index, G4double energy, G4double dValue);
+  void PutValues(std::size_t index, G4double e, G4double value);
   // User code is responsible for correct filling of all elements
+
+  void InsertValues(G4double energy, G4double value);
+
+  G4double GetEnergy(G4double value);
+  // This method can be applied if both energy and data values 
+  // grow monotonically, for example, if in this vector a 
+  // cumulative probability density function is stored. 
+
+  inline G4double GetMaxValue();
+  inline G4double GetMinValue();
+  inline G4double GetMaxLowEdgeEnergy();
+  inline G4double GetMinLowEdgeEnergy();
+  // Obsolete methods
+ 
+  inline void PutValue(std::size_t index, G4double e, G4double value);
+  // User code is responsible for correct filling of all elements
+  // Obsolete method
+
+private:
+
+  std::size_t FindValueBinLocation(G4double aValue);
+
+  G4double LinearInterpolationOfEnergy(G4double aValue, std::size_t locBin);
 };
 
 // -----------------------------
 // Inline methods implementation
 // -----------------------------
+inline G4double G4PhysicsFreeVector::GetMaxValue()
+{
+  return dataVector.back();
+}
+
+inline G4double G4PhysicsFreeVector::GetMinValue()
+{
+  return dataVector.front();
+}
+
+inline G4double G4PhysicsFreeVector::GetMaxLowEdgeEnergy()
+{
+  return edgeMax;
+}
+
+inline G4double G4PhysicsFreeVector::GetMinLowEdgeEnergy()
+{
+  return edgeMin;
+}
 
 inline void G4PhysicsFreeVector::PutValue(std::size_t index, G4double e,
                                           G4double value)
 {
-  if(index >= numberOfNodes)
-  {
-    PrintPutValueError(index);
-  }
-  binVector[index]  = e;
-  dataVector[index] = value;
-  if(index == 0)
-  {
-    edgeMin = e;
-  }
-  else if(numberOfNodes - 1 == index)
-  {
-    edgeMax = e;
-  }
+  PutValues(index, e, value);
 }
 
 #endif

@@ -68,8 +68,8 @@
 #include "G4Material.hh"
 #include "G4ProductionCutsTable.hh"
 
-
-G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
     const G4VEnergySpectrum* spec, G4VDataSetAlgorithm* alg,
     G4double emin, G4double emax, G4int nbin)
  :  G4VCrossSectionHandler(),
@@ -79,12 +79,14 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
   interp = new G4LinLogLogInterpolation();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler()
 {
   delete interp;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
                         const G4DataVector& energyVector,
@@ -163,7 +165,6 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
                      << " Z= " << Z
                      << G4endl;
 	      }
-
 	  }
           if (value == 0.) value = 1e-300;
           log_value = std::log10(value);
@@ -172,9 +173,6 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
         log_cs->push_back(log_value);
       }
       G4VDataSetAlgorithm* algoLocal = interp->Clone();
-
-      //G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,algoLocal,1.,1.);
-
       G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,log_energies,log_cs,algoLocal,1.,1.);
 
       setForMat->AddComponent(elSet);
@@ -184,6 +182,8 @@ std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSections
 
   return set;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eIonisationCrossSectionHandler::GetCrossSectionAboveThresholdForElement(G4double energy,
 										   G4double cutEnergy,

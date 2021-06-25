@@ -533,19 +533,19 @@ G4VisCommandSceneAddElectricField::G4VisCommandSceneAddElectricField () {
   fpCommand -> SetGuidance
   ("Adds electric field representation to current scene.");
   fpCommand -> SetGuidance
-  ("The first parameter is no. of data points per half scene.  So, possibly, at"
+  ("The first parameter is no. of data points per half extent.  So, possibly, at"
    "\nmaximum, the number of data points sampled is (2*n+1)^3, which can grow"
    "\nlarge--be warned!"
    "\nThe default value is 10, i.e., a 21x21x21 array, i.e., 9,261 sampling points."
-   "\nThat may swamp you scene, but usually, a field is limited to a small part of"
-   "\nthe scene, so it's not a problem. But if it is, here are some of the things"
+   "\nThat may swamp your view, but usually, a field is limited to a small part of"
+   "\nthe extent, so it's not a problem. But if it is, here are some of the things"
    "\nyou can do:"
-   "\n- reduce the number of data points per half scene (first parameter);"
+   "\n- reduce the number of data points per half extent (first parameter);"
    "\n- specify \"lightArrow\" (second parameter);"
    "\n- restrict the region sampled with \"/vis/set/extentForField\";"
    "\n- restrict the drawing to a specific volume with"
    "\n    \"/vis/set/volumeForField\" or \"/vis/touchable/volumeForField\"."
-   "\nNote: you may have to deactivate existing field models with"
+   "\nNote: you might have to deactivate existing field models with"
    "\n  \"/vis/scene/activateModel Field false\" and re-issue"
    "\n  \"/vis/scene/add/...Field\" command again.");
   fpCommand -> SetGuidance
@@ -553,7 +553,7 @@ G4VisCommandSceneAddElectricField::G4VisCommandSceneAddElectricField () {
    "\nto the magnitude of the field and the colour is mapped onto the range"
    "\nas a fraction of the maximum magnitude: 0->0.5->1 is red->green->blue.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("nDataPointsPerHalfScene", 'i', omitable = true);
+  parameter = new G4UIparameter ("nDataPointsPerHalfExtent", 'i', omitable = true);
   parameter -> SetDefaultValue (10);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("representation", 's', omitable = true);
@@ -584,10 +584,10 @@ void G4VisCommandSceneAddElectricField::SetNewValue
     return;
   }
 
-  G4int nDataPointsPerHalfScene;
+  G4int nDataPointsPerHalfExtent;
   G4String representation;
   std::istringstream iss(newValue);
-  iss >> nDataPointsPerHalfScene >> representation;
+  iss >> nDataPointsPerHalfExtent >> representation;
   G4ElectricFieldModel::Representation
   modelRepresentation = G4ElectricFieldModel::fullArrow;
   if (representation == "lightArrow") {
@@ -595,7 +595,7 @@ void G4VisCommandSceneAddElectricField::SetNewValue
   }
   G4VModel* model;
   model = new G4ElectricFieldModel
-  (nDataPointsPerHalfScene,modelRepresentation,
+  (nDataPointsPerHalfExtent,modelRepresentation,
    fCurrentArrow3DLineSegmentsPerCircle,
    fCurrentExtentForField,
    fCurrrentPVFindingsForField);
@@ -607,8 +607,8 @@ void G4VisCommandSceneAddElectricField::SetNewValue
       << "Electric field, if any, will be drawn in scene \""
       << currentSceneName
       << "\"\n  with "
-      << nDataPointsPerHalfScene
-      << " data points per half scene and with representation \""
+      << nDataPointsPerHalfExtent
+      << " data points per half extent and with representation \""
       << representation
       << '\"'
       << G4endl;
@@ -1240,6 +1240,132 @@ void G4VisCommandSceneAddLine2D::Line2D::operator()
   sceneHandler.EndPrimitives2D();
 }
 
+////////////// /vis/scene/add/localAxes ///////////////////////////////////////
+
+G4VisCommandSceneAddLocalAxes::G4VisCommandSceneAddLocalAxes () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/localAxes", this);
+  fpCommand -> SetGuidance
+  ("Adds local axes to physical volume(s).");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("physical-volume-name", 's', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("copy-no", 'i', omitable = true);
+  parameter -> SetGuidance ("If negative, matches any copy no.");
+  parameter -> SetDefaultValue (-1);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddLocalAxes::~G4VisCommandSceneAddLocalAxes () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLocalAxes::GetCurrentValue (G4UIcommand*) {
+  return "world 0 -1";
+}
+
+void G4VisCommandSceneAddLocalAxes::SetNewValue (G4UIcommand*,
+						 G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn = verbosity >= G4VisManager::warnings;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4String name;
+  G4int copyNo;
+  std::istringstream is (newValue);
+  is >> name >> copyNo;
+
+  std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
+
+  // Search all worlds...
+  G4TransportationManager* transportationManager =
+  G4TransportationManager::GetTransportationManager ();
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+  transportationManager->GetWorldsIterator();
+  size_t nWorlds = transportationManager->GetNoWorlds();
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4ModelingParameters mp;  // Default - no culling.
+    G4PhysicalVolumeModel searchModel
+    (*iterWorld,
+     G4PhysicalVolumeModel::UNLIMITED,
+     G4Transform3D(),
+     &mp,
+     true);  // Use full extent (avoids initial descent of geometry tree)
+    G4PhysicalVolumesSearchScene searchScene
+    (&searchModel, name, copyNo);
+    searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
+    for (const auto& findings: searchScene.GetFindings()) {
+      findingsVector.push_back(findings);
+    }
+  }
+
+  G4int id = 0;  // To distinguish axes models by their global description
+  for (const auto& findings: findingsVector) {
+
+    // Create axes model based on size and transformation of found volume(s).
+    const auto& extent = findings.fpFoundPV->GetLogicalVolume()->GetSolid()->GetExtent();
+    const auto& transform = findings.fFoundObjectTransformation;
+
+    const G4double lengthMax = extent.GetExtentRadius()/2.;
+    const G4double intLog10LengthMax = std::floor(std::log10(lengthMax));
+    G4double length = std::pow(10,intLog10LengthMax);
+    if (5.*length < lengthMax) length *= 5.;
+    else if (2.*length < lengthMax) length *= 2.;
+
+    const auto& axesModel = new G4AxesModel(0.,0.,0.,length);
+    axesModel->SetTransformation(transform);
+    axesModel->SetGlobalTag("LocalAxesModel");
+    std::ostringstream oss; oss
+    << "Local Axes for " << findings.fpFoundPV->GetName()
+    << ':' << findings.fFoundPVCopyNo << ':' << id++;
+    axesModel->SetGlobalDescription(oss.str());
+    // ...so add it to the scene.
+    G4bool successful = pScene->AddRunDurationModel(axesModel,warn);
+    if (successful) {
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout << "\"" << findings.fpFoundPV->GetName()
+	<< "\", copy no. " << findings.fFoundPVCopyNo
+	<< ",\n  found in searched volume \""
+	<< findings.fpSearchPV->GetName()
+	<< "\" at depth " << findings.fFoundDepth
+	<< ",\n  base path: \"" << findings.fFoundBasePVPath
+	<< "\".\n  Local axes have been added to scene \""
+	<< pScene->GetName() << "\".";
+	if (verbosity >= G4VisManager::parameters) {
+	  G4cout << "  With extent " << extent
+	  << "\n  at " << transform.getRotation()
+	  << "  " << transform.getTranslation();
+	}
+	G4cout << G4endl;
+      }
+    } else {
+      G4VisCommandsSceneAddUnsuccessful(verbosity);
+    }
+  }
+
+  if (findingsVector.empty()) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr << "ERROR: Volume \"" << name << "\"";
+      if (copyNo >= 0) {
+	G4cerr << ", copy no. " << copyNo << ",";
+      }
+      G4cerr << " not found." << G4endl;
+    }
+    G4VisCommandsSceneAddUnsuccessful(verbosity);
+    return;
+  }
+
+  CheckSceneAndNotifyHandlers(pScene);
+}
+
 ////////////// /vis/scene/add/logicalVolume //////////////////////////////////
 
 G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
@@ -1315,20 +1441,9 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4bool checkOverlaps = G4UIcommand::ConvertToBool(overlapString);
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
-  int nLV = pLVStore -> size ();
-  int iLV;
-  G4LogicalVolume* pLV = 0;
-  for (iLV = 0; iLV < nLV; iLV++ ) {
-    pLV = (*pLVStore) [iLV];
-    if (pLV -> GetName () == name) break;
-  }
-  if (iLV == nLV) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Logical volume " << name
-	     << " not found in logical volume store." << G4endl;
-    }
-    return;
-  }
+  G4LogicalVolume* pLV = nullptr;
+  pLV = pLVStore->GetVolume(name);
+  if (pLV == nullptr) return;  // Volume not found; warning message thrown
 
   const std::vector<G4Scene::Model>& rdModelList =
     pScene -> GetRunDurationModelList();
@@ -1712,7 +1827,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
       if (verbosity >= G4VisManager::parameters) {
 	G4cout << "\n  with extent " << extent
 	       << "\n  at " << transform.getRotation()
-	       << transform.getTranslation();
+	       << "  " << transform.getTranslation();
       }
       G4cout << G4endl;
     }
@@ -2398,7 +2513,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
       if (verbosity >= G4VisManager::parameters) {
 	G4cout << "\n  with extent " << scaleExtent
 	       << "\n  at " << transform.getRotation()
-	       << transform.getTranslation();
+	       << "  " << transform.getTranslation();
       }
       G4cout << G4endl;
     }
@@ -3058,6 +3173,24 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
 
+  // When it comes to determining the extent of a physical volume we normally
+  // assume the user wishes to ignore "invisible" volumes. For example, most
+  // users make the world volume invisible. So we ask the physical volume
+  // model to traverse the geometry hierarchy, starting at the named physical
+  // volume, until it finds non-invisible ones, whose extents are accumulated
+  // to determine the overall extent. (Once a non-invisible volume is found,
+  // the search is curtailed - daughters are always contained within the mother
+  // so they have no subsequent influence on the extent of the mother - but the
+  // search continues at the same level until all highest level non-invisible
+  // volumes are found an their extents accumulated.) So the default is
+  G4bool useFullExtent = false;
+  // However, the above procedure can be time consuming in some situations, such
+  // as a nested parameterisation whose ultimate volumes are the first non-
+  // visible ones, which are typical of a medical "phantom". So we assume here
+  // below that if a user specifies a name other than "world" or "worlds" he/she
+  // wished the extent to be determined by the volume, whether it is visible
+  // or not. So we set useFullExtent true at that point below.
+
   if (name == "world") {
 
     findingsVector.push_back
@@ -3084,13 +3217,25 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   } else {  // Search all worlds...
 
+    // Use the model's full extent. This assumes the user wants these
+    // volumes in the findings vector (there could be more than one) to
+    // determine the scene's extent. Otherwise G4PhysicalVolumeModel would
+    // re-calculate each volume's extent based on visibility, etc., which
+    // could be time consuming.
+    useFullExtent = true;
+
     std::vector<G4VPhysicalVolume*>::iterator iterWorld =
       transportationManager->GetWorldsIterator();
     for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-      G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
       G4ModelingParameters mp;  // Default - no culling.
-      searchModel.SetModelingParameters (&mp);
-      G4PhysicalVolumesSearchScene searchScene (&searchModel, name, copyNo);
+      G4PhysicalVolumeModel searchModel
+      (*iterWorld,
+       G4PhysicalVolumeModel::UNLIMITED,
+       G4Transform3D(),
+       &mp,
+       useFullExtent);
+      G4PhysicalVolumesSearchScene searchScene
+      (&searchModel, name, copyNo, requestedDepthOfDescent);
       searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
       for (const auto& findings: searchScene.GetFindings()) {
         findingsVector.push_back(findings);
@@ -3101,19 +3246,18 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   for (const auto& findings: findingsVector) {
     // Set copy number from search findings for replicas and parameterisations.
     findings.fpFoundPV->SetCopyNo(findings.fFoundPVCopyNo);
-    // Create a physical volume model...
     G4PhysicalVolumeModel* foundPVModel = new G4PhysicalVolumeModel
     (findings.fpFoundPV,
      requestedDepthOfDescent,
      findings.fFoundObjectTransformation,
      0, // No modelling parameters (these are set later by the scene handler).
-     false,  // Do not use full extent - only use non-culled extent.
+     useFullExtent,
      findings.fFoundBasePVPath);
     if (clippingSolid) {
       foundPVModel->SetClippingSolid(clippingSolid);
       foundPVModel->SetClippingMode(clippingMode);
     }
-    if (!foundPVModel->Validate(warn)) return;  // Calculates extent
+    if (!foundPVModel->Validate(warn)) return;
     // ...so add it to the scene.
     G4bool successful = pScene->AddRunDurationModel(foundPVModel,warn);
     if (successful) {

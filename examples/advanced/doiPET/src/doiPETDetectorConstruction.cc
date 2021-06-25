@@ -174,7 +174,7 @@ G4VPhysicalVolume* doiPETDetectorConstruction::Construct()
 
 	// Define the physical world volume
 	world_physicalV = new G4PVPlacement(0,G4ThreeVector(),world_logicalV, "world_physicalV", 0, false, 0, fCheckOverlaps);
-	world_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+	world_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 	//NOTE!!!
 	//The scanner specification (like size and number of crystals in each detctor) are given in the "doiPETGlobalParameters.hh" header file.
@@ -290,7 +290,7 @@ G4VPhysicalVolume* doiPETDetectorConstruction::Construct()
 	blockDetectorVisAtt->SetVisibility (true);
 	//blockDetectorVisAtt->SetForceWireframe (true);
 	blockDetector_logicalV->SetVisAttributes (blockDetectorVisAtt);
-	//blockDetector_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+	//blockDetector_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 	//visualization for the the box filled with air
 	G4VisAttributes* airBoxVisAtt;
@@ -298,7 +298,7 @@ G4VPhysicalVolume* doiPETDetectorConstruction::Construct()
 	airBoxVisAtt->SetVisibility (true);
 	airBoxVisAtt->SetForceWireframe (true);
 	airBox_logicalV->SetVisAttributes (airBoxVisAtt);
-	airBox_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+	airBox_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 	//visualization for the crystal
 	G4VisAttributes* crystalVisAtt;
@@ -306,7 +306,7 @@ G4VPhysicalVolume* doiPETDetectorConstruction::Construct()
 	//crystalVisAtt->SetVisibility (true);
 	crystalVisAtt->SetForceWireframe (true);
 	crystal_logicalV->SetVisAttributes (crystalVisAtt);
-	crystal_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+	crystal_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
 	//always return the physical World
@@ -450,7 +450,7 @@ void doiPETDetectorConstruction::ConstructPhantom(G4LogicalVolume* worldLogical)
 
 		//Define the physical volume for the lung phantom and place it in the phantom_lungPMMA.
 		lung_physicalV = new G4PVPlacement(0, G4ThreeVector(0,0,0), lung_logicalV, "coldRegion_physicalV", lung_logicalV_PMMA, false, 0, fCheckOverlaps);
-		//lung_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+		//lung_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
 		////////////////////////////////// Test phantom ////////////////////////////////////////////////////////
@@ -468,7 +468,7 @@ void doiPETDetectorConstruction::ConstructPhantom(G4LogicalVolume* worldLogical)
 
 		//Define the physical volume of the test phantom. The test phantom is placed next to the body phantom. 
 		test_physicalV = new G4PVPlacement(0,G4ThreeVector(0,0,hieghtOfTestPhantom/2+zOffsetBodyPhantom + zOffset_testPhantom), test_logicalV, "phantom_physicalV", worldLogical, false, 0,fCheckOverlaps);
-		//test_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+		//test_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 		////////////////////////////////// Six Spherical phantoms for hot and cold lesions (sources) placed inside the body phatom ///////////////////////////////////
 
@@ -521,8 +521,8 @@ void doiPETDetectorConstruction::ConstructPhantom(G4LogicalVolume* worldLogical)
 				//Define the physical volume of the water phatom for the hot sphere
 				hotSphereWater_physicalV = new G4PVPlacement(0, G4ThreeVector(0,0,0), hotSphereWater_logicalV, "phantom_physicalV", hotSpherePMMA_logicalV, false, i,fCheckOverlaps);
 				//G4cout<<"Hot sphere "<<i<<" is placed. "<< " sphereDiameter = " <<sphereDiameter <<" "<< "Position " <<spherePositionX<<" "<< spherePositionY<<", "<<sphereDiameter<<G4endl;
-				//hotSpherePMMA_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
-				//hotSphereWater_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+				//hotSpherePMMA_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
+				//hotSphereWater_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 			}
 
 			//Cold sphere phantoms
@@ -548,8 +548,8 @@ void doiPETDetectorConstruction::ConstructPhantom(G4LogicalVolume* worldLogical)
 				//Define the physical volume of the water phatom for the cold sphere
 				coldSphereWater_physicalV = new G4PVPlacement(0, G4ThreeVector(0,0,0), coldSphereWater_logicalV, "coldRegion_physicalV", coldSpherePMMA_logicalV, false, i,fCheckOverlaps);
 				//G4cout<<"Cold sphere "<<i<<" is placed. "<< " sphereDiameter = " <<sphereDiameter <<" "<< "Position " <<spherePositionX<<" "<< spherePositionY<<" "<<sphereDiameter<<G4endl;
-				//coldSpherePMMA_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
-				//coldSphereWater_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+				//coldSpherePMMA_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
+				//coldSphereWater_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 			}				
 		}
 	}
@@ -631,7 +631,7 @@ void doiPETDetectorConstruction::ConstructPhantom(G4LogicalVolume* worldLogical)
 
 		//place the phantom at one end of the PMMA phantom
 		WaterPhantom_physicalV = new G4PVPlacement(0,G4ThreeVector(0,0,rodPhantomLength/2), waterPhantom_logicalV, "phantom_physicalV", phantom_logicalV, false, 0,fCheckOverlaps);
-		//waterPhantom_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+		//waterPhantom_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 		//define the surrounding PMMA chamber
 		G4Tubs* chamberPMMA = new G4Tubs("chamber_phantom1", 0*mm,chamberDiameter/2,chamberPhantomLength/2,0*deg,360*deg);
@@ -765,7 +765,7 @@ void doiPETDetectorConstruction::ConstructPhantom(G4LogicalVolume* worldLogical)
 	phantomVisAtt->SetVisibility (true);
 	phantomVisAtt->SetForceWireframe (true);
 	phantom_logicalV->SetVisAttributes (phantomVisAtt);
-	//phantom_logicalV->SetVisAttributes (G4VisAttributes::Invisible);	
+	//phantom_logicalV->SetVisAttributes (G4VisAttributes::GetInvisible());	
 }
 
 //Change the type of the phantom via .mac file

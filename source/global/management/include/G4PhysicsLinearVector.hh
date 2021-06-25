@@ -46,11 +46,12 @@
 
 class G4PhysicsLinearVector : public G4PhysicsVector
 {
- public:
-  G4PhysicsLinearVector();
+public:
+  explicit G4PhysicsLinearVector(G4bool spline = false);
   // The vector will be filled from external file using Retrieve() method
 
-  G4PhysicsLinearVector(G4double Emin, G4double Emax, std::size_t Nbin);
+  explicit G4PhysicsLinearVector(G4double Emin, G4double Emax, std::size_t Nbin,
+                                 G4bool spline = false);
   // Energy vector will be computed and filled at construction,
   // number of elements 'Nbin+1'. Use PutValue() to fill the data vector
 

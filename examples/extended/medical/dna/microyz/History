@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+11/02/2021 - tag microyz-V10-07-00 - V. Ivanchenko
+- PhysicsList - remove unused header
+
 10/11/20 - tag microyz-V10-06-00 - B. Morgan
 - Migration to G4RunManagerFactory.
 

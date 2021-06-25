@@ -29,30 +29,35 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSDList.hh"
 
-CCalSDList* CCalSDList::theList = 0;
+G4ThreadLocal CCalSDList* CCalSDList::theList = nullptr;
 
-CCalSDList::CCalSDList(){}
-CCalSDList::~CCalSDList(){ delete theList;}
 
-CCalSDList* CCalSDList::getInstance(){
+CCalSDList::CCalSDList() {}
 
-  if (theList == 0) 
-    theList = new CCalSDList;
+
+CCalSDList::~CCalSDList() {}
+
+
+CCalSDList* CCalSDList::getInstance() {  
+  if ( theList == nullptr ) { 
+    static G4ThreadLocalSingleton< CCalSDList > inst;
+    theList = inst.Instance();
+  }
   return theList;
 }
-     
-void CCalSDList::addCalo(nameType name){
-    
+
+
+void CCalSDList::addCalo( nameType name ) {    
   theList->caloSD.push_back(name);
 }
 
-void CCalSDList::addTracker(nameType name){
 
+void CCalSDList::addTracker( nameType name ) {
   theList->trackerSD.push_back(name);
 } 
 
-nameType CCalSDList::getCaloSDName(G4int i){
-  
+
+nameType CCalSDList::getCaloSDName( G4int i ) {  
   if (i>=theList->getNumberOfCaloSD() || i<0) {
     G4cout << "CCalSDList invalid calo SD no: " << i << " max is "
            << theList->getNumberOfCaloSD() << G4endl;
@@ -61,30 +66,28 @@ nameType CCalSDList::getCaloSDName(G4int i){
     return theList->caloSD[i];
 }
 
-nameType CCalSDList::getTrackerSDName(G4int i){
 
+nameType CCalSDList::getTrackerSDName( G4int i ) {
   if (i>=theList->getNumberOfTrackerSD() || i<0) {
     G4cout << "CCalSDList invalid tracker SD no: " << i << " max is "
            << theList->getNumberOfTrackerSD() << G4endl;
     return " ";
-  }   
-  else 
+  } else { 
     return theList->trackerSD[i];
+  }
 }
 
       
-G4int CCalSDList::getNumberOfCaloSD(){
-  
+G4int CCalSDList::getNumberOfCaloSD() {
   return theList->caloSD.size();
 }
 
-G4int CCalSDList::getNumberOfTrackerSD(){
 
+G4int CCalSDList::getNumberOfTrackerSD() {
   return theList->trackerSD.size();
 }
-     
 
-CCalSDList& CCalSDList::operator=(CCalSDList&){
 
+CCalSDList& CCalSDList::operator=( CCalSDList& ) {
   return *this;
 }  

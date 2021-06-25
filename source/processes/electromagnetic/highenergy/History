@@ -16,10 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 May 21: V.Ivanchenko  (emhighenergy-V10-07-03)
+- G4eeToHadrons - updated integral type
+
+15 March 21: V.Ivanchenko  (emhighenergy-V10-07-02)
+- update all classes to 11.0: clean-up interfaces, removed unused headers,
+   improved initialisation
+
+21 February 21: V.Ivanchenko  (emhighenergy-V10-07-01)
+- G4hBremsstrahlungModel - added header
+
+08 February 21: V.Ivanchenko  (emhighenergy-V10-07-00)
+- G4hhIonisation - G4BohrFuluctuations is removed
+
 29 October 2020: V.Ivantchenko (emhighenergy-V10-06-02)
-- G4hPairProductionModel, G4hBremsstrahlungModel, G4hPairProduction, 
-  G4hBremsstrahlung - added definition of the energy threshold 
-    for creation of a vertex, when energy transfer is above the 
+- G4hPairProductionModel, G4hBremsstrahlungModel, G4hPairProduction,
+  G4hBremsstrahlung - added definition of the energy threshold
+    for creation of a vertex, when energy transfer is above the
     threshold (CMS request)
 
 01 September 2020: G.Amadio (emhighenergy-V10-06-01)
@@ -30,14 +43,14 @@ committal in the CVS repository !
 - G4GammaConversionToMuons - initialisation of the 5D model cuts size
 
 18 October 2019: V.Ivantchenko (emhighenergy-V10-05-05)
-- G4GammaConversionToMuons - added initialisation of the 5D model 
+- G4GammaConversionToMuons - added initialisation of the 5D model
 
 08 October 2019: V.Ivantchenko (emhighenergy-V10-05-04)
 - G4GammaConversionToMuons - fixed DeRegister; added optional
     possibility to use 5D model for the sampling of the final state
 
 02 July 2019: V.Ivantchenko (emhighenergy-V10-05-03)
-- G4mplIonisationWithDeltaModel, G4mplIonisationModel - fixed 
+- G4mplIonisationWithDeltaModel, G4mplIonisationModel - fixed
     dEdx for electron gas model (beta<0.01) - problem #2169
 
 03 April 2019: V.Ivantchenko (emhighenergy-V10-05-02)
@@ -48,7 +61,7 @@ committal in the CVS repository !
 - G4GammaConversionToMuons - fixed low-energy part of the model by adding
     of intermediate limit 5*MuMass, below which an approximation of
     x-section similar to the Bethe-Heitler model is used; fixed bug
-    in energy sampling for low-energy 
+    in energy sampling for low-energy
 
 01 March 2019: V.Ivantchenko (emhighenergy-V10-05-00)
 - G4mplIonisation, G4mplIonisationWithDeltaModel - added low limit
@@ -63,7 +76,7 @@ committal in the CVS repository !
 - G4eeToHadronsModel, G4mplIonisationWithDeltaModel - minor cleanup
 
 28 Feb 2018: V.Ivant (emhighenergy-V10-04-00)
-- G4AnnihiToMuPair - H.Burkhardt added Coulomb correction to the 
+- G4AnnihiToMuPair - H.Burkhardt added Coulomb correction to the
     cross section at the threshold
 
 08 Nov 2017: D.Sawkey (emhighenergy-V10-03-05)
@@ -110,7 +123,7 @@ committal in the CVS repository !
     (problem #1716); added check on energy balance
 
 22 Oct 2014: V.Ivant (emhighenergy-V10-00-05)
-- G4eeToHadrons, G4hBremsstrahlung, G4hPairProduction, 
+- G4eeToHadrons, G4hBremsstrahlung, G4hPairProduction,
   G4hhIonisation, G4mplIonisation - use G4EmParameters
 
 07 Sept 2014: V.Ivant (emhighenergy-V10-00-04)
@@ -124,14 +137,14 @@ committal in the CVS repository !
 - G4Vee2hadrons - fixed build for gcc 4.1
 
 18 July 2014: V.Ivant (emhighenergy-V10-00-01)
-- G4eeTo3PiModel - fixed sampling algorithm 
+- G4eeTo3PiModel - fixed sampling algorithm
 
 18 July 2014: V.Ivant (emhighenergy-V10-00-00)
 - Naruhiro Chikuma verified and updated positron annihilation
     models: G4Vee2hadrons, G4ee2KChargedModel, G4ee2KNeutralModel,
     G4eeTo3PiModel, G4eeToHadronsMultiModel, G4eeToPGammaModel,
     G4eeToTwoPiModel, G4eeToHadronsModel; and process G4eeToHadrons
-    This includes adition on extra inline methods to convert from Lab 
+    This includes adition on extra inline methods to convert from Lab
     to CM, to initilise models, more correct thresholds,
     migration to updated PhysicsVector interfaces
 
@@ -140,8 +153,8 @@ committal in the CVS repository !
 
 12 November 2013: V.Ivant (emhighenergy-V09-06-08)
 - G4mplIonisationModel, G4mplIonisationWithDeltaModel - fixed electron
-    gas ionisation part of a model (problem is identified by Zukai Wang 
-    <zw4vm@virginia.edu>); before model was working correctly for 
+    gas ionisation part of a model (problem is identified by Zukai Wang
+    <zw4vm@virginia.edu>); before model was working correctly for
     very heavy monopoles in Silicon and not accurate for other media
 
 19 August 2013: V.Ivant (emhighenergy-V09-06-07)
@@ -151,14 +164,14 @@ committal in the CVS repository !
 
 09 August 2013: V.Ivant (emhighenergy-V09-06-06)
 09 August 2013: V.Ivant (emhighenergy-V09-06-05)
-- G4hBremsstrahlung - use inheritence of G4MuBremsstrahlung; 
+- G4hBremsstrahlung - use inheritence of G4MuBremsstrahlung;
     removed unused headers;
 - G4hPairProduction - use inheritence of G4MuPairProduction;
-    removed unused headers; lowestEnergy limit should not be lower 
+    removed unused headers; lowestEnergy limit should not be lower
     than 8*mass because in that case the model is not applicable
 
 09 July 2013: V.Ivant (emhighenergy-V09-06-04)
-- G4hPairProductionModel - substitute SetCurrentElement(G4double) 
+- G4hPairProductionModel - substitute SetCurrentElement(G4double)
     by SetElement(G4int)
 
 03 July 2013: V.Ivant (emhighenergy-V09-06-03)
@@ -177,7 +190,7 @@ committal in the CVS repository !
 
 21 July 2012: V.Ivant (emhighenergy-V09-05-03)
 - G4hBremsstrahlung, G4mplIonisation,  G4hPairProduction -
-    secondary particle type defined in constructors and not in Initialise() 
+    secondary particle type defined in constructors and not in Initialise()
     method, this is needed for correct initialisation at G4_PreInit
 
 11 July 2012: G.Cosmo (emhighenergy-V09-05-02)
@@ -190,11 +203,11 @@ committal in the CVS repository !
 27 May 2012: V.Ivant (emhighenergy-V09-05-00)
 - G4mplIonisation, G4mplIonisationModel, G4mplIonisationWithDeltaModel
     extended energy range of dedx and other tables for monopoles with large mass,
-    this is required for interpolation of dEdx for super-heavy monopoles 
+    this is required for interpolation of dEdx for super-heavy monopoles
 
 10 November 2011: V.Ivant (emhighenergy-V09-04-02)
-- G4hPairProduction, G4eeToHadronsMultiModel, G4hhIonisation, 
-  G4mplIonisationModel, G4mplIonisationWithDeltaModel - fixed 
+- G4hPairProduction, G4eeToHadronsMultiModel, G4hhIonisation,
+  G4mplIonisationModel, G4mplIonisationWithDeltaModel - fixed
     initialisation problems reported by the Coverity tool
 
 3 November 2011: V.Ivant (emhighenergy-V09-04-01)
@@ -206,18 +219,18 @@ committal in the CVS repository !
 - G4GammaConversionToMuons - removed include of unused header
 
 26 October 10: V.Ivanchenko (emhighenergy-V09-03-02)
-- Fixed problem reported by the Coverity tools (mainly pedantic 
+- Fixed problem reported by the Coverity tools (mainly pedantic
   initialisation)
 - Added G4mplIonisationWithDeltaModel which is substituted
   G4mplIonisationModel by default - delat-ray production is required
-  both by ATLAS and CMS 
+  both by ATLAS and CMS
 
 04 March 10: V.Ivanchenko (emhighenergy-V09-03-01)
 - G4ICRU73NoDeltaModel - new model derived from G4ICRU73QOModel
 
 28 March 10: V.Ivanchenko (emhighenergy-V09-03-00)
-- G4mplIonisation - fixed IsApplicable method - always "true" 
-                    (CMS report crash in the case when several types 
+- G4mplIonisation - fixed IsApplicable method - always "true"
+                    (CMS report crash in the case when several types
                      of monopoles are instantiated)
 
 11 November 09: V.Ivanchenko (emhighenergy-V09-02-03)
@@ -225,7 +238,7 @@ committal in the CVS repository !
 
 09 November 09: V.Ivanchenko (emhighenergy-V09-02-02)
 - G4AnnihiToMuPair added method CrossSectionPerVolume;
-                   added integral option to PostStepDoIt - more precise 
+                   added integral option to PostStepDoIt - more precise
                    simulation near cross section threshold
 
 12 April 09: V.Ivanchenko (emhighenergy-V09-02-01)
@@ -243,13 +256,13 @@ committal in the CVS repository !
 
 10 July 08:  V.Ivanchenko (emhighenergy-V09-01-04)
 - G4eeCrossSections - migrated to PDG 2006
-- G4eeToHadronsMultiModel - added main reaction channels for omega and 
+- G4eeToHadronsMultiModel - added main reaction channels for omega and
                             phi resonances
-- New models: G4eeTo3PiModel, G4eeToPGammaModel, G4ee2KChargedModel, 
+- New models: G4eeTo3PiModel, G4eeToPGammaModel, G4ee2KChargedModel,
   G4ee2KNeutralModel
 
 8 July 08:  V.Ivanchenko (emhighenergy-V09-01-03)
-- G4GammaConversionToMuons - all exit() substituted by warnings 
+- G4GammaConversionToMuons - all exit() substituted by warnings
 
 4 April 08:  V.Ivanchenko (emhighenergy-V09-01-02)
 - G4hBremsstrahlungModel - remove static const
@@ -261,7 +274,7 @@ committal in the CVS repository !
 - SubType for all processes is initialized
 
 13 November 07:  V.Ivanchenko (emhighenergy-V09-00-01)
-- G4mplIonisationModel - introduced theoretical asymtotic low-energy 
+- G4mplIonisationModel - introduced theoretical asymtotic low-energy
                          parameterization of dEdx
 
 14 August 07:  V.Ivanchenko (emhighenergy-V09-00-00)
@@ -272,11 +285,11 @@ committal in the CVS repository !
 - G4mplIonisation - fixed destruction of monopole ionisation model
 
 23 May 07:  V.Ivanchenko (emhighenergy-V08-03-01)
-- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
   remove method SecondaryPostStep;
 
 22 May 07:  V.Ivanchenko (emhighenergy-V08-03-00)
-- G4VEmModel - changed interface of SampleSecondary method, it become 
+- G4VEmModel - changed interface of SampleSecondary method, it become
   void, extra parameter std::vector<G4DynamicParticle*>*, all
   classes using or inhereting this interface are modified.
   About 5% speadup of EM shower simulation
@@ -292,7 +305,7 @@ committal in the CVS repository !
 
 10 January 05: V.Ivant (emhighenergy-V08-00-00)
 - substitute the method SetStepLimits by SetStepFunction
-- move initialisation of default values to the constructor 
+- move initialisation of default values to the constructor
 
 29 November 05: V.Ivant (emhighenergy-V07-01-04)
 - Fix initialisation problems in G4hhIonisation and G4eeToHadrons and related classes

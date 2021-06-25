@@ -352,10 +352,11 @@ void G4PSTARStopping::FindData(G4int j, const G4Material* mat)
 
 void G4PSTARStopping::AddData(const G4float* stop, const G4Material* mat)
 {
-  G4LPhysicsFreeVector* v = 
-    new G4LPhysicsFreeVector(60, T0[0], T0[59]);
-  for(size_t i=0; i<60; ++i) { v->PutValues(i, T0[i], ((G4double)stop[i])*fac); }
-  v->SetSpline(true);
+  G4PhysicsFreeVector* v = 
+    new G4PhysicsFreeVector(60, T0[0], T0[59], true);
+  for(size_t i=0; i<60; ++i) { 
+    v->PutValues(i, T0[i], ((G4double)stop[i])*fac); 
+  }
   v->FillSecondDerivatives();
   materials.push_back(mat);
   sdata.push_back(v);

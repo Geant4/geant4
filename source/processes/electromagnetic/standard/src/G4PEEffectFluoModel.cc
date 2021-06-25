@@ -67,7 +67,7 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
 {
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
-  fminimalEnergy = 1.0*eV;
+  fminimalEnergy = 1.0*CLHEP::eV;
   SetDeexcitationFlag(true);
   fParticleChange = nullptr;
   fAtomDeexcitation = nullptr;
@@ -89,7 +89,9 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 				     const G4DataVector&)
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-  if(nullptr == fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  if(nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForGamma(); 
+  }
   size_t nmat = G4Material::GetNumberOfMaterials();
   fMatEnergyTh.resize(nmat, 0.0);
   for(size_t i=0; i<nmat; ++i) { 

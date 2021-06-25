@@ -12,6 +12,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+    
+15-04-21 mma (Hadr03-V10-07-02)
+- Hadr03.cc: RunManagerFactory
+             G4SteppingVerboseWithUnits
+	     ParticleHP env variables 
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+     
+04-03-21 A. Ribon (exhadr03-V10-07-01)
+- GammaNuclearPhysics, GammaNuclearPhysicsLEND : replaced
+  G4PhotoNuclearProcess (that has been deleted) with
+  G4HadronInelasticProcess.
+
+05-01-21 mma (exhadr03-V10-07-00)
+- PhysicsList: add GammaNuclearPhysicsLEND 
      
 22-10-20 mma (exhadr03-V10-06-04)
 - add fusion.mac 

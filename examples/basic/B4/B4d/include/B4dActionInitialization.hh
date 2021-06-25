@@ -47,4 +47,4 @@ class B4dActionInitialization : public G4VUserActionInitialization
 
 #endif
 
-    
+

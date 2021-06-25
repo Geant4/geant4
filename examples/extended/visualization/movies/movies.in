@@ -1,0 +1,4 @@
+# Basic test of movies
+/run/initialize
+/run/printProgress 1
+/run/beamOn 10

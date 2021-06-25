@@ -35,7 +35,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LossTableManager.hh"
-#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -76,13 +75,20 @@
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandardNR::PhysListEmStandardNR(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {
-  G4LossTableManager::Instance();
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetStepFunction(0.2, 100*um);
+  param->SetStepFunctionMuHad(0.2, 50*um);          
+  param->SetStepFunctionLightIons(0.1, 10*um);
+  param->SetStepFunctionIons(0.1, 1*um);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -117,21 +123,21 @@ void PhysListEmStandardNR::ConstructProcess()
 
        // Compton scattering
       G4ComptonScattering* cs = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel(),1);
+      cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
 
       // Photoelectric
       G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
       G4VEmModel* theLivermorePEModel = new G4LivermorePhotoElectricModel();
       theLivermorePEModel->SetHighEnergyLimit(10*GeV);
-      pe->SetEmModel(theLivermorePEModel,1);
+      pe->SetEmModel(theLivermorePEModel);
       ph->RegisterProcess(pe, particle);
 
       // Gamma conversion
       G4GammaConversion* gc = new G4GammaConversion();
       G4VEmModel* thePenelopeGCModel = new G4PenelopeGammaConversionModel();
       thePenelopeGCModel->SetHighEnergyLimit(1*GeV);
-      gc->SetEmModel(thePenelopeGCModel,1);
+      gc->SetEmModel(thePenelopeGCModel);
       ph->RegisterProcess(gc, particle);
 
       // Rayleigh scattering
@@ -141,7 +147,6 @@ void PhysListEmStandardNR::ConstructProcess()
 
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);
 
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
@@ -153,7 +158,6 @@ void PhysListEmStandardNR::ConstructProcess()
     } else if (particleName == "e+") {
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);
 
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
@@ -169,7 +173,6 @@ void PhysListEmStandardNR::ConstructProcess()
                particleName == "mu-"    ) {
 
       G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.2, 50*um);          
 
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(mub, particle);
@@ -181,11 +184,10 @@ void PhysListEmStandardNR::ConstructProcess()
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4UrbanMscModel* model = new G4UrbanMscModel();
       model->SetActivationLowEnergyLimit(energyLimit);
-      msc->SetEmModel(model, 1);
+      msc->SetEmModel(model);
       ph->RegisterProcess(msc, particle);
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 10*um);
       ph->RegisterProcess(ionIoni, particle);
 
       ph->RegisterProcess(nucr, particle);
@@ -195,12 +197,11 @@ void PhysListEmStandardNR::ConstructProcess()
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4UrbanMscModel* model = new G4UrbanMscModel();
       model->SetActivationLowEnergyLimit(energyLimit);
-      msc->SetEmModel(model, 1);
+      msc->SetEmModel(model);
       ph->RegisterProcess(msc, particle);
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 1*um);
       ph->RegisterProcess(ionIoni, particle);
 
       ph->RegisterProcess(nucr, particle);
@@ -212,13 +213,11 @@ void PhysListEmStandardNR::ConstructProcess()
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4UrbanMscModel* model = new G4UrbanMscModel();
       model->SetActivationLowEnergyLimit(energyLimit);
-      msc->SetEmModel(model, 1);
+      msc->SetEmModel(model);
       ph->RegisterProcess(msc, particle);
 
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.05, 1*um);
       ph->RegisterProcess(hIoni, particle);
-
       ph->RegisterProcess(nucr, particle);
 
     } else if ((!particle->IsShortLived()) &&
@@ -231,27 +230,9 @@ void PhysListEmStandardNR::ConstructProcess()
     }
   }
   
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(10*eV);        
-  emOptions.SetMaxEnergy(10*TeV);      
-  emOptions.SetDEDXBinning(12*20);      
-  emOptions.SetLambdaBinning(12*20); 
-
-  // scattering
-  emOptions.SetPolarAngleLimit(0.0);
-
   // Deexcitation
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

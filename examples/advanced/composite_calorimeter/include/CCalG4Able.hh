@@ -69,15 +69,14 @@ public:
   //Set the type of a logical volume to select its vis parameters.
   void setVisType(CCalVisualisable::visType, G4LogicalVolume*);
 
-
   //Sensitivity related
+  void sensitiveHandling();
   void setSensitivity(G4bool sens=true) {sensitivity=sens;}
   G4bool isSensitive() const {return sensitivity;}
 
   //Name
   G4String G4Name() const {return g4ableName;}
   void setName(const G4String& name) {g4ableName = name;}
-
 
   //Comparison operator needed for CCalG4AbleTable. Compares phys. volumes
   G4bool operator==(const CCalG4Able& right) const;
@@ -91,7 +90,7 @@ protected:
 
   //Constructs the sensitive detectors and associates them to the corresponding
   //logical volumes
-  virtual void constructSensitive() {}
+  virtual void constructSensitive() = 0;
 
 protected:
   //////////////////////////////////////////////////////////////////////////

@@ -39,7 +39,7 @@ class G4VSensitiveDetector;
 //  This class is used by G4SDManager for book keeping the
 // sensitive detector modules and hits collections. The order of
 // hits collections stored in G4HCofThisEvent is same as the
-// order of HClist. 
+// order of HClist.
 //  The order may vary from run to run, if the user adds/changes
 // some of his/her sensitive detector modules.
 //  In case user wants to make G4Run object persistent, this
@@ -48,34 +48,33 @@ class G4VSensitiveDetector;
 
 class G4HCtable
 {
-  public:
-    G4HCtable();
-    ~G4HCtable();
+ public:
+  G4HCtable();
+  ~G4HCtable();
 
-  public:
-    G4int Registor(G4String SDname,G4String HCname);
-    G4int GetCollectionID(G4String HCname) const;
-    G4int GetCollectionID(G4VSensitiveDetector* aSD) const;
+ public:
+  G4int Registor(G4String SDname, G4String HCname);
+  G4int GetCollectionID(G4String HCname) const;
+  G4int GetCollectionID(G4VSensitiveDetector* aSD) const;
 
-  private:
-    std::vector<G4String> SDlist;
-    std::vector<G4String> HClist;
+ private:
+  std::vector<G4String> SDlist;
+  std::vector<G4String> HClist;
 
-  public:
-    inline G4int entries() const
-    { return G4int(HClist.size()); }
-    inline G4String GetSDname(G4int i) const
-    {
-      if(i<0||i>entries()) return "***Not Defined***";
-      return SDlist[i];
-    }
-    inline G4String GetHCname(G4int i) const
-    {
-      if(i<0||i>entries()) return "***Not Defined***";
-      return HClist[i];
-    }
-
+ public:
+  inline G4int entries() const { return G4int(HClist.size()); }
+  inline G4String GetSDname(G4int i) const
+  {
+    if(i < 0 || i > entries())
+      return "***Not Defined***";
+    return SDlist[i];
+  }
+  inline G4String GetHCname(G4int i) const
+  {
+    if(i < 0 || i > entries())
+      return "***Not Defined***";
+    return HClist[i];
+  }
 };
 
 #endif
-

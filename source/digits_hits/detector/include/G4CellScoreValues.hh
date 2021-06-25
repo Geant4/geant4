@@ -30,8 +30,8 @@
 //
 // Class description:
 // This struct holds sums of scores for standard scoring.
-// 
-// 
+//
+//
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -41,24 +41,25 @@
 
 #include "globals.hh"
 
-class G4CellScoreValues {
-public:
-  G4CellScoreValues() :
-    fSumSL(0),
-    fSumSLW(0),
-    fSumSLW_v(0),
-    fSumSLWE(0),
-    fSumSLWE_v(0),
-    fSumTracksEntering(0),
-    fSumPopulation(0),
-    fSumCollisions(0),
-    fSumCollisionsWeight(0),
-    fNumberWeightedEnergy(0),
-    fFluxWeightedEnergy(0),
-    fAverageTrackWeight(0),
-    fImportance(0)
+class G4CellScoreValues
+{
+ public:
+  G4CellScoreValues()
+    : fSumSL(0)
+    , fSumSLW(0)
+    , fSumSLW_v(0)
+    , fSumSLWE(0)
+    , fSumSLWE_v(0)
+    , fSumTracksEntering(0)
+    , fSumPopulation(0)
+    , fSumCollisions(0)
+    , fSumCollisionsWeight(0)
+    , fNumberWeightedEnergy(0)
+    , fFluxWeightedEnergy(0)
+    , fAverageTrackWeight(0)
+    , fImportance(0)
   {}
-    
+
   G4double fSumSL;
   G4double fSumSLW;
   G4double fSumSLW_v;

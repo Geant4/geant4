@@ -23,44 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4eInverseBremstrahlung.hh
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4eInverseBremstrahlung.hh
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	25 October 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Adjoint/reverse bremstrahlung
-//
-
+//  Adjoint/reverse bremsstrahlung
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4eInverseBremsstrahlung_h
 #define G4eInverseBremsstrahlung_h 1
 
-#include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
-#include "G4eIonisation.hh"
+#include "G4VAdjointReverseReaction.hh"
+
 class G4VEmAdjointModel;
-class G4eInverseBremsstrahlung: public G4VAdjointReverseReaction
 
+class G4eInverseBremsstrahlung : public G4VAdjointReverseReaction
 {
-public:
+ public:
+  explicit G4eInverseBremsstrahlung(G4bool whichScatCase, G4String process_name,
+                                    G4VEmAdjointModel* aEmAdjointModel);
+  ~G4eInverseBremsstrahlung() override;
 
-  G4eInverseBremsstrahlung(G4bool whichScatCase, G4String process_name,
-		                   G4VEmAdjointModel* aEmAdjointModel);
-  ~G4eInverseBremsstrahlung();
-  
-private:
-    
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+
+  G4eInverseBremsstrahlung(G4eInverseBremsstrahlung&) = delete;
+  G4eInverseBremsstrahlung& operator=(const G4eInverseBremsstrahlung& right) =
+    delete;
 };
 
 #endif

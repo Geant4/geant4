@@ -62,10 +62,10 @@ namespace { G4Mutex  PenelopeBremsstrahlungModelMutex = G4MUTEX_INITIALIZER; }
 
 G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDefinition* part,
 							     const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),fParticle(0),
-   isInitialised(false),energyGrid(0),
-   XSTableElectron(0),XSTablePositron(0),fPenelopeFSHelper(0),
-   fPenelopeAngular(0),fLocalTable(false)
+  :G4VEmModel(nam),fParticleChange(nullptr),fParticle(nullptr),
+   fPenelopeFSHelper(nullptr),fPenelopeAngular(nullptr),fEnergyGrid(nullptr),
+   fXSTableElectron(nullptr),fXSTablePositron(nullptr),
+   fIsInitialised(false),fLocalTable(false)
 
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
@@ -77,10 +77,9 @@ G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDef
 
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
-  oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
+  fOscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
   //
-  verboseLevel= 0;
-
+  fVerboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing
   // 1 = warning for energy non-conservation
@@ -113,16 +112,15 @@ G4PenelopeBremsstrahlungModel::~G4PenelopeBremsstrahlungModel()
 void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* part,
                                              const G4DataVector& theCuts)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling G4PenelopeBremsstrahlungModel::Initialise()" << G4endl;
 
   SetParticle(part);
 
   if (IsMaster() && part == fParticle)
     {
-
       if (!fPenelopeFSHelper)
-	fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(verboseLevel);
+	fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(fVerboseLevel);
       if (!fPenelopeAngular)
 	fPenelopeAngular = new G4PenelopeBremsstrahlungAngular();
       //Clear and re-build the tables
@@ -135,14 +133,13 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* part,
       //Set the number of bins for the tables. 20 points per decade
       nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
       nBins = std::max(nBins,(size_t)100);
-      energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
+      fEnergyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
                                       HighEnergyLimit(),
                                       nBins-1); //one hidden bin is added
 
-
-      XSTableElectron = new
+      fXSTableElectron = new
 	std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
-      XSTablePositron = new
+      fXSTablePositron = new
 	std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
 
       G4ProductionCutsTable* theCoupleTable =
@@ -160,8 +157,7 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* part,
 
 	}
 
-
-      if (verboseLevel > 2) {
+      if (fVerboseLevel > 2) {
 	G4cout << "Penelope Bremsstrahlung model v2008 is initialized " << G4endl
 	       << "Energy range: "
 	       << LowEnergyLimit() / keV << " keV - "
@@ -170,18 +166,18 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition* part,
       }
     }
 
-  if(isInitialised) return;
+  if(fIsInitialised) return;
   fParticleChange = GetParticleChangeForLoss();
-  isInitialised = true;
+  fIsInitialised = true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* part,
 						    G4VEmModel *masterModel)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling  G4PenelopeBremsstrahlungModel::InitialiseLocal()" << G4endl;
-
   //
   //Check that particle matches: one might have multiple master models (e.g.
   //for e+ and e-).
@@ -193,12 +189,10 @@ void G4PenelopeBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* 
 	static_cast<G4PenelopeBremsstrahlungModel*> (masterModel);
 
       //Copy pointers to the data tables
-      energyGrid = theModel->energyGrid;
-      XSTableElectron = theModel->XSTableElectron;
-      XSTablePositron = theModel->XSTablePositron;
+      fEnergyGrid = theModel->fEnergyGrid;
+      fXSTableElectron = theModel->fXSTableElectron;
+      fXSTablePositron = theModel->fXSTablePositron;
       fPenelopeFSHelper = theModel->fPenelopeFSHelper;
-
-      //fPenelopeAngular = theModel->fPenelopeAngular;
 
       //created in each thread and initialized.
       if (!fPenelopeAngular)
@@ -217,14 +211,12 @@ void G4PenelopeBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* 
 	  fPenelopeAngular->PrepareTables(theMat,IsMaster());
 	}
 
-
       //copy the data
       nBins = theModel->nBins;
 
       //Same verbosity for all workers, as the master
-      verboseLevel = theModel->verboseLevel;
+      fVerboseLevel = theModel->fVerboseLevel;
     }
-
   return;
 }
 
@@ -237,23 +229,21 @@ G4double G4PenelopeBremsstrahlungModel::CrossSectionPerVolume(const G4Material* 
                                            G4double)
 {
   //
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4PenelopeBremsstrahlungModel" << G4endl;
 
   SetupForMaterial(theParticle, material, energy);
-
   G4double crossPerMolecule = 0.;
 
   G4PenelopeCrossSection* theXS = GetCrossSectionTableForCouple(theParticle,material,
                                                                 cutEnergy);
-
   if (theXS)
     crossPerMolecule = theXS->GetHardCrossSection(energy);
 
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
-  G4double atPerMol =  oscManager->GetAtomsPerMolecule(material);
+  G4double atPerMol =  fOscManager->GetAtomsPerMolecule(material);
 
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Material " << material->GetName() << " has " << atPerMol <<
       "atoms per molecule" << G4endl;
 
@@ -263,7 +253,7 @@ G4double G4PenelopeBremsstrahlungModel::CrossSectionPerVolume(const G4Material* 
 
   G4double crossPerVolume = crossPerMolecule*moleculeDensity;
 
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
   {
     G4cout << "G4PenelopeBremsstrahlungModel " << G4endl;
     G4cout << "Mean free path for gamma emission > " << cutEnergy/keV << " keV at " <<
@@ -299,7 +289,7 @@ G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* m
 							     G4double kineticEnergy,
 							     G4double cutEnergy)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling ComputeDEDX() of G4PenelopeBremsstrahlungModel" << G4endl;
 
   G4PenelopeCrossSection* theXS = GetCrossSectionTableForCouple(theParticle,material,
@@ -308,9 +298,8 @@ G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* m
   if (theXS)
     sPowerPerMolecule = theXS->GetSoftStoppingPower(kineticEnergy);
 
-
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
-  G4double atPerMol =  oscManager->GetAtomsPerMolecule(material);
+  G4double atPerMol =  fOscManager->GetAtomsPerMolecule(material);
 
   G4double moleculeDensity = 0.;
   if (atPerMol)
@@ -318,7 +307,7 @@ G4double G4PenelopeBremsstrahlungModel::ComputeDEDXPerVolume(const G4Material* m
 
   G4double sPowerPerVolume = sPowerPerMolecule*moleculeDensity;
 
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     {
       G4cout << "G4PenelopeBremsstrahlungModel " << G4endl;
       G4cout << "Stopping power < " << cutEnergy/keV << " keV at " <<
@@ -336,7 +325,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
 						      G4double cutG,
 						      G4double)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4PenelopeBremsstrahlungModel" << G4endl;
 
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
@@ -357,7 +346,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   if (kineticEnergy < cutG)
     return;
 
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Going to sample gamma energy for: " <<material->GetName() << " " <<
       "energy = " << kineticEnergy/keV << ", cut = " << cutG/keV << G4endl;
 
@@ -365,7 +354,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   G4double gammaEnergy =
     fPenelopeFSHelper->SampleGammaEnergy(kineticEnergy,material,cutG);
 
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Sampled gamma energy: " << gammaEnergy/keV << " keV" << G4endl;
 
   //Now sample the direction for the Gamma. Notice that the rotation is already done
@@ -373,7 +362,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
    G4ThreeVector gammaDirection1 =
      fPenelopeAngular->SampleDirection(aDynamicParticle,gammaEnergy,0,material);
 
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Sampled cosTheta for e-: " << gammaDirection1.cosTheta() << G4endl;
 
   G4double residualPrimaryEnergy = kineticEnergy-gammaEnergy;
@@ -405,7 +394,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
                                                       gammaEnergy);
   fvect->push_back(theGamma);
 
-  if (verboseLevel > 1)
+  if (fVerboseLevel > 1)
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Energy balance from G4PenelopeBremsstrahlung" << G4endl;
@@ -418,7 +407,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
 
-  if (verboseLevel > 0)
+  if (fVerboseLevel > 0)
     {
       G4double energyDiff = std::fabs(residualPrimaryEnergy+gammaEnergy-kineticEnergy);
       if (energyDiff > 0.05*keV)
@@ -440,28 +429,28 @@ void G4PenelopeBremsstrahlungModel::ClearTables()
     G4Exception("G4PenelopeBremsstrahlungModel::ClearTables()",
 		"em0100",FatalException,"Worker thread in this method");
 
-  if (XSTableElectron)
+  if (fXSTableElectron)
     {
-      for (auto& item : (*XSTableElectron))        
+      for (auto& item : (*fXSTableElectron))        
 	delete item.second;        
-      delete XSTableElectron;
-      XSTableElectron = nullptr;
+      delete fXSTableElectron;
+      fXSTableElectron = nullptr;
     }
-  if (XSTablePositron)
+  if (fXSTablePositron)
     {
-      for (auto& item : (*XSTablePositron))                
+      for (auto& item : (*fXSTablePositron))                
 	delete item.second;    
-      delete XSTablePositron;
-      XSTablePositron = nullptr;
+      delete fXSTablePositron;
+      fXSTablePositron = nullptr;
     }
   /*
-  if (energyGrid)
-    delete energyGrid;
+  if (fEnergyGrid)
+    delete fEnergyGrid;
   */
   if (fPenelopeFSHelper)
     fPenelopeFSHelper->ClearTables(IsMaster());
 
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     G4cout << "G4PenelopeBremsstrahlungModel: cleared tables" << G4endl;
 
  return;
@@ -488,7 +477,7 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
 
   //The table already exists
-  if (XSTableElectron->count(theKey) && XSTablePositron->count(theKey))
+  if (fXSTableElectron->count(theKey) && fXSTablePositron->count(theKey))
     return;
 
   //
@@ -496,7 +485,7 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
   //and for the given material/cut couple.
   //Equivalent of subroutines EBRaT and PINaT of Penelope
   //
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     {
       G4cout << "G4PenelopeBremsstrahlungModel: going to build cross section table " << G4endl;
       G4cout << "for e+/e- in " << mat->GetName() << " for Ecut(gamma)= " <<
@@ -504,25 +493,23 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
     }
 
   //Tables have been already created (checked by GetCrossSectionTableForCouple)
-  if (energyGrid->GetVectorLength() != nBins)
+  if (fEnergyGrid->GetVectorLength() != nBins)
     {
       G4ExceptionDescription ed;
       ed << "Energy Grid looks not initialized" << G4endl;
-      ed << nBins << " " << energyGrid->GetVectorLength() << G4endl;
+      ed << nBins << " " << fEnergyGrid->GetVectorLength() << G4endl;
       G4Exception("G4PenelopeBremsstrahlungModel::BuildXSTable()",
 		  "em2016",FatalException,ed);
     }
 
   G4PenelopeCrossSection* XSEntry = new G4PenelopeCrossSection(nBins);
   G4PenelopeCrossSection* XSEntry2 = new G4PenelopeCrossSection(nBins);
-
   const G4PhysicsTable* table = fPenelopeFSHelper->GetScaledXSTable(mat,cut);
-
 
   //loop on the energy grid
   for (size_t bin=0;bin<nBins;bin++)
     {
-       G4double energy = energyGrid->GetLowEdgeEnergy(bin);
+       G4double energy = fEnergyGrid->GetLowEdgeEnergy(bin);
        G4double XH0=0, XH1=0, XH2=0;
        G4double XS0=0, XS1=0, XS2=0;
 
@@ -582,8 +569,8 @@ void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double 
     }
 
   //Insert in the appropriate table
-  XSTableElectron->insert(std::make_pair(theKey,XSEntry));
-  XSTablePositron->insert(std::make_pair(theKey,XSEntry2));
+  fXSTableElectron->insert(std::make_pair(theKey,XSEntry));
+  fXSTablePositron->insert(std::make_pair(theKey,XSEntry2));
 
   return;
 }
@@ -609,7 +596,7 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
     {
       //Either Initialize() was not called, or we are in a slave and InitializeLocal() was
       //not invoked
-      if (!XSTableElectron)
+      if (!fXSTableElectron)
         {
 	  //create a **thread-local** version of the table. Used only for G4EmCalculator and
 	  //Unit Tests
@@ -617,23 +604,23 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
           G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
 		      "em2013",JustWarning,excep);
 	  fLocalTable = true;
-	  XSTableElectron = new
+	  fXSTableElectron = new
 	    std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
-	  if (!energyGrid)
-	    energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
+	  if (!fEnergyGrid)
+	    fEnergyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
 						HighEnergyLimit(),
 						nBins-1); //one hidden bin is added
 	  if (!fPenelopeFSHelper)
- 	    fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(verboseLevel);
+ 	    fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(fVerboseLevel);
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-      if (XSTableElectron->count(theKey)) //table already built
-        return XSTableElectron->find(theKey)->second;
+      if (fXSTableElectron->count(theKey)) //table already built
+        return fXSTableElectron->find(theKey)->second;
       else
 	{
 	  //If we are here, it means that Initialize() was inkoved, but the MaterialTable was
 	  //not filled up. This can happen in a UnitTest or via G4EmCalculator
-	  if (verboseLevel > 0)
+	  if (fVerboseLevel > 0)
 	    {
 	      //G4Exception (warning) is issued only in verbose mode
 	      G4ExceptionDescription ed;
@@ -649,37 +636,36 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
 	  BuildXSTable(mat,cut);
 	  lock.unlock();
 	  //now it should be ok
-	  return XSTableElectron->find(theKey)->second;
+	  return fXSTableElectron->find(theKey)->second;
 	}
-
     }
   if (part == G4Positron::Positron())
     {
       //Either Initialize() was not called, or we are in a slave and InitializeLocal() was
       //not invoked
-      if (!XSTablePositron)
+      if (!fXSTablePositron)
         {
 	  G4String excep = "The Cross Section Table for e+ was not initialized correctly!";
           G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
 		      "em2013",JustWarning,excep);
 	  fLocalTable = true;
-	  XSTablePositron = new
+	  fXSTablePositron = new
 	    std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
-	  if (!energyGrid)
-	    energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
+	  if (!fEnergyGrid)
+	    fEnergyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
 						HighEnergyLimit(),
 						nBins-1); //one hidden bin is added
 	  if (!fPenelopeFSHelper)
-            fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(verboseLevel);
+            fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(fVerboseLevel);
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
-      if (XSTablePositron->count(theKey)) //table already built
-        return XSTablePositron->find(theKey)->second;
+      if (fXSTablePositron->count(theKey)) //table already built
+        return fXSTablePositron->find(theKey)->second;
       else
         {
 	  //If we are here, it means that Initialize() was inkoved, but the MaterialTable was
 	  //not filled up. This can happen in a UnitTest or via G4EmCalculator
-	  if (verboseLevel > 0)
+	  if (fVerboseLevel > 0)
 	    {
 	      //Issue a G4Exception (warning) only in verbose mode
 	      G4ExceptionDescription ed;
@@ -695,13 +681,11 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
 	  BuildXSTable(mat,cut);
 	  lock.unlock();
 	  //now it should be ok
-	  return XSTablePositron->find(theKey)->second;
+	  return fXSTablePositron->find(theKey)->second;
         }
     }
   return nullptr;
 }
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

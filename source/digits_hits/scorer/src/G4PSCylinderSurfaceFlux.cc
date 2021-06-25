@@ -59,136 +59,173 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, 
-						 G4int direction, G4int depth)
-    : G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
-      weighted(true),divideByArea(true)
+G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
+                                                 G4int depth)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , fDirection(direction)
+  , EvtMap(0)
+  , weighted(true)
+  , divideByArea(true)
 {
-    DefineUnitAndCategory();
-    SetUnit("percm2");
+  DefineUnitAndCategory();
+  SetUnit("percm2");
 }
 
-G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, 
-						 G4int direction, 
-						 const G4String& unit, 
-						 G4int depth)
-    : G4VPrimitivePlotter(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
-      weighted(true),divideByArea(true)
+G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
+                                                 const G4String& unit,
+                                                 G4int depth)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , fDirection(direction)
+  , EvtMap(0)
+  , weighted(true)
+  , divideByArea(true)
 {
-    DefineUnitAndCategory();
-    SetUnit(unit);
+  DefineUnitAndCategory();
+  SetUnit(unit);
 }
 
-G4PSCylinderSurfaceFlux::~G4PSCylinderSurfaceFlux()
-{;}
+G4PSCylinderSurfaceFlux::~G4PSCylinderSurfaceFlux() { ; }
 
-G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VSolid* solid= ComputeCurrentSolid(aStep);
-  assert( dynamic_cast<G4Tubs*>(solid) );
+  G4VSolid* solid      = ComputeCurrentSolid(aStep);
+  assert(dynamic_cast<G4Tubs*>(solid));
 
   G4Tubs* tubsSolid = static_cast<G4Tubs*>(solid);
-  
-  G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
-  
-  if ( dirFlag > 0 ){
-    if (fDirection == fFlux_InOut || dirFlag == fDirection ){
 
-      G4StepPoint* thisStep=0;
-      if ( dirFlag == fFlux_In ){
-	thisStep = preStep;
-      }else if ( dirFlag == fFlux_Out ){
-	thisStep = aStep->GetPostStepPoint();
-      }else{
-	return FALSE;
+  G4int dirFlag = IsSelectedSurface(aStep, tubsSolid);
+
+  if(dirFlag > 0)
+  {
+    if(fDirection == fFlux_InOut || dirFlag == fDirection)
+    {
+      G4StepPoint* thisStep = 0;
+      if(dirFlag == fFlux_In)
+      {
+        thisStep = preStep;
       }
-  
+      else if(dirFlag == fFlux_Out)
+      {
+        thisStep = aStep->GetPostStepPoint();
+      }
+      else
+      {
+        return FALSE;
+      }
+
       G4TouchableHandle theTouchable = thisStep->GetTouchableHandle();
-      G4ThreeVector pdirection = thisStep->GetMomentumDirection();
-      G4ThreeVector localdir  = 
-	theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
+      G4ThreeVector pdirection       = thisStep->GetMomentumDirection();
+      G4ThreeVector localdir =
+        theTouchable->GetHistory()->GetTopTransform().TransformAxis(pdirection);
       G4ThreeVector position = thisStep->GetPosition();
-      G4ThreeVector localpos  =
-	theTouchable->GetHistory()->GetTopTransform().TransformAxis(position);
-      G4double angleFactor = (localdir.x()*localpos.x()+localdir.y()*localpos.y())
-	/std::sqrt(localdir.x()*localdir.x()
-		   +localdir.y()*localdir.y()+localdir.z()*localdir.z())
-	/std::sqrt(localpos.x()*localpos.x()+localpos.y()*localpos.y());
-    
-      if ( angleFactor < 0 ) angleFactor *= -1.;
-      G4double square = 2.*tubsSolid->GetZHalfLength()
-	*tubsSolid->GetInnerRadius()* tubsSolid->GetDeltaPhiAngle()/radian;
-    
+      G4ThreeVector localpos =
+        theTouchable->GetHistory()->GetTopTransform().TransformAxis(position);
+      G4double angleFactor =
+        (localdir.x() * localpos.x() + localdir.y() * localpos.y()) /
+        std::sqrt(localdir.x() * localdir.x() + localdir.y() * localdir.y() +
+                  localdir.z() * localdir.z()) /
+        std::sqrt(localpos.x() * localpos.x() + localpos.y() * localpos.y());
+
+      if(angleFactor < 0)
+        angleFactor *= -1.;
+      G4double square = 2. * tubsSolid->GetZHalfLength() *
+                        tubsSolid->GetInnerRadius() *
+                        tubsSolid->GetDeltaPhiAngle() / radian;
+
       G4double flux = 1.0;
-      if ( weighted ) flux *=preStep->GetWeight();  
+      if(weighted)
+        flux *= preStep->GetWeight();
       // Current (Particle Weight)
 
-      flux = flux/angleFactor;   
-      if ( divideByArea ) flux /= square;
-      //Flux with angle.
+      flux = flux / angleFactor;
+      if(divideByArea)
+        flux /= square;
+      // Flux with angle.
       G4int index = GetIndex(aStep);
-      EvtMap->add(index,flux);
+      EvtMap->add(index, flux);
 
-      if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+      if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
       {
         auto filler = G4VScoreHistFiller::Instance();
         if(!filler)
         {
-          G4Exception("G4PSCylinderSurfaceFlux::ProcessHits","SCORER0123",JustWarning,
-             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+          G4Exception("G4PSCylinderSurfaceFlux::ProcessHits", "SCORER0123",
+                      JustWarning,
+                      "G4TScoreHistFiller is not instantiated!! Histogram is "
+                      "not filled.");
         }
         else
         {
-          filler->FillH1(hitIDMap[index],thisStep->GetKineticEnergy(),flux);
+          filler->FillH1(hitIDMap[index], thisStep->GetKineticEnergy(), flux);
         }
       }
 
       return TRUE;
-    }else{
+    }
+    else
+    {
       return FALSE;
     }
-  }else{
-      return FALSE;
+  }
+  else
+  {
+    return FALSE;
   }
 }
 
-G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSolid){
-
-  G4TouchableHandle theTouchable = 
+G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep,
+                                                 G4Tubs* tubsSolid)
+{
+  G4TouchableHandle theTouchable =
     aStep->GetPreStepPoint()->GetTouchableHandle();
-  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();  
+  G4double kCarTolerance =
+    G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
-  if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
+  if(aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+  {
     // Entering Geometry
-    G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();
-    G4ThreeVector localpos1 = 
+    G4ThreeVector stppos1 = aStep->GetPreStepPoint()->GetPosition();
+    G4ThreeVector localpos1 =
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
-    if ( std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    //if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()  
+    if(std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength())
+      return -1;
+    // if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()
     //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
     //   <kCarTolerance ){
-    G4double localR2 = localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y();
+    G4double localR2 =
+      localpos1.x() * localpos1.x() + localpos1.y() * localpos1.y();
     G4double InsideRadius = tubsSolid->GetInnerRadius();
-    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
-	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
+    if(localR2 >
+         (InsideRadius - kCarTolerance) * (InsideRadius - kCarTolerance) &&
+       localR2 <
+         (InsideRadius + kCarTolerance) * (InsideRadius + kCarTolerance))
+    {
       return fFlux_In;
     }
   }
 
-  if (aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary ){
+  if(aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
+  {
     // Exiting Geometry
-    G4ThreeVector stppos2= aStep->GetPostStepPoint()->GetPosition();
-    G4ThreeVector localpos2 = 
+    G4ThreeVector stppos2 = aStep->GetPostStepPoint()->GetPosition();
+    G4ThreeVector localpos2 =
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
-    if ( std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    //if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y()  
-    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())) 
+    if(std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength())
+      return -1;
+    // if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y()
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
     // <kCarTolerance ){
-    G4double localR2 = localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y();
+    G4double localR2 =
+      localpos2.x() * localpos2.x() + localpos2.y() * localpos2.y();
     G4double InsideRadius = tubsSolid->GetInnerRadius();
-    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
-	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
+    if(localR2 >
+         (InsideRadius - kCarTolerance) * (InsideRadius - kCarTolerance) &&
+       localR2 <
+         (InsideRadius + kCarTolerance) * (InsideRadius + kCarTolerance))
+    {
       return fFlux_Out;
     }
   }
@@ -199,55 +236,61 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
 void G4PSCylinderSurfaceFlux::Initialize(G4HCofThisEvent* HCE)
 {
   EvtMap = new G4THitsMap<G4double>(GetMultiFunctionalDetector()->GetName(),
-				    GetName());
-  if ( HCID < 0 ) HCID = GetCollectionID(0);
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
+                                    GetName());
+  if(HCID < 0)
+    HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSCylinderSurfaceFlux::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSCylinderSurfaceFlux::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSCylinderSurfaceFlux::clear(){
-  EvtMap->clear();
-}
+void G4PSCylinderSurfaceFlux::clear() { EvtMap->clear(); }
 
-void G4PSCylinderSurfaceFlux::DrawAll()
-{;}
+void G4PSCylinderSurfaceFlux::DrawAll() { ; }
 
 void G4PSCylinderSurfaceFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
-  G4cout << " PrimitiveScorer" << GetName() <<G4endl; 
+  G4cout << " PrimitiveScorer" << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  flux  : " << *(itr->second)/GetUnitValue()
-	   << " ["<<GetUnit()<<"]"
-	   << G4endl;
+           << "  flux  : " << *(itr->second) / GetUnitValue() << " ["
+           << GetUnit() << "]" << G4endl;
   }
 }
 
 void G4PSCylinderSurfaceFlux::SetUnit(const G4String& unit)
 {
-    if ( divideByArea ) {
-	CheckAndSetUnit(unit,"Per Unit Surface");
-    } else {
-	if (unit == "" ){
-	    unitName = unit;
-	    unitValue = 1.0;
-	}else{
-	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-	    G4Exception("G4PSCylinderSurfaceFlux::SetUnit","DetPS0003",JustWarning,msg);
-	}
+  if(divideByArea)
+  {
+    CheckAndSetUnit(unit, "Per Unit Surface");
+  }
+  else
+  {
+    if(unit == "")
+    {
+      unitName  = unit;
+      unitValue = 1.0;
     }
+    else
+    {
+      G4String msg = "Invalid unit [" + unit + "] (Current  unit is [" +
+                     GetUnit() + "] ) for " + GetName();
+      G4Exception("G4PSCylinderSurfaceFlux::SetUnit", "DetPS0003", JustWarning,
+                  msg);
+    }
+  }
 }
 
-void G4PSCylinderSurfaceFlux::DefineUnitAndCategory(){
-   // Per Unit Surface
-   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
-   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
-   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+void G4PSCylinderSurfaceFlux::DefineUnitAndCategory()
+{
+  // Per Unit Surface
+  new G4UnitDefinition("percentimeter2", "percm2", "Per Unit Surface",
+                       (1. / cm2));
+  new G4UnitDefinition("permillimeter2", "permm2", "Per Unit Surface",
+                       (1. / mm2));
+  new G4UnitDefinition("permeter2", "perm2", "Per Unit Surface", (1. / m2));
 }
-
-

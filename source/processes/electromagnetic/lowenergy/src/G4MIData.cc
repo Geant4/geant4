@@ -35,10 +35,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MIData::G4MIData(const G4String& name):
-G4VMaterialExtension(name),
-fFilenameFF(""),
-fFilenameCS(""),
-fMolWeight(0.) 
+  G4VMaterialExtension(name),
+  fFilenameFF(""),
+  fFilenameCS(""),
+  fMolWeight(0.) 
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

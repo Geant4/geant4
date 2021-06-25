@@ -7,12 +7,22 @@
               History file for quasi_elastic directory
               -------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16-Apr-2021, B. Morgan hadr-qelastic-V10-07-01
+- Migrate build to modular CMake API
+
+13-Apr-2021, A.Ribon hadr-qelastic-V10-07-00
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 24-Jul-2020, A.Ribon hadr-qelastic-V10-06-01
 - G4QuasiElRatios : extended to charmed and bottom hadrons.
@@ -78,7 +88,7 @@ code and to keep track of all tags.
 - Renaming variables to avoid shadowing of the global ones
 
 20-Apr-2012, W.Pokorski hadr-qelastic-V09-05-01
-- Bug fix in G4QuasiElRatios affecting the initialisation of table; probably now effect on physics just on slight performance 
+- Bug fix in G4QuasiElRatios affecting the initialisation of table; probably now effect on physics just on slight performance
   degradation
 
 11-Apr-2012, W.Pokorski hadr-qelastic-V09-05-00
@@ -93,6 +103,6 @@ code and to keep track of all tags.
 18-Oct-2001, W.Pokorski hadr-qelastic-V09-04-01
 - Removing unnecessary dependecies in GNUMakefile, fixing warnings about missing returns.
 
-04-Oct-2011, W.Pokorski	
+04-Oct-2011, W.Pokorski
 - This new directory contains now the quasi-elastic process that have been extracted from CHIPS.
   It is used by all the physics lists and it has been made independent from CHIPS.

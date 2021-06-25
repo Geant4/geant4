@@ -48,21 +48,20 @@ class G4UIcmdWithAnInteger;
 //
 
 template <typename T>
-class G4TScoreNtupleWriterMessenger: public G4UImessenger
+class G4TScoreNtupleWriterMessenger : public G4UImessenger
 {
-  public:
-    G4TScoreNtupleWriterMessenger(G4TScoreNtupleWriter<T>* scoreNtupleWriter);
-    ~G4TScoreNtupleWriterMessenger();
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-  
-  private:
-    G4TScoreNtupleWriter<T>*  fScoreNtupleWriter;
-    G4UIdirectory*        fDirectory;
-    G4UIcmdWithAString*   fWriterFileNameCmd;   
-    G4UIcmdWithAnInteger* fWriterVerboseCmd;
+ public:
+  G4TScoreNtupleWriterMessenger(G4TScoreNtupleWriter<T>* scoreNtupleWriter);
+  ~G4TScoreNtupleWriterMessenger();
+  void SetNewValue(G4UIcommand* command, G4String newValues);
+
+ private:
+  G4TScoreNtupleWriter<T>* fScoreNtupleWriter;
+  G4UIdirectory* fDirectory;
+  G4UIcmdWithAString* fWriterFileNameCmd;
+  G4UIcmdWithAnInteger* fWriterVerboseCmd;
 };
 
 #include "G4TScoreNtupleWriterMessenger.icc"
 
 #endif
-

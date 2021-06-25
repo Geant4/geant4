@@ -40,11 +40,8 @@
 // 28 Jan 2009  L.Pandola    Added public method to make a easier migration of
 //                           G4LowEnergyIonisation to G4LivermoreIonisationModel
 // -------------------------------------------------------------------
-
 // Class description: 
 // Provides cross sections with cut for LowEnergyIonisation 
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
 //
 
@@ -62,8 +59,7 @@ class G4VDataSetAlgorithm;
 class G4eIonisationCrossSectionHandler : public G4VCrossSectionHandler
 {
 public:
-
-  G4eIonisationCrossSectionHandler(const G4VEnergySpectrum* spec,
+  explicit G4eIonisationCrossSectionHandler(const G4VEnergySpectrum* spec,
                                          G4VDataSetAlgorithm* alg,
                                          G4double emin, 
                                          G4double emax, 
@@ -74,25 +70,19 @@ public:
   G4double GetCrossSectionAboveThresholdForElement(G4double energy,
 						   G4double cutEnergy,
 						   G4int Z);
- 
+  G4eIonisationCrossSectionHandler& operator=(const G4eIonisationCrossSectionHandler& right) = delete;
+  G4eIonisationCrossSectionHandler(const G4eIonisationCrossSectionHandler&) = delete;
+
 protected:
 
   std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
                                 const G4DataVector& energyVector, 
-				const G4DataVector* energyCuts);
-
+				const G4DataVector* energyCuts) override;
 
 private:
-
-  // Hide copy constructor and assignment operator 
-  G4eIonisationCrossSectionHandler& operator=(const G4eIonisationCrossSectionHandler& right);
-  G4eIonisationCrossSectionHandler(const G4eIonisationCrossSectionHandler&);
-
- const G4VEnergySpectrum* theParam;
-
+  const G4VEnergySpectrum* theParam;
   G4VDataSetAlgorithm* interp;
   G4int verbose;
-  
 };
  
 #endif

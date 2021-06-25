@@ -81,5 +81,3 @@ G4double G4BetheBlochNoDeltaModel::CrossSectionPerVolume(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-

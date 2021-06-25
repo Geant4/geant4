@@ -53,11 +53,18 @@ class ICRP110PhantomConstruction : public G4VUserDetectorConstruction
      ICRP110PhantomConstruction();
     ~ICRP110PhantomConstruction();
      G4VPhysicalVolume* Construct();
-     
+
+     G4VPhysicalVolume* GetMotherVolume() {return fMotherVolume;}
+     G4VPhysicalVolume* GetPhantumContainer() {return fPhantomContainer;}
+
      inline G4int GetNumberVoxelX(){return fNVoxelX;};
      inline G4int GetNumberVoxelY() {return fNVoxelY;};
      inline G4int GetNumberVoxelZ() {return fNVoxelZ;};
-     
+
+     inline G4double GetVoxelHalfDimX(){return fVoxelHalfDimX;};
+     inline G4double GetVoxelHalfDimY() {return fVoxelHalfDimY;};
+     inline G4double GetVoxelHalfDimZ() {return fVoxelHalfDimZ;};
+
      void SetPhantomSex(G4String);
      void SetPhantomSection(G4String);
 
@@ -68,6 +75,8 @@ class ICRP110PhantomConstruction : public G4VUserDetectorConstruction
   ICRP110PhantomMaterial_Male* fMaterial_Male;
   ICRP110PhantomMessenger* fMessenger;
  // std::vector<G4Material*> fMaterials;
+  G4VPhysicalVolume* fMotherVolume;
+  G4VPhysicalVolume* fPhantomContainer;
   G4int fNVoxelX;
   G4int fNVoxelY; 
   G4int fNVoxelZ;

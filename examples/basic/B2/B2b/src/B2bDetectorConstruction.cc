@@ -26,7 +26,7 @@
 //
 /// \file B2bDetectorConstruction.cc
 /// \brief Implementation of the B2bDetectorConstruction class
- 
+
 #include "B2bDetectorConstruction.hh"
 #include "B2bDetectorMessenger.hh"
 #include "B2bChamberParameterisation.hh"
@@ -56,21 +56,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal 
-G4GlobalMagFieldMessenger* B2bDetectorConstruction::fMagFieldMessenger = 0;
- 
+G4ThreadLocal
+G4GlobalMagFieldMessenger* B2bDetectorConstruction::fMagFieldMessenger = nullptr;
+
 B2bDetectorConstruction::B2bDetectorConstruction()
 :G4VUserDetectorConstruction(),
- fLogicTarget(NULL), fLogicChamber(NULL), 
- fTargetMaterial(NULL), fChamberMaterial(NULL), 
- fStepLimit(NULL), 
+ fLogicTarget(nullptr), fLogicChamber(nullptr),
+ fTargetMaterial(nullptr), fChamberMaterial(nullptr),
+ fStepLimit(nullptr),
  fCheckOverlaps(true)
 {
   fMessenger = new B2bDetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 B2bDetectorConstruction::~B2bDetectorConstruction()
 {
   delete fStepLimit;
@@ -78,7 +78,7 @@ B2bDetectorConstruction::~B2bDetectorConstruction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 G4VPhysicalVolume* B2bDetectorConstruction::Construct()
 {
   // Define materials
@@ -92,13 +92,13 @@ G4VPhysicalVolume* B2bDetectorConstruction::Construct()
 
 void B2bDetectorConstruction::DefineMaterials()
 {
-  // Material definition 
+  // Material definition
 
   G4NistManager* nistManager = G4NistManager::Instance();
 
   // Air defined using NIST Manager
   nistManager->FindOrBuildMaterial("G4_AIR");
-  
+
   // Lead defined using NIST Manager
   fTargetMaterial  = nistManager->FindOrBuildMaterial("G4_Pb");
 
@@ -116,19 +116,19 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
   G4Material* air  = G4Material::GetMaterial("G4_AIR");
 
   // Sizes of the principal geometrical components (solids)
-  
+
   G4int NbOfChambers = 5;
   G4double chamberSpacing = 80*cm; // from chamber center to center!
 
   G4double chamberWidth = 20.0*cm; // width of the chambers
   G4double targetLength =  5.0*cm; // full length of Target
-  
+
   G4double trackerLength = (NbOfChambers+1)*chamberSpacing;
 
   G4double worldLength = 1.2 * (2*targetLength + trackerLength);
 
   G4double targetRadius  = 0.5*targetLength;   // Radius of Target
-  targetLength = 0.5*targetLength;             // Half length of the Target  
+  targetLength = 0.5*targetLength;             // Half length of the Target
   G4double trackerSize   = 0.5*trackerLength;  // Half length of the Tracker
 
   // Definitions of Solids, Logical Volumes, Physical Volumes
@@ -149,9 +149,9 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                  worldS,   //its solid
                  air,      //its material
                  "World"); //its name
-  
+
   //  Must place the World Physical volume unrotated at (0,0,0).
-  // 
+  //
   G4VPhysicalVolume* worldPV
     = new G4PVPlacement(
                  0,               // no rotation
@@ -161,10 +161,10 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                  0,               // its mother  volume
                  false,           // no boolean operations
                  0,               // copy number
-                 fCheckOverlaps); // checking overlaps 
+                 fCheckOverlaps); // checking overlaps
 
   // Target
-  
+
   G4ThreeVector positionTarget = G4ThreeVector(0,0,-(targetLength+trackerSize));
 
   G4Tubs* targetS
@@ -178,19 +178,19 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                     worldLV,        // its mother volume
                     false,          // no boolean operations
                     0,              // copy number
-                    fCheckOverlaps); // checking overlaps 
+                    fCheckOverlaps); // checking overlaps
 
   G4cout << "Target is " << 2*targetLength/cm << " cm of "
          << fTargetMaterial->GetName() << G4endl;
 
   // Tracker
- 
+
   G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
 
   G4Tubs* trackerS
     = new G4Tubs("tracker",0,trackerSize,trackerSize, 0.*deg, 360.*deg);
   G4LogicalVolume* trackerLV
-    = new G4LogicalVolume(trackerS, air, "Tracker",0,0,0);  
+    = new G4LogicalVolume(trackerS, air, "Tracker",0,0,0);
   new G4PVPlacement(0,               // no rotation
                     positionTracker, // at (x,y,z)
                     trackerLV,       // its logical volume
@@ -198,18 +198,18 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                     worldLV,         // its mother  volume
                     false,           // no boolean operations
                     0,               // copy number
-                    fCheckOverlaps); // checking overlaps 
+                    fCheckOverlaps); // checking overlaps
 
   // Tracker segments
-  
+
   // An example of Parameterised volumes
   // Dummy values for G4Tubs -- modified by parameterised volume
 
   G4Tubs* chamberS
     = new G4Tubs("tracker",0, 100*cm, 100*cm, 0.*deg, 360.*deg);
-  fLogicChamber 
+  fLogicChamber
     = new G4LogicalVolume(chamberS,fChamberMaterial,"Chamber",0,0,0);
-  
+
   G4double firstPosition = -trackerSize + chamberSpacing;
   G4double firstLength   = trackerLength/10;
   G4double lastLength    = trackerLength;
@@ -220,36 +220,36 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                                   firstPosition,  // Z of center of first
                                   chamberSpacing, // Z spacing of centers
                                   chamberWidth,  // chamber width
-                                  firstLength,    // initial length 
+                                  firstLength,    // initial length
                                   lastLength);    // final length
-                           
+
   // dummy value : kZAxis -- modified by parameterised volume
 
   new G4PVParameterised("Chamber",       // their name
                         fLogicChamber,   // their logical volume
                         trackerLV,       // Mother logical volume
-                        kZAxis,          // Are placed along this axis 
+                        kZAxis,          // Are placed along this axis
                         NbOfChambers,    // Number of chambers
                         chamberParam,    // The parametrisation
-                        fCheckOverlaps); // checking overlaps 
+                        fCheckOverlaps); // checking overlaps
 
   G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
          << G4endl
          << "The chambers are " << chamberWidth/cm << " cm of "
          << fChamberMaterial->GetName() << G4endl
-         << "The distance between chamber is " << chamberSpacing/cm << " cm" 
+         << "The distance between chamber is " << chamberSpacing/cm << " cm"
          << G4endl;
 
   // Visualization attributes
 
   G4VisAttributes* boxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  worldLV   ->SetVisAttributes(boxVisAtt);  
+  worldLV   ->SetVisAttributes(boxVisAtt);
   fLogicTarget ->SetVisAttributes(boxVisAtt);
   trackerLV ->SetVisAttributes(boxVisAtt);
 
   G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   fLogicChamber->SetVisAttributes(chamberVisAtt);
-  
+
   // Example of User Limits
   //
   // Below is an example of how to set tracking constraints in a given
@@ -260,7 +260,7 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
   G4double maxStep = 0.5*chamberWidth;
   fStepLimit = new G4UserLimits(maxStep);
   trackerLV->SetUserLimits(fStepLimit);
-  
+
   /// Set additional contraints on the track, with G4UserSpecialCuts
   ///
   /// G4double maxLength = 2*trackerLength, maxTime = 0.1*ns, minEkin = 10*MeV;
@@ -275,7 +275,7 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 void B2bDetectorConstruction::ConstructSDandField()
 {
   // Sensitive detectors
@@ -292,7 +292,7 @@ void B2bDetectorConstruction::ConstructSDandField()
   G4ThreeVector fieldValue = G4ThreeVector();
   fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
   fMagFieldMessenger->SetVerboseLevel(1);
-  
+
   // Register the field messenger for deleting
   G4AutoDelete::Register(fMagFieldMessenger);
 }
@@ -311,17 +311,17 @@ void B2bDetectorConstruction::SetTargetMaterial(G4String materialName)
         fTargetMaterial = pttoMaterial;
         if (fLogicTarget) fLogicTarget->SetMaterial(fTargetMaterial);
         G4cout
-          << G4endl 
+          << G4endl
           << "----> The target is made of " << materialName << G4endl;
      } else {
         G4cout
-          << G4endl 
+          << G4endl
           << "-->  WARNING from SetTargetMaterial : "
           << materialName << " not found" << G4endl;
      }
   }
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
@@ -336,7 +336,7 @@ void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
         fChamberMaterial = pttoMaterial;
         if (fLogicChamber) fLogicChamber->SetMaterial(fChamberMaterial);
         G4cout
-          << G4endl 
+          << G4endl
           << "----> The chambers are made of " << materialName << G4endl;
      } else {
         G4cout
@@ -348,7 +348,7 @@ void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 void B2bDetectorConstruction::SetMaxStep(G4double maxStep)
 {
   if ((fStepLimit)&&(maxStep>0.)) fStepLimit->SetMaxAllowedStep(maxStep);

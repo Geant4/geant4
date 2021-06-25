@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16-Apr-2021 Ben Morgan     hadr-partonstring-mgt-V10-07-01
+- Migrate build to modular CMake API
+
+13-Apr-2021 A. Ribon       hadr-partonstring-mgt-V10-07-00
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+
 29-Oct-2020 B. Morgan      hadr-partonstring-mgt-V10-06-03
 -  Remove inclusion of obsolete CMake module
 

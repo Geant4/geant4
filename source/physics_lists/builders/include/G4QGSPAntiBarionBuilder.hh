@@ -51,14 +51,9 @@ class G4QGSPAntiBarionBuilder : public G4VAntiBarionBuilder {
     G4QGSPAntiBarionBuilder( G4bool quasiElastic = false );
     virtual ~G4QGSPAntiBarionBuilder() {};
 
-    virtual void Build( G4HadronElasticProcess* ) final override {}
-    virtual void Build( G4AntiProtonInelasticProcess* aP ) final override;
-    virtual void Build( G4AntiNeutronInelasticProcess* aP ) final override;
-    virtual void Build( G4AntiDeuteronInelasticProcess* ) final override;
-    virtual void Build( G4AntiTritonInelasticProcess* ) final override;
-    virtual void Build( G4AntiHe3InelasticProcess* ) final override;
-    virtual void Build( G4AntiAlphaInelasticProcess* ) final override;
-    
+    virtual void Build( G4HadronElasticProcess* ) final override {}  
+    virtual void Build( G4HadronInelasticProcess* aP ) final override;
+  
     virtual void SetMinEnergy( G4double val ) final override { theMin = val; }
     virtual void SetMaxEnergy( G4double val ) final override { theMax = val; }
 

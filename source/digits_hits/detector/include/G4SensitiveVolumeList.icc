@@ -34,17 +34,28 @@
 //
 //   ----------------  G4SensitiveVolumeList  -----------------
 
+// Get and Set Operations for Has Relationships
 
-//Get and Set Operations for Has Relationships
+inline const std::vector<G4VPhysicalVolume*>&
+G4SensitiveVolumeList::get_the_G4VPhysicalVolume_list() const
+{
+  return the_G4VPhysicalVolume_list;
+}
 
-      inline const std::vector<G4VPhysicalVolume*>& G4SensitiveVolumeList::get_the_G4VPhysicalVolume_list() const { return the_G4VPhysicalVolume_list; }
+inline void G4SensitiveVolumeList::set_the_G4VPhysicalVolume_list(
+  const std::vector<G4VPhysicalVolume*> value)
+{
+  the_G4VPhysicalVolume_list = value;
+}
 
-      inline void G4SensitiveVolumeList::set_the_G4VPhysicalVolume_list(const std::vector<G4VPhysicalVolume*> value) { the_G4VPhysicalVolume_list = value; }
+inline const std::vector<G4LogicalVolume*>&
+G4SensitiveVolumeList::get_the_G4LogicalVolume() const
+{
+  return the_G4LogicalVolume_list;
+}
 
-
-      inline const std::vector<G4LogicalVolume*>& G4SensitiveVolumeList::get_the_G4LogicalVolume() const { return the_G4LogicalVolume_list; }
-
-      inline void G4SensitiveVolumeList::set_the_G4LogicalVolume(const std::vector<G4LogicalVolume*> value) { the_G4LogicalVolume_list = value; }
-
-
-
+inline void G4SensitiveVolumeList::set_the_G4LogicalVolume(
+  const std::vector<G4LogicalVolume*> value)
+{
+  the_G4LogicalVolume_list = value;
+}

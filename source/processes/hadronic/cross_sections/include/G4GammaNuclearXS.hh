@@ -96,15 +96,15 @@ private:
 
   inline G4PhysicsVector* GetPhysicsVector(G4int Z);
 
-  G4VCrossSectionDataSet* ggXsection;
+  G4VCrossSectionDataSet* ggXsection = nullptr;
   const G4ParticleDefinition* gamma;
+
+  G4bool isMaster = false;
 
   static const G4int MAXZGAMMAN = 93;
   static G4PhysicsVector* data[MAXZGAMMAN];
   static G4double coeff[MAXZGAMMAN];
   static G4String gDataDirectory;
-
-  G4bool  isMaster;
 
 #ifdef G4MULTITHREADED
   static G4Mutex gNuclearXSMutex;

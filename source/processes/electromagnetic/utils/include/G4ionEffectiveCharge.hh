@@ -65,7 +65,7 @@ public:
 
   explicit G4ionEffectiveCharge();
 
-  virtual ~G4ionEffectiveCharge();
+  ~G4ionEffectiveCharge() = default;
 
   G4double EffectiveChargeSquareRatio(
                            const G4ParticleDefinition* p,
@@ -76,17 +76,18 @@ public:
                            const G4Material* material,
 			         G4double kineticEnergy);
 
-private:
-
   // hide assignment operator
   G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right) = delete;
   G4ionEffectiveCharge(const G4ionEffectiveCharge&) = delete;
 
-  G4double                    inveplus;
+private:
+
   G4Pow*                      g4calc;
 
-  const G4ParticleDefinition* lastPart;
-  const G4Material*           lastMat;
+  const G4ParticleDefinition* lastPart = nullptr;
+  const G4Material*           lastMat = nullptr;
+
+  G4double                    inveplus;
   G4double                    lastKinEnergy;
 
   G4double                    chargeCorrection;
@@ -107,13 +108,9 @@ inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4Material* material,
 			         G4double kineticEnergy)
 {
-  G4double charge = effCharge;
-  if( kineticEnergy != lastKinEnergy || material != lastMat || p != lastPart) {
-    charge = EffectiveCharge(p,material,kineticEnergy);
-  }
-  charge *= chargeCorrection*inveplus;
-
-  return charge*charge;
+  const G4double aCharge = 
+    EffectiveCharge(p,material,kineticEnergy)*chargeCorrection*inveplus;
+  return aCharge*aCharge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

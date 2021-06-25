@@ -7,12 +7,28 @@
               History file for theo_high_energy directory
               -------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+04-Jun-2021, Alberto Ribon              (had-theo-HE-V10-07-02)
+- G4TheoFSGenerator : added accessor (i.e. "Get") methods for the
+  corresponding setter methods (i.e. "Set", already existing).
+  This can be useful for users to access at run-time some information
+  available from a hadronic final-state model.  
+
+16-Apr-2021, Ben Morgan                 (had-theo-HE-V10-07-01)
+- Migrate build to modular CMake API
+
+13-Apr-2021, Alberto Ribon              (had-theo-HE-V10-07-00)
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 07-Nov-2020, Vladimir Ivanchenko        (had-theo-HE-V10-06-04)
 - G4CRCoalescence : use inheritance from G4HadronicInteraction
@@ -43,7 +59,7 @@ code and to keep track of all tags.
 05-Mar-2020, Vladimir Ivanchenko        (had-theo-HE-V10-06-01)
 - G4QuasiElasticChannel, G4TheoFSGenerator - clean-up: use C++11
     keywords and loops, removed unused methods, coherently aline
-    identation and brackets 
+    identation and brackets
 
 24-Feb-2020, Vladimir Ivanchenko        (had-theo-HE-V10-06-00)
 - G4QuasiElasticChannel - use inheritance from G4HadronicInteraction
@@ -77,7 +93,7 @@ code and to keep track of all tags.
 - remove G4LMsdGenerator and G4LMsdChannel
 
 15-Oct-2014, V. Grichine:               (had-theo-HE-V10-00-05)
-- G4LMsdGenerator and G4LMsdChannel were added 
+- G4LMsdGenerator and G4LMsdChannel were added
   to provide interface to inelastic single diffraction dissociation
 
 1-July-2014, Gunter Folger              (had-theo-HE-V10-00-04)
@@ -92,7 +108,7 @@ code and to keep track of all tags.
 05-March-2014, Gunter Folger            (had-theo-HE-V10-00-01)
 - G4TheoFSGenerator: remove const_cast for ParticleDefinition and
    simplify code.
- 
+
 29-Jan-2014, Gunter Folger              (had-theo-HE-V10-00-00)
 - Removed models/common from sources.cmake
 
@@ -146,11 +162,11 @@ code and to keep track of all tags.
 	in place of QuasiFreeRatios from chips.
 	also update Gnumakefile and sources.cmake for added(*) dependency.
 	 (*) ProjectileDiffraction still(?) relies on chips, so dependency on chips
-	 cannot be removed. 
+	 cannot be removed.
 
-21-Sep-2011, G.Folger	    had-theo-HE-V09-04-03 
-              note that had-theo-HE-V09-04-02 was done without record 
-- G4ProjectileDiffractiveChannel.cc: finish migration to integer A&Z 
+21-Sep-2011, G.Folger	    had-theo-HE-V09-04-03
+              note that had-theo-HE-V09-04-02 was done without record
+- G4ProjectileDiffractiveChannel.cc: finish migration to integer A&Z
 - G4QuasiElasticChannel: use QuasiFreeRatios in place of QuasiElRatios
 
 8-Aug-2011, M. Kelsey
@@ -169,7 +185,7 @@ code and to keep track of all tags.
   	had-theo-HE-V09-04-01
 
 17-Mar-2011 G.Folger        had-theo-HE-V09-04-00
--  Add G4TheoFSGenerator::GetEnergyMomentumCheckLevel() method. 
+-  Add G4TheoFSGenerator::GetEnergyMomentumCheckLevel() method.
 -  M.Kelsey: store primary particle, so that cascade in Propagate has access
 
 17-Sep-2010 G.Folger        had-theo-HE-V09-03-01
@@ -193,19 +209,19 @@ code and to keep track of all tags.
 -  Add Fermi momentum to quasi elastic scattering
 
 15-Nov-2007 G.Folger        had-theo-HE-V09-00-01
--  Correct Projectile Diffractive scattering: when a very unusal nucleus 
+-  Correct Projectile Diffractive scattering: when a very unusal nucleus
     PDGcode is given by chips, recreate another final state.
-    
+
 13-Nov-2007 G.Folger        had-theo-HE-V09-00-00
 -  Add Channel for Projectile Diffractive scattering
 
 12-04-2007 Gunter Folger    had-theo-HE-V08-02-01
--  add model name to identify model for hadronic whiteboard; default for 
+-  add model name to identify model for hadronic whiteboard; default for
    G4TheoFSGenerator is "TheoFSGenerator", but the ctor in physics lists should
    set better name
 
 30-03-2007 Gunter Folger    had-theo-HE-V08-02-00
-- add G4QuasiElasticChannel to simulate quasielastic scattering; Relies on 
+- add G4QuasiElasticChannel to simulate quasielastic scattering; Relies on
    Chips class  G4QuasiFreeRatios.
 - modify G4TheoFSGenerator use G4QuasiElasticChannel to add quasielastic
    scattering for string models, and use these in competition to the string

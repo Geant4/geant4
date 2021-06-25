@@ -7,16 +7,19 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
-13.04.2021 G. Cosmo    Tag: gammaknife-V10-06-03
+24.05.2021 B. Morgan (gammaknife-V10-07-02)
+           - Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+13.04.2021 G. Cosmo    Tag: gammaknife-V10-07-01
            - Use default MixMax random number engine.
            - Fixed interactive run to just execute defaultMacro.mac.
 
-11.04.2021 V. Ivanchenko
+11.04.2021 V. Ivanchenko  Tag: gammaknife-V10-07-00
            - GammaKnifePhysicsList - added forgotten header
 
-07.11.2020 S. Guatelli Tag: gammaknife-V10-06-02
+07.11.2020 S. Guatelli    Tag: gammaknife-V10-06-02
            - Migration to G4RunManagerFactory
-           
+
 07.11.2020 F.Romano    Tag: gammaknife-V10-06-01
            - README updated
 

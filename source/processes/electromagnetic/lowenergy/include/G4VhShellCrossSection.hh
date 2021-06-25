@@ -41,7 +41,6 @@
 // 15 Mar 2011 ALF          Introduced the usage of G4AtomicShellEnumerator
 // 09 Mar 2012 LP           Added const G4Material* to the signature of virtual 
 //                          methods.
-//
 // -------------------------------------------------------------------
 
 // Class Description: 
@@ -58,14 +57,10 @@
 #include "G4AtomicShellEnumerator.hh"
 #include "G4Material.hh"
 
-
 class G4VhShellCrossSection 
 {
-
 public:
-
-  G4VhShellCrossSection(const G4String& xname = "");
-
+  explicit G4VhShellCrossSection(const G4String& xname = "");
   virtual ~G4VhShellCrossSection();
 
   G4int SelectRandomShell(G4int Z, 
@@ -87,25 +82,19 @@ public:
 				G4double mass,
 				const G4Material* mat) =0;
 
-  //protected:
-
   virtual std::vector<G4double> Probabilities(G4int Z,
 					      G4double incidentEnergy,
 					      G4double mass,
 					      G4double deltaEnergy,
 					      const G4Material* mat) = 0;
 
-
   virtual void SetTotalCS(G4double);
-
   inline const G4String& GetName() const; 
 
-private:
+  G4VhShellCrossSection(const  G4VhShellCrossSection&) = delete;
+  G4VhShellCrossSection & operator=(const  G4VhShellCrossSection &right) = delete;
 
-  // Hide copy constructor and assignment operator 
-  G4VhShellCrossSection(const  G4VhShellCrossSection&);
-  G4VhShellCrossSection & operator=(const  G4VhShellCrossSection &right);
-
+private: 
   G4String name;
 
 };

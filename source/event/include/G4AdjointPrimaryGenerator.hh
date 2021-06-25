@@ -47,7 +47,7 @@
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include"G4PhysicsOrderedFreeVector.hh"
+#include"G4PhysicsFreeVector.hh"
 
 class G4AdjointPosOnPhysVolGenerator;
 class G4Event;
@@ -98,7 +98,7 @@ class G4AdjointPrimaryGenerator
     G4double radius_spherical_source = 0.0;
     G4ThreeVector center_spherical_source;
     G4Navigator* fLinearNavigator = nullptr;
-    G4PhysicsOrderedFreeVector* theAccumulatedDepthVector = nullptr;
+    G4PhysicsFreeVector* theAccumulatedDepthVector = nullptr;
 };
 
 #endif

@@ -39,8 +39,6 @@ class QEntity;
 }
 class G4Qt3DQEntity;
 
-//#define G4QT3DDEBUG
-
 class G4Qt3DSceneHandler: public G4VSceneHandler {
   
   friend class G4Qt3DViewer;
@@ -61,6 +59,7 @@ public:
   void BeginPrimitives(const G4Transform3D& objectTransformation);
   void EndPrimitives();
 
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive(const G4Polyline&);
   void AddPrimitive(const G4Polymarker&);
   void AddPrimitive(const G4Text&);

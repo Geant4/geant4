@@ -7,7 +7,7 @@
 # Use this open statement to create an OpenGL view:
 #/vis/open OGL 800x600-0+0 #600x600-0+0
 # This is enough for a 2.5 keV electron
-/vis/ogl/set/displayListLimit 10000000
+/vis/ogl/flushAt NthPrimitive 1000000
 #
 # Use this open statement to create an OpenInventor view:
 #/vis/open OI

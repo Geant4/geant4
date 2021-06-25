@@ -46,39 +46,34 @@ class G4VPrimitiveScorer;
 
 class G4MultiFunctionalDetector : public G4VSensitiveDetector
 {
+ public:  // with description
+  G4MultiFunctionalDetector(G4String);
 
-  public: // with description
-      G4MultiFunctionalDetector(G4String);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  std::vector<G4VPrimitiveScorer*> primitives;
 
-      std::vector<G4VPrimitiveScorer*> primitives;
+ public:  // with description
+  G4bool RegisterPrimitive(G4VPrimitiveScorer*);
+  G4bool RemovePrimitive(G4VPrimitiveScorer*);
+  inline G4int GetNumberOfPrimitives() const
+  {
+    return G4int(primitives.size());
+  }
+  G4VPrimitiveScorer* GetPrimitive(G4int id) const { return primitives[id]; }
 
-  public: // with description
-      G4bool RegisterPrimitive(G4VPrimitiveScorer*);
-      G4bool RemovePrimitive(G4VPrimitiveScorer*);
-      inline G4int GetNumberOfPrimitives() const
-      { return G4int(primitives.size()); }
-      G4VPrimitiveScorer* GetPrimitive(G4int id) const
-      { return primitives[id]; }
+ public:
+  virtual ~G4MultiFunctionalDetector();
 
-  public:
-      virtual ~G4MultiFunctionalDetector();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-
-  public:
-      virtual void DrawAll();
-      virtual void PrintAll();
-
-
+ public:
+  virtual void DrawAll();
+  virtual void PrintAll();
 };
 
-
-
 #endif
-

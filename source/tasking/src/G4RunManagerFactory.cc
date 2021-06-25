@@ -172,8 +172,8 @@ std::string G4RunManagerFactory::GetDefault()
 {
 #if defined(G4MULTITHREADED)
   // For version 10.7, default is set to MT
-  //  return "Tasking";
-  return "MT";
+  //  return "MT";
+  return "Tasking";
 #else
   return "Serial";
 #endif

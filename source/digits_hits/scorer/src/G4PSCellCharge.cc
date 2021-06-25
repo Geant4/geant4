@@ -28,7 +28,6 @@
 #include "G4PSCellCharge.hh"
 #include "G4Track.hh"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell charge.
@@ -36,85 +35,82 @@
 //
 // Created: 2006-08-20  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellCharge::G4PSCellCharge(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+  : G4VPrimitiveScorer(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
 {
-    SetUnit("e+");
+  SetUnit("e+");
 }
 
-G4PSCellCharge::G4PSCellCharge(G4String name, const G4String& unit, 
-			       G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
+G4PSCellCharge::G4PSCellCharge(G4String name, const G4String& unit, G4int depth)
+  : G4VPrimitiveScorer(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
 {
-    SetUnit(unit);
+  SetUnit(unit);
 }
 
-G4PSCellCharge::~G4PSCellCharge()
-{;}
+G4PSCellCharge::~G4PSCellCharge() { ; }
 
-G4bool G4PSCellCharge::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSCellCharge::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
+  // Enter or First step of primary.
+  if(aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ||
+     (aStep->GetTrack()->GetParentID() == 0 &&
+      aStep->GetTrack()->GetCurrentStepNumber() == 1))
+  {
+    G4double CellCharge = aStep->GetPreStepPoint()->GetCharge();
+    CellCharge *= aStep->GetPreStepPoint()->GetWeight();
+    G4int index = GetIndex(aStep);
+    EvtMap->add(index, CellCharge);
+  }
 
-    // Enter or First step of primary.
-    if( aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary 
-	|| ( aStep->GetTrack()->GetParentID() == 0 &&
-	     aStep->GetTrack()->GetCurrentStepNumber() == 1 ) ){
-	G4double CellCharge = aStep->GetPreStepPoint()->GetCharge();
-	CellCharge *= aStep->GetPreStepPoint()->GetWeight();
-	G4int index = GetIndex(aStep);
-	EvtMap->add(index,CellCharge);
-    }
-
-    // Exit
-    if( aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary){
-	G4double CellCharge = aStep->GetPreStepPoint()->GetCharge();
-	CellCharge *= aStep->GetPreStepPoint()->GetWeight();
-	G4int index = GetIndex(aStep);
-	CellCharge *= -1.0;
-	EvtMap->add(index,CellCharge);
-    }
+  // Exit
+  if(aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
+  {
+    G4double CellCharge = aStep->GetPreStepPoint()->GetCharge();
+    CellCharge *= aStep->GetPreStepPoint()->GetWeight();
+    G4int index = GetIndex(aStep);
+    CellCharge *= -1.0;
+    EvtMap->add(index, CellCharge);
+  }
 
   return TRUE;
 }
 
 void G4PSCellCharge::Initialize(G4HCofThisEvent* HCE)
 {
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),
-				    GetName());
-  if ( HCID < 0 ) HCID = GetCollectionID(0);
-  HCE->AddHitsCollection(HCID,EvtMap);
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+    HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSCellCharge::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSCellCharge::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSCellCharge::clear(){
-  EvtMap->clear();
-}
+void G4PSCellCharge::clear() { EvtMap->clear(); }
 
-void G4PSCellCharge::DrawAll()
-{;}
+void G4PSCellCharge::DrawAll() { ; }
 
 void G4PSCellCharge::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
-  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
+  G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell charge : " << *(itr->second)/GetUnitValue()
-	   << " [" << GetUnit() << "]"
-	   << G4endl;
+           << "  cell charge : " << *(itr->second) / GetUnitValue() << " ["
+           << GetUnit() << "]" << G4endl;
   }
 }
 
 void G4PSCellCharge::SetUnit(const G4String& unit)
 {
-    CheckAndSetUnit(unit,"Electric charge");
+  CheckAndSetUnit(unit, "Electric charge");
 }
-
-

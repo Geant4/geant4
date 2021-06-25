@@ -58,33 +58,33 @@ public:
 
   explicit G4DipBustGenerator(const G4String& name = "");
 
-  virtual ~G4DipBustGenerator();
+  ~G4DipBustGenerator() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy, G4int Z,
-                                         const G4Material* mat = nullptr) final;
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy, G4int Z,
+				 const G4Material* mat = nullptr) final;
 
-  virtual void SamplePairDirections(const G4DynamicParticle* dp,
-				    G4double elecKinEnergy,
-				    G4double posiKinEnergy,
-				    G4ThreeVector& dirElectron,
-				    G4ThreeVector& dirPositron,
-				    G4int Z = 0,
-				    const G4Material* mat = nullptr) final;
+  void SamplePairDirections(const G4DynamicParticle* dp,
+			    G4double elecKinEnergy,
+			    G4double posiKinEnergy,
+			    G4ThreeVector& dirElectron,
+			    G4ThreeVector& dirPositron,
+			    G4int Z = 0,
+			    const G4Material* mat = nullptr) final;
 
   G4double PolarAngle(G4double initial_energy,
 		      G4double final_energy,
 		      G4int Z);
 
-  virtual void PrintGeneratorInformation() const final;
-
-private:
-
-  G4double SampleCosTheta(G4double kinEnergy);
+  void PrintGeneratorInformation() const final;
 
   // hide assignment operator
   G4DipBustGenerator & operator=(const  G4DipBustGenerator &right) = delete;
   G4DipBustGenerator(const  G4DipBustGenerator&) = delete;
+
+private:
+
+  G4double SampleCosTheta(G4double kinEnergy);
 
 };
 

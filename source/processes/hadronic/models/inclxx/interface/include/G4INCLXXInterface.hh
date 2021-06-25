@@ -87,8 +87,8 @@ class G4INCLXXVInterfaceTally;
  * inclModel -> SetMinEnergy(0.0 * MeV); // Set the energy limits
  * inclModel -> SetMaxEnergy(3.0 * GeV);
  *
- * G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess();
- * G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection();
+ * G4HadronInelasticProcess* protonInelasticProcess = new G4HadronInelasticProcess( "protonInelastic", G4Proton::Definition() );
+ * G4VCrossSectionDataSet* protonInelasticCrossSection = new G4BGGNucleonInelasticXS( G4Proton::Proton() );
  *
  * protonInelasticProcess -> RegisterMe(inclModel);
  * protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);

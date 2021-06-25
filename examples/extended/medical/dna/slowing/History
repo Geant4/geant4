@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+11 Feb 2021 - tag slowing-V10-07-00 - V. Ivanchenko
+- PhysicsList - remove unused header
+
 10 Nov 20 - tag slowing-V10-06-00 - B. Morgan
 - Migration to G4RunManagerFactory.
 

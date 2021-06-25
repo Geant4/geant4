@@ -2,7 +2,7 @@
 # Macro file for "Hadr06.cc"
 #
 /control/verbose 2
-/run/verbose 2
+/run/verbose 1
 #
 /testhadr/det/setMat graphite
 /testhadr/det/setRadius 20 cm

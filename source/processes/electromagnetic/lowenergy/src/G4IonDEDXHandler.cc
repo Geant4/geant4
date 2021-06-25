@@ -57,33 +57,30 @@
 #include "G4VIonDEDXScalingAlgorithm.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4Exp.hh"
-
-//#define PRINT_DEBUG
-
 
 // #########################################################################
 
 G4IonDEDXHandler::G4IonDEDXHandler(
-                            G4VIonDEDXTable* ionTable,
-                            G4VIonDEDXScalingAlgorithm* ionAlgorithm,
-                            const G4String& name,
-                            G4int maxCacheSize,
-                            G4bool splines) :
+				   G4VIonDEDXTable* ionTable,
+				   G4VIonDEDXScalingAlgorithm* ionAlgorithm,
+				   const G4String& name,
+				   G4int maxCacheSize,
+				   G4bool splines) :
   table(ionTable),
   algorithm(ionAlgorithm),
   tableName(name),
   useSplines(splines),
   maxCacheEntries(maxCacheSize) {
 
-  if(table == 0) {
+  if(table == nullptr) {
      G4cerr << "G4IonDEDXHandler::G4IonDEDXHandler() "
             << " Pointer to G4VIonDEDXTable object is null-pointer."
             << G4endl;
   }
 
-  if(algorithm == 0) {
+  if(algorithm == nullptr) {
      G4cerr << "G4IonDEDXHandler::G4IonDEDXHandler() "
             << " Pointer to G4VIonDEDXScalingAlgorithm object is null-pointer."
             << G4endl;
@@ -114,8 +111,10 @@ G4IonDEDXHandler::~G4IonDEDXHandler() {
 
   stoppingPowerTable.clear();
 
-  if(table != 0) delete table;
-  if(algorithm != 0) delete algorithm;
+  if(table != nullptr) 
+    delete table;
+  if(algorithm != nullptr) 
+    delete algorithm;
 }
 
 // #########################################################################
@@ -126,7 +125,7 @@ G4bool G4IonDEDXHandler::IsApplicable(
 
   G4bool isApplicable = true;
 
-  if(table == 0 || algorithm == 0) {
+  if(table == nullptr || algorithm == nullptr) {
      isApplicable = false;
   }
   else {
@@ -225,7 +224,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
   // the case
   G4IonKey key = std::make_pair(atomicNumberBase, material);
 
-  DEDXTable::iterator iter = stoppingPowerTable.find(key);
+  auto iter = stoppingPowerTable.find(key);
   if(iter != stoppingPowerTable.end()) return isApplicable;
 
   // Checking if table contains stopping power vector for given material name
@@ -282,10 +281,11 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
         G4double lowerEdge = dEdxTable[0] -> GetLowEdgeEnergy(0);
         G4double upperEdge = dEdxTable[0] -> GetLowEdgeEnergy(nmbdEdxBins-1);
 
-        G4LPhysicsFreeVector* dEdxBragg =
-                    new G4LPhysicsFreeVector(nmbdEdxBins,
-                                             lowerEdge,
-                                             upperEdge);
+        G4PhysicsFreeVector* dEdxBragg =
+	  new G4PhysicsFreeVector(nmbdEdxBins,
+				  lowerEdge,
+				  upperEdge,
+				  useSplines);
 
         const G4double* massFractionVector = material -> GetFractionVector();
 
@@ -303,7 +303,8 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
             dEdxBragg -> PutValues(j, edge, value);
 	}
-        dEdxBragg -> SetSpline(useSplines);
+	if (useSplines)
+	  dEdxBragg -> FillSecondDerivatives();
 
 #ifdef PRINT_DEBUG
         G4cout << "G4IonDEDXHandler::BuildPhysicsVector() for ion with Z="

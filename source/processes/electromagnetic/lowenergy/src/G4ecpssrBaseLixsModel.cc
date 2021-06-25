@@ -25,9 +25,7 @@
 //
 
 #include <iostream>
-
 #include "G4ecpssrBaseLixsModel.hh"
-
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -45,7 +43,6 @@ G4ecpssrBaseLixsModel::G4ecpssrBaseLixsModel()
   verboseLevel=0;
 
   // Storing FLi data needed for 0.2 to 3.0  velocities region
-
   char *path = std::getenv("G4LEDATA");
     
   if (!path) {
@@ -59,7 +56,6 @@ G4ecpssrBaseLixsModel::G4ecpssrBaseLixsModel()
   fileName2 << path << "/pixe/uf/FL2.dat";
 
   // Reading of FL1.dat
-
   std::ifstream FL1(fileName1.str().c_str());
   if (!FL1) G4Exception("G4ecpssrLCrossSection::G4ecpssrBaseLixsModel()","em0003",FatalException, "error opening FL1 data file");
 
@@ -122,7 +118,6 @@ G4double G4ecpssrBaseLixsModel::ExpIntFunction(G4int n,G4double x)
 
 {
 // this function allows fast evaluation of the n order exponential integral function En(x)
-
   G4int i;
   G4int ii;
   G4int nm1;
@@ -742,13 +737,13 @@ G4double G4ecpssrBaseLixsModel::CalculateVelocity(G4int subShell, G4int zTarget,
       return 0;
     }
 
-  const G4double zlshell= 4.15;
+  constexpr G4double zlshell= 4.15;
 
   G4double screenedzTarget = zTarget- zlshell;
 
-  const G4double rydbergMeV= 13.6056923e-6;
+  constexpr G4double rydbergMeV= 13.6056923e-6;
 
-  const G4double nl= 2.;
+  constexpr G4double nl= 2.;
 
   G4double tetali = (liBindingEnergy*nl*nl)/(screenedzTarget*screenedzTarget*rydbergMeV);
 
@@ -764,7 +759,6 @@ G4double G4ecpssrBaseLixsModel::CalculateVelocity(G4int subShell, G4int zTarget,
 
 G4double G4ecpssrBaseLixsModel::FunctionFL1(G4double k, G4double theta)
 {
-
   G4double sigma = 0.;
   G4double valueT1 = 0;
   G4double valueT2 = 0;
@@ -799,14 +793,14 @@ G4double G4ecpssrBaseLixsModel::FunctionFL1(G4double k, G4double theta)
 
   // END PROTECTION
 
-  std::vector<double>::iterator t2 = std::upper_bound(dummyVec1.begin(),dummyVec1.end(), k);
-  std::vector<double>::iterator t1 = t2-1;
+  auto t2 = std::upper_bound(dummyVec1.begin(),dummyVec1.end(), k);
+  auto t1 = t2-1;
 
-  std::vector<double>::iterator e12 = std::upper_bound(aVecMap1[(*t1)].begin(),aVecMap1[(*t1)].end(), theta);
-  std::vector<double>::iterator e11 = e12-1;
+  auto e12 = std::upper_bound(aVecMap1[(*t1)].begin(),aVecMap1[(*t1)].end(), theta);
+  auto e11 = e12-1;
 
-  std::vector<double>::iterator e22 = std::upper_bound(aVecMap1[(*t2)].begin(),aVecMap1[(*t2)].end(), theta);
-  std::vector<double>::iterator e21 = e22-1;
+  auto e22 = std::upper_bound(aVecMap1[(*t2)].begin(),aVecMap1[(*t2)].end(), theta);
+  auto e21 = e22-1;
 
   valueT1  =*t1;
   valueT2  =*t2;
@@ -890,14 +884,12 @@ G4double G4ecpssrBaseLixsModel::FunctionFL2(G4double k, G4double theta)
 
   // END PROTECTION
 
-  std::vector<double>::iterator t2 = std::upper_bound(dummyVec2.begin(),dummyVec2.end(), k);
-  std::vector<double>::iterator t1 = t2-1;
-
-  std::vector<double>::iterator e12 = std::upper_bound(aVecMap2[(*t1)].begin(),aVecMap2[(*t1)].end(), theta);
-  std::vector<double>::iterator e11 = e12-1;
-
-  std::vector<double>::iterator e22 = std::upper_bound(aVecMap2[(*t2)].begin(),aVecMap2[(*t2)].end(), theta);
-  std::vector<double>::iterator e21 = e22-1;
+  auto t2 = std::upper_bound(dummyVec2.begin(),dummyVec2.end(), k);
+  auto t1 = t2-1;
+  auto e12 = std::upper_bound(aVecMap2[(*t1)].begin(),aVecMap2[(*t1)].end(), theta);
+  auto e11 = e12-1;
+  auto e22 = std::upper_bound(aVecMap2[(*t2)].begin(),aVecMap2[(*t2)].end(), theta);
+  auto e21 = e22-1;
 
   valueT1  =*t1;
   valueT2  =*t2;
@@ -992,24 +984,10 @@ G4double G4ecpssrBaseLixsModel::QuadInterpolator(G4double e11, G4double e12,
 						       G4double t1, G4double t2,
 						       G4double t, G4double e)
 {
-// Log-Log
+  // Log-Log
   G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
   G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-
-/*
-// Lin-Log
-  G4double interpolatedvalue1 = LinLogInterpolate(e11, e12, e, xs11, xs12);
-  G4double interpolatedvalue2 = LinLogInterpolate(e21, e22, e, xs21, xs22);
-  G4double value = LinLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-*/
-
-/*
-// Lin-Lin
-  G4double interpolatedvalue1 = LinLinInterpolate(e11, e12, e, xs11, xs12);
-  G4double interpolatedvalue2 = LinLinInterpolate(e21, e22, e, xs21, xs22);
-  G4double value = LinLinInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
-*/
   return value;
 
 }

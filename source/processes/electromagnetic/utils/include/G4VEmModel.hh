@@ -193,9 +193,8 @@ public:
   // add correction to energy loss and compute non-ionizing energy loss
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
                                     const G4DynamicParticle*,
-                                    G4double& eloss,
-                                    G4double& niel,
-                                    G4double length);
+                                    const G4double& length,
+                                    G4double& eloss);
 
   // value which may be tabulated (by default cross section)
   virtual G4double Value(const G4MaterialCutsCouple*,
@@ -251,7 +250,7 @@ public:
   inline void SetElementSelectors(std::vector<G4EmElementSelector*>*);
 
   // dEdx per unit length, base material approach may be used
-  virtual inline G4double ComputeDEDX(const G4MaterialCutsCouple*,
+  inline G4double ComputeDEDX( const G4MaterialCutsCouple*,
                                const G4ParticleDefinition*,
                                G4double kineticEnergy,
                                G4double cutEnergy = DBL_MAX);
@@ -407,55 +406,58 @@ private:
 
   // ======== Parameters of the class fixed at construction =========
  
-  G4VEmFluctuationModel* flucModel;
-  G4VEmAngularDistribution* anglModel;
-  const G4String  name;
-
-  // ======== Parameters of the class fixed at initialisation =======
-
-  G4double        lowLimit;
-  G4double        highLimit;
-  G4double        eMinActive;
-  G4double        eMaxActive;
-  G4double        polarAngleLimit;
-  G4double        secondaryThreshold;
-  G4bool          theLPMflag;
-  G4bool          flagDeexcitation;
-  G4bool          flagForceBuildTable;
-  G4bool          isMaster;
-
-  G4bool          localTable;
-  G4bool          localElmSelectors;
-  G4bool          useAngularGenerator;
-  G4bool          useBaseMaterials;
-  G4bool          isLocked;
-  G4int           nSelectors;
-  std::vector<G4EmElementSelector*>* elmSelectors;
-  G4LossTableManager*  fEmManager;
+  G4VEmFluctuationModel*      flucModel = nullptr;
+  G4VEmAngularDistribution*   anglModel = nullptr;
+  G4VEmModel*                 fTripletModel = nullptr;
+  const G4MaterialCutsCouple* fCurrentCouple = nullptr;
+  const G4Element*            fCurrentElement = nullptr;
+  const G4Isotope*            fCurrentIsotope = nullptr;
+  std::vector<G4EmElementSelector*>* elmSelectors = nullptr;
+  G4LossTableManager*         fEmManager;
 
 protected:
 
-  G4ElementData*               fElementData;
-  G4VParticleChange*           pParticleChange;
-  G4PhysicsTable*              xSectionTable;
-  const G4Material*            pBaseMaterial;
-  const std::vector<G4double>* theDensityFactor;
-  const std::vector<G4int>*    theDensityIdx;
-  size_t                       idxTable;
-  G4bool                       lossFlucFlag;
-  G4double                     inveplus;
-  G4double                     pFactor;
+  G4ElementData*               fElementData = nullptr;
+  G4VParticleChange*           pParticleChange = nullptr;
+  G4PhysicsTable*              xSectionTable = nullptr;
+  const G4Material*            pBaseMaterial = nullptr;
+  const std::vector<G4double>* theDensityFactor = nullptr;
+  const std::vector<G4int>*    theDensityIdx = nullptr;
 
-  // ======== Cached values - may be state dependent ================
+  G4double        inveplus;
+  G4double        pFactor = 1.0;
 
 private:
 
-  const G4MaterialCutsCouple* fCurrentCouple;
-  const G4Element*            fCurrentElement;
-  const G4Isotope*            fCurrentIsotope;
-  G4VEmModel*                 fTripletModel;
+  G4double        lowLimit;
+  G4double        highLimit;
+  G4double        eMinActive = 0.0;
+  G4double        eMaxActive = DBL_MAX;
+  G4double        secondaryThreshold = DBL_MAX;
+  G4double        polarAngleLimit;
 
-  G4int                  nsec;
+  G4int           nSelectors = 0;
+  G4int           nsec = 5;
+
+protected:
+
+  size_t          idxTable = 0;
+  G4bool          lossFlucFlag = true;
+
+private:
+
+  G4bool          theLPMflag = false;
+  G4bool          flagDeexcitation = false;
+  G4bool          flagForceBuildTable = false;
+  G4bool          isMaster = true;
+
+  G4bool          localTable = true;
+  G4bool          localElmSelectors = true;
+  G4bool          useAngularGenerator = false;
+  G4bool          useBaseMaterials = true;
+  G4bool          isLocked = false;
+
+  const G4String  name;
   std::vector<G4double>  xsec;
 
 };
@@ -468,7 +470,7 @@ inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* ptr)
     fCurrentCouple = ptr;
     pBaseMaterial = ptr->GetMaterial();
     pFactor = 1.0;
-    if(useBaseMaterials && pBaseMaterial->GetBaseMaterial()) {
+    if(useBaseMaterials && nullptr != pBaseMaterial->GetBaseMaterial()) {
       pBaseMaterial = pBaseMaterial->GetBaseMaterial();
       pFactor = (*theDensityFactor)[(*theDensityIdx)[ptr->GetIndex()]];
     }
@@ -843,7 +845,7 @@ G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
 {
   if(p != elmSelectors) {
     elmSelectors = p;
-    nSelectors = (elmSelectors) ? G4int(elmSelectors->size()) : 0;
+    nSelectors = (nullptr != elmSelectors) ? G4int(elmSelectors->size()) : 0;
     localElmSelectors = false;
   }
 }

@@ -31,6 +31,7 @@
 // 13 Jan 2010   L. Pandola  First implementation
 // 24 May 2011   L. Pandola  Renamed (make v2008 as default Penelope)
 // 18 Sep 2013   L. Pandola  Migration to MT paradigm
+// 04 Mar 2021   L. Pandola  Replace map with static array
 //
 // -------------------------------------------------------------------
 //
@@ -55,58 +56,45 @@ class G4PhysicsFreeVector;
 
 class G4PenelopeGammaConversionModel : public G4VEmModel 
 {
-
 public:
-  
-  G4PenelopeGammaConversionModel(const G4ParticleDefinition* p=0,
-				 const G4String& processName ="PenConversion");
+  explicit G4PenelopeGammaConversionModel(const G4ParticleDefinition* p=nullptr,
+					  const G4String& processName ="PenConversion");
   
   virtual ~G4PenelopeGammaConversionModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-  virtual void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel*); 
-  virtual G4double ComputeCrossSectionPerAtom(
-					      const G4ParticleDefinition*,
-					      G4double kinEnergy,
-					      G4double Z,
-					      G4double A=0,
-					      G4double cut=0,
-					      G4double emax=DBL_MAX);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel*) override; 
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*,
+				      G4double kinEnergy,
+				      G4double Z,
+				      G4double A=0,
+				      G4double cut=0,
+				      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+  
+  void SetVerbosityLevel(G4int lev){fVerboseLevel = lev;};
+  G4int GetVerbosityLevel(){return fVerboseLevel;};
 
-  void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
-  G4int GetVerbosityLevel(){return verboseLevel;};
+  G4PenelopeGammaConversionModel & operator=(const 
+					     G4PenelopeGammaConversionModel &right) = delete;
+  G4PenelopeGammaConversionModel(const G4PenelopeGammaConversionModel&) = delete;
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
   const G4ParticleDefinition* fParticle;
 
 private:
-  G4PenelopeGammaConversionModel & operator=(const 
-					       G4PenelopeGammaConversionModel &right);
-  G4PenelopeGammaConversionModel(const G4PenelopeGammaConversionModel&);
-
   void SetParticle(const G4ParticleDefinition*);
-
-  //Intrinsic energy limits of the model: cannot be extended by the parent process
-  G4double fIntrinsicLowEnergyLimit;
-  G4double fIntrinsicHighEnergyLimit;
-
-  //Use a quicker sampling algorithm if E < smallEnergy
-  G4double fSmallEnergy; 
-
-  std::map<G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
   void ReadDataFile(const G4int Z);
-
-  void InitializeScreeningRadii();
-  G4double fAtomicScreeningRadius[99];
-
   void InitializeScreeningFunctions(const G4Material*);
+  std::pair<G4double,G4double> GetScreeningFunctions(G4double);	
+
   //Effective (scalar) properties attached to materials:
   // effective charge
   std::map<const G4Material*,G4double> *fEffectiveCharge;
@@ -115,10 +103,19 @@ private:
   // Parameters of screening functions
   std::map<const G4Material*,std::pair<G4double,G4double> > *fScreeningFunction;
 
-  std::pair<G4double,G4double> GetScreeningFunctions(G4double);	
+  static const G4int fMaxZ =99;
+  static G4PhysicsFreeVector* fLogAtomicCrossSection[fMaxZ+1];
+  //Z range is 1-99
+  static G4double fAtomicScreeningRadius[fMaxZ+1];
 
-  G4int verboseLevel;
-  G4bool isInitialised;
+  //Intrinsic energy limits of the model: cannot be extended by the parent process
+  G4double fIntrinsicLowEnergyLimit;
+  G4double fIntrinsicHighEnergyLimit;
+
+  //Use a quicker sampling algorithm if E < smallEnergy
+  G4double fSmallEnergy;  
+  G4int fVerboseLevel;
+  G4bool fIsInitialised;
 
   //Used only for G4EmCalculator and Unit Tests
   G4bool fLocalTable;

@@ -49,6 +49,8 @@ private:
   G4UIcommand* defaultIcons;
   G4UIcommand* sys;
   G4UIcommand* outputStyle;
+  G4UIcommand* nativeMenu;
+  G4UIcommand* clearMenu;
 };
 
 #endif

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G3toG4
-# Package: Geant4.src.G3toG4
-#------------------------------------------------------------------------------
+# - G3toG4 module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G3toG4
-  HEADERS
+geant4_add_module(G3toG4
+  PUBLIC_HEADERS
     G3DetTable.hh
     G3DetTableEntry.hh
     G3Division.hh
@@ -75,35 +70,22 @@ geant4_define_module(NAME G3toG4
     G4gstmed.cc
     G4gstpar.cc
     G4gsvolu.cc
-    clparse.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4decay
-    G4detector
-    G4geomBoolean
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hits
-    G4magneticfield
-    G4materials
-    G4partman
-    G4procman
-    G4specsolids
-    G4track
-    G4tracking
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4materials
-    G4particles
-    G4processes
-    G4track
-    G4tracking
-  LINK_LIBRARIES
-)
+    clparse.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G3toG4
+  PUBLIC
+    G4detector
+    G4geometrymng
+    G4partman
+    G4materials
+    G4globman
+    G4hepgeometry
+  PRIVATE
+    G4decay
+    G4procman
+    G4csg
+    G4specsolids
+    G4magneticfield
+    G4volumes
+    G4geomBoolean
+    G4graphics_reps)

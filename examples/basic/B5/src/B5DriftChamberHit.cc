@@ -48,15 +48,15 @@ G4ThreadLocal G4Allocator<B5DriftChamberHit>* B5DriftChamberHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberHit::B5DriftChamberHit()
-: G4VHit(), 
-  fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
+: G4VHit(),
+  fLayerID(-1), fTime(0.), fLocalPos(), fWorldPos()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberHit::B5DriftChamberHit(G4int layerID)
-: G4VHit(), 
-  fLayerID(layerID), fTime(0.), fLocalPos(0), fWorldPos(0)
+: G4VHit(),
+  fLayerID(layerID), fTime(0.), fLocalPos(), fWorldPos()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,19 +116,19 @@ const std::map<G4String,G4AttDef>* B5DriftChamberHit::GetAttDefs() const
   auto store = G4AttDefStore::GetInstance("B5DriftChamberHit",isNew);
 
   if (isNew) {
-      (*store)["HitType"] 
+      (*store)["HitType"]
         = G4AttDef("HitType","Hit Type","Physics","","G4String");
-      
-      (*store)["ID"] 
+
+      (*store)["ID"]
         = G4AttDef("ID","ID","Physics","","G4int");
-      
-      (*store)["Time"] 
+
+      (*store)["Time"]
         = G4AttDef("Time","Time","Physics","G4BestUnit","G4double");
-      
-      (*store)["Pos"] 
+
+      (*store)["Pos"]
         = G4AttDef("Pos", "Position", "Physics","G4BestUnit","G4ThreeVector");
   }
-  
+
   return store;
 }
 
@@ -137,7 +137,7 @@ const std::map<G4String,G4AttDef>* B5DriftChamberHit::GetAttDefs() const
 std::vector<G4AttValue>* B5DriftChamberHit::CreateAttValues() const
 {
   auto values = new std::vector<G4AttValue>;
-  
+
   values
     ->push_back(G4AttValue("HitType","DriftChamberHit",""));
   values
@@ -146,7 +146,7 @@ std::vector<G4AttValue>* B5DriftChamberHit::CreateAttValues() const
     ->push_back(G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
   values
     ->push_back(G4AttValue("Pos",G4BestUnit(fWorldPos,"Length"),""));
-  
+
   return values;
 }
 

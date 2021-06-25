@@ -14,8 +14,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18-05-21 A. Ribon (exhadr02-V10-06-02)
+18-05-21 A. Ribon     (exhadr02-V10-07-03)
 - Migration to newer CRMC, and more modern approach to physics lists.
+
+18-03-21 A. Ribon     (exhadr02-V10-07-02)
+- CRMCNeutronBuilder, HIJINGNeutronBuilder, UrQMDNeutronBuilder :
+  replaced G4HadronCaptureProcess with G4NeutronCaptureProcess, and
+  G4HadronFissionProcess with G4NeutronFissionProcess.
+
+08-03-21 A. Ribon     (exhadr02-V10-07-01)
+- IonUrQMDPhysics : replaced old ion cross sections (that have been
+  deleted) with G4ComponentGGNuclNuclXsc.
+
+04-03-21 A. Ribon     (exhadr02-V10-07-00)
+- Replaced particle-specific inelastic processes (that have been deleted)
+  with G4HadronInelasticProcess.
 
 10-11-20 B. Morgan (exhadr02-V10-06-01)
 - Migration to G4RunManagerFactory.

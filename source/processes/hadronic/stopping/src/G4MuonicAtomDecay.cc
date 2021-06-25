@@ -244,6 +244,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
         ed << G4endl;
       }
       G4Exception("G4MuonicAtomDecay::DecayIt", "DECAY003", FatalException,ed);
+      return &theTotalResult;
     } else {
       // execute DecayIt()
 #ifdef G4VERBOSE
@@ -306,7 +307,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
     }
 
     //add products in theTotalResult
-    G4int numberOfSecondaries = (nullptr != products) ? products->entries() : 0;
+    G4int numberOfSecondaries = products->entries();
     theTotalResult.SetNumberOfSecondaries(numberOfSecondaries);
    
 #ifdef G4VERBOSE
@@ -434,10 +435,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
 
     ClearNumberOfInteractionLengthLeft();
     return &theTotalResult;
-
   }
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

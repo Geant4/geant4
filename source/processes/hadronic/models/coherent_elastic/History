@@ -14,6 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 April 2021 - Ben Morgan (hadr-cohe-V10-07-03)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+05 May 2021 - V.Ivanchenko         (hadr-cohe-V10-07-02)
+---------------------------------------------------------------
+- G4LEHadronProtonElastic, G4ChargeExchangeProcess - removed unused
+    headers
+
+13 April 2021 - A.Ribon         (hadr-cohe-V10-07-01)
+---------------------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+
+08 March 2021 - A.Ribon         (hadr-cohe-V10-07-00)
+---------------------------------------------------------------
+- G4ChargeExchangeProcess : replaced Gheisha elastic cross section
+  (that has been deleted) with G4ComponentGGHadronNucleusXsc.
+
 22 July 2020 - V.Ivanchenko     (hadr-cohe-V10-06-03)
 ---------------------------------------------------------------
 - G4HadronElastic - added numerical protection against precision lost

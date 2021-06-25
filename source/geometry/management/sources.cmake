@@ -1,25 +1,12 @@
-#------------------------------------------------------------------------------
-# Module : G4geometrymng
-# Package: Geant4.src.G4geometry.G4geometrymng
-#------------------------------------------------------------------------------
+# - G4geometrymng module build definition
 
 # Configure header for preprocessor symbols for USolids
 configure_file(${CMAKE_CURRENT_LIST_DIR}/include/G4GeomConfig.hh.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/G4GeomConfig.hh
-  )
+  ${CMAKE_CURRENT_BINARY_DIR}/include/G4GeomConfig.hh)
 
-# WORKAROUND: When building/testing examples uing ROOT, ROOT's
-# dictionary generation is not smart enough to handle target usage
-# requirements for include paths. Explicitly add the path to the
-# generated header into build time include paths...
-set_property(GLOBAL APPEND
-  PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")
-
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4geometrymng
-  HEADERS
+geant4_add_module(G4geometrymng
+  PUBLIC_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/include/G4GeomConfig.hh
     G4AffineTransform.hh
     G4AffineTransform.icc
@@ -108,23 +95,21 @@ geant4_define_module(NAME G4geometrymng
     G4VPhysicalVolume.cc
     G4VSolid.cc
     G4VTouchable.cc
-    G4VoxelLimits.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4graphics_reps
-    G4intercoms
-    G4materials
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-  LINK_LIBRARIES
-    ${VECGEOM_LIBRARIES}
-)
+    G4VoxelLimits.cc)
 
-# List any source specific properties here
-# For new system, must explicitly add path for generated header 
+# - Add path to generated header
 geant4_module_include_directories(G4geometrymng
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-  )
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>)
+
+# - Link to modules/deps
+geant4_module_link_libraries(G4geometrymng
+  PUBLIC G4globman G4hepgeometry G4graphics_reps ${VECGEOM_LIBRARIES}
+  PRIVATE G4materials)
+
+# WORKAROUND: When building/testing examples uing ROOT, ROOT's
+# dictionary generation is not smart enough to handle target usage
+# requirements for include paths. Explicitly add the path to the
+# generated header into build time include paths...
+set_property(GLOBAL APPEND
+  PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")
+

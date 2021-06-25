@@ -79,9 +79,6 @@ class G4ParticleHPCaptureData : public G4VCrossSectionDataSet
 
       void DumpPhysicsTable(const G4ParticleDefinition&);
 
-      void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
-      void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
-
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
@@ -91,7 +88,6 @@ class G4ParticleHPCaptureData : public G4VCrossSectionDataSet
    
       G4PhysicsTable * theCrossSections;
 
-      G4bool onFlightDB;
       G4bool instanceOfWorker;
 
       G4double ke_cache;

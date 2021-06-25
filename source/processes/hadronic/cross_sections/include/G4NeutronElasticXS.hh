@@ -97,15 +97,15 @@ private:
 
   inline G4PhysicsVector* GetPhysicsVector(G4int Z);
 
-  G4VComponentCrossSection* ggXsection;
+  G4VComponentCrossSection* ggXsection = nullptr;
   const G4ParticleDefinition* neutron;
+
+  G4bool  isMaster = false;
 
   static const G4int MAXZEL = 93;
   static G4PhysicsVector* data[MAXZEL];
   static G4double coeff[MAXZEL];
   static G4String gDataDirectory;
-
-  G4bool  isMaster;
 
 #ifdef G4MULTITHREADED
   static G4Mutex neutronElasticXSMutex;

@@ -49,7 +49,6 @@
 
 #include <vector>
 #include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
 #include "G4VEMDataSet.hh"
 
@@ -58,11 +57,11 @@ class G4VDataSetAlgorithm;
 class G4CompositeEMDataSet : public G4VEMDataSet 
 {
 public:
-  G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm, 
-		       G4double eUnit=CLHEP::MeV, 
-		       G4double dataUnit=CLHEP::barn, 
-		       G4int zMin=1, 
-		       G4int zMax=99); 
+  explicit G4CompositeEMDataSet(G4VDataSetAlgorithm* argAlgorithm, 
+				G4double eUnit=CLHEP::MeV, 
+				G4double dataUnit=CLHEP::barn, 
+				G4int zMin=1, 
+				G4int zMax=99); 
 
   virtual ~G4CompositeEMDataSet();
  
@@ -90,18 +89,16 @@ public:
   virtual G4bool LoadNonLogData(const G4String& fileName);
 
   virtual G4bool SaveData(const G4String& fileName) const;
-
- virtual G4double RandomSelect(G4int componentId) const;
-
+  
+  virtual G4double RandomSelect(G4int componentId) const;
    
 private:
-
   void CleanUpComponents(void);
   
   // Hide copy constructor and assignment operator 
-  G4CompositeEMDataSet();
-  G4CompositeEMDataSet(const G4CompositeEMDataSet& copy);
-  G4CompositeEMDataSet& operator=(const G4CompositeEMDataSet& right);
+  explicit G4CompositeEMDataSet();
+  G4CompositeEMDataSet(const G4CompositeEMDataSet& copy) = delete;
+  G4CompositeEMDataSet& operator=(const G4CompositeEMDataSet& right) = delete;
 
   std::vector<G4VEMDataSet*> components;    // Owned pointers
 

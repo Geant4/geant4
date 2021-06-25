@@ -23,38 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4PhysicsListHelper implementation
 //
-//
-//
-// ------------------------------------------------------------
-//	GEANT 4 class header file
-//
-// ------------------------------------------------------------
-//	History
-//       first version                   29 Apr 2011 by H.Kurashige
-// ------------------------------------------------------------
+// Author: H.Kurashige, 29 April 2011
+// --------------------------------------------------------------------
+
+#include <fstream>
+#include <iomanip>
 
 #include "G4PhysicsListHelper.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "globals.hh"
-
 #include "G4ios.hh"
-#include <fstream>
-#include <iomanip>
 
-////////////////////////////////////////////////////////
+#include "G4CoupledTransportation.hh"
+#include "G4RunManagerKernel.hh"
+#include "G4ScoringManager.hh"
+#include "G4Transportation.hh"
+
+#include "G4ProcessManager.hh"
+
 G4ThreadLocal G4PhysicsListHelper* G4PhysicsListHelper::pPLHelper = nullptr;
 
-////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4PhysicsListHelper::G4PhysicsListHelper()
-  : useCoupledTransportation(false)
-  , theTransportationProcess(nullptr)
-  , verboseLevel(1)
-  , theTable(nullptr)
-  , sizeOfTable(0)
-  , ordParamFileName("")
 {
   // pointer to the particle table
   theParticleTable  = G4ParticleTable::GetParticleTable();
@@ -70,28 +64,22 @@ G4PhysicsListHelper::G4PhysicsListHelper()
 #endif
 }
 
-////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4PhysicsListHelper::~G4PhysicsListHelper()
 {
-  if(theTable != 0)
+  if(theTable != nullptr)
   {
     theTable->clear();
     delete theTable;
-    theTable    = 0;
+    theTable    = nullptr;
     sizeOfTable = 0;
   }
-  /*
-  if (theTransportationProcess!=0) {
-    delete theTransportationProcess;
-    theTransportationProcess=0;
-  }
-  */
 }
 
-////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4PhysicsListHelper* G4PhysicsListHelper::GetPhysicsListHelper()
 {
-  if(!pPLHelper)
+  if(pPLHelper == nullptr)
   {
     static G4ThreadLocalSingleton<G4PhysicsListHelper> inst;
     pPLHelper = inst.Instance();
@@ -99,7 +87,7 @@ G4PhysicsListHelper* G4PhysicsListHelper::GetPhysicsListHelper()
   return pPLHelper;
 }
 
-////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4PhysicsListHelper::CheckParticleList() const
 {
   G4bool isElectron         = false;
@@ -220,12 +208,7 @@ void G4PhysicsListHelper::CheckParticleList() const
   }
 }
 
-////////////////////////////////////////////////////////
-#include "G4CoupledTransportation.hh"
-#include "G4RunManagerKernel.hh"
-#include "G4ScoringManager.hh"
-#include "G4Transportation.hh"
-
+// --------------------------------------------------------------------
 void G4PhysicsListHelper::AddTransportation()
 {
   G4int verboseLevelTransport = 0;
@@ -298,9 +281,7 @@ void G4PhysicsListHelper::AddTransportation()
   }
 }
 
-////////////////////////////////////////////////////////
-#include "G4ProcessManager.hh"
-
+// --------------------------------------------------------------------
 void G4PhysicsListHelper::ReadOrdingParameterTable()
 {
   G4bool readInFile = false;
@@ -339,11 +320,11 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
   }
 
   // create OrdParamTable
-  if(theTable != 0)
+  if(theTable != nullptr)
   {
     theTable->clear();
     delete theTable;
-    theTable    = 0;
+    theTable    = nullptr;
     sizeOfTable = 0;
   }
   theTable    = new G4OrdParamTable();
@@ -360,7 +341,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
         tmp.ordering[0] >> tmp.ordering[1] >> tmp.ordering[2] >> flag;
       tmp.isDuplicable = (flag != 0);
       theTable->push_back(tmp);
-      sizeOfTable += 1;
+      ++sizeOfTable;
     }
     fIn.close();
   }
@@ -381,15 +362,15 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
     G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable", "Run0106",
                 JustWarning, "The ordering parameter table is empty ");
     delete theTable;
-    theTable = 0;
+    theTable = nullptr;
   }
   return;
 }
 
-////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 void G4PhysicsListHelper::DumpOrdingParameterTable(G4int subType) const
 {
-  if(theTable == 0)
+  if(theTable == nullptr)
   {
 #ifdef G4VERBOSE
     if(verboseLevel > 0)
@@ -431,13 +412,13 @@ void G4PhysicsListHelper::DumpOrdingParameterTable(G4int subType) const
   }
 }
 
-////////////////////////////////////////////////////////
-G4PhysicsListOrderingParameter G4PhysicsListHelper::GetOrdingParameter(
-  G4int subType) const
+// --------------------------------------------------------------------
+G4PhysicsListOrderingParameter
+G4PhysicsListHelper::GetOrdingParameter(G4int subType) const
 {
   G4PhysicsListOrderingParameter value;
 
-  if(theTable == 0)
+  if(theTable == nullptr)
   {
 #ifdef G4VERBOSE
     if(verboseLevel > 0)
@@ -467,11 +448,11 @@ G4PhysicsListOrderingParameter G4PhysicsListHelper::GetOrdingParameter(
   return value;
 }
 
-////////////////////////////////////////////////////////
+// --------------------------------------------------------------------
 G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess* process,
                                             G4ParticleDefinition* particle)
 {
-  if(theTable == 0)
+  if(theTable == nullptr)
   {
 #ifdef G4VERBOSE
     if(verboseLevel > 0)
@@ -550,7 +531,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess* process,
 
   // Check Process Manager
   G4ProcessManager* pManager = particle->GetProcessManager();
-  if(pManager == 0)
+  if(pManager == nullptr)
   {
     // Error !! no process manager
 #ifdef G4VERBOSE
@@ -636,6 +617,7 @@ G4bool G4PhysicsListHelper::RegisterProcess(G4VProcess* process,
   return true;
 }
 
+// --------------------------------------------------------------------
 void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
 {
   G4PhysicsListOrderingParameter tmp;
@@ -935,11 +917,11 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processSubType  = 36;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
-  tmp.ordering[2]     =  1000;
-  tmp.isDuplicable =  false;
+  tmp.ordering[2]     = 1000;
+  tmp.isDuplicable    = false;
   theTable->push_back(tmp);
-  sizeOfTable +=1;  
-  
+  sizeOfTable += 1;
+
   tmp.processTypeName = "DNAElastic";
   tmp.processType     = 2;
   tmp.processSubType  = 51;
@@ -1079,6 +1061,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.isDuplicable    = false;
   theTable->push_back(tmp);
   sizeOfTable += 1;
+
+  tmp.processTypeName = "DNAStaticMol";
+  tmp.processType     = 9;
+  tmp.processSubType  = 65;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
 
   tmp.processTypeName = "HadElastic";
   tmp.processType     = 4;

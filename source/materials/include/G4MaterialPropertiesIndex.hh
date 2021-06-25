@@ -55,8 +55,6 @@ enum G4MaterialPropertyIndex   {
   kWLSCOMPONENT2,               // the relative emission spectrum of the material as a function of the photon's momentum
   kWLSABSLENGTH2,               // the absorption length of the material as a function of the photon's momentum
   kABSLENGTH,                  // the absorption length
-  kFASTCOMPONENT,              // fast component of scintillation
-  kSLOWCOMPONENT,              // slow component of scintillation
   kPROTONSCINTILLATIONYIELD,   // scintillation light yield by protons  
   kDEUTERONSCINTILLATIONYIELD, // scintillation light yield by deuterons
   kTRITONSCINTILLATIONYIELD,   // scintillation light yield by tritons
@@ -84,11 +82,6 @@ enum G4MaterialConstPropertyIndex
   kMIEHG_FORWARD_RATIO,	        // ratio of the MIEHG forward scattering 
   kSCINTILLATIONYIELD,	        // scintillation light yield
   kRESOLUTIONSCALE,	            // resolution scale
-  kFASTTIMECONSTANT,	          // fast scintillation time constant 
-  kFASTSCINTILLATIONRISETIME,   // rise time of fast scintillation 
-  kSLOWTIMECONSTANT,	          // slow scintillation time constant
-  kSLOWSCINTILLATIONRISETIME,   // rise time of slow scintillation 
-  kYIELDRATIO,                  // yield ratio
   kFERMIPOT,                    // the Fermi potential (in neV)
   kDIFFUSION,                   // diffusion
   kSPINFLIP,		                // spin flip

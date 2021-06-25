@@ -39,13 +39,8 @@
 #include "G4Exp.hh"
 #include "G4SystemOfUnits.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
 EMField::EMField() 
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EMField::GetFieldValue(const double point[4], double *Bfield ) const
 { 
@@ -529,7 +524,5 @@ if (z>=-1400*mm && z <-200*mm)
       Bfield[4] = electricFieldPlate2;
       Bfield[5] = 0;
   }
-
-//
 
 }

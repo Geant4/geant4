@@ -5,6 +5,10 @@
      =========================================================
 
                       Category History file
+31.12.2020 - John Allison (DICOM-V10-07-00)
+             vis.mac: "Change /vis/ogl/set/eventsDrawInterval" to
+             "/vis/ogl/flushAt NthPrimitive".
+
 10.11.2020 - Ben Morgan (DICOM-V10-06-01)
              Migration to G4RunManagerFactory.
 

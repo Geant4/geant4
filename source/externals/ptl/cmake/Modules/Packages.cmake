@@ -34,13 +34,18 @@ endif()
 ################################################################################
 
 if(PTL_USE_TBB)
-    find_package(TBB)
+    find_package(TBB 2017)
 
     if(TBB_FOUND)
         target_compile_definitions(ptl-tbb INTERFACE PTL_USE_TBB)
         target_include_directories(ptl-tbb SYSTEM INTERFACE ${TBB_INCLUDE_DIRS})
         target_link_libraries(ptl-tbb INTERFACE ${TBB_LIBRARIES})
         target_link_libraries(ptl-external-packages INTERFACE ptl-tbb)
+    else()
+        set(PTL_USE_TBB OFF)
+        ptl_add_disabled_interface(ptl-tbb)
     endif()
-
+else()
+    set(PTL_USE_TBB OFF)
+    ptl_add_disabled_interface(ptl-tbb)
 endif()

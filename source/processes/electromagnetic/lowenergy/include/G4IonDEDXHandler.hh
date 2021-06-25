@@ -44,7 +44,6 @@
 //
 // =========================================================================== 
 
-
 #ifndef G4IONDEDXHANDLER_HH
 #define G4IONDEDXHANDLER_HH
 
@@ -65,86 +64,82 @@ class G4VIonDEDXScalingAlgorithm;
 // # Type definitions for a local cache
 // #########################################################################
 
-   typedef struct CacheValue{
-      G4double energyScaling;         // Scaling factor for kinetic energy
-      G4PhysicsVector* dedxVector;    // dE/dx vector for current projectile-
-                                      // material combination
-      G4double lowerEnergyEdge;       // Lower energy edge of dE/dx vector
-      G4double upperEnergyEdge;       // Upper energy edge of dE/dx vector
-      G4double density;               // Material density
-   } G4CacheValue;
-
-
+typedef struct CacheValue{
+  G4double energyScaling;         // Scaling factor for kinetic energy
+  G4PhysicsVector* dedxVector;    // dE/dx vector for current projectile-
+  // material combination
+  G4double lowerEnergyEdge;       // Lower energy edge of dE/dx vector
+  G4double upperEnergyEdge;       // Upper energy edge of dE/dx vector
+  G4double density;               // Material density
+} G4CacheValue;
 // #########################################################################
 // # Class G4IonDEDXHandler: Handler class for stopping power tables
 // #########################################################################
 
 class G4IonDEDXHandler {
-
  public:
-   G4IonDEDXHandler(G4VIonDEDXTable* tables,
-                    G4VIonDEDXScalingAlgorithm* algorithm,
-                    const G4String& name,
-                    G4int maxCacheSize = 5,
-                    G4bool splines = true);
-   ~G4IonDEDXHandler();
+  explicit G4IonDEDXHandler(G4VIonDEDXTable* tables,
+			    G4VIonDEDXScalingAlgorithm* algorithm,
+			    const G4String& name,
+			    G4int maxCacheSize = 5,
+			    G4bool splines = true);
+  ~G4IonDEDXHandler();
 
-   // Function checking the availability of stopping power values for a 
-   // given ion-target combination (kinetic energy not considered) 
-   G4bool IsApplicable(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*);           // Target material             
+  // Function checking the availability of stopping power values for a 
+  // given ion-target combination (kinetic energy not considered) 
+  G4bool IsApplicable(
+		      const G4ParticleDefinition*,  // Projectile (ion) 
+		      const G4Material*);           // Target material             
 
-   // Function returning the stopping power of a given material for a
-   // projectile of specified energy
-   G4double GetDEDX(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*,            // Target material 
-              G4double);                    // Kinetic energy of projectile
+  // Function returning the stopping power of a given material for a
+  // projectile of specified energy
+  G4double GetDEDX(
+		   const G4ParticleDefinition*,  // Projectile (ion) 
+		   const G4Material*,            // Target material 
+		   G4double);                    // Kinetic energy of projectile
+  
+  
+  // Function for building stopping power vectors according to Bragg's
+  // additivity rule
+  G4bool BuildDEDXTable(
+			const G4ParticleDefinition*,  // Projectile (ion) 
+			const G4Material*);           // Target material 
+  
+  // Function for building stopping power vectors according to Bragg's
+  // additivity rule
+  G4bool BuildDEDXTable(
+			G4int atomicNumberIon,        // Atomic number of ion 
+			const G4Material*);           // Target material 
+  
+  // Function printing stopping powers for a given ion-material combination
+  // within a specified energy range 
+  void PrintDEDXTable(
+		      const G4ParticleDefinition*,  // Projectile (ion) 
+		      const G4Material* ,           // Target material
+		      G4double,                     // Minimum energy per nucleon
+		      G4double,                     // Maximum energy per nucleon
+		      G4int,                        // Number of bins
+		      G4bool logScaleEnergy = true);// Logarithmic scaling of energy
+  
+  // Function returning the lower energy edge of stopping power tables
+  G4double GetLowerEnergyEdge(
+			      const G4ParticleDefinition*,  // Projectile (ion) 
+			      const G4Material*);           // Target material 
+  
+  // Function returning the upper energy edge of stopping power tables 
+  G4double GetUpperEnergyEdge(
+			      const G4ParticleDefinition*,  // Projectile (ion) 
+			      const G4Material*);           // Target material 
+  
+  // Function for clearing the cache
+  void ClearCache();
+  
+  G4String GetName();
+  
+  G4IonDEDXHandler& operator=(const G4IonDEDXHandler &r) = delete;
+  G4IonDEDXHandler(const G4IonDEDXHandler&) = delete;
 
-
-   // Function for building stopping power vectors according to Bragg's
-   // additivity rule
-   G4bool BuildDEDXTable(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*);           // Target material 
-
-   // Function for building stopping power vectors according to Bragg's
-   // additivity rule
-   G4bool BuildDEDXTable(
-              G4int atomicNumberIon,        // Atomic number of ion 
-              const G4Material*);           // Target material 
-
-   // Function printing stopping powers for a given ion-material combination
-   // within a specified energy range 
-   void PrintDEDXTable(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material* ,           // Target material
-              G4double,                     // Minimum energy per nucleon
-              G4double,                     // Maximum energy per nucleon
-              G4int,                        // Number of bins
-              G4bool logScaleEnergy = true);// Logarithmic scaling of energy
-
-   // Function returning the lower energy edge of stopping power tables
-   G4double GetLowerEnergyEdge(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*);           // Target material 
-
-   // Function returning the upper energy edge of stopping power tables 
-   G4double GetUpperEnergyEdge(
-              const G4ParticleDefinition*,  // Projectile (ion) 
-              const G4Material*);           // Target material 
-
-   // Function for clearing the cache
-   void ClearCache();
-
-   G4String GetName();
-
- private: 
-   // The assignment operator and the copy constructor are hidden
-   G4IonDEDXHandler& operator=(const G4IonDEDXHandler &r);
-   G4IonDEDXHandler(const G4IonDEDXHandler&);
-
+private:
    // ######################################################################
    // # Stopping power table (table of stopping power vectors either built
    // # by G4VIonDEDXTable, or by the current class (using the Bragg 
@@ -193,10 +188,7 @@ class G4IonDEDXHandler {
    typedef std::map<G4CacheKey, void*> CacheIterPointerMap;
    CacheIterPointerMap cacheKeyPointers;  
 
-   // Maximum number of cache entries
-   G4int maxCacheEntries;
-
-   // Function for updating the cache
+  // Function for updating the cache
    G4CacheValue UpdateCacheValue(
                 const G4ParticleDefinition*,  // Projectile (ion) 
                 const G4Material*);           // Target material
@@ -205,6 +197,10 @@ class G4IonDEDXHandler {
    G4CacheValue GetCacheValue(
                 const G4ParticleDefinition*,  // Projectile (ion) 
                 const G4Material*);           // Target material
+
+   // Maximum number of cache entries
+   G4int maxCacheEntries;
+
 };
 
 #endif  // G4IONDEDXHANDLER_HH

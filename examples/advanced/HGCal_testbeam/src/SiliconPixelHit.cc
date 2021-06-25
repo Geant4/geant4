@@ -47,7 +47,7 @@ void SiliconPixelHit::Digitise(const G4double aTimeWindow,
                                const G4double aToaThreshold) {
 
   // process energy deposits
-  if (fEdep.size() == 0) {
+  if (fEdep.empty()) {
     fIsValidHit = false;
     return;
   }
@@ -60,7 +60,7 @@ void SiliconPixelHit::Digitise(const G4double aTimeWindow,
 
   G4double firstHitTime = fEdep[0].second;
   fEdepDigi = 0;
-  for (size_t i = 0; i < fEdep.size(); i++) {
+  for (size_t i = 0; i < fEdep.size(); ++i) {
     if (aTimeWindow < 0 || fEdep[i].second < firstHitTime + aTimeWindow)
       fEdepDigi += fEdep[i].first;
     if (fEdepDigi > aToaThreshold) {
@@ -72,7 +72,7 @@ void SiliconPixelHit::Digitise(const G4double aTimeWindow,
   fIsValidHit = (fEdepDigi > 0);
 
   // non ionizing part, does not contribute to TOAs
-  if (fEdepNonIonizing.size() == 0)
+  if (fEdepNonIonizing.empty())
     return;
 
   std::sort(fEdepNonIonizing.begin(), fEdepNonIonizing.end(),
@@ -82,7 +82,7 @@ void SiliconPixelHit::Digitise(const G4double aTimeWindow,
             });
 
   fEdepNonIonizingDigi = 0;
-  for (size_t i = 0; i < fEdep.size(); i++) {
+  for (size_t i = 0; i < fEdepNonIonizing.size(); ++i) {
     if (aTimeWindow == -1 ||
         fEdepNonIonizing[i].second < firstHitTime + aTimeWindow)
       fEdepNonIonizingDigi += fEdepNonIonizing[i].first;

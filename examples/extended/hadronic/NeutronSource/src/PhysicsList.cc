@@ -49,9 +49,10 @@
 
 #include "G4StoppingPhysics.hh"
 #include "GammaNuclearPhysics.hh"
+#include "GammaNuclearPhysicsLEND.hh"
 
 #include "ElectromagneticPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option3.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
@@ -73,7 +74,6 @@ PhysicsList::PhysicsList()
   
   //add new units
   //
-  new G4UnitDefinition( "millielectronVolt", "meV", "Energy", 1.e-3*eV);
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
     
@@ -104,11 +104,12 @@ PhysicsList::PhysicsList()
 
   // Gamma-Nuclear Physics
   fGammaNuclear = new GammaNuclearPhysics("gamma");
+  ////fGammaNuclear = new GammaNuclearPhysicsLEND("gamma");  
   RegisterPhysics(fGammaNuclear);
 
   // EM physics
   fElectromagnetic = new ElectromagneticPhysics();
-  ////fElectromagnetic = new G4EmStandardPhysics();
+  ////fElectromagnetic = new G4EmStandardPhysics_option3();
   RegisterPhysics(fElectromagnetic);
 
   // Decay

@@ -45,10 +45,10 @@
 G4NeutronBuilder::
 G4NeutronBuilder(G4bool fissionFlag)
 {
-  theNeutronInelastic = new G4NeutronInelasticProcess;
-  theNeutronCapture = new G4HadronCaptureProcess;
+  theNeutronInelastic = new G4HadronInelasticProcess( "neutronInelastic", G4Neutron::Definition() );
+  theNeutronCapture = new G4NeutronCaptureProcess;
   if ( fissionFlag ) {
-    theNeutronFission = new G4HadronFissionProcess;
+    theNeutronFission = new G4NeutronFissionProcess;
   } else {
     theNeutronFission = nullptr;
   } 

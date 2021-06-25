@@ -178,8 +178,6 @@ private:
   G4int  verbose = 0;
 
   G4bool isMaster = false;
-
-  G4String currentParticleName = "";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

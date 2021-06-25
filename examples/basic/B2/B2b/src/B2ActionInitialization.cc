@@ -57,6 +57,6 @@ void B2ActionInitialization::Build() const
   SetUserAction(new B2PrimaryGeneratorAction);
   SetUserAction(new B2RunAction);
   SetUserAction(new B2EventAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

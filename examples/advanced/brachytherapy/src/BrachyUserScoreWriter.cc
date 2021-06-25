@@ -30,15 +30,16 @@
 //
 Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 */
-#include <map>
-#include <fstream>
+
 #include "BrachyUserScoreWriter.hh"
-#include "G4SystemOfUnits.hh" 
 #include "BrachyAnalysisManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
 #include "G4VScoringMesh.hh"
+#include "G4SystemOfUnits.hh" 
+#include <map>
+#include <fstream>
 // The default output is
 // voxelX, voxelY, voxelZ, edep
 // The BrachyUserScoreWriter allows to change the format of the output file.

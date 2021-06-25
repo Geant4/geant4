@@ -29,9 +29,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
 #include "G4INCLXXInterface.hh"   
@@ -67,7 +65,7 @@ class G4INCLXXProtonBuilder : public G4VProtonBuilder
   /**
    * Build inelastic process.
    */
-    virtual void Build(G4ProtonInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
   /**
    * Set the minimum energy limit for the model.

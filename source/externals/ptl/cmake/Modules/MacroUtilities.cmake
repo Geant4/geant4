@@ -35,6 +35,9 @@
 #
 #
 
+# - Include guard
+include_guard(DIRECTORY)
+
 cmake_policy(PUSH)
 if(NOT CMAKE_VERSION VERSION_LESS 3.1)
     cmake_policy(SET CMP0054 NEW)
@@ -49,7 +52,7 @@ include(CMakeParseArguments)
 # macro set_ifnot(<var> <value>)
 #       If variable var is not set, set its value to that provided
 #
-macro(set_ifnot _var _value)
+macro(ptl_set_ifnot _var _value)
     if(NOT DEFINED ${_var})
         set(${_var} ${_value} ${ARGN})
     endif()
@@ -59,7 +62,7 @@ endmacro()
 # macro safe_remove_duplicates(<list>)
 #       ensures remove_duplicates is only called if list has values
 #
-macro(safe_remove_duplicates _list)
+macro(ptl_safe_remove_duplicates _list)
     if(NOT "${${_list}}" STREQUAL "")
         list(REMOVE_DUPLICATES ${_list})
     endif(NOT "${${_list}}" STREQUAL "")
@@ -71,7 +74,7 @@ endmacro()
 #       capitalize("SHARED" CShared)
 #   message(STATUS "-- CShared is \"${CShared}\"")
 #   $ -- CShared is "Shared"
-function(capitalize str var)
+function(ptl_capitalize str var)
     # make string lower
     string(TOLOWER "${str}" str)
     string(SUBSTRING "${str}" 0 1 _first)
@@ -89,7 +92,7 @@ endfunction()
 # macro set_ifnot_match(<var> <value>)
 #       If variable var is not set, set its value to that provided
 #
-macro(SET_IFNOT_MATCH VAR APPEND)
+macro(PTL_SET_IFNOT_MATCH VAR APPEND)
     if(NOT "${APPEND}" STREQUAL "")
         STRING(REGEX MATCH "${APPEND}" _MATCH "${${VAR}}")
         if(NOT "${_MATCH}" STREQUAL "")
@@ -102,7 +105,7 @@ endmacro()
 # macro cache_ifnot(<var> <value>)
 #       If variable var is not set, set its value to that provided and cache it
 #
-macro(cache_ifnot _var _value _type _doc)
+macro(ptl_cache_ifnot _var _value _type _doc)
   if(NOT ${_var} OR NOT ${CACHE_VARIABLES} MATCHES ${_var})
     set(${_var} ${_value} CACHE ${_type} "${_doc}")
   endif()
@@ -126,7 +129,7 @@ endmacro()
 #          checks of the value of <option> against the allowed values
 #          will ignore the case when performing string comparison.
 #
-function(enum_option _var)
+function(ptl_enum_option _var)
   set(options CASE_INSENSITIVE)
   set(oneValueArgs DOC TYPE DEFAULT)
   set(multiValueArgs VALUES)
@@ -181,14 +184,14 @@ endfunction()
 # when "make distclean" is run
 #
 # Prototype:
-#    ADD_TO_DISTCLEAN(file)
+#    PTL_ADD_TO_DISTCLEAN(file)
 # Parameters:
 #    file    A file or dir
 #
 
-MACRO(ADD_TO_DISTCLEAN TARGET_TO_DELETE)
+MACRO(PTL_ADD_TO_DISTCLEAN TARGET_TO_DELETE)
      SET( FILES_TO_DELETE ${FILES_TO_DELETE} ${TARGET_TO_DELETE} )
-ENDMACRO(ADD_TO_DISTCLEAN)
+ENDMACRO(PTL_ADD_TO_DISTCLEAN)
 
 #-----------------------------------------------------------------------
 # from
@@ -203,31 +206,31 @@ ENDMACRO(ADD_TO_DISTCLEAN)
 #    (none)
 #
 
-MACRO(GENERATE_DISTCLEAN_TARGET)
+MACRO(PTL_GENERATE_DISTCLEAN_TARGET)
     IF( EXISTS ${PROJECT_BINARY_DIR}/distclean_manifest.txt )
         FILE( REMOVE ${PROJECT_BINARY_DIR}/distclean_manifest.txt )
     ENDIF( EXISTS ${PROJECT_BINARY_DIR}/distclean_manifest.txt )
 
     IF(MSVC)
         SET( FILES_TO_DELETE ${FILES_TO_DELETE} ${PROJECT_BINARY_DIR}/*.dir )
-        ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/*.vcproj )
-        ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/*.vcproj.cmake )
-        ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.sln )
+        PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/*.vcproj )
+        PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/*.vcproj.cmake )
+        PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.sln )
     ENDIF(MSVC)
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/distclean.dir )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/CMakeCache.txt )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/install_manifest.txt )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/CPackConfig.cmake )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/CPackSourceConfig.cmake )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/_CPack_Packages )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/PACKAGE.dir )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/cmake_install.cmake )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/distclean.dir )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/CMakeCache.txt )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/install_manifest.txt )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/CPackConfig.cmake )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/CPackSourceConfig.cmake )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/_CPack_Packages )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/PACKAGE.dir )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/cmake_install.cmake )
 
     # This code does not work yet. I don't know why CPACK_GENERATOR is null.
     IF(CPACK_GENERATOR)
         FOREACH(gen ${CPACK_GENERATOR})
             MESSAGE("Adding file ${PROJECT_BINARY_DIR}/${CPACK_SOURCE_PACKAGE_FILE_NAME}.${gen} to distclean")
-            ADD_TO_DISTCLEAN(${PROJECT_BINARY_DIR}/${CPACK_SOURCE_PACKAGE_FILE_NAME}.${gen} )
+            PTL_ADD_TO_DISTCLEAN(${PROJECT_BINARY_DIR}/${CPACK_SOURCE_PACKAGE_FILE_NAME}.${gen} )
         ENDFOREACH(gen)
     ELSE(CPACK_GENERATOR)
         MESSAGE("CPACK_GENERATOR was not defined (value: ${CPACK_GENERATOR})")
@@ -236,14 +239,14 @@ MACRO(GENERATE_DISTCLEAN_TARGET)
 
 
     IF(EXECUTABLE_OUTPUT_PATH)
-        ADD_TO_DISTCLEAN( ${EXECUTABLE_OUTPUT_PATH} )
+        PTL_ADD_TO_DISTCLEAN( ${EXECUTABLE_OUTPUT_PATH} )
     ENDIF(EXECUTABLE_OUTPUT_PATH)
     IF(LIBRARY_OUTPUT_PATH)
-        ADD_TO_DISTCLEAN( ${LIBRARY_OUTPUT_PATH} )
+        PTL_ADD_TO_DISTCLEAN( ${LIBRARY_OUTPUT_PATH} )
     ENDIF(LIBRARY_OUTPUT_PATH)
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY} )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/Makefile )
-    ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/distclean_manifest.txt )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY} )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/Makefile )
+    PTL_ADD_TO_DISTCLEAN( ${PROJECT_BINARY_DIR}/distclean_manifest.txt )
 
     FOREACH(f ${FILES_TO_DELETE})
         FILE(TO_NATIVE_PATH ${f} ff)
@@ -277,14 +280,14 @@ MACRO(GENERATE_DISTCLEAN_TARGET)
                             generated files...
         )
     ENDIF(WIN32)
-ENDMACRO(GENERATE_DISTCLEAN_TARGET)
+ENDMACRO()
 
 
 #-----------------------------------------------------------------------
 # Determine if two paths are the same
 #
 #-----------------------------------------------------------------------
-function(equal_paths VAR PATH1 PATH2)
+function(ptl_equal_paths VAR PATH1 PATH2)
     get_filename_component(PATH1 ${PATH1} ABSOLUTE)
     get_filename_component(PATH2 ${PATH2} ABSOLUTE)
 
@@ -293,7 +296,7 @@ function(equal_paths VAR PATH1 PATH2)
     else()
         set(${VAR} OFF PARENT_SCOPE)
     endif()
-endfunction(equal_paths VAR PATH1 PATH2)
+endfunction()
 
 
 #-----------------------------------------------------------------------
@@ -301,7 +304,7 @@ endfunction(equal_paths VAR PATH1 PATH2)
 #   in CMAKE_PREFIX_PATH
 #
 #-----------------------------------------------------------------------
-function(clean_prefix_path)
+function(ptl_clean_prefix_path)
     set(_prefix_path )
     foreach(_path ${CMAKE_PREFIX_PATH})
         get_filename_component(_path ${_path} REALPATH)
@@ -351,7 +354,7 @@ function(subConfigureRootSearchPath _package_name _search_other)
     # if ROOT not already defined and ENV variable defines it
     if(NOT ${_package_name}_ROOT_DIR AND
        NOT "$ENV{${_package_name}_ROOT}" STREQUAL "")
-        cache_ifnot(${_package_name}_ROOT_DIR $ENV{${_package_name}_ROOT}
+        ptl_cache_ifnot(${_package_name}_ROOT_DIR $ENV{${_package_name}_ROOT}
                     FILEPATH "ROOT search path for ${_package_name}")
     endif()
 
@@ -361,7 +364,7 @@ function(subConfigureRootSearchPath _package_name _search_other)
         if(_search_other)
             string(TOUPPER "${_package_name}" ALT_PACKAGE_NAME)
             if("${ALT_PACKAGE_NAME}" STREQUAL "${_package_name}")
-                capitalize("${_package_name}" ALT_PACKAGE_NAME)
+                ptl_capitalize("${_package_name}" ALT_PACKAGE_NAME)
                 subConfigureRootSearchPath(${ALT_PACKAGE_NAME} OFF)
             else()
                 subConfigureRootSearchPath(${ALT_PACKAGE_NAME} OFF)
@@ -384,7 +387,7 @@ function(subConfigureRootSearchPath _package_name _search_other)
             # store previous root to see if it changed
             set(PREVIOUS_${_package_name}_ROOT_DIR ${${_package_name}_ROOT_DIR}
                 CACHE FILEPATH "Previous root search path for ${_package_name}" FORCE)
-            clean_prefix_path()
+            ptl_clean_prefix_path()
         else()
             message(WARNING "${_package_name}_ROOT_DIR specified an invalid directory")
             unset(${_package_name}_ROOT_DIR CACHE)
@@ -469,7 +472,7 @@ endmacro()
 #          existence of the variable <NAME>, to the list of enabled/disabled
 #          features, plus a docstring describing the feature
 #
-FUNCTION(ADD_FEATURE _var _description)
+FUNCTION(PTL_ADD_FEATURE _var _description)
   set(EXTRA_DESC "")
   foreach(currentArg ${ARGN})
       if(NOT "${currentArg}" STREQUAL "${_var}" AND
@@ -490,7 +493,7 @@ ENDFUNCTION()
 #          existence of the variable <NAME>, to the list of enabled/disabled
 #          features, plus a docstring describing the feature
 #
-FUNCTION(ADD_SUBFEATURE _root _var _description)
+FUNCTION(PTL_ADD_SUBFEATURE _root _var _description)
     set(EXTRA_DESC "")
     foreach(currentArg ${ARGN})
         if(NOT "${currentArg}" STREQUAL "${_var}" AND
@@ -507,15 +510,21 @@ ENDFUNCTION()
 # function add_option(<OPTION_NAME> <DOCSRING> <DEFAULT_SETTING> [NO_FEATURE])
 #          Add an option and add as a feature if NO_FEATURE is not provided
 #
-FUNCTION(ADD_OPTION _NAME _MESSAGE _DEFAULT)
+FUNCTION(PTL_ADD_OPTION _NAME _MESSAGE _DEFAULT)
     SET(__FEATURE ${ARGN})
-    OPTION(${_NAME} "${_MESSAGE}" ${_DEFAULT})
-    IF(NOT "${__FEATURE}" STREQUAL "NO_FEATURE")
-        ADD_FEATURE(${_NAME} "${_MESSAGE}")
+    IF(PTL_MASTER_PROJECT)
+        OPTION(${_NAME} "${_MESSAGE}" ${_DEFAULT})
+        IF(NOT "${__FEATURE}" STREQUAL "NO_FEATURE")
+            PTL_ADD_FEATURE(${_NAME} "${_MESSAGE}")
+        ELSE()
+            MARK_AS_ADVANCED(${_NAME})
+        ENDIF()
     ELSE()
-        MARK_AS_ADVANCED(${_NAME})
+        IF(NOT DEFINED ${_NAME})
+          SET(${_NAME} ${_DEFAULT})
+        ENDIF()
     ENDIF()
-ENDFUNCTION(ADD_OPTION _NAME _MESSAGE _DEFAULT)
+ENDFUNCTION(PTL_ADD_OPTION _NAME _MESSAGE _DEFAULT)
 
 
 #------------------------------------------------------------------------------#
@@ -524,7 +533,7 @@ ENDFUNCTION(ADD_OPTION _NAME _MESSAGE _DEFAULT)
 #                               <DEFAULT_SETTING> [NO_FEATURE])
 #          Add an option and add as a feature if NO_FEATURE is not provided
 #
-FUNCTION(ADD_DEPENDENT_OPTION _NAME _MESSAGE _COND_SETTING _COND _DEFAULT)
+FUNCTION(PTL_ADD_DEPENDENT_OPTION _NAME _MESSAGE _COND_SETTING _COND _DEFAULT)
     SET(_FEATURE ${ARGN})
     IF(DEFINED ${_NAME} AND NOT ${_COND})
         OPTION(${_NAME} "${_MESSAGE}" ${_DEFAULT})
@@ -538,14 +547,14 @@ FUNCTION(ADD_DEPENDENT_OPTION _NAME _MESSAGE _COND_SETTING _COND _DEFAULT)
     ELSE()
         MARK_AS_ADVANCED(${_NAME})
     ENDIF()
-ENDFUNCTION(ADD_DEPENDENT_OPTION _NAME _MESSAGE _DEFAULT _COND _COND_SETTING)
+ENDFUNCTION(PTL_ADD_DEPENDENT_OPTION _NAME _MESSAGE _DEFAULT _COND _COND_SETTING)
 
 
 #------------------------------------------------------------------------------#
 # function print_enabled_features()
 #          Print enabled  features plus their docstrings.
 #
-function(print_enabled_features)
+function(ptl_print_enabled_features)
     set(_basemsg "The following features are defined/enabled (+):")
     set(_currentFeatureText "${_basemsg}")
     get_property(_features GLOBAL PROPERTY PROJECT_FEATURES)
@@ -567,7 +576,7 @@ function(print_enabled_features)
                 else()
                     string(REGEX REPLACE "^USE_" "" _feature_tmp "${_feature}")
                     string(TOLOWER "${_feature_tmp}" _feature_tmp_l)
-                    capitalize("${_feature_tmp}" _feature_tmp_c)
+                    ptl_capitalize("${_feature_tmp}" _feature_tmp_c)
                     foreach(_var _feature_tmp _feature_tmp_l _feature_tmp_c)
                         set(_ver "${${${_var}}_VERSION}")
                         if(NOT "${_ver}" STREQUAL "")
@@ -644,7 +653,7 @@ endfunction()
 # function print_disabled_features()
 #          Print disabled features plus their docstrings.
 #
-function(print_disabled_features)
+function(ptl_print_disabled_features)
     set(_basemsg "The following features are NOT defined/enabled (-):")
     set(_currentFeatureText "${_basemsg}")
     get_property(_features GLOBAL PROPERTY PROJECT_FEATURES)
@@ -674,15 +683,15 @@ endfunction()
 # function print_features()
 #          Print all features plus their docstrings.
 #
-function(print_features)
+function(ptl_print_features)
     message(STATUS "")
-    print_enabled_features()
-    print_disabled_features()
+    ptl_print_enabled_features()
+    ptl_print_disabled_features()
 endfunction()
 
 
 #------------------------------------------------------------------------------#
-macro(DETERMINE_LIBDIR_DEFAULT VAR)
+macro(PTL_DETERMINE_LIBDIR_DEFAULT VAR)
     set(_LIBDIR_DEFAULT "lib")
     # Override this default 'lib' with 'lib64' iff:
     #  - we are on Linux system but NOT cross-compiling
@@ -742,6 +751,7 @@ macro(DETERMINE_LIBDIR_DEFAULT VAR)
         set(LIBDIR_DEFAULT "${_LIBDIR_DEFAULT}" CACHE PATH "Object code libraries (${_LIBDIR_DEFAULT})" FORCE)
     elseif(DEFINED __LAST_LIBDIR_DEFAULT
             AND "${__LAST_LIBDIR_DEFAULT}" STREQUAL "${LIBDIR_DEFAULT}")
+        set(LIBDIR_DEFAULT "${_LIBDIR_DEFAULT}" CACHE STRING "")
         set_property(CACHE LIBDIR_DEFAULT PROPERTY VALUE "${_LIBDIR_DEFAULT}")
     endif()
 endmacro()
@@ -752,7 +762,7 @@ endmacro()
 #           Provide a list of variables that will be stored in the cache
 #               as {variable_name}_REF for later reference
 #           This version does not force the cache to be updated
-macro(CACHE_VARIABLES_FOR_REFERENCE)
+macro(PTL_CACHE_VARIABLES_FOR_REFERENCE)
     foreach(_var ${ARGN})
         set(${_var}_REF ${${_var}} CACHE STRING
             "Cached reference of ${_var} under ${_var}_REF for later comparison")
@@ -765,7 +775,7 @@ endmacro()
 #           Provide a list of variables that will be stored in the cache
 #              as {variable_name}_REF for later reference
 #           This version forces the cache to be updated
-macro(UPDATE_REFERENCE_CACHE_VARIABLES)
+macro(PTL_UPDATE_REFERENCE_CACHE_VARIABLES)
     foreach(_var ${ARGN})
         set(${_var}_REF ${${_var}} CACHE STRING
             "Cached reference of ${_var} under ${_var}_REF for later comparison"
@@ -800,7 +810,7 @@ endfunction(GET_HOSTNAME VAR)
 #       TEST_FILE (one value) -- file to check for (default: CMakeLists.txt)
 #       ADDITIONAL_CMDS (many value) -- any addition commands to pass
 #
-macro(CHECKOUT_GIT_SUBMODULE)
+macro(PTL_CHECKOUT_GIT_SUBMODULE)
 
     # parse args
     cmake_parse_arguments(
@@ -858,13 +868,13 @@ macro(CHECKOUT_GIT_SUBMODULE)
 
     endif(NOT EXISTS "${_TEST_FILE}")
 
-endmacro(CHECKOUT_GIT_SUBMODULE)
+endmacro()
 
 
 #----------------------------------------------------------------------------
 # Macro for building library
 #
-macro(BUILD_LIBRARY)
+macro(PTL_BUILD_LIBRARY)
     cmake_parse_arguments(LIB
     "VERSION" "TYPE;TARGET_NAME;OUTPUT_NAME;EXTENSION" "LINK_LIBRARIES;SOURCES;EXTRA_ARGS"
     ${ARGN})
@@ -879,6 +889,7 @@ macro(BUILD_LIBRARY)
     setifnot(LIB_OUTPUT_NAME ${LIB_TARGET_NAME})
 
     add_library(${LIB_TARGET_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+    add_library(${PROJECT_NAME}::${LIB_TARGET_NAME} ALIAS ${LIB_TARGET_NAME})
 
     if(LIB_VERSION)
         list(APPEND LIB_EXTRA_ARGS VERSION ${${PROJECT_NAME}_VERSION}
@@ -886,8 +897,7 @@ macro(BUILD_LIBRARY)
     endif()
 
     target_link_libraries(${LIB_TARGET_NAME} PUBLIC
-        ${EXTERNAL_LIBRARIES} ${LIB_LINK_LIBRARIES}
-        PRIVATE ${PRIVATE_EXTERNAL_LIBRARIES})
+        ptl-external-packages ${LIB_LINK_LIBRARIES})
 
     set_target_properties(${LIB_TARGET_NAME}
         PROPERTIES
@@ -897,11 +907,15 @@ macro(BUILD_LIBRARY)
             POSITION_INDEPENDENT_CODE   ON
             ${LIB_EXTRA_ARGS})
 
+    if(WIN32)
+        set_target_properties(${LIB_TARGET_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    endif()
+
     target_compile_definitions(${LIB_TARGET_NAME} PUBLIC
         ${${PROJECT_NAME}_DEFINITIONS})
 
     target_compile_features(${LIB_TARGET_NAME}
-        PUBLIC cxx_std_${GEANT4_BUILD_CXXSTD})
+        PUBLIC cxx_std_${CMAKE_CXX_STANDARD})
 
     get_property(languages GLOBAL PROPERTY ENABLED_LANGUAGES)
 
@@ -916,8 +930,7 @@ macro(BUILD_LIBRARY)
             $<$<COMPILE_LANGUAGE:CXX>:${${PROJECT_NAME}_CXX_FLAGS} ${LIB_CXXFLAGS}>)
     endif()
 
-    list(APPEND INSTALL_LIBRARIES ${TARGET_NAME})
-endmacro(BUILD_LIBRARY)
+endmacro()
 
 #-----------------------------------------------------------------------
 # function add_enabled_interface(<NAME>)
@@ -946,6 +959,7 @@ ENDFUNCTION()
 FUNCTION(PTL_ADD_INTERFACE_LIBRARY _TARGET)
     if(NOT TARGET ${_TARGET})
         add_library(${_TARGET} INTERFACE ${ARGN})
+        add_library(${PROJECT_NAME}::${_TARGET} ALIAS ${_TARGET})
         set_property(GLOBAL APPEND PROPERTY ${PROJECT_NAME}_INTERFACE_LIBRARIES ${_TARGET})
         ptl_add_enabled_interface(${_TARGET})
         install(TARGETS ${_TARGET}
@@ -967,7 +981,7 @@ ENDFUNCTION()
 
 #------------------------------------------------------------------------------#
 # always determine the default lib directory
-DETERMINE_LIBDIR_DEFAULT(LIBDIR_DEFAULT)
+PTL_DETERMINE_LIBDIR_DEFAULT(LIBDIR_DEFAULT)
 
 
 #------------------------------------------------------------------------------#

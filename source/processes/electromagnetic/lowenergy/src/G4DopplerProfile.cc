@@ -46,16 +46,11 @@
 #include <sstream>
 #include "Randomize.hh"
 
-// The following deprecated header is included because <functional> seems not to be found on MGP's laptop
-//#include "function.h"
-
-// Constructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DopplerProfile::G4DopplerProfile(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ)
 {  
-  nBiggs = 31;
-
   LoadBiggsP("/doppler/p-biggs");
 
   for (G4int Z=zMin; Z<zMax+1; Z++)
@@ -64,18 +59,20 @@ G4DopplerProfile::G4DopplerProfile(G4int minZ, G4int maxZ)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 // Destructor
 G4DopplerProfile::~G4DopplerProfile()
 {
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
-  for (pos = profileMap.begin(); pos != profileMap.end(); ++pos)
+  for (auto& pos : profileMap)
     {
-      G4VEMDataSet* dataSet = (*pos).second;
+      G4VEMDataSet* dataSet = pos.second;
       delete dataSet;
-      dataSet = 0;
+      dataSet = nullptr;
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 size_t G4DopplerProfile::NumberOfProfiles(G4int Z) const
 {
@@ -84,18 +81,19 @@ size_t G4DopplerProfile::NumberOfProfiles(G4int Z) const
   return n;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4VEMDataSet* G4DopplerProfile::Profiles(G4int Z) const
 {
-  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
   if (Z < zMin || Z > zMax) 
     G4Exception("G4DopplerProfile::Profiles",
 		    "em1005",FatalException,"Z outside boundaries");
-  pos = profileMap.find(Z);
+  auto pos = profileMap.find(Z);
   G4VEMDataSet* dataSet = (*pos).second;
   return dataSet;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4VEMDataSet* G4DopplerProfile::Profile(G4int Z, G4int shellIndex) const
 {
@@ -104,6 +102,7 @@ const G4VEMDataSet* G4DopplerProfile::Profile(G4int Z, G4int shellIndex) const
   return profi;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DopplerProfile::PrintData() const
 {
@@ -114,6 +113,7 @@ void G4DopplerProfile::PrintData() const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
 {
@@ -156,6 +156,7 @@ void G4DopplerProfile::LoadBiggsP(const G4String& fileName)
 		    "em1006",FatalException,"Number of momenta read in is not 31");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
 {
@@ -205,7 +206,6 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
 	  file >> p;
 	  profi->push_back(p);
           biggs->push_back(biggsP[i]);
-	  //	  if (i == 16) G4cout << "profile = " << p << G4endl;
 	}
 
       // Create G4EMDataSet for the current shell
@@ -222,6 +222,7 @@ void G4DopplerProfile::LoadProfile(const G4String& fileName,G4int Z)
   profileMap[Z] = dataSetForZ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
  G4double G4DopplerProfile::RandomSelectMomentum(G4int Z, G4int shellIndex) const
 {

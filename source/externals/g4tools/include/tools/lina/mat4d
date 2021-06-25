@@ -1,0 +1,82 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_mat4d
+#define tools_mat4d
+
+#include "mat4"
+#include <cmath>
+
+namespace tools {
+
+class mat4d : public mat4<double> {
+  typedef mat4<double> parent;
+public:
+  mat4d(){}
+  virtual ~mat4d() {}
+public:
+  mat4d(const mat4d& a_from):parent(a_from){}
+  mat4d& operator=(const mat4d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  mat4d(double a_00,double a_01,double a_02,double a_03, //first  row
+        double a_10,double a_11,double a_12,double a_13, //second row
+        double a_20,double a_21,double a_22,double a_23, //third  row
+        double a_30,double a_31,double a_32,double a_33) //fourth row
+  :parent(a_00,a_01,a_02,a_03,
+          a_10,a_11,a_12,a_13,
+          a_20,a_21,a_22,a_23,
+          a_30,a_31,a_32,a_33)
+  {}
+  mat4d(const parent& a_from):parent(a_from){}
+  mat4d& operator=(const parent& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  mat4d(const mat4<float>& a_from):parent(){
+    for(unsigned int index=0;index<16;index++) {
+      m_vec[index] = a_from.data()[index];
+    }
+  }
+  mat4d& operator=(const mat4<float>& a_from){
+    for(unsigned int index=0;index<16;index++) {
+      m_vec[index] = a_from.data()[index];
+    }
+    return *this;
+  }
+public:
+  void set_rotate(const double& a_x,const double& a_y,const double& a_z,const double& a_angle) {
+    parent::set_rotate(a_x,a_y,a_z,a_angle,::sin,::cos);
+  }
+  void mul_rotate(const double& a_x,const double& a_y,const double& a_z,const double& a_angle) {
+    parent::mul_rotate(a_x,a_y,a_z,a_angle,::sin,::cos);
+  }
+  void left_mul_rotate(const double& a_x,const double& a_y,const double& a_z,const double& a_angle) {
+    parent::left_mul_rotate(a_x,a_y,a_z,a_angle,::sin,::cos);
+  }
+
+  template <class VEC>
+  void set_rotate(const VEC& a_dir,double a_angle) {
+    //WARNING : a_dir must be a normalized vector.
+    parent::set_rotate(a_dir[0],a_dir[1],a_dir[2],a_angle,::sin,::cos);
+  }
+
+public: //backward compatibility
+  void mul_2d(double& a_x,double& a_y) const {
+    parent::mul_2(a_x,a_y);
+  }
+  void mul_3d(double& a_x,double& a_y,double& a_z) const {
+    parent::mul_3(a_x,a_y,a_z);
+  }
+  void mul_4d(double& a_x,double& a_y,double& a_z,double& a_w) const {
+    parent::mul_4(a_x,a_y,a_z,a_w);
+  }
+public: //operators
+};
+
+}
+
+#endif

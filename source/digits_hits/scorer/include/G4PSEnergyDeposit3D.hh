@@ -38,24 +38,21 @@
 // 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class G4PSEnergyDeposit3D : public G4PSEnergyDeposit
 {
-   public: // with description
-    G4PSEnergyDeposit3D(G4String name,
-			G4int ni=1,G4int nj=1, G4int nk=1,
-			G4int depi=2, G4int depj=1, G4int depk=0);
-    G4PSEnergyDeposit3D(G4String name, const G4String& unit,
-			G4int ni=1,G4int nj=1, G4int nk=1,
-			G4int depi=2, G4int depj=1, G4int depk=0);
+ public:  // with description
+  G4PSEnergyDeposit3D(G4String name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
+                      G4int depi = 2, G4int depj = 1, G4int depk = 0);
+  G4PSEnergyDeposit3D(G4String name, const G4String& unit, G4int ni = 1,
+                      G4int nj = 1, G4int nk = 1, G4int depi = 2,
+                      G4int depj = 1, G4int depk = 0);
 
-    virtual ~G4PSEnergyDeposit3D();
+  virtual ~G4PSEnergyDeposit3D();
 
-  protected: // with description
-    virtual G4int GetIndex(G4Step*);
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
 #endif
-

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4hits
-# Package: Geant4.src.G4digits_hits.G4hits
-#------------------------------------------------------------------------------
+# - G4hits module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4hits
-  HEADERS
+geant4_add_module(G4hits
+  PUBLIC_HEADERS
     G4HCofThisEvent.hh
     G4THitsCollection.hh
     G4THitsMap.hh
@@ -18,11 +13,6 @@ geant4_define_module(NAME G4hits
     G4HCofThisEvent.cc
     G4THitsCollection.cc
     G4VHit.cc
-    G4VHitsCollection.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-  GLOBAL_DEPENDENCIES
-    G4global
-)
+    G4VHitsCollection.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4hits PUBLIC G4globman)

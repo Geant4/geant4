@@ -37,7 +37,7 @@
 // interactions with the wrapper hadronic model around CRMC.
 //
 // Modified:
-// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@ class CRMCProtonBuilder : public G4VProtonBuilder {
     CRMCProtonBuilder( const G4int crmcModelId, const std::string & crmcModelName );
     virtual ~CRMCProtonBuilder();
     virtual void Build( G4HadronElasticProcess* aP ) final override;
-    virtual void Build( G4ProtonInelasticProcess* aP ) final override;
+    virtual void Build( G4HadronInelasticProcess* aP ) final override;
     inline void SetMinEnergy( G4double aM ) final override { fMin = aM; }
     inline void SetMaxEnergy( G4double aM ) final override { fMax = aM; }
     using G4VProtonBuilder::Build;  // Prevent compiler warning

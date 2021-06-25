@@ -65,15 +65,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::instance = nullptr;
-
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
-  if(!instance) {
-    static G4ThreadLocalSingleton<G4HadronicProcessStore> inst;
-    instance = inst.Instance();
-  }
-  return instance;
+  static thread_local auto* _instance = new G4HadronicProcessStore{};
+  return _instance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -88,19 +83,14 @@ G4HadronicProcessStore::~G4HadronicProcessStore()
 
 void G4HadronicProcessStore::Clean()
 {
-  G4int i;
-  for (i=0; i<n_proc; ++i) {
-    if( process[i] ) {
-      delete process[i];
-      process[i] = nullptr;
-    }
-  }
-  for(i=0; i<n_extra; ++i) {
-    if(extraProcess[i]) {
-        delete extraProcess[i];
-        extraProcess[i] = nullptr;
-    }
-  }
+  for(auto& itr : process)
+    delete itr;
+  process.clear();
+
+  for(auto& itr : extraProcess)
+    delete itr;
+  extraProcess.clear();
+
   n_extra = 0;
   n_proc = 0;
 }

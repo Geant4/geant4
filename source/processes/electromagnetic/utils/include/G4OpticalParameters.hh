@@ -91,8 +91,6 @@ G4String G4OpticalProcessName(G4int processNumber)
   }
 }
 
-
-
 class G4OpticalParameters
 {
 public:
@@ -113,15 +111,6 @@ public:
 
   void   SetProcessActivation(const G4String&, G4bool);
   G4bool GetProcessActivation(const G4String&) const;
-
-  // DEPRECATED, use Set/GetProcessActivation instead
-  void   Configure(G4OpticalProcessIndex, G4bool);
-  G4bool GetConfiguration(G4OpticalProcessIndex);
-
-  // DEPRECATED, use Set/GetCerenkovTrackSecondariesFirst and 
-  // Set/GetScintTrackSecondariesFirst instead
-  void   SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool);
-  G4bool GetTrackSecondariesFirst(G4OpticalProcessIndex);
 
   // Cerenkov
   void     SetCerenkovMaxPhotonsPerStep(G4int);
@@ -209,15 +198,10 @@ private:
   G4double cerenkovMaxBetaChange;
 
   // scintillation /////////////////
-  G4double scintYieldFactor;
-
-  /// Note: this is to be removed in the next major release.
-  ///       Use material properties SCINTILLATIONYIELD1, 2, 3 instead
-  G4double scintExcitationRatio;
 
   /// option to set a finite rise-time; Note: the G4Scintillation
   /// process expects the user to have set the constant material
-  /// property FAST/SLOWSCINTILLATIONRISETIME
+  /// property SCINTILLATIONRISETIME{1,2,3}
   G4bool   scintFiniteRiseTime;
 
   /// option to  allow for the light yield to be a function of
@@ -231,10 +215,6 @@ private:
 
   /// option to allow stacking of secondary Scintillation photons
   G4bool   scintStackPhotons;
-
-  /// new in version 10.7; allow > 2 time constants, and > 1 time
-  /// constant for scintillation by particle type
-  G4bool   scintEnhancedTimeConstants;
 
   G4int    scintVerboseLevel;
   G4bool   scintTrackSecondariesFirst;

@@ -115,11 +115,8 @@ public:
   bool setExportImageFormat(std::string format,bool quiet = false);
   // change the export image format according to thoses available for the current viewer
 
-  // Special case for Wt, we want to have acces to the drawer
 #ifdef G4OPENGL_VERSION_2
-  inline G4OpenGLVboDrawer* getWtDrawer() {return fVboDrawer;}
-  
-  // Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
+
   void setVboDrawer(G4OpenGLVboDrawer* drawer);
   G4OpenGLVboDrawer* fVboDrawer;
 
@@ -251,17 +248,6 @@ private :
   
 #ifdef G4OPENGL_VERSION_2
 public:
-#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
-  inline Wt::WGLWidget::Program getShaderProgram() {
-    return fShaderProgram;
-  }
-  inline Wt::WGLWidget::UniformLocation getShaderProjectionMatrix() {
-    return fpMatrixUniform;
-  }
-  inline Wt::WGLWidget::UniformLocation getShaderTransformMatrix() {
-    return ftMatrixUniform;
-  }
-#else
   inline GLuint getShaderProgram() {
     return fShaderProgram;
   }
@@ -274,30 +260,13 @@ public:
   inline GLuint getShaderViewModelMatrix() {
     return fmvMatrixUniform;
   }
-#endif // G4VIS_BUILD_OPENGLWT_DRIVER
 
 protected :
   
   // define the keyword shader to handle it in a better way for OpenGL and WebGL
-#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
-#define Shader Wt::WGLWidget::Shader
-#else
 #define Shader GLuint
-#endif // G4VIS_BUILD_OPENGLWT_DRIVER
 
   // define some attributes and variables for OpenGL and WebGL
-#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
-  Wt::WGLWidget::Program fShaderProgram;
-  
-  // Program and related variables
-  Wt::WGLWidget::AttribLocation fVertexPositionAttribute;
-  Wt::WGLWidget::AttribLocation fVertexNormalAttribute;
-  Wt::WGLWidget::UniformLocation fpMatrixUniform;
-  Wt::WGLWidget::UniformLocation fcMatrixUniform;
-  Wt::WGLWidget::UniformLocation fmvMatrixUniform;
-  Wt::WGLWidget::UniformLocation fnMatrixUniform;
-  Wt::WGLWidget::UniformLocation ftMatrixUniform;
-#else
   GLuint fShaderProgram;
   
   // Program and related variables
@@ -308,7 +277,6 @@ protected :
   GLuint fmvMatrixUniform;
   GLuint fnMatrixUniform;
   GLuint ftMatrixUniform;
-#endif // G4VIS_BUILD_OPENGLWT_DRIVER
 
 #endif
 };

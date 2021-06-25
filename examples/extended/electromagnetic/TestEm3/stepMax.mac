@@ -1,0 +1,22 @@
+#
+# macro file for TestEm1.cc
+#
+/control/verbose 2
+/run/verbose 1
+#
+/testem/det/setNbOfLayers 2
+#
+/process/em/verbose 0
+#    
+/run/initialize
+#
+/gun/particle chargedgeantino 
+#
+/tracking/verbose 1
+#
+/testem/stepMax 1 mm
+/run/beamOn 1
+#
+/testem/stepMax 3 mm
+/run/beamOn 1
+

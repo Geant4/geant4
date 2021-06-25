@@ -69,6 +69,7 @@ class G4Polymarker;
 class G4Polyhedron;
 class G4VisExtent;
 class G4StatDouble;
+class G4Mesh;
 
 class G4VGraphicsScene {
 
@@ -130,6 +131,7 @@ public: // With description
   virtual void AddCompound (const G4VDigi&)                  = 0;
   virtual void AddCompound (const G4THitsMap<G4double>&)     = 0;
   virtual void AddCompound (const G4THitsMap<G4StatDouble>&) = 0;
+  virtual void AddCompound (const G4Mesh&)                   = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding graphics primitives to the scene handler.  A

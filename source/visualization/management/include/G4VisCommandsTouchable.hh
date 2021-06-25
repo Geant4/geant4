@@ -51,6 +51,7 @@ private:
   G4UIcmdWithoutParameter* fpCommandDump;
   G4UIcmdWithABool*        fpCommandExtentForField;
   G4UIcommand*             fpCommandFindPath;
+  G4UIcmdWithoutParameter* fpCommandLocalAxes;
   G4UIcmdWithABool*        fpCommandShowExtent;
   G4UIcmdWithABool*        fpCommandVolumeForField;
 };

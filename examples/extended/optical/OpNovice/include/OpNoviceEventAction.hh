@@ -58,7 +58,5 @@ class OpNoviceEventAction : public G4UserEventAction
   G4int fMie;
   G4int fBoundary;
 };
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

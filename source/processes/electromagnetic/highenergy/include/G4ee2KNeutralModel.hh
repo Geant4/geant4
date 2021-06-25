@@ -62,20 +62,20 @@ public:
 
   explicit G4ee2KNeutralModel(G4eeCrossSections*,G4double,G4double);
 
-  virtual ~G4ee2KNeutralModel();
+  ~G4ee2KNeutralModel() override;
 
-  virtual G4double PeakEnergy() const override;
+  G4double PeakEnergy() const override;
 
-  virtual G4double ComputeCrossSection(G4double) const override;
+  G4double ComputeCrossSection(G4double) const override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&) override;
-
-private:
 
   // hide assignment operator
   G4ee2KNeutralModel & operator=(const  G4ee2KNeutralModel &right) = delete;
   G4ee2KNeutralModel(const  G4ee2KNeutralModel&) = delete;
+
+private:
 
   G4double massK;
   G4double massPhi;

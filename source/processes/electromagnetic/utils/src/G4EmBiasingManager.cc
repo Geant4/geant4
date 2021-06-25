@@ -64,18 +64,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmBiasingManager::G4EmBiasingManager() 
-  : nForcedRegions(0),nSecBiasedRegions(0),eIonisation(nullptr),
-    currentStepLimit(0.0),startTracking(true)
+G4EmBiasingManager::G4EmBiasingManager()
+  : fDirectionalSplittingTarget(0.0,0.0,0.0)
 {
   fSafetyMin = 1.e-6*mm;
   theElectron = G4Electron::Electron();
   theGamma    = G4Gamma::Gamma();
-
-  fDirectionalSplitting = false;
-  fDirectionalSplittingRadius = 0.;
-  fDirectionalSplittingTarget = G4ThreeVector(0.,0.,0.);
-  fDirectionalSplittingWeights.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -447,8 +441,7 @@ G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
       const G4DynamicParticle* dp = vd[k];
       if(dp->GetDefinition() == theElectron) {
         G4double e = dp->GetKineticEnergy();
-        if(eIonisation->GetRangeForLoss(e, track.GetMaterialCutsCouple()) 
-           < safety) {
+        if(eIonisation->GetRange(e, track.GetMaterialCutsCouple()) < safety) {
           eloss += e;
           delete dp;
           vd[k] = 0;

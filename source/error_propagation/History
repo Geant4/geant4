@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-April-2020 - J. Madsen (error-propagation-V10-07-01)
+- make G4error_propagation-format
+
+1-April-2020 - B.Morgan (error-propagation-V10-07-00)
+- Migrate build to modular CMake API
+
 8-Sep-2020 - G.Cosmo (error-propagation-V10-06-01)
 - Fixed Coverity defects warnings in G4ErrorPropagator for unreachable code.
   Implemented move assignment operators in G4ErrorSymMatrix, G4ErrorSymMatrix,
@@ -31,7 +37,7 @@ committal in the CVS repository !
   Thanks to Raphael Isemann for reporting these.
 
 10-Nov-2017 - P.Arce (error-propagation-V10-03-02)
-- Bug report 2010: precision correction in G4ErrorFreeTrajState.cc 
+- Bug report 2010: precision correction in G4ErrorFreeTrajState.cc
 
  1-Nov-2017 - J. Apostolakis, D. Sorokin (error-propagation-V10-03-01)
                             same code as (error-propagation-V10-03-00)
@@ -44,7 +50,7 @@ committal in the CVS repository !
 12-Oct-2016 - Gunter Folger              (error-propagation-V10-02-01)
 - replace direct use of aParticleIterator by GetParticleIterator().
     fix required by clang39 on Windows and MAC
-	 
+
 21 September 2016 - G.Cosmo
 - Roll back to tag "error-propagation-V10-01-00". Cleaner solution to the
   problem is required to be applied in conjunction with "run" category for
@@ -94,7 +100,7 @@ committal in the CVS repository !
 - G4ErrorPhysicsList - remove unnecessary header
 
 21 November 2012 - P.Arce (error-propagation-V09-05-06)
-- Changes to G4ErrorRunManagerHelper to correct check for G4ErrorPhysicsList" 
+- Changes to G4ErrorRunManagerHelper to correct check for G4ErrorPhysicsList"
 
 19 September 2012 - P.Arce (error_propagation-V09-05-05)
 - Changes in G4ErrorFreeTrajState (partType -> partName) and delete code not needed in G4ErrorPhysicsList
@@ -124,7 +130,7 @@ committal in the CVS repository !
 
 1 July 2011 - G.Cosmo (error_propagation-V09-04-02)
 - Fixed Coverity defects for uninitialised static data and cases of ios
-  format not restored. 
+  format not restored.
 
 13 May 2011 - G.Cosmo (error_propagation-V09-04-01)
 - Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
@@ -137,7 +143,7 @@ committal in the CVS repository !
 11 November 2009 - P.Arce (error_propagation-V09-02-02)
 - Avoid G4ThreeVector(double) constructor in G4ErrorMagFieldLimitProcess.cc
 
-14 May 2008 - P.Arce (error_propagation-V09-02-01) 
+14 May 2008 - P.Arce (error_propagation-V09-02-01)
 - Inclusion of pion+/- and proton in physics list
 - Possibility to account for error deflation (needed to make 'smoothing')
 

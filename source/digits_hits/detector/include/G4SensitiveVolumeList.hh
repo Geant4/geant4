@@ -51,48 +51,39 @@
 // used by the veto list for individual logical/physical volumes.
 //
 
-class G4SensitiveVolumeList 
+class G4SensitiveVolumeList
 {
+ public:
+  // Constructors
+  G4SensitiveVolumeList();
+  G4SensitiveVolumeList(const G4SensitiveVolumeList& right);
 
-  public:
-    //Constructors
-      G4SensitiveVolumeList();
-      G4SensitiveVolumeList(const G4SensitiveVolumeList &right);
+  // Destructor
+  ~G4SensitiveVolumeList();
 
-    //Destructor
-      ~G4SensitiveVolumeList();
+  // Assignment Operation
+  G4SensitiveVolumeList& operator=(const G4SensitiveVolumeList& right);
 
-    //Assignment Operation
-    G4SensitiveVolumeList & operator=(const G4SensitiveVolumeList &right
-);
+  // Equality Operations
+  G4bool operator==(const G4SensitiveVolumeList& right) const;
+  G4bool operator!=(const G4SensitiveVolumeList& right) const;
 
-    //Equality Operations
-      G4bool operator==(const G4SensitiveVolumeList &right) const;
-      G4bool operator!=(const G4SensitiveVolumeList &right) const;
+  // Other Operations
+  G4bool CheckPV(const G4VPhysicalVolume* pvp) const;
+  G4bool CheckLV(const G4LogicalVolume* lvp) const;
 
+  // Get and Set Operations for Has Relationships
+  const std::vector<G4VPhysicalVolume*>& GetThePhysicalVolumeList() const;
+  void SetThePhysicalVolumeList(const std::vector<G4VPhysicalVolume*> value);
 
-    //Other Operations
-      G4bool CheckPV(const G4VPhysicalVolume *pvp) const;
-      G4bool CheckLV(const G4LogicalVolume *lvp) const;
+  const std::vector<G4LogicalVolume*>& GetTheLogicalVolumeList() const;
+  void SetTheLogicalVolumeList(const std::vector<G4LogicalVolume*> value);
 
-    //Get and Set Operations for Has Relationships
-      const std::vector<G4VPhysicalVolume*>& GetThePhysicalVolumeList() const;
-      void SetThePhysicalVolumeList(const std::vector<G4VPhysicalVolume*> value);
+ private:
+  // Data Members for Has Relationships
 
-      const std::vector<G4LogicalVolume*>& GetTheLogicalVolumeList() const;
-      void SetTheLogicalVolumeList(const std::vector<G4LogicalVolume*> value);
-
-
-
-  private: 
-
-    //Data Members for Has Relationships
-
-      std::vector<G4VPhysicalVolume*> thePhysicalVolumeList;
-      std::vector<G4LogicalVolume*> theLogicalVolumeList;
-
+  std::vector<G4VPhysicalVolume*> thePhysicalVolumeList;
+  std::vector<G4LogicalVolume*> theLogicalVolumeList;
 };
 
-
 #endif
-

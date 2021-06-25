@@ -6,13 +6,15 @@
 
                            History file
                            ------------
- 
-14.11.2020 - S. Guatelli(air_shower-V10-06-04)   
-             Migration to G4RunFactoryManager                     
+24.05.2021 - B. Morgan (air_shower-V10-07-00)
+             Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+14.11.2020 - S. Guatelli(air_shower-V10-06-04)
+             Migration to G4RunFactoryManager
 
 05.11.2020 - B.Tome (air_shower-V10-06-03)
              Output results histograms to ROOT file
-             Add ROOT macro file to plot histograms           
+             Add ROOT macro file to plot histograms
 
 03.11.2020 - D.Sawkey (air_shower-V10-06-02)
              Create material properties using std::vectors

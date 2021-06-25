@@ -44,14 +44,13 @@
 using namespace std;
 
 G4ComptonScattering::G4ComptonScattering(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+  G4ProcessType type):G4VEmProcess (processName, type)
 {
   SetStartFromNullFlag(true);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fComptonScattering);
-  SetMinKinEnergyPrim(1*MeV);
+  SetMinKinEnergyPrim(1*CLHEP::MeV);
   SetSplineFlag(true);
 }
 
@@ -73,18 +72,13 @@ void G4ComptonScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!EmModel(0)) { SetEmModel(new G4KleinNishinaCompton()); }
+    if(nullptr == EmModel(0)) { SetEmModel(new G4KleinNishinaCompton()); }
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(1, EmModel(0));
   } 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4ComptonScattering::PrintInfo()
-{}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

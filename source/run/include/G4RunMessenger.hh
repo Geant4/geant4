@@ -23,34 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RunMessenger
 //
+// Class description:
 //
+// This is a messenger class for G4RunManager.
+// Implemented commands are following;
 //
-//	GEANT 4 class header file
+//   beamOn           *  Start a Run.
+//   verbose          *  Set the Verbose level of G4RunManager.
+//   printProgress    *  Set the frequency of printing out progress of a run.
+//   dumpRegion       *  Dump information of a region.
+//   dumpCouples      *  Dump information of material-cuts-couples.
+//   optimizeGeometry *  Set the optimization flag of closing geometry.
+//   breakAtBeginOfEvent * Set a break point at the beginning of every event.
+//   breakAtEndOfEvent   *   Set a break point at the end of every event.
+//   abort            *  Abort current run processing.
+//   Initialize       *  Initialise G4 kernel.
+//   geometryModified *  Force geometry to be closed again.
+//   physicsModified  *  Force cross-section tables to be calculated again
+//                       (and rebuilding physics table will be invoked).
+//   constructScoringWorlds * Construct scoring world(s) if defined.
 
-// class description:
-//
-//      This is a messenger class for G4RunManager.
-//      Implemented commands are following;
-//
-//  Commands :
-//    beamOn *              Start a Run.
-//    verbose *             Set the Verbose level of G4RunManager.
-//    printProgress *       Set the frequency of printing out the progress of a
-//    run. dumpRegion *          Dump information of a region. dumpCouples *
-//    Dump information of material-cuts-couples. optimizeGeometry *    Set the
-//    optimization flag of closing geometry. breakAtBeginOfEvent * Set a break
-//    point at the beginning of every event. breakAtEndOfEvent *   Set a break
-//    point at the end of every event. abort *               Abort current run
-//    processing. Initialize *          Initialize G4 kernel. geometryModified *
-//    Force geometry to be closed again. physicsModified *     Force
-//    cross-section tables to be calculated again.
-//           (and rebuilding physics table will be invoked)
-//    constructScoringWorlds * Construct scoring world(s) if defined
-//
+// Original author: M.Asai, 1997
+// --------------------------------------------------------------------
+#ifndef G4RunMessenger_hh
+#define G4RunMessenger_hh 1
 
-#ifndef G4RunMessenger_h
-#define G4RunMessenger_h 1
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
 class G4RunManager;
 class G4UIdirectory;
@@ -61,59 +62,56 @@ class G4UIcmdWithABool;
 class G4UIcommand;
 class G4MaterialScanner;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
 class G4RunMessenger : public G4UImessenger
 {
- public:
-  G4RunMessenger(G4RunManager* runMgr);
-  ~G4RunMessenger();
+  public:
 
- public:
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);
+    G4RunMessenger(G4RunManager* runMgr);
+   ~G4RunMessenger();
 
- private:
-  G4RunManager* runManager;
-  G4String macroFileName;  // internal use only!!!
+    void SetNewValue(G4UIcommand* command, G4String newValues);
+    G4String GetCurrentValue(G4UIcommand* command);
 
- private:  // commands
-  G4UIdirectory* runDirectory;
-  G4UIcommand* beamOnCmd;
-  G4UIcmdWithAnInteger* verboseCmd;
-  G4UIcmdWithAnInteger* printProgCmd;
-  G4UIcmdWithAnInteger* nThreadsCmd;
-  G4UIcmdWithoutParameter* maxThreadsCmd;
-  G4UIcmdWithAnInteger* pinAffinityCmd;
-  G4UIcommand* evModCmd;
-  G4UIcmdWithAString* dumpRegCmd;
-  G4UIcmdWithoutParameter* dumpCoupleCmd;
-  G4UIcmdWithABool* optCmd;
-  G4UIcmdWithABool* brkBoECmd;
-  G4UIcmdWithABool* brkEoECmd;
-  G4UIcmdWithABool* abortCmd;
-  G4UIcmdWithoutParameter* abortEventCmd;
-  G4UIcmdWithoutParameter* initCmd;
-  G4UIcmdWithoutParameter* geomCmd;
-  G4UIcmdWithABool* geomRebCmd;
-  G4UIcmdWithoutParameter* physCmd;
-  G4UIcmdWithAnInteger* randEvtCmd;
-  G4UIcommand* procUICmds;
+  private:
 
-  G4UIdirectory* randomDirectory;
-  G4UIcmdWithAString* seedCmd;
-  G4UIcmdWithAString* randDirCmd;
-  G4UIcmdWithABool* savingFlagCmd;
-  G4UIcmdWithoutParameter* saveThisRunCmd;
-  G4UIcmdWithoutParameter* saveThisEventCmd;
-  G4UIcmdWithAString* restoreRandCmd;
-  G4UIcmdWithABool* saveEachEventCmd;
-  G4UIcmdWithABool* restoreRandCmdMT;
+    G4RunManager* runManager = nullptr;
+    G4String macroFileName = "***NULL***";  // internal use only!!!
 
-  G4UIcmdWithoutParameter* constScoreCmd;
+    G4UIdirectory* runDirectory = nullptr;
+    G4UIcommand* beamOnCmd = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
+    G4UIcmdWithAnInteger* printProgCmd = nullptr;
+    G4UIcmdWithAnInteger* nThreadsCmd = nullptr;
+    G4UIcmdWithoutParameter* maxThreadsCmd = nullptr;
+    G4UIcmdWithAnInteger* pinAffinityCmd = nullptr;
+    G4UIcommand* evModCmd = nullptr;
+    G4UIcmdWithAString* dumpRegCmd = nullptr;
+    G4UIcmdWithoutParameter* dumpCoupleCmd = nullptr;
+    G4UIcmdWithABool* optCmd = nullptr;
+    G4UIcmdWithABool* brkBoECmd = nullptr;
+    G4UIcmdWithABool* brkEoECmd = nullptr;
+    G4UIcmdWithABool* abortCmd = nullptr;
+    G4UIcmdWithoutParameter* abortEventCmd = nullptr;
+    G4UIcmdWithoutParameter* initCmd = nullptr;
+    G4UIcmdWithoutParameter* geomCmd = nullptr;
+    G4UIcmdWithABool* geomRebCmd = nullptr;
+    G4UIcmdWithoutParameter* physCmd = nullptr;
+    G4UIcmdWithAnInteger* randEvtCmd = nullptr;
+    G4UIcommand* procUICmds = nullptr;
 
-  G4MaterialScanner* materialScanner;
+    G4UIdirectory* randomDirectory = nullptr;
+    G4UIcmdWithAString* seedCmd = nullptr;
+    G4UIcmdWithAString* randDirCmd = nullptr;
+    G4UIcmdWithABool* savingFlagCmd = nullptr;
+    G4UIcmdWithoutParameter* saveThisRunCmd = nullptr;
+    G4UIcmdWithoutParameter* saveThisEventCmd = nullptr;
+    G4UIcmdWithAString* restoreRandCmd = nullptr;
+    G4UIcmdWithABool* saveEachEventCmd = nullptr;
+    G4UIcmdWithABool* restoreRandCmdMT = nullptr;
+
+    G4UIcmdWithoutParameter* constScoreCmd = nullptr;
+
+    G4MaterialScanner* materialScanner = nullptr;
 };
 
 #endif

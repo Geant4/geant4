@@ -71,22 +71,24 @@
   	
  5- Visualisation
     ------------- 
- Visualization Manager is set in the main().
+ In interactive mode, visualization manager is set in the main().
  Initialisation of the drawing is done via the commands
- /vis/.. in the macro vis.mac. This macro is automatically read from the main 
- in case of interactive running mode.
+ /vis/.. in the macro vis.mac : /control/execute vis.mac
   
  6- How to start ?
     -------------- 
   - execute transforms in 'interactive mode' with visualization
  	% transforms
  	....
- 	Idle>   ---> type your commands. For instance:
+ 	Idle>   ---> type your commands. For example:
 	Idle> /placement/setMethod WithInverseMatrix
+	Idle> /control/execute vis.mac
 	Idle> /tracking/verbose 1 		
-	Idle> /run/beamOn 1
-	....				
+	Idle> /run/beamOn 1				
  	Idle> exit
+      or, simply
+	Idle> /control/execute rotations.mac 
+	Idle> /control/execute reflections.mac
  		
   - execute transforms in 'batch' mode from macro files
  	% transforms   transforms.in	

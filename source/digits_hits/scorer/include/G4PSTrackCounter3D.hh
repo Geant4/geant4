@@ -31,7 +31,6 @@
 
 #include "G4PSTrackCounter.hh"
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring number of tracks in a cell.
@@ -41,25 +40,20 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class G4PSTrackCounter3D : public G4PSTrackCounter
 {
- 
- public: // with description
-      G4PSTrackCounter3D(G4String name, G4int direction,
-			G4int ni=1,G4int nj=1, G4int nk=1,
-			G4int di=2, G4int dj=1, G4int dk=0);
-  public:
-      virtual ~G4PSTrackCounter3D();
+ public:  // with description
+  G4PSTrackCounter3D(G4String name, G4int direction, G4int ni = 1, G4int nj = 1,
+                     G4int nk = 1, G4int di = 2, G4int dj = 1, G4int dk = 0);
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+ public:
+  virtual ~G4PSTrackCounter3D();
 
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
-
-
 
 #endif

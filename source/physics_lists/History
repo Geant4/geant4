@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-04-2021 Ben Morgan (physics-lists-V10-07-01)
+- Migrate build to modular CMake API
+
+14-04-2021, Alberto Ribon (physics-lists-V10-07-00)
+- Removed dependencies on hadronic/model/util and hadronic/model/management
+  (that have been now deleted, with their classes moved to hadronic/util
+   and hadronic/management).
+
 23-09-2020, Ben Morgan (physics-lists-V10-06-00)
 - Remove no longer required include_directories
 

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4vis_management
-# Package: Geant4.src.G4visualization.G4vis_management
-#------------------------------------------------------------------------------
+# - G4vis_management module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4vis_management
-  HEADERS
+geant4_add_module(G4vis_management
+  PUBLIC_HEADERS
     G4GraphicsSystemList.hh
     G4Scene.hh
     G4Scene.icc
@@ -73,47 +68,28 @@ geant4_define_module(NAME G4vis_management
     G4VisCommandsViewerDefault.cc
     G4VisCommandsViewerSet.cc
     G4VisManager.cc
-    G4VisStateDependent.cc
-  GRANULAR_DEPENDENCIES
+    G4VisStateDependent.cc)
+
+geant4_module_link_libraries(G4vis_management
+  PUBLIC
+    G4modeling
+    G4hepgeometry
+    G4graphics_reps
+    G4globman
+    G4intercoms
+    G4hits
+  PRIVATE
     G4csg
     G4detutils
-    G4digits
-    G4event
     G4geomBoolean
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4hits
-    G4intercoms
-    G4magneticfield
-    G4materials
-    G4modeling
-    G4navigation
-    G4partman
-    G4procman
-    G4run
     G4specsolids
-    G4tasking
-    G4track
-    G4tracking
-    G4vis_management
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
     G4event
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
+    G4geometrymng
     G4materials
-    G4modeling
-    G4particles
-    G4processes
+    G4partman
+    G4tracking
     G4run
     G4tasking
-    G4track
-    G4tracking
-)
-
-# List any source specific properties here
+    G4navigation
+    G4digits
+    G4heprandom)

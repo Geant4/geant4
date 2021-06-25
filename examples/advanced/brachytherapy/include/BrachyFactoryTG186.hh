@@ -39,21 +39,19 @@
 #include "BrachyFactory.hh"
 #include "G4RunManager.hh"
 
+class BrachyFactory;
+class BrachyDetectorConstructionTG186;
 class G4ParticleGun;
 class G4Run;
 class G4Event;
-class BrachyFactory;
-class BrachyDetectorConstructionTG186;
 
-// This class manages the creation of iridum source used in endocavitary
-// brachytherapy ...
-class BrachyFactoryTG186 : public BrachyFactory
+class BrachyFactoryTG186: public BrachyFactory
 {
 public:
-  BrachyFactoryTG186();
+  explicit BrachyFactoryTG186();
   ~BrachyFactoryTG186();
-  void CreateSource(G4VPhysicalVolume*);
-  void CleanSource();
+  void CreateSource(G4VPhysicalVolume*) override;
+  void CleanSource() override;
 
 private:
   BrachyDetectorConstructionTG186* fTG186iridiumSource;

@@ -36,7 +36,7 @@
 #include "G4NeutronInelasticXS.hh"
 #include "G4Neutron.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4ElementTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
@@ -74,8 +74,6 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
   ggXsection = G4CrossSectionDataSetRegistry::Instance()->GetComponentCrossSection("Glauber-Gribov");
   if(ggXsection == nullptr) ggXsection = new G4ComponentGGHadronNucleusXsc();
   SetForAllAtomsAndEnergies(true);
-  isMaster = false;
-  temp.resize(13,0.0);
 }
 
 G4NeutronInelasticXS::~G4NeutronInelasticXS()
@@ -282,21 +280,21 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 
   // it is possible re-initialisation for the new run
+  const G4ElementTable* table = G4Element::GetElementTable();
   if(isMaster) {
-
-    // Access to elements
-    auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
-    for(size_t j=0; j<numOfCouples; ++j) {
-      auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
-      auto elmVec = mat->GetElementVector();
-      size_t numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZINEL-1));
-	if(nullptr == data->GetElementData(Z)) { Initialise(Z); }
-      }
-    }  
+    // Upload data for elements used in geometry
+    for ( auto & elm : *table ) {
+      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZINEL-1) );
+      if ( nullptr == data->GetElementData(Z) ) { Initialise(Z); }
+    }
   }
+  // prepare isotope selection
+  size_t nIso = temp.size();
+  for ( auto & elm : *table ) {
+    size_t n = elm->GetNumberOfIsotopes();
+    if(n > nIso) { nIso = n; }
+  }
+  temp.resize(nIso, 0.0);
 }
 
 const G4String& G4NeutronInelasticXS::FindDirectoryPath()

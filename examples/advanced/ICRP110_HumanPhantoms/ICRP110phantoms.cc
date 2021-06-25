@@ -36,6 +36,7 @@
 #include "ICRP110PhantomActionInitialization.hh"
 #include "G4ScoringManager.hh"
 #include "ICRP110UserScoreWriter.hh"
+#include "ICRP110PhantomVisAction.hh"
 #include "QGSP_BIC_HP.hh"
 #include "G4RunManagerFactory.hh"
 
@@ -63,6 +64,8 @@ int main(int argc,char** argv)
  // runManager -> SetUserInitialization(new ICRP110PhantomPhysicsList);
 
   G4VisManager* visManager = new G4VisExecutive;
+  visManager->RegisterRunDurationUserVisAction
+  ("phantom",new ICRP110PhantomVisAction(userPhantom));
   visManager -> Initialize();
  
   ICRP110PhantomActionInitialization* actions = new ICRP110PhantomActionInitialization();

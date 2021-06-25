@@ -47,95 +47,111 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 
-G4ScoringProbe::G4ScoringProbe(G4String lvName, G4double half_size, G4bool checkOverlap)
-  :G4VScoringMesh(lvName), chkOverlap(checkOverlap),
-   layeredMaterialName("none"), layeredMaterial(nullptr)
+G4ScoringProbe::G4ScoringProbe(G4String lvName, G4double half_size,
+                               G4bool checkOverlap)
+  : G4VScoringMesh(lvName)
+  , chkOverlap(checkOverlap)
+  , layeredMaterialName("none")
+  , layeredMaterial(nullptr)
 {
-  fShape = MeshShape::probe;
-  logVolName = lvName;
-  probeSize = half_size;
-  G4double hs[] = {half_size,half_size,half_size};
+  fShape        = MeshShape::probe;
+  logVolName    = lvName;
+  probeSize     = half_size;
+  G4double hs[] = { half_size, half_size, half_size };
   SetSize(hs);
-  G4int nBin[] = {1,1,1};
+  G4int nBin[] = { 1, 1, 1 };
   SetNumberOfSegments(nBin);
   regName = lvName + "_region";
   if(G4Threading::IsMasterThread())
-  { new G4Region(regName); }
+  {
+    new G4Region(regName);
+  }
 }
 
-G4ScoringProbe::~G4ScoringProbe()
-{
-}
+G4ScoringProbe::~G4ScoringProbe() {}
 
 void G4ScoringProbe::List() const
 {
   G4cout << "G4ScoringProbe : " << logVolName << G4endl;
   G4int np = posVec.size();
-  for(G4int i=0;i<np;i++)
-  { G4cout << " >> probe #" << i << " at " << posVec[i] << G4endl; }
+  for(G4int i = 0; i < np; i++)
+  {
+    G4cout << " >> probe #" << i << " at " << posVec[i] << G4endl;
+  }
   G4VScoringMesh::List();
 }
 
 #include "G4AutoLock.hh"
-namespace { G4Mutex logvolmutex = G4MUTEX_INITIALIZER; }
+namespace
+{
+  G4Mutex logvolmutex = G4MUTEX_INITIALIZER;
+}
 
-void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys) 
+void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys)
 {
   if(G4Threading::IsMasterThread())
   {
     auto worldLog = worldPhys->GetLogicalVolume();
-    auto region = G4RegionStore::GetInstance()->GetRegion(regName);
-    assert(region!=nullptr);
+    auto region   = G4RegionStore::GetInstance()->GetRegion(regName);
+    assert(region != nullptr);
     region->AddRootLogicalVolume(worldLog);
     region->SetWorld(worldPhys);
 
-    auto boxSolid = new G4Box(logVolName+"_solid",probeSize,probeSize,probeSize);
-    fMeshElementLogical = new G4LogicalVolume(boxSolid,layeredMaterial,logVolName+"_log");
+    auto boxSolid =
+      new G4Box(logVolName + "_solid", probeSize, probeSize, probeSize);
+    fMeshElementLogical =
+      new G4LogicalVolume(boxSolid, layeredMaterial, logVolName + "_log");
 
     G4int np = posVec.size();
-    for(G4int i=0;i<np;i++)
-    { new G4PVPlacement(0,posVec[i],fMeshElementLogical,logVolName+"_phy",worldLog,false,i,chkOverlap); }
+    for(G4int i = 0; i < np; i++)
+    {
+      new G4PVPlacement(0, posVec[i], fMeshElementLogical, logVolName + "_phy",
+                        worldLog, false, i, chkOverlap);
+    }
 
-    G4VisAttributes* wisatt = new G4VisAttributes(G4Colour(.5,.5,.5));
+    G4VisAttributes* wisatt = new G4VisAttributes(G4Colour(.5, .5, .5));
     wisatt->SetVisibility(false);
     worldLog->SetVisAttributes(wisatt);
-    G4VisAttributes* visatt = new G4VisAttributes(G4Colour(.5,.5,.5));
+    G4VisAttributes* visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
     visatt->SetVisibility(true);
     fMeshElementLogical->SetVisAttributes(visatt);
   }
   else
-  { 
+  {
     G4AutoLock l(&logvolmutex);
-    fMeshElementLogical = G4LogicalVolumeStore::GetInstance()->GetVolume(logVolName,false);
-    assert(fMeshElementLogical!=nullptr);
+    fMeshElementLogical =
+      G4LogicalVolumeStore::GetInstance()->GetVolume(logVolName, false);
+    assert(fMeshElementLogical != nullptr);
     l.unlock();
   }
 
   fMeshElementLogical->SetSensitiveDetector(fMFD);
-
 }
 
 G4bool G4ScoringProbe::SetMaterial(G4String val)
 {
-  G4AutoLock l(&logvolmutex);
-  if(val == "none")
+  if(G4Threading::IsMasterThread())
   {
-    layeredMaterialName = val;
-    layeredMassFlg = false;
-    layeredMaterial = nullptr;
+    if(val == "none")
+    {
+      layeredMaterialName = val;
+      layeredMassFlg      = false;
+      layeredMaterial     = nullptr;
+    }
+    else
+    {
+      auto mat = G4NistManager::Instance()->FindOrBuildMaterial(val);
+      if(!mat)
+      {
+        return false;
+      }
+      layeredMaterialName = val;
+      layeredMassFlg      = true;
+      layeredMaterial     = mat;
+    }
+    auto region = G4RegionStore::GetInstance()->GetRegion(regName);
+    assert(region != nullptr);
+    region->UpdateMaterialList();
   }
-  else
-  {
-    auto mat = G4NistManager::Instance()->FindOrBuildMaterial(val);
-    if(!mat)
-    { return false; }
-    layeredMaterialName = val;
-    layeredMassFlg = true;
-    layeredMaterial = mat;
-  }
-  auto region = G4RegionStore::GetInstance()->GetRegion(regName);
-  assert(region!=nullptr);
-  region->UpdateMaterialList();
   return true;
 }
-

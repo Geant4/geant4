@@ -34,13 +34,12 @@
 
 class G4DefaultLinearColorMap : public G4VScoreColorMap
 {
-  public:
-      G4DefaultLinearColorMap(G4String mName);
-      virtual ~G4DefaultLinearColorMap();
+ public:
+  G4DefaultLinearColorMap(G4String mName);
+  virtual ~G4DefaultLinearColorMap();
 
-  public:
-      virtual void GetMapColor(G4double val, G4double color[4]);
+ public:
+  virtual void GetMapColor(G4double val, G4double color[4]);
 };
 
 #endif
-

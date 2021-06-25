@@ -32,7 +32,6 @@ GEANT4_DEFINE_MODULE(NAME G4tasking
         G4ThreadData.hh
         G4ThreadPool.hh
         G4VTask.hh
-        G4VTaskGroup.hh
         G4TaskManager.hh
         G4UserTaskQueue.hh
         G4VUserTaskQueue.hh

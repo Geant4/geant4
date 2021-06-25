@@ -66,7 +66,7 @@ G4eMultipleScattering::~G4eMultipleScattering()
 
 G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,9 +74,9 @@ G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  if(!EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
+  if(nullptr == EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
   AddEmModel(1, EmModel(0));
-  if(EmModel(1))  { AddEmModel(1, EmModel(1)); }
+  if(nullptr != EmModel(1))  { AddEmModel(1, EmModel(1)); }
   isInitialized = true;
 }
 

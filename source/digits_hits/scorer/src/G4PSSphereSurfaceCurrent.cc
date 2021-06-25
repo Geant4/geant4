@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Current.
-//  Current version assumes only for G4Sphere shape. 
+//  Current version assumes only for G4Sphere shape.
 //
 // Surface is defined  at the inside of sphere.
 // Direction                  -Rmin   +Rmax
@@ -49,100 +49,122 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name, 
-					 G4int direction, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-     EvtMap(0),weighted(true),divideByArea(true)
+G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
+                                                   G4int direction, G4int depth)
+  : G4VPrimitiveScorer(name, depth)
+  , HCID(-1)
+  , fDirection(direction)
+  , EvtMap(0)
+  , weighted(true)
+  , divideByArea(true)
 {
-    DefineUnitAndCategory();
-    SetUnit("percm2");
+  DefineUnitAndCategory();
+  SetUnit("percm2");
 }
 
-G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name, 
-						   G4int direction, 
-						   const G4String& unit,
-						   G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-     EvtMap(0),weighted(true),divideByArea(true)
+G4PSSphereSurfaceCurrent::G4PSSphereSurfaceCurrent(G4String name,
+                                                   G4int direction,
+                                                   const G4String& unit,
+                                                   G4int depth)
+  : G4VPrimitiveScorer(name, depth)
+  , HCID(-1)
+  , fDirection(direction)
+  , EvtMap(0)
+  , weighted(true)
+  , divideByArea(true)
 {
-    DefineUnitAndCategory();
-    SetUnit(unit);
+  DefineUnitAndCategory();
+  SetUnit(unit);
 }
 
-G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent()
-{;}
+G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent() { ; }
 
-G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VSolid * solid= ComputeCurrentSolid(aStep);
-  assert( dynamic_cast<G4Sphere*>(solid) != nullptr );
+  G4VSolid* solid      = ComputeCurrentSolid(aStep);
+  assert(dynamic_cast<G4Sphere*>(solid) != nullptr);
 
   G4Sphere* sphereSolid = static_cast<G4Sphere*>(solid);
-  
-  G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);
-  if ( dirFlag > 0 ) {
-    if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){
-	G4double radi   = sphereSolid->GetInnerRadius();
-	G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
-	G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
-	G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
-	G4double current = 1.0;
-	if ( weighted) current = preStep->GetWeight(); // Current (Particle Weight)
-	if ( divideByArea ){
-	    G4double square = radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
-	    current = current/square;  // Current with angle.
-	}
 
-	G4int index = GetIndex(aStep);
-	EvtMap->add(index,current);
+  G4int dirFlag = IsSelectedSurface(aStep, sphereSolid);
+  if(dirFlag > 0)
+  {
+    if(fDirection == fCurrent_InOut || fDirection == dirFlag)
+    {
+      G4double radi    = sphereSolid->GetInnerRadius();
+      G4double dph     = sphereSolid->GetDeltaPhiAngle() / radian;
+      G4double stth    = sphereSolid->GetStartThetaAngle() / radian;
+      G4double enth    = stth + sphereSolid->GetDeltaThetaAngle() / radian;
+      G4double current = 1.0;
+      if(weighted)
+        current = preStep->GetWeight();  // Current (Particle Weight)
+      if(divideByArea)
+      {
+        G4double square =
+          radi * radi * dph * (-std::cos(enth) + std::cos(stth));
+        current = current / square;  // Current with angle.
+      }
+
+      G4int index = GetIndex(aStep);
+      EvtMap->add(index, current);
     }
   }
 
   return TRUE;
 }
 
-G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSolid){
-
-  G4TouchableHandle theTouchable = 
+G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep,
+                                                  G4Sphere* sphereSolid)
+{
+  G4TouchableHandle theTouchable =
     aStep->GetPreStepPoint()->GetTouchableHandle();
-  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  
-  if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
+  G4double kCarTolerance =
+    G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+  if(aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
+  {
     // Entering Geometry
-    G4ThreeVector stppos1= aStep->GetPreStepPoint()->GetPosition();
-    G4ThreeVector localpos1 = 
+    G4ThreeVector stppos1 = aStep->GetPreStepPoint()->GetPosition();
+    G4ThreeVector localpos1 =
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
-    G4double localR2 = localpos1.x()*localpos1.x()
-                      +localpos1.y()*localpos1.y()
-                      +localpos1.z()*localpos1.z();
-    //G4double InsideRadius2 = 
+    G4double localR2 = localpos1.x() * localpos1.x() +
+                       localpos1.y() * localpos1.y() +
+                       localpos1.z() * localpos1.z();
+    // G4double InsideRadius2 =
     //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    // if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
     G4double InsideRadius = sphereSolid->GetInnerRadius();
-    if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
-	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
+    if(localR2 >
+         (InsideRadius - kCarTolerance) * (InsideRadius - kCarTolerance) &&
+       localR2 <
+         (InsideRadius + kCarTolerance) * (InsideRadius + kCarTolerance))
+    {
       return fCurrent_In;
     }
   }
 
-  if (aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary ){
+  if(aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
+  {
     // Exiting Geometry
-    G4ThreeVector stppos2= aStep->GetPostStepPoint()->GetPosition();
-    G4ThreeVector localpos2 = 
+    G4ThreeVector stppos2 = aStep->GetPostStepPoint()->GetPosition();
+    G4ThreeVector localpos2 =
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
-    G4double localR2 = localpos2.x()*localpos2.x()
-                      +localpos2.y()*localpos2.y()
-                      +localpos2.z()*localpos2.z();
-    //G4double InsideRadius2 = 
+    G4double localR2 = localpos2.x() * localpos2.x() +
+                       localpos2.y() * localpos2.y() +
+                       localpos2.z() * localpos2.z();
+    // G4double InsideRadius2 =
     //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    // if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
     G4double InsideRadius = sphereSolid->GetInnerRadius();
-    if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
-	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
+    if(localR2 >
+         (InsideRadius - kCarTolerance) * (InsideRadius - kCarTolerance) &&
+       localR2 <
+         (InsideRadius + kCarTolerance) * (InsideRadius + kCarTolerance))
+    {
       return fCurrent_Out;
     }
   }
@@ -153,57 +175,67 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
 void G4PSSphereSurfaceCurrent::Initialize(G4HCofThisEvent* HCE)
 {
   EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
-  if ( HCID < 0 ) HCID = GetCollectionID(0);
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
+  if(HCID < 0)
+    HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSSphereSurfaceCurrent::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSSphereSurfaceCurrent::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSSphereSurfaceCurrent::clear(){
-  EvtMap->clear();
-}
+void G4PSSphereSurfaceCurrent::clear() { EvtMap->clear(); }
 
-void G4PSSphereSurfaceCurrent::DrawAll()
-{;}
+void G4PSSphereSurfaceCurrent::DrawAll() { ; }
 
 void G4PSSphereSurfaceCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
-  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
+  G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
-    G4cout << "  copy no.: " << itr->first  << "  current  : " ;
-    if ( divideByArea ) {
-	G4cout << *(itr->second)/GetUnitValue() 
-	       << " [" <<GetUnit()<<"]";
-    }else {
-	G4cout << *(itr->second) << " [tracks]" ;
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
+    G4cout << "  copy no.: " << itr->first << "  current  : ";
+    if(divideByArea)
+    {
+      G4cout << *(itr->second) / GetUnitValue() << " [" << GetUnit() << "]";
     }
-    G4cout  << G4endl;
+    else
+    {
+      G4cout << *(itr->second) << " [tracks]";
+    }
+    G4cout << G4endl;
   }
 }
 
-
 void G4PSSphereSurfaceCurrent::SetUnit(const G4String& unit)
 {
-    if ( divideByArea ) {
-	CheckAndSetUnit(unit,"Per Unit Surface");
-    } else {
-	if (unit == "" ){
-	    unitName = unit;
-	    unitValue = 1.0;
-	}else{
-	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-	    G4Exception("G4PSSphereSurfaceCurrent::SetUnit","DetPS0015",JustWarning,msg);
-	}
+  if(divideByArea)
+  {
+    CheckAndSetUnit(unit, "Per Unit Surface");
+  }
+  else
+  {
+    if(unit == "")
+    {
+      unitName  = unit;
+      unitValue = 1.0;
     }
+    else
+    {
+      G4String msg = "Invalid unit [" + unit + "] (Current  unit is [" +
+                     GetUnit() + "] ) for " + GetName();
+      G4Exception("G4PSSphereSurfaceCurrent::SetUnit", "DetPS0015", JustWarning,
+                  msg);
+    }
+  }
 }
 
-void G4PSSphereSurfaceCurrent::DefineUnitAndCategory(){
-   // Per Unit Surface
-   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
-   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
-   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+void G4PSSphereSurfaceCurrent::DefineUnitAndCategory()
+{
+  // Per Unit Surface
+  new G4UnitDefinition("percentimeter2", "percm2", "Per Unit Surface",
+                       (1. / cm2));
+  new G4UnitDefinition("permillimeter2", "permm2", "Per Unit Surface",
+                       (1. / mm2));
+  new G4UnitDefinition("permeter2", "perm2", "Per Unit Surface", (1. / m2));
 }

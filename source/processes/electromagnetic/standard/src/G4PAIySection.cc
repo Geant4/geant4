@@ -146,7 +146,7 @@ void G4PAIySection::Initialize( const G4Material* material,
   fA3             = G4DataVector(fIntervalNumber+2,0.0);
   fA4             = G4DataVector(fIntervalNumber+2,0.0);
 
-  for( i = 1; i <= fIntervalNumber; i++ ) 
+  for( i = 1; i <= fIntervalNumber; ++i ) 
   {
     if ( sandia->GetSandiaMatTablePAI(i-1,0) < 1.*eV ) 
     { 
@@ -182,7 +182,7 @@ void G4PAIySection::Initialize( const G4Material* material,
   }
   if( fVerbose > 0 )
   {  
-    for( i = 1; i <= fIntervalNumber; i++ )
+    for( i = 1; i <= fIntervalNumber; ++i )
     {
       G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
@@ -191,7 +191,7 @@ void G4PAIySection::Initialize( const G4Material* material,
   if( fVerbose > 0 ) {
     G4cout<<"Now checking, if two borders are too close together"<<G4endl;
   }
-  for( i = 1; i < fIntervalNumber; i++ )
+  for( i = 1; i < fIntervalNumber; ++i )
   {
     if( fEnergyInterval[i+1]-fEnergyInterval[i] >
          1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]) ) continue;
@@ -210,7 +210,7 @@ void G4PAIySection::Initialize( const G4Material* material,
   }
   if( fVerbose > 0 )
   {
-    for( i = 1; i <= fIntervalNumber; i++ )
+    for( i = 1; i <= fIntervalNumber; ++i )
     {
       G4cout<<i<<"\t"<<fEnergyInterval[i]/keV<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
         <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl;
@@ -228,7 +228,7 @@ void G4PAIySection::Initialize( const G4Material* material,
       
   // Preparation of integral PAI cross section for input betaGammaSq
    
-  for( i = 1; i <= fSplineNumber; i++ )
+  for( i = 1; i <= fSplineNumber; ++i )
   {
      fDifPAIySection[i] = DifPAIySection(i,betaGammaSq);
 
@@ -254,13 +254,13 @@ void G4PAIySection::ComputeLowEnergyCof(const G4Material* material)
   G4double* thisMaterialZ   = new G4double[numberOfElements];
   G4double* thisMaterialCof = new G4double[numberOfElements];
    
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
   {
     thisMaterialZ[i] = material->GetElement(i)->GetZ();
     sumZ += thisMaterialZ[i];
     thisMaterialCof[i] = p0+p1*thisMaterialZ[i]+p2*thisMaterialZ[i]*thisMaterialZ[i];   
   }
-  for( i = 0; i < numberOfElements; i++ )
+  for( i = 0; i < numberOfElements; ++i )
   {
     sumCof += thisMaterialCof[i]*thisMaterialZ[i]/sumZ;
   }
@@ -290,7 +290,7 @@ void G4PAIySection::InitPAI()
    IntegralCerenkov();
    IntegralPlasmon();
 
-   for( i = 0; i<= fSplineNumber; i++)
+   for( i = 0; i<= fSplineNumber; ++i)
    {
      fPAItable[i][fRefGammaNumber] = fIntegralPAIySection[i];
       
@@ -304,7 +304,7 @@ void G4PAIySection::InitPAI()
       
       betaGammaSq = fLorentzFactor[j]*fLorentzFactor[j] - 1;
       
-      for(i = 1; i <= fSplineNumber; i++)
+      for(i = 1; i <= fSplineNumber; ++i)
       {
          fDifPAIySection[i] = DifPAIySection(i,betaGammaSq);
          fdNdxCerenkov[i]   = PAIdNdxCerenkov(i,betaGammaSq);
@@ -314,7 +314,7 @@ void G4PAIySection::InitPAI()
       IntegralCerenkov();
       IntegralPlasmon();
       
-      for(i = 0; i <= fSplineNumber; i++)
+      for(i = 0; i <= fSplineNumber; ++i)
       {
         fPAItable[i][j] = fIntegralPAIySection[i];
       }
@@ -346,7 +346,7 @@ void G4PAIySection::NormShift(G4double betaGammaSq)
 
   j = 1;
 
-  for(i=2;i<=fSplineNumber;i++)
+  for(i=2;i<=fSplineNumber;++i)
   {
     if(fSplineEnergy[i]<fEnergyInterval[j+1])
     {
@@ -409,7 +409,7 @@ void G4PAIySection::SplainPAI(G4double betaGammaSq)
       if(fSplineEnergy[i+1] > fEnergyInterval[k+1])
       {
           k++;   // Here next energy point is in next energy interval
-          i++;
+          ++i;
           continue;
       }
                         // Shifting of arrayes for inserting the geometrical 
@@ -539,7 +539,7 @@ G4double G4PAIySection::RePartDielectricConst(G4double enb)
    x0 = enb;
    result = 0;
    
-   for(G4int i=1;i<=fIntervalNumber-1;i++)
+   for(G4int i=1;i<=fIntervalNumber-1;++i)
    {
       x1 = fEnergyInterval[i];
       x2 = fEnergyInterval[i+1];

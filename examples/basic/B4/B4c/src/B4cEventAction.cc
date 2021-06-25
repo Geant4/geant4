@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4cEventAction.cc
 /// \brief Implementation of the B4cEventAction class
 
@@ -56,23 +56,23 @@ B4cEventAction::~B4cEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4cCalorHitsCollection* 
+B4cCalorHitsCollection*
 B4cEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  auto hitsCollection 
+  auto hitsCollection
     = static_cast<B4cCalorHitsCollection*>(
         event->GetHCofThisEvent()->GetHC(hcID));
-  
+
   if ( ! hitsCollection ) {
     G4ExceptionDescription msg;
-    msg << "Cannot access hitsCollection ID " << hcID; 
+    msg << "Cannot access hitsCollection ID " << hcID;
     G4Exception("B4cEventAction::GetHitsCollection()",
       "MyCode0003", FatalException, msg);
-  }         
+  }
 
   return hitsCollection;
-}    
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,14 +82,14 @@ void B4cEventAction::PrintEventStatistics(
 {
   // print event statistics
   G4cout
-     << "   Absorber: total energy: " 
+     << "   Absorber: total energy: "
      << std::setw(7) << G4BestUnit(absoEdep, "Energy")
-     << "       total track length: " 
+     << "       total track length: "
      << std::setw(7) << G4BestUnit(absoTrackLength, "Length")
      << G4endl
-     << "        Gap: total energy: " 
+     << "        Gap: total energy: "
      << std::setw(7) << G4BestUnit(gapEdep, "Energy")
-     << "       total track length: " 
+     << "       total track length: "
      << std::setw(7) << G4BestUnit(gapTrackLength, "Length")
      << G4endl;
 }
@@ -102,12 +102,12 @@ void B4cEventAction::BeginOfEventAction(const G4Event* /*event*/)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4cEventAction::EndOfEventAction(const G4Event* event)
-{  
+{
   // Get hits collections IDs (only once)
   if ( fAbsHCID == -1 ) {
-    fAbsHCID 
+    fAbsHCID
       = G4SDManager::GetSDMpointer()->GetCollectionID("AbsorberHitsCollection");
-    fGapHCID 
+    fGapHCID
       = G4SDManager::GetSDMpointer()->GetCollectionID("GapHitsCollection");
   }
 
@@ -118,37 +118,37 @@ void B4cEventAction::EndOfEventAction(const G4Event* event)
   // Get hit with total values
   auto absoHit = (*absoHC)[absoHC->entries()-1];
   auto gapHit = (*gapHC)[gapHC->entries()-1];
- 
+
   // Print per event (modulo n)
   //
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;     
+    G4cout << "---> End of event: " << eventID << G4endl;
 
     PrintEventStatistics(
       absoHit->GetEdep(), absoHit->GetTrackLength(),
       gapHit->GetEdep(), gapHit->GetTrackLength());
-  }  
-  
+  }
+
   // Fill histograms, ntuple
   //
 
   // get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
- 
+
   // fill histograms
   analysisManager->FillH1(0, absoHit->GetEdep());
   analysisManager->FillH1(1, gapHit->GetEdep());
   analysisManager->FillH1(2, absoHit->GetTrackLength());
   analysisManager->FillH1(3, gapHit->GetTrackLength());
-  
+
   // fill ntuple
   analysisManager->FillNtupleDColumn(0, absoHit->GetEdep());
   analysisManager->FillNtupleDColumn(1, gapHit->GetEdep());
   analysisManager->FillNtupleDColumn(2, absoHit->GetTrackLength());
   analysisManager->FillNtupleDColumn(3, gapHit->GetTrackLength());
-  analysisManager->AddNtupleRow();  
-}  
+  analysisManager->AddNtupleRow();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

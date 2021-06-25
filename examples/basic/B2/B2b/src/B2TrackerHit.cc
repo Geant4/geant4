@@ -36,7 +36,7 @@
 
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<B2TrackerHit>* B2TrackerHitAllocator=0;
+G4ThreadLocal G4Allocator<B2TrackerHit>* B2TrackerHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

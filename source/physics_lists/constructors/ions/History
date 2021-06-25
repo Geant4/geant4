@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-April-2021 Ben Morgan             (phys-ctor-ions-V10-07-01)
+- Migrate build to modular CMake API
+
+13-April-2021, Alberto Ribon          (phys-ctor-ions-V10-07-00)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
 26-November-2020, Alberto Ribon       (phys-ctor-ions-V10-06-02)
 - Update README.
 

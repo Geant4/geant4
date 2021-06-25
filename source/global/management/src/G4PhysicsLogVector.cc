@@ -37,16 +37,16 @@
 #include "G4Exp.hh"
 
 // --------------------------------------------------------------------
-G4PhysicsLogVector::G4PhysicsLogVector()
-  : G4PhysicsVector()
+G4PhysicsLogVector::G4PhysicsLogVector(G4bool spline)
+  : G4PhysicsVector(spline)
 {
   type = T_G4PhysicsLogVector;
 }
 
 // --------------------------------------------------------------------
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, G4double theEmax,
-                                       std::size_t theNbin)
-  : G4PhysicsVector()
+                                       std::size_t theNbin, G4bool spline)
+  : G4PhysicsVector(spline)
 {
   numberOfNodes = theNbin + 1;
   if(theNbin < 2 || theEmin == theEmax)

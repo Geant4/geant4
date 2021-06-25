@@ -153,6 +153,12 @@ public: // With description
   // Second argument is the style (fixed proportional)
   // Third argument highlights commands if "highlight" (and if /control/verbose > 0)
 
+  void NativeMenu(bool aVal);
+  // Enable/Disable the native Menu Bar in Qt
+
+  void ClearMenu();
+  // Clear Menu Bar, remove all actions
+
   void DefaultIcons(bool aVal);
   // Enable/Disable the default icon ToolBar in Qt
 

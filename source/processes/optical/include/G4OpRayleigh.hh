@@ -91,7 +91,7 @@ class G4OpRayleigh : public G4VDiscreteProcess
 
   /// Calculates the mean free paths for a material as a function of
   /// photon energy
-  G4PhysicsOrderedFreeVector* CalculateRayleighMeanFreePaths(
+  G4PhysicsFreeVector* CalculateRayleighMeanFreePaths(
     const G4Material* material) const;
 
   size_t idx_rslength = 0;
@@ -111,7 +111,7 @@ inline void G4OpRayleigh::DumpPhysicsTable() const
 {
   for(size_t i = 0; i < thePhysicsTable->entries(); ++i)
   {
-    ((G4PhysicsOrderedFreeVector*) (*thePhysicsTable)[i])->DumpValues();
+    ((G4PhysicsFreeVector*) (*thePhysicsTable)[i])->DumpValues();
   }
 }
 

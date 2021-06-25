@@ -1,13 +1,7 @@
-#------------------------------------------------------------------------------
-# Module : G4hepnumerics
-# Package: Geant4.src.G4global.G4hepnumerics
-#------------------------------------------------------------------------------
+# - G4hepnumerics module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4hepnumerics
-  HEADERS
+geant4_add_module(G4hepnumerics
+  PUBLIC_HEADERS
     G4AnalyticalPolSolver.hh
     G4ChebyshevApproximation.hh
     G4ConvergenceTester.hh
@@ -42,9 +36,6 @@ geant4_define_module(NAME G4hepnumerics
     G4JTPolynomialSolver.cc
     G4SimpleIntegration.cc
     G4StatDouble.cc
-    G4VGaussianQuadrature.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-)
+    G4VGaussianQuadrature.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4hepnumerics PUBLIC G4globman)

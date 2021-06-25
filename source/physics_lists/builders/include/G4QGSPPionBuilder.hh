@@ -42,8 +42,6 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
 #include "G4VPionBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
@@ -63,8 +61,7 @@ class G4QGSPPionBuilder : public G4VPionBuilder
 
   public: 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
-    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 

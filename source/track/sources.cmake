@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4track
-# Package: Geant4.src.G4track
-#------------------------------------------------------------------------------
+# - G4track module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4track
-  HEADERS
+geant4_add_module(G4track
+  PUBLIC_HEADERS
     G4FieldTrackUpdator.hh
     G4ForceCondition.hh
     G4GPILSelection.hh
@@ -52,21 +47,13 @@ geant4_define_module(NAME G4track
     G4VParticleChange.cc
     G4VelocityTable.cc
     G4VAuxiliaryTrackInformation.cc
-    G4VUserTrackInformation.cc
-  GRANULAR_DEPENDENCIES
+    G4VUserTrackInformation.cc)
+
+geant4_module_link_libraries(G4track
+  PUBLIC
     G4geometrymng
     G4globman
-    G4intercoms
-    G4magneticfield
     G4materials
     G4partman
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4intercoms
-    G4materials
-    G4particles
-  LINK_LIBRARIES
-)
-
-# List any source specific properties here
+  PRIVATE
+    G4magneticfield)

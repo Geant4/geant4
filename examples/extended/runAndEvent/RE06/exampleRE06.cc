@@ -48,7 +48,6 @@
 #include "RE06RunAction.hh"
 #include "RE06SteppingVerbose.hh"
 #include "RE06ActionInitialization.hh"
-#include "RE06WorkerInitialization.hh"
 
 int main(int argc,char** argv)
 {
@@ -59,17 +58,12 @@ int main(int argc,char** argv)
  }
 
  // Construct the stepping verbose class
+ //
  auto verbosity = new RE06SteppingVerbose;
- G4VSteppingVerbose::SetInstance(verbosity);
 
  // Construct the run manager
  //
  auto runManager = G4RunManagerFactory::CreateRunManager();
- if(runManager->GetRunManagerType() == G4RunManager::masterRM)
- {
-   runManager->SetNumberOfThreads(4);
-   runManager->SetUserInitialization(new RE06WorkerInitialization);
- }
 
  // Set mandatory initialization classes
  //
@@ -112,14 +106,15 @@ int main(int argc,char** argv)
    UImanager->ApplyCommand(command+fileName);
  }
 
-  // Job termination
-  // Free the store:
-  // user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not
-  // be deleted in the main() program !
+ // Job termination
+ // Free the store:
+ // user actions, physics_list and detector_description are
+ // owned and deleted by the run manager, so they should not
+ // be deleted in the main() program !
 
  delete visManager;
  delete runManager;
+ delete verbosity;
 
  return 0;
 }

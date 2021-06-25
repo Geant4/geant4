@@ -1,18 +1,13 @@
-#------------------------------------------------------------------------------
-# Module : G4analysisfac
-# Package: Geant4.src.G4analysis.G4analysisfac
-#------------------------------------------------------------------------------
+# - G4analysisfac module build definition
 
 # Optional additional links
 if(GEANT4_USE_HDF5)
   set(G4analysisfac_G4hdf5 G4hdf5)
 endif()
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4analysisfac
-  HEADERS
+geant4_add_module(G4analysisfac
+  PUBLIC_HEADERS
     g4analysis.hh
     g4analysis_defs.hh
     G4GenericAnalysisManager.hh
@@ -22,19 +17,8 @@ geant4_define_module(NAME G4analysisfac
   SOURCES
     g4analysis.cc
     G4GenericAnalysisManager.cc
-    G4GenericFileManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-    G4analysismng
-    G4hntools
-    G4csv
-    G4root
-    G4xml
-    ${G4analysisfac_G4hdf5}
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-)
+    G4GenericFileManager.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4analysisfac
+  PUBLIC G4analysismng G4hntools G4globman
+  PRIVATE G4csv G4root G4xml ${G4analysisfac_G4hdf5})

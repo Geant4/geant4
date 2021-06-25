@@ -715,10 +715,11 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
 
   // Another (sometimes better way) is to use a user-limit maximum Step size
   // to alleviate this problem ..
-  // Add smooth curved trajectories to particle-change
+
+  // Introduce smooth curved trajectories to particle-change
   //
-  // fParticleChange.SetPointerToVectorOfAuxiliaryPoints
-  //   (fFieldPropagator->GimmeTrajectoryVectorAndForgetIt() );
+  fParticleChange.SetPointerToVectorOfAuxiliaryPoints
+    (fFieldPropagator->GimmeTrajectoryVectorAndForgetIt() );
 
   return &fParticleChange ;
 }

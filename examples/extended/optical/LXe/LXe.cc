@@ -67,10 +67,7 @@ int main(int argc, char** argv)
 
   opticalParams->SetWLSTimeProfile("delta");
 
-  opticalParams->SetScintYieldFactor(1.0);
-  opticalParams->SetScintExcitationRatio(0.0);
   opticalParams->SetScintTrackSecondariesFirst(true);
-  opticalParams->SetScintEnhancedTimeConstants(true);
 
   opticalParams->SetCerenkovMaxPhotonsPerStep(100);
   opticalParams->SetCerenkovMaxBetaChange(10.0);

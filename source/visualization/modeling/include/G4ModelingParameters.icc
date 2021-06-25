@@ -105,6 +105,13 @@ G4ModelingParameters::GetVisAttributesModifiers() const {
   return fVisAttributesModifiers;
 }
 
+inline G4bool G4ModelingParameters::IsSpecialMeshRendering () const
+{return fSpecialMeshRendering;}
+
+inline const std::vector<G4ModelingParameters::PVNameCopyNo>&
+G4ModelingParameters::GetSpecialMeshVolumes() const
+{return fSpecialMeshVolumes;}
+
 inline void G4ModelingParameters::SetWarning (G4bool value) {
   fWarning = value;
 }
@@ -165,3 +172,10 @@ inline void G4ModelingParameters::SetVisAttributesModifiers
 (const std::vector<G4ModelingParameters::VisAttributesModifier>& vams) {
   fVisAttributesModifiers = vams;
 }
+
+inline void G4ModelingParameters::SetSpecialMeshRendering (G4bool smr)
+{fSpecialMeshRendering = smr;}
+
+inline void G4ModelingParameters::SetSpecialMeshVolumes
+(const std::vector<G4ModelingParameters::PVNameCopyNo>& smvs)
+{fSpecialMeshVolumes = smvs;}

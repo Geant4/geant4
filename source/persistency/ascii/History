@@ -15,7 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27 March 2021 - G.Cosmo (ascii-V10-06-03)
+1 April 2021 - B. Morgan (ascii-V10-07-01)
+- Migrate build to modular CMake API
+
+27 March 2021 - G.Cosmo (ascii-V10-07-00)
 - Fixed definition of generic polyhedra in G4tgbVolume::FindOrConstructG4Solid()
   for POLYHEDRA tag. Based on findings in GitHub PR#24 by P.Heidary.
 
@@ -119,7 +122,7 @@ committal in the CVS repository !
 
 15 December, 10 P.Arce (ascii-V09-03-05)
 - Introduced fixes for Coverity reports...
- 
+
 7 November, 10  G.Cosmo (ascii-V09-03-04)
 - Removed wrong assumption for NULL pointer condition previously introduced
   in G4tgbVolume. Fixes crash in example P03.
@@ -158,7 +161,7 @@ committal in the CVS repository !
 - Inclusion of extruded and tessellated solids
 
 17 May, 09  P.Arce (ascii-V09-02-06)
-- Fix of GNUmakefile 
+- Fix of GNUmakefile
 
 15 May, 09  P.Arce (ascii-V09-02-05)
 - Added parallel world management

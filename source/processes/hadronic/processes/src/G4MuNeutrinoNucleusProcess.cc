@@ -41,10 +41,8 @@
 #include "G4Nucleus.hh"
 #include "G4ProcessManager.hh"
 #include "G4CrossSectionDataStore.hh"
-#include "G4HadronElasticDataSet.hh" //???
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
-#include "G4HadronicDeprecate.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4VCrossSectionRatio.hh"
 #include "G4VDiscreteProcess.hh"
@@ -69,7 +67,6 @@
 G4MuNeutrinoNucleusProcess::G4MuNeutrinoNucleusProcess( G4String anEnvelopeName, const G4String& pName)
   : G4HadronicProcess( pName, fHadronInelastic ), isInitialised(false), fBiased(true)  // fHadronElastic???
 {
-  // AddDataSet(new G4HadronElasticDataSet); //???
   lowestEnergy = 1.*keV;
   fEnvelope  = nullptr;
   fEnvelopeName = anEnvelopeName;

@@ -12,6 +12,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
+19-04-21 mma (userPrimaryGenerator-V10-07-00)
+- userPrimaryGenerator.cc : use G4SteppingVerboseWithUnits
+
 13-04-18 mma (userPrimaryGenerator-V10-04-01)
 - userPrimaryGenerator.cc : set visualisation only in interactive mode
 

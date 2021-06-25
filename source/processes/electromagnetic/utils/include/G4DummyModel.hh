@@ -50,7 +50,7 @@
 #include "globals.hh"
 #include "G4VMscModel.hh"
 
-class G4DummyModel :  public G4VMscModel
+class G4DummyModel : public G4VMscModel
 {
 
 public:
@@ -74,8 +74,6 @@ public:
   G4double ComputeTrueStepLength(G4double) final;
 
   G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double) final;
-
-private:
 
   //  hide assignment operator
   G4DummyModel & operator=(const  G4DummyModel &right) = delete;

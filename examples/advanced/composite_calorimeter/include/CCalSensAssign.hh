@@ -36,20 +36,21 @@
 #include <map>
 #include "globals.hh"
 #include "G4VSensitiveDetector.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 class CCalSensAssign
 {
+friend class G4ThreadLocalSingleton< CCalSensAssign >;
 public:
   ~CCalSensAssign(){}
   static CCalSensAssign* getInstance();
   G4bool assign();
-  G4bool stackingAction();
   G4bool addCaloSD(G4String name, CCalVOrganization* numberingScheme);
 
 private:
   CCalSensAssign();
 
-  static CCalSensAssign* theInstance;
+  static G4ThreadLocal CCalSensAssign* theInstance;
   std::map<G4String,G4VSensitiveDetector*> sens_;
 
 };

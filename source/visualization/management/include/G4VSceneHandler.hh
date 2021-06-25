@@ -139,6 +139,7 @@ public: // With description
   virtual void AddCompound (const G4VDigi&);
   virtual void AddCompound (const G4THitsMap<G4double>&);
   virtual void AddCompound (const G4THitsMap<G4StatDouble>&);
+  virtual void AddCompound (const G4Mesh&);
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.

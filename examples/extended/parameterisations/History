@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th 2021,  B. Morgan (exParameterisations-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 Nov 11th, 2020 B. Morgan (exParameterisations-V10-06-01)
 - Migration to G4RunManagerFactory.
 

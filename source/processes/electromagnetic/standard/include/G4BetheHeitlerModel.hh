@@ -65,26 +65,29 @@ public:
   explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
                                const G4String& nam = "BetheHeitler");
  
-  virtual ~G4BetheHeitlerModel();
+  ~G4BetheHeitlerModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*, 
+		       G4VEmModel* masterModel) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                              G4double kinEnergy, 
-                                              G4double Z, 
-                                              G4double A=0., 
-                                              G4double cut=0.,
-                                              G4double emax=DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kinEnergy, 
+				      G4double Z, 
+				      G4double A=0., 
+				      G4double cut=0.,
+				      G4double emax=DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+
+  // hide assignment operator
+  G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right) = delete;
+  G4BetheHeitlerModel(const  G4BetheHeitlerModel&) = delete;
 
 protected:
 
@@ -100,26 +103,17 @@ protected:
     G4double fDeltaMaxLow;
     G4double fDeltaMaxHigh;
   };
-
-private:
-
-  // hide assignment operator
-  G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right) = delete;
-  G4BetheHeitlerModel(const  G4BetheHeitlerModel&) = delete;
-
-protected:
   
   static const G4int                gMaxZet; 
   
   G4Pow*                            fG4Calc;
-  G4ParticleDefinition*             fTheGamma;
-  G4ParticleDefinition*             fTheElectron;
-  G4ParticleDefinition*             fThePositron;
+  const G4ParticleDefinition*       fTheGamma;
+  const G4ParticleDefinition*       fTheElectron;
+  const G4ParticleDefinition*       fThePositron;
   G4ParticleChangeForGamma*         fParticleChange;
 
   static std::vector<ElementData*>  gElementData;
 };
-
 
 //
 // Bethe screening functions for the elastic (coherent) scattering:
@@ -145,14 +139,12 @@ inline G4double G4BetheHeitlerModel::ScreenFunction1(const G4double delta)
                        : 42.184 - delta*(7.444 - 1.623*delta);
 }
 
-
 // Compute the value of the screening function 1.5*PHI1(delta) +0.5*PHI2(delta):
 inline G4double G4BetheHeitlerModel::ScreenFunction2(const G4double delta)
 {
   return (delta > 1.4) ? 42.038 - 8.29*G4Log(delta + 0.958)
                        : 41.326 - delta*(5.848 - 0.902*delta);
 }
-
 
 // Same as ScreenFunction1 and ScreenFunction2 but computes them at once
 inline void G4BetheHeitlerModel::ScreenFunction12(const G4double delta, 
@@ -166,6 +158,5 @@ inline void G4BetheHeitlerModel::ScreenFunction12(const G4double delta,
     f2 = 41.326 - delta*(5.848 - 0.902*delta); 
   }
 }
-
 
 #endif

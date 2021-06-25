@@ -13,6 +13,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+04-06-21 I. Hrivnacova (exTransforms-V10-07-02)
+- added cleaning of the reflection factory
+
+31-04-21 mma (exTransforms-V10-07-01)
+- transforms.cc : initialize visualization only in interactive mode
+- PlaceWithReflections : permute z-positions
+- DetectorMessenger : AvailableForStates(G4State_PreInit,G4State_Idle)
+- new macros : rotations.mac  reflections.mac 
+
+20-04-21 mma (exTransforms-V10-07-00)
+- transforms.cc : use G4SteppingVerboseWithUnits
 	 
 01-10-18 mma, I. Hrivnacova (exTransforms-V10-04-02)
 - DetectorConstruction::PlaceWithAxialRotations : use rotate(angle, axis)

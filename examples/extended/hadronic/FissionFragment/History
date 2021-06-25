@@ -14,10 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-01-06-21 G. Folger (exExtHadFissFrag-V10-06-02)
+01-06-21 G. Folger (exExtHadFissFrag-V10-07-01)
 - Fixed CMake build script to define target properly.
 
-22-03-21 A. Ribon
+22-03-21 A. Ribon (exExtHadFissFrag-V10-07-00)
 - Improved comment.
 
 10-11-20 B, Morgan (exExtHadFissFrag-V10-06-01)

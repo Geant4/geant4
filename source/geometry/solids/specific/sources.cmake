@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4specsolids
-# Package: Geant4.src.G4geometry.G4specsolids
-#------------------------------------------------------------------------------
+# - G4specsolids module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4specsolids
-  HEADERS
+geant4_add_module(G4specsolids
+  PUBLIC_HEADERS
     G4ClippablePolygon.hh
     G4ClippablePolygon.icc
     G4Ellipsoid.hh
@@ -134,21 +129,9 @@ geant4_define_module(NAME G4specsolids
     G4VFacet.cc
     G4Voxelizer.cc
     G4VTwistSurface.cc
-    G4VTwistedFaceted.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4intercoms
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-  LINK_LIBRARIES
-    ${VECGEOM_LIBRARIES}
-)
+    G4VTwistedFaceted.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4specsolids
+  PUBLIC G4csg G4geometrymng G4hepnumerics G4graphics_reps G4globman G4hepgeometry ${VECGEOM_LIBRARIES}
+  PRIVATE G4heprandom)
+

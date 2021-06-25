@@ -66,6 +66,11 @@ class G4UPara : public G4UAdapter<vecgeom::UnplacedParallelepiped>
     G4ThreeVector GetSymAxis() const;
     G4double GetTanAlpha()     const;
 
+    G4double GetAlpha()  const;
+    G4double GetTheta()  const;    
+    G4double GetPhi()    const;
+    // Obtain (re)computed values of original parameters
+   
     // Modifiers
 
     void SetXHalfLength(G4double val);

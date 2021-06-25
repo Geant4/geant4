@@ -33,6 +33,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SteppingVerbose.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -41,7 +42,6 @@
 
 #include "RunAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 #include "StackingAction.hh"
 #include "HistoManager.hh"
 
@@ -56,9 +56,10 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-
+  //Use SteppingVerbose with Unit
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
+  
   //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

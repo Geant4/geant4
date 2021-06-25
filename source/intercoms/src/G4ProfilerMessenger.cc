@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ProfilerMessenger implementation
 //
-//
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Author: J.Madsen, 12 November 2020
+// --------------------------------------------------------------------
 
 #include "G4ProfilerMessenger.hh"
 
@@ -38,7 +36,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4TiMemory.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------------
 
 using Type = G4ProfileType;
 
@@ -145,11 +143,12 @@ G4ProfilerMessenger::G4ProfilerMessenger()
     "Display the results for each individual G4event (default: aggregation)");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------------
 
 G4ProfilerMessenger::~G4ProfilerMessenger()
 {
   delete profileDirectory;
+  delete profileOutputDirectory;
   for(auto& itr : profileTypeDirs)
     delete itr;
   for(auto& itr : profileEnableCmds)
@@ -160,7 +159,7 @@ G4ProfilerMessenger::~G4ProfilerMessenger()
     delete itr.first;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------------
 
 void G4ProfilerMessenger::SetNewValue(G4UIcommand* command, G4String value)
 {
@@ -206,4 +205,4 @@ void G4ProfilerMessenger::SetNewValue(G4UIcommand* command, G4String value)
     G4Profiler::Configure(command_line);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// --------------------------------------------------------------------

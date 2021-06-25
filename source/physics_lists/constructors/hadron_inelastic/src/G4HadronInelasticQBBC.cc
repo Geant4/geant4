@@ -40,7 +40,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "G4HadronInelasticProcess.hh"
-#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
 #include "G4HadronicInteraction.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -78,10 +78,11 @@
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
-  : G4VHadronPhysics("hInelasticQBBC"),verbose(ver)
+  : G4VHadronPhysics("hInelasticQBBC")
 {
   SetPhysicsType(bHadronInelastic);
   G4HadronicParameters::Instance()->SetEnableBCParticles(true);
+  G4HadronicParameters::Instance()->SetVerboseLevel(ver);
 }
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String&, G4int ver, 
@@ -105,7 +106,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   const G4double emaxBertPions = 12.*CLHEP::GeV;
   const G4double emax = param->GetMaxEnergy();
 
-  if(G4Threading::IsMasterThread() && verbose > 0) {
+  if(G4Threading::IsMasterThread() && param->GetVerboseLevel() > 0) {
     G4cout << "### HadronInelasticQBBC Construct Process:\n"
            << "    Emin(FTFP)= " << eminFtf/CLHEP::GeV 
            << " GeV; Emax(FTFP)= " << emax/CLHEP::GeV << " GeV\n"
@@ -165,7 +166,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   ph->RegisterProcess(hp, particle);
   if( useFactorXS ) hp->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
        
-  hp = new G4HadronCaptureProcess("nCapture");
+  hp = new G4NeutronCaptureProcess("nCapture");
   hp->RegisterMe(new G4NeutronRadCapture());
   ph->RegisterProcess(hp, particle);
 

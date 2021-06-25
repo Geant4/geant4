@@ -128,13 +128,13 @@ G4VParticleChange* G4OpWLS2::PostStepDoIt(const G4Track& aTrack,
   }
 
   // Retrieve the WLS Integral for this material
-  // new G4PhysicsOrderedFreeVector allocated to hold CII's
+  // new G4PhysicsFreeVector allocated to hold CII's
   G4double primaryEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
   G4double WLSTime       = 0.;
-  G4PhysicsOrderedFreeVector* WLSIntegral = nullptr;
+  G4PhysicsFreeVector* WLSIntegral = nullptr;
 
   WLSTime     = MPT->GetConstProperty(kWLSTIMECONSTANT2);
-  WLSIntegral = (G4PhysicsOrderedFreeVector*) ((*theIntegralTable)(
+  WLSIntegral = (G4PhysicsFreeVector*) ((*theIntegralTable)(
     aTrack.GetMaterial()->GetIndex()));
 
   // Max WLS Integral
@@ -246,7 +246,7 @@ void G4OpWLS2::BuildPhysicsTable(const G4ParticleDefinition&)
   // loop for materials
   for(G4int i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsOrderedFreeVector* physVector = new G4PhysicsOrderedFreeVector();
+    G4PhysicsFreeVector* physVector = new G4PhysicsFreeVector();
 
     // Retrieve vector of WLS2 wavelength intensity for
     // the material from the material's optical properties table.

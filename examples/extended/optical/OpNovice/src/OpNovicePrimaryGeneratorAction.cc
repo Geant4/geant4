@@ -32,9 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNovicePrimaryGeneratorAction.hh"
-
 #include "OpNovicePrimaryGeneratorMessenger.hh"
-
 #include "G4Event.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
@@ -43,17 +41,14 @@
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNovicePrimaryGeneratorAction::OpNovicePrimaryGeneratorAction()
   : G4VUserPrimaryGeneratorAction()
   , fParticleGun(nullptr)
 {
   G4int n_particle = 1;
   fParticleGun     = new G4ParticleGun(n_particle);
-
   // create a messenger for this class
   fGunMessenger = new OpNovicePrimaryGeneratorMessenger(this);
-
   // default kinematic
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
@@ -67,7 +62,6 @@ OpNovicePrimaryGeneratorAction::OpNovicePrimaryGeneratorAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNovicePrimaryGeneratorAction::~OpNovicePrimaryGeneratorAction()
 {
   delete fParticleGun;
@@ -75,14 +69,12 @@ OpNovicePrimaryGeneratorAction::~OpNovicePrimaryGeneratorAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNovicePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNovicePrimaryGeneratorAction::SetOptPhotonPolar()
 {
   G4double angle = G4UniformRand() * 360.0 * deg;
@@ -90,7 +82,6 @@ void OpNovicePrimaryGeneratorAction::SetOptPhotonPolar()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNovicePrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
 {
   if(fParticleGun->GetParticleDefinition()->GetParticleName() !=
@@ -117,5 +108,4 @@ void OpNovicePrimaryGeneratorAction::SetOptPhotonPolar(G4double angle)
     std::cos(angle) * e_paralle + std::sin(angle) * e_perpend;
   fParticleGun->SetParticlePolarization(polar);
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

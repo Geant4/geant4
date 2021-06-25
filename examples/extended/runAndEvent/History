@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th, 2021,  B. Morgan (exRunAndEvent-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 Nov. 11, 2020 M. Asai (exRunAndEvent-V10-06-02)
 - RE05 and RE06 : Migration to G4RunManagerFactory.
 

@@ -65,42 +65,26 @@ G4double G4WentzelOKandVIxSection::FormFactor[]        = {0.0};
 G4Mutex G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex = G4MUTEX_INITIALIZER;
 #endif
 
+const G4double alpha2 = CLHEP::fine_structure_const*CLHEP::fine_structure_const;
+const G4double factB1= 0.5*CLHEP::pi*CLHEP::fine_structure_const;
+const G4double numlimit = 0.1;
+const G4int nwarnlimit = 50;
+
 using namespace std;
 
 G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool comb) :
   temp(0.,0.,0.),
-  numlimit(0.1),
-  nwarnings(0),
-  nwarnlimit(50),
-  isCombined(comb),
-  cosThetaMax(-1.0),
-  alpha2(fine_structure_const*fine_structure_const)
+  isCombined(comb)
 {
   fNistManager = G4NistManager::Instance();
   fG4pow = G4Pow::GetInstance();
-  fMottXSection = nullptr;
 
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
 
-  lowEnergyLimit = 1.0*eV;
-  G4double p0 = electron_mass_c2*classic_electr_radius;
-  coeff = twopi*p0*p0;
-  particle = nullptr;
-
-  fNucFormfactor = fExponentialNF;
-
-  currentMaterial = nullptr;
-  factB = factD = formfactA = screenZ = 0.0;
-  cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = fMottFactor 
-    = gam0pcmp = pcmp2 = 1.0;
-
-  factB1= 0.5*CLHEP::pi*fine_structure_const;
-
-  tkin = mom2 = momCM2 = factorA2 = mass = spin = chargeSquare = charge3 = 0.0;
-  ecut = etag = DBL_MAX;
-  targetZ = 0;
+  G4double p0 = CLHEP::electron_mass_c2*CLHEP::classic_electr_radius;
+  coeff = CLHEP::twopi*p0*p0;
   targetMass = CLHEP::proton_mass_c2;
 }
 
@@ -153,15 +137,16 @@ void G4WentzelOKandVIxSection::InitialiseA()
   G4MUTEXLOCK(&G4WentzelOKandVIxSection::WentzelOKandVIxSectionMutex);
   if(0.0 == ScreenRSquare[0]) {
 #endif
-    G4double a0 = electron_mass_c2/0.88534; 
-    G4double constn = 6.937e-6/(MeV*MeV);
+    const G4double invmev2 = 1./(CLHEP::MeV*CLHEP::MeV);
+    G4double a0 = CLHEP::electron_mass_c2/0.88534; 
+    G4double constn = 6.937e-6*invmev2;
     G4double fct = G4EmParameters::Instance()->ScreeningFactor();
 
     G4double afact = 0.5*fct*alpha2*a0*a0;
     ScreenRSquare[0] = afact;
     ScreenRSquare[1] = afact;
     ScreenRSquareElec[1] = afact; 
-    FormFactor[1] = 3.097e-6/(MeV*MeV);
+    FormFactor[1] = 3.097e-6*invmev2;
 
     for(G4int j=2; j<100; ++j) {
       G4double x = fG4pow->Z13(j);

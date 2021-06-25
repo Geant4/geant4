@@ -16,7 +16,7 @@
 #  G3TOG4   - UNIX only
 #  USOLIDS  - Allow use of VecGeom classes in geometry, and must find
 #             external VecGeom install
-#  FREETYPE - For analysis module, find external FreeType install
+#  FREETYPE - For analysis/vis modules, find external FreeType install
 
 #-----------------------------------------------------------------------
 # CLHEP
@@ -175,18 +175,21 @@ geant4_add_feature(GEANT4_USE_TBB "Enable (optional) use of TBB as a tasking bac
 # Rely on PTL::PTL imported target (since CMake 3.1)
 option(GEANT4_USE_SYSTEM_PTL "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_PTL)
-  find_package(PTL REQUIRED)
+  find_package(PTL 2.0.0 REQUIRED)
   # Backward compatibility for sources.cmake using the variable
   set(PTL_LIBRARIES PTL::ptl)
   geant4_save_package_variables(PTL PTL_DIR)
 else()
-  set(PTL_USE_TBB ${GEANT4_USE_TBB})
   set(PTL_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_PTL TRUE)
   set(PTL_LIBRARIES G4ptl)
 endif()
 mark_as_advanced(GEANT4_USE_SYSTEM_PTL)
 geant4_add_feature(GEANT4_USE_SYSTEM_PTL "Using system PTL library")
+
+# Internal PTL offers adding locks in task queues to help debugging
+cmake_dependent_option(GEANT4_USE_PTL_LOCKS "Enable mutex locking in PTL task subqueues" OFF "NOT GEANT4_USE_SYSTEM_PTL" OFF)
+mark_as_advanced(GEANT4_USE_PTL_LOCKS)
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
@@ -363,14 +366,11 @@ endif()
 #-----------------------------------------------------------------------
 # Optional support for Freetype - Requires external Freetype install
 #
-option(GEANT4_USE_FREETYPE "Build Geant4 analysis library with Freetype support" OFF)
+option(GEANT4_USE_FREETYPE "Build Geant4 Analysis/Visualization with Freetype support" OFF)
 mark_as_advanced(GEANT4_USE_FREETYPE)
 
 if(GEANT4_USE_FREETYPE)
   find_package(Freetype REQUIRED)
-  # Shim only needed until we require CMake >= 3.10
-  include("${CMAKE_CURRENT_LIST_DIR}/G4FreetypeShim.cmake")
-
   geant4_save_package_variables(Freetype
     FREETYPE_INCLUDE_DIR_freetype2
     FREETYPE_INCLUDE_DIR_ft2build
@@ -378,7 +378,7 @@ if(GEANT4_USE_FREETYPE)
     FREETYPE_LIBRARY_RELEASE)
 endif()
 
-geant4_add_feature(GEANT4_USE_FREETYPE "Building Geant4 analysis library with Freetype support")
+geant4_add_feature(GEANT4_USE_FREETYPE "Building Geant4 Analysis/Visualization with Freetype support")
 
 #-----------------------------------------------------------------------
 # Optional support for HDF5

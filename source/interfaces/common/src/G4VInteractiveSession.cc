@@ -67,6 +67,16 @@ void G4VInteractiveSession::OutputStyle(const char*,const char*,const char*)
 }
 
 /***************************************************************************/
+void G4VInteractiveSession::NativeMenu (bool)
+{
+}
+
+/***************************************************************************/
+void G4VInteractiveSession::ClearMenu ()
+{
+}
+
+/***************************************************************************/
 void G4VInteractiveSession::AddInteractor (G4String a_name,
                                            G4Interactor a_interactor)
 {

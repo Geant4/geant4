@@ -58,6 +58,7 @@
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4EmParameters.hh"
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4DataVector.hh"
@@ -74,7 +75,6 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4SafetyHelper.hh"
 #include "G4TransportationManager.hh"
-#include "G4EmConfigurator.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4VSubCutProducer.hh"
 #include "G4EmBiasingManager.hh"
@@ -85,71 +85,28 @@
 
 G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, 
                                            G4ProcessType type): 
-  G4VContinuousDiscreteProcess(name, type),
-  secondaryParticle(nullptr),
-  nSCoffRegions(0),
-  idxSCoffRegions(nullptr),
-  nProcesses(0),
-  theDEDXTable(nullptr),
-  theDEDXSubTable(nullptr),
-  theDEDXunRestrictedTable(nullptr),
-  theIonisationTable(nullptr),
-  theIonisationSubTable(nullptr),
-  theRangeTableForLoss(nullptr),
-  theCSDARangeTable(nullptr),
-  theSecondaryRangeTable(nullptr),
-  theInverseRangeTable(nullptr),
-  theLambdaTable(nullptr),
-  theSubLambdaTable(nullptr),
-  baseParticle(nullptr),
-  lossFluctuationFlag(true),
-  rndmStepFlag(false),
-  tablesAreBuilt(false),
-  integral(true),
-  isIon(false),
-  isIonisation(true),
-  useSubCutoff(false),
-  useDeexcitation(false),
-  currentCouple(nullptr),
-  mfpKinEnergy(0.0),
-  particle(nullptr)
+  G4VContinuousDiscreteProcess(name, type)
 {
   theParameters = G4EmParameters::Instance();
   SetVerboseLevel(1);
 
   // low energy limit
-  lowestKinEnergy     = theParameters->LowestElectronEnergy();
-  preStepKinEnergy    = 0.0;
-  preStepLogKinEnergy = LOG_EKIN_MIN;
-  preStepRangeEnergy  = 0.0;
-  computedRange       = DBL_MAX;
+  lowestKinEnergy = theParameters->LowestElectronEnergy();
 
-  // Size of tables assuming spline
-  minKinEnergy     = 0.1*keV;
-  maxKinEnergy     = 100.0*TeV;
+  // Size of tables
+  minKinEnergy     = 0.1*CLHEP::keV;
+  maxKinEnergy     = 100.0*CLHEP::TeV;
+  maxKinEnergyCSDA = 1.0*CLHEP::GeV;
   nBins            = 84;
-  maxKinEnergyCSDA = 1.0*GeV;
   nBinsCSDA        = 35;
-  actMinKinEnergy = actMaxKinEnergy = actBinning = actLinLossLimit 
-    = actLossFluc = actIntegral = false;
 
-  // default linear loss limit for spline
-  linLossLimit = 0.01;
-  dRoverRange  = 0.2;
-  finalRange   = CLHEP::mm;
-
-  // default lambda factor
-  lambdaFactor    = 0.8;
-  logLambdafactor = G4Log(lambdaFactor);
-
-  // cross section biasing
-  biasFactor = 1.0;
+  // default linear loss limit
+  finalRange = 1.*CLHEP::mm;
 
   // particle types
   theElectron   = G4Electron::Electron();
   thePositron   = G4Positron::Positron();
   theGamma      = G4Gamma::Gamma();
-  theGenericIon = nullptr;
 
   // run time objects
   pParticleChange = &fParticleChange;
@@ -162,32 +119,13 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   // initialise model
   lManager = G4LossTableManager::Instance();
   lManager->Register(this);
+
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
 
-  fluctModel = nullptr;
-  currentModel = nullptr;
-  atomDeexcitation = nullptr;
-  subcutProducer = nullptr;
-
-  biasManager  = nullptr;
-  biasFlag     = false; 
-  weightFlag   = false; 
-  isMaster     = true;
-  lastIdx      = 0;
-
-  scTracks.reserve(5);
-  secParticles.reserve(5);
-
-  theCuts = theSubCuts = nullptr;
-  currentMaterial = nullptr;
-  currentCoupleIndex  = basedCoupleIndex = 0;
-  massRatio = fFactor = reduceFactor = chargeSqRatio = 1.0;
-  preStepLambda = preStepScaledEnergy = fRange = logMassRatio = 0.0;
-  preStepLogScaledEnergy = LOG_EKIN_MIN;
-
-  secID = biasID = subsecID = -1;
+  scTracks.reserve(10);
+  secParticles.reserve(12);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -199,14 +137,12 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
          << GetProcessName() << " isMaster: " << isMaster
          << "  basePart: " << baseParticle 
          << G4endl;
+  G4cout << " isIonisation " << isIonisation << "  " 
+         << theDEDXTable << "  " <<  theIonisationTable << G4endl;
   */
-  Clean();
 
-  // G4cout << " isIonisation " << isIonisation << "  " 
-  //   << theDEDXTable << "  " <<  theIonisationTable << G4endl;
-
-  if (isMaster && !baseParticle) {
-    if(theDEDXTable) {
+  if (isMaster && nullptr == baseParticle) {
+    if(nullptr != theDEDXTable) {
 
       //G4cout << " theIonisationTable " << theIonisationTable << G4endl;
       if(theIonisationTable == theDEDXTable) { theIonisationTable = nullptr; }
@@ -214,88 +150,54 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
       theDEDXTable->clearAndDestroy();
       delete theDEDXTable;
       theDEDXTable = nullptr;
-      if(theDEDXSubTable) {
-        if(theIonisationSubTable == theDEDXSubTable) 
-          { theIonisationSubTable = nullptr; }
-        theDEDXSubTable->clearAndDestroy();
-        delete theDEDXSubTable;
-        theDEDXSubTable = nullptr;
-      }
     }
     //G4cout << " theIonisationTable " << theIonisationTable << G4endl;
-    if(theIonisationTable) {
+    if(nullptr != theIonisationTable) {
       //G4cout << " delete theIonisationTable " << theIonisationTable << G4endl;
       theIonisationTable->clearAndDestroy();
       delete theIonisationTable;
       theIonisationTable = nullptr;
     }
-    if(theIonisationSubTable) {
-      theIonisationSubTable->clearAndDestroy();
-      delete theIonisationSubTable;
-      theIonisationSubTable = nullptr;
-    }
-    if(theDEDXunRestrictedTable && isIonisation) {
+    if(nullptr != theDEDXunRestrictedTable && isIonisation) {
       theDEDXunRestrictedTable->clearAndDestroy();
       delete theDEDXunRestrictedTable;
       theDEDXunRestrictedTable = nullptr;
     }
-    if(theCSDARangeTable && isIonisation) {
+    if(nullptr != theCSDARangeTable && isIonisation) {
       theCSDARangeTable->clearAndDestroy();
       delete theCSDARangeTable;
       theCSDARangeTable = nullptr;
     }
     //G4cout << "delete RangeTable: " << theRangeTableForLoss << G4endl;
-    if(theRangeTableForLoss && isIonisation) {
+    if(nullptr != theRangeTableForLoss && isIonisation) {
       theRangeTableForLoss->clearAndDestroy();
       delete theRangeTableForLoss;
       theRangeTableForLoss = nullptr;
     }
     //G4cout << "delete InvRangeTable: " << theInverseRangeTable << G4endl;
-    if(theInverseRangeTable && isIonisation /*&& !isIon*/) {
+    if(nullptr != theInverseRangeTable && isIonisation /*&& !isIon*/) {
       theInverseRangeTable->clearAndDestroy();
       delete theInverseRangeTable;
       theInverseRangeTable = nullptr;
     }
     //G4cout << "delete LambdaTable: " << theLambdaTable << G4endl;
-    if(theLambdaTable) {
+    if(nullptr != theLambdaTable) {
       theLambdaTable->clearAndDestroy();
       delete theLambdaTable;
       theLambdaTable = nullptr;
     }
-    if(theSubLambdaTable) {
-      theSubLambdaTable->clearAndDestroy();
-      delete theSubLambdaTable;
-      theSubLambdaTable = nullptr;
+    if(nullptr != fXSpeaks) {
+      for(auto const & v : *fXSpeaks) { delete v; }
+      delete fXSpeaks;
+      fXSpeaks = nullptr;
     }
   }
- 
   delete modelManager;
   delete biasManager;
+  delete scoffRegions;
+  delete emModels;
   lManager->DeRegister(this);
   //G4cout << "** all removed" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::Clean()
-{
-  /*
-  if(1 < verboseLevel) { 
-    G4cout << "G4VEnergyLossProcess::Clear() for " << GetProcessName() 
-           << G4endl;
-  }
-  */
-  delete [] idxSCoffRegions;
-
-  tablesAreBuilt = false;
-
-  scProcesses.clear();
-  nProcesses = 0;
-  /*
-  idxDEDX = idxDEDXSub = idxDEDXunRestricted = idxIonisation =
-    idxIonisationSub = idxRange = idxCSDA = idxSecRange =
-    idxInverseRange = idxLambda = idxSubLambda = 0;
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -309,49 +211,37 @@ G4double G4VEnergyLossProcess::MinPrimaryEnergy(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, 
+void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* ptr,
                                       G4VEmFluctuationModel* fluc,
                                       const G4Region* region)
 {
-  modelManager->AddEmModel(order, p, fluc, region);
-  if(p) { p->SetParticleChange(pParticleChange, fluc); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, 
-                                         G4double emin, G4double emax)
-{
-  modelManager->UpdateEmModel(nam, emin, emax);
+  if(nullptr == ptr) { return; }
+  modelManager->AddEmModel(order, ptr, fluc, region);
+  ptr->SetParticleChange(pParticleChange, fluc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SetEmModel(G4VEmModel* ptr, G4int)
 {
-  for(auto & em : emModels) { if(em == ptr) { return; } }
-  emModels.push_back(ptr);  
+  if(nullptr == ptr) { return; }
+  if(nullptr == emModels) { emModels = new std::vector<G4VEmModel*>; }
+  if(!emModels->empty()) {
+    for(auto & em : *emModels) { if(em == ptr) { return; } }
+  }
+  emModels->push_back(ptr);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmModel* G4VEnergyLossProcess::EmModel(size_t index) const
+void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
+                                                G4double charge2ratio)
 {
-  return (index < emModels.size()) ? emModels[index] : nullptr; 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx, G4bool ver) const
-{
-  return modelManager->GetModel(idx, ver);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4int G4VEnergyLossProcess::NumberOfModels() const
-{
-  return modelManager->NumberOfModels();
+  massRatio     = massratio;
+  logMassRatio  = G4Log(massRatio);
+  fFactor = charge2ratio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
+  chargeSqRatio = charge2ratio;
+  reduceFactor  = 1.0/(fFactor*massRatio);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -366,22 +256,8 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
   isMaster = lManager->IsMaster();
 
-  currentCouple = nullptr;
-  preStepLambda = 0.0;
-  mfpKinEnergy  = DBL_MAX;
-  fRange        = DBL_MAX;
-  preStepKinEnergy    = 0.0;
-  preStepLogKinEnergy = LOG_EKIN_MIN;
-  preStepRangeEnergy  = 0.0;
-  chargeSqRatio = 1.0;
-  massRatio     = 1.0;
-  logMassRatio  = 0.;
-  reduceFactor  = 1.0;
-  fFactor = 1.0;
-  lastIdx = 0;
-
   // Are particle defined?
-  if( !particle ) { particle = &part; }
+  if(nullptr == particle) { particle = &part; }
 
   if(part.GetParticleType() == "nucleus") {
 
@@ -423,32 +299,20 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     return;
   }
 
-  Clean();
-  lManager->PreparePhysicsTable(&part, this, isMaster);
+  tablesAreBuilt = false;
+
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  lManager->PreparePhysicsTable(&part, this, isMaster);
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
 
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t n = theCoupleTable->GetTableSize();
-
-  theDEDXAtMaxEnergy.resize(n, 0.0);
-  theRangeAtMaxEnergy.resize(n, 0.0);
-  theEnergyOfCrossSectionMax.resize(n, 0.0);
-  theCrossSectionMax.resize(n, DBL_MAX);
-
   // parameters of the process
-  if(!actIntegral) { integral = theParameters->Integral(); }
   if(!actLossFluc) { lossFluctuationFlag = theParameters->LossFluctuation(); }
   rndmStepFlag = theParameters->UseCutAsFinalRange();
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
   if(!actMaxKinEnergy) { maxKinEnergy = theParameters->MaxKinEnergy(); }
-  if(!actBinning) { 
-    nBins = theParameters->NumberOfBinsPerDecade()
-      *G4lrint(std::log10(maxKinEnergy/minKinEnergy));
-  }
+  if(!actBinning) { nBins = theParameters->NumberOfBins(); }
   maxKinEnergyCSDA = theParameters->MaxEnergyForCSDARange();
   nBinsCSDA = theParameters->NumberOfBinsPerDecade()
     *G4lrint(std::log10(maxKinEnergyCSDA/minKinEnergy));
@@ -456,49 +320,42 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   lambdaFactor    = theParameters->LambdaFactor();
   logLambdafactor = G4Log(lambdaFactor);
   if(isMaster) { SetVerboseLevel(theParameters->Verbose()); }
-  else {  SetVerboseLevel(theParameters->WorkerVerbose()); }
+  else { SetVerboseLevel(theParameters->WorkerVerbose()); }
 
   theParameters->DefineRegParamForLoss(this);
+
+  fRangeEnergy = fLambdaEnergy = 0.0;
 
   G4double initialCharge = particle->GetPDGCharge();
   G4double initialMass   = particle->GetPDGMass();
 
   theParameters->FillStepFunction(particle, this);
 
-  if (baseParticle) {
+  // parameters for scaling from the base particle
+  if (nullptr != baseParticle) {
     massRatio    = (baseParticle->GetPDGMass())/initialMass;
     logMassRatio = G4Log(massRatio);
     G4double q = initialCharge/baseParticle->GetPDGCharge();
     chargeSqRatio = q*q;
     if(chargeSqRatio > 0.0) { reduceFactor = 1.0/(chargeSqRatio*massRatio); }
   }
-  lowestKinEnergy = (initialMass < MeV) ? theParameters->LowestElectronEnergy()
+  lowestKinEnergy = (initialMass < CLHEP::MeV) 
+    ? theParameters->LowestElectronEnergy()
     : theParameters->LowestMuHadEnergy();
 
   // Tables preparation
-  if (isMaster && !baseParticle) {
+  if (isMaster && nullptr == baseParticle) {
 
-    if(theDEDXTable && isIonisation) {
-      if(theIonisationTable && theDEDXTable != theIonisationTable) {
+    if(nullptr != theDEDXTable && isIonisation) {
+      if(nullptr != theIonisationTable && theDEDXTable != theIonisationTable) {
         theDEDXTable->clearAndDestroy();
         delete theDEDXTable;
         theDEDXTable = theIonisationTable;
-      }   
-      if(theDEDXSubTable && theIonisationSubTable && 
-         theDEDXSubTable != theIonisationSubTable) {
-        theDEDXSubTable->clearAndDestroy();
-        delete theDEDXSubTable;
-        theDEDXSubTable = theIonisationSubTable;
       }   
     }
     
     theDEDXTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXTable);
     bld->InitialiseBaseMaterials(theDEDXTable);
-
-    if(theDEDXSubTable) {
-      theDEDXSubTable = 
-        G4PhysicsTableHelper::PreparePhysicsTable(theDEDXSubTable);
-    }
 
     if (theParameters->BuildCSDARange()) {
       theDEDXunRestrictedTable = 
@@ -516,12 +373,13 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
         G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);  
     }
 
-    if (nSCoffRegions && !lManager->SubCutProducer()) {
-      theDEDXSubTable = 
-        G4PhysicsTableHelper::PreparePhysicsTable(theDEDXSubTable);
-      theSubLambdaTable = 
-        G4PhysicsTableHelper::PreparePhysicsTable(theSubLambdaTable);
+    const G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
+    size_t n = theCoupleTable->GetTableSize();
+    if(nullptr == fXSpeaks) { 
+      fXSpeaks = new std::vector<G4TwoPeaksXS*>;
     }
+    fXSpeaks->resize(n, nullptr);
   }
   /*
   G4cout << "** G4VEnergyLossProcess::PreparePhysicsTable() for " 
@@ -534,7 +392,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
          << " theLambda: " << theLambdaTable << G4endl;
   */
   // forced biasing
-  if(biasManager) { 
+  if(nullptr != biasManager) { 
     biasManager->Initialise(part,GetProcessName(),verboseLevel); 
     biasFlag = false; 
   }
@@ -543,48 +401,35 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if(isMaster) {
     G4String nam1 = GetProcessName();
     G4String nam4 = nam1 + "_split";
-    G4String nam5 = nam1 + "_subcut";
     secID   = G4PhysicsModelCatalog::Register(nam1); 
     biasID  = G4PhysicsModelCatalog::Register(nam4); 
-    subsecID= G4PhysicsModelCatalog::Register(nam5);
   } 
 
   // initialisation of models
-  G4int nmod = modelManager->NumberOfModels();
-  for(G4int i=0; i<nmod; ++i) {
+  numberOfModels = modelManager->NumberOfModels();
+  for(G4int i=0; i<numberOfModels; ++i) {
     G4VEmModel* mod = modelManager->GetModel(i);
+    if(0 == i) { currentModel = mod; }
     mod->SetMasterThread(isMaster);
     mod->SetAngularGeneratorFlag(
       theParameters->UseAngularGeneratorForIonisation());
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
     }
+    SetEmModel(mod);
   }
   theCuts = modelManager->Initialise(particle, secondaryParticle, 
-                                     theParameters->MinSubRange(), 
-                                     verboseLevel);
+                                     1.0, verboseLevel);
 
-  // Sub Cutoff 
-  if(nSCoffRegions > 0) {
-    if(theParameters->MinSubRange() < 1.0) { useSubCutoff = true; }
-
-    theSubCuts = modelManager->SubCutoff();
-
-    idxSCoffRegions = new G4bool[n]; 
-    for (size_t j=0; j<n; ++j) {
-
-      const G4MaterialCutsCouple* couple = 
-        theCoupleTable->GetMaterialCutsCouple(j);
-      const G4ProductionCuts* pcuts = couple->GetProductionCuts();
-      
-      G4bool reg = false;
-      for(G4int i=0; i<nSCoffRegions; ++i) {
-        if( pcuts == scoffRegions[i]->GetProductionCuts()) { 
-          reg = true;
-          break; 
-        }
-      }
-      idxSCoffRegions[j] = reg;
+  // subcut processor
+  if(isIonisation) { 
+    subcutProducer = lManager->SubCutProducer();
+  }
+  if(1 == nSCoffRegions) {
+    if((*scoffRegions)[0]->GetName() == "DefaultRegionForTheWorld") {
+      delete scoffRegions;
+      scoffRegions = nullptr;
+      nSCoffRegions = 0;
     }
   }
 
@@ -598,12 +443,14 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     G4cout << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
            << " reduceFactor= " << reduceFactor << G4endl;
-    if (nSCoffRegions) {
-      G4cout << " SubCutoff Regime is ON for regions: " << G4endl;
+    if (nSCoffRegions > 0) {
+      G4cout << " SubCut secondary production is ON for regions: " << G4endl;
       for (G4int i=0; i<nSCoffRegions; ++i) {
-        const G4Region* r = scoffRegions[i];
+        const G4Region* r = (*scoffRegions)[i];
         G4cout << "           " << r->GetName() << G4endl;
       }
+    } else if(nullptr != subcutProducer) {
+      G4cout << " SubCut secondary production is ON for all regions" << G4endl;
     }
   }
 }
@@ -636,28 +483,24 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
       // copy table pointers from master thread
       SetDEDXTable(masterProcess->DEDXTable(),fRestricted);
-      SetDEDXTable(masterProcess->DEDXTableForSubsec(),fSubRestricted);
       SetDEDXTable(masterProcess->DEDXunRestrictedTable(),fTotal);
       SetDEDXTable(masterProcess->IonisationTable(),fIsIonisation);
-      SetDEDXTable(masterProcess->IonisationTableForSubsec(),fIsSubIonisation);
       SetRangeTableForLoss(masterProcess->RangeTableForLoss());
       SetCSDARangeTable(masterProcess->CSDARangeTable());
       SetSecondaryRangeTable(masterProcess->SecondaryRangeTable());
       SetInverseRangeTable(masterProcess->InverseRangeTable());
       SetLambdaTable(masterProcess->LambdaTable());
-      SetSubLambdaTable(masterProcess->SubLambdaTable());
+      SetTwoPeaksXS(masterProcess->TwoPeaksXS());
       isIonisation = masterProcess->IsIonisationProcess();
 
       tablesAreBuilt = true;  
       // local initialisation of models
       G4bool printing = true;
-      G4int numberOfModels = modelManager->NumberOfModels();
       for(G4int i=0; i<numberOfModels; ++i) {
         G4VEmModel* mod = GetModelByIndex(i, printing);
-        G4VEmModel* mod0= masterProcess->GetModelByIndex(i,printing);
+        G4VEmModel* mod0= masterProcess->GetModelByIndex(i, printing);
         mod->InitialiseLocal(particle, mod0);
       }
-
       lManager->LocalPhysicsTables(particle, this);
     }
    
@@ -683,11 +526,11 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   // identify deexcitation flag
   if(isIonisation) { 
     atomDeexcitation = lManager->AtomDeexcitation();
-    if(nSCoffRegions > 0) { subcutProducer = lManager->SubCutProducer(); }
-    if(atomDeexcitation) { 
+    if(nullptr != atomDeexcitation) { 
       if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
     }
   }
+
   /*  
   G4cout << "** G4VEnergyLossProcess::BuildPhysicsTable() for " 
          << GetProcessName() << " and " << particle->GetParticleName()
@@ -728,8 +571,6 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
     table = theDEDXunRestrictedTable;
   } else if(fRestricted == tType) {
     table = theDEDXTable;
-  } else if(fSubRestricted == tType) {    
-    table = theDEDXSubTable;
   } else {
     G4cout << "G4VEnergyLossProcess::BuildDEDXTable WARNING: wrong type "
            << tType << G4endl;
@@ -749,10 +590,9 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
            << " table= " << table << "  " << this 
            << G4endl;
   }
-  if(!table) { return table; }
+  if(nullptr == table) { return table; }
 
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
-  G4bool splineFlag = theParameters->Spline();
   G4PhysicsLogVector* aVector = nullptr;
   G4PhysicsLogVector* bVector = nullptr;
 
@@ -768,17 +608,16 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
         theCoupleTable->GetMaterialCutsCouple(i);
-      if((*table)[i]) { delete (*table)[i]; }
-      if(bVector) {
+      if(nullptr != (*table)[i]) { delete (*table)[i]; }
+      if(nullptr != bVector) {
         aVector = new G4PhysicsLogVector(*bVector);
       } else {
-        bVector = new G4PhysicsLogVector(minKinEnergy, emax, bin);
+        bVector = new G4PhysicsLogVector(minKinEnergy, emax, bin, spline);
         aVector = bVector;
       }
-      aVector->SetSpline(splineFlag);
 
       modelManager->FillDEDXVector(aVector, couple, tType);
-      if(splineFlag) { aVector->FillSecondDerivatives(); }
+      if(spline) { aVector->FillSecondDerivatives(); }
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
@@ -804,8 +643,6 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
 
   if(fRestricted == tType) {
     table = theLambdaTable;
-  } else if(fSubRestricted == tType) {    
-    table = theSubLambdaTable;
   } else {
     G4cout << "G4VEnergyLossProcess::BuildLambdaTable WARNING: wrong type "
            << tType << G4endl;
@@ -820,18 +657,14 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
            << " table= " << table
            << G4endl;
   }
-  if(!table) {return table;}
+  if(nullptr == table) { return table; }
 
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
-
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
-  theDensityFactor = bld->GetDensityFactors();
-  theDensityIdx = bld->GetCoupleIndexes();
 
-  G4bool splineFlag = theParameters->Spline();
   G4PhysicsLogVector* aVector = nullptr;
   G4double scale = G4Log(maxKinEnergy/minKinEnergy);
 
@@ -856,11 +689,10 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
       if(emax <= emin) { emax = 2*emin; }
       G4int bin = G4lrint(nBins*G4Log(emax/emin)/scale);
       bin = std::max(bin, 3);
-      aVector = new G4PhysicsLogVector(emin, emax, bin);
-      aVector->SetSpline(splineFlag);
+      aVector = new G4PhysicsLogVector(emin, emax, bin, spline);
 
       modelManager->FillLambdaVector(aVector, couple, startNull, tType);
-      if(splineFlag) { aVector->FillSecondDerivatives(); }
+      if(spline) { aVector->FillSecondDerivatives(); }
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
@@ -885,7 +717,8 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
   out << std::setprecision(6);
   out << G4endl << indent << GetProcessName()  << ": ";
   if (!rst) out << " for " << part.GetParticleName();
-  out << "  SubType=" << GetProcessSubType() << G4endl
+  out << "  XStype:" << fXSType 
+      << "  SubType=" << GetProcessSubType() << G4endl
       << "      dE/dx and range tables from "
       << G4BestUnit(minKinEnergy,"Energy")
       << " to " << G4BestUnit(maxKinEnergy,"Energy")
@@ -893,20 +726,19 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
       << "      Lambda tables from threshold to "
       << G4BestUnit(maxKinEnergy,"Energy")
       << ", " << theParameters->NumberOfBinsPerDecade() 
-      << " bins/decade, spline: "
-      << theParameters->Spline()
+      << " bins/decade, spline: " << spline
       << G4endl;
-  if(theRangeTableForLoss && isIonisation) {
+  if(nullptr != theRangeTableForLoss && isIonisation) {
     out << "      StepFunction=(" << dRoverRange << ", "
         << finalRange/mm << " mm)"
-        << ", integ: " << integral
+        << ", integ: " << fXSType
         << ", fluct: " << lossFluctuationFlag
         << ", linLossLim= " << linLossLimit
         << G4endl;
   }
   StreamProcessInfo(out);
   modelManager->DumpModelList(out, verboseLevel);
-  if(theCSDARangeTable && isIonisation) {
+  if(nullptr != theCSDARangeTable && isIonisation) {
     out << "      CSDA range table up"
         << " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
         << " in " << nBinsCSDA << " bins" << G4endl;
@@ -917,63 +749,61 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
   }
   if(2 < verboseLevel) {
     out << "      DEDXTable address= " << theDEDXTable << G4endl; 
-    if(theDEDXTable && isIonisation) out << (*theDEDXTable) << G4endl;
+    if(nullptr != theDEDXTable && isIonisation) out << (*theDEDXTable) << G4endl;
     out << "non restricted DEDXTable address= " 
         << theDEDXunRestrictedTable << G4endl;
-    if(theDEDXunRestrictedTable && isIonisation) {
+    if(nullptr != theDEDXunRestrictedTable && isIonisation) {
       out << (*theDEDXunRestrictedTable) << G4endl;
     }
-    if(theDEDXSubTable && isIonisation) {
-      out << (*theDEDXSubTable) << G4endl;
-    }
     out << "      CSDARangeTable address= " << theCSDARangeTable << G4endl;
-    if(theCSDARangeTable && isIonisation) {
+    if(nullptr != theCSDARangeTable && isIonisation) {
       out << (*theCSDARangeTable) << G4endl;
     }
     out << "      RangeTableForLoss address= " << theRangeTableForLoss 
         << G4endl;
-    if(theRangeTableForLoss && isIonisation) {
+    if(nullptr != theRangeTableForLoss && isIonisation) {
       out << (*theRangeTableForLoss) << G4endl;
     }
     out << "      InverseRangeTable address= " << theInverseRangeTable 
         << G4endl;
-    if(theInverseRangeTable && isIonisation) {
+    if(nullptr != theInverseRangeTable && isIonisation) {
       out << (*theInverseRangeTable) << G4endl;
     }
     out << "      LambdaTable address= " << theLambdaTable << G4endl;
-    if(theLambdaTable && isIonisation) {
+    if(nullptr != theLambdaTable) {
       out << (*theLambdaTable) << G4endl;
-    }
-    out << "      SubLambdaTable address= " << theSubLambdaTable << G4endl;
-    if(theSubLambdaTable && isIonisation) {
-      out << (*theSubLambdaTable) << G4endl;
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
+void G4VEnergyLossProcess::ActivateSubCutoff(const G4Region* r)
 {
-  G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  const G4Region* reg = r;
-  if (!reg) {
-    reg = regionStore->GetRegion("DefaultRegionForTheWorld", false);
+  if(nullptr == scoffRegions) {
+    scoffRegions = new std::vector<const G4Region*>;
   }
-
   // the region is in the list
-  if (nSCoffRegions > 0) {
-    for (G4int i=0; i<nSCoffRegions; ++i) {
-      if (reg == scoffRegions[i]) {
-        return;
-      }
+  if(!scoffRegions->empty()) {
+    for (auto & reg : *scoffRegions) {
+      if (reg == r) { return; }
     }
   }
   // new region 
-  if(val) {
-    scoffRegions.push_back(reg);
-    ++nSCoffRegions;
+  scoffRegions->push_back(r);
+  ++nSCoffRegions;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4VEnergyLossProcess::IsRegionForCubcutProcessor(const G4Track& aTrack)
+{
+  if(0 == nSCoffRegions) { return true; }
+  const G4Region* r = aTrack.GetVolume()->GetLogicalVolume()->GetRegion();
+  for(auto & reg : *scoffRegions) {
+    if(r == reg) { return true; }
   }
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -989,14 +819,13 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
   */
   // reset parameters for the new track
   theNumberOfInteractionLengthLeft = -1.0;
-  currentInteractionLength = mfpKinEnergy = DBL_MAX; 
-  preStepRangeEnergy = 0.0;
+  mfpKinEnergy = DBL_MAX;
 
   // reset ion
   if(isIon) {
     chargeSqRatio = 0.5;
 
-    G4double newmass = track->GetDefinition()->GetPDGMass();
+    const G4double newmass = track->GetDefinition()->GetPDGMass();
     if(baseParticle) {
       massRatio    = baseParticle->GetPDGMass()/newmass;
       logMassRatio = G4Log(massRatio);
@@ -1011,7 +840,6 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track->GetParentID()) {
-      // primary particle
       biasFlag = true; 
       biasManager->ResetForcedInteraction(); 
     }
@@ -1027,20 +855,18 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
   *selection = aGPILSelection;
   if(isIonisation && currentModel->IsActive(preStepScaledEnergy)) {
-    fRange = reduceFactor*GetScaledRangeForScaledEnergy(preStepScaledEnergy,
-                                                        preStepLogScaledEnergy);
-    G4double finR = (rndmStepFlag) ? std::min(finalRange,
+    GetScaledRangeForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
+    const G4double finR = (rndmStepFlag) ? std::min(finalRange,
       currentCouple->GetProductionCuts()->GetProductionCut(1)) : finalRange;
     x = (fRange > finR) ? 
       fRange*dRoverRange + finR*(1.0-dRoverRange)*(2.0-finR/fRange) : fRange; 
-   // if(particle->GetPDGMass() > 0.9*GeV)
+    // if(particle->GetPDGMass() > 0.9*GeV)
     /*
-    G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-          <<" range= "<<fRange << " idx= " << basedCoupleIndex
-              << " finR= " << finR
-          << " limit= " << x <<G4endl;
-    G4cout << "massRatio= " << massRatio << " Q^2= " << chargeSqRatio 
-           << " finR= " << finR << " dRoverRange= " << dRoverRange 
+    G4cout << GetProcessName() << ": e= " << preStepKinEnergy
+           <<" range= "<<fRange << " idx= " << basedCoupleIndex
+	   << " finR= " << finR << " limit= " << x <<
+	   << "\n" << "massRatio= " << massRatio << " Q^2= " << chargeSqRatio 
+           << " dRoverRange= " << dRoverRange 
            << " finalRange= " << finalRange << G4endl;
     */
   }
@@ -1077,14 +903,13 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 
   // change effective charge of an ion on fly
   if(isIon) {
-    G4double q2 = currentModel->ChargeSquareRatio(track);
+    const G4double q2 = currentModel->ChargeSquareRatio(track);
     if(q2 != chargeSqRatio && q2 > 0.0) {
       chargeSqRatio = q2;
       fFactor = q2*biasFactor*(*theDensityFactor)[currentCoupleIndex];
       reduceFactor = 1.0/(fFactor*massRatio);
     }
   }
-  //  if(particle->GetPDGMass() > 0.9*GeV)
   //G4cout << "q2= "<<chargeSqRatio << " massRatio= " << massRatio << G4endl; 
 
   // forced biasing only for primary particles
@@ -1096,27 +921,19 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   }
 
   // compute mean free path
-  if(preStepScaledEnergy < mfpKinEnergy) {
-    if (integral) {
-      ComputeLambdaForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
-    } else {
-      preStepLambda = 
-          GetLambdaForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
-    }
+  ComputeLambdaForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
 
-    // zero cross section
-    if(preStepLambda <= 0.0) { 
-      theNumberOfInteractionLengthLeft = -1.0;
-      currentInteractionLength = DBL_MAX;
-    }
-  }
+  // zero cross section
+  if(preStepLambda <= 0.0) { 
+    theNumberOfInteractionLengthLeft = -1.0;
+    currentInteractionLength = DBL_MAX;
+  } else {
 
-  // non-zero cross section
-  if(preStepLambda > 0.0) { 
+    // non-zero cross section
     if (theNumberOfInteractionLengthLeft < 0.0) {
 
       // beggining of tracking (or just after DoIt of this process)
-      theNumberOfInteractionLengthLeft =  -G4Log( G4UniformRand() );
+      theNumberOfInteractionLengthLeft = -G4Log( G4UniformRand() );
       theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 
     } else if(currentInteractionLength < DBL_MAX) {
@@ -1155,29 +972,64 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 void
 G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
 {
-  // condition to skip recomputation of cross section
-  const G4double epeak = theEnergyOfCrossSectionMax[currentCoupleIndex];
-  if(e <= epeak && e/lambdaFactor >= mfpKinEnergy) { return; }
-
-  // recomputation is needed 
-  if (e <= epeak) {
-    preStepLambda = GetLambdaForScaledEnergy(e, loge);
-    mfpKinEnergy  = e;
-  } else {
-    const G4double e1 = e*lambdaFactor;
-    if (e1 > epeak) {
-      preStepLambda = GetLambdaForScaledEnergy(e, loge);
-      mfpKinEnergy  = e;
-      const G4double preStepLambda1 = 
-                            GetLambdaForScaledEnergy(e1, loge+logLambdafactor);
-      if (preStepLambda1 > preStepLambda) {
-        mfpKinEnergy  = e1;
-        preStepLambda = preStepLambda1;
-      }
-    } else {
-      preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
-      mfpKinEnergy  = epeak;
+  // cross section increased with energy
+  if(fXSType == fEmIncreasing) {
+    if(e/lambdaFactor < mfpKinEnergy) {
+      mfpKinEnergy = e;
+      preStepLambda = GetLambdaForScaledEnergy(e, loge); 
     }
+
+  // cross section has two peaks
+  } else if(fXSType == fEmTwoPeaks) {
+    G4TwoPeaksXS* xs = (*fXSpeaks)[basedCoupleIndex];
+    const G4double e1peak = xs->e1peak;
+
+    // below the 1st peak
+    if(e <= e1peak) {
+      if(e/lambdaFactor < mfpKinEnergy) {
+	mfpKinEnergy = e;
+	preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+      }
+      return;
+    }
+    const G4double e1deep = xs->e1deep;
+    // above the 1st peak, below the deep
+    if(e <= e1deep) {
+      if(mfpKinEnergy >= e1deep || e <= mfpKinEnergy) { 
+	const G4double e1 = std::max(e1peak, e*lambdaFactor);
+	preStepLambda = GetLambdaForScaledEnergy(e1); 
+	mfpKinEnergy = e1;
+      }
+      return;
+    }
+    const G4double e2peak = xs->e2peak;
+    // above the deep, below 2nd peak
+    if(e <= e2peak) {
+      if(e/lambdaFactor < mfpKinEnergy) {
+	mfpKinEnergy = e;
+	preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+      }
+      return;
+    }
+    const G4double e2deep = xs->e2deep;
+    // above the 2nd peak, below the deep
+    if(e <= e2deep) {
+      if(mfpKinEnergy >= e2deep || e <= mfpKinEnergy) { 
+	const G4double e1 = std::max(e2peak, e*lambdaFactor);
+	preStepLambda = GetLambdaForScaledEnergy(e1); 
+	mfpKinEnergy = e1;
+      }
+      return;
+    }
+    // above the deep, below 3d peak
+    if(e/lambdaFactor < mfpKinEnergy) {
+      mfpKinEnergy = e;
+      preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+    }
+
+    // integral method is not used
+  } else {
+    preStepLambda = GetLambdaForScaledEnergy(e, loge); 
   }
 }
 
@@ -1197,7 +1049,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(length <= 0.0) { return &fParticleChange; }
   G4double eloss  = 0.0;
  
-  /*      
+  /*        
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetParticleDefinition();
     G4cout << "AlongStepDoIt for "
@@ -1230,7 +1082,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     if (useDeexcitation) {
       atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
                                               eloss, currentCoupleIndex);
-      if(scTracks.size() > 0) { FillSecondariesAlongStep(eloss, weight); }
+      if(scTracks.size() > 0) { FillSecondariesAlongStep(weight); }
       eloss = std::max(eloss, 0.0);
     }
     fParticleChange.SetProposedKineticEnergy(0.0);
@@ -1241,10 +1093,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // << "  " << GetProcessName() << "  "<< currentMaterial->GetName()<<G4endl;
   //if(particle->GetParticleName() == "e-")G4cout << (*theDEDXTable) <<G4endl;
   // Short step
-  eloss  = GetDEDXForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
-  eloss *= length;
+  eloss = length*GetDEDXForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
 
-  //G4cout << "eloss= " << eloss << G4endl;
+  //G4cout << "Short STEP: eloss= " << eloss << G4endl;
 
   // Long step
   if(eloss > preStepKinEnergy*linLossLimit) {
@@ -1267,7 +1118,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     */
   }
 
-  /*   
+  /*     
   G4double eloss0 = eloss;
   if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -1279,96 +1130,33 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
   */
 
-  G4double cut  = (*theCuts)[currentCoupleIndex];
+  const G4double cut = (*theCuts)[currentCoupleIndex];
   G4double esec = 0.0;
-
-  //G4cout << "cut= " << cut << " useSubCut= " << useSubCutoff << G4endl;
-
-  // SubCutOff 
-  if(useSubCutoff && !subcutProducer) {
-    if(idxSCoffRegions[currentCoupleIndex]) {
-
-      G4bool yes = false;
-      const G4StepPoint* prePoint = step.GetPreStepPoint();
-
-      // Check boundary
-      if(prePoint->GetStepStatus() == fGeomBoundary) { yes = true; }
-
-      // Check PrePoint
-      else {
-        G4double preSafety  = prePoint->GetSafety();
-        G4double rcut = 
-          currentCouple->GetProductionCuts()->GetProductionCut(1);
-
-        // recompute presafety
-        if(preSafety < rcut) {
-          preSafety = safetyHelper->ComputeSafety(prePoint->GetPosition(),
-                                                  rcut);
-        }
-
-        if(preSafety < rcut) { yes = true; }
-
-        // Check PostPoint
-        else {
-          G4double postSafety = preSafety - length; 
-          if(postSafety < rcut) {
-            postSafety = safetyHelper->ComputeSafety(
-              step.GetPostStepPoint()->GetPosition(), rcut);
-            if(postSafety < rcut) { yes = true; }
-          }
-        }
-      }
-  
-      // Decided to start subcut sampling
-      if(yes) {
-
-        cut = (*theSubCuts)[currentCoupleIndex];
-         eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
-        esec = SampleSubCutSecondaries(scTracks, step, 
-                                       currentModel,currentCoupleIndex);
-        // add bremsstrahlung sampling
-        /*
-        if(nProcesses > 0) {
-          for(G4int i=0; i<nProcesses; ++i) {
-            (scProcesses[i])->SampleSubCutSecondaries(
-                scTracks, step, (scProcesses[i])->
-                SelectModelForMaterial(preStepKinEnergy, currentCoupleIndex),
-                currentCoupleIndex);
-          }
-        } 
-        */
-      }   
-    }
-  }
 
   // Corrections, which cannot be tabulated
   if(isIon) {
-    G4double eadd = 0.0;
-    G4double eloss_before = eloss;
     currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
-                                       eloss, eadd, length);
-    if(eloss < 0.0) { eloss = 0.5*eloss_before; }
+                                       length, eloss);
+    eloss = std::max(eloss, 0.0);
   }
 
   // Sample fluctuations
-  if (lossFluctuationFlag) {
-    G4VEmFluctuationModel* fluc = currentModel->GetModelOfFluctuations();
-    if(eloss + esec < preStepKinEnergy) {
+  if (lossFluctuationFlag && eloss + esec < preStepKinEnergy) {
 
-      G4double tmax = 
-        std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
-      eloss = fluc->SampleFluctuations(currentCouple,dynParticle,
-                                       tmax,length,eloss);
-      /*                                  
-      if(-1 < verboseLevel) 
+    const G4double tmax = 
+      std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
+    G4VEmFluctuationModel* fluc = currentModel->GetModelOfFluctuations();
+    eloss = fluc->SampleFluctuations(currentCouple,dynParticle,
+				     tmax,length,eloss);
+    /*
+    if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
              << " fluc= " << (eloss-eloss0)/MeV
              << " ChargeSqRatio= " << chargeSqRatio
              << " massRatio= " << massRatio
              << " tmax= " << tmax
              << G4endl;
-      */
-    }
+    */
   }
 
   // deexcitation
@@ -1406,10 +1194,11 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     } 
     */   
   }
-  if(subcutProducer && idxSCoffRegions[currentCoupleIndex]) {
+  if(nullptr != subcutProducer && IsRegionForCubcutProcessor(track)) {
     subcutProducer->SampleSecondaries(step, scTracks, eloss, cut);
   }
-  if(scTracks.size() > 0) { FillSecondariesAlongStep(eloss, weight); }
+  // secondaries from atomic de-excitation and subcut
+  if(!scTracks.empty()) { FillSecondariesAlongStep(weight); }
 
   // Energy balance
   G4double finalT = preStepKinEnergy - eloss - esec;
@@ -1421,7 +1210,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       currentModel->GetParticleCharge(track.GetParticleDefinition(),
                                       currentMaterial,finalT));
   }
-
   eloss = std::max(eloss, 0.0);
 
   fParticleChange.SetProposedKineticEnergy(finalT);
@@ -1443,11 +1231,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
-G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
+void G4VEnergyLossProcess::FillSecondariesAlongStep(G4double wt)
 {
-  G4int n0 = scTracks.size();
-
+  const G4int n0 = scTracks.size();
+  G4double weight = wt;
   // weight may be changed by biasing manager
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
@@ -1457,12 +1244,12 @@ G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
   } 
 
   // fill secondaries
-  G4int n = scTracks.size();
+  const G4int n = scTracks.size();
   fParticleChange.SetNumberOfSecondaries(n);
 
   for(G4int i=0; i<n; ++i) {
     G4Track* t = scTracks[i];
-    if(t) {
+    if(nullptr != t) {
       t->SetWeight(weight); 
       pParticleChange->AddSecondary(t);
       if(i >= n0) { t->SetCreatorModelIndex(biasID); }
@@ -1475,97 +1262,17 @@ G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double 
-G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks, 
-                                              const G4Step& step, 
-                                              G4VEmModel* model,
-                                              G4int idx) 
-{
-  // Fast check weather subcutoff can work
-  G4double esec = 0.0;
-  G4double subcut = (*theSubCuts)[idx];
-  G4double cut = (*theCuts)[idx];
-  if(cut <= subcut) { return esec; }
-
-  const G4Track* track = step.GetTrack();
-  const G4DynamicParticle* dp = track->GetDynamicParticle();
-  G4double e = dp->GetKineticEnergy()*massRatio;
-  G4double cross = (*theDensityFactor)[idx]*chargeSqRatio
-    *(((*theSubLambdaTable)[(*theDensityIdx)[idx]])->Value(e, idxSubLambda));
-  G4double length = step.GetStepLength();
-
-  // negligible probability to get any interaction
-  if(length*cross < perMillion) { return esec; }
-  /*      
-  if(-1 < verboseLevel) 
-    G4cout << "<<< Subcutoff for " << GetProcessName()
-           << " cross(1/mm)= " << cross*mm << ">>>"
-           << " e(MeV)= " << preStepScaledEnergy
-           << " matIdx= " << currentCoupleIndex
-           << G4endl;
-  */
-
-  // Sample subcutoff secondaries
-  G4StepPoint* preStepPoint = step.GetPreStepPoint();
-  G4StepPoint* postStepPoint = step.GetPostStepPoint();
-  G4ThreeVector prepoint = preStepPoint->GetPosition();
-  G4ThreeVector dr = postStepPoint->GetPosition() - prepoint;
-  G4double pretime = preStepPoint->GetGlobalTime();
-  G4double dt = postStepPoint->GetGlobalTime() - pretime;
-  G4double fragment = 0.0;
-
-  do {
-    G4double del = -G4Log(G4UniformRand())/cross;
-    fragment += del/length;
-    if (fragment > 1.0) { break; }
-
-    // sample secondaries
-    secParticles.clear();
-    model->SampleSecondaries(&secParticles,track->GetMaterialCutsCouple(),
-                             dp,subcut,cut);
-
-    // position of subcutoff particles
-    G4ThreeVector r = prepoint + fragment*dr;
-    std::vector<G4DynamicParticle*>::iterator it;
-    for(it=secParticles.begin(); it!=secParticles.end(); ++it) {
-
-      G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
-      t->SetTouchableHandle(track->GetTouchableHandle());
-      t->SetCreatorModelIndex(subsecID);
-      tracks.push_back(t);
-      esec += t->GetKineticEnergy();
-      if (t->GetParticleDefinition() == thePositron) { 
-        esec += 2.0*electron_mass_c2; 
-      }
-
-        /*        
-        if(-1 < verboseLevel) 
-          G4cout << "New track " 
-                 << t->GetParticleDefinition()->GetParticleName()
-                 << " e(keV)= " << t->GetKineticEnergy()/keV
-                 << " fragment= " << fragment
-                 << G4endl;
-        */
-    }
-    // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-  } while (fragment <= 1.0);
-  return esec;
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
                                                       const G4Step& step)
 {
   // In all cases clear number of interaction lengths
   theNumberOfInteractionLengthLeft = -1.0;
-  mfpKinEnergy = currentInteractionLength = DBL_MAX; 
+  mfpKinEnergy = DBL_MAX;
 
   fParticleChange.InitializeForPostStep(track);
-  G4double finalT = track.GetKineticEnergy();
-  if(finalT <= lowestKinEnergy) { return &fParticleChange; }
+  const G4double finalT = track.GetKineticEnergy();
 
-  G4double postStepScaledEnergy = finalT*massRatio;
+  const G4double postStepScaledEnergy = finalT*massRatio;
   SelectModel(postStepScaledEnergy);
 
   if(!currentModel->IsActive(postStepScaledEnergy)) { 
@@ -1587,13 +1294,20 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   }
 
   const G4DynamicParticle* dp = track.GetDynamicParticle();
-  const G4double logFinalT    = dp->GetLogKineticEnergy();
-  // postStepLogScaledEnergy = logFinalT + logMassRatio;
 
   // Integral approach
-  if (integral) {
-    const G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy,
-                                                 logFinalT + logMassRatio);
+  if (fXSType != fEmNoIntegral) {
+    const G4double logFinalT = dp->GetLogKineticEnergy();
+    G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy,
+					   logFinalT + logMassRatio);
+    lx = std::max(lx, 0.0);
+
+    // cache cross section useful for the false interaction
+    const G4double lg = preStepLambda;
+    if(postStepScaledEnergy < mfpKinEnergy) {
+      mfpKinEnergy = postStepScaledEnergy;
+      preStepLambda = lx;
+    }
     /*
     if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARNING: for " << particle->GetParticleName()
@@ -1604,13 +1318,11 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
              << G4endl;
     }
     */
-    if(lx <= 0.0 || preStepLambda*G4UniformRand() > lx) {
+    // if both lg and lx are zero then no interaction
+    if(lg*G4UniformRand() >= lx) {
       return &fParticleChange;
     }
   }
-
-  SelectModel(postStepScaledEnergy);
-
   // define new weight for primary and secondaries
   G4double weight = fParticleChange.GetParentWeight();
   if(weightFlag) {
@@ -1618,7 +1330,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
     fParticleChange.ProposeWeight(weight);
   }
 
-  G4double tcut = (*theCuts)[currentCoupleIndex];
+  const G4double tcut = (*theCuts)[currentCoupleIndex];
 
   // sample secondaries
   secParticles.clear();
@@ -1626,7 +1338,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   //        << " cut= " << tcut/MeV << G4endl;
   currentModel->SampleSecondaries(&secParticles, currentCouple, dp, tcut);
 
-  G4int num0 = secParticles.size();
+  const G4int num0 = secParticles.size();
 
   // bremsstrahlung splitting or Russian roulette  
   if(biasManager) {
@@ -1646,14 +1358,14 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   }
 
   // save secondaries
-  G4int num = secParticles.size();
+  const G4int num = secParticles.size();
   if(num > 0) {
 
     fParticleChange.SetNumberOfSecondaries(num);
     G4double time = track.GetGlobalTime();
 
     for (G4int i=0; i<num; ++i) {
-      if(secParticles[i]) {
+      if(nullptr != secParticles[i]) {
         G4Track* t = new G4Track(secParticles[i], time, track.GetPosition());
         t->SetTouchableHandle(track.GetTouchableHandle());
         if (biasManager) {
@@ -1711,13 +1423,7 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
   if(!StoreTable(part,theDEDXunRestrictedTable,ascii,directory,"DEDXnr")) 
     {res = false;}
 
-  if(!StoreTable(part,theDEDXSubTable,ascii,directory,"SubDEDX")) 
-    {res = false;}
-
   if(!StoreTable(part,theIonisationTable,ascii,directory,"Ionisation")) 
-    {res = false;}
-
-  if(!StoreTable(part,theIonisationSubTable,ascii,directory,"SubIonisation")) 
     {res = false;}
 
   if(isIonisation &&
@@ -1733,9 +1439,6 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
     {res = false;}
   
   if(!StoreTable(part,theLambdaTable,ascii,directory,"Lambda")) 
-    {res = false;}
-
-  if(!StoreTable(part,theSubLambdaTable,ascii,directory,"SubLambda")) 
     {res = false;}
 
   return res;
@@ -1760,51 +1463,35 @@ G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
   }
   if(particle == part) {
 
-    if ( !baseParticle ) {
+    if(nullptr == baseParticle) {
 
       G4bool fpi = true;
       if(!RetrieveTable(part,theDEDXTable,ascii,directory,"DEDX",fpi)) 
-        {fpi = false;}
+        { fpi = false; }
 
       // ionisation table keeps individual dEdx and not sum of sub-processes
       if(!RetrieveTable(part,theDEDXTable,ascii,directory,"Ionisation",false)) 
-        {fpi = false;}
+        { fpi = false; }
 
       if(!RetrieveTable(part,theRangeTableForLoss,ascii,directory,"Range",fpi)) 
-        {res = false;}
+        { res = false; }
 
       if(!RetrieveTable(part,theDEDXunRestrictedTable,ascii,directory,
                         "DEDXnr",false)) 
-        {res = false;}
+        { res = false; }
 
       if(!RetrieveTable(part,theCSDARangeTable,ascii,directory,
                         "CSDARange",false)) 
-        {res = false;}
+        { res = false; }
 
       if(!RetrieveTable(part,theInverseRangeTable,ascii,directory,
                         "InverseRange",fpi)) 
-        {res = false;}
+        { res = false; }
 
       if(!RetrieveTable(part,theLambdaTable,ascii,directory,"Lambda",true)) 
-        {res = false;}
-
-      G4bool yes = false;
-      if(nSCoffRegions > 0) {yes = true;}
-
-      if(!RetrieveTable(part,theDEDXSubTable,ascii,directory,"SubDEDX",yes)) 
-        {res = false;}
-
-      if(!RetrieveTable(part,theSubLambdaTable,ascii,directory,
-                        "SubLambda",yes)) 
-        {res = false;}
-
-      if(!fpi) yes = false;
-      if(!RetrieveTable(part,theIonisationSubTable,ascii,directory,
-                        "SubIonisation",yes))
-        {res = false;}
+        { res = false; }
     }
   }
-
   return res;
 }
 
@@ -1816,7 +1503,7 @@ G4bool G4VEnergyLossProcess::StoreTable(const G4ParticleDefinition* part,
                                         const G4String& tname)
 {
   G4bool res = true;
-  if ( aTable ) {
+  if (nullptr != aTable) {
     const G4String& name = GetPhysicsTableFileName(part, directory, tname, ascii);
     if ( aTable->StorePhysicsTable(name,ascii) ) {
       if (0 < verboseLevel) G4cout << "Stored: " << name << G4endl;
@@ -1840,16 +1527,15 @@ G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
 {
   G4bool isRetrieved = false;
   G4String filename = GetPhysicsTableFileName(part,directory,tname,ascii);
-  if(aTable) {
+  if(nullptr != aTable) {
     if(aTable->ExistPhysicsTable(filename)) {
-      if(G4PhysicsTableHelper::RetrievePhysicsTable(aTable,filename,ascii)) {
+      if(G4PhysicsTableHelper::RetrievePhysicsTable(aTable,filename,ascii,spline)) {
         isRetrieved = true;
-        if(theParameters->Spline()) {
-          size_t n = aTable->length();
-          for(size_t i=0; i<n; ++i) {
-            if((*aTable)[i]) { (*aTable)[i]->SetSpline(true); }
-          }
-        }
+	if(spline) {
+	  for(auto & v : *aTable) { 
+	    if(nullptr != v) { v->FillSecondDerivatives(); } 
+	  }
+	}
         if (0 < verboseLevel) {
           G4cout << tname << " table for " << part->GetParticleName() 
                  << " is Retrieved from <" << filename << ">"
@@ -1884,7 +1570,7 @@ G4double G4VEnergyLossProcess::GetDEDXDispersion(
   tmax = std::min(tmax,(*theCuts)[currentCoupleIndex]);
   G4double d = 0.0;
   G4VEmFluctuationModel* fm = currentModel->GetModelOfFluctuations();
-  if(fm) { d = fm->Dispersion(currentMaterial,dp,tmax,length); }
+  if(nullptr != fm) { d = fm->Dispersion(currentMaterial,dp,tmax,length); }
   return d;
 }
 
@@ -1898,7 +1584,7 @@ G4VEnergyLossProcess::CrossSectionPerVolume(G4double kineticEnergy,
   // Cross section per volume is calculated
   DefineMaterial(couple);
   G4double cross = 0.0;
-  if (theLambdaTable) {
+  if (nullptr != theLambdaTable) {
     cross = GetLambdaForScaledEnergy(kineticEnergy * massRatio,
                                      logKineticEnergy + logMassRatio);
   } else {
@@ -1929,8 +1615,7 @@ G4double G4VEnergyLossProcess::ContinuousStepLimit(const G4Track& track,
                                                    G4double x, G4double y, 
                                                    G4double& z)
 {
-  G4GPILSelection sel;
-  return AlongStepGetPhysicalInteractionLength(track, x, y, z, &sel);
+  return AlongStepGetPhysicalInteractionLength(track, x, y, z, &aGPILSelection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1957,39 +1642,12 @@ G4double G4VEnergyLossProcess::GetContinuousStepLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsVector* 
-G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*, 
+G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* couple, 
                                           G4double)
 {
-  G4PhysicsVector* v = 
-    new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
-  v->SetSpline(theParameters->Spline());
-  return v;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-void G4VEnergyLossProcess::AddCollaborativeProcess(
-            G4VEnergyLossProcess* p)
-{
-  G4bool add = true;
-  if(p->GetProcessName() != "eBrem") { add = false; }
-  if(add && nProcesses > 0) {
-    for(G4int i=0; i<nProcesses; ++i) {
-      if(p == scProcesses[i]) {
-        add = false;
-        break;
-      }
-    }
-  }
-  if(add) {
-    scProcesses.push_back(p);
-    ++nProcesses;
-    if (1 < verboseLevel) { 
-      G4cout << "### The process " << p->GetProcessName() 
-             << " is added to the list of collaborative processes of "
-             << GetProcessName() << G4endl; 
-    }
-  }
+  DefineMaterial(couple);
+  G4PhysicsVector* v = (*theLambdaTable)[basedCoupleIndex];
+  return new G4PhysicsVector(*v);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1999,32 +1657,6 @@ G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 {
   if(fTotal == tType) {
     theDEDXunRestrictedTable = p;
-    if(p) {
-      size_t n = p->length();
-      G4PhysicsVector* pv = (*p)[0];
-      G4double emax = maxKinEnergyCSDA;
-
-      G4LossTableBuilder* bld = lManager->GetTableBuilder();
-      theDensityFactor = bld->GetDensityFactors();
-      theDensityIdx = bld->GetCoupleIndexes();
-
-      for (size_t i=0; i<n; ++i) {
-        G4double dedx = 0.0; 
-        pv = (*p)[i];
-        if(pv) { 
-          dedx = pv->Value(emax, idxDEDXunRestricted); 
-        } else {
-          pv = (*p)[(*theDensityIdx)[i]];
-          if(pv) { 
-            dedx = 
-              pv->Value(emax, idxDEDXunRestricted)*(*theDensityFactor)[i]; 
-          }
-        }
-        theDEDXAtMaxEnergy[i] = dedx;
-        //G4cout << "i= " << i << " emax(MeV)= " << emax/MeV<< " dedx= " 
-        //     << dedx << G4endl;
-      }
-    }
 
   } else if(fRestricted == tType) {
     /*
@@ -2037,8 +1669,6 @@ G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
       G4cout << (*p) << G4endl;
     */
     theDEDXTable = p;
-  } else if(fSubRestricted == tType) {
-      theDEDXSubTable = p;
   } else if(fIsIonisation == tType) {
     /*
       G4cout<< "G4VEnergyLossProcess::SetIonisationTable "
@@ -2049,8 +1679,6 @@ G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
             << " " << GetProcessName() << G4endl;
     */
     theIonisationTable = p;
-  } else if(fIsSubIonisation == tType) {
-    theIonisationSubTable = p;
   }
 }
 
@@ -2059,24 +1687,10 @@ G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 void G4VEnergyLossProcess::SetCSDARangeTable(G4PhysicsTable* p)
 {
   theCSDARangeTable = p; 
-
-  if(p) {
-    size_t n = p->length();
-    G4PhysicsVector* pv;
-    G4double emax = maxKinEnergyCSDA;
-
-    for (size_t i=0; i<n; ++i) {
-      pv = (*p)[i];
-      G4double rmax = 0.0;
-      if(pv) { rmax = pv->Value(emax, idxCSDA); }
-      else {
-        pv = (*p)[(*theDensityIdx)[i]];
-        if(pv) { rmax = pv->Value(emax, idxCSDA)/(*theDensityFactor)[i]; }
-      }
-      theRangeAtMaxEnergy[i] = rmax;
-      //G4cout << "i= " << i << " Emax(MeV)= " << emax/MeV << " Rmax= " 
-      //<< rmax<< G4endl;
-    }
+  if(1 < verboseLevel) {
+    G4cout << "### Set CSDA Range table " << p 
+           << " for " << particle->GetParticleName()
+           << " and process " << GetProcessName() << G4endl;
   }
 }
 
@@ -2133,46 +1747,100 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
 
-  if(theLambdaTable) {
-    size_t n = theLambdaTable->length();
-    G4PhysicsVector* pv = (*theLambdaTable)[0];
-    G4double e, ss, smax, emax;
+  if(isMaster && nullptr == baseParticle && 
+     nullptr != theLambdaTable && fEmTwoPeaks == fXSType) {
 
-    size_t i;
+    size_t n = theLambdaTable->length();
+
+    G4double e, ss, xs, ee, e1peak, xs1peak, e1deep, e2peak, e2deep, xs2peak;
 
     // first loop on existing vectors
-    for (i=0; i<n; ++i) {
-      pv = (*theLambdaTable)[i];
-      if(pv) {
+    for (size_t i=0; i<n; ++i) {
+      const G4PhysicsVector* pv = (*theLambdaTable)[i];
+      ee = xs = xs1peak = xs2peak = 0.0;
+      e1peak = e1deep = e2peak = e2deep = DBL_MAX;
+      if(nullptr != pv) {
         size_t nb = pv->GetVectorLength();
-        emax = DBL_MAX;
-        smax = 0.0;
-        if(nb > 0) {
-          for (size_t j=0; j<nb; ++j) {
-            e = pv->Energy(j);
-            ss = (*pv)(j);
-            if(ss > smax) {
-              smax = ss;
-              emax = e;
-            }
-          }
-        }
-        theEnergyOfCrossSectionMax[i] = emax;
-        theCrossSectionMax[i] = smax;
-        if(1 < verboseLevel) {
-          G4cout << "For " << particle->GetParticleName() 
-                 << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
-                 << " lambda= " << smax << G4endl;
-        }
+	for (size_t j=0; j<nb; ++j) {
+	  e = pv->Energy(j);
+	  ss = (*pv)(j);
+	  // find out 1st peak
+	  if(e1peak == DBL_MAX) {
+	    if(ss >= xs) {
+	      xs = ss;
+	      ee = e;
+	      continue;
+	    } else {
+	      e1peak = ee;
+	      xs1peak = xs;
+	    }
+	  }
+	  // find out the deep
+	  if(e1deep == DBL_MAX) {
+	    if(ss <= xs) {
+	      xs = ss;
+	      ee = e;
+	      continue;
+	    } else {
+	      e1deep = ee;
+	    }
+	  }
+	  // find out 2nd peak
+	  if(e2peak == DBL_MAX) {
+	    if(ss >= xs) {
+	      xs = ss;
+	      ee = e;
+	      continue;
+	    } else {
+	      e2peak = ee;
+	      xs2peak = xs;
+	    }
+	  }
+	  if(e2deep == DBL_MAX) {
+	    if(ss <= xs) {
+	      xs = ss;
+	      ee = e;
+	      continue;
+	    } else {
+	      e2deep = ee;
+	      break;
+	    }
+	  }
+	}
+      }
+      G4TwoPeaksXS* x = (*fXSpeaks)[i];
+      if(nullptr == x) { 
+	x = new G4TwoPeaksXS(); 
+	(*fXSpeaks)[i] = x;
+      }
+      x->e1peak = e1peak;
+      x->e1deep = e1deep;
+      x->e2peak = e2peak;
+      x->e2deep = e2deep;
+       
+      if(1 < verboseLevel) {
+	G4cout << "For " << particle->GetParticleName() 
+	       << " index= " << i << " data:\n" << " E1peak=" << e1peak 
+	       << " xs1= " << xs1peak << " E1deep=" << e1deep
+	       << " E2peak=" << e2peak << " xs2=" << xs2peak 
+	       << " E2deep=" << e2deep << G4endl;
       }
     }
     // second loop using base materials
-    for (i=0; i<n; ++i) {
-      pv = (*theLambdaTable)[i];
-      if(!pv){
+    for (size_t i=0; i<n; ++i) {
+      const G4PhysicsVector* pv = (*theLambdaTable)[i];
+      if (nullptr == pv) {
         G4int j = (*theDensityIdx)[i];
-        theEnergyOfCrossSectionMax[i] = theEnergyOfCrossSectionMax[j];
-        theCrossSectionMax[i] = (*theDensityFactor)[i]*theCrossSectionMax[j];
+	G4TwoPeaksXS* x = (*fXSpeaks)[i];
+	G4TwoPeaksXS* y = (*fXSpeaks)[j];
+	if(nullptr == x) { 
+	  x = new G4TwoPeaksXS(); 
+	  (*fXSpeaks)[i] = x;
+	}
+	x->e1peak = y->e1peak;
+	x->e1deep = y->e1deep;
+	x->e2peak = y->e2peak;
+	x->e2deep = y->e2deep;
       }
     }
   }
@@ -2180,23 +1848,16 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetSubLambdaTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetTwoPeaksXS(std::vector<G4TwoPeaksXS*>* ptr)
 {
-  theSubLambdaTable = p;
-  if(1 < verboseLevel) {
-    G4cout << "### Set SebLambda table " << p 
-           << " for " << particle->GetParticleName()
-           << " and process " << GetProcessName() << G4endl;
-  }
+  fXSpeaks = ptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4Element* G4VEnergyLossProcess::GetCurrentElement() const
 {
-  const G4Element* elm = nullptr;
-  if(currentModel) { elm = currentModel->GetCurrentElement(); }
-  return elm;
+  return (nullptr != currentModel) ? currentModel->GetCurrentElement() : nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -2218,12 +1879,11 @@ void G4VEnergyLossProcess::SetCrossSectionBiasingFactor(G4double f,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
-G4VEnergyLossProcess::ActivateForcedInteraction(G4double length, 
-                                                const G4String& region,
-                                                G4bool flag)
+void G4VEnergyLossProcess::ActivateForcedInteraction(G4double length, 
+                                                     const G4String& region,
+                                                     G4bool flag)
 {
-  if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+  if(nullptr == biasManager) { biasManager = new G4EmBiasingManager(); }
   if(1 < verboseLevel) {
     G4cout << "### ActivateForcedInteraction: for " 
            << " process " << GetProcessName()
@@ -2244,12 +1904,11 @@ G4VEnergyLossProcess::ActivateSecondaryBiasing(const G4String& region,
                                                G4double energyLimit)
 {
   if (0.0 <= factor) {
-
     // Range cut can be applied only for e-
     if(0.0 == factor && secondaryParticle != G4Electron::Electron())
       { return; }
 
-    if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+    if(nullptr == biasManager) { biasManager = new G4EmBiasingManager(); }
     biasManager->ActivateSecondaryBiasing(region, factor, energyLimit);
     if(1 < verboseLevel) {
       G4cout << "### ActivateSecondaryBiasing: for " 
@@ -2337,7 +1996,7 @@ void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::PrintWarning(G4String tit, G4double val)
+void G4VEnergyLossProcess::PrintWarning(const G4String& tit, G4double val) const
 {
   G4String ss = "G4VEnergyLossProcess::" + tit; 
   G4ExceptionDescription ed;
@@ -2353,7 +2012,7 @@ void G4VEnergyLossProcess::PrintWarning(G4String tit, G4double val)
 
 void G4VEnergyLossProcess::ProcessDescription(std::ostream& out) const
 {
-  if(particle) { StreamInfo(out, *particle, true); }
+  if(nullptr != particle) { StreamInfo(out, *particle, true); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

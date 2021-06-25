@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 13, 2021 D. Sawkey (LXe-V10-07-01)
+- Get some refractive indices from new G4OpticalMaterialParameters file
+
+February 24, 2021 D. Sawkey (LXe-V10-07-00)
+- replace deprecated optical commands and parameters with new ones.
+
 November 5, 2020 D. Sawkey (LXe-V10-06-03)
 - Apply clang-format style
 - update macros

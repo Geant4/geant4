@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4bSteppingAction.cc
 /// \brief Implementation of the B4bSteppingAction class
 
@@ -46,7 +46,7 @@ B4bSteppingAction::B4bSteppingAction(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4bSteppingAction::~B4bSteppingAction()
-{ 
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,23 +57,23 @@ void B4bSteppingAction::UserSteppingAction(const G4Step* step)
 
   // get volume of the current step
   auto volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  
+
   // energy deposit
   auto edep = step->GetTotalEnergyDeposit();
-  
+
   // step length
   G4double stepLength = 0.;
   if ( step->GetTrack()->GetDefinition()->GetPDGCharge() != 0. ) {
     stepLength = step->GetStepLength();
   }
-      
+
   auto runData = static_cast<B4bRunData*>
     (G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   if ( volume == fDetConstruction->GetAbsorberPV() ) {
     runData->Add(kAbs, edep, stepLength);
   }
-  
+
   if ( volume == fDetConstruction->GetGapPV() ) {
     runData->Add(kGap, edep, stepLength);
   }

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Definition
 ////////////////////////////////////////////////////////////////////////
@@ -54,21 +51,13 @@
 #define G4Scintillation_h 1
 
 #include "globals.hh"
-#include "templates.hh"
-#include "Randomize.hh"
-#include "G4Poisson.hh"
-#include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
-#include "G4Step.hh"
-#include "G4VRestDiscreteProcess.hh"
-#include "G4OpticalPhoton.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
-#include "G4PhysicsTable.hh"
-#include "G4MaterialPropertiesTable.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
-
 #include "G4EmSaturation.hh"
+#include "G4OpticalPhoton.hh"
+#include "G4VRestDiscreteProcess.hh"
+
+class G4PhysicsTable;
+class G4Step;
+class G4Track;
 
 // Class Description:
 // RestDiscrete Process - Generation of Scintillation Photons.
@@ -82,11 +71,9 @@ class G4Scintillation : public G4VRestDiscreteProcess
                            G4ProcessType type          = fElectromagnetic);
   ~G4Scintillation();
 
- private:
   G4Scintillation(const G4Scintillation& right) = delete;
   G4Scintillation& operator=(const G4Scintillation& right) = delete;
 
- public:
   // G4Scintillation Process has both PostStepDoIt (for energy
   // deposition of particles in flight) and AtRestDoIt (for energy
   // given to the medium by particles at rest)
@@ -94,6 +81,9 @@ class G4Scintillation : public G4VRestDiscreteProcess
   G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable', for any particle type except
   // for an 'opticalphoton' and for short-lived particles
+
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override {ProcessDescription(G4cout);};
 
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) override;
   // Build table at the right time
@@ -118,19 +108,15 @@ class G4Scintillation : public G4VRestDiscreteProcess
                                 const G4Step& aStep) override;
 
   G4double GetScintillationYieldByParticleType(const G4Track& aTrack,
-                                               const G4Step& aStep);
-  // Returns the number of scintillation photons calculated when
-  // scintillation depends on the particle type and energy
-  // deposited (includes nonlinear dependendency)
-  // DEPRECATED: to be removed in the next major release. Use the
-  // following instead.
-
-  G4double GetScintillationYieldByParticleType(const G4Track& aTrack,
                                                const G4Step& aStep,
                                                G4double& yield1,
                                                G4double& yield2,
                                                G4double& yield3);
   // allow multiple time constants with scint by particle type
+  // Returns the number of scintillation photons calculated when
+  // scintillation depends on the particle type and energy
+  // deposited (includes nonlinear dependendency) and updates the
+  // yields for each channel
 
   void SetTrackSecondariesFirst(const G4bool state);
   // If set, the primary particle tracking is interrupted and any
@@ -142,7 +128,7 @@ class G4Scintillation : public G4VRestDiscreteProcess
 
   void SetFiniteRiseTime(const G4bool state);
   // If set, the G4Scintillation process expects the user to have
-  // set the constant material property FAST/SLOWSCINTILLATIONRISETIME.
+  // set the constant material property SCINTILLATIONRISETIME{1,2,3}.
 
   G4bool GetFiniteRiseTime() const;
   // Returns the boolean flag for a finite scintillation rise time.
@@ -154,29 +140,6 @@ class G4Scintillation : public G4VRestDiscreteProcess
 
   G4double GetScintillationYieldFactor() const;
   // Returns the photon yield factor.
-
-  void SetScintillationExcitationRatio(const G4double ratio);
-  // Called to set the scintillation excitation ratio, needed when
-  // the scintillation level excitation is different for different
-  // types of particles. This overwrites the YieldRatio obtained
-  // from the G4MaterialPropertiesTable.
-  // DEPRECATED and will be removed in the next major release. Set
-  // the yields for different particles in material property table instead.
-
-  G4double GetScintillationExcitationRatio() const;
-  // Returns the scintillation level excitation ratio.
-  // DEPRECATED and will be removed in the next major release. Set
-  // the yields for different particles in material property table instead.
-
-  G4PhysicsTable* GetFastIntegralTable() const;
-  // Returns the address of the fast scintillation integral table.
-  // DEPRECATED and will be removed in the next major release. Use
-  // GetIntegralTable1() instead.
-
-  G4PhysicsTable* GetSlowIntegralTable() const;
-  // Returns the address of the slow scintillation integral table.
-  // DEPRECATED and will be removed in the next major release. Use
-  // GetIntegralTable3() instead.
 
   G4PhysicsTable* GetIntegralTable1() const;
   // Returns the address of scintillation integral table #1.
@@ -204,12 +167,6 @@ class G4Scintillation : public G4VRestDiscreteProcess
   // Return the boolean that determines the method of scintillation
   // production
 
-  void SetEnhancedTimeConstants(G4bool);
-  G4bool GetEnhancedTimeConstants() const;
-  // Starting with 10.7.beta, enable 3 time constants, either for
-  // all particles or by particle type.  The names of the material
-  // properties have been generalized from FAST and SLOW to 1, 2, 3.
-
   void SetScintillationTrackInfo(const G4bool trackType);
   // Call by the user to set the G4ScintillationTrackInformation
   // to scintillation photon track
@@ -230,21 +187,23 @@ class G4Scintillation : public G4VRestDiscreteProcess
   void DumpPhysicsTable() const;
   // Prints the fast and slow scintillation integral tables.
 
- protected:
+ private:
+
   G4PhysicsTable* fIntegralTable1;
   G4PhysicsTable* fIntegralTable2;
   G4PhysicsTable* fIntegralTable3;
 
- private:
-  G4bool fTrackSecondariesFirst;
-  G4bool fFiniteRiseTime;
-  G4double fYieldFactor;
-  G4double fExcitationRatio;
+  G4EmSaturation* fEmSaturation;
+  const G4ParticleDefinition* opticalphoton =
+    G4OpticalPhoton::OpticalPhotonDefinition();
+
+  G4int fNumPhotons;
+  
   G4bool fScintillationByParticleType;
   G4bool fScintillationTrackInfo;
   G4bool fStackingFlag;
-  G4int fNumPhotons;
-  G4bool fEnhancedTimeConstants;
+  G4bool fTrackSecondariesFirst;
+  G4bool fFiniteRiseTime;
 
 #ifdef G4DEBUG_SCINTILLATION
   G4double ScintTrackEDep, ScintTrackYield;
@@ -256,9 +215,6 @@ class G4Scintillation : public G4VRestDiscreteProcess
   // emission time distribution when there is a finite rise time
   G4double sample_time(G4double tau1, G4double tau2);
 
-  G4EmSaturation* fEmSaturation;
-  G4ParticleDefinition* opticalphoton =
-    G4OpticalPhoton::OpticalPhotonDefinition();
 };
 
 ////////////////////
@@ -283,38 +239,6 @@ inline void G4Scintillation::SetFiniteRiseTime(const G4bool state)
 inline G4bool G4Scintillation::GetFiniteRiseTime() const
 {
   return fFiniteRiseTime;
-}
-
-inline void G4Scintillation::SetScintillationYieldFactor(
-  const G4double yieldfactor)
-{
-  fYieldFactor = yieldfactor;
-}
-
-inline G4double G4Scintillation::GetScintillationYieldFactor() const
-{
-  return fYieldFactor;
-}
-
-inline void G4Scintillation::SetScintillationExcitationRatio(
-  const G4double ratio)
-{
-  fExcitationRatio = ratio;
-}
-
-inline G4double G4Scintillation::GetScintillationExcitationRatio() const
-{
-  return fExcitationRatio;
-}
-
-inline G4PhysicsTable* G4Scintillation::GetSlowIntegralTable() const
-{
-  return fIntegralTable3;
-}
-
-inline G4PhysicsTable* G4Scintillation::GetFastIntegralTable() const
-{
-  return fIntegralTable1;
 }
 
 inline G4PhysicsTable* G4Scintillation::GetIntegralTable1() const
@@ -347,16 +271,6 @@ inline G4EmSaturation* G4Scintillation::GetSaturation() const
 inline G4bool G4Scintillation::GetScintillationByParticleType() const
 {
   return fScintillationByParticleType;
-}
-
-inline void G4Scintillation::SetEnhancedTimeConstants(G4bool val)
-{
-  fEnhancedTimeConstants = val;
-}
-
-inline G4bool G4Scintillation::GetEnhancedTimeConstants() const
-{
-  return fEnhancedTimeConstants;
 }
 
 inline void G4Scintillation::SetScintillationTrackInfo(const G4bool trackType)

@@ -39,18 +39,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4LambdaInelasticProcess.hh"
-#include "G4AntiLambdaInelasticProcess.hh"
-#include "G4SigmaMinusInelasticProcess.hh"
-#include "G4AntiSigmaMinusInelasticProcess.hh"
-#include "G4SigmaPlusInelasticProcess.hh"
-#include "G4AntiSigmaPlusInelasticProcess.hh"
-#include "G4XiMinusInelasticProcess.hh"
-#include "G4AntiXiMinusInelasticProcess.hh"
-#include "G4XiZeroInelasticProcess.hh"
-#include "G4AntiXiZeroInelasticProcess.hh"
-#include "G4OmegaMinusInelasticProcess.hh"
-#include "G4AntiOmegaMinusInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4CrossSectionInelastic.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4HadronicParameters.hh"
@@ -99,91 +88,18 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder( G4bool quasiElastic ) {
 G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder() {}
 
 
-void G4HyperonFTFPBuilder::Build( G4LambdaInelasticProcess* aP ) {
-  theHyperonFTFP->SetMinEnergy( theMin );
-  theHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theBertini );
-  aP->RegisterMe( theHyperonFTFP );
+void G4HyperonFTFPBuilder::Build( G4HadronInelasticProcess* aP ) {
+  if ( aP->GetParticleDefinition()  &&  aP->GetParticleDefinition()->GetBaryonNumber() < 0 ) {
+    // Anti-hyperon
+    theAntiHyperonFTFP->SetMaxEnergy( theMax );
+    aP->RegisterMe( theAntiHyperonFTFP );
+  } else {
+    // Hyperon
+    theHyperonFTFP->SetMinEnergy( theMin );
+    theHyperonFTFP->SetMaxEnergy( theMax );
+    aP->RegisterMe( theBertini );
+    aP->RegisterMe( theHyperonFTFP );
+  }
   aP->AddDataSet( theInelasticCrossSection );
 }
 
-void G4HyperonFTFPBuilder::Build( G4AntiLambdaInelasticProcess* aP ) {
-  theAntiHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theAntiHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}   
-
-
-void G4HyperonFTFPBuilder::Build( G4SigmaMinusInelasticProcess* aP ) {
-  theHyperonFTFP->SetMinEnergy( theMin );
-  theHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theBertini );
-  aP->RegisterMe( theHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonFTFPBuilder::Build( G4AntiSigmaMinusInelasticProcess* aP ) {
-  theAntiHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theAntiHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonFTFPBuilder::Build( G4SigmaPlusInelasticProcess* aP ) {
-  theHyperonFTFP->SetMinEnergy( theMin );
-  theHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theBertini );
-  aP->RegisterMe( theHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonFTFPBuilder::Build( G4AntiSigmaPlusInelasticProcess* aP ) {
-  theAntiHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theAntiHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonFTFPBuilder::Build( G4XiMinusInelasticProcess* aP ) {
-  theHyperonFTFP->SetMinEnergy( theMin );
-  theHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theBertini );
-  aP->RegisterMe( theHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonFTFPBuilder::Build( G4AntiXiMinusInelasticProcess* aP ) {
-  theAntiHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theAntiHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonFTFPBuilder::Build( G4XiZeroInelasticProcess* aP ) {
-  theHyperonFTFP->SetMinEnergy( theMin );
-  theHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theBertini );
-  aP->RegisterMe( theHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonFTFPBuilder::Build( G4AntiXiZeroInelasticProcess* aP ) {
-  theAntiHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theAntiHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-
-void G4HyperonFTFPBuilder::Build( G4OmegaMinusInelasticProcess* aP ) {
-  theHyperonFTFP->SetMinEnergy( theMin );
-  theHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theBertini );
-  aP->RegisterMe( theHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}
-
-void G4HyperonFTFPBuilder::Build( G4AntiOmegaMinusInelasticProcess* aP ) {
-  theAntiHyperonFTFP->SetMaxEnergy( theMax );
-  aP->RegisterMe( theAntiHyperonFTFP );
-  aP->AddDataSet( theInelasticCrossSection );
-}

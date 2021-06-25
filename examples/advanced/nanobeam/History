@@ -7,6 +7,9 @@
 
                        Package History file
                        --------------------
+24 May 2021 -  B. Morgan (nanobeam-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 15 Nov 2020 - S. Guatelli   tag nanobeam-V10-06-01
 - Migration to G4RunManagerFactory
 

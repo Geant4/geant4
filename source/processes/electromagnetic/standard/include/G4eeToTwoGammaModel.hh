@@ -64,28 +64,27 @@ public:
   explicit G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0,
                                const G4String& nam = "eplus2gg");
 
-  virtual ~G4eeToTwoGammaModel();
+  ~G4eeToTwoGammaModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
   
   virtual G4double ComputeCrossSectionPerElectron(G4double kinEnergy); 
   
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A = 0., 
-                                      G4double cutEnergy = 0.,
-                                      G4double maxEnergy = DBL_MAX) override;
+  G4double ComputeCrossSectionPerAtom(
+                                 const G4ParticleDefinition*,
+                                 G4double kinEnergy, 
+                                 G4double Z, 
+                                 G4double A = 0., 
+                                 G4double cutEnergy = 0.,
+                                 G4double maxEnergy = DBL_MAX) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy = 0.0,
-					 G4double maxEnergy = DBL_MAX) override;
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy = 0.0,
+				 G4double maxEnergy = DBL_MAX) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
@@ -98,7 +97,7 @@ public:
 private:
 
   G4double pi_rcl2;
-  G4ParticleDefinition*  theGamma;
+  const G4ParticleDefinition* theGamma;
   G4ParticleChangeForGamma* fParticleChange;
 
   static G4bool fSampleAtomicPDF;

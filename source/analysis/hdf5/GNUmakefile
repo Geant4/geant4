@@ -19,7 +19,7 @@ endif
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/analysis/g4tools/include \
+            -I$(G4BASE)/externals/g4tools/include \
             -I$(G4BASE)/analysis/management/include \
             -I$(G4BASE)/analysis/hntools/include
 

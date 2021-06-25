@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4Tree
-# Package: Geant4.src.G4visualization.G4Tree
-#------------------------------------------------------------------------------
+# - G4Tree module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4Tree
-  HEADERS
+geant4_add_module(G4Tree
+  PUBLIC_HEADERS
     G4ASCIITree.hh
     G4ASCIITreeMessenger.hh
     G4ASCIITreeSceneHandler.hh
@@ -23,34 +18,17 @@ geant4_define_module(NAME G4Tree
     G4ASCIITreeViewer.cc
     G4VTree.cc
     G4VTreeSceneHandler.cc
-    G4VTreeViewer.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4detector
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hits
-    G4intercoms
-    G4materials
-    G4modeling
-    G4navigation
-    G4partman
-    G4specsolids
-    G4track
-    G4vis_management
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4modeling
-    G4particles
-    G4track
-    G4vis_management
-)
+    G4VTreeViewer.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4Tree
+  PUBLIC
+    G4modeling
+    G4intercoms
+    G4vis_management
+  PRIVATE
+    G4graphics_reps
+    G4geometrymng
+    G4materials
+    G4navigation
+    G4globman
+    G4detector)

@@ -56,12 +56,9 @@
 #include "G4ExtDEDXTable.hh" 
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsVectorType.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4PhysicsLnVector.hh"
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -435,8 +432,7 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
       ifilestream.close();
       return false;
     } 
-
-    physicsVector -> SetSpline(true);
+    physicsVector -> FillSecondDerivatives();
 
     // Retrieved vector is added to material store
     if( !AddPhysicsVector(physicsVector, (G4int)atomicNumberIon, 
@@ -457,32 +453,20 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
 
 G4PhysicsVector* G4ExtDEDXTable::CreatePhysicsVector(G4int vectorType) {
 
-  G4PhysicsVector* physicsVector = 0;
+  G4PhysicsVector* physicsVector = nullptr;
 
   switch (vectorType) {
 
   case T_G4PhysicsLinearVector: 
-    physicsVector = new G4PhysicsLinearVector();
+    physicsVector = new G4PhysicsLinearVector(true);
     break;
 
   case T_G4PhysicsLogVector: 
-    physicsVector = new G4PhysicsLogVector();
-    break;
-
-  case T_G4PhysicsLnVector: 
-    physicsVector = new G4PhysicsLnVector();
+    physicsVector = new G4PhysicsLogVector(true);
     break;
 
   case T_G4PhysicsFreeVector: 
-    physicsVector = new G4PhysicsFreeVector();
-    break;
-
-  case T_G4PhysicsOrderedFreeVector: 
-    physicsVector = new G4PhysicsOrderedFreeVector();
-    break;
-
-  case T_G4LPhysicsFreeVector: 
-    physicsVector = new G4LPhysicsFreeVector();
+    physicsVector = new G4PhysicsFreeVector(true);
     break;
   
   default:
@@ -502,7 +486,7 @@ G4int G4ExtDEDXTable::FindAtomicNumberElement(
   G4IonDEDXMapElem::iterator iter = dedxMapElements.begin();
   G4IonDEDXMapElem::iterator iter_end = dedxMapElements.end();
   
-  for(;iter != iter_end; iter++) {
+  for(;iter != iter_end; ++iter) {
 
      if( (*iter).second == physicsVector ) {
 
@@ -521,7 +505,7 @@ void G4ExtDEDXTable::ClearTable() {
   G4IonDEDXMapMat::iterator iterMat = dedxMapMaterials.begin();
   G4IonDEDXMapMat::iterator iterMat_end = dedxMapMaterials.end();
 
-  for(;iterMat != iterMat_end; iterMat++) { 
+  for(;iterMat != iterMat_end; ++iterMat) { 
 
     G4PhysicsVector* vec = iterMat -> second;
 
@@ -547,7 +531,7 @@ void G4ExtDEDXTable::DumpMap() {
          << "Atomic nmb material"
          << G4endl;
 
-  for(;iterMat != iterMat_end; iterMat++) {
+  for(;iterMat != iterMat_end; ++iterMat) {
       G4IonDEDXKeyMat key = iterMat -> first;
       G4PhysicsVector* physicsVector = iterMat -> second; 
 

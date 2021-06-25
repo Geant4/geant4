@@ -149,7 +149,7 @@ void PhysicsList::ConstructProcess()
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  StepMax* stepMaxProcess = new StepMax(fMessenger);
+  StepMax* stepMaxProcess = new StepMax();
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();

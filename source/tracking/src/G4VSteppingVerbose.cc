@@ -37,6 +37,7 @@
 #include "G4ParticleDefinition.hh"
 
 G4ThreadLocal G4VSteppingVerbose* G4VSteppingVerbose::fInstance = nullptr;
+G4VSteppingVerbose* G4VSteppingVerbose::fMasterInstance = nullptr;
 G4ThreadLocal G4int G4VSteppingVerbose::Silent = 0;
 G4ThreadLocal G4int G4VSteppingVerbose::SilentStepInfo = 0;
 
@@ -50,6 +51,8 @@ G4VSteppingVerbose::G4VSteppingVerbose()
                 "Tracking0014", FatalException,
                 "Only one SteppingVerbose class can be instantiated.");
   }
+  fInstance = this;
+  if(!fMasterInstance) fMasterInstance = this;
 }
 
 //////////////////////////////////////////////////
@@ -59,6 +62,14 @@ G4VSteppingVerbose::~G4VSteppingVerbose()
   fInstance = nullptr;
 }
 
+//////////////////////////////////////////////////////////////////
+G4VSteppingVerbose* G4VSteppingVerbose::Clone()
+//////////////////////////////////////////////////////////////////
+{
+  G4Exception("G4VSteppingVerbose::Clone","TRKING000",FatalException,
+    "Base class method must not be invoked.");
+  return nullptr;
+}
 //////////////////////////////////////////////////////////////////
 void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
 //////////////////////////////////////////////////////////////////
@@ -135,14 +146,17 @@ void G4VSteppingVerbose::CopyState()
   fGPILSelection = fManager->GetfGPILSelection();
 }
 
-void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* Instance)
-{
-  fInstance = Instance;
-}
+void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* /*Instance*/)
+{;}
 
 G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
 {
   return fInstance;
+}
+
+G4VSteppingVerbose* G4VSteppingVerbose::GetMasterInstance()
+{
+  return fMasterInstance;
 }
 
 G4int G4VSteppingVerbose::GetSilent()

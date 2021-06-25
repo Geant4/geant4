@@ -47,23 +47,19 @@ class PhysicsList: public G4VModularPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList();
+   ~PhysicsList() override;
 
-    virtual void ConstructParticle();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
         
     void AddPhysicsList(const G4String& name);
 
-    virtual void ConstructProcess();
-
     void AddTrackingCut();       
 
-  protected:
-    virtual void SetCuts();
-
-
   private:       
-    G4String                      fEmName;
-    G4VPhysicsConstructor*        fEmPhysicsList;    
+    G4String               fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList;
+    G4VPhysicsConstructor* fRadDecay;
     
     PhysicsListMessenger*  fMessenger;
 };

@@ -111,11 +111,11 @@ void PhysListEmStandard_SS::ConstructProcess()
       //electron
       
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetEmModel(new MyMollerBhabhaModel, 1);
+      eIoni->SetEmModel(new MyMollerBhabhaModel);
                          
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eCoulombScatteringModel* csmod = new G4eCoulombScatteringModel();
-      cs->SetEmModel(csmod, 1);
+      cs->SetEmModel(csmod);
       pmanager->AddProcess(cs,     -1, -1, 1);
       pmanager->AddProcess(eIoni,  -1,  1, 2);
             

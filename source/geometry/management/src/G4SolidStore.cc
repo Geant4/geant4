@@ -23,15 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4SolidStore implementation for singleton container
+// G4SolidStore implementation
 //
-// 18.04.01, G.Cosmo - Migrated to STL vector
-// 10.07.95, P.Kent - Initial version
+// 10.07.95, P.Kent, G.Cosmo
 // --------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4SolidStore.hh"
 #include "G4GeometryManager.hh"
+
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex mapMutex = G4MUTEX_INITIALIZER;
+}
 
 // ***************************************************************************
 // Static class variables
@@ -81,7 +87,7 @@ void G4SolidStore::Clean()
   //
   locked = true;  
 
-  size_t i = 0;
+  std::size_t i = 0;
   G4SolidStore* store = GetInstance();
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -101,6 +107,7 @@ void G4SolidStore::Clean()
     { G4cout << i-1 << " solids deleted !" << G4endl; }
 #endif
 
+  store->bmap.clear(); store->mvalid = false;
   locked = false;
   store->clear();
 }
@@ -116,13 +123,53 @@ void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
 }
 
 // ***************************************************************************
+// Bring contents of internal map up to date and reset validity flag
+// ***************************************************************************
+//
+void G4SolidStore::UpdateMap()
+{
+  G4AutoLock l(&mapMutex);  // to avoid thread contention at initialisation
+  if (mvalid) return;
+  bmap.clear();
+  for(auto pos=GetInstance()->cbegin(); pos!=GetInstance()->cend(); ++pos)
+  {
+    const G4String& sol_name = (*pos)->GetName();
+    auto it = bmap.find(sol_name);
+    if (it != bmap.cend())
+    {
+      it->second.push_back(*pos);
+    }
+    else
+    {
+      std::vector<G4VSolid*> sol_vec { *pos };
+      bmap.insert(std::make_pair(sol_name, sol_vec));
+    }
+  }
+  mvalid = true;
+  l.unlock();
+}
+
+// ***************************************************************************
 // Add Solid to container
 // ***************************************************************************
 //
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
-  GetInstance()->push_back(pSolid);
-  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
+  G4SolidStore* store = GetInstance();
+  store->push_back(pSolid);
+  const G4String& sol_name = pSolid->GetName();
+  auto it = store->bmap.find(sol_name);
+  if (it != store->bmap.cend())
+  {
+    it->second.push_back(pSolid);
+  }
+  else
+  {
+    std::vector<G4VSolid*> sol_vec { pSolid };
+    store->bmap.insert(std::make_pair(sol_name, sol_vec));
+  }
+  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  store->mvalid = true;
 }
 
 // ***************************************************************************
@@ -131,15 +178,37 @@ void G4SolidStore::Register(G4VSolid* pSolid)
 //
 void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
+  G4SolidStore* store = GetInstance();
   if (!locked)    // Do not de-register if locked !
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    for (auto i=GetInstance()->crbegin(); i!=GetInstance()->crend(); ++i)
+    for (auto i=store->crbegin(); i!=store->crend(); ++i)
     {
       if (**i==*pSolid)
       {
-        GetInstance()->erase(std::next(i).base());
+        store->erase(std::next(i).base());
+        store->mvalid = false;
         break;
+      }
+    }
+    const G4String& sol_name = pSolid->GetName();
+    auto it = store->bmap.find(sol_name);
+    if (it != store->bmap.cend())
+    {
+      if (it->second.size() > 1)
+      {
+        for (auto i=it->second.cbegin(); i!=it->second.cend(); ++i)
+        {
+          if (**i==*pSolid)
+          {
+            it->second.erase(i);
+            break;
+          }
+        }
+      }
+      else
+      {
+        store->bmap.erase(it);
       }
     }
   }
@@ -151,17 +220,29 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 //
 G4VSolid* G4SolidStore::GetSolid(const G4String& name, G4bool verbose) const
 {
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
+  G4SolidStore* store = GetInstance();
+  if (!store->mvalid)  { store->UpdateMap(); }
+  auto pos = store->bmap.find(name);
+  if(pos != store->bmap.cend())
   {
-    if ((*i)->GetName() == name) { return *i; }
+    if ((verbose) && (pos->second.size()>1))
+    {
+      std::ostringstream message;
+      message << "There exists more than ONE solid in store named: "
+              << name << "!" << G4endl
+              << "Returning the first found.";
+      G4Exception("G4SolidStore::GetSolid()",
+                  "GeomMgt1001", JustWarning, message);
+    }
+    return pos->second[0];
   }
   if (verbose)
   {
-     std::ostringstream message;
-     message << "Solid " << name << " not found in store !" << G4endl
-             << "Returning NULL pointer.";
-     G4Exception("G4SolidStore::GetSolid()",
-                 "GeomMgt1001", JustWarning, message);
+    std::ostringstream message;
+    message << "Solid " << name << " not found in store !" << G4endl
+            << "Returning NULL pointer.";
+    G4Exception("G4SolidStore::GetSolid()",
+                "GeomMgt1001", JustWarning, message);
   }
   return nullptr;
 }

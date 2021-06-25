@@ -74,8 +74,7 @@ using namespace std;
 
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   : G4VEnergyLossProcess(name),
-    lowestKinEnergy(1.*GeV),
-    isInitialised(false)
+    lowestKinEnergy(1.*CLHEP::GeV)
 {
   SetProcessSubType(fBremsstrahlung);
   SetSecondaryParticle(G4Gamma::Gamma());
@@ -86,7 +85,7 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
 
 G4bool G4MuBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -104,25 +103,18 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
 				 const G4ParticleDefinition*,
 				 const G4ParticleDefinition*)
 {
-  if(!isInitialised) {
+  if(isInitialised) { return; }
+  isInitialised = true;
 
-    isInitialised = true;
+  if (nullptr == EmModel(0)) { SetEmModel(new G4MuBremsstrahlungModel()); }
 
-    if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
-
-    G4VEmFluctuationModel* fm = nullptr;
-    G4EmParameters* param = G4EmParameters::Instance();
-    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
-    EmModel()->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
-    AddEmModel(1, EmModel(), fm);
-  }
+  G4VEmFluctuationModel* fm = nullptr;
+  G4EmParameters* param = G4EmParameters::Instance();
+  EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
+  EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
+  EmModel(0)->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
+  AddEmModel(1, EmModel(0), fm);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4MuBremsstrahlung::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

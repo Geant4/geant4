@@ -4,8 +4,14 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13,7 +19,6 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-PhysicsList::SetCuts:CutLength : 1 um 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -70,270 +75,280 @@ Some /vis commands (optionally) take a string to specify colour.
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
             UrbanMsc : Emin=    1 MeV Emax=  100 TeV Nbins=56   1 MeV - 100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e-  SubType=2
+eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+        MollerBhabha : Emin=    0 meV Emax=  100 TeV
       ===== EM models for the G4Region  Target ======
         MollerBhabha : Emin=    1 MeV Emax=  100 TeV
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
+DNAChampionElasticModel : Emin=    0 meV Emax=    1 MeV
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
+DNABornExcitationModel : Emin=    0 meV Emax=    1 MeV
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNABornIonisationModel : Emin=    0 eV  Emax=    1 MeV  deltaBorn
+DNABornIonisationModel : Emin=    0 meV Emax=    1 MeV  deltaBorn
 
 e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
+DNAMeltonAttachmentModel : Emin=    0 meV Emax=   13 eV 
 
 e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
+DNASancheExcitationModel : Emin=    0 meV Emax=  100 eV 
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+        WentzelVIUni : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
         WentzelVIUni : Emin=    1 MeV Emax=  100 TeV Nbins=56   1 MeV - 100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-CoulombScat:  for proton, integral:1  SubType=1 BuildTable=1
+CoulombScat:  for proton XStype:3 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+  eCoulombScattering : Emin=    0 meV Emax=  100 TeV
       ===== EM models for the G4Region  Target ======
   eCoulombScattering : Emin=    1 MeV Emax=  100 TeV
 
-hIoni:  for proton  SubType=2
+hIoni:  for proton  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 meV Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
       ===== EM models for the G4Region  Target ======
           BetheBloch : Emin=  9.9 MeV Emax=  100 TeV
 
 proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  500 keV
 DNABornExcitationModel : Emin=  500 keV Emax=   10 MeV
 
 proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=  500 keV  deltaRudd
+DNARuddIonisationModel : Emin=    0 meV Emax=  500 keV  deltaRudd
 DNABornIonisationModel : Emin=  500 keV Emax=   10 MeV  deltaBorn
 
 proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=   10 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 meV Emax=   10 MeV
 
 msc:  for GenericIon  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-ionIoni:  for GenericIon  SubType=2
+ionIoni:  for GenericIon  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
       Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=    2 MeV
+            BraggIon : Emin=    0 meV Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
 
 msc:  for alpha  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-            UrbanMsc : Emin=    1 MeV Emax=  100 TeV Nbins=56   1 MeV - 100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+            UrbanMsc : Emin=    1 MeV Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-ionIoni:  for alpha  SubType=2
+ionIoni:  for alpha  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon : Emin=    0 eV  Emax=7.9452 MeV
+            BraggIon : Emin=    0 meV Emax=7.9452 MeV
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
       ===== EM models for the G4Region  Target ======
           BetheBloch : Emin=  9.9 MeV Emax=  100 TeV
 
 alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=   10 MeV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=   10 MeV
 
 alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=   10 MeV  deltaRudd
+DNARuddIonisationModel : Emin=    0 meV Emax=   10 MeV  deltaRudd
 
 alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=   10 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 meV Emax=   10 MeV
 
 msc:  for alpha+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-            UrbanMsc : Emin=    1 MeV Emax=  100 TeV Nbins=56   1 MeV - 100 TeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+            UrbanMsc : Emin=    1 MeV Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for alpha+  XStype:1  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 meV Emax=7.94528 MeV
+          BetheBloch : Emin=7.94528 MeV Emax=  100 TeV
+      ===== EM models for the G4Region  Target ======
+          BetheBloch : Emin=  9.9 MeV Emax=  100 TeV
 
 alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=   10 MeV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=   10 MeV
 
 alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=   10 MeV  deltaRudd
+DNARuddIonisationModel : Emin=    0 meV Emax=   10 MeV  deltaRudd
 
 alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=   10 MeV
+DNADingfelderChargeDecreaseModel : Emin=    0 meV Emax=   10 MeV
 
 alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=   10 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 meV Emax=   10 MeV
 
 helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=   10 MeV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=   10 MeV
 
 helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=   10 MeV  deltaRudd
+DNARuddIonisationModel : Emin=    0 meV Emax=   10 MeV  deltaRudd
 
 helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=   10 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 meV Emax=   10 MeV
 
 hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+DNAMillerGreenExcitationModel : Emin=    0 meV Emax=  500 keV
 
 hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel : Emin=    0 eV  Emax=   10 MeV  deltaRudd
+DNARuddIonisationModel : Emin=    0 meV Emax=   10 MeV  deltaRudd
 
 hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+  DNAIonElasticModel : Emin=    0 meV Emax=    1 MeV
 
 hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel : Emin=    0 eV  Emax=  100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+          DummyModel : Emin=    0 meV Emax=  100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
       ===== EM models for the G4Region  Target ======
-DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=   10 MeV
+DNADingfelderChargeIncreaseModel : Emin=    0 meV Emax=   10 MeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -367,7 +382,7 @@ Index : 0     used in the geometry : Yes
 Index : 1     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 meV
  Region(s) which use this couple : 
     Target
 
@@ -384,12 +399,12 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=29.590000s Real=32.063282s Sys=0.020000s
+  User=23.930000s Real=24.631174s Sys=0.000000s
 Number and type of particles created outside region "Target" :
-N e- : 753
+N e- : 735
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 45410
+N e- : 45932
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -399,20 +414,24 @@ G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
 Total navigation history collections cleaned: 6
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 1.09 MB
+Pool ID '17G4DynamicParticle', size : 1.08 MB
 Pool ID '7G4Track', size : 2.17 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
@@ -423,3 +442,4 @@ G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

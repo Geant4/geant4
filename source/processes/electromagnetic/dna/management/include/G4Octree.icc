@@ -1,0 +1,340 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Author: HoangTRAN, 20/2/2019
+
+#define OCTREE G4Octree<Iterator,Extractor,Point>
+#define OCTREE_TEMPLATE typename Iterator, class Extractor,typename Point
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+G4ThreadLocal G4Allocator<OCTREE>* OCTREE::fgAllocator = nullptr;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+OCTREE::G4Octree()
+    : functor_(Extractor())
+    , head_(nullptr)
+    , size_(0)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+OCTREE::G4Octree(Iterator begin, Iterator end) 
+    : G4Octree(begin,end,Extractor())
+{
+    head_ = nullptr;
+    size_ = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+OCTREE::G4Octree(Iterator begin, Iterator end, Extractor f)
+    : functor_(f),head_(nullptr),size_(0)
+{
+    std::vector<std::pair<Iterator,Point>> v;
+    for(auto it=begin;it!=end;++it)
+    {
+        v.push_back(std::pair<Iterator,Point>(it,functor_(it)));
+    }
+    size_ = v.size();
+    head_ = new Node(v);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+OCTREE::G4Octree(OCTREE::tree_type&& rhs)
+    : functor_(rhs.functor_)
+    , head_(rhs.head_)
+    , size_(rhs.size_)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+void OCTREE::swap(OCTREE::tree_type& rhs) 
+{
+    std::swap(head_, rhs.head_);
+    std::swap(functor_, rhs.functor_);
+    std::swap(size_, rhs.size_);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+typename OCTREE::tree_type& OCTREE::operator=(typename OCTREE::tree_type rhs)
+{
+    swap(rhs);
+    return *this;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+typename OCTREE::tree_type& OCTREE::operator=(typename OCTREE::tree_type&& rhs) 
+{
+    swap(rhs);
+    return *this;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+OCTREE::~G4Octree()
+{
+    delete head_;
+}
+
+template <OCTREE_TEMPLATE>
+size_t OCTREE::size() const
+{
+    return size_;
+}
+
+template <OCTREE_TEMPLATE>
+OCTREE::Node::Node(const NodeVector& input_values)
+    : Node(input_values,
+         G4DNABoundingBox(InnerIterator(input_values.begin()),
+                        InnerIterator(input_values.end())),
+            0)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+OCTREE::Node::Node(
+    const NodeVector& input_values,
+    const G4DNABoundingBox& box,
+    size_t current_depth):
+    fpValue(nullptr),
+    fBigVolume(box),
+    fNodeType(DEFAULT)
+{
+    if (current_depth > max_depth)
+    {
+        init_max_depth_leaf(input_values);
+    }
+    else if (input_values.size() <= max_per_node)
+    {
+        init_leaf(input_values);
+    }
+    else
+    {
+        init_internal(input_values, current_depth);
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+template <OCTREE_TEMPLATE>
+OCTREE::Node::~Node()
+{
+    if (fNodeType == NodeTypes::INTERNAL)
+    {
+        childNodeArray& children = *static_cast<childNodeArray*>(fpValue);
+        for (size_t i = 0; i < 8; ++i)
+        {
+            if (children[i] != nullptr)
+            {
+                delete children[i];
+                children[i] = nullptr;
+            }
+        }
+        delete &children;
+    }
+    else if (fNodeType == NodeTypes::LEAF)
+    {
+        auto toDelete = static_cast<LeafValues*>(fpValue);
+        toDelete->size_ = 0;
+        delete static_cast<LeafValues*>(fpValue);
+    }
+    else if (fNodeType == NodeTypes::MAX_DEPTH_LEAF)
+    {
+        delete static_cast<NodeVector*>(fpValue);
+    }
+    fpValue = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+void OCTREE::Node::init_max_depth_leaf(
+    const NodeVector& input_values)
+{
+    fpValue = new NodeVector(input_values);
+    fNodeType = NodeTypes::MAX_DEPTH_LEAF;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+template <OCTREE_TEMPLATE>
+void OCTREE::Node::init_leaf(const NodeVector& input_values)
+{
+    std::array<std::pair<Iterator, Point>, max_per_node> a;
+    std::copy(input_values.begin(), input_values.end(), a.begin());
+    fpValue = new LeafValues{a, input_values.size()};
+    fNodeType = NodeTypes::LEAF;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+template <OCTREE_TEMPLATE>
+void OCTREE::Node::init_internal(
+    const NodeVector& input_values,
+    size_t current_depth)
+{
+    std::array<NodeVector, 8> childVectors;
+    std::array<G4DNABoundingBox, 8> boxes = fBigVolume.partition();
+    std::array<Node*, 8> children;
+    for (size_t child = 0; child < 8; ++child)
+    {
+        NodeVector& childVector = childVectors[child];
+        childVector.reserve(input_values.size()/8);
+        std::copy_if(input_values.begin(),input_values.end(),
+                    std::back_inserter(childVector),
+                [&boxes, child](const std::pair<Iterator, Point>& element)
+                -> G4bool
+        {
+            const Point& p = element.second;
+            return boxes[child].contains(p);
+        }
+        );
+        children[child] = childVector.empty()
+            ? nullptr
+            : new Node(childVector, boxes[child], ++current_depth);
+    }
+    fpValue = new std::array<Node*, 8>(children);
+    fNodeType = NodeTypes::INTERNAL;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+template <typename OutPutContainer>
+G4bool OCTREE::Node::radiusNeighbors(const Point& query, 
+                                    G4double radius,
+		                            OutPutContainer& resultIndices) const
+{
+    G4bool success = false;
+    G4double distance = 0;
+    if (fNodeType == NodeTypes::INTERNAL)
+    {
+        childNodeArray& children = *static_cast<childNodeArray*>(fpValue);
+        for (auto eachChild : children)
+        {
+            if (eachChild == nullptr)
+            {
+                continue;
+            }
+            if(!eachChild->fBigVolume.overlap(query,radius))
+            {
+                continue;
+            }
+            success = eachChild->radiusNeighbors(query, radius, resultIndices) || success;
+        }
+    }
+    else if (fNodeType == NodeTypes::LEAF)
+    {
+        if(fpValue != nullptr)
+        {
+            LeafValues& children = *static_cast<LeafValues*>(fpValue);
+            for (size_t i = 0; i < children.size_; ++i)
+            {
+                distance = (query - std::get<1>(children.values_[i])).mag();
+
+                if(distance != 0)
+                {
+                    if( distance < radius )//TODO: find another solution for this using boundingbox
+                    {
+                        resultIndices.push_back(std::make_pair(std::get<0>(children.values_[i]),distance));
+                        success = true;
+                    }
+                }
+            }
+        }
+    }
+    else if (fNodeType == NodeTypes::MAX_DEPTH_LEAF)
+    {
+        NodeVector& children = *static_cast<NodeVector*>(fpValue);
+        for (auto child : children)
+        {
+            const Point& point = std::get<1>(child);
+            //if (this->fBigVolume.contains(query, point, radius))
+            distance = (query - point).mag();
+            if( distance == 0. )
+            {
+                continue;
+            }
+            if( distance < radius )
+            {
+                if(distance == 0)
+                {
+                    throw std::runtime_error("distance == 0 => OCTREE::Node::radiusNeighbors : find itself");
+                }
+                Iterator resultIndex = std::get<0>(child);
+                resultIndices.push_back(std::make_pair(resultIndex,distance));
+                success = true;
+            }
+        }
+    }
+    else
+    {
+        throw std::runtime_error("fNodeType is not set : find itself");
+    }
+    return success;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+template <typename OutPutContainer>
+void OCTREE::radiusNeighbors(const Point& query,
+                             const G4double& radius,
+                             OutPutContainer& resultIndices) const
+{
+    resultIndices.clear();
+    if (head_ == nullptr) 
+    {
+         return;
+    }
+    head_->radiusNeighbors(query, radius, resultIndices);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+template <OCTREE_TEMPLATE>
+void* OCTREE::operator new(size_t)
+{
+    if (!fgAllocator) 
+    {
+        fgAllocator = new G4Allocator<OCTREE>;
+    }
+    return (void *) fgAllocator->MallocSingle();
+}
+
+template <OCTREE_TEMPLATE>
+void OCTREE::operator delete(void *a)
+{
+    fgAllocator->FreeSingle((OCTREE*)a);
+}

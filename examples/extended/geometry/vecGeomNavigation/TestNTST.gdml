@@ -1,0 +1,2465 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define/>
+
+  <materials>
+    <isotope N="28" Z="14" name="Si280x7f93d58e04b0">
+      <atom unit="g/mole" value="27.9769"/>
+    </isotope>
+    <isotope N="29" Z="14" name="Si290x7f93d58e0910">
+      <atom unit="g/mole" value="28.9765"/>
+    </isotope>
+    <isotope N="30" Z="14" name="Si300x7f93d58e0950">
+      <atom unit="g/mole" value="29.9738"/>
+    </isotope>
+    <element name="Si0x7f93d58e09b0">
+      <fraction n="0.922296077703922" ref="Si280x7f93d58e04b0"/>
+      <fraction n="0.0468319531680468" ref="Si290x7f93d58e0910"/>
+      <fraction n="0.0308719691280309" ref="Si300x7f93d58e0950"/>
+    </element>
+    <material name="Silicon0x7f93d58e07d0" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="173"/>
+      <D unit="g/cm3" value="2.33"/>
+      <fraction n="1" ref="Si0x7f93d58e09b0"/>
+    </material>
+    <isotope N="36" Z="18" name="Ar360x7f93d5a04800">
+      <atom unit="g/mole" value="35.9675"/>
+    </isotope>
+    <isotope N="38" Z="18" name="Ar380x7f93d5a04860">
+      <atom unit="g/mole" value="37.9627"/>
+    </isotope>
+    <isotope N="40" Z="18" name="Ar400x7f93d5a048b0">
+      <atom unit="g/mole" value="39.9624"/>
+    </isotope>
+    <element name="Ar0x7f93d5a04930">
+      <fraction n="0.003365" ref="Ar360x7f93d5a04800"/>
+      <fraction n="0.000632" ref="Ar380x7f93d5a04860"/>
+      <fraction n="0.996003" ref="Ar400x7f93d5a048b0"/>
+    </element>
+    <material name="ArgonGas0x7f93d441c8b0" state="gas">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="188"/>
+      <D unit="g/cm3" value="0.001782"/>
+      <fraction n="1" ref="Ar0x7f93d5a04930"/>
+    </material>
+  </materials>
+
+  <solids>
+    <trd lunit="mm" name="aWafer0x7f93d47222d0" x1="0.3" x2="0.3" y1="41.3" y2="41.3" z="42.4"/>
+    <trd lunit="mm" name="aWafer0x7f93d4722480" x1="0.3" x2="0.3" y1="49.414" y2="49.414" z="45.4"/>
+    <trd lunit="mm" name="aWafer0x7f93d4722630" x1="0.3" x2="0.3" y1="71.47" y2="71.47" z="43.9"/>
+    <trd lunit="mm" name="aWafer0x7f93d4722bd0" x1="0.3" x2="0.3" y1="43.3" y2="52.8" z="67.97"/>
+    <trd lunit="mm" name="aWafer0x7f93d47229f0" x1="0.3" x2="0.3" y1="52.5" y2="52.5" z="53.9"/>
+    <trd lunit="mm" name="aWafer0x7f93d4722810" x1="0.3" x2="0.3" y1="52.5" y2="52.5" z="67.55"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Svt_tube0x7f93d58e1b80" rmax="190" rmin="29" startphi="0" z="800"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4422940" rmax="260" rmin="250" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4422b80" rmax="270" rmin="260" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4422dc0" rmax="280" rmin="270" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4423020" rmax="300" rmin="280" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4423260" rmax="320" rmin="300" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d44234e0" rmax="330" rmin="320" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4423700" rmax="340" rmin="330" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4423940" rmax="350" rmin="340" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4423b80" rmax="370" rmin="350" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4423e40" rmax="380" rmin="370" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4424080" rmax="390" rmin="380" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d44242c0" rmax="410" rmin="390" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4424500" rmax="420" rmin="410" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4424740" rmax="430" rmin="420" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4424980" rmax="450" rmin="430" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4424bc0" rmax="460" rmin="450" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4424e00" rmax="480" rmin="460" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425140" rmax="490" rmin="480" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425350" rmax="500" rmin="490" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425590" rmax="520" rmin="500" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d44257d0" rmax="530" rmin="520" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425a10" rmax="540" rmin="530" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425c50" rmax="560" rmin="540" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425e90" rmax="570" rmin="560" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d44260d0" rmax="590" rmin="570" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4426310" rmax="600" rmin="590" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4426550" rmax="610" rmin="600" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4426790" rmax="620" rmin="610" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d44269d0" rmax="640" rmin="620" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4426c10" rmax="660" rmin="640" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4426e50" rmax="670" rmin="660" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4427090" rmax="680" rmin="670" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d44272d0" rmax="700" rmin="680" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4425040" rmax="710" rmin="700" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4427850" rmax="720" rmin="710" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4427a90" rmax="730" rmin="720" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4427cd0" rmax="750" rmin="730" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4427f10" rmax="760" rmin="750" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4428150" rmax="770" rmin="760" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Lay_tube0x7f93d4428390" rmax="780" rmin="770" startphi="0" z="5000"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="Dch_tube0x7f93d4422690" rmax="810" rmin="240" startphi="0" z="5000"/>
+    <box lunit="mm" name="expHall_box0x7f93d58e1030" x="20000" y="20000" z="40000"/>
+  </solids>
+
+  <structure>
+    <volume name="aWafer_log0x7f93d47223e0">
+      <materialref ref="Silicon0x7f93d58e07d0"/>
+      <solidref ref="aWafer0x7f93d47222d0"/>
+    </volume>
+    <volume name="aWafer_log0x7f93d4722590">
+      <materialref ref="Silicon0x7f93d58e07d0"/>
+      <solidref ref="aWafer0x7f93d4722480"/>
+    </volume>
+    <volume name="aWafer_log0x7f93d4722740">
+      <materialref ref="Silicon0x7f93d58e07d0"/>
+      <solidref ref="aWafer0x7f93d4722630"/>
+    </volume>
+    <volume name="aWafer_log0x7f93d4722ce0">
+      <materialref ref="Silicon0x7f93d58e07d0"/>
+      <solidref ref="aWafer0x7f93d4722bd0"/>
+    </volume>
+    <volume name="aWafer_log0x7f93d4722b00">
+      <materialref ref="Silicon0x7f93d58e07d0"/>
+      <solidref ref="aWafer0x7f93d47229f0"/>
+    </volume>
+    <volume name="aWafer_log0x7f93d4722920">
+      <materialref ref="Silicon0x7f93d58e07d0"/>
+      <solidref ref="aWafer0x7f93d4722810"/>
+    </volume>
+    <volume name="Svt_log0x7f93d58e1c80">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Svt_tube0x7f93d58e1b80"/>
+      <physvol name="WaferPos0x7f93d4722de0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4722de0_pos" unit="mm" x="33.2" y="-0.558" z="-36.921"/>
+        <rotation name="WaferPos0x7f93d4722de0_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d4722de0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4722eb0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4722eb0_pos" unit="mm" x="33.2" y="-0.558" z="5.536"/>
+        <rotation name="WaferPos0x7f93d4722eb0_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d4722eb0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4722f80">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4722f80_pos" unit="mm" x="33.2" y="-0.558" z="47.994"/>
+        <rotation name="WaferPos0x7f93d4722f80_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d4722f80_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723050">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723050_pos" unit="mm" x="33.2" y="-0.558" z="90.451"/>
+        <rotation name="WaferPos0x7f93d4723050_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d4723050_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723120">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723120_pos" unit="mm" x="17.083" y="28.473" z="-36.921"/>
+        <rotation name="WaferPos0x7f93d4723120_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d4723120_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723200">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723200_pos" unit="mm" x="17.083" y="28.473" z="5.536"/>
+        <rotation name="WaferPos0x7f93d4723200_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d4723200_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47232d0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d47232d0_pos" unit="mm" x="17.083" y="28.473" z="47.994"/>
+        <rotation name="WaferPos0x7f93d47232d0_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d47232d0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47233a0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d47233a0_pos" unit="mm" x="17.083" y="28.473" z="90.451"/>
+        <rotation name="WaferPos0x7f93d47233a0_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d47233a0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723470">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723470_pos" unit="mm" x="-16.117" y="29.031" z="-36.921"/>
+        <rotation name="WaferPos0x7f93d4723470_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d4723470_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723590">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723590_pos" unit="mm" x="-16.117" y="29.031" z="5.536"/>
+        <rotation name="WaferPos0x7f93d4723590_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d4723590_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723660">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723660_pos" unit="mm" x="-16.117" y="29.031" z="47.994"/>
+        <rotation name="WaferPos0x7f93d4723660_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d4723660_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723730">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723730_pos" unit="mm" x="-16.117" y="29.031" z="90.451"/>
+        <rotation name="WaferPos0x7f93d4723730_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d4723730_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47237d0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d47237d0_pos" unit="mm" x="-33.2" y="0.558" z="-36.921"/>
+        <rotation name="WaferPos0x7f93d47237d0_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d47237d0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723890">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723890_pos" unit="mm" x="-33.2" y="0.558" z="5.536"/>
+        <rotation name="WaferPos0x7f93d4723890_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d4723890_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723960">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723960_pos" unit="mm" x="-33.2" y="0.558" z="47.994"/>
+        <rotation name="WaferPos0x7f93d4723960_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d4723960_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723a30">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723a30_pos" unit="mm" x="-33.2" y="0.558" z="90.451"/>
+        <rotation name="WaferPos0x7f93d4723a30_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d4723a30_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723b00">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723b00_pos" unit="mm" x="-17.083" y="-28.473" z="-36.921"/>
+        <rotation name="WaferPos0x7f93d4723b00_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d4723b00_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723540">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723540_pos" unit="mm" x="-17.083" y="-28.473" z="5.536"/>
+        <rotation name="WaferPos0x7f93d4723540_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d4723540_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723d20">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723d20_pos" unit="mm" x="-17.083" y="-28.473" z="47.994"/>
+        <rotation name="WaferPos0x7f93d4723d20_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d4723d20_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723df0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723df0_pos" unit="mm" x="-17.083" y="-28.473" z="90.451"/>
+        <rotation name="WaferPos0x7f93d4723df0_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d4723df0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723ec0">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723ec0_pos" unit="mm" x="16.117" y="-29.031" z="-36.921"/>
+        <rotation name="WaferPos0x7f93d4723ec0_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d4723ec0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723f90">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4723f90_pos" unit="mm" x="16.117" y="-29.031" z="5.536"/>
+        <rotation name="WaferPos0x7f93d4723f90_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d4723f90_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724060">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4724060_pos" unit="mm" x="16.117" y="-29.031" z="47.994"/>
+        <rotation name="WaferPos0x7f93d4724060_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d4724060_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724130">
+        <volumeref ref="aWafer_log0x7f93d47223e0"/>
+        <position name="WaferPos0x7f93d4724130_pos" unit="mm" x="16.117" y="-29.031" z="90.451"/>
+        <rotation name="WaferPos0x7f93d4724130_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d4724130_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724200">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724200_pos" unit="mm" x="40.334" y="-1.652" z="-47.421"/>
+        <rotation name="WaferPos0x7f93d4724200_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d4724200_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47242d0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47242d0_pos" unit="mm" x="40.334" y="-1.652" z="-1.964"/>
+        <rotation name="WaferPos0x7f93d47242d0_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d47242d0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47243a0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47243a0_pos" unit="mm" x="40.334" y="-1.652" z="43.494"/>
+        <rotation name="WaferPos0x7f93d47243a0_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d47243a0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724470">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724470_pos" unit="mm" x="40.334" y="-1.652" z="88.951"/>
+        <rotation name="WaferPos0x7f93d4724470_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d4724470_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724540">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724540_pos" unit="mm" x="21.597" y="34.105" z="-47.421"/>
+        <rotation name="WaferPos0x7f93d4724540_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d4724540_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724610">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724610_pos" unit="mm" x="21.597" y="34.105" z="-1.964"/>
+        <rotation name="WaferPos0x7f93d4724610_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d4724610_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47246e0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47246e0_pos" unit="mm" x="21.597" y="34.105" z="43.494"/>
+        <rotation name="WaferPos0x7f93d47246e0_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d47246e0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47247b0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47247b0_pos" unit="mm" x="21.597" y="34.105" z="88.951"/>
+        <rotation name="WaferPos0x7f93d47247b0_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d47247b0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724880">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724880_pos" unit="mm" x="-18.737" y="35.756" z="-47.421"/>
+        <rotation name="WaferPos0x7f93d4724880_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d4724880_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4723bd0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4723bd0_pos" unit="mm" x="-18.737" y="35.756" z="-1.964"/>
+        <rotation name="WaferPos0x7f93d4723bd0_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d4723bd0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724b20">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724b20_pos" unit="mm" x="-18.737" y="35.756" z="43.494"/>
+        <rotation name="WaferPos0x7f93d4724b20_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d4724b20_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724bf0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724bf0_pos" unit="mm" x="-18.737" y="35.756" z="88.951"/>
+        <rotation name="WaferPos0x7f93d4724bf0_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d4724bf0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724cc0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724cc0_pos" unit="mm" x="-40.334" y="1.652" z="-47.421"/>
+        <rotation name="WaferPos0x7f93d4724cc0_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d4724cc0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724d90">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724d90_pos" unit="mm" x="-40.334" y="1.652" z="-1.964"/>
+        <rotation name="WaferPos0x7f93d4724d90_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d4724d90_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724e60">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724e60_pos" unit="mm" x="-40.334" y="1.652" z="43.494"/>
+        <rotation name="WaferPos0x7f93d4724e60_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d4724e60_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724f30">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4724f30_pos" unit="mm" x="-40.334" y="1.652" z="88.951"/>
+        <rotation name="WaferPos0x7f93d4724f30_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d4724f30_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725000">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4725000_pos" unit="mm" x="-21.597" y="-34.105" z="-47.421"/>
+        <rotation name="WaferPos0x7f93d4725000_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d4725000_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47250d0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47250d0_pos" unit="mm" x="-21.597" y="-34.105" z="-1.964"/>
+        <rotation name="WaferPos0x7f93d47250d0_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d47250d0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47251a0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47251a0_pos" unit="mm" x="-21.597" y="-34.105" z="43.494"/>
+        <rotation name="WaferPos0x7f93d47251a0_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d47251a0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725270">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4725270_pos" unit="mm" x="-21.597" y="-34.105" z="88.951"/>
+        <rotation name="WaferPos0x7f93d4725270_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d4725270_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725340">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4725340_pos" unit="mm" x="18.737" y="-35.756" z="-47.421"/>
+        <rotation name="WaferPos0x7f93d4725340_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d4725340_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725410">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d4725410_pos" unit="mm" x="18.737" y="-35.756" z="-1.964"/>
+        <rotation name="WaferPos0x7f93d4725410_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d4725410_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47254e0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47254e0_pos" unit="mm" x="18.737" y="-35.756" z="43.494"/>
+        <rotation name="WaferPos0x7f93d47254e0_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d47254e0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47255b0">
+        <volumeref ref="aWafer_log0x7f93d4722590"/>
+        <position name="WaferPos0x7f93d47255b0_pos" unit="mm" x="18.737" y="-35.756" z="88.951"/>
+        <rotation name="WaferPos0x7f93d47255b0_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d47255b0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04550">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04550_pos" unit="mm" x="59.443" y="-1.904" z="-79.159"/>
+        <rotation name="WaferPos0x7f93d5d04550_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d5d04550_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04620">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04620_pos" unit="mm" x="59.443" y="-1.904" z="-35.198"/>
+        <rotation name="WaferPos0x7f93d5d04620_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d5d04620_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d046f0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d046f0_pos" unit="mm" x="59.443" y="-1.904" z="8.764"/>
+        <rotation name="WaferPos0x7f93d5d046f0_rot" unit="deg" x="0" y="0" z="-5.39932073383293"/>
+        <scale name="WaferPos0x7f93d5d046f0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d047c0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d047c0_pos" unit="mm" x="59.443" y="-1.904" z="52.726"/>
+        <rotation name="WaferPos0x7f93d5d047c0_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d5d047c0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04890">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04890_pos" unit="mm" x="59.443" y="-1.904" z="96.687"/>
+        <rotation name="WaferPos0x7f93d5d04890_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d5d04890_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04960">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04960_pos" unit="mm" x="59.443" y="-1.904" z="140.649"/>
+        <rotation name="WaferPos0x7f93d5d04960_rot" unit="deg" x="180" y="0" z="5.39932073383293"/>
+        <scale name="WaferPos0x7f93d5d04960_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04a30">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04a30_pos" unit="mm" x="31.371" y="50.527" z="-79.159"/>
+        <rotation name="WaferPos0x7f93d5d04a30_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d5d04a30_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441c1b0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441c1b0_pos" unit="mm" x="31.371" y="50.527" z="-35.198"/>
+        <rotation name="WaferPos0x7f93d441c1b0_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d441c1b0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441cb10">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441cb10_pos" unit="mm" x="31.371" y="50.527" z="8.764"/>
+        <rotation name="WaferPos0x7f93d441cb10_rot" unit="deg" x="0" y="0" z="-65.3981380773758"/>
+        <scale name="WaferPos0x7f93d441cb10_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441cbb0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441cbb0_pos" unit="mm" x="31.371" y="50.527" z="52.726"/>
+        <rotation name="WaferPos0x7f93d441cbb0_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d441cbb0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441cc50">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441cc50_pos" unit="mm" x="31.371" y="50.527" z="96.687"/>
+        <rotation name="WaferPos0x7f93d441cc50_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d441cc50_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5a04db0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5a04db0_pos" unit="mm" x="31.371" y="50.527" z="140.649"/>
+        <rotation name="WaferPos0x7f93d5a04db0_rot" unit="deg" x="180" y="0" z="65.3981380773758"/>
+        <scale name="WaferPos0x7f93d5a04db0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5a04e80">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5a04e80_pos" unit="mm" x="-28.072" y="52.431" z="-79.159"/>
+        <rotation name="WaferPos0x7f93d5a04e80_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d5a04e80_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5a04f50">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5a04f50_pos" unit="mm" x="-28.072" y="52.431" z="-35.198"/>
+        <rotation name="WaferPos0x7f93d5a04f50_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d5a04f50_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ccf0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441ccf0_pos" unit="mm" x="-28.072" y="52.431" z="8.764"/>
+        <rotation name="WaferPos0x7f93d441ccf0_rot" unit="deg" x="0" y="0" z="-125.401801886866"/>
+        <scale name="WaferPos0x7f93d441ccf0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04b00">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04b00_pos" unit="mm" x="-28.072" y="52.431" z="52.726"/>
+        <rotation name="WaferPos0x7f93d5d04b00_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d5d04b00_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04bd0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04bd0_pos" unit="mm" x="-28.072" y="52.431" z="96.687"/>
+        <rotation name="WaferPos0x7f93d5d04bd0_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d5d04bd0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04ca0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04ca0_pos" unit="mm" x="-28.072" y="52.431" z="140.649"/>
+        <rotation name="WaferPos0x7f93d5d04ca0_rot" unit="deg" x="180" y="0" z="125.401801886866"/>
+        <scale name="WaferPos0x7f93d5d04ca0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04d70">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04d70_pos" unit="mm" x="-59.443" y="1.904" z="-79.159"/>
+        <rotation name="WaferPos0x7f93d5d04d70_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d5d04d70_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5d04e40">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d5d04e40_pos" unit="mm" x="-59.443" y="1.904" z="-35.198"/>
+        <rotation name="WaferPos0x7f93d5d04e40_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d5d04e40_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724920">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d4724920_pos" unit="mm" x="-59.443" y="1.904" z="8.764"/>
+        <rotation name="WaferPos0x7f93d4724920_rot" unit="deg" x="0" y="0" z="174.600679266167"/>
+        <scale name="WaferPos0x7f93d4724920_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47249f0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d47249f0_pos" unit="mm" x="-59.443" y="1.904" z="52.726"/>
+        <rotation name="WaferPos0x7f93d47249f0_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d47249f0_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441cd90">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441cd90_pos" unit="mm" x="-59.443" y="1.904" z="96.687"/>
+        <rotation name="WaferPos0x7f93d441cd90_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d441cd90_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ce30">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441ce30_pos" unit="mm" x="-59.443" y="1.904" z="140.649"/>
+        <rotation name="WaferPos0x7f93d441ce30_rot" unit="deg" x="180" y="0" z="-174.600679266167"/>
+        <scale name="WaferPos0x7f93d441ce30_scl" x="1.00003708431238" y="1.00003708431238" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ced0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441ced0_pos" unit="mm" x="-31.371" y="-50.527" z="-79.159"/>
+        <rotation name="WaferPos0x7f93d441ced0_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d441ced0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441cfa0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441cfa0_pos" unit="mm" x="-31.371" y="-50.527" z="-35.198"/>
+        <rotation name="WaferPos0x7f93d441cfa0_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d441cfa0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d070">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d070_pos" unit="mm" x="-31.371" y="-50.527" z="8.764"/>
+        <rotation name="WaferPos0x7f93d441d070_rot" unit="deg" x="0" y="0" z="114.601861922624"/>
+        <scale name="WaferPos0x7f93d441d070_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d140">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d140_pos" unit="mm" x="-31.371" y="-50.527" z="52.726"/>
+        <rotation name="WaferPos0x7f93d441d140_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d441d140_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d210">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d210_pos" unit="mm" x="-31.371" y="-50.527" z="96.687"/>
+        <rotation name="WaferPos0x7f93d441d210_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d441d210_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d2e0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d2e0_pos" unit="mm" x="-31.371" y="-50.527" z="140.649"/>
+        <rotation name="WaferPos0x7f93d441d2e0_rot" unit="deg" x="180" y="0" z="-114.601861922624"/>
+        <scale name="WaferPos0x7f93d441d2e0_scl" x="0.999975164691604" y="0.999975164691604" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d3b0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d3b0_pos" unit="mm" x="28.072" y="-52.431" z="-79.159"/>
+        <rotation name="WaferPos0x7f93d441d3b0_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d441d3b0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d480">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d480_pos" unit="mm" x="28.072" y="-52.431" z="-35.198"/>
+        <rotation name="WaferPos0x7f93d441d480_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d441d480_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d550">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d550_pos" unit="mm" x="28.072" y="-52.431" z="8.764"/>
+        <rotation name="WaferPos0x7f93d441d550_rot" unit="deg" x="0" y="0" z="54.5981981131337"/>
+        <scale name="WaferPos0x7f93d441d550_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d620">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d620_pos" unit="mm" x="28.072" y="-52.431" z="52.726"/>
+        <rotation name="WaferPos0x7f93d441d620_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d441d620_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d6f0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d6f0_pos" unit="mm" x="28.072" y="-52.431" z="96.687"/>
+        <rotation name="WaferPos0x7f93d441d6f0_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d441d6f0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d7c0">
+        <volumeref ref="aWafer_log0x7f93d4722740"/>
+        <position name="WaferPos0x7f93d441d7c0_pos" unit="mm" x="28.072" y="-52.431" z="140.649"/>
+        <rotation name="WaferPos0x7f93d441d7c0_rot" unit="deg" x="180" y="0" z="-54.5981981131337"/>
+        <scale name="WaferPos0x7f93d441d7c0_scl" x="0.999988249930968" y="0.999988249930968" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d890">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441d890_pos" unit="mm" x="102.52" y="20.393" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d441d890_rot" unit="deg" x="5.67867810551639" y="-26.441717791292" z="-12.5850256134219"/>
+        <scale name="WaferPos0x7f93d441d890_scl" x="1.00002865458946" y="1.00001251992163" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441d960">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441d960_pos" unit="mm" x="117.694" y="23.411" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d441d960_rot" unit="deg" x="0" y="0" z="-11.2503793132539"/>
+        <scale name="WaferPos0x7f93d441d960_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441da30">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441da30_pos" unit="mm" x="117.694" y="23.411" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d441da30_rot" unit="deg" x="0" y="0" z="-11.2503793132539"/>
+        <scale name="WaferPos0x7f93d441da30_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441db00">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441db00_pos" unit="mm" x="117.694" y="23.411" z="36.385"/>
+        <rotation name="WaferPos0x7f93d441db00_rot" unit="deg" x="0" y="0" z="-11.2503793132539"/>
+        <scale name="WaferPos0x7f93d441db00_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441dbd0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441dbd0_pos" unit="mm" x="117.694" y="23.411" z="90.387"/>
+        <rotation name="WaferPos0x7f93d441dbd0_rot" unit="deg" x="180" y="0" z="11.2503793132539"/>
+        <scale name="WaferPos0x7f93d441dbd0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441dca0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441dca0_pos" unit="mm" x="117.694" y="23.411" z="151.214"/>
+        <rotation name="WaferPos0x7f93d441dca0_rot" unit="deg" x="180" y="0" z="11.2503793132539"/>
+        <scale name="WaferPos0x7f93d441dca0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441dd70">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441dd70_pos" unit="mm" x="102.002" y="20.289" z="215.177"/>
+        <rotation name="WaferPos0x7f93d441dd70_rot" unit="deg" x="174.077116428027" y="-27.418183553349" z="12.6961258633703"/>
+        <scale name="WaferPos0x7f93d441dd70_scl" x="1.00004012919482" y="1.00002324472984" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441de40">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441de40_pos" unit="mm" x="58.073" y="86.912" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d441de40_rot" unit="deg" x="22.961614773557" y="-14.6075701977894" z="-59.2342520195551"/>
+        <scale name="WaferPos0x7f93d441de40_scl" x="1.000011044939" y="0.999991124960617" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441df10">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441df10_pos" unit="mm" x="66.668" y="99.776" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d441df10_rot" unit="deg" x="0" y="0" z="-56.2495492248473"/>
+        <scale name="WaferPos0x7f93d441df10_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441dfe0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441dfe0_pos" unit="mm" x="66.668" y="99.776" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d441dfe0_rot" unit="deg" x="0" y="0" z="-56.2495492248473"/>
+        <scale name="WaferPos0x7f93d441dfe0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e0b0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e0b0_pos" unit="mm" x="66.668" y="99.776" z="36.385"/>
+        <rotation name="WaferPos0x7f93d441e0b0_rot" unit="deg" x="0" y="0" z="-56.2495492248473"/>
+        <scale name="WaferPos0x7f93d441e0b0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c600">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9c600_pos" unit="mm" x="66.668" y="99.776" z="90.387"/>
+        <rotation name="WaferPos0x7f93d5e9c600_rot" unit="deg" x="180" y="0" z="56.2495492248473"/>
+        <scale name="WaferPos0x7f93d5e9c600_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c6d0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9c6d0_pos" unit="mm" x="66.668" y="99.776" z="151.214"/>
+        <rotation name="WaferPos0x7f93d5e9c6d0_rot" unit="deg" x="180" y="0" z="56.2495492248473"/>
+        <scale name="WaferPos0x7f93d5e9c6d0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c7a0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9c7a0_pos" unit="mm" x="57.779" y="86.473" z="215.177"/>
+        <rotation name="WaferPos0x7f93d5e9c7a0_rot" unit="deg" x="156.146658044057" y="-15.1175432554143" z="59.4637400187043"/>
+        <scale name="WaferPos0x7f93d5e9c7a0_scl" x="0.999999569999908" y="1.00000316499499" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c840">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9c840_pos" unit="mm" x="-20.393" y="102.52" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d5e9c840_rot" unit="deg" x="26.5540705584437" y="5.08300742748302" z="-100.048631641672"/>
+        <scale name="WaferPos0x7f93d5e9c840_scl" x="1.00001251992163" y="1.00002865458946" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c910">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9c910_pos" unit="mm" x="-23.411" y="117.694" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d5e9c910_rot" unit="deg" x="0" y="0" z="-101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9c910_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c9e0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9c9e0_pos" unit="mm" x="-23.411" y="117.694" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d5e9c9e0_rot" unit="deg" x="0" y="0" z="-101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9c9e0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cab0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9cab0_pos" unit="mm" x="-23.411" y="117.694" z="36.385"/>
+        <rotation name="WaferPos0x7f93d5e9cab0_rot" unit="deg" x="0" y="0" z="-101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9cab0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cb80">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9cb80_pos" unit="mm" x="-23.411" y="117.694" z="90.387"/>
+        <rotation name="WaferPos0x7f93d5e9cb80_rot" unit="deg" x="180" y="0" z="101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9cb80_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cc50">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9cc50_pos" unit="mm" x="-23.411" y="117.694" z="151.214"/>
+        <rotation name="WaferPos0x7f93d5e9cc50_rot" unit="deg" x="180" y="0" z="101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9cc50_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cd20">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9cd20_pos" unit="mm" x="-20.289" y="102.002" z="215.177"/>
+        <rotation name="WaferPos0x7f93d5e9cd20_rot" unit="deg" x="152.456123947346" y="5.25553810027413" z="99.9636510317443"/>
+        <scale name="WaferPos0x7f93d5e9cd20_scl" x="1.00002324472984" y="1.00004012919482" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cdf0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9cdf0_pos" unit="mm" x="-86.912" y="58.073" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d5e9cdf0_rot" unit="deg" x="15.8041228997497" y="22.1791199242164" z="-143.130102354156"/>
+        <scale name="WaferPos0x7f93d5e9cdf0_scl" x="0.999991124960617" y="1.000011044939" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cec0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9cec0_pos" unit="mm" x="-99.776" y="66.668" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d5e9cec0_rot" unit="deg" x="0" y="0" z="-146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9cec0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9cf90">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9cf90_pos" unit="mm" x="-99.776" y="66.668" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d5e9cf90_rot" unit="deg" x="0" y="0" z="-146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9cf90_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d060">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9d060_pos" unit="mm" x="-99.776" y="66.668" z="36.385"/>
+        <rotation name="WaferPos0x7f93d5e9d060_rot" unit="deg" x="0" y="0" z="-146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9d060_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d130">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9d130_pos" unit="mm" x="-99.776" y="66.668" z="90.387"/>
+        <rotation name="WaferPos0x7f93d5e9d130_rot" unit="deg" x="180" y="0" z="146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9d130_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d200">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9d200_pos" unit="mm" x="-99.776" y="66.668" z="151.214"/>
+        <rotation name="WaferPos0x7f93d5e9d200_rot" unit="deg" x="180" y="0" z="146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9d200_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d2d0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9d2d0_pos" unit="mm" x="-86.473" y="57.779" z="215.177"/>
+        <rotation name="WaferPos0x7f93d5e9d2d0_rot" unit="deg" x="163.543816035624" y="22.9793139586212" z="142.87992033969"/>
+        <scale name="WaferPos0x7f93d5e9d2d0_scl" x="1.00000316499499" y="0.999999569999908" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d3a0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9d3a0_pos" unit="mm" x="-102.52" y="-20.393" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d5e9d3a0_rot" unit="deg" x="-5.67867810551639" y="26.441717791292" z="167.414974386578"/>
+        <scale name="WaferPos0x7f93d5e9d3a0_scl" x="1.00002865458946" y="1.00001251992163" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e100">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e100_pos" unit="mm" x="-117.694" y="-23.411" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d441e100_rot" unit="deg" x="0" y="0" z="168.749620686746"/>
+        <scale name="WaferPos0x7f93d441e100_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e1d0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e1d0_pos" unit="mm" x="-117.694" y="-23.411" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d441e1d0_rot" unit="deg" x="0" y="0" z="168.749620686746"/>
+        <scale name="WaferPos0x7f93d441e1d0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e2a0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e2a0_pos" unit="mm" x="-117.694" y="-23.411" z="36.385"/>
+        <rotation name="WaferPos0x7f93d441e2a0_rot" unit="deg" x="0" y="0" z="168.749620686746"/>
+        <scale name="WaferPos0x7f93d441e2a0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e370">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e370_pos" unit="mm" x="-117.694" y="-23.411" z="90.387"/>
+        <rotation name="WaferPos0x7f93d441e370_rot" unit="deg" x="180" y="0" z="-168.749620686746"/>
+        <scale name="WaferPos0x7f93d441e370_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e440">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441e440_pos" unit="mm" x="-117.694" y="-23.411" z="151.214"/>
+        <rotation name="WaferPos0x7f93d441e440_rot" unit="deg" x="180" y="0" z="-168.749620686746"/>
+        <scale name="WaferPos0x7f93d441e440_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e510">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441e510_pos" unit="mm" x="-102.002" y="-20.289" z="215.177"/>
+        <rotation name="WaferPos0x7f93d441e510_rot" unit="deg" x="-174.077116428027" y="27.418183553349" z="-167.30387413663"/>
+        <scale name="WaferPos0x7f93d441e510_scl" x="1.00004012919482" y="1.00002324472984" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e5e0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441e5e0_pos" unit="mm" x="-58.073" y="-86.912" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d441e5e0_rot" unit="deg" x="-22.961614773557" y="14.6075701977894" z="120.765747980445"/>
+        <scale name="WaferPos0x7f93d441e5e0_scl" x="1.000011044939" y="0.999991124960617" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e6b0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e6b0_pos" unit="mm" x="-66.668" y="-99.776" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d441e6b0_rot" unit="deg" x="0" y="0" z="123.750450775153"/>
+        <scale name="WaferPos0x7f93d441e6b0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e780">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e780_pos" unit="mm" x="-66.668" y="-99.776" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d441e780_rot" unit="deg" x="0" y="0" z="123.750450775153"/>
+        <scale name="WaferPos0x7f93d441e780_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e850">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e850_pos" unit="mm" x="-66.668" y="-99.776" z="36.385"/>
+        <rotation name="WaferPos0x7f93d441e850_rot" unit="deg" x="0" y="0" z="123.750450775153"/>
+        <scale name="WaferPos0x7f93d441e850_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e920">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441e920_pos" unit="mm" x="-66.668" y="-99.776" z="90.387"/>
+        <rotation name="WaferPos0x7f93d441e920_rot" unit="deg" x="180" y="0" z="-123.750450775153"/>
+        <scale name="WaferPos0x7f93d441e920_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441e9f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441e9f0_pos" unit="mm" x="-66.668" y="-99.776" z="151.214"/>
+        <rotation name="WaferPos0x7f93d441e9f0_rot" unit="deg" x="180" y="0" z="-123.750450775153"/>
+        <scale name="WaferPos0x7f93d441e9f0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441eac0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441eac0_pos" unit="mm" x="-57.779" y="-86.473" z="215.177"/>
+        <rotation name="WaferPos0x7f93d441eac0_rot" unit="deg" x="-156.146658044057" y="15.1175432554143" z="-120.536259981296"/>
+        <scale name="WaferPos0x7f93d441eac0_scl" x="0.999999569999908" y="1.00000316499499" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441eb90">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441eb90_pos" unit="mm" x="20.393" y="-102.52" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d441eb90_rot" unit="deg" x="-26.5540705584437" y="-5.08300742748302" z="79.9513683583281"/>
+        <scale name="WaferPos0x7f93d441eb90_scl" x="1.00001251992163" y="1.00002865458946" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ec60">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441ec60_pos" unit="mm" x="23.411" y="-117.694" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d441ec60_rot" unit="deg" x="0" y="0" z="78.7496206867461"/>
+        <scale name="WaferPos0x7f93d441ec60_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ed30">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441ed30_pos" unit="mm" x="23.411" y="-117.694" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d441ed30_rot" unit="deg" x="0" y="0" z="78.7496206867461"/>
+        <scale name="WaferPos0x7f93d441ed30_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ee00">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441ee00_pos" unit="mm" x="23.411" y="-117.694" z="36.385"/>
+        <rotation name="WaferPos0x7f93d441ee00_rot" unit="deg" x="0" y="0" z="78.7496206867461"/>
+        <scale name="WaferPos0x7f93d441ee00_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441eed0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441eed0_pos" unit="mm" x="23.411" y="-117.694" z="90.387"/>
+        <rotation name="WaferPos0x7f93d441eed0_rot" unit="deg" x="180" y="0" z="-78.7496206867461"/>
+        <scale name="WaferPos0x7f93d441eed0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441efa0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441efa0_pos" unit="mm" x="23.411" y="-117.694" z="151.214"/>
+        <rotation name="WaferPos0x7f93d441efa0_rot" unit="deg" x="180" y="0" z="-78.7496206867461"/>
+        <scale name="WaferPos0x7f93d441efa0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d470">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9d470_pos" unit="mm" x="20.289" y="-102.002" z="215.177"/>
+        <rotation name="WaferPos0x7f93d5e9d470_rot" unit="deg" x="-152.456123947346" y="-5.25553810027413" z="-80.0363489682557"/>
+        <scale name="WaferPos0x7f93d5e9d470_scl" x="1.00002324472984" y="1.00004012919482" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d540">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9d540_pos" unit="mm" x="86.912" y="-58.073" z="-129.029"/>
+        <rotation name="WaferPos0x7f93d5e9d540_rot" unit="deg" x="-15.8041228997497" y="-22.1791199242164" z="36.869897645844"/>
+        <scale name="WaferPos0x7f93d5e9d540_scl" x="0.999991124960617" y="1.000011044939" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d610">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9d610_pos" unit="mm" x="99.776" y="-66.668" z="-71.619"/>
+        <rotation name="WaferPos0x7f93d5e9d610_rot" unit="deg" x="0" y="0" z="33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9d610_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d6e0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9d6e0_pos" unit="mm" x="99.776" y="-66.668" z="-17.617"/>
+        <rotation name="WaferPos0x7f93d5e9d6e0_rot" unit="deg" x="0" y="0" z="33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9d6e0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d7b0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9d7b0_pos" unit="mm" x="99.776" y="-66.668" z="36.385"/>
+        <rotation name="WaferPos0x7f93d5e9d7b0_rot" unit="deg" x="0" y="0" z="33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9d7b0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d880">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9d880_pos" unit="mm" x="99.776" y="-66.668" z="90.387"/>
+        <rotation name="WaferPos0x7f93d5e9d880_rot" unit="deg" x="180" y="0" z="-33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9d880_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9d950">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9d950_pos" unit="mm" x="99.776" y="-66.668" z="151.214"/>
+        <rotation name="WaferPos0x7f93d5e9d950_rot" unit="deg" x="180" y="0" z="-33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9d950_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9da20">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9da20_pos" unit="mm" x="86.473" y="-57.779" z="215.177"/>
+        <rotation name="WaferPos0x7f93d5e9da20_rot" unit="deg" x="-163.543816035624" y="-22.9793139586212" z="-37.1200796603104"/>
+        <scale name="WaferPos0x7f93d5e9da20_scl" x="1.00000316499499" y="0.999999569999908" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9daf0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9daf0_pos" unit="mm" x="90.238" y="60.295" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5e9daf0_rot" unit="deg" x="15.8041228997497" y="-22.1791199242164" z="-36.869897645844"/>
+        <scale name="WaferPos0x7f93d5e9daf0_scl" x="0.999991124960617" y="1.000011044939" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9dbc0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9dbc0_pos" unit="mm" x="103.102" y="68.891" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5e9dbc0_rot" unit="deg" x="0" y="0" z="-33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9dbc0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9dc90">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9dc90_pos" unit="mm" x="103.102" y="68.891" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5e9dc90_rot" unit="deg" x="0" y="0" z="-33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9dc90_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9dd60">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9dd60_pos" unit="mm" x="103.102" y="68.891" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5e9dd60_rot" unit="deg" x="0" y="0" z="-33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9dd60_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9de30">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9de30_pos" unit="mm" x="103.102" y="68.891" z="92.602"/>
+        <rotation name="WaferPos0x7f93d5e9de30_rot" unit="deg" x="180" y="0" z="33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9de30_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9df00">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9df00_pos" unit="mm" x="103.102" y="68.891" z="160.254"/>
+        <rotation name="WaferPos0x7f93d5e9df00_rot" unit="deg" x="180" y="0" z="33.7504507751527"/>
+        <scale name="WaferPos0x7f93d5e9df00_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9dfd0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9dfd0_pos" unit="mm" x="89.799" y="60.002" z="224.217"/>
+        <rotation name="WaferPos0x7f93d5e9dfd0_rot" unit="deg" x="163.543816035624" y="-22.9793139586212" z="37.1200796603104"/>
+        <scale name="WaferPos0x7f93d5e9dfd0_scl" x="1.00000316499499" y="0.999999569999908" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e0a0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9e0a0_pos" unit="mm" x="21.173" y="106.443" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5e9e0a0_rot" unit="deg" x="26.5540705584437" y="-5.08300742748302" z="-79.9513683583281"/>
+        <scale name="WaferPos0x7f93d5e9e0a0_scl" x="1.00001251992163" y="1.00002865458946" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e170">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9e170_pos" unit="mm" x="24.191" y="121.617" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5e9e170_rot" unit="deg" x="0" y="0" z="-78.7496206867461"/>
+        <scale name="WaferPos0x7f93d5e9e170_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e240">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9e240_pos" unit="mm" x="24.191" y="121.617" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5e9e240_rot" unit="deg" x="0" y="0" z="-78.7496206867461"/>
+        <scale name="WaferPos0x7f93d5e9e240_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e310">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9e310_pos" unit="mm" x="24.191" y="121.617" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5e9e310_rot" unit="deg" x="0" y="0" z="-78.7496206867461"/>
+        <scale name="WaferPos0x7f93d5e9e310_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e3e0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9e3e0_pos" unit="mm" x="24.191" y="121.617" z="92.602"/>
+        <rotation name="WaferPos0x7f93d5e9e3e0_rot" unit="deg" x="180" y="0" z="78.7496206867461"/>
+        <scale name="WaferPos0x7f93d5e9e3e0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e4b0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9e4b0_pos" unit="mm" x="24.191" y="121.617" z="160.254"/>
+        <rotation name="WaferPos0x7f93d5e9e4b0_rot" unit="deg" x="180" y="0" z="78.7496206867461"/>
+        <scale name="WaferPos0x7f93d5e9e4b0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e580">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9e580_pos" unit="mm" x="21.07" y="105.925" z="224.217"/>
+        <rotation name="WaferPos0x7f93d5e9e580_rot" unit="deg" x="152.456123947346" y="-5.25553810027413" z="80.0363489682557"/>
+        <scale name="WaferPos0x7f93d5e9e580_scl" x="1.00002324472984" y="1.00004012919482" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e650">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9e650_pos" unit="mm" x="-60.295" y="90.238" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5e9e650_rot" unit="deg" x="22.961614773557" y="14.6075701977894" z="-120.765747980445"/>
+        <scale name="WaferPos0x7f93d5e9e650_scl" x="1.000011044939" y="0.999991124960617" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e720">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9e720_pos" unit="mm" x="-68.891" y="103.102" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5e9e720_rot" unit="deg" x="0" y="0" z="-123.750450775153"/>
+        <scale name="WaferPos0x7f93d5e9e720_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e7f0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9e7f0_pos" unit="mm" x="-68.891" y="103.102" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5e9e7f0_rot" unit="deg" x="0" y="0" z="-123.750450775153"/>
+        <scale name="WaferPos0x7f93d5e9e7f0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e8c0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9e8c0_pos" unit="mm" x="-68.891" y="103.102" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5e9e8c0_rot" unit="deg" x="0" y="0" z="-123.750450775153"/>
+        <scale name="WaferPos0x7f93d5e9e8c0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9e990">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9e990_pos" unit="mm" x="-68.891" y="103.102" z="92.602"/>
+        <rotation name="WaferPos0x7f93d5e9e990_rot" unit="deg" x="180" y="0" z="123.750450775153"/>
+        <scale name="WaferPos0x7f93d5e9e990_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9ea60">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9ea60_pos" unit="mm" x="-68.891" y="103.102" z="160.254"/>
+        <rotation name="WaferPos0x7f93d5e9ea60_rot" unit="deg" x="180" y="0" z="123.750450775153"/>
+        <scale name="WaferPos0x7f93d5e9ea60_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9eb30">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9eb30_pos" unit="mm" x="-60.002" y="89.799" z="224.217"/>
+        <rotation name="WaferPos0x7f93d5e9eb30_rot" unit="deg" x="156.146658044057" y="15.1175432554143" z="120.536259981296"/>
+        <scale name="WaferPos0x7f93d5e9eb30_scl" x="0.999999569999908" y="1.00000316499499" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9ec00">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9ec00_pos" unit="mm" x="-106.443" y="21.173" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5e9ec00_rot" unit="deg" x="5.67867810551639" y="26.441717791292" z="-167.414974386578"/>
+        <scale name="WaferPos0x7f93d5e9ec00_scl" x="1.00002865458946" y="1.00001251992163" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9ecd0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9ecd0_pos" unit="mm" x="-121.617" y="24.191" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5e9ecd0_rot" unit="deg" x="0" y="0" z="-168.749620686746"/>
+        <scale name="WaferPos0x7f93d5e9ecd0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9eda0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9eda0_pos" unit="mm" x="-121.617" y="24.191" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5e9eda0_rot" unit="deg" x="0" y="0" z="-168.749620686746"/>
+        <scale name="WaferPos0x7f93d5e9eda0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9ee70">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9ee70_pos" unit="mm" x="-121.617" y="24.191" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5e9ee70_rot" unit="deg" x="0" y="0" z="-168.749620686746"/>
+        <scale name="WaferPos0x7f93d5e9ee70_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9ef40">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9ef40_pos" unit="mm" x="-121.617" y="24.191" z="92.602"/>
+        <rotation name="WaferPos0x7f93d5e9ef40_rot" unit="deg" x="180" y="0" z="168.749620686746"/>
+        <scale name="WaferPos0x7f93d5e9ef40_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f010">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9f010_pos" unit="mm" x="-121.617" y="24.191" z="160.254"/>
+        <rotation name="WaferPos0x7f93d5e9f010_rot" unit="deg" x="180" y="0" z="168.749620686746"/>
+        <scale name="WaferPos0x7f93d5e9f010_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f0e0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9f0e0_pos" unit="mm" x="-105.925" y="21.07" z="224.217"/>
+        <rotation name="WaferPos0x7f93d5e9f0e0_rot" unit="deg" x="174.077116428027" y="27.418183553349" z="167.30387413663"/>
+        <scale name="WaferPos0x7f93d5e9f0e0_scl" x="1.00004012919482" y="1.00002324472984" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f1b0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9f1b0_pos" unit="mm" x="-90.238" y="-60.295" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5e9f1b0_rot" unit="deg" x="-15.8041228997497" y="22.1791199242164" z="143.130102354156"/>
+        <scale name="WaferPos0x7f93d5e9f1b0_scl" x="0.999991124960617" y="1.000011044939" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f280">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9f280_pos" unit="mm" x="-103.102" y="-68.891" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5e9f280_rot" unit="deg" x="0" y="0" z="146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9f280_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f350">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9f350_pos" unit="mm" x="-103.102" y="-68.891" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5e9f350_rot" unit="deg" x="0" y="0" z="146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9f350_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f420">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9f420_pos" unit="mm" x="-103.102" y="-68.891" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5e9f420_rot" unit="deg" x="0" y="0" z="146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9f420_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f4f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9f4f0_pos" unit="mm" x="-103.102" y="-68.891" z="92.602"/>
+        <rotation name="WaferPos0x7f93d5e9f4f0_rot" unit="deg" x="180" y="0" z="-146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9f4f0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f5c0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9f5c0_pos" unit="mm" x="-103.102" y="-68.891" z="160.254"/>
+        <rotation name="WaferPos0x7f93d5e9f5c0_rot" unit="deg" x="180" y="0" z="-146.249549224847"/>
+        <scale name="WaferPos0x7f93d5e9f5c0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f690">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9f690_pos" unit="mm" x="-89.799" y="-60.002" z="224.217"/>
+        <rotation name="WaferPos0x7f93d5e9f690_rot" unit="deg" x="-163.543816035624" y="22.9793139586212" z="-142.87992033969"/>
+        <scale name="WaferPos0x7f93d5e9f690_scl" x="1.00000316499499" y="0.999999569999908" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f760">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9f760_pos" unit="mm" x="-21.173" y="-106.443" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5e9f760_rot" unit="deg" x="-26.5540705584437" y="5.08300742748302" z="100.048631641672"/>
+        <scale name="WaferPos0x7f93d5e9f760_scl" x="1.00001251992163" y="1.00002865458946" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f830">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9f830_pos" unit="mm" x="-24.191" y="-121.617" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5e9f830_rot" unit="deg" x="0" y="0" z="101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9f830_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f900">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9f900_pos" unit="mm" x="-24.191" y="-121.617" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5e9f900_rot" unit="deg" x="0" y="0" z="101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9f900_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9f9d0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9f9d0_pos" unit="mm" x="-24.191" y="-121.617" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5e9f9d0_rot" unit="deg" x="0" y="0" z="101.250379313254"/>
+        <scale name="WaferPos0x7f93d5e9f9d0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4724ac0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4724ac0_pos" unit="mm" x="-24.191" y="-121.617" z="92.602"/>
+        <rotation name="WaferPos0x7f93d4724ac0_rot" unit="deg" x="180" y="0" z="-101.250379313254"/>
+        <scale name="WaferPos0x7f93d4724ac0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725700">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4725700_pos" unit="mm" x="-24.191" y="-121.617" z="160.254"/>
+        <rotation name="WaferPos0x7f93d4725700_rot" unit="deg" x="180" y="0" z="-101.250379313254"/>
+        <scale name="WaferPos0x7f93d4725700_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47257d0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d47257d0_pos" unit="mm" x="-21.07" y="-105.925" z="224.217"/>
+        <rotation name="WaferPos0x7f93d47257d0_rot" unit="deg" x="-152.456123947346" y="5.25553810027413" z="-99.9636510317443"/>
+        <scale name="WaferPos0x7f93d47257d0_scl" x="1.00002324472984" y="1.00004012919482" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725890">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4725890_pos" unit="mm" x="60.295" y="-90.238" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d4725890_rot" unit="deg" x="-22.961614773557" y="-14.6075701977894" z="59.2342520195551"/>
+        <scale name="WaferPos0x7f93d4725890_scl" x="1.000011044939" y="0.999991124960617" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725960">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d4725960_pos" unit="mm" x="68.891" y="-103.102" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d4725960_rot" unit="deg" x="0" y="0" z="56.2495492248473"/>
+        <scale name="WaferPos0x7f93d4725960_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725a30">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d4725a30_pos" unit="mm" x="68.891" y="-103.102" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d4725a30_rot" unit="deg" x="0" y="0" z="56.2495492248473"/>
+        <scale name="WaferPos0x7f93d4725a30_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725b00">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d4725b00_pos" unit="mm" x="68.891" y="-103.102" z="31.775"/>
+        <rotation name="WaferPos0x7f93d4725b00_rot" unit="deg" x="0" y="0" z="56.2495492248473"/>
+        <scale name="WaferPos0x7f93d4725b00_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725bd0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4725bd0_pos" unit="mm" x="68.891" y="-103.102" z="92.602"/>
+        <rotation name="WaferPos0x7f93d4725bd0_rot" unit="deg" x="180" y="0" z="-56.2495492248473"/>
+        <scale name="WaferPos0x7f93d4725bd0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725ca0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4725ca0_pos" unit="mm" x="68.891" y="-103.102" z="160.254"/>
+        <rotation name="WaferPos0x7f93d4725ca0_rot" unit="deg" x="180" y="0" z="-56.2495492248473"/>
+        <scale name="WaferPos0x7f93d4725ca0_scl" x="1.00004180412621" y="1.00004180412621" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725d70">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4725d70_pos" unit="mm" x="60.002" y="-89.799" z="224.217"/>
+        <rotation name="WaferPos0x7f93d4725d70_rot" unit="deg" x="-156.146658044057" y="-15.1175432554143" z="-59.4637400187043"/>
+        <scale name="WaferPos0x7f93d4725d70_scl" x="0.999999569999908" y="1.00000316499499" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b052e0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5b052e0_pos" unit="mm" x="106.443" y="-21.173" z="-133.639"/>
+        <rotation name="WaferPos0x7f93d5b052e0_rot" unit="deg" x="-5.67867810551639" y="-26.441717791292" z="12.5850256134219"/>
+        <scale name="WaferPos0x7f93d5b052e0_scl" x="1.00002865458946" y="1.00001251992163" z="0.999998499998875"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b053b0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5b053b0_pos" unit="mm" x="121.617" y="-24.191" z="-76.229"/>
+        <rotation name="WaferPos0x7f93d5b053b0_rot" unit="deg" x="0" y="0" z="11.2503793132539"/>
+        <scale name="WaferPos0x7f93d5b053b0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05480">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5b05480_pos" unit="mm" x="121.617" y="-24.191" z="-22.227"/>
+        <rotation name="WaferPos0x7f93d5b05480_rot" unit="deg" x="0" y="0" z="11.2503793132539"/>
+        <scale name="WaferPos0x7f93d5b05480_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05550">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5b05550_pos" unit="mm" x="121.617" y="-24.191" z="31.775"/>
+        <rotation name="WaferPos0x7f93d5b05550_rot" unit="deg" x="0" y="0" z="11.2503793132539"/>
+        <scale name="WaferPos0x7f93d5b05550_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05620">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05620_pos" unit="mm" x="121.617" y="-24.191" z="92.602"/>
+        <rotation name="WaferPos0x7f93d5b05620_rot" unit="deg" x="180" y="0" z="-11.2503793132539"/>
+        <scale name="WaferPos0x7f93d5b05620_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b056f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b056f0_pos" unit="mm" x="121.617" y="-24.191" z="160.254"/>
+        <rotation name="WaferPos0x7f93d5b056f0_rot" unit="deg" x="180" y="0" z="-11.2503793132539"/>
+        <scale name="WaferPos0x7f93d5b056f0_scl" x="1.00001632486675" y="1.00001632486675" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b057c0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5b057c0_pos" unit="mm" x="105.925" y="-21.07" z="224.217"/>
+        <rotation name="WaferPos0x7f93d5b057c0_rot" unit="deg" x="-174.077116428027" y="-27.418183553349" z="-12.6961258633703"/>
+        <scale name="WaferPos0x7f93d5b057c0_scl" x="1.00004012919482" y="1.00002324472984" z="0.999971329589004"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05890">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5b05890_pos" unit="mm" x="120.084" y="43.707" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d5b05890_rot" unit="deg" x="7.48140041013118" y="-19.6814837302612" z="-21.2974501398446"/>
+        <scale name="WaferPos0x7f93d5b05890_scl" x="1.00002676464183" y="1.00000966995325" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05960">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05960_pos" unit="mm" x="131.557" y="47.883" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d5b05960_rot" unit="deg" x="0" y="0" z="-19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5b05960_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05a30">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05a30_pos" unit="mm" x="131.557" y="47.883" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d5b05a30_rot" unit="deg" x="0" y="0" z="-19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5b05a30_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05b00">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05b00_pos" unit="mm" x="131.557" y="47.883" z="27.344"/>
+        <rotation name="WaferPos0x7f93d5b05b00_rot" unit="deg" x="0" y="0" z="-19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5b05b00_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05bd0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5b05bd0_pos" unit="mm" x="131.557" y="47.883" z="88.161"/>
+        <rotation name="WaferPos0x7f93d5b05bd0_rot" unit="deg" x="180" y="0" z="19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5b05bd0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05ca0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05ca0_pos" unit="mm" x="131.557" y="47.883" z="148.977"/>
+        <rotation name="WaferPos0x7f93d5b05ca0_rot" unit="deg" x="180" y="0" z="19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5b05ca0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05d70">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05d70_pos" unit="mm" x="131.557" y="47.883" z="216.619"/>
+        <rotation name="WaferPos0x7f93d5b05d70_rot" unit="deg" x="180" y="0" z="19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5b05d70_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05e40">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5b05e40_pos" unit="mm" x="118.534" y="43.143" z="281.607"/>
+        <rotation name="WaferPos0x7f93d5b05e40_rot" unit="deg" x="171.342651055587" y="-22.4692749587337" z="21.72081666166"/>
+        <scale name="WaferPos0x7f93d5b05e40_scl" x="1.00003154450247" y="1.00002057478834" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05f10">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5b05f10_pos" unit="mm" x="63.895" y="110.67" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d5b05f10_rot" unit="deg" x="18.3910859162337" y="-10.3233175013002" z="-61.6739996337599"/>
+        <scale name="WaferPos0x7f93d5b05f10_scl" x="0.999985439894002" y="1.00001020494793" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b05fe0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b05fe0_pos" unit="mm" x="70" y="121.244" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d5b05fe0_rot" unit="deg" x="0" y="0" z="-59.9992722191726"/>
+        <scale name="WaferPos0x7f93d5b05fe0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b060b0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b060b0_pos" unit="mm" x="70" y="121.244" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d5b060b0_rot" unit="deg" x="0" y="0" z="-59.9992722191726"/>
+        <scale name="WaferPos0x7f93d5b060b0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b06180">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5b06180_pos" unit="mm" x="70" y="121.244" z="27.344"/>
+        <rotation name="WaferPos0x7f93d5b06180_rot" unit="deg" x="0" y="0" z="-59.9992722191726"/>
+        <scale name="WaferPos0x7f93d5b06180_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5b06250">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5b06250_pos" unit="mm" x="70" y="121.244" z="88.161"/>
+        <rotation name="WaferPos0x7f93d5b06250_rot" unit="deg" x="180" y="0" z="59.9992722191726"/>
+        <scale name="WaferPos0x7f93d5b06250_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f070">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f070_pos" unit="mm" x="70" y="121.244" z="148.977"/>
+        <rotation name="WaferPos0x7f93d441f070_rot" unit="deg" x="180" y="0" z="59.9992722191726"/>
+        <scale name="WaferPos0x7f93d441f070_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f140">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f140_pos" unit="mm" x="70" y="121.244" z="216.619"/>
+        <rotation name="WaferPos0x7f93d441f140_rot" unit="deg" x="180" y="0" z="59.9992722191726"/>
+        <scale name="WaferPos0x7f93d441f140_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f210">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441f210_pos" unit="mm" x="63.07" y="109.241" z="281.607"/>
+        <rotation name="WaferPos0x7f93d441f210_rot" unit="deg" x="158.91734249421" y="-11.7358894818787" z="62.1891295225834"/>
+        <scale name="WaferPos0x7f93d441f210_scl" x="0.999996899995195" y="1.00002113977655" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f2e0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441f2e0_pos" unit="mm" x="-22.191" y="125.849" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d441f2e0_rot" unit="deg" x="20.7073809938476" y="3.56614178756488" z="-99.3471815255742"/>
+        <scale name="WaferPos0x7f93d441f2e0_scl" x="0.999988144929729" y="0.999985864900099" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f3b0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f3b0_pos" unit="mm" x="-24.311" y="137.873" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d441f3b0_rot" unit="deg" x="0" y="0" z="-99.9973586541882"/>
+        <scale name="WaferPos0x7f93d441f3b0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f480">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f480_pos" unit="mm" x="-24.311" y="137.873" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d441f480_rot" unit="deg" x="0" y="0" z="-99.9973586541882"/>
+        <scale name="WaferPos0x7f93d441f480_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f550">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f550_pos" unit="mm" x="-24.311" y="137.873" z="27.344"/>
+        <rotation name="WaferPos0x7f93d441f550_rot" unit="deg" x="0" y="0" z="-99.9973586541882"/>
+        <scale name="WaferPos0x7f93d441f550_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f620">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441f620_pos" unit="mm" x="-24.311" y="137.873" z="88.161"/>
+        <rotation name="WaferPos0x7f93d441f620_rot" unit="deg" x="180" y="0" z="99.9973586541882"/>
+        <scale name="WaferPos0x7f93d441f620_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f6f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f6f0_pos" unit="mm" x="-24.311" y="137.873" z="148.977"/>
+        <rotation name="WaferPos0x7f93d441f6f0_rot" unit="deg" x="180" y="0" z="99.9973586541882"/>
+        <scale name="WaferPos0x7f93d441f6f0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f7c0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441f7c0_pos" unit="mm" x="-24.311" y="137.873" z="216.619"/>
+        <rotation name="WaferPos0x7f93d441f7c0_rot" unit="deg" x="180" y="0" z="99.9973586541882"/>
+        <scale name="WaferPos0x7f93d441f7c0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f890">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441f890_pos" unit="mm" x="-21.904" y="124.224" z="281.607"/>
+        <rotation name="WaferPos0x7f93d441f890_rot" unit="deg" x="156.322962531203" y="4.04851207783859" z="99.148810506937"/>
+        <scale name="WaferPos0x7f93d441f890_scl" x="0.999984679882647" y="1.00003870425099" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441f960">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441f960_pos" unit="mm" x="-97.893" y="82.142" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d441f960_rot" unit="deg" x="13.8634927027219" y="15.9317851731173" z="-138.051760603614"/>
+        <scale name="WaferPos0x7f93d441f960_scl" x="1.00002656464716" y="0.999980084801692" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441fa30">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441fa30_pos" unit="mm" x="-107.246" y="89.99" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d441fa30_rot" unit="deg" x="0" y="0" z="-139.997819322081"/>
+        <scale name="WaferPos0x7f93d441fa30_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441fb00">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441fb00_pos" unit="mm" x="-107.246" y="89.99" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d441fb00_rot" unit="deg" x="0" y="0" z="-139.997819322081"/>
+        <scale name="WaferPos0x7f93d441fb00_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441fbd0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441fbd0_pos" unit="mm" x="-107.246" y="89.99" z="27.344"/>
+        <rotation name="WaferPos0x7f93d441fbd0_rot" unit="deg" x="0" y="0" z="-139.997819322081"/>
+        <scale name="WaferPos0x7f93d441fbd0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441fca0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d441fca0_pos" unit="mm" x="-107.246" y="89.99" z="88.161"/>
+        <rotation name="WaferPos0x7f93d441fca0_rot" unit="deg" x="180" y="0" z="139.997819322081"/>
+        <scale name="WaferPos0x7f93d441fca0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441fd70">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441fd70_pos" unit="mm" x="-107.246" y="89.99" z="148.977"/>
+        <rotation name="WaferPos0x7f93d441fd70_rot" unit="deg" x="180" y="0" z="139.997819322081"/>
+        <scale name="WaferPos0x7f93d441fd70_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441fe40">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d441fe40_pos" unit="mm" x="-107.246" y="89.99" z="216.619"/>
+        <rotation name="WaferPos0x7f93d441fe40_rot" unit="deg" x="180" y="0" z="139.997819322081"/>
+        <scale name="WaferPos0x7f93d441fe40_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ff10">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441ff10_pos" unit="mm" x="-96.629" y="81.082" z="281.607"/>
+        <rotation name="WaferPos0x7f93d441ff10_rot" unit="deg" x="164.03143194555" y="18.1556199023453" z="137.431028898734"/>
+        <scale name="WaferPos0x7f93d441ff10_scl" x="1.00000321999482" y="0.999944898481911" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d441ffe0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d441ffe0_pos" unit="mm" x="-127.791" y="0" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d441ffe0_rot" unit="deg" x="0" y="21.0013124445943" z="180"/>
+        <scale name="WaferPos0x7f93d441ffe0_scl" x="1.00002975955718" y="1" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44200b0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44200b0_pos" unit="mm" x="-140" y="0" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d44200b0_rot" unit="deg" x="0" y="0" z="180"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420180">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420180_pos" unit="mm" x="-140" y="0" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d4420180_rot" unit="deg" x="0" y="0" z="180"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420250">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420250_pos" unit="mm" x="-140" y="0" z="27.344"/>
+        <rotation name="WaferPos0x7f93d4420250_rot" unit="deg" x="0" y="0" z="180"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420320">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d4420320_pos" unit="mm" x="-140" y="0" z="88.161"/>
+        <rotation name="WaferPos0x7f93d4420320_rot" unit="deg" x="180" y="0" z="180"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44203f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44203f0_pos" unit="mm" x="-140" y="0" z="148.977"/>
+        <rotation name="WaferPos0x7f93d44203f0_rot" unit="deg" x="180" y="0" z="180"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44204c0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44204c0_pos" unit="mm" x="-140" y="0" z="216.619"/>
+        <rotation name="WaferPos0x7f93d44204c0_rot" unit="deg" x="180" y="0" z="180"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420590">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4420590_pos" unit="mm" x="-126.141" y="0" z="281.607"/>
+        <rotation name="WaferPos0x7f93d4420590_rot" unit="deg" x="180" y="23.9991413269328" z="180"/>
+        <scale name="WaferPos0x7f93d4420590_scl" x="0.999943568407738" y="1" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420660">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4420660_pos" unit="mm" x="-97.893" y="-82.142" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d4420660_rot" unit="deg" x="-13.8634927027219" y="15.9317851731173" z="138.051760603614"/>
+        <scale name="WaferPos0x7f93d4420660_scl" x="1.00002656464716" y="0.999980084801692" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420730">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420730_pos" unit="mm" x="-107.246" y="-89.99" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d4420730_rot" unit="deg" x="0" y="0" z="139.997819322081"/>
+        <scale name="WaferPos0x7f93d4420730_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420800">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420800_pos" unit="mm" x="-107.246" y="-89.99" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d4420800_rot" unit="deg" x="0" y="0" z="139.997819322081"/>
+        <scale name="WaferPos0x7f93d4420800_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44208d0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44208d0_pos" unit="mm" x="-107.246" y="-89.99" z="27.344"/>
+        <rotation name="WaferPos0x7f93d44208d0_rot" unit="deg" x="0" y="0" z="139.997819322081"/>
+        <scale name="WaferPos0x7f93d44208d0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44209a0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d44209a0_pos" unit="mm" x="-107.246" y="-89.99" z="88.161"/>
+        <rotation name="WaferPos0x7f93d44209a0_rot" unit="deg" x="180" y="0" z="-139.997819322081"/>
+        <scale name="WaferPos0x7f93d44209a0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420a70">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420a70_pos" unit="mm" x="-107.246" y="-89.99" z="148.977"/>
+        <rotation name="WaferPos0x7f93d4420a70_rot" unit="deg" x="180" y="0" z="-139.997819322081"/>
+        <scale name="WaferPos0x7f93d4420a70_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420b40">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420b40_pos" unit="mm" x="-107.246" y="-89.99" z="216.619"/>
+        <rotation name="WaferPos0x7f93d4420b40_rot" unit="deg" x="180" y="0" z="-139.997819322081"/>
+        <scale name="WaferPos0x7f93d4420b40_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420c10">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4420c10_pos" unit="mm" x="-96.629" y="-81.082" z="281.607"/>
+        <rotation name="WaferPos0x7f93d4420c10_rot" unit="deg" x="-164.03143194555" y="18.1556199023453" z="-137.431028898734"/>
+        <scale name="WaferPos0x7f93d4420c10_scl" x="1.00000321999482" y="0.999944898481911" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420ce0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4420ce0_pos" unit="mm" x="-22.191" y="-125.849" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d4420ce0_rot" unit="deg" x="-20.7073809938476" y="3.56614178756488" z="99.3471815255742"/>
+        <scale name="WaferPos0x7f93d4420ce0_scl" x="0.999988144929729" y="0.999985864900099" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420db0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420db0_pos" unit="mm" x="-24.311" y="-137.873" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d4420db0_rot" unit="deg" x="0" y="0" z="99.9973586541882"/>
+        <scale name="WaferPos0x7f93d4420db0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420e80">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420e80_pos" unit="mm" x="-24.311" y="-137.873" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d4420e80_rot" unit="deg" x="0" y="0" z="99.9973586541882"/>
+        <scale name="WaferPos0x7f93d4420e80_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4420f50">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4420f50_pos" unit="mm" x="-24.311" y="-137.873" z="27.344"/>
+        <rotation name="WaferPos0x7f93d4420f50_rot" unit="deg" x="0" y="0" z="99.9973586541882"/>
+        <scale name="WaferPos0x7f93d4420f50_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421020">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d4421020_pos" unit="mm" x="-24.311" y="-137.873" z="88.161"/>
+        <rotation name="WaferPos0x7f93d4421020_rot" unit="deg" x="180" y="0" z="-99.9973586541882"/>
+        <scale name="WaferPos0x7f93d4421020_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44210f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44210f0_pos" unit="mm" x="-24.311" y="-137.873" z="148.977"/>
+        <rotation name="WaferPos0x7f93d44210f0_rot" unit="deg" x="180" y="0" z="-99.9973586541882"/>
+        <scale name="WaferPos0x7f93d44210f0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44211c0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44211c0_pos" unit="mm" x="-24.311" y="-137.873" z="216.619"/>
+        <rotation name="WaferPos0x7f93d44211c0_rot" unit="deg" x="180" y="0" z="-99.9973586541882"/>
+        <scale name="WaferPos0x7f93d44211c0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421290">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4421290_pos" unit="mm" x="-21.904" y="-124.224" z="281.607"/>
+        <rotation name="WaferPos0x7f93d4421290_rot" unit="deg" x="-156.322962531203" y="4.04851207783859" z="-99.148810506937"/>
+        <scale name="WaferPos0x7f93d4421290_scl" x="0.999984679882647" y="1.00003870425099" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421360">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4421360_pos" unit="mm" x="63.895" y="-110.67" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d4421360_rot" unit="deg" x="-18.3910859162337" y="-10.3233175013002" z="61.6739996337599"/>
+        <scale name="WaferPos0x7f93d4421360_scl" x="0.999985439894002" y="1.00001020494793" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421430">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421430_pos" unit="mm" x="70" y="-121.244" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d4421430_rot" unit="deg" x="0" y="0" z="59.9992722191726"/>
+        <scale name="WaferPos0x7f93d4421430_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421500">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421500_pos" unit="mm" x="70" y="-121.244" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d4421500_rot" unit="deg" x="0" y="0" z="59.9992722191726"/>
+        <scale name="WaferPos0x7f93d4421500_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44215d0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d44215d0_pos" unit="mm" x="70" y="-121.244" z="27.344"/>
+        <rotation name="WaferPos0x7f93d44215d0_rot" unit="deg" x="0" y="0" z="59.9992722191726"/>
+        <scale name="WaferPos0x7f93d44215d0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44216a0">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d44216a0_pos" unit="mm" x="70" y="-121.244" z="88.161"/>
+        <rotation name="WaferPos0x7f93d44216a0_rot" unit="deg" x="180" y="0" z="-59.9992722191726"/>
+        <scale name="WaferPos0x7f93d44216a0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4722170">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4722170_pos" unit="mm" x="70" y="-121.244" z="148.977"/>
+        <rotation name="WaferPos0x7f93d4722170_rot" unit="deg" x="180" y="0" z="-59.9992722191726"/>
+        <scale name="WaferPos0x7f93d4722170_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725f50">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4725f50_pos" unit="mm" x="70" y="-121.244" z="216.619"/>
+        <rotation name="WaferPos0x7f93d4725f50_rot" unit="deg" x="180" y="0" z="-59.9992722191726"/>
+        <scale name="WaferPos0x7f93d4725f50_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4725ff0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4725ff0_pos" unit="mm" x="63.07" y="-109.241" z="281.607"/>
+        <rotation name="WaferPos0x7f93d4725ff0_rot" unit="deg" x="-158.91734249421" y="-11.7358894818787" z="-62.1891295225834"/>
+        <scale name="WaferPos0x7f93d4725ff0_scl" x="0.999996899995195" y="1.00002113977655" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d47260c0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d47260c0_pos" unit="mm" x="120.084" y="-43.707" z="-173.6"/>
+        <rotation name="WaferPos0x7f93d47260c0_rot" unit="deg" x="-7.48140041013118" y="-19.6814837302612" z="21.2974501398446"/>
+        <scale name="WaferPos0x7f93d47260c0_scl" x="1.00002676464183" y="1.00000966995325" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4726160">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4726160_pos" unit="mm" x="131.557" y="-47.883" z="-107.939"/>
+        <rotation name="WaferPos0x7f93d4726160_rot" unit="deg" x="0" y="0" z="19.9987708695444"/>
+        <scale name="WaferPos0x7f93d4726160_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9c490">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9c490_pos" unit="mm" x="131.557" y="-47.883" z="-40.297"/>
+        <rotation name="WaferPos0x7f93d5e9c490_rot" unit="deg" x="0" y="0" z="19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5e9c490_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9fb80">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9fb80_pos" unit="mm" x="131.557" y="-47.883" z="27.344"/>
+        <rotation name="WaferPos0x7f93d5e9fb80_rot" unit="deg" x="0" y="0" z="19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5e9fb80_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9fc50">
+        <volumeref ref="aWafer_log0x7f93d4722b00"/>
+        <position name="WaferPos0x7f93d5e9fc50_pos" unit="mm" x="131.557" y="-47.883" z="88.161"/>
+        <rotation name="WaferPos0x7f93d5e9fc50_rot" unit="deg" x="180" y="0" z="-19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5e9fc50_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9fcf0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9fcf0_pos" unit="mm" x="131.557" y="-47.883" z="148.977"/>
+        <rotation name="WaferPos0x7f93d5e9fcf0_rot" unit="deg" x="180" y="0" z="-19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5e9fcf0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9fdc0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5e9fdc0_pos" unit="mm" x="131.557" y="-47.883" z="216.619"/>
+        <rotation name="WaferPos0x7f93d5e9fdc0_rot" unit="deg" x="180" y="0" z="-19.9987708695444"/>
+        <scale name="WaferPos0x7f93d5e9fdc0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9fe90">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9fe90_pos" unit="mm" x="118.534" y="-43.143" z="281.607"/>
+        <rotation name="WaferPos0x7f93d5e9fe90_rot" unit="deg" x="-171.342651055587" y="-22.4692749587337" z="-21.72081666166"/>
+        <scale name="WaferPos0x7f93d5e9fe90_scl" x="1.00003154450247" y="1.00002057478834" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5e9ff60">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5e9ff60_pos" unit="mm" x="100.958" y="84.713" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5e9ff60_rot" unit="deg" x="13.8634927027219" y="-15.9317851731173" z="-41.9482393963861"/>
+        <scale name="WaferPos0x7f93d5e9ff60_scl" x="1.00002656464716" y="0.999980084801692" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea0030">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea0030_pos" unit="mm" x="110.31" y="92.561" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea0030_rot" unit="deg" x="0" y="0" z="-40.0021806779193"/>
+        <scale name="WaferPos0x7f93d5ea0030_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea0100">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea0100_pos" unit="mm" x="110.31" y="92.561" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea0100_rot" unit="deg" x="0" y="0" z="-40.0021806779193"/>
+        <scale name="WaferPos0x7f93d5ea0100_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea01d0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea01d0_pos" unit="mm" x="110.31" y="92.561" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5ea01d0_rot" unit="deg" x="0" y="0" z="-40.0021806779193"/>
+        <scale name="WaferPos0x7f93d5ea01d0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea02a0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea02a0_pos" unit="mm" x="110.31" y="92.561" z="90.976"/>
+        <rotation name="WaferPos0x7f93d5ea02a0_rot" unit="deg" x="180" y="0" z="40.0021806779193"/>
+        <scale name="WaferPos0x7f93d5ea02a0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea0fe0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea0fe0_pos" unit="mm" x="110.31" y="92.561" z="158.617"/>
+        <rotation name="WaferPos0x7f93d5ea0fe0_rot" unit="deg" x="180" y="0" z="40.0021806779193"/>
+        <scale name="WaferPos0x7f93d5ea0fe0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea10b0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea10b0_pos" unit="mm" x="110.31" y="92.561" z="226.259"/>
+        <rotation name="WaferPos0x7f93d5ea10b0_rot" unit="deg" x="180" y="0" z="40.0021806779193"/>
+        <scale name="WaferPos0x7f93d5ea10b0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1180">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea1180_pos" unit="mm" x="99.694" y="83.653" z="291.247"/>
+        <rotation name="WaferPos0x7f93d5ea1180_rot" unit="deg" x="164.03143194555" y="-18.1556199023453" z="42.5689711012659"/>
+        <scale name="WaferPos0x7f93d5ea1180_scl" x="1.00000321999482" y="0.999944898481911" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1250">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea1250_pos" unit="mm" x="22.885" y="129.789" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5ea1250_rot" unit="deg" x="20.7073809938476" y="-3.56614178756488" z="-80.6528184744258"/>
+        <scale name="WaferPos0x7f93d5ea1250_scl" x="0.999988144929729" y="0.999985864900099" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1320">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1320_pos" unit="mm" x="25.005" y="141.812" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea1320_rot" unit="deg" x="0" y="0" z="-80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea1320_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea13f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea13f0_pos" unit="mm" x="25.005" y="141.812" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea13f0_rot" unit="deg" x="0" y="0" z="-80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea13f0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea14c0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea14c0_pos" unit="mm" x="25.005" y="141.812" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5ea14c0_rot" unit="deg" x="0" y="0" z="-80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea14c0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1590">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1590_pos" unit="mm" x="25.005" y="141.812" z="90.976"/>
+        <rotation name="WaferPos0x7f93d5ea1590_rot" unit="deg" x="180" y="0" z="80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea1590_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1660">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1660_pos" unit="mm" x="25.005" y="141.812" z="158.617"/>
+        <rotation name="WaferPos0x7f93d5ea1660_rot" unit="deg" x="180" y="0" z="80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea1660_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1730">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1730_pos" unit="mm" x="25.005" y="141.812" z="226.259"/>
+        <rotation name="WaferPos0x7f93d5ea1730_rot" unit="deg" x="180" y="0" z="80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea1730_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1800">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea1800_pos" unit="mm" x="22.599" y="128.164" z="291.247"/>
+        <rotation name="WaferPos0x7f93d5ea1800_rot" unit="deg" x="156.322962531203" y="-4.04851207783859" z="80.851189493063"/>
+        <scale name="WaferPos0x7f93d5ea1800_scl" x="0.999984679882647" y="1.00003870425099" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea18d0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea18d0_pos" unit="mm" x="-65.895" y="114.134" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5ea18d0_rot" unit="deg" x="18.3910859162337" y="10.3233175013002" z="-118.32600036624"/>
+        <scale name="WaferPos0x7f93d5ea18d0_scl" x="0.999985439894002" y="1.00001020494793" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea19a0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea19a0_pos" unit="mm" x="-72" y="124.708" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea19a0_rot" unit="deg" x="0" y="0" z="-120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea19a0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1a70">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1a70_pos" unit="mm" x="-72" y="124.708" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea1a70_rot" unit="deg" x="0" y="0" z="-120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea1a70_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1b40">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1b40_pos" unit="mm" x="-72" y="124.708" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5ea1b40_rot" unit="deg" x="0" y="0" z="-120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea1b40_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1c10">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1c10_pos" unit="mm" x="-72" y="124.708" z="90.976"/>
+        <rotation name="WaferPos0x7f93d5ea1c10_rot" unit="deg" x="180" y="0" z="120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea1c10_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1ce0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1ce0_pos" unit="mm" x="-72" y="124.708" z="158.617"/>
+        <rotation name="WaferPos0x7f93d5ea1ce0_rot" unit="deg" x="180" y="0" z="120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea1ce0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1db0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea1db0_pos" unit="mm" x="-72" y="124.708" z="226.259"/>
+        <rotation name="WaferPos0x7f93d5ea1db0_rot" unit="deg" x="180" y="0" z="120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea1db0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1e80">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea1e80_pos" unit="mm" x="-65.07" y="112.705" z="291.247"/>
+        <rotation name="WaferPos0x7f93d5ea1e80_rot" unit="deg" x="158.91734249421" y="11.7358894818787" z="117.810870477417"/>
+        <scale name="WaferPos0x7f93d5ea1e80_scl" x="0.999996899995195" y="1.00002113977655" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea1f50">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea1f50_pos" unit="mm" x="-123.843" y="45.075" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5ea1f50_rot" unit="deg" x="7.48140041013118" y="19.6814837302612" z="-158.702549860155"/>
+        <scale name="WaferPos0x7f93d5ea1f50_scl" x="1.00002676464183" y="1.00000966995325" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2020">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2020_pos" unit="mm" x="-135.316" y="49.251" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea2020_rot" unit="deg" x="0" y="0" z="-160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2020_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea20f0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea20f0_pos" unit="mm" x="-135.316" y="49.251" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea20f0_rot" unit="deg" x="0" y="0" z="-160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea20f0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea21c0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea21c0_pos" unit="mm" x="-135.316" y="49.251" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5ea21c0_rot" unit="deg" x="0" y="0" z="-160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea21c0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2290">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2290_pos" unit="mm" x="-135.316" y="49.251" z="90.976"/>
+        <rotation name="WaferPos0x7f93d5ea2290_rot" unit="deg" x="180" y="0" z="160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2290_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2360">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2360_pos" unit="mm" x="-135.316" y="49.251" z="158.617"/>
+        <rotation name="WaferPos0x7f93d5ea2360_rot" unit="deg" x="180" y="0" z="160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2360_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2430">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2430_pos" unit="mm" x="-135.316" y="49.251" z="226.259"/>
+        <rotation name="WaferPos0x7f93d5ea2430_rot" unit="deg" x="180" y="0" z="160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2430_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2500">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea2500_pos" unit="mm" x="-122.292" y="44.511" z="291.247"/>
+        <rotation name="WaferPos0x7f93d5ea2500_rot" unit="deg" x="171.342651055587" y="22.4692749587337" z="158.27918333834"/>
+        <scale name="WaferPos0x7f93d5ea2500_scl" x="1.00003154450247" y="1.00002057478834" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea25d0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea25d0_pos" unit="mm" x="-123.843" y="-45.075" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5ea25d0_rot" unit="deg" x="-7.48140041013118" y="19.6814837302612" z="158.702549860155"/>
+        <scale name="WaferPos0x7f93d5ea25d0_scl" x="1.00002676464183" y="1.00000966995325" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea26a0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea26a0_pos" unit="mm" x="-135.316" y="-49.251" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea26a0_rot" unit="deg" x="0" y="0" z="160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea26a0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2770">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2770_pos" unit="mm" x="-135.316" y="-49.251" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea2770_rot" unit="deg" x="0" y="0" z="160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2770_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2840">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2840_pos" unit="mm" x="-135.316" y="-49.251" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5ea2840_rot" unit="deg" x="0" y="0" z="160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2840_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2910">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2910_pos" unit="mm" x="-135.316" y="-49.251" z="90.976"/>
+        <rotation name="WaferPos0x7f93d5ea2910_rot" unit="deg" x="180" y="0" z="-160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2910_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea29e0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea29e0_pos" unit="mm" x="-135.316" y="-49.251" z="158.617"/>
+        <rotation name="WaferPos0x7f93d5ea29e0_rot" unit="deg" x="180" y="0" z="-160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea29e0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2ab0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2ab0_pos" unit="mm" x="-135.316" y="-49.251" z="226.259"/>
+        <rotation name="WaferPos0x7f93d5ea2ab0_rot" unit="deg" x="180" y="0" z="-160.001229130456"/>
+        <scale name="WaferPos0x7f93d5ea2ab0_scl" x="1.000000045" y="1.000000045" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2b80">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea2b80_pos" unit="mm" x="-122.292" y="-44.511" z="291.247"/>
+        <rotation name="WaferPos0x7f93d5ea2b80_rot" unit="deg" x="-171.342651055587" y="22.4692749587337" z="-158.27918333834"/>
+        <scale name="WaferPos0x7f93d5ea2b80_scl" x="1.00003154450247" y="1.00002057478834" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2c50">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea2c50_pos" unit="mm" x="-65.895" y="-114.134" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5ea2c50_rot" unit="deg" x="-18.3910859162337" y="10.3233175013002" z="118.32600036624"/>
+        <scale name="WaferPos0x7f93d5ea2c50_scl" x="0.999985439894002" y="1.00001020494793" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2d20">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2d20_pos" unit="mm" x="-72" y="-124.708" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea2d20_rot" unit="deg" x="0" y="0" z="120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea2d20_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2df0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2df0_pos" unit="mm" x="-72" y="-124.708" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea2df0_rot" unit="deg" x="0" y="0" z="120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea2df0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2ec0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2ec0_pos" unit="mm" x="-72" y="-124.708" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5ea2ec0_rot" unit="deg" x="0" y="0" z="120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea2ec0_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea2f90">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea2f90_pos" unit="mm" x="-72" y="-124.708" z="90.976"/>
+        <rotation name="WaferPos0x7f93d5ea2f90_rot" unit="deg" x="180" y="0" z="-120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea2f90_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea3060">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea3060_pos" unit="mm" x="-72" y="-124.708" z="158.617"/>
+        <rotation name="WaferPos0x7f93d5ea3060_rot" unit="deg" x="180" y="0" z="-120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea3060_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea3130">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea3130_pos" unit="mm" x="-72" y="-124.708" z="226.259"/>
+        <rotation name="WaferPos0x7f93d5ea3130_rot" unit="deg" x="180" y="0" z="-120.000727780827"/>
+        <scale name="WaferPos0x7f93d5ea3130_scl" x="0.999977999757995" y="0.999977999757995" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea3200">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea3200_pos" unit="mm" x="-65.07" y="-112.705" z="291.247"/>
+        <rotation name="WaferPos0x7f93d5ea3200_rot" unit="deg" x="-158.91734249421" y="11.7358894818787" z="-117.810870477417"/>
+        <scale name="WaferPos0x7f93d5ea3200_scl" x="0.999996899995195" y="1.00002113977655" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea32d0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d5ea32d0_pos" unit="mm" x="22.885" y="-129.789" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d5ea32d0_rot" unit="deg" x="-20.7073809938476" y="-3.56614178756488" z="80.6528184744258"/>
+        <scale name="WaferPos0x7f93d5ea32d0_scl" x="0.999988144929729" y="0.999985864900099" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea33a0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea33a0_pos" unit="mm" x="25.005" y="-141.812" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d5ea33a0_rot" unit="deg" x="0" y="0" z="80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea33a0_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5ea3470">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5ea3470_pos" unit="mm" x="25.005" y="-141.812" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d5ea3470_rot" unit="deg" x="0" y="0" z="80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5ea3470_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d5a04c70">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d5a04c70_pos" unit="mm" x="25.005" y="-141.812" z="23.334"/>
+        <rotation name="WaferPos0x7f93d5a04c70_rot" unit="deg" x="0" y="0" z="80.0026413458118"/>
+        <scale name="WaferPos0x7f93d5a04c70_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421770">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421770_pos" unit="mm" x="25.005" y="-141.812" z="90.976"/>
+        <rotation name="WaferPos0x7f93d4421770_rot" unit="deg" x="180" y="0" z="-80.0026413458118"/>
+        <scale name="WaferPos0x7f93d4421770_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421840">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421840_pos" unit="mm" x="25.005" y="-141.812" z="158.617"/>
+        <rotation name="WaferPos0x7f93d4421840_rot" unit="deg" x="180" y="0" z="-80.0026413458118"/>
+        <scale name="WaferPos0x7f93d4421840_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421910">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421910_pos" unit="mm" x="25.005" y="-141.812" z="226.259"/>
+        <rotation name="WaferPos0x7f93d4421910_rot" unit="deg" x="180" y="0" z="-80.0026413458118"/>
+        <scale name="WaferPos0x7f93d4421910_scl" x="0.999983999871998" y="0.999983999871998" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44219e0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d44219e0_pos" unit="mm" x="22.599" y="-128.164" z="291.247"/>
+        <rotation name="WaferPos0x7f93d44219e0_rot" unit="deg" x="-156.322962531203" y="-4.04851207783859" z="-80.851189493063"/>
+        <scale name="WaferPos0x7f93d44219e0_scl" x="0.999984679882647" y="1.00003870425099" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421ab0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4421ab0_pos" unit="mm" x="100.958" y="-84.713" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d4421ab0_rot" unit="deg" x="-13.8634927027219" y="-15.9317851731173" z="41.9482393963861"/>
+        <scale name="WaferPos0x7f93d4421ab0_scl" x="1.00002656464716" y="0.999980084801692" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421b80">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421b80_pos" unit="mm" x="110.31" y="-92.561" z="-111.949"/>
+        <rotation name="WaferPos0x7f93d4421b80_rot" unit="deg" x="0" y="0" z="40.0021806779193"/>
+        <scale name="WaferPos0x7f93d4421b80_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421c50">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421c50_pos" unit="mm" x="110.31" y="-92.561" z="-44.307"/>
+        <rotation name="WaferPos0x7f93d4421c50_rot" unit="deg" x="0" y="0" z="40.0021806779193"/>
+        <scale name="WaferPos0x7f93d4421c50_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421d20">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421d20_pos" unit="mm" x="110.31" y="-92.561" z="23.334"/>
+        <rotation name="WaferPos0x7f93d4421d20_rot" unit="deg" x="0" y="0" z="40.0021806779193"/>
+        <scale name="WaferPos0x7f93d4421d20_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421df0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421df0_pos" unit="mm" x="110.31" y="-92.561" z="90.976"/>
+        <rotation name="WaferPos0x7f93d4421df0_rot" unit="deg" x="180" y="0" z="-40.0021806779193"/>
+        <scale name="WaferPos0x7f93d4421df0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421ec0">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421ec0_pos" unit="mm" x="110.31" y="-92.561" z="158.617"/>
+        <rotation name="WaferPos0x7f93d4421ec0_rot" unit="deg" x="180" y="0" z="-40.0021806779193"/>
+        <scale name="WaferPos0x7f93d4421ec0_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4421f90">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4421f90_pos" unit="mm" x="110.31" y="-92.561" z="226.259"/>
+        <rotation name="WaferPos0x7f93d4421f90_rot" unit="deg" x="180" y="0" z="-40.0021806779193"/>
+        <scale name="WaferPos0x7f93d4421f90_scl" x="0.999973919659908" y="0.999973919659908" z="1"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422060">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4422060_pos" unit="mm" x="99.694" y="-83.653" z="291.247"/>
+        <rotation name="WaferPos0x7f93d4422060_rot" unit="deg" x="-164.03143194555" y="-18.1556199023453" z="-42.5689711012659"/>
+        <scale name="WaferPos0x7f93d4422060_scl" x="1.00000321999482" y="0.999944898481911" z="0.999943568407738"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422130">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d4422130_pos" unit="mm" x="131.791" y="0" z="-177.61"/>
+        <rotation name="WaferPos0x7f93d4422130_rot" unit="deg" x="0" y="-21.0013124445943" z="0"/>
+        <scale name="WaferPos0x7f93d4422130_scl" x="1.00002975955718" y="1" z="1.00002975955718"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422200">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4422200_pos" unit="mm" x="144" y="0" z="-111.949"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422280">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4422280_pos" unit="mm" x="144" y="0" z="-44.307"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422300">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4422300_pos" unit="mm" x="144" y="0" z="23.334"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422380">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4422380_pos" unit="mm" x="144" y="0" z="90.976"/>
+        <rotation name="WaferPos0x7f93d4422380_rot" unit="deg" x="180" y="0" z="0"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422450">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4422450_pos" unit="mm" x="144" y="0" z="158.617"/>
+        <rotation name="WaferPos0x7f93d4422450_rot" unit="deg" x="180" y="0" z="0"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d4422520">
+        <volumeref ref="aWafer_log0x7f93d4722920"/>
+        <position name="WaferPos0x7f93d4422520_pos" unit="mm" x="144" y="0" z="226.259"/>
+        <rotation name="WaferPos0x7f93d4422520_rot" unit="deg" x="180" y="0" z="0"/>
+      </physvol>
+      <physvol name="WaferPos0x7f93d44225f0">
+        <volumeref ref="aWafer_log0x7f93d4722ce0"/>
+        <position name="WaferPos0x7f93d44225f0_pos" unit="mm" x="130.141" y="0" z="291.247"/>
+        <rotation name="WaferPos0x7f93d44225f0_rot" unit="deg" x="180" y="-23.9991413269328" z="0"/>
+        <scale name="WaferPos0x7f93d44225f0_scl" x="0.999943568407738" y="1" z="0.999943568407738"/>
+      </physvol>
+    </volume>
+    <volume name="Layer_log0x7f93d4422a40">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4422940"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4422c80">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4422b80"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4422ec0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4422dc0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4423120">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4423020"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4423360">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4423260"/>
+    </volume>
+    <volume name="Layer_log0x7f93d44235e0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d44234e0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4423800">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4423700"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4423a40">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4423940"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4423c80">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4423b80"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4423f40">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4423e40"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4424180">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4424080"/>
+    </volume>
+    <volume name="Layer_log0x7f93d44243c0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d44242c0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4424600">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4424500"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4424840">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4424740"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4424a80">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4424980"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4424cc0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4424bc0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4424f00">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4424e00"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4425240">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425140"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4425450">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425350"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4425690">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425590"/>
+    </volume>
+    <volume name="Layer_log0x7f93d44258d0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d44257d0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4425b10">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425a10"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4425d50">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425c50"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4425f90">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425e90"/>
+    </volume>
+    <volume name="Layer_log0x7f93d44261d0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d44260d0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4426410">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4426310"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4426650">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4426550"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4426890">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4426790"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4426ad0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d44269d0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4426d10">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4426c10"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4426f50">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4426e50"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4427190">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4427090"/>
+    </volume>
+    <volume name="Layer_log0x7f93d44273d0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d44272d0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4427710">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4425040"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4427950">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4427850"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4427b90">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4427a90"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4427dd0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4427cd0"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4428010">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4427f10"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4428250">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4428150"/>
+    </volume>
+    <volume name="Layer_log0x7f93d4428490">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Lay_tube0x7f93d4428390"/>
+    </volume>
+    <volume name="Dch_log0x7f93d4422790">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="Dch_tube0x7f93d4422690"/>
+      <physvol name="Layer0x7f93d4422b10">
+        <volumeref ref="Layer_log0x7f93d4422a40"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4422d50">
+        <volumeref ref="Layer_log0x7f93d4422c80"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4422f90">
+        <volumeref ref="Layer_log0x7f93d4422ec0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44231f0">
+        <volumeref ref="Layer_log0x7f93d4423120"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4423430">
+        <volumeref ref="Layer_log0x7f93d4423360"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44236b0">
+        <volumeref ref="Layer_log0x7f93d44235e0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44238d0">
+        <volumeref ref="Layer_log0x7f93d4423800"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4423b10">
+        <volumeref ref="Layer_log0x7f93d4423a40"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4423d50">
+        <volumeref ref="Layer_log0x7f93d4423c80"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424010">
+        <volumeref ref="Layer_log0x7f93d4423f40"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424250">
+        <volumeref ref="Layer_log0x7f93d4424180"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424490">
+        <volumeref ref="Layer_log0x7f93d44243c0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44246d0">
+        <volumeref ref="Layer_log0x7f93d4424600"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424910">
+        <volumeref ref="Layer_log0x7f93d4424840"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424b50">
+        <volumeref ref="Layer_log0x7f93d4424a80"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424d90">
+        <volumeref ref="Layer_log0x7f93d4424cc0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4424fd0">
+        <volumeref ref="Layer_log0x7f93d4424f00"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44252e0">
+        <volumeref ref="Layer_log0x7f93d4425240"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4425520">
+        <volumeref ref="Layer_log0x7f93d4425450"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4425760">
+        <volumeref ref="Layer_log0x7f93d4425690"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44259a0">
+        <volumeref ref="Layer_log0x7f93d44258d0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4425be0">
+        <volumeref ref="Layer_log0x7f93d4425b10"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4425e20">
+        <volumeref ref="Layer_log0x7f93d4425d50"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4426060">
+        <volumeref ref="Layer_log0x7f93d4425f90"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44262a0">
+        <volumeref ref="Layer_log0x7f93d44261d0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44264e0">
+        <volumeref ref="Layer_log0x7f93d4426410"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4426720">
+        <volumeref ref="Layer_log0x7f93d4426650"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4426960">
+        <volumeref ref="Layer_log0x7f93d4426890"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4426ba0">
+        <volumeref ref="Layer_log0x7f93d4426ad0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4426de0">
+        <volumeref ref="Layer_log0x7f93d4426d10"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4427020">
+        <volumeref ref="Layer_log0x7f93d4426f50"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4427260">
+        <volumeref ref="Layer_log0x7f93d4427190"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44274a0">
+        <volumeref ref="Layer_log0x7f93d44273d0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44277e0">
+        <volumeref ref="Layer_log0x7f93d4427710"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4427a20">
+        <volumeref ref="Layer_log0x7f93d4427950"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4427c60">
+        <volumeref ref="Layer_log0x7f93d4427b90"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4427ea0">
+        <volumeref ref="Layer_log0x7f93d4427dd0"/>
+      </physvol>
+      <physvol name="Layer0x7f93d44280e0">
+        <volumeref ref="Layer_log0x7f93d4428010"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4428320">
+        <volumeref ref="Layer_log0x7f93d4428250"/>
+      </physvol>
+      <physvol name="Layer0x7f93d4428560">
+        <volumeref ref="Layer_log0x7f93d4428490"/>
+      </physvol>
+    </volume>
+    <volume name="expHall_log0x7f93d58e13c0">
+      <materialref ref="ArgonGas0x7f93d441c8b0"/>
+      <solidref ref="expHall_box0x7f93d58e1030"/>
+      <physvol name="Svt0x7f93d58e1dc0">
+        <volumeref ref="Svt_log0x7f93d58e1c80"/>
+      </physvol>
+      <physvol name="Dch0x7f93d44228d0">
+        <volumeref ref="Dch_log0x7f93d4422790"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <userinfo>
+    <auxiliary auxtype="Region" auxvalue="DefaultRegionForTheWorld0x7f93d58d5a30">
+      <auxiliary auxtype="volume" auxvalue="expHall_log0x7f93d58e13c0"/>
+      <auxiliary auxtype="gamcut" auxunit="mm" auxvalue="1"/>
+      <auxiliary auxtype="ecut" auxunit="mm" auxvalue="1"/>
+      <auxiliary auxtype="poscut" auxunit="mm" auxvalue="1"/>
+      <auxiliary auxtype="pcut" auxunit="mm" auxvalue="1"/>
+    </auxiliary>
+  </userinfo>
+
+  <setup name="Default" version="1.0">
+    <world ref="expHall_log0x7f93d58e13c0"/>
+  </setup>
+
+</gdml>

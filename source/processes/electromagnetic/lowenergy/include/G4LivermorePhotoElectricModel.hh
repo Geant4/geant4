@@ -45,87 +45,82 @@
 
 class G4ParticleChangeForGamma;
 class G4VAtomDeexcitation;
-class G4LPhysicsFreeVector;
+class G4PhysicsFreeVector;
 
 class G4LivermorePhotoElectricModel : public G4VEmModel
 {
-    
 public:
+  explicit G4LivermorePhotoElectricModel(const G4String& nam = "LivermorePhElectric");
     
-    G4LivermorePhotoElectricModel(const G4String& nam = "LivermorePhElectric");
+  virtual ~G4LivermorePhotoElectricModel();
     
-    virtual ~G4LivermorePhotoElectricModel();
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
     
-    virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double energy,
+				 G4double cutEnergy = 0.0,
+				 G4double maxEnergy = DBL_MAX) override;
+  
+  G4double ComputeCrossSectionPerAtom(
+				      const G4ParticleDefinition*,
+				      G4double energy,
+				      G4double Z,
+				      G4double A=0,
+				      G4double cut=0,
+				      G4double emax=DBL_MAX) override;
     
-    virtual G4double CrossSectionPerVolume(const G4Material*,
-                                           const G4ParticleDefinition*,
-                                           G4double energy,
-                                           G4double cutEnergy = 0.0,
-                                           G4double maxEnergy = DBL_MAX);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
     
-    virtual G4double ComputeCrossSectionPerAtom(
-                                                const G4ParticleDefinition*,
-                                                G4double energy,
-                                                G4double Z,
-                                                G4double A=0,
-                                                G4double cut=0,
-                                                G4double emax=DBL_MAX);
+  
+  void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
     
-    virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                   const G4MaterialCutsCouple*,
-                                   const G4DynamicParticle*,
-                                   G4double tmin,
-                                   G4double maxEnergy);
-    
-    
-    virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
-    
-    inline void SetLimitNumberOfShells(G4int);
-    G4double GetBindingEnergy (G4int Z, G4int shell);
-    
-    G4LivermorePhotoElectricModel & operator=
-    (const G4LivermorePhotoElectricModel &right) = delete;
-    G4LivermorePhotoElectricModel(const G4LivermorePhotoElectricModel&) = delete;
+  inline void SetLimitNumberOfShells(G4int);
+  G4double GetBindingEnergy (G4int Z, G4int shell);
+  
+  G4LivermorePhotoElectricModel & operator=
+  (const G4LivermorePhotoElectricModel &right) = delete;
+  G4LivermorePhotoElectricModel(const G4LivermorePhotoElectricModel&) = delete;
 
-protected:
-    
+protected:    
     G4ParticleChangeForGamma* fParticleChange;
     
 private:
-    
-    void ReadData(G4int Z);
-
-    const G4String& FindDirectoryPath();
-        
-    const G4ParticleDefinition*   theGamma;
-    const G4ParticleDefinition*   theElectron;
-    
-    G4int                   verboseLevel;
-    G4int                   maxZ;
-    G4int                   nShellLimit;
-    G4bool                  fDeexcitationActive;
-    G4bool                  isInitialised;
-    
-    static G4LPhysicsFreeVector*   fCrossSection[99];
-    static G4LPhysicsFreeVector*   fCrossSectionLE[99];
-    static std::vector<G4double>*  fParamHigh[99];
-    static std::vector<G4double>*  fParamLow[99];
-    static G4int                   fNShells[99];
-    static G4int                   fNShellsUsed[99];
-    static G4ElementData*          fShellCrossSection;
-    static G4Material*             fWater;
-    static G4double                fWaterEnergyLimit;
-    static G4String                fDataDirectory;
-
+  void ReadData(G4int Z);  
+  const G4String& FindDirectoryPath();
+  
+  const G4ParticleDefinition*   theGamma;
+  const G4ParticleDefinition*   theElectron;
+  
+  static G4PhysicsFreeVector*   fCrossSection[99];
+  static G4PhysicsFreeVector*   fCrossSectionLE[99];
+  static std::vector<G4double>*  fParamHigh[99];
+  static std::vector<G4double>*  fParamLow[99];
+  static G4int                   fNShells[99];
+  static G4int                   fNShellsUsed[99];
+  static G4ElementData*          fShellCrossSection;
+  static G4Material*             fWater;
+  static G4double                fWaterEnergyLimit;
+  static G4String                fDataDirectory;
+  
 #ifdef G4MULTITHREADED
-    static G4Mutex livPhotoeffMutex;
+  static G4Mutex livPhotoeffMutex;
 #endif
-    
-    G4VAtomDeexcitation*    fAtomDeexcitation;
-    
-    G4double                fCurrSection;
-    std::vector<G4double>   fSandiaCof;
+  
+  G4VAtomDeexcitation*    fAtomDeexcitation;
+  std::vector<G4double>   fSandiaCof;
+
+  G4double                fCurrSection;
+  G4int                   verboseLevel;
+  G4int                   maxZ;
+  G4int                   nShellLimit;
+  G4bool                  fDeexcitationActive;
+  G4bool                  isInitialised;
+  
 };
 
 inline 

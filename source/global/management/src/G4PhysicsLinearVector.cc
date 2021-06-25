@@ -35,16 +35,16 @@
 #include "G4PhysicsLinearVector.hh"
 
 // --------------------------------------------------------------------
-G4PhysicsLinearVector::G4PhysicsLinearVector()
-  : G4PhysicsVector()
+G4PhysicsLinearVector::G4PhysicsLinearVector(G4bool spline)
+  : G4PhysicsVector(spline)
 {
   type = T_G4PhysicsLinearVector;
 }
 
 // --------------------------------------------------------------------
 G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, G4double theEmax,
-                                             std::size_t theNbin)
-  : G4PhysicsVector()
+                                             std::size_t theNbin, G4bool spline)
+  : G4PhysicsVector(spline)
 {
   numberOfNodes = theNbin + 1;
   if(theNbin < 1 || theEmin == theEmax)

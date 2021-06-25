@@ -37,7 +37,6 @@
 #include "G4Nucleus.hh"
 #include "G4ProcessManager.hh"
 #include "G4CrossSectionDataStore.hh"
-#include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
 #include "G4HadronicInteraction.hh"

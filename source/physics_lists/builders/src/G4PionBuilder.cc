@@ -43,8 +43,8 @@
 
 G4PionBuilder::G4PionBuilder()
 {  
-  thePionPlusInelastic=new G4PionPlusInelasticProcess;
-  thePionMinusInelastic=new G4PionMinusInelasticProcess;
+  thePionPlusInelastic=new  G4HadronInelasticProcess( "pi+Inelastic", G4PionPlus::Definition() );
+  thePionMinusInelastic=new G4HadronInelasticProcess( "pi-Inelastic", G4PionMinus::Definition() );
 }
 
 void G4PionBuilder::

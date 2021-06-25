@@ -58,7 +58,7 @@ UrQMDNeutronBuilder::UrQMDNeutronBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UrQMDNeutronBuilder::Build(G4NeutronInelasticProcess * aP)
+void UrQMDNeutronBuilder::Build(G4HadronInelasticProcess * aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);
@@ -75,14 +75,14 @@ UrQMDNeutronBuilder::~UrQMDNeutronBuilder()
 void UrQMDNeutronBuilder::Build(G4HadronElasticProcess * )
 {}
 
-void UrQMDNeutronBuilder::Build(G4HadronFissionProcess* aP)
+void UrQMDNeutronBuilder::Build(G4NeutronFissionProcess* aP)
 {
   fissionModel->SetMinEnergy(0.0);
   fissionModel->SetMaxEnergy(20.0*TeV);
   aP->RegisterMe(fissionModel);
 }
 
-void UrQMDNeutronBuilder::Build(G4HadronCaptureProcess* aP)
+void UrQMDNeutronBuilder::Build(G4NeutronCaptureProcess* aP)
 {
   aP->RegisterMe(captureModel);
 }

@@ -48,6 +48,7 @@
 #include "G4LossTableManager.hh"
 #include "G4EmParameters.hh"
 #include "G4NistManager.hh"
+#include "G4DynamicParticle.hh"
 #include "G4VEmProcess.hh"
 #include "G4VEnergyLossProcess.hh"
 #include "G4VMultipleScattering.hh"
@@ -77,33 +78,11 @@ G4EmCalculator::G4EmCalculator()
   nist    = G4NistManager::Instance();
   theParameters = G4EmParameters::Instance();
   corr    = manager->EmCorrections();
-  nLocalMaterials    = 0;
-  verbose            = 0;
-  currentCoupleIndex = 0;
-  currentCouple      = nullptr;
-  currentMaterial    = cutMaterial = nullptr;
-  currentParticle    = nullptr;
-  lambdaParticle     = nullptr;
-  baseParticle       = nullptr;
-  currentLambda      = nullptr;
-  currentModel       = nullptr;
-  currentProcess     = nullptr;
-  curProcess         = nullptr;
-  loweModel          = nullptr;
-  chargeSquare       = 1.0;
-  massRatio          = 1.0;
-  mass               = 0.0;
-  currentCut         = 0.0;
   cutenergy[0] = cutenergy[1] = cutenergy[2] = DBL_MAX;
-  currentParticleName= "";
-  currentMaterialName= "";
-  currentName        = "";
-  lambdaName         = "";
-  theGenericIon      = G4GenericIon::GenericIon();
-  ionEffCharge       = new G4ionEffectiveCharge();
-  ionTable           = G4ParticleTable::GetParticleTable()->GetIonTable();
-  isIon              = false;
-  isApplicable       = false;
+  theGenericIon = G4GenericIon::GenericIon();
+  ionEffCharge  = new G4ionEffectiveCharge();
+  dynParticle   = new G4DynamicParticle();
+  ionTable      = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -111,6 +90,7 @@ G4EmCalculator::G4EmCalculator()
 G4EmCalculator::~G4EmCalculator()
 {
   delete ionEffCharge;
+  delete dynParticle;
   for (G4int i=0; i<nLocalMaterials; ++i) {
     delete localCouples[i];
   }
@@ -134,10 +114,9 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy,
         G4double eloss = res*length;
         //G4cout << "### GetDEDX: E= " << kinEnergy << " dedx0= " << res 
         //       << " de= " << eloss << G4endl;; 
-        G4double niel  = 0.0;
-        dynParticle.SetKineticEnergy(kinEnergy);
+        dynParticle->SetKineticEnergy(kinEnergy);
         currentModel->GetChargeSquareRatio(p, mat, kinEnergy);
-        currentModel->CorrectionsAlongStep(couple,&dynParticle,eloss,niel,length);
+        currentModel->CorrectionsAlongStep(couple,dynParticle,length,eloss);
         res = eloss/length; 
              //G4cout << " de1= " << eloss << " res1= " << res 
         //       << " " << p->GetParticleName() <<G4endl;;
@@ -454,10 +433,9 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
           const G4Region* r = 0;
           const G4MaterialCutsCouple* couple = FindCouple(mat, r);
           G4double eloss = res*length;
-          G4double niel  = 0.0;
-          dynParticle.SetKineticEnergy(kinEnergy);
+          dynParticle->SetKineticEnergy(kinEnergy);
           currentModel->GetChargeSquareRatio(p, mat, kinEnergy);
-          currentModel->CorrectionsAlongStep(couple,&dynParticle,eloss,niel,length);
+          currentModel->CorrectionsAlongStep(couple,dynParticle,length,eloss);
           res = eloss/length; 
         
           if(verbose > 1) {
@@ -583,7 +561,7 @@ G4double G4EmCalculator::ComputeNuclearDEDX(G4double kinEnergy,
   G4double res = 0.0;
   G4VEmProcess* nucst = FindDiscreteProcess(p, "nuclearStopping");
   if(nucst) {
-    G4VEmModel* mod = nucst->GetModelByIndex();
+    G4VEmModel* mod = nucst->EmModel();
     if(mod) {
       mod->SetFluctuationFlag(false);
       res = mod->ComputeDEDXPerVolume(mat, p, kinEnergy);
@@ -785,8 +763,8 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
 
     // new particle
     currentParticle = p;
-    dynParticle.SetDefinition(const_cast<G4ParticleDefinition*>(p));
-    dynParticle.SetKineticEnergy(kinEnergy);
+    dynParticle->SetDefinition(const_cast<G4ParticleDefinition*>(p));
+    dynParticle->SetKineticEnergy(kinEnergy);
     baseParticle    = 0;
     currentParticleName = p->GetParticleName();
     massRatio       = 1.0;

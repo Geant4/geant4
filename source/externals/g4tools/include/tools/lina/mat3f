@@ -1,0 +1,50 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_mat3f
+#define tools_mat3f
+
+#include "mat3"
+//#include "mathf"
+
+namespace tools {
+
+class mat3f : public mat3<float> {
+  typedef mat3<float> parent;
+public:
+  mat3f(){}
+  mat3f(float a_00,float a_01,float a_02, //first  row
+        float a_10,float a_11,float a_12, //second row
+        float a_20,float a_21,float a_22) //third  row
+  :parent(a_00,a_01,a_02,
+          a_10,a_11,a_12,
+          a_20,a_21,a_22)
+  {}
+  virtual ~mat3f() {}
+public:
+  mat3f(const mat3f& a_from):parent(a_from){}
+  mat3f& operator=(const mat3f& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+/*
+  void set_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    parent::set_rotate(a_x,a_y,a_z,a_angle,fsin,fcos);
+  }
+  void mul_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    parent::mul_rotate(a_x,a_y,a_z,a_angle,fsin,fcos);
+  }
+  void left_mul_rotate(const float& a_x,const float& a_y,const float& a_z,const float& a_angle) {
+    parent::left_mul_rotate(a_x,a_y,a_z,a_angle,fsin,fcos);
+  }
+  bool get_rotate(float& a_x,float& a_y,float& a_z,float& a_angle) {
+    return parent::get_rotate(a_x,a_y,a_z,a_angle,facos,fsin,fsqrt); //warning : acos and not cos.
+  }
+  */
+public: //operators
+};
+
+}
+
+#endif

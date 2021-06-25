@@ -1,6 +1,3 @@
-#------------------------------------------------------------------------------
-# Module : G4materials
-# Package: Geant4.src.G4materials
-#------------------------------------------------------------------------------
+# - G4materials category build(s)
 
-geant4_global_library_target(COMPONENTS sources.cmake)
+geant4_global_library_target(NAME G4materials COMPONENTS sources.cmake)

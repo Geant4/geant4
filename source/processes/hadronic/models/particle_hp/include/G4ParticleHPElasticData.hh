@@ -80,9 +80,6 @@ class G4ParticleHPElasticData : public G4VCrossSectionDataSet
       void BuildPhysicsTable(const G4ParticleDefinition&);
       void DumpPhysicsTable(const G4ParticleDefinition&);
 
-      void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
-      void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
-
       void SetVerboseLevel( G4int );
       G4int GetVerboseLevel() const;
       virtual void CrossSectionDescription(std::ostream&) const;
@@ -90,7 +87,6 @@ class G4ParticleHPElasticData : public G4VCrossSectionDataSet
    private:
    
       G4PhysicsTable * theCrossSections;
-      G4bool onFlightDB;
       G4bool instanceOfWorker;
 
       G4double ke_cache;

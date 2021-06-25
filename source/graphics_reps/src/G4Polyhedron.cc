@@ -45,13 +45,13 @@ G4PolyhedronBox::G4PolyhedronBox (G4double dx, G4double dy, G4double dz):
 
 G4PolyhedronBox::~G4PolyhedronBox () {}
 
-G4PolyhedronCone::G4PolyhedronCone (G4double Rmn1, G4double Rmx1, 
+G4PolyhedronCone::G4PolyhedronCone (G4double Rmn1, G4double Rmx1,
                                     G4double Rmn2, G4double Rmx2, G4double Dz):
   G4Polyhedron (HepPolyhedronCone (Rmn1, Rmx1, Rmn2, Rmx2, Dz)) {}
 
 G4PolyhedronCone::~G4PolyhedronCone () {}
 
-G4PolyhedronCons::G4PolyhedronCons (G4double Rmn1, G4double Rmx1, 
+G4PolyhedronCons::G4PolyhedronCons (G4double Rmn1, G4double Rmx1,
                                     G4double Rmn2, G4double Rmx2, G4double Dz,
                                     G4double Phi1, G4double Dphi):
   G4Polyhedron (HepPolyhedronCons (Rmn1, Rmx1, Rmn2, Rmx2, Dz, Phi1, Dphi)) {}
@@ -71,6 +71,10 @@ G4PolyhedronPcon::G4PolyhedronPcon (G4double phi, G4double dphi, G4int nz,
                                     const G4double *rmax):
   G4Polyhedron (HepPolyhedronPcon (phi, dphi, nz, z, rmin, rmax)) {}
 
+G4PolyhedronPcon::G4PolyhedronPcon (G4double phi, G4double dphi,
+                                    const std::vector<G4TwoVector> &rz):
+  G4Polyhedron (HepPolyhedronPcon(phi, dphi, rz)) {}
+
 G4PolyhedronPcon::~G4PolyhedronPcon () {}
 
 G4PolyhedronPgon::G4PolyhedronPgon (G4double phi, G4double dphi, G4int npdv,
@@ -79,6 +83,10 @@ G4PolyhedronPgon::G4PolyhedronPgon (G4double phi, G4double dphi, G4int npdv,
                                     const G4double *rmin,
                                     const G4double *rmax):
   G4Polyhedron (HepPolyhedronPgon (phi, dphi, npdv, nz, z, rmin, rmax)) {}
+
+G4PolyhedronPgon::G4PolyhedronPgon (G4double phi, G4double dphi, G4int npdv,
+                                    const std::vector<G4TwoVector> &rz):
+  G4Polyhedron (HepPolyhedronPgon(phi, dphi, npdv, rz)) {}
 
 G4PolyhedronPgon::~G4PolyhedronPgon () {}
 
@@ -131,7 +139,7 @@ G4PolyhedronTube::G4PolyhedronTube (G4double Rmin, G4double Rmax, G4double Dz):
 
 G4PolyhedronTube::~G4PolyhedronTube () {}
 
-G4PolyhedronTubs::G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz, 
+G4PolyhedronTubs::G4PolyhedronTubs (G4double Rmin, G4double Rmax, G4double Dz,
                                     G4double Phi1, G4double Dphi):
   G4Polyhedron (HepPolyhedronTubs (Rmin, Rmax, Dz, Phi1, Dphi)) {}
 
@@ -151,7 +159,7 @@ G4PolyhedronHype::G4PolyhedronHype (G4double r1, G4double r2, G4double tan1,
 G4PolyhedronHype::~G4PolyhedronHype () {}
 
 G4PolyhedronEllipsoid::G4PolyhedronEllipsoid (G4double ax, G4double by,
-                                              G4double cz, 
+                                              G4double cz,
                                               G4double zCut1, G4double zCut2):
   G4Polyhedron (HepPolyhedronEllipsoid (ax, by, cz, zCut1, zCut2)) {}
 
@@ -159,7 +167,7 @@ G4PolyhedronEllipsoid::~G4PolyhedronEllipsoid () {}
 
 G4PolyhedronEllipticalCone::G4PolyhedronEllipticalCone (G4double ax,
                                                         G4double ay,
-                                                        G4double h, 
+                                                        G4double h,
                                                         G4double zCut1):
   G4Polyhedron (HepPolyhedronEllipticalCone (ax, ay, h, zCut1)) {}
 

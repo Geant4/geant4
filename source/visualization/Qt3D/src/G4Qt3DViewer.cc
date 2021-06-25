@@ -247,7 +247,9 @@ G4bool G4Qt3DViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
       (lastVP.GetVisAttributesModifiers() !=
-       fVP.GetVisAttributesModifiers())
+       fVP.GetVisAttributesModifiers())                           ||
+      (lastVP.IsSpecialMeshRendering() !=
+       fVP.IsSpecialMeshRendering())
       ) {
     return true;
   }
@@ -263,6 +265,10 @@ G4bool G4Qt3DViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    return true;
+
+  if (lastVP.IsSpecialMeshRendering() &&
+      (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
   return false;

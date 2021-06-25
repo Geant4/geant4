@@ -45,7 +45,6 @@
 // Class for Rayleigh scattering generation
 //
 // Class Description: End 
-
 // -------------------------------------------------------------------
 //
 //    
@@ -109,7 +108,6 @@ G4RayleighAngularGenerator::SampleDirection(const G4DynamicParticle* dp,
 
   G4double cost;
   do {
-
     G4double w = w0;
     G4double n = n0;
     G4double b = b0;
@@ -131,12 +129,9 @@ G4RayleighAngularGenerator::SampleDirection(const G4DynamicParticle* dp,
 
     // sampling of angle
     G4double y = w*G4UniformRand();
-    if(y < numlim) { x = y*n*( 1. + 0.5*(n + 1.)*y*(1. - (n + 2.)*y/3.)); }
-    //else           { x = 1.0/std::pow(1 - y, n) - 1.0; }
+    if(y < numlim) { x = y*n*( 1. + 0.5*(n + 1.)*y*(1. - (n + 2.)*y/3.)); }   
     else           { x = G4Exp(-n*G4Log(1. - y)) - 1.0; }
     cost = 1.0 - x/(b*xx);
-    //G4cout << "cost = " << cost << " w= " << w << " n= " << n 
-    //	   << " b= " << b << " x= " << x << " xx= " << xx << G4endl;  
   } while (2*G4UniformRand() > 1.0 + cost*cost || cost < -1.0);
 
   G4double phi  = twopi*G4UniformRand();

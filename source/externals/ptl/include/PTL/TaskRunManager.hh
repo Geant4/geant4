@@ -44,7 +44,7 @@ class TaskManager;
 class TaskRunManager
 {
 public:
-    typedef TaskRunManager*    pointer;
+    typedef TaskRunManager* pointer;
 
 public:
     // Parameters:
@@ -52,7 +52,7 @@ public:
     //      useTBB: only relevant if PTL_USE_TBB defined
     //      grainsize:  0 = auto
     explicit TaskRunManager(bool useTBB = false);
-    virtual ~TaskRunManager();
+    virtual ~TaskRunManager() = default;
 
 public:
     virtual int GetNumberOfThreads() const

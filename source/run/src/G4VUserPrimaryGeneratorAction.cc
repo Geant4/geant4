@@ -23,13 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserPrimaryGeneratorAction implementation
 //
-//
+// Original author: M.Asai, 1999
+// --------------------------------------------------------------------
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleTable.hh"
 #include "globals.hh"
 
+// --------------------------------------------------------------------
 G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()
 {
   if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
@@ -38,8 +41,7 @@ G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()
     msg = " You are instantiating G4VUserPrimaryGeneratorAction BEFORE your\n";
     msg += "G4VUserPhysicsList is instantiated and assigned to G4RunManager.\n";
     msg +=
-      " Such an instantiation is prohibited by Geant4 version 8.0. To fix this "
-      "problem,\n";
+      " Such an instantiation is prohibited. To fix this problem,\n";
     msg +=
       "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
     msg +=
@@ -51,4 +53,7 @@ G4VUserPrimaryGeneratorAction::G4VUserPrimaryGeneratorAction()
   }
 }
 
-G4VUserPrimaryGeneratorAction::~G4VUserPrimaryGeneratorAction() { ; }
+// --------------------------------------------------------------------
+G4VUserPrimaryGeneratorAction::~G4VUserPrimaryGeneratorAction()
+{
+}

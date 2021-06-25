@@ -180,30 +180,30 @@ public:
 
 private:
 
-  G4SafetyHelper* safetyHelper;
-  G4VEnergyLossProcess* ionisation;
-  const G4ParticleDefinition* currentPart;
+  G4SafetyHelper* safetyHelper = nullptr;
+  G4VEnergyLossProcess* ionisation = nullptr;
+  const G4ParticleDefinition* currentPart = nullptr;
 
-  G4double dedx;
-  G4double localtkin;
-  G4double localrange;
+  G4double dedx = 0.0;
+  G4double localtkin = 0.0;
+  G4double localrange = DBL_MAX;
 
 protected:
 
-  G4double facrange;
-  G4double facgeom;
-  G4double facsafety;
-  G4double skin;
-  G4double dtrl;
+  G4double facrange = 0.04;
+  G4double facgeom = 2.5;
+  G4double facsafety = 0.6;
+  G4double skin = 1.0;
+  G4double dtrl = 0.05;
   G4double lambdalimit;
   G4double geomMin;
   G4double geomMax;
 
+  G4bool   samplez = false;
+  G4bool   latDisplasment = true;
+
   G4ThreeVector      fDisplacement;
   G4MscStepLimitType steppingAlgorithm;
-
-  G4bool   samplez;
-  G4bool   latDisplasment;
 
 };
 
@@ -310,6 +310,8 @@ G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
   return x;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double 
 G4VMscModel::GetDEDX(const G4ParticleDefinition* part, G4double kinEnergy,
                      const G4MaterialCutsCouple* couple, G4double logKinEnergy)
@@ -335,7 +337,7 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
   //  << G4endl;
   localtkin  = kinEnergy;
   if (ionisation) {
-    localrange = ionisation->GetRangeForLoss(kinEnergy, couple); 
+    localrange = ionisation->GetRange(kinEnergy, couple); 
   } else {
     const G4double q = part->GetPDGCharge()*inveplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
@@ -343,6 +345,8 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
   //G4cout << "R(mm)= " << localrange << "  "  << ionisation << G4endl;
   return localrange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double 
 G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy, 
@@ -353,7 +357,7 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,G4double kinEnergy,
   //	<< G4endl;
   localtkin  = kinEnergy;
   if (ionisation) { 
-    localrange = ionisation->GetRangeForLoss(kinEnergy, couple, logKinEnergy);
+    localrange = ionisation->GetRange(kinEnergy, couple, logKinEnergy);
   } else { 
     const G4double q = part->GetPDGCharge()*inveplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity());

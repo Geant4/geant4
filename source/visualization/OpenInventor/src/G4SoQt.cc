@@ -47,9 +47,10 @@
 #include "moc_G4SoQt.cpp"
 #endif
 
-G4SoQt* G4SoQt::instance    = NULL;
+G4SoQt* G4SoQt::instance = NULL;
 
-static G4bool QtInited  = FALSE;
+static G4bool QtInited = FALSE;
+
 
 /***************************************************************************/
 G4SoQt* G4SoQt::getInstance()
@@ -58,17 +59,8 @@ G4SoQt* G4SoQt::getInstance()
      instance = new G4SoQt();
   }
   return instance;
-  //  return G4SoQt::getInstance(0, NULL, (char*)"Geant4");
 }
 
-/***************************************************************************/
-//G4SoQt* G4SoQt::getInstance(int a_argn, char** a_args, char* a_class)
-//{
-//  if (instance==NULL) {
-//    instance = new G4SoQt();
-//  }
-//  return instance;
-//}
 
 /***************************************************************************/
 G4SoQt::G4SoQt()
@@ -140,20 +132,25 @@ void G4SoQt::FlushAndWaitExecution()
    // FWJ no, should be done in secondaryLoop()!
    //   SoQt::mainLoop();
 }
+
+
 /***************************************************************************/
 void G4SoQt::SecondaryLoop()
 {
-   // FWJ DEBUG
    if (externalApp) return;
 
+   // FWJ DEBUG
    //      G4cout <<
    //     "ENTERING OIQT VIEWER SECONDARY LOOP" << G4endl;
    //   else
+
    G4cout <<
       "ENTERING OIQT VIEWER SECONDARY LOOP... PRESS E KEY TO EXIT" << G4endl;
 
    SoQt::mainLoop();
 }
+
+
 /***************************************************************************/
 void G4SoQt::ExitSecondaryLoop()
 {

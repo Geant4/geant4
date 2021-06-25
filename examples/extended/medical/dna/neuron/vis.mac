@@ -93,8 +93,8 @@
 #/vis/filtering/trajectories/particleFilter-0/add OH-
 #/vis/filtering/trajectories/particleFilter-0/add H_2
 #/vis/filtering/trajectories/particleFilter-0/add H2O2
-#/vis/ogl/set/startTime 1 ns
-#/vis/ogl/set/endTime 10 ns
+#/vis/viewer/set/timeWindow/startTime 1 ns
+#/vis/viewer/set/timeWindow/endTime 10 ns
 
 #
 # To invert the above, drawing all particles except gammas,

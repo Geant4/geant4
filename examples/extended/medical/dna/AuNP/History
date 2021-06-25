@@ -1,0 +1,23 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    AuNP History file
+                    -----------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+16.06.2021 - G. Cosmo; AuNP-V10-07-01
+             Added GNUmakefile.
+             Remove executable bit from files.
+
+11.05.2021 - D. Sakata; AuNP-V10-07-00
+             New example demonstrating the use of Geant4 
+             for nanoparticle radio-enhancement

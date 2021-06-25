@@ -45,7 +45,7 @@ class G4IonElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  explicit G4IonElasticPhysics(G4int ver = 0); 
+  explicit G4IonElasticPhysics(G4int ver = 1);
 
   virtual ~G4IonElasticPhysics();
 
@@ -58,14 +58,10 @@ public:
   // registered to the process manager of each particle type 
   void ConstructProcess() override;
 
-private:
-
   // copy constructor and hide assignment operator
   G4IonElasticPhysics(G4IonElasticPhysics &) = delete;
   G4IonElasticPhysics & operator=
   (const G4IonElasticPhysics &right) = delete;
-
-  G4int    verbose;
 };
 
 #endif

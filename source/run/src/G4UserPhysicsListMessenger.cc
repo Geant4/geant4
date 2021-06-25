@@ -23,19 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
-//---------------------------------------------------------------
-//
-//  G4UserPhysicsListMessenger.cc
-// ------------------------------------------------------------
-//	History
-//        first version                   09 Jan. 1998 by H.Kurashige
-//        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
-//        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
-//        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
-// ------------------------------------------------------------
+// G4UserPhysicsListMessenger implementation
+// 
+// Original author: H.Kurashige, 9 January 1998
+// --------------------------------------------------------------------
 
 #include <sstream>
 
@@ -54,11 +45,11 @@
 #include "G4VUserPhysicsList.hh"
 #include "G4ios.hh"
 
-G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(
-  G4VUserPhysicsList* pParticleList)
+G4UserPhysicsListMessenger::
+G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList)
   : thePhysicsList(pParticleList)
 {
-  G4UIparameter* param = 0;
+  G4UIparameter* param = nullptr;
   // /run/particle    directory
   theDirectory = new G4UIdirectory("/run/particle/");
   theDirectory->SetGuidance("Commands for G4VUserPhysicsList.");
@@ -238,6 +229,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(
                                       G4State_Idle);
 }
 
+// --------------------------------------------------------------------
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 {
   delete setCutCmd;
@@ -257,6 +249,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete theDirectory;
 }
 
+// --------------------------------------------------------------------
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                              G4String newValue)
 {
@@ -313,13 +306,13 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand* command,
   {
     G4ParticleDefinition* particle =
       (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if(particle == 0)
+    if(particle == nullptr)
     {
       ed << " Particle is not found : " << newValue;
       command->CommandFailed(ed);
       return;
     }
-    else if(particle->GetProcessManager() != 0)
+    else if(particle->GetProcessManager() != nullptr)
     {
       ed << " Particle is not initialized : " << newValue;
       command->CommandFailed(ed);
@@ -331,7 +324,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand* command,
   {
     G4ParticleDefinition* particle =
       (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if(particle == 0)
+    if(particle == nullptr)
     {
       ed << " Particle is not found : " << newValue;
       command->CommandFailed(ed);
@@ -385,12 +378,12 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand* command,
   }
 }
 
+// --------------------------------------------------------------------
 G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String cv;
   G4String candidates("none");
-  G4ParticleTable::G4PTblDicIterator* piter =
-    (G4ParticleTable::GetParticleTable())->GetIterator();
+  auto piter = G4ParticleTable::GetParticleTable()->GetIterator();
 
   if(command == setCutCmd)
   {
@@ -449,13 +442,6 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand* command)
     {
       cv = "0";
     }
-
-    //  } else if( command == applyCutsCmd ) {
-    //   if (thePhysicsList->GetApplyCuts("gamma")){
-    //     cv =  "true";
-    //   } else {
-    //     cv =  "false";
-    //   }
   }
 
   return cv;

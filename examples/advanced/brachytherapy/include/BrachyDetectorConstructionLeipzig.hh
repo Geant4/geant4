@@ -43,7 +43,6 @@
 #include "G4VUserDetectorConstruction.hh"
 
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4Sphere;
 class G4Tubs;
 class G4LogicalVolume;
@@ -58,9 +57,6 @@ public:
   void CleanLeipzigApplicator();
 
 private:
-  
-  BrachyMaterial* fMaterial; 
-  
   G4Tubs* fCapsule;
   G4Sphere* fCapsuleTip;
   G4Tubs* fIridiumCore;   
@@ -83,5 +79,4 @@ private:
   G4VisAttributes* fSimpleCapsuleTipVisAtt;
   G4VisAttributes* fApplicatorVisAtt;
 };
-
 #endif

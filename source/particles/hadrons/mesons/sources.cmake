@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4mesons
-# Package: Geant4.src.G4particles..G4mesons
-#------------------------------------------------------------------------------
+# - G4mesons module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4mesons
-  HEADERS
+geant4_add_module(G4mesons
+  PUBLIC_HEADERS
     G4AntiBMesonZero.hh
     G4AntiBsMesonZero.hh
     G4AntiDMesonZero.hh
@@ -36,7 +31,7 @@ geant4_define_module(NAME G4mesons
     G4PionMinus.hh
     G4PionPlus.hh
     G4PionZero.hh
-	G4Upsilon.hh
+	  G4Upsilon.hh
   SOURCES
     G4AntiBMesonZero.cc
     G4AntiBsMesonZero.cc
@@ -66,14 +61,6 @@ geant4_define_module(NAME G4mesons
     G4PionMinus.cc
     G4PionPlus.cc
     G4PionZero.cc
-    G4Upsilon.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4materials
-    G4partman
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4materials
-)
+    G4Upsilon.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4mesons PUBLIC G4globman G4partman)

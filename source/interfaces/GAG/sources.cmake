@@ -1,25 +1,12 @@
-#------------------------------------------------------------------------------
-# Module : G4UIGAG
-# Package: Geant4.src.G4interfaces.G4UIGAG
-#------------------------------------------------------------------------------
+# - G4UIGAG module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4UIGAG
-  HEADERS
+# Define the Geant4 Module
+geant4_add_module(G4UIGAG
+  PUBLIC_HEADERS
     G4UIGAG.hh
     G4UIGainServer.hh
   SOURCES
     G4UIGAG.cc
-    G4UIGainServer.cc
-  GRANULAR_DEPENDENCIES
-    G4UIcommon
-    G4globman
-    G4intercoms
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-)
+    G4UIGainServer.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4UIGAG PUBLIC G4UIcommon G4intercoms G4globman)

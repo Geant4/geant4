@@ -100,6 +100,8 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
 
     using Base_t::GetTanAlpha1;
     using Base_t::GetTanAlpha2;
+ 
+  // Accessors
 
     G4double GetZHalfLength()  const;
     G4double GetYHalfLength1() const;
@@ -112,6 +114,14 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
     G4double GetThetaSphi()    const;
     TrapSidePlane GetSidePlane(G4int n) const;
     G4ThreeVector GetSymAxis() const;
+
+    G4double GetPhi()    const;
+    G4double GetTheta()  const;
+    G4double GetAlpha1() const;
+    G4double GetAlpha2() const;
+      // Obtain (re)computed values of original parameters
+
+  // Modifiers
 
     void SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
                           G4double pDy1, G4double pDx1, G4double pDx2,
@@ -139,7 +149,7 @@ class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid>
       // persistifiable objects.
 
     G4UTrap(const G4UTrap& rhs);
-    G4UTrap& operator=(const G4UTrap& rhs); 
+    G4UTrap& operator=(const G4UTrap& rhs);
       // Copy constructor and assignment operator.
 };
 

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Author : Valentin Libioulle valentin.libioulle@usherbrooke.ca (3IT - GRAMS)
 //
 //---------------------------------------------------------------
@@ -40,6 +38,7 @@
 #ifndef G4SCINTILLATIONTRACKINFORMATION_H
 #define G4SCINTILLATIONTRACKINFORMATION_H
 
+#include "G4Allocator.hh"
 #include "G4VUserTrackInformation.hh"
 
 // Represents the scintillation type used to create the track (opticalphoton).
@@ -90,8 +89,6 @@ class G4ScintillationTrackInformation : public G4VUserTrackInformation
 ///
 // Inline methods
 ///
-
-#include "G4Allocator.hh"
 
 // Forward declaration for the Allocator
 class G4ScintillationTrackInformation;

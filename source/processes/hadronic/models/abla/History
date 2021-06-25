@@ -8,12 +8,23 @@
          History file for the ABLA evaporation/fission model
          ---------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+16 April 2021 - Ben Morgan (hadr-abla-V10-07-01)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+13 Apr 2021 - Alberto Ribon (hadr-abla-V10-07-00)
+--------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
 
 15 Nov 2020 - Jose Luis Rodriguez Sanchez (hadr-abla-V10-06-00)
 --------------------------------------------------

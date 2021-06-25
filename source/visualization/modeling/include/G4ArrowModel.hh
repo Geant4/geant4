@@ -53,9 +53,12 @@ public: // With description
 	       G4double width, const G4Colour& colour,
 	       const G4String& description = "",
                G4int lineSegmentsPerCircle = 6);
+
   virtual ~G4ArrowModel ();
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
+  void SetTransformation (const G4Transform3D& transform) override;
+
+  void DescribeYourselfTo (G4VGraphicsScene&) override;
   // The main task of a model is to describe itself to the graphics scene.
 
 private:
@@ -66,6 +69,9 @@ private:
 
   G4Polyhedron* fpShaftPolyhedron;
   G4Polyhedron* fpHeadPolyhedron;
+
+  G4Polyhedron* fpShaftPolyhedronOrig;
+  G4Polyhedron* fpHeadPolyhedronOrig;
 };
 
 #endif

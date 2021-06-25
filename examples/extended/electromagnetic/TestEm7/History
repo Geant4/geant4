@@ -13,6 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-05-21 mma (testem7-V10-07-02)
+- Migration to G4SteppingVerboseWithUnits.
+
+19-03-21 V.Ivanchenko (testem7-V10-07-01)
+- updated PhysListEmPhysicsNR for 11.0, removed RanecuEngine
+
+10-02-21 V.Ivanchenko (testem7-V10-07-00)
+- fixed README
 
 07-04-20 V.Ivantchenko (testem7-V10-06-00)
 - do not call vis.mac automatically in interactive mode

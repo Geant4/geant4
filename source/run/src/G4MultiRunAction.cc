@@ -23,22 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MultiRunAction implementation
 //
-//
-//---------------------------------------------------------------
-//
-// G4MultiRunAction.hh
-//
-//   Created on: Jan 17, 2016
-//       Author: adotti
-//
-// ---------------------------------------------------------------
-//
+// Author: A.Dotti, 17 January 2016
+// --------------------------------------------------------------------
+
+#include <algorithm>
 
 #include "G4MultiRunAction.hh"
 #include "G4Run.hh"
-#include <algorithm>
 
+// --------------------------------------------------------------------
 G4Run* G4MultiRunAction::GenerateRun()
 {
   G4Run* aRun = nullptr;
@@ -58,18 +53,21 @@ G4Run* G4MultiRunAction::GenerateRun()
   return aRun;
 }
 
+// --------------------------------------------------------------------
 void G4MultiRunAction::BeginOfRunAction(const G4Run* run)
 {
   std::for_each(begin(), end(),
                 [run](G4UserRunActionUPtr& e) { e->BeginOfRunAction(run); });
 }
 
+// --------------------------------------------------------------------
 void G4MultiRunAction::EndOfRunAction(const G4Run* run)
 {
   std::for_each(begin(), end(),
                 [run](G4UserRunActionUPtr& e) { e->EndOfRunAction(run); });
 }
 
+// --------------------------------------------------------------------
 void G4MultiRunAction::SetMaster(G4bool val)
 {
   G4UserRunAction::SetMaster(val);

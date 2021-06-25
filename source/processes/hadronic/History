@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 16, 2021  B.Morgan (hadr-V10-07-02)
+- Migrate hadronic categories to use modular CMake API
+
+April 13, 2021  A. Ribon (hadr-V10-07-01)
+- GNUmakefile : removed the subdirectories hadronic/models/management and
+  hadronic/models/util (that have been now deleted, with their classes
+  moved to hadronic/util and hadronic/management).
+
+March 16, 2021  A. Ribon (hadr-V10-07-00)
+- GNUmakefile : removed the subdirectory rpg
+  (corresponding to the hadronic model rpg that has been deleted).
+
 February 1, 2019  I. Hrivnacova (hadr-V10-05-00)
 - Merged GitHub PR #4:
   - Improvements to G4HadronicException.

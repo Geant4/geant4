@@ -47,12 +47,6 @@
 #include "G4VRML2File.hh"
 #include "G4GMocrenFile.hh"
 
-// FIXME : avoid mix with QT/WT driver (should be done by cmake??)
-#if defined(G4VIS_USE_OPENGLWT)
-  // do not want GL2P2 in WT case
-  #undef G4VIS_BUILD_OPENGL_GL2PS
-#endif
-
 // Needing external packages or libraries...
 
 #ifdef G4VIS_USE_DAWN
@@ -79,10 +73,6 @@
 #include "G4OpenGLStoredQt.hh"
 #endif
 
-#ifdef G4VIS_USE_OPENGLWT
-#include "G4OpenGLImmediateWt.hh"
-#endif
-
 #ifdef G4VIS_USE_OIX
 #include "G4OpenInventorX.hh"
 #include "G4OpenInventorXtExtended.hh"
@@ -107,6 +97,22 @@
 
 #ifdef G4VIS_USE_QT3D
 #include "G4Qt3D.hh"
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_X11_GLES
+#include "G4ToolsSGX11GLES.hh"
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
+#include "G4ToolsSGWindowsGLES.hh"
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_XT_GLES
+#include "G4ToolsSGXtGLES.hh"
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+#include "G4ToolsSGQtGLES.hh"
 #endif
 
 // The inline keyword prevents the compiler making an external
@@ -211,10 +217,6 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #endif
 #endif
 
-#ifdef G4VIS_USE_OPENGLWT
-  RegisterGraphicsSystem (new G4OpenGLImmediateWt);
-#endif
-
 // Register OI graphics system with super-abbreviated nickname
 #ifdef G4VIS_USE_OI
   G4VGraphicsSystem* oi  = 0;
@@ -243,6 +245,23 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_QT3D
   RegisterGraphicsSystem (new G4Qt3D);
 #endif
+
+#ifdef G4VIS_USE_TOOLSSG_X11_GLES
+  RegisterGraphicsSystem (new G4ToolsSGX11GLES);
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
+  RegisterGraphicsSystem (new G4ToolsSGWindowsGLES);
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_XT_GLES
+  RegisterGraphicsSystem (new G4ToolsSGXtGLES);
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+  RegisterGraphicsSystem (new G4ToolsSGQtGLES);
+#endif
+
 }
 
 // See comments about inlining above.

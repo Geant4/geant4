@@ -41,7 +41,7 @@
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4He3InelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VHe3Builder.hh"
 
 #include "G4ParticleHPInelastic.hh"
@@ -52,7 +52,7 @@ public:
   G4He3PHPBuilder();
   virtual ~G4He3PHPBuilder() {}
   
-  virtual void Build(G4He3InelasticProcess * aP) final override;
+  virtual void Build(G4HadronInelasticProcess * aP) final override;
   virtual void Build(G4HadronElasticProcess * aP) final override;
   
   virtual void SetMinEnergy(G4double aM) final override

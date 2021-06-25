@@ -66,6 +66,8 @@
 
 class G4VPhysicalVolume;
 
+#define ALTERNATIVE_VOXEL_NAV 1
+
 class G4Navigator
 {
   public:  // with description
@@ -189,21 +191,6 @@ class G4Navigator
     //  calculations.  The geometry must be closed.
     // To ensure minimum side effects from the call, keepState
     //  must be true.
-  
-   virtual G4bool RecheckDistanceToCurrentBoundary(
-                               const G4ThreeVector& pGlobalPoint,
-                               const G4ThreeVector& pDirection,
-                               const G4double CurrentProposedStepLength,
-                                     G4double* prDistance,
-                                     G4double* prNewSafety = nullptr) const;
-    // Trial method for checking potential displacement for MS
-    // Check new Globalpoint, to see whether it is in current volume
-    // (mother) and not in potential entering daughter.
-    // If in mother, check distance to boundary along pDirection.
-    // If in entering daughter, check distance back to boundary. 
-    // NOTE:
-    // Can be called only after ComputeStep is called - before ReLocation
-    // Deals only with current volume (and potentially entered)
 
   inline G4VPhysicalVolume* GetWorldVolume() const;
     // Return the current  world (`topmost') volume.
@@ -314,6 +301,16 @@ class G4Navigator
     // navigator, including external sub-navigator.
     // Client has responsibility for ownership of returned allocated pointer.
 
+  inline G4ThreeVector GetLastStepEndPoint() const { return fStepEndPoint;}
+    // Get endpoint of last step
+
+  void   InformLastStep(G4double lastStep, G4bool entersDaughtVol, G4bool exitsMotherVol );
+   // Derived navigators which rely on LocateGlobalPointAndSetup
+   //  need to inform size of step -- to maintain logic about
+   //  arriving on boundary for challenging cases.
+   // Required in order to cope with multile trials at boundaries
+   //  => Locate with use direction rather than simple, fast logic
+
  protected:  // with description
 
   void SetSavedState();
@@ -360,6 +357,15 @@ class G4Navigator
     // overlaps ordered by relevance. Used in ComputeStep() when loopings
     // with zero step are detected.
 
+#ifdef ALTERNATIVE_VOXEL_NAV
+ public:   
+    void SetVoxelNavigation(G4VoxelNavigation *voxelNav);
+    // Alternative navigator for voxel volumes -- for use in integrating
+    //   VecGeom Navigation
+#endif   
+ private:
+   inline G4VoxelNavigation& GetVoxelNavigator();
+
  private:
 
   void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
@@ -401,7 +407,7 @@ class G4Navigator
 
   G4bool fWasLimitedByGeometry = false;
     // Set true if last Step was limited by geometry.
-   
+
  private:
 
   G4ThreeVector fLastLocatedPointLocal;
@@ -515,7 +521,11 @@ private:
   // Helpers/Utility classes
   //
   G4NormalNavigation fnormalNav;
-  G4VoxelNavigation fvoxelNav;
+#ifdef ALTERNATIVE_VOXEL_NAV
+  G4VoxelNavigation* fpvoxelNav;
+#else
+  G4VoxelNavigation  fvoxelNav;
+#endif
   G4ParameterisedNavigation fparamNav;
   G4ReplicaNavigation freplicaNav;
   G4RegularNavigation fregularNav;

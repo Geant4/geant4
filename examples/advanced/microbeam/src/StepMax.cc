@@ -24,15 +24,20 @@
 // ********************************************************************
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+//
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+// 
+// If you use this example, please cite the following publication:
+// Rad. Prot. Dos. 133 (2009) 2-11
+//
 #include "StepMax.hh"
 #include "PhysicsListMessenger.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4TransportationProcessType.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(PhysicsListMessenger* mess)
   : G4VEmProcess("UserMaxStep", fGeneral),fMessenger(mess),
@@ -41,19 +46,13 @@ StepMax::StepMax(PhysicsListMessenger* mess)
   SetProcessSubType(static_cast<G4int>(STEP_LIMITER));  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 StepMax::~StepMax() 
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool StepMax::IsApplicable(const G4ParticleDefinition& part)
 {
   return (part.GetPDGCharge() != 0. && !part.IsShortLived());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
 {
@@ -61,8 +60,6 @@ void StepMax::PreparePhysicsTable(const G4ParticleDefinition&)
     isInitialised = false;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMax::BuildPhysicsTable(const G4ParticleDefinition&)
 {
@@ -76,12 +73,8 @@ void StepMax::BuildPhysicsTable(const G4ParticleDefinition&)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void StepMax::InitialiseProcess(const G4ParticleDefinition*)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
 StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
@@ -93,8 +86,6 @@ StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
   return fMaxChargedStep;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   // do nothing
@@ -102,5 +93,4 @@ G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   return &aParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

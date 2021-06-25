@@ -1,0 +1,395 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Author: HoangTRAN 16/7/2019
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Molecule.hh"
+
+template<class T,typename CONTAINER>
+G4ThreadLocal G4OctreeFinder<T,CONTAINER> * G4OctreeFinder<T,CONTAINER>::fInstance = nullptr;
+
+template<class T, typename CONTAINER>
+G4OctreeFinder<T,CONTAINER> * G4OctreeFinder<T,CONTAINER>::Instance()
+{
+    if (!fInstance)
+    {
+        fInstance = new G4OctreeFinder();
+    }
+    return fInstance;
+}
+
+template<class T,typename CONTAINER>
+G4OctreeFinder<T,CONTAINER>::G4OctreeFinder()
+    : G4VFinder()
+    , fVerbose(0)
+    , fIsOctreeUsed(false)
+    , fIsOctreeBuit(false)
+
+{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+template<class T,typename CONTAINER>
+G4OctreeFinder<T,CONTAINER>::~G4OctreeFinder()
+{
+    typename TreeMap::iterator it;
+    for (it = fTreeMap.begin(); it != fTreeMap.end(); it++)
+    {
+    if (it->second == nullptr)
+    {
+        continue;
+    }
+    it->second.reset();
+    }
+    fTreeMap.clear();
+    fIsOctreeBuit = false;
+    if(fInstance != nullptr)
+    {
+        delete fInstance;
+    }
+    fInstance = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::Clear()
+{
+    typename TreeMap::iterator it;
+    for (it = fTreeMap.begin(); it != fTreeMap.end(); it++)
+    {
+        if (it->second == nullptr)
+        {
+            continue;
+        }
+        it->second.reset();
+    }
+    fTreeMap.clear();
+    fIsOctreeBuit = false;
+}
+
+#ifdef DEBUG
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::FindNaive(const G4ThreeVector& position,
+                                           int key,
+                                           G4double R,
+                                           std::vector<CONTAINER::iterator>& result)
+{
+    std::map<int,PriorityList*>& listMap_test = G4ITTrackHolder::Instance()->GetLists();
+    std::map<int,PriorityList*>::iterator it = listMap_test.begin();
+    std::map<int,PriorityList*>::iterator end = listMap_test.end();
+    
+    for (; it!= end; it++)
+    {
+        if(it->first == key)
+        {
+            PriorityList* Mollist=it->second;
+            result.clear();
+            
+            if(Mollist == nullptr || Mollist->GetMainList() == nullptr
+               || Mollist->GetMainList()->empty() )
+            {
+                continue;
+            }
+            else
+            {
+                G4TrackList* trackList = Mollist->GetMainList();
+                G4TrackList::iterator __it = trackList->begin();
+                G4TrackList::iterator __end = trackList->end();
+                for (; __it != __end; __it++)
+                {
+                    G4double r = (position - (*__it)->GetPosition()).mag();
+                    if(r < R)
+                    {
+                        result.push_back(__it);
+                    }
+                }
+            }
+        }
+    }
+}
+#endif
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4Track& track,
+                                                    const G4int& key,
+                                                    G4double R,
+                                                    std::vector<std::pair<
+                                                    typename CONTAINER::iterator,G4double> >&
+                                                    result,
+                                                    G4bool isSorted) const
+{
+    typename TreeMap::const_iterator it = fTreeMap.find(key);
+    if (it == fTreeMap.end())
+    {
+        return;
+    }
+    std::vector<std::pair<typename CONTAINER::iterator,G4double>> tempResult;
+    if(it->second == nullptr)
+    {
+        return;
+    }
+    else
+    {
+        it->second->template radiusNeighbors
+        <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+        track.GetPosition(), R, tempResult);
+
+        G4int nBin = 10;
+
+        G4double value(G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns));
+
+        G4double binOfR(std::pow(G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) / value,
+        1. / static_cast<G4double>(nBin - 1)));
+
+        if( R <= G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) )
+        {
+            if(tempResult.size() < 10 && R < G4IRTUtils::GetRCutOff(1000 * CLHEP::ns))
+            {
+                R *= binOfR;
+#ifdef DEBUG
+                G4cout<<"recurring up R : "<< R<<" tempResult.size() : "<<tempResult.size()<<G4endl;
+#endif
+                FindNearestInRange(track, key, R, tempResult, isSorted);
+            }
+        }
+    }
+    if(isSorted)
+    {
+        std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
+    }
+
+    result = tempResult;
+}
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::FindNearest(const G4Track& track,
+                                                     const G4int& key,
+                                                     G4double R,
+                                                     std::vector<std::pair<
+                                                             typename CONTAINER::iterator,G4double> >&
+                                                     result,
+                                                     G4bool isSorted) const
+{
+    typename TreeMap::const_iterator it = fTreeMap.find(key);
+    if (it == fTreeMap.end())
+    {
+        return;
+    }
+    std::vector<std::pair<typename CONTAINER::iterator,G4double>> tempResult;
+    if(it->second == nullptr)
+    {
+        return;
+    }
+    else
+    {
+        it->second->template radiusNeighbors
+                <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+                track.GetPosition(), R, tempResult);
+    }
+    if(isSorted)
+    {
+        std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
+    }
+
+    result = tempResult;
+}
+
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4ThreeVector& position,
+                                                    const G4int& key,
+                                                    G4double R,
+                                                    std::vector<std::pair<
+                                                    typename CONTAINER::iterator,G4double> >&
+                                                    result,
+                                                    G4bool isSorted) const
+{
+    typename TreeMap::const_iterator it = fTreeMap.find(key);
+    if (it == fTreeMap.end())
+    {
+        return;
+    }
+    std::vector<std::pair<typename CONTAINER::iterator,G4double>> tempResult;
+    if(it->second == nullptr)
+    {
+        return;
+    }
+    else
+    {
+        it->second->template radiusNeighbors
+        <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+        position, R, tempResult);
+
+        G4int nBin = 10;
+
+        G4double value(G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns));
+        G4double binOfR(std::pow(G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) / value,
+        1. / static_cast<G4double>(nBin - 1)));
+
+        if( R <= G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) )
+        {
+            if(tempResult.size() < 10 && R < G4IRTUtils::GetRCutOff(1000 * CLHEP::ns))
+            {
+                R *= binOfR;
+#ifdef DEBUG
+                G4cout<<"recurring up R : "<< R<<" tempResult.size() : "<<tempResult.size()<<G4endl;
+#endif
+                FindNearestInRange(position, key, R, tempResult, isSorted);
+            }
+        }
+
+    }
+    if(isSorted)
+    {
+        std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
+    }
+
+    result = tempResult;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::
+FindNearestInRange(const G4ThreeVector& position,
+                        G4double R,
+                        std::vector<std::pair<
+                        typename CONTAINER::iterator,G4double> >&
+                        result,
+                        G4bool isSorted) const
+{
+    typename TreeMap::const_iterator it = fTreeMap.begin();
+    std::vector<std::pair<typename CONTAINER::iterator,G4double>> Result;
+
+    for(;it != fTreeMap.end(); it++)
+    {
+        std::vector<std::pair<typename CONTAINER::iterator,G4double>> tempResult;
+        it->second->template radiusNeighbors
+        <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+        position, R, tempResult);
+        if(tempResult.empty())
+        {
+            continue;
+        }
+        
+        Result.insert( Result.end(), tempResult.begin(), tempResult.end() );
+    
+    }
+    if(isSorted)
+    {
+        std::sort(Result.begin(),Result.end(),fExtractor.compareInterval);
+    }
+
+    result = Result;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::BuildTreeMap(
+const std::map<G4int,CONTAINER*>& listMap)
+{
+    auto it = listMap.begin();
+    typename TreeMap::iterator it_Tree;
+    fTreeMap.clear();
+    for (; it!= listMap.end(); it++)
+    {
+        int key = it->first;
+        it_Tree = fTreeMap.find(key);
+        if (it_Tree != fTreeMap.end())
+        {
+            if (it_Tree->second == nullptr)
+            {
+                continue;
+            }
+            it_Tree->second.reset();
+        }
+        auto Mollist = it->second;
+        if(Mollist->empty())
+        {
+            continue;
+        }
+        else
+        {
+//#define DEBUG
+#ifdef DEBUG
+            G4cout << "** " << "Create new tree for : " << key << G4endl;
+#endif
+            if(!Mollist->empty())
+            {
+                fTreeMap[key].reset(new Octree(Mollist->begin(),Mollist->end(),fExtractor));
+            }
+            else
+            {
+                G4ExceptionDescription exceptionDescription;
+                exceptionDescription << "should not create new tree for : " << key;
+                G4Exception("G4OCtreeFinder"
+                            "::BuildReactionMap()", "BuildReactionMap02",
+                            FatalException, exceptionDescription);
+            }
+
+#ifdef DEBUG
+
+            auto __it = Mollist->begin();
+            auto __end = Mollist->end();
+
+            for (; __it != __end; __it++)
+            {
+                G4cout<< "molecule : "<<(*__it)->GetPosition()<< G4endl;
+            }
+#endif
+#undef DEBUG
+
+        }
+    }
+    fIsOctreeBuit = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::SetOctreeUsed(G4bool used)
+{
+    fIsOctreeUsed = used;
+}
+
+template<class T,typename CONTAINER>
+G4bool G4OctreeFinder<T,CONTAINER>::IsOctreeUsed() const
+{
+    return fIsOctreeUsed;
+}
+
+template<class T,typename CONTAINER>
+void G4OctreeFinder<T,CONTAINER>::SetOctreeBuilt(G4bool used)
+{
+    fIsOctreeBuit = used;
+}
+
+template<class T,typename CONTAINER>
+G4bool G4OctreeFinder<T,CONTAINER>::IsOctreeBuilt() const
+{
+    return fIsOctreeBuit;
+}

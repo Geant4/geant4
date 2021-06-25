@@ -78,9 +78,9 @@ class G4Isotope
                     G4int     z,		//atomic number
                     G4int     n,		//number of nucleons
                     G4double  a = 0.,		//mass of mole
-                    G4int     mlevel = 0);      //isomer level
+                    G4int     mlevel = 0);      //isomer level		    
                     
-    virtual ~G4Isotope();
+    ~G4Isotope();
 
     // Retrieval methods
     //

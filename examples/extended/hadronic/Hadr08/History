@@ -14,7 +14,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10-11-20 B, Morgan (exhadr08-V10-06-00)
+10-03-21 A. Ribon (exhadr08-V10-07-02)
+- BiasingOperation : added (forgotten) calls to BuildPhysicsTable.
+
+08-03-21 A. Ribon (exhadr08-V10-07-01)
+- BiasingOperation : replaced Gheisha inelastic cross section (that
+  has been deleted) with better cross sections.
+
+04-03-21 A. Ribon (exhadr08-V10-07-00)
+- BiasingOperation : replaced particle-specific inelastic processes
+  (that have been deleted) with G4HadronInelasticProcess.
+
+10-11-20 B. Morgan (exhadr08-V10-06-00)
 - Migration to G4RunManagerFactory.
 
 26-11-19 I. Hrivnacova (exhadr08-V10-05-01)

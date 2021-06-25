@@ -91,8 +91,8 @@ private:
   // If non-empty, use fExtentForField alone for sampling, but only
   // draw if sampling point is in the specified physical volume(s).
 
-  G4int fNDataPointsPerMaxHalfScene;
-  // No. of data points sampled per maximum half scene.
+  G4int fNDataPointsPerMaxHalfExtent;
+  // No. of data points sampled per maximum half extent.
   // Note that total number of sampling points can be as high as
   // (2*n+1)^3, which can get very big. However, fields are usually
   // confined to only parts of the scene, so this may not be a problem.

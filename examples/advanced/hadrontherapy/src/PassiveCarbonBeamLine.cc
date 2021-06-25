@@ -44,6 +44,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Trd.hh"
 #include "PassiveCarbonBeamLineMessenger.hh"
+#include "G4UnionSolid.hh"
+
+using namespace std;
 
 //G4bool PassiveCarbonBeamLine::doCalculation = false;
 /////////////////////////////////////////////////////////////////////////////
@@ -210,7 +213,7 @@ void PassiveCarbonBeamLine::SetDefaultDimensions()
     kaptonWindowMaterial = kaptonNist;
     
     // Material of ripple filter
-    rippleFilterMaterial = airNist;
+    rippleFilterMaterial = PMMANist;
     rippleFilterBoxMaterial = airNist;
     
     // Materials of the monitor chamber
@@ -232,6 +235,20 @@ void PassiveCarbonBeamLine::SetDefaultDimensions()
     
     // Material of the PMMA collimator
     PMMACollimatorMaterial = airNist;
+    
+    
+    G4Element* hydrogenNist = G4NistManager::Instance()->FindOrBuildElement("H");
+    G4Element* oxygenNist = G4NistManager::Instance()->FindOrBuildElement("O");
+    G4Element* carbonNist = G4NistManager::Instance()->FindOrBuildElement("C");
+    
+    G4Material* plastic = new G4Material("Plastic", 1.18*g/cm3, nComponents=3);
+    plastic -> AddElement(carbonNist, 21);
+    plastic -> AddElement(oxygenNist, 4);
+    plastic -> AddElement(hydrogenNist, 24);
+    PMMANist = plastic;
+    
+    
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -250,9 +267,9 @@ void PassiveCarbonBeamLine::ConstructPassiveCarbonBeamLine()
     airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
     treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
     logicTreatmentRoom = new G4LogicalVolume(treatmentRoom,
-                                                              airNist,
-                                                              "logicTreatmentRoom",
-                                                              0,0,0);
+                                             airNist,
+                                             "logicTreatmentRoom",
+                                             0,0,0);
     physicalTreatmentRoom = new G4PVPlacement(0,
                                               G4ThreeVector(),
                                               "physicalTreatmentRoom",
@@ -270,7 +287,13 @@ void PassiveCarbonBeamLine::ConstructPassiveCarbonBeamLine()
     HadrontherapyBeamNozzle();
     HadrontherapyBeamFinalCollimator();
     HadrontherapyPMMACollimator();
-    HadrontherapyRippleFilter();
+   // HadrontherapyRippleFilter();
+    
+    
+   // StopperCostruction();
+    
+    
+   HadrontherapyRidgeFilter();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -289,13 +312,13 @@ void PassiveCarbonBeamLine::HadrontherapyBeamLineSupport()
     beamLineSupportZPosition = 0.*mm;
     
     beamLineSupport = new G4Box("BeamLineSupport",
-                                       beamLineSupportXSize,
-                                       beamLineSupportYSize,
-                                       beamLineSupportZSize);
+                                beamLineSupportXSize,
+                                beamLineSupportYSize,
+                                beamLineSupportZSize);
     
     logicBeamLineSupport = new G4LogicalVolume(beamLineSupport,
-                                                                beamLineSupportMaterial,
-                                                                "BeamLineSupport");
+                                               beamLineSupportMaterial,
+                                               "BeamLineSupport");
     physiBeamLineSupport = new G4PVPlacement(0, G4ThreeVector(beamLineSupportXPosition,
                                                               beamLineSupportYPosition,
                                                               beamLineSupportZPosition),
@@ -318,13 +341,13 @@ void PassiveCarbonBeamLine::HadrontherapyBeamLineSupport()
     beamLineCoverZPosition = 610.*mm;
     
     beamLineCover = new G4Box("BeamLineCover",
-                                     beamLineCoverXSize,
-                                     beamLineCoverYSize,
-                                     beamLineCoverZSize);
+                              beamLineCoverXSize,
+                              beamLineCoverYSize,
+                              beamLineCoverZSize);
     
     logicBeamLineCover = new G4LogicalVolume(beamLineCover,
-                                                              beamLineSupportMaterial,
-                                                              "BeamLineCover");
+                                             beamLineSupportMaterial,
+                                             "BeamLineCover");
     
     physiBeamLineCover = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
                                                             beamLineCoverYPosition,
@@ -386,7 +409,7 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
     // --------------------------//
     // A thin foil performing a first scattering
     // of the original beam
-
+    
     firstScatteringFoilXSize = 0.015 *mm;
     firstScatteringFoilYSize = 52.5 *mm;
     firstScatteringFoilZSize = 52.5 *mm;
@@ -406,7 +429,7 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
                                                  false, 0);
     
     logicFirstScatteringFoil -> SetVisAttributes(skyBlue);
-
+    
     // -------------------//
     // THE KAPTON WINDOWS //
     //--------------------//
@@ -429,21 +452,14 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
     
     physiKaptonWindow = new G4PVPlacement(0, G4ThreeVector(kaptonWindowXPosition, 0., 0.),
                                           "KaptonWindow", logicKaptonWindow,
-                                          physiVacuumZone, false,	0);
+                                          physiVacuumZone, false,    0);
     
     logicKaptonWindow -> SetVisAttributes(darkOrange3);
-
-
-
-
-
-
 }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
 {
-
-
+    
     G4double defaultRippleFilterXPosition = -1638.0*mm;
     G4double ripple_position=(defaultRippleFilterXPosition);
     G4double RF_x = 200.0 * mm;
@@ -548,14 +564,209 @@ void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
         
         copyNumber++;
     }
+    
+}
+/////////////////////////////////////////////////////////////////////////////
 
-   }
+void PassiveCarbonBeamLine::StopperCostruction(){
+    
+    supportFoil= new G4Box("supportFoil",25/2*um,10*cm,10*cm);
+    LogicSupportFoil = new G4LogicalVolume(supportFoil,tantalumNist,"logicSupportFoil");
+    PhysiSupportFoil = new G4PVPlacement(0,G4ThreeVector(-1398.*mm+25/2*um,0.*mm,0.*mm),"logicSupportFoil",LogicSupportFoil,physicalTreatmentRoom,false,0 );
+    LogicSupportFoil -> SetVisAttributes(skyBlue);
+    
+    
+    
+    stopper = new G4Tubs("Stopper",0*mm,3*mm,3.5*mm,0.*deg,360.*deg);
+    LogicStopper= new G4LogicalVolume(stopper,brass,"logicalStopper");
+    
+    G4double ti = -270. *deg;
+    G4RotationMatrix rt;
+    rt.rotateY(ti);
+    
+    PhysicStopper= new G4PVPlacement(G4Transform3D(rt,G4ThreeVector(-1398.*mm-3.5*mm,0*mm,0*mm)),"logicalStopper",LogicStopper,physicalTreatmentRoom,false,0);
+    
+    LogicStopper -> SetVisAttributes(red);
+    
+    
+}
+
+void PassiveCarbonBeamLine::HadrontherapyRidgeFilter(){
+    
+   
+    G4double defaultRidgeXPosition= -1270.0*mm; 
+    const G4double XBase = 0.5 *mm;
+    const G4double YBase =6.03*cm;
+    const G4double ZBase =6.03*cm;
+    
+    
+    
+    SolidRidgeBase = new G4Box("BaseRidgeFilter",
+                               XBase,
+                               YBase/2,
+                               ZBase/2);
+    
+    LogicRidgeBase = new G4LogicalVolume(SolidRidgeBase,
+                                         PMMANist,
+                                         "BaseRidgeFilter");
+    
+    PhysiRidgeFilterBase = new G4PVPlacement(0,
+                                             G4ThreeVector(
+                                                           -1270*mm, 
+                                                           0.,
+                                                           0.),
+                                             "BaseRidgeFilter",
+                                             LogicRidgeBase,
+                                             physicalTreatmentRoom,
+                                             false,
+                                             0);
+    
+    LogicRidgeBase->SetVisAttributes(red);
+    
+    
+    SolidRidgeMother = new G4Box("MotherRidgeSOL",1.7*mm/2,1.7*mm/2,4.72*mm/2);
+    LogicRidgeMother = new G4LogicalVolume(SolidRidgeMother,airNist,"MotherRidge");
+    
+    G4Trd* trapp1=new G4Trd("Trapp1SOL",1.7*mm/2,1.68*mm/2,1.7*mm/2,1.68*mm/2,0.22*mm/2);
+    G4LogicalVolume* LogicTrapp1=new G4LogicalVolume(trapp1,PMMANist,"Trapp1");
+ PhysiTrapp1=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22/2)*mm),LogicTrapp1,"Trapp1",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp2=new G4Trd("Trapp2SOL",1.68*mm/2,1.64*mm/2,1.68*mm/2,1.64*mm/2,0.08*mm/2);
+    G4LogicalVolume* LogicTrapp2=new G4LogicalVolume(trapp2,PMMANist,"Trapp2");
+  PhysiTrapp2=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08/2)*mm),LogicTrapp2,"Trapp2",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp3=new G4Trd("Trapp3SOL",1.64*mm/2,1.58*mm/2,1.64*mm/2,1.58*mm/2,0.14*mm/2);
+    G4LogicalVolume* LogicTrapp3=new G4LogicalVolume(trapp3,PMMANist,"Trapp3");
+ PhysiTrapp3=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14/2)*mm),LogicTrapp3,"Trapp3",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp4=new G4Trd("Trapp4SOL",1.58*mm/2,1.50*mm/2,1.58*mm/2,1.50*mm/2,0.22*mm/2);
+    G4LogicalVolume* LogicTrapp4=new G4LogicalVolume(trapp4,PMMANist,"Trapp4");
+    PhysiTrapp4=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22/2)*mm),LogicTrapp4,"Trapp4",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp5=new G4Trd("Trapp5SOL",1.50*mm/2,1.40*mm/2,1.50*mm/2,1.40*mm/2,0.31*mm/2);
+    G4LogicalVolume* LogicTrapp5=new G4LogicalVolume(trapp5,PMMANist,"Trapp5");
+   PhysiTrapp5=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31/2)*mm),LogicTrapp5,"Trapp5",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp6=new G4Trd("Trapp6SOL",1.40*mm/2,1.26*mm/2,1.40*mm/2,1.26*mm/2,0.48*mm/2);
+    G4LogicalVolume* LogicTrapp6=new G4LogicalVolume(trapp6,PMMANist,"Trapp6");
+   PhysiTrapp6=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48/2)*mm),LogicTrapp6,"Trapp6",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp7=new G4Trd("Trapp7SOL",1.26*mm/2,0.94*mm/2,1.26*mm/2,0.94*mm/2,1.20*mm/2);
+    G4LogicalVolume* LogicTrapp7=new G4LogicalVolume(trapp7,PMMANist,"Trapp7");
+PhysiTrapp7=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20/2)*mm),LogicTrapp7,"Trapp7",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp8=new G4Trd("Trapp8SOL",0.94*mm/2,0.78*mm/2,0.94*mm/2,0.78*mm/2,0.57*mm/2);
+    G4LogicalVolume* LogicTrapp8=new G4LogicalVolume(trapp8,PMMANist,"Trapp8");
+    PhysiTrapp8=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57/2)*mm),LogicTrapp8,"Trapp8",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp9=new G4Trd("Trapp9SOL",0.78*mm/2,0.66*mm/2,0.78*mm/2,0.66*mm/2,0.39*mm/2);
+    G4LogicalVolume* LogicTrapp9=new G4LogicalVolume(trapp9,PMMANist,"Trapp9");
+  PhysiTrapp9=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39/2)*mm),LogicTrapp9,"Trapp9",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp10=new G4Trd("Trapp10SOL",0.66*mm/2,0.56*mm/2,0.66*mm/2,0.56*mm/2,0.29*mm/2);
+    G4LogicalVolume* LogicTrapp10=new G4LogicalVolume(trapp10,PMMANist,"Trapp10");
+ PhysiTrapp10=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29/2)*mm),LogicTrapp10,"Trapp10",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp11=new G4Trd("Trapp11SOL",0.56*mm/2,0.46*mm/2,0.56*mm/2,0.46*mm/2,0.25*mm/2);
+    G4LogicalVolume* LogicTrapp11=new G4LogicalVolume(trapp11,PMMANist,"Trapp11");
+PhysiTrapp11=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29+0.25/2)*mm),LogicTrapp11,"Trapp11",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp12=new G4Trd("Trapp12SOL",0.46*mm/2,0.38*mm/2,0.46*mm/2,0.38*mm/2,0.17*mm/2);
+    G4LogicalVolume* LogicTrapp12=new G4LogicalVolume(trapp12,PMMANist,"Trapp12");
+   PhysiTrapp12=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29+0.25+0.17/2)*mm),LogicTrapp12,"Trapp12",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp13=new G4Trd("Trapp13SOL",0.38*mm/2,0.30*mm/2,0.38*mm/2,0.30*mm/2,0.14*mm/2);
+    G4LogicalVolume* LogicTrapp13=new G4LogicalVolume(trapp13,PMMANist,"Trapp13");
+   PhysiTrapp13=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29+0.25+0.17+0.14/2)*mm),LogicTrapp13,"Trapp13",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp14=new G4Trd("Trapp14SOL",0.30*mm/2,0.24*mm/2,0.30*mm/2,0.24*mm/2,0.09*mm/2);
+    G4LogicalVolume* LogicTrapp14=new G4LogicalVolume(trapp14,PMMANist,"Trapp13");
+PhysiTrapp14=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29+0.25+0.17+0.14+0.09/2)*mm),LogicTrapp14,"Trapp14",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp15=new G4Trd("Trapp14SOL",0.24*mm/2,0.18*mm/2,0.24*mm/2,0.18*mm/2,0.07*mm/2);
+    G4LogicalVolume* LogicTrapp15=new G4LogicalVolume(trapp15,PMMANist,"Trapp15");
+    PhysiTrapp15=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29+0.25+0.17+0.14+0.09+0.07/2)*mm),LogicTrapp15,"Trapp15",LogicRidgeMother,false,0);
+    
+    G4Trd* trapp16=new G4Trd("Trapp16SOL",0.18*mm/2,0.12*mm/2,0.18*mm/2,0.12*mm/2,0.10*mm/2);
+    G4LogicalVolume* LogicTrapp16=new G4LogicalVolume(trapp16,PMMANist,"Trapp16");
+  PhysiTrapp16=new G4PVPlacement(0,G4ThreeVector(0.,0.,(-4.72/2+0.22+0.08+0.14+0.22+0.31+0.48+1.20+0.57+0.39+0.29+0.25+0.17+0.14+0.09+0.07+0.10/2)*mm),LogicTrapp16,"Trapp16",LogicRidgeMother,false,0);
+    
+    LogicTrapp1->SetVisAttributes(green);
+    LogicTrapp2->SetVisAttributes(green);
+    LogicTrapp3->SetVisAttributes(green);
+    LogicTrapp4->SetVisAttributes(green);
+    LogicTrapp5->SetVisAttributes(green);
+    LogicTrapp6->SetVisAttributes(green);
+    LogicTrapp7->SetVisAttributes(green);
+    LogicTrapp8->SetVisAttributes(green);
+    LogicTrapp9->SetVisAttributes(green);
+    LogicTrapp10->SetVisAttributes(green);
+    LogicTrapp11->SetVisAttributes(green);
+    LogicTrapp12->SetVisAttributes(green);
+    LogicTrapp13->SetVisAttributes(green);
+    LogicTrapp14->SetVisAttributes(green);
+    LogicTrapp15->SetVisAttributes(green);
+    LogicTrapp16->SetVisAttributes(green);
+    G4VisAttributes* visAttr = new G4VisAttributes();
+    visAttr->SetVisibility(false);
+    LogicRidgeMother->SetVisAttributes(visAttr);
+    
+    
+    
+    
+    
+    
+    G4int numberOfLayers = 30;
+    G4double minZ = 30.15*mm-0.3*mm-1.70/2*mm;
+    G4double minY = 30.15*mm-0.3*mm-1.70/2*mm;
+    G4double sum_space = 0.3*mm+1.70*mm;
+    
+    
+    std::vector<G4ThreeVector> singleTrapPositions;
+    
+    for (int i = 0; i < numberOfLayers; i++)
+    {
+        for (int j = 0; j < numberOfLayers; j++)
+        {
+            singleTrapPositions.push_back({defaultRidgeXPosition-4.72/2*mm-0.5*mm,
+                minY - i*sum_space,
+                minZ - j*sum_space,
+                
+            });
+        }
+    }
+    
+    G4double ti = -  90. *deg;
+    G4RotationMatrix rt;
+    rt.rotateY(ti);
+    
+    
+    G4int peaks = numberOfLayers*numberOfLayers;
+    for (int i = 0; i < peaks; i++)
+    {
+        
+        std::ostringstream tName;tName << "singleTrap" << i;
+        new G4PVPlacement(G4Transform3D(rt,
+                                        singleTrapPositions[i]),
+                          LogicRidgeMother,
+                          "tName.str()",
+                          logicTreatmentRoom,
+                          0,
+                          i);
+        
+    }
+    
+}
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyPMMACollimator()
 {
-
+    
     // ----------------------//
     //   PMMA COLLIMATOR     //
     // ----------------------//
@@ -563,7 +774,8 @@ void PassiveCarbonBeamLine::HadrontherapyPMMACollimator()
     PMMACollimatorSupportYSize = 200. *mm;
     PMMACollimatorSupportZSize = 200. *mm;
     
-    PMMACollimatorXPosition = -1082.00 *mm;
+    
+    PMMACollimatorXPosition = -1257.0 *mm; 
     
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
@@ -626,14 +838,13 @@ void PassiveCarbonBeamLine::HadrontherapyPMMACollimator()
     
     logicPMMACollimator -> SetVisAttributes(yellow);
     
-
+    
     
     
 }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
 {
-
     // ----------------------------
     //       MONITOR CHAMBER
     // ----------------------------
@@ -650,7 +861,7 @@ void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
     monitor3XSize = 4.5*mm;
     monitorYSize = 10.*cm;
     monitorZSize = 10.*cm;
-    monitor1XPosition = -1059.0 *mm;
+    monitor1XPosition = -1239.974978 *mm;
     monitor2XPosition = -4.500011*mm;
     monitor4XPosition = 4.500011*mm;
     
@@ -688,13 +899,13 @@ void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
                                                 0);
     
     solidFirstMonitorLayer3 = new G4Box("FirstMonitorLayer3",
-                                               monitor3XSize,
-                                               monitorYSize,
-                                               monitorZSize);
+                                        monitor3XSize,
+                                        monitorYSize,
+                                        monitorZSize);
     
     logicFirstMonitorLayer3 = new G4LogicalVolume(solidFirstMonitorLayer3,
-                                                                   layer3MonitorChamberMaterial,
-                                                                   "FirstMonitorLayer3");
+                                                  layer3MonitorChamberMaterial,
+                                                  "FirstMonitorLayer3");
     
     physiFirstMonitorLayer3 = new G4PVPlacement(0,
                                                 G4ThreeVector(0.*mm,0.*cm,0.*cm),
@@ -705,13 +916,13 @@ void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
                                                 0);
     
     solidFirstMonitorLayer4 = new G4Box("FirstMonitorLayer4",
-                                               monitor2XSize,
-                                               monitorYSize,
-                                               monitorZSize);
+                                        monitor2XSize,
+                                        monitorYSize,
+                                        monitorZSize);
     
     logicFirstMonitorLayer4 = new G4LogicalVolume(solidFirstMonitorLayer4,
-                                                                   layer4MonitorChamberMaterial,
-                                                                   "FirstMonitorLayer4");
+                                                  layer4MonitorChamberMaterial,
+                                                  "FirstMonitorLayer4");
     
     physiFirstMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm),
                                                 "FirstMonitorLayer4",
@@ -719,7 +930,7 @@ void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
                                                 physiFirstMonitorLayer1, false, 0);
     
     logicFirstMonitorLayer3 -> SetVisAttributes(white);
-
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -749,13 +960,13 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
     rm.rotateY(phi);
     
     solidNozzleSupport = new G4Box("NozzleSupport",
-                                          nozzleSupportXSize/2,
-                                          nozzleSupportYSize/2,
-                                          nozzleSupportZSize/2);
+                                   nozzleSupportXSize/2,
+                                   nozzleSupportYSize/2,
+                                   nozzleSupportZSize/2);
     
     logicNozzleSupport = new G4LogicalVolume(solidNozzleSupport,
-                                                              nozzleSupportMaterial,
-                                                              "NozzleSupport");
+                                             nozzleSupportMaterial,
+                                             "NozzleSupport");
     
     physiNozzleSupport = new G4PVPlacement(0, G4ThreeVector(nozzleSupportXPosition,0., 0.),
                                            "NozzleSupport",
@@ -778,18 +989,18 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
     spanningAngleHoleNozzleSupport = 360.*deg;
     
     solidHoleNozzleSupport = new G4Tubs("HoleNozzleSupport",
-                                                innerRadiusHoleNozzleSupport,
-                                                outerRadiusHoleNozzleSupport,
-                                                hightHoleNozzleSupport/2,
-                                                startAngleHoleNozzleSupport,
-                                                spanningAngleHoleNozzleSupport);
+                                        innerRadiusHoleNozzleSupport,
+                                        outerRadiusHoleNozzleSupport,
+                                        hightHoleNozzleSupport/2,
+                                        startAngleHoleNozzleSupport,
+                                        spanningAngleHoleNozzleSupport);
     
     logicHoleNozzleSupport = new G4LogicalVolume(solidHoleNozzleSupport,
-                                                                  holeNozzleSupportMaterial,
-                                                                  "HoleNozzleSupport",
-                                                                  0,
-                                                                  0,
-                                                                  0);
+                                                 holeNozzleSupportMaterial,
+                                                 "HoleNozzleSupport",
+                                                 0,
+                                                 0,
+                                                 0);
     
     physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()),
                                                "HoleNozzleSupport",
@@ -809,16 +1020,16 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
     brassTube3XPosition = -458.0 *mm;
     
     solidBrassTube3 = new G4Tubs("BrassTube3",
-                                         innerRadiusBrassTube3,
-                                         outerRadiusBrassTube3,
-                                         hightBrassTube3/2,
-                                         startAngleBrassTube3,
-                                         spanningAngleBrassTube3);
+                                 innerRadiusBrassTube3,
+                                 outerRadiusBrassTube3,
+                                 hightBrassTube3/2,
+                                 startAngleBrassTube3,
+                                 spanningAngleBrassTube3);
     
     logicBrassTube3 = new G4LogicalVolume(solidBrassTube3,
-                                                           brassTube3Material,
-                                                           "BrassTube3",
-                                                           0, 0, 0);
+                                          brassTube3Material,
+                                          "BrassTube3",
+                                          0, 0, 0);
     
     physiBrassTube3 = new G4PVPlacement(G4Transform3D(rm,
                                                       G4ThreeVector(brassTube3XPosition,
@@ -844,16 +1055,16 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
     
     
     solidBrassTube2 = new G4Tubs("BrassTube2",
-                                         innerRadiusBrassTube2,
-                                         outerRadiusBrassTube2,
-                                         hightBrassTube2/2,
-                                         startAngleBrassTube2,
-                                         spanningAngleBrassTube2);
+                                 innerRadiusBrassTube2,
+                                 outerRadiusBrassTube2,
+                                 hightBrassTube2/2,
+                                 startAngleBrassTube2,
+                                 spanningAngleBrassTube2);
     
     logicBrassTube2 = new G4LogicalVolume(solidBrassTube2,
-                                                           brassTube2Material,
-                                                           "BrassTube2",
-                                                           0, 0, 0);
+                                          brassTube2Material,
+                                          "BrassTube2",
+                                          0, 0, 0);
     physiBrassTube2 = new G4PVPlacement(0,
                                         G4ThreeVector(0,0.,0.),
                                         logicBrassTube2,
@@ -874,16 +1085,16 @@ void PassiveCarbonBeamLine::HadrontherapyBeamNozzle()
     spanningAngleBrassTube = 360.*deg;
     brassTubeXPosition = -294 *mm;
     solidBrassTube = new G4Tubs("BrassTube",
-                                        innerRadiusBrassTube,
-                                        outerRadiusBrassTube,
-                                        hightBrassTube/2,
-                                        startAngleBrassTube,
-                                        spanningAngleBrassTube);
+                                innerRadiusBrassTube,
+                                outerRadiusBrassTube,
+                                hightBrassTube/2,
+                                startAngleBrassTube,
+                                spanningAngleBrassTube);
     
     logicBrassTube = new G4LogicalVolume(solidBrassTube,
-                                                          brassTubeMaterial,
-                                                          "BrassTube",
-                                                          0, 0, 0);
+                                         brassTubeMaterial,
+                                         "BrassTube",
+                                         0, 0, 0);
     
     physiBrassTube = new G4PVPlacement(G4Transform3D(rm,
                                                      G4ThreeVector(brassTubeXPosition,
@@ -924,11 +1135,11 @@ void PassiveCarbonBeamLine::HadrontherapyBeamFinalCollimator()
                                       spanningAngleFinalCollimator);
     
     logicFinalCollimator = new G4LogicalVolume(solidFinalCollimator,
-                                                                finalCollimatorMaterial,
-                                                                "FinalCollimator",
-                                                                0,
-                                                                0,
-                                                                0);
+                                               finalCollimatorMaterial,
+                                               "FinalCollimator",
+                                               0,
+                                               0,
+                                               0);
     
     physiFinalCollimator = new G4PVPlacement(G4Transform3D(rm,
                                                            G4ThreeVector(finalCollimatorXPosition,0.,0.)),

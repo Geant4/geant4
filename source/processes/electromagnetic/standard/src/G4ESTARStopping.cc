@@ -54,8 +54,8 @@ G4ESTARStopping::G4ESTARStopping(const G4String& datatype)
   currentMaterial = 0;
   matIndex = -1;
 
+  sdata.resize(280,nullptr);
   name.resize(280,"");
-  sdata.resize(280,0);
 
   type = 0;
   if("basic" == datatype)     { type = 1; }
@@ -962,10 +962,11 @@ void G4ESTARStopping::AddData(const G4double* ekin, const G4double* stop,
   G4double x1, x2, x3, x4, x5, x6, x7;
 
   static const G4double fac = MeV*cm2/g;
+  if(nullptr != sdata[idx]) { delete sdata[idx]; }
 
   // hardtyped data
   if(0 == type) {
-    sdata[idx] = new G4LPhysicsFreeVector(25, ekin[0]*MeV, ekin[24]*MeV);
+    sdata[idx] = new G4PhysicsFreeVector(25, ekin[0]*MeV, ekin[24]*MeV, true);
     for(size_t i=0; i<25; ++i) { 
       sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); 
     }
@@ -988,7 +989,7 @@ void G4ESTARStopping::AddData(const G4double* ekin, const G4double* stop,
                 ed,"G4LEDATA version should be G4EMLOW6.34 or later.");
       return;
     }
-    sdata[idx] = new G4LPhysicsFreeVector(81, 0.01*MeV, GeV);
+    sdata[idx] = new G4PhysicsFreeVector(81, 0.01*MeV, GeV, true);
     for(size_t i=0; i<81; ++i) { 
       fin >> x1 >> x2 >> x3 >> x4 >> x5 >> x6 >> x7;
       sdata[idx]->PutValues(i, x1*MeV, x4*fac); 
@@ -1012,13 +1013,12 @@ void G4ESTARStopping::AddData(const G4double* ekin, const G4double* stop,
                 ed,"G4LEDATA version should be G4EMLOW6.34 or later.");
       return;
     }
-    sdata[idx] = new G4LPhysicsFreeVector(97, 0.001*MeV, 10*GeV);
+    sdata[idx] = new G4PhysicsFreeVector(97, 0.001*MeV, 10*GeV, true);
     for(size_t i=0; i<97; ++i) { 
       fin >> x1 >> x2 >> x3 >> x4 >> x5;
       sdata[idx]->PutValues(i, x1*MeV, x4*fac); 
     }
   }
-  sdata[idx]->SetSpline(true);
   sdata[idx]->FillSecondDerivatives();
   //G4cout << "done " << G4endl;
 }

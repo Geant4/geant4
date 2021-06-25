@@ -68,10 +68,6 @@
 //# Do NOT include glx Here ! It has to be done, after all <Qxx...> includes
 //#  include <GL/glx.h>
 
- #if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
- #  include <Wt/WGLWidget>
- #  define G4OPENGL_VERSION_2 1
- #endif
  #if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
    #if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
    #else

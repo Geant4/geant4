@@ -43,10 +43,10 @@
 
 G4KaonBuilder::G4KaonBuilder()
 {  
-  theKaonPlusInelastic=new G4KaonPlusInelasticProcess;
-  theKaonMinusInelastic=new G4KaonMinusInelasticProcess;
-  theKaonZeroLInelastic=new G4KaonZeroLInelasticProcess;
-  theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
+  theKaonPlusInelastic=new  G4HadronInelasticProcess( "kaon+Inelastic",  G4KaonPlus::Definition() );
+  theKaonMinusInelastic=new G4HadronInelasticProcess( "kaon-Inelastic",  G4KaonMinus::Definition() );
+  theKaonZeroLInelastic=new G4HadronInelasticProcess( "kaon0LInelastic", G4KaonZeroLong::Definition() );
+  theKaonZeroSInelastic=new G4HadronInelasticProcess( "kaon0SInelastic", G4KaonZeroShort::Definition() );
 }
 
 void G4KaonBuilder::
@@ -83,4 +83,3 @@ void G4KaonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
       G4PhysicsBuilderInterface::RegisterMe(aB);
   }
 }
-

@@ -58,7 +58,7 @@ class G4PenelopeIonisationCrossSection : public G4VhShellCrossSection
 {
 public:  
   //! Constructor. 
-  G4PenelopeIonisationCrossSection();
+  explicit G4PenelopeIonisationCrossSection();
   
   //! Destructor. Clean all tables.
   ~G4PenelopeIonisationCrossSection();
@@ -70,7 +70,7 @@ public:
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy,
-					const G4Material* mat);
+					const G4Material* mat) override;
   
   //! Purely virtual method from the base interface. Returns the 
   //! cross section for the given shell in the element Z of material 
@@ -79,7 +79,7 @@ public:
 			G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
 			G4double mass,
-			const G4Material* mat);
+			const G4Material* mat) override;
 
   //! Purely virtual method from the base interface. Returns the 
   //! shell ionisation probabilities for the given Z in the
@@ -88,34 +88,33 @@ public:
 				      G4double incidentEnergy,
 				      G4double mass,
 				      G4double deltaEnergy,
-				      const G4Material* mat) ;
+				      const G4Material* mat) override;
   //! Getter/setter for the verbosity level
-  void SetVerbosityLevel(G4int vl){verboseLevel = vl;};
-  G4int GetVerbosityLevel(){return verboseLevel;};
+  void SetVerbosityLevel(G4int vl){fVerboseLevel = vl;};
+  G4int GetVerbosityLevel(){return fVerboseLevel;};
 
-private:  
-  G4PenelopeIonisationCrossSection & operator=(const G4PenelopeIonisationCrossSection &right);
-  G4PenelopeIonisationCrossSection(const G4PenelopeIonisationCrossSection&);
+  G4PenelopeIonisationCrossSection & operator=(const G4PenelopeIonisationCrossSection &right) 
+  = delete;
+  G4PenelopeIonisationCrossSection(const G4PenelopeIonisationCrossSection&) = delete;
 
-  //Oscillator manager
-  G4PenelopeOscillatorManager* oscManager;
-
-  G4int verboseLevel;
-
+private:
   //!The shells in Penelope are organized per *material*, rather than per 
   //!element, so given a material one has to find the proper index for the 
   //!given Z and shellID. An appropriate look-up table is used to avoid 
   //!recalculation.
   G4int FindShellIDIndex(const G4Material* mat,G4int Z,G4AtomicShellEnumerator shell);
-  std::map< std::pair<const G4Material*,G4int>, G4DataVector*> *shellIDTable;
 
-  G4int nMaxLevels;
+  std::map< std::pair<const G4Material*,G4int>, G4DataVector*> *fShellIDTable;
 
+  //Oscillator manager
+  G4PenelopeOscillatorManager* fOscManager;
+  G4PenelopeIonisationXSHandler* fCrossSectionHandler;
+  const G4AtomicTransitionManager* fTransitionManager;
+ 
   G4double fLowEnergyLimit;
   G4double fHighEnergyLimit;
-
-  G4PenelopeIonisationXSHandler* theCrossSectionHandler;
-  const G4AtomicTransitionManager* transitionManager;
+  G4int fVerboseLevel;
+  G4int fNMaxLevels;
 };
 
 #endif

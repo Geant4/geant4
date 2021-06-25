@@ -59,16 +59,16 @@ public:
 
   G4double GetDeltaL(G4int Z, G4double gamma) const;
 
+  // hide assignment operator
+  G4LindhardSorensenData & operator=
+  (const  G4LindhardSorensenData &right) = delete;
+  G4LindhardSorensenData(const  G4LindhardSorensenData&) = delete;
+
 private:
 
   void InitialiseData();
 
   G4double ComputeDeltaL(G4int Z, G4double x) const;
-
-  // hide assignment operator
-  G4LindhardSorensenData & operator=
-  (const  G4LindhardSorensenData &right) = delete;
-  G4LindhardSorensenData(const  G4LindhardSorensenData&) = delete;
 
   G4double xmin;
   G4double xmax;

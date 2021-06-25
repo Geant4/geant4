@@ -32,6 +32,7 @@
 #include "PTL/Types.hh"
 
 #include <cstddef>
+#include <memory>
 #include <set>
 #include <tuple>
 #include <type_traits>
@@ -40,25 +41,24 @@
 namespace PTL
 {
 class VTask;
-class VTaskGroup;
 class ThreadPool;
 class ThreadData;
 
 class VUserTaskQueue
 {
 public:
-    typedef VTask*                task_pointer;
-    typedef std::atomic<intmax_t> AtomicInt;
-    typedef uintmax_t             size_type;
-    typedef std::function<void()> function_type;
-    typedef std::set<ThreadId>    ThreadIdSet;
+    typedef std::shared_ptr<VTask> task_pointer;
+    typedef std::atomic<intmax_t>  AtomicInt;
+    typedef uintmax_t              size_type;
+    typedef std::function<void()>  function_type;
+    typedef std::set<ThreadId>     ThreadIdSet;
 
 public:
     // Constructor - accepting the number of workers
     explicit VUserTaskQueue(intmax_t nworkers = -1);
     // Virtual destructors are required by abstract classes
     // so add it by default, just in case
-    virtual ~VUserTaskQueue();
+    virtual ~VUserTaskQueue() = default;
 
 public:
     // Virtual function for getting a task from the queue
@@ -75,8 +75,8 @@ public:
     //      2. int - sub-queue to inserting into
     // return:
     //      int - subqueue inserted into
-    virtual intmax_t InsertTask(task_pointer, ThreadData* = nullptr,
-                                intmax_t subq = -1) = 0;
+    virtual intmax_t InsertTask(task_pointer&&, ThreadData* = nullptr,
+                                intmax_t subq = -1) PTL_NO_SANITIZE_THREAD = 0;
 
     // Overload this function to hold threads
     virtual void     Wait()               = 0;
@@ -104,109 +104,6 @@ public:
     intmax_t workers() const { return m_workers; }
 
     virtual VUserTaskQueue* clone() = 0;
-
-    // operator for number of tasks
-    //      prefix versions
-    // virtual uintmax_t operator++() = 0;
-    // virtual uintmax_t operator--() = 0;
-    //      postfix versions
-    // virtual uintmax_t operator++(int) = 0;
-    // virtual uintmax_t operator--(int) = 0;
-
-public:
-    template <typename ContainerT, size_t... Idx>
-    static auto ContainerToTupleImpl(ContainerT&& container, mpl::index_sequence<Idx...>)
-        -> decltype(std::make_tuple(std::forward<ContainerT>(container)[Idx]...))
-    {
-        return std::make_tuple(std::forward<ContainerT>(container)[Idx]...);
-    }
-
-    template <std::size_t N, typename ContainerT>
-    static auto ContainerToTuple(ContainerT&& container)
-        -> decltype(ContainerToTupleImpl(std::forward<ContainerT>(container),
-                                         mpl::make_index_sequence<N>{}))
-    {
-        return ContainerToTupleImpl(std::forward<ContainerT>(container),
-                                    mpl::make_index_sequence<N>{});
-    }
-
-    template <std::size_t N, std::size_t Nt, typename TupleT,
-              enable_if_t<(N == Nt), int> = 0>
-    static void TExecutor(TupleT&& _t)
-    {
-        if(std::get<N>(_t).get())
-            (*(std::get<N>(_t)))();
-    }
-
-    template <std::size_t N, std::size_t Nt, typename TupleT,
-              enable_if_t<(N < Nt), int> = 0>
-    static void TExecutor(TupleT&& _t)
-    {
-        if(std::get<N>(_t).get())
-            (*(std::get<N>(_t)))();
-        TExecutor<N + 1, Nt, TupleT>(std::forward<TupleT>(_t));
-    }
-
-    template <typename TupleT, std::size_t N = std::tuple_size<decay_t<TupleT>>::value>
-    static void Executor(TupleT&& __t)
-    {
-        TExecutor<0, N - 1, TupleT>(std::forward<TupleT>(__t));
-    }
-
-    template <typename Container,
-              typename std::enable_if<std::is_same<Container, task_pointer>::value,
-                                      int>::type = 0>
-    static void Execute(Container& obj)
-    {
-        if(obj.get())
-            (*obj)();
-    }
-
-    template <typename Container,
-              typename std::enable_if<!std::is_same<Container, task_pointer>::value,
-                                      int>::type = 0>
-    static void Execute(Container& tasks)
-    {
-        /*
-        for(auto& itr : tasks)
-        {
-            if(itr.get())
-                (*itr)();
-        }*/
-
-        size_type n     = tasks.size();
-        size_type max_n = 4;
-        while(n > 0)
-        {
-            auto compute = (n > max_n) ? max_n : n;
-            switch(compute)
-            {
-                case 4: {
-                    auto t = ContainerToTuple<4>(tasks);
-                    Executor(t);
-                    break;
-                }
-                case 3: {
-                    auto t = ContainerToTuple<3>(tasks);
-                    Executor(t);
-                    break;
-                }
-                case 2: {
-                    auto t = ContainerToTuple<2>(tasks);
-                    Executor(t);
-                    break;
-                }
-                case 1: {
-                    auto t = ContainerToTuple<1>(tasks);
-                    Executor(t);
-                    break;
-                }
-                case 0: break;
-            }
-            // tasks.erase(tasks.begin(), tasks.begin() + compute);
-            n -= compute;
-        }
-    }
 
 protected:
     intmax_t m_workers = 0;

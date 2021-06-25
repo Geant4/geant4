@@ -13,7 +13,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+29-04-21 mma (testem1-V10-07-03)
+- Additional migration to new G4SteppingVerbose.
 
+26-02-21 M.Asai (testem1-V10-07-02)
+- Migrating to G4RunManagerFactory and G4SteppingVerboseWithUnits
+  classes.
+
+10-02-21 V.Ivanchenko (testem1-V10-07-01)
+- fixed README
+     
+09-12-20 mma (testem1-V10-07-00)
+- updated PhysListEmStandard.cc
+- DetectorConstruction : do not print materials table
+- StepMax.hh and StepMax.cc : purely cosmetic
+- Added macro stepMax.mac
+- cosmetic in TestEm1.in
+
+  
 03-09-20 I.Hrivnacova, mma (testem1-V10-06-02)
 - Revied macros:
   Added macro description in README.

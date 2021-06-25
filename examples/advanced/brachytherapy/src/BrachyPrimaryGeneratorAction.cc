@@ -42,18 +42,18 @@
 #include "globals.hh"
 
 #include "BrachyPrimaryGeneratorAction.hh"
+#include "BrachyAnalysisManager.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyAnalysisManager.hh"
 
 BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction()
 {
 // Use the GPS to generate primary particles,
 // Particle type, energy position, direction are specified in 
-//macro files
+// macro files
  fGun = new G4GeneralParticleSource();
 }
 
@@ -71,9 +71,9 @@ void BrachyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   auto analysisManager = G4AnalysisManager::Instance();
   G4double energy = fGun -> GetParticleEnergy();
   // Fill histogram with the energy spectrum of 
-  // the photons emitted the radionuclide
-  // when modelling the photons directly (not via radioactive decay)
-   analysisManager->FillH1(0, energy/keV);
+  // the photons emitted by the radionuclide
+  // when modelling the photons as primary particles (not via radioactive decay)
+   analysisManager -> FillH1(0, energy/keV);
  }
 }
 

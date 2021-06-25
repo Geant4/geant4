@@ -142,7 +142,7 @@
     nPhotons=thePhotons->size();
 
 ///*
-   if ( DoNotAdjustFinalState() ) {
+    if ( ! G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) {
 //Make at least one photon  
 //101203 TK
     if ( nPhotons == 0 )

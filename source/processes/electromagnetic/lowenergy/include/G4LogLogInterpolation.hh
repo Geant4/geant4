@@ -30,7 +30,6 @@
 // History:
 // -----------
 // 31 Jul 2001   MGP                 Created
-//
 // 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
 //                                   to enhance computing performance of interpolation
 //
@@ -52,27 +51,20 @@
 class G4LogLogInterpolation : public G4VDataSetAlgorithm {
  
 public:
-
-  G4LogLogInterpolation();
-
+  explicit G4LogLogInterpolation();
   ~G4LogLogInterpolation();
  
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
-		     const G4DataVector& data) const;
+		     const G4DataVector& data) const override;
 
   G4double Calculate(G4double point, G4int bin,
                      const G4DataVector& energies,
                      const G4DataVector& data, 
 		     const G4DataVector& log_energies, 
-		     const G4DataVector& log_data) const;
+		     const G4DataVector& log_data) const override;
 
-  virtual G4VDataSetAlgorithm* Clone() const; 
-
-private:
-
-  
-  // Hide copy constructor and assignment operator
+  virtual G4VDataSetAlgorithm* Clone() const override; 
 
 };
  

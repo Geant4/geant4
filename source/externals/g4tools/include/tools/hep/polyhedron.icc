@@ -1,0 +1,2965 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+
+#include <cfloat> //G.Barrand : to have DBL_EPSILON on Windows.
+#include <list>
+
+#include "../mnmx"
+
+namespace tools {
+namespace hep {
+
+// G.Barrand : introduce iabs to avoid a mess with cmath and some compiler.
+inline int iabs(int a) {
+  return a < 0 ? -a : a;
+}
+
+//--------------------------------------------------------------------//
+// JFB:                                                               //
+// polyhedron was polyhedron, retrofitted to Open Inventor            //
+// infrastructure:                                                    //
+//--------------------------------------------------------------------//
+
+
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+//
+// 
+//
+// G4 Polyhedron library
+//
+// History:
+// 23.07.96 E.Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
+//
+// 30.09.96 E.Chernyaev
+// - added GetNextVertexIndex, GetVertex by Yasuhide Sawada
+// - added GetNextUnitNormal, GetNextEdgeIndeces, GetNextEdge
+//
+// 15.12.96 E.Chernyaev
+// - added GetNumberOfRotationSteps, RotateEdge, RotateAroundZ, SetReferences
+// - rewritten G4PolyhedronCons;
+// - added G4PolyhedronPara, ...Trap, ...Pgon, ...Pcon, ...Sphere, ...Torus
+//
+// 01.06.97 E.Chernyaev
+// - modified RotateAroundZ, added SetSideFacets
+//
+// 19.03.00 E.Chernyaev
+// - implemented boolean operations (add, subtract, intersect) on polyhedra;
+//
+// 25.05.01 E.Chernyaev
+// - added GetSurfaceArea() and GetVolume();
+//
+
+
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron operator <<                   Date:    09.05.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Print contents of G4 polyhedron                           *
+ *                                                                     *
+ ***********************************************************************/
+inline int operator==(const SbFacet& v1, const SbFacet& v2) { //G.Barrand
+  for(int i=0;i<4;i++) {
+    if(v1.edge[i].v != v2.edge[i].v) return false;
+    if(v1.edge[i].f != v2.edge[i].f) return false;
+  }
+  return true;
+}
+inline int operator!=(const SbFacet& v1, const SbFacet& v2) { //G.Barrand
+  return !(v1 == v2);
+}
+inline std::ostream& operator<<(std::ostream & ostr, const SbFacet & facet) {
+  for (int k=0; k<4; k++) {
+    ostr << " " << facet.edge[k].v << "/" << facet.edge[k].f;
+  }
+  return ostr;
+}
+inline std::ostream& operator<<(std::ostream & ostr, const polyhedron & ph) {
+  ostr << std::endl;
+  ostr << "Nverteces=" << ph.nvert << ", Nfacets=" << ph.nface << std::endl;
+  int i;
+  for (i=1; i<=ph.nvert; i++) {
+     ostr << "xyz(" << i << ")="
+          << ph.pV[i].v0() << ' ' << ph.pV[i].v1() << ' ' << ph.pV[i].v2()
+          << std::endl;
+  }
+  for (i=1; i<=ph.nface; i++) {
+    ostr << "face(" << i << ")=" << ph.pF[i] << std::endl;
+  }
+  return ostr;
+}
+
+inline polyhedron::polyhedron(const polyhedron &from)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron copy constructor             Date:    23.07.96  *
+ * Author: E.Chernyaev (IHEP/Protvino)              Revised:           *
+ *                                                                     *
+ ***********************************************************************/
+{
+#ifdef TOOLS_MEM
+  mem::increment(s_class().c_str());
+#endif
+  //m_name = 0; //G.Barrand
+  //if(from.m_name) m_name = new std::string(*from.m_name); //G.Barrand
+  
+  if (from.nvert > 0 && from.nface > 0) {
+    nvert = from.nvert;
+    nface = from.nface;
+    pV = new HVPoint3D[nvert + 1];
+    pF = new SbFacet[nface + 1];
+    int i;
+    for (i=1; i<=nvert; i++) pV[i] = from.pV[i];
+    for (i=1; i<=nface; i++) pF[i] = from.pF[i];
+  }else{
+    nvert = 0; nface = 0; pV = 0; pF = 0;
+  }
+  fNumberOfRotationSteps = from.fNumberOfRotationSteps;
+}
+
+inline int operator==(const polyhedron& v1,const polyhedron& v2) { //G.Barrand
+  return v1.isEqual(v2);
+}
+inline int operator!=(const polyhedron& v1,const polyhedron& v2) { //G.Barrand
+  return !(v1 == v2);
+}
+
+inline polyhedron & polyhedron::operator=(const polyhedron &from)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron operator =                   Date:    23.07.96  *
+ * Author: E.Chernyaev (IHEP/Protvino)              Revised:           *
+ *                                                                     *
+ * Function: Copy contents of one GEANT4 polyhedron to another         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (this == &from) {
+//    ::printf("debug : polyhedron::operaot=() : on same object\n");
+//    std::cerr << "polyhedron::operaot=() :"
+//              << " on same object !"
+//              << std::endl;
+    return *this;
+  }
+
+  //delete m_name;m_name = 0; //G.Barrand
+  //if(from.m_name) m_name = new std::string(*from.m_name); //G.Barrand
+
+  delete [] pV;
+  delete [] pF;
+  if (from.nvert > 0  && from.nface > 0) {
+    nvert = from.nvert;
+    nface = from.nface;
+    pV = new HVPoint3D[nvert + 1];
+    pF = new SbFacet[nface + 1];
+    int i;
+    for (i=1; i<=nvert; i++) pV[i] = from.pV[i];
+    for (i=1; i<=nface; i++) pF[i] = from.pF[i];
+  }else{
+    nvert = 0; nface = 0; pV = 0; pF = 0;
+  }
+  fNumberOfRotationSteps = from.fNumberOfRotationSteps;
+  return *this;
+}
+
+//G.Barrand
+inline bool polyhedron::isEqual(const polyhedron &from) const {
+  if (this == &from) return true;
+  if(nvert!=from.nvert) return false;
+  if(nface!=from.nface) return false;
+  int i;
+  for (i=1; i<=nvert; i++) {
+    if(pV[i]!=from.pV[i]) return false;
+  }
+  for (i=1; i<=nface; i++) {
+    if(!pF[i].isEqual(from.pF[i])) return false;
+  }
+  return true;
+}
+inline bool polyhedron::isConsistent(const char*) const {
+  for(int i=1;i<=nface;i++) {
+    const SbFacet& facet = pF[i];
+    for(int j=0;j<4;j++) {
+      int v,f;
+      facet.GetEdge(j,v,f);
+      if(iabs(v)>nvert) return false;
+      if(iabs(f)>nvert) return false;
+    }
+  }
+  return true;
+}
+inline void polyhedron::dump(std::ostream& a_out) const {
+  a_out << " nface = " << nface << std::endl;
+  for(int i=1;i<=nface;i++) {
+    const SbFacet& facet = pF[i];
+    for(int j=0;j<4;j++) {
+      int v,f;
+      facet.GetEdge(j,v,f);
+      a_out << " " << v << " " << f << std::endl;
+    }
+  }
+}
+
+inline int polyhedron::FindNeighbour(int iFace, int iNode, int iOrder) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::FindNeighbour                Date:    22.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Find neighbouring face                                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int i;
+  for (i=0; i<4; i++) {
+    if (iNode == iabs(pF[iFace].edge[i].v)) break;
+  }
+  if (i == 4) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron::FindNeighbour: face " << iFace
+      << " has no node " << iNode
+      << std::endl; 
+#endif
+    return 0;
+  }
+  if (iOrder < 0) {
+    if ( --i < 0) i = 3;
+    if (pF[iFace].edge[i].v == 0) i = 2;
+  }
+  return (pF[iFace].edge[i].v > 0) ? 0 : pF[iFace].edge[i].f;
+}
+
+inline HVNormal3D polyhedron::FindNodeNormal(int iFace, int iNode) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::FindNodeNormal               Date:    22.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Find normal at given node                                 *
+ *                                                                     *
+ ***********************************************************************/
+{
+  HVNormal3D  normal = GetUnitNormal(iFace);
+  int          k = iFace, iOrder = 1, n = 1;
+
+  for(;;) {
+    k = FindNeighbour(k, iNode, iOrder);
+    if (k == iFace) break; 
+    if (k > 0) {
+      n++;
+      normal += GetUnitNormal(k);
+    }else{
+      if (iOrder < 0) break;
+      k = iFace;
+      iOrder = -iOrder;
+    }
+  }
+  normal.normalize();
+  return normal;
+}
+
+inline void polyhedron::SetNumberOfRotationSteps(int n)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::SetNumberOfRotationSteps     Date:    24.06.97 *
+ * Author: J.Allison (Manchester University)         Revised:          *
+ *                                                                     *
+ * Function: Set number of steps for whole circle                      *
+ *                                                                     *
+ ***********************************************************************/
+{
+  const int nMin = 3;
+  if (n < nMin) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr 
+      << "polyhedron::SetNumberOfRotationSteps: attempt to set the\n"
+      << "number of steps per circle < " << nMin << "; forced to " << nMin
+      << std::endl;
+#endif
+    fNumberOfRotationSteps = nMin;
+  }else{
+    fNumberOfRotationSteps = n;
+  }    
+}
+
+inline void polyhedron::AllocateMemory(int Nvert, int Nface)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::AllocateMemory               Date:    19.06.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Allocate memory for GEANT4 polyhedron                     *
+ *                                                                     *
+ * Input: Nvert - number of nodes                                      *
+ *        Nface - number of faces                                      *
+ *                                                                     *
+ ***********************************************************************/
+{
+  nvert = Nvert;
+  nface = Nface;
+  pV    = new HVPoint3D[nvert+1];
+  pF    = new SbFacet[nface+1];
+}
+
+inline void polyhedron::CreatePrism()
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::CreatePrism                  Date:    15.07.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Set facets for a prism                                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  enum {DUMMY, BOTTOM, LEFT, BACK, RIGHT, FRONT, TOP};
+
+  pF[1] = SbFacet(1,LEFT,  4,BACK,  3,RIGHT,  2,FRONT);
+  pF[2] = SbFacet(5,TOP,   8,BACK,  4,BOTTOM, 1,FRONT);
+  pF[3] = SbFacet(8,TOP,   7,RIGHT, 3,BOTTOM, 4,LEFT);
+  pF[4] = SbFacet(7,TOP,   6,FRONT, 2,BOTTOM, 3,BACK);
+  pF[5] = SbFacet(6,TOP,   5,LEFT,  1,BOTTOM, 2,RIGHT);
+  pF[6] = SbFacet(5,FRONT, 6,RIGHT, 7,BACK,   8,LEFT);
+}
+
+inline void polyhedron::RotateEdge(int k1, int k2, double r1, double r2,
+                              int v1, int v2, int vEdge,
+                              bool ifWholeCircle, int ns, int &kface)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::RotateEdge                   Date:    05.12.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Create set of facets by rotation of an edge around Z-axis *
+ *                                                                     *
+ * Input: k1, k2 - end vertices of the edge                            *
+ *        r1, r2 - radiuses of the end vertices                        *
+ *        v1, v2 - visibility of edges produced by rotation of the end *
+ *                 vertices                                            *
+ *        vEdge  - visibility of the edge                              *
+ *        ifWholeCircle - is true in case of whole circle rotation     *
+ *        ns     - number of discrete steps                            *
+ *        r[]    - r-coordinates                                       *
+ *        kface  - current free cell in the pF array                   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (r1 == 0. && r2 == 0) return;
+
+  int i;
+  int i1  = k1;
+  int i2  = k2;
+  int ii1 = ifWholeCircle ? i1 : i1+ns;
+  int ii2 = ifWholeCircle ? i2 : i2+ns;
+  int vv  = ifWholeCircle ? vEdge : 1;
+
+  if (ns == 1) {
+    if (r1 == 0.) {
+      pF[kface++]   = SbFacet(i1,0,    v2*i2,0, (i2+1),0);
+    }else if (r2 == 0.) {
+      pF[kface++]   = SbFacet(i1,0,    i2,0,    v1*(i1+1),0);
+    }else{
+      pF[kface++]   = SbFacet(i1,0,    v2*i2,0, (i2+1),0, v1*(i1+1),0);
+    }
+  }else{
+    if (r1 == 0.) {
+      pF[kface++]   = SbFacet(vv*i1,0,    v2*i2,0, vEdge*(i2+1),0);
+      for (i2++,i=1; i<ns-1; i2++,i++) {
+        pF[kface++] = SbFacet(vEdge*i1,0, v2*i2,0, vEdge*(i2+1),0);
+      }
+      pF[kface++]   = SbFacet(vEdge*i1,0, v2*i2,0, vv*ii2,0);
+    }else if (r2 == 0.) {
+      pF[kface++]   = SbFacet(vv*i1,0,    vEdge*i2,0, v1*(i1+1),0);
+      for (i1++,i=1; i<ns-1; i1++,i++) {
+        pF[kface++] = SbFacet(vEdge*i1,0, vEdge*i2,0, v1*(i1+1),0);
+      }
+      pF[kface++]   = SbFacet(vEdge*i1,0, vv*i2,0,    v1*ii1,0);
+    }else{
+      pF[kface++]   = SbFacet(vv*i1,0,    v2*i2,0, vEdge*(i2+1),0,v1*(i1+1),0);
+      for (i1++,i2++,i=1; i<ns-1; i1++,i2++,i++) {
+        pF[kface++] = SbFacet(vEdge*i1,0, v2*i2,0, vEdge*(i2+1),0,v1*(i1+1),0);
+      }  
+      pF[kface++]   = SbFacet(vEdge*i1,0, v2*i2,0, vv*ii2,0,      v1*ii1,0);
+    }
+  }
+}
+
+inline void polyhedron::SetSideFacets(int ii[4], int vv[4],
+                                 int *kk, double *r,
+                                 double dphi, int ns, int &kface)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::SetSideFacets                Date:    20.05.97 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Set side facets for the case of incomplete rotation       *
+ *                                                                     *
+ * Input: ii[4] - indeces of original verteces                         *
+ *        vv[4] - visibility of edges                                  *
+ *        kk[]  - indeces of nodes                                     *
+ *        r[]   - radiuses                                             *
+ *        dphi  - delta phi                                            *
+ *        ns     - number of discrete steps                            *
+ *        kface  - current free cell in the pF array                   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  const double perMillion = 0.000001;
+
+  int k1, k2, k3, k4;
+  if (std::fabs(dphi-_M_PI()) < perMillion) {          // half a circle
+    for (int i=0; i<4; i++) {
+      k1 = ii[i];
+      k2 = (i == 3) ? ii[0] : ii[i+1];
+      if (r[k1] == 0. && r[k2] == 0.) vv[i] = -1;      
+    }
+  }
+
+  if (ii[1] == ii[2]) {
+    k1 = kk[ii[0]];
+    k2 = kk[ii[2]];
+    k3 = kk[ii[3]];
+    pF[kface++] = SbFacet(vv[0]*k1,0, vv[2]*k2,0, vv[3]*k3,0);
+    if (r[ii[0]] != 0.) k1 += ns;
+    if (r[ii[2]] != 0.) k2 += ns;
+    if (r[ii[3]] != 0.) k3 += ns;
+    pF[kface++] = SbFacet(vv[2]*k3,0, vv[0]*k2,0, vv[3]*k1,0);
+  }else if (kk[ii[0]] == kk[ii[1]]) {
+    k1 = kk[ii[0]];
+    k2 = kk[ii[2]];
+    k3 = kk[ii[3]];
+    pF[kface++] = SbFacet(vv[1]*k1,0, vv[2]*k2,0, vv[3]*k3,0);
+    if (r[ii[0]] != 0.) k1 += ns;
+    if (r[ii[2]] != 0.) k2 += ns;
+    if (r[ii[3]] != 0.) k3 += ns;
+    pF[kface++] = SbFacet(vv[2]*k3,0, vv[1]*k2,0, vv[3]*k1,0);
+  }else if (kk[ii[2]] == kk[ii[3]]) {
+    k1 = kk[ii[0]];
+    k2 = kk[ii[1]];
+    k3 = kk[ii[2]];
+    pF[kface++] = SbFacet(vv[0]*k1,0, vv[1]*k2,0, vv[3]*k3,0);
+    if (r[ii[0]] != 0.) k1 += ns;
+    if (r[ii[1]] != 0.) k2 += ns;
+    if (r[ii[2]] != 0.) k3 += ns;
+    pF[kface++] = SbFacet(vv[1]*k3,0, vv[0]*k2,0, vv[3]*k1,0);
+  }else{
+    k1 = kk[ii[0]];
+    k2 = kk[ii[1]];
+    k3 = kk[ii[2]];
+    k4 = kk[ii[3]];
+    pF[kface++] = SbFacet(vv[0]*k1,0, vv[1]*k2,0, vv[2]*k3,0, vv[3]*k4,0);
+    if (r[ii[0]] != 0.) k1 += ns;
+    if (r[ii[1]] != 0.) k2 += ns;
+    if (r[ii[2]] != 0.) k3 += ns;
+    if (r[ii[3]] != 0.) k4 += ns;
+    pF[kface++] = SbFacet(vv[2]*k4,0, vv[1]*k3,0, vv[0]*k2,0, vv[3]*k1,0);
+  }
+}
+
+inline void polyhedron::RotateAroundZ(int nstep, double phi, double dphi,
+                                 int np1, int np2,
+                                 const double *z, double *r,
+                                 int nodeVis, int edgeVis)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::RotateAroundZ                Date:    27.11.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Create polyhedron for a solid produced by rotation of  *
+ *           two polylines around Z-axis                               *
+ *                                                                     *
+ * Input: nstep - number of discrete steps, if 0 then default          *
+ *        phi   - starting phi angle                                   *
+ *        dphi  - delta phi                                            *
+ *        np1   - number of points in external polyline                *
+ *                (must be negative in case of closed polyline)        *
+ *        np2   - number of points in internal polyline (may be 1)     *
+ *        z[]   - z-coordinates (+z >>> -z for both polylines)         *
+ *        r[]   - r-coordinates                                        *
+ *        nodeVis - how to Draw edges joing consecutive positions of   *
+ *                  node during rotation                               *
+ *        edgeVis - how to Draw edges                                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static const double wholeCircle   = 2*_M_PI(); //G.Barrand : const
+    
+  //   S E T   R O T A T I O N   P A R A M E T E R S
+
+  const double perMillion = 0.000001;
+
+  bool ifWholeCircle = (std::fabs(dphi-wholeCircle) < perMillion) ?
+    true : false;
+  double   delPhi  = ifWholeCircle ? wholeCircle : dphi;  
+
+  int n_step = (nstep > 0) ? nstep : GetNumberOfRotationSteps(); //G.Barrand
+  int nSphi = int(delPhi*n_step/wholeCircle+.5);
+
+  if (nSphi == 0) nSphi = 1;
+  int        nVphi    = ifWholeCircle ? nSphi : nSphi+1;
+  bool ifClosed = np1 > 0 ? false : true;
+  
+  //   C O U N T   V E R T E C E S
+
+  int absNp1 = iabs(np1);
+  int absNp2 = iabs(np2);
+  int i1beg = 0;
+  int i1end = absNp1-1;
+  int i2beg = absNp1;
+  int i2end = absNp1+absNp2-1; 
+  int i, j, k;
+
+  for(i=i1beg; i<=i2end; i++) {
+    if (std::fabs(r[i]) < perMillion) r[i] = 0.;
+  }
+
+  j = 0;                                                // external nodes
+  for (i=i1beg; i<=i1end; i++) {
+    j += (r[i] == 0.) ? 1 : nVphi;
+  }
+
+  bool ifSide1 = false;                           // internal nodes
+  bool ifSide2 = false;
+
+  if (r[i2beg] != r[i1beg] || z[i2beg] != z[i1beg]) {
+    j += (r[i2beg] == 0.) ? 1 : nVphi;
+    ifSide1 = true;
+  }
+
+  for(i=i2beg+1; i<i2end; i++) {
+    j += (r[i] == 0.) ? 1 : nVphi;
+  }
+  
+  if (r[i2end] != r[i1end] || z[i2end] != z[i1end]) {
+    if (absNp2 > 1) j += (r[i2end] == 0.) ? 1 : nVphi;
+    ifSide2 = true;
+  }
+
+  //   C O U N T   F A C E S
+
+  k = ifClosed ? absNp1*nSphi : (absNp1-1)*nSphi;       // external faces
+
+  if (absNp2 > 1) {                                     // internal faces
+    for(i=i2beg; i<i2end; i++) {
+      if (r[i] > 0. || r[i+1] > 0.)       k += nSphi;
+    }
+
+    if (ifClosed) {
+      if (r[i2end] > 0. || r[i2beg] > 0.) k += nSphi;
+    }
+  }
+
+  if (!ifClosed) {                                      // side faces
+    if (ifSide1 && (r[i1beg] > 0. || r[i2beg] > 0.)) k += nSphi;
+    if (ifSide2 && (r[i1end] > 0. || r[i2end] > 0.)) k += nSphi;
+  }
+
+  if (!ifWholeCircle) {                                 // phi_side faces
+    k += ifClosed ? 2*absNp1 : 2*(absNp1-1);
+  }
+
+  //   A L L O C A T E   M E M O R Y
+
+  AllocateMemory(j, k);
+
+  //   G E N E R A T E   V E R T E C E S
+
+  int *kk;
+  kk = new int[absNp1+absNp2];
+
+  k = 1;
+  for(i=i1beg; i<=i1end; i++) {
+    kk[i] = k;
+    if (r[i] == 0.) { pV[k++] = HVPoint3D(0, 0, z[i]); } else { k += nVphi; }
+  }
+
+  i = i2beg;
+  if (ifSide1) {
+    kk[i] = k;
+    if (r[i] == 0.) { pV[k++] = HVPoint3D(0, 0, z[i]); } else { k += nVphi; }
+  }else{
+    kk[i] = kk[i1beg];
+  }
+
+  for(i=i2beg+1; i<i2end; i++) {
+    kk[i] = k;
+    if (r[i] == 0.) { pV[k++] = HVPoint3D(0, 0, z[i]); } else { k += nVphi; }
+  }
+
+  if (absNp2 > 1) {
+    i = i2end;
+    if (ifSide2) {
+      kk[i] = k;
+      if (r[i] == 0.) pV[k] = HVPoint3D(0, 0, z[i]);
+    }else{
+      kk[i] = kk[i1end];
+    }
+  }
+
+  double cosPhi, sinPhi;
+
+  for(j=0; j<nVphi; j++) {
+    cosPhi = std::cos(phi+j*delPhi/nSphi);
+    sinPhi = std::sin(phi+j*delPhi/nSphi);
+    for(i=i1beg; i<=i2end; i++) {
+      if (r[i] != 0.) pV[kk[i]+j] = HVPoint3D(r[i]*cosPhi,r[i]*sinPhi,z[i]);
+    }
+  }
+
+  //   G E N E R A T E   E X T E R N A L   F A C E S
+
+  int v1,v2;
+
+  k = 1;
+  v2 = ifClosed ? nodeVis : 1;
+  for(i=i1beg; i<i1end; i++) {
+    v1 = v2;
+    if (!ifClosed && i == i1end-1) {
+      v2 = 1;
+    }else{
+      v2 = (r[i] == r[i+1] && r[i+1] == r[i+2]) ? -1 : nodeVis;
+    }
+    RotateEdge(kk[i], kk[i+1], r[i], r[i+1], v1, v2,
+               edgeVis, ifWholeCircle, nSphi, k);
+  }
+  if (ifClosed) {
+    RotateEdge(kk[i1end], kk[i1beg], r[i1end],r[i1beg], nodeVis, nodeVis,
+               edgeVis, ifWholeCircle, nSphi, k);
+  }
+
+  //   G E N E R A T E   I N T E R N A L   F A C E S
+
+  if (absNp2 > 1) {
+    v2 = ifClosed ? nodeVis : 1;
+    for(i=i2beg; i<i2end; i++) {
+      v1 = v2;
+      if (!ifClosed && i==i2end-1) {
+        v2 = 1;
+      }else{
+        v2 = (r[i] == r[i+1] && r[i+1] == r[i+2]) ? -1 :  nodeVis;
+      }
+      RotateEdge(kk[i+1], kk[i], r[i+1], r[i], v2, v1,
+                 edgeVis, ifWholeCircle, nSphi, k);
+    }
+    if (ifClosed) {
+      RotateEdge(kk[i2beg], kk[i2end], r[i2beg], r[i2end], nodeVis, nodeVis,
+                 edgeVis, ifWholeCircle, nSphi, k);
+    }
+  }
+
+  //   G E N E R A T E   S I D E   F A C E S
+
+  if (!ifClosed) {
+    if (ifSide1) {
+      RotateEdge(kk[i2beg], kk[i1beg], r[i2beg], r[i1beg], 1, 1,
+                 -1, ifWholeCircle, nSphi, k);
+    }
+    if (ifSide2) {
+      RotateEdge(kk[i1end], kk[i2end], r[i1end], r[i2end], 1, 1,
+                 -1, ifWholeCircle, nSphi, k);
+    }
+  }
+
+  //   G E N E R A T E   S I D E   F A C E S  for the case of incomplete circle
+
+  if (!ifWholeCircle) {
+
+    int  ii[4], vv[4];
+
+    if (ifClosed) {
+      for (i=i1beg; i<=i1end; i++) {
+        ii[0] = i;
+        ii[3] = (i == i1end) ? i1beg : i+1;
+        ii[1] = (absNp2 == 1) ? i2beg : ii[0]+absNp1;
+        ii[2] = (absNp2 == 1) ? i2beg : ii[3]+absNp1;
+        vv[0] = -1;
+        vv[1] = 1;
+        vv[2] = -1;
+        vv[3] = 1;
+        SetSideFacets(ii, vv, kk, r, dphi, nSphi, k);
+      }
+    }else{
+      for (i=i1beg; i<i1end; i++) {
+        ii[0] = i;
+        ii[3] = i+1;
+        ii[1] = (absNp2 == 1) ? i2beg : ii[0]+absNp1;
+        ii[2] = (absNp2 == 1) ? i2beg : ii[3]+absNp1;
+        vv[0] = (i == i1beg)   ? 1 : -1;
+        vv[1] = 1;
+        vv[2] = (i == i1end-1) ? 1 : -1;
+        vv[3] = 1;
+        SetSideFacets(ii, vv, kk, r, dphi, nSphi, k);
+      }
+    }      
+  }
+
+  delete [] kk;
+
+  if (k-1 != nface) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "Polyhedron::RotateAroundZ: number of generated faces ("
+      << k-1 << ") is not equal to the number of allocated faces ("
+      << nface << ")"
+      << std::endl;
+#endif
+  }
+}
+
+inline void polyhedron::SetReferences()
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::SetReferences                Date:    04.12.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: For each edge set reference to neighbouring facet         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (nface <= 0) return;
+
+  struct edgeListMember {
+    edgeListMember *next;
+    int v2;
+    int iface;
+    int iedge;
+  } *edgeList, *freeList, **headList;
+
+  
+  //   A L L O C A T E   A N D   I N I T I A T E   L I S T S
+
+  edgeList = new edgeListMember[2*nface];
+  headList = new edgeListMember*[nvert];
+  
+  int i;
+#ifdef TOOLS_HEP_PH_NOT_OPT
+  for (i=0; i<nvert; i++) {
+    headList[i] = 0;
+  }
+  freeList = edgeList;
+  for (i=0; i<2*nface-1; i++) {
+    edgeList[i].next = &edgeList[i+1];
+  }
+  edgeList[2*nface-1].next = 0;
+#else
+ {edgeListMember** hpos = headList;
+  for (i=0; i<nvert; i++,hpos++) *hpos = 0;
+  freeList = edgeList;
+  int num = 2*nface-1;
+  edgeListMember* epos = edgeList;
+  for (i=0; i<num; i++,epos++) {
+    (*epos).next = epos+1;
+  }
+  (*epos).next = 0;}
+#endif
+
+  //   L O O P   A L O N G   E D G E S
+
+  int iface, iedge, nedge, i1, i2, k1, k2;
+  edgeListMember *prev, *cur;
+  
+#ifdef TOOLS_HEP_PH_NOT_OPT
+#else
+  edgeListMember** hpos;
+  SbFacet* pF_iface;
+  SbFacet* pF_cur_iface;
+#endif
+
+  for(iface=1; iface<=nface; iface++) {
+#ifdef TOOLS_HEP_PH_NOT_OPT
+    nedge = (pF[iface].edge[3].v == 0) ? 3 : 4;
+#else
+    pF_iface = pF+iface;
+    nedge = (pF_iface->edge[3].v == 0) ? 3 : 4;
+#endif
+    for (iedge=0; iedge<nedge; iedge++) {
+      i1 = iedge;
+      i2 = (iedge < nedge-1) ? iedge+1 : 0;
+#ifdef TOOLS_HEP_PH_NOT_OPT
+      i1 = iabs(pF[iface].edge[i1].v);
+      i2 = iabs(pF[iface].edge[i2].v);
+      k1 = (i1 < i2) ? i1 : i2;          // k1 = ::min(i1,i2);
+      k2 = (i1 > i2) ? i1 : i2;          // k2 = ::max(i1,i2);
+#else
+      i1 = iabs(pF_iface->edge[i1].v);
+      i2 = iabs(pF_iface->edge[i2].v);
+      if(i1<i2) {
+        k1 = i1;
+        k2 = i2;
+      } else {
+        k1 = i2;
+        k2 = i1;
+      }
+#endif      
+      // check head of the List corresponding to k1
+#ifdef TOOLS_HEP_PH_NOT_OPT
+      cur = headList[k1];
+#else
+      hpos = headList+k1;
+      cur = *hpos;
+#endif
+      if (cur == 0) {
+#ifdef TOOLS_HEP_PH_NOT_OPT
+        headList[k1] = freeList;
+        freeList = freeList->next;
+        cur = headList[k1];
+#else
+        *hpos = freeList;
+        freeList = freeList->next;
+        cur = *hpos;
+#endif
+        cur->next = 0;
+        cur->v2 = k2;
+        cur->iface = iface;
+        cur->iedge = iedge;
+        continue;
+      }        
+
+      if (cur->v2 == k2) {
+#ifdef TOOLS_HEP_PH_NOT_OPT
+        headList[k1] = cur->next;
+#else
+        *hpos = cur->next;
+#endif	
+        cur->next = freeList;
+        freeList = cur;      
+#ifdef TOOLS_HEP_PH_NOT_OPT
+        pF[iface].edge[iedge].f = cur->iface;
+        pF[cur->iface].edge[cur->iedge].f = iface;
+        i1 = (pF[iface].edge[iedge].v < 0) ? -1 : 1;
+        i2 = (pF[cur->iface].edge[cur->iedge].v < 0) ? -1 : 1;
+#else
+        pF_iface->edge[iedge].f = cur->iface;
+        pF_cur_iface = pF+cur->iface;
+        pF_cur_iface->edge[cur->iedge].f = iface;
+        i1 = (pF_iface->edge[iedge].v < 0) ? -1 : 1;
+        i2 = (pF_cur_iface->edge[cur->iedge].v < 0) ? -1 : 1;
+#endif
+        if (i1 != i2) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+          std::cerr
+            << "Polyhedron::SetReferences: different edge visibility "
+            << iface << "/" << iedge << "/"
+            << pF[iface].edge[iedge].v << " and "
+            << cur->iface << "/" << cur->iedge << "/"
+            << pF[cur->iface].edge[cur->iedge].v
+            << std::endl;
+#endif
+        }
+        continue;
+      }
+
+      // check List itself
+      for (;;) {
+        prev = cur;
+        cur = prev->next;
+        if (cur == 0) {
+          prev->next = freeList;
+          freeList = freeList->next;
+          cur = prev->next;
+          cur->next = 0;
+          cur->v2 = k2;
+          cur->iface = iface;
+          cur->iedge = iedge;
+          break;
+        }
+
+        if (cur->v2 == k2) {
+          prev->next = cur->next;
+          cur->next = freeList;
+          freeList = cur;      
+#ifdef TOOLS_HEP_PH_NOT_OPT
+          pF[iface].edge[iedge].f = cur->iface;
+          pF[cur->iface].edge[cur->iedge].f = iface;
+          i1 = (pF[iface].edge[iedge].v < 0) ? -1 : 1;
+          i2 = (pF[cur->iface].edge[cur->iedge].v < 0) ? -1 : 1;
+#else
+          pF_iface->edge[iedge].f = cur->iface;
+          pF_cur_iface = pF+cur->iface;
+          pF_cur_iface->edge[cur->iedge].f = iface;
+          i1 = (pF_iface->edge[iedge].v < 0) ? -1 : 1;
+          i2 = (pF_cur_iface->edge[cur->iedge].v < 0) ? -1 : 1;
+#endif
+            if (i1 != i2) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+              std::cerr
+                << "Polyhedron::SetReferences: different edge visibility "
+                << iface << "/" << iedge << "/"
+                << pF[iface].edge[iedge].v << " and "
+                << cur->iface << "/" << cur->iedge << "/"
+                << pF[cur->iface].edge[cur->iedge].v
+                << std::endl;
+#endif
+            }
+          break;
+        }
+      }
+    }
+  }
+
+  //  C H E C K   T H A T   A L L   L I S T S   A R E   E M P T Y
+
+#ifdef TOOLS_HEP_PH_OUT_ERR
+#ifdef TOOLS_HEP_PH_NOT_OPT
+  for (i=0; i<nvert; i++) {
+    if (headList[i] != 0) {
+      std::cerr
+        << "Polyhedron::SetReferences: List " << i << " is not empty"
+        << std::endl;
+    }
+  }
+#else
+ {edgeListMember** hpos = headList;
+  for (i=0; i<nvert; i++,hpos++) {
+    if (*hpos != 0) {
+      std::cerr
+        << "Polyhedron::SetReferences: List " << i << " is not empty"
+        << std::endl;
+    }
+  }}
+#endif
+#endif
+
+  //   F R E E   M E M O R Y
+
+  delete [] edgeList;
+  delete [] headList;
+}
+
+inline void polyhedron::InvertFacets()
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::InvertFacets                Date:    01.12.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Invert the order of the nodes in the facets               *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (nface <= 0) return;
+  int i, k, nnode, v[4],f[4];
+  for (i=1; i<=nface; i++) {
+    nnode =  (pF[i].edge[3].v == 0) ? 3 : 4;
+    for (k=0; k<nnode; k++) {
+      v[k] = (k+1 == nnode) ? pF[i].edge[0].v : pF[i].edge[k+1].v;
+      if (v[k] * pF[i].edge[k].v < 0) v[k] = -v[k];
+      f[k] = pF[i].edge[k].f;
+    }
+    for (k=0; k<nnode; k++) {
+      pF[i].edge[nnode-1-k].v = v[k];
+      pF[i].edge[nnode-1-k].f = f[k];
+    }
+  }
+}
+
+/*
+inline polyhedron & polyhedron::Transform(
+ const SbRotation& rotation
+,const SbVec3f& translation
+)
+{
+  if (nvert > 0) {
+    for (int i=1; i<=nvert; i++) { 
+      const HVPoint3D& pv = pV[i];
+      SbVec3f tmp;
+      rotation.multVec(SbVec3f(pv[0],pv[1],pv[2]),tmp);
+      pV[i] = HVPoint3D(tmp[0],tmp[1],tmp[2])
+             +HVPoint3D(translation[0],translation[1],translation[2]);
+    }
+
+    //  C H E C K   D E T E R M I N A N T   A N D
+    //  I N V E R T   F A C E T S   I F   I T   I S   N E G A T I V E
+
+    //FIXME : have the below done in double.
+    SbVec3f x;  rotation.multVec(SbVec3f(1,0,0),x);
+    SbVec3f y;  rotation.multVec(SbVec3f(0,1,0),y);
+    SbVec3f z;  rotation.multVec(SbVec3f(0,0,1),z);
+    if ((x.cross(y)).dot(z) < 0) InvertFacets();
+  }
+  return *this;
+}
+*/
+
+/*G.Barrand : optimized version.*/
+inline polyhedron & polyhedron::Translate(
+ double a_x
+,double a_y
+,double a_z
+)
+{
+  if (nvert > 0) {
+    for (int i=1; i<=nvert; i++) { 
+      const HVPoint3D& p = pV[i];
+      pV[i].set_value(p.x()+a_x,p.y()+a_y,p.z()+a_z);
+    }
+  }
+  return *this;
+}
+
+inline polyhedron & polyhedron::Transform(const rotd& rotation,double a_x,double a_y,double a_z) {
+  if (nvert > 0) {
+   {double x,y,z;
+    for (int i=1; i<=nvert; i++) { 
+      HVPoint3D& p = pV[i];
+      x = p.x();
+      y = p.y();
+      z = p.z();
+      rotation.mul_3(x,y,z); //tmp = R*pV[i]
+      p.set_value(x+a_x,y+a_y,z+a_z);
+    }}
+
+    double x_x = 1;
+    double x_y = 0;
+    double x_z = 0;
+    rotation.mul_3(x_x,x_y,x_z);
+
+    double y_x = 0;
+    double y_y = 1;
+    double y_z = 0;
+    rotation.mul_3(y_x,y_y,y_z);
+
+    double z_x = 0;
+    double z_y = 0;
+    double z_z = 1;
+    rotation.mul_3(z_x,z_y,z_z);
+
+    // x_x   y_x
+    // x_y   y_y
+    // x_z   y_z
+    double x_cross_y_x = x_y*y_z-x_z*y_y;
+    double x_cross_y_y = x_z*y_x-x_x*y_z;
+    double x_cross_y_z = x_x*y_y-x_y*y_x;
+   
+    double x_cross_y_dot_z =
+      x_cross_y_x*z_x + x_cross_y_y*z_y + x_cross_y_z*z_z;
+    if (x_cross_y_dot_z < 0) InvertFacets();
+  }
+  return *this;
+}
+
+inline polyhedron & polyhedron::Transform(const rotd& rotation,const vec3d& translation) {
+/*
+  if (nvert > 0) {
+    vec3d tmp;
+    for (int i=1; i<=nvert; i++) { 
+      rotation.mul_vec(pV[i],tmp); //tmp = R*pV[i]
+      pV[i] = tmp+translation;
+    }
+    vec3d x;  rotation.mul_vec(vec3d::s_x(),x);
+    vec3d y;  rotation.mul_vec(vec3d::s_y(),y);
+    vec3d z;  rotation.mul_vec(vec3d::s_z(),z);
+    if ((x.cross(y)).dot(z) < 0) InvertFacets();
+  }
+*/
+  return Transform(rotation,translation.x(),translation.y(),translation.z());
+}
+
+/*G.Barrand : inline 
+bool polyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
+// ***********************************************************************
+// *                                                                     *
+// * Name: polyhedron::GetNextVertexIndex          Date:    03.09.96   *
+// * Author: Yasuhide Sawada                          Revised:           *
+// *                                                                     *
+// * Function:                                                           *
+// *                                                                     *
+// ***********************************************************************
+{
+  static int iFace = 1;
+  static int iQVertex = 0;
+  int vIndex = pF[iFace].edge[iQVertex].v;
+
+  edgeFlag = (vIndex > 0) ? 1 : 0;
+  index = iabs(vIndex);
+
+  if(index>nvert) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "polyhedron::GetNextVertexIndex: pV index problem " 
+              << index << " exceed " << nvert << std::endl;
+#endif
+    index = 0;
+  }
+
+  if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
+    iQVertex = 0;
+    if (++iFace > nface) iFace = 1;
+    return false;  // Last Edge
+  }else{
+    ++iQVertex;
+    return true;  // not Last Edge
+  }
+}
+*/
+
+inline HVPoint3D polyhedron::GetVertex(int index) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetVertex                   Date:    03.09.96  *
+ * Author: Yasuhide Sawada                          Revised: 17.11.99  *
+ *                                                                     *
+ * Function: Get vertex of the index.                                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (index <= 0 || index > nvert) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron::GetVertex: irrelevant index " << index
+      << std::endl;
+#endif
+    return HVPoint3D();
+  }
+  return pV[index];
+}
+
+inline const HVPoint3D& polyhedron::GetVertexFast(int index) const {//G.Barrand
+  return pV[index];
+}
+
+inline bool polyhedron::GetNextVertex(HVPoint3D &vertex, int &edgeFlag) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextVertex               Date:    22.07.96  *
+ * Author: John Allison                             Revised:           *
+ *                                                                     *
+ * Function: Get vertices of the quadrilaterals in order for each      *
+ *           face in face order.  Returns false when finished each     *
+ *           face.                                                     *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int index;
+  bool rep = GetNextVertexIndex(index, edgeFlag);
+  vertex = pV[index];
+  return rep;
+}
+
+inline bool polyhedron::GetNextVertex(HVPoint3D &vertex, int &edgeFlag,HVNormal3D &normal) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextVertex               Date:    26.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get vertices with normals of the quadrilaterals in order  *
+ *           for each face in face order.                              *
+ *           Returns false when finished each face.                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace = 1;
+  static int iNode = 0;
+
+  if (nface == 0) return false;  // empty polyhedron
+
+  int k = pF[iFace].edge[iNode].v;
+  if (k > 0) { edgeFlag = 1; } else { edgeFlag = -1; k = -k; }
+  vertex = pV[k];
+  normal = FindNodeNormal(iFace,k);
+  if (iNode >= 3 || pF[iFace].edge[iNode+1].v == 0) {
+    iNode = 0;
+    if (++iFace > nface) iFace = 1;
+    return false;                // last node
+  }else{
+    ++iNode;
+    return true;                 // not last node
+  }
+}
+
+inline bool polyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
+                                            int &iface1, int &iface2) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextEdgeIndeces          Date:    30.09.96  *
+ * Author: E.Chernyaev                              Revised: 17.11.99  *
+ *                                                                     *
+ * Function: Get indeces of the next edge together with indeces of     *
+ *           of the faces which share the edge.                        *
+ *           Returns false when the last edge.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace    = 1;
+  static int iQVertex = 0;
+  static int iOrder   = 1;
+  int  k1, k2, kflag, kface1, kface2;
+
+  if (iFace == 1 && iQVertex == 0) {
+    k2 = pF[nface].edge[0].v;
+    k1 = pF[nface].edge[3].v;
+    if (k1 == 0) k1 = pF[nface].edge[2].v;
+    if (iabs(k1) > iabs(k2)) iOrder = -1;
+  }
+
+  do {
+    k1     = pF[iFace].edge[iQVertex].v;
+    kflag  = k1;
+    k1     = iabs(k1);
+    kface1 = iFace; 
+    kface2 = pF[iFace].edge[iQVertex].f;
+    if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
+      iQVertex = 0;
+      k2 = iabs(pF[iFace].edge[iQVertex].v);
+      iFace++;
+    }else{
+      iQVertex++;
+      k2 = iabs(pF[iFace].edge[iQVertex].v);
+    }
+  } while (iOrder*k1 > iOrder*k2);
+
+  i1 = k1; i2 = k2; edgeFlag = (kflag > 0) ? 1 : 0;
+  iface1 = kface1; iface2 = kface2; 
+
+  if (iFace > nface) {
+    iFace  = 1; iOrder = 1;
+    return false;
+  }else{
+    return true;
+  }
+}
+
+inline bool polyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextEdgeIndeces          Date:    17.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get indeces of the next edge.                             *
+ *           Returns false when the last edge.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int kface1, kface2;
+  return GetNextEdgeIndeces(i1, i2, edgeFlag, kface1, kface2);
+}
+
+inline bool polyhedron::GetNextEdge(HVPoint3D &p1,HVPoint3D &p2,int &edgeFlag) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextEdge                 Date:    30.09.96  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get next edge.                                            *
+ *           Returns false when the last edge.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int i1,i2;
+  bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag);
+  p1 = pV[i1];
+  p2 = pV[i2];
+  return rep;
+}
+
+inline bool polyhedron::GetNextEdge(HVPoint3D &p1, HVPoint3D &p2,int &edgeFlag, int &iface1, int &iface2) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextEdge                 Date:    17.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get next edge with indeces of the faces which share       *
+ *           the edge.                                                 *
+ *           Returns false when the last edge.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int i1,i2;
+  bool rep = GetNextEdgeIndeces(i1,i2,edgeFlag,iface1,iface2);
+  p1 = pV[i1];
+  p2 = pV[i2];
+  return rep;
+}
+
+inline void polyhedron::GetFacet(int iFace, int &n, int *iNodes,int *edgeFlags, int *iFaces) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetFacet                    Date:    15.12.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get face by index                                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (iFace < 1 || iFace > nface) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr 
+      << "polyhedron::GetFacet: irrelevant index " << iFace
+      << std::endl;
+#endif
+    n = 0;
+  }else{
+    int i, k;
+    for (i=0; i<4; i++) { 
+      k = pF[iFace].edge[i].v;
+      if (k == 0) break;
+      if (iFaces != 0) iFaces[i] = pF[iFace].edge[i].f;
+      if (k > 0) { 
+        iNodes[i] = k;
+        if (edgeFlags != 0) edgeFlags[i] = 1;
+      }else{
+        iNodes[i] = -k;
+        if (edgeFlags != 0) edgeFlags[i] = -1;
+      }
+    }
+    n = i;
+  }
+}
+
+inline void polyhedron::GetFacet(int index, int &n, HVPoint3D *nodes,int *edgeFlags, HVNormal3D *normals) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetFacet                    Date:    17.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get face by index                                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  int iNodes[4];
+  GetFacet(index, n, iNodes, edgeFlags);
+  if (n != 0) {
+    for (int i=0; i<4; i++) {
+      nodes[i] = pV[iNodes[i]];
+      if (normals != 0) normals[i] = FindNodeNormal(index,iNodes[i]);
+    }
+  }
+}
+
+inline bool polyhedron::GetNextFacet(int &n, HVPoint3D *nodes,int *edgeFlags, HVNormal3D *normals) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextFacet                Date:    19.11.99  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get next face with normals of unit length at the nodes.   *
+ *           Returns false when finished all faces.                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace = 1;
+
+  if (edgeFlags == 0) {
+    GetFacet(iFace, n, nodes);
+  }else if (normals == 0) {
+    GetFacet(iFace, n, nodes, edgeFlags);
+  }else{
+    GetFacet(iFace, n, nodes, edgeFlags, normals);
+  }
+
+  if (++iFace > nface) {
+    iFace  = 1;
+    return false;
+  }else{
+    return true;
+  }
+}
+
+//G.Barrand
+#ifdef TOOLS_HEP_PH_OUT_ERR
+inline bool polyhedron::CHECK_INDEX(const char* a_method,int a_index) const {
+  if(a_index>nvert) {
+    std::cerr << "polyhedron::" << a_method << " :"
+              << " index problem. "
+              << a_index << " exceed " << nvert << std::endl;
+    return false;
+  }
+  return true;
+}
+#else
+inline bool polyhedron::CHECK_INDEX(const char*,int a_index) const {
+  if(a_index>nvert) {
+    return false;
+  }
+  return true;
+}
+#endif
+
+inline HVNormal3D polyhedron::GetNormal(int iFace) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNormal                    Date:    19.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Get normal of the face given by index                     *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (iFace < 1 || iFace > nface) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr 
+      << "polyhedron::GetNormal: irrelevant index " << iFace 
+      << std::endl;
+#endif
+    return HVNormal3D();
+  }
+
+  int i0  = iabs(pF[iFace].edge[0].v);
+  int i1  = iabs(pF[iFace].edge[1].v);
+  int i2  = iabs(pF[iFace].edge[2].v);
+  int i3  = iabs(pF[iFace].edge[3].v);
+  if (i3 == 0) i3 = i0;
+
+  if(!CHECK_INDEX("GetNormal",i0)) return HVNormal3D();
+  if(!CHECK_INDEX("GetNormal",i1)) return HVNormal3D();
+  if(!CHECK_INDEX("GetNormal",i2)) return HVNormal3D();
+  if(!CHECK_INDEX("GetNormal",i3)) return HVNormal3D();
+
+  HVNormal3D nm;
+  (pV[i2] - pV[i0]).cross(pV[i3] - pV[i1],nm);
+  return nm;
+}
+
+inline HVNormal3D polyhedron::GetUnitNormal(int iFace) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNormal                    Date:    19.11.99 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Get unit normal of the face given by index                *
+ *                                                                     *
+ ***********************************************************************/
+{
+  if (iFace < 1 || iFace > nface) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr 
+      << "polyhedron::GetUnitNormal: irrelevant index " << iFace
+      << std::endl;
+#endif
+    return HVNormal3D();
+  }
+
+  int i0  = iabs(pF[iFace].edge[0].v);
+  int i1  = iabs(pF[iFace].edge[1].v);
+  int i2  = iabs(pF[iFace].edge[2].v);
+  int i3  = iabs(pF[iFace].edge[3].v);
+  if (i3 == 0) i3 = i0;
+
+  if(!CHECK_INDEX("GetUnitNormal",i0)) return HVNormal3D();
+  if(!CHECK_INDEX("GetUnitNormal",i1)) return HVNormal3D();
+  if(!CHECK_INDEX("GetUnitNormal",i2)) return HVNormal3D();
+  if(!CHECK_INDEX("GetUnitNormal",i3)) return HVNormal3D();
+
+  HVNormal3D nm;
+  (pV[i2] - pV[i0]).cross(pV[i3] - pV[i1],nm);
+  nm.normalize();
+  return nm;
+}
+
+inline bool polyhedron::GetNextNormal(HVNormal3D &normal) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextNormal               Date:    22.07.96  *
+ * Author: John Allison                             Revised: 19.11.99  *
+ *                                                                     *
+ * Function: Get normals of each face in face order.  Returns false    *
+ *           when finished all faces.                                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace = 1;
+  normal = GetNormal(iFace);
+  if (++iFace > nface) {
+    iFace = 1;
+    return false;
+  }else{
+    return true;
+  }
+}
+
+inline bool polyhedron::GetNextUnitNormal(HVNormal3D &normal) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextUnitNormal           Date:    16.09.96  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Get normals of unit length of each face in face order.    *
+ *           Returns false when finished all faces.                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  bool rep = GetNextNormal(normal);
+  normal.normalize();
+  return rep;
+}
+
+inline double polyhedron::GetSurfaceArea() const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetSurfaceArea              Date:    25.05.01  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Returns area of the surface of the polyhedron.            *
+ *                                                                     *
+ ***********************************************************************/
+{
+  double s = 0.;
+  HVPoint3D p;
+  for (int iFace=1; iFace<=nface; iFace++) {
+    int i0 = iabs(pF[iFace].edge[0].v);
+    int i1 = iabs(pF[iFace].edge[1].v);
+    int i2 = iabs(pF[iFace].edge[2].v);
+    int i3 = iabs(pF[iFace].edge[3].v);
+    if (i3 == 0) i3 = i0;
+    (pV[i2] - pV[i0]).cross(pV[i3] - pV[i1],p);
+    s += p.length();
+  }
+  return s/2.;
+}
+
+inline double polyhedron::GetVolume() const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetVolume                   Date:    25.05.01  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Returns volume of the polyhedron.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  double v = 0.;
+  HVPoint3D p;
+  for (int iFace=1; iFace<=nface; iFace++) {
+    int i0 = iabs(pF[iFace].edge[0].v);
+    int i1 = iabs(pF[iFace].edge[1].v);
+    int i2 = iabs(pF[iFace].edge[2].v);
+    int i3 = iabs(pF[iFace].edge[3].v);
+    HVPoint3D g;
+    if (i3 == 0) {
+      i3 = i0;
+      g  = (pV[i0]+pV[i1]+pV[i2]) * (1.0/3.0);
+    }else{
+      g  = (pV[i0]+pV[i1]+pV[i2]+pV[i3]) * 0.25;
+    }
+    (pV[i2] - pV[i0]).cross(pV[i3] - pV[i1],p);
+    v += p.dot(g);
+  }
+  return v/6.;
+}
+
+//G.Barrand
+inline
+bool polyhedron::set_polyhedron_trd2(double Dx1, double Dx2,
+                                     double Dy1, double Dy2,
+                                     double Dz)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron_trd2                           Date:    22.07.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Create GEANT4 TRD2-trapezoid                              *
+ *                                                                     *
+ * Input: Dx1 - half-length along X at -Dz           8----7            *
+ *        Dx2 - half-length along X ay +Dz        5----6  !            *
+ *        Dy1 - half-length along Y ay -Dz        !  4-!--3            *
+ *        Dy2 - half-length along Y ay +Dz        1----2               *
+ *        Dz  - half-length along Z                                    *
+ *                                                                     *
+ ***********************************************************************/
+{
+  _clear(); //G.Barrand
+
+  //From TGeoTrd2::Capacity() :
+  double capacity = 2*(Dx1+Dx2)*(Dy1+Dy2)*Dz + 
+                    (2./3.)*(Dx1-Dx2)*(Dy1-Dy2)*Dz;
+
+  //if(//(Dx1<=0.0)||(Dx2<=0.0)||
+  //   //(Dy1<=0.0)||(Dy2<=0.0)||
+  //   (Dz<=0.0)){ //G.Barrand
+  if(capacity<=0) {
+#if defined(TOOLS_HEP_PH_OUT_ERR) || defined(TOOLS_HEP_PH_OUT_ERR_TRD2)
+    std::cerr << "set_polyhedron_trd2: error in input parameters";
+    std::cerr << " Dx1=" << Dx1
+              << " Dx2=" << Dx2
+              << " Dy1=" << Dy1
+              << " Dy2=" << Dy2
+              << " Dz=" << Dz
+              << std::endl;
+#endif
+    return false;
+  }
+
+  AllocateMemory(8,6);
+
+  pV[1] = HVPoint3D(-Dx1,-Dy1,-Dz);
+  pV[2] = HVPoint3D( Dx1,-Dy1,-Dz);
+  pV[3] = HVPoint3D( Dx1, Dy1,-Dz);
+  pV[4] = HVPoint3D(-Dx1, Dy1,-Dz);
+  pV[5] = HVPoint3D(-Dx2,-Dy2, Dz);
+  pV[6] = HVPoint3D( Dx2,-Dy2, Dz);
+  pV[7] = HVPoint3D( Dx2, Dy2, Dz);
+  pV[8] = HVPoint3D(-Dx2, Dy2, Dz);
+
+  CreatePrism();
+
+  return true;
+}
+
+inline
+polyhedron_trd2::polyhedron_trd2(double Dx1, double Dx2,
+                                     double Dy1, double Dy2,
+                                     double Dz)
+{
+  set_polyhedron_trd2(Dx1,Dx2,Dy1,Dy2,Dz); //G.Barrand
+}
+
+//G.Barrand
+inline
+bool polyhedron::set_polyhedron_arb8(double Dz,const double* xy) {
+  _clear(); //G.Barrand
+
+  // xy as if xy[8][2]
+  // then xy[i][j] = xy[i*2+j]
+
+  // from TGeoArb8::Capacity() :
+  double capacity = 0;
+ {int j;
+  for(int i=0; i<4; i++) {
+    j = (i+1)%4;
+    capacity += 
+      0.25*Dz*((vxy(xy,i,0)+vxy(xy,i+4,0))*(vxy(xy,j,1)+vxy(xy,j+4,1)) -
+               (vxy(xy,j,0)+vxy(xy,j+4,0))*(vxy(xy,i,1)+vxy(xy,i+4,1)) +
+       (1./3)*((vxy(xy,i+4,0)-vxy(xy,i,0))*(vxy(xy,j+4,1)-vxy(xy,j,1)) -
+               (vxy(xy,j,0)-vxy(xy,j+4,0))*(vxy(xy,i,1)-vxy(xy,i+4,1))));
+  }
+  capacity = ::fabs(capacity);}                                
+  if(capacity<=0) {
+    return false;
+  }
+
+  AllocateMemory(8,6);
+
+  pV[1] = HVPoint3D( vxy(xy,0,0), vxy(xy,0,1),-Dz);
+  pV[2] = HVPoint3D( vxy(xy,1,0), vxy(xy,1,1),-Dz);
+  pV[3] = HVPoint3D( vxy(xy,2,0), vxy(xy,2,1),-Dz);
+  pV[4] = HVPoint3D( vxy(xy,3,0), vxy(xy,3,1),-Dz);
+  pV[5] = HVPoint3D( vxy(xy,4,0), vxy(xy,4,1), Dz);
+  pV[6] = HVPoint3D( vxy(xy,5,0), vxy(xy,5,1), Dz);
+  pV[7] = HVPoint3D( vxy(xy,6,0), vxy(xy,6,1), Dz);
+  pV[8] = HVPoint3D( vxy(xy,7,0), vxy(xy,7,1), Dz);
+
+  CreatePrism();
+
+  return true;
+}
+
+inline
+polyhedron_arb8::polyhedron_arb8(double Dz,const double* xy)
+{
+  set_polyhedron_arb8(Dz,xy); //G.Barrand
+}
+
+//G.Barrand
+inline
+int polyhedron::_ixy(
+ int a_ixy
+,int a_npts
+,int a_iz
+,int a_nz
+,bool a_acw
+,bool a_zfb
+){
+  if(a_acw) {
+    if(a_zfb) {
+      return a_iz*a_npts+a_ixy;
+    } else {
+      return (a_nz-1-a_iz)*a_npts+a_ixy;
+    }
+  } else {
+    if(a_zfb) {
+      return a_iz*a_npts+(a_npts-1-a_ixy);
+    } else {
+      return (a_nz-1-a_iz)*a_npts+(a_npts-1-a_ixy);
+    }
+  }
+}
+
+inline
+bool polyhedron::set_polyhedron_xtru(
+ int a_npts            // number of vertices of the 2D polygon (at least 3)
+,int a_nz              // number of z planes (at least two)
+,double* a_xs          //[a_nz][a_npts] X positions for polygon vertices
+,double* a_ys          //[a_nz][a_npts] Y positions for polygon vertices
+,double* a_zs          //[a_nz] Z positions
+//default orientations :
+,bool a_acw //= true
+,bool a_zfb //= true
+){
+  _clear(); //G.Barrand
+
+  if(a_npts<=2) return false;
+  if(a_nz<=1) return false;
+
+  //check if convex :
+  bool convex = true;
+ {double xv = a_xs[1]-a_xs[0];
+  double yv = a_ys[1]-a_ys[0];
+  double xw,yw,cross_z;
+  for(int j=2;j<a_npts;j++) {
+    xw = a_xs[j]-a_xs[j-1];
+    yw = a_ys[j]-a_ys[j-1];
+    //z of cross :
+    //  xv  xw
+    //  yv  yw
+    //   0   0
+    cross_z = xv*yw-yv*xw;    
+    if(a_acw) {
+      if(cross_z<0) {convex = false;break;}
+    } else {
+      if(cross_z>0) {convex = false;break;}
+    }
+    xv = xw;
+    yv = yw;
+  }
+  if(convex) {
+    // have to check seg(n-2,n-1) to seg(n-1,0)
+    xw = a_xs[0]-a_xs[a_npts-1];
+    yw = a_ys[0]-a_ys[a_npts-1];
+    cross_z = xv*yw-yv*xw;    
+    if(a_acw) {
+      if(cross_z<0) convex = false;
+    } else {
+      if(cross_z>0) convex = false;
+    }
+    xv = xw;
+    yv = yw;
+  }
+  if(convex) {
+    // have to check seg(n-1,0) to seg(0,1)
+    xw = a_xs[1]-a_xs[0];
+    yw = a_ys[1]-a_ys[0];
+    cross_z = xv*yw-yv*xw;    
+    if(a_acw) {
+      if(cross_z<0) convex = false;
+    } else {
+      if(cross_z>0) convex = false;
+    }
+  }
+  if(!convex) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "tools::hep::set_polyhedron_xtru :"
+              << " not convex polygon."
+              << std::endl;
+#endif
+    return false;
+  }}
+
+  //   C O U N T   V E R T E C E S
+
+  int i;
+
+  int j = a_nz*a_npts+2;
+
+  //   C O U N T   F A C E S
+
+  int k = ((a_nz-1)+1+1)*a_npts;
+
+  //   A L L O C A T E   M E M O R Y
+
+  AllocateMemory(j, k);
+
+  //   G E N E R A T E   V E R T E C E S
+
+  int* kk = new int[a_nz+2];
+
+  k = 1;
+  for(i=0; i<a_nz; i++) {
+    kk[i] = k;
+    k += a_npts; 
+  }
+
+  kk[a_nz] = k;
+  kk[a_nz+1] = k+1;
+
+  int ixy,iz;
+  if(a_acw) {
+    if(a_zfb) {
+      for(j=0; j<a_npts; j++) {
+        for(i=0; i<a_nz; i++) {
+          iz = i;
+          ixy = iz*a_npts+j;
+          pV[kk[i]+j] = HVPoint3D(a_xs[ixy],a_ys[ixy],a_zs[iz]);
+        }
+      }
+    } else {
+      for(j=0; j<a_npts; j++) {
+        for(i=0; i<a_nz; i++) {
+          iz = a_nz-1-i;
+          ixy = iz*a_npts+j;
+          pV[kk[i]+j] = HVPoint3D(a_xs[ixy],a_ys[ixy],a_zs[iz]);
+        }
+      }
+    }
+  } else {
+    if(a_zfb) {
+      for(j=0; j<a_npts; j++) {
+        for(i=0; i<a_nz; i++) {
+          iz = i;
+          ixy = iz*a_npts+a_npts-1-j;
+          pV[kk[i]+j] = HVPoint3D(a_xs[ixy],a_ys[ixy],a_zs[iz]);
+        }
+      }
+    } else {
+      for(j=0; j<a_npts; j++) {
+        for(i=0; i<a_nz; i++) {
+          iz = a_nz-1-i;
+          ixy = iz*a_npts+a_npts-1-j;
+          pV[kk[i]+j] = HVPoint3D(a_xs[ixy],a_ys[ixy],a_zs[iz]);
+        }
+      }
+    }
+  }
+
+ {double xcbeg = 0;
+  double ycbeg = 0;
+  for(j=0; j<a_npts; j++) {
+    ixy = _ixy(j,a_npts,0,a_nz,a_acw,a_zfb);
+    xcbeg += a_xs[ixy];
+    ycbeg += a_ys[ixy];
+  }
+  xcbeg /= a_npts;
+  ycbeg /= a_npts;
+  if(a_zfb) {
+    pV[kk[a_nz]] = HVPoint3D(xcbeg,ycbeg,a_zs[0]);
+  } else {
+    pV[kk[a_nz]] = HVPoint3D(xcbeg,ycbeg,a_zs[a_nz-1]);
+  }}
+
+ {double xcend = 0;
+  double ycend = 0;
+  for(j=0; j<a_npts; j++) {
+    ixy = _ixy(j,a_npts,a_nz-1,a_nz,a_acw,a_zfb);
+    xcend += a_xs[ixy];
+    ycend += a_ys[ixy];
+  }
+  xcend /= a_npts;
+  ycend /= a_npts;	
+  if(a_zfb) {
+    pV[kk[a_nz+1]] = HVPoint3D(xcend,ycend,a_zs[a_nz-1]);
+  } else {
+    pV[kk[a_nz+1]] = HVPoint3D(xcend,ycend,a_zs[0]);
+  }}
+
+  //   G E N E R A T E   E X T E R N A L   F A C E S
+  int edgeVis = 1;
+
+  int v1 = 1;
+  int v2 = 1;
+  k = 1;
+  for(i=0; i<(a_nz-1); i++) {
+    RotateEdge(kk[i], kk[i+1], 1, 1, v1, v2,
+               edgeVis, true, a_npts, k);
+  }
+
+  //   G E N E R A T E   S I D E   F A C E S
+  //begin side
+  RotateEdge(kk[a_nz], kk[0], 0, 1, 1, 1,
+            -1, true, a_npts, k);
+  //end side
+  RotateEdge(kk[a_nz-1], kk[a_nz+1], 1, 0, 1, 1,
+             -1, true, a_npts, k);
+
+  delete [] kk;
+
+  if ((k-1) != nface) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "Polyhedron::RotateAroundZ: number of generated faces ("
+      << k-1 << ") is not equal to the number of allocated faces ("
+      << nface << ")"
+      << std::endl;
+#endif
+  }
+
+  SetReferences();
+  return true;
+}
+
+inline
+polyhedron_xtru::polyhedron_xtru(int a_npts,int a_nz,
+                               double* a_xs,double* a_ys,double* a_zs,
+                               bool a_acw, //= true
+                               bool a_zfb){ //= true
+  set_polyhedron_xtru(a_npts,a_nz,a_xs,a_ys,a_zs,a_acw,a_zfb);
+}
+
+//G.Barrand :
+inline
+bool polyhedron::set_polyhedron_hype(double a_st_in,double a_st_out, 
+                                    double a_rmin,double a_rmax,double a_dz,
+                                    int a_nz,int a_nphi) //G.Barrand
+{
+  static const double wholeCircle = 2*_M_PI(); //G.Barrand : const
+
+  _clear(); //G.Barrand
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  int k = 0;
+  if (a_rmin < 0. || a_rmax < 0.)        k = 1;
+  if (a_rmin > a_rmax)                   k = 1;
+  if (a_rmin == a_rmax)                  k = 1;
+
+  if (a_dz <= 0.) k += 2;
+ 
+  if (a_nz <= 0) k += 4;
+  if (a_nphi <= 0) k += 4;
+ 
+  double tout = ::tan(a_st_in);
+  double tin = ::tan(a_st_out);
+
+  double d_in  = a_rmin*a_rmin + tin*tin*a_dz*a_dz;
+  double d_out = a_rmax*a_rmax + tout*tout*a_dz*a_dz;
+  if(d_in>d_out) k += 8;
+
+  double phi1 = 0;
+  double dphi = wholeCircle;
+
+  if (k != 0) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "polyhedron_cone(s)/Tube(s): error in input parameters";
+    if ((k & 1) != 0) std::cerr << " (radiuses)";
+    if ((k & 2) != 0) std::cerr << " (half-length)";
+    if ((k & 4) != 0) std::cerr << " (steps)";
+    if ((k & 8) != 0) std::cerr << " (angles)";
+    std::cerr << std::endl;
+    //std::cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
+    //std::cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
+    //std::cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi
+    //          << std::endl;
+#endif
+    return false;
+  }
+  
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  double* zz = new double[2*(a_nz+1)];
+  double* rr = new double[2*(a_nz+1)];
+
+  double dz = 2.0f*a_dz/double(a_nz);
+
+  double z;
+
+  // r^2 - (tout*z)^2 = rout^2 
+  double rout_sq = a_rmax*a_rmax;
+  double tout_sq = tout*tout;
+  for(int iz=0;iz<=a_nz;iz++) {
+    z = a_dz-iz*dz;
+    zz[iz] = z;
+    rr[iz] = ::sqrt(rout_sq+tout_sq*z*z);
+  }
+
+  // r^2 - (tin*z)^2 = rin^2 
+  double rin_sq = a_rmin*a_rmin;
+  double tin_sq = tin*tin;
+  for(int iz=0;iz<a_nz;iz++) {
+    z = a_dz-iz*dz;
+    zz[a_nz+iz] = z;
+    rr[a_nz+iz] = ::sqrt(rin_sq+tin_sq*z*z);
+  }
+
+  //   R O T A T E    P O L Y L I N E S
+
+  RotateAroundZ(a_nphi, phi1, dphi, a_nz, a_nz, zz, rr, -1, -1); 
+  SetReferences();
+
+  delete [] zz;
+  delete [] rr;
+  return true;
+}
+
+inline
+polyhedron_hype::polyhedron_hype(double a_st_in,double a_st_out, 
+                               double a_rmin,double a_rmax,double a_dz,
+                               int a_nz,int a_nphi) {
+  set_polyhedron_hype(a_st_in,a_st_out,a_rmin,a_rmax,a_dz,a_nz,a_nphi);
+}
+
+//G.Barrand :
+inline
+bool polyhedron::set_polyhedron_eltu(double a_dx,double a_dy,double a_dz,
+                                    int a_nz,int a_nphi) //G.Barrand
+{
+  // elliptical tube  class. An elliptical tube has 3 parameters :
+  //            a_dx - semi-axis of the ellipse along x
+  //            a_dy - semi-axis of the ellipse along y
+  //            a_dz - half length in z
+  static const double wholeCircle = 2*_M_PI(); //G.Barrand : const
+
+  _clear(); //G.Barrand
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  int k = 0;
+
+  if (a_dx <= 0.) k += 1;
+  if (a_dy <= 0.) k += 1;
+  if (a_dz <= 0.) k += 1;
+ 
+  if (a_nz <= 0) k += 2;
+  if (a_nphi <= 0) k += 2;
+ 
+  if (k != 0) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "polyhedron_cone(s)/Tube(s): error in input parameters";
+    if ((k & 1) != 0) std::cerr << " (half-length)";
+    if ((k & 2) != 0) std::cerr << " (steps)";
+    std::cerr << std::endl;
+    std::cerr << " Dx=" << a_dx
+              << " Dy=" << a_dy
+              << " Dz=" << a_dz
+              << " nz=" << a_nz
+              << " nphi=" << a_nphi
+              << std::endl;
+#endif
+    return false;
+  }
+  
+  //   C O U N T   V E R T E C E S
+
+  int i;
+
+  int j = a_nz*a_nphi+2;
+
+  //   C O U N T   F A C E S
+
+  k = ((a_nz-1)+1+1)*a_nphi;
+
+  //   A L L O C A T E   M E M O R Y
+
+  AllocateMemory(j, k);
+
+  //   G E N E R A T E   V E R T E C E S
+
+  int* kk = new int[a_nz+2];
+
+  k = 1;
+  for(i=0; i<a_nz; i++) {
+    kk[i] = k;
+    k += a_nphi; 
+  }
+
+  kk[a_nz] = k;
+  kk[a_nz+1] = k+1;
+
+
+ {double a2 = a_dx*a_dx;
+  double b2 = a_dy*a_dy;
+  double dphi = wholeCircle/a_nphi;
+  double phi = 0;
+  double sph,cph,r2,r,x,y;
+  double sz = (2.0*a_dz)/a_nz;
+  for(j=0; j<a_nphi; j++) {
+    phi = j*dphi;
+    sph=::sin(phi);
+    cph=::cos(phi);
+    r2=(a2*b2)/(b2+(a2-b2)*sph*sph);
+    r=::sqrt(r2);
+    x = r*cph;
+    y = r*sph;
+    for(i=0; i<a_nz; i++) {
+      pV[kk[i]+j] = HVPoint3D(x,y,a_dz-sz*i);
+    }
+  }}
+
+  pV[kk[a_nz]] = HVPoint3D(0,0,a_dz);
+  pV[kk[a_nz+1]] = HVPoint3D(0,0,-a_dz);
+
+  //   G E N E R A T E   E X T E R N A L   F A C E S
+  int edgeVis = 1;
+
+  int v1 = 1;
+  int v2 = 1;
+  k = 1;
+  for(i=0; i<(a_nz-1); i++) {
+    RotateEdge(kk[i], kk[i+1], 1, 1, v1, v2,
+               edgeVis, true, a_nphi, k);
+  }
+
+  //   G E N E R A T E   S I D E   F A C E S
+  //begin side
+  RotateEdge(kk[a_nz], kk[0], 0, 1, 1, 1,
+            -1, true, a_nphi, k);
+  //end side
+  RotateEdge(kk[a_nz-1], kk[a_nz+1], 1, 0, 1, 1,
+             -1, true, a_nphi, k);
+
+  delete [] kk;
+
+  if ((k-1) != nface) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "Polyhedron::RotateAroundZ: number of generated faces ("
+      << k-1 << ") is not equal to the number of allocated faces ("
+      << nface << ")"
+      << std::endl;
+#endif
+  }
+
+  SetReferences();
+  return true;
+}
+
+inline
+polyhedron_trd1::polyhedron_trd1(double Dx1, double Dx2,
+                                     double Dy, double Dz)
+  : polyhedron_trd2(Dx1, Dx2, Dy, Dy, Dz) {}
+
+inline
+polyhedron_box::polyhedron_box(double Dx, double Dy, double Dz)
+  : polyhedron_trd2(Dx, Dx, Dy, Dy, Dz) {}
+
+//G.Barrand
+inline
+bool polyhedron::set_polyhedron_trap(double Dz,
+                                     double Theta,
+                                     double Phi,
+                                     double Dy1,
+                                     double Dx1,
+                                     double Dx2,
+                                     double Alp1,
+                                     double Dy2,
+                                     double Dx3,
+                                     double Dx4,
+                                     double Alp2)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron_trap                           Date:    20.11.96 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Create GEANT4 TRAP-trapezoid                              *
+ *                                                                     *
+ * Input: DZ   - half-length in Z                                      *
+ *        Theta,Phi - polar angles of the line joining centres of the  *
+ *                    faces at Z=-Dz and Z=+Dz                         *
+ *        Dy1  - half-length in Y of the face at Z=-Dz                 *
+ *        Dx1  - half-length in X of low edge of the face at Z=-Dz     *
+ *        Dx2  - half-length in X of top edge of the face at Z=-Dz     *
+ *        Alp1 - angle between Y-axis and the median joining top and   *
+ *               low edges of the face at Z=-Dz                        *
+ *        Dy2  - half-length in Y of the face at Z=+Dz                 *
+ *        Dx3  - half-length in X of low edge of the face at Z=+Dz     *
+ *        Dx4  - half-length in X of top edge of the face at Z=+Dz     *
+ *        Alp2 - angle between Y-axis and the median joining top and   *
+ *               low edges of the face at Z=+Dz                        *
+ *                                                                     *
+ ***********************************************************************/
+{
+  _clear(); //G.Barrand
+
+  //FIXME : check capacity = 0; //see TGeoTrap to set a arb8.
+
+  if(//(Dx1<=0.0)||(Dx2<=0.0)||(Dx3<=0.0)||(Dx4<=0.0)||
+     //(Dy1<=0.0)||(Dy2<=0.0)||
+     (Dz<=0.0)){ //G.Barrand
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "set_polyhedron_trap: error in input parameters";
+    std::cerr << " Dx1=" << Dx1
+              << " Dx2=" << Dx2
+              << " Dy1=" << Dy1
+              << " Dy2=" << Dy2
+              << " Dz=" << Dz
+              << std::endl;
+#endif
+    return false;
+  } 
+
+  double DzTthetaCphi = Dz*std::tan(Theta)*std::cos(Phi);
+  double DzTthetaSphi = Dz*std::tan(Theta)*std::sin(Phi);
+  double Dy1Talp1 = Dy1*std::tan(Alp1);
+  double Dy2Talp2 = Dy2*std::tan(Alp2);
+  
+  AllocateMemory(8,6);
+
+  pV[1] = HVPoint3D(-DzTthetaCphi-Dy1Talp1-Dx1,-DzTthetaSphi-Dy1,-Dz);
+  pV[2] = HVPoint3D(-DzTthetaCphi-Dy1Talp1+Dx1,-DzTthetaSphi-Dy1,-Dz);
+  pV[3] = HVPoint3D(-DzTthetaCphi+Dy1Talp1+Dx2,-DzTthetaSphi+Dy1,-Dz);
+  pV[4] = HVPoint3D(-DzTthetaCphi+Dy1Talp1-Dx2,-DzTthetaSphi+Dy1,-Dz);
+  pV[5] = HVPoint3D( DzTthetaCphi-Dy2Talp2-Dx3, DzTthetaSphi-Dy2, Dz);
+  pV[6] = HVPoint3D( DzTthetaCphi-Dy2Talp2+Dx3, DzTthetaSphi-Dy2, Dz);
+  pV[7] = HVPoint3D( DzTthetaCphi+Dy2Talp2+Dx4, DzTthetaSphi+Dy2, Dz);
+  pV[8] = HVPoint3D( DzTthetaCphi+Dy2Talp2-Dx4, DzTthetaSphi+Dy2, Dz);
+
+  CreatePrism();
+
+  return true;
+}
+
+inline
+polyhedron_trap::polyhedron_trap(double Dz,
+                                     double Theta,
+                                     double Phi,
+                                     double Dy1,
+                                     double Dx1,
+                                     double Dx2,
+                                     double Alp1,
+                                     double Dy2,
+                                     double Dx3,
+                                     double Dx4,
+                                     double Alp2)
+{
+  //G.Barrand
+  set_polyhedron_trap(Dz,Theta,Phi,Dy1,Dx1,Dx2,Alp1,Dy2,Dx3,Dx4,Alp2);
+}
+
+inline
+polyhedron_para::polyhedron_para(double Dx, double Dy, double Dz,
+                                     double Alpha, double Theta,
+                                     double Phi)
+  : polyhedron_trap(Dz, Theta, Phi, Dy, Dx, Dx, Alpha, Dy, Dx, Dx, Alpha) {}
+
+//G.Barrand : have the below set_ to optimize exlib/sg/polyhedron setup.
+inline
+bool polyhedron::set_polyhedron_cons(double Rmn1,
+                                     double Rmx1,
+                                     double Rmn2,
+                                     double Rmx2, 
+                                     double Dz,
+                                     double Phi1,
+                                     double Dphi,
+                                     int nstep) //G.Barrand
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron_cons::polyhedron_cons        Date:    15.12.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised: 15.12.96 *
+ *                                                                     *
+ * Function: Constructor for CONS, TUBS, CONE, TUBE                    *
+ *                                                                     *
+ * Input: Rmn1, Rmx1 - inside and outside radiuses at -Dz              *
+ *        Rmn2, Rmx2 - inside and outside radiuses at +Dz              *
+ *        Dz         - half length in Z                                *
+ *        Phi1       - starting angle of the segment                   *
+ *        Dphi       - segment range                                   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static const double wholeCircle = 2*_M_PI(); //G.Barrand : const
+  _clear(); //G.Barrand
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  int k = 0;
+  if (Rmn1 < 0. || Rmx1 < 0. || Rmn2 < 0. || Rmx2 < 0.)        k = 1;
+  if (Rmn1 > Rmx1 || Rmn2 > Rmx2)                              k = 1;
+  if (Rmn1 == Rmx1 && Rmn2 == Rmx2)                            k = 1;
+
+  //G.Barrand : for atlas.root.
+  //if (Dz <= 0.) k += 2;
+  const double perMillion = 0.000001;
+  if (Dz <= 0.) Dz = perMillion*mx<double>(Rmx1,Rmx2);
+ 
+  double phi1, phi2, dphi;
+  if (Dphi < 0.) {
+    phi2 = Phi1; phi1 = phi2 - Dphi;
+  }else if (Dphi == 0.) {
+    phi1 = Phi1; phi2 = phi1 + wholeCircle;
+  }else{
+    phi1 = Phi1; phi2 = phi1 + Dphi;
+  }
+  dphi  = phi2 - phi1;
+
+  if (std::fabs(dphi-wholeCircle) < perMillion) dphi = wholeCircle;
+  if (dphi > wholeCircle) k += 4; 
+
+  if (k != 0) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "polyhedron_cone(s)/Tube(s): error in input parameters";
+    if ((k & 1) != 0) std::cerr << " (radiuses)";
+    if ((k & 2) != 0) std::cerr << " (half-length)";
+    if ((k & 4) != 0) std::cerr << " (angles)";
+    std::cerr << std::endl;
+    std::cerr << " Rmn1=" << Rmn1 << " Rmx1=" << Rmx1;
+    std::cerr << " Rmn2=" << Rmn2 << " Rmx2=" << Rmx2;
+    std::cerr << " Dz=" << Dz << " Phi1=" << Phi1 << " Dphi=" << Dphi
+              << std::endl;
+#endif
+    return false;
+  }
+  
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  double zz[4], rr[4];
+  zz[0] =  Dz; 
+  zz[1] = -Dz; 
+  zz[2] =  Dz; 
+  zz[3] = -Dz; 
+  rr[0] =  Rmx2;
+  rr[1] =  Rmx1;
+  rr[2] =  Rmn2;
+  rr[3] =  Rmn1;
+
+  //   R O T A T E    P O L Y L I N E S
+
+  //G.Barrand : nstep
+  RotateAroundZ(nstep, phi1, dphi, 2, 2, zz, rr, -1, -1); 
+  SetReferences();
+
+  return true;
+}
+
+inline
+polyhedron_cons::polyhedron_cons(double Rmn1,
+                                     double Rmx1,
+                                     double Rmn2,
+                                     double Rmx2, 
+                                     double Dz,
+                                     double Phi1,
+                                     double Dphi,
+                                     int nstep) //G.Barrand
+{
+  set_polyhedron_cons(Rmn1,Rmx1,Rmn2,Rmx2,Dz,Phi1,Dphi,nstep); //G.Barrand
+}
+
+inline
+polyhedron_cone::polyhedron_cone(double Rmn1, double Rmx1, 
+                                   double Rmn2, double Rmx2,
+                                   double Dz,
+                                   int nstep) //G.Barrand
+:  polyhedron_cons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0, 2*_M_PI(), nstep) {}
+
+inline
+polyhedron_tubs::polyhedron_tubs(double Rmin, double Rmax,
+                                     double Dz, 
+                                     double Phi1, double Dphi,
+                                     int nstep) //G.Barrand
+:   polyhedron_cons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi, nstep) {}
+
+inline
+polyhedron_tube::polyhedron_tube (double Rmin, double Rmax,
+                                    double Dz,
+                                    int nstep) //G.Barrand
+: polyhedron_cons(Rmin, Rmax, Rmin, Rmax, Dz, 0, 2*_M_PI(), nstep) {}
+
+//G.Barrand
+inline
+bool polyhedron::set_polyhedron_pgon(double phi,
+                                     double dphi,
+                                     int    npdv,
+                                     int    nz,
+                                     const double *z,
+                                     const double *rmin,
+                                     const double *rmax)
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron_pgon                           Date:    09.12.96 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Constructor of polyhedron for PGON, PCON                  *
+ *                                                                     *
+ * Input: phi  - initial phi                                           *
+ *        dphi - delta phi                                             *
+ *        npdv - number of steps along phi                             *
+ *        nz   - number of z-planes (at least two)                     *
+ *        z[]  - z coordinates of the slices                           *
+ *        rmin[] - smaller r at the slices                             *
+ *        rmax[] - bigger  r at the slices                             *
+ *                                                                     *
+ ***********************************************************************/
+{
+  _clear();
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  if (dphi <= 0. || dphi > 2*_M_PI()) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_pgon/Pcon: wrong delta phi = " << dphi
+      << std::endl;
+#endif
+    return false;
+  }    
+    
+  if (nz < 2) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_pgon/Pcon: number of z-planes less than two = " << nz
+      << std::endl;
+#endif
+    return false;
+  }
+
+  if (npdv < 0) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_pgon/Pcon: error in number of phi-steps =" << npdv
+      << std::endl;
+#endif
+    return false;
+  }
+
+  int i;
+  for (i=0; i<nz; i++) {
+    if (rmin[i] < 0. || rmax[i] < 0. || rmin[i] > rmax[i]) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+      std::cerr
+        << "polyhedron_pgon: error in radiuses rmin[" << i << "]="
+        << rmin[i] << " rmax[" << i << "]=" << rmax[i]
+        << std::endl;
+#endif
+      return false;
+    }
+  }
+
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  double *zz, *rr;
+  zz = new double[2*nz];
+  rr = new double[2*nz];
+
+  if (z[0] > z[nz-1]) {
+    for (i=0; i<nz; i++) {
+      zz[i]    = z[i];
+      rr[i]    = rmax[i];
+      zz[i+nz] = z[i];
+      rr[i+nz] = rmin[i];
+    }
+  }else{
+    for (i=0; i<nz; i++) {
+      zz[i]    = z[nz-i-1];
+      rr[i]    = rmax[nz-i-1];
+      zz[i+nz] = z[nz-i-1];
+      rr[i+nz] = rmin[nz-i-1];
+    }
+  }
+
+  //   R O T A T E    P O L Y L I N E S
+
+  RotateAroundZ(npdv, phi, dphi, nz, nz, zz, rr, -1, (npdv == 0) ? -1 : 1); 
+  SetReferences();
+  
+  delete [] zz;
+  delete [] rr;
+
+  return true;
+}
+
+inline
+polyhedron_pgon::polyhedron_pgon(double phi,
+                                     double dphi,
+                                     int    npdv,
+                                     int    nz,
+                                     const double *z,
+                                     const double *rmin,
+                                     const double *rmax)
+{
+  set_polyhedron_pgon(phi,dphi,npdv,nz,z,rmin,rmax);
+}
+
+inline
+polyhedron_pcon::polyhedron_pcon(double phi, double dphi, int nz,
+                                     const double *z,
+                                     const double *rmin,
+                                     const double *rmax)
+  : polyhedron_pgon(phi, dphi, 0, nz, z, rmin, rmax) {}
+
+inline
+bool polyhedron::set_polyhedron_sphere(double rmin, double rmax,
+                                       double phi, double dphi,
+                                       double the, double dthe,
+                                       int nphi, //G.Barrand
+                                       int nthe) //G.Barrand
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron_sphere                         Date:    11.12.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Constructor of polyhedron for SPHERE                      *
+ *                                                                     *
+ * Input: rmin - internal radius                                       *
+ *        rmax - external radius                                       *
+ *        phi  - initial phi                                           *
+ *        dphi - delta phi                                             *
+ *        the  - initial theta                                         *
+ *        dthe - delta theta                                           *
+ *                                                                     *
+ ***********************************************************************/
+{
+  _clear();
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  if (dphi <= 0. || dphi > 2*_M_PI()) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_sphere: wrong delta phi = " << dphi
+      << std::endl;
+#endif
+    return false;
+  }    
+
+  if (the < 0. || the > _M_PI()) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_sphere: wrong theta = " << the
+      << std::endl;
+#endif
+    return false;
+  }    
+  
+  if (dthe <= 0. || dthe > _M_PI()) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_sphere: wrong delta theta = " << dthe
+      << std::endl;
+#endif
+    return false;
+  }    
+
+  if ( (the+dthe >= _M_PI()) && (the+dthe < _M_PI() + 2*DBL_EPSILON) ) 
+    dthe = _M_PI() - the; //G.Barrand : coming from LHCb/S.Ponce.
+
+  if (the+dthe > _M_PI()) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_sphere: wrong theta + delta theta = "
+      << the << " " << dthe
+      << std::endl;
+#endif
+    return false;
+  }    
+  
+  if (rmin < 0. || rmin >= rmax) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_sphere: error in radiuses"
+      << " rmin=" << rmin << " rmax=" << rmax
+      << std::endl;
+#endif
+    return false;
+  }
+
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  int n_the = (nthe>0) ? nthe : GetNumberOfRotationSteps(); //G.Barrand.
+  int ns = (n_the + 1) / 2;
+
+  int np1 = int(dthe*ns/_M_PI()+.5) + 1;
+  if (np1 <= 1) np1 = 2;
+  const double perMillion = 0.000001;
+  int np2 = rmin < perMillion ? 1 : np1;
+
+  double *zz, *rr;
+  zz = new double[np1+np2];
+  rr = new double[np1+np2];
+
+  double a = dthe/(np1-1);
+  double cosa, sina;
+  for (int i=0; i<np1; i++) {
+    cosa  = std::cos(the+i*a);
+    sina  = std::sin(the+i*a);
+    zz[i] = rmax*cosa;
+    rr[i] = rmax*sina;
+    if (np2 > 1) {
+      zz[i+np1] = rmin*cosa;
+      rr[i+np1] = rmin*sina;
+    }
+  }
+  if (np2 == 1) {
+    zz[np1] = 0.;
+    rr[np1] = 0.;
+  }
+
+  //   R O T A T E    P O L Y L I N E S
+
+  //G.Barrand : nphi.
+  RotateAroundZ(nphi, phi, dphi, np1, np2, zz, rr, -1, -1); 
+  SetReferences();
+  
+  delete [] zz;
+  delete [] rr;
+
+  return true;
+}
+
+inline
+polyhedron_sphere::polyhedron_sphere(double rmin, double rmax,
+                                       double phi, double dphi,
+                                       double the, double dthe,
+                                       int nphi, //G.Barrand
+                                       int nthe) //G.Barrand
+{
+  set_polyhedron_sphere(rmin,rmax,
+                       phi,dphi,
+                       the,dthe,
+                       nphi,nthe);
+}
+
+
+inline
+bool polyhedron::set_polyhedron_torus(double rmin,
+                                       double rmax,
+                                       double rtor,
+                                       double phi,
+                                       double dphi,
+                                       int nphi, //G.Barrand
+                                       int nthe) //G.Barrand
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron_torus                          Date:    11.12.96 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Constructor of polyhedron for TORUS                       *
+ *                                                                     *
+ * Input: rmin - internal radius                                       *
+ *        rmax - external radius                                       *
+ *        rtor - radius of torus                                       *
+ *        phi  - initial phi                                           *
+ *        dphi - delta phi                                             *
+ *                                                                     *
+ ***********************************************************************/
+{
+  _clear();
+
+  //   C H E C K   I N P U T   P A R A M E T E R S
+
+  if (dphi <= 0. || dphi > 2*_M_PI()) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_torus: wrong delta phi = " << dphi
+      << std::endl;
+#endif
+    return false;
+  }
+
+  if (rmin < 0. || rmin >= rmax || rmax >= rtor) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr
+      << "polyhedron_torus: error in radiuses"
+      << " rmin=" << rmin << " rmax=" << rmax << " rtorus=" << rtor
+      << std::endl;
+#endif
+    return false;
+  }
+
+  //   P R E P A R E   T W O   P O L Y L I N E S
+
+  int n_the = (nthe>0) ? nthe : GetNumberOfRotationSteps(); //G.Barrand.
+  int np1 = n_the;
+
+  const double perMillion = 0.000001;
+  int np2 = rmin < perMillion ? 1 : np1;
+
+  double *zz, *rr;
+  zz = new double[np1+np2];
+  rr = new double[np1+np2];
+
+  double a = 2*_M_PI()/np1;
+  double cosa, sina;
+  for (int i=0; i<np1; i++) {
+    cosa  = std::cos(i*a);
+    sina  = std::sin(i*a);
+    zz[i] = rmax*cosa;
+    rr[i] = rtor+rmax*sina;
+    if (np2 > 1) {
+      zz[i+np1] = rmin*cosa;
+      rr[i+np1] = rtor+rmin*sina;
+    }
+  }
+  if (np2 == 1) {
+    zz[np1] = 0.;
+    rr[np1] = rtor;
+    np2 = -1;
+  }
+
+  //   R O T A T E    P O L Y L I N E S
+
+  //G.Barrand : nphi.
+  RotateAroundZ(nphi, phi, dphi, -np1, -np2, zz, rr, -1,-1); 
+  SetReferences();
+  
+  delete [] zz;
+  delete [] rr;
+
+  return true;
+}
+
+inline
+polyhedron_torus::polyhedron_torus(double rmin,
+                                       double rmax,
+                                       double rtor,
+                                       double phi,
+                                       double dphi,
+                                       int nphi, //G.Barrand
+                                       int nthe) //G.Barrand
+{
+  set_polyhedron_torus(rmin,rmax,rtor,phi,dphi,nphi,nthe); //G.Barrand
+}
+
+//int polyhedron::fNumberOfRotationSteps = NUMBER_OF_STEPS;
+
+// G.Barrand : begin.
+inline int polyhedron::GetNumberOfRotationSteps() { 
+  return fNumberOfRotationSteps; 
+}
+inline void polyhedron::ResetNumberOfRotationSteps() {
+  fNumberOfRotationSteps = NUMBER_OF_STEPS();
+}
+// G.Barrand : end.
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::fNumberOfRotationSteps       Date:    24.06.97 *
+ * Author: J.Allison (Manchester University)         Revised:          *
+ *                                                                     *
+ * Function: Number of steps for whole circle                          *
+ *                                                                     *
+ ***********************************************************************/
+
+}}
+
+#include "pbp.icc" //BooleanProcessor
+
+namespace tools {
+namespace hep {
+
+//G.Barrand : static BooleanProcessor processor;
+
+inline polyhedron polyhedron::add(const polyhedron & p) const 
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::add                          Date:    19.03.00 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Boolean "union" of two polyhedra                          *
+ *                                                                     *
+ ***********************************************************************/
+{
+  BooleanProcessor processor; //G.Barrand
+  int err;
+  return processor.execute(OP_UNION, *this, p, err);
+}
+
+inline polyhedron polyhedron::intersect(const polyhedron & p) const 
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::intersect                    Date:    19.03.00 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Boolean "intersection" of two polyhedra                   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  BooleanProcessor processor; //G.Barrand
+  int err;
+  return processor.execute(OP_INTERSECTION, *this, p, err);
+}
+
+inline polyhedron polyhedron::subtract(const polyhedron & p) const 
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::add                          Date:    19.03.00 *
+ * Author: E.Chernyaev                               Revised:          *
+ *                                                                     *
+ * Function: Boolean "subtraction" of "p" from "this"                  *
+ *                                                                     *
+ ***********************************************************************/
+{
+  BooleanProcessor processor; //G.Barrand
+  int err;
+  return processor.execute(OP_SUBTRACTION, *this, p, err);
+}
+
+
+//G.Barrand : begin
+
+inline bool is_in(unsigned int a_index,
+                         const std::list<unsigned int>& a_is) {
+  std::list<unsigned int>::const_iterator it;
+  for(it=a_is.begin();it!=a_is.end();++it) {
+    if(*it==a_index) return true;
+  }
+  return false;
+}
+
+class bijection_visitor {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::hep::bijection_visitor)
+#endif
+public:
+  typedef std::vector<unsigned int> is_t;
+  virtual bool visit(const is_t&) = 0;
+public:
+  bijection_visitor(unsigned int a_number):m_number(a_number){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~bijection_visitor(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  bijection_visitor(const bijection_visitor&){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  bijection_visitor& operator=(const bijection_visitor&){return *this;}
+public:
+  bool visitx() {
+    m_is.clear();
+    m_is.resize(m_number,0);
+    std::list<unsigned int> is;
+    return visit(0,is);
+  }
+private:
+  bool visit(unsigned int a_level,std::list<unsigned int>& a_is) {
+    for(unsigned int index=0;index<m_number;index++) {
+      if(is_in(index,a_is)) {
+      } else {
+        a_is.push_back(index);
+        m_is[a_level] = index; 
+        if(a_level==m_number-1) {
+          if(!visit(m_is)) return false;
+        } else {
+          if(!visit(a_level+1,a_is)) return false;
+        }
+        a_is.pop_back();
+      }
+    }
+    return true;
+  }
+private:
+  unsigned int m_number;
+  is_t m_is;
+};
+
+//inline void dump(const std::vector<unsigned int>& a_is) {
+//  unsigned int number = a_is.size();
+//  for(unsigned int index=0;index<number;index++) {
+//    printf("%d ",a_is[index]);
+//  }
+//  printf("\n");
+//}
+
+//class bijection_dump : public bijection_visitor {
+//public:
+//  bijection_dump(unsigned int a_number)
+//  : bijection_visitor(a_number)
+//  {}
+//  virtual bool visit(const is_t& a_is) {
+//    dump(a_is);
+//    return true;//continue
+//  }
+//};
+
+class polyhedron_exec : public bijection_visitor {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::hep::polyhedron_exec)
+#endif
+public:
+  polyhedron_exec(unsigned int a_number,
+       polyhedronProcessor& a_proc,
+       polyhedron& a_poly)
+  : bijection_visitor(a_number)
+  ,m_proc(a_proc)
+  ,m_poly(a_poly)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~polyhedron_exec(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  polyhedron_exec(const polyhedron_exec& a_from)
+  :bijection_visitor(a_from)
+  ,m_proc(a_from.m_proc)
+  ,m_poly(a_from.m_poly)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  polyhedron_exec& operator=(const polyhedron_exec&){return *this;}
+public:
+  virtual bool visit(const is_t& a_is) {
+    if(m_proc.execute1(m_poly,a_is)==true) return false; //stop
+    return true;//continue
+  }
+private:
+  polyhedronProcessor& m_proc;
+  polyhedron& m_poly;
+};
+
+inline bool polyhedronProcessor::execute(polyhedron& a_poly) {
+  //{for(unsigned int index=0;index<5;index++) {
+  //  printf("debug : bijection : %d\n",index);  
+  //  bijection_dump bd(index);
+  //  bd.visitx();
+  //}}
+
+  polyhedron_exec e((unsigned int)m_ops.size(),*this,a_poly);
+  if(!e.visitx()) return true;
+#ifdef TOOLS_HEP_PH_OUT_ERR
+  //std::cerr << "polyhedronProcessor::execute :"
+  //          << " all shifts and combinatory tried."
+  //          << " Boolean operations failed."
+  //          << std::endl;
+#endif
+  return false;
+}
+inline bool polyhedronProcessor::execute1(
+ polyhedron& a_poly
+,const std::vector<unsigned int>& a_is
+) {
+  polyhedron result(a_poly);
+  size_t number = m_ops.size();
+  int num_shift = BooleanProcessor::get_num_shift();
+  for(int ishift=0;ishift<num_shift;ishift++) {
+    BooleanProcessor::set_shift(ishift);
+
+    result = a_poly;
+    bool done = true;
+    for(size_t index=0;index<number;index++) {
+      BooleanProcessor processor; //take a fresh one.
+      const op_t& elem = m_ops[a_is[index]];
+      int err;
+      result = processor.execute(elem.first,result,elem.second,err);
+      if(err) {
+        done = false;
+        break;
+      }
+    }
+    if(done) {
+      a_poly = result;
+      return true;      
+    }
+  }
+
+#ifdef TOOLS_HEP_PH_OUT_ERR
+  //std::cerr << "polyhedronProcessor::execute :"
+  //          << " all shifts tried. Boolean operations failed."
+  //          << std::endl;
+#endif
+
+  //a_poly = result;
+  return false;
+}
+
+}}
+//G.Barrand : end

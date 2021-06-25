@@ -156,15 +156,15 @@ private:
   TCSMap tableTCS;
 
   //Maps for multilayers
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
 
   typedef std::map<G4String, TriDimensionMap* > ThetaMap;
   ThetaMap thetaDataStorage; //Storage of angles (cumulated)
 
-  typedef std::map<G4String, std::vector<double>* > energyMap;
+  typedef std::map<G4String, std::vector<G4double>* > energyMap;
   energyMap eIncidentEnergyStorage;
 
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
 
   typedef std::map<G4String, VecMap* > ProbaMap;
   ProbaMap eProbaStorage; //Storage of probabilities for cumulated sections

@@ -51,11 +51,10 @@ G4double G4PenelopeAnnihilationModel::fPielr2 = 0;
 
 G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinition* part,
                                              const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),fParticle(0),isInitialised(false)
+  :G4VEmModel(nam),fParticleChange(nullptr),fParticle(nullptr),fIsInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 0.0;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
 
   if (part)
@@ -64,14 +63,13 @@ G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinit
   //Calculate variable that will be used later on
   fPielr2 = pi*classic_electr_radius*classic_electr_radius;
 
-  verboseLevel= 0;
+  fVerboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
   // 1 = warning for energy non-conservation 
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,14 +82,14 @@ G4PenelopeAnnihilationModel::~G4PenelopeAnnihilationModel()
 void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition* part,
 					     const G4DataVector&)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling G4PenelopeAnnihilationModel::Initialise()" << G4endl;
   SetParticle(part);
 
   if (IsMaster() && part == fParticle)
     {
 
-      if(verboseLevel > 0) {
+      if(fVerboseLevel > 0) {
 	G4cout << "Penelope Annihilation model is initialized " << G4endl
 	       << "Energy range: "
 	       << LowEnergyLimit() / keV << " keV - "
@@ -100,16 +98,16 @@ void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition* part,
       }
     }
 
-  if(isInitialised) return;
+  if(fIsInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
-  isInitialised = true; 
+  fIsInitialised = true; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4PenelopeAnnihilationModel::InitialiseLocal(const G4ParticleDefinition* part,
 						  G4VEmModel* masterModel)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling G4PenelopeAnnihilationModel::InitialiseLocal()" << G4endl;
 
   //
@@ -123,7 +121,7 @@ void G4PenelopeAnnihilationModel::InitialiseLocal(const G4ParticleDefinition* pa
         static_cast<G4PenelopeAnnihilationModel*> (masterModel);
  
       //Same verbosity for all workers, as the master
-      verboseLevel = theModel->verboseLevel;
+      fVerboseLevel = theModel->fVerboseLevel;
     }
 }
 
@@ -135,13 +133,13 @@ G4double G4PenelopeAnnihilationModel::ComputeCrossSectionPerAtom(
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4PenelopeAnnihilationModel" << 
       G4endl;
 
   G4double cs = Z*ComputeCrossSectionPerElectron(energy);
   
-  if (verboseLevel > 2)
+  if (fVerboseLevel > 2)
     G4cout << "Annihilation cross Section at " << energy/keV << " keV for Z=" << Z << 
       " = " << cs/barn << " barn" << G4endl;
   return cs;
@@ -170,7 +168,7 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
   // The angle theta is kinematically linked to the photon energy, to ensure momentum 
   // conservation. The angle phi is sampled isotropically for the first gamma.
   //
-  if (verboseLevel > 3)
+  if (fVerboseLevel > 3)
     G4cout << "Calling SamplingSecondaries() of G4PenelopeAnnihilationModel" << G4endl;
 
   G4double kineticEnergy = aDynamicPositron->GetKineticEnergy();
@@ -219,8 +217,6 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
   G4double cosTheta1 = (ani-1.0/epsilon)/gamma21;
   G4double cosTheta2 = (ani-1.0/(1.0-epsilon))/gamma21;
   
-  //G4double localEnergyDeposit = 0.; 
-
   G4double sinTheta1 = std::sqrt(1.-cosTheta1*cosTheta1);
   G4double phi1  = twopi * G4UniformRand();
   G4double dirx1 = sinTheta1 * std::cos(phi1);
@@ -243,13 +239,13 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
  
   G4ThreeVector photon2Direction(dirx2,diry2,dirz2);
   photon2Direction.rotateUz(positronDirection); 
-     // create G4DynamicParticle object for the particle2 
+  // create G4DynamicParticle object for the particle2 
   G4DynamicParticle* aParticle2= new G4DynamicParticle (G4Gamma::Gamma(),
 							   photon2Direction,
 							   photon2Energy);
   fvect->push_back(aParticle2);
 
-  if (verboseLevel > 1)
+  if (fVerboseLevel > 1)
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Energy balance from G4PenelopeAnnihilation" << G4endl;
@@ -262,7 +258,7 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
-  if (verboseLevel > 0)
+  if (fVerboseLevel > 0)
     {      
       G4double energyDiff = std::fabs(totalAvailableEnergy-photon1Energy-photon2Energy);
       if (energyDiff > 0.05*keV)

@@ -51,11 +51,6 @@
 // 28-02-08 Use precomputed Z^1/3 and Log(A) (V.Ivanchenko)
 // 31-05-13 Use element selectors instead of local data structure (V.Ivanchenko)
 //
-
-//
-// Class Description:
-//
-//
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,6 +71,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,39 +83,40 @@ const G4double G4MuBremsstrahlungModel::xgi[] =
 const G4double G4MuBremsstrahlungModel::wgi[] = 
   {0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
 G4double G4MuBremsstrahlungModel::fDN[] = {0.0};
+#ifdef G4MULTITHREADED
+  G4Mutex G4MuBremsstrahlungModel::theMuBremMutex = G4MUTEX_INITIALIZER;
+#endif
 
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-    particle(nullptr),
     sqrte(sqrt(G4Exp(1.))),
-    bh(202.4),
-    bh1(446.),
-    btf(183.),
-    btf1(1429.),
-    fParticleChange(nullptr),
-    lowestKinEnergy(1.0*GeV),
-    minThreshold(0.9*keV)
+    lowestKinEnergy(1.0*CLHEP::GeV),
+    minThreshold(0.9*CLHEP::keV)
 {
   theGamma = G4Gamma::Gamma();
-  nist = G4NistManager::Instance();
-
-  lowestKinEnergy = 1.*GeV;  
-
-  mass = rmass = cc = coeff = 1.0;
+  nist = G4NistManager::Instance();  
 
   if(0.0 == fDN[1]) {
-    for(G4int i=1; i<93; ++i) {
-      G4double dn = 1.54*nist->GetA27(i);
-      fDN[i] = dn;
-      if(1 < i) {
-        fDN[i] /= std::pow(dn, 1./G4double(i));
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&theMuBremMutex);
+    if(0.0 == fDN[1]) {
+#endif
+      for(G4int i=1; i<93; ++i) {
+        G4double dn = 1.54*nist->GetA27(i);
+        fDN[i] = dn;
+        if(1 < i) {
+          fDN[i] /= std::pow(dn, 1./G4double(i));
+        }
       }
+#ifdef G4MULTITHREADED
     }
+    G4MUTEXUNLOCK(&theMuBremMutex);
+#endif
   }
   SetAngularDistribution(new G4ModifiedMephi());
 
-  if(p) { SetParticle(p); }
+  if(nullptr != p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,10 +141,11 @@ G4double G4MuBremsstrahlungModel::MinPrimaryEnergy(const G4Material*,
 void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 {
-  if(p) { SetParticle(p); }
+  SetParticle(p);
 
-  // define pointer to G4ParticleChange
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if(nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForLoss(); 
+  }
 
   if(IsMaster() && p == particle && lowestKinEnergy < HighEnergyLimit()) { 
     InitialiseElementSelectors(p, cuts); 
@@ -184,7 +182,7 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
     material->GetAtomicNumDensityVector();
 
   //  loop for elements in the material
-  for (size_t i=0; i<material->GetNumberOfElements(); i++) {
+  for (size_t i=0; i<material->GetNumberOfElements(); ++i) {
 
     G4double loss = 
       ComputMuBremLoss((*theElementVector)[i]->GetZ(), kineticEnergy, cut);
@@ -259,9 +257,9 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
 
   G4double aa = aaa;
 
-  for(G4int l=0; l<kkk; l++)
+  for(G4int l=0; l<kkk; ++l)
   {
-    for(G4int i=0; i<6; i++)
+    for(G4int i=0; i<6; ++i)
     {
       G4double ep = G4Exp(aa + xgi[i]*hhh)*totalEnergy;
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);

@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24/05/21,  B. Morgan (exPhysicsLists-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 10/11/20 I. Hrivnacova  (exPhysicslists-V10-06-00)
 - Migration to G4RunManagerFactory
 - Removed trailing whitespaces

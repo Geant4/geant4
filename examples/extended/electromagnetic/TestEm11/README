@@ -61,10 +61,6 @@
       
  Physics lists and options can be (re)set with UI commands
     
- Please, notice that options set through G4EmProcessOptions are global, eg
- for all particle types. In G4 builders, it is shown how to set options per
- particle type.
- 	 
  3- ACTION INITIALIZATION
 
  A newly introduced class, ActionInitialization, instantiates and registers 

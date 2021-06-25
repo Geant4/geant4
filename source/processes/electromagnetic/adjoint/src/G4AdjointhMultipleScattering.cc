@@ -23,92 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-
-//
-// GEANT4 Class file
+// Geant4 class file
 //
 // File name:     G4AdjointhMultipleScattering
 //
 // Author:        Desorgher Laurent
 //
-// Creation date: 03.06.2009 cloned from G4hMultipleScattering by U.Laszlo with slight modification for adjoint_ion. 
+// Creation date: 03.06.2009 cloned from G4hMultipleScattering by U.Laszlo with
+// slight modification for adjoint_ion.
 //
 // -----------------------------------------------------------------------------
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4AdjointhMultipleScattering.hh"
+
+#include "G4MscStepLimitType.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UrbanMscModel.hh"
-#include "G4MscStepLimitType.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
-
-G4AdjointhMultipleScattering::G4AdjointhMultipleScattering(const G4String& processName)
+G4AdjointhMultipleScattering::G4AdjointhMultipleScattering(
+  const G4String& processName)
   : G4VMultipleScattering(processName)
-{
-  isInitialized = false;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4AdjointhMultipleScattering::~G4AdjointhMultipleScattering()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4AdjointhMultipleScattering::~G4AdjointhMultipleScattering() {}
 
-G4bool G4AdjointhMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4AdjointhMultipleScattering::ProcessDescription(std::ostream& out) const
+{
+  out << "Inverse multiple scattering process for hadrons.\n";
+  StreamProcessInfo(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4AdjointhMultipleScattering::StreamProcessInfo(std::ostream& out) const
+{
+  out << "      RangeFactor= " << RangeFactor()
+      << ", step limit type: " << StepLimitType()
+      << ", lateralDisplacement: " << LateralDisplasmentFlag()
+      << ", skin= " << Skin() << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4bool G4AdjointhMultipleScattering::IsApplicable(const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4AdjointhMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
+void G4AdjointhMultipleScattering::InitialiseProcess(
+  const G4ParticleDefinition*)
 {
-  if(isInitialized) { return; }
+  if(fIsInitialized)
+  {
+    return;
+  }
   AddEmModel(1, new G4UrbanMscModel());
-  isInitialized = true;
+  fIsInitialized = true;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4AdjointhMultipleScattering::PrintInfo()
-{
-  G4cout << "      RangeFactor= " << RangeFactor()
-	 << ", step limit type: " << StepLimitType()
-         << ", lateralDisplacement: " << LateralDisplasmentFlag()
-	 << ", skin= " << Skin()  
-	 << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-/*G4double G4AdjointhMultipleScattering::AlongStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             double,
-                             G4double currentMinimalStep,
-                             G4double& currentSafety,
-                             G4GPILSelection* selection)
-{
-  // get Step limit proposed by the process
-  valueGPILSelectionMSC = NotCandidateForSelection;
-
-  G4double escaled = track.GetKineticEnergy();
-  if(isIon) escaled *= track.GetDynamicParticle()->GetMass()/proton_mass_c2;
-
-  G4double steplength = GetMscContinuousStepLimit(track,
-						  escaled,
-						  currentMinimalStep,
-						  currentSafety);
-  // G4cout << "StepLimit= " << steplength << G4endl;
-  // set return value for G4GPILSelection
-  *selection = valueGPILSelectionMSC;
-  return  steplength;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

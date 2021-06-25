@@ -63,7 +63,7 @@
 using namespace std;
 
 G4MicroElecLOPhononScattering::G4MicroElecLOPhononScattering(
-       const G4String& processName, G4ProcessType type) 
+							     const G4String& processName, G4ProcessType type) 
   :G4VEmProcess(processName, type),
    isInitialised(false)
 {
@@ -93,15 +93,6 @@ void G4MicroElecLOPhononScattering::InitialiseProcess(const G4ParticleDefinition
       if (!EmModel(0)) SetEmModel(new G4DummyModel());
       AddEmModel(2, EmModel(0));
     }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MicroElecLOPhononScattering::PrintInfo()
-{
-	// V.I. printout of models is performed by model manager
-	//      if this extra printout is needed it should be 
-	//      protected by verbosity level
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

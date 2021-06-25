@@ -1,0 +1,116 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hep_sf_polyhedron
+#define tools_hep_sf_polyhedron
+
+#include "../sg/bsf"
+#include "polyhedron"
+#include "../typedefs"
+#include "../io/iwbuf"
+#include "../io/irbuf"
+#include "../HEADER"
+
+namespace tools {
+namespace hep {
+
+class sf_polyhedron : public sg::bsf<polyhedron> {
+  TOOLS_HEADER(sf_polyhedron,tools::hep::sf_polyhedron,sg::bsf<polyhedron>)
+public:
+  virtual bool write(io::iwbuf& a_buffer) {
+    //FIXME : write fNumberOfSteps ?
+
+    int nvert = m_value.GetNoVertices();
+    int nface = m_value.GetNoFacets();
+    double* ds = new double[1+3*nvert+1+8*nface];
+    uint32 di=0;
+
+   {ds[di] = nvert;di++;
+    HVPoint3D* pV = m_value.GetPV();
+    for(int index=1;index<=nvert;index++) { //CERN still in FORTRAN...
+      HVPoint3D& p = pV[index];
+      ds[di] = p[0];di++;
+      ds[di] = p[1];di++;
+      ds[di] = p[2];di++;
+    }}
+
+   {ds[di] = nface;di++;
+    SbFacet* pF = m_value.GetPF();
+    int v,f;
+    for(int index=1;index<=nface;index++) {
+      SbFacet& fc = pF[index]; //yes, yes +1
+      for(int i=0;i<4;i++) {
+        fc.GetEdge(i,v,f);
+        ds[di] = v;di++;
+        ds[di] = f;di++;
+      }
+    }}
+
+    bool status = a_buffer.write_vec(di,ds);
+
+    delete [] ds;
+
+    return status;
+  }
+
+  virtual bool read(io::irbuf& a_buffer) {
+    double* ds;
+    uint32 sz;
+    if(!a_buffer.read_vec(sz,ds)) return false;
+    uint32 di=0;
+    //FIXME : check di vs sz.
+
+    int nvert = (int)ds[di];di++;
+    HVPoint3D* pV = new HVPoint3D[nvert+1];
+    for(int index=1;index<=nvert;index++) {
+      HVPoint3D& p = pV[index];
+      p[0] = ds[di];di++;
+      p[1] = ds[di];di++;
+      p[2] = ds[di];di++;
+    }
+
+    int nface = (int)ds[di];di++;
+    SbFacet* pF = new SbFacet[nface+1];
+    int v[8];
+    for(int index=1;index<=nface;index++) {
+      SbFacet& fc = pF[index];
+      for(int i=0;i<8;i++) {
+        v[i] = (int)ds[di];di++;
+      }
+      fc.Set(v);
+    }
+
+    m_value.Set(nvert,pV,nface,pF); //it takes ownership of pV,pF.
+
+    delete [] ds;
+#ifdef TOOLS_MEM
+    mem::decrement(s_new().c_str());
+#endif
+
+    return true;
+  }
+  virtual bool dump(std::ostream&) {
+    return true;
+  }
+  virtual bool s_value(std::string& a_s) const {a_s.clear();return false;}
+  virtual bool s2value(const std::string&) {return false;}
+public:
+  sf_polyhedron():parent(){}
+  sf_polyhedron(const polyhedron& a_value):parent(a_value){}
+  virtual ~sf_polyhedron(){}
+public:
+  sf_polyhedron(const sf_polyhedron& a_from):parent(a_from){}
+  sf_polyhedron& operator=(const sf_polyhedron& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  sf_polyhedron& operator=(const polyhedron& a_value){
+    parent::operator=(a_value);
+    return *this;
+  }
+};
+
+}}
+
+#endif

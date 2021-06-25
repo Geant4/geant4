@@ -81,7 +81,7 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
                                        G4double emax,
                                        G4VEmFluctuationModel* fm)
 {
-  if(!mod) { return; }
+  if(nullptr == mod) { return; }
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetExtraEmModel " << mod->GetName()
            << " for " << particleName 
@@ -115,9 +115,9 @@ void G4EmConfigurator::AddModels()
   }
   if(n > 0) {
     for(size_t i=0; i<n; ++i) {
-      if(models[i]) {
-        G4Region* reg = FindRegion(regions[i]);
-        if(reg) {
+      if(nullptr != models[i]) {
+        const G4Region* reg = FindRegion(regions[i]);
+        if(nullptr != reg) {
           --index;
           SetModelForRegion(models[i],flucModels[i],reg,
                             particles[i],processes[i],
@@ -133,12 +133,12 @@ void G4EmConfigurator::AddModels()
 
 void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
                                          G4VEmFluctuationModel* fm,
-                                         G4Region* reg,
+                                         const G4Region* reg,
                                          const G4String& particleName,
                                          const G4String& processName,
                                          G4double emin, G4double emax)
 {
-  if(!mod) { return; }
+  if(nullptr == mod) { return; }
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetModelForRegion: " << mod->GetName() 
            << G4endl;
@@ -147,7 +147,7 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
            << " in the region <" << reg->GetName()
            << " Emin(MeV)= " << emin/MeV
            << " Emax(MeV)= " << emax/MeV;
-    if(fm) { G4cout << " FLmodel " << fm->GetName(); }
+    if(nullptr != fm) { G4cout << " FLmodel " << fm->GetName(); }
     G4cout << G4endl;
   }
 
@@ -178,7 +178,7 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
           break;
         }
       }
-      if(!proc) {
+      if(nullptr == proc) {
         G4cout << "### G4EmConfigurator WARNING: fails to find a process <"
                << processName << "> for " << particleName << G4endl;
         return;        
@@ -235,21 +235,22 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
         if((particleName == particles[i]) ||
            (particles[i] == "all") ||
            (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-          G4Region* reg = FindRegion(regions[i]);
+          const G4Region* reg = FindRegion(regions[i]);
           //G4cout << "Region " << reg << G4endl;
-          if(reg) {
+          if(nullptr != reg) {
             --index;
             G4VEmModel* mod = models[i];
             G4VEmFluctuationModel* fm = flucModels[i];
-            if(mod) {
+            if(nullptr != mod) {
               if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) {
                 p->AddEmModel(index,mod,fm,reg);
                 if(1 < verbose) {
                   G4cout << "### Added eloss model order= " << index << " for " 
-                         << particleName << " and " << processName << G4endl;
+                         << particleName << " and " << processName 
+			 << " for " << reg->GetName() << G4endl;
                 }
               }
-            } else if(fm) {
+            } else if(nullptr != fm) {
               p->SetFluctModel(fm);
             }
           }
@@ -279,12 +280,12 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
         if((particleName == particles[i]) ||
            (particles[i] == "all") ||
            (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-          G4Region* reg = FindRegion(regions[i]);
+          const G4Region* reg = FindRegion(regions[i]);
           //G4cout << "Region " << reg << G4endl;
-          if(reg) {
+          if(nullptr != reg) {
             --index;
             G4VEmModel* mod = models[i];
-            if(mod) {
+            if(nullptr != mod) {
               if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) { 
                 p->AddEmModel(index,mod,reg);
                 if(1 < verbose) {
@@ -320,11 +321,11 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
         if((particleName == particles[i]) ||
            (particles[i] == "all") ||
            (particles[i] == "charged" && aParticle->GetPDGCharge() != 0.0)) {
-          G4Region* reg = FindRegion(regions[i]);
-          if(reg) {
+          const G4Region* reg = FindRegion(regions[i]);
+          if(nullptr != reg) {
             --index;
             G4VEmModel* mod = models[i];
-            if(mod) {
+            if(nullptr != mod) {
               if(UpdateModelEnergyRange(mod, lowEnergy[i], highEnergy[i])) { 
                 p->AddEmModel(index,mod,reg);
                 //G4cout << "### Added msc model order= " << index << " for " 
@@ -353,17 +354,17 @@ void G4EmConfigurator::Clear()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Region* G4EmConfigurator::FindRegion(const G4String& regionName)
+const G4Region* G4EmConfigurator::FindRegion(const G4String& regionName)
 {
   // search for region
-  G4Region* reg = 0;
+  const G4Region* reg = nullptr;
   G4RegionStore* regStore = G4RegionStore::GetInstance();
   G4String r = regionName;
   if(r == "" || r == "world" || r == "World") { 
     r = "DefaultRegionForTheWorld";
   }
   reg = regStore->GetRegion(r, true); 
-  if(!reg) {
+  if(nullptr == reg) {
     G4cout << "### G4EmConfigurator WARNING: fails to find a region <"
            << r << G4endl;
   } else if(verbose > 1) {

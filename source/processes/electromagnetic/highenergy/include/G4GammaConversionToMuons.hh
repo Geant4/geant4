@@ -111,29 +111,29 @@ public:  // with description
   G4double ComputeMeanFreePath (G4double GammaEnergy,
                                 const G4Material* aMaterial);
 
-private:
-
-  const G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
-                                    const G4Material* aMaterial);
-
   // hide assignment operator as private
   G4GammaConversionToMuons& 
   operator=(const G4GammaConversionToMuons &right) = delete;
   G4GammaConversionToMuons(const G4GammaConversionToMuons& ) = delete;
+
+private:
+
+  const G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
+                                    const G4Material* aMaterial);
 
   G4double Mmuon;
   G4double Rc;
   G4double LimitEnergy;          // energy limit for accurate x-section
   G4double LowestEnergyLimit;    // low  energy limit of the model
   G4double HighestEnergyLimit;   // high energy limit of the model
-  G4double Energy5DLimit;        // high energy limit for 5D final state sampling
+  G4double Energy5DLimit = 0.0;  // high energy limit for 5D final state sampling
 
-  G4double MeanFreePath;         // actual MeanFreePath (current medium)
-  G4double CrossSecFactor;       // factor to artificially increase
-                                 // the cross section
+  G4double MeanFreePath = DBL_MAX;// actual MeanFreePath (current medium)
+  G4double CrossSecFactor = 1.0;  // factor to artificially increase
+                                  // the cross section
 
   G4LossTableManager* fManager;
-  G4BetheHeitler5DModel* f5Dmodel;
+  G4BetheHeitler5DModel* f5Dmodel = nullptr;
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theMuonPlus;
   const G4ParticleDefinition* theMuonMinus;

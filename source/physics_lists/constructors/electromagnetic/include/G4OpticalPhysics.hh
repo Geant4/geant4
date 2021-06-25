@@ -52,64 +52,17 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
   public:
 
     G4OpticalPhysics(G4int verbose = 0, const G4String& name = "Optical");
-    virtual ~G4OpticalPhysics();
-    virtual void PrintStatistics() const;
-
-  protected:
-
-    // construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-  private:
+    ~G4OpticalPhysics() override;
+    void PrintStatistics() const;
 
     G4OpticalPhysics(const G4OpticalPhysics& right) = delete;
     G4OpticalPhysics& operator=(const G4OpticalPhysics& right) = delete;
 
-  public:
+  protected:
 
-    // DEPRECATED
-    // the methods below are kept for backwards compatibility, and are to be
-    // removed in future. Please use the methods in 
-    // G4OpticalParameters instead.
-
-    void Configure(G4OpticalProcessIndex, G4bool);
-    void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool);
-
-    // Cerenkov
-    void SetMaxNumPhotonsPerStep(G4int);
-    void SetMaxBetaChangePerStep(G4double);
-    void SetCerenkovStackPhotons(G4bool);
-    void SetCerenkovTrackSecondariesFirst(G4bool);
-    void SetCerenkovVerbosity(G4int);
-
-    // Scintillation
-    void SetScintillationYieldFactor(G4double);
-    void SetScintillationExcitationRatio(G4double);
-    void SetScintillationByParticleType(G4bool);
-    void SetScintillationTrackInfo(G4bool);
-    void SetScintillationTrackSecondariesFirst(G4bool);
-    void SetFiniteRiseTime(G4bool);
-    void SetScintillationStackPhotons(G4bool);
-    void SetScintillationVerbosity(G4int);
-    void SetScintillationEnhancedTimeConstants(G4bool);
-    //void AddScintillationSaturation(G4EmSaturation* );
-
-    // WLS
-    void SetWLSTimeProfile(G4String);
-    void SetWLSVerbosity(G4int);
-
-    // WLS2
-    void SetWLS2TimeProfile(G4String);
-    void SetWLS2Verbosity(G4int);
-
-    //boundary
-    void SetBoundaryVerbosity(G4int);
-    void SetInvokeSD(G4bool);
-
-    void SetAbsorptionVerbosity(G4int);
-    void SetRayleighVerbosity(G4int);
-    void SetMieVerbosity(G4int);
+    // construct particle and physics
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
   private:
 

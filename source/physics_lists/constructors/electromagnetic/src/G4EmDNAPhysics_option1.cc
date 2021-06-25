@@ -240,7 +240,7 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     } else if ( particleName == "GenericIon" ) {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
       ph->RegisterProcess(msc, particle);
 
       ph->RegisterProcess(new G4DNAIonisation("GenericIon_G4DNAIonisation"), particle);
@@ -249,7 +249,7 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     } else if ( particleName == "carbon" ) {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
       ph->RegisterProcess(msc, particle);
 
       ph->RegisterProcess(new G4DNAIonisation("carbon_G4DNAIonisation"), particle);
@@ -257,7 +257,7 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     } else if ( particleName == "nitrogen" ) {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
       ph->RegisterProcess(msc, particle);
 
       ph->RegisterProcess(new G4DNAIonisation("nitrogen_G4DNAIonisation"), particle);
@@ -265,7 +265,7 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     } else if ( particleName == "oxygen" ) {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
       ph->RegisterProcess(msc, particle);
 
       ph->RegisterProcess(new G4DNAIonisation("oxygen_G4DNAIonisation"), particle);
@@ -273,7 +273,7 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     } else if ( particleName == "iron" ) {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
       ph->RegisterProcess(msc, particle);
 
       ph->RegisterProcess(new G4DNAIonisation("iron_G4DNAIonisation"), particle);

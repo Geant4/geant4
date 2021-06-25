@@ -81,9 +81,9 @@ class G4NistMessenger: public G4UImessenger
 public:
 
   explicit G4NistMessenger(G4NistManager* );
-  virtual ~G4NistMessenger();
+  ~G4NistMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String) final;
+  void SetNewValue(G4UIcommand*, G4String) final;
 
 private:
 

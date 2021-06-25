@@ -16,19 +16,30 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30-April-2021 G.Cosmo              (geom-specific-V10-06-12)
+25-June-2021 G.Cosmo               (geom-specific-V10-07-06)
+- Added missing accessor in G4UTet.
+
+12-May-2021 E.Tcherniaev           (geom-specific-V10-07-05)
+- Reimplemented	CreatePolyhedron() in
+  G4Polyhedra, G4Polycone, G4GenericPolycone,
+  G4UPolyhedra, G4UPolycone, G4UGenericPolycone
+
+30-April-2021 G.Cosmo              (geom-specific-V10-07-04)
 - Fixed use of conversion factor in G4UPolyhedra wrapper for "generic"
   polyhedra constructs.
 
-19-April-2021 E.Tcherniaev
+19-April-2021 E.Tcherniaev         (geom-specific-V10-07-03)
 - G4Polyhedra, G4Polycone: Fix calculation of endPhi for the case
   of negative phiStart, it addresses also problem report #2362
 
-18-March-2021 E.Tcherniaev
+30-March-2021 B.Morgan             (geom-specific-V10-07-02)
+- Migrate sources.cmake to modular build API
+
+18-March-2021 E.Tcherniaev         (geom-specific-V10-07-01)
 - Fix calculation of bounding box position in G4Voxelizer::BuildVoxelLimits(),
   it addresses problem report #2301
 
-13-January-2021 G.Cosmo            (geom-specific-V10-06-11)
+13-January-2021 G.Cosmo            (geom-specific-V10-07-00)
 - Reduce cases of bad speculation in G4PolyhedraSide::Inside() and
   G4PolyPhiFace::InsideEdges(), based on report in profiling analysis
   by G.Amadio.
@@ -76,7 +87,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 16-December-2019 E.Tcherniaev      (geom-specific-V10-06-02)
 - Complete revision of G4Ellipsoid, it fixes issues with former
   implementation, in particular it addresses problem report #2206.
-  30%-70% speed-up in all main methods. 
+  30%-70% speed-up in all main methods.
 
 11-December-2019 B.Morgan          (geom-specific-V10-06-01)
 - Cleanup CMake build, removing obsolete granular library options and
@@ -223,7 +234,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 - Enabled VecGeom wrappers for G4ExtrudedSolid and G4Hype.
 
 13-December-2017  E.Tcherniaev     (geom-specific-V10-04-01)
-- Removed redundant data initialistion in G4ExtrudedSolid constructors. 
+- Removed redundant data initialistion in G4ExtrudedSolid constructors.
 
 11-December-2017  E.Tcherniaev     (geom-specific-V10-04-00)
 - Added missing initialisation of two data-members in copy-ctor and
@@ -502,8 +513,8 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 - Renamed DistanceAwayForInside() to DistanceAway() and use polymorphism.
 
 26-Jan-2015  T.Nikitina            (geom-specific-V10-01-03, 02)
-- Added special method for Inside 'DistanceAwayForInside()' in order to fix 
-  precision problem of calculation of DistanceToSide() in G4PolyconeSide. 
+- Added special method for Inside 'DistanceAwayForInside()' in order to fix
+  precision problem of calculation of DistanceToSide() in G4PolyconeSide.
 
 21-Jan-2015  T.Nikitina            (geom-specific-V10-01-01)
 - Fixed triangularisation method AddGeneralPOlygoneFacets() in
@@ -544,7 +555,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 
 12-Feb-2014  G.Cosmo               (geom-specific-V10-00-04)
 - Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
-  in parameterisation. Resolves crash in MT visualization when using USolids. 
+  in parameterisation. Resolves crash in MT visualization when using USolids.
 
 12-Feb-2014  G.Cosmo               (geom-specific-V10-00-03 [and -02])
 - Added correct cloning mechanism in G4U* wrappers.
@@ -585,10 +596,10 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 
 12-Nov-2013  G.Cosmo               (geom-specific-V09-06-28)
 - Correction to USolids switch mechanism for G4Polycone.
-    
+
 08-Nov-2013  J.Apostolakis         (geom-specific-V09-06-27)
 - G4SolidsWorkspace: cleanup of verbosity.
-  Reduced verbosity by making it optional.  
+  Reduced verbosity by making it optional.
   Added Set/Get Verbose methods to toggle and view it.
   Added parameter to constructor for verbosity (default=off).
 
@@ -621,7 +632,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 
 16-Oct-2013  J.Apostolakis/A.Dotti (geom-specific-V09-06-20)
 - Created G4SolidsWorkspacePool class, to manage Workspaces
-  Fixed Singleton G4SolidsWorkspacePool for thread safe creation of object. 
+  Fixed Singleton G4SolidsWorkspacePool for thread safe creation of object.
 
 04-Oct-2013  J.Apostolakis (geom-specific-V09-06-19)
 - Retagged.
@@ -661,9 +672,9 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 22-Apr-2013  J.Apostolakis (geom-specific-V09-06-11)
 - Revised G4ExtrudedSolid::IsSameLine to use the perpendicular
   distance to a line when deciding - not the y-intercept difference.
-  ( Issue responsible for a problem in Subtraction Solid in Atlas.  
+  ( Issue responsible for a problem in Subtraction Solid in Atlas.
      Tatiana & Ivana contributed to debugging. )
-- Changed GNUmakefile in test directory to work with Cmake and granular 
+- Changed GNUmakefile in test directory to work with Cmake and granular
   builds.
 
 16-Apr-2013  T.Nikitina (geom-specific-V09-06-10)
@@ -915,7 +926,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 - Use INT_MAX as initialisation for max limits in G4SolidExtentList.
 
 12-Jul-2010  G.Cosmo (geom-specific-V09-03-09)
-- Added dummy initialization to members in struct 
+- Added dummy initialization to members in struct
   G4PolyPhiFace::G4PolyPhiFaceEdge, struct G4ReduciblePolygon::ABVertex.
   G4Ellipsoid, G4EllipticalTube, G4EnclosingCylinder, G4ExtrudedSolid, G4Hype,
   G4IntersectingCone, G4Paraboloid, G4PolyPhiFace, G4Polycone, G4PolyconeSide,
@@ -1126,7 +1137,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 02-Feb-2008, I.Hrivnacova (geom-specific-V09-01-01)
 - Corrected triangularization of polygon, now correctly handling case
   of concave shapes.
-- Corrected order of arguments in G4Paraboloid constructor.  
+- Corrected order of arguments in G4Paraboloid constructor.
 
 16-Jan-2008, I.Hrivnacova (geom-specific-V09-01-00)
 - In G4ExtrudedSolid::MakeFacets(), now adding triangular facets before quadrangular
@@ -1168,7 +1179,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
     p on the surface.
   o DistanceToOut(p,v): now returning positive solution or zero when crossing
     the elliptical surface.
-  o Fix in DistanceToOut(p) which was giving always zero. 
+  o Fix in DistanceToOut(p) which was giving always zero.
   o Corrected visualisation error of solid in graphics_reps.
   o Added some formulas on how to pre-calculate 'SemiAxis' and 'zheight'.
   o Added checkDistanceToOut() method to unit test.
@@ -1368,7 +1379,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
   o added GetPointOnSurface() method
 - G4Hype:
   o corrected surface area calculation used in GetPointOnSurface()
-  
+
 17-Nov-2005, G.Cosmo (geom-specific-V07-01-09)
 - More fixes required for direct object persistency to G4Polycone,
   G4polyhedra and related utility classes.
@@ -1472,7 +1483,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 - Added G4TwistedBox  - a twisted box with twist angle alpha,
                         length a/2,b/2,L/2.
 - Added G4TwistedTrap - a twisted trapezoid (still in debug state)
-- Changed in G4VSurface.icc: 
+- Changed in G4VSurface.icc:
     - GetNeighbours(): corrected axiscode (was returning the wrong neighbours)
     - SetNeighbours(): fixed problem #685 (index out of range)
 - Added tests for G4TwistedBox and G4TwistedTrap in specific/test.
@@ -1592,7 +1603,7 @@ May  21, 2020 Guilherme Lima       (geom-specific-V10-06-08)
 - Migration to STL vector:
   o In G4ClippablePolygon, migrated G4ThreeVectorList typedef and
     made private to class.
-    
+
 03-Apr-2001, D.Williams  (geom-solids-specific-V03-00-01)
 -----------------------
 - G4IntersectingCone.cc: make small adjustment to help with roundoff error

@@ -67,9 +67,13 @@ class G4EmParametersMessenger: public G4UImessenger
 public:   // with description
   
   explicit G4EmParametersMessenger(G4EmParameters*);
-  virtual ~G4EmParametersMessenger();
+  ~G4EmParametersMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String) override;
+  void SetNewValue(G4UIcommand*, G4String) override;
+
+  G4EmParametersMessenger & operator=
+  (const G4EmParametersMessenger &right) = delete;
+  G4EmParametersMessenger(const G4EmParametersMessenger&) = delete;
 
 private:
 
@@ -84,14 +88,12 @@ private:
   G4UIcmdWithABool*          flucCmd;
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
-  G4UIcmdWithABool*          splCmd;
   G4UIcmdWithABool*          rsCmd;
   G4UIcmdWithABool*          aplCmd;
   G4UIcmdWithABool*          latCmd;
   G4UIcmdWithABool*          lat96Cmd;
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          delCmd;
-  G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;
   G4UIcmdWithABool*          birksCmd;
   G4UIcmdWithABool*          sharkCmd;
@@ -100,7 +102,6 @@ private:
   G4UIcmdWithABool*          icru90Cmd;
   G4UIcmdWithABool*          mudatCmd;
 
-  G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
   G4UIcmdWithADoubleAndUnit* max5DCmd;
@@ -124,8 +125,6 @@ private:
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        screCmd;
 
-  G4UIcmdWithAnInteger*      dedxCmd;
-  G4UIcmdWithAnInteger*      lamCmd;
   G4UIcmdWithAnInteger*      amCmd;
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;

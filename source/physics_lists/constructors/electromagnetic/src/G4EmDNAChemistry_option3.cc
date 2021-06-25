@@ -281,12 +281,17 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
       G4MoleculeTable::Instance()->GetConfiguration("H3Op");
   G4MolecularConfiguration* H =
       G4MoleculeTable::Instance()->GetConfiguration("H");
+  G4MolecularConfiguration* O =
+      G4MoleculeTable::Instance()->GetConfiguration("Oxy");
 
   //-------------------------------------
   //Define the decay channels
   G4MoleculeDefinition* water = G4H2O::Definition();
   G4MolecularDissociationChannel* decCh1;
   G4MolecularDissociationChannel* decCh2;
+  G4MolecularDissociationChannel* decCh3;
+  G4MolecularDissociationChannel* decCh4;
+  G4MolecularDissociationChannel* decCh5;
 
   G4ElectronOccupancy* occ = new G4ElectronOccupancy(
       *(water->GetGroundStateElectronOccupancy()));
@@ -311,7 +316,6 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
   decCh2->SetDisplacementType(
       G4DNAWaterDissociationDisplacer::A1B1_DissociationDecay);
 
-//  water->AddExcitedState("A^1B_1");
   occ->RemoveElectron(4, 1); // this is the transition form ground state to
   occ->AddElectron(5, 1); // the first unoccupied orbital: A^1B_1
 
@@ -323,18 +327,20 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
   //---------------Excitation on the fourth layer-----------
   decCh1 = new G4MolecularDissociationChannel("B^1A_1_Relaxation_Channel");
   decCh2 = new G4MolecularDissociationChannel("B^1A_1_DissociativeDecay");
-  G4MolecularDissociationChannel* decCh3 = new G4MolecularDissociationChannel(
-      "B^1A_1_AutoIonisation_Channel");
+  decCh3 = new G4MolecularDissociationChannel("B^1A_1_AutoIonisation_Channel");
+  decCh4 = new G4MolecularDissociationChannel("A^1B_1_DissociativeDecay");
+  decCh5 = new G4MolecularDissociationChannel("B^1A_1_DissociativeDecay2");
+
 
   //Decay 1 : energy
   decCh1->SetEnergy(waterExcitation.ExcitationEnergy(1));
-  decCh1->SetProbability(0.3);
+  decCh1->SetProbability(0.175);
 
   //Decay 2 : 2OH + H_2
   decCh2->AddProduct(H2);
   decCh2->AddProduct(OH);
   decCh2->AddProduct(OH);
-  decCh2->SetProbability(0.15);
+  decCh2->SetProbability(0.0325);
   decCh2->SetDisplacementType(
       G4DNAWaterDissociationDisplacer::B1A1_DissociationDecay);
 
@@ -342,8 +348,21 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
   decCh3->AddProduct(OH);
   decCh3->AddProduct(H3O);
   decCh3->AddProduct(e_aq);
-  decCh3->SetProbability(0.55);
+  decCh3->SetProbability(0.50);
   decCh3->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
+
+  //Decay 4 :  H + OH
+  decCh4->AddProduct(H);
+  decCh4->AddProduct(OH);
+  decCh4->SetProbability(0.2535);
+  decCh4->SetDisplacementType(G4DNAWaterDissociationDisplacer::A1B1_DissociationDecay);
+
+  //Decay 5 : 2H + O
+  decCh5->AddProduct(O);
+  decCh5->AddProduct(H);
+  decCh5->AddProduct(H);
+  decCh5->SetProbability(0.039);
+  decCh5->SetDisplacementType(G4DNAWaterDissociationDisplacer::B1A1_DissociationDecay2);
 
   *occ = *(water->GetGroundStateElectronOccupancy());
   occ->RemoveElectron(3); // this is the transition form ground state to
@@ -353,6 +372,8 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
   water->AddDecayChannel("B^1A_1", decCh1);
   water->AddDecayChannel("B^1A_1", decCh2);
   water->AddDecayChannel("B^1A_1", decCh3);
+  water->AddDecayChannel("B^1A_1", decCh4);
+  water->AddDecayChannel("B^1A_1", decCh5);
 
   //-------------------------------------------------------
   //-------------------Excitation of 3rd layer-----------------
@@ -500,6 +521,48 @@ void G4EmDNAChemistry_option3::ConstructDissociationChannels()
 
   water->NewConfigurationWithElectronOccupancy("DissociativeAttachment_ch1", *occ);
   water->AddDecayChannel("DissociativeAttachment_ch1", decCh1);
+
+  //////////////////////////////////////////////////////////
+  //            Electron-hole recombination               //
+  //////////////////////////////////////////////////////////
+  decCh1 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay1");
+  decCh2 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay2");
+  decCh3 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay3");
+  decCh4 = new G4MolecularDissociationChannel("H2Ovib_DissociationDecay4");
+
+  //Decay 1 : 2OH + H_2
+  decCh1->AddProduct(H2);
+  decCh1->AddProduct(OH);
+  decCh1->AddProduct(OH);
+  decCh1->SetProbability(0.1365);
+  decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::
+                              B1A1_DissociationDecay);
+
+  //Decay 2 : OH + H
+  decCh2->AddProduct(OH);
+  decCh2->AddProduct(H);
+  decCh2->SetProbability(0.3575);
+  decCh2->SetDisplacementType(G4DNAWaterDissociationDisplacer::
+                              A1B1_DissociationDecay);
+
+  //Decay 3 : 2H + O(3p)
+  decCh3->AddProduct(O);
+  decCh3->AddProduct(H);
+  decCh3->AddProduct(H);
+  decCh3->SetProbability(0.156);
+  decCh3->SetDisplacementType(G4DNAWaterDissociationDisplacer::
+                              B1A1_DissociationDecay2);
+
+  //Decay 4 : relaxation
+  decCh4->SetProbability(0.35);
+
+  const auto pH2Ovib = G4H2O::Definition()->NewConfiguration("H2Ovib");
+  assert(pH2Ovib != nullptr);
+
+  water->AddDecayChannel(pH2Ovib, decCh1);
+  water->AddDecayChannel(pH2Ovib, decCh2);
+  water->AddDecayChannel(pH2Ovib, decCh3);
+  water->AddDecayChannel(pH2Ovib, decCh4);
 
   delete occ;
 }

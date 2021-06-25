@@ -56,26 +56,20 @@
 
 class G4PhotoElectricAngularGeneratorSauterGavrila : public G4VEmAngularDistribution
 {
-
 public:
-
-  G4PhotoElectricAngularGeneratorSauterGavrila();
-
+  explicit G4PhotoElectricAngularGeneratorSauterGavrila();
   ~G4PhotoElectricAngularGeneratorSauterGavrila();
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double e = 0.0,
-                                         G4int shellId = 0,
-                                         const G4Material* mat = 0);
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double e = 0.0,
+				 G4int shellId = 0,
+				 const G4Material* mat = nullptr) override;
 
-  void PrintGeneratorInformation() const;
-
-private:
+  void PrintGeneratorInformation() const override;
 
   // hide assignment operator 
-  G4PhotoElectricAngularGeneratorSauterGavrila & operator=(const  G4PhotoElectricAngularGeneratorSauterGavrila &right);
-  G4PhotoElectricAngularGeneratorSauterGavrila(const  G4PhotoElectricAngularGeneratorSauterGavrila&);
-
+  G4PhotoElectricAngularGeneratorSauterGavrila & operator=(const  G4PhotoElectricAngularGeneratorSauterGavrila &right) = delete;
+  G4PhotoElectricAngularGeneratorSauterGavrila(const  G4PhotoElectricAngularGeneratorSauterGavrila&) = delete;
 };
 
 #endif

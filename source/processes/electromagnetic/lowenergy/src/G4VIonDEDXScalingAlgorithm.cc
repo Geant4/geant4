@@ -47,11 +47,12 @@
 
 #include "G4VIonDEDXScalingAlgorithm.hh"
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4VIonDEDXScalingAlgorithm::G4VIonDEDXScalingAlgorithm() {
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VIonDEDXScalingAlgorithm::~G4VIonDEDXScalingAlgorithm() {
 

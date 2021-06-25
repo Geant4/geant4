@@ -1,9 +1,6 @@
-#------------------------------------------------------------------------------
-# Module : G4tracking
-# Package: Geant4.src.G4tracking
-#------------------------------------------------------------------------------
+# - G4tracking category build
 
-# Add allocation export symbol for the tracking category
+# Add (private) allocation export symbol
 add_definitions(-DG4TRACKING_ALLOC_EXPORT)
 
 geant4_global_library_target(COMPONENTS sources.cmake)

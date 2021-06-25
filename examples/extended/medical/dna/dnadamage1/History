@@ -5,6 +5,10 @@
                        Package History file
                        --------------------
 
+27-05-2020 - tag dnadamage1-V10-07-00 - Y. Perrot
+- Fixed SSD file typos, thanks to Andrea Matamoros
+- Updated contacts
+
 10-11-2020 - tag dnadamage1-V10-06-00 - B. Morgan
 - Migration to G4RunManagerFactory.
 

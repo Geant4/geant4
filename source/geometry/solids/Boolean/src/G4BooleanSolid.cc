@@ -114,8 +114,8 @@ G4BooleanSolid::~G4BooleanSolid()
 
 G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
   : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
-    fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
-    fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
+    fCubicVolume(rhs.fCubicVolume), fStatistics(rhs.fStatistics),
+    fCubVolEpsilon(rhs.fCubVolEpsilon), fAreaAccuracy(rhs.fAreaAccuracy), 
     fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false),
     fpPolyhedron(nullptr), createdDisplacedSolid(rhs.createdDisplacedSolid)
 {
@@ -408,4 +408,18 @@ G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
   }
 
   return top;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Estimate Cubic Volume (capacity) and store it for reuse.
+
+G4double G4BooleanSolid::GetCubicVolume()
+{
+  if(fCubicVolume < 0.)
+  {
+    fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
+  }
+  return fCubicVolume;
 }

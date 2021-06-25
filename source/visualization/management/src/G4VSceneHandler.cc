@@ -76,6 +76,7 @@
 #include "G4VDigi.hh"
 #include "G4ScoringManager.hh"
 #include "G4VScoringMesh.hh"
+#include "G4Mesh.hh"
 #include "G4DefaultLinearColorMap.hh"
 #include "Randomize.hh"
 #include "G4StateManager.hh"
@@ -423,6 +424,34 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4StatDouble>& hits) {
   }
 }
 
+void G4VSceneHandler::AddCompound(const G4Mesh& mesh)
+{
+  G4ExceptionDescription ed;
+  ed << "There has been an attempt to draw a mesh (a nested parameterisation),"
+  "\nbut it is not implemented by the current graphics driver. Here we simply"
+  "\ndraw the container, \"" << mesh.GetContainerVolume()->GetName() << "\".";
+  G4Exception("G4VSceneHandler::AddCompound(const G4Mesh&)",
+	      "visman0107", JustWarning, ed);
+
+  const auto& pv = mesh.GetContainerVolume();
+  const auto& lv = pv->GetLogicalVolume();
+  const auto& solid = lv->GetSolid();
+  const auto& transform = mesh.GetTransform();
+  // Make sure container is visible
+  const auto& saveVisAtts = lv->GetVisAttributes();
+  auto tmpVisAtts = *saveVisAtts;
+  tmpVisAtts.SetVisibility(true);
+  auto colour = saveVisAtts->GetColour();
+  colour.SetAlpha(1.);
+  tmpVisAtts.SetColour(colour);
+  // Draw container
+  PreAddSolid(transform,tmpVisAtts);
+  solid->DescribeYourselfTo(*this);
+  PostAddSolid();
+  // Restore vis attributes
+  lv->SetVisAttributes(saveVisAtts);
+}
+
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
   fViewerList.push_back (pViewer);
 }
@@ -632,7 +661,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
 
     case G4ViewParameters::cloud:
     {
-      // Form solid out of cloud of dots
+      // Form solid out of cloud of dots on surface of solid
       G4Polymarker dots;
       // Note: OpenGL has a fast implementation of polymarker so it's better
       // to build a polymarker rather than add a succession of circles.
@@ -644,14 +673,14 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
       G4int numberOfCloudPoints = GetNumberOfCloudPoints(fpVisAttribs);
       if (numberOfCloudPoints <= 0) numberOfCloudPoints = vp.GetNumberOfCloudPoints();
       for (G4int i = 0; i < numberOfCloudPoints; ++i) {
-        G4ThreeVector p = solid.GetPointOnSurface();
-        dots.push_back(p);
+	G4ThreeVector p = solid.GetPointOnSurface();
+	dots.push_back(p);
       }
       BeginPrimitives (fObjectTransformation);
       AddPrimitive(dots);
       EndPrimitives ();
-    }
       break;
+    }
   }
 }
 
@@ -705,14 +734,21 @@ void G4VSceneHandler::ProcessScene()
     {
       if(runDurationModelList[i].fActive)
       {
-        fpModel = runDurationModelList[i].fpModel;
-        // Note: this is not the place to take action on
-        // pModel->GetTransformation().  The model must take care of
-        // this in pModel->DescribeYourselfTo(*this).  See, for example,
-        // G4PhysicalVolumeModel and /vis/scene/add/logo.
-        fpModel->SetModelingParameters(pMP);
-        fpModel->DescribeYourselfTo(*this);
-        fpModel->SetModelingParameters(0);
+	fpModel = runDurationModelList[i].fpModel;
+	// Note: this is not the place to apply the transformation
+	// pModel->GetTransformation().  The model must take care of
+	// the required transformation itself - thus the models components
+	// have already been transformed. The model could receive the
+	// transformation in its constructor, e.g., G4PhysicalVolumeModel, or
+	// handle it in the model's SetTransformation, e.g., in G4AxesModel
+	// (relatively simple) or in G4ArrowModel (quite complicated) - see
+	// G4VModel.hh. This avoids having to transform the components perhaps
+	// multiple times. The reasons for this are mainly to do with how we
+	// implement G4PhysicalVolumeModel.
+	// See also /vis/scene/add/logo.
+	fpModel->SetModelingParameters(pMP);
+	fpModel->DescribeYourselfTo(*this);
+	fpModel->SetModelingParameters(0);
       }
     }
 
@@ -904,6 +940,9 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
   // The polyhedron objects are deleted in the modeling parameters destructor.
   
   pModelingParams->SetVisAttributesModifiers(vp.GetVisAttributesModifiers());
+
+  pModelingParams->SetSpecialMeshRendering(vp.IsSpecialMeshRendering());
+  pModelingParams->SetSpecialMeshVolumes(vp.GetSpecialMeshVolumes());
 
   return pModelingParams;
 }

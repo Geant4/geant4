@@ -99,13 +99,17 @@ public:
 
   inline void SetVerbose(G4int value);
 
+  // hide assignment operator
+  G4EmConfigurator & operator=(const G4EmConfigurator &right) = delete;
+  G4EmConfigurator(const G4EmConfigurator&) = delete;
+
 private:
 
-  G4Region* FindRegion(const G4String&);
+  const G4Region* FindRegion(const G4String&);
 
   void SetModelForRegion(G4VEmModel* model,
                          G4VEmFluctuationModel* fm,
-                         G4Region* reg,
+                         const G4Region* reg,
                          const G4String& particleName,
                          const G4String& processName,
                          G4double emin,
@@ -113,10 +117,6 @@ private:
 
   G4bool UpdateModelEnergyRange(G4VEmModel* mod,
                                 G4double emin, G4double emax);
-
-  // hide assignment operator
-  G4EmConfigurator & operator=(const G4EmConfigurator &right) = delete;
-  G4EmConfigurator(const G4EmConfigurator&) = delete;
 
   std::vector<G4VEmModel*> models;  
   std::vector<G4VEmFluctuationModel*> flucModels;  

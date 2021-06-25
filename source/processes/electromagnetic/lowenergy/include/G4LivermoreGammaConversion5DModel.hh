@@ -35,20 +35,16 @@
 #include "G4BetheHeitler5DModel.hh"
 #include "G4Log.hh"
 
-
 class G4ParticleChangeForGamma;
-class G4LPhysicsFreeVector;
+class G4PhysicsFreeVector;
 class G4PhysicsLogVector;
 
 class G4LivermoreGammaConversion5DModel : public G4BetheHeitler5DModel
 {
-
 public:
-
   explicit G4LivermoreGammaConversion5DModel(
                       const G4ParticleDefinition* p = nullptr, 
 		      const G4String& nam = "Livermore5DConversion");
-
   virtual ~G4LivermoreGammaConversion5DModel();
 
   void Initialise(const G4ParticleDefinition*, 
@@ -64,21 +60,20 @@ public:
                                       G4double cut=0.0,
                                       G4double emax=DBL_MAX) override;
 
-
-private:
-
-  void ReadData(size_t Z, const char* path = nullptr);
-
   G4LivermoreGammaConversion5DModel & operator=
   (const  G4LivermoreGammaConversion5DModel &right) = delete;
   G4LivermoreGammaConversion5DModel(const  G4LivermoreGammaConversion5DModel&) = delete;
 
-  static G4double lowEnergyLimit;  
-  static G4int verboseLevel;
-  static constexpr G4int maxZ =101;
-  static G4LPhysicsFreeVector* data[maxZ]; // 101 because Z range is 1-100
-   
+private:
+  void ReadData(size_t Z, const char* path = nullptr);
+
   G4ParticleChangeForGamma* fParticleChange;
+     
+  static const G4int maxZ =101;
+  static G4PhysicsFreeVector* data[maxZ]; // 101 because Z range is 1-100
+   
+  G4int verboseLevel;
+  static G4double lowEnergyLimit; 
 };
 
 

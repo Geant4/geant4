@@ -110,11 +110,8 @@ void G4OpticalParameters::Initialise()
   scintByParticleType        = false;
   scintTrackInfo             = false;
   scintStackPhotons          = true;
-  scintEnhancedTimeConstants = false;
   scintFiniteRiseTime        = false;
   scintTrackSecondariesFirst = true;
-  scintYieldFactor           = 1.;
-  scintExcitationRatio       = 1.;
   scintVerboseLevel          = 0;
 
 	wlsTimeProfileName = "delta";
@@ -188,103 +185,6 @@ void G4OpticalParameters::SetProcessActivation(const G4String& process, G4bool v
 G4bool G4OpticalParameters::GetProcessActivation(const G4String& process) const
 { return processActivation.find(process)->second; }
 
-void G4OpticalParameters::Configure(G4OpticalProcessIndex index, G4bool val)
-{
-  // DEPRECATED. Use SetProcessActivation instead.
-
-  // Configure the physics constructor to use/not use a selected process.
-  // This method can only be called in PreInit> phase (before execution of
-  // ConstructProcess). The process is not added to particle's process manager
-  // and so it cannot be re-activated later in Idle> phase with the command
-  // /process/activate.
-
-  if(IsLocked()) { return; }
-  if      (index == kCerenkov)      processActivation["Cerenkov"] = val;
-  else if (index == kScintillation) processActivation["Scintillation"] = val;
-  else if (index == kAbsorption)    processActivation["OpAbsorption"] = val;
-  else if (index == kRayleigh)      processActivation["OpRayleigh"] = val;
-  else if (index == kMieHG)         processActivation["OpMieHG"] = val;
-  else if (index == kWLS)           processActivation["OpWLS"] = val;
-  else if (index == kWLS2)          processActivation["OpWLS2"] = val;
-  else {
-    G4ExceptionDescription ed;
-    ed << "Process index " << index << " out of bounds.";
-    G4Exception("G4OpticalParameters::Configure()", "Optical010", FatalException, ed);
-  }
-	G4ExceptionDescription ed2;
-  ed2 << "Method Configure(G4OpticalProcessIndex, G4bool) is deprecated "
-      << "and will be removed in a future Geant4 version. Please use "
-      << "SetProcessActivation(G4String, G4bool) instead.";
-	PrintWarning(ed2);
-}
-
-G4bool G4OpticalParameters::GetConfiguration(G4OpticalProcessIndex index)
-{
-  // DEPRECATED. Use GetProcessActivation instead.
-  if      (index == kCerenkov)      return processActivation["Cerenkov"];
-  else if (index == kScintillation) return processActivation["Scintillation"];
-  else if (index == kAbsorption)    return processActivation["OpAbsorption"];
-  else if (index == kRayleigh)      return processActivation["OpRayleigh"];
-  else if (index == kMieHG)         return processActivation["OpMieHG"];
-  else if (index == kWLS)           return processActivation["OpWLS"];
-  else if (index == kWLS2)          return processActivation["OpWLS2"];
-  else {
-    G4ExceptionDescription ed;
-    ed << "Process index " << index << " out of bounds.";
-    G4Exception("G4OpticalParameters::GetConfiguration()", "Optical011", JustWarning, ed);
-  }
-	G4ExceptionDescription ed2;
-  ed2 << "Method GetConfiguration(G4OpticalProcessIndex) is deprecated "
-      << "and will be removed in a future Geant4 version. Please use "
-      << "GetProcessActivation(G4String) instead.";
-	PrintWarning(ed2);
-  return true;
-}
-
-void G4OpticalParameters::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
-                                                G4bool val)
-{
-  // DEPRECATED. Use SetCerenkovTrackSecondariesFirst and
-  //                 SetScintTrackSecondariesFirst instead.
-  if(IsLocked()) { return; }
-  if      (index == kCerenkov)      cerenkovTrackSecondariesFirst = val;
-  else if (index == kScintillation) scintTrackSecondariesFirst = val;
-  else {
-    G4ExceptionDescription ed;
-    ed << "Process index " << index << " out of bounds.";
-    G4Exception("G4OpticalParameters::SetTrackSecondariesFirst()",
-                "Optical013", FatalException, ed);
-  }
-	G4ExceptionDescription ed2;
-  ed2 << "Method SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool) is "
-      << "deprecated and will be removed in a future Geant4 version. Please use "
-      << "SetCerenkovTrackSecondariesFirst(G4bool) and "
-      << "SetScintTrackSecondariesFirst(G4bool) instead.";
-	PrintWarning(ed2);
-
-}
-
-G4bool G4OpticalParameters::GetTrackSecondariesFirst(G4OpticalProcessIndex index)
-// DEPRECATED. Use GetCerenkovTrackSecondariesFirst and
-//                 GetScintTrackSecondariesFirst instead.
-{
-  if      (index == kCerenkov)      return cerenkovTrackSecondariesFirst;
-  else if (index == kScintillation) return scintTrackSecondariesFirst;
-  else {
-    G4ExceptionDescription ed;
-    ed << "Process index " << index << " out of bounds.";
-    G4Exception("G4OpticalParameters::GetTrackSecondariesFirst()",
-                "Optical012", JustWarning, ed);
-  }
-	G4ExceptionDescription ed2;
-  ed2 << "Method GetTrackSecondariesFirst(G4OpticalProcessIndex) is "
-      << "deprecated and will be removed in a future Geant4 version. Please use "
-      << "GetCerenkovTrackSecondariesFirst() and "
-      << "GetScintTrackSecondariesFirst() instead.";
-	PrintWarning(ed2);
-  return true;
-}
-
 void G4OpticalParameters::SetCerenkovStackPhotons(G4bool val)
 {
   if(IsLocked()) { return; }
@@ -338,28 +238,6 @@ void G4OpticalParameters::SetCerenkovTrackSecondariesFirst(G4bool val)
 G4bool G4OpticalParameters::GetCerenkovTrackSecondariesFirst() const
 {
   return cerenkovTrackSecondariesFirst;
-}
-
-void G4OpticalParameters::SetScintYieldFactor(G4double val)
-{
-  if(IsLocked()) { return; }
-  scintYieldFactor = val;
-}
-
-G4double G4OpticalParameters::GetScintYieldFactor() const
-{
-  return scintYieldFactor;
-}
-
-void G4OpticalParameters::SetScintExcitationRatio(G4double val)
-{
-  if(IsLocked()) { return; }
-  scintExcitationRatio = val;
-}
-
-G4double G4OpticalParameters::GetScintExcitationRatio() const
-{
-  return scintExcitationRatio;
 }
 
 void G4OpticalParameters::SetScintByParticleType(G4bool val)
@@ -426,17 +304,6 @@ void G4OpticalParameters::SetScintVerboseLevel(G4int val)
 G4int G4OpticalParameters::GetScintVerboseLevel() const
 {
   return scintVerboseLevel;
-}
-
-void G4OpticalParameters::SetScintEnhancedTimeConstants(G4bool val)
-{
-  if(IsLocked()) { return; }
-  scintEnhancedTimeConstants = val;
-}
-
-G4bool G4OpticalParameters::GetScintEnhancedTimeConstants() const
-{
-  return scintEnhancedTimeConstants;
 }
 
 void G4OpticalParameters::SetWLSTimeProfile(const G4String& val)
@@ -556,13 +423,10 @@ void G4OpticalParameters::StreamInfo(std::ostream& os) const
   os << " Cerenkov stack photons:                " << cerenkovStackPhotons << "\n";
   os << " Cerenkov track secondaries first:      " << cerenkovTrackSecondariesFirst << "\n";
   os << " Scintillation process active:          " << GetProcessActivation("Scintillation") << "\n";
-  os << " Scintillation yield factor:            " << scintYieldFactor << "\n";
-  os << " Scintillation excitation ratio:        " << scintExcitationRatio << "\n";
   os << " Scintillation finite rise time:        " << scintFiniteRiseTime << "\n";
   os << " Scintillation by particle type:        " << scintByParticleType << "\n";
   os << " Scintillation record track info:       " << scintTrackInfo << "\n";
   os << " Scintillation stack photons:           " << scintStackPhotons << "\n";
-  os << " Scintillation use enhanced time constants: " << scintEnhancedTimeConstants << "\n";
   os << " Scintillation track secondaries first: " << scintTrackSecondariesFirst << "\n";
   os << " WLS process active:                    " << GetProcessActivation("OpWLS") << "\n";
   os << " WLS time profile name:                 " << wlsTimeProfileName << "\n";

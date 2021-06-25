@@ -61,8 +61,7 @@ class G4FTFPPionBuilder : public G4VPionBuilder
     virtual ~G4FTFPPionBuilder();
 
     virtual void Build(G4HadronElasticProcess *) final override {}
-    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
-    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
     virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}

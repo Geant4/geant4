@@ -44,7 +44,7 @@
 #include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4ElementTable.hh"
 #include "G4IsotopeList.hh"
 #include "Randomize.hh"
 #include "G4Log.hh" 
@@ -70,9 +70,7 @@ G4NeutronCaptureXS::G4NeutronCaptureXS()
     G4cout  << "G4NeutronCaptureXS::G4NeutronCaptureXS: Initialise for Z < "
 	    << MAXZCAPTURE << G4endl;
   }
-  logElimit   = G4Log(elimit);
-  isMaster    = false;
-  temp.resize(13,0.0);
+  logElimit = G4Log(elimit);
 }
 
 G4NeutronCaptureXS::~G4NeutronCaptureXS()
@@ -269,21 +267,22 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 
   // it is possible re-initialisation for the second run
+  const G4ElementTable* table = G4Element::GetElementTable();
   if(isMaster) {
 
     // Access to elements
-    auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
-    for(size_t j=0; j<numOfCouples; ++j) {
-      auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
-      auto elmVec = mat->GetElementVector();
-      size_t numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZCAPTURE-1));
-	if(nullptr == data->GetElementData(Z)) { Initialise(Z); }
-      }
+    for ( auto & elm : *table ) {
+      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZCAPTURE-1) );
+      if ( nullptr == data->GetElementData(Z) ) { Initialise(Z); }
     }
   }
+  // prepare isotope selection
+  size_t nIso = temp.size();
+  for ( auto & elm : *table ) {
+    size_t n = elm->GetNumberOfIsotopes();
+    if(n > nIso) { nIso = n; }
+  }
+  temp.resize(nIso, 0.0);
 }
 
 const G4String& G4NeutronCaptureXS::FindDirectoryPath()

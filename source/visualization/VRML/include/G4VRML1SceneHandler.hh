@@ -54,6 +54,8 @@ class G4VRML1SceneHandler: public G4VSceneHandler {
 public:
 	G4VRML1SceneHandler(G4VRML1& system, const G4String& name = "");
 	virtual ~G4VRML1SceneHandler();
+
+	using G4VSceneHandler::AddSolid;
 	void AddSolid(const G4Box&);
 	void AddSolid(const G4Cons&);
 	void AddSolid(const G4Tubs&);
@@ -62,50 +64,19 @@ public:
 	void AddSolid(const G4Sphere&);
 	void AddSolid(const G4Para&);
 	void AddSolid(const G4Torus&);
-        void AddSolid ( const G4Polycone& polycone ) {
-          G4VSceneHandler::AddSolid (polycone);
-        }
-        void AddSolid ( const G4Polyhedra& polyhedra) {
-          G4VSceneHandler::AddSolid (polyhedra);
-        }
-        void AddSolid ( const G4Orb& orb ) {
-          G4VSceneHandler::AddSolid (orb);
-        }
-        void AddSolid ( const G4Ellipsoid& ellipsoid) {
-          G4VSceneHandler::AddSolid (ellipsoid);
-        }
-        void AddSolid ( const G4TessellatedSolid& tess) {
-          G4VSceneHandler::AddSolid (tess);
-        }
         void AddSolid(const G4VSolid&);
-        void AddCompound ( const G4VTrajectory& traj) {
-          G4VSceneHandler::AddCompound(traj);
-        }
-        void AddCompound ( const G4VHit& hit) {
-          G4VSceneHandler::AddCompound(hit);
-        }
-        void AddCompound ( const G4VDigi& digi) {
-          G4VSceneHandler::AddCompound(digi);
-        }
-        void AddCompound ( const G4THitsMap<G4double> & hits) {
-	  G4VSceneHandler::AddCompound(hits);
-	}
-        void AddCompound ( const G4THitsMap<G4StatDouble> & hits) {
-	  G4VSceneHandler::AddCompound(hits);
-	}
+
+	using G4VSceneHandler::AddCompound;
 
 	void BeginPrimitives(const G4Transform3D& objectTransformation);
 	void EndPrimitives();
 
+	using G4VSceneHandler::AddPrimitive;
 	void AddPrimitive(const G4Polyline&);
 	void AddPrimitive(const G4Polyhedron&);
 	void AddPrimitive(const G4Text&); 
 	void AddPrimitive(const G4Circle&);
 	void AddPrimitive(const G4Square&);
-	void AddPrimitive (const G4Polymarker& polymarker)
-		{ G4VSceneHandler::AddPrimitive (polymarker); }
-        void AddPrimitive (const G4Scale& scale) 
-                { G4VSceneHandler::AddPrimitive (scale); }
 
 	void ClearTransientStore();  // Used for triggering detector re-drawing.
 

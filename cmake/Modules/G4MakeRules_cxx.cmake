@@ -46,11 +46,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
     set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -Qunused-arguments -DGL_SILENCE_DEPRECATION")
   endif()
 
-  # Though it should be the default, always use libc++ with AppleClang
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-    set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -stdlib=libc++")
-  endif()
-
   # Extra Geant4 modes
   # - Debug_FPE: Core Debug mode plus FPE)
   set(CMAKE_CXX_FLAGS_DEBUG_FPE_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} -DG4FPE_DEBUG")

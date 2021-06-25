@@ -68,7 +68,7 @@
 DMXParticleSource::DMXParticleSource() {
 
   NumberOfParticlesToBeGenerated = 1;
-  particle_definition = NULL;
+  particle_definition = nullptr;
   G4ThreeVector zero(0., 0., 0.);
   particle_momentum_direction = G4ParticleMomentum(1., 0., 0.);
   particle_energy = 1.0*MeV;
@@ -137,25 +137,15 @@ void DMXParticleSource::ConfineSourceToVolume(G4String Vname)
   if(verbosityLevel == 2) G4cout << VolName << G4endl;
 
   // checks if selected volume exists
-  G4VPhysicalVolume *tempPV      = NULL;
-  G4PhysicalVolumeStore *PVStore = 0;
+  G4VPhysicalVolume *tempPV      = nullptr;
+  G4PhysicalVolumeStore *PVStore = nullptr;
   G4String theRequiredVolumeName = VolName;
   PVStore = G4PhysicalVolumeStore::GetInstance();
-  G4int i = 0;
   G4bool found = false;
   if(verbosityLevel == 2) G4cout << PVStore->size() << G4endl;
 
-  // recasting required since PVStore->size() is actually a signed int...
-  while (!found && i<(G4int)PVStore->size())
-    {
-      tempPV = (*PVStore)[i];
-      found  = tempPV->GetName() == theRequiredVolumeName;
-      if(verbosityLevel == 2)
-	G4cout << i << " " << " " << tempPV->GetName() 
-	       << " " << theRequiredVolumeName << " " << found << G4endl;
-      if (!found)
-	{i++;}
-    }
+  tempPV = PVStore->GetVolume(theRequiredVolumeName, false);
+  if (tempPV != nullptr) { found = true; }
 
   // found = true then the volume exists else it doesnt.
   if(found == true) {
@@ -171,15 +161,12 @@ void DMXParticleSource::ConfineSourceToVolume(G4String Vname)
     VolName = "NULL";
     Confine = false;
   }
-
 }
-
 
 void DMXParticleSource::SetAngDistType(G4String atype)
 {
   AngDistType = atype;
 }
-
 
 void DMXParticleSource::GeneratePointSource()
 {
@@ -190,7 +177,6 @@ void DMXParticleSource::GeneratePointSource()
     if(verbosityLevel >= 1)
       G4cout << "Error SourcePosType is not set to Point" << G4endl;
 }
-
 
 void DMXParticleSource::GeneratePointsInVolume()
 {
@@ -238,16 +224,14 @@ void DMXParticleSource::GeneratePointsInVolume()
 
 }
 
-
 G4bool DMXParticleSource::IsSourceConfined()
 {
 
   // Method to check point is within the volume specified
   if(Confine == false)
     G4cout << "Error: Confine is false" << G4endl;
-  G4ThreeVector null(0.,0.,0.);
-  G4ThreeVector *ptr;
-  ptr = &null;
+  G4ThreeVector null_vec(0.,0.,0.);
+  G4ThreeVector *ptr = &null_vec;
 
   // Check particle_position is within VolName
   G4VPhysicalVolume *theVolume;
@@ -262,13 +246,11 @@ G4bool DMXParticleSource::IsSourceConfined()
     return(false);
 }
 
-
 void DMXParticleSource::SetParticleMomentumDirection
    (G4ParticleMomentum aDirection) {
 
   particle_momentum_direction =  aDirection.unit();
 }
-
 
 void DMXParticleSource::GenerateIsotropicFlux()
 {
@@ -278,7 +260,8 @@ void DMXParticleSource::GenerateIsotropicFlux()
 
   G4double sintheta, sinphi, costheta, cosphi;
   rndm = G4UniformRand();
-  costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
+  costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta)
+                                - std::cos(MaxTheta));
   sintheta = std::sqrt(1. - costheta*costheta);
   
   rndm2 = G4UniformRand();
@@ -301,9 +284,9 @@ void DMXParticleSource::GenerateIsotropicFlux()
 
   // particle_momentum_direction now holds unit momentum vector.
   if(verbosityLevel >= 2)
-    G4cout << "Generating isotropic vector: " << particle_momentum_direction << G4endl;
+    G4cout << "Generating isotropic vector: "
+           << particle_momentum_direction << G4endl;
 }
-
 
 void DMXParticleSource::SetEnergyDisType(G4String DisType)
 {
@@ -320,7 +303,6 @@ void DMXParticleSource::GenerateMonoEnergetic()
   particle_energy = MonoEnergy;
 }
 
-
 void DMXParticleSource::SetVerbosity(int vL)
 {
   verbosityLevel = vL;
@@ -334,11 +316,10 @@ void DMXParticleSource::SetParticleDefinition
   particle_charge = particle_definition->GetPDGCharge();
 }
 
-
 void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
 {
 
-  if(particle_definition==NULL) {
+  if(particle_definition==nullptr) {
     G4cout << "No particle has been defined!" << G4endl;
     return;
   }
@@ -365,7 +346,7 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
     else if(Confine == false)
       srcconf = true; // terminate loop
     
-    LoopCount++;
+    ++LoopCount;
     if(LoopCount == 100000) {
       G4cout << "*************************************" << G4endl;
         G4cout << "LoopCount = 100000" << G4endl;
@@ -409,30 +390,25 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
   
   if(verbosityLevel >= 1){
     G4cout << "Particle name: " 
-	   << particle_definition->GetParticleName() << G4endl; 
+           << particle_definition->GetParticleName() << G4endl; 
     G4cout << "       Energy: "<<particle_energy << G4endl;
     G4cout << "     Position: "<<particle_position<< G4endl; 
     G4cout << "    Direction: "<<particle_momentum_direction << G4endl;
     G4cout << " NumberOfParticlesToBeGenerated: "
-	   << NumberOfParticlesToBeGenerated << G4endl;
+           << NumberOfParticlesToBeGenerated << G4endl;
   }
 
-
-  for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ ) {
+  for( G4int i=0; i<NumberOfParticlesToBeGenerated; ++i ) {
     G4PrimaryParticle* particle =
       new G4PrimaryParticle(particle_definition,px,py,pz);
     particle->SetMass( mass );
     particle->SetCharge( particle_charge );
     particle->SetPolarization(particle_polarization.x(),
-			      particle_polarization.y(),
-			      particle_polarization.z());
+                              particle_polarization.y(),
+                              particle_polarization.z());
     vertex->SetPrimary( particle );
   }
   evt->AddPrimaryVertex( vertex );
   if(verbosityLevel > 1)
     G4cout << " Primary Vetex generated "<< G4endl;   
 }
-
-
-
-

@@ -14,6 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21st June, 2021 J. Yarba (exEventGenerator-V10-07-03)
+- In CMakeLists.txt, make serach for Pythia8 QUIET
+
+18th June, 2021 J. Yarba (exEventGenerator-V10-07-02)
+- In CmakeLists.txt, use newly added Pythia8 finder module
+
+16th June, 2021 J. Yarba (exEventGenerator-V10-07-01)
+- Add example pythia/py8decayer that demonstrates how to interface Pythia8
+  as an "external decayer", to decay certain resonances in Geant4
+
+24th November, 2021 B. Morgan (exEventGenerator-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 13th November, 2020 B. Morgan (exEventGenerator-V10-06-02)
 - Enforce use of Serial RunManager for serial-only examples.
 

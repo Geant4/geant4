@@ -16,17 +16,79 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 9, 2021 Gabriele (global-V10-06-29)
-- Removed spurious spaces in #define in G4Version header.
-  Addressing problem report #2384.
-- Updated tag IDs for release 10.7.p02.
+June 21, 2021 Gabriele Cosmo (global-V10-07-16)
+- Updated G4SIUnits and G4PhysicalConstants to include new symbols
+  (minute, hour, day, year and millielectronvolt) and new constants
+  (Bohr_magneton and nuclear_magneton), based on CLHEP-2.4.4.2.
+- Updated tag IDs for geant4-10-07-ref-06.
 
-March 26, 2021 Gabriele Cosmo
+June 3, 2021 Gabriele Cosmo (global-V10-07-15)
+- Added protection for WIN32 in G4BackTrace.
+
+May 27, 2021 Gabriele Cosmo (global-V10-07-14)
+- Updated tag IDs for geant4-10-07-ref-05.
+
+May 24, 2021 Vladimir Ivanchenko (global-V10-07-13)
+- Removed deprecated classes: G4LPhysicsFreeVector, G4PhysicsLnVector
+  and G4PhysicsOrderedFreeVector.
+
+May 18, 2021 Ben Morgan (global-V10-07-12)
+- New G4Filesystem header to support transparent use of C++ filesystem
+  whether it is in std:: or std::experimental namespaces.
+
+May 18, 2021 Jonathan Madsen (global-V10-07-11)
+- G4ThreadLocalSingleton: added way to explicitly call Clear() for all
+  TLS singletons.
+- Reworked G4Backtrace to use fewer dynamic memory allocations when
+  printing backtrace in order to avoid overflowing the signal stack.
+
+May 7, 2021 Gabriele Cosmo (global-V10-07-10)
+- Updated G4SIUnits and G4PhysicalConstants to include new commented symbols.
+  (minute, hour, day, year and millielectronvolt) and new constants
+  (Bohr_magneton and nuclear_magneton).
+
+April 29, 2021 Gabriele Cosmo (global-V10-07-09)
+- Updated tag IDs for geant4-10-07-ref-04.
+
+April 28, 2021 Michel Maire (global-V10-07-08)
+- G4UnitsTable: added units for Velocity and Momentum.
+
+March 31, 2021 Gabriele Cosmo (global-V10-07-07)
+- Updated tag IDs for geant4-10-07-ref-03.
+
+March 26, 2021 Gabriele Cosmo (global-V10-07-06)
 - Zero terminate buffer in G4strstreambuf destructor before flushing.
   Addressing problem report #2350.
 
-February 2, 2021 Gabriele (global-V10-06-28)
-- Updated tag IDs for release 10.7.p01.
+March 15, 2021 Gabriele Cosmo (global-V10-07-05)
+- G4ConvergenceTester: fixed potential thread contention likely
+  responsible for crashes in ThreadSafe-Scorers example, observed in
+  system testing. Some code cleanup.
+
+March 12, 2021 Ben Morgan (global-V10-07-04)
+- Modernize CMake build.
+
+March 5, 2021 Ben Morgan (global-V10-07-03)
+- Add patch from Seth Johnson to allow user query of G4PhysicsVector's
+  use or not of spline interpolation.
+
+February 25, 2021 Gabriele Cosmo (global-V10-07-02)
+- Updated tag IDs for geant4-10-07-ref-02.
+
+February 4, 2021 Vladimir Ivanchenko (global-V10-07-01)
+- G4PhysicsFreeVector, G4LPhysicsFreeVector, G4PhysicsLogVector,
+  G4PhysicsLinearFreeVector, G4PhysicsOrderedFreeVector - to
+    each constructor added extra boolean variable making spline;
+    this is needed for later removal of the SetSpline(..) method
+    required forreorganisation of the code using templates
+- G4LPhysicsFreeVector, G4PhysicsOrderedFreeVector - moved
+    implementation to G4PhysicsFreeVector
+- G4PhysicsFreeVector - added control on continues increase
+    energy in the energy vector to all constructors
+- G4PhysicsVector - extended warning printout
+
+January 28, 2021 Gabriele (global-V10-07-00)
+- Updated tag IDs for geant4-10-07-ref-01.
 
 December 2, 2020 Gabriele (global-V10-06-27)
 - Removed condition restricting to __x86_64__ architectures for macOS

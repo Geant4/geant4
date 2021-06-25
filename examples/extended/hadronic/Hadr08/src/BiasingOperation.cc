@@ -34,10 +34,7 @@
 #include "BiasingOperation.hh"
 #include "G4BiasingProcessInterface.hh"
 #include "G4VParticleChange.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4PionPlusInelasticProcess.hh"
-#include "G4PionMinusInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4HadronicParameters.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
@@ -47,17 +44,24 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4VPreCompoundModel.hh"
 #include "G4INCLXXInterface.hh"
-#include "G4HadronInelasticDataSet.hh"
+#include "G4BGGNucleonInelasticXS.hh"
+#include "G4NeutronInelasticXS.hh"
+#include "G4BGGPionInelasticXS.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 BiasingOperation::BiasingOperation( G4String name ) : G4VBiasingOperation( name ) {
 
   // Create the inelastic processes for  p , n , pi+ , pi- 
-  fProtonInelasticProcess    = new G4ProtonInelasticProcess;
-  fNeutronInelasticProcess   = new G4NeutronInelasticProcess;
-  fPionPlusInelasticProcess  = new G4PionPlusInelasticProcess;
-  fPionMinusInelasticProcess = new G4PionMinusInelasticProcess;
+  fProtonInelasticProcess =
+    new G4HadronInelasticProcess( "protonInelastic", G4Proton::Definition() );
+  fNeutronInelasticProcess =
+    new G4HadronInelasticProcess( "neutronInelastic", G4Neutron::Definition() );
+  fPionPlusInelasticProcess =
+    new G4HadronInelasticProcess( "pi+Inelastic", G4PionPlus::Definition() );    
+  fPionMinusInelasticProcess =
+    new G4HadronInelasticProcess( "pi-Inelastic", G4PionMinus::Definition() );
 
   // Set the energy ranges
   const G4double minPreco = 0.0;
@@ -110,14 +114,18 @@ BiasingOperation::BiasingOperation( G4String name ) : G4VBiasingOperation( name 
   fPionMinusInelasticProcess->RegisterMe( theHighEnergyModel );
   fPionMinusInelasticProcess->RegisterMe( theInclxxModel_forPions );
 
-  // Register the cross sections: this is mandatory starting from G4 10.6
-  // because the default Gheisha inelastic cross sections have been removed.
-  // It is convenient to use the Gheisha inelastic cross sections here
-  // because they do not require any special initialization.
-  fProtonInelasticProcess->AddDataSet( new G4HadronInelasticDataSet );
-  fNeutronInelasticProcess->AddDataSet( new G4HadronInelasticDataSet );
-  fPionPlusInelasticProcess->AddDataSet( new G4HadronInelasticDataSet );
-  fPionMinusInelasticProcess->AddDataSet( new G4HadronInelasticDataSet );
+  G4VCrossSectionDataSet* theProtonXSdata = new G4BGGNucleonInelasticXS( G4Proton::Definition() );
+  theProtonXSdata->BuildPhysicsTable( *(G4Proton::Definition()) );
+  fProtonInelasticProcess->AddDataSet( theProtonXSdata );
+  G4VCrossSectionDataSet* theNeutronXSdata = new G4NeutronInelasticXS;
+  theNeutronXSdata->BuildPhysicsTable( *(G4Neutron::Definition()) );
+  fNeutronInelasticProcess->AddDataSet( theNeutronXSdata );
+  G4VCrossSectionDataSet* thePionPlusXSdata = new G4BGGPionInelasticXS( G4PionPlus::Definition() );
+  thePionPlusXSdata->BuildPhysicsTable( *(G4PionPlus::Definition()) );
+  fPionPlusInelasticProcess->AddDataSet( thePionPlusXSdata );
+  G4VCrossSectionDataSet* thePionMinusXSdata = new G4BGGPionInelasticXS( G4PionMinus::Definition() );
+  thePionMinusXSdata->BuildPhysicsTable( *(G4PionMinus::Definition()) );  
+  fPionMinusInelasticProcess->AddDataSet( thePionMinusXSdata );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

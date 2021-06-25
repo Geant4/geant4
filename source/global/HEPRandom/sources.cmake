@@ -1,24 +1,15 @@
-#------------------------------------------------------------------------------
-# Module : 
-# Package: Geant4.src.G4global.
-#------------------------------------------------------------------------------
+# - G4heprandom module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4heprandom 
-  HEADERS
+geant4_add_module(G4heprandom
+  PUBLIC_HEADERS
     G4Poisson.hh
     G4QuickRand.hh
     G4RandomDirection.hh
     G4RandomTools.hh
-	G4UniformRandPool.hh
+	  G4UniformRandPool.hh
     Randomize.hh
   SOURCES
     G4Poisson.cc
-    G4UniformRandPool.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-)
+    G4UniformRandPool.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4heprandom PUBLIC G4globman)

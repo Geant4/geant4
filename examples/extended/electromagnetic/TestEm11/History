@@ -13,6 +13,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-05-21 mma (testem11-V10-07-02)
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
+
+10-02-21 V.Ivanchenko (testem11-V10-07-01)
+- fixed README
+ 
+17-12-20 mma (testem11-V10-07-00)
+- updated PhysListEmStandard.cc
+- DetectorConstruction : print used materials
+- RunAction : dump G4EmParameters
 
 27-10-20 mma (testem11-V11-06-01)
 - add macros description in Readme

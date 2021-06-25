@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------
 # GNUmakefile for Geant4 external packages
-# Gunter Folger 26-April-2011 
+# Gunter Folger 26-April-2011
 # -----------------------------------------------------------------------
 
 MAKEFLAGS= --no-print-directory
@@ -13,8 +13,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS :=
-SUBLIBS :=
+SUBDIRS := g4tools
+SUBLIBS := G4tools
 
 ifdef G4LIB_USE_PTL
   SUBDIRS += ptl

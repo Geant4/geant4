@@ -13,8 +13,34 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07-December-2020, Vladimir Ivanchenko (phys-ctor-helastic-V10-06-07)
-- G4HadronElasticPhysics : fixed type of builder in all hadron 
+20-May-2021 Vladimir Ivanchenko (phys-ctor-helastic-V10-07-06)
+- in all constructors use verbosity level from G4HadronicParameters
+
+16-April-2021 Ben Morgan (phys-ctor-helastic-V10-07-05)
+- Migrate build to modular CMake API
+
+13-Apr-2021, Alberto Ribon (phys-ctor-helastic-V10-07-04)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
+08-Mar-2021, Alberto Ribon (phys-ctor-helastic-V10-07-03)
+- G4ChargeExchangePhysics : set explicitly the elastic cross sections
+  according to the hadron type, given that the universal Gheisha
+  elastic cross section has been deleted.
+
+15-Feb-2021, Alberto Ribon (phys-ctor-helastic-V10-07-02)
+- G4HadronHElasticPhysics : fixed problem of fully overlapping energy
+  transition between G4HadronElastic and G4ChipsElasticModel, using
+  now G4ChipsElasticModel only for Hydrogen element above 10 MeV.
+
+11-Dec-2020, Vladimir Ivanchenko (phys-ctor-helastic-V10-07-01)
+- G4HadronDElasticPhysics, G4HadronHElasticPhysics : use inheritance
+    from G4HadronElasticPhysics; use G4HadProcesses, G4PhysListUtil,
+    and G4HadParticles; implement x-section factor
+
+07-Dec-2020, Vladimir Ivanchenko (phys-ctor-helastic-V10-07-00)
+- G4HadronElasticPhysics : fixed type of builder in all hadron
     elastic constructors (problem #2183)
   G4IonElasticPhysics, G4ThermalNeutrons - added comments
 
@@ -38,7 +64,7 @@ introduced in the code and keeptrack of all tags.
 
 02-Jul-2020, V. Ivanchenko  (phys-ctor-helastic-V10-06-01)
 - G4HadronElasticPhysics - use coherently with inelastic physics
-    builder new utilities: G4HadParticles and G4HadronicBuilder 
+    builder new utilities: G4HadParticles and G4HadronicBuilder
 
 30-Apr-2020 Ben Morgan      (phys-ctor-helastic-V10-06-00)
 -  Remove obsolete GRANULAR_DEPENDENCIES entries

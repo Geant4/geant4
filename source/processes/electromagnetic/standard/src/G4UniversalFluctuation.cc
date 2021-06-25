@@ -96,7 +96,7 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
   // Derived quantities
   m_Inv_particleMass = 1.0 / particleMass;
   m_massrate = electron_mass_c2 * m_Inv_particleMass ;
-  chargeSquare   = q*q;
+  chargeSquare = q*q;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

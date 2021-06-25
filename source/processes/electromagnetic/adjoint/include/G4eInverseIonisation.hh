@@ -23,42 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:   G4eInverseIonisation.hh
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4eInverseIonisation.hh
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
+//  Adjoint/reverse discrete ionisation
 //
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	15 April 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Adjoint/reverse discrete ionisation
-//
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4eInverseIonisation_h
 #define G4eInverseIonisation_h 1
 
 #include "G4VAdjointReverseReaction.hh"
-#include "globals.hh"
-#include "G4eIonisation.hh"
-#include "G4VEmAdjointModel.hh"
-class G4eInverseIonisation: public G4VAdjointReverseReaction
 
+class G4VEmAdjointModel;
+
+class G4eInverseIonisation : public G4VAdjointReverseReaction
 {
-public:
-
-  G4eInverseIonisation(G4bool whichScatCase, G4String process_name, G4VEmAdjointModel* aEmAdjointModel);
+ public:
+  G4eInverseIonisation(G4bool whichScatCase, G4String process_name,
+                       G4VEmAdjointModel* aEmAdjointModel);
   ~G4eInverseIonisation();
-  
-private:
-    
+
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+
+  G4eInverseIonisation(G4eInverseIonisation&) = delete;
+  G4eInverseIonisation& operator=(const G4eInverseIonisation& right) = delete;
 };
 
 #endif

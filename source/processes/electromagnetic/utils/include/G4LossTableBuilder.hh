@@ -64,7 +64,7 @@ public:
 
   G4LossTableBuilder(G4bool master=true);
 
-  virtual ~G4LossTableBuilder();
+  ~G4LossTableBuilder();
 
   // build sum of all energy loss processes
   void BuildDEDXTable(G4PhysicsTable* dedxTable, 
@@ -100,16 +100,16 @@ public:
   inline void SetSplineFlag(G4bool flag);
 
   inline void SetInitialisationFlag(G4bool flag);
+
+  G4LossTableBuilder & operator=(const  G4LossTableBuilder &right) = delete;
+  G4LossTableBuilder(const  G4LossTableBuilder&) = delete;
  
 private:
 
-  G4LossTableBuilder & operator=(const  G4LossTableBuilder &right);
-  G4LossTableBuilder(const  G4LossTableBuilder&);
-
   G4EmParameters* theParameters;
 
-  G4bool splineFlag;
-  G4bool isInitialized;
+  G4bool splineFlag = true;
+  G4bool isInitialized = false;
   G4bool isMaster;
 
   static std::vector<G4double>* theDensityFactor;

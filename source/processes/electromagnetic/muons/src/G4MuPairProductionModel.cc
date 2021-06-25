@@ -112,32 +112,21 @@ using namespace std;
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-    particle(nullptr),
-    factorForCross(4.*fine_structure_const*fine_structure_const
-                   *classic_electr_radius*classic_electr_radius/(3.*pi)),
+    factorForCross(CLHEP::fine_structure_const*CLHEP::fine_structure_const*
+		   CLHEP::classic_electr_radius*CLHEP::classic_electr_radius*
+		   4./(3.*CLHEP::pi)),
     sqrte(sqrt(G4Exp(1.))),
-    currentZ(0),
-    fParticleChange(nullptr),
-    minPairEnergy(4.*electron_mass_c2),
-    lowestKinEnergy(1.0*GeV),
-    nYBinPerDecade(4),
-    nbiny(1000),
-    nbine(0),
-    ymin(-5.),
-    dy(0.005),
-    fTableToFile(false)
+    minPairEnergy(4.*CLHEP::electron_mass_c2),
+    lowestKinEnergy(1.0*CLHEP::GeV)
 {
   nist = G4NistManager::Instance();
 
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
 
-  particleMass = lnZ = z13 = z23 = 0.;
-
-  // setup lowest limit dependent on particle mass
-  if(p) { 
+  if(nullptr != p) { 
     SetParticle(p); 
-    lowestKinEnergy = std::max(lowestKinEnergy,p->GetPDGMass()*8.0); 
+    lowestKinEnergy = std::max(lowestKinEnergy,p->GetPDGMass()*8.0);  
   }
   emin = lowestKinEnergy;
   emax = 10.*TeV;
@@ -164,7 +153,10 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 { 
   SetParticle(p); 
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+
+  if(nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForLoss();
+  }
 
   // for low-energy application this process should not work
   if(lowestKinEnergy >= HighEnergyLimit()) { return; }
@@ -181,7 +173,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
   }
 
   if(IsMaster() && p == particle) { 
-    if(!fElementData) { 
+    if(nullptr == fElementData) { 
       fElementData = new G4ElementData();
       G4bool dataFile = G4EmParameters::Instance()->RetrieveMuDataFromFile();
       if(dataFile)  { dataFile = RetrieveTables(); }
@@ -279,8 +271,6 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   G4double cut  = std::max(cutEnergy, minPairEnergy);
   if (tmax <= cut) { return cross; }
 
-  //  G4double ak1=6.9 ;
-  // G4double ak2=1.0 ;
   G4double aaa = G4Log(cut);
   G4double bbb = G4Log(tmax);
   G4int kkk = (G4int)((bbb-aaa)/ak1 + ak2);
@@ -480,7 +470,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
     for (size_t it=0; it<=nbine; ++it) {
 
-      pv->PutY(it, G4Log(kinEnergy/MeV));
+      pv->PutY(it, G4Log(kinEnergy/CLHEP::MeV));
       G4double maxPairEnergy = MaxSecondaryEnergyForElement(kinEnergy, Z);
       /*
       G4cout << "it= " << it << " E= " << kinEnergy 
@@ -577,7 +567,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   //G4cout << "yymin= " << yymin << "  yymax= " << yymax << G4endl;
 
   // units should not be used, bacause table was built without
-  G4double logTkin = G4Log(kinEnergy/MeV);
+  G4double logTkin = G4Log(kinEnergy/CLHEP::MeV);
 
   // sample e-e+ energy, pair energy first
 
@@ -731,5 +721,3 @@ G4bool G4MuPairProductionModel::RetrieveTables()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

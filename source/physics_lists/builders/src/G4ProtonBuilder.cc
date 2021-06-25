@@ -56,7 +56,7 @@
 
  G4ProtonBuilder::G4ProtonBuilder()
  {
-   theProtonInelastic=new G4ProtonInelasticProcess;
+   theProtonInelastic=new G4HadronInelasticProcess( "protonInelastic", G4Proton::Definition() );
  }
 
  void G4ProtonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {

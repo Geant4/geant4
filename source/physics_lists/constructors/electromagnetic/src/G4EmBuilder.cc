@@ -132,6 +132,27 @@ void G4EmBuilder::ConstructIonEmPhysics(G4hMultipleScattering* hmsc,
   }
 }
 
+void G4EmBuilder::ConstructIonEmPhysicsSS()
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  G4ParticleDefinition* part = G4Deuteron::Deuteron();
+  ph->RegisterProcess(new G4hIonisation(), part);
+  ph->RegisterProcess(new G4CoulombScattering(), part);
+
+  part = G4Triton::Triton();
+  ph->RegisterProcess(new G4hIonisation(), part);
+  ph->RegisterProcess(new G4CoulombScattering(), part);
+
+  part = G4He3::He3();
+  ph->RegisterProcess(new G4ionIonisation(), part);
+  ph->RegisterProcess(new G4CoulombScattering(), part);
+
+  part = G4Alpha::Alpha();
+  ph->RegisterProcess(new G4ionIonisation(), part);
+  ph->RegisterProcess(new G4CoulombScattering(), part);
+}
+
 void G4EmBuilder::ConstructLightHadrons(G4ParticleDefinition* part1,
 			   	        G4ParticleDefinition* part2,
 				        G4bool isHEP, G4bool isProton, 
@@ -168,6 +189,30 @@ void G4EmBuilder::ConstructLightHadrons(G4ParticleDefinition* part1,
     ph->RegisterProcess(pair, part2);
   }
   if( isWVI ) { ph->RegisterProcess(ss, part2); }
+}
+
+void G4EmBuilder::ConstructLightHadronsSS(G4ParticleDefinition* part1,
+			   	          G4ParticleDefinition* part2,
+					  G4bool isHEP)
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  G4hBremsstrahlung* brem = ( isHEP ) ? new G4hBremsstrahlung() : nullptr;
+  G4hPairProduction* pair = ( isHEP ) ? new G4hPairProduction() : nullptr;
+
+  ph->RegisterProcess(new G4hIonisation(), part1);
+  if( isHEP ) {
+    ph->RegisterProcess(brem, part1);
+    ph->RegisterProcess(pair, part1);
+  }
+  ph->RegisterProcess(new G4CoulombScattering(), part1);
+
+  ph->RegisterProcess(new G4hIonisation(), part2);
+  if( isHEP ) {
+    ph->RegisterProcess(brem, part2);
+    ph->RegisterProcess(pair, part2);
+  }
+  ph->RegisterProcess(new G4CoulombScattering(), part2);
 }
 
 void G4EmBuilder::ConstructCharged(G4hMultipleScattering* hmsc,
@@ -222,6 +267,60 @@ void G4EmBuilder::ConstructCharged(G4hMultipleScattering* hmsc,
 
   // ions
   ConstructIonEmPhysics(hmsc, nucStopping);
+
+  // hyperons and anti particles
+  if( isHEP ) { 
+    ConstructBasicEmPhysics(hmsc, G4HadParticles::GetHeavyChargedParticles());
+
+    // b- and c- charged particles
+    if( hpar->EnableBCParticles() ) {
+      ConstructBasicEmPhysics(hmsc, G4HadParticles::GetBCChargedHadrons());
+    }
+  }
+}
+
+void G4EmBuilder::ConstructChargedSS(G4hMultipleScattering* hmsc) 
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4EmParameters* param = G4EmParameters::Instance();
+  G4HadronicParameters* hpar = G4HadronicParameters::Instance();
+  G4bool isHEP = ( param->MaxKinEnergy() > hpar->EnergyThresholdForHeavyHadrons() );
+
+  // muon bremsstrahlung and pair production
+  G4MuBremsstrahlung* mub = ( isHEP ) ? new G4MuBremsstrahlung() : nullptr;
+  G4MuPairProduction* mup = ( isHEP ) ? new G4MuPairProduction() : nullptr;
+
+  // muon multiple and single scattering
+  G4CoulombScattering* muss = new G4CoulombScattering();
+
+  // Add standard EM Processes
+  // mu+-
+  G4ParticleDefinition* part = G4MuonPlus::MuonPlus();
+  ph->RegisterProcess(new G4MuIonisation(), part);
+  if( isHEP ) {
+    ph->RegisterProcess(mub, part);
+    ph->RegisterProcess(mup, part);
+  }
+  ph->RegisterProcess(muss, part);
+
+  part = G4MuonMinus::MuonMinus();
+  ph->RegisterProcess(new G4MuIonisation(), part);
+  if( isHEP ) {
+    ph->RegisterProcess(mub, part);
+    ph->RegisterProcess(mup, part);
+  }
+  ph->RegisterProcess(muss, part);
+
+  // pi+-
+  ConstructLightHadronsSS(G4PionPlus::PionPlus(), G4PionMinus::PionMinus(), isHEP);
+
+  // K+-
+  ConstructLightHadronsSS(G4KaonPlus::KaonPlus(), G4KaonMinus::KaonMinus(), isHEP);
+ 
+  // p, pbar
+  ConstructLightHadronsSS(G4Proton::Proton(), G4AntiProton::AntiProton(), isHEP);
+  // ions
+  ConstructIonEmPhysicsSS();
 
   // hyperons and anti particles
   if( isHEP ) { 

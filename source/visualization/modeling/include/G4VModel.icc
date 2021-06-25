@@ -72,7 +72,3 @@ inline void G4VModel::SetType (const G4String& type) {
 inline void G4VModel::SetGlobalTag (const G4String& tag) {
   fGlobalTag = tag;
 }
-
-inline void G4VModel::SetTransformation (const G4Transform3D& transform) {
-  fTransform = transform;
-}

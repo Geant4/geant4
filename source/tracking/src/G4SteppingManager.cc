@@ -33,6 +33,7 @@
 
 #include "G4SteppingManager.hh"
 #include "G4SteppingVerbose.hh"
+#include "G4SteppingVerboseWithUnits.hh"
 #include "G4UImanager.hh"
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
@@ -56,19 +57,24 @@ G4SteppingManager::G4SteppingManager()
   fPostStepPoint = fStep->GetPostStepPoint();
 
 #ifdef G4VERBOSE
-   if(G4VSteppingVerbose::GetInstance()==nullptr)
-   {
-     fVerbose =  new G4SteppingVerbose();
-     G4VSteppingVerbose::SetInstance(fVerbose);
-     fVerbose -> SetManager(this);
-     KillVerbose = true;
-   }
-   else
-   { 
-     fVerbose = G4VSteppingVerbose::GetInstance();
-     fVerbose -> SetManager(this);
-     KillVerbose = false;
-   }
+  fVerbose = G4VSteppingVerbose::GetInstance();
+  if(fVerbose==nullptr)
+  {
+    if(G4VSteppingVerbose::GetMasterInstance()==nullptr)
+    {
+      G4int prec = G4SteppingVerbose::BestUnitPrecision();
+      if(prec > 0)
+      { fVerbose = new G4SteppingVerboseWithUnits(prec); }
+      else
+      { fVerbose = new G4SteppingVerbose(); }
+    }
+    else
+    { fVerbose = G4VSteppingVerbose::GetMasterInstance()->Clone(); }
+    KillVerbose = true;
+  }
+  else
+  { KillVerbose = false; }
+  fVerbose -> SetManager(this);
 #endif
 
    SetNavigator(G4TransportationManager::GetTransportationManager()
@@ -257,9 +263,10 @@ G4StepStatus G4SteppingManager::Stepping()
   {
     fUserSteppingAction->UserSteppingAction(fStep);
   }
-  G4UserSteppingAction* regionalAction = fStep->GetPreStepPoint()
-        ->GetPhysicalVolume()->GetLogicalVolume()
-        ->GetRegion()->GetRegionalSteppingAction();
+
+  G4UserSteppingAction* regionalAction =
+    fCurrentVolume->GetLogicalVolume()->GetRegion()->GetRegionalSteppingAction();
+
   if(regionalAction)
     regionalAction->UserSteppingAction(fStep);
 

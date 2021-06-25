@@ -1,0 +1,57 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization ToolsSG category - a vis driver based on
+g4tools scene graph logic. See geant4/source/analysis/g4tools/tools.license
+------------------------------------------------
+
+07 June 2021  John Allison  (vis_toolsg-V10-07-05)
+- Requires greps-V10-07-07 (new method AddCompound (const G4Mesh&)).
+- Requires modeling-V10-07-09 (new class G4Mesh).
+- Requires visman-V10-07-10 (new default method and new commands).
+- G4ToolsSGViewer.hh:
+  o Force kernel visit if special mesh rendering parameters change.
+
+28 May 2021 Ben Morgan (vis_toolssg-V10-07-04)
+- Migrate to modular CMake build
+
+27 May 2021  John Allison (vis_toolsg-V10-07-03)
+- AddPrimitive(const G4Polyhedron&):
+  o Minor improvement to error message in the case of unexpected number
+    of edges.
+
+23 May 2021  John Allison (vis_toolsg-V10-07-02)
+- Corrections to cmake files for freetype fonts:
+  o Move freetype setup from CMakeLists.txt to sources.cmake.
+- G4ToolsSGSceneHandler.cc: Remove redundant comments.
+
+14 May 2021  Guy Barrand (vis_toolsg-V10-07-01)
+- cosmetic/style improvements:
+  o 0 => nullptr.
+  o have '= default' for some destructors.
+  o G4ToolsSGNode.hh : have public cpstor and operator=.
+  o G4ToolsSGViewer.hh : rm #ifdef G4TOOLSSG_DEBUG code.
+
+05 May 2021  Guy Barrand (vis_toolsg-V10-07-00)
+- Requires cmake-V10-07-15, visman-V10-07-06 and externals-V10-07-02.
+- First committal of a tools_sg driver (Guy Barrand).
+  o Four (mutually exclusive) options:
+    . TOOLSSG_X11_GLES
+    . TOOLSSG_WINDOWS_GLES
+    . TOOLSSG_XT_GLES
+    . TOOLSSG_QT_GLES

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Win32 implementation
 //
-//
-// G.Barrand
+// Original author: G.Barrand, 1998
+// --------------------------------------------------------------------
 
 #if defined(G4INTY_BUILD_WIN32) || defined(G4INTY_USE_WIN32)
 
@@ -72,15 +73,21 @@ G4Win32::G4Win32 (
     wc.lpszClassName = className;
     ::RegisterClass  (&wc);
     
-    topWindow   = ::CreateWindow(className,className, 
-				 WS_OVERLAPPEDWINDOW,
-				 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 
-				 NULL, NULL, 
-				 ::GetModuleHandle(NULL),
-				 NULL);
+    topWindow   = ::CreateWindowEx(WS_EX_CLIENTEDGE,
+                                   className,
+                                   "Test",
+                                   WS_OVERLAPPEDWINDOW,
+                                   CW_USEDEFAULT,
+                                   CW_USEDEFAULT,
+                                   CW_USEDEFAULT,
+                                   CW_USEDEFAULT,
+                                   NULL,
+                                   NULL,
+                                   ::GetModuleHandle(NULL),
+                                   NULL);
     
     if(topWindow==NULL) {
-      G4cout << "G4Win32 : Unable to create Win32 window." << G4endl;
+      G4cout << "G4Win32: Unable to create Win32 window." << G4endl;
     }
 
     Win32Inited = TRUE;

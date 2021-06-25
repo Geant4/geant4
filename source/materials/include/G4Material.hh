@@ -288,13 +288,13 @@ public:  // with description
 
   virtual G4bool IsExtended() const;
 
-private:
+  // operators
+  G4bool operator==(const G4Material&) const = delete;
+  G4bool operator!=(const G4Material&) const = delete;
+  G4Material(const G4Material&) = delete;
+  const G4Material& operator=(const G4Material&) = delete;
 
-  // operators       
-  G4bool operator==(const G4Material&) const;
-  G4bool operator!=(const G4Material&) const;
-  G4Material(const G4Material&);
-  const G4Material& operator=(const G4Material&);
+private:
 
   void InitializePointers();
    

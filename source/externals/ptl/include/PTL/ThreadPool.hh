@@ -34,10 +34,15 @@
 #include "PTL/ThreadData.hh"
 #include "PTL/Threading.hh"
 #include "PTL/VTask.hh"
-#include "PTL/VTaskGroup.hh"
 #include "PTL/VUserTaskQueue.hh"
 
-#ifdef PTL_USE_TBB
+#if defined(PTL_USE_TBB)
+#    if !defined(TBB_SUPPRESS_DEPRECATED_MESSAGES)
+#        define TBB_SUPPRESS_DEPRECATED_MESSAGES 1
+#    endif
+#    if !defined(TBB_PREVIEW_GLOBAL_CONTROL)
+#        define TBB_PREVIEW_GLOBAL_CONTROL 1
+#    endif
 #    include <tbb/global_control.h>
 #    include <tbb/tbb.h>
 #endif
@@ -76,28 +81,28 @@ public:
     using task_type    = VTask;
     using lock_t       = std::shared_ptr<Mutex>;
     using condition_t  = std::shared_ptr<Condition>;
-    using task_pointer = task_type*;
+    using task_pointer = std::shared_ptr<task_type>;
     using task_queue_t = VUserTaskQueue;
     // containers
     typedef std::deque<ThreadId>          thread_list_t;
     typedef std::vector<bool>             bool_list_t;
     typedef std::map<ThreadId, uintmax_t> thread_id_map_t;
     typedef std::map<uintmax_t, ThreadId> thread_index_map_t;
-    using thread_vec_t = std::vector<Thread>;
+    using thread_vec_t  = std::vector<Thread>;
+    using thread_data_t = std::vector<std::shared_ptr<ThreadData>>;
     // functions
     typedef std::function<void()>             initialize_func_t;
     typedef std::function<intmax_t(intmax_t)> affinity_func_t;
 
 public:
     // Constructor and Destructors
-    ThreadPool(
-        const size_type& pool_size, VUserTaskQueue* task_queue = nullptr,
-        bool _use_affinity     = GetEnv<bool>("PTL_CPU_AFFINITY", false),
-        const affinity_func_t& = [](intmax_t) {
-            static std::atomic<intmax_t> assigned;
-            intmax_t                     _assign = assigned++;
-            return _assign % Thread::hardware_concurrency();
-        });
+    ThreadPool(const size_type& pool_size, VUserTaskQueue* task_queue = nullptr,
+               bool _use_affinity = GetEnv<bool>("PTL_CPU_AFFINITY", false),
+               affinity_func_t    = [](intmax_t) {
+                   static std::atomic<intmax_t> assigned;
+                   intmax_t                     _assign = assigned++;
+                   return _assign % Thread::hardware_concurrency();
+               });
     // Virtual destructors are required by abstract classes
     // so add it by default, just in case
     virtual ~ThreadPool();
@@ -115,6 +120,15 @@ public:
     template <typename FuncT>
     void execute_on_all_threads(FuncT&& _func);
 
+    template <typename FuncT>
+    void execute_on_specific_threads(const std::set<std::thread::id>& _tid,
+                                     FuncT&&                          _func);
+
+    task_queue_t*  get_queue() const { return m_task_queue; }
+    task_queue_t*& get_valid_queue(task_queue_t*&) const;
+
+    bool is_tbb_threadpool() const { return m_tbb_tp; }
+
 public:
     // Public functions related to TBB
     static bool using_tbb();
@@ -123,7 +137,7 @@ public:
 
 public:
     // add tasks for threads to process
-    size_type add_task(task_pointer task, int bin = -1);
+    size_type add_task(task_pointer&& task, int bin = -1);
     // size_type add_thread_task(ThreadId id, task_pointer&& task);
     // add a generic container with iterator
     template <typename ListT>
@@ -131,8 +145,6 @@ public:
 
     Thread* get_thread(size_type _n) const;
     Thread* get_thread(std::thread::id id) const;
-
-    task_queue_t* get_queue() const { return m_task_queue; }
 
     // only relevant when compiled with PTL_USE_TBB
     static tbb_global_control_t*& tbb_global_control();
@@ -168,21 +180,37 @@ public:
 
     void set_verbose(int n) { m_verbose = n; }
     int  get_verbose() const { return m_verbose; }
-    bool is_master() const { return ThisThread::get_id() == m_master_tid; }
+    bool is_main() const { return ThisThread::get_id() == m_main_tid; }
+
+    tbb_task_arena_t* get_task_arena();
 
 public:
     // read FORCE_NUM_THREADS environment variable
     static const thread_id_map_t& get_thread_ids();
     static uintmax_t              get_this_thread_id();
+    static uintmax_t              add_thread_id()
+    {
+        AutoLock lock(TypeMutex<ThreadPool>(), std::defer_lock);
+        if(!lock.owns_lock())
+            lock.lock();
+        auto _tid = ThisThread::get_id();
+        if(f_thread_ids.find(_tid) == f_thread_ids.end())
+        {
+            auto _idx          = f_thread_ids.size();
+            f_thread_ids[_tid] = _idx;
+            Threading::SetThreadId(_idx);
+        }
+        return f_thread_ids.at(_tid);
+    }
 
 protected:
     void execute_thread(VUserTaskQueue*);  // function thread sits in
-    int  insert(const task_pointer&, int = -1);
-    int  run_on_this(task_pointer);
+    int  insert(task_pointer&&, int = -1);
+    int  run_on_this(task_pointer&&);
 
 protected:
     // called in THREAD INIT
-    static void start_thread(ThreadPool*, intmax_t = -1);
+    static void start_thread(ThreadPool*, thread_data_t*, intmax_t = -1);
 
     void record_entry()
     {
@@ -199,15 +227,16 @@ protected:
 private:
     // Private variables
     // random
-    bool             m_use_affinity;
-    bool             m_tbb_tp;
-    int              m_verbose   = 0;
-    size_type        m_pool_size = 0;
-    ThreadId         m_master_tid;
-    atomic_bool_type m_alive_flag   = std::make_shared<std::atomic_bool>(false);
-    pool_state_type  m_pool_state   = std::make_shared<std::atomic_short>(0);
-    atomic_int_type  m_thread_awake = std::make_shared<std::atomic_uintmax_t>();
-    atomic_int_type  m_thread_active = std::make_shared<std::atomic_uintmax_t>();
+    bool             m_use_affinity      = false;
+    bool             m_tbb_tp            = false;
+    bool             m_delete_task_queue = false;
+    int              m_verbose           = GetEnv<int>("PTL_VERBOSE", 0);
+    size_type        m_pool_size         = 0;
+    ThreadId         m_main_tid          = ThisThread::get_id();
+    atomic_bool_type m_alive_flag        = std::make_shared<std::atomic_bool>(false);
+    pool_state_type  m_pool_state        = std::make_shared<std::atomic_short>(0);
+    atomic_int_type  m_thread_awake      = std::make_shared<std::atomic_uintmax_t>();
+    atomic_int_type  m_thread_active     = std::make_shared<std::atomic_uintmax_t>();
 
     // locks
     lock_t m_task_lock = std::make_shared<Mutex>();
@@ -215,18 +244,20 @@ private:
     condition_t m_task_cond = std::make_shared<Condition>();
 
     // containers
-    bool_list_t   m_is_joined;     // join list
-    bool_list_t   m_is_stopped;    // lets thread know to stop
-    thread_list_t m_main_threads;  // storage for active threads
-    thread_list_t m_stop_threads;  // storage for stopped threads
-    thread_vec_t  m_threads;
+    bool_list_t   m_is_joined{};     // join list
+    bool_list_t   m_is_stopped{};    // lets thread know to stop
+    thread_list_t m_main_threads{};  // storage for active threads
+    thread_list_t m_stop_threads{};  // storage for stopped threads
+    thread_vec_t  m_threads{};
+    thread_data_t m_thread_data{};
 
     // task queue
-    task_queue_t*     m_task_queue;
-    tbb_task_group_t* m_tbb_task_group;
+    task_queue_t*     m_task_queue     = nullptr;
+    tbb_task_arena_t* m_tbb_task_arena = nullptr;
+    tbb_task_group_t* m_tbb_task_group = nullptr;
 
     // functions
-    initialize_func_t m_init_func;
+    initialize_func_t m_init_func = []() {};
     affinity_func_t   m_affinity_func;
 
 private:
@@ -271,7 +302,9 @@ ThreadPool::notify(size_type ntasks)
                 m_task_cond->notify_one();
         }
         else
+        {
             m_task_cond->notify_all();
+        }
     }
 }
 //--------------------------------------------------------------------------------------//
@@ -281,6 +314,28 @@ ThreadPool::tbb_global_control()
 {
     static thread_local tbb_global_control_t* _instance = nullptr;
     return _instance;
+}
+//--------------------------------------------------------------------------------------//
+// task arena
+inline tbb_task_arena_t*
+ThreadPool::get_task_arena()
+{
+#if defined(PTL_USE_TBB)
+    // create a task arena
+    if(!m_tbb_task_arena)
+    {
+        auto _sz = (tbb_global_control())
+                       ? tbb_global_control()->active_value(
+                             tbb::global_control::max_allowed_parallelism)
+                       : size();
+        m_tbb_task_arena = new tbb_task_arena_t(::tbb::task_arena::attach{});
+        m_tbb_task_arena->initialize(_sz, 1);
+    }
+#else
+    if(!m_tbb_task_arena)
+        m_tbb_task_arena = new tbb_task_arena_t{};
+#endif
+    return m_tbb_task_arena;
 }
 //--------------------------------------------------------------------------------------//
 inline void
@@ -293,17 +348,14 @@ ThreadPool::resize(size_type _n)
 }
 //--------------------------------------------------------------------------------------//
 inline int
-ThreadPool::run_on_this(task_pointer task)
+ThreadPool::run_on_this(task_pointer&& _task)
 {
-    auto _func = [=]() {
-        (*task)();
-        if(!task->group())
-            delete task;
-    };
+    auto&& _func = [_task]() { (*_task)(); };
 
     if(m_tbb_tp && m_tbb_task_group)
     {
-        m_tbb_task_group->run(_func);
+        auto _arena = get_task_arena();
+        _arena->execute([=]() { m_tbb_task_group->run(_func); });
     }
     else
     {
@@ -314,28 +366,24 @@ ThreadPool::run_on_this(task_pointer task)
 }
 //--------------------------------------------------------------------------------------//
 inline int
-ThreadPool::insert(const task_pointer& task, int bin)
+ThreadPool::insert(task_pointer&& task, int bin)
 {
     static thread_local ThreadData* _data = ThreadData::GetInstance();
 
     // pass the task to the queue
-    auto ibin = m_task_queue->InsertTask(task, _data, bin);
+    auto ibin = get_valid_queue(m_task_queue)->InsertTask(std::move(task), _data, bin);
     notify();
     return ibin;
 }
 //--------------------------------------------------------------------------------------//
 inline ThreadPool::size_type
-ThreadPool::add_task(task_pointer task, int bin)
+ThreadPool::add_task(task_pointer&& task, int bin)
 {
-    // if not native (i.e. TBB) then return
-    if(!task->is_native_task())
-        return 0;
+    // if not native (i.e. TBB) or we haven't built thread-pool, just execute
+    if(m_tbb_tp || !task->is_native_task() || !m_alive_flag->load())
+        return static_cast<size_type>(run_on_this(std::move(task)));
 
-    // if we haven't built thread-pool, just execute
-    if(!m_alive_flag->load())
-        return static_cast<size_type>(run_on_this(task));
-
-    return static_cast<size_type>(insert(task, bin));
+    return static_cast<size_type>(insert(std::move(task), bin));
 }
 //--------------------------------------------------------------------------------------//
 template <typename ListT>
@@ -359,7 +407,7 @@ ThreadPool::add_tasks(ListT& c)
         else
         {
             //++(m_task_queue);
-            m_task_queue->InsertTask(itr);
+            get_valid_queue(m_task_queue)->InsertTask(itr);
         }
     }
     c.clear();
@@ -377,87 +425,92 @@ ThreadPool::execute_on_all_threads(FuncT&& _func)
     if(m_tbb_tp && m_tbb_task_group)
     {
 #if defined(PTL_USE_TBB)
-        // TBB lazily activates threads to process tasks and the master thread
+        // TBB lazily activates threads to process tasks and the main thread
         // participates in processing the tasks so getting a specific
         // function to execute only on the worker threads requires some trickery
         //
-        auto                      master_tid = ThisThread::get_id();
-        std::set<std::thread::id> _first;
-        Mutex                     _mutex;
+        std::set<std::thread::id> _first{};
+        Mutex                     _mutex{};
         // init function which executes function and returns 1 only once
         auto _init = [&]() {
-            static thread_local int _once = 0;
+            int _once = 0;
             _mutex.lock();
             if(_first.find(std::this_thread::get_id()) == _first.end())
             {
                 // we need to reset this thread-local static for multiple invocations
                 // of the same template instantiation
-                _once = 0;
+                _once = 1;
                 _first.insert(std::this_thread::get_id());
             }
             _mutex.unlock();
-            if(_once++ == 0)
+            if(_once != 0)
             {
                 _func();
                 return 1;
             }
             return 0;
         };
-        // consumes approximately N milliseconds of cpu time
-        auto _consume = [](long n) {
-            using stl_mutex_t   = std::mutex;
-            using unique_lock_t = std::unique_lock<stl_mutex_t>;
-            // a mutex held by one lock
-            stl_mutex_t mutex;
-            // acquire lock
-            unique_lock_t hold_lk(mutex);
-            // associate but defer
-            unique_lock_t try_lk(mutex, std::defer_lock);
-            // get current time
-            auto now = std::chrono::steady_clock::now();
-            // try until time point
-            while(std::chrono::steady_clock::now() < (now + std::chrono::milliseconds(n)))
-                try_lk.try_lock();
-        };
         // this will collect the number of threads which have
         // executed the _init function above
         std::atomic<size_t> _total_init{ 0 };
+        // max parallelism by TBB
+        size_t _maxp = tbb_global_control()->active_value(
+            tbb::global_control::max_allowed_parallelism);
+        // create a task arean
+        auto _arena = get_task_arena();
+        // size of the thread-pool
+        size_t _sz = size();
+        // number of cores
+        size_t _ncore = Threading::GetNumberOfCores();
+        // maximum depth for recursion
+        size_t _dmax = std::max<size_t>(_ncore, 4);
+        // how many threads we need to initialize
+        size_t _num = std::min(_maxp, std::min(_sz, _ncore));
         // this is the task passed to the task-group
-        auto _init_task = [&]() {
-            int _ret = 0;
-            // don't let the master thread execute the function
-            if(ThisThread::get_id() != master_tid)
+        std::function<void()> _init_task;
+        _init_task = [&]() {
+            add_thread_id();
+            static thread_local size_type _depth = 0;
+            int                           _ret   = 0;
+            // don't let the main thread execute the function
+            if(!is_main())
             {
                 // execute the function
                 _ret = _init();
                 // add the result
                 _total_init += _ret;
             }
-            // if the function did not return anything, put it to sleep
-            // so TBB will wake other threads to execute the remaining tasks
-            if(_ret == 0)
-                _consume(100);
+            // if the function did not return anything, recursively execute
+            // two more tasks
+            ++_depth;
+            if(_ret == 0 && _depth < _dmax && _total_init.load() < _num)
+            {
+                tbb::task_group tg{};
+                tg.run([&]() { _init_task(); });
+                tg.run([&]() { _init_task(); });
+                ThisThread::sleep_for(std::chrono::milliseconds{ 1 });
+                tg.wait();
+            }
+            --_depth;
         };
 
         // TBB won't oversubscribe so we need to limit by ncores - 1
-        size_t nitr  = 0;
-        size_t _maxp = tbb_global_control()->active_value(
-            tbb::global_control::max_allowed_parallelism);
-        size_t _sz         = size();
-        size_t _ncore      = Threading::GetNumberOfCores() - 1;
-        size_t _num        = std::min(_maxp, std::min(_sz, _ncore));
+        size_t nitr        = 0;
         auto   _fname      = __FUNCTION__;
         auto   _write_info = [&]() {
-            std::cerr << "[" << _fname << "]> Total initalized: " << _total_init
+            std::cout << "[" << _fname << "]> Total initalized: " << _total_init
                       << ", expected: " << _num << ", max-parallel: " << _maxp
                       << ", size: " << _sz << ", ncore: " << _ncore << std::endl;
         };
         while(_total_init < _num)
         {
-            auto _n = _num;
+            auto _n = 2 * _num;
             while(--_n > 0)
-                m_tbb_task_group->run(_init_task);
-            m_tbb_task_group->wait();
+            {
+                _arena->execute(
+                    [&]() { m_tbb_task_group->run([&]() { _init_task(); }); });
+            }
+            _arena->execute([&]() { m_tbb_task_group->wait(); });
             // don't loop infinitely but use a strict condition
             if(nitr++ > 2 * (_num + 1) && (_total_init - 1) == _num)
             {
@@ -480,6 +533,121 @@ ThreadPool::execute_on_all_threads(FuncT&& _func)
         get_queue()->ExecuteOnAllThreads(this, std::forward<FuncT>(_func));
     }
 }
+
+//--------------------------------------------------------------------------------------//
+
+template <typename FuncT>
+inline void
+ThreadPool::execute_on_specific_threads(const std::set<std::thread::id>& _tids,
+                                        FuncT&&                          _func)
+{
+    if(m_tbb_tp && m_tbb_task_group)
+    {
+#if defined(PTL_USE_TBB)
+        // TBB lazily activates threads to process tasks and the main thread
+        // participates in processing the tasks so getting a specific
+        // function to execute only on the worker threads requires some trickery
+        //
+        std::set<std::thread::id> _first{};
+        Mutex                     _mutex{};
+        // init function which executes function and returns 1 only once
+        auto _exec = [&]() {
+            int _once = 0;
+            _mutex.lock();
+            if(_first.find(std::this_thread::get_id()) == _first.end())
+            {
+                // we need to reset this thread-local static for multiple invocations
+                // of the same template instantiation
+                _once = 1;
+                _first.insert(std::this_thread::get_id());
+            }
+            _mutex.unlock();
+            if(_once != 0)
+            {
+                _func();
+                return 1;
+            }
+            return 0;
+        };
+        // this will collect the number of threads which have
+        // executed the _exec function above
+        std::atomic<size_t> _total_exec{ 0 };
+        // number of cores
+        size_t _ncore = Threading::GetNumberOfCores();
+        // maximum depth for recursion
+        size_t _dmax = std::max<size_t>(_ncore, 4);
+        // how many threads we need to initialize
+        size_t _num = _tids.size();
+        // create a task arena
+        auto _arena = get_task_arena();
+        // this is the task passed to the task-group
+        std::function<void()> _exec_task;
+        _exec_task = [&]() {
+            add_thread_id();
+            static thread_local size_type _depth    = 0;
+            int                           _ret      = 0;
+            auto                          _this_tid = std::this_thread::get_id();
+            // don't let the main thread execute the function
+            if(_tids.count(_this_tid) > 0)
+            {
+                // execute the function
+                _ret = _exec();
+                // add the result
+                _total_exec += _ret;
+            }
+            // if the function did not return anything, recursively execute
+            // two more tasks
+            ++_depth;
+            if(_ret == 0 && _depth < _dmax && _total_exec.load() < _num)
+            {
+                tbb::task_group tg{};
+                tg.run([&]() { _exec_task(); });
+                tg.run([&]() { _exec_task(); });
+                ThisThread::sleep_for(std::chrono::milliseconds{ 1 });
+                tg.wait();
+            }
+            --_depth;
+        };
+
+        // TBB won't oversubscribe so we need to limit by ncores - 1
+        size_t nitr        = 0;
+        auto   _fname      = __FUNCTION__;
+        auto   _write_info = [&]() {
+            std::cout << "[" << _fname << "]> Total executed: " << _total_exec
+                      << ", expected: " << _num << ", size: " << size() << std::endl;
+        };
+        while(_total_exec < _num)
+        {
+            auto _n = 2 * _num;
+            while(--_n > 0)
+            {
+                _arena->execute(
+                    [&]() { m_tbb_task_group->run([&]() { _exec_task(); }); });
+            }
+            _arena->execute([&]() { m_tbb_task_group->wait(); });
+            // don't loop infinitely but use a strict condition
+            if(nitr++ > 2 * (_num + 1) && (_total_exec - 1) == _num)
+            {
+                _write_info();
+                break;
+            }
+            // at this point we need to exit
+            if(nitr > 8 * (_num + 1))
+            {
+                _write_info();
+                break;
+            }
+        }
+        if(get_verbose() > 3)
+            _write_info();
+#endif
+    }
+    else if(get_queue())
+    {
+        get_queue()->ExecuteOnSpecificThreads(_tids, this, std::forward<FuncT>(_func));
+    }
+}
+
 //======================================================================================//
 
 }  // namespace PTL

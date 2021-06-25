@@ -7,12 +7,22 @@
       History file for hadronic/models/parton_string/qgsm directory
       -------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16-Apr-2021 Ben Morgan (hadr-qgsm-V10-07-01)
+- Migrate build to modular CMake API
+
+13-Apr-2021 A. Ribon                     (hadr-qgsm-V10-07-00)
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 17-Oct-2020 V.Ivanchenko                 (hadr-qgsm-V10-06-06)
 -  G4QGSParticipants - added protection for G4Exp (fixing outstanding
@@ -60,18 +70,18 @@ Two, unrelated changes made by Vladimir Uzhinsky :
    'double' to 'size_t' (to avoid warnings seen on Windows).
 
 19-Nov-2019 A. Ribon                     (hadr-qgsm-V10-05-02)
--  G4VAnnihilationCrossSection, G4AnnihilationCrossSection, 
+-  G4VAnnihilationCrossSection, G4AnnihilationCrossSection,
    G4GammaAnnCrossSection, G4ASCCrossSection, G4QGSMParameters :
    deleted unused classes.
 
 24-Oct-2019 A. Ribon                     (hadr-qgsm-V10-05-01)
 -  G4Reggeons: Vladimir Uzhinsky extension of the class for charmed and
-   bottom hadrons following ideas of Grichine's implementation of 
+   bottom hadrons following ideas of Grichine's implementation of
    Glauber-Gribov heavy hadron - nucleon cross sections.
 
 02-Apr-2019 A. Ribon                     (hadr-qgsm-V10-05-00)
--  G4QGSParticipants : bug-fix (made by Vladimir Uzhinsky) in the 
-   computation of the transverse mass in the method 
+-  G4QGSParticipants : bug-fix (made by Vladimir Uzhinsky) in the
+   computation of the transverse mass in the method
    G4QGSParticipants::DeterminePartonMomenta() .
 
 20-Nov-2018 A. Ribon                     (hadr-qgsm-V10-04-08)
@@ -83,7 +93,7 @@ Two, unrelated changes made by Vladimir Uzhinsky :
 
 25-Oct-2018 V. Uzhinsky                  (hadr-qgsm-V10-04-06)
 -  G4Reggeons.cc : Cross sections of K-meson - nucleon interactions are
-   improved. Pomeron and 2 non-vacuum exchanges are accounted. Initial 
+   improved. Pomeron and 2 non-vacuum exchanges are accounted. Initial
    parameters for Kaons are taken from Kaidalov's paper (1976).
 
    Gamma-nucleon cross sections are improved due to simple tunning of
@@ -94,7 +104,7 @@ Two, unrelated changes made by Vladimir Uzhinsky :
 
 05-Feb-2018 A. Ribon                     (hadr-qgsm-V10-04-04)
 -  G4QGSParticipants : introduced protection against negative squared mass
-   in method PutOnMassShell(), which was causing some rare crashes. 
+   in method PutOnMassShell(), which was causing some rare crashes.
    If a negative squared mass occurs, a "JustWarning" exception is thrown
    and the squared mass is set to 0, before calling the square root (which
    is now computed only once).
@@ -112,7 +122,7 @@ Two, unrelated changes made by Vladimir Uzhinsky :
   Thanks to Raphael Isemann for reporting this.
 
 07-Dec-2017 A. Ribon                     (hadr-qgsm-V10-04-00)
--  Brought back the development version of QGS 
+-  Brought back the development version of QGS
    (as it was in hadr-qgsm-V10-03-04).
 
 26-Oct-2017 A. Ribon                     (hadr-qgsm-V10-03-05)
@@ -160,7 +170,7 @@ Two, unrelated changes made by Vladimir Uzhinsky :
    RRR diagram of Reggeon phenomenology. For implementation of the processes, a new class -
    G4QuarkExchange, was created.
 
-   Main changes are in G4QGSParticipants.cc. 
+   Main changes are in G4QGSParticipants.cc.
 
    10-20 Implementation of Quark exchange simulation.
    7-9 Oct. Creation and testing G4Reggeons.
@@ -212,7 +222,7 @@ Two, unrelated changes made by Vladimir Uzhinsky :
    checking of 'while' loops.
 
 05 August 2015 Alberto Ribon             (hadr-qgsm-V10-01-12)
-   G4ASCCrossSection, G4QGSMSplitableHadron, G4QGSParticipants, 
+   G4ASCCrossSection, G4QGSMSplitableHadron, G4QGSParticipants,
    G4SingleDiffractiveExcitation and G4QGSDiffractiveExcitation:
    replaced std::exp, std::log and std::pow with the faster
    G4Exp, G4Log and G4Pow, respectively.
@@ -244,7 +254,7 @@ Two, unrelated changes made by Vladimir Uzhinsky :
    theNucleus->StartLoop();
    G4Nucleon * pNucleon =0; // theNucleus->GetNextNucleon();   // Uzhi 27.05.2015
 
-   while( (pNucleon = theNucleus->GetNextNucleon()) ) 
+   while( (pNucleon = theNucleus->GetNextNucleon()) )
    ....
 
 22 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-06)
@@ -258,8 +268,8 @@ Two, unrelated changes made by Vladimir Uzhinsky :
    A bug is fixed in G4QGSParticipants for gamma projectile.
 
 19 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-03)
-   To avoid double deletion erasing of TheInvolvedNucleonsOfTarget and 
-   TheInvolvedNucleonsOfProjectile was closed in G4QGSParticipants::~G4QGSParticipants(). 
+   To avoid double deletion erasing of TheInvolvedNucleonsOfTarget and
+   TheInvolvedNucleonsOfProjectile was closed in G4QGSParticipants::~G4QGSParticipants().
 
 15 May 2015 Vladimir Uzhinsky            (hadr-qgsm-V10-01-02)
    A bug was erased in G4SPBaryon.cc: setting of Delta0 isobar splitting
@@ -335,27 +345,27 @@ Two, unrelated changes made by Vladimir Uzhinsky :
 - G4QGSParticipants: reduce energy of participant nucleons by binding energy.
    This increases excitation energy, as calculated by initial-final. Without
    this, excitation E often is close to 0, or negative.
-   
+
 01 Jun 2011, G.Folger		(hadr-qgsm-V09-04-01)
 -----------------------------------------------------
--  Fix compilation warnings, gcc4.6, on alost unused variables. Move 
+-  Fix compilation warnings, gcc4.6, on alost unused variables. Move
     "debug" variables into #ifdef
-     
+
 17 Mar 2011, G.Folger		(hadr-qgsm-V09-04-00)
 -----------------------------------------------------
 -  set limits for E/p checking
 
 8 Sep 2010, G.Folger		(hadr-qgsm-V09-03-01)
 -----------------------------------------------------
-- G4QGSModel.icc: use integer (A,Z) interface of nucleus 
+- G4QGSModel.icc: use integer (A,Z) interface of nucleus
 
 12-Mar-2010, G.Folger		(hadr-qgsm-V09-03-00)
 -  remove G4PartonStringAnnihilator.{hh,cc} not used anywhere
 
 19 May 2009, G.Folger		(hadr-qgsm-V09-02-02)
 -----------------------------------------------------
-- fix in G4SPBaryon: for antibaryon, a  diquark & quark was given instead of 
-      anti-diquark & antiquark; note the reverse order, too. 
+- fix in G4SPBaryon: for antibaryon, a  diquark & quark was given instead of
+      anti-diquark & antiquark; note the reverse order, too.
     Fixes problems with incident anti baryons, e.g. antiproton, manifesting
     in problems with forming hadrons.
 
@@ -365,7 +375,7 @@ Very important bug fix in G4QGSParticipants.cc to let QGSC working from E=0
 Added by GF (19-May-09):
 - this very important "bug" fix modifies G4G4QGSParticipants.cc and
    G4GammaParticipants.cc:
-     changing the value of Threshold from 0.45 GeV to 0.GeV, 
+     changing the value of Threshold from 0.45 GeV to 0.GeV,
      and disables an Exception if s < sqr(total mass + Threshold)
 
 15 Sep 2008 G.Folger       (hadr-qgsm-V09-01-01)

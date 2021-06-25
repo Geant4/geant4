@@ -41,7 +41,7 @@
 #include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
-#include "G4DeuteronInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VDeuteronBuilder.hh"
 #include <vector>
 
@@ -55,7 +55,7 @@ class G4DeuteronBuilder : public G4PhysicsBuilderInterface
     virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
-    G4DeuteronInelasticProcess * theDeuteronInelastic;
+    G4HadronInelasticProcess * theDeuteronInelastic;
     
     std::vector<G4VDeuteronBuilder *> theModelCollections;
 };

@@ -9,15 +9,12 @@
 /testem/det/setAbsMat Silicon
 /testem/det/setAbsThick 20 um
 /testem/det/setAbsYZ    50 um
-/testem/det/setAbsXpos   0 um
 #
 /testem/phys/addPhysics  emstandard_opt3
+/process/em/verbose 1
+/process/em/workerVerbose 0
 #
 /run/setCut 7 um
-#
-#/process/em/verbose 1
-/process/em/workerVerbose 0
-#/process/eLoss/fluct false
 #
 /run/initialize
 #
@@ -26,7 +23,6 @@
 /gun/energy 5 GeV
 #
 /run/printProgress 10000
-#
 /run/beamOn 100000
 #
 /testem/det/setAbsMat Gold

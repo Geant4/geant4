@@ -59,12 +59,11 @@
 class G4MicroElecLOPhononModel : public G4VEmModel
 {
 public:
-  G4MicroElecLOPhononModel(const G4ParticleDefinition*p = nullptr,
+  explicit G4MicroElecLOPhononModel(const G4ParticleDefinition*p = nullptr,
 		  const G4String& nam = "G4MicroElecLOPhononModel");
   ~G4MicroElecLOPhononModel() override;
   
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
-  
   G4double CrossSectionPerVolume(const G4Material* material,
 				 const G4ParticleDefinition* p,
 				 G4double ekin,
@@ -76,18 +75,18 @@ public:
 			 const G4DynamicParticle*,
 			 G4double tmin,
 			 G4double maxEnergy) override;
+
+  G4MicroElecLOPhononModel & operator=(const  G4MicroElecLOPhononModel &right) = delete;
+  G4MicroElecLOPhononModel(const  G4MicroElecLOPhononModel&) = delete;
   
 protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
   
-private:
-  G4MicroElecLOPhononModel & operator=(const  G4MicroElecLOPhononModel &right);
-  G4MicroElecLOPhononModel(const  G4MicroElecLOPhononModel&);
-  
+private:  
+  G4double phononEnergy = 0.;
   G4bool Interband = false;
   G4bool isInitialised = false;
   G4bool absor = false;
-  G4double phononEnergy = 0.;
 };
 
 #endif 

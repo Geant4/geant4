@@ -59,7 +59,7 @@ void UrQMDProtonBuilder::Build(G4HadronElasticProcess * )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UrQMDProtonBuilder::Build(G4ProtonInelasticProcess * aP)
+void UrQMDProtonBuilder::Build(G4HadronInelasticProcess * aP)
 {
   fModel->SetMinEnergy(fMin);
   fModel->SetMaxEnergy(fMax);

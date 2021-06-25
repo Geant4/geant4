@@ -47,8 +47,6 @@ public:
 
   virtual void BuildForMaster() const;
 
-  virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
-
 private:
 
   DetectorConstruction* fDetector;

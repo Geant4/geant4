@@ -90,13 +90,11 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
 
-
 class G4MicroElecInelasticModel_new : public G4VEmModel
 {
 
 public:
-  
-  G4MicroElecInelasticModel_new(const G4ParticleDefinition* p = 0,
+  explicit G4MicroElecInelasticModel_new(const G4ParticleDefinition* p = nullptr,
 				const G4String& nam = "MicroElecInelasticModel");
   ~G4MicroElecInelasticModel_new() override;
   
@@ -125,9 +123,10 @@ public:
   // compute the effective charge according Brandt et Kitagawa theory
 
   G4double stepFunc(G4double x);
-
   G4double vrkreussler(G4double v, G4double vF);
-  
+
+  G4MicroElecInelasticModel_new & operator=(const  G4MicroElecInelasticModel_new &right) = delete;
+  G4MicroElecInelasticModel_new(const  G4MicroElecInelasticModel_new&) = delete;
 protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
 
@@ -135,9 +134,6 @@ private:
   //
   // private methods
   //  
-  G4MicroElecInelasticModel_new & operator=(const  G4MicroElecInelasticModel_new &right);
-  G4MicroElecInelasticModel_new(const  G4MicroElecInelasticModel_new&);
-  
   G4int RandomSelect(G4double energy,const G4String& particle, G4double originalMass, G4int originalZ );
 
   G4double RandomizeCreatedElectronEnergy(G4double secondaryKinetic);
@@ -159,20 +155,17 @@ private:
 			     G4double t1,  G4double t2,  G4double t,  G4double e);
   //
   // private elements
-  // 
-  G4String currentMaterial = "";
-  G4bool fasterCode = false;
+  //  
   //deexcitation manager to produce fluo photns and e-
   G4VAtomDeexcitation* fAtomDeexcitation = nullptr;
   G4Material* nistSi = nullptr;
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-  G4bool isInitialised = false;
-  G4int verboseLevel = 0;  
+  G4MicroElecMaterialStructure* currentMaterialStructure = nullptr;
+
   typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
   typedef std::map<G4String,G4MicroElecCrossSectionDataSet_new*,std::less<G4String> > MapData;
   typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap; 
   typedef std::map<G4double, std::vector<G4double> > VecMap;
+
   //Tables for multilayers
   typedef std::map<G4String, MapData*, std::less<G4String> > TCSMap;
   TCSMap tableTCS; //TCS tables by particle
@@ -187,8 +180,14 @@ private:
   TranfEnergyMap eVecmStorage, pVecmStorage; //Transfered energy for interpolation (slower code)
   typedef std::map<G4String, G4MicroElecMaterialStructure*, std::less<G4String> > MapStructure;
   MapStructure tableMaterialsStructures; //Structures of all materials simulated
-  G4MicroElecMaterialStructure* currentMaterialStructure = nullptr;
-  
+
+  G4String currentMaterial = "";
+  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
+  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+ 
+  G4int verboseLevel;  
+  G4bool isInitialised ;
+  G4bool fasterCode;
 };
 
 #endif

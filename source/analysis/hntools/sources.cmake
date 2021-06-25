@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4hntools
-# Package: Geant4.src.G4analysis.G4hntools
-#------------------------------------------------------------------------------
+# - G4hntools module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4hntools
-  HEADERS
+geant4_add_module(G4hntools
+  PUBLIC_HEADERS
     G4BaseHistoUtilities.hh
     G4MPIToolsManager.hh
     G4H1ToolsManager.hh
@@ -28,14 +23,6 @@ geant4_define_module(NAME G4hntools
     G4P1ToolsManager.cc
     G4P2ToolsManager.cc
     G4ToolsAnalysisManager.cc
-    G4ToolsAnalysisReader.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-    G4analysismng
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-)
+    G4ToolsAnalysisReader.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4hntools PUBLIC G4analysismng G4globman G4tools)

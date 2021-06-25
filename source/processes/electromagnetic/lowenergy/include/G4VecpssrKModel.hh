@@ -48,19 +48,14 @@ class G4VecpssrKModel
 
 {
 public:
-
-  G4VecpssrKModel();
-
+  explicit G4VecpssrKModel();
   virtual ~G4VecpssrKModel();
 			     
-  virtual G4double CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
+  virtual G4double CalculateCrossSection(G4int zTarget,G4double massIncident, 
+					 G4double energyIncident) = 0;
    
-
-private:
-
-
-  G4VecpssrKModel(const G4VecpssrKModel&);
-  G4VecpssrKModel & operator = (const G4VecpssrKModel &right);
+  G4VecpssrKModel(const G4VecpssrKModel&) = delete;
+  G4VecpssrKModel & operator = (const G4VecpssrKModel &right) = delete;
 
 };
 

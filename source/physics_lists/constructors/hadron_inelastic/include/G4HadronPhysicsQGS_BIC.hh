@@ -54,9 +54,9 @@ class G4HadronPhysicsQGS_BIC : public G4HadronPhysicsQGSP_BERT
     (const G4HadronPhysicsQGS_BIC &right) = delete;
 
   protected:
-    virtual void Neutron();
-    virtual void Proton();
-    virtual void Pion();
+    void Neutron() override;
+    void Proton() override;
+    void Pion() override;
 
   private:
     G4double minBERT_pion;

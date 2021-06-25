@@ -36,8 +36,8 @@
 
 /// Run class
 ///
-/// In RecordEvent() there is collected information event per event 
-/// from Hits Collections, and accumulated statistic for the run 
+/// In RecordEvent() there is collected information event per event
+/// from Hits Collections, and accumulated statistic for the run
 
 class B3bRun : public G4Run
 {
@@ -47,15 +47,15 @@ class B3bRun : public G4Run
 
     virtual void RecordEvent(const G4Event*);
     virtual void Merge(const G4Run*);
-    
+
   public:
     G4int GetNbGoodEvents() const { return fGoodEvents; }
-    G4double GetSumDose()   const { return fSumDose; }    
+    G4double GetSumDose()   const { return fSumDose; }
     G4StatAnalysis GetStatDose() const { return fStatDose; }
 
   private:
     G4int fCollID_cryst;
-    G4int fCollID_patient;   
+    G4int fCollID_patient;
     G4int fPrintModulo;
     G4int fGoodEvents;
     G4double fSumDose;
@@ -66,4 +66,4 @@ class B3bRun : public G4Run
 
 #endif
 
-    
+

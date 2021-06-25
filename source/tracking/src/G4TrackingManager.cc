@@ -43,8 +43,8 @@
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////
 {
-  fpSteppingManager = new G4SteppingManager();
   messenger = new G4TrackingMessenger(this);
+  fpSteppingManager = new G4SteppingManager();
 }
 
 ///////////////////////////////////////

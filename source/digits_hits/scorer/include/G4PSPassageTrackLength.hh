@@ -36,48 +36,44 @@
 // (Description)
 //   This is a primitive scorer class for scoring only track length.
 //   The tracks which passed a geometry is taken into account.
-// 
+//
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
-// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of track length 
+// 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of track length
 //              vs. number of tracks (not weighted)             (Makoto Asai)
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSPassageTrackLength : public G4VPrimitivePlotter
 {
- 
-  public: // with description
-      G4PSPassageTrackLength(G4String name, G4int depth=0);
-      G4PSPassageTrackLength(G4String name, const G4String& unit, 
-			     G4int depth=0);
-      virtual ~G4PSPassageTrackLength();
+ public:  // with description
+  G4PSPassageTrackLength(G4String name, G4int depth = 0);
+  G4PSPassageTrackLength(G4String name, const G4String& unit, G4int depth = 0);
+  virtual ~G4PSPassageTrackLength();
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      G4bool IsPassed(G4Step*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  G4bool IsPassed(G4Step*);
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  private:
-      G4int HCID;
-      G4int fCurrentTrkID;
-      G4double fTrackLength;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool weighted;
-
+ private:
+  G4int HCID;
+  G4int fCurrentTrkID;
+  G4double fTrackLength;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
 };
 
 #endif
-

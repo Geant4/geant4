@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RunManager implementation
 //
-//
-//
+// Original author: M.Asai, 1996
+// --------------------------------------------------------------------
 
-// On Sun, to prevent conflict with ObjectSpace, G4Timer.hh has to be
-// loaded *before* globals.hh...
+#include <sstream>
+
 #include "G4Timer.hh"
 
 #include "G4MTRunManagerKernel.hh"
@@ -63,17 +64,32 @@
 #include "Randomize.hh"
 #include "G4TiMemory.hh"
 #include "G4Profiler.hh"
-#include <sstream>
+
+#include "G4HCofThisEvent.hh"
+#include "G4ParallelWorldProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+#include "G4ScoringManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4VHitsCollection.hh"
+#include "G4VScoringMesh.hh"
+
+#include "G4ScoringBox.hh"
+#include "G4ScoringCylinder.hh"
+#include "G4LogicalVolume.hh"
+#include "G4SmartVoxelHeader.hh"
+#include "G4SmartVoxelStat.hh"
+#include "G4VPhysicalVolume.hh"
+
+#include "G4AssemblyStore.hh"
+#include "G4GeometryManager.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4RegionStore.hh"
+#include "G4SolidStore.hh"
 
 using namespace CLHEP;
-
-G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
-
-G4bool G4RunManager::fGeometryHasBeenDestroyed = false;
-G4bool G4RunManager::IfGeometryHasBeenDestroyed()
-{
-  return fGeometryHasBeenDestroyed;
-}
 
 // The following lines are needed since G4VUserPhysicsList
 // uses a #define theParticleIterator
@@ -81,45 +97,24 @@ G4bool G4RunManager::IfGeometryHasBeenDestroyed()
 #  undef theParticleIterator
 #endif
 
-G4RunManager* G4RunManager::GetRunManager() { return fRunManager; }
+G4ThreadLocal G4RunManager* G4RunManager::fRunManager = nullptr;
 
+G4bool G4RunManager::fGeometryHasBeenDestroyed = false;
+
+// --------------------------------------------------------------------
+G4bool G4RunManager::IfGeometryHasBeenDestroyed()
+{
+  return fGeometryHasBeenDestroyed;
+}
+
+// --------------------------------------------------------------------
+G4RunManager* G4RunManager::GetRunManager()
+{
+  return fRunManager;
+}
+
+// --------------------------------------------------------------------
 G4RunManager::G4RunManager()
-  : userDetector(0)
-  , physicsList(0)
-  , userActionInitialization(0)
-  , userWorkerInitialization(0)
-  , userWorkerThreadInitialization(0)
-  , userRunAction(0)
-  , userPrimaryGeneratorAction(0)
-  , userEventAction(0)
-  , userStackingAction(0)
-  , userTrackingAction(0)
-  , userSteppingAction(0)
-  , geometryInitialized(false)
-  , physicsInitialized(false)
-  , runAborted(false)
-  , initializedAtLeastOnce(false)
-  , geometryToBeOptimized(true)
-  , runIDCounter(0)
-  , verboseLevel(0)
-  , printModulo(-1)
-  , DCtable(0)
-  , currentRun(0)
-  , currentEvent(0)
-  , n_perviousEventsToBeStored(0)
-  , numberOfEventToBeProcessed(0)
-  , storeRandomNumberStatus(false)
-  , storeRandomNumberStatusToG4Event(0)
-  , rngStatusEventsFlag(false)
-  , currentWorld(0)
-  , nParallelWorlds(0)
-  , msgText(" ")
-  , n_select_msg(-1)
-  , numberOfEventProcessed(0)
-  , selectMacro("")
-  , fakeRun(false)
-  , isScoreNtupleWriter(false)
-  , geometryDirectlyUpdated(false)
 {
   if(fRunManager)
   {
@@ -136,7 +131,6 @@ G4RunManager::G4RunManager()
   previousEvents = new std::list<G4Event*>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable();
-  randomNumberStatusDir = "./";
   std::ostringstream oss;
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun   = oss.str();
@@ -144,57 +138,21 @@ G4RunManager::G4RunManager()
   runManagerType                 = sequentialRM;
 }
 
+// --------------------------------------------------------------------
 G4RunManager::G4RunManager(RMType rmType)
-  : userDetector(0)
-  , physicsList(0)
-  , userActionInitialization(0)
-  , userWorkerInitialization(0)
-  , userWorkerThreadInitialization(0)
-  , userRunAction(0)
-  , userPrimaryGeneratorAction(0)
-  , userEventAction(0)
-  , userStackingAction(0)
-  , userTrackingAction(0)
-  , userSteppingAction(0)
-  , geometryInitialized(false)
-  , physicsInitialized(false)
-  , runAborted(false)
-  , initializedAtLeastOnce(false)
-  , geometryToBeOptimized(true)
-  , runIDCounter(0)
-  , verboseLevel(0)
-  , printModulo(-1)
-  , DCtable(0)
-  , currentRun(0)
-  , currentEvent(0)
-  , n_perviousEventsToBeStored(0)
-  , numberOfEventToBeProcessed(0)
-  , storeRandomNumberStatus(false)
-  , storeRandomNumberStatusToG4Event(0)
-  , rngStatusEventsFlag(false)
-  , currentWorld(0)
-  , nParallelWorlds(0)
-  , msgText(" ")
-  , n_select_msg(-1)
-  , numberOfEventProcessed(0)
-  , selectMacro("")
-  , fakeRun(false)
-  , isScoreNtupleWriter(false)
-  , geometryDirectlyUpdated(false)
 {
   // This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
   G4ExceptionDescription msg;
   msg << "Geant4 code is compiled without multi-threading support "
-         "(-DG4MULTITHREADED "
-         "is set to off).";
+         "(-DG4MULTITHREADED is set to off).";
   msg << " This type of RunManager can only be used in mult-threaded "
          "applications.";
-  G4Exception("G4RunManager::G4RunManager(G4bool)", "Run0107", FatalException,
-              msg);
+  G4Exception("G4RunManager::G4RunManager(G4bool)", "Run0107",
+              FatalException, msg);
 #endif
 
-  if(fRunManager)
+  if(fRunManager != nullptr)
   {
     G4Exception("G4RunManager::G4RunManager()", "Run0031", FatalException,
                 "G4RunManager constructed twice.");
@@ -212,7 +170,7 @@ G4RunManager::G4RunManager(RMType rmType)
       break;
     default:
       G4ExceptionDescription msgx;
-      msgx << " This type of RunManager can only be used in mult-threaded "
+      msgx << "This type of RunManager can only be used in multi-threaded "
               "applications.";
       G4Exception("G4RunManager::G4RunManager(G4bool)", "Run0108",
                   FatalException, msgx);
@@ -235,9 +193,10 @@ G4RunManager::G4RunManager(RMType rmType)
   ConfigureProfilers();
 }
 
+// --------------------------------------------------------------------
 G4RunManager::~G4RunManager()
 {
-  // finalize profiler before shutting down the threads
+  // finalise profiler before shutting down the threads
   G4Profiler::Finalize();
   G4StateManager* pStateManager = G4StateManager::GetStateManager();
   // set the application state to the quite state
@@ -249,80 +208,68 @@ G4RunManager::~G4RunManager()
   }
 
   CleanUpPreviousEvents();
-  if(currentRun)
-    delete currentRun;
+  delete currentRun;
   delete timer;
   delete runMessenger;
   delete previousEvents;
 
   // The following will work for all RunManager types
-  // if derived class does the correct thing in derived
-  // destructor that is set to zero pointers of
-  // user initialization objects for which does not have
+  // if derived class does the correct thing in the derived
+  // destructor that is: set to zero pointers of
+  // user initialization objects for which have no
   // ownership
   DeleteUserInitializations();
-  if(userRunAction)
-  {
-    delete userRunAction;
-    userRunAction = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserRunAction deleted." << G4endl;
-  }
-  if(userPrimaryGeneratorAction)
-  {
-    delete userPrimaryGeneratorAction;
-    userPrimaryGeneratorAction = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserPrimaryGenerator deleted." << G4endl;
-  }
+  delete userRunAction;
+  userRunAction = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserRunAction deleted." << G4endl;
+
+  delete userPrimaryGeneratorAction;
+  userPrimaryGeneratorAction = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserPrimaryGenerator deleted." << G4endl;
 
   if(verboseLevel > 1)
     G4cout << "RunManager is deleting RunManagerKernel." << G4endl;
 
   delete kernel;
 
-  fRunManager = 0;
+  fRunManager = nullptr;
+
+  if(verboseLevel > 1)
+    G4cout << "RunManager is deleted." << G4endl;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::DeleteUserInitializations()
 {
-  if(userDetector)
-  {
-    delete userDetector;
-    userDetector = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserDetectorConstruction deleted." << G4endl;
-  }
-  if(physicsList)
-  {
-    delete physicsList;
-    physicsList = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserPhysicsList deleted." << G4endl;
-  }
-  if(userActionInitialization)
-  {
-    delete userActionInitialization;
-    userActionInitialization = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserActionInitialization deleted." << G4endl;
-  }
-  if(userWorkerInitialization)
-  {
-    delete userWorkerInitialization;
-    userWorkerInitialization = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserWorkerInitialization deleted." << G4endl;
-  }
-  if(userWorkerThreadInitialization)
-  {
-    delete userWorkerThreadInitialization;
-    userWorkerThreadInitialization = 0;
-    if(verboseLevel > 1)
-      G4cout << "UserWorkerThreadInitialization deleted." << G4endl;
-  }
+  delete userDetector;
+  userDetector = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserDetectorConstruction deleted." << G4endl;
+
+  delete physicsList;
+  physicsList = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserPhysicsList deleted." << G4endl;
+
+  delete userActionInitialization;
+  userActionInitialization = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserActionInitialization deleted." << G4endl;
+
+  delete userWorkerInitialization;
+  userWorkerInitialization = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserWorkerInitialization deleted." << G4endl;
+
+  delete userWorkerThreadInitialization;
+  userWorkerThreadInitialization = nullptr;
+  if(verboseLevel > 1)
+    G4cout << "UserWorkerThreadInitialization deleted." << G4endl;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::BeamOn(G4int n_event, const char* macroFile, G4int n_select)
 {
   if(n_event <= 0)
@@ -346,6 +293,7 @@ void G4RunManager::BeamOn(G4int n_event, const char* macroFile, G4int n_select)
   fakeRun = false;
 }
 
+// --------------------------------------------------------------------
 G4bool G4RunManager::ConfirmBeamOnCondition()
 {
   G4StateManager* stateManager = G4StateManager::GetStateManager();
@@ -380,6 +328,7 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
   return true;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::RunInitialization()
 {
   if(!(kernel->RunInitialization(fakeRun)))
@@ -389,9 +338,8 @@ void G4RunManager::RunInitialization()
   numberOfEventProcessed = 0;
 
   CleanUpPreviousEvents();
-  if(currentRun)
-    delete currentRun;
-  currentRun = 0;
+  delete currentRun;
+  currentRun = nullptr;
 
   if(fakeRun)
     return;
@@ -399,9 +347,9 @@ void G4RunManager::RunInitialization()
   if(fGeometryHasBeenDestroyed)
     G4ParallelWorldProcessStore::GetInstance()->UpdateWorlds();
 
-  if(userRunAction)
+  if(userRunAction != nullptr)
     currentRun = userRunAction->GenerateRun();
-  if(!currentRun)
+  if(currentRun == nullptr)
     currentRun = new G4Run();
 
   currentRun->SetRunID(runIDCounter);
@@ -409,12 +357,12 @@ void G4RunManager::RunInitialization()
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
-  if(fSDM)
+  if(fSDM != nullptr)
   {
     currentRun->SetHCtable(fSDM->GetHCtable());
   }
 
-  if(G4VScoreNtupleWriter::Instance())
+  if(G4VScoreNtupleWriter::Instance() != nullptr)
   {
     auto hce            = fSDM->PrepareNewEvent();
     isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
@@ -426,16 +374,16 @@ void G4RunManager::RunInitialization()
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
 
-  for(G4int i_prev = 0; i_prev < n_perviousEventsToBeStored; i_prev++)
+  for(G4int i_prev = 0; i_prev < n_perviousEventsToBeStored; ++i_prev)
   {
-    previousEvents->push_back((G4Event*) 0);
+    previousEvents->push_back(nullptr);
   }
 
   if(printModulo >= 0 || verboseLevel > 0)
   {
     G4cout << "### Run " << currentRun->GetRunID() << " starts." << G4endl;
   }
-  if(userRunAction)
+  if(userRunAction != nullptr)
     userRunAction->BeginOfRunAction(currentRun);
 
 #if defined(GEANT4_USE_TIMEMORY)
@@ -460,13 +408,14 @@ void G4RunManager::RunInitialization()
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::DoEventLoop(G4int n_event, const char* macroFile,
                                G4int n_select)
 {
   InitializeEventLoop(n_event, macroFile, n_select);
 
   // Event loop
-  for(G4int i_event = 0; i_event < n_event; i_event++)
+  for(G4int i_event = 0; i_event < n_event; ++i_event)
   {
     ProcessOneEvent(i_event);
     TerminateOneEvent();
@@ -480,6 +429,7 @@ void G4RunManager::DoEventLoop(G4int n_event, const char* macroFile,
     TerminateEventLoop();
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
                                        G4int n_select)
 {
@@ -504,6 +454,7 @@ void G4RunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::ProcessOneEvent(G4int i_event)
 {
   currentEvent = GenerateEvent(i_event);
@@ -514,13 +465,15 @@ void G4RunManager::ProcessOneEvent(G4int i_event)
     G4UImanager::GetUIpointer()->ApplyCommand(msgText);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::TerminateOneEvent()
 {
   StackPreviousEvent(currentEvent);
   currentEvent = 0;
-  numberOfEventProcessed++;
+  ++numberOfEventProcessed;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::TerminateEventLoop()
 {
   if(verboseLevel > 0 && !fakeRun)
@@ -540,18 +493,17 @@ void G4RunManager::TerminateEventLoop()
     }
     G4cout << "  " << *timer << G4endl;
   }
-  ////////////////
-  /// G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
   fGeometryHasBeenDestroyed = false;
 }
 
+// --------------------------------------------------------------------
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
-  if(!userPrimaryGeneratorAction)
+  if(userPrimaryGeneratorAction == nullptr)
   {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
                 "G4VUserPrimaryGeneratorAction is not defined!");
-    return 0;
+    return nullptr;
   }
 
   G4Event* anEvent = new G4Event(i_event);
@@ -585,21 +537,24 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
   return anEvent;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::StoreRNGStatus(const G4String& fnpref)
 {
   G4String fileN = randomNumberStatusDir + fnpref + ".rndm";
   G4Random::saveEngineStatus(fileN);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 {
   G4VPersistencyManager* fPersM =
     G4VPersistencyManager::GetPersistencyManager();
-  if(fPersM)
+  if(fPersM != nullptr)
     fPersM->Store(anEvent);
   currentRun->RecordEvent(anEvent);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::RunTermination()
 {
   if(!fakeRun)
@@ -610,13 +565,13 @@ void G4RunManager::RunTermination()
     CleanUpUnnecessaryEvents(0);
     // tasking occasionally will call this function even
     // if there was not a current run
-    if(currentRun)
+    if(currentRun != nullptr)
     {
-      if(userRunAction)
+      if(userRunAction != nullptr)
         userRunAction->EndOfRunAction(currentRun);
       G4VPersistencyManager* fPersM =
         G4VPersistencyManager::GetPersistencyManager();
-      if(fPersM)
+      if(fPersM != nullptr)
         fPersM->Store(currentRun);
       // write & close analysis output
       if(isScoreNtupleWriter)
@@ -624,12 +579,13 @@ void G4RunManager::RunTermination()
         G4VScoreNtupleWriter::Instance()->Write();
       }
     }
-    runIDCounter++;
+    ++runIDCounter;
   }
 
   kernel->RunTermination();
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::CleanUpPreviousEvents()
 {
   // Delete all events carried over from previous run.
@@ -640,16 +596,17 @@ void G4RunManager::CleanUpPreviousEvents()
   // kept in G4Run of the previous run, and deleted along with
   // the deletion of G4Run.
 
-  std::list<G4Event*>::iterator evItr = previousEvents->begin();
-  while(evItr != previousEvents->end())
+  auto evItr = previousEvents->cbegin();
+  while(evItr != previousEvents->cend())
   {
     G4Event* evt = *evItr;
-    if(evt && !(evt->ToBeKept()))
+    if(evt != nullptr && !(evt->ToBeKept()))
       delete evt;
     evItr = previousEvents->erase(evItr);
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::CleanUpUnnecessaryEvents(G4int keepNEvents)
 {
   // Delete events that are no longer necessary for post
@@ -658,14 +615,14 @@ void G4RunManager::CleanUpUnnecessaryEvents(G4int keepNEvents)
   // kept in G4Run of the previous run, and deleted along with
   // the deletion of G4Run.
 
-  std::list<G4Event*>::iterator evItr = previousEvents->begin();
-  while(evItr != previousEvents->end())
+  auto evItr = previousEvents->cbegin();
+  while(evItr != previousEvents->cend())
   {
     if(G4int(previousEvents->size()) <= keepNEvents)
       return;
 
     G4Event* evt = *evItr;
-    if(evt)
+    if(evt != nullptr)
     {
       if(evt->GetNumberOfGrips() == 0)
       {
@@ -675,7 +632,7 @@ void G4RunManager::CleanUpUnnecessaryEvents(G4int keepNEvents)
       }
       else
       {
-        evItr++;
+        ++evItr;
       }
     }
     else
@@ -685,6 +642,7 @@ void G4RunManager::CleanUpUnnecessaryEvents(G4int keepNEvents)
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::StackPreviousEvent(G4Event* anEvent)
 {
   if(anEvent->ToBeKept())
@@ -702,10 +660,10 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
       previousEvents->push_back(anEvent);
     }
   }
-
   CleanUpUnnecessaryEvents(n_perviousEventsToBeStored);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::Initialize()
 {
   G4StateManager* stateManager    = G4StateManager::GetStateManager();
@@ -729,9 +687,10 @@ void G4RunManager::Initialize()
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::InitializeGeometry()
 {
-  if(!userDetector)
+  if(userDetector == nullptr)
   {
     G4Exception("G4RunManager::InitializeGeometry", "Run0033", FatalException,
                 "G4VUserDetectorConstruction is not defined!");
@@ -759,7 +718,7 @@ void G4RunManager::InitializeGeometry()
   if(G4Threading::IsMasterThread())
   {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if(pVVisManager)
+    if(pVVisManager != nullptr)
       pVVisManager->GeometryHasChanged();
   }
 
@@ -768,6 +727,7 @@ void G4RunManager::InitializeGeometry()
   stateManager->SetNewState(currentState);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::InitializePhysics()
 {
   G4StateManager* stateManager    = G4StateManager::GetStateManager();
@@ -776,7 +736,7 @@ void G4RunManager::InitializePhysics()
   {
     stateManager->SetNewState(G4State_Init);
   }
-  if(physicsList)
+  if(physicsList != nullptr)
   {
     kernel->InitializePhysics();
   }
@@ -789,6 +749,7 @@ void G4RunManager::InitializePhysics()
   stateManager->SetNewState(currentState);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::AbortRun(G4bool softAbort)
 {
   // This method is valid only for GeomClosed or EventProc state
@@ -809,6 +770,7 @@ void G4RunManager::AbortRun(G4bool softAbort)
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::AbortEvent()
 {
   // This method is valid only for EventProc state
@@ -825,16 +787,19 @@ void G4RunManager::AbortEvent()
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
                                      G4bool topologyIsChanged)
 {
   kernel->DefineWorldVolume(worldVol, topologyIsChanged);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::rndmSaveThisRun()
 {
   G4int runNumber = 0;
-  if(currentRun) runNumber = currentRun->GetRunID();
+  if(currentRun != nullptr)
+    runNumber = currentRun->GetRunID();
   if(!storeRandomNumberStatus)
   {
     G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
@@ -857,27 +822,28 @@ void G4RunManager::rndmSaveThisRun()
 #endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
   if(verboseLevel > 0)
-  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
+  {
+    G4cout << fileIn << " is copied to " << fileOut << G4endl;
+  }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::rndmSaveThisEvent()
 {
   if(currentEvent == 0)
   {
-    G4cerr
-      << "Warning from G4RunManager::rndmSaveThisEvent():"
-      << " there is no currentEvent available."
-      << G4endl << "Command ignored." << G4endl;
+    G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
+           << " there is no currentEvent available." << G4endl
+           << "Command ignored." << G4endl;
     return;
   }
 
   if(!storeRandomNumberStatus)
   {
-    G4cerr
-      << "Warning from G4RunManager::rndmSaveThisEvent():"
-      << " Random number engine status is not available."
-      << G4endl << "/random/setSavingFlag command must be issued "
-      << "prior to the start of the run. Command ignored." << G4endl;
+    G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
+           << " Random number engine status is not available." << G4endl
+           << "/random/setSavingFlag command must be issued "
+           << "prior to the start of the run. Command ignored." << G4endl;
     return;
   }
 
@@ -895,9 +861,12 @@ void G4RunManager::rndmSaveThisEvent()
 #endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
   if(verboseLevel > 0)
-  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
+  {
+    G4cout << fileIn << " is copied to " << fileOut << G4endl;
+  }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 {
   G4String fileNameWithDirectory;
@@ -917,44 +886,33 @@ void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
   G4Random::showEngineStatus();
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::DumpRegion(const G4String& rname) const
 {
   kernel->DumpRegion(rname);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::DumpRegion(G4Region* region) const
 {
   kernel->DumpRegion(region);
 }
 
-#include "G4HCofThisEvent.hh"
-#include "G4ParallelWorldProcess.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4ScoringManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4VHitsCollection.hh"
-#include "G4VScoringMesh.hh"
-
-#include "G4ScoringBox.hh"
-#include "G4ScoringCylinder.hh"
-
+// --------------------------------------------------------------------
 void G4RunManager::ConstructScoringWorlds()
 {
   using MeshShape = G4VScoringMesh::MeshShape;
 
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
-  if(!ScM)
+  if(ScM == nullptr)
     return;
 
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar < 1)
     return;
 
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator =
-    G4ParticleTable::GetParticleTable()->GetIterator();
-  for(G4int iw = 0; iw < nPar; iw++)
+  auto theParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+  for(G4int iw = 0; iw < nPar; ++iw)
   {
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
     if(fGeometryHasBeenDestroyed)
@@ -962,19 +920,17 @@ void G4RunManager::ConstructScoringWorlds()
     G4VPhysicalVolume* pWorld = nullptr;
     if(mesh->GetShape() != MeshShape::realWorldLogVol)
     {
-      pWorld =
-        G4TransportationManager::GetTransportationManager()->IsWorldExisting(
-          ScM->GetWorldName(iw));
-      if(!pWorld)
+      pWorld = G4TransportationManager::GetTransportationManager()
+             ->IsWorldExisting(ScM->GetWorldName(iw));
+      if(pWorld == nullptr)
       {
-        pWorld =
-          G4TransportationManager::GetTransportationManager()->GetParallelWorld(
-            ScM->GetWorldName(iw));
+        pWorld = G4TransportationManager::GetTransportationManager()
+               ->GetParallelWorld(ScM->GetWorldName(iw));
         pWorld->SetName(ScM->GetWorldName(iw));
 
         G4ParallelWorldProcess* theParallelWorldProcess =
           mesh->GetParallelWorldProcess();
-        if(theParallelWorldProcess)
+        if(theParallelWorldProcess != nullptr)
         {
           theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
         }
@@ -990,7 +946,7 @@ void G4RunManager::ConstructScoringWorlds()
           {
             G4ParticleDefinition* particle = theParticleIterator->value();
             G4ProcessManager* pmanager     = particle->GetProcessManager();
-            if(pmanager)
+            if(pmanager != nullptr)
             {
               pmanager->AddProcess(theParallelWorldProcess);
               if(theParallelWorldProcess->IsAtRestRequired(particle))
@@ -1010,10 +966,10 @@ void G4RunManager::ConstructScoringWorlds()
     }
     mesh->Construct(pWorld);
   }
-
   GeometryHasBeenModified();
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::UpdateScoring()
 {
   if(isScoreNtupleWriter)
@@ -1023,36 +979,33 @@ void G4RunManager::UpdateScoring()
   }
 
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
-  if(!ScM)
+  if(ScM == nullptr)
     return;
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar < 1)
     return;
 
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
-  if(!HCE)
+  if(HCE == nullptr)
     return;
   G4int nColl = HCE->GetCapacity();
-  for(G4int i = 0; i < nColl; i++)
+  for(G4int i = 0; i < nColl; ++i)
   {
     G4VHitsCollection* HC = HCE->GetHC(i);
-    if(HC)
+    if(HC != nullptr)
       ScM->Accumulate(HC);
   }
 }
 
-#include "G4LogicalVolume.hh"
-#include "G4SmartVoxelHeader.hh"
-#include "G4SmartVoxelStat.hh"
-#include "G4VPhysicalVolume.hh"
-
+// --------------------------------------------------------------------
 void G4RunManager::ReOptimizeMotherOf(G4VPhysicalVolume* pPhys)
 {
   G4LogicalVolume* pMotherL = pPhys->GetMotherLogical();
-  if(pMotherL)
+  if(pMotherL != nullptr)
     ReOptimize(pMotherL);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::ReOptimize(G4LogicalVolume* pLog)
 {
   G4Timer localtimer;
@@ -1080,17 +1033,20 @@ void G4RunManager::ReOptimize(G4LogicalVolume* pLog)
   }
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserInitialization(G4VUserDetectorConstruction* userInit)
 {
   userDetector = userInit;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserInitialization(G4VUserPhysicsList* userInit)
 {
   physicsList = userInit;
   kernel->SetPhysics(userInit);
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserInitialization(
   G4UserWorkerInitialization* /*userInit*/)
 {
@@ -1100,6 +1056,7 @@ void G4RunManager::SetUserInitialization(
     "G4MTRunManager.");
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserInitialization(
   G4UserWorkerThreadInitialization* /*userInit*/)
 {
@@ -1109,46 +1066,54 @@ void G4RunManager::SetUserInitialization(
     "Use G4MTRunManager.");
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
 {
   userActionInitialization = userInit;
   userActionInitialization->Build();
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserAction(G4UserRunAction* userAction)
 {
   userRunAction = userAction;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserAction(G4VUserPrimaryGeneratorAction* userAction)
 {
   userPrimaryGeneratorAction = userAction;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserAction(G4UserEventAction* userAction)
 {
   eventManager->SetUserAction(userAction);
   userEventAction = userAction;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserAction(G4UserStackingAction* userAction)
 {
   eventManager->SetUserAction(userAction);
   userStackingAction = userAction;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserAction(G4UserTrackingAction* userAction)
 {
   eventManager->SetUserAction(userAction);
   userTrackingAction = userAction;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::SetUserAction(G4UserSteppingAction* userAction)
 {
   eventManager->SetUserAction(userAction);
   userSteppingAction = userAction;
 }
 
+// --------------------------------------------------------------------
 void G4RunManager::GeometryHasBeenModified(G4bool prop)
 {
   if(prop)
@@ -1161,13 +1126,7 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
   }
 }
 
-#include "G4AssemblyStore.hh"
-#include "G4GeometryManager.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4RegionStore.hh"
-#include "G4SolidStore.hh"
-
+// --------------------------------------------------------------------
 void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
 {
   if(destroyFirst && G4Threading::IsMasterThread())
@@ -1186,18 +1145,16 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
     // remove all logical volume pointers from regions
     // exception: world logical volume pointer must be kept
     G4RegionStore* regionStore = G4RegionStore::GetInstance();
-    std::vector<G4Region*>::iterator rItr;
-    for(rItr = regionStore->begin(); rItr != regionStore->end(); rItr++)
+    for(auto rItr = regionStore->cbegin(); rItr != regionStore->cend(); ++rItr)
     {
       if((*rItr)->GetName() == "DefaultRegionForTheWorld")
         continue;
       // if((*rItr)->GetName()=="DefaultRegionForParallelWorld") continue;
-      std::vector<G4LogicalVolume*>::iterator lvItr =
-        (*rItr)->GetRootLogicalVolumeIterator();
-      for(size_t iRLV = 0; iRLV < (*rItr)->GetNumberOfRootVolumes(); iRLV++)
+      auto lvItr = (*rItr)->GetRootLogicalVolumeIterator();
+      for(std::size_t iRLV=0; iRLV<(*rItr)->GetNumberOfRootVolumes(); ++iRLV)
       {
         (*rItr)->RemoveRootLogicalVolume(*lvItr, false);
-        lvItr++;
+        ++lvItr;
       }
       if(verboseLevel > 0)
       {
@@ -1222,24 +1179,22 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
     if(G4Threading::IsMasterThread())
     {
       G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-      if(pVVisManager)
+      if(pVVisManager != nullptr)
         pVVisManager->GeometryHasChanged();
     }
   }
 }
 
-//---------------------------------------------------------------------------//
-
-void G4RunManager::ConfigureProfilers(int argc, char** argv)
+// --------------------------------------------------------------------
+void G4RunManager::ConfigureProfilers(G4int argc, char** argv)
 {
   std::vector<std::string> _args;
-  for(int i = 0; i < argc; ++i)
+  for(G4int i = 0; i < argc; ++i)
     _args.push_back(argv[i]);
   ConfigureProfilers(_args);
 }
 
-//---------------------------------------------------------------------------//
-
+// --------------------------------------------------------------------
 void G4RunManager::ConfigureProfilers(const std::vector<std::string>& args)
 {
 #ifdef GEANT4_USE_TIMEMORY
@@ -1250,14 +1205,14 @@ void G4RunManager::ConfigureProfilers(const std::vector<std::string>& args)
 #endif
 }
 
-//---------------------------------------------------------------------------//
+// --------------------------------------------------------------------
 
 #if !defined(GEANT4_USE_TIMEMORY)
 #  define TIMEMORY_WEAK_PREFIX
 #  define TIMEMORY_WEAK_POSTFIX
 #endif
 
-//---------------------------------------------------------------------------//
+// --------------------------------------------------------------------
 
 extern "C"
 {
@@ -1275,7 +1230,7 @@ extern "C"
     G4ProfilerInit();
 
     // guard against re-initialization
-    static bool _once = false;
+    static G4bool _once = false;
     if(_once)
       return;
     _once = true;
@@ -1390,13 +1345,13 @@ extern "C"
   }
 }  // extern "C"
 
-//---------------------------------------------------------------------------//
+// --------------------------------------------------------------------
 
 #ifdef GEANT4_USE_TIMEMORY
 namespace
 {
-  static bool profiler_is_initialized = (G4RunProfilerInit(), true);
+  static G4bool profiler_is_initialized = (G4RunProfilerInit(), true);
 }
 #endif
 
-//---------------------------------------------------------------------------//
+// --------------------------------------------------------------------

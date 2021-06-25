@@ -44,25 +44,23 @@
 #include "G4SystemOfUnits.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4CompositeEMDataSet.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+namespace { G4Mutex LivermorePolarizedRayleighModelMutex = G4MUTEX_INITIALIZER; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4LivermorePolarizedRayleighModel::maxZ = 100;
-G4LPhysicsFreeVector* G4LivermorePolarizedRayleighModel::dataCS[] = {0};
-G4VEMDataSet* G4LivermorePolarizedRayleighModel::formFactorData = 0;
+G4PhysicsFreeVector* G4LivermorePolarizedRayleighModel::dataCS[] = {nullptr};
+G4VEMDataSet* G4LivermorePolarizedRayleighModel::formFactorData = nullptr;
 
 G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4ParticleDefinition*,
 									 const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false)
+  :G4VEmModel(nam),fParticleChange(nullptr),isInitialised(false)
 {
-  fParticleChange =0;
   lowEnergyLimit = 250 * eV; 
-  //SetLowEnergyLimit(lowEnergyLimit);
-  //SetHighEnergyLimit(highEnergyLimit);
   //
   verboseLevel= 0;
   // Verbosity scale:
@@ -89,11 +87,11 @@ G4LivermorePolarizedRayleighModel::~G4LivermorePolarizedRayleighModel()
    for(G4int i=0; i<maxZ; ++i) {
      if(dataCS[i]) { 
        delete dataCS[i];
-       dataCS[i] = 0;
+       dataCS[i] = nullptr;
      }
    }
    delete formFactorData;
-   formFactorData = 0; 
+   formFactorData = nullptr; 
    
  }
 }
@@ -103,21 +101,18 @@ G4LivermorePolarizedRayleighModel::~G4LivermorePolarizedRayleighModel()
 void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* particle,
                                        const G4DataVector& cuts)
 {
-// Rayleigh process:                      The Quantum Theory of Radiation
-//                                        W. Heitler,       Oxford at the Clarendon Press, Oxford (1954)                                                 
-// Scattering function:                   A simple model of photon transport
-//                                        D.E. Cullen,      Nucl. Instr. Meth. in Phys. Res. B 101 (1995) 499-510                                       
-// Polarization of the outcoming photon:  Beam test of a prototype detector array for the PoGO astronomical hard X-ray/soft gamma-ray polarimeter
-//                                        T. Mizuno et al., Nucl. Instr. Meth. in Phys. Res. A 540 (2005) 158-168                                        
-
+  // Rayleigh process:                      The Quantum Theory of Radiation
+  //                                        W. Heitler,       Oxford at the Clarendon Press, Oxford (1954)       
+  // Scattering function:                   A simple model of photon transport
+  //                                        D.E. Cullen,      Nucl. Instr. Meth. in Phys. Res. B 101 (1995) 499-510               
+  // Polarization of the outcoming photon:  Beam test of a prototype detector array for the PoGO astronomical hard 
+  //                                        X-ray/soft gamma-ray polarimeter
+  //                                        T. Mizuno et al., Nucl. Instr. Meth. in Phys. Res. A 540 (2005) 158-168 
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePolarizedRayleighModel::Initialise()" << G4endl;
 
-
   if(IsMaster()) {
-    
-    // Form Factor 
-    
+    // Form Factor     
     G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
     G4String formFactorFile = "rayl/re-ff-";
     formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
@@ -153,7 +148,6 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
-  
 }
 
 
@@ -190,13 +184,7 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
 	  return;
 	}
     }
-  
-  //
-  
-  dataCS[Z] = new G4LPhysicsFreeVector();
-  
-  // Activation of spline interpolation
-  //dataCS[Z] ->SetSpline(true);
+  dataCS[Z] = new G4PhysicsFreeVector();
   
   std::ostringstream ostCS;
   ostCS << datadir << "/livermore/rayl/re-cs-" << Z <<".dat";
@@ -211,12 +199,12 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
 		 ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
      return;
    } 
-   else 
-   {
-     if(verboseLevel > 3) { 
+  else 
+    {
+      if(verboseLevel > 3) { 
        G4cout << "File " << ostCS.str() 
         << " is opened by G4LivermoreRayleighModel" << G4endl;
-     }
+      }
      dataCS[Z]->Retrieve(finCS, true);
    } 
  }
@@ -240,10 +228,9 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
    G4double xs = 0.0;
    
    G4int intZ = G4lrint(Z);
-   
    if(intZ < 1 || intZ > maxZ) { return xs; }
    
-   G4LPhysicsFreeVector* pv = dataCS[intZ];
+   G4PhysicsFreeVector* pv = dataCS[intZ];
  
    // if element was not initialised
    // do initialisation safely for MT mode
@@ -260,21 +247,6 @@ void G4LivermorePolarizedRayleighModel::ReadData(size_t Z, const char* path)
    } else if(e >= pv->Energy(0)) {
      xs = pv->Value(e)/(e*e);  
    }
- 
-   /*   if(verboseLevel > 0)
-	{
-	G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
-     << e << G4endl;
-       G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
-     G4cout  <<  "    -> first E*E*cs value in CS data file (iu) =" << (*pv)[0] 
-     << G4endl;
-       G4cout  <<  "    -> last  E*E*cs value in CS data file (iu) =" << (*pv)[n] 
-     << G4endl;
-       G4cout  <<  "*********************************************************" 
-     << G4endl;
-       }
-   */
-   
    return xs;
  }
 
@@ -302,7 +274,6 @@ void G4LivermorePolarizedRayleighModel::SampleSecondaries(std::vector<G4DynamicP
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
   // Select randomly one element in the current material
-  // G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
   const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
   G4int Z = (G4int)elm->GetZ();
@@ -319,8 +290,7 @@ void G4LivermorePolarizedRayleighModel::SampleSecondaries(std::vector<G4DynamicP
   // outgoingPhoton reference frame:
   // z' = versor parallel to the outgoingPhotonDirection
   // x' = defined as x-x*z'z' normalized
-  // y' = defined as z'^x'
- 
+  // y' = defined as z'^x' 
   G4ThreeVector z(aDynamicGamma->GetMomentumDirection().unit()); 
   G4ThreeVector x(GetPhotonPolarization(*aDynamicGamma));
   G4ThreeVector y(z.cross(x));
@@ -368,10 +338,8 @@ G4double G4LivermorePolarizedRayleighModel::GenerateCosTheta(G4double incomingPh
   // On pcgeant2 the time is ~ 1 s for k0 ~ 1 MeV on the oxygen element. A 100 GeV
   // event will take ~ 10 hours.
   //
-  // On the avarage the inner loop does 1.5 iterations before exiting
- 
+  // On the avarage the inner loop does 1.5 iterations before exiting 
   const G4double xFactor = (incomingPhotonEnergy*cm)/(h_Planck*c_light);
-  //const G4VEMDataSet * formFactorData = GetScatterFunctionData();
 
   G4double cosTheta;
   G4double fCosTheta;
@@ -442,7 +410,6 @@ G4double G4LivermorePolarizedRayleighModel::GeneratePhi(G4double cosTheta) const
 G4double G4LivermorePolarizedRayleighModel::GeneratePolarizationAngle(void) const
 {
   // Rayleigh polarization is always on the x' direction
-
   return 0;
 }
 
@@ -450,9 +417,7 @@ G4double G4LivermorePolarizedRayleighModel::GeneratePolarizationAngle(void) cons
 
 G4ThreeVector G4LivermorePolarizedRayleighModel::GetPhotonPolarization(const G4DynamicParticle&  photon)
 {
-
-// SI - From G4VLowEnergyDiscretePhotonProcess.cc
- 
+  // From G4VLowEnergyDiscretePhotonProcess.cc
   G4ThreeVector photonMomentumDirection;
   G4ThreeVector photonPolarization;
 
@@ -462,8 +427,7 @@ G4ThreeVector G4LivermorePolarizedRayleighModel::GetPhotonPolarization(const G4D
   if ((!photonPolarization.isOrthogonal(photonMomentumDirection, 1e-6)) || photonPolarization.mag()==0.)
     {
       // if |photonPolarization|==0. or |photonPolarization * photonDirection0| > 1e-6 * |photonPolarization ^ photonDirection0|
-      // then polarization is choosen randomly.
-  
+      // then polarization is choosen randomly. 
       G4ThreeVector e1(photonMomentumDirection.orthogonal().unit());
       G4ThreeVector e2(photonMomentumDirection.cross(e1).unit());
   
@@ -477,8 +441,7 @@ G4ThreeVector G4LivermorePolarizedRayleighModel::GetPhotonPolarization(const G4D
   else if (photonPolarization.howOrthogonal(photonMomentumDirection) != 0.)
     {
       // if |photonPolarization * photonDirection0| != 0.
-      // then polarization is made orthonormal;
-  
+      // then polarization is made orthonormal;  
       photonPolarization=photonPolarization.perpPart(photonMomentumDirection);
     }
  
@@ -487,15 +450,10 @@ G4ThreeVector G4LivermorePolarizedRayleighModel::GetPhotonPolarization(const G4D
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
- #include "G4AutoLock.hh"
- namespace { G4Mutex LivermorePolarizedRayleighModelMutex = G4MUTEX_INITIALIZER; }
- 
-void  G4LivermorePolarizedRayleighModel::InitialiseForElement(const G4ParticleDefinition*, 
+void G4LivermorePolarizedRayleighModel::InitialiseForElement(const G4ParticleDefinition*, 
                   G4int Z)
  {
    G4AutoLock l(&LivermorePolarizedRayleighModelMutex);
-   //  G4cout << "G4LivermoreRayleighModel::InitialiseForElement Z= " 
-   //   << Z << G4endl;
    if(!dataCS[Z]) { ReadData(Z); }
    l.unlock();
  }

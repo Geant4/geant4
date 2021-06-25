@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -128,60 +135,60 @@ PhysicsList::AddPhysicsList: <standard_opt3>
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 10 GeV in 94 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric : Emin=    0 eV  Emax=   10 GeV  SauterGavrila
+       PhotoElectric : Emin=    0 meV Emax=   10 GeV  SauterGavrila
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 10 eV  to 1 MeV, 20 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 10 GeV in 80 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina : Emin=    0 eV  Emax=   10 GeV
+       Klein-Nishina : Emin=    0 meV Emax=   10 GeV
 
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 10 GeV, 25 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-     BetheHeitlerLPM : Emin=    0 eV  Emax=   10 GeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 meV Emax=   10 GeV  ModifiedTsai
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e-  SubType=2
+eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
       Lambda tables from threshold to 10 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha : Emin=    0 eV  Emax=   10 GeV
+      myMollerBhabha : Emin=    0 meV Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-              StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e+  SubType=2
+eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
       Lambda tables from threshold to 10 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha : Emin=    0 eV  Emax=   10 GeV
+      myMollerBhabha : Emin=    0 meV Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
-annihil:  for e+, integral:1  SubType=5 BuildTable=0
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 eV  Emax=   10 GeV
+            eplus2gg : Emin=    0 meV Emax=   10 GeV
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
-              StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for proton  SubType=2
+hIoni:  for proton  XStype:1  SubType=2
       dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
       Lambda tables from threshold to 10 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 eV  Emax=    2 MeV
+               Bragg : Emin=    0 meV Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
@@ -236,7 +243,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=1.340000s Real=1.358236s Sys=0.010000s
+  User=1.240000s Real=1.281739s Sys=0.000000s
 
  Process calls frequency --->  eIoni= 329042  msc= 202513  Transportation= 22126
 

@@ -53,7 +53,7 @@
 
  G4DeuteronBuilder::G4DeuteronBuilder()
  {
-   theDeuteronInelastic=new G4DeuteronInelasticProcess;
+   theDeuteronInelastic=new G4HadronInelasticProcess( "dInelastic", G4Deuteron::Definition() );
  }
 
  void G4DeuteronBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {

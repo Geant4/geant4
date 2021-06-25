@@ -81,8 +81,7 @@ G4WentzelVIRelModel::G4WentzelVIRelModel() :
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WentzelVIRelModel::~G4WentzelVIRelModel()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,7 +122,7 @@ G4double G4WentzelVIRelModel::ComputeCrossSectionPerAtom(
   G4double cross = 0.0;
   if(p != particle) { SetupParticle(p); }
   if(kinEnergy < lowEnergyLimit) { return cross; }
-  if(!CurrentCouple()) {
+  if(nullptr == CurrentCouple()) {
     G4Exception("G4WentzelVIRelModel::ComputeCrossSectionPerAtom", "em0011",
                 FatalException, " G4MaterialCutsCouple is not defined");
     return cross;

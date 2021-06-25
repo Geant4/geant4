@@ -44,20 +44,17 @@ class BrachyPhysicsListMessenger;
 class BrachyPhysicsList: public G4VModularPhysicsList
 {
 public:
-  BrachyPhysicsList();
+  explicit BrachyPhysicsList();
   ~BrachyPhysicsList();
-  void ConstructParticle(); 
+  void ConstructParticle() override; 
   void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-protected:
-  void SetCuts();
+  void ConstructProcess() override;
 
 private:
+  BrachyPhysicsListMessenger* fMessenger;
   G4VPhysicsConstructor* fEmPhysicsList;
   G4VPhysicsConstructor* fDecPhysicsList;
   G4VPhysicsConstructor* fRadDecayPhysicsList;
-  BrachyPhysicsListMessenger* fMessenger;
   G4String fEmName;
 };
 #endif

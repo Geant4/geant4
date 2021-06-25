@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4magneticfield
-# Package: Geant4.src.G4geometry.G4magneticfield
-#------------------------------------------------------------------------------
+# - G4magneticfield module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4magneticfield
-  HEADERS 
+geant4_add_module(G4magneticfield
+  PUBLIC_HEADERS
     G4BFieldIntegrationDriver.hh
     G4BogackiShampine23.hh
     G4BogackiShampine45.hh
@@ -86,7 +81,7 @@ geant4_define_module(NAME G4magneticfield
     G4NystromRK4.hh
     G4NystromRK4.icc
     G4OldMagIntDriver.hh
-    G4OldMagIntDriver.icc 	
+    G4OldMagIntDriver.icc
     G4QuadrupoleMagField.hh
     G4RepleteEofM.hh
     G4SextupoleMagField.hh
@@ -101,7 +96,7 @@ geant4_define_module(NAME G4magneticfield
     G4TExplicitEuler.hh
     G4TSimpleHeum.hh
     G4TSimpleRunge.hh
-    G4TCashKarpRKF45.hh    
+    G4TCashKarpRKF45.hh
     G4TClassicalRK4.hh
     G4TDormandPrince45.hh
     G4TMagFieldEquation.hh
@@ -186,11 +181,6 @@ geant4_define_module(NAME G4magneticfield
     G4UniformElectricField.cc
     G4UniformGravityField.cc
     G4UniformMagField.cc
-    G4VIntegrationDriver.cc	
-  GRANULAR_DEPENDENCIES
-    G4globman
-  GLOBAL_DEPENDENCIES
-    G4global
-)
+    G4VIntegrationDriver.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4magneticfield PUBLIC G4globman)

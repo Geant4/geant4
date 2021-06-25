@@ -73,46 +73,13 @@ G4FTFBinaryPiKBuilder:: ~G4FTFBinaryPiKBuilder()
 }
 
 void G4FTFBinaryPiKBuilder::
-Build(G4PionPlusInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  if ( aP->GetParticleDefinition() == G4PionPlus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+  } else if ( aP->GetParticleDefinition() == G4PionMinus::Definition() ) { 
+    aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+  }  
   aP->RegisterMe(theModel);
 }
-
-void G4FTFBinaryPiKBuilder::
-Build(G4PionMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFBinaryPiKBuilder::
-Build(G4KaonPlusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFBinaryPiKBuilder::
-Build(G4KaonMinusInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFBinaryPiKBuilder::
-Build(G4KaonZeroLInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFBinaryPiKBuilder::
-Build(G4KaonZeroSInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  aP->RegisterMe(theModel);
-}
-

@@ -62,15 +62,14 @@ public:
   explicit G4KleinNishinaCompton(const G4ParticleDefinition* p = nullptr, 
 				 const G4String& nam = "Klein-Nishina");
 
-  virtual ~G4KleinNishinaCompton();
+  ~G4KleinNishinaCompton() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*, 
+		       G4VEmModel* masterModel) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
@@ -78,11 +77,16 @@ public:
                                       G4double cut,
                                       G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+
+  // hide assignment operator
+  G4KleinNishinaCompton & operator=
+  (const G4KleinNishinaCompton &right) = delete;
+  G4KleinNishinaCompton(const  G4KleinNishinaCompton&) = delete;
 
 protected:
 
@@ -90,14 +94,6 @@ protected:
   G4ParticleDefinition*     theElectron;
   G4ParticleChangeForGamma* fParticleChange;
   G4double                  lowestSecondaryEnergy;
-
-private:
-
-  // hide assignment operator
-  G4KleinNishinaCompton & operator=
-  (const G4KleinNishinaCompton &right) = delete;
-  G4KleinNishinaCompton(const  G4KleinNishinaCompton&) = delete;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

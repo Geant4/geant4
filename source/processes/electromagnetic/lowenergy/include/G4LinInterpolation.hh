@@ -51,26 +51,20 @@
 class G4LinInterpolation : public G4VDataSetAlgorithm {
  
 public:
-
-  G4LinInterpolation();
-
+  explicit G4LinInterpolation();
   ~G4LinInterpolation();
  
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
-		     const G4DataVector& data) const;
+		     const G4DataVector& data) const override;
 
   G4double Calculate(G4double point, G4int bin,
                      const G4DataVector& energies,
                      const G4DataVector& data, 
 		     const G4DataVector& log_energies, 
-		     const G4DataVector& log_data) const;
+		     const G4DataVector& log_data) const override;
 
-  G4VDataSetAlgorithm* Clone() const;
-
-private:
-  
-  // Hide copy constructor and assignment operator
+  G4VDataSetAlgorithm* Clone() const override;
 
 };
  

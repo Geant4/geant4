@@ -38,7 +38,7 @@
 #include "G4GammaNuclearXS.hh"
 #include "G4Gamma.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4ElementTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
@@ -66,9 +66,7 @@ G4String G4GammaNuclearXS::gDataDirectory = "";
 
 G4GammaNuclearXS::G4GammaNuclearXS() 
  : G4VCrossSectionDataSet(Default_Name()),
-   ggXsection(nullptr),
-   gamma(G4Gamma::Gamma()),
-   isMaster(false)
+   gamma(G4Gamma::Gamma())
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
@@ -208,18 +206,11 @@ G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
   // it is possible re-initialisation for the second run
   if(isMaster) {
-
-    // Access to elements
-    auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
-    for(size_t j=0; j<numOfCouples; ++j) {
-      auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
-      auto elmVec = mat->GetElementVector();
-      size_t numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZGAMMAN-1));
-	if(data[Z] == nullptr) { Initialise(Z); }
-      }
+    // Upload data for elements used in geometry
+    const G4ElementTable* table = G4Element::GetElementTable();
+    for ( auto & elm : *table ) {
+      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZGAMMAN-1) );
+      if ( nullptr == data[Z] ) { Initialise(Z); }
     }
   }
 }

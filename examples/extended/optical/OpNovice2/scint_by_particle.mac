@@ -50,9 +50,6 @@
 /process/optical/processActivation OpMieHG       false
 /process/optical/processActivation OpWLS         false
 
-/process/optical/scintillation/setEnhancedTimeConstants true
-/process/optical/scintillation/setYieldFactor 10
-#/process/optical/scintillation/setExcitationRatio .5
 /process/optical/scintillation/setByParticleType true
 /process/optical/scintillation/setTrackInfo      false
 /process/optical/scintillation/setFiniteRiseTime false

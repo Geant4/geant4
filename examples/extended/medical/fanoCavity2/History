@@ -13,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-05-21 mma (fano2-V10-07-01)
+- Migration to G4RunManagerFactory and G4SteppingVerboseWithUnits.
+
+23-03-21 V. Ivanchenko (fano2-V10-07-00)
+- PhysListEmStandard_SS - updated for 11.0 
 
 01-04-19 mma (fano2-V10-05-02)
 - DetectorConstruction : restore wallThickness = 5 cm; radius = 10 m;

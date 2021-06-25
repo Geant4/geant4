@@ -177,6 +177,8 @@ public: // With description
   G4DisplacedSolid* GetCutawaySolid              () const;
   const G4Event*   GetEvent                      () const;
   const std::vector<VisAttributesModifier>& GetVisAttributesModifiers() const;
+  G4bool           IsSpecialMeshRendering        () const;
+  const std::vector<PVNameCopyNo>& GetSpecialMeshVolumes() const;
 
   // Set functions...
   void SetWarning              (G4bool);
@@ -197,6 +199,8 @@ public: // With description
   void SetCutawaySolid         (G4DisplacedSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
   void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>&);
+  void SetSpecialMeshRendering (G4bool);
+  void SetSpecialMeshVolumes   (const std::vector<PVNameCopyNo>&);
 
   friend std::ostream& operator <<
   (std::ostream& os, const G4ModelingParameters&);
@@ -233,6 +237,8 @@ private:
   G4DisplacedSolid* fpCutawaySolid;  // For generic cutaways.
   const G4Event* fpEvent;        // Event being processed.
   std::vector<VisAttributesModifier> fVisAttributesModifiers;
+  G4bool       fSpecialMeshRendering;  // Request special rendering of parameterised volumes
+  std::vector<PVNameCopyNo> fSpecialMeshVolumes;  // If empty, all meshes.
 };
 
 std::ostream& operator <<

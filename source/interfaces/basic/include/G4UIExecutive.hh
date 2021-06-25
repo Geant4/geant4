@@ -71,7 +71,7 @@ public:
   void SessionStart();
 
 private:
-  enum SessionType { kNone, kQt, kXm, kWin32, kWt, kGag, kTcsh, kCsh };
+  enum SessionType { kNone, kQt, kXm, kWin32, kGag, kTcsh, kCsh };
   SessionType selected;
 
   G4UIsession* session;

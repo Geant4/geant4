@@ -42,7 +42,7 @@
 class G4Isotope;
 class G4Element;
 class G4Material;
-class G4PhysicsOrderedFreeVector;
+class G4PhysicsFreeVector;
 class G4MaterialPropertiesTable;
 
 class G4GDMLWriteMaterials : public G4GDMLWriteDefine
@@ -70,7 +70,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
     void MaterialWrite(const G4Material* const);
     void PropertyWrite(xercesc::DOMElement*, const G4Material* const);
     void PropertyVectorWrite(const G4String&,
-                             const G4PhysicsOrderedFreeVector* const);
+                             const G4PhysicsFreeVector* const);
     void PropertyConstWrite(const G4String&, const G4double,
                             const G4MaterialPropertiesTable*);
 
@@ -79,7 +79,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
     std::vector<const G4Isotope*> isotopeList;
     std::vector<const G4Element*> elementList;
     std::vector<const G4Material*> materialList;
-    std::vector<const G4PhysicsOrderedFreeVector*> propertyList;
+    std::vector<const G4PhysicsFreeVector*> propertyList;
     xercesc::DOMElement* materialsElement = nullptr;
 };
 

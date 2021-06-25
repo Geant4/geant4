@@ -46,32 +46,34 @@ class PassiveCarbonBeamLineMessenger;
 class PassiveCarbonBeamLine : public G4VUserDetectorConstruction
 {
 public:
-
-	PassiveCarbonBeamLine();
-	~PassiveCarbonBeamLine();
-
-	G4VPhysicalVolume* Construct();  
-	
-	void HadrontherapyBeamLineSupport();
-	// Definition of the beam line support
     
-	void VacuumToAirInterface();
-	
-	void HadrontherapyBeamMonitoring();
-	// Definition of three monitor chambers
-	
-	void HadrontherapyBeamNozzle();
-	// Definition of the beam noozle
-	
-	void HadrontherapyBeamFinalCollimator();
-	// Definition of the final collimator
+    PassiveCarbonBeamLine();
+    ~PassiveCarbonBeamLine();
+    
+    G4VPhysicalVolume* Construct();
+    
+    void HadrontherapyBeamLineSupport();
+    // Definition of the beam line support
+    
+    void VacuumToAirInterface();
+    
+    void HadrontherapyBeamMonitoring();
+    // Definition of three monitor chambers
+    
+    void HadrontherapyBeamNozzle();
+    // Definition of the beam noozle
+    
+    void HadrontherapyBeamFinalCollimator();
+    // Definition of the final collimator
     
     void HadrontherapyPMMACollimator();
     // Definition of the PMMA collimator
     
     void HadrontherapyRippleFilter();
     // Definition of the ripple filter
-	
+    
+    void StopperCostruction();
+    void HadrontherapyRidgeFilter();
     void SetInnerRadiusFinalCollimator(G4double);
     // This method allows to change the size of the inner radius of the
     // final collimator
@@ -82,29 +84,29 @@ public:
     
     void SetRippleFilterXPosition(G4double);
     
-	// The following methods allow to change parameters
-	// of some beam line components
-
-        G4Material* kapton;
-        G4VisAttributes* redWire;
-        G4VPhysicalVolume* mother;
+    // The following methods allow to change parameters
+    // of some beam line components
+    
+    G4Material* kapton;
+    G4VisAttributes* redWire;
+    G4VPhysicalVolume* mother;
 private:
     static PassiveCarbonBeamLine* instance;
-	//passive carbon line dimensions
-	void SetDefaultDimensions(); 
-	void ConstructPassiveCarbonBeamLine();
-	
+    //passive carbon line dimensions
+    void SetDefaultDimensions();
+    void ConstructPassiveCarbonBeamLine();
+    
     PassiveCarbonBeamLineMessenger* PassiveCarbonMessenger;
     G4VPhysicalVolume* physicalTreatmentRoom;
-	HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction;
-
+    HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction;
+    
     ///////////////////////////////////////////////////////////////////////////
     // Definitions of all volumes
     // World (experimental hall)
     G4Box* treatmentRoom;
     G4LogicalVolume* logicTreatmentRoom;
-  
-
+    
+    
     // Beamline support
     G4Box* beamLineSupport;
     G4LogicalVolume* logicBeamLineSupport;
@@ -130,7 +132,7 @@ private:
     G4Box* solidKaptonWindow;
     G4LogicalVolume* logicKaptonWindow;
     G4VPhysicalVolume* physiKaptonWindow;
-
+    
     //Ripple filter
     G4Box* SolidRippleFilter;
     G4LogicalVolume* LogicRippleFilter;
@@ -144,6 +146,25 @@ private:
     G4LogicalVolume* LogicRippleFilterTrd;
     G4VPhysicalVolume* PhysiRippleFilterTrd;
     
+    
+    //
+    G4Box* supportFoil;
+    G4LogicalVolume* LogicSupportFoil;
+    G4VPhysicalVolume* PhysiSupportFoil;
+    //
+    G4Tubs* stopper;
+    G4LogicalVolume* LogicStopper;
+    G4VPhysicalVolume* PhysicStopper;
+    //Ridge filter
+    G4Box* SolidRidgeBase;
+    G4LogicalVolume* LogicRidgeBase;
+    G4VPhysicalVolume* PhysiRidgeFilterBase;
+    
+    G4Box* SolidRidgeMother;
+    G4LogicalVolume* LogicRidgeMother;
+   // G4VPhysicalVolume* PhysiRidgeMother;
+    
+    
     // PMMA Collimator
     G4Box* solidPMMACollimatorSupport;
     G4LogicalVolume* logicPMMACollimatorSupport;
@@ -152,12 +173,12 @@ private:
     G4Tubs* solidPMMACollimator;
     G4LogicalVolume* logicPMMACollimator;
     G4VPhysicalVolume* physiPMMACollimator;
-
+    
     // Monitor chamber
     G4Box* solidFirstMonitorLayer1;
     G4LogicalVolume* logicFirstMonitorLayer1;
     G4VPhysicalVolume* physiFirstMonitorLayer1;
-
+    
     G4Box* solidFirstMonitorLayer2;
     G4LogicalVolume* logicFirstMonitorLayer2;
     G4VPhysicalVolume* physiFirstMonitorLayer2;
@@ -178,7 +199,7 @@ private:
     G4Tubs* solidHoleNozzleSupport;
     G4LogicalVolume* logicHoleNozzleSupport;
     G4VPhysicalVolume* physiHoleNozzleSupport;
-
+    
     G4Tubs* solidBrassTube3;
     G4LogicalVolume* logicBrassTube3;
     G4VPhysicalVolume* physiBrassTube3;
@@ -186,7 +207,7 @@ private:
     G4Tubs* solidBrassTube2;
     G4LogicalVolume* logicBrassTube2;
     G4VPhysicalVolume* physiBrassTube2;
-
+    
     G4Tubs* solidBrassTube;
     G4LogicalVolume* logicBrassTube;
     G4VPhysicalVolume* physiBrassTube;
@@ -215,17 +236,17 @@ private:
     G4double beamLineCoverZPosition;
     
     // vacuum pipe
-	G4double vacuumZoneXSize;
-	G4double vacuumZoneYSize;
-	G4double vacuumZoneZSize;
-	G4double vacuumPipeXPosition;
+    G4double vacuumZoneXSize;
+    G4double vacuumZoneYSize;
+    G4double vacuumZoneZSize;
+    G4double vacuumPipeXPosition;
     
     // Scattering foil
     G4double firstScatteringFoilXSize;
     G4double firstScatteringFoilYSize;
     G4double firstScatteringFoilZSize;
     G4double firstScatteringFoilXPosition;
-
+    
     // kapton Windows
     G4double kaptonWindowXSize;
     G4double kaptonWindowYSize;
@@ -258,7 +279,7 @@ private:
     G4double nozzleSupportYSize;
     G4double nozzleSupportZSize;
     G4double nozzleSupportXPosition;
-
+    
     G4double innerRadiusHoleNozzleSupport;
     G4double outerRadiusHoleNozzleSupport;
     G4double hightHoleNozzleSupport;
@@ -292,19 +313,19 @@ private:
     G4double startAngleFinalCollimator;
     G4double spanningAngleFinalCollimator;
     G4double finalCollimatorXPosition;
-	
-	// Colors
-	G4VisAttributes* blue;
-	G4VisAttributes* gray;
-	G4VisAttributes* white;
-	G4VisAttributes* red;
-	G4VisAttributes* yellow;
-	G4VisAttributes* green;
-	G4VisAttributes* darkGreen;
-	G4VisAttributes* darkOrange3;
-	G4VisAttributes* skyBlue;
+    
+    // Colors
+    G4VisAttributes* blue;
+    G4VisAttributes* gray;
+    G4VisAttributes* white;
+    G4VisAttributes* red;
+    G4VisAttributes* yellow;
+    G4VisAttributes* green;
+    G4VisAttributes* darkGreen;
+    G4VisAttributes* darkOrange3;
+    G4VisAttributes* skyBlue;
     G4VisAttributes* black;
-	
+    
     // Elements, compounds and materials
     G4Material *aluminumNist;
     G4Material* copperNistMaterial;
@@ -316,18 +337,18 @@ private:
     G4Material* brass;
     
     G4Material* beamLineSupportMaterial;
-	G4Material* vacuumZoneMaterial;
-	G4Material* kaptonWindowMaterial;
+    G4Material* vacuumZoneMaterial;
+    G4Material* kaptonWindowMaterial;
     G4Material* firstScatteringFoilMaterial;
-
-	G4Material* layer1MonitorChamberMaterial;
-	G4Material* layer2MonitorChamberMaterial;
-	G4Material* layer3MonitorChamberMaterial;
-	G4Material* layer4MonitorChamberMaterial;
-	G4Material* nozzleSupportMaterial;
-	G4Material* holeNozzleSupportMaterial;
-	G4Material* seconHoleNozzleSupportMaterial;
-	G4Material* brassTubeMaterial;
+    
+    G4Material* layer1MonitorChamberMaterial;
+    G4Material* layer2MonitorChamberMaterial;
+    G4Material* layer3MonitorChamberMaterial;
+    G4Material* layer4MonitorChamberMaterial;
+    G4Material* nozzleSupportMaterial;
+    G4Material* holeNozzleSupportMaterial;
+    G4Material* seconHoleNozzleSupportMaterial;
+    G4Material* brassTubeMaterial;
     G4Material* brassTube2Material;
     G4Material* brassTube3Material;
     G4Material* finalCollimatorMaterial;
@@ -335,7 +356,26 @@ private:
     G4Material* rippleFilterMaterial;
     G4Material* rippleFilterBoxMaterial;
     
-	HadrontherapyDetectorROGeometry* RO;
+    HadrontherapyDetectorROGeometry* RO;
+    
+    G4VPhysicalVolume* PhysiTrapp1;
+    G4VPhysicalVolume* PhysiTrapp2;
+    G4VPhysicalVolume* PhysiTrapp3;
+    G4VPhysicalVolume* PhysiTrapp4;
+    G4VPhysicalVolume* PhysiTrapp5;
+    G4VPhysicalVolume* PhysiTrapp6;
+    G4VPhysicalVolume* PhysiTrapp7;
+    G4VPhysicalVolume* PhysiTrapp8;
+    G4VPhysicalVolume* PhysiTrapp9;
+    G4VPhysicalVolume* PhysiTrapp10;
+    G4VPhysicalVolume* PhysiTrapp11;
+    G4VPhysicalVolume* PhysiTrapp12;
+    G4VPhysicalVolume* PhysiTrapp13;
+    G4VPhysicalVolume* PhysiTrapp14;
+    G4VPhysicalVolume* PhysiTrapp15;
+    G4VPhysicalVolume* PhysiTrapp16;
+    
+    
 };
 #endif
 

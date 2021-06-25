@@ -75,9 +75,9 @@
 
 G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinition*,
 						       const G4String& nam) : 
-  G4VEmModel(nam), fParticleChange(0), 
-  isInitialised(false),
-  crossSectionHandler(0), energySpectrum(0)
+  G4VEmModel(nam), fParticleChange(nullptr), 
+  crossSectionHandler(nullptr), energySpectrum(nullptr), 
+  isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 12.*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -108,14 +108,13 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
 		  "em0002",FatalException,
 		  "Livermore Ionisation Model is applicable only to electrons");
     }
-
   transitionManager->Initialise();
 
   //Read energy spectrum
   if (energySpectrum) 
     {
       delete energySpectrum;
-      energySpectrum = 0;
+      energySpectrum = nullptr;
     }
   energySpectrum = new G4eIonisationSpectrum();
   if (verboseLevel > 3)
@@ -125,7 +124,7 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
   if (crossSectionHandler) 
     {
       delete crossSectionHandler;
-      crossSectionHandler = 0;
+      crossSectionHandler = nullptr;
     }
 
   const size_t nbins = 20;
@@ -179,7 +178,7 @@ G4LivermoreIonisationModel::ComputeCrossSectionPerAtom(
 			    G4double cutEnergy, 
 			    G4double)
 {
-  G4int iZ = (G4int) Z;
+  G4int iZ = G4int(Z);
   if (!crossSectionHandler)
     {
       G4Exception("G4LivermoreIonisationModel::ComputeCrossSectionPerAtom",

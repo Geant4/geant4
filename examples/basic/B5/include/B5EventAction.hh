@@ -51,13 +51,13 @@ class B5EventAction : public G4UserEventAction
 public:
     B5EventAction();
     virtual ~B5EventAction();
-    
+
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
     std::vector<G4double>& GetEmCalEdep() { return fCalEdep[kEm]; }
     std::vector<G4double>& GetHadCalEdep() { return fCalEdep[kHad]; }
-    
+
 private:
     // hit collections Ids
     std::array<G4int, kDim> fHodHCID;

@@ -1,0 +1,89 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vec4d
+#define tools_vec4d
+
+#include "vec4"
+#include <cmath>
+
+namespace tools {
+
+class vec4d : public vec4<double> {
+  typedef vec4<double> parent;
+public:
+  vec4d():parent() {}
+  vec4d(const double a_vec[4]):parent(a_vec) {}
+#ifdef TOOLS_MEM
+  vec4d(const double& a0,const double& a1,const double& a2,const double& a3,bool a_inc = true):parent(a0,a1,a2,a3,a_inc){}
+#else
+  vec4d(const double& a0,const double& a1,const double& a2,const double& a3):parent(a0,a1,a2,a3){}
+#endif
+  virtual ~vec4d() {}
+public:
+  vec4d(const vec4d& a_from):parent(a_from){}
+  vec4d& operator=(const vec4d& a_from){parent::operator=(a_from);return *this;}
+public: //operators
+  vec4d operator*(double a_v) const {
+    return vec4d(m_data[0]*a_v,
+                 m_data[1]*a_v,
+                 m_data[2]*a_v,
+                 m_data[3]*a_v);
+  }
+  vec4d operator+(const vec4d& a_v) const {
+    return vec4d(m_data[0]+a_v.m_data[0],
+                 m_data[1]+a_v.m_data[1],
+                 m_data[2]+a_v.m_data[2],
+                 m_data[3]+a_v.m_data[3]);
+  }
+  vec4d operator-(const vec4d& a_v) const {
+    return vec4d(m_data[0]-a_v.m_data[0],
+                 m_data[1]-a_v.m_data[1],
+                 m_data[2]-a_v.m_data[2],
+                 m_data[3]-a_v.m_data[3]);
+  }
+  vec4d& operator+=(const vec4d& a_v) {
+    m_data[0] += a_v.m_data[0];
+    m_data[1] += a_v.m_data[1];
+    m_data[2] += a_v.m_data[2];
+    m_data[3] += a_v.m_data[3];
+    return *this;
+  }
+  vec4d& operator*=(double a_v) {
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    m_data[2] *= a_v;
+    m_data[3] *= a_v;
+    return *this;
+  }
+  vec4d operator-() const {
+    return vec4d(-m_data[0],-m_data[1],-m_data[2],-m_data[3]);
+  }
+public:
+  double length() const {return parent::length(::sqrt);}
+  double normalize() {return parent::normalize(::sqrt);}
+};
+
+}
+
+/*
+#include <vector>
+
+namespace tools {
+
+#ifndef SWIG
+//for sf, mf :
+inline bool set_from_vec(vec4d& a_v,const std::vector<double>& a_sv) {
+  if(a_sv.size()!=4) return false;
+  a_v[0] = a_sv[0];
+  a_v[1] = a_sv[1];
+  a_v[2] = a_sv[2];
+  a_v[3] = a_sv[3];
+  return true;
+}
+#endif
+
+}
+*/
+
+#endif

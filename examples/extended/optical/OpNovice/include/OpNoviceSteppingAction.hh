@@ -31,7 +31,6 @@
 #define OpNoviceSteppingAction_h 1
 
 #include "OpNoviceEventAction.hh"
-
 #include "globals.hh"
 #include "G4UserSteppingAction.hh"
 

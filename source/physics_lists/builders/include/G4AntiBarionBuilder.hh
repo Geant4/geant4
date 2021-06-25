@@ -40,10 +40,11 @@
 
 #include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
-
-#include "G4ProtonInelasticProcess.hh"
-#include "G4VAntiBarionBuilder.hh"
 #include <vector>
+
+class G4HadronInelasticProcess;
+class G4VAntiBarionBuilder;
+
 
 class G4AntiBarionBuilder : public G4PhysicsBuilderInterface
 {
@@ -55,14 +56,14 @@ class G4AntiBarionBuilder : public G4PhysicsBuilderInterface
     virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
-    G4AntiProtonInelasticProcess*   theAntiProtonInelastic;
-    G4AntiNeutronInelasticProcess*  theAntiNeutronInelastic;
-    G4AntiDeuteronInelasticProcess* theAntiDeuteronInelastic;
-    G4AntiTritonInelasticProcess*   theAntiTritonInelastic;
-    G4AntiHe3InelasticProcess*      theAntiHe3Inelastic;
-    G4AntiAlphaInelasticProcess*    theAntiAlphaInelastic;
+    G4HadronInelasticProcess* theAntiProtonInelastic;
+    G4HadronInelasticProcess* theAntiNeutronInelastic;
+    G4HadronInelasticProcess* theAntiDeuteronInelastic;
+    G4HadronInelasticProcess* theAntiTritonInelastic;
+    G4HadronInelasticProcess* theAntiHe3Inelastic;
+    G4HadronInelasticProcess* theAntiAlphaInelastic;
      
-    std::vector<G4VAntiBarionBuilder *> theModelCollections;
+    std::vector<G4VAntiBarionBuilder* > theModelCollections;
 
 };
 

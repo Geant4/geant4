@@ -75,12 +75,11 @@ public:
   explicit G4IonCoulombScatteringModel(const G4String& nam = 
 				       "IonCoulombScattering");
  
-  virtual ~G4IonCoulombScatteringModel();
+  ~G4IonCoulombScatteringModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) final;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
  
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
 				G4double kinEnergy, 
 				G4double Z, 
@@ -88,11 +87,11 @@ public:
 				G4double cut,
 				G4double emax) final;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) final;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) final;
 
 
   	
@@ -102,20 +101,16 @@ public:
 
   inline G4int GetHeavyIonCorr();
 
-  //protected: 
+  // hide assignment operator
+  G4IonCoulombScatteringModel & operator=
+  (const G4IonCoulombScatteringModel &right) = delete;
+  G4IonCoulombScatteringModel(const  G4IonCoulombScatteringModel&) = delete;
 	 
 private:
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
   
   inline void SetupParticle(const G4ParticleDefinition*);
-
-  // hide assignment operator
-  G4IonCoulombScatteringModel & operator=
-  (const G4IonCoulombScatteringModel &right) = delete;
-  G4IonCoulombScatteringModel(const  G4IonCoulombScatteringModel&) = delete;
-
-  //protected:
 
   G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange; 

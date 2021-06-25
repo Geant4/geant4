@@ -1,0 +1,21 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sys_process
+#define tools_sys_process
+
+#ifdef _MSC_VER
+#include <process.h>
+#else
+#include <unistd.h>
+#endif
+
+namespace tools {
+
+inline int process_id() {
+  return static_cast<int>(::getpid());
+}
+
+}
+
+#endif

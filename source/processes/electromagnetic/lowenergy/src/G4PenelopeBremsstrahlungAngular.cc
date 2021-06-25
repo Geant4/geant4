@@ -58,12 +58,12 @@
 #include "G4Exp.hh"
 
 G4PenelopeBremsstrahlungAngular::G4PenelopeBremsstrahlungAngular() :
-  G4VEmAngularDistribution("Penelope"), theEffectiveZSq(0),
-  theLorentzTables1(0),theLorentzTables2(0)
+  G4VEmAngularDistribution("Penelope"), fEffectiveZSq(nullptr),
+  fLorentzTables1(nullptr),fLorentzTables2(nullptr)
 
 {
-  dataRead = false;
-  verbosityLevel = 0;
+  fDataRead = false;
+  fVerbosityLevel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,33 +84,32 @@ void G4PenelopeBremsstrahlungAngular::Initialize()
 
 void G4PenelopeBremsstrahlungAngular::ClearTables()
 {
-  if (theLorentzTables1)
+  if (fLorentzTables1)
     {
-      for (auto j = theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
+      for (auto j=fLorentzTables1->begin(); j != fLorentzTables1->end(); ++j)
         {
 	  G4PhysicsTable* tab = j->second;
           //tab->clearAndDestroy();
           delete tab;
         }
-      delete theLorentzTables1;
-      theLorentzTables1 = nullptr;
+      delete fLorentzTables1;
+      fLorentzTables1 = nullptr;
     }
 
-  if (theLorentzTables2)
+  if (fLorentzTables2)
     {
-      for (auto j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
+      for (auto j=fLorentzTables2->begin(); j != fLorentzTables2->end(); ++j)
         {
 	  G4PhysicsTable* tab = j->second;
-          //tab->clearAndDestroy();
           delete tab;
         }
-      delete theLorentzTables2;
-      theLorentzTables2 = nullptr;
+      delete fLorentzTables2;
+      fLorentzTables2 = nullptr;
     }
-  if (theEffectiveZSq)
+  if (fEffectiveZSq)
     {
-      delete theEffectiveZSq;
-      theEffectiveZSq = nullptr;
+      delete fEffectiveZSq;
+      fEffectiveZSq = nullptr;
     }
 }
 
@@ -141,9 +140,9 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
     }
   G4int i=0,j=0,k=0; // i=index for Z, j=index for E, k=index for K
 
-  for (k=0;k<NumberofKPoints;k++)
-    for (i=0;i<NumberofZPoints;i++)
-      for (j=0;j<NumberofEPoints;j++)
+  for (k=0;k<fNumberofKPoints;k++)
+    for (i=0;i<fNumberofZPoints;i++)
+      for (j=0;j<fNumberofEPoints;j++)
 	{
 	  G4double a1,a2;
 	  G4int ik1,iz1,ie1;
@@ -152,8 +151,8 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 	  //check the data are correct
 	  if ((iz1-1 == i) && (ik1-1 == k) && (ie1-1 == j))
 	    {
-	      QQ1[i][j][k]=a1;
-	      QQ2[i][j][k]=a2;
+	      fQQ1[i][j][k]=a1;
+	      fQQ2[i][j][k]=a2;
 	    }
 	  else
 	    {
@@ -164,7 +163,7 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 	    }
 	}
   file.close();
-  dataRead = true;
+  fDataRead = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -173,58 +172,54 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
 {
   //Unused at the moment: the G4PenelopeBremsstrahlungAngular is thread-local, so each worker
   //builds its own version of the tables.
-  /*
-    if (!isMaster)
-    //Should not be here!
-    G4Exception("G4PenelopeBremsstrahlungAngular::PrepareTables()",
-    "em0100",FatalException,"Worker thread in this method");
-  */
-
+  
   //Check if data file has already been read
-  if (!dataRead)
+  if (!fDataRead)
     {
       ReadDataFile();
-      if (!dataRead)
+      if (!fDataRead)
 	G4Exception("G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables()",
 		    "em2001",FatalException,"Unable to build interpolation table");
     }
 
-  if (!theLorentzTables1)
-      theLorentzTables1 = new std::map<G4double,G4PhysicsTable*>;
-  if (!theLorentzTables2)
-    theLorentzTables2 = new std::map<G4double,G4PhysicsTable*>;
+  if (!fLorentzTables1)
+      fLorentzTables1 = new std::map<G4double,G4PhysicsTable*>;
+  if (!fLorentzTables2)
+    fLorentzTables2 = new std::map<G4double,G4PhysicsTable*>;
 
   G4double Zmat = CalculateEffectiveZ(material);
 
   const G4int reducedEnergyGrid=21;
   //Support arrays.
-  G4double betas[NumberofEPoints]; //betas for interpolation
+  G4double betas[fNumberofEPoints]; //betas for interpolation
   //tables for interpolation
-  G4double Q1[NumberofEPoints][NumberofKPoints];
-  G4double Q2[NumberofEPoints][NumberofKPoints];
+  G4double Q1[fNumberofEPoints][fNumberofKPoints];
+  G4double Q2[fNumberofEPoints][fNumberofKPoints];
   //expanded tables for interpolation
-  G4double Q1E[NumberofEPoints][reducedEnergyGrid];
-  G4double Q2E[NumberofEPoints][reducedEnergyGrid];
-  G4double pZ[NumberofZPoints] = {2.0,8.0,13.0,47.0,79.0,92.0};
+  G4double Q1E[fNumberofEPoints][reducedEnergyGrid];
+  G4double Q2E[fNumberofEPoints][reducedEnergyGrid];
+  G4double pZ[fNumberofZPoints] = {2.0,8.0,13.0,47.0,79.0,92.0};
 
   G4int i=0,j=0,k=0; // i=index for Z, j=index for E, k=index for K
   //Interpolation in Z
-  for (i=0;i<NumberofEPoints;i++)
+  for (i=0;i<fNumberofEPoints;i++)
     {
-      for (j=0;j<NumberofKPoints;j++)
+      for (j=0;j<fNumberofKPoints;j++)
 	{
-	  G4PhysicsFreeVector* QQ1vector = new G4PhysicsFreeVector(NumberofZPoints);
-	  G4PhysicsFreeVector* QQ2vector = new G4PhysicsFreeVector(NumberofZPoints);
+	  G4PhysicsFreeVector* QQ1vector = 
+	    new G4PhysicsFreeVector(fNumberofZPoints,/*spline =*/true);
+	  G4PhysicsFreeVector* QQ2vector = 
+	    new G4PhysicsFreeVector(fNumberofZPoints,/*spline =*/true);
 
 	  //fill vectors
-	  for (k=0;k<NumberofZPoints;k++)
+	  for (k=0;k<fNumberofZPoints;k++)
 	    {
-	      QQ1vector->PutValue(k,pZ[k],G4Log(QQ1[k][i][j]));
-	      QQ2vector->PutValue(k,pZ[k],QQ2[k][i][j]);
+	      QQ1vector->PutValue(k,pZ[k],G4Log(fQQ1[k][i][j]));
+	      QQ2vector->PutValue(k,pZ[k],fQQ2[k][i][j]);
 	    }
-
-	  QQ1vector->SetSpline(true);
-	  QQ2vector->SetSpline(true);
+	  //Filled: now calculate derivatives
+	  QQ1vector->FillSecondDerivatives();
+	  QQ2vector->FillSecondDerivatives();
 
 	  Q1[i][j]= G4Exp(QQ1vector->Value(Zmat));
 	  Q2[i][j]=QQ2vector->Value(Zmat);
@@ -232,32 +227,32 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
 	  delete QQ2vector;
 	}
     }
-  G4double pE[NumberofEPoints] = {1.0e-03*MeV,5.0e-03*MeV,1.0e-02*MeV,5.0e-02*MeV,
+  G4double pE[fNumberofEPoints] = {1.0e-03*MeV,5.0e-03*MeV,1.0e-02*MeV,5.0e-02*MeV,
 				  1.0e-01*MeV,5.0e-01*MeV};
-  G4double pK[NumberofKPoints] = {0.0,0.6,0.8,0.95};
+  G4double pK[fNumberofKPoints] = {0.0,0.6,0.8,0.95};
   G4double ppK[reducedEnergyGrid];
 
   for(i=0;i<reducedEnergyGrid;i++)
     ppK[i]=((G4double) i) * 0.05;
 
 
-  for(i=0;i<NumberofEPoints;i++)
+  for(i=0;i<fNumberofEPoints;i++)
     betas[i]=std::sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
 
 
-  for (i=0;i<NumberofEPoints;i++)
+  for (i=0;i<fNumberofEPoints;i++)
     {
-      for (j=0;j<NumberofKPoints;j++)
+      for (j=0;j<fNumberofKPoints;j++)
 	Q1[i][j]=Q1[i][j]/Zmat;
     }
 
   //Expanded table of distribution parameters
-  for (i=0;i<NumberofEPoints;i++)
+  for (i=0;i<fNumberofEPoints;i++)
     {
-      G4PhysicsFreeVector* Q1vector = new G4PhysicsFreeVector(NumberofKPoints);
-      G4PhysicsFreeVector* Q2vector = new G4PhysicsFreeVector(NumberofKPoints);
+      G4PhysicsFreeVector* Q1vector = new G4PhysicsFreeVector(fNumberofKPoints);
+      G4PhysicsFreeVector* Q2vector = new G4PhysicsFreeVector(fNumberofKPoints);
 
-      for (j=0;j<NumberofKPoints;j++)
+      for (j=0;j<fNumberofKPoints;j++)
 	{
 	  Q1vector->PutValue(j,pK[j],G4Log(Q1[i][j])); //logarithmic
 	  Q2vector->PutValue(j,pK[j],Q2[i][j]);
@@ -284,9 +279,9 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
   //reserve space of the vectors.
   for (j=0;j<reducedEnergyGrid;j++)
     {
-      G4PhysicsFreeVector* thevec = new G4PhysicsFreeVector(NumberofEPoints);
+      G4PhysicsFreeVector* thevec = new G4PhysicsFreeVector(fNumberofEPoints,/*spline=*/true);
       theTable1->push_back(thevec);
-      G4PhysicsFreeVector* thevec2 = new G4PhysicsFreeVector(NumberofEPoints);
+      G4PhysicsFreeVector* thevec2 = new G4PhysicsFreeVector(fNumberofEPoints,/*spline=*/true);
       theTable2->push_back(thevec2);
     }
 
@@ -294,19 +289,20 @@ void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G
     {
       G4PhysicsFreeVector* thevec = (G4PhysicsFreeVector*) (*theTable1)[j];
       G4PhysicsFreeVector* thevec2 = (G4PhysicsFreeVector*) (*theTable2)[j];
-      for (i=0;i<NumberofEPoints;i++)
+      for (i=0;i<fNumberofEPoints;i++)
 	{
 	  thevec->PutValue(i,betas[i],Q1E[i][j]);
 	  thevec2->PutValue(i,betas[i],Q2E[i][j]);
 	}
-      thevec->SetSpline(true);
-      thevec2->SetSpline(true);
+      //Vectors are filled: calculate derivatives
+      thevec->FillSecondDerivatives();
+      thevec2->FillSecondDerivatives();
     }
 
-  if (theLorentzTables1 && theLorentzTables2)
+  if (fLorentzTables1 && fLorentzTables2)
     {
-      theLorentzTables1->insert(std::make_pair(Zmat,theTable1));
-      theLorentzTables2->insert(std::make_pair(Zmat,theTable2));
+      fLorentzTables1->insert(std::make_pair(Zmat,theTable1));
+      fLorentzTables2->insert(std::make_pair(Zmat,theTable2));
     }
   else
     {
@@ -339,7 +335,7 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
   //Retrieve the effective Z
   G4double Zmat = 0;
 
-  if (!theEffectiveZSq)
+  if (!fEffectiveZSq)
     {
       G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
 		  "em2040",FatalException,"EffectiveZ table not available");
@@ -347,8 +343,8 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
     }
 
   //found in the table: return it
-  if (theEffectiveZSq->count(material))
-    Zmat = theEffectiveZSq->find(material)->second;
+  if (fEffectiveZSq->count(material))
+    Zmat = fEffectiveZSq->find(material)->second;
   else
     {
       G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
@@ -356,7 +352,7 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
       return fLocalDirection;
     }
 
-  if (verbosityLevel > 0)
+  if (fVerbosityLevel > 0)
     {
       G4cout << "Effective <Z> for material : " << material->GetName() <<
 	" = " << Zmat << G4endl;
@@ -394,7 +390,7 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
       return fLocalDirection;
     }
 
-  if (!(theLorentzTables1->count(Zmat)) || !(theLorentzTables2->count(Zmat)))
+  if (!(fLorentzTables1->count(Zmat)) || !(fLorentzTables2->count(Zmat)))
     {
       G4ExceptionDescription ed;
       ed << "Unable to retrieve Lorentz tables for Z= " << Zmat << G4endl;
@@ -403,8 +399,8 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
     }
 
   //retrieve actual tables
-  const G4PhysicsTable* theTable1 = theLorentzTables1->find(Zmat)->second;
-  const G4PhysicsTable* theTable2 = theLorentzTables2->find(Zmat)->second;
+  const G4PhysicsTable* theTable1 = fLorentzTables1->find(Zmat)->second;
+  const G4PhysicsTable* theTable2 = fLorentzTables2->find(Zmat)->second;
 
   G4double RK=20.0*eGamma/ePrimary;
   G4int ik=std::min((G4int) RK,19);
@@ -463,27 +459,14 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeBremsstrahlungAngular::PolarAngle(const G4double ,
-						     const G4double ,
-						     const G4int )
-{
-  G4cout << "WARNING: G4PenelopeBremsstrahlungAngular() does NOT support PolarAngle()" << G4endl;
-  G4cout << "Please use the alternative interface SampleDirection()" << G4endl;
-  G4Exception("G4PenelopeBremsstrahlungAngular::PolarAngle()",
-	      "em0005",FatalException,"Unsupported interface");
-  return 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* material)
 {
-  if (!theEffectiveZSq)
-    theEffectiveZSq = new std::map<const G4Material*,G4double>;
+  if (!fEffectiveZSq)
+    fEffectiveZSq = new std::map<const G4Material*,G4double>;
 
   //Already exists: return it
-  if (theEffectiveZSq->count(material))
-    return theEffectiveZSq->find(material)->second;
+  if (fEffectiveZSq->count(material))
+    return fEffectiveZSq->find(material)->second;
 
   //Helper for the calculation
   std::vector<G4double> *StechiometricFactors = new std::vector<G4double>;
@@ -518,7 +501,7 @@ G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* 
   delete StechiometricFactors;
 
   G4double ZBR = std::sqrt(sumz2/sums);
-  theEffectiveZSq->insert(std::make_pair(material,ZBR));
+  fEffectiveZSq->insert(std::make_pair(material,ZBR));
 
   return ZBR;
 }

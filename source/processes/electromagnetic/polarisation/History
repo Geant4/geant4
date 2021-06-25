@@ -16,14 +16,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 May 21: V.Ivanchenko (empolar-V10-07-06)
+- G4PolarizedAnnihilation - updated use of the spline flag
+
+10 May 21: V.Ivanchenko (empolar-V10-07-05)
+- G4PolarizedCompton - updated use of the spline flag
+
+16 April 21: B.Morgan (empolar-V10-07-04)
+- Migrate build to modular CMake API
+
+24 April 21: V.Ivanchenko (empolar-V10-07-03)
+- G4PolarizedIonisationBhabhaXS - removed incorrect G4Exception;
+
+10 April 21: V.Ivanchenko (empolar-V10-07-02)
+- G4PolarizedBremsstrahlung - removed variable shadowing
+
+31 March 21: V.Ivanchenko (empolar-V10-07-01)
+- G4PolarizedAnnihilation, G4ePolarizedIonisation - improve
+  initialisation of assymetry tables
+
+16 February 21: D.Sawkey (empolar-V10-07-00)
+- all files. Major cleaning for version 11.
+ - name classes in logical manner
+ - improve comments
+ - add ProcessDescription
+ - order #includes; remove unused
+ - disable copy and assignment operators with 'delete'
+ - increase C++11 keyword usage, especially override, explicit
+ - rename (most) class variables to start with f
+ - make SCRN arrays the correct size
+ - use constexpr for numbers
+ - apply clang-format style
+ - use G4ExceptionDescription
+ - avoid implicit conversions between G4StokesVector and G4ThreeVector
+
 01 April 18: V.Ivanchenko (empolar-V10-04-02)
-- G4PolarizedCompton, G4PolarizedPhotoElectricEffect, 
+- G4PolarizedCompton, G4PolarizedPhotoElectricEffect,
   G4PolarizedGammaConversion, G4ePolarizedBremsstrahlung,
   G4ePolarizedIonisation - cleanup process classes, moved virtual
     methods to source, removed unused headers and methods
 
 01 April 18: V.Ivanchenko (empolar-V10-04-01)
-- G4PolarizedAnnihilationModel - implemented sampling of final 
+- G4PolarizedAnnihilationModel - implemented sampling of final
     state AtRest
 
 12 February 18: V.Ivanchenko (empolar-V10-04-00)
@@ -35,7 +69,7 @@ committal in the CVS repository !
     make coherent model initialisation
 
 1 Jun 16: D.Sawkey (empolar-V10-02-04)
-- G4PolarizationManager: C++11 range-based for loop; 
+- G4PolarizationManager: C++11 range-based for loop;
 - G4PolarizationManager, G4ePolarizedBremsstrahlungModel: nullptr
 
 26 May 16: D.Sawkey (empolar-V10-02-03)
@@ -63,10 +97,10 @@ committal in the CVS repository !
 06 October 15: V.Ivanchenko (empolar-V10-01-01)
 - G4PolarizedCompton, G4ePolarizedIonisation, G4eplusPolarizedAnnihilation
     - changed initialisation taking into account MT mode, added
-      method ComputeSaturationFactor used in mean free path and 
-      step limit corrections, removed PreparePhysicsTable method (use 
-      one from the base class), fixed computation of the value of number 
-      of interaction lengths left which is responsible for the 
+      method ComputeSaturationFactor used in mean free path and
+      step limit corrections, removed PreparePhysicsTable method (use
+      one from the base class), fixed computation of the value of number
+      of interaction lengths left which is responsible for the
       problem #1698
 - G4PolarizedComptonModel - revised do/while loop in sampling of
       gamma scattering angle
@@ -75,7 +109,7 @@ committal in the CVS repository !
 - Added comments to do/while and while loops
 
 22 October 13: V.Ivanchenko (empolar-V10-00-03)
-- G4PolarizedCompton, G4PolarizedGammaConversion, 
+- G4PolarizedCompton, G4PolarizedGammaConversion,
   G4PolarizedPhotoElectricEffect, G4ePolarizedBremsstrahlung,
   G4ePolarizedIonisation - use G4EmParameters
 
@@ -85,7 +119,7 @@ committal in the CVS repository !
 
 08 July 13: V.Ivanchenko (empolar-V10-00-01)
 - G4PolarizedCompton, G4PolarizedComptonModel - added startFromNull option
-    as for standard Compton process and add the same low-energy 
+    as for standard Compton process and add the same low-energy
     threshold to create secondary particle
 
 26 May 13: V.Ivanchenko (empolar-V10-00-00)
@@ -106,7 +140,7 @@ committal in the CVS repository !
 28 October 13: V.Ivanchenko (empolar-V09-06-03)
 28 October 13: V.Ivanchenko (empolar-V09-06-02)
 28 October 13: V.Ivanchenko (empolar-V09-06-01)
-- G4ePolarizedBremsstrahlungModel - substitute G4eBremsstrahlungModel 
+- G4ePolarizedBremsstrahlungModel - substitute G4eBremsstrahlungModel
     by G4SeltzerBergerModel
 
 25 February 13: V.Ivanchenko (empolar-V09-06-00)
@@ -114,7 +148,7 @@ committal in the CVS repository !
      gammaPol0, electronPol1, epsilon
 
 20 October 12: V.Ivanchenko (empolar-V09-05-02)
-- G4PolarizedPhotoElectricEffect, G4PolarizedPEEffectModel - substitute 
+- G4PolarizedPhotoElectricEffect, G4PolarizedPEEffectModel - substitute
     methods Model(), SetModel() by EmModel(), SetEmModel()
 
 11 July 12: G.Cosmo (empolar-V09-05-01)
@@ -125,11 +159,11 @@ committal in the CVS repository !
 - Fixed shadowing
 
 11 November 11: V.Ivanchenko (empolar-V09-04-04)
-- G4ePolarizedBremsstrahlung - fixed problem provoked by the tag 
+- G4ePolarizedBremsstrahlung - fixed problem provoked by the tag
     of standard
 
 10 November 11: V.Ivanchenko (empolar-V09-04-03)
-- G4PolarizedCompton, G4ePolarizedIonisation, 
+- G4PolarizedCompton, G4ePolarizedIonisation,
   G4PolarizedMollerBhabhaModel, G4eplusPolarizedAnnihilation - fixed
     initialisation problems reported by the Coverity tool
 
@@ -143,22 +177,22 @@ committal in the CVS repository !
 - G4ePolarizedIonisation - do not use obsolete MinCutEnergy
 
 12 November 10: A.Schaelicke (empolar-V09-03-02)
-- Resolved: Warning messages of Coverity 
+- Resolved: Warning messages of Coverity
 
-3 September 10: G.Cosmo (empolar-V09-03-01) 
+3 September 10: G.Cosmo (empolar-V09-03-01)
 - Fixed signature to G4VPolarizedCrossSection::TotalXSection() in source file.
 
 16 June 10: A.Schaelicke (empolar-V09-03-00)
 - Bug fix in G4ePolarizedIonisation.cc
-  (used default vector size of G4VEnergyLossProcess, 
+  (used default vector size of G4VEnergyLossProcess,
    avoid size mismatch in G4LossTableBuilder::BuildDEDXTable)
 
 12 November 09: A.Schaelicke (empolar-V09-02-01)
-- Bug fix in G4PolarizationHelper::GetSpinInPRF 
+- Bug fix in G4PolarizationHelper::GetSpinInPRF
     (wrong normalization of y component)
 - Bug fix in G4PolarizedAnnihilationModel::PostStepDoIt
-    (wrong treatment in error check) 
-- Bug fix in G4StokesVector::RotateAz 
+    (wrong treatment in error check)
+- Bug fix in G4StokesVector::RotateAz
     (wrong usage of vector product)
 
 12 April 09: V.Ivanchenko (empolar-V09-02-00)
@@ -170,8 +204,8 @@ G4PolarizedAnnihilationModel - simplified initialisation
 01 November 07: A.Schaelicke
 - Bug fix in G4PolarizedAnnihilationCrossSection
     error in calculation of polarisation dependent total cross section
-    (wrong interactionLength for positrons in applications where, 
-     particle and media are polarised)  
+    (wrong interactionLength for positrons in applications where,
+     particle and media are polarised)
 - more general Cross section frame work:
     G4PolarizedAnnihilationCrossSection
     G4PolarizedBhabhaCrossSection
@@ -182,12 +216,12 @@ G4PolarizedAnnihilationModel - simplified initialisation
     G4PolarizedPairProductionCrossSection
     G4VPolarizedCrossSection
     G4ePolarizedBremsstrahlungModel
-   (removed dependencies to models; now cross sections can be used 
+   (removed dependencies to models; now cross sections can be used
     independent of any model, e.g. in a cross section calculator class)
 - add polarized photo electric effect:
     G4PolarizationHelper
        (new method GetRandomFrame, used when interaction frame is not
-        well defined by outgoing particles) 
+        well defined by outgoing particles)
     G4PolarizedPEEffectCrossSection
        (based on McMaster, Rev.Mod.Phys. 33 (1961) 8)
     G4PolarizedPEEffectModel
@@ -206,25 +240,25 @@ G4eplusPolarizedAnnihilation - enabled AtRest
   G4eplusPolarizedAnnihilation renamed local variable "particle" to
   avoid "shadow" Warning on SUN CC
 - G4PolarizedAnnihilationModel
-  copied Initialise() method from G4eeToTwoGammaModel provide a 
+  copied Initialise() method from G4eeToTwoGammaModel provide a
   ParticleChangeForGamma object, this avoids "shadow" Warning on SUNCC
   and reduces overhead in SampleSecondaries()
 
 11 June 07: V.Ivanchenko (empolar-V08-03-02)
-- (A.Schaelicke) G4PolarizedCompton, G4ePolarizedIonisation, 
-  G4eplusPolarizedAnnihilation added method 
-  PostStepGetPhysicalInteractionLength in order to provide 
-  simulation of polarized target; the fix is required because of design 
+- (A.Schaelicke) G4PolarizedCompton, G4ePolarizedIonisation,
+  G4eplusPolarizedAnnihilation added method
+  PostStepGetPhysicalInteractionLength in order to provide
+  simulation of polarized target; the fix is required because of design
   change in utils
 
 25 May 07:  V.Ivanchenko (empolar-V08-03-01)
-- G4PolarizedCompton - fix compilation warning and incorrect usage of 
+- G4PolarizedCompton - fix compilation warning and incorrect usage of
 	               G4PhysicsVector
 
 23 May 07:  V.Ivanchenko (empolar-V08-03-00)
-- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
   remove method SecondaryPostStep;
-- G4VEmModel - changed interface of SampleSecondary method, it become 
+- G4VEmModel - changed interface of SampleSecondary method, it become
   void, extra parameter std::vector<G4DynamicParticle*>*, all
   classes using or inhereting this interface are modified.
 
@@ -255,7 +289,7 @@ G4eplusPolarizedAnnihilation - enabled AtRest
   to other polarized processes)
 - G4PolarizedBhabhaCrossSection and G4PolarizedMollerCrossSection :
   new cross section calculation to make polarization vector conform to
-  other polarized processes 
+  other polarized processes
 
 29 Sept 06: G.Cosmo (empolar-V08-01-01)
 - Fixed for usage of std namespace and porting on WIN32-VC platform.

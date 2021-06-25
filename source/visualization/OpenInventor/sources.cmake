@@ -1,7 +1,4 @@
-#------------------------------------------------------------------------------
-# Module : G4OpenInventor
-# Package: Geant4.src.G4visualization.G4OpenInventor
-#------------------------------------------------------------------------------
+# - G4OpenInventor module build definition
 
 #----------------------------------------------------------------------------
 # Geant4 OpenInventor Core sources and headers (all platforms)
@@ -143,43 +140,28 @@ if(GEANT4_USE_INVENTOR_WIN)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES SoWin::SoWin OpenGL::GL)
 endif()
 
-#
+
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4OpenInventor
-  HEADERS
+geant4_add_module(G4OpenInventor
+  PUBLIC_HEADERS
     ${G4VIS_MODULE_OPENINVENTOR_HEADERS}
   SOURCES
-    ${G4VIS_MODULE_OPENINVENTOR_SOURCES}
-  GRANULAR_DEPENDENCIES
+    ${G4VIS_MODULE_OPENINVENTOR_SOURCES})
+
+geant4_module_link_libraries(G4OpenInventor
+  PUBLIC
     G4UIcommon
+    G4globman
+    G4graphics_reps
+    G4hepgeometry
+    G4intercoms
+    G4modeling
+    G4vis_management
+    ${G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES}
+  PRIVATE
+    G4UIbasic
     G4csg
     G4geometrymng
     G4gl2ps
-    G4globman
-    G4graphics_reps
-    G4hits
-    G4intercoms
     G4materials
-    G4modeling
-    G4specsolids
-    G4tracking
-    G4vis_management
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4geometry
-    G4gl2ps
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4interfaces
-    G4materials
-    G4modeling
-    G4tracking
-    G4vis_management
-  LINK_LIBRARIES
-    ${G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES}
-  )
-
-# List any source specific properties here
-
+    G4tracking)

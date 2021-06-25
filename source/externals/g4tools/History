@@ -1,0 +1,26 @@
+# g4tools Category History
+# - It is NOT a substitute for good git commit messages!
+# - All entries must be in reverse time order (most recent data on top)!
+
+25th May 2021, B. Morgan (g4tools-V10-07-05)
+- Move fonts from analysis category to tools to assist cross-category use
+
+18th May 2021, G. Barrand (g4tools-V10-07-04)
+- tools/zb/polygon: in scan() : initialize ET,AET,SLLBlock, before calling
+  CreateETandAET, to quiet g++-11 -Wmaybe-uninitialized warnings.
+
+5th May 2021, J. Allison (g4tools-V10-07-03)
+- Rename g4tools/include/tools/sg/gL_manager to GL_manager.
+
+16th April 2021, I. Hrivnacova (g4tools-V10-07-02)
+- Updated to g4tools 5.4.0 (Guy Barrand):
+  “Windowing” code update needed for the new “ToolsSG” vis drivers.
+  See History_tools for the complete list of modifications.
+
+04th March 2021, I. Hrivnacova (g4tools-V10-07-01)
+- Updated to g4tools 5.3.1 (Guy Barrand):
+  "Windowing" code needed for G4/vis/tools_sg
+  See History_tools for the complete list of modifications.
+
+18th February 2021, B. Morgan (g4tools-V10-07-00)
+- Move g4tools from g4analysis to externals category

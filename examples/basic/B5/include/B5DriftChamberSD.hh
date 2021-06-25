@@ -45,10 +45,10 @@ class B5DriftChamberSD : public G4VSensitiveDetector
   public:
     B5DriftChamberSD(G4String name);
     virtual ~B5DriftChamberSD();
-    
+
     virtual void Initialize(G4HCofThisEvent*HCE);
     virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
-    
+
   private:
     B5DriftChamberHitsCollection* fHitsCollection;
     G4int fHCID;

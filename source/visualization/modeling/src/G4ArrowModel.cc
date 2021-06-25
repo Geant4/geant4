@@ -46,6 +46,8 @@ G4ArrowModel::~G4ArrowModel ()
 {
   delete fpHeadPolyhedron;
   delete fpShaftPolyhedron;
+  delete fpHeadPolyhedronOrig;
+  delete fpShaftPolyhedronOrig;
 }
 
 G4ArrowModel::G4ArrowModel
@@ -56,6 +58,8 @@ G4ArrowModel::G4ArrowModel
  G4int lineSegmentsPerCircle)
 : fpShaftPolyhedron(nullptr)
 , fpHeadPolyhedron(nullptr)
+, fpShaftPolyhedronOrig(nullptr)
+, fpHeadPolyhedronOrig(nullptr)
 {
   fType = "G4ArrowModel";
   fGlobalTag = fType;
@@ -123,10 +127,35 @@ G4ArrowModel::G4ArrowModel
   G4Polyhedron::SetNumberOfRotationSteps(tempN);
 }
 
+void G4ArrowModel::SetTransformation (const G4Transform3D& transform)
+{
+  fTransform = transform;  // A new transform
+
+  if (fpShaftPolyhedron) {
+    if (fpShaftPolyhedronOrig == nullptr) {  // Must be first time
+      fpShaftPolyhedronOrig = new G4Polyhedron(*fpShaftPolyhedron);
+    }
+    delete fpShaftPolyhedron;  // Has transformation of old transfrom
+    fpShaftPolyhedron = new G4Polyhedron(*fpShaftPolyhedronOrig);
+    fpShaftPolyhedron->Transform(fTransform);
+  }
+
+  if (fpHeadPolyhedron) {
+    if (fpHeadPolyhedronOrig == nullptr) {  // Must be first time
+      fpHeadPolyhedronOrig = new G4Polyhedron(*fpHeadPolyhedron);
+    }
+    delete fpHeadPolyhedron;  // Has transformation of old transfrom
+    fpHeadPolyhedron = new G4Polyhedron(*fpHeadPolyhedronOrig);
+    fpHeadPolyhedron->Transform(fTransform);
+  }
+}
+
 void G4ArrowModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  sceneHandler.BeginPrimitives();
-  if (fpShaftPolyhedron) sceneHandler.AddPrimitive(*fpShaftPolyhedron);
-  if (fpHeadPolyhedron) sceneHandler.AddPrimitive(*fpHeadPolyhedron);
-  sceneHandler.EndPrimitives();
+  if (fpShaftPolyhedron && fpHeadPolyhedron) {
+    sceneHandler.BeginPrimitives();
+    sceneHandler.AddPrimitive(*fpShaftPolyhedron);
+    sceneHandler.AddPrimitive(*fpHeadPolyhedron);
+    sceneHandler.EndPrimitives();
+  }
 }

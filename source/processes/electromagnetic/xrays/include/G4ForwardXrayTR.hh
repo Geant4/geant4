@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // G4ForwardXrayTR
 //
 // Class for description
@@ -42,149 +40,117 @@
 #ifndef G4FORWARDXRAYTR_H
 #define G4FORWARDXRAYTR_H
 
-
 #include "globals.hh"
-#include "templates.hh"
-#include "geomdefs.hh"
-#include "Randomize.hh"
-#include "G4Step.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4DynamicParticle.hh"
-#include "G4Material.hh"
-#include "G4LogicalBorderSurface.hh"
-#include "G4LogicalSkinSurface.hh"
-#include "G4OpticalSurface.hh"
-#include "G4OpticalPhoton.hh"
-#include "G4TransportationManager.hh"
-
+#include "G4Track.hh"
 #include "G4TransitionRadiation.hh"
-#include "G4PhysicsTable.hh"
-#include "G4Gamma.hh"
-#include "G4PhysicsLogVector.hh"
+#include "G4VParticleChange.hh"
+
+class G4ParticleDefinition;
+class G4PhysicsTable;
+class G4PhysicsLogVector;
 
 class G4ForwardXrayTR : public G4TransitionRadiation
 {
-public:
+ public:
+  explicit G4ForwardXrayTR(const G4String& matName1, const G4String& matName2,
+                           const G4String& processName = "XrayTR");
 
-  // Constructors
+  explicit G4ForwardXrayTR(const G4String& processName = "XrayTR");
 
-  explicit G4ForwardXrayTR(  const G4String& matName1,    //  G4Material* pMat1,
-		    const G4String& matName2,    //  G4Material* pMat2,     
-                    const G4String& processName="XrayTR"     );
-  
-  explicit G4ForwardXrayTR(  const G4String& processName="XrayTR"     );
+  ~G4ForwardXrayTR();
 
-  // Destructor //  virtual
+  G4ForwardXrayTR(const G4ForwardXrayTR& right) = delete;
+  G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) = delete;
 
-  virtual ~G4ForwardXrayTR();
+  ///////////////////////    Methods    /////////////////////////////////
 
-///////////////////////    Methods    /////////////////////////////////
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
 
   void BuildXrayTRtables();
 
   G4double GetMeanFreePath(const G4Track&, G4double,
-			   G4ForceCondition* condition) override;
+                           G4ForceCondition* condition) override;
 
-  G4VParticleChange* PostStepDoIt( const G4Track& aTrack,
-           const G4Step&  aStep    ) override;
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+                                  const G4Step& aStep) override;
 
   G4double GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const;
-  
-  G4double GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const;     
 
+  G4double GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const;
 
-///////////////////// Angle distribution  /////////////////////////////
-//
+  ///////////////////// Angle distribution  /////////////////////////////
 
-G4double SpectralAngleTRdensity( G4double energy,
-                                 G4double varAngle ) const override;
+  G4double SpectralAngleTRdensity(G4double energy,
+                                  G4double varAngle) const override;
 
-G4double AngleDensity( G4double energy,
-                       G4double varAngle ) const;
+  G4double AngleDensity(G4double energy, G4double varAngle) const;
 
-G4double EnergyInterval( G4double energy1,
-                         G4double energy2,
-                         G4double varAngle ) const;
+  G4double EnergyInterval(G4double energy1, G4double energy2,
+                          G4double varAngle) const;
 
-G4double AngleSum( G4double varAngle1,
-                   G4double varAngle2     )  const;
+  G4double AngleSum(G4double varAngle1, G4double varAngle2) const;
 
-/////////////////////////  Energy distribution ///////////////////////////////
+  /////////////////////////  Energy distribution ///////////////////////////////
 
-G4double SpectralDensity( G4double energy,
-                          G4double x       ) const;
+  G4double SpectralDensity(G4double energy, G4double x) const;
 
-G4double AngleInterval( G4double energy,
-                        G4double varAngle1,
-                        G4double varAngle2   ) const;
+  G4double AngleInterval(G4double energy, G4double varAngle1,
+                         G4double varAngle2) const;
 
-G4double EnergySum( G4double energy1,
-                    G4double energy2     )   const;
+  G4double EnergySum(G4double energy1, G4double energy2) const;
 
-
-///////////////////////////   Access functions  ////////////////////////////
+  ///////////////////////////   Access functions  ////////////////////////////
 
   G4PhysicsTable* GetAngleDistrTable();
   G4PhysicsTable* GetEnergyDistrTable();
 
-  static G4int    GetSympsonNumber();
-  static G4int            GetBinTR();
+  static G4int GetSympsonNumber();
+  static G4int GetBinTR();
 
   static G4double GetMinProtonTkin();
   static G4double GetMaxProtonTkin();
-  static G4int           GetTotBin();
+  static G4int GetTotBin();
 
+ protected:  // for access from X-ray TR fast simulation models
+  static constexpr G4double fTheMinEnergyTR =
+    1. * CLHEP::keV;  //  static min TR energy
+  static constexpr G4double fTheMaxEnergyTR =
+    100. * CLHEP::keV;                              //  static max TR energy
+  static constexpr G4double fTheMaxAngle = 1.0e-3;  //  max theta of TR quanta
+  static constexpr G4double fTheMinAngle = 5.0e-6;  //  min theta of TR quanta
+  static constexpr G4double fMinProtonTkin =
+    100. * CLHEP::GeV;  // min Tkin of proton in tables
+  static constexpr G4double fMaxProtonTkin =
+    100. * CLHEP::TeV;  // max Tkin of proton in tables
+  static constexpr G4double fPlasmaCof =
+    4.0 * CLHEP::pi * CLHEP::fine_structure_const * CLHEP::hbarc *
+    CLHEP::hbarc * CLHEP::hbarc /
+    CLHEP::electron_mass_c2;  // physical consts for plasma energy
+  static constexpr G4double fCofTR = CLHEP::fine_structure_const / CLHEP::pi;
 
-protected:  // for access from X-ray TR fast simulation models
+  static constexpr G4int fSympsonNumber =
+    100;                                // Accuracy of Sympson integration
+  static constexpr G4int fBinTR  = 50;  //  number of bins in TR vectors
+  static constexpr G4int fTotBin = 50;  // number of bins in log scale
 
-  // private :  ///////////////  Data members   ///////////////////////////
+  const std::vector<G4double>* fGammaCutInKineticEnergy;
+  // TR photon cut in energy array
 
-G4ParticleDefinition* fPtrGamma;  // pointer to TR photon
+  G4ParticleDefinition* fPtrGamma;  // pointer to TR photon
 
-const std::vector<G4double>* fGammaCutInKineticEnergy;
-                                     // TR photon cut in energy array
-G4double  fGammaTkinCut;            // Tkin cut of TR photon in current mat.
+  G4PhysicsTable* fAngleDistrTable;
+  G4PhysicsTable* fEnergyDistrTable;
 
-G4PhysicsTable* fAngleDistrTable;
-G4PhysicsTable* fEnergyDistrTable;
+  G4PhysicsLogVector* fProtonEnergyVector;
 
-G4PhysicsLogVector* fProtonEnergyVector;
+  G4double fMinEnergyTR;   //  min TR energy in material
+  G4double fMaxEnergyTR;   //  max TR energy in material
+  G4double fMaxThetaTR;    //  max theta of TR quanta
+  G4double fGamma;         // current Lorentz factor
+  G4double fGammaTkinCut;  // Tkin cut of TR photon in current mat.
+  G4double fSigma1;        // plasma energy Sq of matter1
+  G4double fSigma2;        // plasma energy Sq of matter2
+};
 
-static G4int fSympsonNumber;                // Accuracy of Sympson integration 
-
-static G4double fTheMinEnergyTR;            //  static min TR energy
-static G4double fTheMaxEnergyTR;            //  static max TR energy
-       G4double fMinEnergyTR;               //  min TR energy in material
-       G4double fMaxEnergyTR;               //  max TR energy in material
-static G4double  fTheMaxAngle;               //  max theta of TR quanta
-static G4double  fTheMinAngle;               //  max theta of TR quanta
-       G4double  fMaxThetaTR;               //  max theta of TR quanta
-static G4int          fBinTR;               //  number of bins in TR vectors
-
-static G4double fMinProtonTkin;             // min Tkin of proton in tables
-static G4double fMaxProtonTkin;             // max Tkin of proton in tables
-static G4int    fTotBin;             // number of bins in log scale
-       G4double fGamma;             // current Lorentz factor
-
-static G4double fPlasmaCof;               // physical consts for plasma energy
-static G4double fCofTR;
-
-G4double fSigma1;                       // plasma energy Sq of matter1
-G4double fSigma2;                       // plasma energy Sq of matter2
-
-private:
-  // Operators
-
-  G4ForwardXrayTR(const G4ForwardXrayTR& right) = delete;
-
-  G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) = delete;
-
-  // G4bool operator==(const G4ForwardXrayTR& right)const;
-  // G4bool operator!=(const G4ForwardXrayTR& right)const;
-
-};    // end of G4ForwardXrayTR class ---------------------------
-
-#endif   // G4FORWARDXRAYTR_H
-
-
-
+#endif  // G4FORWARDXRAYTR_H

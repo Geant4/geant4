@@ -77,11 +77,11 @@ public:
   // replace model of NIEL
   void AddEmModel(G4VEmModel*); 
 
-private:
-
   // hide assignment operator
   G4NIELCalculator & operator=(const G4NIELCalculator &right) = delete;
   G4NIELCalculator(const G4NIELCalculator&) = delete;
+
+private:
 
   G4VEmModel* fModel;  
   G4int fVerbose;             

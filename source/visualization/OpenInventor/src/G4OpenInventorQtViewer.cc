@@ -80,6 +80,11 @@ void G4OpenInventorQtViewer::Initialise()
    //     parent << G4endl;
 
    fViewer = new G4OpenInventorQtExaminerViewer(parent, fName, TRUE);
+  
+   // FWJ tried this to replace sensors, but it misses some camera changes.
+   //   fGroupCameraSensor->detach();
+   //   fCameraSensor->detach();
+   //   fViewer->addFinishCallback(FinishCB);
 
    auto UI = G4UImanager::GetUIpointer();
    auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
@@ -115,6 +120,7 @@ void G4OpenInventorQtViewer::Initialise()
    //  }
 
    fViewer->setSize(SbVec2s(width, height));
+   fViewer->setOrigWindowSize(width, height);
 
    // Add common menu items...
 
@@ -282,7 +288,6 @@ void G4OpenInventorQtViewer::SetView()
     (SbColor((float)b.GetRed(),(float)b.GetGreen(),(float)b.GetBlue()));
 }
 
-
 void G4OpenInventorQtViewer::ViewerRender()
 {
   if(!fViewer) return;
@@ -293,6 +298,13 @@ SoCamera* G4OpenInventorQtViewer::GetCamera () {
   if(!fViewer) return 0;
   return fViewer->getCamera();
 }
+
+
+// User interaction finished: update VPs
+//void G4OpenInventorQtViewer::FinishCB(void* data, SoQtViewer* viewer)
+//{
+//   G4cout << "FINISHCB CALLED !!!!!" << G4endl;
+//}
 
 
 // File menu...

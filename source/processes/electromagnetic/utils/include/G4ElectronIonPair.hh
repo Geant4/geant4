@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 #ifndef G4ElectronIonPair_h
 #define G4ElectronIonPair_h 1
 
@@ -110,15 +108,15 @@ public:
 
   inline void SetVerbose(G4int);
 
+  // hide assignment operator
+  G4ElectronIonPair & operator=(const G4ElectronIonPair &right) = delete;
+  G4ElectronIonPair(const G4ElectronIonPair&) = delete;
+
 private:
 
   void Initialise();
 
   G4double FindMeanEnergyPerIonPair(const G4Material*) const;
-
-  // hide assignment operator
-  G4ElectronIonPair & operator=(const G4ElectronIonPair &right) = delete;
-  G4ElectronIonPair(const G4ElectronIonPair&) = delete;
 
   // cache
   const G4Material*  curMaterial;

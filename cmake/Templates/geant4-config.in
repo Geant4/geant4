@@ -76,7 +76,7 @@ cflags="@CMAKE_CXX_FLAGS@ @GEANT4_CXXSTD_FLAGS@"
 feature_list=""
 
 # - CXX Standard
-geant4_cxx_std="c++@GEANT4_BUILD_CXXSTD@"
+geant4_cxx_std="@CMAKE_CXX_STANDARD@"
 
 # - static libs
 have_staticlibs="@G4_BUILTWITH_STATICLIBS@"
@@ -129,7 +129,9 @@ libs="-lG4interfaces \
 -lG4materials \
 -lG4graphics_reps \
 -lG4intercoms \
--lG4global"
+-lG4global \
+-lG4tools \
+@G4_LINK_CXX_FILESYSTEM@"
 
 #-----------------------------------------------------------------------
 # - Extra optional features that were enabled.
@@ -204,7 +206,7 @@ if test "x${have_qt}" = "xyes" ; then
   vis_cflags="${vis_cflags} \
   -DG4INTY_USE_QT -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT @G4_QT_CFLAGS@"
 
-if test "x${qt_version}" \< "5.15.0" ; then 
+if test "x${qt_version}" \< "5.15.0" ; then
   vis_libs="-lG4visQt3D ${vis_libs}"
   libs="-lG4visQt3D ${libs}"
   vis_cflags="${vis_cflags} -DG4UI_USE_QT3D"
@@ -324,30 +326,15 @@ install_datasets()
     exit 1
   fi
 
-  if test ! -x "${G4CURL}" ; then
-    echo "- error: curl '${G4CURL}' is not executable"
-    exit 1
-  fi
-
   G4OPENSSL=$(which openssl)
   if test "x${G4OPENSSL}" = "x" ; then
     echo "- error: no openssl executable found"
     exit 1
   fi
 
-  if test ! -x "${G4OPENSSL}" ; then
-    echo "- error: openssl '${G4OPENSSL}' is not executable"
-    exit 1
-  fi
-
   G4TAR=$(which tar)
   if test "x${G4TAR}" = "x" ; then
     echo "- error: no tar executable found"
-    exit 1
-  fi
-
-  if test ! -x "${G4TAR}" ; then
-    echo "- error: tar '${G4TAR}' is not executable"
     exit 1
   fi
 

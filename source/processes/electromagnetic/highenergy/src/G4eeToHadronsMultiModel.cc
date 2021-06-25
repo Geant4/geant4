@@ -63,17 +63,10 @@
 using namespace std;
 
 G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, 
-  const G4String& mname) : G4VEmModel(mname),
-    csFactor(1.0),
-    nModels(0),
-    verbose(ver),
-    isInitialised(false)
+  const G4String& mname) : G4VEmModel(mname), verbose(ver)
 {
-  thKineticEnergy  = DBL_MAX;
-  maxKineticEnergy = 4.521*GeV;  //crresponding to 10TeV in lab
-  fParticleChange  = nullptr;
-  cross = nullptr;
-  delta = 1.0*MeV;  //for bin width
+  maxKineticEnergy = 4.521*CLHEP::GeV;  //crresponding to 10TeV in lab
+  delta = 1.0*CLHEP::MeV;  //for bin width
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -127,8 +120,6 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
 void G4eeToHadronsMultiModel::AddEEModel(G4Vee2hadrons* mod,
 					 const G4DataVector& cuts)
 {
@@ -168,6 +159,26 @@ G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerAtom(
   return Z*ComputeCrossSectionPerElectron(p, kineticEnergy);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition*,
+								 G4double kineticEnergy,
+								 G4double, G4double)
+{
+  G4double res = 0.0;
+
+  G4double energy = LabToCM(kineticEnergy);
+
+  if (energy > thKineticEnergy) {
+    for(G4int i=0; i<nModels; i++) {
+      if(energy >= ekinMin[i] && energy <= ekinMax[i]){
+        res += (models[i])->ComputeCrossSectionPerElectron(0,energy);
+      }
+      cumSum[i] = res;
+    }
+  }
+  return res*csFactor;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -181,7 +192,7 @@ void G4eeToHadronsMultiModel::SampleSecondaries(
   G4double energy = LabToCM(kinEnergy);
   if (energy > thKineticEnergy) {
     G4double q = cumSum[nModels-1]*G4UniformRand();
-    for(G4int i=0; i<nModels; i++) {
+    for(G4int i=0; i<nModels; ++i) {
       if(q <= cumSum[i]) {
         (models[i])->SampleSecondaries(newp, couple,dp);
 	if(newp->size() > 0) {

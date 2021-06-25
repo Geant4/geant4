@@ -16,37 +16,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 May 2021 Gabriele Cosmo (gdml-V10-06-07)
+21 May 2021 G. Cosmo (gdml-V10-07-07)
 - G4GDMLReadSolids: updated optical surface properties based on relatively
   recent introduction of DAVIS interface.
   Addressing problem report #2371.
 
-17 March 2021 Witek Pokorski
+18 May 2021 V. Ivanchenko (gdml-V10-07-06)
+- G4GDMLWriteMaterials: use G4PhysicsFreeVector instead
+  of G4PhysicsOrderedFreeVector.
+
+1 April 2021 B. Morgan (gdml-V10-07-05)
+- Migrate build to modular CMake API.
+
+17 March 2021 Witek Pokorski (gdml-V10-07-04)
 - Solves the problem #2343 of not all assemblies being written out to the GDML file.
   Fix provided by Laurie Nevay.
 
-16 March 2021 Witek Pokorski
+16 March 2021 Witek Pokorski (gdml-V10-07-03)
 - Solves the problem #2342 of multiUnion and assembly write creating degenerated names
  (position, rotation and nodes). Fix provided by Laurie Nevay.
 
-4 March 2021 Witek Pokorski
+4 March 2021 Witek Pokorski (gdml-V10-07-02)
 - Removed the hardcoded size 10000 in G4GDMLWrite causing the values in GDML truncated.
   Adressing problem report #2336. Fix by Tao Lin.
 
-3 February 2021 Gabriele Cosmo (gdml-V10-06-06)
+3 February 2021 Gabriele Cosmo (gdml-V10-07-01)
 - Fixed parsing of regions in G4GDMLParser::ImportRegions().
   Allow for proper deletion of meta-data lists in destructor.
   Based on GitHub PR#19 by shangjiaxuan.
 - Fixed reading of units for GenericTrap in G4GDMLReadSolids.
   Addressing problem report #2317.
 
-18 January 2021 Witek Pokorski
+18 January 2021 Witek Pokorski (gdml-V10-07-00)
 - Fixed importing of skin/border-surface properties by changing the key of
   the G4GDMLReadSolids property vector map from 'name' to 'name + ref'.
   Addressing problem report #2305
 
 5 November 2020 Witek Pokorski (gdml-V10-06-05)
-- Adding new method to the parser SetOutputFileOverwrite(G4bool flag) which 
+- Adding new method to the parser SetOutputFileOverwrite(G4bool flag) which
   allows to set the flag to enable overwriting of the output GDML file.
 
 19 October 2020 Witek Pokorski (gdml-V10-06-04)
@@ -72,7 +79,7 @@ committal in the CVS repository !
 - G4GDMLRead.cc : avoid double-definition of units.
 
 25th September 2019 Ben Morgan (gdml-V10-05-08)
-- sources.cmake: Replace use of XercesC include/library by imported 
+- sources.cmake: Replace use of XercesC include/library by imported
   XercesC::XercesC target
 
 18,19 July 2019 Makoto Asai (gdml-V10-05-06, -07)
@@ -113,10 +120,10 @@ G4MaterialPropertyVector object for identical properties.
   Addressing problem report #2064.
 
 15 March 2018 Gabriele Cosmo (gdml-V10-04-02)
-- Protect printout of progress in reading/writing by G4VERBOSE. 
+- Protect printout of progress in reading/writing by G4VERBOSE.
 
 7 February 2018 Daren Sawkey (gdml-V10-04-01)
-- Updates to changes in G4Material[Const]PropertiesTable in 
+- Updates to changes in G4Material[Const]PropertiesTable in
   G4GDMLWriteSolids and G4GDMLWriteMaterials.
   Addressing problem report #2030.
 
@@ -128,7 +135,7 @@ G4MaterialPropertyVector object for identical properties.
 - Added handling of null pointer to material in case of parallel geometries
 
 15 September 2017 Soon Yung Jun (gdml-V10-03-08)
-- use GetPropertyMap and GetConstPropertyMap instead of GetPropertiesMap 
+- use GetPropertyMap and GetConstPropertyMap instead of GetPropertiesMap
   and GetPropertiesCMap in G4GDMLWriteMaterials and G4GDMLWriteSolids
 
 11 September 2017 Soon Yung Jun (gdml-V10-03-07)
@@ -216,7 +223,7 @@ G4MaterialPropertyVector object for identical properties.
 
 24 September 2015 Gabriele Cosmo (gdml-V10-01-20)
 - Rectify rotation matrices in reading and writing GDML files to get rid of
-  spurious roundoff errors in stored values. 
+  spurious roundoff errors in stored values.
 
 06 August 2015 Gabriele Cosmo (gdml-V10-01-19)
 - Fixed typo in exported name for electron cuts in G4GDMLWriteStructure.
@@ -234,14 +241,14 @@ G4MaterialPropertyVector object for identical properties.
 
 07 May 2015 Witek Pokorski (gdml-V10-01-15)
 - Fixing bug introduced in the previous tag V10-01-13.
-  
+
 30 April 2015 Gabriele Cosmo (gdml-V10-01-14)
 - Fixed non-initialised boolean flag in G4GDMLRead, reported by Coverity.
 
 28 April 2015 Witek Pokorski (gdml-V10-01-13)
 - One more fix for writing out reflected volumes to cover the case when _only_
   the reflected volume is present.
-  
+
 27 April 2015 Gabriele Cosmo (gdml-V10-01-12)
 - Allow for optional stripping of references from regions names
   when exporting.
@@ -525,7 +532,7 @@ G4MaterialPropertyVector object for identical properties.
 14 Oct 2009 Gabriele Cosmo (gdml-V09-02-17)
 - Added support for GDML 'expression' tag, implementing generic expressions
   stored as literal constants.
-- Corrected handling of 'quantity' tag; added missing caching of evaluation. 
+- Corrected handling of 'quantity' tag; added missing caching of evaluation.
 
 24 Sep 2009 Gabriele Cosmo (gdml-V09-02-16)
 - Added support for the GDML 'assembly' tag, implementing assemblies of
@@ -666,7 +673,7 @@ G4MaterialPropertyVector object for identical properties.
 
 24 July 2008 Tatiana Nikitina
 - Fixes in reading/writing G4TwistedTrap shapes.
- 
+
 22 July 2008 Tatiana Nikitina
 - Added G4Paraboloid to list of supported solids for reader and writer.
 
@@ -858,7 +865,7 @@ G4MaterialPropertyVector object for identical properties.
   ...but these logical volumes are not instantiated yet when we instantiate
   the mother! That's why we move the mother volume at the end of the list
   after the daughters are processed.
-  
+
 18 January 2008 Z.Torzsok
 - The class hierarchy of the GDML parser/writer is finished:
   Write <- WriteDefine <- WriteMaterials <- WriteSolids
@@ -876,7 +883,7 @@ G4MaterialPropertyVector object for identical properties.
 - Reader is now capable of resolving entities.
 
 08 January 2008 Z.Torzsok
-- Vertex referencing is fixed in tessellated solid 
+- Vertex referencing is fixed in tessellated solid
   (using the identifier "vertex" according to the schema).
 
 07 January 2008 Z.Torzsok

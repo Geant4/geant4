@@ -27,21 +27,6 @@
 #define G4LENDBertiniGammaElectroNuclearBuilder_h 1
 
 #include "G4BertiniElectroNuclearBuilder.hh"
-#include "globals.hh"
-#include "G4ios.hh"
-
-#include "G4TheoFSGenerator.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-#include "G4QGSModel.hh"
-#include "G4GammaParticipants.hh"
-#include "G4QGSMFragmentation.hh"
-#include "G4ExcitedStringDecay.hh"
-
-#include "G4CascadeInterface.hh"
-#include "G4ElectroVDNuclearModel.hh"
-#include "G4PhotoNuclearProcess.hh"
-#include "G4ElectronNuclearProcess.hh"
-#include "G4PositronNuclearProcess.hh"
 
 //A. Dotti (June2013): No need to change this class for MT
 // Since each thread owns its own instance (created by G4EmExtraPhysics)

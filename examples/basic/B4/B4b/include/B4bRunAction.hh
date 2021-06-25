@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4bRunAction.hh
 /// \brief Definition of the B4bRunAction class
 
@@ -37,9 +37,9 @@ class G4Run;
 
 /// Run action class
 ///
-/// It accumulates statistic and computes dispersion of the energy deposit 
+/// It accumulates statistic and computes dispersion of the energy deposit
 /// and track lengths of charged particles with use of analysis tools:
-/// H1D histograms are created in BeginOfRunAction() for the following 
+/// H1D histograms are created in BeginOfRunAction() for the following
 /// physics quantities:
 /// - Edep in absorber
 /// - Edep in gap
@@ -49,7 +49,7 @@ class G4Run;
 /// The histograms and ntuple are saved in the output file in a format
 /// accoring to a selected technology in B4Analysis.hh.
 ///
-/// In EndOfRunAction(), the accumulated statistic and computed 
+/// In EndOfRunAction(), the accumulated statistic and computed
 /// dispersion is printed.
 ///
 

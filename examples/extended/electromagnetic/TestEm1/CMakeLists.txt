@@ -1,9 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.8...3.18)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20)
 project(TestEm1)
 
 #----------------------------------------------------------------------------
@@ -44,8 +41,8 @@ target_link_libraries(TestEm1 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 #
 set(TestEm1_SCRIPTS
     annihil.mac brems.mac decayinfly.mac erange.mac gammaconversion.mac 
-    geantino.mac photoelec.mac photon.mac radioactive.mac range.mac runs.mac TestEm1.in
-    TestEm1.out vis.mac
+    geantino.mac photoelec.mac photon.mac radioactive.mac range.mac runs.mac
+    stepMax.mac TestEm1.in TestEm1.out vis.mac
   )
 
 foreach(_script ${TestEm1_SCRIPTS})

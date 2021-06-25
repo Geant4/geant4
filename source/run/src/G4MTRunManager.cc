@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MTRunManager implementation
 //
+// Original authors: X.Dong, A.Dotti - February 2013
+// --------------------------------------------------------------------
 
 #include "G4MTRunManager.hh"
 #include "G4AutoLock.hh"
@@ -43,13 +46,14 @@
 #include "G4WorkerRunManager.hh"
 #include "G4WorkerThread.hh"
 
-G4ScoringManager* G4MTRunManager::masterScM = 0;
-G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds =
-  G4MTRunManager::masterWorlds_t();
-G4MTRunManager* G4MTRunManager::fMasterRM      = 0;
+G4ScoringManager* G4MTRunManager::masterScM = nullptr;
+G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds
+  = G4MTRunManager::masterWorlds_t();
+G4MTRunManager* G4MTRunManager::fMasterRM      = nullptr;
 G4int G4MTRunManager::seedOncePerCommunication = 0;
 G4ThreadId G4MTRunManager::masterThreadId      = G4ThisThread::get_id();
 
+// --------------------------------------------------------------------
 namespace
 {
   G4Mutex cmdHandlingMutex  = G4MUTEX_INITIALIZER;
@@ -58,62 +62,63 @@ namespace
   G4Mutex setUpEventMutex   = G4MUTEX_INITIALIZER;
 }  // namespace
 
+// --------------------------------------------------------------------
 G4MTRunManager* G4MTRunManager::GetMasterRunManager()
 {
-  ////////#ifdef G4MULTITHREADED
   return fMasterRM;
-  ////////#else
-  ////////    return G4RunManager::GetRunManager();
-  ////////#endif
 }
 
+// --------------------------------------------------------------------
 G4RunManagerKernel* G4MTRunManager::GetMasterRunManagerKernel()
 {
   return fMasterRM->kernel;
 }
 
+// --------------------------------------------------------------------
 G4MTRunManagerKernel* G4MTRunManager::GetMTMasterRunManagerKernel()
 {
   return fMasterRM->MTkernel;
 }
+
+// --------------------------------------------------------------------
 G4ScoringManager* G4MTRunManager::GetMasterScoringManager()
 {
   return masterScM;
 }
 
+// --------------------------------------------------------------------
 G4MTRunManager::masterWorlds_t& G4MTRunManager::GetMasterWorlds()
 {
   return masterWorlds;
 }
+
+// --------------------------------------------------------------------
 void G4MTRunManager::addWorld(G4int counter, G4VPhysicalVolume* w)
 {
   masterWorlds.insert(std::make_pair(counter, w));
 }
-G4ThreadId G4MTRunManager::GetMasterThreadId() { 
-    return masterThreadId; 
+
+// --------------------------------------------------------------------
+G4ThreadId G4MTRunManager::GetMasterThreadId()
+{
+  return masterThreadId;
 }
+
+// --------------------------------------------------------------------
 G4int G4MTRunManager::SeedOncePerCommunication()
 {
   return seedOncePerCommunication;
 }
+
+// --------------------------------------------------------------------
 void G4MTRunManager::SetSeedOncePerCommunication(G4int val)
 {
   seedOncePerCommunication = val;
 }
 
+// --------------------------------------------------------------------
 G4MTRunManager::G4MTRunManager()
   : G4RunManager(masterRM)
-  , nworkers(2)
-  , forcedNwokers(-1)
-  , pinAffinity(0)
-  , masterRNGEngine(0)
-  , nextActionRequest(WorkerActionRequest::UNDEFINED)
-  , eventModuloDef(0)
-  , eventModulo(1)
-  , nSeedsUsed(0)
-  , nSeedsFilled(0)
-  , nSeedsMax(10000)
-  , nSeedsPerEvent(2)
 {
   if(fMasterRM)
   {
@@ -135,10 +140,11 @@ G4MTRunManager::G4MTRunManager()
   if(numberOfStaticAllocators > 0)
   {
     G4ExceptionDescription msg1;
-    msg1 << "There are " << numberOfStaticAllocators
-         << " static G4Allocator objects detected.\n"
-         << "In multi-threaded mode, all G4Allocator objects must be dynamically "
-            "instantiated.";
+    msg1
+      << "There are " << numberOfStaticAllocators
+      << " static G4Allocator objects detected.\n"
+      << "In multi-threaded mode, all G4Allocator objects must be dynamically "
+         "instantiated.";
     G4Exception("G4MTRunManager::G4MTRunManager", "Run1035", FatalException,
                 msg1);
   }
@@ -152,8 +158,7 @@ G4MTRunManager::G4MTRunManager()
   // Now remember the master instance of the RNG Engine
   masterRNGEngine = G4Random::getTheEngine();
 
-  numberOfEventToBeProcessed = 0;
-  randDbl                    = new double[nSeedsPerEvent * nSeedsMax];
+  randDbl = new G4double[nSeedsPerEvent * nSeedsMax];
 
   char* env = std::getenv("G4FORCENUMBEROFTHREADS");
   if(env)
@@ -192,6 +197,7 @@ G4MTRunManager::G4MTRunManager()
   }
 }
 
+// --------------------------------------------------------------------
 G4MTRunManager::~G4MTRunManager()
 {
   // TODO: Currently does not work due to concurrent deletion of something
@@ -202,6 +208,7 @@ G4MTRunManager::~G4MTRunManager()
   delete[] randDbl;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::StoreRNGStatus(const G4String& fn)
 {
   std::ostringstream os;
@@ -209,10 +216,12 @@ void G4MTRunManager::StoreRNGStatus(const G4String& fn)
   G4Random::saveEngineStatus(os.str().c_str());
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::rndmSaveThisRun()
 {
   G4int runNumber = 0;
-  if(currentRun) runNumber = currentRun->GetRunID();
+  if(currentRun != nullptr)
+    runNumber = currentRun->GetRunID();
   if(!storeRandomNumberStatus)
   {
     G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
@@ -235,15 +244,19 @@ void G4MTRunManager::rndmSaveThisRun()
 #endif
   G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
   if(verboseLevel > 0)
-  { G4cout << fileIn << " is copied to " << fileOut << G4endl; }
+  {
+    G4cout << fileIn << " is copied to " << fileOut << G4endl;
+  }
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::rndmSaveThisEvent()
 {
-  G4Exception("G4MTRunManager::rndmSaveThisEvent","RUN_RNDM001",
-    FatalException,"This method shall not be invoked !!");
+  G4Exception("G4MTRunManager::rndmSaveThisEvent", "RUN_RNDM001",
+              FatalException, "This method shall not be invoked !!");
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetNumberOfThreads(G4int n)
 {
   if(threads.size() != 0)
@@ -269,6 +282,7 @@ void G4MTRunManager::SetNumberOfThreads(G4int n)
   }
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::Initialize()
 {
   G4RunManager::Initialize();
@@ -279,38 +293,39 @@ void G4MTRunManager::Initialize()
   /// G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 }
 
-////void G4MTRunManager::TerminateEventLoop()
-////{
-////    //Nothing to do
-////}
+// --------------------------------------------------------------------
 void G4MTRunManager::ProcessOneEvent(G4int)
 {
   // Nothing to do
 }
+
+// --------------------------------------------------------------------
 void G4MTRunManager::TerminateOneEvent()
 {
   // Nothing to do
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::PrepareCommandsStack()
 {
   G4AutoLock l(&cmdHandlingMutex);
   uiCmdsForWorkers.clear();
   std::vector<G4String>* cmdCopy =
     G4UImanager::GetUIpointer()->GetCommandStack();
-  for(std::vector<G4String>::const_iterator it = cmdCopy->begin();
-      it != cmdCopy->end(); ++it)
+  for(auto it = cmdCopy->cbegin(); it != cmdCopy->cend(); ++it)
     uiCmdsForWorkers.push_back(*it);
   cmdCopy->clear();
   delete cmdCopy;
 }
 
+// --------------------------------------------------------------------
 std::vector<G4String> G4MTRunManager::GetCommandStack()
 {
   G4AutoLock l(&cmdHandlingMutex);
   return uiCmdsForWorkers;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::CreateAndStartWorkers()
 {
   // Now loop on requested number of workers
@@ -350,6 +365,7 @@ void G4MTRunManager::CreateAndStartWorkers()
   NewActionRequest(WorkerActionRequest::NEXTITERATION);
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
                                          G4int n_select)
 {
@@ -403,7 +419,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
     else
     {
       eventModulo =
-        int(std::sqrt(double(numberOfEventToBeProcessed / nworkers)));
+        G4int(std::sqrt(G4double(numberOfEventToBeProcessed / nworkers)));
       if(eventModulo < 1)
         eventModulo = 1;
     }
@@ -440,7 +456,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
   }
 
   // Now initialize workers. Check if user defined a WorkerThreadInitialization
-  if(userWorkerThreadInitialization == 0)
+  if(userWorkerThreadInitialization == nullptr)
   {
     userWorkerThreadInitialization = new G4UserWorkerThreadInitialization();
   }
@@ -456,6 +472,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile,
   WaitForReadyWorkers();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::RefillSeeds()
 {
   G4RNGHelper* helper = G4RNGHelper::GetInstance();
@@ -470,9 +487,8 @@ void G4MTRunManager::RefillSeeds()
       break;
     case 2:
     default:
-      nFill = (numberOfEventToBeProcessed - nSeedsFilled * eventModulo) /
-                eventModulo +
-              1;
+      nFill = (numberOfEventToBeProcessed - nSeedsFilled * eventModulo)
+            / eventModulo + 1;
   }
   // Generates up to nSeedsMax seed pairs only.
   if(nFill > nSeedsMax)
@@ -480,9 +496,9 @@ void G4MTRunManager::RefillSeeds()
   masterRNGEngine->flatArray(nSeedsPerEvent * nFill, randDbl);
   helper->Refill(randDbl, nFill);
   nSeedsFilled += nFill;
-  // G4cout<<"helper->Refill() for "<<nFill<<" events."<<G4endl;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::RunTermination()
 {
   // Wait for all worker threads to have finished the run
@@ -496,6 +512,7 @@ void G4MTRunManager::RunTermination()
   G4RunManager::RunTermination();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::ConstructScoringWorlds()
 {
   masterScM = G4ScoringManager::GetScoringManagerIfExist();
@@ -503,28 +520,31 @@ void G4MTRunManager::ConstructScoringWorlds()
   G4RunManager::ConstructScoringWorlds();
 
   masterWorlds.clear();
-  size_t nWorlds =
+  std::size_t nWorlds =
     G4TransportationManager::GetTransportationManager()->GetNoWorlds();
-  std::vector<G4VPhysicalVolume*>::iterator itrW =
+  auto itrW =
     G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
-  for(size_t iWorld = 0; iWorld < nWorlds; iWorld++)
+  for(std::size_t iWorld = 0; iWorld < nWorlds; ++iWorld)
   {
     addWorld(iWorld, *itrW);
-    itrW++;
+    ++itrW;
   }
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserInitialization(G4UserWorkerInitialization* userInit)
 {
   userWorkerInitialization = userInit;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserInitialization(
   G4UserWorkerThreadInitialization* userInit)
 {
   userWorkerThreadInitialization = userInit;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserInitialization(
   G4VUserActionInitialization* userInit)
 {
@@ -532,17 +552,20 @@ void G4MTRunManager::SetUserInitialization(
   userActionInitialization->BuildForMaster();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserInitialization(G4VUserPhysicsList* userPL)
 {
   G4RunManager::SetUserInitialization(userPL);
   // Needed for MT, to be moved in kernel
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserInitialization(G4VUserDetectorConstruction* userDC)
 {
   G4RunManager::SetUserInitialization(userDC);
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserAction(G4UserRunAction* userAction)
 {
   G4RunManager::SetUserAction(userAction);
@@ -550,6 +573,7 @@ void G4MTRunManager::SetUserAction(G4UserRunAction* userAction)
     userAction->SetMaster();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserAction(
   G4VUserPrimaryGeneratorAction* /*userAction*/)
 {
@@ -559,6 +583,7 @@ void G4MTRunManager::SetUserAction(
     "G4VUserActionInitialization.");
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserAction(G4UserEventAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run0124", FatalException,
@@ -566,6 +591,7 @@ void G4MTRunManager::SetUserAction(G4UserEventAction* /*userAction*/)
               "G4VUserActionInitialization.");
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserAction(G4UserStackingAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run0125", FatalException,
@@ -573,6 +599,7 @@ void G4MTRunManager::SetUserAction(G4UserStackingAction* /*userAction*/)
               "G4VUserActionInitialization.");
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserAction(G4UserTrackingAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run0126", FatalException,
@@ -580,6 +607,7 @@ void G4MTRunManager::SetUserAction(G4UserTrackingAction* /*userAction*/)
               "G4VUserActionInitialization.");
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::SetUserAction(G4UserSteppingAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run0127", FatalException,
@@ -587,20 +615,23 @@ void G4MTRunManager::SetUserAction(G4UserSteppingAction* /*userAction*/)
               "G4VUserActionInitialization.");
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::MergeScores(const G4ScoringManager* localScoringManager)
 {
   G4AutoLock l(&scorerMergerMutex);
-  if(masterScM && localScoringManager)
+  if(masterScM != nullptr && localScoringManager != nullptr)
     masterScM->Merge(localScoringManager);
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::MergeRun(const G4Run* localRun)
 {
   G4AutoLock l(&runMergerMutex);
-  if(currentRun && localRun)
+  if(currentRun != nullptr && localRun != nullptr)
     currentRun->Merge(localRun);
 }
 
+// --------------------------------------------------------------------
 G4bool G4MTRunManager::SetUpAnEvent(G4Event* evt, long& s1, long& s2, long& s3,
                                     G4bool reseedRequired)
 {
@@ -616,16 +647,17 @@ G4bool G4MTRunManager::SetUpAnEvent(G4Event* evt, long& s1, long& s2, long& s3,
       s2                  = helper->GetSeed(idx_rndm + 1);
       if(nSeedsPerEvent == 3)
         s3 = helper->GetSeed(idx_rndm + 2);
-      nSeedsUsed++;
+      ++nSeedsUsed;
       if(nSeedsUsed == nSeedsFilled)
         RefillSeeds();
     }
-    numberOfEventProcessed++;
+    ++numberOfEventProcessed;
     return true;
   }
   return false;
 }
 
+// --------------------------------------------------------------------
 G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,
                                    G4bool reseedRequired)
 {
@@ -644,13 +676,13 @@ G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,
       G4int nevRnd        = nev;
       if(seedOncePerCommunication > 0)
         nevRnd = 1;
-      for(int i = 0; i < nevRnd; i++)
+      for(G4int i = 0; i < nevRnd; ++i)
       {
         seedsQueue->push(helper->GetSeed(nSeedsPerEvent * nSeedsUsed));
         seedsQueue->push(helper->GetSeed(nSeedsPerEvent * nSeedsUsed + 1));
         if(nSeedsPerEvent == 3)
           seedsQueue->push(helper->GetSeed(nSeedsPerEvent * nSeedsUsed + 2));
-        nSeedsUsed++;
+        ++nSeedsUsed;
         if(nSeedsUsed == nSeedsFilled)
           RefillSeeds();
       }
@@ -661,6 +693,7 @@ G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,
   return 0;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::TerminateWorkers()
 {
   // Force workers to execute (if any) all UI commands left in the stack
@@ -683,6 +716,7 @@ void G4MTRunManager::TerminateWorkers()
   threads.clear();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::AbortRun(G4bool softAbort)
 {
   // This method is valid only for GeomClosed or EventProc state
@@ -699,11 +733,13 @@ void G4MTRunManager::AbortRun(G4bool softAbort)
   }
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::AbortEvent()
 {
   // nothing to do in the master thread
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::WaitForReadyWorkers()
 {
   beginOfEventLoopBarrier.Wait(GetNumberActiveThreads());
@@ -711,11 +747,13 @@ void G4MTRunManager::WaitForReadyWorkers()
   beginOfEventLoopBarrier.ReleaseBarrier();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::ThisWorkerReady()
 {
   beginOfEventLoopBarrier.ThisWorkerReady();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::WaitForEndEventLoopWorkers()
 {
   endOfEventLoopBarrier.Wait(GetNumberActiveThreads());
@@ -723,11 +761,13 @@ void G4MTRunManager::WaitForEndEventLoopWorkers()
   endOfEventLoopBarrier.ReleaseBarrier();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::ThisWorkerEndEventLoop()
 {
   endOfEventLoopBarrier.ThisWorkerReady();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::NewActionRequest(
   G4MTRunManager::WorkerActionRequest newRequest)
 {
@@ -738,6 +778,7 @@ void G4MTRunManager::NewActionRequest(
   nextActionRequestBarrier.ReleaseBarrier();
 }
 
+// --------------------------------------------------------------------
 G4MTRunManager::WorkerActionRequest
 G4MTRunManager::ThisWorkerWaitForNextAction()
 {
@@ -745,6 +786,7 @@ G4MTRunManager::ThisWorkerWaitForNextAction()
   return nextActionRequest;
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::RequestWorkersProcessCommandsStack()
 {
   PrepareCommandsStack();
@@ -753,10 +795,13 @@ void G4MTRunManager::RequestWorkersProcessCommandsStack()
   processUIBarrier.WaitForReadyWorkers();
 }
 
+// --------------------------------------------------------------------
 void G4MTRunManager::ThisWorkerProcessCommandsStackDone()
 {
   processUIBarrier.ThisWorkerReady();
 }
+
+// --------------------------------------------------------------------
 void G4MTRunManager::SetPinAffinity(G4int n)
 {
   if(n == 0)

@@ -1,0 +1,111 @@
+
+///\file "medical/dna/AuNP/.README.txt"
+///\brief ExampleAuNP README page
+
+/*! \page ExampleAuNP Example AuNP
+
+\author D. Sakata (a)                             \n
+(a)sakata _ dousatsu _ qst _ go _ jp              \n
+
+This example is provided by the Geant4-DNA collaboration.
+(http://geant4-dna.org)
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications: \n
+Med. Phys. 45 (2018) e722-e739                            \n
+Phys. Med. 31 (2015) 861-874                              \n
+Med. Phys. 37 (2010) 4692-4708                            \n
+Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
+
+\section AuNP_s1 INTRODUCTION
+
+  The AuNP example simulates the track-structure of electrons 
+  in microscopic gold volume.The example also simulates that 
+  in liquid water medium surrunding the gold volume.
+
+  The details of the physics models are described in the following paper:
+  J. Appl. Phys. 120 (2016) 244901
+
+  The details of the application are described in the following paper:
+  Phys. Med. 63 (2019) 98-104
+  Med. Phys. 45(5) (2018) 2230-2242
+
+\section AuNP_s2 GEOMETRY DEFINITION
+
+  The geometry is a sphere (World) made of liquid water containing a smaller 
+  sphererical target volume of Gold.
+
+  The default geometry is constructed in DetectorConstruction class.
+
+\section AuNP_s3 PHYSICS LIST
+
+  The default physics list is constructed in PhysicsList class.
+
+  The details of the physics models are described in the following paper:
+  J. Appl. Phys. 120 (2016) 244901
+
+\section AuNP_s4  ACTION INITALIZATION
+
+  The class ActionInitialization instantiates and registers
+  to Geant4 kernel all user action classes.
+
+  While in sequential mode the action classes are instantiated just once,
+  via invoking the method
+      ActionInitialization::Build()
+  in multi-threading mode the same method is invoked for each thread worker
+  and so all user action classes are defined thread-local.
+
+  A run action class is instantiated both thread-local
+  and global that's why its instance is created also in the method
+      ActionInitialization::BuildForMaster()
+  which is invoked only in multi-threading mode.
+
+\section AuNP_s5 AN EVENT: PRIMARY GENERATOR
+
+  The primary kinematic consists of a single particle starting from the
+  hemi-sphere of gold volume (the position is randomely selected).
+  The type of the particle and its energy are set in the
+  PrimaryGeneratorAction class, and can be changed via the G4 build-in
+  commands of G4ParticleGun class.
+
+\section AuNP_s6 DETECTOR RESPONSE : Scorers
+
+\subsection CHEM6_s6_sub1 Species scorer
+
+  This scorer computes following quantities.
+
+  - the energy spectra of secondary particles generated in AuNP
+  - the energy spectra of secondary particles at AuNP surface
+  - the energy spectra of secondary particles generated in liquid water
+  - the energy deposit and the position in the absorber surrunding AuNP
+
+  Run::RecordEvent(), called at end of event, collects informations
+  event per event from the hits collections, and accumulates statistic for
+  RunAction::EndOfRunAction().
+
+  In multi-threading mode the statistics accumulated per workers is merged
+  to the master in Run::Merge().
+
+  The information is scored in a ROOT ntuple file AuNP.root.
+  
+\section AuNP_s7 OUTPUT
+
+  Physics initialization and the defined reaction table are printed.
+
+\section AuNP_s9 RELEVANT MACRO FILES
+
+  Two user macro files can be used:
+
+\verbatim
+./AuNP -mac AuNP.mac
+\endverbatim
+
+\section CHEM6_s10 PLOT
+
+  Two root macros can be used:
+
+\verbatim
+root plot.C
+\endverbatim
+
+*/

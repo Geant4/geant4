@@ -41,15 +41,15 @@
 B3aRunAction::B3aRunAction()
  : G4UserRunAction(),
    fGoodEvents(0),
-   fSumDose(0.)  
-{  
+   fSumDose(0.)
+{
   //add new units for dose
-  // 
+  //
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
-  const G4double nanogray  = 1.e-9*gray;  
+  const G4double nanogray  = 1.e-9*gray;
   const G4double picogray  = 1.e-12*gray;
-   
+
   new G4UnitDefinition("milligray", "milliGy" , "Dose", milligray);
   new G4UnitDefinition("microgray", "microGy" , "Dose", microgray);
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
@@ -58,7 +58,7 @@ B3aRunAction::B3aRunAction()
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->RegisterAccumulable(fGoodEvents);
-  accumulableManager->RegisterAccumulable(fSumDose); 
+  accumulableManager->RegisterAccumulable(fSumDose);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,13 +69,13 @@ B3aRunAction::~B3aRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B3aRunAction::BeginOfRunAction(const G4Run* run)
-{ 
+{
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-  
+
   // reset accumulables to their initial values
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Reset();
-  
+
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
@@ -86,8 +86,8 @@ void B3aRunAction::EndOfRunAction(const G4Run* run)
 {
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
-  
-  // Merge accumulables 
+
+  // Merge accumulables
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Merge();
 
@@ -98,13 +98,13 @@ void B3aRunAction::EndOfRunAction(const G4Run* run)
     = static_cast<const B3PrimaryGeneratorAction*>(
         G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4String partName;
-  if (generatorAction) 
+  if (generatorAction)
   {
-    G4ParticleDefinition* particle 
+    G4ParticleDefinition* particle
       = generatorAction->GetParticleGun()->GetParticleDefinition();
     partName = particle->GetParticleName();
-  }  
-          
+  }
+
   // Print results
   //
   if (IsMaster())
@@ -122,12 +122,12 @@ void B3aRunAction::EndOfRunAction(const G4Run* run)
      << "--------------------End of Local Run------------------------"
      << G4endl
      << "  The run was " << nofEvents << " "<< partName;
-  }      
+  }
   G4cout
      << "; Nb of 'good' e+ annihilations: " << fGoodEvents.GetValue()  << G4endl
-     << " Total dose in patient : " << G4BestUnit(fSumDose.GetValue(),"Dose") 
-     << G4endl 
-     << "------------------------------------------------------------" << G4endl 
+     << " Total dose in patient : " << G4BestUnit(fSumDose.GetValue(),"Dose")
+     << G4endl
+     << "------------------------------------------------------------" << G4endl
      << G4endl;
 }
 

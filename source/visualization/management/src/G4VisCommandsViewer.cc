@@ -44,18 +44,15 @@
 #include "G4Point3D.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4ios.hh"
+#include "G4Filesystem.hh"
 #include <chrono>
 #include <thread>
 #include <sstream>
 #include <fstream>
-#include <sstream>
 #include <iomanip>
 #include <cstdio>
-#ifdef WIN32
 #include <regex>
-#include <filesystem>
-#endif //WIN32
+#include <set>
 
 ////////////// /vis/viewer/addCutawayPlane ///////////////////////////////////////
 
@@ -217,6 +214,7 @@ void G4VisCommandViewerCentreOn::SetNewValue (G4UIcommand* command, G4String new
     G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
     G4ModelingParameters mp;  // Default - no culling.
     searchModel.SetModelingParameters (&mp);
+    // Find all instances at any position in the tree
     G4PhysicalVolumesSearchScene searchScene (&searchModel, pvName, copyNo);
     searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
     for (const auto& findings: searchScene.GetFindings()) {
@@ -961,7 +959,7 @@ G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand*) {
   return currentValue;
 }
 
-void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
+void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -991,12 +989,11 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.size ();
   if (nHandlers <= 0) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
-	"ERROR: G4VisCommandViewerCreate::SetNewValue: no scene handlers."
-	"\n  Create a scene handler with \"/vis/sceneHandler/create\""
-	     << G4endl;
-    }
+    G4ExceptionDescription ed;
+    ed <<
+    "ERROR: G4VisCommandViewerCreate::SetNewValue: no scene handlers."
+    "\n  Create a scene handler with \"/vis/sceneHandler/create\"";
+    command->CommandFailed(ed);
     return;
   }
 
@@ -1008,11 +1005,10 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   if (iHandler < 0 || iHandler >= nHandlers) {
     // Invalid command line argument or none.
     // This shouldn't happen!!!!!!
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "G4VisCommandViewerCreate::SetNewValue:"
-	" invalid scene handler specified."
-	    << G4endl;
-    }
+    G4ExceptionDescription ed;
+    ed <<
+    "G4VisCommandViewerCreate::SetNewValue: invalid scene handler specified.";
+    command->CommandFailed(ed);
     return;
   }
 
@@ -1036,10 +1032,10 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     const G4ViewerList& viewerList = sh -> GetViewerList ();
     for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       if (viewerList [iViewer] -> GetShortName () == newShortName ) {
-	if (verbosity >= G4VisManager::errors) {
-	  G4cerr << "ERROR: Viewer \"" << newShortName << "\" already exists."
-		 << G4endl;
-	}
+	G4ExceptionDescription ed;
+	ed <<
+	"ERROR: Viewer \"" << newShortName << "\" already exists.";
+	command->CommandFailed(ed);
 	return;
       }
     }
@@ -1058,13 +1054,14 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   else {
-    if (verbosity >= G4VisManager::errors) {
-      if (newViewer) {
-	G4cerr << "ERROR: New viewer doesn\'t match!!!  Curious!!" << G4endl;
-      } else {
-	G4cout << "WARNING: No viewer created." << G4endl;
-      }
+    G4ExceptionDescription ed;
+    if (newViewer) {
+      ed << "ERROR: New viewer doesn\'t match!!!  Curious!!";
+    } else {
+      ed << "WARNING: No viewer created.";
     }
+    command->CommandFailed(ed);
+    return;
   }
   // Refresh if appropriate...
   if (newViewer) {
@@ -1235,7 +1232,7 @@ G4VisCommandViewerInterpolate::G4VisCommandViewerInterpolate () {
   ("The default is to search the working directory for files with a .g4view "
    "extension. Another procedure is to assemble view files in a subdirectory, "
    "e.g., \"myviews\"; then they can be interpolated with\n"
-   "\"/vis/viewer/interpolate myviews/*\".");
+   "\"/vis/viewer/interpolate myviews\".");
   fpCommand -> SetGuidance
   ("To export interpolated views to file for a future possible movie, "
    "write \"export\" as 5th parameter (OpenGL only).");
@@ -1320,114 +1317,73 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   non_auto.SetAutoRefresh(false);
   currentViewer->SetViewParameters(non_auto);
 
-  // View vector of way points
-  std::vector<G4ViewParameters> viewVector;
-
-  const G4int safety = 9999;
+  const G4int safety = 99;
   G4int safetyCount = 0;
-  G4String pathname;
+  G4fs::path pathPattern = pattern.c_str();
 
-#ifndef WIN32
+  // Parent path - add "./" for empty directory
+  G4String parentPathString
+  (pathPattern.parent_path().string().length() ?
+   pathPattern.parent_path().string() :
+   std::string("./"));
+  G4fs::path parentPath = parentPathString.c_str();
 
-  // Execute pattern and get resulting list of files
-  G4String shellCommand = "echo " + pattern;
-  FILE *filelist = popen(shellCommand.c_str(), "r");
-  if (!filelist) {
+  // Fill selected paths
+  std::set<G4fs::path> paths;  // Use std::set to ensure order
+
+  if (G4fs::is_directory(pathPattern)) {
+
+    // The user has specified a directory. Find all files.
+    for (const auto& path: G4fs::directory_iterator(pathPattern)) {
+      if (safetyCount++ >= safety) break;
+      paths.insert(path);
+    }
+
+  } else {
+
+    // Assume user has specified a Unix "glob" pattern in leaf
+    // Default pattern is *.g4view, which translates to ^.*\\.g4view
+    // Convert pattern into a regexp
+    G4String regexp_pattern('^');
+    for (size_t i = 0; i < pattern.length(); ++i) {
+      if (pattern[i] == '.') {
+	regexp_pattern += "\\.";
+      } else if (pattern[i] == '*') {
+	regexp_pattern += ".*";
+      } else if (pattern[i] == '?') {
+	regexp_pattern += "(.{1,1})";
+      } else {
+	regexp_pattern += pattern[i];
+      }
+    }
+    std::regex regexp(regexp_pattern, std::regex_constants::basic | std::regex_constants::icase);
+
+    for (const auto& path: G4fs::directory_iterator(parentPath)) {
+      const auto& pathname = path.path().relative_path().string();
+      if (std::regex_match(pathname, regexp)) {
+	if (safetyCount++ >= safety) break;
+	paths.insert(path);
+      }
+    }
+  }
+
+  if (safetyCount > safety) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr
-      << "ERROR: G4VisCommandViewerInterpolate::SetNewValue:"
-      << "\n  Error obtaining pipe."
-	     << G4endl;
-    }
-    return;
-  }
-
-  // Build view vector of way points
-  const size_t BUFLENGTH = 999999;
-  char buf[BUFLENGTH];
-  char* result = std::fgets(buf, BUFLENGTH, filelist);
-  if (result) {
-    std::istringstream fileliststream(result);
-    while (fileliststream >> pathname
-           && safetyCount++ < safety) {  // Loop checking, 16.02.2016, J.Allison
-      uiManager->ApplyCommand("/control/execute " + pathname);
-      G4ViewParameters vp = currentViewer->GetViewParameters();
-      // Set original auto-refresh status.
-      vp.SetAutoRefresh(saveVP.IsAutoRefresh());
-      viewVector.push_back(vp);
-    }
-  }
-  pclose(filelist);
-
-#else // WIN32 (popen is not available in Windows)
-
-  std::filesystem::path filePattern = pattern.c_str();
-
-  // Default pattern : *.g4view
-  // Translated to a regexp : ^.*\\.g4view
-  // Convert pattern into a regexp
-  std::string regexp_pattern("^" + filePattern.filename().string());
-  std::string result_pattern = "";
-  // Replace '.' by "\\."
-  size_t currentPos = 0;
-  size_t nextPos = 0;
-  std::string currentReplacement = "";
-  size_t pos1 = regexp_pattern.find('.', nextPos);
-  size_t pos2 = regexp_pattern.find('*', nextPos);
-  size_t pos3 = regexp_pattern.find('?', nextPos);
-  while ((pos1 != std::string::npos) || (pos2 != std::string::npos) || (pos3 != std::string::npos)) {
-    nextPos = pos1;
-    currentReplacement = "\\.";
-    if (pos2 < nextPos) {
-      nextPos = pos2;
-      currentReplacement = ".*";
-    }
-    if (pos3 < nextPos) {
-      nextPos = pos3;
-      currentReplacement = "(.{1,1})";
-    }
-    result_pattern += regexp_pattern.substr(currentPos, nextPos - currentPos) + currentReplacement;
-    nextPos++;
-    currentPos = nextPos;
-    pos1 = regexp_pattern.find('.', currentPos);
-    pos2 = regexp_pattern.find('*', currentPos);
-    pos3 = regexp_pattern.find('?', currentPos);
-  }
-  result_pattern += regexp_pattern.substr(currentPos);
-
-  // Build view vector of way points
-  // Add "./" for empty paths
-  G4String parentPath(filePattern.parent_path().string().length() ? filePattern.parent_path().string() : std::string("./"));
-  std::filesystem::path parentPathPattern = parentPath.c_str();
-  // Iterate through files in directory and apply regex match to filter appropriate files
-  std::regex result_pattern_regex (result_pattern, std::regex_constants::basic | std::regex_constants::icase);
-  for (auto iter = std::filesystem::directory_iterator(parentPathPattern);
-       iter != std::filesystem::directory_iterator() && safetyCount++ < safety;
-       ++iter)
-  {
-    const auto& file = iter->path();
-
-    G4String filename(file.filename().string());
-    if (std::regex_match(filename, result_pattern_regex))
-    {
-      uiManager->ApplyCommand("/control/execute " + filename);
-      G4ViewParameters vp = currentViewer->GetViewParameters();
-      // Set original auto-refresh status.
-      vp.SetAutoRefresh(saveVP.IsAutoRefresh());
-      viewVector.push_back(vp);
-    }
-  }
-
-#endif // WIN32
-
-  if (safetyCount >= safety) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "/vis/viewer/interpolate:"
-      "\n  the number of way points exceeds the maximum currently allowed: "
+      "\n  the number of way points has been limited to the maximum currently allowed: "
       << safety << G4endl;
     }
-    return;
+  }
+
+  // Fill view vector of way points
+  std::vector<G4ViewParameters> viewVector;
+  for (const auto& path: paths) {
+    uiManager->ApplyCommand("/control/execute " + path.relative_path().string());
+    G4ViewParameters vp = currentViewer->GetViewParameters();
+    // Set original auto-refresh status.
+    vp.SetAutoRefresh(saveVP.IsAutoRefresh());
+    viewVector.push_back(vp);
   }
 
   InterpolateViews
@@ -1869,7 +1825,7 @@ G4VisCommandViewerSave::G4VisCommandViewerSave () {
   ("If you are wanting to save views for future interpolation a recommended "
    "procedure is: save views to \"g4_nn.g4view\", as above, then move the files "
    "into a sub-directory, say, \"views\", then interpolate with"
-   "\"/vis/viewer/interpolate views/\" (note the trailing \'/\').");
+   "\"/vis/viewer/interpolate views\"");
   fpCommand -> SetParameterName ("filename", omitable = true);
   fpCommand -> SetDefaultValue ("");
 }

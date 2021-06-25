@@ -295,6 +295,13 @@ inline G4int G4ViewParameters::GetNumberOfCloudPoints () const {
   return fNumberOfCloudPoints;
 }
 
+inline G4bool G4ViewParameters::IsSpecialMeshRendering () const
+{return fSpecialMeshRendering;}
+
+inline const std::vector<G4ModelingParameters::PVNameCopyNo>&
+G4ViewParameters::GetSpecialMeshVolumes() const
+{return fSpecialMeshVolumes;}
+
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;
@@ -553,3 +560,10 @@ inline void G4ViewParameters::SetDisplayLightFrontGreen (G4double displayLightFr
 inline void G4ViewParameters::SetDisplayLightFrontBlue (G4double displayLightFrontBlue) {
   fDisplayLightFrontBlue = displayLightFrontBlue;
 }
+
+inline void G4ViewParameters::SetSpecialMeshRendering (G4bool smr)
+{fSpecialMeshRendering = smr;}
+
+inline void G4ViewParameters::SetSpecialMeshVolumes
+(const std::vector<G4ModelingParameters::PVNameCopyNo>& smvs)
+{fSpecialMeshVolumes = smvs;}

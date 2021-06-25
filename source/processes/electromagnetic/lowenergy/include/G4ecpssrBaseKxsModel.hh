@@ -34,29 +34,21 @@
 
 #include "G4CrossSectionDataSet.hh"
 
-
 class G4ecpssrBaseKxsModel : public G4VecpssrKModel
 {
 public:
-
-  G4ecpssrBaseKxsModel();
-
+  explicit G4ecpssrBaseKxsModel();
   ~G4ecpssrBaseKxsModel();
-			     
-  
-  G4double CalculateCrossSection(G4int, G4double, G4double);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
-  
+			       
+  G4double CalculateCrossSection(G4int, G4double, G4double) override;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
   G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
-  
+
+  G4ecpssrBaseKxsModel(const G4ecpssrBaseKxsModel&) = delete;
+  G4ecpssrBaseKxsModel & operator = (const G4ecpssrBaseKxsModel &right) = delete;
+
 private:
-  
-  G4ecpssrBaseKxsModel(const G4ecpssrBaseKxsModel&);
-  G4ecpssrBaseKxsModel & operator = (const G4ecpssrBaseKxsModel &right);
-
   G4double FunctionFK(G4double k, G4double theta);
-
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
   G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double QuadInterpolator(G4double e11, 
@@ -72,19 +64,18 @@ private:
 			    G4double t, 
 			    G4double e);
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
-
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
   TriDimensionMap FKData;
-  std::vector<double> dummyVec;
+  std::vector<G4double> dummyVec;
 
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
   VecMap aVecMap;
-
-  G4int verboseLevel;
 
   G4CrossSectionDataSet* tableC1;
   G4CrossSectionDataSet* tableC2;
   G4CrossSectionDataSet* tableC3;
+
+  G4int verboseLevel;
 };
   
 #endif

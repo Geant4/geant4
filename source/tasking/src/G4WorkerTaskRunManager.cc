@@ -223,9 +223,11 @@ void G4WorkerTaskRunManager::DoEventLoop(G4int n_event, const char* macroFile,
     if(eventLoopOnGoing)
     {
       TerminateOneEvent();
-      if(runAborted) eventLoopOnGoing = false;
+      if(runAborted)
+        eventLoopOnGoing = false;
     }
-    if(!eventLoopOnGoing) break;
+    if(!eventLoopOnGoing)
+      break;
   }
 
   // TerminateEventLoop();

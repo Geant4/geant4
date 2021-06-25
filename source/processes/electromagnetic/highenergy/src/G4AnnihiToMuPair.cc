@@ -61,13 +61,13 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
 {
   //e+ Energy threshold
   const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();
-  LowestEnergyLimit = 2.*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
+  fLowEnergyLimit = 2.*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
  
-  //modele ok up to 1000 TeV due to neglected Z-interference
-  HighestEnergyLimit = 1000.*TeV;
+  //model is ok up to 1000 TeV due to neglected Z-interference
+  fHighEnergyLimit = 1000.*TeV;
  
-  CurrentSigma = 0.0;
-  CrossSecFactor = 1.;
+  fCurrentSigma = 0.0;
+  fCrossSecFactor = 1.;
   SetProcessSubType(6);
   G4LossTableManager::Instance()->Register(this);
 }
@@ -92,7 +92,6 @@ void G4AnnihiToMuPair::BuildPhysicsTable(const G4ParticleDefinition&)
 // Build cross section and mean free path tables
 //here no tables, just calling PrintInfoDefinition
 {
-  CurrentSigma = 0.0;
   PrintInfoDefinition();
 }
 
@@ -101,9 +100,9 @@ void G4AnnihiToMuPair::BuildPhysicsTable(const G4ParticleDefinition&)
 void G4AnnihiToMuPair::SetCrossSecFactor(G4double fac)
 // Set the factor to artificially increase the cross section
 { 
-  CrossSecFactor = fac;
+  fCrossSecFactor = fac;
   G4cout << "The cross section for AnnihiToMuPair is artificially "
-         << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+         << "increased by the CrossSecFactor=" << fCrossSecFactor << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,12 +117,12 @@ G4double G4AnnihiToMuPair::ComputeCrossSectionPerAtom(G4double Epos, G4double Z)
   static const G4double pia = CLHEP::pi * CLHEP::fine_structure_const; // pi * alphaQED
 
   G4double CrossSection = 0.;
-  if (Epos < LowestEnergyLimit) return CrossSection;
+  if (Epos <= fLowEnergyLimit) return CrossSection;
    
-  G4double xi = LowestEnergyLimit/Epos;
+  G4double xi = fLowEnergyLimit/Epos;
   G4double piaxi = pia * sqrt(xi);
   G4double SigmaEl = Sig0 * xi * (1.+xi/2.) * piaxi;
-  if( Epos>LowestEnergyLimit+1.e-5 ) SigmaEl /= (1.-std::exp( -piaxi/std::sqrt(1-xi) ));
+  if( Epos>fLowEnergyLimit+1.e-5 ) SigmaEl /= (1.-std::exp( -piaxi/std::sqrt(1-xi) ));
   CrossSection = SigmaEl*Z; // SigmaEl per electron * number of electrons per atom
   return CrossSection;
 }
@@ -151,21 +150,17 @@ G4double G4AnnihiToMuPair::CrossSectionPerVolume(G4double PositronEnergy,
 
 G4double G4AnnihiToMuPair::GetMeanFreePath(const G4Track& aTrack,
                                            G4double, G4ForceCondition*)
-
 // returns the positron mean free path in GEANT4 internal units
-
 {
   const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
-  G4double PositronEnergy = aDynamicPositron->GetKineticEnergy()
-                                              +electron_mass_c2;
-  G4Material* aMaterial = aTrack.GetMaterial();
-  CurrentSigma = CrossSectionPerVolume(PositronEnergy, aMaterial);
+  G4double PositronEnergy = aDynamicPositron->GetTotalEnergy();
+  const G4Material* aMaterial = aTrack.GetMaterial();
+
+  // cross section before step
+  fCurrentSigma = CrossSectionPerVolume(PositronEnergy, aMaterial);
 
   // increase the CrossSection by CrossSecFactor (default 1)
-  G4double mfp = DBL_MAX;
-  if(CurrentSigma > DBL_MIN) mfp = 1.0/(CurrentSigma*CrossSecFactor);
-
-  return mfp;
+  return (fCurrentSigma > 0.0) ? 1.0/(fCurrentSigma*fCrossSecFactor) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -176,43 +171,36 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 // generation of e+e- -> mu+mu-
 //
 {
-
   aParticleChange.Initialize(aTrack);
   static const G4double Mele=electron_mass_c2;
   static const G4double Mmuon=G4MuonPlus::MuonPlus()->GetPDGMass();
 
   // current Positron energy and direction, return if energy too low
   const G4DynamicParticle *aDynamicPositron = aTrack.GetDynamicParticle();
-  G4double Epos = aDynamicPositron->GetKineticEnergy() + Mele; 
+  G4double Epos = aDynamicPositron->GetTotalEnergy();
+  G4double xs = CrossSectionPerVolume(Epos, aTrack.GetMaterial());
 
   // test of cross section
-  if(CurrentSigma*G4UniformRand() > 
-     CrossSectionPerVolume(Epos, aTrack.GetMaterial())) 
+  if(xs > 0.0 && fCurrentSigma*G4UniformRand() > xs) 
     {
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
-  if (Epos < LowestEnergyLimit) {
-     return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
-  }
+  const G4ThreeVector PosiDirection = aDynamicPositron->GetMomentumDirection();
+  G4double xi = fLowEnergyLimit/Epos; // xi is always less than 1,
+                                      // goes to 0 at high Epos
 
-  G4ParticleMomentum PositronDirection = 
-                                       aDynamicPositron->GetMomentumDirection();
-  G4double xi = LowestEnergyLimit/Epos; // xi is always less than 1,
-                                        // goes to 0 at high Epos
-
-  // generate cost
+  // generate cost; probability function 1+cost**2 at high Epos
   //
   G4double cost;
   do { cost = 2.*G4UniformRand()-1.; }
   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
   while (2.*G4UniformRand() > 1.+xi+cost*cost*(1.-xi) ); 
-                                                       //1+cost**2 at high Epos
   G4double sint = sqrt(1.-cost*cost);
 
   // generate phi
   //
-  G4double phi=2.*pi*G4UniformRand();
+  G4double phi=2.*CLHEP::pi*G4UniformRand();
 
   G4double Ecm   = sqrt(0.5*Mele*(Epos+Mele));
   G4double Pcm   = sqrt(Ecm*Ecm-Mmuon*Mmuon);
@@ -243,8 +231,8 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 
   // rotate to actual Positron direction
   //
-  MuPlusDirection.rotateUz(PositronDirection);
-  MuMinusDirection.rotateUz(PositronDirection);
+  MuPlusDirection.rotateUz(PosiDirection);
+  MuMinusDirection.rotateUz(PosiDirection);
 
   aParticleChange.SetNumberOfSecondaries(2);
   // create G4DynamicParticle object for the particle1
@@ -271,9 +259,9 @@ void G4AnnihiToMuPair::PrintInfoDefinition()
   G4String comments ="e+e->mu+mu- annihilation, atomic e- at rest, SubType=.";
   G4cout << G4endl << GetProcessName() << ":  " << comments 
 	 << GetProcessSubType() << G4endl;
-  G4cout << "        threshold at " << LowestEnergyLimit/GeV << " GeV"
+  G4cout << "        threshold at " << fLowEnergyLimit/CLHEP::GeV << " GeV"
          << " good description up to "
-         << HighestEnergyLimit/TeV << " TeV for all Z." << G4endl;
+         << fHighEnergyLimit/CLHEP::TeV << " TeV for all Z." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

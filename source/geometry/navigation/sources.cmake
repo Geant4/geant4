@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4navigation
-# Package: Geant4.src.G4geometry.G4navigation
-#------------------------------------------------------------------------------
+# - G4navigation module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4navigation
-  HEADERS
+geant4_add_module(G4navigation
+  PUBLIC_HEADERS
     G4AuxiliaryNavServices.hh
     G4AuxiliaryNavServices.icc
     G4BrentLocator.hh
@@ -17,7 +12,7 @@ geant4_define_module(NAME G4navigation
     G4GeometryMessenger.hh
     G4GlobalMagFieldMessenger.hh
     G4LocatorChangeRecord.hh
-    G4LocatorChangeLogger.hh	    
+    G4LocatorChangeLogger.hh
     G4MultiLevelLocator.hh
     G4MultiNavigator.hh
     G4NavigationLogger.hh
@@ -56,7 +51,7 @@ geant4_define_module(NAME G4navigation
     G4GeometryMessenger.cc
     G4GlobalMagFieldMessenger.cc
     G4LocatorChangeRecord.cc
-    G4LocatorChangeLogger.cc    
+    G4LocatorChangeLogger.cc
     G4MultiLevelLocator.cc
     G4MultiNavigator.cc
     G4NavigationLogger.cc
@@ -76,20 +71,8 @@ geant4_define_module(NAME G4navigation
     G4VExternalNavigation.cc
     G4VIntersectionLocator.cc
     G4VoxelNavigation.cc
-    G4VoxelSafety.cc
-  GRANULAR_DEPENDENCIES
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4intercoms
-    G4magneticfield
-    G4materials
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-)
+    G4VoxelSafety.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4navigation
+  PUBLIC G4geometrymng G4magneticfield G4volumes G4graphics_reps G4globman G4intercoms G4hepgeometry
+  PRIVATE G4materials)

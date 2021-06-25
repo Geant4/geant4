@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file GammaNuclearPhysics.hh
+/// \file hadronic/Hadr03/include/GammaNuclearPhysics.hh
 /// \brief Definition of the GammaNuclearPhysics class
 //
 //
@@ -42,11 +42,11 @@ class GammaNuclearPhysics : public G4VPhysicsConstructor
 {
   public:
     GammaNuclearPhysics(const G4String& name="gamma");
-   ~GammaNuclearPhysics();
+   ~GammaNuclearPhysics() override;
 
   public:
-    virtual void ConstructParticle() { };
-    virtual void ConstructProcess();
+    void ConstructParticle() override { };
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

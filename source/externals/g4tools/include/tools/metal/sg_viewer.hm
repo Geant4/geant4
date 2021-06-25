@@ -1,0 +1,147 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_metal_sg_viewer_hm
+#define tools_metal_sg_viewer_hm
+
+#include "session.hm"
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= 1050
+@interface tools_metal_sg_viewer_win_delegate : NSObject {
+#else
+@interface tools_metal_sg_viewer_win_delegate : NSObject<NSWindowDelegate> {
+#endif
+  tools::metal::session* m_session;
+}
+- (id)init:(tools::metal::session*)a_session;
+- (void)dealloc;
+- (void)windowWillClose:(NSNotification*)a_not;
+@end
+@implementation tools_metal_sg_viewer_win_delegate
+- (id)init:(tools::metal::session*)a_session {
+  if(self = [super init]) {}
+  m_session = a_session;
+  return self;
+}
+- (void)dealloc {[super dealloc];}
+- (void)windowWillClose:(NSNotification*)a_not {
+  m_session->set_to_exit();
+  (void)a_not;
+}
+@end
+
+#include "view.hm"
+
+#include "render.hm"
+
+namespace tools {
+namespace metal {
+
+class sg_viewer : public ui_viewer {
+  typedef ui_viewer parent;
+public:
+  virtual void win_render() { //ui_viewer::win_render()
+    if(!m_ww) return;
+    if(!m_wh) return;
+    if(!m_win) return;
+    if(m_mgr_gra.begin_render(0,0,m_ww,m_wh,
+                              m_clear_color.r(),
+                              m_clear_color.g(),
+                              m_clear_color.b(),
+                              m_clear_color.a())) {
+      render action(m_mgr_gra,m_out,m_ww,m_wh);
+      action.state().m_use_gsto = m_use_gsto;
+      m_sg.render(action);
+      if(!action.end()) { //check that matrices stack are ok.
+        m_out << "exib::sg::viewer : bad gl_action end." << std::endl;
+      }
+      m_mgr_gra.end_render();
+    }
+  }
+public:
+  sg_viewer(session& a_session,
+            int a_x = 0,int a_y = 0,
+            unsigned int a_width = 500,unsigned int a_height = 500,
+            const std::string& a_win_title = "")
+  :parent(a_session.out(),a_width,a_height)
+  ,m_session(a_session)
+  ,m_mgr_gra(a_session.out())
+  ,m_win(0)
+  ,m_view(0)
+  {
+    //////////////////////////////////////////////////////////
+    /// windowing : //////////////////////////////////////////
+    //////////////////////////////////////////////////////////
+    m_win = m_session.create_window(a_win_title.c_str(),a_x,a_y,a_width,a_height);
+    if(!m_win) return; //throw
+    
+    tools_metal_sg_viewer_win_delegate* _win_delegate = [[tools_metal_sg_viewer_win_delegate alloc] init:&a_session];
+    [m_win setDelegate:_win_delegate];
+
+    NSRect rect;
+    rect = [m_win frame];
+    rect = [m_win contentRectForFrameRect:rect]; //window content true size.
+   {int w = rect.size.width;
+    int h = rect.size.height;
+  //::printf("debug : sg_viewer::cstor %d %d\n",w,h);
+    parent::set_size(w,h);}
+    
+    m_view = [[tools_metal_view alloc] init:rect device:m_mgr_gra.device() viewer:this];
+#ifdef TOOLS_METAL_DRAW_WHEN_NEEDED    
+    m_view.paused = true;
+    m_view.enableSetNeedsDisplay = true;
+#endif
+  //m_view.presentsWithTransaction = true;  //it does not help.
+    m_view.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
+  //m_view.clearDepth = -100000;
+  //m_view.clearStencil = 0;
+  
+#ifdef TOOLS_METAL_DRAW_WHEN_NEEDED
+#else
+    tools_metal_view_controller* view_controller = [[tools_metal_view_controller alloc] init];
+    m_view.delegate = view_controller;
+#endif
+    
+    m_mgr_gra.set_view(m_view);
+    [m_win setContentView:m_view];
+    [m_view release];
+  }
+  virtual ~sg_viewer() {
+    if(m_win) {
+      m_session.delete_window(m_win);
+    }
+  }    
+protected:
+  sg_viewer(const sg_viewer& a_from)
+  :parent(a_from)
+  ,m_session(a_from.m_session)
+  ,m_mgr_gra(a_from.m_mgr_gra)
+  ,m_win(a_from.m_win)
+  {}
+  sg_viewer& operator=(const sg_viewer& a_from){
+    parent::operator=(a_from);
+    m_mgr_gra = a_from.m_mgr_gra;
+    m_win = a_from.m_win;
+    return *this;
+  }
+public:
+  bool has_window() const {return m_win?true:false;} //for SWIG
+
+  bool show() {
+    if(!m_win) return false;
+    m_session.show_window(m_win);
+    return true;
+  }
+protected:
+  session& m_session;
+  metal::manager m_mgr_gra;
+  NSWindow* m_win;
+  tools_metal_view* m_view;
+};
+
+}}
+
+
+
+#endif
+

@@ -43,10 +43,13 @@
 #include "G4LossTableManager.hh"
 
 #include "G4ComptonScattering.hh"
+#include "G4KleinNishinaModel.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 #include "G4RayleighScattering.hh"
 #include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermorePolarizedRayleighModel.hh"
+#include "G4PhotoElectricAngularGeneratorPolarized.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
@@ -61,6 +64,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4NuclearStopping.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -80,11 +84,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandard")
 {
+  SetVerboseLevel(ver);
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -105,40 +110,66 @@ void G4EmStandardPhysics::ConstructParticle()
 
 void G4EmStandardPhysics::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4EmParameters* param = G4EmParameters::Instance();
 
   // processes used by several particles
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
-  G4NuclearStopping* pnuc(nullptr);
+
+  // nuclear stopping is enabled if th eenergy limit above zero
+  G4double nielEnergyLimit = param->MaxNIELEnergy();
+  G4NuclearStopping* pnuc = nullptr;
+  if(nielEnergyLimit > 0.0) {
+    pnuc = new G4NuclearStopping();
+    pnuc->SetMaxKinEnergy(nielEnergyLimit);
+  }
 
   // high energy limit for e+- scattering models and bremsstrahlung
-  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
+  G4double highEnergyLimit = param->MscEnergyLimit();
 
   // Add gamma EM Processes
   G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4bool polar = param->EnablePolarisation();
 
-  G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-  pee->SetEmModel(new G4LivermorePhotoElectricModel());
+  // Photoelectric
+  G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
+  G4VEmModel* peModel = new G4LivermorePhotoElectricModel();
+  pe->SetEmModel(peModel);
+  if(polar) {
+    peModel->SetAngularDistribution(new G4PhotoElectricAngularGeneratorPolarized());
+  }
+
+  // Compton scattering
+  G4ComptonScattering* cs = new G4ComptonScattering;
+  if(polar) {
+    cs->SetEmModel(new G4KleinNishinaModel());
+  }
+
+  // default Rayleigh scattering is Livermore
+  G4RayleighScattering* rl = new G4RayleighScattering();
+  if(polar) {
+    rl->SetEmModel(new G4LivermorePolarizedRayleighModel());
+  }
 
   if(G4EmParameters::Instance()->GeneralProcessActive()) {
     G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
-    sp->AddEmProcess(pee);
-    sp->AddEmProcess(new G4ComptonScattering());
+    sp->AddEmProcess(pe);
+    sp->AddEmProcess(cs);
     sp->AddEmProcess(new G4GammaConversion());
-    sp->AddEmProcess(new G4RayleighScattering());
+    sp->AddEmProcess(rl);
     G4LossTableManager::Instance()->SetGammaGeneralProcess(sp);
     ph->RegisterProcess(sp, particle);
 
   } else {
-    ph->RegisterProcess(pee, particle);
-    ph->RegisterProcess(new G4ComptonScattering(), particle);
+    ph->RegisterProcess(pe, particle);
+    ph->RegisterProcess(cs, particle);
     ph->RegisterProcess(new G4GammaConversion(), particle);
-    ph->RegisterProcess(new G4RayleighScattering(), particle);
+    ph->RegisterProcess(rl, particle);
   }
 
   // e-
@@ -193,6 +224,7 @@ void G4EmStandardPhysics::ConstructProcess()
   G4ionIonisation* ionIoni = new G4ionIonisation();
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
+  if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }
 
   // muons, hadrons ions
   G4EmBuilder::ConstructCharged(hmsc, pnuc);

@@ -41,7 +41,7 @@
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
 //   The Cell Flux is defined by  a track length divided by a geometry
-//   volume, where only tracks passing through the geometry are taken 
+//   volume, where only tracks passing through the geometry are taken
 //  into account. e.g. the unit of Cell Flux is mm/mm3.
 //
 //   If you want to score all tracks in the geometry volume,
@@ -52,85 +52,104 @@
 // 2010-07-22   Add weighted option
 // 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
 //              vs. cell flux * track weight (y)                (Makoto Asai)
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
-    EvtMap(0),weighted(true)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , fCurrentTrkID(-1)
+  , fCellFlux(0)
+  , EvtMap(0)
+  , weighted(true)
 {
-    DefineUnitAndCategory();
-    SetUnit("percm2");
+  DefineUnitAndCategory();
+  SetUnit("percm2");
 }
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
-					 G4int depth)
-  : G4VPrimitivePlotter(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
-    EvtMap(0),weighted(true)
+                                         G4int depth)
+  : G4VPrimitivePlotter(name, depth)
+  , HCID(-1)
+  , fCurrentTrkID(-1)
+  , fCellFlux(0)
+  , EvtMap(0)
+  , weighted(true)
 {
-    DefineUnitAndCategory();
-    SetUnit(unit);
+  DefineUnitAndCategory();
+  SetUnit(unit);
 }
 
-G4PSPassageCellFlux::~G4PSPassageCellFlux()
-{;}
+G4PSPassageCellFlux::~G4PSPassageCellFlux() { ; }
 
-G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-
-  if ( IsPassed(aStep) ) {
-    G4int idx = ((G4TouchableHistory*)
-		 (aStep->GetPreStepPoint()->GetTouchable()))
-                 ->GetReplicaNumber(indexDepth);
+  if(IsPassed(aStep))
+  {
+    G4int idx =
+      ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
+        ->GetReplicaNumber(indexDepth);
     G4double cubicVolume = ComputeVolume(aStep, idx);
 
     fCellFlux /= cubicVolume;
     G4int index = GetIndex(aStep);
-    EvtMap->add(index,fCellFlux);
+    EvtMap->add(index, fCellFlux);
 
-    if(hitIDMap.size()>0 && hitIDMap.find(index)!=hitIDMap.end())
+    if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
     {
       auto filler = G4VScoreHistFiller::Instance();
       if(!filler)
       {
-        G4Exception("G4PSPassageCellFlux::ProcessHits","SCORER0123",JustWarning,
-             "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
+        G4Exception(
+          "G4PSPassageCellFlux::ProcessHits", "SCORER0123", JustWarning,
+          "G4TScoreHistFiller is not instantiated!! Histogram is not filled.");
       }
       else
       {
-        filler->FillH1(hitIDMap[index],aStep->GetPreStepPoint()->GetKineticEnergy(),fCellFlux);
+        filler->FillH1(hitIDMap[index],
+                       aStep->GetPreStepPoint()->GetKineticEnergy(), fCellFlux);
       }
     }
-
   }
 
   return TRUE;
 }
 
-G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep){
+G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep)
+{
   G4bool Passed = FALSE;
 
   G4bool IsEnter = aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary;
   G4bool IsExit  = aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary;
 
-  G4int  trkid  = aStep->GetTrack()->GetTrackID();
-  G4double trklength  = aStep->GetStepLength();
-  if ( weighted ) trklength *= aStep->GetPreStepPoint()->GetWeight();
+  G4int trkid        = aStep->GetTrack()->GetTrackID();
+  G4double trklength = aStep->GetStepLength();
+  if(weighted)
+    trklength *= aStep->GetPreStepPoint()->GetWeight();
 
-  if ( IsEnter &&IsExit ){         // Passed at one step
-    fCellFlux = trklength;         // Track length is absolutely given.
-    Passed = TRUE;                 
-  }else if ( IsEnter ){            // Enter a new geometry
-    fCurrentTrkID = trkid;         // Resetting the current track.
-    fCellFlux  = trklength;     
-  }else if ( IsExit ){             // Exit a current geometry
-    if ( fCurrentTrkID == trkid ) {// if the track is same as entered,
-      fCellFlux  += trklength;     // add the track length to current one.
-      Passed = TRUE;               
+  if(IsEnter && IsExit)
+  {                         // Passed at one step
+    fCellFlux = trklength;  // Track length is absolutely given.
+    Passed    = TRUE;
+  }
+  else if(IsEnter)
+  {                         // Enter a new geometry
+    fCurrentTrkID = trkid;  // Resetting the current track.
+    fCellFlux     = trklength;
+  }
+  else if(IsExit)
+  {  // Exit a current geometry
+    if(fCurrentTrkID == trkid)
+    {                          // if the track is same as entered,
+      fCellFlux += trklength;  // add the track length to current one.
+      Passed = TRUE;
     }
-  }else{                           // Inside geometry
-    if ( fCurrentTrkID == trkid ){ // if the track is same as entered,
-      fCellFlux  += trklength;     // adding the track length to current one.
+  }
+  else
+  {  // Inside geometry
+    if(fCurrentTrkID == trkid)
+    {                          // if the track is same as entered,
+      fCellFlux += trklength;  // adding the track length to current one.
     }
   }
 
@@ -141,50 +160,48 @@ void G4PSPassageCellFlux::Initialize(G4HCofThisEvent* HCE)
 {
   fCurrentTrkID = -1;
 
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),
-				    GetName());
-  if ( HCID < 0 ) HCID = GetCollectionID(0);
-  HCE->AddHitsCollection(HCID,EvtMap);
-
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+    HCID = GetCollectionID(0);
+  HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSPassageCellFlux::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSPassageCellFlux::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSPassageCellFlux::clear(){
-  EvtMap->clear();
-}
+void G4PSPassageCellFlux::clear() { EvtMap->clear(); }
 
-void G4PSPassageCellFlux::DrawAll()
-{;}
+void G4PSPassageCellFlux::DrawAll() { ; }
 
 void G4PSPassageCellFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
-  G4cout << " PrimitiveScorer " << GetName() <<G4endl; 
+  G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second)/GetUnitValue()
-	   << " [" << GetUnit()
-	   << G4endl;
+           << "  cell flux : " << *(itr->second) / GetUnitValue() << " ["
+           << GetUnit() << G4endl;
   }
 }
 
 void G4PSPassageCellFlux::SetUnit(const G4String& unit)
 {
-    CheckAndSetUnit(unit,"Per Unit Surface");
+  CheckAndSetUnit(unit, "Per Unit Surface");
 }
 
-void G4PSPassageCellFlux::DefineUnitAndCategory(){
-   // Per Unit Surface
-   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
-   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
-   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+void G4PSPassageCellFlux::DefineUnitAndCategory()
+{
+  // Per Unit Surface
+  new G4UnitDefinition("percentimeter2", "percm2", "Per Unit Surface",
+                       (1. / cm2));
+  new G4UnitDefinition("permillimeter2", "permm2", "Per Unit Surface",
+                       (1. / mm2));
+  new G4UnitDefinition("permeter2", "perm2", "Per Unit Surface", (1. / m2));
 }
 
-G4double G4PSPassageCellFlux::ComputeVolume(G4Step* aStep, G4int idx )
-{  
-   return ComputeSolid(aStep, idx)->GetCubicVolume();
+G4double G4PSPassageCellFlux::ComputeVolume(G4Step* aStep, G4int idx)
+{
+  return ComputeSolid(aStep, idx)->GetCubicVolume();
 }

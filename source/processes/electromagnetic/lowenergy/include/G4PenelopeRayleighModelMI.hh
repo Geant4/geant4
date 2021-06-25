@@ -34,8 +34,10 @@
 // 27 Sep 2013   L. Pandola   Migration to MT paradigm
 // 20 Aug 2017 	 G. Paternò   Molecular Interference implementation
 // 24 Mar 2019 	 G. Paternò   Improved Molecular Interference implementation
-// 20 Jun 2020   G. Paternò   Read qext separately and leave original atomic form factors
+// 20 Jun 2020   G. Paternò   Read qext separately and leave original atomic 
+//                            form factors
 // 27 Aug 2020   G. Paternò   Further improvement of MI implementation
+// 04 Mar 2021   L. Pandola   Replace maps with arrays
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -70,37 +72,37 @@ class G4PenelopeRayleighModelMI : public G4VEmModel
 {
 
 public:  
-  G4PenelopeRayleighModelMI(const G4ParticleDefinition* p = nullptr,
-			    const G4String& processName = "PenRayleighMI");
+  explicit G4PenelopeRayleighModelMI(const G4ParticleDefinition* p = nullptr,
+				     const G4String& processName = "PenRayleighMI");
 
   virtual ~G4PenelopeRayleighModelMI();
   
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
-  virtual void InitialiseLocal(const G4ParticleDefinition*,
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void InitialiseLocal(const G4ParticleDefinition*,
 			       G4VEmModel *masterModel) override;
-  
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double kinEnergy,
-					      G4double Z,
-					      G4double A = 0,
-					      G4double cut = 0,
-					      G4double emax = DBL_MAX) override;
+
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kinEnergy,
+				      G4double Z,
+				      G4double A = 0,
+				      G4double cut = 0,
+				      G4double emax = DBL_MAX) override;
   
   //Overriding of parent's (G4VEmModel) method                                           
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy = 0.,
-					 G4double maxEnergy = DBL_MAX) override;	
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy = 0.,
+				 G4double maxEnergy = DBL_MAX) override;	
   
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
   
-  void SetVerbosityLevel(G4int lev) {verboseLevel = lev;};
-  G4int GetVerbosityLevel() {return verboseLevel;};
+  void SetVerbosityLevel(G4int lev) {fVerboseLevel = lev;};
+  G4int GetVerbosityLevel() {return fVerboseLevel;};
   
   //Testing purposes
   void DumpFormFactorTable(const G4Material*);
@@ -109,10 +111,11 @@ public:
   void SetMIActive(G4bool val){fIsMIActive = val;};
   G4bool IsMIActive(){return fIsMIActive;};
 
+  G4PenelopeRayleighModelMI& operator=(const G4PenelopeRayleighModelMI &right) = delete;
+  G4PenelopeRayleighModelMI(const G4PenelopeRayleighModelMI&) = delete;
+
 private:
-  G4PenelopeRayleighModelMI& operator=(const G4PenelopeRayleighModelMI &right);
-  G4PenelopeRayleighModelMI(const G4PenelopeRayleighModelMI&);
-  void SetParticle(const G4ParticleDefinition*);
+   void SetParticle(const G4ParticleDefinition*);
 
   //Helper methods
   void ReadDataFile(G4int);   
@@ -128,38 +131,35 @@ private:
   G4double IntegrateFun(G4double y[], G4int n, G4double dTheta);
   void LoadKnownMIFFMaterials();
 
-
   /// Data members
   G4ParticleChangeForGamma* fParticleChange;
   const G4ParticleDefinition* fParticle;
   
+  G4DataVector fLogQSquareGrid; //log(Q^2) grid for interpolation
+  std::map<const G4Material*,G4PhysicsFreeVector*> *fLogFormFactorTable; //log(Q^2) vs. log(F^2)
+  
+  G4DataVector fLogEnergyGridPMax; //energy grid for PMax (and originally for the x-section)
+  std::map<const G4Material*,G4PhysicsFreeVector*> *fPMaxTable; //E vs. Pmax
+  std::map<const G4Material*,G4PenelopeSamplingData*> *fSamplingTable;
+  //Internal tables and manager methods
+  std::map<G4String,G4PhysicsFreeVector*> *fMolInterferenceData; 
+  G4PhysicsFreeVector* fAngularFunction;
+  std::map<G4String,G4String> *fKnownMaterials;
+  static const G4int fMaxZ =99;
+  static G4PhysicsFreeVector* fLogAtomicCrossSection[fMaxZ+1];
+  static G4PhysicsFreeVector* fAtomicFormFactor[fMaxZ+1];
+
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
-  
-  G4int verboseLevel;
-  G4bool isInitialised;
-  
-  //Internal tables and manager methods
-  std::map<G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
-  std::map<G4int,G4PhysicsFreeVector*> *atomicFormFactor;
-  std::map<G4String,G4PhysicsFreeVector*> *MolInterferenceData; //G. Paternò  
-  
-  G4DataVector logQSquareGrid; //log(Q^2) grid for interpolation
-  std::map<const G4Material*,G4PhysicsFreeVector*> *logFormFactorTable; //log(Q^2) vs. log(F^2)
-  
-  G4DataVector logEnergyGridPMax; //energy grid for PMax (and originally for the x-section)
-  std::map<const G4Material*,G4PhysicsFreeVector*> *pMaxTable; //E vs. Pmax
-  std::map<const G4Material*,G4PenelopeSamplingData*> *samplingTable;
-    
+  G4double fDTheta = {0.0001};
+
+  static const G4int fNtheta = 31415;
+  G4int fVerboseLevel;
+  G4bool fIsInitialised;  
   //Used only for G4EmCalculator and Unit Tests
   G4bool fLocalTable;  
-  static const G4int Ntheta = 31415;
-  G4double fDTheta = {0.0001};
   G4bool fIsMIActive;	        
-  G4PhysicsFreeVector* angularFunction;
-  std::map<G4String,G4String> *fKnownMaterials;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

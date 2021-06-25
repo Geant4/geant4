@@ -47,31 +47,11 @@
 
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 
-// Warning : the following is needed in order to use EM Physics builders
-// e+
-#include "G4Positron.hh"
-#include "G4eMultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-// gamma
-#include "G4Gamma.hh"
-#include "G4PhotoElectricEffect.hh"
-#include "G4LivermorePhotoElectricModel.hh"
-#include "G4ComptonScattering.hh"
-#include "G4LivermoreComptonModel.hh"
-#include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
-#include "G4RayleighScattering.hh" 
-#include "G4LivermoreRayleighModel.hh"
-
 #include "G4EmParameters.hh"
-// end of warning
 
-#include "G4LossTableManager.hh"
-#include "G4UAtomicDeexcitation.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
@@ -82,34 +62,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary);
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmDNAPhysics_stationary::G4EmDNAPhysics_stationary(G4int ver)
-  : G4VPhysicsConstructor("G4EmDNAPhysics_stationary"), verbose(ver)
+ 
+G4EmDNAPhysics_stationary::G4EmDNAPhysics_stationary(G4int ver, const G4String& nam)
+  : G4EmDNAPhysics(ver, nam)
 {
   G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetFluo(true);  
-  param->SetAuger(true);  
-  param->SetAugerCascade(true);  
-  param->SetDeexcitationIgnoreCut(true);
-  param->ActivateDNA();
-
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmDNAPhysics_stationary::G4EmDNAPhysics_stationary(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmDNAPhysics_stationary"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetFluo(true);  
-  param->SetAuger(true);  
-  param->SetAugerCascade(true);  
-  param->SetDeexcitationIgnoreCut(true);
-
-  SetPhysicsType(bElectromagnetic);
+  param->SetDNAStationary(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,403 +77,248 @@ G4EmDNAPhysics_stationary::~G4EmDNAPhysics_stationary()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmDNAPhysics_stationary::ConstructParticle()
-{
-// bosons
-  G4Gamma::Gamma();
-
-// leptons
-  G4Electron::Electron();
-  G4Positron::Positron();
-  
-// baryons
-  G4Proton::Proton();
-
-  G4GenericIon::GenericIonDefinition();
-
-  G4DNAGenericIonsManager * genericIonsManager;
-  genericIonsManager=G4DNAGenericIonsManager::Instance();
-  genericIonsManager->GetIon("alpha++");
-  genericIonsManager->GetIon("alpha+");
-  genericIonsManager->GetIon("helium");
-  genericIonsManager->GetIon("hydrogen");
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4EmDNAPhysics_stationary::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
+  ConstructGammaPositronProcesses();
+
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4DNAGenericIonsManager* genericIonsManager
+    = G4DNAGenericIonsManager::Instance();
 
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-  while( (*myParticleIterator)() )
-  {
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String particleName = particle->GetParticleName();
+  // e-
+  G4ParticleDefinition* part = G4Electron::Electron();
 
-    if (particleName == "e-") {
+  // *** Elastic scattering ***      
+  G4DNAElastic* theDNAElastic = new G4DNAElastic("e-_G4DNAElastic");
+  theDNAElastic->SetEmModel(new G4DNAChampionElasticModel());
+  ph->RegisterProcess(theDNAElastic, part);
 
-      // *** Elastic scattering (two alternative models available) ***
-      
-      G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
-      theDNAElasticProcess->SetEmModel(new G4DNAChampionElasticModel());
-      
-      // or alternative model
-      //theDNAElasticProcess
-      //->SetEmModel(new G4DNAScreenedRutherfordElasticModel());
-      
-      ph->RegisterProcess(theDNAElasticProcess, particle);
+  // *** Excitation ***
+  G4DNAExcitation* theDNAExc = new G4DNAExcitation("e-_G4DNAExcitation");
+  G4DNABornExcitationModel* modB = new G4DNABornExcitationModel();
+  theDNAExc->SetEmModel(modB);
+  modB->SelectStationary(true);
+  ph->RegisterProcess(theDNAExc, part);
 
-      // *** Excitation ***
+  // *** Ionisation ***
+  G4DNAIonisation* theDNAIoni = new G4DNAIonisation("e-_G4DNAIonisation");
+  G4DNABornIonisationModel* modI = new G4DNABornIonisationModel();
+  theDNAIoni->SetEmModel(modI);
+  modI->SelectStationary(true);
+  ph->RegisterProcess(theDNAIoni, part);
 
-      G4DNAExcitation* theDNAExcitationProcess = 
-	new G4DNAExcitation("e-_G4DNAExcitation");
-      G4DNABornExcitationModel* modB = new G4DNABornExcitationModel();
-      theDNAExcitationProcess->SetEmModel(modB);
-      modB->SelectStationary(true);
-      ph->RegisterProcess(theDNAExcitationProcess, particle);
-
-      // *** Ionisation ***
-
-      G4DNAIonisation* theDNAIonisationProcess = 
-	new G4DNAIonisation("e-_G4DNAIonisation");
-      G4DNABornIonisationModel* modI = new G4DNABornIonisationModel();
-      theDNAIonisationProcess->SetEmModel(modI);
-      modI->SelectStationary(true);
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
-
-      // *** Vibrational excitation ***
- 
-      G4DNAVibExcitation* theDNAVibExcitationProcess = 
-       new G4DNAVibExcitation("e-_G4DNAVibExcitation");
-      G4DNASancheExcitationModel* modS = new G4DNASancheExcitationModel();
-      theDNAVibExcitationProcess->SetEmModel(modS);
-      modS->SelectStationary(true);
-      ph->RegisterProcess(theDNAVibExcitationProcess, particle);
+  // *** Vibrational excitation ***
+  G4DNAVibExcitation* theDNAVibExc = 
+    new G4DNAVibExcitation("e-_G4DNAVibExcitation");
+  G4DNASancheExcitationModel* modS = new G4DNASancheExcitationModel();
+  theDNAVibExc->SetEmModel(modS);
+  modS->SelectStationary(true);
+  ph->RegisterProcess(theDNAVibExc, part);
           
-      // *** Attachment ***
-
-      G4DNAAttachment* theDNAAttachmentProcess = 
-       new G4DNAAttachment("e-_G4DNAAttachment");
-      G4DNAMeltonAttachmentModel* modM = new G4DNAMeltonAttachmentModel();
-      theDNAAttachmentProcess->SetEmModel(modM);
-      modM->SelectStationary(true);
-      ph->RegisterProcess(theDNAAttachmentProcess, particle);
+  // *** Attachment ***
+  G4DNAAttachment* theDNAAttach = new G4DNAAttachment("e-_G4DNAAttachment");
+  G4DNAMeltonAttachmentModel* modM = new G4DNAMeltonAttachmentModel();
+  theDNAAttach->SetEmModel(modM);
+  modM->SelectStationary(true);
+  ph->RegisterProcess(theDNAAttach, part);
           
-    } else if ( particleName == "proton" ) {
+  // proton
+  part = G4Proton::Proton();
       
-      // *** Elastic ***
-      
-      G4DNAElastic* theDNAElasticProcess = 
-       new G4DNAElastic("proton_G4DNAElastic");
-      theDNAElasticProcess->SetEmModel(new G4DNAIonElasticModel());
-      ((G4DNAIonElasticModel*)(theDNAElasticProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAElasticProcess, particle);
+  // *** Elastic ***
+  theDNAElastic = new G4DNAElastic("proton_G4DNAElastic");
+  G4DNAIonElasticModel* modE = new G4DNAIonElasticModel();
+  theDNAElastic->SetEmModel(modE);
+  modE->SelectStationary(true);
+  ph->RegisterProcess(theDNAElastic, part);
             
-      // *** Excitation ***
-      
-      G4DNAExcitation* theDNAExcitationProcess = 
-       new G4DNAExcitation("proton_G4DNAExcitation");
-     
-      theDNAExcitationProcess
-       ->SetEmModel(new G4DNAMillerGreenExcitationModel(),1);
-      theDNAExcitationProcess
-       ->SetEmModel(new G4DNABornExcitationModel(),2);
-      
-      ((G4DNAMillerGreenExcitationModel*)
-       (theDNAExcitationProcess->EmModel(0)))->SetLowEnergyLimit(10*eV);
-      ((G4DNAMillerGreenExcitationModel*)
-       (theDNAExcitationProcess->EmModel(0)))->SetHighEnergyLimit(500*keV);
-      ((G4DNAMillerGreenExcitationModel*)
-       (theDNAExcitationProcess->EmModel(0)))->SelectStationary(true);
-      
-      ((G4DNABornExcitationModel*)
-       (theDNAExcitationProcess->EmModel(1)))->SetLowEnergyLimit(500*keV);
-      ((G4DNABornExcitationModel*)
-       (theDNAExcitationProcess->EmModel(1)))->SetHighEnergyLimit(100*MeV);
-      ((G4DNABornExcitationModel*)
-       (theDNAExcitationProcess->EmModel(1)))->SelectStationary(true);
-      
-      ph->RegisterProcess(theDNAExcitationProcess, particle);
+  // *** Excitation ***
+  theDNAExc = new G4DNAExcitation("proton_G4DNAExcitation");
+  G4DNAMillerGreenExcitationModel* modMGE = 
+    new G4DNAMillerGreenExcitationModel();
+  modMGE->SetLowEnergyLimit(10*eV);
+  modMGE->SetHighEnergyLimit(500*keV);
+  modMGE->SelectStationary(true);
+  theDNAExc->SetEmModel(modMGE);
+  G4DNABornExcitationModel* modBE = new G4DNABornExcitationModel();
+  modBE->SetLowEnergyLimit(500*keV);
+  modBE->SetHighEnergyLimit(100*MeV);
+  modBE->SelectStationary(true);
+  theDNAExc->SetEmModel(modBE);      
+  ph->RegisterProcess(theDNAExc, part);
 
-      // *** Ionisation ***
+  // *** Ionisation ***
+  theDNAIoni = new G4DNAIonisation("proton_G4DNAIonisation");
+  G4DNARuddIonisationModel* modRI = new G4DNARuddIonisationModel();
+  modRI->SetLowEnergyLimit(0*eV);
+  modRI->SetHighEnergyLimit(500*keV);
+  modRI->SelectStationary(true);
+  theDNAIoni->SetEmModel(modRI);
+  G4DNABornIonisationModel* modBI = new G4DNABornIonisationModel();
+  modBI->SetLowEnergyLimit(500*keV);
+  modBI->SetHighEnergyLimit(100*MeV);
+  modBI->SelectStationary(true);
+  theDNAIoni->SetEmModel(modBI);
+  ph->RegisterProcess(theDNAIoni, part);
+
+  // *** Charge decrease ***
+  G4DNAChargeDecrease* theDNAChargeDecreaseProcess = 
+    new G4DNAChargeDecrease("proton_G4DNAChargeDecrease");
+  G4DNADingfelderChargeDecreaseModel* modDCD =
+    new G4DNADingfelderChargeDecreaseModel();
+  modDCD->SelectStationary(true);
+  theDNAChargeDecreaseProcess->SetEmModel(modDCD);
+  ph->RegisterProcess(theDNAChargeDecreaseProcess, part);
+
+  // hydrogen
+  part = genericIonsManager->GetIon("hydrogen");
       
-      G4DNAIonisation* theDNAIonisationProcess = 
-       new G4DNAIonisation("proton_G4DNAIonisation");
+  // *** Elastic ***
+  theDNAElastic = new G4DNAElastic("hydrogen_G4DNAElastic");
+  G4DNAIonElasticModel* modEI = new G4DNAIonElasticModel();
+  modEI->SelectStationary(true);
+  theDNAElastic->SetEmModel(modEI);
+  ph->RegisterProcess(theDNAElastic, part);
 
-      theDNAIonisationProcess->SetEmModel(new G4DNARuddIonisationModel);
-      theDNAIonisationProcess->SetEmModel(new G4DNABornIonisationModel);
+  // *** Excitation ***
+  theDNAExc = new G4DNAExcitation("hydrogen_G4DNAExcitation");
+  modMGE = new G4DNAMillerGreenExcitationModel();
+  modMGE->SelectStationary(true);
+  theDNAExc->SetEmModel(modMGE);
+  ph->RegisterProcess(theDNAExc, part);
+
+  // *** Ionisation ***
+  theDNAIoni = new G4DNAIonisation("hydrogen_G4DNAIonisation");
+  modRI = new G4DNARuddIonisationModel();
+  theDNAIoni->SetEmModel(new G4DNARuddIonisationModel());
+  modRI->SelectStationary(true);
+  ph->RegisterProcess(theDNAIoni, part);
+
+  // *** Charge increase ***
+  G4DNAChargeIncrease* theDNAChargeIncreaseProcess = 
+    new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease");
+  G4DNADingfelderChargeIncreaseModel* modDCI = 
+    new G4DNADingfelderChargeIncreaseModel();
+  modDCI->SelectStationary(true);
+  theDNAChargeIncreaseProcess->SetEmModel(modDCI);
+  ph->RegisterProcess(theDNAChargeIncreaseProcess, part);
+
+  // alpha++
+  part = G4Alpha::Alpha();
       
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel(0)))
-       ->SetLowEnergyLimit(0*eV);
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel(0)))
-       ->SetHighEnergyLimit(500*keV);
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel(0)))
-       ->SelectStationary(true);
+  // *** Elastic ***    
+  theDNAElastic = new G4DNAElastic("alpha_G4DNAElastic");
+  modEI = new G4DNAIonElasticModel();
+  modEI->SelectStationary(true);
+  theDNAElastic->SetEmModel(modEI);
+  ph->RegisterProcess(theDNAElastic, part);
       
-      ((G4DNABornIonisationModel*)(theDNAIonisationProcess->EmModel(1)))
-       ->SetLowEnergyLimit(500*keV);
-      ((G4DNABornIonisationModel*)(theDNAIonisationProcess->EmModel(1)))
-       ->SetHighEnergyLimit(100*MeV);
-      ((G4DNABornIonisationModel*)(theDNAIonisationProcess->EmModel(1)))
-       ->SelectStationary(true);
-
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
-
-      // *** Charge decrease ***
-
-      G4DNAChargeDecrease* theDNAChargeDecreaseProcess = 
-       new G4DNAChargeDecrease("proton_G4DNAChargeDecrease");
-      theDNAChargeDecreaseProcess
-       ->SetEmModel(new G4DNADingfelderChargeDecreaseModel());
-      ((G4DNADingfelderChargeDecreaseModel*)
-       (theDNAChargeDecreaseProcess->EmModel()))->SelectStationary(true);
-      ph->RegisterProcess(theDNAChargeDecreaseProcess, particle);
-
-    } else if ( particleName == "hydrogen" ) {
-      
-      // *** Elastic ***
-      
-      G4DNAElastic* theDNAElasticProcess = 
-       new G4DNAElastic("hydrogen_G4DNAElastic");
-      theDNAElasticProcess->SetEmModel(new G4DNAIonElasticModel());
-      ((G4DNAIonElasticModel*)(theDNAElasticProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAElasticProcess, particle);
-
-      // *** Excitation ***
-
-      G4DNAExcitation* theDNAExcitationProcess = 
-       new G4DNAExcitation("hydrogen_G4DNAExcitation");
-      theDNAExcitationProcess
-       ->SetEmModel(new G4DNAMillerGreenExcitationModel());
-      ((G4DNAMillerGreenExcitationModel*)(theDNAExcitationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAExcitationProcess, particle);
-      
-      // *** Ionisation ***
-
-      G4DNAIonisation* theDNAIonisationProcess = 
-       new G4DNAIonisation("hydrogen_G4DNAIonisation");
-      theDNAIonisationProcess->SetEmModel(new G4DNARuddIonisationModel());
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
-      
-      // *** Charge increase ***
-
-      G4DNAChargeIncrease* theDNAChargeIncreaseProcess = 
-       new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease");
-      theDNAChargeIncreaseProcess
-       ->SetEmModel(new G4DNADingfelderChargeIncreaseModel());
-      ((G4DNADingfelderChargeIncreaseModel*)
-       (theDNAChargeIncreaseProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAChargeIncreaseProcess, particle);
-
-    } else if ( particleName == "alpha" ) {
-      
-      // *** Elastic ***
-      
-      G4DNAElastic* theDNAElasticProcess = 
-       new G4DNAElastic("alpha_G4DNAElastic");
-      theDNAElasticProcess->SetEmModel(new G4DNAIonElasticModel());
-      ((G4DNAIonElasticModel*)(theDNAElasticProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAElasticProcess, particle);
-      
-      // *** Excitation ***
-
-      G4DNAExcitation* theDNAExcitationProcess = 
-       new G4DNAExcitation("alpha_G4DNAExcitation");
-      theDNAExcitationProcess->SetEmModel
-       (new G4DNAMillerGreenExcitationModel());
-      ((G4DNAMillerGreenExcitationModel*)(theDNAExcitationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAExcitationProcess, particle);
+  // *** Excitation ***
+  theDNAExc = new G4DNAExcitation("alpha_G4DNAExcitation");
+  modMGE = new G4DNAMillerGreenExcitationModel();
+  modMGE->SelectStationary(true);
+  theDNAExc->SetEmModel(modMGE);
+  ph->RegisterProcess(theDNAExc, part);
             
-      // *** Ionisation ***
+  // *** Ionisation ***
+  theDNAIoni = new G4DNAIonisation("alpha_G4DNAIonisation");
+  modRI = new G4DNARuddIonisationModel();
+  theDNAIoni->SetEmModel(new G4DNARuddIonisationModel());
+  modRI->SelectStationary(true);
+  ph->RegisterProcess(theDNAIoni, part);
 
-      G4DNAIonisation* theDNAIonisationProcess = 
-       new G4DNAIonisation("alpha_G4DNAIonisation");
-      theDNAIonisationProcess->SetEmModel(new G4DNARuddIonisationModel());
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
+  // *** Charge decrease ***
+  theDNAChargeDecreaseProcess = 
+    new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease");
+  modDCD = new G4DNADingfelderChargeDecreaseModel();
+  modDCD->SelectStationary(true);
+  theDNAChargeDecreaseProcess->SetEmModel(modDCD);
+  ph->RegisterProcess(theDNAChargeDecreaseProcess, part);
 
-      // *** Charge decrease ***
-
-      G4DNAChargeDecrease* theDNAChargeDecreaseProcess = 
-       new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease");
-      theDNAChargeDecreaseProcess->SetEmModel
-       (new G4DNADingfelderChargeDecreaseModel());
-      ((G4DNADingfelderChargeDecreaseModel*)
-       (theDNAChargeDecreaseProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAChargeDecreaseProcess, particle);
-
-    } else if ( particleName == "alpha+" ) {
+  // alpha+
+  part = genericIonsManager->GetIon("alpha+");
       
-      // *** Elastic ***
+  // *** Elastic ***    
+  theDNAElastic = new G4DNAElastic("alpha+_G4DNAElastic");
+  modEI = new G4DNAIonElasticModel();
+  modEI->SelectStationary(true);
+  theDNAElastic->SetEmModel(modEI);
+  ph->RegisterProcess(theDNAElastic, part);
       
-      G4DNAElastic* theDNAElasticProcess = 
-       new G4DNAElastic("alpha+_G4DNAElastic");
-      theDNAElasticProcess->SetEmModel(new G4DNAIonElasticModel());
-      ((G4DNAIonElasticModel*)(theDNAElasticProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAElasticProcess, particle);
-      
-      // *** Excitation ***
-
-      G4DNAExcitation* theDNAExcitationProcess = 
-       new G4DNAExcitation("alpha+_G4DNAExcitation");
-      theDNAExcitationProcess->SetEmModel
-       (new G4DNAMillerGreenExcitationModel());
-      ((G4DNAMillerGreenExcitationModel*)
-       (theDNAExcitationProcess->EmModel()))->SelectStationary(true);
-      ph->RegisterProcess(theDNAExcitationProcess, particle);
+  // *** Excitation ***
+  theDNAExc = new G4DNAExcitation("alpha+_G4DNAExcitation");
+  modMGE = new G4DNAMillerGreenExcitationModel();
+  modMGE->SelectStationary(true);
+  theDNAExc->SetEmModel(modMGE);
+  ph->RegisterProcess(theDNAExc, part);
             
-      // *** Ionisation ***
+  // *** Ionisation ***
+  theDNAIoni = new G4DNAIonisation("alpha+_G4DNAIonisation");
+  modRI = new G4DNARuddIonisationModel();
+  theDNAIoni->SetEmModel(new G4DNARuddIonisationModel());
+  modRI->SelectStationary(true);
+  ph->RegisterProcess(theDNAIoni, part);
 
-      G4DNAIonisation* theDNAIonisationProcess = 
-       new G4DNAIonisation("alpha+_G4DNAIonisation");
-      theDNAIonisationProcess->SetEmModel(new G4DNARuddIonisationModel());
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
+  // *** Charge decrease ***
+  theDNAChargeDecreaseProcess = 
+    new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease");
+  modDCD = new G4DNADingfelderChargeDecreaseModel();
+  modDCD->SelectStationary(true);
+  theDNAChargeDecreaseProcess->SetEmModel(modDCD);
+  ph->RegisterProcess(theDNAChargeDecreaseProcess, part);
 
-      // *** Charge decrease ***
+  // *** Charge increase ***
+  theDNAChargeIncreaseProcess = 
+    new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease");
+  modDCI = new G4DNADingfelderChargeIncreaseModel();
+  modDCI->SelectStationary(true);
+  theDNAChargeIncreaseProcess->SetEmModel(modDCI);
+  ph->RegisterProcess(theDNAChargeIncreaseProcess, part);
 
-      G4DNAChargeDecrease* theDNAChargeDecreaseProcess = 
-       new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease");
-      theDNAChargeDecreaseProcess->SetEmModel
-       (new G4DNADingfelderChargeDecreaseModel());
-      ((G4DNADingfelderChargeDecreaseModel*)
-       (theDNAChargeDecreaseProcess->EmModel()))->SelectStationary(true);
-      ph->RegisterProcess(theDNAChargeDecreaseProcess, particle);
-
-      // *** Charge increase ***
-
-      G4DNAChargeIncrease* theDNAChargeIncreaseProcess = 
-       new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease");
-      theDNAChargeIncreaseProcess->SetEmModel
-       (new G4DNADingfelderChargeIncreaseModel());
-      ((G4DNADingfelderChargeIncreaseModel*)
-       (theDNAChargeIncreaseProcess->EmModel()))->SelectStationary(true);
-      ph->RegisterProcess(theDNAChargeIncreaseProcess, particle);
-
-    } else if ( particleName == "helium" ) {
+  // helium
+  part = genericIonsManager->GetIon("helium");
       
-      // *** Elastic ***
+  // *** Elastic ***    
+  theDNAElastic = new G4DNAElastic("helium_G4DNAElastic");
+  modEI = new G4DNAIonElasticModel();
+  modEI->SelectStationary(true);
+  theDNAElastic->SetEmModel(modEI);
+  ph->RegisterProcess(theDNAElastic, part);
       
-      G4DNAElastic* theDNAElasticProcess = 
-       new G4DNAElastic("helium_G4DNAElastic");
-      theDNAElasticProcess->SetEmModel
-       (new G4DNAIonElasticModel());
-      ((G4DNAIonElasticModel*)(theDNAElasticProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAElasticProcess, particle);
-      
-      // *** Excitation ***
-
-      G4DNAExcitation* theDNAExcitationProcess = 
-       new G4DNAExcitation("helium_G4DNAExcitation");
-      theDNAExcitationProcess->SetEmModel
-       (new G4DNAMillerGreenExcitationModel());
-      ((G4DNAMillerGreenExcitationModel*)(theDNAExcitationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAExcitationProcess, particle);
+  // *** Excitation ***
+  theDNAExc = new G4DNAExcitation("helium_G4DNAExcitation");
+  modMGE = new G4DNAMillerGreenExcitationModel();
+  modMGE->SelectStationary(true);
+  theDNAExc->SetEmModel(modMGE);
+  ph->RegisterProcess(theDNAExc, part);
             
-      // *** Ionisation ***
+  // *** Ionisation ***
+  theDNAIoni = new G4DNAIonisation("helium_G4DNAIonisation");
+  modRI = new G4DNARuddIonisationModel();
+  theDNAIoni->SetEmModel(new G4DNARuddIonisationModel());
+  modRI->SelectStationary(true);
+  ph->RegisterProcess(theDNAIoni, part);
 
-      G4DNAIonisation* theDNAIonisationProcess = 
-       new G4DNAIonisation("helium_G4DNAIonisation");
-      theDNAIonisationProcess->SetEmModel
-       (new G4DNARuddIonisationModel());
-      ((G4DNARuddIonisationModel*)(theDNAIonisationProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
-
-      // *** Charge increase ***
-
-      G4DNAChargeIncrease* theDNAChargeIncreaseProcess = 
-       new G4DNAChargeIncrease("helium_G4DNAChargeIncrease");
-      theDNAChargeIncreaseProcess->SetEmModel
-       (new G4DNADingfelderChargeIncreaseModel());
-      ((G4DNADingfelderChargeIncreaseModel*)
-       (theDNAChargeIncreaseProcess->EmModel()))
-       ->SelectStationary(true);
-      ph->RegisterProcess(theDNAChargeIncreaseProcess, particle);
+  // *** Charge increase ***
+  theDNAChargeIncreaseProcess = 
+    new G4DNAChargeIncrease("helium_G4DNAChargeIncrease");
+  modDCI = new G4DNADingfelderChargeIncreaseModel();
+  modDCI->SelectStationary(true);
+  theDNAChargeIncreaseProcess->SetEmModel(modDCI);
+  ph->RegisterProcess(theDNAChargeIncreaseProcess, part);
     
-    } else if ( particleName == "GenericIon" ) {
+  // other ions
+  part = G4GenericIon::GenericIon();
 
-      // *** Ionisation ***
-
-      G4DNAIonisation* theDNAIonisationProcess = 
-       new G4DNAIonisation("GenericIon_G4DNAIonisation");
-      theDNAIonisationProcess->SetEmModel(
-       new G4DNARuddIonisationExtendedModel());
-      ((G4DNARuddIonisationExtendedModel*)(theDNAIonisationProcess->EmModel()))
-      ->SelectStationary(true);
-      ph->RegisterProcess(theDNAIonisationProcess, particle);
-
-    }
-    
-    // Warning : the following particles and processes are needed by EM Physics 
-    // builders
-    // They are taken from the default Livermore Physics list
-    // These particles are currently not handled by Geant4-DNA
-    
-      // e+
-      
-    else if (particleName == "e+") {
-
-      // Identical to G4EmStandardPhysics_stationary
-      
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
-
-      ph->RegisterProcess(msc, particle);
-      ph->RegisterProcess(eIoni, particle);
-      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
-
-    } else if (particleName == "gamma") {
-      // photoelectric effect - Livermore model only
-      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
-      ph->RegisterProcess(thePhotoElectricEffect, particle);
-
-      // Compton scattering - Livermore model only
-      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
-      ph->RegisterProcess(theComptonScattering, particle);
-
-      // gamma conversion - Livermore model below 80 GeV
-      G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
-      ph->RegisterProcess(theGammaConversion, particle);
-
-      // default Rayleigh scattering is Livermore
-      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      ph->RegisterProcess(theRayleigh, particle);
-    }
-    
-   // Warning : end of particles and processes are needed by EM Physics build.
-    
-  }
-
-  // Deexcitation
-  //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  // *** Ionisation ***
+  theDNAIoni = new G4DNAIonisation("GenericIon_G4DNAIonisation");
+  G4DNARuddIonisationExtendedModel* mod =
+    new G4DNARuddIonisationExtendedModel();
+  mod->SelectStationary(true);
+  theDNAIoni->SetEmModel(mod);
+  ph->RegisterProcess(theDNAIoni, part);
 }
 

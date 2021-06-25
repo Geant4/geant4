@@ -46,13 +46,10 @@
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4UniversalFluctuation.hh"
-#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-using namespace std;
 
 G4eIonisation::G4eIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
@@ -95,21 +92,16 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
     if(part != theElectron) { isElectron = false; }
-    if (!EmModel(0)) { SetEmModel(new G4MollerBhabhaModel()); }
+    if (nullptr == EmModel(0)) { SetEmModel(new G4MollerBhabhaModel()); }
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
-    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
+    if (nullptr == FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
                 
     AddEmModel(1, EmModel(), FluctModel());
     isInitialised = true;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4eIonisation::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

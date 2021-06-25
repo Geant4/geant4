@@ -19,6 +19,12 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+07 June 2021  John Allison (DAWN-V10-07-01)
+- Fix hidden function warning.
+
+14 April 2021 Ben Morgan (DAWN-V10-07-00)
+- Migrate to modular CMake build
+
 2 October 2020  John Allison  (DAWN-V10-06-03)
 - G4FukuiRendererViewer.cc:
   o Fix "overlapping comparisons always evaluate to true".

@@ -62,9 +62,10 @@ using namespace std;
 
 G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
-   scatterFunctionData(0),
-   crossSectionHandler(0),fAtomDeexcitation(0)
+  :G4VEmModel(nam),fParticleChange(nullptr),
+   scatterFunctionData(nullptr),
+   crossSectionHandler(nullptr),fAtomDeexcitation(nullptr),
+   isInitialised(false)
 {
   verboseLevel=0 ;
   // Verbosity scale:
@@ -79,7 +80,6 @@ G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4Particl
 
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -168,7 +168,6 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
 						const G4DynamicParticle* aDynamicGamma,
 						G4double, G4double)
 {
-
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
   // then accepted or rejected depending on the Scattering Function multiplied
   // by factor from Klein - Nishina formula.
@@ -273,19 +272,13 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       shellIdx = shellData.SelectRandomShell(Z);
       bindingE = shellData.BindingEnergy(Z,shellIdx);
 
-
-
       // Randomly sample bound electron momentum
       // (memento: the data set is in Atomic Units)
       G4double pSample = profileData.RandomSelectMomentum(Z,shellIdx);
       // Rescale from atomic units
 
-
       //Kinetic energy of target electron
-
-
       // Reverse vector projection onto scattering vector
-
       do {
          Alpha = G4UniformRand()*pi/2.0;
          } while(Alpha >= (pi/2.0));
@@ -293,7 +286,6 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       ePAU = pSample / std::cos(Alpha);
 
       // Convert to SI and the calculate electron energy in natural units
-
       G4double ePSI = ePAU * momentum_au_to_nat;
       G4double u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)))/vel_c;
       G4double eEIncident = electron_mass_c2 / sqrt( 1 - (u_temp*u_temp));
@@ -328,15 +320,14 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
   G4double eKineticEnergy = systemE - photonE - bindingE - electron_mass_c2;
 
   // protection against negative final energy: no e- is created
-   G4double eDirX = 0.0;
-   G4double eDirY = 0.0;
-   G4double eDirZ = 1.0;
-
+  G4double eDirX = 0.0;
+  G4double eDirY = 0.0;
+  G4double eDirZ = 1.0;
+  
   if(eKineticEnergy < 0.0) {
     G4cout << "Error, kinetic energy of electron less than zero" << G4endl;
-    }
-
- else{
+  }
+  else{
     // Estimation of Compton electron polar angle taken from:
     // The EGSnrc Code System: Monte Carlo Simulation of Electron and Photon Transport
     // Eqn 2.2.25 Pg 42, NRCC Report PIRS-701
@@ -354,11 +345,9 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
     G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
                                                    eDirection,eKineticEnergy) ;
     fvect->push_back(dp);
-   }
-
+  }
 
   // Revert to original if maximum number of iterations threshold has been reached
-
   if (iteration >= maxDopplerIterations)
     {
       photonE = photonEoriginal;
@@ -366,7 +355,6 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
     }
 
   // Update G4VParticleChange for the scattered photon
-
   G4ThreeVector photonDirection1(dirx,diry,dirz);
   photonDirection1.rotateUz(photonDirection0);
   fParticleChange->ProposeMomentumDirection(photonDirection1) ;
@@ -377,13 +365,13 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
     {
       fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;
 
-        if (iteration < maxDopplerIterations)
+      if (iteration < maxDopplerIterations)
         {
-         G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
-         eDirection.rotateUz(photonDirection0);
-         G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
-                                                       eDirection,eKineticEnergy) ;
-         fvect->push_back(dp);
+	  G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
+	  eDirection.rotateUz(photonDirection0);
+	  G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
+							 eDirection,eKineticEnergy) ;
+	  fvect->push_back(dp);
         }
     }
   else
@@ -391,8 +379,8 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       photonEnergy1 = 0.;
       fParticleChange->SetProposedKineticEnergy(0.) ;
       fParticleChange->ProposeTrackStatus(fStopAndKill);
-     }
-
+    }
+  
   // sample deexcitation
   //
   if(fAtomDeexcitation && iteration < maxDopplerIterations) {

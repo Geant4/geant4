@@ -32,9 +32,10 @@
 // 23.02.96 Created
 // 26.03.96 Added constants for standard conditions of temperature
 //          and pressure; also added Gas threshold.
-// 29.04.08   use PDG 2006 values
-// 03.11.08   use PDG 2008 values
-// 17.07.20   use PDG 2019 values
+// 29.04.08 Use PDG 2006 values
+// 03.11.08 Use PDG 2008 values
+// 17.07.20 Use PDG 2019 values
+// 06.05.21 Added Bohr_magneton and nuclear_magneton constants
 
 #ifndef HEP_PHYSICAL_CONSTANTS_H
 #define HEP_PHYSICAL_CONSTANTS_H
@@ -105,6 +106,10 @@ static constexpr double alpha_rcl2 = fine_structure_const
 static constexpr double twopi_mc2_rcl2 = twopi*electron_mass_c2
                                              *classic_electr_radius
                                              *classic_electr_radius;
+
+static constexpr double Bohr_magneton = (eplus*hbarc*c_light)/(2*electron_mass_c2);
+static constexpr double nuclear_magneton = (eplus*hbarc*c_light)/(2*proton_mass_c2);
+
 //
 //
 //

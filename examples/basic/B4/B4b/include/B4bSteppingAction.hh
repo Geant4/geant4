@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4bSteppingAction.hh
 /// \brief Definition of the B4bSteppingAction class
 
@@ -36,7 +36,7 @@ class B4DetectorConstruction;
 
 /// Stepping action class.
 ///
-/// In UserSteppingAction() there are collected the energy deposit and track 
+/// In UserSteppingAction() there are collected the energy deposit and track
 /// lengths of charged particles in Absober and Gap layers and
 /// updated in B4bRunData object.
 
@@ -47,7 +47,7 @@ public:
   virtual ~B4bSteppingAction();
 
   virtual void UserSteppingAction(const G4Step* step);
-    
+
 private:
   const B4DetectorConstruction* fDetConstruction;
 };

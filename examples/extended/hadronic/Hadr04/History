@@ -12,7 +12,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+    
+15-04-21 mma (Hadr04-V10-07-02)
+- Hadr04.cc: RunManagerFactory
+             G4SteppingVerboseWithUnits
+             ParticleHP env variables 
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+      
+18-03-21 A. Ribon (exhadr04-V10-07-01)
+- NeutronHPphysics : replaced G4HadronCaptureProcess with
+  G4NeutronCaptureProcess, and G4HadronFissionProcess with
+  G4NeutronFissionProcess.
+
+04-03-21 A. Ribon (exhadr04-V10-07-00)
+- NeutronHPphysics : replaced G4NeutronInelasticProcess (that has been
+  deleted) with G4HadronInelasticProcess.
+
 22-10-20 mma (exhadr04-V10-06-01)
 - README : add macros descrption
 

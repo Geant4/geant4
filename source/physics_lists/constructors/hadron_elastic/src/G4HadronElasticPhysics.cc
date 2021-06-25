@@ -77,9 +77,10 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysics);
 //
 
 G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver, const G4String& nam)
-  : G4VPhysicsConstructor(nam), verbose(ver)
+  : G4VPhysicsConstructor(nam)
 {
-  if(verbose > 1) { 
+  G4HadronicParameters::Instance()->SetVerboseLevel(ver);
+  if(ver > 1) { 
     G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
   }
@@ -112,7 +113,7 @@ void G4HadronElasticPhysics::ConstructProcess()
   const G4double elimitAntiNuc = 100.*MeV;
   const G4double delta = 0.1*MeV;
   G4double emax = std::max(param->GetMaxEnergy(), elimitAntiNuc+delta);
-  if(verbose > 1) {
+  if(param->GetVerboseLevel() > 1) {
     G4cout << "### HadronElasticPhysics::ConstructProcess: "
 	   << "Elimit for for anti-neuclei " << elimitAntiNuc/CLHEP::GeV << " GeV"
 	   << " for all hadrons Emax(GeV)= " << emax/CLHEP::GeV

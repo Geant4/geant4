@@ -23,21 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4WorkerRunManager
 //
+// Class description:
 //
-//
-
-// class description:
-//
-//      This is a class for run control in GEANT4 for multi-threaded runs
+// This is a class for run control in GEANT4 for multi-threading.
 // It extends G4RunManager re-implementing multi-threaded behavior in
-// key methods. See documentation for G4RunManager
+// key methods. See documentation for G4RunManager.
 // User should never initialize instances of this class, that are usually
-// handled by G4MTRunManager. There exists one instance of this class for each
-// worker in a MT application.
+// handled by G4MTRunManager. There exists one instance of this class for
+// each worker in a MT application.
 
-#ifndef G4WorkerRunManager_h
-#define G4WorkerRunManager_h 1
+// Original authors: X.Dong, A.Dotti - 2013
+// --------------------------------------------------------------------
+#ifndef G4WorkerRunManager_hh
+#define G4WorkerRunManager_hh 1
+
 #include "G4RNGHelper.hh"
 #include "G4RunManager.hh"
 
@@ -46,85 +47,79 @@ class G4WorkerRunManagerKernel;
 
 class G4WorkerRunManager : public G4RunManager
 {
- public:
-  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
+  public:
 
- public:
-  static G4WorkerRunManager* GetWorkerRunManager();
-  static G4WorkerRunManagerKernel* GetWorkerRunManagerKernel();
-  G4WorkerRunManager();
-  ~G4WorkerRunManager();
-  // Modified for worker behavior
-  ////////virtual void BeamOn(G4int n_event,const char* macroFile=0,G4int
-  ///n_select=-1);
-  virtual void InitializeGeometry();
-  virtual void RunInitialization();
-  virtual void DoEventLoop(G4int n_event, const char* macroFile = 0,
-                           G4int n_select = -1);
-  virtual void ProcessOneEvent(G4int i_event);
-  virtual G4Event* GenerateEvent(G4int i_event);
-  // G4int NewCommands( const std::vector<G4String>& newCmdsToExecute ,
-  // G4String& currentCmd ); Called by the MTRunManager when new UI commands are
-  // to be executed. It is not assumed method is not thread-safe: i.e. should be
-  // called sequentially Returns 0 if commands are executed corrected, otherwise
-  // returns error code (see G4UImanager::ApplyCommand) In case of error
-  // currentCmd is set to the command that gave the problem
-  virtual void RunTermination();
-  virtual void TerminateEventLoop();
+    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Run>;
 
-  // This function is called by the thread function: it should loop until some
-  // work is requested
-  virtual void DoWork();
+    static G4WorkerRunManager* GetWorkerRunManager();
+    static G4WorkerRunManagerKernel* GetWorkerRunManagerKernel();
 
- protected:
-  virtual void ConstructScoringWorlds();
-  virtual void StoreRNGStatus(const G4String& filenamePrefix);
-  virtual void rndmSaveThisRun();
-  virtual void rndmSaveThisEvent();
-  virtual void MergePartialResults();
-  // This method will merge (reduce) the results of this run into the
-  // global run
- public:
-  //! Sets the worker context
-  void SetWorkerThread(G4WorkerThread* wc) { workerContext = wc; }
+    G4WorkerRunManager();
+   ~G4WorkerRunManager();
 
- protected:
-  G4WorkerThread* workerContext;
-#ifdef G4MULTITHREADED
-  G4bool visIsSetUp;
-#endif
+    virtual void InitializeGeometry();
+    virtual void RunInitialization();
+    virtual void DoEventLoop(G4int n_event, const char* macroFile = 0,
+                             G4int n_select = -1);
+    virtual void ProcessOneEvent(G4int i_event);
+    virtual G4Event* GenerateEvent(G4int i_event);
 
- private:
-  void SetupDefaultRNGEngine();
+    virtual void RunTermination();
+    virtual void TerminateEventLoop();
 
- public:
-  virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
-  virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
-  virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
-  virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
-  virtual void SetUserInitialization(
-    G4UserWorkerThreadInitialization* userInit);
-  virtual void SetUserAction(G4UserRunAction* userAction);
-  virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
-  virtual void SetUserAction(G4UserEventAction* userAction);
-  virtual void SetUserAction(G4UserStackingAction* userAction);
-  virtual void SetUserAction(G4UserTrackingAction* userAction);
-  virtual void SetUserAction(G4UserSteppingAction* userAction);
+    virtual void DoWork();
+      // This function is called by the thread function: it should
+      // loop until some work is requested.
 
- protected:
-  G4bool eventLoopOnGoing;
-  G4bool runIsSeeded;
-  G4int nevModulo;
-  G4int currEvID;
-  G4int luxury;
-  G4SeedsQueue seedsQueue;
-  G4bool readStatusFromFile;
+    inline void SetWorkerThread(G4WorkerThread* wc) { workerContext = wc; }
+      // Sets the worker context.
+
+    virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
+    virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
+    virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
+    virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
+    virtual void SetUserInitialization(G4UserWorkerThreadInitialization* userInit);
+    virtual void SetUserAction(G4UserRunAction* userAction);
+    virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
+    virtual void SetUserAction(G4UserEventAction* userAction);
+    virtual void SetUserAction(G4UserStackingAction* userAction);
+    virtual void SetUserAction(G4UserTrackingAction* userAction);
+    virtual void SetUserAction(G4UserSteppingAction* userAction);
+
+    virtual void RestoreRndmEachEvent(G4bool flag) { readStatusFromFile=flag; }
+
+  protected:
+
+    virtual void ConstructScoringWorlds();
+    virtual void StoreRNGStatus(const G4String& filenamePrefix);
+    virtual void rndmSaveThisRun();
+    virtual void rndmSaveThisEvent();
+    virtual void MergePartialResults();
+      // This method will merge (reduce) the results
+      // of this run into the global run
+
+  private:
+
+    void SetupDefaultRNGEngine();
+
+  protected:
+
+    G4WorkerThread* workerContext = nullptr;
+  #ifdef G4MULTITHREADED
+    G4bool visIsSetUp = false;
+  #endif
+
+    G4bool eventLoopOnGoing = false;
+    G4bool runIsSeeded = false;
+    G4int nevModulo = -1;
+    G4int currEvID = -1;
+    G4int luxury = -1;
+    G4SeedsQueue seedsQueue;
+    G4bool readStatusFromFile = false;
 
  private:
+
   std::unique_ptr<ProfilerConfig> workerRunProfiler;
-
- public:
-  virtual void RestoreRndmEachEvent(G4bool flag) { readStatusFromFile = flag; }
 };
 
-#endif  // G4WorkerRunManager_h
+#endif  // G4WorkerRunManager_hh

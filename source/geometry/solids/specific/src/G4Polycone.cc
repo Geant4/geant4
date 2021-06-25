@@ -221,10 +221,8 @@ void G4Polycone::Create( G4double phiStart,
   numCorner = rz->NumVertices();
 
   startPhi = phiStart;
-
   while( startPhi < 0. )    // Loop checking, 13.08.2015, G.Cosmo
     startPhi += twopi;
-
   //
   // Phi opening? Account for some possible roundoff, and interpret
   // nonsense value as representing no phi opening
@@ -952,16 +950,10 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
 
 G4Polyhedron* G4Polycone::CreatePolyhedron() const
 {
-  //
-  // This has to be fixed in visualization. Fake it for the moment.
-  //
-
-    return new G4PolyhedronPcon( original_parameters->Start_angle,
-                                 original_parameters->Opening_angle,
-                                 original_parameters->Num_z_planes,
-                                 original_parameters->Z_values,
-                                 original_parameters->Rmin,
-                                 original_parameters->Rmax );
+  std::vector<G4TwoVector> rz(numCorner);
+  for (G4int i = 0; i < numCorner; ++i)
+    rz[i].set(corners[i].r, corners[i].z);
+  return new G4PolyhedronPcon(startPhi, endPhi - startPhi, rz);
 }
 
 // SetOriginalParameters

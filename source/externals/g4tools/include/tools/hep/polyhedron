@@ -1,0 +1,993 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hep_polyhedron
+#define tools_hep_polyhedron
+
+// see (lengthy) doc and disclaimer at end.
+
+#include "../lina/vec3d"
+#include "../lina/rotd"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#include "../S_STRING"
+#endif
+
+#include <string>
+#include <vector>
+
+//#define TOOLS_HEP_PH_OUT_ERR
+//#define TOOLS_HEP_PH_OUT_ERR_TRD2
+//#define TOOLS_HEP_PH_NOT_OPT
+
+#ifdef TOOLS_HEP_PH_OUT_ERR
+#include <iostream>
+#endif
+
+#ifdef TOOLS_HEP_PH_OUT_ERR_TRD2
+#include <iostream>
+#endif
+
+#include <cmath>
+
+namespace tools {
+namespace hep {
+
+typedef vec3d HVPoint3D;
+typedef HVPoint3D HVNormal3D;
+typedef HVPoint3D HVVector3D;
+
+//WARNING : with SbFacet, take care of exlib::geant4::polyhedron
+//          that attempts to copy the private content of G4Facet.
+//          (see WARNING here).
+
+class SbFacet {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::hep::SbFacet)
+#endif
+
+  friend class polyhedron;
+#ifndef SWIG
+  friend std::ostream& operator<<(std::ostream&, const SbFacet &facet);
+  //G.Barrand
+  friend int operator == (const SbFacet & v1, const SbFacet & v2);
+  friend int operator != (const SbFacet & v1, const SbFacet & v2);
+#endif
+
+ private:
+  typedef struct { int v,f; } edge_t; //G.Barrand
+  edge_t edge[4];
+
+ public:
+  SbFacet(int v1=0, int f1=0, int v2=0, int f2=0, 
+          int v3=0, int f3=0, int v4=0, int f4=0)
+  { 
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;
+    edge[2].v=v3; edge[2].f=f3; edge[3].v=v4; edge[3].f=f4; }
+
+  virtual ~SbFacet() { 
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+//public:
+protected:
+  SbFacet(const SbFacet & aFrom) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    edge[0].v = aFrom.edge[0].v;
+    edge[0].f = aFrom.edge[0].f;
+    edge[1].v = aFrom.edge[1].v;
+    edge[1].f = aFrom.edge[1].f;
+    edge[2].v = aFrom.edge[2].v;
+    edge[2].f = aFrom.edge[2].f;
+    edge[3].v = aFrom.edge[3].v;
+    edge[3].f = aFrom.edge[3].f;
+  }
+  SbFacet& operator=(const SbFacet& aFrom) {
+    edge[0].v = aFrom.edge[0].v;
+    edge[0].f = aFrom.edge[0].f;
+    edge[1].v = aFrom.edge[1].v;
+    edge[1].f = aFrom.edge[1].f;
+    edge[2].v = aFrom.edge[2].v;
+    edge[2].f = aFrom.edge[2].f;
+    edge[3].v = aFrom.edge[3].v;
+    edge[3].f = aFrom.edge[3].f;
+    return *this;
+  }
+public:
+  bool isEqual(const SbFacet& aFrom) const { //G.Barrand
+    if(edge[0].v!=aFrom.edge[0].v) return false;
+    if(edge[0].f!=aFrom.edge[0].f) return false;
+
+    if(edge[1].v!=aFrom.edge[1].v) return false;
+    if(edge[1].f!=aFrom.edge[1].f) return false;
+
+    if(edge[2].v!=aFrom.edge[2].v) return false;
+    if(edge[2].f!=aFrom.edge[2].f) return false;
+
+    if(edge[3].v!=aFrom.edge[3].v) return false;
+    if(edge[3].f!=aFrom.edge[3].f) return false;
+
+    return true;
+  }
+  void GetEdge(int i,int& v,int& f) const { //G.Barrand
+    v = edge[i].v;
+    f = edge[i].f;
+  }
+
+  void set(int v1, int f1, int v2, int f2,  //G.Barrand
+           int v3, int f3, int v4, int f4) { 
+    edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;
+    edge[2].v=v3; edge[2].f=f3; edge[3].v=v4; edge[3].f=f4;
+  }
+
+
+  void Set(int v[8]) //G.Barrand 
+  { edge[0].v = v[0]; edge[0].f = v[1]; 
+    edge[1].v = v[2]; edge[1].f = v[3];
+    edge[2].v = v[4]; edge[2].f = v[5]; 
+    edge[3].v = v[6]; edge[3].f = v[7]; }
+};
+
+//G.Barrand :
+//int operator == (const SbFacet & v1, const SbFacet & v2);
+//int operator != (const SbFacet & v1, const SbFacet & v2);
+
+class polyhedron {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::hep::polyhedron)
+#endif
+
+#ifndef SWIG
+  friend std::ostream& operator<<(std::ostream&, const polyhedron &ph);
+  //G.Barrand
+  friend int operator == (const polyhedron & v1, const polyhedron & v2);
+  friend int operator != (const polyhedron & v1, const polyhedron & v2);
+#endif
+
+private: //G.Barrand
+  //std::string* m_name; //have a pointer to optimize memory.
+protected:
+  int nvert, nface;
+  HVPoint3D* pV;
+  SbFacet*   pF;
+private:
+  int fNumberOfRotationSteps;
+
+protected:
+  static double _M_PI()      {return 3.1415926535897931160E0;}
+  //static double _M_PI_2()    {return 1.5707963267948965580E0;}
+
+  // Allocate memory for polyhedron
+  void AllocateMemory(int Nvert, int Nface);
+
+  // Find neighbouring facet
+  int FindNeighbour(int iFace, int iNode, int iOrder) const;
+
+  // Find normal at node
+  HVNormal3D FindNodeNormal(int iFace, int iNode) const;
+
+  // Create polyhedron for prism with quadrilateral base
+  void CreatePrism();
+
+  // Generate facets by revolving an edge around Z-axis
+  void RotateEdge(int k1, int k2, double r1, double r2,
+                  int v1, int v2, int vEdge,
+                  bool ifWholeCircle, int ns, int &kface);
+
+  // Set side facets for the case of incomplete rotation
+  void SetSideFacets(int ii[4], int vv[4],
+                     int *kk, double *r,
+                     double dphi, int ns, int &kface);
+
+  // Create polyhedron for body of revolution around Z-axis
+  void RotateAroundZ(int nstep, double phi, double dphi,
+                     int np1, int np2,
+                     const double *z, double *r,
+                     int nodeVis, int edgeVis);
+
+  // For each edge set reference to neighbouring facet
+  void SetReferences();
+
+  // Invert the order on nodes in facets
+  void InvertFacets();
+public: //public for iv2sg
+  static int NUMBER_OF_STEPS() {return 24;}
+public: //for iv2sg
+  static void do_not_set_NUMBER_OF_STEPS(int){}
+public:
+  polyhedron(int Nvert=0, int Nface=0)
+  : /*m_name(0) //G.Barrand
+  ,*/nvert(Nvert),nface(Nface)
+  ,pV(Nvert ? new HVPoint3D[Nvert+1] : 0)
+  ,pF(Nface ? new SbFacet[Nface+1] : 0)
+  ,fNumberOfRotationSteps(NUMBER_OF_STEPS())
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+public:
+  virtual ~polyhedron() { 
+    //delete m_name; //G.Barrand.
+    delete [] pV; delete [] pF; 
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  polyhedron(const polyhedron & from);
+  polyhedron& operator=(const polyhedron & from);
+public:
+  //G.Barrand : handle a name to help debugging.
+/*
+  void setName(const std::string& aName) { 
+    delete m_name;
+    m_name = new std::string(aName);
+  }
+  const std::string& getName() const { 
+    if(!m_name) return s_empty();
+    return *m_name;
+  }
+*/
+  //G.Barrand :end
+
+  void Set(int Nvert, HVPoint3D* aV,
+           int Nface, SbFacet* aF) //G.Barrand
+  { delete [] pV; delete [] pF;
+    nvert = Nvert; nface = Nface; pV = aV; pF = aF;}
+
+  void Empty() //G.Barrand
+  { nvert = 0; nface = 0; pV = 0;pF = 0;}
+
+  // Get number of vertices
+  int GetNoVertices() const { return nvert; }
+
+  // Get number of facets
+  int GetNoFacets() const { return nface; }
+
+  // Transform the polyhedron
+  polyhedron& Translate(double,double,double);
+  polyhedron& Transform(const rotd& rot,double,double,double);
+  polyhedron& Transform(const rotd& rot,const vec3d& trans);
+
+  // Get next vertex index of the quadrilateral
+  //G.Barrand
+  bool GetNextVertexIndex(int & index, int & edgeFlag) const;
+
+  // Get vertex by index 
+  HVPoint3D GetVertex(int index) const;
+  const HVPoint3D& GetVertexFast(int index) const; //G.Barrand
+
+  //G.Barrand : to optimize SoPolyhedron.
+  HVPoint3D* GetPV() const {return pV;} //G.Barrand
+  SbFacet* GetPF() const {return pF;} //G.Barrand
+
+  // Get next vertex + edge visibility of the quadrilateral
+  bool GetNextVertex(HVPoint3D & vertex, int & edgeFlag) const;
+
+  // Get next vertex + edge visibility + normal of the quadrilateral
+  bool GetNextVertex(HVPoint3D & vertex, int & edgeFlag,
+                           HVNormal3D & normal) const;
+
+  // Get indeces of the next edge with indeces of the faces
+  bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag,
+                                int & iface1, int & iface2) const;
+
+  // Get indeces of the next edge
+  bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag) const;
+
+  // Get next edge
+  bool GetNextEdge(HVPoint3D &p1, HVPoint3D &p2, int &edgeFlag) const;
+
+  // Get next edge
+  bool GetNextEdge(HVPoint3D &p1, HVPoint3D &p2, int &edgeFlag,
+                         int &iface1, int &iface2) const;
+
+  // Get face by index
+  void GetFacet(int iFace, int &n, int *iNodes,
+                int *edgeFlags = 0, int *iFaces = 0) const;
+
+  // Get face by index
+  void GetFacet(int iFace, int &n, HVPoint3D *nodes,
+                int *edgeFlags = 0, HVNormal3D *normals = 0) const;
+
+  // Get next face with normals at the nodes
+  bool GetNextFacet(int &n, HVPoint3D *nodes,
+                          int *edgeFlags=0, HVNormal3D *normals=0) const;
+
+  // Get normal of the face given by index
+  HVNormal3D GetNormal(int iFace) const;
+
+  // Get unit normal of the face given by index
+  HVNormal3D GetUnitNormal(int iFace) const;
+
+  // Get normal of the next face
+  bool GetNextNormal(HVNormal3D &normal) const;
+
+  // Get normal of unit length of the next face 
+  bool GetNextUnitNormal(HVNormal3D &normal) const;
+
+  // Boolean operations 
+  polyhedron add(const polyhedron &p) const;
+  polyhedron subtract(const polyhedron &p) const;
+  polyhedron intersect(const polyhedron &p) const;
+
+  // Get area of the surface of the polyhedron
+  double GetSurfaceArea() const;
+
+  // Get volume of the polyhedron
+  double GetVolume() const;
+
+  bool isEqual(const polyhedron &p) const; //G.Barrand
+  bool isConsistent(const char* = 0) const; //G.Barrand
+  void dump(std::ostream&) const;
+
+  // Get number of steps for whole circle
+  int GetNumberOfRotationSteps(); //G.Barrand : no more static.
+
+  // Set number of steps for whole circle
+  void SetNumberOfRotationSteps(int n);
+
+  // Reset number of steps for whole circle to default value
+  void ResetNumberOfRotationSteps(); //G.Barrand : have code in .cxx.
+
+public:
+  //G.Barrand : have the below set_ to optimize exlib/sg/polyhedron setup.
+  bool set_polyhedron_cons(double Rmn1, double Rmx1, 
+                          double Rmn2, double Rmx2, double Dz,
+                          double Phi1, double Dphi,
+                          int nstep = 0); //G.Barrand
+  bool set_polyhedron_tube(double Rmin, double Rmax, double Dz,
+                          int nstep = 0){
+    return set_polyhedron_cons(Rmin, Rmax, Rmin, Rmax, Dz, 0, 2*_M_PI(), nstep);
+  }
+
+  double vxy(const double* xy,int i,int j) {return xy[i*2+j];}
+  bool set_polyhedron_arb8(double Dz,const double* xy);
+
+  bool set_polyhedron_trd2(double Dx1, double Dx2,
+                          double Dy1, double Dy2, double Dz);
+  bool set_polyhedron_box(double Dx, double Dy, double Dz){
+    return set_polyhedron_trd2(Dx, Dx, Dy, Dy, Dz);
+  }
+  bool set_polyhedron_trd1(double Dx1, double Dx2,
+                          double Dy, double Dz){
+    return set_polyhedron_trd2(Dx1, Dx2, Dy, Dy, Dz);
+  }
+  bool set_polyhedron_trap(double Dz, double Theta, double Phi,
+                          double Dy1,
+                          double Dx1, double Dx2, double Alp1,
+                          double Dy2,
+                          double Dx3, double Dx4, double Alp2);
+
+  bool set_polyhedron_para(double Dx, double Dy, double Dz,
+                          double Alpha, double Theta,
+                          double Phi){
+    return set_polyhedron_trap(Dz,Theta,Phi,Dy,Dx,Dx,Alpha,Dy,Dx,Dx,Alpha);
+  }
+
+  bool set_polyhedron_pgon(double phi, double dphi, int npdv, int nz,
+                          const double *z,
+                          const double *rmin,
+                          const double *rmax);
+  bool set_polyhedron_pcon(double phi, double dphi, int nz,
+                          const double *z,
+                          const double *rmin,
+                          const double *rmax) {
+    return set_polyhedron_pgon(phi, dphi, 0, nz, z, rmin, rmax);
+  }
+
+  bool set_polyhedron_tubs(double Rmin, double Rmax,
+                                     double Dz, 
+                                     double Phi1, double Dphi,
+                                     int nstep) {//G.Barrand
+    return set_polyhedron_cons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi, nstep);
+  }
+
+  bool set_polyhedron_cone(double Rmn1, double Rmx1, 
+                      double Rmn2, double Rmx2,
+                      double Dz,
+                      int nstep) {
+    return set_polyhedron_cons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0, 2*_M_PI(), nstep);
+  }
+
+  bool set_polyhedron_torus(double rmin,double rmax,double rtor,
+                           double phi,double dphi,
+                           int nphi, //G.Barrand
+                           int nthe); //G.Barrand
+
+  bool set_polyhedron_xtru(int a_npts,int a_nz,
+                          double* a_xs,double* a_ys,double* a_zs,
+                          bool a_acw = true,
+                          bool a_zfb = true);
+
+  bool set_polyhedron_sphere(double rmin, double rmax,
+                     double phi, double dphi,
+                     double the, double dthe,
+                     int nphi = 0,
+                     int nthe = 0); //G.Barrand
+
+  bool set_polyhedron_hype(double a_st_in,double a_st_out, 
+                          double a_rmin,double a_rmax,double a_dz,
+                          int a_nz = 10,int a_nphi = 24);
+  bool set_polyhedron_eltu(double a_dx,double a_dy,double a_dz,
+                          int a_nz = 10,int a_nphi = 24);
+private: //G.Barrand
+  int _ixy(int,int,int,int,bool,bool);
+  void _clear(){
+    //used in set_polyhedronXxx()
+    delete [] pV;
+    pV = 0;
+    delete [] pF;
+    pF = 0;
+    nvert = 0;
+    nface = 0; 
+  }
+  bool CHECK_INDEX(const char* a_method,int a_index) const;
+};
+
+//G.Barrand :
+//int operator == (const polyhedron & v1, const polyhedron & v2);
+//int operator != (const polyhedron & v1, const polyhedron & v2);
+
+// G.Barrand : introduce iabs to avoid a mess with cmath and some compiler.
+inline int Sb_iabs(int a) {
+  return a < 0 ? -a : a;
+}
+
+inline //G.Barrand
+bool polyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
+/***********************************************************************
+ *                                                                     *
+ * Name: polyhedron::GetNextVertexIndex          Date:    03.09.96  *
+ * Author: Yasuhide Sawada                          Revised:           *
+ *                                                                     *
+ * Function:                                                           *
+ *                                                                     *
+ ***********************************************************************/
+{
+  static int iFace = 1;
+  static int iQVertex = 0;
+  //G.Barrand : int vIndex = pF[iFace].edge[iQVertex].v;
+  SbFacet::edge_t* edge = pF[iFace].edge; //G.Barrand : optimize.
+  int vIndex = edge[iQVertex].v;
+
+  edgeFlag = (vIndex > 0) ? 1 : 0;
+  index = Sb_iabs(vIndex);
+
+  if(index>nvert) {
+#ifdef TOOLS_HEP_PH_OUT_ERR
+    std::cerr << "polyhedron::GetNextVertexIndex: pV index problem " 
+              << index << " exceed " << nvert << std::endl;
+#endif
+    index = 0;
+  }
+
+  //G.Barrand : if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
+  if (iQVertex >= 3 || edge[iQVertex+1].v == 0) {
+    iQVertex = 0;
+    if (++iFace > nface) iFace = 1;
+    return false;  // Last Edge
+  }else{
+    ++iQVertex;
+    return true;  // not Last Edge
+  }
+}
+
+class polyhedron_trd2 : public polyhedron {
+ public:
+  polyhedron_trd2(double Dx1, double Dx2,
+                    double Dy1, double Dy2, double Dz);
+  virtual ~polyhedron_trd2(){}
+ public: 
+  polyhedron_trd2(const polyhedron_trd2& a_from):polyhedron(a_from){}
+  polyhedron_trd2& operator=(const polyhedron_trd2& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_arb8 : public polyhedron {
+ public:
+  polyhedron_arb8(double Dz,const double* xy);
+  virtual ~polyhedron_arb8(){}
+ public:
+  polyhedron_arb8(const polyhedron_arb8& a_from):polyhedron(a_from){}
+  polyhedron_arb8& operator=(const polyhedron_arb8& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_xtru : public polyhedron {
+ public:
+  polyhedron_xtru(int a_npts,int a_nz,
+                 double* a_xs,double* a_ys,double* a_zs,
+                 bool a_acw = true,
+                 bool a_zfb = true);
+  virtual ~polyhedron_xtru(){}
+ public:
+  polyhedron_xtru(const polyhedron_xtru& a_from):polyhedron(a_from){}
+  polyhedron_xtru& operator=(const polyhedron_xtru& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+};
+
+class polyhedron_hype : public polyhedron {
+ public:
+  polyhedron_hype(double a_st_in,double a_st_out, 
+                 double a_rmin,double a_rmax,double a_dz,
+                 int a_nz = 10,int a_nphi = 24);
+  virtual ~polyhedron_hype(){}
+ public:
+  polyhedron_hype(const polyhedron_hype& a_from):polyhedron(a_from){}
+  polyhedron_hype& operator=(const polyhedron_hype& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+};
+
+class polyhedron_trd1 : public polyhedron_trd2 {
+ public:
+  polyhedron_trd1(double Dx1, double Dx2,
+                    double Dy, double Dz);
+  virtual ~polyhedron_trd1(){}
+ public:
+  polyhedron_trd1(const polyhedron_trd1& a_from):polyhedron_trd2(a_from){}
+  polyhedron_trd1& operator=(const polyhedron_trd1& a_from){
+    polyhedron_trd2::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_box : public polyhedron_trd2 {
+ public:
+  polyhedron_box(double Dx, double Dy, double Dz);
+  virtual ~polyhedron_box(){}
+ public: 
+  polyhedron_box(const polyhedron_box& a_from):polyhedron_trd2(a_from){}
+  polyhedron_box& operator=(const polyhedron_box& a_from){
+    polyhedron_trd2::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_trap : public polyhedron {
+public:
+  polyhedron_trap(double Dz, double Theta, double Phi,
+                    double Dy1,
+                    double Dx1, double Dx2, double Alp1,
+                    double Dy2,
+                    double Dx3, double Dx4, double Alp2);
+  virtual ~polyhedron_trap(){}
+ public:
+  polyhedron_trap(const polyhedron_trap& a_from):polyhedron(a_from){}
+  polyhedron_trap& operator=(const polyhedron_trap& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_para : public polyhedron_trap {
+public:
+  polyhedron_para(double Dx, double Dy, double Dz,
+                 double Alpha, double Theta, double Phi);
+  virtual ~polyhedron_para(){}
+ public:
+  polyhedron_para(const polyhedron_para& a_from):polyhedron_trap(a_from){}
+  polyhedron_para& operator=(const polyhedron_para& a_from){
+    polyhedron_trap::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_cons : public polyhedron {
+public:
+  polyhedron_cons(double Rmn1, double Rmx1, 
+                   double Rmn2, double Rmx2, double Dz,
+                   double Phi1, double Dphi,
+                   int nstep = 0); //G.Barrand
+  virtual ~polyhedron_cons(){}
+ public:
+  polyhedron_cons(const polyhedron_cons& a_from):polyhedron(a_from){}
+  polyhedron_cons& operator=(const polyhedron_cons& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_cone : public polyhedron_cons {
+public:
+  polyhedron_cone(double Rmn1, double Rmx1, 
+                   double Rmn2, double Rmx2, double Dz,
+                   int nstep = 0); //G.Barrand
+  virtual ~polyhedron_cone(){}
+ public:
+  polyhedron_cone(const polyhedron_cone& a_from):polyhedron_cons(a_from){}
+  polyhedron_cone& operator=(const polyhedron_cone& a_from){
+    polyhedron_cons::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_tubs : public polyhedron_cons {
+public:
+  polyhedron_tubs(double Rmin, double Rmax, double Dz, 
+                   double Phi1, double Dphi,
+                   int nstep = 0); //G.Barrand
+  virtual ~polyhedron_tubs(){}
+ public:
+  polyhedron_tubs(const polyhedron_tubs& a_from):polyhedron_cons(a_from){}
+  polyhedron_tubs& operator=(const polyhedron_tubs& a_from){
+    polyhedron_cons::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_tube : public polyhedron_cons {
+public:
+  polyhedron_tube(double Rmin, double Rmax, double Dz,int nstep = 0); //G.Barrand
+  virtual ~polyhedron_tube(){}
+ public:
+  polyhedron_tube(const polyhedron_tube& a_from):polyhedron_cons(a_from){}
+  polyhedron_tube& operator=(const polyhedron_tube& a_from){
+    polyhedron_cons::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_pgon : public polyhedron {
+public:
+  polyhedron_pgon(double phi, double dphi, int npdv, int nz,
+                    const double *z,
+                    const double *rmin,
+                    const double *rmax);
+  virtual ~polyhedron_pgon(){}
+ public:
+  polyhedron_pgon(const polyhedron_pgon& a_from):polyhedron(a_from){}
+  polyhedron_pgon& operator=(const polyhedron_pgon& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_pcon : public polyhedron_pgon {
+public:
+  polyhedron_pcon(double phi, double dphi, int nz,
+                    const double *z,
+                    const double *rmin,
+                    const double *rmax);
+  virtual ~polyhedron_pcon(){}
+ public:
+  polyhedron_pcon(const polyhedron_pcon& a_from):polyhedron_pgon(a_from){}
+  polyhedron_pcon& operator=(const polyhedron_pcon& a_from){
+    polyhedron_pgon::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_sphere : public polyhedron {
+public:
+  polyhedron_sphere(double rmin, double rmax,
+                     double phi, double dphi,
+                     double the, double dthe,
+                     int nphi = 0,
+                     int nthe = 0); //G.Barrand
+  virtual ~polyhedron_sphere(){}
+ public:
+  polyhedron_sphere(const polyhedron_sphere& a_from):polyhedron(a_from){}
+  polyhedron_sphere& operator=(const polyhedron_sphere& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+class polyhedron_torus : public polyhedron {
+public:
+  polyhedron_torus(double rmin, double rmax, double rtor,
+                    double phi, double dphi,
+                    int nphi = 0,
+                    int nthe = 0); //G.Barrand
+  virtual ~polyhedron_torus(){}
+ public:
+  polyhedron_torus(const polyhedron_torus& a_from):polyhedron(a_from){}
+  polyhedron_torus& operator=(const polyhedron_torus& a_from){
+    polyhedron::operator=(a_from);
+    return *this;
+  }
+  //virtual polyhedron& operator = (const polyhedron& from) {
+  //  return polyhedron::operator = (from);
+  //}
+};
+
+//G.Barrand : begin
+class polyhedronProcessor {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::hep::polyhedronProcessor)
+#endif
+public:
+  enum Operation { //Must be the same than BooleanProcessor OP_XXX.
+     UNION  = 0
+    ,INTERSECTION = 1
+    ,SUBTRACTION = 2
+  };
+private:
+  typedef std::pair<Operation,polyhedron> op_t;
+public:
+  polyhedronProcessor(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~polyhedronProcessor(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+private:
+  polyhedronProcessor(const polyhedronProcessor&){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  polyhedronProcessor& operator=(const polyhedronProcessor&){return *this;}
+public:
+  void push_back(Operation a_op,const polyhedron& a_polyhedron) {
+    m_ops.push_back(op_t(a_op,a_polyhedron));
+  }
+  bool execute(polyhedron&);
+  void clear() { m_ops.clear();}
+  bool is_same_op() const {
+    if(!m_ops.size()) return true;
+    Operation op = m_ops[0].first;
+    std::vector<op_t>::const_iterator it;
+    for(it=m_ops.begin();it!=m_ops.end();++it) {
+      if((*it).first!=op) return false;
+    }
+    return true;
+  }
+
+//private:
+  bool execute1(polyhedron&,const std::vector<unsigned int>&);
+private:
+  std::vector<op_t> m_ops; 
+};
+//G.Barrand : end
+
+//inline const std::string& stype(const polyhedron&) {
+//  static const std::string s_v("tools::hep::polyhedron");
+//  return s_v;
+//}
+
+}}
+
+#include "polyhedron.icc"
+
+namespace tools {
+namespace hep {
+
+template <class MATRIX>
+inline void tsf_polyhedron(polyhedron& a_ph,const MATRIX& a_matrix) {
+  typedef typename MATRIX::elem_t T;                            
+  int nvert = a_ph.GetNoVertices();
+  hep::HVPoint3D* pV = a_ph.GetPV();
+  if (nvert > 0) {
+    T x,y,z;
+    for (int i=1; i<=nvert; i++) { 
+      hep::HVPoint3D& p = pV[i];
+      x = T(p.x());
+      y = T(p.y());
+      z = T(p.z());
+      a_matrix.mul_3(x,y,z);
+      p.set_value(x,y,z);
+    }
+  }
+}
+
+}}
+  
+#endif
+
+//--------------------------------------------------------------------//
+// JFB:                                                               //
+// polyhedron was HepPolyhedron, retrofitted to Open Inventor       //
+// infrastructure:                                                    //
+//--------------------------------------------------------------------//
+
+
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+//
+//
+// Class Description:
+// polyhedron is an intermediate class between description of a shape
+// and visualization systems. It is intended to provide some service like:
+//   - polygonization of shapes with triangulization (quadrilaterization)
+//     of complex polygons;
+//   - calculation of normals for faces and vertices;
+//   - finding result of boolean operation on polyhedra;
+//
+// Public constructors:
+//
+//   polyhedron_box (dx,dy,dz)
+//                                        - create polyhedron for Box;
+//   polyhedron_trd1 (dx1,dx2,dy,dz)
+//                                        - create polyhedron for G3 Trd1;
+//   polyhedron_trd2 (dx1,dx2,dy1,dy2,dz)
+//                                        - create polyhedron for G3 Trd2;
+//   polyhedron_trap (dz,theta,phi, h1,bl1,tl1,alp1, h2,bl2,tl2,alp2)
+//                                        - create polyhedron for G3 Trap;
+//   polyhedron_para (dx,dy,dz,alpha,theta,phi)
+//                                        - create polyhedron for G3 Para;
+//   polyhedron_tube (rmin,rmax,dz,nstep=0)
+//                                        - create polyhedron for G3 Tube;
+//   polyhedron_tubs (rmin,rmax,dz,phi1,dphi,nstep=0)
+//                                        - create polyhedron for G3 Tubs;
+//   polyhedron_cone (rmin1,rmax1,rmin2,rmax2,dz,nstep=0)
+//                                        - create polyhedron for G3 Cone;
+//   polyhedron_cons (rmin1,rmax1,rmin2,rmax2,dz,phi1,dphi,nstep=0)
+//                                        - create polyhedron for G3 Cons;
+//   polyhedron_pgon (phi,dphi,npdv,nz, z(*),rmin(*),rmax(*))
+//                                        - create polyhedron for G3 Pgon;
+//   polyhedron_pcon (phi,dphi,nz, z(*),rmin(*),rmax(*))
+//                                        - create polyhedron for G3 Pcon;
+//   polyhedron_sphere (rmin,rmax,phi,dphi,the,dthe,nstep=0)
+//                                        - create polyhedron for Sphere;
+//   polyhedron_torus (rmin,rmax,rtor,phi,dphi,nstep=0)
+//                                        - create polyhedron for Torus;
+// Public functions:
+//
+//   GetNoVertices ()       - returns number of vertices;
+//   GetNoFacets ()         - returns number of faces;
+//   GetNextVertexIndex (index,edgeFlag) - get vertex indeces of the
+//                            quadrilaterals in order;
+//                            returns false when finished each face;
+//   GetVertex (index)      - returns vertex by index;
+//   GetNextVertex (vertex,edgeFlag) - get vertices with edge visibility
+//                            of the quadrilaterals in order;
+//                            returns false when finished each face;
+//   GetNextVertex (vertex,edgeFlag,normal) - get vertices with edge
+//                            visibility and normal of the quadrilaterals
+//                            in order; returns false when finished each face;
+//   GetNextEdgeIndeces (i1,i2,edgeFlag) - get indeces of the next edge;
+//                            returns false for the last edge;
+//   GetNextEdgeIndeces (i1,i2,edgeFlag,iface1,iface2) - get indeces of
+//                            the next edge with indeces of the faces
+//                            to which the edge belongs;
+//                            returns false for the last edge;
+//   GetNextEdge (p1,p2,edgeFlag) - get next edge;
+//                            returns false for the last edge;
+//   GetNextEdge (p1,p2,edgeFlag,iface1,iface2) - get next edge with indeces
+//                            of the faces to which the edge belongs;
+//                            returns false for the last edge;
+//   GetFacet (index,n,nodes,edgeFlags=0,normals=0) - get face by index;
+//   GetNextFacet (n,nodes,edgeFlags=0,normals=0) - get next face with normals
+//                            at the nodes; returns false for the last face;
+//   GetNormal (index)      - get normal of face given by index;
+//   GetUnitNormal (index)  - get unit normal of face given by index;
+//   GetNextNormal (normal) - get normals of each face in order;
+//                            returns false when finished all faces;
+//   GetNextUnitNormal (normal) - get normals of unit length of each face
+//                            in order; returns false when finished all faces;
+//   GetSurfaceArea()       - get surface area of the polyhedron;
+//   GetVolume()            - get volume of the polyhedron;
+//   GetNumberOfRotationSteps()   - get number of steps for whole circle;
+//   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
+//   ResetNumberOfRotationSteps() - reset number of steps for whole circle
+//                            to default value;
+// History:
+//
+// 20.06.96 Evgeni Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
+//
+// 23.07.96 John Allison
+// - added GetNoVertices, GetNoFacets, GetNextVertex, GetNextNormal
+//
+// 30.09.96 E.Chernyaev
+// - added GetNextVertexIndex, GetVertex by Yasuhide Sawada
+// - added GetNextUnitNormal, GetNextEdgeIndeces, GetNextEdge
+// - improvements: angles now expected in radians
+//                 int -> G4int, double -> G4double  
+// - G4ThreeVector replaced by either G4Point3D or G4Normal3D
+//
+// 15.12.96 E.Chernyaev
+// - private functions G4PolyhedronAlloc, G4PolyhedronPrism renamed
+//   to AllocateMemory and CreatePrism
+// - added private functions GetNumberOfRotationSteps, RotateEdge,
+//   RotateAroundZ, SetReferences
+// - rewritten G4PolyhedronCons;
+// - added G4PolyhedronPara, ...Trap, ...Pgon, ...Pcon, ...Sphere, ...Torus,
+//   so full List of implemented shapes now looks like:
+//   BOX, TRD1, TRD2, TRAP, TUBE, TUBS, CONE, CONS, PARA, PGON, PCON,
+//   SPHERE, TORUS
+//
+// 01.06.97 E.Chernyaev
+// - RotateAroundZ modified and SetSideFacets added to allow Rmin=Rmax
+//   in bodies of revolution
+//
+// 24.06.97 J.Allison
+// - added static private member fNumberOfRotationSteps and static public
+//   functions void SetNumberOfRotationSteps (G4int n) and
+//   void ResetNumberOfRotationSteps ().  Modified
+//   GetNumberOfRotationSteps() appropriately.  Made all three functions
+//   inline (at end of this .hh file).
+//   Usage:
+//    G4Polyhedron::SetNumberOfRotationSteps
+//     (fpView -> GetViewParameters ().GetNoOfSides ());
+//    pPolyhedron = solid.CreatePolyhedron ();
+//    G4Polyhedron::ResetNumberOfRotationSteps ();
+//
+// 19.03.00 E.Chernyaev
+// - added boolean operations (add, subtract, intersect) on polyhedra;
+//
+// 25.05.01 E.Chernyaev
+// - added GetSurfaceArea() and GetVolume();
+//
+

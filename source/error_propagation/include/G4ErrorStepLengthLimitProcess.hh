@@ -38,33 +38,30 @@
 #ifndef G4ErrorStepLengthLimitProcess_hh
 #define G4ErrorStepLengthLimitProcess_hh
 
-#include "G4ios.hh" 
+#include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ElementTable.hh"
-#include "G4Gamma.hh" 
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4Step.hh" 
+#include "G4Step.hh"
 #include "G4VErrorLimitProcess.hh"
 
 //-----------------------------------------------------------------
 
 class G4ErrorStepLengthLimitProcess : public G4VErrorLimitProcess
 {
-
  public:  // with description
-  
-  G4ErrorStepLengthLimitProcess(const G4String& processName =
-                                     "G4ErrorStepLengthLimit");
+  G4ErrorStepLengthLimitProcess(
+    const G4String& processName = "G4ErrorStepLengthLimit");
   ~G4ErrorStepLengthLimitProcess();
-  
-  virtual G4double
-  PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                              G4double previousStepSize,
-                                              G4ForceCondition* condition );
-    // returns the step length
+
+  virtual G4double PostStepGetPhysicalInteractionLength(
+    const G4Track& track, G4double previousStepSize,
+    G4ForceCondition* condition);
+  // returns the step length
 };
-  
+
 #endif

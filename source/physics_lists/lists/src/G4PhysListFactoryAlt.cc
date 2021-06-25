@@ -40,8 +40,9 @@
 
 namespace g4alt {
 
-G4PhysListFactory::G4PhysListFactory()
+G4PhysListFactory::G4PhysListFactory(G4int verbose)
 {
+  SetVerbose(verbose);
 }
 
 G4PhysListFactory::~G4PhysListFactory()
@@ -64,7 +65,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   return G4PhysListRegistry::Instance()->GetModularPhysicsList(name);
 }
 
-G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name)
+G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name) const
 {
   return G4PhysListRegistry::Instance()->IsReferencePhysList(name);
 }

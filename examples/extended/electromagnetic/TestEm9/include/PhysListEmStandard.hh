@@ -23,12 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm9/include/PhysListEmStandard.hh
-/// \brief Definition of the PhysListEmStandard class
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//---------------------------------------------------------------------------
+//
+// ClassName:   PhysListEmStandard
+//
+// Author:      V.Ivanchenko 09.11.2005
+//
+// Modified:
+// 05.12.2005 V.Ivanchenko add controlled verbosity
+// 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
+// 18.01.2021 V.Ivanchenko copy this class from physics_list library
+//
+//----------------------------------------------------------------------------
+//
+// This class provides construction of default EM standard physics
+//
 
 #ifndef PhysListEmStandard_h
 #define PhysListEmStandard_h 1
@@ -40,25 +51,22 @@
 
 class PhysListEmStandard : public G4VPhysicsConstructor
 {
-public: 
+public:
 
-  PhysListEmStandard(const G4String& name = "standard");
-  virtual ~PhysListEmStandard();
+  explicit PhysListEmStandard(G4int ver = 1);
 
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  ~PhysListEmStandard() override;
+
+  void ConstructParticle() override;
+  void ConstructProcess() override;
+
+private:
+  G4int  verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 
 
 

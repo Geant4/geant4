@@ -114,7 +114,7 @@ void DetectorConstruction::DefineMaterials()
   BGO->AddElement(Ge, natoms= 3);
   BGO->AddElement(Bi, natoms= 4);
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ////G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,9 +144,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     fPhysiEcal = new G4PVPlacement(0,G4ThreeVector(),
                                    fLogicEcal,"Ecal",0,false,0);
   }
-  G4cout << "Absorber is " << G4BestUnit(fEcalLength,"Length")
+  G4cout << "\n Absorber is " << G4BestUnit(fEcalLength,"Length")
          << " of " << fMaterial->GetName()
-         << "  R= " << fEcalRadius/cm << " cm" << G4endl;
+         << "  R= " << fEcalRadius/cm << " cm \n" << G4endl;
+  G4cout << fMaterial << G4endl;	 
   //
   //always return the physical World
   //

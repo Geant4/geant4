@@ -112,6 +112,21 @@ add_custom_target(validate_sources
   COMMENT "Validating Geant4 Module Source Lists"
   )
 
+#.rst:
+# A custom ``validate_no_module_cycles`` is declared if Python3.9 is available.
+# This runs the geant4_check_module_cycles Python script to check that the
+# source module dependency graph has no cycles. It will fail if any cycles
+# are found, listing the first found to stderr.
+find_package(Python3 3.9 QUIET COMPONENTS Interpreter)
+if(Python3_FOUND)
+  add_custom_target(validate_no_module_cycles
+    COMMAND Python3::Interpreter
+            ${PROJECT_SOURCE_DIR}/cmake/Modules/geant4_check_module_cycles.py
+            -f ${PROJECT_BINARY_DIR}/G4ModuleAdjacencyList.txt
+    COMMENT "Checking for cycles in declared source module dependencies"
+    )
+endif()
+
 #-----------------------------------------------------------------------
 #.rst:
 # General Installation Settings

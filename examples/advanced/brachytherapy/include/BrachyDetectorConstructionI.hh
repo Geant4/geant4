@@ -30,7 +30,9 @@
 //    *    BrachyDetectorConstructionI.hh     *
 //    *                                      *
 //    ****************************************
-// Model of the Iodium source
+//
+// Author: Susanna Guatelli, susanna@uow.edu.au
+// Model of Bebig Isoseed Iodine source
 //
 #ifndef BrachyDetectorConstructionI_H
 #define BrachyDetectorConstructionI_H 1
@@ -42,16 +44,15 @@ class G4Tubs;
 class G4Sphere;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionI
 {
 public:
-  BrachyDetectorConstructionI();
+  explicit BrachyDetectorConstructionI();
   ~BrachyDetectorConstructionI();
-  void  ConstructIodine(G4VPhysicalVolume*);// Construct iodium source
-  void  CleanIodine();
+  void  ConstructIodine(G4VPhysicalVolume*);// Construct iodine source
+  void  CleanIodine(); // Clean iodine source
 private:
   G4Tubs* fDefaultTub;
   G4Tubs* fCapsule;
@@ -69,8 +70,6 @@ private:
   G4VisAttributes* fSimpleIodineVisAtt;
   G4VisAttributes* fSimpleCapsuleVisAtt;
   G4VisAttributes* fSimpleCapsuleTipVisAtt;
-
-  BrachyMaterial* fMaterial;   
 };
 #endif
 

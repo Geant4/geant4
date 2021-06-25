@@ -36,6 +36,8 @@
 #include <Qt3DCore>
 #include <fstream>
 
+//#define G4QT3DDEBUG
+
 class G4Colour;
 
 namespace G4Qt3DUtils {

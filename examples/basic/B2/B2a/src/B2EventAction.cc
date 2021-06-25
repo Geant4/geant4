@@ -71,9 +71,9 @@ void B2EventAction::EndOfEventAction(const G4Event* event)
              << " trajectories stored in this event." << G4endl;
     }
     G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-    G4cout << "    "  
+    G4cout << "    "
            << hc->GetSize() << " hits stored in this event" << G4endl;
   }
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

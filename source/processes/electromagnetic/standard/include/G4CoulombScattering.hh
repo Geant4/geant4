@@ -58,28 +58,27 @@ public:
 
   explicit G4CoulombScattering(const G4String& name = "CoulombScat");
 
-  virtual ~G4CoulombScattering();
+  ~G4CoulombScattering() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
+  G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
+
+  G4CoulombScattering & operator=(const G4CoulombScattering &right) = delete;
+  G4CoulombScattering(const G4CoulombScattering&) = delete;
 
 protected:
 
   // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
+  void StreamProcessInfo(std::ostream& outFile) const override;
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*) final;
+  G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+			    const G4Material*) final;
 
 private:
-
- // hide assignment operator
-  G4CoulombScattering & operator=(const G4CoulombScattering &right) = delete;
-  G4CoulombScattering(const G4CoulombScattering&) = delete;
   
   G4double q2Max;
   G4bool isInitialised;

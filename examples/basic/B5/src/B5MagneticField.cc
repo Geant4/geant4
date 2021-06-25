@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5MagneticField::B5MagneticField()
-: G4MagneticField(), 
+: G4MagneticField(),
   fMessenger(nullptr), fBy(1.0*tesla)
 {
   // define commands for this class
@@ -46,8 +46,8 @@ B5MagneticField::B5MagneticField()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5MagneticField::~B5MagneticField()
-{ 
-  delete fMessenger; 
+{
+  delete fMessenger;
 }
 
 void B5MagneticField::GetFieldValue(const G4double [4],double *bField) const
@@ -62,14 +62,14 @@ void B5MagneticField::GetFieldValue(const G4double [4],double *bField) const
 void B5MagneticField::DefineCommands()
 {
   // Define /B5/field command directory using generic messenger class
-  fMessenger = new G4GenericMessenger(this, 
-                                      "/B5/field/", 
+  fMessenger = new G4GenericMessenger(this,
+                                      "/B5/field/",
                                       "Field control");
 
-  // fieldValue command 
+  // fieldValue command
   auto& valueCmd
     = fMessenger->DeclareMethodWithUnit("value","tesla",
-                                &B5MagneticField::SetField, 
+                                &B5MagneticField::SetField,
                                 "Set field strength.");
   valueCmd.SetParameterName("field", true);
   valueCmd.SetDefaultValue("1.");

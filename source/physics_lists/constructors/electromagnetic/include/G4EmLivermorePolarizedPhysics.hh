@@ -38,11 +38,6 @@ public:
   explicit G4EmLivermorePolarizedPhysics(G4int ver=1, const G4String& name="");
 
   ~G4EmLivermorePolarizedPhysics() override;
-
-  void ConstructProcess() override;
-
-private:
-  G4int  verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

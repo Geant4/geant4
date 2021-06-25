@@ -24,10 +24,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/management/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
-            -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-	    -I$(G4BASE)/processes/hadronic/models/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include/ \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include/ \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include/ \
@@ -36,7 +33,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include/ \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include/ \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include/ \
-	    -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
 	    -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
 	    -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \

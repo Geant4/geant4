@@ -271,9 +271,8 @@ G4LindhardSorensenIonModel::ComputeDEDXPerVolume(const G4Material* material,
 void 
 G4LindhardSorensenIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                                  const G4DynamicParticle* dp,
-                                                 G4double& eloss,
-                                                 G4double&,
-                                                 G4double length)
+                                                 const G4double& length,
+                                                 G4double& eloss)
 {
   const G4ParticleDefinition* p = dp->GetDefinition();
   SetParticle(p);

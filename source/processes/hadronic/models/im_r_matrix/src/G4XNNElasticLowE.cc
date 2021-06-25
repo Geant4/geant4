@@ -32,7 +32,7 @@
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"
-#include "G4PhysicsLnVector.hh"
+#include "G4PhysicsLogVector.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
@@ -96,12 +96,12 @@ G4XNNElasticLowE::G4XNNElasticLowE()
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - Low energy limit not valid");    
   if (_highLimit > _eMax)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - High energy limit not valid");    
-  G4PhysicsVector* pp = new G4PhysicsLnVector(_eMin,_eMax,tableSize);
+  G4PhysicsVector* pp = new G4PhysicsLogVector(_eMin,_eMax,tableSize);
 
   _eMin = G4Exp(G4Log(_eMinTable)-_eStepLog)*GeV;
   if (_eMin < _lowLimit)
     throw G4HadronicException(__FILE__, __LINE__, "G4XNNElasticLowE::G4XNNElasticLowE - Low energy limit not valid");
-  G4PhysicsVector* np = new G4PhysicsLnVector(_eMin,_eMax,tableSize);
+  G4PhysicsVector* np = new G4PhysicsLogVector(_eMin,_eMax,tableSize);
 
   G4int i;
   for (i=0; i<tableSize; i++)

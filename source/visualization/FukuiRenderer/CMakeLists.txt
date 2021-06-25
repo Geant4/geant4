@@ -1,6 +1,3 @@
-#------------------------------------------------------------------------------
-# Module : G4FR
-# Package: Geant4.src.G4visualization.G4FR
-#------------------------------------------------------------------------------
+# - G4FR category build
 
 geant4_global_library_target(COMPONENTS sources.cmake)

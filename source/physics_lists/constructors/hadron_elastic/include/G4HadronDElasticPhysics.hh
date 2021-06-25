@@ -38,10 +38,9 @@
 #ifndef G4HadronDElasticPhysics_h
 #define G4HadronDElasticPhysics_h 1
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4HadronElasticPhysics.hh"
 
-class G4HadronDElasticPhysics : public G4VPhysicsConstructor
+class G4HadronDElasticPhysics : public G4HadronElasticPhysics
 {
 public: 
 
@@ -49,24 +48,13 @@ public:
 
   virtual ~G4HadronDElasticPhysics();
 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  void ConstructParticle() override;
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
   void ConstructProcess() override;
-
-private:
 
   G4HadronDElasticPhysics(G4HadronDElasticPhysics &) = delete;
   G4HadronDElasticPhysics & operator=
   (const G4HadronDElasticPhysics &right) = delete;
 
-  G4int verbose;
 };
-
 
 #endif
 

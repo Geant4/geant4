@@ -28,9 +28,7 @@
 /// \brief Implementation of the OpNoviceSteppingAction class
 
 #include "OpNoviceSteppingAction.hh"
-
 #include "OpNoviceRun.hh"
-
 #include "G4Event.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
@@ -46,11 +44,9 @@ OpNoviceSteppingAction::OpNoviceSteppingAction(OpNoviceEventAction* event)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceSteppingAction::~OpNoviceSteppingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
 {
   static G4ParticleDefinition* opticalphoton =
@@ -97,5 +93,4 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
     }
   }
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

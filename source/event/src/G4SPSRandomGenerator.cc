@@ -191,7 +191,7 @@ void G4SPSRandomGenerator::SetVerbosity(G4int a)
 
 namespace
 {
-  G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
+  G4PhysicsFreeVector ZeroPhysVector; // for re-set only
 }
 
 void G4SPSRandomGenerator::ReSetHist(const G4String& atype)

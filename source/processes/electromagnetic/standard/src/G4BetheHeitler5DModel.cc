@@ -122,12 +122,6 @@
 
 #include <cassert>
 
-// // Q : Use enum G4EmProcessSubType hire ?
-// enum G45DConversionMode
-//   {
-//     kEPair, kMuPair
-//   };
-
 const G4int kEPair = 0;
 const G4int kMuPair = 1;
 
@@ -136,11 +130,13 @@ const G4int kMuPair = 1;
 
 G4BetheHeitler5DModel::G4BetheHeitler5DModel(const G4ParticleDefinition* pd,
                                              const G4String& nam)
-  : G4PairProductionRelModel(pd, nam),fVerbose(1),fConversionType(0),
-    iraw(false),
+  : G4PairProductionRelModel(pd, nam),
     fLepton1(G4Electron::Definition()),fLepton2(G4Positron::Definition()),
+    fTheMuPlus(G4MuonPlus::Definition()),fTheMuMinus(G4MuonMinus::Definition()),
+    fVerbose(1),
+    fConversionType(0),
     fConvMode(kEPair),
-    fTheMuPlus(G4MuonPlus::Definition()),fTheMuMinus(G4MuonMinus::Definition())
+    iraw(false)
 {
   theIonTable = G4IonTable::GetIonTable();
   //Q: Do we need this on Model
@@ -167,7 +163,7 @@ void G4BetheHeitler5DModel::Initialise(const G4ParticleDefinition* part,
   // > 3 print rejection warning from transformation (fix bug from gammaray .. )
   // > 4 print photon direction & polarisation
   fVerbose = theManager->Verbose();
-  fConversionType  = theManager->GetConversionType();
+  fConversionType = theManager->GetConversionType();
   //////////////////////////////////////////////////////////////
   // iraw :
   //      true  : isolated electron or nucleus.

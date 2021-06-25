@@ -1,0 +1,112 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// 20/2/2019
+// Author: HoangTRAN
+
+#ifndef G4DNAIndependentReactionTimeStepper_hh
+#define G4DNAIndependentReactionTimeStepper_hh 1
+
+#include "G4VITTimeStepComputer.hh"
+#include "G4KDTreeResult.hh"
+#include "G4IRTUtils.hh"
+#include "G4VReactionType.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
+#include <memory>
+#include <set>
+
+class G4VReactionTypeManager;
+class G4VDNAReactionModel;
+class G4DNAMolecularReactionTable;
+class G4MolecularConfiguration;
+class G4DNAReactionTypeManager;
+class G4Molecule;
+class G4ITReactionSet;
+class G4ITReactionChange;
+class G4VITReactionProcess;
+class G4ITTrackHolder;
+
+class G4DNAIndependentReactionTimeStepper : public G4VITTimeStepComputer
+{
+public:
+    G4DNAIndependentReactionTimeStepper();
+    ~G4DNAIndependentReactionTimeStepper() override = default;
+    G4DNAIndependentReactionTimeStepper(const G4DNAIndependentReactionTimeStepper&) = delete;
+    G4DNAIndependentReactionTimeStepper& operator=(const G4DNAIndependentReactionTimeStepper&) = delete;
+
+    void Prepare() override;
+    G4double CalculateStep(const G4Track&, const G4double&) override;
+    G4double CalculateMinTimeStep(G4double, G4double) override;
+
+    void SetReactionModel(G4VDNAReactionModel*);
+    G4VDNAReactionModel* GetReactionModel();
+
+    std::unique_ptr<G4ITReactionChange>
+    FindReaction(G4ITReactionSet* pReactionSet,
+                 const G4double& currentStepTime = 0,
+                 const G4double& previousStepTime = 0,
+                 const G4bool& reachedUserStepTimeLimit = false);
+
+    void SetReactionProcess(G4VITReactionProcess* pReactionProcess);
+
+    void SetReactionTypeManager(G4VReactionTypeManager* typeManager);
+    void SetVerbose(G4int);
+private:
+    void InitializeForNewTrack();
+    ReactionType GetReactionType(const G4Track& trackA, const G4Track& trackB);
+
+    class Utils;
+
+    void CheckAndRecordResults(const Utils& utils);
+
+    G4double GetTimeToEncounter(const G4Track& trackA,
+                                const G4Track& trackB);
+
+    G4bool fHasAlreadyReachedNullTime;
+    const G4DNAMolecularReactionTable*& fMolecularReactionTable;
+    G4VDNAReactionModel* fReactionModel;
+    G4ITTrackHolder* fpTrackContainer;
+    G4ITReactionSet* fReactionSet;
+    G4int fVerbose;
+    G4double fRCutOff;
+    G4DNAReactionTypeManager* fReactionTypeManager;
+
+    G4VITReactionProcess* fpReactionProcess;
+    std::map<G4int,G4ThreeVector> fSampledPositions;
+
+    class Utils
+    {
+    public:
+        Utils(const G4Track& tA, const G4Track& tB);
+        ~Utils() = default;
+        const G4Track& fTrackA;
+        const G4Track& fTrackB;
+        const G4Molecule* fpMoleculeA;
+        const G4Molecule* fpMoleculeB;
+    };
+};
+#endif

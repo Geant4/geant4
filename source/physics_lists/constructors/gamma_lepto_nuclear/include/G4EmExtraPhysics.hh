@@ -48,7 +48,7 @@
 #include "G4EmMessenger.hh"
 
 class G4CascadeInterface;
-class G4PhotoNuclearProcess;
+class G4HadronInelasticProcess;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -91,7 +91,7 @@ private:
   void ConstructGammaElectroNuclear();
 
   void ConstructLENDGammaNuclear(G4CascadeInterface* cascade,
-                                 G4PhotoNuclearProcess* gnuc);
+                                 G4HadronInelasticProcess* gnuc);
 
   G4bool gnActivated;
   G4bool eActivated;

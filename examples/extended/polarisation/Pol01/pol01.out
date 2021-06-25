@@ -3,8 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,59 +18,6 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-Visualization Manager instantiating with verbosity "warnings (3)"...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Registered graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
-  OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
-  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByAttribute
-  drawByCharge
-  drawByOriginVolume
-  drawByParticleID
-  drawByEncounteredVolume
-
-Registered models:
-  None
-
-Registered filter factories:
-  attributeFilter
-  chargeFilter
-  originVolumeFilter
-  particleFilter
-  encounteredVolumeFilter
-
-Registered filters:
-  None
-
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
-
-Some /vis commands (optionally) take a string to specify colour.
-"/vis/list" to see available colours.
 ... create file : pol01.root - done
 ... open analysis file : pol01.root - done
 /run/verbose 2
@@ -102,62 +55,63 @@ theBox : (0,0,0.08)
 /run/beamOn 10000
  buildBhabha cross section 0
  buildBhabha cross section 0
-G4PolarizedPEEffectCrossSection() init
 
 pol-phot:  for gamma SubType=12 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
+Polarized-PhotoElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila
 
 pol-compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   Polarized-Compton : Emin=    0 eV  Emax=  100 TeV
+   Polarized-Compton : Emin=    0 meV Emax=  100 TeV
 
 pol-conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             polConv : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+             polConv : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-pol-eIoni:  for e-  SubType=2
+pol-eIoni:  for e-  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
+PolarizedMollerBhabha : Emin=    0 meV Emax=  100 TeV
 
-pol-eBrem:  for e-  SubType=3
+pol-eBrem:  for e-  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 100000 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PolBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+             PolBrem : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-              StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llimit=1
+            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-pol-eIoni:  for e+  SubType=2
+pol-eIoni:  for e+  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
+PolarizedMollerBhabha : Emin=    0 meV Emax=  100 TeV
 
-pol-eBrem:  for e+  SubType=3
+pol-eBrem:  for e+  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 100000 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PolBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+             PolBrem : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
 
-pol-annihil:  for e+, integral:1  SubType=5 BuildTable=0
+pol-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-Annihilation : Emin=    0 eV  Emax=  100 TeV
+Polarized-Annihilation : Emin=    0 meV Emax=  100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -195,8 +149,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
 --> Event 0 starts.
@@ -204,57 +156,55 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.105842s Sys=0.000000s
+  User=0.050000s Real=0.052353s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31150
-	pol-compt = 288
-	pol-eBrem = 336
-	msc = 1703
-	pol-conv = 208
-	pol-eIoni = 680
-	pol-annihil = 64
-	pol-phot = 174
+	Transportation = 31026
+	pol-conv = 197
+	msc = 1499
+	pol-eBrem = 283
+	pol-phot = 145
+	pol-eIoni = 618
+	pol-compt = 260
+	pol-annihil = 55
  Gamma: 
-Mean Number per Event :1.0075
-Mean Energy :9.5879 MeV +- 1.873 MeV
-Mean Polarization :-0.96606 +- 0.17867
+Mean Number per Event :1.0044
+Mean Energy :9.6333 MeV +- 1.7791 MeV
+Mean Polarization :-0.9698 +- 0.16794
  Electron: 
-Mean Number per Event :0.0351
-Mean Energy :5.0764 MeV +- 2.6308 MeV
-Mean Polarization :-0.70158 +- 0.30574
+Mean Number per Event :0.0321
+Mean Energy :5.405 MeV +- 2.5648 MeV
+Mean Polarization :-0.72686 +- 0.3046
  Positron: 
-Mean Number per Event :0.0149
-Mean Energy :4.2903 MeV +- 2.0442 MeV
-Mean Polarization :-0.64106 +- 0.30908
+Mean Number per Event :0.0148
+Mean Energy :4.2005 MeV +- 2.0177 MeV
+Mean Polarization :-0.59627 +- 0.33881
 ... write file : pol01.root - done
 ... close file : pol01.root - done
 
---------- Ranlux engine status ---------
- Initial seed = 9876
- float_seed_table[] = 0.833699 0.78332 0.0652168 0.500713 0.232817 0.0598344 0.0871152 0.627404 0.0401857 0.252922 0.831884 0.0136842 0.406118 0.820797 0.13577 0.449864 0.770882 0.364361 0.729599 0.943753 0.876379 0.253382 0.754363 0.37449 
- i_lag = 7, j_lag = 17
- carry = 0, count24 = 2
- luxury = 3 nskip = 199
-----------------------------------------
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1070029060380044275, 1452744244067288775, 484797723570206551, 810534345944831089, 1785012081452881778, 363774572091969476, 642299707523813964, 1095801661099078560, 2038040517141041611, 969700547076028694, 1867474704091568856, 38203698131185750, 951718104572890248, 1382836620322085169, 1187203719546800534, 603875856701136428, 1986087757022693175} counter= 10sumtot= 283390847025993325
+---------------------------------------
 #
-Graphics systems deleted.
-Visualization Manager deleting...
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
+UserActionInitialization deleted.
+UserWorkerInitialization deleted.
+UserWorkerThreadInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
 Total navigation history collections cleaned: 7
+G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
@@ -272,3 +222,4 @@ G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted. Good bye :)
+RunManager is deleted.

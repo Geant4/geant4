@@ -39,10 +39,7 @@
 
 // Class description:
 // Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
 // -------------------------------------------------------------------
-
 
 #ifndef G4ecpssrBaseLixsModel_hh
 #define G4ecpssrBaseLixsModel_hh 1
@@ -53,43 +50,29 @@
 #include <vector>
 
 class G4ecpssrBaseLixsModel : public G4VecpssrLiModel
-
 {
 public:
-
-  G4ecpssrBaseLixsModel();
+  explicit G4ecpssrBaseLixsModel();
 
   ~G4ecpssrBaseLixsModel();
 			     
-  G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) override;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
-  G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) override;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
-  G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) override;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 				    
   G4double CalculateVelocity(G4int subShell, G4int zTarget,G4double massIncident, G4double energyIncident); 
-			      
   G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
-
-   
+  G4ecpssrBaseLixsModel(const G4ecpssrBaseLixsModel&) = delete;
+  G4ecpssrBaseLixsModel & operator = (const G4ecpssrBaseLixsModel &right) = delete;
 
 private:
-
-
-  G4ecpssrBaseLixsModel(const G4ecpssrBaseLixsModel&);
-  G4ecpssrBaseLixsModel & operator = (const G4ecpssrBaseLixsModel &right);
-
   G4double FunctionFL1(G4double k, G4double theta);
-  
   G4double FunctionFL2(G4double k, G4double theta);
-
-
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
   G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
- 
   G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-  
   G4double QuadInterpolator(G4double e11, 
  		            G4double e12, 
 			    G4double e21, 
@@ -103,17 +86,13 @@ private:
 			    G4double t, 
 			    G4double e);
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
-
-  TriDimensionMap FL1Data;
-  
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  TriDimensionMap FL1Data;  
   TriDimensionMap FL2Data;
-  std::vector<double> dummyVec1;
-  std::vector<double> dummyVec2;
+  std::vector<G4double> dummyVec1;
+  std::vector<G4double> dummyVec2;
 
-
-
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
   VecMap aVecMap1;
   VecMap aVecMap2;
 

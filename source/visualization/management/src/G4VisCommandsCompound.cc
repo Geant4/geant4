@@ -372,28 +372,20 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   auto errorCode = UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
-  if (errorCode == 0) {
-    UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
-  } else {
-    // Use set to get alphabetical order
-    std::set<G4String> candidates;
-    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
-      // Just list nicknames, but exclude FALLBACK nicknames
-      for (const auto& nickname: gs->GetNicknames()) {
-        if (!nickname.contains("FALLBACK")) {
-          candidates.insert(nickname);
-        }
-      }
-    }
-    std::ostringstream oss;
-    oss << "Candidates are:";
-    for (const auto& candidate: candidates) {
-      oss << ' ' << candidate;
-    };
-    G4cerr << oss.str() << G4endl;
-    command->CommandFailed(oss);
+  if (errorCode != 0) {
+    G4ExceptionDescription ed;
+    ed << "sub-command \"/vis/sceneHandler/create\" failed.";
+    command->CommandFailed(errorCode,ed);
+    goto restore;
   }
-  UImanager->SetVerboseLevel(keepVerbose);
+  errorCode = UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
+  if (errorCode != 0) {
+    G4ExceptionDescription ed;
+    ed << "sub-command \"/vis/viewer/create\" failed.";
+    command->CommandFailed(errorCode,ed);
+    goto restore;
+  }
+restore:  UImanager->SetVerboseLevel(keepVerbose);
 }
 
 ////////////// /vis/specify ///////////////////////////////////////

@@ -46,20 +46,19 @@ class G4Tubs;
 class G4Box;
 class G4Sphere;
 class G4VPhysicalVolume;
-class BrachyMaterial;
 class G4VisAttributes;
 
 class BrachyDetectorConstructionTG186
 {
 public:
-  BrachyDetectorConstructionTG186();
+  explicit BrachyDetectorConstructionTG186();
   ~BrachyDetectorConstructionTG186();
 
   void  ConstructTG186(G4VPhysicalVolume*);
   // Model the TG186 reference source
 
   void  CleanTG186(); 
-  // Destroy the TG186 reference source in the experimental set-up
+  // Clean the TG186 reference source 
 
 private:   
   G4Tubs* fTG186capsule ;
@@ -74,9 +73,6 @@ private:
   G4Tubs* fTG186cable;
   G4LogicalVolume* fTG186cableLog;
   G4VPhysicalVolume* fTG186cablePhys;
-    
-  BrachyMaterial* fMat;    
-
   G4VisAttributes* fTG186simpleCapsuleVisAtt;
   G4VisAttributes* fTG186simpleCapsuleTipVisAtt;
   G4VisAttributes* fTG186simpleIridiumVisAtt;

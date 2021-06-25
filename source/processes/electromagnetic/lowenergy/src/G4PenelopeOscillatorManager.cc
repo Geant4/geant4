@@ -59,18 +59,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4ThreadLocal G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::instance = nullptr;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() :
-  oscillatorStoreIonisation(0),oscillatorStoreCompton(0),atomicNumber(0),
-  atomicMass(0),excitationEnergy(0),plasmaSquared(0),atomsPerMolecule(0),
-  atomTablePerMolecule(0)
+  fOscillatorStoreIonisation(nullptr),fOscillatorStoreCompton(nullptr),
+  fAtomicNumber(nullptr),fAtomicMass(nullptr),fExcitationEnergy(nullptr),
+  fPlasmaSquared(nullptr),fAtomsPerMolecule(nullptr),
+  fAtomTablePerMolecule(nullptr)
 {
   fReadElementData = false;
   for (G4int i=0;i<5;i++)
     {
       for (G4int j=0;j<2000;j++)
-	elementData[i][j] = 0.;
+	fElementData[i][j] = 0.;
     }
-  verbosityLevel = 0;
+  fVerbosityLevel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -80,10 +85,6 @@ G4PenelopeOscillatorManager::~G4PenelopeOscillatorManager()
   Clear();
   delete instance;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4ThreadLocal G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -98,16 +99,16 @@ G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::GetOscillatorManager()
 
 void G4PenelopeOscillatorManager::Clear()
 {
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     G4cout << " G4PenelopeOscillatorManager::Clear() - Clean Oscillator Tables" << G4endl;
 
   //Clean up OscillatorStoreIonisation
-  for (auto& item : (*oscillatorStoreIonisation))
+  for (auto& item : (*fOscillatorStoreIonisation))
     {
       G4PenelopeOscillatorTable* table = item.second;
       if (table)
 	{
-	  for (size_t k=0;k<table->size();k++) //clean individual oscillators
+	  for (size_t k=0;k<table->size();++k) //clean individual oscillators
 	    {
 	      if ((*table)[k])
 		delete ((*table)[k]);
@@ -115,15 +116,15 @@ void G4PenelopeOscillatorManager::Clear()
 	  delete table;
 	}
     }
-  delete oscillatorStoreIonisation;
+  delete fOscillatorStoreIonisation;
 
   //Clean up OscillatorStoreCompton
-  for (auto& item : (*oscillatorStoreCompton))
+  for (auto& item : (*fOscillatorStoreCompton))
     {
       G4PenelopeOscillatorTable* table = item.second;
       if (table)
 	{
-	  for (size_t k=0;k<table->size();k++) //clean individual oscillators
+	  for (size_t k=0;k<table->size();++k) //clean individual oscillators
 	    {
 	      if ((*table)[k])
 		delete ((*table)[k]);
@@ -131,14 +132,14 @@ void G4PenelopeOscillatorManager::Clear()
 	  delete table;
 	}
     }
-  delete oscillatorStoreCompton;
+  delete fOscillatorStoreCompton;
 
-  if (atomicMass) delete atomicMass;
-  if (atomicNumber) delete atomicNumber;
-  if (excitationEnergy) delete excitationEnergy;
-  if (plasmaSquared) delete plasmaSquared;
-  if (atomsPerMolecule) delete atomsPerMolecule;
-  if (atomTablePerMolecule) delete atomTablePerMolecule;
+  if (fAtomicMass) delete fAtomicMass;
+  if (fAtomicNumber) delete fAtomicNumber;
+  if (fExcitationEnergy) delete fExcitationEnergy;
+  if (fPlasmaSquared) delete fPlasmaSquared;
+  if (fAtomsPerMolecule) delete fAtomsPerMolecule;
+  if (fAtomTablePerMolecule) delete fAtomTablePerMolecule;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,7 +150,8 @@ void G4PenelopeOscillatorManager::Dump(const G4Material* material)
   if (!theTable)
     {
       G4cout << " G4PenelopeOscillatorManager::Dump " << G4endl;
-      G4cout << "Problem in retrieving the Ionisation Oscillator Table for " << material->GetName() << G4endl;
+      G4cout << "Problem in retrieving the Ionisation Oscillator Table for " 
+	     << material->GetName() << G4endl;
       return;
     }
   G4cout << "*********************************************************************" << G4endl;
@@ -173,19 +175,20 @@ void G4PenelopeOscillatorManager::Dump(const G4Material* material)
   for (size_t k=0;k<theTable->size();k++)
     {
       G4cout << k << " " << (*theTable)[k]->GetOscillatorStrength() << " " <<
-	(*theTable)[k]->GetIonisationEnergy()/eV << " " << (*theTable)[k]->GetResonanceEnergy()/eV << " " <<
+	(*theTable)[k]->GetIonisationEnergy()/eV << " " 
+	     << (*theTable)[k]->GetResonanceEnergy()/eV << " " <<
 	(*theTable)[k]->GetParentZ() << " " << (*theTable)[k]->GetShellFlag() << " " <<
 	(*theTable)[k]->GetParentShellID() << G4endl;
     }
   G4cout << "*********************************************************************" << G4endl;
-
 
   //Compton table
   theTable = GetOscillatorTableCompton(material);
   if (!theTable)
     {
       G4cout << " G4PenelopeOscillatorManager::Dump " << G4endl;
-      G4cout << "Problem in retrieving the Compton Oscillator Table for " << material->GetName() << G4endl;
+      G4cout << "Problem in retrieving the Compton Oscillator Table for " << 
+	material->GetName() << G4endl;
       return;
     }
   G4cout << "*********************************************************************" << G4endl;
@@ -222,42 +225,42 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
 {
   //Tables should be created at the same time, since they are both filled
   //simultaneously
-  if (!oscillatorStoreIonisation)
+  if (!fOscillatorStoreIonisation)
     {
-      oscillatorStoreIonisation = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
+      fOscillatorStoreIonisation = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
       if (!fReadElementData)
 	ReadElementData();
-      if (!oscillatorStoreIonisation)
+      if (!fOscillatorStoreIonisation)
 	//It should be ok now
 	G4Exception("G4PenelopeOscillatorManager::GetOscillatorTableIonisation()",
 		    "em2034",FatalException,
 		    "Problem in allocating the Oscillator Store for Ionisation");
     }
 
-  if (!oscillatorStoreCompton)
+  if (!fOscillatorStoreCompton)
     {
-      oscillatorStoreCompton = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
+      fOscillatorStoreCompton = new std::map<const G4Material*,G4PenelopeOscillatorTable*>;
       if (!fReadElementData)
 	ReadElementData();
-      if (!oscillatorStoreCompton)
+      if (!fOscillatorStoreCompton)
 	//It should be ok now
 	G4Exception("G4PenelopeOscillatorManager::GetOscillatorTableIonisation()",
 		    "em2034",FatalException,
 		    "Problem in allocating the Oscillator Store for Compton");
     }
 
-  if (!atomicNumber)
-    atomicNumber = new std::map<const G4Material*,G4double>;
-  if (!atomicMass)
-    atomicMass = new std::map<const G4Material*,G4double>;
-  if (!excitationEnergy)
-    excitationEnergy = new std::map<const G4Material*,G4double>;
-  if (!plasmaSquared)
-    plasmaSquared = new std::map<const G4Material*,G4double>;
-  if (!atomsPerMolecule)
-    atomsPerMolecule = new std::map<const G4Material*,G4double>;
-  if (!atomTablePerMolecule)
-    atomTablePerMolecule = new std::map< std::pair<const G4Material*,G4int>, G4double>;
+  if (!fAtomicNumber)
+    fAtomicNumber = new std::map<const G4Material*,G4double>;
+  if (!fAtomicMass)
+    fAtomicMass = new std::map<const G4Material*,G4double>;
+  if (!fExcitationEnergy)
+    fExcitationEnergy = new std::map<const G4Material*,G4double>;
+  if (!fPlasmaSquared)
+    fPlasmaSquared = new std::map<const G4Material*,G4double>;
+  if (!fAtomsPerMolecule)
+    fAtomsPerMolecule = new std::map<const G4Material*,G4double>;
+  if (!fAtomTablePerMolecule)
+    fAtomTablePerMolecule = new std::map< std::pair<const G4Material*,G4int>, G4double>;
 }
 
 
@@ -265,19 +268,19 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
 
 G4double G4PenelopeOscillatorManager::GetTotalZ(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (atomicNumber->count(mat))
-    return atomicNumber->find(mat)->second;
+  if (fAtomicNumber->count(mat))
+    return fAtomicNumber->find(mat)->second;
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (atomicNumber->count(mat))
-    return atomicNumber->find(mat)->second;
+  if (fAtomicNumber->count(mat))
+    return fAtomicNumber->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetTotalZ() " << G4endl;
@@ -290,19 +293,19 @@ G4double G4PenelopeOscillatorManager::GetTotalZ(const G4Material* mat)
 
 G4double G4PenelopeOscillatorManager::GetTotalA(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (atomicMass->count(mat))
-    return atomicMass->find(mat)->second;
+  if (fAtomicMass->count(mat))
+    return fAtomicMass->find(mat)->second;
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (atomicMass->count(mat))
-    return atomicMass->find(mat)->second;
+  if (fAtomicMass->count(mat))
+    return fAtomicMass->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetTotalA() " << G4endl;
@@ -315,22 +318,22 @@ G4double G4PenelopeOscillatorManager::GetTotalA(const G4Material* mat)
 
 G4PenelopeOscillatorTable* G4PenelopeOscillatorManager::GetOscillatorTableIonisation(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (oscillatorStoreIonisation->count(mat))
+  if (fOscillatorStoreIonisation->count(mat))
     {
       //Ok, it exists
-      return oscillatorStoreIonisation->find(mat)->second;
+      return fOscillatorStoreIonisation->find(mat)->second;
     }
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (oscillatorStoreIonisation->count(mat))
-    return oscillatorStoreIonisation->find(mat)->second;
+  if (fOscillatorStoreIonisation->count(mat))
+    return fOscillatorStoreIonisation->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableIonisation() " << G4endl;
@@ -362,22 +365,22 @@ G4PenelopeOscillator* G4PenelopeOscillatorManager::GetOscillatorIonisation(const
 
 G4PenelopeOscillatorTable* G4PenelopeOscillatorManager::GetOscillatorTableCompton(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStore and read data
+  // (1) First time, create fOscillatorStore and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (oscillatorStoreCompton->count(mat))
+  if (fOscillatorStoreCompton->count(mat))
     {
       //Ok, it exists
-      return oscillatorStoreCompton->find(mat)->second;
+      return fOscillatorStoreCompton->find(mat)->second;
     }
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (oscillatorStoreCompton->count(mat))
-    return oscillatorStoreCompton->find(mat)->second;
+  if (fOscillatorStoreCompton->count(mat))
+    return fOscillatorStoreCompton->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableCompton() " << G4endl;
@@ -427,17 +430,15 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 					   878.0*eV,890.0*eV,902.0*eV,921.0*eV,934.0*eV,939.0*eV,952.0*eV,
 					   966.0*eV,980.0*eV};
 
-  if (verbosityLevel > 0)
+  if (fVerbosityLevel > 0)
     G4cout << "Going to build Oscillator Table for " << material->GetName() << G4endl;
 
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
 
-
   //At the moment, there's no way in Geant4 to know if a material
   //is defined with atom numbers or fraction of weigth
   const G4double* fractionVector = material->GetFractionVector();
-
 
   //Take always the composition by fraction of mass. For the composition by
   //atoms: it is calculated by Geant4 but with some rounding to integers
@@ -480,8 +481,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   G4double moleculeDensity =
     material->GetTotNbOfAtomsPerVolume()/theatomsPerMolecule; //molecules per unit volume
 
-
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     {
       for (size_t i=0;i<StechiometricFactors->size();i++)
 	{
@@ -491,32 +491,24 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	}
     }
 
-
   for (G4int i=0;i<nElements;i++)
     {
       G4int iZ = (*elementVector)[i]->GetZasInt();
       totalZ += iZ * (*StechiometricFactors)[i];
       totalMolecularWeight += (*elementVector)[i]->GetAtomicMassAmu() * (*StechiometricFactors)[i];
       meanExcitationEnergy += iZ*G4Log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
-      /*
-      G4cout << iZ << " " << (*StechiometricFactors)[i] << " " << totalZ << " " <<
-	totalMolecularWeight/(g/mole) << " " << meanExcitationEnergy << " " <<
-	meanAtomExcitationEnergy[iZ-1]/eV <<
-	G4endl;
-      */
       std::pair<const G4Material*,G4int> theKey = std::make_pair(material,iZ);
-      if (!atomTablePerMolecule->count(theKey))
-	atomTablePerMolecule->insert(std::make_pair(theKey,(*StechiometricFactors)[i]));
+      if (!fAtomTablePerMolecule->count(theKey))
+	fAtomTablePerMolecule->insert(std::make_pair(theKey,(*StechiometricFactors)[i]));
     }
   meanExcitationEnergy = G4Exp(meanExcitationEnergy/totalZ);
 
-  atomicNumber->insert(std::make_pair(material,totalZ));
-  atomicMass->insert(std::make_pair(material,totalMolecularWeight));
-  excitationEnergy->insert(std::make_pair(material,meanExcitationEnergy));
-  atomsPerMolecule->insert(std::make_pair(material,theatomsPerMolecule));
+  fAtomicNumber->insert(std::make_pair(material,totalZ));
+  fAtomicMass->insert(std::make_pair(material,totalMolecularWeight));
+  fExcitationEnergy->insert(std::make_pair(material,meanExcitationEnergy));
+  fAtomsPerMolecule->insert(std::make_pair(material,theatomsPerMolecule));
 
-
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     {
       G4cout << "Calculated mean excitation energy for " << material->GetName() <<
 	" = " << meanExcitationEnergy/eV << " eV" << G4endl;
@@ -543,16 +535,16 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       for (G4int i=0;i<2000 && !finished;i++)
 	{
 	  /*
-	    elementData[0][i] = Z;
-	    elementData[1][i] = shellCode;
-	    elementData[2][i] = occupationNumber;
-	    elementData[3][i] = ionisationEnergy;
-	    elementData[4][i] = hartreeProfile;
+	    fElementData[0][i] = Z;
+	    fElementData[1][i] = shellCode;
+	    fElementData[2][i] = occupationNumber;
+	    fElementData[3][i] = ionisationEnergy;
+	    fElementData[4][i] = hartreeProfile;
 	  */
-	  if (elementData[0][i] == Z)
+	  if (fElementData[0][i] == Z)
 	    {
-	      G4int shellID = (G4int) elementData[1][i];
-	      G4double occup = elementData[2][i];
+	      G4int shellID = (G4int) fElementData[1][i];
+	      G4double occup = fElementData[2][i];
 	      if (shellID > 0)
 		{
 
@@ -560,15 +552,15 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		    {
 		      G4PenelopeOscillator newOscLocal;
 		      newOscLocal.SetOscillatorStrength(std::fabs(occup)*(*StechiometricFactors)[k]);
-		      newOscLocal.SetIonisationEnergy(elementData[3][i]);
-		      newOscLocal.SetHartreeFactor(elementData[4][i]/fine_structure_const);
-		      newOscLocal.SetParentZ(elementData[0][i]);
+		      newOscLocal.SetIonisationEnergy(fElementData[3][i]);
+		      newOscLocal.SetHartreeFactor(fElementData[4][i]/fine_structure_const);
+		      newOscLocal.SetParentZ(fElementData[0][i]);
 		      //keep track of the origianl shell level
-		      newOscLocal.SetParentShellID((G4int)elementData[1][i]);
+		      newOscLocal.SetParentShellID((G4int)fElementData[1][i]);
 		      //register only K, L and M shells. Outer shells all grouped with
 		      //shellIndex = 30
-		      if (elementData[0][i] > 6 && elementData[1][i] < 10)
-			newOscLocal.SetShellFlag(((G4int)elementData[1][i]));
+		      if (fElementData[0][i] > 6 && fElementData[1][i] < 10)
+			newOscLocal.SetShellFlag(((G4int)fElementData[1][i]));
 		      else
 			newOscLocal.SetShellFlag(30);
 		      helper->push_back(newOscLocal);
@@ -581,7 +573,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		    }
 		}
 	    }
-	  if (elementData[0][i] > Z)
+	  if (fElementData[0][i] > Z)
 	    finished = true;
 	}
     }
@@ -599,12 +591,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   G4double conductionStrength = (*helper)[0].GetOscillatorStrength();
   G4double plasmaEnergy = Omega*std::sqrt(conductionStrength/totalZ);
 
-  plasmaSquared->insert(std::make_pair(material,Omega*Omega));
+  fPlasmaSquared->insert(std::make_pair(material,Omega*Omega));
 
   G4bool isAConductor = false;
   G4int nullOsc = 0;
 
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     {
       G4cout << "Estimated oscillator strength and energy of plasmon: " <<
 	conductionStrength << " and " << plasmaEnergy/eV << " eV" << G4endl;
@@ -612,14 +604,14 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   if (conductionStrength < 0.01 || plasmaEnergy<1.0*eV) //this is an insulator
     {
-      if (verbosityLevel >1 )
+      if (fVerbosityLevel >1 )
 	G4cout << material->GetName() << " is an insulator " << G4endl;
       //remove conduction band oscillator
       helper->erase(helper->begin());
     }
   else //this is a conductor, Outer shells moved to conduction band
     {
-      if (verbosityLevel >1 )
+      if (fVerbosityLevel >1 )
 	G4cout << material->GetName() << " is a conductor " << G4endl;
       isAConductor = true;
       //copy the conduction strength.. The number is going to change.
@@ -647,7 +639,6 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		}
 	    }
 	}
-
       //Update conduction band
       (*helper)[0].SetOscillatorStrength(conductionStrength);
       (*helper)[0].SetIonisationEnergy(0.);
@@ -728,7 +719,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	    AALow = adjustmentFactor;
 	  else
 	    AAHigh = adjustmentFactor;
-	  if (verbosityLevel > 3)
+	  if (fVerbosityLevel > 3)
 	    G4cout << "Sternheimer's adjustment factor loops: " << AALow << " " << AAHigh << " " <<
 	      adjustmentFactor << " " << TST << " " <<
 	      sumLocal << G4endl;
@@ -740,7 +731,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       (*helper)[0].SetIonisationEnergy(std::fabs(ionEne));
       (*helper)[0].SetResonanceEnergy(meanExcitationEnergy);
     }
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     {
       G4cout << "Sternheimer's adjustment factor: " << adjustmentFactor << G4endl;
     }
@@ -800,7 +791,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   G4double lowEnergyLimitForFluorescence = 250*eV;
   cutEnergy = std::min(cutEnergy,lowEnergyLimitForFluorescence);
 
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
       G4cout << "Cutoff energy: " << cutEnergy/eV << " eV" << G4endl;
   //
   //Copy helper in the oscillatorTable for Ionisation
@@ -905,7 +896,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	loopAgain = false;
     }while(loopAgain);
 
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     {
       G4cout << "Final grouping factor for Ionisation: " << Rgroup << G4endl;
     }
@@ -926,12 +917,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }
 
   //Last step
-  oscillatorStoreIonisation->insert(std::make_pair(material,theTable));
+  fOscillatorStoreIonisation->insert(std::make_pair(material,theTable));
 
-
-  /*
+  /******************************************
     SAME FOR COMPTON
-  */
+  ******************************************/
   //
   //Copy helper in the oscillatorTable for Compton
   //
@@ -964,7 +954,6 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	  for (size_t i=firstIndex;i<theTableC->size()-1;i++)
 	    {
 	      G4bool skipLoop = false;
-	      //G4int shellFlag = (*theTableC)[i]->GetShellFlag();
 	      G4double ionEne = (*theTableC)[i]->GetIonisationEnergy();
 	      G4double ionEnePlus1 = (*theTableC)[i+1]->GetIonisationEnergy();
 	      G4double oscStre = (*theTableC)[i]->GetOscillatorStrength();
@@ -1020,45 +1009,19 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     }while(loopAgain);
 
 
-   if (verbosityLevel > 1)
+   if (fVerbosityLevel > 1)
     {
       G4cout << "Final grouping factor for Compton: " << Rgroup << G4endl;
     }
 
-    //Last step
-   oscillatorStoreCompton->insert(std::make_pair(material,theTableC));
-
-  /* //TESTING PURPOSES
-  if (verbosityLevel > 1)
-    {
-      G4cout << "The table contains " << helper->size() << " oscillators " << G4endl;
-      for (size_t k=0;k<helper->size();k++)
-	{
-	  G4cout << "Oscillator # " << k << G4endl;
-	  G4cout << "Z = " << (*helper)[k].GetParentZ() << G4endl;
-	  G4cout << "Shell Flag = " << (*helper)[k].GetShellFlag() << G4endl;
-	  G4cout << "Compton index = " << (*helper)[k].GetHartreeFactor() << G4endl;
-	  G4cout << "Ionisation energy = " << (*helper)[k].GetIonisationEnergy()/eV << " eV" << G4endl;
-	  G4cout << "Occupation number = " << (*helper)[k].GetOscillatorStrength() << G4endl;
-	  G4cout << "Resonance energy = " << (*helper)[k].GetResonanceEnergy()/eV << " eV" << G4endl;
-	}
-
-      for (size_t k=0;k<helper->size();k++)
-	{
-	  G4cout << k << " " << (*helper)[k].GetOscillatorStrength() << " " <<
-	    (*helper)[k].GetIonisationEnergy()/eV << " " << (*helper)[k].GetResonanceEnergy()/eV << " " <<
-	    (*helper)[k].GetParentZ() << " " << (*helper)[k].GetShellFlag() << " " <<
-	    (*helper)[k].GetHartreeFactor() << G4endl;
-	}
-    }
-  */
-
-
-  //CLEAN UP theHelper and its content
-  delete helper;
-  if (verbosityLevel > 1)
-    Dump(material);
-
+   //Last step
+   fOscillatorStoreCompton->insert(std::make_pair(material,theTableC));
+   
+   //CLEAN UP theHelper and its content
+   delete helper;
+   if (fVerbosityLevel > 1)
+     Dump(material);
+   
   return;
 }
 
@@ -1066,7 +1029,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
 void G4PenelopeOscillatorManager::ReadElementData()
 {
-  if (verbosityLevel > 0)
+  if (fVerbosityLevel > 0)
     {
       G4cout << "G4PenelopeOscillatorManager::ReadElementData()" << G4endl;
       G4cout << "Going to read Element Data" << G4endl;
@@ -1094,7 +1057,6 @@ void G4PenelopeOscillatorManager::ReadElementData()
     G4AtomicTransitionManager::Instance();
   theTransitionManager->Initialise();
 
-
   //Read header (22 lines)
   G4String theHeader;
   for (G4int iline=0;iline<22;iline++)
@@ -1115,9 +1077,9 @@ void G4PenelopeOscillatorManager::ReadElementData()
       file >> Z >> shellCode >> shellId >> occupationNumber >> ionisationEnergy >> hartreeProfile;
       if (Z>0 && i<2000)
 	{
-	  elementData[0][i] = Z;
-	  elementData[1][i] = shellCode;
-	  elementData[2][i] = occupationNumber;
+	  fElementData[0][i] = Z;
+	  fElementData[1][i] = shellCode;
+	  fElementData[2][i] = occupationNumber;
 	  //reset things
 	  if (Z != oldZ)
 	    {
@@ -1133,39 +1095,37 @@ void G4PenelopeOscillatorManager::ReadElementData()
 	    }
 	  //Valid level found in the G4AtomicTransition database: keep it, otherwise use
 	  //the ionisation energy found in the Penelope database
-	  elementData[3][i] = (bindingEnergy>100*eV) ? bindingEnergy : ionisationEnergy*eV;
-	  //elementData[3][i] = ionisationEnergy*eV;
-	  elementData[4][i] = hartreeProfile;
+	  fElementData[3][i] = (bindingEnergy>100*eV) ? bindingEnergy : ionisationEnergy*eV;
+	  fElementData[4][i] = hartreeProfile;
 	  shellCounter++;
 	}
     }
   file.close();
 
-  if (verbosityLevel > 1)
+  if (fVerbosityLevel > 1)
     {
       G4cout << "G4PenelopeOscillatorManager::ReadElementData(): Data file read" << G4endl;
     }
   fReadElementData = true;
   return;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4PenelopeOscillatorManager::GetMeanExcitationEnergy(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (excitationEnergy->count(mat))
-    return excitationEnergy->find(mat)->second;
+  if (fExcitationEnergy->count(mat))
+    return fExcitationEnergy->find(mat)->second;
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (excitationEnergy->count(mat))
-    return excitationEnergy->find(mat)->second;
+  if (fExcitationEnergy->count(mat))
+    return fExcitationEnergy->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetMolecularExcitationEnergy() " << G4endl;
@@ -1177,19 +1137,19 @@ G4double G4PenelopeOscillatorManager::GetMeanExcitationEnergy(const G4Material* 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4PenelopeOscillatorManager::GetPlasmaEnergySquared(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (plasmaSquared->count(mat))
-    return plasmaSquared->find(mat)->second;
+  if (fPlasmaSquared->count(mat))
+    return fPlasmaSquared->find(mat)->second;
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (plasmaSquared->count(mat))
-    return plasmaSquared->find(mat)->second;
+  if (fPlasmaSquared->count(mat))
+    return fPlasmaSquared->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetPlasmaEnergySquared() " << G4endl;
@@ -1202,19 +1162,19 @@ G4double G4PenelopeOscillatorManager::GetPlasmaEnergySquared(const G4Material* m
 
 G4double G4PenelopeOscillatorManager::GetAtomsPerMolecule(const G4Material* mat)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material has been already included
-  if (atomsPerMolecule->count(mat))
-    return atomsPerMolecule->find(mat)->second;
+  if (fAtomsPerMolecule->count(mat))
+    return fAtomsPerMolecule->find(mat)->second;
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (atomsPerMolecule->count(mat))
-    return atomsPerMolecule->find(mat)->second;
+  if (fAtomsPerMolecule->count(mat))
+    return fAtomsPerMolecule->find(mat)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetAtomsPerMolecule() " << G4endl;
@@ -1228,20 +1188,20 @@ G4double G4PenelopeOscillatorManager::GetAtomsPerMolecule(const G4Material* mat)
 
 G4double G4PenelopeOscillatorManager::GetNumberOfZAtomsPerMolecule(const G4Material* mat,G4int Z)
 {
-  // (1) First time, create oscillatorStores and read data
+  // (1) First time, create fOscillatorStores and read data
   CheckForTablesCreated();
 
   // (2) Check if the material/Z couple has been already included
   std::pair<const G4Material*,G4int> theKey = std::make_pair(mat,Z);
-  if (atomTablePerMolecule->count(theKey))
-    return atomTablePerMolecule->find(theKey)->second;
+  if (fAtomTablePerMolecule->count(theKey))
+    return fAtomTablePerMolecule->find(theKey)->second;
 
   // (3) If we are here, it means that we have to create the table for the material
   BuildOscillatorTable(mat);
 
   // (4) now, the oscillator store should be ok
-  if (atomTablePerMolecule->count(theKey))
-    return atomTablePerMolecule->find(theKey)->second;
+  if (fAtomTablePerMolecule->count(theKey))
+    return fAtomTablePerMolecule->find(theKey)->second;
   else
     {
       G4cout << "G4PenelopeOscillatorManager::GetAtomsPerMolecule() " << G4endl;

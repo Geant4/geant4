@@ -54,7 +54,7 @@ class G4PhysicsTableHelper
 
     static G4bool RetrievePhysicsTable(G4PhysicsTable* physTable,
                                        const G4String& fileName,
-                                       G4bool ascii );
+                                       G4bool ascii, G4bool spline);
       // Retrieve the physics table from the given file and 
       // fill the given physics table with retrieved physics vectors
 

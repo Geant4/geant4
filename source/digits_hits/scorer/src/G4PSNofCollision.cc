@@ -39,66 +39,70 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSNofCollision::G4PSNofCollision(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(false)
+  : G4VPrimitiveScorer(name, depth)
+  , HCID(-1)
+  , EvtMap(0)
+  , weighted(false)
 {
-    SetUnit("");
+  SetUnit("");
 }
 
-G4PSNofCollision::~G4PSNofCollision()
-{;}
+G4PSNofCollision::~G4PSNofCollision() { ; }
 
-G4bool G4PSNofCollision::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool G4PSNofCollision::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  if ( aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary ) return TRUE;
+  if(aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
+    return TRUE;
 
-  G4int  index = GetIndex(aStep);
+  G4int index  = GetIndex(aStep);
   G4double val = 1.0;
-  if(weighted) val *= aStep->GetPreStepPoint()->GetWeight();
-  EvtMap->add(index,val);  
+  if(weighted)
+    val *= aStep->GetPreStepPoint()->GetWeight();
+  EvtMap->add(index, val);
   return TRUE;
 }
 
 void G4PSNofCollision::Initialize(G4HCofThisEvent* HCE)
 {
-  EvtMap = new G4THitsMap<G4double>(detector->GetName(),GetName());
-  if(HCID < 0) {HCID = GetCollectionID(0);}
-  HCE->AddHitsCollection(HCID, (G4VHitsCollection*)EvtMap);
+  EvtMap = new G4THitsMap<G4double>(detector->GetName(), GetName());
+  if(HCID < 0)
+  {
+    HCID = GetCollectionID(0);
+  }
+  HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSNofCollision::EndOfEvent(G4HCofThisEvent*)
-{;}
+void G4PSNofCollision::EndOfEvent(G4HCofThisEvent*) { ; }
 
-void G4PSNofCollision::clear(){
-  EvtMap->clear();
-}
+void G4PSNofCollision::clear() { EvtMap->clear(); }
 
-void G4PSNofCollision::DrawAll()
-{;}
+void G4PSNofCollision::DrawAll() { ; }
 
 void G4PSNofCollision::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++) {
+  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
+  for(; itr != EvtMap->GetMap()->end(); itr++)
+  {
     G4cout << "  copy no.: " << itr->first
-	   << "  collisions: " << *(itr->second)/GetUnitValue()
-	   << " [collision] "
-	   << G4endl;
+           << "  collisions: " << *(itr->second) / GetUnitValue()
+           << " [collision] " << G4endl;
   }
 }
-
 
 void G4PSNofCollision::SetUnit(const G4String& unit)
 {
-  if (unit == "" ){
-    unitName = unit;
+  if(unit == "")
+  {
+    unitName  = unit;
     unitValue = 1.0;
-  }else{
-      G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] ) for " + GetName();
-      G4Exception("G4PSNofCollision::SetUnit","DetPS0009",JustWarning,msg);
+  }
+  else
+  {
+    G4String msg = "Invalid unit [" + unit + "] (Current  unit is [" +
+                   GetUnit() + "] ) for " + GetName();
+    G4Exception("G4PSNofCollision::SetUnit", "DetPS0009", JustWarning, msg);
   }
 }
-
-

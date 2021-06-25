@@ -13,6 +13,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-06-21 G. Cosmo (exhadr07-V10-07-07)
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
+
+13-04-21 mma (exhadr07-V10-07-06)
+- main : set true few env variables for ParticleHP
+     
+24-03-21 mma (exhadr07-V10-07-05)
+- main : migration to G4RunManagerFactory
+         and G4SteppingVerbose::UseBestUnit() classes.
+- TrackingAction : add TrackingMessenger with 1 command
+
+
+04-03-21 A. Ribon (exhadr07-V10-07-04)
+- GammaNuclearPhysics, GammaNuclearPhysicsLEND : replaced
+  G4PhotoNuclearProcess (that has been deleted) with
+  G4HadronInelasticProcess.
+
+28-01-21 mma (exhadr07-V10-07-03)
+- TrackingAction, Run: print meanLife
+- PhysicsList: add new units for time
+     
+15-01-21 mma (exhadr07-V10-07-02)
+- TrackingAction: count secondary particles with meanLife > 0.
+
+05-01-21 mma (exhadr07-V10-07-01)
+- PhysicsList: add GammaNuclearPhysicsLEND
+     
+30-12-20 mma (exhadr07-V10-07-00)
+- update ElectromagneticPhysics
      
 25-10-20 mma (exhadr07-V10-06-02)
 - README : add macros descrption

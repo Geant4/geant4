@@ -11,7 +11,12 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-
+    
+20-04-21 mma (particleGunExample-V10-07-00)
+- particleGun.cc: RunManagerFactory
+                  G4SteppingVerboseWithUnits
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+     
 08-04-18 B. Morgan (particleGunExample-V10-04-02)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

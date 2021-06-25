@@ -37,8 +37,6 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4VRML
   SUBDIRS += Tree
   SUBLIBS += G4Tree
-  SUBDIRS += XXX
-  SUBLIBS += G4visXXX
   SUBDIRS += gMocren
   SUBLIBS += G4GMocren
 # Drivers needing external libraries...
@@ -58,6 +56,10 @@ ifdef G4VIS_BUILD_QT3D_DRIVER
   SUBDIRS += Qt3D
   SUBLIBS += G4visQt3D
 endif
+#ifdef G4VIS_BUILD_TOOLSSG_DRIVER
+  SUBDIRS += ToolsSG
+  SUBLIBS += G4ToolsSG
+#endif
 endif #G4VIS_BUILD
 
 .PHONY: granular obj glob global clean

@@ -16,6 +16,80 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th June 2021  Gabriele Cosmo (examples-V10-07-06)
+- Updated reference outputs according to reference tag geant4-10-07-ref-06.
+- Includes tags: exhgcaltb-V10-07-02, microbeam-V10-07-03, exampleB1-V10-07-01,
+                 STCyclotron-V10-07-04, exampleB2-V10-07-01, exdna-V10-07-00,
+                 exampleB3-V10-07-01, exampleB4-V10-07-03, exampleB5-V10-07-01,
+                 exEventGenerator-V10-07-03, exExtHadFissFrag-V10-07-01,
+                 p8decayer-V10-07-02, exGeometry-V10-07-02, AuNP-V10-07-01,
+                 VecGeomNavigation-V10-07-01, NeutronSource-V10-07-06,
+                 exTransforms-V10-07-02, exHadronic-V10-07-02
+                 exhadr06-V10-07-09, exhadr07-V10-07-07, OpNovice-V10-07-03,
+                 activation-V10-07-05, rdecay01-V10-07-01, rdecay02-V10-07-01.
+
+28th May 2021  Gabriele Cosmo (examples-V10-07-05)
+- Updated reference outputs according to reference tag geant4-10-07-ref-05.
+- Includes tags: amsEcal-V10-07-01, ccal-V10-07-02, hadrontherapy-V10-07-05,
+                 STCyclotron-V10-07-03, testem1-V10-07-03, testem3-V10-07-01,
+                 testem4-V10-07-01, testem5-V10-07-04, testem6-V10-07-00,
+                 testem7-V10-07-02, testem11-V10-07-02, testem12-V10-07-02,
+                 testem13-V10-07-00, testem14-V10-07-00, testem15-V10-07-01,
+                 testem16-V10-07-00, testem17-V10-07-00, testem18-V10-07-00,
+                 exHadronic-V10-07-01, exhadr02-V10-07-03, exhadr10-V10-07-00,
+                 electronScattering-V10-07-00, fano-V10-07-01, fano2-V10-07-01,
+                 LXe-V10-07-01, OpNovice-V10-07-02, WLS-V10-07-01,
+                 exam-ext-vis-movies-V10-07-02.
+
+30th April 2021  Gabriele Cosmo (examples-V10-07-04)
+- Updated reference outputs according to reference tag geant4-10-07-ref-04.
+- Includes tags: ICRP110Phantoms-V10-07-00, gammaknife-V10-07-01,
+                 purmag-V10-07-00, STCyclotron-V10-07-01, xraytel-V10-07-00,
+                 particleGunExample-V10-07-00, userPrimaryGenerator-V10-07-00,
+                 exTransforms-V10-07-00, exhadr03-V10-07-02, exhadr04-V10-07-02,
+                 exhadr06-V10-07-08, exhadr07-V10-07-06, gtherapy-V10-07-00,
+                 NeutronSource-V10-07-05, OpNovice-V10-07-01,
+                 activation-V10-07-04, rdecay01-V10-07-00, rdecay02-V10-07-00.
+
+31st March 2021  Gabriele Cosmo (examples-V10-07-03)
+- Updated reference outputs according to reference tag geant4-10-07-ref-03.
+- Includes tags: gammaraytel-V10-07-04, gorad-V10-07-00, exhgcaltb-V10-07-00,
+                 microelectronics-V10-07-00, STCyclotron-V10-07-00,
+                 DMX-V10-07-05, exampleB4-V10-07-02, B03-V10-07-02,
+                 testem1-V10-07-02, testem2-V10-07-06, testem5-V10-07-03,
+                 testem7-V10-07-01, testem15-V10-07-00, exhadr01-V10-07-00,
+                 channelingExample-V10-07-00, exExtHadFissFrag-V10-07-00,
+                 exhadr02-V10-07-02, exhadr03-V10-07-01, exhadr04-V10-07-01,
+                 exhadr06-V10-07-07, exhadr07-V10-07-05, exhadr08-V10-07-02,
+                 exhadr09-V10-07-00, NeutronSource-V10-07-04, fano-V10-07-00,
+                 microdosimetry-V10-07-01, splitting-V10-07-00, fano2-V10-07-00,
+                 LXe-V10-07-00, OpNovice-V10-07-00, OpNovice2-V10-07-00,
+                 activation-V10-07-03, exam-ext-vis-movies-V10-07-01.
+
+28th February 2021  Gabriele Cosmo (examples-V10-07-02)
+- Updated reference outputs according to reference tag geant4-10-07-ref-02.
+- Includes tags: brachy-V10-07-00, gammaraytel-V10-07-00, microbeam-V10-07-01,
+                 hadrontherapy-V10-07-03, iort_therapy-V10-07-00,
+                 radioprotection-V10-07-00, XRayFluo-V10-07-00,
+                 testem1-V10-07-01, testem2-V10-07-03, testem5-V10-07-02,
+                 testem7-V10-07-00, testem9-V10-07-01, testem11-V10-07-01,
+                 testem12-V10-07-01, exhadr06-V10-07-04, exhadr07-V10-07-03,
+                 NeutronSource-V10-07-03, microprox-V10-07-00, svalue-V10-07-00,
+                 microyz-V10-07-00, slowing-V10-07-00, exampleES2-V10-07-00,
+                 ThreadsafeScorers-V10-07-00, G01-V10-07-01, expol01-V10-07-01,
+                 exampleRE05-V10-07-00, exam-ext-vis-movies-V10-07-00,
+                 exampleRE06-V10-07-00.
+
+31st January 2021  Gabriele Cosmo (examples-V10-07-01)
+- Updated reference outputs according to reference tag geant4-10-07-ref-01.
+- Includes tags: doiPET-V10-07-00, hadrontherapy-V10-07-02, exampleB4-V10-07-00,
+                 testem0-V10-07-00, testem1-V10-07-00, testem2-V10-07-00,
+                 testem3-V10-07-00, testem5-V10-07-00, testem9-V10-07-00,
+                 testem11-V10-07-00, testem12-V10-07-00, exhadr03-V10-07-00,
+                 exhadr06-V10-07-03, exhadr07-V10-07-02, DICOM-V10-07-00,
+                 NeutronSource-V10-07-02, chem2-V10-07-00, chem3-V10-07-00,
+                 neuron-V10-07-00, G01-V10-07-00, activation-V10-07-02.
+
 4th December 2020  Gabriele Cosmo (examples-V10-07-00)
 - Updated reference outputs according to reference tag geant4-10-07-ref-00.
 - Includes tags: doxygen-V10-06-03, exadvanced-V10-06-00, air_shower-V10-06-04,

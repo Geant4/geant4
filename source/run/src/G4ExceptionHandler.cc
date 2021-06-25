@@ -23,46 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ExceptionHandler implementation
 //
-//
-//
-// ------------------------------------------------------------
-//      GEANT 4 class implementation file
-//
-//      ---------------- G4ExceptionHandler ----------------
-//             by Makoto Asai (August 2002)
-// ------------------------------------------------------------
+// Author: M.Asai - August 2002
+// --------------------------------------------------------------------
+
+#include <stdlib.h>
 
 #include "G4ExceptionHandler.hh"
 #include "G4RunManager.hh"
 #include "G4StateManager.hh"
 #include "G4String.hh"
 #include "G4ios.hh"
-#include <stdlib.h>
 
+#include "G4EventManager.hh"
+#include "G4Material.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4RunManagerKernel.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
+#include "G4SteppingManager.hh"
+#include "G4Track.hh"
+#include "G4TrackingManager.hh"
+#include "G4UnitsTable.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VProcess.hh"
+
+// --------------------------------------------------------------------
 G4ExceptionHandler::G4ExceptionHandler() {}
 
+// --------------------------------------------------------------------
 G4ExceptionHandler::~G4ExceptionHandler() {}
 
-G4ExceptionHandler::G4ExceptionHandler(const G4ExceptionHandler&)
-  : G4VExceptionHandler()
-{}
-
-G4ExceptionHandler& G4ExceptionHandler::operator=(const G4ExceptionHandler&)
-{
-  return *this;
-}
-
+// --------------------------------------------------------------------
 G4bool G4ExceptionHandler::operator==(const G4ExceptionHandler& right) const
 {
   return (this == &right);
 }
 
+// --------------------------------------------------------------------
 G4bool G4ExceptionHandler::operator!=(const G4ExceptionHandler& right) const
 {
   return (this != &right);
 }
 
+// --------------------------------------------------------------------
 G4bool G4ExceptionHandler::Notify(const char* originOfException,
                                   const char* exceptionCode,
                                   G4ExceptionSeverity severity,
@@ -130,19 +135,7 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
   return abortionForCoreDump;
 }
 
-#include "G4EventManager.hh"
-#include "G4Material.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4RunManagerKernel.hh"
-#include "G4Step.hh"
-#include "G4StepPoint.hh"
-#include "G4SteppingManager.hh"
-#include "G4Track.hh"
-#include "G4TrackingManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VProcess.hh"
-
+// --------------------------------------------------------------------
 void G4ExceptionHandler::DumpTrackInfo()
 {
   G4ApplicationState aps = G4StateManager::GetStateManager()->GetCurrentState();
@@ -152,7 +145,7 @@ void G4ExceptionHandler::DumpTrackInfo()
   const G4Track* theTrack = steppingMgr->GetfTrack();
   const G4Step* theStep   = steppingMgr->GetfStep();
 
-  if(aps != G4State_EventProc || !theTrack)
+  if(aps != G4State_EventProc || theTrack == nullptr)
   {
     G4cerr << " **** Track information is not available at this moment"
            << G4endl;

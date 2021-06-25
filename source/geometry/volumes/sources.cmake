@@ -1,13 +1,10 @@
-#------------------------------------------------------------------------------
-# Module : G4volumes
-# Package: Geant4.src.G4geometry.G4volumes
-#------------------------------------------------------------------------------
+# - G4volumes module build definition
 
 #
 # Define the Geant4 Module.
 #
-geant4_define_module(NAME G4volumes
-  HEADERS
+geant4_add_module(G4volumes
+  PUBLIC_HEADERS
     G4AssemblyTriplet.hh
     G4AssemblyTriplet.icc
     G4AssemblyStore.hh
@@ -39,7 +36,7 @@ geant4_define_module(NAME G4volumes
     G4TouchableHistory.hh
     G4TouchableHistory.icc
     G4TouchableHistoryHandle.hh
-	G4VExternalPhysicalVolume.hh
+	  G4VExternalPhysicalVolume.hh
   SOURCES
     G4AssemblyStore.cc
     G4AssemblyVolume.cc
@@ -57,17 +54,6 @@ geant4_define_module(NAME G4volumes
     G4PVReplica.cc
     G4ReflectionFactory.cc
     G4TouchableHistory.cc
-	G4VExternalPhysicalVolume.cc
-  GRANULAR_DEPENDENCIES
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4intercoms
-    G4magneticfield
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-)
+  	G4VExternalPhysicalVolume.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4volumes PUBLIC G4globman G4hepgeometry G4geometrymng)

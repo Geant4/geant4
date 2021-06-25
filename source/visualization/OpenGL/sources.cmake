@@ -1,14 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4OpenGL
-# Package: Geant4.src.G4visualization.G4OpenGL
-#------------------------------------------------------------------------------
+# - G4OpenGL module build definition
 
-#
 # Module has optional sources
-#
 # Define the core sources, includes and libraries which all Geant4
 # OpenGL implementations use
-#
 set(G4VIS_MODULE_OPENGL_HEADERS
   G4OpenGL.hh
   G4OpenGLImmediateViewer.hh
@@ -215,54 +209,23 @@ list(REMOVE_DUPLICATES G4VIS_MODULE_OPENGL_LINK_LIBRARIES)
 #----------------------------------------------------------------------------
 # Define the Geant4 Module.
 #
-geant4_define_module(NAME G4OpenGL
-  HEADERS
-    ${G4VIS_MODULE_OPENGL_HEADERS}
-  SOURCES
-    ${G4VIS_MODULE_OPENGL_SOURCES}
-  GRANULAR_DEPENDENCIES
-    G4UIbasic
-    G4UIcommon
-    G4csg
-    G4event
-    G4run
-    G4tasking
-    G4particles
-    G4processes
-    G4track
-    G4materials
-    G4geometrymng
-    G4gl2ps
+geant4_add_module(G4OpenGL
+  PUBLIC_HEADERS ${G4VIS_MODULE_OPENGL_HEADERS}
+  SOURCES ${G4VIS_MODULE_OPENGL_SOURCES})
+
+geant4_module_link_libraries(G4OpenGL
+  PUBLIC
     G4globman
-    G4graphics_reps
-    G4digits
-    G4hits
-    G4intercoms
     G4modeling
-    G4specsolids
-    G4tracking
+    G4graphics_reps
+    G4hepgeometry
+    G4intercoms
     G4vis_management
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
+    ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES}
+  PRIVATE
+    G4geometrymng
+    G4UIcommon
+    G4UIbasic
     G4run
     G4tasking
-    G4particles
-    G4processes
-    G4track
-    G4materials
-    G4geometry
-    G4gl2ps
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4interfaces
-    G4modeling
-    G4tracking
-    G4vis_management
-  LINK_LIBRARIES
-    ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES}
-)
-
-# List any source specific properties here
-
+    G4gl2ps)

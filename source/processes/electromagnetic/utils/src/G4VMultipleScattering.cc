@@ -37,8 +37,6 @@
 //
 // Modifications:
 //
-// 13.04.03 Change printout (V.Ivanchenko)
-// 04-06-03 Fix compilation warnings (V.Ivanchenko)
 // 16-07-03 Use G4VMscModel interface (V.Ivanchenko)
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 // 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
@@ -56,10 +54,6 @@
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
 // 04-06-13 Adoptation to MT mode (V.Ivanchenko)
 //
-// Class Description:
-//
-// It is the generic process of multiple scattering it includes common
-// part of calculations for all charged particles
 
 // -------------------------------------------------------------------
 //
@@ -87,37 +81,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType)
+G4VMultipleScattering::G4VMultipleScattering(const G4String&, G4ProcessType)
   : G4VContinuousDiscreteProcess("msc", fElectromagnetic),
-  numberOfModels(0),
-  firstParticle(nullptr),
-  currParticle(nullptr),
-  stepLimit(fUseSafety),
-  facrange(0.04),
-  latDisplacement(true),
-  isIon(false),
   fNewPosition(0.,0.,0.),
   fNewDirection(0.,0.,1.)
 {
   theParameters = G4EmParameters::Instance();
   SetVerboseLevel(1);
   SetProcessSubType(fMultipleScattering);
-  if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
   lowestKinEnergy = 10*CLHEP::eV;
-
-  physStepLimit = gPathLength = tPathLength = 0.0;
-  fIonisation = nullptr;
 
   geomMin   = 0.05*CLHEP::nm;
   minDisplacement2 = geomMin*geomMin;
 
   pParticleChange = &fParticleChange;
-  safetyHelper = nullptr;
-  fPositionChanged = false;
-  isActive = false;
 
-  currentModel = nullptr;
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
   mscModels.reserve(2);
@@ -128,40 +107,30 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
-  /*
-  if(1 < verboseLevel) {
-    G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
-          << G4endl;
-  }
-  */
   delete modelManager;
   emManager->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
+void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* ptr,
                                        const G4Region* region)
 {
-  if(!p) { return; }
+  if(nullptr == ptr) { return; }
   G4VEmFluctuationModel* fm = nullptr;
-  modelManager->AddEmModel(order, p, fm, region);
-  p->SetParticleChange(pParticleChange);
+  modelManager->AddEmModel(order, ptr, fm, region);
+  ptr->SetParticleChange(pParticleChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VMultipleScattering::SetEmModel(G4VMscModel* p, size_t)
+void G4VMultipleScattering::SetEmModel(G4VMscModel* ptr, G4int)
 {
-  for(auto & msc : mscModels) { if(msc == p) { return; } }
-  mscModels.push_back(p);  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VMscModel* G4VMultipleScattering::EmModel(size_t index) const
-{
-  return (index < mscModels.size()) ? mscModels[index] : nullptr; 
+  if(nullptr == ptr) { return; }
+  if(!mscModels.empty()) { 
+    for(auto & msc : mscModels) { if(msc == ptr) { return; } } 
+  }
+  mscModels.push_back(ptr);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -177,34 +146,10 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
   G4bool master = emManager->IsMaster();
 
-  if(!firstParticle) { firstParticle = &part; }
-  if(part.GetParticleType() == "nucleus") {
-    stepLimit = fMinimal;
-    latDisplacement = false;
-    facrange = 0.2;
-    G4String pname = part.GetParticleName();
-    if(pname != "deuteron" && pname != "triton" &&
-       pname != "alpha+"   && pname != "helium" &&
-       pname != "alpha"    && pname != "He3" &&
-       pname != "hydrogen") {
-
-      const G4ParticleDefinition* theGenericIon = 
-        G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-      if(&part == theGenericIon) { isIon = true; }
-     
-      if(theGenericIon && firstParticle != theGenericIon) {
-        G4ProcessManager* pm =  theGenericIon->GetProcessManager();
-        G4ProcessVector* v = pm->GetAlongStepProcessVector();
-        size_t n = v->size();
-        for(size_t j=0; j<n; ++j) {
-          if((*v)[j] == this) {
-            firstParticle = theGenericIon;
-            isIon = true; 
-            break; 
-          }
-        }
-      }
-    }
+  if(nullptr == firstParticle) { firstParticle = &part; }
+  if(part.GetPDGMass() > CLHEP::GeV) {
+    // flag declears that mass scaling is applied
+    isIon = true;
   }
 
   emManager->PreparePhysicsTable(&part, this, master);
@@ -216,7 +161,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << part.GetParticleName()
            << " local particle " << firstParticle->GetParticleName()
            << " isIon: " << isIon << " isMaster: " << master
-           << G4endl;
+	   << G4endl;
   }
 
   if(firstParticle == &part) {
@@ -224,36 +169,33 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
     // initialise process
     InitialiseProcess(firstParticle);
 
-    // heavy particles and not ions
-    if(!isIon) {
-      if(part.GetPDGMass() > MeV) {
-        stepLimit = theParameters->MscMuHadStepLimitType(); 
-        facrange = theParameters->MscMuHadRangeFactor(); 
-        latDisplacement = theParameters->MuHadLateralDisplacement();
-      } else {
-        stepLimit = theParameters->MscStepLimitType(); 
-        facrange = theParameters->MscRangeFactor(); 
-        latDisplacement = theParameters->LateralDisplacement();
-      }
+    // heavy particles 
+    if(part.GetPDGMass() > CLHEP::MeV) {
+      stepLimit = theParameters->MscMuHadStepLimitType(); 
+      facrange = theParameters->MscMuHadRangeFactor(); 
+      latDisplacement = theParameters->MuHadLateralDisplacement();
+    } else {
+      stepLimit = theParameters->MscStepLimitType(); 
+      facrange = theParameters->MscRangeFactor(); 
+      latDisplacement = theParameters->LateralDisplacement();
     }
     if(master) { SetVerboseLevel(theParameters->Verbose()); }
     else {  SetVerboseLevel(theParameters->WorkerVerbose()); }
 
     // initialisation of models
     numberOfModels = modelManager->NumberOfModels();
-    /*
-        G4cout << "### G4VMultipleScattering::PreparePhysicsTable() for "
-        << GetProcessName()
-        << " and particle " << part.GetParticleName()
-        << " Nmod= " << numberOfModels << "  " << this
-        << G4endl;
+    /*     
+    std::cout << "### G4VMultipleScattering::PreparePhysicsTable() for "
+	      << GetProcessName()
+	      << " and particle " << part.GetParticleName()
+	      << " Nmodels= " << mscModels.size() << "  " << this << std::endl;
     */
     for(G4int i=0; i<numberOfModels; ++i) {
-      G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i));
-      if(!msc) { continue; }
+      G4VMscModel* msc = GetModelByIndex(i);
+      if(nullptr == msc) { continue; }
+      if(nullptr == currentModel) { currentModel = msc; }
       msc->SetIonisation(nullptr, firstParticle);
       msc->SetMasterThread(master);
-      currentModel = msc; 
       msc->SetPolarAngleLimit(theParameters->MscThetaLimit());
       G4double emax = 
         std::min(msc->HighEnergyLimit(),theParameters->MaxKinEnergy());
@@ -261,9 +203,9 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
 
     modelManager->Initialise(firstParticle, G4Electron::Electron(), 
-                             10.0, verboseLevel);
+                             1.0, verboseLevel);
 
-    if(!safetyHelper) {
+    if(nullptr == safetyHelper) {
       safetyHelper = G4TransportationManager::GetTransportationManager()
         ->GetSafetyHelper();
       safetyHelper->InitialiseHelper();
@@ -275,42 +217,37 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  G4String num = part.GetParticleName();
+  const G4String& num = part.GetParticleName();
   G4bool master = emManager->IsMaster();
   if(1 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << num << " isIon: " << isIon
-           << " IsMaster: " << master << G4endl;
+	   << " IsMaster: " << master << G4endl;
   }
   const G4VMultipleScattering* masterProcess = 
     static_cast<const G4VMultipleScattering*>(GetMasterProcess());
 
   if(firstParticle == &part) { 
-    /*    
-    G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
-           << GetProcessName()
-           << " and particle " << num
-           << " IsMaster= " << G4LossTableManager::Instance()->IsMaster()
-           << "  " << this
-           << G4endl;
+    /*
+    std::cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
+              << GetProcessName() << " and particle " << num
+	      << " IsMaster= " << G4LossTableManager::Instance()->IsMaster()
+	      << "  " << this << std::endl;
     */
     emManager->BuildPhysicsTable(firstParticle);
 
     if(!master) {
       // initialisation of models
       /*
-        G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
-        << GetProcessName()
-        << " and particle " << num
-        << " Nmod= " << numberOfModels << "  " << this
-        << G4endl;
+      std::cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
+                << GetProcessName() << " and particle " << num
+		<< " Nmod= " << mscModels.size() << " NOT master" << std::endl;
       */
       for(G4int i=0; i<numberOfModels; ++i) {
-        G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i));
-        if(!msc) { continue; }
-        G4VMscModel* msc0= 
-          static_cast<G4VMscModel*>(masterProcess->GetModelByIndex(i));
+	G4VMscModel* msc = GetModelByIndex(i);
+	if(nullptr == msc) { continue; }
+        G4VMscModel* msc0 = masterProcess->GetModelByIndex(i);
         msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
         msc->InitialiseLocal(firstParticle, msc0);
       }
@@ -334,8 +271,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(1 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() done for "
            << GetProcessName()
-           << " and particle " << num
-           << G4endl;
+           << " and particle " << num << G4endl;
   }
 }
 
@@ -348,7 +284,6 @@ void G4VMultipleScattering::StreamInfo(std::ostream& outFile,
   outFile << G4endl << indent << GetProcessName() << ": ";
   if (!rst) outFile << " for " << part.GetParticleName();
   outFile  << "  SubType= " << GetProcessSubType() << G4endl;
-  //StreamProcessInfo(outFile);
   modelManager->DumpModelList(outFile, verboseLevel);
 }
 
@@ -356,35 +291,29 @@ void G4VMultipleScattering::StreamInfo(std::ostream& outFile,
 
 void G4VMultipleScattering::StartTracking(G4Track* track)
 {
-  G4VEnergyLossProcess* eloss = nullptr;
   if(track->GetParticleDefinition() != currParticle) {
     currParticle = track->GetParticleDefinition();
     fIonisation = emManager->GetEnergyLossProcess(currParticle);
-    eloss = fIonisation;
   }
   /*
   G4cout << "G4VMultipleScattering::StartTracking Nmod= " << numberOfModels
          << "  " << currParticle->GetParticleName() 
          << " E(MeV)= " << track->GetKineticEnergy()
-         << "  Ion= " << eloss << "  " << fIonisation << " IsMaster= " 
+         << "  Ion= " << fIonisation << " IsMaster= " 
          << G4LossTableManager::Instance()->IsMaster() 
          << G4endl;
   */
-  for(G4int i=0; i<numberOfModels; ++i) {
+  for(auto & msc : mscModels) {
     /*
-    G4cout << "Next model " << i << "  " << msc 
-           << " Emin= " << msc->LowEnergyLimit() 
-           << " Emax= " << msc->HighEnergyLimit() 
-           << " Eact= " << msc->LowEnergyActivationLimit() << G4endl;
+      G4cout << "Next model " << msc 
+      << " Emin= " << msc->LowEnergyLimit() 
+      << " Emax= " << msc->HighEnergyLimit() 
+      << " Eact= " << msc->LowEnergyActivationLimit() << G4endl;
     */
-    G4VEmModel* msc = GetModelByIndex(i);
     msc->StartTracking(track);
-    if(eloss) { 
-      G4VMscModel* mscmod = static_cast<G4VMscModel*>(msc);
-      if(mscmod) { mscmod->SetIonisation(fIonisation, currParticle); } 
-    }
+    msc->SetIonisation(fIonisation, currParticle);
   }
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -596,15 +525,16 @@ G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part,
   if(part != firstParticle) { return yes; }
   const G4VMultipleScattering* masterProcess = 
     static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
-  if(masterProcess && masterProcess != this) { return yes; }
+  if(nullptr != masterProcess && masterProcess != this) { return yes; }
 
   G4int nmod = modelManager->NumberOfModels();
   static const G4String ss[4] = {"1","2","3","4"};
   for(G4int i=0; i<nmod; ++i) {
     G4VEmModel* msc = modelManager->GetModel(i);
+    if(nullptr == msc) { continue; }
     yes = true;
     G4PhysicsTable* table = msc->GetCrossSectionTable();
-    if (table) {
+    if (nullptr != table) {
       G4int j = std::min(i,3); 
       G4String name = 
         GetPhysicsTableFileName(part,directory,"LambdaMod"+ss[j],ascii);
@@ -643,9 +573,8 @@ G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition*,
 
 void G4VMultipleScattering::SetIonisation(G4VEnergyLossProcess* p)
 {
-  for(G4int i=0; i<numberOfModels; ++i) {
-    G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i, true));
-    if(msc) { msc->SetIonisation(p, firstParticle); }
+  for(auto & msc : mscModels) {
+    if(nullptr != msc) { msc->SetIonisation(p, firstParticle); }
   }
 }
 

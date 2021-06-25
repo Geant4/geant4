@@ -23,7 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAELSEPAElasticModel.hh 97497 2016-06-03 11:41:57Z matkara $
+// Created on 2016/01/18
+//
+// Authors: D. Sakata, S. Incerti
+//
+// Based on a recent release of the ELSEPA code 
+// developed and provided kindly by F. Salvat et al. 
+// See
+// Computer Physics Communications, 165(2), 157-190. (2005)
+// http://dx.doi.org/10.1016/j.cpc.2004.09.006
 //
 
 #ifndef G4DNAELSEPAElasticModel_h
@@ -43,16 +51,16 @@ class G4DNAELSEPAElasticModel : public G4VEmModel
 
 public:
 
-  G4DNAELSEPAElasticModel(const G4ParticleDefinition* p = 0,
-                            const G4String& nam = "DNAELSEPAElasticModel");
+  G4DNAELSEPAElasticModel(const G4ParticleDefinition* particle = 0,
+                          const G4String& nam = "DNAELSEPAElasticModel");
 
   virtual ~G4DNAELSEPAElasticModel();
 
-  virtual void Initialise(const G4ParticleDefinition*,
-                          const G4DataVector&);
+  virtual void Initialise(
+                   const G4ParticleDefinition* particle, const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-                                         const G4ParticleDefinition* p,
+                                         const G4ParticleDefinition* particle,
                                          G4double ekin,
                                          G4double emin,
                                          G4double emax);
@@ -63,48 +71,36 @@ public:
                                  G4double tmin,
                                  G4double maxEnergy);
 
-  void SetKillBelowThreshold(G4double threshold);
-
-  inline G4double GetKillBelowThreshold()
-  {
-    G4ExceptionDescription errMsg;
-    errMsg << "The method G4DNAELSEPAElasticModel::"
-              "GetKillBelowThreshold is deprecated";
-    
-    G4Exception("G4DNAELSEPAElasticModel::GetKillBelowThreshold",
-                "deprecated",
-                JustWarning,
-                errMsg);
-    return 0.;
-  }
-
-private:
-  // Cross section
-  typedef std::map<double, std::vector<double> > VecMap;
-  VecMap eVecm;
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
-  TriDimensionMap eDiffCrossSectionData;
-  std::vector<double> eTdummyVec;
-
-  // Water density table
-  const std::vector<G4double>* fpMolWaterDensity;
-
-  // Cross section
-  G4DNACrossSectionDataSet* fpData;
+  void SetMaximumEnergy (G4double input)
+                   {highEnergyLimit = input; SetHighEnergyLimit(input);};
+  
+  void     SetKillBelowThreshold (G4double threshold);
+  
+  G4double GetKillBelowThreshold() {return killBelowEnergy;}
 
 protected:
+
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
-  G4int verboseLevel;
-  G4bool isInitialised;
+ 
+  G4int kScreeningFactor;
+
+  const std::vector<G4double>* fpMolDensity;
+  std::vector <G4double> kIntersectionEnergySR;
+
+  G4double killBelowEnergy;
+  G4double lowEnergyLimit;
+  G4double highEnergyLimit;
   
-  // Final state
+  G4bool isInitialised;
+  G4int verboseLevel;
 
-  //G4double DifferentialCrossSection(G4ParticleDefinition* aParticle,
-  //                                  G4double k, G4double theta);
+  typedef std::map<G4int,G4String, std::less<G4String> >MapZFile;
+  typedef std::map<G4int,G4DNACrossSectionDataSet*,std::less<G4String>>MapZData;
+  MapZData tableZData;
 
-  G4double Theta(//G4ParticleDefinition * aParticleDefinition,
+  G4double Theta(G4int Z, G4ParticleDefinition * aParticleDefinition,
                  G4double k,
                  G4double integrDiff);
 
@@ -115,6 +111,12 @@ private:
                              G4double xs2);
 
   G4double LinLogInterpolate(G4double e1,
+                             G4double e2,
+                             G4double e,
+                             G4double xs1,
+                             G4double xs2);
+
+  G4double LogLinInterpolate(G4double e1,
                              G4double e2,
                              G4double e,
                              G4double xs1,
@@ -139,12 +141,20 @@ private:
                             G4double t,
                             G4double e);
 
-  G4double RandomizeCosTheta(G4double k);
+  G4double RandomizeCosTheta(G4int Z, G4double k);
 
-  //
+  typedef std::map<G4int,std::map<G4double,std::map<G4double,G4double>>>
+                   TriDimensionMapZ;
+  TriDimensionMapZ fAngleDataZ;
+
+  std::map <G4int, std::vector<G4double> > eEdummyVecZ;
+
+  typedef std::map <G4int, std::map<G4double, std::vector<G4double>>> VecMapZ;
+  VecMapZ eCumZ;
 
   G4DNAELSEPAElasticModel & operator=(const G4DNAELSEPAElasticModel &right);
   G4DNAELSEPAElasticModel(const G4DNAELSEPAElasticModel&);
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

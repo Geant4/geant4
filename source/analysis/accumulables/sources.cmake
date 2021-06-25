@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4accumulables
-# Package: Geant4.src.G4analysis.G4accumulables
-#------------------------------------------------------------------------------
+# - G4accumulables module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4accumulables
-  HEADERS
+geant4_add_module(G4accumulables
+  PUBLIC_HEADERS
     G4MergeMode.hh
     G4AccumulableManager.hh
     G4AccumulableManager.icc
@@ -17,13 +12,6 @@ geant4_define_module(NAME G4accumulables
     G4VAccumulable.icc
   SOURCES
     G4MergeMode.cc
-    G4AccumulableManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-)
+    G4AccumulableManager.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4accumulables PUBLIC G4globman)

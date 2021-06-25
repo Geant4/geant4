@@ -44,13 +44,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hPairProduction.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4hPairProductionModel.hh"
-#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-using namespace std;
 
 G4hPairProduction::G4hPairProduction(const G4String& name)
   : G4MuPairProduction(name)
@@ -65,38 +61,24 @@ G4hPairProduction::~G4hPairProduction()
 
 G4bool G4hPairProduction::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 110.0*MeV);
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hPairProduction::InitialiseEnergyLossProcess(
                          const G4ParticleDefinition* part,
-			 const G4ParticleDefinition*)
+			 const G4ParticleDefinition* bpart)
 {
-  if (!isInitialised) {
-    isInitialised = true;
-
-    theParticle = part;
-    if (!EmModel()) { SetEmModel(new G4hPairProductionModel(part)); }
-
-    G4double limit = part->GetPDGMass()*8.;
-    if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
-
-    G4VEmFluctuationModel* fm = nullptr;
-    G4EmParameters* param = G4EmParameters::Instance();
-    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
-    EmModel()->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
-    AddEmModel(1, EmModel(), fm);
-  }
+  if (nullptr == EmModel(0)) { SetEmModel(new G4hPairProductionModel(part)); }
+  G4MuPairProduction::InitialiseEnergyLossProcess(part, bpart);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hPairProduction::ProcessDescription(std::ostream& out) const
 {
-  out << "  Hadron pair production";
+  out << "e+e- pair production by hadrons";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MaterialScanner implementation
 //
-//
-//
-//
+// Author: M.Asai, May 2006
+// --------------------------------------------------------------------
 
 #include "G4MaterialScanner.hh"
 
@@ -46,35 +46,19 @@
 #include "G4SystemOfUnits.hh"
 #include "G4TransportationManager.hh"
 
+// --------------------------------------------------------------------
 G4MaterialScanner::G4MaterialScanner()
 {
   theRayShooter   = new G4RayShooter();
   theMessenger    = new G4MatScanMessenger(this);
   theEventManager = G4EventManager::GetEventManager();
 
-  theUserEventAction    = 0;
-  theUserStackingAction = 0;
-  theUserTrackingAction = 0;
-  theUserSteppingAction = 0;
-
-  theMatScannerEventAction    = 0;
-  theMatScannerStackingAction = 0;
-  theMatScannerTrackingAction = 0;
-  theMatScannerSteppingAction = 0;
-
   eyePosition = G4ThreeVector(0., 0., 0.);
-  nTheta      = 91;
-  thetaMin    = 0. * deg;
   thetaSpan   = 90. * deg;
-  nPhi        = 37;
-  phiMin      = 0. * deg;
   phiSpan     = 360. * deg;
-
-  regionSensitive = false;
-  regionName      = "notDefined";
-  theRegion       = 0;
 }
 
+// --------------------------------------------------------------------
 G4MaterialScanner::~G4MaterialScanner()
 {
   delete theRayShooter;
@@ -82,6 +66,7 @@ G4MaterialScanner::~G4MaterialScanner()
   delete theMessenger;
 }
 
+// --------------------------------------------------------------------
 void G4MaterialScanner::Scan()
 {
   G4StateManager* theStateMan     = G4StateManager::GetStateManager();
@@ -92,7 +77,7 @@ void G4MaterialScanner::Scan()
     return;
   }
 
-  if(!theMatScannerSteppingAction)
+  if(theMatScannerSteppingAction == nullptr)
   {
     theMatScannerSteppingAction = new G4MSSteppingAction();
   }
@@ -101,6 +86,7 @@ void G4MaterialScanner::Scan()
   RestoreUserActions();
 }
 
+// --------------------------------------------------------------------
 void G4MaterialScanner::StoreUserActions()
 {
   theUserEventAction    = theEventManager->GetUserEventAction();
@@ -114,7 +100,7 @@ void G4MaterialScanner::StoreUserActions()
   theEventManager->SetUserAction(theMatScannerSteppingAction);
 
   G4SDManager* theSDMan = G4SDManager::GetSDMpointerIfExist();
-  if(theSDMan)
+  if(theSDMan != nullptr)
   {
     theSDMan->Activate("/", false);
   }
@@ -124,6 +110,7 @@ void G4MaterialScanner::StoreUserActions()
   theGeomMan->CloseGeometry(true);
 }
 
+// --------------------------------------------------------------------
 void G4MaterialScanner::RestoreUserActions()
 {
   theEventManager->SetUserAction(theUserEventAction);
@@ -132,12 +119,13 @@ void G4MaterialScanner::RestoreUserActions()
   theEventManager->SetUserAction(theUserSteppingAction);
 
   G4SDManager* theSDMan = G4SDManager::GetSDMpointerIfExist();
-  if(theSDMan)
+  if(theSDMan != nullptr)
   {
     theSDMan->Activate("/", true);
   }
 }
 
+// --------------------------------------------------------------------
 void G4MaterialScanner::DoScan()
 {
   // Confirm material table is updated
@@ -146,7 +134,7 @@ void G4MaterialScanner::DoScan()
   /////  // Make sure Geantino has been initialized
   /////  G4ProcessVector* pVector
   /////    =
-  ///G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
+  /// G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
   /////  for (G4int j=0; j < pVector->size(); ++j) {
   ///// (*pVector)[j]->BuildPhysicsTable(*(G4Geantino::GeantinoDefinition()));
   /////  }
@@ -166,7 +154,7 @@ void G4MaterialScanner::DoScan()
 
   // Event loop
   G4int iEvent = 0;
-  for(G4int iTheta = 0; iTheta < nTheta; iTheta++)
+  for(G4int iTheta = 0; iTheta < nTheta; ++iTheta)
   {
     G4double theta = thetaMin;
     if(iTheta > 0)
@@ -179,7 +167,7 @@ void G4MaterialScanner::DoScan()
       << "         Theta(deg)    Phi(deg)  Length(mm)          x0     lambda0"
       << G4endl;
     G4cout << G4endl;
-    for(G4int iPhi = 0; iPhi < nPhi; iPhi++)
+    for(G4int iPhi = 0; iPhi < nPhi; ++iPhi)
     {
       G4Event* anEvent = new G4Event(iEvent++);
       G4double phi     = phiMin;
@@ -217,10 +205,11 @@ void G4MaterialScanner::DoScan()
   return;
 }
 
+// --------------------------------------------------------------------
 G4bool G4MaterialScanner::SetRegionName(const G4String& val)
 {
   G4Region* aRegion = G4RegionStore::GetInstance()->GetRegion(val);
-  if(aRegion)
+  if(aRegion != nullptr)
   {
     theRegion  = aRegion;
     regionName = val;
@@ -230,7 +219,7 @@ G4bool G4MaterialScanner::SetRegionName(const G4String& val)
   {
     G4cerr << "Region <" << val << "> not found. Command ignored." << G4endl;
     G4cerr << "Defined regions are : " << G4endl;
-    for(size_t i = 0; i < G4RegionStore::GetInstance()->size(); i++)
+    for(std::size_t i = 0; i < G4RegionStore::GetInstance()->size(); ++i)
     {
       G4cerr << " " << (*(G4RegionStore::GetInstance()))[i]->GetName();
     }

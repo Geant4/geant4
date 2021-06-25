@@ -23,41 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////////////////////////////////////////////////////////////////////////////////
+//  Class:   G4InversePEEffect
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
 //
-/////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4InversePEEffect.hh
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	25 October 2007 creation by L. Desorgher  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Adjoint/reverse photo electric process
-//
+//  Adjoint/reverse photo electric process
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef G4InversePEEffect_h
 #define G4InversePEEffect_h 1
 
-#include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
+#include "G4VAdjointReverseReaction.hh"
+
 class G4AdjointPhotoElectricModel;
-class G4InversePEEffect: public G4VAdjointReverseReaction
 
+class G4InversePEEffect : public G4VAdjointReverseReaction
 {
-public:
+ public:
+  explicit G4InversePEEffect(G4String process_name,
+                             G4AdjointPhotoElectricModel* aModel);
+  ~G4InversePEEffect() override;
 
-  G4InversePEEffect(G4String process_name, G4AdjointPhotoElectricModel* aModel);
-  ~G4InversePEEffect();
-  
-private:
-    
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+
+  G4InversePEEffect(G4InversePEEffect&) = delete;
+  G4InversePEEffect& operator=(const G4InversePEEffect& right) = delete;
 };
 
 #endif

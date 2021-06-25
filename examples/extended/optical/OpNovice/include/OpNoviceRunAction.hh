@@ -58,7 +58,5 @@ class OpNoviceRunAction : public G4UserRunAction
   OpNoviceRun* fRun;
   OpNovicePrimaryGeneratorAction* fPrimary;
 };
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

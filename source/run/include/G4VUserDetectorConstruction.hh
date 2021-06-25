@@ -23,64 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserDetectorConstruction
 //
+// Class description:
 //
+// This is the abstract base class for the user's mandatory initialization
+// of the detector setup. It has only one pure virtual method Construct()
+// which is invoked by G4RunManager when its Initialize() method is invoked.
+// The Construct() method must return the G4VPhysicalVolume pointer which
+// represents the world volume.
 
-#ifndef G4VUserDetectorConstruction_h
-#define G4VUserDetectorConstruction_h 1
+// Original author: M.Asai, 1999
+// --------------------------------------------------------------------
+#ifndef G4VUserDetectorConstruction_hh
+#define G4VUserDetectorConstruction_hh 1
+
+#include <vector>
+
+#include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VUserParallelWorld;
 class G4VSensitiveDetector;
 
-#include "globals.hh"
-#include <vector>
-
-// class description:
-//
-//  This is the abstract base class of the user's mandatory initialization class
-// for detector setup. It has only one pure virtual method Construct() which is
-// invoked by G4RunManager when it's Initialize() method is invoked.
-//  The Construct() method must return the G4VPhysicalVolume pointer which
-//  represents
-// the world volume.
-//
-
 class G4VUserDetectorConstruction
 {
- public:
-  G4VUserDetectorConstruction();
-  virtual ~G4VUserDetectorConstruction();
+  public:
 
- public:
-  virtual G4VPhysicalVolume* Construct() = 0;
+    G4VUserDetectorConstruction();
+    virtual ~G4VUserDetectorConstruction();
 
-  virtual void ConstructSDandField();
-  // This method is used in multi-threaded applications to build
-  // per-worker non-shared objects: SensitiveDetectors and Field managers
+    virtual G4VPhysicalVolume* Construct() = 0;
 
-  virtual void CloneSD();
-  virtual void CloneF();
+    virtual void ConstructSDandField();
+      // This method is used in multi-threaded applications to build
+      // per-worker non-shared objects: SensitiveDetectors and Field managers.
 
- public:
-  void RegisterParallelWorld(G4VUserParallelWorld*);
+    virtual void CloneSD();
+    virtual void CloneF();
 
- public:
-  G4int ConstructParallelGeometries();
-  void ConstructParallelSD();
+    void RegisterParallelWorld(G4VUserParallelWorld*);
 
- private:
-  std::vector<G4VUserParallelWorld*> parallelWorld;
+    G4int ConstructParallelGeometries();
+    void ConstructParallelSD();
 
- public:
-  G4int GetNumberOfParallelWorld() const;
-  G4VUserParallelWorld* GetParallelWorld(G4int i) const;
+    G4int GetNumberOfParallelWorld() const;
+    G4VUserParallelWorld* GetParallelWorld(G4int i) const;
 
- protected:
-  void SetSensitiveDetector(const G4String& logVolName,
-                            G4VSensitiveDetector* aSD, G4bool multi = false);
-  void SetSensitiveDetector(G4LogicalVolume* logVol, G4VSensitiveDetector* aSD);
+  protected:
+
+    void SetSensitiveDetector(const G4String& logVolName,
+                              G4VSensitiveDetector* aSD, G4bool multi = false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol,
+                              G4VSensitiveDetector* aSD);
+  private:
+
+    std::vector<G4VUserParallelWorld*> parallelWorld;
 };
 
 #endif

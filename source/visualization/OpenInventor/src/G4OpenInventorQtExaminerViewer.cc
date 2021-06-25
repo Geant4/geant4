@@ -31,7 +31,7 @@
 #include "G4OpenInventorQtExaminerViewer.hh"
 
 #include "ui_OIQtListsDialog.h"
-//#include "ui_OIQTAuxWindowQT5.h"
+
 #include "saveViewPt.h"
 #include "pickext.h"
 #include "pickref.h"
@@ -87,7 +87,6 @@
 // For searching for nodes within kits:
 #include <Inventor/nodekits/SoBaseKit.h>
 
-
 #include <QMenuBar>
 #include <QPushButton>
 #include <QRadioButton>
@@ -120,18 +119,17 @@ G4OpenInventorQtExaminerViewer::
 G4OpenInventorQtExaminerViewer(QWidget* parent, const char* name, SbBool embed,
                                SoQtFullViewer::BuildFlag flag,
                                SoQtViewer::Type type)
-//   : SoQtExaminerViewer(parent, name, embed, BUILD_NONE, type)
    : SoQtExaminerViewer(parent, name, embed, flag, type),
-     externalQtApp(0)
+     externalQtApp(0), processSoEventCount(0)
 {
    // FWJ DEBUG
-   //   G4cout << "G4OpenInventorQtExaminerViewer CONSTRUCTOR CALLED" << G4endl;
-   //   G4cout << "G4OpenInventorQtExaminerViewer parent=" << parent << G4endl;
+   //  G4cout << "G4OpenInventorQtExaminerViewer CONSTRUCTOR CALLED" << G4endl;
+   //  G4cout << "G4OpenInventorQtExaminerViewer parent=" << parent << G4endl;
 
    // FWJ THIS DOESN'T WORK APPARENTLY NO MAINWINDOW
    //   QMenuBar* menubar = ((QMainWindow*)parent)->menuBar();
-   //   G4cout << "G4OpenInventorQtExaminerViewer menubar=" << menubar << G4endl;
-   fName = name;
+
+   fName = new QString(name);
    viewer = this;
    construct(TRUE);
 }
@@ -157,7 +155,7 @@ G4OpenInventorQtExaminerViewer::~G4OpenInventorQtExaminerViewer()
 
 void G4OpenInventorQtExaminerViewer::construct(const SbBool)
 {
-   //   setClassName(thisClassName);
+   setFeedbackSize(40);
 
    hookBeamOn = new HookEventProcState(this);
    newEvents = false;
@@ -447,8 +445,7 @@ void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
 // MENU BAR
 
    menubar = new QMenuBar(getRenderAreaWidget());
-   //   menubar = new QMenuBar(parent);
-   //   menubar = new QMenuBar(parent->parentWidget());
+   // FWJ DEBUG
    //   G4cout << "G4OpenInventorQtExaminerViewer: GOT A menubar=" <<
    //      menubar << G4endl; 
    
@@ -560,7 +557,6 @@ void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
    addAppPushButton(prevViewPtButton);
 
    abbrOutputButton = new QPushButton;
-   //   abbrOutputButton = new QRadioButton;
    abbrOutputButton->setCheckable(true);
    abbrOutputButton->setIconSize(QSize(24,24));
    abbrOutputButton->setIcon(QPixmap((const char **)pickext_xpm));
@@ -578,7 +574,6 @@ void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
    addAppPushButton(pickRefPathButton);
 
    switchWireFrameButton = new QPushButton;
-   //   switchWireFrameButton = new QRadioButton;
    switchWireFrameButton->setCheckable(true);
    switchWireFrameButton->setIconSize(QSize(24,24));
    switchWireFrameButton->setIcon(QPixmap((const char **)wireframe_xpm));
@@ -586,6 +581,23 @@ void G4OpenInventorQtExaminerViewer::buildWidget(QWidget* parent)
    connect(switchWireFrameButton, SIGNAL(toggled(bool)), this,
            SLOT(SwitchWireFrameCB(bool)));
    addAppPushButton(switchWireFrameButton);
+
+   switchAxesButton = new QPushButton;
+   switchAxesButton->setCheckable(true);
+   switchAxesButton->setText(QString("A"));
+   switchAxesButton->setToolTip("Axes on/off");
+   connect(switchAxesButton, SIGNAL(toggled(bool)), this,
+           SLOT(SwitchAxesCB(bool)));
+   addAppPushButton(switchAxesButton);
+
+   detachButton = new QPushButton;
+   detachButton->setIconSize(QSize(24,24));
+   detachButton->setIcon(style.standardIcon(QStyle::SP_CommandLink));
+   detachButton->setToolTip("Detach viewer window");
+   connect(detachButton, SIGNAL(clicked()), this,
+           SLOT(DetachCB()));
+   // Used for UIQt only so check and add later
+   //   addAppPushButton(detachButton);
 
    // HELP WINDOW
 
@@ -627,8 +639,6 @@ FLY mode (requires Reference Path):\n\n\
 
    // Bypass the namespace in order to make a persistent object
    AuxWindowDialog = new Ui_Dialog;
-   //   AuxWindowDialog = new Ui::Dialog;
-   //   Ui::Dialog AuxWindowDialog;
    AuxWindow = new QDialog(parent);
    AuxWindowDialog->setupUi(AuxWindow);
 
@@ -644,11 +654,6 @@ FLY mode (requires Reference Path):\n\n\
    connect(AuxWindowDialog->pushButton, SIGNAL(clicked()),
            this, SLOT(SortBookmarksCB()));
    
-   //   AuxWindowDialog.setupUi(AuxWindow);
-   // NO   AuxWindowDialog.setupUi(&AuxWindow);
-   // FWJ DEBUG
-   //   G4cout << "CALLING SHOW() ON AUXWINDOW !!!!!!!!!!!!!!!!!!!!" << G4endl;
-
    // FWJ Better to do this after viewer window is realized
    //   AuxWindow->show();
    //   AuxWindow->raise();
@@ -758,9 +763,16 @@ void G4OpenInventorQtExaminerViewer::afterRealizeHook()
    AuxWindow->activateWindow();
 
    auto UI = G4UImanager::GetUIpointer();
-   auto uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
+   uiQt = dynamic_cast<G4UIQt*>(UI->GetG4UIWindow());
    // This explicitly sets the TabWidget as parent before addTab():
-   if (uiQt) uiQt->AddTabWidget(getParentWidget(), QString(fName));
+   if (uiQt) {
+      viewerParent = getParentWidget();
+      viewerParent2 = viewerParent->parentWidget();
+      uiQt->AddTabWidget(getParentWidget(), *fName);
+      uiQtTabIndex = uiQt->GetViewerTabWidget()->currentIndex();
+      //      attached = TRUE;
+      addAppPushButton(detachButton);
+   }
 }
 
 
@@ -887,7 +899,7 @@ void G4OpenInventorQtExaminerViewer::superimpositionEvent(SoAction * action)
          char zPos[20];
          // FWJ need a better format here
          sprintf(zPos, "%-7.2f [m]", refZPositions[refParticleIdx] / 1000);
-         //         sprintf(zPos, "%7.2f [m]", refZPositions[refParticleIdx] / 1000);
+         // sprintf(zPos, "%7.2f [m]", refZPositions[refParticleIdx] / 1000);
          curInfoText->string.setValue(SbString(zPos));
       }
    }
@@ -1321,15 +1333,16 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
       }
       // FWJ Mouseover for trajectories
       else if(node->getTypeId() == SoLineSet::getClassTypeId()) {
-         //         G4cout << "Trajectory!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+         // G4cout << "Trajectory!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
          G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
          if(attHolder && attHolder->GetAttDefs().size()) {
             std::string strTrajPoint = "G4TrajectoryPoint:";
             std::ostringstream oss;
             G4String t1, t1Ch, t2, t3, t4;
             for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
-               //               G4cout << "Getting index " << i << " from attHolder" << G4endl;
-               // No, returns a vector!   G4AttValue* attValue = attHolder->GetAttValues()[i];
+               // G4cout << "Getting index " << i << " from attHolder" << G4endl;
+               // No, returns a vector!
+               //   G4AttValue* attValue = attHolder->GetAttValues()[i];
                const std::vector<G4AttValue>* vals = attHolder->GetAttValues()[i];
                std::vector<G4AttValue>::const_iterator iValue;
                for (iValue = vals->begin(); iValue != vals->end(); ++iValue) {
@@ -1383,19 +1396,19 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
                      This->mouseOverTextZPos->string.setValue(SbString(t4oss.str().c_str()));
                   }
                }
-//               G4cout << "  NOW CALLING G4AttCheck" << G4endl;
-//                G4cout << G4AttCheck(attHolder->GetAttValues()[i],
+//             G4cout << "  NOW CALLING G4AttCheck" << G4endl;
+//             G4cout << G4AttCheck(attHolder->GetAttValues()[i],
 //                                     attHolder->GetAttDefs()[i]);
-//                oss << G4AttCheck(attHolder->GetAttValues()[i],
+//             oss << G4AttCheck(attHolder->GetAttValues()[i],
 //                                  attHolder->GetAttDefs()[i]);
-//                if(oss.str().find(strTrajPoint) != std::string::npos) {
-//                   // Last attribute displayed was a trajectory point.  Since we
-//                   // want abbreviated output, display the last one and exit
-//                   // (unless we're already at the last (and only) trajectory point)
-//                   if(i != attHolder->GetAttDefs().size()-1) {
-//                      G4cout << G4AttCheck(
-//                                           attHolder->GetAttValues()[attHolder->GetAttDefs().size()-1],
-//                                           attHolder->GetAttDefs()[attHolder->GetAttDefs().size()-1]);
+//             if(oss.str().find(strTrajPoint) != std::string::npos) {
+//                // Last attribute displayed was a trajectory point.  Since we
+//                // want abbreviated output, display the last one and exit
+//                // (unless we're already at the last (and only) trajectory point)
+//                if(i != attHolder->GetAttDefs().size()-1) {
+//                   G4cout << G4AttCheck(
+//                      attHolder->GetAttValues()[attHolder->GetAttDefs().size()-1],
+//                      attHolder->GetAttDefs()[attHolder->GetAttDefs().size()-1]);
 //                   }
 //                   break;
 //                }
@@ -1632,7 +1645,6 @@ void G4OpenInventorQtExaminerViewer::findAndSetRefPath()
                   // const char * nextChar = 
                   // oss.str().substr(idx + findStr.size() + 1,1).c_str();
                   if(std::isdigit(nextChar))
-                  // if(std::isdigit(nextChar[0]))
                      break;	//Not a primary track, continue with next track
 
                   coords = getCoordsNode(path);
@@ -2583,13 +2595,6 @@ void G4OpenInventorQtExaminerViewer::addEscapeCallback(void (*callback)())
    escapeCallback = callback;
 }
 
-//void G4OpenInventorQtExaminerViewer::addEscapeCallback(
-//                         void (*callback)(void *), void * object)
-//{
-//   escapeCallback = callback;
-//   examinerObject = object;
-//}
-
 
 void G4OpenInventorQtExaminerViewer::sceneChangeCB(void* userData, SoSensor*)
 {
@@ -3150,6 +3155,30 @@ void G4OpenInventorQtExaminerViewer::SwitchWireFrameCB(bool checked)
 }
 
 
+void G4OpenInventorQtExaminerViewer::SwitchAxesCB(bool checked)
+{
+   // FWJ DEBUG
+   //   G4cout << "App Button: switchAxes CALLBACK" << G4endl;
+   setFeedbackVisibility(checked);
+   //   if (checked) {
+   //      setFeedbackVisibility(TRUE);
+   //   } else {
+   //      setFeedbackVisibility(FALSE);
+   //   }
+}
+
+
+void G4OpenInventorQtExaminerViewer::DetachCB()
+{
+   //   FWJ DEBUG
+   //   G4cout << "App Button: detach CALLBACK" << G4endl;
+   uiQt->GetViewerTabWidget()->removeTab(uiQtTabIndex);
+   viewerParent->setParent(viewerParent2);
+   removeAppPushButton(detachButton);
+   show();
+}
+
+
 void G4OpenInventorQtExaminerViewer::DeleteBookmarkCB()
 {
    // FWJ DEBUG
@@ -3442,11 +3471,39 @@ void G4OpenInventorQtExaminerViewer::sortViewPts(std::vector<std::string> sorted
 }
 
 
+// Emulating private method SoGuiFullViewerP::zoom()
+void
+G4OpenInventorQtExaminerViewer::zoom(const float diffvalue)
+{
+   float multiplicator = float(std::exp(diffvalue));
+   SoCamera *cam = getCamera();
+
+   if (cam->isOfType(SoPerspectiveCamera::getClassTypeId())) {
+      const float oldfocaldist = cam->focalDistance.getValue();
+      const float newfocaldist = oldfocaldist * multiplicator;
+
+      SbVec3f direction;
+      cam->orientation.getValue().multVec(SbVec3f(0, 0, -1), direction);
+
+      const SbVec3f oldpos = cam->position.getValue();
+      const SbVec3f newpos = oldpos + (newfocaldist - oldfocaldist) * -direction;
+      cam->position = newpos;
+      cam->focalDistance = newfocaldist;
+   } else if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
+      SoOrthographicCamera * oc = (SoOrthographicCamera *)cam;
+      oc->height = oc->height.getValue() * multiplicator;
+   }
+}
+
+
 // Handling mouse and keyboard events
 
 SbBool
 G4OpenInventorQtExaminerViewer::processSoEvent(const SoEvent* const ev)
 {
+
+   // FWJ DEBUG
+   //   G4cout << "processSoEvent ############" << ++processSoEventCount << G4endl;
 
    SoCamera *cam = getCamera();
    const SoType type(ev->getTypeId());
@@ -3454,47 +3511,30 @@ G4OpenInventorQtExaminerViewer::processSoEvent(const SoEvent* const ev)
    if (type.isDerivedFrom(SoMouseButtonEvent::getClassTypeId())) {
       SoMouseButtonEvent * me = (SoMouseButtonEvent *) ev;
 
-      if (currentState == ANIMATION || currentState == REVERSED_ANIMATION
-          || currentState == PAUSED_ANIMATION) {
-         switch (me->getButton()) {
+      //      if (currentState == ANIMATION || currentState == REVERSED_ANIMATION
+      //          || currentState == PAUSED_ANIMATION) {
+
+      switch (me->getButton()) {
+
          case SoMouseButtonEvent::BUTTON4: // Scroll wheel up
             if (me->getState() == SoButtonEvent::DOWN) {
-               if (cam->isOfType(SoPerspectiveCamera::getClassTypeId())) {
-                  float hAngle =
-                     ((SoPerspectiveCamera *) cam)->heightAngle.getValue();
-                  ((SoPerspectiveCamera *) cam)->heightAngle = hAngle
-                     + 0.01f;
-                  return TRUE;
-               } else if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
-                  float height =
-                     ((SoOrthographicCamera *) cam)->height.getValue();
-                  ((SoOrthographicCamera *) cam)->height = height + 5;
-                  return TRUE;
-               }
+               //               G4cout << "SCROLL WHEEL UP" << G4endl;
+               zoom(-0.1f);
+               return TRUE;
             }
             break;
+
          case SoMouseButtonEvent::BUTTON5: // Scroll wheel down
             if (me->getState() == SoButtonEvent::DOWN) {
-               if (cam->isOfType(SoPerspectiveCamera::getClassTypeId())) {
-                  float hAngle =
-                     ((SoPerspectiveCamera *) cam)->heightAngle.getValue();
-                  if (hAngle > 0.01)
-                     ((SoPerspectiveCamera *) cam)->heightAngle = hAngle
-                        - 0.01f;
-                  return TRUE;
-               } else if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
-                  float height =
-                     ((SoOrthographicCamera *) cam)->height.getValue();
-                  if (height > 5)
-                     ((SoOrthographicCamera *) cam)->height = height - 5;
-                  return TRUE;
-               }
+               //               G4cout << "SCROLL WHEEL DOWN" << G4endl;
+               zoom(0.1f);
+               return TRUE;
             }
             break;
          default:
             break;
          }
-      }
+         //      }
       if (currentState == GENERAL) {
 
       }

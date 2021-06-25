@@ -40,18 +40,7 @@
 #include "G4VHyperonBuilder.hh"
 #include <vector>
 
-class G4LambdaInelasticProcess;
-class G4AntiLambdaInelasticProcess;
-class G4SigmaMinusInelasticProcess;
-class G4AntiSigmaMinusInelasticProcess;
-class G4SigmaPlusInelasticProcess;
-class G4AntiSigmaPlusInelasticProcess;
-class G4XiMinusInelasticProcess;
-class G4AntiXiMinusInelasticProcess;
-class G4XiZeroInelasticProcess;
-class G4AntiXiZeroInelasticProcess;
-class G4OmegaMinusInelasticProcess;
-class G4AntiOmegaMinusInelasticProcess;
+class G4HadronInelasticProcess;
 
 
 class G4HyperonBuilder : public G4PhysicsBuilderInterface {
@@ -61,18 +50,18 @@ class G4HyperonBuilder : public G4PhysicsBuilderInterface {
     virtual void Build() final override;
     virtual void RegisterMe( G4PhysicsBuilderInterface* aB ) final override;
   private:
-    G4LambdaInelasticProcess*         theLambdaInelastic;
-    G4AntiLambdaInelasticProcess*     theAntiLambdaInelastic;
-    G4SigmaMinusInelasticProcess*     theSigmaMinusInelastic;
-    G4AntiSigmaMinusInelasticProcess* theAntiSigmaMinusInelastic;
-    G4SigmaPlusInelasticProcess*      theSigmaPlusInelastic;
-    G4AntiSigmaPlusInelasticProcess*  theAntiSigmaPlusInelastic;
-    G4XiMinusInelasticProcess*        theXiMinusInelastic;
-    G4AntiXiMinusInelasticProcess*    theAntiXiMinusInelastic;
-    G4XiZeroInelasticProcess*         theXiZeroInelastic;
-    G4AntiXiZeroInelasticProcess*     theAntiXiZeroInelastic;
-    G4OmegaMinusInelasticProcess*     theOmegaMinusInelastic;
-    G4AntiOmegaMinusInelasticProcess* theAntiOmegaMinusInelastic;
+    G4HadronInelasticProcess*         theLambdaInelastic;
+    G4HadronInelasticProcess*     theAntiLambdaInelastic;
+    G4HadronInelasticProcess*     theSigmaMinusInelastic;
+    G4HadronInelasticProcess* theAntiSigmaMinusInelastic;
+    G4HadronInelasticProcess*      theSigmaPlusInelastic;
+    G4HadronInelasticProcess*  theAntiSigmaPlusInelastic;
+    G4HadronInelasticProcess*        theXiMinusInelastic;
+    G4HadronInelasticProcess*    theAntiXiMinusInelastic;
+    G4HadronInelasticProcess*         theXiZeroInelastic;
+    G4HadronInelasticProcess*     theAntiXiZeroInelastic;
+    G4HadronInelasticProcess*     theOmegaMinusInelastic;
+    G4HadronInelasticProcess* theAntiOmegaMinusInelastic;
     std::vector< G4VHyperonBuilder* > theModelCollections;
 };
 

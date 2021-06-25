@@ -48,7 +48,7 @@ G4INCLXXProtonBuilder()
 }
 
 void G4INCLXXProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   thePreCompoundModel->SetMinEnergy(thePreCompoundMin);
   thePreCompoundModel->SetMaxEnergy(thePreCompoundMax);

@@ -1,24 +1,8 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4phonon
-# Package: Geant4.src.G4processes.G4phonon
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitly.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/10/2013
-#
-#
-#------------------------------------------------------------------------------
+# - G4phonon module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4solidstate_phonon
-    HEADERS
+geant4_add_module(G4solidstate_phonon
+  PUBLIC_HEADERS
 	G4LatticeManager.hh
 	G4LatticeReader.hh
 	G4PhononDownconversion.hh
@@ -27,7 +11,7 @@ GEANT4_DEFINE_MODULE(NAME G4solidstate_phonon
 	G4PhononScattering.hh
 	G4PhononTrackMap.hh
 	G4VPhononProcess.hh
-    SOURCES
+  SOURCES
 	G4LatticeManager.cc
 	G4LatticeReader.cc
 	G4PhononDownconversion.cc
@@ -35,24 +19,16 @@ GEANT4_DEFINE_MODULE(NAME G4solidstate_phonon
 	G4PhononReflection.cc
 	G4PhononScattering.cc
 	G4PhononTrackMap.cc
-	G4VPhononProcess.cc
-    GRANULAR_DEPENDENCIES
-        G4bosons
-        G4geometrymng
-        G4globman
-        G4materials
-        G4partman
-        G4procman
-        G4track
-        G4volumes
-    GLOBAL_DEPENDENCIES
-        G4geometry
-        G4global
-        G4materials
-        G4particles
-        G4track
-    LINK_LIBRARIES
-)
+	G4VPhononProcess.cc)
 
-# List any source specific properties here
-
+geant4_module_link_libraries(G4solidstate_phonon
+  PUBLIC
+    G4globman
+    G4procman
+  PRIVATE
+    G4bosons
+    G4geometrymng
+    G4heprandom
+    G4materials
+    G4partman
+    G4track)

@@ -61,8 +61,8 @@
 #include "G4Pow.hh"   
 
 G4Generator2BS::G4Generator2BS(const G4String&)
-  : G4VEmAngularDistribution("AngularGen2BS"),fz(1),ratio(1),
-    ratio1(1),ratio2(1),delta(0)
+  : G4VEmAngularDistribution("AngularGen2BS"),fz(1.),ratio(1.),
+    ratio1(1.),ratio2(1.),delta(0.)
 {
   g4pow = G4Pow::GetInstance();
   nwarn = 0;
@@ -76,7 +76,6 @@ G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
 					       G4int Z,
 					       const G4Material*)
 {
-
   // Adapted from "Improved bremsstrahlung photon angular sampling in the EGS4 code system"
   // by Alex F. Bielajew, Rahde Mohan anc Chen-Shou Chui, PIRS-0203
   // Ionizing Radiation Standards
@@ -121,7 +120,6 @@ G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
     }
 
   } while(G4UniformRand()*gMax > gfun || y > ymax);
-
   
   G4double cost = 1 - 2*y/ymax;
   G4double sint = std::sqrt((1 - cost)*(1 + cost));

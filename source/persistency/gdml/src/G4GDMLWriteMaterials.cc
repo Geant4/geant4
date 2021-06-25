@@ -228,7 +228,7 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 
 // --------------------------------------------------------------------
 void G4GDMLWriteMaterials::PropertyVectorWrite(
-  const G4String& key, const G4PhysicsOrderedFreeVector* const pvec)
+  const G4String& key, const G4PhysicsFreeVector* const pvec)
 {
   for(std::size_t i = 0; i < propertyList.size(); ++i)  // Check if property is
   {                                                     // already in the list!

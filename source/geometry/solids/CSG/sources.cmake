@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4csg
-# Package: Geant4.src.G4geometry.G4csg
-#------------------------------------------------------------------------------
+# - G4csg module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4csg
-  HEADERS
+geant4_add_module(G4csg
+  PUBLIC_HEADERS
     G4Box.hh
     G4Box.icc
     G4CSGSolid.hh
@@ -60,20 +55,8 @@ geant4_define_module(NAME G4csg
     G4UTorus.cc
     G4UTrap.cc
     G4UTrd.cc
-    G4UTubs.cc
-  GRANULAR_DEPENDENCIES
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hepnumerics
-    G4intercoms
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-  LINK_LIBRARIES
-    ${VECGEOM_LIBRARIES}
-)
+    G4UTubs.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4csg
+  PUBLIC G4globman G4graphics_reps G4geometrymng ${VECGEOM_LIBRARIES}
+  PRIVATE G4hepnumerics G4heprandom)

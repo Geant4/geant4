@@ -32,15 +32,13 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Log.hh"
 
 class G4BoldyshevTripletModel : public G4VEmModel
 {
-
 public:
-  
   explicit G4BoldyshevTripletModel(const G4ParticleDefinition* p = nullptr, 
 				   const G4String& nam = "BoldyshevTripletConversion");
   
@@ -70,7 +68,6 @@ public:
 				    G4double);
 
 private:
-
   void ReadData(size_t Z, const char* path = nullptr);
 
   G4double ScreenFunction1(G4double screenVariable);
@@ -79,7 +76,10 @@ private:
   G4BoldyshevTripletModel & operator=(const  G4BoldyshevTripletModel &right) = delete;
   G4BoldyshevTripletModel(const  G4BoldyshevTripletModel&) = delete;
 
-  G4int verboseLevel;
+  static const G4int maxZ = 99;
+  static G4PhysicsFreeVector* data[maxZ+1]; // 100 because Z range is 1-99
+  
+  G4ParticleChangeForGamma* fParticleChange;
 
   G4double lowEnergyLimit;  
   G4double smallEnergy;
@@ -88,10 +88,7 @@ private:
   G4double xb;
   G4double xn;
   
-  static G4int maxZ;
-  static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
-  
-  G4ParticleChangeForGamma* fParticleChange;
+  G4int verboseLevel;
 
 };
 

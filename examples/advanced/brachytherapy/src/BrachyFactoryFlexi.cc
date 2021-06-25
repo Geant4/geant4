@@ -34,7 +34,8 @@
 //    *******************************
 //
 //
-#include "globals.hh"
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionFlexi.hh"
 #include "BrachyFactoryFlexi.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
@@ -43,8 +44,7 @@
 #include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh" 
-#include "BrachyDetectorMessenger.hh"
-#include "BrachyDetectorConstructionFlexi.hh"
+#include "globals.hh"
 
 BrachyFactoryFlexi:: BrachyFactoryFlexi()
 {
@@ -61,7 +61,7 @@ void BrachyFactoryFlexi::CreateSource(G4VPhysicalVolume* mother)
   fFlexiSource -> ConstructFlexi(mother);
 }
 
-void BrachyFactoryFlexi::CleanSource()
+void BrachyFactoryFlexi::CleanSource() 
 {
   fFlexiSource -> CleanFlexi();
   fFlexiSource = nullptr;

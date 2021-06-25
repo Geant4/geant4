@@ -36,9 +36,9 @@
 class G4MicroElecCrossSectionDataSet_new : public G4VEMDataSet
 { 
 public:
-  G4MicroElecCrossSectionDataSet_new(G4VDataSetAlgorithm* algo, 
-			   G4double xUnit=CLHEP::MeV, 
-			   G4double dataUnit=CLHEP::barn);
+  explicit G4MicroElecCrossSectionDataSet_new(G4VDataSetAlgorithm* algo, 
+					      G4double xUnit=CLHEP::MeV, 
+					      G4double dataUnit=CLHEP::barn);
   ~G4MicroElecCrossSectionDataSet_new() override;
 
   G4double FindValue(G4double e, G4int componentId=0) const override;
@@ -69,23 +69,21 @@ public:
   G4bool SaveData(const G4String & argFileName) const override;
   G4double RandomSelect(G4int /*componentId */) const  override
         { return -1.; };
-   
-private:
-  G4MicroElecCrossSectionDataSet_new();
-  G4MicroElecCrossSectionDataSet_new(const G4MicroElecCrossSectionDataSet_new & copy);
-  G4MicroElecCrossSectionDataSet_new& operator=(const G4MicroElecCrossSectionDataSet_new & right);
 
+  G4MicroElecCrossSectionDataSet_new(const G4MicroElecCrossSectionDataSet_new & copy) = delete;
+  G4MicroElecCrossSectionDataSet_new& operator=(const G4MicroElecCrossSectionDataSet_new & right) = delete;
+
+private:
   G4String FullFileName(const G4String & argFileName) const;
   G4double GetUnitEnergies() const { return unitEnergies; }
   G4double GetUnitData() const { return unitData; }
   const G4VDataSetAlgorithm* GetAlgorithm() const { return algorithm; }
-  void CleanUpComponents(void);
+  void CleanUpComponents();
 
   std::vector<G4VEMDataSet*> components;          // Owned pointers
-  G4int z;
+ 
   G4VDataSetAlgorithm* algorithm;           // Owned pointer 
   G4double unitEnergies;
   G4double unitData; 
-
 };
 #endif 

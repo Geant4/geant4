@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 May 21: D. Sawkey (op-V10-07-02)
+- G4OpBoundaryProcess: make some variables local and initialize them
+  properly. Addresses bug 2364.
+
+18 May 21: V. Ivanchenko (op-V10-07-01)
+- G4OpRayleigh, G4OpWLS, G4OpWLS2 - use G4PhysicsFreeVector instead
+  of G4PhysicsOrderedFreeVector
+
+16 Apr 21: Ben Morgan (op-V10-07-00)
+- Migrate build to modular CMake API
+
 04 Nov 20: D. Sawkey (op-V10-06-07)
 - Fix reading Davis LUT out of bounds (addresses bug 2287)
 
@@ -57,7 +68,7 @@ committal in the CVS repository !
 - G4OpMieHG: change GetProperty from string to enum
 
 11 September 17: S.Y. Jun (op-V10-03-03)
-- change material property keys by the enum type defined in 
+- change material property keys by the enum type defined in
   G4MaterialPropertiesIndex
 
 29 May 17: P. Gumplinger (op-V10-03-02)
@@ -107,7 +118,7 @@ committal in the CVS repository !
 - fix Coverity error in G4OpWLS.cc
 
 27 October 2014 A. Dotti (op-V10-00-09)
-- Address problem #1675, this requires re engineering of 
+- Address problem #1675, this requires re engineering of
   all UI commands related to optical processes and created
   in G4OpticalPhysics.
 - Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
@@ -134,7 +145,7 @@ committal in the CVS repository !
 
 9th October 2014 P. Gumplinger (op-V10-00-05)
 - G4OpBoundaryProcess allow for a Transmittance, Reflectivity and
-  Absorption on dielectric_dielectric and dielectric_metal boundaries 
+  Absorption on dielectric_dielectric and dielectric_metal boundaries
 
 10th June 2014 P. Gumplinger (op-V10-00-04)
 - G4OpWLS always rebuild theIntegralTable in BuildPhysicsTable method
@@ -203,25 +214,25 @@ committal in the CVS repository !
               G4OPTICAL_DEBUG, as the one defined in GNUmakefile...
 
 17th Oct.2012 J.Apostolakis (op-V09-05-11)
-	      Avoid the 'new' Event-abort exception, by 'protecting' 
+	      Avoid the 'new' Event-abort exception, by 'protecting'
                  it with G4DEBUG_OPTICAL_PROC flag.
-              By default, the normal is now flipped instead 
+              By default, the normal is now flipped instead
                  (as Geant4 9.5 and 9.5 patch 1 worked.)
 
- 5th Oct.2012 J.Apostolakis (op-V09-05-10) 
+ 5th Oct.2012 J.Apostolakis (op-V09-05-10)
               G4OpBoundaryProcess now uses GlobalExitNormal()
                ( same code as op-V09-05-06 )
 
 ********* G4OpBoundaryProcess uses the *Global* Normal  ****
 
- 5th Oct.2012 J.Apostolakis (op-V09-05-09) 
+ 5th Oct.2012 J.Apostolakis (op-V09-05-09)
               Retagged to enable testing - same code as -07 below.
  4th Oct.2012 J.Apostolakis (op-V09-05-07)
-              Added information in printout of Exception on direction of 
+              Added information in printout of Exception on direction of
               momentum and exiting normal.
 
 03rd Oct.2012 P.Gumplinger (op-V09-05-05a)
-              add G4Exception when theGlobalNormal points the 
+              add G4Exception when theGlobalNormal points the
               wrong direction in G4OpBoundaryProcess
 
 10th Jul.2012 G.Cosmo (op-V09-05-05)
@@ -295,8 +306,8 @@ committal in the CVS repository !
 
 19th Apr 2010 Peter Gumplinger (op-V09-03-01)
               fix Problem report #1114 in that for backpainted
-              surfaces theReflectivity is not applied twice. 
-              While doing the fix I also completely refashioning the 
+              surfaces theReflectivity is not applied twice.
+              While doing the fix I also completely refashioning the
               code in the case of type == dielectric_dielect.
 
 19th Jan 2010 Peter Gumplinger (op-V09-03-00)
@@ -340,7 +351,7 @@ committal in the CVS repository !
               both are bug-fixes.
 
 14th Jan 2009 Peter Gumplinger (op-V09-02-00)
-              respond to bug report 1040 by fixing G4OpBoundaryProcess.cc 
+              respond to bug report 1040 by fixing G4OpBoundaryProcess.cc
 
 07th Nov 2008 Peter Gumplinger (op-V09-01-09)
               use new global/HEPRandom's G4RandomTools.hh
@@ -373,7 +384,7 @@ committal in the CVS repository !
                following suggestion in bug-report #1014
 
 6th June 2008 Peter Gumplinger (op-V09-01-02)
-              G4OpRayleigh, G4OpWLS = trivial name changes: 
+              G4OpRayleigh, G4OpWLS = trivial name changes:
               momentum->energy, momenta->energies
 
 5th June 2008 Peter Gumplinger (op-V09-01-00)
@@ -384,8 +395,8 @@ committal in the CVS repository !
 
 29th Oct 2007 Peter Gumplinger (op-V09-00-01)
               In G4OpWLS.cc allow for the MeanNumberOfPhotons to be
-              different from one, in case the constant property: 
-              WLSMEANNUMBERPHOTONS is provided and, if it is, sample 
+              different from one, in case the constant property:
+              WLSMEANNUMBERPHOTONS is provided and, if it is, sample
               NumPhotons with G4Poisson.
 
 15th Oct 2007 Peter Gumplinger (op-V09-00-00)
@@ -432,15 +443,15 @@ committal in the CVS repository !
                 theFacetNormal for LobeReflection in DielectricMetal
 
 12th August 2004 Peter Gumplinger (op-V06-02-01)
-                In G4OpBoundaryProcess.cc: use GetMaterial from 
-                G4StepPoint directly; apply/sample reflectivity and 
+                In G4OpBoundaryProcess.cc: use GetMaterial from
+                G4StepPoint directly; apply/sample reflectivity and
                 Unified model reflection parameters only once even
                 for rough dielectric/metal surfaces - i.e. not again
                 even when reflected ray still points toward the
                 surface - fixes problem report 654.
 
 05th August 2004 Peter Gumplinger (op-V06-02-00)
-                Allow for unified model reflectivity parameters 
+                Allow for unified model reflectivity parameters
                 to also work in case of dielectric_metal surfaces;
                 addresses in part problem report 654.
 
@@ -462,7 +473,7 @@ committal in the CVS repository !
                 compilation warning in Linux-g++.
 
 19th February 2004 Peter Gumplinger (op-V06-00-01)
-                Add process status: NotAtBoundary, SameMaterial, 
+                Add process status: NotAtBoundary, SameMaterial,
                                     StepTooSmall, NoRINDEX
                 Allow for a skin-surface between mother and daughter
                 volumes, with the daughter skin taking precedence.
@@ -470,7 +481,7 @@ committal in the CVS repository !
 2nd February 2004 Peter Gumplinger (op-V06-00-00)
                 Set theStatus = Undefined at start of DoIt
                 Replace usage of 0 with NULL.
- 
+
 1st December 2003 Peter Gumplinger (op-V05-02-02)
                 G4OpBoundaryProcess.cc: modified to adopt G4SurfaceProperty.
                 Requires tag "materials-V05-02-00".
@@ -487,12 +498,12 @@ committal in the CVS repository !
                 Change logic for assigning of Rindex2; bug report #444
 4th February 2003 Peter Gumplinger (op-V05-00-00)
                 Fix calculation of polarization for perpendicular
-                incidence when Rindex1 > Rindex2; bug report #442 
+                incidence when Rindex1 > Rindex2; bug report #442
 12th November 2002 Peter Gumplinger (op-V04-01-01)
                 Fix calculation of polarization on dielectric dielectric
                 interfaces; bug report #427
 28th March 2002 Peter Gumplinger (op-V04-00-01)
-                Add public inline method GetStatus and make enum 
+                Add public inline method GetStatus and make enum
                 G4OpBoundaryProcessStatus public in G4OpBoundaryProcess.hh
 18th October 2001 Peter Gumplinger (op-V03-02-01)
               Avoid warnings on Linux (gcc-2.95.2) compiler
@@ -515,7 +526,7 @@ committal in the CVS repository !
                    bug report: 207
 
 23rd January 2001 Peter Gumplinger (op-V03-00-02)
-- G4OpRayleigh.cc: Allow for Rayleigh scattering length to be defined for 
+- G4OpRayleigh.cc: Allow for Rayleigh scattering length to be defined for
            arbitrary material through the use of G4MaterialPropertyTable.
 
 5th October 2000  Peter Gumplinger (op-V02-00-02)

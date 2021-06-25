@@ -16,12 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 May 2021 - G.Cosmo
+- Units (M.Maire)
+  o Added in SystemOfUnits.h: minute, hour, day, year and millielectronvolt.
+  o Added in PhysicalConstants.h: Bohr_magneton and nuclear_magneton.
+
 06 May 2021 - G.Cosmo
 - Fixed trivial compilation warnings on gcc-11 in Random headers.
 
 11 November 2020 - G.Cosmo
 - Synchronised with CLHEP-2.4.4.0:
-  * Vector (G.Amadio <amadio@cern.ch>)
+  * Vector (G.Amadio)
     o Removed obsolete #pragma interface/implementation
       These pragmas are obsolete since GCC 2.7.2.
       https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Interface.html.
@@ -34,7 +39,7 @@ committal in the CVS repository !
       This is in preparation to change the data layout of Hep3Vector
       by replacing the private dx/dy/dz members with a vector, data[3],
       to allow us to remove the inefficient switch from operator[]().
-  * Vector, Random (V.Vassilev <v.g.vassilev@gmail.com>)
+  * Vector, Random (V.Vassilev)
     o Added missing includes for translation unit encapsulation.
 
 17 July 2020 - G.Cosmo

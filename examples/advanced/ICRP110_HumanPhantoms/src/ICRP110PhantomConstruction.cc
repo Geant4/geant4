@@ -51,6 +51,7 @@
 #include "ICRP110PhantomNestedParameterisation.hh"
 
 ICRP110PhantomConstruction::ICRP110PhantomConstruction():
+   fMotherVolume(nullptr), fPhantomContainer(nullptr),
    fNVoxelX(0), fNVoxelY(0), fNVoxelZ(0), 
    fVoxelHalfDimX(0), fVoxelHalfDimY(0), fVoxelHalfDimZ(0),
    fMinX(0),fMaxX(0), fMinY(0), fMaxY(0),
@@ -214,16 +215,16 @@ if(fSex == "female"){
   G4double worldSize = 2.*m ;
   G4Box* world = new G4Box("world", worldSize, worldSize, worldSize);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(world, 
-						                         matAir, 
-						                         "logicalWorld", 0, 0,0);
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(world,
+						    matAir,
+						    "logicalWorld", 0, 0,0);
 
-  G4VPhysicalVolume* motherVolume = new G4PVPlacement(0,G4ThreeVector(),
-						                                         "physicalWorld",
-						                                          logicWorld,
-						                                          0,
-						                                         false,
-						                                         0);
+  fMotherVolume = new G4PVPlacement(0,G4ThreeVector(),
+				    "physicalWorld",
+				    logicWorld,
+				    0,
+				    false,
+				    0);
 
   logicWorld -> SetVisAttributes(G4VisAttributes::GetInvisible());
  
@@ -258,7 +259,8 @@ if(fSex == "female"){
   G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
 
    
-  new G4PVPlacement(0,                     // rotation
+  fPhantomContainer
+  = new G4PVPlacement(0,                     // rotation
                       posCentreVoxels,
                       fContainer_logic,     // The logic volume
                       "phantomContainer",  // Name
@@ -312,7 +314,7 @@ if(fSex == "female"){
     param -> SetMaterialIndices(fMateIDs); // fMateIDs is  the vector with Material ID associated to each voxel, from ASCII input data files.
     param -> SetNoVoxel(fNVoxelX,fNVoxelY,fNVoxelZ);
 
-return motherVolume;
+  return fMotherVolume;
 }
 
 void ICRP110PhantomConstruction::ReadPhantomData(const G4String& sex, const G4String& section)
@@ -806,4 +808,4 @@ void ICRP110PhantomConstruction::SetPhantomSection(G4String newSection)
   if ((fSection != "head") && (fSection != "trunk") && (fSection != "full"))
     G4cout << fSection << " is not defined!" << G4endl;  
 
-} 
+}

@@ -57,7 +57,6 @@
 
 #include "G4SystemOfUnits.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MicroElecSurface::G4MicroElecSurface(const G4String& processName,G4ProcessType type)
@@ -291,8 +290,7 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
 	       GetLogicalVolume());
 	}
     }
-  
-  
+    
   G4VPhysicalVolume* thePrePV = pPreStepPoint->GetPhysicalVolume();
   G4VPhysicalVolume* thePostPV = pPostStepPoint->GetPhysicalVolume();
   
@@ -309,14 +307,12 @@ G4VParticleChange* G4MicroElecSurface::PostStepDoIt(const G4Track& aTrack, const
 	G4Exception("G4Surface::G4Surface", "em0002", FatalException, str);
 	return 0;
       }
-      
       else if (preStepWF == tableWF.end()) {
 	G4String str = "Material ";
 	str += thePrePV->GetLogicalVolume()->GetMaterial()->GetName() + " not found!";
 	G4Exception("G4Surface::G4Surface", "em0002", FatalException, str);
 	return 0;
       }
-      
       else
 	{
 	  G4double thresholdNew = postStepWF->second;
@@ -434,8 +430,7 @@ G4ThreeVector G4MicroElecSurface::Reflexion(const G4StepPoint* PostStepPoint)
   
   if (Ny == 0 && Nx == 0) {
     gamma = -gamma;
-  }
-  
+  }  
   else {
     if (Ny == 0) {
       
@@ -467,8 +462,7 @@ G4ThreeVector G4MicroElecSurface::Reflexion(const G4StepPoint* PostStepPoint)
     
   }
   
-  G4ThreeVector newMomentum = G4ThreeVector(alpha-PSx,beta-PSy,gamma-PSz);
-  
+  G4ThreeVector newMomentum = G4ThreeVector(alpha-PSx,beta-PSy,gamma-PSz);  
   return newMomentum.unit();
 }
 

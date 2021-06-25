@@ -50,19 +50,19 @@ class DetectorConstruction: public G4VUserDetectorConstruction
 {
 public:
   DetectorConstruction();
-  ~DetectorConstruction();
+  ~DetectorConstruction() override;
 
   void SetTrackingCut(G4double);
 
   void SetCytoThickness(G4double);
-  void SetCytoMaterial(G4String);
+  void SetCytoMaterial(const G4String&);
   
   void SetNuclRadius(G4double);
-  void SetNuclMaterial(G4String);
+  void SetNuclMaterial(const G4String&);
 
-  void SetWorldMaterial(G4String);
+  void SetWorldMaterial(const G4String&);
 
-  virtual G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct() override;
 
   inline G4double GetCytoThickness() const
   {
@@ -109,29 +109,26 @@ public:
 private:
 
   void DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
+
+  G4Material* fNuclMaterial = nullptr;
+  G4Material* fCytoMaterial = nullptr;
+  G4Material* fWorldMaterial = nullptr;
+
+  G4VPhysicalVolume* fNucl = nullptr;
+  G4VPhysicalVolume* fCyto = nullptr;
+  G4VPhysicalVolume* fWorld = nullptr;
+
+  G4LogicalVolume* fLogicalNucl = nullptr;
+  G4LogicalVolume* fLogicalCyto = nullptr;
+  G4LogicalVolume* fLogicalWorld = nullptr;
+
+  DetectorMessenger* fDetectorMessenger = nullptr;
 
   G4double fTrackingCut;
-
   G4double fNuclRadius;
-  G4Material* fNuclMaterial;
-  
   G4double fCytoThickness;
-  G4Material* fCytoMaterial;
-  
   G4double fWorldRadius;
-  G4Material* fWorldMaterial;
 
-  G4VPhysicalVolume* fNucl;
-  G4LogicalVolume* fLogicalNucl;
-
-  G4VPhysicalVolume* fCyto;
-  G4LogicalVolume* fLogicalCyto;
-  
-  G4VPhysicalVolume* fWorld;
-  G4LogicalVolume* fLogicalWorld;
-
-  DetectorMessenger* fDetectorMessenger;
 };
 
 #endif

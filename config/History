@@ -15,10 +15,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12th March 2021 Gabriele Cosmo (config-V10-06-09)
-- Fixed name of internal PTL module library for DLL build.
+1st June 2021 Gabriele Cosmo (config-V10-07-05)
+- Moved default to c++17 Standard.
 
-11th December 2020 Gabriele Cosmo (config-V10-06-08)
+15th April 2021 Gabriele Cosmo (config-V10-07-04)
+- binmake.gmk: removed include paths to "hadronic/models/management" and
+  "hadronic/models/util" modules, now retired.
+
+17th March 2021 Gabriele Cosmo (config-V10-07-03)
+- binmake.gmk: removed include path to "rpg" hadronic model, now retired.
+
+12th March 2021 Gabriele Cosmo (config-V10-07-02)
+- Added comctl32.lib to UI32LIBS for WIN32-VC configuration and fixed name
+  of internal PTL module library for DLL build.
+
+18th December 2020 Ben Morgan (config-V10-07-01)
+- Update compiler/link flags for migration of g4tools to externals
+  category.
+
+11th December 2020 Gabriele Cosmo (config-V10-07-00)
 - Updated Qt5 settings in Linux targets.
 
 22nd October 2020 Gabriele Cosmo (config-V10-06-07)

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 1, 2021 B. Morgan (detscorer-V10-07-00)
+- Migrate build to modular CMake API
+
 October 6, 2020  Makoto Asai (detscorer-V10-06-01)
 - Migrate following scorers to use G4PrimitivePlotter to directly fill histograms.
    G4PSCellFlux G4PSCylinderSurfaceCurrent G4PSCylinderSurfaceFlux G4PSDoseDeposit
@@ -37,7 +40,7 @@ July 11, 2007  M.Asai (detscorer-V09-00-00)
 - Moved from digits_hits/utilis.
 
 June 06, 2007  A.Howard (detutils-V08-03-02)
-- Added modified G4PSPopulation removing event (circular) dependency 
+- Added modified G4PSPopulation removing event (circular) dependency
   (file form T.Aso).
 
 June 05, 2007  M.Asai (detutils-V08-03-01)

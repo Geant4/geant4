@@ -37,37 +37,14 @@
 #include "G4PhysicsBuilderInterface.hh"
 
 class G4HadronElasticProcess;
-class G4LambdaInelasticProcess;
-class G4AntiLambdaInelasticProcess;
-class G4SigmaMinusInelasticProcess;
-class G4AntiSigmaMinusInelasticProcess;
-class G4SigmaPlusInelasticProcess;
-class G4AntiSigmaPlusInelasticProcess;
-class G4XiMinusInelasticProcess;
-class G4AntiXiMinusInelasticProcess;
-class G4XiZeroInelasticProcess;
-class G4AntiXiZeroInelasticProcess;
-class G4OmegaMinusInelasticProcess;
-class G4AntiOmegaMinusInelasticProcess;
-
+class G4HadronInelasticProcess;
 
 class G4VHyperonBuilder : public G4PhysicsBuilderInterface {
   public:
     G4VHyperonBuilder() = default;
     virtual ~G4VHyperonBuilder() {} 
-    virtual void Build( G4HadronElasticProcess*           aP ) = 0;
-    virtual void Build( G4LambdaInelasticProcess*         aP ) = 0;
-    virtual void Build( G4AntiLambdaInelasticProcess*     aP ) = 0;
-    virtual void Build( G4SigmaMinusInelasticProcess*     aP ) = 0;
-    virtual void Build( G4AntiSigmaMinusInelasticProcess* aP ) = 0;
-    virtual void Build( G4SigmaPlusInelasticProcess*      aP ) = 0;
-    virtual void Build( G4AntiSigmaPlusInelasticProcess*  aP ) = 0;
-    virtual void Build( G4XiMinusInelasticProcess*        aP ) = 0;
-    virtual void Build( G4AntiXiMinusInelasticProcess*    aP ) = 0;
-    virtual void Build( G4XiZeroInelasticProcess*         aP ) = 0;
-    virtual void Build( G4AntiXiZeroInelasticProcess*     aP ) = 0;
-    virtual void Build( G4OmegaMinusInelasticProcess*     aP ) = 0;
-    virtual void Build( G4AntiOmegaMinusInelasticProcess* aP ) = 0;
+    virtual void Build( G4HadronElasticProcess*   aP ) = 0;
+    virtual void Build( G4HadronInelasticProcess* aP ) = 0;
     using G4PhysicsBuilderInterface::Build;  // Prevent compiler warning
 };
 

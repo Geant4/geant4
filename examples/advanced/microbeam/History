@@ -7,6 +7,26 @@
 
                        Package History file
                        --------------------
+
+10 June 2021 - V. Ivanchenko - tag microbeam-V10-07-03
+- an attempt to fix problems at nightly and some clean-up:
+  microbeam.cc - do not initialize run and number of threads, let 
+    these be done in microbeam.mac
+  DetectorConstruction - use CLHEP::twopi; do not have fField pointer
+    as the class member, instead use G4AutoDelete registration
+  CellParameterisation - initilize all data members
+
+24 May 2021 - B. Morgan (microbeam-V10-07-02)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+15 Feb 2021 - S. Guatelli - tag microbeam-V10-07-01
+- explicit constructors and "override" instead of "virtual" in derived classes.
+Initialisation of G4double/G4int variables in the DetectorConstruction
+
+09 Feb 2021 - S. Guatelli - tag microbeam-V10-07-00
+- Initialisation of fDose3DDose and fMapVoxels in the
+constructor of the RunAction class
+
 15 Nov 2020 - S. Guatelli - tag microbeam-V10-06-01
 - Migration to G4RunManagerFactory
 

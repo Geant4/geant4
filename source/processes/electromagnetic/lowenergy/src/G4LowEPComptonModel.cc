@@ -76,6 +76,7 @@
 #include "G4LossTableManager.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShell.hh"
+#include "G4AutoLock.hh"
 #include "G4Gamma.hh"
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
@@ -85,11 +86,11 @@
 //****************************************************************************
 
 using namespace std;
+namespace { G4Mutex LowEPComptonModelMutex = G4MUTEX_INITIALIZER; }
 
-G4int G4LowEPComptonModel::maxZ = 99;
-G4LPhysicsFreeVector* G4LowEPComptonModel::data[] = {0};
-G4ShellData*       G4LowEPComptonModel::shellData = 0;
-G4DopplerProfile*  G4LowEPComptonModel::profileData = 0;
+G4PhysicsFreeVector* G4LowEPComptonModel::data[] = {nullptr};
+G4ShellData*       G4LowEPComptonModel::shellData = nullptr;
+G4DopplerProfile*  G4LowEPComptonModel::profileData = nullptr;
 
 static const G4double ln10 = G4Log(10.);
 
@@ -112,8 +113,8 @@ G4LowEPComptonModel::G4LowEPComptonModel(const G4ParticleDefinition*,
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
 
-  fParticleChange = 0;
-  fAtomDeexcitation = 0;
+  fParticleChange = nullptr;
+  fAtomDeexcitation = nullptr;
 }
 
 //****************************************************************************
@@ -122,9 +123,9 @@ G4LowEPComptonModel::~G4LowEPComptonModel()
 {
   if(IsMaster()) {
     delete shellData;
-    shellData = 0;
+    shellData = nullptr;
     delete profileData;
-    profileData = 0;
+    profileData = nullptr;
   }
 }
 
@@ -138,11 +139,9 @@ void G4LowEPComptonModel::Initialise(const G4ParticleDefinition* particle,
   }
 
   // Initialise element selector
-
   if(IsMaster()) {
 
     // Access to elements
-
     char* path = std::getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =
@@ -226,10 +225,7 @@ void G4LowEPComptonModel::ReadData(size_t Z, const char* path)
     }
   }
 
-  data[Z] = new G4LPhysicsFreeVector();
-
-  // Activation of spline interpolation
-  data[Z]->SetSpline(false);
+  data[Z] = new G4PhysicsFreeVector();
 
   std::ostringstream ost;
   ost << datadir << "/livermore/comp/ce-cs-" << Z <<".dat";
@@ -275,7 +271,7 @@ G4LowEPComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   G4int intZ = G4lrint(Z);
   if(intZ < 1 || intZ > maxZ) { return cs; }
 
-  G4LPhysicsFreeVector* pv = data[intZ];
+  G4PhysicsFreeVector* pv = data[intZ];
 
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -319,7 +315,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // The random number techniques of Butcher & Messel are used
   // (Nucl Phys 20(1960),15).
 
-
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy()/MeV;
 
   if (verboseLevel > 3) {
@@ -336,7 +331,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
   // Select randomly one element in the current material
-
   const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
   G4int Z = (G4int)elm->GetZ();
@@ -387,14 +381,12 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   G4double diry = sinTheta * std::sin(phi);
   G4double dirz = cosTheta ;
 
-
   // Scatter photon energy and Compton electron direction - Method based on:
   // J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin'
   // "A low energy bound atomic electron Compton scattering model for Geant4"
   // NIMB, Vol. 338, 77-88, 2014.
 
   // Set constants and initialize scattering parameters
-
   const G4double vel_c = c_light / (m/s);
   const G4double momentum_au_to_nat = halfpi* hbar_Planck / Bohr_radius / (kg*m/s);
   const G4double e_mass_kg =  electron_mass_c2 / c_squared / kg ;
@@ -421,178 +413,154 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   }
 
   do{
-
-
       // ******************************************
       // |     Determine scatter photon energy    |
       // ******************************************   
+    do
+      {
+	iteration++;
+	// ********************************************
+	// |     Sample bound electron information    |
+	// ********************************************
+	
+	// Select shell based on shell occupancy	
+	shellIdx = shellData->SelectRandomShell(Z);
+	bindingE = shellData->BindingEnergy(Z,shellIdx)/MeV;
+	
+	// Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
+	ePAU = profileData->RandomSelectMomentum(Z,shellIdx);
+	
+	// Convert to SI units     
+	G4double ePSI = ePAU * momentum_au_to_nat;
 
- do
-    {
-      iteration++;
+	//Calculate bound electron velocity and normalise to natural units
+	u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)) )/vel_c;
+	
+	// Sample incident electron direction, amorphous material, to scattering photon scattering plane 
+	e_alpha = pi*G4UniformRand();
+	e_beta = twopi*G4UniformRand();
 
+	// Total energy of system  
+	
+	G4double eEIncident = electron_mass_c2 / sqrt( 1 - (u_temp*u_temp));
+	G4double systemE = eEIncident + pEIncident;
+	G4double gamma_temp = 1.0 / sqrt( 1 - (u_temp*u_temp));
+	G4double numerator = gamma_temp*electron_mass_c2*(1 - u_temp * std::cos(e_alpha));
+	G4double subdenom1 =  u_temp*cosTheta*std::cos(e_alpha);
+	G4double subdenom2 = u_temp*sinTheta*std::sin(e_alpha)*std::cos(e_beta);
+	G4double denominator = (1.0 - cosTheta) +  (gamma_temp*electron_mass_c2*(1 - subdenom1 - subdenom2) / pEIncident);
+	pERecoil = (numerator/denominator);
+	eERecoil = systemE - pERecoil;
+	CE_emission_flag = pEIncident - pERecoil;
+      } while ( (iteration <= maxDopplerIterations) && (CE_emission_flag < bindingE));
+    
+    // End of recalculation of photon energy with Doppler broadening
+    
+    // *******************************************************
+    // |     Determine ejected Compton electron direction    |
+    // *******************************************************      
+    
+    // Calculate velocity of ejected Compton electron   
+    
+    G4double a_temp = eERecoil / electron_mass_c2;
+    G4double u_p_temp = sqrt(1 - (1 / (a_temp*a_temp)));
+    
+    // Coefficients and terms from simulatenous equations     
+    G4double sinAlpha = std::sin(e_alpha);
+    G4double cosAlpha = std::cos(e_alpha);
+    G4double sinBeta = std::sin(e_beta);
+    G4double cosBeta = std::cos(e_beta);
+    
+    G4double gamma = 1.0 / sqrt(1 - (u_temp*u_temp));
+    G4double gamma_p = 1.0 / sqrt(1 - (u_p_temp*u_p_temp));
+    
+    G4double var_A = pERecoil*u_p_temp*sinTheta;
+    G4double var_B = u_p_temp* (pERecoil*cosTheta-pEIncident);
+    G4double var_C = (pERecoil-pEIncident) - ( (pERecoil*pEIncident) / (gamma_p*electron_mass_c2))*(1 - cosTheta);
+    
+    G4double var_D1 = gamma*electron_mass_c2*pERecoil;
+    G4double var_D2 = (1 - (u_temp*cosTheta*cosAlpha) - (u_temp*sinTheta*cosBeta*sinAlpha));
+    G4double var_D3 = ((electron_mass_c2*electron_mass_c2)*(gamma*gamma_p - 1)) - (gamma_p*electron_mass_c2*pERecoil);
+    G4double var_D = var_D1*var_D2 + var_D3;
+    
+    G4double var_E1 = ((gamma*gamma_p)*(electron_mass_c2*electron_mass_c2)*(u_temp*u_p_temp)*cosAlpha);
+    G4double var_E2 = gamma_p*electron_mass_c2*pERecoil*u_p_temp*cosTheta;
+    G4double var_E = var_E1 - var_E2;
+    
+    G4double var_F1 = ((gamma*gamma_p)*(electron_mass_c2*electron_mass_c2)*(u_temp*u_p_temp)*cosBeta*sinAlpha);
+    G4double var_F2 = (gamma_p*electron_mass_c2*pERecoil*u_p_temp*sinTheta);
+    G4double var_F = var_F1 - var_F2;
+    
+    G4double var_G = (gamma*gamma_p)*(electron_mass_c2*electron_mass_c2)*(u_temp*u_p_temp)*sinBeta*sinAlpha;
+    
+    // Two equations form a quadratic form of Wx^2 + Yx + Z = 0
+    // Coefficents and solution to quadratic
+    G4double var_W1 = (var_F*var_B - var_E*var_A)*(var_F*var_B - var_E*var_A);
+    G4double var_W2 = (var_G*var_G)*(var_A*var_A) + (var_G*var_G)*(var_B*var_B);
+    G4double var_W = var_W1 + var_W2;
+    
+    G4double var_Y = 2.0*(((var_A*var_D-var_F*var_C)*(var_F*var_B-var_E*var_A)) - ((var_G*var_G)*var_B*var_C));
+    
+    G4double var_Z1 = (var_A*var_D - var_F*var_C)*(var_A*var_D - var_F*var_C);
+    G4double var_Z2 = (var_G*var_G)*(var_C*var_C) - (var_G*var_G)*(var_A*var_A);
+    G4double var_Z = var_Z1 + var_Z2;
+    G4double diff1 = var_Y*var_Y;
+    G4double diff2 = 4*var_W*var_Z;
+    G4double diff = diff1 - diff2;
 
-      // ********************************************
-      // |     Sample bound electron information    |
-      // ********************************************
-
-      // Select shell based on shell occupancy
-
-      shellIdx = shellData->SelectRandomShell(Z);
-      bindingE = shellData->BindingEnergy(Z,shellIdx)/MeV;
-
-
-      // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
-      ePAU = profileData->RandomSelectMomentum(Z,shellIdx);
-
-      // Convert to SI units     
-      G4double ePSI = ePAU * momentum_au_to_nat;
-
-      //Calculate bound electron velocity and normalise to natural units
-      u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)) )/vel_c;
-
-      // Sample incident electron direction, amorphous material, to scattering photon scattering plane 
-
-      e_alpha = pi*G4UniformRand();
-      e_beta = twopi*G4UniformRand();
-
-      // Total energy of system  
-
-      G4double eEIncident = electron_mass_c2 / sqrt( 1 - (u_temp*u_temp));
-      G4double systemE = eEIncident + pEIncident;
-
-
-      G4double gamma_temp = 1.0 / sqrt( 1 - (u_temp*u_temp));
-      G4double numerator = gamma_temp*electron_mass_c2*(1 - u_temp * std::cos(e_alpha));
-      G4double subdenom1 =  u_temp*cosTheta*std::cos(e_alpha);
-      G4double subdenom2 = u_temp*sinTheta*std::sin(e_alpha)*std::cos(e_beta);
-      G4double denominator = (1.0 - cosTheta) +  (gamma_temp*electron_mass_c2*(1 - subdenom1 - subdenom2) / pEIncident);
-      pERecoil = (numerator/denominator);
-      eERecoil = systemE - pERecoil;
-      CE_emission_flag = pEIncident - pERecoil;
-    } while ( (iteration <= maxDopplerIterations) && (CE_emission_flag < bindingE));
-
-// End of recalculation of photon energy with Doppler broadening
-
-
-
-   // *******************************************************
-   // |     Determine ejected Compton electron direction    |
-   // *******************************************************      
-
-      // Calculate velocity of ejected Compton electron   
-
-      G4double a_temp = eERecoil / electron_mass_c2;
-      G4double u_p_temp = sqrt(1 - (1 / (a_temp*a_temp)));
-
-      // Coefficients and terms from simulatenous equations     
-
-      G4double sinAlpha = std::sin(e_alpha);
-      G4double cosAlpha = std::cos(e_alpha);
-      G4double sinBeta = std::sin(e_beta);
-      G4double cosBeta = std::cos(e_beta);
-
-      G4double gamma = 1.0 / sqrt(1 - (u_temp*u_temp));
-      G4double gamma_p = 1.0 / sqrt(1 - (u_p_temp*u_p_temp));
-
-      G4double var_A = pERecoil*u_p_temp*sinTheta;
-      G4double var_B = u_p_temp* (pERecoil*cosTheta-pEIncident);
-      G4double var_C = (pERecoil-pEIncident) - ( (pERecoil*pEIncident) / (gamma_p*electron_mass_c2))*(1 - cosTheta);
-
-      G4double var_D1 = gamma*electron_mass_c2*pERecoil;
-      G4double var_D2 = (1 - (u_temp*cosTheta*cosAlpha) - (u_temp*sinTheta*cosBeta*sinAlpha));
-      G4double var_D3 = ((electron_mass_c2*electron_mass_c2)*(gamma*gamma_p - 1)) - (gamma_p*electron_mass_c2*pERecoil);
-      G4double var_D = var_D1*var_D2 + var_D3;
-
-      G4double var_E1 = ((gamma*gamma_p)*(electron_mass_c2*electron_mass_c2)*(u_temp*u_p_temp)*cosAlpha);
-      G4double var_E2 = gamma_p*electron_mass_c2*pERecoil*u_p_temp*cosTheta;
-      G4double var_E = var_E1 - var_E2;
-
-      G4double var_F1 = ((gamma*gamma_p)*(electron_mass_c2*electron_mass_c2)*(u_temp*u_p_temp)*cosBeta*sinAlpha);
-      G4double var_F2 = (gamma_p*electron_mass_c2*pERecoil*u_p_temp*sinTheta);
-      G4double var_F = var_F1 - var_F2;
-
-      G4double var_G = (gamma*gamma_p)*(electron_mass_c2*electron_mass_c2)*(u_temp*u_p_temp)*sinBeta*sinAlpha;
-
-      // Two equations form a quadratic form of Wx^2 + Yx + Z = 0
-      // Coefficents and solution to quadratic
-
-      G4double var_W1 = (var_F*var_B - var_E*var_A)*(var_F*var_B - var_E*var_A);
-      G4double var_W2 = (var_G*var_G)*(var_A*var_A) + (var_G*var_G)*(var_B*var_B);
-      G4double var_W = var_W1 + var_W2;
-
-      G4double var_Y = 2.0*(((var_A*var_D-var_F*var_C)*(var_F*var_B-var_E*var_A)) - ((var_G*var_G)*var_B*var_C));
-
-      G4double var_Z1 = (var_A*var_D - var_F*var_C)*(var_A*var_D - var_F*var_C);
-      G4double var_Z2 = (var_G*var_G)*(var_C*var_C) - (var_G*var_G)*(var_A*var_A);
-      G4double var_Z = var_Z1 + var_Z2;
-      G4double diff1 = var_Y*var_Y;
-      G4double diff2 = 4*var_W*var_Z;
-      G4double diff = diff1 - diff2;
-
-
-     // Check if diff is less than zero, if so ensure it is due to FPE
-
+    // Check if diff is less than zero, if so ensure it is due to FPE
     //Determine number of digits (in decimal base) that G4double can accurately represent
-     G4double g4d_order = G4double(numeric_limits<G4double>::digits10);
-     G4double g4d_limit = std::pow(10.,-g4d_order);
-     //Confirm that diff less than zero is due FPE, i.e if abs of diff / diff1 and diff/ diff2 is less 
-     //than 10^(-g4d_order), then set diff to zero
-
-     if ((diff < 0.0) && (abs(diff / diff1) < g4d_limit) && (abs(diff / diff2) < g4d_limit) )
-     {
-           diff = 0.0;
-     }
-
-
-      // Plus and minus of quadratic
-      G4double X_p = (-var_Y + sqrt (diff))/(2*var_W);
-      G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
-
-
-      // Floating point precision protection
-      // Check if X_p and X_m are greater than or less than 1 or -1, if so clean up FPE 
-      // Issue due to propagation of FPE and only impacts 8th sig fig onwards
-
-      if(X_p >1){X_p=1;} if(X_p<-1){X_p=-1;}
-      if(X_m >1){X_m=1;} if(X_m<-1){X_m=-1;}
-
-      // End of FP protection
-
-      G4double ThetaE = 0.;
-
-   
-      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
-       G4double sol_select = G4UniformRand();
-
-      if (sol_select < 0.5)
+    G4double g4d_order = G4double(numeric_limits<G4double>::digits10);
+    G4double g4d_limit = std::pow(10.,-g4d_order);
+    //Confirm that diff less than zero is due FPE, i.e if abs of diff / diff1 and diff/ diff2 is less 
+    //than 10^(-g4d_order), then set diff to zero
+    
+    if ((diff < 0.0) && (abs(diff / diff1) < g4d_limit) && (abs(diff / diff2) < g4d_limit) )
       {
-           ThetaE = std::acos(X_p);
+	diff = 0.0;
       }
-      if (sol_select > 0.5)
+    
+    
+    // Plus and minus of quadratic
+    G4double X_p = (-var_Y + sqrt (diff))/(2*var_W);
+    G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
+    
+    // Floating point precision protection
+    // Check if X_p and X_m are greater than or less than 1 or -1, if so clean up FPE 
+    // Issue due to propagation of FPE and only impacts 8th sig fig onwards    
+    if(X_p >1){X_p=1;} if(X_p<-1){X_p=-1;}
+    if(X_m >1){X_m=1;} if(X_m<-1){X_m=-1;}
+    // End of FP protection
+
+    G4double ThetaE = 0.;   
+    // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+    G4double sol_select = G4UniformRand();
+    
+    if (sol_select < 0.5)
       {
-          ThetaE = std::acos(X_m);
+	ThetaE = std::acos(X_p);
       }
-      
-
-      cosThetaE = std::cos(ThetaE);
-      sinThetaE = std::sin(ThetaE);
-      G4double Theta = std::acos(cosTheta);
-
-      //Calculate electron Phi
-      G4double iSinThetaE = std::sqrt(1+std::tan((pi/2.0)-ThetaE)*std::tan((pi/2.0)-ThetaE));
-      G4double iSinTheta = std::sqrt(1+std::tan((pi/2.0)-Theta)*std::tan((pi/2.0)-Theta));
-      G4double ivar_A = iSinTheta/ (pERecoil*u_p_temp);
-      // Trigs
-      cosPhiE = (var_C - var_B*cosThetaE)*(ivar_A*iSinThetaE);
-
-     // End of calculation of ejection Compton electron direction
-
-      //Fix for floating point errors
-
-    } while ( (iteration <= maxDopplerIterations) && (abs(cosPhiE) > 1));
-
-   // Revert to original if maximum number of iterations threshold has been reached     
+    if (sol_select > 0.5)
+      {
+	ThetaE = std::acos(X_m);
+      }
+    cosThetaE = std::cos(ThetaE);
+    sinThetaE = std::sin(ThetaE);
+    G4double Theta = std::acos(cosTheta);
+    
+    //Calculate electron Phi
+    G4double iSinThetaE = std::sqrt(1+std::tan((pi/2.0)-ThetaE)*std::tan((pi/2.0)-ThetaE));
+    G4double iSinTheta = std::sqrt(1+std::tan((pi/2.0)-Theta)*std::tan((pi/2.0)-Theta));
+    G4double ivar_A = iSinTheta/ (pERecoil*u_p_temp);
+    // Trigs
+    cosPhiE = (var_C - var_B*cosThetaE)*(ivar_A*iSinThetaE);
+    
+    // End of calculation of ejection Compton electron direction    
+    //Fix for floating point errors
+    
+  } while ( (iteration <= maxDopplerIterations) && (abs(cosPhiE) > 1));
+  
+  // Revert to original if maximum number of iterations threshold has been reached     
   if (iteration >= maxDopplerIterations)
     {
       pERecoil = photonEnergy0 ;
@@ -603,7 +571,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
     }
 
   // Set "scattered" photon direction and energy
-
   G4ThreeVector photonDirection1(dirx,diry,dirz);
   photonDirection1.rotateUz(photonDirection0);
   fParticleChange->ProposeMomentumDirection(photonDirection1) ;
@@ -635,7 +602,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
   // sample deexcitation
   //
-
   if (verboseLevel > 3) {
     G4cout << "Started atomic de-excitation " << fAtomDeexcitation << G4endl;
   }
@@ -661,7 +627,7 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
              //Invalid secondary: not enough energy to create it!
              //Keep its energy in the local deposit
              delete (*fvect)[i];
-             (*fvect)[i]=0;
+             (*fvect)[i]=nullptr;
            }
         }
       }
@@ -674,7 +640,6 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
                  "em2051",FatalException,"Negative local energy deposit");
 
   fParticleChange->ProposeLocalEnergyDeposit(bindingE);
-
 }
 
 //****************************************************************************
@@ -700,9 +665,6 @@ G4LowEPComptonModel::ComputeScatteringFunction(G4double x, G4int Z)
 
 
 //****************************************************************************
-
-#include "G4AutoLock.hh"
-namespace { G4Mutex LowEPComptonModelMutex = G4MUTEX_INITIALIZER; }
 
 void
 G4LowEPComptonModel::InitialiseForElement(const G4ParticleDefinition*,

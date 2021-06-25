@@ -31,7 +31,7 @@
 #include "B5ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
-
+#include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
@@ -45,10 +45,12 @@ int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
-  if ( argc == 1 ) {
-    ui = new G4UIExecutive(argc, argv);
-  }
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
+
+  // Use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
 
   // Construct the default run manager
   //
@@ -84,7 +86,7 @@ int main(int argc,char** argv)
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     if (ui->IsGUI()) {
          UImanager->ApplyCommand("/control/execute gui.mac");
-    }     
+    }
     // start interactive session
     ui->SessionStart();
     delete ui;
@@ -92,7 +94,7 @@ int main(int argc,char** argv)
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
+  // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
   delete visManager;

@@ -34,29 +34,23 @@
 // (Description)
 //   This is a primitive scorer class for scoring Number of tracks
 //  which stops(terminated) in the cell.
-// 
+//
 // Created: 2007-08-14  Tsukasa ASO
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class G4PSTermination3D : public G4PSTermination
 {
- 
- public: // with description
-      G4PSTermination3D(G4String name, 
-			G4int ni=1,G4int nj=1, G4int nk=1,
-			G4int di=2, G4int dj=1, G4int dk=0);
-      virtual ~G4PSTermination3D();
+ public:  // with description
+  G4PSTermination3D(G4String name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
+                    G4int di = 2, G4int dj = 1, G4int dk = 0);
+  virtual ~G4PSTermination3D();
 
- protected: // with description
-      virtual G4int GetIndex(G4Step*);
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
  private:
-      G4int fDepthi, fDepthj, fDepthk;
-
+  G4int fDepthi, fDepthj, fDepthk;
 };
-
-
 
 #endif

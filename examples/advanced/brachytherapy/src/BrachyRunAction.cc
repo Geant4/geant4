@@ -41,11 +41,11 @@
 //
 
 #include "BrachyRunAction.hh"
+#include "BrachyAnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-#include "BrachyAnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
@@ -73,7 +73,7 @@ analysisManager -> SetVerboseLevel(1);
 
 // Create histogram with the energy spectrum of the photons emitted by the
 // radionucldie
-analysisManager-> CreateH1("h10","energy spectrum", 800, 0., 800.);
+analysisManager -> CreateH1("h10","energy spectrum", 800, 0., 800.);
 }
 
 void BrachyRunAction::EndOfRunAction(const G4Run* aRun)

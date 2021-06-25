@@ -1,11 +1,8 @@
+/run/verbose 1
+/control/verbose 1
+/control/cout/ignoreThreadsExcept 0
 #
-/run/numberOfThreads 2
-#
-/process/em/deexcitationIgnoreCut true
-/process/em/fluo true
-/process/em/pixe true
-/process/em/auger true
-/process/em/augerCascade true
+/run/numberOfThreads 4
 #
 #/svalue/det/setWorldMat G4_Galactic
 /svalue/det/setWorldMat G4_WATER
@@ -18,6 +15,11 @@
 /svalue/det/setTrackingCut 12 eV
 #
 /svalue/phys/addPhysics  dna_opt2	        
+#
+/process/em/deexcitationIgnoreCut true
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
 #
 /run/initialize
 #

@@ -63,33 +63,29 @@
 #include "G4ChipsKaonMinusElasticXS.hh"
 #include "G4ChipsKaonPlusElasticXS.hh"
 #include "G4ChipsKaonZeroElasticXS.hh"
-#include "G4ChipsHyperonElasticXS.hh"
-#include "G4ChipsAntiBaryonElasticXS.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4LMsdGenerator.hh"
 #include "G4DiffElasticRatio.hh"
-#include "G4AutoDelete.hh"
 
 #include "G4HadronicParameters.hh"
 #include "G4HadronicBuilder.hh"
 #include "G4HadParticles.hh"
-
+#include "G4HadProcesses.hh"
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY( G4HadronHElasticPhysics );
 
-G4ThreadLocal G4DiffElasticRatio* G4HadronHElasticPhysics::diffRatio = nullptr;
-
-G4HadronHElasticPhysics::G4HadronHElasticPhysics( G4int ver, G4bool diffraction)
-  : G4VPhysicsConstructor( "hElastic_BEST" ), verbose( ver ), 
+G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool diffraction)
+  : G4HadronElasticPhysics(ver, "hElastic_BEST"), 
     fDiffraction(diffraction) 
 {
-  if ( verbose > 1 ) { 
+  if (ver > 1) { 
     G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
 	   << "  low-mass diffraction: " << fDiffraction << G4endl; 
   }
@@ -97,220 +93,142 @@ G4HadronHElasticPhysics::G4HadronHElasticPhysics( G4int ver, G4bool diffraction)
 
 G4HadronHElasticPhysics::~G4HadronHElasticPhysics() {}
 
-
-void G4HadronHElasticPhysics::ConstructParticle() {
-  // G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  //  Construct light ions
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle();  
-}
-
 void G4HadronHElasticPhysics::ConstructProcess() {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useFactorXS = param->ApplyFactorXS();
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  const G4double elimitDiffuse = 0.0;
+  const G4double elimitDiffuse = 10.0;
   const G4double elimitAntiNuc = 100.0*MeV;
   const G4double delta = 0.1*MeV;
-
-  if ( verbose > 1 ) {
+  G4double emax = std::max(param->GetMaxEnergy(), elimitAntiNuc+delta);
+  if (param->GetVerboseLevel() > 1 ) {
     G4cout << "### HadronHElasticPhysics::ConstructProcess: lower energy limit for DiffuseElastic : " 
 	   << elimitDiffuse/GeV << " GeV" << G4endl
            << "                                             transition energy for anti-nuclei : " 
 	   << elimitAntiNuc/GeV << " GeV" << G4endl;
   }
+  G4HadronElastic* lhep0 = new G4HadronElastic();
+  G4HadronElastic* lhep1 = new G4HadronElastic();
+  G4HadronElastic* lhep2 = new G4HadronElastic();
+  lhep0->SetMaxEnergy(emax);
+  lhep1->SetMaxEnergy(elimitDiffuse+delta);
+  lhep2->SetMaxEnergy(elimitAntiNuc+delta);
 
   G4AntiNuclElastic* anuc = new G4AntiNuclElastic();
   anuc->SetMinEnergy( elimitAntiNuc );
-  G4CrossSectionElastic* anucxs = 
-    new G4CrossSectionElastic( anuc->GetComponentCrossSection() );
+  anuc->SetMaxEnergy(emax);
 
-  G4HadronElastic* lhep = new G4HadronElastic();
-  lhep->SetMaxEnergy( elimitAntiNuc + delta );
+  auto anucxs = G4HadProcesses::ElasticXS("AntiAGlauber");
+  auto xsNN = G4HadProcesses::ElasticXS("Glauber-Gribov Nucl-nucl");
 
-  G4HadronElastic* lhep0 = new G4HadronElastic();
+  G4LMsdGenerator* diffGen = nullptr;
+  G4DiffElasticRatio* diffRatio = nullptr;
+  if( fDiffraction ) {
+    diffGen = new G4LMsdGenerator("LMsdDiffraction");
+    diffRatio = new G4DiffElasticRatio();
+  }
 
-  // Three instances of Chips elastic model: one used everywhere,
-  // one used below a energy threshold, and one used only for the
-  // hydrogen element.
-  G4ChipsElasticModel* chips1 = new G4ChipsElasticModel();
-  G4ChipsElasticModel* chips2 = new G4ChipsElasticModel();
-  chips2->SetMaxEnergy( elimitAntiNuc + delta );
+  // Use Chips elastic model only for the hydrogen element and above an energy threshold
   G4ChipsElasticModel* chipsH = new G4ChipsElasticModel();
+  chipsH->SetMinEnergy( elimitDiffuse );
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   for ( size_t i_ele = 0; i_ele < theElementTable->size(); i_ele++ ) {
     G4Element* element = (*theElementTable)[ i_ele ];
     if ( element->GetZ() > 1.0 ) chipsH->DeActivateFor( element );
   }
 
-  G4NuclNuclDiffuseElastic* diffuseNuclNuclElastic = new G4NuclNuclDiffuseElastic();
-  diffuseNuclNuclElastic->SetMinEnergy( elimitDiffuse );
+  // p
+  G4ParticleDefinition* particle = G4Proton::Proton();
+  G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+  hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+  G4DiffuseElastic* protonDiffuseElastic = new G4DiffuseElastic();
+  protonDiffuseElastic->SetMinEnergy( elimitDiffuse );
+  hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
+  hel->RegisterMe( protonDiffuseElastic );
+  hel->RegisterMe( lhep1 );
+  if( fDiffraction) hel->SetDiffraction(diffGen, diffRatio);
+  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
+  ph->RegisterProcess(hel, particle);
 
-  G4VCrossSectionDataSet* theComponentGGHadronNucleusData = 
-    new G4CrossSectionElastic( new G4ComponentGGHadronNucleusXsc );
+  // n
+  particle = G4Neutron::Neutron();
+  hel = new G4HadronElasticProcess();
+  hel->AddDataSet(new G4NeutronElasticXS());
+  G4DiffuseElastic* neutronDiffuseElastic = new G4DiffuseElastic();
+  neutronDiffuseElastic->SetMinEnergy( elimitDiffuse );
+  hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
+  hel->RegisterMe( neutronDiffuseElastic );
+  hel->RegisterMe( lhep1 );
+  if( fDiffraction) hel->SetDiffraction(diffGen, diffRatio);
+  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
+  ph->RegisterProcess(hel, particle);
 
-  G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
-    new G4CrossSectionElastic( new G4ComponentGGNuclNuclXsc() );
+  // pi+
+  particle = G4PionPlus::PionPlus();
+  hel = new G4HadronElasticProcess();
+  hel->AddDataSet(new G4BGGPionElasticXS(particle));
+  G4DiffuseElastic* dElastic = new G4DiffuseElastic();
+  dElastic->SetMinEnergy( elimitDiffuse );
+  hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
+  hel->RegisterMe( dElastic );
+  hel->RegisterMe( lhep1 );
+  if( fDiffraction) hel->SetDiffraction(diffGen, diffRatio);
+  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorPionElastic() );
+  ph->RegisterProcess(hel, particle);
 
-  G4LMsdGenerator* diffGen = nullptr;
-  if(fDiffraction) {
-    diffGen = new G4LMsdGenerator("LMsdDiffraction");
-    diffRatio = new G4DiffElasticRatio();
-    G4AutoDelete::Register(diffRatio);    
+  // pi-
+  particle = G4PionMinus::PionMinus();
+  hel = new G4HadronElasticProcess();
+  hel->AddDataSet(new G4BGGPionElasticXS(particle));
+  dElastic = new G4DiffuseElastic();
+  dElastic->SetMinEnergy( elimitDiffuse );
+  hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
+  hel->RegisterMe( dElastic );
+  hel->RegisterMe( lhep1 );
+  if( fDiffraction) hel->SetDiffraction(diffGen, diffRatio);
+  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorPionElastic() );
+  ph->RegisterProcess(hel, particle);
+
+  // kaons
+  G4HadronicBuilder::BuildElastic( G4HadParticles::GetKaons() );
+
+  // d, t, He3, alpha
+  for( auto & pdg : G4HadParticles::GetLightIons() ) {
+    particle = table->FindParticle( pdg );
+    if ( particle == nullptr ) { continue; }
+
+    hel = new G4HadronElasticProcess();
+    hel->AddDataSet(xsNN);
+    hel->RegisterMe(lhep0);
+    if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorHadronElastic() );
+    ph->RegisterProcess(hel, particle);
   }
-  G4HadronElasticProcess* hel = nullptr;
 
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-  while( (*myParticleIterator)() ) {
+  // high energy particles
+  if( emax > param->EnergyThresholdForHeavyHadrons() ) {
 
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String pname = particle->GetParticleName();
+    // pbar, nbar, anti light ions
+    for( auto & pdg : G4HadParticles::GetLightAntiIons() ) {
+      particle = table->FindParticle( pdg );
+      if ( particle == nullptr ) { continue; }
 
-    if ( pname == "anti_lambda"  || 
-         pname == "anti_sigma-"  ||
-         pname == "anti_sigma0"  || 
-         pname == "anti_sigma+"  || 
-         pname == "anti_xi-"     || 
-         pname == "anti_xi0"     ||
-         pname == "anti_omega-"  ||
-         pname == "lambda"       || 
-         pname == "sigma-"       ||
-         pname == "sigma0"       || 
-         pname == "sigma+"       || 
-         pname == "xi-"          || 
-         pname == "xi0"          ||
-         pname == "omega-"
-    ) {
       hel = new G4HadronElasticProcess();
-      hel->AddDataSet( theComponentGGHadronNucleusData );
-      hel->RegisterMe( chips1 );
-      pmanager->AddDiscreteProcess( hel );
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
+      hel->RegisterMe(lhep2);
+      hel->RegisterMe(anuc);
+      hel->AddDataSet(anucxs);
+      if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorHadronElastic() );
+      ph->RegisterProcess(hel, particle);
+    }
 
-    } else if ( pname == "proton" ) {   
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( new G4BGGNucleonElasticXS( particle ) );
-      // To preserve reproducibility, a different instance of
-      // G4DiffuseElastic must be used for each particle type.
-      G4DiffuseElastic* protonDiffuseElastic = new G4DiffuseElastic();
-      protonDiffuseElastic->SetMinEnergy( elimitDiffuse );
-      hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
-      hel->RegisterMe( protonDiffuseElastic );
-      pmanager->AddDiscreteProcess( hel );
-      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
+    // hyperons
+    G4HadronicBuilder::BuildElastic( G4HadParticles::GetHyperons() );
+    G4HadronicBuilder::BuildElastic( G4HadParticles::GetAntiHyperons() );
 
-    } else if ( pname == "neutron" ) {   
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet(new G4NeutronElasticXS() );
-      // To preserve reproducibility, a different instance of
-      // G4DiffuseElastic must be used for each particle type.
-      G4DiffuseElastic* neutronDiffuseElastic = new G4DiffuseElastic();
-      neutronDiffuseElastic->SetMinEnergy( elimitDiffuse );
-      hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
-      hel->RegisterMe( neutronDiffuseElastic );
-      pmanager->AddDiscreteProcess( hel );
-      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " 
-	       << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if ( pname == "pi-" || pname == "pi+" ) { 
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( new G4BGGPionElasticXS( particle ) );
-      // To preserve reproducibility, a different instance of
-      // G4DiffuseElastic must be used for each particle type.
-      G4DiffuseElastic* dElastic = new G4DiffuseElastic();
-      dElastic->SetMinEnergy( elimitDiffuse );
-      hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
-      hel->RegisterMe( dElastic );
-      pmanager->AddDiscreteProcess( hel );
-      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if ( pname == "kaon-"     || 
-	        pname == "kaon+"     || 
-	        pname == "kaon0S"    || 
-	        pname == "kaon0L" 
-	      ) {
-      hel = new G4HadronElasticProcess();
-      //AR-14Aug2017 : Replaced Chips elastic kaon cross sections with
-      //               Grichine's Glauber-Gribov ones. In this way, the
-      //               total (elastic + inelastic) kaon cross sections
-      //               are consistent with the PDG ones.
-      //               For the time being, kept Chips elastic as
-      //               final-state model.
-      hel->AddDataSet( theComponentGGHadronNucleusData );
-      hel->RegisterMe( chips1 );
-      pmanager->AddDiscreteProcess( hel );
-      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if(pname == "alpha"     ||
-              pname == "deuteron"  ||
-              pname == "triton"    ||
-              pname == "He3"
-             ) {
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet(theComponentGGNuclNuclData);
-      hel->RegisterMe(lhep0);
-      pmanager->AddDiscreteProcess(hel);
-      if(verbose > 1) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if ( pname == "anti_proton"  ||  pname == "anti_neutron" ) {
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( anucxs );
-      hel->RegisterMe( chips2 );
-      hel->RegisterMe( anuc );
-      pmanager->AddDiscreteProcess( hel );
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if ( pname == "anti_deuteron"  ||
-                pname == "anti_triton"    ||
-                pname == "anti_He3"       ||
-                pname == "anti_alpha"
-              ) {
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( anucxs );
-      hel->RegisterMe( lhep );
-      hel->RegisterMe( anuc );
-      pmanager->AddDiscreteProcess( hel );
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
+    // b-, c- baryons and mesons
+    if( G4HadronicParameters::Instance()->EnableBCParticles() ) {
+      G4HadronicBuilder::BuildElastic( G4HadParticles::GetBCHadrons() );
     }
   }
-
-  // Charm and bottom hadrons
-  if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
-    G4HadronicBuilder::BuildElastic( G4HadParticles::GetBCHadrons() );
-  }
-
 }

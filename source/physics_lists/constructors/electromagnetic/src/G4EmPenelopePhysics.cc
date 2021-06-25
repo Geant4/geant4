@@ -105,11 +105,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmPenelopePhysics);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmPenelope"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmPenelope")
 {
+  SetVerboseLevel(ver);
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   param->SetMinEnergy(100*CLHEP::eV);
   param->SetLowestElectronEnergy(100*CLHEP::eV);
   param->SetNumberOfBinsPerDecade(20);
@@ -146,23 +147,26 @@ void G4EmPenelopePhysics::ConstructParticle()
 
 void G4EmPenelopePhysics::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4EmParameters* param = G4EmParameters::Instance();
   
   // processes used by several particles
-  G4ePairProduction* ee = new G4ePairProduction();
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
-  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
+  G4double highEnergyLimit = param->MscEnergyLimit();
 
   // nuclear stopping
-  G4double nielEnergyLimit = G4EmParameters::Instance()->MaxNIELEnergy();
-  G4NuclearStopping* pnuc = new G4NuclearStopping();
-  pnuc->SetMaxKinEnergy(nielEnergyLimit);
+  G4double nielEnergyLimit = param->MaxNIELEnergy();
+  G4NuclearStopping* pnuc = nullptr;
+  if(nielEnergyLimit > 0.0) {
+    pnuc = new G4NuclearStopping();
+    pnuc->SetMaxKinEnergy(nielEnergyLimit);
+  }
 
   //Applicability range for Penelope models
   //for higher energies, the Standard models are used   
@@ -232,6 +236,8 @@ void G4EmPenelopePhysics::ConstructProcess()
   theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
   brem->SetEmModel(theBremPenelope);
 
+  G4ePairProduction* ee = new G4ePairProduction();
+
   // register processes
   ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
@@ -290,7 +296,7 @@ void G4EmPenelopePhysics::ConstructProcess()
   ionIoni->SetEmModel(new G4IonParametrisedLossModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
-  ph->RegisterProcess(pnuc, particle);
+  if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }
 
   // muons, hadrons, ions
   G4EmBuilder::ConstructCharged(hmsc, pnuc);

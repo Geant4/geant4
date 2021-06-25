@@ -47,14 +47,12 @@
 #include "G4QMDMeanField.hh"
 #include "G4QMDParticipant.hh"
 
-#include "G4IonsShenCrossSection.hh"
-//#include "G4GeneralSpaceNNCrossSection.hh"
-
 #include "G4HadronicInteraction.hh"
 
 #include "G4Evaporation.hh"
 #include "G4ExcitationHandler.hh"
 
+class G4VCrossSectionDataSet;
 class G4BGGPionElasticXS;
 class G4BGGPionInelasticXS;
 
@@ -123,9 +121,7 @@ class G4QMDReaction : public G4HadronicInteraction
     G4double coulomb_collision_px_targ;
     G4double coulomb_collision_pz_targ;
 
-//090331
-    G4IonsShenCrossSection* shenXS;
-    // G4GeneralSpaceNNCrossSection* genspaXS;
+    G4VCrossSectionDataSet* theXS;
 
     G4BGGPionElasticXS* pipElNucXS;
     G4BGGPionElasticXS* pimElNucXS;

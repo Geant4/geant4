@@ -1,0 +1,28 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_std_system
+#define tools_std_system
+
+#include <cstdlib>
+#include <ostream>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+namespace tools {
+
+inline int std_system(std::ostream& a_out,const std::string& a_string) {
+#if TARGET_OS_IPHONE
+  a_out << "tools::std_system : system() not available on iOS. Can't execute " << sout(a_string) << "." << std::endl;
+  return EXIT_FAILURE;
+#else
+  return ::system(a_string.c_str());
+  (void)a_out;
+#endif
+}
+
+}
+
+#endif

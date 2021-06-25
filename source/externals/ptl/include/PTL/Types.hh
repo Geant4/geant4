@@ -52,10 +52,22 @@
 #    define PTL_DLL
 #endif
 
+#if !defined(PTL_DEFAULT_OBJECT)
+#    define PTL_DEFAULT_OBJECT(NAME)                                                     \
+        NAME()            = default;                                                     \
+        ~NAME()           = default;                                                     \
+        NAME(const NAME&) = default;                                                     \
+        NAME(NAME&&)      = default;                                                     \
+        NAME& operator=(const NAME&) = default;                                          \
+        NAME& operator=(NAME&&) = default;
+#endif
+
 #include <atomic>
 #include <complex>
+#include <functional>
 #include <limits>
 #include <memory>
+#include <utility>
 
 namespace PTL
 {
@@ -107,98 +119,40 @@ GetSharedPointerPairMasterInstance()
     return _inst;
 }
 
-//--------------------------------------------------------------------------------------//
+//======================================================================================//
 
-template <typename CountedType>
-class CountedObject
+struct ScopeDestructor
 {
-public:
-    typedef CountedObject<CountedType> this_type;
-    typedef CountedObject<void>        void_type;
+    template <typename FuncT>
+    ScopeDestructor(FuncT&& _func)
+    : m_functor(std::forward<FuncT>(_func))
+    {}
 
-public:
-    // return number of existing objects:
-    static int64_t           live() { return count(); }
-    static constexpr int64_t zero() { return static_cast<int64_t>(0); }
-    static int64_t           max_depth() { return fmax_depth; }
+    // delete copy operations
+    ScopeDestructor(const ScopeDestructor&) = delete;
+    ScopeDestructor& operator=(const ScopeDestructor&) = delete;
 
-    static void enable(const bool& val) { fenabled = val; }
-    static void set_max_depth(const int64_t& val) { fmax_depth = val; }
-    static bool is_enabled() { return fenabled; }
-
-    template <typename Tp                                                   = CountedType,
-              typename std::enable_if<std::is_same<Tp, void>::value>::type* = nullptr>
-    static bool enable()
+    // allow move operations
+    ScopeDestructor(ScopeDestructor&& rhs) noexcept
+    : m_functor(std::move(rhs.m_functor))
     {
-        return fenabled && fmax_depth > count();
+        rhs.m_functor = []() {};
     }
-    // the void type is consider the global setting
-    template <typename Tp = CountedType,
-              typename std::enable_if<!std::is_same<Tp, void>::value>::type* = nullptr>
-    static bool enable()
+    ScopeDestructor& operator=(ScopeDestructor&& rhs) noexcept
     {
-        return void_type::is_enabled() && void_type::max_depth() > count() && fenabled &&
-               fmax_depth > count();
+        if(this != &rhs)
+        {
+            m_functor     = std::move(rhs.m_functor);
+            rhs.m_functor = []() {};
+        }
+        return *this;
     }
 
-protected:
-    // default constructor
-    CountedObject() { ++count(); }
-    ~CountedObject() { --count(); }
-    CountedObject(const this_type&) { ++count(); }
-    explicit CountedObject(this_type&&) { ++count(); }
+    ~ScopeDestructor() { m_functor(); }
 
 private:
-    // number of existing objects
-    static int64_t& thread_number();
-    static int64_t& master_count();
-    static int64_t& count();
-    static int64_t  fmax_depth;
-    static bool     fenabled;
+    std::function<void()> m_functor = []() {};
 };
-
-//--------------------------------------------------------------------------------------//
-
-template <typename CountedType>
-int64_t&
-CountedObject<CountedType>::thread_number()
-{
-    static std::atomic<int64_t> _all_instance;
-    static thread_local int64_t _instance = _all_instance++;
-    return _instance;
-}
-
-//--------------------------------------------------------------------------------------//
-
-template <typename CountedType>
-int64_t&
-CountedObject<CountedType>::master_count()
-{
-    static int64_t _instance = 0;
-    return _instance;
-}
-
-//--------------------------------------------------------------------------------------//
-
-template <typename CountedType>
-int64_t&
-CountedObject<CountedType>::count()
-{
-    if(thread_number() == 0)
-        return master_count();
-    static thread_local int64_t _instance = master_count();
-    return _instance;
-}
-
-//--------------------------------------------------------------------------------------//
-
-template <typename CountedType>
-int64_t CountedObject<CountedType>::fmax_depth = std::numeric_limits<int64_t>::max();
-
-//--------------------------------------------------------------------------------------//
-
-template <typename CountedType>
-bool CountedObject<CountedType>::fenabled = true;
 
 //======================================================================================//
 

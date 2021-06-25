@@ -31,37 +31,40 @@
 //////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for Debug.
-// 
+//
 // Created: 2011-03-24  Tsukasa ASO
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-G4PSStepChecker3D::G4PSStepChecker3D(G4String name,
-			       G4int ni, G4int nj, G4int nk,
-			       G4int depi, G4int depj, G4int depk)
-    :G4PSStepChecker(name),
-     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+G4PSStepChecker3D::G4PSStepChecker3D(G4String name, G4int ni, G4int nj,
+                                     G4int nk, G4int depi, G4int depj,
+                                     G4int depk)
+  : G4PSStepChecker(name)
+  , fDepthi(depi)
+  , fDepthj(depj)
+  , fDepthk(depk)
 {
-  fNi=ni;
-  fNj=nj;
-  fNk=nk;
+  fNi = ni;
+  fNj = nj;
+  fNk = nk;
 }
 
-G4PSStepChecker3D::~G4PSStepChecker3D()
-{;}
+G4PSStepChecker3D::~G4PSStepChecker3D() { ; }
 
 G4int G4PSStepChecker3D::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
-  G4int i = touchable->GetReplicaNumber(fDepthi);
-  G4int j = touchable->GetReplicaNumber(fDepthj);
-  G4int k = touchable->GetReplicaNumber(fDepthk);
+  G4int i                       = touchable->GetReplicaNumber(fDepthi);
+  G4int j                       = touchable->GetReplicaNumber(fDepthj);
+  G4int k                       = touchable->GetReplicaNumber(fDepthk);
 
-  G4int N = i*fNj*fNk+j*fNk+k;
+  G4int N = i * fNj * fNk + j * fNk + k;
 
-  G4cout <<" depi= "<<fDepthi<<" depj= "<<fDepthj<<" depk= "<<fDepthk<<G4endl;
-  G4cout <<"    i= "<<i<<"   j= "<<j<<"    k= "<<k<<G4endl;
-  G4cout <<"    N= " << N<<"  Nx= "<<fNi<<" Nj= "<<fNj<<" Nk= "<<fNk<<G4endl;
-  
-  return i*fNj*fNk+j*fNk+k;
+  G4cout << " depi= " << fDepthi << " depj= " << fDepthj << " depk= " << fDepthk
+         << G4endl;
+  G4cout << "    i= " << i << "   j= " << j << "    k= " << k << G4endl;
+  G4cout << "    N= " << N << "  Nx= " << fNi << " Nj= " << fNj
+         << " Nk= " << fNk << G4endl;
+
+  return i * fNj * fNk + j * fNk + k;
 }

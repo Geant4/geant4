@@ -16,10 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 3rd, 2021 Gabriele Cosmo G01-V10-06-03
+February 3rd, 2021 Gabriele Cosmo G01-V10-07-01
 - Fixed auxiliary.gdml sample to define proper Region tags.
 
-January 11th, 2021 Gabriele Cosmo
+January 11th, 2021 Gabriele Cosmo G01-V10-07-00
 - Added scaledSolids.gdml sample setup.
 
 November 10th, 2020 Ben Morgan G01-V10-06-02

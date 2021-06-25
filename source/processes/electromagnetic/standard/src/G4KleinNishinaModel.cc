@@ -335,7 +335,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   
   // sample deexcitation
   //
-  if(fAtomDeexcitation) {
+  if(nullptr != fAtomDeexcitation) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
       G4int Z = elm->GetZasInt();

@@ -121,7 +121,7 @@ class G4Region
       // NOT already inserted, in which case significant speedup can be
       // achieved in very complex flat geometry setups.
 
-    inline void SetName(const G4String& name);
+    void SetName(const G4String& name);
     inline const G4String& GetName() const;
       // Set/get region's name.
 

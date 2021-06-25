@@ -40,26 +40,22 @@
 #include "G4Log.hh"
 
 class G4ParticleChangeForGamma;
-class G4LPhysicsFreeVector;
+class G4PhysicsFreeVector;
 class G4PhysicsLogVector;
 
 class G4LivermoreGammaConversionModel : public G4PairProductionRelModel
 {
-
 public:
-
+  
   explicit G4LivermoreGammaConversionModel(
-                      const G4ParticleDefinition* p = nullptr, 
-		      const G4String& nam = "LivermoreConversion");
-
+					   const G4ParticleDefinition* p = nullptr, 
+					   const G4String& nam = "LivermoreConversion");
   virtual ~G4LivermoreGammaConversionModel();
-
+  
   void Initialise(const G4ParticleDefinition*, 
-                  const G4DataVector&) override;
-													
+                  const G4DataVector&) override;	
   void InitialiseForElement(const G4ParticleDefinition*, 
                                   G4int Z) override;
-
   G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
@@ -67,21 +63,20 @@ public:
                                       G4double A=0.0, 
                                       G4double cut=0.0,
                                       G4double emax=DBL_MAX) override;
-
-private:
-
-  void ReadData(size_t Z, const char* path = nullptr);
-  
   G4LivermoreGammaConversionModel & operator=
   (const  G4LivermoreGammaConversionModel &right) = delete;
   G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&) = delete;
 
-  static G4double lowEnergyLimit;  
-  static G4int verboseLevel;
-  static constexpr G4int maxZ =101;
-  static G4LPhysicsFreeVector* data[maxZ]; // 101 because Z range is 1-100
-  
+private:
+  void ReadData(size_t Z, const char* path = nullptr);
+
   G4ParticleChangeForGamma* fParticleChange;
+  
+  static const G4int maxZ =101;
+  static G4PhysicsFreeVector* data[maxZ]; // 101 because Z range is 1-100
+  
+  static G4double lowEnergyLimit;  
+  G4int verboseLevel;
 };
 
 

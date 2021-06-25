@@ -39,7 +39,6 @@
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,8 +50,6 @@ public:
  ~PhysicsListMessenger();
     
   virtual void SetNewValue(G4UIcommand*, G4String);
-
-  inline G4double GetMaxChargedStep() const { return fMaxChargedStep; }
     
 private:
   
@@ -60,8 +57,6 @@ private:
     
   G4UIdirectory*             fPhysDir;    
   G4UIcmdWithAString*        fListCmd;    
-  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
-  G4double                   fMaxChargedStep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4geombias
-# Package: Geant4.src.G4geometry.G4geombias
-#------------------------------------------------------------------------------
+# - G4geombias module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4geombias
-  HEADERS
+geant4_add_module(G4geombias
+  PUBLIC_HEADERS
     G4GeometryCell.hh
     G4GeometryCellComp.hh
     G4GeometryCellImportance.hh
@@ -41,21 +36,9 @@ geant4_define_module(NAME G4geombias
     G4VWeightWindowAlgorithm.cc
     G4VWeightWindowStore.cc
     G4WeightWindowAlgorithm.cc
-    G4WeightWindowStore.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4navigation
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-)
+    G4WeightWindowStore.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4geombias
+  PUBLIC G4navigation G4globman
+  PRIVATE G4geometrymng G4heprandom)
+

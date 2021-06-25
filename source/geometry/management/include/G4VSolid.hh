@@ -97,7 +97,7 @@ class G4VSolid
 
     inline G4String GetName() const;
       // Returns the current shape's name.
-    inline void SetName(const G4String& name);
+    void SetName(const G4String& name);
       // Sets the current shape's name.
 
     inline G4double GetTolerance() const;

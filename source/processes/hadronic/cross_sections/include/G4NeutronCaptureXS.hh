@@ -109,7 +109,7 @@ private:
 
   std::vector<G4double> temp;
 
-  G4bool   isMaster;
+  G4bool isMaster = false;
 
   static const G4int MAXZCAPTURE = 93;
   static G4ElementData* data;

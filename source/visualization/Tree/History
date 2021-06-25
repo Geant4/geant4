@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+14 April 2021 Ben Morgan (vistree-V10-07-00)
+- Migrate to modular CMake build
+
 12 December 2019 Ben Morgan (vistree-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library option and
   explicit include_directories.
@@ -100,7 +103,7 @@ History file for visualization/Tree sub-category
 2nd June 2011  John Allison  (vistree-V09-04-00)
 - Tagged.
 
-23, December L. Garnier 
+23, December L. Garnier
 - GNUmakefile : Remove OpenGL/Qt stuff from Makefile
 
 13th November 2010  John Allison  (vistree-V09-03-00)
@@ -133,7 +136,7 @@ History file for visualization/Tree sub-category
 - Replaced previousMotherID == i->rend() that gives problems on VC++ Net 7.1.
 
 28th March 2006  John Allison (vistree-V08-00-02)
-- Made compatible with modeling-V08-00-05. 
+- Made compatible with modeling-V08-00-05.
 - Migration away from EstablishSpecials mechanism.
 
 14th March 2006  John Allison (vistree-V08-00-01)
@@ -195,7 +198,7 @@ History file for visualization/Tree sub-category
 15th June 2001  Satoshi Tanaka (vis-V03-01-05)
 - The  first committing of GAGTree driver.
 - Other files are the same as vis-V03-01-04
- 
+
 5th June 2001  John Allison (vis-V03-01-04)
 - Moved re-useable code from G4ASCIITree to G4VTree.
 

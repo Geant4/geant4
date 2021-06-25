@@ -1,6 +1,3 @@
-#------------------------------------------------------------------------------
-# Module : G4readout
-# Package: Geant4.src.G4readout
-#------------------------------------------------------------------------------
+# - G4readout category build
 
 geant4_global_library_target(COMPONENTS sources.cmake)

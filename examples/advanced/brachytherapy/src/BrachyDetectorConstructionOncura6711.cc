@@ -39,9 +39,9 @@
 //
 // 
 //
+#include "BrachyDetectorConstructionOncura6711.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyDetectorConstructionOncura6711.hh"
 #include "G4Sphere.hh"
 #include "G4RunManager.hh"
 #include "G4Box.hh"
@@ -52,7 +52,7 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4TransportationManager.hh"
-#include "BrachyMaterial.hh"
+#include "G4NistManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
@@ -70,41 +70,38 @@ BrachyDetectorConstructionOncura6711::BrachyDetectorConstructionOncura6711()
    fOncuraSilverCorePhys(nullptr),
    fOncuraCapsuleShellVisAtt(nullptr), fOncuraCapsuleTipVisAtt(nullptr),
    fOncuraSilverCoreVisAtt(nullptr)
-{
-  fMat = new BrachyMaterial();
-}
+{}
 
 BrachyDetectorConstructionOncura6711::~BrachyDetectorConstructionOncura6711()
-{ 
-  delete fMat; 
-}
+{}
 
 void BrachyDetectorConstructionOncura6711::ConstructOncura6711(G4VPhysicalVolume* mother)
 {
 G4Colour  red     (1.0, 0.0, 0.0) ;
 G4Colour  magenta (1.0, 0.0, 1.0) ; 
 
-G4Material* titaniumMat = fMat -> GetMat("titanium");
-G4Material* airMat = fMat -> GetMat("Air");
-G4Material* silverMat = fMat -> GetMat("Silver");
+G4NistManager* nist = G4NistManager::Instance();
+G4Material* titanium = nist -> FindOrBuildMaterial("G4_Ti");
+G4Material* air = nist -> FindOrBuildMaterial("G4_AIR");
+G4Material* silver = nist -> FindOrBuildMaterial("G4_Ag");
 
 //Capsule shell
 fOncuraCapsule = new G4Tubs("OncuraCapsule",0,0.4*mm,1.875*mm,0.*deg,360.*deg);
-fOncuraCapsuleLog = new G4LogicalVolume(fOncuraCapsule,titaniumMat,"OncuraCapsuleLog", 0,0,0);
+fOncuraCapsuleLog = new G4LogicalVolume(fOncuraCapsule,titanium,"OncuraCapsuleLog", 0,0,0);
 fOncuraCapsulePhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
   								"OncuraCapsulePhys", fOncuraCapsuleLog, 
   								mother, false, 0, true);
 						
 //Capsule tips
 fOncuraCapsuleTip1 = new G4Sphere("OncuraCapsuleTip1", 0, 0.4*mm, 0., 360*deg, 0., 90*deg);
-fOncuraCapsuleTip1Log = new G4LogicalVolume(fOncuraCapsuleTip1, titaniumMat, "OncuraCapsuleTip1Log",0,0,0);
+fOncuraCapsuleTip1Log = new G4LogicalVolume(fOncuraCapsuleTip1, titanium, "OncuraCapsuleTip1Log",0,0,0);
 fOncuraCapsuleTip1Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,1.875*mm), 
 								"OncuraCapsuleTip1Phys", fOncuraCapsuleTip1Log,
 								mother, false, 
 								0, true);
 
 fOncuraCapsuleTip2 = new G4Sphere("OncuraCapsuleTip2", 0, 0.4*mm, 0., 360*deg, 90*deg, 90*deg);
-fOncuraCapsuleTip2Log = new G4LogicalVolume(fOncuraCapsuleTip2, titaniumMat, "OncuraCapsuleTip2Log",0,0,0);
+fOncuraCapsuleTip2Log = new G4LogicalVolume(fOncuraCapsuleTip2, titanium, "OncuraCapsuleTip2Log",0,0,0);
 fOncuraCapsuleTip2Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,-1.875*mm), 
 								"OncuraCapsuleTip2Phys", fOncuraCapsuleTip2Log,
 								mother, false, 
@@ -112,7 +109,7 @@ fOncuraCapsuleTip2Phys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,-1.875*mm)
 
 //Air gap
 fOncuraAirGap = new G4Tubs("OncuraAirGap",0,0.33*mm,1.825*mm,0.*deg,360.*deg);
-fOncuraAirGapLog = new G4LogicalVolume(fOncuraAirGap, airMat, "OncuraAirGapLog");
+fOncuraAirGapLog = new G4LogicalVolume(fOncuraAirGap, air, "OncuraAirGapLog");
 fOncuraAirGapPhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
                                 "OncuraAirGapPhys", fOncuraAirGapLog, 
                                 fOncuraCapsulePhys, false,
@@ -120,7 +117,7 @@ fOncuraAirGapPhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0),
 
 //Silver core
 fOncuraSilverCore = new G4Tubs("OncuraSilverCore",0,0.25*mm,1.4*mm,0.*deg,360.*deg);
-fOncuraSilverCoreLog = new G4LogicalVolume(fOncuraSilverCore, silverMat, "silverCoreLog");
+fOncuraSilverCoreLog = new G4LogicalVolume(fOncuraSilverCore, silver, "silverCoreLog");
 fOncuraSilverCorePhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,0), 
 								"OncuraSilverCorePhys", fOncuraSilverCoreLog,
                                 fOncuraAirGapPhys, false,

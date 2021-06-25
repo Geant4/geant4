@@ -23,24 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/////////////////////////////////////////////////////////////////////////////////
+//  Class:    G4AdjointeIonisationModel
+//  Author:         L. Desorgher
+//  Organisation:   SpaceIT GmbH
+//
+//  Adjoint EM model for discrete reverse e- ionisation
 //
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointeIonisationModel
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//      ChangeHistory: 
-//	 	 September 2009 creation by L. Desorgher. Separate the concrete ionisation stuff from G4VEMAdjointModel  		
-//
-//-------------------------------------------------------------
-//	Documentation:
-//		Adjoint EM model for discrete reverse e- ionisation
-//
 
 #ifndef G4AdjointeIonisationModel_h
 #define G4AdjointeIonisationModel_h 1
@@ -48,35 +38,29 @@
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
 
-class G4AdjointeIonisationModel: public G4VEmAdjointModel
+class G4AdjointeIonisationModel : public G4VEmAdjointModel
 {
-
-public: //methods
-
-//Constructor, destructor
+ public:
   G4AdjointeIonisationModel();
 
-  virtual ~G4AdjointeIonisationModel();
+  ~G4AdjointeIonisationModel() override;
 
-//Concrete implementation or virtual methods
-  
-  virtual void SampleSecondaries(const G4Track& aTrack,
-                                G4bool IsScatProjToProjCase,
-				G4ParticleChange* fParticleChange);
-  
-  virtual G4double DiffCrossSectionPerAtomPrimToSecond(
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd, // kinetic energy of the secondary particle 
-				      G4double Z, 
-                                      G4double A = 0.);
+  void SampleSecondaries(const G4Track& aTrack, G4bool isScatProjToProj,
+                         G4ParticleChange* fParticleChange) override;
 
-				
-private:  
-  G4double DiffCrossSectionMoller(G4double kinEnergyProj,G4double kinEnergyProd);
-private: //attributes   
-   G4bool WithRapidSampling;
-   
+  G4double DiffCrossSectionPerAtomPrimToSecond(
+    G4double kinEnergyProj,  // kin energy of particle before interaction
+    G4double kinEnergyProd,  // kinetic energy of the secondary particle
+    G4double Z, G4double A = 0.) override;
 
+  G4AdjointeIonisationModel(G4AdjointeIonisationModel&) = delete;
+  G4AdjointeIonisationModel& operator=(const G4AdjointeIonisationModel& right) =
+    delete;
+
+ private:
+  G4double DiffCrossSectionMoller(G4double kinEnergyProj,
+                                  G4double kinEnergyProd);
+
+  G4bool fWithRapidSampling = false;
 };
 #endif
-

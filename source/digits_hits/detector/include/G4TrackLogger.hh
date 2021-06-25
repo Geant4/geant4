@@ -28,11 +28,11 @@
 // Class G4TrackLogger
 //
 // Class description:
-// 
+//
 // This class loggs every track via it's id. It may tell if
-// a track has been logged. The loggs are cleared when ever 
+// a track has been logged. The loggs are cleared when ever
 // the object has been informed about a new event.
-// 
+//
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 //
@@ -43,25 +43,25 @@
 #include "globals.hh"
 #include <set>
 
-class G4TrackLogger {
-public:
+class G4TrackLogger
+{
+ public:
   G4TrackLogger();
   ~G4TrackLogger();
 
   void SetEventID(G4int id);
-    // inform the object about the event number
-    // if the event number changes the loggs are cleared.
+  // inform the object about the event number
+  // if the event number changes the loggs are cleared.
 
   G4bool FirstEnterance(G4int trid);
-    // returns true if the track is new to this event.
+  // returns true if the track is new to this event.
 
-  typedef std::set<G4int > TrackIDsSet;
-    // log for the track ids.
+  typedef std::set<G4int> TrackIDsSet;
+  // log for the track ids.
 
-private:
+ private:
   G4int fPreviousEventID;
   TrackIDsSet fTrackIDsSet;
-
 };
 
 #endif

@@ -35,7 +35,7 @@ class G4GeneralParticleSource;
 class BrachyActionInitialization: public G4VUserActionInitialization
 {
   public:
-    BrachyActionInitialization();
+    explicit BrachyActionInitialization();
     virtual ~BrachyActionInitialization();
     virtual void BuildForMaster() const;
     virtual void Build() const;

@@ -48,6 +48,8 @@
 #include "G4ForceCondition.hh"        // enum 'track'
 #include "G4GPILSelection.hh"         // enum 'track'
 
+#include "trkgdefs.hh"
+
 class G4SteppingManager;
 class G4Navigator;
 class G4VPhysicalVolume;
@@ -69,16 +71,19 @@ class G4VSteppingVerbose
 
     static void SetInstance(G4VSteppingVerbose* Instance);
     static G4VSteppingVerbose* GetInstance();
+    static G4VSteppingVerbose* GetMasterInstance();
     static G4int GetSilent();
     static void SetSilent(G4int fSilent);
     static G4int GetSilentStepInfo();
     static void SetSilentStepInfo(G4int fSilent);
 
+    virtual G4VSteppingVerbose* Clone();
+
     // these method are invoked by G4SteppingManager 
  
     virtual void NewStep() = 0;
     void CopyState();
-    void SetManager(G4SteppingManager* const);
+    virtual void SetManager(G4SteppingManager* const);
     virtual void AtRestDoItInvoked() = 0;
     virtual void AlongStepDoItAllDone() = 0;
     virtual void PostStepDoItAllDone() = 0;
@@ -99,9 +104,11 @@ class G4VSteppingVerbose
 
     static G4ThreadLocal G4VSteppingVerbose* fInstance;
       // pointer to the instance 
-    static G4ThreadLocal G4int Silent;
+    static G4VSteppingVerbose* fMasterInstance;
+      // pointer to the instance in master thread
+    G4TRACKING_DLL static G4ThreadLocal G4int Silent;
       //flag for verbosity
-    static G4ThreadLocal G4int SilentStepInfo;
+    G4TRACKING_DLL static G4ThreadLocal G4int SilentStepInfo;
       //another flag for verbosity
 
     G4SteppingManager* fManager = nullptr;

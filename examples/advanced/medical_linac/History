@@ -14,6 +14,9 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.05.2021  B. Morgan (medical_linac-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 02.11.2020    B.Morgan tag medical_linac-V10-06-00
               Support same CMake version range as core Geant4
 

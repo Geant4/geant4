@@ -22,7 +22,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/scoring/include \
             -I$(G4BASE)/processes/hadronic/management/include \
-            -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/particles/management/include \

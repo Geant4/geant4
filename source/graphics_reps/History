@@ -19,8 +19,36 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
-06 May 2021 Gabriele Cosmo (greps-V10-06-07)
+07 June 2021 John Allison (greps-V10-07-07)
+- G4VGraphicsScene.hh:
+  o Introduce a new pure virtual function:
+    virtual void AddCompound (const G4Mesh&) = 0;
+- G4VisAttributes.cc:
+  o Improve message in SetForceNumberOfCloudPoints.
+
+05 June 2021 Evgueni Tcherniaev (greps-V10-07-06)
+- RotateContourAroundZ(): fixed calculation of Nfaces
+
+12 May 2021 Evgueni Tcherniaev (greps-V10-07-05)
+- added TriangulatePolygon(), RotateContourAroundZ()
+- added HepPolyhedronPgon, HepPolyhedronPcon given by rz-contour
+
+06 May 2021 Gabriele Cosmo (greps-V10-07-04)
 - Fixed shadowing compilation warning in G4Colours reported with gcc-11.
+
+18 March 2021 Ben Morgan (greps-V10-07-03)
+- Fix typo in geant4_add_module that prevented install of greps headers
+
+15 March 2021 John Allison (greps-V10-07-02)
+- Add G4Colour::operator<.
+  o This is useful of you want to make a set or map based on
+    G4colour as a key.
+
+12 March 2021 Ben Morgan (greps-V10-07-01)
+- Modernize CMake build
+
+29 December 2020 John Allison (greps-V10-07-00)
+- Remove deprecated G4VisAttributes::Invisible.
 
 01 December 2020 Evgueni Tcherniaev (greps-V10-06-06)
 - HepPolyhedron: revised HepPolyhedronHype,
@@ -56,7 +84,7 @@ History file for graphics_reps category
 
 07 November 2019  Evgueni Tcherniaev (greps-V10-05-06)
 - HepPolyhedron: Added move constructor and move assignment
-- BooleanProcessor::createPolyhedron(): Use return std::move() 
+- BooleanProcessor::createPolyhedron(): Use return std::move()
 
 04 October 2019  Evgueni Tcherniaev  (greps-V10-05-05)
 - HepPolyhedron::SetSideFacets: Fixed false defect reported by Coverity
@@ -118,7 +146,7 @@ History file for graphics_reps category
 
 18th January 2018  Ben Morgan (greps-V10-04-00)
 - Fix unexported global data for WINDOWS_EXPORT_ALL_SYMBOLS
-- New DLL build method identified that G4VisAttributes has a 
+- New DLL build method identified that G4VisAttributes has a
   static const member that is not declared dllexport/import.
 - graphics_reps_defs.hh: New header to configure the needed
   export/import keywords, using a macro G4GREPS_DLL
@@ -171,13 +199,13 @@ History file for graphics_reps category
 - Co-works with digits_hits-V10-02-06, vis-V10-02-12
 - include/G4VGraphicsScene.hh
      It accepts both G4TMitsMap<G4StatDouble> and G4THitsMap<G4double>.
-  
+
 2nd September 2016  Makoto Asai (greps-V10-02-06)
 - Co-works with digits_hits-V10-02-05, vis-V10-02-10
 - include/G4VGraphicsScene.hh
      Build-in scorer now uses G4TMitsMap<G4StatDouble> instead of
      G4THitsMap<G4double>.
-  
+
 31st August 2016  John Allison  (greps-V10-02-05)
 - Co-works vis-V10-02-09.
 - G4VGraphicsScene.hh:
@@ -313,11 +341,11 @@ History file for graphics_reps category
 
 14th February 2013 Jean Jacquemier
 - Removed modifcations G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable
-  ( see  TAG greps-V09-06-02 ). These modifications will be done once 
+  ( see  TAG greps-V09-06-02 ). These modifications will be done once
   MultiThreading performance loss will be recover
-  
+
 8th February 2013 Jean Jacquemier (greps-V09-06-02)
-- Modify G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable 
+- Modify G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable
   modification
 
 14th December 2012  John Allison (greps-V09-06-01)
@@ -659,12 +687,12 @@ June 11, 2012 G.Cosmo (greps-V09-05-09)
     objects out of vertices and indices.
   o Removed unnecessary operator= functions.
 
-23rd November 2005  Jane Tinslay 
+23rd November 2005  Jane Tinslay
 - Update documentation in G4Colour
 
 10th November 2005  Jane Tinslay (greps-V07-01-09)
 - G4VVisManager: Fix Dispatch method name to "DispatchToModel".
-- G4Colour: Use public static member functions instead of public 
+- G4Colour: Use public static member functions instead of public
   static data members to avoid problems with dynamic libraries.
 
 10th November 2005  John Allison
@@ -688,7 +716,7 @@ June 11, 2012 G.Cosmo (greps-V09-05-09)
 - G4Colour.cc: Added #include <sstream>.
 
 17th October 2005 Jane Tinslay (greps-V07-01-05)
-- intercoms->graphics_reps migration for G4VGraphicsScene and G4VVisManager  
+- intercoms->graphics_reps migration for G4VGraphicsScene and G4VVisManager
 
 13th October 2005 Jane Tinslay  (greps-V07-01-04)
 - Additions to G4Colour

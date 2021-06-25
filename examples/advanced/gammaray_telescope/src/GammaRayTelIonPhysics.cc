@@ -36,6 +36,28 @@
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicParameters.hh"
 
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronElastic.hh"
+
+#include "G4HadronInelasticProcess.hh"
+
+#include "G4hIonisation.hh"
+#include "G4hMultipleScattering.hh"
+
+#include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4CrossSectionInelastic.hh"
+
+#include "G4FTFModel.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4CascadeInterface.hh"
+
 
 GammaRayTelIonPhysics::GammaRayTelIonPhysics(const G4String& name)
                  :  G4VPhysicsConstructor(name)
@@ -53,6 +75,24 @@ void GammaRayTelIonPhysics::ConstructParticle()
 
 void GammaRayTelIonPhysics::ConstructProcess()
 {
+
+  
+  /*
+
+   // Deuteron physics
+   G4HadronInelasticProcess  fDeuteronProcess;
+
+   // Triton physics
+   G4HadronInelasticProcess    fTritonProcess;
+  
+   // Alpha physics
+   G4HadronInelasticProcess     fAlphaProcess;
+
+
+   */
+
+
+  
   G4ProcessManager * pManager = 0;
   
   const G4double theBERTMin =   0.0*GeV;
@@ -76,19 +116,21 @@ void GammaRayTelIonPhysics::ConstructProcess()
   theBERTModel->SetMaxEnergy( theBERTMax );
 
   // Elastic Process
-  theElasticModel = new G4HadronElastic();
-  theElasticProcess.RegisterMe(theElasticModel);
+  G4HadronElastic* theElasticModel = new G4HadronElastic;
+  G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+  theElasticProcess->RegisterMe(theElasticModel);
 
   // Generic Ion
   pManager = G4GenericIon::GenericIon()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
 
-  pManager->AddProcess(&fIonIonisation, ordInActive, 2, 2);
+  pManager->AddProcess(new G4hIonisation, ordInActive, 2, 2);
 
-  pManager->AddProcess(&fIonMultipleScattering);
-  pManager->SetProcessOrdering(&fIonMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fIonMultipleScattering, idxPostStep,  1);
+  G4hMultipleScattering* fIonMultipleScattering = new G4hMultipleScattering;
+  pManager->AddProcess(fIonMultipleScattering);
+  pManager->SetProcessOrdering(fIonMultipleScattering, idxAlongStep,  1);
+  pManager->SetProcessOrdering(fIonMultipleScattering, idxPostStep,  1);
 
   G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
   G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
@@ -96,59 +138,68 @@ void GammaRayTelIonPhysics::ConstructProcess()
   // Deuteron 
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-  fDeuteronProcess.AddDataSet(theGGNuclNuclData);
-  fDeuteronProcess.RegisterMe(theBERTModel);
-  fDeuteronProcess.RegisterMe(theModel);
-  pManager->AddDiscreteProcess(&fDeuteronProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
+  G4HadronInelasticProcess* fDeuteronProcess =
+    new G4HadronInelasticProcess( "dInelastic", G4Deuteron::Definition() );
+  fDeuteronProcess->AddDataSet(theGGNuclNuclData);
+  fDeuteronProcess->RegisterMe(theBERTModel);
+  fDeuteronProcess->RegisterMe(theModel);
+  pManager->AddDiscreteProcess(fDeuteronProcess);
 
-  pManager->AddProcess(&fDeuteronIonisation, ordInActive, 2, 2);
+  pManager->AddProcess(new G4hIonisation, ordInActive, 2, 2);
 
-  pManager->AddProcess(&fDeuteronMultipleScattering);
-  pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fDeuteronMultipleScattering, idxPostStep,  1);
+  G4hMultipleScattering* fDeuteronMultipleScattering = new G4hMultipleScattering;
+  pManager->AddProcess(fDeuteronMultipleScattering);
+  pManager->SetProcessOrdering(fDeuteronMultipleScattering, idxAlongStep,  1);
+  pManager->SetProcessOrdering(fDeuteronMultipleScattering, idxPostStep,  1);
  
   // Triton 
   pManager = G4Triton::Triton()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
-  fTritonProcess.AddDataSet(theGGNuclNuclData);
-  fTritonProcess.RegisterMe(theBERTModel);
-  fTritonProcess.RegisterMe(theModel);
-  pManager->AddDiscreteProcess(&fTritonProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
+  G4HadronInelasticProcess* fTritonProcess =
+    new G4HadronInelasticProcess( "tInelastic", G4Triton::Definition() );  
+  fTritonProcess->AddDataSet(theGGNuclNuclData);
+  fTritonProcess->RegisterMe(theBERTModel);
+  fTritonProcess->RegisterMe(theModel);
+  pManager->AddDiscreteProcess(fTritonProcess);
 
-  pManager->AddProcess(&fTritonIonisation, ordInActive, 2, 2);
+  pManager->AddProcess(new G4hIonisation, ordInActive, 2, 2);
 
-  pManager->AddProcess(&fTritonMultipleScattering);
-  pManager->SetProcessOrdering(&fTritonMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fTritonMultipleScattering, idxPostStep,  1);
+  G4hMultipleScattering* fTritonMultipleScattering = new G4hMultipleScattering;
+  pManager->AddProcess(fTritonMultipleScattering);
+  pManager->SetProcessOrdering(fTritonMultipleScattering, idxAlongStep,  1);
+  pManager->SetProcessOrdering(fTritonMultipleScattering, idxPostStep,  1);
  
   // Alpha 
   pManager = G4Alpha::Alpha()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
+  G4HadronInelasticProcess* fAlphaProcess =
+    new G4HadronInelasticProcess( "alphaInelastic", G4Alpha::Definition() );  
+  fAlphaProcess->AddDataSet(theGGNuclNuclData);
+  fAlphaProcess->RegisterMe(theBERTModel);
+  fAlphaProcess->RegisterMe(theModel);
+  pManager->AddDiscreteProcess(fAlphaProcess);
 
-  fAlphaProcess.AddDataSet(theGGNuclNuclData);
-  fAlphaProcess.RegisterMe(theBERTModel);
-  fAlphaProcess.RegisterMe(theModel);
-  pManager->AddDiscreteProcess(&fAlphaProcess);
+  pManager->AddProcess(new G4hIonisation, ordInActive, 2, 2);
 
-  pManager->AddProcess(&fAlphaIonisation, ordInActive, 2, 2);
-
-  pManager->AddProcess(&fAlphaMultipleScattering);
-  pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fAlphaMultipleScattering, idxPostStep,  1);
+  G4hMultipleScattering* fAlphaMultipleScattering = new G4hMultipleScattering;
+  pManager->AddProcess(fAlphaMultipleScattering);
+  pManager->SetProcessOrdering(fAlphaMultipleScattering, idxAlongStep,  1);
+  pManager->SetProcessOrdering(fAlphaMultipleScattering, idxPostStep,  1);
  
   // He3
   pManager = G4He3::He3()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
 
-  pManager->AddProcess(&fHe3Ionisation, ordInActive, 2, 2);
+  pManager->AddProcess(new G4hIonisation, ordInActive, 2, 2);
 
-  pManager->AddProcess(&fHe3MultipleScattering);
-  pManager->SetProcessOrdering(&fHe3MultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&fHe3MultipleScattering, idxPostStep,  1);
+  G4hMultipleScattering* fHe3MultipleScattering = new G4hMultipleScattering;
+  pManager->AddProcess(fHe3MultipleScattering);
+  pManager->SetProcessOrdering(fHe3MultipleScattering, idxAlongStep,  1);
+  pManager->SetProcessOrdering(fHe3MultipleScattering, idxPostStep,  1);
    
 }
 

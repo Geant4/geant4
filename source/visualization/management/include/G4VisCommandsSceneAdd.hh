@@ -283,6 +283,18 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSceneAddLocalAxes: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLocalAxes ();
+  virtual ~G4VisCommandSceneAddLocalAxes ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLocalAxes (const G4VisCommandSceneAddLocalAxes&);
+  G4VisCommandSceneAddLocalAxes& operator = (const G4VisCommandSceneAddLocalAxes&);
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneAddLogicalVolume: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddLogicalVolume ();

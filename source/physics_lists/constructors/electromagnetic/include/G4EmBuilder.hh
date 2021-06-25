@@ -53,8 +53,14 @@ public:
                                     G4bool isHEP, G4bool isProton,
                                     G4bool isWVI);
 
+  static void ConstructLightHadronsSS(G4ParticleDefinition* part1, 
+                                      G4ParticleDefinition* part2,
+				      G4bool isHEP);
+
   static void ConstructIonEmPhysics(G4hMultipleScattering* hmsc, 
                                     G4NuclearStopping* nucStopping); 
+
+  static void ConstructIonEmPhysicsSS(); 
 
   // main method to be called from EM constructors to construct
   // EM physics for the list of leptons and hadrons common for
@@ -62,6 +68,8 @@ public:
   static void ConstructCharged(G4hMultipleScattering* hmsc, 
                                G4NuclearStopping* nucStopping,
                                G4bool isWVI = true);
+
+  static void ConstructChargedSS(G4hMultipleScattering* hmsc); 
 
   // minimal set of particles for EM physics
   static void ConstructMinimalEmSet();

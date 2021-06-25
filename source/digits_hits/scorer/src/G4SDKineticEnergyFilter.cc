@@ -33,40 +33,43 @@
 // class description:
 //
 //  This is the class of a filter to be associated with a
-// sensitive detector. 
+// sensitive detector.
 //
 //
 // Created: 2005-11-14  Tsukasa ASO.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-G4SDKineticEnergyFilter::G4SDKineticEnergyFilter(G4String name,
-						 G4double elow, 
-						 G4double ehigh)
-  :G4VSDFilter(name),fLowEnergy(elow),fHighEnergy(ehigh)
-{;}
+G4SDKineticEnergyFilter::G4SDKineticEnergyFilter(G4String name, G4double elow,
+                                                 G4double ehigh)
+  : G4VSDFilter(name)
+  , fLowEnergy(elow)
+  , fHighEnergy(ehigh)
+{
+  ;
+}
 
-G4SDKineticEnergyFilter::~G4SDKineticEnergyFilter()
-{;}
+G4SDKineticEnergyFilter::~G4SDKineticEnergyFilter() { ; }
 
 G4bool G4SDKineticEnergyFilter::Accept(const G4Step* aStep) const
 {
   G4double kinetic = aStep->GetPreStepPoint()->GetKineticEnergy();
-  if ( kinetic < fLowEnergy  ) return FALSE;
-  if ( kinetic >= fHighEnergy ) return FALSE;
+  if(kinetic < fLowEnergy)
+    return FALSE;
+  if(kinetic >= fHighEnergy)
+    return FALSE;
   return TRUE;
 }
 
-void G4SDKineticEnergyFilter::SetKineticEnergy(G4double elow, G4double ehigh){
+void G4SDKineticEnergyFilter::SetKineticEnergy(G4double elow, G4double ehigh)
+{
   fLowEnergy  = elow;
   fHighEnergy = ehigh;
 }
 
-void G4SDKineticEnergyFilter::show() {
-    G4cout << " G4SDKineticEnergyFilter:: " << GetName()
-	 << " LowE  " << G4BestUnit(fLowEnergy,"Energy") 
-	 << " HighE " << G4BestUnit(fHighEnergy,"Energy")
-	 <<G4endl;
+void G4SDKineticEnergyFilter::show()
+{
+  G4cout << " G4SDKineticEnergyFilter:: " << GetName() << " LowE  "
+         << G4BestUnit(fLowEnergy, "Energy") << " HighE "
+         << G4BestUnit(fHighEnergy, "Energy") << G4endl;
 }
-
-

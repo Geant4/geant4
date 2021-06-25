@@ -36,6 +36,15 @@
 // to a scene handler.  A scene is a collection of models.
 // A special case is made for G4PhysicalVolumeModel - a non-null pointer
 // is to be returned by G4PhysicalVolumeModel::GetG4PhysicalVolumeModel().
+//
+// The model must take care of the required transformation itself - thus the
+// models components should be transformed before delivering to the scene
+// handler. The model could receive the transformation in its constructor,
+// e.g., G4PhysicalVolumeModel, or handle it in the model's SetTransformation,
+// e.g., in G4AxesModel (relatively simple) or in G4ArrowModel (quite
+// complicated). This avoids having to transform the components perhaps
+// multiple times. The reasons for this are mainly to do with how we implement
+// G4PhysicalVolumeModel
 
 #ifndef G4VMODEL_HH
 #define G4VMODEL_HH
@@ -100,7 +109,7 @@ public: // With description
   void SetType (const G4String&);
   void SetGlobalDescription (const G4String&);
   void SetGlobalTag (const G4String&);
-  void SetTransformation (const G4Transform3D&);
+  virtual void SetTransformation (const G4Transform3D&);
 
   virtual G4bool Validate (G4bool warn = true);
   // Validate, but allow internal changes (hence non-const function).

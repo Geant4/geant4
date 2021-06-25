@@ -35,7 +35,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B3PhysicsList::B3PhysicsList() 
+B3PhysicsList::B3PhysicsList()
 : G4VModularPhysicsList(){
   SetVerboseLevel(1);
 
@@ -52,7 +52,7 @@ B3PhysicsList::B3PhysicsList()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3PhysicsList::~B3PhysicsList()
-{ 
+{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,4 +60,4 @@ B3PhysicsList::~B3PhysicsList()
 void B3PhysicsList::SetCuts()
 {
   G4VUserPhysicsList::SetCuts();
-}  
+}

@@ -78,13 +78,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(nullptr),
-    lowestKinEnergy(1.*GeV),
-    isInitialised(false)
+    lowestKinEnergy(1.*GeV)
 {
   SetProcessSubType(fPairProdByCharged);
   SetSecondaryParticle(G4Positron::Positron());
@@ -95,7 +91,7 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
 
 G4bool G4MuPairProduction::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,24 +109,24 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
                          const G4ParticleDefinition* part,
 			 const G4ParticleDefinition*)
 {
-  if (!isInitialised) {
-    isInitialised = true;
+  if (isInitialised) { return; }
+  isInitialised = true;
 
-    theParticle = part;
+  theParticle = part;
+  lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
 
-    G4MuPairProductionModel* mod = new G4MuPairProductionModel(part); 
+  G4VEmModel* mod = EmModel(0);
+  if(nullptr == mod) {
+    mod = new G4MuPairProductionModel(part); 
     SetEmModel(mod);
-
-    lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
-    mod->SetLowestKineticEnergy(lowestKinEnergy);
-
-    G4VEmFluctuationModel* fm = nullptr;
-    G4EmParameters* param = G4EmParameters::Instance();
-    mod->SetLowEnergyLimit(param->MinKinEnergy());
-    mod->SetHighEnergyLimit(param->MaxKinEnergy());
-    mod->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
-    AddEmModel(1, mod, fm);
   }
+
+  G4VEmFluctuationModel* fm = nullptr;
+  G4EmParameters* param = G4EmParameters::Instance();
+  mod->SetLowEnergyLimit(param->MinKinEnergy());
+  mod->SetHighEnergyLimit(param->MaxKinEnergy());
+  mod->SetSecondaryThreshold(param->MuHadBremsstrahlungTh());
+  AddEmModel(1, mod, fm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -144,8 +140,8 @@ void G4MuPairProduction::StreamProcessInfo(std::ostream& out) const
       if(pv) {
         out << "      Sampling table " << pv->GetLengthY()
 	    << "x" << pv->GetLengthX() << "; from "
-	    << exp(pv->GetY(0))/GeV << " GeV to " 
-	    << exp(pv->GetY(pv->GetLengthY()-1))/TeV 
+	    << std::exp(pv->GetY(0))/GeV << " GeV to " 
+	    << std::exp(pv->GetY(pv->GetLengthY()-1))/TeV 
 	    << " TeV " << G4endl;
 	break;
       }
@@ -157,7 +153,7 @@ void G4MuPairProduction::StreamProcessInfo(std::ostream& out) const
 
 void G4MuPairProduction::ProcessDescription(std::ostream& out) const
 {
-  out << "  Pair production";
+  out << "  Electron-positron pair production by muons";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

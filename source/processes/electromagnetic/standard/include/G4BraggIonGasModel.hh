@@ -61,21 +61,21 @@ public:
   explicit G4BraggIonGasModel(const G4ParticleDefinition* p = 0,
 			      const G4String& nam = "BraggIonGas");
 
-  virtual ~G4BraggIonGasModel();
+  ~G4BraggIonGasModel() override;
 
   // Access ion effective charge square ratio to unit charge
-  virtual G4double ChargeSquareRatio(const G4Track&) final;
+  G4double ChargeSquareRatio(const G4Track&) final;
 
   // Access ion effective charge 
-  virtual G4double GetParticleCharge(const G4ParticleDefinition*,
-				     const G4Material* mat,
-				     G4double kineticEnergy) final;
-
-private:
+  G4double GetParticleCharge(const G4ParticleDefinition*,
+			     const G4Material* mat,
+			     G4double kineticEnergy) final;
 
   // hide assignment operator
   G4BraggIonGasModel & operator=(const  G4BraggIonGasModel &right) = delete;
   G4BraggIonGasModel(const  G4BraggIonGasModel&) = delete;
+
+private:
 
   G4double currentCharge;
 };

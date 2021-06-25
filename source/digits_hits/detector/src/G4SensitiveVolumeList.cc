@@ -35,60 +35,57 @@
 
 #include "G4SensitiveVolumeList.hh"
 
- //Constructors
-   G4SensitiveVolumeList::G4SensitiveVolumeList()
-   {
-   }
+// Constructors
+G4SensitiveVolumeList::G4SensitiveVolumeList() {}
 
-   G4SensitiveVolumeList::G4SensitiveVolumeList(const G4SensitiveVolumeList &right)
-   {
-     thePhysicalVolumeList = right.thePhysicalVolumeList;
-     theLogicalVolumeList = right.theLogicalVolumeList;
-   }
+G4SensitiveVolumeList::G4SensitiveVolumeList(const G4SensitiveVolumeList& right)
+{
+  thePhysicalVolumeList = right.thePhysicalVolumeList;
+  theLogicalVolumeList  = right.theLogicalVolumeList;
+}
 
+// Destructor
+G4SensitiveVolumeList::~G4SensitiveVolumeList() {}
 
- //Destructor
-   G4SensitiveVolumeList::~G4SensitiveVolumeList()
-   {
-   }
+// Assignment Operation
+G4SensitiveVolumeList& G4SensitiveVolumeList::operator=(
+  const G4SensitiveVolumeList& right)
+{
+  thePhysicalVolumeList = right.thePhysicalVolumeList;
+  theLogicalVolumeList  = right.theLogicalVolumeList;
+  return *this;
+}
 
+// Equality Operations
+G4bool G4SensitiveVolumeList::operator==(
+  const G4SensitiveVolumeList& right) const
+{
+  return (this == (G4SensitiveVolumeList*) &right);
+}
 
- //Assignment Operation
-    G4SensitiveVolumeList & G4SensitiveVolumeList::operator=(const G4SensitiveVolumeList &right)
-   {
-     thePhysicalVolumeList = right.thePhysicalVolumeList;
-     theLogicalVolumeList = right.theLogicalVolumeList;
-     return *this;
-   }
+G4bool G4SensitiveVolumeList::operator!=(
+  const G4SensitiveVolumeList& right) const
+{
+  return (this != (G4SensitiveVolumeList*) &right);
+}
 
+// Other Operations
+G4bool G4SensitiveVolumeList::CheckPV(const G4VPhysicalVolume* pvp) const
+{
+  for(auto pv : thePhysicalVolumeList)
+  {
+    if(pv == pvp)
+      return true;
+  }
+  return false;
+}
 
- //Equality Operations
-   G4bool G4SensitiveVolumeList::operator==(const G4SensitiveVolumeList &right) const
-   {
-     return (this == (G4SensitiveVolumeList *) &right);
-   }
-
-   G4bool G4SensitiveVolumeList::operator!=(const G4SensitiveVolumeList &right) const
-   {
-     return (this != (G4SensitiveVolumeList *) &right);
-   }
-
-
-
- //Other Operations 
-   G4bool G4SensitiveVolumeList::CheckPV(const G4VPhysicalVolume * pvp) const
-   {
-     for(auto pv : thePhysicalVolumeList) 
-     { if(pv==pvp) return true; }
-     return false;  
-   }
-
-
-   G4bool G4SensitiveVolumeList::CheckLV(const G4LogicalVolume * lvp) const
-   {
-     for(auto lv : theLogicalVolumeList)
-     { if(lv==lvp) return true; }
-     return false;  
-   }
-
-
+G4bool G4SensitiveVolumeList::CheckLV(const G4LogicalVolume* lvp) const
+{
+  for(auto lv : theLogicalVolumeList)
+  {
+    if(lv == lvp)
+      return true;
+  }
+  return false;
+}

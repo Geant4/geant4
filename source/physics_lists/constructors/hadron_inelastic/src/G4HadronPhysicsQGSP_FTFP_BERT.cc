@@ -43,13 +43,15 @@
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_FTFP_BERT);
 
 
-G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(G4int)
+G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(G4int verb)
     : G4HadronPhysicsQGSP_FTFP_BERT("hInelastic QGSP_FTFP_BERT",true) 
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(const G4String& name, 
 							 G4bool quasiElastic)
-    :  G4HadronPhysicsQGSP_BERT(name,quasiElastic)
+    : G4HadronPhysicsQGSP_BERT(name,quasiElastic)
 {
   G4HadronicParameters::Instance()->SetEnableBCParticles(true);
 }

@@ -6,12 +6,22 @@
         History file for hadronic/models/binary_cascade directory
         --------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16-Apr-2021, Ben Morgan  had-binary-V10-07-01
+- Migrate build to modular CMake API
+
+13-Apr-2021, Alberto Ribon    had-binary-V10-07-00
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 10-Mar-2020, Vladimir Ivanchenko    had-binary-V10-06-00
 - G4BinaryCascade: fixed memory leak at exit
@@ -30,7 +40,7 @@ code and to keep track of all tags.
 - G4GeneratorPrecompoundInterface: fixed printout typo.
 
 23-Jun-2017, Gunter Folger          had-binary-V10-03-04
-- fix memory leak introduced in BIC and BLIR by changes for 
+- fix memory leak introduced in BIC and BLIR by changes for
     passing creator model.
 
 31-May-2017, Gunter Folger          had-binary-V10-03-03
@@ -46,9 +56,9 @@ code and to keep track of all tags.
 - fix compilation problems.
 
 18-May 2017, Gunter Folger           had-binary-V10-03-00
-- pass through CreatorModel. 
+- pass through CreatorModel.
 - Binary Cascade also sets creator model for particles it creates,
-    BLIR not yet.  
+    BLIR not yet.
 
 9-September 2015, Gunter Folger      had-binary-V10-01-08
 - migrate to G4Exp, G4Log, and G4Pow for std::exp, std::log, and std::pow.
@@ -63,28 +73,28 @@ code and to keep track of all tags.
 
 15-May 2015, Vladimir Uzhinsky       had-binary-V10-01-05
 - G4GeneratorPrecompoundInterface.cc: Propagate for hA interactions
-  A bug is erased for a case when an ActualMass of a residual nucleus <= 
+  A bug is erased for a case when an ActualMass of a residual nucleus <=
   ground state mass of the residual.
 
  5-May 2015, Vladimir Uzhinsky       had-binary-V10-01-04
-- G4GeneratorPrecompoundInterface.cc: 
+- G4GeneratorPrecompoundInterface.cc:
   Variable CaptureThreshold is introduced.
   Calculation of excitation energies of projectile and target nuclear residuals
   was improved.
 
 29-April 2015, Vladimir Uzhinsky       had-binary-V10-01-03
-- G4GeneratorPrecompoundInterface.cc: 
+- G4GeneratorPrecompoundInterface.cc:
   Improved calculation of excitation energies of nuclear residuals for QGS model.
   Improved debug diagnostic.
 
 28-April 2015, Vladimir Uzhinsky       had-binary-V10-01-02
-- G4GeneratorPrecompoundInterface.cc: 
+- G4GeneratorPrecompoundInterface.cc:
   Improved calculation of excitation energies of nuclear residuals.
   Improved debug diagnostic.
 
 27-April 2015, Gunter Folger           had-binary-V10-01-01
 - Fix for compiler warning (clang 3.6) on expression with side effects
-  - G4BinaryCascade::DebugApplyCollisionFail(): use const & as 
+  - G4BinaryCascade::DebugApplyCollisionFail(): use const & as
        argument to typeid()
 
 16 April 2015 Vladimir Uzhinsky   had-binary-V10-01-00
@@ -97,30 +107,30 @@ code and to keep track of all tags.
        fragments are transformed to Lab. system.
 
 11-November 2014 Gunter Folger    had-binary-V10-00-11
-- BinaryLightReaction: Momentum correction wrong in case of no Fragment, but 
-       primary projectile nucleon(s) in final state. 
+- BinaryLightReaction: Momentum correction wrong in case of no Fragment, but
+       primary projectile nucleon(s) in final state.
        Example: d + Pb -> X, where neutron or proton of deuteron did not interact.
-        
+
 4-November 2014 Gunter Folger    had-binary-V10-00-10
 - remove left over use of SetA/SetZ.
 - Binary cascade: improve handling of destroyed nucleus solving issues with
-    light nuclei in BinaryLightIonReaction, like He in H. 
-    final state in case target nucleus is destroyed made to conserve 
+    light nuclei in BinaryLightIonReaction, like He in H.
+    final state in case target nucleus is destroyed made to conserve
 	 energy and momentum, taking into account momentum transfered to nucleus,
-	  and finally forcing conservation.	 
+	  and finally forcing conservation.
 - BinaryLightIonreaction: handle currentA/Z consistant with list of spectators.
     added optional debugging output.
-	 	  
+
 2 June 2014 Gunter Folger        had-binary-V10-00-09
-- G4NeutronField, G4ProtonField: add static cast to correct 
+- G4NeutronField, G4ProtonField: add static cast to correct
   compilation warning.
 
 30 May 2014 Gunter Folger        had-binary-V10-00-08
-- G4NeutronField, G4ProtonField: remove superfluous const_casts and use 
-    unsigned int for index, removing need for check on negative index. 
+- G4NeutronField, G4ProtonField: remove superfluous const_casts and use
+    unsigned int for index, removing need for check on negative index.
 
 28 May 2014 Gunter Folger        had-binary-V10-00-07
-- G4BinaryCasacde: Improve calculation of mass, and of correction for outgoing 
+- G4BinaryCasacde: Improve calculation of mass, and of correction for outgoing
    particles by always using GetIon() method. IN GetIonMass() return 0 when A==0
 	(Addresses crash for p+d seen in d+H in BLIC)
 
@@ -142,20 +152,20 @@ code and to keep track of all tags.
 
 31 Jan 2014 Gunter Folger      had-binary-V10-00-01
 - G4BinaryLightIoncascade::FuseNucleiAndPrompound():
-   protect at low energy: available energy is not sufficient to create a 
+   protect at low energy: available energy is not sufficient to create a
 	 fragment.
 16 Jan 2014 Gunter Folger      had-binary-V10-00-00
-- bring back corrected change for coverity, rejected previously in 
+- bring back corrected change for coverity, rejected previously in
   tag had-binary-V09-06-07.
-  Add printout of particle name in check for valid type of projectile 
-  in G4BinaryCasacde::ApplyYourself() 
+  Add printout of particle name in check for valid type of projectile
+  in G4BinaryCasacde::ApplyYourself()
 20 Sep 2013 Gunter Folger      had-binary-V09-06-08
-- revert change introduced for coverity fix, rev 72276, in tag 
+- revert change introduced for coverity fix, rev 72276, in tag
   had-binary-V09-06-07. The tag was rejected, and in the way for
   unrelated fixes.
   Remove commented lines for G4Fragment.SetParticleDefinition()
-  
-20 Sept 2013 V.Ivanchenko 
+
+20 Sept 2013 V.Ivanchenko
 - G4BinaryCascade, G4BinaryLightIonCascade - fixed infinite exception
     output by commenting out G4Fragment.SetParticleDefinition() for
     ions - ion definition is not used inside G4Fragment class
@@ -164,22 +174,22 @@ code and to keep track of all tags.
 - G4BinaryCascade.cc: fix typo, bug report 1511.
 
 12 Jul 2013 Gunter Folger      had-binary-V09-06-07  (tag rejected)
-- G4BinaryLightIonReaction: fix for coverity report on small leak 
+- G4BinaryLightIonReaction: fix for coverity report on small leak
 
  9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag
- 8 May 2013 John Apostolakis	 had-binary-V09-06-05 
+ 8 May 2013 John Apostolakis	 had-binary-V09-06-05
 - Revised signature of SetChargeMomentumMass for fields (G4KM_NucleonEqRhs,
     G4KM_OpticalEqRhs).  Made these virtual methods non-inline.
 
 26 Feb 2013 Andrea Dotti	 had-binary-V09-06-04
 - Adding cloning of Dummy Field (required by multi-threading)
-  
+
 22 Feb 2013 Gunter Folger        had-binary-V09-06-03
 -  Checking for changes made for transition to MT
      - G4BinaryCascade, G4BinaryLightIonReaction:
          remove static variable used only to count interactions in debug mode
-     - G4RKFieldIntegrator.cc: make static array in fuction const array    
-     
+     - G4RKFieldIntegrator.cc: make static array in fuction const array
+
 9 Jan. 2013 V. Uzhinsky          had-binary-V09-06-02
 -  Checking of G4GeneratorPrecompoundInterface::PropagateNuclNucl
    for simulation of nucleus-nucleus interactions.
@@ -192,8 +202,8 @@ code and to keep track of all tags.
 -  Re-numeration of the previous tag.
 
 17 Dec. 2012 V. Uzhinsky         had-binary-V09-05-15
--  An interface to Precompound model is implemented for nucleus-nucleus 
-   interactions at high (> 2GeV/N). It will be us17 Dec. 2012 V. Uzhinsky     
+-  An interface to Precompound model is implemented for nucleus-nucleus
+   interactions at high (> 2GeV/N). It will be us17 Dec. 2012 V. Uzhinsky
     had-binary-V09-05-15
 
 15 Nov 2012 Gunter Folger        had-binary-V09-05-14
@@ -203,11 +213,11 @@ code and to keep track of all tags.
 - send a warning message to G4cout, not G4cerr.
 
 26 Oct 2012 Gunter Folger        had-binary-V09-05-12
-- more places corrected to explicitely convert in G4BinaryCascade 
+- more places corrected to explicitely convert in G4BinaryCascade
    and G4BinaryLightIonReaction; unused variable removed.
 
 25 Oct 2012 Vladimir Ivanchenko  had-binary-V09-05-11
-- G4BinaryCascade - use G4lrint to increment lateZ 
+- G4BinaryCascade - use G4lrint to increment lateZ
 - G4BinaryLightIonReaction - comment out unused variable
 
 25 Oct 2012 Vladimir Ivanchenko  had-binary-V09-05-10
@@ -218,12 +228,12 @@ code and to keep track of all tags.
 -  Attempt to fix warning in G4BinaryLightIonCascade when target is very light:
    - split very long ApplyYourSelf() into smaller bits.
    - fixed problem: do not try to correct spectators momentum, when there are no spectators
-   
+
 04 Oct 2012 Gunter Folger        had-binary-V09-05-08
 -  Fix left-over bug for Propagate() interface introduced in had-binary-V09-05-04
    Fix charge/baryon number violation for Propagate() interface ( G4RKPropagtion)
-   Add method to optionally check baryon/charge conservation 
-   
+   Add method to optionally check baryon/charge conservation
+
 21 Sep 2012 Vladimir Ivanchenko  had-binary-V09-05-07
 - G4BinaryCasacade, G4BinaryLightIonReaction and
   G4GeneratorPrecompoundInterface - reuse already instantiated
@@ -235,7 +245,7 @@ code and to keep track of all tags.
 
 31 Aug 2012 Gunter Folger        had-binary-V09-05-05
 - fix bug introduced in G4BianryCasacde & G4BianryLightIonCascade by
-   previous changes. 
+   previous changes.
 
 31 Aug 2012 Gunter Folger        had-binary-V09-05-04
 -  Binary Cascade: code cleanup & splitting of long methods.
@@ -249,28 +259,28 @@ code and to keep track of all tags.
 -  fix warnings from shadowed variables
 
 29 May 2012 Gunter Folger        had-binary-V09-05-02
--  Address coverity issues. Most were not needed implementaion of 
-    copy ctor thowing exception; i.e. suppressed implementation of 
+-  Address coverity issues. Most were not needed implementaion of
+    copy ctor thowing exception; i.e. suppressed implementation of
     private copy ctor, == and != operators
-    
+
 13 Apr 2012 Gunter Folger        had-binary-V09-05-01
 -  Add description in G4BinaryLightIonReaction
--  G4BinaryCascade; when propagating secondaries from HE model, do not 
-     modify initial energy for fermi level. 
+-  G4BinaryCascade; when propagating secondaries from HE model, do not
+     modify initial energy for fermi level.
 
 18 Jan 2011 Vladimir Ivanchenko  had-binary-V09-05-00
 - G4BinaryCascade, G4BinaryLightIonReaction,
-  G4GeneratorPrecompoundInterface - added pointer to G4VPreCompoundModel 
-    in the constructor; if this pointer NULL then instantiate new 
-    G4PreCompoundModel; get pointer of G4ExcitationHandler from 
-    this object; do not delete G4VPreCompoundModel object 
+  G4GeneratorPrecompoundInterface - added pointer to G4VPreCompoundModel
+    in the constructor; if this pointer NULL then instantiate new
+    G4PreCompoundModel; get pointer of G4ExcitationHandler from
+    this object; do not delete G4VPreCompoundModel object
 
 22 Nov 2011 Gunter Folger        had-binary-V09-04-15
 - more plumbing: fix leak in G4GeneratorPrecompoundInterface.cc:
       delete theDeExcitation and its handler in dtor.
 
 21 Nov 2011 Gunter Folger        had-binary-V09-04-14
-- correct G4GeneratorPrecompoundInterface.cc to delete correct object, 
+- correct G4GeneratorPrecompoundInterface.cc to delete correct object,
     i.e. the kinetic track,
 
 21 Nov 2011 Gunter Folger        had-binary-V09-04-13
@@ -295,21 +305,21 @@ code and to keep track of all tags.
 
 14-October-2011, Gunter Folger  had-binary-V09-04-07
    svn rev 53102
--  G4GeneratorPrecompoundInterface: without de-excitation, need to 
+-  G4GeneratorPrecompoundInterface: without de-excitation, need to
     add Fragment Nucleus to reaction products.
--  BinaryCascade: More cleanup. Revised claculation of excitation energy 
-    when used for rescattering, removing systematic energy non-conservation. 	 
+-  BinaryCascade: More cleanup. Revised claculation of excitation energy
+    when used for rescattering, removing systematic energy non-conservation.
 
 12-October-2011, Gunter Folger  had-binary-V09-04-06
    svn rev 53051
 -  G4GeneratorPrecompoundInterface: If (exact) excitation energy is <0,
-    not not try to de-execite; energy non-conservation remains, but at a 
-	smaller value. 
+    not not try to de-execite; energy non-conservation remains, but at a
+	smaller value.
 
 28-September-2011, Gunter Folger
    svn rev 52599
 -  Some code cleanup in G4BinaryCascade, mostly ApplyCollision. No change in
-    functionality. 
+    functionality.
 
 4-August-2011, M.Kelsey			had-binary-V09-04-05
 -  G4GeneratorPrecompoundInterface.cc: BUG FIXES: had wrong order of iterators
@@ -325,17 +335,17 @@ code and to keep track of all tags.
 
 10-June-2011, G.Folger		         had-binary-V09-04-03
 -  G4GeneratorPrecompoundInterface: add code to calculate excitation
-    energy from as difference of initial-final state; Results in Energy 
+    energy from as difference of initial-final state; Results in Energy
     conservation for string models. Requires tag on QGS increasing exciattion
     energy by decrease of participant nucleon energies.
-    
+
 25-May-2011,G.Folger		         had-binary-V09-04-02
 -  Fix compilation warning on almost unused variables
 
 12 May 2011, G.Folger		         had-binary-V09-04-01
 -  Fix large  energy non-conservation for Hydrogen target.
      (theFinalState vector was not cleared before use)
-   Also move check for Hydrogen to ApplyYourSelf, directly calling 
+   Also move check for Hydrogen to ApplyYourSelf, directly calling
     Progategate1H1().
 
 17 Mar 2011, G.Folger		         had-binary-V09-04-00
@@ -345,23 +355,23 @@ code and to keep track of all tags.
 - fix compilation errors and warnings in G4BinaryCascade.
 
 10 Nov 2010, G.Folger		         had-binary-V09-03-04
-- *** lower CaptureThreshold in G4GeneratorPrecompoundInterface.cc 
-       from 80 to 10 MeV. 
-- G4BinaryCascade: disable G4Exception in StepParticlesOut() introduced in 
+- *** lower CaptureThreshold in G4GeneratorPrecompoundInterface.cc
+       from 80 to 10 MeV.
+- G4BinaryCascade: disable G4Exception in StepParticlesOut() introduced in
    previous tag. Need to investigate why this happens first.
-   
+
 3 Nov 2010,  G.Folger		         had-binary-V09-03-03
 - Fix coverity warnings
    - in Propagate(), mem leak for products
    - in StepParticlesOut, check return code of GetSphereInter....
-   - Scatter1H1(0 always check secs 
+   - Scatter1H1(0 always check secs
 
 8 Sep 2010, G.Folger		         had-binary-V09-03-02
 - Binary{LightIon}Cascade: use integer (A,Z) interface of nucleus
 - *Field.cc: use integer A,Z from G4V3DNucleus, and for G4FermiMomentum
 
 31-Aug-2010, V.Ivanchenko                had-binary-V09-03-01
-- G4GeneratorPrecompoundInterface - define default deexcitation with 
+- G4GeneratorPrecompoundInterface - define default deexcitation with
                                     G4PreCompoundModel in the constructor
                                     of the class
 
@@ -377,7 +387,7 @@ code and to keep track of all tags.
 
 13-Nov-2009, Gunter Folger               had-binary-V09-02-05
 - Correct assignment to G4ThreeVector, avoid use of Vector=0;
-- Protect for void nucleus ( not even a single neutron ) after cascade 
+- Protect for void nucleus ( not even a single neutron ) after cascade
 
 9-Nov-2009, Gunter Folger                had-binary-V09-02-04
 - Merge changes for BinaryCascade with changes by VU, see below.
@@ -393,7 +403,7 @@ code and to keep track of all tags.
 
   1. Shift of particle's formation times that the min. time=0.
 
-  2. Including of captured particles (Due to absence of the options there 
+  2. Including of captured particles (Due to absence of the options there
      were a large energy-non-conservation).
 
   3. GetExcitationEnergy() - correction for the case when all nucleons are
@@ -403,8 +413,8 @@ code and to keep track of all tags.
 ---------------------------------------------------------
 
 4-Aug-2009, Gunter Folger                had-binary-V09-02-02
-- Remove unused header file G4NucleiPropertiesTable.hh from 
-    G4KM_NucleonEqRhs.cc, G4{Proton,Neutron}Field.cc 
+- Remove unused header file G4NucleiPropertiesTable.hh from
+    G4KM_NucleonEqRhs.cc, G4{Proton,Neutron}Field.cc
 
 15-Jun-2009, Gunter Folger               had-binary-V09-02-01
 - Commit files supposedly in  had-binary-V09-02-00
@@ -413,13 +423,13 @@ code and to keep track of all tags.
 - Add interface to set deexcitation handler in  G4BinaryLightIonReaction used to
   deexcite lighter initial nucleus;
    precompound handling low energy interactions can be set, too.
-   
+
 8-Dec-2008 Gunter Folger		 had-binary-V09-01-03
-  G4BinaryCascade: previous tag inadvertedly added developement; 
+  G4BinaryCascade: previous tag inadvertedly added developement;
   moved development to branch, and re-add data member initialisation.
 
 5-Dec-2008 Gunter Folger		 had-binary-V09-01-02
-  G4BinaryCascade: make static instance of G4Scatterer in 1H1... data 
+  G4BinaryCascade: make static instance of G4Scatterer in 1H1... data
    member, to avoid bad late destruction of static instance
    ( found by GC using valgrind )
 
@@ -428,8 +438,8 @@ G4BinaryCascade, G4BinaryLightIonReaction - added name of the model,
   comment out welcome message
 
 27-Oct-2008 Dennis Wright                had-binary-V09-01-00
-- replace G4NucleiPropertiesTable::GetBindingEnergy(Z,A) with 
-  G4NucleiProperties::GetBindingEnergy(A,Z)  in 
+- replace G4NucleiPropertiesTable::GetBindingEnergy(Z,A) with
+  G4NucleiProperties::GetBindingEnergy(A,Z)  in
     G4AntiProtonField.cc, G4KaonMinusField.cc, G4KaonPlusField.cc,
     G4KaonZeroField.cc, G4PionMinusField.cc, G4PionPlusField.cc,
     G4PionZeroField.cc, G4SigmaMinusField.cc, G4SigmaPlusField.cc,
@@ -445,7 +455,7 @@ G4BinaryCascade, G4BinaryLightIonReaction - added name of the model,
 -   deactivate general debug printout in G4BinaryCascade
 
 05-Nov-2007 Gunter Folger                had-binary-V09-00-02
--   Fixes for propagate: particles can decay outside nucleus, correct counting 
+-   Fixes for propagate: particles can decay outside nucleus, correct counting
       for late particles
 
 31-Oct-2007 Gunter Folger                had-binary-V09-00-01
@@ -459,8 +469,8 @@ G4BinaryCascade, G4BinaryLightIonReaction - added name of the model,
 
 18-May-2007 Gunter Folger                had-binary-V08-03-00
 -   G4BinaryLightIonReaction: Protect against divide by 0 when energy momentum
-     correction stalls (for numerical precision?)     
-     
+     correction stalls (for numerical precision?)
+
 04-May-2007 Gunter Folger		tag had-binary-V08-02-01
 ----------------------------------------------------------------
 -   G4RKPropagation.cc: protect against integrating 0 timeStep. This causes
@@ -470,8 +480,8 @@ G4BinaryCascade, G4BinaryLightIonReaction - added name of the model,
 ----------------------------------------------------------------
 -  G4BinaryCascade::Capture(): add protection against divide by 0
 
-13-june-03: Gunter 
+13-june-03: Gunter
    Tag: binary_cascade_ion_baseline_01
    Can run >= 10k light ions, spectator peak clear. Requires generator/util with
    this tag.
-   
+

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 30th, 2021 B.Morgan (geomdiv-V10-07-00)
+- Migrate sources.cmake to modular build API
+
 December 10th, 2019     B.Morgan (geomdiv-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library options and
   explicit include_directories.
@@ -181,7 +184,7 @@ January 10th, 2006      G.Cosmo  (geomdiv-V08-00-00)
   G4ParameterisationPolyhedra: allow it for the automatic replicated instance.
 
 November 16th, 2005     J.Apostolakis  (geomdiv-V07-01-02)
-- Adapted to revision of G4VPhysicalVolume that identifies some 
+- Adapted to revision of G4VPhysicalVolume that identifies some
   regular structures: added two methods for G4PVDivision (IsRegularStructure()
   and GetRegularStructureId()).
 

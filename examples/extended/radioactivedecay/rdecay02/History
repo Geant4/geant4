@@ -14,7 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+    
+22-06-21 G. Cosmo (rdecay02-V10-07-01)
+--------------------------------------
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
 
+19-04-21 mma (rdecay02-V10-07-00)
+---------------------------------
+- rdecay02.cc: RunManagerFactory
+               G4SteppingVerboseWithUnits
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+      
 05-08-20  Alberto Ribon (rdecay02-V10-06-00)
 --------------------------------------------
 - README, .README.txt, macros/* : migrated UI commands from "/grdm/..."

@@ -349,13 +349,7 @@ AddaSphericalSurfaceWithCenterAtTheCenterOfAVolume(const G4String& SurfaceName,
 { 
   G4VPhysicalVolume* thePhysicalVolume = nullptr;
   G4PhysicalVolumeStore* thePhysVolStore = G4PhysicalVolumeStore::GetInstance();
-  for (std::size_t i=0; i<thePhysVolStore->size(); ++i)
-  {
-    if ((*thePhysVolStore)[i]->GetName() == volume_name)
-    {
-      thePhysicalVolume = (*thePhysVolStore)[i];
-    }
-  }
+  thePhysicalVolume = thePhysVolStore->GetVolume(volume_name);
   if (thePhysicalVolume != nullptr)
   {
     G4VPhysicalVolume* daughter = thePhysicalVolume;
@@ -382,8 +376,6 @@ AddaSphericalSurfaceWithCenterAtTheCenterOfAVolume(const G4String& SurfaceName,
   }
   else
   {
-    G4cout << "The physical volume with name " << volume_name
-           << " does not exist!! " << G4endl;
     return false;
   }
   return AddaSphericalSurface(SurfaceName, radius, center, area);
@@ -399,17 +391,9 @@ AddanExtSurfaceOfAvolume(const G4String& SurfaceName,
 
   G4VPhysicalVolume* thePhysicalVolume = nullptr;
   G4PhysicalVolumeStore* thePhysVolStore = G4PhysicalVolumeStore::GetInstance();
-  for (std::size_t i=0; i<thePhysVolStore->size(); ++i)
-  {
-    if ((*thePhysVolStore)[i]->GetName() == volume_name)
-    {
-      thePhysicalVolume = (*thePhysVolStore)[i];
-    }
-  }
+  thePhysicalVolume = thePhysVolStore->GetVolume(volume_name);
   if (thePhysicalVolume == nullptr)
   {
-    G4cout << "The physical volume with name " << volume_name
-           << " does not exist!!" << G4endl;
     return false;
   }
   Area = thePhysicalVolume->GetLogicalVolume()->GetSolid()->GetSurfaceArea();

@@ -59,13 +59,9 @@ class G4HadronicEPTestMessenger: public G4UImessenger
  private:
    G4HadronicProcessStore* theProcessStore;
   
-   G4UIdirectory*             old_heptstDirectory;  // To be removed in G4 11.0
    G4UIdirectory*                 heptstDirectory;
-   G4UIcmdWithAnInteger*      old_reportLvlCmd;     // To be removed in G4 11.0
    G4UIcmdWithAnInteger*          reportLvlCmd;
-   G4UIcmdWithADouble*        old_procRelLvlCmd;    // To be removed in G4 11.0
    G4UIcmdWithADouble*            procRelLvlCmd;
-   G4UIcmdWithADoubleAndUnit* old_procAbsLvlCmd;    // To be removed in G4 11.0
    G4UIcmdWithADoubleAndUnit*     procAbsLvlCmd;
 };
 

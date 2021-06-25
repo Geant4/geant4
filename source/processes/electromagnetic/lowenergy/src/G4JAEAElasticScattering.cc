@@ -25,7 +25,7 @@
 //
 /*
 Authors:
-Updated 15 Novebmer 2019
+Updated 15 November 2019
 
 M. Omer and R. Hajima  on   17 October 2016
 contact:
@@ -34,7 +34,8 @@ Publication Information:
 1- M. Omer, R. Hajima, Including Delbrück scattering in Geant4,
 Nucl. Instrum. Methods Phys. Res. Sect. B, vol. 405, 2017, pp. 43-49.,
 https://doi.org/10.1016/j.nimb.2017.05.028
-2- M. Omer, R. Hajima, Geant4 physics process for elastic scattering of gamma-rays,
+2- M. Omer, R. Hajima, Geant4 physics process for elastic
+   scattering of gamma-rays,
 JAEA Technical Report 2018-007, 2018.
 https://doi.org/10.11484/jaea-data-code-2018-007
 */
@@ -45,7 +46,7 @@ https://doi.org/10.11484/jaea-data-code-2018-007
 #include "G4SystemOfUnits.hh"
 #include "G4JAEAElasticScatteringModel.hh"
 #include "G4Gamma.hh"
-
+#include "G4EmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -55,10 +56,9 @@ G4JAEAElasticScattering::G4JAEAElasticScattering(const G4String& processName,
 {
   SetStartFromNullFlag(false);
   SetBuildTableFlag(true);
-  SetProcessSubType(fG4JAEAElasticScattering);
+  SetProcessSubType(fRayleigh);
   SetMinKinEnergyPrim(100*keV);
   SetSplineFlag(false);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,17 +77,11 @@ G4bool G4JAEAElasticScattering::IsApplicable(const G4ParticleDefinition& p)
 //initialize the process
 void G4JAEAElasticScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
-if(!isInitialised) {
+  if(!isInitialised) {
     isInitialised = true;
     if(!EmModel()) { SetEmModel(new G4JAEAElasticScatteringModel); }
     AddEmModel(1, EmModel());
-  }
-
+  }  
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4JAEAElasticScattering::PrintInfo()
-{}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

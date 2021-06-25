@@ -54,13 +54,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4ePairProduction::G4ePairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(nullptr),
-    lowestKinEnergy(100.*MeV),
-    isInitialised(false)
+    lowestKinEnergy(100.*CLHEP::MeV)
 {
   SetProcessSubType(fPairProdByCharged);
   SetSecondaryParticle(G4Positron::Positron());
@@ -132,7 +128,7 @@ void G4ePairProduction::StreamProcessInfo(std::ostream& out) const
 
 void G4ePairProduction::ProcessDescription(std::ostream& out) const
 {
-  out << "  Pair production";
+  out << "  Electron-positron pair production by electron or positron";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

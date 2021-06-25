@@ -45,6 +45,9 @@ class RE06SteppingVerbose : public G4VSteppingVerbose
   RE06SteppingVerbose();
   virtual ~RE06SteppingVerbose();
 
+  virtual G4VSteppingVerbose* Clone()
+  { return new RE06SteppingVerbose; }
+
   void InitializeTimers();
   void Report();
 

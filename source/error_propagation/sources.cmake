@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4error_propagation
-# Package: Geant4.src.G4error_propagation
-#------------------------------------------------------------------------------
+# - G4error_propagation module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4error_propagation
-  HEADERS
+geant4_add_module(G4error_propagation
+  PUBLIC_HEADERS
     G4ErrorFreeTrajParam.hh
     G4ErrorFreeTrajState.hh
     G4ErrorGeomVolumeTarget.hh
@@ -45,48 +40,26 @@ geant4_define_module(NAME G4error_propagation
     G4ErrorSymMatrix.cc
     G4ErrorTrackLengthTarget.cc
     G4ErrorTrajState.cc
-    G4VErrorLimitProcess.cc
-  GRANULAR_DEPENDENCIES
-    G4baryons
-    G4bosons
-    G4csg
-    G4cuts
-    G4digits
-    G4emstandard
-    G4emutils
-    G4event
-    G4geometrymng
-    G4globman
-    G4hits
-    G4intercoms
-    G4ions
-    G4leptons
-    G4magneticfield
-    G4materials
-    G4mesons
-    G4muons
-    G4navigation
-    G4partman
+    G4VErrorLimitProcess.cc)
+
+geant4_module_link_libraries(G4error_propagation
+  PUBLIC
     G4procman
-    G4run
+    G4leptons
+    G4bosons
     G4track
     G4tracking
-    G4transportation
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
-    G4geometry
-    G4global
-    G4intercoms
+    G4run
+    G4geometrymng
     G4materials
-    G4particles
-    G4processes
-    G4run
-    G4track
-    G4tracking
-  LINK_LIBRARIES
-)
-
-# List any source specific properties here
-
+    G4intercoms
+    G4hepgeometry
+    G4globman
+  PRIVATE
+    G4emstandard
+    G4transportation
+    G4muons
+    G4event
+    G4partman
+    G4navigation
+    G4magneticfield)

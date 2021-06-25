@@ -1,11 +1,6 @@
-#------------------------------------------------------------------------------
-# Module : G4RayTracer
-# Package: Geant4.src.G4visualization.G4RayTracer
-#------------------------------------------------------------------------------
+# - G4RayTracer module build definition
 
-#
 # Module has optional sources
-#
 # List those always built
 set(G4VIS_RAYTRACER_MODULE_HEADERS
   G4RTJpeg.hh
@@ -55,9 +50,7 @@ set(G4VIS_RAYTRACER_MODULE_SOURCES
 
 set(G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES )
 
-#
 # X11 RayTracer only if selected
-#
 if(GEANT4_USE_RAYTRACER_X11)
   list(APPEND G4VIS_RAYTRACER_MODULE_HEADERS
     G4RayTracerX.hh
@@ -69,9 +62,7 @@ if(GEANT4_USE_RAYTRACER_X11)
     G4RayTracerXViewer.cc
     G4RTXScanner.cc)
 
-  #
   # Add source properties and additional LINK_LIBRARIES here
-  #
   # Must use G4VIS_BUILD_RAYTRACERX_DRIVER define
   add_definitions(-DG4VIS_BUILD_RAYTRACERX_DRIVER)
 
@@ -79,50 +70,31 @@ if(GEANT4_USE_RAYTRACER_X11)
   list(APPEND G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
 endif()
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4RayTracer
-  HEADERS
-    ${G4VIS_RAYTRACER_MODULE_HEADERS}
-  SOURCES
-    ${G4VIS_RAYTRACER_MODULE_SOURCES}
-  GRANULAR_DEPENDENCIES
-    G4bosons
-    G4cuts
-    G4detector
-    G4digits
-    G4event
-    G4geometrymng
+geant4_add_module(G4RayTracer
+  PUBLIC_HEADERS ${G4VIS_RAYTRACER_MODULE_HEADERS}
+  SOURCES ${G4VIS_RAYTRACER_MODULE_SOURCES})
+
+geant4_module_link_libraries(G4RayTracer
+  PUBLIC
     G4globman
     G4graphics_reps
-    G4hits
-    G4intercoms
-    G4materials
     G4modeling
-    G4navigation
+    G4run
+    G4hits
+    G4track
+    G4intercoms
+    G4tracking
+    G4vis_management
+    G4hepgeometry
+    ${G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES}
+  PRIVATE
+    G4event
+    G4bosons
+    G4scoring
     G4partman
     G4procman
-    G4track
-    G4tracking
-    G4vis_management
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4modeling
-    G4particles
-    G4processes
-    G4track
-    G4tracking
-    G4vis_management
-  LINK_LIBRARIES
-    ${G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES}
-)
-
-# List any source specific properties here
+    G4cuts
+    G4tasking
+    G4detector
+    G4navigation)

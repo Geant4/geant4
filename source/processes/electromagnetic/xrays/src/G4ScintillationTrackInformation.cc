@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Author : Valentin Libioulle valentin.libioulle@usherbrooke.ca (3IT - GRAMS)
 //
 

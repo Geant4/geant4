@@ -34,7 +34,7 @@
 // Author:    2018 Alberto Ribon
 //
 // Modified:
-// -  21-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
+// -  18-May-2021 Alberto Ribon : Used the latest Geant4-CRMC interface.
 //
 //----------------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "HadronicInelasticModelCRMC.hh"
 #include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
@@ -64,7 +64,7 @@ CRMCProtonBuilder::~CRMCProtonBuilder() {}
 void CRMCProtonBuilder::Build( G4HadronElasticProcess* ) {}
 
 
-void CRMCProtonBuilder::Build( G4ProtonInelasticProcess* aP ) {
+void CRMCProtonBuilder::Build( G4HadronInelasticProcess* aP ) {
   fModel->SetMinEnergy( fMin );
   fModel->SetMaxEnergy( fMax );
   aP->RegisterMe( fModel );

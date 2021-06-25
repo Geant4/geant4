@@ -137,8 +137,8 @@ void G4TaskRunManagerKernel::InitializeWorker()
   if(G4MTRunManager::GetMasterThreadId() == G4ThisThread::get_id())
   {
     G4TaskManager* taskManager = mrm->GetTaskManager();
-    std::future<void> _fut     = taskManager->async(InitializeWorker);
-    _fut.wait();
+    auto _fut                  = taskManager->async(InitializeWorker);
+    _fut->wait();
     return;
   }
 
@@ -238,7 +238,7 @@ void G4TaskRunManagerKernel::ExecuteWorkerInit()
     G4TaskManager* taskManager =
       G4TaskRunManager::GetMasterRunManager()->GetTaskManager();
     auto _fut = taskManager->async(ExecuteWorkerInit);
-    return _fut.get();
+    return _fut->get();
   }
 
   // this check is for TBB as there is not a way to run an initialization
@@ -261,7 +261,7 @@ void G4TaskRunManagerKernel::ExecuteWorkerTask()
     G4TaskManager* taskManager =
       G4TaskRunManager::GetMasterRunManager()->GetTaskManager();
     auto _fut = taskManager->async(ExecuteWorkerTask);
-    return _fut.get();
+    return _fut->get();
   }
 
   // this check is for TBB as there is not a way to run an initialization

@@ -58,10 +58,8 @@ class G4ParticleDefinition;
 
 class G4VEnergySpectrum 
 {
-
 public:
-
-  G4VEnergySpectrum() {};
+  explicit G4VEnergySpectrum() {};
 
   virtual ~G4VEnergySpectrum() {};
 
@@ -70,38 +68,32 @@ public:
 			       G4double maxKineticEnergy,
                                G4double kineticEnergy,
                                G4int shell = 0,
-			       const G4ParticleDefinition* pd = 0) const = 0;
+			       const G4ParticleDefinition* pd = nullptr) const = 0;
 
   virtual G4double AverageEnergy(G4int Z,
 				 G4double minKineticEnergy,
 				 G4double maxKineticEnergy,
 				 G4double kineticEnergy,
 				 G4int shell = 0,
-				 const G4ParticleDefinition* pd = 0) const = 0;
+				 const G4ParticleDefinition* pd = nullptr) const = 0;
 
   virtual G4double SampleEnergy(G4int Z,
 				G4double minKineticEnergy,
 				G4double maxKineticEnergy,
 				G4double kineticEnergy,
 				G4int shell = 0,
-				const G4ParticleDefinition* pd = 0) const = 0;
+				const G4ParticleDefinition* pd = nullptr) const = 0;
 
   virtual G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
 					  G4int Z = 0,
-					  const G4ParticleDefinition* pd = 0) const = 0;
+					  const G4ParticleDefinition* pd = nullptr) const = 0;
   
   virtual G4double Excitation(G4int Z, G4double kineticEnergy) const = 0; 
 
   virtual void PrintData() const = 0;
 
-protected:
-
-private:
-
-  // Hide copy constructor and assignment operator 
-  G4VEnergySpectrum(const G4VEnergySpectrum&);
-  G4VEnergySpectrum& operator=(const G4VEnergySpectrum &right);
-
+  G4VEnergySpectrum(const G4VEnergySpectrum&) = delete;
+  G4VEnergySpectrum& operator=(const G4VEnergySpectrum &right) = delete;
 };
 
 #endif

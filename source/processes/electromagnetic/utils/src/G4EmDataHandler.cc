@@ -95,7 +95,7 @@ G4PhysicsTable* G4EmDataHandler::MakeTable(size_t i)
 void G4EmDataHandler::CleanTable(size_t i)
 {
   //std::cout << i << "  " << data[i] << std::endl;
-  if(i < tLength && data[i]) {
+  if(i < tLength && nullptr != data[i]) {
     data[i]->clearAndDestroy();
     delete data[i];
     data[i] = nullptr;
@@ -110,7 +110,7 @@ G4bool G4EmDataHandler::StorePhysicsTable(size_t idx,
 			   G4bool ascii)
 {
   G4bool yes = true;
-  if(data[idx]) {
+  if(nullptr != data[idx]) {
     yes = data[idx]->StorePhysicsTable(fname, ascii);
 
     if ( yes ) {
@@ -131,10 +131,10 @@ G4bool G4EmDataHandler::StorePhysicsTable(size_t idx,
 G4bool G4EmDataHandler::RetrievePhysicsTable(size_t idx,
                            const G4ParticleDefinition* part,
 			   const G4String& fname, 
-			   G4bool ascii)
+					     G4bool ascii, G4bool spline)
 {
-  G4bool yes = 
-    G4PhysicsTableHelper::RetrievePhysicsTable(data[idx], fname, ascii);
+  G4PhysicsTable* table = Table(idx);
+  G4bool yes = G4PhysicsTableHelper::RetrievePhysicsTable(table, fname, ascii, spline);
   G4EmParameters* param = G4EmParameters::Instance();
   if ( yes ) {
     if (0 < param->Verbose()) {
@@ -142,13 +142,6 @@ G4bool G4EmDataHandler::RetrievePhysicsTable(size_t idx,
 	     << part->GetParticleName()
 	     << " is retrieved from <" << fname << ">"
 	     << G4endl;
-    }
-    if(param->Spline()) {
-      G4PhysicsTable* table = data[idx];
-      size_t n = table->length();
-      for(size_t i=0; i<n; ++i) {
-	if((*table)[i]) { (*table)[i]->SetSpline(true); } 
-      }
     }
   } else if (1 < param->Verbose()) {
     G4cout << "Fail to retrieve physics table " << idx << " for " 

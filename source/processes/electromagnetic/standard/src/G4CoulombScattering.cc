@@ -58,12 +58,12 @@
 using namespace std;
 
 G4CoulombScattering::G4CoulombScattering(const G4String& name)
-  : G4VEmProcess(name),q2Max(TeV*TeV),isInitialised(false)
+  : G4VEmProcess(name),q2Max(CLHEP::TeV*CLHEP::TeV),isInitialised(false)
 {
   //  G4cout << "G4CoulombScattering constructor "<< G4endl;
   SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
-  SetIntegral(true);
+  SetCrossSectionType(fEmOnePeak);
   SetSecondaryParticle(G4Proton::Proton());
   SetProcessSubType(fCoulombScattering);
 }
@@ -77,7 +77,7 @@ G4CoulombScattering::~G4CoulombScattering()
 
 G4bool G4CoulombScattering::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -114,7 +114,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
   //G4cout << name << "  type: " << p->GetParticleType() 
   //<< " mass= " << mass << G4endl;
   yes = true;
-  if (mass > GeV || p->GetParticleType() == "nucleus") {
+  if (mass > CLHEP::GeV || p->GetParticleType() == "nucleus") {
     SetBuildTableFlag(false);
     yes = false;
     if(name != "GenericIon") { SetVerboseLevel(0); }
@@ -124,7 +124,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
        name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
   }
 
-  if(!EmModel(0)) { 
+  if(nullptr == EmModel(0)) { 
     if(yes) { SetEmModel(new G4eCoulombScatteringModel()); } 
     else    { SetEmModel(new G4IonCoulombScatteringModel()); }
   }
@@ -161,7 +161,7 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
 
 void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile) const
 {
-  G4double tetmin = G4EmParameters::Instance()->MscThetaLimit()/degree;
+  G4double tetmin = G4EmParameters::Instance()->MscThetaLimit()/CLHEP::degree;
   outFile << "      ";
   if(tetmin > 179.) { outFile << "ThetaMin(p)"; }
   else              { outFile << tetmin; }

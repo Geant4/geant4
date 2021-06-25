@@ -89,10 +89,10 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
     G4DecayTable* GetDecayTable(const G4ParticleDefinition*);
 
     // Select a logical volume in which RDM applies
-    void SelectAVolume(const G4String aVolume);
+    void SelectAVolume(const G4String& aVolume);
 
     // Remove a logical volume from the RDM applied list
-    void DeselectAVolume(const G4String aVolume);
+    void DeselectAVolume(const G4String& aVolume);
 
     // Select all logical volumes for the application of RDM
     void SelectAllVolumes();
@@ -149,6 +149,12 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
       SetDecayDirection(theDir);
       SetDecayHalfAngle(halfAngle);
     }
+
+    // Ignore radioactive decays at rest of nuclides happening after this (very long) time threshold
+    inline void SetThresholdForVeryLongDecayTime(const G4double inputThreshold) {
+      fThresholdForVeryLongDecayTime = std::max( 0.0, inputThreshold );
+    }
+    inline G4double GetThresholdForVeryLongDecayTime() const {return fThresholdForVeryLongDecayTime;}
 
     void BuildPhysicsTable(const G4ParticleDefinition &);
 
@@ -227,6 +233,8 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
     G4double fRemainderLifeTime;
     G4int verboseLevel;
 
+    // Ignore radioactive decays at rest of nuclides happening after this (very long) time threshold
+    G4double fThresholdForVeryLongDecayTime;
 
     // inline implementations 
     inline

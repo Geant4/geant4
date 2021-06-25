@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4aEventAction.cc
 /// \brief Implementation of the B4aEventAction class
 
@@ -56,7 +56,7 @@ B4aEventAction::~B4aEventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4aEventAction::BeginOfEventAction(const G4Event* /*event*/)
-{  
+{
   // initialisation per event
   fEnergyAbs = 0.;
   fEnergyGap = 0.;
@@ -79,20 +79,20 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
   analysisManager->FillH1(1, fEnergyGap);
   analysisManager->FillH1(2, fTrackLAbs);
   analysisManager->FillH1(3, fTrackLGap);
-  
+
   // fill ntuple
   analysisManager->FillNtupleDColumn(0, fEnergyAbs);
   analysisManager->FillNtupleDColumn(1, fEnergyGap);
   analysisManager->FillNtupleDColumn(2, fTrackLAbs);
   analysisManager->FillNtupleDColumn(3, fTrackLGap);
-  analysisManager->AddNtupleRow();  
-  
+  analysisManager->AddNtupleRow();
+
   // Print per event (modulo n)
   //
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;     
+    G4cout << "---> End of event: " << eventID << G4endl;
 
     G4cout
        << "   Absorber: total energy: " << std::setw(7)
@@ -106,6 +106,6 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
                                         << G4BestUnit(fTrackLGap,"Length")
        << G4endl;
   }
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

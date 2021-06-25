@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4bEventAction.cc
 /// \brief Implementation of the B4bEventAction class
 
@@ -56,14 +56,14 @@ void B4bEventAction::PrintEventStatistics(
 {
   // print event statistics
   G4cout
-     << "   Absorber: total energy: " 
+     << "   Absorber: total energy: "
      << std::setw(7) << G4BestUnit(absoEdep, "Energy")
-     << "       total track length: " 
+     << "       total track length: "
      << std::setw(7) << G4BestUnit(absoTrackLength, "Length")
      << G4endl
-     << "        Gap: total energy: " 
+     << "        Gap: total energy: "
      << std::setw(7) << G4BestUnit(gapEdep, "Energy")
-     << "       total track length: " 
+     << "       total track length: "
      << std::setw(7) << G4BestUnit(gapTrackLength, "Length")
      << G4endl;
 }
@@ -71,18 +71,18 @@ void B4bEventAction::PrintEventStatistics(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4bEventAction::BeginOfEventAction(const G4Event* /*event*/)
-{  
-  auto runData 
+{
+  auto runData
     = static_cast<B4bRunData*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-  runData->Reset();  
+  runData->Reset();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4bEventAction::EndOfEventAction(const G4Event* event)
 {
-  auto runData 
+  auto runData
     = static_cast<B4bRunData*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   runData->FillPerEvent();
@@ -92,7 +92,7 @@ void B4bEventAction::EndOfEventAction(const G4Event* event)
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;     
+    G4cout << "---> End of event: " << eventID << G4endl;
 
     PrintEventStatistics(
       runData->GetEdep(kAbs),
@@ -100,6 +100,6 @@ void B4bEventAction::EndOfEventAction(const G4Event* event)
       runData->GetEdep(kGap),
       runData->GetTrackLength(kGap));
   }
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

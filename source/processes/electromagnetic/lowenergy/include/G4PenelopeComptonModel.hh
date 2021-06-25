@@ -63,41 +63,41 @@ class G4PenelopeComptonModel : public G4VEmModel
 {
 
 public:
-  
-  G4PenelopeComptonModel(const G4ParticleDefinition* p=0,
+  explicit G4PenelopeComptonModel(const G4ParticleDefinition* p=nullptr,
 			 const G4String& processName ="PenCompton");
-  
   virtual ~G4PenelopeComptonModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-  virtual void InitialiseLocal(const G4ParticleDefinition*,
-                               G4VEmModel *masterModel);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  void InitialiseLocal(const G4ParticleDefinition*,
+		       G4VEmModel *masterModel) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-                                         const G4ParticleDefinition*,
-                                         G4double kineticEnergy,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
+  G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy = 0.0,
+				 G4double maxEnergy = DBL_MAX) override;
   
   //This is a dummy method. Never inkoved by the tracking, it just issues 
   //a warning if one tries to get Cross Sections per Atom via the 
   //G4EmCalculator.
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                              G4double,
-                                              G4double,
-                                              G4double,
-                                              G4double,
-                                              G4double);
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double,
+				      G4double,
+				      G4double,
+				      G4double,
+				      G4double) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+  
+  void SetVerbosityLevel(G4int lev){fVerboseLevel = lev;};
+  G4int GetVerbosityLevel(){return fVerboseLevel;};
 
-  void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
-  G4int GetVerbosityLevel(){return verboseLevel;};
-
+  G4PenelopeComptonModel & operator=(const G4PenelopeComptonModel &right) = delete;
+  G4PenelopeComptonModel(const G4PenelopeComptonModel&) = delete;
 
 protected:
   G4ParticleChangeForGamma* fParticleChange;
@@ -115,24 +115,18 @@ private:
 
   G4double KleinNishinaCrossSection(G4double energy,const G4Material*);
 
-  G4PenelopeComptonModel & operator=(const G4PenelopeComptonModel &right);
-  G4PenelopeComptonModel(const G4PenelopeComptonModel&);
+  G4VAtomDeexcitation*             fAtomDeexcitation;
+  const G4AtomicTransitionManager* fTransitionManager;
+  
+  G4PenelopeOscillatorManager* fOscManager;
 
   //Intrinsic energy limits of the model: 
   //cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
 
-  G4int verboseLevel;
-
-  G4bool isInitialised;
-
-  G4VAtomDeexcitation*             fAtomDeexcitation;
-  const G4AtomicTransitionManager* fTransitionManager;
-  
-  G4PenelopeOscillatorManager* oscManager;
-
-
+  G4int fVerboseLevel;
+  G4bool fIsInitialised;
 };
 
 #endif

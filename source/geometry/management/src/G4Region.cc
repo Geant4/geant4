@@ -115,6 +115,16 @@ G4Region::~G4Region()
 }
 
 // ********************************************************************
+// SetName - Set region name and notify store of the change
+// ********************************************************************
+//
+void G4Region::SetName(const G4String& pName)
+{
+  fName = pName;
+  G4RegionStore::GetInstance()->SetMapValid(false);
+}
+
+// ********************************************************************
 // SetFastSimulationManager
 // ********************************************************************
 //

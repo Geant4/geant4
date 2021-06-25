@@ -18,6 +18,13 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+07 June 2021  John Allison (vis-HepRep-V10-07-01)
+- Fix hidden function warning.
+
+14 April 2021 Ben Morgan (vis-HepRep-V10-07-00)
+- Migrate to modular CMake build
+
 12 December Ben Morgan (vis-HepRep-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library option and
   explicit include_directories.
@@ -69,7 +76,7 @@ History file for visualization/HepRep sub-category
 
 26th March 2013  Ben Morgan  (vis-HepRep-V09-06-05)
 - sources.cmake:
-  o BUGFIX #1322 : Update include paths/library linking to use new 
+  o BUGFIX #1322 : Update include paths/library linking to use new
   ZLIB variables allowing transparent use of internal/external ZLIB
   as required.
 - G4HepRepSceneHandler:
@@ -128,7 +135,7 @@ History file for visualization/HepRep sub-category
 - Add /vis/heprep/scale and /vis/heprep/center
 
 13th October 2011  Andrea Dotti (vis-HepRep-V09-04-02)
-- Solving "variable set but not used" warning in GCC 4.6 
+- Solving "variable set but not used" warning in GCC 4.6
 
 26th September 2011  John Allison  (vis-HepRep-V09-04-01)
 - Tagged.
@@ -293,7 +300,7 @@ History file for visualization/HepRep sub-category
 - Improve handling of solids (in HepRepFile).
 
 16 May 2005 Mark Donszelmann
-- Fixed problems with sequential heprep files, gz files, 
+- Fixed problems with sequential heprep files, gz files,
   too much info in the heprep file and some compilation mistakes.
 
 12 May 2005 Mark Donszelmann
@@ -307,15 +314,15 @@ History file for visualization/HepRep sub-category
 
 3 May 2005 Mark Donszelmann
 - Removed the following zlib and zipios files which are not necessary for writing
-  zip or gz files: include/zipios++/basicentry.h, include/zipios++/collcoll.h, 
-  include/zipios++/dircoll.h, include/zipios++/filepath.h, 
-  include/zipios++/filterinputstreambuf.h, include/zipios++/inflateinputstreambuf.h, 
-  include/zipios++/zipfile.h, include/zipios++/zipinputstream.h, 
-  include/zipios++/zipinputstreambuf.h, 
-  include/zlib/inffast.h, include/zlib/inffixed.h, include/zlib/inflate.h, 
-  include/zlib/inftrees.h, src/basicentry.cc, src/collcoll.cc, src/filepath.cc, 
-  src/filterinputstreambuf.cc, src/infback.cc, src/inffast.cc, src/inflate.cc, 
-  src/inflateinputstreambuf.cc, src/inftrees.cc, src/uncompr.cc, src/zipfile.cc, 
+  zip or gz files: include/zipios++/basicentry.h, include/zipios++/collcoll.h,
+  include/zipios++/dircoll.h, include/zipios++/filepath.h,
+  include/zipios++/filterinputstreambuf.h, include/zipios++/inflateinputstreambuf.h,
+  include/zipios++/zipfile.h, include/zipios++/zipinputstream.h,
+  include/zipios++/zipinputstreambuf.h,
+  include/zlib/inffast.h, include/zlib/inffixed.h, include/zlib/inflate.h,
+  include/zlib/inftrees.h, src/basicentry.cc, src/collcoll.cc, src/filepath.cc,
+  src/filterinputstreambuf.cc, src/infback.cc, src/inffast.cc, src/inflate.cc,
+  src/inflateinputstreambuf.cc, src/inftrees.cc, src/uncompr.cc, src/zipfile.cc,
   src/zipinputstream.cc, src/zipinputstreambuf.cc
 
 16 February 2005 Mark Donszelmann (vis-HepRep-V07-00-00 against geant4-07-00-ref-00)
@@ -333,7 +340,7 @@ History file for visualization/HepRep sub-category
   - Renamed zlib prefix from z_ to heprep_z_
   - Added symbol z_errmsg to list for renaming to avoid conflicts with other
     programs who contain a copy of zlib (such as Root).
-  
+
 4 June 2004 Mark Donszelmann (vis-HepRep-V06-01-04 against geant4-06-01-ref-02)
 - Fixed compilation problem with G4RunManagerKernel
 
@@ -346,7 +353,7 @@ History file for visualization/HepRep sub-category
   see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
 
 26 May 2004 Mark Donszelmann (vis-HepRep-V06-01-00)
-- Fixed GEANT-47: Added initial viewpoint settings and a command to set the 
+- Fixed GEANT-47: Added initial viewpoint settings and a command to set the
   coordinate system.
 - Fixed GEANT-41: copied new interfaces for HepRep, which uses fewer pointers,
   see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
@@ -362,9 +369,9 @@ History file for visualization/HepRep sub-category
 - Removed appendzip.cc file, since it is strictly not necessary.
 
 12 Febryary 2004 Mark Donszelmann
-- GEANT-42: Renamed the HepRep schema locator to 
+- GEANT-42: Renamed the HepRep schema locator to
   http://java.freehep.org/schemas/heprep/2.0
-  
+
 5 February 2004 Mark Donszelmann (vis-HepRep-V06-00-04)
 - Fixed compilation problems for the Linux-icc (7.0) compiler.
 
@@ -376,7 +383,7 @@ History file for visualization/HepRep sub-category
 
 28 January 2004 Mark Donszelmann (vis-HepRep-V06-00-01)
 - Attempted to fix GEANT-40. For some unclear reason the symbols zcalloc and zcfree
-  of the zlib library were being called as C++ mangled names. 
+  of the zlib library were being called as C++ mangled names.
   To get rid of the situation of a mix of C++ and C names, we took
   out the 'extern "C"' declarations from our zlib.h and zutil.h.
   All names are C++ mangled now.
@@ -396,14 +403,14 @@ History file for visualization/HepRep sub-category
 
 17 November 2003 Mark Donszelmann (vis-HepRep-V05-02-06)
 - Removed dependency on sstream which made compilation fail on Linux-g++2.95.2
-  and on Solaris 5.2. 
+  and on Solaris 5.2.
 - Added flags for zipios++ to compile OutputStringStream using sstream only on
-  g++ 3.x (Linux/MacOS X) and on WIN32. 
+  g++ 3.x (Linux/MacOS X) and on WIN32.
 - Added include to OutputStringStream.h to make it work on Solaris.
 - Removed our own sstream since it is no longer used.
-- Fixed GEANT-34  
-  
-14 November 2003 Mark Donszelmann 
+- Fixed GEANT-34
+
+14 November 2003 Mark Donszelmann
 - Fixed GEANT-25, GEANT-35 and GEANT-36 (vis-HepRep-V05-02-05)
   see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
 
@@ -443,7 +450,7 @@ History file for visualization/HepRep sub-category
 
 28 October 2003 Mark Donszelmann
 - Several fixes (GEANT-11, GEANT-12, GEANT-3 and GEANT-13)
-  
+
 24 October 2003 Mark Donszelmann
 - Several fixes (GEANT-2, GEANT-4, GEANT-8 and GEANT-9)
 

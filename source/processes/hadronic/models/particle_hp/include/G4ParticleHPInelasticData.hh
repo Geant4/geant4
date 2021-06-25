@@ -82,10 +82,7 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
 
       void DumpPhysicsTable(const G4ParticleDefinition&);
 
-      void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
-      void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
-   
-  G4ParticleDefinition* GetProjectile(){return theProjectile;}
+      G4ParticleDefinition* GetProjectile(){return theProjectile;}
  
    public:
       G4int GetVerboseLevel() const;
@@ -96,9 +93,7 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
    
       G4PhysicsTable * theCrossSections;
 
-      G4bool onFlightDB;
-
-  G4ParticleDefinition* theProjectile;
+      G4ParticleDefinition* theProjectile;
 
       G4ParticleHPData* theHPData;
 
@@ -109,7 +104,7 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
       const G4Element* element_cache;
       const G4Material* material_cache;
 
-  //char envVariable[500];
+      //char envVariable[500];
 };
 
 #endif

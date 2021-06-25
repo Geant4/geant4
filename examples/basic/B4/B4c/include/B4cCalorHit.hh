@@ -66,7 +66,7 @@ class B4cCalorHit : public G4VHit
     // get methods
     G4double GetEdep() const;
     G4double GetTrackLength() const;
-      
+
   private:
     G4double fEdep;        ///< Energy deposit in the sensitive volume
     G4double fTrackLength; ///< Track length in the  sensitive volume
@@ -99,16 +99,16 @@ inline void B4cCalorHit::operator delete(void *hit)
 }
 
 inline void B4cCalorHit::Add(G4double de, G4double dl) {
-  fEdep += de; 
+  fEdep += de;
   fTrackLength += dl;
 }
 
-inline G4double B4cCalorHit::GetEdep() const { 
-  return fEdep; 
+inline G4double B4cCalorHit::GetEdep() const {
+  return fEdep;
 }
 
-inline G4double B4cCalorHit::GetTrackLength() const { 
-  return fTrackLength; 
+inline G4double B4cCalorHit::GetTrackLength() const {
+  return fTrackLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

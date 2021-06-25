@@ -11,6 +11,9 @@ Simulation of optical photons generation and transport.
 Defines optical surfaces and exercises optical physics processes
 (Cerenkov, Scintillation, Absorption, Rayleigh, ...). Uses stacking
 mechanism to count the secondary particles generated.
+Via the command line one can select an option to define the detector via a
+gdml file. An example gdml file is provided that corresponds
+to the  detector configuration defined in OpNoviceDetectorConstruction.cc.
 
 OpNovice2
 --------

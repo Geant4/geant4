@@ -23,51 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VUserActionInitialization implementation
+//
+// Author: M.Asai (SLAC), 17 April 2013
+// --------------------------------------------------------------------
+
 #include "G4VUserActionInitialization.hh"
 #include "G4RunManager.hh"
 
-G4VUserActionInitialization::G4VUserActionInitialization() { ; }
+// --------------------------------------------------------------------
+G4VUserActionInitialization::G4VUserActionInitialization()
+{
+}
 
-G4VUserActionInitialization::~G4VUserActionInitialization() { ; }
+// --------------------------------------------------------------------
+G4VUserActionInitialization::~G4VUserActionInitialization()
+{
+}
 
-void G4VUserActionInitialization::BuildForMaster() const { ; }
+// --------------------------------------------------------------------
+void G4VUserActionInitialization::BuildForMaster() const
+{
+}
 
-void G4VUserActionInitialization::SetUserAction(
-  G4VUserPrimaryGeneratorAction* action) const
+// --------------------------------------------------------------------
+void G4VUserActionInitialization::
+SetUserAction(G4VUserPrimaryGeneratorAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
+// --------------------------------------------------------------------
 void G4VUserActionInitialization::SetUserAction(G4UserRunAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
+// --------------------------------------------------------------------
 void G4VUserActionInitialization::SetUserAction(G4UserEventAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
-void G4VUserActionInitialization::SetUserAction(
-  G4UserStackingAction* action) const
+// --------------------------------------------------------------------
+void G4VUserActionInitialization::
+SetUserAction(G4UserStackingAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
-void G4VUserActionInitialization::SetUserAction(
-  G4UserTrackingAction* action) const
+// --------------------------------------------------------------------
+void G4VUserActionInitialization::
+SetUserAction(G4UserTrackingAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
-void G4VUserActionInitialization::SetUserAction(
-  G4UserSteppingAction* action) const
+// --------------------------------------------------------------------
+void G4VUserActionInitialization::
+SetUserAction(G4UserSteppingAction* action) const
 {
   G4RunManager::GetRunManager()->SetUserAction(action);
 }
 
-G4VSteppingVerbose* G4VUserActionInitialization::InitializeSteppingVerbose()
-  const
+// --------------------------------------------------------------------
+G4VSteppingVerbose* G4VUserActionInitialization::
+InitializeSteppingVerbose() const
 {
-  return static_cast<G4VSteppingVerbose*>(0);
+  return nullptr;
 }

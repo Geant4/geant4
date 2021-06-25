@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B3StackingAction.cc
 /// \brief Implementation of the B3StackingAction class
 

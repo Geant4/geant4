@@ -16,9 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 7th, 2021 M. Asai (event-V10-06-10)
+June 7th, 2021 M. Asai (event-V10-07-03)
 - Fix the default value of /gps/ang/maxphi command. Addressing to 
   the bug report 2383.
+
+May 18th, 2021 V.Ivanchenko (event-V10-07-02)
+- G4AdjointPrimaryGenerator, G4SPSAngDistribution, G4SPSEneDistribution,
+  G4SPSRandomGenerator - use G4PhysicsFreeVector instead of
+  G4PhysicsOrderedFreeVector
+
+April 1st, 2021 B. Morgan (event-V10-07-01)
+- Migrate build to modular CMake API
+
+March 31st, 2021 G.Cosmo (event-V10-07-00)
+- Use existing facility to find physical volume in store, rather than looping
+  through in G4SPSPosDistribution::ConfineSourceToVolume().
 
 November 20th, 2020 B.Morgan (event-V10-06-09)
 - Bugfix of build to ensure SmartStack preprocessor define is propagated.

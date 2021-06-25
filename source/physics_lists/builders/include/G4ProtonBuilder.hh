@@ -43,7 +43,7 @@
 #include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
-#include "G4ProtonInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 #include <vector>
 #include <type_traits>
@@ -58,7 +58,7 @@ class G4ProtonBuilder : public G4PhysicsBuilderInterface
     virtual void RegisterMe(G4PhysicsBuilderInterface* aB) final override;
 
   private:
-    G4ProtonInelasticProcess * theProtonInelastic;
+    G4HadronInelasticProcess * theProtonInelastic;
     
     std::vector<G4VProtonBuilder *> theModelCollections;
 

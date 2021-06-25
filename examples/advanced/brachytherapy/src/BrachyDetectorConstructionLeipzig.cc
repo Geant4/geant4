@@ -37,13 +37,9 @@
 //    *                                         *
 //    *******************************************
 //
-//
-//
-// Code by S. Guatelli
-//
+#include "BrachyDetectorConstructionLeipzig.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyDetectorConstructionLeipzig.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"
 #include "G4RunManager.hh"
@@ -55,46 +51,55 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4TransportationManager.hh"
-#include "BrachyMaterial.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
-// Leipzig Applicator ...
+#include "G4NistManager.hh"
 
 BrachyDetectorConstructionLeipzig::BrachyDetectorConstructionLeipzig(): 
 fCapsule(nullptr), fCapsuleTip(nullptr), fIridiumCore(nullptr), fApplicator1(nullptr), fApplicator2(nullptr),
 fCapsuleLog(nullptr), fCapsuleTipLog(nullptr), fIridiumCoreLog(nullptr), fApplicator1Log(nullptr),
 fApplicator2Log(nullptr), fCapsulePhys(nullptr), fCapsuleTipPhys(nullptr), fIridiumCorePhys(nullptr), 
 fApplicator1Phys(nullptr), fApplicator2Phys(nullptr)
-{ 
-  fMaterial = new BrachyMaterial();
-}
+{}
 
 BrachyDetectorConstructionLeipzig::~BrachyDetectorConstructionLeipzig()
-{ 
-  delete fMaterial; 
-}
+{}
 
 void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume* mother)
 {
   G4Colour  red     (1.0, 0.0, 0.0) ; 
   G4Colour  lblue   (0.0, 0.0, .75);
-
-  G4Material* capsuleMat = fMaterial -> GetMat("Stainless steel");
-  G4Material* iridium = fMaterial -> GetMat("Iridium");
-  G4Material* tungsten = fMaterial -> GetMat("Tungsten");
+  
+  G4NistManager* nist = G4NistManager::Instance();
+  G4Material* iridium = nist -> FindOrBuildMaterial("G4_Ir");
+  G4Material* tungsten = nist -> FindOrBuildMaterial("G4_W");
+ 
+  // Stainless steel (Medical Physics, Vol 25, No 10, Oct 1998)
+  constexpr G4double d = 8.02*g/cm3;
+  G4int Z; //atomic number of the element
+  G4Element* elMn = nist -> FindOrBuildElement(Z=12);
+  G4Element* elSi = nist -> FindOrBuildElement(Z=14);
+  G4Element* elCr = nist -> FindOrBuildElement(Z=24);
+  G4Element* elFe = nist -> FindOrBuildElement(Z=26);
+  G4Element* elNi = nist -> FindOrBuildElement(Z=28);
+  G4Material* steel = new G4Material("Stainless steel",d,5);
+  steel -> AddElement(elMn, 0.02);
+  steel -> AddElement(elSi, 0.01);
+  steel -> AddElement(elCr, 0.19);
+  steel -> AddElement(elNi, 0.10);
+  steel -> AddElement(elFe, 0.68);
 
   //Iridium source ...
 
   fCapsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
-  fCapsuleLog = new G4LogicalVolume(fCapsule,capsuleMat,"CapsuleLog");
+  fCapsuleLog = new G4LogicalVolume(fCapsule,steel,"CapsuleLog");
   fCapsulePhys = new G4PVPlacement(nullptr, G4ThreeVector(0,0,-1.975*mm),"CapsulePhys",
                                   fCapsuleLog,mother, //mother volume: phantom
                                   false,0, true);
 
   // Capsule tip
   fCapsuleTip = new G4Sphere("CapsuleTip",0.*mm,0.55*mm,0.*deg,360.*deg,0.*deg,90.*deg);
-  fCapsuleTipLog = new G4LogicalVolume(fCapsuleTip,capsuleMat,"CapsuleTipLog");
+  fCapsuleTipLog = new G4LogicalVolume(fCapsuleTip,steel,"CapsuleTipLog");
   fCapsuleTipPhys = new G4PVPlacement(nullptr,G4ThreeVector(0.,0.,1.75*mm),"CapsuleTipPhys",
                                       fCapsuleTipLog,mother,false,0, true);
   // Iridium core

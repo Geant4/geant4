@@ -52,9 +52,9 @@ class B2aDetectorMessenger: public G4UImessenger
   public:
     B2aDetectorMessenger(B2aDetectorConstruction* );
     virtual ~B2aDetectorMessenger();
-    
+
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
     B2aDetectorConstruction*  fDetectorConstruction;
 

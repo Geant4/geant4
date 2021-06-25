@@ -49,24 +49,22 @@
 // 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class G4PSCylinderSurfaceFlux3D : public G4PSCylinderSurfaceFlux
 {
-   public: // with description
-      G4PSCylinderSurfaceFlux3D(G4String name, G4int direction,
-			       G4int ni=1,G4int nj=1, G4int nk=1,
-			       G4int di=2, G4int dj=1, G4int dk=0);
-      G4PSCylinderSurfaceFlux3D(G4String name, G4int direction,
-				const G4String& unit,
-			       G4int ni=1,G4int nj=1, G4int nk=1,
-			       G4int di=2, G4int dj=1, G4int dk=0);
-      virtual ~G4PSCylinderSurfaceFlux3D();
+ public:  // with description
+  G4PSCylinderSurfaceFlux3D(G4String name, G4int direction, G4int ni = 1,
+                            G4int nj = 1, G4int nk = 1, G4int di = 2,
+                            G4int dj = 1, G4int dk = 0);
+  G4PSCylinderSurfaceFlux3D(G4String name, G4int direction,
+                            const G4String& unit, G4int ni = 1, G4int nj = 1,
+                            G4int nk = 1, G4int di = 2, G4int dj = 1,
+                            G4int dk = 0);
+  virtual ~G4PSCylinderSurfaceFlux3D();
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
 #endif
-

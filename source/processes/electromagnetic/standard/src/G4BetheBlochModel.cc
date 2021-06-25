@@ -62,6 +62,7 @@
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
+#include "G4EmParameters.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ICRU90StoppingData.hh"
 #include "G4Log.hh"
@@ -328,18 +329,17 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                              const G4DynamicParticle* dp,
-                                             G4double& eloss,
-                                             G4double&,
-                                             G4double length)
+                                             const G4double& length,
+                                             G4double& eloss)
 {
   if(isIon) {
     const G4Material* mat = couple->GetMaterial();
     const G4ParticleDefinition* p = dp->GetDefinition();
-    G4double preKinEnergy = dp->GetKineticEnergy();
+    const G4double preKinEnergy = dp->GetKineticEnergy();
     G4double e = preKinEnergy - eloss*0.5;
     if(e < preKinEnergy*0.75) { e = preKinEnergy*0.75; }
 
-    G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
+    const G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
     G4double qfactor = q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor;
 
@@ -351,10 +351,13 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     }
     G4double elossnew  = eloss*qfactor + highOrder;
     eloss = std::max(std::min(elossnew,preKinEnergy),eloss*0.5);
-    //G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
-    //           << " qfactor= " << qfactor 
-    //           << " highOrder= " << highOrder << " (" 
-    // << highOrder/eloss << ")" << G4endl;    
+    /*
+    G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
+    << " qfactor= " << qfactor 
+    << " highOrder= " << highOrder << " (" 
+    << highOrder/eloss << ")" 
+    " q2= " << q2 << "  corrFactor= " << corrFactor << G4endl;
+    */
   }
 }
 
@@ -367,17 +370,16 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
                                           G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
-
-  G4double maxKinEnergy = std::min(maxEnergy,tmax);
+  const G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
+  const G4double maxKinEnergy = std::min(maxEnergy,tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
 
   //G4cout << "G4BetheBlochModel::SampleSecondaries Emin= " << minKinEnergy
   //         << " Emax= " << maxKinEnergy << G4endl;
 
-  G4double totEnergy     = kineticEnergy + mass;
-  G4double etot2         = totEnergy*totEnergy;
-  G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
+  const G4double totEnergy = kineticEnergy + mass;
+  const G4double etot2     = totEnergy*totEnergy;
+  const G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
 
   G4double deltaKinEnergy, f; 
   G4double f1 = 0.0;
@@ -427,13 +429,11 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4ThreeVector deltaDirection;
 
   if(UseAngularGeneratorFlag()) {
-
-    const G4Material* mat =  couple->GetMaterial();
-    G4int Z = SelectRandomAtomNumber(mat);
-
+    const G4Material* mat = couple->GetMaterial();
     deltaDirection = 
-      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy, Z, mat);
-
+      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy,
+						SelectRandomAtomNumber(mat),
+						mat);
   } else {
  
     G4double deltaMomentum =
@@ -441,11 +441,10 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
       (deltaMomentum * dp->GetTotalMomentum());
     cost = std::min(cost, 1.0);
-    G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+    const G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+    const G4double phi = twopi*rndmEngineMod->flat();
 
-    G4double phi = twopi*rndmEngineMod->flat();
-
-    deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
+    deltaDirection.set(sint*std::cos(phi),sint*std::sin(phi), cost) ;
     deltaDirection.rotateUz(dp->GetMomentumDirection());
   }  
   /*

@@ -53,18 +53,7 @@ class G4HyperonFTFPBuilder : public G4VHyperonBuilder {
     virtual ~G4HyperonFTFPBuilder();
 
     virtual void Build( G4HadronElasticProcess* ) final override {}
-    virtual void Build( G4LambdaInelasticProcess*         aP ) final override;
-    virtual void Build( G4AntiLambdaInelasticProcess*     aP ) final override;
-    virtual void Build( G4SigmaMinusInelasticProcess*     aP ) final override;
-    virtual void Build( G4AntiSigmaMinusInelasticProcess* aP ) final override;
-    virtual void Build( G4SigmaPlusInelasticProcess*      aP ) final override;
-    virtual void Build( G4AntiSigmaPlusInelasticProcess*  aP ) final override;
-    virtual void Build( G4XiMinusInelasticProcess*        aP ) final override;
-    virtual void Build( G4AntiXiMinusInelasticProcess*    aP ) final override;
-    virtual void Build( G4XiZeroInelasticProcess*         aP ) final override;
-    virtual void Build( G4AntiXiZeroInelasticProcess*     aP ) final override;
-    virtual void Build( G4OmegaMinusInelasticProcess*     aP ) final override;
-    virtual void Build( G4AntiOmegaMinusInelasticProcess* aP ) final override;
+    virtual void Build( G4HadronInelasticProcess* aP ) final override;
 
     // The energy limits refer to the string model FTF:
     // -  the max energy is the same for hyperons and hyperons;

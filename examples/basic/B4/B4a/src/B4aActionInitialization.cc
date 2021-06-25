@@ -63,6 +63,6 @@ void B4aActionInitialization::Build() const
   auto eventAction = new B4aEventAction;
   SetUserAction(eventAction);
   SetUserAction(new B4aSteppingAction(fDetConstruction,eventAction));
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

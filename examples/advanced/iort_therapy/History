@@ -6,6 +6,16 @@ carlo.casarino@polooncologicocefalu.it
          ====================================================
              History file of the IORT application
          ====================================================
+24.05.2021 - B. Morgan (iort_therapy-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+12.02.2021 - S.Guatelli tag iort_therapy-V10-07-00
+            Dependence to G4EmProcessOptions removed.
+            SetCuts method removed from local physics list as
+            it is not thread-safe. Cuts per Region set in ConstructProcess.
+            RegionStore is not available when accessed from the constructor
+            of the Physics List.
+
 02.11.2020 - B.Morgan tag iort_therapy-V10-06-02
              Support same CMake version range as core Geant4
 

@@ -54,8 +54,6 @@ CPPFLAGS += \
 	    -I$(G4BASE)/geometry/biasing/include \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-            -I$(G4BASE)/processes/hadronic/models/management/include \
-            -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/leptons/include \

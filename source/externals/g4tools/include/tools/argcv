@@ -1,0 +1,39 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_argcv
+#define tools_argcv
+
+#include <vector>
+#include <string>
+#include "cstr"
+
+namespace tools {
+
+inline void new_argcv(const std::vector<std::string>& a_args,int& a_argc,char**& a_argv){
+  // delete with delete_argcv
+  a_argc = (int)a_args.size();
+  if(a_argc<=0) {
+    a_argc = 0;
+    a_argv = 0;
+    return;
+  }
+  typedef char* cstring;
+  a_argv = new cstring[a_argc];
+  for(int index=0;index<a_argc;index++) {
+    const std::string& arg = a_args[index];
+    a_argv[index] = new char[arg.size()+1];
+    ::strcpy(a_argv[index],arg.c_str());
+  }
+}
+
+inline void delete_argcv(int& a_argc,char**& a_argv) {
+  for(int index=0;index<a_argc;index++) delete [] a_argv[index];
+  delete [] a_argv;
+  a_argc = 0;
+  a_argv = 0;
+}
+
+}
+
+#endif

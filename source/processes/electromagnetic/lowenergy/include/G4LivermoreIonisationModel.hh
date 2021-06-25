@@ -56,59 +56,51 @@ class G4AtomicTransitionManager;
 
 class G4LivermoreIonisationModel : public G4VEmModel 
 {
-
 public:
-  
-  G4LivermoreIonisationModel(const G4ParticleDefinition* p=0,
-			     const G4String& processName = "LowEnergyIoni");
-  
+  G4LivermoreIonisationModel(const G4ParticleDefinition* p=nullptr,
+			     const G4String& processName = "LowEnergyIoni");  
   virtual ~G4LivermoreIonisationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   
-  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                              G4double kinEnergy,
-                                              G4double Z,
-                                              G4double A=0,
-                                              G4double cut=0,
-                                              G4double emax=DBL_MAX);
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+				      G4double kinEnergy,
+				      G4double Z,
+				      G4double A=0,
+				      G4double cut=0,
+				      G4double emax=DBL_MAX) override;
 					 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 				   
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-                               const G4ParticleDefinition*,
-                               G4double kineticEnergy,
-                               G4double cutEnergy);
+  G4double ComputeDEDXPerVolume(const G4Material*,
+				const G4ParticleDefinition*,
+				G4double kineticEnergy,
+				G4double cutEnergy) override;
 		 
   void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
   G4int GetVerboseLevel(){return verboseLevel;};
+  
+  G4LivermoreIonisationModel & operator=(const G4LivermoreIonisationModel &right) = delete;
+  G4LivermoreIonisationModel(const G4LivermoreIonisationModel&) = delete;
 
 protected:
-
   G4ParticleChangeForLoss* fParticleChange;
 
 private:
- 
-  G4LivermoreIonisationModel & operator=(const G4LivermoreIonisationModel &right);
-  G4LivermoreIonisationModel(const G4LivermoreIonisationModel&);
+  G4eIonisationCrossSectionHandler* crossSectionHandler;
+  G4VEnergySpectrum* energySpectrum;
+  G4AtomicTransitionManager* transitionManager;
 
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
-  G4double fIntrinsicHighEnergyLimit;
-
-  G4bool isInitialised;
- 
+  G4double fIntrinsicHighEnergyLimit;  
   G4int verboseLevel;
- 
-  G4eIonisationCrossSectionHandler* crossSectionHandler;
-  G4VEnergySpectrum* energySpectrum;
-
-  G4AtomicTransitionManager* transitionManager;
+  G4bool isInitialised;
 };
 
 #endif

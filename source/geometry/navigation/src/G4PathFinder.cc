@@ -1361,56 +1361,6 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   return minStep; 
 }
 
-
-G4bool G4PathFinder::RecheckDistanceToCurrentBoundary(
-                                        const G4ThreeVector& pGlobalPoint,
-                                        const G4ThreeVector& pDirection,
-                                        const G4double aProposedMove,
-                                        G4double* prDistance,
-                                        G4double* prNewSafety)const
-{
-  G4bool retval = true;
-  
-  if( fNoActiveNavigators > 0 )
-  {
-    // Calculate the safety values before making the step
-    
-    G4double minSafety = kInfinity;
-    G4double minMove = kInfinity;
-    int numNav;
-    for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
-    {
-      G4double distance, safety;
-      G4bool moveIsOK;
-      moveIsOK = fpNavigator[numNav]->RecheckDistanceToCurrentBoundary(
-                                                                pGlobalPoint,
-                                                                pDirection,
-                                                                aProposedMove,
-                                                                &distance,
-                                                                &safety);
-      minSafety = std::min( safety, minSafety );
-      minMove   = std::min( distance, minMove );
-      // The first surface encountered will determine it 
-      //   - even if it is at a negative distance.
-      retval &= moveIsOK;
-    }
-    
-    *prDistance = minMove;
-    if( prNewSafety )
-    {
-      *prNewSafety = minSafety;
-    }
-  }
-  else
-  {
-    retval = false;
-  }
-
-  return retval;
-}
-
-
-
 G4String& G4PathFinder::LimitedString( ELimited lim )
 {
   static G4String StrDoNot("DoNot"),

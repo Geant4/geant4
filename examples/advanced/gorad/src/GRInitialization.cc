@@ -54,15 +54,16 @@
 #include "G4ScoringManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 GRInitialization::GRInitialization(G4int verboseLvl)
 : verboseLevel(verboseLvl)
 {
   // adding unites
-  new G4UnitDefinition("milligray","mGy","Dose",1.e-3*gray);
-  new G4UnitDefinition("microgray","muGy","Dose",1.e-6*gray);
-  new G4UnitDefinition("nanogray","nGy","Dose",1.e-9*gray);
+  new G4UnitDefinition("milligray","mGy","Dose",1.e-3*CLHEP::gray);
+  new G4UnitDefinition("microgray","muGy","Dose",1.e-6*CLHEP::gray);
+  new G4UnitDefinition("nanogray","nGy","Dose",1.e-9*CLHEP::gray);
 
   G4ScoringManager::GetScoringManager()->SetScoreWriter(new GRScoreWriter());
 

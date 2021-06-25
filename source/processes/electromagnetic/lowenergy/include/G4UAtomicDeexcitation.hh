@@ -60,97 +60,70 @@ class G4Material;
 class G4UAtomicDeexcitation : public G4VAtomDeexcitation
 {  
 public: 
-  
-  G4UAtomicDeexcitation();
+  explicit G4UAtomicDeexcitation();
   virtual ~G4UAtomicDeexcitation();
    
   //=================================================================
   // methods that are requested to be implemented by the interface
   //=================================================================
+  /// initialisation methods
+  void InitialiseForNewRun() override;
+  void InitialiseForExtraAtom(G4int Z) override;
 
-  // initialisation methods
-  virtual void InitialiseForNewRun();
-  virtual void InitialiseForExtraAtom(G4int Z);
-
-
-  // Set threshold energy for fluorescence 
+  /// Set threshold energy for fluorescence 
   void SetCutForSecondaryPhotons(G4double cut);
 
-  // Set threshold energy for Auger electron production
+  /// Set threshold energy for Auger electron production
   void SetCutForAugerElectrons(G4double cut);
   
 
-  // Get atomic shell by shell index, used by discrete processes 
-  // (for example, photoelectric), when shell vacancy sampled by the model
-  virtual 
+  /// Get atomic shell by shell index, used by discrete processes 
+  /// (for example, photoelectric), when shell vacancy sampled by the model
   const G4AtomicShell* GetAtomicShell(G4int Z, 
-				      G4AtomicShellEnumerator shell);
+				      G4AtomicShellEnumerator shell) override;
 
-  // generation of deexcitation for given atom, shell vacancy and cuts
-  virtual void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
-				 const G4AtomicShell*, 
-				 G4int Z,
-                                 G4double gammaCut,
-				 G4double eCut);
-
-  //  access or compute PIXE cross section 
-  virtual
+  /// generation of deexcitation for given atom, shell vacancy and cuts
+  void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
+			 const G4AtomicShell*, 
+			 G4int Z,
+			 G4double gammaCut,
+			 G4double eCut) override;
+  
+  ///  access or compute PIXE cross section 
   G4double GetShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
 						 G4int Z, 
 						 G4AtomicShellEnumerator shell,
 						 G4double kinE,
-                                                 const G4Material* mat = 0);
+                                                 const G4Material* mat = nullptr) override;
 
-  //  access or compute PIXE cross section 
-  virtual
+  ///  access or compute PIXE cross section 
   G4double ComputeShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
 						     G4int Z, 
 						     G4AtomicShellEnumerator shell,
 						     G4double kinE,
-						     const G4Material* mat = 0);
+						     const G4Material* mat = nullptr) override; 
 
-  //=================================================================
-  // concrete methods of the deextation class
-  //=================================================================
+  G4UAtomicDeexcitation(G4UAtomicDeexcitation &) = delete;
+  G4UAtomicDeexcitation & operator=(const G4UAtomicDeexcitation &right) = delete;
 
 private:
-
-  // Decides wether a radiative transition is possible and, if it is,
-  // returns the identity of the starting shell for the transition
+  /// Decides wether a radiative transition is possible and, if it is,
+  /// returns the identity of the starting shell for the transition
   G4int SelectTypeOfTransition(G4int Z, G4int shellId);
   
-  // Generates a particle from a radiative transition and returns it
+  /// Generates a particle from a radiative transition and returns it
   G4DynamicParticle* GenerateFluorescence(G4int Z, G4int shellId, 
 					  G4int provShellId);
  
-  // Generates a particle from a non-radiative transition and returns it
+  /// Generates a particle from a non-radiative transition and returns it
   G4DynamicParticle* GenerateAuger(G4int Z, G4int shellId);
 
-  //SI
-  //Auger cascade by Burkhant Suerfu on March 24 2015 (Bugzilla 1727)
-  //Generates auger electron cascade.
+  ///Auger cascade by Burkhant Suerfu on March 24 2015 (Bugzilla 1727)
+  ///Generates auger electron cascade.
   G4DynamicParticle* GenerateAuger(G4int Z, G4int shellId, G4int& newAugerShellId);
-  //ENDSI
-  
-  // copy constructor and hide assignment operator
-  G4UAtomicDeexcitation(G4UAtomicDeexcitation &);
-  G4UAtomicDeexcitation & operator=(const G4UAtomicDeexcitation &right);
-
   G4AtomicTransitionManager* transitionManager;
- 
-  // Data member which stores the shells to be filled by 
-  // the radiative transition
-  G4int newShellId;
 
-  G4double minGammaEnergy;
-  G4double minElectronEnergy;
-
-  // Data member wich stores the id of the shell where is the vacancy 
-  // left from the Auger electron
-  G4int augerVacancyId;
-
-  // Data member for the calculation of the proton and alpha ionisation XS
-
+  /// Data member for the calculation of the proton and alpha ionisation XS
   G4VhShellCrossSection* PIXEshellCS;
   G4VhShellCrossSection* anaPIXEshellCS;
   G4VhShellCrossSection* ePIXEshellCS;
@@ -159,11 +132,15 @@ private:
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
 
-  //SI
   //Auger cascade by Burkhant Suerfu on March 24 2015 (Bugzilla 1727)
   //Data member to keep track of cascading vacancies.
   std::vector<int> vacancyArray;
-  //ENDSI
+
+  /// Data member which stores the shells to be filled by 
+  /// the radiative transition
+  G4double minGammaEnergy;
+  G4double minElectronEnergy;
+  G4int newShellId;
 };
 
 #endif

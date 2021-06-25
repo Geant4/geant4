@@ -232,6 +232,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetRadius(G4double value)
 {
   fRadius = value;
+  fWorldSize = 1.1*fRadius;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 

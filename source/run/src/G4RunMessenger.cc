@@ -23,8 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4RunMessenger implementation
 //
-//
+// Original author: M.Asai, 1997
+// --------------------------------------------------------------------
+
+#include <sstream>
 
 #include "G4RunMessenger.hh"
 #include "G4MTRunManager.hh"
@@ -42,7 +46,6 @@
 #include "G4UIparameter.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include <sstream>
 
 G4RunMessenger::G4RunMessenger(G4RunManager* runMgr)
   : runManager(runMgr)
@@ -407,6 +410,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager* runMgr)
                                  G4State_GeomClosed);
 }
 
+// --------------------------------------------------------------------
 G4RunMessenger::~G4RunMessenger()
 {
   delete materialScanner;
@@ -446,6 +450,7 @@ G4RunMessenger::~G4RunMessenger()
   delete restoreRandCmdMT;
 }
 
+// --------------------------------------------------------------------
 void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if(command == beamOnCmd)
@@ -613,17 +618,17 @@ void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   {
     G4Tokenizer next(newValue);
     G4int idx = 0;
-    long seeds[100];
+    G4long seeds[100];
     G4String vl;
     while(!(vl = next()).isNull())
     {
       seeds[idx] = StoL(vl);
-      idx++;
+      ++idx;
     }
     if(idx < 2)
     {
-      G4cerr << "/random/setSeeds should have at least two integers. Command "
-                "ignored."
+      G4cerr << "/random/setSeeds should have at least two values. "
+                "Command ignored."
              << G4endl;
     }
     else
@@ -702,6 +707,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
 }
 
+// --------------------------------------------------------------------
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String cv;

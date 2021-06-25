@@ -51,6 +51,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLStoredViewer (sceneHandler),             // FIXME : gerer le pb du parent !
   QGLWidget()
 {
+  if (fViewId < 0) return;  // In case error in base class instantiation.
+
   fQGLWidgetInitialiseCompleted = false;
 
     // Indicates that the widget has no background, i.e. when the widget receives paint events, the background is not automatically repainted. Note: Unlike WA_OpaquePaintEvent, newly exposed areas are never filled with the background (e.g., after showing a window for the first time the user can see "through" it until the application processes the paint events). This flag is set or cleared by the widget's author.
@@ -60,12 +62,10 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   fHasToRepaint = false;
   fPaintEventLock = false;
   fUpdateGLLock = false;
-
-  if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 
 G4OpenGLStoredQtViewer::~G4OpenGLStoredQtViewer() {
-  makeCurrent();
+  //  makeCurrent();  // Not sure why this - commented out 12-Apr-2021 JA
   // this is connect to the Dialog for deleting it properly
   // when close event.
   //   ((QDialog*)window())->reject();
@@ -138,7 +138,8 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ()))
+      (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
+      (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()))
     return true;
 
   // Don't check VisAttributesModifiers if this comparison has been
@@ -182,6 +183,10 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    return true;
+
+  if (lastVP.IsSpecialMeshRendering() &&
+      (lastVP.GetSpecialMeshVolumes() != fVP.GetSpecialMeshVolumes()))
     return true;
 
   return false;

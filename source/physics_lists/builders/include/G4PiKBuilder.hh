@@ -43,7 +43,6 @@
 #include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
-#include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 #include <vector>
 
@@ -57,12 +56,12 @@ class G4PiKBuilder : public G4PhysicsBuilderInterface
     virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
-    G4PionPlusInelasticProcess*  thePionPlusInelastic;
-    G4PionMinusInelasticProcess* thePionMinusInelastic;
-    G4KaonPlusInelasticProcess*  theKaonPlusInelastic;
-    G4KaonMinusInelasticProcess* theKaonMinusInelastic;
-    G4KaonZeroLInelasticProcess* theKaonZeroLInelastic;
-    G4KaonZeroSInelasticProcess* theKaonZeroSInelastic;
+    G4HadronInelasticProcess* thePionPlusInelastic;
+    G4HadronInelasticProcess* thePionMinusInelastic;
+    G4HadronInelasticProcess* theKaonPlusInelastic;
+    G4HadronInelasticProcess* theKaonMinusInelastic;
+    G4HadronInelasticProcess* theKaonZeroLInelastic;
+    G4HadronInelasticProcess* theKaonZeroSInelastic;
      
     std::vector<G4VPiKBuilder *> theModelCollections;
 };

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// G4TransitionRadiation  -- header file
-//
 // Class for description of  transition radiation generated
 // by  charged particle crossed interface between material 1
 // and material 2 (1 -> 2). Transition radiation could be of kind:
@@ -34,10 +31,7 @@
 // - X-ray   forward (for relativistic case Tkin/mass >= 10^2)
 //
 // GEANT 4 class header file --- Copyright CERN 1995
-// CERB Geneva Switzerland
 //
-// for information related to this code, please, contact
-// CERN, CN Division, ASD Group
 // History:
 // 18.12.97, V. Grichine (Vladimir.Grichine@cern.ch)
 // 02.02.00, V.Grichine, new data fEnergy and fVarAngle for double
@@ -48,81 +42,71 @@
 #ifndef G4TransitionRadiation_h
 #define G4TransitionRadiation_h
 
-
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
+#include "G4Track.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4Material.hh"
+#include "G4VParticleChange.hh"
 
-class G4TransitionRadiation : public   G4VDiscreteProcess
+class G4TransitionRadiation : public G4VDiscreteProcess
 {
-public:
+ public:
+  explicit G4TransitionRadiation(const G4String& processName = "TR",
+                                 G4ProcessType type = fElectromagnetic);
 
-  explicit G4TransitionRadiation( const G4String& processName = "TR",
-			 G4ProcessType type = fElectromagnetic) ;
+  virtual ~G4TransitionRadiation();
 
-  virtual ~G4TransitionRadiation() ;
+  G4TransitionRadiation(const G4TransitionRadiation& right) = delete;
+  G4TransitionRadiation& operator=(const G4TransitionRadiation& right) = delete;
 
   // Methods
 
   G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
 
   virtual G4double GetMeanFreePath(const G4Track&, G4double,
-			   G4ForceCondition* condition) override;
+                                   G4ForceCondition* condition) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, 
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&,
                                           const G4Step&) override;
 
-  virtual
-  G4double SpectralAngleTRdensity( G4double energy,
-                                 G4double varAngle ) const = 0 ;
+  virtual void ProcessDescription(std::ostream&) const override;
+  virtual void DumpInfo() const override { ProcessDescription(G4cout); };
 
-  G4double IntegralOverEnergy( G4double energy1,
-			       G4double energy2,
-			       G4double varAngle     ) const ;
+  virtual G4double SpectralAngleTRdensity(G4double energy,
+                                          G4double varAngle) const = 0;
 
-  G4double IntegralOverAngle( G4double energy,
-			      G4double varAngle1,
-			      G4double varAngle2     ) const ;
+  G4double IntegralOverEnergy(G4double energy1, G4double energy2,
+                              G4double varAngle) const;
 
-  G4double AngleIntegralDistribution( G4double varAngle1,
-				      G4double varAngle2     ) const ;
+  G4double IntegralOverAngle(G4double energy, G4double varAngle1,
+                             G4double varAngle2) const;
 
-  G4double EnergyIntegralDistribution( G4double energy1,
-				       G4double energy2     )  const   ;
+  G4double AngleIntegralDistribution(G4double varAngle1,
+                                     G4double varAngle2) const;
 
+  G4double EnergyIntegralDistribution(G4double energy1, G4double energy2) const;
 
-
-  // Access functions
-
-protected :
-
-  G4int fMatIndex1 ;                   // index of the 1st material
-  G4int fMatIndex2 ;                   // index of the 2nd material
-
-  // private :
-
-  G4double fGamma ;
-  G4double fEnergy ;
-  G4double fVarAngle ;
-
+ protected:
   // Local constants
-  static const G4int fSympsonNumber ; // Accuracy of Sympson integration 10
-  static const G4int fGammaNumber   ; // = 15
-  static const G4int fPointNumber   ; // = 100
+  // Accuracy of Sympson integration
+  static constexpr G4int fSympsonNumber = 100;
+  static constexpr G4int fGammaNumber   = 15;
+  static constexpr G4int fPointNumber   = 100;
 
-  G4double fMinEnergy ;                //  min TR energy
-  G4double fMaxEnergy ;                //  max TR energy
-  G4double fMaxTheta  ;                //  max theta of TR quanta
+  G4double fGamma;
+  G4double fEnergy;
+  G4double fVarAngle;
 
-  G4double fSigma1 ;                   // plasma energy Sq of matter1
-  G4double fSigma2 ;                   // plasma energy Sq of matter2
+  G4double fMinEnergy;  //  min TR energy
+  G4double fMaxEnergy;  //  max TR energy
+  G4double fMaxTheta;   //  max theta of TR quanta
 
-private:
+  G4double fSigma1;  // plasma energy Sq of matter1
+  G4double fSigma2;  // plasma energy Sq of matter2
 
-// Operators
-  G4TransitionRadiation(const G4TransitionRadiation& right) = delete;
-  G4TransitionRadiation& 
-    operator=(const G4TransitionRadiation& right) = delete;
-
+  G4int fMatIndex1;  // index of the 1st material
+  G4int fMatIndex2;  // index of the 2nd material
 };
 
-#endif   // G4TransitionRadiation_h
+#endif  // G4TransitionRadiation_h

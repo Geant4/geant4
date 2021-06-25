@@ -151,26 +151,19 @@ G4VisCommandSetExtentForField::G4VisCommandSetExtentForField ()
   ("The default is a null extent, which is interpreted by the commands as the"
    "\nextent of the whole scene.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("xmin", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("xmin", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter = new G4UIparameter ("xmax", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("xmax", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter = new G4UIparameter ("ymin", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("ymin", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter = new G4UIparameter ("ymax", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("ymax", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter = new G4UIparameter ("zmin", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("zmin", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter = new G4UIparameter ("zmax", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
+  parameter = new G4UIparameter ("zmax", 'd', omitable = false);
   fpCommand->SetParameter (parameter);
-  parameter = new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetDefaultValue ("m");
+  parameter = new G4UIparameter ("unit", 's', omitable = false);
   fpCommand->SetParameter (parameter);
 }
 
@@ -449,7 +442,7 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
       if (verbosity >= G4VisManager::warnings) {
         G4cout <<
         "WARNING: G4VisCommandSetTouchable::SetNewValue"
-        "\n  A pair not found.  (Did you have an even number of parameters?)"
+	"\n  A pair not found.  (There should be an even number of parameters.)"
         "\n  Command ignored."
         << G4endl;
         return;
@@ -526,8 +519,7 @@ G4VisCommandSetVolumeForField::G4VisCommandSetVolumeForField ()
   fpCommand->SetGuidance
   ("Takes a volume name or a /regular expression/ -- see guidance for"
    "\n\"/vis/drawVolume\"");
-  parameter = new G4UIparameter ("physical-volume-name", 's', omitable = true);
-  parameter -> SetDefaultValue ("none");
+  parameter = new G4UIparameter ("physical-volume-name", 's', omitable = false);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("copy-no", 'i', omitable = true);
   parameter -> SetGuidance ("If negative, matches any copy no.");
@@ -559,15 +551,6 @@ void G4VisCommandSetVolumeForField::SetNewValue (G4UIcommand*, G4String newValue
   is >> name >> copyNo >> drawString;
   G4bool draw = G4UIcmdWithABool::ConvertToBool(drawString);
 
-  if (name == "none") {
-    fCurrrentPVFindingsForField.clear();
-    fCurrentExtentForField = G4VisExtent();
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "Volume for field cleared" << G4endl;
-    }
-    return;
-  }
-
   G4TransportationManager* transportationManager =
   G4TransportationManager::GetTransportationManager ();
   size_t nWorlds = transportationManager->GetNoWorlds();
@@ -579,6 +562,7 @@ void G4VisCommandSetVolumeForField::SetNewValue (G4UIcommand*, G4String newValue
     G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
     G4ModelingParameters mp;  // Default - no culling.
     searchModel.SetModelingParameters (&mp);
+    // Find all instances at any position in the tree
     G4PhysicalVolumesSearchScene searchScene (&searchModel, name, copyNo);
     searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
     for (const auto& findings: searchScene.GetFindings()) {

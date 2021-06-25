@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4cEventAction.hh
 /// \brief Definition of the B4cEventAction class
 
@@ -38,8 +38,8 @@
 
 /// Event action class
 ///
-/// In EndOfEventAction(), it prints the accumulated quantities of the energy 
-/// deposit and track lengths of charged particles in Absober and Gap layers 
+/// In EndOfEventAction(), it prints the accumulated quantities of the energy
+/// deposit and track lengths of charged particles in Absober and Gap layers
 /// stored in the hits collections.
 
 class B4cEventAction : public G4UserEventAction
@@ -50,21 +50,21 @@ public:
 
   virtual void  BeginOfEventAction(const G4Event* event);
   virtual void    EndOfEventAction(const G4Event* event);
-    
+
 private:
   // methods
   B4cCalorHitsCollection* GetHitsCollection(G4int hcID,
                                             const G4Event* event) const;
   void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
                             G4double gapEdep, G4double gapTrackLength) const;
-  
-  // data members                   
+
+  // data members
   G4int  fAbsHCID;
   G4int  fGapHCID;
 };
-                     
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    
+

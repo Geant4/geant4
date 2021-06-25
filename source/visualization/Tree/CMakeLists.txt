@@ -1,6 +1,3 @@
-#------------------------------------------------------------------------------
-# Module : G4Tree
-# Package: Geant4.src.G4visualization.G4Tree
-#------------------------------------------------------------------------------
+# - G4Tree category build
 
 geant4_global_library_target(COMPONENTS sources.cmake)

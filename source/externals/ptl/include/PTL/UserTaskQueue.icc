@@ -34,6 +34,7 @@
 #include <cassert>
 #include <deque>
 #include <list>
+#include <memory>
 #include <queue>
 #include <stack>
 
@@ -46,10 +47,10 @@ class VTask;
 class TaskSubQueue
 {
 public:
-    template <typename _Tp>
-    using container = std::deque<_Tp>;
+    template <typename Tp>
+    using container = std::list<Tp>;
 
-    typedef VTask*                    task_pointer;
+    typedef std::shared_ptr<VTask>    task_pointer;
     typedef container<task_pointer>   container_type;
     typedef container_type::size_type size_type;
 
@@ -66,13 +67,17 @@ public:
     bool AcquireClaim();
     void ReleaseClaim();
 
-    void         PushTask(task_pointer);
-    task_pointer PopTask(bool front = true);
+    void         PushTask(task_pointer&&) PTL_NO_SANITIZE_THREAD;
+    task_pointer PopTask(bool front = true) PTL_NO_SANITIZE_THREAD;
 
     size_type size() const;
     bool      empty() const;
 
 private:
+    // mutex
+#if defined(PTL_USE_LOCKS)
+    Mutex m_mutex{};
+#endif
     // used internally to keep number of tasks
     std::atomic<size_type> m_ntasks;
     // for checking if being modified
@@ -144,13 +149,15 @@ TaskSubQueue::empty() const
 //======================================================================================//
 
 inline void
-TaskSubQueue::PushTask(task_pointer task)
+TaskSubQueue::PushTask(task_pointer&& task)
 {
     // no need to lock these if claim is acquired via atomic
     assert(m_available.load(std::memory_order_relaxed) == false);
-    //++(*m_all_tasks); already incremented
     ++m_ntasks;
-    m_task_queue.push_front(task);
+#if defined(PTL_USE_LOCKS)
+    AutoLock lk{ m_mutex };
+#endif
+    m_task_queue.emplace_front(std::move(task));
 }
 
 //======================================================================================//
@@ -160,17 +167,23 @@ TaskSubQueue::PopTask(bool front)
 {
     // no need to lock -- claim is acquired via atomic
     assert(m_available.load(std::memory_order_relaxed) == false);
-    if(m_task_queue.empty())
+    if(m_ntasks.load() == 0)
         return nullptr;
 
-    task_pointer _task;
+    task_pointer _task{ nullptr };
     if(front)
     {
+#if defined(PTL_USE_LOCKS)
+        AutoLock lk{ m_mutex };
+#endif
         _task = std::move(m_task_queue.front());
         m_task_queue.pop_front();
     }
     else
     {
+#if defined(PTL_USE_LOCKS)
+        AutoLock lk{ m_mutex };
+#endif
         _task = std::move(m_task_queue.back());
         m_task_queue.pop_back();
     }

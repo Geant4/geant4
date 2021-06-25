@@ -39,7 +39,7 @@
 //   This is a primitive scorer class for scoring Surface Flux.
 //  Flux version assumes only for G4Sphere shape, and the surface
 //  is defined at the inside of the sphere.
-//   The current is given in the unit of area. 
+//   The current is given in the unit of area.
 //    e.g.  (Number of tracks)/mm2.
 //
 // Surface is defined  at the inside of sphere.
@@ -53,47 +53,45 @@
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction for out-going flux.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByArea options
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSSphereSurfaceFlux : public G4VPrimitiveScorer
 {
- 
-  public: // with description
-      G4PSSphereSurfaceFlux(G4String name, G4int direction, G4int depth=0);
-      G4PSSphereSurfaceFlux(G4String name, G4int direction, 
-			    const G4String& unit, G4int depth=0);
-      virtual ~G4PSSphereSurfaceFlux();
+ public:  // with description
+  G4PSSphereSurfaceFlux(G4String name, G4int direction, G4int depth = 0);
+  G4PSSphereSurfaceFlux(G4String name, G4int direction, const G4String& unit,
+                        G4int depth = 0);
+  virtual ~G4PSSphereSurfaceFlux();
 
-      inline void Weighted(G4bool flg=true) { weighted = flg; }
-      // Multiply track weight
+  inline void Weighted(G4bool flg = true) { weighted = flg; }
+  // Multiply track weight
 
-      inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
-      // Divided by Area.
+  inline void DivideByArea(G4bool flg = true) { divideByArea = flg; }
+  // Divided by Area.
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      G4int IsSelectedSurface(G4Step*,G4Sphere*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  G4int IsSelectedSurface(G4Step*, G4Sphere*);
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  protected:
-      virtual void DefineUnitAndCategory();
+ protected:
+  virtual void DefineUnitAndCategory();
 
-  private:
-      G4int  HCID;
-      G4int  fDirection;
-      G4THitsMap<G4double>* EvtMap;
-      G4bool weighted;
-      G4bool divideByArea;
+ private:
+  G4int HCID;
+  G4int fDirection;
+  G4THitsMap<G4double>* EvtMap;
+  G4bool weighted;
+  G4bool divideByArea;
 };
 
 #endif
-

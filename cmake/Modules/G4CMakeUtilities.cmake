@@ -135,7 +135,9 @@ function(geant4_add_feature _var _description)
     set_property(GLOBAL APPEND PROPERTY GEANT4_DISABLED_FEATURES ${_var})
   endif()
 
-  set_property(GLOBAL PROPERTY ${_var}_DESCRIPTION "${_description}")
+  # Property name qualified by "G4" prefix so we can provide seperate
+  # descriptions for CMake builtins we might expose (e.g. CXX_STANDARD)
+  set_property(GLOBAL PROPERTY G4_${_var}_DESCRIPTION "${_description}")
 endfunction()
 
 #-----------------------------------------------------------------------
@@ -149,7 +151,7 @@ function(geant4_print_enabled_features)
   foreach(_feature ${_enabledFeatures})
     set(_currentFeatureText "${_currentFeatureText}\n${_feature}")
 
-    get_property(_desc GLOBAL PROPERTY ${_feature}_DESCRIPTION)
+    get_property(_desc GLOBAL PROPERTY G4_${_feature}_DESCRIPTION)
 
     if(_desc)
       set(_currentFeatureText "${_currentFeatureText}: ${_desc}")

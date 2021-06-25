@@ -9,22 +9,81 @@
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-
      ----------------------------------------------------------
 
-26 January 21:  V.Ivanchenko  (emstand-V10-06-20)
+24 May 21: J.Allison  (emstand-V10-07-14)
+- G4eplusAnnihilation.cc:
+  o Instantiate clip board only if Quantum Entanglement is requested.
+
+23 May 21: V.Ivanchenko  (emstand-V10-07-13)
+- G4PAIModelData, G4eplusTo2GammaOKVIModel - corrected 
+    initialisation of physics vectors spline
+
+15 May 21: V.Ivanchenko  (emstand-V10-07-12)
+- G4CoulombScattering, G4eBremsstrahlung, G4eplusAnnihilation -
+  updated set of flags for spline and the integral approach
+
+10 May 21: V.Ivanchenko  (emstand-V10-07-11)
+- G4BetheBlochModel - minor cleanup - more const variables 
+- G4LindhardSorensenData - updated definition of spline
+
+16 April 21: B.Morgan (emstand-V10-07-10)
+- Migrate build to modular CMake API
+
+02 May 21: J.Allison  (emstand-V10-07-09)
+- G4eplusAnnihilation:
+  o Introduce Quantum Entanglement. This is activated by
+      /process/em/QuantumEntanglement.
+  o For e+e- -> gamma gamma, the gammas are "tagged" here and must be
+    "analysed" in a Compton scattering process - see, for example,
+    G4LivermorePolarizedComptonModel. Otherwise entanglement has no
+    effect even if activated.
+  o Add data member:  G4int fEntanglementModelIndex;
+    Entanglement uses AuxiliaryTrackInformation, so we need to pick up a
+    unique model index. In the constructor:
+      fEntanglementModelIndex
+      = G4PhysicsModelCatalog::Register("G4GammaGammaEntanglement");
+    Then in AtRestDoIt:
+      t->SetAuxiliaryTrackInformation
+      (fEntanglementModelIndex,new G4EntanglementAuxInfo(clipBoard));
+
+28 April 21: V.Ivanchenko  (emstand-V10-07-08)
+- G4BetheBlochModel, G4BraggIonModel, G4LindhardSorensenIonModel,
+  G4ICRU73QOModel, G4AtimaIonIonisationModel - changed interface
+    to ion ionisation corrections
+
+24 April 21: V.Ivanchenko  (emstand-V10-07-07)
+- clean-up models for 11.0
+
+18 April 21: V.Ivanchenko  (emstand-V10-07-06)
+- clean-up models for 11.0
+
+10 April 21: V.Ivanchenko  (emstand-V10-07-05)
+- clean-up energy loss models for 11.0
+
+03 April 21: V.Ivanchenko  (emstand-V10-07-04)
+- clean-up models for 11.0
+
+30 March 21: V.Ivanchenko  (emstand-V10-07-03)
+- clean-up ionisation processes
+
+18 March 21: V.Ivanchenko  (emstand-V10-07-02)
+- clean-up gamma processes
+
+08 February 21: V.Ivanchenko  (emstand-V10-07-01)
+- G4BohrFuluctuations, G4HeatedKleinNishinaCompton are removed
+
+26 January 21:  V.Ivanchenko  (emstand-V10-07-00)
 - G4BetheBlochModel, G4LindhardSorensenIonModel - fixed problem #2312,
     restore computation of maximum energy transfer from Geant4 10.4,
     affect only ultrarelativistic ions
 
 11 November 20:  V.Ivanchenko  (emstand-V10-06-19)
-- G4UrbanMscModel - restored parameterisation of step limit to 
-    the variant of emstand-V10-06-13 
+- G4UrbanMscModel - restored parameterisation of step limit to
+    the variant of emstand-V10-06-13
 
 10 November 20:  V.Ivanchenko (emstand-V10-06-18)
 - G4SauterGavrilaAngularDistribution, G4DeltaAngle - code clean-up
@@ -54,17 +113,17 @@ committal in the CVS repository !
     parameter 'doverra'
 
 02 July 20: M. Novak          (emstand-V10-06-12)
-- G4eDPWAElasticDCS - a new class that handles the numerical Differential Cross 
-   Sections(DCS) for Coulomb scattering of e-/e+, computed by Dirac Partial Wave 
+- G4eDPWAElasticDCS - a new class that handles the numerical Differential Cross
+   Sections(DCS) for Coulomb scattering of e-/e+, computed by Dirac Partial Wave
    Analysis(DPWA) using ELSEPA
-- G4eDPWACoulombScatteringModel - as new class that implements single Coulomb 
-   scattering model for e-/e+ based on the numerical DCS provided by the above 
-   G4eDPWAElasticDCS class 
-   
+- G4eDPWACoulombScatteringModel - as new class that implements single Coulomb
+   scattering model for e-/e+ based on the numerical DCS provided by the above
+   G4eDPWAElasticDCS class
+
 15 May 20:  V.Ivanchenko      (emstand-V10-06-11)
 - G4UrbanMscModel - added e- range cut to the cache data structure; minor
     improvement of the code
-- G4UniversalFluctuation - set value for a0 = 42 after optimisations 
+- G4UniversalFluctuation - set value for a0 = 42 after optimisations
 
 29 April 20: Gunter Folger    (emstand-V10-06-10)
 - fix for clang10: G4PAIPhotModel.hh, G4PAIModel.hh : mark class final
@@ -76,10 +135,10 @@ committal in the CVS repository !
 - G4LindhardSorensenData - fixed data table
 
 07 April 20:  V.Ivanchenko    (emstand-V10-06-07)
-- G4UniversalFluctuation - 10.6 value for a0=50 is returned, because 
+- G4UniversalFluctuation - 10.6 value for a0=50 is returned, because
     test results with the previous tag does not improve all thin target tests
 - G4eeToTwoGammaModel - code clean-up; added static flag, which identifies if
-    electron motion is taken into account for sampling of acolliniarity, 
+    electron motion is taken into account for sampling of acolliniarity,
     when annihilation is happen at rest; the model was introduced previously
     by John Allison, here we ensure, that by default no extra computation
     is performed; also removed extra printout at initialisation and extra
@@ -93,7 +152,7 @@ committal in the CVS repository !
 25 March 20:  V.Ivanchenko    (emstand-V10-06-05)
 - G4UniversalFluctuation - L.Urban propose to change nmaxCont from
     16 to 8 in order to speed-up simulation
-- G4BetheHeitler5DModel - Li Zhuxin change  "final"  keyword by "override" 
+- G4BetheHeitler5DModel - Li Zhuxin change  "final"  keyword by "override"
     for virtual methods
 
 23 March 20:  J.Allison       (emstand-V10-06-04)
@@ -108,7 +167,7 @@ committal in the CVS repository !
 
 09 March 20:  V.Ivanchenko    (emstand-V10-06-03)
 - G4eplusAnnihilation - fixed problem seen in the rare case, when
-    initial energy is null 
+    initial energy is null
 
 03 March 20:  V.Ivanchenko    (emstand-V10-06-02)
 - G4UrbanMscModel - removed Cache and introduced data struct
@@ -117,12 +176,12 @@ committal in the CVS repository !
 25 February 20:  V.Ivanchenko (emstand-V10-06-01)
 - G4UrbanMscModel - L.Urban changed tlimitmin computation for e-
     (for e+ kept unchanged) and changed parameterisation
-    of stepmin; two private inline methods are added to reduce 
+    of stepmin; two private inline methods are added to reduce
     duplication of the code
 
 07 December 19:  V.Ivanchenko (emstand-V10-06-00)
 - G4BetheHeitler5DModel - added protection against negative
-    argument of sqrt() due to precision lost 
+    argument of sqrt() due to precision lost
 
 06 November 19:  V.Ivanchenko (emstand-V10-05-26)
 - G4ESTARStopping, G4GSMottCorrection, G4GSPWACorrections,
@@ -134,7 +193,7 @@ committal in the CVS repository !
     which affect Opt3 EM physics
 
 31 October 19:  V.Ivanchenko (emstand-V10-05-24)
-- G4SeltzerBergerModel, G4ICRU49NuclearStoppingModel - cosmetic 
+- G4SeltzerBergerModel, G4ICRU49NuclearStoppingModel - cosmetic
     modifications - more safe initialisation in the MT mode
 
 24 October 19:  I.Semeniouk (emstand-V10-05-23)
@@ -151,26 +210,26 @@ committal in the CVS repository !
 - G4eplusAnnihilation: set secondary weight correctly using bias manager.
 
 1 October 19:  V.Ivanchenko (emstand-V10-05-19)
-- G4UrbanMscModel, G4GoudsmitSaundersonMscModel, G4WentzelVIModel - 
-    use lambdalimit and facsafety from the base class G4VMscModel   
+- G4UrbanMscModel, G4GoudsmitSaundersonMscModel, G4WentzelVIModel -
+    use lambdalimit and facsafety from the base class G4VMscModel
 
 2 September 19:  M.Novak (emstand-V10-05-18)
-- G4PairProductionRelModel, G4GammaConversion - The high energy model for e-/e+ 
-    pair production has been extended down to threshold (2mc^2) such that it 
-    gives results (both x-section and final state) identical to those produced 
-    by the low energy (G4BetheHeitlerModel). Since this new version of the 
+- G4PairProductionRelModel, G4GammaConversion - The high energy model for e-/e+
+    pair production has been extended down to threshold (2mc^2) such that it
+    gives results (both x-section and final state) identical to those produced
+    by the low energy (G4BetheHeitlerModel). Since this new version of the
     high energy model can describe e-/e+ pair production from threshold up to
-    PeV (LPM effects are included) the G4BetheHeitlerModel was removed from the 
-    G4GammaConversion process. 
+    PeV (LPM effects are included) the G4BetheHeitlerModel was removed from the
+    G4GammaConversion process.
 
 29 August 19:  V.Ivanchenko (emstand-V10-05-17)
-- G4UrbanMscModel - L.Urban modified step limit parameters: 
+- G4UrbanMscModel - L.Urban modified step limit parameters:
     lambdalimit to 0.5 mm; facsafety to 0.67.
 
 24 August 19:  V.Ivanchenko (emstand-V10-05-16)
-- G4UrbanMscModel - L.Urban modified step limit parameters: 
+- G4UrbanMscModel - L.Urban modified step limit parameters:
     lambdalimit from 1 mm to 0.4 mm; facsafety from 0.6 to 0.7.
-- G4WentzelOKadriVIxSection, G4WentzelVIModel - return previous 
+- G4WentzelOKadriVIxSection, G4WentzelVIModel - return previous
     parameterisation of screening parameter
 
 14 August 19:  V.Ivanchenko (emstand-V10-05-15)
@@ -180,14 +239,14 @@ committal in the CVS repository !
 25 July 19:  V.Ivanchenko (emstand-V10-05-14)
 - G4SeltzerBergerModel - during initialisation data files uploaded
     only data for elements used in geometry, lazy initialisation
-    of the data is also available (may be used in unit tests) 
+    of the data is also available (may be used in unit tests)
 
 20 July 19:  V.Ivanchenko (emstand-V10-05-13)
 - G4WentzelOKandVIxSection - modified parameterisation of screening
     parameter for e+-, which affect backscattering at low energies
     making results closer to data
-- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel 
-    optimized code and data structure; fixed floating point exception 
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel
+    optimized code and data structure; fixed floating point exception
     for low energy; use C++11 patterns
 
 28 May 19:  V.Ivanchenko (emstand-V10-05-12)
@@ -212,26 +271,26 @@ committal in the CVS repository !
 - G4eCoulombScatteringModel, G4WentzelOKandVIxSection - cleanup debug cout
   and initialisation
 
-17 March 19: M.Novak (emstand-V10-05-07) 
-- G4BetheHeitler5DModel, G4BetheHeitlerModel, G4IonCoulombScatteringModel, 
-  G4PAIModel, G4PAIPhotModel, G4PairProductionRelModel, G4SeltzerBergerModel, 
-  G4XrayRayleighModel, G4eBremParametrizedModel, G4eBremsstrahlungRelModel, 
-  G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - make use of the 
-  new target atom selector (emutils-V10-05-07) that can reuse the already known 
+17 March 19: M.Novak (emstand-V10-05-07)
+- G4BetheHeitler5DModel, G4BetheHeitlerModel, G4IonCoulombScatteringModel,
+  G4PAIModel, G4PAIPhotModel, G4PairProductionRelModel, G4SeltzerBergerModel,
+  G4XrayRayleighModel, G4eBremParametrizedModel, G4eBremsstrahlungRelModel,
+  G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - make use of the
+  new target atom selector (emutils-V10-05-07) that can reuse the already known
   log-energy value.
 
-17 March 19: M.Novak (emstand-V10-05-06) 
-- G4UrbanMscModel, G4WentzelVIModel, G4GoudsmitSaundersonMscModel - make use of 
-  the new base class methods (emutils-V10-05-06), utilising the already known 
-  log-energy value, in case of dEdx, range and transport mean free path log - 
+17 March 19: M.Novak (emstand-V10-05-06)
+- G4UrbanMscModel, G4WentzelVIModel, G4GoudsmitSaundersonMscModel - make use of
+  the new base class methods (emutils-V10-05-06), utilising the already known
+  log-energy value, in case of dEdx, range and transport mean free path log -
   vector table accesses.
 
 04 March 19:  V.Ivanchenko (emstand-V10-05-05)
-- G4UrbanMscModel - L.Urban optimise step limitation for UseSafetyPlus 
+- G4UrbanMscModel - L.Urban optimise step limitation for UseSafetyPlus
     and UseDistanceToBoundary; minor clean-up of step limit method
 
 01 March 19:  V.Ivanchenko (emstand-V10-05-04)
-- G4BetheBlochModel - code clean-up, removed tabs, some empty lines 
+- G4BetheBlochModel - code clean-up, removed tabs, some empty lines
 
 27 February 19:  I.Semeniouk (emstand-V10-05-03)
 - G4BetheHeitler5DModel - commint assert on negative bp1
@@ -278,7 +337,7 @@ committal in the CVS repository !
 - G4eplusAnnihilation: set weights for directional splitting
 
 10 October 18:  V.Ivanchenko (emstand-V10-04-46)
-- G4UrbanMscModel - L.Urban added correction to get better 
+- G4UrbanMscModel - L.Urban added correction to get better
     backscattering at low energy
 - G4LindhardSorensenData, G4LindhardSorensenIonModel - correction
     of dEdx computation
@@ -287,7 +346,7 @@ committal in the CVS repository !
 - G4eplusAnnihilation - back to emstand-V10-04-42
 
 09 October 18: J.L. Rodriguez-Sanchez (emstand-V10-04-44)
-- G4AtimaEnergyLossModel, G4AtimaFluctuations - fixed some errors 
+- G4AtimaEnergyLossModel, G4AtimaFluctuations - fixed some errors
   and added some cosmetic modifications
 
 02 October 18: D.Sawkey (emstand-V10-04-43)
@@ -301,13 +360,13 @@ committal in the CVS repository !
 27 September 18: V.Ivanchenko (emstand-V10-04-41)
 - G4BraggModel, G4BraggIonModel, G4BetheBlochModel - added
     optional possibility to use ICRU90 data
-- G4LindhardSorensenData - fixed interpolation of corrections for 
+- G4LindhardSorensenData - fixed interpolation of corrections for
     large energies
 - G4LindhardSorensenIonModel, G4PSTARStopping - minor cleanup
 
 21 September 18: V.Ivanchenko (emstand-V10-04-40)
-- G4GammaConversion, G4eBremsstrahlung, G4hIonisation - use upper 
-    energy limit for low-energy model from PhysicsList instead of 
+- G4GammaConversion, G4eBremsstrahlung, G4hIonisation - use upper
+    energy limit for low-energy model from PhysicsList instead of
     hard-coding values
 - G4ionIonisation - apply correction to energy loss only to BetheBloch
     ionisation model
@@ -324,8 +383,8 @@ committal in the CVS repository !
 - G4eSingleCoulombScatteringModel - fixed problem #2090
 
 31 August 18: V.Ivanchenko (emstand-V10-04-37)
-- G4LindhardSorensenIonModel - fixed numerical problem in computation 
-    of correction 
+- G4LindhardSorensenIonModel - fixed numerical problem in computation
+    of correction
 
 29 August 18: L.Urban (emstand-V10-04-36)
 - G4UrbanMscModel - correction in order to get better backscattering
@@ -334,22 +393,22 @@ committal in the CVS repository !
 17 August 18: V.Ivanchenko (emstand-V10-04-35)
 - G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel - added
     extra protections on argument of std::acos avoiding crash due to
-    precision lost; clean-up and formats of code; one run time method 
-    is moved inlined; initialisation methods are moved to the source 
+    precision lost; clean-up and formats of code; one run time method
+    is moved inlined; initialisation methods are moved to the source
 
 17 August 18: V.Ivanchenko (emstand-V10-04-34)
 17 August 18: V.Ivanchenko (emstand-V10-04-33)
 - G4MottCoefficients class is removed because big inefficiency was reported
-    by Grigory Latyshev 
+    by Grigory Latyshev
 - G4MottData.hh static data file is created instead
-- G4ScreeningMottCrossSection - use G4MottData and improved time consuming 
+- G4ScreeningMottCrossSection - use G4MottData and improved time consuming
   computations
 
 12 August 18: M. Novak (emstand-V10-04-32)
-- G4SBBremTable - fixed compiler warning 
+- G4SBBremTable - fixed compiler warning
 - G4eBremssrahlungRelModel, G4PairProductionRelModel - fixed possible out-of-
    bound vector access introduced in the previous tag.
-- G4SeltzerBergerModel - added extra protections for data per Z access    
+- G4SeltzerBergerModel - added extra protections for data per Z access
 
 10 August 18: M. Novak (emstand-V10-04-31)
 - G4DipBustGenerator - optimisation, speedup: using G4Pow::A13

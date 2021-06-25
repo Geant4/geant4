@@ -25,9 +25,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/hadronic/models/management/include/ \
+            -I$(G4BASE)/processes/hadronic/management/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
-            -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk

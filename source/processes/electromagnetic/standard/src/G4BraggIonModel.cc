@@ -64,6 +64,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
+#include "G4EmParameters.hh"
 #include "G4DeltaAngle.hh"
 #include "G4ICRU90StoppingData.hh"
 #include "G4NistManager.hh"
@@ -78,28 +79,18 @@ G4ASTARStopping* G4BraggIonModel::fASTAR = nullptr;
 
 G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
                                  const G4String& nam)
-  : G4VEmModel(nam),
-    corr(nullptr),
-    particle(nullptr),
-    fParticleChange(nullptr),
-    fICRU90(nullptr),
-    currentMaterial(nullptr),
-    baseMaterial(nullptr),
-    iMolecula(-1),
-    iASTAR(-1),
-    iICRU90(-1),
-    isIon(false)
+  : G4VEmModel(nam)
 {
-  SetHighEnergyLimit(2.0*MeV);
+  SetHighEnergyLimit(2.0*CLHEP::MeV);
 
-  HeMass           = 3.727417*GeV;
-  rateMassHe2p     = HeMass/proton_mass_c2;
-  lowestKinEnergy  = 1.0*keV/rateMassHe2p;
+  HeMass           = 3.727417*CLHEP::GeV;
+  rateMassHe2p     = HeMass/CLHEP::proton_mass_c2;
+  lowestKinEnergy  = 1.0*CLHEP::keV/rateMassHe2p;
   massFactor       = 1000.*amu_c2/HeMass;
-  theZieglerFactor = eV*cm2*1.0e-15;
+  theZieglerFactor = CLHEP::eV*CLHEP::cm2*1.0e-15;
   theElectron      = G4Electron::Electron();
   corrFactor       = 1.0;
-  if(p) { SetParticle(p); }
+  if(nullptr != p) { SetParticle(p); }
   else  { SetParticle(theElectron); }
 }
 
@@ -124,17 +115,17 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
   if(IsMaster()) {
     if(nullptr == fASTAR)  { fASTAR = new G4ASTARStopping(); }
-    if(particle->GetPDGMass() < GeV) { fASTAR->Initialise(); }
+    if(particle->GetPDGMass() < CLHEP::GeV) { fASTAR->Initialise(); }
     if(G4EmParameters::Instance()->UseICRU90Data()) {
-      if(!fICRU90) { 
+      if(nullptr == fICRU90) { 
 	fICRU90 = G4NistManager::Instance()->GetICRU90StoppingData(); 
-      } else if(particle->GetPDGMass() < GeV) { fICRU90->Initialise(); }
+      } else if(particle->GetPDGMass() < CLHEP::GeV) { fICRU90->Initialise(); }
     }
   }
 
   if(nullptr == fParticleChange) {
 
-    if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+    if(UseAngularGeneratorFlag() && nullptr == GetAngularDistribution()) {
       SetAngularDistribution(new G4DeltaAngle());
     }
     G4String pname = particle->GetParticleName();
@@ -203,7 +194,7 @@ G4double G4BraggIonModel::ComputeCrossSectionPerElectron(
 
     if( 0.0 < spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
-    cross *= twopi_mc2_rcl2*chargeSquare/beta2;
+    cross *= CLHEP::twopi_mc2_rcl2*chargeSquare/beta2;
   }
  //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy 
  //          << " tmax= " << tmax << " cross= " << cross << G4endl;
@@ -263,7 +254,7 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = tmin/tmax;
 
-    dedx += (G4Log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
+    dedx += (G4Log(x) + (1.0 - x)*beta2) * CLHEP::twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
   }
 
@@ -283,9 +274,8 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
 
 void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                            const G4DynamicParticle* dp,
-                                           G4double& eloss,
-                                           G4double&,
-                                           G4double /*length*/)
+                                           const G4double&,
+                                           G4double& eloss)
 {
   // this method is called only for ions
   const G4ParticleDefinition* p = dp->GetDefinition();

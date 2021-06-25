@@ -68,33 +68,38 @@ public:
 
   explicit G4eplusAnnihilation(const G4String& name = "annihil");
 
-  virtual ~G4eplusAnnihilation();
+  ~G4eplusAnnihilation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
+  G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
-  virtual G4VParticleChange* AtRestDoIt(
+  G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
                              const G4Step& stepData) override;
 
-  virtual G4double AtRestGetPhysicalInteractionLength(
+  G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
                             ) override;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
+
+  G4eplusAnnihilation & operator=(const G4eplusAnnihilation &right) = delete;
+  G4eplusAnnihilation(const G4eplusAnnihilation&) = delete;
 
 protected:
 
-  // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile) const override;
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
+  // Print out of the class parameters
+  void StreamProcessInfo(std::ostream& outFile) const override;
 
 private:
   
-  G4bool  isInitialised;
+  G4bool isInitialised = false;
   const G4ParticleDefinition* theGamma;
+  const G4ParticleDefinition* theElectron;
+  G4int fEntanglementModelIndex;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,9 +1,6 @@
-#------------------------------------------------------------------------------
-# Module : G4digits_hits
-# Package: Geant4.src.G4digits_hits
-#------------------------------------------------------------------------------
+# - G4digits_hits category build
 
-# Add allocation export symbol for the digits_hits category
+# Add (private) allocation export symbol
 add_definitions(-DG4DIGI_ALLOC_EXPORT)
 
 geant4_global_library_target(NAME G4digits_hits
@@ -12,5 +9,4 @@ geant4_global_library_target(NAME G4digits_hits
     digits/sources.cmake
     hits/sources.cmake
     scorer/sources.cmake
-    utils/sources.cmake
-)
+    utils/sources.cmake)

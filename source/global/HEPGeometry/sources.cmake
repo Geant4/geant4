@@ -1,13 +1,7 @@
-#------------------------------------------------------------------------------
-# Module : G4hepgeometry
-# Package: Geant4.src.G4global.G4hepgeometry
-#------------------------------------------------------------------------------
+# - G4hepgeometry module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4hepgeometry
-  HEADERS
+geant4_add_module(G4hepgeometry
+  PUBLIC_HEADERS
     G4LorentzRotation.hh
     G4LorentzVector.hh
     G4Normal3D.hh
@@ -15,9 +9,6 @@ geant4_define_module(NAME G4hepgeometry
     G4Point3D.hh
     G4Transform3D.hh
     G4Vector3D.hh
-    geomdefs.hh
-  GRANULAR_DEPENDENCIES
-    G4globman
-)
+    geomdefs.hh)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4hepgeometry PUBLIC G4globman)

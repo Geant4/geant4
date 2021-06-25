@@ -33,7 +33,6 @@
 #include "G4VUserActionInitialization.hh"
 
 class DetectorConstruction;
-class G4VSteppingVerbose;
 
 /// Action initialization class.
 ///
@@ -42,16 +41,13 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization(DetectorConstruction*);
-    virtual ~ActionInitialization();
+    ~ActionInitialization() override;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
-    
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    void BuildForMaster() const override;
+    void Build() const override;
     
   private:
     DetectorConstruction* fDetector;
-
 };
 
 #endif

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4run
-# Package: Geant4.src.G4run
-#------------------------------------------------------------------------------
+# - G4run module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4run
-  HEADERS
+geant4_add_module(G4run
+  PUBLIC_HEADERS
     G4AdjointPrimaryGeneratorAction.hh
     G4AdjointSimManager.hh
     G4AdjointSimMessenger.hh
@@ -77,49 +72,39 @@ geant4_define_module(NAME G4run
     G4VUserPhysicsList.cc
     G4VUserPrimaryGeneratorAction.cc
     G4WorkerThread.cc
-    G4RNGHelper.cc
-  GRANULAR_DEPENDENCIES
+    G4RNGHelper.cc)
+
+geant4_module_link_libraries(G4run
+  PUBLIC
     G4cuts
-    G4decay
+    G4event
+    G4globman
+    G4heprandom
+    G4intercoms
+    G4partman
+    G4tracking
+  PRIVATE
+    G4bosons
     G4detector
     G4detutils
-    G4digits
     G4emutils
-    G4event
-    G4geombias
     G4geometrymng
-    G4globman
     G4graphics_reps
+    G4hadronic_util
     G4hepnumerics
     G4hits
-    G4intercoms
+    G4ions
     G4magneticfield
     G4materials
     G4navigation
-    G4partman
     G4procman
     G4scoring
+    G4specsolids
     G4track
     G4tracking
     G4transportation
     G4volumes
-    G4specsolids
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4event
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4materials
-    G4particles
-    G4processes
-    G4ptl
-    G4track
-    G4tracking
-  LINK_LIBRARIES
-    ${timemory_LIBRARIES}
-)
+    ${timemory_LIBRARIES})
 
 # List any source specific properties here
 if(GEANT4_BUILD_BUILTIN_BACKTRACE)

@@ -1,7 +1,4 @@
-#------------------------------------------------------------------------------
-# Module : G4RayTracer
-# Package: Geant4.src.G4visualization.G4RayTracer
-#------------------------------------------------------------------------------
+# - G4RayTracer category build
 
 # Add allocation export symbol for the RayTracer module
 # NB: we don't add this at the category level because RayTracer is

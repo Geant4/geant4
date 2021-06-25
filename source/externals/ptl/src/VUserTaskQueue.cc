@@ -45,16 +45,3 @@ VUserTaskQueue::VUserTaskQueue(intmax_t nworkers)
 }
 
 //======================================================================================//
-
-VUserTaskQueue::~VUserTaskQueue() {}
-
-//======================================================================================//
-/*
-intmax_t& VUserTaskQueue::ThisThreadNumber() const
-{
-    // get a thread id number
-    static thread_local intmax_t _tid;
-    return _tid;
-}
-*/
-//======================================================================================//

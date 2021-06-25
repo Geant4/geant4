@@ -29,18 +29,13 @@
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "OpNoviceRunAction.hh"
-
 #include "OpNovicePrimaryGeneratorAction.hh"
 #include "OpNoviceRun.hh"
-
 #include "G4ParticleDefinition.hh"
 #include "G4Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceRunAction::OpNoviceRunAction(OpNovicePrimaryGeneratorAction* prim)
   : G4UserRunAction()
   , fRun(nullptr)
@@ -48,9 +43,9 @@ OpNoviceRunAction::OpNoviceRunAction(OpNovicePrimaryGeneratorAction* prim)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceRunAction::~OpNoviceRunAction() {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Run* OpNoviceRunAction::GenerateRun()
 {
   fRun = new OpNoviceRun();
@@ -58,7 +53,6 @@ G4Run* OpNoviceRunAction::GenerateRun()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceRunAction::BeginOfRunAction(const G4Run*)
 {
   if(fPrimary)
@@ -71,11 +65,9 @@ void OpNoviceRunAction::BeginOfRunAction(const G4Run*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceRunAction::EndOfRunAction(const G4Run*)
 {
   if(isMaster)
     fRun->EndOfRun();
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

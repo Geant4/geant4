@@ -162,6 +162,12 @@ public:
   // persistency for clients requiring preallocation of memory for
   // persistifiable objects.
 
+  // operators
+  G4IonisParamMat& operator=(const G4IonisParamMat&) = delete;
+  G4bool operator==(const G4IonisParamMat&) const = delete;
+  G4bool operator!=(const G4IonisParamMat&) const = delete;
+  G4IonisParamMat(const G4IonisParamMat&) = delete;
+
 private:
     
   // Compute mean parameters : ExcitationEnergy,Shell corretion vector ...
@@ -175,12 +181,6 @@ private:
 
   // Compute parameters for ion parameterizations
   void ComputeIonParameters();
-
-  // operators
-  G4IonisParamMat& operator=(const G4IonisParamMat&);
-  G4bool operator==(const G4IonisParamMat&) const;
-  G4bool operator!=(const G4IonisParamMat&) const;
-  G4IonisParamMat(const G4IonisParamMat&);
 
   //
   // data members

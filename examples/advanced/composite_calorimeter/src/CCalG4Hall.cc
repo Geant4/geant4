@@ -46,24 +46,17 @@
 //#define debug
 //#define pdebug
 
-////////////////////////////////////////////////////////////////////
-// CCalG4Hall constructor & destructor...
-////////////////////////////////////////////////////////////////////
 
-CCalG4Hall::CCalG4Hall(const G4String &name):
-  CCalHall(name),CCalG4Able(name) {}
+CCalG4Hall::CCalG4Hall( const G4String &name ) : CCalHall(name), CCalG4Able(name) {}
+
 
 CCalG4Hall::~CCalG4Hall() {}
 
-////////////////////////////////////////////////////////////////////
-// CCalG4Hall methods...
-////////////////////////////////////////////////////////////////////
 
-G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
+G4VPhysicalVolume* CCalG4Hall::constructIn( G4VPhysicalVolume* mother ) {
 
   G4cout << "==>> Constructing CCalG4Hall..." << G4endl;
 
-  ///////////////////////////////////////////////////////////////
   //Pointers to the Rotation Matrices and to the Materials
   CCalMaterialFactory* matfact       = CCalMaterialFactory::getInstance();
 
@@ -98,7 +91,8 @@ G4VPhysicalVolume* CCalG4Hall::constructIn(G4VPhysicalVolume* mother) {
   return volume;
 }
 
-void CCalG4Hall::constructDaughters(){
+
+void CCalG4Hall::constructDaughters() {
   //Hadron Calorimeter
   CCalG4Hcal* hcal = new CCalG4Hcal("HadronCalorimeter");
   addDetector(hcal);
@@ -110,3 +104,6 @@ void CCalG4Hall::constructDaughters(){
   addDetector(ecal);
   AddCCalG4Able(ecal);
 }
+
+
+void CCalG4Hall::constructSensitive() {}

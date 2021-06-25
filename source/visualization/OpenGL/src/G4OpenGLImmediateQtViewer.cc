@@ -72,7 +72,7 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 }
 
 G4OpenGLImmediateQtViewer::~G4OpenGLImmediateQtViewer() {
-  makeCurrent();
+  //  makeCurrent();  // Not sure why this - commented out 12-Apr-2021 JA
 }
 
 void G4OpenGLImmediateQtViewer::Initialise() {
@@ -130,8 +130,6 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
   glUniformMatrix4fv(fmvMatrixUniform, 1, 0, identity);
 
   glUseProgram(fShaderProgram);
-
-  setInitialized();  // Should be removed when fuse Wt and Qt
 
 #endif
 

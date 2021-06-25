@@ -34,33 +34,22 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4LambdaInelasticProcess.hh"
-#include "G4AntiLambdaInelasticProcess.hh"
-#include "G4SigmaMinusInelasticProcess.hh"
-#include "G4AntiSigmaMinusInelasticProcess.hh"
-#include "G4SigmaPlusInelasticProcess.hh"
-#include "G4AntiSigmaPlusInelasticProcess.hh"
-#include "G4XiMinusInelasticProcess.hh"
-#include "G4AntiXiMinusInelasticProcess.hh"
-#include "G4XiZeroInelasticProcess.hh"
-#include "G4AntiXiZeroInelasticProcess.hh"
-#include "G4OmegaMinusInelasticProcess.hh"
-#include "G4AntiOmegaMinusInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 
 
 G4HyperonBuilder::G4HyperonBuilder() {  
-  theLambdaInelastic         = new G4LambdaInelasticProcess;
-  theAntiLambdaInelastic     = new G4AntiLambdaInelasticProcess;
-  theSigmaMinusInelastic     = new G4SigmaMinusInelasticProcess;
-  theAntiSigmaMinusInelastic = new G4AntiSigmaMinusInelasticProcess;
-  theSigmaPlusInelastic      = new G4SigmaPlusInelasticProcess;
-  theAntiSigmaPlusInelastic  = new G4AntiSigmaPlusInelasticProcess;
-  theXiMinusInelastic        = new G4XiMinusInelasticProcess;
-  theAntiXiMinusInelastic    = new G4AntiXiMinusInelasticProcess;
-  theXiZeroInelastic         = new G4XiZeroInelasticProcess;
-  theAntiXiZeroInelastic     = new G4AntiXiZeroInelasticProcess;
-  theOmegaMinusInelastic     = new G4OmegaMinusInelasticProcess;
-  theAntiOmegaMinusInelastic = new G4AntiOmegaMinusInelasticProcess;
+  theLambdaInelastic         = new G4HadronInelasticProcess( "lambdaInelastic", G4Lambda::Definition() );
+  theAntiLambdaInelastic     = new G4HadronInelasticProcess( "anti-lambdaInelastic", G4AntiLambda::Definition() );
+  theSigmaMinusInelastic     = new G4HadronInelasticProcess( "sigma-Inelastic", G4SigmaMinus::Definition() );
+  theAntiSigmaMinusInelastic = new G4HadronInelasticProcess( "anti_sigma-Inelastic", G4AntiSigmaMinus::Definition() );
+  theSigmaPlusInelastic      = new G4HadronInelasticProcess( "sigma+Inelastic", G4SigmaPlus::Definition() );
+  theAntiSigmaPlusInelastic  = new G4HadronInelasticProcess( "anti_sigma+Inelastic", G4AntiSigmaPlus::Definition() );
+  theXiMinusInelastic        = new G4HadronInelasticProcess( "xi-Inelastic", G4XiMinus::Definition() );
+  theAntiXiMinusInelastic    = new G4HadronInelasticProcess( "anti_xi-Inelastic", G4AntiXiMinus::Definition() );
+  theXiZeroInelastic         = new G4HadronInelasticProcess( "xi0Inelastic", G4XiZero::Definition() );
+  theAntiXiZeroInelastic     = new G4HadronInelasticProcess( "anti_xi0Inelastic", G4AntiXiZero::Definition() );
+  theOmegaMinusInelastic     = new G4HadronInelasticProcess( "omega-Inelastic", G4OmegaMinus::Definition() );
+  theAntiOmegaMinusInelastic = new G4HadronInelasticProcess( "anti_omega-Inelastic", G4AntiOmegaMinus::Definition() );
 }
 
 

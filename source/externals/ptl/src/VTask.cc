@@ -31,78 +31,16 @@
 #include "PTL/VTask.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/VTaskGroup.hh"
+
+#include <cassert>
 
 using namespace PTL;
 
 //======================================================================================//
 
-VTask::VTask()
-: m_depth(0)
-, m_group(nullptr)
-, m_pool(nullptr)
+VTask::VTask(bool _is_native, intmax_t _depth)
+: m_is_native{ _is_native }
+, m_depth{ _depth }
 {}
-
-//======================================================================================//
-
-VTask::VTask(VTaskGroup* task_group)
-: m_depth(0)
-, m_group(task_group)
-, m_pool((m_group) ? task_group->pool() : nullptr)
-{}
-
-//======================================================================================//
-
-VTask::VTask(ThreadPool* tp)
-: m_depth(0)
-, m_group(nullptr)
-, m_pool(tp)
-{}
-
-//======================================================================================//
-
-VTask::~VTask() {}
-
-//======================================================================================//
-
-void
-VTask::operator--()
-{
-    if(m_group)
-    {
-        intmax_t _count = --(*m_group);
-        if(_count < 2)
-        {
-            try
-            {
-                m_group->task_cond()->notify_all();
-            } catch(std::system_error& e)
-            {
-                auto     tid = ThreadPool::get_this_thread_id();
-                AutoLock l(TypeMutex<decltype(std::cerr)>(), std::defer_lock);
-                if(!l.owns_lock())
-                    l.lock();
-                std::cerr << "[" << tid << "] Caught system error: " << e.what()
-                          << std::endl;
-            }
-        }
-    }
-}
-
-//======================================================================================//
-
-bool
-VTask::is_native_task() const
-{
-    return (m_group) ? m_group->is_native_task_group() : false;
-}
-
-//======================================================================================//
-
-ThreadPool*
-VTask::pool() const
-{
-    return (!m_pool && m_group) ? m_group->pool() : m_pool;
-}
 
 //======================================================================================//

@@ -115,22 +115,9 @@ std::vector<G4eBremsstrahlungRelModel::ElementData*> G4eBremsstrahlungRelModel::
 
 G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
                                                      const G4String& nam)
-: G4VEmModel(nam), fIsElectron(true), fIsScatOffElectron(false),
-  fIsLPMActive(false), fPrimaryParticle(nullptr), fIsUseCompleteScreening(false)
+: G4VEmModel(nam)
 {
-  fCurrentIZ = 0;
-  //
-  fPrimaryParticleMass = 0.;
-  fPrimaryKinEnergy    = 0.;
-  fPrimaryTotalEnergy  = 0.;
-  fDensityFactor       = 0.;
-  fDensityCorr         = 0.;
-  fNucTerm             = 0.;
-  fSumTerm             = 0.;
-  //
-  fPrimaryParticle     = nullptr;
   fGammaParticle       = G4Gamma::Gamma();
-  fParticleChange      = nullptr;
   //
   fLowestKinEnergy     = 1.0*MeV;
   SetLowEnergyLimit(fLowestKinEnergy);
@@ -141,9 +128,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   SetLPMFlag(true);
   //
   SetAngularDistribution(new G4ModifiedTsai());
-  //SetAngularDistribution(new G4DipBustGenerator());
   //
-  if (p) {
+  if (nullptr != p) {
     SetParticle(p);
   }
 }
@@ -153,7 +139,7 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
   if (IsMaster()) {
     // clear ElementData container
     for (size_t iz = 0; iz < gElementData.size(); ++iz) {
-      if (gElementData[iz]) {
+      if (nullptr != gElementData[iz]) {
         delete gElementData[iz];
       }
     }
@@ -170,7 +156,7 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
                                            const G4DataVector& cuts)
 {
-  if (p) {
+  if (nullptr != p) {
     SetParticle(p);
   }
   fCurrentIZ = 0;
@@ -182,7 +168,9 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
       InitialiseElementSelectors(p, cuts);
     }
   }
-  if (!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if (nullptr == fParticleChange) { 
+    fParticleChange = GetParticleChangeForLoss(); 
+  }
   if (GetTripletModel()) {
     GetTripletModel()->Initialise(p, cuts);
     fIsScatOffElectron = true;
@@ -244,7 +232,7 @@ G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(const G4Material* material,
                                                 G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (!fPrimaryParticle) {
+  if (nullptr == fPrimaryParticle) {
     SetParticle(p);
   }
   if (kineticEnergy < LowEnergyLimit()) {
@@ -331,7 +319,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
                                                   G4double maxEnergy)
 {
   G4double crossSection = 0.0;
-  if (!fPrimaryParticle) {
+  if (nullptr == fPrimaryParticle) {
     SetParticle(p);
   }
   if (kineticEnergy < LowEnergyLimit()) {

@@ -47,14 +47,14 @@ G4ThreadLocal G4Allocator<B5EmCalorimeterHit>* B5EmCalorimeterHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EmCalorimeterHit::B5EmCalorimeterHit()
-: G4VHit(), 
+: G4VHit(),
   fCellID(-1), fEdep(0.), fPos(0.), fPLogV(nullptr)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EmCalorimeterHit::B5EmCalorimeterHit(G4int cellID)
-: G4VHit(), 
+: G4VHit(),
   fCellID(cellID), fEdep(0.), fPos(0.), fPLogV(nullptr)
 {}
 
@@ -123,21 +123,21 @@ const std::map<G4String,G4AttDef>* B5EmCalorimeterHit::GetAttDefs() const
   auto store = G4AttDefStore::GetInstance("B5EmCalorimeterHit",isNew);
 
   if (isNew) {
-      (*store)["HitType"] 
+      (*store)["HitType"]
         = G4AttDef("HitType","Hit Type","Physics","","G4String");
-      
-      (*store)["ID"] 
+
+      (*store)["ID"]
         = G4AttDef("ID","ID","Physics","","G4int");
-      
-      (*store)["Energy"] 
-        = G4AttDef("Energy", "Energy Deposited", "Physics", "G4BestUnit", 
+
+      (*store)["Energy"]
+        = G4AttDef("Energy", "Energy Deposited", "Physics", "G4BestUnit",
                    "G4double");
-      
-      (*store)["Pos"] 
-        = G4AttDef("Pos", "Position", "Physics","G4BestUnit", 
+
+      (*store)["Pos"]
+        = G4AttDef("Pos", "Position", "Physics","G4BestUnit",
                    "G4ThreeVector");
-      
-      (*store)["LVol"] 
+
+      (*store)["LVol"]
         = G4AttDef("LVol","Logical Volume","Physics","","G4String");
   }
   return store;
@@ -148,7 +148,7 @@ const std::map<G4String,G4AttDef>* B5EmCalorimeterHit::GetAttDefs() const
 std::vector<G4AttValue>* B5EmCalorimeterHit::CreateAttValues() const
 {
   auto values = new std::vector<G4AttValue>;
-  
+
   values
     ->push_back(G4AttValue("HitType","EmCalorimeterHit",""));
   values
@@ -157,12 +157,12 @@ std::vector<G4AttValue>* B5EmCalorimeterHit::CreateAttValues() const
     ->push_back(G4AttValue("Energy",G4BestUnit(fEdep,"Energy"),""));
   values
     ->push_back(G4AttValue("Pos",G4BestUnit(fPos,"Length"),""));
-  
+
   if (fPLogV)
     values->push_back(G4AttValue("LVol",fPLogV->GetName(),""));
   else
     values->push_back(G4AttValue("LVol"," ",""));
-  
+
   return values;
 }
 

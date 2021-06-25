@@ -465,8 +465,11 @@ G4HadFinalState* G4NuMuNucleusCcModel::ApplyYourself(
       //     + G4ParticleTable::GetParticleTable()->FindParticle(-211)->GetPDGMass();
     } 
   }
-  G4int       index = GetEnergyIndex(energy);
-  G4double qeTotRat = GetNuMuQeTotRat(index, energy);
+  // G4int       index = GetEnergyIndex(energy);
+  G4int nepdg = aParticle->GetDefinition()->GetPDGEncoding();
+
+  G4double qeTotRat; // = GetNuMuQeTotRat(index, energy);
+  qeTotRat = CalculateQEratioA( Z, A, energy, nepdg);
 
   G4ThreeVector dX = (lvX.vect()).unit();
   G4double eX   = lvX.e();  // excited nucleon

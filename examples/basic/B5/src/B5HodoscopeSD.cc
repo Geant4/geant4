@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HodoscopeSD::B5HodoscopeSD(G4String name)
-: G4VSensitiveDetector(name), 
+: G4VSensitiveDetector(name),
   fHitsCollection(nullptr), fHCID(-1)
 {
   collectionName.insert( "hodoscopeColl");
@@ -57,8 +57,8 @@ void B5HodoscopeSD::Initialize(G4HCofThisEvent* hce)
 {
   fHitsCollection = new B5HodoscopeHitsCollection
   (SensitiveDetectorName,collectionName[0]);
-  if (fHCID<0) { 
-    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
+  if (fHCID<0) {
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
   }
   hce->AddHitsCollection(fHCID,fHitsCollection);
 }
@@ -69,12 +69,12 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
   auto edep = step->GetTotalEnergyDeposit();
   if (edep==0.) return true;
-  
+
   auto preStepPoint = step->GetPreStepPoint();
   auto touchable = preStepPoint->GetTouchable();
   auto copyNo = touchable->GetVolume()->GetCopyNo();
   auto hitTime = preStepPoint->GetGlobalTime();
-  
+
   // check if this finger already has a hit
   auto ix = -1;
   for (std::size_t i=0;i<fHitsCollection->entries();++i) {
@@ -86,8 +86,8 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
   if (ix>=0) {
     // if it has, then take the earlier time
-    if ((*fHitsCollection)[ix]->GetTime()>hitTime) { 
-      (*fHitsCollection)[ix]->SetTime(hitTime); 
+    if ((*fHitsCollection)[ix]->GetTime()>hitTime) {
+      (*fHitsCollection)[ix]->SetTime(hitTime);
     }
   }
   else {
@@ -100,7 +100,7 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     hit->SetRot(transform.NetRotation());
     hit->SetPos(transform.NetTranslation());
     fHitsCollection->insert(hit);
-  }    
+  }
   return true;
 }
 

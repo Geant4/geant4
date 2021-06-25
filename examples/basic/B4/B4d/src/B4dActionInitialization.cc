@@ -57,6 +57,6 @@ void B4dActionInitialization::Build() const
   SetUserAction(new B4PrimaryGeneratorAction);
   SetUserAction(new B4RunAction);
   SetUserAction(new B4dEventAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

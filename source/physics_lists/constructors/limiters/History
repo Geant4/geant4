@@ -12,6 +12,12 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-Apr-2021, A. Ribon     (phys-ctor-limiters-V10-07-00)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
 28-May-2020, B. Morgan    (phys-ctor-limiters-V10-06-02)
 - Remove obsolete GRANULAR_DEPENDENCIES entries
 

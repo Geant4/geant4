@@ -51,7 +51,7 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
-#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 
 class G4ICRU90StoppingData 
 { 
@@ -81,23 +81,23 @@ public:
  
   inline G4bool IsApplicable(const G4Material*) const;
 
-private:
-
-  inline G4double GetDEDX(G4LPhysicsFreeVector*, G4double e) const;
-
-  void FillData();
-
-  G4LPhysicsFreeVector* AddData(G4int n, const G4double* e, const G4float* dedx);
-
   // hide assignment operator
   G4ICRU90StoppingData & operator=
   (const  G4ICRU90StoppingData &right) = delete;
   G4ICRU90StoppingData(const G4ICRU90StoppingData&) = delete;
 
+private:
+
+  inline G4double GetDEDX(G4PhysicsFreeVector*, G4double e) const;
+
+  void FillData();
+
+  G4PhysicsFreeVector* AddData(G4int n, const G4double* e, const G4float* dedx);
+
   static constexpr G4int nvectors = 3;
   const G4Material* materials[nvectors];
-  G4LPhysicsFreeVector* sdata_proton[nvectors];
-  G4LPhysicsFreeVector* sdata_alpha[nvectors];
+  G4PhysicsFreeVector* sdata_proton[nvectors];
+  G4PhysicsFreeVector* sdata_alpha[nvectors];
   G4bool isInitialized;
 };
 
@@ -131,7 +131,7 @@ inline G4int G4ICRU90StoppingData::GetIndex(const G4String& nam) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double 
-G4ICRU90StoppingData::GetDEDX(G4LPhysicsFreeVector* data, G4double e) const
+G4ICRU90StoppingData::GetDEDX(G4PhysicsFreeVector* data, G4double e) const
 {
   G4double emin = data->Energy(0);
   return (e <= emin) ? (*data)[0]*std::sqrt(e/emin) : data->Value(e);

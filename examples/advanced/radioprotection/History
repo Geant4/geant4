@@ -7,9 +7,17 @@
 
                       Category History file
                       ---------------------
+24.05.2021,  B. Morgan (radioprotection-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+11.02.2021 - S. Guatelli tag radioprotection-V10-07-00
+             Dependence to G4EmProcessOptions removed.
+             SetCuts method removed from the local PhysicsList as it is
+             not thread-safe.
+
 17.11.2020 - S. Guatelli tag radioprotection-V10-06-02
              Migration to G4RunManagerFactory
-             
+
 02.11.2020 - F. Romano and J. Magini tag radioprotection-V10-06-01
            - radioprotection.cc :
 	     added new parameter to DetectorConstruction constructor
@@ -22,17 +30,18 @@
 	   - DetectorConstruction.cc :
 	     modifed the constructor to store the detector type
 	     rewrote Construct so that it calls the specific method of the selected detector type
-	     moved the previous diamond detector geometry to ConstructDiamondDetector, and added new possible 		     		     geometries (silicon and microdiamond) from scratch via the other two methods
+	     moved the previous diamond detector geometry to ConstructDiamondDetector, and added new possible
+       geometries (silicon and microdiamond) from scratch via the other two methods
    	   - DetectorMessenger.hh :
-	     created the file in order to switch detector type 
+	     created the file in order to switch detector type
 	   - DetectorMessenger.cc :
-	     created the file in order to switch detector type 
+	     created the file in order to switch detector type
 	   - geometry.mac :
 	     create the macro in order to select a specific detector at runtime (by default, all options are commented out)
 	   - vis.mac :
 	     added a line to execute geometry.mac before launching the GUI (at which point it wouldn't be possible to change 		     the geometry anymore)
-	   - run.mac: 
-             added a line to execute geometry.mac 
+	   - run.mac:
+             added a line to execute geometry.mac
 	   - CMakeLists.txt :
 	     added geometry.mac to the list of files to be copied to the build directory
 

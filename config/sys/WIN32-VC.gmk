@@ -36,7 +36,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     OGLLIBS   := opengl32.lib gdi32.lib user32.lib
   endif
   ifndef UI32LIBS
-    UI32LIBS  := gdi32.lib user32.lib
+    UI32LIBS  := gdi32.lib user32.lib comctl32.lib
   endif
   ifndef QTHOME
     QTHOME   := /Qt

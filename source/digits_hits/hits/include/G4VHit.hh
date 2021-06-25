@@ -44,37 +44,33 @@ class G4AttValue;
 //  If a concrete hit class is used as a transient class, G4Allocator
 // must be used.
 
-class G4VHit 
+class G4VHit
 {
+ public:
+  G4VHit();
+  virtual ~G4VHit();
 
-  public:
-      G4VHit();
-      virtual ~G4VHit();
+  G4bool operator==(const G4VHit& right) const;
 
-      G4bool operator==(const G4VHit &right) const;
+  virtual void Draw();
+  virtual void Print();
 
-      virtual void Draw();
-      virtual void Print();
-
-      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const
-      { return 0; }
-      // If implemented by a derived class, returns a pointer to a map
-      // of attribute definitions for the attribute values below.  The
-      // user must test the validity of this pointer.  See
-      // G4Trajectory for an example of a concrete implementation of
-      // this method.
-      virtual std::vector<G4AttValue>* CreateAttValues() const
-      { return 0; }
-      // If implemented by a derived class, returns a pointer to a
-      // list of attribute values suitable, e.g., for picking.  Each
-      // must refer to an attribute definition in the above map; its
-      // name is the key.  The user must test the validity of this
-      // pointer (it must be non-zero and conform to the G4AttDefs,
-      // which may be checked with G4AttCheck) and delete the list
-      // after use.  See G4Trajectory for an example of a concrete
-      // implementation of this method and
-      // G4VTrajectory::ShowTrajectory for an example of its use.
-
+  virtual const std::map<G4String, G4AttDef>* GetAttDefs() const { return 0; }
+  // If implemented by a derived class, returns a pointer to a map
+  // of attribute definitions for the attribute values below.  The
+  // user must test the validity of this pointer.  See
+  // G4Trajectory for an example of a concrete implementation of
+  // this method.
+  virtual std::vector<G4AttValue>* CreateAttValues() const { return 0; }
+  // If implemented by a derived class, returns a pointer to a
+  // list of attribute values suitable, e.g., for picking.  Each
+  // must refer to an attribute definition in the above map; its
+  // name is the key.  The user must test the validity of this
+  // pointer (it must be non-zero and conform to the G4AttDefs,
+  // which may be checked with G4AttCheck) and delete the list
+  // after use.  See G4Trajectory for an example of a concrete
+  // implementation of this method and
+  // G4VTrajectory::ShowTrajectory for an example of its use.
 };
 
 #endif

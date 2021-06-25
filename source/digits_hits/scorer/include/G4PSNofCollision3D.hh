@@ -34,30 +34,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring Number of Steps in the cell.
-// 
+//
 // Created: 2007-08-14  Tsukasa ASO
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class G4PSNofCollision3D : public G4PSNofCollision
 {
- 
- public: // with description
-      G4PSNofCollision3D(G4String name, 
-		     G4int ni=1,G4int nj=1, G4int nk=1,
-		     G4int depi=2, G4int depj=1, G4int depk=0);
+ public:  // with description
+  G4PSNofCollision3D(G4String name, G4int ni = 1, G4int nj = 1, G4int nk = 1,
+                     G4int depi = 2, G4int depj = 1, G4int depk = 0);
 
-  public:
-      virtual ~G4PSNofCollision3D();
+ public:
+  virtual ~G4PSNofCollision3D();
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
-
-
 
 #endif

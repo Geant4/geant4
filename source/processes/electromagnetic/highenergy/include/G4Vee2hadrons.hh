@@ -69,9 +69,9 @@ public:
 		G4double vhighEnergy,
 		G4double vdelta) : cross(cr)
   {
-	lowEnergy  = vlowEnergy;
-	highEnergy = vhighEnergy;
-	delta      = vdelta;
+    lowEnergy  = vlowEnergy;
+    highEnergy = vhighEnergy;
+    delta      = vdelta;
   };
 
   virtual ~G4Vee2hadrons() {};
@@ -94,11 +94,11 @@ public:
 
   G4double HighEnergy() const {return highEnergy;};
   
-private:
-
   // hide assignment operator
   G4Vee2hadrons & operator=(const  G4Vee2hadrons &right) = delete;
   G4Vee2hadrons(const  G4Vee2hadrons&) = delete;
+
+private:
 
   // parameters of the table
   G4double lowEnergy;

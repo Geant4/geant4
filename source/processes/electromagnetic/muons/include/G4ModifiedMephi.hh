@@ -59,21 +59,21 @@ public:
 
   explicit G4ModifiedMephi(const G4String& name = "");
 
-  virtual ~G4ModifiedMephi();
+  ~G4ModifiedMephi() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double gEnergy, G4int Z,
-                                         const G4Material* mat = nullptr) final;
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                 G4double gEnergy, G4int Z,
+                                 const G4Material* mat = nullptr) final;
 
-  virtual void SamplePairDirections(const G4DynamicParticle* dp,
-				    G4double elecKinEnergy,
-				    G4double posiKinEnergy,
-				    G4ThreeVector& dirElectron,
-				    G4ThreeVector& dirPositron,
-				    G4int Z = 0,
-				    const G4Material* mat = nullptr) final;
+  void SamplePairDirections(const G4DynamicParticle* dp,
+			    G4double elecKinEnergy,
+                            G4double posiKinEnergy,
+                            G4ThreeVector& dirElectron,
+                            G4ThreeVector& dirPositron,
+                            G4int Z = 0,
+                            const G4Material* mat = nullptr) final;
 
-  virtual void PrintGeneratorInformation() const final;
+  void PrintGeneratorInformation() const override;
 
   // hide assignment operator 
   G4ModifiedMephi & operator=(const  G4ModifiedMephi &right) = delete;

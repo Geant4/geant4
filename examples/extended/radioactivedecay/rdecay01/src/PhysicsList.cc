@@ -47,17 +47,6 @@
 PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
 {
-  //add new units for radioActive decays
-  // 
-  const G4double minute = 60*second;
-  const G4double hour   = 60*minute;
-  const G4double day    = 24*hour;
-  const G4double year   = 365*day;
-  new G4UnitDefinition("minute", "min", "Time", minute);
-  new G4UnitDefinition("hour",   "h",   "Time", hour);
-  new G4UnitDefinition("day",    "d",   "Time", day);
-  new G4UnitDefinition("year",   "y",   "Time", year);
-
   // mandatory for G4NuclideTable
   //
   G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);

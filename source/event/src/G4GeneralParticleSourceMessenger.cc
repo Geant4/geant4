@@ -427,6 +427,7 @@ G4GeneralParticleSourceMessenger(G4GeneralParticleSource* fPtclGun)
   minphiCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/minphi",this);
   minphiCmd1->SetGuidance("Set minimum phi");
   minphiCmd1->SetParameterName("MinPhi",true,false);
+  minphiCmd1->SetDefaultValue(0.);
   minphiCmd1->SetDefaultUnit("rad");
   // minphiCmd1->SetUnitCandidates("rad deg");
 

@@ -57,6 +57,6 @@ void B3bActionInitialization::Build() const
   SetUserAction(new B3bRunAction);
   SetUserAction(new B3PrimaryGeneratorAction);
   SetUserAction(new B3StackingAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

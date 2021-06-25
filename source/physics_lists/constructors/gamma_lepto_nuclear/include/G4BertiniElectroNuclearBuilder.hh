@@ -38,7 +38,7 @@
 
 #include "G4CascadeInterface.hh"
 #include "G4ElectroVDNuclearModel.hh"
-#include "G4PhotoNuclearProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4ElectronNuclearProcess.hh"
 #include "G4PositronNuclearProcess.hh"
 
@@ -55,7 +55,7 @@ class G4BertiniElectroNuclearBuilder
     virtual void Build();
 
   protected:
-    G4PhotoNuclearProcess * thePhotoNuclearProcess;
+    G4HadronInelasticProcess * thePhotoNuclearProcess;
     G4ElectronNuclearProcess * theElectronNuclearProcess;
     G4PositronNuclearProcess * thePositronNuclearProcess;
     G4ElectroVDNuclearModel * theElectroReaction;
@@ -70,7 +70,4 @@ class G4BertiniElectroNuclearBuilder
     G4bool eActivated;
 };
 
-// 2002 by J.P. Wellisch
-
 #endif
-

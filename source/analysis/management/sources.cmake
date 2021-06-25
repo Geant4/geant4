@@ -1,17 +1,12 @@
-#------------------------------------------------------------------------------
-# Module : G4analysismng
-# Package: Geant4.src.G4analysis.G4analysismng
-#------------------------------------------------------------------------------
+# - G4analysismng module build definition
 
 if(GEANT4_USE_FREETYPE)
   set(G4analysismng_LINK_LIBRARIES Freetype::Freetype)
 endif()
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4analysismng
-  HEADERS
+geant4_add_module(G4analysismng
+  PUBLIC_HEADERS
     G4AnalysisVerbose.hh
     G4AnalysisManagerState.hh
     G4AnalysisMessenger.hh
@@ -92,15 +87,7 @@ geant4_define_module(NAME G4analysismng
     G4VAnalysisManager.cc
     G4VAnalysisReader.cc
     G4VFileManager.cc
-    G4VNtupleFileManager.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-  LINK_LIBRARIES
-    ${G4analysismng_LINK_LIBRARIES}
-)
+    G4VNtupleFileManager.cc)
 
-# List any source specific properties here
+# NB Freetype may be private
+geant4_module_link_libraries(G4analysismng PUBLIC G4globman G4intercoms G4tools ${G4analysismng_LINK_LIBRARIES})

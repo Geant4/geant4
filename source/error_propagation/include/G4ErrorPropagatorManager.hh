@@ -61,91 +61,91 @@ class G4Track;
 
 class G4ErrorPropagatorManager
 {
-
  public:  // with description
-
   G4ErrorPropagatorManager();
-    // Initialise data to 0. Starts the G4ErrorRunManagerHelper and
-    // G4ErrorPropagationNavigator.
+  // Initialise data to 0. Starts the G4ErrorRunManagerHelper and
+  // G4ErrorPropagationNavigator.
 
   ~G4ErrorPropagatorManager();
 
   static G4ErrorPropagatorManager* GetErrorPropagatorManager();
-    // Get only instance of G4ErrorPropagatorManager. If it does not exists,
-    // creates it
+  // Get only instance of G4ErrorPropagatorManager. If it does not exists,
+  // creates it
 
   void EventTermination();
-    // Set state to G4ErrorState_Init
+  // Set state to G4ErrorState_Init
 
   void RunTermination();
-    // Set state to G4ErrorState_Init and invoke
-    // G4ErrorRunManagerHelper::RunTermination()
+  // Set state to G4ErrorState_Init and invoke
+  // G4ErrorRunManagerHelper::RunTermination()
 
   void InitGeant4e();
-    // Initializes Geant4 and Geant4e
+  // Initializes Geant4 and Geant4e
 
   void InitTrackPropagation();
-    // Set the propagator step number to 0 and the G4ErrorState to Propagating
- 
+  // Set the propagator step number to 0 and the G4ErrorState to Propagating
+
   G4bool InitFieldForBackwards();
-    // Creates the G4ErrorMag_UsualEqRhs, that will control backwards tracking
+  // Creates the G4ErrorMag_UsualEqRhs, that will control backwards tracking
 
-  G4int Propagate( G4ErrorTrajState* currentTS, const G4ErrorTarget* target, G4ErrorMode mode = G4ErrorMode_PropForwards );
-    // Inits track propagation, invokes G4ErrorPropagator::Propagate and
-    // terminates "event"
+  G4int Propagate(G4ErrorTrajState* currentTS, const G4ErrorTarget* target,
+                  G4ErrorMode mode = G4ErrorMode_PropForwards);
+  // Inits track propagation, invokes G4ErrorPropagator::Propagate and
+  // terminates "event"
 
-  G4int PropagateOneStep( G4ErrorTrajState* currentTS,
-                          G4ErrorMode mode = G4ErrorMode_PropForwards );
-    // Invokes G4ErrorPropagator::PropagateOneStep
+  G4int PropagateOneStep(G4ErrorTrajState* currentTS,
+                         G4ErrorMode mode = G4ErrorMode_PropForwards);
+  // Invokes G4ErrorPropagator::PropagateOneStep
 
   G4bool CloseGeometry();
-    // Close Geant4 geometry
+  // Close Geant4 geometry
 
   void SetUserInitialization(G4VUserDetectorConstruction* userInit);
-    // Invokes G4ErrorRunManagerHelper to construct detector and set
-    // world volume
+  // Invokes G4ErrorRunManagerHelper to construct detector and set
+  // world volume
   void SetUserInitialization(G4VPhysicalVolume* userInit);
-    // Invokes G4ErrorRunManagerHelper to  set world volume
+  // Invokes G4ErrorRunManagerHelper to  set world volume
   void SetUserInitialization(G4VUserPhysicsList* userInit);
-    // Invokes G4ErrorRunManagerHelper to initialize physics
+  // Invokes G4ErrorRunManagerHelper to initialize physics
 
   void SetUserAction(G4UserTrackingAction* userAction);
-    // Invokes G4EventManager to set a G4UserTrackingAction
+  // Invokes G4EventManager to set a G4UserTrackingAction
   void SetUserAction(G4UserSteppingAction* userAction);
-    // Invokes G4EventManager to set a G4UserSteppingAction
+  // Invokes G4EventManager to set a G4UserSteppingAction
 
   G4String PrintG4ErrorState();
-  G4String PrintG4ErrorState( G4ErrorState state );
-    // Print Geant4e state
+  G4String PrintG4ErrorState(G4ErrorState state);
+  // Print Geant4e state
 
   G4String PrintG4State();
-  G4String PrintG4State( G4ApplicationState state );
-    // Print Geant4 state
- 
-  // Set and Get methods 
+  G4String PrintG4State(G4ApplicationState state);
+  // Print Geant4 state
+
+  // Set and Get methods
 
   G4ErrorRunManagerHelper* GetErrorRunManagerHelper() const
-    { return theG4ErrorRunManagerHelper; }
+  {
+    return theG4ErrorRunManagerHelper;
+  }
 
   void SetSteppingManagerVerboseLevel();
 
   G4ErrorPropagationNavigator* GetErrorPropagationNavigator() const
-    { return theG4ErrorPropagationNavigator; }
+  {
+    return theG4ErrorPropagationNavigator;
+  }
 
-  G4ErrorPropagator* GetPropagator() const
-    { return thePropagator; }
+  G4ErrorPropagator* GetPropagator() const { return thePropagator; }
 
  private:
-
   void StartG4ErrorRunManagerHelper();
-    // Create a G4ErrorRunManagerHelper if it does not exist and set to it
-    // the G4ErrorPhysicsList
- 
-  void StartNavigator();
-    // create a G4ErrorPropagationNavigator
- 
- private:
+  // Create a G4ErrorRunManagerHelper if it does not exist and set to it
+  // the G4ErrorPhysicsList
 
+  void StartNavigator();
+  // create a G4ErrorPropagationNavigator
+
+ private:
   static G4ThreadLocal G4ErrorPropagatorManager* theG4ErrorPropagatorManager;
 
   G4ErrorRunManagerHelper* theG4ErrorRunManagerHelper;
@@ -155,7 +155,6 @@ class G4ErrorPropagatorManager
   G4Mag_UsualEqRhs* theEquationOfMotion;
 
   G4ErrorPropagationNavigator* theG4ErrorPropagationNavigator;
-
 };
 
 #endif

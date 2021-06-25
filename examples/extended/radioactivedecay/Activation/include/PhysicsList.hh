@@ -40,10 +40,10 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
- ~PhysicsList();
+ ~PhysicsList() override;
 
 public:
-  virtual void SetCuts();
+  void SetCuts() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

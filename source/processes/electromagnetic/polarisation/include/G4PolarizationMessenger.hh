@@ -25,66 +25,59 @@
 //
 // -------------------------------------------------------------------
 //
-//
-// GEANT4 Class header file
-//
+// Geant4 Class header file
 //
 // File name:     G4PolarizationMessenger
 //
 // Author:        Andreas Schaelicke
 //
-// Creation date: 01.05.2005
-//
-// Modifications:
-//
 // Class Description:
-//
-// Provides access to general polarization information and to 
-// polarization for logical volumes through macro files.
-//
+//   Provides access to general polarization information and to
+//   polarization for logical volumes through macro files.
 
 #ifndef G4PolarizationMessenger_h
 #define G4PolarizationMessenger_h 1
 
-class G4PolarizationManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithABool;
-class G4UIcommand;
-
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4PolarizationMessenger: public G4UImessenger
+class G4PolarizationManager;
+class G4UIcmdWithABool;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
+class G4UIcommand;
+class G4UIdirectory;
+
+class G4PolarizationMessenger : public G4UImessenger
 {
-  public:
-    explicit G4PolarizationMessenger(G4PolarizationManager* runMgr);
-    ~G4PolarizationMessenger();
+ public:
+  explicit G4PolarizationMessenger(G4PolarizationManager* runMgr);
+  ~G4PolarizationMessenger() override;
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues) override;
-    G4String GetCurrentValue(G4UIcommand * command) override;
-  private:
-    G4PolarizationManager * polarizationManager;
-    
-  private: //commands
-    G4UIdirectory *             polarizationDirectory;
+  void SetNewValue(G4UIcommand* command, G4String newValues) override;
+  G4String GetCurrentValue(G4UIcommand* command) override;
 
-    G4UIdirectory *             managerDirectory;
-    G4UIcmdWithAnInteger *      verboseCmd;
-    G4UIcmdWithABool *          optActivateCmd;
-    
-    G4UIdirectory *             volumeDirectory;
-    G4UIcmdWithoutParameter *   printVolumeListCmd;
-    G4UIcommand *               setPolarizationCmd;
+  G4PolarizationManager* polarizationManager;
 
-    G4UIdirectory *             testDirectory;
-    G4UIcmdWithoutParameter *   testPolarizationTransformationCmd;
-    G4UIcmdWithoutParameter *   testInteractionFrameCmd;
+  G4PolarizationMessenger& operator=(const G4PolarizationMessenger& right) =
+    delete;
+  G4PolarizationMessenger(const G4PolarizationMessenger&) = delete;
+
+ private:
+  G4UIdirectory* polarizationDirectory;
+
+  G4UIdirectory* managerDirectory;
+  G4UIcmdWithAnInteger* verboseCmd;
+  G4UIcmdWithABool* optActivateCmd;
+
+  G4UIdirectory* volumeDirectory;
+  G4UIcmdWithoutParameter* printVolumeListCmd;
+  G4UIcommand* setPolarizationCmd;
+
+  G4UIdirectory* testDirectory;
+  G4UIcmdWithoutParameter* testPolarizationTransformationCmd;
+  G4UIcmdWithoutParameter* testInteractionFrameCmd;
 };
 
 #endif
-
-

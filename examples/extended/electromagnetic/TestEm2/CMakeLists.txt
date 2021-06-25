@@ -1,9 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.8...3.18)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20)
 project(TestEm2)
 
 #----------------------------------------------------------------------------
@@ -43,7 +40,7 @@ target_link_libraries(TestEm2 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(TestEm2_SCRIPTS
-    egs4.mac run01.mac run02.mac run03.mac TestEm2.in TestEm2.out vis.mac
+    egs4.mac run01.mac run02.mac run03.mac stepMax.mac TestEm2.in TestEm2.out vis.mac
   )
   
 foreach(_script ${TestEm2_SCRIPTS})

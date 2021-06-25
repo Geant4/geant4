@@ -34,33 +34,37 @@
 
 #include "G4TrackLogger.hh"
 
-G4TrackLogger::G4TrackLogger() : 
-  fPreviousEventID(-1)
+G4TrackLogger::G4TrackLogger()
+  : fPreviousEventID(-1)
 {}
 
-G4TrackLogger::~G4TrackLogger(){}
+G4TrackLogger::~G4TrackLogger() {}
 
-
-void G4TrackLogger::SetEventID(G4int id){
-  if (id != fPreviousEventID) {
+void G4TrackLogger::SetEventID(G4int id)
+{
+  if(id != fPreviousEventID)
+  {
     fTrackIDsSet.clear();
-    fPreviousEventID =id;
+    fPreviousEventID = id;
   }
 }
 
-G4bool G4TrackLogger::FirstEnterance(G4int trid){
+G4bool G4TrackLogger::FirstEnterance(G4int trid)
+{
   G4bool first = true;
-  G4int n = fTrackIDsSet.count(trid);
-  if (n==1) {
-    first=false;
+  G4int n      = fTrackIDsSet.count(trid);
+  if(n == 1)
+  {
+    first = false;
   }
-  else  if(n==0) {
+  else if(n == 0)
+  {
     fTrackIDsSet.insert(trid);
   }
-  else if (n>1) {
-    G4cout << "Error G4TrackLogger::FirstEnterance: " 
-	   << "more than one elm in set!" << G4endl;
-    
+  else if(n > 1)
+  {
+    G4cout << "Error G4TrackLogger::FirstEnterance: "
+           << "more than one elm in set!" << G4endl;
   }
   return first;
 }

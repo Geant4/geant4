@@ -1,9 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.8...3.18 FATAL_ERROR)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20)
 
 project(ICRPphantoms)
 
@@ -49,7 +46,7 @@ add_dependencies(ICRP110phantoms ICRPdata)
 # relies on these scripts being in the current working directory.
 #
 set(ICRPphantoms_SCRIPTS
-     female.in female_head.in female_trunk.in male.in male_head.in male_trunk.in vis.mac primary.mac ColourMap.dat openGLVis.mac
+     female.in female_head.in female_trunk.in male.in male_head.in male_trunk.in vis.mac primary.mac ColourMap.dat openGLVis.mac g4views/g4_00.g4view g4views/g4_01.g4view
 #    ICRPdata/Data.dat 
 #    "ICRPdata/ICRP110_g4dat/AF/*.g4dat"
 #    "ICRPdata/ICRP110_g4dat/AM/*.g4dat"

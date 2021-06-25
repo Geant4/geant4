@@ -89,11 +89,12 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsGS);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysicsGS::G4EmStandardPhysicsGS(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmStandardGS"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandardGS")
 {
+  SetVerboseLevel(ver);
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   param->SetMscRangeFactor(0.06);
   //  param->SetMscStepLimitType(fUseSafetyPlus); // corresponds to the error-free stepping
   //  param->SetFluo(true);
@@ -117,7 +118,7 @@ void G4EmStandardPhysicsGS::ConstructParticle()
 
 void G4EmStandardPhysicsGS::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();

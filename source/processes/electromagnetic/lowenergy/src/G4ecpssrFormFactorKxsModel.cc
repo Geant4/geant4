@@ -65,7 +65,6 @@ G4ecpssrFormFactorKxsModel::G4ecpssrFormFactorKxsModel()
       alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
       alphaDataSetMap[i]->LoadData("pixe/ecpssr/alpha/k-i02m004c02-");
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

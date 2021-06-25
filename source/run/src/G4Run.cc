@@ -23,26 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4Run implementation
 //
-//
+// Author: M.Asai, 1996
+// --------------------------------------------------------------------
 
 #include "G4Run.hh"
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include "G4StatAnalysis.hh"
 
+// --------------------------------------------------------------------
 G4Run::G4Run()
-  : runID(0)
-  , numberOfEvent(0)
-  , numberOfEventToBeProcessed(0)
-  , HCtable(0)
-  , DCtable(0)
 {
   eventVector = new std::vector<const G4Event*>;
-  // this is for FOM in G4StatAnalysis
-  G4StatAnalysis::ResetCpuClock();
+  G4StatAnalysis::ResetCpuClock();  // this is for FOM in G4StatAnalysis
 }
 
+// --------------------------------------------------------------------
 G4Run::~G4Run()
 {
   // Objects made by local thread should not be deleted by the master thread
@@ -50,8 +48,8 @@ G4Run::~G4Run()
     G4RunManager::GetRunManager()->GetRunManagerType();
   if(rmType != G4RunManager::masterRM)
   {
-    std::vector<const G4Event*>::iterator itr = eventVector->begin();
-    for(; itr != eventVector->end(); itr++)
+    for(auto itr = eventVector->cbegin();
+             itr != eventVector->cend(); ++itr)
     {
       delete *itr;
     }
@@ -59,16 +57,25 @@ G4Run::~G4Run()
   delete eventVector;
 }
 
-void G4Run::RecordEvent(const G4Event*) { numberOfEvent++; }
+// --------------------------------------------------------------------
+void G4Run::RecordEvent(const G4Event*)
+{
+  ++numberOfEvent;
+}
 
+// --------------------------------------------------------------------
 void G4Run::Merge(const G4Run* right)
 {
   numberOfEvent += right->numberOfEvent;
-  std::vector<const G4Event*>::iterator itr = right->eventVector->begin();
-  for(; itr != right->eventVector->end(); itr++)
+  for(auto itr = right->eventVector->cbegin();
+           itr != right->eventVector->cend(); ++itr)
   {
     eventVector->push_back(*itr);
   }
 }
 
-void G4Run::StoreEvent(G4Event* evt) { eventVector->push_back(evt); }
+// --------------------------------------------------------------------
+void G4Run::StoreEvent(G4Event* evt)
+{
+  eventVector->push_back(evt);
+}

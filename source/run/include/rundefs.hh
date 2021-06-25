@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // Defines for Windows DLLs import/export
 //
-
-#ifndef RUNDEFS_HH
-#define RUNDEFS_HH
+// Author: G.Cosmo (CERN), 5 April 2013
+// --------------------------------------------------------------------
+#ifndef G4RUNDEFS_HH
+#define G4RUNDEFS_HH 1
 
 #include "G4Types.hh"
 

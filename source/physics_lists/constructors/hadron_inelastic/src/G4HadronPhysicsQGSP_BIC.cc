@@ -70,7 +70,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
@@ -85,9 +84,11 @@
 
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC);
 
-G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int)
+G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int verb)
     : G4HadronPhysicsQGSP_BIC("hInelastic QGSP_BIC",true) 
-{}
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+}
 
 G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool)
     :  G4VPhysicsConstructor(name)
@@ -277,7 +278,7 @@ void G4HadronPhysicsQGSP_BIC::ConstructProcess()
   maxBIC_proton  = maxBIC_neutron  = maxBERT_pik = 
     param->GetMaxEnergyTransitionFTF_Cascade();
 
-  if(G4Threading::IsMasterThread()) {
+  if(G4Threading::IsMasterThread() && param->GetVerboseLevel() > 0) {
       DumpBanner();
   }
   CreateModels();

@@ -42,12 +42,12 @@ class B5MagneticField : public G4MagneticField
   public:
     B5MagneticField();
     virtual ~B5MagneticField();
-    
+
     virtual void GetFieldValue(const G4double point[4],double* bField ) const;
-    
+
     void SetField(G4double val) { fBy = val; }
     G4double GetField() const { return fBy; }
-    
+
   private:
     void DefineCommands();
 

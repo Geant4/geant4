@@ -90,7 +90,6 @@
 
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4CrossSectionInelastic.hh"
-#include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4ParticleHPCaptureData.hh"
@@ -107,9 +106,11 @@
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsShielding);
 
 
-G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
+G4HadronPhysicsShielding::G4HadronPhysicsShielding(G4int verb)
   :  G4HadronPhysicsShielding()
-{} 
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+} 
 
 G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name)
   :  G4HadronPhysicsShielding(name, false)
@@ -121,14 +122,17 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
   minBERT_neutron = 19.9*CLHEP::MeV;
 }
 
-G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4int) 
+G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4int verb)
   :  G4HadronPhysicsShielding(name, false)
-{} 
+{
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
+} 
 
-G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4int,
+G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4int verb,
                           G4double minFTFPEnergy, G4double maxBertiniEnergy)
   :  G4HadronPhysicsShielding(name, false)
 {
+  G4HadronicParameters::Instance()->SetVerboseLevel(verb);
   minFTFP_pion = minFTFPEnergy;
   maxBERT_pion = maxBertiniEnergy;
   minFTFP_kaon = minFTFPEnergy;
@@ -194,7 +198,8 @@ void G4HadronPhysicsShielding::Neutron()
 
 void G4HadronPhysicsShielding::ConstructProcess()
 {
-  if ( G4Threading::IsMasterThread() ) {
+  if ( G4Threading::IsMasterThread() && 
+       G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
     DumpBanner();
   }
   CreateModels();

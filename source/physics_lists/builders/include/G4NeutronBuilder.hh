@@ -43,9 +43,9 @@
 #include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4NeutronFissionProcess.hh"
+#include "G4NeutronCaptureProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 #include <vector>
 
@@ -60,9 +60,9 @@ class G4NeutronBuilder : public G4PhysicsBuilderInterface
     virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
-    G4NeutronInelasticProcess * theNeutronInelastic;
-    G4HadronFissionProcess * theNeutronFission;
-    G4HadronCaptureProcess  * theNeutronCapture;
+    G4HadronInelasticProcess * theNeutronInelastic;
+    G4NeutronFissionProcess * theNeutronFission;
+    G4NeutronCaptureProcess  * theNeutronCapture;
     
     std::vector<G4VNeutronBuilder *> theModelCollections;
 

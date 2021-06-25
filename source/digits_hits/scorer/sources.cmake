@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4detscorer
-# Package: Geant4.src.G4digits_hits.G4detscorer
-#------------------------------------------------------------------------------
+# - G4detscorer module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4detscorer
-  HEADERS
+geant4_add_module(G4detscorer
+  PUBLIC_HEADERS
     G4PSCellCharge.hh
     G4PSCellCharge3D.hh
     G4PSCellFlux.hh
@@ -117,27 +112,8 @@ geant4_define_module(NAME G4detscorer
     G4SDKineticEnergyFilter.cc
     G4SDNeutralFilter.cc
     G4SDParticleFilter.cc
-    G4SDParticleWithEnergyFilter.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4detector
-    G4digits
-    G4geometrymng
-    G4globman
-    G4hits
-    G4intercoms
-    G4materials
-    G4navigation
-    G4partman
-    G4track
-    G4volumes
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4intercoms
-    G4materials
-    G4particles
-    G4track
-)
+    G4SDParticleWithEnergyFilter.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4detscorer
+  PUBLIC G4detector G4csg G4partman G4globman
+  PRIVATE G4track G4volumes G4geometrymng)

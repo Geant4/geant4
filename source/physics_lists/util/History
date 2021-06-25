@@ -13,16 +13,24 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-April-2021 Ben Morgan             (phys-util-V10-07-01)
+- Migrate build to modular CMake API
+
+13-April-2021, Alberto Ribon            (phys-util-V10-07-00)
+-  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util
+   and hadronic/model/management (that have been now deleted, with their
+   classes moved to hadronic/util and hadronic/management).
+
 09-October-2020, Gabriele Cosmo         (phys-util-V10-06-10)
 - Added new dependencies to "processes/electromagnetic/utils" and
   "processes/hadronic/models/de_excitation/management" modules in
   GNUMakefile.
 
 07-October-2020, Vladimir Ivanchenko    (phys-util-V10-06-09)
-- G4PhysListUtil - added utility method InitialiseParameters() 
+- G4PhysListUtil - added utility method InitialiseParameters()
 
 22-August-2020, Vladimir Ivanchenko     (phys-util-V10-06-08)
-- G4HadProcesses - added optional GG nucl-nucl cross section 
+- G4HadProcesses - added optional GG nucl-nucl cross section
 
 21-August-2020, Vladimir Ivanchenko     (phys-util-V10-06-07)
 - G4HadProcesses - use G4PhysListUtil to access processes
@@ -37,13 +45,13 @@ introduced in the code and keeptrack of all tags.
   for pi0 and Sigma0) because they decay too quickly.
 
 19-July-2020, Vladimir Ivanchenko       (phys-util-V10-06-05)
-- G4HadParticles - subdivide for different methods hyperons and 
+- G4HadParticles - subdivide for different methods hyperons and
     anti-hyperons
 
 11-July-2020, Vladimir Ivanchenko       (phys-util-V10-06-04)
 - G4HadProcesses - new utility class providing access to hadronic
     processes and addition of a cross section per particle type
-    and hadronic process; Using this class it is possible to 
+    and hadronic process; Using this class it is possible to
     customise hadronic cross sections
 
 01-July-2020, Vladimir Ivanchenko       (phys-util-V10-06-03)

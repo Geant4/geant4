@@ -38,7 +38,7 @@
 
 class G4HCofThisEvent;
 
-template  <typename T>
+template <typename T>
 class G4TScoreNtupleWriterMessenger;
 class G4HCofThisEvent;
 
@@ -50,50 +50,50 @@ class G4HCofThisEvent;
 // the analysis manager type is defined via template.
 //
 // An ntuple with three columns is created for each primitive scorer:
-// int column - eventNumber 
+// int column - eventNumber
 // int column - copyNumber
 // double column - scored value
 
 template <typename T>
 class G4TScoreNtupleWriter : public G4VScoreNtupleWriter
 {
-  public: 
-    G4TScoreNtupleWriter();
-    virtual ~G4TScoreNtupleWriter();
-    
-    // methods
-    virtual G4bool Book(G4HCofThisEvent* hce);
-    virtual void OpenFile();
-    virtual void Fill(G4HCofThisEvent* hce, G4int eventNumber);
-    virtual void Write();
+ public:
+  G4TScoreNtupleWriter();
+  virtual ~G4TScoreNtupleWriter();
 
-    // set methods
-    void SetFileName(const G4String& fileName);
-    void SetVerboseLevel(G4int value);
+  // methods
+  virtual G4bool Book(G4HCofThisEvent* hce);
+  virtual void OpenFile();
+  virtual void Fill(G4HCofThisEvent* hce, G4int eventNumber);
+  virtual void Write();
 
-    // get methods
-    G4String GetFileName() const   { return fFileName; }
-    G4int GetVerboseLevel() const  { return fVerboseLevel; }
+  // set methods
+  void SetFileName(const G4String& fileName);
+  void SetVerboseLevel(G4int value);
 
-  protected:
-    // methods
-    virtual G4VScoreNtupleWriter* CreateInstance() const;
+  // get methods
+  G4String GetFileName() const { return fFileName; }
+  G4int GetVerboseLevel() const { return fVerboseLevel; }
 
-  private:
-    // methods
-    void CreateAnalysisManager();
+ protected:
+  // methods
+  virtual G4VScoreNtupleWriter* CreateInstance() const;
 
-    // data members
-    G4TScoreNtupleWriterMessenger<T>* fMessenger;
-    std::vector<G4int>  fHCIds;
-    T*       fAnalysisManager;
-    G4String fFileName;
-    G4int    fVerboseLevel;
-    G4bool   fHasAnalysisManager;
-    G4bool   fHasAnalysisFile;
-    G4bool   fIsBooked;
-    G4bool   fIsInitialized;
-    G4int    fFirstNtupleId;
+ private:
+  // methods
+  void CreateAnalysisManager();
+
+  // data members
+  G4TScoreNtupleWriterMessenger<T>* fMessenger;
+  std::vector<G4int> fHCIds;
+  T* fAnalysisManager;
+  G4String fFileName;
+  G4int fVerboseLevel;
+  G4bool fHasAnalysisManager;
+  G4bool fHasAnalysisFile;
+  G4bool fIsBooked;
+  G4bool fIsInitialized;
+  G4int fFirstNtupleId;
 };
 
 #include "G4TScoreNtupleWriter.icc"

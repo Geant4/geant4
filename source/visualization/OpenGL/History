@@ -16,6 +16,72 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 June 2021  John Allison  (opengl-V10-07-09)
+- Requires greps-V10-07-07 (new method AddCompound (const G4Mesh&)).
+- Requires modeling-V10-07-09 (new class G4Mesh).
+- Requires visman-V10-07-10 (new default method and new commands).
+- G4OpenGLSceneHandler:
+  o Implement AddCompound (const G4Mesh&):
+    Turns nested parameterisations into polymarkers of dots - much
+    improved speed.
+- G4OpenGLStoredViewer.cc and G4OpenGLStoredQtViewer.cc:
+  o Force kernel visit if special mesh rendering parameters change.
+
+28 May 2021 Ben Morgan (opengl-V10-07-08)
+- Migrate to modular CMake build
+
+15 April 2021  Guy Barrand (opengl-V10-07-07)
+- G4OpenGLWin32Viewer: fixed occasional crash with G4UIWin32 when creating
+  viewer from UI command: avoid indirect call to DrawView() while still within
+  CreateMainWindow().
+
+12 April 2021  John Allison (opengl-V10-07-06)
+- Comment out makeCurrent in ~G4OpenGLImmediate/StoredQtViewer:
+  o Prevents red-button crash.
+
+29 March 2021  John Allison (opengl-V10-07-05)
+- G4OpenGLQtViewer::addNonPVSceneTreeElement:
+  Special case for markers - use Info() if non-empty for modelShortName,
+  the name that appears in Qt's scene tree. This allows the user to design
+  markers, e.g., a list of points, and give them a name that relates to the
+  providence of the points, e.g., a particular material or geometry component.
+
+11 March 2021  Gabriele Cosmo (opengl-V10-07-04)
+- Enable extended WIN32 window in G4OpenGLWin32Viewer.
+  Based on contribution by O.Pena-Rodrigues in GitHub PR#23.
+- Removed [commented out] DrawView() implementation in G4OpenGLWin32Viewer.
+
+09 March 2021  John Allison (opengl-V10-07-03)
+- Removed Wt.
+- G4OpenGLStoredQtViewer.cc:
+  o Move fViewId<0 check to top of constructor to pick up errors in
+    base class construction.
+
+04 March 2021  Gabriele Cosmo (opengl-V10-07-02)
+- Implemented WindowProc() function in G4OpenGLWin32Viewer for the Win32
+  OpenGL driver (function that was commented out). It is now possible to
+  change the Zoom and the orientation using the mouse (like in the Qt driver).
+  Based on GitHub PR#20, contributed by Ovidio Pena Rodriguez.
+- Added [commented out] DrawView() implementation in G4OpenGLWin32Viewer.
+
+06 January 2021  John Allison (opengl-V10-07-01)
+- Remove deprecated /vis/ogl/set/ commands. These have been deprecated
+  since 2016. Since that time they have all printed a message, giving the
+  new command. All examples have been checked for use of the deprecated
+  commands, which have been replaced with the new ones. The commands
+  involved are:
+  o All commands connected with a time window. Use equivalent
+    /vis/viewer/set/timeWindow commands.
+  o "/vis/ogl/set/eventsDrawInterval <N> is replaced by
+    "/vis/ogl/flushAt NthPrimitive <N>".
+
+30 December 2020  John Allison (openGL-V10-07-00)
+- G4OpenGLViewerMessenger: Remove deprecated /vis/ogl/set commands.
+  o /vis/ogl/set/eventsDrawInterval: use /vis/ogl/flushAt
+  o /vis/ogl/set/<time-interval-related-command>: use related
+    /vis/viewer/set/timeWindow command.
+  o All above commands have been deprecated (with a message) since 2017.
+
 16 November 2020 Gabriele Cosmo (OpenGL-V10-06-13)
 - Fixed typos in printed-out text. Addressing problem report #2285.
 

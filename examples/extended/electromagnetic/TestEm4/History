@@ -13,7 +13,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+25-05-21 mma (testem4-V10-07-01)
+- remove local SteppingVerbose
+     
+29-04-21 mma (testem4-V10-07-00)
+- Migrating to G4RunManagerFactory 
+- local SteppingVerbose inherits from G4SteppingVerboseWithUnits.
+  
 28-08-20 I. Hrivnacova (testem4-V10-06-01)
 - Updated README: removed paw instructions (as the HBOOK output
   is not supported anymore)

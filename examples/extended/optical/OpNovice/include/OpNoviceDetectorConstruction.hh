@@ -38,16 +38,25 @@
 #include "G4VUserDetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+class OpNoviceDetectorConstructionMessenger;
 class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
   OpNoviceDetectorConstruction();
   ~OpNoviceDetectorConstruction();
-
   G4VPhysicalVolume* Construct() override;
-
- private:
+  void SetDumpgdml(G4bool dumpgdml);
+  G4bool IsDumpgdml() const;
+  void SetVerbose(G4bool verbose);
+  G4bool IsVerbose() const;
+  void SetDumpgdmlFile(G4String DumpgdmlFile);
+  G4String GetDumpgdmlFile() const;
+  
+ private:  
+  G4double fWorld_x;
+  G4double fWorld_y;
+  G4double fWorld_z;
+  
   G4double fExpHall_x;
   G4double fExpHall_y;
   G4double fExpHall_z;
@@ -59,6 +68,12 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
   G4double fBubble_x;
   G4double fBubble_y;
   G4double fBubble_z;
+  
+  G4String DumpgdmlFile;
+  G4bool verbose;
+  G4bool dumpgdml;
+
+  OpNoviceDetectorConstructionMessenger* fDetectorMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

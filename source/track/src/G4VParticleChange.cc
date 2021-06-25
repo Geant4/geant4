@@ -237,21 +237,21 @@ void G4VParticleChange::DumpInfo() const
   G4cout << "        G4ParticleChange Information  " << std::setw(20) << G4endl;
   G4cout << "      -----------------------------------------------" << G4endl;
 
-  G4cout << "        # of 2ndaries       : " << std::setw(20)
+  G4cout << "        # of secondaries    : " << std::setw(20)
          << theNumberOfSecondaries << G4endl;
 
-  if(theNumberOfSecondaries > 0)
+  if (theNumberOfSecondaries > 0)
   {
-    G4cout << "        Pointer to 2ndaries : " << std::setw(20)
+    G4cout << "      Pointer to 2ndaries : " << std::setw(20)
            << GetSecondary(0) << G4endl;
-    G4cout << "        (Showed only 1st one)" << G4endl;
+    G4cout << "       (Showed only 1st one)" << G4endl;
   }
   G4cout << "      -----------------------------------------------" << G4endl;
 
   G4cout << "        Energy Deposit (MeV): " << std::setw(20)
          << theLocalEnergyDeposit / MeV << G4endl;
 
-  G4cout << "        Non-ionizing Energy Deposit (MeV): " << std::setw(20)
+  G4cout << "    Non-ionizing Energy Deposit (MeV): " << std::setw(11)
          << theNonIonizingEnergyDeposit / MeV << G4endl;
 
   G4cout << "        Track Status        : " << std::setw(20);
@@ -280,17 +280,17 @@ void G4VParticleChange::DumpInfo() const
     G4cout << " PostponeToNextEvent";
   }
   G4cout << G4endl;
-  G4cout << "        True Path Length (mm) : " << std::setw(20)
+  G4cout << "        True Path Length (mm) : " << std::setw(18)
          << theTrueStepLength / mm << G4endl;
-  G4cout << "        Stepping Control      : " << std::setw(20)
+  G4cout << "        Stepping Control    : " << std::setw(20)
          << theSteppingControlFlag << G4endl;
   if(theFirstStepInVolume)
   {
-    G4cout << "    First Step In the voulme  : " << G4endl;
+    G4cout << "                              First step in volume" << G4endl;
   }
   if(theLastStepInVolume)
   {
-    G4cout << "    Last Step In the voulme  : " << G4endl;
+    G4cout << "                               Last step in volume" << G4endl;
   }
   G4cout.precision(olprc);
 }

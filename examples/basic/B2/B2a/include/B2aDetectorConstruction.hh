@@ -65,7 +65,7 @@ class B2aDetectorConstruction : public G4VUserDetectorConstruction
     // methods
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
-  
+
     // data members
     G4int fNbOfChambers;
 
@@ -79,10 +79,10 @@ class B2aDetectorConstruction : public G4VUserDetectorConstruction
 
     B2aDetectorMessenger*  fMessenger;   // messenger
 
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
                                          // magnetic field messenger
-    
-    G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps 
+
+    G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

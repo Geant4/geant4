@@ -56,21 +56,21 @@ class G4Polyhedra;
 ///  They are spaced an equal distance apart, starting from given location.
 
 class B2bChamberParameterisation : public G4VPVParameterisation
-{ 
+{
   public:
-  
-    B2bChamberParameterisation(G4int    noChambers, 
-                              G4double startZ, 
+
+    B2bChamberParameterisation(G4int    noChambers,
+                              G4double startZ,
                               G4double spacing,
-                              G4double widthChamber, 
+                              G4double widthChamber,
                               G4double lengthInitial,
                               G4double lengthFinal );
 
     virtual ~B2bChamberParameterisation();
-   
+
     void ComputeTransformation (const G4int copyNo,
                                 G4VPhysicalVolume* physVol) const;
-    
+
     void ComputeDimensions (G4Tubs & trackerLayer, const G4int copyNo,
                             const G4VPhysicalVolume* physVol) const;
 
@@ -103,12 +103,12 @@ class B2bChamberParameterisation : public G4VPVParameterisation
 
   private:
 
-    G4int    fNoChambers;   
+    G4int    fNoChambers;
     G4double fStartZ;
     G4double fHalfWidth;        //  The half-width of each tracker chamber
     G4double fSpacing;          //  The distance between the chambers' center
-    G4double fRmaxFirst;        //  The first half-length 
-    G4double fRmaxIncr;         //  The Increment for the half-length 
+    G4double fRmaxFirst;        //  The first half-length
+    G4double fRmaxIncr;         //  The Increment for the half-length
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

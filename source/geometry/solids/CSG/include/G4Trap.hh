@@ -174,6 +174,12 @@ class G4Trap : public G4CSGSolid
     inline TrapSidePlane GetSidePlane( G4int n ) const;
     inline G4ThreeVector GetSymAxis() const;
 
+    inline G4double GetPhi() const;
+    inline G4double GetTheta() const;
+    inline G4double GetAlpha1() const;
+    inline G4double GetAlpha2() const;   
+      // Obtain (re)computed values of original parameters
+   
   // Modifiers
 
     void SetAllParameters ( G4double pDz,

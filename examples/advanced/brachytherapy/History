@@ -7,6 +7,15 @@
 
                       Category History file
                       ---------------------
+24.05.2021 - B. Morgan; brachy-V10-07-01
+             Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+12.02.2021 - S. Guatelli; brachy-V10-07-00
+             Cleaning of the code. Use C++11 keywords and patterns.
+             Remove BrachyMaterial class. Materials implemented now
+             using NIST Material Manager of Geant4. Remove SetCuts from
+             the local PhysicsList as it is not thread-safe.
+
 12.11.2020 - S. Guatelli; brachy-V10-06-03
              Migration to G4RunManagerFactory
 

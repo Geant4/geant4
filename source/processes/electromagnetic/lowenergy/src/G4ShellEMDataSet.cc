@@ -59,27 +59,29 @@
 #include <fstream>
 #include <sstream>
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4ShellEMDataSet::G4ShellEMDataSet(G4int zeta, G4VDataSetAlgorithm* algo, 
 				   G4double eUnit, 
 				   G4double dataUnit)
-  :
-  z(zeta),
+  : 
   algorithm(algo),
   unitEnergies(eUnit),
-  unitData(dataUnit)
+  unitData(dataUnit),
+  z(zeta)
 {
-  if (algorithm == 0) G4Exception("G4ShellEMDataSet::G4ShellEMDataSet()","em0007",FatalErrorInArgument, "Interpolation == 0");
+  if (algorithm == nullptr) 
+    G4Exception("G4ShellEMDataSet::G4ShellEMDataSet()","em0007",
+		FatalErrorInArgument, "Interpolation == 0");
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4ShellEMDataSet::~G4ShellEMDataSet()
 {
   CleanUpComponents();
   if (algorithm) delete algorithm;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4ShellEMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
   // Returns the sum over the shells corresponding to e
@@ -97,8 +99,9 @@ G4double G4ShellEMDataSet::FindValue(G4double energy, G4int /* componentId */) c
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ShellEMDataSet::PrintData(void) const
+void G4ShellEMDataSet::PrintData() const
 {
   const size_t n = NumberOfComponents();
 
@@ -115,13 +118,13 @@ void G4ShellEMDataSet::PrintData(void) const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ShellEMDataSet::SetEnergiesData(G4DataVector* energies, 
 				       G4DataVector* data, 
 				       G4int componentId)
 {
-  G4VEMDataSet* component = components[componentId];
- 
+  G4VEMDataSet* component = components[componentId]; 
   if (component)
     {
       component->SetEnergiesData(energies, data, 0);
@@ -133,6 +136,7 @@ void G4ShellEMDataSet::SetEnergiesData(G4DataVector* energies,
   G4Exception("G4ShellEMDataSet::SetEnergiesData()","em0008", FatalErrorInArgument ,msg);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ShellEMDataSet::SetLogEnergiesData(G4DataVector* energies,
                                           G4DataVector* data,
@@ -140,21 +144,19 @@ void G4ShellEMDataSet::SetLogEnergiesData(G4DataVector* energies,
                                           G4DataVector* log_data,
                                           G4int componentId)
 {
-  G4VEMDataSet* component = components[componentId];
- 
+  G4VEMDataSet* component = components[componentId]; 
   if (component)
     {
       component->SetLogEnergiesData(energies, data, log_energies, log_data, 0);
       return;
     }
 
-  G4String msg = "component " + (G4String)componentId + " not found";
- 
-  G4Exception("G4ShellEMDataSet::SetLogEnergiesData()","em0008", FatalErrorInArgument ,msg);
-
+  G4String msg = "component " + (G4String)componentId + " not found"; 
+  G4Exception("G4ShellEMDataSet::SetLogEnergiesData()","em0008", 
+	      FatalErrorInArgument ,msg);
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4ShellEMDataSet::LoadData(const G4String& file)
 {
@@ -198,7 +200,10 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
 	{
 	  if ((k%nColumns == 0) && (orig_shell_energies != 0) )
 	    {
-	     AddComponent(new G4EMDataSet(shellIndex, orig_shell_energies, orig_shell_data, log_shell_energies, log_shell_data, algorithm->Clone(), unitEnergies, unitData));
+	     AddComponent(new G4EMDataSet(shellIndex, orig_shell_energies, 
+					  orig_shell_data, log_shell_energies, 
+					  log_shell_data, algorithm->Clone(), 
+					  unitEnergies, unitData));
 	      orig_shell_energies = 0;
 	      orig_shell_data = 0;
               log_shell_energies = 0;
@@ -229,7 +234,6 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
       else k = 1;
     }
   while (a != -2);  // End of file
- 
 
   delete orig_shell_energies;
   delete orig_shell_data;
@@ -239,6 +243,7 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
 {
@@ -267,7 +272,6 @@ G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
   do
     {
       in >> a;
-
       // The file is organized into four columns:
       // 1st column contains the values of energy
       // 2nd column contains the corresponding data value
@@ -278,7 +282,9 @@ G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
 	{
 	  if ((k%nColumns == 0) && (orig_shell_energies != 0) )
 	    {
-	     AddComponent(new G4EMDataSet(shellIndex, orig_shell_energies, orig_shell_data, algorithm->Clone(), unitEnergies, unitData));
+	     AddComponent(new G4EMDataSet(shellIndex, orig_shell_energies, 
+					  orig_shell_data, algorithm->Clone(), 
+					  unitEnergies, unitData));
 	      orig_shell_energies = 0;
 	      orig_shell_data = 0;
 	    }
@@ -311,7 +317,7 @@ G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
   return true;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool G4ShellEMDataSet::SaveData(const G4String& file) const
 {
@@ -384,8 +390,9 @@ G4bool G4ShellEMDataSet::SaveData(const G4String& file) const
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ShellEMDataSet::CleanUpComponents(void)
+void G4ShellEMDataSet::CleanUpComponents()
 {
   while (!components.empty())
     {
@@ -394,6 +401,7 @@ void G4ShellEMDataSet::CleanUpComponents(void)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4String G4ShellEMDataSet::FullFileName(const G4String& fileName) const
 {

@@ -7,12 +7,27 @@
             History file for hadronic/models/im_r_matrix
             --------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21-May 2021, Vladimir Ivanchenko          had-im_r_V10-07-02
+- G4XnpElasticLowE, G4XNNElasticLowE, G4XnpTotalLowE - substituted
+  G4PhysicsLnVector by G4PhysicsLogVector - nothing changed in the code,
+    only duplicated class name is substituted
+
+16-April 2021, Ben Morgan                 hadr-im_r-V10-07-01
+- Migrate build to modular CMake API
+
+13-April 2021, Alberto Ribon              hadr-im_r-V10-07-00
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
 
 19-December 2017, Gabriele Cosmo          hadr-im_r-V10-04-00
 - Fixed self-consistency in headers (missing #include) in G4CrossSectionBuffer,
@@ -34,25 +49,25 @@ code and to keep track of all tags.
 - Replace G4float by G4double
 
 30-October 2015, Gunter Folger            had-im_r-V10-01-03
-- while loop checking: 
+- while loop checking:
     - src/G4MesonAbsorption.cc  finite loop.
-    - src/G4AngularDistribution{PP,NP}.cc: couter in each while, 
-	     with an G4Exception is case the loop terminates due to counter, 
+    - src/G4AngularDistribution{PP,NP}.cc: couter in each while,
+	     with an G4Exception is case the loop terminates due to counter,
 		  with properly ordered data, this cannot happen.
-    - several files with 'while' in comment have words slightly changed ;)		  
-	  
+    - several files with 'while' in comment have words slightly changed ;)
+
 28-October 2015, Gunter Folger            had-im_r-V10-01-02
--  replace std::{exp,log} with G4{Exp,Log} and std::pow with the 
+-  replace std::{exp,log} with G4{Exp,Log} and std::pow with the
      proper G4Pow method
-	  
+
 13-May 2015, Vladimir Ivanchenko         had-im_r-V10-01-01
-- G4Clebsch is moved to util 
+- G4Clebsch is moved to util
 
 27-April 2015, Gunter Folger             had-im_r-V10-01-00
 - Fix for compiler warning (clang 3.6) on expression with side effects
   - G4CollisionManager::Print() use const & as argument to typeid()
   - G4CollisionInitialState::BCAction(): return pointer to const object.
-  
+
 16-October-2014 Andrea Dotti	         had-im_r-V10-00-09
 - Bug fixing for DRD: correctly destroy mutex after initialization
 
@@ -64,7 +79,7 @@ code and to keep track of all tags.
 - G4VScatteringCollision.cc, G4ConcreteN*.cc:
   - dtor should delete and not new data member; may fix some leaks
   - improve formatting
-  
+
 01-August-2014 Gunter Folger             had-im_r-V10-00-06
 - G4VCrossSectionSource: remove unused GetTransversePionMass() and
   GetMinStringMass()
@@ -74,9 +89,9 @@ code and to keep track of all tags.
 
 18-July-2014 Andrea Dotti	       had-im_r-V10-00-05
 - Improve thread safety (DRD) mark as static some "const" in src code
-- Fix data-race issue in G4CollisionComposite, when shared there 
+- Fix data-race issue in G4CollisionComposite, when shared there
   are concurrent accesses to G4CollisionBuffer. The simplest solution
-  is to add a lock on a mutex. 
+  is to add a lock on a mutex.
 
 17-July-2014 Andrea Dotti              had-im_r-V10-00-04
 - Sharing of static tables between threads (G4Scatterer)
@@ -84,15 +99,15 @@ code and to keep track of all tags.
 10-June-2014 Gunter Folger             had-im_r-V10-00-03
 - Fix out of bound error in G4DetailedBalancePhaseSpaceIntegral, reported by
   coverity.
-  
+
 21-May-2014 Andrea Dotti               had-im_r-V10-00-02
-- Do not delete physics vector explictly in destructors since 
+- Do not delete physics vector explictly in destructors since
   they are managed by allocators in
   G4XNNElasticLowE, G4XnpElasticLowE, G4XnpTotalLowE
 
 20-May-2014 Andrea Dotti               had-im_r-V10-00-01
-- Do not delete physics vector explictly in destructors since 
-  they are managed by allocators in G4XResonance and 
+- Do not delete physics vector explictly in destructors since
+  they are managed by allocators in G4XResonance and
   G4XAnnihilationChannel
 
 15-April-2014 Gunter Folger            had-im_r-V10-00-00
@@ -102,21 +117,21 @@ code and to keep track of all tags.
 - Changes for const G4ParticleDefintion* in use with G4KineticTrack.
 
 07-April-2014 Gunter Folger            had-im_r-V09-06-07
-- revert changes from revision 79352 to G4Scatterer. 
+- revert changes from revision 79352 to G4Scatterer.
 
 05-March-2014 Gunter Folger            had-im_r-V09-06-06
 - remove const_cast in use of G4ParticleDefintion
- 
-24-Feb-2014 Andrea Dotti             
+
+24-Feb-2014 Andrea Dotti
 - Made G4Scatterer data field G4CollisionVector shared among instances
-  of G4Scatterer. Marked methods as const when possible. Added 
+  of G4Scatterer. Marked methods as const when possible. Added
   thread-safety protection for filling and deleting of G4CollisionVector.
 
 29-Jul-2013 Hisaya Kurashige            had-im_r-V09-06-05
 - remove inclusion of G4ShortLivedTable.hh in G4ResonaceNames.cc
 
 12-Jul-2013 Gunter Folger               hadr-im_r-V09-06-04
-- correct typo 
+- correct typo
 
 12-Jul-2013 Gunter Folger               hadr-im_r-V09-06-03
 - fixes for coverity.
@@ -126,9 +141,9 @@ code and to keep track of all tags.
 
 08-Jan-2013 Gunter Folger               hadr-im_r-V09-06-01
 - Bugfix in G4MesonAbsorption, bug 1416; loss of optimisation shortcut.
-- Bugfix in G4CollisionMesonBaryonElastic::IsInCharge, bug 1415, method 
-   always returned false, effectively blocking meson-baryon elastic. 
-   Expect to change distributions. 
+- Bugfix in G4CollisionMesonBaryonElastic::IsInCharge, bug 1415, method
+   always returned false, effectively blocking meson-baryon elastic.
+   Expect to change distributions.
 
 21-Nov-2012 Gunter Folger               hadr-im_r-V09-06-00
 - Bugfix in G4Scatterer::GetTimeToInteraction(), bug 1334.
@@ -155,7 +170,7 @@ code and to keep track of all tags.
 
 29-May-2012 Gunter Folger		 hadr-im_r-V09-05-03
 -  Fix coverity warnings, part 2; fixed ~20 more warnings, mostly not
-     initialized data members, or dead code. 
+     initialized data members, or dead code.
      Affected 25 source and 18 header files
 
 29-May-2012 Gunter Folger		 hadr-im_r-V09-05-02
@@ -163,14 +178,14 @@ code and to keep track of all tags.
 
 18-May-2012 Gunter Folger		 hadr-im_r-V09-05-01
 -  Fix coverity warnings, part 1: includes done, src started.
- 
+
 03-Feb-2012 Gunter Folger		 hadr-im_r-V09-05-00
 -  Incorporate new data from extended nucleon-nucleon elastic scattering data,
     i.e. SAID evaluation.
     These double differential elastic cross sections now cover energies up to 5 GeV.
 	Data copied from G4LE{np,pp}..., affects
 	G4AngularDistribution{NP,PP}{,Data}.hh
-	 
+
 11-Nov-2011Gunter Folger		 hadr-im_r-V09-04-01
 -  Move to new style G4Exception
 
@@ -181,7 +196,7 @@ code and to keep track of all tags.
 -  create branch with developments from head, never released yet. Take care,
     this also lost some changes made on the branch going to releases!
 -  take release version back to HEAD
--  remove empty G4VScatterer.cc  
+-  remove empty G4VScatterer.cc
 
 30-Nov-2009 Gunter Folger                hadr-im_r-V09-02-02
 -  Fix compilation error in gcc 4.3 (typeinfo)
@@ -191,16 +206,16 @@ code and to keep track of all tags.
    in place of particle name
 
 19-Nov-2009 Gunter Folger/Tatsumi Koi    hadr-im_r-V09-02-00
--  G4CollisionComposite.cc: Fix for reproducability provided by Tatsumi. 
+-  G4CollisionComposite.cc: Fix for reproducability provided by Tatsumi.
    Removed the dependance of the energy grid of the cross section set
    on the order of the particles by forcing heavier particle to be at rest
    when caching the cross section.
 
 8-Dec-2008  Gunter Folger           hadr-im_r-V09-01-01
--  G4XNNElasticLowE:  remove use of ParticleDefinition object in dtor 
+-  G4XNNElasticLowE:  remove use of ParticleDefinition object in dtor
 
 5-Dec-2008  Gunter Folger           hadr-im_r-V09-01-00
--  G4XNNTotalLowE:  remove use of ParticleDefinition object in dtor 
+-  G4XNNTotalLowE:  remove use of ParticleDefinition object in dtor
 
 15-Nov-2007  Gunter Folger          hadr-im_r_V09-00-03
 ----------------------------------------------------------------
@@ -212,10 +227,10 @@ code and to keep track of all tags.
 -  Incorporate change by Dennis for G4CollisionComposite.cc: SUN compiler
      warning  of hiding variable components.
      hadr-im_r_V09-00-01 had many files from head.
-     
+
 5 Jul 2007 Dennis Wright  (hadr-im_r_V09-00-01)
 -----------------------------------------------
-- G4CollisionComposite.cc : remove duplicate declaration of local variable 
+- G4CollisionComposite.cc : remove duplicate declaration of local variable
      "components" to avoid Sun compiler hiding warning
 
 - use 2006 versions of G4Scatterer.cc and G4CollisionComposite.hh

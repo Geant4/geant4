@@ -48,4 +48,4 @@ class B1ActionInitialization : public G4VUserActionInitialization
 
 #endif
 
-    
+

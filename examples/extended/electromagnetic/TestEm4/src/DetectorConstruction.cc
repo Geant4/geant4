@@ -63,7 +63,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4int ncomponents, natoms;
  
   G4Element* C = new G4Element("Carbon"  ,"C" , z= 6., a= 12.01*g/mole);
-  G4Element* F = new G4Element("Fluorine","N" , z= 9., a= 18.99*g/mole);
+  G4Element* F = new G4Element("Fluorine","F" , z= 9., a= 18.99*g/mole);
  
   G4Material* C6F6 = 
   new G4Material("FluorCarbonate", density= 1.61*g/cm3, ncomponents=2);

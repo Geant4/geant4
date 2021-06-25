@@ -186,12 +186,6 @@ public: // With description
   void RegisterEndOfRunUserVisAction
   (const G4String& name, G4VUserVisAction*,
    const G4VisExtent& = G4VisExtent());
-  void SetUserAction
-  (G4VUserVisAction* pVisAction,
-   const G4VisExtent& = G4VisExtent());
-  // SetUserAction is deprecated.  Use RegisterRunDurationUserVisAction
-  // or other of the above.
-  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
 
   G4bool RegisterGraphicsSystem (G4VGraphicsSystem*);
   // Register an individual graphics system.  Normally this is done in

@@ -32,7 +32,7 @@
 // This class will be created for every cell standard
 // scoring should be applied. It does the actual scoring.
 // GetStandardCellScoreValues() delivers the struct
-// G4CellScoreValues  does calculations based on the 
+// G4CellScoreValues  does calculations based on the
 // sums of scores and delivers the results in
 // G4CellScoreValues.
 //
@@ -47,41 +47,37 @@
 
 class G4Step;
 
-class G4CellScoreComposer {
-public: // with description
-
+class G4CellScoreComposer
+{
+ public:  // with description
   G4CellScoreComposer();
 
   ~G4CellScoreComposer();
 
-  void EstimatorCalculation(const G4Step &step);
-    // get values for estimators based on
-    // track length
+  void EstimatorCalculation(const G4Step& step);
+  // get values for estimators based on
+  // track length
 
   void TrackEnters();
-    // to be called if a track enters the cell 
+  // to be called if a track enters the cell
 
   void NewTrackPopedUp();
-    // to be caled if the cell popultion is increased 
+  // to be caled if the cell popultion is increased
 
   void SetCollisionWeight(G4double weight);
-    // to be called for every collision
-    // in the cell with the weight of the colliding particle 
+  // to be called for every collision
+  // in the cell with the weight of the colliding particle
 
   void SetImportnace(G4double importance);
-    // informs G4CellScoreComposer about  the importance of the cell 
+  // informs G4CellScoreComposer about  the importance of the cell
 
-  const G4CellScoreValues &GetStandardCellScoreValues() const;
-    // return scores in G4CellScoreValues
+  const G4CellScoreValues& GetStandardCellScoreValues() const;
+  // return scores in G4CellScoreValues
 
-private:
+ private:
   mutable G4CellScoreValues fSCScoreValues;
 };
 
-std::ostream& operator<<(std::ostream &out, 
-                           const G4CellScoreComposer &ps);
-
-
+std::ostream& operator<<(std::ostream& out, const G4CellScoreComposer& ps);
 
 #endif
-

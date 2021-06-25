@@ -84,53 +84,17 @@ G4QGSPAntiBarionBuilder::G4QGSPAntiBarionBuilder( G4bool quasiElastic ) {
 }
 
 
-void G4QGSPAntiBarionBuilder::Build( G4AntiProtonInelasticProcess* aP ) {
-  theQGSmodel->SetMinEnergy( theMin );
-  theQGSmodel->SetMaxEnergy( theMax );
+void G4QGSPAntiBarionBuilder::Build( G4HadronInelasticProcess* aP ) {
+  if ( aP->GetParticleDefinition()  &&  aP->GetParticleDefinition()->GetBaryonNumber() < -1 ) {
+    // Light anti-ions: for the time being QGSP cannot be applied, use FTFP
+    theFTFmodel->SetMinEnergy( theMin );
+    theFTFmodel->SetMaxEnergy( theMax );
+    aP->RegisterMe( theFTFmodel );
+  } else {
+    // Anti-proton and anti-neutron: use QGSP
+    theQGSmodel->SetMinEnergy( theMin );
+    theQGSmodel->SetMaxEnergy( theMax );
+    aP->RegisterMe( theQGSmodel );
+  }
   aP->AddDataSet( theAntiNucleonData );
-  aP->RegisterMe( theQGSmodel );
-}
-
-
-void G4QGSPAntiBarionBuilder::Build( G4AntiNeutronInelasticProcess* aP ) {
-  theQGSmodel->SetMinEnergy( theMin );
-  theQGSmodel->SetMaxEnergy( theMax );
-  aP->AddDataSet( theAntiNucleonData );
-  aP->RegisterMe( theQGSmodel );
-}
-
-
-void G4QGSPAntiBarionBuilder::Build( G4AntiDeuteronInelasticProcess* aP ) {
-  // For the time being QGSP cannot handle anti_deuteron: use FTFP
-  theFTFmodel->SetMinEnergy( theMin );
-  theFTFmodel->SetMaxEnergy( theMax );
-  aP->AddDataSet( theAntiNucleonData );
-  aP->RegisterMe( theFTFmodel );
-}
-
-
-void G4QGSPAntiBarionBuilder::Build( G4AntiTritonInelasticProcess* aP ) {
-  // For the time being QGSP cannot handle anti_triton: use FTFP
-  theFTFmodel->SetMinEnergy( theMin );
-  theFTFmodel->SetMaxEnergy( theMax );
-  aP->AddDataSet( theAntiNucleonData );
-  aP->RegisterMe( theFTFmodel );
-}
-
-
-void G4QGSPAntiBarionBuilder::Build( G4AntiHe3InelasticProcess* aP ) {
-  // For the time being QGSP cannot handle anti_He3: use FTFP
-  theFTFmodel->SetMinEnergy( theMin );
-  theFTFmodel->SetMaxEnergy( theMax );
-  aP->AddDataSet( theAntiNucleonData );
-  aP->RegisterMe( theFTFmodel );
-}
-
-
-void G4QGSPAntiBarionBuilder::Build( G4AntiAlphaInelasticProcess* aP ) {
-  // For the time being QGSP cannot handle anti_alpha: use FTFP
-  theFTFmodel->SetMinEnergy( theMin );
-  theFTFmodel->SetMaxEnergy( theMax );
-  aP->AddDataSet( theAntiNucleonData );
-  aP->RegisterMe( theFTFmodel );
 }

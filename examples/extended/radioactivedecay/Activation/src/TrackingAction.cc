@@ -69,10 +69,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4String name     = particle->GetParticleName();
   G4double meanLife = particle->GetPDGLifeTime();
   G4double ekin     = track->GetKineticEnergy();
-  fTimeBirth       = track->GetGlobalTime();
+  fTimeBirth        = track->GetGlobalTime();
 
-  //count secondary particles
-  if (track->GetTrackID() > 1)  run->ParticleCount(name,ekin,meanLife);
+  //count secondary particles (with meanLife > 0)
+  if ((track->GetTrackID() > 1) && (meanLife != 0.))
+    run->ParticleCount(name,ekin,meanLife);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

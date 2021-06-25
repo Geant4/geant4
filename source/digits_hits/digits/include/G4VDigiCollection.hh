@@ -41,37 +41,32 @@ class G4VDigi;
 // class.
 //  Geant4 kernel will use this class methods.
 
-class G4VDigiCollection 
+class G4VDigiCollection
 {
-  public:
-      G4VDigiCollection();
-      G4VDigiCollection(G4String DMnam,G4String colNam);
-      virtual ~G4VDigiCollection();
-      G4bool operator==(const G4VDigiCollection &right) const;
+ public:
+  G4VDigiCollection();
+  G4VDigiCollection(G4String DMnam, G4String colNam);
+  virtual ~G4VDigiCollection();
+  G4bool operator==(const G4VDigiCollection& right) const;
 
-      virtual void DrawAllDigi();
-      virtual void PrintAllDigi();
+  virtual void DrawAllDigi();
+  virtual void PrintAllDigi();
 
-  protected:
+ protected:
+  // Collection name
+  G4String collectionName;
+  G4String DMname;
 
-      // Collection name
-      G4String collectionName;
-      G4String DMname;
+ public:
+  inline const G4String& GetName() const { return collectionName; }
+  inline const G4String& GetDMname() const { return DMname; }
 
-  public:
-      inline const G4String& GetName() const
-      { return collectionName; }
-      inline const G4String& GetDMname() const
-      { return DMname; }
-
-  public:
-      // GetDigi and GetSize are given a default implementation here so
-      // that the template G4TDigiCollection can be used, but they
-      // are re-implemented in G4TDigiCollection.
-      virtual G4VDigi* GetDigi(size_t) const { return 0; }
-      virtual size_t GetSize() const { return 0; }
-
+ public:
+  // GetDigi and GetSize are given a default implementation here so
+  // that the template G4TDigiCollection can be used, but they
+  // are re-implemented in G4TDigiCollection.
+  virtual G4VDigi* GetDigi(size_t) const { return 0; }
+  virtual size_t GetSize() const { return 0; }
 };
 
 #endif
-

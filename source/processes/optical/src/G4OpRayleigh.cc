@@ -205,7 +205,7 @@ void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
   {
     G4Material* material               = (*theMaterialTable)[i];
     G4MaterialPropertiesTable* matProp = material->GetMaterialPropertiesTable();
-    G4PhysicsOrderedFreeVector* rayleigh = nullptr;
+    G4PhysicsFreeVector* rayleigh = nullptr;
     if(matProp)
     {
       rayleigh = matProp->GetProperty(kRAYLEIGH);
@@ -220,8 +220,8 @@ void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
 G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double,
                                        G4ForceCondition*)
 {
-  G4PhysicsOrderedFreeVector* rayleigh =
-    static_cast<G4PhysicsOrderedFreeVector*>(
+  G4PhysicsFreeVector* rayleigh =
+    static_cast<G4PhysicsFreeVector*>(
       (*thePhysicsTable)(aTrack.GetMaterial()->GetIndex()));
 
   G4double rsLength = DBL_MAX;
@@ -234,7 +234,7 @@ G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4PhysicsOrderedFreeVector* G4OpRayleigh::CalculateRayleighMeanFreePaths(
+G4PhysicsFreeVector* G4OpRayleigh::CalculateRayleighMeanFreePaths(
   const G4Material* material) const
 {
   G4MaterialPropertiesTable* MPT = material->GetMaterialPropertiesTable();
@@ -281,7 +281,7 @@ G4PhysicsOrderedFreeVector* G4OpRayleigh::CalculateRayleighMeanFreePaths(
     temperature = material->GetTemperature();
   }
 
-  G4PhysicsOrderedFreeVector* rayleighMFPs = new G4PhysicsOrderedFreeVector();
+  G4PhysicsFreeVector* rayleighMFPs = new G4PhysicsFreeVector();
   // This calculates the meanFreePath via the Einstein-Smoluchowski formula
   const G4double c1 =
     scaleFactor * betat * temperature * k_Boltzmann / (6.0 * pi);

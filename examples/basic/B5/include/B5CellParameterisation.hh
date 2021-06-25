@@ -46,10 +46,10 @@ class B5CellParameterisation : public G4VPVParameterisation
   public:
     B5CellParameterisation();
     virtual ~B5CellParameterisation();
-    
+
     virtual void ComputeTransformation(
                    const G4int copyNo,G4VPhysicalVolume *physVol) const;
-    
+
   private:
     std::array<G4double, kNofEmCells> fXCell;
     std::array<G4double, kNofEmCells> fYCell;

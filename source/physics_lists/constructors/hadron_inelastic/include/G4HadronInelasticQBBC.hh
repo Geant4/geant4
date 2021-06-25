@@ -53,7 +53,7 @@ public:
 			G4bool chips = false, G4bool hp = false, 
 			G4bool glauber = false);
 
-  ~G4HadronInelasticQBBC() override;
+  virtual ~G4HadronInelasticQBBC();
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
@@ -63,9 +63,6 @@ public:
   // copy constructor and hide assignment operator
   G4HadronInelasticQBBC(G4HadronInelasticQBBC &) = delete;
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right) = delete;
-
-private:
-  G4int    verbose;
 };
 
 #endif

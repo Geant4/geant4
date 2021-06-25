@@ -16,10 +16,7 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.8...3.18 FATAL_ERROR)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-  cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.12...3.20 FATAL_ERROR)
 
 # - Make overrides for default flags, so they appear in interfaces
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
@@ -31,9 +28,9 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
 #   in tests/examples which are subprojects. All calls must use
 #   the same form.
 project(Geant4)
-set(${PROJECT_NAME}_VERSION_MAJOR 10)
-set(${PROJECT_NAME}_VERSION_MINOR  7)
-set(${PROJECT_NAME}_VERSION_PATCH  2)
+set(${PROJECT_NAME}_VERSION_MAJOR 11)
+set(${PROJECT_NAME}_VERSION_MINOR  0)
+set(${PROJECT_NAME}_VERSION_PATCH  0)
 set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}")
 
 # - Prepend our own CMake Modules to the search path

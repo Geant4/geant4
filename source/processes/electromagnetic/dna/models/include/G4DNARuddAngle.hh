@@ -60,26 +60,25 @@ public:
 
   G4DNARuddAngle(const G4String& name = "");
 
-  virtual ~G4DNARuddAngle();
+  ~G4DNARuddAngle() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double kinEnergyFinal,
-                                         G4int Z,
-                                         const G4Material* mat = 0);
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double kinEnergyFinal,
+				 G4int Z,
+				 const G4Material* mat = nullptr) override;
 
-  virtual G4ThreeVector& SampleDirectionForShell(
-                                         const G4DynamicParticle* dp,
+  G4ThreeVector& SampleDirectionForShell(const G4DynamicParticle* dp,
                                          G4double kinEnergyFinal,
                                          G4int Z, G4int shellIdx,
-                                         const G4Material* mat = 0);
+                                         const G4Material* mat = nullptr) override;
 
-  void PrintGeneratorInformation() const;
-
-private:
+  void PrintGeneratorInformation() const override;
 
   // hide assignment operator 
-  G4DNARuddAngle & operator=(const  G4DNARuddAngle &right);
-  G4DNARuddAngle(const  G4DNARuddAngle&);
+  G4DNARuddAngle & operator=(const  G4DNARuddAngle &right) = delete;
+  G4DNARuddAngle(const  G4DNARuddAngle&) = delete;
+
+private:
 
   const G4ParticleDefinition* fElectron;
 };

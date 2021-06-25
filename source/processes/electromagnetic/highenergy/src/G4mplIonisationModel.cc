@@ -64,28 +64,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 std::vector<G4double>* G4mplIonisationModel::dedx0 = nullptr;
 
 G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   magCharge(mCharge),
-  twoln10(log(100.0)),
+  twoln10(G4Log(100.0)),
   betalow(0.01),
   betalim(0.1),
   beta2lim(betalim*betalim),
   bg2lim(beta2lim*(1.0 + beta2lim))
 {
-  nmpl         = G4int(abs(magCharge) * 2 * fine_structure_const + 0.5);
+  nmpl = G4int(std::abs(magCharge) * 2 * CLHEP::fine_structure_const + 0.5);
   if(nmpl > 6)      { nmpl = 6; }
   else if(nmpl < 1) { nmpl = 1; }
-  pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
+  pi_hbarc2_over_mc2 = CLHEP::pi*CLHEP::hbarc*CLHEP::hbarc/CLHEP::electron_mass_c2;
   chargeSquare = magCharge * magCharge;
-  dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
-  fParticleChange = nullptr;
-  monopole = nullptr;
-  mass = 0.0;
+  dedxlim = 45.*nmpl*nmpl*CLHEP::GeV*CLHEP::cm2/CLHEP::g;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,9 +97,9 @@ void G4mplIonisationModel::SetParticle(const G4ParticleDefinition* p)
   monopole = p;
   mass     = monopole->GetPDGMass();
   G4double emin = 
-    std::min(LowEnergyLimit(),0.1*mass*(1./sqrt(1. - betalow*betalow) - 1.)); 
+    std::min(LowEnergyLimit(),0.1*mass*(1./std::sqrt(1. - betalow*betalow) - 1.)); 
   G4double emax = 
-    std::max(HighEnergyLimit(),10.*mass*(1./sqrt(1. - beta2lim) - 1.)); 
+    std::max(HighEnergyLimit(),10.*mass*(1./std::sqrt(1. - beta2lim) - 1.)); 
   SetLowEnergyLimit(emin);
   SetHighEnergyLimit(emax);
 }
@@ -114,10 +109,10 @@ void G4mplIonisationModel::SetParticle(const G4ParticleDefinition* p)
 void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
 				      const G4DataVector&)
 {
-  if(!monopole) { SetParticle(p); }
-  if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if(nullptr == monopole) { SetParticle(p); }
+  if(nullptr == fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
   if(IsMaster()) {
-    if(!dedx0) { dedx0 = new std::vector<G4double>; }
+    if(nullptr == dedx0) { dedx0 = new std::vector<G4double>; }
     G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();
     G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -146,12 +141,12 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 						    G4double kineticEnergy,
 						    G4double)
 {
-  if(!monopole) { SetParticle(p); }
+  if(nullptr == monopole) { SetParticle(p); }
   G4double tau   = kineticEnergy / mass;
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau + 2.0);
   G4double beta2 = bg2 / (gam * gam);
-  G4double beta  = sqrt(beta2);
+  G4double beta  = std::sqrt(beta2);
 
   // low-energy asymptotic formula
   //G4double dedx  = dedxlim*beta*material->GetDensity();
@@ -193,7 +188,7 @@ G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material,
   G4double x1den = material->GetIonisation()->GetX1density();
 
   // Ahlen's formula for nonconductors, [1]p157, f(5.7)
-  G4double dedx = log(2.0 * electron_mass_c2 * bg2 / eexc) - 0.5;
+  G4double dedx = std::log(2.0 * electron_mass_c2 * bg2 / eexc) - 0.5;
 
   // Kazama et al. cross-section correction
   G4double  k = 0.406;
@@ -206,10 +201,10 @@ G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material,
 
   // density effect correction
   G4double deltam;
-  G4double x = log(bg2) / twoln10;
+  G4double x = std::log(bg2) / twoln10;
   if ( x >= x0den ) {
     deltam = twoln10 * x - cden;
-    if ( x < x1den ) deltam += aden * pow((x1den-x), mden);
+    if ( x < x1den ) deltam += aden * std::pow((x1den-x), mden);
     dedx -= 0.5 * deltam;
   }
 
@@ -240,7 +235,7 @@ G4double G4mplIonisationModel::SampleFluctuations(
 {
   G4double siga = Dispersion(couple->GetMaterial(),dp,tmax,length);
   G4double loss = meanLoss;
-  siga = sqrt(siga);
+  siga = std::sqrt(siga);
   G4double twomeanLoss = meanLoss + meanLoss;
 
   if(twomeanLoss < siga) {

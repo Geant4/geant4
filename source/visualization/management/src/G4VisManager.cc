@@ -202,7 +202,10 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   RegisterMessenger(new G4VisCommandInitialize);
 }
 
-G4VisManager::~G4VisManager () {
+G4VisManager::~G4VisManager()
+{
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  UImanager->SetCoutDestination(nullptr);
   fpInstance = 0;
   size_t i;
   for (i = 0; i < fSceneList.size (); ++i) {
@@ -528,6 +531,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLine);
   RegisterMessenger(new G4VisCommandSceneAddLine2D);
+  RegisterMessenger(new G4VisCommandSceneAddLocalAxes);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddLogo2D);
@@ -1391,17 +1395,6 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
   if (IsValidView()) {
       trajectoryModel->Draw(trajectory, visible);
   }
-}
-
-void G4VisManager::SetUserAction
-(G4VUserVisAction* pVisAction,
- const G4VisExtent& extent) {
-  if (fVerbosity >= warnings) {
-    G4cout <<
-  "WARNING: SetUserAction is deprecated. Use RegisterRunDurationUserVisAction."
-    << G4endl;
-  }
-  RegisterRunDurationUserVisAction("SetUserAction",pVisAction,extent);
 }
 
 void G4VisManager::RegisterRunDurationUserVisAction

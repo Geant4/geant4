@@ -184,3 +184,16 @@ const std::map<G4String, G4Colour>& G4Colour::GetMap()
  
   return fColourMap;
 }
+
+G4bool G4Colour::operator< (const G4Colour& rhs) const
+{
+  if (red < rhs.red) return true;
+  else if (red == rhs.red) {
+    if (green < rhs.green) return true;
+    else if (green == rhs.green) {
+      if (blue < rhs.blue) return true;
+      else if (blue == rhs.blue) {
+	if (alpha < rhs.alpha) return true;
+      }}}
+  return false;
+}

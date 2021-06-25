@@ -42,44 +42,37 @@
 // 2020-10-06   Use G4VPrimitivePlotter and fill 1-D histo of kinetic energy (x)
 //              vs. track weight (y)                 (Makoto Asai)
 //
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class G4PSMinKinEAtGeneration : public G4VPrimitivePlotter
 {
- 
- public: // with description
-      G4PSMinKinEAtGeneration(G4String name, G4int depth=0);
-      G4PSMinKinEAtGeneration(G4String name, const G4String& unit, 
-			      G4int depth=0);
+ public:  // with description
+  G4PSMinKinEAtGeneration(G4String name, G4int depth = 0);
+  G4PSMinKinEAtGeneration(G4String name, const G4String& unit, G4int depth = 0);
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  public:
-      virtual ~G4PSMinKinEAtGeneration();
+ public:
+  virtual ~G4PSMinKinEAtGeneration();
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
 
-  public:
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-      virtual void SetUnit(const G4String& unit);
+  virtual void SetUnit(const G4String& unit);
 
-  private:
-      G4int HCID;
-      G4THitsMap<G4double>* EvtMap;
+ private:
+  G4int HCID;
+  G4THitsMap<G4double>* EvtMap;
 
-  public:
-
-
+ public:
 };
-
-
 
 #endif

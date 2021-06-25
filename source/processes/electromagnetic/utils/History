@@ -16,19 +16,109 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06 May 21: G.Cosmo (emutils-V10-06-18)
+08 June 21: V.Ivanchenko (emutils-V10-07-22)
+- G4VEmProcess, G4VEnergyLossProcess - fixed computation of cross
+    section and rangle if base material approach is used; recover
+    Fano cavity test results; improved initialisation
+- G4LossTableBuilder - fixed debug printout
+
+01 June 21: V.Ivanchenko (emutils-V10-07-21)
+- G4VEmProcess, G4VEnergyLossProcess - an attempt to improve 
+    integral option 
+
+26 May 21: V.Ivanchenko (emutils-V10-07-20)
+- G4VEmProcess, G4VEnergyLossProcess, G4EmDataHandler - updated 
+  method RetrievePhysicsTable(...)
+
+15 May 21: V.Ivanchenko (emutils-V10-07-19)
+- G4VEmProcess, G4VEnergyLossProcess, G4EmTableType, G4EmBiasingManager,
+  G4LossTableManager - updated integral approach by introduction of a
+  cross section shape type and different actions depending on the type; 
+  addition of cache for cross section and range; removed unused methods; 
+  attempt to reduce number of "if" operators in the run time; integral 
+  and spline flags are set to each process individually
+- G4VMultipleScattering - fixed problem observed by CMS for specific
+  Physics List
+
+10 May 21: V.Ivanchenko (emutils-V10-07-18)
+- G4EmCorrections, G4VEmProcess - updated use of the spline flag
+- G4ionEffectiveCharge - fixed bug in computation of effective
+    charge square
+
+16 May 21: B.Morgan (emutils-V10-07-17)
+- Migrate build to modular CMake API
+
+06 May 21: G.Cosmo (emutils-V10-07-16)
 - Fixed shadowing compilation warning in G4EmCorrections reported with gcc-11.
 
-14 April 21: V.Ivanchenko (emutils-V10-06-17)
+03 May 21: V.Ivanchenko (emutils-V10-07-15)
+- G4EmCorrections, G4LossTableBuilder - substitute G4LPhysicsFreeVector
+  by G4PhysicsFreeVector
+- G4TableType - added extra enumerator
+
+28 April 21: V.Ivanchenko (emutils-V10-07-14)
+- G4VEmModel, G4VEnergyLossProcess, G4EmCalculator - optimized signature
+    of the CorrectionsAlongStep method; use more const variables;
+    minor code optimisation
+- G4VMscModel - improve printout
+
+24 April 21: V.Ivanchenko (emutils-V10-07-13)
+- G4VEmAngularDistribution - added virtual method
+    PrintGeneratorInformation()
+
+14 April 21: V.Ivanchenko (emutils-V10-07-12)
 - G4EmParameters - fix problem #2350 (correct line break)
 
-30 January 21: V.Ivanchenko (emutils-V10-06-16)
+10 April 21: V.Ivanchenko (emutils-V10-07-11)
+- clean-up EM libraries for 11.0 including G4VEnergyLossProcess
+  and messengers for EM parameters
+
+06 April 21: V.Ivanchenko (emutils-V10-07-10)
+- clean-up EM libraries for 11.0 including G4LossTableManager
+
+30 March 21: V.Ivanchenko (emutils-V10-07-09)
+- clean-up EM libraries for 11.0: fixed model per region definition
+  for all base processes G4VEmProcess, G4VMultipleScattering,
+  G4VEnergyLossProcess; removed subcut facility for energy loss
+  processes; clean-up parameters classes
+
+25 March 21: V.Ivanchenko (emutils-V10-07-08)
+- clean-up EM libraries for 11.0
+
+23 March 21: V.Ivanchenko (emutils-V10-07-07)
+- clean-up EM libraries for 11.0
+
+22 March 21: V.Ivanchenko (emutils-V10-07-06)
+- G4VEmModel, G4EmElementSelectors, G4VAtomDeexcitation - general
+  clean-up, removed obsolete methods and members
+
+18 March 21: V.Ivanchenko (emutils-V10-07-05)
+- G4VEmProcess - general clean-up; reorganized class members;
+  removed obsolete methods
+
+04 March 21: V.Ivanchenko (emutils-V10-07-04)
+- G4VEmModel removed "virtual" keyward from ComputeDEDX method
+- G4EmProcessOptions - removed obsolete
+
+28 Febuary 21: V.Ivanchenko (emutils-V10-07-03)
+- G4ionEffectiveCharge - code clean-up
+- G4VMultipleScattering - removed obsolete unused methods,
+    reduced number of operations run time, use isIon flag
+    for scaling of energy limits for all particles with mass >1 GeV
+- G4VMscModel - minor code clean-up
+
+24 February 21: D.Sawkey (emutils-V10-07-02)
+- G4OpticalParameters, G4OpticalParametersMessenger
+ - Remove deprecated optical commands and parameters.
+ - Replace CreateDir with new G4UIdirectory()
+
+30 January 21: V.Ivanchenko (emutils-V10-07-01)
 - G4VEnergyLossProcess, G4VEmProcess, - improved printout
   G4EmExtraParameters, G4EmExtraParametersMessenger - fixed #2292
 
-11 January 21: V.Ivanchenko
-- G4EmCorrections - fix 2-D interpolation of shell corrections 
-    (problem #2308), which provides minor change of ranges of 
+11 January 21: V.Ivanchenko (emutils-V10-07-00)
+- G4EmCorrections - fix 2-D interpolation of shell corrections
+    (problem #2308), which provides minor change of ranges of
     charge particles (< 0.1 mm)
 
 12 November 20: B. Morgan (emutils-V10-06-15)

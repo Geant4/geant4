@@ -23,13 +23,6 @@
 /gui/addButton gun "neutron" "/gun/particle neutron"
 /gui/addButton gun "proton"  "/gun/particle proton"
 #
-# Vis menu :
-/gui/addMenu vis Vis
-/gui/addButton vis DAWNFILE  "/control/execute visTutor/exN03Vis0.mac"
-/gui/addButton vis OpenInventor "/control/execute visTutor/exN03Vis5.mac"
-/gui/addButton vis TimeSlicing "/control/execute visTutor/exN03Vis12.mac"
-/gui/addButton vis EmShower "/control/execute visTutor/exN03Vis13.mac"
-#
 # Viewer menu :
 /gui/addMenu viewer Viewer
 /gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"

@@ -103,7 +103,7 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
 
   for(G4int i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsOrderedFreeVector* vec = new G4PhysicsOrderedFreeVector();
+    G4PhysicsFreeVector* vec = new G4PhysicsFreeVector();
 
     G4MaterialPropertiesTable* MPT =
       (*theMaterialTable)[i]->GetMaterialPropertiesTable();
@@ -168,8 +168,8 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         if(WLSIntensity)
         {
-          G4PhysicsOrderedFreeVector* WLSIntegral =
-            (G4PhysicsOrderedFreeVector*) ((*fIntegralTable)(
+          G4PhysicsFreeVector* WLSIntegral =
+            (G4PhysicsFreeVector*) ((*fIntegralTable)(
               fMaterial->GetIndex()));
 
           G4double CIImax   = WLSIntegral->GetMaxValue();

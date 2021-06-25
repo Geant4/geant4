@@ -489,10 +489,9 @@ G4Material* G4NistManager::FindMaterial(const G4String& name) const
 
 inline
 G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
-					       G4bool isotopes,
-					       G4bool warning)
+					       G4bool, G4bool warning)
 {
-  return matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
+  return matBuilder->FindOrBuildMaterial(name, warning);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -518,14 +517,14 @@ inline G4Material* G4NistManager::ConstructNewMaterial(
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
 				      G4double dens, 
-				      G4bool isotopes,
+				      G4bool,
 				      G4State   state,     
 				      G4double  T,  
 				      G4double  P) 
 
 {
   return 
-    matBuilder->ConstructNewMaterial(name,elm,nbAtoms,dens,isotopes,state,T,P);
+    matBuilder->ConstructNewMaterial(name,elm,nbAtoms,dens,state,T,P);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -535,12 +534,12 @@ inline G4Material* G4NistManager::ConstructNewMaterial(
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4double>& w,
 				      G4double dens, 
-				      G4bool isotopes,
+				      G4bool,
 				      G4State   state,     
 				      G4double  T,  
 				      G4double  P) 
 {
-  return matBuilder->ConstructNewMaterial(name,elm,w,dens,isotopes,state,T,P);
+  return matBuilder->ConstructNewMaterial(name,elm,w,dens,state,T,P);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -549,10 +548,9 @@ inline G4Material* G4NistManager::ConstructNewGasMaterial(
 				      const G4String& name,
                                       const G4String& nameNist,
 				      G4double temp, G4double pres, 
-				      G4bool isotopes)
+				      G4bool)
 {
-  return matBuilder->ConstructNewGasMaterial(name,nameNist,
-					     temp,pres,isotopes);
+  return matBuilder->ConstructNewGasMaterial(name,nameNist,temp,pres);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -561,12 +559,12 @@ inline G4Material* G4NistManager::ConstructNewIdealGasMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-                                      G4bool isotopes,
+                                      G4bool,
                                       G4double  T,
                                       G4double  P)
 {
   return
-    matBuilder->ConstructNewIdealGasMaterial(name,elm,nbAtoms,isotopes,T,P);
+    matBuilder->ConstructNewIdealGasMaterial(name,elm,nbAtoms,T,P);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -602,7 +600,7 @@ inline G4double G4NistManager::GetZ13(G4int Z) const
 
 inline G4double G4NistManager::GetA27(G4int Z) const
 {
-  return (0 <= Z && Z < 101) ? POWERA27[Z] : 0.0;
+  return (0 <= Z && Z < 101) ? POWERA27[Z] : g4pow->powZ(Z, 0.27);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

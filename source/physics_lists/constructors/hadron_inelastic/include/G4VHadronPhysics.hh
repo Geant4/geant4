@@ -53,7 +53,7 @@ public:
   G4VHadronPhysics(const G4String& name ="hInelastic", 
 		   G4int verbose = 0);
 
-  ~G4VHadronPhysics() override;
+  virtual ~G4VHadronPhysics();
 
   void ConstructParticle() override;
 

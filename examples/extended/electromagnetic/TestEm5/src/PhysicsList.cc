@@ -34,8 +34,6 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEm5DStandard.hh"
-#include "PhysListEm19DStandard.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -151,7 +149,7 @@ void PhysicsList::ConstructProcess()
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  StepMax* stepMaxProcess = new StepMax(fMessenger);
+  StepMax* stepMaxProcess = new StepMax();
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
@@ -212,23 +210,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
 
-  } else if (name == "emstandardATIMA") {
-
-    fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEm19DStandard();
-        
   } else if (name == "emstandardSS") {
 
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
-
-  } else if (name == "emstandard5D") {
-
-    fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEm5DStandard();
 
   } else if (name == "emstandardWVI") {
 

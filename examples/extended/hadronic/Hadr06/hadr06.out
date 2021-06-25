@@ -1,10 +1,17 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,6 +26,9 @@
 /testhadr/det/setIsotopeMat Li7 3 7 1.85 g/cm3
 /testhadr/det/setRadius 30 cm
 /run/reinitializeGeometry
+#
+/process/em/verbose 0
+/process/had/verbose 1
 #
 /run/initialize
 
@@ -38,61 +48,10 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
 NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic/CrossSection/6_nat_Carbon
 #
-/process/list
-     Transportation,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,         hadElastic
-         hadElastic,         hadElastic,         hadElastic,   neutronInelastic
-           nCapture,           nFission,    protonInelastic,       pi+Inelastic
-       pi-Inelastic,     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic
-    kaon0SInelastic,anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic
-anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic,    lambdaInelastic
-    sigma+Inelastic,    sigma-Inelastic,       xi0Inelastic,       xi-Inelastic
-    omega-Inelastic,anti_lambdaInelastic,anti_sigma+Inelastic,anti_sigma-Inelastic
-  anti_xi0Inelastic,  anti_xi-Inelastic,anti_omega-Inelastic,         ionElastic
-         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
-       ionInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
-      photonNuclear,                msc,              hIoni,                msc
-              hIoni,                msc,              hIoni,                msc
-              hIoni,                msc,              hIoni,                msc
-              hIoni,                msc,              hIoni,                msc
-              hIoni,                msc,            ionIoni,    nuclearStopping
-                msc,            ionIoni,    nuclearStopping,                msc
-            ionIoni,    nuclearStopping,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              eIoni
-              eBrem,            annihil,                msc,              eIoni
-              eBrem,               phot,              compt,               conv
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,             muIoni
-            muBrems,         muPairProd,                msc,             muIoni
-            muBrems,         muPairProd,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-                msc,              hIoni,                msc,              hIoni
-              Decay,RadioactiveDecayBase
-#
 /gun/particle neutron
 /gun/energy 14.1 MeV
 #
 /run/printProgress 1000
-#
 /run/beamOn 10000
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
@@ -107,6 +66,7 @@ Auger electron emission enabled                   1
 Auger cascade enabled                             1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
+Threshold for very long decay time at rest        1e+27  ns
 ======================================================================
 NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Capture/CrossSection/6_nat_Carbon
 NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Elastic/CrossSection/6_nat_Carbon
@@ -116,10 +76,10 @@ NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /
 =======================================================
 ======       ParticleHP Physics Parameters     ========
 =======================================================
- UseOnlyPhotoEvaporation ? 0
+ UseOnlyPhotoEvaporation ? 1
  SkipMissingIsotopes ?     0
  NeglectDoppler ?          0
- DoNotAdjustFinalState ?   0
+ DoNotAdjustFinalState ?   1
  ProduceFissionFragments ? 0
  UseWendtFissionModel ?    0
  UseNRESP71Model ?         0
@@ -360,7 +320,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
         Model:          NeutronHPFission: 0 meV ---> 20 MeV
         Model:                G4LFission: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPFissionXS: 0 meV ---> 20 MeV
-     Cr_sctns:          GheishaFissionXS: 0 meV ---> 100 TeV
+     Cr_sctns:                    ZeroXS: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -493,49 +453,47 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.860000s Real=8.354193s Sys=0.010000s
+  User=6.020000s Real=6.521375s Sys=0.010000s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
- RadioactiveDecayBase= 195865        Transportation=  73025               annihil=    205
-                compt= 400940                  conv=    206            dInelastic=      3
-                eIoni= 410692                 hIoni=    672            hadElastic= 179590
-              ionIoni= 196197                   msc=    139              nCapture=     25
-     neutronInelastic=  16399                  phot=  20719 
+ RadioactiveDecayBase= 197147                  Rayl=  13480        Transportation=  43008
+                compt= 238041                 eIoni= 236437                 hIoni=    149
+           hadElastic= 181303               ionIoni= 197480                   msc=     16
+             nCapture=     34      neutronInelastic=  16497                  phot=   4882
 
- List of generated particles:
-  Be8[3030.000]:      25  Emean =  6.5066 keV	( 576 eV  --> 12.036 keV)
-            He6:     130  Emean =  1.2825 MeV	( 899.67 keV --> 1.338 MeV)
-            Li6:     707  Emean =  1.6492 MeV	( 6.5416 eV  --> 8.294 MeV)
-            Li7:  194979  Emean =  332.68 keV	( 0.69805 meV --> 6.2218 MeV)
-            Li8:      25  Emean =   1.539 keV	( 98.565 eV  --> 15.763 keV)
-          alpha:     357  Emean =  1.2613 MeV	( 82.823 keV --> 7.8307 MeV)
-      anti_nu_e:     155  Emean =  2.7609 MeV	( 355.17 keV --> 12.413 MeV)
-       deuteron:     433  Emean =  3.7046 MeV	( 163.79 keV --> 21.188 MeV)
-             e+:     206  Emean =  1.4766 MeV	( 81.659 keV --> 3.9235 MeV)
-             e-:  410656  Emean =  87.612 keV	( 100 eV  --> 10.101 MeV)
-          gamma:   46386  Emean =   1.209 MeV	( 1.0003 keV --> 5.8821 MeV)
-        neutron:   17151  Emean =  3.3665 MeV	( 2.7041 keV --> 13.636 MeV)
 
- Mean energy deposit per event = 10.43 MeV  rms = 3.4782 MeV
- Mean energy flow per event    = 3.1161 MeV  rms = 3.2596 MeV
+ Mean energy deposit per event = 7.2554 MeV  rms = 3.3989 MeV
+ Mean energy leakage per event = 1.231 MeV  rms = 2.8406 MeV
+
+ total energy: Edep + Eleak = 8.4864 MeV
+
+ List of particles at creation:
+            He6:     149  Emean =   1.286 MeV	( 984.63 keV --> 1.3376 MeV)	mean life = 1.1638 s  
+            Li6:     149  Emean =     790 eV 	( 24.458 eV  --> 1.3995 keV)	stable
+            Li7:  196781  Emean =  332.91 keV	( 0.60831 meV --> 6.2149 MeV)	stable
+            Li8:      34  Emean =  1.2279 keV	( 226.44 eV  --> 19.545 keV)	mean life = 1.2117 s  
+          alpha:     367  Emean =  1.1941 MeV	( 75.215 keV --> 3.8695 MeV)	stable
+      anti_nu_e:     183  Emean =  2.8473 MeV	( 411.88 keV --> 11.907 MeV)	stable
+       deuteron:     149  Emean =  429.67 keV	( 329.3 keV --> 446.81 keV)	stable
+             e-:  235872  Emean =  26.919 keV	( 100.02 eV  --> 12.171 MeV)	stable
+          gamma:   15512  Emean =  481.02 keV	( 477.59 keV --> 2.1451 MeV)	stable
+        neutron:   17218  Emean =  3.3827 MeV	( 4.5041 keV --> 13.639 MeV)	mean life = 14.67 min
 
  List of particles emerging from the absorber :
-            Li7:       1  Emean =  1.8227 MeV	( 1.8227 MeV --> 1.8227 MeV) 	Eflow/event = 182.27 eV 
-      anti_nu_e:     155  Emean =  2.7609 MeV	( 355.17 keV --> 12.413 MeV) 	Eflow/event = 42.794 keV
-             e+:       1  Emean =  2.5051 MeV	( 2.5051 MeV --> 2.5051 MeV) 	Eflow/event = 250.51 eV 
-             e-:     160  Emean =  1.3423 MeV	( 6.0695 keV --> 4.9835 MeV) 	Eflow/event = 21.477 keV
-          gamma:   25461  Emean =  783.03 keV	( 3.4138 keV --> 5.8811 MeV) 	Eflow/event = 1.9937 MeV
-        neutron:   10727  Emean =  986.05 keV	( 2.7097 meV --> 14.1 MeV) 	Eflow/event = 1.0577 MeV
+      anti_nu_e:     183  Emean =  2.8473 MeV	( 411.88 keV --> 11.907 MeV) 	Eleak/event = 52.105 keV
+             e-:       4  Emean =  417.58 keV	( 96.603 keV --> 1.2648 MeV) 	Eleak/event = 167.03 eV 
+          gamma:   10630  Emean =  146.13 keV	( 11.567 keV --> 2.0324 MeV) 	Eleak/event = 155.34 keV
+        neutron:   10687  Emean =  957.62 keV	( 13.694 meV --> 14.1 MeV) 	Eleak/event = 1.0234 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 186864717, 1230361718
+ Current couple of seeds = 167330687, 649263322
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.07 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.064 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

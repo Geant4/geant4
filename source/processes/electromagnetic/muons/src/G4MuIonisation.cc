@@ -79,29 +79,20 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4MuBetheBlochModel.hh"
 #include "G4UniversalFluctuation.hh"
 #include "G4IonFluctuations.hh"
-#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4ICRU73QOModel.hh"
 #include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-using namespace std;
-
 G4MuIonisation::G4MuIonisation(const G4String& name)
-  : G4VEnergyLossProcess(name),
-    theParticle(nullptr),
-    theBaseParticle(nullptr),
-    isInitialised(false)
+  : G4VEnergyLossProcess(name)
 {
-  mass = ratio = 0;
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
 }
@@ -110,7 +101,7 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
 
 G4bool G4MuIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+  return (p.GetPDGCharge() != 0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -119,15 +110,16 @@ G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 					  const G4Material*,
 					  G4double cut)
 {
-  G4double x = 0.5*cut/electron_mass_c2;
+  G4double x = 0.5*cut/CLHEP::electron_mass_c2;
   G4double gam = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
   return mass*(gam - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                 const G4ParticleDefinition* bpart)
+void 
+G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
+                                            const G4ParticleDefinition* bpart)
 {
   if(!isInitialised) {
 
@@ -138,12 +130,12 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     G4double q = theParticle->GetPDGCharge();
 
     G4EmParameters* param = G4EmParameters::Instance();
-    G4double elow = 0.2*MeV;
+    G4double elow = 0.2*CLHEP::MeV;
     G4double emax = param->MaxKinEnergy();
-    G4double ehigh = std::min(1*GeV, emax);
+    G4double ehigh = std::min(1*CLHEP::GeV, emax);
 
     // Bragg peak model
-    if (!EmModel(0)) {
+    if (nullptr == EmModel(0)) {
       if(q > 0.0) { SetEmModel(new G4BraggModel()); }
       else        { SetEmModel(new G4ICRU73QOModel()); }
     }
@@ -152,30 +144,27 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
     // high energy fluctuation model
-    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
+    if (nullptr == FluctModel()) { 
+      SetFluctModel(new G4UniversalFluctuation()); 
+    }
 
     // moderate energy model
-    if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
+    if (nullptr == EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
     EmModel(1)->SetLowEnergyLimit(elow);
     EmModel(1)->SetHighEnergyLimit(ehigh);
     AddEmModel(2, EmModel(1), FluctModel());
 
     // high energy model
     if(ehigh < emax) {
-      if (!EmModel(2)) { SetEmModel(new G4MuBetheBlochModel()); }
+      if (nullptr == EmModel(2)) { SetEmModel(new G4MuBetheBlochModel()); }
       EmModel(2)->SetLowEnergyLimit(ehigh);
       EmModel(2)->SetHighEnergyLimit(emax);
       AddEmModel(3, EmModel(2), FluctModel());
     }
-    ratio = electron_mass_c2/mass;
+    ratio = CLHEP::electron_mass_c2/mass;
     isInitialised = true;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4MuIonisation::PrintInfo()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -57,22 +57,15 @@ int main(int argc,char** argv) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  //choose the Random engine
-  //  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine());
-
   // Construct a serial run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
 
   // set mandatory initialization classes
-  DetectorConstruction* det;
-  PrimaryGeneratorAction* prim;
-  runManager->SetUserInitialization(det = new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList);
-  runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
-
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  DetectorConstruction* det = new DetectorConstruction();
+  runManager->SetUserInitialization(det);
+  runManager->SetUserInitialization(new PhysicsList());
+  PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(det);
+  runManager->SetUserAction(prim);
 
   // set user action classes
   RunAction* run;
@@ -81,12 +74,15 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new SteppingAction(det,prim,run));
 
   // get the pointer to the User Interface manager
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)   // Define UI terminal for interactive mode
     {
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
       ui->SessionStart();
       delete ui;
+      delete visManager;
     }
   else           // Batch mode
     {
@@ -96,7 +92,6 @@ int main(int argc,char** argv) {
     }
 
   // job termination
-  delete visManager;
   delete runManager;
 
   return 0;

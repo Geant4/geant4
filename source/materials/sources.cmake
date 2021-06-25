@@ -1,17 +1,11 @@
-#------------------------------------------------------------------------------
-# Module : G4materials
-# Package: Geant4.src.G4materials
-#------------------------------------------------------------------------------
+# - G4materials module build definition
 
-#
-# Define the Geant4 Module.
-#
-geant4_define_module(NAME G4materials
-  HEADERS
+geant4_add_module(G4materials
+  PUBLIC_HEADERS
 		G4AtomicBond.hh
 		G4AtomicFormFactor.hh
 		G4AtomicShells.hh
-		G4AtomicShells_XDB_EADL.hh 
+		G4AtomicShells_XDB_EADL.hh
 		G4CrystalAtomBase.hh
 		G4CrystalBravaisLattices.h
 		G4CrystalLatticeSystems.h
@@ -34,17 +28,17 @@ geant4_define_module(NAME G4materials
 		G4LatticeLogical.hh
 		G4LatticePhysical.hh
 		G4Material.hh
-                G4MaterialPropertiesIndex.hh
+    G4MaterialPropertiesIndex.hh
 		G4MaterialPropertiesTable.hh
-		G4MaterialPropertiesTable.icc
 		G4MaterialPropertyVector.hh
 		G4MaterialTable.hh
-                G4MicroElecMaterialStructure.hh
-                G4MicroElecSiStructure.hh
+    G4MicroElecMaterialStructure.hh
+    G4MicroElecSiStructure.hh
 		G4NistElementBuilder.hh
 		G4NistManager.hh
 		G4NistMaterialBuilder.hh
 		G4NistMessenger.hh
+		G4OpticalMaterialProperties.hh
 		G4OpticalSurface.hh
 		G4SandiaTable.hh
 		G4StaticSandiaData.hh
@@ -57,7 +51,7 @@ geant4_define_module(NAME G4materials
 		G4AtomicBond.cc
 		G4AtomicFormFactor.cc
 		G4AtomicShells.cc
-		G4AtomicShells_XDB_EADL.cc 
+		G4AtomicShells_XDB_EADL.cc
 		G4CrystalExtension.cc
 		G4CrystalUnitCell.cc
 		G4DensityEffectCalculator.cc
@@ -75,8 +69,8 @@ geant4_define_module(NAME G4materials
 		G4LatticePhysical.cc
 		G4Material.cc
 		G4MaterialPropertiesTable.cc
-                G4MicroElecMaterialStructure.cc
-                G4MicroElecSiStructure.cc
+    G4MicroElecMaterialStructure.cc
+    G4MicroElecSiStructure.cc
 		G4NistElementBuilder.cc
 		G4NistManager.cc
 		G4NistMaterialBuilder.cc
@@ -86,15 +80,12 @@ geant4_define_module(NAME G4materials
 		G4SurfaceProperty.cc
 		G4UCNMaterialPropertiesTable.cc
 		G4UCNMicroRoughnessHelper.cc
-		G4VIonDEDXTable.cc
-  GRANULAR_DEPENDENCIES
-    G4globman
-    G4intercoms
-  GLOBAL_DEPENDENCIES
-    G4global
-    G4intercoms
-  LINK_LIBRARIES
-    ${ZLIB_LIBRARIES}
-)
+		G4VIonDEDXTable.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4materials
+  PUBLIC
+	  G4globman
+		G4intercoms
+  PRIVATE
+    ${ZLIB_LIBRARIES})
+

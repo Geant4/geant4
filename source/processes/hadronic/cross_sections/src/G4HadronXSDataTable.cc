@@ -52,7 +52,7 @@ G4HadElementSelector::G4HadElementSelector(G4DynamicParticle* dp,
 					   G4CrossSectionDataStore* xs, 
 					   const G4Material* mat, 
 					   G4int bins, G4double emin, 
-					   G4double emax, G4bool spline)
+					   G4double emax, G4bool)
 {
   G4int n = mat->GetNumberOfElements();
   nElmMinusOne = n - 1;
@@ -60,13 +60,12 @@ G4HadElementSelector::G4HadElementSelector(G4DynamicParticle* dp,
   if(nElmMinusOne > 0) {
     G4PhysicsVector* first = nullptr;
     xSections.resize(n, first);
-    first = new G4PhysicsLogVector(emin,emax,bins);
-    first->SetSpline(spline);
+    first = new G4PhysicsLogVector(emin,emax,bins,false);
     xSections[0] = first;
     for(G4int i=1; i<n; ++i) {
       xSections[i] = new G4PhysicsVector(*first);
     }
-    std::vector<double> temp;
+    std::vector<G4double> temp;
     temp.resize(n, 0.0);
     for(G4int j=0; j<=bins; ++j) {
       G4double cross = 0.0;
@@ -113,6 +112,10 @@ void G4HadronXSDataTable::Initialise(G4DynamicParticle* dp,
 {
   size_t nn = G4Material::GetNumberOfMaterials();
   if(nn > nMaterials) {
+    if(0 == nMaterials) {
+      xsData.reserve(nn);
+      elmSelectors.reserve(nn);
+    }
     G4PhysicsLogVector* first = nullptr;
     G4int sbins = std::max(10, bins/5);
     const G4MaterialTable* mtable = G4Material::GetMaterialTable();
@@ -122,9 +125,8 @@ void G4HadronXSDataTable::Initialise(G4DynamicParticle* dp,
       G4HadElementSelector* es = nullptr;
       // create real vector only for complex materials
       if(mat->GetNumberOfElements() > 1) {
-	if(!first) {
-          first = new G4PhysicsLogVector(emin, emax, bins);
-	  first->SetSpline(spline);
+	if(nullptr == first) {
+          first = new G4PhysicsLogVector(emin, emax, bins, spline);
 	  v = first;
 	} else {
 	  v = new G4PhysicsVector(*first);
@@ -135,6 +137,7 @@ void G4HadronXSDataTable::Initialise(G4DynamicParticle* dp,
           G4double cros = xs->ComputeCrossSection(dp, mat);
           v->PutValue(j, cros);
 	}
+        if(spline) v->FillSecondDerivatives();
 	elmSelectors[i] = new G4HadElementSelector(dp, xs, mat, sbins, emin, emax, spline);
       }
       xsData.push_back(v);

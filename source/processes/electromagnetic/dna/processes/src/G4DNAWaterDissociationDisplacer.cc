@@ -41,6 +41,7 @@
 #include "G4H2O.hh"
 #include "G4H2.hh"
 #include "G4Hydrogen.hh"
+#include "G4Oxygen.hh"
 #include "G4OH.hh"
 #include "G4H3O.hh"
 #include "G4Electron_aq.hh"
@@ -66,6 +67,9 @@ G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
 
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 B1A1_DissociationDecay)
+
+G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
+                B1A1_DissociationDecay2)
 
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 AutoIonisation)
@@ -177,6 +181,9 @@ theDecayChannel) const
             RMSMotherMoleculeDisplacement = 0. * nanometer;
             break;
         case B1A1_DissociationDecay:
+            RMSMotherMoleculeDisplacement = 0. * nanometer;
+            break;
+        case B1A1_DissociationDecay2:
             RMSMotherMoleculeDisplacement = 0. * nanometer;
             break;
         case AutoIonisation:
@@ -298,13 +305,19 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
                 auto pProduct = pDecayChannel->GetProduct(i);
                 if (pProduct->GetDefinition() == G4H2::Definition())
                 {
-                    // H2
-                    theProductDisplacementVector[i] = -2. / 18. * RandDirection;
+                    // In the paper of Kreipl (2009)
+                    // theProductDisplacementVector[i] = -2. / 18. * RandDirection;
+
+                    // Based on momentum conservation
+                    theProductDisplacementVector[i] = -16. / 18. * RandDirection;
                 }
                 else if (pProduct->GetDefinition() == G4OH::Definition())
                 {
-                    // OH
-                    G4ThreeVector OxygenDisplacement = +16. / 18. * RandDirection;
+                    // In the paper of Kreipl (2009)
+                    // G4ThreeVector OxygenDisplacement = +16. / 18. * RandDirection;
+
+                    // Based on momentum conservation
+                    G4ThreeVector OxygenDisplacement = +2. / 18. * RandDirection;
                     G4double OHRMSDisplacement = 1.1 * nanometer;
 
                     auto OHDisplacement =
@@ -326,6 +339,37 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
                 }
             }
             break;
+        }
+        case B1A1_DissociationDecay2:
+        {
+          if(fVerbose){
+            G4cout<<"B1A1_DissociationDecay2"<<G4endl;
+            G4cout<<"Channel's name: "<<pDecayChannel->GetName()<<G4endl;
+          }
+
+          G4int NbOfH = 0;
+          for(G4int i =0; i < nbProducts; ++i)
+          {
+            auto pProduct = pDecayChannel->GetProduct(i);
+            if(pProduct->GetDefinition() == G4Oxygen::Definition()){
+            // O(3p)
+            theProductDisplacementVector[i] = G4ThreeVector(0,0,0);
+          }
+          else if(pProduct->GetDefinition() == G4Hydrogen::Definition()){
+            // H
+            G4double HRMSDisplacement = 1.6 * nanometer;
+
+            auto HDisplacement =
+            radialDistributionOfProducts(HRMSDisplacement);
+
+            if(NbOfH==0) HDisplacement = 0.5*HDisplacement;
+            else HDisplacement = -0.5*HDisplacement;
+            theProductDisplacementVector[i] = HDisplacement;
+
+            ++NbOfH;
+          }
+        }
+        break;
         }
         case AutoIonisation:
         {

@@ -66,9 +66,13 @@ class G4EmLowEParametersMessenger: public G4UImessenger
 public:   // with description
   
   explicit G4EmLowEParametersMessenger(G4EmLowEParameters*);
-  virtual ~G4EmLowEParametersMessenger();
+  ~G4EmLowEParametersMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String) override;
+  void SetNewValue(G4UIcommand*, G4String) override;
+
+  G4EmLowEParametersMessenger & operator=
+  (const G4EmLowEParametersMessenger &right) = delete;
+  G4EmLowEParametersMessenger(const G4EmLowEParametersMessenger&) = delete;
 
 private:
 

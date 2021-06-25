@@ -13,7 +13,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+    
+22-06-21 G. Cosmo (rdecay01-V10-07-01)
+- Use new CLHEP units for minute, hour, day, year and millielectronvolt
+  in PhysicsList.
+
+19-04-21 mma (rdecay01-V10-07-00)
+- rdecay01.cc: RunManagerFactory
+               G4SteppingVerboseWithUnits
+- ActionInitialization.hh and cc: remove SteppingVerbose class
+      
 03-11-20 mma  (rdecay01-V10-06-04)
 - add a comment in atomicDeexcitation.mac
 

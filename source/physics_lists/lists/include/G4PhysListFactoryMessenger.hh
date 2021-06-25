@@ -51,9 +51,9 @@ class G4PhysListFactoryMessenger: public G4UImessenger
 {
 public:
   G4PhysListFactoryMessenger(G4VModularPhysicsList* pl);
-  virtual ~G4PhysListFactoryMessenger();
+  ~G4PhysListFactoryMessenger() override;
 
-  void SetNewValue(G4UIcommand* aComm, G4String aS);
+  void SetNewValue(G4UIcommand* aComm, G4String aS) override;
 
 private:
   G4VModularPhysicsList*   thePhysList;

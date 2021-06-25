@@ -32,7 +32,6 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "TrackingAction.hh"
-#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,13 +67,6 @@ void ActionInitialization::Build() const
   
   TrackingAction* trackingAction = new TrackingAction(eventAction);
   SetUserAction(trackingAction);
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
-{
-  return new SteppingVerbose();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

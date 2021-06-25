@@ -23,6 +23,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+15th April 2021 Ben Morgan (raytracer-V10-07-00)
+- Migrate to modular CMake build
+
 20th October 2020  Jonathan Madsen (raytracer-V10-06-03)
 - Implemented G4RunManagerFactory::GetMasterRunManager()
 

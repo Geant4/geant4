@@ -50,7 +50,6 @@
 #include "G4Text.hh"
 
 #ifdef G4OPENGL_VERSION_2
-// We need to have a Wt gl drawer because we will draw inside the WtGL component (ImmediateWtViewer)
 #include "G4OpenGLVboDrawer.hh"
 #endif
 

@@ -38,19 +38,20 @@
 #include "G4LinInterpolation.hh"
 
 // Constructor
-
+// -------------------------------------------------------------------
 G4LinInterpolation::G4LinInterpolation()
 { }
 
+// -------------------------------------------------------------------
 // Destructor
-
 G4LinInterpolation::~G4LinInterpolation()
 { }
 
-
+// -------------------------------------------------------------------
 G4VDataSetAlgorithm* G4LinInterpolation::Clone() const 
 { return new G4LinInterpolation; }
 
+// -------------------------------------------------------------------
 G4double G4LinInterpolation::Calculate(G4double x, G4int bin, 
 				       const G4DataVector& points, 
 				       const G4DataVector& data) const
@@ -77,7 +78,7 @@ G4double G4LinInterpolation::Calculate(G4double x, G4int bin,
   return value;
 }
 
-
+// -------------------------------------------------------------------
 //Nicolas A. Karakatsanis: New Calculation method implemented to which logarithmic values
 //                         from the G4EMLOW dataset are loaded directly to enhance performance
 

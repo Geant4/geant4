@@ -68,7 +68,6 @@ public:
     targetMass = 0.0;
     frameFlag = 0;
     nProducts = 0;
-    bAdjustFinalState = true;
   }
 
   G4ParticleHPEnAngCorrelation(G4ParticleDefinition* proj)
@@ -83,7 +82,6 @@ public:
     targetMass = 0.0;
     frameFlag = 0;
     nProducts = 0;
-    bAdjustFinalState = true;
   }
 
   ~G4ParticleHPEnAngCorrelation()
@@ -93,15 +91,6 @@ public:
   
   inline void Init(std::istream & aDataFile)
   {
-    bAdjustFinalState = true;
-    if ( G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState() ) bAdjustFinalState = false;
-
-// T.K. Comment out following line to keep the condition at the
-// validation efforts comparing NeutronHP and PartileHP for neutrons (2015 Sep.)
-//#ifdef PHP_AS_HP
-//    bAdjustFinalState = false;
-//#endif
- 
     inCharge = true;
     aDataFile>>targetMass>>frameFlag>>nProducts;
     theProducts = new G4ParticleHPProduct[nProducts];
@@ -160,7 +149,6 @@ private:
 
   G4ParticleDefinition* theProjectile;
 
-  G4bool bAdjustFinalState;
 };
 
 #endif

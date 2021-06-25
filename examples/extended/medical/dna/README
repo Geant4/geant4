@@ -78,7 +78,9 @@ This directory contains a set of Geant4-DNA examples.
 
    - neuron 
        Irradiation of a realistic neuron cell.
-   
+
+   - AuNP
+   Simulation calsulates absorbed dose around AuNP 
    
 See the README page inside each example for more detail.
 

@@ -66,6 +66,8 @@ using CLHEP::STP_Pressure;
 using CLHEP::STP_Temperature;
 using CLHEP::twopi;
 using CLHEP::twopi_mc2_rcl2;
+using CLHEP::Bohr_magneton;
+using CLHEP::nuclear_magneton;
 using CLHEP::universe_mean_density;
 
 #endif

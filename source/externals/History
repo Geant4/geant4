@@ -16,10 +16,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06 May 2021 - G.Cosmo (externals-V10-06-07)
+03 June 2021, B. Morgan (externals-V10-07-05)
+- PTL: Hide PTL_... options from clients building Geant4
+  - Forward relevant Geant4 options to PTL: TBB, sanitizer, locks
+
+11 May 2021, J. Allison  (externals-V10-07-04)
+- g4tools-V10-07-03: Rename g4tools/include/tools/sg/gL_manager to GL_manager.
+
+07 May 2021 - G.Cosmo (externals-V10-07-03)
+- CLHEP: Updated values in SystemOfUnits.h and PhysicalConstants.h:
+  o Added units: minute, hour, day, year and millielectronvolt.
+  o Added constants: Bohr_magneton and nuclear_magneton.
+
+06 May 2021 - G.Cosmo (externals-V10-07-02)
 - CLHEP: Fixed trivial compilation warnings on gcc-11 in Random headers.
 
-8 December 2020 - B.Morgan (externals-V10-06-06)
+18 February 2021 - B.Morgan (externals-V10-07-01)
+- Move g4tools from analysis to externals category
+
+8 December 2020 - B.Morgan (externals-V10-07-00)
 - Force PTL to install its CMake configuration files within the directory
   where Geant4 installs its own.
 - Force PTL to install its headers under CMAKE_INSTALL_INCLUDEDIR/Geant4

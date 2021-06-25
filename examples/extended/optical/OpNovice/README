@@ -45,6 +45,10 @@ G4VUserDetectorConstruction
      *** define G4OpticalSurface                           ***
      *** add G4MaterialPropertiesTable to G4OpticalSurface ***
 
+alternatively the Configuration can be read from a gdml file.
+The provided gdml file NoviceExample.gdml corresponds to the detector
+defined in OpNoviceDetectorConstruction.
+
 G4VUserPrimaryGeneratorAction
 -----------------------------
 
@@ -80,8 +84,8 @@ Visualisation
  - compile and link to generate an executable
 
    This example handles the program arguments in a new way.
-   It can be run with the following optional arguments:
-   $ OpNovice [-m macro ] [-u UIsession] [-t nThreads]
+   It can be run with the following optional optionaarguments:
+   $ OpNovice [-g gdmlfile] [-m macro ] [-u UIsession] [-t nThreads]
 
    The -t option is available only in multi-threading mode
    and it allows the user to override the Geant4 default number of
@@ -90,7 +94,11 @@ Visualisation
 
  - execute OpNovice in 'batch' mode from macro files
  	$ OpNovice -m OpNovice.in
- 
+
+ - execute OpNovice in 'batch' mode from macro files using a gdml file
+   to define the geometry
+ 	$ OpNovice -g NoviceExample.gdml -m OpNovice.in
+	
  - execute OpNovice in 'interactive mode' with visualization
  	$ OpNovice
  	....
@@ -107,4 +115,10 @@ Macros
  optPhoton.mac: Shoot optical photons with energy 3 eV
  OpNovice.in: Shoot positrons with energy 500 keV.
  gui.mac: Configure the graphical user interface.
- vis.mac: Configure visualization.
+ vis.mac: Configure visualization.ls 
+
+
+gdml files
+----------
+NoviceExample.gdml: example gdml file corresponding to
+OpNoviceDetectorConstruction

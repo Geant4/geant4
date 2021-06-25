@@ -1,13 +1,19 @@
 ################################################################################
 #   cmake settings
 #
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8...3.18 FATAL_ERROR)
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+ cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
 # Add allocation export symbol for the PLT module
-add_definitions(-DPTL_ALLOC_EXPORT)
+add_compile_definitions(PTL_ALLOC_EXPORT)
 
 cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0042 NEW)
+if(NOT CMAKE_VERSION VERSION_LESS 3.12)
+    cmake_policy(SET CMP0077 NEW)
+endif()
 
 # Check if project is being used directly or via add_subdirectory
 set(PTL_MASTER_PROJECT ON)
@@ -47,7 +53,7 @@ endif()
 ################################################################################
 
 include(MacroUtilities)
-#include(Options)
+include(Options)
 include(Compilers)
 include(GNUInstallDirs)
 include(ProjectSettings)
@@ -90,7 +96,7 @@ export(TARGETS ${PTL_INTERFACE_LIBRARIES} FILE ${PROJECT_BINARY_DIR}/${PROJECT_N
 ################################################################################
 
 if(BUILD_SHARED_LIBS)
-    build_library(VERSION
+    ptl_build_library(VERSION
         TYPE SHARED
         TARGET_NAME ptl-shared
         OUTPUT_NAME G4ptl
@@ -98,8 +104,14 @@ if(BUILD_SHARED_LIBS)
         EXTRA_ARGS POSITION_INDEPENDENT_CODE ON
                    WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-    target_link_libraries(ptl-shared PUBLIC ptl-external-packages)
-    target_link_libraries(ptl-shared PRIVATE ptl-external-libraries ptl-compile-options)
+    target_link_libraries(ptl-shared PUBLIC
+        ptl-public-options
+        ptl-sanitizer-options
+        ptl-external-packages)
+
+    target_link_libraries(ptl-shared PRIVATE
+        ptl-compile-options
+        ptl-external-libraries)
 
     target_include_directories(ptl-shared PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -111,15 +123,20 @@ endif()
 
 if(BUILD_STATIC_LIBS)
 
-    build_library(
+    ptl_build_library(
         TYPE STATIC
         TARGET_NAME ptl-static
         OUTPUT_NAME $<IF:$<PLATFORM_ID:Windows>,G4ptl-static,G4ptl>
         SOURCES ${ptl_headers} ${ptl_sources}
         EXTRA_ARGS POSITION_INDEPENDENT_CODE ON)
 
-    target_link_libraries(ptl-static PUBLIC ptl-external-packages)
-    target_link_libraries(ptl-static PRIVATE ptl-external-libraries ptl-compile-options)
+    target_link_libraries(ptl-static PUBLIC
+        ptl-public-options
+        ptl-external-packages)
+
+    target_link_libraries(ptl-static PRIVATE
+        ptl-compile-options
+        ptl-external-libraries)
 
     target_include_directories(ptl-static PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -166,4 +183,3 @@ include(ConfigurePackage)
 if(PTL_MASTER_PROJECT)
     print_features()
 endif()
-

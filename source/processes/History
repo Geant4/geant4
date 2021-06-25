@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 18, 2021 (processes-V10-07-02)
+- Migrate main/orphaned processes categories to modular CMake API
+  - EM/Hadronic/Biasing are to be handled in separate MRs
+
+April 13, 2021 A.Ribon (processes-V10-07-01)
+- CMakeLists.txt, GNUmakefile : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+
+March 16, 2021 A.Ribon (processes-V10-07-00)
+- CMakeLists.txt, GNUmakefile : removed the subdirectory rpg
+  (corresponding to the hadronic model rpg that has been deleted).
+
 November 16, 2020 G.Cosmo (processes-V10-06-01)
 - Fixed typos in printed-out text. Addressing problem report #2285.
 

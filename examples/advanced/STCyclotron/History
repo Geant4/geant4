@@ -8,11 +8,21 @@
                       Category History file
                       ---------------------
 
-21.04.2021 - Gabriele Cosmo STCyclotron-V10-06-04
+22.06.2021 - Gabriele Cosmo (STCyclotron-V10-07-04)
+- Use new CLHEP units for minute, hour, day, year in STCyclotronPhysicsList.
+
+26.05.2021 - Dennis Wright (STCyclotron-V10-07-03)
+- STCyclotronSensitiveTarget.cc: remove #include of deprecated file
+  G4RadioactiveDecay.hh
+
+24.05.2021 - B. Morgan (STCyclotron-V10-07-02)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+21.04.2021 - Gabriele Cosmo STCyclotron-V10-07-01
 - Fixed gui.mac macro to invoke init_parameters.mac.
   Addressing GitHub PR#25.
 
-18.03.2021 - Gunter Folger STCyclotron-V10-06-03
+18.03.2021 - Gunter Folger STCyclotron-V10-07-00
 - Update README to recommend G4TENDL 1.3.2
 
 12.11.2020 - S. Guatelli STCyclotron-V10-06-02

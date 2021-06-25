@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
+    
+    <define>
+        <matrix coldim="2" name="AIRRINDEX" values="2.034*eV 1 2.068*eV 1 2.103*eV 1 2.139*eV 1 2.177*eV 1 2.216*eV 1 2.256*eV 1 2.298*eV 1 2.341*eV 1 2.386*eV 1 2.433*eV 1 2.481*eV 1 2.532*eV 1 2.585*eV 1 2.64*eV 1 2.697*eV 1 2.757*eV 1 2.82*eV 1 2.885*eV 1 2.954*eV 1 3.026*eV 1 3.102*eV 1 3.181*eV 1 3.265*eV 1 3.353*eV 1 3.446*eV 1 3.545*eV 1 3.649*eV 1 3.76*eV 1 3.877*eV 1 4.002*eV 1 4.136*eV 1"/>
+        <matrix coldim="2" name="REFLECTIVITY" values="2.034*eV 0.3 4.136*eV 0.5"/>
+        <matrix coldim="2" name="EFFICIENCY" values="2.034*eV 0.8 4.136*eV 1"/>
+        <matrix coldim="2" name="WATERRINDEX" values="2.034*eV 1.3435 2.068*eV 1.344 2.103*eV 1.3445 2.139*eV 1.345 2.177*eV 1.3455 2.216*eV 1.346 2.256*eV 1.3465 2.298*eV 1.347 2.341*eV 1.3475 2.386*eV 1.348 2.433*eV 1.3485 2.481*eV 1.3492 2.532*eV 1.35 2.585*eV 1.3505 2.64*eV 1.351 2.697*eV 1.3518 2.757*eV 1.3522 2.82*eV 1.353 2.885*eV 1.3535 2.954*eV 1.354 3.026*eV 1.3545 3.102*eV 1.355 3.181*eV 1.3555 3.265*eV 1.356 3.353*eV 1.3568 3.446*eV 1.3572 3.545*eV 1.358 3.649*eV 1.3585 3.76*eV 1.359 3.877*eV 1.3595 4.002*eV 1.36 4.136*eV 1.3608"/>
+        <matrix coldim="2" name="WATERMIEHG" values="1.56962*eV 1.67024e+08 1.58974*eV 1.58727e+08 1.61039*eV 1.50742e+08 1.63157*eV 1.43062e+08 1.65333*eV 1.3568e+08 1.67567*eV 1.28587e+08 1.69863*eV 1.21776e+08 1.72222*eV 1.1524e+08 1.74647*eV 1.0897e+08 1.77142*eV 1.02959e+08 1.7971*eV 9.72004e+07 1.82352*eV 9.16869e+07 1.85074*eV 8.64113e+07 1.87878*eV 8.13668e+07 1.90769*eV 7.65464e+07 1.93749*eV 7.19435e+07 1.96825*eV 6.75513e+07 1.99999*eV 6.33634e+07 2.03278*eV 5.93732e+07 2.06666*eV 5.55746e+07 2.10169*eV 5.19612e+07 2.13793*eV 4.8527e+07 2.17543*eV 4.52659e+07 2.21428*eV 4.21719e+07 2.25454*eV 3.92394e+07 2.29629*eV 3.64625e+07 2.33962*eV 3.38357e+07 2.38461*eV 3.13534e+07 2.43137*eV 2.90103e+07 2.47999*eV 2.6801e+07 2.53061*eV 2.47204e+07 2.58333*eV 2.27634e+07 2.63829*eV 2.09249e+07 2.69565*eV 1.92001e+07 2.75555*eV 1.75842e+07 2.81817*eV 1.60724e+07 2.88371*eV 1.46604e+07 2.95237*eV 1.33435e+07 3.02438*eV 1.21173e+07 3.09999*eV 1.09777e+07 3.17948*eV 9.92042e+06 3.26315*eV 8.94141e+06 3.35134*eV 8.03671e+06 3.44444*eV 7.20247e+06 3.54285*eV 6.43493e+06 3.64705*eV 5.73043e+06 3.75757*eV 5.08542e+06 3.87499*eV 4.49647e+06 3.99999*eV 3.96021e+06 4.13332*eV 3.47341e+06 4.27585*eV 3.03294e+06 4.42856*eV 2.63575e+06 4.59258*eV 2.27891e+06 4.76922*eV 1.95959e+06 4.95999*eV 1.67506e+06 5.16665*eV 1.42271e+06 5.39129*eV 1.2e+06 5.63635*eV 1.00453e+06 5.90475*eV 833967 6.19998*eV 686106"/>
+        <matrix coldim="2" name="WATERABSLENGTH" values="2.034*eV 3448 2.068*eV 4082 2.103*eV 6329 2.139*eV 9174 2.177*eV 12346 2.216*eV 13889 2.256*eV 15152 2.298*eV 17241 2.341*eV 18868 2.386*eV 20000 2.433*eV 26316 2.481*eV 35714 2.532*eV 45455 2.585*eV 47619 2.64*eV 52632 2.697*eV 52632 2.757*eV 55556 2.82*eV 52632 2.885*eV 52632 2.954*eV 47619 3.026*eV 45455 3.102*eV 41667 3.181*eV 37037 3.265*eV 33333 3.353*eV 30000 3.446*eV 28500 3.545*eV 27000 3.649*eV 24500 3.76*eV 22000 3.877*eV 19500 4.002*eV 17500 4.136*eV 14500"/>
+        <matrix coldim="2" name="WATERSCINTILLATIONCOMPONENT1" values="2.034*eV 1 2.068*eV 1 2.103*eV 1 2.139*eV 1 2.177*eV 1 2.216*eV 1 2.256*eV 1 2.298*eV 1 2.341*eV 1 2.386*eV 1 2.433*eV 1 2.481*eV 1 2.532*eV 1 2.585*eV 1 2.64*eV 1 2.697*eV 1 2.757*eV 1 2.82*eV 1 2.885*eV 1 2.954*eV 1 3.026*eV 1 3.102*eV 1 3.181*eV 1 3.265*eV 1 3.353*eV 1 3.446*eV 1 3.545*eV 1 3.649*eV 1 3.76*eV 1 3.877*eV 1 4.002*eV 1 4.136*eV 1"/>
+        <matrix coldim="2" name="WATERSCINTILLATIONCOMPONENT2" values="2.034*eV 0.01 2.068*eV 1 2.103*eV 2 2.139*eV 3 2.177*eV 4 2.216*eV 5 2.256*eV 6 2.298*eV 7 2.341*eV 8 2.386*eV 9 2.433*eV 8 2.481*eV 7 2.532*eV 6 2.585*eV 4 2.64*eV 3 2.697*eV 2 2.757*eV 1 2.82*eV 0.01 2.885*eV 1 2.954*eV 2 3.026*eV 3 3.102*eV 4 3.181*eV 5 3.265*eV 6 3.353*eV 7 3.446*eV 8 3.545*eV 9 3.649*eV 8 3.76*eV 7 3.877*eV 6 4.002*eV 5 4.136*eV 4"/>
+        <matrix coldim="1" name="WATERMIEHG_FORWARD" values="0.99"/>
+        <matrix coldim="1" name="WATERMIEHG_BACKWARD" values="0.99"/>
+        <matrix coldim="1" name="WATERMIEHG_FORWARD_RATIO" values="0.8"/>
+        <matrix coldim="1" name="WATERSCINTILLATIONYIELD" values="50"/>
+        <matrix coldim="1" name="WATERRESOLUTIONSCALE" values="1"/>
+        <matrix coldim="1" name="WATERSCINTILLATIONTIMECONSTANT1" values="1"/>
+        <matrix coldim="1" name="WATERSCINTILLATIONTIMECONSTANT2" values="10"/>
+	<matrix coldim="1" name="SCINTILLATIONYIELD1" values="0.8"/>
+	<matrix coldim="1" name="SCINTILLATIONYIELD2" values="0.2"/>
+    </define>
+
+    <materials>
+        <isotope N="14" Z="7" name="N14">
+            <atom unit="g/mole" value="14.0031"/>
+        </isotope>
+        <isotope N="15" Z="7" name="N15">
+            <atom unit="g/mole" value="15.0001"/>
+        </isotope>
+        <element name="Nitrogen">
+            <fraction n="0.99632" ref="N14"/>
+            <fraction n="0.00368" ref="N15"/>
+        </element>
+        <isotope N="16" Z="8" name="O16">
+            <atom unit="g/mole" value="15.9949"/>
+        </isotope>
+        <isotope N="17" Z="8" name="O17">
+            <atom unit="g/mole" value="16.9991"/>
+        </isotope>
+        <isotope N="18" Z="8" name="O18">
+            <atom unit="g/mole" value="17.9992"/>
+        </isotope>
+        <element name="Oxygen">
+            <fraction n="0.99757" ref="O16"/>
+            <fraction n="0.00038" ref="O17"/>
+            <fraction n="0.00205" ref="O18"/>
+        </element>
+        <material name="Air" state="gas">
+            <property name="RINDEX" ref="AIRRINDEX"/>
+            <T unit="K" value="293.15"/>
+            <MEE unit="eV" value="85.7030667332998"/>
+            <D unit="g/cm3" value="0.00129"/>
+            <fraction n="0.7" ref="Nitrogen"/>
+            <fraction n="0.3" ref="Oxygen"/>
+        </material>
+        <isotope N="1" Z="1" name="H1">
+            <atom unit="g/mole" value="1.00782503081372"/>
+        </isotope>
+        <isotope N="2" Z="1" name="H2">
+            <atom unit="g/mole" value="2.01410199966617"/>
+        </isotope>
+        <element name="Hydrogen">
+            <fraction n="0.999885" ref="H1"/>
+            <fraction n="0.000115" ref="H2"/>
+        </element>
+        <material name="Water" state="solid">
+            <property name="RINDEX" ref="WATERRINDEX"/>
+            <property name="MIEHG" ref="WATERMIEHG"/>
+            <property name="ABSLENGTH" ref="WATERABSLENGTH"/>
+            <property name="SCINTILLATIONCOMPONENT1" ref="WATERSCINTILLATIONCOMPONENT1"/>
+            <property name="SCINTILLATIONCOMPONENT2" ref="WATERSCINTILLATIONCOMPONENT2"/>
+            <property name="MIEHG_FORWARD" ref="WATERMIEHG_FORWARD"/>
+            <property name="MIEHG_BACKWARD" ref="WATERMIEHG_BACKWARD"/>
+            <property name="MIEHG_FORWARD_RATIO" ref="WATERMIEHG_FORWARD_RATIO"/>
+            <property name="SCINTILLATIONYIELD" ref="WATERSCINTILLATIONYIELD"/>
+            <property name="RESOLUTIONSCALE" ref="WATERRESOLUTIONSCALE"/>
+            <property name="SCINTILLATIONTIMECONSTANT1" ref="WATERSCINTILLATIONTIMECONSTANT1"/>
+            <property name="SCINTILLATIONTIMECONSTANT2" ref="WATERSCINTILLATIONTIMECONSTANT2"/>
+	    <property name="SCINTILLATIONYIELD1" ref="SCINTILLATIONYIELD1"/>
+	    <property name="SCINTILLATIONYIELD2" ref="SCINTILLATIONYIELD2"/>
+            <T unit="K" value="293.15"/>
+            <MEE unit="eV" value="68.9984174679527"/>
+            <D unit="g/cm3" value="1"/>
+            <fraction n="0.112097669256382" ref="Hydrogen"/>
+            <fraction n="0.887902330743618" ref="Oxygen"/>
+        </material>
+    </materials>
+
+    <solids>
+        <box lunit="m" name="Bubble_solid" x="1" y="1" z="1"/>
+        <opticalsurface finish="0" model="0" name="AirSurface" type="1" value="1">
+            <property name="REFLECTIVITY" ref="REFLECTIVITY"/>
+            <property name="EFFICIENCY" ref="EFFICIENCY"/>
+        </opticalsurface>
+        <box lunit="m" name="Tank_solid" x="10" y="10" z="10"/>
+	<opticalsurface finish="30" model="3" name="WaterSurface" type="3" value="0"/>
+        <box lunit="m" name="expHall_solid" x="20" y="20" z="20"/>
+        <box lunit="m" name="World_solid" x="30" y="30" z="30"/>
+    </solids>
+
+    <structure>
+        <volume name="Bubble_log">
+            <materialref ref="Air"/>
+            <solidref ref="Bubble_solid"/>
+         </volume>
+        <volume name="Tank_log">
+             <materialref ref="Water"/>
+            <solidref ref="Tank_solid"/>
+            <physvol name="Bubble_phys">
+                <volumeref ref="Bubble_log"/>
+                <position name="Bubble_pos" unit="m" x="0" y="2.5" z="0"/>
+            </physvol>
+        </volume>
+        <volume name="expHall_log">
+            <materialref ref="Air"/>
+            <solidref ref="expHall_solid"/>
+            <physvol name="Tank_phys">
+                <volumeref ref="Tank_log"/>
+                <position name="Tank_pos" unit="m" x="0" y="0" z="0"/>
+            </physvol>
+        </volume>
+        <volume name="World_log">
+            <materialref ref="Air"/>
+            <solidref ref="World_solid"/>
+            <physvol name="expHall_phys">
+                <volumeref ref="expHall_log"/>
+                <position name="expHall_pos" unit="m" x="0" y="0" z="0"/>
+            </physvol>
+        </volume>
+        <skinsurface name="AirSurface" surfaceproperty="AirSurface">
+            <volumeref ref="Bubble_log"/>
+        </skinsurface>
+        <bordersurface name="WaterSurface" surfaceproperty="WaterSurface">
+            <physvolref ref="Tank_phys"/>
+            <physvolref ref="expHall_phys"/>
+        </bordersurface>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="World_log"/>
+    </setup>
+
+</gdml>

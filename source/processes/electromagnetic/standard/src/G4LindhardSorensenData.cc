@@ -201,11 +201,11 @@ void G4LindhardSorensenData::InitialiseData()
      -0.015675051, -0.027353574,  -0.03931666, -0.050325729,  -0.06174447}};
 
   for(G4int i=0; i<=LVECT; ++i) { 
-    data[i] = new G4PhysicsLinearVector(xmin, xmax, NPOINT-1);
-    data[i]->SetSpline(true);
+    data[i] = new G4PhysicsLinearVector(xmin, xmax, NPOINT-1, true);
     for(std::size_t j=0; j<NPOINT; ++j) {
       data[i]->PutValue(j, lsdata[i][j]);
     }
+    data[i]->FillSecondDerivatives();
   }
 }
 

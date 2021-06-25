@@ -26,26 +26,21 @@
 #ifndef G4EmDNAPhysics_stationary_h
 #define G4EmDNAPhysics_stationary_h 1
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4EmDNAPhysics.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmDNAPhysics_stationary : public G4VPhysicsConstructor
+class G4EmDNAPhysics_stationary : public G4EmDNAPhysics
 {
 public:
 
-  G4EmDNAPhysics_stationary(G4int ver = 1);
-  G4EmDNAPhysics_stationary(G4int ver, const G4String& name);
+  G4EmDNAPhysics_stationary(G4int ver=1, const G4String& nam="G4EmDNAPhysics_stationary");
 
   virtual ~G4EmDNAPhysics_stationary();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
-private:
-
-  G4int  verbose;
 };
 
 #endif

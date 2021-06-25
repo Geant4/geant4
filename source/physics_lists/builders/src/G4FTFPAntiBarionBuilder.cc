@@ -78,52 +78,7 @@ G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder()
 }
 
 void G4FTFPAntiBarionBuilder::
-Build(G4AntiProtonInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(theAntiNucleonData);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPAntiBarionBuilder::
-Build(G4AntiNeutronInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(theAntiNucleonData);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPAntiBarionBuilder::
-Build(G4AntiDeuteronInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(theAntiNucleonData);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPAntiBarionBuilder::
-Build(G4AntiTritonInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(theAntiNucleonData);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPAntiBarionBuilder::
-Build(G4AntiHe3InelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->AddDataSet(theAntiNucleonData);
-  aP->RegisterMe(theModel);
-}
-
-void G4FTFPAntiBarionBuilder::
-Build(G4AntiAlphaInelasticProcess * aP)
+Build(G4HadronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);

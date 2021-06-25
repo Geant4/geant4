@@ -57,16 +57,14 @@ public:
 
   explicit G4DeltaAngleFreeScat(const G4String& name = "");
 
-  virtual ~G4DeltaAngleFreeScat();
+  ~G4DeltaAngleFreeScat() override;
 
-  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double kinEnergyFinal,
-                                         G4int Z,
-                                         const G4Material* mat = nullptr) final;
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double kinEnergyFinal,
+				 G4int Z,
+				 const G4Material* mat = nullptr) final;
 
-  virtual void PrintGeneratorInformation() const final;
-
-private:
+  void PrintGeneratorInformation() const final;
 
   // hide assignment operator 
   G4DeltaAngleFreeScat & operator=(const  G4DeltaAngleFreeScat &right) = delete;

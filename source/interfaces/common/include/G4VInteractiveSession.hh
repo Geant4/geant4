@@ -52,6 +52,8 @@ class G4VInteractiveSession
     virtual void AddIcon (const char*,const char*,const char*,const char*);
     virtual void DefaultIcons (bool);
     virtual void OutputStyle (const char*,const char*,const char*);
+    virtual void NativeMenu (bool);
+    virtual void ClearMenu ();
     void AddInteractor(G4String,G4Interactor);
     G4Interactor GetInteractor(G4String);
 

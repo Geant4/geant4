@@ -1,12 +1,6 @@
-#------------------------------------------------------------------------------
-# Module : G4FR
-# Package: Geant4.src.G4visualization.G4FR
-#------------------------------------------------------------------------------
+# - G4FR module build definition
 
-#
 # Module has optional sources
-#
-
 # List those always built
 set(G4VIS_DAWN_MODULE_HEADERS
   G4DAWNFILE.hh
@@ -45,32 +39,21 @@ if(GEANT4_USE_NETWORKDAWN)
   add_definitions(-DG4VIS_BUILD_DAWN_DRIVER)
 endif()
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4FR
-  HEADERS
+geant4_add_module(G4FR
+  PUBLIC_HEADERS
     ${G4VIS_DAWN_MODULE_HEADERS}
   SOURCES
-    ${G4VIS_DAWN_MODULE_SOURCES}
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4geometrymng
-    G4globman
-    G4graphics_reps
-    G4hits
-    G4intercoms
-    G4modeling
-    G4specsolids
-    G4vis_management
-  GLOBAL_DEPENDENCIES
-    G4digits_hits
-    G4geometry
-    G4global
-    G4graphics_reps
-    G4intercoms
-    G4modeling
-    G4vis_management
-)
+    ${G4VIS_DAWN_MODULE_SOURCES})
 
-# List any source specific properties here
+geant4_module_link_libraries(G4FR
+  PUBLIC
+    G4geometrymng
+    G4modeling
+    G4vis_management
+    G4globman
+  PRIVATE
+    G4csg
+    G4graphics_reps
+    G4hepgeometry)
+

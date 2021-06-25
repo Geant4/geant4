@@ -62,9 +62,9 @@ void G4Qt3DUtils::delete_entity_recursively(Qt3DCore::QNode *node){
 #endif
   Qt3DCore::QEntity* entity = dynamic_cast<Qt3DCore::QEntity*>(node);
   if(entity == nullptr){
+#ifdef G4QT3DDEBUG
     G4String name = node->objectName().toStdString();
     if (name == "") name = "X";
-#ifdef G4QT3DDEBUG
     G4Qt3DUtils::LogFile << (void*)node << ": "
     << "Deleting non-entity node " << name << std::endl;
 #endif
@@ -73,9 +73,9 @@ void G4Qt3DUtils::delete_entity_recursively(Qt3DCore::QNode *node){
     return;
   }
   for (auto component: entity->components()) {
+#ifdef G4QT3DDEBUG
     G4String name = component->objectName().toStdString();
     if (name == "") name = "X";
-#ifdef G4QT3DDEBUG
     G4Qt3DUtils::LogFile << (void*)node << ": " << "Deleting component " << name
     << " of " << entity->objectName().toStdString() << std::endl;
 #endif
@@ -104,17 +104,17 @@ void G4Qt3DUtils::delete_entity_recursively(Qt3DCore::QNode *node){
 void G4Qt3DUtils::delete_components_and_children_of_entity_recursively(Qt3DCore::QNode *node){
   Qt3DCore::QEntity* entity = dynamic_cast<Qt3DCore::QEntity*>(node);
   if(entity == nullptr){
+#ifdef G4QT3DDEBUG
     G4String name = node->objectName().toStdString();
     if (name == "") name = "X";
-#ifdef G4QT3DDEBUG
     G4Qt3DUtils::LogFile << (void*)node << ": " << "Found non-entity node " << name << std::endl;
 #endif
     return;
   }
   for (auto component: entity->components()){
+#ifdef G4QT3DDEBUG
     G4String name = component->objectName().toStdString();
     if (name == "") name = "X";
-#ifdef G4QT3DDEBUG
     G4Qt3DUtils::LogFile << (void*)entity << ": " << "Deleting component " << name
     << " of " << entity->objectName().toStdString() << std::endl;
 #endif

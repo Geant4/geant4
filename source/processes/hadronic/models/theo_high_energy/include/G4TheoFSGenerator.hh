@@ -65,9 +65,14 @@ class G4TheoFSGenerator : public G4HadronicInteraction
 
   public:
       G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) override;
+
       inline void SetTransport(G4VIntraNuclearTransportModel *const  value);
       inline void SetHighEnergyGenerator(G4VHighEnergyGenerator *const  value);
       inline void SetQuasiElasticChannel(G4QuasiElasticChannel *const value);
+
+      inline const G4VIntraNuclearTransportModel* GetTransport() const;
+      inline const G4VHighEnergyGenerator* GetHighEnergyGenerator() const;
+      inline const G4QuasiElasticChannel* GetQuasiElasticChannel() const;
 
       std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const override;
       void ModelDescription(std::ostream& outFile) const override;
@@ -80,6 +85,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
       G4QuasiElasticChannel * theQuasielastic;
       G4CRCoalescence * theCosmicCoalescence;
 };
+
 
 inline void G4TheoFSGenerator::SetTransport(G4VIntraNuclearTransportModel *const  value)
 {
@@ -94,6 +100,21 @@ inline void G4TheoFSGenerator::SetHighEnergyGenerator(G4VHighEnergyGenerator *co
 inline void G4TheoFSGenerator::SetQuasiElasticChannel(G4QuasiElasticChannel *const value)
 {
   theQuasielastic = value;
+}
+
+inline const G4VIntraNuclearTransportModel* G4TheoFSGenerator::GetTransport() const
+{
+  return theTransport;
+}
+
+inline const G4VHighEnergyGenerator* G4TheoFSGenerator::GetHighEnergyGenerator() const
+{
+  return theHighEnergyGenerator; 
+}
+
+inline const G4QuasiElasticChannel* G4TheoFSGenerator::GetQuasiElasticChannel() const
+{
+  return theQuasielastic;
 }
 
 #endif

@@ -16,26 +16,54 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18 March 2021  John Allison  (interfaces-V10-06-13)
+22 April 2021 Ben Morgan (interfaces-V10-07-10)
+- G4UIQt.cc: Deal properly with creation and deletion of Viewer Properties
+
+19 April 2021 Ben Morgan (interfaces-V10-07-09)
+- Remove obsolete Wt code from source and use in G4UIexecutive
+
+1 April 2021 Ben Morgan (interfaces-V10-07-08)
+- Migrate build to modular CMake API
+
+18 March 2021  John Allison  (interfaces-V10-07-07)
 - G4UIQt::ReceiveG4cout/G4cerr:
   o Trap empty string with empty() instead of using unary operator!
     (The latter may work for std::string but G4String has a conversion
     operator to char*, so ! is always false.)
   o Fixes bug report #2347.
 
-26 January 2020  John Allison (interfaces-V10-06-12)
+11 March 2021  Gabriele Cosmo (interfaces-V10-07-06)
+- Extended G4UIWin32 driver with new features, based on contribution
+  by O.Pena-Rodrigues in GitHub PR#23.
+- Removed spurious moc data previously pushed by mistake.
+
+5 March 2021  Gabriele Cosmo (interfaces-V10-07-05)
+- Modified G4UIExecutive::SelectSessionByFile() to ensure that in Windows
+  the Win32 OpenGL driver is selected as the second choice by default.
+  Based on GitHub PR#20, contributed by Ovidio Pena Rodriguez.
+
+26 February 2021  Igor Semeniouk (interfaces-V10-07-04)
+- G4UIQt, G4InteractorMessenger, G4VInteractiveSession: introducing menu
+  bar style:
+  o /gui/nativeMenuBar [true|false]
+    Allow native menu bar when relevant ( MacOS, Ubuntu Unity), default true
+    Native menu enabled by defailt in G4UIQt
+  o /gui/clearMenu
+    Clear menu bar, remove all user defined menu entries.
+
+26 January 2021  John Allison (interfaces-V10-07-03)
 - G4UIQt.cc: Get colour and background from OS.
   o Instead of fixed background <span style='background:#EEEEEE...
     use <span style='background:" + pal.highlight().color().name()...
   o This picks up colour from the OS and even allows for change of
     OS display style, e.g., dark mode on MacOS.
 
-20 January 2020  John Allison
+20 January 2021  John Allison (interfaces-V10-07-02)
 - G4UIQt.cc: Fix bug in command-line-echo highlighting whereby there
   could be a crash in some circumstances.
   o Use <span> instead of <div> in HTML wrappers.
 
-16 January 2020  John Allison
+16 January 2021  John Allison (interfaces-V10-07-01)
 - Requires intercoms-V10-07-00.
 - Introduce choice of output styles:
   o /gui/outputStyle
@@ -44,8 +72,8 @@ committal in the CVS repository !
     <highlight|no-highlight>
   o Highlighting applies to the echoed command line if echoing is
     requested with /control/verbose > 0.
-    
-29 December 2020  John Allison
+
+29 December 2020  John Allison (interfaces-V10-07-00)
 - G4UIQt.cc: Use 12pt Courier for G4UIQt output window.
 
 29 November 2020  Gabriele Cosmo (interfaces-V10-06-11)
@@ -66,7 +94,7 @@ committal in the CVS repository !
   o As a workaround to the problem of loss of output in the case of
     a crash or G4Exception:
     - Send G4cout/cerr also to std::cout/cerr so that output is not lost.
- 
+
 21 September 2020  John Allison (interfaces-V10-06-07)
 - G4Qt.cc: Add the following to fix a problem with Windows - see
   https://geant4-forum.web.cern.ch/t/blue-screen-when-running-b1-example-using-qt/3144

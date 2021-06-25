@@ -85,7 +85,7 @@
 #  endif
 #endif
 
-#if defined(G4UNIX)
+#if defined(G4UNIX) && !defined(WIN32)
 #  include <cxxabi.h>
 #  include <execinfo.h>
 #  include <unistd.h>
@@ -202,11 +202,11 @@ inline G4String G4Demangle()
 #  include <algorithm>
 #  include <array>
 #  include <cstdlib>
+#  include <cstdio>
 #  include <functional>
 #  include <iomanip>
 #  include <iostream>
 #  include <map>
-#  include <mutex>
 #  include <regex>
 #  include <set>
 #  include <sstream>
@@ -230,7 +230,6 @@ class G4Backtrace
     using id_entry_t = std::tuple<std::string, int, std::string>;
     using id_list_t  = std::vector<id_entry_t>;
 
-    std::shared_ptr<std::mutex> lock        = std::make_shared<std::mutex>();
     std::map<int, bool> is_active           = {};
     std::map<int, sigaction_t> current      = {};
     std::map<int, sigaction_t> previous     = {};
@@ -452,11 +451,16 @@ G4Backtrace::GetDemangled(FuncT&& func)
 
 inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
 {
-  std::stringstream message;
-  message << "\n### CAUGHT SIGNAL: " << sig << " ### ";
+  // try to avoid as many dynamic allocations as possible here to avoid
+  // overflowing the signal stack
+
+  // ignore future signals of this type
+  sigignore(sig);
+
+  os << "\n### CAUGHT SIGNAL: " << sig << " ### ";
   if(sinfo)
-    message << "address: " << sinfo->si_addr << ", ";
-  message << Description(sig) << ". ";
+    os << "address: " << sinfo->si_addr << ", ";
+  os << Description(sig) << ". ";
 
   if(sig == SIGSEGV)
   {
@@ -465,20 +469,19 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
       switch(sinfo->si_code)
       {
         case SEGV_MAPERR:
-          message << "Address not mapped to object.";
+          os << "Address not mapped to object.";
           break;
         case SEGV_ACCERR:
-          message << "Invalid permissions for mapped object.";
+          os << "Invalid permissions for mapped object.";
           break;
         default:
-          message << "Unknown segmentation fault error: " << sinfo->si_code
-                  << ".";
+          os << "Unknown segmentation fault error: " << sinfo->si_code << ".";
           break;
       }
     }
     else
     {
-      message << "Segmentation fault (unknown).";
+      os << "Segmentation fault (unknown).";
     }
   }
   else if(sig == SIGFPE)
@@ -488,93 +491,92 @@ inline void G4Backtrace::Message(int sig, siginfo_t* sinfo, std::ostream& os)
       switch(sinfo->si_code)
       {
         case FE_DIVBYZERO:
-          message << "Floating point divide by zero.";
+          os << "Floating point divide by zero.";
           break;
         case FE_OVERFLOW:
-          message << "Floating point overflow.";
+          os << "Floating point overflow.";
           break;
         case FE_UNDERFLOW:
-          message << "Floating point underflow.";
+          os << "Floating point underflow.";
           break;
         case FE_INEXACT:
-          message << "Floating point inexact result.";
+          os << "Floating point inexact result.";
           break;
         case FE_INVALID:
-          message << "Floating point invalid operation.";
+          os << "Floating point invalid operation.";
           break;
         default:
-          message << "Unknown floating point exception error: "
-                  << sinfo->si_code << ".";
+          os << "Unknown floating point exception error: " << sinfo->si_code
+             << ".";
           break;
       }
     }
     else
     {
-      message << "Unknown floating point exception";
+      os << "Unknown floating point exception";
       if(sinfo)
-        message << ": " << sinfo->si_code;
-      message << ". ";
+        os << ": " << sinfo->si_code;
+      os << ". ";
     }
   }
 
-  message << std::endl;
+  os << '\n';
+
+  auto bt = GetMangled<256, 3>([](const char* _s) { return _s; });
+  char prefix[64];
+  snprintf(prefix, 64, "[PID=%i, TID=%i]", (int) getpid(),
+           (int) G4Threading::G4GetThreadId());
+  size_t sz = 0;
+  for(auto& itr : bt)
+  {
+    if(!itr)
+      break;
+    if(strlen(itr) == 0)
+      break;
+    ++sz;
+  }
+  os << "\nBacktrace:\n";
+  auto _w = std::log10(sz) + 1;
+  for(size_t i = 0; i < sz; ++i)
+  {
+    os << prefix << "[" << std::setw(_w) << std::right << i << '/'
+       << std::setw(_w) << std::right << sz << "]> " << std::left << bt.at(i)
+       << '\n';
+  }
+  os << std::flush;
+
+  // exit action could cause more signals to be raise so make sure this is done
+  // after the message has been printed
   try
   {
-    sigignore(sig);
     ExitAction(sig);
   } catch(std::exception& e)
   {
     std::cerr << "ExitAction(" << sig << ") threw an exception" << std::endl;
     std::cerr << e.what() << std::endl;
   }
-
-  auto bt = GetDemangled<256, 3>(FrameFunctor());
-  std::stringstream prefix;
-  prefix << "[PID=" << getpid() << ", TID=" << G4Threading::G4GetThreadId()
-         << "]";
-  std::vector<G4String> btvec;
-  for(auto& itr : bt)
-  {
-    if(itr.length() > 0)
-      btvec.emplace_back(std::move(itr));
-  }
-  std::stringstream serr;
-  serr << "\nBacktrace:\n";
-  auto _w = std::log10(btvec.size()) + 1;
-  for(size_t i = 0; i < btvec.size(); ++i)
-  {
-    serr << prefix.str() << "[" << std::setw(_w) << std::right << i << '/'
-         << std::setw(_w) << std::right << btvec.size() << "]> " << std::left
-         << btvec.at(i) << '\n';
-  }
-  os << serr.str().c_str() << '\n';
-  os << message.str() << std::flush;
 }
 
 //----------------------------------------------------------------------------//
 
 inline void G4Backtrace::Handler(int sig, siginfo_t* sinfo, void*)
 {
-  std::unique_lock<std::mutex> lk{ *(GetData().lock) };
+  Message(sig, sinfo, std::cerr);
 
-  {
-    std::stringstream msg;
-    Message(sig, sinfo, msg);
-    std::cerr << msg.str() << std::flush;
-  }
-
-  std::stringstream msg;
-  msg << "\n\n";
+  char msg[1024];
+  snprintf(msg, 1024, "%s", "\n");
 
   if(sinfo && G4PSIGINFO_AVAILABLE > 0)
   {
 #  if G4PSIGINFO_AVAILABLE > 0
-    psiginfo(sinfo, msg.str().c_str());
+    psiginfo(sinfo, msg);
+    fflush(stdout);
+    fflush(stderr);
 #  endif
   }
   else
   {
-    std::cerr << msg.str() << std::endl;
+    std::cerr << msg << std::flush;
   }
 
   // ignore any termination signals
@@ -589,7 +591,6 @@ inline void G4Backtrace::Handler(int sig, siginfo_t* sinfo, void*)
 inline int G4Backtrace::Enable(const signal_set_t& _signals)
 {
   static bool _first = true;
-  std::unique_lock<std::mutex> lk{ *(GetData().lock) };
   if(_first)
   {
     std::string _msg = "!!! G4Backtrace is activated !!!";
@@ -654,8 +655,6 @@ inline int G4Backtrace::Enable(const std::string& _signals)
 
 inline int G4Backtrace::Disable(signal_set_t _signals)
 {
-  std::unique_lock<std::mutex> lk{ *(GetData().lock) };
-
   if(_signals.empty())
   {
     for(auto& itr : GetData().is_active)

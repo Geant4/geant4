@@ -7,6 +7,9 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+24.05.2021 - B. Morgan (ChargeExchangeMC-V10-07-00)
+           Bump required CMake version range to 3.12...3.20, matching core Geant4
+
 02.11.2020 - B.Morgan, Tag ChargeExchangeMC-V10-06-01
              Support same CMake version range as core Geant4
 

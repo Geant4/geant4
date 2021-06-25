@@ -1,157 +1,108 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4phys_lists
-# Package: Geant4.src.G4physicslists.G4phys_lists
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitely.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - G4phys_lists module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4phys_lists
-    HEADERS
-	FTF_BIC.hh
-	FTFP_BERT.hh
-	FTFP_BERT_HP.hh
-	FTFP_BERT_TRV.hh
-	FTFP_BERT_ATL.hh
-	FTFQGSP_BERT.hh
-	G4GenericPhysicsList.hh
-	G4GenericPhysicsList.icc
-        G4PhysListFactory.hh
-        G4PhysListFactoryMessenger.hh
-        LBE.hh
-	NuBeam.hh
-	QBBC.hh
-	QGS_BIC.hh
-	QGSP_BERT.hh
-	QGSP_BERT_HP.hh
-	QGSP_BIC.hh
-	QGSP_BIC_HP.hh
-        QGSP_BIC_AllHP.hh
-	QGSP_FTFP_BERT.hh
-        INCLXXPhysicsListHelper.hh
-        INCLXXPhysicsListHelper.icc
-        QGSP_INCLXX.hh
-        QGSP_INCLXX_HP.hh
-        FTFP_INCLXX.hh
-        FTFP_INCLXX_HP.hh
-	Shielding.hh
-	ShieldingLEND.hh
-        G4PhysListRegistry.hh
-        G4PhysListStamper.hh
-        G4PhysListFactoryAlt.hh
-        G4RegisterPhysLists.icc
-    SOURCES
-	FTF_BIC.cc
-	FTFP_BERT_ATL.cc
-	FTFP_BERT.cc
-	FTFP_BERT_HP.cc
-	FTFP_BERT_TRV.cc
-	FTFQGSP_BERT.cc
-        G4PhysListFactoryAlt.cc
-        G4PhysListFactory.cc
-        G4PhysListFactoryMessenger.cc
-        G4PhysListRegistry.cc
-	LBE.cc
-	NuBeam.cc
-        QBBC.cc
-	QGS_BIC.cc
-	QGSP_BERT.cc
-	QGSP_BERT_HP.cc
-        QGSP_BIC_AllHP.cc
-	QGSP_BIC.cc
-	QGSP_BIC_HP.cc
-	QGSP_FTFP_BERT.cc
-	Shielding.cc
-    GRANULAR_DEPENDENCIES
-        G4baryons
-        G4bosons
-        G4cuts
-        G4decay
-        G4digits
-        G4emhighenergy
-        G4emlowenergy
-        G4emstandard
-        G4emutils
-        G4event
-        G4geometrymng
-        G4globman
-        G4had_im_r_matrix
-        G4had_lend
-        G4had_mod_man
-        G4had_mod_util
-        G4had_lept_nuclear
-        G4had_preequ_exciton
-        G4had_string_diff
-        G4had_string_frag
-        G4had_string_man
-        G4had_theo_max
-        G4hadronic_bert_cascade
-        G4hadronic_binary
-        G4hadronic_coherent_elastic
-        G4hadronic_deex_evaporation
-        G4hadronic_deex_fermi_breakup
-        G4hadronic_deex_fission
-        G4hadronic_deex_gem_evaporation
-        G4hadronic_deex_handler
-        G4hadronic_deex_management
-        G4hadronic_deex_multifragmentation
-        G4hadronic_deex_photon_evaporation
-        G4hadronic_deex_util
-        G4hadronic_inclxx_interface
-        G4hadronic_inclxx_physics
-        G4hadronic_inclxx_utils
-        G4hadronic_mgt
-        G4hadronic_proc
-        G4hadronic_qgstring
-        G4hadronic_radioactivedecay
-        G4hadronic_stop
-        G4hadronic_util
-        G4hadronic_xsect
-        G4hits
-        G4intercoms
-        G4ions
-        G4leptons
-        G4magneticfield
-        G4materials
-        G4mesons
-        G4muons
-        G4navigation
-        G4optical
-        G4partman
-        G4phys_builders
-        G4procman
-        G4run
-        G4shortlived
-        G4track
-        G4tracking
-        G4transportation
-        G4volumes
-        G4xrays
-    GLOBAL_DEPENDENCIES
-        G4digits_hits
-        G4event
-        G4geometry
-        G4global
-        G4intercoms
-        G4materials
-        G4particles
-        G4processes
-        G4run
-        G4track
-        G4tracking
-    LINK_LIBRARIES
-)
+geant4_add_module(G4phys_lists
+  PUBLIC_HEADERS
+    FTF_BIC.hh
+    FTFP_BERT.hh
+    FTFP_BERT_HP.hh
+    FTFP_BERT_TRV.hh
+    FTFP_BERT_ATL.hh
+    FTFQGSP_BERT.hh
+    G4GenericPhysicsList.hh
+    G4GenericPhysicsList.icc
+    G4PhysListFactory.hh
+    G4PhysListFactoryMessenger.hh
+    LBE.hh
+    NuBeam.hh
+    QBBC.hh
+    QGS_BIC.hh
+    QGSP_BERT.hh
+    QGSP_BERT_HP.hh
+    QGSP_BIC.hh
+    QGSP_BIC_HP.hh
+    QGSP_BIC_AllHP.hh
+    QGSP_FTFP_BERT.hh
+    INCLXXPhysicsListHelper.hh
+    INCLXXPhysicsListHelper.icc
+    QGSP_INCLXX.hh
+    QGSP_INCLXX_HP.hh
+    FTFP_INCLXX.hh
+    FTFP_INCLXX_HP.hh
+    Shielding.hh
+    ShieldingLEND.hh
+    G4PhysListRegistry.hh
+    G4PhysListStamper.hh
+    G4PhysListFactoryAlt.hh
+    G4RegisterPhysLists.icc
+  SOURCES
+    FTF_BIC.cc
+    FTFP_BERT_ATL.cc
+    FTFP_BERT.cc
+    FTFP_BERT_HP.cc
+    FTFP_BERT_TRV.cc
+    FTFQGSP_BERT.cc
+    G4PhysListFactoryAlt.cc
+    G4PhysListFactory.cc
+    G4PhysListFactoryMessenger.cc
+    G4PhysListRegistry.cc
+    LBE.cc
+    NuBeam.cc
+    QBBC.cc
+    QGS_BIC.cc
+    QGSP_BERT.cc
+    QGSP_BERT_HP.cc
+    QGSP_BIC_AllHP.cc
+    QGSP_BIC.cc
+    QGSP_BIC_HP.cc
+    QGSP_FTFP_BERT.cc
+    Shielding.cc)
 
-# List any source specific properties here
-
+geant4_module_link_libraries(G4phys_lists
+  PUBLIC
+    G4globman
+    G4intercoms
+    G4materials
+    G4partman
+    G4phys_ctor_decay
+    G4phys_ctor_em
+    G4phys_ctor_factory
+    G4phys_ctor_glnuclear
+    G4phys_ctor_helastic
+    G4phys_ctor_hinelastic
+    G4phys_ctor_ions
+    G4phys_ctor_limiters
+    G4phys_ctor_stopping
+    G4physlist_util
+    G4procman
+    G4run
+  PRIVATE
+    G4baryons
+    G4cuts
+    G4decay
+    G4emhighenergy
+    G4emlowenergy
+    G4emstandard
+    G4emutils
+    G4had_par_hp
+    G4had_preequ_exciton
+    G4had_string_diff
+    G4had_string_frag
+    G4had_theo_max
+    G4hadronic_bert_cascade
+    G4hadronic_binary
+    G4hadronic_coherent_elastic
+    G4hadronic_deex_handler
+    G4hadronic_deex_management
+    G4hadronic_deex_photon_evaporation
+    G4hadronic_proc
+    G4hadronic_radioactivedecay
+    G4hadronic_stop
+    G4hadronic_util
+    G4hadronic_xsect
+    G4ions
+    G4mesons
+    G4muons
+    G4optical
+    G4shortlived
+    G4xrays)

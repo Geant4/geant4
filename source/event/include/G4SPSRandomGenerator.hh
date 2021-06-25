@@ -51,7 +51,7 @@
 #ifndef G4SPSRandomGenerator_hh
 #define G4SPSRandomGenerator_hh 1
 
-#include "G4PhysicsOrderedFreeVector.hh"
+#include "G4PhysicsFreeVector.hh"
 #include "G4DataInterpolation.hh"
 #include "G4ThreeVector.hh"
 #include "G4Threading.hh"
@@ -154,36 +154,36 @@ class G4SPSRandomGenerator
     //
     G4Cache<a_check> local_IPDFXBias;
     G4bool XBias, IPDFXBias;
-    G4PhysicsOrderedFreeVector XBiasH;
-    G4PhysicsOrderedFreeVector IPDFXBiasH;
+    G4PhysicsFreeVector XBiasH;
+    G4PhysicsFreeVector IPDFXBiasH;
     G4Cache<a_check> local_IPDFYBias;
     G4bool YBias, IPDFYBias;
-    G4PhysicsOrderedFreeVector YBiasH;
-    G4PhysicsOrderedFreeVector IPDFYBiasH;
+    G4PhysicsFreeVector YBiasH;
+    G4PhysicsFreeVector IPDFYBiasH;
     G4Cache<a_check> local_IPDFZBias;
     G4bool ZBias, IPDFZBias;
-    G4PhysicsOrderedFreeVector ZBiasH;
-    G4PhysicsOrderedFreeVector IPDFZBiasH;
+    G4PhysicsFreeVector ZBiasH;
+    G4PhysicsFreeVector IPDFZBiasH;
     G4Cache<a_check> local_IPDFThetaBias;
     G4bool ThetaBias, IPDFThetaBias;
-    G4PhysicsOrderedFreeVector ThetaBiasH;
-    G4PhysicsOrderedFreeVector IPDFThetaBiasH;
+    G4PhysicsFreeVector ThetaBiasH;
+    G4PhysicsFreeVector IPDFThetaBiasH;
     G4Cache<a_check> local_IPDFPhiBias;
     G4bool PhiBias, IPDFPhiBias;
-    G4PhysicsOrderedFreeVector PhiBiasH;
-    G4PhysicsOrderedFreeVector IPDFPhiBiasH;
+    G4PhysicsFreeVector PhiBiasH;
+    G4PhysicsFreeVector IPDFPhiBiasH;
     G4Cache<a_check> local_IPDFEnergyBias;
     G4bool EnergyBias, IPDFEnergyBias;
-    G4PhysicsOrderedFreeVector EnergyBiasH;
-    G4PhysicsOrderedFreeVector IPDFEnergyBiasH;
+    G4PhysicsFreeVector EnergyBiasH;
+    G4PhysicsFreeVector IPDFEnergyBiasH;
     G4Cache<a_check> local_IPDFPosThetaBias;
     G4bool PosThetaBias, IPDFPosThetaBias;
-    G4PhysicsOrderedFreeVector PosThetaBiasH;
-    G4PhysicsOrderedFreeVector IPDFPosThetaBiasH;
+    G4PhysicsFreeVector PosThetaBiasH;
+    G4PhysicsFreeVector IPDFPosThetaBiasH;
     G4Cache<a_check> local_IPDFPosPhiBias;
     G4bool PosPhiBias, IPDFPosPhiBias;
-    G4PhysicsOrderedFreeVector PosPhiBiasH;
-    G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
+    G4PhysicsFreeVector PosPhiBiasH;
+    G4PhysicsFreeVector IPDFPosPhiBiasH;
 
     struct bweights_t
     {

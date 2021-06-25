@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3bRun::B3bRun()
- : G4Run(), 
+ : G4Run(),
    fCollID_cryst(-1),
    fCollID_patient(-1),
    fPrintModulo(10000),
@@ -59,60 +59,60 @@ B3bRun::~B3bRun()
 void B3bRun::RecordEvent(const G4Event* event)
 {
   if ( fCollID_cryst < 0 ) {
-   fCollID_cryst 
+   fCollID_cryst
      = G4SDManager::GetSDMpointer()->GetCollectionID("crystal/edep");
-   //G4cout << " fCollID_cryst: " << fCollID_cryst << G4endl;   
+   //G4cout << " fCollID_cryst: " << fCollID_cryst << G4endl;
   }
 
   if ( fCollID_patient < 0 ) {
-   fCollID_patient 
+   fCollID_patient
      = G4SDManager::GetSDMpointer()->GetCollectionID("patient/dose");
-   //G4cout << " fCollID_patient: " << fCollID_patient << G4endl;   
+   //G4cout << " fCollID_patient: " << fCollID_patient << G4endl;
   }
 
   G4int evtNb = event->GetEventID();
-  
-  if (evtNb%fPrintModulo == 0) { 
+
+  if (evtNb%fPrintModulo == 0) {
     G4cout << G4endl << "---> end of event: " << evtNb << G4endl;
-  }      
-  
+  }
+
   //Hits collections
-  //  
+  //
   G4HCofThisEvent* HCE = event->GetHCofThisEvent();
   if(!HCE) return;
-               
+
   //Energy in crystals : identify 'good events'
   //
   const G4double eThreshold = 500*keV;
   G4int nbOfFired = 0;
-   
-  G4THitsMap<G4double>* evtMap = 
+
+  G4THitsMap<G4double>* evtMap =
     static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_cryst));
-               
+
   std::map<G4int,G4double*>::iterator itr;
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
     G4double edep = *(itr->second);
     if (edep > eThreshold) nbOfFired++;
     ///G4int copyNb  = (itr->first);
     ///G4cout << G4endl << "  cryst" << copyNb << ": " << edep/keV << " keV ";
-  }  
+  }
   if (nbOfFired == 2) fGoodEvents++;
-  
+
   //Dose deposit in patient
   //
   G4double dose = 0.;
-     
+
   evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_patient));
-               
+
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
     ///G4int copyNb  = (itr->first);
     dose = *(itr->second);
   }
   fSumDose += dose;
   fStatDose += dose;
-  
-  G4Run::RecordEvent(event);      
-}  
+
+  G4Run::RecordEvent(event);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -122,7 +122,7 @@ void B3bRun::Merge(const G4Run* aRun)
   fGoodEvents += localRun->fGoodEvents;
   fSumDose    += localRun->fSumDose;
   fStatDose   += localRun->fStatDose;
-  G4Run::Merge(aRun); 
-} 
+  G4Run::Merge(aRun);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,32 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4VModularPhysicsList
 //
+// Class description:
 //
+// This class is a subclass of G4VUserPhysicsList.
+// The user should register his/her physics constructors by using:
+//   G4VModularPhysicsList::RegsiterPhysics()
+// to construt particles and processes.
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file
-//
-// Class Description:
-//   This class is a subclass of G4VUserPhysicsList.
-//   The user should register his/her physics constructors
-//   by using
-//         G4VModularPhysicsList::RegsiterPhysics()
-//   to construt particles and processes.
-//
-//   Only one physics constructor can be registered for each "physics_type".
-//   Physics constructors with same "physics_type" can be replaced by
-//   G4VModularPhysicsList::ReplacePhysics() method
-//
-// ------------------------------------------------------------
-// History
-// - first version                   12 Nov 2000 by H.Kurashige
-// - Add  ReplacePhysics             14 Mar 2011 by H.Kurashige
-// - Add Worker cleanup              21 Apr 2017 by A.Dotti
-//
-// ------------------------------------------------------------
-#ifndef G4VModularPhysicsList_h
-#define G4VModularPhysicsList_h 1
+// Only one physics constructor can be registered for each "physics_type".
+// Physics constructors with same "physics_type" can be replaced using the
+// G4VModularPhysicsList::ReplacePhysics() method.
+
+// Original author: H.Kurashige (Kobe University), 12 November 2000
+// --------------------------------------------------------------------
+#ifndef G4VModularPhysicsList_hh
+#define G4VModularPhysicsList_hh 1
 
 #include <vector>
 
@@ -64,12 +55,13 @@ class G4VMPLData
 {
   // Encapsulate the fields of class G4VModularPhysicsList
   // that are per-thread.
- public:
-  void initialize();
-  typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVectorData;
-  // TODO: understand this
-  // See: https://jira-geant4.kek.jp/browse/DEV-284
-  G4PhysConstVectorData* physicsVector;
+
+  public:
+
+    void initialize();
+    using G4PhysConstVectorData = std::vector<G4VPhysicsConstructor*>;
+    // See: https://jira-geant4.kek.jp/browse/DEV-284
+    G4PhysConstVectorData* physicsVector = nullptr;
 };
 
 // The type G4VMPLManager is introduced to encapsulate the methods used by
@@ -87,72 +79,71 @@ class G4VMPLData
 // Both the master thread and worker threads change the length of the array
 // for G44VUPLData instances mutually along with G4VUserPhysicsList
 // instances are created.
-typedef G4VUPLSplitter<G4VMPLData> G4VMPLManager;
-typedef G4VMPLManager G4VModularPhysicsListSubInstanceManager;
+//
+using G4VMPLManager = G4VUPLSplitter<G4VMPLData>;
+using G4VModularPhysicsListSubInstanceManager = G4VMPLManager;
 
 class G4VModularPhysicsList : public virtual G4VUserPhysicsList
 {
- public:
-  G4VModularPhysicsList();
-  virtual ~G4VModularPhysicsList();
+  public:
 
- protected:
-  // hide copy constructor and assignment operator
-  G4VModularPhysicsList(const G4VModularPhysicsList&);
-  G4VModularPhysicsList& operator=(const G4VModularPhysicsList&);
+    G4VModularPhysicsList();
+    virtual ~G4VModularPhysicsList();
 
- public:  // with description
-  // This method will be invoked in the Construct() method.
-  // each particle type will be instantiated
-  virtual void ConstructParticle() override;
+    virtual void ConstructParticle() override;
+      // This method will be invoked in the Construct() method.
+      // Each particle type will be instantiated.
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess() override;
+    virtual void ConstructProcess() override;
+      // This method will be invoked in the Construct() method.
+      // Each physics process will be instantiated and
+      // registered to the process manager of each particle type.
 
- public:  // with description
-  // Register Physics Constructor
-  void RegisterPhysics(G4VPhysicsConstructor*);
+    void RegisterPhysics(G4VPhysicsConstructor*);
+      // Register Physics Constructor.
 
-  const G4VPhysicsConstructor* GetPhysics(G4int index) const;
-  const G4VPhysicsConstructor* GetPhysics(const G4String& name) const;
-  const G4VPhysicsConstructor* GetPhysicsWithType(G4int physics_type) const;
+    const G4VPhysicsConstructor* GetPhysics(G4int index) const;
+    const G4VPhysicsConstructor* GetPhysics(const G4String& name) const;
+    const G4VPhysicsConstructor* GetPhysicsWithType(G4int physics_type) const;
 
-  // Replace Physics Constructor
-  //  The existing physics constructor with same physics_type as one of
-  //  the given physics constructor is replaced
-  //  (existing physics will be deleted)
-  //  If a corresponding physics constructor is NOT found,
-  //  the given physics constructor is just added
-  void ReplacePhysics(G4VPhysicsConstructor*);
+    void ReplacePhysics(G4VPhysicsConstructor*);
+      // Replace the Physics Constructor.
+      // The existing physics constructor with same physics_type as one of
+      // the given physics constructor is replaced (existing physics will be
+      // deleted). If a corresponding physics constructor is NOT found,
+      // the given physics constructor is just added.
 
-  // Remove Physics Constructor from the list
-  void RemovePhysics(G4VPhysicsConstructor*);
-  void RemovePhysics(G4int type);
-  void RemovePhysics(const G4String& name);
+    void RemovePhysics(G4VPhysicsConstructor*);
+    void RemovePhysics(G4int type);
+    void RemovePhysics(const G4String& name);
+      // Remove the Physics Constructor from the list.
 
-  /////////////////////////////////////
- public:  // with description
-  void SetVerboseLevel(G4int value);
-  G4int GetVerboseLevel() const;
-  // set/get controle flag for output message
-  //  0: Silent
-  //  1: Warning message
-  //  2: More
-  // given verbose level is set to all physics constructors
+    inline G4int GetInstanceID() const;
+    static const G4VMPLManager& GetSubInstanceManager();
+    virtual void TerminateWorker() override;
 
- protected:  // with description
-  G4int verboseLevel;
-  typedef G4VMPLData::G4PhysConstVectorData G4PhysConstVector;
-  G4int g4vmplInstanceID;
-  G4RUN_DLL static G4VMPLManager G4VMPLsubInstanceManager;
+    void SetVerboseLevel(G4int value);
+    G4int GetVerboseLevel() const;
+      // Set/get control flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
+      // given verbose level is set to all physics constructors.
 
- public:
-  inline G4int GetInstanceID() const;
-  static const G4VMPLManager& GetSubInstanceManager();
-  virtual void TerminateWorker() override;
+  protected:
+
+    G4VModularPhysicsList(const G4VModularPhysicsList&);
+    G4VModularPhysicsList& operator=(const G4VModularPhysicsList&);
+      // Protected copy constructor and assignment operator.
+
+    using G4PhysConstVector = G4VMPLData::G4PhysConstVectorData;
+
+    G4int verboseLevel = 0;
+    G4int g4vmplInstanceID = 0;
+    G4RUN_DLL static G4VMPLManager G4VMPLsubInstanceManager;
 };
+
+// Inline methods implementations
 
 inline G4int G4VModularPhysicsList::GetVerboseLevel() const
 {
@@ -168,4 +159,5 @@ inline const G4VMPLManager& G4VModularPhysicsList::GetSubInstanceManager()
 {
   return G4VMPLsubInstanceManager;
 }
+
 #endif

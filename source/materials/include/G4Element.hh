@@ -212,6 +212,11 @@ public:  // without description
 
   inline void SetName(const G4String& name)  {fName=name;}
 
+  G4Element(G4Element&) = delete;
+  const G4Element & operator=(const G4Element&) = delete;
+  G4bool operator==(const G4Element&) const = delete;
+  G4bool operator!=(const G4Element&) const = delete;
+
 private:
 
   void InitializePointers();
@@ -219,11 +224,6 @@ private:
   void ComputeCoulombFactor();
   void ComputeLradTsaiFactor();
   void AddNaturalIsotopes();
-
-  G4Element(G4Element&) = delete;
-  const G4Element & operator=(const G4Element&) = delete;
-  G4bool operator==(const G4Element&) const = delete;
-  G4bool operator!=(const G4Element&) const = delete;
 
   //
   // Basic data members (which define an Element)

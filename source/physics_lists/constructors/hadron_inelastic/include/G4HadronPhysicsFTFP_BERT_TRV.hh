@@ -50,7 +50,7 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4HadronPhysicsFTFP_BERT
   public: 
     G4HadronPhysicsFTFP_BERT_TRV(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4bool quasiElastic=false);
-    ~G4HadronPhysicsFTFP_BERT_TRV() override;
+    virtual ~G4HadronPhysicsFTFP_BERT_TRV();
 
     // copy constructor and hide assignment operator
     G4HadronPhysicsFTFP_BERT_TRV(G4HadronPhysicsFTFP_BERT_TRV &) = delete;

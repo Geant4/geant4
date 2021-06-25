@@ -42,7 +42,7 @@ using G4AnalysisManager = G4GenericAnalysisManager;
 B5RunAction::B5RunAction(B5EventAction* eventAction)
  : G4UserRunAction(),
    fEventAction(eventAction)
-{ 
+{
   // Create the generic analysis manager
   // The choice of analysis technology is done according to the file extension
   auto analysisManager = G4AnalysisManager::Instance();
@@ -58,18 +58,18 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
      // The default file type (root) can be redefined by the user.
 
   // Book histograms, ntuple
-  
+
   // Creating 1D histograms
   analysisManager
     ->CreateH1("Chamber1","Drift Chamber 1 # Hits", 50, 0., 50); // h1 Id = 0
   analysisManager
     ->CreateH1("Chamber2","Drift Chamber 2 # Hits", 50, 0., 50); // h1 Id = 1
-  
+
   // Creating 2D histograms
-  analysisManager                                                
+  analysisManager
     ->CreateH2("Chamber1 XY","Drift Chamber 1 X vs Y",           // h2 Id = 0
-               50, -1000., 1000, 50, -300., 300.); 
-  analysisManager                                                
+               50, -1000., 1000, 50, -300., 300.);
+  analysisManager
     ->CreateH2("Chamber2 XY","Drift Chamber 2 X vs Y",           // h2 Id = 1
                50, -1500., 1500, 50, -300., 300.);
 
@@ -83,7 +83,7 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
     analysisManager->CreateNtupleDColumn("Time1");    // column Id = 4
     analysisManager->CreateNtupleDColumn("Time2");    // column Id = 5
     analysisManager                                   // column Id = 6
-      ->CreateNtupleDColumn("ECEnergyVector", fEventAction->GetEmCalEdep()); 
+      ->CreateNtupleDColumn("ECEnergyVector", fEventAction->GetEmCalEdep());
     analysisManager                                   // column Id = 7
       ->CreateNtupleDColumn("HCEnergyVector", fEventAction->GetHadCalEdep());
     analysisManager->FinishNtuple();
@@ -97,20 +97,20 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
 
 B5RunAction::~B5RunAction()
 {
-  delete G4AnalysisManager::Instance();  
+  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B5RunAction::BeginOfRunAction(const G4Run* /*run*/)
-{ 
+{
   //inform the runManager to save random number seed
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  
+
   // Get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
 
-  // Open an output file 
+  // Open an output file
   // The default file name is set in B5RunAction::B5RunAction(),
   // it can be overwritten in a macro
   analysisManager->OpenFile();

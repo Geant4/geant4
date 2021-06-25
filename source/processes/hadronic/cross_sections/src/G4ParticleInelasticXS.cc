@@ -38,7 +38,7 @@
 #include "G4ParticleInelasticXS.hh"
 #include "G4Neutron.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4ElementTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
@@ -64,12 +64,9 @@ G4String G4ParticleInelasticXS::gDataDirectory[] = {""};
 
 G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part) 
   : G4VCrossSectionDataSet("G4ParticleInelasticXS"),
-    highEnergyXsection(nullptr),
-    particle(part),
-    index(0),
-    isMaster(false)
+    particle(part)
 {
-  if(!part) {
+  if(nullptr == part) {
     G4Exception("G4ParticleInelasticXS::G4ParticleInelasticXS(..)","had015",
 		FatalException, "NO particle definition in constructor");
   } else {
@@ -102,7 +99,6 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
     }
   }
   SetForAllAtomsAndEnergies(true);
-  temp.resize(13,0.0);
 }
 
 G4ParticleInelasticXS::~G4ParticleInelasticXS()
@@ -317,21 +313,22 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 
   // it is possible re-initialisation for the new run
+  const G4ElementTable* table = G4Element::GetElementTable();
   if(isMaster) {
 
     // Access to elements
-    auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
-    for(size_t j=0; j<numOfCouples; ++j) {
-      auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
-      auto elmVec = mat->GetElementVector();
-      size_t numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZINELP-1));
-	if(nullptr == data[index]->GetElementData(Z)) { Initialise(Z); }
-      }
+    for ( auto & elm : *table ) {
+      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZINELP-1) );
+      if ( nullptr == (data[index])->GetElementData(Z) ) { Initialise(Z); }
     }
   }
+  // prepare isotope selection
+  size_t nIso = temp.size();
+  for ( auto & elm : *table ) {
+    size_t n = elm->GetNumberOfIsotopes();
+    if(n > nIso) { nIso = n; }
+  }
+  temp.resize(nIso, 0.0);
 }
 
 const G4String& G4ParticleInelasticXS::FindDirectoryPath()

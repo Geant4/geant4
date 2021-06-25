@@ -3,8 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,7 +18,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x1e3a1c0
+ creating G4RunManagerKernel 0x11bccc0
 
 The materials defined are : 
 
@@ -87,33 +93,33 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x204e6f0G4ErrorPhysicsList:: particle process manager e+ = 0x2050d70
-0x204e510G4ErrorPhysicsList:: particle process manager e- = 0x2052940
-0x204e370G4ErrorPhysicsList:: particle process manager gamma = 0x2052b70
-0x204faa0G4ErrorPhysicsList:: particle process manager geantino = 0x2052dc0
-0x204e8d0G4ErrorPhysicsList:: particle process manager mu+ = 0x2053010
-0x204ebf0G4ErrorPhysicsList:: particle process manager mu- = 0x2053260
-0x204f000G4ErrorPhysicsList:: particle process manager pi+ = 0x20534b0
-0x204f450G4ErrorPhysicsList:: particle process manager pi- = 0x2053700
-0x204f870G4ErrorPhysicsList:: particle process manager proton = 0x2053950
+0x13d41a0G4ErrorPhysicsList:: particle process manager e+ = 0x13d68f0
+0x13d4010G4ErrorPhysicsList:: particle process manager e- = 0x13d84c0
+0x13d3aa0G4ErrorPhysicsList:: particle process manager gamma = 0x13d86f0
+0x13d5620G4ErrorPhysicsList:: particle process manager geantino = 0x13d8940
+0x13d4380G4ErrorPhysicsList:: particle process manager mu+ = 0x13d8b90
+0x13d4770G4ErrorPhysicsList:: particle process manager mu- = 0x13d8de0
+0x13d4b80G4ErrorPhysicsList:: particle process manager pi+ = 0x13d9030
+0x13d4fd0G4ErrorPhysicsList:: particle process manager pi- = 0x13d9280
+0x13d53f0G4ErrorPhysicsList:: particle process manager proton = 0x13d94d0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
+       Klein-Nishina : Emin=    0 meV Emax=  100 TeV
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
+       PhotoElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -183,13 +189,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 /geant4e/limits/stepLength 100 mm
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
-### G4EnergyLossForExtrapolator::Initialisation
+### G4EnergyLossForExtrapolator::Initialisation tables= 0
 G4TablesForExtrapolator::ComputeElectronDEDX for e-
 G4TablesForExtrapolator::ComputeElectronDEDX for e+
 G4TablesForExtrapolator::ComputeMuonDEDX for mu+
 G4TablesForExtrapolator::ComputeProtonDEDX for proton
 G4TablesForExtrapolator::ComputeTransportXS for e-
-### G4EnergyLossForExtrapolator::BuildTables for 4 materials Nbins= 80 Emin(MeV)= 1  Emax(MeV)= 100000000
+### G4EnergyLossForExtrapolator::BuildTables for 4 materials Nbins= 80 Emin(MeV)= 1  Emax(MeV)= 1e+08
     1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
     2      150    0.169        0  1.99e+04   0.0333      100       150        CDET G4ErrorStepLengthLimit
     3      250    0.468        0  1.99e+04   0.0333      100       250        CDET G4ErrorStepLengthLimit

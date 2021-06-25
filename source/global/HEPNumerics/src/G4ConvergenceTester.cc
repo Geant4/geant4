@@ -29,9 +29,15 @@
 // --------------------------------------------------------------------
 
 #include "G4ConvergenceTester.hh"
+#include "G4AutoLock.hh"
 #include <iomanip>
 
-G4ConvergenceTester::G4ConvergenceTester(G4String theName)
+namespace
+{
+  G4Mutex aMutex = G4MUTEX_INITIALIZER;
+}
+
+G4ConvergenceTester::G4ConvergenceTester(const G4String& theName)
   : name(theName)
 {
   nonzero_histories.clear();
@@ -56,20 +62,25 @@ G4ConvergenceTester::G4ConvergenceTester(G4String theName)
   cpu_time.push_back(0.0);
 }
 
-G4ConvergenceTester::~G4ConvergenceTester() { delete timer; }
+G4ConvergenceTester::~G4ConvergenceTester()
+{
+  delete timer;
+}
 
 void G4ConvergenceTester::AddScore(G4double x)
 {
-  // G4cout << x << G4endl;
+  G4AutoLock l(&aMutex);
 
   timer->Stop();
   cpu_time.push_back(timer->GetSystemElapsed() + timer->GetUserElapsed());
 
   if(x < 0.0)
   {
-    G4cout << "Warning: G4convergenceTester expects zero or positive number as "
-              "inputs, but received a negative number."
-           << G4endl;
+    std::ostringstream message;
+    message << "Expecting zero or positive number as inputs,\n"
+            << "but received a negative number.";
+    G4Exception("G4ConvergenceTester::AddScore()", "Warning",
+                JustWarning, message);
   }
 
   if(x == 0.0)
@@ -80,9 +91,8 @@ void G4ConvergenceTester::AddScore(G4double x)
     nonzero_histories.insert(std::pair<G4int, G4double>(n, x));
     if(x > largest_scores.back())
     {
-      //        Following serch should become faster if begin from bottom.
-      std::vector<G4double>::iterator it;
-      for(it = largest_scores.begin(); it != largest_scores.end(); it++)
+      // Following search should become faster if begin from bottom.
+      for(auto it = largest_scores.begin(); it != largest_scores.end(); ++it)
       {
         if(x > *it)
         {
@@ -99,15 +109,16 @@ void G4ConvergenceTester::AddScore(G4double x)
     sum += x;
   }
 
-  // Data has been added so statistics have not been updated to new values
+  // Data has been added so statistics have now been updated to new values
   statsAreUpdated = false;
-  n++;
+  ++n;
+  l.unlock();
   return;
 }
 
 void G4ConvergenceTester::calStat()
 {
-  efficiency = double(nonzero_histories.size()) / n;
+  efficiency = G4double(nonzero_histories.size()) / n;
 
   mean = sum / n;
 
@@ -172,8 +183,6 @@ void G4ConvergenceTester::calStat()
   sd_1    = 0.0;
   r_1     = 0.0;
   vov_1   = 0.0;
-
-  //   G4cout << "The largest history  = " << largest << G4endl;
 
   mean_1 = (sum + largest) / (n + 1);
 
@@ -245,16 +254,11 @@ void G4ConvergenceTester::calc_grid_point_of_history()
   for(G4int i = 1; i <= noBinOfHistory; ++i)
   {
     history_grid[i - 1] = G4int(n / (G4double(noBinOfHistory)) * i - 0.1);
-    // G4cout << "history_grid " << i-1  << " " << history_grid [ i-1 ] <<
-    // G4endl;
   }
 }
 
 void G4ConvergenceTester::calc_stat_history()
 {
-  //   G4cout << "i/16  till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff
-  //   r2int" << G4endl;
-
   if(history_grid[0] == 0)
   {
     showHistory = false;
@@ -506,7 +510,6 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
   first_ally.resize(N);
   second_ally.resize(N);
 
-  //
   G4double sum_of_var =
     std::accumulate(var_history.begin(), var_history.end(), 0.0);
   if(sum_of_var == 0.0)
@@ -676,8 +679,6 @@ G4bool G4ConvergenceTester::is_monotonically_decrease(
   return TRUE;
 }
 
-// void G4ConvergenceTester::calc_slope_fit ( std::vector<G4double>
-// largest_socres )
 void G4ConvergenceTester::calc_slope_fit(std::vector<G4double>)
 {
   // create PDF bins
@@ -693,9 +694,6 @@ void G4ConvergenceTester::calc_slope_fit(std::vector<G4double>)
     min  = largest_scores[last - 1];
     last = last - 1;
   }
-
-  // G4cout << "largest " << max << G4endl;
-  // G4cout << "last  " << min << G4endl;
 
   if(max * 0.99 < min)
   {
@@ -715,7 +713,6 @@ void G4ConvergenceTester::calc_slope_fit(std::vector<G4double>)
   for(G4int i = 1; i < noBinOfPDF; ++i)
   {
     pdf_grid[i] = std::pow(10.0, log10_max - log10_delta / 10.0 * (i));
-    // G4cout << "pdf i " << i << " " << pdf_grid[i] << G4endl;
   }
 
   std::vector<G4double> pdf;
@@ -728,9 +725,6 @@ void G4ConvergenceTester::calc_slope_fit(std::vector<G4double>)
       if(largest_scores[j] >= pdf_grid[i + 1])
       {
         pdf[i] += 1.0 / (pdf_grid[i] - pdf_grid[i + 1]) / n;
-        // G4cout << "pdf " << j << " " << i << " " <<  largest_scores[j]  << "
-        // "
-        // << G4endl;
         break;
       }
     }
@@ -740,8 +734,6 @@ void G4ConvergenceTester::calc_slope_fit(std::vector<G4double>)
   f_yi.resize(noBinOfPDF);
   for(G4int i = 0; i < noBinOfPDF; ++i)
   {
-    // G4cout << "pdf i " << i << " " <<  (pdf_grid[i]+pdf_grid[i+1])/2 << " "
-    // << pdf[i] << G4endl;
     f_xi[i] = (pdf_grid[i] + pdf_grid[i + 1]) / 2;
     f_yi[i] = pdf[i];
   }
@@ -798,7 +790,6 @@ G4double G4ConvergenceTester::slope_fitting_function(std::vector<G4double> x)
            (f_yi[i] - 1 / a * std::pow(1 + k * f_xi[i] / a, -1 / k - 1));
     }
   }
-  //   G4cout << "y = " << y << G4endl;
 
   return y;
 }

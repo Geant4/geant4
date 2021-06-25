@@ -65,6 +65,8 @@ private:
 
 #include <qobject.h>
 
+class G4UIQt;
+
 class SoCoordinate3;
 class SoFont;
 class SoText2;
@@ -116,6 +118,8 @@ private Q_SLOTS :
    void AbbrOutputCB(bool);      // Includes mouse-over fcns
    void PickRefPathCB();
    void SwitchWireFrameCB(bool);
+   void SwitchAxesCB(bool);
+   void DetachCB();
 
    // Lists Window
    void LoadBookmarkCB(QListWidgetItem*);
@@ -127,10 +131,12 @@ private Q_SLOTS :
 private:
 
    static G4OpenInventorQtExaminerViewer* viewer;
-   const char* fName;
+   QString* fName;
+
+   int OWwidth, OWheight;
 
    void (*escapeCallback)();
-   //   void (*escapeCallback)(void*);
+
    void* examinerObject;
    SbBool lshiftdown, rshiftdown, lctrldown, rctrldown;
 
@@ -163,16 +169,23 @@ private:
    QPushButton* nextViewPtButton;
    QPushButton* prevViewPtButton;
    QPushButton* abbrOutputButton;
-   //   QRadioButton* abbrOutputButton;
    QPushButton* pickRefPathButton;
    QPushButton* switchWireFrameButton;
-   //   QRadioButton* switchWireFrameButton;
+   QPushButton* switchAxesButton;
+   QPushButton* detachButton;
 
    QListWidgetItem* saveViewPtItem;
 
    Ui_Dialog* AuxWindowDialog;
    QDialog* AuxWindow;
-  
+
+   G4UIQt* uiQt;
+   QWidget* viewerParent;
+   QWidget* viewerParent2;
+   int uiQtTabIndex;
+
+   int processSoEventCount;
+
 public:
 
    G4OpenInventorQtExaminerViewer(QWidget* parent = NULL,
@@ -184,6 +197,9 @@ public:
    ~G4OpenInventorQtExaminerViewer();
 
    template <class T> void parseString(T &t, const std::string &s, bool &error);
+
+   // In case the viewer is embedded and then detached:
+   void setOrigWindowSize(int w, int h) { OWwidth = w; OWheight = h; }
 
    // Menubar information needed by G4OpenInventorQtViewer
    // for common menu items:
@@ -199,7 +215,6 @@ public:
    std::string saveRefCoordsFileName;
 
    void addEscapeCallback(void (*cb)());
-   //   void addEscapeCallback(void (*cb)(void *), void *);
 
    bool abbrOutputFlag;
    bool pickRefPathFlag;
@@ -227,7 +242,6 @@ protected:
 
    static void sceneChangeCB(void*, SoSensor*);
 
-   // FWJ try to handle events as in XtExaminerViewer
    SbBool processSoEvent(const SoEvent* const event);
 
    void saveViewPt(char* name);
@@ -240,6 +254,7 @@ protected:
    void renameViewPt(char *vpName);
    void sortViewPts(std::vector<std::string>);
 
+   void zoom(const float);
    void moveCamera(float dist = 0, bool lookdown = false);
    std::string curEltName;
    SbVec3f camUpVec;

@@ -14,6 +14,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06-05-21 mma (testem5-V10-07-04)
+- Migration to G4SteppingVerboseWithUnits.
+
+21-03-21 V.Ivanchenko (testem5-V10-07-03)
+- removed obsolete PhysListEm5DPhysics and PhysListEm19DPhysics,
+  because these models are part of regular physics constructors
+     
+04-02-21 mma (testem5-V10-07-02)
+- TrackingAction : fixe bug for histo of vertex position
+- subcut.mac : add histos and interactive mode
+
+30-12-20 V.Ivanchenko (testem5-V10-07-01)
+- TestEm5.cc - use factory to define RunManager
+- subcut.mac - added macro
+     
+10-12-20 mma (testem5-V10-07-00)
+- updated PhysListEmStandard.cc
+- StepMax, StepMaxMessenger, PhysicsList, PhysicsListMessenger :
+    revert, to make command /testem/stepMax working in interactive mode
+- add macro stepMax.mac
+- TrackingAction.cc : fixe bug for filling histos 6 and 7
+- cosmetic in TestEm5.in
+           
 05-10-20 mma (testem5-V10-06-04)
 - StackingAction - log histograms : revert to previous version 
 - clean up of pixe.mac and pixe.C

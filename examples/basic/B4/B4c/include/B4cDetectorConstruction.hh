@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4cDetectorConstruction.hh
 /// \brief Definition of the B4cDetectorConstruction class
 
@@ -49,7 +49,7 @@ class G4GlobalMagFieldMessenger;
 ///
 /// In ConstructSDandField() sensitive detectors of B4cCalorimeterSD type
 /// are created and associated with the Absorber and Gap volumes.
-/// In addition a transverse uniform magnetic field is defined 
+/// In addition a transverse uniform magnetic field is defined
 /// via G4GlobalMagFieldMessenger class.
 
 class B4cDetectorConstruction : public G4VUserDetectorConstruction
@@ -61,16 +61,16 @@ class B4cDetectorConstruction : public G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-     
+
   private:
     // methods
     //
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
-  
+
     // data members
     //
-    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger;
                                       // magnetic field messenger
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps

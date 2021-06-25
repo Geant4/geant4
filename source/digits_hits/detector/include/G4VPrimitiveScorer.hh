@@ -41,96 +41,101 @@ class G4TouchableHistory;
 //  This is the base class of the sensitive detector which owns
 // only one hits collection.
 //  A concrete class object derived from this base class can be
-// used either as a sensitive detector or to be registered to 
+// used either as a sensitive detector or to be registered to
 // G4MultiFunctionalDetector to define multiple functionalities.
 //
-// 
+//
 
 class G4VPrimitiveScorer
 {
   friend class G4MultiFunctionalDetector;
 
-  public: // with description
-      G4VPrimitiveScorer(G4String name, G4int depth=0);
-      virtual ~G4VPrimitiveScorer();
+ public:  // with description
+  G4VPrimitiveScorer(G4String name, G4int depth = 0);
+  virtual ~G4VPrimitiveScorer();
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*)=0;
-      // This is the method must be implemented in each concrete class.
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*) = 0;
+  // This is the method must be implemented in each concrete class.
 
-      virtual G4int GetIndex(G4Step*);
-      // This is a function mapping from copy number(s) to an index of 
-      // the hit collection. In the default implementation, just the
-      // copy number of the physical volume is taken.
+  virtual G4int GetIndex(G4Step*);
+  // This is a function mapping from copy number(s) to an index of
+  // the hit collection. In the default implementation, just the
+  // copy number of the physical volume is taken.
 
-  public: // with description
-      G4int GetCollectionID(G4int);
-      // This method returns the ID of its hitsCollection. This mehod
-      // gives valid value only after it is registered to G4MultiFunctionalDetector
-      // and the G4MultiFunctionalDetector is registered to G4SDManager.
+ public:  // with description
+  G4int GetCollectionID(G4int);
+  // This method returns the ID of its hitsCollection. This mehod
+  // gives valid value only after it is registered to G4MultiFunctionalDetector
+  // and the G4MultiFunctionalDetector is registered to G4SDManager.
 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void DrawAll();
-      virtual void PrintAll();
-      // These five methods are exactly identical to those in G4VSensitiveDetector.
-      // These methods are invoked by G4SDManager through G4MultiFunctionalDetector.
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
+  // These five methods are exactly identical to those in G4VSensitiveDetector.
+  // These methods are invoked by G4SDManager through G4MultiFunctionalDetector.
 
-       void SetUnit(const G4String& unit) { unitName = unit; }
-       const G4String& GetUnit() const { return unitName; }
-       G4double  GetUnitValue() const { return unitValue; }
+  void SetUnit(const G4String& unit) { unitName = unit; }
+  const G4String& GetUnit() const { return unitName; }
+  G4double GetUnitValue() const { return unitValue; }
 
-  protected:
-     void CheckAndSetUnit(const G4String& unit,const G4String& category);
+ protected:
+  void CheckAndSetUnit(const G4String& unit, const G4String& category);
 
-  protected:
-      G4String primitiveName;
-      G4MultiFunctionalDetector* detector;
-      G4VSDFilter* filter;
-      G4int verboseLevel;
-      G4int indexDepth;
-      G4String unitName;
-      G4double unitValue;
+ protected:
+  G4String primitiveName;
+  G4MultiFunctionalDetector* detector;
+  G4VSDFilter* filter;
+  G4int verboseLevel;
+  G4int indexDepth;
+  G4String unitName;
+  G4double unitValue;
 
-  public: // with description
-      // Set/Get methods
-      inline void SetMultiFunctionalDetector(G4MultiFunctionalDetector* d)
-      { detector = d; }
-      inline G4MultiFunctionalDetector* GetMultiFunctionalDetector() const
-      { return detector; }
-      inline G4String GetName() const
-      { return primitiveName; }
-      inline void SetFilter(G4VSDFilter* f)
-      { filter = f; }
-      inline G4VSDFilter* GetFilter() const
-      { return filter; }
-      inline void SetVerboseLevel(G4int vl)
-      { verboseLevel = vl; }
-      inline G4int GetVerboseLevel() const
-      { return verboseLevel; }
+ public:  // with description
+  // Set/Get methods
+  inline void SetMultiFunctionalDetector(G4MultiFunctionalDetector* d)
+  {
+    detector = d;
+  }
+  inline G4MultiFunctionalDetector* GetMultiFunctionalDetector() const
+  {
+    return detector;
+  }
+  inline G4String GetName() const { return primitiveName; }
+  inline void SetFilter(G4VSDFilter* f) { filter = f; }
+  inline G4VSDFilter* GetFilter() const { return filter; }
+  inline void SetVerboseLevel(G4int vl) { verboseLevel = vl; }
+  inline G4int GetVerboseLevel() const { return verboseLevel; }
 
-  private:
-      inline G4bool HitPrimitive(G4Step*aStep,G4TouchableHistory*ROhis)
-      {
-        if(filter)
-        { if(!(filter->Accept(aStep))) return false; }
-        return ProcessHits(aStep,ROhis);
-      }
+ private:
+  inline G4bool HitPrimitive(G4Step* aStep, G4TouchableHistory* ROhis)
+  {
+    if(filter)
+    {
+      if(!(filter->Accept(aStep)))
+        return false;
+    }
+    return ProcessHits(aStep, ROhis);
+  }
 
-  protected:
-     G4VSolid* ComputeSolid(G4Step* aStep, G4int replicaIdx );
-      // Get the solid at current depth, ensuring it's correct by 
-      //   calling a parameterisation is called if it's that volume type
-     G4VSolid* ComputeCurrentSolid(G4Step* aStep);
-      // Same as above -- using stored replica number
-   
-  protected:
-     G4int fNi, fNj, fNk; // used for 3D scorers
-  public:
-     inline void SetNijk(G4int i,G4int j,G4int k)
-     { fNi = i; fNj = j; fNk = k; }
+ protected:
+  G4VSolid* ComputeSolid(G4Step* aStep, G4int replicaIdx);
+  // Get the solid at current depth, ensuring it's correct by
+  //   calling a parameterisation is called if it's that volume type
+  G4VSolid* ComputeCurrentSolid(G4Step* aStep);
+  // Same as above -- using stored replica number
+
+ protected:
+  G4int fNi, fNj, fNk;  // used for 3D scorers
+ public:
+  inline void SetNijk(G4int i, G4int j, G4int k)
+  {
+    fNi = i;
+    fNj = j;
+    fNk = k;
+  }
 };
 
 #endif
-

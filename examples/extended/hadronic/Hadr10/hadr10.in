@@ -1,0 +1,203 @@
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/run/verbose 1
+/event/verbose 0 
+/tracking/verbose 0
+#
+#=======================  INITIALIZE ======================
+#
+/run/initialize
+#
+#=======================  LAYER ===========================
+#
+#--- "Beam pipe" : 2-mm-thick layer of Beryllium
+###/mydet/targetMaterial G4_Be
+###/mydet/targetInnerRadius  9.0 mm
+###/mydet/targetOuterRadius 11.0 mm
+#
+#--- "Silicon tracker" : 2-cm-thick layer of Silicon
+/mydet/targetMaterial G4_Si
+/mydet/targetInnerRadius  9.0 mm
+/mydet/targetOuterRadius 29.0 mm
+#
+#--- "Calorimeter" : 1-m-thick layer of Lead
+###/mydet/targetMaterial G4_Pb
+###/mydet/targetInnerRadius    0.0 mm
+###/mydet/targetOuterRadius 1000.0 mm
+#
+#=======================  MAGNETIC FIELD  =================
+#
+###/mydet/setField  0.0 tesla
+/mydet/setField  4.0 tesla
+###/mydet/setField 20.0 tesla
+#
+#=======================  UPDATE GEOMETRY =================
+#
+/mydet/update
+#
+#=======================  RUNs  ===========================
+#
+# --- tau ---
+/gun/particle tau-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle tau+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+#
+# --- Charm mesons ---
+#
+/gun/particle D+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle D-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle D0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_D0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle Ds+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle Ds-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+#
+# --- Bottom mesons ---
+#
+/gun/particle B+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle B-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle B0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_B0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle Bs0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_Bs0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle Bc+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle Bc-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+#
+# --- Charm baryons ---
+#
+/gun/particle lambda_c+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_lambda_c+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle xi_c+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_xi_c+
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle xi_c0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_xi_c0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle omega_c0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_omega_c0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+#
+# --- Bottom baryons ---
+#
+/gun/particle lambda_b
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_lambda_b
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle xi_b0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_xi_b0
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle xi_b-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_xi_b-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+# ---
+#
+/gun/particle omega_b-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#
+/gun/particle anti_omega_b-
+/gun/energy 500.0 GeV
+/run/beamOn 10000
+#

@@ -61,6 +61,6 @@ void B5ActionInitialization::Build() const
   SetUserAction(eventAction);
 
   SetUserAction(new B5RunAction(eventAction));
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -54,8 +54,6 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
-  G4int nThreads = 4;
-  runManager->SetNumberOfThreads(nThreads);
 
   // Set mandatory user initialization classes
 
@@ -68,14 +66,9 @@ int main(int argc,char** argv) {
 
   runManager->SetUserInitialization(new ActionInitialization(detector));
 
-  // Initialize G4 kernel
-
-  runManager->Initialize();
-
   // Visualization
 
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisManager* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -90,6 +83,8 @@ int main(int argc,char** argv) {
   }
   else {
     // interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;

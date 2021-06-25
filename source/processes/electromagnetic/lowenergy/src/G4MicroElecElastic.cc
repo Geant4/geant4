@@ -75,12 +75,3 @@ void G4MicroElecElastic::InitialiseProcess(const G4ParticleDefinition*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MicroElecElastic::PrintInfo()
-{
-  // V.I. printout of models is performed by model manager
-  //      if this extra printout is needed it should be 
-  //      protected by verbosity level
-}         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

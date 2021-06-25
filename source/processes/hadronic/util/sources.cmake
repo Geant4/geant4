@@ -1,88 +1,115 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4hadronic_util
-# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_util
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitly.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - G4hadronic_util module build definition
 
-#
 # Define the Geant4 Module.
-#
-GEANT4_DEFINE_MODULE(NAME G4hadronic_util
-    HEADERS
-        DumpFrame.hh
-        G4Bessel.hh
-        G4Delete.hh
-        G4DynamicParticleVector.hh
-        G4GHEKinematicsVector.hh
-        G4HadFinalState.hh
-        G4HadParticleCodes.hh
-        G4HadProjectile.hh
-        G4HadReentrentException.hh
-        G4HadSecondary.hh
-        G4HadSignalHandler.hh
-        G4HadTmpUtil.hh
-        G4HadronicDeprecate.hh
-        G4HadronicDeveloperParameters.hh
-        G4HadronicException.hh
-        G4HadronicParameters.hh
-        G4HadronicParametersMessenger.hh
-        G4IsoResult.hh
-        G4LightMedia.hh
-        G4NuclearPolarization.hh
-        G4Nucleus.hh
-        G4Pair.hh
-        G4ReactionProduct.hh
-        G4ReactionProductVector.hh
-        G4StableIsotopes.hh
-        G4ping.hh
-    SOURCES
-        G4Bessel.cc
-        G4HadFinalState.cc
-        G4HadProjectile.cc
-        G4HadSecondary.cc
-        G4HadSignalHandler.cc
-        G4HadTmpUtil.cc
-        G4HadronicDeveloperParameters.cc
-        G4HadronicException.cc
-        G4HadronicParameters.cc
-        G4HadronicParametersMessenger.cc
-        G4IsoResult.cc
-        G4LightMedia.cc
-        G4NuclearPolarization.cc
-        G4Nucleus.cc
-        G4ReactionProduct.cc
-        G4StableIsotopes.cc
-    GRANULAR_DEPENDENCIES
-        G4baryons
-        G4bosons
-        G4geometrymng
-        G4globman
-        G4ions
-        G4leptons
-        G4materials
-        G4mesons
-        G4partman
-        G4procman
-        G4track
-        G4volumes
-    GLOBAL_DEPENDENCIES
-        G4geometry
-        G4global
-        G4materials
-        G4particles
-        G4track
-    LINK_LIBRARIES
-)
+geant4_add_module(G4hadronic_util
+  PUBLIC_HEADERS
+    G4Bessel.hh
+    G4Clebsch.hh
+    G4DecayKineticTracks.hh
+    G4DecayStrongResonances.hh
+    G4Delete.hh
+    G4DynamicParticleVector.hh
+    G4ExcitedString.hh
+    G4ExcitedStringVector.hh
+    G4Fancy3DNucleus.hh
+    G4Fancy3DNucleusHelper.hh
+    G4FermiMomentum.hh
+    G4Fragment.hh
+    G4FragmentVector.hh
+    G4GeneralPhaseSpaceDecay.hh
+    G4HadDecayGenerator.hh
+    G4HadFinalState.hh
+    G4HadParticleCodes.hh
+    G4HadPhaseSpaceGenbod.hh
+    G4HadPhaseSpaceKopylov.hh
+    G4HadPhaseSpaceNBodyAsai.hh
+    G4HadProjectile.hh
+    G4HadronicDeveloperParameters.hh
+    G4HadronicException.hh
+    G4HadronicParameters.hh
+    G4HadronicParametersMessenger.hh
+    G4HadSecondary.hh
+    G4HadTmpUtil.hh
+    G4KineticTrack.hh
+    G4KineticTrackVector.hh
+    G4LegendrePolynomial.hh
+    G4NuclearFermiDensity.hh
+    G4NuclearPolarization.hh
+    G4NuclearPolarizationStore.hh
+    G4NuclearRadii.hh
+    G4NuclearShellModelDensity.hh
+    G4Nucleon.hh
+    G4Nucleus.hh
+    G4Pair.hh
+    G4Parton.hh
+    G4PartonVector.hh
+    G4ping.hh
+    G4PolynomialPDF.hh
+    G4ReactionProduct.hh
+    G4ReactionProductVector.hh
+    G4SampleResonance.hh
+    G4StableIsotopes.hh
+    G4V3DNucleus.hh
+    G4VHadDecayAlgorithm.hh
+    G4VHadPhaseSpaceAlgorithm.hh
+    G4VKineticNucleon.hh
+    G4VNuclearDensity.hh
+    G4WilsonRadius.hh
+  SOURCES
+    G4Bessel.cc
+    G4Clebsch.cc
+    G4DecayKineticTracks.cc
+    G4DecayStrongResonances.cc
+    G4ExcitedString.cc
+    G4Fancy3DNucleus.cc
+    G4FermiMomentum.cc
+    G4Fragment.cc
+    G4GeneralPhaseSpaceDecay.cc
+    G4HadDecayGenerator.cc
+    G4HadFinalState.cc
+    G4HadPhaseSpaceGenbod.cc
+    G4HadPhaseSpaceKopylov.cc
+    G4HadPhaseSpaceNBodyAsai.cc
+    G4HadProjectile.cc
+    G4HadronicDeveloperParameters.cc
+    G4HadronicException.cc
+    G4HadronicParameters.cc
+    G4HadronicParametersMessenger.cc
+    G4HadSecondary.cc
+    G4HadTmpUtil.cc
+    G4KineticTrack.cc
+    G4KineticTrackVector.cc
+    G4LegendrePolynomial.cc
+    G4NuclearFermiDensity.cc
+    G4NuclearPolarization.cc
+    G4NuclearPolarizationStore.cc
+    G4NuclearRadii.cc
+    G4NuclearShellModelDensity.cc
+    G4Nucleon.cc
+    G4Nucleus.cc
+    G4Parton.cc
+    G4PolynomialPDF.cc
+    G4ReactionProduct.cc
+    G4SampleResonance.cc
+    G4StableIsotopes.cc
+    G4V3DNucleus.cc
+    G4VHadDecayAlgorithm.cc
+    G4VHadPhaseSpaceAlgorithm.cc
+    G4VKineticNucleon.cc
+    G4VNuclearDensity.cc
+    G4WilsonRadius.cc)
 
-# List any source specific properties here
-
+geant4_module_link_libraries(G4hadronic_util
+  PUBLIC
+    G4baryons
+    G4globman
+    G4hepgeometry
+    G4heprandom
+    G4intercoms
+    G4materials
+    G4partman
+    G4procman
+  PRIVATE
+    G4hepnumerics
+    G4mesons
+    G4track)

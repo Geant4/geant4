@@ -44,11 +44,9 @@
 
 #include "G4VEmProcess.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4RayleighScattering : public G4VEmProcess
-
 {
 public:  // with description
 
@@ -58,24 +56,19 @@ public:  // with description
   virtual ~G4RayleighScattering();
 
   // true for Gamma only.  
-  G4bool IsApplicable(const G4ParticleDefinition&) final;
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
   
-  // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo() override;
-
   // print description in html
-  virtual void ProcessDescription(std::ostream&) const override;
+  void ProcessDescription(std::ostream&) const override;
 
-protected:
-
-  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
-
-private:
-     
   // hide assignment operator
   G4RayleighScattering & operator=(const G4RayleighScattering &right) = delete;
   G4RayleighScattering(const G4RayleighScattering&) = delete;
 
+protected:
+  void InitialiseProcess(const G4ParticleDefinition*) override;
+
+private:    
   G4bool       isInitialised;
 };
 

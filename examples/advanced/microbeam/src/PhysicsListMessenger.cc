@@ -27,18 +27,13 @@
 /// \brief Implementation of the PhysicsListMessenger class
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
-#include "G4SystemOfUnits.hh"
-
 #include "PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   :G4UImessenger(),fPhysicsList(pPhys),fMaxChargedStep(1*CLHEP::mm)
@@ -60,16 +55,12 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fStepMaxCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fListCmd;
   delete fPhysDir;
   delete fStepMaxCmd;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
@@ -79,4 +70,3 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     { fMaxChargedStep = fStepMaxCmd->GetNewDoubleValue(newValue); }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 //---------------------------------------------------------------
 //
 // G4EmTableType.hh
@@ -36,7 +35,8 @@
 //
 // Creation date: 19.01.2006
 // Modifications:
-// 15.01.07 Add two types (V.Ivanchenko)
+// 15.01.07 Added two types (V.Ivanchenko)
+// 06.04.21 Removed two types (V.Ivanchenko)
 //
 //---------------------------------------------------------------
 
@@ -47,11 +47,26 @@ enum G4EmTableType
 {
   fTotal = 0,
   fRestricted,
-  fSubRestricted,
   fIsIonisation,
-  fIsSubIonisation,
   fIsCrossSectionPrim
 };
+
+enum G4CrossSectionType
+{
+  fEmNoIntegral = 0,
+  fEmIncreasing,
+  fEmDecreasing,
+  fEmOnePeak,
+  fEmTwoPeaks
+};
+
+struct G4TwoPeaksXS {
+  G4double e1peak;
+  G4double e1deep;
+  G4double e2peak;
+  G4double e2deep;
+};
+
 #endif
 
 

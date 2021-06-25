@@ -38,7 +38,7 @@
 #include "G4NeutronElasticXS.hh"
 #include "G4Neutron.hh"
 #include "G4DynamicParticle.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4ElementTable.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
@@ -66,9 +66,7 @@ G4String G4NeutronElasticXS::gDataDirectory = "";
 
 G4NeutronElasticXS::G4NeutronElasticXS() 
  : G4VCrossSectionDataSet(Default_Name()),
-   ggXsection(nullptr),
-   neutron(G4Neutron::Neutron()),
-   isMaster(false)
+   neutron(G4Neutron::Neutron())
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
@@ -213,16 +211,10 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(isMaster) {
 
     // Access to elements
-    auto theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
-    for(size_t j=0; j<numOfCouples; ++j) {
-      auto mat = theCoupleTable->GetMaterialCutsCouple(j)->GetMaterial();
-      auto elmVec = mat->GetElementVector();
-      size_t numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
-	G4int Z = std::max(1,std::min(((*elmVec)[ie])->GetZasInt(), MAXZEL-1));
-	if(data[Z] == nullptr) { Initialise(Z); }
-      }
+    const G4ElementTable* table = G4Element::GetElementTable();
+    for ( auto & elm : *table ) {
+      G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZEL-1) );
+      if ( nullptr == data[Z] ) { Initialise(Z); }
     }
   }
 }

@@ -180,20 +180,11 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     PAItransferTable->insertAt(i,transferVector);
     PAIdEdxTable->insertAt(i,dEdxVector);
 
-    //transferVector->SetSpline(true);
-    //transferVector->FillSecondDerivatives();
-    //dEdxVector->SetSpline(true);
-    //dEdxVector->FillSecondDerivatives();
-
   } // end of Tkin loop`
   fPAIxscBank.push_back(PAItransferTable);
   fPAIdEdxBank.push_back(PAIdEdxTable);
   //G4cout << "dEdxMeanVector: " << G4endl;
   //G4cout << *dEdxMeanVector << G4endl;
-  /*
-  dEdxMeanVector->SetSpline(true);
-  dEdxMeanVector->FillSecondDerivatives();
-  */
   fdEdxTable.push_back(dEdxMeanVector);
 }
 

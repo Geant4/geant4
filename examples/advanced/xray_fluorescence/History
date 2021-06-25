@@ -14,6 +14,13 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24.05.2021  B. Morgan (XRayFluo-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+12.02.2021  S. Guatelli Tag:XRayFluo-V10-07-00
+-  Dependence to G4EmProcessOptions.hh removed.
+   Method SetCuts() removed from local physics list as it is not thread-safe.
+
 02.11.2020 Ben Morgan Tag:XRayFluo-V10-06-00
 - Support same CMake version range as core Geant4
 

@@ -39,7 +39,7 @@
 //    e.g.  (Number of tracks)/mm2.
 //
 // Surface is defined at the -Z surface.
-// Direction                  Rmin Rmax 
+// Direction                  Rmin Rmax
 //   0  IN || OUT            ->|<-  |      fCurrent_InOut
 //   1  IN                   ->|    |      fCurrent_In
 //   2  OUT                    |<-  |      fCurrent_Out
@@ -49,24 +49,22 @@
 // 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class G4PSCylinderSurfaceCurrent3D : public G4PSCylinderSurfaceCurrent
 {
-   public: // with description
-      G4PSCylinderSurfaceCurrent3D(G4String name, G4int direction,
-				   G4int ni=1,G4int nj=1, G4int nk=1,
-				   G4int depi=2, G4int depj=1, G4int depk=0);
-      G4PSCylinderSurfaceCurrent3D(G4String name, G4int direction,
-				   const G4String& unit,
-				   G4int ni=1,G4int nj=1, G4int nk=1,
-				   G4int depi=2, G4int depj=1, G4int depk=0);
-      virtual ~G4PSCylinderSurfaceCurrent3D();
+ public:  // with description
+  G4PSCylinderSurfaceCurrent3D(G4String name, G4int direction, G4int ni = 1,
+                               G4int nj = 1, G4int nk = 1, G4int depi = 2,
+                               G4int depj = 1, G4int depk = 0);
+  G4PSCylinderSurfaceCurrent3D(G4String name, G4int direction,
+                               const G4String& unit, G4int ni = 1, G4int nj = 1,
+                               G4int nk = 1, G4int depi = 2, G4int depj = 1,
+                               G4int depk = 0);
+  virtual ~G4PSCylinderSurfaceCurrent3D();
 
-  protected: // with description
-      virtual G4int GetIndex(G4Step*);
+ protected:  // with description
+  virtual G4int GetIndex(G4Step*);
 
-  private:
-      G4int fDepthi, fDepthj, fDepthk;
+ private:
+  G4int fDepthi, fDepthj, fDepthk;
 };
 #endif
-

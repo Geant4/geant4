@@ -44,7 +44,6 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-
 #ifndef G4MICROELECLOPHONONSCATTERING_HH 
 #define G4MICROELECLOPHONONSCATTERING_HH 1 
 
@@ -57,12 +56,11 @@
 class G4MicroElecLOPhononScattering : public G4VEmProcess
 {
 public:
-  G4MicroElecLOPhononScattering(const G4String& processName = "LOPhononScattering",
+  explicit G4MicroElecLOPhononScattering(const G4String& processName = "LOPhononScattering",
 				    G4ProcessType type = fElectromagnetic);
   ~G4MicroElecLOPhononScattering() override;
   
   G4bool IsApplicable(const G4ParticleDefinition&) override;
-  void PrintInfo() override;
   
 protected:
   void InitialiseProcess(const G4ParticleDefinition*) override;

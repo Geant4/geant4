@@ -61,9 +61,6 @@ public:
 
   void ConstructParticle() override;
   void ConstructProcess() override;
-
-private:
-  G4int  verbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

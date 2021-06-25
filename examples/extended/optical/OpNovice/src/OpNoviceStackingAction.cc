@@ -31,9 +31,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "OpNoviceStackingAction.hh"
-
 #include "OpNoviceRun.hh"
-
 #include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -50,11 +48,9 @@ OpNoviceStackingAction::OpNoviceStackingAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 OpNoviceStackingAction::~OpNoviceStackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4ClassificationOfNewTrack OpNoviceStackingAction::ClassifyNewTrack(
   const G4Track* aTrack)
 {
@@ -72,7 +68,6 @@ G4ClassificationOfNewTrack OpNoviceStackingAction::ClassifyNewTrack(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceStackingAction::NewStage()
 {
   // G4cout << "Number of Scintillation photons produced in this event : "
@@ -87,11 +82,9 @@ void OpNoviceStackingAction::NewStage()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceStackingAction::PrepareNewEvent()
 {
   fScintillationCounter = 0;
   fCerenkovCounter      = 0;
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4geomdivision
-# Package: Geant4.src.G4geometry.G4geomdivision
-#------------------------------------------------------------------------------
+# - G4geomdivision module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4geomdivision
-  HEADERS
+geant4_add_module(G4geomdivision
+  PUBLIC_HEADERS
     G4PVDivision.hh
     G4PVDivisionFactory.hh
     G4ParameterisationBox.hh
@@ -31,14 +26,8 @@ geant4_define_module(NAME G4geomdivision
     G4ParameterisationTrd.cc
     G4ParameterisationTubs.cc
     G4ReplicatedSlice.cc
-    G4VDivisionParameterisation.cc
-  GRANULAR_DEPENDENCIES
-    G4csg
-    G4geometrymng
-    G4globman
-    G4specsolids
-  GLOBAL_DEPENDENCIES
-    G4global
-)
+    G4VDivisionParameterisation.cc)
 
-# List any source specific properties here
+geant4_module_link_libraries(G4geomdivision
+  PUBLIC G4specsolids G4globman G4geometrymng G4hepgeometry
+  PRIVATE G4csg)

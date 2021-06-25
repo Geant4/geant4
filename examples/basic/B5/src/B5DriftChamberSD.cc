@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberSD::B5DriftChamberSD(G4String name)
-: G4VSensitiveDetector(name), 
+: G4VSensitiveDetector(name),
   fHitsCollection(nullptr), fHCID(-1)
 {
   collectionName.insert("driftChamberColl");
@@ -55,11 +55,11 @@ B5DriftChamberSD::~B5DriftChamberSD()
 
 void B5DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 {
-  fHitsCollection 
+  fHitsCollection
     = new B5DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
 
-  if (fHCID<0) { 
-     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
+  if (fHCID<0) {
+     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection);
   }
   hce->AddHitsCollection(fHCID,fHitsCollection);
 }
@@ -70,7 +70,7 @@ G4bool B5DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
   auto charge = step->GetTrack()->GetDefinition()->GetPDGCharge();
   if (charge==0.) return true;
-  
+
   auto preStepPoint = step->GetPreStepPoint();
 
   auto touchable = step->GetPreStepPoint()->GetTouchable();
@@ -78,16 +78,16 @@ G4bool B5DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   auto copyNo = motherPhysical->GetCopyNo();
 
   auto worldPos = preStepPoint->GetPosition();
-  auto localPos 
+  auto localPos
     = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
-  
+
   auto hit = new B5DriftChamberHit(copyNo);
   hit->SetWorldPos(worldPos);
   hit->SetLocalPos(localPos);
   hit->SetTime(preStepPoint->GetGlobalTime());
-  
+
   fHitsCollection->insert(hit);
-  
+
   return true;
 }
 

@@ -1,13 +1,8 @@
-#------------------------------------------------------------------------------
-# Module : G4partman
-# Package: Geant4.src.G4particles.G4partman
-#------------------------------------------------------------------------------
+# - G4partman module build definition
 
-#
 # Define the Geant4 Module.
-#
-geant4_define_module(NAME G4partman
-  HEADERS
+geant4_add_module(G4partman
+  PUBLIC_HEADERS
     G4DalitzDecayChannel.hh
     G4DecayProducts.hh
     G4DecayTable.hh
@@ -98,15 +93,6 @@ geant4_define_module(NAME G4partman
     G4VDecayChannel.cc
     G4VIsotopeTable.cc
     G4VUserPrimaryParticleInformation.cc
-    G4VUserPrimaryVertexInformation.cc
-  GRANULAR_DEPENDENCIES
-    G4geometrymng
-    G4globman
-    G4intercoms
-    G4materials
-  GLOBAL_DEPENDENCIES
-    G4geometry
-    G4global
-    G4intercoms
-    G4materials
-)
+    G4VUserPrimaryVertexInformation.cc)
+
+geant4_module_link_libraries(G4partman PUBLIC G4globman G4hepgeometry G4heprandom G4intercoms)

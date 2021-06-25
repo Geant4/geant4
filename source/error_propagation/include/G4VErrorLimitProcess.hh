@@ -38,55 +38,51 @@
 #ifndef G4VErrorLimitProcess_hh
 #define G4VErrorLimitProcess_hh
 
-#include "G4ios.hh" 
+#include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ElementTable.hh"
-#include "G4Gamma.hh" 
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4Step.hh" 
+#include "G4Step.hh"
 
 class G4ErrorLimitsMessenger;
 
 //-----------------------------------------------------------------
- 
+
 class G4VErrorLimitProcess : public G4VDiscreteProcess
 {
-
  public:  // with description
-  
   G4VErrorLimitProcess(const G4String& processName);
-  
+
   ~G4VErrorLimitProcess();
-  
-  virtual G4double
-  PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                              G4double previousStepSize,
-                                              G4ForceCondition* condition ) = 0;
-    // Returns the step limit
 
-  virtual  G4double GetMeanFreePath(const class G4Track &, G4double,
-                                    enum G4ForceCondition *);
-    // Returns kInfinity
+  virtual G4double PostStepGetPhysicalInteractionLength(
+    const G4Track& track, G4double previousStepSize,
+    G4ForceCondition* condition) = 0;
+  // Returns the step limit
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step& );
-    // No action but retrieving the G4VParticleChange
-    // extracted from the G4Track
+  virtual G4double GetMeanFreePath(const class G4Track&, G4double,
+                                   enum G4ForceCondition*);
+  // Returns kInfinity
+
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  // No action but retrieving the G4VParticleChange
+  // extracted from the G4Track
 
   // Get and Set methods
 
   G4double GetStepLimit() const { return theStepLimit; }
-  void SetStepLimit( G4double val ) { theStepLimit = val; }
+  void SetStepLimit(G4double val) { theStepLimit = val; }
 
  protected:
-
-  G4double theStepLimit;  // limit set by the user
-  G4double theStepLength; // step length extracted from the user step limit,
-                          // with the algorithms of each concrete class
+  G4double theStepLimit;   // limit set by the user
+  G4double theStepLength;  // step length extracted from the user step limit,
+                           // with the algorithms of each concrete class
 
   G4VParticleChange theParticleChange;
 };
-  
+
 #endif

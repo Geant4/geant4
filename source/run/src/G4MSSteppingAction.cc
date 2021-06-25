@@ -23,23 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4MSSteppingAction implementation
 //
-//
-//
-//
+// Author: M.Asai, 5 May 2006
+// --------------------------------------------------------------------
 
 #include "G4MSSteppingAction.hh"
-
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4Region.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4MSSteppingAction::G4MSSteppingAction() { Initialize(false, 0); }
+// --------------------------------------------------------------------
+G4MSSteppingAction::G4MSSteppingAction() {}
 
-G4MSSteppingAction::~G4MSSteppingAction() { ; }
+// --------------------------------------------------------------------
+G4MSSteppingAction::~G4MSSteppingAction() {}
 
+// --------------------------------------------------------------------
 void G4MSSteppingAction::Initialize(G4bool rSens, G4Region* reg)
 {
   regionSensitive = rSens;
@@ -49,6 +51,7 @@ void G4MSSteppingAction::Initialize(G4bool rSens, G4Region* reg)
   lambda          = 0.;
 }
 
+// --------------------------------------------------------------------
 void G4MSSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4StepPoint* preStepPoint = aStep->GetPreStepPoint();

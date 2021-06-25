@@ -35,6 +35,8 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "CellParameterisation.hh"
+#include "EMField.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
@@ -42,27 +44,24 @@
 #include "G4PVPlacement.hh"
 #include "G4UserLimits.hh"
 #include "G4PVParameterised.hh"
-#include "CellParameterisation.hh"
-
-#include "EMField.hh"
 #include "G4EqMagElectricField.hh"
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
 #include "G4ChordFinder.hh"
 #include "G4ClassicalRK4.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
 
-  DetectorConstruction();
-  virtual ~DetectorConstruction();
+  explicit DetectorConstruction();
+  ~DetectorConstruction() override;
 
-  virtual G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct() override;
   
-  virtual void ConstructSDandField();
+  void DefineMaterials();
+  
+  void ConstructSDandField() override;
      
   void SetMassNucleus(G4double mN) {fMassNucleus = mN;}
   G4double GetMassNucleus() const  {return fMassNucleus;}          
@@ -88,30 +87,14 @@ public:
   
   const CellParameterisation * GetCellParameterisation() const 
         {return fMyCellParameterisation;};
+        
+  G4VPhysicalVolume* ConstructLine();     
   
 private:
-
-  G4double fMassNucleus;
-  G4double fMassCytoplasm;
-
-  G4double fDensityPhantom;
-  G4double fDensityNucleus;
-  G4double fDensityCytoplasm;
-  G4int    fNbOfPixelsInPhantom;
-    
-  G4double fWorldSizeXY;
-  G4double fWorldSizeZ;
-  G4double fCollObjSizeXY;
-  G4double fCollObjSizeZ;
-
-  G4double fCiblePositionX;
-  G4double fCiblePositionY;
-  G4double fCiblePositionZ;
   
-  G4double fLineAngle;
- 
-// Materials
-
+  CellParameterisation * fMyCellParameterisation;
+  
+  // Materials
   G4Material* fDefaultMaterial;
   G4Material* fCollimatorMaterial;
   G4Material* fBoiteMaterial;
@@ -127,7 +110,7 @@ private:
   G4Material* fCytoplasmMaterial2;
   G4Material* fNucleusMaterial3;
   G4Material* fCytoplasmMaterial3;
-
+  
 // Volumes
 
   G4VPhysicalVolume* fPhysiWorld;
@@ -208,15 +191,25 @@ private:
   G4LogicalVolume*   fLogicPhantom;  
   G4Box*             fSolidPhantom; 
 
-  CellParameterisation * fMyCellParameterisation;
-  
-  // EM FIELD
-  
-  static G4ThreadLocal EMField * fField;
-  
-  void DefineMaterials();
-  G4VPhysicalVolume* ConstructLine();     
+  G4double fMassNucleus;
+  G4double fMassCytoplasm;
 
+  G4double fDensityPhantom;
+  G4double fDensityNucleus;
+  G4double fDensityCytoplasm;
+    
+  G4double fWorldSizeXY;
+  G4double fWorldSizeZ;
+  G4double fCollObjSizeXY;
+  G4double fCollObjSizeZ;
+
+  G4double fCiblePositionX;
+  G4double fCiblePositionY;
+  G4double fCiblePositionZ;
+  
+  G4double fLineAngle;
+  
+  G4int    fNbOfPixelsInPhantom;
 };
 
 #endif

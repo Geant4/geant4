@@ -38,7 +38,7 @@
 class G4MIData : public G4VMaterialExtension {
 
 public:  
-  G4MIData(const G4String&);
+  explicit G4MIData(const G4String&);
   virtual ~G4MIData();
     
 public:
@@ -49,16 +49,14 @@ public:
   void SetFilenameCS(const G4String& filenamecs) {fFilenameCS = filenamecs;};
   void SetMolWeight(const G4double mw) {fMolWeight = mw;};
   
-public:
   const G4String& GetFilenameFF() {return fFilenameFF;};
   const G4String& GetFilenameCS() {return fFilenameCS;};
   const G4double& GetMolWeight() {return fMolWeight;};
   
-protected:
+private:
   G4String fFilenameFF;
   G4String fFilenameCS;
   G4double fMolWeight;
-  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

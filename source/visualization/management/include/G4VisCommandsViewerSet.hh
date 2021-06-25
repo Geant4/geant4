@@ -75,6 +75,8 @@ private:
   G4UIcommand*          fpCommandProjection;
   G4UIcmdWithAString*   fpCommandRotationStyle;
   G4UIcommand*          fpCommandSectionPlane;
+  G4UIcmdWithABool*     fpCommandSpecialMeshRendering;
+  G4UIcommand*          fpCommandSpecialMeshVolumes;
   G4UIcmdWithAString*   fpCommandStyle;
   G4UIcmdWith3VectorAndUnit* fpCommandTargetPoint;
   G4UIcommand*          fpCommandUpThetaPhi;

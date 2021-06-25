@@ -70,10 +70,6 @@ G4eeToHadronsModel::G4eeToHadronsModel(G4Vee2hadrons* mod, G4int ver,
                                        const G4String& nam)
   : G4VEmModel(nam),
     model(mod),
-    crossPerElectron(0),
-    crossBornPerElectron(0),
-    isInitialised(false),
-    nbins(100),
     verbose(ver)
 {
   theGamma = G4Gamma::Gamma();
@@ -102,8 +98,8 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
   isInitialised  = true;
 
   // CM system
-  emin  = model->LowEnergy();
-  emax  = model->HighEnergy();
+  emin = model->LowEnergy();
+  emax = model->HighEnergy();
 
   // peak energy
   epeak = std::min(model->PeakEnergy(), emax);
@@ -174,7 +170,7 @@ G4double G4eeToHadronsModel::ComputeCrossSectionPerElectron(
                                                 G4double energy,
                                                 G4double, G4double)
 {
-  return (crossPerElectron) ? crossPerElectron->Value(energy) : 0.0;
+  return crossPerElectron->Value(energy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -185,46 +181,44 @@ void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp
 					   G4double,
 					   G4double)
 {
-  if(crossPerElectron) {
-    G4double t = dParticle->GetKineticEnergy() + 2*electron_mass_c2;
-    G4LorentzVector inlv = dParticle->Get4Momentum() + 
-      G4LorentzVector(0.0,0.0,0.0,electron_mass_c2);
-    G4double e = inlv.m();
-    G4ThreeVector inBoost = inlv.boostVector();
-    //G4cout << "G4eeToHadronsModel::SampleSecondaries e= " << e 
-    //	   << " " << inlv << " " << inBoost <<G4endl;
-    if(e > emin) {
-      G4DynamicParticle* gamma = GenerateCMPhoton(e);
-      G4LorentzVector gLv = gamma->Get4Momentum();
-      G4LorentzVector lv(0.0,0.0,0.0,e);
-      lv -= gLv;
-      G4double mass = lv.m();
-      //G4cout << "mass= " << mass << " " << lv << G4endl;
-      G4ThreeVector boost = lv.boostVector();
-      //G4cout << "mass= " << mass << " " << boost << G4endl;
-      const G4ThreeVector dir = gamma->GetMomentumDirection();
-      model->SampleSecondaries(newp, mass, dir);
-      G4int np = newp->size();
-      for(G4int j=0; j<np; ++j) {
-	G4DynamicParticle* dp = (*newp)[j];
-	G4LorentzVector v = dp->Get4Momentum();
-	v.boost(boost);
-        //G4cout << j << ". " << v << G4endl;
-	v.boost(inBoost);
-        //G4cout << "   " << v << G4endl;
-	dp->Set4Momentum(v);
-        t -= v.e();
-      }
-      //G4cout << "Gamma   " << gLv << G4endl;
-      gLv.boost(inBoost);
-      //G4cout << "        " << gLv << G4endl;
-      gamma->Set4Momentum(gLv);
-      t -= gLv.e();
-      newp->push_back(gamma);
-      if(std::abs(t) > MeV) {
-	G4cout << "G4eeToHadronsModel::SampleSecondaries: Ebalance(MeV)= " 
-	       << t/MeV << " primary 4-momentum: " << inlv <<  G4endl;
-      }
+  G4double t = dParticle->GetKineticEnergy() + 2*electron_mass_c2;
+  G4LorentzVector inlv = dParticle->Get4Momentum() + 
+    G4LorentzVector(0.0,0.0,0.0,electron_mass_c2);
+  G4double e = inlv.m();
+  G4ThreeVector inBoost = inlv.boostVector();
+  //G4cout << "G4eeToHadronsModel::SampleSecondaries e= " << e 
+  //	   << " " << inlv << " " << inBoost <<G4endl;
+  if(e > emin) {
+    G4DynamicParticle* gamma = GenerateCMPhoton(e);
+    G4LorentzVector gLv = gamma->Get4Momentum();
+    G4LorentzVector lv(0.0,0.0,0.0,e);
+    lv -= gLv;
+    G4double mass = lv.m();
+    //G4cout << "mass= " << mass << " " << lv << G4endl;
+    G4ThreeVector boost = lv.boostVector();
+    //G4cout << "mass= " << mass << " " << boost << G4endl;
+    const G4ThreeVector dir = gamma->GetMomentumDirection();
+    model->SampleSecondaries(newp, mass, dir);
+    G4int np = newp->size();
+    for(G4int j=0; j<np; ++j) {
+      G4DynamicParticle* dp = (*newp)[j];
+      G4LorentzVector v = dp->Get4Momentum();
+      v.boost(boost);
+      //G4cout << j << ". " << v << G4endl;
+      v.boost(inBoost);
+      //G4cout << "   " << v << G4endl;
+      dp->Set4Momentum(v);
+      t -= v.e();
+    }
+    //G4cout << "Gamma   " << gLv << G4endl;
+    gLv.boost(inBoost);
+    //G4cout << "        " << gLv << G4endl;
+    gamma->Set4Momentum(gLv);
+    t -= gLv.e();
+    newp->push_back(gamma);
+    if(std::abs(t) > CLHEP::MeV) {
+      G4cout << "G4eeToHadronsModel::SampleSecondaries: Ebalance(MeV)= " 
+	     << t/MeV << " primary 4-momentum: " << inlv <<  G4endl;
     }
   }
 }
@@ -350,4 +344,3 @@ G4DynamicParticle* G4eeToHadronsModel::GenerateCMPhoton(G4double e)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

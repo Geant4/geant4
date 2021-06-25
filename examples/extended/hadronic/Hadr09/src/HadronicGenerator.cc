@@ -91,37 +91,7 @@
 #include "G4GenericIon.hh"
 
 #include "G4HadronicProcess.hh"
-#include "G4PionMinusInelasticProcess.hh"
-#include "G4PionPlusInelasticProcess.hh"
-#include "G4KaonMinusInelasticProcess.hh"
-#include "G4KaonPlusInelasticProcess.hh"
-#include "G4KaonZeroSInelasticProcess.hh"
-#include "G4KaonZeroLInelasticProcess.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
-#include "G4He3InelasticProcess.hh"
-#include "G4AlphaInelasticProcess.hh"
-#include "G4IonInelasticProcess.hh"
-#include "G4LambdaInelasticProcess.hh"
-#include "G4SigmaMinusInelasticProcess.hh"
-#include "G4SigmaPlusInelasticProcess.hh"
-#include "G4XiMinusInelasticProcess.hh"
-#include "G4XiZeroInelasticProcess.hh"
-#include "G4OmegaMinusInelasticProcess.hh"
-#include "G4AntiProtonInelasticProcess.hh"
-#include "G4AntiNeutronInelasticProcess.hh"
-#include "G4AntiDeuteronInelasticProcess.hh"
-#include "G4AntiTritonInelasticProcess.hh"
-#include "G4AntiHe3InelasticProcess.hh"
-#include "G4AntiAlphaInelasticProcess.hh"
-#include "G4AntiLambdaInelasticProcess.hh"
-#include "G4AntiSigmaMinusInelasticProcess.hh"
-#include "G4AntiSigmaPlusInelasticProcess.hh"
-#include "G4AntiXiMinusInelasticProcess.hh"
-#include "G4AntiXiZeroInelasticProcess.hh"
-#include "G4AntiOmegaMinusInelasticProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 
 #include "G4CascadeInterface.hh"
 #include "G4TheoFSGenerator.hh"
@@ -267,70 +237,101 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
   // Set up inelastic processes : store them in a map (with particle definition as key)
   //                              for convenience
   typedef std::pair< G4ParticleDefinition*, G4HadronicProcess* > ProcessPair;
-  G4HadronicProcess* thePionMinusInelasticProcess = new G4PionMinusInelasticProcess;
+  G4HadronicProcess* thePionMinusInelasticProcess =
+    new G4HadronInelasticProcess( "pi-Inelastic", G4PionMinus::Definition() );    
   fProcessMap.insert( ProcessPair( G4PionMinus::Definition(), thePionMinusInelasticProcess ) );
-  G4HadronicProcess* thePionPlusInelasticProcess = new G4PionPlusInelasticProcess;
+  G4HadronicProcess* thePionPlusInelasticProcess =
+    new G4HadronInelasticProcess( "pi+Inelastic", G4PionPlus::Definition() );    
   fProcessMap.insert( ProcessPair( G4PionPlus::Definition(), thePionPlusInelasticProcess ) );
-  G4HadronicProcess* theKaonMinusInelasticProcess = new G4KaonMinusInelasticProcess;
+  G4HadronicProcess* theKaonMinusInelasticProcess =
+    new G4HadronInelasticProcess( "kaon-Inelastic", G4KaonMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4KaonMinus::Definition(), theKaonMinusInelasticProcess ) );
-  G4HadronicProcess* theKaonPlusInelasticProcess = new G4KaonPlusInelasticProcess;
+  G4HadronicProcess* theKaonPlusInelasticProcess =
+    new G4HadronInelasticProcess( "kaon+Inelastic", G4KaonPlus::Definition() );        
   fProcessMap.insert( ProcessPair( G4KaonPlus::Definition(), theKaonPlusInelasticProcess ) );
-  G4HadronicProcess* theKaonZeroLInelasticProcess = new G4KaonZeroLInelasticProcess;
+  G4HadronicProcess* theKaonZeroLInelasticProcess =
+    new G4HadronInelasticProcess( "kaon0LInelastic", G4KaonZeroLong::Definition() );        
   fProcessMap.insert( ProcessPair( G4KaonZeroLong::Definition(), theKaonZeroLInelasticProcess ) );
-  G4HadronicProcess* theKaonZeroSInelasticProcess = new G4KaonZeroSInelasticProcess;
+  G4HadronicProcess* theKaonZeroSInelasticProcess =
+    new G4HadronInelasticProcess( "kaon0SInelastic", G4KaonZeroShort::Definition() );        
   fProcessMap.insert( ProcessPair( G4KaonZeroShort::Definition(), theKaonZeroSInelasticProcess ) );
-  G4HadronicProcess* theProtonInelasticProcess = new G4ProtonInelasticProcess;
+  G4HadronicProcess* theProtonInelasticProcess =
+    new G4HadronInelasticProcess( "protonInelastic", G4Proton::Definition() );        
   fProcessMap.insert( ProcessPair( G4Proton::Definition(), theProtonInelasticProcess ) );
-  G4HadronicProcess* theNeutronInelasticProcess = new G4NeutronInelasticProcess;
+  G4HadronicProcess* theNeutronInelasticProcess =
+    new G4HadronInelasticProcess( "neutronInelastic", G4Neutron::Definition() );        
   fProcessMap.insert( ProcessPair( G4Neutron::Definition(), theNeutronInelasticProcess ) );
-  G4HadronicProcess* theDeuteronInelasticProcess = new G4DeuteronInelasticProcess;
+  G4HadronicProcess* theDeuteronInelasticProcess =
+    new G4HadronInelasticProcess( "dInelastic", G4Deuteron::Definition() );        
   fProcessMap.insert( ProcessPair( G4Deuteron::Definition(), theDeuteronInelasticProcess ) );
-  G4HadronicProcess* theTritonInelasticProcess = new G4TritonInelasticProcess;
+  G4HadronicProcess* theTritonInelasticProcess =
+    new G4HadronInelasticProcess( "tInelastic", G4Triton::Definition() );        
   fProcessMap.insert( ProcessPair( G4Triton::Definition(), theTritonInelasticProcess ) );
-  G4HadronicProcess* theHe3InelasticProcess = new G4He3InelasticProcess;
+  G4HadronicProcess* theHe3InelasticProcess =
+    new G4HadronInelasticProcess( "he3Inelastic", G4He3::Definition() );        
   fProcessMap.insert( ProcessPair( G4He3::Definition(), theHe3InelasticProcess ) );
-  G4HadronicProcess* theAlphaInelasticProcess = new G4AlphaInelasticProcess;
+  G4HadronicProcess* theAlphaInelasticProcess =
+    new G4HadronInelasticProcess( "alphaInelastic", G4Alpha::Definition() );        
   fProcessMap.insert( ProcessPair( G4Alpha::Definition(), theAlphaInelasticProcess ) );
-  G4HadronicProcess* theIonInelasticProcess = new G4IonInelasticProcess;
+  G4HadronicProcess* theIonInelasticProcess =
+    new G4HadronInelasticProcess( "ionInelastic", G4GenericIon::Definition() );        
   fProcessMap.insert( ProcessPair( G4GenericIon::Definition(), theIonInelasticProcess ) );
-  G4HadronicProcess* theLambdaInelasticProcess = new G4LambdaInelasticProcess;
+  G4HadronicProcess* theLambdaInelasticProcess =
+    new G4HadronInelasticProcess( "lambdaInelastic", G4Lambda::Definition() );        
   fProcessMap.insert( ProcessPair( G4Lambda::Definition(), theLambdaInelasticProcess ) );
-  G4HadronicProcess* theSigmaMinusInelasticProcess = new G4SigmaMinusInelasticProcess;
+  G4HadronicProcess* theSigmaMinusInelasticProcess =
+    new G4HadronInelasticProcess( "sigma-Inelastic", G4SigmaMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4SigmaMinus::Definition(), theSigmaMinusInelasticProcess ) );
-  G4HadronicProcess* theSigmaPlusInelasticProcess = new G4SigmaPlusInelasticProcess;
+  G4HadronicProcess* theSigmaPlusInelasticProcess =
+    new G4HadronInelasticProcess( "sigma+Inelastic", G4SigmaPlus::Definition() );        
   fProcessMap.insert( ProcessPair( G4SigmaPlus::Definition(), theSigmaPlusInelasticProcess ) );
-  G4HadronicProcess* theXiMinusInelasticProcess = new G4XiMinusInelasticProcess;
+  G4HadronicProcess* theXiMinusInelasticProcess =
+    new G4HadronInelasticProcess( "xi-Inelastic", G4XiMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4XiMinus::Definition(), theXiMinusInelasticProcess ) );
-  G4HadronicProcess* theXiZeroInelasticProcess = new G4XiZeroInelasticProcess;
+  G4HadronicProcess* theXiZeroInelasticProcess =
+    new G4HadronInelasticProcess( "xi0Inelastic", G4XiZero::Definition() );        
   fProcessMap.insert( ProcessPair( G4XiZero::Definition(), theXiZeroInelasticProcess ) );
-  G4HadronicProcess* theOmegaMinusInelasticProcess = new G4OmegaMinusInelasticProcess;
+  G4HadronicProcess* theOmegaMinusInelasticProcess =
+    new G4HadronInelasticProcess( "omega-Inelastic", G4OmegaMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4OmegaMinus::Definition(), theOmegaMinusInelasticProcess ) );
-  G4HadronicProcess* theAntiProtonInelasticProcess = new G4AntiProtonInelasticProcess;
+  G4HadronicProcess* theAntiProtonInelasticProcess =
+    new G4HadronInelasticProcess( "anti_protonInelastic", G4AntiProton::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiProton::Definition(), theAntiProtonInelasticProcess ) );
-  G4HadronicProcess* theAntiNeutronInelasticProcess = new G4AntiNeutronInelasticProcess;
+  G4HadronicProcess* theAntiNeutronInelasticProcess =
+    new G4HadronInelasticProcess( "anti_neutronInelastic", G4AntiNeutron::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiNeutron::Definition(), theAntiNeutronInelasticProcess ) );
-  G4HadronicProcess* theAntiDeuteronInelasticProcess = new G4AntiDeuteronInelasticProcess;
+  G4HadronicProcess* theAntiDeuteronInelasticProcess =
+    new G4HadronInelasticProcess( "anti_deuteronInelastic", G4AntiDeuteron::Definition() );            
   fProcessMap.insert( ProcessPair( G4AntiDeuteron::Definition(),
                                    theAntiDeuteronInelasticProcess ) );
-  G4HadronicProcess* theAntiTritonInelasticProcess = new G4AntiTritonInelasticProcess;
+  G4HadronicProcess* theAntiTritonInelasticProcess =
+    new G4HadronInelasticProcess( "anti_tritonInelastic", G4AntiTriton::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiTriton::Definition(), theAntiTritonInelasticProcess ) );
-  G4HadronicProcess* theAntiHe3InelasticProcess = new G4AntiHe3InelasticProcess;
+  G4HadronicProcess* theAntiHe3InelasticProcess =
+    new G4HadronInelasticProcess( "anti_He3Inelastic", G4AntiHe3::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiHe3::Definition(), theAntiHe3InelasticProcess ) );
-  G4HadronicProcess* theAntiAlphaInelasticProcess = new G4AntiAlphaInelasticProcess;
+  G4HadronicProcess* theAntiAlphaInelasticProcess =
+    new G4HadronInelasticProcess( "anti_alphaInelastic", G4AntiAlpha::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiAlpha::Definition(), theAntiAlphaInelasticProcess ) );
-  G4HadronicProcess* theAntiLambdaInelasticProcess = new G4AntiLambdaInelasticProcess;
+  G4HadronicProcess* theAntiLambdaInelasticProcess =
+    new G4HadronInelasticProcess( "anti-lambdaInelastic", G4AntiLambda::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiLambda::Definition(), theAntiLambdaInelasticProcess ) );
-  G4HadronicProcess* theAntiSigmaMinusInelasticProcess = new G4AntiSigmaMinusInelasticProcess;
+  G4HadronicProcess* theAntiSigmaMinusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_sigma-Inelastic", G4AntiSigmaMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiSigmaMinus::Definition(),
                                    theAntiSigmaMinusInelasticProcess ) );
-  G4HadronicProcess* theAntiSigmaPlusInelasticProcess = new G4AntiSigmaPlusInelasticProcess;
+  G4HadronicProcess* theAntiSigmaPlusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_sigma+Inelastic", G4AntiSigmaPlus::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiSigmaPlus::Definition(),
                                    theAntiSigmaPlusInelasticProcess ) );
-  G4HadronicProcess* theAntiXiMinusInelasticProcess = new G4AntiXiMinusInelasticProcess;
+  G4HadronicProcess* theAntiXiMinusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_xi-Inelastic", G4AntiXiMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiXiMinus::Definition(), theAntiXiMinusInelasticProcess ) );
-  G4HadronicProcess* theAntiXiZeroInelasticProcess = new G4AntiXiZeroInelasticProcess;
+  G4HadronicProcess* theAntiXiZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_xi0Inelastic", G4AntiXiZero::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiXiZero::Definition(), theAntiXiZeroInelasticProcess ) );
-  G4HadronicProcess* theAntiOmegaMinusInelasticProcess = new G4AntiOmegaMinusInelasticProcess;
+  G4HadronicProcess* theAntiOmegaMinusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_omega-Inelastic", G4AntiOmegaMinus::Definition() );        
   fProcessMap.insert( ProcessPair( G4AntiOmegaMinus::Definition(),
                                    theAntiOmegaMinusInelasticProcess ) );
 

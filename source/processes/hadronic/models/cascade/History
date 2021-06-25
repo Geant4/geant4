@@ -7,23 +7,39 @@
             History file for hadronic/models/cascade
             ----------------------------------------
 
-This file should be used to summarize modifications introduced in the 
+This file should be used to summarize modifications introduced in the
 code and to keep track of all tags.
 
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 May 2021 Jonathan Madsen (hadr-casc-V10-07-02)
+--------------------------------------------------
+- Fixed TLS usage of G4CascadeChannelTables and G4CascadeParameters
+
+16 April 2021  Ben Morgan (hadr-casc-V10-07-01)
+--------------------------------------------------
+- Migrate build to modular CMake API
+
+13 April 2021  Alberto Ribon    (hadr-casc-V10-07-00)
+-----------------------------------------------------
+- GNUmakefile, sources.cmake : removed the subdirectories
+  hadronic/models/management and hadronic/models/util
+  (that have been now deleted, with their classes moved to
+   hadronic/util and hadronic/management).
+  Removed also the useless dependency to hadronic/process.
+
  5 May 2020  Gunter Folger      (hadr-casc-V10-06-04)
+-----------------------------------------------------
  - Fix for clang10: confusing indentation caused by if
     add {} around statements
-    
------------------------------------------------------
+
 26 February 2020  Dennis Wright (hadr-casc-V10-06-03)
 -----------------------------------------------------
 - G4LightTargetCollider::collide() : avoid frequent energy conservation warning
-  from G4HadronicProcess by setting up "no interaction" final state below 
-  threshold 
+  from G4HadronicProcess by setting up "no interaction" final state below
+  threshold
 
 13 January 2020  Dennis Wright (hadr-casc-V10-06-02)
 ----------------------------------------------------
@@ -38,20 +54,20 @@ code and to keep track of all tags.
 
 16 December 2019  Vladimir Ivanchenko (hadr-casc-V10-06-00)
 -----------------------------------------------------------
-- G4CascadeCheckBalance: fixed outstanding problem of the interface 
-  with native pre-compound model, which happens since in the 
-  default de-excitation internal electron conversion become 
-  enabled 
+- G4CascadeCheckBalance: fixed outstanding problem of the interface
+  with native pre-compound model, which happens since in the
+  default de-excitation internal electron conversion become
+  enabled
 
  7 November 2019  Dennis Wright (hadr-casc-V10-05-02)
 -----------------------------------------------------
 - G4LightTargetCollider: fix crash when gamma energy below deuteron
-  disintegration threshold and improve exception handling 
- 
+  disintegration threshold and improve exception handling
+
  5 November 2019  Dennis Wright (hadr-casc-V10-05-01)
 -----------------------------------------------------
-- new class G4LightTargetCollider to more accurately handle collisons 
-  on p, d, t, 3He.  Currently only gamma on protons and deuterons is 
+- new class G4LightTargetCollider to more accurately handle collisons
+  on p, d, t, 3He.  Currently only gamma on protons and deuterons is
   implemented.
 
 29 May 2019  Dennis Wright (hadr-casc-V10-05-00)
@@ -67,14 +83,14 @@ code and to keep track of all tags.
  G4PreCompoundDeexcitation::deExcite: do not use const reference as
  input to theDeExcitation->DeExcite(G4Fragment) because G4PreCompound
  can change the fragment and upset the energy balance
- 
+
  G4CollisionOutput::getTotalCharge: subtract electron charges in case
  of internal conversion in G4PreCompound
 
  G4CascadeCheckBalance::collide(const G4Fragment& fragment,
                                 G4CollisionOutput& output):
  Convert fragment momentum given in MeV to GeV (Bertini units)
- and remove electrom masses from energy balance when internal conversion 
+ and remove electrom masses from energy balance when internal conversion
  occurs
 
 09 November 2018  Gabriele Cosmo (hadr-casc-V10-04-11)
@@ -91,13 +107,13 @@ code and to keep track of all tags.
 - G4NucleiModel::boundaryTransition : fix by Natalia Toro (SLAC) to
   prevent glancing incidence at shell boundaries from reflecting too
   many times
- 
+
 19 September 2018  Dennis Wright  (hadr-casc-V10-04-08)
 -------------------------------------------------------
 - G4CascadeT11pizNChannel.cc, G4CascadeT31piNChannel.cc,
-  G4CascadeT33piNChannel.cc : re-order particle types in final state 
+  G4CascadeT33piNChannel.cc : re-order particle types in final state
     arrays so that pion is first and nucleon is second.  Two body final
-    state methods assume this.    
+    state methods assume this.
 
 - G4CascadeKminusNChannel.cc, G4CascadeKminusPChannel.cc,
   G4CascadeKplusNChannel.cc, G4CascadeKplusPChannel.cc,
@@ -123,7 +139,7 @@ code and to keep track of all tags.
  7 June 2018  Dennis Wright  (hadr-casc-V10-04-05)
 --------------------------------------------------
 - G4CascadePPChannel, G4CascadeNPChannel, G4CascadeNNChannel: extend strange
-    pair production channels to 6, 7, 8 and 9-body final states  
+    pair production channels to 6, 7, 8 and 9-body final states
 
 - G4CascadeT11pizNChannel.cc : fix qnum conservation problem in 8-body final
     states
@@ -131,14 +147,14 @@ code and to keep track of all tags.
  2 May 2018  Dennis Wright  (hadr-casc-V10-04-04)
 -------------------------------------------------
 - G4ElementaryParticleCollider
-   methods generateSCMpionAbsorption and 
-   generateSCMmuonAbsorption did not produce correct nucleon pairs when 
+   methods generateSCMpionAbsorption and
+   generateSCMmuonAbsorption did not produce correct nucleon pairs when
    pion or muon was absorbed - both methods now re-written
 
-   quantum number conservation test added to method 
+   quantum number conservation test added to method
    collide(G4InuclParticle* bullet, G4InuclParticle* target,
            G4CollisionOutput& output)
- 
+
  20 March 2018  Julia Yarba  (hadr-casc-V10-04-03)
 ---------------------------------------------------
 - Fix implementation of nuclear_rad_2par configurable key (G4CascadeParamMessenger.cc)
@@ -147,16 +163,16 @@ code and to keep track of all tags.
 ---------------------------------------------------
 - G4CascadeT11pizNChannel.cc: extend strange pair production channels to
   6,7,8 and 9 body final states
-  
+
 27 February 2018  Alberto Ribon (hadr-casc-V10-04-01)
 -----------------------------------------------------
 -  G4NucleiModel : replaced obsolete std::bind2nd with std::bind .
 
  2 February 2018  Dennis Wright (hadr-casc-V10-04-00)
 -----------------------------------------------------
-- Add strange pair production channels to list of 6, 7, 8 and 9-body 
+- Add strange pair production channels to list of 6, 7, 8 and 9-body
   final states in classes G4CascadeT31piNChannel and G4CascadeT33piNChannel.
-  Modify template values accordingly in 
+  Modify template values accordingly in
     G4CascadePiMinusNChannel.hh
     G4CascadePiMinusPChannel.hh
     G4CascadePiPlusNChannel.hh
@@ -164,14 +180,14 @@ code and to keep track of all tags.
 
 27 November 2017  Dennis Wright (hadr-casc-V10-03-06)
 -----------------------------------------------------
-- G4CascadeInterface::createBullet, G4CascadeInterface::ApplyYourself: 
-  rotation to z-axis unnecessary and may 
-  cause irreproducibility.  Remove it according to bug report #1990. 
+- G4CascadeInterface::createBullet, G4CascadeInterface::ApplyYourself:
+  rotation to z-axis unnecessary and may
+  cause irreproducibility.  Remove it according to bug report #1990.
 
 20 October 2017  Tatsumi Koi (hadr-casc-V10-03-05)
 ------------------------------------------------
 - G4CascadeParameters.cc FERMI_SCALE and RAD_TRAILING are added to changeable parameters from HDP
-Lower and upper limits of changeable parameters form HDP are registered 
+Lower and upper limits of changeable parameters form HDP are registered
 
 6 October 2017  Tatsumi Koi (hadr-casc-V10-03-04)
 ------------------------------------------------
@@ -185,14 +201,14 @@ Lower and upper limits of changeable parameters form HDP are registered
 ------------------------------------------------
 - G4ElementaryParticleCollider::generateSCMmuonAbsorption: fix rare seg fault
   spotted and diagnosed by Ralf Ehrlich (mu2e/Virgina).  Added line
-      particles.clear();  
+      particles.clear();
   if GetThreeBodyMomenta() returns no momenta.
 
 1 May 2017  Tatsumi Koi (hadr-casc-V10-03-01)
 ---------------------------------------------------
-- G4CascadeParameters.cc: Use G4HadronicDeveloperParameters as a tool 
+- G4CascadeParameters.cc: Use G4HadronicDeveloperParameters as a tool
 for sharing parameters between developers and experienced users.
-Need to set environment variable of "TEST_HDP" for testing the tool. 
+Need to set environment variable of "TEST_HDP" for testing the tool.
 
 13 April 2017  Michael Kelsey (hadr-casc-V10-03-00)
 ---------------------------------------------------
@@ -213,7 +229,7 @@ Need to set environment variable of "TEST_HDP" for testing the tool.
  6 October 2016  Dennis Wright (hadr-casc-V10-02-04)
  ---------------------------------------------------
 - G4EquilibriumEvaporator::deExcite: replace sampling of evaporation spectrum
-   with original Dostrovsky method 
+   with original Dostrovsky method
 - paraMaker.cc: add comments
 
  3 October 2016  Dennis Wright (hadr-casc-V10-02-03)
@@ -221,7 +237,7 @@ Need to set environment variable of "TEST_HDP" for testing the tool.
   Mike Kelsey added the lines
     process->PreparePhysicsTable(*part);
     process->BuildPhysicsTable(*part);
-  in unit test cascade/test/cascade.cc to configure RunManager event loop 
+  in unit test cascade/test/cascade.cc to configure RunManager event loop
 
 30 September 2016  Dennis Wright (hadr-casc-V10-02-02)
 ------------------------------------------------------
@@ -233,7 +249,7 @@ Need to set environment variable of "TEST_HDP" for testing the tool.
 14 March 2016  Dennis Wright (hadr-casc-V10-02-01)
 --------------------------------------------------
 - G4InuclCollider.cc: re-instate getenv for photonuclearOkay().  This
-  method causes significant performance degradation and the physics needs 
+  method causes significant performance degradation and the physics needs
   to be improved before it can made default
 
 25 January 2016  Michael Kelsey (hadr-casc-V10-02-00)
@@ -246,7 +262,7 @@ Need to set environment variable of "TEST_HDP" for testing the tool.
 ----------------------------------------------------
 - G4CascadeKplusNChannel: extend to 9-body final states and 32 GeV using same
   energy bins as G4CascadeKplusPChannel
-  
+
 16 October 2015  V.Ivanchenko (hadr-casc-V10-01-12)
 ---------------------------------------------------
 - G4CascadeCoalescence.hh:  Add #include "G4InuclElementaryParticle.hh", to
@@ -329,9 +345,9 @@ special comment string authenticating that it terminates.
 - G4CascadeInterface.cc:  Call static Initialize() function in constructor,
   for sequential builds or master thread.  Requires global-V10-01-08.
 
-23 April 2015  A. Ribon (hadr-casc-V10-01-03)     
+23 April 2015  A. Ribon (hadr-casc-V10-01-03)
 ---------------------------------------------
-- G4PreCompoundDeexcitation: delete precompound products (i.e. 
+- G4PreCompoundDeexcitation: delete precompound products (i.e.
   G4ReactionProduct objects) before cleaning and deleting their
   vector container.
 
@@ -544,7 +560,7 @@ end-of-job memory leaks:
 
 7 January 2014  Dennis Wright (hadr-casc-V10-00-01)
 ---------------------------------------------------
-- added new pi-nucleon 2-body angular distributions: 
+- added new pi-nucleon 2-body angular distributions:
   G4PipP2PipPAngDst, G4PimP2PimPAngDst, G4Pi0P2Pi0PAngDst and G4PimP2Pi0NAngDst.
   Below 2.6 GeV, distributions taken from SAID phase shift calculations with
   Coulomb phase removed.  Above 2.6 GeV, taken from data.
@@ -799,16 +815,16 @@ Address Coverity 37230 and 37385.
 Address numerous Coverity warnings which have build up since November 2011.
 No modifications to working code were required.
 
-	G4BigBanger.hh			G4InuclCollider.hh		
-	G4CascadeCheckBalance.hh	G4InuclNuclei.cc		
-	G4CascadeColliderBase.hh	G4InuclParticle.cc		
-	G4CascadeDeexcitation.hh	G4MultiBodyMomentumDist.hh	
-	G4CascadeInterface.cc		G4NonEquilibriumEvaporator.hh	
-	G4CascadeRecoilMaker.hh		G4NumIntTwoBodyAngDst.hh,.icc	
-	G4ElementaryParticleCollider.hh	G4ParamExpTwoBodyAngDst.icc	
-	G4EquilibriumEvaporator.hh	G4PreCompoundDeexcitation.hh	
-	G4EvaporationInuclCollider.hh	G4TwoBodyAngularDist.hh		
-	G4Fissioner.hh			G4VCascadeCollider.hh		
+	G4BigBanger.hh			G4InuclCollider.hh
+	G4CascadeCheckBalance.hh	G4InuclNuclei.cc
+	G4CascadeColliderBase.hh	G4InuclParticle.cc
+	G4CascadeDeexcitation.hh	G4MultiBodyMomentumDist.hh
+	G4CascadeInterface.cc		G4NonEquilibriumEvaporator.hh
+	G4CascadeRecoilMaker.hh		G4NumIntTwoBodyAngDst.hh,.icc
+	G4ElementaryParticleCollider.hh	G4ParamExpTwoBodyAngDst.icc
+	G4EquilibriumEvaporator.hh	G4PreCompoundDeexcitation.hh
+	G4EvaporationInuclCollider.hh	G4TwoBodyAngularDist.hh
+	G4Fissioner.hh			G4VCascadeCollider.hh
 	G4GDecay3.cc			G4VCascadeDeexcitation.hh
 	G4IntraNucleiCascader.hh
 
@@ -1006,7 +1022,7 @@ Minor code cleanup before deploying some major revisions.
 ---------------------------------------------------
 - created class G4NP2NPAngDst to handle np and pn elastic scattering
   by sampling histograms taken directly from data
-- added above class to G4TwoBodyAngularDist, replacing old np, pn 
+- added above class to G4TwoBodyAngularDist, replacing old np, pn
   sampling
 
 14 March 2013  Michael Kelsey (hadr-casc-V09-06-16)
@@ -1241,7 +1257,7 @@ Add detailed two-body final state angular distributions for (gamma,p) and
 - created base classes G4VTwoBodyAngDst and G4NumIntTwoBodyAngDst, and concrete
   classes G4GamP2NPipAngDst and G4GamP2PPi0AngDst to hold the tables
 
-- added these channels to G4ElementaryParticleCollider::   
+- added these channels to G4ElementaryParticleCollider::
 
 - added new cross section data to G4CascadeT1GamNChannel
 
@@ -1305,11 +1321,11 @@ Apply automatic conversion to all code for Geant4-MT thread-safe operation.
 
 15 October 2012  Dennis Wright (hadr-casc-V09-05-25)
 ----------------------------------------------------
-- replace SAID cross sections with in-medium cross sections of 
+- replace SAID cross sections with in-medium cross sections of
   Li & Machleidt for incident energies below 420 MeV.  Classes
   changed: G4CascadePPChannel, G4CascadeNNChannel, G4CascadeNPChannel.
 - method findCrossSection removed from G4CascadePPChannel and G4CascadeNPChannel
-  since no Coulomb is included in L&M cross sections 
+  since no Coulomb is included in L&M cross sections
 
 9 October 2012 Michael Kelsey (hadr-casc-V09-05-24)
 ---------------------------------------------------
@@ -1337,7 +1353,7 @@ Apply automatic conversion to all code for Geant4-MT thread-safe operation.
 
 - create classes G4CascadeOmegaMinusPChannel and G4CascadeOmegaMinusNChannel
   containing partial cross sections for omega- p and omega- n reactions
-  
+
 25 September 2012 Gabriele Cosmo (hadr-casc-V09-05-21)
 ------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical
@@ -1576,9 +1592,9 @@ name as data member or global variable) which appear when "-Wshadow" is used.
 
  6 January 2012  Dennis Wright (hadr-casc-V09-05-01)
 ----------------------------------------------------
-- G4ElementaryParticleCollider.cc:  add angular distributions for elastic and 
+- G4ElementaryParticleCollider.cc:  add angular distributions for elastic and
   inelastic 2-body final states of gamma p and gamma n reactions.
- 
+
 19 December 2011  Michael Kelsey (hadr-casc-V09-05-00)
 ------------------------------------------------------
 - G4ElementaryParticle.cc:  Expand diagnostics in getMomModuleFor2toMany(),
@@ -1601,7 +1617,7 @@ name as data member or global variable) which appear when "-Wshadow" is used.
 3 November 2011  Dennis Wright  (hadr-casc-V09-04-40)
 -----------------------------------------------------
 - G4CascadeInterface.hh, .cc: switch from Description() to ModelDescription()
- 
+
 27 October 2011  Gabriele Cosmo (hadr-casc-V09-04-39)
 -----------------------------------------------------
 - Added workaround to use 'this' pointer for internal calls in
@@ -1643,7 +1659,7 @@ name as data member or global variable) which appear when "-Wshadow" is used.
 -------------------------------------------------------
 - evaporation/src/G4BertiniEvaporation.cc: Migrate to integer A&Z.  This
   code is moribund; migration is to avoid compilation errors.
- 
+
 27 September 2011  Michael Kelsey (hadr-casc-V09-04-35)
 -------------------------------------------------------
 - G4CascadeCoalescence.cc: BUG FIX for Windows: Replace strtof() with strtod().
@@ -1761,7 +1777,7 @@ order to anticipate supporting G4ExceptionDescription streams.
 ------------------------------
 - G4CascadeInterface.cc:  Undo copying of G4V3DNucleus; creates incorrect
   PDG codes for proton and neutron.
- 
+
 31 August 2011  Michael Kelsey (hadr-casc-V09-04-29)
 ----------------------------------------------------
 - G4NucleiModel.cc:  Make "best guess" parameters defaults for structure model,
@@ -2215,7 +2231,7 @@ construct "bullet" from original projectile.
   This should leave final state fully balanced before InuclCollider sees it.
 
 - G4InuclCollider.cc:  Simplify de-excitation handling (fragment test is in
-  deexcite() function).  Suppress momentum-conservation check on de-excitation 
+  deexcite() function).  Suppress momentum-conservation check on de-excitation
   unless G4CASCADE_CHECK_ECONS compiler flag was used, as all functions have
   been confirmed to conserve four-momentum.
 
@@ -2542,7 +2558,7 @@ test and diagnostic code:
 - G4IntraNucleiCascader.cc:  Minor shuffle of post-cascade recoil checking,
   in preparation for moving fragment construction and processing away.
 
-- G4CollisionOutput.cc:  Replace names "TargetFragment*" and "NucleiFragment*" 
+- G4CollisionOutput.cc:  Replace names "TargetFragment*" and "NucleiFragment*"
   with "OutgoingNuclei" and "OutgoingNucleus" for consistency with
   "OutgoingParticles" names.  This affects the following source files, all
   of which are modified to match (using |sed|):
@@ -2643,36 +2659,36 @@ from migration to integer A and Z (-73 tag).
 - G4CascadeMomentum.hh:  This should have been removed from the package long
   ago.  Apologies for the oversight.
 
-22 September 2010 Julia Yarba 
+22 September 2010 Julia Yarba
 -----------------------------
-Added 1st prototype of interface between Bartini cascade and PreCompound model 
+Added 1st prototype of interface between Bartini cascade and PreCompound model
 (post-cascade de-excitation).
 
 Changes only to:
 /geant4/source/processes/hadronic/models/cascade/cascade
 
-New developments are those G4PreCompound* classes; the GNUmakefile adapted to 
+New developments are those G4PreCompound* classes; the GNUmakefile adapted to
 include necessary links.
 
 The PreComp wrapper is G4PreCompundDeexcitation class.
 
-The logic, loops, conditions, etc., in the event processing are the same as in 
+The logic, loops, conditions, etc., in the event processing are the same as in
 the "native" Bertini code. I actually copied it over from G4CascadeInterface,
 and started from there.
 
 However, there're a few technical changes that I'd like to mention.
 
 1. G4PreCompoundInterface inherits directly from G4HadronicInteraction.
-I felt that we'd not need G4VIntra..., because its only advantage is a pointer 
+I felt that we'd not need G4VIntra..., because its only advantage is a pointer
 (and related access methods) to G4VPreCompoundModel.
 This has now moved to the de-excitation wrapper.
 
 2. In the Collider itself, I've made the data member to be
  G4CascadeColliderBase* theDeexcitation
-This way, it can be transparently set to the native one or the PreComp one 
+This way, it can be transparently set to the native one or the PreComp one
 (both inherit from G4CascadeColliderBase).
 
-3. There's a setDeExcitation(...) methond in the collider, and also in the interface 
+3. There's a setDeExcitation(...) methond in the collider, and also in the interface
 (which will pass it down to the collider).
 
 19 September 2010 Michael Kelsey (hadr-casc-V09-03-77)
@@ -2775,7 +2791,7 @@ Entire log files (9.6M lines, 433 MB) identical before and after migration.
   from G4IntraNucleiCascader::goodCase().  Add parameter to set "rounding
   tolerance" for small/negative mass differences.  Drop getRecoilFragment()
   in favor of user calling makeRecoilFragment() directly (instead of doing
-  it collide()), which returns a non-const pointer. 
+  it collide()), which returns a non-const pointer.
 
 - G4IntraNucleiCascader: Remove previously introduced getResidualMass() and
   makeResidualFragment() functions, along with G4InuclNuclei object.
@@ -3143,14 +3159,14 @@ Bertini cascade between 4.9.3-ref-05 (hadr-casc-V09-03-23-01) and
 
 6 July 2010 Dennis Wright (hadr-casc-V09-03-55)
 -----------------------------------------------
-- G4IntraNucleiCascader.cc: add to final particle list those cascade 
+- G4IntraNucleiCascader.cc: add to final particle list those cascade
   particles which were formerly abandoned at cascade termination;
 - G4IntraNucleiCascader.cc: allow meson excitons to pass out of nucleus
-  since they are not proper excitons, and would be lost otherwise 
-  
+  since they are not proper excitons, and would be lost otherwise
+
 4 July 2010 Dennis Wright (hadr-casc-V09-03-54)
 -----------------------------------------------
-- tag changes up to now 
+- tag changes up to now
 
 2 July 2010 Michael Kelsey
 --------------------------
@@ -3220,7 +3236,7 @@ Bertini cascade between 4.9.3-ref-05 (hadr-casc-V09-03-23-01) and
 28 June 2010 Michael Kelsey
 ---------------------------
 - G4CascadeCheckBalance:  Report violations on G4cerr always, regardless
-  of verbosity level.  Add collide(...,<vector>) interface to allow use 
+  of verbosity level.  Add collide(...,<vector>) interface to allow use
   from within G4ElementaryParticleCollider.
 
 - G4ElementaryParticleCollider.cc:  Add conservation checks within ::collide().
@@ -3434,7 +3450,7 @@ NOTE:  Changes below were version jumped into V09-03-48.  Tag above ONLY
 
 08 June 2010 Gunter Folger (hadr-casc-V09-03-42)
 ------------------------------------------------
--  trivial fix for compiler warning on gcc43 on empty body in for(...) in  
+-  trivial fix for compiler warning on gcc43 on empty body in for(...) in
     cascade/include/G4CascadeInterpolator.icc:67
 
 01 June 2010 Michael Kelsey (hadr-casc-V09-03-41)
@@ -3443,7 +3459,7 @@ NOTE:  Changes below were version jumped into V09-03-48.  Tag above ONLY
 
 26 May 2010 Dennis Wright (hadr-casc-V09-03-40)
 -----------------------------------------------
-- G4NucleiModel: remove conversion to fm, and conversion of cross 
+- G4NucleiModel: remove conversion to fm, and conversion of cross
   sections to fm**2
 
 21 May 2010 Michael Kelsey (hadr-casc-V09-03-39)
@@ -3525,7 +3541,7 @@ interpolator object itself is declared static, to reduce memory churn.
 	G4EquilibriumEvaporator::getQF()
 	G4InuclSpecialFunctions::paraMaker[Truncated]() (in paraMaker.cc)
 
-- G4CascadSpecialFunctions:  Remove. totalCrossSection() redundant with 
+- G4CascadSpecialFunctions:  Remove. totalCrossSection() redundant with
   G4NucleiModel.  Move absorptionCrossSection() to G4NucleiModel.
 
 - G4CascadeInterpolator.icc:  Bug fix to catch special case of exact upper
@@ -3544,7 +3560,7 @@ interpolator object itself is declared static, to reduce memory churn.
 19 May 2010 Michael Kelsey, Dennis Wright
 -----------------------------------------
 - G4BertiniData.hh,.cc:  Remove unused and unnecessary class.
-- G4NucleiModel.cc: convert nuclear radii to fm and cross sections to 
+- G4NucleiModel.cc: convert nuclear radii to fm and cross sections to
     fm**2.  Use six-zone model for A > 99, and make alpha a 1-zone
     nucleus.
 - G4CascadSpecialFunctions: convert pion absorption cross sections from
@@ -3784,20 +3800,20 @@ Bug fixes in the two-body scattering code.
 
 These three changes, and nothing else, are "backported" on top of -23 for
 continued validation tests.
-  
+
 30 Apr 2010 Dennis Wright (hadr-casc-V09-03-28)
 -----------------------------------------------
-- G4ElementaryParticleCollider: 
-    improved pi-nucleon two-body angular distributions, and made 
-    sampling of CM angle faster.  As a result, the methods 
+- G4ElementaryParticleCollider:
+    improved pi-nucleon two-body angular distributions, and made
+    sampling of CM angle faster.  As a result, the methods
     getElasticCase and adjustIntervalForElastic were made redundant
     and removed.  Also removed array containing old angular distribution
     parameters.
-    
+
     Now use nucleon-nucleon angular distributions for hyperon-nucleon
     scattering, and pi-nucleon dsitributions for kaon-nucleon scattering
-    (until specific kaon distributions are added). 
- 
+    (until specific kaon distributions are added).
+
 29 Apr 2010 Michael Kelsey (hadr-casc-V09-03-27)
 ------------------------------------------------
 - G4InuclPartcleNames.hh:  Long name "gamma" conflicts with math function.
@@ -3811,7 +3827,7 @@ continued validation tests.
 - G4InuclElementaryParticle.hh:  Change "photon()" to "isPhoton()" to avoid
   conflicts with names enum.  Use names enum internally as well.
 
-- G4ElementaryParticleCollider.cc, G4InuclCollider.cc, 
+- G4ElementaryParticleCollider.cc, G4InuclCollider.cc,
   G4PreCompoundInuclCollider.cc:  Change "photon()" to "isPhoton()".
 
 28 Apr 2010 Michael Kelsey (hadr-casc-V09-03-26)
@@ -4012,7 +4028,7 @@ content, preserving the allocated buffer.
 
 07 April 2010 Dennis Wright (hadr-casc-V09-03-16)
 -------------------------------------------------
-- fix negative energy bug in G4BigBanger, and switch to using 
+- fix negative energy bug in G4BigBanger, and switch to using
   G4NucleiProperties::GetBindingEnergy
 
 07 April 2010 Michael Kelsey (hadr-casc-V09-03-15)
@@ -4042,10 +4058,10 @@ by replacing return-by-value std::vector<> with non-const argument buffers.
 
 07 Apr 2010 Michael Kelsey (hadr-casc-V09-03-14)
 ------------------------------------------------
-- G4Dineutron.hh, G4Diproton.hh, G4UnboundPN.hh:  
+- G4Dineutron.hh, G4Diproton.hh, G4UnboundPN.hh:
   Reset static "theInstance" pointer to zero in (now virtual) destructor.
 
-- G4Dineutron.cc, G4Diproton.cc, G4UnboundPN.cc: 
+- G4Dineutron.cc, G4Diproton.cc, G4UnboundPN.cc:
   Implement constructor to do the G4Ions initialization, rather than in
   ::Definition().  Drop use of G4ParticleTable; just monitor static pointer.
   Set "ShortLived" flag in G4Ions initialization, to avoid interactions with
@@ -4267,10 +4283,10 @@ parametrization of elastic scattering added by D.Write in hadr-casc-V09-03-06
 -----------------------------------------------
 - back out changes from tags V09-03-00 to V00-03-05 by restoring HEAD
   to V09-02-11, and keeping the di-nucleon classes
-- replace Bertini method bindingEnergy() with 
+- replace Bertini method bindingEnergy() with
   G4NucleiProperties::GetBindingEnergy() in classes
   G4IntraNuclearCascader, G4InuclCollider, G4NucleiModel, G4EquilibriumModel,
-  G4NonEquilibriumModel, G4Fissioner.  Note that G4Fissioner still uses the 
+  G4NonEquilibriumModel, G4Fissioner.  Note that G4Fissioner still uses the
   Bertini method bindingEnergyAsymptotic.
 
 - G4ElementaryParticleCollider::particleSCMmomentumFor2to2
@@ -4290,7 +4306,7 @@ parametrization of elastic scattering added by D.Write in hadr-casc-V09-03-06
     G4NonEquilibriumEvaporator.cc
     G4Fissioner.cc
 - note that G4Fissioner still uses Bertini method bindingEnergyAsymptotic
-  
+
 28 Jan 2010 Dennis Wright (hadr-casc-V09-03-04)
 -----------------------------------------------
 - fix unused variable warnings in G4InuclParticle.hh, .cc and
@@ -4424,7 +4440,7 @@ All changes below within "cascade/" subdirectory:
 ----------------------------------------------
 - G4PionSampler, G4NucleonSampler: change loop variable in ctor from i to j
   in order to satisfy Windows compiler
- 
+
 11 Nov 2009 Dennis Wright (hadr-casc-V09-02-10)
 -----------------------------------------------
 - G4CascadParticle, G4InuclElementaryParticle: add integer argument to ctor
@@ -4435,7 +4451,7 @@ All changes below within "cascade/" subdirectory:
 -----------------------------------------------
 - G4PionSampler:  use charge exchange cross section for pi0-p, go back
    original Bertini pi0-p elastic partial cs.  Update pi0 total cross
-   section accordingly.  Improve fits to pi-p partial cs and update 
+   section accordingly.  Improve fits to pi-p partial cs and update
    pi- total cross sections.
 - G4NucleiModel: update pi- and pi0 total cross sections
 
@@ -4446,7 +4462,7 @@ All changes below within "cascade/" subdirectory:
 - move large arrays which are instantiated at every call of frequently
     used methods.  They are now initialized once in constructors.
 - G4CascadSpecialFunctions: put copy of total cross section method
-    in G4NucleiModel, also remove unneeded energy scale arrays 
+    in G4NucleiModel, also remove unneeded energy scale arrays
     (now replaced with a new one)
 - G4CascadeInterface: move instantiation of various collider classes
     outside of loop, and put on stack instead of heap
@@ -4454,7 +4470,7 @@ All changes below within "cascade/" subdirectory:
     remove instantiation of large arrays from within loops in code
 - G4NucleiModel: remove instatiation of large arrays from with loops,
     add new total cross section sampling, remove use of all but one
-    energy scale 
+    energy scale
 
 17 Sep 2009 Dennis Wright (hadr-casc-V09-02-07)
 -----------------------------------------------
@@ -4478,16 +4494,16 @@ All changes below within "cascade/" subdirectory:
 
 20 Aug 2009 Dennis Wright (hadr-casc-V09-02-03)
 -----------------------------------------------
-- create class G4PionSampler: samples partial cross sections, multiplicities 
-  and final state particle types required for pi+, pi- and pi0 scattering 
+- create class G4PionSampler: samples partial cross sections, multiplicities
+  and final state particle types required for pi+, pi- and pi0 scattering
   within a nucleus.  This class uses re-evaluated pion partial cross sections
-  and includes production of strange particle pairs. 
+  and includes production of strange particle pairs.
 - G4CascadeSigmaPlusNChannel: correct sigma plus cross sections
-- G4CascadSpecialFunctions:  move pion, kaon, hyperon total cross sections 
-  to this class 
-- G4ElementaryParticleCollider: re-write to use G4PionSampler class for 
+- G4CascadSpecialFunctions:  move pion, kaon, hyperon total cross sections
+  to this class
+- G4ElementaryParticleCollider: re-write to use G4PionSampler class for
   cross sections and multiplicities, remove method reChargering (now redundant)
-  
+
 15 Apr 2009 Dennis Wright (hadr-casc-V09-02-02)
 -----------------------------------------------
 - previous tag no longer used.  Bring hadr-casc-V09-02-00 back to
@@ -4498,7 +4514,7 @@ All changes below within "cascade/" subdirectory:
 - add printCrossSection method to G4CascadSpecialFunctions
 - in GeElementaryParticleCollider, add high energy flag to distinguish
   "string-like" behavior
-- G4IntraNucleiCascader.cc - allow secondaries from HE interaction to 
+- G4IntraNucleiCascader.cc - allow secondaries from HE interaction to
   leave nucleus without interacting
 - G4NucleiModel - get high_energy_interaction flag value from G4ElementaryParticleCollider
 
@@ -4510,8 +4526,8 @@ All changes below within "cascade/" subdirectory:
 25 Nov 2008 Dennis Wright (hadr-casc-V09-01-10)
 -----------------------------------------------
 - fix multiplicity sampling in G4ElementaryParticleCollider::generateMultiplicity().
-  Now partial cross sections are normalized to the total cross section instead 
-  of just the sum of 2-body to 6-body final state cross sections.  Also fix 
+  Now partial cross sections are normalized to the total cross section instead
+  of just the sum of 2-body to 6-body final state cross sections.  Also fix
   2-body cross sections above 7 GeV where they were too small.
   Fix the same cross sections which appear in G4CascadSpecialFunctions.cc
 
@@ -4534,7 +4550,7 @@ All changes below within "cascade/" subdirectory:
 -----------------------------------------------
 - Fixed 4.3 compiler warnings for G4InuclElementaryParticle.hh by providing
   initializers for particle type and mass
-- Remove unused variables totscm, totlab in G4BigBanger.cc, 
+- Remove unused variables totscm, totlab in G4BigBanger.cc,
   G4ElementaryParticleCollider.cc, and unused mom1 from G4InuclSpecialFunctions.cc
 
 22 Sep 2008 Gabriele Cosmo (hadr-casc-V09-01-05)
@@ -4548,12 +4564,12 @@ All changes below within "cascade/" subdirectory:
 -----------------------------------------------
 - G4ElementaryParticleCollider.cc: in method generateMultiplicity, remove
   large_cut which increases multiplicity from 3 to 4 abruptly at 4 GeV
-  and above.   This caused a sharp drop-off in the single pion spectra from 
+  and above.   This caused a sharp drop-off in the single pion spectra from
   pH reactions.   The effect in heavier nuclei is small.
-  
+
 29 Jun 2008 Dennis Wright (hadr-casc-V09-01-03)
 -----------------------------------------------
-- add changes made by M. Paterno, J. Kowalkowski, and M. Fischler (FNAL)  
+- add changes made by M. Paterno, J. Kowalkowski, and M. Fischler (FNAL)
   to speed up code.  All G4Cascade***Channel classes and related code changed.
 
  5 May 2008 Dennis Wright (hadr-casc-V09-01-02)
@@ -4563,7 +4579,7 @@ All changes below within "cascade/" subdirectory:
 30 Apr 2008 Dennis Wright (hadr-casc-V09-csbug)
 -----------------------------------------------
 - fix cross section bug in G4CascadSpecialFunctions that returned
-  low or zero total cross sections for pi-p, pi+n, np, and pi0 
+  low or zero total cross sections for pi-p, pi+n, np, and pi0
   interactions
 
 29 Apr 2008 Dennis Wright (hadr-casc-V09-01-01)
@@ -4572,8 +4588,8 @@ All changes below within "cascade/" subdirectory:
 
 22 Apr 2008 Dennis Wright (hadr-casc-V09-01-param)
 --------------------------------------------------
-- changed pp, nn total cross section parameterization in 
-  G4CascadSpecialFunctions to more closely reflect the PDG values (old one 
+- changed pp, nn total cross section parameterization in
+  G4CascadSpecialFunctions to more closely reflect the PDG values (old one
   was off by as much as a factor of 3.
 
 3 Apr 2008 Dennis Wright (hadr-casc-V09-01-coula)
@@ -4588,10 +4604,10 @@ All changes below within "cascade/" subdirectory:
 -----------------------------------------------
 - Fix angular distribution for nucleon-nucleon elastic scattering
   above 2.8 GeV, by modifying G4ElementaryParticleCollider::getElasticCase
- 
+
 25 May 2007 Dennis Wright for Aatos Heikkinen (hadr-casc-V08-03-00)
 -------------------------------------------------------------------
-- implemented interfaces for pre-equilibrium and equilbrium evaporation 
+- implemented interfaces for pre-equilibrium and equilbrium evaporation
   models
 
 04 May 2007 Aatos Heikkinen (hadr-casc-V08-02-00)
@@ -4613,8 +4629,8 @@ All changes below within "cascade/" subdirectory:
 
 - cascade (Pekka Kaitaniemi): G4ElasticCascadeInterface: derive
   from G4VIntraNuclearTransportModel instead of G4HadronElastic.
-  Check for case when no elastic scattering occurs.  If so, 
-  return original bullet and target.  
+  Check for case when no elastic scattering occurs.  If so,
+  return original bullet and target.
 
 24 Nov 2005 Dennis Wright (hadr-casc-V07-01-00)
 ----------------------------------------------

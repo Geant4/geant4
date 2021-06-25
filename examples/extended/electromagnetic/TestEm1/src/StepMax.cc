@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(0) 
+ : G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX),fMess(nullptr) 
 {
   fMess = new StepMaxMessenger(this);
 }
@@ -79,3 +79,9 @@ G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double StepMax::GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
+{
+   return fMaxChargedStep;
+}    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -55,7 +55,7 @@
  G4TritonBuilder::
  G4TritonBuilder()
  {
-   theTritonInelastic=new G4TritonInelasticProcess;
+   theTritonInelastic=new G4HadronInelasticProcess( "tInelastic", G4Triton::Definition() );
  }
 
 void G4TritonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {

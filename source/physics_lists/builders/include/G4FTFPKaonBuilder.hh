@@ -61,10 +61,7 @@ class G4FTFPKaonBuilder : public G4VKaonBuilder
     virtual ~G4FTFPKaonBuilder();
 
     virtual void Build(G4HadronElasticProcess *) final override {};
-    virtual void Build(G4KaonPlusInelasticProcess * aP) final override;
-    virtual void Build(G4KaonMinusInelasticProcess * aP) final override;
-    virtual void Build(G4KaonZeroLInelasticProcess * aP) final override;
-    virtual void Build(G4KaonZeroSInelasticProcess * aP) final override;
+    virtual void Build(G4HadronInelasticProcess * aP) final override;
     
     virtual void SetMinEnergy(G4double aM) final override{theMin = aM;}
     virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}

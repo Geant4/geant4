@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-02-21 D. Sawkey (expol01-V10-07-01)
+- used renamed polarized processes
+
+12-02-21 V. Ivanchenko (expol01-V10-07-00)
+- Updated for 11.0 - clean-up Physics List
+
 13-11-20 B. Morgan (expol01-V10-06-01)
 - Enforce use of Serial RunManager.
 

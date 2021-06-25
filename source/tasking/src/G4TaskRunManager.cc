@@ -50,6 +50,7 @@
 #include "G4WorkerThread.hh"
 #include "G4UserTaskQueue.hh"
 #include "G4TiMemory.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 #include <cstdlib>
 #include <cstring>
@@ -87,7 +88,7 @@ G4TaskRunManager::G4TaskRunManager(G4VUserTaskQueue* task_queue, G4bool useTBB,
     taskQueue = task_queue;
 
   // override default of 2 from G4MTRunManager
-  nworkers  = std::thread::hardware_concurrency();
+  nworkers  = G4Threading::G4GetNumberOfCores();
   fMasterRM = this;
   MTkernel  = static_cast<G4TaskRunManagerKernel*>(kernel);
 
@@ -115,13 +116,13 @@ G4TaskRunManager::G4TaskRunManager(G4VUserTaskQueue* task_queue, G4bool useTBB,
   //------------------------------------------------------------------------//
   //      handle threading
   //------------------------------------------------------------------------//
-  G4String _nthread_env = G4GetEnv<G4String>("G4FORCENUMBEROFTHREADS", "max");
+  G4String _nthread_env = G4GetEnv<G4String>("G4FORCENUMBEROFTHREADS", "");
   for(auto& itr : _nthread_env)
     itr = tolower(itr);
 
   if(_nthread_env == "max")
     forcedNwokers = G4Threading::G4GetNumberOfCores();
-  else
+  else if(!_nthread_env.empty())
   {
     std::stringstream ss;
     G4int _nthread_val = -1;
@@ -166,15 +167,23 @@ G4TaskRunManager::G4TaskRunManager(G4bool useTBB)
 
 G4TaskRunManager::~G4TaskRunManager()
 {
-  if(workTaskGroup)
-  {
-    workTaskGroup->join();
-    delete workTaskGroup;
-  }
   // finalize profiler before shutting down the threads
   G4Profiler::Finalize();
+
+  // terminate all the workers
+  G4TaskRunManager::TerminateWorkers();
+
+  // trigger all G4AutoDelete instances
+  G4ThreadLocalSingleton<void>::Clear();
+
+  // delete the task-group
+  delete workTaskGroup;
+  workTaskGroup = nullptr;
+
+  // destroy the thread-pool
   if(threadPool)
     threadPool->destroy_threadpool();
+
   PTL::TaskRunManager::Terminate();
 }
 
@@ -269,18 +278,17 @@ void G4TaskRunManager::InitializeThreadPool()
   PTL::TaskRunManager::Initialize(nworkers);
 
   // create the joiners
-  if(threadPool->using_tbb())
+  if(threadPool->is_tbb_threadpool())
   {
     G4cout << "G4TaskRunManager :: Using TBB..." << G4endl;
-    if(!workTaskGroup)
-      workTaskGroup = new RunTaskGroupTBB(threadPool);
   }
   else
   {
     G4cout << "G4TaskRunManager :: Using G4ThreadPool..." << G4endl;
-    if(!workTaskGroup)
-      workTaskGroup = new RunTaskGroup(threadPool);
   }
+
+  if(!workTaskGroup)
+    workTaskGroup = new RunTaskGroup(threadPool);
 
   G4cout << ss.str() << "\n" << G4endl;
 }
@@ -314,11 +322,14 @@ void G4TaskRunManager::ComputeNumberOfTasks()
                          : 1;
 
   if(eventModuloDef > 0)
-  { eventModulo = eventModuloDef; }
+  {
+    eventModulo = eventModuloDef;
+  }
   else
   {
     eventModulo = G4int(std::sqrt(G4double(numberOfEventToBeProcessed)));
-    if(eventModulo < 1) eventModulo = 1;
+    if(eventModulo < 1)
+      eventModulo = 1;
   }
   if(eventModulo > nEvtsPerTask)
   {
@@ -326,8 +337,9 @@ void G4TaskRunManager::ComputeNumberOfTasks()
     eventModulo  = nEvtsPerTask;
 
     G4ExceptionDescription msgd;
-    msgd << "Event modulo is reduced to " << eventModulo << " (was "
-         << oldMod << ")" << " to distribute events to all threads.";
+    msgd << "Event modulo is reduced to " << eventModulo << " (was " << oldMod
+         << ")"
+         << " to distribute events to all threads.";
     G4Exception("G4TaskRunManager::InitializeEventLoop()", "Run10035",
                 JustWarning, msgd);
   }
@@ -773,7 +785,8 @@ void G4TaskRunManager::RequestWorkersProcessCommandsStack()
     }
   };
 
-  threadPool->execute_on_all_threads(process_commands_stack);
+  if(threadPool)
+    threadPool->execute_on_all_threads(process_commands_stack);
 }
 
 //============================================================================//

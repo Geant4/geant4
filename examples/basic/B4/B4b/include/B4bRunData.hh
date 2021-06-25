@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file B4bRunData.hh
 /// \brief Definition of the B4bRunData class
 
@@ -45,8 +45,8 @@ const G4int kDim = 2;
 ///
 /// It defines data members to hold the energy deposit and track lengths
 /// of charged particles in Absober and Gap layers.
-/// 
-/// In order to reduce the number of data members a 2-dimensions array 
+///
+/// In order to reduce the number of data members a 2-dimensions array
 /// is introduced for each quantity:
 /// - fEdep[], fTrackLength[].
 ///
@@ -68,18 +68,18 @@ public:
   // Get methods
   G4String  GetVolumeName(G4int id) const;
   G4double  GetEdep(G4int id) const;
-  G4double  GetTrackLength(G4int id) const; 
+  G4double  GetTrackLength(G4int id) const;
 
 private:
   std::array<G4String, kDim>  fVolumeNames;
   std::array<G4double, kDim>  fEdep;
-  std::array<G4double, kDim>  fTrackLength; 
+  std::array<G4double, kDim>  fTrackLength;
 };
 
 // inline functions
 
 inline void B4bRunData::Add(G4int id, G4double de, G4double dl) {
-  fEdep[id] += de; 
+  fEdep[id] += de;
   fTrackLength[id] += dl;
 }
 
@@ -89,7 +89,7 @@ inline G4String  B4bRunData::GetVolumeName(G4int id) const {
 
 inline G4double  B4bRunData::GetEdep(G4int id) const {
   return fEdep[id];
-}   
+}
 
 inline G4double  B4bRunData::GetTrackLength(G4int id) const {
   return fTrackLength[id];

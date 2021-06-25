@@ -61,32 +61,28 @@ public:
 
   explicit G4alphaIonisation(const G4String& name = "alphaIoni");
 
-  virtual ~G4alphaIonisation();
+  ~G4alphaIonisation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
-
-  // Print out of the class parameters
-  virtual void PrintInfo() override;
+  G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   // print documentation in html format
-  virtual void ProcessDescription(std::ostream&) const override;
-
-protected:
-
-  virtual void 
-  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-			      const G4ParticleDefinition*) override;
-
-  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				   const G4Material*, G4double cut) final;
-
-  inline G4double BetheBlochEnergyThreshold();
-
-private:
+  void ProcessDescription(std::ostream&) const override;
 
   // hide assignment operator
   G4alphaIonisation & operator=(const G4alphaIonisation &right) = delete;
   G4alphaIonisation(const G4alphaIonisation&) = delete;
+
+protected:
+
+  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+				   const G4ParticleDefinition*) override;
+
+  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+			    const G4Material*, G4double cut) final;
+
+  inline G4double BetheBlochEnergyThreshold();
+
+private:
 
   const G4ParticleDefinition* theParticle;
 

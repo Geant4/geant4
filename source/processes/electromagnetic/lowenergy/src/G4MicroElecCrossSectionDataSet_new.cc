@@ -42,9 +42,7 @@ G4MicroElecCrossSectionDataSet_new::G4MicroElecCrossSectionDataSet_new(G4VDataSe
 						   G4double argUnitData)
   :
    algorithm(argAlgorithm), unitEnergies(argUnitEnergies), unitData(argUnitData)
-{
-  z = 0;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -57,7 +55,6 @@ G4MicroElecCrossSectionDataSet_new::~G4MicroElecCrossSectionDataSet_new()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName)
 {
@@ -175,7 +172,6 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName
       // some implementations of STL could throw a "failture" exception
       // when read wants read characters after end of file
     }
-  
   delete stream;
   
   std::vector<G4DataVector *>::size_type maxI(columns.size());
@@ -238,8 +234,6 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
 
 G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFileName)
 {
@@ -396,7 +390,6 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 G4bool G4MicroElecCrossSectionDataSet_new::SaveData(const G4String & argFileName) const
 {
   const size_t n(NumberOfComponents());
@@ -486,7 +479,6 @@ G4String G4MicroElecCrossSectionDataSet_new::FullFileName(const G4String& argFil
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 G4double G4MicroElecCrossSectionDataSet_new::FindValue(G4double argEnergy, G4int /* argComponentId */) const
 {
   // Returns the sum over the shells corresponding to e
@@ -508,11 +500,10 @@ G4double G4MicroElecCrossSectionDataSet_new::FindValue(G4double argEnergy, G4int
 
 G4double G4MicroElecCrossSectionDataSet_new::FindShellValue(G4double argEnergy, G4int shell) const
 {
-	return components.at(shell)->FindValue(argEnergy);
+  return components.at(shell)->FindValue(argEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 void G4MicroElecCrossSectionDataSet_new::PrintData(void) const
 {
@@ -532,7 +523,6 @@ void G4MicroElecCrossSectionDataSet_new::PrintData(void) const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 void G4MicroElecCrossSectionDataSet_new::SetEnergiesData(G4DataVector* argEnergies, 
 					 G4DataVector* argData, 

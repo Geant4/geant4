@@ -105,10 +105,8 @@ class G4VIonDEDXTable {
         const G4String&  // Name or chemical formula of material
 					     ) = 0;
 
-private:
-
-  G4VIonDEDXTable(G4VIonDEDXTable&) = delete;
-  const G4VIonDEDXTable & operator=(const G4VIonDEDXTable&) = delete;
+   G4VIonDEDXTable(G4VIonDEDXTable&) = delete;
+   const G4VIonDEDXTable & operator=(const G4VIonDEDXTable&) = delete;
 
 };
 

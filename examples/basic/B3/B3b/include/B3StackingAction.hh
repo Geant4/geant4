@@ -35,7 +35,7 @@
 
 /// Stacking action class : manage the newly generated particles
 ///
-/// One wishes do not track secondary neutrino.Therefore one kills it 
+/// One wishes do not track secondary neutrino.Therefore one kills it
 /// immediately, before created particles will  put in a stack.
 
 class B3StackingAction : public G4UserStackingAction
@@ -43,8 +43,8 @@ class B3StackingAction : public G4UserStackingAction
   public:
     B3StackingAction();
     virtual ~B3StackingAction();
-     
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);        
+
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

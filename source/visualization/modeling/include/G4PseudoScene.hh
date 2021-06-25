@@ -80,6 +80,7 @@ public:
   void AddCompound (const G4VDigi&)       {}
   void AddCompound (const G4THitsMap<G4double>&)     {}
   void AddCompound (const G4THitsMap<G4StatDouble>&) {}
+  void AddCompound (const G4Mesh&)        {}
   // Primitives
   void BeginPrimitives   (const G4Transform3D&) {}
   void EndPrimitives     ()                     {}
@@ -95,7 +96,7 @@ public:
 
 protected:
 
-  virtual void ProcessVolume (const G4VSolid&) = 0;
+  virtual void ProcessVolume (const G4VSolid&);
   const G4Transform3D* fpCurrentObjectTransformation;
 };
 

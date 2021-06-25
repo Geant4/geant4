@@ -32,44 +32,36 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
 
-
 //////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for Debug.
-// 
+//
 // Created: 2011-03-24  Tsukasa ASO
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class G4PSStepChecker : public G4VPrimitiveScorer
 {
- 
- public: // with description
-      G4PSStepChecker(G4String name, G4int depth=0);
+ public:  // with description
+  G4PSStepChecker(G4String name, G4int depth = 0);
 
-  protected: // with description
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+ protected:  // with description
+  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
 
-  public:
-      virtual ~G4PSStepChecker();
+ public:
+  virtual ~G4PSStepChecker();
 
-  public: 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
+ public:
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
 
-  public:
-      virtual void DrawAll();
-      virtual void PrintAll();
+ public:
+  virtual void DrawAll();
+  virtual void PrintAll();
 
-  private:
-
-  public:
-
-
+ private:
+ public:
 };
-
-
 
 #endif

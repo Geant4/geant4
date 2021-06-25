@@ -7,6 +7,34 @@
 
                       Category History file
                       ---------------------
+
+24.05.2021 - B. Morgan (DMX=V10-07-06)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+29.03.2021 - G. Cosmo         (DMX-V10-07-05)
+             In DMXParticleSource::ConfineSourceToVolume(), use existing
+             facility to find physical volme in store, rather than looping
+             through. Some code cleanup.
+
+18.03.2021 - A. Ribon         (DMX-V10-07-04)
+             DMXPhysicsList : replaced G4HadronCaptureProcess with
+             G4NeutronCaptureProcess.
+
+11.03.2021 - A. Ribon         (DMX-V10-07-03)
+             DMXPhysicsList : replaced stopping processes that
+             have been deleted.
+
+08.03.2021 - A. Ribon         (DMX-V10-07-02)
+             DMXPhysicsList : removed header files of old and unused
+	     pion inelastic cross sections (that have been deleted).
+
+04.03.2021 - A. Ribon         (DMX-V10-07-01)
+             DMXPhysicsList : replaced particle-specific inelastic processes
+	     (that have been deleted) with G4HadronInelasticProcess.
+
+24.02.2021 - D. Sawkey        (DMX-V10-07-00)
+             Replace deprecated optical commands & parameters  with new ones.
+
 17.11.2020 - S. Guatelli      (DMX-V10-06-04)
              Migration to G4RunManagerFactory
 

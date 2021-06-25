@@ -81,15 +81,14 @@ public:
 
   explicit G4eCoulombScatteringModel(G4bool combined = true);
  
-  virtual ~G4eCoulombScatteringModel();
+  ~G4eCoulombScatteringModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel) override;
+  void InitialiseLocal(const G4ParticleDefinition*, 
+                       G4VEmModel* masterModel) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
+  G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
 				G4double kinEnergy, 
 				G4double Z, 
@@ -97,15 +96,14 @@ public:
 				G4double cut,
 				G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				const G4MaterialCutsCouple*,
+				const G4DynamicParticle*,
+				G4double tmin,
+				G4double maxEnergy) override;
 
-  virtual G4double MinPrimaryEnergy(const G4Material*,
-				    const G4ParticleDefinition*,
-				    G4double) final;
+  G4double MinPrimaryEnergy(const G4Material*, const G4ParticleDefinition*,
+				G4double) final;
 
   // defines low energy limit of the model
   inline void SetLowEnergyThreshold(G4double val);
@@ -119,6 +117,11 @@ public:
   // low energy limit on energy transfer to atomic electron
   inline G4double GetFixedCut() const;
 
+  // hide assignment operator
+  G4eCoulombScatteringModel & operator=
+  (const G4eCoulombScatteringModel &right) = delete;
+  G4eCoulombScatteringModel(const  G4eCoulombScatteringModel&) = delete;
+
 protected:
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
@@ -127,19 +130,15 @@ protected:
 
 private:
 
-  // hide assignment operator
-  G4eCoulombScatteringModel & operator=
-  (const G4eCoulombScatteringModel &right) = delete;
-  G4eCoulombScatteringModel(const  G4eCoulombScatteringModel&) = delete;
-
-  //protected:
- 
   G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange;
   G4WentzelOKandVIxSection* wokvi;
   G4NistManager*            fNistManager;
 
   const std::vector<G4double>* pCuts;
+
+  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* theProton;
 
   const G4MaterialCutsCouple* currentCouple;
   const G4Material*           currentMaterial;
@@ -150,12 +149,7 @@ private:
   G4double                  recoilThreshold;
   G4double                  elecRatio;
   G4double                  mass;
-
   G4double                  fixedCut;
-
-  // projectile
-  const G4ParticleDefinition* particle;
-  const G4ParticleDefinition* theProton;
 
   G4bool                    isCombined;  
 };

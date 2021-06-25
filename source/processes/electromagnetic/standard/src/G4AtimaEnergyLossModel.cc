@@ -273,10 +273,9 @@ G4double G4AtimaEnergyLossModel::ComputeDEDXPerVolume(const G4Material* material
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4AtimaEnergyLossModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-                                             const G4DynamicParticle* dp,
-                                             G4double& eloss,
-                                             G4double&,
-                                             G4double length)
+                                                  const G4DynamicParticle* dp,
+                                                  const G4double& length,
+                                                  G4double& eloss)
 {
   if(isIon) {
     const G4ParticleDefinition* p = dp->GetDefinition();

@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-02-2021 - tag svalue-V10-07-00 - V. Ivanchenko
+- PhysicsList - remove unused header; radioactive decay is defined 
+  via standard radioactive physics builder; do not allow change
+  of geometry between runs, only materials may be changed;
+  removed all warning in test run 
+
 26-11-19 I. Hrivnacova (svalue-V10-05-01)
 - Fixed Doxygen warnings
 

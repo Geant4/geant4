@@ -37,9 +37,11 @@
 
 // Processes
 
-#include "G4PhotoNuclearProcess.hh"
+#include "G4HadronInelasticProcess.hh"
 #include "G4LowEGammaNuclearModel.hh"
 #include "G4CascadeInterface.hh"
+
+#include "G4PhotoNuclearCrossSection.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -58,7 +60,9 @@ GammaNuclearPhysics::~GammaNuclearPhysics()
 
 void GammaNuclearPhysics::ConstructProcess()
 {
-   G4PhotoNuclearProcess* process = new G4PhotoNuclearProcess();
+   G4HadronInelasticProcess* process
+       = new G4HadronInelasticProcess("photonNuclear", G4Gamma::Definition());
+   process->AddDataSet( new G4PhotoNuclearCrossSection );   
 
    // to not register a model, set Emax=0; eg. Emax1 = 0.
    const G4double Emax1 = 200*MeV, Emax2 = 10*GeV;

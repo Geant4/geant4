@@ -46,10 +46,7 @@ enum G4PhysicsVectorType
   T_G4PhysicsVector = 0,
   T_G4PhysicsLinearVector,
   T_G4PhysicsLogVector,
-  T_G4PhysicsLnVector,
-  T_G4PhysicsFreeVector,
-  T_G4PhysicsOrderedFreeVector,
-  T_G4LPhysicsFreeVector
+  T_G4PhysicsFreeVector
 };
 
 #endif

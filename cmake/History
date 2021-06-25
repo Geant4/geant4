@@ -27,28 +27,121 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-
      ----------------------------------------------------------
 
-19th March 2021 - Gunter Folger (cmake-V10-06-52)
+21 June 2021   - Julia Yarba    (cmake-V10-07-28)
+- Clean cmake/Modules/FindPythia8.cmake 
+  (remove trailing whitespaces)
+
+18 June 2021   - Julia Yarba    (cmake-V10-07-27)
+- Add cmake/Modules/FindPythia8.cmake
+- Update cmake/Modules/G4ConfigureCMakeHelpers.cmake
+
+8 June 2021    - Gunter Folger  (cmake-V10-07-26)
+- Switch to G4EMLOW 7.17
+
+03 June 2021 - Ben Morgan (cmake-V10-07-25)
+- Remove explicit setting of PTL_ cmake options.
+- Add GEANT4_USE_PTL_LOCKS option to forward to internal PTL
+  as PTL_USE_LOCKS.
+
+27 May 2021 - Ben Morgan (cmake-V10-07-24)
+- Implement build/test script in Python to check for cycles in the
+  declared source module dependency graph.
+
+25 May 2021 - Jonathan Madsen (cmake-V10-07-23)
+- External PTL requires v2.0.0
+
+25 May 2021 - Ben Morgan (cmake-V10-07-22)
+- Clarify use of Freetype for both analysis and visualization
+  - Remove use of no longer required imported target shim for build
+
+24 May 2021 - Ben Morgan (cmake-V10-07-21)
+- Bump minimum CMake version to 3.12
+
+22 May 2021 - Ben Morgan (cmake-V10-07-20)
+- Qualify geant4_add_feature descriptions with "G4_" to distinguish them from
+  CMake property descriptions.
+
+18 May 2021 - Ben Morgan (cmake-V10-07-19)
+- Require C++17 as minimum standard to compile Geant4
+  - Allow compilation against C++23 with CMake 3.20 and newer
+  - Check for filesystem support in native or extension (GNU/Clang) libraries
+
+15 May 2021 - Jonathan Madsen (cmake-V10-07-18)
+- Set GEANT4_BUILD_BUILTIN_BACKTRACE to ON by default so novice
+  and intermediate users can, by default, get valuable information
+  on segmentation faults. Projects with their own signal handlers
+  can configure with this option off, set G4BACKTRACE="none" in
+  the environment, create their signal handlers after G4RunManager
+  gets created, or add `G4BackTrace::DefaultSignals() = std::set<int>{};`
+  before G4RunManager gets created.
+
+10 May 2021    - John Allison  (cmake-V10-07-17)
+- With vis-V10-07-03, incorporating visman-V10-07-06 and vis_toolsg-V10-07-00.
+  Introduce a new vis driver, TOOLSSG (Guy Barrand).
+  o Four (mutually exclusive) options:
+    . TOOLSSG_X11_GLES
+    . TOOLSSG_WINDOWS_GLES
+    . TOOLSSG_XT_GLES
+    . TOOLSSG_QT_GLES
+
+7 May 2021    - Gunter Folger  (cmake-V10-07-16)
+- Switch to G4EMLOW 7.16
+
+4th May 2021 - Ben Morgan (cmake-V10-07-15)
+- Remove obsolete -stdlib flag for AppleClang
+
+3 May 2021    - Gunter Folger  (cmake-V10-07-14)
+- Switch to G4EMLOW 7.15
+
+28 April 2021 - Ben Morgan (cmake-V10-07-13)
+- Preliminary support for sanitizers
+
+22 March 2021 - Alberto Ribon (cmake-V10-07-12)
+- Modules/G4BuildSettings.cmake : removed deprecated PHP_AS_HP
+  environmental variable.
+
+19th March 2021 - Gunter Folger (cmake-V10-07-11)
 - Update to older G4TENDL 1.3.2, 1.4 has problems.
 
-30th January 2021 - Gunter Folger (cmake-V10-06-51)
-- Update to patched dataset G4PARTICLEXS 3.1.1 as provided by Vladimir I. 
+18 March 2021 - Ben Morgan (cmake-V10-07-10)
+- Check for unparsed arguments in G4DeveloperAPI functions to
+  provide better validation against typos/etc in use
 
-22nd January 2021 - Ben Morgan (cmake-V10-06-50)
+09 March 2021 - John Allison (cmake-V10-07-09)
+- Remove all references to Wt.
+
+23 February 2021 - Ben Morgan (cmake-V10-07-08)
+- Store PUBLIC/PRIVATE/INTERFACE module usage requirements explicitly
+
+18th February 2021 - Ben Morgan (cmake-V10-07-07)
+- Add G4tools target to CMake/GNUmake configuration following its
+  migration from analysis to externals categories.
+
+4th February 2021 -  Igor Semeniouk (cmake-V10-07-06)
+- geant4.bat prototype
+- hint to run geant4-config on windows
+
+30th January 2021 - Gunter Folger (cmake-V10-07-05)
+- Update to patched dataset G4PARTICLEXS 3.1.1 as provided by Vladimir I.
+
+22nd January 2021 - Ben Morgan (cmake-V10-07-04)
 - Update for GitHub PR #17: Provide same fix for MacPorts
 - Address Bugzilla #2303: Fail configuration if Qt is enabled with CMake < 3.9
 
-15th January 2021 - Ben Morgan (cmake-V10-06-49)
+15th January 2021 - Ben Morgan (cmake-V10-07-03)
 - Apply GitHub PR #17 from Florian Uhlig: Fix installation
-  error with Homebrew X11/GL. 
+  error with Homebrew X11/GL.
 
-11th January 2021 - Ben Morgan (cmake-V10-06-48)
+11th January 2021 - Ben Morgan (cmake-V10-07-02)
 - Apply GitHub PR #16 from andriish: Fix configure/build with
   system PTL 1.0.0.
 
-14th December 2020 - Ben Morgan (cmake-V10-06-47)
+5th January 2010 - Gunter Folger (cmake-V10-07-01)
+- Update to dataset G4EMLOW 7.14 as provided by Sebastien
+
+8th November 2020 - Ben Morgan (cmake-V10-07-00)
 - Install/Use builtin PTL CMake scripts from PTL subdirectory
   alongside Geant4Config.cmake
 

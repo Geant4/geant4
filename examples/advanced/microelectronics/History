@@ -7,6 +7,13 @@
 
                        Package History file
                        --------------------
+
+24 May 2021 -  B. Morgan (microelectronics-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+21 March 2021 - V. Ivanchenko microelectronics-V10-07-00
+- PhysicsList - update for 11.0
+
 15 November 2020 - S. Guatelli microelectronics-V10-06-01
 - Migration to G4RunManagerFactory
 

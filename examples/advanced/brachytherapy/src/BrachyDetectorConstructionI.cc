@@ -37,9 +37,9 @@
 //    ****************************************
 //
 //
+#include "BrachyDetectorConstructionI.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyDetectorConstructionI.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"
 #include "G4MaterialPropertyVector.hh"
@@ -52,33 +52,28 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4TransportationManager.hh"
-#include "BrachyMaterial.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4NistManager.hh"
 
 BrachyDetectorConstructionI::BrachyDetectorConstructionI():
 fDefaultTub(nullptr), fCapsule(nullptr), fCapsuleTip(nullptr), fIodineCore(nullptr), fDefaultTubLog(nullptr),
 fCapsuleLog(nullptr), fCapsuleTipLog(nullptr), fIodineCoreLog(nullptr), fDefaultTubPhys(nullptr), 
 fCapsulePhys(nullptr),fCapsuleTipPhys1(nullptr),fCapsuleTipPhys2(nullptr), fIodineCorePhys(nullptr),
 fSimpleIodineVisAtt(nullptr), fSimpleCapsuleVisAtt(nullptr), fSimpleCapsuleTipVisAtt(nullptr)
-{ 
-  fMaterial = new BrachyMaterial();
-}
+{}
 
 BrachyDetectorConstructionI::~BrachyDetectorConstructionI()
-{ 
-  delete fMaterial; 
-}
+{}
 
 void BrachyDetectorConstructionI::ConstructIodine(G4VPhysicalVolume* mother)
 {
-  // source Bebig Isoseed I-125 ...
-
-  //Get materials for source construction ...
-  G4Material* titanium = fMaterial -> GetMat("titanium");
-  G4Material* air = fMaterial -> GetMat("Air");
-  G4Material* Iodine = fMaterial -> GetMat("Iodine");
- 
+  // Model of the Bebig Isoseed I-125 brachy source
+  G4NistManager* nist = G4NistManager::Instance();
+  G4Material* titanium = nist -> FindOrBuildMaterial("G4_Ti");
+  G4Material* iodine = nist -> FindOrBuildMaterial("G4_I");
+  G4Material* air = nist -> FindOrBuildMaterial("G4_AIR");
+  
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  lblue   (0.0, 0.0, .75);
@@ -94,8 +89,7 @@ void BrachyDetectorConstructionI::ConstructIodine(G4VPhysicalVolume* mother)
                                       false,
                                       0, true); 
   // Capsule main body ...
-  G4double capsuleR = 0.35*mm;
-  fCapsule = new G4Tubs("fCapsule", capsuleR,0.40*mm,1.84*mm,0.*deg,360.*deg);
+  fCapsule = new G4Tubs("fCapsule", 0.35*mm,0.40*mm,1.84*mm,0.*deg,360.*deg);
   fCapsuleLog = new G4LogicalVolume(fCapsule,titanium,"fCapsuleLog");
   fCapsulePhys = new G4PVPlacement(nullptr,
                                   G4ThreeVector(),
@@ -134,7 +128,7 @@ void BrachyDetectorConstructionI::ConstructIodine(G4VPhysicalVolume* mother)
  
   // Radiactive core ...
   fIodineCore = new G4Tubs("ICore",0.085*mm,0.35*mm,1.75*mm,0.*deg,360.*deg);
-  fIodineCoreLog = new G4LogicalVolume(fIodineCore,Iodine,"IodineCoreLog");
+  fIodineCoreLog = new G4LogicalVolume(fIodineCore,iodine,"IodineCoreLog");
   fIodineCorePhys = new G4PVPlacement(nullptr,
                                      G4ThreeVector(0.,0.,0.),
                                      "IodineCorePhys",

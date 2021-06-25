@@ -33,6 +33,7 @@
 #include <atomic>
 #include <deque>
 #include <list>
+#include <memory>
 #include <queue>
 #include <random>
 #include <set>
@@ -41,13 +42,12 @@
 namespace PTL
 {
 class VTask;
-class VTaskGroup;
 class TaskSubQueue;  // definition in UserTaskQueue.icc
 
 class UserTaskQueue : public VUserTaskQueue
 {
 public:
-    typedef VTask*                             task_pointer;
+    typedef std::shared_ptr<VTask>             task_pointer;
     typedef std::vector<TaskSubQueue*>         TaskSubQueueContainer;
     typedef std::default_random_engine         random_engine_t;
     typedef std::uniform_int_distribution<int> int_dist_t;
@@ -63,8 +63,8 @@ public:
     // Virtual  function for getting a task from the queue
     virtual task_pointer GetTask(intmax_t subq = -1, intmax_t nitr = -1) override;
     // Virtual function for inserting a task into the queue
-    virtual intmax_t InsertTask(task_pointer, ThreadData* = nullptr,
-                                intmax_t subq = -1) override;
+    virtual intmax_t InsertTask(task_pointer&&, ThreadData* = nullptr,
+                                intmax_t subq = -1) override PTL_NO_SANITIZE_THREAD;
 
     // if executing only tasks in threads bin
     task_pointer GetThreadBinTask();

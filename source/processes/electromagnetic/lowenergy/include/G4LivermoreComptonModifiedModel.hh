@@ -46,37 +46,33 @@ class G4VEMDataSet;
 
 class G4LivermoreComptonModifiedModel : public G4VEmModel
 {
-
 public:
-
-  G4LivermoreComptonModifiedModel(const G4ParticleDefinition* p = 0, 
+  explicit G4LivermoreComptonModifiedModel(const G4ParticleDefinition* p = nullptr, 
 		          const G4String& nam = "LivermoreModifiedCompton");
-
   virtual ~G4LivermoreComptonModifiedModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
-                                               G4double kinEnergy, 
-                                               G4double Z, 
-                                               G4double A=0, 
-                                               G4double cut=0,
-                                               G4double emax=DBL_MAX );
+  G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
+				       G4double kinEnergy, 
+				       G4double Z, 
+				       G4double A=0, 
+				       G4double cut=0,
+				       G4double emax=DBL_MAX ) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
+
+  G4LivermoreComptonModifiedModel & operator=(const  G4LivermoreComptonModifiedModel &right) = delete;
+  G4LivermoreComptonModifiedModel(const  G4LivermoreComptonModifiedModel&) = delete;
 
 protected:
-
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
   G4VEMDataSet* scatterFunctionData;
   G4VCrossSectionHandler* crossSectionHandler;
 
@@ -84,9 +80,9 @@ private:
 
   G4ShellData shellData;
   G4DopplerProfile profileData;
-
-  G4LivermoreComptonModifiedModel & operator=(const  G4LivermoreComptonModifiedModel &right);
-  G4LivermoreComptonModifiedModel(const  G4LivermoreComptonModifiedModel&);
+ 
+  G4int verboseLevel;
+  G4bool isInitialised;
 
 };
 

@@ -17,9 +17,21 @@ if(NOT GEANT4_USE_SYSTEM_ZLIB)
   add_subdirectory(zlib)
 endif()
 
+# - G4tools always built
+add_subdirectory(g4tools)
+
 # PTL requires additional pre and post inclusion steps as it's a true subproject
 if(NOT GEANT4_USE_SYSTEM_PTL)
   set(CMAKE_INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}/PTL)
+  set(PTL_USE_TBB ${GEANT4_USE_TBB})
+
+  if(NOT (GEANT4_BUILD_SANITIZER STREQUAL "none"))
+    set(PTL_USE_SANITIZER ON)
+    set(PTL_SANITIZER_TYPE ${GEANT4_BUILD_SANITIZER})
+  endif()
+
+  set(PTL_USE_LOCKS ${GEANT4_USE_PTL_LOCKS})
+
   add_subdirectory(ptl)
   # Needs to be in defined category list for static/shared to be linked correctly.
   set_property(GLOBAL APPEND PROPERTY GEANT4_DEFINED_CATEGORIES G4ptl)
@@ -30,7 +42,6 @@ endif()
 #
 if(TARGET ptl-shared)
   add_library(G4ptl INTERFACE)
-  add_library(PTL::ptl-shared ALIAS ptl-shared)
   target_link_libraries(G4ptl INTERFACE PTL::ptl-shared)
   install(TARGETS G4ptl
     EXPORT Geant4LibraryDepends
@@ -43,7 +54,6 @@ endif()
 
 if(TARGET ptl-static)
   add_library(G4ptl-static INTERFACE)
-  add_library(PTL::ptl-static ALIAS ptl-static)
   target_link_libraries(G4ptl-static INTERFACE PTL::ptl-static)
   install(TARGETS G4ptl-static
     EXPORT Geant4LibraryDepends

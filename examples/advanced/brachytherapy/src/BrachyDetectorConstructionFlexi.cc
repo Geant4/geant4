@@ -51,9 +51,9 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4TransportationManager.hh"
-#include "BrachyMaterial.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4NistManager.hh"
 
 BrachyDetectorConstructionFlexi::BrachyDetectorConstructionFlexi()
   : fSteelShell(nullptr), fLogicalSteelShell(nullptr), fAirGap(nullptr), fLogicalAirGap(nullptr), fPhysicalAirGap(nullptr),
@@ -62,21 +62,36 @@ BrachyDetectorConstructionFlexi::BrachyDetectorConstructionFlexi()
     fCable(nullptr), fLogicalCable(nullptr), fPhysicalCable(nullptr),
     fIridiumCore(nullptr), fLogicalIridiumCore(nullptr), fPhysicalIridiumCore(nullptr),
     fSteelAttributes(nullptr), fEndAttributes(nullptr), fSimpleIridiumVisAtt(nullptr)
-{
-  fMat = new BrachyMaterial();
-}
+{}
 
 BrachyDetectorConstructionFlexi::~BrachyDetectorConstructionFlexi()
-{ 
-  delete fMat; 
-}
+{}
 
 void BrachyDetectorConstructionFlexi::ConstructFlexi(G4VPhysicalVolume* mother)
 {
-  G4Material* steelMat = fMat -> GetMat("Stainless steel 304");
-  G4Material* iridiumMat = fMat -> GetMat("Iridium");
-  G4Material* airMat = fMat -> GetMat("Air");
-
+  G4NistManager* nist = G4NistManager::Instance();
+  
+  G4Material* iridiumMat = nist -> FindOrBuildMaterial("G4_Ir");
+  G4Material* airMat = nist -> FindOrBuildMaterial("G4_AIR");
+  
+  //Define Stainless-steel-304 - Flexi source
+  G4int Z; //atomic number of the element
+  G4Element* elC = nist -> FindOrBuildElement(Z=6);
+  G4Element* elMn = nist -> FindOrBuildElement(Z=12);
+  G4Element* elSi = nist -> FindOrBuildElement(Z=14);
+  G4Element* elCr = nist -> FindOrBuildElement(Z=24);
+  G4Element* elFe = nist -> FindOrBuildElement(Z=26);
+  G4Element* elNi = nist -> FindOrBuildElement(Z=28);
+ 
+  constexpr G4double d = 7.999*g/cm3;
+  G4Material* steelMat = new G4Material("Stainless steel 304",d,6);
+  steelMat -> AddElement(elMn, 0.02);
+  steelMat -> AddElement(elSi, 0.01);
+  steelMat -> AddElement(elCr, 0.19);
+  steelMat -> AddElement(elNi, 0.10);
+  steelMat -> AddElement(elFe, 0.6792);
+  steelMat -> AddElement(elC, 0.0008);
+  
  //Define dimensions of the outer Steel shell around the solid source - not including the ends 
 
   G4double shellr_min = 0.00 * mm;

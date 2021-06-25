@@ -424,13 +424,13 @@ void G4ParticleChange::DumpInfo() const
 
   G4int oldprc = G4cout.precision(3);
 
-  G4cout << "        Mass (GeV)   : " << std::setw(20) << theMassChange / GeV
+  G4cout << "        Mass (GeV)          : " << std::setw(20) << theMassChange / GeV
          << G4endl;
-  G4cout << "        Charge (eplus)   : " << std::setw(20)
+  G4cout << "        Charge (eplus)      : " << std::setw(20)
          << theChargeChange / eplus << G4endl;
-  G4cout << "        MagneticMoment   : " << std::setw(20)
+  G4cout << "        MagneticMoment      : " << std::setw(20)
          << theMagneticMomentChange << G4endl;
-  G4cout << "                :  = " << std::setw(20)
+  G4cout << "                         =  : " << std::setw(20)
          << theMagneticMomentChange
             * 2. * theMassChange / c_squared / eplus / hbar_Planck
          << "*[e hbar]/[2 m]" << G4endl;
@@ -452,7 +452,7 @@ void G4ParticleChange::DumpInfo() const
          << theMomentumDirectionChange.z() << G4endl;
   G4cout << "        Kinetic Energy (MeV): " << std::setw(20)
          << theEnergyChange / MeV << G4endl;
-  G4cout << "        Velocity  (/c): " << std::setw(20)
+  G4cout << "        Velocity  (/c)      : " << std::setw(20)
          << theVelocityChange / c_light << G4endl;
   G4cout << "        Polarization - x    : " << std::setw(20)
          << thePolarizationChange.x() << G4endl;

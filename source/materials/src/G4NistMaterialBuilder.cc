@@ -74,6 +74,8 @@
 #include "G4Element.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
 #include <iomanip>
 
 #ifdef G4MULTITHREADED
@@ -100,21 +102,21 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
-                                                       G4bool, G4bool warning)
+                                                       G4bool warning)
 {
   if(verbose > 1) {
     G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " 
 	   << matname << G4endl;
   }
-  G4Material* mat = FindMaterial(matname);
-  if(mat != nullptr) { return mat; }
   G4String name = matname;
-  if(name == "G4_NYLON-6/6" || name == "G4_NYLON-6/10") {
-    if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
-    else { name = "G4_NYLON-6-10";}
-    mat = FindMaterial(name);
-  }
-  return (mat == nullptr) ? BuildNistMaterial(name, warning) : mat; 
+  if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
+  else if(name == "G4_NYLON-6/10") { name = "G4_NYLON-6-10"; }
+
+  G4Material* mat = FindMaterial(name);
+  if(mat != nullptr) { return mat; }
+
+  mat = BuildNistMaterial(name, warning);
+  return mat; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -247,8 +249,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-				      G4double dens, 
-				      G4bool,
+				      G4double dens,
 				      G4State state,     
 				      G4double temp,  
 				      G4double pres)
@@ -298,8 +299,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4double>& w,
-				      G4double dens, 
-				      G4bool,
+				      G4double dens,
 				      G4State state,     
 				      G4double temp,  
 				      G4double pres)
@@ -348,8 +348,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 				      const G4String& name,
 				      const G4String& nameDB,
 				      G4double temp, 
-				      G4double pres, 
-				      G4bool)
+				      G4double pres)
 {
   // Material name is in DB
   G4Material* mat = FindOrBuildMaterial(name);
@@ -395,7 +394,6 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-                                      G4bool,
                                       G4double temp,
                                       G4double pres)
 {

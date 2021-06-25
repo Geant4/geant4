@@ -63,7 +63,7 @@ public:
                                  G4int shellId = 0,
                                  const G4Material* mat = 0) final;
 
-  void PrintGeneratorInformation() const;
+  void PrintGeneratorInformation() const override;
 
   // hide assignment operator 
   G4SauterGavrilaAngularDistribution & operator=

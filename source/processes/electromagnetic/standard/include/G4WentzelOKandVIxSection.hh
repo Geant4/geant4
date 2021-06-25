@@ -85,7 +85,7 @@ public:
 
   // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
   // cut = DBL_MAX means no scattering off electrons 
-  G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
+  virtual G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
   G4double SetupTarget(G4int Z, G4double cut);
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
@@ -126,60 +126,52 @@ protected:
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
-  const G4Material* currentMaterial;
+  const G4ParticleDefinition* particle = nullptr;
+  const G4Material* currentMaterial = nullptr;
 
-  G4NistManager*  fNistManager;
-  G4Pow*          fG4pow;
+  G4NistManager* fNistManager;
+  G4Pow*         fG4pow;
 
-  G4ScreeningMottCrossSection* fMottXSection;
+  G4ScreeningMottCrossSection* fMottXSection = nullptr;
 
-  G4ThreeVector   temp;
-
-  G4double numlimit;
-
-  // integer parameters
-  G4int    nwarnings;
-  G4int    nwarnlimit;
-
-  G4NuclearFormfactorType fNucFormfactor;
-
-  G4bool   isCombined;
+  G4ThreeVector temp;
 
   // single scattering parameters
   G4double coeff;
-  G4double cosTetMaxElec;
-  G4double cosTetMaxNuc;
-  G4double cosThetaMax;
-  G4double alpha2;
+  G4double cosTetMaxElec = 1.0;
+  G4double cosTetMaxNuc = 1.0;
+  G4double cosThetaMax = -1.0;
 
-  // projectile
-  const G4ParticleDefinition* particle;
-
-  G4double chargeSquare;
-  G4double charge3;
-  G4double spin;
-  G4double mass;
-  G4double tkin;
-  G4double mom2;
-  G4double momCM2;
-  G4double invbeta2;
-  G4double kinFactor;
-  G4double etag;
-  G4double ecut;
-  G4double lowEnergyLimit;
+  G4double chargeSquare = 0.0;
+  G4double charge3 = 0.0;
+  G4double spin = 0.0;
+  G4double mass = 0.0;
+  G4double tkin = 0.0;
+  G4double mom2 = 0.0;
+  G4double momCM2 = 0.0;
+  G4double invbeta2 = 1.0;
+  G4double kinFactor = 1.0;
+  G4double etag = DBL_MAX;
+  G4double ecut = DBL_MAX;
 
   // target
-  G4int    targetZ;
   G4double targetMass;
-  G4double screenZ;
-  G4double formfactA;
-  G4double factorA2;
-  G4double factB;
-  G4double factB1;
-  G4double factD;
-  G4double fMottFactor;
-  G4double gam0pcmp;
-  G4double pcmp2;
+  G4double screenZ = 0.0;
+  G4double formfactA = 0.0;
+  G4double factorA2 = 0.0;
+  G4double factB = 0.0;
+  G4double factD = 0.0;
+  G4double fMottFactor = 1.0;
+  G4double gam0pcmp = 1.0;
+  G4double pcmp2 = 1.0;
+
+  // integer parameters
+  G4int targetZ = 0;
+  G4int nwarnings = 0;
+
+  G4NuclearFormfactorType fNucFormfactor = fExponentialNF;
+
+  G4bool isCombined;
 
   static G4double ScreenRSquareElec[100];
   static G4double ScreenRSquare[100];

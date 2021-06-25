@@ -93,11 +93,11 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsWVI);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
-  : G4VPhysicsConstructor("G4EmStandardWVI"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandardWVI")
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetVerbose(verbose);
+  param->SetVerbose(ver);
   param->SetMinEnergy(10*CLHEP::eV);
   param->SetLowestElectronEnergy(10*CLHEP::eV);
   param->SetNumberOfBinsPerDecade(20);
@@ -130,7 +130,7 @@ void G4EmStandardPhysicsWVI::ConstructParticle()
 
 void G4EmStandardPhysicsWVI::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();

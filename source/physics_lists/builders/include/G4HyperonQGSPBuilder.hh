@@ -48,18 +48,7 @@ class G4HyperonQGSPBuilder : public G4VHyperonBuilder {
     virtual ~G4HyperonQGSPBuilder();
 
     virtual void Build( G4HadronElasticProcess* ) final override {}
-    virtual void Build( G4LambdaInelasticProcess*         aP ) final override;
-    virtual void Build( G4AntiLambdaInelasticProcess*     aP ) final override;
-    virtual void Build( G4SigmaMinusInelasticProcess*     aP ) final override;
-    virtual void Build( G4AntiSigmaMinusInelasticProcess* aP ) final override;
-    virtual void Build( G4SigmaPlusInelasticProcess*      aP ) final override;
-    virtual void Build( G4AntiSigmaPlusInelasticProcess*  aP ) final override;
-    virtual void Build( G4XiMinusInelasticProcess*        aP ) final override;
-    virtual void Build( G4AntiXiMinusInelasticProcess*    aP ) final override;
-    virtual void Build( G4XiZeroInelasticProcess*         aP ) final override;
-    virtual void Build( G4AntiXiZeroInelasticProcess*     aP ) final override;
-    virtual void Build( G4OmegaMinusInelasticProcess*     aP ) final override;
-    virtual void Build( G4AntiOmegaMinusInelasticProcess* aP ) final override;
+    virtual void Build( G4HadronInelasticProcess* aP ) final override;
 
     virtual void SetMinEnergy( G4double val ) final override { theMin = val; }
     virtual void SetMaxEnergy( G4double val ) final override { theMax = val; }
