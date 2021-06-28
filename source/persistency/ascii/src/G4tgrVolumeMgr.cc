@@ -36,6 +36,8 @@
 #include "G4tgrMessenger.hh"
 #include "G4tgrSolid.hh"
 #include "G4tgrSolidBoolean.hh"
+#include "G4tgrSolidMulti.hh"
+#include "G4tgrSolidScale.hh"
 
 G4ThreadLocal G4tgrVolumeMgr* G4tgrVolumeMgr::theInstance = nullptr;
 
@@ -88,6 +90,16 @@ G4tgrSolid* G4tgrVolumeMgr::CreateSolid(const std::vector<G4String>& wl,
     //---------- Boolean solid
     //---------- Create G4tgrSolidBoolean and fill the solid params
     sol = new G4tgrSolidBoolean(wlc);
+  }
+  else if(wl2 == "SCALED")
+  {
+    //---------- Create G4tgrSolidScale and fill the solid params
+    sol = new G4tgrSolidScale(wlc);
+  }
+  else if(wl2 == "MUNION")
+  {
+    //---------- Create G4tgrSolidMulti and fill the solid params
+    sol = new G4tgrSolidMulti(wlc);
   }
   else
   {
