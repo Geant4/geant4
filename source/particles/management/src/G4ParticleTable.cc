@@ -601,13 +601,14 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
     
     G4PTblEncodingDictionary* pedic = fEncodingDictionary;
     G4ParticleDefinition* particle = nullptr;  
-
-    G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
-    if (it != pedic->end())
+    if (pedic)
     {
-      particle = (*it).second;
+      G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
+      if (it != pedic->end())
+      {
+        particle = (*it).second;
+      }
     }
-
 #ifdef G4MULTITHREADED
     if(particle == nullptr && G4Threading::IsWorkerThread())
     {
