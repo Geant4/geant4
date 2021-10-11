@@ -84,6 +84,7 @@ class G4CsvAnalysisManager : public G4ToolsAnalysisManager
     template <typename T>
     G4bool WriteT(const std::vector<T*>& htVector,
                   const std::vector<G4HnInformation*>& hnVector,
+                  const G4String& directoryName,
                   const G4String& hnType);
     G4bool WriteH1();
     G4bool WriteH2();

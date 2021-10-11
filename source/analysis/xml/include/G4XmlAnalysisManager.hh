@@ -85,8 +85,8 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
     G4bool WriteH3();
     G4bool WriteP1();
     G4bool WriteP2();
-    G4bool WriteNtuple();
-    G4bool CloseNtupleFiles();
+    //G4bool WriteNtuple();
+    //G4bool CloseNtupleFiles();
     G4bool Reset();
 
     // data members
@@ -97,4 +97,3 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
 #include "G4XmlAnalysisManager.icc"
 
 #endif
-

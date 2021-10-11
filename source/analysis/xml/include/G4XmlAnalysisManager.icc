@@ -49,9 +49,13 @@ G4bool G4XmlAnalysisManager::WriteT(const std::vector<T*>& htVector,
     if ( fState.GetVerboseL3() ) 
       fState.GetVerboseL3()->Message("write", hnType, name);
 #endif
-    G4String path = "/";
-    path.append(directoryName);
+    G4String path = "";
+    if (!directoryName.empty()) {
+      path.append(directoryName);
+      path.append("/");
+    }
     std::shared_ptr<std::ofstream> hnFile = fFileManager->GetFile();
+
     // Do nothing if there is no file
     if ( ! hnFile.get() ) return false;
 

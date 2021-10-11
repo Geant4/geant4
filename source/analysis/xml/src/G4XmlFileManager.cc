@@ -132,8 +132,15 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
 
   // Create histograms file (on master)
   if ( fState.GetIsMaster() ) {
+    // this seems to only be for histograms but still seems like a hack to assume anything that the master thread saves is a histogram...
+    // set description file name so that we can properly save to directories
+    auto path = GetHistoDirectoryName();
+    if (!path.empty()) {
+      path.append("/");
+    }
+
     // Create file (and save in in the file map (on master only)
-    fFile = CreateTFile(name);
+    fFile = CreateTFile(path + name);
     if ( ! fFile) {
       G4ExceptionDescription description;
       description << "Failed to create file " << fileName;
@@ -152,6 +159,14 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
 G4bool G4XmlFileManager::CreateNtupleFile(
   XmlNtupleDescription* ntupleDescription)
 {
+  // set description file name so that we can properly save to directories
+  auto path = GetNtupleDirectoryName();
+  if (!path.empty()) {
+      path.append("/");
+    }
+  ntupleDescription->fFileName = path+fFileName+"_nt_"
+                                  +ntupleDescription->fNtupleBooking.name();
+
   // get ntuple file name per object (if defined)
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 

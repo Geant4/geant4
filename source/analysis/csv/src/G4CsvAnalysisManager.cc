@@ -122,7 +122,8 @@ G4bool G4CsvAnalysisManager::WriteH1()
   auto result = true;
 
   if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(h1Vector, hnVector, "h1");
+    auto directoryName = fFileManager->GetHistoDirectoryName();
+    result = WriteT(h1Vector, hnVector, directoryName, "h1");
   }  
   else {
     // The worker manager just adds its histograms to the master
@@ -146,7 +147,8 @@ G4bool G4CsvAnalysisManager::WriteH2()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(h2Vector, hnVector, "h2");
+    auto directoryName = fFileManager->GetHistoDirectoryName();
+    result = WriteT(h2Vector, hnVector, directoryName, "h2");
   }  
   else {
     // The worker manager just adds its histograms to the master
@@ -170,7 +172,8 @@ G4bool G4CsvAnalysisManager::WriteH3()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(h3Vector, hnVector, "h3");
+    auto directoryName = fFileManager->GetHistoDirectoryName();
+    result = WriteT(h3Vector, hnVector, directoryName, "h3");
   }  
   else {
     // The worker manager just adds its histograms to the master
@@ -194,7 +197,8 @@ G4bool G4CsvAnalysisManager::WriteP1()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(p1Vector, hnVector, "p1");
+    auto directoryName = fFileManager->GetHistoDirectoryName();
+    result = WriteT(p1Vector, hnVector, directoryName, "p1");
   }  
   else {
     // The worker manager just adds its profiles to the master
@@ -218,7 +222,8 @@ G4bool G4CsvAnalysisManager::WriteP2()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    result = WriteT(p2Vector, hnVector, "p2");
+    auto directoryName = fFileManager->GetHistoDirectoryName();
+    result = WriteT(p2Vector, hnVector, directoryName, "p2");
   }  
   else {
     // The worker manager just adds its profiles to the master

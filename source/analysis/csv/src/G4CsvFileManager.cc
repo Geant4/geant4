@@ -126,6 +126,14 @@ G4bool G4CsvFileManager::OpenFile(const G4String& fileName)
 G4bool G4CsvFileManager::CreateNtupleFile(
   CsvNtupleDescription* ntupleDescription)
 {
+  // set description file name so that we can properly save to directories
+  auto path = GetNtupleDirectoryName();
+  if (!path.empty()) {
+      path.append("/");
+    }
+  ntupleDescription->fFileName = path+fFileName+"_nt_"
+                                  +ntupleDescription->fNtupleBooking.name();
+
   // get ntuple file name per object (if defined)
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 

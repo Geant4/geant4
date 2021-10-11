@@ -36,6 +36,7 @@ template <>
 inline 
 G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVector,
                                     const std::vector<G4HnInformation*>& hnVector,
+                                    const G4String& directoryName,
                                     const G4String& hnType)
 {
   for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
@@ -46,7 +47,12 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVec
     if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
     auto ht = htVector[i];
     auto fileName = fFileManager->GetHnFileName(hnType, name);
-    std::ofstream hnFile(fileName);
+    G4String path = "";
+    if (!directoryName.empty()) {
+      path.append(directoryName);
+      path.append("/");
+    }
+    std::ofstream hnFile(path + fileName);
 
     // Do nothing if there is no file
     if ( ! hnFile.is_open() ) return false;
@@ -64,7 +70,7 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVec
     hnFile.close();
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("write", "file", fileName);
+      fState.GetVerboseL1()->Message("write", "file", path + fileName);
 #endif
   }
 
@@ -76,6 +82,7 @@ template <>
 inline 
 G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVector,
                                     const std::vector<G4HnInformation*>& hnVector,
+                                    const G4String& directoryName,
                                     const G4String& hnType)
 {
   for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
@@ -86,7 +93,12 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVec
     if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
     auto ht = htVector[i];
     auto fileName = fFileManager->GetHnFileName(hnType, name);
-    std::ofstream hnFile(fileName);
+    G4String path = "";
+    if (!directoryName.empty()) {
+      path.append(directoryName);
+      path.append("/");
+    }
+    std::ofstream hnFile(path + fileName);
 
     // Do nothing if there is no file
     if ( ! hnFile.is_open() ) return false;
@@ -104,7 +116,7 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVec
     hnFile.close();
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("write", "file", fileName);
+      fState.GetVerboseL1()->Message("write", "file", path + fileName);
 #endif
   }
 
@@ -116,6 +128,7 @@ template <typename T>
 inline 
 G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
                                     const std::vector<G4HnInformation*>& hnVector,
+                                    const G4String& directoryName,
                                     const G4String& hnType)
 {
   for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
@@ -126,7 +139,12 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
     if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
     auto ht = htVector[i];
     auto fileName = fFileManager->GetHnFileName(hnType, name);
-    std::ofstream hnFile(fileName);
+    G4String path = "";
+    if (!directoryName.empty()) {
+      path.append(directoryName);
+      path.append("/");
+    }
+    std::ofstream hnFile(path + fileName);
 
     // Do nothing if there is no file
     if ( ! hnFile.is_open() ) return false;
@@ -143,7 +161,7 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
     hnFile.close();
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("write", "file", fileName);
+      fState.GetVerboseL1()->Message("write", "file", path + fileName);
 #endif
   }
 
