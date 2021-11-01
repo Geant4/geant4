@@ -134,7 +134,7 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
   if ( fState.GetIsMaster() ) {
     // this seems to only be for histograms but still seems like a hack to assume anything that the master thread saves is a histogram...
     // set description file name so that we can properly save to directories
-    auto path = GetHistoDirectoryName();
+    auto path = GetHistoDirectoryNameIfExists();
     if (!path.empty()) {
       path.append("/");
     }
@@ -160,7 +160,7 @@ G4bool G4XmlFileManager::CreateNtupleFile(
   XmlNtupleDescription* ntupleDescription)
 {
   // set description file name so that we can properly save to directories
-  auto path = GetNtupleDirectoryName();
+  auto path = GetNtupleDirectoryNameIfExists();
   if (!path.empty()) {
       path.append("/");
     }

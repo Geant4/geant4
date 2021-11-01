@@ -92,8 +92,8 @@ void G4XmlNtupleManager::FinishTNtuple(
   }
 
   // Write header
-  G4String path = "";
-  path.append(fFileManager->GetNtupleDirectoryName());
+  G4String path = "/";
+  path.append(fFileManager->GetNtupleDirectoryNameIfExists());
   ntupleDescription->fNtuple
     ->write_header(path, ntupleDescription->fNtupleBooking.name(), 
                    ntupleDescription->fNtupleBooking.title());  

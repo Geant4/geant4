@@ -318,6 +318,18 @@ G4String G4VAnalysisManager::GetNtupleDirectoryName() const
   return fVFileManager->GetNtupleDirectoryName(); 
 }
 
+//
+G4String G4VAnalysisManager::GetHistoDirectoryNameIfExists() const 
+{
+  return fVFileManager->GetHistoDirectoryNameIfExists();
+}
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetNtupleDirectoryNameIfExists() const
+{
+  return fVFileManager->GetNtupleDirectoryNameIfExists();
+}
+
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::GetCompressionLevel() const
 {

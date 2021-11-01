@@ -86,6 +86,8 @@ class G4VAnalysisManager
     G4String GetFileName() const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
+    G4String GetHistoDirectoryNameIfExists() const;
+    G4String GetNtupleDirectoryNameIfExists() const;
     G4int    GetCompressionLevel() const;
 
     // Methods for handling histograms

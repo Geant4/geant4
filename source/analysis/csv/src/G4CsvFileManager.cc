@@ -127,7 +127,7 @@ G4bool G4CsvFileManager::CreateNtupleFile(
   CsvNtupleDescription* ntupleDescription)
 {
   // set description file name so that we can properly save to directories
-  auto path = GetNtupleDirectoryName();
+  auto path = GetNtupleDirectoryNameIfExists();
   if (!path.empty()) {
       path.append("/");
     }

@@ -35,6 +35,10 @@
 #include "G4VTHnFileManager.hh"
 #include "globals.hh"
 
+// check whether directories exist
+#include <sys/types.h>
+#include <sys/stat.h>
+
 namespace tools {
 namespace histo { 
 class h1d; 
@@ -75,6 +79,8 @@ class G4VFileManager : public G4BaseFileManager
     G4bool IsOpenFile() const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
+    G4String GetHistoDirectoryNameIfExists() const;
+    G4String GetNtupleDirectoryNameIfExists() const;
 
     // Access to helpers
     template <typename HT>
@@ -108,6 +114,36 @@ inline G4String G4VFileManager::GetHistoDirectoryName() const
 
 inline G4String G4VFileManager::GetNtupleDirectoryName() const 
 { return fNtupleDirectoryName; }
+
+inline G4String G4VFileManager::GetHistoDirectoryNameIfExists() const 
+{  
+  G4String dirName = fHistoDirectoryName;
+
+  struct stat info;
+
+  int statRC = stat( dirName, &info );
+
+  if (statRC==0 and info.st_mode and S_IFDIR) {
+    return dirName;
+  } else {
+    return "";
+  }
+}
+
+inline G4String G4VFileManager::GetNtupleDirectoryNameIfExists() const
+{
+  G4String dirName = fNtupleDirectoryName;
+
+  struct stat info;
+
+  int statRC = stat( dirName, &info );
+
+  if (statRC==0 and info.st_mode and S_IFDIR) {
+    return dirName;
+  } else {
+    return "";
+  }
+}
 
 template <>
 inline
