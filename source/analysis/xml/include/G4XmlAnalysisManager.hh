@@ -28,6 +28,9 @@
 // It delegates most of functions to the object specific managers. 
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+//
+// Edits:
+// Nate MacFadden, 01/11/2021 - enabled saving to directories
 
 #ifndef G4XmlAnalysisManager_h
 #define G4XmlAnalysisManager_h 1

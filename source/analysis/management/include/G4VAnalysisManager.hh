@@ -33,6 +33,10 @@
 // are declared as virtual protected.
 
 // Author: Ivana Hrivnacova, 09/07/2013  (ivana@ipno.in2P2.fr)
+//
+// Edits:
+// Nate MacFadden, 01/11/2021 - added directory getters which detect
+//                              if directory exists
 
 #ifndef G4VAnalysisManager_h
 #define G4VAnalysisManager_h 1

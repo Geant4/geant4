@@ -25,6 +25,10 @@
 //
 
 // Author: Ivana Hrivnacova, 09/07/2013  (ivana@ipno.in2p3.fr)
+//
+// Edits:
+// Nate MacFadden, 01/11/2021 - added directory getters which detect
+//                              if directory exists
 
 #include "G4VAnalysisManager.hh"
 #include "G4AnalysisMessenger.hh"

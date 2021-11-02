@@ -27,6 +27,10 @@
 // Base class for File manager.
 //
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+//
+// Edits:
+// Nate MacFadden, 01/11/2021 - added directory getters which detect
+//                              if directory exists
 
 #ifndef G4VFileManager_h
 #define G4VFileManager_h 1

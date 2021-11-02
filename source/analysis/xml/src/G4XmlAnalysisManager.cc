@@ -25,6 +25,9 @@
 //
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+//
+// Edits:
+// Nate MacFadden, 01/11/2021 - enabled saving to directories
 
 #include "G4XmlAnalysisManager.hh"
 #include "G4XmlFileManager.hh"
@@ -121,7 +124,7 @@ G4bool G4XmlAnalysisManager::WriteH1()
   auto result = true;
 
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
+    auto directoryName = fFileManager->GetHistoDirectoryNameIfExists(); 
     result = WriteT(h1Vector, hnVector, directoryName, "h1");
   }  
   else {
@@ -146,7 +149,7 @@ G4bool G4XmlAnalysisManager::WriteH2()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
+    auto directoryName = fFileManager->GetHistoDirectoryNameIfExists(); 
     result = WriteT(h2Vector, hnVector, directoryName, "h2");
   }  
   else {
@@ -171,7 +174,7 @@ G4bool G4XmlAnalysisManager::WriteH3()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
+    auto directoryName = fFileManager->GetHistoDirectoryNameIfExists(); 
     result = WriteT(h3Vector, hnVector, directoryName, "h3");
   }  
   else {
@@ -196,7 +199,7 @@ G4bool G4XmlAnalysisManager::WriteP1()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
+    auto directoryName = fFileManager->GetHistoDirectoryNameIfExists(); 
     result = WriteT(p1Vector, hnVector, directoryName, "p1");
   }  
   else {
@@ -221,7 +224,7 @@ G4bool G4XmlAnalysisManager::WriteP2()
   auto result = true;
   
   if ( ! G4Threading::IsWorkerThread() )  {
-    auto directoryName = fFileManager->GetHistoDirectoryName(); 
+    auto directoryName = fFileManager->GetHistoDirectoryNameIfExists(); 
     result = WriteT(p2Vector, hnVector, directoryName, "p2");
   }  
   else {
