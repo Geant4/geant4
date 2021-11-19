@@ -16,6 +16,14 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 14th, 2021 G.Cosmo                 - geomvol-V10-06-05
+- Use same strategy for cloning solids for replicated volumes types in
+  G4GeometryWorkspace (required for having proper treatment of divided
+  volumes). Cleanup of unused verbose printouts.
+- G4PVReplica: moved internal defines for MT split data to source.
+  Avoid deletion of rotation matrix for replication in Phi in destructor
+  as not necessary. Some code cleanup.
+
 January 20th, 2021 G.Cosmo                 - geomvol-V10-06-04
 - Added creation order index in G4LogicalBorderSurface.
   Addressing problem report #2311.

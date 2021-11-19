@@ -16,6 +16,13 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-July-2021 E.Tcherniaev          (geom-specific-V10-06-13)
+- More accurate calculation of distance from point to triangle
+  in G4TriangularFacet, it addresses problem report #2401
+
+25-June-2021 G.Cosmo
+- Added missing accessor in G4UTet.
+
 30-April-2021 G.Cosmo              (geom-specific-V10-06-12)
 - Fixed use of conversion factor in G4UPolyhedra wrapper for "generic"
   polyhedra constructs.

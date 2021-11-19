@@ -73,7 +73,7 @@ endforeach()
 include(ExternalProject)
 ExternalProject_Add(ICRPdata
   SOURCE_DIR ${PROJECT_BINARY_DIR}/ICRPdata
-  URL https://cern.ch/geant4-data/datasets/examples/advanced/ICRP110Phantoms/ICRPdata.tar.gz
+  URL https://cern.ch/geant4-data/datasets/examples/advanced/ICRP110Phantoms/ICRPdata_10_7.tar.gz
   URL_MD5 f4d83f38c9d952430ec6a0a4a07a9f21
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""

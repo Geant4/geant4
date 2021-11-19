@@ -227,17 +227,22 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   //
   if( fContainerSolid->Inside( localPoint ) == kOutside )
   {
-    std::ostringstream message;
-    message << "Point outside voxels!" << G4endl
-            << "        localPoint - " << localPoint
-            << " - is outside container solid: "
-            << fContainerSolid->GetName() << G4endl
-            << "DIFFERENCE WITH PHANTOM WALLS X: "
-            << std::fabs(localPoint.x()) - fContainerWallX
-            << " Y: " << std::fabs(localPoint.y()) - fContainerWallY
-            << " Z: " << std::fabs(localPoint.z()) - fContainerWallZ;
-    G4Exception("G4PhantomParameterisation::GetReplicaNo()", "GeomNav0003",
-                FatalErrorInArgument, message);
+    if( std::fabs(localPoint.x()) - fContainerWallX > kCarTolerance
+	&& std::fabs(localPoint.y()) - fContainerWallY > kCarTolerance
+	&& std::fabs(localPoint.z()) - fContainerWallZ > kCarTolerance )
+    {
+      std::ostringstream message;
+      message << "Point outside voxels!" << G4endl
+              << "        localPoint - " << localPoint
+              << " - is outside container solid: "
+              << fContainerSolid->GetName() << G4endl
+              << "DIFFERENCE WITH PHANTOM WALLS X: "
+              << std::fabs(localPoint.x()) - fContainerWallX
+              << " Y: " << std::fabs(localPoint.y()) - fContainerWallY
+              << " Z: " << std::fabs(localPoint.z()) - fContainerWallZ;
+      G4Exception("G4PhantomParameterisation::GetReplicaNo()", "GeomNav0003",
+                  FatalErrorInArgument, message);
+    }
   }
   
   // Check the voxel numbers corresponding to localPoint
@@ -357,18 +362,23 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   if( !isOK )
   {
-    std::ostringstream message;
-    message << "Corrected the copy number! It was negative or too big" << G4endl
-            << "          LocalPoint: " << localPoint << G4endl
-            << "          LocalDir: " << localDir << G4endl
-            << "          Voxel container size: " << fContainerWallX
-            << " " << fContainerWallY << " " << fContainerWallZ << G4endl
-            << "          LocalPoint - wall: "
-            << localPoint.x()-fContainerWallX << " "
-            << localPoint.y()-fContainerWallY << " "
-            << localPoint.z()-fContainerWallZ;
-    G4Exception("G4PhantomParameterisation::GetReplicaNo()",
-                "GeomNav1002", JustWarning, message);
+    if( fabs(localPoint.x()-fContainerWallX) > kCarTolerance &&
+	fabs(localPoint.y()-fContainerWallY) > kCarTolerance &&
+	fabs(localPoint.z()-fContainerWallZ) > kCarTolerance )
+    {   // only if difference is big 
+      std::ostringstream message;
+      message << "Corrected the copy number! It was negative or too big" << G4endl
+              << "          LocalPoint: " << localPoint << G4endl
+              << "          LocalDir: " << localDir << G4endl
+              << "          Voxel container size: " << fContainerWallX
+              << " " << fContainerWallY << " " << fContainerWallZ << G4endl
+              << "          LocalPoint - wall: "
+              << localPoint.x()-fContainerWallX << " "
+              << localPoint.y()-fContainerWallY << " "
+              << localPoint.z()-fContainerWallZ;
+      G4Exception("G4PhantomParameterisation::GetReplicaNo()",
+                  "GeomNav1002", JustWarning, message);
+    }
     copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
   }
 

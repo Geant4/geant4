@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -434,17 +434,17 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.120000s Real=0.122181s Sys=0.000000s
+  User=0.120000s Real=0.209518s Sys=0.000000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 8112	protonInelastic= 1888
+	hadElastic= 8133	protonInelastic= 1867
 
 
- MeanFreePath:	5.0282 cm  +- 5.0209 cm 	massic: 51.69 g/cm2 
- CrossSection:	0.19888 cm^-1 		massic: 1.9346 mm2/g 
- crossSection per atom:	3.1452 barn  
+ MeanFreePath:	4.9998 cm  +- 5.0491 cm 	massic: 51.398 g/cm2 
+ CrossSection:	0.20001 cm^-1 		massic: 1.9456 mm2/g 
+ crossSection per atom:	3.1631 barn  
 
  Verification: crossSections from G4HadronicProcessStore:
           hadElastic= 1.5946 mm2/g 	2.5924 barn  
@@ -454,29 +454,27 @@ Run Summary
  List of nuclear reactions: 
 
                         proton + Mo98 --> N gamma or e- + Tc99:       1   Q =  6.4945 MeV
-               proton + Mo98 --> N gamma or e- + Tc99[142.683]:       1   Q =  6.3518 MeV
-              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1873   Q = -2.4771 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:      13   Q = -8.6404e-06 eV 
-                               proton + Mo98 --> proton + Mo98:    8112   Q = -5.6975e-06 eV 
+              proton + Mo98 --> N gamma or e- + neutron + Tc98:    1854   Q = -2.4769 MeV
+               proton + Mo98 --> N gamma or e- + proton + Mo98:      12   Q = -3.261e-06 eV 
+                               proton + Mo98 --> proton + Mo98:    8133   Q = -5.6448e-06 eV 
 
                           number of gamma or e- (ic): N = 1 --> 10
 
  List of generated particles:
-           Mo98:    8125  Emean =  32.474 keV	( 5.4473 eV  --> 405.17 keV)
-           Tc98:    1873  Emean =  120.07 keV	( 7.7509 keV --> 296.88 keV)
+           Mo98:    8145  Emean =  32.942 keV	( 0.81692 eV  --> 405.01 keV)
+           Tc98:    1854  Emean =  119.43 keV	( 7.5639 keV --> 296.88 keV)
            Tc99:       1  Emean =  88.079 keV	( 88.079 keV --> 88.079 keV)
-  Tc99[142.683]:       1  Emean =  93.139 keV	( 93.139 keV --> 93.139 keV)
-             e-:     506  Emean =  120.82 keV	( 18.601 keV --> 3.7913 MeV)
-          gamma:   12667  Emean =  851.55 keV	( 21.805 keV --> 12.228 MeV)
-        neutron:    1873  Emean =  1.6433 MeV	( 48.681 keV --> 6.3995 MeV)
-         proton:      13  Emean =  7.7097 MeV	( 5.5275 MeV --> 9.3462 MeV)
+             e-:     531  Emean =  111.17 keV	( 18.483 keV --> 3.7913 MeV)
+          gamma:   11986  Emean =  893.34 keV	( 7.8577 keV --> 12.228 MeV)
+        neutron:    1854  Emean =  1.6222 MeV	( 48.681 keV --> 7.3539 MeV)
+         proton:      12  Emean =  7.1619 MeV	( 5.0264 MeV --> 9.3382 MeV)
 
-   Momentum balance: Pmean =  39.514 eV 	( 2.861e-07 eV  --> 2.3135 keV) 
+   Momentum balance: Pmean =  40.892 eV 	( 8.7973e-07 eV  --> 2.6696 keV) 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 791420560, 1872713980
+ Current couple of seeds = 1417240353, 1345316016
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

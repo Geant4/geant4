@@ -58,7 +58,6 @@
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronHElasticPhysics.hh"
-#include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4NeutronCrossSectionXS.hh"
 #include "G4StoppingPhysics.hh"

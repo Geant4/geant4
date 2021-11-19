@@ -392,7 +392,7 @@ if(GEANT4_USE_HDF5)
   find_package(HDF5 1.8 REQUIRED)
   include("${CMAKE_CURRENT_LIST_DIR}/G4HDF5Shim.cmake")
   # Backward compatibility
-  set(HDF5_LIBRARIES Geant4::HDF5)
+  set(HDF5_LIBRARIES hdf5::hdf5)
 
   # May have found via config mode...
   if(HDF5_DIR)

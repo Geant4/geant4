@@ -5,12 +5,12 @@
       <constant name="XLength" value="100"/>
       <constant name="YLength" value="200"/>
       <constant name="ZLength" value="300"/>
-      <position name="XBoxPos" x="XLength/2"/>
-      <position name="YBoxPos" y="YLength/2"/>
-      <position name="ZBoxPos" z="ZLength/2"/>
-      <position name="XArrowPos" x="XLength"/>
-      <position name="YArrowPos" y="YLength"/>
-      <position name="ZArrowPos" z="ZLength"/>
+      <position name="XBoxPos" x="XLength/2+5"/>
+      <position name="YBoxPos" y="YLength/2+5"/>
+      <position name="ZBoxPos" z="ZLength/2+5"/>
+      <position name="XArrowPos" x="XLength+5"/>
+      <position name="YArrowPos" y="YLength+5"/>
+      <position name="ZArrowPos" z="ZLength+5"/>
       <rotation name="XArrowRot" y="-90" unit="deg"/>
       <rotation name="YArrowRot" x="90" unit="deg"/>
       <rotation name="ZArrowRot" unit="deg"/>

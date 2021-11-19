@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -876,28 +876,28 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.090000s Real=0.107368s Sys=0.000000s
+  User=0.080000s Real=0.118251s Sys=0.000000s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.578   RMS(GeV) 4.218
-Average number of steps              56.24
-Average number of gamma              0.91
+Average energy deposit (GeV)         6.472   RMS(GeV) 4.435
+Average number of steps              55.58
+Average number of gamma              0.77
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           10.01
-Average number of protons            10.69
+Average number of neutrons           10.5
+Average number of protons            11.13
 Average number of antiprotons        0
-Average number of pi+ & pi-          6.94
-Average number of pi0                3.56
+Average number of pi+ & pi-          7.19
+Average number of pi0                4.01
 Average number of kaons              0.12
 Average number of muons              0
-Average number of deuterons+tritons  2.23
-Average number of He3+alpha          0.91
-Average number of ions               1.07
+Average number of deuterons+tritons  2.54
+Average number of He3+alpha          0.98
+Average number of ions               0.96
 ========================================================
 
 0 events have been kept for refreshing and/or reviewing.

@@ -161,7 +161,7 @@ G4double G4NeutronCaptureXS::IsoCrossSection(G4double eKin, G4double logE,
   if(pv == nullptr) { return xs; }
 
   if(amin[Z] > 0 && A >= amin[Z] && A <= amax[Z]) {
-    G4PhysicsVector* pviso = data->GetComponentDataByID(Z, A - amin[Z]);
+    G4PhysicsVector* pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pviso != nullptr) { 
       const G4double e1 = pviso->Energy(1);
       xs = (ekin >= e1) ? pviso->LogVectorValue(ekin, logEkin)

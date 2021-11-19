@@ -16,6 +16,9 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 19, 2021 Gabriele (global-V10-06-30)
+- Updated tag IDs for release 10.7.p03.
+
 June 9, 2021 Gabriele (global-V10-06-29)
 - Removed spurious spaces in #define in G4Version header.
   Addressing problem report #2384.

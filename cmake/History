@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+24th September 2021 - Ben Morgan (cmake-V10-06-53)
+- Rename Geant4::HDF5 to hdf5::hdf5 to be compatible with
+  imported target provided since CMake 3.20.
+- Backports !2107 to 10.7 to address Bugzilla 2426
+
 19th March 2021 - Gunter Folger (cmake-V10-06-52)
 - Update to older G4TENDL 1.3.2, 1.4 has problems.
 

@@ -11,6 +11,10 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31 Aug. 2021 B.Morgan (geant4py-V10-06-05)
+- Remove binding to obsolete member functions of G4Sphere and G4Tubs
+  - Either no longer used or cause issues when using Vecgeom
+
 16 Nov. 2020 B. Morgan (geant4py-V10-06-04)
 - Boost 1.73 modified use of its bind and placeholder functionality, resulting
   in Boost.Python spamming pragma messages about deprecation of this.

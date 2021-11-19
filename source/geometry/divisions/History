@@ -16,6 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29th, 2021 G.Cosmo (geomdiv-V10-06-01)
+- G4ReplicatedSlice: added protection against null pointer for mother
+  physical-volume in constructor.
+
+October 14th, 2021 G.Cosmo
+- Make G4PVDivision and G4ReplicatedSlice inherit from G4PVReplica
+  rather than G4VPhysicalVolume, in order to have instances properly
+  cloned in MT mode. Coworks with "geomvol-V10-07-05".
+
+September 24th, 2021 P.Arce
+- Fix bug in G4ParameterisationTrd for division along X.
+  Debug messages cleaning.
+  
+August 18th, 2021 G.Cosmo
+- Bring internal interactive test for divisions up-to-date.
+  No functional changes.
+
 December 10th, 2019     B.Morgan (geomdiv-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library options and
   explicit include_directories.
@@ -181,7 +198,7 @@ January 10th, 2006      G.Cosmo  (geomdiv-V08-00-00)
   G4ParameterisationPolyhedra: allow it for the automatic replicated instance.
 
 November 16th, 2005     J.Apostolakis  (geomdiv-V07-01-02)
-- Adapted to revision of G4VPhysicalVolume that identifies some 
+- Adapted to revision of G4VPhysicalVolume that identifies some
   regular structures: added two methods for G4PVDivision (IsRegularStructure()
   and GetRegularStructureId()).
 

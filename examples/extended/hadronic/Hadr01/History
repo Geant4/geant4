@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-21  V.Ivanchenko (exhadr01-V10-06-03)
+- HistoManager, DetectorConstruction, DetectorMessenger 
+    fix #2441 - corect counting of leaking neutrons
+
 10-11-20 B. Morgan (exhadr01-V10-06-02)
 - Migration to G4RunManagerFactory.
 

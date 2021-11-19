@@ -401,8 +401,8 @@ void G4OpticalParametersMessenger::SetNewValue(G4UIcommand* command,
     G4String flag;
     is >> pn >> flag;
     G4bool value = G4UIcommand::ConvertToBool(flag);
-    if (pn == "Cerenkov") params->SetCerenkovStackPhotons(value);
-    else if (pn == "Scintillation") params->SetScintStackPhotons(value);
+    if (pn == "Cerenkov") params->SetCerenkovTrackSecondariesFirst(value);
+    else if (pn == "Scintillation") params->SetScintTrackSecondariesFirst(value);
     else {
       G4ExceptionDescription msg;
       msg << "Process name not allowed:  "<<pn<<" (UI: "<<newValue<<")";

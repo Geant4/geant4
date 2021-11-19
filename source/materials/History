@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-10-21 V.Ivanchenko (materials-V10-06-15)
+- G4IonisParamMat - return exact computations according to the 
+    original publication (fix #2334)
+
+19-09-21 V.Ivanchenko
+- G4DensityEffectCalculator - Matthew Strait critically updated
+    calculations (fix #2330)
+
 06-05-21 G.Cosmo (materials-V10-06-14)
 - Fixed shadowing compilation warning in G4Isotope reported with gcc-11.
 

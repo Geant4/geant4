@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 20, 2021 M. Asai (tracking-V10-06-05)
+- G4SteppingManager2.cc : Making sure Transportation limits the step 
+  if a volume boundary in a parallel world is co-limiting the step.
+  Addressing to Bugzilla Report #2240.
+
 Nov 12, 2020 Jonathan Madsen (tracking-V10-06-04)
 - Added G4Profiler support.
 

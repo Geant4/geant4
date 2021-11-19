@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 July 2021 Alberto Ribon (hadr-mod-util-V10-06-03)
+- G4SampleResonance : bug-fix in the method GetMinimumMass in the case
+  that users include rare and light decay channels (e.g. e+ e-) for
+  hadronic resonances.
+  Thanks to Thomas Ruf (SHiP Collaboration) for pointing out this issue
+  (Bug #2299).
+
 24 November 2020 Alberto Ribon (hadr-mod-util-V10-06-02)
 - G4Fragment : introduced an optional parameter to switch off some warnings.
   By default, nothing is changed (i.e. the warnings are printed out as

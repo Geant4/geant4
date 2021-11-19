@@ -167,6 +167,12 @@ inline G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name) const
 }
 
 inline G4VPhysicalVolume*
+G4GDMLParser::GetPhysVolume(const G4String& name) const
+{
+  return reader->GetPhysvol(name);
+}
+
+inline G4VPhysicalVolume*
 G4GDMLParser::GetWorldVolume(const G4String& setupName) const
 {
   return reader->GetWorldVolume(setupName);

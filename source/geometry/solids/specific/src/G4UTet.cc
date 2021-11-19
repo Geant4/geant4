@@ -158,6 +158,19 @@ G4VSolid* G4UTet::Clone() const
 //
 // Accessors
 //
+void G4UTet::GetVertices(G4ThreeVector& anchor,
+                         G4ThreeVector& p1,
+                         G4ThreeVector& p2,
+                         G4ThreeVector& p3) const
+{
+  std::vector<U3Vector> vec(4);
+  Base_t::GetVertices(vec[0], vec[1], vec[2], vec[3]);
+  anchor = G4ThreeVector(vec[0].x(), vec[0].y(), vec[0].z());
+  p1 = G4ThreeVector(vec[1].x(), vec[1].y(), vec[1].z());
+  p2 = G4ThreeVector(vec[2].x(), vec[2].y(), vec[2].z());
+  p3 = G4ThreeVector(vec[3].x(), vec[3].y(), vec[3].z());
+}
+
 std::vector<G4ThreeVector> G4UTet::GetVertices() const
 {
   std::vector<U3Vector> vec(4);

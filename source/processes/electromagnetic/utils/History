@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 Aug 21: D.Sawkey (emutils-V10-06-19)
+- G4OpticalParameters messenger - fix #2392: UI command changes
+    incorrect parameter
+
 06 May 21: G.Cosmo (emutils-V10-06-18)
 - Fixed shadowing compilation warning in G4EmCorrections reported with gcc-11.
 

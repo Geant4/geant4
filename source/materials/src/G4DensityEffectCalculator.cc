@@ -102,10 +102,13 @@ G4DensityEffectCalculator::G4DensityEffectCalculator(const G4Material* mat, G4in
   for(G4int i=0; i<nlev; ++i) {
     sum += sternf[i];
   }
-  sum = (sum > 0.0) ? 1./sum : 0.0;
+  sum += fConductivity;
+
+  const G4double invsum = (sum > 0.0) ? 1./sum : 0.0;
   for(G4int i=0; i<nlev; ++i) {
-    sternf[i] *= sum;
+    sternf[i] *= invsum;
   }
+  fConductivity *= invsum;  
   plasmaE = fMaterial->GetIonisation()->GetPlasmaEnergy()/CLHEP::eV;
   meanexcite = fMaterial->GetIonisation()->GetMeanExcitationEnergy()/CLHEP::eV;
 }
@@ -131,7 +134,7 @@ G4double G4DensityEffectCalculator::ComputeDensityCorrection(G4double x)
     G4cout << "   Delta: computed= " << exact 
 	   << ", parametrized= " << approx << G4endl;
   }
-  if(approx > 0. && exact < 0.) {
+  if(approx >= 0. && exact < 0.) {
     if(fVerbose > 0) {
       ++fWarnings;
       if(fWarnings < maxWarnings) {
@@ -209,18 +212,32 @@ G4double G4DensityEffectCalculator::FermiDeltaCalculation(G4double x)
 
   // Calculate the Sternheimer adjusted energy levels and parameters l_i given
   // the Sternheimer parameter rho.
-  sternrho /= plasmaE; 
   for(G4int i=0; i<nlev; ++i) {
-    sternEbar[i] = levE[i] * sternrho;
-    sternl[i] = std::sqrt(gpow->powN(sternEbar[i], 2) + 2./3.*sternf[i]);
+    sternEbar[i] = levE[i] * (sternrho/plasmaE);
+    sternl[i] = std::sqrt(gpow->powN(sternEbar[i], 2) + (2./3.)*sternf[i]);
   }
+  // The derivative of the function we are solving for is strictly
+  // negative for positive (physical) values, so if the value at
+  // zero is less than zero, it has no solution, and there is no
+  // density effect in the Sternheimer "exact" treatment (which is
+  // still an approximation).
+  //
+  // For conductors, this test is not needed, because Ell(L) contains
+  // the term fConductivity/(L*L), so the value at L=0 is always
+  // positive infinity. In the code we don't return inf, though, but
+  // rather set that term to zero, which means that if this test were
+  // used, it would give the wrong result for some materials.
+  if(fConductivity == 0 && Ell(0) <= 0) return 0;
 
-  // Make imphirical initial guess
-  const G4double sternL = Newton(sternrho, false);
-  if(sternL > -1.) {
-    return DeltaOnceSolved(sternL);
+  // Attempt to find the root from 40 starting points evenly distributed
+  // in log space.  Trying a single starting point is not sufficient for
+  // convergence in most cases.
+  for(G4int startLi = -10; startLi < 30; ++startLi){
+    const G4double sternL = Newton(gpow->powN(2, startLi), false);
+    if(sternL != -1.) {
+      return DeltaOnceSolved(sternL);
+    }
   }
-
   return -1.; // Signal the caller to use the Sternheimer approximation,
               // because we have been unable to solve the exact form.
 }
@@ -251,7 +268,7 @@ G4double G4DensityEffectCalculator::Newton(G4double start, G4bool first)
     const G4double del = value/dvalue;
     lambda -= del;
 
-    const G4double eps = std::abs(del);
+    const G4double eps = std::abs(del/lambda);
     if(eps <= 1.e-12) {
       ++ngood;
       if(ngood == 2) { 
@@ -263,7 +280,7 @@ G4double G4DensityEffectCalculator::Newton(G4double start, G4bool first)
     } else {
       ++nbad;
     }
-    if(nbad > maxIter || eps > 1.) { break; }
+    if(nbad > maxIter || std::isnan(value) || std::isinf(value)) { break; }
   }
   if(fVerbose > 2) {
     G4cout << "  Failed to converge last value= " << value 
@@ -318,6 +335,7 @@ G4double G4DensityEffectCalculator::DEll(G4double L)
       ans += sternf[i]/gpow->powN(y + L*L, 2);
     }
   }
+  ans += fConductivity/gpow->powN(L*L, 2);
   ans *= (-2*L); // pulled out of the loop for efficiency
   return ans;
 }
@@ -332,12 +350,15 @@ G4double G4DensityEffectCalculator::Ell(G4double L)
       ans += sternf[i]/(gpow->powN(sternEbar[i], 2) + L*L);
     }
   }
+  if(fConductivity > 0. && L != 0.) {
+    ans += fConductivity/(L*L);
+  }  
   ans -= gpow->powZ(10, -2 * sternx);
   return ans;
 }
 
 /**
- * Given the Sternheimer parameter l^2 (called 'sternL' here), and that
+ * Given the Sternheimer parameter l (called 'sternL' here), and that
  * the l_i and adjusted energies have been found with SetupFermiDeltaCalc(),
  * return the value of delta.  Helper function for DoFermiDeltaCalc().
  */
@@ -349,6 +370,12 @@ G4double G4DensityEffectCalculator::DeltaOnceSolved(G4double sternL)
       ans += sternf[i] * G4Log((gpow->powN(sternl[i], 2)
               + gpow->powN(sternL, 2))/gpow->powN(sternl[i], 2));
     }
+  }
+  // sternl for the conduction electrons is sqrt(fConductivity), with
+  // no factor of 2./3 as with the other levels.
+  if(fConductivity > 0) {
+    ans += fConductivity * G4Log((fConductivity
+                  + gpow->powN(sternL, 2))/fConductivity);
   }
   ans -= gpow->powN(sternL, 2)/(1 + gpow->powZ(10, 2 * sternx));
   return ans;

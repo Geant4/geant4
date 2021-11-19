@@ -23,40 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Geant4 Version information
-
-// Author: K.Murakami, 26.09.2005 - Created
-// --------------------------------------------------------------------
-#ifndef G4VERSION_HH
-#define G4VERSION_HH 1
-
-// Numbering rule for "G4VERSION_NUMBER":
-// - The number is consecutive (i.e. 711) as an integer.
-// - The meaning of each digit is as follows;
+///////////////////////////////////////////////////////////////////////////
 //
-//   711
-//   |--> major version number
-//    |--> minor version number
-//     |--> patch number
+// Process describing a radiator of X-ray transition radiation.
+// Regular radiator with thicknesses of plates and gas gaps are Gauss-distributed.
+// We suppose that:
+// formation zone ~ mean thickness << absorption length
+// for each material and in the range 1-100 keV. This allows us to simplify
+// interference effects in radiator stack (GetStackFactor method).
+//
+// History:
+//
+// 19.09.21 V. Grichine, first version
+//
 
-#ifndef G4VERSION_NUMBER
-  #define G4VERSION_NUMBER 1073
-#endif
+#ifndef G4GaussXTRadiator_h
+#define G4GaussXTRadiator_h 1
 
-#ifndef G4VERSION_TAG
-  #define G4VERSION_TAG "$Name: geant4-10-07-patch-03 $"
-#endif
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4VXTRenergyLoss.hh"
 
-// as variables
+class G4GaussXTRadiator : public G4VXTRenergyLoss
+{
+ public:
+  explicit G4GaussXTRadiator(
+    G4LogicalVolume* anEnvelope, G4double, G4double, G4Material*, G4Material*, G4double, G4double,
+    G4int, const G4String& processName = "GaussXTRadiator");
+  ~G4GaussXTRadiator();
 
-#include "G4String.hh"
-#include "G4Types.hh"
+  // reimplementation of base class function in analytical way
+  G4double SpectralXTRdEdx(G4double energy) override;
 
-#ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-07-patch-03 [MT]$";
-#else
-static const G4String G4Version = "$Name: geant4-10-07-patch-03 $";
-#endif
-static const G4String G4Date = "(19-November-2021)";
+  G4double GetStackFactor(G4double energy, G4double gamma,
+                          G4double varAngle) override;
+
+  void ProcessDescription(std::ostream&) const override;
+  void DumpInfo() const override { ProcessDescription(G4cout); };
+};
 
 #endif

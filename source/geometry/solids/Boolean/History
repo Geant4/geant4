@@ -19,6 +19,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 12, 2021 G.Cosmo geom-bool-V10-06-02
+- In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in GetPolyhedron()
+  to avoid potential deadlocks in recursive Boolean operations.
+  Courtesy of S.Boogert (London Univ.).
+
 January 28, 2021 I.Hrivnacova, E.Tcherniaev  geom-bool-V10-06-01
 - Added protection against using invalid normal
   in G4ScaledSolid::DistanceToOut(p,v, ...)

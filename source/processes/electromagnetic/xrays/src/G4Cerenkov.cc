@@ -447,10 +447,10 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
     particleType, kineticEnergy, couple);
   G4double Step = Range - RangeMin;
 
-  // If the step is smaller than 1e-16 mm, it may happen that the particle
-  // does not move. See bug 1992.
-  //  2019-03-11: change to 1e-15
-  if(Step < 1.e-15 * mm)
+  // If the step is smaller than G4ThreeVector::getTolerance(), it may happen
+  // that the particle does not move. See bug 1992.
+  static const G4double minAllowedStep = G4ThreeVector::getTolerance();
+  if(Step < minAllowedStep)
     return StepLimit;
 
   if(Step < StepLimit)

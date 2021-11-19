@@ -266,7 +266,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double eDensity = material->GetElectronDensity();
 
   // added ICRU90 stopping data for limited list of materials
-  if(fICRU90) {
+  if(fICRU90 && kineticEnergy < fProtonTlimit) {
     if(material != currentMaterial) {
       currentMaterial = material;
       baseMaterial = material->GetBaseMaterial() 
@@ -277,8 +277,8 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
       G4double e = kineticEnergy*proton_mass_c2/mass;
       G4double dedx = 0.0;
       if(chargeSquare > 1.1 && e < fAlphaTlimit) {
-        dedx = fICRU90->GetElectronicDEDXforAlpha(iICRU90, e)
-          *material->GetDensity()*0.25;
+        dedx = fICRU90->GetElectronicDEDXforProton(iICRU90, e)
+          *material->GetDensity();
       } else if(chargeSquare < 1.1 && e < fProtonTlimit) {
         dedx = fICRU90->GetElectronicDEDXforProton(iICRU90, e)
           *material->GetDensity();

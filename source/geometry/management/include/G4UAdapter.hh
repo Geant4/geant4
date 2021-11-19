@@ -419,6 +419,14 @@ namespace
   G4Mutex pMutex = G4MUTEX_INITIALIZER;
 }
 
+// Free function to enable ostream output
+template <class UnplacedVolume_t>
+std::ostream&
+operator<<(std::ostream& os, const G4UAdapter<UnplacedVolume_t>& s)
+{
+  return s.StreamInfo(os);
+}
+
 template <class UnplacedVolume_t>
 void G4UAdapter<UnplacedVolume_t>::
 ComputeDimensions(G4VPVParameterisation*, const G4int,

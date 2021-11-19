@@ -57,44 +57,44 @@ void G4tgrEvaluator::print_error(G4int estatus) const
   }
 }
 
-G4double fsin(G4double arg) { return std::sin(arg); }
-G4double fcos(G4double arg) { return std::cos(arg); }
-G4double ftan(G4double arg) { return std::tan(arg); }
-G4double fasin(G4double arg) { return std::asin(arg); }
-G4double facos(G4double arg) { return std::acos(arg); }
-G4double fatan(G4double arg) { return std::atan(arg); }
-G4double fatan2(G4double arg1, G4double arg2) { return std::atan2(arg1, arg2); }
-G4double fsinh(G4double arg) { return std::sinh(arg); }
-G4double fcosh(G4double arg) { return std::cosh(arg); }
-G4double ftanh(G4double arg) { return std::tanh(arg); }
-// G4double fasinh( G4double arg ){  return std::asinh(arg); }
-// G4double facosh( G4double arg ){  return std::acosh(arg); }
-// G4double fatanh( G4double arg ){  return std::atanh(arg); }
-G4double fsqrt(G4double arg) { return std::sqrt(arg); }
-G4double fexp(G4double arg) { return std::exp(arg); }
-G4double flog(G4double arg) { return std::log(arg); }
-G4double flog10(G4double arg) { return std::log10(arg); }
-G4double fpow(G4double arg1, G4double arg2) { return std::pow(arg1, arg2); }
+G4double fltsin(G4double arg) { return std::sin(arg); }
+G4double fltcos(G4double arg) { return std::cos(arg); }
+G4double flttan(G4double arg) { return std::tan(arg); }
+G4double fltasin(G4double arg) { return std::asin(arg); }
+G4double fltacos(G4double arg) { return std::acos(arg); }
+G4double fltatan(G4double arg) { return std::atan(arg); }
+G4double fltatan2(G4double arg1, G4double arg2) { return std::atan2(arg1, arg2); }
+G4double fltsinh(G4double arg) { return std::sinh(arg); }
+G4double fltcosh(G4double arg) { return std::cosh(arg); }
+G4double flttanh(G4double arg) { return std::tanh(arg); }
+// G4double fltasinh( G4double arg ){  return std::asinh(arg); }
+// G4double fltacosh( G4double arg ){  return std::acosh(arg); }
+// G4double fltatanh( G4double arg ){  return std::atanh(arg); }
+G4double fltsqrt(G4double arg) { return std::sqrt(arg); }
+G4double fltexp(G4double arg) { return std::exp(arg); }
+G4double fltlog(G4double arg) { return std::log(arg); }
+G4double fltlog10(G4double arg) { return std::log10(arg); }
+G4double fltpow(G4double arg1, G4double arg2) { return std::pow(arg1, arg2); }
 
 // --------------------------------------------------------------------
 void G4tgrEvaluator::AddCommonFunctions()
 {
-  setFunction("sin", (*fsin));
-  setFunction("cos", (*fcos));
-  setFunction("tan", (*ftan));
-  setFunction("asin", (*fasin));
-  setFunction("acos", (*facos));
-  setFunction("atan", (*fatan));
-  setFunction("atan2", (*fatan2));
-  setFunction("sinh", (*fsinh));
-  setFunction("cosh", (*fcosh));
-  setFunction("tanh", (*ftanh));
-  //  setFunction("asinh", (*fasinh));
-  //  setFunction("acosh", (*facosh));
-  //  setFunction("atanh", (*fatanh));
-  setFunction("sqrt", (*fsqrt));
-  setFunction("exp", (*fexp));
-  setFunction("log", (*flog));
-  setFunction("log10", (*flog10));
-  setFunction("pow", (*fpow));
+  setFunction("sin", (*fltsin));
+  setFunction("cos", (*fltcos));
+  setFunction("tan", (*flttan));
+  setFunction("asin", (*fltasin));
+  setFunction("acos", (*fltacos));
+  setFunction("atan", (*fltatan));
+  setFunction("atan2", (*fltatan2));
+  setFunction("sinh", (*fltsinh));
+  setFunction("cosh", (*fltcosh));
+  setFunction("tanh", (*flttanh));
+  //  setFunction("asinh", (*fltasinh));
+  //  setFunction("acosh", (*fltacosh));
+  //  setFunction("atanh", (*fltatanh));
+  setFunction("sqrt", (*fltsqrt));
+  setFunction("exp", (*fltexp));
+  setFunction("log", (*fltlog));
+  setFunction("log10", (*fltlog10));
+  setFunction("pow", (*fltpow));
 }

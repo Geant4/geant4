@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 Sep 21: V. Grichine (xrays-V10-06-11)
+- G4GaussXTRadiator and G4VXTRenergyLoss - Gauss-distributed regular radiator
+  and set/get methods for angle distribution range
+
+14 Sept 21: D. Sawkey (xrays-V10-06-10)
+- G4Cerenkov - fix protection against too small steps (bug 1992, again)
+
 26 May 21: D. Sawkey (xrays-V10-06-09)
 - G4Scintillation: change IsApplicable to all particles except opticalphoton
   and short-lived.  Address bug 2372.

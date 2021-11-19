@@ -333,8 +333,10 @@ void STCyclotronRun::EndOfRun(G4double irradiationTime)
       //       life of the particle, divided by ln(2), in nS
       //----------------------------------------------
 
-      G4double decayConstantMum = 1/(fPrimaryIsotopeTimeTarget[nameMum]*10.E-10);
-      G4double decayConstantDaughter = 1/(fDecayIsotopeTimeTarget[nameDaughter]*10.E-10);
+      G4double decayConstantMum = fPrimaryIsotopeTimeTarget[nameMum]
+                                ? 1/(fPrimaryIsotopeTimeTarget[nameMum]*10.E-10) : 0.;
+      G4double decayConstantDaughter = fDecayIsotopeTimeTarget[nameDaughter]
+                                     ? 1/(fDecayIsotopeTimeTarget[nameDaughter]*10.E-10) : 0.;
 
   
       //----------------------------------------------

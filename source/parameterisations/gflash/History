@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 31st, 2021, M. Verderi (gflash-V10-06-03)
+- Many fixes in src/GFlashSamplingShowerParameterisation.cc in the parameters
+  definition and just cosmetics in src/GFlashSamplingShowerParameterisation.cc.
+
 Sep 23rd, 2020, B. Morgan (gflash-V10-06-02)
 - Remove no longer required include_directories
 

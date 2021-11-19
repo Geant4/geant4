@@ -15,6 +15,9 @@ commit in the repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+August 31, 2021 B.Morgan (geommng-V10-06-07)
+- Provide operator<< as a free function for G4UAdapter to support Geant4Py
+
 November 8, 2020 E.Tcherniaev (geommng-V10-06-06)
 - Bug fix in calculation of normal in G4UAdapter::DistanceToOut()
 

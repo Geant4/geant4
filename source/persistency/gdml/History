@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 September 2021 Gabriele Cosmo (gdml-V10-06-08)
+- G4GDMLWriteStructure: added fatal exception in AssemblyWrite() for the case
+  of nested assemblies, not yet supported for exporting.
+
+13 July 2021 Gabriele Cosmo
+- G4GDMLParser: added utility method to retrieve a generic physical volume
+  by its name.
+
 21 May 2021 Gabriele Cosmo (gdml-V10-06-07)
 - G4GDMLReadSolids: updated optical surface properties based on relatively
   recent introduction of DAVIS interface.

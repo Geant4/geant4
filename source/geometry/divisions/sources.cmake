@@ -37,6 +37,7 @@ geant4_define_module(NAME G4geomdivision
     G4geometrymng
     G4globman
     G4specsolids
+    G4volumes
   GLOBAL_DEPENDENCIES
     G4global
 )

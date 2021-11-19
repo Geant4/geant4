@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 25, 2021 - P.Arce  (geomnav-V10-06-10)
+---------------------------
+- Reduce warning messages in G4PhantomParameterisation::GetReplicaNo(): print
+  only when difference is > kCarTolerance. Addressing problem report #2314.
+
 January 27, 2021 - P.Arce (geomnav-V10-06-09)
 -------------------------
 - G4RegularNavigation: Addressing problem report #2314.

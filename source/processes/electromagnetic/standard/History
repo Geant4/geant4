@@ -17,6 +17,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+27 September 21:  V.Ivanchenko  (emstand-V10-06-21)
+- G4BetheBlochModel - fixed problem #2414, fixed computation of
+    dedx for alpha if ICRU90 data are used
+
 26 January 21:  V.Ivanchenko  (emstand-V10-06-20)
 - G4BetheBlochModel, G4LindhardSorensenIonModel - fixed problem #2312,
     restore computation of maximum energy transfer from Geant4 10.4,

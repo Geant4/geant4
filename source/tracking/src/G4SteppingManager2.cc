@@ -210,6 +210,7 @@ void G4SteppingManager::DefinePhysicalStepLength()
   //
   proposedSafety = DBL_MAX;
   G4double safetyProposedToAndByProcess = proposedSafety;
+  G4bool delegateToTransportation = false;
 
   for(std::size_t kp=0; kp<MAXofAlongStepLoops; ++kp)
   {
@@ -237,10 +238,19 @@ void G4SteppingManager::DefinePhysicalStepLength()
         fStepStatus = fAlongStepDoItProc;
         fStep->GetPostStepPoint()->SetProcessDefinedStep(fCurrentProcess);
       }
+      else if(fCurrentProcess->GetProcessType()==fParallel)
+      { // a parallel world is proposing the shortest but expecting Transportation
+        // to win.
+        delegateToTransportation = true;
+      }
 
       // Transportation is assumed to be the last process in the vector
       //
-      if(kp == MAXofAlongStepLoops-1) { fStepStatus = fGeomBoundary; }
+      if(kp == MAXofAlongStepLoops-1)
+      {
+        fStepStatus = fGeomBoundary;
+        delegateToTransportation = false;
+      }
     }
 
     // Make sure to check the safety, even if Step is not limited 
@@ -259,6 +269,11 @@ void G4SteppingManager::DefinePhysicalStepLength()
       safetyProposedToAndByProcess = proposedSafety;
     }
   } 
+  if(delegateToTransportation)
+  {
+    fStepStatus = fGeomBoundary;
+    fStep->GetPostStepPoint()->SetProcessDefinedStep(fCurrentProcess);
+  }
 }
 
 //////////////////////////////////////////////////////

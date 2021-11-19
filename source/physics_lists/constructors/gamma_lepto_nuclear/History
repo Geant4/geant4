@@ -13,6 +13,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 August 2021  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-06-05)
+- G4EmExtraPhysics - enable synkrotron radiation only for really stable 
+    particles
+
+16 August 2021  Jonas Hahnfeld
+- G4EmExtraPhysics - fix typo to register positron-nuclear process,
+  register model for e-/e+-nuclear in case of general processes,
+  avoid registering synchroton radiation twice for e-/e+
+
 04 November 2020  Vladimir Ivanchenko (phys-ctor-glnuclear-V10-06-04)
 - G4EmExtraPhysics, G4EmMessenger - added a flag to enable G4GammaNuclearXS
     cross section and possibility to use general process for electron and 

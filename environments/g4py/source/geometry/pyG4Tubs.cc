@@ -69,11 +69,6 @@ void export_G4Tubs()
     .def("SetZHalfLength",   &G4Tubs::SetZHalfLength)
     .def("SetStartPhiAngle", &G4Tubs::SetStartPhiAngle)
     .def("SetDeltaPhiAngle", &G4Tubs::SetDeltaPhiAngle)
-    .def("GetRMin",          &G4Tubs::GetRMin)
-    .def("GetRMax",          &G4Tubs::GetRMax)
-    .def("GetDz",            &G4Tubs::GetDz)
-    .def("GetSPhi",          &G4Tubs::GetSPhi)
-    .def("GetDPhi",          &G4Tubs::GetDPhi)
     // operators
     .def(self_ns::str(self))
     ;

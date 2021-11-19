@@ -61,6 +61,12 @@
 #include "G4AntiNeutrinoTau.hh"
 #include "G4NeutrinoTau.hh"
 
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4GenericIon.hh"
+
 #include "G4SynchrotronRadiation.hh"
 #include "G4MuonNuclearProcess.hh"
 #include "G4MuonVDNuclearModel.hh"
@@ -335,20 +341,14 @@ void G4EmExtraPhysics::ConstructProcess()
     ph->RegisterProcess( theSynchRad, electron);
     ph->RegisterProcess( theSynchRad, positron);
     if(synActivatedForAll) {
-      auto myParticleIterator=GetParticleIterator();
-      myParticleIterator->reset();
-      G4ParticleDefinition* particle = nullptr;
+      ph->RegisterProcess( theSynchRad, muonplus);
+      ph->RegisterProcess( theSynchRad, muonminus);
 
-      while( (*myParticleIterator)() ) {
-	particle = myParticleIterator->value();
-	if( particle->GetPDGStable() && particle->GetPDGCharge() != 0.0) { 
-	  if(verbose > 1) {
-	    G4cout << "### G4SynchrotronRadiation for " 
-		   << particle->GetParticleName() << G4endl;
-	  }
-	  ph->RegisterProcess( theSynchRad, particle);
-	}
-      }
+      ph->RegisterProcess( theSynchRad, G4Proton::Proton());
+      ph->RegisterProcess( theSynchRad, G4AntiProton::AntiProton());
+      ph->RegisterProcess( theSynchRad, G4PionPlus::PionPlus());
+      ph->RegisterProcess( theSynchRad, G4PionMinus::PionMinus());
+      ph->RegisterProcess( theSynchRad, G4GenericIon::GenericIon());
     }
   }
   if( fNuActivated )

@@ -5,7 +5,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-07-patch-02    (11-June-2021)
+ Geant4 version Name: geant4-10-07-patch-03    (19-November-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13912,7 +13912,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4      253    5e+03 3.59e+03  3.59e-06        0        0  8.48e+03        Tank Transportation
     5   -5e+03 -4.17e+03 -2.02e+03  3.59e-06        0  1.2e+04  2.05e+04       World Transportation
     6   -5e+03 -4.17e+03 -2.02e+03  3.59e-06        0        0  2.05e+04        Tank Transportation
-    7 -4.54e+03   -5e+03 -2.58e+03  3.59e-06        0  1.1e+03 
+    7 -4.54e+03   -5e+03 -2.58e+03  3.59e-06        0  1.1e
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
@@ -13924,17 +13924,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.420000s Real=1.448480s Sys=0.000000s
+  User=1.020000s Real=1.055091s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.
 Number of events: 1000
-Average number of Cerenkov photons created per event: 16.7 +- 5.44
-Average number of scintillation photons created per event: 20 +- 4.36
-Average number of optical Rayleigh interactions per event: 3.51 +- 2.08
-Average number of optical absorption interactions per event: 15.3 +- 4.18
-Average number of optical Mie interactions per event: 0.057 +- 0.248
-Average number of optical boundary interactions per event: 62.3 +- 16.9
+Average number of Cerenkov photons created per event: 16.7 +- 5.46
+Average number of scintillation photons created per event: 19.9 +- 4.35
+Average number of optical Rayleigh interactions per event: 3.5 +- 2.1
+Average number of optical absorption interactions per event: 15.3 +- 4.21
+Average number of optical Mie interactions per event: 0.055 +- 0.245
+Average number of optical boundary interactions per event: 62.1 +- 16.8
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

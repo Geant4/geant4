@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 15th, 2021 Gabriele Cosmo G01-V10-06-04
+- Fixed minor overlaps in assembly.gdml and axes.gdml samples.
+
 February 3rd, 2021 Gabriele Cosmo G01-V10-06-03
 - Fixed auxiliary.gdml sample to define proper Region tags.
 

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 11th, 2021 Gabriele Cosmo G02-V10-06-02
+- Fixed visualisation settings in input macros.
+
 November 13th, 2020 Ben Morgan G02-V10-06-01
 - Enforce use of Serial RunManager.
 

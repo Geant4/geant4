@@ -49,13 +49,13 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   std::ostringstream message;
-#ifdef G4MULTITHREADED
+  /* #ifdef G4MULTITHREADED
   message << "Divisions for G4Polyhedra currently NOT supported in MT-mode."
           << G4endl
           << "Sorry! Solid: " << msolid->GetName();
   G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
               "GeomDiv0001", FatalException, message);
-#endif
+	      #endif */
 
   G4Polyhedra* msol = (G4Polyhedra*)(msolid);
   if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
@@ -226,8 +226,8 @@ ComputeTransformation( const G4int, G4VPhysicalVolume* physVol ) const
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationPolyhedraRho " << G4endl
-           << " foffset: " << foffset/deg
-           << " - fwidth: " << fwidth/deg << G4endl;
+           << " foffset: " << foffset/CLHEP::deg
+           << " - fwidth: " << fwidth/CLHEP::deg << G4endl;
   }
 #endif
 
@@ -381,10 +381,10 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
   {
-    G4cout << " G4ParameterisationPolyhedraPhi - position: " << posi/deg
+    G4cout << " G4ParameterisationPolyhedraPhi - position: " << posi/CLHEP::deg
            << G4endl
            << " copyNo: " << copyNo
-           << " - fwidth: " << fwidth/deg << G4endl;
+           << " - fwidth: " << fwidth/CLHEP::deg << G4endl;
   }
 #endif
 
@@ -619,11 +619,12 @@ void
 G4ParameterisationPolyhedraZ::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
+  G4double posi;
   if ( fDivisionType == DivNDIV )
   {
     // The position of the centre of copyNo-th mother polycone segment
-
-    G4double posi = ( fOrigParamMother->Z_values[copyNo]
+    
+    posi = ( fOrigParamMother->Z_values[copyNo]
                     + fOrigParamMother->Z_values[copyNo+1])/2;
     physVol->SetTranslation( G4ThreeVector(0, 0, posi) );
   }
@@ -632,7 +633,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
   {
     // The position of the centre of copyNo-th division
 
-    G4double posi = fOrigParamMother->Z_values[0];
+    posi = fOrigParamMother->Z_values[0];
     
     if ( !fReflectedSolid )
       posi += foffset + (2*copyNo + 1) * fwidth/2.;
@@ -648,8 +649,8 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
   if( verbose >= 2 )
   {
     G4cout << " G4ParameterisationPolyhedraZ - position: " << posi << G4endl
-           << " copyNo: " << copyNo << " - foffset: " << foffset/deg
-           << " - fwidth: " << fwidth/deg << G4endl;
+           << " copyNo: " << copyNo << " - foffset: " << foffset/CLHEP::deg
+           << " - fwidth: " << fwidth/CLHEP::deg << G4endl;
   }
 #endif
 
@@ -660,7 +661,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol) const
   {
     G4cout << std::setprecision(8) << " G4ParameterisationPolyhedraZ "
            << copyNo << G4endl
-           << " Position: " << origin << " - Width: " << fwidth
+           << " Position: (0,0,0) - Width: " << fwidth
            << " - Axis: " << faxis  << G4endl;
   }
 #endif

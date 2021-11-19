@@ -87,6 +87,10 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 
     G4Polyhedron* CreatePolyhedron() const;
 
+    void GetVertices(G4ThreeVector& anchor,
+                     G4ThreeVector& p1,
+                     G4ThreeVector& p2,
+                     G4ThreeVector& p3) const;
     std::vector<G4ThreeVector> GetVertices() const;
       // Return the four vertices of the shape.
 };

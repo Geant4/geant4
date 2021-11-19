@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 02, 2021 Vladimir Ivanchenko (run-V10-06-21)
+- G4VModularPhysicsList - fixed destruction of the vector of G4VPhysicsConstructor
+    for the case, when physics list is created but physics is not build (CMS report)
+
 December 07, 2020 Vladimir Ivanchenko (run-V10-06-20)
 - G4PhysicsListHelper - added forgotten processes (general positron 
     and surface reflection) 

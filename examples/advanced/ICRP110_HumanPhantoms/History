@@ -8,6 +8,9 @@
                       Category History file
                       ---------------------
 
+17.11.2021 - Gunter Folger  ICRP110Phantoms-V10-06-02
+-  change URL for download to use file available with 10.7.
+
 15.11.2020 - S. Guatelli; ICRP110Phantoms-V10-06-01
              Migration to G4RunManagerFactory
                     

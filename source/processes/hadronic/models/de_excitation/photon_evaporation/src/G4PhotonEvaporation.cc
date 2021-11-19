@@ -391,6 +391,8 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
       }
     }
   }
+  // if a level has no defined transitions
+  if(0 == ntrans) { isDiscrete = false; }
   if(fVerbose > 2) {
     G4int prec = G4cout.precision(4);
     G4cout << "GenerateGamma: Z= " << nucleus->GetZ_asInt()
