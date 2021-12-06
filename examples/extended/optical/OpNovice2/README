@@ -125,6 +125,8 @@
  Several macros are included.
  boundary.mac: Set the surface to the various types and configurations of
                model, type, etc., shoot optical photons, and record statistics
+ complexRindex.mac: Demonstrates the usage of a complex refractive index and 
+               plots the reflectance/transmittance vs incident angle.
  electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
  fresnel.mac:  Shoot optical photons of fixed polarization and random direction
                at a surface, and plot reflectance/transmittance vs incident

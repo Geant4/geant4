@@ -13,6 +13,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 6, 2021 B.Zatschler (OpNovice2-V10-07-02)
+- complexRindex.mac: new macro to demonstrate usage of complex refractive index
+- SteppingAction.cc: added other reflection and transmission types to histograms
+- PrimaryGeneratorMessenger.cc: fixed command /opnovice2/gun/randomDirection
+
 February 24, 2021 D.Sawkey (OpNovice2-V10-07-00)
 - replace deprecated optical commands and parameters with new ones
 

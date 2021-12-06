@@ -183,6 +183,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
             {
               case Transmission:
                 run->AddTransmission();
+                analysisMan->FillH1(20, angle / deg);
                 break;
               case FresnelRefraction:
                 run->AddFresnelRefraction();
@@ -203,12 +204,15 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
                 break;
               case LambertianReflection:
                 run->AddLambertianReflection();
+                analysisMan->FillH1(21, angle / deg);
                 break;
               case LobeReflection:
                 run->AddLobeReflection();
+                analysisMan->FillH1(21, angle / deg);
                 break;
               case SpikeReflection:
                 run->AddSpikeReflection();
+                analysisMan->FillH1(21, angle / deg);
                 break;
               case BackScattering:
                 run->AddBackScattering();

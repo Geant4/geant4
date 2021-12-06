@@ -61,6 +61,8 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
   fRandomDirectionCmd =
     new G4UIcmdWithABool("/opnovice2/gun/randomDirection", this);
   fRandomDirectionCmd->AvailableForStates(G4State_Idle, G4State_PreInit);
+  fRandomDirectionCmd->SetParameterName("random",true,false);
+  fRandomDirectionCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,7 +93,7 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   }
   else if(command == fRandomDirectionCmd)
   {
-    fPrimaryAction->SetRandomDirection(true);
+    fPrimaryAction->SetRandomDirection(newValue.empty()?true:StoB(newValue));
   }
 }
 
