@@ -464,7 +464,7 @@ class G4RunManager
     inline void SetRandomNumberStoreDir(const G4String& dir)
     {
       G4String dirStr = dir;
-      if(dirStr(dirStr.length() - 1) != '/')
+      if(dirStr.back() != '/')
         dirStr += "/";
     #ifndef WIN32
       G4String shellCmd = "mkdir -p ";

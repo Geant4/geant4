@@ -27,8 +27,6 @@
 // Open Inventor Xt Extended Viewer - 30 Oct 2012
 // Rastislav Ondrasek, Pierre-Luc Gagnon, Frederick Jones TRIUMF
 
-#ifdef G4VIS_BUILD_OIX_DRIVER
-
 #include <stdio.h>
 #include <string.h>
 #include <string>
@@ -4940,5 +4938,3 @@ G4bool HookEventProcState::Notify(G4ApplicationState requiredState)
    }
    return true;
 }
-
-#endif // G4VIS_BUILD_OIX_DRIVER

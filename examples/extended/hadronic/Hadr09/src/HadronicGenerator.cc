@@ -90,8 +90,39 @@
 #include "G4AntiOmegaMinus.hh"
 #include "G4GenericIon.hh"
 
-#include "G4HadronicProcess.hh"
+#include "G4DMesonPlus.hh"
+#include "G4DMesonMinus.hh"
+#include "G4DMesonZero.hh"
+#include "G4AntiDMesonZero.hh"
+#include "G4DsMesonPlus.hh"
+#include "G4DsMesonMinus.hh"
+#include "G4BMesonPlus.hh"
+#include "G4BMesonMinus.hh"
+#include "G4BMesonZero.hh"
+#include "G4AntiBMesonZero.hh"
+#include "G4BsMesonZero.hh"
+#include "G4AntiBsMesonZero.hh"
+#include "G4BcMesonPlus.hh"
+#include "G4BcMesonMinus.hh"
+#include "G4LambdacPlus.hh"
+#include "G4AntiLambdacPlus.hh"
+#include "G4XicPlus.hh"
+#include "G4AntiXicPlus.hh"
+#include "G4XicZero.hh"
+#include "G4AntiXicZero.hh"
+#include "G4OmegacZero.hh"
+#include "G4AntiOmegacZero.hh"
+#include "G4Lambdab.hh"
+#include "G4AntiLambdab.hh"
+#include "G4XibZero.hh"
+#include "G4AntiXibZero.hh"
+#include "G4XibMinus.hh"
+#include "G4AntiXibMinus.hh"
+#include "G4OmegabMinus.hh"
+#include "G4AntiOmegabMinus.hh"
+
 #include "G4HadronInelasticProcess.hh"
+#include "G4HadronicParameters.hh"
 
 #include "G4CascadeInterface.hh"
 #include "G4TheoFSGenerator.hh"
@@ -123,7 +154,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
-  fPhysicsCase( physicsCase ), fPhysicsCaseIsSupported( false ), fPartTable( nullptr )
+  fPhysicsCase( physicsCase ), fPhysicsCaseIsSupported( false ),
+  fLastHadronicProcess( nullptr ), fPartTable( nullptr )
 {
   // The constructor set-ups all the particles, models, cross sections and
   // hadronic inelastic processes.
@@ -142,7 +174,7 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
   //   the target nucleus from the target material.
   
   // Definition of particles
-  G4GenericIon* gion = G4GenericIon::GenericIon();
+  G4GenericIon* gion = G4GenericIon::Definition();
   gion->SetProcessManager( new G4ProcessManager( gion ) );
   G4DecayPhysics* decays = new G4DecayPhysics;
   decays->ConstructParticle();  
@@ -173,9 +205,13 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
     theINCLmodel->SetDeExcitation( theAblaInterface );
   }
   
-  // Build the FTFP model (FTF/Preco) : 3 instances with different energy intervals
-  G4TheoFSGenerator* theFTFPmodel = new G4TheoFSGenerator;
-  theFTFPmodel->SetMaxEnergy( 100.0*TeV );  // Needed to run above 25 GeV
+  // Build the FTFP model (FTF/Preco) : 4 instances with different kinetic energy intervals.
+  // (Notice that these kinetic energy intervals are applied per nucleons, so they are fine
+  // for all types of hadron and ion projectile).
+  // Model instance without energy constraint.
+  // (Used for the case of FTFP model, and for light anti-ions in all physics lists.)
+  G4TheoFSGenerator* theFTFPmodel = new G4TheoFSGenerator( "FTFP" );
+  theFTFPmodel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface;
   theCascade->SetDeExcitation( thePreEquilib );
   theFTFPmodel->SetTransport( theCascade );
@@ -183,21 +219,36 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
   G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay( theLundFragmentation );
   G4FTFModel* theStringModel = new G4FTFModel;
   theStringModel->SetFragmentationModel( theStringDecay );
-  theFTFPmodel->SetHighEnergyGenerator( theStringModel );
 
-  G4TheoFSGenerator* theFTFPmodel_constrained = new G4TheoFSGenerator;
-  theFTFPmodel_constrained->SetMaxEnergy( 100.0*TeV );  // Needed to run above 25 GeV
+  // If the following line is set, then the square of the impact parameter is sampled
+  // randomly from a flat distribution in the range [ Bmin*Bmin, Bmax*Bmax ]
+  //theStringModel->SetBminBmax( 0.0, 2.0*fermi );  //***LOOKHERE*** CHOOSE IMPACT PARAMETER MIN & MAX
+
+  theFTFPmodel->SetHighEnergyGenerator( theStringModel );
+  // Model instance with constraint to be above a kinetic energy threshold.
+  // (Used for ions in all physics lists, and, in the case of non-QGS-based physics lists,
+  // also for pions, kaons, nucleons and hyperons.)  
+  G4TheoFSGenerator* theFTFPmodel_aboveThreshold = new G4TheoFSGenerator( "FTFP" );
+  theFTFPmodel_aboveThreshold->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+  theFTFPmodel_aboveThreshold->SetTransport( theCascade );
+  theFTFPmodel_aboveThreshold->SetHighEnergyGenerator( theStringModel );
+  // Model instance with constraint to be within two kinetic energy thresholds.
+  // (Used in the case of QGS-based physics lists for pions, kaons, nucleons and hyperons.)  
+  G4TheoFSGenerator* theFTFPmodel_constrained = new G4TheoFSGenerator( "FTFP" );
+  theFTFPmodel_constrained->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   theFTFPmodel_constrained->SetTransport( theCascade );
   theFTFPmodel_constrained->SetHighEnergyGenerator( theStringModel );
+  // Model instance to be used down to zero kinetic energy, with eventual constraint
+  // - in the case of QGS-based physics lists - to be below a kinetic energy threshold.
+  // (Used for anti-baryons, anti-hyperons, and charmed and bottom hadrons.)
+  G4TheoFSGenerator* theFTFPmodel_belowThreshold = new G4TheoFSGenerator( "FTFP" );
+  theFTFPmodel_belowThreshold->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+  theFTFPmodel_belowThreshold->SetTransport( theCascade );
+  theFTFPmodel_belowThreshold->SetHighEnergyGenerator( theStringModel );
 
-  G4TheoFSGenerator* theFTFPmodel_halfConstrained = new G4TheoFSGenerator;
-  theFTFPmodel_halfConstrained->SetMaxEnergy( 100.0*TeV );  // Needed to run above 25 GeV
-  theFTFPmodel_halfConstrained->SetTransport( theCascade );
-  theFTFPmodel_halfConstrained->SetHighEnergyGenerator( theStringModel );
- 
   // Build the QGSP model (QGS/Preco)
-  G4TheoFSGenerator* theQGSPmodel = new G4TheoFSGenerator;
-  theQGSPmodel->SetMaxEnergy( 100.0*TeV );  // Needed to run above 25 GeV
+  G4TheoFSGenerator* theQGSPmodel = new G4TheoFSGenerator( "QGSP" );
+  theQGSPmodel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   theQGSPmodel->SetTransport( theCascade );
   G4QGSMFragmentation* theQgsmFragmentation = new G4QGSMFragmentation;
   G4ExcitedStringDecay* theQgsmStringDecay = new G4ExcitedStringDecay( theQgsmFragmentation );
@@ -206,6 +257,48 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
   theQGSPmodel->SetHighEnergyGenerator( theQgsmStringModel );
   G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;  // QGSP uses quasi-elastic
   theQGSPmodel->SetQuasiElasticChannel( theQuasiElastic );
+
+  // For the case of "physics-list proxies", select the energy range for each hadronic model.
+  // Note: the transition energy between hadronic models vary between physics lists,
+  //       type of hadrons, and version of Geant4. Here, for simplicity, we use an uniform
+  //       energy transition for all types of hadrons and regardless of the Geant4 version;
+  //       moreover, for "FTFP_INCLXX" we use a different energy transition range
+  //       between FTFP and INCL than in the real physics list.
+  if ( fPhysicsCase == "FTFP_BERT_ATL"  ||
+       fPhysicsCase == "FTFP_BERT"      ||
+       fPhysicsCase == "FTFP_INCLXX"    ||
+       fPhysicsCase == "QGSP_BERT"      ||
+       fPhysicsCase == "QGSP_BIC" ) {
+    const G4double ftfpMinE = G4HadronicParameters::Instance()->GetMinEnergyTransitionFTF_Cascade();
+    const G4double bertMaxE = G4HadronicParameters::Instance()->GetMaxEnergyTransitionFTF_Cascade();
+    const G4double ftfpMinE_ATL =  9.0*CLHEP::GeV;
+    const G4double bertMaxE_ATL = 12.0*CLHEP::GeV;
+    const G4double ftfpMaxE = G4HadronicParameters::Instance()->GetMaxEnergyTransitionQGS_FTF();
+    const G4double qgspMinE = G4HadronicParameters::Instance()->GetMinEnergyTransitionQGS_FTF();
+    theFTFPmodel->SetMinEnergy( 0.0 );
+    theFTFPmodel_belowThreshold->SetMinEnergy( 0.0 );
+    if ( fPhysicsCase == "FTFP_BERT_ATL" ) {
+      theBERTmodel->SetMaxEnergy( bertMaxE_ATL );
+      theIonBICmodel->SetMaxEnergy( bertMaxE_ATL );
+      theFTFPmodel_aboveThreshold->SetMinEnergy( ftfpMinE_ATL );
+      theFTFPmodel_constrained->SetMinEnergy( ftfpMinE_ATL );
+    } else {
+      theBERTmodel->SetMaxEnergy( bertMaxE );
+      theIonBICmodel->SetMaxEnergy( bertMaxE );
+      theFTFPmodel_aboveThreshold->SetMinEnergy( ftfpMinE );
+      theFTFPmodel_constrained->SetMinEnergy( ftfpMinE );
+    }
+    if ( fPhysicsCase == "FTFP_INCLXX" ) {
+      theINCLmodel->SetMaxEnergy( bertMaxE );
+    }
+    if ( fPhysicsCase == "QGSP_BERT"  ||
+         fPhysicsCase == "QGSP_BIC" ) {
+      theFTFPmodel_constrained->SetMaxEnergy( ftfpMaxE );
+      theFTFPmodel_belowThreshold->SetMaxEnergy( ftfpMaxE );
+      theQGSPmodel->SetMinEnergy( qgspMinE );
+      theBICmodel->SetMaxEnergy( bertMaxE );
+    }
+  }
 
   // Cross sections (needed by Geant4 to sample the target nucleus from the target material)
   G4VCrossSectionDataSet* thePionMinusXSdata =
@@ -335,6 +428,110 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
   fProcessMap.insert( ProcessPair( G4AntiOmegaMinus::Definition(),
                                    theAntiOmegaMinusInelasticProcess ) );
 
+  G4HadronicProcess* theDPlusInelasticProcess =
+    new G4HadronInelasticProcess( "D+Inelastic", G4DMesonPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4DMesonPlus::Definition(), theDPlusInelasticProcess ) );
+  G4HadronicProcess* theDMinusInelasticProcess =
+    new G4HadronInelasticProcess( "D-Inelastic", G4DMesonMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4DMesonMinus::Definition(), theDMinusInelasticProcess ) );
+  G4HadronicProcess* theDZeroInelasticProcess =
+    new G4HadronInelasticProcess( "D0Inelastic", G4DMesonZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4DMesonZero::Definition(), theDZeroInelasticProcess ) );
+  G4HadronicProcess* theAntiDZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_D0Inelastic", G4AntiDMesonZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiDMesonZero::Definition(),
+				   theAntiDZeroInelasticProcess ) );
+  G4HadronicProcess* theDsPlusInelasticProcess =
+    new G4HadronInelasticProcess( "Ds+Inelastic", G4DsMesonPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4DsMesonPlus::Definition(), theDsPlusInelasticProcess ) );
+  G4HadronicProcess* theDsMinusInelasticProcess =
+    new G4HadronInelasticProcess( "Ds-Inelastic", G4DsMesonMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4DsMesonMinus::Definition(), theDsMinusInelasticProcess ) );
+  G4HadronicProcess* theBPlusInelasticProcess =
+    new G4HadronInelasticProcess( "B+Inelastic", G4BMesonPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4BMesonPlus::Definition(), theBPlusInelasticProcess ) );
+  G4HadronicProcess* theBMinusInelasticProcess =
+    new G4HadronInelasticProcess( "B-Inelastic", G4BMesonMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4BMesonMinus::Definition(), theBMinusInelasticProcess ) );
+  G4HadronicProcess* theBZeroInelasticProcess =
+    new G4HadronInelasticProcess( "B0Inelastic", G4BMesonZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4BMesonZero::Definition(), theBZeroInelasticProcess ) );
+  G4HadronicProcess* theAntiBZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_B0Inelastic", G4AntiBMesonZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiBMesonZero::Definition(),
+				   theAntiBZeroInelasticProcess ) );
+  G4HadronicProcess* theBsZeroInelasticProcess =
+    new G4HadronInelasticProcess( "Bs0Inelastic", G4BsMesonZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4BsMesonZero::Definition(), theBsZeroInelasticProcess ) );
+  G4HadronicProcess* theAntiBsZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_Bs0Inelastic", G4AntiBsMesonZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiBsMesonZero::Definition(),
+				   theAntiBsZeroInelasticProcess ) );
+  G4HadronicProcess* theBcPlusInelasticProcess =
+    new G4HadronInelasticProcess( "Bc+Inelastic", G4BcMesonPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4BcMesonPlus::Definition(), theBcPlusInelasticProcess ) );
+  G4HadronicProcess* theBcMinusInelasticProcess =
+    new G4HadronInelasticProcess( "Bc-Inelastic", G4BcMesonMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4BcMesonMinus::Definition(), theBcMinusInelasticProcess ) );
+  G4HadronicProcess* theLambdacPlusInelasticProcess =
+    new G4HadronInelasticProcess( "lambda_c+Inelastic", G4LambdacPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4LambdacPlus::Definition(),
+				   theLambdacPlusInelasticProcess ) );
+  G4HadronicProcess* theAntiLambdacPlusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_lambda_c+Inelastic", G4AntiLambdacPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiLambdacPlus::Definition(),
+				   theAntiLambdacPlusInelasticProcess ) );
+  G4HadronicProcess* theXicPlusInelasticProcess =
+    new G4HadronInelasticProcess( "xi_c+Inelastic", G4XicPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4XicPlus::Definition(), theXicPlusInelasticProcess ) );
+  G4HadronicProcess* theAntiXicPlusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_xi_c+Inelastic", G4AntiXicPlus::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiXicPlus::Definition(),
+				   theAntiXicPlusInelasticProcess ) );
+  G4HadronicProcess* theXicZeroInelasticProcess =
+    new G4HadronInelasticProcess( "xi_c0Inelastic", G4XicZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4XicZero::Definition(), theXicZeroInelasticProcess ) );
+  G4HadronicProcess* theAntiXicZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_xi_c0Inelastic", G4AntiXicZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiXicZero::Definition(),
+				   theAntiXicZeroInelasticProcess ) );
+  G4HadronicProcess* theOmegacZeroInelasticProcess =
+    new G4HadronInelasticProcess( "omega_c0Inelastic", G4OmegacZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4OmegacZero::Definition(), theOmegacZeroInelasticProcess ) );
+  G4HadronicProcess* theAntiOmegacZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_omega_c0Inelastic", G4AntiOmegacZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiOmegacZero::Definition(),
+				   theAntiOmegacZeroInelasticProcess ) );
+  G4HadronicProcess* theLambdabInelasticProcess =
+    new G4HadronInelasticProcess( "lambda_bInelastic", G4Lambdab::Definition() );
+  fProcessMap.insert( ProcessPair( G4Lambdab::Definition(), theLambdabInelasticProcess ) );
+  G4HadronicProcess* theAntiLambdabInelasticProcess =
+    new G4HadronInelasticProcess( "anti_lambda_bInelastic", G4AntiLambdab::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiLambdab::Definition(),
+				   theAntiLambdabInelasticProcess ) );
+  G4HadronicProcess* theXibZeroInelasticProcess =
+    new G4HadronInelasticProcess( "xi_b0Inelastic", G4XibZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4XibZero::Definition(), theXibZeroInelasticProcess ) );
+  G4HadronicProcess* theAntiXibZeroInelasticProcess =
+    new G4HadronInelasticProcess( "anti_xi_b0Inelastic", G4AntiXibZero::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiXibZero::Definition(),
+				   theAntiXibZeroInelasticProcess ) );
+  G4HadronicProcess* theXibMinusInelasticProcess =
+    new G4HadronInelasticProcess( "xi_b-Inelastic", G4XibMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4XibMinus::Definition(), theXibMinusInelasticProcess ) );
+  G4HadronicProcess* theAntiXibMinusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_xi_b-Inelastic", G4AntiXibMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiXibMinus::Definition(),
+				   theAntiXibMinusInelasticProcess ) );
+  G4HadronicProcess* theOmegabMinusInelasticProcess =
+    new G4HadronInelasticProcess( "omega_b-Inelastic", G4OmegabMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4OmegabMinus::Definition(),
+				   theOmegabMinusInelasticProcess ) );
+  G4HadronicProcess* theAntiOmegabMinusInelasticProcess =
+    new G4HadronInelasticProcess( "anti_omega_b-Inelastic", G4AntiOmegabMinus::Definition() );
+  fProcessMap.insert( ProcessPair( G4AntiOmegabMinus::Definition(),
+				   theAntiOmegabMinusInelasticProcess ) );
+
   // Add the cross sections to the corresponding hadronic processes
   thePionMinusInelasticProcess->AddDataSet( thePionMinusXSdata );
   thePionPlusInelasticProcess->AddDataSet( thePionPlusXSdata );
@@ -367,7 +564,38 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
   theAntiXiMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
   theAntiXiZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
   theAntiOmegaMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
-  
+
+  theDPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theDMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theDZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiDZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theDsPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theDsMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theBPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theBMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theBZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiBZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theBsZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiBsZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theBcPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theBcMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theLambdacPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiLambdacPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theXicPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiXicPlusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theXicZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiXicZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theOmegacZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiOmegacZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theLambdabInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiLambdabInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theXibZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiXibZeroInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theXibMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiXibMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theOmegabMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+  theAntiOmegabMinusInelasticProcess->AddDataSet( theHyperonsXSdata );
+
   // Register the proper hadronic model(s) to the corresponding hadronic processes.
   // Note: hadronic models ("BERT", "BIC", "IonBIC", "INCL", "FTFP", "QGSP") are
   //       used for the hadrons and energies they are applicable
@@ -407,18 +635,17 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
        fPhysicsCase == "FTFP_INCLXX"    ||
        fPhysicsCase == "QGSP_BERT"      ||
        fPhysicsCase == "QGSP_BIC"  ) {
-    // The Binary Light Ion model is used for light ions in all physics lists
+    // The Binary Light Ion model is used for ions in all physics lists
     fPhysicsCaseIsSupported = true;
     theDeuteronInelasticProcess->RegisterMe( theIonBICmodel );    
     theTritonInelasticProcess->RegisterMe( theIonBICmodel );    
     theHe3InelasticProcess->RegisterMe( theIonBICmodel );    
     theAlphaInelasticProcess->RegisterMe( theIonBICmodel );  
+    theIonInelasticProcess->RegisterMe( theIonBICmodel );
   }
   if ( fPhysicsCase == "QGSP"       ||
        fPhysicsCase == "QGSP_BERT"  ||
        fPhysicsCase == "QGSP_BIC" ) {
-    // Although the QGSP model can handle also hyperons and anti-baryons,
-    // in the physics lists it is used only for pions, kaons and nucleons
     fPhysicsCaseIsSupported = true;
     thePionMinusInelasticProcess->RegisterMe( theQGSPmodel );
     thePionPlusInelasticProcess->RegisterMe( theQGSPmodel );
@@ -428,26 +655,50 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
     theKaonZeroSInelasticProcess->RegisterMe( theQGSPmodel );
     theProtonInelasticProcess->RegisterMe( theQGSPmodel );
     theNeutronInelasticProcess->RegisterMe( theQGSPmodel );
-    if ( fPhysicsCase == "QGSP" ) {
-      theLambdaInelasticProcess->RegisterMe( theQGSPmodel );
-      theSigmaMinusInelasticProcess->RegisterMe( theQGSPmodel );
-      theSigmaPlusInelasticProcess->RegisterMe( theQGSPmodel );
-      theXiMinusInelasticProcess->RegisterMe( theQGSPmodel );
-      theXiZeroInelasticProcess->RegisterMe( theQGSPmodel );
-      theOmegaMinusInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiProtonInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiNeutronInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiDeuteronInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiTritonInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiHe3InelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiAlphaInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiLambdaInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiSigmaMinusInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiSigmaPlusInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiXiMinusInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiXiZeroInelasticProcess->RegisterMe( theQGSPmodel );
-      theAntiOmegaMinusInelasticProcess->RegisterMe( theQGSPmodel );
-    }
+    theLambdaInelasticProcess->RegisterMe( theQGSPmodel );
+    theSigmaMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theSigmaPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theXiMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theXiZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theOmegaMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiProtonInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiNeutronInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiLambdaInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiSigmaMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiSigmaPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiXiMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiXiZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiOmegaMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theDPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theDMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theDZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiDZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theDsPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theDsMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theBPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theBMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theBZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiBZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theBsZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiBsZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theBcPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theBcMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theLambdacPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiLambdacPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theXicPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiXicPlusInelasticProcess->RegisterMe( theQGSPmodel );
+    theXicZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiXicZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theOmegacZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiOmegacZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theLambdabInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiLambdabInelasticProcess->RegisterMe( theQGSPmodel );
+    theXibZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiXibZeroInelasticProcess->RegisterMe( theQGSPmodel );
+    theXibMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiXibMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theOmegabMinusInelasticProcess->RegisterMe( theQGSPmodel );
+    theAntiOmegabMinusInelasticProcess->RegisterMe( theQGSPmodel );
   }
   if ( fPhysicsCase == "BERT"           ||
        fPhysicsCase == "FTFP_BERT_ATL"  ||
@@ -466,7 +717,7 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
        fPhysicsCase == "FTFP_INCLXX"    ||
        fPhysicsCase == "QGSP_BERT"      ||
        fPhysicsCase == "QGSP_BIC" ) {
-    // The BERT model is used for kaons and hyperons in all physics lists, but not for light ions
+    // The BERT model is used for kaons and hyperons in all physics lists
     fPhysicsCaseIsSupported = true;
     theKaonMinusInelasticProcess->RegisterMe( theBERTmodel );
     theKaonPlusInelasticProcess->RegisterMe( theBERTmodel );
@@ -478,12 +729,6 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
     theXiMinusInelasticProcess->RegisterMe( theBERTmodel );
     theXiZeroInelasticProcess->RegisterMe( theBERTmodel );
     theOmegaMinusInelasticProcess->RegisterMe( theBERTmodel );
-    if ( fPhysicsCase == "BERT" ) {
-      theDeuteronInelasticProcess->RegisterMe( theBERTmodel );
-      theTritonInelasticProcess->RegisterMe( theBERTmodel );
-      theHe3InelasticProcess->RegisterMe( theBERTmodel );
-      theAlphaInelasticProcess->RegisterMe( theBERTmodel );
-    }
   }
   if ( fPhysicsCase == "FTFP"           ||
        fPhysicsCase == "FTFP_BERT_ATL"  ||
@@ -494,20 +739,16 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
     // The FTFP model is applied for all hadrons, but in different energy intervals according
     // whether it is consider as a stand-alone hadronic model, or within physics lists
     fPhysicsCaseIsSupported = true;
-    theAntiProtonInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiNeutronInelasticProcess->RegisterMe( theFTFPmodel );
     theAntiDeuteronInelasticProcess->RegisterMe( theFTFPmodel );
     theAntiTritonInelasticProcess->RegisterMe( theFTFPmodel );
     theAntiHe3InelasticProcess->RegisterMe( theFTFPmodel );
     theAntiAlphaInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiLambdaInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiSigmaMinusInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiSigmaPlusInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiXiMinusInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiXiZeroInelasticProcess->RegisterMe( theFTFPmodel );
-    theAntiOmegaMinusInelasticProcess->RegisterMe( theFTFPmodel );
-    G4TheoFSGenerator* theFTFPmodelToBeUsed = theFTFPmodel_constrained;
-    if ( fPhysicsCase == "FTFP" ) theFTFPmodelToBeUsed = theFTFPmodel;
+    G4TheoFSGenerator* theFTFPmodelToBeUsed = theFTFPmodel_aboveThreshold;
+    if ( fPhysicsCase == "FTFP" ) {
+      theFTFPmodelToBeUsed = theFTFPmodel;
+    } else if ( fPhysicsCase == "QGSP_BERT"  ||  fPhysicsCase == "QGSP_BIC" ) {
+      theFTFPmodelToBeUsed = theFTFPmodel_constrained;
+    }	       
     thePionMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     thePionPlusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theKaonMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
@@ -515,20 +756,58 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
     theKaonZeroLInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theKaonZeroSInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theProtonInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiProtonInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
     theNeutronInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theFTFPmodelToBeUsed = theFTFPmodel_halfConstrained;
+    theAntiNeutronInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theLambdaInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiLambdaInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theSigmaMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiSigmaMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theSigmaPlusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiSigmaPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theXiMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiXiMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theXiZeroInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiXiZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theOmegaMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
+    theAntiOmegaMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theDPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theDMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theDZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiDZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theDsPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theDsMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theBPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theBMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theBZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiBZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theBsZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiBsZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theBcPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theBcMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theLambdacPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiLambdacPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theXicPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiXicPlusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theXicZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiXicZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theOmegacZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiOmegacZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theLambdabInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiLambdabInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theXibZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiXibZeroInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theXibMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiXibMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theOmegabMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theAntiOmegabMinusInelasticProcess->RegisterMe( theFTFPmodel_belowThreshold );
+    theFTFPmodelToBeUsed = theFTFPmodel_aboveThreshold;
     if ( fPhysicsCase == "FTFP" ) theFTFPmodelToBeUsed = theFTFPmodel;
     theDeuteronInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theTritonInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theHe3InelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theAlphaInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
     theIonInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theLambdaInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theSigmaMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theSigmaPlusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theXiMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theXiZeroInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
-    theOmegaMinusInelasticProcess->RegisterMe( theFTFPmodelToBeUsed );
   }
 
   if ( ! fPhysicsCaseIsSupported ) {
@@ -536,47 +815,9 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
            << fPhysicsCase << G4endl
            << "\t Re-try by choosing one of the following:" << G4endl
            << "\t - Hadronic models : BERT, BIC, IonBIC, INCL, FTFP, QGSP" << G4endl
-           << "\t - \"Physics-list proxies\" : FTFP_BERT_ATL (default), FTFP_BERT, \
+           << "\t - \"Physics-list proxies\" : FTFP_BERT (default), FTFP_BERT_ATL, \
                                                QGSP_BERT, QGSP_BIC, FTFP_INCLXX"
            << G4endl;
-  }
-
-  // For the case of "physics-list proxies", select the energy range for each hadronic model.
-  // Note: the transition energy between hadronic models vary between physics lists,
-  //       type of hadrons, and version of Geant4. Here, for simplicity, we use an uniform
-  //       energy transition for all types of hadrons and regarless of the Geant4 version;
-  //       moreover, for "FTFP_INCLXX" we use a different energy transition range
-  //       between FTFP and INCL than in the real physics list.
-  if ( fPhysicsCase == "FTFP_BERT_ATL"  ||
-       fPhysicsCase == "FTFP_BERT"      ||
-       fPhysicsCase == "FTFP_INCLXX"    ||
-       fPhysicsCase == "QGSP_BERT"      ||
-       fPhysicsCase == "QGSP_BIC" ) {
-    const G4double ftfpMinE = 3.0*CLHEP::GeV;
-    const G4double bertMaxE = 6.0*CLHEP::GeV;
-    const G4double ftfpMinE_ATL = 9.0*CLHEP::GeV;
-    const G4double bertMaxE_ATL = 12.0*CLHEP::GeV;
-    const G4double ftfpMaxE = 25.0*CLHEP::GeV;
-    const G4double qgspMinE = 12.0*CLHEP::GeV;
-    theFTFPmodel->SetMinEnergy( 0.0 );
-    theIonBICmodel->SetMaxEnergy( bertMaxE );
-    theFTFPmodel_halfConstrained->SetMinEnergy( ftfpMinE );
-    if ( fPhysicsCase == "FTFP_BERT_ATL" ) {
-      theBERTmodel->SetMaxEnergy( bertMaxE_ATL );
-      theFTFPmodel_constrained->SetMinEnergy( ftfpMinE_ATL );
-    } else {
-      theBERTmodel->SetMaxEnergy( bertMaxE );
-      theFTFPmodel_constrained->SetMinEnergy( ftfpMinE );
-    }
-    if ( fPhysicsCase == "FTFP_INCLXX" ) {
-      theINCLmodel->SetMaxEnergy( bertMaxE );
-    }
-    if ( fPhysicsCase == "QGSP_BERT"  ||
-         fPhysicsCase == "QGSP_BIC" ) {
-      theFTFPmodel_constrained->SetMaxEnergy( ftfpMaxE );
-      theQGSPmodel->SetMinEnergy( qgspMinE );
-      theBICmodel->SetMaxEnergy( bertMaxE );
-    }
   }
 
 }
@@ -590,7 +831,7 @@ HadronicGenerator::~HadronicGenerator() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool HadronicGenerator::IsApplicable( const G4String &nameProjectile,
-                                        const G4double projectileEnergy ) {
+                                        const G4double projectileEnergy ) const {
   G4ParticleDefinition* projectileDefinition = fPartTable->FindParticle( nameProjectile );
   return IsApplicable( projectileDefinition, projectileEnergy );
 }
@@ -598,34 +839,34 @@ G4bool HadronicGenerator::IsApplicable( const G4String &nameProjectile,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool HadronicGenerator::IsApplicable( G4ParticleDefinition* projectileDefinition,
-                                        const G4double projectileEnergy ) {
+                                        const G4double projectileEnergy ) const {
+  if ( projectileDefinition == nullptr ) return false;
   G4bool isApplicable = true;
   // No restrictions for "physics list proxies" because they cover all hadron types and energies.
-  // For the individual models, instead, we need to consider their limitations.
+  // For the individual models, instead, we need to consider their limitations. 
   if ( fPhysicsCase == "BERT" ) {
-    // We consider BERT model below 15 GeV and not for antibaryons
-    if ( projectileEnergy > 15.0*CLHEP::GeV                     ||
-         projectileDefinition == G4AntiProton::Definition()     ||
-         projectileDefinition == G4AntiNeutron::Definition()    ||
-         projectileDefinition == G4AntiDeuteron::Definition()   ||
-         projectileDefinition == G4AntiTriton::Definition()     ||
-         projectileDefinition == G4AntiHe3::Definition()        ||
-         projectileDefinition == G4AntiAlpha::Definition()      ||
-         projectileDefinition == G4AntiLambda::Definition()     ||
-         projectileDefinition == G4AntiSigmaMinus::Definition() ||
-         projectileDefinition == G4AntiSigmaPlus::Definition()  ||
-         projectileDefinition == G4AntiXiMinus::Definition()    ||
-         projectileDefinition == G4AntiXiZero::Definition()     ||
-         projectileDefinition == G4AntiOmegaMinus::Definition() ) {
+    // We consider BERT model below 15 GeV
+    if ( ( ( projectileDefinition != G4PionMinus::Definition()  ) &&
+           ( projectileDefinition != G4PionPlus::Definition()   ) &&
+           ( projectileDefinition != G4Proton::Definition()     ) &&
+           ( projectileDefinition != G4Neutron::Definition()    ) &&
+           ( projectileDefinition != G4Lambda::Definition()     ) &&
+           ( projectileDefinition != G4SigmaMinus::Definition() ) &&
+           ( projectileDefinition != G4SigmaPlus::Definition()  ) &&
+           ( projectileDefinition != G4XiMinus::Definition()    ) &&
+           ( projectileDefinition != G4XiZero::Definition()     ) &&
+           ( projectileDefinition != G4OmegaMinus::Definition() ) ) ||
+         ( projectileEnergy > 15.0*CLHEP::GeV ) ) {
       isApplicable = false;
     }
   } else if ( fPhysicsCase == "QGSP" ) {
-    // We consider QGSP above 2 GeV and not for light ions or anti-ions
+    // We consider QGSP above 2 GeV and not for ions or anti-ions
     if ( projectileEnergy < 2.0*CLHEP::GeV                    ||
          projectileDefinition == G4Deuteron::Definition()     ||
          projectileDefinition == G4Triton::Definition()       ||
          projectileDefinition == G4He3::Definition()          ||
          projectileDefinition == G4Alpha::Definition()        ||
+         projectileDefinition == G4GenericIon::Definition()   ||
          projectileDefinition == G4AntiDeuteron::Definition() ||
          projectileDefinition == G4AntiTriton::Definition()   ||
          projectileDefinition == G4AntiHe3::Definition()      ||
@@ -695,7 +936,6 @@ GenerateInteraction( G4ParticleDefinition* projectileDefinition, const G4double 
   //       << "\t" << projectileEnergy/CLHEP::GeV
   //       << " GeV \t" << projectileDirection
   //       << "\t" << ( targetMaterial ? targetMaterial->GetName() : "NULL" );
-
   if ( ! IsApplicable( projectileDefinition, projectileEnergy ) ) {
     //G4cout << " -> NOT applicable !" ; //<< G4endl;  // Debugging print-out
     return aChange;
@@ -741,17 +981,116 @@ GenerateInteraction( G4ParticleDefinition* projectileDefinition, const G4double 
   //  return aChange;
   //}
 
-  // Finally, the hadronic interaction
+  // Finally, the hadronic interaction: hadron projectile and ion projectile
+  // need to be treated slightly differently
   G4HadronicProcess* theProcess = nullptr;
-  auto mapIndex = fProcessMap.find( projectileDefinition );
+  G4ParticleDefinition* theProjectileDef = nullptr;
+  if ( projectileDefinition->IsGeneralIon() ) {
+    theProjectileDef = G4GenericIon::Definition();
+  } else {
+    theProjectileDef = projectileDefinition;
+  }
+  auto mapIndex = fProcessMap.find( theProjectileDef );
   if ( mapIndex != fProcessMap.end() ) theProcess = mapIndex->second;
-  if ( theProcess ) aChange = theProcess->PostStepDoIt( *gTrack, *step );
-                    //**************************************************
+  if ( theProcess != nullptr ) {
+    aChange = theProcess->PostStepDoIt( *gTrack, *step );
+    //**************************************************
+  } else {
+    G4cerr << "ERROR: theProcess is nullptr !" << G4endl;
+  }
+  fLastHadronicProcess = theProcess;
   //delete pFrame;
   //delete lFrame;
   //delete sFrame;
 
   return aChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double HadronicGenerator::GetImpactParameter() const {
+  G4double impactParameter = -999.0 * fermi;
+  G4HadronicProcess* hadProcess = GetHadronicProcess();
+  G4HadronicInteraction* hadInteraction = GetHadronicInteraction();
+  G4HadronicInteraction* wantedHadInteraction =
+    const_cast< G4HadronicProcess* >( hadProcess )->GetHadronicModel( "FTFP" );
+  if ( hadInteraction != nullptr && hadInteraction == wantedHadInteraction ) {
+    // FTFP has handled the inelastic hadronic interaction.
+    G4TheoFSGenerator* theoFSGenerator = dynamic_cast< G4TheoFSGenerator* >( hadInteraction );
+    if ( theoFSGenerator != nullptr ) {
+      const G4FTFModel* ftfModel = dynamic_cast< const G4FTFModel* >( theoFSGenerator->GetHighEnergyGenerator() );
+      if ( ftfModel != nullptr ) {
+	// ftfModel points to the G4FTFModel object instance that handled the
+	// inelastic hadronic interaction.
+        impactParameter = ftfModel->GetImpactParameter();
+        //G4cout << "\t impactParameter = " << impactParameter/fermi << " fm" << G4endl;
+      }
+    }
+  }
+  return impactParameter;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int HadronicGenerator::GetNumberOfProjectileSpectatorNucleons() const {
+  G4double numProjectileSpectatorNucleons = -999;
+  G4HadronicProcess* hadProcess = GetHadronicProcess();
+  G4HadronicInteraction* hadInteraction = GetHadronicInteraction();
+  G4HadronicInteraction* wantedHadInteraction =
+    const_cast< G4HadronicProcess* >( hadProcess )->GetHadronicModel( "FTFP" );
+  if ( hadInteraction != nullptr && hadInteraction == wantedHadInteraction ) {
+    G4TheoFSGenerator* theoFSGenerator = dynamic_cast< G4TheoFSGenerator* >( hadInteraction );
+    if ( theoFSGenerator != nullptr ) {
+      const G4FTFModel* ftfModel = dynamic_cast< const G4FTFModel* >( theoFSGenerator->GetHighEnergyGenerator() );
+      if ( ftfModel != nullptr ) {
+        numProjectileSpectatorNucleons = ftfModel->GetNumberOfProjectileSpectatorNucleons();
+        //G4cout << "\t numProjectileSpectatorNucleons = " << numProjectileSpectatorNucleons << G4endl;
+      }
+    }
+  }
+  return numProjectileSpectatorNucleons;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int HadronicGenerator::GetNumberOfTargetSpectatorNucleons() const {
+  G4double numTargetSpectatorNucleons = -999;
+  G4HadronicProcess* hadProcess = GetHadronicProcess();
+  G4HadronicInteraction* hadInteraction = GetHadronicInteraction();
+  G4HadronicInteraction* wantedHadInteraction =
+    const_cast< G4HadronicProcess* >( hadProcess )->GetHadronicModel( "FTFP" );
+  if ( hadInteraction != nullptr && hadInteraction == wantedHadInteraction ) {
+    G4TheoFSGenerator* theoFSGenerator = dynamic_cast< G4TheoFSGenerator* >( hadInteraction );
+    if ( theoFSGenerator != nullptr ) {
+      const G4FTFModel* ftfModel = dynamic_cast< const G4FTFModel* >( theoFSGenerator->GetHighEnergyGenerator() );
+      if ( ftfModel != nullptr ) {
+        numTargetSpectatorNucleons = ftfModel->GetNumberOfTargetSpectatorNucleons();
+        //G4cout << "\t numTargetSpectatorNucleons = " << numTargetSpectatorNucleons << G4endl;
+      }
+    }
+  }
+  return numTargetSpectatorNucleons;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int HadronicGenerator::GetNumberOfNNcollisions() const {
+  G4double numNNcollisions = -999;
+  G4HadronicProcess* hadProcess = GetHadronicProcess();
+  G4HadronicInteraction* hadInteraction = GetHadronicInteraction();
+  G4HadronicInteraction* wantedHadInteraction =
+    const_cast< G4HadronicProcess* >( hadProcess )->GetHadronicModel( "FTFP" );
+  if ( hadInteraction != nullptr && hadInteraction == wantedHadInteraction ) {
+    G4TheoFSGenerator* theoFSGenerator = dynamic_cast< G4TheoFSGenerator* >( hadInteraction );
+    if ( theoFSGenerator != nullptr ) {
+      const G4FTFModel* ftfModel = dynamic_cast< const G4FTFModel* >( theoFSGenerator->GetHighEnergyGenerator() );
+      if ( ftfModel != nullptr ) {
+        numNNcollisions = ftfModel->GetNumberOfNNcollisions();
+        //G4cout << "\t numNNcollisions = " << numNNcollisions << G4endl;
+      }
+    }
+  }
+  return numNNcollisions;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -29,27 +29,27 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //    ****************************************************
 //    *      UltraEventAction.cc
 //    ****************************************************
 //
 //    Ultra EventAction class. The UltraAnalysisManager class is used for histogram
-//    filling 
+//    filling
 //
 #include "UltraEventAction.hh"
 #include "UltraPrimaryGeneratorAction.hh"
 #include "UltraOpticalHit.hh"
 
-#include "G4RunManager.hh" 
+#include "G4RunManager.hh"
 #include "G4Event.hh"
-#include "G4EventManager.hh" 
+#include "G4EventManager.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
-#include "G4GeneralParticleSource.hh" 
-#include "UltraAnalysisManager.hh"
+#include "G4GeneralParticleSource.hh"
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,11 +66,11 @@ UltraEventAction::~UltraEventAction(){;}
 
 void UltraEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  G4int printModulo = 100;
+  auto printModulo = 100;
 
   evtNb = evt->GetEventID();
 
-  G4SDManager * SDman = G4SDManager::GetSDMpointer(); 
+  auto SDman = G4SDManager::GetSDMpointer();
 
 
   if(OpticalHitsCollID==-1) {
@@ -86,31 +86,31 @@ void UltraEventAction::BeginOfEventAction(const G4Event* evt)
 
 void UltraEventAction::EndOfEventAction(const G4Event* evt)
 {
-  
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  UltraOpticalHitsCollection* OpticalHitsColl = 0;
-  
-  // Fill histograms
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  if(HCE){    
-    if(OpticalHitsCollID != -1) OpticalHitsColl = 
-      (UltraOpticalHitsCollection*)(HCE->GetHC(OpticalHitsCollID));    
+  auto HCE = evt->GetHCofThisEvent();
+  UltraOpticalHitsCollection* OpticalHitsColl = nullptr;
+
+  // Fill histograms
+  auto man = G4AnalysisManager::Instance();
+
+  if(HCE){
+    if(OpticalHitsCollID != -1) OpticalHitsColl =
+      (UltraOpticalHitsCollection*)(HCE->GetHC(OpticalHitsCollID));
   }
 
-  G4int nOptHits = 0 ; 
-  
-  if(OpticalHitsColl){    
+  auto nOptHits = 0 ;
+
+  if(OpticalHitsColl){
     nOptHits = OpticalHitsColl->entries();
-    
+
 #ifdef ULTRA_VERBOSE
     if (nOptHits > 0){
       G4cout << " Optical Hit # " << " " << "Energy (eV)" <<  " " << "x,y,z (cm)" << G4endl ;
     }
 #endif
-       
-    for(G4int iHit=0; iHit<nOptHits; iHit++){
-      G4double HitEnergy = (*OpticalHitsColl)[iHit]->GetEnergy() ;
+
+    for(auto iHit=0; iHit<nOptHits; iHit++){
+      auto HitEnergy = (*OpticalHitsColl)[iHit]->GetEnergy() ;
       man->FillH1(1,HitEnergy/eV);
     }
 
@@ -119,5 +119,3 @@ void UltraEventAction::EndOfEventAction(const G4Event* evt)
   man->FillH1(2,nOptHits);
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

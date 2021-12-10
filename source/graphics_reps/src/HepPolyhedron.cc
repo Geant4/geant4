@@ -584,6 +584,7 @@ void HepPolyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
   //   A L L O C A T E   M E M O R Y
 
   AllocateMemory(Nverts, Nfaces);
+  if (pV == nullptr || pF == nullptr) return;
 
   //   G E N E R A T E   V E R T I C E S
 
@@ -818,6 +819,12 @@ HepPolyhedron::RotateContourAroundZ(G4int nstep,
   //   A L L O C A T E   M E M O R Y
 
   AllocateMemory(Nverts, Nfaces);
+  if (pV == nullptr || pF == nullptr)
+  {
+    delete [] r;
+    delete [] z;
+    return;
+  }
 
   //   S E T   V E R T I C E S
 

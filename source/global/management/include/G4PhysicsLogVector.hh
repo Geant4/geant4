@@ -47,24 +47,20 @@
 class G4PhysicsLogVector : public G4PhysicsVector
 {
 public:
-  explicit G4PhysicsLogVector(G4bool spline = false);
   // The vector will be filled from external file using Retrieve() method
+  explicit G4PhysicsLogVector(G4bool spline = false);
 
+  // Energies will be computed and filled at construction, values will be 
+  // filled with zeros. Required Nbin > 1 and Emax > Emin > 0.
+  // Use PutValue(..) to fill the data vector
   explicit G4PhysicsLogVector(G4double Emin, G4double Emax, std::size_t Nbin,
                               G4bool spline = false);
-  // Energy vector will be computed and filled at construction,
-  // number of nodes 'Nbin+1'. Use PutValue() to fill the data vector
-  // Because of logarithmic scale, 'Emin' has to be
-  // greater than zero. No protection exists against this error
 
-  virtual ~G4PhysicsLogVector();
+  virtual ~G4PhysicsLogVector() = default;
 
-  virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii) final;
-  // To retrieve persistent data from a file stream
+protected:
 
-  virtual void ScaleVector(G4double factorE, G4double factorV) final;
-  // Scale all values of the vector and second derivatives
-  // by factorV, energies - by vectorE
+  void Initialise() final;
 };
 
 #endif

@@ -99,7 +99,8 @@ public: // With description
   //////////////////////////////////////////////////////
   // Constructors...
   G4VMarker ();
-  G4VMarker (const G4VMarker&);
+  G4VMarker (const G4VMarker&) = default;
+  G4VMarker (G4VMarker&& ) = default;
   G4VMarker (const G4Point3D& position);
 
   //////////////////////////////////////////////////////
@@ -108,11 +109,13 @@ public: // With description
 
   //////////////////////////////////////////////////////
   // Assignment...
-  G4VMarker& operator = (const G4VMarker&);
+  G4VMarker& operator = (const G4VMarker&) = default;
+  G4VMarker& operator = (G4VMarker&&) = default;
 
   //////////////////////////////////////////////////////
   // Logical...
   G4bool operator != (const G4VMarker&) const;
+  G4bool operator == (const G4VMarker&) const;
 
   /////////////////////////////////////////////////////
   // Get functions...

@@ -63,21 +63,22 @@ namespace {
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*            pVPV
  , G4int                       requestedDepth
- , const G4Transform3D&        modelTransformation
+ , const G4Transform3D&        modelTransform
  , const G4ModelingParameters* pMP
  , G4bool                      useFullExtent
  , const std::vector<G4PhysicalVolumeNodeID>& baseFullPVPath)
-: G4VModel           (modelTransformation,pMP)
+: G4VModel           (pMP)
 , fpTopPV            (pVPV)
 , fTopPVCopyNo       (pVPV? pVPV->GetCopyNo(): 0)
 , fRequestedDepth    (requestedDepth)
 , fUseFullExtent     (useFullExtent)
+, fTransform         (modelTransform)
 , fCurrentDepth      (0)
 , fpCurrentPV        (fpTopPV)
 , fCurrentPVCopyNo   (fpTopPV? fpTopPV->GetCopyNo(): 0)
 , fpCurrentLV        (fpTopPV? fpTopPV->GetLogicalVolume(): 0)
 , fpCurrentMaterial  (fpCurrentLV? fpCurrentLV->GetMaterial(): 0)
-, fpCurrentTransform (const_cast<G4Transform3D*>(&modelTransformation))
+, fCurrentTransform  (modelTransform)
 , fBaseFullPVPath    (baseFullPVPath)
 , fAbort             (false)
 , fCurtailDescent    (false)
@@ -172,6 +173,7 @@ void G4PhysicalVolumeModel::CalculateExtent ()
   if (radius < 0.) {  // Nothing in the scene - revert to top extent
     fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
   }
+  fExtent.Transform(fTransform);
 }
 
 void G4PhysicalVolumeModel::DescribeYourselfTo
@@ -394,7 +396,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Create a nodeID for use below - note the "drawn" flag is true
   G4int copyNo = fpCurrentPV->GetCopyNo();
   auto nodeID = G4PhysicalVolumeNodeID
-  (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform);
+  (fpCurrentPV,copyNo,fCurrentDepth,fCurrentTransform);
 
   // Update full path of physical volumes...
   fFullPVPath.push_back(nodeID);
@@ -412,7 +414,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // not be accumulated.
   G4Transform3D theNewAT (theAT);
   if (fCurrentDepth != 0) theNewAT = theAT * theLT;
-  fpCurrentTransform = &theNewAT;
+  fCurrentTransform = theNewAT;
 
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
   //  If the volume does not have any vis attributes, create it.
@@ -584,6 +586,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       sceneHandler.AddCompound(mesh);
       fFullPVPath.pop_back();
       fDrawnPVPath.pop_back();
+      delete tempVisAtts;  // Needs cleaning up (Coverity warning!!)
       return;
     }  // else continue processing
   }
@@ -713,6 +716,7 @@ continue_processing:
     }
   }
 
+  // Clean up
   delete tempVisAtts;
 
   // Reset for normal descending of next volume at this level...
@@ -840,10 +844,9 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   auto iterator = find(pvStore->begin(),pvStore->end(),fpTopPV);
   if (iterator == pvStore->end()) {
     if (warn) {
-      G4cerr <<
-      "G4PhysicalVolumeModel::Validate(): No volume of name \""
-      << fpTopPV->GetName() << "\" exists."
-      << G4endl;
+      G4ExceptionDescription ed;
+      ed << "Attempt to validate a volume that is no longer in the physical volume store.";
+      G4Exception("G4PhysicalVolumeModel::Validate", "modeling0015", JustWarning, ed);
     }
     return false;
   } else {
@@ -1005,7 +1008,7 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
   const G4ThreeVector& localTranslation = fpCurrentPV->GetTranslation();
   oss.str(""); oss << '\n' << G4Transform3D(localRotation,localTranslation);
   values->push_back(G4AttValue("LocalTrans", oss.str(),""));
-  oss.str(""); oss << '\n' << *fpCurrentTransform;
+  oss.str(""); oss << '\n' << fCurrentTransform;
   values->push_back(G4AttValue("GlobalTrans", oss.str(),""));
   G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
   values->push_back(G4AttValue("Material", matName,""));

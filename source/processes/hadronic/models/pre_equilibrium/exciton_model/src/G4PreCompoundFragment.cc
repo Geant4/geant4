@@ -88,8 +88,9 @@ IntegrateEmissionProbability(G4double low, G4double up,
 {  
   static const G4double den = 1.0/CLHEP::MeV;
   G4double del = (up - low);
-  G4int nbins  = std::max(4,(G4int)(del*den));
-  del /= (G4double)nbins;
+  G4int nbins = del*den;
+  nbins = std::max(nbins, 4);
+  del /= static_cast<G4double>(nbins);
   G4double e = low + 0.5*del;
   probmax = ProbabilityDistributionFunction(e, aFragment);
   //G4cout << "    0. e= " << e << "  y= " << probmax << G4endl;
@@ -102,7 +103,7 @@ IntegrateEmissionProbability(G4double low, G4double up,
     probmax = std::max(probmax, y);
     sum += y;
     if(y < sum*0.01) { break; }
-    //G4cout << "   " << i << ". e= " << e << "  y= " << y << " sum= " << sum << G4endl;
+    //G4cout <<"   "<<i<<". e= "<<e<<"  y= "<<y<<" sum= "<<sum<< G4endl;
   }
   sum *= del;
   //G4cout << "Evap prob: " << sum << " probmax= " << probmax << G4endl;
@@ -116,20 +117,21 @@ G4double G4PreCompoundFragment::CrossSection(G4double ekin) const
     res = GetOpt0(ekin);
 
   } else if(OPTxs <= 2) { 
-    res = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, theCoulombBarrier, 
+    res = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, 
+                                                        theCoulombBarrier, 
 							theResA13, muu, 
 							index, theZ, theResA); 
 
   } else { 
     res = G4KalbachCrossSection::ComputeCrossSection(ekin, theCoulombBarrier, 
-						     theResA13, muu,
-						     index, theZ, theA, theResA);
+						     theResA13, muu, index,
+						     theZ, theA, theResA);
   }
   return res;
 }  
 
-// *********************** OPT=0 : Dostrovski's cross section  ***************
 G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
+// OPT=0 : Dostrovski's cross section
 {
   G4double r0 = theParameters->GetR0()*theResA13;
   // cross section is now given in mb (r0 is in mm) for the sake of consistency
@@ -165,9 +167,9 @@ G4double G4PreCompoundFragment::SampleKineticEnergy(const G4Fragment& fragment)
     if(probmax*rndm->flat() <= prob) { break; }
   }
   /*
-  G4cout << "G4PreCompoundFragment: i= " << i << " Z= " << theZ << " A= " << theA 
-	 <<"  T(MeV)= " << T << " Emin(MeV)= " << theMinKinEnergy << " Emax= " 
-	 << theMaxKinEnergy << G4endl;
+  G4cout << "G4PreCompoundFragment: i= " << i << " Z= " << theZ 
+         << " A= " << theA <<"  T(MeV)= " << T << " Emin(MeV)= " 
+         << theMinKinEnergy << " Emax= " << theMaxKinEnergy << G4endl;
   */
   return T;
 }

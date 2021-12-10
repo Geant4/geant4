@@ -32,24 +32,14 @@
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
-#include "G4Threading.hh"
-
-#include <iostream>
-
 using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4CsvNtupleFileManager::G4CsvNtupleFileManager(const G4AnalysisManagerState& state)
- : G4VNtupleFileManager(state, "csv"),
-   fFileManager(nullptr),
-   fNtupleManager(nullptr)
+ : G4VNtupleFileManager(state, "csv")
 {}
 
-//_____________________________________________________________________________
-G4CsvNtupleFileManager::~G4CsvNtupleFileManager()
-{}
-
-// 
+//
 // private methods
 //
 
@@ -58,17 +48,16 @@ G4bool G4CsvNtupleFileManager::CloseNtupleFiles()
 {
   // Close ntuple files
 
-  auto finalResult = true;
+  auto result = true;
   auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
   for ( auto ntupleDescription : ntupleVector) {
-    auto result = fFileManager->CloseNtupleFile(ntupleDescription);
-    finalResult = finalResult && result;
+    result &= fFileManager->CloseNtupleFile(ntupleDescription);
   }
 
-  return finalResult;
-}    
+  return result;
+}
 
-// 
+//
 // public methods
 //
 
@@ -79,7 +68,7 @@ std::shared_ptr<G4VNtupleManager> G4CsvNtupleFileManager::CreateNtupleManager()
 
   fNtupleManager = std::make_shared<G4CsvNtupleManager>(fState);
   fNtupleManager->SetFileManager(fFileManager);
-  
+
   return fNtupleManager;
 }
 
@@ -88,7 +77,7 @@ G4bool G4CsvNtupleFileManager::ActionAtOpenFile(const G4String& /*fileName*/)
 {
   // G4cout << "G4CsvNtupleFileManager::ActionAtOpenFile" << G4endl;
 
-  // Create ntuples if they are booked  
+  // Create ntuples if they are booked
   // (The files will be created with creating ntuples)
   fNtupleManager->CreateNtuplesFromBooking(
     fBookingManager->GetNtupleBookingVector());
@@ -105,29 +94,24 @@ G4bool G4CsvNtupleFileManager::ActionAtWrite()
 //_____________________________________________________________________________
 G4bool G4CsvNtupleFileManager::ActionAtCloseFile(G4bool reset)
 {
-  auto finalResult = true;
+  auto result = true;
 
   // close ntuple files
-  auto result = CloseNtupleFiles();
-  finalResult = finalResult && result;
+  result &= CloseNtupleFiles();
 
   if ( ! reset ) {
-    // The ntuples must be always reset when closing file) 
+    // The ntuples must be always reset when closing file)
     result = Reset();
     if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Resetting data failed";
-      G4Exception("G4CsvNtupleFileManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
+      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
     }
-    finalResult = finalResult && result;
   }
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4CsvNtupleFileManager::Reset()
 {
-  return fNtupleManager->Reset(true);
+  return fNtupleManager->Reset();
 }

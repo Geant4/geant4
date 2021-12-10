@@ -180,9 +180,10 @@ protected:
   G4PreCompoundModel*              fPreCompound;
   G4ExcitationHandler*             fDeExcitation;
 
-
   G4Nucleus* fRecoil;
 
+  G4int fSecID;  // Creator model ID for the secondaries created by this model  
+  
   static const G4int fResNumber;
   static const G4double fResMass[6]; // [fResNumber];
 

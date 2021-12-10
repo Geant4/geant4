@@ -43,6 +43,7 @@
 #include "G4ITTrackHolder.hh"
 #include "G4Molecule.hh"
 #include "G4Scheduler.hh"
+#include "G4AnalysisManager.hh"
 
 #include "DetectorConstruction.hh"
 #include "G4RunManager.hh"

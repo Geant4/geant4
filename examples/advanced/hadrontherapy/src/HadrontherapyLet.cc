@@ -33,6 +33,7 @@
 #include "HadrontherapyInteractionParameters.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyMatrix.hh"
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include <cmath>
@@ -259,7 +260,7 @@ void HadrontherapyLet::StoreLetAscii()
             LetFragmentTuple->SetVerboseLevel(1);
             LetFragmentTuple->SetFirstHistoId(1);
             LetFragmentTuple->SetFirstNtupleId(1);
-            LetFragmentTuple ->OpenFile("Let");
+            LetFragmentTuple ->OpenFile("Let.csv");
             
             
             LetFragmentTuple ->CreateNtuple("coordinate", "Let");

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 1st, 2021 B.Morgan (geombias-V10-07-01)
+- Add missing include of G4Threading header for G4Mutex
+
 March 30th, 2021 B.Morgan (geombias-V10-07-00)
 - Migrate sources.cmake to modular build API
 

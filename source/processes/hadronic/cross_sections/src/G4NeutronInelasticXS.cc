@@ -49,11 +49,6 @@
 #include <fstream>
 #include <sstream>
 
-// factory
-#include "G4CrossSectionFactory.hh"
-//
-G4_DECLARE_XS_FACTORY(G4NeutronInelasticXS);
-
 G4double G4NeutronInelasticXS::coeff[] = {1.0};
 G4ElementData* G4NeutronInelasticXS::data = nullptr;
 G4String G4NeutronInelasticXS::gDataDirectory = "";
@@ -163,7 +158,7 @@ G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4double logekin,
 
   // compute isotope cross section if applicable
   const G4double emax = pv->GetMaxEnergy(); 
-  if(ekin <= emax && amin[Z] > 0 && A >= amin[Z] && A <= amax[Z]) {
+  if(ekin <= emax && amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
     auto pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pviso) { 
       xs = pviso->LogVectorValue(ekin, logekin); 
@@ -216,7 +211,7 @@ const G4Isotope* G4NeutronInelasticXS::SelectIsotope(
   size_t j;
 
   // isotope wise cross section not available
-  if(0 == amin[Z] || Z >= MAXZINEL) {
+  if(amax[Z] == amin[Z] || Z >= MAXZINEL) {
     for (j=0; j<nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
@@ -270,7 +265,7 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     if(nullptr == data) { 
 #endif
       isMaster = true;
-      data = new G4ElementData(); 
+      data = new G4ElementData();
       data->SetName("NeutronInelastic");
       FindDirectoryPath();
 #ifdef G4MULTITHREADED
@@ -303,7 +298,7 @@ const G4String& G4NeutronInelasticXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
     char* path = std::getenv("G4PARTICLEXSDATA");
-    if (path) {
+    if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/neutron/inel";
       gDataDirectory = ost.str();
@@ -344,8 +339,8 @@ void G4NeutronInelasticXS::Initialise(G4int Z)
 	 << "  Amax= " << amax[Z] << G4endl;
   */
   // upload isotope data
-  if(amin[Z] > 0) {
-    size_t nmax = (size_t)(amax[Z]-amin[Z]+1);
+  if(amin[Z] < amax[Z]) {
+    G4int nmax = amax[Z] - amin[Z] + 1;
     data->InitialiseForComponent(Z, nmax);
 
     for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
@@ -369,7 +364,7 @@ G4NeutronInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
 {
   G4PhysicsLogVector* v = nullptr;
   std::ifstream filein(ost.str().c_str());
-  if (!(filein)) {
+  if (!filein.is_open()) {
     if(warn) { 
       G4ExceptionDescription ed;
       ed << "Data file <" << ost.str().c_str()

@@ -71,9 +71,9 @@ void G4SDManager::AddNewDetector(G4VSensitiveDetector* aSD)
 {
   G4int numberOfCollections = aSD->GetNumberOfCollections();
   G4String pathName         = aSD->GetPathName();
-  if(pathName(0) != '/')
-    pathName.prepend("/");
-  if(pathName(pathName.length() - 1) != '/')
+  if(pathName[0] != '/')
+    pathName.insert(0, "/");
+  if(pathName.back() != '/')
     pathName += "/";
   treeTop->AddNewDetector(aSD, pathName);
   if(numberOfCollections < 1)
@@ -125,8 +125,8 @@ void G4SDManager::TerminateCurrentEvent(G4HCofThisEvent* HCE)
 void G4SDManager::Activate(G4String dName, G4bool activeFlag)
 {
   G4String pathName = dName;
-  if(pathName(0) != '/')
-    pathName.prepend("/");
+  if(pathName[0] != '/')
+    pathName.insert(0, "/");
   treeTop->Activate(pathName, activeFlag);
 }
 
@@ -134,8 +134,8 @@ G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(G4String dName,
                                                          G4bool warning)
 {
   G4String pathName = dName;
-  if(pathName(0) != '/')
-    pathName.prepend("/");
+  if(pathName[0] != '/')
+    pathName.insert(0, "/");
   return treeTop->FindSensitiveDetector(pathName, warning);
 }
 

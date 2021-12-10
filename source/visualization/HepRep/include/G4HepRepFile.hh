@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // John Allison  5th April 2001
 // A graphics system to dump geometry hierarchy.
 
@@ -37,14 +37,15 @@
 // HepRep
 #include "G4HepRepFileXMLWriter.hh"
 
-class G4HepRepFile: public G4VGraphicsSystem {
-public:
+class G4HepRepFile : public G4VGraphicsSystem
+{
+ public:
   G4HepRepFile();
   virtual ~G4HepRepFile();
   G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
+  G4VViewer* CreateViewer(G4VSceneHandler&, const G4String& name = "");
 
-  G4HepRepFileXMLWriter *GetHepRepXMLWriter();
+  G4HepRepFileXMLWriter* GetHepRepXMLWriter();
 };
 
 #endif

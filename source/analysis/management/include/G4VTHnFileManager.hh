@@ -31,17 +31,14 @@
 #ifndef G4VTHnFileManager_h
 #define G4VTHnFileManager_h 1
 
-#include "G4BaseFileManager.hh"
 #include "globals.hh"
-
-class G4AnalysisManagerState;
 
 template <typename HT>
 class G4VTHnFileManager
 {
   public:
-    G4VTHnFileManager() {}
-    virtual ~G4VTHnFileManager() {}
+    G4VTHnFileManager() = default;
+    virtual ~G4VTHnFileManager() = default;
 
     // Methods for writing objects
     // Write a single object to an extra file (the file is closed after write)

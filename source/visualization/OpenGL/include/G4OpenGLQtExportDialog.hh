@@ -27,8 +27,6 @@
 //
 // 
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLQTEXPORTDIALOG_HH
 #define G4OPENGLQTEXPORTDIALOG_HH
 
@@ -119,7 +117,5 @@ class G4OpenGLQtExportDialog : public QDialog
   int originalHeight;
   bool isChangingSize;
 };
-
-#endif
 
 #endif

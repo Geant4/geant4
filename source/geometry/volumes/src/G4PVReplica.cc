@@ -31,9 +31,15 @@
 #include "G4PVReplica.hh"
 #include "G4LogicalVolume.hh"
 
+// ----------------------------------------------------------------------
 G4PVRManager G4PVReplica::subInstanceManager;
   // Helping in the use of the class G4PVRManager.
 
+#define G4MT_copyNo ((subInstanceManager.offset[instanceID]).fcopyNo)
+  // This macro changes the references to fields that are now encapsulated
+  // in the class G4ReplicaData.
+
+// ----------------------------------------------------------------------
 G4PVReplica::G4PVReplica( const G4String& pName,
                                 G4LogicalVolume* pLogical,
                                 G4VPhysicalVolume* pMother,
@@ -45,8 +51,6 @@ G4PVReplica::G4PVReplica( const G4String& pName,
 {
 
   instanceID = subInstanceManager.CreateSubInstance();
-
-  G4MT_copyNo = -1;
 
   if ((pMother == nullptr) || (pMother->GetLogicalVolume() == nullptr))
   {
@@ -80,6 +84,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
 }
 
+// ----------------------------------------------------------------------
 G4PVReplica::G4PVReplica( const G4String& pName,
                                 G4LogicalVolume* pLogical,
                                 G4LogicalVolume* pMotherLogical,
@@ -91,7 +96,6 @@ G4PVReplica::G4PVReplica( const G4String& pName,
 {
 
   instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_copyNo = -1; 
 
   if (pMotherLogical == nullptr)
   {
@@ -126,6 +130,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
 }
 
+// ----------------------------------------------------------------------
 G4PVReplica::G4PVReplica( const G4String& pName,
                                 G4int nReplicas,
                                 EAxis pAxis,
@@ -139,7 +144,6 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   //  ( To allow the correct type to be found in mother->AddDaughter )
 
   instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_copyNo = -1; 
 
   if (pMotherLogical == nullptr)
   {
@@ -174,6 +178,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   CheckAndSetParameters (pAxis, nReplicas, 0.0, 0.0);
 }
 
+// ----------------------------------------------------------------------
 void G4PVReplica::CheckOnlyDaughter(G4LogicalVolume* pMotherLogical)
 {
   if (pMotherLogical->GetNoDaughters() != 0)
@@ -192,6 +197,7 @@ void G4PVReplica::CheckOnlyDaughter(G4LogicalVolume* pMotherLogical)
   }
 }
 
+// ----------------------------------------------------------------------
 void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
                                          const G4int nReplicas,
                                          const G4double width,
@@ -239,61 +245,67 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
   }
 }
 
+// ----------------------------------------------------------------------
 G4PVReplica::G4PVReplica( __void__& a )
   : G4VPhysicalVolume(a), faxis(kZAxis), fnReplicas(0), fwidth(0.), foffset(0.)
 {
   instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_copyNo = -1; 
 }
 
+// ----------------------------------------------------------------------
 G4PVReplica::~G4PVReplica()
 {
-  if ( faxis==kPhi )
-  {
-    delete GetRotation();
-  }
 }
 
+// ----------------------------------------------------------------------
 G4bool G4PVReplica::IsMany() const
 {
   return false; 
 }
 
+// ----------------------------------------------------------------------
 G4int G4PVReplica::GetCopyNo() const
 {
   return G4MT_copyNo;
 }
 
+// ----------------------------------------------------------------------
 void  G4PVReplica::SetCopyNo(G4int newCopyNo)
 {
   G4MT_copyNo = newCopyNo;
 }
 
+// ----------------------------------------------------------------------
 G4bool G4PVReplica::IsReplicated() const
 {
   return true;
 }
 
+// ----------------------------------------------------------------------
 G4bool G4PVReplica::IsParameterised() const
 {
   return false;
 }
 
+// ----------------------------------------------------------------------
 G4VPVParameterisation* G4PVReplica::GetParameterisation() const
 {
   return nullptr;
 }
 
+// ----------------------------------------------------------------------
 G4int G4PVReplica::GetMultiplicity() const
 {
   return fnReplicas;
 }
 
+// ----------------------------------------------------------------------
 EVolume G4PVReplica::VolumeType() const
 {
   return kReplica;
 }
 
+// ----------------------------------------------------------------------
 void G4PVReplica::GetReplicationData( EAxis& axis,
                                       G4int& nReplicas,
                                       G4double& width,
@@ -307,21 +319,25 @@ void G4PVReplica::GetReplicationData( EAxis& axis,
   consuming = true;
 }
 
+// ----------------------------------------------------------------------
 G4bool G4PVReplica::IsRegularStructure() const
 {
   return (fRegularVolsId != 0); 
 }
 
+// ----------------------------------------------------------------------
 G4int G4PVReplica::GetRegularStructureId() const
 {
   return fRegularVolsId; 
 }
 
+// ----------------------------------------------------------------------
 void G4PVReplica::SetRegularStructureId( G4int code )
 {
   fRegularVolsId = code; 
 } 
 
+// ----------------------------------------------------------------------
 // Returns the private data instance manager.
 //
 const G4PVRManager& G4PVReplica::GetSubInstanceManager()
@@ -329,6 +345,7 @@ const G4PVRManager& G4PVReplica::GetSubInstanceManager()
   return subInstanceManager;
 }
 
+// ----------------------------------------------------------------------
 // This method is similar to the constructor. It is used by each worker
 // thread to achieve the same effect as that of the master thread exept
 // to register the new created instance. This method is invoked explicitly.
@@ -342,12 +359,11 @@ void G4PVReplica::InitialiseWorker(G4PVReplica* pMasterObject)
   subInstanceManager.SlaveCopySubInstanceArray();
   G4MT_copyNo = -1;
 
-  // This call causes "self-assignment" of the input paramters
-  // Issue reported by DRD since TerminateWorker below can be called
-  // at the same time by another thread
-  // What we need here is the splic-class component of this funciton
-  // that is copied here
-  // CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
+  // This call causes "self-assignment" of the input parameters
+  // Issue reported by DRD since TerminateWorker() below can be called
+  // at the same time by another thread.
+  // What we need here is the split-class component of CheckAndSetParameters()
+  // funciton copied here.
 
   // Create rotation matrix for phi axis case & check axis is valid
   //
@@ -376,9 +392,10 @@ void G4PVReplica::InitialiseWorker(G4PVReplica* pMasterObject)
   }
 }
 
+// ----------------------------------------------------------------------
 // This method is similar to the destructor. It is used by each worker
 // thread to achieve the partial effect as that of the master thread.
-// For G4PVReplica instances, it destories the rotation matrix.
+// For G4PVReplica instances, it destroys the rotation matrix.
 //
 void G4PVReplica::TerminateWorker(G4PVReplica* /*pMasterObject*/)
 {

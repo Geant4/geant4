@@ -242,35 +242,3 @@ void G4CutTubs::SetDeltaPhiAngle (G4double newDPhi)
   CheckPhiAngles(fSPhi, newDPhi);
   Initialize();
 }
-
-//  Older names for access functions
-
-inline
-G4double G4CutTubs::GetRMin () const
-{
-  return GetInnerRadius();
-}
-
-inline
-G4double G4CutTubs::GetRMax () const
-{
-  return GetOuterRadius();
-}
-
-inline
-G4double G4CutTubs::GetDz () const
-{
-  return GetZHalfLength();
-}
-
-inline
-G4double G4CutTubs::GetSPhi () const
-{
-  return GetStartPhiAngle();
-}
-
-inline
-G4double G4CutTubs::GetDPhi () const
-{
-  return GetDeltaPhiAngle();
-}

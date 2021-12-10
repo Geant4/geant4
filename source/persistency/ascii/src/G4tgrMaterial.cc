@@ -33,7 +33,7 @@
 
 // --------------------------------------------------------------------
 G4tgrMaterial::G4tgrMaterial()
-  : theTemperature(STP_Temperature)
+  : theTemperature(NTP_Temperature)
   , thePressure(STP_Pressure)
 {
 }

@@ -109,6 +109,7 @@ class G4WilsonAblationModel : public G4VEvaporation
     G4FragmentVector      *fragmentVector;
     VectorOfFragmentTypes  evapType;
     G4double               fSig[200];
+    G4int                  secID;  // Creator model ID for the secondaries created by this model
 };
 ////////////////////////////////////////////////////////////////////////////////
 //

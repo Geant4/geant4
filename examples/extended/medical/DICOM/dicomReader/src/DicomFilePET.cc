@@ -52,25 +52,25 @@ DicomFilePET::DicomFilePET(DcmDataset* dset) : DicomVFileImage(dset)
 void DicomFilePET::BuildActivities()
 {
   G4int fCompress = theFileMgr->GetCompression();
-  if( fNoVoxelX%fCompress != 0 || fNoVoxelY%fCompress != 0 ) {
+  if( fNoVoxelsX%fCompress != 0 || fNoVoxelsY%fCompress != 0 ) {
     G4Exception("DicompFileMgr.:BuildMaterials",
                 "DFC004",
                 FatalException,
                 ("Compression factor = " + std::to_string(fCompress) 
-                 + " has to be a divisor of Number of voxels X = " + std::to_string(fNoVoxelX) 
-                 + " and Y " + std::to_string(fNoVoxelY)).c_str());
+                 + " has to be a divisor of Number of voxels X = " + std::to_string(fNoVoxelsX) 
+                 + " and Y " + std::to_string(fNoVoxelsY)).c_str());
   }
 
   //  if( DicomVerb(debugVerb) ) G4cout << " BuildMaterials " << fFileName << G4endl;
   double meanHV = 0.;
-  for( int ir = 0; ir < fNoVoxelY; ir += fCompress ) {
-    for( int ic = 0; ic < fNoVoxelX; ic += fCompress ) {
+  for( int ir = 0; ir < fNoVoxelsY; ir += fCompress ) {
+    for( int ic = 0; ic < fNoVoxelsX; ic += fCompress ) {
       meanHV = 0.;
-      int isumrMax = std::min(ir+fCompress,fNoVoxelY);
-      int isumcMax = std::min(ic+fCompress,fNoVoxelX);
+      int isumrMax = std::min(ir+fCompress,fNoVoxelsY);
+      int isumcMax = std::min(ic+fCompress,fNoVoxelsX);
       for( int isumr = ir; isumr < isumrMax; isumr ++ ) {
         for( int isumc = ic; isumc < isumcMax; isumc ++ ) {
-          meanHV += fHounsfieldV[isumc+isumr*fNoVoxelX];
+          meanHV += fHounsfieldV[isumc+isumr*fNoVoxelsX];
         }
       }
       meanHV /= (isumrMax-ir)*(isumcMax-ic);
@@ -88,10 +88,10 @@ void DicomFilePET::DumpActivitiesToTextFile(std::ofstream& fout)
           << fFileName << " " << fActivities.size() << G4endl;
   
   G4int copyNo = 0;
-  for( int ir = 0; ir < fNoVoxelY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelX/fCompress; ic++ ) {
-      fout << fActivities[ic+ir*fNoVoxelX/fCompress];
-      if( ic != fNoVoxelX/fCompress-1) fout << " ";
+  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
+    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
+      fout << fActivities[ic+ir*fNoVoxelsX/fCompress];
+      if( ic != fNoVoxelsX/fCompress-1) fout << " ";
       if( copyNo%8 == 7 ) fout << G4endl;
       copyNo++;
     }

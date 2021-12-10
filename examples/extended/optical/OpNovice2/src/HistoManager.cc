@@ -45,16 +45,15 @@ HistoManager::HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager() { delete G4AnalysisManager::Instance(); }
+HistoManager::~HistoManager() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::Book()
 {
   // Create or get analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in HistoManager.hh
   G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
+  analysisMan->SetDefaultFileType("root");
   analysisMan->SetFileName(fFileName);
   analysisMan->SetVerboseLevel(1);
   analysisMan->SetActivation(true);  // enable inactivation of histograms

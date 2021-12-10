@@ -75,6 +75,7 @@ public:
 protected:
 
   G4double pLocalTmax;
+  G4int secID;  // Creator model ID for the recoil
 
 private:
 

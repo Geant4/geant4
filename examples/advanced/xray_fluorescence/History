@@ -14,6 +14,32 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04.11.2021  I. Hrivnacova Tag:XRayFluo-V10-07-07
+- Updated for changes in the analysis category:
+  G4VAnalysisReader::ReadNtuple(const G4String&) is renamed back
+  in GetNtuple
+
+25.10.2021 B.Morgan Tag:XRayFluo-V10-07-06
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+16.10.2021  S.Guatelli Tag:XRayFluo-V10-07-05
+- Migration to G4RunManagerFactory
+
+07.10.2021  I. Hrivnacova Tag:XRayFluo-V10-07-04
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  explicitly include G4RootAnalysisReader.
+  
+26.08.2021  I. Hrivnacova Tag:XRayFluo-V10-07-03
+- Updated for changes in the analysis category:
+  G4VAnalysisReader::GetNtuple(const G4String&) is renamed in ReadNtuple
+
+19.07.2021  I. Hrivnacova Tag:XRayFluo-V10-07-02
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 24.05.2021  B. Morgan (XRayFluo-V10-07-01)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

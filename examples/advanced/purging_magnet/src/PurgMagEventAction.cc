@@ -43,8 +43,6 @@
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 
-#include"PurgMagAnalysisManager.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PurgMagEventAction::PurgMagEventAction()
@@ -71,20 +69,3 @@ void PurgMagEventAction::EndOfEventAction(const G4Event*)
 {  
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

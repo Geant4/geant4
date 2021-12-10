@@ -1,10 +1,10 @@
- # - G4HDF5Shim
+# - G4HDF5Shim
 #
 # Geant4's Geant4Config.cmake file aims to support CMake 3.8 and newer
 # The HDF5 dependency is located through CMake's builtin FindHDF5
-# module, but this does not supply imported targets as of CMake 3.16.
+# module, but this does not supply imported targets until CMake 3.20.
 # It may use HDF5's hdf5-config.cmake file if available, so create
-# custom imported target Geant4::HDF5 to allow both cases to be handled
+# custom imported target hdf5::hdf5 to allow both cases to be handled
 # without interference with either.
  
 if(HDF5_FOUND)
@@ -24,14 +24,14 @@ if(HDF5_FOUND)
    endif()
  endif()
 
- # As FindHDF5 does not yet supply imported targets, we
+ # If FindHDF5 does not yet supply imported targets, we
  # create an internal INTERFACE target to wrap these.
  # This still hard-codes include/library paths, but limits it
  # to one place. Later, we'll create proper imported targets
  # with re-finds but for now this is the best minimally invasive proceedure
- if(NOT TARGET Geant4::HDF5)
-   add_library(Geant4::HDF5 IMPORTED UNKNOWN)
-   set_target_properties(Geant4::HDF5 PROPERTIES
+ if(NOT TARGET hdf5::hdf5)
+   add_library(hdf5::hdf5 IMPORTED UNKNOWN)
+   set_target_properties(hdf5::hdf5 PROPERTIES
      IMPORTED_LINK_INTERFACE_LANGUAGES "C"
      IMPORTED_LOCATION "${HDF5_C_LIBRARY_hdf5}"
      INTERFACE_INCLUDE_DIRECTORIES "${HDF5_C_INCLUDE_DIRS}"

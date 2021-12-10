@@ -73,12 +73,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
   : G4VProcess(processName, type)
   , fNumPhotons(0)
 {
+  secID = G4PhysicsModelCatalog::GetModelID("model_Cerenkov");
   SetProcessSubType(fCerenkov);
 
   thePhysicsTable = nullptr;
@@ -110,7 +112,8 @@ void G4Cerenkov::ProcessDescription(std::ostream& out) const
   G4OpticalParameters* params = G4OpticalParameters::Instance();
   out << "Maximum beta change per step: " << params->GetCerenkovMaxBetaChange();
   out << "Maximum photons per step: " << params->GetCerenkovMaxPhotonsPerStep();
-  out << "Track secondaries first: " << params->GetCerenkovTrackSecondariesFirst();
+  out << "Track secondaries first: "
+      << params->GetCerenkovTrackSecondariesFirst();
   out << "Stack photons: " << params->GetCerenkovStackPhotons();
   out << "Verbose level: " << params->GetCerenkovVerboseLevel();
 }
@@ -155,12 +158,12 @@ void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
 
     // Retrieve vector of refraction indices for the material
     // from the material's optical properties table
-    G4Material* aMaterial = (*theMaterialTable)[i];
+    G4Material* aMaterial          = (*theMaterialTable)[i];
     G4MaterialPropertiesTable* MPT = aMaterial->GetMaterialPropertiesTable();
 
     if(MPT)
     {
-      cerenkovIntegral = new G4PhysicsFreeVector();
+      cerenkovIntegral                          = new G4PhysicsFreeVector();
       G4MaterialPropertyVector* refractiveIndex = MPT->GetProperty(kRINDEX);
 
       if(refractiveIndex)
@@ -273,8 +276,8 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
   }
 
   ////////////////////////////////////////////////////////////////
-  G4double Pmin = Rindex->GetMinLowEdgeEnergy();
-  G4double Pmax = Rindex->GetMaxLowEdgeEnergy();
+  G4double Pmin = Rindex->Energy(0);
+  G4double Pmax = Rindex->GetMaxEnergy();
   G4double dp   = Pmax - Pmin;
 
   G4double nMax        = Rindex->GetMaxValue();
@@ -369,6 +372,7 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     aSecondaryTrack->SetTouchableHandle(
       aStep.GetPreStepPoint()->GetTouchableHandle());
     aSecondaryTrack->SetParentID(aTrack.GetTrackID());
+    aSecondaryTrack->SetCreatorModelID(secID);
     aParticleChange.AddSecondary(aSecondaryTrack);
   }
 
@@ -454,9 +458,10 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
     particleType, kineticEnergy, couple);
   G4double Step = Range - RangeMin;
 
-  // If the step is smaller than 1e-15 mm, it may happen that the particle
-  // does not move. See bug 1992.
-  if(Step < 1.e-15 * mm)
+  // If the step is smaller than G4ThreeVector::getTolerance(), it may happen
+  // that the particle does not move. See bug 1992.
+  static const G4double minAllowedStep = G4ThreeVector::getTolerance();
+  if(Step < minAllowedStep)
     return StepLimit;
 
   if(Step < StepLimit)
@@ -512,22 +517,22 @@ G4double G4Cerenkov::GetAverageNumberOfPhotons(
   G4int materialIndex = aMaterial->GetIndex();
 
   // Retrieve the Cerenkov Angle Integrals for this material
-  G4PhysicsFreeVector* CerenkovAngleIntegrals =
-    (G4PhysicsFreeVector*) ((*thePhysicsTable)(materialIndex));
+  G4PhysicsVector* CerenkovAngleIntegrals = ((*thePhysicsTable)(materialIndex));
 
-  if(!(CerenkovAngleIntegrals->IsFilledVectorExist()))
+  G4int length = CerenkovAngleIntegrals->GetVectorLength();
+  if(0 == length)
     return 0.0;
 
   // Min and Max photon energies
-  G4double Pmin = Rindex->GetMinLowEdgeEnergy();
-  G4double Pmax = Rindex->GetMaxLowEdgeEnergy();
+  G4double Pmin = Rindex->Energy(0);
+  G4double Pmax = Rindex->GetMaxEnergy();
 
   // Min and Max Refraction Indices
   G4double nMin = Rindex->GetMinValue();
   G4double nMax = Rindex->GetMaxValue();
 
   // Max Cerenkov Angle Integral
-  G4double CAImax = CerenkovAngleIntegrals->GetMaxValue();
+  G4double CAImax = (*CerenkovAngleIntegrals)[length - 1];
 
   G4double dp, ge;
   // If n(Pmax) < 1/Beta -- no photons generated
@@ -571,18 +576,28 @@ G4double G4Cerenkov::GetAverageNumberOfPhotons(
 void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state)
 {
   fTrackSecondariesFirst = state;
+  G4OpticalParameters::Instance()->SetCerenkovTrackSecondariesFirst(
+    fTrackSecondariesFirst);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
 {
   fMaxBetaChange = value * CLHEP::perCent;
+  G4OpticalParameters::Instance()->SetCerenkovMaxBetaChange(fMaxBetaChange);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4Cerenkov::SetMaxNumPhotonsPerStep(const G4int NumPhotons)
 {
   fMaxPhotons = NumPhotons;
+  G4OpticalParameters::Instance()->SetCerenkovMaxPhotonsPerStep(fMaxPhotons);
+}
+
+void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
+{
+  fStackingFlag = stackingFlag;
+  G4OpticalParameters::Instance()->SetCerenkovStackPhotons(fStackingFlag);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -591,6 +606,13 @@ void G4Cerenkov::DumpPhysicsTable() const
   G4cout << "Dump Physics Table!" << G4endl;
   for(size_t i = 0; i < thePhysicsTable->entries(); ++i)
   {
-    ((G4PhysicsFreeVector*) (*thePhysicsTable)[i])->DumpValues();
+    (*thePhysicsTable)[i]->DumpValues();
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4Cerenkov::SetVerboseLevel(G4int verbose)
+{
+  verboseLevel = verbose;
+  G4OpticalParameters::Instance()->SetCerenkovVerboseLevel(verboseLevel);
 }

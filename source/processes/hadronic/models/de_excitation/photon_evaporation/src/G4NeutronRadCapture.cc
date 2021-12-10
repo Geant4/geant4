@@ -51,6 +51,7 @@
 #include "G4Alpha.hh"
 #include "G4RandomDirection.hh"
 #include "G4HadronicParameters.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4NeutronRadCapture::G4NeutronRadCapture() 
   : G4HadronicInteraction("nRadCapture"),
@@ -63,7 +64,7 @@ G4NeutronRadCapture::G4NeutronRadCapture()
 
   electron = G4Electron::Electron();
   icID = -1;
-
+  secID = -1;
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
@@ -78,8 +79,8 @@ void G4NeutronRadCapture::InitialiseModel()
   G4DeexPrecoParameters* param = 
     G4NuclearLevelData::GetInstance()->GetParameters();
   minExcitation = param->GetMinExcitation();
-  icID = param->GetInternalConversionID();
-
+  icID =  G4PhysicsModelCatalog::GetModelID("model_e-InternalConversion");
+  secID = G4PhysicsModelCatalog::GetModelID("model_" + GetModelName());
   photonEvaporation = new G4PhotonEvaporation();
   photonEvaporation->Initialise();
   photonEvaporation->SetICM(true);
@@ -127,6 +128,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     G4HadSecondary* news = 
       new G4HadSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));
     news->SetTime(time);
+    news->SetCreatorModelID(secID);
     theParticleChange.AddSecondary(*news);
     delete news;
 
@@ -146,6 +148,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     if(theDef) {
       news = new G4HadSecondary(new G4DynamicParticle(theDef, lab4mom));
       news->SetTime(time);
+      news->SetCreatorModelID(secID);
       theParticleChange.AddSecondary(*news);
       delete news;
     }
@@ -218,7 +221,11 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       G4double timeF = f->GetCreationTime();
       if(timeF < 0.0) { timeF = 0.0; }
       news->SetTime(time + timeF);
-      if(theDef == electron) { news->SetCreatorModelType(icID); }
+      if(theDef == electron) { 
+        news->SetCreatorModelID(icID); 
+      } else {
+        news->SetCreatorModelID(secID);
+      }
       theParticleChange.AddSecondary(*news);
       delete news;
       delete f;

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 23, 2021, Alberto Ribon (procscore-V10-07-01)
+- G4ParallelWorldProcess.cc : replaced hardwired process sub-type "491"
+  with new enum value PARALLEL_WORLD_PROCESS.
+
 April 16, 2021, Ben Morgan (procscore-V10-07-00)
 - Migrate build to modular CMake API
 

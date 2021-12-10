@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec. 06th, 2021, I. Hrivnacova  (exRunAndEvent-V10-07-01)
+- Added RE07 in Doxygen documentation
+
 May 24th, 2021,  B. Morgan (exRunAndEvent-V10-07-00)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

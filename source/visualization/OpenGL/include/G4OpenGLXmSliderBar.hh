@@ -28,8 +28,6 @@
 // 
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMSLIDERBAR_HH
 #define G4OPENGLXMSLIDERBAR_HH
 
@@ -90,7 +88,5 @@ private:
   unsigned char orientation;
   unsigned char direction;
 };
-
-#endif
 
 #endif

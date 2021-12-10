@@ -125,15 +125,15 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     inline void SetMaterialIndices( size_t* matInd );
 
     void SetVoxelDimensions( G4double halfx, G4double halfy, G4double halfz );
-    void SetNoVoxel( size_t nx, size_t ny, size_t nz );
+    void SetNoVoxels( size_t nx, size_t ny, size_t nz );
     
     inline G4double GetVoxelHalfX() const;
     inline G4double GetVoxelHalfY() const;
     inline G4double GetVoxelHalfZ() const;
-    inline size_t GetNoVoxelX() const;
-    inline size_t GetNoVoxelY() const;
-    inline size_t GetNoVoxelZ() const;
-    inline size_t GetNoVoxel() const;
+    inline size_t GetNoVoxelsX() const;
+    inline size_t GetNoVoxelsY() const;
+    inline size_t GetNoVoxelsZ() const;
+    inline size_t GetNoVoxels() const;
 
     inline std::vector<G4Material*> GetMaterials() const;
     inline size_t* GetMaterialIndices() const;
@@ -167,11 +167,11 @@ class G4PhantomParameterisation : public G4VPVParameterisation
 
     G4double fVoxelHalfX = 0.0, fVoxelHalfY = 0.0, fVoxelHalfZ = 0.0;
       // Half dimension of voxels (assume they are boxes).
-    size_t fNoVoxelX = 0, fNoVoxelY = 0, fNoVoxelZ = 0;
+    size_t fNoVoxelsX = 0, fNoVoxelsY = 0, fNoVoxelsZ = 0;
       // Number of voxel in x, y and z dimensions.
-    size_t fNoVoxelXY = 0;
+    size_t fNoVoxelsXY = 0;
       // Number of voxels in x times number of voxels in y (for speed-up).
-    size_t fNoVoxel = 0;
+    size_t fNoVoxels = 0;
       // Total number of voxels (for speed-up).
 
     std::vector<G4Material*> fMaterials;

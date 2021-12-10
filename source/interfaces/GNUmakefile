@@ -25,8 +25,6 @@ ifdef G4UI_BUILD
   SUBLIBS := G4UIcommon
   SUBDIRS += basic
   SUBLIBS += G4UIbasic
-  SUBDIRS += GAG
-  SUBLIBS += G4UIGAG
 endif
 
 include $(G4INSTALL)/config/globlib.gmk

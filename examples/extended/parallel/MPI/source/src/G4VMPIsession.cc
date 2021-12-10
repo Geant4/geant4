@@ -83,10 +83,10 @@ G4int G4VMPIsession::ExecCommand(const G4String& acommand)
   G4String command = BypassCommand(acommand);
 
   // "/mpi/beamOn is threaded out.
-  if( command(0,11) == "/mpi/beamOn" ) {
+  if( command.substr(0,11) == "/mpi/beamOn" ) {
     g4mpi_-> ExecuteBeamOnThread(command);
     returnVal = fCommandSucceeded;
-  } else if( command(0,12) == "/mpi/.beamOn" ) { // care for beamOn
+  } else if( command.substr(0,12) == "/mpi/.beamOn" ) { // care for beamOn
     G4bool threadStatus = g4mpi_-> CheckThreadStatus();
     if ( threadStatus ) { // still /run/beamOn is active
       if( is_master_ ) {
@@ -151,16 +151,16 @@ G4String G4VMPIsession::TruncateCommand(const G4String& command) const
   G4String acommand = command;
   G4String strarg;
 
-  str_size iarg = acommand.find(' ');
+  G4String::size_type iarg = acommand.find(' ');
   if( iarg != G4String::npos ) {
-    strarg = acommand(iarg, acommand.size()-iarg);
-    acommand = acommand(0,iarg);
+    strarg = acommand.substr(iarg, acommand.size()-iarg);
+    acommand = acommand.substr(0,iarg);
   }
 
-  str_size idx;
+  G4String::size_type idx;
   while( (idx = acommand.find("//")) != G4String::npos)  {
-    G4String command1 = acommand(0,idx+1);
-    G4String command2 = acommand(idx+2, acommand.size()-idx-2);
+    G4String command1 = acommand.substr(0,idx+1);
+    G4String command2 = acommand.substr(idx+2, acommand.size()-idx-2);
     acommand = command1 + command2;
   }
 
@@ -187,7 +187,7 @@ G4String G4VMPIsession::BypassCommand(const G4String& command) const
   G4String acommand = command;
 
   // /mpi/beamOn
-  if( acommand(0,11) == "/mpi/beamOn" ) {
+  if( acommand.substr(0,11) == "/mpi/beamOn" ) {
 #ifdef G4MULTITHREADED
     acommand = "/mpi/.beamOn";
     if(command.length() > 11) {
@@ -204,12 +204,12 @@ G4String G4VMPIsession::BypassCommand(const G4String& command) const
   }
 
   // /run/beamOn
-  if( acommand(0,11) == "/run/beamOn" ) {
+  if( acommand.substr(0,11) == "/run/beamOn" ) {
     G4String strarg = "";
     G4bool qget = false;
     G4bool qdone = false;
 
-    for ( str_size idx = 10; idx < command.size(); idx++ ) {
+    for ( G4String::size_type idx = 10; idx < command.size(); idx++ ) {
       if( command[idx] == ' ' || command[idx] == '\011' ) {
         qget = true;
         if(qdone) break;
@@ -242,7 +242,7 @@ G4String G4VMPIsession::BypassCommand(const G4String& command) const
   }
 
   // /control/execute
-  if( acommand(0,16) == "/control/execute" ) {
+  if( acommand.substr(0,16) == "/control/execute" ) {
     if( g4mpi_-> GetVerbose()>0 && is_master_ ) {
       G4cout << "/control/execute is overridden by /mpi/execute"
              << G4endl;

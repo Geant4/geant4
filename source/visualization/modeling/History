@@ -19,6 +19,67 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+05 November 2021  John Allison  (modeling-V10-07-16)
+- Fix bug in G4PhysicalVolumeModel::CalculateExtent.
+  - The extent was being calculated solely in the reference frame of the
+    top physical volume. It needs to be transformed into the global
+    coordinate system.
+  - This impacts views that contain more than one top physical volume, e.g:
+    - if you `/vis/drawVolume <volume-name` and there are more than
+      one instance (touchable) with that name;
+    - if you `/vis/drawVolume /reg-exp/` and `reg-exp` identifies more
+      than one volume;
+    - if you `/vis/scene/add/volume <volume-name>` to an already existing
+      scene;
+    - if you `/vis/viewer/centreOn <volume-name>` or
+      `/vis/viewer/centreOn /reg-exp/` (similarly `centreAndZoomInOn`)
+      that identify more than one touchable with that name.
+
+25 October 2021  Guy Barrand (modeling-V10-07-15)
+- sources.cmake: declare G4PlotterModel.hh,.cc.
+- G4PlotterModel.hh,.cc: a model to handle a G4Plotter in a scene.
+- G4PseudoScene.hh: default implementation of AddPrimitive(const G4Plotter&).
+
+10 October 2021  John Allison  (modeling-V10-07-14)
+- As a result of Coverity warnings, improve the health of...
+  - G4PhysicalVolumeModel:
+    - Clean up tempVisAtts in case of found G4Mesh.
+    - Hold current transform as object, not as a pointer.
+  - G4TouchablePropertiesScene.cc:
+    - Migrate to the above.
+
+06 July 2021  John Allison  (modeling-V10-07-13)
+- G4AxesModel.cc:
+  o Fix model name (somehow forgot to set name, so it picked up a default
+    name from the base class).
+
+05 July 2021  John Allison  (modeling-V10-07-12)
+- G4PhysicalVolumeModel:
+  o Make CalculateExtent a public function.
+  o G4PhysicalVolumeModel::Validate:
+    . Avoid crash if volume no longer in physical volume store.
+    . Improve warning message.
+
+30 June 2021  John Allison  (modeling-V10-07-11)
+- Requires greps-V10-07-09.
+- Revise vis models.
+  o Over time, the vis models have sprouted some inconsistencies. This
+    is an attempt to rationalise them. The most significant model - used
+    in all applications to draw the detector - is G4PhysicaVolumeModel. To
+    handle all the options, G4PhysicalVolumeModel takes care of the
+    transformation of any primitives that it generates. It ignores the
+    transformation available in the base class, G4VModel. This revision
+    brings all models in line with this policy.
+  o This implies the following:
+    . The data member G4VModel::fTransform and accessors are removed;
+    . Those models that need to keep a transformation now have their own
+      fTransform.
+  o Note: This may also fix some Coverity warnings.
+  o At the same time, we remove G4Scale and G4ScaleModel. G4Scale is an
+    anomaly. It is not a "primitive" (obviously), but somehow, from the long
+    distant past, it was implemented as though it was. These classes have been
+    removed and /vis/scene/add/scale reimplemented with G4CallBackModel.
+
 15 June 2021  John Allison  (modeling-V10-07-10)
 - G4PhysicalVolumeModel.cc:
   o Move fFullPVPath.push_back earlier - fixes vis touchables bug.

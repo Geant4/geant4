@@ -8,7 +8,7 @@ project(${_projname})
 #------------------------------------------------------------------------------
 #Manadatory dependencies
 
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 find_package(MPI REQUIRED)
 find_package(Geant4 10.2.0 REQUIRED)
 include(${Geant4_USE_FILE})

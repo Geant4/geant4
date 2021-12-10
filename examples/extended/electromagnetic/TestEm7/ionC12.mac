@@ -20,8 +20,11 @@
 /testem/det/tallyPosition 2  0.  0. 0. cm
 /testem/det/tallyPosition 3  5.  0. 0. cm
 #
-/testem/phys/addPhysics  emstandard_opt3
+/testem/phys/addPhysics  emstandard_opt0
 #/testem/phys/addPhysics  ionGasModels
+/testem/phys/addPhysics  elastic
+/testem/phys/addPhysics  binary
+/testem/phys/addPhysics  binary_ion
 #
 /run/initialize
 #
@@ -34,9 +37,10 @@
 #
 /run/printProgress 100
 #
-/analysis/setFileName c12
+/analysis/setFileName c12_opt0
+/analysis/h1/set 1 1200 0 120 mm
 /analysis/h1/set 2 100 80 90 mm
 /analysis/h1/set 3 100 80 90 mm
 #
-/run/beamOn 1000
+/run/beamOn 10000
 #

@@ -25,7 +25,8 @@
 //
 // -------------------------------------------------------------------
 // -------------------------------------------------------------------
-
+//  History :
+//    21/10/2021 DLa  update to manage the change of material
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef DetectorConstruction_h
@@ -45,6 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Region;
+class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -55,6 +57,16 @@ public:
   ~DetectorConstruction();
 
   G4VPhysicalVolume* Construct();
+
+  void SetSize     (G4double);              
+  void SetMaterial (const G4String&);
+
+  inline const G4VPhysicalVolume* GetWorld() const {return fPhysiWorld;};
+  inline G4double GetSize() const                  {return fBoxSize;};      
+  inline const G4Material* GetMaterial() const     {return fMaterial;};
+    
+  void   PrintParameters();
+  void   DefineMaterials(); 
 
   G4Region* GetTargetRegion()  {return fRegion;}
                          
@@ -68,10 +80,16 @@ private:
   G4LogicalVolume*   fLogicWorld;  
   G4Box*             fSolidWorld;
 
-  G4Material*        fSiMaterial;
+  G4Material*        fWorldMaterial;
+  G4LogicalVolume*   flogicTarget;
+  G4Box*             ftargetSolid;
+  
+
+  G4double           fBoxSize;  
+  G4Material*        fMaterial; 
   G4Region*          fRegion;
 
-  void DefineMaterials();
+  DetectorMessenger* fDetectorMessenger;
 
   G4VPhysicalVolume* ConstructDetector();     
 };

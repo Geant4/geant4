@@ -64,10 +64,10 @@
 #ifndef G4OpBoundaryProcess_h
 #define G4OpBoundaryProcess_h 1
 
+#include "G4OpticalPhoton.hh"
+#include "G4OpticalSurface.hh"
 #include "G4RandomTools.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4OpticalSurface.hh"
-#include "G4OpticalPhoton.hh"
 
 enum G4OpBoundaryProcessStatus
 {
@@ -144,6 +144,8 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
 
   virtual void Initialise();
 
+  void SetVerboseLevel(G4int);
+
  private:
   G4OpBoundaryProcess(const G4OpBoundaryProcess& right) = delete;
   G4OpBoundaryProcess& operator=(const G4OpBoundaryProcess& right) = delete;
@@ -180,53 +182,46 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   // Invoke SD for post step point if the photon is 'detected'
   G4bool InvokeSD(const G4Step* step);
 
-  G4double thePhotonMomentum;
+  G4ThreeVector fOldMomentum;
+  G4ThreeVector fOldPolarization;
 
-  G4ThreeVector OldMomentum;
-  G4ThreeVector OldPolarization;
+  G4ThreeVector fNewMomentum;
+  G4ThreeVector fNewPolarization;
 
-  G4ThreeVector NewMomentum;
-  G4ThreeVector NewPolarization;
+  G4ThreeVector fGlobalNormal;
+  G4ThreeVector fFacetNormal;
 
-  G4ThreeVector theGlobalNormal;
-  G4ThreeVector theFacetNormal;
+  G4Material* fMaterial1;
+  G4Material* fMaterial2;
 
-  G4Material* Material1;
-  G4Material* Material2;
-
-  G4OpticalSurface* OpticalSurface;
+  G4OpticalSurface* fOpticalSurface;
 
   G4MaterialPropertyVector* fRealRIndexMPV;
   G4MaterialPropertyVector* fImagRIndexMPV;
+  G4Physics2DVector* fDichroicVector;
 
-  G4double Rindex1;
-  G4double Rindex2;
+  G4double fPhotonMomentum;
+  G4double fRindex1;
+  G4double fRindex2;
 
-  G4double sint1;
+  G4double fSint1;
 
-  G4OpBoundaryProcessStatus theStatus;
+  G4double fReflectivity;
+  G4double fEfficiency;
+  G4double fTransmittance;
+  G4double fSurfaceRoughness;
 
-  G4OpticalSurfaceModel theModel;
+  G4double fProb_sl, fProb_ss, fProb_bs;
+  G4double fCarTolerance;
 
-  G4OpticalSurfaceFinish theFinish;
+  G4OpBoundaryProcessStatus fStatus;
+  G4OpticalSurfaceModel fModel;
+  G4OpticalSurfaceFinish fFinish;
 
-  G4double theReflectivity;
-  G4double theEfficiency;
-  G4double theTransmittance;
+  G4int f_iTE, f_iTM;
 
-  G4double theSurfaceRoughness;
-
-  G4double prob_sl, prob_ss, prob_bs;
-
-  G4int iTE, iTM;
-
-  G4double kCarTolerance;
-
-  size_t idx, idy;
-  G4Physics2DVector* DichroicVector;
-
-  G4bool fInvokeSD;
-
+  size_t idx_dichroicX      = 0;
+  size_t idx_dichroicY      = 0;
   size_t idx_rindex1        = 0;
   size_t idx_rindex_surface = 0;
   size_t idx_reflect        = 0;
@@ -239,6 +234,8 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   size_t idx_groupvel       = 0;
   size_t idx_rrindex        = 0;
   size_t idx_irindex        = 0;
+
+  G4bool fInvokeSD;
 };
 
 ////////////////////
@@ -247,7 +244,7 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
 
 inline G4bool G4OpBoundaryProcess::G4BooleanRand(const G4double prob) const
 {
-  /* Returns a random boolean variable with the specified probability */
+  // Returns a random boolean variable with the specified probability
   return (G4UniformRand() < prob);
 }
 
@@ -259,84 +256,80 @@ inline G4bool G4OpBoundaryProcess::IsApplicable(
 
 inline G4OpBoundaryProcessStatus G4OpBoundaryProcess::GetStatus() const
 {
-  return theStatus;
+  return fStatus;
 }
-
-inline void G4OpBoundaryProcess::SetInvokeSD(G4bool flag) { fInvokeSD = flag; }
 
 inline void G4OpBoundaryProcess::ChooseReflection()
 {
   G4double rand = G4UniformRand();
-  if(rand >= 0.0 && rand < prob_ss)
+  if(rand < fProb_ss)
   {
-    theStatus      = SpikeReflection;
-    theFacetNormal = theGlobalNormal;
+    fStatus      = SpikeReflection;
+    fFacetNormal = fGlobalNormal;
   }
-  else if(rand >= prob_ss && rand <= prob_ss + prob_sl)
+  else if(rand < fProb_ss + fProb_sl)
   {
-    theStatus = LobeReflection;
+    fStatus = LobeReflection;
   }
-  else if(rand > prob_ss + prob_sl && rand < prob_ss + prob_sl + prob_bs)
+  else if(rand < fProb_ss + fProb_sl + fProb_bs)
   {
-    theStatus = BackScattering;
+    fStatus = BackScattering;
   }
   else
   {
-    theStatus = LambertianReflection;
+    fStatus = LambertianReflection;
   }
 }
 
 inline void G4OpBoundaryProcess::DoAbsorption()
 {
-  theStatus = Absorption;
+  fStatus = Absorption;
 
-  if(G4BooleanRand(theEfficiency))
+  if(G4BooleanRand(fEfficiency))
   {
     // EnergyDeposited =/= 0 means: photon has been detected
-    theStatus = Detection;
-    aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
+    fStatus = Detection;
+    aParticleChange.ProposeLocalEnergyDeposit(fPhotonMomentum);
   }
   else
   {
     aParticleChange.ProposeLocalEnergyDeposit(0.0);
   }
 
-  NewMomentum     = OldMomentum;
-  NewPolarization = OldPolarization;
+  fNewMomentum     = fOldMomentum;
+  fNewPolarization = fOldPolarization;
 
   aParticleChange.ProposeTrackStatus(fStopAndKill);
 }
 
 inline void G4OpBoundaryProcess::DoReflection()
 {
-  if(theStatus == LambertianReflection)
+  if(fStatus == LambertianReflection)
   {
-    NewMomentum    = G4LambertianRand(theGlobalNormal);
-    theFacetNormal = (NewMomentum - OldMomentum).unit();
+    fNewMomentum = G4LambertianRand(fGlobalNormal);
+    fFacetNormal = (fNewMomentum - fOldMomentum).unit();
   }
-  else if(theFinish == ground)
+  else if(fFinish == ground)
   {
-    theStatus = LobeReflection;
-    if(fRealRIndexMPV && fImagRIndexMPV)
+    fStatus = LobeReflection;
+    if(!fRealRIndexMPV || !fImagRIndexMPV)
     {
-      //
+      fFacetNormal = GetFacetNormal(fOldMomentum, fGlobalNormal);
     }
-    else
-    {
-      theFacetNormal = GetFacetNormal(OldMomentum, theGlobalNormal);
-    }
-    G4double PdotN = OldMomentum * theFacetNormal;
-    NewMomentum    = OldMomentum - (2. * PdotN) * theFacetNormal;
+    // else
+      // complex ref. index to be implemented
+    fNewMomentum =
+      fOldMomentum - (2. * fOldMomentum * fFacetNormal * fFacetNormal);
   }
   else
   {
-    theStatus      = SpikeReflection;
-    theFacetNormal = theGlobalNormal;
-    G4double PdotN = OldMomentum * theFacetNormal;
-    NewMomentum    = OldMomentum - (2. * PdotN) * theFacetNormal;
+    fStatus      = SpikeReflection;
+    fFacetNormal = fGlobalNormal;
+    fNewMomentum =
+      fOldMomentum - (2. * fOldMomentum * fFacetNormal * fFacetNormal);
   }
-  G4double EdotN  = OldPolarization * theFacetNormal;
-  NewPolarization = -OldPolarization + (2. * EdotN) * theFacetNormal;
+  fNewPolarization =
+    -fOldPolarization + (2. * fOldPolarization * fFacetNormal * fFacetNormal);
 }
 
 #endif /* G4OpBoundaryProcess_h */

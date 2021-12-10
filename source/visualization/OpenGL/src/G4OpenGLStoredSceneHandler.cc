@@ -29,8 +29,6 @@
 // Andrew Walkden  10th February 1997
 // OpenGL stored scene - creates OpenGL display lists.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLStoredSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
@@ -54,7 +52,7 @@ G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
 
 G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
 G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
-G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 1e7;
 
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
@@ -535,12 +533,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Square& square)
   }
 }
 
-void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Scale& scale)
-{
-  // Let base class split into primitives.
-  G4OpenGLSceneHandler::AddPrimitive(scale);
-}
-
 void G4OpenGLStoredSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 {
   // Note: colour is still handled in
@@ -638,6 +630,3 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
     fpViewer -> DrawView ();
   }
 }
-
-
-#endif

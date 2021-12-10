@@ -31,7 +31,6 @@
 // OpenGL immediate scene - draws immediately to buffer
 //                           (saving space on server).
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #  include "G4OpenGLSceneHandler.hh"
 #  include "G4OpenGLViewer.hh"
@@ -195,8 +194,8 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case eachPrimitive:
         // This is equivalent to numeric with fEntitiesFlushInterval == 1.
-        fEntitiesFlushInterval = 1;  // fallthrough
-        // Fall through to NthPrimitive.
+        fEntitiesFlushInterval = 1;
+	[[fallthrough]];  // Fall through to NthPrimitive.
       case NthPrimitive:
       { // Encapsulate in scope {} brackets to satisfy Windows.
         static G4int primitivesWaitingToBeFlushed = 0;
@@ -249,8 +248,8 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case eachPrimitive:
         // This is equivalent to NthPrimitive with fEntitiesFlushInterval == 1.
-        fEntitiesFlushInterval = 1;  // fallthrough
-        // Fall through to NthPrimitive.
+        fEntitiesFlushInterval = 1;
+	[[fallthrough]];  // Fall through to NthPrimitive.
       case NthPrimitive:
       { // Encapsulate in scope {} brackets to satisfy Windows.
         static G4int primitivesWaitingToBeFlushed = 0;
@@ -432,15 +431,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         //filled = false;
         break;
       case G4VMarker::hashed:
-        if (!hashedWarned) {  // fallthrough
+        if (!hashedWarned) {
           G4cout << "Hashed fill style in G4OpenGLSceneHandler."
           << "\n  Not implemented.  Using G4VMarker::filled."
           << G4endl;
           hashedWarned = true;
-        }  // fallthrough
+        }
         // Maybe use
         //glPolygonStipple (fStippleMaskHashed);
-        // Drop through to filled...
+	[[fallthrough]];   // Drop through to filled...
       case G4VMarker::filled:
         glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
         //filled = true;
@@ -456,8 +455,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     switch (polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:
-        size = 1.;  // fallthrough
-      // Drop through to circles
+        size = 1.;
+	[[fallthrough]];  // Fall through to circles
     case G4Polymarker::circles:
       nSides = GetNoOfSides(fpVisAttribs);
       startPhi = 0.;
@@ -568,11 +567,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   G4OpenGLSceneHandler::AddPrimitive(oneSquare);
 }
 
-void G4OpenGLSceneHandler::AddPrimitive (const G4Scale& scale)
-{
-  G4VSceneHandler::AddPrimitive(scale);
-}
-
 //Method for handling G4Polyhedron objects for drawing solids.
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
@@ -639,20 +633,20 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       // Transparent...
       glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
       glEnable(GL_COLOR_MATERIAL);
-      glDisable (GL_CULL_FACE);
+      //glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     } else {
       // Opaque...
       if (clipping) {
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
       } else {
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-	glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
+	//glEnable (GL_CULL_FACE);
+	//glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_LINE);
       }
     }
@@ -667,7 +661,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 #ifndef G4OPENGL_VERSION_2
       glEnable(GL_COLOR_MATERIAL);
 #endif
-      glDisable (GL_CULL_FACE);
+      //glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
     } else {
       // Opaque...
@@ -675,15 +669,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       if (clipping) {
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 #ifndef G4OPENGL_VERSION_2
         glEnable(GL_COLOR_MATERIAL);
 #endif
-        glEnable (GL_CULL_FACE);
-	glCullFace (GL_BACK);
+        //glEnable (GL_CULL_FACE);
+	//glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_FILL);
       }
     }
@@ -695,7 +689,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   default:
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_LEQUAL);    //??? was GL_ALWAYS
-    glDisable (GL_CULL_FACE);
+    //glDisable (GL_CULL_FACE);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     break;
   }
@@ -826,17 +820,17 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       if (isTransparent) {
 	// Transparent...
 	glDepthMask (GL_FALSE);  // Make depth buffer read-only.
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
 	// Opaque...
 	glDepthMask (GL_TRUE);  // Make depth buffer writable (default).
 	if (clipping) {
-	  glDisable (GL_CULL_FACE);
+	  //glDisable (GL_CULL_FACE);
 	  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
 	} else {
-	  glEnable (GL_CULL_FACE);
-	  glCullFace (GL_BACK);
+	  //glEnable (GL_CULL_FACE);
+	  //glCullFace (GL_BACK);
 	  glPolygonMode (GL_FRONT, GL_FILL);
 	}
       }
@@ -906,16 +900,16 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
       if (isTransparent) {
 	// Transparent...
-	glDisable (GL_CULL_FACE);
+	//glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
       } else {
 	// Opaque...
 	if (clipping) {
-	  glDisable (GL_CULL_FACE);
+	  //glDisable (GL_CULL_FACE);
 	  glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 	} else {
-	  glEnable (GL_CULL_FACE);
-	  glCullFace (GL_BACK);
+	  //glEnable (GL_CULL_FACE);
+	  //glCullFace (GL_BACK);
 	  glPolygonMode (GL_FRONT, GL_LINE);
 	}
       }
@@ -1415,6 +1409,4 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
   // delete the buffer
   glDeleteBuffers(1,&fVertexBufferObject);
 }
-#endif
-
 #endif

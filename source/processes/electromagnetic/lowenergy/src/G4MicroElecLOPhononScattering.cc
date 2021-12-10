@@ -57,6 +57,7 @@
 #include "G4MicroElecLOPhononScattering.hh"
 #include "G4DummyModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,7 +68,7 @@ G4MicroElecLOPhononScattering::G4MicroElecLOPhononScattering(
   :G4VEmProcess(processName, type),
    isInitialised(false)
 {
-  SetProcessSubType(51);
+  SetProcessSubType(fLowEnergyElastic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

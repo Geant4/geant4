@@ -59,7 +59,7 @@ class G4PSCellFluxForCylinder3D : public G4PSCellFlux3D
                             G4int depj = 1, G4int depk = 0);
   virtual ~G4PSCellFluxForCylinder3D();
 
-  void SetCylinderSize(G4double dr, G4double dz);
+  void SetCylinderSize(G4ThreeVector cylSize, G4double startAng, G4double angSpan);
   void SetNumberOfSegments(G4int nSeg[3]);
 
  protected:  // with description
@@ -68,6 +68,7 @@ class G4PSCellFluxForCylinder3D : public G4PSCellFlux3D
  private:
   // Order of segmentation (Z PHI R) in CylinderMesh
   G4ThreeVector cylinderSize;
+  G4double fAngle[2];
   G4int nSegment[3];
 };
 #endif

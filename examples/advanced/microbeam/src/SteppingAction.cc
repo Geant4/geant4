@@ -35,7 +35,7 @@
 #include "SteppingAction.hh"
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4Alpha.hh"

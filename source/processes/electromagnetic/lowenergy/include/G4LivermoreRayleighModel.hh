@@ -70,12 +70,12 @@ private:
   void ReadData(size_t Z, const char* path = 0);
 
   G4ParticleChangeForGamma* fParticleChange;
-  
-  static const G4int maxZ = 100;
-  static G4PhysicsFreeVector* dataCS[101];
+
+  static G4PhysicsFreeVector* dataCS[101]; // 101 because Z range is 1-100
 
   G4double lowEnergyLimit;  
   G4int verboseLevel;
+  G4int maxZ;
   G4bool isInitialised;
 };
 

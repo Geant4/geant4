@@ -249,7 +249,7 @@ G4double G4tgrUtils::GetDouble(const G4String& str, G4double unitval)
       // Check if it is not an exponential
       //
       if((ii < 2) || ((cstr[ii - 1] != 'E') && (cstr[ii - 1] != 'e')) ||
-         !IsNumber(cstr[ii - 2]))
+	 !IsNumber(G4String(1,cstr[ii - 2])))
       {
         separators.insert(ii);
       }

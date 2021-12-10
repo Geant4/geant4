@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 September 2021 - G.Cosmo (externals-V10-07-07)
+- Synchronised with CLHEP-2.4.5.1:
+  o New random engine RANLUX++ and related helper classes (J.Hahnfeld).
+    RANLUX++ is an extension of RANLUX and uses the equivalent LCG to
+    offer a much higher luxury level at better performance. It inherits
+    the excellent statistical properties and passes the full BigCrush.
+
+07 July 2021 - G.Cosmo (externals-V10-07-06)
+- CLHEP: Fixed seeding in Ranlux64Engine (J.Hahnfeld).
+
 03 June 2021, B. Morgan (externals-V10-07-05)
 - PTL: Hide PTL_... options from clients building Geant4
   - Forward relevant Geant4 options to PTL: TBB, sanitizer, locks

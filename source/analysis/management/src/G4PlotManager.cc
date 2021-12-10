@@ -28,17 +28,20 @@
 
 #include "G4HnInformation.hh"
 #include "G4PlotManager.hh"
+#include "G4AnalysisUtilities.hh"
 #include "G4ios.hh"
 
 #if defined(TOOLS_USE_FREETYPE)
-#include <tools/sg/text_freetype>
-#include <tools/xml/xml_style>
-#include <tools/xml/wrap_viewplot_fonts_google_style>
+#include "tools/sg/text_freetype"
+#include "tools/xml/xml_style"
+#include "tools/xml/wrap_viewplot_fonts_google_style"
   //inlib/xml/viewplot.style file embeded in an inline function.
+#include "tools/font/lato_regular_ttf"
+#include "tools/font/roboto_bold_ttf"
 
 namespace {
 
-// from g4tools/test/viewplot.cpp  
+// from g4tools/test/viewplot.cpp
 //_____________________________________________________________________________
 void HD_style(tools::sg::plots& a_plots,float a_line_width) {
   std::vector<tools::sg::plotter*> plotters;
@@ -71,10 +74,10 @@ void HD_style(tools::sg::plots& a_plots,float a_line_width) {
     _plotter->z_axis().labels_style().line_width = a_line_width;
     _plotter->z_axis().mag_style().line_width = a_line_width;
     _plotter->z_axis().title_style().line_width = a_line_width;
-  }    
+  }
 }
 
-// from g4tools/test/viewplot.cpp  
+// from g4tools/test/viewplot.cpp
 //_____________________________________________________________________________
 void regions_style(tools::sg::plots& a_plots,float a_plotter_scale = 1) {
   // Rescale some plotter parameters (for example margins) according to the number of regions.
@@ -119,10 +122,10 @@ void regions_style(tools::sg::plots& a_plots,float a_plotter_scale = 1) {
     _plotter->x_axis().label_height = _plotter->x_axis().label_height * hfac * label_cooking;
     _plotter->y_axis().label_height = _plotter->y_axis().label_height * hfac * label_cooking;
 
-  }    
+  }
 }
 
-// from g4tools/test/viewplot.cpp  
+// from g4tools/test/viewplot.cpp
 //_____________________________________________________________________________
 bool load_embeded_styles(tools::xml::styles& a_styles) {
   std::string ss;
@@ -140,9 +143,7 @@ bool load_embeded_styles(tools::xml::styles& a_styles) {
 }
 #endif
 
-//
-// static data
-//
+using namespace G4Analysis;
 
 //
 // ctors, dtor
@@ -150,63 +151,49 @@ bool load_embeded_styles(tools::xml::styles& a_styles) {
 
 //_____________________________________________________________________________
 G4PlotManager::G4PlotManager(const G4AnalysisManagerState& state)
- : fState(state),
-   fPlotParameters(),
-   fViewer(nullptr),
-   fFileName()
+ : fState(state)
 {
 #if defined(TOOLS_USE_FREETYPE)
   //////////////////////////////////////////////////////////////////////////////
   /// plotting, high resolution with freetype fonts and by using styles : //////
   //////////////////////////////////////////////////////////////////////////////
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    G4cout << "... using high resolution with Freetype fonts" << G4endl;
-#endif
+  fState.Message(kVL1,  "... using high resolution with Freetype fonts", "");
   //Have vertical A4 :
   // unsigned int ww = 2000; //to have better antialising on freetype fonts.
   // float A4 = 29.7f/21.0f;
   // unsigned int wh = (unsigned int)(float(ww)*A4*0.80);
   static tools::sg::text_freetype ttf;
-  fViewer.reset(new tools::viewplot(G4cout, ttf,
+  ttf.add_embedded_font(tools::sg::font_lato_regular_ttf(),tools::font::lato_regular_ttf);
+  ttf.add_embedded_font(tools::sg::font_roboto_bold_ttf(),tools::font::roboto_bold_ttf);
+  fViewer = std::make_unique<tools::viewplot>(G4cout, ttf,
                                     fPlotParameters.GetColumns(),
-                                    fPlotParameters.GetRows(), 
-                                    fPlotParameters.GetWidth(), 
-                                    fPlotParameters.GetHeight()));
+                                    fPlotParameters.GetRows(),
+                                    fPlotParameters.GetWidth(),
+                                    fPlotParameters.GetHeight());
   fViewer->plots().view_border = false;
   load_embeded_styles(fViewer->styles());
   fViewer->styles().add_colormap("default",tools::sg::style_default_colormap());
   fViewer->styles().add_colormap("ROOT",tools::sg::style_ROOT_colormap());
 #else
   // cretae a viewer with default parameters
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    G4cout << "... using low resolution with Hershey fonts" << G4endl;
-#endif
-  fViewer.reset(new tools::viewplot(G4cout, 
-                                    fPlotParameters.GetColumns(), 
-                                    fPlotParameters.GetRows(), 
-                                    fPlotParameters.GetWidth(), 
-                                    fPlotParameters.GetHeight()));
+  fState.Message(kVL1,  "... using low resolution with Hershey fonts", "");
+  fViewer = std::make_unique<tools::viewplot>(G4cout,
+                                    fPlotParameters.GetColumns(),
+                                    fPlotParameters.GetRows(),
+                                    fPlotParameters.GetWidth(),
+                                    fPlotParameters.GetHeight());
   fViewer->plots().view_border = false;
 #endif
 }
 
-//_____________________________________________________________________________
-G4PlotManager::~G4PlotManager()
-{}
-
-// 
+//
 // private methods
 //
 
 //_____________________________________________________________________________
 G4bool G4PlotManager::WritePage()
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("write a page in", "plot file", fFileName);
-#endif
+  fState.Message(kVL4, "write a page in", "plot file", fFileName);
 
 #if defined(TOOLS_USE_FREETYPE)
   HD_style(fViewer->plots(), 5);
@@ -215,51 +202,37 @@ G4bool G4PlotManager::WritePage()
 
   G4bool result = fViewer->write_page();
   if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot write a page in the plot file " << fFileName;
-    G4Exception("G4PlotManager::WritePage()",
-                "Analysis_W022", JustWarning, description);
+    Warn("Cannot write a page in the plot file " + fFileName,
+      fkClass, "WritePage");
   }
 
   // clear viewers plots
-  fViewer->plots().init_sg(); 
+  fViewer->plots().init_sg();
     //it will recreate the sg::plotters and then reset the styles on new ones.
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) 
-    fState.GetVerboseL3()->Message("write a page in", "plot file", fFileName);
-#endif
+  fState.Message(kVL3, "write a page in", "plot file", fFileName);
 
   return result;
-}  
+}
 
-// 
+//
 // public methods
 //
 
 //_____________________________________________________________________________
 G4bool G4PlotManager::OpenFile(const G4String& fileName)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("open", "plot file", fileName);
-#endif
+  fState.Message(kVL4, "open", "plot file", fileName);
 
   // Keep filename for logging
   fFileName = fileName;
 
   G4bool result = fViewer->open_file(fileName);
   if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open plot file " << fileName;
-    G4Exception("G4PlotManager::OpenFile()",
-                "Analysis_W001", JustWarning, description);
+    Warn("Cannot open plot file " + fileName, fkClass, "OpenFile");
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("open", "plot file", fileName);
-#endif
+  fState.Message(kVL1, "open", "plot file", fileName);
 
   return result;
 }
@@ -267,23 +240,14 @@ G4bool G4PlotManager::OpenFile(const G4String& fileName)
 //_____________________________________________________________________________
 G4bool G4PlotManager::CloseFile()
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("close", "plot file", fFileName);
-#endif
+  fState.Message(kVL4, "close", "plot file", fFileName);
 
   G4bool result = fViewer->close_file();
   if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot close the plot file.";
-    G4Exception("G4PlotManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
+    Warn("Cannot close the plot file", fkClass, "CloseFile");
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("close", "plot file", fFileName);
-#endif
+  fState.Message(kVL1, "close", "plot file", fFileName);
 
   return result;
 }

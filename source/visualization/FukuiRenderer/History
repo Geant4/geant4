@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+26 August 2021  Ben Morgan (DAWN-V10-07-02)
+- Remove obsolete network FukuiRenderer driver
+
 07 June 2021  John Allison (DAWN-V10-07-01)
 - Fix hidden function warning.
 

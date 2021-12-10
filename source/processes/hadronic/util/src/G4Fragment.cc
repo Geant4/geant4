@@ -36,6 +36,7 @@
 //            inline to source 
 // 25.09.2010 M. Kelsey -- Change "setprecision" to "setwidth" in printout,
 //	      add null pointer check.
+// 27.10.2021 A.Ribon extension for hypernuclei.
 
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
@@ -54,6 +55,7 @@ const G4double G4Fragment::minFragExcitation = 10.*CLHEP::eV;
 G4Fragment::G4Fragment() :
   theA(0),
   theZ(0),
+  theL(0),
   theExcitationEnergy(0.0),
   theGroundStateMass(0.0),
   theMomentum(G4LorentzVector(0,0,0,0)),
@@ -74,6 +76,7 @@ G4Fragment::G4Fragment() :
 G4Fragment::G4Fragment(const G4Fragment &right) :
    theA(right.theA),
    theZ(right.theZ),
+   theL(right.theL),
    theExcitationEnergy(right.theExcitationEnergy),
    theGroundStateMass(right.theGroundStateMass),
    theMomentum(right.theMomentum),
@@ -96,6 +99,32 @@ G4Fragment::~G4Fragment()
 G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4bool warning) :
   theA(A),
   theZ(Z),
+  theL(0),
+  theExcitationEnergy(0.0),
+  theGroundStateMass(0.0),
+  theMomentum(aMomentum),
+  thePolarization(nullptr),
+  creatorModel(-1),
+  numberOfParticles(0),
+  numberOfCharged(0),
+  numberOfHoles(0),
+  numberOfChargedHoles(0),
+  numberOfShellElectrons(0),
+  xLevel(0),
+  theParticleDefinition(nullptr),
+  spin(0.0),
+  theCreationTime(0.0)
+{
+  if(theA > 0) { 
+    CalculateGroundStateMass();
+    CalculateExcitationEnergy(warning); 
+  }
+}
+
+G4Fragment::G4Fragment(G4int A, G4int Z, G4int numberOfLambdas, const G4LorentzVector& aMomentum, G4bool warning) :
+  theA(A),
+  theZ(Z),
+  theL(std::max(numberOfLambdas,0)),
   theExcitationEnergy(0.0),
   theGroundStateMass(0.0),
   theMomentum(aMomentum),
@@ -122,6 +151,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
 		       const G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
+  theL(0),
   theExcitationEnergy(0.0),
   theMomentum(aMomentum),
   thePolarization(nullptr),
@@ -150,6 +180,7 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
   if (this != &right) {
     theA = right.theA;
     theZ = right.theZ;
+    theL = right.theL;
     theExcitationEnergy = right.theExcitationEnergy;
     theGroundStateMass = right.theGroundStateMass;
     theMomentum  = right.theMomentum;
@@ -184,7 +215,8 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
   out.setf(std::ios::floatfield);
 
   out << "Fragment: A = " << std::setw(3) << theFragment.theA 
-      << ", Z = " << std::setw(3) << theFragment.theZ ;
+      << ", Z = " << std::setw(3) << theFragment.theZ
+      << ", numberOfLambdas = " << std::setw(3) << theFragment.theL ;
   out.setf(std::ios::scientific,std::ios::floatfield);
 
   // Store user's precision setting and reset to (3) here: back-compatibility
@@ -193,8 +225,8 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
   out << std::setprecision(3)
       << ", U = " << theFragment.GetExcitationEnergy()/CLHEP::MeV 
       << " MeV  ";
-  if(theFragment.GetCreatorModelType() >= 0) { 
-    out << " creatorModelType= " << theFragment.GetCreatorModelType(); 
+  if(theFragment.GetCreatorModelID() >= 0) { 
+    out << " creatorModelID= " << theFragment.GetCreatorModelID(); 
   }
   if(theFragment.GetCreationTime() > 0.0) { 
     out << "  Time= " << theFragment.GetCreationTime()/CLHEP::ns << " ns"; 

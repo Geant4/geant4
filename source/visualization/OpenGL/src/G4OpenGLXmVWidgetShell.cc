@@ -27,8 +27,6 @@
 //
 //Base class for all Motif shell widgets
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmVWidgetShell.hh"
 
 G4OpenGLXmVWidgetShell::G4OpenGLXmVWidgetShell ()
@@ -36,5 +34,3 @@ G4OpenGLXmVWidgetShell::G4OpenGLXmVWidgetShell ()
 
 G4OpenGLXmVWidgetShell::~G4OpenGLXmVWidgetShell ()
 {}
-
-#endif

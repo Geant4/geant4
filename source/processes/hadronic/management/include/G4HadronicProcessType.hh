@@ -48,6 +48,7 @@ enum G4HadronicProcessType
   fHadronAtRest =     151,
   fLeptonAtRest =     152,
   fChargeExchange =   161,
-  fRadioactiveDecay = 210
+  fRadioactiveDecay = 210,
+  fEMDissociation =   310
 };
 #endif

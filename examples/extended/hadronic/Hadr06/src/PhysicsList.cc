@@ -35,6 +35,7 @@
 #include "G4UnitsTable.hh"
 
 #include "HadronElasticPhysicsHP.hh"
+#include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
@@ -51,6 +52,8 @@
 #include "G4EmStandardPhysics_option3.hh"
 
 #include "G4DecayPhysics.hh"
+
+#include "RadioactiveDecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,10 +71,11 @@ PhysicsList::PhysicsList()
 
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
-  
+  ////RegisterPhysics( new G4HadronElasticPhysicsXS(verb) );
+    
   // Hadron Inelastic Physics
   ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
@@ -99,7 +103,8 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());
+  RegisterPhysics(new RadioactiveDecayPhysics());
+  ////RegisterPhysics(new G4RadioactiveDecayPhysics());  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

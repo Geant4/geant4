@@ -56,33 +56,55 @@ if(GEANT4_USE_INVENTOR_QT)
   set(GEANT4_USE_INVENTOR ON)
 endif()
 
-# - Qt (may be required by Coin driver)
+# - ToolsSG/Xt/X11/Qt/Win
+# Though this option has platform differences, we configure here because it can
+# trigger the Qt requirement
+if(WIN32)
+  set(_g4_toolssg_backends "OFF" "WIN32")
+else()
+  # TODO: Difference between X11, XT?
+  set(_g4_toolssg_backends "OFF" "X11" "XT" "QT")
+endif()
+
+enum_option(GEANT4_USE_TOOLSSG
+  DOC "Build Geant4 ToolsSG Visualization Driver with Backend"
+  VALUES ${_g4_toolssg_backends}
+)
+geant4_add_feature(GEANT4_USE_TOOLSSG "Build ToolsSG Visualization Driver with backend '${GEANT4_USE_TOOLSSG}'")
+
+foreach(_tsg_backend IN LISTS _g4_toolssg_backends)
+  set(GEANT4_USE_TOOLSSG_${_tsg_backend}_GLES OFF)
+  if(_tsg_backend STREQUAL GEANT4_USE_TOOLSSG)
+    set(GEANT4_USE_TOOLSSG_${_tsg_backend}_GLES ON)
+  endif()
+endforeach()
+
+# - Qt (may be required by Coin/ToolsSG driver)
 option(GEANT4_USE_QT "Build Geant4 with Qt support" OFF)
-if(GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_QT)
+if((GEANT4_USE_INVENTOR_QT OR GEANT4_USE_TOOLSSG_QT_GLES) AND NOT GEANT4_USE_QT)
   set(GEANT4_USE_QT ON CACHE BOOL "Build Geant4 with Qt support" FORCE)
-  message(STATUS "Forcing GEANT4_USE_QT to ON, required by GEANT4_USE_INVENTOR_QT")
+  message(STATUS "Forcing GEANT4_USE_QT to ON, required by Inventor/ToolsSG Driver(s)")
 endif()
 
 geant4_add_feature(GEANT4_USE_QT "Build Geant4 with Qt support")
 
+# - Vtk
+option(GEANT4_USE_VTK "Build Geant4 with VTK visualisation" OFF)
+mark_as_advanced(GEANT4_USE_VTK)
+if(GEANT4_USE_VTK)
+  find_package(VTK 8.2 REQUIRED)
+endif()
+
+geant4_add_feature(GEANT4_USE_VTK "Using VTK for visualisation (EXPERIMENTAL)")
+
 # - Unix only
 if(UNIX)
-  # - Client/Server DAWN driver
-  # mark as advanced because user should know what they're doing here
-  option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
-  geant4_add_feature(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support")
-  mark_as_advanced(GEANT4_USE_NETWORKDAWN)
-
-  # - Client/Server VRML driver
-  option(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support" OFF)
-  geant4_add_feature(GEANT4_USE_NETWORKVRML "Build VRML driver with Client/Server support")
-  mark_as_advanced(GEANT4_USE_NETWORKVRML)
-
   # - Motif UI/Vis (may be required by Coin Vis driver)
   option(GEANT4_USE_XM "Build Geant4 with Motif (X11) support" OFF)
-  if(GEANT4_USE_INVENTOR AND NOT GEANT4_USE_INVENTOR_QT AND NOT GEANT4_USE_XM)
+  if((GEANT4_USE_INVENTOR AND NOT GEANT4_USE_INVENTOR_QT)
+      AND NOT GEANT4_USE_XM)
     set(GEANT4_USE_XM ON CACHE BOOL "Build Geant4 with Motif (X11) support" FORCE)
-    message(STATUS "Forcing GEANT4_USE_XM to ON, required by GEANT4_USE_INVENTOR")
+    message(STATUS "Forcing GEANT4_USE_XM to ON, required by Inventor driver")
   endif()
 
   geant4_add_feature(GEANT4_USE_XM "Build Geant4 with Xm Support")
@@ -94,30 +116,12 @@ if(UNIX)
   # RayTracer driver with X11 support
   option(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support" OFF)
   geant4_add_feature(GEANT4_USE_RAYTRACER_X11 "Build RayTracer driver with X11 support")
-
-  # ToolsSG X11/GLES driver
-  option(GEANT4_USE_TOOLSSG_X11_GLES "Build Geant4 ToolsSG driver with X11/GLES support" OFF)
-  geant4_add_feature(GEANT4_USE_TOOLSSG_X11_GLES "Build Geant4 ToolsSG driver with X11/GLES support")
-
-  # ToolsSG Xt/GLES driver
-  option(GEANT4_USE_TOOLSSG_XT_GLES "Build Geant4 ToolsSG driver with Xt/GLES support" OFF)
-  geant4_add_feature(GEANT4_USE_TOOLSSG_XT_GLES "Build Geant4 ToolsSG driver with Xt/GLES support")
-
-  # ToolsSG Qt/GLES driver
-  option(GEANT4_USE_TOOLSSG_QT_GLES "Build Geant4 ToolsSG driver with Qt/GLES support" OFF)
-  geant4_add_feature(GEANT4_USE_TOOLSSG_QT_GLES "Build Geant4 ToolsSG driver with Qt/GLES support")
-
 endif()
 
 # Windows only
 if(WIN32)
   option(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
   geant4_add_feature(GEANT4_USE_OPENGL_WIN32 "Build OpenGL driver with Win32 support")
-
-  # ToolsSG Windows/GLES driver
-  option(GEANT4_USE_TOOLSSG_WINDOWS_GLES "Build Geant4 ToolsSG driver with Windows/GLES support" OFF)
-  geant4_add_feature(GEANT4_USE_TOOLSSG_WINDOWS_GLES "Build Geant4 ToolsSG driver with Windows/GLES support")
-
 endif()
 
 #-----------------------------------------------------------------------
@@ -199,18 +203,29 @@ if(GEANT4_USE_INVENTOR
    OR GEANT4_USE_QT
    OR GEANT4_USE_OPENGL_X11
    OR GEANT4_USE_XM
+   OR GEANT4_USE_TOOLSSG
    OR GEANT4_USE_OPENGL_WIN32)
   find_package(OpenGL REQUIRED)
   geant4_save_package_variables(OpenGL OPENGL_INCLUDE_DIR OPENGL_gl_LIBRARY)
 
   # X11 drivers on macOS need XQuartzGL
-  if(APPLE AND (GEANT4_USE_INVENTOR_XT OR GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM))
+  if(APPLE AND
+     (GEANT4_USE_INVENTOR_XT
+      OR GEANT4_USE_OPENGL_X11
+      OR GEANT4_USE_XM
+      OR GEANT4_USE_TOOLSSG_X11_GLES
+      OR GEANT4_USE_TOOLSSG_XT_GLES))
     find_package(XQuartzGL REQUIRED)
     geant4_save_package_variables(XQuartzGL XQuartzGL_INCLUDE_DIR XQuartzGL_gl_LIBRARY)
   endif()
 
-  # Enable driver
-  set(GEANT4_USE_OPENGL ON)
+  # Enable G4OpenGL driver
+  if(GEANT4_USE_INVENTOR
+     OR GEANT4_USE_QT
+     OR GEANT4_USE_OPENGL_X11
+     OR GEANT4_USE_OPENGL_WIN32)
+    set(GEANT4_USE_OPENGL ON)
+  endif()
 endif()
 
 if(UNIX)
@@ -218,7 +233,9 @@ if(UNIX)
   if(GEANT4_USE_OPENGL_X11
      OR GEANT4_USE_RAYTRACER_X11
      OR GEANT4_USE_XM
-     OR GEANT4_USE_INVENTOR_XT)
+     OR GEANT4_USE_INVENTOR_XT
+     OR GEANT4_USE_TOOLSSG_X11_GLES
+     OR GEANT4_USE_TOOLSSG_XT_GLES)
     find_package(X11 REQUIRED)
     include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 

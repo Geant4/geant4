@@ -1,0 +1,132 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_bcbk
+#define tools_sg_bcbk
+
+// "cbk" is for callback. Base class to handle a callback.
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include "../scast"
+#include "../S_STRING"
+
+#include <string>
+
+namespace tools {
+namespace sg {
+
+enum return_action {
+  return_none,
+  return_to_render
+};
+
+class bcbk {
+public:
+  TOOLS_SCLASS(tools::sg::bcbk)
+public:
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<bcbk>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  virtual return_action action() = 0;
+  virtual bcbk* copy() const = 0;
+  //virtual bool equal(const bcbk&) const = 0; //it would need the upper cast.
+public:
+  virtual ~bcbk(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  bcbk()
+  :m_single_shoot(false)
+  ,m_is_valid(true)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  bcbk(const bcbk& a_from)
+  :m_single_shoot(a_from.m_single_shoot)
+  ,m_is_valid(a_from.m_is_valid)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  bcbk& operator=(const bcbk& a_from){
+    m_single_shoot = a_from.m_single_shoot;
+    m_is_valid = a_from.m_is_valid;
+    return *this;
+  }
+public:
+  void set_single_shoot(bool a_value) {m_single_shoot = a_value;}
+  bool is_single_shoot() const {return m_single_shoot;}
+
+  bool is_valid() const {return m_is_valid;}
+  void invalidate() {m_is_valid = false;}
+protected:
+  bool m_single_shoot;
+  bool m_is_valid;
+};
+
+}}
+
+#define TOOLS_CBK(a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_SCLASS(a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}\
+  virtual tools::sg::bcbk* copy() const {return new a__class(*this);}
+
+#define TOOLS_T_CBK(a__T,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_T_SCLASS(a__T,a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}\
+  virtual tools::sg::bcbk* copy() const {return new a__class(*this);}
+
+#define TOOLS_T2_CBK(a__T1,a__T2,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_T2_SCLASS(a__T1,a__T2,a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}\
+  virtual tools::sg::bcbk* copy() const {return new a__class(*this);}
+
+#define TOOLS_T3_CBK(a__T1,a__T2,a__T3,a__class,a__sclass,a__parent)\
+private:\
+  typedef a__parent parent;\
+public:\
+  TOOLS_T3_SCLASS(a__T1,a__T2,a__T3,a__sclass)\
+public:\
+  virtual void* cast(const std::string& a_class) const {\
+    if(void* p = tools::cmp_cast<a__class>(this,a_class)) return p;\
+    return parent::cast(a_class);\
+  }\
+  virtual const std::string& s_cls() const {return s_class();}\
+  virtual tools::sg::bcbk* copy() const {return new a__class(*this);}
+
+#endif

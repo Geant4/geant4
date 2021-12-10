@@ -43,7 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4BGGNucleonInelasticXS.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4HadronicParameters.hh"
 
 
@@ -80,5 +80,5 @@ Build(G4HadronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   aP->RegisterMe(theModel);
-   aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
+   aP->AddDataSet(new G4NeutronInelasticXS());
 }

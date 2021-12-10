@@ -189,10 +189,6 @@ class G4UAdapter : public G4VSolid, protected UnplacedVolume_t
       // Smart access function - creates on request and stores for future
       // access.  A null pointer means "not available".
 
-    inline friend std::ostream& operator<< ( std::ostream& os, const G4UAdapter<UnplacedVolume_t>& uad )
-    { const UnplacedVolume_t& origUnplaced = uad; return operator<< ( os, origUnplaced ); } 
-      // Streaming operator, forward to VecGeom method 
-
   public:  // without description
 
     G4UAdapter(__void__&);
@@ -421,6 +417,14 @@ G4ThreeVector G4UAdapter<UnplacedVolume_t>::GetPointOnSurface() const
 namespace
 {
   G4Mutex pMutex = G4MUTEX_INITIALIZER;
+}
+
+// Free function to enable ostream output
+template <class UnplacedVolume_t>
+std::ostream&
+operator<<(std::ostream& os, const G4UAdapter<UnplacedVolume_t>& uAdapted)
+{
+  return uAdapted.StreamInfo(os);
 }
 
 template <class UnplacedVolume_t>

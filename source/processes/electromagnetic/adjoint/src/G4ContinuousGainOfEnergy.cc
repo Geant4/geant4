@@ -142,7 +142,7 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
     degain = E - Tkin;
   }
   G4double tmax = fCurrentModel->MaxSecondaryKinEnergy(dynParticle);
-  tmax          = std::min(tmax, fCurrentTcut);
+  fCurrentTcut = std::min(fCurrentTcut, tmax);
 
   dynParticle->SetKineticEnergy(Tkin + degain);
 
@@ -154,8 +154,8 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
   if(fLossFluctuationFlag)
   {
     deltaE = fCurrentModel->GetModelOfFluctuations()->SampleFluctuations(
-               fCurrentCouple, dynParticle, tmax, dlength, degain) -
-             degain;
+      fCurrentCouple, dynParticle, fCurrentTcut, tmax, dlength, degain) 
+      - degain;
   }
 
   G4double egain = degain + deltaE;

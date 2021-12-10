@@ -44,8 +44,8 @@
 
 #include "GRRunAction.hh"
 #include "GRRunActionMessenger.hh"
-#include "GRAnalysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
@@ -57,6 +57,7 @@ GRRunAction::GRRunAction()
 { 
   messenger = new GRRunActionMessenger(this);
   auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("csv");
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   analysisManager->SetVerboseLevel(verbose);
@@ -65,7 +66,6 @@ GRRunAction::GRRunAction()
 
 GRRunAction::~GRRunAction()
 {
-  delete G4AnalysisManager::Instance();  
   delete messenger;
 }
 

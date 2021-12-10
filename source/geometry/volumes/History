@@ -16,6 +16,18 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 14th, 2021 G.Cosmo                 - geomvol-V10-07-05
+- Use same strategy for cloning solids for replicated volumes types in
+  G4GeometryWorkspace (required for having proper treatment of divided
+  volumes). Cleanup of unused verbose printouts.
+- G4PVReplica: moved internal defines for MT split data to source.
+  Avoid deletion of rotation matrix for replication in Phi in destructor
+  as not necessary. Some code cleanup.
+
+October 12th, 2021 E.Tcherniaev            - geomvol-V10-07-04
+- G4PVPlacement::CheckOverlaps(): more precise estimation of overlap size,
+  improved check for encapsulation of volume by another volume.
+
 June 4th, 2021  I.Hrivnacova               - geomvol-V10-07-03
 - Added G4ReflectionFactory::Clean() for clearing the internal maps
   on users request and removed problematic G4ReflectionFactory::Reset()

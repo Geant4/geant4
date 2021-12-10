@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 29th, 2021 I. Hrivnacova (exPolarisation-V10-07-01)
+- Removed obsolete references to AIDA analysis tools
+
 May 24th, 2021,  B. Morgan (exPolarisation-V10-07-00)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

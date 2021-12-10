@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01-November-2021 V.Ivanchenko hadr-pre-V10-07-05
+- G4LowEIonFragmentation - fixed main memory leak reported by Coverity
+
+01-October-2021 V.Ivanchenko hadr-pre-V10-07-04
+- G4LowEIonFragmentation - fixed minor memory leak at exit
+- G4PreCompoundModel - removed obsolete methods; improved code format;
+    fixed minor memory leak at exit
+- G4PreCompound* classes - improved formats and add C++11 keywords
+
+30-September-2021 V.Ivanchenko hadr-pre-V10-07-03
+- G4LowEIonFragmentation - fixed Coverity warning and clean-up
+
+04-August-2021 A. Ribon hadr-pre-V10-07-02
+- G4PreCompoundModel, G4LowEGammaNuclearModel : migrated to the new version
+  of G4PhysicsModelCatalog
+- G4PreCompoundEmission, G4LowEIonFragmentation : set creator model ID
+  for secondaries, using the new version of G4PhysicsModelCatalog
+
 16-April-2021 B. Morgan hadr-pre-V10-07-01
 - Migrate build to modular CMake API
 

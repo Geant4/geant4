@@ -35,7 +35,7 @@
 using namespace G4Accumulables;
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>::G4Accumulable(const G4String& name, T initValue, G4MergeMode mergeMode)
  : G4VAccumulable(name),
    fValue(initValue),
@@ -45,7 +45,7 @@ G4Accumulable<T>::G4Accumulable(const G4String& name, T initValue, G4MergeMode m
 {}
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>::G4Accumulable(T initValue, G4MergeMode mergeMode)
  : G4VAccumulable(),
    fValue(initValue),
@@ -55,7 +55,7 @@ G4Accumulable<T>::G4Accumulable(T initValue, G4MergeMode mergeMode)
 {}
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>::G4Accumulable(const G4Accumulable& rhs)
   : G4VAccumulable(rhs),
     fValue(rhs.fValue),
@@ -65,12 +65,17 @@ G4Accumulable<T>::G4Accumulable(const G4Accumulable& rhs)
 {}
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>::~G4Accumulable()
+template <typename T>
+G4Accumulable<T>::G4Accumulable(G4Accumulable&& rhs)
+  : G4VAccumulable(rhs),
+    fValue(std::move(rhs.fValue)),
+    fInitValue(std::move(rhs.fInitValue)),
+    fMergeMode(rhs.fMergeMode),
+    fMergeFunction(rhs.fMergeFunction)
 {}
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator=(const G4Accumulable<T>& rhs)
 {
@@ -90,7 +95,27 @@ G4Accumulable<T>::operator=(const G4Accumulable<T>& rhs)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
+G4Accumulable<T>&
+G4Accumulable<T>::operator=(G4Accumulable<T>&& rhs)
+{
+  // check assignment to self
+  if (this == &rhs) return *this;
+
+  // base class assignment
+  G4VAccumulable::operator=(rhs);
+
+  // this class data assignment
+  fValue = std::move(rhs.fValue);
+  fInitValue = std::move(rhs.fInitValue);
+  fMergeMode = rhs.fMergeMode;
+  fMergeFunction = rhs.fMergeFunction;
+
+  return *this;
+}
+
+//_____________________________________________________________________________
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator+=(const G4Accumulable<T>& rhs)
 {
@@ -100,7 +125,7 @@ G4Accumulable<T>::operator+=(const G4Accumulable<T>& rhs)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator*=(const G4Accumulable<T>& rhs)
 {
@@ -110,7 +135,7 @@ G4Accumulable<T>::operator*=(const G4Accumulable<T>& rhs)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator=(const T& value)
 {
@@ -120,7 +145,7 @@ G4Accumulable<T>::operator=(const T& value)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator+=(const T& value)
 {
@@ -130,7 +155,7 @@ G4Accumulable<T>::operator+=(const T& value)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator*=(const T& value)
 {
@@ -140,18 +165,18 @@ G4Accumulable<T>::operator*=(const T& value)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
-G4Accumulable<T>  
+template <typename T>
+G4Accumulable<T>
 G4Accumulable<T>::operator++(int)
 {
   // postfix increment
   G4Accumulable<T> temp = *this;
   fValue++;
   return temp;
-} 
+}
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 G4Accumulable<T>&
 G4Accumulable<T>::operator++()
 {
@@ -161,7 +186,7 @@ G4Accumulable<T>::operator++()
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 void G4Accumulable<T>::Merge(const G4VAccumulable& other)
 {
   // G4cout << "Merging other: " << other.GetName() << " " << static_cast<const G4Accumulable<T>&>(other).fValue << G4endl;
@@ -171,14 +196,14 @@ void G4Accumulable<T>::Merge(const G4VAccumulable& other)
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 void G4Accumulable<T>::Reset()
 {
   fValue = fInitValue;
 }
 
 //_____________________________________________________________________________
-template <typename T> 
+template <typename T>
 T  G4Accumulable<T>::GetValue() const
 {
   return fValue;

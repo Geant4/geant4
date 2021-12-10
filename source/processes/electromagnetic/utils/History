@@ -16,6 +16,89 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 November 21: V.Ivanchenko (emutils-V10-07-38)
+- G4EmCalculator - fixed computation of dedx for He3 and alpha
+    (complete fix of #2440)
+
+10 November 21: S. Guatelli (emutils-V10-07-37)
+- changed ANSTO parameters in  UI interface commands
+    
+30 October 21: V.Ivanchenko (emutils-V10-07-36)
+- G4VEnergyLossProcess - exclude ion corrections only from d, t, alpha
+    in order to fix #2440
+- G4ionEffectiveCharge - return back limit on effective charge 
+    from 0.5 to 1 (used in previous releases)
+
+25 October 21: V.Ivanchenko (emutils-V10-07-35)
+- G4EmParameters - add ANSTO options for the atomic de-excitation;
+    removed obsolete AugerCascade() method
+- G4EmLowEParameters, G4EmLowEParametersMessenger - added ANSTO
+    flag and UI commands
+
+20 October 21: V.Ivanchenko (emutils-V10-07-34)
+- G4EmProcessSubType : added new type for annihilation to the tau pair
+
+12 October 21: V.Ivanchenko (emutils-V10-07-33)
+- G4ionEffectiveCharge - code clean-up
+- G4EmCorrections - do not use spline in various internal vectors,
+    because correction values are small and smooth, clean-up ion 
+    correction computations
+- G4VEnergyLossProcess - code clean-up for ions
+
+06 October 21: A.Ribon (emutils-V10-07-32)
+- G4LowEnergyEmProcessSubType : added new enum values, corresponding
+  to numerical values used in G4PhysicsListHelper
+
+03 October 21: V.Ivanchenko (emutils-V10-07-31)
+- G4VEmProcess, G4VEnergyLossProcess, G4VAtomDeexcitation,
+  G4LossTableBuilder - implemented updated numbering scheme for
+    secondary particle production, deprecate duplicate printout
+    of processes and models, move list of EM parameters printout
+    before printout on processes, code format improved 
+  G4EmParameters, G4EmParametersMessenger - removed obsolete 
+    methods, added protection agains duplicate printout
+
+23 September 21: A.Ribon (emutils-V10-07-30)
+- G4LowEnergyEmProcessSubType : created new enum for low-energy
+  electromagnetic process sub-types
+
+16 September 21: V.Ivanchenko (emutils-V10-07-29)
+- G4EmElementSelector - change computation for upper energy limit
+    fixing crashes in some applications
+
+30 August 21: D.Sawkey (emutils-V10-07-28)
+- G4OpticalParameters - removed deprecated function declarations
+- G4OpticalParameters, G4OpticalParametersMessenger - apply
+  clang-format style guidelines
+
+27 August 21: V.Ivanchenko (emutils-V10-07-27)
+- G4LossTableBuilder - use updated interface to G4PhysicsVector
+- G4EmElementSelector - change computation for corner cases
+- G4VEnergyLossProcess - minor clean-up
+
+25 August 21: J.Hahnfeld (emutils-V10-07-26)
+- G4EmParametersMessenger - correct default value for GeomFactor
+
+04 August 21: A.Ribon (emutils-V10-07-25)
+- G4VEmProcess, G4VEnergyLossProcess, G4VAtomDeexcitation : migrated
+  to the new version of G4PhysicsModelCatalog
+
+18 July 21: V.Ivanchenko (emutils-V10-07-24)
+- G4VEmFluctuationModel - changed interface - both cut value and
+    max energy transfer are parameters of main methods; this 
+    is needed in order to fix problem #2390
+- G4VEnergyLossProcess, G4EmModelManager - adopted above interface
+    change 
+
+11 July 21: V.Ivanchenko (emutils-V10-07-23)
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering, 
+  G4LossTableBuilder, G4VEmModel, G4VMscModel, G4LossTableManager 
+    implement and use base material approach only if base materials 
+    are defined, this should bring a minor speed-up of the code and little 
+    reduction of memory; fixed problems for the case, when materials
+    are changed between runs
+- G4LossTableBuilder - base material flag may be disabled 
+
 08 June 21: V.Ivanchenko (emutils-V10-07-22)
 - G4VEmProcess, G4VEnergyLossProcess - fixed computation of cross
     section and rangle if base material approach is used; recover

@@ -29,204 +29,228 @@
 // - 02 Dec. 1995, G.Cosmo: Structure created based on object model
 // - 03 Mar. 1996, K.Amako: Implemented the 1st version
 // --------------------------------------------------------------------
-
 inline G4double G4PhysicsVector::operator[](const std::size_t index) const
 {
   return dataVector[index];
 }
 
 // ---------------------------------------------------------------
-
 inline G4double G4PhysicsVector::operator()(const std::size_t index) const
 {
   return dataVector[index];
 }
 
 // ---------------------------------------------------------------
-
 inline G4double G4PhysicsVector::Energy(const std::size_t index) const
 {
   return binVector[index];
 }
 
 // ---------------------------------------------------------------
-
-inline G4double G4PhysicsVector::GetMaxEnergy() const { return edgeMax; }
+inline G4double
+G4PhysicsVector::GetLowEdgeEnergy(const std::size_t index) const
+{
+  return binVector[index];
+}
 
 // ---------------------------------------------------------------
+inline G4double G4PhysicsVector::GetMinEnergy() const
+{ 
+  return edgeMin;
+}
 
+// ---------------------------------------------------------------
+inline G4double G4PhysicsVector::GetMaxEnergy() const
+{
+  return edgeMax;
+}
+
+// ---------------------------------------------------------------
+inline G4double G4PhysicsVector::GetMinValue() const
+{
+  return (numberOfNodes > 0) ? dataVector[0] : 0.0;
+}
+
+// ---------------------------------------------------------------
+inline G4double G4PhysicsVector::GetMaxValue() const
+{
+  return (numberOfNodes > 0) ? dataVector[numberOfNodes - 1] : 0.0;
+}
+
+// ---------------------------------------------------------------
 inline std::size_t G4PhysicsVector::GetVectorLength() const
 {
   return numberOfNodes;
 }
 
 // ---------------------------------------------------------------
-
 inline void G4PhysicsVector::PutValue(std::size_t index, G4double theValue)
 {
   if(index >= numberOfNodes)
   {
-    PrintPutValueError(index, theValue, theValue);
-  }
-  dataVector[index] = theValue;
-}
-
-// ---------------------------------------------------------------
-
-inline G4bool G4PhysicsVector::IsFilledVectorExist() const
-{
-  return (numberOfNodes > 0);
-}
-
-// ---------------------------------------------------------------
-
-inline G4PhysicsVectorType G4PhysicsVector::GetType() const { return type; }
-
-// ---------------------------------------------------------------
-
-inline void G4PhysicsVector::SetSpline(G4bool val)
-{
-  // Flag useSpline is "true" only if second derivatives are filled
-
-  if(val)
-  {
-    if(0 == secDerivative.size() && 0 < dataVector.size())
-    {
-      FillSecondDerivatives();
-    }
+    PrintPutValueError(index, theValue, "PutValue(..) ");
   }
   else
   {
-    useSpline = false;
-    secDerivative.clear();
+    dataVector[index] = theValue;
   }
 }
 
 // ---------------------------------------------------------------
-
-inline G4bool G4PhysicsVector::GetSpline() const { return useSpline; }
+inline G4PhysicsVectorType G4PhysicsVector::GetType() const
+{
+  return type;
+}
 
 // ---------------------------------------------------------------
+inline G4bool G4PhysicsVector::GetSpline() const
+{
+  return useSpline;
+}
 
+// ---------------------------------------------------------------
 inline void G4PhysicsVector::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
 }
 
 // ---------------------------------------------------------------
-
-inline std::size_t G4PhysicsVector::FindBinLocation(
-  const G4double theEnergy) const
+inline G4double
+G4PhysicsVector::FindLinearEnergy(const G4double rand) const
 {
-  std::size_t bin;
-  if(type == T_G4PhysicsLogVector)
-  {
-    bin = size_t(std::max(G4Log(theEnergy) * invdBin - baseBin, 0.0));
-  }
-  else if(type == T_G4PhysicsLinearVector)
-  {
-    bin = size_t(std::max(theEnergy * invdBin - baseBin, 0.0));
-  }
-  else
-  {
-    // Bin location proposed by K.Genser (FNAL)
-    bin = std::lower_bound(binVector.begin(), binVector.end(), theEnergy) -
-          binVector.begin() - 1;
-  }
-  return std::min(bin, numberOfNodes - 2);
+  return GetEnergy(rand*dataVector[numberOfNodes - 1]);
 }
 
 // ---------------------------------------------------------------
-
-inline std::size_t G4PhysicsVector::FindBin(const G4double e,
-                                            const std::size_t idx) const
-{
-  std::size_t id = idx;
-  // it is not possible to drop this long if below before
-  // PAI and diffuse elastic data models will not be improved
-  if(e < binVector[1])
-  {
-    id = 0;
-  }
-  else if(e >= binVector[numberOfNodes - 2])
-  {
-    id = numberOfNodes - 2;
-  }
-  else if(idx > numberOfNodes - 2 || e < binVector[idx] ||
-          e > binVector[idx + 1])
-  {
-    id = FindBinLocation(e);
-  }
-  return id;
-}
-
-// ---------------------------------------------------------------
-
-inline std::size_t G4PhysicsVector::ComputeLogVectorBin(
-  const G4double loge) const
-{
-  return std::size_t(
-    std::max(0., std::min(loge * invdBin - baseBin, numberOfNodes - 2.)));
-}
-
-// ---------------------------------------------------------------
-
-inline G4double G4PhysicsVector::Value(G4double theEnergy) const
-{
-  std::size_t idx = 0;
-  return Value(theEnergy, idx);
-}
-
-// ---------------------------------------------------------------
-
-inline G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) const
-{
-  std::size_t idx = 0;
-  return Value(theEnergy, idx);
-}
-
-// ---------------------------------------------------------------
-
 inline G4double G4PhysicsVector::Interpolation(const std::size_t idx,
                                                const G4double e) const
 {
   // perform the interpolation
   const G4double x1 = binVector[idx];
   const G4double dl = binVector[idx + 1] - x1;
+
+  const G4double y1 = dataVector[idx];
+  const G4double dy = dataVector[idx + 1] - y1;
+
   // note: all corner cases of the previous methods are covered and eventually
   //       gives b=0/1 that results in y=y0\y_{N-1} if e<=x[0]/e>=x[N-1] or
   //       y=y_i/y_{i+1} if e<x[i]/e>=x[i+1] due to small numerical errors
-  const G4double b = std::max(0., std::min(1., (e - x1) / dl));
-  G4double res;
+  const G4double b = (e - x1) / dl;
+
+  G4double res = y1 + b * dy;
+
   if(useSpline)  // spline interpolation
   {
-    const G4double os = 0.166666666667;  // 1./6.
-    const G4double a  = 1.0 - b;
-    const G4double c0 = (a * a * a - a) * secDerivative[idx];
-    const G4double c1 = (b * b * b - b) * secDerivative[idx + 1];
-    res =
-      a * dataVector[idx] + b * dataVector[idx + 1] + (c0 + c1) * dl * dl * os;
+    const G4double c0 = (2.0 - b) * secDerivative[idx];
+    const G4double c1 = (1.0 + b) * secDerivative[idx + 1];
+    res += (b * (b - 1.0)) * (c0 + c1) * (dl * dl * (1.0/6.0));
   }
-  else  // linear interpolation
+
+  return res;
+}
+
+// ---------------------------------------------------------------
+inline std::size_t G4PhysicsVector::ComputeLogVectorBin(
+  const G4double loge) const
+{
+  return std::min(static_cast<G4int>((loge - logemin) * invdBin), idxmax);
+}
+
+// ---------------------------------------------------------------
+inline std::size_t G4PhysicsVector::GetBin(const G4double e) const
+{
+  std::size_t bin;
+  switch(type)
   {
-    const G4double y1 = dataVector[idx];
-    const G4double y2 = dataVector[idx + 1];
-    res               = y1 + b * (y2 - y1);
+    case T_G4PhysicsLogVector:
+      bin = ComputeLogVectorBin(G4Log(e));
+      break;
+
+    case T_G4PhysicsLinearVector:
+      bin = std::min(static_cast<G4int>((e - edgeMin) * invdBin), idxmax);
+      break;
+
+    default:
+      // Bin location proposed by K.Genser (FNAL)
+      bin = std::lower_bound(binVector.begin(), binVector.end(), e) -
+        binVector.begin() - 1;
+  }
+  return bin;
+}
+
+// ---------------------------------------------------------------
+inline G4double
+G4PhysicsVector::Value(const G4double e, std::size_t& idx) const
+{
+  G4double res;
+  if(idx + 1 < numberOfNodes &&
+     e >= binVector[idx] && e <= binVector[idx+1])
+  {
+    res = Interpolation(idx, e);
+  } 
+  else if(e > edgeMin && e < edgeMax)
+  {
+    idx = GetBin(e);
+    res = Interpolation(idx, e);
+  } 
+  else if(e <= edgeMin)
+  {
+    res = dataVector[0];
+    idx = 0;
+  } 
+  else 
+  {
+    res = dataVector[numberOfNodes - 1];
+    idx = idxmax;
   }
   return res;
 }
 
 // ---------------------------------------------------------------
-
-inline G4double G4PhysicsVector::LogVectorValue(
-  const G4double theEnergy, const G4double theLogEnergy) const
+inline G4double G4PhysicsVector::Value(G4double e) const
 {
-  // handle cases below/above the energy grid (by ek, idx that gives b=0/1)
-  // ek = x[0]   if e<=x[0]   and idx will be   0 ^ b=0 => so y=y0
-  // ek = x[N-1] if e>=x[N-1] and idx will be N-2 ^ b=1 => so y=y_{N-1}
-  const G4double ek =
-    std::max(binVector[0], std::min(binVector[numberOfNodes - 1], theEnergy));
-  // compute the lowerindex of the bin (idx \in [0,N-2] will be guaranted)
-  const std::size_t idx = ComputeLogVectorBin(theLogEnergy);
-  return Interpolation(idx, ek);
+  G4double res;
+  if(e > edgeMin && e < edgeMax)
+  {
+    const std::size_t idx = GetBin(e);
+    res = Interpolation(idx, e);
+  }
+  else if(e <= edgeMin)
+  {
+    res = dataVector[0];
+  } 
+  else
+  {
+    res = dataVector[numberOfNodes - 1];
+  }
+  return res;
 }
+
+// ---------------------------------------------------------------
+inline G4double G4PhysicsVector::GetValue(G4double e, G4bool&) const
+{
+  return Value(e);
+}
+
+// ---------------------------------------------------------------
+inline G4double 
+G4PhysicsVector::LogVectorValue(const G4double e, const G4double loge) const
+{
+  G4double res;
+  if(e > edgeMin && e < edgeMax)
+  {
+    const std::size_t idx = ComputeLogVectorBin(loge);
+    res = Interpolation(idx, e);
+  } 
+  else if(e <= edgeMin)
+  {
+    res = dataVector[0];
+  }
+  else
+  {
+    res = dataVector[numberOfNodes - 1];
+  }
+  return res;
+}
+
+// ---------------------------------------------------------------

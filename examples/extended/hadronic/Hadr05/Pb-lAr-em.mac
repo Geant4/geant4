@@ -1,0 +1,33 @@
+#
+# Macro file for "Hadr05.cc"
+#
+# Lead-liquidArgon 50 layers; electron 1 GeV
+#
+/control/verbose 1
+/run/verbose 1
+#
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/testhadr/det/setNbOfLayers 50
+/testhadr/det/setNbOfAbsor  2
+/testhadr/det/setAbsor 1 Lead   2.3  mm
+/testhadr/det/setAbsor 2 liquidArgon  5.7  mm
+/testhadr/det/setSizeYZ 40 cm
+#
+/run/initialize
+#
+/testhadr/gun/setDefault
+/gun/particle e-
+/gun/energy 1 GeV
+#
+/analysis/setFileName Pb-lAr-em
+/analysis/h1/set 1 100 700. 1000. MeV	#edep in absor1
+/analysis/h1/set 2 100   0.  300. MeV	#edep in absor2
+/analysis/h1/set 11 52   0.   52.  none	#long. profile in absor1
+/analysis/h1/set 12 52   0.   52.  none	#long. profile in absor2
+/analysis/h1/set 21 102  0.   102. none	#energy flow
+#
+/run/printProgress 100
+/run/beamOn 1000
+

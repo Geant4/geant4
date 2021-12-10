@@ -29,8 +29,6 @@
 // 27/06/2003 : G.Barrand : implementation (at last !).
 // 30/06/2014 : M.Kelsey :  Change QPixmap objects to pointers
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4VisCommandsGeometrySet.hh"
@@ -556,11 +554,11 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fMouseZoomOutAction = mMouseAction->addAction("Zoom out", fSignalMapperMouse, SLOT(map()));
   fMouseZoomInAction = mMouseAction->addAction("Zoom in", fSignalMapperMouse, SLOT(map()));
 #else
-  fMouseRotateAction = mMouseAction->addAction("Rotate", this, [=](){ this->toggleMouseAction(1); });
-  fMouseMoveAction = mMouseAction->addAction("Move", this, [=](){ this->toggleMouseAction(2); });
-  fMousePickAction = mMouseAction->addAction("Pick", this, [=](){ this->toggleMouseAction(3); });
-  fMouseZoomOutAction = mMouseAction->addAction("Zoom out", this, [=](){ this->toggleMouseAction(4); });
-  fMouseZoomInAction = mMouseAction->addAction("Zoom in", this, [=](){ this->toggleMouseAction(5); });
+  fMouseRotateAction = mMouseAction->addAction("Rotate", this, [this](){ this->toggleMouseAction(1); });
+  fMouseMoveAction = mMouseAction->addAction("Move", this, [this](){ this->toggleMouseAction(2); });
+  fMousePickAction = mMouseAction->addAction("Pick", this, [this](){ this->toggleMouseAction(3); });
+  fMouseZoomOutAction = mMouseAction->addAction("Zoom out", this, [this](){ this->toggleMouseAction(4); });
+  fMouseZoomInAction = mMouseAction->addAction("Zoom in", this, [this](){ this->toggleMouseAction(5); });
 #endif
   QAction *shortcutsAction = mMouseAction->addAction("Show shortcuts");
 
@@ -602,8 +600,8 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   }
 #else
   // no more radioAction, not realy useful and could be confusing to use context menu and icon at the same time
-  fProjectionOrtho = mProjection->addAction("Orthographic", this, [=](){ this->toggleProjection(1); });
-  fProjectionPerspective = mProjection->addAction("Perspective", this, [=](){ this->toggleProjection(2); });
+  fProjectionOrtho = mProjection->addAction("Orthographic", this, [this](){ this->toggleProjection(1); });
+  fProjectionPerspective = mProjection->addAction("Perspective", this, [this](){ this->toggleProjection(2); });
 #endif
   // === Drawing Menu ===
   QMenu *mDrawing = mStyle->addMenu("&Drawing");
@@ -625,10 +623,10 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fSignalMapperSurface->setMapping(fDrawingSurfaceRemoval,3);
   fSignalMapperSurface->setMapping(fDrawingLineSurfaceRemoval,4);
 #else
-  fDrawingWireframe = mDrawing->addAction("Wireframe", this, [=](){ this->toggleSurfaceAction(1); });
-  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", this, [=](){ this->toggleSurfaceAction(2); });
-  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", this, [=](){ this->toggleSurfaceAction(3); });
-  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", this, [=](){ this->toggleSurfaceAction(4); });
+  fDrawingWireframe = mDrawing->addAction("Wireframe", this, [this](){ this->toggleSurfaceAction(1); });
+  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", this, [this](){ this->toggleSurfaceAction(2); });
+  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", this, [this](){ this->toggleSurfaceAction(3); });
+  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", this, [this](){ this->toggleSurfaceAction(4); });
 #endif
 
   fDrawingWireframe->setCheckable(true);
@@ -2831,7 +2829,7 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     // Calculate move for centre and right adjustment
     QFontMetrics* f = new QFontMetrics (font);
 #if QT_VERSION > 0x050110
-    G4double span = f->boundingRect(textCString[0]).width();
+    G4double span = f->boundingRect(textCString).width();
 #else
     G4double span = f->width(textCString);
 #endif
@@ -2845,6 +2843,15 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     //Add offsets
     xmove += g4text.GetXOffset();
     ymove += g4text.GetYOffset();
+
+    // xmove, ymove in pixels - or are they?
+#ifdef __APPLE__
+    const G4double fudgeFactor = 2.;
+#else
+    const G4double fudgeFactor = 1.;
+#endif
+    xmove *= fudgeFactor;
+    ymove *= fudgeFactor;
 
     qGLW->renderText
       ((position.x()+(2*xmove)/getWinWidth()),
@@ -3409,7 +3416,7 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(
   }
   if (!alreadyPresent) {
     createTreeWidgetItem(tmpFullPath,
-                         QString(modelDescription.c_str()),
+                         modelShortName,
                          0, // currentPVCopyNb
                          currentPOIndex,
                          "",
@@ -4624,7 +4631,7 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
 #else
       std::cout << pickCoutButton->text().toStdString() << " "<< fPickInfosWidget->layout()->count()-1<< std::endl;
       int tmp = fPickInfosWidget->layout()->count()-1;
-      connect(pickCoutButton, &QPushButton::clicked , [=](){ this->toggleSceneTreeComponentPickingCout(tmp);});
+      connect(pickCoutButton, &QPushButton::clicked , [this, tmp](){ this->toggleSceneTreeComponentPickingCout(tmp);});
 #endif
     }
   }
@@ -4760,7 +4767,7 @@ QString G4OpenGLQtViewer::GetCommandParameterList (
     for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
       param = aCommand->GetParameter(i_thParameter);
       txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
-      if( ! param->GetParameterGuidance().isNull() )
+      if( ! param->GetParameterGuidance().empty() )
         txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
       txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
       if(param->IsOmittable()){
@@ -4770,13 +4777,13 @@ QString G4OpenGLQtViewer::GetCommandParameterList (
       }
       if( param->GetCurrentAsDefault() ) {
         txt += " Default value   : taken from the current value\n";
-      } else if( ! param->GetDefaultValue().isNull() ) {
+      } else if( ! param->GetDefaultValue().empty() ) {
         txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
       }
-      if( ! param->GetParameterRange().isNull() ) {
+      if( ! param->GetParameterRange().empty() ) {
         txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
       }
-      if( ! param->GetParameterCandidates().isNull() ) {
+      if( ! param->GetParameterCandidates().empty() ) {
         txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
       }
     }
@@ -4913,4 +4920,3 @@ p.end();
 picture.save(fname, "svg");
 }
 */
-#endif

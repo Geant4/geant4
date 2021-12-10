@@ -27,8 +27,8 @@
 /// \file exampleB4a.cc
 /// \brief Main program of the B4a example
 
-#include "B4DetectorConstruction.hh"
-#include "B4aActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4SteppingVerbose.hh"
@@ -114,13 +114,13 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  auto detConstruction = new B4DetectorConstruction();
+  auto detConstruction = new B4::DetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
   auto physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
 
-  auto actionInitialization = new B4aActionInitialization(detConstruction);
+  auto actionInitialization = new B4a::ActionInitialization(detConstruction);
   runManager->SetUserInitialization(actionInitialization);
 
   // Initialize visualization

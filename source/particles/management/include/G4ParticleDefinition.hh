@@ -53,6 +53,7 @@ class G4ProcessManager;
 class G4DecayTable;
 class G4ParticleTable;
 class G4ParticlePropertyTable;
+class G4VTrackingManager;
 
 using G4ParticleDefinitionSubInstanceManager = G4PDefManager;
 
@@ -162,6 +163,11 @@ class G4ParticleDefinition
       // Set/Get Process Manager
       //   !! Process Manager can be modified !!  
 
+    G4VTrackingManager* GetTrackingManager() const;
+    void SetTrackingManager(G4VTrackingManager* aTrackingManager);
+      // Set/Get Tracking Manager; nullptr means the default
+      //   !! Tracking Manager can be modified !!
+
     inline G4ParticleTable* GetParticleTable() const;
       // Get pointer to the particle table
 
@@ -207,6 +213,21 @@ class G4ParticleDefinition
 
     void SetParticleDefinitionID(G4int id=-1);
     inline G4int GetParticleDefinitionID() const;
+
+    inline G4bool IsHypernucleus() const;
+    inline G4int GetNumberOfLambdasInHypernucleus() const;
+    inline G4bool IsAntiHypernucleus() const;
+    inline G4int GetNumberOfAntiLambdasInAntiHypernucleus() const;
+      // The first two methods return "false" and 0, respectively,
+      // if the particle is not an hypernucleus; else, they return
+      // "true" and the number of Lambdas bound in the nucleus.
+      // Similarly, the last two methods return "false" and 0,
+      // respectively, if the particle is not an anti-hypernucleus;
+      // else, they return "true" and the number of anti-Lambdas
+      // bound in the anti-nucleus.
+      // Notice that, for the time being, we are assuming that
+      // (anti-)Lambda is the only type of (anti-)hyperon present
+      // in all (anti-)hypernuclei.
 
   protected:
 

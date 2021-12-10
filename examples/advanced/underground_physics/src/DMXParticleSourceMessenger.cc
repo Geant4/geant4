@@ -287,12 +287,12 @@ void DMXParticleSourceMessenger::SetNewValue
       fAtomicNumber = StoI(next());
       fAtomicMass = StoI(next());
       G4String sQ = next();
-      if (sQ.isNull()) {
+      if (sQ.empty()) {
 	fIonCharge = fAtomicNumber;
       } else {
 	fIonCharge = StoI(sQ);
 	sQ = next();
-	if (sQ.isNull()) {
+	if (sQ.empty()) {
 	  fIonExciteEnergy = 0.0;
 	} else {
 	  fIonExciteEnergy = StoD(sQ) * keV;

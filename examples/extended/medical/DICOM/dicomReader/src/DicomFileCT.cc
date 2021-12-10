@@ -52,25 +52,25 @@ DicomFileCT::DicomFileCT(DcmDataset* dset) : DicomVFileImage(dset)
 void DicomFileCT::BuildMaterials()
 {
   G4int fCompress = theFileMgr->GetCompression();
-  if( fNoVoxelX%fCompress != 0 || fNoVoxelY%fCompress != 0 ) {
+  if( fNoVoxelsX%fCompress != 0 || fNoVoxelsY%fCompress != 0 ) {
     G4Exception("DicompFileMgr.:BuildMaterials",
                 "DFC004",
                FatalException,
                 ("Compression factor = " + std::to_string(fCompress) 
-                 + " has to be a divisor of Number of voxels X = " + std::to_string(fNoVoxelX) 
-                 + " and Y " + std::to_string(fNoVoxelY)).c_str());
+                 + " has to be a divisor of Number of voxels X = " + std::to_string(fNoVoxelsX) 
+                 + " and Y " + std::to_string(fNoVoxelsY)).c_str());
   }
      
   //  if( DicomVerb(debugVerb) ) G4cout << " BuildMaterials " << fFileName << G4endl;
   double meanHV = 0.;
-  for( int ir = 0; ir < fNoVoxelY; ir += fCompress ) {
-    for( int ic = 0; ic < fNoVoxelX; ic += fCompress ) {
+  for( int ir = 0; ir < fNoVoxelsY; ir += fCompress ) {
+    for( int ic = 0; ic < fNoVoxelsX; ic += fCompress ) {
       meanHV = 0.;
-      int isumrMax = std::min(ir+fCompress,fNoVoxelY);
-      int isumcMax = std::min(ic+fCompress,fNoVoxelX);
+      int isumrMax = std::min(ir+fCompress,fNoVoxelsY);
+      int isumcMax = std::min(ic+fCompress,fNoVoxelsX);
       for( int isumr = ir; isumr < isumrMax; isumr ++ ) {
         for( int isumc = ic; isumc < isumcMax; isumc ++ ) {
-          meanHV += fHounsfieldV[isumc+isumr*fNoVoxelX];
+          meanHV += fHounsfieldV[isumc+isumr*fNoVoxelsX];
  // G4cout << isumr << " " << isumc << " GET mean " << meanHV << G4endl;
         }
       }
@@ -97,10 +97,10 @@ void DicomFileCT::DumpMateIDsToTextFile(std::ofstream& fout)
   G4int fCompress = theFileMgr->GetCompression();
   if( DicomFileMgr::verbose >= warningVerb ) G4cout << fLocation << " DumpMateIDsToTextFile " 
             << fFileName << " " << fMateIDs.size() << G4endl;
-  for( int ir = 0; ir < fNoVoxelY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelX/fCompress; ic++ ) {
-      fout << fMateIDs[ic+ir*fNoVoxelX/fCompress];
-      if( ic != fNoVoxelX/fCompress-1) fout << " ";
+  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
+    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
+      fout << fMateIDs[ic+ir*fNoVoxelsX/fCompress];
+      if( ic != fNoVoxelsX/fCompress-1) fout << " ";
     }
     fout << G4endl;
   }
@@ -114,10 +114,10 @@ void DicomFileCT::DumpDensitiesToTextFile(std::ofstream& fout)
           << fFileName << " " << fDensities.size() << G4endl;
   
    G4int copyNo = 0;
-  for( int ir = 0; ir < fNoVoxelY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelX/fCompress; ic++ ) {
-      fout << fDensities[ic+ir*fNoVoxelX/fCompress];
-      if( ic != fNoVoxelX/fCompress-1) fout << " ";
+  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
+    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
+      fout << fDensities[ic+ir*fNoVoxelsX/fCompress];
+      if( ic != fNoVoxelsX/fCompress-1) fout << " ";
       if( copyNo%8 == 7 ) fout << G4endl;
       copyNo++;
     }
@@ -136,17 +136,17 @@ void DicomFileCT::BuildStructureIDs()
   G4int NMAXROI = DicomFileMgr::GetInstance()->GetStructureNMaxROI();
   G4int NMAXROI_real = std::log(INT_MAX)/std::log(NMAXROI);
     
-  //  fStructure = new G4int(fNoVoxelX*fNoVoxelY);
-  for( int ir = 0; ir < fNoVoxelY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelX/fCompress; ic++ ) {
-      //      fStructure[ic+ir*fNoVoxelX] = 0;
+  //  fStructure = new G4int(fNoVoxelsX*fNoVoxelsY);
+  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
+    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
+      //      fStructure[ic+ir*fNoVoxelsX] = 0;
       fStructure.push_back(0);
     }
   }
 
   std::set<double> distInters;
 
-  //  std::fill_n(fStructure,fNoVoxelX*fNoVoxelY,0);
+  //  std::fill_n(fStructure,fNoVoxelsX*fNoVoxelsY,0);
   //
   for( size_t ii = 0; ii < dfs.size(); ii++ ){
     std::vector<DicomROI*> rois = dfs[ii]->GetROIs();
@@ -195,9 +195,9 @@ void DicomFileCT::BuildStructureIDs()
                           "Contour limits exceed Z slice extent");
           }
           int idMinX = std::max(0,int((minXc-fMinX)/fVoxelDimX/fCompress));
-          int idMaxX = std::min(fNoVoxelX/fCompress-1,int((maxXc-fMinX)/fVoxelDimX/fCompress+1));
+          int idMaxX = std::min(fNoVoxelsX/fCompress-1,int((maxXc-fMinX)/fVoxelDimX/fCompress+1));
           int idMinY = std::max(0,int((minYc-fMinY)/fVoxelDimY/fCompress));
-          int idMaxY = std::min(fNoVoxelY/fCompress-1,int((maxYc-fMinY)/fVoxelDimY/fCompress+1));
+          int idMaxY = std::min(fNoVoxelsY/fCompress-1,int((maxYc-fMinY)/fVoxelDimY/fCompress+1));
           if( DicomFileMgr::verbose >= debugVerb )
             G4cout << " minXc " << minXc << " < " << fMinX
                  << " maxXc " << maxXc << " > " << fMaxX
@@ -288,7 +288,7 @@ void DicomFileCT::BuildStructureIDs()
               } // loop to four corners 
               if( bOK ) {
                 // extract previous ROI value
-                int roival = fStructure[ix+iy*fNoVoxelX/fCompress];
+                int roival = fStructure[ix+iy*fNoVoxelsX/fCompress];
                 //                roival = 2 + NMAXROI*3 + NMAXROI*NMAXROI*15;
                 if(roival != 0 && roival != int(roiID) ) {
                   std::set<G4int> roisVoxel;
@@ -311,12 +311,12 @@ GING -NStructureNMaxROI argument to a lower value").c_str());
                    ite != roisVoxel.end(); ite++, inr++ ) {
                     roival += (*ite)*std::pow(NMAXROI,inr);
                   }
-                  fStructure[ix+iy*fNoVoxelX/fCompress] = roival;
+                  fStructure[ix+iy*fNoVoxelsX/fCompress] = roival;
                   if( DicomFileMgr::verbose >= testVerb ){
                     G4cout << " WITH PREVIOUS ROI IN VOXEL " << roival << G4endl;
                   }
                 } else {
-                  fStructure[ix+iy*fNoVoxelX/fCompress] = roiID;
+                  fStructure[ix+iy*fNoVoxelsX/fCompress] = roiID;
                 }
               } 
               
@@ -359,13 +359,13 @@ GING -NStructureNMaxROI argument to a lower value").c_str());
     }
   }
   //@@@ PRINT points in slice inside structure
-  for( int ir = 0; ir < fNoVoxelY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelX/fCompress; ic++ ) {
-      if( fStructure[ic+ir*fNoVoxelX/fCompress] != 0 ) {
-         if( DicomFileMgr::verbose >= 0 ) G4cout << ic+ir*fNoVoxelX/fCompress << " = " << ic 
+  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
+    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
+      if( fStructure[ic+ir*fNoVoxelsX/fCompress] != 0 ) {
+         if( DicomFileMgr::verbose >= 0 ) G4cout << ic+ir*fNoVoxelsX/fCompress << " = " << ic 
                 << " " << ir << " STRUCTURE VOXEL (" << fMinX + fVoxelDimX*fCompress * (ic+0.5) 
                 << "," << fMinY + fVoxelDimY*fCompress * (ir+0.5) << ") = " 
-                << fStructure[ic+ir*fNoVoxelX/fCompress] << G4endl;
+                << fStructure[ic+ir*fNoVoxelsX/fCompress] << G4endl;
       }
     }
   }
@@ -382,10 +382,10 @@ void DicomFileCT::DumpStructureIDsToTextFile(std::ofstream& fout)
   std::vector<DicomFileStructure*> dfs = theFileMgr->GetStructFiles();
   if( dfs.size() == 0 ) return;
   
-  for( int ir = 0; ir < fNoVoxelY/fCompress; ir++ ) {
-    for( int ic = 0; ic < fNoVoxelX/fCompress; ic++ ) {
-      fout << fStructure[ic+ir*fNoVoxelX/fCompress];
-      if( ic != fNoVoxelX/fCompress-1) fout << " ";
+  for( int ir = 0; ir < fNoVoxelsY/fCompress; ir++ ) {
+    for( int ic = 0; ic < fNoVoxelsX/fCompress; ic++ ) {
+      fout << fStructure[ic+ir*fNoVoxelsX/fCompress];
+      if( ic != fNoVoxelsX/fCompress-1) fout << " ";
     }
     fout << G4endl;
   }

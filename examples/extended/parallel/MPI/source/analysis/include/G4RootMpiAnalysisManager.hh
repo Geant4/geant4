@@ -47,6 +47,9 @@ class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
     explicit G4RootMpiAnalysisManager(G4bool isMaster = true);
     virtual ~G4RootMpiAnalysisManager();
     
+    // Static methods
+    static G4RootMpiAnalysisManager* Instance();
+
     // MPI
     void SetMpiNtupleMerging(tools::impi* impi, 
                              G4int mpiRank, G4int mpiSize,
@@ -57,6 +60,10 @@ class G4RootMpiAnalysisManager : public  G4RootAnalysisManager
     virtual G4bool OpenFileImpl(const G4String& fileName) final;
     virtual G4bool WriteImpl() final; 
     virtual G4bool CloseFileImpl(G4bool reset) final; 
+
+  private:
+    // Static data members
+    inline static G4RootMpiAnalysisManager* fgInstance { nullptr };
 };
 
 #endif

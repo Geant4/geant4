@@ -29,56 +29,49 @@
 
 #include "ExGflashHit.hh"
 
-#include "G4VVisManager.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Transform3D.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator=0;
+G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::ExGflashHit()
-: G4VHit()
-{}
+ExGflashHit::ExGflashHit() : G4VHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::~ExGflashHit()
-{}
+ExGflashHit::~ExGflashHit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::ExGflashHit(const ExGflashHit &right)
-: G4VHit(right)
+ExGflashHit::ExGflashHit(const ExGflashHit& right) : G4VHit(right)
 //@@@ ExGflashHit:Is it right with the init?
 {
   fEdep = right.fEdep;
-  fPos = right.fPos; 
+  fPos  = right.fPos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
-{
-  G4VHit::operator=(right);
-  fEdep = right.fEdep;
-  fPos = right.fPos;
-  return *this;
-}
+ExGflashHit& ExGflashHit::operator=(const ExGflashHit& right) = default;
+// {
+//   G4VHit::operator=(right);
+//   fEdep = right.fEdep;
+//   fPos = right.fPos;
+//   return *this;
+// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool ExGflashHit::operator==(const ExGflashHit &right) const
+G4bool ExGflashHit::operator==(const ExGflashHit& right) const
 {
-// @@@@ return false;
-  if ((fPos==right.fPos) &&  (fEdep == right.fEdep)) return true;
-  else return false;
-  
+  return ((fEdep == right.fEdep) && (fPos == right.fPos));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,12 +79,11 @@ G4bool ExGflashHit::operator==(const ExGflashHit &right) const
 void ExGflashHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
+  if ( pVVisManager != nullptr ) {
     G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
+    G4Colour        colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
@@ -100,7 +92,6 @@ void ExGflashHit::Draw()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExGflashHit::Print()
-{}
+void ExGflashHit::Print() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

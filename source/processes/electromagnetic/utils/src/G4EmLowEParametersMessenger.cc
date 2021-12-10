@@ -72,6 +72,13 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dirFluoCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
   dirFluoCmd->SetToBeBroadcasted(false);
 
+  dirFluoCmd1 = new G4UIcmdWithABool("/process/em/fluoANSTO",this);
+  dirFluoCmd1->SetGuidance("Enable/disable usage of ANSTO fluorescence files");
+  dirFluoCmd1->SetParameterName("fluoANSTOFlag",true);
+  dirFluoCmd1->SetDefaultValue(false);
+  dirFluoCmd1->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+  dirFluoCmd1->SetToBeBroadcasted(false);
+
   auCmd = new G4UIcmdWithABool("/process/em/auger",this);
   auCmd->SetGuidance("Enable/disable Auger electrons production");
   auCmd->SetParameterName("augerFlag",true);
@@ -124,7 +131,7 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   pixeXsCmd = new G4UIcmdWithAString("/process/em/pixeXSmodel",this);
   pixeXsCmd->SetGuidance("The name of PIXE cross section");
   pixeXsCmd->SetParameterName("pixeXS",true);
-  pixeXsCmd->SetCandidates("ECPSSR_Analytical Empirical ECPSSR_FormFactor");
+  pixeXsCmd->SetCandidates("ECPSSR_Analytical Empirical ECPSSR_FormFactor ECPSSR_ANSTO");
   pixeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   pixeXsCmd->SetToBeBroadcasted(false);
 
@@ -198,6 +205,7 @@ G4EmLowEParametersMessenger::~G4EmLowEParametersMessenger()
 {
   delete deCmd;
   delete dirFluoCmd;
+  delete dirFluoCmd1;
   delete auCmd;
   delete auCascadeCmd;
   delete pixeCmd;
@@ -225,6 +233,9 @@ void G4EmLowEParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == dirFluoCmd) {
     theParameters->SetBeardenFluoDir(dirFluoCmd->GetNewBoolValue(newValue));
+    physicsModified = true;
+  } else if (command == dirFluoCmd1) {
+    theParameters->SetANSTOFluoDir(dirFluoCmd1->GetNewBoolValue(newValue));
     physicsModified = true;
   } else if (command == auCmd) {
     theParameters->SetAuger(auCmd->GetNewBoolValue(newValue));

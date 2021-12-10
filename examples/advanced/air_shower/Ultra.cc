@@ -73,11 +73,11 @@ int main(int argc,char** argv) {
   }
 
   // Initialise visualization
-  G4VisManager* visManager = new G4VisExecutive;
+  auto* visManager = new G4VisExecutive;
   visManager->Initialize();
 
   // Get the Pointer to the UI Manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto* UImanager = G4UImanager::GetUIpointer();
 
   // User interactions
   // Define (G)UI for interactive mode
@@ -99,4 +99,3 @@ int main(int argc,char** argv) {
 
   return 0;
 }
-

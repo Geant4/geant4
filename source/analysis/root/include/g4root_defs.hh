@@ -31,25 +31,11 @@
 
 #include "tools/wroot/ntuple"
 #include "tools/rroot/ntuple"
-#include "G4RootAnalysisManager.hh"
-#include "G4RootAnalysisReader.hh"
 #include "g4hntools_defs.hh"
 
-namespace G4Root
-{
-  // Ntuple types
-  using G4Ntuple = tools::wroot::ntuple; 
-  using G4NtupleIterator = std::vector<tools::wroot::ntuple*>::iterator;
-  using G4NtupleConstIterator = std::vector<tools::wroot::ntuple*>::const_iterator;
-
-  // RNtuple types
-  using G4RNtuple = tools::rroot::ntuple;
-  
-  // Managers
-  using G4AnalysisManager = G4RootAnalysisManager;
-  using G4AnalysisReader = G4RootAnalysisReader; 
-} 
+// Root output specific types
+using G4RootNtuple = tools::wroot::ntuple;
+using G4RootRNtuple = tools::rroot::ntuple;
 
 #endif
 
-  

@@ -30,27 +30,18 @@
 #include "G4XmlFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
-#include "G4Threading.hh"
 #include "G4UnitsTable.hh"
 
 #include "tools/ntuple_booking"
-
-#include <iostream>
-//#include <cstdio>
 
 using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4XmlNtupleManager::G4XmlNtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::waxml::ntuple, std::ofstream>(state),
-   fFileManager(nullptr)
+ : G4TNtupleManager<tools::waxml::ntuple, std::ofstream>(state)
 {}
 
-//_____________________________________________________________________________
-G4XmlNtupleManager::~G4XmlNtupleManager()
-{}
-
-// 
+//
 // private methods
 //
 
@@ -65,7 +56,7 @@ void G4XmlNtupleManager::CreateTNtupleFromBooking(
     ntupleDescription->fNtuple
       = new tools::waxml::ntuple(
               *(ntupleDescription->fFile), G4cerr, ntupleDescription->fNtupleBooking);
-    fNtupleVector.push_back(ntupleDescription->fNtuple);  
+    fNtupleVector.push_back(ntupleDescription->fNtuple);
 }
 
 //_____________________________________________________________________________
@@ -84,10 +75,7 @@ void G4XmlNtupleManager::FinishTNtuple(
 
   // Return if creating ntuple failed
   if ( ! ntupleDescription->fNtuple ) {
-    G4ExceptionDescription description;
-    description << "Creating ntuple has failed. ";
-    G4Exception("G4XmlNtupleManager::FinishTNtuple()",
-                "Analysis_W022", JustWarning, description);
+    Warn("Creating ntuple has failed. ", fkClass, "FinishTNtuple");
     return;
   }
 
@@ -95,7 +83,7 @@ void G4XmlNtupleManager::FinishTNtuple(
   G4String path = "/";
   path.append(fFileManager->GetNtupleDirectoryName());
   ntupleDescription->fNtuple
-    ->write_header(path, ntupleDescription->fNtupleBooking.name(), 
-                   ntupleDescription->fNtupleBooking.title());  
+    ->write_header(path, ntupleDescription->fNtupleBooking.name(),
+                   ntupleDescription->fNtupleBooking.title());
   fFileManager->LockDirectoryNames();
 }

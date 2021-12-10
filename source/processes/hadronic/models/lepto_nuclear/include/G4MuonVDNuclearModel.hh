@@ -90,6 +90,8 @@ private:
   G4LundStringFragmentation* theFragmentation;
   G4ExcitedStringDecay* theStringDecay;
   G4CascadeInterface* bert;
+
+  G4int secID;  // Creator model ID for the secondaries created by this model
 };
  
 #endif

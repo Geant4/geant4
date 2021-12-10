@@ -10,12 +10,13 @@ geant4_add_module(G4csv
     G4CsvFileManager.hh
     G4CsvHnFileManager.hh
     G4CsvHnFileManager.icc
+    G4CsvHnRFileManager.hh
+    G4CsvHnRFileManager.icc
     G4CsvNtupleFileManager.hh
     G4CsvNtupleManager.hh
     G4CsvRFileManager.hh
     G4CsvRNtupleManager.hh
     g4csv_defs.hh
-    g4csv.hh
   SOURCES
     G4CsvAnalysisManager.cc
     G4CsvAnalysisReader.cc

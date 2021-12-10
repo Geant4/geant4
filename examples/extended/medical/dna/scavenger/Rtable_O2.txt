@@ -1,0 +1,38 @@
+#------------------------------------------------------------------
+# List of Chemical Reactions for Water Radiolysis
+#   -- Reaction rates in [1/s/(mole/l)] for second order reactions
+#   -- Reaction rates in [1/s] for first order reactions
+#   -- Concentration of scavengers in [mole/l]
+#
+# Based on the chemical reactions of G4EmDNAChemistry_option1
+# Reaction types based on Frongillo et al., Rad. Phys. Chem., 1998
+# Reaction rates from Plante and Devroye, Rad. Phys. Chem., 2017
+#------------------------------------------------------------------
+
+
+# Definition of scavengers ---------------
+# scavenger: NAME  CONCENTRATION [mole/l]
+#-----------------------------------------
+scavenger: O2	  5.20e-05  # 4% in partial pressure
+
+
+# Reactions between radio-induced species --------------------
+# REACTANTS -> PRODUCTS , RATE [1/s/(mole/l)] or [1/s]   TYPE  
+#-------------------------------------------------------------
+e_aq + e_aq + [H2O] + [H2O] -> H2 + OH- + OH- , 6.36e9      type_3
+e_aq + OH -> OH- ,                              2.95e10     type_2	
+e_aq + H + [H2O] -> H2 + OH- ,                  2.50e10     type_1	
+e_aq + H3O+ -> H + [H2O] ,                      2.11e10     type_4 	
+e_aq + H2O2 -> OH- + OH ,                       1.10e10     type_2  	
+OH + OH -> H2O2 ,                               5.50e9      type_2   
+OH + H -> [H2O] ,                               1.55e10     type_2   
+H + H -> H2 ,                                   5.03e9      type_1  	
+H3O+ + OH- -> [H2O] + [H2O] ,                   1.13e11     type_3   
+
+
+# Reactions with the scavengers
+# Specify the scavenger with []
+#-------------------------------
+e_aq + [O2] -> O2- , 1.74e10    type_6 
+H + [O2] -> HO2 ,    2.10e10    type_6 
+O- + [O2] -> O3- ,   3.70e9     type_6 

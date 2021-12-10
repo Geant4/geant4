@@ -217,11 +217,6 @@ private:
   const G4ParticleDefinition * thePrimaryType;
   G4ThreeVector theMomentumTransfer;
   static G4int theBIC_ID;
-#ifdef G4MULTITHREADED
-  static G4Mutex BICMutex;
-#endif
-
-
 };
 
 #endif

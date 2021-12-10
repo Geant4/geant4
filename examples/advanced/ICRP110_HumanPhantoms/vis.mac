@@ -1,7 +1,13 @@
-/phantom/setPhantomSection head
-
+# Echo UI commands
+/control/verbose 2
+#
+/phantom/setPhantomSection full
+# Note: It's only feasible to view the "full" phantom if
+# specialMeshRendering is set below. If not, we suggest
+#/phantom/setPhantomSection head
+#
 /run/initialize
-
+#
 #/vis/open OGLSX
 /vis/open OGL 600x600-0+0
 #
@@ -26,11 +32,13 @@
 #/vis/viewer/set/background white
 #
 # Draw phantom
+/vis/viewer/set/specialMeshRendering
 /vis/drawVolume
 #
-#
-# Alternatively comment out "/vis/drawVolume" and un-comment the following
-#   commands
+# Alternatively comment out
+# /vis/viewer/set/specialMeshRendering
+# /vis/drawVolume
+# and replace by
 # Temporarily switch culling off so even a "transparent/invisible" volume
 #   is drawn
 #/vis/viewer/set/culling global false
@@ -39,16 +47,6 @@
 #/vis/viewer/set/culling global true
 # Add vis user action
 #/vis/scene/add/userAction
-# You could try making all materials (except air) opaque (last quantity) in
-#   ColorMap.dat.
-# You could try "/vis/viewer/interpolate g4views/* 200", which runs a cutaway
-#   plane through the head, based on 2 view files - g4_00.g4view and
-#   g4_01.g4view in subdirectory g4views.
-# (See examples/extended/visualization/movies for how to create view
-#   files for interpolation.)
-# Also you may visualise the whole body by changing "head" to "full"
-#   at the head of this file before /run/initialize.
-#
 #
 # Specify view angle:
 /vis/viewer/set/viewpointThetaPhi 85 -75 deg
@@ -56,7 +54,7 @@
 #
 # Set Voxels number to be visualised
 /vis/ogl/set/displayListLimit 9999999
-
+#
 # Specify zoom value:
 #/vis/viewer/zoom 2.
 #
@@ -103,5 +101,8 @@
 #/vis/viewer/flush
 #Define the primary particles
 /control/execute primary.mac
-
-
+#
+# Try "/vis/viewer/interpolate g4views 1000 0", which runs a cutaway
+#   plane through the phantom.
+# (See examples/extended/visualization/movies for how to create view
+#   files for interpolation.)

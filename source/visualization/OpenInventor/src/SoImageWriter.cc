@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4VIS_BUILD_OI_DRIVER
 
 /*----------------------------HEPVis----------------------------------------*/
 /*                                                                          */
@@ -346,5 +345,3 @@ int getRGB(
   aBlue  = *pimag;pimag++;
   return 1;
 }
-
-#endif

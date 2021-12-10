@@ -46,6 +46,17 @@
 #include "G4Fragment.hh"
 #include "G4IonTable.hh" 
 #include "G4ParticleHPDataUsed.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+
+G4ParticleHPCaptureFS::G4ParticleHPCaptureFS()
+  {
+    secID = G4PhysicsModelCatalog::GetModelID( "model_NeutronHPCapture" );
+    hasXsec = false; 
+    hasExactMF6 = false;
+    targetMass = 0;
+  }
+
 
   G4HadFinalState * G4ParticleHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
   {
@@ -205,7 +216,7 @@
        //theOne->SetMomentum(theMomentum);
        
        theOne->SetMomentum(aMomentum);
-       theResult.Get()->AddSecondary(theOne);
+       theResult.Get()->AddSecondary(theOne, secID);
     }
 
     // Now fill in the gammas.
@@ -215,7 +226,7 @@
       G4DynamicParticle * theOne = new G4DynamicParticle;
       theOne->SetDefinition(thePhotons->operator[](i)->GetDefinition());
       theOne->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-      theResult.Get()->AddSecondary(theOne);
+      theResult.Get()->AddSecondary(theOne, secID);
       delete thePhotons->operator[](i);
     }
     delete thePhotons; 
@@ -279,7 +290,7 @@
              G4DynamicParticle * theOne = new G4DynamicParticle;
              theOne->SetDefinition( G4Gamma::Gamma() );
              theOne->SetMomentum( tempVector );
-             theResult.Get()->AddSecondary(theOne);
+             theResult.Get()->AddSecondary(theOne, secID);
           }
 
 //        Add last photon 
@@ -289,7 +300,7 @@
           G4ThreeVector lastPhoton = -p_photons.vect().unit()*vEPhoton.back();
           p_photons += G4LorentzVector( lastPhoton , lastPhoton.mag() );
           theOne->SetMomentum( lastPhoton );
-          theResult.Get()->AddSecondary(theOne);
+          theResult.Get()->AddSecondary(theOne, secID);
        }
 
 //Add residual 
@@ -298,7 +309,7 @@
 			       - p_photons.vect();
        theOne->SetDefinition(aRecoil);
        theOne->SetMomentum( aMomentum );
-       theResult.Get()->AddSecondary(theOne);
+       theResult.Get()->AddSecondary(theOne, secID);
 
     }
 //101203TK END

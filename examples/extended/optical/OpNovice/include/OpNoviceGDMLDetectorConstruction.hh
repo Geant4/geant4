@@ -25,37 +25,42 @@
 //
 #ifndef OpNoviceGDMLDetectorConstruction_h
 #define OpNoviceGDMLDetectorConstruction_h 1
+
 #include "G4VUserDetectorConstruction.hh"
+
 class G4GDMLParser;
-class OpNoviceGDMLDetectorConstructionMessenger;
+class OpNoviceDetectorMessenger;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OpNoviceGDMLDetectorConstruction : public G4VUserDetectorConstruction {
-public:
-    OpNoviceGDMLDetectorConstruction(G4String fname);
-    virtual ~OpNoviceGDMLDetectorConstruction();
-    void ReadGDML();
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
-    void UpdateGeometry();
-    void SetDumpgdml(G4bool fdumpgdml);
-    G4bool IsDumpgdml() const;
-    void SetVerbose(G4bool fverbose);
-    G4bool IsVerbose() const;
-    void SetDumpgdmlFile(G4String fDumpgdmlFile);
-    G4String GetDumpgdmlFile() const;
+class OpNoviceGDMLDetectorConstruction : public G4VUserDetectorConstruction
+{
+ public:
+  OpNoviceGDMLDetectorConstruction(G4String fname);
+  virtual ~OpNoviceGDMLDetectorConstruction();
 
-private:
-    OpNoviceGDMLDetectorConstruction & operator=(const OpNoviceGDMLDetectorConstruction &right);
-    OpNoviceGDMLDetectorConstruction(const OpNoviceGDMLDetectorConstruction&);
-    G4GDMLParser *parser;
-    G4String gdmlFile;
-    //
-    G4String fDumpgdmlFile;
-    G4bool fverbose;
-    G4bool fdumpgdml;
-    OpNoviceGDMLDetectorConstructionMessenger* fDetectorMessenger;
+  void ReadGDML();
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
+  void UpdateGeometry();
+  void SetDumpGdml(G4bool);
+  G4bool IsDumpGdml() const;
+  void SetVerbose(G4bool fverbose);
+  G4bool IsVerbose() const;
+  void SetDumpGdmlFile(G4String fDumpGdmlFile);
+  G4String GetDumpGdmlFileName() const;
+
+ private:
+  OpNoviceGDMLDetectorConstruction& operator=(
+    const OpNoviceGDMLDetectorConstruction& right);
+  OpNoviceGDMLDetectorConstruction(const OpNoviceGDMLDetectorConstruction&);
+  OpNoviceDetectorMessenger* fDetectorMessenger;
+  G4GDMLParser* fParser;
+
+  G4String fGdmlFile;
+  G4String fDumpGdmlFileName;
+  G4bool fVerbose;
+  G4bool fDumpGdml;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 #endif
-

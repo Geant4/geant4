@@ -6,12 +6,15 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Water
+/testem/det/setMat G4_WATER
 /testem/det/setSizeX  10 cm
 /testem/det/setSizeYZ 10 cm
 #
-/testem/phys/addPhysics  local
-##/testem/phys/addPhysics  emstandard_opt3
+#/testem/phys/addPhysics  local
+/testem/phys/addPhysics  emstandard_opt0
+/testem/phys/addPhysics  elastic
+/testem/phys/addPhysics  binary
+/testem/phys/addPhysics  binary_ion
 #
 /run/initialize
 #
@@ -25,7 +28,8 @@
 #
 /run/printProgress 1000
 #
-/analysis/setFileName testem7
+/analysis/setFileName p_opt0
+/analysis/h1/set 1 1200 0 120 mm
 /analysis/h1/set 2 100 70 80 mm
 /analysis/h1/set 3 100 70 80 mm
 #

@@ -344,7 +344,7 @@ void G4ParticleGunMessenger::IonLevelCommand(const G4String& newValues)
   fAtomicNumber = StoI(next());
   fAtomicMass = StoI(next());
   G4String sQ = next();
-  if (sQ.isNull() || StoI(sQ)<0)
+  if (sQ.empty() || StoI(sQ)<0)
   {
     fIonCharge = fAtomicNumber;
   }
@@ -353,7 +353,7 @@ void G4ParticleGunMessenger::IonLevelCommand(const G4String& newValues)
     fIonCharge = StoI(sQ);
   }
   sQ = next();
-  if (sQ.isNull())
+  if (sQ.empty())
   {
     fIonEnergyLevel = 0;
   }
@@ -389,18 +389,18 @@ void G4ParticleGunMessenger::IonCommand(const G4String& newValues)
   fIonExciteEnergy = 0.0;
   fIonFloatingLevelBase = '\0';
   G4String sQ = next();
-  if (!(sQ.isNull()))
+  if (!(sQ.empty()))
   {
     if (StoI(sQ)>=0)
     fIonCharge = StoI(sQ);
 
     sQ = next();
-    if (!(sQ.isNull()))
+    if (!(sQ.empty()))
     {
       fIonExciteEnergy = StoD(sQ) * keV;
 
       sQ = next();
-      if (sQ.isNull()||sQ=="noFloat")
+      if (sQ.empty()||sQ=="noFloat")
       { fIonFloatingLevelBase = '\0'; }
       else
       { fIonFloatingLevelBase = sQ[(std::size_t)0]; }

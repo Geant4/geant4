@@ -185,7 +185,7 @@ G4bool G4RootMpiNtupleManager::WaitBuffer()
 
   unsigned long numberOfEndFill = 0;
   
-  G4bool verbose = ( fState.GetVerboseL2() );
+  G4bool verbose = IsVerbose(kVL2);
 
   while ( true ) { 
     fImpi->pack_reset();

@@ -36,13 +36,13 @@
 
  
 eRositaEventAction::eRositaEventAction()
-{}
+{
+}
 
- 
 eRositaEventAction::~eRositaEventAction()
-{}
+{
+}
 
- 
 void eRositaEventAction::BeginOfEventAction(const G4Event* evt)
 {
   G4int nEvent = evt->GetEventID() + 1;
@@ -54,10 +54,9 @@ void eRositaEventAction::BeginOfEventAction(const G4Event* evt)
  
   G4int remainder = nEvent % frequency;
   if (remainder == 0) G4cout << "---- eRosita event counter: " << nEvent
-			     << std::endl;
+                            << std::endl;
 }
 
- 
 void eRositaEventAction::EndOfEventAction(const G4Event*) // evt)
 {
 /*

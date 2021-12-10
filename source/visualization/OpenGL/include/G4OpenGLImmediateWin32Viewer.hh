@@ -29,8 +29,6 @@
 // Class G4OpenGLImmediateWin32Viewer : a class derived from
 //   G4OpenGLWin32Viewer and G4OpenGLImmediateViewer.
 
-#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
-
 #ifndef G4OpenGLIMMEDIATEWIN32VIEWER_HH
 #define G4OpenGLIMMEDIATEWIN32VIEWER_HH
 
@@ -51,7 +49,5 @@ public:
   void DrawView ();
   void FinishView ();
 };
-
-#endif
 
 #endif

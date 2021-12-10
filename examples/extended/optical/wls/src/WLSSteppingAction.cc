@@ -199,7 +199,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
   // Record Photons that missed the photon detector but escaped from readout
   if(!thePostPV && trackInformation->IsStatus(EscapedFromReadOut))
   {
-    G4cout << "SteppingAction: status = EscapedFromReadOut" << G4endl;
+    //G4cout << "SteppingAction: status = EscapedFromReadOut" << G4endl;
     fEventAction->AddEscaped();
     // UpdateHistogramSuccess(thePostPoint,theTrack);
     ResetCounters();
@@ -308,7 +308,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
       }
       return;
 
-    // Reflection of the mirror
+    // Reflection off the mirror
     case LambertianReflection:
     case LobeReflection:
     case SpikeReflection:
@@ -324,30 +324,12 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
     // Detected by a detector
     case Detection:
+      // Detected automatically with G4OpBoundaryProcess->InvokeSD set true
 
-      // Check if the photon hits the detector and process the hit if it does
-      if(thePostPVname == "PhotonDet")
-      {
-        // G4cout << "Detection" << G4endl;
-        fEventAction->AddDetected();
-        G4SDManager* SDman = G4SDManager::GetSDMpointer();
-        G4String SDname    = "WLS/PhotonDet";
-        WLSPhotonDetSD* mppcSD =
-          (WLSPhotonDetSD*) SDman->FindSensitiveDetector(SDname);
-
-        if(mppcSD)
-          mppcSD->ProcessHits_boundary(theStep, nullptr);
-
-        // Record Photons that escaped at the end
-        // if (trackInformation->IsStatus(EscapedFromReadOut))
-        //                    UpdateHistogramSuccess(thePostPoint,theTrack);
-
-        // Stop Tracking when it hits the detector's surface
-        ResetCounters();
-        theTrack->SetTrackStatus(fStopAndKill);
-        return;
-      }
-      break;
+      // Stop Tracking when it hits the detector's surface
+      ResetCounters();
+      theTrack->SetTrackStatus(fStopAndKill);
+      return;
 
     default:
       break;

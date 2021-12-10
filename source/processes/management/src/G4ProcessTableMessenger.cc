@@ -214,7 +214,7 @@ G4ProcessTableMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
     // check 2nd argument
     currentProcessTypeName = G4String(next());
-    if (currentProcessTypeName.isNull()) currentProcessTypeName = "all";
+    if (currentProcessTypeName.empty()) currentProcessTypeName = "all";
     G4bool isProcName = false;
     G4bool isAll = false;
     type = -1;
@@ -416,7 +416,7 @@ void G4ProcessTableMessenger::SetNumberOfProcessType()
   for (idx = 0; idx < 1000 ; ++idx )
   {
     G4String typeName = G4VProcess::GetProcessTypeName(G4ProcessType(idx));
-    isFoundEndMark = typeName.contains("---");
+    isFoundEndMark = G4StrUtil::contains(typeName, "---");
     if ( isFoundEndMark ) break;
   }
   if ( isFoundEndMark )

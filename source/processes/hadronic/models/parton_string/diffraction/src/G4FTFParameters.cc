@@ -1113,20 +1113,8 @@ G4FTFSettingDefaultHDP FTFDefaultsHDP;
 
 G4FTFParamCollection::G4FTFParamCollection()
 {
+  // zero out everything
 
-  Reset(); // zero out everything
-   
-  //
-  // keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
-  //
-  fNuclearProjDestructP2 = 4.0;
-  fNuclearProjDestructP3 = 2.1;
-  
-}
-
-
-void G4FTFParamCollection::Reset()
-{
   // parameters of excitation
 
   // Proc=0 --> Qexchg w/o excitation
@@ -1147,11 +1135,26 @@ void G4FTFParamCollection::Reset()
   fProc1Atop = 0.;
   fProc1Ymin = 0.;
 
-  // Proc=2 & Proc=3 for ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 )
-  // Do NOT do anything as it's set once and for all !!!
-
   fProjDiffDissociation = false;
   fTgtDiffDissociation = false;
+
+  // Proc=2 --> Projectile diffraction
+  fProc2A1 = 0.; 
+  fProc2B1 = 0.; 
+  fProc2A2 = 0.; 
+  fProc2B2 = 0.; 
+  fProc2A3 = 0.; 
+  fProc2Atop = 0.; 
+  fProc2Ymin = 0.;
+  
+  // Proc=3 --> Target diffraction
+  fProc3A1 = 0.; 
+  fProc3B1 = 0.; 
+  fProc3A2 = 0.; 
+  fProc3B2 = 0.; 
+  fProc3A3 = 0.; 
+  fProc3Atop = 0.; 
+  fProc3Ymin = 0.; 
 
   // Proc=4 --> Qexchg w/additional multiplier in excitation  
   fProc4A1 = 0.;
@@ -1178,7 +1181,9 @@ void G4FTFParamCollection::Reset()
 
   // COMMONs
   fNuclearProjDestructP1 = 0.;
+  fNuclearProjDestructP1_NBRNDEP = false;
   fNuclearTgtDestructP1 = 0.;
+  fNuclearTgtDestructP1_ADEP = false;
   fNuclearProjDestructP2 = 0.;
   fNuclearProjDestructP3 = 0.;
   fNuclearTgtDestructP2 = 0.;
@@ -1193,8 +1198,13 @@ void G4FTFParamCollection::Reset()
   fExciEnergyPerWoundedNucleon = 0.;
   fDofNuclearDestruct = 0.;
   fMaxPt2ofNuclearDestruct = 0.;
-
-  return;
+   
+  //
+  // keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
+  //
+  fNuclearProjDestructP2 = 4.0;
+  fNuclearProjDestructP3 = 2.1;
+  
 }
 
 //============================================================================

@@ -178,16 +178,6 @@ class G4Sphere : public G4CSGSolid
     G4Sphere& operator=(const G4Sphere& rhs);
       // Copy constructor and assignment operator.
 
-    // Old access functions
-
-    inline G4double  GetRmin()   const;
-    inline G4double  GetRmax()   const;
-    inline G4double  GetSPhi()   const;
-    inline G4double  GetDPhi()   const;
-    inline G4double  GetSTheta() const;
-    inline G4double  GetDTheta() const;
-    inline G4double  GetInsideRadius() const;
-    inline void SetInsideRadius(G4double newRmin);
 
   private:
 

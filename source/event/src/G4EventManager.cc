@@ -32,6 +32,8 @@
 #include "G4ios.hh"
 #include "G4EvManMessenger.hh"
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4VTrackingManager.hh"
 #include "G4UserEventAction.hh"
 #include "G4UserStackingAction.hh"
 #include "G4SDManager.hh"
@@ -42,6 +44,8 @@
 #include "Randomize.hh"
 #include "G4Profiler.hh"
 #include "G4TiMemory.hh"
+
+#include <unordered_set>
 
 G4ThreadLocal G4EventManager* G4EventManager::fpEventManager = nullptr;
 
@@ -155,90 +159,128 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
     G4cout << "!!!!!!! Now start processing an event !!!!!!!" << G4endl;
   }
 #endif
-  
-  G4VTrajectory* previousTrajectory;
-  while( (track=trackContainer->PopNextTrack(&previousTrajectory)) != nullptr )
-  {                                        // Loop checking 12.28.2015 M.Asai
 
-#ifdef G4VERBOSE
-    if ( verboseLevel > 1 )
-    {
-      G4cout << "Track " << track << " (trackID " << track->GetTrackID()
-             << ", parentID " << track->GetParentID() 
-             << ") is passed to G4TrackingManager." << G4endl;
-    }
-#endif
+  std::unordered_set<G4VTrackingManager *> trackingManagersToFlush;
 
-    tracking = true;
-    trackManager->ProcessOneTrack( track );
-    istop = track->GetTrackStatus();
-    tracking = false;
+  do
+  {
+    G4VTrajectory* previousTrajectory;
+    while( (track=trackContainer->PopNextTrack(&previousTrajectory)) != nullptr )
+    {                                        // Loop checking 12.28.2015 M.Asai
 
-#ifdef G4VERBOSE
-    if ( verboseLevel > 0 )
-    {
-      G4cout << "Track (trackID " << track->GetTrackID()
-         << ", parentID " << track->GetParentID()
-         << ") is processed with stopping code " << istop << G4endl;
-    }
-#endif
+      const G4ParticleDefinition* partDef = track->GetParticleDefinition();
+      G4VTrackingManager* particleTrackingManager = partDef->GetTrackingManager();
 
-    G4VTrajectory* aTrajectory = nullptr;
-#ifdef G4_STORE_TRAJECTORY
-    aTrajectory = trackManager->GimmeTrajectory();
-
-    if(previousTrajectory != nullptr)
-    {
-      previousTrajectory->MergeTrajectory(aTrajectory);
-      delete aTrajectory;
-      aTrajectory = previousTrajectory;
-    }
-    if(aTrajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
-    {
-      if(trajectoryContainer == nullptr)
+      if (particleTrackingManager != nullptr)
       {
-        trajectoryContainer = new G4TrajectoryContainer; 
-        currentEvent->SetTrajectoryContainer(trajectoryContainer);
-      }
-      trajectoryContainer->insert(aTrajectory);
-    }
+#ifdef G4VERBOSE
+        if ( verboseLevel > 1 )
+        {
+          G4cout << "Track " << track << " (trackID " << track->GetTrackID()
+                 << ", parentID " << track->GetParentID()
+                 << ") is handed over to custom TrackingManager." << G4endl;
+        }
 #endif
 
-    G4TrackVector* secondaries = trackManager->GimmeSecondaries();
-    switch (istop)
-    {
-      case fStopButAlive:
-      case fSuspend:
-        trackContainer->PushOneTrack( track, aTrajectory );
-        StackTracks( secondaries );
-        break;
+        particleTrackingManager->HandOverOneTrack(track);
+        // The particle's tracking manager may either track immediately or
+        // defer processing until FlushEvent is called. Thus, we must neither
+        // check the track's status nor stack secondaries.
 
-      case fPostponeToNextEvent:
-        trackContainer->PushOneTrack( track );
-        StackTracks( secondaries );
-        break;
+        // Remember this tracking manager to later call FlushEvent.
+        trackingManagersToFlush.insert(particleTrackingManager);
 
-      case fStopAndKill:
-        StackTracks( secondaries );
-        delete track;
-        break;
-
-      case fAlive:
-        G4Exception("G4EventManager::DoProcessing", "Event004", JustWarning,
-            "Illegal trackstatus returned from G4TrackingManager."\
-            " Continue with simulation.");
-        break;
-      case fKillTrackAndSecondaries:
-        if( secondaries )
+      } else {
+#ifdef G4VERBOSE
+        if ( verboseLevel > 1 )
         {
-          for(std::size_t i=0; i<secondaries->size(); ++i)
-          { delete (*secondaries)[i]; }
-          secondaries->clear();
+          G4cout << "Track " << track << " (trackID " << track->GetTrackID()
+                 << ", parentID " << track->GetParentID()
+                 << ") is passed to G4TrackingManager." << G4endl;
         }
-        delete track;
-        break;
+#endif
+
+        tracking = true;
+        trackManager->ProcessOneTrack( track );
+        istop = track->GetTrackStatus();
+        tracking = false;
+
+#ifdef G4VERBOSE
+        if ( verboseLevel > 0 )
+        {
+          G4cout << "Track (trackID " << track->GetTrackID()
+             << ", parentID " << track->GetParentID()
+             << ") is processed with stopping code " << istop << G4endl;
+        }
+#endif
+
+        G4VTrajectory* aTrajectory = nullptr;
+#ifdef G4_STORE_TRAJECTORY
+        aTrajectory = trackManager->GimmeTrajectory();
+
+        if(previousTrajectory != nullptr)
+        {
+          previousTrajectory->MergeTrajectory(aTrajectory);
+          delete aTrajectory;
+          aTrajectory = previousTrajectory;
+        }
+        if(aTrajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
+        {
+          if(trajectoryContainer == nullptr)
+          {
+            trajectoryContainer = new G4TrajectoryContainer;
+            currentEvent->SetTrajectoryContainer(trajectoryContainer);
+          }
+          trajectoryContainer->insert(aTrajectory);
+        }
+#endif
+
+        G4TrackVector* secondaries = trackManager->GimmeSecondaries();
+        switch (istop)
+        {
+          case fStopButAlive:
+          case fSuspend:
+            trackContainer->PushOneTrack( track, aTrajectory );
+            StackTracks( secondaries );
+            break;
+
+          case fPostponeToNextEvent:
+            trackContainer->PushOneTrack( track );
+            StackTracks( secondaries );
+            break;
+
+          case fStopAndKill:
+            StackTracks( secondaries );
+            delete track;
+            break;
+
+          case fAlive:
+            G4Exception("G4EventManager::DoProcessing", "Event004", JustWarning,
+                "Illegal trackstatus returned from G4TrackingManager."\
+                " Continue with simulation.");
+            break;
+          case fKillTrackAndSecondaries:
+            if( secondaries )
+            {
+              for(std::size_t i=0; i<secondaries->size(); ++i)
+              { delete (*secondaries)[i]; }
+              secondaries->clear();
+            }
+            delete track;
+            break;
+        }
+      }
     }
-  }
+
+    // Flush all tracking managers, which may have deferred processing until now.
+    for (G4VTrackingManager *tm : trackingManagersToFlush)
+    {
+      tm->FlushEvent();
+    }
+    trackingManagersToFlush.clear();
+
+    // Check if flushing one of the tracking managers stacked new secondaries.
+  } while (trackContainer->GetNUrgentTrack() > 0);
 
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
@@ -352,7 +394,8 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,
   {
     std::ostringstream oss;
     CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(*randStat=oss.str());
+    (*randStat) = oss.str();
+    anEvent->SetRandomNumberStatus(*randStat);
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);

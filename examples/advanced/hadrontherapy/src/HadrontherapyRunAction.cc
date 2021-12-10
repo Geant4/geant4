@@ -28,7 +28,7 @@
 
 #include "HadrontherapyRunAction.hh"
 #include "HadrontherapyEventAction.hh"
-#include "HadrontherapyAnalysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -55,7 +55,6 @@ HadrontherapyRunAction::HadrontherapyRunAction()
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyRunAction::~HadrontherapyRunAction()
 {
-    delete G4AnalysisManager::Instance();
 }
 
 /////////////////////////////////////////////////////////////////////////////

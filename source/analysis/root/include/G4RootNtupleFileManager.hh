@@ -34,6 +34,8 @@
 
 #include "G4VNtupleFileManager.hh"
 
+#include <string_view>
+
 class G4RootFileManager;
 class G4RootNtupleManager;
 class G4RootPNtupleManager;
@@ -52,10 +54,11 @@ class G4RootNtupleFileManager : public G4VNtupleFileManager
 
   public:
     explicit G4RootNtupleFileManager(const G4AnalysisManagerState& state);
+    G4RootNtupleFileManager() = delete;
     virtual ~G4RootNtupleFileManager();
 
     // MT/MPI
-    virtual void SetNtupleMerging(G4bool mergeNtuples, 
+    virtual void SetNtupleMerging(G4bool mergeNtuples,
                    G4int nofReducedNtupleFiles = 0) override;
     virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true) override;
     virtual void SetBasketSize(unsigned int basketSize) override;
@@ -64,10 +67,10 @@ class G4RootNtupleFileManager : public G4VNtupleFileManager
     // virtual methods from base class
     virtual G4bool ActionAtOpenFile(const G4String& fileName) override;
     virtual G4bool ActionAtWrite() override;
-    virtual G4bool ActionAtCloseFile(G4bool reset) override; 
+    virtual G4bool ActionAtCloseFile(G4bool reset) override;
     virtual G4bool Reset() override;
     virtual G4bool IsNtupleMergingSupported() const override;
-    
+
     virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
 
     void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
@@ -76,23 +79,25 @@ class G4RootNtupleFileManager : public G4VNtupleFileManager
     std::shared_ptr<G4RootNtupleManager> GetNtupleManager() const;
 
   private:
-    // static data members
+    // Static data members
     static G4RootNtupleFileManager* fgMasterInstance;
 
     void  SetNtupleMergingMode(G4bool mergeNtuples, G4int nofNtupleFiles);
     G4int GetNtupleFileNumber();
     G4bool CloseNtupleFiles();
 
-    // data members 
-    G4bool  fIsInitialized;
-    G4int   fNofNtupleFiles;
-    G4bool  fNtupleRowWise;
-    G4bool  fNtupleRowMode;
-    G4NtupleMergeMode      fNtupleMergeMode;
-    std::shared_ptr<G4RootNtupleManager>  fNtupleManager; 
-    std::shared_ptr<G4RootPNtupleManager> fSlaveNtupleManager;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootNtupleFileManager" };
 
-    std::shared_ptr<G4RootFileManager> fFileManager;
+    // data members
+    G4bool  fIsInitialized { false };
+    G4int   fNofNtupleFiles { 0 };
+    G4bool  fNtupleRowWise { false };
+    G4bool  fNtupleRowMode { true };
+    G4NtupleMergeMode  fNtupleMergeMode { G4NtupleMergeMode::kNone };
+    std::shared_ptr<G4RootNtupleManager>  fNtupleManager { nullptr };
+    std::shared_ptr<G4RootPNtupleManager> fSlaveNtupleManager { nullptr };
+    std::shared_ptr<G4RootFileManager>    fFileManager { nullptr };
 };
 
 inline void G4RootNtupleFileManager::SetFileManager(

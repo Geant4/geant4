@@ -74,14 +74,11 @@ G4double G4AtimaEnergyLossModel::tableE[] = {0.0};
 G4AtimaEnergyLossModel::G4AtimaEnergyLossModel(const G4ParticleDefinition*, 
                                      const G4String& nam)
   : G4VEmModel(nam),
-    particle(nullptr),
-    tlimit(DBL_MAX),
-    isIon(false)
+    particle(nullptr)
 {
   g4calc = G4Pow::GetInstance();
   fParticleChange = nullptr;
   theElectron = G4Electron::Electron();
-  SetParticle(theElectron);
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
   SetLowEnergyLimit(2.0*MeV);

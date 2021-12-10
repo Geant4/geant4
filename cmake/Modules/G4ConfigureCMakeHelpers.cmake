@@ -200,7 +200,7 @@ configure_file(
 )
 
 
-foreach(_mod AIDA HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
+foreach(_mod HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake

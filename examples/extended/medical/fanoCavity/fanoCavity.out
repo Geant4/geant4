@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -133,26 +133,93 @@ PhysicsList::AddPhysicsList: <standard_opt3>
 PhysicsList::SetCuts:CutLength : 10 km 
 /run/printProgress 1000
 /run/beamOn 4000
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      10 GeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 0.01 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           1
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 10 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 10 GeV in 94 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric : Emin=    0 meV Emax=   10 GeV  SauterGavrila
+       PhotoElectric : Emin=    0 eV  Emax=   10 GeV  SauterGavrila
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 10 eV  to 1 MeV, 20 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 10 GeV in 80 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-     myKlein-Nishina : Emin=    0 meV Emax=   10 GeV
+     myKlein-Nishina : Emin=    0 eV  Emax=   10 GeV
 
 conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 10 GeV, 25 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-     BetheHeitlerLPM : Emin=    0 meV Emax=   10 GeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=   10 GeV  ModifiedTsai
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+            UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
           StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
@@ -160,12 +227,12 @@ eIoni:  for e-  XStype:1  SubType=2
       Lambda tables from threshold to 10 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha : Emin=    0 meV Emax=   10 GeV
+      myMollerBhabha : Emin=    0 eV  Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+            UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
           StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:1  SubType=2
@@ -173,16 +240,16 @@ eIoni:  for e+  XStype:1  SubType=2
       Lambda tables from threshold to 10 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha : Emin=    0 meV Emax=   10 GeV
+      myMollerBhabha : Emin=    0 eV  Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
 annihil:  for e+ XStype:2 SubType=5 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg : Emin=    0 meV Emax=   10 GeV
+            eplus2gg : Emin=    0 eV  Emax=   10 GeV
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
+            UrbanMsc : Emin=    0 eV  Emax=   10 GeV Nbins=160 100 eV  -  10 GeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
 hIoni:  for proton  XStype:1  SubType=2
@@ -190,7 +257,7 @@ hIoni:  for proton  XStype:1  SubType=2
       Lambda tables from threshold to 10 GeV, 20 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg : Emin=    0 meV Emax=    2 MeV
+               Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=   10 GeV
       CSDA range table up to 10 GeV in 180 bins
 
@@ -199,14 +266,14 @@ hIoni:  for proton  XStype:1  SubType=2
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1 TeV
+ Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : g4Water_gas
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1 TeV
+ Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -216,18 +283,18 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
- ---> NbofEvents= 1000   NbOfelectr= 70758   Tkin= 588.474 keV (0.000 %)   NbOfelec in cav= 4567   Dose/EnFluence= 28.072 cm2/g (0.000 %) 
+ ---> NbofEvents= 1000   NbOfelectr= 69755   Tkin= 586.556 keV (0.000 %)   NbOfelec in cav= 4633   Dose/EnFluence= 24.541 cm2/g (0.000 %) 
 
 --> Event 2000 starts.
- ---> NbofEvents= 2000   NbOfelectr= 141208   Tkin= 588.377 keV (-0.016 %)   NbOfelec in cav= 9408   Dose/EnFluence= 28.958 cm2/g (3.154 %) 
+ ---> NbofEvents= 2000   NbOfelectr= 140305   Tkin= 586.951 keV (0.067 %)   NbOfelec in cav= 9211   Dose/EnFluence= 25.899 cm2/g (5.533 %) 
 
 --> Event 3000 starts.
- ---> NbofEvents= 3000   NbOfelectr= 211737   Tkin= 588.491 keV (0.019 %)   NbOfelec in cav= 13787   Dose/EnFluence= 29.055 cm2/g (0.336 %) 
+ ---> NbofEvents= 3000   NbOfelectr= 210411   Tkin= 587.690 keV (0.126 %)   NbOfelec in cav= 13840   Dose/EnFluence= 26.887 cm2/g (3.816 %) 
 
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=7.280000s Real=7.513656s Sys=0.010000s
+  User=6.580000s Real=6.689815s Sys=0.010000s
 
  ======================== run summary ======================
 
@@ -237,31 +304,31 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281455  Transportation= 76810  msc= 638362  eIoni= 2197055
+ Process calls frequency --->  compt= 280800  Transportation= 76336  msc= 636736  eIoni= 2186971
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 588.5850 keV +- 0.1030 %  (--> range in wall material = 2.2229 mm )
- Mass_energy_transfer coef: 29.8830 cm2/g
+ Mean energy of secondary e- = 587.9922 keV +- 0.1033 %  (--> range in wall material = 2.2199 mm )
+ Mass_energy_transfer coef: 29.8529 cm2/g
 
- StoppingPower in wall   = 1.9642 MeV*cm2/g
-               in cavity = 1.9642 MeV*cm2/g
+ StoppingPower in wall   = 1.9645 MeV*cm2/g
+               in cavity = 1.9645 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18773	 Energy = 9.5461 GeV
-      Exit  --> nbParticles = 18788	 Energy = 9.5512 GeV
+      Enter --> nbParticles = 18529	 Energy = 9.4373 GeV
+      Exit  --> nbParticles = 18533	 Energy = 9.4365 GeV
 
- Total edep in cavity = 13.6012 MeV +- 3.4449 %	 Total charged trackLength = 52.6135 m     (mean value = 2.8026 mm )
- Total dose in cavity = 21.6470 MeV/mg
- Dose/EnergyFluence   = 30.6027 cm2/g
+ Total edep in cavity = 12.1060 MeV +- 2.2586 %	 Total charged trackLength = 51.0861 m     (mean value = 2.7571 mm )
+ Total dose in cavity = 19.2673 MeV/mg
+ Dose/EnergyFluence   = 27.2385 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.02408 +- 0.03529
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.91242 +- 0.02063
 
- StepSize of ch. tracks in wall   = 167.5592 um  +- 186.2897 um 	 (nbSteps/track = 10.0496)
- StepSize of ch. tracks in cavity = 691.0377 um  +- 756.9987 um 	 (nbSteps/track = 4.0557)
+ StepSize of ch. tracks in wall   = 167.6347 um  +- 186.0520 um 	 (nbSteps/track = 10.0342)
+ StepSize of ch. tracks in cavity = 682.4589 um  +- 739.9919 um 	 (nbSteps/track = 4.0399)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.069 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

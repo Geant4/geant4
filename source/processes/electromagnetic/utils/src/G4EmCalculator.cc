@@ -790,8 +790,7 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
          && currentParticleName != "deuteron"  
          && currentParticleName != "triton"
          && currentParticleName != "alpha+"
-         && currentParticleName != "helium"
-         && currentParticleName != "hydrogen"
+         && currentParticleName != "alpha"
          ) {
         isIon = true;
         massRatio = theGenericIon->GetPDGMass()/p->GetPDGMass();
@@ -1118,11 +1117,8 @@ G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
   if(p->GetParticleType() == "nucleus" 
      && currentParticleName != "deuteron"  
      && currentParticleName != "triton"
-     && currentParticleName != "He3"
      && currentParticleName != "alpha"
      && currentParticleName != "alpha+"
-     && currentParticleName != "helium"
-     && currentParticleName != "hydrogen"
      ) { part = theGenericIon; } 
 
   elp = manager->GetEnergyLossProcess(part);

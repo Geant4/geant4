@@ -47,8 +47,8 @@
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4AnalysisManager.hh"
 
-#include "DMXAnalysisManager.hh"
 #include "DMXDetectorConstruction.hh"
 #include "DMXPhysicsList.hh"
 #include "DMXActionInitializer.hh"
@@ -106,8 +106,6 @@ int main(int argc,char** argv) {
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->Write();
   man->CloseFile();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
 
   if(visManager) delete visManager;
 

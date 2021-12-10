@@ -39,6 +39,8 @@
 
 #include "G4tgrSolid.hh"
 #include "G4tgrSolidBoolean.hh"
+#include "G4tgrSolidMultiUnion.hh"
+#include "G4tgrSolidScaled.hh"
 #include "G4tgrVolume.hh"
 #include "G4tgrVolumeDivision.hh"
 #include "G4tgrVolumeAssembly.hh"
@@ -53,6 +55,8 @@
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4IntersectionSolid.hh"
+#include "G4MultiUnion.hh"
+#include "G4ScaledSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -355,7 +359,8 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
     solid = new G4Torus(sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], phiDelta);
   }
-  else if(stype == "POLYCONE")
+  else if(stype == "POLYCONE" 
+	  || stype == "GENERICPOLYCONE")
   {
     std::size_t nplanes = std::size_t(solParam[2]);
     G4bool genericPoly = false;
@@ -399,7 +404,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
       {
         phiTotal = twopi;
       }
-      solid = new G4Polycone(sname, solParam[0], phiTotal,  // start,delta-phi
+      solid = new G4Polycone(sname, solParam[0], phiTotal*deg,  // start,delta-phi
                              nplanes,                       // sections
                              &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
     }
@@ -418,7 +423,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
         phiTotal = twopi;
       }
       solid =
-        new G4GenericPolycone(sname, solParam[0], phiTotal,  // start,delta-phi
+        new G4GenericPolycone(sname, solParam[0], phiTotal*deg,  // start,delta-phi
                               nplanes,                       // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
     }
@@ -540,6 +545,19 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
     CheckNoSolidParams(stype, 6, solParam.size());
     solid = new G4TwistedTrd(sname, solParam[0], solParam[1], solParam[2],
                              solParam[3], solParam[4], solParam[5]);
+  }
+    else if(stype == "SCALED")
+  {
+    const G4tgrSolidScaled* tgrSol = dynamic_cast<const G4tgrSolidScaled*>(sol);
+    if(tgrSol == nullptr)
+    {
+      G4Exception("G4tgbVolume::FindOrConstructG4Solid()", "InvalidSetup",
+                  FatalException, "Invalid Solid pointer");
+      return nullptr;
+    }
+    G4VSolid* sol0   = FindOrConstructG4Solid(tgrSol->GetOrigSolid());    
+    G4Scale3D scale  = tgrSol->GetScale3d();
+    solid  = new G4ScaledSolid(sname, sol0, scale);
   }
   else if(stype == "TWISTEDTUBS")
   {
@@ -714,6 +732,30 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
                   FatalException, ErrMessage);
       return nullptr;
     }
+  }
+  else if(stype == "MULTIUNION")
+  {
+    const G4tgrSolidMultiUnion* tgrSol = dynamic_cast<const G4tgrSolidMultiUnion*>(sol);
+    if(tgrSol == nullptr)
+    {
+      G4Exception("G4tgbVolume::FindOrConstructG4Solid()", "InvalidSetup",
+                  FatalException, "Invalid Solid pointer");
+      return nullptr;
+    }
+
+    G4int nsol =  tgrSol->GetNSolid();
+    G4VSolid*     soli;
+    G4Transform3D tri;
+    G4MultiUnion* solidu = new G4MultiUnion(sname);
+
+    for (G4int i=0; i<nsol; ++i)
+    {
+      soli = FindOrConstructG4Solid(tgrSol->GetSolid(i));
+      tri  = tgrSol->GetTransformation(i);
+      solidu->AddNode(*soli, tri);
+    }
+    solidu->Voxelize();
+    solid = dynamic_cast<G4VSolid*>(solidu);
   }
   else
   {

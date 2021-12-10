@@ -30,11 +30,11 @@
 // method
 //
 // History:
-// 06.10.05 V. Grichine first step to discrete process
-// 15.01.02 V. Grichine first version
+// 06.10.05  V. Grichine first step to discrete process
+// 15.01.02  V. Grichine first version
 // 28.07.05, P.Gumplinger add G4ProcessType to constructor
 // 28.09.07, V.Ivanchenko general cleanup without change of algorithms
-//
+// 19.09.21, V. Grichine, set/get functions for angle anf energy ranges and number of bins
 
 #ifndef G4VXTRenergyLoss_h
 #define G4VXTRenergyLoss_h 1
@@ -140,18 +140,53 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
   G4double GetRandomAngle(G4double energyXTR, G4int iTkin);
   G4double GetAngleXTR(G4int iTR, G4double position, G4int iAngle);
 
-  G4double GetGamma() { return fGamma; };
-  G4double GetEnergy() { return fEnergy; };
-  G4double GetVarAngle() { return fVarAngle; };
+  // set/get methods for class fields
 
-  void SetGamma(G4double gamma) { fGamma = gamma; };
-  void SetEnergy(G4double energy) { fEnergy = energy; };
-  void SetVarAngle(G4double varAngle) { fVarAngle = varAngle; };
-  void SetAngleRadDistr(G4bool pAngleRadDistr)
-  {
-    fAngleRadDistr = pAngleRadDistr;
-  };
-  void SetCompton(G4bool pC) { fCompton = pC; };
+  void     SetGamma(G4double gamma) { fGamma = gamma; };
+  G4double GetGamma() { return fGamma; };
+  void     SetEnergy(G4double energy) { fEnergy = energy; };
+  G4double GetEnergy() { return fEnergy; };
+  void     SetVarAngle(G4double varAngle) { fVarAngle = varAngle; };
+  G4double GetVarAngle() { return fVarAngle; };
+  void   SetCompton(G4bool pC) { fCompton = pC; };
+  G4bool GetCompton() { return fCompton; };
+
+
+
+  void     SetAlphaGas(G4double ag){ fAlphaGas = ag;};
+  G4double GetAlphaGas() { return fAlphaGas; };  
+  void     SetAlphaPlate(G4double ap){ fAlphaPlate = ap;};
+  G4double GetAlphaPlate() { return fAlphaPlate; };
+
+  void     SetTheMinEnergyTR(G4double minetr){ fTheMinEnergyTR = minetr;};
+  G4double GetTheMinEnergyTR() { return fTheMinEnergyTR; };  
+  void     SetTheMaxEnergyTR(G4double maxetr){ fTheMaxEnergyTR = maxetr;};
+  G4double GetTheMaxEnergyTR() { return fTheMaxEnergyTR; };  
+
+  void     SetMinEnergyTR(G4double minetr){ fMinEnergyTR = minetr;};
+  G4double GetMinEnergyTR() { return fMinEnergyTR; };  
+  void     SetMaxEnergyTR(G4double maxetr){ fMaxEnergyTR = maxetr;};
+  G4double GetMaxEnergyTR() { return fMaxEnergyTR; };  
+  
+  void     SetTheMinAngle(G4double minang){ fTheMinAngle = minang;};
+  G4double GetTheMinAngle() { return fTheMinAngle; };  
+  void     SetTheMaxAngle(G4double maxang){ fTheMaxAngle = maxang;};
+  G4double GetTheMaxAngle() { return fTheMaxAngle; };
+
+  void     SetMinThetaTR(G4double minatr){ fMinThetaTR = minatr;};
+  G4double GetMinThetaTR() { return fMinThetaTR; };  
+  void     SetMaxThetaTR(G4double maxatr){ fMaxThetaTR = maxatr;};
+  G4double GetMaxThetaTR() { return fMaxThetaTR; };
+
+  // modes of XTR angle distribution
+  
+  void   SetFastAngle(G4bool fatr){ fFastAngle = fatr;};
+  G4bool GetFastAngle() { return fFastAngle; };  
+  void   SetAngleRadDistr(G4bool fatr){ fAngleRadDistr = fatr;};
+  G4bool GetAngleRadDistr() { return fAngleRadDistr; };  
+  
+
+  
 
   G4PhysicsLogVector* GetProtonVector() { return fProtonEnergyVector; };
   G4int GetTotBin() { return fTotBin; };
@@ -159,11 +194,14 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
 
  protected:
   //   min TR energy
-  static constexpr G4double fTheMinEnergyTR = 1. * CLHEP::keV;
+  G4double fTheMinEnergyTR; 
   //   max TR energy
-  static constexpr G4double fTheMaxEnergyTR = 100. * CLHEP::keV;
-  static constexpr G4double fTheMinAngle    = 1.e-3;  //  min theta of TR quanta
-  static constexpr G4double fTheMaxAngle    = 1.e-2;  //  max theta of TR quanta
+  G4double fTheMaxEnergyTR; 
+  G4double fTheMinAngle;  //  min theta of TR quanta
+  G4double fTheMaxAngle;  //  1.e-4;  //  max theta of TR quanta
+
+  // static const members
+  
   // min Tkin of proton in tables
   static constexpr G4double fMinProtonTkin = 100. * CLHEP::GeV;
   // max Tkin of proton in tables
@@ -174,8 +212,8 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
     CLHEP::hbarc / CLHEP::electron_mass_c2;
   static constexpr G4double fCofTR = CLHEP::fine_structure_const / CLHEP::pi;
 
-  static constexpr G4int fBinTR = 200;  //  number of bins in TR vectors
-  static constexpr G4int fTotBin = 50;  // number of bins in log scale
+  G4int fTotBin;  //  number of bins in log-gamma scale
+  G4int fBinTR;   //  number of bins in TR energy-angle vectors
   
   G4ParticleDefinition* fPtrGamma;  // pointer to TR photon
 
@@ -195,7 +233,7 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
   G4double fGammaTkinCut;  // Tkin cut of TR photon in current mat.
   G4double fMinEnergyTR;   //  min TR energy in material
   G4double fMaxEnergyTR;   //  max TR energy in material
-  G4double fMaxThetaTR;    //  max theta of TR quanta
+  G4double fMinThetaTR, fMaxThetaTR;    //  min-max theta of TR quanta
   G4double fTotalDist;
   G4double fPlateThick;
   G4double fGasThick;
@@ -203,7 +241,7 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
   G4double fAlphaGas;
   G4double fGamma;     // current Lorentz factor
   G4double fEnergy;    // energy and
-  G4double fVarAngle;  // angle squared
+  G4double fVarAngle;  // angle squared!
   G4double fLambda;
   G4double fSigma1;
   G4double fSigma2;  // plasma energy Sq of matter1/2
@@ -213,8 +251,10 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
   G4int fPlateNumber;
 
   G4bool fExitFlux;
-  G4bool fAngleRadDistr;
+  G4bool fFastAngle, fAngleRadDistr;
   G4bool fCompton;
+
+  G4int secID = -1;  // creator modelID
 };
 
 #endif

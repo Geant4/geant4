@@ -166,7 +166,7 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 
 void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(fNucleon) { return; }
+  if(nullptr != fNucleon) { return; }
   if(&p == theProton || &p == G4Neutron::Neutron()) {
     isProton = (theProton == &p);
 

@@ -43,7 +43,7 @@ class G4PhaseSpaceDecayChannel : public G4VDecayChannel
 {
   public:
 
-    enum { MAX_N_DAUGHTERS=4 }; 
+    enum { MAX_N_DAUGHTERS=5 }; 
 
     G4PhaseSpaceDecayChannel(G4int Verbose = 1);
     G4PhaseSpaceDecayChannel(const G4String& theParentName,
@@ -52,7 +52,8 @@ class G4PhaseSpaceDecayChannel : public G4VDecayChannel
                              const G4String& theDaughterName1,
                              const G4String& theDaughterName2 = "",
                              const G4String& theDaughterName3 = "",
-                             const G4String& theDaughterName4 = "" );
+                             const G4String& theDaughterName4 = "",
+                             const G4String& theDaughterName5 = "" );
       // Constructors 
 
     virtual ~G4PhaseSpaceDecayChannel();

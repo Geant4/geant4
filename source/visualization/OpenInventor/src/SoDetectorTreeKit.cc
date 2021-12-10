@@ -34,8 +34,6 @@
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
@@ -241,5 +239,3 @@ void SoDetectorTreeKit::doAction(
   SO_ALTERNATEREP_DO_ACTION(aAction)
   SoBaseKit::doAction(aAction);
 }
-
-#endif

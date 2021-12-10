@@ -30,48 +30,52 @@
 
 #include "G4HepRepFileSceneHandler.hh"
 
-//HepRep
+// HepRep
 #include "G4HepRepFileXMLWriter.hh"
 
-G4HepRepFileViewer::G4HepRepFileViewer
-(G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {
-  hepRepXMLWriter = ((G4HepRepFileSceneHandler*)(&sceneHandler))->GetHepRepXMLWriter();
+G4HepRepFileViewer::G4HepRepFileViewer(G4VSceneHandler& sceneHandler,
+                                       const G4String& name)
+  : G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
+{
+  hepRepXMLWriter =
+    ((G4HepRepFileSceneHandler*) (&sceneHandler))->GetHepRepXMLWriter();
   // Make changes to view parameters for HepRep...
   fVP.SetCulling(false);
   fDefaultVP.SetCulling(false);
 }
 
-G4HepRepFileViewer::~G4HepRepFileViewer() {
-  ShowView ();
-}
+G4HepRepFileViewer::~G4HepRepFileViewer() { ShowView(); }
 
-void G4HepRepFileViewer::SetView() {
+void G4HepRepFileViewer::SetView()
+{
 #ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::SetView() called.=" << G4endl;
 #endif
 }
 
-void G4HepRepFileViewer::ClearView() {
+void G4HepRepFileViewer::ClearView()
+{
 #ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::ClearView() called." << G4endl;
 #endif
 }
 
-void G4HepRepFileViewer::DrawView() {
+void G4HepRepFileViewer::DrawView()
+{
 #ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::DrawView() called." << G4endl;
 #endif
-  NeedKernelVisit ();  // Always need to visit G4 kernel.
-  ProcessView ();
+  NeedKernelVisit();  // Always need to visit G4 kernel.
+  ProcessView();
 }
 
-void G4HepRepFileViewer::ShowView () {
+void G4HepRepFileViewer::ShowView()
+{
 #ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::ShowView" << G4endl;
 #endif
   G4VViewer::ShowView();
-  
-  if (hepRepXMLWriter->isOpen)
+
+  if(hepRepXMLWriter->isOpen)
     hepRepXMLWriter->close();
 }

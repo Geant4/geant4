@@ -47,10 +47,10 @@ public:
   void DumpHeaderToTextFile(std::ofstream& fout);
 
  // Get and set methods
-  G4int GetNoVoxelX() const { return fNoVoxelX; };
-  G4int GetNoVoxelY() const { return fNoVoxelY; };
-  G4int GetNoVoxelZ() const { return fNoVoxelZ; };
-  G4int GetNoVoxels() const { return fNoVoxelX*fNoVoxelY*fNoVoxelZ; };
+  G4int GetNoVoxelsX() const { return fNoVoxelsX; };
+  G4int GetNoVoxelsY() const { return fNoVoxelsY; };
+  G4int GetNoVoxelsZ() const { return fNoVoxelsZ; };
+  G4int GetNoVoxels() const { return fNoVoxelsX*fNoVoxelsY*fNoVoxelsZ; };
     
   G4double GetMinX() const { return fMinX; };
   G4double GetMinY() const { return fMinY; };
@@ -59,9 +59,9 @@ public:
   G4double GetMaxY() const { return fMaxY; };
   G4double GetMaxZ() const { return fMaxZ; };
   
-  void SetNoVoxelX(const G4int& val) { fNoVoxelX = val; }
-  void SetNoVoxelY(const G4int& val) { fNoVoxelY = val; }
-  void SetNoVoxelZ(const G4int& val) { fNoVoxelZ = val; }
+  void SetNoVoxelsX(const G4int& val) { fNoVoxelsX = val; }
+  void SetNoVoxelsY(const G4int& val) { fNoVoxelsY = val; }
+  void SetNoVoxelsZ(const G4int& val) { fNoVoxelsZ = val; }
   
   void SetMinX(const G4double& val) { fMinX = val; };
   void SetMaxX(const G4double& val) { fMaxX = val; };
@@ -89,7 +89,7 @@ protected:
   G4double fRescaleSlope;
   G4double fRescaleIntercept;
 
-  G4int fNoVoxelX, fNoVoxelY, fNoVoxelZ;  // number of voxels in each dimensions
+  G4int fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ;  // number of voxels in each dimensions
   G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position of wall)
   G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position of wall)
   G4double fVoxelDimX,fVoxelDimY,fVoxelDimZ; // maximum extension of voxels (position of wall)

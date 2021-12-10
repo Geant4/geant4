@@ -58,6 +58,8 @@
 #include "G4TwistedTrap.hh"
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTubs.hh"
+#include "G4MultiUnion.hh"
+#include "G4ScaledSolid.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4PVReplica.hh"
@@ -505,7 +507,7 @@ G4String G4tgbGeometryDumper::DumpMaterial(G4Material* mat)
     const G4double* fractions    = mat->GetFractionVector();
     for(std::size_t ii = 0; ii < numElements; ++ii)
     {
-      DumpElement((*elems)[ii]);
+      DumpElement(const_cast<G4Element*>((*elems)[ii]));
     }
 
     (*theFile) << ":MIXT " << AddQuotes(mateName) << " " << density << " "
@@ -513,7 +515,7 @@ G4String G4tgbGeometryDumper::DumpMaterial(G4Material* mat)
     // close start element tag and get ready to do composit "parts"
     for(std::size_t ii = 0; ii < numElements; ++ii)
     {
-      (*theFile) << "   " << AddQuotes(GetObjectName((*elems)[ii], theElements))
+      (*theFile) << "   " << AddQuotes(GetObjectName(const_cast<G4Element*>((*elems)[ii]), theElements))
                  << " " << fractions[ii] << G4endl;
     }
   }
@@ -637,7 +639,7 @@ G4String G4tgbGeometryDumper::DumpSolid(G4VSolid* solid,
 
   G4String solidType = solid->GetEntityType();
   solidType          = GetTGSolidType(solidType);
-
+  
   if(solidType == "UNIONSOLID")
   {
     DumpBooleanVolume("UNION", solid);
@@ -662,11 +664,19 @@ G4String G4tgbGeometryDumper::DumpSolid(G4VSolid* solid,
     G4VSolid* solidori = solidrefl->GetConstituentMovedSolid();
     DumpSolid(solidori);
   }
+  else if(solidType == "MULTIUNION")
+  {
+    DumpMultiUnionVolume(solid);
+  }
+  else if(solidType == "SCALEDSOLID")
+  {
+    DumpScaledVolume(solid);
+  }
   else
   {
     (*theFile) << ":SOLID " << AddQuotes(solidName) << " ";
     (*theFile) << AddQuotes(solidType) << " ";
-    DumpSolidParams(solid);
+    DumpSolidParams( solid );
     theSolids[solidName] = solid;
   }
 
@@ -728,6 +738,57 @@ void G4tgbGeometryDumper::DumpBooleanVolume(const G4String& solidType,
              << G4endl;
 
   theSolids[bsoName] = bso;
+}
+
+// --------------------------------------------------------------------
+void G4tgbGeometryDumper::DumpMultiUnionVolume( G4VSolid* so)
+{
+  const G4MultiUnion* muun = dynamic_cast<const G4MultiUnion*>(so);
+  if(muun != nullptr)
+    {
+      G4int nSolids = muun->GetNumberOfSolids();
+      std::vector<G4String> rotList;
+      for( G4int iso = 0; iso < nSolids; iso++ ) {
+	G4Transform3D trans = muun->GetTransformation(iso);
+	G4String rotName = DumpRotationMatrix( new G4RotationMatrix(trans.getRotation()));
+	rotList.push_back(rotName);
+	G4VSolid* solN = muun->GetSolid(iso);
+	DumpSolid(solN);
+      }
+      G4String bsoName = GetObjectName(const_cast<G4VSolid*>(so), theSolids);
+      (*theFile) << ":SOLID " << AddQuotes(bsoName) << " MULTIUNION "
+		 << nSolids;
+      
+      for( G4int iso = 0; iso < nSolids; iso++ ) {
+	G4VSolid* solN = muun->GetSolid(iso);
+	G4Transform3D trans = muun->GetTransformation(iso);
+	G4ThreeVector pos = trans.getTranslation();  // translation is of mother frame
+	(*theFile) << " " <<  solN->GetName()
+		   << " " << " " << rotList[iso]
+		   << " " << approxTo0(pos.x())
+		   << " " << approxTo0(pos.y())
+		   << " " << approxTo0(pos.z());
+      }
+      (*theFile) << G4endl;
+      
+    }
+}
+
+// --------------------------------------------------------------------
+void G4tgbGeometryDumper::DumpScaledVolume( G4VSolid* so)
+{
+  const G4ScaledSolid* ssol = dynamic_cast<const G4ScaledSolid*>(so);
+  if(ssol != nullptr)
+    {
+      G4VSolid* unscaledSolid = ssol->GetUnscaledSolid();
+      G4Scale3D scaleTransf = ssol->GetScaleTransform();
+      G4String bsoName = GetObjectName(const_cast<G4VSolid*>(so), theSolids);
+      (*theFile) << ":SOLID " << AddQuotes(bsoName) << " SCALED "
+		 << unscaledSolid->GetName() << " "
+		 << scaleTransf.xx() << " "
+		 << scaleTransf.yy() << " "
+		 << scaleTransf.zz() << G4endl;
+    }
 }
 
 // --------------------------------------------------------------------
@@ -875,9 +936,15 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams(const G4VSolid* so)
       {
         angphi -= 360 * deg;
       }
-      G4int ncor = plc->GetNumRZCorner();
+      G4double endphi = plc->GetEndPhi() / deg;
+      if(endphi > 180 * deg)
+      {
+        endphi -= 360 * deg;
+      }
       params.push_back(angphi);
-      params.push_back(plc->GetOriginalParameters()->Opening_angle / deg);
+      params.push_back(endphi - angphi);
+      //      params.push_back(plc->GetOriginalParameters()->Opening_angle / deg);
+      G4int ncor = plc->GetNumRZCorner();
       params.push_back(ncor);
 
       for(G4int ii = 0; ii < ncor; ++ii)
@@ -903,9 +970,9 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams(const G4VSolid* so)
       {
         endphi -= 360 * deg;
       }
-      G4int ncor = plc->GetNumRZCorner();
       params.push_back(angphi);
       params.push_back(endphi - angphi);
+      G4int ncor = plc->GetNumRZCorner();
       params.push_back(ncor);
 
       for(G4int ii = 0; ii < ncor; ++ii)
@@ -1043,7 +1110,7 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams(const G4VSolid* so)
   else
   {
     G4String ErrMessage = "Solid type not supported, sorry... " + solidType;
-    G4Exception("G4tgbGeometryDumpe::DumpSolidParams()", "NotImplemented",
+    G4Exception("G4tgbGeometryDumper::DumpSolidParams()", "NotImplemented",
                 FatalException, ErrMessage);
   }
 

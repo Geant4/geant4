@@ -32,16 +32,10 @@
 #include "G4H3ToolsManager.hh"
 #include "G4P1ToolsManager.hh"
 #include "G4P2ToolsManager.hh"
-#include "G4MPIToolsManager.hh"
 
 //_____________________________________________________________________________
-G4ToolsAnalysisReader::G4ToolsAnalysisReader(const G4String& type, G4bool isMaster)
- : G4VAnalysisReader(type, isMaster),
-   fH1Manager(nullptr),
-   fH2Manager(nullptr),
-   fH3Manager(nullptr),
-   fP1Manager(nullptr),
-   fP2Manager(nullptr)
+G4ToolsAnalysisReader::G4ToolsAnalysisReader(const G4String& type)
+ : G4VAnalysisReader(type)
 {
   // Create managers
   fH1Manager = new G4H1ToolsManager(fState);
@@ -50,7 +44,7 @@ G4ToolsAnalysisReader::G4ToolsAnalysisReader(const G4String& type, G4bool isMast
   fP1Manager = new G4P1ToolsManager(fState);
   fP2Manager = new G4P2ToolsManager(fState);
       // The managers will be deleted by the base class
-  
+
   // Set managers to base class which takes then their ownership
   SetH1Manager(fH1Manager);
   SetH2Manager(fH2Manager);
@@ -59,35 +53,72 @@ G4ToolsAnalysisReader::G4ToolsAnalysisReader(const G4String& type, G4bool isMast
   SetP2Manager(fP2Manager);
 }
 
-//_____________________________________________________________________________
-G4ToolsAnalysisReader::~G4ToolsAnalysisReader()
-{}
-
 //
 // protected methods
 //
+
+//_____________________________________________________________________________
+G4int G4ToolsAnalysisReader::ReadH1Impl(const G4String& h1Name,
+                                       const G4String& fileName,
+                                       const G4String& dirName,
+                                       G4bool isUserFileName)
+{
+  return ReadTImpl<tools::histo::h1d>(
+           h1Name, fileName, dirName, isUserFileName, fH1Manager);
+}
+
+//_____________________________________________________________________________
+G4int G4ToolsAnalysisReader::ReadH2Impl(const G4String& h2Name,
+                                       const G4String& fileName,
+                                       const G4String& dirName,
+                                       G4bool isUserFileName)
+{
+  return ReadTImpl<tools::histo::h2d>(
+           h2Name, fileName, dirName, isUserFileName, fH2Manager);
+}
+
+//_____________________________________________________________________________
+G4int G4ToolsAnalysisReader::ReadH3Impl(const G4String& h3Name,
+                                       const G4String& fileName,
+                                       const G4String& dirName,
+                                       G4bool isUserFileName)
+{
+  return ReadTImpl<tools::histo::h3d>(
+           h3Name, fileName, dirName, isUserFileName, fH3Manager);
+}
+
+//_____________________________________________________________________________
+G4int G4ToolsAnalysisReader::ReadP1Impl(const G4String& p1Name,
+                                       const G4String& fileName,
+                                       const G4String& dirName,
+                                       G4bool isUserFileName)
+{
+  return ReadTImpl<tools::histo::p1d>(
+           p1Name, fileName, dirName, isUserFileName, fP1Manager);
+}
+
+//_____________________________________________________________________________
+G4int G4ToolsAnalysisReader::ReadP2Impl(const G4String& p2Name,
+                                       const G4String& fileName,
+                                       const G4String& dirName,
+                                       G4bool isUserFileName)
+{
+  return ReadTImpl<tools::histo::p2d>(
+           p2Name, fileName, dirName, isUserFileName, fP2Manager);
+}
 
 //_____________________________________________________________________________
 G4bool G4ToolsAnalysisReader::Reset()
 {
 // Reset histograms and profiles
 
-  auto finalResult = true;
-  
-  auto result = fH1Manager->Reset();
-  finalResult = finalResult && result;
+  auto result = true;
 
-  result = fH2Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fH3Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP1Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP2Manager->Reset();
-  finalResult = finalResult && result;
-  
-  return finalResult;
-}  
+  result &= fH1Manager->Reset();
+  result &= fH2Manager->Reset();
+  result &= fH3Manager->Reset();
+  result &= fP1Manager->Reset();
+  result &= fP2Manager->Reset();
+
+  return result;
+}

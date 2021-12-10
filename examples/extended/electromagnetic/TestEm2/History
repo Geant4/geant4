@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-11-21 I. Hrivnacova (testem2-V10-07-08)
+- Added analysis manager Clear() in the end of run
+
+06-10-21 I. Hrivnacova (testem2-V10-07-07)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
 25-03-21 M.Asai (testem2-V10-07-06)
 - Additional migration to new G4SteppingVerbose.
 

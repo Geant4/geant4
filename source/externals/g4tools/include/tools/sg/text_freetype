@@ -875,7 +875,7 @@ protected:
     ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combine_cbk);
     ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)error_cbk);
 #else
-    // NOTE : the gluTessCallback_<enum>() functions are inlib/glutess specific.
+    // NOTE : the gluTessCallback_<enum>() functions are tools/glutess specific.
     //        They had been introduced to avoid g++-8.1.0 warnings :
     //          warnings : cast between incompatible function types.
     ::gluTessCallback_GLU_TESS_BEGIN_DATA   (m_tobj,begin_cbk);
@@ -1775,26 +1775,45 @@ protected:
       ::FT_Done_Face(m_face);
       m_face = 0;
     }
+
     if(font.value().empty()) {
       a_out << "tools::sg::text_freetype::load_face :"
-            << " no font file given."
+            << " no font given."
             << std::endl;
       return;
     }
 
-    std::string file;
-
-    //if(tools::file::exists(font.value())) { //look in current directory.
-    //  file = font.value(); //ok
-    //} else if(!inlib::find_with_dirs(a_out,font_dirs.values(),font.value(),file,false)) {
-      if(!tools::find_with_env(a_out,s_TOOLS_FONT_PATH(),font.value(),file,false)) {
+    // look for embedded fonts:
+   {unsigned int size;
+    const unsigned char* buffer;
+    if(parent::find_embedded_font(font.value(),size,buffer)) {
+      FT_Error error =
+        ::FT_New_Memory_Face(m_library,(const FT_Byte*)buffer,(FT_Long)size,0,&m_face);
+      if(error) {
         a_out << "tools::sg::text_freetype::load_face :"
-              << " font file not found for font "
-              << tools::sout(font.value()) << "."
+              << " FT_New_Memory_Face : error : " << serror(error) << "."
               << std::endl;
+        m_face = 0;
         return;
       }
-    //}
+      if(m_verbose) a_out << "tools::sg::text_freetype::load_face : load embedded font ok." << std::endl;
+      return;
+    }}
+
+    std::string file;
+
+    if(parent::find_font_with_finders(font.value(),file)) {
+    } else {
+      tools::find_with_env(a_out,s_TOOLS_FONT_PATH(),font.value(),file,false);
+    }
+    
+    if(file.empty()) {
+      a_out << "tools::sg::text_freetype::load_face :"
+            << " font file not found for font "
+            << tools::sout(font.value()) << "."
+            << std::endl;
+      return;
+    }
 
     if(m_verbose) {
       a_out << "tools::sg::text_freetype::load_face :"
@@ -2128,7 +2147,7 @@ protected:
   FT_Library m_library;
   FT_Face m_face;
   unsigned short m_encoding_offset;
-  bool m_verbose; //append _ to avoid clash with inlib/sg/guib::m_verbose
+  bool m_verbose; //append _ to avoid clash with tools/sg/guib::m_verbose
   ////////////////////////////////////////////////////////
   /// outline ////////////////////////////////////////////
   ////////////////////////////////////////////////////////
@@ -2173,5 +2192,6 @@ protected:
 };
 
 }}
+
 
 #endif

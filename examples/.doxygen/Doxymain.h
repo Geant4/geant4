@@ -4,7 +4,7 @@
 
 /*! \mainpage Geant4 Examples
 
-This module collects four sets of user examples aimed to demonstrate to
+This module collects three sets of user examples aimed to demonstrate to
 the user how to make correct use of the GEANT4 toolkit by implementing
 in a correct way those user-classes which the user is supposed to
 customize in order to define his/her own simulation setup.

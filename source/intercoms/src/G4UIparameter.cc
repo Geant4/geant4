@@ -80,7 +80,7 @@ G4bool G4UIparameter::operator!=(const G4UIparameter& right) const
 void G4UIparameter::List()
 {
   G4cout << G4endl << "Parameter : " << parameterName << G4endl;
-  if(!parameterGuidance.isNull())
+  if(!parameterGuidance.empty())
     G4cout << parameterGuidance << G4endl;
   G4cout << " Parameter type  : " << parameterType << G4endl;
   if(omittable)
@@ -95,13 +95,13 @@ void G4UIparameter::List()
   {
     G4cout << " Default value   : taken from the current value" << G4endl;
   }
-  else if(!defaultValue.isNull())
+  else if(!defaultValue.empty())
   {
     G4cout << " Default value   : " << defaultValue << G4endl;
   }
-  if(!parameterRange.isNull())
+  if(!parameterRange.empty())
     G4cout << " Parameter range : " << parameterRange << G4endl;
-  if(!parameterCandidate.isNull())
+  if(!parameterCandidate.empty())
     G4cout << " Candidates      : " << parameterCandidate << G4endl;
 }
 
@@ -174,12 +174,12 @@ G4int G4UIparameter::CheckNewValue(const char* newValue)
 {
   if(TypeCheck(newValue) == 0)
     return fParameterUnreadable;
-  if(!parameterRange.isNull())
+  if(!parameterRange.empty())
   {
     if(RangeCheck(newValue) == 0)
       return fParameterOutOfRange;
   }
-  if(!parameterCandidate.isNull())
+  if(!parameterCandidate.empty())
   {
     if(CandidateCheck(newValue) == 0)
       return fParameterOutOfCandidates;
@@ -193,7 +193,7 @@ G4int G4UIparameter::CandidateCheck(const char* newValue)
   G4Tokenizer candidateTokenizer(parameterCandidate);
   G4String aToken;
   G4int iToken = 0;
-  while(!(aToken = candidateTokenizer()).isNull())
+  while(!(aToken = candidateTokenizer()).empty())
   {
     ++iToken;
     if(aToken == newValue)
@@ -201,6 +201,14 @@ G4int G4UIparameter::CandidateCheck(const char* newValue)
   }
   G4cerr << "parameter value (" << newValue
          << ") is not listed in the candidate List." << G4endl;
+  G4cerr << "  Candidates are:";
+  G4Tokenizer candidateListTokenizer(parameterCandidate);
+  while(!(aToken = candidateListTokenizer()).empty())
+  {
+    G4cerr << ' ' << aToken;
+  }
+  G4cerr << G4endl;
+
   return 0;
 }
 
@@ -269,7 +277,7 @@ G4int G4UIparameter::TypeCheck(const char* newValue)
     case 'S':
       break;
     case 'B':
-      newValueString.toUpper();
+      G4StrUtil::to_upper(newValueString);
       if(newValueString == "Y" || newValueString == "N" ||
          newValueString == "YES" || newValueString == "NO" ||
          newValueString == "1" || newValueString == "0" ||
@@ -973,7 +981,7 @@ tokenNum G4UIparameter::Yylex()  // reads input and returns token number KR486
   {  // I or D
     do
     {
-      buf += G4String((unsigned char) c);
+      buf += (unsigned char) c;
       c = G4UIpGetc();
     } while(c == '.' || isdigit(c) || c == 'e' || c == 'E' || c == '+' ||
             c == '-');
@@ -1000,7 +1008,7 @@ tokenNum G4UIparameter::Yylex()  // reads input and returns token number KR486
   {  // IDENTIFIER
     do
     {
-      buf += G4String((unsigned char) c);
+      buf += (unsigned char) c;
     } while((c = G4UIpGetc()) != EOF && (isalnum(c) || c == '_'));
     G4UIpUngetc(c);
     if(buf == parameterName)
@@ -1049,7 +1057,7 @@ G4int G4UIparameter::G4UIpGetc()
 {  // emulation of getc()
   G4int length = parameterRange.length();
   if(bp < length)
-    return parameterRange(bp++);
+    return parameterRange[bp++];
   else
     return EOF;
 }
@@ -1059,7 +1067,7 @@ G4int G4UIparameter::G4UIpUngetc(G4int c)
 {  // emulation of ungetc()
   if(c < 0)
     return -1;
-  if(bp > 0 && c == parameterRange(bp - 1))
+  if(bp > 0 && c == parameterRange[bp - 1])
   {
     --bp;
   }
@@ -1067,7 +1075,7 @@ G4int G4UIparameter::G4UIpUngetc(G4int c)
   {
     G4cerr << "G4UIpUngetc() failed." << G4endl;
     G4cerr << "bp=" << bp << " c=" << c
-           << " pR(bp-1)=" << parameterRange(bp - 1) << G4endl;
+           << " pR(bp-1)=" << parameterRange[bp - 1] << G4endl;
     paramERR = 1;
     return -1;
   }

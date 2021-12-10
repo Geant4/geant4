@@ -1,0 +1,23 @@
+#
+# Macro file for "Hadr05.cc"
+#
+/control/verbose 1
+/run/verbose 1
+#
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/testhadr/det/setNbOfLayers 1
+/testhadr/det/setNbOfAbsor  1
+/testhadr/det/setAbsor 1 Aluminium 10 cm
+/testhadr/det/setSizeYZ 10 cm
+#
+/control/execute vis.mac
+##/run/initialize
+#
+/testhadr/gun/setDefault
+/gun/particle e-
+/gun/energy 10 MeV
+#
+/run/beamOn 1
+

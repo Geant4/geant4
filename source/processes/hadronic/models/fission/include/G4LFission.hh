@@ -75,5 +75,6 @@ class G4LFission : public G4HadronicInteraction
 
     void init();
     G4double spneut[10];
+    G4int secID;  // Creator model ID for the secondaries created by this model
 };
 #endif

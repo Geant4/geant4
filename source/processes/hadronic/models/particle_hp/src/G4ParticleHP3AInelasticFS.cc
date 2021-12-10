@@ -32,6 +32,12 @@
 #include "G4ParticleHP3AInelasticFS.hh"
 #include "G4Nucleus.hh"
 #include "G4Alpha.hh"
+#include "G4PhysicsModelCatalog.hh"
+
+G4ParticleHP3AInelasticFS::G4ParticleHP3AInelasticFS()
+{
+  secID = G4PhysicsModelCatalog::GetModelID( "model_G4ParticleHP3AInelasticFS_F29" );
+}
 
 G4HadFinalState * G4ParticleHP3AInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
 {

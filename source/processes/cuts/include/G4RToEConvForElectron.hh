@@ -42,25 +42,16 @@
 
 class G4RToEConvForElectron : public G4VRangeToEnergyConverter
 {
-  public: 
+public: 
 
-    G4RToEConvForElectron();
-      // Constructor
+  explicit G4RToEConvForElectron();
 
-    virtual ~G4RToEConvForElectron();
-      // Destructor
+  virtual ~G4RToEConvForElectron();
 
-  protected:
+protected:
 
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy);
+  G4double ComputeValue(const G4int Z, const G4double kinEnergy) final;
 
-    G4double Mass = 0.0;
-    G4double Z = -1.0;  
-    G4double taul = 0.0;
-    G4double ionpot = 0.0;
-    G4double ionpotlog = -1.0e-10;
-    G4double bremfactor = 0.1;
 };
 
 #endif

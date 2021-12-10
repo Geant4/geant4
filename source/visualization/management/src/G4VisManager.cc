@@ -38,6 +38,7 @@
 #include "G4VisCommandsSet.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
+#include "G4VisCommandsPlotter.hh"
 #include "G4VisCommandsSceneHandler.hh"
 #include "G4VisCommandsTouchable.hh"
 #include "G4VisCommandsTouchableSet.hh"
@@ -189,8 +190,10 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
 
   // Make top level command directory...
   // Vis commands should *not* be broadcast to threads (2nd argument).
-  G4UIcommand* directory = new G4UIdirectory ("/vis/",false);
+  auto directory = new G4UIdirectory ("/vis/",false);
   directory -> SetGuidance ("Visualization commands.");
+  // Request commands in name order
+  directory -> Sort();  // Ordering propagates to sub-directories
   fDirectoryList.push_back (directory);
 
   // Instantiate *basic* top level commands so that they can be used
@@ -206,7 +209,6 @@ G4VisManager::~G4VisManager()
 {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->SetCoutDestination(nullptr);
-  fpInstance = 0;
   size_t i;
   for (i = 0; i < fSceneList.size (); ++i) {
     delete fSceneList[i];
@@ -236,6 +238,7 @@ G4VisManager::~G4VisManager()
   delete fpHitFilterMgr;
   delete fpTrajFilterMgr;
   delete fpTrajDrawModelMgr;
+  fpInstance = 0;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -512,6 +515,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
   RegisterMessenger(new G4VisCommandSceneList);
   RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
+  RegisterMessenger(new G4VisCommandSceneRemoveModel);
   RegisterMessenger(new G4VisCommandSceneSelect);
   RegisterMessenger(new G4VisCommandSceneShowExtents);
 
@@ -536,6 +540,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddLogo2D);
   RegisterMessenger(new G4VisCommandSceneAddMagneticField);
+  RegisterMessenger(new G4VisCommandSceneAddPlotter);
   RegisterMessenger(new G4VisCommandSceneAddPSHits);
   RegisterMessenger(new G4VisCommandSceneAddScale);
   RegisterMessenger(new G4VisCommandSceneAddText);
@@ -543,6 +548,17 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddTrajectories);
   RegisterMessenger(new G4VisCommandSceneAddUserAction);
   RegisterMessenger(new G4VisCommandSceneAddVolume);
+  
+  RegisterMessenger(new G4VisCommandPlotterCreate);
+  RegisterMessenger(new G4VisCommandPlotterSetLayout);
+  RegisterMessenger(new G4VisCommandPlotterAddStyle);
+  RegisterMessenger(new G4VisCommandPlotterAddRegionStyle);
+  RegisterMessenger(new G4VisCommandPlotterAddRegionParameter);
+  RegisterMessenger(new G4VisCommandPlotterClear);
+  RegisterMessenger(new G4VisCommandPlotterClearRegion);
+  RegisterMessenger(new G4VisCommandPlotterList);
+  RegisterMessenger(new G4VisCommandPlotterAddRegionH1);
+  RegisterMessenger(new G4VisCommandPlotterAddRegionH2);
   
   directory = new G4UIdirectory ("/vis/sceneHandler/");
   directory -> SetGuidance ("Operations on Geant4 scene handlers.");
@@ -955,12 +971,6 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
   DrawT (polymarker, objectTransform);
 }
 
-void G4VisManager::Draw (const G4Scale& scale,
-			 const G4Transform3D& objectTransform)
-{
-  DrawT (scale, objectTransform);
-}
-
 void G4VisManager::Draw (const G4Square& square,
 			 const G4Transform3D& objectTransform)
 {
@@ -1306,12 +1316,17 @@ void G4VisManager::GeometryHasChanged () {
              << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
 	     << G4endl;
     }
-    fpSceneHandler->ClearTransientStore();
-    fpSceneHandler->ClearStore();
-    fpViewer->NeedKernelVisit();
-    fpViewer->SetView();
-    fpViewer->ClearView();
-    fpViewer->FinishView();
+    // Clean up
+    if (fpSceneHandler) {
+      fpSceneHandler->ClearTransientStore();
+      fpSceneHandler->ClearStore();
+      if (fpViewer) {
+        fpViewer->NeedKernelVisit();
+        fpViewer->SetView();
+        fpViewer->ClearView();
+        fpViewer->FinishView();
+      }
+    }
   }
 }
 
@@ -1570,6 +1585,13 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
 
 void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   fpViewer  = pViewer;
+  if (fpViewer == nullptr) {
+    if (fVerbosity >= confirmations) {
+      G4cout << "G4VisManager::SetCurrentViewer: current viewer pointer zeroed "
+      << G4endl;
+    }
+    return;
+  }
   if (fVerbosity >= confirmations) {
     G4cout << "G4VisManager::SetCurrentViewer: viewer now "
 	   << pViewer -> GetName ()
@@ -2132,7 +2154,7 @@ void G4VisManager::EndOfEvent ()
 
     G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
 
-    if (maxNumberOfKeptEvents > 0 &&
+    if (maxNumberOfKeptEvents >= 0 &&
         fNKeepRequests >= maxNumberOfKeptEvents) {
 
       fEventKeepingSuspended = true;
@@ -2343,9 +2365,8 @@ void G4VisManager::ResetTransientsDrawnFlags()
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
-  G4String viewerShortName (viewerName);
-  viewerShortName = viewerShortName (0, viewerShortName.find (' '));
-  return viewerShortName.strip ();
+  G4String viewerShortName = viewerName.substr(0, viewerName.find (' '));
+  return G4StrUtil::strip_copy(viewerShortName);
 }
 
 G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
@@ -2388,15 +2409,15 @@ G4String G4VisManager::VerbosityString(Verbosity verbosity) {
 
 G4VisManager::Verbosity
 G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
-  G4String ss(verbosityString); ss.toLower();
+  G4String ss = G4StrUtil::to_lower_copy(verbosityString); 
   Verbosity verbosity;
-  if      (ss(0) == 'q') verbosity = quiet;
-  else if (ss(0) == 's') verbosity = startup;
-  else if (ss(0) == 'e') verbosity = errors;
-  else if (ss(0) == 'w') verbosity = warnings;
-  else if (ss(0) == 'c') verbosity = confirmations;
-  else if (ss(0) == 'p') verbosity = parameters;
-  else if (ss(0) == 'a') verbosity = all;
+  if      (ss[0] == 'q') verbosity = quiet;
+  else if (ss[0] == 's') verbosity = startup;
+  else if (ss[0] == 'e') verbosity = errors;
+  else if (ss[0] == 'w') verbosity = warnings;
+  else if (ss[0] == 'c') verbosity = confirmations;
+  else if (ss[0] == 'p') verbosity = parameters;
+  else if (ss[0] == 'a') verbosity = all;
   else {
     G4int intVerbosity;
     std::istringstream is(ss);

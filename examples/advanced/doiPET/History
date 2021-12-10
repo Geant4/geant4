@@ -6,6 +6,26 @@
                       Category History file
                       ---------------------
 
+14.11.2021 - G. Cosmo;doiPET-V10-07-03
+           - Fixed compilation warnings for unused private variables in
+             doiPETDetectorConstruction and doiPETEventAction. Removed tabs.
+
+16.10.2021 - S. Guatelli;doiPET-V10-07-02
+           - Migration to the G4RunManagerFactory
+           - Analysis now done with G4Analysis (no dependency towards external ROOT libraries)
+           - Link to reference data and analysis scripts provided to 
+             let users compare simulatilesion results to reference data
+           - Some controls to prepare DOI-look-up table is added. 
+             If DOI look-up table is provided as a file, then it will use it. 
+             If look-up table is not provided, the program will prepare the look-up table
+              based on the information provided by the user (number of crystals, etc).
+           - In performing Anger Logic calculation, the interaction position is mapped to the center
+             of the crystal before 2D position error is added to model photomultiplier tube (PMT) error.
+           - An analysis C++ program is provided to calculate the sensitivity of the scanner for a line source.
+
+07.10.2021 - I. Hrivnacova (doiPET-V10-07-01)
+             Removed unused include of g4root.hh
+
 24.05.2021 - B. Morgan (doiPET-V10-07-00)
              Bump required CMake version range to 3.12...3.20, matching core Geant4
 

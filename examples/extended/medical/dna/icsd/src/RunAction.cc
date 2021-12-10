@@ -35,8 +35,8 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
-#include "Analysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,12 +48,11 @@ RunAction::RunAction()
    // book histograms, ntuple
 
     // create analysis manager
-    // the choice of analysis technology is done via selection of a namespace
-    // in Analysis.hh
 
     G4cout << "##### Create analysis manager " << "  " << this << G4endl;
     auto analysisManager = G4AnalysisManager::Instance();
 
+    analysisManager->SetDefaultFileType("root");
     analysisManager->SetNtupleMerging(true);
 
     G4cout << "Using " << analysisManager->GetType()
@@ -84,7 +83,6 @@ RunAction::RunAction()
 
 RunAction::~RunAction()
 {
-    delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

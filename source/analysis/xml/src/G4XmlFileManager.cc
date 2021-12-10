@@ -48,11 +48,7 @@ G4XmlFileManager::G4XmlFileManager(const G4AnalysisManagerState& state)
   fP2FileManager = std::make_shared<G4XmlHnFileManager<histo::p2d>>(this);
 }
 
-//_____________________________________________________________________________
-G4XmlFileManager::~G4XmlFileManager()
-{}
-
-// 
+//
 // private methods
 //
 
@@ -69,9 +65,9 @@ G4String G4XmlFileManager::GetNtupleFileName(XmlNtupleDescription* ntupleDescrip
     ntupleFileName = GetNtupleFileName(ntupleDescription->fNtupleBooking.name());
   }
   return ntupleFileName;
-}  
+}
 
-// 
+//
 // protected methods
 //
 
@@ -80,11 +76,7 @@ std::shared_ptr<std::ofstream> G4XmlFileManager::CreateFileImpl(const G4String& 
 {
   std::shared_ptr<std::ofstream> file = std::make_shared<std::ofstream>(fileName);
   if ( file->fail() ) {
-    file = nullptr;
-    G4ExceptionDescription description;
-    description << "      " << "Cannot create file " << fileName;
-    G4Exception("G4XmlFileManager::CreateFileImpl()",
-              "Analysis_W001", JustWarning, description);
+    Warn(G4String("Cannot create file ") + fileName, fkClass, "CreateFileImpl");
     return nullptr;
   }
 
@@ -96,22 +88,22 @@ std::shared_ptr<std::ofstream> G4XmlFileManager::CreateFileImpl(const G4String& 
 G4bool G4XmlFileManager::WriteFileImpl(std::shared_ptr<std::ofstream> /*file*/)
 {
   // Nothing to be done here
-  return true;  
+  return true;
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlFileManager::CloseFileImpl(std::shared_ptr<std::ofstream> file)    
+G4bool G4XmlFileManager::CloseFileImpl(std::shared_ptr<std::ofstream> file)
 {
   if ( ! file ) return false;
 
   // close file
   waxml::end(*file);
-  file->close(); 
+  file->close();
 
   return true;
 }
 
-// 
+//
 // public methods
 //
 
@@ -123,10 +115,7 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
   auto name = GetFullFileName(fFileName);
 
   if ( fFile ) {
-    G4ExceptionDescription description;
-    description << "File " << fileName << " already exists.";
-    G4Exception("G4XmlFileManager::OpenFile()",
-                "Analysis_W001", JustWarning, description);
+    Warn(G4String("File ") + fileName + " already exists.", fkClass, "OpenFile");
     fFile.reset();
   }
 
@@ -135,10 +124,7 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
     // Create file (and save in in the file map (on master only)
     fFile = CreateTFile(name);
     if ( ! fFile) {
-      G4ExceptionDescription description;
-      description << "Failed to create file " << fileName;
-      G4Exception("G4XmlFileManager::OpenFile()",
-                  "Analysis_W001", JustWarning, description);
+      Warn(G4String("Failed to create file") + fileName, fkClass, "OpenFile");
       return false;
     }
   }
@@ -146,8 +132,8 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
   fIsOpenFile = true;
 
   return true;
-}  
-  
+}
+
 //_____________________________________________________________________________
 G4bool G4XmlFileManager::CreateNtupleFile(
   XmlNtupleDescription* ntupleDescription)
@@ -155,11 +141,7 @@ G4bool G4XmlFileManager::CreateNtupleFile(
   // get ntuple file name per object (if defined)
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("create", "ntuple file", ntupleFileName);
-  }
-#endif
+  Message(kVL4, "create", "ntuple file", ntupleFileName);
 
   // update file name if it is already in use
   while ( GetTFile(ntupleFileName, false) ) {
@@ -168,26 +150,19 @@ G4bool G4XmlFileManager::CreateNtupleFile(
     auto newName = GetBaseName(oldName) + "_bis." + GetExtension(oldName);
     ntupleDescription->fFileName = newName;
 
-    G4ExceptionDescription description;
-    description
-      << "Ntuple filename " << oldName << " is already in use." << G4endl
-      << "It will be replaced with : " << newName;
-    G4Exception("G4XmlFileManager::CreateFileImpl()",
-                "Analysis_W001", JustWarning, description);
+    Warn(G4String( "Ntuple filename ") + oldName + " is already in use.\n" +
+         "It will be replaced with : " + newName,
+         fkClass, "CreateNtupleFile");
 
     ntupleFileName = GetNtupleFileName(ntupleDescription);
   }
 
   ntupleDescription->fFile = CreateTFile(ntupleFileName);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("create", "ntuple file", ntupleFileName);
-  }
-#endif
+  Message(kVL2, "create", "ntuple file", ntupleFileName);
 
   return (ntupleDescription->fFile != nullptr);
-}  
+}
 
 //_____________________________________________________________________________
 G4bool G4XmlFileManager::CloseNtupleFile(
@@ -196,32 +171,21 @@ G4bool G4XmlFileManager::CloseNtupleFile(
   // Do nothing if there is no file
   if ( ! ntupleDescription->fFile ) return true;
 
-  auto finalResult = true;
+  auto result = true;
 
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("close", "ntuple file", ntupleFileName);
-  }
-#endif
+  Message(kVL4, "close", "ntuple file", ntupleFileName);
 
-  // close file
-  auto result = CloseTFile(ntupleFileName);
-  finalResult = result && finalResult;
-
+  // Close file
+  result &= CloseTFile(ntupleFileName);
   // Notify not empty file
-  result = SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
-  finalResult = result && finalResult;
+  result &=SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
 
   // Reset file info in ntuple description
   ntupleDescription->fFile.reset();
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("close", "ntuple file", ntupleFileName);
-  }
-#endif
+  Message(kVL2, "close", "ntuple file", ntupleFileName);
 
-  return result; 
+  return result;
 }

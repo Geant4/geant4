@@ -68,8 +68,8 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process, G4int iVol) 
 {
+  if (process == nullptr) return;  
   G4String procName = process->GetProcessName();
-  
   if (iVol == 1) {
     std::map<G4String,G4int>::iterator it1 = fProcCounter1.find(procName);
     if ( it1 == fProcCounter1.end()) {

@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Oct 4, 2021  Alberto Ribon (procman-V10-07-04)
+- G4NoProcess : added the method IsApplicable(), returning false, because
+  this process should not be set to any particle.
+  (Thanks to Makoto Asai for the suggestion.)
+
+- Sep 21, 2021  Alberto Ribon (procman-V10-07-03)
+- G4NoProcess : introduced a new class (proposed and written by K. Genser)
+  representing an empty process, which is not assigned to any particle,
+  and used only in the method G4SteppingManager::InvokeAtRestDoItProcs
+  for stable ions at rest (to avoid that Radioactive Decay appears as
+  process defining their last step, which can mislead users).
+
 - May 02, 2021  John Allison (procman-V10-07-02)
 - Introduce the following files for implementation of quantum entanglement:
     G4EntanglementAuxInfo.hh

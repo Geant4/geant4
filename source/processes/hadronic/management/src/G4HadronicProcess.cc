@@ -66,7 +66,6 @@
 #include "G4VCrossSectionDataSet.hh"
 
 #include "G4NistManager.hh"
-#include "G4PhysicsModelCatalog.hh"
 #include "G4VLeadingParticleBiasing.hh"
 #include "G4Exp.hh"
 
@@ -119,7 +118,6 @@ void G4HadronicProcess::InitialiseLocal() {
   useIntegralXS = true;
   theLastCrossSection = 0.0;
   nICelectrons = 0;
-  idxIC = -1;
   G4HadronicProcess_debug_flag = false;
   levelsSetByProcess = false;
   epReportLevel = 0;
@@ -414,10 +412,6 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
  
   // check secondaries 
   nICelectrons = 0;
-  if(idxIC == -1) { 
-    G4int idx = G4PhysicsModelCatalog::GetIndex("e-InternalConvertion");
-    idxIC =  -1 == idx ? -2 : idx; 
-  } 
   G4int nSec = aR->GetNumberOfSecondaries();
   theTotalResult->SetNumberOfSecondaries(nSec);
   G4double time0 = aT.GetGlobalTime();
@@ -453,15 +447,14 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       dynParticle->SetKineticEnergy(e);
       dynParticle->SetMass(mass);               
     }
-    G4int idxModel = aR->GetSecondary(i)->GetCreatorModelType(); 
-    //if(idxIC == idxModel) { ++nICelectrons; }
+    G4int idModel = aR->GetSecondary(i)->GetCreatorModelID(); 
     if(part->GetPDGEncoding() == 11) { ++nICelectrons; }
       
     // time of interaction starts from zero + global time
     G4double time = std::max(aR->GetSecondary(i)->GetTime(), 0.0) + time0;
 
     G4Track* track = new G4Track(dynParticle, time, aT.GetPosition());
-    track->SetCreatorModelIndex(idxModel);
+    track->SetCreatorModelID(idModel);
     G4double newWeight = fWeight*aR->GetSecondary(i)->GetWeight();
     track->SetWeight(newWeight);
     track->SetTouchableHandle(aT.GetTouchableHandle());

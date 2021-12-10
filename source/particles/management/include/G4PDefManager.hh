@@ -64,6 +64,7 @@
 #include "G4AutoLock.hh"
 
 class G4ProcessManager;
+class G4VTrackingManager;
 
 class G4PDefData
 {
@@ -76,6 +77,7 @@ class G4PDefData
     void initialize();
 
     G4ProcessManager* theProcessManager = nullptr;
+    G4VTrackingManager* theTrackingManager = nullptr;
 };
 
 class G4PDefManager

@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 November 2021 V. Ivanchenko (hadr-man-V10-07-10)
+---------------------------------------------------
+- G4HadronicProcessStore : attempt to fix memory leak at exit
+
+23 September 2021 A. Ribon (hadr-man-V10-07-09)
+---------------------------------------------------
+- G4HadronicProcessType : added new enum value (fEMDissociation = 310)
+  for EM dissociation process (as requested by Laurence James Nevay).
+
+04 August 2021 A. Ribon (hadr-man-V10-07-08)
+---------------------------------------------------
+- HadronicProcess : removed unused private member variable (idxIC);
+  updated the call to the G4Track method to set the model creator ID.
+
 04 June 2021 A. Ribon (hadr-man-V10-07-07)
 ---------------------------------------------------
 - HadronicProcess : made public (instead of protected) the method

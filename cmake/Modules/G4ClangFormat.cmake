@@ -2,26 +2,22 @@
 # G4ClangFormat
 # =============
 #
-# Functions and helper targets for formatting sources of a target using 
+# Functions and helper targets for formatting sources of a target using
 # clang-format
 
 # - Include guard
-if(NOT __G4CLANGFORMAT_INCLUDED)
-  set(__G4CLANGFORMAT_INCLUDED 1)
-else()
-  return()
-endif()
+include_guard(DIRECTORY)
 
 # Default logging directory
 set(G4FORMAT_LOGDIR ${PROJECT_BINARY_DIR}/format CACHE PATH
-    "Output folder of files that are formatted")
+  "Output folder of files that are formatted")
 
 # Find clang-format (optional)
 find_program(CLANG_FORMATTER NAMES
-    clang-format-6          # prefer clang-format version 6.0
-    clang-format-6.0
-    clang-format-mp-6.0     # Apple macports version
-    clang-format)
+  clang-format-6          # prefer clang-format version 6.0
+  clang-format-6.0
+  clang-format-mp-6.0     # Apple macports version
+  clang-format)
 
 function(exclude_from_format)
   cmake_parse_arguments(ARG "" "" "HEADERS;SOURCES;FILES" ${ARGN})
@@ -50,8 +46,7 @@ endfunction()
 
 function(create_format_directory)
   if(NOT EXISTS ${G4FORMAT_LOGDIR})
-      execute_process(COMMAND ${CMAKE_COMMAND}
-          -E make_directory ${G4FORMAT_LOGDIR})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${G4FORMAT_LOGDIR})
   endif()
 endfunction()
 
@@ -103,7 +98,7 @@ function(geant4_format_target)
     # add to list to be processed
     list(APPEND SOURCES ${_SOURCE})
   endforeach()
-    
+
   # write format file
   set(FMTLOG_OUT ${G4FORMAT_LOGDIR}/${G4TARGET_NAME}.txt)
   file(WRITE ${FMTLOG_OUT} "${FILELOG}")

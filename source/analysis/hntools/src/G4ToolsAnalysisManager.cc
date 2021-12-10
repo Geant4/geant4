@@ -35,31 +35,34 @@
 #include "G4PlotManager.hh"
 #include "G4MPIToolsManager.hh"
 #include "G4AnalysisUtilities.hh"
+#include "G4AutoLock.hh"
+#include "G4Threading.hh"
 
-G4ThreadLocal G4ToolsAnalysisManager* G4ToolsAnalysisManager::fgToolsInstance = nullptr;
+using namespace G4Analysis;
+
+namespace {
+  //Mutex to lock master manager when merging histograms
+  G4Mutex mergeHnMutex = G4MUTEX_INITIALIZER;
+}
 
 //_____________________________________________________________________________
 G4ToolsAnalysisManager* G4ToolsAnalysisManager::Instance()
 {
   return fgToolsInstance;
-}    
+}
 
 //_____________________________________________________________________________
 G4bool G4ToolsAnalysisManager::IsInstance()
 {
-  return ( fgToolsInstance != 0 );
-}    
+  return ( fgToolsInstance != nullptr );
+}
 
 //_____________________________________________________________________________
-G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMaster)
- : G4VAnalysisManager(type, isMaster),
-   fH1Manager(nullptr),
-   fH2Manager(nullptr),
-   fH3Manager(nullptr),
-   fP1Manager(nullptr),
-   fP2Manager(nullptr)
+G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type)
+ : G4VAnalysisManager(type)
 {
   // Set instance pointer
+  if ( ! G4Threading::IsWorkerThread() ) fgMasterToolsInstance = this;
   fgToolsInstance = this;
 
   // Create managers
@@ -69,7 +72,7 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMa
   fP1Manager = new G4P1ToolsManager(fState);
   fP2Manager = new G4P2ToolsManager(fState);
       // The managers will be deleted by the base class
-  
+
   // Set managers to base class which takes then their ownership
   SetH1Manager(fH1Manager);
   SetH2Manager(fH2Manager);
@@ -79,11 +82,15 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMa
 
   // Plot manager
   SetPlotManager(std::make_shared<G4PlotManager>(fState));
+
+  // Messenger
+  fMessenger = std::make_unique<G4ToolsAnalysisMessenger>(this);
 }
 
 //_____________________________________________________________________________
 G4ToolsAnalysisManager::~G4ToolsAnalysisManager()
 {
+  if ( fState.GetIsMaster() ) fgMasterToolsInstance = nullptr;
   fgToolsInstance = nullptr;
 }
 
@@ -92,115 +99,164 @@ G4ToolsAnalysisManager::~G4ToolsAnalysisManager()
 //
 
 //_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::PlotImpl() 
+G4bool G4ToolsAnalysisManager::PlotImpl()
 {
 
   // Only master thread performs plotting
   if ( G4Threading::IsWorkerThread() )  return true;
 
-  auto finalResult = true;
+  auto result = true;
 
   // Open output file
   fPlotManager->OpenFile(fVFileManager->GetPlotFileName());
 
   // H1
-  auto result 
-    = fPlotManager->PlotAndWrite<tools::histo::h1d>(fH1Manager->GetH1Vector(), 
+  result
+    &= fPlotManager->PlotAndWrite<tools::histo::h1d>(fH1Manager->GetH1Vector(),
                                                     fH1Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // H2
-  result 
-    = fPlotManager->PlotAndWrite<tools::histo::h2d>(fH2Manager->GetH2Vector(), 
+  result
+    &= fPlotManager->PlotAndWrite<tools::histo::h2d>(fH2Manager->GetH2Vector(),
                                                     fH2Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // H3
   // not yet available in tools
 
   // P1
-  result 
-    = fPlotManager->PlotAndWrite<tools::histo::p1d>(fP1Manager->GetP1Vector(), 
+  result
+    &= fPlotManager->PlotAndWrite<tools::histo::p1d>(fP1Manager->GetP1Vector(),
                                                     fP1Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // P2
   // not yet available in tools
 
   // Close output file
-  result = fPlotManager->CloseFile();
-  finalResult = finalResult && result;
+  result &= fPlotManager->CloseFile();
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::MergeImpl(tools::histo::hmpi* hmpi) 
+G4bool G4ToolsAnalysisManager::MergeImpl(tools::histo::hmpi* hmpi)
 {
 
   // if ( G4Threading::IsWorkerThread() )  return true;
 
   if ( ! hmpi )  return false;
 
-  G4bool finalResult = true;
+  auto result = true;
 
   // Create MPI manager
   G4MPIToolsManager mpiToolsManager(fState, hmpi);
 
   // H1
-  G4bool result 
-    = mpiToolsManager.Merge<tools::histo::h1d>(fH1Manager->GetH1Vector(), 
+  result
+    &= mpiToolsManager.Merge<tools::histo::h1d>(fH1Manager->GetH1Vector(),
                                                fH1Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // H2
-  result 
-    = mpiToolsManager.Merge<tools::histo::h2d>(fH2Manager->GetH2Vector(), 
+  result
+    &= mpiToolsManager.Merge<tools::histo::h2d>(fH2Manager->GetH2Vector(),
                                                fH2Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // H3
-  result 
-    = mpiToolsManager.Merge<tools::histo::h3d>(fH3Manager->GetH3Vector(), 
+  result
+    &= mpiToolsManager.Merge<tools::histo::h3d>(fH3Manager->GetH3Vector(),
                                                fH3Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // P1
-  result 
-    = mpiToolsManager.Merge<tools::histo::p1d>(fP1Manager->GetP1Vector(), 
+  result
+    &= mpiToolsManager.Merge<tools::histo::p1d>(fP1Manager->GetP1Vector(),
                                                fP1Manager->GetHnVector());
-  finalResult = finalResult && result;
 
   // P2
-  result 
-    = mpiToolsManager.Merge<tools::histo::p2d>(fP2Manager->GetP2Vector(), 
+  result
+    &= mpiToolsManager.Merge<tools::histo::p2d>(fP2Manager->GetP2Vector(),
                                                fP2Manager->GetHnVector());
-  finalResult = finalResult && result;
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
-G4bool G4ToolsAnalysisManager::Reset()
+G4bool G4ToolsAnalysisManager::WriteImpl()
+{
+  // Nothing to be done on worker
+  if ( G4Threading::IsWorkerThread() ) return false;
+
+  auto result = true;
+
+  // Write all histograms/profile on master
+  result &=WriteT(fH1Manager->GetH1Vector(), fH1Manager->GetHnVector());
+  result &=WriteT(fH2Manager->GetH2Vector(), fH2Manager->GetHnVector());
+  result &=WriteT(fH3Manager->GetH3Vector(), fH3Manager->GetHnVector());
+  result &=WriteT(fP1Manager->GetP1Vector(), fP1Manager->GetHnVector());
+  result &=WriteT(fP2Manager->GetP2Vector(), fP2Manager->GetHnVector());
+
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::ResetImpl()
 {
 // Reset histograms and profiles
 
-  auto finalResult = true;
-  
-  auto result = fH1Manager->Reset();
-  finalResult = finalResult && result;
+  auto result = true;
 
-  result = fH2Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fH3Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP1Manager->Reset();
-  finalResult = finalResult && result;
-  
-  result = fP2Manager->Reset();
-  finalResult = finalResult && result;
-  
-  return finalResult;
-}  
+  result &= fH1Manager->Reset();
+  result &= fH2Manager->Reset();
+  result &= fH3Manager->Reset();
+  result &= fP1Manager->Reset();
+  result &= fP2Manager->Reset();
+
+  return result;
+}
+
+//_____________________________________________________________________________
+void G4ToolsAnalysisManager::ClearImpl()
+{
+// Reset histograms and profiles
+
+  fH1Manager->ClearData();
+  fH2Manager->ClearData();
+  fH3Manager->ClearData();
+  fP1Manager->ClearData();
+  fP2Manager->ClearData();
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::Merge()
+{
+  // Nothing to be done on master
+  if ( ! G4Threading::IsWorkerThread() ) return false;
+
+  if ( ! fgMasterToolsInstance ) {
+    if (! IsEmpty() ) {
+      Warn("No master G4AnalysisManager instance exists.\n"
+           "Histogram/profile data will not be merged.",
+           fkClass, "Merge");
+      return false;
+    }
+    return true;
+  }
+
+  Message(kVL4, "merge on worker", "histograms");
+
+  // The worker manager just adds its histograms to the master
+  fH1Manager->Merge(mergeHnMutex, fgMasterToolsInstance->fH1Manager);
+  fH2Manager->Merge(mergeHnMutex, fgMasterToolsInstance->fH2Manager);
+  fH3Manager->Merge(mergeHnMutex, fgMasterToolsInstance->fH3Manager);
+  fP1Manager->Merge(mergeHnMutex, fgMasterToolsInstance->fP1Manager);
+  fP2Manager->Merge(mergeHnMutex, fgMasterToolsInstance->fP2Manager);
+
+  Message(kVL3, "merge on worker", "histograms");
+
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4ToolsAnalysisManager::IsEmpty()
+{
+  return fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
+         fP1Manager->IsEmpty() && fP2Manager->IsEmpty();
+}

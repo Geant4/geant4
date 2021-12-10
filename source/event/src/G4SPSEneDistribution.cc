@@ -563,8 +563,8 @@ void G4SPSEneDistribution::ArbInterpolate(const G4String& IType)
   G4AutoLock l(&mutex);
 
   IntType = IType;
-  ArbEmax = ArbEnergyH.GetMaxLowEdgeEnergy();
-  ArbEmin = ArbEnergyH.GetMinLowEdgeEnergy();
+  ArbEmax = ArbEnergyH.GetMaxEnergy();
+  ArbEmin = ArbEnergyH.Energy(0);
 
   // Now interpolate points
 

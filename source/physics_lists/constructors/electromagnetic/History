@@ -13,6 +13,40 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2021, V.Ivanchenko (phys-ctor-em-V10-07-23)
+- G4EmStandardPhysicsWVI - making this experimantal configuration 
+    compatible for CPU performance with Opt3 (it was similar to SS)
+
+10 November 2021, V.Ivanchenko (phys-ctor-em-V10-07-22)
+- G4EmStandardPhysicsWVI - use similar options as in Opt3, for ions
+    use G4LinhardSorensenIonModel
+- G4EmModelActivator - updated according to the current Opt3 and Opt4 
+    configurations
+
+29 October 2021, M. Novak (phys-ctor-em-V10-07-21)
+- G4GammaGeneralProcess - make some methods/fields visible for 
+    derived classes
+
+25 October 2021, V.Ivanchenko (phys-ctor-em-V10-07-20)
+- G4EmBuilder - complete addition of hyper-nuclei EM physics
+- in all DNA Physics List use SetAuger() instead of SetAugerCascade()
+
+22 October 2021, V.Ivanchenko (phys-ctor-em-V10-07-19)
+- G4EmBuilder - added hyper-nuclei EM physics
+
+12 October 2021, V.Ivanchenko (phys-ctor-em-V10-07-18)
+- G4EmBuilder - removed obsolete header
+
+27 September 2021, V.Ivanchenko (phys-ctor-em-V10-07-17)
+- G4EmBuilder - use more optimal order of instantiation of processes,
+    should not affect any result but useful for debugging
+
+30 August 2021, D.Sawkey (phys-ctor-em-V10-07-16)
+- G4OpticalPhysics - apply clang-format style guidelines
+
+11 July 2021, V.Ivanchenko (phys-ctor-em-V10-07-15)
+- G4GammaGeneralProcess -  use base material approach
+
 14 June 2021, V.Ivanchenko (phys-ctor-em-V10-07-14)
 - G4EmLivermorePhysics, G4EmPenelopePhysics_option1,
   G4EmStandardPhysics_option3, G4EmStandardPhysics_option4,
@@ -31,15 +65,15 @@ introduced in the code and keeptrack of all tags.
 - G4EmDNAPhysics - updated configuration of standard physics for
     gamma and positrons according to Opt3; updated particle list by
     addition of G4Alpha; simplified ConstructProcess() method using
-    G4PhysicsListHelper 
+    G4PhysicsListHelper
 
 22 May 2021, V.Ivanchenko (phys-ctor-em-V10-07-11)
 - Updated all standard Physics Lists: removed local member "verbose"
   and use uniform approach for verbosity via G4EmParameters;
   instantiate NIEL process only if parameter MaxNIELEnergy is above
   zero; include gamma linear polarization model to Opt0, Opt3, Opt4,
-  SS, and Livermore physics constructors if the parameter 
-  EnablePolarisation="true"; G4EmLivermorePolarizedPhysics fully 
+  SS, and Livermore physics constructors if the parameter
+  EnablePolarisation="true"; G4EmLivermorePolarizedPhysics fully
   inherit from G4EmLivermorePhysics
 
 24 April 2021, V.Ivanchenko (phys-ctor-em-V10-07-10)

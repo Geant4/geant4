@@ -38,6 +38,8 @@
 
 #include "tools/wroot/ntuple"
 
+#include <string_view>
+
 class G4RootMainNtupleManager;
 class G4NtupleBookingManager;
 class G4RootFileManager;
@@ -54,7 +56,7 @@ G4bool G4TNtupleManager<tools::wroot::ntuple, G4RootFile>::FillNtupleTColumn(
 
 
 class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple,
-                                                    G4RootFile> 
+                                                    G4RootFile>
 {
   friend class G4RootAnalysisManager;
   friend class G4RootMainNtupleManager;
@@ -63,11 +65,12 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple,
   friend class G4RootMpiNtupleManager;
 
   public:
-    explicit G4RootNtupleManager(const G4AnalysisManagerState& state,
-                std::shared_ptr<G4NtupleBookingManager> bookingManger,
+    G4RootNtupleManager(const G4AnalysisManagerState& state,
+                const std::shared_ptr<G4NtupleBookingManager>& bookingManger,
                 G4int nofMainManagers, G4int nofReducedFiles,
                 G4bool rowWise, G4bool rowMode);
-    virtual ~G4RootNtupleManager();
+    G4RootNtupleManager() = delete;
+    virtual ~G4RootNtupleManager() = default;
 
    private:
     // Methods from the templated base class
@@ -76,11 +79,12 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple,
     virtual void FinishTNtuple(
                     RootNtupleDescription*  ntupleDescription,
                     G4bool fromBooking) final;
-    virtual G4bool Reset(G4bool deleteNtuple) final;
+    virtual G4bool Reset() final;
+    virtual void Clear() final;
     virtual G4bool Merge();
 
     // Set functions
-    void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
+    void SetFileManager(const std::shared_ptr<G4RootFileManager>& fileManager);
     void SetNtupleFile(std::shared_ptr<G4RootFile> file);
     void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
 
@@ -90,14 +94,16 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple,
     unsigned int GetBasketSize() const;
     unsigned int GetBasketEntries() const;
 
-    // data members
-    //
-    std::shared_ptr<G4RootFileManager> fFileManager;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootNtupleManager" };
+
+    // Rata members
+    std::shared_ptr<G4RootFileManager> fFileManager { nullptr };
     std::vector<std::shared_ptr<G4RootMainNtupleManager>>  fMainNtupleManagers;
-    std::shared_ptr<G4RootFile> fNtupleFile;
+    std::shared_ptr<G4RootFile> fNtupleFile { nullptr };
     G4bool fRowWise;
     G4bool fRowMode;
-};    
+};
 
 #include "G4RootNtupleManager.icc"
 

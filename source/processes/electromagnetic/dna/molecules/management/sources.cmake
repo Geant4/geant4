@@ -18,7 +18,6 @@ geant4_add_module(G4emdna-molman
     G4VMolecularDissociationDisplacer.hh
     G4VMoleculeCounter.hh
   SOURCES
-    G4FakeParticleID.cc
     G4MolecularConfiguration.cc
     G4MolecularDissociationChannel.cc
     G4MolecularDissociationTable.cc

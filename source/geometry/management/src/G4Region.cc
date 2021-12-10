@@ -398,7 +398,7 @@ void G4Region::UpdateMaterialList()
 void G4Region::SetWorld(G4VPhysicalVolume* wp)
 {
   if(!wp)
-  { fWorldPhys = 0; }
+  { fWorldPhys = nullptr; }
   else
   { if(BelongsTo(wp)) fWorldPhys = wp; }
 

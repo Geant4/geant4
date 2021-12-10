@@ -138,6 +138,8 @@ class G4SynchrotronRadiationInMat : public G4VDiscreteProcess
 
   G4int fRootNumber;
   G4int fVerboseLevel;
+  
+  G4int secID = -1;  // creator modelID
 };
 
 #endif  // end of G4SynchrotronRadiationInMat.hh

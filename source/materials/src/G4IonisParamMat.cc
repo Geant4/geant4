@@ -184,7 +184,7 @@ G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
 
 G4double G4IonisParamMat::DensityCorrection(G4double x)
 {
-  return (!fDensityEffectCalc) ? GetDensityCorrection(x) 
+  return (nullptr == fDensityEffectCalc) ? GetDensityCorrection(x) 
     : fDensityEffectCalc->ComputeDensityCorrection(x);
 }
 
@@ -226,7 +226,7 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
     }
   }
   // for base material case
-  if(idx < 0 && bmat) {
+  if(idx < 0 && nullptr != bmat) {
     idx = fDensityData->GetIndex(bmat->GetName());
     if(idx >= 0) {
       corr = G4Log(bmat->GetDensity()/fMaterial->GetDensity());
@@ -281,7 +281,7 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
 
   } else {
 
-    static const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
+    static const G4double Cd2 = 4*CLHEP::pi*CLHEP::hbarc_squared*CLHEP::classic_electr_radius;
     fPlasmaEnergy = std::sqrt(Cd2*fMaterial->GetTotNbOfElectPerVolume());
 
     // Compute parameters for the density effect correction in DE/Dx formula.
@@ -292,9 +292,9 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
     //
     // condensed materials
     //  
-    if ((State == kStateSolid)||(State == kStateLiquid)) {
+    if ((State == kStateSolid) || (State == kStateLiquid)) {
 
-      static const G4double E100eV  = 100.*eV; 
+      static const G4double E100eV  = 100.*CLHEP::eV; 
       static const G4double ClimiS[] = {3.681 , 5.215 };
       static const G4double X0valS[] = {1.0   , 1.5   };
       static const G4double X1valS[] = {2.0   , 3.0   };
@@ -317,17 +317,23 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
       //
       fMdensity = 3.;
       fX1density = 4.0;
-      if(fCdensity < 10.) {
-	fX0density = 1.6; 
-      } else if(fCdensity < 11.5) { 
-	fX0density = 1.6 + 0.2*(fCdensity - 10.); 
-      } else if(fCdensity < 12.25) { 
-	fX0density = 1.9 + (fCdensity - 11.5)/7.5; 
-      } else if(fCdensity < 13.804) { 
-	fX0density = 2.0; 
-	fX1density = 4.0 + (fCdensity - 12.25)/1.554;
+
+      if(fCdensity <= 10.) {
+	fX0density = 1.6;
+      } else if(fCdensity <= 10.5) { 
+	fX0density = 1.7;
+      } else if(fCdensity <= 11.0) { 
+	fX0density = 1.8;
+      } else if(fCdensity <= 11.5) { 
+	fX0density = 1.9;
+      } else if(fCdensity <= 12.25) { 
+	fX0density = 2.0;
+      } else if(fCdensity <= 13.804) { 
+	fX0density = 2.0;
+	fX1density = 5.0;
       } else {
-	fX0density = 0.326*fCdensity-2.5; fX1density = 5.0; 
+	fX0density = 0.326*fCdensity-2.5; 
+        fX1density = 5.0; 
       }
       
       //special: Hydrogen
@@ -395,12 +401,12 @@ void G4IonisParamMat::ComputeFluctModel()
   fF2fluct = (Zeff > 2.) ? 2./Zeff : 0.0; 
 
   fF1fluct         = 1. - fF2fluct;
-  fEnergy2fluct    = 10.*Zeff*Zeff*eV;
+  fEnergy2fluct    = 10.*Zeff*Zeff*CLHEP::eV;
   fLogEnergy2fluct = G4Log(fEnergy2fluct);
   fLogEnergy1fluct = (fLogMeanExcEnergy - fF2fluct*fLogEnergy2fluct)
                      /fF1fluct;
   fEnergy1fluct    = G4Exp(fLogEnergy1fluct);
-  fEnergy0fluct    = 10.*eV;
+  fEnergy0fluct    = 10.*CLHEP::eV;
   fRateionexcfluct = 0.4;
 }
 
@@ -444,7 +450,7 @@ void G4IonisParamMat::ComputeIonParameters()
   }  
   fZeff        = z;
   fLfactor     = lF;
-  fFermiEnergy = 25.*keV*vF*vF;
+  fFermiEnergy = 25.*CLHEP::keV*vF*vF;
   fInvA23      = a23;
 }
 
@@ -456,7 +462,7 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
   if (G4NistManager::Instance()->GetVerbose() > 1) {
     G4cout << "G4Material: Mean excitation energy is changed for "
            << fMaterial->GetName()
-           << " Iold= " << fMeanExcitationEnergy/eV
+           << " Iold= " << fMeanExcitationEnergy/CLHEP::eV
            << "eV; Inew= " << value/eV << " eV;"
            << G4endl;
   }
@@ -525,7 +531,7 @@ void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
 void G4IonisParamMat::ComputeDensityEffectOnFly(G4bool val)
 {
   if(val) {
-    if(!fDensityEffectCalc) { 
+    if(nullptr == fDensityEffectCalc) { 
       G4int n = 0;
       for(size_t i=0; i<fMaterial->GetNumberOfElements(); ++i) {
 	const G4int Z = fMaterial->GetElement(i)->GetZasInt();

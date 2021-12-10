@@ -28,8 +28,6 @@
 // 
 // OpenGLImmediateQt graphics system factory.
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLSceneHandler.hh"
@@ -75,5 +73,3 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
   }
   return pView;
 }
-
-#endif

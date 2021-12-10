@@ -31,8 +31,6 @@ set(G4VIS_MODULE_OPENGL_SOURCES
   G4VisFeaturesOfOpenGL.cc
 )
 
-add_definitions(-DG4VIS_BUILD_OPENGL_DRIVER)
-
 #----------------------------------------------------------------------------
 # Add X11 OpenGL Support if requested
 #
@@ -51,7 +49,7 @@ if(GEANT4_USE_OPENGL_X11)
     G4OpenGLStoredXViewer.cc
     G4OpenGLXViewer.cc)
 
-  # Add the compile definitions needed for the X11 component
+  # Add the compile definitions needed for the X11 component (G4OpenGL.hh, G4OpenGLViewer.cc)
   add_definitions(-DG4VIS_BUILD_OPENGLX_DRIVER)
 
   # Add in X11 libraries, plus Xmu library
@@ -128,9 +126,8 @@ if(GEANT4_USE_XM)
     add_definitions(-DG4VIS_BUILD_OPENGLX_DRIVER)
   endif()
 
-  # Add the compile definitions needed for the Xm component, remembering
-  # to add those for the UI part as well!!!
-  add_definitions(-DG4VIS_BUILD_OPENGLXM_DRIVER -DG4INTY_BUILD_XT -DG4UI_BUILD_XM_SESSION)
+  # Add the compile definitions needed for the Xm component (G4OpenGL.hh, G4OpenGLViewer.cc)
+  add_definitions(-DG4VIS_BUILD_OPENGLXM_DRIVER)
 
   # Add in Xm, X11 libraries, plus Xmu library
   set(G4VIS_MODULE_OPENGL_LINK_LIBRARIES Motif::Xm X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu ${G4VIS_MODULE_OPENGL_LINK_LIBRARIES})
@@ -169,9 +166,8 @@ if(GEANT4_USE_QT)
     G4OpenGLStoredQtSceneHandler.cc
     G4OpenGLStoredQtViewer.cc)
 
-  # Add the definitions
-  # Argh.. Have to remember about INTY and UI because of their use...
-  add_definitions(-DG4VIS_BUILD_OPENGLQT_DRIVER -DG4INTY_BUILD_QT -DG4UI_BUILD_QT_SESSION)
+  # Add the definitions (G4OpenGL.hh, G4OpenGLViewer.cc)
+  add_definitions(-DG4VIS_BUILD_OPENGLQT_DRIVER)
 
   # Add in Qt libraries
   list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES Qt5::OpenGL Qt5::Gui Qt5::PrintSupport Qt5::Widgets OpenGL::GL)
@@ -198,7 +194,7 @@ if(GEANT4_USE_OPENGL_WIN32)
     G4OpenGLWin32Viewer.cc
   )
 
-  # Add the compile definitions
+  # Add the compile definitions (G4OpenGL.hh, G4OpenGLViewer.cc)
   add_definitions(-DG4VIS_BUILD_OPENGLWIN32_DRIVER)
   list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES OpenGL::GL)
 endif()

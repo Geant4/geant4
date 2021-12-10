@@ -110,6 +110,7 @@
 #include "G4Exp.hh"
 #include "G4Pow.hh"
 
+#include "G4PhysicsModelCatalog.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -165,6 +166,8 @@ G4WilsonAblationModel::G4WilsonAblationModel()
   OPTxs   = 3;
   useSICB = false;
   fragmentVector = 0;
+
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4WilsonAblationModel");
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -226,11 +229,13 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     if (Z == 0)
     {
       G4Fragment *fragment = new G4Fragment(lorentzVector,G4Neutron::Neutron());
+      if (fragment != nullptr) { fragment->SetCreatorModelID(secID); }
       fragmentVector->push_back(fragment);
     }
     else
     {
       G4Fragment *fragment = new G4Fragment(lorentzVector,G4Proton::Proton());
+      if (fragment != nullptr) { fragment->SetCreatorModelID(secID); }
       fragmentVector->push_back(fragment);
     }
     if (verboseLevel >= 2)
@@ -394,6 +399,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     G4LorentzVector lorentzVector = G4LorentzVector(direction*p, e);
     lorentzVector.boost(-boost);
     G4Fragment* frag = new G4Fragment(AF, ZF, lorentzVector);
+    if (frag != nullptr) { frag->SetCreatorModelID(secID); }
     fragmentVector->push_back(frag);
   }
   delete resultNucleus;
@@ -537,6 +543,7 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
       if (ii >= nChannels) { ii = nChannels - 1; }
       G4FragmentVector *evaporationResult = theChannels1[ii]->
         BreakUpFragment(intermediateNucleus);
+      if ((*evaporationResult)[0] != nullptr) { (*evaporationResult)[0]->SetCreatorModelID(secID); }
       fragmentVector->push_back((*evaporationResult)[0]);
       intermediateNucleus = (*evaporationResult)[1];
       delete evaporationResult;
@@ -578,7 +585,7 @@ void G4WilsonAblationModel::SelectSecondariesByDefault (G4ThreeVector boost)
     G4int Z = (G4int) (type->GetPDGCharge() + 1.0E-10);
     G4Fragment *fragment          = 
       new G4Fragment(A, Z, lorentzVector);
-
+    if (fragment != nullptr) { fragment->SetCreatorModelID(secID); }
     fragmentVector->push_back(fragment);
   }
 }

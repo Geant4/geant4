@@ -29,8 +29,6 @@
 #ifndef G4SOQT_HH
 #define G4SOQT_HH
 
-#if defined (G4VIS_BUILD_OIQT_DRIVER) || defined (G4VIS_USE_OIQT)
-
 #include "G4VInteractorManager.hh"
 
 class QWidget;
@@ -69,7 +67,5 @@ private:
   //  char** args;
   bool externalApp;
 };
-
-#endif
 
 #endif

@@ -31,29 +31,37 @@
 #ifndef G4CsvRFileManager_h
 #define G4CsvRFileManager_h 1
 
-#include "G4BaseFileManager.hh"
+#include "G4VRFileManager.hh"
 #include "globals.hh"
 
 #include <fstream>
 #include <map>
+#include <string_view>
 
 class G4AnalysisManagerState;
 
-class G4CsvRFileManager : public G4BaseFileManager
+class G4CsvRFileManager : public G4VRFileManager
 {
   public:
     explicit G4CsvRFileManager(const G4AnalysisManagerState& state);
+    G4CsvRFileManager() = delete;
     ~G4CsvRFileManager();
 
     virtual G4String GetFileType() const final { return "csv"; }
+
+    // Methods from base class
+    virtual void CloseFiles() final {}
 
     // Methods to manipulate input files
     virtual G4bool OpenRFile(const G4String& fileName);
 
     // Specific methods for files per objects
     std::ifstream* GetRFile(const G4String& fileName) const;
-    
+
    private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4CsvRFileManager" };
+
     // data members
     std::map<G4String, std::ifstream*> fRFiles;
 };

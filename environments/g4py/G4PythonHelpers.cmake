@@ -40,7 +40,7 @@ function(g4py_add_module target_name)
   # Use dynamic_lookup on Darwin to avoid direct linking to libpython (Linux has this as default,
   # to be checked for Windows)
   target_include_directories(${target_name} PRIVATE ${PYTHON_INCLUDE_DIRS})
-  target_link_libraries(${target_name} PRIVATE Boost::python "$<$<PLATFORM_ID:Darwin>:-undefined dynamic_lookup>")
+  target_link_libraries(${target_name} PRIVATE Boost::python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} "$<$<PLATFORM_ID:Darwin>:-undefined dynamic_lookup>")
 
   # Workaround to suppress pragma message spam in Boost >= 1.73
   # - See https://github.com/boostorg/python/pull/315

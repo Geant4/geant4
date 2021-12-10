@@ -59,6 +59,17 @@ void G4VVisCommandGeometrySet::Set
     }
     return;
   }
+  // Recalculate extent of any physical volume model in run duration lists
+  for (const auto& scene : fpVisManager->GetSceneList()) {
+    const auto& runDurationModelList = scene->GetRunDurationModelList();
+    for (const auto& sceneModel : runDurationModelList) {
+      auto model = sceneModel.fpModel;
+      auto pvModel = dynamic_cast<G4PhysicalVolumeModel*>(model);
+      if (pvModel) pvModel->CalculateExtent();
+    }
+    // And re-calculate the scene's extent
+    scene->CalculateExtent();
+  }
   if (fpVisManager->GetCurrentViewer()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
   }

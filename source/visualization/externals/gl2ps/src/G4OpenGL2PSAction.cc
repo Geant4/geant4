@@ -27,15 +27,6 @@
 //
 // 
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
- #define G4VIS_BUILD_OPENGL_GL2PS 
-#endif
-#ifdef G4VIS_BUILD_OI_DRIVER
- #define G4VIS_BUILD_OPENGL_GL2PS 
-#endif
-
-#ifdef G4VIS_BUILD_OPENGL_GL2PS
-
 #include "G4OpenGL2PSAction.hh"
 
 #include <limits>
@@ -207,8 +198,3 @@ void G4OpenGL2PSAction::setExportImageFormat(unsigned int type){
     //  Could not change the file type at this step. Please change it before enableFileWriting()
   }
 }
-
-
-
-
-#endif

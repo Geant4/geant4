@@ -191,7 +191,9 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
             lastTRatio[j]=CalcQF2IN_Ratio(sv,A);
         }
         lastLRatio=new G4double[mls];            // Create the logarithmic Table
-        if(m_s>sma)                           // Initialize the logarithmic Table
+        // Initialize the logarithmic Table
+	for(G4int j=0; j<mls; ++j) lastLRatio[j]=0.0;
+        if(m_s>sma)                           
         {
 	  G4double ls=G4Log(m_s);
             lastKRatio = static_cast<int>((ls-lsi)/dls)+1; // MaxBin to be initialized in LogTaB

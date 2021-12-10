@@ -26,6 +26,7 @@
 /// \file electromagnetic/TestEm11/src/doiPETRun.cc
 /// \brief Implementation of the doiPETRun class
 //
+// $Id: doiPETRun.cc 71376 2013-06-14 07:44:50Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,8 +70,6 @@ void doiPETRun::GetIntractionInfomation(InteractionInformation*step)
 
 void doiPETRun::FindInteractingCrystal()
 {
-
-	//G4cout<<"totalTime: "<<totalTime/s<<" "<<InitialActivity/becquerel<<G4endl;
 	std::multimap< G4int, InteractionInformation* >::iterator mitr;
 	std::set<G4int>::iterator sitr;
 	G4int cystalIDTemp;
@@ -83,20 +82,45 @@ void doiPETRun::FindInteractingCrystal()
 		for(G4int i=0; i<numberofInteractions; i++, mitr++){
 			edep = (*mitr).second->GetEdep();
 			cystalIDTemp = (*mitr).second->GetCrystalNo();
-			//edep_AfterCrystalBlurring = doiPETAnalysis::GetInstance()->QuantumEffifciency(edep);
 			edep_AfterCrystalBlurring = doiPETAnalysis::GetInstance()->QuantumEffifciency(edep, blockID, cystalIDTemp);
 			totalEdep += edep_AfterCrystalBlurring;
+
+			crystalID_vec.push_back(cystalIDTemp);
+			posInter_vec.push_back(((*mitr).second->GetInteractionPositionInCrystal()));
+			edepInCry_vec.push_back(edep_AfterCrystalBlurring);
+
 			//This is  to identify the crystal with the highest energy deposition. 
 			if(edepMax<edep_AfterCrystalBlurring){
 				edepMax=edep_AfterCrystalBlurring;
 				crystalID = cystalIDTemp;
 				interactionTime = (*mitr).second->GetGlobalTime();
-				interactionPos = (*mitr).second->GetInteractionPositionInCrystal();
+
+				//position of interaction based on highest edep. See below for energy weighted position of interaction
+				//interactionPos = (*mitr).second->GetInteractionPositionInCrystal();
 			}
 		}
+		if(totalEdep==0)continue;
+		
+		//The interaction position is based on energy weighted center of mass calculation
+		interactionPos = CenterOfMassInteractionPos(crystalID_vec, edepInCry_vec, totalEdep, posInter_vec);
 		doiPETAnalysis::GetInstance()->ReadOut(blockID,crystalID,interactionTime,timeOfAnnihil,interactionPos,totalEdep);
+
+		crystalID_vec.clear();
+		posInter_vec.clear();
+		edepInCry_vec.clear();
 	}
+	
 }
+
+//Apply center of mass calculation in determining the interaction position
+G4ThreeVector doiPETRun::CenterOfMassInteractionPos(const std::vector<G4int> &cryID, const std::vector<G4double> &energyDep, G4double edepTotal, const std::vector<G4ThreeVector> &pos){
+	posInterInCrystal = G4ThreeVector();
+	for(std::size_t i=0; i<cryID.size();i++){
+		posInterInCrystal += pos[i] * energyDep[i];
+	}
+	return (posInterInCrystal)/edepTotal;
+}
+
 
 void doiPETRun::SetAnnihilationTime(G4double t){
 	timeOfAnnihil = t;

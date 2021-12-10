@@ -874,7 +874,7 @@ LBE::~LBE()
 
 // Decays ///////////////////////////////////////////////////////////////////
 #include "G4Decay.hh"
-#include "G4RadioactiveDecayBase.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4IonTable.hh"
 #include "G4Ions.hh"
 
@@ -908,7 +908,7 @@ LBE::~LBE()
   // Declare radioactive decay to the GenericIon in the IonTable.
   const G4IonTable *theIonTable = 
     G4ParticleTable::GetParticleTable()->GetIonTable();
-  G4RadioactiveDecayBase* theRadioactiveDecay = new G4RadioactiveDecayBase();
+  G4RadioactiveDecay* theRadioactiveDecay = new G4RadioactiveDecay();
  
   //Fix for activation of RadioactiveDecay, based on G4RadioactiveDecayPhysics 
   G4EmParameters* param = G4EmParameters::Instance();

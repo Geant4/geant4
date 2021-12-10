@@ -71,8 +71,8 @@ void ICRP110UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G
 //----------------Create Scoring Mesh Output Text File----------------//
 //--------------------------------------------------------------------//
 // First we create use the scoring mesh to create a default output text
-// file containing 4 columns: voxel number along x, y, z, and dose deposited
-// in that voxel (in Gy). This file is to be called "PhantomDose_Mesh.txt". 
+// file containing 4 columns: voxel number along x, y, z, and edep deposited
+// in that voxel (in J). This file is to be called "PhantomMesh_Edep.txt". 
 
 std::ofstream ofile(fileName);
   
@@ -100,8 +100,8 @@ std::map<G4int, G4StatDouble*> * score = msMapItr -> second-> GetMap();
 ofile << "# primitive scorer name: " << msMapItr -> first << G4endl;
 
   // declare dose array and initialize to zero.
-  std::vector<double> ScoringMeshDose;
-  for(G4int y = 0; y < fNMeshSegments[0]*fNMeshSegments[1]*fNMeshSegments[2]; y++) ScoringMeshDose.push_back(0.);
+  std::vector<double> ScoringMeshEdep;
+  for(G4int y = 0; y < fNMeshSegments[0]*fNMeshSegments[1]*fNMeshSegments[2]; y++) ScoringMeshEdep.push_back(0.);
 
 ofile << std::setprecision(16); // for double value with 8 bytes
   
@@ -111,7 +111,7 @@ for(G4int x = 0; x < fNMeshSegments[0]; x++) {
         // Retrieve dose in each scoring mesh bin/voxel
         G4int idx = GetIndex(x, y, z);
         std::map<G4int, G4StatDouble*>::iterator value = score -> find(idx);
-        if (value != score -> end()) ScoringMeshDose[idx] += (value->second->sum_wx())/gray;
+        if (value != score -> end()) ScoringMeshEdep[idx] += (value->second->sum_wx())/(joule);
        }
       }
      }
@@ -125,7 +125,10 @@ for(G4int x = 0; x < fNMeshSegments[0]; x++) {
      for(G4int z = 0; z < fNMeshSegments[2]; z++){
          
          G4int idx = GetIndex(x, y, z);
-         ofile << x << "\t" << y << "\t" << z << "\t" << ScoringMeshDose[idx] << G4endl;
+         
+         if (ScoringMeshEdep[idx] != 0){
+         ofile << x << '\t' << y << '\t' << z << '\t' << ScoringMeshEdep[idx] << G4endl;
+         }
          //Store x,y,z and dose for each voxel in output text file. 
      
        }
@@ -297,19 +300,19 @@ G4String slice;
 //--------------Read Data from Scoring Mesh Text File------------//
 //---------------------------------------------------------------//
 // Opens and reads initial/default scoring mesh output file which
-// was created at the beginning of the code. We now store the dose in each
+// was created at the beginning of the code. We now store the edep in each
 // voxel to cross reference against the organ ID of each voxel for 
 // calculations of total dose in each organ.
 
-std::ifstream DoseFile(fileName);
+std::ifstream MeshFile(fileName);
 
 	//Check if file opens
-	if(DoseFile.good() != 1 )
+	if(MeshFile.good() != 1 )
 	{
-		G4cout << "Problem Reading Data File PhantomMesh_Dose.txt" << G4endl;
+		G4cout << "Problem Reading Data File: " << fileName << G4endl;
 	}
 	else {
-		G4cout << "Opening File PhantomMesh_Dose.txt" << G4endl; 
+		G4cout << "Opening File: " << fileName << G4endl; 
 	}
 
 
@@ -319,45 +322,45 @@ G4int col = 4;
 G4int lines = VoxelsPerSlice*NSlices;
 
 //Ignore first 2 lines of PhantomMesh.txt as they are text headers
-DoseFile.ignore(256, '\n');
-DoseFile.ignore(256, '\n');
+MeshFile.ignore(256, '\n');
+MeshFile.ignore(256, '\n');
 
 std::vector<G4int> X_MeshID; //Stores X-position of all scoring mesh voxels
 std::vector<G4int> Y_MeshID; //Stores Y-position
 std::vector<G4int> Z_MeshID; //Stores Z-position
-std::vector<G4double> Dose; //Stores Dose in all voxels
+std::vector<G4double> Edep; //Stores edep in voxels
 
 G4int nX = 0; //Number along X of scoring mesh voxel
 G4int nY = 0; //Number along Y
 G4int nZ = 0; //Number along Z
-G4double DoseDep = 0.0; //Dose deposited in individual voxels
+G4double EDep = 0.0; //edep deposited in individual voxels
 
 for (G4int i=0; i< lines; i++){
 	for (G4int j=0; j < col;){
  
-		DoseFile >> nX; //Reads number along X of current scoring mesh voxel
+		MeshFile >> nX; //Reads number along X of current scoring mesh voxel
 		X_MeshID.push_back(nX); //Stores it sequentially in vector X_MeshID
       j++;
      
-		DoseFile >> nY; // Reads number along Y
+		MeshFile >> nY; // Reads number along Y
 		Y_MeshID.push_back(nY); // Stores in vector
       j++;
   
-	  DoseFile >> nZ; // Reads number along Z
+	  MeshFile >> nZ; // Reads number along Z
 		Z_MeshID.push_back(nZ); // Stores in vector
       j++;
       
-		DoseFile >> DoseDep; // Reads dose in each voxel
-		Dose.push_back(DoseDep); // Stores in vector
+		MeshFile >> EDep; // Reads edep in each voxel
+		Edep.push_back(EDep); // Stores in vector
       j++;
  
  }
 }
 
-DoseFile.close();
+MeshFile.close();
 
 //--------------------------------------------------------------------//
-//---------Reads AF_organs.dat file and stores info about-------------//
+//---------Reads AM/AF_organs.dat file and stores info about----------//
 //------------------------the phantom organs--------------------------//
 //--------------------------------------------------------------------//
 
@@ -408,87 +411,145 @@ std::vector<G4String> OrganNames;
   OrganNames.push_back("141    Phantom Top/Bottom Skin Layer"); //Registers top and bottom slices of phantom made entirely of
   // skin. The skin in these layers has organ ID 141 to differentiate it from other skin, and is given its
   // own organ ID so that the user can choose whether to include it or not. 
+  
+//-------------------------------------------------------------------//
+//---------Reads OrganMasses.dat file and stores info about----------//
+//--------------------the phantom organ massess----------------------//
+//-------------------------------------------------------------------//
+
+G4int NOrganIDs = OrganNames.size();
+
+std::ifstream OrganMasses;
+
+      OrganMasses.open ("ICRPdata/OrganMasses.dat");
+    	//Check if file opens
+      	if(OrganMasses.good() != 1 )
+      	{
+      		G4cout << "Problem reading OrganMasses.dat" << G4endl;
+      	}
+      	else
+        {
+      		G4cout << "Reading OrganMasses.dat" << G4endl; 
+      	}
+
+
+OrganMasses.ignore(256, '\n'); //Igonore first line as it is a header
+
+std::vector<G4int> iteratorID;
+std::vector<G4double> MaleOrganMasses;
+std::vector<G4double> FemaleOrganMasses;
+
+G4int itID = 0;
+G4double massM = 0.0;
+G4double massF = 0.0;  
+  
+  for (G4int i = 0; i < NOrganIDs; i++)
+    {
+        OrganMasses >> itID;
+        iteratorID.push_back(itID);
+        
+        OrganMasses >> massM;
+        MaleOrganMasses.push_back(massM);
+        
+        OrganMasses >> massF;
+        FemaleOrganMasses.push_back(massF);
+    }
 
 //---------------------------------------------------------------------------//
 //----------------------Writes Outputs of code to File-----------------------//
-//-------------------------------OrganDoses.dat------------------------------//
+//-------------------------------OrganDeps.out------------------------------//
 //---------------------------------------------------------------------------//
-// As the final step, we compare the dose in each voxel with the voxels organID 
-// and sum the dose in voxels with identical organIDs to obtain total doses in 
-// each organ. All this information is then output to the file "OrganDoses.out".
+// As the final step, we compare the edep in each voxel with the voxels organID 
+// and sum the edep in voxels with identical organIDs to obtain total edep in 
+// each organ. We then divide total edep in each organ by their respective organ
+// mass to give total dose received in each organ (in Gy). 
+// All this information is then output to the file "ICRP110.out".
 
 std::ofstream OutputFile2;
 
 G4int VoxelNumber = 0; 
 G4int OrganIndex = 0;
-G4int NOrganIDs = OrganNames.size();
 G4cout << "NOrganIDs: " << NOrganIDs << G4endl;
+std::vector <G4double> OrganDep;
 std::vector <G4double> OrganDose;
 
 G4double a = 0.0;
+G4double b = 0.0;
 
 for (G4int i = 0; i < NOrganIDs; i++)
 {
-  OrganDose.push_back(a);
+  OrganDep.push_back(a);
+  OrganDose.push_back(b);
 }
 
 
 for (G4int i = 0; i < ARRAY_SIZE; i++){
 	VoxelNumber = X_MeshID[i] + NXVoxels * Y_MeshID[i] + VoxelsPerSlice * Z_MeshID[i]; 
   OrganIndex = OrganIDs[VoxelNumber];
-  OrganDose[OrganIndex] += Dose[i];
- // G4cout << "Organ index: " << OrganIndex <<  G4endl;
+  OrganDep[OrganIndex] += Edep[i];
 }
-/*
-for (G4int i = 0; i< NOrganIDs; i++)
-{
-  G4cout << "OrganDose for OrganID " << i << " gives: " << OrganDose[i] << G4endl;
-}
-*/
-OutputFile2.open ("OrganDoses.out");
+
+//Calculate dose in each organ by dividing edep in each organ by organ masses (in kg)
+  if (strcmp(fSex.c_str(), male.c_str()) == 0)
+  {
+    for (G4int i = 0; i < NOrganIDs; i++)
+      {
+        OrganDose[i] = (MaleOrganMasses[i] == 0 ) ? 0 : OrganDep[i]/(MaleOrganMasses[i] * 1e-3); 
+      }
+  }
+  else if(strcmp(fSex.c_str(), female.c_str()) == 0)
+  {
+    for (G4int i = 0; i < NOrganIDs; i++)
+      {
+        OrganDose[i] = (FemaleOrganMasses[i] == 0 ) ? 0 : OrganDep[i]/(FemaleOrganMasses[i] * 1e-3); 
+      }  
+  }
+
+OutputFile2.open ("ICRP110.out");
 
 	//Check if file opens
 	if(OutputFile2.good() != 1 )
 	{
-		G4cout << "Problem writing output to OrganDoses.out" << G4endl;
+		G4cout << "Problem writing output to ICRP110.out" << G4endl;
 	}
 	else {
-		G4cout << "Writing output to OrganDoses.out" << G4endl; 
+		G4cout << "Writing output to ICRP110.out" << G4endl; 
 	}
 
 
+G4double TotalDep = 0.0;
 G4double TotalDose = 0.0;
+
+OutputFile2 << G4endl; 
+OutputFile2 << '\t' << "-------------------------------- " << G4endl;
+OutputFile2 << '\t' << "OrganID" << '\t' << "Edep (J)" << '\t' << "Dose (Gy)" << G4endl;
+OutputFile2 << '\t' << "-------------------------------- " << G4endl;
+
+
+for (G4int i = 1; i < NOrganIDs; i++)
+{
+  if (OrganDep[i] != 0)
+  {
+    if (i != 140) //Skip dose deposited in air inside body
+    {
+      OutputFile2 << '\t' << i << " |" << '\t' << '\t' << OrganDep[i] << '\t' << OrganDose[i] << G4endl;
+    }
+  }
+}
 
 OutputFile2 << "----------------------------------------------------------------------------" << G4endl;
 OutputFile2 << "-------------------------------ORGAN INFO-----------------------------------" << G4endl;
-OutputFile2 << "-------------------(of organs where dose was scored)------------------------" << G4endl;
+OutputFile2 << "-----------------(of organs where edep/dose was recorded)-------------------" << G4endl;
 OutputFile2 << "----------------------------------------------------------------------------" << G4endl;
 OutputFile2 << "ID" << '\t' << '\t' << "Organ Name" << '\t' << "    " << '\t' << "    " << '\t' << "    " << '\t' << "Material ID" << '\t'  << '\t' << "Density (g/cm^3) " << G4endl;
 
 for(G4int i = 1; i < NOrganIDs; i++)
 {
-  if (OrganDose[i] != 0)
+  if (OrganDep[i] != 0)
   {
     if (i != 140) //Skip dose deposited in air inside body
     {
       OutputFile2 << OrganNames[i] << G4endl;
-    }
-  }
-}
-
-OutputFile2 << G4endl; 
-OutputFile2 << '\t' << "-------------- " << G4endl;
-OutputFile2 << '\t' << "ABSORBED DOSES " << G4endl;
-OutputFile2 << '\t' << "-------------- " << G4endl;
-OutputFile2 << '\t' << "OrganID" << '\t' << "Dose(Gy)" << G4endl;
-
-for (G4int i = 1; i < NOrganIDs; i++)
-{
-  if (OrganDose[i] != 0)
-  {
-    if (i != 140) //Skip dose deposited in air inside body
-    {
-      OutputFile2 << '\t' << i << '\t' << '\t' << OrganDose[i] << G4endl;
     }
   }
 }
@@ -498,29 +559,34 @@ for (G4int i = 1; i < NOrganIDs; i++)
 {
     if (i != 140) //Skip dose deposited in air inside body
     {
+      TotalDep += OrganDep[i];
       TotalDose += OrganDose[i];
     }
 }
 
 OutputFile2 << G4endl;
-OutputFile2 << "Total Dose over all organs = " << TotalDose << " Gy" << G4endl;
+OutputFile2 << "Total Edep over all organs = " << TotalDep << " J" << G4endl;
+OutputFile2 << "Total dose absorbed over all organs = " << TotalDose << " Gy" << G4endl;
 
 
 OutputFile2 << G4endl;
 OutputFile2 << "----------------------------------------------------------------------------" << G4endl;
-OutputFile2 << "-------------------------------ORGAN DOSES----------------------------------" << G4endl;
+OutputFile2 << "----------------ORGAN ENERGY DEPOSITIONS AND ABSORBED DOSE------------------" << G4endl;
 OutputFile2 << "-----------(for all organs [includes air - OrganIDs = 0, 140])--------------" << G4endl;
 OutputFile2 << "--------------([and top/bottom skin layer - OrganIDs = 141])----------------" << G4endl;
-OutputFile2 << "OrganID" << '\t' << "Dose(Gy)" << G4endl;
+OutputFile2 << "----------------------------------------------------------------------------" << G4endl;
+OutputFile2 << "OrganID" << '\t' << "Edep (J) " << '\t' << "Dose (Gy) " << G4endl;
 OutputFile2 << "-------------------------------" << G4endl;
 
 for (G4int i = 0; i < NOrganIDs; i++)
 {
-    OutputFile2 << i << '\t' << OrganDose[i] << G4endl;
+    OutputFile2 << i << "  | " << '\t' << '\t' << OrganDep[i] << '\t' << OrganDose[i] << G4endl;
 }
 
-OutputFile2 << "Total Dose over all organs = " << TotalDose << " Gy" << G4endl;
-G4cout << "Total Dose over all Organs within the Phantom is " << TotalDose << " Gy" << G4endl;
+OutputFile2 << "Total energy depositied over all organs = " << TotalDep << " J" << G4endl;
+OutputFile2 << "Total absorbed dose over all organs = " << TotalDose << " Gy " << G4endl;
+G4cout << "Total energy deposited over all Organs within the Phantom is " << TotalDep << " J" << G4endl;
+G4cout << "Total absorbed dose over all phantom organs is " << TotalDose << " Gy " << G4endl;
 
 OutputFile2.close();
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// Data class for the added Hn/Pn information (not available in g4tools). 
+// Data class for the added Hn/Pn information (not available in g4tools).
 //
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
@@ -32,80 +32,49 @@
 #define G4HnInformation_h 1
 
 #include "globals.hh"
-#include "G4Fcn.hh" 
-#include "G4BinScheme.hh" 
-#include "G4AnalysisUtilities.hh" 
+#include "G4Fcn.hh"
+#include "G4BinScheme.hh"
+#include "G4AnalysisUtilities.hh"
 
 // The additional Hn information per dimension
 
 struct G4HnDimensionInformation
 {
-  G4HnDimensionInformation()
-    : fUnitName(), 
-      fFcnName(),
-      fUnit(), 
-      fFcn(nullptr),
-      fBinScheme(G4BinScheme::kLinear)
-      {}
-      
-  G4HnDimensionInformation( 
+  G4HnDimensionInformation(
       const G4String& unitName,
       const G4String& fcnName,
-      G4double unit, 
+      G4double unit,
       G4Fcn fcn,
-      G4BinScheme binScheme) 
-    : fUnitName(unitName), 
+      G4BinScheme binScheme)
+    : fUnitName(unitName),
       fFcnName(fcnName),
-      fUnit(unit), 
+      fUnit(unit),
       fFcn(fcn),
       fBinScheme(binScheme)
       {}
-      
-  G4HnDimensionInformation(const G4HnDimensionInformation& rhs) 
-    : fUnitName(rhs.fUnitName), 
-      fFcnName(rhs.fFcnName),
-      fUnit(rhs.fUnit), 
-      fFcn(rhs.fFcn),
-      fBinScheme(rhs.fBinScheme)
-      {}
-      
-  G4HnDimensionInformation& operator=(const G4HnDimensionInformation& rhs) 
-    {
-      // check assignment to self
-      if (this == &rhs) return *this;
-    
-      fUnitName = rhs.fUnitName; 
-      fFcnName  = rhs.fFcnName;
-      fUnit = rhs.fUnit; 
-      fFcn  = rhs.fFcn;
-      fBinScheme = rhs.fBinScheme;
-      
-      return *this;
-    }  
+
+  G4HnDimensionInformation() = default;
+  G4HnDimensionInformation(const G4HnDimensionInformation& rhs) = default;
+  G4HnDimensionInformation& operator=(const G4HnDimensionInformation& rhs) = default;
 
   //G4String fName;
   G4String fUnitName;
   G4String fFcnName;
-  G4double fUnit;  
+  G4double fUnit;
   G4Fcn    fFcn;
   G4BinScheme fBinScheme;
-};  
+};
 
 class G4HnInformation
 {
   public:
     G4HnInformation(const G4String& name, G4int nofDimensions)
-      : fName(name),
-        fHnDimensionInformations(),
-        fIsLogAxis({ false, false, false }),
-        fActivation(true),
-        fAscii(false),
-        fPlotting(false),
-        fFileName("") { fHnDimensionInformations.reserve(nofDimensions); }
+      : fName(name)
+    { fHnDimensionInformations.reserve(nofDimensions); }
 
     // Deleted default constructor
-    G4HnInformation() = delete; 
-  
+    G4HnInformation() = delete;
+
     // Set methods
     void AddHnDimensionInformation(
             const G4HnDimensionInformation& hnDimensionInformation);
@@ -118,7 +87,7 @@ class G4HnInformation
     void SetAscii(G4bool ascii);
     void SetPlotting(G4bool plotting);
     void SetFileName(G4String fileName);
-  
+
     // Get methods
     G4String GetName() const;
     G4HnDimensionInformation* GetHnDimensionInformation(G4int dimension);
@@ -132,10 +101,10 @@ class G4HnInformation
     // Data members
     G4String fName;
     std::vector<G4HnDimensionInformation> fHnDimensionInformations;
-    std::vector<G4bool> fIsLogAxis;
-    G4bool   fActivation;
-    G4bool   fAscii;  
-    G4bool   fPlotting;
+    std::vector<G4bool> fIsLogAxis { false, false, false };
+    G4bool   fActivation { true };
+    G4bool   fAscii { false };
+    G4bool   fPlotting { false };
     G4String fFileName;
 };
 
@@ -146,16 +115,16 @@ inline void G4HnInformation::AddHnDimensionInformation(
 { fHnDimensionInformations.push_back(hnDimensionInformation); }
 
 inline void G4HnInformation::AddDimension(
-  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)  
+  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
 {
   auto unit = G4Analysis::GetUnitValue(unitName);
   auto fcn = G4Analysis::GetFunction(fcnName);
-  fHnDimensionInformations.push_back(
-    G4HnDimensionInformation(unitName, fcnName, unit, fcn, binScheme));
+  fHnDimensionInformations.emplace_back(
+    unitName, fcnName, unit, fcn, binScheme);
 }
 
 inline void G4HnInformation::SetDimension(G4int dimension,
-  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)    
+  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
 {
   auto info = GetHnDimensionInformation(dimension);
   auto unit = G4Analysis::GetUnitValue(unitName);

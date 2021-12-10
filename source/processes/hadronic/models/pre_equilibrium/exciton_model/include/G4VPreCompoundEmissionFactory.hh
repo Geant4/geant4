@@ -43,35 +43,25 @@ public:
   
   inline std::vector<G4VPreCompoundFragment*> * GetFragmentVector();
 
+  G4VPreCompoundEmissionFactory(const G4VPreCompoundEmissionFactory&) = delete;
+  const G4VPreCompoundEmissionFactory & operator=
+  (const G4VPreCompoundEmissionFactory & val) = delete;
+  G4bool operator==(const G4VPreCompoundEmissionFactory & val) const = delete;
+  G4bool operator!=(const G4VPreCompoundEmissionFactory & val) const = delete;
+
 protected:
 
   virtual std::vector<G4VPreCompoundFragment*> * CreateFragmentVector() = 0;
 
 private:
 
-  G4VPreCompoundEmissionFactory(const G4VPreCompoundEmissionFactory & );
-  const G4VPreCompoundEmissionFactory & operator=
-  (const G4VPreCompoundEmissionFactory & val);
-  G4bool operator==(const G4VPreCompoundEmissionFactory & val) const;
-  G4bool operator!=(const G4VPreCompoundEmissionFactory & val) const;
-
-  std::vector<G4VPreCompoundFragment*> * fragvector;
-
-  struct DeleteFragment 
-  {
-    template<typename T>
-    void operator()(const T* ptr) const
-    {
-      delete ptr;
-    }
-  };
-  
+  std::vector<G4VPreCompoundFragment*> * fragvector = nullptr;
 };
 
 inline std::vector<G4VPreCompoundFragment*> * 
 G4VPreCompoundEmissionFactory::GetFragmentVector()
 {
-  if (fragvector == 0) { fragvector = CreateFragmentVector(); }
+  if (fragvector == nullptr) { fragvector = CreateFragmentVector(); }
   return fragvector;
 }
 

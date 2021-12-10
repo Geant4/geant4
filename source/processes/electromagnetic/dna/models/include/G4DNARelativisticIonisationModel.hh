@@ -116,17 +116,17 @@ private:
           =(const  G4DNARelativisticIonisationModel &right);
   G4DNARelativisticIonisationModel(const  G4DNARelativisticIonisationModel&);
 
-  G4double     fLowEnergyLimit;
-  G4double     fHighEnergyLimit;
+  G4double     fLowEnergyLimit=0.;
+  G4double     fHighEnergyLimit=0.;
 
-  G4bool       isInitialised;
-  G4bool       statCode;
-  G4bool       fasterCode;
-  G4int        verboseLevel;
+  G4bool       isInitialised=false;
+  G4bool       statCode=false;
+  G4bool       fasterCode=false;
+  G4int        verboseLevel=0;
 
-  const std::vector<G4double>*  fMaterialDensity;
-  const  G4ParticleDefinition*  fParticleDefinition;
-  G4VAtomDeexcitation*          fAtomDeexcitation;
+  const std::vector<G4double>*  fMaterialDensity=nullptr;
+  const  G4ParticleDefinition*  fParticleDefinition=nullptr;
+  G4VAtomDeexcitation*          fAtomDeexcitation=nullptr;
 
   G4int RandomSelect(const G4Material* material,
                      const G4ParticleDefinition*,

@@ -64,12 +64,13 @@ void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
   theNucleus = aNucleus;
 }
 
-void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ)
+void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ,
+					    G4int numberOfLambdasOrAntiLambdas)
 {
   if ( theProjectileNucleus == nullptr ) 
     theProjectileNucleus = new G4Fancy3DNucleus();
 
-  theProjectileNucleus->Init(theA, theZ);
+  theProjectileNucleus->Init(theA, theZ, numberOfLambdasOrAntiLambdas);
   theProjectileNucleus->SortNucleonsDecZ();
 }
 

@@ -79,7 +79,10 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   G4String tubsName = fWorldName + "_mesh";
 
   if(verboseLevel > 9)
-    G4cout << "R max., Dz =: " << fSize[0] << ", " << fSize[1] << G4endl;
+  {
+    G4cout << "R min, R max., Dz =: " << fSize[0] << ", " << fSize[1]
+                                      << ", " << fSize[2]  << G4endl;
+  }
   G4VSolid* tubsSolid          = new G4Tubs(tubsName + "0",  // name
                                    fSize[0],        // R min
                                    fSize[1],        // R max

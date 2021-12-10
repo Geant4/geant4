@@ -35,17 +35,12 @@
 #include "tools/wroot/to"
 #include "tools/zlib"
 
-#include <iostream>
-#include <cstdio>
-
 using namespace tools;
 using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
- : G4VTFileManager<G4RootFile>(state),
-   fBasketSize(0),
-   fBasketEntries(0)
+ : G4VTFileManager<G4RootFile>(state)
 {
   // Create helpers defined in the base class
   fH1FileManager = std::make_shared<G4RootHnFileManager<histo::h1d>>(this);
@@ -55,52 +50,33 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
   fP2FileManager = std::make_shared<G4RootHnFileManager<histo::p2d>>(this);
 }
 
-//_____________________________________________________________________________
-G4RootFileManager::~G4RootFileManager()
-{}
-
 //
 // private methods
 //
 
 //_____________________________________________________________________________
 tools::wroot::directory*  G4RootFileManager::CreateDirectory(
-  std::shared_ptr<tools::wroot::file> rfile,
-#ifdef G4VERBOSE
-  const G4String& directoryName, const G4String& objectType) const
-#else
-  const G4String& directoryName, const G4String& /*objectType*/) const
-#endif
+  tools::wroot::file* rfile,
+  const G4String& directoryName,  [[maybe_unused]] const G4String& objectType) const
 {
   if ( ! rfile ) return nullptr;
 
   if ( directoryName == "" ) {
     // Do not create a new directory if its name is not set
     return &(rfile->dir());
-  }  
-  
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()
-      ->Message("create", "directory for " + objectType, directoryName);
-#endif
-  
+  }
+
+  Message(kVL4, "create", "directory for " + objectType, directoryName);
+
   auto directory = rfile->dir().mkdir(directoryName);
   if ( ! directory ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "cannot create directory " << directoryName;
-    G4Exception("G4RootFileManager::CreateDirectory()",
-              "Analysis_W001", JustWarning, description);
-    return nullptr;       
-  }       
-#ifdef G4VERBOSE
+    Warn("Cannot create directory " + directoryName, fkClass, "CreateDirectory");
+    return nullptr;
+  }
   else {
-    if ( fState.GetVerboseL2() ) 
-      fState.GetVerboseL2()
-        ->Message("create", "directory for " + objectType, directoryName);
-  }    
-#endif
+    Message(kVL2, "create", "directory for " + objectType, directoryName);
+  }
+
   return directory;
 }
 
@@ -125,49 +101,46 @@ G4String G4RootFileManager::GetNtupleFileName(
   // update filename per mainNumber
   if ( mainNumber > -1 ) {
     // update filename per mainNumber
-    ntupleFileName 
+    ntupleFileName
       = G4Analysis::GetNtupleFileName(ntupleFileName, GetFileType(), mainNumber);
   }
 
   return ntupleFileName;
-}  
+}
 
 //
 // protected methods
 //
 
 //_____________________________________________________________________________
-std::shared_ptr<G4RootFile> 
+std::shared_ptr<G4RootFile>
 G4RootFileManager::CreateFileImpl(const G4String& fileName)
 {
   // create file
   std::shared_ptr<wroot::file> file = std::make_shared<wroot::file>(G4cout, fileName);
   file->add_ziper('Z',compress_buffer);
   file->set_compression(fState.GetCompressionLevel());
-  
+
   if ( ! file->is_open() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot create file " << fileName;
-    G4Exception("G4RootFileManager::CreateFileImpl()",
-                "Analysis_W001", JustWarning, description);
+    Warn("Cannot create file " + fileName, fkClass, "CreateFileImpl");
     return std::make_shared<G4RootFile>(nullptr, nullptr, nullptr);
   }
 
   // create histo directory
-  tools::wroot::directory* hdirectory 
-    = CreateDirectory(file, fHistoDirectoryName, "histograms");
+  tools::wroot::directory* hdirectory
+    = CreateDirectory(file.get(), fHistoDirectoryName, "histograms");
   if ( ! hdirectory ) {
     // Warning is issued in CreateDirectory
     return std::make_shared<G4RootFile>(nullptr, nullptr, nullptr);
-  } 
+  }
 
   // create ntuple directory
-  tools::wroot::directory* ndirectory 
-    = CreateDirectory(file, fNtupleDirectoryName, "ntuples");
+  tools::wroot::directory* ndirectory
+    = CreateDirectory(file.get(), fNtupleDirectoryName, "ntuples");
   if ( ! ndirectory ) {
     // Warning is issued in CreateDirectory
     return std::make_shared<G4RootFile>(nullptr, nullptr, nullptr);
-  } 
+  }
 
   return std::make_shared<G4RootFile>(file, hdirectory, ndirectory);
 }
@@ -184,7 +157,7 @@ G4bool G4RootFileManager::WriteFileImpl(std::shared_ptr<G4RootFile> file)
 }
 
 //_____________________________________________________________________________
-G4bool G4RootFileManager::CloseFileImpl(std::shared_ptr<G4RootFile> file)    
+G4bool G4RootFileManager::CloseFileImpl(std::shared_ptr<G4RootFile> file)
 {
 // New prototype: called by G4TFileManager base classe
 
@@ -209,25 +182,19 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
   auto name = GetFullFileName();
 
   if ( fFile ) {
-    G4ExceptionDescription description;
-    description << "File " << fileName << " already exists.";
-    G4Exception("G4RootFileManager::OpenFile()",
-                "Analysis_W001", JustWarning, description);
+    Warn("File " + fileName + " already exists.", fkClass, "OpenFile");
     fFile.reset();
   }
 
   // Create file (and save in in the file map)
   fFile = CreateTFile(name);
   if ( ! fFile ) {
-    G4ExceptionDescription description;
-    description << "Failed to create file " << fileName;
-    G4Exception("G4RootFileManager::OpenFile()",
-                "Analysis_W001", JustWarning, description);
+    Warn("Failed to create file " + fileName, fkClass, "OpenFile");
     return false;
   }
 
+  LockDirectoryNames();
   fIsOpenFile = true;
-  fLockDirectoryNames = true;
 
   return true;
 }
@@ -268,7 +235,7 @@ std::shared_ptr<G4RootFile> G4RootFileManager::GetNtupleFile(
 G4bool G4RootFileManager::CloseNtupleFile(
   RootNtupleDescription* ntupleDescription)
 {
-  auto finalResult = true;
+  auto result = true;
 
   if ( ntupleDescription->fFile ) {
     // Ntuple files are registered in file manager map.
@@ -276,10 +243,9 @@ G4bool G4RootFileManager::CloseNtupleFile(
     ntupleDescription->fFile.reset();
     // Notify not empty file
     auto ntupleFileName = GetNtupleFileName(ntupleDescription);
-    auto result = SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
-    finalResult = result && finalResult;
+    result &= SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
   }
 
-  return finalResult;
+  return result;
 }
 

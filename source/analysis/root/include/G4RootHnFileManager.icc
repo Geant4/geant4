@@ -26,6 +26,8 @@
 
 // Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
 
+#include "G4AnalysisUtilities.hh"
+
 #include "tools/wroot/to"
 #include "tools/wroot/file"
 #include "tools/zlib"
@@ -44,11 +46,10 @@ template <typename HT>
 G4bool G4RootHnFileManager<HT>::WriteExtra(
   HT* ht, const G4String& htName, const G4String& fileName)
 {
-  auto finalResult = true;
   auto result = true;
 
   // // create a new file
-  tools::wroot::file* rfile = new tools::wroot::file(G4cout, fileName);
+  auto rfile = new tools::wroot::file(G4cout, fileName);
   // TO DO
   // rfile->add_ziper('Z', tools::compress_buffer);
   // rfile->set_compression(fState.GetCompressionLevel());
@@ -59,18 +60,16 @@ G4bool G4RootHnFileManager<HT>::WriteExtra(
   if ( ! hdirectory ) return false;
 
   // write histo
-  result = Write(hdirectory, ht, htName);
-  finalResult = result && finalResult;
+  result &= Write(hdirectory, ht, htName);
 
   // write file
   unsigned int n;
-  result = rfile->write(n);
-  finalResult = result && finalResult;
+  result &= rfile->write(n);
 
   // close file
   rfile->close();
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -87,11 +86,9 @@ G4bool G4RootHnFileManager<HT>::Write(
 
   auto hdirectory = std::get<1>(*fFileManager->GetTFile(fileName));
   if ( hdirectory == nullptr ) {
-    G4ExceptionDescription description;
-    description 
-      << "Failed to get Root file " << fileName << " histo directory."; 
-    G4Exception("G4RootHnFileManager<HT>::Write()",
-                "Analysis_W022", JustWarning, description);
+    G4Analysis::Warn(
+      "Failed to get Root file " + fileName + " histo directory.",
+      fkClass, "Write");
     return false;
   }
 

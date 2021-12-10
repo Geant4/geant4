@@ -32,7 +32,6 @@
 #include "globals.hh"
 #include <vector>
 #include <fstream>
-//#include "g4csv.hh"
 
 
 #ifndef HADRONTHERAPYANALYSISMANAGER_HH

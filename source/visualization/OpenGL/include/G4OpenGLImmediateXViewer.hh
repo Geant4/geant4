@@ -30,8 +30,6 @@
 // Class G4OpenGLImmediateXViewer : a class derived from G4OpenGLXViewer and
 //                                  G4OpenGLImmediateViewer.
 
-#if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
-
 #ifndef G4OpenGLIMMEDIATEXVIEWER_HH
 #define G4OpenGLIMMEDIATEXVIEWER_HH
 
@@ -53,7 +51,5 @@ public:
   void DrawView ();
   void FinishView ();
 };
-
-#endif
 
 #endif

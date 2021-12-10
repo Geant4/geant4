@@ -49,11 +49,11 @@
 //   G4SurfaceProperty*             theSurfaceProperty
 //   G4TransitionRadiationSurface*  theTransRadSurface
 
-// Created:     1997, June, 4th to 17th
-// Author:      John Apostolakis, (with help of Peter Gumplinger)
+// Created: 1997, June, 4th to 17th
+// Author:  John Apostolakis, (with help of Peter Gumplinger)
 // ------------------------------------------------------------------------
-#ifndef G4LogicalSurface_h
-#define G4LogicalSurface_h 1
+#ifndef G4LOGICALSURFACE_HH
+#define G4LOGICALSURFACE_HH 1
 
 #include "G4Types.hh"
 #include "G4String.hh"
@@ -64,7 +64,7 @@ class G4TransitionRadiationSurface;
 class G4LogicalSurface
 {
 
- public:  // with description
+ public:
 
    inline G4SurfaceProperty* GetSurfaceProperty() const;
    inline void SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
@@ -75,9 +75,7 @@ class G4LogicalSurface
    inline G4TransitionRadiationSurface* GetTransitionRadiationSurface() const;
    inline void SetTransitionRadiationSurface(G4TransitionRadiationSurface* trs);
 
- public:  // without description
-
-   virtual ~G4LogicalSurface();
+   virtual ~G4LogicalSurface() = default;
 
    G4LogicalSurface(const G4LogicalSurface&) = delete;
    G4LogicalSurface& operator=(const G4LogicalSurface&) = delete;
@@ -102,4 +100,4 @@ class G4LogicalSurface
 
 #include "G4LogicalSurface.icc"
 
-#endif /* G4LogicalSurface_h */
+#endif

@@ -1,33 +1,7 @@
 
-Analysis_F001: Fatal exception when trying to create a singleton manager twice
+Analysis_F001: Fatal exceptions:
+   When trying to create a singleton manager twice
+   When selecting non-existing output type.
 
-Analysis_F002: Fatal exception when selecting non-existing output type.
-
-Analysis_W001: Cannot create file or directory for output
-
-Analysis_W002: Cannot create an object for output
-
-Analysis_W011: Cannot manipulate an object which does not exist
-
-Analysis_W012: Cannot set an object name 
-
-Analysis_W013: Cannot apply an attribute to an object
-
-Analysis_W014: Cannot access an attribute of an object
-
-Analysis_W021: Writing or closing a file has failed
-
-Analysis_W022: Writing an object on file has failed
-
-Analysis_W031: Merging data has failed
-
-Analysis_W041: Requested feature is not available with selected output.
-
-Analysis_W051: Selected output type is not supported.
-
-Analysis_WR001: Cannot open a file for reading
-
-Analysis_WR011: Cannot access an object in a file 
-
-Analysis_WR021: Reading an object from a file has failed
-
+Analysis_W001: Warnings:
+   All cases when a JustWarning exception is issued

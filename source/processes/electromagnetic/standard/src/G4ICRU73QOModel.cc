@@ -40,8 +40,6 @@
 //
 // -------------------------------------------------------------------
 //
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,17 +121,18 @@ void G4ICRU73QOModel::Initialise(const G4ParticleDefinition* p,
 G4double G4ICRU73QOModel::ComputeCrossSectionPerElectron(
                                            const G4ParticleDefinition* p,
                                                  G4double kineticEnergy,
-                                                 G4double cutEnergy,
+                                                 G4double cut,
                                                  G4double maxKinEnergy)
 {
-  G4double cross     = 0.0;
-  G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double cross = 0.0;
+  const G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
+  const G4double maxEnergy = std::min(tmax, maxKinEnergy);
+  const G4double cutEnergy = std::max(cut, lowestKinEnergy*massRate);
   if(cutEnergy < maxEnergy) {
 
-    G4double energy  = kineticEnergy + mass;
-    G4double energy2 = energy*energy;
-    G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+    const G4double energy  = kineticEnergy + mass;
+    const G4double energy2 = energy*energy;
+    const G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
     cross = (maxEnergy - cutEnergy)/(cutEnergy*maxEnergy) 
       - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
@@ -177,27 +176,24 @@ G4double G4ICRU73QOModel::CrossSectionPerVolume(
 G4double G4ICRU73QOModel::ComputeDEDXPerVolume(const G4Material* material,
                                                const G4ParticleDefinition* p,
                                                G4double kineticEnergy,
-                                               G4double cutEnergy)
+                                               G4double cut)
 {
   SetParticle(p);
-  G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double tkin  = kineticEnergy/massRate;
+  const G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
+  const G4double tkin  = kineticEnergy/massRate;
+  const G4double cutEnergy = std::max(cut, lowestKinEnergy*massRate);
   G4double dedx  = 0.0;
   if(tkin > lowestKinEnergy) { dedx = DEDX(material, tkin); }
   else { dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy); }
 
   if (cutEnergy < tmax) {
 
-    G4double tau   = kineticEnergy/mass;
-    G4double gam   = tau + 1.0;
-    G4double bg2   = tau * (tau+2.0);
-    G4double beta2 = bg2/(gam*gam);
-    G4double x     = cutEnergy/tmax;
-
-    dedx += chargeSquare*( G4Log(x) + (1.0 - x)*beta2 ) * twopi_mc2_rcl2
-          * material->GetElectronDensity()/beta2;
+    const G4double tau = kineticEnergy/mass;
+    const G4double x = cutEnergy/tmax;
+    dedx += (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) * 
+      CLHEP::twopi_mc2_rcl2 *chargeSquare * material->GetElectronDensity();
   }
-  if(dedx < 0.0) { dedx = 0.0; }
+  dedx = std::max(dedx, 0.0);
   return dedx;
 }
 
@@ -219,7 +215,7 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
   for (G4int i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
-      eloss   += DEDXPerElement(element->GetZasInt(), kineticEnergy)
+      eloss += DEDXPerElement(element->GetZasInt(), kineticEnergy)
         * theAtomicNumDensityVector[i] * element->GetZ();
     }      
   return eloss;
@@ -413,17 +409,18 @@ void G4ICRU73QOModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
                                         const G4MaterialCutsCouple* couple,
                                         const G4DynamicParticle* dp,
-                                        G4double xmin,
+                                        G4double minEnergy,
                                         G4double maxEnergy)
 {
-  G4double tmax = MaxSecondaryKinEnergy(dp);
-  G4double xmax = std::min(tmax, maxEnergy);
+  const G4double tmax = MaxSecondaryKinEnergy(dp);
+  const G4double xmax = std::min(tmax, maxEnergy);
+  const G4double xmin = std::max(minEnergy, lowestKinEnergy*massRate);
   if(xmin >= xmax) { return; }
 
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double energy  = kineticEnergy + mass;
-  G4double energy2 = energy*energy;
-  G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+  const G4double energy  = kineticEnergy + mass;
+  const G4double energy2 = energy*energy;
+  const G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
   G4double grej    = 1.0;
   G4double deltaKinEnergy, f;
 

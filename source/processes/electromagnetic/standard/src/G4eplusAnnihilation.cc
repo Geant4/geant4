@@ -77,8 +77,7 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   SetProcessSubType(fAnnihilation);
   enableAtRestDoIt = true;
   mainSecondaries = 2;
-  fEntanglementModelIndex =
-    G4PhysicsModelCatalog::Register("G4GammaGammaEntanglement");
+  fEntanglementModelID = G4PhysicsModelCatalog::GetModelID("model_GammaGammaEntanglement");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -220,7 +219,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
               clipBoard->SetTrackB(t);
             }
             t->SetAuxiliaryTrackInformation
-            (fEntanglementModelIndex,new G4EntanglementAuxInfo(clipBoard));
+            (fEntanglementModelID,new G4EntanglementAuxInfo(clipBoard));
           }
           if (biasManager) {
             t->SetWeight(weight * biasManager->GetWeight(i));
@@ -230,15 +229,15 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
           pParticleChange->AddSecondary(t);
 
           // define type of secondary
-          if(i < mainSecondaries) { t->SetCreatorModelIndex(secID); }
+          if(i < mainSecondaries) { t->SetCreatorModelID(secID); }
           else if(i < num0) {
             if(p == theGamma) { 
-              t->SetCreatorModelIndex(fluoID);
+              t->SetCreatorModelID(fluoID);
             } else {
-              t->SetCreatorModelIndex(augerID);
+              t->SetCreatorModelID(augerID);
 	    }
 	  } else {
-            t->SetCreatorModelIndex(biasID);
+            t->SetCreatorModelID(biasID);
           }
           /* 
           G4cout << "Secondary(post step) has weight " << t->GetWeight() 

@@ -28,12 +28,12 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
-#include "Analysis.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,12 +42,11 @@ RunAction::RunAction(const G4String& fileName)
    fFileName(fileName)
 {
   // Create analysis manager
-  // The choice of analysis technology is done via selectin of a namespace
-  // in Analysis.hh
   auto analysisManager = G4AnalysisManager::Instance();
-  G4cout << "Using " << analysisManager->GetType() << G4endl;
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetNtupleMerging(true);
+  G4cout << "Using " << analysisManager->GetType() << G4endl;
      // Note: merging ntuples is available only with Root output
 
   // Set default fileName
@@ -69,7 +68,6 @@ RunAction::RunAction(const G4String& fileName)
 
 RunAction::~RunAction()
 {
-  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

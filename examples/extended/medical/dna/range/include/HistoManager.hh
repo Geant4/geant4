@@ -30,8 +30,7 @@
 #define HistoManager_h 1
 
 #include "globals.hh"
-
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

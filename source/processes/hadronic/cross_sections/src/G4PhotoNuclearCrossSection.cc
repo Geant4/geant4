@@ -35,13 +35,6 @@
 
 #include "G4PhotoNuclearCrossSection.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadTmpUtil.hh"
-
-// factory
-#include "G4CrossSectionFactory.hh"
-//
-G4_DECLARE_XS_FACTORY(G4PhotoNuclearCrossSection);
-
 
 static const G4double THmin=2.;          // minimum Energy Threshold
 static const G4double dE=1.;             // step for the GDR table
@@ -1489,38 +1482,26 @@ static const G4double* SH[nHA]={
     SH0,SH1,SH2,SH3,SH4,SH5,SH6,SH7,SH8,SH9,SH10,SH11,SH12,SH13};
 
 
-
 // Bug 2092 fix (ejc3) Init deuteron_GDR ptr to null
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
- : G4VCrossSectionDataSet(Default_Name()), lastZ(0), lastSig(0), lastGDR(0),
-   lastHEN(0), lastE(0), lastTH(0), lastSP(0),
-   deuteron_GDR(0), deuteron_HR(0), deuteron_TH(0), deuteron_SP(0),
-   triton_GDR(0), triton_HR(0), triton_TH(0), triton_SP(0),
-   he3_GDR(0), he3_HR(0), he3_TH(0), he3_SP(0),
+ : G4VCrossSectionDataSet(Default_Name()), 
    mNeut(G4NucleiProperties::GetNuclearMass(1,0)),
    mProt(G4NucleiProperties::GetNuclearMass(1,1))
 {
   SetForAllAtomsAndEnergies(true);
   nistmngr = G4NistManager::Instance();
     
-  for (G4int i = 0; i < 120; i++) {
-    GDR.push_back(0);
-    HEN.push_back(0);
-    spA.push_back(0);
-    eTH.push_back(0);
-  }
+  GDR.resize(120, nullptr);
+  HEN.resize(120, nullptr);
+  spA.resize(120, 0.0);
+  eTH.resize(120, 0.0);
 }
 
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {
-  std::vector<G4double*>::iterator posi;
-  for (posi = GDR.begin(); posi < GDR.end(); posi++)
-    { delete [] *posi; }
-  GDR.clear();
-  for (posi = HEN.begin(); posi < HEN.end(); posi++)
-    { delete [] *posi; }
-  HEN.clear();
+  for (auto & ptr : GDR) { delete [] ptr; }
+  for (auto & ptr : HEN) { delete [] ptr; }
 }
 
 
@@ -1542,7 +1523,6 @@ G4PhotoNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle*,
                                             const G4Material*)
 {
   // explicitly allow deuterium and tritium
-//  if (Z == 1 && (A == 2 || A == 3) ) return true;
   if ((Z == 1 && A == 2) || (Z == 1 && A == 3) ||
       (Z == 2 && A == 3) ) return true; 
   return false;
@@ -1565,19 +1545,19 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
                                                const G4Element*,
                                                const G4Material* mat)
 {
-  const G4double Energy = aPart->GetKineticEnergy()/MeV;
+  G4double Energy = aPart->GetKineticEnergy()/MeV;
   if (Energy < THmin) return 0.;
 
   G4double sigma;
   G4double lE;
   if (Z == 1 && A == 2) { 
     // init the XS table if need be
-    if (deuteron_GDR == NULL) {
+    if (deuteron_GDR == nullptr) {
       deuteron_TH = ThresholdEnergy(1,1); // threshold calculation is correct
       deuteron_GDR = new G4double[nL];    // direct copies
-      for (G4int i = 0 ; i < nL ; i++) deuteron_GDR[i] = SL[0][i];   // A = 2 -> SL0
+      for (G4int i = 0; i < nL; ++i) deuteron_GDR[i] = SL[0][i];   // A = 2 -> SL0
       deuteron_HR = new G4double[nH];
-      for (G4int i = 0 ; i < nH ; i++) deuteron_HR[i] = SH[1][i];    // A = 2 -> SH1
+      for (G4int i = 0; i < nH; ++i) deuteron_HR[i] = SH[1][i];    // A = 2 -> SH1
       deuteron_SP = 1;                    // as would be assigned for proton
     }
     if (Energy < deuteron_TH) {
@@ -1593,12 +1573,12 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
     }
 
   } else if (Z == 1 && A == 3) {
-    if (triton_GDR == NULL) {
+    if (triton_GDR == nullptr) {
       triton_TH = ThresholdEnergy(1,2);
       triton_GDR = new G4double[nL];      // same as for deuteron since no A = 3 entry
-      for (G4int i = 0 ; i < nL ; i++) triton_GDR[i] = SL[0][i];     // A = 3 -> SL0
+      for (G4int i = 0; i < nL; ++i) triton_GDR[i] = SL[0][i];     // A = 3 -> SL0
       triton_HR = new G4double[nH];
-      for (G4int i = 0 ; i < nH ; i++) triton_HR[i] = SH[2][i];      // A = 3 -> SH2
+      for (G4int i = 0; i < nH; ++i) triton_HR[i] = SH[2][i];      // A = 3 -> SH2
       triton_SP = 1;
     }
     if (Energy < triton_TH) {
@@ -1614,12 +1594,12 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
     }
 
   } else if (Z == 2 && A == 3) {
-    if (he3_GDR == NULL) {
+    if (he3_GDR == nullptr) {
       he3_TH = ThresholdEnergy(2,1);
-      he3_GDR = new G4double[nL];      // same as for deuteron since no A = 3 entry
-      for (G4int i = 0 ; i < nL ; i++) he3_GDR[i] = SL[0][i];     // A = 3 -> SL0
+      he3_GDR = new G4double[nL]; // same as for deuteron since no A = 3 entry
+      for (G4int i = 0 ; i < nL ; ++i) he3_GDR[i] = SL[0][i]; // A = 3 -> SL0
       he3_HR = new G4double[nH];
-      for (G4int i = 0 ; i < nH ; i++) he3_HR[i] = SH[2][i];      // A = 3 -> SH2
+      for (G4int i = 0 ; i < nH ; ++i) he3_HR[i] = SH[2][i];  // A = 3 -> SH2
       he3_SP = 2;
     }
     if (Energy < he3_TH) {
@@ -1644,7 +1624,7 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
 
 
 // The main member function giving the gamma-A cross section
-// (E in GeV, CS in mb) <-??????? GeV ??????? (WP)
+// (E in MeV, CS in mb)
 G4double
 G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPart,
                                                    G4int ZZ, const G4Material*)
@@ -1667,7 +1647,7 @@ G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPar
         else
         {
             G4double Aa = nistmngr->GetAtomicMassAmu(ZZ); // average A
-            G4int N = (G4int)Aa - ZZ;
+            G4int N = static_cast<G4int>(Aa) - ZZ;
             
             G4double lnA=G4Log(Aa); // The nucleus is not found in DB. It is new.
             if(Aa==1.) lastSP=1.;      // The Reggeon shadowing (A=1)
@@ -1714,7 +1694,7 @@ G4PhotoNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPar
     }
     // End of "sigma" calculation
     
-    if(sigma<0.) return 0.;
+    sigma = std::max(sigma, 0.);
     return sigma*millibarn;
 }
 
@@ -1761,56 +1741,56 @@ G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N,
                                          const G4double X0, const G4double DX,
                                          const G4double* Y)
 {
-    if(DX<=0. || N<2)
+  if(DX<=0. || N<2)
     {
-        G4cout<<"***G4PhotoNuclearCrossSection::EquLinearFit: DX="<<DX<<", N="<<N<<G4endl;
-        return Y[0];
+      G4cout<<"***G4PhotoNuclearCrossSection::EquLinearFit: DX="
+	    <<DX<<", N="<<N<<", X0="<<X0<<", X="<<X<<", Y[0]="<<Y[0]<<G4endl;
+      return Y[0];
     }
-    G4int    N2=N-2;
-    G4double d=(X-X0)/DX;
-    G4int         j=static_cast<int>(d);
-    if     (j<0)  j=0;
-    else if(j>N2) j=N2;
-    d-=j; // excess
-    G4double yi=Y[j];
-    G4double sigma=yi+(Y[j+1]-yi)*d;
-    return sigma;
+  G4int    N2=N-2;
+  G4double d=(X-X0)/DX;
+  G4int         j=static_cast<int>(d);
+  if     (j<0)  j=0;
+  else if(j>N2) j=N2;
+  d-=j; // excess
+  G4double yi=Y[j];
+  G4double sigma=yi+(Y[j+1]-yi)*d;
+  return sigma;
 }
 
 // Calculate the functions for the G4Log(A)
 
 G4int
 G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
-{
-    
-    if(a<=.9)
+{    
+  if(a<=.9)
     {
         G4cout << "***G4PhotoNuclearCS::GetFunctions: A=" << a
-        << "(?). No CS returned!" << G4endl;
+               << "(?). No CS returned!" << G4endl;
         return -1;
     }
-    G4int r=0;                    // Low channel for GDR (filling-flag for GDR)
-    for(G4int i=0; i<nLA; i++) if(std::abs(a-LA[i])<.0005)
+  G4int r=0;                    // Low channel for GDR (filling-flag for GDR)
+  for(G4int i=0; i<nLA; ++i) if(std::abs(a-LA[i])<.0005)
     {
-        for(G4int k=0; k<nL; k++) y[k]=SL[i][k];
+        for(G4int k=0; k<nL; ++k) y[k]=SL[i][k];
         r=1;                          // Flag of filled GDR part
     }
-    G4int h=0;
-    for(G4int j=0; j<nHA; j++) if(std::abs(a-HA[j])<.0005)
+  G4int h=0;
+  for(G4int j=0; j<nHA; ++j) if(std::abs(a-HA[j])<.0005)
     {
-        for(G4int k=0; k<nH; k++) z[k]=SH[j][k];
+        for(G4int k=0; k<nH; ++k) z[k]=SH[j][k];
         h=1;                          // Flag of filled GDR part
     }
-    if(!r)                          // GDR part is not filled
+  if(0 == r)           // GDR part is not filled
     {
-        G4int k=0;                    // !! To be good for different compilers !!
-        for(k=1; k<nLA; k++) if(a<LA[k]) break;
+        G4int k=0;   // !! To be good for different compilers !!
+        for(k=1; k<nLA; ++k) if(a<LA[k]) break;
         if(k<1) k=1;                  // Extrapolation from the first bin (D/He)
         if(k>=nLA) k=nLA-1;           // Extrapolation from the last bin (U)
         G4int     k1=k-1;
         G4double  xi=LA[k1];
         G4double   b=(a-xi)/(LA[k]-xi);
-        for(G4int q=0; q<nL; q++)
+        for(G4int q=0; q<nL; ++q)
         {
             if(a>1.5)
             {
@@ -1821,21 +1801,21 @@ G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
         }
         r=1;
     }
-    if(!h)                            // High Energy part is not filled
+  if(0 == h)    // High Energy part is not filled
     {
         G4int k=0;
-        for(k=1; k<nHA; k++) if(a<HA[k]) break;
-        if(k<1) k=1;                    // Extrapolation from the first bin (D/He)
-        if(k>=nHA) k=nHA-1;             // Extrapolation from the last bin (Pu)
+        for(k=1; k<nHA; ++k) if(a<HA[k]) break;
+        if(k<1) k=1;         // Extrapolation from the first bin (D/He)
+        if(k>=nHA) k=nHA-1;  // Extrapolation from the last bin (Pu)
         G4int     k1=k-1;
         G4double  xi=HA[k1];
         G4double   b=(a-xi)/(HA[k]-xi);
-        for(G4int q=0; q<nH; q++)
+        for(G4int q=0; q<nH; ++q)
         {
             G4double zi=SH[k1][q];
             z[q]=zi+(SH[k][q]-zi)*b;
         }
         h=1;
     }
-    return r*h;
+  return r*h;
 }

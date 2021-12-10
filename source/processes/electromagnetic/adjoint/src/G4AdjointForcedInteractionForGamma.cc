@@ -103,6 +103,7 @@ G4VParticleChange* G4AdjointForcedInteractionForGamma::PostStepDoIt(
     // Selection of the model to be called
     G4VEmAdjointModel* theSelectedModel = nullptr;
     G4bool is_scat_proj_to_proj_case    = false;
+    G4double factor=1.;
     if(!fAdjointComptonModel && !fAdjointBremModel)
       return fParticleChange;
     if(!fAdjointComptonModel)
@@ -120,30 +121,32 @@ G4VParticleChange* G4AdjointForcedInteractionForGamma::PostStepDoIt(
       is_scat_proj_to_proj_case = true;
     }
     else
-    {  // Choose the model according to cross sections
+    {  // Choose the model according to a 50-50 % probability
       G4double bremAdjCS = fAdjointBremModel->AdjointCrossSection(
         track.GetMaterialCutsCouple(), track.GetKineticEnergy(), false);
-      if(G4UniformRand() * fLastAdjCS < bremAdjCS)
+      if(G4UniformRand()  < 0.5)
       {
         theSelectedModel          = fAdjointBremModel;
         is_scat_proj_to_proj_case = false;
+        factor=bremAdjCS/fLastAdjCS/0.5;
       }
       else
       {
         theSelectedModel          = fAdjointComptonModel;
         is_scat_proj_to_proj_case = true;
+        factor=(fLastAdjCS-bremAdjCS)/fLastAdjCS/0.5;
       }
     }
 
     // Compute the weight correction factor
     G4double invEffectiveAdjointCS =
-      (1. - std::exp(fNbAdjIntLength - fTotNbAdjIntLength)) / fLastAdjCS;
+      (1. - std::exp(fNbAdjIntLength - fTotNbAdjIntLength)) / fLastAdjCS/fCSBias;
 
     // Call the  selected model without correction of the weight in the model
     theSelectedModel->SetCorrectWeightForPostStepInModel(false);
     theSelectedModel
       ->SetAdditionalWeightCorrectionFactorForPostStepOutsideModel(
-        fLastAdjCS * invEffectiveAdjointCS);
+        factor*fLastAdjCS * invEffectiveAdjointCS);
     theSelectedModel->SampleSecondaries(track, is_scat_proj_to_proj_case,
                                         fParticleChange);
     theSelectedModel->SetCorrectWeightForPostStepInModel(true);
@@ -183,8 +186,8 @@ G4VParticleChange* G4AdjointForcedInteractionForGamma::AlongStepDoIt(
   else
   {
     G4double previous_acc_nb_adj_interaction_length = fNbAdjIntLength;
-    fNbAdjIntLength += nb_adj_interaction_length_over_step;
-    theNumberOfInteractionLengthLeft -= nb_adj_interaction_length_over_step;
+    fNbAdjIntLength += fCSBias*nb_adj_interaction_length_over_step;
+    theNumberOfInteractionLengthLeft -= fCSBias*nb_adj_interaction_length_over_step;
 
     // protection against rare race condition
     if(std::abs(fTotNbAdjIntLength - previous_acc_nb_adj_interaction_length) <=
@@ -253,6 +256,8 @@ G4AdjointForcedInteractionForGamma::PostStepGetPhysicalInteractionLength(
   {  // compute the interaction length for forced interaction
     if(step_id == 1)
     {
+      fCSBias=0.000001/fTotNbAdjIntLength;
+      fTotNbAdjIntLength*=fCSBias;
       G4double min_val = std::exp(-fTotNbAdjIntLength);
       theNumberOfInteractionLengthLeft =
         -std::log(min_val + G4UniformRand() * (1. - min_val));
@@ -270,7 +275,7 @@ G4AdjointForcedInteractionForGamma::PostStepGetPhysicalInteractionLength(
         thePostPhysVolume->GetLogicalVolume()->GetMaterialCutsCouple());
     }
     if(postCS > 0.)
-      return theNumberOfInteractionLengthLeft / postCS;
+      return theNumberOfInteractionLengthLeft / postCS /fCSBias;
     else
       return DBL_MAX;
   }

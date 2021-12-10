@@ -13,14 +13,13 @@
 #
 /run/initialize
 #
-/particle/createAllIsomer
 /gun/particle neutron
 /gun/energy 2 MeV
 #
-/analysis/setFileName Graphite_on
+/analysis/setFileName Graphite
 /analysis/h1/set 1  100  0. 200. none	#nb colli >1eV
 /analysis/h1/set 2  100  0. 5. m	#track len >1eV
-/analysis/h1/set 3  100  0. 50. mus	#time of flight >1eV
+/analysis/h1/set 3  100  0. 50. us	#time of flight >1eV
 /analysis/h1/set 4  100  0. 10000. none	#nb colli <1eV
 /analysis/h1/set 5  100  0. 100. m	#track len <1eV
 /analysis/h1/set 6  100  0. 100. ms	#time of flight <1eV

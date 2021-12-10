@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(gammaray_telescope)
 
 #----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ target_link_libraries(GammaRayTel ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(gammaray_telescope_SCRIPTS
-    emlowe.mac emstd.mac gammaraytel.in gammaraytel_polarized.in gammaraytel.out macro1.mac macro2.mac macro3.mac macro4.mac macro5.mac macro6.mac physics.mac physics_polarized.mac physics_polarized_new.mac prerunGammaRayTel.mac)
+   gammaraytel.in gammaraytel.out macro1.mac macro2.mac macro3.mac macro4.mac macro5.mac macro6.mac physics.mac physics_opt4.mac prerunGammaRayTel.mac)
 
 foreach(_script ${gammaray_telescope_SCRIPTS})
   configure_file(

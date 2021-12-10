@@ -865,7 +865,7 @@ void G4GDMLReadMaterials::PropertyRead(
   }
   if(matrix.GetCols() == 1)  // constant property assumed
   {
-    matprop->AddConstProperty(Strip(name), matrix.Get(0, 0));
+    matprop->AddConstProperty(Strip(name), matrix.Get(0, 0), true);
   }
   else  // build the material properties vector
   {
@@ -874,7 +874,7 @@ void G4GDMLReadMaterials::PropertyRead(
     {
       propvect->InsertValues(matrix.Get(i, 0), matrix.Get(i, 1));
     }
-    matprop->AddProperty(Strip(name), propvect);
+    matprop->AddProperty(Strip(name), propvect, true);
   }
 }
 

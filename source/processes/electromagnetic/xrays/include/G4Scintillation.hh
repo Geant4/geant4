@@ -187,6 +187,9 @@ class G4Scintillation : public G4VRestDiscreteProcess
   void DumpPhysicsTable() const;
   // Prints the fast and slow scintillation integral tables.
 
+  void SetVerboseLevel(G4int);
+  // sets verbosity
+
  private:
 
   G4PhysicsTable* fIntegralTable1;
@@ -215,25 +218,17 @@ class G4Scintillation : public G4VRestDiscreteProcess
   // emission time distribution when there is a finite rise time
   G4double sample_time(G4double tau1, G4double tau2);
 
+  G4int secID = -1;  // creator modelID
+
 };
 
 ////////////////////
 // Inline methods
 ////////////////////
 
-inline void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
-{
-  fTrackSecondariesFirst = state;
-}
-
 inline G4bool G4Scintillation::GetTrackSecondariesFirst() const
 {
   return fTrackSecondariesFirst;
-}
-
-inline void G4Scintillation::SetFiniteRiseTime(const G4bool state)
-{
-  fFiniteRiseTime = state;
 }
 
 inline G4bool G4Scintillation::GetFiniteRiseTime() const
@@ -273,19 +268,9 @@ inline G4bool G4Scintillation::GetScintillationByParticleType() const
   return fScintillationByParticleType;
 }
 
-inline void G4Scintillation::SetScintillationTrackInfo(const G4bool trackType)
-{
-  fScintillationTrackInfo = trackType;
-}
-
 inline G4bool G4Scintillation::GetScintillationTrackInfo() const
 {
   return fScintillationTrackInfo;
-}
-
-inline void G4Scintillation::SetStackPhotons(const G4bool stackingFlag)
-{
-  fStackingFlag = stackingFlag;
 }
 
 inline G4bool G4Scintillation::GetStackPhotons() const { return fStackingFlag; }

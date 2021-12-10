@@ -36,6 +36,7 @@ CPPFLAGS += \
             -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/scoring/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/optical/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/geometry/management/include \
@@ -53,6 +54,7 @@ CPPFLAGS += \
             -I$(G4BASE)/intercoms/include \
 	    -I$(G4BASE)/geometry/biasing/include \
             -I$(G4BASE)/graphics_reps/include \
+            -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/particles/bosons/include \

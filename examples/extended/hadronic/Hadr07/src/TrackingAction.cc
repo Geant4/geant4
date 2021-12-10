@@ -69,7 +69,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4int iabs        = track->GetTouchableHandle()->GetCopyNumber();
   G4String name     = track->GetDefinition()->GetParticleName();
   G4double meanLife = track->GetDefinition()->GetPDGLifeTime();  
-  G4double energy   = track->GetKineticEnergy(); 
+  G4double energy   = track->GetKineticEnergy();
+  //do not count excited states with meanlife = 0.   
   if (fParticleCount && (iabs > 0) && (meanLife != 0.))
     run->ParticleCount(iabs,name,energy,meanLife);
 }

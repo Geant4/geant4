@@ -148,10 +148,13 @@ namespace G4INCL {
     // Fill in the global information
     theGlobalInfo.At = theConfig->getTargetA();
     theGlobalInfo.Zt = theConfig->getTargetZ();
+    theGlobalInfo.St = theConfig->getTargetS();
     const ParticleSpecies theSpecies = theConfig->getProjectileSpecies();
     theGlobalInfo.Ap = theSpecies.theA;
     theGlobalInfo.Zp = theSpecies.theZ;
+    theGlobalInfo.Sp = theSpecies.theS;
     theGlobalInfo.Ep = theConfig->getProjectileKineticEnergy();
+    theGlobalInfo.biasFactor = theConfig->getBias();
 #endif
 
     fixedImpactParameter = theConfig->getImpactParameter();

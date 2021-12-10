@@ -33,7 +33,7 @@
 #include "G4NullModel.hh"
 
 G4NullModel::G4NullModel (const G4ModelingParameters* pMP):
-  G4VModel (G4Transform3D(), pMP) {}
+  G4VModel (pMP) {}
 
 G4NullModel::~G4NullModel () {}
 

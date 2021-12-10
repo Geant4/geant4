@@ -25,8 +25,6 @@
 //
 // John Allison, 18th July 2020
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #include "G4Qt3DUtils.hh"
 
 #include "G4Qt3DQEntity.hh"
@@ -150,12 +148,14 @@ void G4Qt3DUtils::PrintQObjectTree
   if (where.length()) logFile << "\n===== QObjectTree at " << where << std::endl;
   static G4int iDep = -1;
   ++iDep;
-  const auto* g4node = dynamic_cast<const G4Qt3DQEntity*>(node);
   G4String nodeName = node->objectName().toStdString();
   if (nodeName == "") nodeName = "X";
   for (G4int i = 0; i < iDep; ++i) logFile << "  ";
   logFile << (void*)node << ": "
-  << "Node at depth " << iDep << ": " << nodeName << ": ";
+  << "Node at depth " << iDep << ": " << nodeName << ": "
+  << "thread: " << node->thread() << ": "
+  << "parent: " << node->parent() << ": ";
+  const auto* g4node = dynamic_cast<const G4Qt3DQEntity*>(node);
   if (g4node) {
     logFile << g4node->GetPVNodeID() << std::endl;
   } else {
@@ -178,5 +178,3 @@ void G4Qt3DUtils::PrintQObjectTree
   return;
 }
 #endif
-
-#endif // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

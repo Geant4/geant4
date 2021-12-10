@@ -107,7 +107,10 @@ G4ParticlePropertyMessenger::~G4ParticlePropertyMessenger()
 void G4ParticlePropertyMessenger::
 SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (SetCurrentParticle() == nullptr)
+  G4ParticleDefinition* currentParticle
+    = const_cast<G4ParticleDefinition*>(theParticleTable->GetSelectedParticle());
+
+  if (currentParticle == nullptr)
   {
     G4cout << "Particle is not selected yet !! Command ignored." << G4endl;
     return;
@@ -122,7 +125,7 @@ SetNewValue(G4UIcommand* command, G4String newValue)
   else if (command == lifetimeCmd )
   {
     // Command   /particle/property/lifetime
-    currentParticle->SetPDGLifeTime(lifetimeCmd->GetNewDoubleValue(newValue)); 
+    currentParticle->SetPDGLifeTime(lifetimeCmd->GetNewDoubleValue(newValue));
 
   }
   else if (command == stableCmd )
@@ -145,39 +148,16 @@ SetNewValue(G4UIcommand* command, G4String newValue)
   else if( command==verboseCmd )
   {
     // Command   /particle/property/Verbose
-    currentParticle->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 
+    currentParticle->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));
   }
-}
-
-G4ParticleDefinition* G4ParticlePropertyMessenger::SetCurrentParticle()
-{
-  // Set currentParticle pointer
-  
-  // Get particle name by asking G4ParticleMessenger via UImanager
-  //
-  G4String particleName
-    = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
-	
-  if ( currentParticle != nullptr )
-  {
-    // check whether selection is changed 
-    if (currentParticle->GetParticleName() != particleName)
-    {
-      currentParticle = theParticleTable->FindParticle(particleName);
-    }
-  }
-  else
-  {
-    currentParticle = theParticleTable->FindParticle(particleName);
-  }
-  return currentParticle;
 }
 
 G4String G4ParticlePropertyMessenger::GetCurrentValue(G4UIcommand* command)
 {
-  G4String returnValue('\0');
+  G4String returnValue(1,'\0');
 
-  if ( SetCurrentParticle() == nullptr )
+  const G4ParticleDefinition* currentParticle = theParticleTable->GetSelectedParticle();
+  if ( currentParticle == nullptr )
   {
     return returnValue;  // no particle is selected. return null 
   }

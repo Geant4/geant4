@@ -53,6 +53,7 @@ G4PDefManager G4ParticleDefinition::subInstanceManager;
 // in the class G4PDefData.
 //
 #define G4MT_pmanager ((subInstanceManager.offset()[g4particleDefinitionInstanceID]).theProcessManager)
+#define G4MT_tmanager ((subInstanceManager.offset()[g4particleDefinitionInstanceID]).theTrackingManager)
 
 // --------------------------------------------------------------------
 G4ParticleDefinition::G4ParticleDefinition(
@@ -238,6 +239,13 @@ G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {
   if(g4particleDefinitionInstanceID<0) return nullptr;
   return G4MT_pmanager;
+}
+
+// --------------------------------------------------------------------
+G4VTrackingManager* G4ParticleDefinition::GetTrackingManager() const
+{
+  if(g4particleDefinitionInstanceID<0) return nullptr;
+  return G4MT_tmanager;
 }
 
 // --------------------------------------------------------------------
@@ -473,4 +481,23 @@ void G4ParticleDefinition::SetProcessManager(G4ProcessManager* aProcessManager)
     SetParticleDefinitionID();
   }
   G4MT_pmanager = aProcessManager;
+}
+
+// --------------------------------------------------------------------
+void G4ParticleDefinition::SetTrackingManager(G4VTrackingManager* aTrackingManager)
+{
+  if(g4particleDefinitionInstanceID<0 && !isGeneralIon)
+  {
+    if(G4Threading::G4GetThreadId() >= 0)
+    {
+      G4ExceptionDescription ed;
+      ed << "TrackingManager is being set to " << theParticleName
+         << " without proper initialization of TLS pointer vector.\n"
+         << "This operation is thread-unsafe.";
+      G4Exception("G4ParticleDefintion::SetTrackingManager",
+                  "PART10118", JustWarning, ed);
+    }
+    SetParticleDefinitionID();
+  }
+  G4MT_tmanager = aTrackingManager;
 }

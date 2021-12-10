@@ -62,10 +62,6 @@ if(GEANT4_USE_RAYTRACER_X11)
     G4RayTracerXViewer.cc
     G4RTXScanner.cc)
 
-  # Add source properties and additional LINK_LIBRARIES here
-  # Must use G4VIS_BUILD_RAYTRACERX_DRIVER define
-  add_definitions(-DG4VIS_BUILD_RAYTRACERX_DRIVER)
-
   # The X11 Libraries
   list(APPEND G4VIS_RAYTRACER_MODULE_LINK_LIBRARIES X11::SM X11::ICE X11::X11 X11::Xext X11::Xmu)
 endif()

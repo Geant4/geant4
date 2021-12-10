@@ -33,7 +33,6 @@
 #include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
-#include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -49,9 +48,6 @@ int main(int argc,char** argv) {
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
   if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
-
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng);
 
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   // Number of threads can be defined via 3rd argument

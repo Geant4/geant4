@@ -152,21 +152,19 @@ public:  // with description
   //
   // Add an element, giving number of atoms
   //
-  void AddElement(G4Element* element,				//the element
-                  G4int      nAtoms);				//nb of atoms in a molecule
+  void AddElementByNumberOfAtoms(const G4Element* elm, G4int nAtoms); 
   inline 
-  void AddElementByNumberOfAtoms(G4Element* elm, G4int nAtoms) {AddElement(elm, nAtoms);}
+  void AddElement(G4Element* elm, G4int nAtoms)
+  { AddElementByNumberOfAtoms(elm, nAtoms); }
 
   //
   // Add an element or material, giving fraction of mass
   //
-  void AddElement (G4Element* element ,				//the element
-                   G4double   fraction);			//fractionOfMass
-  inline 
-  void AddElementByMassFraction(G4Element* elm, G4double frac)  {AddElement(elm, frac);}
+  void AddElementByMassFraction(const G4Element* elm, G4double fraction);  
+  inline void AddElement (G4Element* elm, G4double frac)
+  { AddElementByMassFraction(elm, frac); }
 
-  void AddMaterial(G4Material* material,			//the material
-                   G4double   fraction);			//fractionOfMass
+  void AddMaterial(G4Material* material, G4double fraction);
                      
   virtual ~G4Material();  
   //
@@ -277,7 +275,7 @@ public:  // with description
   //
   friend std::ostream& operator<<(std::ostream&, const G4Material*);    
   friend std::ostream& operator<<(std::ostream&, const G4Material&);    
-  friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
+  friend std::ostream& operator<<(std::ostream&, const G4MaterialTable&);
     
   G4Material(__void__&);
     // Fake default constructor for usage restricted to direct object
@@ -312,52 +310,52 @@ private:
     
 private:
 
-  const G4Material* fBaseMaterial;        // Pointer to the base material
-  G4MaterialPropertiesTable* fMaterialPropertiesTable;
-  
-  G4ElementVector* theElementVector;      // vector of constituent Elements
-  G4double*        fMassFractionVector;   // composition by fractional mass
-  G4int*           fAtomsVector;          // composition by atom count
+  void FillVectors();
 
   static
-  G4MaterialTable theMaterialTable;       // the material table
+  G4MaterialTable theMaterialTable;  // the material table
+
+  const G4Material* fBaseMaterial;   // Pointer to the base material
+  G4MaterialPropertiesTable* fMaterialPropertiesTable;
 
   //
-  // Derived data members (computed from the basic data members)
+  // General atomic properties defined in constructor or
+  // computed from the basic data members
   //
-  // some general atomic properties
-   
-  G4double* fVecNbOfAtomsPerVolume;       // vector of nb of atoms per volume
   
-  G4IonisParamMat* fIonisation;           // ionisation parameters
-  G4SandiaTable*   fSandiaTable;          // Sandia table         
+  G4ElementVector* theElementVector; // vector of constituent G4Elements
+  G4int* fAtomsVector;               // composition by atom count
+  G4double* fMassFractionVector;     // composition by fractional mass   
+  G4double* fVecNbOfAtomsPerVolume;  // number of atoms per volume
+  
+  G4IonisParamMat* fIonisation;    // ionisation parameters
+  G4SandiaTable* fSandiaTable;     // Sandia table         
 
-  G4double         fDensity;              // Material density
-  G4double         fFreeElecDensity;      // Free electron density
-  G4double         fTemp;                 // Temperature (defaults: STP)
-  G4double         fPressure;             // Pressure    (defaults: STP)
+  G4double fDensity;               // Material density
+  G4double fFreeElecDensity;       // Free electron density
+  G4double fTemp;                  // Temperature (defaults: STP)
+  G4double fPressure;              // Pressure    (defaults: STP)
 
-  G4double  fTotNbOfAtomsPerVolume;       // total nb of atoms per volume 
-  G4double  fTotNbOfElectPerVolume;       // total nb of electrons per volume 
-  G4double  fRadlen;                      // Radiation length
-  G4double  fNuclInterLen;                // Nuclear interaction length  
-  G4double  fMassOfMolecule; 		  // for materials built by atoms count
+  G4double fTotNbOfAtomsPerVolume; // Total nb of atoms per volume 
+  G4double fTotNbOfElectPerVolume; // Total nb of electrons per volume 
+  G4double fRadlen;                // Radiation length
+  G4double fNuclInterLen;          // Nuclear interaction length  
+  G4double fMassOfMolecule;        // Correct for materials built by atoms count
 
-  G4State          fState;                // Material state (determined 
-                                          // internally based on density)
-  size_t           fIndexInTable;         // the position in the material table 
+  G4State fState;                  // Material state
+  size_t fIndexInTable;            // Index in the material table 
+  G4int fNumberOfElements;         // Number of G4Elements in the material
 
-  G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
-  G4int            fArrayLength;          // the length of fAtomsVector 
-  G4int            fNumberOfComponents;   // Nb of components declared so far
+  // Class members used only at initialisation
+  G4int fNbComponents;             // Number of material components 
+  G4int fIdxComponent;             // Index of a new component
+  G4bool fMassFraction;            // Flag of the method to add components
 
-  G4int            fNumberOfElements;     // Nb of Elements in the material
+  // For composites built via AddMaterial()
+  std::map<G4Material*, G4double> fMatComponents; 
 
-  std::map<G4Material*,G4double> fMatComponents; // for composites built via
-                                                 // AddMaterial()
-
-  G4String         fName;                 // Material name
-  G4String         fChemicalFormula;      // Material chemical formula
+  G4String fName;                  // Material name
+  G4String fChemicalFormula;       // Material chemical formula
 
 #ifdef G4MULTITHREADED
   static G4Mutex materialMutex;

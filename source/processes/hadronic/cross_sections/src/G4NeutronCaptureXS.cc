@@ -49,11 +49,6 @@
 #include "Randomize.hh"
 #include "G4Log.hh" 
 
-// factory
-#include "G4CrossSectionFactory.hh"
-//
-G4_DECLARE_XS_FACTORY(G4NeutronCaptureXS);
-
 G4ElementData* G4NeutronCaptureXS::data = nullptr;
 G4String G4NeutronCaptureXS::gDataDirectory = "";
 
@@ -158,8 +153,8 @@ G4double G4NeutronCaptureXS::IsoCrossSection(G4double eKin, G4double logE,
   auto pv = GetPhysicsVector(Z);
   if(pv == nullptr) { return xs; }
 
-  if(amin[Z] > 0 && A >= amin[Z] && A <= amax[Z]) {
-    G4PhysicsVector* pviso = data->GetComponentDataByID(Z, A - amin[Z]);
+  if(amin[Z] < amax[Z] && A >= amin[Z] && A <= amax[Z]) {
+    G4PhysicsVector* pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pviso != nullptr) { 
       const G4double e1 = pviso->Energy(1);
       xs = (ekin >= e1) ? pviso->LogVectorValue(ekin, logEkin)
@@ -207,7 +202,7 @@ G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
 
   // is there isotope wise cross section?
   size_t j;
-  if(0 == amin[Z] || Z >= MAXZCAPTURE) {
+  if(amax[Z] == amin[Z] || Z >= MAXZCAPTURE) {
     for (j = 0; j<nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
@@ -257,7 +252,7 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     if(nullptr == data) { 
 #endif
       isMaster = true;
-      data = new G4ElementData(); 
+      data = new G4ElementData();
       data->SetName("NeutronCapture");
       FindDirectoryPath();
 #ifdef G4MULTITHREADED
@@ -291,7 +286,7 @@ const G4String& G4NeutronCaptureXS::FindDirectoryPath()
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
     char* path = std::getenv("G4PARTICLEXSDATA");
-    if (path) {
+    if (nullptr != path) {
       std::ostringstream ost;
       ost << path << "/neutron/cap";
       gDataDirectory = ost.str();
@@ -328,8 +323,8 @@ void G4NeutronCaptureXS::Initialise(G4int Z)
   data->InitialiseForElement(Z, v);
 
   // upload isotope data
-  if(amin[Z] > 0) {
-    size_t nmax = (size_t)(amax[Z]-amin[Z]+1);
+  if(amin[Z] < amax[Z]) {
+    G4int nmax = amax[Z] - amin[Z] + 1;
     data->InitialiseForComponent(Z, nmax);
 
     for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
@@ -346,7 +341,7 @@ G4NeutronCaptureXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
 {
   G4PhysicsLogVector* v = nullptr;
   std::ifstream filein(ost.str().c_str());
-  if (!(filein)) {
+  if (!filein.is_open()) {
     if(warn) {
       G4ExceptionDescription ed;
       ed << "Data file <" << ost.str().c_str()

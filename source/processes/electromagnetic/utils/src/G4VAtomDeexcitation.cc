@@ -59,7 +59,7 @@
 #include "G4ElementVector.hh"
 #include "Randomize.hh"
 #include "G4VParticleChange.hh"
-#include "G4PhysicsModelCatalog.hh"
+#include "G4EmSecondaryParticleType.hh"
 #include "G4Gamma.hh"
 #include "G4Log.hh"
 
@@ -69,28 +69,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4VAtomDeexcitation::pixeIDg = -1;
-G4int G4VAtomDeexcitation::pixeIDe = -1;
-
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname) 
   : name(modname)
 {
   vdyn.reserve(5);
   theCoupleTable = nullptr;
-  G4String gg = "gammaPIXE";
-  G4String ee = "e-PIXE";
-  if(pixeIDg < 0) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&atomDeexcitationMutex);
-    if(pixeIDg < 0) { 
-#endif
-      pixeIDg = G4PhysicsModelCatalog::Register(gg); 
-      pixeIDe = G4PhysicsModelCatalog::Register(ee); 
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&atomDeexcitationMutex);
-#endif
-  }
   gamma = G4Gamma::Gamma();
 }
 
@@ -121,9 +104,9 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
   // initialisation of flags and options
   // normally there is no locksed flags
-  if(!isActiveLocked)       { isActive  = theParameters->Fluo(); }
-  if(!isAugerLocked)        { flagAuger = theParameters->Auger(); }
-  if(!isPIXELocked)         { flagPIXE  = theParameters->Pixe(); }
+  if(!isActiveLocked) { isActive  = theParameters->Fluo(); }
+  if(!isAugerLocked)  { flagAuger = theParameters->Auger(); }
+  if(!isPIXELocked)   { flagPIXE  = theParameters->Pixe(); }
   ignoreCuts = theParameters->DeexcitationIgnoreCut();
 
   // Define list of regions
@@ -153,8 +136,8 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
       const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
       if(0 < verbose) {
         G4cout << "          " << activeRegions[j]
-	       << "  " << deRegions[j]  << "  " << AugerRegions[j]
-	       << "  " << PIXERegions[j] << G4endl;  
+               << "  " << deRegions[j]  << "  " << AugerRegions[j]
+               << "  " << PIXERegions[j] << G4endl;  
       }
       for(G4int i=0; i<nCouples; ++i) {
         const G4MaterialCutsCouple* couple =
@@ -182,11 +165,11 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
   if(0 < verbose && flagAuger) {
     G4cout << "### ===  Auger flag: " << flagAuger 
-	   << G4endl;
+           << G4endl;
   }
   if(0 < verbose) {
     G4cout << "### ===  Ignore cuts flag:   " << ignoreCuts
-	   << G4endl;
+           << G4endl;
   }
   if(0 < verbose && flagPIXE) {
     G4cout << "### ===  PIXE model for hadrons: " 
@@ -249,9 +232,9 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   }
 }
 
-void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,  
-					    const G4AtomicShell* as, 
-					    G4int Z, G4int idx)
+void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
+                                            const G4AtomicShell* as, 
+                                            G4int Z, G4int idx)
 {
   G4double gCut = DBL_MAX;
   if(ignoreCuts) {
@@ -360,11 +343,10 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
                     // defined secondary type
                     if(dp->GetDefinition() == gamma) { 
-                      t->SetCreatorModelIndex(pixeIDg);
+                      t->SetCreatorModelID(_GammaPIXE);
                     } else {
-                      t->SetCreatorModelIndex(pixeIDe);
+                      t->SetCreatorModelID(_ePIXE);
                     }
-
                     tracks.push_back(t);
                   } else {
                     delete dp;

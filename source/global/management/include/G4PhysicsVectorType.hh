@@ -28,25 +28,34 @@
 // Description:
 //
 // Enumerator to define the physics vector type:
-//   G4PhysicsVector - base
+//   G4PhysicsFreeVector
 //   G4PhysicsLinearVector
 //   G4PhysicsLogVector
-//   G4PhysicsLnVector
-//   G4PhysicsFreeVector
-//   G4PhysicsOrderedFreeVector
-//   G4LPhysicsFreeVector
-
+//
+// Spline type:
+//   G4SplineType::Simple     - 2d derivative continues
+//   G4SplineType::Base       - 3d derivative continues
+//   G4SplineType::FixedEdges - 3d derivatives continues, 1st and last 
+//                              derivatives are fixed 
+//
 // Author: H.Kurashige, 9 March 2001
-// --------------------------------------------------------------
+//
+// --------------------------------------------------------------------
 #ifndef G4PhysicsVectorType_hh
 #define G4PhysicsVectorType_hh 1
 
 enum G4PhysicsVectorType
 {
-  T_G4PhysicsVector = 0,
+  T_G4PhysicsFreeVector = 0,
   T_G4PhysicsLinearVector,
-  T_G4PhysicsLogVector,
-  T_G4PhysicsFreeVector
+  T_G4PhysicsLogVector
+};
+
+enum class G4SplineType
+{
+  Simple = 0,
+  Base,
+  FixedEdges
 };
 
 #endif

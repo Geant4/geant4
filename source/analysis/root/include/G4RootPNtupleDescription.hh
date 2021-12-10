@@ -52,21 +52,18 @@ using RootNtupleDescription = G4TNtupleDescription<tools::wroot::ntuple, G4RootF
 
 struct G4RootPNtupleDescription
 {
-  G4RootPNtupleDescription(G4NtupleBooking* g4NtupleBooking) 
-    :  fDescription(g4NtupleBooking),
-       fNtuple(nullptr),
-       fBasePNtuple(nullptr),
-       fMainBranches() {}
+  G4RootPNtupleDescription(G4NtupleBooking* g4NtupleBooking)
+    :  fDescription(g4NtupleBooking) {}
 
   ~G4RootPNtupleDescription()
       {
          if ( fDescription.fIsNtupleOwner ) delete fNtuple;
-      }    
+      }
 
   RootNtupleDescription fDescription;
-  tools::wroot::imt_ntuple* fNtuple;
-  tools::wroot::base_pntuple* fBasePNtuple;
-  std::vector<tools::wroot::branch*> fMainBranches; 
+  tools::wroot::imt_ntuple* fNtuple { nullptr };
+  tools::wroot::base_pntuple* fBasePNtuple { nullptr };
+  std::vector<tools::wroot::branch*> fMainBranches;
 };
 
-#endif  
+#endif

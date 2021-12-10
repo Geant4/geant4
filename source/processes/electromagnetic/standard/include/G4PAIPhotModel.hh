@@ -97,10 +97,11 @@ public:
 
   G4double SampleFluctuations(const G4MaterialCutsCouple*,
 			      const G4DynamicParticle*,
-			      G4double, G4double, G4double) final;
+			      const G4double, const G4double, 
+                              const G4double, const G4double) final;
 
   G4double Dispersion(const G4Material*, const G4DynamicParticle*,
-		      G4double, G4double) final;
+		      const G4double, const G4double, const G4double) final;
 
   void DefineForRegion(const G4Region* r) final;
 

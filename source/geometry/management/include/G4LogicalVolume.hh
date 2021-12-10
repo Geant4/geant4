@@ -98,12 +98,11 @@
 // 18.04.01 G.Cosmo: Migrated to STL vector
 // 12.02.99 S.Giani: Added user defined optimisation quality
 // 09.11.98 M.Verderi, J.Apostolakis: Added BiasWeight member and accessors
-// 10.20.97 P.M.DeFreitas: Added pointer to a FastSimulation
-//          J.Apostolakis: & flag to indicate if it is an Envelope for it
+// 10.20.97 P.M.DeFreitas, J.Apostolakis: Added pointer to a FastSimulation
 // 11.07.95 P.Kent: Initial version
 // ------------------------------------------------------------------------
 #ifndef G4LOGICALVOLUME_HH
-#define G4LOGICALVOLUME_HH
+#define G4LOGICALVOLUME_HH 1
 
 #include <vector>
 
@@ -177,13 +176,11 @@ class G4LVData
 // In addition, it invokes a method similiar to the constructor explicitly
 // to achieve the partial effect for each instance in the array.
 //
-typedef G4GeomSplitter<G4LVData> G4LVManager;
+using G4LVManager = G4GeomSplitter<G4LVData>;
 
 class G4LogicalVolume
 {
-  typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
-
-  public:  // with description
+  public:
     
     G4LogicalVolume(G4VSolid* pSolid,
                     G4Material* pMaterial,
@@ -339,7 +336,7 @@ class G4LogicalVolume
     inline G4double GetBiasWeight() const;
       // Sets and gets bias weight.
 
-  public:  // without description
+  public:
 
     G4LogicalVolume(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -391,7 +388,8 @@ class G4LogicalVolume
       // Returns: success (true) or failure (false).
 
   private:
-    // Data members:
+
+    using G4PhysicalVolumeList = std::vector<G4VPhysicalVolume *>;
 
     G4GEOM_DLL static G4LVManager subInstanceManager;
       // This new field helps to use the class G4LVManager introduced above.

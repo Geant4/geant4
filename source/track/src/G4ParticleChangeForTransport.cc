@@ -39,6 +39,8 @@
 G4ParticleChangeForTransport::G4ParticleChangeForTransport()
   : G4ParticleChange()
 {
+  // Disable flag that is enabled in G4VParticleChange if G4VERBOSE.
+  debugFlag = false;
 }
 
 // --------------------------------------------------------------------

@@ -27,6 +27,8 @@
 //
 #include "G4VisFeaturesOfDAWNFILE.hh"
 
+//clang-format off
+
 G4String G4VisFeaturesOfDAWNFILE () {
   return
     "High quality technical renderer."

@@ -30,8 +30,6 @@
 // G4OpenGLXmViewer : Class derived from G4OpenGLXViewer, to provide
 //                    (Motif) widget OpenGL functionality for GEANT4.
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMVIEWER_HH
 #define G4OPENGLXMVIEWER_HH
 
@@ -367,8 +365,6 @@ private:
   void UpdateControlPanel();
   // Update the content of the control panel
 };
-
-#endif
 
 #endif
   

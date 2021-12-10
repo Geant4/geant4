@@ -30,8 +30,6 @@
 // G4OpenGLXmViewer : Class derived from G4OpenGLXViewer, to provide
 //                  (Motif) widget OpenGL functionality for GEANT4.
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLIMMEDIATEXMVIEWER_HH
 #define G4OPENGLIMMEDIATEXMVIEWER_HH
 
@@ -54,7 +52,5 @@ public:
   void FinishView ();
 
 };
-
-#endif
 
 #endif

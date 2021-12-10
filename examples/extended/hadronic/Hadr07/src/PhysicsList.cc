@@ -51,6 +51,8 @@
 #include "G4EmStandardPhysics_option3.hh"
 
 #include "G4DecayPhysics.hh"
+
+#include "RadioactiveDecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "StepMaxBuilder.hh"
@@ -100,8 +102,9 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());
-
+  RegisterPhysics(new RadioactiveDecayPhysics());
+  ////RegisterPhysics(new G4RadioactiveDecayPhysics());
+  
   // Step Max
   RegisterPhysics(new StepMaxBuilder());
 }

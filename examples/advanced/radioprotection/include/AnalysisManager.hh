@@ -32,7 +32,7 @@
 #define ANALYSISMANAGER_HH 
 
 #include "globals.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 // Define the total number of columns in the ntuple
 const G4int MaxNtCol = 5;

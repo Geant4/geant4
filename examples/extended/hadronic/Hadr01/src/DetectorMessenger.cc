@@ -85,7 +85,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fRCmd->SetParameterName("radius",false);
   fRCmd->SetUnitCategory("Length");
   fRCmd->SetRange("radius>0");
-  fRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fRCmd->AvailableForStates(G4State_PreInit);
 
   fLCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength",this);
   fLCmd->SetGuidance("Set length of the target");
@@ -147,7 +147,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   } else if( command == fMat1Cmd ) {
     fDetector->SetWorldMaterial(newValue);
   } else if( command == fRCmd ) {
-    fDetector->SetTargetRadius(fRCmd->GetNewDoubleValue(newValue));
+    h->SetTargetRadius(fRCmd->GetNewDoubleValue(newValue));
   } else if( command == fLCmd ) {
     h->SetTargetLength(fLCmd->GetNewDoubleValue(newValue));
   } else if( command == fNOfAbsCmd ) {

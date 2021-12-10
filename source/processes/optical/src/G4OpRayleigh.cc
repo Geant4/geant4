@@ -307,3 +307,10 @@ G4PhysicsFreeVector* G4OpRayleigh::CalculateRayleighMeanFreePaths(
 
   return rayleighMFPs;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4OpRayleigh::SetVerboseLevel(G4int verbose)
+{
+  verboseLevel = verbose;
+  G4OpticalParameters::Instance()->SetRayleighVerboseLevel(verboseLevel);
+}

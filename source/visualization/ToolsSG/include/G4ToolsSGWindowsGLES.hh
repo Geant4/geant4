@@ -25,8 +25,6 @@
 //
 // Guy Barrand 6th March 2021
 
-#if defined (G4VIS_BUILD_TOOLSSG_WINDOWS_GLES_DRIVER) || defined (G4VIS_USE_TOOLSSG_WINDOWS_GLES)
-
 #ifndef G4TOOLSSGWINDOWSGLES_HH
 #define G4TOOLSSGWINDOWSGLES_HH
 
@@ -51,7 +49,5 @@ protected:
 protected:
   tools::Windows::session* fSGSession;
 };
-
-#endif
 
 #endif

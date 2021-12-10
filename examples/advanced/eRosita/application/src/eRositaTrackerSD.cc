@@ -26,7 +26,10 @@
 //
 //
 
+
 #include "eRositaTrackerSD.hh"
+#include "eRositaTrackerHit.hh"
+
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
@@ -40,47 +43,43 @@
 #include "AnalysisManager.hh"
 
 
-
-eRositaTrackerSD::eRositaTrackerSD(G4String name)
-  :G4VSensitiveDetector(name)
+eRositaTrackerSD::eRositaTrackerSD(G4String name) : G4VSensitiveDetector(name)
 {
   G4String HCname;
   collectionName.insert(HCname="trackerCollection");
 }
 
-
-eRositaTrackerSD::~eRositaTrackerSD(){ }
-
+eRositaTrackerSD::~eRositaTrackerSD()
+{
+}
 
 void eRositaTrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
-  trackerCollection = new eRositaTrackerHitsCollection
-    (SensitiveDetectorName,collectionName[0]); 
+  trackerCollection = 
+    new eRositaTrackerHitsCollection(SensitiveDetectorName, collectionName[0]); 
   static G4int HCID = -1;
   if (HCID < 0)
-    { 
+  { 
       HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); 
-    }
-  HCE->AddHitsCollection( HCID, trackerCollection ); 
+  }
+  HCE->AddHitsCollection( HCID, trackerCollection); 
 }
 
-
-G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
+G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   if(aStep->GetTrack()->GetDefinition() != G4Gamma::GammaDefinition()) return false;
 
 //   G4double edep = aStep->GetTotalEnergyDeposit();
   G4double edep = aStep->GetPreStepPoint()->GetKineticEnergy();
-
   if (edep == 0.) return false;
 
   eRositaTrackerHit* newHit = new eRositaTrackerHit();
-  newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
+  newHit->SetTrackID(aStep->GetTrack()->GetTrackID());
   //newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
   //                                             ->GetCopyNumber());
   newHit->SetEdep(edep);
   newHit->SetPos(aStep->GetPostStepPoint()->GetPosition());
-  trackerCollection->insert( newHit );
+  trackerCollection->insert(newHit);
   
   //newHit->Print();
   //newHit->Draw();
@@ -91,7 +90,6 @@ G4bool eRositaTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   return true;
 }
-
 
 void eRositaTrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
@@ -125,7 +123,3 @@ void eRositaTrackerSD::EndOfEvent(G4HCofThisEvent*)
 
 //out.close();
 }
-
-
-
-

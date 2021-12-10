@@ -32,20 +32,17 @@
 #include "G4TouchableHistory.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4LambdacPlus.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4Channeling::G4Channeling():
 G4VDiscreteProcess("channeling"),
-fChannelingID(-1),
+fChannelingID(G4PhysicsModelCatalog::GetModelID("model_channeling")),
 fTimeStepMin(0.),
 fTimeStepMax(0.),
 fTransverseVariationMax(2.E-2 * CLHEP::angstrom),
-k010(G4ThreeVector(0.,1.,0.)){
-    fChannelingID = G4PhysicsModelCatalog::GetIndex("channeling");
-    if(fChannelingID == -1){
-        fChannelingID = G4PhysicsModelCatalog::Register("channeling");
-    }
-    fSpin = G4ThreeVector(0.,0.,0.);
-}
+k010(G4ThreeVector(0.,1.,0.)),
+fSpin(G4ThreeVector(0.,0.,0.))
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

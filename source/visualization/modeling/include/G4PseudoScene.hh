@@ -87,12 +87,13 @@ public:
   void BeginPrimitives2D (const G4Transform3D&) {}
   void EndPrimitives2D   ()                     {}
   void AddPrimitive (const G4Polyline&)   {}
-  void AddPrimitive (const G4Scale&)      {}
   void AddPrimitive (const G4Text&)       {}
   void AddPrimitive (const G4Circle&)     {}
   void AddPrimitive (const G4Square&)     {}
   void AddPrimitive (const G4Polymarker&) {}
   void AddPrimitive (const G4Polyhedron&) {}
+
+  void AddPrimitive (const G4Plotter&)    {}
 
 protected:
 

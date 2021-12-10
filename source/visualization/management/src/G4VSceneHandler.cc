@@ -43,7 +43,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Material.hh"
 #include "G4Polyline.hh"
-#include "G4Scale.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
@@ -456,110 +455,6 @@ void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
   fViewerList.push_back (pViewer);
 }
 
-void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
-
-  const G4double margin(0.01);
-  // Fractional margin - ensures scale is comfortably inside viewing
-  // volume.
-  const G4double oneMinusMargin (1. - margin);
-
-  const G4VisExtent& sceneExtent = fpScene->GetExtent();
-
-  // Useful constants...
-  const G4double length(scale.GetLength());
-  const G4double halfLength(length / 2.);
-  const G4double tickLength(length / 20.);
-  const G4double piBy2(halfpi);
-
-  // Get size of scene...
-  const G4double xmin = sceneExtent.GetXmin();
-  const G4double xmax = sceneExtent.GetXmax();
-  const G4double ymin = sceneExtent.GetYmin();
-  const G4double ymax = sceneExtent.GetYmax();
-  const G4double zmin = sceneExtent.GetZmin();
-  const G4double zmax = sceneExtent.GetZmax();
-
-  // Create (empty) polylines having the same vis attributes...
-  G4Polyline scaleLine, tick11, tick12, tick21, tick22;
-  G4VisAttributes visAtts(*scale.GetVisAttributes());  // Long enough life.
-  scaleLine.SetVisAttributes(&visAtts);
-  tick11.SetVisAttributes(&visAtts);
-  tick12.SetVisAttributes(&visAtts);
-  tick21.SetVisAttributes(&visAtts);
-  tick22.SetVisAttributes(&visAtts);
-
-  // Add points to the polylines to represent an scale parallel to the
-  // x-axis centred on the origin...
-  G4Point3D r1(G4Point3D(-halfLength, 0., 0.));
-  G4Point3D r2(G4Point3D( halfLength, 0., 0.));
-  scaleLine.push_back(r1);
-  scaleLine.push_back(r2);
-  G4Point3D ticky(0., tickLength, 0.);
-  G4Point3D tickz(0., 0., tickLength);
-  tick11.push_back(r1 + ticky);
-  tick11.push_back(r1 - ticky);
-  tick12.push_back(r1 + tickz);
-  tick12.push_back(r1 - tickz);
-  tick21.push_back(r2 + ticky);
-  tick21.push_back(r2 - ticky);
-  tick22.push_back(r2 + tickz);
-  tick22.push_back(r2 - tickz);
-  G4Point3D textPosition(0., tickLength, 0.);
-
-  // Transform appropriately...
-
-  G4Transform3D transformation;
-  if (scale.GetAutoPlacing()) {
-    G4Transform3D rotation;
-    switch (scale.GetDirection()) {
-    case G4Scale::x:
-      break;
-    case G4Scale::y:
-      rotation = G4RotateZ3D(piBy2);
-      break;
-    case G4Scale::z:
-      rotation = G4RotateY3D(piBy2);
-      break;
-    }
-    G4double sxmid;
-    G4double symid;
-    G4double szmid;
-    sxmid = xmin + oneMinusMargin * (xmax - xmin);
-    symid = ymin + margin * (ymax - ymin);
-    szmid = zmin + oneMinusMargin * (zmax - zmin);
-    switch (scale.GetDirection()) {
-    case G4Scale::x:
-      sxmid -= halfLength;
-      break;
-    case G4Scale::y:
-      symid += halfLength;
-      break;
-    case G4Scale::z:
-      szmid -= halfLength;
-      break;
-    }
-    G4Translate3D translation(sxmid, symid, szmid);
-    transformation = translation * rotation;
-  } else {
-    if (fpModel) transformation = fpModel->GetTransformation();
-  }
-
-  // Draw...
-  // We would like to call BeginPrimitives(transformation) here but
-  // calling BeginPrimitives from within an AddPrimitive is not
-  // allowed!  So we have to do our own transformation...
-  AddPrimitive(scaleLine.transform(transformation));
-  AddPrimitive(tick11.transform(transformation));
-  AddPrimitive(tick12.transform(transformation));
-  AddPrimitive(tick21.transform(transformation));
-  AddPrimitive(tick22.transform(transformation));
-  G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
-  G4VisAttributes va(G4VVisCommand::GetCurrentTextColour());
-  text.SetVisAttributes(va);
-  text.SetScreenSize(scale.GetAnnotationSize());
-  AddPrimitive(text);
-}
-
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   switch (polymarker.GetMarkerType()) {
     default:
@@ -596,7 +491,17 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 }
 
 void G4VSceneHandler::RemoveViewerFromList (G4VViewer* pViewer) {
-  fViewerList.remove(pViewer);
+  fViewerList.remove(pViewer);  // Does nothing if already removed
+  // And reset current viewer
+  auto visManager = G4VisManager::GetInstance();
+  visManager->SetCurrentViewer(nullptr);
+}
+
+
+void G4VSceneHandler::AddPrimitive (const G4Plotter&) {
+  G4cerr << "WARNING: Plotter not implemented for " << fSystem.GetName() << G4endl;
+  G4cerr << "  Open a plotter-aware graphics system or remove plotter with" << G4endl;
+  G4cerr << "  /vis/scene/removeModel Plotter" << G4endl;
 }
 
 void G4VSceneHandler::SetScene (G4Scene* pScene) {
@@ -657,7 +562,8 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
           G4cerr << G4endl;
         }
       }
-    }  // fallthrough
+    }
+      [[fallthrough]];
 
     case G4ViewParameters::cloud:
     {
@@ -683,6 +589,25 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
     }
   }
 }
+
+//namespace {
+//  void DrawExtent(const G4VModel* pModel)
+//  {
+//    // Show extent boxes - debug only, OGLSX only (OGLSQt problem?)
+//    if (pModel->GetExtent() != G4VisExtent::GetNullExtent()) {
+//      const auto& extent = pModel->GetExtent();
+//      const auto& centre = extent.GetExtentCenter();
+//      const auto& position = G4Translate3D(centre);
+//      const auto& dx = (extent.GetXmax()-extent.GetXmin())/2.;
+//      const auto& dy = (extent.GetYmax()-extent.GetYmin())/2.;
+//      const auto& dz = (extent.GetZmax()-extent.GetZmin())/2.;
+//      auto visAtts = G4VisAttributes();
+//      visAtts.SetForceWireframe();
+//      G4Box extentBox("Extent",dx,dy,dz);
+//      G4VisManager::GetInstance()->Draw(extentBox,visAtts,position);
+//    }
+//  }
+//}
 
 void G4VSceneHandler::ProcessScene()
 {
@@ -735,19 +660,11 @@ void G4VSceneHandler::ProcessScene()
       if(runDurationModelList[i].fActive)
       {
 	fpModel = runDurationModelList[i].fpModel;
-	// Note: this is not the place to apply the transformation
-	// pModel->GetTransformation().  The model must take care of
-	// the required transformation itself - thus the models components
-	// have already been transformed. The model could receive the
-	// transformation in its constructor, e.g., G4PhysicalVolumeModel, or
-	// handle it in the model's SetTransformation, e.g., in G4AxesModel
-	// (relatively simple) or in G4ArrowModel (quite complicated) - see
-	// G4VModel.hh. This avoids having to transform the components perhaps
-	// multiple times. The reasons for this are mainly to do with how we
-	// implement G4PhysicalVolumeModel.
-	// See also /vis/scene/add/logo.
 	fpModel->SetModelingParameters(pMP);
 	fpModel->DescribeYourselfTo(*this);
+	// To see the extents of each model represented as wireframe boxes,
+	// uncomment the next line and DrawExtent in namespace above
+	// DrawExtent(fpModel);
 	fpModel->SetModelingParameters(0);
       }
     }
@@ -1074,13 +991,22 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
   }
 }
 
-const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
-  const G4VisAttributes* pVA = text.GetVisAttributes ();
-  if (!pVA) {
-    return G4VVisCommand::GetCurrentTextColour();
-  }
-  const G4Colour& colour = pVA -> GetColour ();
+const G4Colour& G4VSceneHandler::GetColour () {
+  fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  const G4Colour& colour = fpVisAttribs -> GetColour ();
   return colour;
+}
+
+const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
+  auto pVA = visible.GetVisAttributes();
+  if (!pVA) pVA = fpViewer->GetViewParameters().GetDefaultVisAttributes();
+  return pVA->GetColour();
+}
+
+const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
+  auto pVA = text.GetVisAttributes();
+  if (!pVA) pVA = fpViewer->GetViewParameters().GetDefaultTextVisAttributes();
+  return pVA->GetColour();
 }
 
 G4double G4VSceneHandler::GetLineWidth(const G4VisAttributes* pVisAttribs)

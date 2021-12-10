@@ -30,8 +30,6 @@
 // G4OpenGLTransform3D provides OpenGL style transformation matrix
 // from G4Transform3D.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLTransform3D.hh"
 
 G4OpenGLTransform3D::G4OpenGLTransform3D (const G4Transform3D &t)
@@ -47,5 +45,3 @@ G4OpenGLTransform3D::G4OpenGLTransform3D (const G4Transform3D &t)
   } 
   m[15] = 1.; 
 }
-
-#endif

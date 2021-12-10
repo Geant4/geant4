@@ -1,0 +1,44 @@
+----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr05 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+25-10-21 B.Morgan (exhadr05-V10-07-07)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+13-10-21 I. Hrivnacova (exhadr05-V10-07-06)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+11-10-21 mma (exhadr05-V10-07-05)
+- RadioactiveDecayPhysics : do not change ThresholdOfHalfLife
+     
+20-09-21 mma (exhadr05-V10-07-04)
+- Run.hh Run.cc : remove fEnergyLeakage2
+     
+05-08-21 mma (exhadr05-V10-07-03)
+- ElectromagneticPhysics : update EM parameters
+- RadioactiveDecayPhysics : new constructor, include G4Radioactivation process,
+                            inactivate atomic deexcitation
+			        
+27-07-21 mma (exhadr05-V10-07-02)
+- RunAction::CountProcesses() : add a protection if (process == nullptr)
+     
+19-07-21 I. Hrivnacova (exhadr05-V10-07-01)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
+20-06-21 Michel Maire (exhadr05-V10-07-00) 
+- created from TestEm3 and Hadr06. Detector parameters from test68

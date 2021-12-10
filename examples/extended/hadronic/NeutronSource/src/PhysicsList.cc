@@ -53,7 +53,10 @@
 
 #include "ElectromagneticPhysics.hh"
 #include "G4EmStandardPhysics_option3.hh"
+
 #include "G4DecayPhysics.hh"
+
+#include "RadioactiveDecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4Neutron.hh"
@@ -117,7 +120,8 @@ PhysicsList::PhysicsList()
   RegisterPhysics(fDecay);
 
   // Radioactive decay
-  fRadioactiveDecay = new G4RadioactiveDecayPhysics();
+  fRadioactiveDecay = new RadioactiveDecayPhysics();
+  ////fRadioactiveDecay = new G4RadioactiveDecayPhysics();  
   RegisterPhysics(fRadioactiveDecay);
 }
 

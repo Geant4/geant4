@@ -34,10 +34,10 @@
 /// \file EventAction.cc
 /// \brief Implementation of the EventAction class
 
-#include "Analysis.hh"
 #include "EventAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"

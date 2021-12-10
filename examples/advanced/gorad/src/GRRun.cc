@@ -43,8 +43,8 @@
 
 #include "GRRun.hh"
 #include "GRRunAction.hh"
-#include "GRAnalysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
 

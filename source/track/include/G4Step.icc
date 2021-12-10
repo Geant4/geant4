@@ -154,45 +154,53 @@ inline void G4Step::SetTrack(G4Track* value)
 
 inline void G4Step::InitializeStep(G4Track* aValue)
 {
+  fpTrack = aValue;
+  fpTrack->SetStepLength(0.);
+
   // Initialize G4Step attributes
   fStepLength               = 0.;
   fTotalEnergyDeposit       = 0.;
   fNonIonizingEnergyDeposit = 0.;
-  fpTrack                   = aValue;
-  fpTrack->SetStepLength(0.);
 
   nSecondaryByLastStep = 0;
 
   // Initialize G4StepPoint attributes.
   // To avoid the circular dependency between G4Track, G4Step
   // and G4StepPoint, G4Step has to manage the copy actions.
-  fpPreStepPoint->SetPosition(fpTrack->GetPosition());
-  fpPreStepPoint->SetGlobalTime(fpTrack->GetGlobalTime());
-  fpPreStepPoint->SetLocalTime(fpTrack->GetLocalTime());
-  fpPreStepPoint->SetProperTime(fpTrack->GetProperTime());
-  fpPreStepPoint->SetMomentumDirection(fpTrack->GetMomentumDirection());
-  fpPreStepPoint->SetKineticEnergy(fpTrack->GetKineticEnergy());
-  fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
-  fpPreStepPoint->SetMaterial(
-    fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
-  fpPreStepPoint->SetMaterialCutsCouple(fpTrack->GetTouchable()
-                                          ->GetVolume()
-                                          ->GetLogicalVolume()
-                                          ->GetMaterialCutsCouple());
-  fpPreStepPoint->SetSensitiveDetector(fpTrack->GetTouchable()
-                                         ->GetVolume()
-                                         ->GetLogicalVolume()
-                                         ->GetSensitiveDetector());
-  fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
-  fpPreStepPoint->SetSafety(0.);
-  fpPreStepPoint->SetStepStatus(fUndefined);
+  //
+  fpPreStepPoint->SetSafety(0.0);
   fpPreStepPoint->SetProcessDefinedStep(0);
-  fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());
-  fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge());
-  fpPreStepPoint->SetWeight(fpTrack->GetWeight());
+  fpPreStepPoint->SetStepStatus(fUndefined);
 
-  // Set Velocity
-  // should be placed after SetMaterial for preStep point
+  // G4Track properties
+
+  fpPreStepPoint->SetWeight(fpTrack->GetWeight());
+  fpPreStepPoint->SetPosition(fpTrack->GetPosition());
+  fpPreStepPoint->SetLocalTime(fpTrack->GetLocalTime());
+  fpPreStepPoint->SetGlobalTime(fpTrack->GetGlobalTime());
+
+  // G4Track properties (via G4DynamicParticle)
+
+  auto pParticle = fpTrack->GetDynamicParticle();
+
+  fpPreStepPoint->SetMass(pParticle->GetMass());
+  fpPreStepPoint->SetCharge(pParticle->GetCharge());
+  fpPreStepPoint->SetProperTime(pParticle->GetProperTime());
+  fpPreStepPoint->SetKineticEnergy(pParticle->GetKineticEnergy());
+  fpPreStepPoint->SetMomentumDirection(pParticle->GetMomentumDirection());
+  fpPreStepPoint->SetPolarization(pParticle->GetPolarization());
+
+  // G4Track properties (via G4LogicalVolume)
+
+  auto lvol = fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume();
+
+  fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
+
+  fpPreStepPoint->SetMaterial(lvol->GetMaterial());
+  fpPreStepPoint->SetMaterialCutsCouple(lvol->GetMaterialCutsCouple());
+  fpPreStepPoint->SetSensitiveDetector(lvol->GetSensitiveDetector());
+
+  // SetVelocity() must be called after SetMaterial() for fpPreStepPoint.
   fpPreStepPoint->SetVelocity(fpTrack->CalculateVelocity());
 
   (*fpPostStepPoint) = (*fpPreStepPoint);
@@ -206,16 +214,16 @@ inline void G4Step::UpdateTrack()
   fpTrack->SetPosition(fpPostStepPoint->GetPosition());
   fpTrack->SetGlobalTime(fpPostStepPoint->GetGlobalTime());
   fpTrack->SetLocalTime(fpPostStepPoint->GetLocalTime());
-  fpTrack->SetProperTime(fpPostStepPoint->GetProperTime());
-  //  energy, momentum, polarization
-  fpTrack->SetMomentumDirection(fpPostStepPoint->GetMomentumDirection());
-  fpTrack->SetKineticEnergy(fpPostStepPoint->GetKineticEnergy());
-  fpTrack->SetPolarization(fpPostStepPoint->GetPolarization());
-  //  mass charge
+  //  mass, charge, proper time
   G4DynamicParticle* pParticle =
     (G4DynamicParticle*) (fpTrack->GetDynamicParticle());
   pParticle->SetMass(fpPostStepPoint->GetMass());
   pParticle->SetCharge(fpPostStepPoint->GetCharge());
+  pParticle->SetProperTime(fpPostStepPoint->GetProperTime());
+  //  energy, momentum, polarization
+  pParticle->SetMomentumDirection(fpPostStepPoint->GetMomentumDirection());
+  pParticle->SetKineticEnergy(fpPostStepPoint->GetKineticEnergy());
+  pParticle->SetPolarization(fpPostStepPoint->GetPolarization());
   //  step length
   fpTrack->SetStepLength(fStepLength);
   // NextTouchable is updated

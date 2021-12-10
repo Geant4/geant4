@@ -25,8 +25,6 @@
 //
 // Guy Barrand 12th March 2021
 
-#ifdef G4VIS_BUILD_TOOLSSG_QT_GLES_DRIVER
-
 #include "G4ToolsSGQtGLES.hh"
 
 //
@@ -127,5 +125,3 @@ G4bool G4ToolsSGQtGLES::IsUISessionCompatible () const
 //  }
   return isCompatible;
 }
-
-#endif

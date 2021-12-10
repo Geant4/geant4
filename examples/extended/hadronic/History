@@ -13,6 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+29-11-21 I. Hrivnacova (exHadronic-V10-07-04)
+- Removed obsolete references to AIDA analysis tools
+
+17-11-21 I. Hrivnacova (exHadronic-V10-07-03)
+- Updated documentation
+
+20-06-21 M. Maire (exHadronic-V10-07-02)
+- new example: Hadr05.
 
 26-05-21 A. Ribon (exHadronic-V10-07-01)
 - Created new test: Hadr10.

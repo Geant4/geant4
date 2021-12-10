@@ -53,10 +53,8 @@ public:
   SAXSPhysicsList();
   virtual ~SAXSPhysicsList();
 
-public:
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
    
   //for the Messenger 
   void SetDefaultCutsValue(G4double);
@@ -64,9 +62,10 @@ public:
   void SetUseMIFlag(G4bool val){fUseMIFlag = val;};
   G4bool GetUseMIFlag(){return fUseMIFlag;};
  
+  SAXSPhysicsList & operator = (const SAXSPhysicsList &right) = delete;
+  SAXSPhysicsList(const SAXSPhysicsList&) = delete;
+
 private:
-  SAXSPhysicsList & operator = (const SAXSPhysicsList &right);
-  SAXSPhysicsList(const SAXSPhysicsList&);
   
   G4VPhysicsConstructor* fParticleList; 
   G4VPhysicsConstructor* fEmPhysicsList;    

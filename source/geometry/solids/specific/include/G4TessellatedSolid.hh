@@ -146,6 +146,7 @@ class G4TessellatedSolid : public G4VSolid
     inline G4VFacet* GetFacet (G4int i) const;
 
     G4int GetNumberOfFacets () const;
+    G4int GetFacetIndex (const G4ThreeVector& p) const;
 
     virtual EInside Inside (const G4ThreeVector& p) const;
     virtual G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
@@ -176,6 +177,7 @@ class G4TessellatedSolid : public G4VSolid
 
     void SetSolidClosed (const G4bool t);
     G4bool GetSolidClosed () const;
+    G4int CheckStructure() const;
 
     inline void SetMaxVoxels(G4int max);
 

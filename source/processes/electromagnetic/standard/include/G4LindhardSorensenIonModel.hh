@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -48,17 +47,18 @@
 #ifndef G4LindhardSorensenIonModel_h
 #define G4LindhardSorensenIonModel_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
+#include <vector>
 
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
 #include "G4Threading.hh"
-#include <vector>
 
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
 class G4LindhardSorensenData;
 class G4BraggIonModel;
+class G4BetheBlochModel;
+class G4IonICRU73Data;
 
 class G4LindhardSorensenIonModel : public G4VEmModel
 {
@@ -145,6 +145,7 @@ private:
 
   static const G4int MAXZION = 93;
 
+  static G4IonICRU73Data* fIonData;
   static G4LindhardSorensenData* lsdata;
   static std::vector<G4float>*   fact[MAXZION];
 
@@ -153,18 +154,21 @@ private:
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;
   G4NistManager*              nist;
-  G4BraggIonModel*            fBraggIonModel;
+  G4BraggIonModel*            fBraggModel;
+  G4BetheBlochModel*          fBBModel;
 
-  G4int Zin;
-  G4double mass;
-  G4double tlimit;
-  G4double spin;
-  G4double magMoment2;
-  G4double chargeSquare;
-  G4double charge;
-  G4double ratio;
-  G4double formfact;
+  G4int Zin = 1;
+  G4double mass = 0.0;
+  G4double tlimit = DBL_MAX;
+  G4double spin = 0.0;
+  G4double magMoment2 = 0.0;
+  G4double chargeSquare = 1.0;
+  G4double charge = 1.0;
+  G4double eRatio = 0.0;
+  G4double pRatio = 1.0;
+  G4double formfact = 0.0;
   G4double twoln10;
+  G4double fElimit;
 
 #ifdef G4MULTITHREADED
   static G4Mutex theLSMutex;

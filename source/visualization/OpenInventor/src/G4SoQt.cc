@@ -26,8 +26,6 @@
 //
 // F.W. Jones 05012018
 
-#ifdef G4VIS_BUILD_OIQT_DRIVER
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -166,5 +164,3 @@ bool G4SoQt::IsExternalApp()
 {
   return externalApp;
 }
-
-#endif

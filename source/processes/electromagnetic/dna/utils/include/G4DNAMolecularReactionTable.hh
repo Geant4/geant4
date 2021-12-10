@@ -48,6 +48,7 @@
 #include "G4ITReactionTable.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4ReferenceCast.hh"
+#include "G4VDNAMolecularGeometry.hh"
 #include <vector>
 #include <map>
 #include <functional>
@@ -208,6 +209,9 @@ public:
 
     void SetReaction(G4DNAMolecularReactionData*);
 
+    void SetGeometry(G4VDNAMolecularGeometry* geometry){fGeometry = geometry;};
+    G4VDNAMolecularGeometry* GetGeometry() const;
+
     Data* GetReactionData(Reactant*, Reactant*) const;
 
     Data* GetReactionData(const G4String&, const G4String&) const;
@@ -238,6 +242,7 @@ public:
 protected:
     G4bool fVerbose;
 
+    G4VDNAMolecularGeometry* fGeometry;
     ReactionDataMap fReactionData;
     ReactivesMV     fReactantsMV;
     ReactionDataMV  fReactionDataMV;

@@ -107,6 +107,11 @@ class G4HadronicParameters {
     // Baryons and mesons with c- and b- quarks may be enabled/disabled
     // This flag is used both by EM and hadronic physics constructors
 
+    G4bool EnableHyperNuclei() const;
+    void SetEnableHyperNuclei( G4bool val );
+    // Light hyper-nuclei may be enabled/disabled
+    // This flag is used both by EM and hadronic physics constructors
+
     G4bool ApplyFactorXS() const;
     void SetApplyFactorXS( G4bool val );
     // Flag enabling cross section factor definition
@@ -149,6 +154,7 @@ class G4HadronicParameters {
     
     G4int    fVerboseLevel = 1;
     G4bool   fEnableBC = false;
+    G4bool   fEnableHyperNuclei = false;
     G4bool   fApplyFactorXS = false;
     G4bool   fEnableCRCoalescence = false;
 };
@@ -210,6 +216,10 @@ inline G4int G4HadronicParameters::GetVerboseLevel() const {
 
 inline G4bool G4HadronicParameters::EnableBCParticles() const {
   return fEnableBC;
+}
+
+inline G4bool G4HadronicParameters::EnableHyperNuclei() const {
+  return fEnableHyperNuclei;
 }
 
 inline G4bool G4HadronicParameters::ApplyFactorXS() const {

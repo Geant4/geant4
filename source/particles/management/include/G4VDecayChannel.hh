@@ -58,7 +58,8 @@ class G4VDecayChannel
                     const G4String& theDaughterName1,
                     const G4String& theDaughterName2 = "",
                     const G4String& theDaughterName3 = "",
-                    const G4String& theDaughterName4 = "" );
+                    const G4String& theDaughterName4 = "",
+                    const G4String& theDaughterName5 = "" );
       // Constructors 
 
     virtual ~G4VDecayChannel();

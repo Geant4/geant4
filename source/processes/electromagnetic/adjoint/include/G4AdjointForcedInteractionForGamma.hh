@@ -97,7 +97,7 @@ class G4AdjointForcedInteractionForGamma : public G4VContinuousDiscreteProcess
   G4AdjointCSManager* fCSManager;
 
   G4double fLastAdjCS = 0.;
-
+  G4double fCSBias = 1.;
   G4double fAccTrackLength    = 0.;
   G4double fTotNbAdjIntLength = 0.;
 

@@ -41,12 +41,12 @@
 
 enum G4DNAModelSubType 
 {
-  fDNAUnknownModel = 0,
-  fRitchie1994eSolvation = 1, 
-  fTerrisol1990eSolvation = 2, 
-  fMeesungnoen2002eSolvation = 3,
-  fKreipl2009eSolvation = 4,
-  fMeesungnoensolid2002eSolvation = 5
+  fDNAUnknownModel = 11000,
+  fRitchie1994eSolvation = 11001, 
+  fTerrisol1990eSolvation = 11002,
+  fMeesungnoen2002eSolvation = 11003,
+  fKreipl2009eSolvation = 11004,
+  fMeesungnoensolid2002eSolvation = 11005
 };
 
 #endif

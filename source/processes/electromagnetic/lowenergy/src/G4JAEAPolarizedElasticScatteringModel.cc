@@ -201,7 +201,7 @@ void G4JAEAPolarizedElasticScatteringModel::ReadData(size_t Z, const char* path)
   dataCS[Z] = new G4PhysicsFreeVector(300,0.01,3.,/*spline=*/true);
   
   for (G4int i=0;i<300;++i)
-    dataCS[Z]->PutValue(i,10.*i*1e-3,Polarized_ES_Data[Z]->at(i)*1e-22);
+    dataCS[Z]->PutValues(i,10.*i*1e-3,Polarized_ES_Data[Z]->at(i)*1e-22);
  
   // Activation of spline interpolation
   dataCS[Z] ->FillSecondDerivatives();

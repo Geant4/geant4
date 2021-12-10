@@ -16,6 +16,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 31st, 2021 J. Hahnfeld (event-V10-07-08)
+- G4EventManager: Make StackTracks public
+
+October 25th, 2021 B.Morgan (event-V10-07-07)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 21st, 2021 J. Hahnfeld (event-V10-07-06)
+- G4EventManager: Hand over track to custom tracking manager,
+  if registered for the particle
+
+October 18th, 2021 B.Morgan (event-V10-07-05)
+- Use std::string member functions from G4String in place of synonyms
+
+August 21th, 2021 V.Ivanchenko (event-V10-07-04)
+- G4SPSEneDistribution - use more optimal access to G4PhysicsVector
+
 June 7th, 2021 M. Asai (event-V10-07-03)
 - Fix the default value of /gps/ang/maxphi command. Addressing to 
   the bug report 2383.

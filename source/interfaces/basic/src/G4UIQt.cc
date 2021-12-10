@@ -27,8 +27,6 @@
 //
 // L. Garnier
 
-#ifdef G4UI_BUILD_QT_SESSION
-
 #include "G4Types.hh"
 
 #include <string.h>
@@ -55,6 +53,7 @@
 #include <qdialog.h>
 #include <qevent.h>
 #include <qtextedit.h>
+#include <qtextbrowser.h>
 #if QT_VERSION < 0x050600
 #include <qsignalmapper.h>
 #endif
@@ -340,7 +339,7 @@ void G4UIQt::SetDefaultIconsToolbar(
     int intVP = 0;
     signalMapperViewerProperties->setMapping(actionViewerProperties, intVP);
 #else
-    fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", this, [=](){ this->ViewerPropertiesIconCallback(0); });
+    fToolbarApp->addAction(QIcon(*fParamIcon),"Viewer properties", this, [this](){ this->ViewerPropertiesIconCallback(0); });
 #endif
 
     // Cursors style icons
@@ -360,6 +359,7 @@ void G4UIQt::SetDefaultIconsToolbar(
     AddIcon("Perspective", "perspective","");
     AddIcon("Orthographic", "ortho","");
     AddIcon("Run beam on", "runBeamOn","/run/beamOn 1");
+    AddIcon("Exit Application", "exit","exit");
   }
 }
 
@@ -1387,6 +1387,95 @@ void G4UIQt::CreateIcons(
   };
   fParamIcon = new QPixmap(paramIcon);
 
+  const char * const exitIcon[]={
+    /* columns rows colors chars-per-pixel */
+    "23 28 55 1 ",
+    "  c None",
+    ". c #350505",
+    "X c #3A0505",
+    "o c #3C0605",
+    "O c #3D0605",
+    "+ c #430606",
+    "@ c #440606",
+    "# c #470706",
+    "$ c #500707",
+    "% c #510807",
+    "& c #520807",
+    "* c #530807",
+    "= c #550808",
+    "- c #570808",
+    "; c #5C0908",
+    ": c #5D0908",
+    "> c #5F0908",
+    ", c #630A08",
+    "< c #640A09",
+    "1 c #6B0A09",
+    "2 c #6C0A09",
+    "3 c #720B0A",
+    "4 c #760B0A",
+    "5 c #770B0A",
+    "6 c #7A0B0B",
+    "7 c #7D0C0B",
+    "8 c #7F0C0B",
+    "9 c #840D0B",
+    "0 c #850D0C",
+    "q c #880D0C",
+    "w c #8D0E0C",
+    "e c #900E0C",
+    "r c #940E0D",
+    "t c #950E0D",
+    "y c #9C0F0E",
+    "u c #9E100E",
+    "i c #AA100E",
+    "p c #AC100F",
+    "a c #AD100F",
+    "s c #AE110F",
+    "d c #B31110",
+    "f c #B51210",
+    "g c #B61210",
+    "h c #B71210",
+    "j c #B91210",
+    "k c #C01311",
+    "l c #C21311",
+    "z c #C81311",
+    "x c #C91312",
+    "c c #CC1412",
+    "v c #CE1412",
+    "b c #D01412",
+    "n c #D11412",
+    "m c #D31412",
+    "M c #D51513",
+    /* pixels */
+    "                       ",
+    "          O=           ",
+    "         :MMh          ",
+    "         hMMM          ",
+    "         jMMM          ",
+    "    <x1  jMMM  %xw     ",
+    "   rMMM  jMMM  MMMk    ",
+    "  rMMMM# jMMM  MMMMx   ",
+    " OMMMMk  jMMM  8MMMM9  ",
+    " xMMMM   jMMM   pMMMM  ",
+    " MMMM    jMMM    xMMM8 ",
+    "rMMM3    jMMM     MMMM ",
+    "MMMM     hMMM     MMMM ",
+    "MMMM     :MMh     hMMM ",
+    "MMMM      O%      8MMM ",
+    "MMMM              pMMM ",
+    "MMMM              MMMM ",
+    "wMMM3             MMMM ",
+    ".MMMM            xMMM9 ",
+    " hMMMk          wMMMM  ",
+    "  MMMMMO       hMMMM=  ",
+    "  <MMMMMp:  $rMMMMMp   ",
+    "   yMMMMMMMMMMMMMMk    ",
+    "    #MMMMMMMMMMMM3     ",
+    "      uMMMMMMMMk       ",
+    "        #1wr3%         ",
+    "                       ",
+    "                       "
+  };
+  fExitIcon= new QPixmap(exitIcon);
 }
 
 
@@ -1832,12 +1921,12 @@ const std::string& text)
     fDefaultViewerFirstPageHTMLText = text;
   }
   if (!fStartPage) {
-    fStartPage = new QTextEdit();
-    fStartPage->setAcceptRichText (true);
+    fStartPage = new QTextBrowser();
     fStartPage->setContentsMargins(5,5,5,5);
     fStartPage->setReadOnly(true);
   }
-  fStartPage->setText(fDefaultViewerFirstPageHTMLText.c_str());
+  fStartPage->setOpenExternalLinks(true);
+  fStartPage->setHtml(fDefaultViewerFirstPageHTMLText.c_str());
 }
 
 
@@ -2022,7 +2111,7 @@ G4int G4UIQt::ReceiveG4cout (
 
   // Try to be smart :
   // "*** This is just a warning message. ***"
-  if (aString.contains("*** This is just a warning message. ***")) {
+  if (G4StrUtil::contains(aString, "*** This is just a warning message. ***")) {
     return ReceiveG4cerr(aString);
   }
 
@@ -2049,6 +2138,8 @@ G4int G4UIQt::ReceiveG4cout (
       aStringWithStyle += "&nbsp;";
     } else if (aString[i] == '\t') {
       aStringWithStyle += "&nbsp;&nbsp;&nbsp;&nbsp;";
+    } else if (aString[i] == '<') {
+      aStringWithStyle += "&lt;";
     } else {
       aStringWithStyle += aString[i];
     }
@@ -2134,6 +2225,8 @@ G4int G4UIQt::ReceiveG4cerr (
       aStringWithStyle += "&nbsp;";
     } else if (aString[i] == '\t') {
       aStringWithStyle += "&nbsp;&nbsp;&nbsp;&nbsp;";
+    } else if (aString[i] == '<') {
+      aStringWithStyle += "&lt;";
     } else {
       aStringWithStyle += aString[i];
     }
@@ -2293,16 +2386,16 @@ void G4UIQt::AddButton (
 
   if(treeTop->FindPath(cmd) == NULL) {
     if(cmd != "ls" &&
-       cmd(0,3) != "ls " &&
+       cmd.substr(0,3) != "ls " &&
        cmd != "pwd" &&
        cmd != "cd" &&
-       cmd(0,3) != "cd " &&
+       cmd.substr(0,3) != "cd " &&
        cmd != "help" &&
-       cmd(0,5) != "help " &&
-       cmd(0) != '?' &&
+       cmd.substr(0,5) != "help " &&
+       cmd[0] != '?' &&
        cmd != "hist" &&
        cmd != "history" &&
-       cmd(0) != '!' &&
+       cmd[0] != '!' &&
        cmd != "exit" &&
        cmd != "cont" &&
        cmd != "continue"){
@@ -2323,7 +2416,7 @@ void G4UIQt::AddButton (
   signalMapper->setMapping(action, QString(aCommand));
 #else
   QString cmd_tmp = QString(aCommand);
-  parentTmp->addAction(aLabel, this, [=](){ this->ButtonCallback(cmd_tmp); });
+  parentTmp->addAction(aLabel, this, [this, cmd_tmp](){ this->ButtonCallback(cmd_tmp); });
 #endif
 }
 
@@ -2387,6 +2480,8 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     pix = fOrthoIcon;
   } else if (std::string(aIconFile) == "runBeamOn") {
     pix = fRunIcon;
+  } else if (std::string(aIconFile) == "exit") {
+    pix = fExitIcon;
   } else {
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4int verbose = UImanager->GetVerboseLevel();
@@ -2439,7 +2534,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString &)));
     signalMapper->setMapping(action, QString(txt));
 #else
-    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->OpenIconCallback(txt); });
+    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [this, txt](){ this->OpenIconCallback(txt); });
 #endif
 
   // special cases :"save"
@@ -2449,7 +2544,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
     signalMapper->setMapping(action, QString(txt));
 #else
-    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->SaveIconCallback(txt); });
+    currentToolbar->addAction(QIcon(*pix), aIconFile, this, [this, txt](){ this->SaveIconCallback(txt); });
 #endif
 
   // special cases : cursor style
@@ -2463,7 +2558,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     signalMapper->setMapping(action, QString(aIconFile));
 #else
     QString txt = QString(aIconFile);
-    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangeCursorAction(txt); });
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [this, txt](){ this->ChangeCursorAction(txt); });
 #endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
@@ -2495,7 +2590,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     signalMapper->setMapping(action, QString(aIconFile));
 #else
     QString txt = QString(aIconFile);
-    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangeSurfaceStyle(txt); });
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [this, txt](){ this->ChangeSurfaceStyle(txt); });
 #endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
@@ -2522,7 +2617,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     signalMapper->setMapping(action, QString(aIconFile));
 #else
     QString txt = QString(aIconFile);
-    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [=](){ this->ChangePerspectiveOrtho(txt); });
+    QAction* action = currentToolbar->addAction(QIcon(*pix), aIconFile, this, [this, txt](){ this->ChangePerspectiveOrtho(txt); });
 #endif
     action->setCheckable(TRUE);
     action->setChecked(TRUE);
@@ -2563,7 +2658,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     signalMapper->setMapping(action, QString(aCommand));
 #else
     QString txt = QString(aCommand);
-    currentToolbar->addAction(QIcon(*pix), aCommand, this, [=](){ this->ButtonCallback(txt); });
+    currentToolbar->addAction(QIcon(*pix), aCommand, this, [this, txt](){ this->ButtonCallback(txt); });
 #endif
   }
 }
@@ -2610,12 +2705,12 @@ void G4UIQt::ActivateCommand(
     return;
   }
   // Look for the choosen command "newCommand"
-  size_t i = newCommand.index(" ");
+  size_t i = newCommand.find(" ");
   G4String targetCom ="";
   if( i != std::string::npos )
     {
-      G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
-      newValue.strip(G4String::both);
+      G4String newValue = newCommand.substr(i+1,newCommand.length()-(i+1));
+      G4StrUtil::strip(newValue);
       targetCom = ModifyToFullPathCommand( newValue );
     }
   if (targetCom != "") {
@@ -2997,7 +3092,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
         } else if (defaultValue == "1") {
           radioOn->setChecked(true);
         }
-      } else if ((QString(QChar(param->GetParameterType())) == "s") && (!param->GetParameterCandidates().isNull())) {
+      } else if ((QString(QChar(param->GetParameterType())) == "s") && (!param->GetParameterCandidates().empty())) {
         input = new QComboBox();
         QString candidates = QString((char*)(param->GetParameterCandidates()).data());
         QStringList list = candidates.split (" ");
@@ -3043,7 +3138,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       }
 
       txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
-      if( ! param->GetParameterGuidance().isNull() )
+      if( ! param->GetParameterGuidance().empty() )
         txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
 
       txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
@@ -3054,13 +3149,13 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       }
       if( param->GetCurrentAsDefault() ) {
         txt += " Default value   : taken from the current value\n";
-      } else if( ! param->GetDefaultValue().isNull() ) {
+      } else if( ! param->GetDefaultValue().empty() ) {
         txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
       }
-      if( ! param->GetParameterRange().isNull() ) {
+      if( ! param->GetParameterRange().empty() ) {
         txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
       }
-      if( ! param->GetParameterCandidates().isNull() ) {
+      if( ! param->GetParameterCandidates().empty() ) {
         txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
       }
 
@@ -3106,7 +3201,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
           connect(input, SIGNAL(clicked()), signalMapper, SLOT(map()));
           connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(ChangeColorCallback(QWidget*)));
 #else
-          connect(dynamic_cast<QPushButton*>(input), &QPushButton::clicked , [=](){ this->ChangeColorCallback(input);});
+          connect(dynamic_cast<QPushButton*>(input), &QPushButton::clicked , [this, input](){ this->ChangeColorCallback(input);});
 #endif
           isColorDialogAdded = true;
           isStillColorParameter = false;
@@ -3133,7 +3228,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
 #else
-      connect(applyButton, &QPushButton::clicked , [=](){ this->VisParameterCallback(paramWidget);});
+      connect(applyButton, &QPushButton::clicked , [this, paramWidget](){ this->VisParameterCallback(paramWidget);});
 #endif
     } else {
       // Apply/Cancel buttons
@@ -3152,7 +3247,7 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
 #else
-      connect(applyButton, &QPushButton::clicked , [=](){ this->VisParameterCallback(paramWidget);});
+      connect(applyButton, &QPushButton::clicked , [this, paramWidget](){ this->VisParameterCallback(paramWidget);});
 #endif
 
       QWidget * parentCheck = aParent;
@@ -3249,7 +3344,7 @@ QString G4UIQt::GetCommandList (
   for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
     txt += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "\n";
   }
-  if( ! rangeString.isNull() ) {
+  if( ! rangeString.empty() ) {
     txt += " Range of parameters : " + QString((char*)(rangeString).data()) + "\n";
   }
   if( n_parameterEntry > 0 ) {
@@ -3260,7 +3355,7 @@ QString G4UIQt::GetCommandList (
     for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
       param = aCommand->GetParameter(i_thParameter);
       txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
-      if( ! param->GetParameterGuidance().isNull() )
+      if( ! param->GetParameterGuidance().empty() )
         txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
       txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
       if(param->IsOmittable()){
@@ -3270,13 +3365,13 @@ QString G4UIQt::GetCommandList (
       }
       if( param->GetCurrentAsDefault() ) {
         txt += " Default value   : taken from the current value\n";
-      } else if( ! param->GetDefaultValue().isNull() ) {
+      } else if( ! param->GetDefaultValue().empty() ) {
         txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
       }
-      if( ! param->GetParameterRange().isNull() ) {
+      if( ! param->GetParameterRange().empty() ) {
         txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
       }
-      if( ! param->GetParameterCandidates().isNull() ) {
+      if( ! param->GetParameterCandidates().empty() ) {
         txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
       }
     }
@@ -3333,7 +3428,7 @@ void G4UIQt::updateHelpArea (
 	  tmpGuidance.replace("\n","<br />");
     txt += tmpGuidance + "<br />";
   }
-  if( ! rangeString.isNull() ) {
+  if( ! rangeString.empty() ) {
 	  QString range = QString((char*)(rangeString).data());
 #if QT_VERSION < 0x050000
 	  range = Qt::escape(range);
@@ -3387,7 +3482,7 @@ void G4UIQt::updateHelpArea (
       fParameterHelpTable->setItem(a, 0, new QTableWidgetItem(QString::number(a+1)));
 
       fParameterHelpTable->setItem(a, 1, new QTableWidgetItem(QString((char*)(param->GetParameterName()).data())));
-      if( ! param->GetParameterGuidance().isNull() ) {
+      if( ! param->GetParameterGuidance().empty() ) {
         fParameterHelpTable->setItem(a, 2, new QTableWidgetItem(QString((char*)(param->GetParameterGuidance()).data())));
       }
       fParameterHelpTable->setItem(a, 3, new QTableWidgetItem(QString(QChar(param->GetParameterType()))));
@@ -3399,13 +3494,13 @@ void G4UIQt::updateHelpArea (
       }
       if( param->GetCurrentAsDefault() ) {
         fParameterHelpTable->setItem(a, 5, new QTableWidgetItem(QString("taken from the current value")));
-      } else if( ! param->GetDefaultValue().isNull() ) {
+      } else if( ! param->GetDefaultValue().empty() ) {
         fParameterHelpTable->setItem(a, 5, new QTableWidgetItem(QString((char*)(param->GetDefaultValue()).data())));
       }
-      if( ! param->GetParameterRange().isNull() ) {
+      if( ! param->GetParameterRange().empty() ) {
         fParameterHelpTable->setItem(a, 6, new QTableWidgetItem(QString((char*)(param->GetParameterRange()).data())));
       }
-      if( ! param->GetParameterCandidates().isNull() ) {
+      if( ! param->GetParameterCandidates().empty() ) {
         fParameterHelpTable->setItem(a, 7, new QTableWidgetItem(QString((char*)(param->GetParameterCandidates()).data())));
       }
       // tooltips
@@ -3630,8 +3725,8 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
   G4String matchingPath = empty;
 
   // find the tree
-  G4int jpre= pName.last('/');
-  if(jpre != G4int(G4String::npos)) pName.remove(jpre+1);
+  auto jpre= pName.rfind('/');
+  if(jpre != G4String::npos) pName.erase(jpre+1);
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4UIcommandTree * commandTreeTop = UI->GetTree();
   G4UIcommandTree* aTree = commandTreeTop->FindCommandTree(pName);
@@ -3643,7 +3738,7 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
     for(G4int idir=1; idir<=Ndir; idir++) {
       G4String fpdir= aTree-> GetTree(idir)-> GetPathName();
       // matching test
-      if( fpdir.index(remainingPath, 0) == 0) {
+      if( fpdir.find(remainingPath, 0) == 0) {
         if(nMatch==0) {
           matchingPath = fpdir;
         } else {
@@ -3702,7 +3797,7 @@ QStandardItemModel* G4UIQt::CreateCompleterModel(G4String aCmd) {
 
 
       // matching test
-      if( longCommandName.index(remainingPath, 0) ==0) {
+      if( longCommandName.find(remainingPath, 0) ==0) {
         if(nMatch==0) {
           matchingPath= longCommandName + " ";
         } else {
@@ -3829,7 +3924,7 @@ void G4UIQt::CommandEnteredCallback (
       }
 
       G4String command = txt.toStdString().c_str();
-      if (command(0,4) != "help") {
+      if (command.substr(0,4) != "help") {
         ApplyShellCommand (command,exitSession,exitPause);
       } else {
         ActivateCommand(command);
@@ -3952,8 +4047,7 @@ void G4UIQt::ButtonCallback (
  const QString& aCommand
 )
 {
-  G4String ss = G4String(aCommand.toStdString().c_str());
-  ss = ss.strip(G4String::leading);
+  G4String ss = G4StrUtil::lstrip_copy(G4String(aCommand.toStdString().c_str()));
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
@@ -4572,7 +4666,7 @@ void G4UIQt::OpenIconCallback(const QString& aParam) {
   QString aCommand = aParam.left(aParam.indexOf(fStringSeparator));
   QString aLabel = aParam.mid(aParam.indexOf(fStringSeparator)+fStringSeparator.length());
 
-  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, aLabel, fLastOpenPath, "Macro files (*.mac)");
+  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, aLabel, fLastOpenPath, "Macro files (*.mac);;Geant4 files( *.mac *.g4* *.in);;All (*.*)");
   if (nomFich != "") {
     G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ QString(" ")+ nomFich).toStdString().c_str());
     QDir dir;
@@ -4663,9 +4757,7 @@ void G4UIQt::CreateEmptyViewerPropertiesWidget() {
   QLabel* label = new QLabel("No viewer - Please open a viewer first");
   fViewerPropertiesWidget->layout()->addWidget(label);
   fViewerPropertiesDialog->setWindowTitle("No viewer");
-  fViewerPropertiesDialog->show();
-  fViewerPropertiesDialog->raise();
-  fViewerPropertiesDialog->activateWindow();
+  fViewerPropertiesDialog->setVisible(false);
 }
 
 
@@ -5072,7 +5164,6 @@ void G4UIQt::TabCloseCallback(int a){
   }
 
   if (lastTab) {
-    CreateViewerPropertiesDialog();
     CreateEmptyViewerPropertiesWidget();
   }
   // delete the widget
@@ -5140,5 +5231,3 @@ void G4UIDockWidget::closeEvent(QCloseEvent *aEvent) {
   // hide them instead
   hide();
 }
-
- #endif

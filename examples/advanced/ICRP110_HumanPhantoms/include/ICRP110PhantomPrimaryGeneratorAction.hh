@@ -38,11 +38,11 @@ class G4Event;
 class ICRP110PhantomPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    ICRP110PhantomPrimaryGeneratorAction();
+    explicit ICRP110PhantomPrimaryGeneratorAction();
     ~ICRP110PhantomPrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event* anEvent);
+    void GeneratePrimaries(G4Event* anEvent) override;
 
   private:
     G4GeneralParticleSource* fParticleGun;

@@ -25,8 +25,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLViewerMessenger.hh"
 
 #include "G4OpenGLViewer.hh"
@@ -116,16 +114,6 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameterFlushAt->SetDefaultValue(100);
   fpCommandFlushAt->SetParameter(parameterFlushAt);
 
-  fpCommandPrintEPS =
-  new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
-  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
-  fpCommandPrintEPS->SetGuidance
-  ("See \"/vis/ogl/export\" for other file formats.");
-  fpCommandPrintEPS->SetGuidance
-  ("Generates files with names G4OpenGL_viewer-name_nnnn.eps, where nnnn is a"
-   "\nsequence number, starting at 0000."
-   "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
-
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
 
@@ -134,7 +122,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayListLimit->SetGuidance
     ("Set/reset display list number of primitive limit (to avoid memory exhaustion).");
   fpCommandDisplayListLimit->SetParameterName("limit", omitable = true);
-  fpCommandDisplayListLimit->SetDefaultValue(50000);
+  fpCommandDisplayListLimit->SetDefaultValue(1e7);
   fpCommandDisplayListLimit->SetRange("limit>=10000");
 
   fpCommandExportFormat =
@@ -197,7 +185,6 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpCommandExportFormat;
   delete fpCommandDisplayListLimit;
   delete fpDirectorySet;
-  delete fpCommandPrintEPS;
   delete fpCommandFlushAt;
   delete fpCommandExport;
   delete fpDirectory;
@@ -299,16 +286,6 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
-  if (command == fpCommandPrintEPS)
-  {
-    pOGLViewer->setExportImageFormat("eps",true);
-    pOGLViewer->exportImage();
-
-    if (pOGLViewer->fVP.IsAutoRefresh())
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    return;
-  }
-
   if (command == fpCommandPrintFilename)
     {
       G4String name;
@@ -384,5 +361,3 @@ void G4OpenGLViewerMessenger::SetNewValue
       return;
     }
 }
-
-#endif

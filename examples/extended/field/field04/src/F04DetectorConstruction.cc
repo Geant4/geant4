@@ -249,7 +249,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
       char c[4];
       sprintf(c,"%d",i);
       G4String angle = c;
-      angle = angle.strip(G4String::both,' ');
+      G4StrUtil::strip(angle);
       angle = "Y" + angle;
 
       g4rot = new G4RotationMatrix();

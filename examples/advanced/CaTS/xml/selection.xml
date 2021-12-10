@@ -1,0 +1,23 @@
+<lcgdict>
+<class name="std::basic_string<char>" />
+<class name="G4String"/>
+<class name="G4VHit"/>
+<class name="Event"/>
+<class name="lArTPCHit"/>
+<class name="std::vector<lArTPCHit*>"/>
+<class name="PhotonHit"/>
+<class name="std::vector<PhotonHit*>"/>
+<class name="InteractionHit"/>
+<class name="std::vector<InteractionHit*>"/>
+<class name="CalorimeterHit"/>
+<class name="std::vector<CalorimeterHit*>"/>
+<class name="DRCalorimeterHit"/>
+<class name="std::vector<DRCalorimeterHit*>"/>
+<class name="TrackerHit"/>
+<class name="std::vector<TrackerHit*>"/>
+<class name="MscHit"/>
+<class name="std::vector<MscHit*>"/>
+<class name="G4ThreeVector"/>
+<class name="CLHEP::Hep3Vector"/>
+<class name="std::map<G4String, std::vector<G4VHit*> >"/>
+</lcgdict>

@@ -37,6 +37,7 @@ geant4_add_module(G4hadronic_xsect
     G4CrossSectionElastic.hh
     G4CrossSectionFactory.hh
     G4CrossSectionInelastic.hh
+    G4ElNucleusSFcs.hh
     G4ElectroNuclearCrossSection.hh
     G4ElNeutrinoNucleusTotXsc.hh
     G4DiffElasticRatio.hh
@@ -45,6 +46,7 @@ geant4_add_module(G4hadronic_xsect
     G4GammaNuclearXS.hh
     G4HadronNucleonXsc.hh
     G4HadronXSDataTable.hh
+    G4IonsShenCrossSection.hh
     G4IsotopeList.hh
     G4KokoulinMuonNuclearXS.hh
     G4NeutrinoElectronCcXsc.hh
@@ -99,6 +101,7 @@ geant4_add_module(G4hadronic_xsect
     G4CrossSectionElastic.cc
     G4CrossSectionInelastic.cc
     G4DiffElasticRatio.cc
+    G4ElNucleusSFcs.cc
     G4ElectroNuclearCrossSection.cc
     G4ElNeutrinoNucleusTotXsc.cc
     G4EMDissociationCrossSection.cc
@@ -106,6 +109,7 @@ geant4_add_module(G4hadronic_xsect
     G4GammaNuclearXS.cc
     G4HadronNucleonXsc.cc
     G4HadronXSDataTable.cc
+    G4IonsShenCrossSection.cc
     G4KokoulinMuonNuclearXS.cc
     G4NeutrinoElectronCcXsc.cc
     G4NeutrinoElectronNcXsc.cc

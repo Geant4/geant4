@@ -1,0 +1,12 @@
+/CaTS/verbose false
+/CaTS/dumpgdml true
+/CaTS/writeHits true
+/CaTS/fname Msc
+/CaTS/enable_opticks false
+/run/initialize 
+/CaTS/doAnalysis false
+/gun/particle proton
+/gun/energy 0.8 GeV
+/gun/position 0. 0. -1. cm
+/gun/direction 0. 0. 1.
+/run/beamOn 100000

@@ -39,6 +39,7 @@
 #include "globals.hh"
 
 #include <vector>
+#include <string_view>
 
 class G4RootFileManager;
 class G4RootNtupleManager;
@@ -59,18 +60,20 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
   friend class G4RootNtupleManager;
 
   public:
-    explicit G4RootMainNtupleManager(
+    G4RootMainNtupleManager(
                G4RootNtupleManager* ntupleBuilder,
-               G4NtupleBookingManager* bookingManager,
+               std::shared_ptr<G4NtupleBookingManager> bookingManager,
                G4bool rowWise, G4int fileNumber,
                const G4AnalysisManagerState& state);
-    ~G4RootMainNtupleManager();
+    G4RootMainNtupleManager() = delete;
+    virtual ~G4RootMainNtupleManager() = default;
 
   protected:
-    // Methods to manipulate ntuples  
+    // Methods to manipulate ntuples
     void   CreateNtuple(RootNtupleDescription* ntupleDescription, G4bool warn = true);
     G4bool Merge();
-    G4bool Reset(G4bool deleteNtuple);
+    G4bool Reset();
+    void ClearData();
 
     // Set/get methods
     void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
@@ -78,15 +81,18 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
     std::shared_ptr<G4RootFile> GetNtupleFile(RootNtupleDescription* ntupleDescription) const;
 
     // Access functions
-    const std::vector<tools::wroot::ntuple*>& GetNtupleVector() 
+    const std::vector<tools::wroot::ntuple*>& GetNtupleVector()
       { return fNtupleVector; }
     unsigned int GetBasketEntries() const;
 
   private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4RootMainNtupleManager" };
+
     // Data members
-    G4RootNtupleManager* fNtupleBuilder;
-    G4NtupleBookingManager* fBookingManager;
-    std::shared_ptr<G4RootFileManager> fFileManager;
+    G4RootNtupleManager* fNtupleBuilder { nullptr };
+    std::shared_ptr<G4NtupleBookingManager> fBookingManager { nullptr };
+    std::shared_ptr<G4RootFileManager> fFileManager { nullptr };
     G4bool  fRowWise;
     G4int  fFileNumber;
     std::vector<tools::wroot::ntuple*>  fNtupleVector;

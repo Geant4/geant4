@@ -40,6 +40,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 using namespace std;
@@ -48,6 +49,8 @@ using namespace CLHEP;
 G4NeutronElectronElModel::G4NeutronElectronElModel(const G4String& name) 
   : G4HadronElastic(name)
 {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + name );
+  
  // neutron magneton squared
 
   fM   = neutron_mass_c2; // neutron mass
@@ -334,7 +337,7 @@ G4HadFinalState* G4NeutronElectronElModel::ApplyYourself(
     // G4cout<<"lvt2 = "<<lvt2<<G4endl;
 
     G4DynamicParticle * aSec = new G4DynamicParticle( theElectron, lvt2 );
-    theParticleChange.AddSecondary( aSec );
+    theParticleChange.AddSecondary( aSec, secID );
 
     G4LorentzVector lvp2 = lvsum-lvt2;
 

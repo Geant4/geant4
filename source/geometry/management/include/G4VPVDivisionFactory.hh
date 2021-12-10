@@ -32,8 +32,8 @@
 
 // Author: Ivana Hrivnacova, 4.5.2004
 // ------------------------------------------------------------------------
-#ifndef G4VPVDIVISION_FACTORY_HH
-#define G4VPVDIVISION_FACTORY_HH
+#ifndef G4VPVDIVISIONFACTORY_HH
+#define G4VPVDIVISIONFACTORY_HH 1
 
 #include "geomdefs.hh"
 
@@ -43,9 +43,9 @@ class G4VPVParameterisation;
 
 class G4VPVDivisionFactory
 {
-  public:  // with description
+  public:
 
-    virtual ~G4VPVDivisionFactory();
+    virtual ~G4VPVDivisionFactory() = default;
     
     static  G4VPVDivisionFactory* Instance();
     
@@ -89,12 +89,11 @@ class G4VPVDivisionFactory
 
   protected:
 
-   G4VPVDivisionFactory();
+    G4VPVDivisionFactory() = default;
 
   protected:
 
-   static G4ThreadLocal G4VPVDivisionFactory* fgInstance;
-     
+    static G4ThreadLocal G4VPVDivisionFactory* fgInstance;
 };
 
 #endif

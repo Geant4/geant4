@@ -25,10 +25,12 @@ geant4_add_module(G4emutils
     G4EmParametersMessenger.hh
     G4EmProcessSubType.hh
     G4EmSaturation.hh
+    G4EmSecondaryParticleType.hh
     G4EmTableType.hh
     G4EnergyLossTables.hh
     G4LossTableBuilder.hh
     G4LossTableManager.hh
+    G4LowEnergyEmProcessSubType.hh
     G4MscStepLimitType.hh
     G4NIELCalculator.hh
     G4NuclearFormfactorType.hh

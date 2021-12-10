@@ -49,6 +49,7 @@
 #include "G4FTFParameters.hh"                            
 #include "G4DiffractiveSplitableHadron.hh"
 #include "G4VSplitableHadron.hh"
+#include "G4PhysicalConstants.hh"
 
 
 //============================================================================
@@ -58,7 +59,11 @@
 
 //============================================================================
 
-G4FTFParticipants::G4FTFParticipants() : currentInteraction( -1 ) {}
+G4FTFParticipants::G4FTFParticipants() : Bimpact( 0.0 ), BinInterval( false ),
+                                         Bmin2( -1.0 ), Bmax2( -1.0 ),
+                                         currentInteraction( -1 )
+{}
+
 
 //============================================================================
 
@@ -87,6 +92,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
   if ( theProjectileNucleus == nullptr ) {  // Hadron-nucleus or anti-baryon-nucleus interactions
 
     G4double impactX( 0.0 ), impactY( 0.0 );
+    G4double B( 0.0 ), B2( 0.0 );
 
     G4VSplitableHadron* primarySplitable = new G4DiffractiveSplitableHadron( thePrimary );
 
@@ -94,20 +100,29 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
     G4cout << "Hadron-nucleus or anti-baryon-nucleus interactions" << G4endl;
     #endif
 
-    G4double xyradius;                          
-    xyradius = theNucleus->GetOuterRadius() + deltaxy; // Range of impact parameter sampling
+    G4double xyradius = theNucleus->GetOuterRadius() + deltaxy;  // Range of impact parameter sampling
 
     const G4int maxNumberOfLoops = 1000;
     G4int loopCounter = 0;                                          
     do {
 
       std::pair< G4double, G4double > theImpactParameter;
-      theImpactParameter = theNucleus->ChooseImpactXandY( xyradius );
-      impactX = theImpactParameter.first; 
-      impactY = theImpactParameter.second;
+      if ( SampleBinInterval() ) {
+        B2 = GetBmin2() + G4UniformRand() * ( GetBmax2() - GetBmin2() );
+        B  = B2 > 0.0 ? std::sqrt( B2 ) : 0.0;
+        G4double Phi = twopi * G4UniformRand();
+        impactX = B * std::cos( Phi );
+        impactY = B * std::sin( Phi );
+        SetImpactParameter( B );
+      } else {
+        theImpactParameter = theNucleus->ChooseImpactXandY( xyradius );
+        impactX = theImpactParameter.first; 
+        impactY = theImpactParameter.second;
+        SetImpactParameter( std::sqrt( sqr(impactX) + sqr(impactY) ) );
+      }
 
       #ifdef debugFTFparticipant
-      G4cout << "New interaction list," << " b= " 
+      G4cout << "New interaction list," << " b[fm]= " 
              << std::sqrt( sqr(impactX ) + sqr( impactY ) )/fermi << G4endl;
       #endif
 
@@ -168,8 +183,8 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
     }
 
     #ifdef debugFTFparticipant
-    G4cout << "Number of Hit nucleons " << theInteractions.size() << "\t Bx " << impactX/fermi
-           << "\t By " << impactY/fermi << "\t B " 
+    G4cout << "Number of Hit nucleons " << theInteractions.size() << "\t Bx[fm] " << impactX/fermi
+           << "\t By[fm] " << impactY/fermi << "\t B[fm] " 
            << std::sqrt( sqr( impactX ) + sqr( impactY ) )/fermi << G4endl << G4endl;
     #endif
 
@@ -187,23 +202,33 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
   //G4cout<<theProjectileNucleus->GetOuterRadius()/fermi<<" "<<theNucleus->GetOuterRadius()/fermi<<" "<<deltaxy/fermi<<G4endl;
 
-  G4double xyradius;                          
-  xyradius = theProjectileNucleus->GetOuterRadius() +  // Range of impact parameter sampling
-             theNucleus->GetOuterRadius() + deltaxy;
+  // Range of impact parameter sampling
+  G4double xyradius = theProjectileNucleus->GetOuterRadius() + theNucleus->GetOuterRadius() + deltaxy;
 
   G4double impactX( 0.0 ), impactY( 0.0 );
+  G4double B( 0.0 ), B2( 0.0 );
 
   const G4int maxNumberOfLoops = 1000;
   G4int loopCounter = 0;
   do {
 
     std::pair< G4double, G4double > theImpactParameter;
-    theImpactParameter = theNucleus->ChooseImpactXandY( xyradius );
-    impactX = theImpactParameter.first; 
-    impactY = theImpactParameter.second;
+    if ( SampleBinInterval() ) {
+      B2 = GetBmin2() + G4UniformRand() * ( GetBmax2() - GetBmin2() );
+      B  = B2 > 0.0 ? std::sqrt( B2 ) : 0.0;  // In G4 internal units (mm)
+      G4double Phi = twopi * G4UniformRand();
+      impactX = B * std::cos( Phi ); 
+      impactY = B * std::sin( Phi );
+      SetImpactParameter( B );
+    } else {
+      theImpactParameter = theNucleus->ChooseImpactXandY( xyradius );
+      impactX = theImpactParameter.first; 
+      impactY = theImpactParameter.second;
+      SetImpactParameter( std::sqrt( sqr(impactX) + sqr(impactY) ) );
+    }
 
     #ifdef debugFTFparticipant
-    G4cout << "New interaction list, " << "b "
+    G4cout << "New interaction list, " << "b[fm] "
            << std::sqrt( sqr( impactX ) + sqr( impactY ) )/fermi << G4endl;
     #endif
 
@@ -240,7 +265,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
           G4cout << G4endl << "An Interaction has happend" << G4endl << "Proj N mom " << PrNuclN
                  << " " << ProjectileNucleon->Get4Momentum() << "-------------" << G4endl
                  << "Targ N mom " << TrNuclN << " " << TargetNucleon->Get4Momentum() << G4endl
-                 << "PrN TrN Z coords " << ProjectileNucleon->GetPosition().z()/fermi 
+                 << "PrN TrN Z coords [fm]" << ProjectileNucleon->GetPosition().z()/fermi 
                  << " " << TargetNucleon->GetPosition().z()/fermi 
                  << " " << ProjectileNucleon->GetPosition().z()/fermi + 
                            TargetNucleon->GetPosition().z()/fermi << G4endl;
@@ -272,7 +297,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
           anInteraction->SetStatus( 1 );                     
 
           #ifdef debugFTFparticipant
-          G4cout << "Part anInteraction->GetInteractionTime() " 
+          G4cout << "Part anInteraction->GetInteractionTime() [fm] " 
                  << anInteraction->GetInteractionTime()/fermi << G4endl
                  << "Splitable Pr* Tr* " << ProjectileSplitable << " " 
                  << TargetSplitable << G4endl;
@@ -310,8 +335,8 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
   #ifdef debugFTFparticipant
   G4cout << G4endl << "Number of primary collisions " << theInteractions.size() 
-         << "\t Bx " << impactX/fermi << "\t By " << impactY/fermi
-         << "\t B " << std::sqrt( sqr( impactX ) + sqr( impactY ) )/fermi << G4endl
+         << "\t Bx[fm] " << impactX/fermi << "\t By[fm] " << impactY/fermi
+         << "\t B[fm] " << std::sqrt( sqr( impactX ) + sqr( impactY ) )/fermi << G4endl
          << "FTF participant End. #######################" << G4endl << G4endl;
   #endif
   return;

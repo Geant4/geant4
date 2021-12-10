@@ -5,6 +5,20 @@
                        Package History file
                        --------------------
 
+07-11-21 - tag dnadamage1-V10-07-03 - I. Hrivnacova
+- Added analysis manager Clear() at the end of run
+
+06-10-2021 - tag dnadamage1-V10-07-02 - I. Hrivnacova
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root).
+
+24-06-2021 - tag dnadamage1-V10-07-01 - I. Hrivnacova
+- Fixes in ROOT macros:
+  - Added copyimg of the DNAVolumeType.hh included in molecule.C
+    in build area as the relative path in macro does not work
+  - Do not delete the Root output file if example is run
+    in sequential mode
+
 27-05-2020 - tag dnadamage1-V10-07-00 - Y. Perrot
 - Fixed SSD file typos, thanks to Andrea Matamoros
 - Updated contacts

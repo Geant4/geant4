@@ -137,11 +137,10 @@ int main(int argc ,char ** argv)
     delete ui;
 
   }
-
-  delete visManager;
-
-  delete runManager;
   delete controller;
+  delete visManager;
+  delete runManager;
+ 
 
   return 0;
 }

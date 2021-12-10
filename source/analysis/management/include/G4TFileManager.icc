@@ -26,6 +26,8 @@
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
+#include "G4AnalysisUtilities.hh"
+
 //_____________________________________________________________________________
 template <typename FT>
 inline
@@ -38,7 +40,7 @@ template <typename FT>
 inline
 G4TFileManager<FT>::~G4TFileManager()
 {
-  for ( auto mapElement : fFileMap ) {
+  for ( const auto& mapElement : fFileMap ) {
     delete mapElement.second;
   }
 }
@@ -50,28 +52,25 @@ G4TFileManager<FT>::~G4TFileManager()
 //_____________________________________________________________________________
 template <typename FT>
 inline
-void 
-G4TFileManager<FT>::FileNotFoundException(const G4String& fileName, 
-                      const G4String& functionName) const
+void
+G4TFileManager<FT>::FileNotFoundWarning(const G4String& fileName,
+                      std::string_view functionName) const
 {
-  G4ExceptionDescription description;
-  description 
-    << "Failed to get file " << fileName;
-  G4Exception(functionName, "Analysis_W011", JustWarning, description);
+  G4Analysis::Warn("Failed to get file " + fileName, fkClass, functionName);
 }
 
 //_____________________________________________________________________________
 template <typename FT>
 inline
-G4TFileInformation<FT>* 
-G4TFileManager<FT>::GetFileInfoInFunction(const G4String& fileName, 
-                      G4String functionName, G4bool warn ) const
+G4TFileInformation<FT>*
+G4TFileManager<FT>::GetFileInfoInFunction(const G4String& fileName,
+                      std::string_view functionName, G4bool warn ) const
 {
   // Find the file information in the map
   auto it = fFileMap.find(fileName);
   if ( it == fFileMap.end() ) {
     if (warn) {
-      FileNotFoundException(fileName, functionName);
+      FileNotFoundWarning(fileName, functionName);
     }
     return nullptr;
   }
@@ -82,9 +81,9 @@ G4TFileManager<FT>::GetFileInfoInFunction(const G4String& fileName,
 //_____________________________________________________________________________
 template <typename FT>
 inline
-std::shared_ptr<FT> 
+std::shared_ptr<FT>
 G4TFileManager<FT>::GetFileInFunction(const G4String& fileName,
-                      G4String functionName, G4bool warn) const
+                      std::string_view functionName, G4bool warn) const
 {
   // Find the file information in the map
   auto fileInfo = GetFileInfoInFunction(fileName, functionName, warn);
@@ -93,9 +92,9 @@ G4TFileManager<FT>::GetFileInFunction(const G4String& fileName,
   // Check if the file is open
   if ( ! fileInfo->fFile ) {
     if (warn) {
-      FileNotFoundException(fileName, functionName);
+      FileNotFoundWarning(fileName, functionName);
     }
-    return nullptr;    
+    return nullptr;
   }
 
   return fileInfo->fFile;
@@ -104,24 +103,15 @@ G4TFileManager<FT>::GetFileInFunction(const G4String& fileName,
 //_____________________________________________________________________________
 template <typename FT>
 inline
-#ifdef G4VERBOSE
-G4bool G4TFileManager<FT>::WriteTFile(std::shared_ptr<FT> file, const G4String& fileName)
-#else
-G4bool G4TFileManager<FT>::WriteTFile(std::shared_ptr<FT> file, const G4String& /*fileName*/)
-#endif
+G4bool G4TFileManager<FT>::WriteTFile(std::shared_ptr<FT> file,
+                                      [[maybe_unused]] const G4String& fileName)
 {
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL4() ) 
-    fAMState.GetVerboseL4()->Message("write", "file", fileName);
-#endif
+  fAMState.Message(G4Analysis::kVL4, "write", "file", fileName);
 
   // Write the found file
   auto result = WriteFileImpl(file);
 
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL1() ) 
-    fAMState.GetVerboseL1()->Message("write", "file", fileName);
-#endif
+  fAMState.Message(G4Analysis::kVL1, "write", "file", fileName, result);
 
   return result;
 }
@@ -129,24 +119,15 @@ G4bool G4TFileManager<FT>::WriteTFile(std::shared_ptr<FT> file, const G4String& 
 //_____________________________________________________________________________
 template <typename FT>
 inline
-#ifdef G4VERBOSE
-G4bool G4TFileManager<FT>::CloseTFile(std::shared_ptr<FT> file, const G4String& fileName)
-#else
-G4bool G4TFileManager<FT>::CloseTFile(std::shared_ptr<FT> file, const G4String& /*fileName*/)
-#endif
+G4bool G4TFileManager<FT>::CloseTFile(std::shared_ptr<FT> file,
+                                      [[maybe_unused]] const G4String& fileName)
 {
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL4() ) 
-    fAMState.GetVerboseL4()->Message("close", "file", fileName);
-#endif
+  fAMState.Message(G4Analysis::kVL4, "close", "file", fileName);
 
   // Close the found file
   auto result = CloseFileImpl(file);
 
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL1() ) 
-    fAMState.GetVerboseL1()->Message("close", "file", fileName);
-#endif
+  fAMState.Message(G4Analysis::kVL1, "close", "file", fileName, result);
 
   return result;
 }
@@ -156,21 +137,26 @@ template <typename FT>
 inline
 G4bool G4TFileManager<FT>::DeleteEmptyFile(const G4String& fileName)
 {
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL4() ) {
-    fAMState.GetVerboseL4()->Message("delete", "empty file", fileName);
-  }
-#endif
+  fAMState.Message(G4Analysis::kVL4, "delete", "empty file", fileName);
 
   auto result = ! std::remove(fileName);
 
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL1() ) {
-    fAMState.GetVerboseL1()->Message("delete", "empty file", fileName, result);
-  }
-#endif
+  fAMState.Message(G4Analysis::kVL1, "delete", "empty file", fileName, result);
 
   return result;
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+void G4TFileManager<FT>::ClearData()
+{
+  for ( const auto& mapElement : fFileMap ) {
+    delete mapElement.second;
+  }
+  fFileMap.clear();
+
+  fAMState.Message(G4Analysis::kVL2, "clear", "files");
 }
 
 //
@@ -184,42 +170,27 @@ std::shared_ptr<FT> G4TFileManager<FT>::CreateTFile(const G4String& fileName)
 {
   // Check if file already exists
   if ( GetFileInFunction(fileName, "CreateTFile", false) ) {
-    G4ExceptionDescription description;
-    description 
-      << "File " << fileName << " already exists."; 
-    G4Exception("G4TFileManager<FT>::CreateTFile",
-                "Analysis_W001", JustWarning, description);
-    // return it->second->fFile;
+    G4Analysis::Warn("File " + fileName + " already exists.",
+      fkClass, "CreateTFile");
     return nullptr;
   }
 
   auto fileInformation = GetFileInfoInFunction(fileName, "CreateTFile", false);
   if ( ! fileInformation ) {
-#ifdef G4VERBOSE
-    if ( fAMState.GetVerboseL4() ) { 
-      fAMState.GetVerboseL4()->Message("create", "fileInformation", fileName);
-    }
-#endif
+    fAMState.Message(G4Analysis::kVL4, "create", "fileInformation", fileName);
+
     // Create file information and save it in the map
     fileInformation = new G4TFileInformation<FT>(fileName);
     fFileMap[fileName] = fileInformation;
   }
 
   // Create file and save it in fileInformation
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL4() ) { 
-    fAMState.GetVerboseL4()->Message("create", "file", fileName);
-  }
-#endif
+  fAMState.Message(G4Analysis::kVL4, "create", "file", fileName);
 
   // Let concrete class create a file
   auto file = CreateFileImpl(fileName);
   if ( ! file ) {
-    G4ExceptionDescription description;
-    description 
-      << "Failed to create file " << fileName;
-    G4Exception("G4TFileManager<FT>::CreateTFile",
-                "Analysis_W001", JustWarning, description);
+    G4Analysis::Warn("Failed to create file " + fileName, fkClass, "CreateTFile");
     return nullptr;
   }
   // Save file in fileInformation
@@ -228,11 +199,7 @@ std::shared_ptr<FT> G4TFileManager<FT>::CreateTFile(const G4String& fileName)
   fileInformation->fIsEmpty = true;
   fileInformation->fIsDeleted = false;
 
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL1() ) {
-    fAMState.GetVerboseL1()->Message("create", "file", fileName);
-  }
-#endif
+  fAMState.Message(G4Analysis::kVL1, "create", "file", fileName);
 
   // Return created file
   return file;
@@ -267,7 +234,7 @@ G4bool G4TFileManager<FT>::CloseTFile(const G4String& fileName)
   // Get file from the file information
   auto file = fileInfo->fFile;
   if ( ! file ) {
-    FileNotFoundException(fileName, "CloseTFile");
+    FileNotFoundWarning(fileName, "CloseTFile");
     return false;
   }
 
@@ -291,23 +258,17 @@ G4bool G4TFileManager<FT>::SetIsEmpty(const G4String& fileName, G4bool isEmpty)
   // Warning is issued in GetFileFunction
   if ( ! fileInfo ) return false;
 
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL4() ) {
-    fAMState.GetVerboseL4()->Message("notify not empty", "file", fileName);
-  }
-#endif
+  fAMState.Message(G4Analysis::kVL4, "notify not empty", "file", fileName);
 
   // Set notification to file information
   if ( fileInfo->fIsEmpty ) {
     // do not revert information if file is not empty
     fileInfo->fIsEmpty = isEmpty;
-  }
 
-#ifdef G4VERBOSE
-  if ( fAMState.GetVerboseL2() ) {
-    fAMState.GetVerboseL2()->Message("notify not empty", "file", fileName);
+    if ( ! isEmpty ) {
+      fAMState.Message(G4Analysis::kVL3, "notify not empty", "file", fileName);
+    }
   }
-#endif
 
   return true;
 }
@@ -327,19 +288,18 @@ template <typename FT>
 inline
 G4bool G4TFileManager<FT>::OpenFiles()
 {
-  bool finalResult = true;
-  for ( auto mapElement : fFileMap ) {
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
      auto fileInformation = mapElement.second;
      // Do nothing if file was open by user explicitly
      if ( fileInformation->fFile ) {
-       G4cout << " ... skipping open file for " << fileInformation->fFileName << G4endl;
+       // G4cout << "... skipping open file for " << fileInformation->fFileName << G4endl;
        continue;
      }
-     
-     auto result = CreateTFile(fileInformation->fFileName);
-     finalResult = result && finalResult;
+
+     result &= (CreateTFile(fileInformation->fFileName) != nullptr);
   }
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -347,17 +307,16 @@ template <typename FT>
 inline
 G4bool G4TFileManager<FT>::WriteFiles()
 {
-  bool finalResult = true;
-  for ( auto mapElement : fFileMap ) {
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
      auto fileInformation = mapElement.second;
      if ( ! fileInformation->fIsOpen ) {
        // G4cout << "skipping write for file " << fileInformation->fFileName << G4endl;
        continue;
      }
-     auto result = WriteTFile(fileInformation->fFile, fileInformation->fFileName);
-     finalResult = result && finalResult;
+     result &= WriteTFile(fileInformation->fFile, fileInformation->fFileName);
   }
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -365,15 +324,14 @@ template <typename FT>
 inline
 G4bool G4TFileManager<FT>::CloseFiles()
 {
-  bool finalResult = true;
-  for ( auto mapElement : fFileMap ) {
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
      auto fileInformation = mapElement.second;
      if ( ! fileInformation->fIsOpen ) {
        // G4cout << "skipping close for file " << fileInformation->fFileName << G4endl;
        continue;
      }
-     auto result = CloseTFile(fileInformation->fFile, fileInformation->fFileName);
-     finalResult = result && finalResult;
+     result &= CloseTFile(fileInformation->fFile, fileInformation->fFileName);
 
      // Update file information
      fileInformation->fFile.reset();
@@ -383,7 +341,7 @@ G4bool G4TFileManager<FT>::CloseFiles()
   // As the files were set to nullptr, clear should not be needed
   // fFileMap.clear();
 
-  return finalResult;  
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -391,20 +349,19 @@ template <typename FT>
 inline
 G4bool G4TFileManager<FT>::DeleteEmptyFiles()
 {
-  bool finalResult = true;
-  for ( auto mapElement : fFileMap ) {
+  auto result = true;
+  for ( const auto& mapElement : fFileMap ) {
     auto fileInformation = mapElement.second;
     if ( (! fileInformation->fIsEmpty) || fileInformation->fIsDeleted ) {
       // G4cout << "skipping delete for file " << fileInformation->fFileName << G4endl;
       continue;
     }
 
-    auto result = DeleteEmptyFile(fileInformation->fFileName);
-    finalResult = result && finalResult;
+    result &= DeleteEmptyFile(fileInformation->fFileName);
 
     // Update file information
     fileInformation->fIsDeleted = true;
   }
 
-  return finalResult;
+  return result;
 }

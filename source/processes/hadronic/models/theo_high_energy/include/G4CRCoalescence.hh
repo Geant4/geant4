@@ -111,7 +111,9 @@ class G4CRCoalescence : public G4HadronicInteraction {
 		   G4double p2x, G4double p2y, G4double p2z, G4double m2 );
   
     G4double fP0_d;     // Coalescence parameter for deuterons
-    G4double fP0_dbar;  // Coalescence parameter for antideuterons 
+    G4double fP0_dbar;  // Coalescence parameter for antideuterons
+
+    G4int secID;  // Creator model ID for the secondaries created by this model 
 };
 
 #endif

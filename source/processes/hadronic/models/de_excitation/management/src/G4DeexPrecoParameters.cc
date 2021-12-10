@@ -75,7 +75,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoType = 3;
   fDeexType = 3;
   fTwoJMAX = 10;
-  fVerbose = G4HadronicParameters::Instance()->GetVerboseLevel();
+  fVerbose = 1;
   fNeverGoBack = false;
   fUseSoftCutoff = false;
   fUseCEM = true;
@@ -89,10 +89,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fLD = true;
   fFD = false;
   fIsomerFlag = true;
-  fLocalVerbose = false;
   fDeexChannelType = fCombined;
-  fInternalConversionID = 
-    G4PhysicsModelCatalog::Register("e-InternalConvertion");
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
 #endif
@@ -197,7 +194,6 @@ void G4DeexPrecoParameters::SetTwoJMAX(G4int n)
 void G4DeexPrecoParameters::SetVerbose(G4int n)
 {
   if(IsLocked()) { return; }
-  if( n != fVerbose ) { fLocalVerbose = true; }
   fVerbose = n;
 }
 
@@ -326,8 +322,6 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "Internal e- conversion flag                         " 
      << fInternalConversion << "\n";
   os << "Store e- internal conversion data                   " << fStoreAllLevels << "\n";
-  os << "Electron internal conversion ID                     " 
-     << fInternalConversionID << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
   os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";
   os << "=======================================================================" << G4endl;
@@ -338,7 +332,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 G4int G4DeexPrecoParameters::GetVerbose() const
 {
   G4int verb = G4HadronicParameters::Instance()->GetVerboseLevel();
-  return (fLocalVerbose && verb > 0) ? fVerbose : verb;
+  return (verb > 0) ? std::max(fVerbose, verb) : verb;
 }
 
 void G4DeexPrecoParameters::Dump() const

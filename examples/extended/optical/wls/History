@@ -15,6 +15,24 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Oct 25, 2021 B. Morgan (WLS-V10-07-04)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+Oct 6, 2021 I. Hrivnacova (WLS-V10-07-03)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed WLSAnalysis.hh
+
+Sept 7, 2021 D. Sawkey (WLS-V10-07-02)
+- add visualisation attributes
+- fix bug preventing cladding being built
+- fix counting detector hits
+- add histograms
+- use G4OpBoundaryProcess::invokeSD rather than ProcessHits_boundary call
+  in SteppingAction
+- remove StringToRotation
+- remove Sr90.mac; add electron.mac
+
 May 21, 2021 D. Sawkey (WLS-V10-07-01)
 - WLSMaterials: use correct material property names
 

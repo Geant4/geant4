@@ -16,6 +16,95 @@ commit in the repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 3, 2021 Gabriele Cosmo (global-V10-07-36)
+- Updated tag IDs for geant4-11-00-ref-00.
+
+October 30, 2021 Vladimir Ivanchenko (global-V10-07-35)
+- G4PhysicsModelCatalog : extended number of EM types
+
+October 28, 2021 Gabriele Cosmo (global-V10-07-34)
+- Updated tag IDs for geant4-10-07-ref-09.
+
+October 25, 2021 Ben Morgan (global-V10-07-33)
+- Deprecate non-std::string member functions, replacing with new free
+  functions in G4StrUtil namespace
+
+October 18, 2021 Ben Morgan (global-V10-07-32)
+- Remove obsolete/std::string synonym member functions from G4String:
+  - hash/stlhash
+  - data
+  - replace
+  - index
+  - isNull
+  - first/last
+  - append/prepend
+  - call operators
+
+October 13, 2021 Alberto Ribon (global-V10-07-31)
+- G4PhysicsModelCatalog : made the last changes as agreed during
+  the Collaboration meeting. This version should be ready for the
+  release G4 11.0
+
+October 8, 2021 Vladimir Ivanchenko (global-V10-07-30)
+- G4PhysicsOrderedFreeVector is back redirected to G4PhysicsFreeVector;
+  CMS request
+
+October 7, 2021 Vladimir Ivanchenko (global-V10-07-29)
+- G4PhysicsModelCatalog : extended number of EM types
+
+October 1, 2021 Ben Morgan (global-V10-07-28)
+- Simplify G4String interfaces and implementation with C++11/17
+
+September 30, 2021 Gabriele Cosmo (global-V10-07-27)
+- Updated tag IDs for geant4-10-07-ref-08.
+
+September 27, 2021 Vladimir Ivanchenko (global-V10-07-26)
+- G4PhysicsModelCatalog : EM part is filled according to proposal
+    agreed at the annual workshop
+
+September 16, 2021 Vladimir Ivanchenko (global-V10-07-25)
+- Fixed G4PhysicsVector::GetMinEnergy() and format icc file
+
+September 10, 2021 Guilherme Amadio (global-V10-07-24)
+- Optimize G4PhysicsVector::Interpolation.
+     
+September 8, 2021 Michel Maire (global-V10-07-23)
+- G4BestUnit : modify previous feature: 
+               for energy = 0, print "eV" instead of "meV"
+
+August 31, 2021 Gabriele Cosmo (global-V10-07-22)
+- Updated tag IDs for geant4-10-07-ref-07.
+
+August 27, 2021 Vladimir Ivanchenko (global-V10-07-21)
+- G4PhysicsVectorType: added enumeration of Spline type, use namespace
+- G4PhysicsVector, G4PhysicsFreeVector, G4PhysicsLogVector,
+  G4PhysicsLinearVector: major update - introduced new public access methods;
+  removed obsolete unused methods; introduced possibility to use different
+  Spline methods; do not fill second derivative vector if Spline not enabled;
+  improved control on input data; reduce number of calls to min/max; attempt
+  to optimise run time code G4PhysicsTable, improved use of the vector type.
+
+August 23, 2021 Guilherme Amadio (global-V10-07-20)
+- G4BackTrace: move from deprecated sigignore() to signal().
+
+August 22, 2021 Michel Maire (global-V10-07-19)
+- G4BestUnit : if value=0, do print unit symbol.
+
+August 4, 2021 Alberto Ribon (global-V10-07-18)
+- G4PhysicsModelCatalog : new version of the catalog of physics models.
+  Introduced a modelID (a unique integer for each physics model, with
+  close values for similar/related physics models), besides an index
+  (the position in a vector) and the name (string) of the physics model.
+  The main difference with respect to the previous version is that
+  the three identifiers of each physics model - modelID, index and
+  name - must stay constant and the same for all applications, 
+  physics lists and future versions of Geant4, starting with 11.0.
+
+July 18, 2021 Vladimir Ivanchenko (global-V10-07-17)
+- G4PhysicsVector, G4PhysicsTable, G4PhysicsFreeVector - removed 
+    obsolete methods SetSpline(); T_G4PhysicsFreeVector type set 
+    to be default;  improved comments and printouts
+
 June 21, 2021 Gabriele Cosmo (global-V10-07-16)
 - Updated G4SIUnits and G4PhysicalConstants to include new symbols
   (minute, hour, day, year and millielectronvolt) and new constants

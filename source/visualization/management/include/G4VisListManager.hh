@@ -122,7 +122,7 @@ G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
     
   ostr<<"  Current: "<<fpCurrent->Name()<<std::endl;
 
-  if (!name.isNull()) {
+  if (!name.empty()) {
     // Print out specified object
     typename std::map<G4String, T*>::const_iterator iter = fMap.find(name);
 

@@ -38,6 +38,7 @@
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
+#include "G4PhysicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
 #include "G4UImanager.hh"
@@ -57,8 +58,8 @@ fNeedKernelVisit (true)
   else {
     fName = name;
   }
-  fShortName = fName (0, fName.find (' '));
-  fShortName.strip ();
+  fShortName = fName.substr(0, fName.find (' '));
+  G4StrUtil::strip(fShortName);
 
   fVP = G4VisManager::GetInstance()->GetDefaultViewParameters();
   fDefaultVP = fVP;
@@ -70,8 +71,8 @@ G4VViewer::~G4VViewer () {
 
 void G4VViewer::SetName (const G4String& name) {
   fName = name;
-  fShortName = fName (0, fName.find (' '));
-  fShortName.strip ();
+  fShortName = fName.substr(0, fName.find (' '));
+  G4StrUtil::strip(fShortName);
 }
 
 void G4VViewer::NeedKernelVisit () {
@@ -125,10 +126,19 @@ void G4VViewer::SetTouchable
 {
   // Set the touchable for /vis/touchable/set/... commands.
   std::ostringstream oss;
+  const auto& pvStore = G4PhysicalVolumeStore::GetInstance();
   for (const auto& pvNodeId: fullPath) {
-    oss
-    << ' ' << pvNodeId.GetPhysicalVolume()->GetName()
-    << ' ' << pvNodeId.GetCopyNo();
+    const auto& pv = pvNodeId.GetPhysicalVolume();
+    auto iterator = find(pvStore->begin(),pvStore->end(),pv);
+    if (iterator == pvStore->end()) {
+      G4ExceptionDescription ed;
+      ed << "Volume no longer in physical volume store.";
+      G4Exception("G4VViewer::SetTouchable", "visman0501", JustWarning, ed);
+    } else {
+      oss
+      << ' ' << pvNodeId.GetPhysicalVolume()->GetName()
+      << ' ' << pvNodeId.GetCopyNo();
+    }
   }
   G4UImanager::GetUIpointer()->ApplyCommand("/vis/set/touchable" + oss.str());
 }

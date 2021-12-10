@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#ifdef G4VIS_BUILD_OIX_DRIVER
-
 #include "G4OpenInventorXtExaminerViewerMessenger.hh"
 #include "G4OpenInventorXtExaminerViewer.hh"
 
@@ -101,5 +99,3 @@ void G4OpenInventorXtExaminerViewerMessenger::
      if (lookahead > 0) pViewer->pathLookahead = lookahead;
   }
 }
-
-#endif

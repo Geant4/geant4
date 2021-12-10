@@ -43,9 +43,9 @@ G4TScoreNtupleWriter<T>::G4TScoreNtupleWriter()
   , fMessenger(nullptr)
   , fHCIds()
   , fAnalysisManager(nullptr)
+  , fDefaultFileType("root")
   , fFileName("scoring")
   , fVerboseLevel(1)
-  , fHasAnalysisManager(false)
   , fHasAnalysisFile(false)
   , fIsBooked(false)
   , fIsInitialized(false)
@@ -61,11 +61,6 @@ G4TScoreNtupleWriter<T>::G4TScoreNtupleWriter()
 template <typename T>
 G4TScoreNtupleWriter<T>::~G4TScoreNtupleWriter()
 {
-  if(fHasAnalysisManager)
-  {
-    delete fAnalysisManager;
-  }
-
   delete fMessenger;
 }
 
@@ -80,11 +75,10 @@ void G4TScoreNtupleWriter<T>::CreateAnalysisManager()
   if(fAnalysisManager)
     return;
 
-  // create analysis manager
-  if(!T::IsInstance())
-    fHasAnalysisManager = true;
+  // create/get analysis manager
   fAnalysisManager = T::Instance();
 
+  fAnalysisManager->SetDefaultFileType(fDefaultFileType);
   fAnalysisManager->SetVerboseLevel(fVerboseLevel);
 }
 
@@ -322,12 +316,12 @@ void G4TScoreNtupleWriter<T>::Write()
 
 //_____________________________________________________________________________
 template <typename T>
-void G4TScoreNtupleWriter<T>::SetVerboseLevel(G4int value)
+void G4TScoreNtupleWriter<T>::SetDefaultFileType(const G4String& value)
 {
-  fVerboseLevel = value;
+  fDefaultFileType = value;
   if(fAnalysisManager)
   {
-    fAnalysisManager->SetVerboseLevel(value);
+    fAnalysisManager->SetDefaultFileType(value);
   }
 }
 
@@ -336,4 +330,15 @@ template <typename T>
 void G4TScoreNtupleWriter<T>::SetFileName(const G4String& fileName)
 {
   fFileName = fileName;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+void G4TScoreNtupleWriter<T>::SetVerboseLevel(G4int value)
+{
+  fVerboseLevel = value;
+  if(fAnalysisManager)
+  {
+    fAnalysisManager->SetVerboseLevel(value);
+  }
 }

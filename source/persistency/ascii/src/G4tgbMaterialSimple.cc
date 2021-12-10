@@ -60,7 +60,7 @@ G4Material* G4tgbMaterialSimple::BuildG4Material()
 
   G4Material* mate =
     new G4Material(GetName(), GetZ(), GetA(), theTgrMate->GetDensity(),
-                   kStateUndefined, STP_Temperature);
+                   kStateUndefined, NTP_Temperature);
 
 #ifdef G4VERBOSE
   if(G4tgrMessenger::GetVerboseLevel() >= 2)

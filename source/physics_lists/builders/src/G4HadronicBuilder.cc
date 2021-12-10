@@ -351,6 +351,7 @@ void G4HadronicBuilder::BuildDecayTableForBCHadrons() {
     G4DecayTable* decayTable = new G4DecayTable;
     const G4int numberDecayChannels = 1;
     G4VDecayChannel** mode = new G4VDecayChannel*[ numberDecayChannels ];
+    for ( G4int i = 0; i < numberDecayChannels; ++i ) mode[i] = nullptr;
     switch ( pdg ) {
       // Charmed mesons
       case  411 :  // D+ 
@@ -462,6 +463,7 @@ void G4HadronicBuilder::BuildDecayTableForBCHadrons() {
     G4DecayTable* decayTable = new G4DecayTable;
     const G4int numberDecayChannels = 1;
     G4VDecayChannel** mode = new G4VDecayChannel*[ numberDecayChannels ];
+    for ( G4int i = 0; i < numberDecayChannels; ++i ) mode[i] = nullptr;
     mode[0] = new G4PhaseSpaceDecayChannel( "etac", 1.0, 3, "eta", "pi+", "pi-" );
     for ( G4int index = 0; index < numberDecayChannels; ++index ) decayTable->Insert( mode[index] );
     delete [] mode;
@@ -471,6 +473,7 @@ void G4HadronicBuilder::BuildDecayTableForBCHadrons() {
     G4DecayTable* decayTable = new G4DecayTable;
     const G4int numberDecayChannels = 1;
     G4VDecayChannel** mode = new G4VDecayChannel*[ numberDecayChannels ];
+    for ( G4int i = 0; i < numberDecayChannels; ++i ) mode[i] = nullptr;
     mode[0] = new G4PhaseSpaceDecayChannel( "J/psi", 1.0, 3, "pi0", "pi+", "pi-" );
     for ( G4int index = 0; index < numberDecayChannels; ++index ) decayTable->Insert( mode[index] );
     delete [] mode;
@@ -480,6 +483,7 @@ void G4HadronicBuilder::BuildDecayTableForBCHadrons() {
     G4DecayTable* decayTable = new G4DecayTable;
     const G4int numberDecayChannels = 1;
     G4VDecayChannel** mode = new G4VDecayChannel*[ numberDecayChannels ];
+    for ( G4int i = 0; i < numberDecayChannels; ++i ) mode[i] = nullptr;
     mode[0] = new G4PhaseSpaceDecayChannel( "Upsilon", 1.0, 3, "eta_prime", "pi+", "pi-" );
     for ( G4int index = 0; index < numberDecayChannels; ++index ) decayTable->Insert( mode[index] );
     delete [] mode;

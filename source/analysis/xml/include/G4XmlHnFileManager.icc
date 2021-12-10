@@ -26,6 +26,8 @@
 
 // Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
 
+#include "G4AnalysisUtilities.hh"
+
 #include "tools/waxml/histos"
 #include "tools/waxml/begend"
 
@@ -63,7 +65,7 @@ G4bool G4XmlHnFileManager<HT>::WriteExtra(
 template <typename HT>
 G4bool G4XmlHnFileManager<HT>::Write(
   HT* ht, const G4String& htName,  G4String& fileName)
-{  
+{
   if ( fileName.empty()) {
     // should not happen
     G4cerr << "!!! Xml file name not defined." << G4endl;
@@ -73,13 +75,9 @@ G4bool G4XmlHnFileManager<HT>::Write(
 
   auto hnFile = fFileManager->GetTFile(fileName);
   if ( hnFile == nullptr ) {
-    // TO DO: give an exception, 
-    // this prototype can be used only with OpenFile() mode
-    G4ExceptionDescription description;
-    description 
-      << "Failed to get Xml file " << fileName; 
-    G4Exception("G4XmlHnFileManager<HT>::Write()",
-                "Analysis_W022", JustWarning, description);
+    // This prototype can be used only with OpenFile() mode
+    G4Analysis::Warn(
+      G4String("Failed to get Xml file ") + fileName, fkClass, "Write");
     return false;
   }
 

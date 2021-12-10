@@ -47,7 +47,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "Run.hh"
 #include "G4RunManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

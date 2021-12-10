@@ -65,7 +65,6 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   steppingAlgorithm(fUseSafety)
 {
   dedx = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
-  SetUseBaseMaterials(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,33 +89,22 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
   } else {
     change = new G4ParticleChangeForMSC();
   }
-  if(nullptr != p) {
+  if(IsMaster() && nullptr != p) {
 
-    // table is never built for GenericIon 
-    if(p->GetParticleName() == "GenericIon") {
-      if(nullptr != xSectionTable) {
-        xSectionTable->clearAndDestroy();
-        delete xSectionTable;
-        xSectionTable = nullptr;
-      }
-
-      // table is always built for low mass particles 
-    } else if(p->GetPDGMass() < CLHEP::GeV || ForceBuildTableFlag()) {
-      //  } else if(p->GetPDGMass() < 4.5*CLHEP::GeV || ForceBuildTableFlag()) {
+    // table is always built for low mass particles 
+    if(p->GetParticleName() != "GenericIon" &&
+       (p->GetPDGMass() < CLHEP::GeV || ForceBuildTableFlag()) ) {
 
       G4EmParameters* param = G4EmParameters::Instance();
-      idxTable = 0;
       G4LossTableBuilder* builder = 
 	G4LossTableManager::Instance()->GetTableBuilder();
-      if(IsMaster()) {
-        G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
-        G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
-        emin = std::max(emin, param->MinKinEnergy());
-        emax = std::min(emax, param->MaxKinEnergy());
-        if(emin < emax) {
-          xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
-                                                      emin, emax, true);
-        }
+      G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
+      G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
+      emin = std::max(emin, param->MinKinEnergy());
+      emax = std::min(emax, param->MaxKinEnergy());
+      if(emin < emax) {
+	xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
+						    emin, emax, true);
       }
     }
   }

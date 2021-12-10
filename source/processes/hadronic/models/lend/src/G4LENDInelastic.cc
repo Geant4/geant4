@@ -215,7 +215,7 @@ G4HadFinalState* G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack,
       Psum += momentum;
       theSec->SetMomentum(momentum);
 //      theResult->AddSecondary(theSec);
-      theParticleChange.AddSecondary(theSec);
+      theParticleChange.AddSecondary(theSec, secID);
     }
 
     G4int productM(0);
@@ -234,7 +234,7 @@ G4HadFinalState* G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack,
       Psum += momentum;
       theSec->SetMomentum(momentum);
 //      theResult->AddSecondary(theSec);
-      theParticleChange.AddSecondary(theSec);
+      theParticleChange.AddSecondary(theSec, secID);
     }
 
     // Create heavy fragment if necessary to try to balance A, Z
@@ -254,7 +254,7 @@ G4HadFinalState* G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack,
       }
       theSec->SetMomentum(projMom - Psum);
 //      theResult->AddSecondary(theSec);
-      theParticleChange.AddSecondary(theSec);
+      theParticleChange.AddSecondary(theSec, secID);
     }
   } // loop OK
 

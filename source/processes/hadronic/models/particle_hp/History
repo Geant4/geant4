@@ -14,6 +14,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2021 Alberto Ribon (hadr-hpp-V10-07-11)
+--------------------------------------------------
+Improvements made by Loic Thulliez and Eric Dumonteil (CEA Saclay):
+- G4ParticleHPThermalScattering, G4ParticleHPElastic : corrected the
+  original treatment of the temperature interpolation when computing
+  the neutron final state, with the temperature interpolation performed
+  stochastically now. 
+- G4ParticleHPThermalScatteringNames : extended the list of materials
+  which can have thermal data libraries.
+
+22 October 2021 Alberto Ribon (hadr-hpp-V10-07-10)
+-------------------------------------------------
+- G4ParticleHPLabAngularEnergy : bug-fix made by Emilio Mendoza.
+
+04 August 2021 Alberto Ribon (hadr-hpp-V10-07-09)
+-------------------------------------------------
+- (affecting nearly all classes) : set creator model ID for secondaries,
+  using the new version of G4PhysicsModelCatalog
+
 23 May 2021 Dennis Wright (hadr-hpp-V10-07-08)
 ----------------------------------------------
 - G4ParticleHPInelasticCompFS:::CompositeApply():

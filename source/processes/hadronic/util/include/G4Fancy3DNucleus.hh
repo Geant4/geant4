@@ -40,7 +40,7 @@
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Nucleon.hh"		/* FIXME: This should be forward decl! */
+#include "G4Nucleon.hh"
 #include "G4V3DNucleus.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
@@ -74,15 +74,16 @@ class G4Fancy3DNucleus : public G4V3DNucleus
 
   public:
 #if defined(NON_INTEGER_A_Z)
-      void Init(G4double theA, G4double theZ);
+      void Init(G4double theA, G4double theZ, G4int numberOfLambdas = 0);
 #endif
-      void Init(G4int theA, G4int theZ);
+      void Init(G4int theA, G4int theZ, G4int numberOfLambdas = 0);
       G4bool StartLoop();
       G4Nucleon * GetNextNucleon();
       const std::vector<G4Nucleon> & GetNucleons();
       G4int GetMassNumber();
       G4double GetMass();
       G4int GetCharge();
+      G4int GetNumberOfLambdas();  // Non-negative number of Lambdas (for hypernuclei) or anti-Lambdas (for anti-hypernuclei) 
       G4double GetNuclearRadius();
       G4double GetNuclearRadius(const G4double maxRelativeDensity);
       G4double GetOuterRadius();
@@ -103,13 +104,13 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   
   G4int myA;
   G4int myZ;
+  G4int myL;  // Non-negative number of Lambdas (for hypernuclei) or anti-Lambdas (for anti-hypernuclei) 
   std::vector<G4Nucleon> theNucleons;
 
   G4int currentNucleon;
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  
-//const G4double nucleondistance;  // Uzhi Dec. 2017
-  G4double nucleondistance;        // Uzhi Dec. 2017
+  G4double nucleondistance;
   G4double excitationEnergy;
   
   std::vector<G4ThreeVector> places;		// For selecting locations
@@ -128,6 +129,12 @@ inline G4int G4Fancy3DNucleus::GetMassNumber()
 {
 	return myA;
 }
+
+inline G4int G4Fancy3DNucleus::GetNumberOfLambdas()
+{
+        return myL;
+} 
+
 inline G4double G4Fancy3DNucleus::AddExcitationEnergy(G4double anE)
 {
    excitationEnergy +=anE;

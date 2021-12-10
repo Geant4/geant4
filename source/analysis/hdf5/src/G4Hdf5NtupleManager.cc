@@ -34,22 +34,14 @@
 
 #include "tools/ntuple_booking"
 
-#include <iostream>
-//#include <cstdio>
-
 using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4Hdf5NtupleManager::G4Hdf5NtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>(state),
-   fFileManager(nullptr)
+ : G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>(state)
 {}
 
-//_____________________________________________________________________________
-G4Hdf5NtupleManager::~G4Hdf5NtupleManager()
-{}
-
-// 
+//
 // private methods
 //
 //_____________________________________________________________________________
@@ -68,11 +60,8 @@ void G4Hdf5NtupleManager::CreateTNtuple(
   // Check file
   if ( ! ntupleFile ) {
     if (warn) {
-      G4String inFunction = "G4Hdf5NtupleManager::::CreateTNtuple";
-      G4ExceptionDescription description;
-      description << "      " 
-        << "Cannot create ntuple. Ntuple file does not exist." << G4endl;
-      G4Exception(inFunction, "Analysis_W002", JustWarning, description);
+      Warn( "Cannot create ntuple. Ntuple file does not exist.",
+        fkClass, "CreateTNtuple");
     }
     return;
   }
@@ -88,7 +77,7 @@ void G4Hdf5NtupleManager::CreateTNtuple(
             G4cout, directory, ntupleDescription->fNtupleBooking,
             compressionLevel, basketSize);
 
-  fNtupleVector.push_back(ntupleDescription->fNtuple);  
+  fNtupleVector.push_back(ntupleDescription->fNtuple);
 }
 
 //_____________________________________________________________________________

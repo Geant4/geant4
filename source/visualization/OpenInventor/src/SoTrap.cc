@@ -35,8 +35,6 @@
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "HEPVis/nodes/SoTrap.h"
 
@@ -411,5 +409,3 @@ void SoTrap::generateAlternateRep() {
 void SoTrap::clearAlternateRep() {
   alternateRep.setValue(NULL);
 }
-
-#endif

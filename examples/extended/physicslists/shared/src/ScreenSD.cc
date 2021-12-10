@@ -29,12 +29,12 @@
 //
 
 #include "ScreenSD.hh"
-#include "Analysis.hh"
 
 #include "G4VTouchable.hh"
 #include "G4Step.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 #include "G4VProcess.hh"
 

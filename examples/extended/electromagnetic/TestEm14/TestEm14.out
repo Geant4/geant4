@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -59,7 +59,7 @@ Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
 Enable angular generator interface                 0
 Max kinetic energy for CSDA tables                 1 GeV
-Max kinetic energy for NIEL computation            0 meV
+Max kinetic energy for NIEL computation            0 eV 
 Linear loss limit                                  0.01
 Read data from file for e+e- pair production by mu 0
 =======================================================================
@@ -149,7 +149,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -179,7 +179,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.080000s Real=3.110162s Sys=0.000000s
+  User=2.710000s Real=2.744131s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -224,7 +224,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -249,26 +249,26 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.050000s Real=3.075968s Sys=0.000000s
+  User=2.520000s Real=2.554044s Sys=0.010000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 608449	eIoni = 391551
+ Process calls frequency --->	eBrem = 609748	eIoni = 390252
 
- MeanFreePath:	1.6125 cm  +- 1.6128 cm 	massic: 1.6125 g/cm2 
- CrossSection:	0.62015 cm^-1 			massic: 62.015 mm2/g 
+ MeanFreePath:	1.6135 cm  +- 1.6139 cm 	massic: 1.6135 g/cm2 
+ CrossSection:	0.61977 cm^-1 			massic: 61.977 mm2/g 
 
- mean energy of charged secondaries: 740.99 keV
-     ---> mass_energy_transfer coef: 459.52 um2/mg
+ mean energy of charged secondaries: 744.54 keV
+     ---> mass_energy_transfer coef: 461.44 um2/mg
 
  Verification : crossSections from G4EmCalculator 
-   eBrem= 37.788 mm2/g    eIoni= 24.337 mm2/g    total= 62.125 mm2/g 
+   eBrem= 37.79 mm2/g    eIoni= 24.206 mm2/g    total= 61.997 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 116422662, 1893707566
+ Current couple of seeds = 1944797771, 1867140892
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

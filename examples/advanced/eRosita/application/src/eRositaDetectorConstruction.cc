@@ -52,16 +52,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 eRositaDetectorConstruction::eRositaDetectorConstruction()
-
 {
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 eRositaDetectorConstruction::~eRositaDetectorConstruction()
 {
-             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -199,8 +196,6 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
 				  0);              // copy number 
 
 
-
-
   //------------------------------------------------ 
   // Sensitive detectors
   //------------------------------------------------ 
@@ -208,10 +203,9 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   G4String trackerChamberSDname = "eRosita/TrackerChamberSD";
-  eRositaTrackerSD* aTrackerSD = new eRositaTrackerSD( trackerChamberSDname );
-  SDman->AddNewDetector( aTrackerSD );
-  logicTracker->SetSensitiveDetector( aTrackerSD );
-
+  eRositaTrackerSD* aTrackerSD = new eRositaTrackerSD(trackerChamberSDname);
+  SDman->AddNewDetector(aTrackerSD);
+  logicTracker->SetSensitiveDetector(aTrackerSD);
 
 //--------- Visualization attributes -------------------------------
 
@@ -235,6 +229,18 @@ G4VPhysicalVolume* eRositaDetectorConstruction::Construct()
 
   
   return physiWorld;
+}
+
+void eRositaDetectorConstruction::ConstructSDandField()
+{
+    G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+
+    G4String trackerChamberSDname = "eRosita/TrackerChamberSD";
+    eRositaTrackerSD* aTrackerSD = new eRositaTrackerSD(trackerChamberSDname);
+    SDman->AddNewDetector(aTrackerSD);
+    logicTracker->SetSensitiveDetector(aTrackerSD);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

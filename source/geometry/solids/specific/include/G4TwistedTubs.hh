@@ -27,14 +27,15 @@
 //
 // Class description:
 //
-//  G4TwistedTubs is a sort of twisted cylinder.
+//  G4TwistedTubs is a sector of a twisted hollow cylinder.
 //  A twisted cylinder which is placed along with z-axis and is
 //  separated into phi-segments should become a hyperboloid, and
-//  its each segmented piece should be tilted with a stereo angle. 
+//  its each segmented piece should be tilted with a stereo angle.
 //  G4TwistedTubs is a G4VSolid.
-//  It can have inner & outer surfaces as well as G4TwistedTubs, 
-//  but cannot has different stereo angles between the inner surface
-//  and outer surface.
+//
+//  Details of the implementation: "Development of a Geant4 solid
+//  for stereo mini-jet cells in a cylindrical drift chamber",
+//  Computer Physics Communications 153 (2003) pp.373–391
 
 // 01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp), created.
 // 13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4

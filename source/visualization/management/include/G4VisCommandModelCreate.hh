@@ -123,7 +123,7 @@ G4VisCommandModelCreate<Factory>::GetCurrentValue(G4UIcommand*)
 template <typename Factory>
 void G4VisCommandModelCreate<Factory>::SetNewValue(G4UIcommand*, G4String newName) 
 {
-  if (newName.isNull()) newName = NextName();
+  if (newName.empty()) newName = NextName();
 
   assert (0 != fpFactory);
 

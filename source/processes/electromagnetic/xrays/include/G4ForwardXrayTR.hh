@@ -151,6 +151,8 @@ class G4ForwardXrayTR : public G4TransitionRadiation
   G4double fGammaTkinCut;  // Tkin cut of TR photon in current mat.
   G4double fSigma1;        // plasma energy Sq of matter1
   G4double fSigma2;        // plasma energy Sq of matter2
+
+  G4int secID = -1;  // creator modelID
 };
 
 #endif  // G4FORWARDXRAYTR_H

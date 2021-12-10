@@ -189,7 +189,7 @@ G4ParticleDefinition* G4DecayTableMessenger::SetCurrentParticle()
 
 G4String G4DecayTableMessenger::GetCurrentValue(G4UIcommand* command)
 {
-  G4String returnValue('\0');
+  G4String returnValue(1,'\0');
 
   if (SetCurrentParticle() == nullptr)
   {

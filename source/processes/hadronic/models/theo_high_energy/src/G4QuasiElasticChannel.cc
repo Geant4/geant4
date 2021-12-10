@@ -54,6 +54,7 @@
 #include "G4QuasiElRatios.hh"
 #include "globals.hh"
 #include <vector>
+#include "G4PhysicsModelCatalog.hh"
 
 //#define debug_scatter
 
@@ -61,7 +62,9 @@
 G4QuasiElasticChannel::G4QuasiElasticChannel()
   : G4HadronicInteraction("QuasiElastic"),
     theQuasiElastic(new G4QuasiElRatios),
-    the3DNucleus(new G4Fancy3DNucleus) {
+    the3DNucleus(new G4Fancy3DNucleus),
+    secID(-1) {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_QuasiElastic" );  
 }
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
@@ -165,16 +168,19 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
   G4KineticTrackVector * ktv = new G4KineticTrackVector();
   G4KineticTrack * sPrim=new G4KineticTrack(thePrimary.GetDefinition(),
                                             0.,G4ThreeVector(0), scatteredHadron4Mom);
+  sPrim->SetCreatorModelID( secID );
   ktv->push_back(sPrim);
   if (result.first.e() > 0.)
   {
     G4KineticTrack * sNuc=new G4KineticTrack(pDef, 0.,G4ThreeVector(0), result.first);
+    sNuc->SetCreatorModelID( secID );
     ktv->push_back(sNuc);
   }
   if(resZ || resA==1) // For the only neutron or for tnuclei with Z>0 
   {
     G4KineticTrack * rNuc=new G4KineticTrack(resDef,
                            0.,G4ThreeVector(0), residualNucleus4Mom);
+    rNuc->SetCreatorModelID( secID );
     ktv->push_back(rNuc);
   }
   else // The residual nucleus consists of only neutrons 
@@ -184,6 +190,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
     {
       G4KineticTrack* rNuc=new G4KineticTrack(resDef,
                            0.,G4ThreeVector(0), residualNucleus4Mom);
+      rNuc->SetCreatorModelID( secID );
       ktv->push_back(rNuc);
     }
   }

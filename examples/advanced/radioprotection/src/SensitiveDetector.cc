@@ -72,7 +72,7 @@ G4bool SensitiveDetector::ProcessHits(G4Step* aStep,
 
   G4String volumeName = aStep -> GetPreStepPoint() -> GetPhysicalVolume()-> GetName();
 
-  if(volumeName != "SV_phys1") 
+  if(volumeName != "SV_phys1" && volumeName != "sen_bridge" && volumeName != "physSensitiveBridgeVolume" ) 
     return false;  
 
   SensitiveDetectorHit* newHit = new SensitiveDetectorHit();

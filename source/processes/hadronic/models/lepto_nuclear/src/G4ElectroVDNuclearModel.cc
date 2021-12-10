@@ -58,10 +58,11 @@
 
 #include "G4HadFinalState.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
  : G4HadronicInteraction("G4ElectroVDNuclearModel"),
-   leptonKE(0.0), photonEnergy(0.0), photonQ2(0.0)
+   leptonKE(0.0), photonEnergy(0.0), photonQ2(0.0), secID(-1)
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(1*PeV);
@@ -92,6 +93,9 @@ G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
     
   // Build Bertini model
   bert = new G4CascadeInterface();
+
+  // Creator model ID
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );
 }
 
 G4ElectroVDNuclearModel::~G4ElectroVDNuclearModel()
@@ -227,6 +231,11 @@ G4ElectroVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
 
   delete incident;
 
+  // Assign the creator model ID to the secondaries
+  for ( size_t i = 0; i < hfs->GetNumberOfSecondaries(); ++i ) {
+    hfs->GetSecondary( i )->SetCreatorModelID( secID );
+  }
+  
   // Copy secondaries from sub-model to model
   theParticleChange.AddSecondaries(hfs);
 }

@@ -130,6 +130,7 @@ class G4QMDReaction : public G4HadronicInteraction
 
     G4bool gem;
     G4bool frag;
+    G4int secID;  // Creator model ID for the secondaries
 };
 
 #endif

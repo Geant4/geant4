@@ -176,7 +176,7 @@ void GammaRayTelPhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePolarizedPhysics();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
-  } else if (name == "Gamma_Polarized") {
+  } else if (name == "standard_opt4") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option4();

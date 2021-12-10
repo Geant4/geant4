@@ -246,6 +246,7 @@ void HistoManager::EndOfRun()
   G4cout.precision(prec);
   fAnalysisManager->Write();
   fAnalysisManager->CloseFile();
+  fAnalysisManager->Clear();
 
   G4bool extra = true;
   if(fTargetMaterial && extra) {
@@ -257,7 +258,6 @@ void HistoManager::EndOfRun()
            << " GeV on " << fTargetMaterial->GetName()
            << " xs/X0= " << 1.0/(cross*fTargetMaterial->GetRadlen()) << G4endl;
   }
-  delete fAnalysisManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

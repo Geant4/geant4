@@ -35,4 +35,5 @@ G4UIcmdWithoutParameter::G4UIcmdWithoutParameter(const char* theCommandPath,
                                                  G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
+  SetCommandType(WithoutParameterCmd);
 }

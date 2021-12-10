@@ -78,7 +78,8 @@ G4KineticTrack::G4KineticTrack() :
                 theDaughterMass(0),
                 theDaughterWidth(0),
 		theStateToNucleus(undefined),
-		theProjectilePotential(0)
+		theProjectilePotential(0),
+                theCreatorModel(-1)
 {
 ////////////////
 //    DEBUG   //
@@ -117,7 +118,7 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon(
  theDaughterWidth = 0;
  theStateToNucleus=right.theStateToNucleus;
  theProjectilePotential=right.theProjectilePotential;
- 
+ theCreatorModel = right.GetCreatorModelID();
 ////////////////
 //    DEBUG   //
 ////////////////
@@ -146,7 +147,8 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 		theTotal4Momentum(a4Momentum),
 		theNucleon(0),
 		theStateToNucleus(undefined),
-		theProjectilePotential(0)
+		theProjectilePotential(0),
+                theCreatorModel(-1)
 {
   if(G4KaonZero::KaonZero() == theDefinition ||
     G4AntiKaonZero::AntiKaonZero() == theDefinition)
@@ -412,8 +414,8 @@ G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
 }
 
 G4KineticTrack::G4KineticTrack(G4Nucleon * nucleon,
-								const G4ThreeVector& aPosition,
-                                const G4LorentzVector& a4Momentum)
+			       const G4ThreeVector& aPosition,
+                               const G4LorentzVector& a4Momentum)
   :     theDefinition(nucleon->GetDefinition()),
 	theFormationTime(0),
 	thePosition(aPosition),
@@ -426,7 +428,8 @@ G4KineticTrack::G4KineticTrack(G4Nucleon * nucleon,
 	theDaughterMass(0),
 	theDaughterWidth(0),
 	theStateToNucleus(undefined),
-	theProjectilePotential(0)
+	theProjectilePotential(0),
+        theCreatorModel(-1)
 {
 	theFermi3Momentum.setE(0);
 	Set4Momentum(a4Momentum);
@@ -458,6 +461,7 @@ G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
      for (G4int i = 0; i < nChannels; ++i) theActualWidth[i] = right.theActualWidth[i];
+     theCreatorModel = right.GetCreatorModelID();
     }
  return *this;
 }
@@ -694,7 +698,9 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 		                                        
 //
 //      Create the kinetic track List associated to the decay products
-//
+//      
+//      For the decay products of hadronic resonances, we assign as creator model ID
+//      the same as their parent
      G4LorentzRotation toMoving(Get4Momentum().boostVector());
      G4DynamicParticle* theDynamicParticle;
      G4double formationTime = 0.0;
@@ -713,10 +719,12 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 	 momentumBalanceCMS += theDynamicParticle->Get4Momentum();
          momentum = toMoving*theDynamicParticle->Get4Momentum();
          energyMomentumBalance -= momentum;
-         theDecayProductList->push_back(new G4KineticTrack (aProduct,
+         G4KineticTrack* aDaughter = new G4KineticTrack (aProduct,
                                                          formationTime,
                                                          position,
-                                                         momentum));
+                                                         momentum);
+         if (aDaughter != nullptr) aDaughter->SetCreatorModelID(GetCreatorModelID());
+         theDecayProductList->push_back(aDaughter);
          delete theDynamicParticle;
         }
      delete theDecayProducts;

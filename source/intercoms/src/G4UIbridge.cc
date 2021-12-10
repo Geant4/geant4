@@ -35,7 +35,7 @@ G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir)
   : localUImanager(localUI)
 {
   // make sure dirName starts and ends with '/'
-  if(dir(0, 1) == "/")
+  if(dir[0] == '/')
   {
     dirName = dir;
   }
@@ -43,7 +43,7 @@ G4UIbridge::G4UIbridge(G4UImanager* localUI, G4String dir)
   {
     dirName = "/" + dir;
   }
-  if(dirName(dirName.length() - 1, 1) != "/")
+  if(dirName.back() != '/')
   {
     dirName += "/";
   }

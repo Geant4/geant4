@@ -45,61 +45,54 @@ ExGflashHistoManager::ExGflashHistoManager(ExGflashDetectorConstruction* myDet)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHistoManager::~ExGflashHistoManager()
-{
-  delete G4AnalysisManager::Instance();
-}
+ExGflashHistoManager::~ExGflashHistoManager() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashHistoManager::Book()
 {
-  // Create or get analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in ExGflashHistoManager.hh
   G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetDefaultFileType("root");
   fAnalysisManager->SetFileName(fFileName);
   fAnalysisManager->SetVerboseLevel(1);
-  fAnalysisManager->SetActivation(true);   // enable inactivation of histograms
+  fAnalysisManager->SetActivation(true);  // enable inactivation of histograms
   //
   // Creating histograms
   //
   // const G4int kMaxHisto = 9;
   // const G4int kMaxProf = 2;
-  G4int nLbin = fDet->GetnLtot();
-  G4int nRbin = fDet->GetnRtot();
+  G4int    nLbin  = fDet->GetnLtot();
+  G4int    nRbin  = fDet->GetnRtot();
   G4double dLradl = fDet->GetdLradl();
   G4double dRradl = fDet->GetdRradl();
-  
 
-  fAnalysisManager->CreateH1( "h0","total energy deposit(percent of Einc)",
-                                  100,95.,105.);
+  fAnalysisManager->CreateH1(
+    "h0", "total energy deposit(percent of Einc)", 100, 95., 105.);
 
-  fAnalysisManager->CreateH1( "h1","The number of Hits per event",
-                                     200,0.,4.0e5);
-                                    
-  fAnalysisManager->CreateH1( "h2","The energy of Hit (in MeV)",
-                                     200,0.,10.);
-                                    
+  fAnalysisManager->CreateH1(
+    "h1", "The number of Hits per event", 200, 0., 4.0e5);
+
+  fAnalysisManager->CreateH1("h2", "The energy of Hit (in MeV)", 200, 0., 10.);
+
   // fAnalysisManager->CreateH1( "h3","longit energy profile (% of E inc)",
   //                                   nLbin,0.,nLbin*dLradl);
-                                    
+
   // fAnalysisManager->CreateH1( "h4","radial energy profile (% of E inc)",
   //                                 nRbin,0.,nRbin*dRradl);
 
-  fAnalysisManager->CreateP1( "p0","longit energy profile (% of E inc)",
-                                    nLbin,0.,nLbin*dLradl, 0., 2000.);
-                                    
-  fAnalysisManager->CreateP1( "p1","radial energy profile (% of E inc)",
-                                  nRbin,0.,nRbin*dRradl, 0., 2000.);
-                                  
-  fAnalysisManager->CreateP1( "p2","Comul longit energy profile (% of E inc)",
-                                    nLbin,0.,nLbin*dLradl, 0., 20000.);
-                                    
-  fAnalysisManager->CreateP1( "p3","Cuml radial energy profile (% of E inc)",
-                                  nRbin,0.,nRbin*dRradl, 0., 20000.);
-                                  
-  // Create all histograms as inactivated 
+  fAnalysisManager->CreateP1("p0", "longit energy profile (% of E inc)", nLbin,
+    0., nLbin * dLradl, 0., 2000.);
+
+  fAnalysisManager->CreateP1("p1", "radial energy profile (% of E inc)", nRbin,
+    0., nRbin * dRradl, 0., 2000.);
+
+  fAnalysisManager->CreateP1("p2", "Comul longit energy profile (% of E inc)",
+    nLbin, 0., nLbin * dLradl, 0., 20000.);
+
+  fAnalysisManager->CreateP1("p3", "Cuml radial energy profile (% of E inc)",
+    nRbin, 0., nRbin * dRradl, 0., 20000.);
+
+  // Create all histograms as inactivated
   // for (G4int k=0; k<kMaxHisto; k++) {
   //   fAnalysisManager->SetH1Activation(k, false);
   // }

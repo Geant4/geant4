@@ -27,18 +27,41 @@
 //
 // --------------------------------------------------------------------
 
+extern G4GEOM_DLL G4Allocator<G4SmartVoxelProxy>*& aProxyAllocator();
+
+// --------------------------------------------------------------------
+inline
+void* G4SmartVoxelProxy::operator new(std::size_t)
+{
+  if(aProxyAllocator() == nullptr)
+  {
+    aProxyAllocator() = new G4Allocator<G4SmartVoxelProxy>;
+  }
+  return (void*) aProxyAllocator()->MallocSingle();
+}
+
+// --------------------------------------------------------------------
+inline
+void G4SmartVoxelProxy::operator delete(void* aProxy)
+{
+  aProxyAllocator()->FreeSingle((G4SmartVoxelProxy*) aProxy);
+}
+
+// --------------------------------------------------------------------
 inline
 G4bool G4SmartVoxelProxy::IsHeader() const
 {
   return (fHeader) ? true : false;
 }   
 
+// --------------------------------------------------------------------
 inline
 G4bool G4SmartVoxelProxy::IsNode() const
 {
   return (fNode) ? true : false;
 }
 
+// --------------------------------------------------------------------
 inline
 G4SmartVoxelNode* G4SmartVoxelProxy::GetNode() const
 {
@@ -46,6 +69,7 @@ G4SmartVoxelNode* G4SmartVoxelProxy::GetNode() const
   return fNode;
 }
 
+// --------------------------------------------------------------------
 inline
 G4SmartVoxelHeader* G4SmartVoxelProxy::GetHeader() const
 {
@@ -53,6 +77,7 @@ G4SmartVoxelHeader* G4SmartVoxelProxy::GetHeader() const
   return fHeader;
 }
 
+// --------------------------------------------------------------------
 inline
 G4bool G4SmartVoxelProxy::operator == (const G4SmartVoxelProxy& right) const
 {

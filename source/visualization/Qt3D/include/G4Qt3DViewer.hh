@@ -25,8 +25,6 @@
 //
 // John Allison  17th June 2019
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #ifndef G4QT3DVIEWER_HH
 #define G4QT3DVIEWER_HH
 
@@ -49,7 +47,9 @@ public:
   void ShowView();
   void FinishView();
 
+  void MovingToVisSubThread();
   void SwitchToVisSubThread();
+  void MovingToMasterThread();
   void SwitchToMasterThread();
 
 protected:
@@ -77,5 +77,3 @@ protected:
 };
 
 #endif
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

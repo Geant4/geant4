@@ -114,6 +114,12 @@ public:
   //for superimposed Coulomb Barrier for inverse cross sections
   inline void UseSICB(G4bool);
 
+  G4VPreCompoundFragment(const G4VPreCompoundFragment &right) = delete;
+  const G4VPreCompoundFragment& 
+  operator= (const G4VPreCompoundFragment &right) = delete;  
+  G4bool operator==(const G4VPreCompoundFragment &right) const = delete;
+  G4bool operator!=(const G4VPreCompoundFragment &right) const = delete;
+
 protected:
 
   virtual G4double GetAlpha() const = 0;
@@ -121,16 +127,6 @@ protected:
   virtual G4double GetBeta() const = 0;
 
 private:
-
-  G4VPreCompoundFragment(const G4VPreCompoundFragment &right) = delete;
-  const G4VPreCompoundFragment& 
-  operator= (const G4VPreCompoundFragment &right) = delete;  
-  G4bool operator==(const G4VPreCompoundFragment &right) const = delete;
-  G4bool operator!=(const G4VPreCompoundFragment &right) const = delete;
-
-  // =============
-  // Data members
-  // =============
 
   const G4ParticleDefinition* particle;
   G4VCoulombBarrier * theCoulombBarrierPtr;

@@ -63,6 +63,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   //  G4cout << "G4CoulombScattering constructor "<< G4endl;
   SetBuildTableFlag(true);
   SetStartFromNullFlag(false);
+  SetSplineFlag(false);
   SetCrossSectionType(fEmOnePeak);
   SetSecondaryParticle(G4Proton::Proton());
   SetProcessSubType(fCoulombScattering);

@@ -81,32 +81,26 @@ class G4MCCIndexConversionTable
 inline
 G4bool G4MCCIndexConversionTable::IsUsed(std::size_t index) const
 {
-  if (index >= vecNewIndex.size()) return false;
-
   // returns 'true' if the indicated MCC in the file 
   // is used in the current production cut table
-  return (vecNewIndex[index] >= 0); 
+  return ((index < vecNewIndex.size()) && (vecNewIndex[index] >= 0)); 
 }
 
 inline
 void G4MCCIndexConversionTable::SetNewIndex(std::size_t index,
                                             std::size_t new_value)
 {
-  if (index >= vecNewIndex.size()) return;
-
   // set the index in the current production cut table
   // for the indicated MCC in the file
-  vecNewIndex[index]=G4int(new_value);  
+  if (index < vecNewIndex.size()) vecNewIndex[index] = new_value;  
 }  
 
 inline
 G4int G4MCCIndexConversionTable::GetIndex(std::size_t index) const
 {
-  if (index >= vecNewIndex.size()) return -1;
-
   // get the index in the current production cut table
   // for the indicated MCC in the file
-  return (vecNewIndex[index]);  
+  return (index < vecNewIndex.size()) ? vecNewIndex[index] : -1;  
 }
 
 inline

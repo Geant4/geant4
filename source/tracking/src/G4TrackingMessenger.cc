@@ -162,5 +162,5 @@ G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand* command)
     return StoreTrajectoryCmd
            ->ConvertToString(trackingManager->GetStoreTrajectory());
   }
-  return G4String('\0');
+  return G4String(1,'\0');
 }

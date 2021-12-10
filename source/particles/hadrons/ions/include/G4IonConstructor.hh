@@ -43,11 +43,11 @@ class G4IonConstructor
     G4IonConstructor();
     ~G4IonConstructor();
   
-  public:
     static void ConstructParticle();
 
   protected:
     static void ConstructLightIons();
+    static void ConstructHyperNuclei();
 };
 
 #endif

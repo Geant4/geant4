@@ -322,10 +322,12 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
 ///////////////////////////////////////////////////////////////////////
 
-G4double G4PAIModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
-                                         const G4DynamicParticle* aParticle,
-					 G4double tmax, G4double step,
-					 G4double eloss)
+G4double G4PAIModel::SampleFluctuations(const G4MaterialCutsCouple* matCC,
+                                        const G4DynamicParticle* aParticle,
+                                        const G4double tcut,
+					const G4double, 
+                                        const G4double step,
+					const G4double eloss)
 {
   G4int coupleIndex = FindCoupleIndex(matCC);
   if(0 > coupleIndex) { return eloss; }
@@ -342,7 +344,7 @@ G4double G4PAIModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
   G4double scaledTkin = Tkin*fRatio;
 
   G4double loss = fModelData->SampleAlongStepTransfer(coupleIndex, Tkin,
-						      scaledTkin, tmax,
+						      scaledTkin, tcut,
 						      step*fChargeSquare);
   
   // G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "
@@ -359,8 +361,9 @@ G4double G4PAIModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
 
 G4double G4PAIModel::Dispersion( const G4Material* material, 
                                  const G4DynamicParticle* aParticle,
- 				       G4double tmax, 
-			               G4double step       )
+ 				 const G4double tcut,
+ 				 const G4double tmax,
+			         const G4double step )
 {
   G4double particleMass  = aParticle->GetMass();
   G4double electronDensity = material->GetElectronDensity();
@@ -368,7 +371,7 @@ G4double G4PAIModel::Dispersion( const G4Material* material,
   G4double q = aParticle->GetCharge()/eplus;
   G4double etot = kineticEnergy + particleMass;
   G4double beta2 = kineticEnergy*(kineticEnergy + 2.0*particleMass)/(etot*etot);
-  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * step
+  G4double siga  = (tmax/beta2 - 0.5*tcut) * twopi_mc2_rcl2 * step
                  * electronDensity * q * q;
 
   return siga;

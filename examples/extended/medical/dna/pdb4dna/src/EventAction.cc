@@ -38,7 +38,7 @@
 
 #include "EventAction.hh"
 
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "EventActionMessenger.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"

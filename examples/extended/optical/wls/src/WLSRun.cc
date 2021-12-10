@@ -54,8 +54,6 @@ WLSRun::WLSRun()
   fClad2Bounce2  = 0.;
   fReflected     = 0.;
   fReflected2    = 0.;
-  fDetected      = 0.;
-  fDetected2     = 0.;
   fEscaped       = 0.;
   fEscaped2      = 0.;
   fMirror        = 0.;
@@ -92,8 +90,6 @@ void WLSRun::Merge(const G4Run* run)
   fClad2Bounce2 += localRun->fClad2Bounce2;
   fReflected += localRun->fReflected;
   fReflected2 += localRun->fReflected2;
-  fDetected += localRun->fDetected;
-  fDetected2 += localRun->fDetected2;
   fEscaped += localRun->fEscaped;
   fEscaped2 += localRun->fEscaped2;
   fMirror += localRun->fMirror;
@@ -184,14 +180,6 @@ void WLSRun::EndOfRun()
   else
     rmsReflected = 0.;
 
-  fDetected            = fDetected / TotNbofEvents;
-  fDetected2           = fDetected2 / TotNbofEvents;
-  G4double rmsDetected = fDetected2 - fDetected * fDetected;
-  if(rmsDetected > 0.)
-    rmsDetected = std::sqrt(rmsDetected);
-  else
-    rmsDetected = 0.;
-
   fEscaped            = fEscaped / TotNbofEvents;
   fEscaped2           = fEscaped2 / TotNbofEvents;
   G4double rmsEscaped = fEscaped2 - fEscaped * fEscaped;
@@ -229,7 +217,6 @@ void WLSRun::EndOfRun()
          << " +- " << rmsClad1Bounce << G4endl
          << " Clad2 Bounce: " << fClad2Bounce << " +- " << rmsClad2Bounce
          << G4endl << " Reflected:    " << fReflected << " +- " << rmsReflected
-         << G4endl << " Detected:     " << fDetected << " +- " << rmsDetected
          << G4endl << " Escaped:      " << fEscaped << " +- " << rmsEscaped
          << G4endl << " Mirror:       " << fMirror << " +- " << rmsMirror
          << G4endl << " Detector hit: " << fDetectorHits << " +- "

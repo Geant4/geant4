@@ -27,19 +27,47 @@
 // Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
 
 #include "G4Hdf5RNtupleManager.hh"
+#include "G4Hdf5RFileManager.hh"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4Hdf5RNtupleManager::G4Hdf5RNtupleManager(const G4AnalysisManagerState& state)
  : G4TRNtupleManager<tools::hdf5::ntuple>(state)
 {}
 
-//_____________________________________________________________________________
-G4Hdf5RNtupleManager::~G4Hdf5RNtupleManager()
-{}
-
-// 
+//
 // private methods
 //
+
+//_____________________________________________________________________________
+G4int G4Hdf5RNtupleManager::ReadNtupleImpl(const G4String& ntupleName,
+                                           const G4String& fileName,
+                                           const G4String& dirName,
+                                           G4bool isUserFileName)
+{
+  Message(kVL4, "read", "ntuple", ntupleName);
+
+  // Ntuples are saved in files per thread
+  // but apply thethe thread suffix only if fileName is not provided explicitly
+  G4String fullFileName = fileName;
+  if ( ! isUserFileName ) {
+    fullFileName = fFileManager->GetFullFileName();
+  }
+
+  // Get directory
+  auto directory = fFileManager->GetNtupleRDirectory(fullFileName, dirName, false);
+  if ( directory < 0 ) return kInvalidId;
+
+  // Create ntuple
+  auto rntuple = new tools::hdf5::ntuple(G4cout, directory, ntupleName);
+  auto rntupleDescription = new G4TRNtupleDescription<tools::hdf5::ntuple>(rntuple);
+  auto id = SetNtuple(rntupleDescription);
+
+  Message(kVL2, "read", "ntuple", ntupleName, id > kInvalidId);
+
+  return id;
+}
 
 //_____________________________________________________________________________
 G4bool G4Hdf5RNtupleManager::GetTNtupleRow(
@@ -51,26 +79,16 @@ G4bool G4Hdf5RNtupleManager::GetTNtupleRow(
   if ( ! isInitialized ) {
     auto ntupleBinding = ntupleDescription->fNtupleBinding;
     if ( ! ntuple->initialize(G4cout, *ntupleBinding) ) {
-      G4ExceptionDescription description;
-      description 
-        << "      " 
-        << "Ntuple initialization failed !!"; 
-      G4Exception("G4Hdf5RNtuple::GetNtupleRow()",
-                  "Analysis_WR021", JustWarning, description);
+      Warn("Ntuple initialization failed !!", fkClass, "GetTNtupleRow");
       return false;
     }
     ntupleDescription->fIsInitialized = true;
   }
 
   if ( ! ntuple->get_row() ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "Ntuple get_row() failed !!"; 
-    G4Exception("G4Hdf5RNtuple::GetNtupleRow()",
-                "Analysis_WR021", JustWarning, description);
+    Warn( "Ntuple get_row() failed !!", fkClass, "GetTNtupleRow");
     return false;
   }
 
   return true;
-}   
+}

@@ -71,6 +71,8 @@ private:
   G4int resA;
   G4int resZ;
 
+  G4int secID;  // Creator model ID for the secondaries created by this model
+  
   G4double mass;
   G4double resMass;
 

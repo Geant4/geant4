@@ -27,8 +27,6 @@
 //
 //Framed box container class
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmBox.hh"
 #include "G4OpenGLXmFramedBox.hh"
 #include "G4OpenGLXmVWidgetComponent.hh"
@@ -99,5 +97,3 @@ void G4OpenGLXmFramedBox::AddYourselfTo (G4OpenGLXmVWidgetShell* window)
 					  NULL);
   
 }
-
-#endif

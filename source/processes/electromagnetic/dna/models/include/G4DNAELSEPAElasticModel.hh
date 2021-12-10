@@ -72,11 +72,11 @@ public:
                                  G4double maxEnergy);
 
   void SetMaximumEnergy (G4double input)
-                   {highEnergyLimit = input; SetHighEnergyLimit(input);};
+                   {fhighEnergyLimit = input; SetHighEnergyLimit(input);};
   
   void     SetKillBelowThreshold (G4double threshold);
   
-  G4double GetKillBelowThreshold() {return killBelowEnergy;}
+  G4double GetKillBelowThreshold() {return fkillBelowEnergy_Au;}
 
 protected:
 
@@ -84,21 +84,18 @@ protected:
 
 private:
  
-  G4int kScreeningFactor;
-
-  const std::vector<G4double>* fpMolDensity;
+  const std::vector<G4double>* fpMolDensity=nullptr;
   std::vector <G4double> kIntersectionEnergySR;
 
-  G4double killBelowEnergy;
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
+  G4double fkillBelowEnergy_Au=0.;
+  G4double flowEnergyLimit=0.;
+  G4double fhighEnergyLimit=0.;
   
-  G4bool isInitialised;
-  G4int verboseLevel;
+  G4bool isInitialised=false;
+  G4int verboseLevel=0;
 
-  typedef std::map<G4int,G4String, std::less<G4String> >MapZFile;
-  typedef std::map<G4int,G4DNACrossSectionDataSet*,std::less<G4String>>MapZData;
-  MapZData tableZData;
+  G4DNACrossSectionDataSet* fpData_Au=nullptr;
+  G4DNACrossSectionDataSet* fpData_H2O=nullptr;
 
   G4double Theta(G4int Z, G4ParticleDefinition * aParticleDefinition,
                  G4double k,
@@ -149,8 +146,16 @@ private:
 
   std::map <G4int, std::vector<G4double> > eEdummyVecZ;
 
-  typedef std::map <G4int, std::map<G4double, std::vector<G4double>>> VecMapZ;
-  VecMapZ eCumZ;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
+  VecMap eCum_Au;
+  VecMap eCum_H2O;
+
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  TriDimensionMap fAngleData_Au;
+  TriDimensionMap fAngleData_H2O;
+
+  std::vector<G4double> eEdummyVec_Au;
+  std::vector<G4double> eEdummyVec_H2O;
 
   G4DNAELSEPAElasticModel & operator=(const G4DNAELSEPAElasticModel &right);
   G4DNAELSEPAElasticModel(const G4DNAELSEPAElasticModel&);

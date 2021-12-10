@@ -27,8 +27,6 @@
 //
 // 
 
-#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
-
 #ifndef G4OPENGLQTMOVIEDIALOG_HH
 #define G4OPENGLQTMOVIEDIALOG_HH
 
@@ -87,7 +85,5 @@ private Q_SLOTS :
   void resetRecording();
   void enabledApplyButton();
 };
-
-#endif
 
 #endif

@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Oct 21: D. Sawkey (op-V10-07-05)
+- G4OpBoundaryProcess - rename variables: class start with f; lowercase
+  - make comparison to nullptr explicit
+  - remove unneeded intermediate variable
+  - refactor Davis LUT calculation
+
+21 Oct 21: D. Sawkey (op-V10-07-04)
+- G4OpBoundaryProcess - on StepTooSmall, propose velocity corresponding to
+  material of post step point. Addresses bug 2438.
+
+19 Oct 21: D. Sawkey (op-V10-07-03)
+- all process classes - update G4OpticalParameters when process
+  parameters updated directly. Addresses bug 2425.
+
 21 May 21: D. Sawkey (op-V10-07-02)
 - G4OpBoundaryProcess: make some variables local and initialize them
   properly. Addresses bug 2364.

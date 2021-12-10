@@ -31,8 +31,8 @@
 
 // Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-#ifndef G4ErrorCylSurfaceTarget_hh
-#define G4ErrorCylSurfaceTarget_hh
+#ifndef G4ERRORCYLSURFACETARGET_HH
+#define G4ERRORCYLSURFACETARGET_HH 1
 
 #include "globals.hh"
 #include "G4ErrorSurfaceTarget.hh"
@@ -43,7 +43,7 @@
 
 class G4ErrorCylSurfaceTarget : public G4ErrorSurfaceTarget
 {
-  public:  // with description
+  public:
 
     G4ErrorCylSurfaceTarget( const G4double& radius,
                              const G4ThreeVector& trans=G4ThreeVector(),
@@ -54,7 +54,7 @@ class G4ErrorCylSurfaceTarget : public G4ErrorSurfaceTarget
                              const G4AffineTransform& trans );
       // Constructs cylindrical surface by radius and affine transformation
 
-    ~G4ErrorCylSurfaceTarget();
+    ~G4ErrorCylSurfaceTarget() = default;
 
     virtual G4ThreeVector IntersectLocal( const G4ThreeVector& point,
                                           const G4ThreeVector& direc ) const;

@@ -37,7 +37,6 @@ set(GEANT4_FALSEPOSITIVE_SOURCES
   #   internally but validate_sources assumes icc files will be in
   #   include/
   #   They are covered in sources.cmake though!
-  G4VRML1SceneHandlerFunc.icc
   G4VRML2SceneHandlerFunc.icc
   # - Documentation of processes/hadronic/models/cascade/cascade
   # lists some sources in comments. These do not correspond to

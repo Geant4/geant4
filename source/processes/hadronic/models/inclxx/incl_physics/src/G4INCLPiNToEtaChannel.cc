@@ -89,7 +89,7 @@ namespace G4INCL {
 
 		G4double ECM=G4INCL::KinematicsUtils::totalEnergyInCM(particle1,particle2);
 
-		const G4double pi=std::acos(-1.0);		
+		const G4double pi=std::acos(-1.0);
 		G4double x1;
 		G4double u1;
 		G4double fteta;

@@ -1,0 +1,18 @@
+/CaTS/verbose false
+/CaTS/dumpgdml false
+/CaTS/writeHits true
+/CaTS/fname Hits_G4_point
+/process/optical/scintillation/setStackPhotons true
+/process/optical/cerenkov/setStackPhotons true
+/process/optical/rayleigh/verbose 0
+/process/optical/absorption/verbose 0
+/process/optical/boundary/verbose 0
+/run/initialize 
+/random/setSeeds 7 38 
+/CaTS/enable_opticks false
+/CaTS/doAnalysis false
+/gun/particle e-
+/gun/energy 2 MeV
+/gun/position 0. 0. 0. cm
+/gun/direction 0. 0. 1.
+/run/beamOn 100

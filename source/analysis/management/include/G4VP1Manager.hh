@@ -40,13 +40,13 @@ class G4HnManager;
 
 class G4VP1Manager
 {
-  // Disable using the object managers outside 
+  // Disable using the object managers outside
   friend class G4VAnalysisManager;
   friend class G4VAnalysisReader;
 
   public:
-    G4VP1Manager() {}
-    virtual ~G4VP1Manager() {}
+    G4VP1Manager() = default;
+    virtual ~G4VP1Manager() = default;
 
     // deleted copy constructor & assignment operator
     G4VP1Manager(const G4VP1Manager& rhs) = delete;
@@ -57,39 +57,39 @@ class G4VP1Manager
     virtual G4int CreateP1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear") = 0;
     virtual G4int CreateP1(const G4String& name, const G4String& title,
                            const std::vector<G4double>& edges,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none") = 0;
 
     virtual G4bool SetP1(G4int id,
                            G4int nbins, G4double xmin, G4double xmax,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear") = 0;
     virtual G4bool SetP1(G4int id,
                            const std::vector<G4double>& edges,
                            G4double ymin = 0, G4double ymax = 0,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none") = 0;
 
     virtual G4bool ScaleP1(G4int id, G4double factor) = 0;
-                           
+
     // Methods to fill profiles
-    virtual G4bool FillP1(G4int id, G4double xvalue, G4double yvalue, 
+    virtual G4bool FillP1(G4int id, G4double xvalue, G4double yvalue,
                           G4double weight = 1.0) = 0;
 
     // Access methods
@@ -114,7 +114,7 @@ class G4VP1Manager
     virtual G4String GetP1YAxisTitle(G4int id) const = 0;
 
     // Methods to manipulate profiles
-    // virtual G4bool WriteOnAscii(std::ofstream& output) = 0;
+    virtual G4bool WriteOnAscii(std::ofstream& output) = 0;
 
     // Access to Hn manager
     virtual std::shared_ptr<G4HnManager> GetHnManager() = 0;

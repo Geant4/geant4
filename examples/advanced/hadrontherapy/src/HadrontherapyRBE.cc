@@ -128,8 +128,8 @@ vector<G4String> split(const G4String& line, const G4String& delimiter)
     {
         pos = line.find(delimiter, current);
         G4String token = line.substr(current, pos - current);
-        token = token.strip(G4String::both);
-        token = token.strip(G4String::both, '\"');
+        G4StrUtil::strip(token);
+        G4StrUtil::strip(token, '\"');
         result.push_back(token);
         current = pos + delimiter.size();
     }

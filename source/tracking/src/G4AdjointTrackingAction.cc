@@ -54,7 +54,7 @@ G4AdjointTrackingAction::~G4AdjointTrackingAction()
 void G4AdjointTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
-  if (partType.contains(G4String("adjoint")))
+  if (G4StrUtil::contains(partType, "adjoint"))
   {
     is_adjoint_tracking_mode = true;
     theAdjointSteppingAction->SetPrimWeight(aTrack->GetWeight());
@@ -94,7 +94,7 @@ void G4AdjointTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     last_cos_th = last_direction.z();
     G4ParticleDefinition* aPartDef= theAdjointSteppingAction->GetLastPartDef();
     last_fwd_part_name= aPartDef->GetParticleName();
-    last_fwd_part_name.remove(0,4);
+    last_fwd_part_name.erase(0,4);
     last_fwd_part_PDGEncoding=G4ParticleTable::GetParticleTable()
          ->FindParticle(last_fwd_part_name)->GetPDGEncoding();
     last_ekin = theAdjointSteppingAction->GetLastEkin();

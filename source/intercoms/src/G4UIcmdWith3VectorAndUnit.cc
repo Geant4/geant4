@@ -46,8 +46,9 @@ G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit(
   G4UIparameter* dblParamZ = new G4UIparameter('d');
   SetParameter(dblParamZ);
   G4UIparameter* untParam = new G4UIparameter('s');
-  SetParameter(untParam);
   untParam->SetParameterName("Unit");
+  SetParameter(untParam);
+  SetCommandType(With3VectorAndUnitCmd);
 }
 
 // --------------------------------------------------------------------

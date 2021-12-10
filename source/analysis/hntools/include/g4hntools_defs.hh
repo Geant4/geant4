@@ -41,12 +41,12 @@ using G4H1Iterator = std::vector<tools::histo::h1d*>::iterator;
 using G4H1ConstIterator = std::vector<tools::histo::h1d*>::const_iterator;
 
 // H2 types
-using G4H2 = tools::histo::h2d;    
+using G4H2 = tools::histo::h2d;
 using G4H2Iterator = std::vector<tools::histo::h2d*>::iterator;
 using G4H2ConstIterator = std::vector<tools::histo::h2d*>::const_iterator;
 
 // H3 types
-using G4H3 = tools::histo::h3d;    
+using G4H3 = tools::histo::h3d;
 using G4H3Iterator = std::vector<tools::histo::h3d*>::iterator;
 using G4H3ConstIterator = std::vector<tools::histo::h3d*>::const_iterator;
 
@@ -62,4 +62,4 @@ using G4P2ConstIterator = std::vector<tools::histo::p2d*>::const_iterator;
 
 #endif
 
-  
+

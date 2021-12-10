@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-08-2021 Dennis Wright (physics-lists-V10-07-02)
+- completed name migration by replacing G4RadioactiveDecayBase with
+  G4RadioactiveDecay everywhere in physics_lists (/lists, /constructors) 
+
 16-04-2021 Ben Morgan (physics-lists-V10-07-01)
 - Migrate build to modular CMake API
 

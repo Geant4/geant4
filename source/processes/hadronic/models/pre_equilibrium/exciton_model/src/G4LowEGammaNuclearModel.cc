@@ -42,10 +42,12 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ThreeVector.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4LowEGammaNuclearModel::G4LowEGammaNuclearModel() 
-  : G4HadronicInteraction("GammaNPreco"),lab4mom(0.,0.,0.,0.)
+  : G4HadronicInteraction("GammaNPreco"),lab4mom(0.,0.,0.,0.), secID(-1)
 {
+  secID = G4PhysicsModelCatalog::GetModelID("model_" + GetModelName());
   SetMinEnergy( 0.0*CLHEP::GeV );
   SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
@@ -76,6 +78,8 @@ G4HadFinalState* G4LowEGammaNuclearModel::ApplyYourself(
 
   G4Fragment frag(A, Z, lab4mom);
 
+  frag.SetCreatorModelID(secID);
+
   if (verboseLevel > 1) {
     G4cout << "G4LowEGammaNuclearModel::ApplyYourself initial G4Fragmet:" 
 	   << G4endl;
@@ -99,7 +103,7 @@ G4HadFinalState* G4LowEGammaNuclearModel::ApplyYourself(
 	G4HadSecondary* news = new G4HadSecondary(
           new G4DynamicParticle((*res)[i]->GetDefinition(), dir, ekin));
 	news->SetTime((*res)[i]->GetTOF());
-	news->SetCreatorModelType((*res)[i]->GetCreatorModel());
+	news->SetCreatorModelID(secID);
 	theParticleChange.AddSecondary(*news);
 	if (verboseLevel > 1) {
 	  G4cout << i << ". " << (*res)[i]->GetDefinition()->GetParticleName()

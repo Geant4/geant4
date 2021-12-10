@@ -35,22 +35,20 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 
-#include <iostream>
-
 using namespace G4Analysis;
+using std::to_string;
 
 namespace {
 
-void WrongParametersException(
-  const G4String& commandName, std::size_t got, std::size_t expected)
+//_____________________________________________________________________________
+void WrongParametersWarning(
+  const G4String& commandName, std::size_t got, std::size_t expected,
+  std::string_view className)
 {
-  G4ExceptionDescription description;
-  description
-    << "Got wrong number of \"" << commandName
-    << "\" parameters: " << got << " instead of " << expected
-    << " expected" << G4endl;
-  G4Exception("G4NtupleMessenger::SetNewValue",
-              "Analysis_W013", JustWarning, description);
+  Warn(
+    "Got wrong number of \"" + commandName + "\" parameters: " +
+    to_string(got) + " instead of " + to_string(expected) + " expected",
+    className, "SetNewValue");
 }
 
 }
@@ -58,15 +56,11 @@ void WrongParametersException(
 //_____________________________________________________________________________
 G4NtupleMessenger::G4NtupleMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
-    fManager(manager),
-    fSetActivationCmd(nullptr),
-    fSetActivationAllCmd(nullptr),
-    fSetFileNameCmd(nullptr),
-    fSetFileNameAllCmd(nullptr)
+    fManager(manager)
 {
-  fNtupleDir = G4Analysis::make_unique<G4UIdirectory>("/analysis/ntuple/");
+  fNtupleDir = std::make_unique<G4UIdirectory>("/analysis/ntuple/");
   fNtupleDir->SetGuidance("ntuple control");
-  
+
   SetActivationCmd();
   SetActivationToAllCmd();
   SetFileNameCmd();
@@ -74,9 +68,7 @@ G4NtupleMessenger::G4NtupleMessenger(G4VAnalysisManager* manager)
 }
 
 //_____________________________________________________________________________
-G4NtupleMessenger::~G4NtupleMessenger()
-{
-}
+G4NtupleMessenger::~G4NtupleMessenger() = default;
 
 //
 // public functions
@@ -93,25 +85,25 @@ void G4NtupleMessenger::SetActivationCmd()
   ntupleActivation->SetGuidance("Ntuple activation");
   ntupleActivation->SetDefaultValue("none");
 
-  fSetActivationCmd = G4Analysis::make_unique<G4UIcommand>("/analysis/ntuple/setActivation", this);
+  fSetActivationCmd = std::make_unique<G4UIcommand>("/analysis/ntuple/setActivation", this);
   G4String guidance("Set activation for the ntuple of given id");
 
   fSetActivationCmd->SetGuidance(guidance);
   fSetActivationCmd->SetParameter(ntupleId);
   fSetActivationCmd->SetParameter(ntupleActivation);
   fSetActivationCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}  
+}
 
 //_____________________________________________________________________________
 void G4NtupleMessenger::SetActivationToAllCmd()
 {
-  fSetActivationAllCmd 
-    = G4Analysis::make_unique<G4UIcmdWithABool>("/analysis/ntuple/setActivationToAll", this);
+  fSetActivationAllCmd
+    = std::make_unique<G4UIcmdWithABool>("/analysis/ntuple/setActivationToAll", this);
   G4String guidance("Set activation to all ntuples");
   fSetActivationAllCmd->SetGuidance(guidance);
   fSetActivationAllCmd->SetParameterName("AllNtupleActivation",false);
-}  
-  
+}
+
 //_____________________________________________________________________________
 void G4NtupleMessenger::SetFileNameCmd()
 {
@@ -123,7 +115,7 @@ void G4NtupleMessenger::SetFileNameCmd()
   ntupleFileName->SetGuidance("Ntuple file name");
   ntupleFileName->SetDefaultValue("none");
 
-  fSetFileNameCmd = G4Analysis::make_unique<G4UIcommand>("/analysis/ntuple/setFileName", this);
+  fSetFileNameCmd = std::make_unique<G4UIcommand>("/analysis/ntuple/setFileName", this);
   G4String guidance("Set file name for the ntuple of given id");
 
   fSetFileNameCmd->SetGuidance(guidance);
@@ -136,7 +128,7 @@ void G4NtupleMessenger::SetFileNameCmd()
 void G4NtupleMessenger::SetFileNameToAllCmd()
 {
   fSetFileNameAllCmd
-    = G4Analysis::make_unique<G4UIcmdWithAString>("/analysis/ntuple/setFileNameToAll", this);
+    = std::make_unique<G4UIcmdWithAString>("/analysis/ntuple/setFileNameToAll", this);
   G4String guidance("Set file name to all ntuples");
   fSetFileNameAllCmd->SetGuidance(guidance);
   fSetFileNameAllCmd->SetParameterName("AllNtupleFileName",false);
@@ -158,18 +150,18 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
       auto counter = 0;
       auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
       auto activation = G4UIcommand::ConvertToBool(parameters[counter++]);
-      fManager->SetNtupleActivation(id, activation);     
+      fManager->SetNtupleActivation(id, activation);
     }
     else {
       // Should never happen but let's check anyway for consistency
-      WrongParametersException(command->GetCommandName(),
-        parameters.size(),command->GetParameterEntries());
-    }  
+      WrongParametersWarning(command->GetCommandName(),
+        parameters.size(),command->GetParameterEntries(), fkClass);
+    }
   }
   else if ( command == fSetActivationAllCmd.get() ) {
     auto activation = fSetActivationAllCmd->GetNewBoolValue(newValues);
     fManager->SetNtupleActivation(activation);
-  }  
+  }
   else if ( command == fSetFileNameCmd.get() ) {
     // tokenize parameters in a vector
     std::vector<G4String> parameters;
@@ -183,8 +175,8 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     }
     else {
       // Should never happen but let's check anyway for consistency
-      WrongParametersException(command->GetCommandName(),
-        parameters.size(),command->GetParameterEntries());
+      WrongParametersWarning(command->GetCommandName(),
+        parameters.size(),command->GetParameterEntries(), fkClass);
     }
   }
   else if ( command == fSetFileNameAllCmd.get() ) {

@@ -57,9 +57,10 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4EmDataHandler.hh"
 #include "G4EmParameters.hh"
+#include "G4EmDataHandler.hh"
 #include "G4EmTableType.hh"
+#include "G4EmSecondaryParticleType.hh"
 
 class G4Step;
 class G4VEmModel;
@@ -154,8 +155,8 @@ public:
 
   // It returns the cross section of the process per atom
   G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
-				      G4double Z, G4double A=0., 
-				      G4double cut=0.0);
+                                      G4double Z, G4double A=0., 
+                                      G4double cut=0.0);
 
   G4double MeanFreePath(const G4Track& track);
 
@@ -241,7 +242,7 @@ public:
                                  G4bool flag = true);
 
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
-				G4double energyLimit);
+                                G4double energyLimit);
 
   inline void SetEmMasterProcess(const G4VEmProcess*);
           
@@ -250,6 +251,8 @@ public:
   inline void SetBuildTableFlag(G4bool val);
 
   inline void CurrentSetup(const G4MaterialCutsCouple*, G4double energy);
+
+  inline G4bool UseBaseMaterial() const;
 
   // hide copy constructor and assignment operator
   G4VEmProcess(G4VEmProcess &) = delete;
@@ -262,8 +265,8 @@ public:
 protected:
 
   G4double GetMeanFreePath(const G4Track& track,
-			   G4double previousStepSize,
-			   G4ForceCondition* condition) override;
+                           G4double previousStepSize,
+                           G4ForceCondition* condition) override;
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
@@ -306,6 +309,11 @@ protected:
   inline const G4Element* GetTargetElement() const;
 
   inline const G4Isotope* GetTargetIsotope() const;
+
+  // these two methods assume that vectors are initilized
+  // and idx is within vector length
+  inline G4int DensityIndex(G4int idx) const;
+  inline G4double DensityFactor(G4int idx) const;
 
 private:
 
@@ -369,10 +377,11 @@ protected:
   const G4Material*            currentMaterial = nullptr;
   G4EmBiasingManager*          biasManager = nullptr;
   std::vector<G4double>*       theEnergyOfCrossSectionMax = nullptr;
-  const std::vector<G4double>* theDensityFactor = nullptr;
-  const std::vector<G4int>*    theDensityIdx = nullptr;
 
 private:
+
+  const std::vector<G4double>* theDensityFactor = nullptr;
+  const std::vector<G4int>*    theDensityIdx = nullptr;
 
   // ======== parameters =========
   G4double minKinEnergy;
@@ -402,18 +411,19 @@ private:
 
 protected:
 
-  G4int mainSecondaries = 100;
-  G4int secID = -1;
-  G4int fluoID = -1;  
-  G4int augerID = -1;
-  G4int biasID = -1;
-
+  G4int mainSecondaries = 1;
+  G4int secID = _EM;
+  G4int fluoID = _Fluorescence; 
+  G4int augerID = _AugerElectron;
+  G4int biasID = _EM;
+  G4int tripletID = _TripletElectron;
   size_t currentCoupleIndex = 0;
   size_t basedCoupleIndex = 0;
   size_t coupleIdxLambda = 0;
   size_t idxLambda = 0;
 
   G4bool isTheMaster = true;
+  G4bool baseMat = false;
 
 private:
 
@@ -481,14 +491,17 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
   if(couple != currentCouple) {
-    currentCouple   = couple;
-    currentMaterial = couple->GetMaterial();
-    baseMaterial = (currentMaterial->GetBaseMaterial()) 
-      ? currentMaterial->GetBaseMaterial() : currentMaterial;
-    currentCoupleIndex = couple->GetIndex();
-    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
-    fFactor = biasFactor*(*theDensityFactor)[currentCoupleIndex];
+    currentCouple = couple;
+    baseMaterial = currentMaterial = couple->GetMaterial();
+    basedCoupleIndex = currentCoupleIndex = couple->GetIndex();
+    fFactor = biasFactor;
     mfpKinEnergy = DBL_MAX;
+    if(baseMat) {
+      basedCoupleIndex = (*theDensityIdx)[currentCoupleIndex];
+      if(nullptr != currentMaterial->GetBaseMaterial())
+        baseMaterial = currentMaterial->GetBaseMaterial();
+      fFactor *= (*theDensityFactor)[currentCoupleIndex];
+    }
   }
 }
 
@@ -557,7 +570,7 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
     fLambdaEnergy = e;
     if(e >= minKinEnergyPrim) { fLambda = GetLambdaFromTablePrim(e); }
     else if(nullptr != theLambdaTable) { fLambda = GetLambdaFromTable(e); }
-    else if(nullptr != currentModel) { fLambda = ComputeCurrentLambda(e); }
+    else { fLambda = ComputeCurrentLambda(e); }
     fLambda *= fFactor;
   }
   return fLambda;
@@ -572,7 +585,7 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e, G4double loge)
     fLambdaEnergy = e;
     if(e >= minKinEnergyPrim) { fLambda = GetLambdaFromTablePrim(e, loge); }
     else if(nullptr != theLambdaTable) { fLambda = GetLambdaFromTable(e, loge); }
-    else if(nullptr != currentModel) { fLambda = ComputeCurrentLambda(e); }
+    else { fLambda = ComputeCurrentLambda(e); }
     fLambda *= fFactor;
   }
   return fLambda;
@@ -627,13 +640,6 @@ inline G4double G4VEmProcess::MinKinEnergy() const
 inline G4double G4VEmProcess::MaxKinEnergy() const
 {
   return maxKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::PolarAngleLimit() const
-{
-  return theParameters->MscThetaLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -747,6 +753,27 @@ inline const G4Element* G4VEmProcess::GetTargetElement() const
 inline const G4Isotope* G4VEmProcess::GetTargetIsotope() const
 {
   return currentModel->GetCurrentIsotope();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4int G4VEmProcess::DensityIndex(G4int idx) const
+{
+  return (*theDensityIdx)[idx];  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::DensityFactor(G4int idx) const
+{
+  return (*theDensityFactor)[idx];  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEmProcess::UseBaseMaterial() const
+{
+  return baseMat;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

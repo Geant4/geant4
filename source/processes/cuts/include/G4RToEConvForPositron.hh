@@ -34,33 +34,21 @@
 #ifndef G4RToEConvForPositron_hh
 #define G4RToEConvForPositron_hh 1
 
-#include <vector>
-
 #include "globals.hh"
-#include "G4ios.hh"
 #include "G4VRangeToEnergyConverter.hh"
 
 class G4RToEConvForPositron : public G4VRangeToEnergyConverter
 {
-  public:
+public:
 
-    G4RToEConvForPositron();
-      // Constructor
+  explicit G4RToEConvForPositron();
 
   virtual ~G4RToEConvForPositron();
-      // Destructor
 
-  protected:
+protected:
 
-    virtual G4double ComputeLoss(G4double AtomicNumber,
-                                 G4double KineticEnergy);
+  G4double ComputeValue(const G4int Z, const G4double kinEnergy) final;
 
-    G4double Mass = 0.0;
-    G4double Z = -1.0;  
-    G4double taul = 0.0;
-    G4double ionpot = 0.0;
-    G4double ionpotlog = -1.0e-10;
-    G4double bremfactor = 0.1;
 };
 
 

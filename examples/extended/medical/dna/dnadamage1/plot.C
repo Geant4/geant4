@@ -18,9 +18,12 @@
     using Table = map<int,array<map<int,double>, 2>>;
     using ResultTable = map<int,array<vector<int>, 2>>;
 
-    system ("rm -rf output.root");
-    system ("hadd output.root output_*.root");
-    
+    ifstream fs("output_t0.root");
+    if ( fs.good() ) {
+      system ("rm -rf output.root");
+      system ("hadd output.root output_*.root");
+    }
+
     double xphy;
     double yphy;
     double zphy;

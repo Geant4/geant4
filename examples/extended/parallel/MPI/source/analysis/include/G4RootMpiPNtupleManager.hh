@@ -45,6 +45,8 @@
 
 #include <vector>
 
+using std::to_string;
+
 class G4RootFileManager;
 
 namespace tools {
@@ -93,6 +95,9 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     virtual G4bool AddNtupleRow(G4int ntupleId) final;
     virtual G4bool Merge() final;
 
+    // Clear all data
+    virtual void Clear() final;
+
     // Reset
     virtual G4bool Reset(G4bool deleteNtuple) final;
 
@@ -140,14 +145,11 @@ inline G4bool G4RootMpiPNtupleManager::FillNtupleTColumn(
     return false; 
   } 
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fState.GetVerboseL4()->Message("fill", "pntuple T column", description);
-  }  
-#endif
+  if ( IsVerbose(G4Analysis::kVL4) ) {
+    Message(G4Analysis::kVL4, "fill", "pntuple T column",
+       " ntupleId " + to_string(ntupleId) + " columnId " + to_string(columnId) +
+       " value " + G4Analysis::ToString(value));
+  }
 
   auto ntuple = GetNtupleInFunction(ntupleId, "FillNtupleTColumn");
   if ( ! ntuple ) return false;
@@ -176,14 +178,13 @@ inline G4bool G4RootMpiPNtupleManager::FillNtupleTColumn(
 
   column->fill(value);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fState.GetVerboseL4()->Message("done fill", "pntuple T column", description);
-  }  
-#endif
+  if ( IsVerbose(G4Analysis::kVL4) ) {
+    Message(G4Analysis::kVL4, "done fill", "pntuple T column",
+      " ntupleId " + to_string(ntupleId) +
+      " columnId " + to_string(columnId) +
+      " value " + value);
+  }
+
   return true;  
 }
 
@@ -197,14 +198,12 @@ G4bool G4RootMpiPNtupleManager::FillNtupleTColumn(
     return false; 
   }  
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fState.GetVerboseL4()->Message("fill", "pntuple T column", description);
-  }  
-#endif
+  if ( IsVerbose(G4Analysis::kVL4) ) {
+    Message(G4Analysis::kVL4, "fill", "pntuple T column",
+       " ntupleId " + to_string(ntupleId) +
+       " columnId " + to_string(columnId) +
+       " value " + G4Analysis::ToString(value));
+  }
 
   // get ntuple
   auto ntuple = GetNtupleInFunction(ntupleId, "FillNtupleTColumn");
@@ -236,14 +235,13 @@ G4bool G4RootMpiPNtupleManager::FillNtupleTColumn(
 
   column->fill(value);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fState.GetVerboseL4()->Message("done fill", "pntuple T column", description);
-  }  
-#endif
+  if ( IsVerbose(G4Analysis::kVL4) ) {
+    Message(G4Analysis::kVL4, "done fill", "pntuple T column",
+       " ntupleId " + to_string(ntupleId) +
+       " columnId " + to_string(columnId) +
+       " value " + G4Analysis::ToString(value));
+  }
+
   return true;  
 }
 

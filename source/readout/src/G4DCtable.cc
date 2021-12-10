@@ -45,7 +45,7 @@ G4int G4DCtable::Registor(G4String DMname,G4String DCname)
 G4int G4DCtable::GetCollectionID(G4String DCname) const
 {
   G4int i = -1;
-  if(DCname.index("/")==std::string::npos) // DCname only
+  if(DCname.find("/")==std::string::npos) // DCname only
   {
     for(int j=0;j<int(DClist.size());j++)
     {

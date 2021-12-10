@@ -180,7 +180,8 @@ private:
   G4InuclElementaryParticle hadronTarget;
   G4InuclNuclei             nucleusTarget;
 
-
+  G4int secID;  // Creator model ID for the secondaries
+  
 private:
   // Copying of modules is forbidden
   G4CascadeInterface(const G4CascadeInterface&);

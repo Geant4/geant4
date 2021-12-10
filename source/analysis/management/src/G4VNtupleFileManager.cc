@@ -27,22 +27,20 @@
 // Author: Ivana Hrivnacova, 15/09/2020  (ivana@ipno.in2p3.fr)
 
 #include "G4VNtupleFileManager.hh"
+#include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
-#include <iostream>
+using namespace G4Analysis;
 
 namespace {
 
 //_____________________________________________________________________________
-void NtupleMergingWarning(const G4String& functionName, 
+void NtupleMergingWarning(std::string_view className,
+                          std::string_view functionName,
                           const G4String& outputType)
 {
-  G4ExceptionDescription description;
-  description
-    << "      " << "Ntuple merging is not available with "
-    << outputType << " output." << G4endl
-    << "      " << "Setting is ignored.";
-  G4Exception(functionName, "Analysis_W041", JustWarning, description);  
+  Warn("Ntuple merging is not available with " + outputType + " output.\n" +
+       "Setting is ignored.", className, functionName);
 }
 
 }
@@ -51,32 +49,27 @@ void NtupleMergingWarning(const G4String& functionName,
 G4VNtupleFileManager::G4VNtupleFileManager(const G4AnalysisManagerState& state,
   const G4String& fileType)
  : fState(state),
-   fFileType(fileType),
-   fBookingManager(nullptr) 
+   fFileType(fileType)
 {}
 
-//_____________________________________________________________________________
-G4VNtupleFileManager::~G4VNtupleFileManager() 
-{}
-
-//_____________________________________________________________________________
-void G4VNtupleFileManager::SetNtupleMerging(G4bool /*mergeNtuples*/, 
+///_____________________________________________________________________________
+void G4VNtupleFileManager::SetNtupleMerging(G4bool /*mergeNtuples*/,
                    G4int /*nofReducedNtupleFiles*/)
 {
 // The function is overridden in the managers which supports ntuple merging
 // Here we give just a warning that the feature is not available.
 
-  NtupleMergingWarning("G4VNtupleFileManager::SetNtupleMerging", fFileType);
+  NtupleMergingWarning(fkClass, "SetNtupleMerging", fFileType);
 }
 
 //_____________________________________________________________________________
-void G4VNtupleFileManager::SetNtupleRowWise(G4bool /*rowWise*/, 
+void G4VNtupleFileManager::SetNtupleRowWise(G4bool /*rowWise*/,
                                           G4bool /*rowMode*/)
 {
 // The function is overridden in the managers which supports ntuple merging
 // Here we give just a warning that the feature is not available.
 
-  NtupleMergingWarning("G4VNtupleFileManager::SetNtupleRowWise", fFileType);
+  NtupleMergingWarning(fkClass, "SetNtupleRowWise", fFileType);
 }
 
 //_____________________________________________________________________________
@@ -85,7 +78,7 @@ void G4VNtupleFileManager::SetBasketSize(unsigned int /*basketSize*/)
 // The function is overridden in the managers which supports ntuple merging
 // Here we give just a warning that the feature is not available.
 
-  NtupleMergingWarning("G4VNtupleFileManager::SetBasketSize", fFileType);
+  NtupleMergingWarning(fkClass, "SetBasketSize", fFileType);
 }
 
 //_____________________________________________________________________________
@@ -94,5 +87,5 @@ void G4VNtupleFileManager::SetBasketEntries(unsigned int /*basketEntries*/)
 // The function is overridden in the managers which supports ntuple merging
 // Here we give just a warning that the feature is not available.
 
-  NtupleMergingWarning("G4VNtupleFileManager::SetBasketEntries", fFileType);
+  NtupleMergingWarning(fkClass, "SetBasketEntries", fFileType);
 }

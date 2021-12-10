@@ -102,7 +102,7 @@ void G4MicroElecMaterialStructure::ReadMaterialFile()
 {
   char *path = std::getenv("G4LEDATA");
   
-  if (materialName(0) == 'G' && materialName(1) == '4') {
+  if (materialName[0] == 'G' && materialName[1] == '4') {
     //in the case the NIST database is used
     materialName.erase(0, 1);
     materialName.erase(0, 1);
@@ -133,7 +133,7 @@ void G4MicroElecMaterialStructure::ReadMaterialFile()
 	getline(fichier, filler);
 	std::stringstream line(filler);
 	
-	if (filler(0) == '#' || filler.empty()) {continue;}
+	if (filler[0] == '#' || filler.empty()) {continue;}
 	
 	line >> varLength;
 	line >> nameParameter;

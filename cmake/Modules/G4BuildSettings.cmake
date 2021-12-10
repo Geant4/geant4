@@ -285,7 +285,7 @@ endif()
 #   If set to ``ON``, compile Geant4 with support for multithreading.
 #   On Win32, this option requires use of static libraries only
 #
-option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
+option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" ON)
 geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
 
 #.rst:

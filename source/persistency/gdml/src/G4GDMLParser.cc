@@ -105,7 +105,7 @@ void G4GDMLParser::ImportRegions()
     {
       reader->StripName(name);
     }
-    if(name.contains("DefaultRegionForTheWorld"))
+    if(G4StrUtil::contains(name, "DefaultRegionForTheWorld"))
       continue;
 
     if(!iaux->auxList)
@@ -129,11 +129,43 @@ void G4GDMLParser::ImportRegions()
           {
             reader->StripName(volname);
           }
-          G4LogicalVolume* lvol =
-            G4LogicalVolumeStore::GetInstance()->GetVolume(volname);
-          aRegion->AddRootLogicalVolume(lvol);
-          if(reflFactory->IsConstituent(lvol))
-            aRegion->AddRootLogicalVolume(reflFactory->GetReflectedLV(lvol));
+          G4LogicalVolumeStore* store = G4LogicalVolumeStore::GetInstance();
+          auto pos = store->GetMap().find(volname);
+          if(pos != store->GetMap().cend())
+          {
+            // Scan for all possible volumes with same name
+            // and set them as root logical volumes for the region...
+            // Issue a notification in case more than one logical volume
+            // with same name exist and get set.
+            //
+            if (pos->second.size()>1)
+            {
+              std::ostringstream message;
+              message << "There exists more than ONE logical volume "
+                      << "in store named: " << volname << "." << G4endl
+                      << "NOTE: assigning all such volumes as root logical "
+                      << "volumes for region: " << name << "!";
+              G4Exception("G4GDMLParser::ImportRegions()",
+                          "Notification", JustWarning, message);
+            }
+            for (auto vpos = pos->second.cbegin();
+                      vpos != pos->second.cend(); ++vpos)
+            {
+              aRegion->AddRootLogicalVolume(*vpos);
+              if(reflFactory->IsConstituent(*vpos))
+                aRegion->AddRootLogicalVolume(reflFactory->GetReflectedLV(*vpos));
+            }
+          }
+          else
+          {
+            std::ostringstream message;
+            message << "Volume NOT found in store !" << G4endl
+                    << "        Volume " << volname << " NOT found in store !"
+                    << G4endl
+                    << "        No region is being set.";
+            G4Exception("G4GDMLParser::ImportRegions()",
+                        "InvalidSetup", JustWarning, message);
+          }
         }
         else if(tag == "pcut")
         {
@@ -245,7 +277,7 @@ void G4GDMLParser::ExportRegions(G4bool storeReferences)
      // Skip default regions associated to worlds
   {
     const G4String& tname = (*rstore)[i]->GetName();
-    if(tname.contains("DefaultRegionForParallelWorld"))
+    if(G4StrUtil::contains(tname, "DefaultRegionForParallelWorld"))
       continue;
     const G4String& rname    = writer->GenerateName(tname, (*rstore)[i]);
     rlist                    = new G4GDMLAuxListType();

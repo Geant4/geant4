@@ -58,21 +58,22 @@ class G4AnalysisMessenger : public G4UImessenger
 {
   public:
     explicit G4AnalysisMessenger(G4VAnalysisManager* manager);
+    G4AnalysisMessenger() = delete;
     virtual ~G4AnalysisMessenger();
-   
-    // methods
+
+    // Methods
     void SetH1HnManager(G4HnManager& h1HnManager);
     void SetH2HnManager(G4HnManager& h2HnManager);
     void SetH3HnManager(G4HnManager& h3HnManager);
     void SetP1HnManager(G4HnManager& p1HnManager);
     void SetP2HnManager(G4HnManager& p2HnManager);
 
-    // methods
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
 
   private:
-    // data members
-    G4VAnalysisManager* fManager; ///< Associated class
+    // Data members
+    G4VAnalysisManager* fManager { nullptr }; ///< Associated class
     std::unique_ptr<G4FileMessenger>  fFileMessenger;
     std::unique_ptr<G4H1Messenger>  fH1Messenger;
     std::unique_ptr<G4H2Messenger>  fH2Messenger;
@@ -85,12 +86,12 @@ class G4AnalysisMessenger : public G4UImessenger
     std::unique_ptr<G4HnMessenger>  fH3HnMessenger;
     std::unique_ptr<G4HnMessenger>  fP1HnMessenger;
     std::unique_ptr<G4HnMessenger>  fP2HnMessenger;
-    
-    std::unique_ptr<G4UIdirectory>         fAnalysisDir;   
-    std::unique_ptr<G4UIcmdWithABool>      fSetActivationCmd;   
-    std::unique_ptr<G4UIcmdWithAnInteger>  fVerboseCmd;   
-    std::unique_ptr<G4UIcmdWithAnInteger>  fCompressionCmd;   
+
+    std::unique_ptr<G4UIdirectory>         fAnalysisDir;
+    std::unique_ptr<G4UIcmdWithABool>      fSetActivationCmd;
+    std::unique_ptr<G4UIcmdWithAnInteger>  fVerboseCmd;
+    std::unique_ptr<G4UIcmdWithAnInteger>  fCompressionCmd;
 };
-  
+
 #endif
 

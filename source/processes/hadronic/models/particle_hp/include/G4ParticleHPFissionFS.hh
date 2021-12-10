@@ -47,7 +47,7 @@ class G4ParticleHPFissionFS : public G4ParticleHPFinalState
 {
   public:
   
-  G4ParticleHPFissionFS(){ hasXsec = false; produceFissionFragments = false; }
+  G4ParticleHPFissionFS();
   ~G4ParticleHPFissionFS(){}
   void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* );
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);

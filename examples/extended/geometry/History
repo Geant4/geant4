@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17/11/21,  I. Hrivnacova (exGeometry-V10-07-03)
+- Updated documentation
+
 25/01/21,  B. Morgan (exGeometry-V10-07-02)
 - Only add vecGeomNavigation if VecGeom is present
 

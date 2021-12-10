@@ -8,14 +8,12 @@ endif()
 # Define the Geant4 Module.
 geant4_add_module(G4analysisfac
   PUBLIC_HEADERS
-    g4analysis.hh
-    g4analysis_defs.hh
+    G4AnalysisManager.hh
     G4GenericAnalysisManager.hh
     G4GenericAnalysisManager.icc
     G4GenericFileManager.hh
     G4GenericFileManager.icc
   SOURCES
-    g4analysis.cc
     G4GenericAnalysisManager.cc
     G4GenericFileManager.cc)
 

@@ -43,6 +43,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4PropagatorInField.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 const G4double G4SynchrotronRadiationInMat::fIntegralProbabilityOfSR[200] = {
   1.000000e+00, 9.428859e-01, 9.094095e-01, 8.813971e-01, 8.565154e-01,
@@ -104,6 +105,7 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(
     G4TransportationManager::GetTransportationManager();
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
+  secID = G4PhysicsModelCatalog::GetModelID("model_SynchrotronRadiation");
   SetProcessSubType(fSynchrotronRadiation);
   CutInRange = GammaCutInKineticEnergyNow = ElectronCutInKineticEnergyNow =
     PositronCutInKineticEnergyNow = ParticleCutInKineticEnergyNow = fKsi =
@@ -315,7 +317,6 @@ G4VParticleChange* G4SynchrotronRadiationInMat::PostStepDoIt(
                               gammaPolarization.z());
 
       aParticleChange.SetNumberOfSecondaries(1);
-      aParticleChange.AddSecondary(aGamma);
 
       // Update the incident particle
       G4double newKinEnergy = kineticEnergy - energyOfSR;
@@ -340,6 +341,13 @@ G4VParticleChange* G4SynchrotronRadiationInMat::PostStepDoIt(
           aParticleChange.ProposeTrackStatus(fStopButAlive);
         }
       }
+      
+      // Create the G4Track
+      G4Track* aSecondaryTrack = new G4Track(aGamma, trackData.GetGlobalTime(), trackData.GetPosition());
+      aSecondaryTrack->SetTouchableHandle(stepData.GetPostStepPoint()->GetTouchableHandle());
+      aSecondaryTrack->SetParentID(trackData.GetTrackID());
+      aSecondaryTrack->SetCreatorModelID(secID);
+      aParticleChange.AddSecondary(aSecondaryTrack);
     }
     else
     {

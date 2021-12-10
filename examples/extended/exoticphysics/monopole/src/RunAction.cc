@@ -41,6 +41,7 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4AnalysisManager.hh"
 
 #include "G4EmCalculator.hh"
 
@@ -52,7 +53,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   fMessenger = new RunActionMessenger(this);
   fBinLength = 5 * CLHEP::mm;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-  analysisManager->SetFileName("monopole");
+  analysisManager->SetFileName("monopole.root");
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
 }
@@ -100,6 +101,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   if ( analysisManager->IsActive() ) {    
     analysisManager->Write();
     analysisManager->CloseFile();
+    analysisManager->Clear();
   }  
 }
 

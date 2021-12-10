@@ -41,6 +41,7 @@ G4ParticleChangeForGamma::G4ParticleChangeForGamma()
   : G4VParticleChange()
 {
   theSteppingControlFlag = NormalCondition;
+  // Disable flag that is enabled in G4VParticleChange if G4VERBOSE.
   debugFlag              = false;
 }
 

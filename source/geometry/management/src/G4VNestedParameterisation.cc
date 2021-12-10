@@ -34,32 +34,26 @@
 #include "G4LogicalVolume.hh"
 #include "G4VTouchable.hh"
 
-G4VNestedParameterisation::G4VNestedParameterisation()
-  : G4VPVParameterisation(),
-    G4VVolumeMaterialScanner()
-{
-}
-
-G4VNestedParameterisation::~G4VNestedParameterisation()
-{
-}
-
+// --------------------------------------------------------------------
 G4VSolid* G4VNestedParameterisation::ComputeSolid(const G4int, 
                                                   G4VPhysicalVolume* pvol)
 { 
   return pvol->GetLogicalVolume()->GetSolid(); 
 }
 
+// --------------------------------------------------------------------
 G4bool G4VNestedParameterisation::IsNested() const 
 { 
   return true;
 }
 
+// --------------------------------------------------------------------
 G4VVolumeMaterialScanner* G4VNestedParameterisation::GetMaterialScanner() 
 { 
   return this; 
 } 
 
+// --------------------------------------------------------------------
 G4Material* 
 G4VNestedParameterisation::ComputeMaterial(const G4int repNo, 
                                                  G4VPhysicalVolume* currentVol,

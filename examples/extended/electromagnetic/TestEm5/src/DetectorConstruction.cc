@@ -58,10 +58,10 @@
 
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
- fAbsorberMaterial(nullptr),fWorldMaterial(nullptr),fDefaultWorld(true),
- fSolidWorld(nullptr),fLogicWorld(nullptr),fPhysiWorld(nullptr),
- fSolidAbsorber(nullptr),fLogicAbsorber(nullptr),fPhysiAbsorber(nullptr),
- fDetectorMessenger(nullptr)
+   fAbsorberMaterial(nullptr),fWorldMaterial(nullptr),
+   fSolidWorld(nullptr),fLogicWorld(nullptr),fPhysiWorld(nullptr),
+   fSolidAbsorber(nullptr),fLogicAbsorber(nullptr),fPhysiAbsorber(nullptr),
+   fDetectorMessenger(nullptr)
 {
   // default parameter values of the calorimeter
   fAbsorberThickness = 1.*cm;
@@ -253,21 +253,16 @@ void DetectorConstruction::ComputeGeomParameters()
   fXendAbs   = fXposAbs+0.5*fAbsorberThickness;
 
   G4double xmax = std::max(std::abs(fXstartAbs), std::abs(fXendAbs));
-     
-  // change world size by the flag or if the absorber is large 
-  if (fDefaultWorld || 2*xmax >=  fWorldSizeX ||
-      fAbsorberSizeYZ >= fWorldSizeYZ) 
-    {
-      fWorldSizeX = 3*xmax; 
-      fWorldSizeYZ= 1.2*fAbsorberSizeYZ;
-    }         
+  fWorldSizeX = 2.4*xmax; 
+  fWorldSizeYZ= 1.2*fAbsorberSizeYZ;
+  if(nullptr != fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* DetectorConstruction::Construct()
 { 
-  if(fPhysiWorld) { return fPhysiWorld; }
+  if(nullptr != fPhysiWorld) { return fPhysiWorld; }
   // World
   //
   fSolidWorld = new G4Box("World",                                //its name
@@ -366,7 +361,6 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   fAbsorberThickness = val;
   ComputeGeomParameters();
-  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -375,7 +369,6 @@ void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
   fAbsorberSizeYZ = val;
   ComputeGeomParameters();
-  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -383,9 +376,7 @@ void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 void DetectorConstruction::SetWorldSizeX(G4double val)
 {
   fWorldSizeX = val;
-  fDefaultWorld = false;
   ComputeGeomParameters();
-  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -393,16 +384,15 @@ void DetectorConstruction::SetWorldSizeX(G4double val)
 void DetectorConstruction::SetWorldSizeYZ(G4double val)
 {
   fWorldSizeYZ = val;
-  fDefaultWorld = false;
   ComputeGeomParameters();
-  if(fPhysiWorld) { ChangeGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetAbsorberXpos(G4double val)
 {
-  if(!fPhysiWorld) { fXposAbs = val; }
+  fXposAbs = val;
+  ComputeGeomParameters();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

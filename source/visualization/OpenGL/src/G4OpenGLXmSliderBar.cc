@@ -27,8 +27,6 @@
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmSliderBar.hh"
@@ -223,5 +221,3 @@ Widget* G4OpenGLXmSliderBar::GetPointerToWidget ()
 {
   return &sliderbar;
 }
-
-#endif

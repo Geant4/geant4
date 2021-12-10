@@ -16,6 +16,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 August 2021 Alberto Ribon channeling-V10-07-01
+-----------------------------------------------------
+- G4Channeling, G4ChannelingOptrChangeCrossSection : migrated to the
+  new version of G4PhysicsModelCatalog
+
 16 April 2021 Ben Morgan channeling-V10-07-00
 -----------------------------------------------------
 - Migrate build to modular CMake API

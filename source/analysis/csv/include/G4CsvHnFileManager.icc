@@ -35,8 +35,6 @@
 #include "tools/histo/p1d"
 #include "tools/histo/p2d"
 
-#include <iostream>
-
 //_____________________________________________________________________________
 template <>
 inline
@@ -79,12 +77,11 @@ G4bool G4CsvHnFileManager<HT>::WriteExtra(
   auto result = Write(hnFile, ht);
 
   if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "      " << "saving " << G4Analysis::GetHnType<HT>() << " " << htName << " failed";
-    G4Exception("G4CsvAnalysisManager::WriteExtra()",
-              "Analysis_W022", JustWarning, description);
-    return false;       
-  } 
+    G4Analysis::Warn(
+      "Saving " + G4Analysis::GetHnType<HT>() + " " + htName + " failed",
+      fkClass, "WriteExtra");
+    return false;
+  }
   hnFile.close();
   return true;
 }
@@ -107,14 +104,19 @@ G4bool G4CsvHnFileManager<HT>::Write(
     // If histogram file name was not defined per object
     // a file should be created from the provided default file name
     auto hnFileName = fFileManager->GetHnFileName(G4Analysis::GetHnType<HT>(), htName);
+
+    // If histo directory name is set and if this directory exists
+    // add directory path to hnFileName
+    if ( fFileManager->IsHistoDirectory() ) {
+      hnFileName = "./" + fFileManager->GetHistoDirectoryName() + "/" + hnFileName;
+    }
+
     if ( ! hnFileName.empty() ) {
       hnFile = fFileManager->CreateTFile(hnFileName);
     }
+
     if ( ! hnFile ) {
-      G4ExceptionDescription description;
-      description << "Failed to get Csv file " << fileName;
-      G4Exception("G4CsvHnFileManager<HT>::Write()",
-                  "Analysis_W022", JustWarning, description);
+      G4Analysis::Warn("Failed to get Csv file " + fileName, fkClass, "Write");
       return false;
     } else {
       fileName = hnFileName;

@@ -27,8 +27,6 @@
 //
 // G.Barrand
 
-#if defined(G4INTY_BUILD_XT) || defined(G4INTY_USE_XT)
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -188,8 +186,3 @@ void G4Xt::FlushAndWaitExecution (
   if(topWidget==NULL) return;
   XSync(XtDisplay(topWidget),False);
 }
-
-#endif
-
-
-

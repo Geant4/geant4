@@ -76,7 +76,7 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
   // built-in.  The HepRApp offline browser also has a tree browser
   // built in.
 
-  if (!system.contains("Tree")) {
+  if (!G4StrUtil::contains(system, "Tree")) {
     system = "ATree";
   }
 
@@ -85,6 +85,7 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
   G4VSceneHandler* keepSceneHandler = fpVisManager->GetCurrentSceneHandler();
   G4VViewer* keepViewer = fpVisManager->GetCurrentViewer();
   G4VisManager::Verbosity keepVisVerbosity = fpVisManager->GetVerbosity();
+  G4bool keepAbleness = fpVisManager->GetConcreteInstance()? true: false;
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepUIVerbose = UImanager->GetVerboseLevel();
@@ -94,8 +95,6 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
 
-  G4bool keepAbleness = fpVisManager->GetConcreteInstance()? true: false;
-
   auto errorCode = UImanager->ApplyCommand(G4String("/vis/open " + system));
   if (errorCode == 0) {
     if (!keepAbleness) {  // Enable temporarily
@@ -103,6 +102,7 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
       UImanager->ApplyCommand("/vis/enable");
       fpVisManager->SetVerboseLevel(keepVisVerbosity);
     }
+    UImanager->ApplyCommand("/vis/viewer/reset");
     UImanager->ApplyCommand(G4String("/vis/drawVolume " + pvname));
     UImanager->ApplyCommand("/vis/viewer/flush");
     if (!keepAbleness) {  // Disable again
@@ -360,7 +360,8 @@ G4VisCommandOpen::~G4VisCommandOpen() {
   delete fpCommand;
 }
 
-void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
+void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue)
+{
   G4String systemName, windowSizeHint;
   std::istringstream is(newValue);
   is >> systemName >> windowSizeHint;
@@ -371,21 +372,42 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
+
   auto errorCode = UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
-  if (errorCode != 0) {
+  if (errorCode) {
     G4ExceptionDescription ed;
     ed << "sub-command \"/vis/sceneHandler/create\" failed.";
     command->CommandFailed(errorCode,ed);
-    goto restore;
+    goto finish;
   }
   errorCode = UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
-  if (errorCode != 0) {
+  if (errorCode) {
     G4ExceptionDescription ed;
     ed << "sub-command \"/vis/viewer/create\" failed.";
     command->CommandFailed(errorCode,ed);
-    goto restore;
+    goto finish;
   }
-restore:  UImanager->SetVerboseLevel(keepVerbose);
+
+finish:
+  if (errorCode) {
+    std::set<G4String> candidates;
+    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
+      // Just list nicknames, but exclude FALLBACK nicknames
+      for (const auto& nickname: gs->GetNicknames()) {
+	if (!G4StrUtil::contains(nickname, "FALLBACK")) {
+	  candidates.insert(nickname);
+	}
+      }
+    }
+    G4ExceptionDescription ed;
+    ed << "Invoked command has failed - see above. Available graphics systems are (short names):\n ";
+    for (const auto& candidate: candidates) {
+      ed << ' ' << candidate;
+    };
+    command->CommandFailed(errorCode,ed);
+  }
+
+  UImanager->SetVerboseLevel(keepVerbose);
 }
 
 ////////////// /vis/specify ///////////////////////////////////////

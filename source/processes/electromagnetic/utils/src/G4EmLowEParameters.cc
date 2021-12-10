@@ -69,6 +69,7 @@ void G4EmLowEParameters::Initialise()
 {
   fluo = false;
   beardenFluoDir = false;
+  fANSTOFluoDir = false;
   auger = false;
   pixe = false;
   deexIgnoreCut = false;
@@ -103,6 +104,16 @@ void G4EmLowEParameters::SetBeardenFluoDir(G4bool val)
 G4bool G4EmLowEParameters::BeardenFluoDir() const
 {
   return beardenFluoDir;
+}
+
+void G4EmLowEParameters::SetANSTOFluoDir(G4bool val)
+{
+  fANSTOFluoDir = val;
+}
+
+G4bool G4EmLowEParameters::ANSTOFluoDir() const
+{
+  return fANSTOFluoDir;
 }
 
 void G4EmLowEParameters::SetAuger(G4bool val)

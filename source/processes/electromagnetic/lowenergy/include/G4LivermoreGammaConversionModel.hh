@@ -69,14 +69,12 @@ public:
 
 private:
   void ReadData(size_t Z, const char* path = nullptr);
+  static G4PhysicsFreeVector* data[101]; // 101 because Z range is 1-100
+  static G4double lowEnergyLimit;
 
-  G4ParticleChangeForGamma* fParticleChange;
-  
-  static const G4int maxZ =101;
-  static G4PhysicsFreeVector* data[maxZ]; // 101 because Z range is 1-100
-  
-  static G4double lowEnergyLimit;  
   G4int verboseLevel;
+  G4ParticleChangeForGamma* fParticleChange;
+  G4int maxZ;
 };
 
 

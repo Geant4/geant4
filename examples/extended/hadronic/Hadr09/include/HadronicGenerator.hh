@@ -50,8 +50,6 @@
 // -  precise low-energy inelastic interactions of neutrons and
 //    charged particles (i.e. ParticleHP)
 // -  gamma/lepton-nuclear inelastic interactions
-// -  inelastic nuclear interactions of generic-ions (i.e. projectile ions
-//    heavier than deuterium, triton, He3 and alpha)
 //
 // This class does NOT use the Geant4 run-manager, and therefore should
 // be usable in a multi-threaded application, with one instance of this
@@ -73,12 +71,13 @@
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
 #include <map>
+#include "G4HadronicProcess.hh"
 
 class G4ParticleDefinition;
 class G4VParticleChange;
 class G4ParticleTable;
 class G4Material;
-class G4HadronicProcess;
+class G4HadronicInteraction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,12 +110,12 @@ class HadronicGenerator {
 
     ~HadronicGenerator();
 
-    G4bool IsPhysicsCaseSupported();
+    inline G4bool IsPhysicsCaseSupported() const;
     // Returns "true" if the physicsCase is supported; "false" otherwise. 
   
-    G4bool IsApplicable( const G4String &nameProjectile, const G4double projectileEnergy );
+    G4bool IsApplicable( const G4String &nameProjectile, const G4double projectileEnergy ) const;
     G4bool IsApplicable( G4ParticleDefinition* projectileDefinition,
-                         const G4double projectileEnergy );
+                         const G4double projectileEnergy ) const;
     // Returns "true" if the specified projectile (either by name or particle definition)
     // of given energy is applicable, "false" otherwise.
 
@@ -135,18 +134,44 @@ class HadronicGenerator {
     // final-state hadronic inelastic "physics case" specified in the constructor.
     // If the required hadronic collision is not possible, then the method returns
     // immediately an empty "G4VParticleChange", i.e. without secondaries produced.
-  
+
+    inline G4HadronicProcess* GetHadronicProcess() const;
+    inline G4HadronicInteraction* GetHadronicInteraction() const;
+    // Returns the hadronic process and the hadronic interaction, respectively,
+    // that handled the last call of "GenerateInteraction".
+
+    G4double GetImpactParameter() const;
+    G4int GetNumberOfTargetSpectatorNucleons() const;
+    G4int GetNumberOfProjectileSpectatorNucleons() const;
+    G4int GetNumberOfNNcollisions() const;
+    // In the case of hadronic interactions handled by the FTF model, returns,
+    // respectively, the impact parameter, the number of target/projectile
+    // spectator nucleons, and the number of nucleon-nucleon collisions,
+    // else, returns a negative value (-999).
+
   private:
 
     G4String fPhysicsCase;
     G4bool fPhysicsCaseIsSupported;
+    G4HadronicProcess* fLastHadronicProcess;
     G4ParticleTable* fPartTable;
     std::map< G4ParticleDefinition*, G4HadronicProcess* > fProcessMap;  
 };
 
 
-inline G4bool HadronicGenerator::IsPhysicsCaseSupported() {
+inline G4bool HadronicGenerator::IsPhysicsCaseSupported() const {
   return fPhysicsCaseIsSupported;
+}
+
+
+inline G4HadronicProcess* HadronicGenerator::GetHadronicProcess() const {
+  return fLastHadronicProcess;
+}
+
+
+inline G4HadronicInteraction* HadronicGenerator::GetHadronicInteraction() const {
+  return fLastHadronicProcess == nullptr ? nullptr
+                                         : fLastHadronicProcess->GetHadronicInteraction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

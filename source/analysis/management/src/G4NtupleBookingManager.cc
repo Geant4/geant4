@@ -31,6 +31,7 @@
 #include "G4AnalysisUtilities.hh"
 
 using namespace G4Analysis;
+using std::to_string;
 
 //
 // private template functions
@@ -39,38 +40,31 @@ using namespace G4Analysis;
 //_____________________________________________________________________________
 G4NtupleBookingManager::G4NtupleBookingManager(
   const G4AnalysisManagerState& state)
-  : G4BaseAnalysisManager(state),
-    fNtupleBookingVector(),
-    fFileType(),
-    fFirstNtupleColumnId(0),
-    fLockFirstNtupleColumnId(false)    
+  : G4BaseAnalysisManager(state)
 {}
 
 //_____________________________________________________________________________
 G4NtupleBookingManager::~G4NtupleBookingManager()
-{  
+{
   for ( auto ntupleBooking : fNtupleBookingVector ) {
     delete ntupleBooking;
-  }   
+  }
 }
 
 //_____________________________________________________________________________
 G4NtupleBooking*
 G4NtupleBookingManager::GetNtupleBookingInFunction(
-  G4int id, G4String functionName, G4bool warn) const
-{                                      
+  G4int id, std::string_view functionName, G4bool warn) const
+{
   auto index = id - fFirstId;
   if ( index < 0 || index >= G4int(fNtupleBookingVector.size()) ) {
     if ( warn) {
-      G4String inFunction = "G4NtupleBookingManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "ntuple booking " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
+      Warn("Ntuple booking " + to_string(id) + " does not exist.",
+        fkClass, functionName);
     }
-    return nullptr;         
+    return nullptr;
   }
-  
+
   return fNtupleBookingVector[index];
 }
 
@@ -82,16 +76,13 @@ G4NtupleBookingManager::GetNtupleBookingInFunction(
 G4bool G4NtupleBookingManager::IsEmpty() const
 {
   return ! fNtupleBookingVector.size();
-}  
- 
+}
+
 //_____________________________________________________________________________
 G4int G4NtupleBookingManager::CreateNtuple(
   const G4String& name, const G4String& title)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "ntuple booking", name);
-#endif
+  Message(kVL4, "create", "ntuple booking", name);
 
   // Create ntuple description
   auto index = fNtupleBookingVector.size();
@@ -106,19 +97,14 @@ G4int G4NtupleBookingManager::CreateNtuple(
   // Create ntuple
   fLockFirstId = true;
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleBooking->fNtupleId;
-    fState.GetVerboseL2()->Message("create", "ntuple booking", description);
-  } 
-#endif
+  Message(kVL2, "create", "ntuple booking",
+    name +  " ntupleId " + to_string(ntupleBooking->fNtupleId));
 
   return ntupleBooking->fNtupleId;
-}                                         
+}
 
 //_____________________________________________________________________________
-G4int G4NtupleBookingManager::CreateNtupleIColumn(const G4String& name, 
+G4int G4NtupleBookingManager::CreateNtupleIColumn(const G4String& name,
                                                std::vector<int>* vector)
 {
   return CreateNtupleIColumn(GetCurrentNtupleId(), name, vector);
@@ -139,9 +125,10 @@ G4int G4NtupleBookingManager::CreateNtupleDColumn(const G4String& name,
 }
 
 //_____________________________________________________________________________
-G4int G4NtupleBookingManager::CreateNtupleSColumn(const G4String& name)
+G4int G4NtupleBookingManager::CreateNtupleSColumn(const G4String& name,
+                                               std::vector<std::string>* vector)
 {
-  return CreateNtupleSColumn(GetCurrentNtupleId(), name);
+  return CreateNtupleSColumn(GetCurrentNtupleId(), name, vector);
 }
 
 //_____________________________________________________________________________
@@ -155,50 +142,47 @@ G4int G4NtupleBookingManager::CreateNtupleIColumn(
   G4int ntupleId, const G4String& name, std::vector<int>* vector)
 {
   return CreateNtupleTColumn<int>(ntupleId, name, vector);
-}                                         
+}
 
 //_____________________________________________________________________________
 G4int G4NtupleBookingManager::CreateNtupleFColumn(
   G4int ntupleId, const G4String& name, std::vector<float>* vector)
 {
   return CreateNtupleTColumn<float>(ntupleId, name, vector);
-}                                         
+}
 
 //_____________________________________________________________________________
 G4int G4NtupleBookingManager::CreateNtupleDColumn(
   G4int ntupleId, const G4String& name, std::vector<double>* vector)
 {
   return CreateNtupleTColumn<double>(ntupleId, name, vector);
-}                                         
+}
 
 //_____________________________________________________________________________
 G4int G4NtupleBookingManager::CreateNtupleSColumn(
-  G4int ntupleId, const G4String& name)
+  G4int ntupleId, const G4String& name, std::vector<std::string>* vector)
 {
-  return CreateNtupleTColumn<std::string>(ntupleId, name, nullptr);
-}  
+  return CreateNtupleTColumn<std::string>(ntupleId, name, vector);
+}
 
 //_____________________________________________________________________________
 G4NtupleBooking*  G4NtupleBookingManager::FinishNtuple(
   G4int ntupleId)
-{ 
+{
   // Nothing to be done for booking,
   return GetNtupleBookingInFunction(ntupleId, "FinishNtuple");
 }
 
 //_____________________________________________________________________________
-G4bool G4NtupleBookingManager::SetFirstNtupleColumnId(G4int firstId) 
-{ 
+G4bool G4NtupleBookingManager::SetFirstNtupleColumnId(G4int firstId)
+{
   if ( fLockFirstNtupleColumnId ) {
-    G4ExceptionDescription description;
-    description 
-      << "Cannot set FirstNtupleColumnId as its value was already used.";
-    G4Exception("G4BaseNtupleManager::SetFirstNtupleColumnId()",
-                "Analysis_W013", JustWarning, description);
+    Warn("Cannot set FirstNtupleColumnId as its value was already used.",
+      fkClass, "SetFirstNtupleColumnId");
     return false;
-  }              
+  }
 
-  fFirstNtupleColumnId = firstId; 
+  fFirstNtupleColumnId = firstId;
   return true;
 }
 
@@ -208,14 +192,14 @@ void  G4NtupleBookingManager::SetActivation(
 {
   for ( auto ntupleBooking : fNtupleBookingVector ) {
     ntupleBooking->fActivation = activation;
-  } 
+  }
 }
 
 //_____________________________________________________________________________
 void  G4NtupleBookingManager::SetActivation(
   G4int ntupleId, G4bool activation)
 {
-  auto ntupleBooking 
+  auto ntupleBooking
     = GetNtupleBookingInFunction(ntupleId, "SetActivation");
   if ( ! ntupleBooking ) return;
 
@@ -226,7 +210,7 @@ void  G4NtupleBookingManager::SetActivation(
 G4bool  G4NtupleBookingManager::GetActivation(
   G4int ntupleId) const
 {
-  auto ntupleBooking 
+  auto ntupleBooking
     = GetNtupleBookingInFunction(ntupleId, "GetActivation");
   if ( ! ntupleBooking ) return false;
 
@@ -259,11 +243,8 @@ void  G4NtupleBookingManager::SetFileName(
     // Check if valid extension (if present)
     auto output = G4Analysis::GetOutput(extension);
     if ( output == G4AnalysisOutput::kNone ) {
-      G4ExceptionDescription description;
-      description
-        << "The file extension " << extension << "is not supported.";
-      G4Exception("G4NtupleBookingManager::SetFileName",
-                  "Analysis_W051", JustWarning, description);
+      Warn("The file extension " + extension + " is not supported.",
+        fkClass, "SetFileName");
       return;
     }
   }
@@ -291,6 +272,18 @@ G4String  G4NtupleBookingManager::GetFileName(
   return ntupleBooking->fFileName;
 }
 
+//_____________________________________________________________________________
+void G4NtupleBookingManager::ClearData()
+{
+  for ( auto ntupleBooking : fNtupleBookingVector ) {
+    delete ntupleBooking;
+  }
+  fNtupleBookingVector.clear();
+  fLockFirstNtupleColumnId = false;
+
+  Message(G4Analysis::kVL2, "clear", "ntupleBookings");
+}
+
 //
 // public methods
 //
@@ -316,15 +309,10 @@ void G4NtupleBookingManager::SetFileType(const G4String& fileType)
     // multiple file types are not suported
     auto baseFileName = GetBaseName(ntupleBooking->fFileName);
     auto ntupleFileName = baseFileName + "." + fFileType;
-    if ( extension.size()) {
-    G4ExceptionDescription description;
-      description
-        << "Writing ntuples in files of different output types "
-        << fFileType << ", " << extension << " is not supported." << G4endl
-        << "Ntuple " << ntupleBooking->fNtupleBooking.name()
-        << " will be written in " << ntupleFileName;
-      G4Exception("G4NtupleBookingManager::SetFileType",
-                  "Analysis_W051", JustWarning, description);
+    if ( extension.size() ) {
+      Warn("Writing ntuples in files of different output types " +
+           fFileType + ", " + extension + " is not supported.",
+           fkClass, "SetFileType");
     }
 
     // Save the info in ntuple description

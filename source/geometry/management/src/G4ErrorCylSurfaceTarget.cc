@@ -76,12 +76,6 @@ G4ErrorCylSurfaceTarget( const G4double& radius,
 
 //---------------------------------------------------------------------
 
-G4ErrorCylSurfaceTarget::~G4ErrorCylSurfaceTarget()
-{
-}
-
-//---------------------------------------------------------------------
-
 G4double G4ErrorCylSurfaceTarget::
 GetDistanceFromPoint( const G4ThreeVector& point,
                       const G4ThreeVector& dir ) const

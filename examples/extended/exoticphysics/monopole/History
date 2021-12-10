@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 November 2021 I. Hrivnacova (monopole-V10-07-01)
+- Added analysis manager Clear() call at the end of run
+
+06 October 2021 I. Hrivnacova (monopole-V10-07-00)
+- Migration to new G4AnalysisManager.hh header;
+  define the output file name with an extension.
+
 10 November 2020: B. Morgan (monopole-V10-06-00)
 - Migration to G4RunManagerFactory.
 

@@ -68,6 +68,7 @@ class G4QuasiElasticChannel : public G4HadronicInteraction
   private:
    	G4QuasiElRatios* theQuasiElastic;
 	G4V3DNucleus* the3DNucleus;
+        G4int secID;  // Creator model ID for the secondaries created by this model
 };
 
 #endif

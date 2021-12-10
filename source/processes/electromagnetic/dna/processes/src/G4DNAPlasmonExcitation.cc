@@ -32,6 +32,7 @@
 
 #include "G4DNAPlasmonExcitation.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,7 +42,7 @@ G4DNAPlasmonExcitation::G4DNAPlasmonExcitation(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
   isInitialised(false)
 {
-  //SetProcessSubType(56); //dousatsu temp
+  //SetProcessSubType(fLowEnergyChargeDecrease); //dousatsu temp
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

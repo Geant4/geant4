@@ -2,9 +2,6 @@
 # Visualization of detector geometry and events  
 ###################################################
 
-# create empty scene
-/vis/scene/create
-
 # reading extended GDML Geometry from file
 /mydet/readFile color_extension.gdml
 /run/initialize

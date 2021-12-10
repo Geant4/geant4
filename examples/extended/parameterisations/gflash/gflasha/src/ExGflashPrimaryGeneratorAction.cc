@@ -28,15 +28,15 @@
 //
 #include "ExGflashPrimaryGeneratorAction.hh"
 
-#include "G4GeneralParticleSource.hh"
 #include "G4Event.hh"
+#include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashPrimaryGeneratorAction::ExGflashPrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+  : G4VUserPrimaryGeneratorAction(), fParticleGun(nullptr)
 {
-  fParticleGun=new G4GeneralParticleSource;
+  fParticleGun = new G4GeneralParticleSource;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@ ExGflashPrimaryGeneratorAction::~ExGflashPrimaryGeneratorAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
+{
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

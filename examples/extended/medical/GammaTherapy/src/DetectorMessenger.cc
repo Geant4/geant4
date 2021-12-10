@@ -50,8 +50,6 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//#include "g4root.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* h):

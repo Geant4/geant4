@@ -161,9 +161,9 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     #ifdef debug_heavyHadrons
     // Check charm and bottom numbers of the projectile:
     G4int count_charm_projectile  = thePrimary.GetDefinition()->GetQuarkContent( 4 ) -
-                                        thePrimary.GetDefinition()->GetAntiQuarkContent( 4 );
+                                    thePrimary.GetDefinition()->GetAntiQuarkContent( 4 );
     G4int count_bottom_projectile = thePrimary.GetDefinition()->GetQuarkContent( 5 ) -
-                                        thePrimary.GetDefinition()->GetAntiQuarkContent( 5 );
+                                    thePrimary.GetDefinition()->GetAntiQuarkContent( 5 );
     G4int count_charm_strings = 0, count_bottom_strings = 0;
     G4int count_charm_hadrons = 0, count_bottom_hadrons = 0;
     #endif
@@ -250,40 +250,57 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     G4double ExcitationEt(0.), ExcitationEp(0.);
     #endif
 
+    // We assume that the target nucleus is never a hypernucleus, whereas
+    // the projectile nucleus can be a light hypernucleus or anti-hypernucleus.
+    
     G4V3DNucleus * ProjResNucleus = GetProjectileNucleus();
 
     G4int numberProtonProjectileResidual( 0 ), numberNeutronProjectileResidual( 0 );
+    G4int numberLambdaProjectileResidual( 0 );
     if(ProjResNucleus != 0)
     {
       theNuclNucleon = ProjResNucleus->StartLoop() ? ProjResNucleus->GetNextNucleon() : nullptr;
       G4int numberProtonProjectileHits( 0 ), numberNeutronProjectileHits( 0 );
+      G4int numberLambdaProjectileHits( 0 );
       while( theNuclNucleon )
       {
         if(theNuclNucleon->AreYouHit())
         {
           G4LorentzVector tmp=toLab*theNuclNucleon->Get4Momentum();
+	  const G4ParticleDefinition* def = theNuclNucleon->GetDefinition();
           #ifdef debug_PartonStringModel
           ProjectileResidual4Momentum += tmp;
           hitsP++;
-          if ( theNuclNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hitsP;
+          if ( def == G4Proton::Definition() || def == G4AntiProton::Definition() ) ++charged_hitsP;
           ExcitationEp +=theNuclNucleon->GetBindingEnergy();
           #endif
           theNuclNucleon->SetMomentum(tmp);
-          if ( theNuclNucleon->GetDefinition() == G4Proton::Proton() )   ++numberProtonProjectileHits;
-          if ( theNuclNucleon->GetDefinition() == G4Neutron::Neutron() ) ++numberNeutronProjectileHits;
+          if ( def == G4Proton::Definition()  || def == G4AntiProton::Definition() )  ++numberProtonProjectileHits;
+          if ( def == G4Neutron::Definition() || def == G4AntiNeutron::Definition() ) ++numberNeutronProjectileHits;
+          if ( def == G4Lambda::Definition()  || def == G4AntiLambda::Definition() )  ++numberLambdaProjectileHits;
         }
         theNuclNucleon = ProjResNucleus->GetNextNucleon();
       }
+      G4int numberLambdaProjectile = 0;
+      if ( thePrimary.GetDefinition()->IsHypernucleus() ) {
+	numberLambdaProjectile = thePrimary.GetDefinition()->GetNumberOfLambdasInHypernucleus();
+      } else if ( thePrimary.GetDefinition()->IsAntiHypernucleus() ) {
+	numberLambdaProjectile = thePrimary.GetDefinition()->GetNumberOfAntiLambdasInAntiHypernucleus();
+      }
       #ifdef debug_PartonStringModel
-      G4cout<<"Projectile residual A, Z and E* "
+      G4cout<<"Projectile residual A, Z (numberOfLambdasOrAntiLambdas) and E* "
             <<thePrimary.GetDefinition()->GetBaryonNumber() - hitsP<<" "
-            <<thePrimary.GetDefinition()->GetPDGCharge()    - charged_hitsP<<" "
+            <<thePrimary.GetDefinition()->GetPDGCharge()    - charged_hitsP<<" ("
+	    << numberLambdaProjectile - numberLambdaProjectileHits << ") "
             <<ExcitationEp<<G4endl;
       G4cout<<"Projectile residual 4 momentum  "<<ProjectileResidual4Momentum<<G4endl;
       #endif
-      numberProtonProjectileResidual = thePrimary.GetDefinition()->GetPDGCharge() - numberProtonProjectileHits;
-      numberNeutronProjectileResidual = thePrimary.GetDefinition()->GetBaryonNumber() 
-                                        - thePrimary.GetDefinition()->GetPDGCharge() - numberNeutronProjectileHits;
+      numberProtonProjectileResidual = std::max( std::abs( G4int( thePrimary.GetDefinition()->GetPDGCharge() ) ) -
+						 numberProtonProjectileHits, 0 );
+      numberLambdaProjectileResidual = std::max( numberLambdaProjectile - numberLambdaProjectileHits, 0 );
+      numberNeutronProjectileResidual = std::max( std::abs( thePrimary.GetDefinition()->GetBaryonNumber() ) -
+                                                  std::abs( G4int( thePrimary.GetDefinition()->GetPDGCharge() ) ) -
+						  numberLambdaProjectile - numberNeutronProjectileHits, 0 );
     }
 
     G4V3DNucleus * ResNucleus = GetWoundedNucleus(); 
@@ -335,8 +352,24 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
       //G4cout << "***UNPHYSICAL TARGET RESIDUAL*** Z=" << numberProtonTargetResidual 
       //       << " ; N=" << numberNeutronTargetResidual;
     }
+    // The projectile residual can be a hypernucleus or anti-hypernucleus:
+    // only the following combinations are currently allowed in Geant4:
+    // p-n-lambda (hypertriton), p-n-n-lambda (hyperH4), p-p-n-lambda (hyperAlpha),
+    // p-p-n-n-lambda (hyperHe5), n-n-lambda-lambda (doublehyperdoubleneutron),
+    // p-n-lambda-lambda (doubleHyperH4)
     if ( ( numberProtonProjectileResidual > 3   &&  numberNeutronProjectileResidual == 0 ) ||
-         ( numberProtonProjectileResidual == 0  &&  numberNeutronProjectileResidual > 1  ) ) {
+         ( numberProtonProjectileResidual == 0  &&  numberNeutronProjectileResidual > 1  &&
+	   numberLambdaProjectileResidual == 0 ) ||
+	 ( numberProtonProjectileResidual == 0  &&  numberNeutronProjectileResidual <= 1  &&
+	   numberLambdaProjectileResidual > 0 ) ||
+	 ( numberProtonProjectileResidual == 0  &&  numberNeutronProjectileResidual > 2  &&
+	   numberLambdaProjectileResidual > 0 ) ||
+	 ( numberLambdaProjectileResidual > 2 ) ||
+	 ( numberProtonProjectileResidual > 0  &&  numberNeutronProjectileResidual == 0  &&
+	   numberLambdaProjectileResidual > 0 ) ||
+	 ( numberProtonProjectileResidual > 1  &&  numberNeutronProjectileResidual > 1  &&
+	   numberLambdaProjectileResidual > 1 )
+	 ) {
       unphysicalResidual = true;
       //G4cout << "***UNPHYSICAL PROJECTILE RESIDUAL*** Z=" << numberProtonProjectileResidual
       //       << " ; N=" << numberNeutronProjectileResidual;

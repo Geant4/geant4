@@ -82,6 +82,8 @@ class G4OpRayleigh : public G4VDiscreteProcess
   virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
   virtual void Initialise();
 
+  void SetVerboseLevel(G4int);
+
  protected:
   G4PhysicsTable* thePhysicsTable;
 

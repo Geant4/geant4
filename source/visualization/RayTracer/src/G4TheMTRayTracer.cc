@@ -63,6 +63,23 @@ G4TheMTRayTracer::G4TheMTRayTracer(G4VFigureFileMaker* figMaker,
   theRTRunAction = 0;
 }
 
+G4TheMTRayTracer* G4TheMTRayTracer::Instance()
+{
+  if (theInstance) return theInstance;
+  else return new G4TheMTRayTracer;
+}
+
+G4TheMTRayTracer* G4TheMTRayTracer::Instance
+(G4VFigureFileMaker* figMaker,G4VRTScanner* scanner)
+{
+  if (theInstance) {
+    theFigMaker=figMaker;
+    theScanner=scanner;
+    return theInstance;
+  }
+  else return new G4TheMTRayTracer(figMaker,scanner);
+}
+
 G4TheMTRayTracer::~G4TheMTRayTracer()
 {
   if(theRTWorkerInitialization)

@@ -520,7 +520,7 @@ void G4MuonicAtomDecay::FillResult(G4HadFinalState * aR, const G4Track & aT)
 
       G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
                                    time, aT.GetPosition());
-      track->SetCreatorModelIndex(aR->GetSecondary(i)->GetCreatorModelType());
+      track->SetCreatorModelID(aR->GetSecondary(i)->GetCreatorModelID());
       G4double newWeight = weight*aR->GetSecondary(i)->GetWeight();
 	// G4cout << "#### ParticleDebug "
 	// <<GetProcessName()<<" "

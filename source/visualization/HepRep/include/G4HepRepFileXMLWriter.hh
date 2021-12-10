@@ -49,7 +49,7 @@
 
 class G4HepRepFileXMLWriter
 {
-public:
+ public:
   G4HepRepFileXMLWriter();
 
   void addType(const char* name, int newTypeDepth);
@@ -57,27 +57,19 @@ public:
   void addPrimitive();
   void addPoint(double x, double y, double z);
 
-  void addAttDef(const char* name,
-		 const char* desc,
-		 const char* type,
-		 const char* extra);
+  void addAttDef(const char* name, const char* desc, const char* type,
+                 const char* extra);
 
-  void addAttValue(const char* name,
-		   const char* value);
+  void addAttValue(const char* name, const char* value);
 
-  void addAttValue(const char* name,
-		   double value);
+  void addAttValue(const char* name, double value);
 
-  void addAttValue(const char* name,
-		   int value);
+  void addAttValue(const char* name, int value);
 
-  void addAttValue(const char* name,
-		   bool value);
+  void addAttValue(const char* name, bool value);
 
-  void addAttValue(const char* name,
-		   double value1,
-		   double value2,
-		   double value3);
+  void addAttValue(const char* name, double value1, double value2,
+                   double value3);
 
   void open(const char* filespec);
   void close();
@@ -89,8 +81,8 @@ public:
   bool inType[50];
   bool inInstance[50];
   char* prevTypeName[50];
-  
-private:
+
+ private:
   std::ofstream fout;
 
   void init();

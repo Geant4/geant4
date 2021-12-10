@@ -48,11 +48,12 @@ class G4HnMessenger : public G4UImessenger
 {
   public:
     explicit G4HnMessenger(G4HnManager& manager);
+    G4HnMessenger() = delete;
     virtual ~G4HnMessenger();
-   
-    // methods
+
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
-    
+
   private:
     void SetHnAsciiCmd();
     void SetHnActivationCmd();
@@ -61,7 +62,7 @@ class G4HnMessenger : public G4UImessenger
     void SetHnPlottingToAllCmd();
     void SetHnFileNameCmd();
     void SetHnFileNameToAllCmd();
- 
+
     G4HnManager&  fManager; ///< Associated class
     std::unique_ptr<G4AnalysisMessengerHelper>   fHelper;
 

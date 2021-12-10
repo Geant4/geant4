@@ -44,7 +44,7 @@
 #include "TrackingAction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4RunManager.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
 #include "CommandLineParser.hh"
 //#include "NeuronLoadDataFile.hh"
@@ -75,7 +75,6 @@ fDetector(det),fPrimary(prim),fRun(0)
 
 RunAction::~RunAction()
 {  
-  //delete G4AnalysisManager::Instance();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -103,6 +102,7 @@ RunInitManager::Instance()->Initialize();
 /*
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   analysisManager->SetFirstHistoId(1);
 //  if(!analysisManager->IsActive()) {return; }
 
@@ -184,8 +184,6 @@ void RunAction::CreateHistogram()
   // Book histograms, ntuple
 
   // Create analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in Analysis.hh
 
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* command(0);

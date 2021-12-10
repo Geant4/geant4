@@ -37,7 +37,6 @@
 
 #include "G4ExtendedMaterial.hh"
 #include "G4VMaterialExtension.hh"
-#include "G4PhysicsModelCatalog.hh"
 
 // Constructor to create an extended material from the base-class G4Material
 

@@ -60,7 +60,6 @@ class WLSEventAction : public G4UserEventAction
   void AddClad1Bounce() { fClad1Bounce += 1; };
   void AddClad2Bounce() { fClad2Bounce += 1; };
   void AddReflected() { fReflected += 1; };
-  void AddDetected() { fDetected += 1; };
   void AddEscaped() { fEscaped += 1; };
   void AddMirror() { fMirror += 1; };
 
@@ -80,7 +79,6 @@ class WLSEventAction : public G4UserEventAction
   G4int fClad1Bounce;
   G4int fClad2Bounce;
   G4int fReflected;
-  G4int fDetected;
   G4int fEscaped;
   G4int fMirror;
 };

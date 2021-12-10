@@ -65,10 +65,6 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
 
     G4bool debug_G4BinaryLightIonReactionResults;
     static G4int theBLIR_ID;
-#ifdef G4MULTITHREADED
-    static G4Mutex BLIRMutex;
-#endif
-
 };
 inline void G4BinaryLightIonReaction::SetPrecompound(G4VPreCompoundModel* ptr)
 {

@@ -301,7 +301,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fgCmd->SetGuidance("Set GeomFactor parameter for msc processes");
   fgCmd->SetParameterName("Fg",true);
   fgCmd->SetRange("Fg>0");
-  fgCmd->SetDefaultValue(3.5);
+  fgCmd->SetDefaultValue(2.5);
   fgCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fgCmd->SetToBeBroadcasted(false);
  
@@ -583,6 +583,7 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == ver2Cmd) {
     theParameters->SetWorkerVerbose(ver2Cmd->GetNewIntValue(newValue));
   } else if (command == dumpCmd) {
+    theParameters->SetIsPrintedFlag(false);
     theParameters->Dump();
   } else if (command == mscCmd || command == msc1Cmd) {
     G4MscStepLimitType msctype = fUseSafety;

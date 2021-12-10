@@ -41,6 +41,7 @@
 #include "G4HadronicException.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4VCrossSectionRatio.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
   : G4HadronicProcess(pName, fHadronElastic), 
@@ -121,6 +122,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
       result->SetTrafoToLab(theProj.GetTrafoToLab());
       ClearNumberOfInteractionLengthLeft();
 
+      // The following method of the base class takes care also of setting
+      // the creator model ID for the secondaries that are created
       FillResult(result, track);
 
       if (epReportLevel != 0) {
@@ -234,6 +237,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 			       track.GetPosition());
       t->SetWeight(weight);
       t->SetTouchableHandle(track.GetTouchableHandle());
+      G4int secID = G4PhysicsModelCatalog::GetModelID( "model_" + hadi->GetModelName() );
+      if ( secID > 0 ) t->SetCreatorModelID(secID);
       theTotalResult->AddSecondary(t);
 
     } else {

@@ -30,6 +30,8 @@
 // 080808 Bug fix in serching mu bin and index for theBuff2b by T. Koi
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// 
+// E. Mendoza, Nov. 2020 - bug fix
 //
 #include "G4ParticleHPLabAngularEnergy.hh"
 #include "G4PhysicalConstants.hh"
@@ -118,98 +120,76 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
      it = i;
      if ( anEnergy < theEnergies[i] ) break;
    }
-   //080808
-   //if ( it == 0 || it == nEnergies-1 ) // it marks the energy bin
-   if ( it == 0 ) // it marks the energy bin
-   {
-     G4cout << "080808 Something unexpected is happen in G4ParticleHPLabAngularEnergy " << G4endl;
-     // integrate the prob for each costh, and select theta.
-     G4double * running = new G4double [nCosTh[it]];
-     running[0]=0;
-     for(i=0;i<nCosTh[it]; i++)
-     {
-       if(i!=0) running[i] = running[i-1];
-       running[i]+=theData[it][i].GetIntegral(); // Does interpolated integral.
-     }
-     G4double random = running[nCosTh[it]-1]*G4UniformRand();
-     G4int ith(0);
-     for(i=0;i<nCosTh[it]; i++)
-     {
-       ith = i;
-       if(random<running[i]) break;
-     }
-     //080807
-     //if ( ith == 0 || ith == nCosTh[it]-1 ) //ith marks the angluar bin
-     if ( ith == 0 ) //ith marks the angluar bin
-     {
-        cosTh = theData[it][ith].GetLabel();
-        secEnergy = theData[it][ith].Sample();
-        currentMeanEnergy = theData[it][ith].GetMeanX();
-     }
-     else
-     {
-       //080808
-       //G4double x1 = theData[it][ith-1].GetIntegral();
-       //G4double x2 = theData[it][ith].GetIntegral();
-       G4double x1 = running [ ith-1 ];
-       G4double x2 = running [ ith ];
-       G4double x = random;
-       G4double y1 = theData[it][ith-1].GetLabel();
-       G4double y2 = theData[it][ith].GetLabel();
-       cosTh = theInt.Interpolate(theSecondManager[it].GetInverseScheme(ith),
-                                  x, x1, x2, y1, y2);
-       G4ParticleHPVector theBuff1;
-       theBuff1.SetInterpolationManager(theData[it][ith-1].GetInterpolationManager());
-       G4ParticleHPVector theBuff2;
-       theBuff2.SetInterpolationManager(theData[it][ith].GetInterpolationManager());
-       x1=y1;
-       x2=y2;
-       G4double y, mu;
-       for(i=0;i<theData[it][ith-1].GetVectorLength(); i++)
-       {
-         mu = theData[it][ith-1].GetX(i);
-         y1 = theData[it][ith-1].GetY(i);
-         y2 = theData[it][ith].GetY(mu);
 
-         y = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
-                                cosTh, x1,x2,y1,y2);
-         theBuff1.SetData(i, mu, y);
-       }
-       for(i=0;i<theData[it][ith].GetVectorLength(); i++)
-       {
-         mu = theData[it][ith].GetX(i);
-         y1 = theData[it][ith-1].GetY(mu);
-         y2 = theData[it][ith].GetY(i);
-         y = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
-                                cosTh, x1,x2,y1,y2);
-         theBuff2.SetData(i, mu, y);
-       }
-       G4ParticleHPVector theStore;
-       theStore.Merge(&theBuff1, &theBuff2);
-       secEnergy = theStore.Sample();
-       currentMeanEnergy = theStore.GetMeanX();
+   if ( it == 0 ) // it marks the energy bin --> we do not extrapolate to low energies, we extrapolate to high energies (??)
+   {
+     //Do  not sample between incident neutron energies:
+     //---------------------------------------------------------
+     //CosTheta:
+     G4ParticleHPVector theThVec;
+     theThVec.SetInterpolationManager(theSecondManager[it]);
+     for(i=0; i<nCosTh[it]; i++)
+     {
+       theThVec.SetX(i, theData[it][i].GetLabel());
+       theThVec.SetY(i, theData[it][i].GetIntegral());
      }
-     delete [] running;
+     cosTh=theThVec.Sample();
+     //---------------------------------------------------------
+
+     //---------------------------------------------------------
+     //Now the secondary energy:
+     G4double x, x1, x2, y1, y2, y, E;
+     G4int i1(0);
+     for(i=1; i<nCosTh[it]; i++)
+     {
+       i1 = i;
+       if(cosTh<theData[it][i].GetLabel()) break;
+     }
+     // now get the prob at this energy for the right theta value
+     x = cosTh;
+     x1 = theData[it][i1-1].GetLabel();
+     x2 = theData[it][i1].GetLabel();
+     G4ParticleHPVector theBuff1a;
+     theBuff1a.SetInterpolationManager(theData[it][i1-1].GetInterpolationManager());
+     for(i=0;i<theData[it][i1-1].GetVectorLength(); i++)
+     {
+       E = theData[it][i1-1].GetX(i);
+       y1 = theData[it][i1-1].GetY(i);
+       y2 = theData[it][i1].GetY(E);
+       y = theInt.Interpolate(theSecondManager[it].GetScheme(i1), x, x1,x2,y1,y2);
+       theBuff1a.SetData(i, E, y);
+     }
+     G4ParticleHPVector theBuff2a;
+     theBuff2a.SetInterpolationManager(theData[it][i1].GetInterpolationManager());
+     for(i=0;i<theData[it][i1].GetVectorLength(); i++)
+     {
+       E = theData[it][i1].GetX(i);
+       y1 = theData[it][i1-1].GetY(E);
+       y2 = theData[it][i1].GetY(i);
+       y = theInt.Interpolate(theSecondManager[it].GetScheme(i1), x, x1,x2,y1,y2);
+       theBuff2a.SetData(i, E, y); // wrong E, right theta.
+     }
+     G4ParticleHPVector theStore;
+     theStore.Merge(&theBuff1a, &theBuff2a);
+     secEnergy = theStore.Sample();
+     currentMeanEnergy = theStore.GetMeanX();
+     //---------------------------------------------------------
    }
    else // this is the small big else.
    {
      G4double x, x1, x2, y1, y2, y, tmp, E;
      // integrate the prob for each costh, and select theta.
      G4ParticleHPVector run1;
-     run1.SetY(0, 0.);
      for(i=0;i<nCosTh[it-1]; i++)
      {
-       if(i!=0) run1.SetY(i, run1.GetY(i-1));
        run1.SetX(i, theData[it-1][i].GetLabel());
-       run1.SetY(i, run1.GetY(i)+theData[it-1][i].GetIntegral());
+       run1.SetY(i,theData[it-1][i].GetIntegral());
      }
      G4ParticleHPVector run2;
-     run2.SetY(0, 0.); 
      for(i=0;i<nCosTh[it]; i++)
      {
-       if(i!=0) run2.SetY(i, run2.GetY(i-1));
        run2.SetX(i, theData[it][i].GetLabel());
-       run2.SetY(i, run2.GetY(i)+theData[it][i].GetIntegral());
+       run2.SetY(i, theData[it][i].GetIntegral());
      }
      // get the distributions for the correct neutron energy
      x = anEnergy;
@@ -232,13 +212,17 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
        tmp = run2.GetX(i); //theta
        y1 = run1.GetY(tmp); // integral
        y2 = run2.GetY(i);
-       y = theInt.Lin(x, x1,x2,y1,y2);
+       y = theInt.Interpolate(theManager.GetScheme(it), x, x1,x2,y1,y2);
        thBuff2.SetData(i, tmp, y);
      }
      G4ParticleHPVector theThVec;
      theThVec.Merge(&thBuff1 ,&thBuff2); // takes care of interpolation
+     cosTh=theThVec.Sample();
+     /*
+     if(massCode>0.99 && massCode<1.01){theThVec.Dump();}
      G4double random = (theThVec.GetY(theThVec.GetVectorLength()-1)
                         -theThVec.GetY(0))   *G4UniformRand();
+     G4cout<<" -- "<<theThVec.GetY(theThVec.GetVectorLength()-1)<<"  "<<theThVec.GetY(0)<<"  ----> "<<random<<G4endl;
      G4int ith(0);
      for(i=1;i<theThVec.GetVectorLength(); i++)
      {
@@ -256,10 +240,11 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
        cosTh = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
                                   xx, xx1,xx2,yy1,yy2);
      }
+     */
      G4int i1(0), i2(0);
      // get the indixes of the vectors close to theta for low energy
      // first it-1 !!!! i.e. low in energy
-     for(i=0; i<nCosTh[it-1]; i++)
+     for(i=1; i<nCosTh[it-1]; i++)
      {
        i1 = i;
        if(cosTh<theData[it-1][i].GetLabel()) break;
@@ -275,7 +260,7 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
        E = theData[it-1][i1-1].GetX(i);
        y1 = theData[it-1][i1-1].GetY(i);
        y2 = theData[it-1][i1].GetY(E);
-       y = theInt.Lin(x, x1,x2,y1,y2);
+       y = theInt.Interpolate(theSecondManager[it-1].GetScheme(i1), x, x1,x2,y1,y2);
        theBuff1a.SetData(i, E, y); // wrong E, right theta.
      }
      G4ParticleHPVector theBuff2a;
@@ -285,7 +270,7 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
        E = theData[it-1][i1].GetX(i);
        y1 = theData[it-1][i1-1].GetY(E);
        y2 = theData[it-1][i1].GetY(i);
-       y = theInt.Lin(x, x1,x2,y1,y2);
+       y = theInt.Interpolate(theSecondManager[it-1].GetScheme(i1), x, x1,x2,y1,y2);
        theBuff2a.SetData(i, E, y); // wrong E, right theta.
      }
      G4ParticleHPVector theStore1;
@@ -293,7 +278,7 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
 
      // get the indixes of the vectors close to theta for high energy
      // then it !!!! i.e. high in energy
-     for(i=0; i<nCosTh[it]; i++)
+     for(i=1; i<nCosTh[it]; i++)
      {
        i2 = i;
        if(cosTh<theData[it][i2].GetLabel()) break;
@@ -307,7 +292,7 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
        E = theData[it][i2-1].GetX(i);
        y1 = theData[it][i2-1].GetY(i);
        y2 = theData[it][i2].GetY(E);
-       y = theInt.Lin(x, x1,x2,y1,y2);
+       y = theInt.Interpolate(theSecondManager[it].GetScheme(i2), x, x1,x2,y1,y2);
        theBuff1b.SetData(i, E, y); // wrong E, right theta.
      }
      G4ParticleHPVector theBuff2b;
@@ -322,7 +307,7 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
        E = theData[it][i2].GetX(i);
        y1 = theData[it][i2-1].GetY(E);
        y2 = theData[it][i2].GetY(i);
-       y = theInt.Lin(x, x1,x2,y1,y2);
+       y = theInt.Interpolate(theSecondManager[it].GetScheme(i2), x, x1,x2,y1,y2);
        theBuff2b.SetData(i, E, y); // wrong E, right theta.
      }
      G4ParticleHPVector theStore2;

@@ -325,6 +325,19 @@ public:
           return;
         }
 
+      } else if((*it).cls_id()==_cid_std_vector<std::string>()) {
+        std::vector<std::string>* vec = (std::vector<std::string>*)(*it).user_obj();
+        if(vec) {
+          create_column<std::string>((*it).name(),*vec);
+        } else {
+          a_out << "tools::waxml::ntuple :"
+                << " for std::vector column " << sout((*it).name())
+                << ", the user vector pointer is null."
+                << std::endl;
+          safe_clear<iobj>(m_cols);
+          return;
+        }
+
       } else {
         a_out << "tools::waxml::ntuple :"
               << " for column " << sout((*it).name())

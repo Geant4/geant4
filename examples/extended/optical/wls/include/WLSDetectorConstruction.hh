@@ -48,6 +48,7 @@ class G4EllipticalTube;
 class G4LogicalVolume;
 class G4Material;
 class G4Tubs;
+class G4VisAttributes;
 class G4VPhysicalVolume;
 
 class WLSDetectorConstruction : public G4VUserDetectorConstruction
@@ -112,20 +113,11 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
   G4double GetCoatingThickness();
   G4double GetCoatingRadius();
 
-  // StringToRotationMatrix() converts a string "X90,Y45" into a
-  // G4RotationMatrix.
-  // This is an active rotation, in that the object is first rotated
-  // around the parent's X axis by 90 degrees, then the object is
-  // further rotated around the parent's Y axis by 45 degrees.
-  // The return value points to a G4RotationMatrix on the heap, so
-  // it is persistent. Angles are in degrees, can have decimals,
-  // and can be negative. Axes are X, Y, Z.
-
-  static G4RotationMatrix StringToRotationMatrix(G4String rotation);
-
   G4Material* FindMaterial(G4String);
 
  private:
+  std::vector<G4VisAttributes*> fVisAttributes;
+
   WLSMaterials* fMaterials;
 
   G4LogicalVolume* fLogicHole;
@@ -190,8 +182,6 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
   G4double fHoleLength;
   G4double fCoatingThickness;
   G4double fCoatingRadius;
-
-  void ConstructFiber();
 
   void UpdateGeometryParameters();
 

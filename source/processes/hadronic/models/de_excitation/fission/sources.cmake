@@ -10,7 +10,6 @@ geant4_add_module(G4hadronic_deex_fission
     G4FissionLevelDensityParameterINCLXX.hh
     G4FissionParameters.hh
     G4FissionProbability.hh
-    G4ParaFissionModel.hh
     G4VFissionBarrier.hh
   SOURCES
     G4CompetitiveFission.cc
@@ -25,10 +24,8 @@ geant4_add_module(G4hadronic_deex_fission
 geant4_module_link_libraries(G4hadronic_deex_fission
   PUBLIC
     G4globman
-    G4hadronic_deex_handler
     G4hadronic_deex_management
     G4hadronic_deex_util
-    G4hadronic_mgt
     G4hadronic_util
     G4partman
   PRIVATE

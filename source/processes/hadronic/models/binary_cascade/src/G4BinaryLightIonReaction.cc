@@ -43,12 +43,9 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4Log.hh"
+#include "G4PhysicsModelCatalog.hh"
 
-#ifdef G4MULTITHREADED
-   G4Mutex G4BinaryLightIonReaction::BLIRMutex = G4MUTEX_INITIALIZER;
-#endif
-   G4int G4BinaryLightIonReaction::theBLIR_ID = -1;
-
+G4int G4BinaryLightIonReaction::theBLIR_ID = -1;
 
 //#define debug_G4BinaryLightIonReaction
 //#define debug_BLIR_finalstate
@@ -69,19 +66,7 @@ G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
 	}
 	theModel = new G4BinaryCascade(theProjectileFragmentation);
 	theHandler = theProjectileFragmentation->GetExcitationHandler();
-	if ( theBLIR_ID == -1 ) {
-#ifdef G4MULTITHREADED
-       G4MUTEXLOCK(&G4BinaryLightIonReaction::BLIRMutex);
-       if ( theBLIR_ID == -1 ) {
-#endif
-    	   theBLIR_ID = G4PhysicsModelCatalog::Register("Binary Light Ion Reaction");
-#ifdef G4MULTITHREADED
-       }
-       G4MUTEXUNLOCK(&G4BinaryLightIonReaction::BLIRMutex);
-#endif
-    }
-
-
+    	theBLIR_ID = G4PhysicsModelCatalog::GetModelID("model_G4BinaryLightIonReaction");
 	debug_G4BinaryLightIonReactionResults=std::getenv("debug_G4BinaryLightIonReactionResults")!=0;
 }
 
@@ -332,7 +317,8 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
             G4double time = 0;                     //(*iter)->GetCreationTime();
             //if(time < 0.0) { time = 0.0; }
             aNew.SetTime(timePrimary + time);
-            aNew.SetCreatorModelType((*iter)->GetCreatorModel());
+            //aNew.SetCreatorModelID((*iter)->GetCreatorModelID()); //AR-02Aug2021 : For some reasons, it does NOT work!
+            aNew.SetCreatorModelID(theBLIR_ID);
 
 			theResult.AddSecondary(aNew);
 			ptot += tmp;

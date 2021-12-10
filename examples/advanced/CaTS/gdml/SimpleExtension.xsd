@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  xs:schema >
+<xs:schema attributeFormDefault="unqualified"
+	   elementFormDefault="unqualified"
+	   version="1.0"
+	   xmlns:gdml_simple_extension="http://www.example.org/"
+	   xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+	   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:redefine schemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <xs:annotation>
+      <xs:documentation>
+	Extend the volume element using the redefine tag.
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType name="VolumeType">
+      <xs:annotation>
+	<xs:documentation>
+	  Extend the VolumeType defined by GDML.
+	</xs:documentation>
+      </xs:annotation>      
+      <xs:complexContent>
+	<xs:extension base="VolumeType">
+	  <xs:sequence>
+	    <xs:element minOccurs="0" maxOccurs="1" name="colorref" type="ReferenceType"/>
+	  </xs:sequence>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:redefine>
+
+  <xs:complexType name="extensionType">
+    <xs:annotation>
+      <xs:documentation>
+	Contains color elements.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="color" minOccurs="0" maxOccurs="unbounded" type="ColorType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ColorType">
+    <xs:annotation>
+      <xs:documentation>
+	A complex type defining RGBA values for geometric data display.  
+	These values will be loaded into a G4VisAttributes object assigned
+	to the G4LogicalVolume.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:ID" use="required" />
+    <xs:attribute name="R" type="xs:double" default="1.0"/>
+    <xs:attribute name="G" type="xs:double" default="1.0"/>
+    <xs:attribute name="B" type="xs:double" default="1.0"/>
+    <xs:attribute name="A" type="xs:double" default="1.0" />
+  </xs:complexType>
+
+  <xs:element name="extension" type="extensionType"/>
+
+  <xs:element name="gdml_simple_extension">
+    <xs:annotation>
+      <xs:documentation>
+	Top-level element including the gdml element
+	plus a container extension element for e.g.
+	fields, SDs, regions and components.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+	<xs:element ref="extension" minOccurs="0" maxOccurs="1"/>
+	<xs:element ref="gdml" minOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+</xs:schema>

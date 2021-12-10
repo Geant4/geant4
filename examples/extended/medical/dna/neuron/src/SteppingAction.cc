@@ -39,10 +39,10 @@
 /// \file SteppingAction.cc 
 /// \brief Implementation of the SteppingAction class
 
-#include "Analysis.hh"
 #include "SteppingAction.hh"
 #include "RunAction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"

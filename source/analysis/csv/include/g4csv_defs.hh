@@ -30,20 +30,10 @@
 #define g4csv_defs_h
 
 #include "tools/wcsv_ntuple"
-#include "G4CsvAnalysisManager.hh"
-#include "G4CsvAnalysisReader.hh"
 #include "g4hntools_defs.hh"
 
-namespace G4Csv 
-{
-  // Ntuple types
-  using G4Ntuple = tools::wcsv::ntuple; 
-  using G4NtupleIterator = std::vector<tools::wcsv::ntuple*>::iterator;
-  using G4NtupleConstIterator = std::vector<tools::wcsv::ntuple*>::const_iterator;
-
-  // Managers
-  using G4AnalysisManager = G4CsvAnalysisManager; 
-  using G4AnalysisReader = G4CsvAnalysisReader;
-}  
+// Csv output specific types
+using G4CsvNtuple = tools::wcsv::ntuple;
+using G4CsvRNtuple = tools::wcsv::ntuple;
 
 #endif

@@ -28,8 +28,6 @@
 // 
 //Virtual base class for all Motif widgets.
 
-#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
-
 #ifndef G4OPENGLXMVWIDGETOBJECT_HH
 #define G4OPENGLXMVWIDGETOBJECT_HH
 
@@ -58,7 +56,5 @@ protected:
   Visual* visual;
   Widget top;
 };
-
-#endif
 
 #endif

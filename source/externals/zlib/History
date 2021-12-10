@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for G4 zlib package
 --------------------------------
 
+29 June 2021 Ben Morgan (zlib-V10-07-01)
+- Remove formatting options from build
+
 23 February 2021 Ben Morgan (zlib-V10-07-00)
 - Use separate genexes in G4zlib include directories to prevent parsing issues
 

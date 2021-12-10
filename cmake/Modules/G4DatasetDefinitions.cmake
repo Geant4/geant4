@@ -18,11 +18,11 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   7.17
+  VERSION   8.0
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    7cc8360a78fe6d501cdf34a945e71a25
+  MD5SUM    6795805f39ac73a71333276756004d99
   )
 
 # - Photon evaporation
@@ -48,11 +48,11 @@ geant4_add_dataset(
 # - Particle XS - replaces Neutron XS
 geant4_add_dataset(
   NAME      G4PARTICLEXS
-  VERSION   3.1.1
+  VERSION   4.0
   FILENAME  G4PARTICLEXS
   EXTENSION tar.gz
   ENVVAR    G4PARTICLEXSDATA
-  MD5SUM    98b766fa2c447b541834cc9bf5206c05
+  MD5SUM    d82a4d171d50f55864e28b6cd6f433c0
   )
 
 # - PII
@@ -123,11 +123,11 @@ mark_as_advanced(GEANT4_INSTALL_DATASETS_TENDL)
 if(GEANT4_INSTALL_DATASETS_TENDL)
   geant4_add_dataset(
   NAME      G4TENDL
-  VERSION   1.3.2
+  VERSION   1.4
   FILENAME  G4TENDL
   EXTENSION tar.gz
   ENVVAR    G4PARTICLEHPDATA
-  MD5SUM    209f878b777a36842d20a47ca53c6f93
+  MD5SUM    ab17a1eec5ad4c8fcfafcfbc0de30ed8
   )
 
 endif()

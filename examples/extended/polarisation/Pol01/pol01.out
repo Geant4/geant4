@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,7 +18,9 @@
                              WWW : http://geant4.org/
 **************************************************************
 
+... set ntuple merging row mode : row-wise - done
 ... create file : pol01.root - done
+... open analysis file : pol01.root - done
 ... open analysis file : pol01.root - done
 /run/verbose 2
 #
@@ -53,27 +55,94 @@ theBox : (0,0,0.08)
 #
 ##/tracking/verbose 1
 /run/beamOn 10000
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
  buildBhabha cross section 0
  buildBhabha cross section 0
 
 pol-phot:  for gamma SubType=12 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-PhotoElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila
+Polarized-PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
 
 pol-compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   Polarized-Compton : Emin=    0 meV Emax=  100 TeV
+   Polarized-Compton : Emin=    0 eV  Emax=  100 TeV
 
 pol-conv:  for gamma SubType=14 BuildTable=1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             polConv : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
+             polConv : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 pol-eIoni:  for e-  XStype:1  SubType=2
@@ -81,18 +150,18 @@ pol-eIoni:  for e-  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha : Emin=    0 meV Emax=  100 TeV
+PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
 pol-eBrem:  for e-  XStype:4  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       LPM flag: 1 for E > 100000 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PolBrem : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
+             PolBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 pol-eIoni:  for e+  XStype:1  SubType=2
@@ -100,18 +169,7 @@ pol-eIoni:  for e+  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha : Emin=    0 meV Emax=  100 TeV
-
-pol-eBrem:  for e+  XStype:4  SubType=3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      LPM flag: 1 for E > 100000 GeV,  VertexHighEnergyTh(GeV)= 100000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PolBrem : Emin=    0 meV Emax=  100 TeV  ModifiedTsai
-
-pol-annihil:  for e+ XStype:2 SubType=5 BuildTable=0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-Polarized-Annihilation : Emin=    0 meV Emax=  100 TeV
+PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -131,14 +189,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  6.28375 keV    e-  235.116 keV    e+  228.88 keV proton 10 keV
+ Energy thresholds :  gamma  6.28013 keV    e-  235.652 keV    e+  229.148 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -156,38 +214,39 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.052353s Sys=0.000000s
+  User=0.050000s Real=0.056268s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31026
-	pol-conv = 197
-	msc = 1499
-	pol-eBrem = 283
-	pol-phot = 145
-	pol-eIoni = 618
-	pol-compt = 260
-	pol-annihil = 55
+	Transportation = 31184
+	pol-conv = 229
+	msc = 1806
+	pol-eIoni = 741
+	pol-eBrem = 336
+	pol-annihil = 75
+	pol-compt = 285
+	pol-phot = 180
  Gamma: 
-Mean Number per Event :1.0044
-Mean Energy :9.6333 MeV +- 1.7791 MeV
-Mean Polarization :-0.9698 +- 0.16794
+Mean Number per Event :1.0071
+Mean Energy :9.5719 MeV +- 1.923 MeV
+Mean Polarization :-0.96345 +- 0.18582
  Electron: 
-Mean Number per Event :0.0321
-Mean Energy :5.405 MeV +- 2.5648 MeV
-Mean Polarization :-0.72686 +- 0.3046
+Mean Number per Event :0.0365
+Mean Energy :5.3556 MeV +- 2.4606 MeV
+Mean Polarization :-0.74507 +- 0.28333
  Positron: 
-Mean Number per Event :0.0148
-Mean Energy :4.2005 MeV +- 2.0177 MeV
-Mean Polarization :-0.59627 +- 0.33881
+Mean Number per Event :0.0156
+Mean Energy :3.9054 MeV +- 2.0267 MeV
+Mean Polarization :-0.54327 +- 0.34605
 ... write file : pol01.root - done
 ... close file : pol01.root - done
+... delete empty file : pol01.root - done
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1070029060380044275, 1452744244067288775, 484797723570206551, 810534345944831089, 1785012081452881778, 363774572091969476, 642299707523813964, 1095801661099078560, 2038040517141041611, 969700547076028694, 1867474704091568856, 38203698131185750, 951718104572890248, 1382836620322085169, 1187203719546800534, 603875856701136428, 1986087757022693175} counter= 10sumtot= 283390847025993325
+N=17 V[N]={1883766887621258172, 445260673900121858, 1495747664081991833, 154728272166703337, 783765121210404421, 364296141077971942, 1499610218231124573, 1675248323824583760, 1440307099525015875, 1159860002200486021, 590729407651023665, 1027050997351495804, 950076689074687500, 1513081478329614161, 129981774455909486, 2001839909826765720, 1899088457471448255} counter= 4sumtot= 567695044291054775
 ---------------------------------------
 #
 G4 kernel has come to Quit state.

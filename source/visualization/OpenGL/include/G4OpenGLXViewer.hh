@@ -30,8 +30,6 @@
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                   functionality for OpenGL in GEANT4
 
-#if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
-
 #ifndef G4OPENGLXVIEWER_HH
 #define G4OPENGLXVIEWER_HH
 
@@ -109,7 +107,5 @@ private:
   G4OpenGLXViewer& operator = (const G4OpenGLXViewer&);
   GLXContext                        tmp_cx;
 };
-
-#endif
 
 #endif

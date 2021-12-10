@@ -40,15 +40,6 @@ G4VMarker::G4VMarker ():
   // fInfo: default initialisation.
 }
 
-G4VMarker::G4VMarker (const G4VMarker& mk):
-  G4Visible   (mk),
-  fPosition   (mk.fPosition),
-  fWorldSize  (mk.fWorldSize),
-  fScreenSize (mk.fScreenSize),
-  fFillStyle  (mk.fFillStyle),
-  fInfo       (mk.fInfo)
-{}
-
 G4VMarker::G4VMarker (const G4Point3D& pos):
   fPosition   (pos),
   fWorldSize  (0.),
@@ -61,28 +52,13 @@ G4VMarker::G4VMarker (const G4Point3D& pos):
 
 G4VMarker::~G4VMarker () {}
 
-G4VMarker& G4VMarker::operator = (const G4VMarker& mk) {
-  if (&mk == this) return *this;
-  G4Visible::operator = (mk);
-  fPosition   = mk.fPosition;
-  fWorldSize  = mk.fWorldSize;
-  fScreenSize = mk.fScreenSize;
-  fFillStyle  = mk.fFillStyle;
-  fInfo       = mk.fInfo;
-  return *this;
-}
-
 G4bool G4VMarker::operator != (const G4VMarker& mk) const {
-  if (
-      (G4Visible::operator != (mk))   ||
-      (fWorldSize  != mk.fWorldSize)   ||
-      (fScreenSize != mk.fScreenSize)  ||
-      (fFillStyle  != mk.fFillStyle)   ||
-      !(fPosition  == mk.fPosition)    ||
-      (fInfo       != mk.fInfo)
-      )
-    return true;
-  return false;
+  return ( (G4Visible::operator != (mk))   ||
+           (fWorldSize  != mk.fWorldSize)  ||
+           (fScreenSize != mk.fScreenSize) ||
+           (fFillStyle  != mk.fFillStyle)  ||
+           !(fPosition  == mk.fPosition)   ||
+           (fInfo       != mk.fInfo) );
 }
 
 std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {

@@ -27,60 +27,90 @@
 //
 // --------------------------------------------------------------------
 
+extern G4GEOM_DLL G4Allocator<G4SmartVoxelNode>*& aNodeAllocator();
+
+// --------------------------------------------------------------------
+inline
+void* G4SmartVoxelNode::operator new(std::size_t)
+{
+  if(aNodeAllocator() == nullptr)
+  {
+    aNodeAllocator() = new G4Allocator<G4SmartVoxelNode>;
+  }
+  return (void*) aNodeAllocator()->MallocSingle();
+}
+
+// --------------------------------------------------------------------
+inline
+void G4SmartVoxelNode::operator delete(void* aNode)
+{
+  aNodeAllocator()->FreeSingle((G4SmartVoxelNode*) aNode);
+}
+
+// --------------------------------------------------------------------
 inline
 G4int G4SmartVoxelNode::GetVolume(G4int pVolumeNo) const
 {
   return fcontents[pVolumeNo];
 }
 
+// --------------------------------------------------------------------
 inline
 void G4SmartVoxelNode::Insert(G4int pVolumeNo)
 {
   fcontents.push_back(pVolumeNo);
 }
 
+// --------------------------------------------------------------------
 inline
-size_t G4SmartVoxelNode::GetNoContained() const
+std::size_t G4SmartVoxelNode::GetNoContained() const
 {
   return fcontents.size();
 }
 
+// --------------------------------------------------------------------
 inline
-size_t G4SmartVoxelNode::GetCapacity() const
+std::size_t G4SmartVoxelNode::GetCapacity() const
 {
   return fcontents.capacity();
 }
 
+// --------------------------------------------------------------------
 inline
 void G4SmartVoxelNode::Reserve(G4int noSlices)
 {
   fcontents.reserve(noSlices);
 }
 
+// --------------------------------------------------------------------
 inline
 void G4SmartVoxelNode::Shrink()
 {
   G4SliceVector(fcontents).swap(fcontents);
 }
 
+// --------------------------------------------------------------------
 inline
 G4int G4SmartVoxelNode::GetMaxEquivalentSliceNo() const
 {
   return fmaxEquivalent;
 }
 
+// --------------------------------------------------------------------
 inline
 void G4SmartVoxelNode::SetMaxEquivalentSliceNo(G4int pMax)
 {
   fmaxEquivalent = pMax;
 }
 
+// --------------------------------------------------------------------
 inline
 G4int G4SmartVoxelNode::GetMinEquivalentSliceNo() const
 {
   return fminEquivalent;
 }
 
+// --------------------------------------------------------------------
 inline
 void G4SmartVoxelNode::SetMinEquivalentSliceNo(G4int pMin)
 {

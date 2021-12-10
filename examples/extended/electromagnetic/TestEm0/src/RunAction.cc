@@ -49,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:G4UserRunAction(),fDetector(det), fPrimary(kin)
+  : G4UserRunAction(), fDetector(det), fPrimary(kin)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,13 +90,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // get cuts         
   GetCuts();
   if (charge != 0.) {
-   G4cout << "\n  Range cuts : \t gamma "  
-                      << std::setw(8) << G4BestUnit(fRangeCut[0],"Length")
-          << "\t e- " << std::setw(8) << G4BestUnit(fRangeCut[1],"Length");
-   G4cout << "\n Energy cuts : \t gamma " 
-                      << std::setw(8) << G4BestUnit(fEnergyCut[0],"Energy")
-          << "\t e- " << std::setw(8) << G4BestUnit(fEnergyCut[1],"Energy")
-          << G4endl;
+    G4cout << "\n  Range cuts: \t gamma "
+                       << std::setw(12) << G4BestUnit(fRangeCut[0],"Length")
+           << "\t e- " << std::setw(12) << G4BestUnit(fRangeCut[1],"Length");
+    G4cout << "\n Energy cuts: \t gamma "
+                       << std::setw(12) << G4BestUnit(fEnergyCut[0],"Energy")
+           << "\t e- " << std::setw(12) << G4BestUnit(fEnergyCut[1],"Energy")
+           << G4endl;
    }
    
   // max energy transfert
@@ -143,9 +143,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   // print list of processes
   G4cout << "\n  processes :                ";
-  for (size_t j=0; j<emName.size();j++)
-    G4cout << "\t" << std::setw(13) << emName[j] << "\t";
-  G4cout << "\t" << std::setw(13) <<"total";
+  for (size_t j=0; j<emName.size(); ++j) {
+    G4cout << "\t" << std::setw(14) << emName[j] << "\t";
+  }
+  G4cout << "\t" << std::setw(14) <<"total";
   
   //compute cross section per atom (only for single material)
   if (material->GetNumberOfElements() == 1) {
@@ -163,9 +164,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
     }
     sigma0.push_back(sigtot);
 
-    G4cout << "\n \n  cross section per atom    : ";
-    for (size_t j=0; j<sigma0.size();j++) {             
-      G4cout << "\t" << std::setw(13) << G4BestUnit(sigma0[j], "Surface");
+    G4cout << "\n \n  cross section per atom   : ";
+    for (size_t j=0; j<sigma0.size(); ++j) {             
+      G4cout << "\t" << std::setw(9) << G4BestUnit(sigma0[j], "Surface");
     }
     G4cout << G4endl;
   }
@@ -176,7 +177,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   std::vector<G4double> sigma2;
   G4double Sig, SigtotComp = 0., Sigtot = 0.;
 
-  for (size_t j=0; j<emName.size();j++) {
+  for (size_t j=0; j<emName.size(); ++j) {
     Sig = emCal.ComputeCrossSectionPerVolume
       (energy,particle,emName[j],material,enerCut[j]);  
     SigtotComp += Sig;    
@@ -191,18 +192,18 @@ void RunAction::BeginOfRunAction(const G4Run*)
   sigma2.push_back(Sigtot/density);          
     
   //print cross sections
-  G4cout << "\n \n  compCrossSectionPerVolume : ";
-  for (size_t j=0; j<sigma0.size();j++) {             
-    G4cout << "\t" << std::setw(13) << sigma0[j]*cm << " cm^-1";
+  G4cout << "\n \n  compCrossSectionPerVolume: ";
+  for (size_t j=0; j<sigma0.size(); ++j) {             
+    G4cout << "\t" << std::setw(9) << sigma0[j]*cm << std::setw(6) << " cm^-1";
   }
   G4cout << "\n  cross section per volume : ";
-  for (size_t j=0; j<sigma1.size();j++) {             
-    G4cout << "\t" << std::setw(13) << sigma1[j]*cm << " cm^-1";
+  for (size_t j=0; j<sigma1.size(); ++j) {             
+    G4cout << "\t" << std::setw(9) << sigma1[j]*cm << std::setw(6) << " cm^-1";
   }
   
   G4cout << "\n  cross section per mass   : ";
-  for (size_t j=0; j<sigma2.size();j++) {
-    G4cout << "\t" << std::setw(13) 
+  for (size_t j=0; j<sigma2.size(); ++j) {
+    G4cout << "\t" << std::setw(9)
            << G4BestUnit(sigma2[j], "Surface/Mass");
   }
    
@@ -211,18 +212,18 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double lambda;
   
   G4cout << "\n \n  mean free path           : ";
-  for (size_t j=0; j<sigma1.size();j++) {
+  for (size_t j=0; j<sigma1.size(); ++j) {
     lambda = DBL_MAX; 
     if (sigma1[j] > 0.) lambda = 1/sigma1[j];
-    G4cout << "\t" << std::setw(13) << G4BestUnit( lambda, "Length");
+    G4cout << "\t" << std::setw(9) << G4BestUnit( lambda, "Length");
   }
   
   //mean free path (g/cm2)
   G4cout << "\n        (g/cm2)            : ";  
-  for (size_t j=0; j<sigma2.size();j++) {
+  for (size_t j=0; j<sigma2.size(); ++j) {
     lambda =  DBL_MAX;
     if (sigma2[j] > 0.) lambda = 1/sigma2[j];                       
-    G4cout << "\t" << std::setw(13) << G4BestUnit( lambda, "Mass/Surface");    
+    G4cout << "\t" << std::setw(9) << G4BestUnit( lambda, "Mass/Surface");    
   }
   G4cout << G4endl;
   
@@ -239,7 +240,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double dedx, dedxtot = 0.;
   size_t nproc = emName.size();
 
-  for (size_t j=0; j<nproc; j++) {
+  for (size_t j=0; j<nproc;  ++j) {
     dedx = emCal.ComputeDEDX(energy,particle,emName[j],material,enerCut[j]);
     dedxtot += dedx;
     dedx1.push_back(dedx);
@@ -250,19 +251,19 @@ void RunAction::BeginOfRunAction(const G4Run*)
     
   //print stopping power
   G4cout << "\n \n  restricted dE/dx         : ";
-  for (size_t j=0; j<=nproc; j++) {             
-    G4cout << "\t" << std::setw(13) 
+  for (size_t j=0; j<=nproc;  ++j) {             
+    G4cout << "\t" << std::setw(14) 
            << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
   G4cout << "\n      (MeV/g/cm2)          : ";
-  for (size_t j=0; j<=nproc; j++) {
-    G4cout << "\t" << std::setw(13) 
+  for (size_t j=0; j<=nproc;  ++j) {
+    G4cout << "\t" << std::setw(14) 
            << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   dedxtot = 0.;
 
-  for (size_t j=0; j<nproc; j++) {
+  for (size_t j=0; j<nproc;  ++j) {
     dedx = emCal.ComputeDEDX(energy,particle,emName[j],material,energy);
     dedxtot += dedx;
     dedx1[j] = dedx;
@@ -273,13 +274,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
     
   //print stopping power
   G4cout << "\n \n  unrestricted dE/dx       : ";
-  for (size_t j=0; j<=nproc; j++) {             
-    G4cout << "\t" << std::setw(13) << G4BestUnit(dedx1[j],"Energy/Length");
+  for (size_t j=0; j<=nproc;  ++j) {             
+    G4cout << "\t" << std::setw(14) << G4BestUnit(dedx1[j],"Energy/Length");
   }
   
   G4cout << "\n      (MeV/g/cm2)          : ";
-  for (size_t j=0; j<=nproc; j++) {
-    G4cout << "\t" << std::setw(13) 
+  for (size_t j=0; j<=nproc;  ++j) {
+    G4cout << "\t" << std::setw(14) 
            << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   
@@ -289,8 +290,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   //print range
   G4cout << "\n \n  range from restrict dE/dx: " 
-         << "\t" << std::setw(8) << G4BestUnit(range1,"Length")
-         << " (" << std::setw(8) << G4BestUnit(range2,"Mass/Surface") << ")";
+         << "\t" << std::setw(9) << G4BestUnit(range1,"Length")
+         << " (" << std::setw(9) << G4BestUnit(range2,"Mass/Surface") << ")";
   
   //get range from full dedx
   G4double EmaxTable = G4EmParameters::Instance()->MaxEnergyForCSDARange();
@@ -299,8 +300,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4double Range2 = Range1*density;
      
     G4cout << "\n  range from full dE/dx    : " 
-           << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
-           << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
+           << "\t" << std::setw(9) << G4BestUnit(Range1,"Length")
+           << " (" << std::setw(9) << G4BestUnit(Range2,"Mass/Surface") << ")";
   }
 
   //get transport mean free path (for multiple scattering)
@@ -309,8 +310,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   //print transport mean free path
   G4cout << "\n \n  transport mean free path : " 
-         << "\t" << std::setw(8) << G4BestUnit(MSmfp1,"Length")
-         << " (" << std::setw(8) << G4BestUnit(MSmfp2,"Mass/Surface") << ")";
+         << "\t" << std::setw(9) << G4BestUnit(MSmfp1,"Length")
+         << " (" << std::setw(9) << G4BestUnit(MSmfp2,"Mass/Surface") << ")";
 
   if (particle == G4Electron::Electron()) CriticalEnergy();
            

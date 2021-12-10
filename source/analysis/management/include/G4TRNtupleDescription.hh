@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// Structure containing the information related to rroot ntuple
+// Structure containing the information related to rntuple
 //
 // Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
 
@@ -36,34 +36,35 @@
 #include <map>
 #include <vector>
 
-namespace tools { 
+namespace tools {
 class ntuple_binding;
 }
 
-template <typename TNTUPLE>
+template <typename NT>
 struct G4TRNtupleDescription
 {
-  G4TRNtupleDescription(TNTUPLE* rntuple) 
+  G4TRNtupleDescription(NT* rntuple)
     :  fNtuple(rntuple),
-       fNtupleBinding(new tools::ntuple_binding()),
-       fIsInitialized(false),
-       fIVectorBindingMap(),
-       fFVectorBindingMap(),
-       fDVectorBindingMap() {}
+       fNtupleBinding(new tools::ntuple_binding())
+  {}
 
+  G4TRNtupleDescription() = delete;
   ~G4TRNtupleDescription()
-      { 
+      {
         delete fNtupleBinding;
-        delete fNtuple;   // CHECK
+        delete fNtuple;
 
         {for ( auto mapElement : fIVectorBindingMap ) {
-          delete mapElement.first;        
+          delete mapElement.first;
         }}
         {for ( auto mapElement : fFVectorBindingMap ) {
-          delete mapElement.first;        
+          delete mapElement.first;
         }}
         {for ( auto mapElement : fDVectorBindingMap ) {
-          delete mapElement.first;        
+          delete mapElement.first;
+        }}
+        {for ( auto mapElement : fSVectorBindingMap ) {
+          delete mapElement.first;
         }}
       }
 
@@ -72,14 +73,15 @@ struct G4TRNtupleDescription
   // deleted assignement operator
   G4TRNtupleDescription& operator=(G4TRNtupleDescription& rhs) = delete;
 
-  TNTUPLE* fNtuple; 
-  tools::ntuple_binding* fNtupleBinding;
-  G4bool fIsInitialized;
+  NT* fNtuple { nullptr };
+  tools::ntuple_binding* fNtupleBinding { nullptr };
+  G4bool fIsInitialized { false };
 
   // needed for XML
-  std::map<TNTUPLE*, std::vector<int>* >    fIVectorBindingMap;           
-  std::map<TNTUPLE*, std::vector<float>* >  fFVectorBindingMap;           
-  std::map<TNTUPLE*, std::vector<double>* > fDVectorBindingMap;             
+  std::map<NT*, std::vector<int>* >    fIVectorBindingMap;
+  std::map<NT*, std::vector<float>* >  fFVectorBindingMap;
+  std::map<NT*, std::vector<double>* > fDVectorBindingMap;
+  std::map<NT*, std::vector<std::string>* > fSVectorBindingMap;
 };
 
 #endif

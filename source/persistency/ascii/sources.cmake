@@ -50,6 +50,8 @@ geant4_add_module(G4geomtext
     G4tgrVolumeAssembly.hh
     G4tgrVolumeDivision.hh
     G4tgrVolumeMgr.hh
+    G4tgrSolidMultiUnion.hh
+    G4tgrSolidScaled.hh
   SOURCES
     G4tgbDetectorBuilder.cc
     G4tgbDetectorConstruction.cc
@@ -97,7 +99,9 @@ geant4_add_module(G4geomtext
     G4tgrVolume.cc
     G4tgrVolumeAssembly.cc
     G4tgrVolumeDivision.cc
-    G4tgrVolumeMgr.cc)
+    G4tgrVolumeMgr.cc
+    G4tgrSolidMultiUnion.cc
+    G4tgrSolidScaled.cc)
 
 geant4_module_link_libraries(G4geomtext
   PUBLIC

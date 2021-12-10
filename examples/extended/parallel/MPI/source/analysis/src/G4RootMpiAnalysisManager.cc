@@ -30,13 +30,24 @@
 #include "G4RootMpiNtupleFileManager.hh"
 #include "G4RootMpiNtupleManager.hh"
 #include "G4RootMpiPNtupleManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include <tools/impi>
 
+using namespace G4Analysis;
+
 //_____________________________________________________________________________
-G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool isMaster)
- : G4RootAnalysisManager(isMaster)
+G4RootMpiAnalysisManager* G4RootMpiAnalysisManager::Instance()
 {
+  return fgInstance;
+}
+
+//_____________________________________________________________________________
+G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool /*isMaster*/)
+ : G4RootAnalysisManager()
+{
+  fgInstance = this;
+
   // Reset the ntuple file manager
   fNtupleFileManager.reset();
 
@@ -48,7 +59,9 @@ G4RootMpiAnalysisManager::G4RootMpiAnalysisManager(G4bool isMaster)
 
 //_____________________________________________________________________________
 G4RootMpiAnalysisManager::~G4RootMpiAnalysisManager()
-{}
+{
+  fgInstance = 0;
+}
 
 //
 // public methods
@@ -118,11 +131,7 @@ G4bool G4RootMpiAnalysisManager::WriteImpl()
     finalResult = finalResult && result;
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("write", "slave files", "", finalResult);
-  }
-#endif
+  Message(kVL2, "write", "slave files", "", finalResult);
 
   return finalResult;
 }
@@ -144,11 +153,7 @@ G4bool G4RootMpiAnalysisManager::CloseFileImpl(G4bool reset)
     finalResult = finalResult && result;
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) {
-    fState.GetVerboseL2()->Message("close", "slave files", "", finalResult);
-  }
-#endif
+  Message(kVL2, "close", "slave files", "", finalResult);
 
   return finalResult;
 

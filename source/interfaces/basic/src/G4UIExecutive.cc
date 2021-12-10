@@ -40,7 +40,6 @@
 #include "G4UIWin32.hh"
 #endif
 
-#include "G4UIGAG.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "G4UIcsh.hh"
@@ -67,12 +66,6 @@ static const G4bool win32_build = true;
 static const G4bool win32_build = false;
 #endif
 
-#if defined(G4UI_BUILD_WT_SESSION)
-static const G4bool wt_build = true;
-#else
-static const G4bool wt_build = false;
-#endif
-
 #ifndef WIN32
 static const G4bool tcsh_build = true;
 #else
@@ -83,21 +76,20 @@ static const G4bool tcsh_build = false;
 
 // --------------------------------------------------------------------------
 G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
-  : selected(kNone), session(NULL), shell(NULL), isGUI(false)
+  : selected(kNone), session(NULL), shell(NULL), isGUI(false), verbose(true)
 {
-  G4cout << "Available UI session types: [ ";
-  if ( qt_build ) G4cout << "Qt, ";
-  if ( xm_build ) G4cout << "Xm, ";
-  if ( win32_build) G4cout << "Win32, ";
-  if ( wt_build ) G4cout << "Wt, ";
-  G4cout << "GAG, ";
-  if (tcsh_build ) G4cout << "tcsh, ";
-  G4cout << "csh ]" << G4endl;
+  if ( verbose ) {
+    G4cout << "Available UI session types: [ ";
+    if ( qt_build ) G4cout << "Qt, ";
+    if ( xm_build ) G4cout << "Xm, ";
+    if ( win32_build) G4cout << "Win32, ";
+    if (tcsh_build ) G4cout << "tcsh, ";
+    G4cout << "csh ]" << G4endl;
+  }
 
   // selecting session type...
   // 1st priority : in case argumant specified
-  G4String stype = type;
-  stype.toLower();   // session type is case-insensitive.
+  G4String stype = G4StrUtil::to_lower_copy(type); // session type is case-insensitive.
   if (type != "") SelectSessionByArg(stype);
 
   // 2nd priority : refer environment variables (as backword compatibility)
@@ -111,7 +103,7 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     if (islash == G4String::npos)
       appname = appinput;
     else
-      appname = appinput(islash+1, appinput.size()-islash-1);
+      appname = appinput.substr(islash+1, appinput.size()-islash-1);
 
     SelectSessionByFile(appname);
   }
@@ -140,12 +132,6 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     session = new G4UIWin32();
     isGUI = true;
 #endif
-    break;
-  case kGag:
-    DISCARD_PARAMETER(argc);
-    DISCARD_PARAMETER(argv);
-    session = new G4UIGAG();
-    isGUI = true;
     break;
  case kTcsh:
 #ifndef WIN32
@@ -195,7 +181,6 @@ void G4UIExecutive::SelectSessionByArg(const G4String& stype)
   if ( qt_build && stype == "qt" ) selected = kQt;
   else if ( xm_build && stype == "xm" ) selected = kXm;
   else if ( win32_build && stype == "win32" ) selected = kWin32;
-  else if ( stype == "gag" ) selected = kGag;
   else if ( tcsh_build && stype == "tcsh" ) selected = kTcsh;
   else if ( stype == "csh" ) selected = kCsh;
 }
@@ -206,7 +191,6 @@ void G4UIExecutive::SelectSessionByEnv()
   if ( qt_build && std::getenv("G4UI_USE_QT") ) selected = kQt;
   else if ( xm_build && std::getenv("G4UI_USE_XM") ) selected = kXm;
   else if ( win32_build && std::getenv("G4UI_USE_WIN32") ) selected = kWin32;
-  else if ( std::getenv("G4UI_USE_GAG") ) selected = kGag;
   else if ( tcsh_build && std::getenv("G4UI_USE_TCSH") ) selected = kTcsh;
 }
 
@@ -234,9 +218,8 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
   while( fsession.good() ) {
     if( fsession.eof()) break;
     fsession.getline(linebuf, BUFSIZE);
-    G4String aline = linebuf;
-    aline.strip(G4String::both);
-    if ( aline(0) == '#' ) continue;
+    G4String aline = G4StrUtil::strip_copy(linebuf);
+    if ( aline[0] == '#' ) continue;
     if ( aline == "" ) continue;
     if ( iline == 1 )
       default_session = aline;
@@ -257,13 +240,12 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
   std::map<G4String, G4String>::iterator it = sessionMap.find(appname);
   if ( it != sessionMap.end() ) stype = sessionMap[appname];
   else stype = default_session;
-  stype.toLower();
+  G4StrUtil::to_lower(stype);
 
   // select session...
   if ( qt_build && stype == "qt" ) selected = kQt;
   else if ( xm_build && stype == "xm" ) selected = kXm;
   else if ( win32_build && stype == "win32" ) selected = kWin32;
-  else if ( stype == "gag" ) selected = kGag;
   else if ( tcsh_build && stype == "tcsh" ) selected = kTcsh;
   else if ( stype == "csh" ) selected = kCsh;
 }

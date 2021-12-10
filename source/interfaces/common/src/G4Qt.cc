@@ -27,8 +27,6 @@
 //
 // L. Garnier
 
-#if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -40,6 +38,10 @@
 
 #include <qapplication.h>
 
+#ifdef G4VIS_USE_VTK_QT
+#include <qsurfaceformat.h>
+#include "QVTKOpenGLNativeWidget.h"
+#endif
 
 G4Qt* G4Qt::instance    = NULL;
 
@@ -114,6 +116,10 @@ G4Qt::G4Qt (
       *p_argn = argn;
 #ifdef WIN32
       qApp->setAttribute( Qt::AA_UseDesktopOpenGL );
+#endif
+
+#ifdef G4VIS_USE_VTK_QT
+      QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
 #endif
       new QApplication (*p_argn, args);
       if(!qApp) {
@@ -194,7 +200,3 @@ bool G4Qt::IsExternalApp (
 {
   return externalApp;
 }
-
-#endif
-
-

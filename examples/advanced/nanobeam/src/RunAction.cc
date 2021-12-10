@@ -29,7 +29,7 @@
 // #define MATRIX_BOUND_CHECK
 
 #include "RunAction.hh"
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "G4AutoLock.hh"
 
 namespace 
@@ -69,6 +69,7 @@ void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
    G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   
    G4AnalysisManager* man = G4AnalysisManager::Instance();
+   man->SetDefaultFileType("root");
   
    G4cout << "Using " << man->GetType() << " analysis manager" << G4endl;
 
@@ -172,7 +173,5 @@ if (fDetector->GetCoef()==1)
  man->CloseFile();
  
  // Complete clean-up
- 
- delete G4AnalysisManager::Instance();
-
+ man->Clear();
 }

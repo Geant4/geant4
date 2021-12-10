@@ -81,7 +81,19 @@ const std::vector<G4int> G4HadParticles::sLightAntiIons = {
   -2212, -2112, -1000010020, -1000010030, -1000020030, -1000020040
 };
 
+// hyper_t, hyper_H4, hyper_He4, hyder_He5, 2-hyper-2n, 2-hyper_H4 
+const std::vector<G4int> G4HadParticles::sHyperNuclei = {
+  1010010030, 1010010040, 1010020040, 1010020050, 1020000040, 1020010040
+};
+
+// anti-hyper-nuclei
+const std::vector<G4int> G4HadParticles::sHyperAntiNuclei = {
+  -1010010030, -1010010040, -1010020040, -1010020050, -1020000040, -1020010040 
+};
+
+//
 // charged particles for EM physics
+//
 const std::vector<G4int> G4HadParticles::sHeavyChargedPart = {
   // Sigma+, Sigma-, Xi-, Omega-, anti_hyperons 
   3222, 3112, 3312, 3334, -3222, -3112, -3312, -3334,
@@ -102,6 +114,12 @@ const std::vector<G4int> G4HadParticles::sBCChargedHadrons = {
   5222, 5112, 5132, 5332,
   // anti_baryons
   -4122, -4222, -4212, -4232, -5222, -5112, -5132, -5332 
+};
+
+// hyper_t
+const std::vector<G4int> G4HadParticles::sChargedHyperNuclei = {
+  1010010030,  1010010040,  1010020040,  1010020050,  1020010040,
+ -1010010030, -1010010040, -1010020040, -1010020050, -1020010040
 };
 
 const std::vector<G4int>& G4HadParticles::GetLightHadrons()
@@ -139,6 +157,16 @@ const std::vector<G4int>& G4HadParticles::GetLightAntiIons()
   return sLightAntiIons;
 }
 
+const std::vector<G4int>& G4HadParticles::GetHyperNuclei()
+{
+  return sHyperNuclei;
+}
+
+const std::vector<G4int>& G4HadParticles::GetHyperAntiNuclei()
+{
+  return sHyperAntiNuclei;
+}
+
 const std::vector<G4int>& G4HadParticles::GetHeavyChargedParticles()
 {
   return sHeavyChargedPart;
@@ -147,4 +175,9 @@ const std::vector<G4int>& G4HadParticles::GetHeavyChargedParticles()
 const std::vector<G4int>& G4HadParticles::GetBCChargedHadrons()
 {
   return sBCChargedHadrons;
+}
+
+const std::vector<G4int>& G4HadParticles::GetChargedHyperNuclei()
+{
+  return sChargedHyperNuclei;
 }

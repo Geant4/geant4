@@ -398,19 +398,24 @@ inline void G4Track::SetCreatorProcess(const G4VProcess* aValue)
   fpCreatorProcess = aValue;
 }
 
-inline void G4Track::SetCreatorModelIndex(G4int idx)
+inline void G4Track::SetCreatorModelID(const G4int id)
 {
-  fCreatorModelIndex = idx;
-}
-
-inline const G4String& G4Track::GetCreatorModelName() const
-{
-  return G4PhysicsModelCatalog::GetModelName(fCreatorModelIndex);
+  fCreatorModelID = id;
 }
 
 inline G4int G4Track::GetCreatorModelID() const
 {
-  return fCreatorModelIndex;
+  return fCreatorModelID;
+}
+
+inline G4int G4Track::GetCreatorModelIndex() const 
+{
+  return G4PhysicsModelCatalog::GetModelIndex(fCreatorModelID);
+}
+
+inline const G4String G4Track::GetCreatorModelName() const
+{
+  return G4PhysicsModelCatalog::GetModelNameFromID(fCreatorModelID);
 }
 
 // flag for "Below Threshold"

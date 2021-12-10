@@ -53,6 +53,7 @@
 #include "G4ElementData.hh" 
 #include "G4Physics2DVector.hh" 
 #include "G4Pow.hh" 
+#include "G4PhysicsModelCatalog.hh"
 
 const G4int G4MuonVDNuclearModel::zdat[] = {1, 4, 13, 29, 92};
 const G4double G4MuonVDNuclearModel::adat[] = {1.01,9.01,26.98,63.55,238.03};
@@ -104,6 +105,9 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
 
   // Build Bertini cascade
   bert = new G4CascadeInterface();
+
+  // Creator model ID
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );
 }
 
 G4MuonVDNuclearModel::~G4MuonVDNuclearModel()
@@ -297,6 +301,11 @@ G4MuonVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
 
   delete incident;
 
+  // Assign the creator model ID to the secondaries
+  for ( size_t i = 0; i < hfs->GetNumberOfSecondaries(); ++i ) {
+    hfs->GetSecondary( i )->SetCreatorModelID( secID );
+  }
+  
   // Copy secondaries from sub-model to model
   theParticleChange.AddSecondaries(hfs);
 } 

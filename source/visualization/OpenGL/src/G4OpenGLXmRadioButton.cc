@@ -27,8 +27,6 @@
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmRadioButton.hh"
@@ -107,5 +105,3 @@ Widget* G4OpenGLXmRadioButton::GetPointerToWidget ()
 {
   return &button;
 }
-
-#endif

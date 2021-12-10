@@ -28,8 +28,6 @@
 // 
 // Laurent Garnier  27th October 2011
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLStoredQtSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
@@ -170,5 +168,3 @@ void G4OpenGLStoredQtSceneHandler::SetScene(G4Scene* pScene){
   }
   G4VSceneHandler::SetScene(pScene);
 }
-
-#endif

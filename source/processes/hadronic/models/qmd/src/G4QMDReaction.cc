@@ -48,6 +48,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4CrossSectionInelastic.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 G4QMDReaction::G4QMDReaction()
@@ -58,6 +59,7 @@ G4QMDReaction::G4QMDReaction()
 , envelopF ( 1.05 ) // 10% for Peripheral reactions
 , gem ( true )
 , frag ( false )
+, secID( -1 )
 {
    theXS = new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc );
    pipElNucXS = new G4BGGPionElasticXS(G4PionPlus::PionPlus() );
@@ -95,6 +97,8 @@ G4QMDReaction::G4QMDReaction()
    coulomb_collision_rz_targ = 0.0;
    coulomb_collision_px_targ = 0.0;
    coulomb_collision_pz_targ = 0.0;
+
+   secID = G4PhysicsModelCatalog::GetModelID( "model_QMDModel" );
 }
 
 
@@ -679,8 +683,8 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    {
      //G4cout << "Particle : " << theParticleChange.GetSecondary(i)->GetParticle()->GetParticleDefinition()->GetParticleName() << G4endl;
      //G4cout << "KEnergy : " << theParticleChange.GetSecondary(i)->GetParticle()->GetKineticEnergy() << G4endl;
-     //G4cout << "KEnergy : " << theParticleChange.GetSecondary(i)->GetCreatorModelType() << G4endl;
-     theParticleChange.GetSecondary(i)->SetCreatorModelType(1111);
+     //G4cout << "modelID : " << theParticleChange.GetSecondary(i)->GetCreatorModelID() << G4endl;
+     theParticleChange.GetSecondary(i)->SetCreatorModelID(secID);
    }
 
    return &theParticleChange;

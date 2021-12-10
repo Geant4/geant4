@@ -1,0 +1,16 @@
+/CaTS/verbose false
+/process/had/verbose 0
+/run/initialize 
+#
+/run/physicsModified
+#
+/run/initialize 
+/random/setSeeds 7 38 
+/CaTS/fname CaloHits
+/CaTS/writeHits true 
+/CaTS/enable_opticks false
+/gun/particle pi+
+/gun/energy 10. GeV
+/gun/position 0. 0. -200. mm 
+/gun/direction 0. 0. 1.
+/run/beamOn 1000

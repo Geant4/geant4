@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 18, 2021 B. Morgan (readout-V10-07-01)
+- Use std::string member functions from G4String in place of synonyms
+
 April 1, 2021 B. Morgan (readout-V10-07-00)
 - Migrate build to modular CMake API
 

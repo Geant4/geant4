@@ -83,6 +83,8 @@ class G4LENDModel : public G4HadronicInteraction
       G4ParticleDefinition* proj;
       G4LENDManager* lend_manager;
       std::map< G4int , G4LENDUsedTarget* > usedTarget_map;
+
+      G4int secID;  // Creator model ID for the secondaries created by this model
 };
 
 #endif

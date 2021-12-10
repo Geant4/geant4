@@ -42,18 +42,12 @@ G4TScoreHistFiller<T>::G4TScoreHistFiller()
 template <typename T>
 G4TScoreHistFiller<T>::~G4TScoreHistFiller()
 {
-  if(fHasAnalysisManager)
-  {
-    delete fAnalysisManager;
-  }
 }
 
 template <typename T>
 void G4TScoreHistFiller<T>::CreateAnalysisManager()
 {
-  // create analysis manager
-  if(!T::IsInstance())
-    fHasAnalysisManager = true;
+  // get/create analysis manager
   fAnalysisManager = T::Instance();
 
   fAnalysisManager->SetVerboseLevel(fVerboseLevel);

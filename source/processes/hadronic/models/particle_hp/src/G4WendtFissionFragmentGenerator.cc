@@ -35,6 +35,8 @@
 #include "G4FFGDebuggingMacros.hh"
 #include "G4WendtFissionFragmentGenerator.hh"
 
+#include "G4PhysicsModelCatalog.hh"
+
 G4ThreadLocal G4WendtFissionFragmentGenerator* G4WendtFissionFragmentGenerator::instance = NULL;
 
 G4WendtFissionFragmentGenerator::
@@ -42,6 +44,9 @@ G4WendtFissionFragmentGenerator()
 {
     // Set the default verbosity
     Verbosity_ = G4FFGDefaultValues::Verbosity;
+
+    // Set the creator model ID
+    secID = G4PhysicsModelCatalog::GetModelID( "model_NeutronHPFission" );
 }
 /*
 G4WendtFissionFragmentGenerator* G4WendtFissionFragmentGenerator::
@@ -90,7 +95,7 @@ G4FFG_FUNCTIONENTER__
 
         for(unsigned int i = 0; i < finalParticles->size(); ++i)
         {
-            finalState->AddSecondary((*finalParticles)[i]);
+	  finalState->AddSecondary((*finalParticles)[i], secID);
         }
     }
 

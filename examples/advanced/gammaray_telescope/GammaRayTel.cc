@@ -68,9 +68,6 @@ int main(int argc, char** argv)
     new GammaRayTelDetectorConstruction;
   runManager->SetUserInitialization(detector);
 
-  // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
-  //  do not use   GammaRayTelPhysicsList, this is old style and crashes at
-  //    program exit
   runManager->SetUserInitialization(new GammaRayTelPhysicsList);
 
   //  runManager->SetUserInitialization(new QGSP_BIC);
@@ -92,23 +89,21 @@ int main(int argc, char** argv)
 
   // Get the pointer to the UI manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  if (argc!=1)   // batch mode
+  if (argc == 1)   // Define UI session for interactive mode.
+    {
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      G4cout << " UI session starts ..." << G4endl;
+      UImanager -> ApplyCommand("/control/execute prerunGammaRayTel.mac");
+      ui -> SessionStart();
+      delete ui;
+    }
+ else   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
-  else
-    {
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      if (ui->IsGUI())
-	{
-	  /* prerunGammaRayTel.mac is loaded by default */
-	  UImanager->ApplyCommand("/control/execute prerunGammaRayTel.mac");
-	  ui->SessionStart();
-	}
-      delete ui;
-    }
+  
   // Job termination
   delete visManager;
   delete analysis;

@@ -11,7 +11,7 @@
 /gps/energy    50 GeV
 /gps/direction  0. 0. 1.0
 
-# Paramatrisation on 
+# Paramatrisation on
 /GFlash/flag 1
 
 
@@ -22,4 +22,11 @@
 #/vis/scene/endOfEventAction accumulate
 /tracking/verbose 0
 
-/run/beamOn 10
+/run/beamOn 100
+
+# Paramatrisation off
+/GFlash/flag 0
+/analysis/setFileName gflash00
+
+
+/run/beamOn 100

@@ -25,10 +25,10 @@
 //
 //
 /// \file exampleB5.cc
-/// \brief Main program of the analysis/B5 example
+/// \brief Main program of the basic B5 example
 
-#include "B5DetectorConstruction.hh"
-#include "B5ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "G4SteppingVerbose.hh"
@@ -58,14 +58,14 @@ int main(int argc,char** argv)
     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Mandatory user initialization classes
-  runManager->SetUserInitialization(new B5DetectorConstruction);
+  runManager->SetUserInitialization(new B5::DetectorConstruction);
 
   auto physicsList = new FTFP_BERT;
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
 
   // User action initialization
-  runManager->SetUserInitialization(new B5ActionInitialization());
+  runManager->SetUserInitialization(new B5::ActionInitialization());
 
   // Visualization manager construction
   auto visManager = new G4VisExecutive;

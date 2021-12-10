@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
 #ifndef G4PreCompoundEmissionFactory_hh
 #define G4PreCompoundEmissionFactory_hh 
@@ -38,17 +36,15 @@ public:
   G4PreCompoundEmissionFactory();
   virtual ~G4PreCompoundEmissionFactory();
 
+  G4PreCompoundEmissionFactory(const G4PreCompoundEmissionFactory&) = delete;
+  const G4PreCompoundEmissionFactory & operator=
+  (const G4PreCompoundEmissionFactory & val) = delete;
+  G4bool operator==(const G4PreCompoundEmissionFactory & val) const = delete;
+  G4bool operator!=(const G4PreCompoundEmissionFactory & val) const = delete;
+
 protected:
 
   virtual std::vector<G4VPreCompoundFragment*> *  CreateFragmentVector();
-
-private:
-
-  G4PreCompoundEmissionFactory(const G4PreCompoundEmissionFactory & );
-  const G4PreCompoundEmissionFactory & operator=
-  (const G4PreCompoundEmissionFactory & val);
-  G4bool operator==(const G4PreCompoundEmissionFactory & val) const;
-  G4bool operator!=(const G4PreCompoundEmissionFactory & val) const;
 
 };
 

@@ -73,9 +73,9 @@ public:
 
     G4bool TestReactibility(const G4Track&,
                             const G4Track&,
-                            double ,
-                            bool ) override;
-    std::vector<std::unique_ptr<G4ITReactionChange>> FindReaction(G4ITReactionSet*, const double, const double, const bool) override;
+                            G4double ,
+                            G4bool ) override;
+    std::vector<std::unique_ptr<G4ITReactionChange>> FindReaction(G4ITReactionSet*, const G4double, const G4double, const G4bool) override;
     std::unique_ptr<G4ITReactionChange> MakeReaction(const G4Track&, const G4Track&) override;
 
     void SetReactionModel(G4VDNAReactionModel*);
@@ -109,7 +109,6 @@ private:
     G4int fNx, fNy, fNz;
     G4int xiniIndex, yiniIndex, ziniIndex;
     G4int xendIndex, yendIndex, zendIndex;
-
 };
 
 #endif /* G4DNAIRT_HH_ */

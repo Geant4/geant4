@@ -166,8 +166,7 @@ G4VisFilterManager<T>::SetMode(const G4String& mode)
 {
   bool result(false);
   
-  G4String myMode(mode);
-  myMode.toLower();
+  G4String myMode = G4StrUtil::to_lower_copy(mode);
 
   if (myMode == "soft") {result = true; SetMode(FilterMode::Soft);}
   else if (myMode == "hard") {result = true; SetMode(FilterMode::Hard);}
@@ -214,7 +213,7 @@ G4VisFilterManager<T>::Print(std::ostream& ostr, const G4String& name) const
   typename std::vector<Filter*>::const_iterator iterFilter = fFilterList.begin();
 
   while (iterFilter != fFilterList.end()) {
-    if (!name.isNull()) {
+    if (!name.empty()) {
       if ((*iterFilter)->Name() == name) (*iterFilter)->PrintAll(ostr);
     }
     else {

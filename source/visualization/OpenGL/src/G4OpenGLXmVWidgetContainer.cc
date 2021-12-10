@@ -27,8 +27,6 @@
 //
 //Base class for all Motif container widgets
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmVWidgetContainer.hh"
 
 G4OpenGLXmVWidgetContainer::G4OpenGLXmVWidgetContainer ()
@@ -36,5 +34,3 @@ G4OpenGLXmVWidgetContainer::G4OpenGLXmVWidgetContainer ()
 
 G4OpenGLXmVWidgetContainer::~G4OpenGLXmVWidgetContainer ()
 {}
-
-#endif

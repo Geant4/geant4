@@ -16,6 +16,35 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-December-2021 E.Tcherniaev      (geom-specific-V10-07-13)
+- G4TwistedTubs: Accurate calculation of the bounding box in
+  BoundingLimits() and GetExtent(), fixing measured performance
+  penalty. Addressing problem report #2450.
+- G4TwistedTubs, G4VTwistedFaceted: Fixed GetCubicVolume()
+
+15-October-2021 E.Tcherniaev       (geom-specific-V10-07-12)
+- G4Tet, G4UTet: Added SetBoundingLimits()
+
+06-October-2021 E.Tcherniaev       (geom-specific-V10-07-11)
+- G4Tet: some changes in calculation of bounding box
+- G4UTet: added CheckDegeneracy() and SetVertices()
+
+27-September-2021 E.Tcherniaev     (geom-specific-V10-07-10)
+- Added degeneracyFlag to the list of parameters of G4Tet::SetVertices(),
+  it addresses first part of the problem report #2427
+
+24-September-2021 E.Tcherniaev     (geom-specific-V10-07-09)
+- Implemented G4TesselatedSolid::GetFacetIndex(p)
+
+10-September-2021 E.Tcherniaev     (geom-specific-V10-07-08)
+- Implemented G4TesselatedSolid::CheckStructure()
+- Optimisation in G4TessellatedSolid::SetExtremeFacets():
+  shuffle of vertices and checking of six extreme vertices
+
+21-July-2021 E.Tcherniaev          (geom-specific-V10-07-07)
+- More accurate calculation of distance from point to triangle
+  in G4TriangularFacet, it addresses problem report #2401
+
 25-June-2021 G.Cosmo               (geom-specific-V10-07-06)
 - Added missing accessor in G4UTet.
 

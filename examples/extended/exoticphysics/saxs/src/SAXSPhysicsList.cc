@@ -44,17 +44,14 @@
 #include "G4ParticleTable.hh"
 
 //EM Physics Lists
+#include "G4EmParameters.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmPenelopePhysicsMI.hh"
-
-//EM options
-#include "G4EmSaturation.hh"
 #include "G4LossTableManager.hh"
-#include "G4UAtomicDeexcitation.hh"
 
 //Hadronic and Extra Physics Lists
 #include "G4EmExtraPhysics.hh"
@@ -63,21 +60,8 @@
 #include "G4IonPhysics.hh"
 #include "G4StoppingPhysics.hh"
 
-//Optical processes
-#include "G4Cerenkov.hh"
-#include "G4Scintillation.hh"
-#include "G4OpAbsorption.hh"
-#include "G4OpRayleigh.hh"
-#include "G4OpMieHG.hh"
-#include "G4OpBoundaryProcess.hh"
-
 //Decays
-#include "G4Decay.hh"
 #include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"
-#include "G4PhysicsListHelper.hh"
-#include "G4RadioactiveDecayBase.hh"
-#include "G4NuclideTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -108,7 +92,10 @@ SAXSPhysicsList::SAXSPhysicsList():
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SAXSPhysicsList::~SAXSPhysicsList() {}
+SAXSPhysicsList::~SAXSPhysicsList() 
+{
+  delete fPMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -124,16 +111,14 @@ void SAXSPhysicsList::ConstructProcess()
   //transportation
   AddTransportation();
   
+  //Atomic deexcitation
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetFluo(true);  //Activate deexcitation processes and fluorescence
+  param->SetAuger(true); //Activate Auger effect if deexcitation is activated
+  param->SetPixe(true);  //Activate Particle Induced X-Ray Emission (PIXE)
+
   //EM physics
   fEmPhysicsList->ConstructProcess();
-
-  //Atomic deexcitation
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);                 //Activate deexcitation processes and fluorescence
-  de->SetAuger(true);            //Activate Auger effect if deexcitation is activated
-  de->SetAugerCascade(true); //Activate Auger Cascade if deexcitation is activated
-  de->SetPIXE(true);                   //Activate Particle Induced X-Ray Emission (PIXE)
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,46 +129,35 @@ void SAXSPhysicsList::SelectPhysicsList(const G4String& name)
     G4cout << "### PhysicsList::SelectPhysicsList: <" << name << "> ###" << G4endl;
   }
 
-  if (name == "standard") {
+  if (name == "emstandard") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics(verboseLevel);
     G4cout << "### selected Standard PhysicsList ###" << G4endl;
-  } else if (name == "standard_option4") {
+  } else if (name == "emstandard_opt4") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4(verboseLevel);
     G4cout << "### selected Standard_option4 PhysicsList ###" << G4endl;
-  } else if (name == "livermore") {
+  } else if (name == "emlivermore") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics(verboseLevel);
     G4cout << "### selected Livermore PhysicsList ###" << G4endl;
-  } else if (name == "penelope") {
+  } else if (name == "empenelope") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics(verboseLevel);
     G4cout << "### selected Penelope PhysicsList ###" << G4endl;
-  } else if (name == "penelopeMI") {
+  } else if (name == "empenelopeMI") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysicsMI(verboseLevel,"G4EmPenelopeMI",fUseMIFlag);
     G4cout << "### selected Penelope PhysicsList with MI effects ###" << G4endl;
-  } else if (name == "LowEP") {
+  } else if (name == "emlowenergy") {
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmLowEPPhysics(1,name);
+    fEmPhysicsList = new G4EmLowEPPhysics(verboseLevel);
     G4cout << "### selected LowEP PhysicsList ###" << G4endl;            
   } else {
     G4cout << "### PhysicsList::SelectPhysicsList: <" << name 
            << ">"<< " is not defined ###" << G4endl;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void SAXSPhysicsList::SetCuts()
-{
-  //set the default cuts value for all particle types  
-  SetCutsWithDefault();
-  if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SAXSPhysicsList::SetDefaultCutsValue(G4double value)
 {

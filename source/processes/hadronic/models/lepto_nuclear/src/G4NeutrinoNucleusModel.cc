@@ -72,6 +72,7 @@
 #include "G4MuonPlus.hh"
 #include "G4Nucleus.hh"
 #include "G4LorentzVector.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 using namespace std;
 using namespace CLHEP;
@@ -107,7 +108,7 @@ G4double G4NeutrinoNucleusModel::fNuMuQdistrKR[50][51][50] = {{{1.0}}};
 ///////////////////////////////////////////
 
 G4NeutrinoNucleusModel::G4NeutrinoNucleusModel(const G4String& name) 
-  : G4HadronicInteraction(name)
+  : G4HadronicInteraction(name), fSecID(-1)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
@@ -180,7 +181,9 @@ G4NeutrinoNucleusModel::G4NeutrinoNucleusModel(const G4String& name)
   
   fPDGencoding = 0; // unphysical as default
   fRecoil = nullptr;
-     
+
+  // Creator model ID
+  fSecID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
 }
 
 
@@ -416,7 +419,7 @@ void G4NeutrinoNucleusModel::FinalMeson( G4LorentzVector & lvM, G4int, G4int pdg
   {
     G4ParticleDefinition* pd2 = G4ParticleTable::GetParticleTable()->FindParticle(pdg); 
     G4DynamicParticle*    dp2 = new G4DynamicParticle( pd2, lvM);
-    theParticleChange.AddSecondary( dp2 );
+    theParticleChange.AddSecondary( dp2, fSecID );
   }
   else // meson resonances
   {
@@ -435,7 +438,7 @@ void G4NeutrinoNucleusModel::FinalMeson( G4LorentzVector & lvM, G4int, G4int pdg
 
       // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
 
-      theParticleChange.AddSecondary( aNew );
+      theParticleChange.AddSecondary( aNew, fSecID );
       delete ddktv->operator[](i);
     }
     delete ddktv;
@@ -511,7 +514,7 @@ void G4NeutrinoNucleusModel::FinalBarion( G4LorentzVector & lvB, G4int, G4int pd
   {
     G4ParticleDefinition* pd2 = G4ParticleTable::GetParticleTable()->FindParticle(pdg); 
     G4DynamicParticle*    dp2 = new G4DynamicParticle( pd2, lvN);
-    theParticleChange.AddSecondary( dp2 );
+    theParticleChange.AddSecondary( dp2, fSecID );
 
   }
   else // delta resonances
@@ -530,7 +533,7 @@ void G4NeutrinoNucleusModel::FinalBarion( G4LorentzVector & lvB, G4int, G4int pd
 
       // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
 
-      theParticleChange.AddSecondary( aNew );
+      theParticleChange.AddSecondary( aNew, fSecID );
       delete ddktv->operator[](i);
     }
     delete ddktv;
@@ -582,7 +585,7 @@ void G4NeutrinoNucleusModel::RecoilDeexcitation( G4Fragment& fragment)
     {
       theParticleChange.AddSecondary(new G4DynamicParticle( (*iter)->GetDefinition(),
                                                             (*iter)->GetTotalEnergy(),
-                                                            (*iter)->GetMomentum() ) );
+                                                            (*iter)->GetMomentum() ), fSecID );
       // delete prod;
     }
     // delete products;
@@ -675,7 +678,7 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
 
   G4ParticleDefinition* pd2 = G4ParticleTable::GetParticleTable()->FindParticle(pdg); 
   G4DynamicParticle*    dp2 = new G4DynamicParticle( pd2, lvN);
-  theParticleChange.AddSecondary( dp2 ); // coherent pion
+  theParticleChange.AddSecondary( dp2, fSecID ); // coherent pion
 
   // recoil nucleus
 
@@ -708,7 +711,7 @@ void G4NeutrinoNucleusModel::CoherentPion( G4LorentzVector & lvP, G4int pdgP, G4
     if( eTkin > eTh )
     {
       G4DynamicParticle * aSec = new G4DynamicParticle( G4Proton::Proton(), lvTarg);
-      theParticleChange.AddSecondary(aSec);
+      theParticleChange.AddSecondary(aSec, fSecID);
     }
     else theParticleChange.SetLocalEnergyDeposit( eTkin );
   }

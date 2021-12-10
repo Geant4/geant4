@@ -39,6 +39,7 @@
 #include "G4PhysicsFreeVector.hh"
 #include "G4DataVector.hh"
 #include "G4Exp.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 G4PenelopeCrossSection::G4PenelopeCrossSection(size_t nPointsE,size_t nShells) :
@@ -101,22 +102,22 @@ G4PenelopeCrossSection::~G4PenelopeCrossSection()
   //clean up tables
   if (fShellCrossSections)
     {
-      //fShellCrossSections->clearAndDestroy();
+      fShellCrossSections->clearAndDestroy();
       delete fShellCrossSections;
     }
   if (fShellNormalizedCrossSections)
     {
-      //fShellNormalizedCrossSections->clearAndDestroy();
+      fShellNormalizedCrossSections->clearAndDestroy();
       delete fShellNormalizedCrossSections;
     }
   if (fSoftCrossSections)
     {
-      //fSoftCrossSections->clearAndDestroy();
+      fSoftCrossSections->clearAndDestroy();
       delete fSoftCrossSections;
     }
   if (fHardCrossSections)
     {
-      //fHardCrossSections->clearAndDestroy();
+      fHardCrossSections->clearAndDestroy();
       delete fHardCrossSections;
     }
 }
@@ -150,32 +151,32 @@ void G4PenelopeCrossSection::AddCrossSectionPoint(size_t binNumber,G4double ener
 
    //XS0
    G4double val = G4Log(std::max(XS0,1e-42*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
    //XS1
    theVector = (G4PhysicsFreeVector*) (*fSoftCrossSections)[1];
    val =  G4Log(std::max(XS1,1e-42*eV*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
    //XS2
    theVector = (G4PhysicsFreeVector*) (*fSoftCrossSections)[2];
    val =  G4Log(std::max(XS2,1e-42*eV*eV*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
    //XH0
    theVector = (G4PhysicsFreeVector*) (*fHardCrossSections)[0];
    val =  G4Log(std::max(XH0,1e-42*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
    //XH1
    theVector = (G4PhysicsFreeVector*) (*fHardCrossSections)[1];
    val =  G4Log(std::max(XH1,1e-42*eV*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
     //XH2
    theVector = (G4PhysicsFreeVector*) (*fHardCrossSections)[2];
    val =  G4Log(std::max(XH2,1e-42*eV*eV*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
    return;
 }
@@ -216,7 +217,7 @@ void G4PenelopeCrossSection::AddShellCrossSectionPoint(size_t binNumber,
     }
    G4double logEne = G4Log(energy);
    G4double val = G4Log(std::max(xs,1e-42*cm2)); //avoid log(0)
-   theVector->PutValue(binNumber,logEne,val);
+   theVector->PutValues(binNumber,logEne,val);
 
    return;
 }
@@ -447,7 +448,7 @@ void G4PenelopeCrossSection::NormalizeShellCrossSections()
 	 G4double previousValue = (*theFullVec)[i]; //log(XS)
 	 G4double logEnergy = theFullVec->GetLowEdgeEnergy(i);
 	 //log(XS/normFactor) = log(XS) - log(normFactor)
-	 theVec->PutValue(i,logEnergy,previousValue-logNormFactor);
+	 theVec->PutValues(i,logEnergy,previousValue-logNormFactor);
 	}
     }
   fIsNormalized = true;

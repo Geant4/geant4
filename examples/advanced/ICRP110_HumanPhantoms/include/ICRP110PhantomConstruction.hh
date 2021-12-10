@@ -30,15 +30,12 @@
 #ifndef ICRP110PhantomConstruction_H
 #define ICRP110PhantomConstruction_H 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "ICRP110PhantomMessenger.hh"
-
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
 #include "G4PSDoseDeposit3D.hh"
-
+#include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
-
+#include "G4VPrimitiveScorer.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include <map>
 
@@ -50,9 +47,9 @@ class G4Material;
 class ICRP110PhantomConstruction : public G4VUserDetectorConstruction
 {
   public:
-     ICRP110PhantomConstruction();
+     explicit ICRP110PhantomConstruction();
     ~ICRP110PhantomConstruction();
-     G4VPhysicalVolume* Construct();
+     G4VPhysicalVolume* Construct()override;
 
      G4VPhysicalVolume* GetMotherVolume() {return fMotherVolume;}
      G4VPhysicalVolume* GetPhantumContainer() {return fPhantomContainer;}

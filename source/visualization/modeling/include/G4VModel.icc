@@ -49,10 +49,6 @@ inline const G4VisExtent& G4VModel::GetExtent () const {
   return fExtent;
 }
 
-inline const G4Transform3D& G4VModel::GetTransformation () const {
-  return fTransform;
-}
-
 inline void G4VModel::SetModelingParameters (const G4ModelingParameters* pMP) {
   fpMP = pMP;
 }

@@ -1,0 +1,169 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+//
+// Helper functions to handle node(s) paths in a scene graph.
+//
+
+#ifndef tools_sg_path
+#define tools_sg_path
+
+#include "node"
+#include "noderef"
+#include "../pointer"
+
+namespace tools {
+namespace sg {
+
+typedef std::vector<node*> path_t;
+
+inline bool parent_class(const path_t& a_path,std::string& a_class) {
+  if(a_path.size()<2) {a_class.clear();return false;}
+  node* parent = a_path[a_path.size()-2];
+  a_class = parent->s_cls();
+  return true;
+}
+
+template <class NODE>
+inline NODE* rfind(const path_t& a_path) {
+  path_t::const_reverse_iterator it;
+  for(it=a_path.rbegin();it!=a_path.rend();++it){
+    if(NODE* par = safe_cast<node,NODE>(*(*it))) return par;
+  }
+  return 0;
+}
+
+template <class NODE>
+inline NODE* tail(const path_t& a_path) {
+  if(a_path.empty()) return 0;
+  node* _node = a_path[a_path.size()-1];
+  return safe_cast<node,NODE>(*_node);
+}
+
+inline bool remove_tail(path_t& a_path) {
+  if(a_path.empty()) return false;
+  a_path.resize(a_path.size()-1);
+  return true;
+}
+
+template <class CONTAINER>
+inline CONTAINER* container(const path_t& a_path) {
+  if(a_path.size()<2) return 0;
+  node* parent = a_path[a_path.size()-2];
+  return safe_cast<node,CONTAINER>(*parent);
+}
+
+template <class CONTAINER>
+inline CONTAINER* container_container(const path_t& a_path) {
+  if(a_path.size()<3) return 0;
+  node* parent = a_path[a_path.size()-3];
+  return safe_cast<node,CONTAINER>(*parent);
+}
+
+inline void dump(std::ostream& a_out,const path_t& a_path) {
+  a_out << "tools::sg::dump : path size " << a_path.size() << std::endl;
+  std::string s;
+  path_t::const_iterator it;
+  for(it=a_path.begin();it!=a_path.end();++it){
+    if(!p2s(*it,s)) {}
+    a_out << " " << s << " " << (*it)->s_cls();
+    if(noderef* _ref = safe_cast<node,noderef>(*(*it))) {
+      if(!p2s(&(_ref->node()),s)) {}
+      a_out << ", " << s << " " << _ref->node().s_cls();
+    }
+    a_out << std::endl;
+  }
+}
+
+//#define TOOLS_RFIND_DEBUG
+
+template <class WHAT,class CONTAINER>
+inline bool rfind(const path_t& a_path,const node& a_from,
+                  CONTAINER*& a_container,WHAT*& a_what,
+                  int& a_container_index){
+  node* from = (node*)&a_from;
+  path_t::size_type sz = a_path.size();
+#ifdef TOOLS_RFIND_DEBUG
+  ::printf("debug : rfind : from %s, a_path.size() %d\n",a_from.s_cls().c_str(),sz);
+  //::printf("debug : rfind : search node of class %s\n",typename WHAT::s_cls().c_str());
+#endif
+  for(size_t index=1;index<sz;index++) {
+    node* _node = a_path[sz-index-1];
+#ifdef TOOLS_RFIND_DEBUG
+    ::printf("debug : rfind : index %d, node %s\n",index,_node->s_cls().c_str());
+#endif
+    a_container = safe_cast<node,CONTAINER>(*_node);
+    if(a_container) {
+#ifdef TOOLS_RFIND_DEBUG
+      ::printf("debug : rfind : node is a container of size %d\n",a_container->size());
+#endif
+      //the below does not compile.
+      //a_what = a_container->rsearch_from<WHAT>(from);
+      //if(a_what) return true;
+
+      void* p = a_container->rsearch_from(from,WHAT::s_class(),false);
+      if(p) {
+#ifdef TOOLS_RFIND_DEBUG
+        ::printf("debug : rfind : found in container %lu\n",p);
+#endif
+        a_what = (WHAT*)p;
+        a_container_index = int(sz-index-1);
+        return true;
+      }
+
+      from = a_container;
+    } else if(noderef* _ref = safe_cast<node,noderef>(*_node)) {
+#ifdef TOOLS_RFIND_DEBUG
+      ::printf("debug : rfind : node is a noderef with a %s\n",_ref->node().s_cls().c_str());
+#endif
+      from = _ref;
+    } else { // weird case :
+#ifdef TOOLS_RFIND_DEBUG
+      ::printf("debug : rfind : weird case\n");
+#endif
+      break;
+    }
+  }
+#ifdef TOOLS_RFIND_DEBUG
+  ::printf("debug : rfind : failed\n");
+#endif
+  a_what = 0;
+  a_container = 0;
+  a_container_index = -1;
+  return false;
+}
+#ifdef TOOLS_RFIND_DEBUG
+#undef TOOLS_RFIND_DEBUG
+#endif
+
+template <class WHAT,class CONTAINER>
+inline bool find_top(const path_t& a_path,const node& a_from,
+                     CONTAINER*& a_container,WHAT*& a_what,
+                     int& a_container_index){
+  a_what = 0;
+  a_container = 0;
+  a_container_index = -1;
+  path_t _path = a_path;
+  node* from = (node*)&a_from;
+  while(true) {
+    CONTAINER* container;
+    WHAT* what;
+    int idx; //index in path of container.
+    if(!sg::rfind<WHAT,CONTAINER>(_path,*from,container,what,idx)) {
+      break;
+    }
+    a_container = container;
+    a_what = what;
+    a_container_index = idx;
+    _path.resize(idx+1);
+    _path.push_back(what);
+    from = what;
+  }
+  return a_container?true:false;
+}
+
+typedef std::vector<path_t> paths_t;
+
+}}
+
+#endif

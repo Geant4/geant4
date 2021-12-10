@@ -16,6 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+29 October 2021: L. Desorgher (emadjoint-V10-07-07)
+- G4AdjointForcedInteractionForGamma : Improve the forced interaction for 
+									gamma reverse tracking for thick shielding 
+- G4AdjointhIonisationModel : Correct weight correction to limit dependence
+								 of proton dose results on cut in range
+- G4AdjointCSManager :   Fixing of coverity issues 
+	
+- G4VEMAdjointModel : Fixing of coverity issues
+
+	
+18 July 2021: V. Ivanchenko (emadjoint-V10-07-06)
+G4AdjointCSManager - updated interfaces to G4PhysicsVector
+
 16 Apr 2021: B. Morgan (emadjoint-V10-07-05)
 - Migrate build to modular CMake API
 

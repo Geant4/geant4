@@ -153,10 +153,11 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
     const G4String& name = gs -> GetName ();
     candidates += name + ' ';
     for (const auto& nickname: gs -> GetNicknames ()) {
+      if (G4StrUtil::contains(nickname, "FALLBACK")) continue;
       if (nickname != name) candidates += nickname + ' ';
     }
   }
-  candidates = candidates.strip ();
+  G4StrUtil::strip(candidates);
   parameter -> SetParameterCandidates(candidates);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter
@@ -223,14 +224,14 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   G4bool found = false;
   for (iGS = 0; iGS < nSystems; iGS++) {
     const auto& gs = gsl[iGS];
-    if (graphicsSystem.compareTo(gs->GetName(), G4String::ignoreCase) == 0) {
+    if (G4StrUtil::icompare(graphicsSystem, gs->GetName()) == 0) {
       found = true;
       break;  // Match found
     } else {
       const auto& nicknames = gs->GetNicknames();
       for (size_t i = 0; i < nicknames.size(); ++i) {
         const auto& nickname = nicknames[i];
-        if (graphicsSystem.compareTo (nickname, G4String::ignoreCase) == 0) {
+        if (G4StrUtil::icompare(graphicsSystem, nickname) == 0) {
           found = true;
           break;  // Match found
         }
@@ -247,7 +248,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
       // Just list nicknames, but exclude FALLBACK nicknames
       for (const auto& nickname: gs->GetNicknames()) {
-	if (!nickname.contains("FALLBACK")) {
+	if (!G4StrUtil::contains(nickname, "FALLBACK")) {
 	  candidates.insert(nickname);
 	}
       }
@@ -278,7 +279,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
       const auto& nicknames = gsl[iGS]->GetNicknames();
       for (size_t i = 0; i < nicknames.size(); ++i) {
         const auto& nickname = nicknames[i];
-        if (fallbackNickname.compareTo (nickname, G4String::ignoreCase) == 0) {
+        if (G4StrUtil::icompare(fallbackNickname, nickname) == 0) {
           fallback = true;
           break;  // Match found
         }
@@ -312,18 +313,6 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << G4endl;
   }
 
-  // Set current graphics system in preparation for
-  // creating scene handler.
-  fpVisManager -> SetCurrentGraphicsSystem (pSystem);
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Graphics system set to "
-    << pSystem -> GetName ()
-    << " ("
-    << pSystem -> GetNickname ()
-    << ')'
-    << G4endl;
-  }
-
   // Now deal with name of scene handler.
   G4String nextName = NextName ();
   if (newName == "") {
@@ -345,6 +334,24 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     }
   }
 
+  // If there is an existing viewer, store its view parameters
+  if (fpVisManager->GetCurrentViewer()) {
+    fThereWasAViewer = true;
+    fVPExistingViewer = fpVisManager->GetCurrentViewer()->GetViewParameters();
+  }
+
+  // Set current graphics system in preparation for
+  // creating scene handler.
+  fpVisManager -> SetCurrentGraphicsSystem (pSystem);
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Graphics system set to "
+    << pSystem -> GetName ()
+    << " ("
+    << pSystem -> GetNickname ()
+    << ')'
+    << G4endl;
+  }
+
   //Create scene handler.
   fpVisManager -> CreateSceneHandler (newName);
   if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName) {
@@ -364,8 +371,15 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   if (verbosity >= G4VisManager::confirmations)
     G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
 
-  if (fpVisManager -> GetCurrentScene ())
-    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
+  if (fpVisManager -> GetCurrentScene ()) {
+    auto errorCode = G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
+    if (errorCode) {
+      G4ExceptionDescription ed;
+      ed << "sub-command \"/vis/sceneHandler/attach\" failed.";
+      command->CommandFailed(errorCode,ed);
+      return;
+    }
+  }
 }
 
 ////////////// /vis/sceneHandler/list ///////////////////////////////////////

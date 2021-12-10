@@ -27,68 +27,52 @@
 // Author: Ivana Hrivnacova, 09/07/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 #include "G4UnitsTable.hh"
 
-#include <iostream>
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4AnalysisManagerState::G4AnalysisManagerState(
                                          const G4String& type, G4bool isMaster)
  : fType(type),
-   fIsMaster(isMaster),
-   fIsActivation(false),
-   fVerboseLevel(0),
-   fCompressionLevel(1),
-   fVerboseL1(1),
-   fVerboseL2(2),
-   fVerboseL3(3),
-   fVerboseL4(4),
-   fpVerboseL1(0),
-   fpVerboseL2(0),
-   fpVerboseL3(0),
-   fpVerboseL4(0)
-{
-}
+   fIsMaster(isMaster)
+{}
 
 //
 // private methods
 //
 
 //_____________________________________________________________________________
-void G4AnalysisManagerState::SetVerboseLevel(G4int verboseLevel) 
+void G4AnalysisManagerState::SetVerboseLevel(G4int verboseLevel)
 {
-  if ( verboseLevel == fVerboseLevel || verboseLevel < 0 ) return;
-  
+  if ( verboseLevel == fVerboseLevel ) return;
+
+  if ( verboseLevel < 0 ) {
+    Warn("Cannot set value < 0", fkClass, "SetVerboseLevel");
+    return;
+  }
+
   fVerboseLevel = verboseLevel;
-  
-  if ( verboseLevel == 0 ) {
-    fpVerboseL1 = nullptr;
-    fpVerboseL2 = nullptr;
-    fpVerboseL3 = nullptr;
-    fpVerboseL4 = nullptr;
-  }
-  else if ( verboseLevel == 1 ) {  
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = nullptr;
-    fpVerboseL3 = nullptr;
-    fpVerboseL4 = nullptr;
-  }
-  else if ( verboseLevel == 2 ) {  
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = &fVerboseL2;
-    fpVerboseL3 = nullptr;
-    fpVerboseL4 = nullptr;
-  }
-  else if ( verboseLevel == 3 ) {  
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = &fVerboseL2;
-    fpVerboseL3 = &fVerboseL3;
-    fpVerboseL4 = nullptr;
-  }
-  else if ( verboseLevel > 3 ) {
-    fpVerboseL1 = &fVerboseL1;
-    fpVerboseL2 = &fVerboseL2;
-    fpVerboseL3 = &fVerboseL3;
-    fpVerboseL4 = &fVerboseL4;
-  }
+}
+
+//
+// public methods
+//
+
+//_____________________________________________________________________________
+void G4AnalysisManagerState::Message(
+  [[maybe_unused]] G4int level,
+  [[maybe_unused]] const G4String& action,
+  [[maybe_unused]] const G4String& objectType,
+  [[maybe_unused]] const G4String& objectName,
+  [[maybe_unused]] G4bool success ) const
+{
+#ifdef G4VERBOSE
+  // Skip message if of higher level than that is set
+  if (fVerboseLevel < level) return;
+
+  // Print message
+  fVerbose.Message(level, action, objectType, objectName, success);
+#endif
 }

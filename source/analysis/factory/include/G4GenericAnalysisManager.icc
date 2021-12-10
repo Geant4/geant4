@@ -28,6 +28,13 @@
 #include "G4AutoLock.hh"
 
 //_____________________________________________________________________________
+inline std::shared_ptr<G4VFileManager> G4GenericAnalysisManager::GetFileManager(
+  const G4String& fileName)
+{
+  return fFileManager->GetFileManager(fileName);
+}
+
+//_____________________________________________________________________________
 inline void G4GenericAnalysisManager::SetNtupleMerging(
   G4bool mergeNtuples, G4int nofReducedNtupleFiles)
 {

@@ -50,26 +50,7 @@ fLayout   (left)  ,
 fXOffset(0.) , fYOffset(0.)
 {}
 
-G4Text::G4Text (const G4Text& text):
-G4VMarker (text),
-fText     (text.fText),
-fLayout   (text.fLayout),
-fXOffset  (text.fXOffset),
-fYOffset  (text.fYOffset)
-{}
-
 G4Text::~G4Text () {}
-
-G4Text& G4Text::operator= (const G4Text& rhs)
-{
-  if (&rhs == this) return *this;
-  G4VMarker::operator=(rhs);
-  fText = rhs.fText;
-  fLayout = rhs.fLayout;
-  fXOffset = rhs.fXOffset;
-  fYOffset = rhs.fYOffset;
-  return *this;
-}
 
 std::ostream& operator<< (std::ostream& os, const G4Text& text)
 {

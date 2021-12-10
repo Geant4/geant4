@@ -98,9 +98,9 @@ void
 G4HadronStoppingProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
 {
   G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this,&p);
-  emcID = G4PhysicsModelCatalog::Register(G4String((GetProcessName() + "_EMCascade")));
-  ncID  = G4PhysicsModelCatalog::Register(G4String((GetProcessName() + "_NuclearCapture")));
-  dioID = G4PhysicsModelCatalog::Register(G4String((GetProcessName() + "_DIO")));
+  emcID = G4PhysicsModelCatalog::GetModelID(G4String("model_" + (GetProcessName() + "_EMCascade")));
+  ncID  = G4PhysicsModelCatalog::GetModelID(G4String("model_" + (GetProcessName() + "_NuclearCapture")));
+  dioID = G4PhysicsModelCatalog::GetModelID(G4String("model_" + (GetProcessName() + "_DIO")));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -137,7 +137,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   theTotalResult->Initialize(track);
 
   G4Nucleus* nucleus = GetTargetNucleusPointer();
-  G4Element* elm = fElementSelector->SelectZandA(track, nucleus);
+  const G4Element* elm = fElementSelector->SelectZandA(track, nucleus);
 
   G4HadFinalState* result = 0;
   thePro.Initialise(track);
@@ -275,13 +275,13 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
 			     track.GetPosition());
     t->SetWeight(w*sec->GetWeight());
 
-    // use SetCreatorModelIndex to "label" the track
+    // use SetCreatorModelID to "label" the track
     if (i<nEmCascadeSec) {
-      t->SetCreatorModelIndex(emcID);
+      t->SetCreatorModelID(emcID);
     } else if (nuclearCapture) {
-      t->SetCreatorModelIndex(ncID);
+      t->SetCreatorModelID(ncID);
     } else {
-      t->SetCreatorModelIndex(dioID);
+      t->SetCreatorModelID(dioID);
     }
 
     t->SetTouchableHandle(track.GetTouchableHandle());

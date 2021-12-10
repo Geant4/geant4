@@ -62,23 +62,51 @@ G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
 			const G4DecayTable* theDecays = p->GetDecayTable();
 			const G4int nDecays = theDecays->entries();
 
+			// To find the minimum mass of the resonance, consider only the
+			// decay channels whose branching ratio is above a given threshold.
+			// This is needed to avoid that rare and light decay channels
+			// (e.g. e+ e-) can set a very small minimum mass of the resonance.
+			// In the case that no channel with branching ratio above the
+			// threshold has been found, consider the channel with the highest
+			// branching ratio (whatever its values).
+			// Note that this solution works also when rare decays are artificially
+	                // enhanced if both of the following conditions hold:
+                        // 1. The enhanced rare decays have branching ratios below the threshold
+                        // 2. The decay with the highest branching ratio is a "natural" decay,
+			//    i.e. not a rare decay which has been artificially enhanced.
+			const G4double thresholdChannelProbability = 0.10;
+			G4double foundChannelAboveThresholdProbability = false;
+			G4double minMassMostProbableChannel = 0.0;
+			G4double highestChannelProbability = 0.0;
 			for (G4int i=0; i<nDecays; i++)
 			{
 				const G4VDecayChannel* aDecay = theDecays->GetDecayChannel(i);
-				const G4int nDaughters = aDecay->GetNumberOfDaughters();
-
-				G4double minChannelMass = 0;
-
-				for (G4int j=0; j<nDaughters; j++)
+				G4double decayBr = aDecay->GetBR();
+				if (decayBr > std::min(highestChannelProbability, thresholdChannelProbability))
 				{
+				  const G4int nDaughters = aDecay->GetNumberOfDaughters();
+				  G4double minChannelMass = 0;
+				  for (G4int j=0; j<nDaughters; j++)
+				  {
 					const G4ParticleDefinition* aDaughter = const_cast<G4VDecayChannel*>(aDecay)->GetDaughter(j);
 					G4double minMass = GetMinimumMass(aDaughter);
 					if (!minMass) minMass = DBL_MAX; // exclude gamma channel;
 					minChannelMass+=minMass;
-				}
-				// G4cout << "channel mass for the above is " << minChannelMass/MeV << G4endl;
-				if (minChannelMass < minResonanceMass) minResonanceMass = minChannelMass;
-
+				  }
+				  if (decayBr > highestChannelProbability)
+				  {
+				    highestChannelProbability = decayBr;
+				    minMassMostProbableChannel = minChannelMass;
+				  }
+				  if (decayBr > thresholdChannelProbability)
+				  {
+				    foundChannelAboveThresholdProbability = true;
+				    if (minChannelMass < minResonanceMass) minResonanceMass = minChannelMass;
+				  }
+                                }
+			}
+			if ( ! foundChannelAboveThresholdProbability ) {
+			  minResonanceMass = minMassMostProbableChannel;
 			}
 			// replace this as soon as the compiler supports mutable!!
 			G4SampleResonance* self = const_cast<G4SampleResonance*>(this);

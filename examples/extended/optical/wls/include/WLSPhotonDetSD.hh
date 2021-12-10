@@ -50,8 +50,8 @@ class WLSPhotonDetSD : public G4VSensitiveDetector
   void Initialize(G4HCofThisEvent*) override;
 
   G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
-  // A version of processHits, not called automatically by sensitive detector
-  G4bool ProcessHits_boundary(const G4Step*, G4TouchableHistory*);
+
+  void EndOfEvent(G4HCofThisEvent*) override;
 
  private:
   WLSPhotonDetHitsCollection* fPhotonDetHitCollection;

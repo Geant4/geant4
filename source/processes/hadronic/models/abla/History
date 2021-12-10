@@ -15,6 +15,26 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+8 November 2021 - Jose Luis Rodriguez Sanchez (hadr-abla-V10-07-05)
+-----------------------------------------------------
+- Update of G4Abla for hypernuclei.
+
+27 October 2021 - Alberto Ribon (hadr-abla-V10-07-04)
+-----------------------------------------------------
+- G4AblaInterface : extended for hypernuclei.
+  (Thanks to Jose Luis Rodriguez Sanchez for extending the arguments of
+   the method G4Abla::DeexcitationAblaxx to the nucleus strangeness.)
+
+04 August 2021 - Alberto Ribon (hadr-abla-V10-07-03)
+----------------------------------------------------
+- G4AblaInterface : set the model creator ID using the new version
+  of G4PhysicsModelCatalog.
+
+13 July 2021 - Alberto Ribon (hadr-abla-V10-07-02)
+--------------------------------------------------
+- G4Abla : deleted array variables (problamb and Nblamb) with
+  array delete (instead of non-array delete), as suggested by Coverity.
+
 16 April 2021 - Ben Morgan (hadr-abla-V10-07-01)
 --------------------------------------------------
 - Migrate build to modular CMake API

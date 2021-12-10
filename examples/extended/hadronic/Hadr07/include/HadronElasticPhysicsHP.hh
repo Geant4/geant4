@@ -36,7 +36,7 @@
 #include "globals.hh"
 #include "G4HadronElasticPhysics.hh"
 
-class NeutronHPMessenger;
+class G4GenericMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -44,20 +44,26 @@ class HadronElasticPhysicsHP : public G4HadronElasticPhysics
 {
   public: 
     HadronElasticPhysicsHP(G4int ver = 1); 
-   ~HadronElasticPhysicsHP();
+   ~HadronElasticPhysicsHP() override;
 
   public: 
-    virtual void ConstructProcess();
-    
-  public:
-    void SetThermalPhysics(G4bool flag) {fThermal = flag;};
+    void ConstructProcess() override;
       
   private:
-    G4bool                  fThermal;
-    NeutronHPMessenger*     fNeutronMessenger;          
+    void DefineCommands();
+    
+    G4GenericMessenger*     fMessenger;    
+    G4bool                  fThermal;          
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

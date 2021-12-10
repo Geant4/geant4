@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 project(ICRPphantoms)
 
@@ -71,7 +71,7 @@ include(ExternalProject)
 ExternalProject_Add(ICRPdata
   SOURCE_DIR ${PROJECT_BINARY_DIR}/ICRPdata
   URL https://cern.ch/geant4-data/datasets/examples/advanced/ICRP110Phantoms/ICRPdata.tar.gz
-  URL_MD5 f4d83f38c9d952430ec6a0a4a07a9f21
+  URL_MD5 2aba5409d4e7b7a2f0328e7d3402f187
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""

@@ -117,7 +117,6 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       xSections[i]->PutValue(j, cross);
     }
   }
-
   // xSections start from null, so use probabilities from the next bin
   if(0.0 == (*xSections[nElmMinusOne])[0]) {
     for (G4int i=0; i<=nElmMinusOne; ++i) {
@@ -141,39 +140,45 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       }
     }
   }
-  //G4cout << "======== G4EmElementSelector for the " << model->GetName() 
-  //    << G4endl;
+  /*
+  G4cout << "======== G4EmElementSelector for the " << model->GetName() 
+         << G4endl;
+  for (G4int i=0; i<=nElmMinusOne; ++i) {
+    G4cout << "#### i=" << i << G4endl;
+    G4cout << (*xSections[i]) << G4endl;
+  }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-const G4Element*
-G4EmElementSelector::SelectRandomAtom(const G4double e, const G4double loge) const
+const G4Element* 
+G4EmElementSelector::SelectRandomAtom(const G4double e, 
+                                      const G4double loge) const
 {
   const G4Element* element = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
     // 1. Determine energy index (only once)
-    const size_t nBins  = (xSections[0])->GetVectorLength();
     // handle cases below/above the enrgy grid (by ekin, idx that gives a=0/1)
     // ekin = x[0]   if e<=x[0]   and idx will be   0 ^ a=0 => so y=y0
     // ekin = x[N-1] if e>=x[N-1] and idx will be N-2 ^ a=1 => so y=y_{N-1}
-    const G4double ekin = std::max((xSections[0])->Energy(0),
-                                   std::min((xSections[0])->Energy(nBins-1),e));
-    // compute the lower index of the bin (idx \in [0,N-2] will be guaranted)
-    const size_t    idx = (xSections[0])->ComputeLogVectorBin(loge);
-    // 2. Do the linear interp.(robust for corner cases through ekin, idx and a)
-    const G4double   x1 = (xSections[0])->Energy(idx);
-    const G4double   x2 = (xSections[0])->Energy(idx+1);
-    // note: all corner cases of the previous methods are covered and eventually
-    //       gives a=0/1 that results in y=y0\y_{N-1} if e<=x[0]/e>=x[N-1] or
-    //       y=y_i/y_{i+1} if e<x[i]/e>=x[i+1] due to small numerical errors
-
-    const G4double    a = std::max(0., std::min(1., (ekin - x1)/(x2 - x1)));
+    G4double ekin = e;
+    std::size_t idx = 0;
+    if(e <= (xSections[0])->Energy(0)) {
+      ekin = (xSections[0])->Energy(0);
+    } else if(e < (xSections[0])->GetMaxEnergy()) {
+      idx = (xSections[0])->ComputeLogVectorBin(loge);
+    } else {
+      ekin = (xSections[0])->GetMaxEnergy();
+      idx = (xSections[0])->GetVectorLength() - 2;
+    }
+    // 2. Do the linear interp.(corner cases are already excluded)
+    const G4double x1 = (xSections[0])->Energy(idx);
+    const G4double  a = (ekin - x1)/((xSections[0])->Energy(idx+1) - x1);
     const G4double urnd = G4UniformRand();
     for (G4int i = 0; i < nElmMinusOne; ++i) {
       const G4double  y1 = (*xSections[i])[idx];
-      const G4double  y2 = (*xSections[i])[idx+1];
-      if (urnd <= y1 + a*(y2-y1)) {
+      if (urnd <= y1 + a*((*xSections[i])[idx+1] - y1)) {
         element = (*theElementVector)[i];
         break;
       }

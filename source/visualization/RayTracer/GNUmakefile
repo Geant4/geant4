@@ -52,4 +52,29 @@ CPPFLAGS += -I$(G4BASE)/processes/cuts/include
 CPPFLAGS += -I$(G4BASE)/processes/scoring/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 
+# Locally adjust source list before including common.gmk
+sources := $(addprefix src/,G4RTJpegCoder.cc \
+  G4RTJpegMaker.cc \
+  G4RTMessenger.cc \
+  G4RTOutBitStream.cc \
+  G4RTPrimaryGeneratorAction.cc \
+  G4RTRun.cc \
+  G4RTRunAction.cc \
+  G4RTSimpleScanner.cc \
+  G4RTSteppingAction.cc \
+  G4RTTrackingAction.cc \
+  G4RTWorkerInitialization.cc \
+  G4RayTracer.cc \
+  G4RayTracerSceneHandler.cc \
+  G4RayTracerViewer.cc \
+  G4RayTrajectory.cc \
+  G4RayTrajectoryPoint.cc \
+  G4TheMTRayTracer.cc \
+  G4TheRayTracer.cc \
+  G4VRTScanner.cc)
+
+ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
+  sources += src/G4RayTracerX.cc src/G4RayTracerXViewer.cc src/G4RTXScanner.cc
+endif
+
 include $(G4INSTALL)/config/common.gmk

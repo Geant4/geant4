@@ -81,7 +81,7 @@ G4SchedulerMessenger::G4SchedulerMessenger(G4Scheduler * stepMgr) :
   fMaxNULLTimeSteps->SetGuidance("Set maximum allowed zero time steps. After this "
       "threshold, the simulation is stopped.");
   fMaxNULLTimeSteps->SetParameterName("numberOfNullTimeSteps", true);
-  fMaxNULLTimeSteps->SetDefaultValue(10);
+  fMaxNULLTimeSteps->SetDefaultValue(10000);
   fMaxNULLTimeSteps->SetRange("numberOfNullTimeSteps >=0 ");
 
   fMaxStepNumber = new G4UIcmdWithAnInteger("/scheduler/maxStepNumber", this);

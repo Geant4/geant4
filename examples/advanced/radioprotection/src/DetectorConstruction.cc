@@ -28,6 +28,9 @@
 
 // Modified by Jacopo Magini: j.magini@surrey.ac.uk
 
+// Modified by David Bolst: db001@uowmail.edu.au
+// Added geometry of "bridge" microdosimeter (ConstructSiliconBridgeDetector())
+
 #include "DetectorConstruction.hh"
 #include "globals.hh"
 #include "G4Element.hh"
@@ -72,6 +75,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	else if( detectorType == "MicroDiamond" ) return ConstructMicroDiamondDetector();
 	
 	else if( detectorType == "Silicon" ) return ConstructSiliconDetector();
+	
+	else if( detectorType == "SiliconBridge" ) return ConstructSiliconBridgeDetector();
 	
 	else
 	{
@@ -663,11 +668,288 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconDetector()
 
 }
 
+G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
+{
+//--------------------------------------------------------
+//--------------------- MATERIALS ------------------------
+//--------------------------------------------------------
+	G4NistManager * nistMan = G4NistManager::Instance();
+	
+	//Define Water   
+	//G4Material* Water  = nistMan->FindOrBuildMaterial("G4_WATER");
+
+	//Define Polyethylene
+	//G4Material* poly  = nistMan->FindOrBuildMaterial("G4_POLYETHYLENE");
+	
+	//Define PMMA
+	//G4Material* perspex  = nistMan->FindOrBuildMaterial("G4_PLEXIGLASS"); //Default 1.19g
+	
+	//Define Air
+	G4Material* Air  = nistMan->FindOrBuildMaterial("G4_AIR");
+	
+	//Define Aluminium
+	G4Material* Aluminium = nistMan->FindOrBuildMaterial("G4_Al");
+	
+	//Define Silicon
+	G4Material* silicon = nistMan->FindOrBuildMaterial("G4_Si");
+	
+	//Define Aluminium Oxide (this is acting as the ceremic)
+	//G4Material* AlOx = nistMan->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
+	
+	//Define SiO
+	G4Material* SiO2 = nistMan->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
+	
+	//Define Pyrex Glass
+	//G4Material* PyrexGlass = nistMan->FindOrBuildMaterial("G4_Pyrex_Glass");
+	
+//--------------------------------------------------------
+//-------------------- Vis Attributes --------------------
+//--------------------------------------------------------	
+	G4VisAttributes* wireFrameWhiteAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+	wireFrameWhiteAtt -> SetVisibility(true);
+	wireFrameWhiteAtt -> SetForceWireframe(true);
+	
+	G4VisAttributes* wireFramePinkAtt = new G4VisAttributes(G4Colour(1.0, 0.0, 1.0)); 
+   	wireFramePinkAtt -> SetVisibility(true);
+   	wireFramePinkAtt -> SetForceWireframe(true);
+	
+	G4VisAttributes* solidGreyAtt = new G4VisAttributes(G4Colour(0.5, .5, .5)); 
+   	solidGreyAtt -> SetVisibility(true);
+   	solidGreyAtt -> SetForceSolid(true);
+	
+	G4VisAttributes* solidRedAtt = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
+	solidRedAtt -> SetVisibility(true);
+	solidRedAtt -> SetForceSolid(true);
+	
+	G4VisAttributes* solidGreenAtt = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+	solidGreenAtt -> SetVisibility(true);
+	solidGreenAtt -> SetForceSolid(true);
+	
+	G4VisAttributes* solidYellowAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
+	solidYellowAtt -> SetVisibility(true);
+	solidYellowAtt -> SetForceSolid(true);
+	
+	G4VisAttributes* solidBlueAtt = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+	solidBlueAtt -> SetVisibility(true);
+	solidBlueAtt -> SetForceSolid(true);
+	
+//--------------------------------------------------------
+//----------------------- Volumes ------------------------
+//--------------------------------------------------------
+
+//-------------------------World -------------------------
+    G4double worldX = 10. * cm;
+    G4double worldY = 10. * cm;
+    G4double worldZ = 10. * cm;
+    
+	G4RotationMatrix* rotMatW = new G4RotationMatrix;
+	rotMatW->rotateY(0*deg);
+	rotMatW->rotateX(0*deg);
+	rotMatW->rotateZ(0*deg);
+
+    G4Box* world = new G4Box("world_box", worldX/2., worldY/2., worldZ/2.);
+    G4LogicalVolume* logical_world = new G4LogicalVolume(world, Air, "world_log", 0,0,0);
+    G4VPhysicalVolume* physical_world = new G4PVPlacement(0,G4ThreeVector(0,0,0),logical_world, "world_phys", 0, false, 0);
+	
+	logical_world -> SetVisAttributes(wireFrameWhiteAtt);
+
+//------------------Detector Mother Volume------------------	
+	G4double SVheight = 10.*micrometer;
+	G4double insulationThickness = 1.*micrometer;
+	G4double SiOoverlayerBottomThickness = 1.7*micrometer;
+	G4double AlOverlayerThickness = 1.7*micrometer;
+	G4double AlOverlayerRadius = 4.*micrometer;
+	G4double SiOoverlayerTopThickness = 1.43*micrometer;
+	G4double SiOoverlayerTopRadius = 10.5/2. * micrometer;
+	G4double overLayerThickness = AlOverlayerThickness + SiOoverlayerTopThickness;
+
+	G4double baseSiThickness = 300.*micrometer;
+	G4double detectorHeight = (SVheight + baseSiThickness + insulationThickness + SiOoverlayerBottomThickness + AlOverlayerThickness + SiOoverlayerTopThickness);
+
+	G4double SVwidth = 30.*micrometer;
+	G4double pitch = 20.*micrometer; //distance between the odd and even rows
+
+	G4double bridgingWidth = 20.*micrometer;
+	G4double bridgingLength = 15.*micrometer;
+	G4double bridingHeight = SVheight;
+
+	G4double numberOfRows = 59;
+	G4double numberOfColumns = (24*3);
+	G4double SVareaWidth = (numberOfColumns * (SVwidth + bridgingWidth)) - 1.*bridgingWidth;
+	G4double SVareaLength = numberOfRows*(SVwidth + pitch) - 1.*pitch;
+	G4double bufferWidth = 100.*micrometer;
+	G4double detectorWidth = SVareaWidth + bufferWidth;
+	G4double detectorLength = SVareaLength + bufferWidth;
+	
+//------------------Detector Mother Volume------------------	
+	G4Box* detectorBox = new G4Box("detectorBox", detectorWidth/2., detectorHeight/2., detectorLength/2.);
+	G4LogicalVolume* logicalDetectorReg = new G4LogicalVolume(detectorBox, Air, "detectorReg_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0), logicalDetectorReg, "detectorRegPhys", logical_world , false, 0, true);
+
+	logicalDetectorReg -> SetVisAttributes(wireFrameWhiteAtt);
+	
+//------------------Base Silicon Volume----------------------
+	G4Box* basSiBox = new G4Box("baseSiBox", detectorWidth/2., baseSiThickness/2., detectorLength/2.);
+	G4LogicalVolume* logicalbaseSi = new G4LogicalVolume(basSiBox, silicon, "baseSi_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0,(-detectorHeight/2. + baseSiThickness/2.),0), logicalbaseSi, "baseSiPhys", logicalDetectorReg, false, 0, true);
+	
+	logicalbaseSi -> SetVisAttributes(wireFramePinkAtt);
+
+//---------------------Insulation Volume----------------------
+	G4Box* SiOBox = new G4Box("SiOBox", detectorWidth/2., insulationThickness/2., detectorLength/2.);
+	G4LogicalVolume* logicalSoI = new G4LogicalVolume(SiOBox, SiO2, "SoI_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0,(detectorHeight/2. -overLayerThickness - SVheight - insulationThickness/2.),0), logicalSoI, "SoIPhys", logicalDetectorReg, false, 0, true);
+
+	logicalSoI -> SetVisAttributes(solidGreyAtt);
+
+//----------------Sensitive Volume Region---------------------
+//This volume encapsulates the SVs and the "bridging" volumes
+	G4Box* SVregBox = new G4Box("SVregBox", detectorWidth/2., SVheight/2., detectorLength/2.);
+	G4LogicalVolume* logicalSVreg = new G4LogicalVolume(SVregBox, Air, "SVreg_log", 0,0,0);
+	new G4PVPlacement(0, G4ThreeVector(0,(detectorHeight/2. - overLayerThickness - SVheight/2.),0), logicalSVreg, "SVregPhys", logicalDetectorReg, false, 0, true);
+
+    logicalSVreg -> SetVisAttributes(wireFrameWhiteAtt);
+
+//----------------------Bridging Volume----------------------
+//This volume connects or "bridges" the main sensitive volumes 
+//together but effectively act as additional sensitive volumes
+	G4Box* bridgeVolBox = new G4Box("bridgeVolBox", bridgingWidth/2., bridingHeight/2., bridgingLength/2.);
+	G4LogicalVolume* logicalBridgeVol = new G4LogicalVolume(bridgeVolBox, silicon, "bridgeVol_log", 0,0,0);
+
+	logicalBridgeVol -> SetVisAttributes(solidRedAtt);
+	
+//---------------------SiO Bottom Overlayer------------------
+	G4Box* SiObotLayerBox = new G4Box("SiObotLayerBox", SVwidth/2., SiOoverlayerBottomThickness/2., SVwidth/2.);
+	G4LogicalVolume* logicalSiObotLayer = new G4LogicalVolume(SiObotLayerBox, SiO2, "logicalSiObotLayer", 0,0,0);
+
+	logicalSiObotLayer -> SetVisAttributes(solidGreenAtt);
+	
+//--------------SiO Bottom Overlayer Bridging Vol-------------
+	G4Box* SiObotLayerBridgeBox = new G4Box("SiObotLayerBridgeBox", bridgingWidth/2., SiOoverlayerBottomThickness/2., bridgingLength/2.);
+	G4LogicalVolume* logicalSiObotLayerBridge = new G4LogicalVolume(SiObotLayerBridgeBox, SiO2, "logicalSiObotLayer", 0,0,0);
+
+	logicalSiObotLayerBridge -> SetVisAttributes(solidGreenAtt);
+
+//-----------------------Al contact ---------------------------
+	G4Box* AlContactBox = new G4Box("AlContactBox", AlOverlayerRadius, AlOverlayerThickness/2., AlOverlayerRadius);
+	G4LogicalVolume* logicalAlContact = new G4LogicalVolume(AlContactBox, Aluminium, "logicalAlContact", 0,0,0);
+
+	logicalAlContact -> SetVisAttributes(solidYellowAtt);
+
+//----------------------SiO Top Overlayer----------------------	
+	G4Box* SiOtopLayerBox = new G4Box("SiOtopLayerBox", SiOoverlayerTopRadius, SiOoverlayerTopThickness/2., SiOoverlayerTopRadius);
+	G4LogicalVolume* logicalSiOtopLayer = new G4LogicalVolume(SiOtopLayerBox, SiO2, "logicalSiOtopLayer", 0,0,0);
+
+	logicalSiOtopLayer -> SetVisAttributes(solidBlueAtt);
+
+//--------------------Sensitive Volume--------------------------
+	G4Box* sensitiveBridgeVolume = new G4Box("water_region_sphere", SVwidth/2., SVheight/2., SVwidth/2.);
+	G4LogicalVolume* SV_log = new G4LogicalVolume(sensitiveBridgeVolume, silicon, "SV_log", 0,0,0);
+
+	SV_log -> SetVisAttributes(solidYellowAtt);
+	
+//---Placing SVs, 30x30 volumes and "bridging" volumes between them
+
+	G4bool checkSVoverlap = false;
+	
+	//Placing "odd" SV rows/columns
+	G4int globalCount = 100000;  
+	
+	for (G4double j = -SVareaLength/2.; j <= SVareaLength/2.; j+=2.*(SVwidth + bridgingWidth)) //creates each row
+	{
+		for (G4double i = -SVareaWidth/2.; i <= SVareaWidth/2.; i+=(SVwidth + bridgingWidth)) //goes through each odd row
+		{
+			//G4cout << "x: " << i/um << " z: " << j/um << G4endl;
+			new G4PVPlacement(0, G4ThreeVector(i,0,j), SV_log , "physSensitiveBridgeVolume", logicalSVreg, false, globalCount, checkSVoverlap);
+			
+			new G4PVPlacement(0, G4ThreeVector(i,((detectorHeight/2. -overLayerThickness + SiOoverlayerBottomThickness/2.)),j), logicalSiObotLayer, "physSiObotLayer", logicalDetectorReg, false, globalCount, checkSVoverlap);
+			
+			new G4PVPlacement(0, G4ThreeVector(i,((detectorHeight/2. -overLayerThickness + SiOoverlayerBottomThickness + SiOoverlayerTopThickness/2.)),j), logicalSiOtopLayer, "physSiOtopLayer", logicalDetectorReg, false, globalCount, checkSVoverlap);
+			
+			globalCount++;	
+		}
+	}
+	
+	//Placing "even" SV rows/columns
+	globalCount = 200000;  
+	
+	for (G4double j = (-SVareaLength/2. + SVwidth + bridgingWidth); j <= SVareaLength/2.; j+=2.*(SVwidth + bridgingWidth)) //creates each row
+	{
+		for (G4double i = -SVareaWidth/2.; i <= SVareaWidth/2.; i+=(SVwidth + bridgingWidth)) //goes through each odd row
+		{
+			//G4cout << "x: " << i/micrometer << " z: " << j/micrometer << G4endl;
+
+			new G4PVPlacement(0, G4ThreeVector(i,0,j), SV_log , "physSensitiveBridgeVolume", logicalSVreg, false, globalCount, checkSVoverlap);
+			
+			new G4PVPlacement(0, G4ThreeVector(i,((detectorHeight/2. -overLayerThickness + SiOoverlayerBottomThickness/2.)),j), logicalSiObotLayer, "physSiObotLayer", logicalDetectorReg, false, globalCount, checkSVoverlap);
+			
+			new G4PVPlacement(0, G4ThreeVector(i,((detectorHeight/2. -overLayerThickness + SiOoverlayerBottomThickness + SiOoverlayerTopThickness/2.)),j), logicalSiOtopLayer, "physSiOtopLayer", logicalDetectorReg, false, globalCount, checkSVoverlap);
+			
+			globalCount++;
+		}
+	}
+
+	//Placing "odd" bridging volumes rows/columns
+	globalCount = 300000;
+
+	for (G4double j = -SVareaLength/2.; j < SVareaLength/2.; j+=2.*(SVwidth + bridgingWidth)) //creates each row
+	{
+		for (G4double i = -SVareaWidth/2.; i < SVareaWidth/2.; i+=(SVwidth + bridgingWidth)) //goes through each odd row
+		{
+		if ( (i + (SVwidth + bridgingWidth)) < SVareaWidth/2.)
+		{
+			//G4cout << globalCount << G4endl;
+			new G4PVPlacement(0, G4ThreeVector((i + SVwidth/2. + bridgingWidth/2.),0,(j+ bridgingLength/2.)), logicalBridgeVol , "sen_bridge", logicalSVreg, false, globalCount, checkSVoverlap);
+			
+			new G4PVPlacement(0, G4ThreeVector((i + SVwidth/2. + bridgingWidth/2.),((detectorHeight/2. -overLayerThickness + SiOoverlayerBottomThickness/2.)),(j+ bridgingLength/2.)), logicalSiObotLayerBridge, "physSiObotLayerBridge", logicalDetectorReg, false, globalCount, checkSVoverlap);
+			
+			//G4cout << "x: " << (i + SVwidth/2. + bridgingWidth/2.)/micrometer << " z: " << j/micrometer << G4endl;
+			
+			globalCount++;
+		}	
+		}
+	}
+
+	//Placing "even" bridging rows/columns
+	globalCount = 400000;  
+
+	for (G4double j = (-SVareaLength/2. + SVwidth + bridgingWidth); j < SVareaLength/2.; j+=2.*(SVwidth + bridgingWidth)) //creates each row
+	{
+		for (G4double i = -SVareaWidth/2.; i < SVareaWidth/2.; i+=(SVwidth + bridgingWidth)) //goes through each odd row
+		{
+		
+		if ( (i+ (SVwidth + bridgingWidth)) < SVareaWidth/2.)
+		{	
+			//G4cout << globalCount << G4endl;
+			new G4PVPlacement(0, G4ThreeVector((i + SVwidth/2. + bridgingWidth/2.),0,(j+ bridgingLength/2.)), logicalBridgeVol , "sen_bridge", logicalSVreg, false, globalCount, checkSVoverlap);
+			
+			//G4cout << "x: " << (i + SVwidth/2. + bridgingWidth/2.)/micrometer << " z: " << j/micrometer << G4endl;
+			
+			new G4PVPlacement(0, G4ThreeVector((i + SVwidth/2. + bridgingWidth/2.),((detectorHeight/2. -overLayerThickness + SiOoverlayerBottomThickness/2.)),(j+ bridgingLength/2.)), logicalSiObotLayerBridge, "physSiObotLayerBridge", logicalDetectorReg, false, globalCount, checkSVoverlap);
+			
+			globalCount++;
+		}
+			
+		}
+	}
+	
+//----------------------------------------
+	new G4PVPlacement(0, G4ThreeVector(0,0,0), logicalAlContact, "physAlContact", logicalSiObotLayer, false, 0, 1);
+
+
+
+	return physical_world; 
+}
+
+
 void DetectorConstruction::ConstructSDandField()
 {
    SensitiveDetector* SD = new SensitiveDetector("SD", "DetectorHitsCollection", analysis);
    G4SDManager::GetSDMpointer()->AddNewDetector(SD);
    SetSensitiveDetector("SV_log", SD);
 
-
+	if (detectorType == "SiliconBridge")
+	{
+		SetSensitiveDetector("bridgeVol_log", SD);
+	}
 }

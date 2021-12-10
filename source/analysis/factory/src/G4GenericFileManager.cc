@@ -40,52 +40,27 @@
 #include "G4XmlFileManager.hh"
 #include "G4XmlNtupleFileManager.hh"
 
-#include <iostream>
-#include <cstdio>
-
 using namespace G4Analysis;
 
 namespace {
 
-void FileManagerException(const G4String& fileName, const G4String& functionName,
-                          const G4String& exceptionClassification, G4bool hdf5Warn = true)
+//_____________________________________________________________________________
+void FileManagerWarning(const G4String& fileName,
+                        std::string_view className,
+                        std::string_view functionName,
+                        G4bool hdf5Warn = true)
 {
   if ( GetExtension(fileName) == "hdf5" && ( ! hdf5Warn ) ) return;
 
-  G4String where = "G4GenericFileManager::" + functionName;
-  G4String what = "Analysis_" + exceptionClassification;
-  G4ExceptionDescription description;
-  description << "Cannot get file manager for " << fileName;
-  G4Exception(where, what, JustWarning, description);
+  Warn("Cannot get file manager for " + fileName,
+       className, functionName);
 }
 
 }
-
-// static data
-const G4String G4GenericFileManager::fgkDefaultFileType = "root";
 
 //_____________________________________________________________________________
 G4GenericFileManager::G4GenericFileManager(const G4AnalysisManagerState& state)
- : G4VFileManager(state),
-   fDefaultFileType(fgkDefaultFileType),
-   fDefaultFileManager(nullptr),
-   fFileManagers
-     { nullptr, // Csv
-       nullptr, // Hdf5
-       nullptr, // Generic
-       nullptr  // Xml
-     },
-   fCsvFileManager(nullptr),
-#ifdef TOOLS_USE_HDF5
-   fHdf5FileManager(nullptr),
-#endif
-   fRootFileManager(nullptr),
-   fXmlFileManager(nullptr),
-   fHdf5Warn(true)
-{}
-
-//_____________________________________________________________________________
-G4GenericFileManager::~G4GenericFileManager()
+ : G4VFileManager(state)
 {}
 
 //
@@ -95,20 +70,13 @@ G4GenericFileManager::~G4GenericFileManager()
 //_____________________________________________________________________________
 void G4GenericFileManager::CreateFileManager(G4AnalysisOutput output)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("create", "file manager", GetOutputName(output));
-  }
-#endif
+  Message(kVL4, "create", "file manager", GetOutputName(output));
 
-  auto outputId = static_cast<size_t>(output);  
+  auto outputId = static_cast<size_t>(output);
   if ( fFileManagers[outputId] ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "The file manager of " << G4Analysis::GetOutputName(output) << " type already exists.";
-    G4Exception("G4GenericFileManager::CreateFileManager",
-                "Analysis_W002", JustWarning, description);
+    Warn("The file manager of " + G4Analysis::GetOutputName(output) +
+         " type already exists.",
+         fkClass, "CreateFileManager");
     return;
   }
 
@@ -118,16 +86,13 @@ void G4GenericFileManager::CreateFileManager(G4AnalysisOutput output)
       fCsvFileManager = std::make_shared<G4CsvFileManager>(fState);
       fFileManagers[outputId] = fCsvFileManager;
       break;
-    case G4AnalysisOutput::kHdf5: 
+    case G4AnalysisOutput::kHdf5:
 #ifdef TOOLS_USE_HDF5
       fHdf5FileManager = std::make_shared<G4Hdf5FileManager>(fState);
       fFileManagers[outputId] = fHdf5FileManager;
 #else
       if ( fHdf5Warn) {
-        G4ExceptionDescription description;
-        description << "Hdf5 type is not available.";
-        G4Exception("G4GenericFileManager::CreateFileManager",
-                    "Analysis_W051", JustWarning, description);
+        Warn("Hdf5 type is not available.", fkClass, "CreateFileManager");
         fHdf5Warn = false;
       }
 #endif
@@ -141,30 +106,31 @@ void G4GenericFileManager::CreateFileManager(G4AnalysisOutput output)
       fFileManagers[outputId] = fXmlFileManager ;
       break;
     case G4AnalysisOutput::kNone:
-      G4ExceptionDescription description;
-      description 
-        << G4Analysis::GetOutputName(output) << " type is not supported.";
-      G4Exception("G4GenericFileManager::CreateFileManager",
-                  "Analysis_W051", JustWarning, description);
-      break;
+      Warn(G4Analysis::GetOutputName(output) + " type is not supported.",
+        fkClass, "CreateFileManager");
+      return;
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    fState.GetVerboseL3()->Message("create", "file manager", GetOutputName(output));
+  // Pass directory names (only if set)
+  if ( ! GetHistoDirectoryName().empty() ) {
+    fFileManagers[outputId]->SetHistoDirectoryName(GetHistoDirectoryName());
   }
-#endif
+  if ( ! GetNtupleDirectoryName().empty() ) {
+    fFileManagers[outputId]->SetNtupleDirectoryName(GetNtupleDirectoryName());
+  }
+
+  Message(kVL3, "create", "file manager", GetOutputName(output));
 }
 
 //_____________________________________________________________________________
-std::shared_ptr<G4VFileManager> 
+std::shared_ptr<G4VFileManager>
 G4GenericFileManager::GetFileManager(G4AnalysisOutput output) const
 {
   return fFileManagers[static_cast<size_t>(output)];
 }
 
 //_____________________________________________________________________________
-std::shared_ptr<G4VFileManager> 
+std::shared_ptr<G4VFileManager>
 G4GenericFileManager::GetFileManager(const G4String& fileName)
 {
   // Get file extension
@@ -176,12 +142,8 @@ G4GenericFileManager::GetFileManager(const G4String& fileName)
 
   auto output = G4Analysis::GetOutput(extension);
   if ( output == G4AnalysisOutput::kNone ) {
-    G4ExceptionDescription description;
-    description 
-      << "      " 
-      << "The file extension " << extension << "is not supported.";
-    G4Exception("G4GenericFileManager::GetFileManager",
-                "Analysis_W051", JustWarning, description);
+    Warn("The file extension " + extension + "is not supported.",
+      fkClass, "GetFileManager");
     return nullptr;
   }
 
@@ -207,45 +169,30 @@ G4bool G4GenericFileManager::OpenFile(const G4String& fileName)
   if ( fDefaultFileManager && (fDefaultFileManager != fileManager) ) {
     // Print warning if default output changed
     // (maybe be not needed?)
-    G4ExceptionDescription description;
-    description
-      << "Default file manager changed (old: " 
-      << fDefaultFileManager->GetFileType()
-      << ", new:" << fileManager->GetFileType() << ")";
-    G4Exception("G4GenericFileManager::OpenFile",
-                "Analysis_W001", JustWarning, description);
-  } 
-  fDefaultFileManager = fileManager;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("open", "analysis file", fileName);
+    Warn("Default file manager changed "
+         "(old: " +fDefaultFileManager->GetFileType() +
+         ", new:" + fileManager->GetFileType() + ")",
+         fkClass, "OpenFile");
   }
-#endif
+  fDefaultFileManager = fileManager;
+  fDefaultFileType = fileManager->GetFileType();
 
-  auto finalResult = true;
+  Message(kVL4, "open", "analysis file", fileName);
+
   auto result = true;
 
-  // Save the default file name 
+  // Save the default file name
   // both in the generic file manager and the output specific one
-  result = SetFileName(fileName);
-  finalResult = finalResult && result;
-  result = fDefaultFileManager->SetFileName(fileName);
-  finalResult = finalResult && result;
+  result &= SetFileName(fileName);
+  result &= fDefaultFileManager->SetFileName(fileName);
+  result &= fDefaultFileManager->OpenFile(fileName);
 
-  result = fDefaultFileManager->OpenFile(fileName);
-  finalResult = finalResult && result;
-
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) {
-    fState.GetVerboseL1()->Message("open", "analysis file", fileName, finalResult);
-  }
-#endif
-
-  fLockDirectoryNames = true;
+  LockDirectoryNames();
   fIsOpenFile = true;
 
-  return finalResult;  
+  Message(kVL1, "open", "analysis file", fileName, result);
+
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -253,70 +200,46 @@ G4bool G4GenericFileManager::OpenFiles()
 {
 // Open all files regeistered with objects
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("open", "analysis files", "");
-  }
-#endif
+  Message(kVL4, "open", "analysis files");
 
-  auto finalResult = true;
   auto result = true;
 
   // process names registered in base file manager
-  for ( auto fileName : GetFileNames() ) {
+  for ( const auto& fileName : GetFileNames() ) {
     auto fileManager = GetFileManager(fileName);
     if ( ! fileManager ) {
-      FileManagerException(fileName, "OpenFiles", "W001", fHdf5Warn);
+      FileManagerWarning(fileName, fkClass, "OpenFiles", fHdf5Warn);
       continue;
     }
 
-    result = fileManager->CreateFile(fileName);
-    finalResult = result && finalResult;    
+    result &= fileManager->CreateFile(fileName);
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    fState.GetVerboseL3()->Message("open", "analysis files", "", finalResult);
-  }
-#endif
+  Message(kVL3, "open", "analysis files", "", result);
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4GenericFileManager::WriteFiles()
 {
-// Finish write for all files regeistered with objects
+// Finish write for all files registered with objects
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("write", "files", "");
-  }
-#endif
+  Message(kVL4, "write", "analysis files");
 
-  auto finalResult = true;
   auto result = true;
 
-  for ( auto fileManager : fFileManagers ) {
+  for ( const auto& fileManager : fFileManagers ) {
     if ( ! fileManager ) continue;
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()->Message("write", fileManager->GetFileType(), "files");
-    }
-#endif
+    Message(kVL4, "write", fileManager->GetFileType(), "files");
 
-    result = fileManager->WriteFiles();
-    finalResult = result && finalResult;
+    result &= fileManager->WriteFiles();
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    fState.GetVerboseL3()->Message("write", "files", "", finalResult);
-  }
-#endif
+  Message(kVL3, "write", "analysis files", "", result);
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -324,35 +247,21 @@ G4bool G4GenericFileManager::CloseFiles()
 {
 // Close all files regeistered with objects
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("close", "files", "");
-  }
-#endif
+  Message(kVL4, "close", "analysis files");
 
-  auto finalResult = true;
   auto result = true;
 
-  for ( auto fileManager : fFileManagers ) {
+  for ( const auto& fileManager : fFileManagers ) {
     if ( ! fileManager ) continue;
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()->Message("close", fileManager->GetFileType(), "files");
-    }
-#endif
+    Message(kVL4, "close", fileManager->GetFileType(), "files");
 
-    result = fileManager->CloseFiles();
-    finalResult = result && finalResult;
+    result &= fileManager->CloseFiles();
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    fState.GetVerboseL3()->Message("close", "files", "", finalResult);
-  }
-#endif
+  Message(kVL3, "close", "analysis files", "", result);
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -360,35 +269,34 @@ G4bool G4GenericFileManager::DeleteEmptyFiles()
 {
 // Close all files regeistered with objects
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("delete", "empty files", "");
-  }
-#endif
+  Message(kVL4, "delete", "empty files");
 
-  auto finalResult = true;
   auto result = true;
 
-  for ( auto fileManager : fFileManagers ) {
+  for ( const auto& fileManager : fFileManagers ) {
     if ( ! fileManager ) continue;
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()->Message("delete", fileManager->GetFileType(), "files");
-    }
-#endif
+    Message(kVL4, "delete", fileManager->GetFileType(), "empty files");
 
-    result = fileManager->DeleteEmptyFiles();
-    finalResult = result && finalResult;
+    result &= fileManager->DeleteEmptyFiles();
   }
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    fState.GetVerboseL3()->Message("delete", "empty files", "", finalResult);
-  }
-#endif
+  Message(kVL3, "delete", "empty files", "", result);
 
-  return finalResult;
+  return result;
+}
+
+//_____________________________________________________________________________
+void G4GenericFileManager::Clear()
+{
+// Clear files data
+
+  for ( const auto& fileManager : fFileManagers ) {
+    if ( ! fileManager ) continue;
+
+    fileManager->Clear();
+  }
+  UnlockDirectoryNames();
 }
 
 //_____________________________________________________________________________
@@ -398,7 +306,7 @@ G4bool G4GenericFileManager::CreateFile(const G4String& fileName)
 
   auto fileManager = GetFileManager(fileName);
   if ( ! fileManager ) {
-    FileManagerException(fileName, "CreateFile", "W001", fHdf5Warn);
+    FileManagerWarning(fileName, fkClass, "CreateFile", fHdf5Warn);
     return false;
   }
 
@@ -412,7 +320,7 @@ G4bool G4GenericFileManager::WriteFile(const G4String& fileName)
 
   auto fileManager = GetFileManager(fileName);
   if ( ! fileManager ) {
-    FileManagerException(fileName, "WriteFile", "W021", fHdf5Warn);
+    FileManagerWarning(fileName, fkClass, "WriteFile", fHdf5Warn);
     return false;
   }
 
@@ -426,7 +334,7 @@ G4bool G4GenericFileManager::CloseFile(const G4String& fileName)
 
   auto fileManager = GetFileManager(fileName);
   if ( ! fileManager ) {
-    FileManagerException(fileName, "CloseFile",  "W021", fHdf5Warn);
+    FileManagerWarning(fileName, fkClass, "CloseFile", fHdf5Warn);
     return false;
   }
 
@@ -438,11 +346,37 @@ G4bool G4GenericFileManager::SetIsEmpty(const G4String& fileName, G4bool isEmpty
 {
   auto fileManager = GetFileManager(fileName);
   if ( ! fileManager ) {
-    FileManagerException(fileName, "SetIsEmpty", "W021", fHdf5Warn);
+    FileManagerWarning(fileName, fkClass, "SetIsEmpty", fHdf5Warn);
     return false;
   }
 
   return fileManager->SetIsEmpty(fileName, isEmpty);
+}
+
+//_____________________________________________________________________________
+G4bool G4GenericFileManager::SetHistoDirectoryName(const G4String& dirName)
+{
+  auto result = G4VFileManager::SetHistoDirectoryName(dirName);
+
+  for (auto fileManager : fFileManagers ) {
+    if ( fileManager != nullptr ) {
+      result &= fileManager->SetHistoDirectoryName(dirName);
+    }
+  }
+  return result;
+}
+
+//_____________________________________________________________________________
+G4bool G4GenericFileManager::SetNtupleDirectoryName(const G4String& dirName)
+{
+  auto result = G4VFileManager::SetNtupleDirectoryName(dirName);
+
+  for (auto fileManager : fFileManagers ) {
+    if ( fileManager != nullptr ) {
+      result &= fileManager->SetNtupleDirectoryName(dirName);
+    }
+  }
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -451,12 +385,9 @@ void G4GenericFileManager::SetDefaultFileType(const G4String& value)
   // Check if value correspond to a valid file type
   auto output = G4Analysis::GetOutput(value);
   if ( output == G4AnalysisOutput::kNone ) {
-    G4ExceptionDescription description;
-    description
-      << "The file type " << value << "is not supported." << G4endl
-      << "The default type " << fDefaultFileType << " will be used.";
-    G4Exception("G4GenericFileManager::SetDeafultFileType",
-                "Analysis_W051", JustWarning, description);
+    Warn("The file type " + value + "is not supported.\n" +
+         "The default type " + fDefaultFileType + " will be used.",
+         fkClass, "SetDeafultFileType");
     return;
   }
 
@@ -464,7 +395,7 @@ void G4GenericFileManager::SetDefaultFileType(const G4String& value)
 }
 
 //_____________________________________________________________________________
-std::shared_ptr<G4VNtupleFileManager> 
+std::shared_ptr<G4VNtupleFileManager>
 G4GenericFileManager::CreateNtupleFileManager(G4AnalysisOutput output)
 {
   if ( ! GetFileManager(output) ) {
@@ -480,7 +411,7 @@ G4GenericFileManager::CreateNtupleFileManager(G4AnalysisOutput output)
       ntupleFileManager->SetFileManager(fCsvFileManager);
       vNtupleFileManager = ntupleFileManager;
       break;
-    } 
+    }
     case G4AnalysisOutput::kHdf5: {
 #ifdef TOOLS_USE_HDF5
       auto ntupleFileManager = std::make_shared<G4Hdf5NtupleFileManager>(fState);
@@ -508,13 +439,9 @@ G4GenericFileManager::CreateNtupleFileManager(G4AnalysisOutput output)
   }
 
   if ( ! vNtupleFileManager ) {
-      G4ExceptionDescription description;
-      description 
-        << "      " 
-        << "Failed to create ntuple file manager of " << G4Analysis::GetOutputName(output) << " type."
-        << failure;
-      G4Exception("G4GenericFileManager::CreateNtupleFileManager",
-                  "Analysis_W002", JustWarning, description);
+      Warn("Failed to create ntuple file manager of " +
+           G4Analysis::GetOutputName(output) + " type.\n" + failure,
+           fkClass, "CreateNtupleFileManager");
   }
 
   return vNtupleFileManager;

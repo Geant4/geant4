@@ -45,8 +45,8 @@ class G4VH2Manager
   friend class G4VAnalysisReader;
 
   public:
-    G4VH2Manager() {}
-    virtual ~G4VH2Manager() {}
+    G4VH2Manager() = default;
+    virtual ~G4VH2Manager() = default;
 
     // deleted copy constructor & assignment operator
     G4VH2Manager(const G4VH2Manager& rhs) = delete;
@@ -55,39 +55,39 @@ class G4VH2Manager
   protected:
     // Methods for handling histograms
     virtual G4int CreateH2(const G4String& name, const G4String& title,
-                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nxbins, G4double xmin, G4double xmax,
                            G4int nybins, G4double ymin, G4double ymax,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear",
                            const G4String& ybinScheme = "linear") = 0;
-                           
+
     virtual G4int CreateH2(const G4String& name, const G4String& title,
                            const std::vector<G4double>& xedges,
                            const std::vector<G4double>& yedges,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none") = 0;
-                           
+
     virtual G4bool SetH2(G4int id,
-                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nxbins, G4double xmin, G4double xmax,
                            G4int nybins, G4double ymin, G4double ymax,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
-                           const G4String& yfcnName = "none", 
+                           const G4String& xfcnName = "none",
+                           const G4String& yfcnName = "none",
                            const G4String& xbinScheme = "linear",
                            const G4String& ybinScheme = "linear") = 0;
 
     virtual G4bool SetH2(G4int id,
                            const std::vector<G4double>& xedges,
                            const std::vector<G4double>& yedges,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none") = 0;
 
     virtual G4bool ScaleH2(G4int id, G4double factor) = 0;
@@ -95,7 +95,7 @@ class G4VH2Manager
     // Methods to fill histograms
     virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
                           G4double weight = 1.0) = 0;
-    
+
     // Access methods
     virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const = 0;
 

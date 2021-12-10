@@ -51,13 +51,14 @@ class G4V3DNucleus
       G4bool operator!=(const G4V3DNucleus &right) const;
 
   public:
-      virtual void Init(G4int theA, G4int theZ) = 0;
+      virtual void Init(G4int theA, G4int theZ, G4int numberOfLambdas = 0) = 0;
       virtual G4bool StartLoop() = 0;
       virtual G4Nucleon * GetNextNucleon() = 0;
       virtual const std::vector<G4Nucleon> & GetNucleons() = 0;
       virtual G4int GetMassNumber() = 0;
       virtual G4double GetMass() = 0;
       virtual G4int GetCharge() = 0;
+      virtual G4int GetNumberOfLambdas() = 0;
       virtual G4double GetNuclearRadius() = 0;
       virtual G4double GetNuclearRadius(const G4double maxRelativeDensity) = 0;
       virtual G4double GetOuterRadius() = 0;

@@ -90,6 +90,7 @@ geant4_module_link_libraries(G4run
     G4emutils
     G4geometrymng
     G4graphics_reps
+    G4hadronic_mgt
     G4hadronic_util
     G4hepnumerics
     G4hits
@@ -97,6 +98,7 @@ geant4_module_link_libraries(G4run
     G4magneticfield
     G4materials
     G4navigation
+    G4optical
     G4procman
     G4scoring
     G4specsolids

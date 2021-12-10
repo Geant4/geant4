@@ -132,10 +132,12 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   historyCommand->SetGuidance("Defaul file name is G4history.macro.");
   historyCommand->SetParameterName("fileName", true);
   historyCommand->SetDefaultValue("G4History.macro");
+  historyCommand->SetToBeBroadcasted(false);
 
   stopStoreHistoryCommand =
     new G4UIcmdWithoutParameter("/control/stopSavingHistory", this);
   stopStoreHistoryCommand->SetGuidance("Stop saving history file.");
+  stopStoreHistoryCommand->SetToBeBroadcasted(false);
 
   aliasCommand = new G4UIcommand("/control/alias", this);
   aliasCommand->SetGuidance("Set an alias.");
@@ -160,6 +162,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   getEnvCmd = new G4UIcmdWithAString("/control/getEnv", this);
   getEnvCmd->SetGuidance(
     "Get a shell environment variable and define it as an alias.");
+  getEnvCmd->SetToBeBroadcasted(false);
 
   getValCmd = new G4UIcommand("/control/getVal", this);
   getValCmd->SetGuidance(
@@ -174,12 +177,15 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   G4UIparameter* iIdxParam = new G4UIparameter("iIdx", 'i', true);
   iIdxParam->SetDefaultValue(0);
   getValCmd->SetParameter(iIdxParam);
+  getValCmd->SetToBeBroadcasted(false);
 
   echoCmd = new G4UIcmdWithAString("/control/echo", this);
-  echoCmd->SetGuidance("Display the aliased value.");
+  echoCmd->SetGuidance("Display the valuerameter string.");
+  echoCmd->SetGuidance("If alias is contained, it is converted to the aliased value.");
 
   shellCommand = new G4UIcmdWithAString("/control/shell", this);
   shellCommand->SetGuidance("Execute a (Unix) SHELL command.");
+  shellCommand->SetToBeBroadcasted(false);
 
   ManualCommand = new G4UIcmdWithAString("/control/manual", this);
   ManualCommand->SetGuidance("Display all of sub-directories and commands.");
@@ -485,11 +491,11 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4String aliName = next();
     G4String com     = next();
     G4String curVal  = UI->GetCurrentValues(com);
-    if(!(curVal.isNull()))
+    if(!(curVal.empty()))
     {
       G4String theValue = curVal;
       G4String iIdx     = next();
-      if(!(iIdx.isNull()))
+      if(!(iIdx.empty()))
       {
         G4int idx = StoI(iIdx);
         G4Tokenizer nextVal(curVal);
@@ -581,21 +587,21 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
     G4String c1 = next();
     G4String ca;
-    while(!((ca = next()).isNull()))
+    while(!((ca = next()).empty()))
     {
       c1 += " ";
       c1 += ca;
     }
-    if(c1(0) == '"')
+    if(c1[0] == '"')
     {
       G4String strippedValue;
-      if(c1(c1.length() - 1) == '"')
+      if(c1.back() == '"')
       {
-        strippedValue = c1(1, c1.length() - 2);
+        strippedValue = c1.substr(1, c1.length() - 2);
       }
       else
       {
-        strippedValue = c1(1, c1.length() - 1);
+        strippedValue = c1.substr(1, c1.length() - 1);
       }
       c1 = strippedValue;
     }
@@ -704,21 +710,21 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
     G4String c1 = next();
     G4String ca;
-    while(!((ca = next()).isNull()))
+    while(!((ca = next()).empty()))
     {
       c1 += " ";
       c1 += ca;
     }
-    if(c1(0) == '"')
+    if(c1[0] == '"')
     {
       G4String strippedValue;
-      if(c1(c1.length() - 1) == '"')
+      if(c1.back() == '"')
       {
-        strippedValue = c1(1, c1.length() - 2);
+        strippedValue = c1.substr(1, c1.length() - 2);
       }
       else
       {
-        strippedValue = c1(1, c1.length() - 1);
+        strippedValue = c1.substr(1, c1.length() - 1);
       }
       c1 = strippedValue;
     }

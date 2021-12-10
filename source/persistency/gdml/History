@@ -16,6 +16,41 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 November 2021 G. Cosmo (gdml-V10-07-15)
+- G4GDMLParser: issue notification warning in ImportRegions() in case
+  more than one logical volume with same name is found, to be set a
+  root logical volume for a region.
+
+02 November 2021 G. Cosmo (gdml-V10-07-14)
+- G4GDMLParser: scan for all possible logical volumes with same name in
+  ImportRegions() and set them as root logical volumes.
+
+13 October 2021 D. Sawkey (gdml-V10-07-13)
+- G4GDMLWriteMaterials, G4GDMLWriteSolids: G4MaterialProperties table now
+  returns references to vectors, rather than maps that had to be allocated
+  on the heap. Adjust code to iterate over the vectors.
+
+30 September 2021 G. Cosmo (gdml-V10-07-12)
+- G4GDMLWriteMaterials, G4GDMLWriteSolids: fixed leaks introduced with recent
+  changes to G4MaterialPropertiesTable, where now maps are returned allocated
+  on the heap, leaving ownership to clients...
+
+15 September 2021 G. Cosmo (gdml-V10-07-11)
+- G4GDMLWriteStructure: added fatal exception in AssemblyWrite() for the case
+  of nested assemblies, not yet supported for exporting.
+
+13 September 2021 D. Sawkey (gdml-V10-07-10)
+- G4GDMLReadMaterials, G4GDMLReadSolids: add parameter createNewKey=true to 
+  G4Material[Const]PropertiesTable::AddProperty()
+
+17 August 2021 G. Cosmo (gdml-V10-07-09)
+- G4GDMLRead: added missing update to internal maps for solids and volumes
+  stores, after stripping of names execution. Addressing problem report #2403.
+
+13 July 2021 G. Cosmo (gdml-V10-07-08)
+- G4GDMLParser: added utility method to retrieve a generic physical volume
+  by its name.
+
 21 May 2021 G. Cosmo (gdml-V10-07-07)
 - G4GDMLReadSolids: updated optical surface properties based on relatively
   recent introduction of DAVIS interface.
@@ -34,7 +69,7 @@ committal in the CVS repository !
 
 16 March 2021 Witek Pokorski (gdml-V10-07-03)
 - Solves the problem #2342 of multiUnion and assembly write creating degenerated names
- (position, rotation and nodes). Fix provided by Laurie Nevay.
+  (position, rotation and nodes). Fix provided by Laurie Nevay.
 
 4 March 2021 Witek Pokorski (gdml-V10-07-02)
 - Removed the hardcoded size 10000 in G4GDMLWrite causing the values in GDML truncated.
@@ -69,7 +104,7 @@ committal in the CVS repository !
 - Some code cleanup and formatting in G4GDMLWriteStructure source.
 
 21 February 2020 Witek Pokorski (gdml-V10-06-01)
-- Fixed writting out and reading in of const properties of material.
+- Fixed writing out and reading in of const properties of material.
 
 11 December 2019 Ben Morgan (gdml-V10-06-00)
 - Cleanup CMake build, removing obsolete granular library options and
@@ -91,7 +126,7 @@ committal in the CVS repository !
 
 2 May 2019 Witek Pokorski (gdml-V10-05-04)
 - Improvement in the optical properties reader allowing to reuse the same
-G4MaterialPropertyVector object for identical properties.
+  G4MaterialPropertyVector object for identical properties.
 
 12 April 2019 Witek Pokorski (gdml-V10-05-03)
 - Fixes to BorderSurface and OpticalSurface writer provided by Binbin Qi.

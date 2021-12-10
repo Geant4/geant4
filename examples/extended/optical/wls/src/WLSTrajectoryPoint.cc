@@ -36,6 +36,7 @@
 #include "G4Step.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
+#include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VProcess.hh"
 
@@ -136,7 +137,7 @@ std::vector<G4AttValue>* WLSTrajectoryPoint::CreateAttValues() const
   values->push_back(G4AttValue("Time", G4BestUnit(fTime, "Time"), ""));
   values->push_back(
     G4AttValue("Momentum", G4BestUnit(fMomentum, "Momentum"), ""));
-  values->push_back(G4AttValue("StepStatus", fStepStatus, ""));
+  values->push_back(G4AttValue("StepStatus", G4UIcommand::ConvertToString(fStepStatus), ""));
   values->push_back(G4AttValue("VolumeName", fVolumeName, ""));
 
   return values;

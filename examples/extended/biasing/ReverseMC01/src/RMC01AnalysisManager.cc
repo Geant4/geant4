@@ -618,6 +618,7 @@ void RMC01AnalysisManager::Book()
 
   //Histo manager
    G4AnalysisManager* theHistoManager = G4AnalysisManager::Instance();
+   theHistoManager->SetDefaultFileType("root"); 
    G4String extension = theHistoManager->GetFileType();
    fFileName[1] = fFileName[0] + "." + extension;
    theHistoManager->SetFirstHistoId(1);
@@ -780,7 +781,7 @@ void RMC01AnalysisManager::Save(G4double scaling_factor)
     theHistoManager->CloseFile();
     G4cout << "\n----> Histogram Tree is saved in " << fFileName[1] << G4endl;
 
-    delete G4AnalysisManager::Instance();
+    theHistoManager->Clear();
     fFactoryOn = false;
   }
 }

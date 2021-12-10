@@ -44,8 +44,8 @@ class G4VTFileManager : public G4VFileManager,
 {
   public:
     explicit G4VTFileManager(const G4AnalysisManagerState& state)
-      : G4VFileManager(state), G4TFileManager<FT>(state), fFile(nullptr) {}
-    ~G4VTFileManager() {}
+      : G4VFileManager(state), G4TFileManager<FT>(state) {}
+    virtual ~G4VTFileManager() = default;
 
     using G4VFileManager::WriteFile;
     using G4VFileManager::CloseFile;
@@ -61,13 +61,16 @@ class G4VTFileManager : public G4VFileManager,
     virtual G4bool CloseFiles() final;
     virtual G4bool DeleteEmptyFiles() final;
 
+    // Clear all data
+    virtual void Clear() final;
+
     // Get method
     std::shared_ptr<FT> GetFile() const;
 
   protected:
     // Data members
     // Default file - created at OpenFile call
-    std::shared_ptr<FT> fFile;
+    std::shared_ptr<FT> fFile { nullptr };
 };
 
 //_____________________________________________________________________________
@@ -129,6 +132,15 @@ inline
 G4bool G4VTFileManager<FT>::DeleteEmptyFiles()
 {
   return G4TFileManager<FT>::DeleteEmptyFiles();
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+void G4VTFileManager<FT>::Clear()
+{
+  G4TFileManager<FT>::ClearData();
+  UnlockDirectoryNames();
 }
 
 //_____________________________________________________________________________

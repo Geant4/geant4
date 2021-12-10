@@ -129,7 +129,7 @@ void ICRP110PhantomMaterial_Male::DefineMaterials()
   fBone -> AddElement(elMg,0.002);
   fBone -> AddElement(elP,0.094);
   fBone -> AddElement(elS,0.003);
-  fBone -> AddElement(elH,0.213);
+  fBone -> AddElement(elCa,0.213);
   
   //Humeri, upper half, spongiosa -> ID 3
   d = 1.205 *g/cm3;

@@ -75,15 +75,13 @@ void doiPETSteppingAction::UserSteppingAction(const G4Step* aStep)
 	//G4int eventID = G4RunManager::GetRunManager()->GetCurrentEvent() -> GetEventID();	
 	G4ThreeVector pos = track->GetPosition();
 
-	//G4StepPoint* point1 = aStep->GetPreStepPoint();
-	//G4ThreeVector posIntCrystal = point1->GetPosition();
 
 	//G4StepPoint* p2 = aStep->GetPostStepPoint();
 	G4StepPoint* p1 = aStep->GetPreStepPoint();
 	G4ThreeVector coord1 = p1->GetPosition();
 
-	//The following is to get the local position of the with respect to the crystal volume
-	const G4AffineTransform transformation =  p1->GetTouchable()-> GetHistory()->GetTopTransform();
+	//The following is to get the local position of the interaction with respect to the crystal block volume
+	const G4AffineTransform transformation =  p1->GetTouchable()-> GetHistory()->GetTransform(2);
 	G4ThreeVector localPosition = transformation.TransformPoint(coord1);
 
 	G4int blockID;
@@ -107,9 +105,11 @@ void doiPETSteppingAction::UserSteppingAction(const G4Step* aStep)
 	//doiPETAnalysis::GetInstance()->SetEventID (eventID);
 
 	//Get scatter information in the phantom by the annihilation photon before detected by the detector. Note that the scatter index is initialized to 0. 
-	//If there is scatter, the index is 1, and if not it is 0.
-	if(edep>0 && (volumeName == "phantom_physicalV")) scatterIndex = 1;
-	doiPETAnalysis::GetInstance()->GetScatterIndexInPhantom(scatterIndex);
+	//If there energy deposition in the phantom by the photon, then there is scatter, the index is 1, and if not it is 0.
+	if(edep > 0 && particleName == "gamma"  && volumeName == "phantom_physicalV"){
+		scatterIndex = 1;
+		doiPETAnalysis::GetInstance()->SetScatterIndexInPhantom(scatterIndex);
+	}
 
 	///////////////////    Retrive (Extract) information in the crystal ///////////////////////////
 	if(edep>0. && volumeName=="Crystal_physicalV"){
@@ -145,7 +145,6 @@ void doiPETSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 		//get the global time of the interaction with the crystal
 		ExtractIntInfo->SetGlobalTime( track->GetGlobalTime()); 
-		//G4cout<<"Step: "<<eventID<<" "<<blockID<<" "<<crystalID<<" "<<edep<<G4endl;
 
 		//pass all the obtained information to the doiPETAnalysis class
 		//doiPETAnalysis::GetInstance()->GetIntractionInfomation(ExtractIntInfo);

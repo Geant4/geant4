@@ -32,7 +32,7 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 */
 
 #include "BrachyUserScoreWriter.hh"
-#include "BrachyAnalysisManager.hh"
+#include "G4AnalysisManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"

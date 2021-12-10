@@ -204,7 +204,7 @@ feature_list="${feature_list} qt[${have_qt}]"
 
 if test "x${have_qt}" = "xyes" ; then
   vis_cflags="${vis_cflags} \
-  -DG4INTY_USE_QT -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT @G4_QT_CFLAGS@"
+  -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT @G4_QT_CFLAGS@"
 
 if test "x${qt_version}" \< "5.15.0" ; then
   vis_libs="-lG4visQt3D ${vis_libs}"
@@ -251,7 +251,7 @@ have_openinventor="@G4_BUILTWITH_INVENTOR@"
 feature_list="${feature_list} openinventor[${have_openinventor}]"
 
 if test "x${have_openinventor}" = "xyes" ; then
-  vis_cflags="${vis_cflags} -DG4INTY_USE_XT -DG4VIS_USE_OI -DG4VIS_USE_OIX"
+  vis_cflags="${vis_cflags} -DG4VIS_USE_OI -DG4VIS_USE_OIX"
   vis_libs="-lG4OpenInventor ${vis_libs}"
 fi
 
@@ -262,10 +262,9 @@ if test "x${geant4_uses_opengl}" = "xyes" ; then
   vis_libs="-lG4OpenGL -lG4gl2ps ${vis_libs}"
 fi
 
-# - If we have any X11 based feature, then we need the INTY_XT define and
-# *may* need the X11 includes
+# - If we have any X11 based feature, then we *may* need the X11 includes
 if test "x${geant4_uses_x11}" = "xyes" ; then
-  vis_cflags="-DG4INTY_USE_XT @G4_X11_CFLAGS@ ${vis_cflags}"
+  vis_cflags="@G4_X11_CFLAGS@ ${vis_cflags}"
 fi
 
 #-----------------------------------------------------------------------

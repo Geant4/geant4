@@ -38,7 +38,7 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4Sphere {
 
-G4Sphere* CreateSphere(const G4String& name, 
+G4Sphere* CreateSphere(const G4String& name,
                        G4double pRmin, G4double pRmax,
                        G4double pSPhi, G4double pDPhi,
                        G4double pSTheta, G4double pDTheta)
@@ -61,13 +61,11 @@ void export_G4Sphere()
     .def(init<const G4String&, G4double, G4double, G4double,
          G4double, G4double, G4double>())
     // ---
-    .def("GetInsideRadius",     &G4Sphere::GetInsideRadius)
     .def("GetOuterRadius",      &G4Sphere::GetOuterRadius)
     .def("GetStartPhiAngle",    &G4Sphere::GetStartPhiAngle)
     .def("GetDeltaPhiAngle",    &G4Sphere::GetDeltaPhiAngle)
     .def("GetStartThetaAngle",  &G4Sphere::GetStartThetaAngle)
     .def("GetDeltaThetaAngle",  &G4Sphere::GetDeltaThetaAngle)
-    .def("SetInsideRadius",     &G4Sphere::SetInsideRadius)
     .def("SetOuterRadius",      &G4Sphere::SetOuterRadius)
     .def("SetStartPhiAngle",    &G4Sphere::SetStartPhiAngle)
     .def("SetDeltaPhiAngle",    &G4Sphere::SetDeltaPhiAngle)

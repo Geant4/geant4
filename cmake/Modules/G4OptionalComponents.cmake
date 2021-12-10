@@ -30,11 +30,6 @@
 # by providing the `CLHEP_ROOT_DIR` option. Setting this variable
 # will automatically enable use of an external CLHEP.
 #
-# When using an external install of CLHEP, the default is to link
-# to the full CLHEP library. An additional advanced option
-# `GEANT4_USE_SYSTEM_CLHEP_GRANULAR` is available to configure
-# use of the modular CLHEP libraries.
-#
 set(_default_use_system_clhep OFF)
 if(CLHEP_ROOT_DIR)
   set(_default_use_system_clhep ON)
@@ -42,27 +37,9 @@ if(CLHEP_ROOT_DIR)
 endif()
 
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
-cmake_dependent_option(GEANT4_USE_SYSTEM_CLHEP_GRANULAR
-  "Use system CLHEP granular libraries" OFF
-  "GEANT4_USE_SYSTEM_CLHEP" OFF
-  )
-mark_as_advanced(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
 
 if(GEANT4_USE_SYSTEM_CLHEP)
-  set(__system_clhep_mode " (singular)")
-
-  if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
-    set(__g4_clhep_components
-      Evaluator
-      Geometry
-      Random
-      Vector
-      )
-    set(__system_clhep_mode " (granular)")
-  endif()
-
-  find_package(CLHEP 2.4.4.0 REQUIRED ${__g4_clhep_components} CONFIG)
-
+  find_package(CLHEP 2.4.5.1 REQUIRED CONFIG)
   geant4_save_package_variables(CLHEP CLHEP_DIR)
 else()
   set(CLHEP_FOUND TRUE)
@@ -82,7 +59,7 @@ else()
   set(CLHEP_LIBRARIES G4clhep)
 endif()
 
-geant4_add_feature(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library${__system_clhep_mode}")
+geant4_add_feature(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library")
 
 #-----------------------------------------------------------------------
 # Find required EXPAT package
@@ -336,7 +313,7 @@ endif()
 
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
-  find_package(VecGeom 1.1.8 REQUIRED)
+  find_package(VecGeom 1.1.18 REQUIRED)
   # Shim until VecGeom supports config mode properly
   include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
   # Backward Compatibility
@@ -392,7 +369,7 @@ if(GEANT4_USE_HDF5)
   find_package(HDF5 1.8 REQUIRED)
   include("${CMAKE_CURRENT_LIST_DIR}/G4HDF5Shim.cmake")
   # Backward compatibility
-  set(HDF5_LIBRARIES Geant4::HDF5)
+  set(HDF5_LIBRARIES hdf5::hdf5)
 
   # May have found via config mode...
   if(HDF5_DIR)
@@ -406,4 +383,3 @@ if(GEANT4_USE_HDF5)
 endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_HDF5 "Building Geant4 analysis library with HDF5 support")
-

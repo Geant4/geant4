@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04-Aug-2021, Alberto Ribon              (had-theo-HE-V10-07-03)
+- G4TheoFSGenerator, G4QuasiElasticChannel, G4CRCoalescence : 
+  set creator model ID for the secondaries, using the new version of
+  G4PhysicsModelCatalog
+
 04-Jun-2021, Alberto Ribon              (had-theo-HE-V10-07-02)
 - G4TheoFSGenerator : added accessor (i.e. "Get") methods for the
   corresponding setter methods (i.e. "Set", already existing).

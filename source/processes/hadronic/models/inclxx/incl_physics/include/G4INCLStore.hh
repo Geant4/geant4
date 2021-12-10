@@ -233,7 +233,7 @@ namespace G4INCL {
       ParticleList spectators;
       for(ParticleIter p=outgoing.begin(), e=outgoing.end(); p!=e; ++p) {
         if((*p)->isProjectileSpectator()) {
-// assert((*p)->isNucleon());
+// assert((*p)->isNucleon() || (*p)->isLambda());
           spectators.push_back(*p); // add them to the list we will return
         }
       }

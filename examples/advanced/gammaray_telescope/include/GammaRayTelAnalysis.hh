@@ -57,11 +57,7 @@
 #include "globals.hh"
 #include <vector>
 #include "G4ThreeVector.hh"
-
-// uncomment g4xml.hh and comment g4root.hh for a XML-based output file
-
-#include "g4root.hh"
-//#include "g4xml.hh"
+#include "G4AnalysisManager.hh"
 
 
 class GammaRayTelAnalysisMessenger;

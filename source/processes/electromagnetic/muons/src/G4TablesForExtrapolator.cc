@@ -139,6 +139,7 @@ G4TablesForExtrapolator::~G4TablesForExtrapolator()
     delete mscElectron;
   }
   delete pcuts;
+  delete builder;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -226,8 +227,8 @@ void G4TablesForExtrapolator::Initialisation()
   invRangeProton   = PrepareTable(invRangeProton);
   mscElectron      = PrepareTable(mscElectron);
 
-  builder = G4LossTableManager::Instance()->GetTableBuilder();
-  builder->InitialiseBaseMaterials();
+  builder = new G4LossTableBuilder(true);
+  builder->SetBaseMaterialActive(false);
 
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator Builds electron tables" 

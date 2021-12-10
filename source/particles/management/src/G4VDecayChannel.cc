@@ -63,7 +63,8 @@ G4VDecayChannel::G4VDecayChannel(const G4String& aName,
                                  const G4String& theDaughterName1,
                                  const G4String& theDaughterName2,
                                  const G4String& theDaughterName3,
-                                 const G4String& theDaughterName4 )
+                                 const G4String& theDaughterName4,
+                                 const G4String& theDaughterName5 )
   : kinematics_name(aName), rbranch(theBR), parent_polarization(),
     numberOfDaughters(theNumberOfDaughters) 
 {
@@ -85,6 +86,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String& aName,
   if (numberOfDaughters>1) daughters_name[1] = new G4String(theDaughterName2);
   if (numberOfDaughters>2) daughters_name[2] = new G4String(theDaughterName3);
   if (numberOfDaughters>3) daughters_name[3] = new G4String(theDaughterName4);
+  if (numberOfDaughters>4) daughters_name[4] = new G4String(theDaughterName5);
 
   if      (rbranch <0.  ) rbranch = 0.0;
   else if (rbranch >1.0 ) rbranch = 1.0;

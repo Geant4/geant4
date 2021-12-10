@@ -39,7 +39,6 @@
 #define ITACTION_H
 
 #include "G4UserTimeStepAction.hh"
-#include "g4root.hh"
 #include "G4MoleculeIterator.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeTable.hh"

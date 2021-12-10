@@ -72,17 +72,7 @@ void WLSPhotonDetSD::Initialize(G4HCofThisEvent* HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool WLSPhotonDetSD::ProcessHits(G4Step*, G4TouchableHistory*)
-{
-  return false;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool WLSPhotonDetSD::ProcessHits_boundary(const G4Step* aStep,
-                                            G4TouchableHistory*)
-// Generates a hit and uses the postStepPoint; PostStepPoint because the hit
-// is generated manually when the photon hits the detector
+G4bool WLSPhotonDetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   if(!aStep)
     return false;
@@ -106,6 +96,7 @@ G4bool WLSPhotonDetSD::ProcessHits_boundary(const G4Step* aStep,
   G4ThreeVector photonExit   = trackInformation->GetExitPosition();
   G4ThreeVector photonArrive = thePostPoint->GetPosition();
   G4double arrivalTime       = theTrack->GetGlobalTime();
+  G4double energy            = theTrack->GetTotalEnergy();
 
   // Convert the global coordinate for arriving photons into
   // the local coordinate of the detector
@@ -114,7 +105,19 @@ G4bool WLSPhotonDetSD::ProcessHits_boundary(const G4Step* aStep,
 
   // Creating the hit and add it to the collection
   fPhotonDetHitCollection->insert(
-    new WLSPhotonDetHit(photonExit, photonArrive, arrivalTime));
+    new WLSPhotonDetHit(photonExit, photonArrive, arrivalTime, energy));
 
   return true;
 }
+
+void WLSPhotonDetSD::EndOfEvent(G4HCofThisEvent*)
+{
+  if ( verboseLevel>1 ) {
+     G4int nofHits = fPhotonDetHitCollection->entries();
+     G4cout << G4endl
+            << "-------->Hits Collection: in this event there are " << nofHits
+            << " hits in the photon detector: " << G4endl;
+     for ( G4int i=0; i<nofHits; i++ ) (*fPhotonDetHitCollection)[i]->Print();
+  }
+}
+

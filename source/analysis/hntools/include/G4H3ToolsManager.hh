@@ -26,7 +26,7 @@
 
 // Manager class for tools::histo::h3d.
 // It implements functions specific to the H3 type
-// (defined in g4tools). 
+// (defined in g4tools).
 //
 // Author: Ivana Hrivnacova, 24/07/2014  (ivana@ipno.in2p3.fr)
 
@@ -42,10 +42,11 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string_view>
 
 namespace tools {
-namespace histo { 
-class h3d; 
+namespace histo {
+class h3d;
 }
 }
 
@@ -54,13 +55,13 @@ class G4H3ToolsManager : public G4VH3Manager,
 {
   public:
     explicit G4H3ToolsManager(const G4AnalysisManagerState& state);
-    virtual ~G4H3ToolsManager();
+    virtual ~G4H3ToolsManager() = default;
 
     // Method to add histograms read from a file
     G4int AddH3(const G4String& name, tools::histo::h3d* h3d);
     // Method for merge (MT)
     void AddH3Vector(const std::vector<tools::histo::h3d*>& h3Vector);
-    
+
     // Access methods
     //
     tools::histo::h3d*  GetH3(G4int id, G4bool warn = true,
@@ -70,11 +71,11 @@ class G4H3ToolsManager : public G4VH3Manager,
     std::vector<tools::histo::h3d*>::iterator EndH3();
     std::vector<tools::histo::h3d*>::const_iterator BeginConstH3() const;
     std::vector<tools::histo::h3d*>::const_iterator EndConstH3() const;
-                              
+
     // Access to histogram vector (needed for Write())
     const std::vector<tools::histo::h3d*>& GetH3Vector() const;
     const std::vector<G4HnInformation*>&   GetHnVector() const;
-   
+
   protected:
     // Virtual functions from base class
     //
@@ -82,63 +83,63 @@ class G4H3ToolsManager : public G4VH3Manager,
     // Methods to create histograms
     //
     virtual G4int CreateH3(const G4String& name, const G4String& title,
-                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nxbins, G4double xmin, G4double xmax,
                            G4int nybins, G4double ymin, G4double ymax,
                            G4int nzbins, G4double zmin, G4double zmax,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none",
                            const G4String& xbinScheme = "linear",
                            const G4String& ybinScheme = "linear",
                            const G4String& zbinScheme = "linear") final;
-                           
+
     virtual G4int CreateH3(const G4String& name, const G4String& title,
                            const std::vector<G4double>& xedges,
                            const std::vector<G4double>& yedges,
                            const std::vector<G4double>& zedges,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none") final;
-                          
+
     virtual G4bool SetH3(G4int id,
-                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nxbins, G4double xmin, G4double xmax,
                            G4int nybins, G4double ymin, G4double ymax,
                            G4int nzbins, G4double zmin, G4double zmax,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none",
                            const G4String& xbinScheme = "linear",
                            const G4String& ybinScheme = "linear",
                            const G4String& zbinScheme = "linear") final;
-                           
+
     virtual G4bool SetH3(G4int id,
                            const std::vector<G4double>& xedges,
                            const std::vector<G4double>& yedges,
                            const std::vector<G4double>& zedges,
-                           const G4String& xunitName = "none", 
+                           const G4String& xunitName = "none",
                            const G4String& yunitName = "none",
                            const G4String& zunitName = "none",
-                           const G4String& xfcnName = "none", 
+                           const G4String& xfcnName = "none",
                            const G4String& yfcnName = "none",
                            const G4String& zfcnName = "none") final;
 
     virtual G4bool ScaleH3(G4int id, G4double factor) final;
-    
+
     // Method to fill histograms
     //
-    virtual G4bool FillH3(G4int id, 
+    virtual G4bool FillH3(G4int id,
                           G4double xvalue, G4double yvalue, G4double zvalue,
                           G4double weight = 1.0) final;
-                          
+
 
     // Methods to manipulate histograms
     //
@@ -159,7 +160,7 @@ class G4H3ToolsManager : public G4VH3Manager,
     virtual G4double GetH3Zmin(G4int id) const final;
     virtual G4double GetH3Zmax(G4int id) const final;
     virtual G4double GetH3ZWidth(G4int id) const final;
-        
+
     // Setters for attributes for plotting
     virtual G4bool SetH3Title(G4int id, const G4String& title) final;
     virtual G4bool SetH3XAxisTitle(G4int id, const G4String& title) final;
@@ -171,28 +172,28 @@ class G4H3ToolsManager : public G4VH3Manager,
     virtual G4String GetH3XAxisTitle(G4int id) const final;
     virtual G4String GetH3YAxisTitle(G4int id) const final;
     virtual G4String GetH3ZAxisTitle(G4int id) const final;
- 
+
      // Write data on ASCII file
     virtual G4bool WriteOnAscii(std::ofstream& output) final;
-   
+
     // Access to Hn manager
     virtual std::shared_ptr<G4HnManager> GetHnManager() final;
 
   private:
-    void AddH3Information(const G4String& name,  
-                          const G4String& xunitName, 
-                          const G4String& yunitName, 
-                          const G4String& zunitName, 
+    void AddH3Information(const G4String& name,
+                          const G4String& xunitName,
+                          const G4String& yunitName,
+                          const G4String& zunitName,
                           const G4String& xfcnName,
                           const G4String& yfcnName,
                           const G4String& zfcnName,
                           G4BinScheme xbinScheme,
                           G4BinScheme ybinScheme,
                           G4BinScheme zbinScheme) const;
-                            
-    // data members
-    // static constexpr G4int kDimension = 3;  // not yet supported on vc12
-    static const G4int kDimension;
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4H3ToolsManager" };
+    static constexpr G4int fkDimension = 3;
 };
 // inline methods
 
@@ -202,11 +203,11 @@ inline  std::vector<tools::histo::h3d*>::iterator G4H3ToolsManager::BeginH3()
 inline  std::vector<tools::histo::h3d*>::iterator G4H3ToolsManager::EndH3()
 { return EndT(); }
 
-inline  std::vector<tools::histo::h3d*>::const_iterator 
+inline  std::vector<tools::histo::h3d*>::const_iterator
 G4H3ToolsManager::BeginConstH3() const
 { return BeginConstT(); }
 
-inline  std::vector<tools::histo::h3d*>::const_iterator 
+inline  std::vector<tools::histo::h3d*>::const_iterator
 G4H3ToolsManager::EndConstH3() const
 { return EndConstT(); }
 
@@ -216,7 +217,7 @@ inline const std::vector<tools::histo::h3d*>& G4H3ToolsManager::GetH3Vector() co
 inline const std::vector<G4HnInformation*>& G4H3ToolsManager::GetHnVector() const
 { return fHnManager->GetHnVector(); }
 
-inline std::shared_ptr<G4HnManager> G4H3ToolsManager::GetHnManager() 
+inline std::shared_ptr<G4HnManager> G4H3ToolsManager::GetHnManager()
 { return std::shared_ptr<G4HnManager>(fHnManager); }
 
 #endif

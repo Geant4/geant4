@@ -74,14 +74,15 @@ namespace G4INCL {
   }
 
   void ProjectileRemnant::removeParticle(Particle * const p, const G4double theProjectileCorrection) {
-// assert(p->isNucleon());
+// assert(p->isNucleon() || p->isLambda());
 
     INCL_DEBUG("The following Particle is about to be removed from the ProjectileRemnant:"
         << '\n' << p->print()
         << "theProjectileCorrection=" << theProjectileCorrection << '\n');
-    // Update A, Z, momentum and energy of the projectile remnant
+    // Update A, Z, S, momentum, and energy of the projectile remnant
     theA -= p->getA();
     theZ -= p->getZ();
+    theS -= p->getS();
 
     ThreeVector const &oldMomentum = p->getMomentum();
     const G4double oldEnergy = p->getEnergy();

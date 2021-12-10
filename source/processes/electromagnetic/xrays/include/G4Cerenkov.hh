@@ -163,6 +163,9 @@ class G4Cerenkov : public G4VProcess
   void DumpInfo() const override {ProcessDescription(G4cout);};
   void ProcessDescription(std::ostream& out) const override;
 
+  void SetVerboseLevel(G4int);
+  // sets verbosity
+
  protected:
   G4PhysicsTable* thePhysicsTable;
 
@@ -174,6 +177,8 @@ class G4Cerenkov : public G4VProcess
 
   G4bool fStackingFlag;
   G4bool fTrackSecondariesFirst;
+
+  G4int secID = -1;  // creator modelID
 
 };
 
@@ -188,11 +193,6 @@ inline G4double G4Cerenkov::GetMaxBetaChangePerStep() const
 }
 
 inline G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const { return fMaxPhotons; }
-
-inline void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
-{
-  fStackingFlag = stackingFlag;
-}
 
 inline G4bool G4Cerenkov::GetStackPhotons() const { return fStackingFlag; }
 

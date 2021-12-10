@@ -101,6 +101,7 @@ void G4HadronicParameters::SetMinEnergyTransitionFTF_Cascade( const G4double val
   }
 }
 
+
 void G4HadronicParameters::SetMaxEnergyTransitionFTF_Cascade( const G4double val ) {
   if ( ! IsLocked()  &&  val > fMinEnergyTransitionFTF_Cascade ) { 
     fMaxEnergyTransitionFTF_Cascade = val;
@@ -120,9 +121,13 @@ void G4HadronicParameters::SetMaxEnergyTransitionQGS_FTF( const G4double val ) {
   }
 }
 
-
 void G4HadronicParameters::SetEnableBCParticles( G4bool val ) {
   if ( ! IsLocked() ) fEnableBC = val;
+}
+
+
+void G4HadronicParameters::SetEnableHyperNuclei( G4bool val ) {
+  if ( ! IsLocked() ) fEnableHyperNuclei = val;
 }
 
 

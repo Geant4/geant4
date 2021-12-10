@@ -30,37 +30,39 @@
 // - 06 Jun. 1996, K.Amako: Implemented the 1st version
 // Revisions:
 // - 11 Nov. 2000, H.Kurashige: Use STL vector for dataVector and binVector
+// - 25 Aug. 2021, V.Ivanchenko updated for Geant4 11.0 
 // --------------------------------------------------------------------
 
 #include "G4PhysicsFreeVector.hh"
 
 // --------------------------------------------------------------------
+G4PhysicsFreeVector::G4PhysicsFreeVector(G4bool spline)
+  : G4PhysicsVector(spline)
+{}
+
+// --------------------------------------------------------------------
+G4PhysicsFreeVector::G4PhysicsFreeVector(G4int length)
+  : G4PhysicsFreeVector((std::size_t)length, false)
+{}
+
+// --------------------------------------------------------------------
 G4PhysicsFreeVector::G4PhysicsFreeVector(std::size_t length, G4bool spline)
   : G4PhysicsVector(spline)
 {
-  type          = T_G4PhysicsFreeVector;
   numberOfNodes = length;
 
   if(0 < length) {
-    dataVector.reserve(numberOfNodes);
-    binVector.reserve(numberOfNodes);
-
-    for(std::size_t i = 0; i < numberOfNodes; ++i)
-    {
-      binVector.push_back(0.0);
-      dataVector.push_back(0.0);
-    }
+    binVector.resize(numberOfNodes, 0.0);
+    dataVector.resize(numberOfNodes, 0.0);
   }
+  Initialise();
 }
 
 // --------------------------------------------------------------------
-G4PhysicsFreeVector::G4PhysicsFreeVector(std::size_t length, G4double emin,
-                                         G4double emax, G4bool spline)
+G4PhysicsFreeVector::G4PhysicsFreeVector(std::size_t length, G4double,
+                                         G4double, G4bool spline)
   : G4PhysicsFreeVector(length, spline)
-{
-  edgeMin = emin;
-  edgeMax = emax;
-}
+{}
 
 // --------------------------------------------------------------------
 G4PhysicsFreeVector::G4PhysicsFreeVector(const std::vector<G4double>& energies,
@@ -68,7 +70,6 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const std::vector<G4double>& energies,
                                          G4bool spline)
   : G4PhysicsVector(spline)
 {
-  type          = T_G4PhysicsFreeVector;
   numberOfNodes = energies.size();
 
   if(numberOfNodes != values.size())
@@ -78,19 +79,9 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const std::vector<G4double>& energies,
     G4Exception("G4PhysicsFreeVector constructor: ","glob04", FatalException, ed);
   }
 
-  if(0 < numberOfNodes)
-  {
-    binVector.reserve(numberOfNodes);
-    dataVector.reserve(numberOfNodes);
-
-    for(std::size_t i = 0; i < numberOfNodes; ++i)
-    {
-      binVector.push_back(energies[i]);
-      dataVector.push_back(values[i]);
-    }
-    edgeMin = binVector[0];
-    edgeMax = binVector[numberOfNodes - 1];
-  }
+  binVector = energies;
+  dataVector = values;
+  Initialise();
 }
 
 // --------------------------------------------------------------------
@@ -100,41 +91,37 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4double* energies,
                                          G4bool spline)
   : G4PhysicsVector(spline)
 {
-  type          = T_G4PhysicsFreeVector;
   numberOfNodes = length;
 
   if(0 < numberOfNodes) 
   {
-    binVector.reserve(numberOfNodes);
-    dataVector.reserve(numberOfNodes);
+    binVector.resize(numberOfNodes);
+    dataVector.resize(numberOfNodes);
 
     for(std::size_t i = 0; i < numberOfNodes; ++i)
     {
-      binVector.push_back(energies[i]);
-      dataVector.push_back(values[i]);
+      binVector[i] = energies[i];
+      dataVector[i] = values[i];
     }
-    edgeMin = binVector[0];
-    edgeMax = binVector[numberOfNodes - 1];
   }
+  Initialise();
 }
 
 // --------------------------------------------------------------------
-G4PhysicsFreeVector::~G4PhysicsFreeVector() 
-{}
-
-// --------------------------------------------------------------------
-void G4PhysicsFreeVector::PutValues(std::size_t index, G4double e,
-                                    G4double value)
+void G4PhysicsFreeVector::PutValues(const std::size_t index, 
+                                    const G4double e,
+                                    const G4double value)
 {
   if(index >= numberOfNodes)
   {
-    PrintPutValueError(index, binVector[numberOfNodes - 1],  e);
+    PrintPutValueError(index, value, "G4PhysicsFreeVector::PutValues ");
+    return;
   }
   binVector[index]  = e;
   dataVector[index] = value;
   if(index == 0)
   {
-    edgeMin = edgeMax = e;
+    edgeMin = e;
   }
   else if(numberOfNodes == index + 1)
   {
@@ -143,61 +130,18 @@ void G4PhysicsFreeVector::PutValues(std::size_t index, G4double e,
 }
 
 // --------------------------------------------------------------------
-void G4PhysicsFreeVector::InsertValues(G4double energy, G4double value)
+void G4PhysicsFreeVector::InsertValues(const G4double energy, 
+                                       const G4double value)
 {
   auto binLoc = std::lower_bound(binVector.cbegin(), binVector.cend(), energy);
-
-  std::size_t binIdx = binLoc - binVector.cbegin();  // Iterator difference!
-
-  auto dataLoc = dataVector.cbegin() + binIdx;
+  auto dataLoc = dataVector.cbegin();
+  dataLoc += binLoc - binVector.cbegin(); 
 
   binVector.insert(binLoc, energy);
   dataVector.insert(dataLoc, value);
 
   ++numberOfNodes;
-  edgeMin = binVector.front();
-  edgeMax = binVector.back();
+  Initialise();
 }
 
 // --------------------------------------------------------------------
-G4double G4PhysicsFreeVector::GetEnergy(G4double aValue)
-{
-  G4double e;
-  if(aValue <= GetMinValue())
-  {
-    e = edgeMin;
-  }
-  else if(aValue >= GetMaxValue())
-  {
-    e = edgeMax;
-  }
-  else
-  {
-    std::size_t closestBin = FindValueBinLocation(aValue);
-    e                      = LinearInterpolationOfEnergy(aValue, closestBin);
-  }
-  return e;
-}
-
-// --------------------------------------------------------------------
-std::size_t G4PhysicsFreeVector::FindValueBinLocation(G4double aValue)
-{
-  std::size_t bin =
-    std::lower_bound(dataVector.cbegin(), dataVector.cend(), aValue) -
-    dataVector.cbegin() - 1;
-  bin = std::min(bin, numberOfNodes - 2);
-  return bin;
-}
-
-// --------------------------------------------------------------------
-G4double G4PhysicsFreeVector::LinearInterpolationOfEnergy(G4double aValue, 
-                                                          std::size_t bin)
-{
-  G4double res = binVector[bin];
-  G4double del = dataVector[bin + 1] - dataVector[bin];
-  if(del > 0.0)
-  {
-    res += (aValue - dataVector[bin]) * (binVector[bin + 1] - res) / del;
-  }
-  return res;
-}

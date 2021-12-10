@@ -1929,7 +1929,7 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
   //   A L L O C A T E   M E M O R Y
 
   ExtPolyhedron polyhedron;
-  if (nface == 0) return std::move(polyhedron);
+  if (nface == 0) return HepPolyhedron(polyhedron);
   polyhedron.AllocateMemory(nnode, nface);
 
   //   S E T   N O D E S
@@ -1967,7 +1967,7 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
     polyhedron.pF[faces[i].inew] =
       G4Facet(v[0],f[0], v[1],f[1], v[2],f[2], v[3],f[3]); 
   }
-  return std::move(polyhedron);
+  return HepPolyhedron(polyhedron);
 }
 
 G4ThreadLocal int BooleanProcessor::ishift = 0; //G.Barrand

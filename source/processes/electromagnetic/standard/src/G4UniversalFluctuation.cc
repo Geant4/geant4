@@ -57,25 +57,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-using namespace std;
-
 G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
-  particle(nullptr),
-  minNumberInteractionsBohr(10.0),
-  minLoss(10.*eV),
-  nmaxCont(8.),
-  rate(0.56),
-  a0(42),
-  fw(4.00)
+  minLoss(10.*CLHEP::eV)
 {
-  lastMaterial = nullptr;
-  particleMass = chargeSquare = ipotFluct = electronDensity = f1Fluct = f2Fluct 
-    = e1Fluct = e2Fluct = e1LogFluct = e2LogFluct = ipotLogFluct = e0 = esmall 
-    = e1 = e2 = 0.0;
-  m_Inv_particleMass = m_massrate = DBL_MAX;
-  sizearray = 30;
-  rndmarray = new G4double[30];
+  rndmarray = new G4double[sizearray];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,13 +75,13 @@ G4UniversalFluctuation::~G4UniversalFluctuation()
 
 void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 {
-  particle       = part;
-  particleMass   = part->GetPDGMass();
-  G4double q     = part->GetPDGCharge()/eplus;
+  particle = part;
+  particleMass = part->GetPDGMass();
+  const G4double q = part->GetPDGCharge()/CLHEP::eplus;
 
   // Derived quantities
   m_Inv_particleMass = 1.0 / particleMass;
-  m_massrate = electron_mass_c2 * m_Inv_particleMass ;
+  m_massrate = CLHEP::electron_mass_c2 * m_Inv_particleMass;
   chargeSquare = q*q;
 }
 
@@ -104,9 +90,10 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 G4double 
 G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
                                            const G4DynamicParticle* dp,
-                                           G4double tmax,
-                                           G4double length,
-                                           G4double averageLoss)
+                                           const G4double tcut,
+                                           const G4double tmax,
+                                           const G4double length,
+                                           const G4double averageLoss)
 {
   // Calculate actual loss from the mean loss.
   // The model used to get the fluctuations is essentially the same
@@ -138,95 +125,76 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   // for heavy particles only and conditions
   // for Gauusian fluct. has been changed 
   //
-  if ((particleMass > electron_mass_c2) &&
-      (meanLoss >= minNumberInteractionsBohr*tmax))
-  {
-    G4double tmaxkine = 2.*electron_mass_c2*beta2*gam2/
-                        (1.+m_massrate*(2.*gam+m_massrate)) ;
-    if (tmaxkine <= 2.*tmax)   
-    {
-      electronDensity = material->GetElectronDensity();
-      siga = sqrt((1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-                  * electronDensity * chargeSquare);
+  if (particleMass > CLHEP::electron_mass_c2 &&
+      meanLoss >= minNumberInteractionsBohr*tcut && tmax <= 2.*tcut) {
 
-      const G4double sn = meanLoss/siga;
+    siga = std::sqrt((tmax/beta2 - 0.5*tcut)*CLHEP::twopi_mc2_rcl2* 
+                      length*chargeSquare*material->GetElectronDensity());
+    const G4double sn = meanLoss/siga;
   
-      // thick target case 
-      if (sn >= 2.0) {
+    // thick target case 
+    if (sn >= 2.0) {
 
-        const G4double twomeanLoss = meanLoss + meanLoss;
-        do {
-          loss = G4RandGauss::shoot(rndmEngineF,meanLoss,siga);
-          // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-        } while  (0.0 > loss || twomeanLoss < loss);
+      const G4double twomeanLoss = meanLoss + meanLoss;
+      do {
+	loss = G4RandGauss::shoot(rndmEngineF, meanLoss, siga);
+	// Loop checking, 03-Aug-2015, Vladimir Ivanchenko
+      } while  (0.0 > loss || twomeanLoss < loss);
 
-        // Gamma distribution
-      } else {
+      // Gamma distribution
+    } else {
 
-        G4double neff = sn*sn;
-        loss = meanLoss*G4RandGamma::shoot(rndmEngineF,neff,1.0)/neff;
-      }
-      //G4cout << "Gauss: " << loss << G4endl;
-      return loss;
+      const G4double neff = sn*sn;
+      loss = meanLoss*G4RandGamma::shoot(rndmEngineF, neff, 1.0)/neff;
     }
+    //G4cout << "Gauss: " << loss << G4endl;
+    return loss;
   }
 
   // Glandz regime : initialisation
   //
   if (material != lastMaterial) {
-    f1Fluct      = material->GetIonisation()->GetF1fluct();
-    f2Fluct      = material->GetIonisation()->GetF2fluct();
-    e1Fluct      = material->GetIonisation()->GetEnergy1fluct();
-    e2Fluct      = material->GetIonisation()->GetEnergy2fluct();
-    e1LogFluct   = material->GetIonisation()->GetLogEnergy1fluct();
-    e2LogFluct   = material->GetIonisation()->GetLogEnergy2fluct();
     ipotFluct    = material->GetIonisation()->GetMeanExcitationEnergy();
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     e0 = material->GetIonisation()->GetEnergy0fluct();
-    esmall = 0.5*sqrt(e0*ipotFluct);  
     lastMaterial = material;   
   }
 
   // very small step or low-density material
-  if(tmax <= e0) { return meanLoss; }
+  if(tcut <= e0) { return meanLoss; }
 
   // width correction for small cuts
-  const G4double scaling = std::min(1.+0.5*CLHEP::keV/tmax,1.50);
+  const G4double scaling = std::min(1.+0.5*CLHEP::keV/tcut,1.50);
   meanLoss /= scaling;
 
-  G4double a1(0.0), a2(0.0), a3(0.0);
+  G4double a1(0.0), a3(0.0);
     
   loss = 0.0;
 
-  e1 = e1Fluct;
-  e2 = e2Fluct;
+  e1 = ipotFluct;
 
-  if(tmax > ipotFluct) {
-    G4double w2 = G4Log(2.*electron_mass_c2*beta2*gam2)-beta2;
-
+  if(tcut > ipotFluct) {
+    const G4double w2 = G4Log(2.*CLHEP::electron_mass_c2*beta2*gam2)-beta2;
     if(w2 > ipotLogFluct)  {
-      if(w2 > e2LogFluct) {
-	const G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-	a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
-	a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
-      } else {
-	a1 = meanLoss*(1.-rate)/e1;
-      }
-      if(a1 < a0) { 
-        const G4double fwnow = 0.5+(fw-0.5)*sqrt(a1/a0);
-        a1 /= fwnow;
-        e1 *= fwnow;
-      } else {
-        a1 /= fw;
-        e1 = fw*e1Fluct;
-      }
+      const G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
+      a1 = C*(w2-ipotLogFluct)/ipotFluct;
+    } else {
+      a1 = meanLoss*(1.-rate)/e1;
+    }
+    if(a1 < a0) {
+      const G4double fwnow = fw*a1/a0;
+      a1 /= fwnow;
+      e1 *= fwnow;
+    } else {
+      a1 /= fw;
+      e1 *= fw;
     }   
   }
 
-  G4double w1 = tmax/e0;
-  if(tmax > e0) {
-    a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*G4Log(w1));
-    if(a1+a2 <= 0.) { 
+  const G4double w1 = tcut/e0;
+  if(tcut > e0) {
+    a3 = rate*meanLoss*(tcut-e0)/(e0*tcut*G4Log(w1));
+    if(a1 <= 0.) { 
       a3 /= rate;
     }
   }
@@ -237,9 +205,6 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   // excitation of type 1
   if(a1 > 0.0) { AddExcitation(rndmEngineF, a1, e1, emean, loss, sig2e); }
 
-  // excitation of type 2
-  if(a2 > 0.0) { AddExcitation(rndmEngineF, a2, e2, emean, loss, sig2e); }
-
   if(sig2e > 0.0) { SampleGauss(rndmEngineF, emean, sig2e, loss); }
 
   // ionisation 
@@ -248,20 +213,19 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     sig2e = 0.;
     G4double p3 = a3;
     G4double alfa = 1.;
-    if(a3 > nmaxCont)
-      {
-        alfa            = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
-        const G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
-        const G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
-        emean          += namean*e0*alfa1;
-        sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
-        p3              = a3-namean;
-      }
+    if(a3 > nmaxCont) {
+      alfa = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
+      const G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
+      const G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
+      emean += namean*e0*alfa1;
+      sig2e += e0*e0*namean*(alfa-alfa1*alfa1);
+      p3 = a3-namean;
+    }
 
-    G4double w2 = alfa*e0;
-    if(tmax > w2) {
-      G4double w  = (tmax-w2)/tmax;
-      G4int nnb = G4Poisson(p3);
+    const G4double w2 = alfa*e0;
+    if(tcut > w2) {
+      const G4double w = (tcut-w2)/tcut;
+      const G4int nnb = G4Poisson(p3);
       if(nnb > 0) {
         if(nnb > sizearray) {
           sizearray = nnb;
@@ -274,11 +238,8 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     }
     if(sig2e > 0.0) { SampleGauss(rndmEngineF, emean, sig2e, loss); }
   }
-
-  loss *= scaling;
-
-  return loss;
-
+  //G4cout << "### loss=" << loss << " scaling=" << scaling << G4endl;
+  return loss*scaling;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -287,20 +248,14 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 G4double G4UniversalFluctuation::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
-                                G4double tmax,
-                                G4double length)
+                          const G4double tcut,
+                          const G4double tmax,
+                          const G4double length)
 {
   if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
-
-  electronDensity = material->GetElectronDensity();
-
   const G4double beta = dp->GetBeta();
-  const G4double beta2 = beta*beta;
-
-  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-                 * electronDensity * chargeSquare;
-
-  return siga;
+  return (tmax/(beta*beta) - 0.5*tcut) * CLHEP::twopi_mc2_rcl2 * length
+    * material->GetElectronDensity() * chargeSquare;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -310,12 +265,12 @@ G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
                                              G4double q2)
 {
   if(part != particle) {
-    particle       = part;
-    particleMass   = part->GetPDGMass();
+    particle = part;
+    particleMass = part->GetPDGMass();
 
     // Derived quantities
     m_Inv_particleMass = 1.0 / particleMass;
-    m_massrate = electron_mass_c2 * m_Inv_particleMass;
+    m_massrate = CLHEP::electron_mass_c2 * m_Inv_particleMass;
   }
   chargeSquare = q2;
 }

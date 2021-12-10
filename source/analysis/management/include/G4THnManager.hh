@@ -39,50 +39,70 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string_view>
 
 class G4AnalysisManagerState;
 class G4HnManager;
 
-template <typename T>
+template <typename HT>
 class G4THnManager
 {
   public:
     G4THnManager(const G4AnalysisManagerState& state,
                  const G4String& hnType);
+    G4THnManager() = delete;
     virtual ~G4THnManager();
+
+    G4int RegisterT(HT* t, const G4String& name);
 
     // Reset data
     G4bool Reset();
+
+    // Clear data
+    void ClearData();
+
     // Return true if the H1 vector is empty
-    G4bool IsEmpty() const;   
+    G4bool IsEmpty() const;
 
     // Method for merge (MT)
-    void  AddTVector(const std::vector<T*>& tVector);
+    void  AddTVector(const std::vector<HT*>& tVector);
 
     // New method for merge
-    void  Merge(G4Mutex& mergeMutex, G4THnManager<T>* masterInstance);
+    void  Merge(G4Mutex& mergeMutex, G4THnManager<HT>* masterInstance);
+
+    // Get method
+    HT*  GetT(G4int id) const;
 
   protected:
     // Iterators
-    typename std::vector<T*>::iterator BeginT();
-    typename std::vector<T*>::iterator EndT();
-    typename std::vector<T*>::const_iterator BeginConstT() const;
-    typename std::vector<T*>::const_iterator EndConstT() const;
+    typename std::vector<HT*>::iterator BeginT();
+    typename std::vector<HT*>::iterator EndT();
+    typename std::vector<HT*>::const_iterator BeginConstT() const;
+    typename std::vector<HT*>::const_iterator EndConstT() const;
 
-    T*  GetTInFunction(G4int id, 
-                       G4String functionName,
+    HT*  GetTInFunction(G4int id,
+                       std::string_view functionName,
                        G4bool warn = true,
                        G4bool onlyIfActive = true) const;
 
-    G4int RegisterT(T* t, const G4String& name);
-
     G4int GetTId(const G4String& name, G4bool warn = true) const;
 
-    // data members
+    // Methods for verbose
+    G4bool IsVerbose(G4int verboseLevel) const;
+    void Message(G4int level,
+                 const G4String& action,
+                 const G4String& objectType,
+                 const G4String& objectName = "",
+                 G4bool success = true) const;
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4THnManager<T>" };
+
+    // Data members
     const G4AnalysisManagerState& fState;
-    std::vector<T*>  fTVector;
-    std::map<G4String, G4int>    fNameIdMap;                
-    std::shared_ptr<G4HnManager> fHnManager;
+    std::vector<HT*>  fTVector;
+    std::map<G4String, G4int>    fNameIdMap;
+    std::shared_ptr<G4HnManager> fHnManager { nullptr };
 };
 
 // inline functions
@@ -90,4 +110,3 @@ class G4THnManager
 #include "G4THnManager.icc"
 
 #endif
-

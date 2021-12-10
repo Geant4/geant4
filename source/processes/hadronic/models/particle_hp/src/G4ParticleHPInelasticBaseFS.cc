@@ -286,7 +286,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       aPart->SetDefinition(aSec->GetDefinition());
       aPart->SetMomentum(aSec->GetMomentum());
       delete aSec;
-      theResult.Get()->AddSecondary(aPart);     
+      theResult.Get()->AddSecondary(aPart, secID);     
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticBaseFS::BaseApply NoFSData add secondary " << aPart->GetParticleDefinition()->GetParticleName() << " E= " << aPart->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -614,7 +614,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       theSec = new G4DynamicParticle;    
       theSec->SetDefinition(tmpHadrons->operator[](i)->GetDefinition());
       theSec->SetMomentum(tmpHadrons->operator[](i)->GetMomentum());
-      theResult.Get()->AddSecondary(theSec); 
+      theResult.Get()->AddSecondary(theSec, secID); 
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticBaseFS::BaseApply add secondary2 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif
@@ -631,7 +631,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       theSec = new G4DynamicParticle;    
       theSec->SetDefinition(thePhotons->operator[](i)->GetDefinition());
       theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-      theResult.Get()->AddSecondary(theSec); 
+      theResult.Get()->AddSecondary(theSec, secID); 
 #ifdef G4PHPDEBUG
       if( std::getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticBaseFS::BaseApply add secondary3 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.Get()->GetNumberOfSecondaries() << G4endl;
 #endif

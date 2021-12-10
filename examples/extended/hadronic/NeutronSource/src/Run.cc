@@ -65,6 +65,7 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
+  if (process == nullptr) return;
   G4String procName = process->GetProcessName();
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
@@ -257,7 +258,7 @@ void Run::EndOfRun()
   
   //particles count
   //
-  G4cout << "\n List of generated particles:" << G4endl;
+  G4cout << "\n List of generated particles (with meanLife != 0):" << G4endl;
      
  std::map<G4String,ParticleData>::iterator itc;               
  for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 

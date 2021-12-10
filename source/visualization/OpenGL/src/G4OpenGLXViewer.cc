@@ -30,8 +30,6 @@
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                 functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-
 #include "G4OpenGLXViewer.hh"
 
 #include "G4OpenGLSceneHandler.hh"
@@ -108,8 +106,12 @@ void G4OpenGLXViewer::ShowView () {
 //  G4int thread_id = G4Threading::G4GetThreadId();
 //  G4cout << "G4OpenGLXViewer::ShowView: thread " << thread_id << G4endl;
 #endif
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+  
+//  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propagated before progressing.
+// JA: Commented out July 2021 - slows rendering down in some cases and I
+// don't see any adverse effects.
+
   glFlush ();
 
   if (fVP.IsPicking()) {
@@ -549,5 +551,3 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
   }
 }
 	
-
-#endif

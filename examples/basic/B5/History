@@ -14,6 +14,52 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-21 G. Barrand (exampleB5-V10-07-11)
+- RunAction: remove the usage of G4VisPlotMessenger.
+- README, .README.txt: remove the paragraph about using
+  G4VisPlotMessenger in the RunAction. Now about plotting,
+  remains only the plotter.mac file.
+
+04-11-21 G. Barrand (exampleB5-V10-07-10)
+- plotter.mac: TSG_QT_GLES => TSG.
+- plotter.mac: have commented examples to create a style
+  by using the /vis/plotter/style/select,add commands.
+- plotter.mac, README, .README.txt: remove reference
+  to the XML style logic.
+- CMakeLists.txt: remove plotter.style.
+- remove plotter.style.
+
+02-11-21 I. Hrivnacova (exampleB5-V10-07-09)
+- Added analysisManager->Reset() in begin of run,
+  as resetting was disabled for plotting in end of run.
+
+25-10-21 G. Barrand (exampleB5-V10-07-08)
+- README, .README.txt: have the "PLOTTING" section.
+- modifications to have vis plotting. Available with the
+  TOOLSSG_[QT,XT,WINDOWS]_GLES vis drivers for the moment.
+- CMakeLists.txt: declare plotte.mac, plotter.style.
+- src/RunAction.cc: instanciate the G4VisPlotMessenger so that
+  the commands /vis/plotter/add/[h1,h2] be available to attach
+  histos to a G4/vis/plotter (see plotter.mac for a macro example).
+- plotter.mac: example to create a G4/vis/plotter, attach
+  to it histograms of this example, and customize the style
+  of the various plotting regions.
+- plotter.style: an example to declare styles by using XML.
+
+06-10-21 I. Hrivnacova (exampleB5-V10-07-07)
+- Migration to new G4AnalysisManager.hh header
+
+19-07-21 I. Hrivnacova (exampleB5-V10-07-06)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+- Include G4GenericAnalysisManager.hh instead of "g4analysis.hh"
+  in EventAction.cc (to be consistent with RunAction.cc)
+
+13-07-21 I. Hrivnacova (exampleB5-V10-07-05)
+- Introduced namespace instead of a class names prefix
+- Declare overriding functions 'override' (and removed 'virtual' keyword)
+
 31-05-21 I. Hrivnacova (exampleB5-V10-07-01)
 - Clean trailing whitespaces from all files
 

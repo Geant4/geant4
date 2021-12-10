@@ -27,8 +27,6 @@
 //
 //Top level shell class
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmTopLevelShell.hh"
 #include "G4OpenGLXmVWidgetContainer.hh"
@@ -121,5 +119,3 @@ char* G4OpenGLXmTopLevelShell::GetName ()
 {
   return name;
 }
-
-#endif

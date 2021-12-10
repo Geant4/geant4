@@ -8,7 +8,12 @@
 /testhadr/det/setThickness 10 cm
 /testhadr/det/setSizeYZ 5 cm
 #
+/process/em/verbose 0
+/process/had/verbose 0
+#
 /run/initialize
+#
+/process/em/printParameters
 #
 /gun/particle neutron
 /gun/energy 25 meV

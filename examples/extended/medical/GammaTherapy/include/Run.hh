@@ -41,7 +41,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 
 #include "globals.hh"
 

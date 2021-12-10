@@ -26,7 +26,6 @@
 //
 // G.Barrand.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
  #ifndef G4OpenGL_h
  #define G4OpenGL_h 
@@ -88,7 +87,5 @@
 #endif
 
 #define G4OPENGL_FLT_BIG 1.e20
-
-#endif
 
 #endif

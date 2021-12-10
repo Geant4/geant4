@@ -29,7 +29,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //    ****************************************************
 //    *      UltraPMTSD.cc
@@ -74,7 +74,7 @@ void UltraPMTSD::Initialize(G4HCofThisEvent* HCE)
 
   // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
 
-  OpticalHitsCollection = 
+  OpticalHitsCollection =
     new UltraOpticalHitsCollection(SensitiveDetectorName,collectionName[0]);
 
   if(HCID1<0)
@@ -86,30 +86,30 @@ void UltraPMTSD::Initialize(G4HCofThisEvent* HCE)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool UltraPMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
-{ 
- 
-  // Get Material 
-  
-  G4String thisVolume = aStep->GetTrack()->GetVolume()->GetName() ;
-  const G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition();
+{
+
+  // Get Material
+
+  auto thisVolume = aStep->GetTrack()->GetVolume()->GetName() ;
+  const auto particle = aStep->GetTrack()->GetDefinition();
 
 
-  if (thisVolume != "PMT1" && thisVolume != "PMT2") 
+  if (thisVolume != "PMT1" && thisVolume != "PMT2")
     return false;
-  if (particle != G4OpticalPhoton::Definition() ) 
+  if (particle != G4OpticalPhoton::Definition() )
     return false;
 
-  if(particle == G4OpticalPhoton::Definition()) 
+  if(particle == G4OpticalPhoton::Definition())
     aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 
-  G4double      kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
-  G4ThreeVector HitPosition   = aStep->GetPreStepPoint()->GetPosition() ;
+  auto      kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
+  auto HitPosition   = aStep->GetPreStepPoint()->GetPosition() ;
 
-  UltraOpticalHit* OpticalHit = new UltraOpticalHit ;
+  auto OpticalHit = new UltraOpticalHit ;
   OpticalHit->SetEnergy(kineticEnergy);
   OpticalHit->SetPosition(HitPosition);
 
- 
+
   OpticalHitsCollection->insert(OpticalHit);
 
 
@@ -118,7 +118,7 @@ G4bool UltraPMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4cout << "             PMT HIT           " << G4endl;
   G4cout << "  Volume:                      " << thisVolume << G4endl;
   G4cout << "  Photon energy (eV) :         " << kineticEnergy/CLHEP::eV << G4endl;
-  G4cout << "  POSITION (mm) :              " 
+  G4cout << "  POSITION (mm) :              "
 	 << HitPosition.x()/CLHEP::mm << " " << HitPosition.y()/CLHEP::mm << " " << HitPosition.z()/CLHEP::mm << G4endl;
   G4cout << "*******************************" << G4endl;
 #endif
@@ -128,13 +128,11 @@ G4bool UltraPMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void UltraPMTSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
   if(HCID<0)
-    { 
+    {
       HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     }
   HCE->AddHitsCollection(HCID,OpticalHitsCollection);
@@ -144,16 +142,16 @@ void UltraPMTSD::EndOfEvent(G4HCofThisEvent* HCE)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void UltraPMTSD::clear()
-{;} 
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void UltraPMTSD::DrawAll()
-{;} 
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void UltraPMTSD::PrintAll()
-{;} 
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

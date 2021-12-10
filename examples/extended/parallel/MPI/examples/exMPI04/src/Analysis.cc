@@ -31,11 +31,14 @@
 #include "G4SystemOfUnits.hh"
 #include "Analysis.hh"
 
-//Select format of output here
 //Note: ntuple merging is supported only with Root format
-#include "g4root.hh"
+#ifndef G4MULTITHREADED
+#include "G4RootMpiAnalysisManager.hh"
+using G4AnalysisManager = G4RootMpiAnalysisManager;
+#else
 #include "G4RootAnalysisManager.hh"
-
+using G4AnalysisManager = G4RootAnalysisManager;
+#endif
 
 G4ThreadLocal G4int Analysis::fincidentFlag = false;
 G4ThreadLocal Analysis* the_analysis = 0;

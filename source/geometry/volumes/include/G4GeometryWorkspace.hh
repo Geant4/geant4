@@ -42,15 +42,14 @@
 // Authors: John Apostolakis (CERN), Andrea Dotti (SLAC), July 2013
 // --------------------------------------------------------------------
 #ifndef G4GEOMETRYWORKSPACE_HH
-#define G4GEOMETRYWORKSPACE_HH
+#define G4GEOMETRYWORKSPACE_HH 1
 
 #include "G4TWorkspacePool.hh"
-#include "G4PVReplica.hh"
-#include "G4PVParameterised.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4VSolid.hh"
 
+// Headers defining MT "manager" types
+//
+#include "G4PVReplica.hh"
+#include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
 
@@ -70,15 +69,11 @@ class G4GeometryWorkspace
     void InitialiseWorkspace();
       // To be called at start of each run (especially 2nd and further runs)
 
-    inline void   SetVerbose(G4bool v) { fVerbose = v; } 
-    inline G4bool GetVerbose()  { return fVerbose; } 
-
     static pool_type* GetPool();
   
   protected:  // Implementation methods
 
     void InitialisePhysicalVolumes();
-    G4bool CloneParameterisedSolids( G4PVParameterised* paramVol );
     G4bool CloneReplicaSolid( G4PVReplica* );
   
   private:    // Helper pointers - can be per instance or shared
@@ -96,8 +91,6 @@ class G4GeometryWorkspace
     G4PVData*      fPhysicalVolumeOffset;
     G4ReplicaData* fReplicaOffset;       
     G4RegionData*  fRegionOffset;        
-
-    G4bool         fVerbose = false;
 };
 
 #endif

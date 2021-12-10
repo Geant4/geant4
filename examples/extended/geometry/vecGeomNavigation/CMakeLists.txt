@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(exampleVecGeomNav)
 
 option(WITH_ROOT "WITH ROOT SUPPORT" OFF)
@@ -23,7 +23,7 @@ if(BUILTIN_G4VECGEOMNAV)
   FetchContent_Declare(
     g4vecgeomnav
     GIT_REPOSITORY https://gitlab.cern.ch/VecGeom/g4vecgeomnav.git
-    GIT_TAG 1a002fbf2bccd81827b6100f86e2ad82433a75e9
+    GIT_TAG master
   )
 
   FetchContent_GetProperties(g4vecgeomnav)

@@ -1,0 +1,360 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_plotter_some_styles
+#define tools_sg_plotter_some_styles
+
+//  Functions to set some common styles.
+// Typically ROOT_default (the default style of ROOT), hippodraw
+// or return/reset to the default inlib style.
+
+#include "plotter"
+#include "style_colormap"
+
+namespace tools {
+namespace sg {
+
+inline bool set_style_color(std::ostream& a_out,const cmaps_t& a_cmaps,const std::string& a_s,colorf& a_col){
+  if(!find_color(a_cmaps,a_s,a_col)) {
+    a_out << "tools::sg::set_style_color: color " << sout(a_s) << " not found." << std::endl;
+    return false;
+  }
+  return true;
+}
+
+// a_font = font_arialbd_ttf();     //idem ROOT 62.
+// a_font = font_roboto_bold_ttf(); //open source replacement for arialbd.
+
+inline void set_style_font(text_style& a_style,const std::string& a_font){
+  a_style.font = a_font;
+  a_style.front_face = winding_cw;
+  a_style.smoothing = true;
+}
+
+inline void set_ROOT_default_style(std::ostream& a_out,const cmaps_t& a_cmaps,plotter& a_plotter,const std::string& a_font) {
+  a_plotter.value_top_margin = 0.05f;
+  a_plotter.bottom_margin = 0.1f;
+  a_plotter.top_margin = 0.1f;
+  a_plotter.left_margin = 0.1f;
+  a_plotter.right_margin = 0.1f;
+
+ {style& _style = a_plotter.background_style();
+  _style.visible = true;
+//if(!set_style_color(a_out,a_cmaps,"ROOT/grey19",_style.back_color.value())) {}
+  //border:
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.line_width = 0.003;  // 0 = no border. In % of width.
+  }
+
+// <!-- <style name="wall_style"><visible>false</visible></style> -->
+
+ {style& _style = a_plotter.grid_style();
+  _style.visible = false;
+//if(!set_style_color(a_out,a_cmaps,"white",_style.color.value())) {}
+  }
+
+  // plot title done with the title_box (and not plotter title):
+ {text_style& _style = a_plotter.title_style();
+  _style.visible = false;
+  }
+ {text_style& _style = a_plotter.title_box_style();
+  _style.visible = true;
+  if(!set_style_color(a_out,a_cmaps,"ROOT/grey19",_style.back_color.value())) {}
+  _style.back_shadow = 0.015f;  //% of width.
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  set_style_font(_style,a_font);}
+
+  a_plotter.infos_width = 0.35f;
+  a_plotter.infos_x_margin = 0.01f;  //from right border.
+  a_plotter.infos_y_margin = 0.005f;  //from top border.
+ {text_style& _style = a_plotter.infos_style();
+  _style.visible = true;
+  if(!set_style_color(a_out,a_cmaps,"ROOT/grey19",_style.back_color.value())) {}
+  _style.back_shadow = 0.015f;  //% of width.
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.modeling = infos_modeling_ROOT();  //to have histo name as info title.
+  set_style_font(_style,a_font);}
+
+ {style& _style = a_plotter.inner_frame_style();
+  _style.visible = true;
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.line_width = 1.0f;  
+//_style.line_pattern = line_solid;
+  }
+
+  //////////////////////////////////////////////////////////
+  /// x axis: //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.x_axis();
+  _axis.modeling = tick_modeling_hplot();
+  _axis.divisions = 510;
+  _axis.title_hjust = right;
+  _axis.label_to_axis = 0.005f;
+  _axis.label_height = 0.04f;
+  _axis.tick_length = 0.03f;
+  _axis.title_to_axis = 0.05f; //YLAB = 0.05
+  _axis.title_height = 0.04f;
+  _axis.is_log = false;
+
+ {line_style& _style = _axis.line_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}  
+
+ {line_style& _style = _axis.ticks_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.title_style();
+  _style.visible = true;
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.mag_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+  }
+  
+  //////////////////////////////////////////////////////////
+  /// y axis: //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.y_axis();
+  _axis.modeling = tick_modeling_hplot();
+  _axis.divisions = 510;
+  _axis.title_hjust = right;
+  _axis.label_to_axis = 0.005f;
+  _axis.label_height = 0.04f;
+  _axis.tick_length = 0.03f;
+  _axis.title_to_axis = 0.07f; //XLAB = 0.07
+  _axis.title_height = 0.04f;
+  _axis.is_log = false;
+
+ {line_style& _style = _axis.line_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}  
+
+ {line_style& _style = _axis.ticks_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.title_style();
+  _style.visible = true;
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.mag_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+  }
+  
+  //////////////////////////////////////////////////////////
+  /// z axis: //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.z_axis();
+  _axis.modeling = tick_modeling_hplot();
+  _axis.is_log = false;
+
+ {line_style& _style = _axis.line_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}  
+
+ {line_style& _style = _axis.ticks_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;}
+  
+ {text_style& _style = _axis.title_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;}
+  
+ {text_style& _style = _axis.mag_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;}
+  
+  }
+  
+  //////////////////////////////////////////////////////////
+  /// colormap axis: ///////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.colormap_axis();
+  _axis.modeling = tick_modeling_hplot();
+  _axis.divisions = 510;
+  _axis.title_hjust = right;
+  _axis.label_to_axis = 0.005f;
+  _axis.label_height = 0.04f;
+  _axis.tick_length = 0.03f;
+  _axis.title_to_axis = 0.07f; //XLAB = 0.07
+  _axis.title_height = 0.04f;
+  _axis.is_log = false;
+
+ {line_style& _style = _axis.line_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}  
+
+ {line_style& _style = _axis.ticks_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.width = 1.0f;}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.title_style();
+  _style.visible = true;
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.mag_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.scale = 0.6;  //To have a good matching with ROOT text size.
+  set_style_font(_style,a_font);}
+  
+  }
+
+ {style& _style = a_plotter.bins_style(0);
+  _style.modeling = modeling_top_lines();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.line_width = 1.0f;
+//_style.line_pattern = line_solid;
+  }
+  
+ {style& _style = a_plotter.func_style(0);
+  _style.modeling = modeling_top_lines();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.line_width = 3.0f;
+//_style.line_pattern = line_solid;
+  }
+  
+}
+
+// a_font = font_helvetica_ttf();
+// a_font = font_lato_regular_ttf(); //open source replacement for helvetica
+
+inline void set_hippodraw_style(std::ostream& a_out,const cmaps_t& a_cmaps,plotter& a_plotter,const std::string& a_font) {
+  // In memory of P.Kunz.
+
+  a_plotter.value_top_margin = 0.05f;
+  a_plotter.bottom_margin = 0.12f;
+  a_plotter.top_margin = 0.16f;
+  a_plotter.left_margin = 0.16f;
+  a_plotter.right_margin = 0.16f;
+  a_plotter.title_to_axis = 0.1f;
+  a_plotter.title_height = 0.03f;
+
+// <!-- <style name="wall_style"><visible>false</visible></style> -->
+
+ {style& _style = a_plotter.grid_style();
+  _style.visible = false;}
+ {style& _style = a_plotter.inner_frame_style();
+  _style.visible = true;}
+ {text_style& _style = a_plotter.infos_style();
+  _style.visible = false;}
+  
+ {text_style& _style = a_plotter.title_style();
+  set_style_font(_style,a_font);
+  _style.visible = true;}
+
+  //////////////////////////////////////////////////////////
+  /// x axis: //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.x_axis();
+  _axis.modeling = tick_modeling_hippo();
+  _axis.title_hjust = center;
+  _axis.label_to_axis = 0.015f;
+  _axis.title_to_axis = 0.07f;
+  _axis.title_height = 0.035f;
+  _axis.label_height = 0.02625f;  //0.0175F * 1.5F
+  
+ {text_style& _style = _axis.title_style();
+  _style.visible = true;
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  set_style_font(_style,a_font);}
+  
+  }
+  
+  //////////////////////////////////////////////////////////
+  /// y axis: //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.y_axis();
+  _axis.modeling = tick_modeling_hippo();
+  _axis.title_hjust = center;
+  _axis.title_to_axis = 0.2f;
+  _axis.title_height = 0.035f;
+  _axis.label_height = 0.02625f;  //0.0175F * 1.5F
+  
+ {text_style& _style = _axis.title_style();
+  _style.visible = true;
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  set_style_font(_style,a_font);}
+  
+  }
+  
+  //////////////////////////////////////////////////////////
+  /// z axis: //////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+ {axis& _axis = a_plotter.z_axis();
+  
+ {text_style& _style = _axis.title_style();
+  _style.visible = true;
+  set_style_font(_style,a_font);}
+  
+ {text_style& _style = _axis.labels_style();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  set_style_font(_style,a_font);}
+  
+  }
+  
+ {style& _style = a_plotter.bins_style(0);
+  _style.modeling = modeling_top_lines();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.line_width = 1.0f;
+//_style.line_pattern = line_solid;
+  }
+  
+ {style& _style = a_plotter.func_style(0);
+  _style.modeling = modeling_top_lines();
+  if(!set_style_color(a_out,a_cmaps,"black",_style.color.value())) {}
+  _style.line_width = 1.0f;
+//_style.line_pattern = line_solid;
+  }
+
+ {style& _style = a_plotter.errors_style(0);
+  _style.visible = false;
+  }
+
+}
+
+inline void set_inlib_default_style(std::ostream&,const cmaps_t&,plotter& a_plotter,const std::string&) {
+ {axis& _axis = a_plotter.colormap_axis();
+  _axis.label_to_axis = 0.01f;}  
+}
+
+}}
+
+#endif

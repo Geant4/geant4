@@ -31,9 +31,8 @@
 
 // Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-
-#ifndef G4ErrorSurfaceTarget_hh
-#define G4ErrorSurfaceTarget_hh
+#ifndef G4ERRORSURFACETARGET_HH
+#define G4ERRORSURFACETARGET_HH 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -42,10 +41,10 @@
 
 class G4ErrorSurfaceTarget : public G4ErrorTanPlaneTarget
 {
-  public:  // with description
+  public:
 
     G4ErrorSurfaceTarget();
-    virtual ~G4ErrorSurfaceTarget();
+    virtual ~G4ErrorSurfaceTarget() = default;
 
     virtual double GetDistanceFromPoint( const G4ThreeVector& point,
                                          const G4ThreeVector& direc ) const = 0;

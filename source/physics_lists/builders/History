@@ -13,6 +13,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-Aug-2021 Vladimir Ivanchenko      (phys-builder-V10-07-08)
+- G4QGSPNeutronBuilder - use G4NeutronInelasticXS cross section
+
+13-Jul-2021 Alberto Ribon            (phys-builder-V10-07-07)
+- G4HadronicBuilder : initialized the vector mode, as suggested by Coverity.
+
 16-April-2021 Ben Morgan             (phys-builder-V10-07-06)
 - Migrate build to modular CMake API
 

@@ -870,7 +870,7 @@ void G4RunManager::rndmSaveThisEvent()
 void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 {
   G4String fileNameWithDirectory;
-  if(fileN.index("/") == std::string::npos)
+  if(fileN.find("/") == std::string::npos)
   {
     fileNameWithDirectory = randomNumberStatusDir + fileN;
   }

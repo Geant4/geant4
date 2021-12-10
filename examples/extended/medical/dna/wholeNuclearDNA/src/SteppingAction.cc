@@ -43,7 +43,7 @@
 #include <G4VProcess.hh>
 #include <G4Track.hh>
 
-#include "Analysis.hh"
+#include "G4AnalysisManager.hh"
 #include "CommandLineParser.hh"
 
 using namespace G4DNAPARSER;

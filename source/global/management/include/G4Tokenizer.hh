@@ -82,13 +82,13 @@ class G4Tokenizer
     {
       tmp    = actual;
       actual = j + 1;
-      return string2tokenize(tmp, j - tmp);
+      return string2tokenize.substr(tmp, j - tmp);
     }
     else
     {
       tmp    = actual;
       actual = j;
-      return string2tokenize(tmp, j - tmp);
+      return string2tokenize.substr(tmp, j - tmp);
     }
   }
 

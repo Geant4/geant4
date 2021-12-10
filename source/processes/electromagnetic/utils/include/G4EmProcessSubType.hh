@@ -61,6 +61,7 @@ enum G4EmProcessSubType
   fGammaConversionToMuMu = 15,
   fGammaGeneralProcess = 16,
   fPositronGeneralProcess = 17,
+  fAnnihilationToTauTau = 18,
  
   fCerenkov = 21,
   fScintillation = 22,

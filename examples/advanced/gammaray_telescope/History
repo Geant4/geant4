@@ -7,6 +7,28 @@
 
                           History file
                           ------------
+07.10.2021 - I. Hrivnacova (gammaraytel-V10-07-08)
+             Migration to new G4AnalysisManager.hh header;
+             define the default output file type (root).
+
+11.08.2021 - S. Guatelli (gammaraytel-V10-07-07)
+             Interactive mode fixed.
+             removed obsolete macros emlow.mac and emstd.mac and physics_polarized.mac, gammaraytel_polarized.in
+             physics_polarized_new.mac moved for clarity to physics_opt4 as EM Physics List 
+             option4 was activated.
+             Removed obsolete classes GammaRayTelGeneralPhysics, GammaRayTelParticles, 
+             GammaRayTelEMlowePhysics, GammaRayTelEMstdPhysics, GammaRayTelIonPhysics, 
+             GammaRayTelHadronPhysics.
+             README file updated.
+             Minor change in the GammaRayTelRunAction::OpenFile() method
+             to allow filenames longer than the hardcoded 25 character limit.
+             Revision reccomended by N. MacFadden and A. Knaian, nklabs.
+
+19.07.2021 - I. Hrivnacova (gammaraytel-V10-07-06)
+             Updated for changes in the analysis category:
+             removed deleting of the analysis manager,
+             as this is now done by the Geant4 kernel.
+
 24.05.2021 - B. Morgan (gammaraytel-V10-07-05)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

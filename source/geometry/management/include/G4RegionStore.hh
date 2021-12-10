@@ -78,7 +78,7 @@ class G4RegionStore : public std::vector<G4Region*>
       // to FALSE. Used by the run manager to notify that the
       // physics table has been updated.
 
-    void UpdateMaterialList(G4VPhysicalVolume* currentWorld=0);
+    void UpdateMaterialList(G4VPhysicalVolume* currentWorld=nullptr);
       // Forces recomputation of material lists in all regions
       // in the store.
 

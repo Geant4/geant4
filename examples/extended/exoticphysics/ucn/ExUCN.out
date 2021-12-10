@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -52,10 +52,8 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   OpenGLImmediateQt (OGLIQt, OGLI)
@@ -108,14 +106,14 @@ Some /vis commands (optionally) take a string to specify colour.
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  990 eV     e+  -1 MeV proton 100 keV
+ Energy thresholds :  gamma  -1 MeV    e-  1 keV    e+  -1 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Ni
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  1.44302 MeV    e+  -1 MeV proton 100 keV
+ Energy thresholds :  gamma  -1 MeV    e-  1.4556 MeV    e+  -1 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1494,7 +1492,7 @@ Terminate current event processing.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.030000s Real=0.028886s Sys=0.000000s
+  User=0.030000s Real=0.029615s Sys=0.000000s
 Sum NoMT:                            0
 Sum NoMRT:                           0
 Sum NoMRCondition:                   0
@@ -1521,7 +1519,7 @@ G4 kernel has come to Quit state.
  Maximum number of tracks in the urgent stack : 576460752303423487
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.013 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.015 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -26,6 +26,7 @@
 
 #include "G4DNAChargeIncrease.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,7 +36,7 @@ G4DNAChargeIncrease::G4DNAChargeIncrease(const G4String& processName,
                                          G4ProcessType type) :
     G4VEmProcess(processName, type), isInitialised(false)
 {
-  SetProcessSubType(57);
+  SetProcessSubType(fLowEnergyChargeIncrease);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

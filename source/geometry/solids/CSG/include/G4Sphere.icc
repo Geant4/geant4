@@ -27,12 +27,6 @@
 // --------------------------------------------------------------------
 
 inline
-G4double G4Sphere::GetInsideRadius() const
-{
-  return fRmin;
-}
-
-inline
 G4double G4Sphere::GetInnerRadius() const
 {
   return fRmin;
@@ -253,17 +247,11 @@ void G4Sphere::CheckPhiAngles(G4double sPhi, G4double dPhi)
 }
 
 inline
-void G4Sphere::SetInsideRadius(G4double newRmin)
+void G4Sphere::SetInnerRadius(G4double newRmin)
 {
   fRmin= newRmin;
   fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
   Initialize();
-}
-
-inline
-void G4Sphere::SetInnerRadius(G4double newRmin)
-{
-  SetInsideRadius(newRmin);
 }
 
 inline
@@ -305,42 +293,4 @@ void G4Sphere::SetDeltaThetaAngle(G4double newDTheta)
 {
   CheckThetaAngles(fSTheta, newDTheta);
   Initialize();
-}
-
-// Old access functions
-
-inline
-G4double G4Sphere::GetRmin() const
-{
-  return GetInsideRadius();
-}
-
-inline
-G4double G4Sphere::GetRmax() const
-{
-  return GetOuterRadius();
-}
-
-inline
-G4double G4Sphere::GetSPhi() const
-{
-  return GetStartPhiAngle();
-}
-
-inline
-G4double G4Sphere::GetDPhi() const
-{
-  return GetDeltaPhiAngle();
-}
-
-inline
-G4double G4Sphere::GetSTheta() const
-{
-  return GetStartThetaAngle();
-}
-
-inline
-G4double G4Sphere::GetDTheta() const
-{
-  return GetDeltaThetaAngle();
 }

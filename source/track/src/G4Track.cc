@@ -32,7 +32,6 @@
 #include "G4Track.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4VAuxiliaryTrackInformation.hh"
-#include "G4PhysicsModelCatalog.hh"
 
 #include <iostream>
 #include <iomanip>
@@ -104,6 +103,9 @@ G4Track& G4Track::operator=(const G4Track& right)
     // CurrentStepNumber is set to be 0
     fCurrentStepNumber = 0;
 
+    // Creator model ID
+    fCreatorModelID = right.fCreatorModelID;
+
     // velocity information
     fVelocity = right.fVelocity;
 
@@ -174,7 +176,7 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
   {
     groupvel = nullptr;
     if(mat->GetMaterialPropertiesTable() != nullptr)
-      groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+      groupvel = mat->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
     update_groupvel = true;
   }
   prev_mat = mat;
@@ -200,7 +202,7 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
 }
 
 // --------------------------------------------------------------------
-void G4Track::SetAuxiliaryTrackInformation(G4int idx,
+void G4Track::SetAuxiliaryTrackInformation(G4int id,
               G4VAuxiliaryTrackInformation* info) const
 {
   if(fpAuxiliaryTrackInformationMap == nullptr)
@@ -208,23 +210,23 @@ void G4Track::SetAuxiliaryTrackInformation(G4int idx,
     fpAuxiliaryTrackInformationMap =
       new std::map<G4int, G4VAuxiliaryTrackInformation*>;
   }
-  if(idx < 0 || idx >= G4PhysicsModelCatalog::Entries())
+  if(G4PhysicsModelCatalog::GetModelIndex(id) < 0)
   {
     G4ExceptionDescription ED;
-    ED << "Process/model index <" << idx << "> is invalid.";
+    ED << "Process/model ID <" << id << "> is invalid.";
     G4Exception("G4VAuxiliaryTrackInformation::G4VAuxiliaryTrackInformation()",
                 "TRACK0982", FatalException, ED);
   }
-  (*fpAuxiliaryTrackInformationMap)[idx] = info;
+  (*fpAuxiliaryTrackInformationMap)[id] = info;
 }
 
 // --------------------------------------------------------------------
 G4VAuxiliaryTrackInformation*
-G4Track::GetAuxiliaryTrackInformation(G4int idx) const
+G4Track::GetAuxiliaryTrackInformation(G4int id) const
 {
   if(fpAuxiliaryTrackInformationMap == nullptr)
     return nullptr;
-  auto itr = fpAuxiliaryTrackInformationMap->find(idx);
+  auto itr = fpAuxiliaryTrackInformationMap->find(id);
   if(itr == fpAuxiliaryTrackInformationMap->cend())
     return nullptr;
   else
@@ -232,12 +234,12 @@ G4Track::GetAuxiliaryTrackInformation(G4int idx) const
 }
 
 // --------------------------------------------------------------------
-void G4Track::RemoveAuxiliaryTrackInformation(G4int idx)
+void G4Track::RemoveAuxiliaryTrackInformation(G4int id)
 {
-  if(fpAuxiliaryTrackInformationMap != nullptr
-  && idx >= 0 && idx < G4PhysicsModelCatalog::Entries())
+  if(fpAuxiliaryTrackInformationMap != nullptr  &&
+     fpAuxiliaryTrackInformationMap->find(id) != fpAuxiliaryTrackInformationMap->cend())
   {
-    fpAuxiliaryTrackInformationMap->erase(idx);
+    fpAuxiliaryTrackInformationMap->erase(id);
   }
 }
 
@@ -246,8 +248,8 @@ void G4Track::RemoveAuxiliaryTrackInformation(G4String& name)
 {
   if(fpAuxiliaryTrackInformationMap != nullptr)
   {
-    G4int idx = G4PhysicsModelCatalog::GetIndex(name);
-    RemoveAuxiliaryTrackInformation(idx);
+    G4int id = G4PhysicsModelCatalog::GetModelID(name);
+    RemoveAuxiliaryTrackInformation(id);
   }
 }
 

@@ -34,8 +34,6 @@
 //                       camera positions by equal amounts).
 //                       Zoom callback is also here.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
 #include "G4OpenGLXmViewer.hh"
 #include "G4VSceneHandler.hh"
 #include <Xm/ToggleB.h>
@@ -241,7 +239,3 @@ void G4OpenGLXmViewer::set_pan_sens_callback (Widget w,
   
   pView->fPan_sens = (G4double)((cbs->value) / ten_to_the_dp);
 }  
-
-#endif
-
-

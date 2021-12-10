@@ -278,14 +278,30 @@ namespace G4INCL {
       endFirstSection = beginSecondSection;
 
     } else {
-      // One separator, Fe-56 or 56-Fe style
+      // One separator, Fe-56 or 56-Fe style or hypercluster style: Fe56-1 (iron 56 including 1 lambda)
       endFirstSection = firstSeparator;
       beginSecondSection = firstSeparator+1;
     }
-
+    
     std::string firstSection(pS.substr(0,endFirstSection));
     std::string secondSection(pS.substr(beginSecondSection,std::string::npos));
     std::stringstream parsingStream;
+    
+    if(std::isalpha(firstSection.at(0)) && std::isdigit(firstSection.at(endFirstSection-1))) { // Hypernucleus, must be Fe56-1 style
+      std::stringstream parseStrangeness;
+      parseStrangeness.str(secondSection);
+      parseStrangeness >> theS;
+      if(parsingStream.fail()) {
+        // Couldn't parse the strange charge section
+        // Setting unknown particle species
+        (*this) = ParticleSpecies(UnknownParticle);
+        return;
+      }
+      theS *= (-1);
+      beginSecondSection = std::find_if(pS.begin()+1, pS.end(), predicate) - pS.begin(); // predicate == std::isdigit(G4int) in this case
+      firstSection = pS.substr(0, beginSecondSection);
+      secondSection = pS.substr(beginSecondSection, endFirstSection);
+    }
 
     // Parse the sections
     G4bool success;
@@ -348,86 +364,86 @@ namespace G4INCL {
 	
   G4int ParticleSpecies::getPDGCode() const {
     switch (theType) {
-		case Proton:
-		    return 2212;
-			break;
-		case Neutron:
-		    return 2112;
-			break;
-		case DeltaPlusPlus:
-		    return 2224;
-			break;
-		case DeltaPlus:
-		    return 2214;
-			break;
-		case DeltaZero:
-		    return 2114;
-			break;
-		case DeltaMinus:
-		    return 1114;
-			break;
-		case PiPlus:
-		    return 211;
-			break;
-		case PiZero:
-		    return 111;
-			break;
-		case PiMinus:
-		    return -211;
-			break;
-		case Eta:
-		    return 221;
-			break;
-		case Omega:
-		    return 223;
-			break;
-		case EtaPrime:
-		    return 331;
-			break;
-		case Photon:
-		    return 22;
-			break;
-		case Lambda:
-		    return 3122;
-			break;
-		case SigmaPlus:
-		    return 3222;
-			break;
-		case SigmaZero:
-		    return 3212;
-			break;
-		case SigmaMinus:
-		    return 3112;
-			break;
-		case KPlus:
-		    return 321;
-			break;
-		case KZero:
-		    return 311;
-			break;
-		case KZeroBar:
-		    return -311;
-			break;
-		case KShort:
-		    return 310;
-			break;
-		case KLong:
-		    return 130;
-			break;
-		case KMinus:
-		    return -321;
-			break;
-		case Composite:
-			if(theA == 1 && theZ == 1 && theS == 0) return 2212;
-			else if(theA == 1 && theZ == 0 && theS == 0) return 2112;
-			else if(theA == 1 && theZ == 0 && theS == -1) return 3122;
-			else return theA+theZ*1000-theS*1e6; // Here -theS because hyper-nucleus -> theS < 0
-			break;
-		default:
-			INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
-			return 0;
-			break;
-	}	
+      case Proton:
+          return 2212;
+        break;
+      case Neutron:
+          return 2112;
+        break;
+      case DeltaPlusPlus:
+          return 2224;
+        break;
+      case DeltaPlus:
+          return 2214;
+        break;
+      case DeltaZero:
+          return 2114;
+        break;
+      case DeltaMinus:
+          return 1114;
+        break;
+      case PiPlus:
+          return 211;
+        break;
+      case PiZero:
+          return 111;
+        break;
+      case PiMinus:
+          return -211;
+        break;
+      case Eta:
+          return 221;
+        break;
+      case Omega:
+          return 223;
+        break;
+      case EtaPrime:
+          return 331;
+        break;
+      case Photon:
+          return 22;
+        break;
+      case Lambda:
+          return 3122;
+        break;
+      case SigmaPlus:
+          return 3222;
+        break;
+      case SigmaZero:
+          return 3212;
+        break;
+      case SigmaMinus:
+          return 3112;
+        break;
+      case KPlus:
+          return 321;
+        break;
+      case KZero:
+          return 311;
+        break;
+      case KZeroBar:
+          return -311;
+        break;
+      case KShort:
+          return 310;
+        break;
+      case KLong:
+          return 130;
+        break;
+      case KMinus:
+          return -321;
+        break;
+      case Composite:
+        if(theA == 1 && theZ == 1 && theS == 0) return 2212;
+        else if(theA == 1 && theZ == 0 && theS == 0) return 2112;
+        else if(theA == 1 && theZ == 0 && theS == -1) return 3122;
+        else return theA+theZ*1000-theS*1e6; // Here -theS because hyper-nucleus -> theS < 0
+        break;
+      default:
+        INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
+        return 0;
+        break;
+    }	
   }
 }
 

@@ -14,7 +14,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/geometry/navigation/include \
+            -I$(G4BASE)/geometry/solids/CSG/include \
+            -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/processes/management/include \
@@ -30,6 +34,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/event/include \
+            -I$(G4BASE)/digits_hits/hits/include \
+            -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4INCLUDE)
 

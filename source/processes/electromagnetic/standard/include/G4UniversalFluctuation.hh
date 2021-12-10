@@ -64,18 +64,23 @@ public:
 
   G4double SampleFluctuations(const G4MaterialCutsCouple*,
 			      const G4DynamicParticle*,
-			      G4double, G4double,
-			      G4double) override;
+                              const G4double, const G4double,
+			      const G4double, const G4double) override;
 
   G4double Dispersion(const G4Material*,
 		      const G4DynamicParticle*,
-		      G4double, G4double) override;
+                      const G4double, const G4double,
+                      const G4double) override;
 
   void InitialiseMe(const G4ParticleDefinition*) final;
 
   // Initialisation prestep
   void SetParticleAndCharge(const G4ParticleDefinition*, 
 			    G4double q2) final;
+
+  // hide assignment operator
+  G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right) = delete;
+  G4UniversalFluctuation(const  G4UniversalFluctuation&) = delete;
 
 private:
 
@@ -87,43 +92,31 @@ private:
                           G4double eav, G4double esig2, 
                           G4double& eloss); 
 
-  // hide assignment operator
-  G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right) = delete;
-  G4UniversalFluctuation(const  G4UniversalFluctuation&) = delete;
+  const G4ParticleDefinition* particle = nullptr;
+  const G4Material* lastMaterial = nullptr;
 
-  const G4ParticleDefinition* particle;
-  const G4Material* lastMaterial;
-
-  G4double particleMass;
+  G4double particleMass = 0.0;
 
   // Derived quantities
-  G4double m_Inv_particleMass;
-  G4double m_massrate;
-  G4double chargeSquare;
+  G4double m_Inv_particleMass = DBL_MAX;
+  G4double m_massrate = DBL_MAX;
+  G4double chargeSquare = 1.0;
 
   // data members to speed up the fluctuation calculation
-  G4double ipotFluct;
-  G4double electronDensity;
-  
-  G4double f1Fluct;
-  G4double f2Fluct;
-  G4double e1Fluct;
-  G4double e2Fluct;
-  G4double e1LogFluct;
-  G4double e2LogFluct;
-  G4double ipotLogFluct;
-  G4double e0;
-  G4double esmall;
+  G4double ipotFluct = 0.0;
+  G4double ipotLogFluct = 0.0;
+  G4double e0 = 0.0;
+  G4double e1 = 0.0;
 
-  G4double e1,e2;
-
-  G4double minNumberInteractionsBohr;
+  G4double minNumberInteractionsBohr = 10.0;
   G4double minLoss;
-  G4double nmaxCont;
-  G4double rate,a0,fw; 
+  G4double nmaxCont = 8.0;
+  G4double rate = 0.56;
+  G4double fw = 5.0;
+  G4double a0 = 15.0;
 
-  G4int     sizearray;
-  G4double* rndmarray;
+  G4int     sizearray = 30;
+  G4double* rndmarray = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,7 +131,7 @@ G4UniversalFluctuation::AddExcitation(CLHEP::HepRandomEngine* rndm,
     eav  += ax*ex;
     esig2 += ax*ex*ex;
   } else {
-    G4int p = G4Poisson(ax);
+    const G4int p = G4Poisson(ax);
     if(p > 0) { eloss += ((p + 1) - 2.*rndm->flat())*ex; }
   }
 }

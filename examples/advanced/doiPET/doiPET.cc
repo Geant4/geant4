@@ -36,52 +36,43 @@
 // (2) University of Wollongong, Australia
 // (3) National Institute of Radiological Sciences, Japan
 
-
-
-//#include "doiPETGlobalParameters.hh"
 #include "doiPETDetectorConstruction.hh"
 #include "doiPETPhysicsList.hh"
 #include "doiPETAnalysis.hh"
 #include "doiPETActionInitialization.hh"
-
 #include "Randomize.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 #include "G4SystemOfUnits.hh"
-
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
-
+#include "G4RunManagerFactory.hh"
+//
 //////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char** argv)
 {
+  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  G4int nThreads = 4;
+  runManager->SetNumberOfThreads(nThreads);
+   
+	G4UIExecutive* ui = 0;
+	if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+	}
+	
 	// Choose the Random engine
+	
 	G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
-#ifdef G4MULTITHREADED
-
-	G4MTRunManager* runManager = new G4MTRunManager;
-	runManager->SetNumberOfThreads(4); // Is equal to 2 by default
-#else
-
-	G4RunManager* runManager = new G4RunManager;
-#endif
-
-	runManager->SetUserInitialization(new doiPETDetectorConstruction);
-
-	runManager->SetUserInitialization(new doiPETPhysicsList);
-
-	// Set user action initialization
-	runManager->SetUserInitialization(new doiPETActionInitialization());
 
 	//Initialize analysis
 	doiPETAnalysis* ptrAnalysis = doiPETAnalysis::GetInstance();
 
+	runManager->SetUserInitialization(new doiPETDetectorConstruction());
+
+	runManager->SetUserInitialization(new doiPETPhysicsList());
+
+	// Set user action initialization
+	runManager->SetUserInitialization(new doiPETActionInitialization(ptrAnalysis));
 
 	G4double act  = 1000000 * becquerel;//Activity is set via run.mac file
 	ptrAnalysis->SetActivity(act);
@@ -102,30 +93,23 @@ int main(int argc,char** argv)
 	ptrAnalysis->ReadReflectorPattern();
 
 	// Get the pointer to the User Interface manager
-	G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-
-
-	// Process macro or start UI session
-	if (argc!=1)   // batch mode  
-	{
-		G4String command = "/control/execute ";
-		G4String fileName = argv[1];
-		UI->ApplyCommand(command+fileName);
-	}
-
-	else           //define visualization and UI terminal for interactive mode
-	{ 
-		G4VisManager* visManager = new G4VisExecutive;
-		visManager->Initialize();
-
-		G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-		ui->SessionStart();
-		delete ui;
-
-		//
-		delete visManager;  
-	}
+  if ( ! ui ) { 
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+  else { 
+    // interactive mode
+	G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    ui->SessionStart();
+    delete ui;
+	delete visManager;
+  }
 
 	//close the file
 	ptrAnalysis->Close();

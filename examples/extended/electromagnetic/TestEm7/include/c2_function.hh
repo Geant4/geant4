@@ -1013,7 +1013,7 @@ public:
   }
 
 protected:
-  c2_scaled_function_p<float_type>() : func() {} 
+  c2_scaled_function_p(float_type scale) : func(), yscale(scale) {}
   /// \brief the scaling factor for the function
   const c2_const_ptr<float_type> func;
   float_type yscale;

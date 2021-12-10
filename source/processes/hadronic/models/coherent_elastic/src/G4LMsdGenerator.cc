@@ -40,14 +40,16 @@
 #include "G4DecayKineticTracks.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Log.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 
 G4LMsdGenerator::G4LMsdGenerator(const G4String& name)
-    : G4HadronicInteraction(name)
+  : G4HadronicInteraction(name), secID(-1)
 
 {
   fPDGencoding = 0;
-
+  secID = G4PhysicsModelCatalog::GetModelID( "model_LMsdGenerator" );
+  
   // theParticleChange = new G4HadFinalState;
 }
 
@@ -243,7 +245,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon( Z, A, 0.0 );
     }
     G4DynamicParticle * aSec = new G4DynamicParticle( recoilDef, lvTarg);
-    theParticleChange.AddSecondary(aSec);
+    theParticleChange.AddSecondary(aSec, secID);
   } 
   else if( eRecoil > 0.0 ) 
   {
@@ -275,7 +277,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 
     // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
 
-    theParticleChange.AddSecondary(aNew);
+    theParticleChange.AddSecondary(aNew, secID);
     delete ddktv->operator[](i);
   }
   delete ddktv;

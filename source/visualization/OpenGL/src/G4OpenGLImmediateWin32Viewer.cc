@@ -29,8 +29,6 @@
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and
 //                                G4OpenGLImmediateViewer.
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
-
 #include "G4OpenGLImmediateWin32Viewer.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
 
@@ -112,5 +110,3 @@ void G4OpenGLImmediateWin32Viewer::FinishView (
     ::DispatchMessage (&event);
   }
 }
-
-#endif

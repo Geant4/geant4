@@ -31,8 +31,8 @@
 
 // Created: P.Arce, September 2004
 // --------------------------------------------------------------------
-#ifndef G4ErrorPlaneSurfaceTarget_hh
-#define G4ErrorPlaneSurfaceTarget_hh
+#ifndef G4ERRORPLANESURFACETARGET_HH
+#define G4ERRORPLANESURFACETARGET_HH 1
 
 #include "globals.hh"
 #include "G4ErrorSurfaceTarget.hh"
@@ -41,7 +41,7 @@
 
 class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
 {
-  public:  // with description
+  public:
 
     G4ErrorPlaneSurfaceTarget(G4double a=0., G4double b=0.,
                               G4double c=0., G4double d=0.);
@@ -56,7 +56,7 @@ class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
                               const G4Point3D& p3);
       // Constructs plane by three points
 
-    ~G4ErrorPlaneSurfaceTarget();
+    ~G4ErrorPlaneSurfaceTarget() = default;
 
     virtual G4ThreeVector Intersect( const G4ThreeVector& point,
                                      const G4ThreeVector& direc ) const;
@@ -74,7 +74,6 @@ class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
 
     virtual void Dump( const G4String& msg ) const;
       // Dump plane surface parameter
-
 };
 
 #endif

@@ -40,7 +40,7 @@
 /det/setDetectorThickness 20. mm
 /det/setDetectorSampleDistance 500. mm
 
-/phys/SelectPhysicsList penelopeMI			#To activate MI effect, set "penelopeMI"				
+/phys/SelectPhysicsList empenelopeMI			#To activate MI effect, set "penelopeMI"				
 
 /run/setCut .1 mm		
 

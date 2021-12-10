@@ -16,7 +16,6 @@ endif()
 geant4_add_pymodule(pyG4visualization
   pyG4ASCIITree.cc
   pyG4DAWNFILE.cc
-  pyG4HepRep.cc
   pyG4HepRepFile.cc
   pyG4OpenGLImmediateX.cc
   pyG4OpenGLImmediateXm.cc
@@ -25,7 +24,6 @@ geant4_add_pymodule(pyG4visualization
   pyG4RayTracer.cc
   pyG4RayTracerX.cc
   pyG4VGraphicsSystem.cc
-  pyG4VRML1File.cc
   pyG4VRML2File.cc
   pyG4VisManager.cc
   pymodG4visualization.cc
@@ -37,7 +35,7 @@ target_link_libraries(pyG4visualization PRIVATE
   G4RayTracer
   G4VRML
   G4visHepRep
-  G4vis_management  
+  G4vis_management
 )
 
 if(GEANT4_USE_OPENGL_X11 OR GEANT4_USE_XM)

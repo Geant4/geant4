@@ -10,12 +10,14 @@ geant4_add_module(G4xml
     G4XmlFileManager.hh
     G4XmlHnFileManager.hh
     G4XmlHnFileManager.icc
+    G4XmlHnRFileManager.hh
+    G4XmlHnRFileManager.icc
     G4XmlNtupleFileManager.hh
     G4XmlNtupleManager.hh
     G4XmlRFileManager.hh
+    G4XmlRFileManager.icc
     G4XmlRNtupleManager.hh
     g4xml_defs.hh
-    g4xml.hh
   SOURCES
     G4XmlAnalysisManager.cc
     G4XmlAnalysisReader.cc

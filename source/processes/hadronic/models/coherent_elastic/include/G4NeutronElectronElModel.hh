@@ -52,7 +52,7 @@ class G4NeutronElectronElModel : public G4HadronElastic
 {
 public:
 
-  G4NeutronElectronElModel(const G4String& name = "nu-e-elastic");
+  G4NeutronElectronElModel(const G4String& name = "n-e-elastic");
 
   virtual ~G4NeutronElectronElModel();
 

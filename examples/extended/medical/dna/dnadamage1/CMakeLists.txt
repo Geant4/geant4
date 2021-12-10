@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 project(dnadamage1)
 
 #----------------------------------------------------------------------------
@@ -79,7 +79,8 @@ target_link_libraries(dnadamage1 ${Geant4_LIBRARIES} )
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/*.mac 
      ${PROJECT_SOURCE_DIR}/*.in
      ${PROJECT_SOURCE_DIR}/*.C
-	${PROJECT_SOURCE_DIR}/*.fab2g4dna)
+     ${PROJECT_SOURCE_DIR}/include/DNAVolumeType.hh
+     ${PROJECT_SOURCE_DIR}/*.fab2g4dna)
 
 foreach(_script ${MAC_FILES})
   configure_file(

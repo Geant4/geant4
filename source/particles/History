@@ -16,6 +16,52 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 02 November 2021 Gabriele Cosmo (particles-V10-07-10)
+- Fix for potential null pointer dereference in G4ParticleTable::FindParticle().
+  Based on GitHub PR#30 (https://github.com/Geant4/geant4/pull/30).
+
+- 29 October 2021 Vladimir Ivanchenko (particles-V10-07-09)
+- G4IonConstructor - added hyper-nuclei
+
+- 25th October 2021 B.Morgan (particles-V10-07-08)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+- 21 October 2021 Jonas Hahnfeld (particles-V10-07-07)
+- Store custom tracking manager per particle definition
+
+- 18 October 2021 Ben Morgan (particles-V10-07-06)
+- Use std::string member functions from G4String in place of synonyms
+
+- 17 October 2021 Alberto Ribon (particles-V10-07-05)
+- Introduced 6 light hypernuclei and their corresponding antiparticles,
+  as requested by the ALICE Collaboration: G4HyperTriton, G4AntiHyperTriton,
+  G4HyperAlpha, G4AntiHyperAlpha, G4HyperH4, G4AntiHyperH4,
+  G4DoubleHyperH4, G4AntiDoubleHyperH4, G4HyperHe5, G4AntiHyperHe5,
+  G4DoubleHyperDoubleNeutron, G4AntiDoubleHyperDoubleNeutron.
+  The following simplifying assumptions have been made:
+  - No hyper-deuteron, no hyper-He3
+  - The masses of these hyperons have been computed using the existing
+    method (by M. Kossov): G4HyperNucleiProperties::GetNuclearMass
+  - The lifetimes are all assumed to be the same as the Lambda's lifetime
+  - The decays are obtained from the two decays of the (anti-)Lambda
+    (with the same branching ratios as for a free Lambda), assuming,
+    whenever possible, that 50% of the emitted (anti-)nucleon will be
+    captured by the (anti-)nucleus where the decay of the (anti-)Lambda
+    occurs. In the case of double-hyperon, only one of the two Lambdas
+    is assumed to decay.
+- Added a few methods in G4ParticleDefinition, useful for dealing with
+  hypernuclei and anti-hypernuclei.
+- Extended the max number of decay secondaries, from 4 to 5, in the
+  classes G4VDecayChannel and G4PhaseSpaceDecayChannel, needed for
+  a decay channel of G4DoubleHyperDoubleNeutron.
+
+- 30 June 2021 Gabriele Cosmo (particles-V10-07-04)
+- Fixed compilation error in G4IonTable occurring if c++20 enabled.
+
+- 24 June 2021 Ivana Hrivnacova (particles-V10-07-03)
+- Fixed retrieving selected particle in G4ParticlePropertyMessenger,
+  which was failing
+
 - 21 June 2021 Gabriele Cosmo (particles-V10-07-02)
 - Fixed shadowing compilation warning in G4Triton.
 

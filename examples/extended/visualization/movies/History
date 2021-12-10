@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th July 2021  J. Allison  (exam-ext-vis-movies-V10-07-03)
+- Replace /vis/ogl/printEPS with /vis/ogl/export in relevant macros.
+
 22nd May 2021  J. Allison  (exam-ext-vis-movies-V10-07-02)
 - Minor improvements to README files.
 

@@ -480,7 +480,7 @@ void G4AdjointSimManager::RegisterAtEndOfAdjointTrack()
 
   last_fwd_part_name = aPartDef->GetParticleName();
 
-  last_fwd_part_name.remove(0, 4);
+  last_fwd_part_name.erase(0, 4);
 
   last_fwd_part_PDGEncoding = G4ParticleTable::GetParticleTable()
                                 ->FindParticle(last_fwd_part_name)

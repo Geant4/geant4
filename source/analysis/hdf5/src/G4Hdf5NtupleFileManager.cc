@@ -32,28 +32,18 @@
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
-#include "G4Threading.hh"
-
-#include <iostream>
-
 using namespace G4Analysis;
 
-// 
+//
 // utility methods
 //
 
 //_____________________________________________________________________________
 G4Hdf5NtupleFileManager::G4Hdf5NtupleFileManager(const G4AnalysisManagerState& state)
- : G4VNtupleFileManager(state, "hdf5"),
-   fFileManager(nullptr),
-   fNtupleManager(nullptr)
+ : G4VNtupleFileManager(state, "hdf5")
 {}
 
-//_____________________________________________________________________________
-G4Hdf5NtupleFileManager::~G4Hdf5NtupleFileManager()
-{}
-
-// 
+//
 // private methods
 //
 
@@ -62,14 +52,13 @@ G4bool G4Hdf5NtupleFileManager::CloseNtupleFiles()
 {
  // Close ntuple files
 
-  auto finalResult = true;
+  auto result = true;
   auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
   for ( auto ntupleDescription : ntupleVector) {
-    auto result = fFileManager->CloseNtupleFile(ntupleDescription);
-    finalResult = finalResult && result;
+    result &= fFileManager->CloseNtupleFile(ntupleDescription);
   }
 
-  return finalResult;
+  return result;
 }
 
 //
@@ -90,7 +79,7 @@ std::shared_ptr<G4VNtupleManager> G4Hdf5NtupleFileManager::CreateNtupleManager()
 //_____________________________________________________________________________
 G4bool G4Hdf5NtupleFileManager::ActionAtOpenFile(const G4String& /*fileName*/)
 {
-  // Create ntuples if they are booked  
+  // Create ntuples if they are booked
   // (The files will be created with creating ntuples)
   fNtupleManager->CreateNtuplesFromBooking(
     fBookingManager->GetNtupleBookingVector());
@@ -101,50 +90,31 @@ G4bool G4Hdf5NtupleFileManager::ActionAtOpenFile(const G4String& /*fileName*/)
 //_____________________________________________________________________________
 G4bool G4Hdf5NtupleFileManager::ActionAtWrite()
 {
-  // notify that ntuple file is not empty
-
-  auto finalResult = true;
-
-  // Notify that ntuple files are not empty
-  auto ntupleVector
-    = fNtupleManager->GetNtupleDescriptionVector();
-
-  for ( auto ntupleDescription : ntupleVector) {
-    if (ntupleDescription->fFile) {
-      auto result = fFileManager->SetIsEmpty(ntupleDescription->fFileName, false);
-      finalResult = finalResult && result;
-    }
-  }
-
-  return finalResult;
+  // Nothing to be done
+  return true;
 }
 
 //_____________________________________________________________________________
 G4bool G4Hdf5NtupleFileManager::ActionAtCloseFile(G4bool reset)
 {
-  auto finalResult = true;
+  auto result = true;
 
   // Close ntuple files
-  auto result = CloseNtupleFiles();
-  finalResult = finalResult && result;
+  result &= CloseNtupleFiles();
 
   if ( ! reset ) {
-    // The ntuples must be always reset when closing file) 
+    // The ntuples must be always reset when closing file)
     result = Reset();
     if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Resetting data failed";
-      G4Exception("G4Hdf5NtupleFileManager::CloseFile()",
-                "Analysis_W021", JustWarning, description);
+      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
     }
-    finalResult = finalResult && result;
   }
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
 G4bool G4Hdf5NtupleFileManager::Reset()
 {
-  return fNtupleManager->Reset(true);
+  return fNtupleManager->Reset();
 }

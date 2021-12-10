@@ -30,8 +30,6 @@
 // Class G4OpenGLStoredXViewer : a class derived from G4OpenGLXViewer and
 //                             G4OpenGLStoredViewer.
 
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
-
 #include "G4OpenGLStoredXViewer.hh"
 
 #include "G4OpenGLStoredSceneHandler.hh"
@@ -135,8 +133,11 @@ void G4OpenGLStoredXViewer::FinishView () {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredXViewer::FinishView\n");
 #endif
-  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
-                //be propogated before progressing.
+
+//  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propagated before progressing.
+// JA: Commented out July 2021 - slows rendering down in some cases and I
+// don't see any adverse effects.
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredXViewer::FinishView flush \n");
@@ -147,5 +148,3 @@ void G4OpenGLStoredXViewer::FinishView () {
   glGetIntegerv(GL_RENDER_MODE, &renderMode);
   if (renderMode == GL_RENDER) glXSwapBuffers (dpy, win);  
 }
-
-#endif

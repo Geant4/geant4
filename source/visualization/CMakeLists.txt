@@ -28,3 +28,8 @@ endif()
 if(GEANT4_USE_TOOLSSG)
   add_subdirectory(ToolsSG)
 endif()
+
+# VTK is optional depending on user selection
+if(GEANT4_USE_VTK)
+  add_subdirectory(Vtk)
+endif()

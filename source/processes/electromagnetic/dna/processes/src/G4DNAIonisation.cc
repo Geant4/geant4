@@ -27,6 +27,7 @@
 #include "G4DNAIonisation.hh"
 #include "G4LEPTSIonisationModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //SEB
 #include "G4GenericIon.hh"
@@ -40,7 +41,7 @@ G4DNAIonisation::G4DNAIonisation(const G4String& processName,
                                  G4ProcessType type) :
     G4VEmProcess(processName, type), isInitialised(false)
 {
-  SetProcessSubType(53);
+  SetProcessSubType(fLowEnergyIonisation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

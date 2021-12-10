@@ -30,15 +30,8 @@
 
 //_____________________________________________________________________________
 G4BaseNtupleManager::G4BaseNtupleManager(const G4AnalysisManagerState& state)
-  : G4VNtupleManager(state),
-    fFirstNtupleColumnId(0)
-    // fLockFirstNtupleColumnId(false)
+  : G4VNtupleManager(state)
 {}
-
-//_____________________________________________________________________________
-G4BaseNtupleManager::~G4BaseNtupleManager()
-{
-}
 
 //_____________________________________________________________________________
 G4bool G4BaseNtupleManager::FillNtupleIColumn(G4int id, G4int value)

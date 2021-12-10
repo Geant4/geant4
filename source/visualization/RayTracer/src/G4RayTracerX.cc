@@ -28,8 +28,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-
 #include "G4RayTracerX.hh"
 #include "G4RayTracerFeatures.hh"
 #include "G4RayTracerSceneHandler.hh"
@@ -71,5 +69,3 @@ G4VViewer* G4RayTracerX::CreateViewer (G4VSceneHandler& sceneHandler,
   }
   return pViewer;
 }
-
-#endif

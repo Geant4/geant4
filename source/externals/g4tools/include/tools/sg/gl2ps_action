@@ -648,6 +648,7 @@ inline bool s2format(const std::string& a_format,int& a_gl2ps_format) {
   if(a_format=="gl2ps_svg") {a_gl2ps_format = TOOLS_GL2PS_SVG;return true;}
   if(a_format=="gl2ps_tex") {a_gl2ps_format = TOOLS_GL2PS_TEX;return true;}
   if(a_format=="gl2ps_pgf") {a_gl2ps_format = TOOLS_GL2PS_PGF;return true;}
+  a_gl2ps_format = TOOLS_GL2PS_PS;
   return false;
 }
 

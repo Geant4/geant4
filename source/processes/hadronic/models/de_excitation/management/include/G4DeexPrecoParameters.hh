@@ -91,8 +91,6 @@ public:
 
   inline G4double GetMinExPerNucleounForMF() const;
 
-  inline G4int GetInternalConversionID() const;
-
   inline G4int GetMinZForPreco() const;
 
   inline G4int GetMinAForPreco() const;
@@ -248,8 +246,6 @@ private:
   G4int fPrecoType;
   G4int fDeexType;
 
-  // Internal conversion model ID
-  G4int fInternalConversionID;
   G4int fTwoJMAX;
 
   // Preco model
@@ -274,7 +270,6 @@ private:
   G4bool fLD;  // use simple level density model 
   G4bool fFD;  // use transition to discrete level 
   G4bool fIsomerFlag;  // enable isomere production 
-  G4bool fLocalVerbose; // is user set verbose for this module
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -337,11 +332,6 @@ inline G4double G4DeexPrecoParameters::GetMaxLifeTime() const
 inline G4double G4DeexPrecoParameters::GetMinExPerNucleounForMF() const
 {
   return fMinExPerNucleounForMF;
-}
-
-inline G4int G4DeexPrecoParameters::GetInternalConversionID() const
-{
-  return fInternalConversionID;
 }
 
 inline G4int G4DeexPrecoParameters::GetMinZForPreco() const

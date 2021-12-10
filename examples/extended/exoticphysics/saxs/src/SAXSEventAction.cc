@@ -45,8 +45,8 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
-#include "SAXSAnalysis.hh"
 #include "SAXSEventAction.hh"
 #include "SAXSSensitiveDetectorHit.hh"
 

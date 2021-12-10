@@ -26,8 +26,8 @@
 #include "Par03EventAction.hh"
 #include "Par03Hit.hh"
 #include "Par03DetectorConstruction.hh"
-#include "g4analysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Event.hh"

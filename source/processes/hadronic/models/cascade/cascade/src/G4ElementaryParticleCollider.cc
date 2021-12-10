@@ -454,18 +454,18 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
   G4int typeProduct = particle1->type() * particle2->type();
 
-  if (typeProduct == pi0*diproton || typeProduct == pip*unboundPN ||
-      typeProduct == gam*diproton) {
+  if (typeProduct == G4int(pi0)*G4int(diproton) || typeProduct == G4int(pip)*G4int(unboundPN) ||
+      typeProduct == G4int(gam)*G4int(diproton)) {
     particle_kinds.push_back(pro);
     particle_kinds.push_back(pro);
 
-  } else if (typeProduct == pim*diproton || typeProduct == pip*dineutron ||
-             typeProduct == pi0*unboundPN || typeProduct == gam*unboundPN) {
+  } else if (typeProduct == G4int(pim)*G4int(diproton) || typeProduct == G4int(pip)*G4int(dineutron) ||
+             typeProduct == G4int(pi0)*G4int(unboundPN) || typeProduct == G4int(gam)*G4int(unboundPN)) {
     particle_kinds.push_back(pro);
     particle_kinds.push_back(neu);
 
-  } else if (typeProduct == pi0*dineutron || typeProduct == pim*unboundPN ||
-             typeProduct == gam*dineutron) {
+  } else if (typeProduct == G4int(pi0)*G4int(dineutron) || typeProduct == G4int(pim)*G4int(unboundPN) ||
+             typeProduct == G4int(gam)*G4int(dineutron)) {
     particle_kinds.push_back(neu);
     particle_kinds.push_back(neu);
 
@@ -514,10 +514,10 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
 
   G4int typeProduct = particle1->type() * particle2->type();
 
-  if (typeProduct == mum*diproton) {
+  if (typeProduct == G4int(mum)*G4int(diproton)) {
     particle_kinds.push_back(pro);
     particle_kinds.push_back(neu);
-  } else if (typeProduct == mum*unboundPN) {
+  } else if (typeProduct == G4int(mum)*G4int(unboundPN)) {
     particle_kinds.push_back(neu);
     particle_kinds.push_back(neu);
   } else {

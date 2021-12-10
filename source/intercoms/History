@@ -16,6 +16,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 October, 2021  M. Asai (intercoms-V10-07-14)
+- G4UIcommandTree, G4UIdirectory, G4GenericMessenger
+ - Improve output HTML file layout (L.Garnier)
+ - Add option to sort command/directory names in alphabetic order (J.Allison)
+
+25 October, 2021 B.Morgan (intercoms-V10-07-13)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+18 October, 2021 B.Morgan (intercoms-V10-07-12)
+- Use std::string member functions from G4String in place of synonyms
+
+1 October, 2021  B. Morgan (intercoms-V10-07-11)
+- Use new std::string compliant G4String interfaces
+
+30 August, 2021  J. Allison (intercoms-V10-07-10)
+- G4UIparameter::CandidateCheck :
+   When candidate not found, print list of candidates.
+  
+11 July, 2021  M. Asai (intercoms-V10-07-08, -09)
+- G4GenericMessenger :
+   Adding G4ThreeVector type without unit to DeclareProperty().
+   Removing unnecessary duplications of G4UIdirectory objects.
+.
+06 July, 2021  M. Asai (intercoms-V10-07-07)
+- G4UImanager : adding access methods to individual UI command.
+  G4UIcommand : adding command-type identiifier.
+
+30 June, 2021  M. Asai (intercoms-V10-07-06)
+- G4UIcontrolMessenger : protect some control commands not to be
+  broadcasted to worker threads.
+
 06 May, 2021  G. Cosmo (intercoms-V10-07-05)
 - Fixed shadowing compilation warning in G4UImanager reported with gcc-11.
 

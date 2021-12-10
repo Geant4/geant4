@@ -45,11 +45,11 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AnalysisManager.hh"
 
 #include "SAXSSteppingAction.hh"
 #include "SAXSEventAction.hh"
 #include "SAXSDetectorConstruction.hh"
-#include "SAXSAnalysis.hh"
 
 #include "G4Step.hh"
 #include "G4Track.hh"

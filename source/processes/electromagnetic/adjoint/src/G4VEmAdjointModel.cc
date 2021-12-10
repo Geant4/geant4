@@ -240,6 +240,10 @@ G4VEmAdjointModel::ComputeAdjointCrossSectionVectorPerAtomForSecond(
     res_mat.push_back(log_ESec_vector);
     res_mat.push_back(log_Prob_vector);
   }
+  else {
+	delete  log_ESec_vector;
+	delete  log_Prob_vector;
+  }
   return res_mat;
 }
 
@@ -288,6 +292,10 @@ G4VEmAdjointModel::ComputeAdjointCrossSectionVectorPerAtomForScatProj(
   {
     res_mat.push_back(log_ESec_vector);
     res_mat.push_back(log_Prob_vector);
+  }
+  else {
+  	delete  log_ESec_vector;
+  	delete  log_Prob_vector;
   }
 
   return res_mat;
@@ -340,6 +348,10 @@ G4VEmAdjointModel::ComputeAdjointCrossSectionVectorPerVolumeForSecond(
     res_mat.push_back(log_ESec_vector);
     res_mat.push_back(log_Prob_vector);
   }
+  else {
+  	delete  log_ESec_vector;
+  	delete  log_Prob_vector;
+  }
   return res_mat;
 }
 
@@ -389,6 +401,10 @@ G4VEmAdjointModel::ComputeAdjointCrossSectionVectorPerVolumeForScatProj(
     res_mat.push_back(log_ESec_vector);
     res_mat.push_back(log_Prob_vector);
   }
+  else {
+  	delete  log_ESec_vector;
+  	delete  log_Prob_vector;
+  }
 
   return res_mat;
 }
@@ -427,10 +443,15 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromCSMatrix(
 
   theMatrix->GetData(ind, aLogPrimEnergy1, aLogCS1, log01,
                      aLogSecondEnergyVector1, aLogProbVector1,
-                     aLogProbVectorIndex1);
+					 aLogProbVectorIndex1 );
   theMatrix->GetData(ind + 1, aLogPrimEnergy2, aLogCS2, log02,
                      aLogSecondEnergyVector2, aLogProbVector2,
                      aLogProbVectorIndex2);
+
+  if (! (aLogProbVector1 && aLogProbVector2 &&
+		       aLogSecondEnergyVector1 && aLogSecondEnergyVector2)){
+	 return  0.;
+  }
 
   G4double rand_var     = G4UniformRand();
   G4double log_rand_var = std::log(rand_var);

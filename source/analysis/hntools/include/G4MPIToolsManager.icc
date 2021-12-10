@@ -1,0 +1,181 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// The manager class for MPI applications.
+
+// Author: Ivana Hrivnacova, 25/06/2015  (ivana@ipno.in2p3.fr)
+
+using std::to_string;
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4MPIToolsManager::Send(G4int nofActiveT,
+                               const std::vector<HT*>& htVector,
+                               const std::vector<G4HnInformation*>& hnVector)
+{
+  auto result = true;
+
+  // send object to destination rank
+  // G4cout << "Begin send for " << nofActiveT << G4endl;
+  fHmpi->beg_send(nofActiveT);
+
+  // pack objects
+  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    // skip sending if activation is enabled and HT is inactivated
+    auto info = hnVector[i];
+    if ( ( fState.GetIsActivation() && ( ! info->GetActivation() ) ) ) continue;
+    // pack histogram for sending
+    // G4cout << "Packed " << i << "th T" << G4endl;
+    auto ht = htVector[i];
+    result &= fHmpi->pack(*ht);
+  }
+
+  //G4cout << "Go to send all " << G4endl;
+  if ( ! fHmpi->send(fHmpi->rank()) ) {
+    G4Analysis::Warn(
+      "Rank: " + to_string(fHmpi->rank()) + " : can't send histos.",
+      fkClass, "Send");
+    return false;
+  }
+
+  return result;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4MPIToolsManager::Receive(G4int nofActiveT,
+                                  const std::vector<HT*>& htVector,
+                                  const std::vector<G4HnInformation*>& hnVector)
+{
+  G4int commSize;
+  G4bool result = fHmpi->comm_size(commSize);
+  if ( ! result ) {
+    G4Analysis::Warn(
+      "Failed to get MPI commander size.\nMerging will not be performed.",
+      fkClass, "Receive");
+    return false;
+  }
+
+  // get objects from source ranks
+  for (G4int srank = 0; srank < commSize; ++srank) {
+
+    // skip destination rank
+    if ( srank == fHmpi->rank() ) continue;
+
+    // get objects from this source rank
+    // G4cout << "Go to wait_histos " << srank << G4endl;
+    using class_pointer = std::pair<std::string,void*>;
+    std::vector<class_pointer> hs;
+    if ( ! fHmpi->wait_histos(srank, hs) ) {
+      G4Analysis::Warn(
+        "Wait_histos from " + to_string(srank) + " : failed.",
+        fkClass, "Receive");
+      return false;
+    }
+
+    // check that we got the right number of objects
+    if ( G4int(hs.size()) != nofActiveT ) {
+      G4Analysis::Warn(
+        "srank: " + to_string(srank) + " : got " + to_string(hs.size()) +
+        " objects, while " + to_string(nofActiveT) +" were expected.",
+        fkClass, "Receive");
+      return false;
+    }
+
+    // merge the objects to destination rank
+    G4int counter = 0;
+    for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+      // skip sending if activation is enabled and HT is inactivated
+      auto info = hnVector[i];
+      if ( ( fState.GetIsActivation() && ( ! info->GetActivation() ) ) ) continue;
+      // merge histograms
+      auto ht = htVector[i];
+      auto newHt = static_cast<HT*>(hs[counter++].second);
+      ht->add(*newHt);
+    }
+  }
+  return true;
+}
+
+
+//_____________________________________________________________________________
+template <typename HT>
+inline
+G4bool G4MPIToolsManager::Merge(const std::vector<HT*>& htVector,
+                                const std::vector<G4HnInformation*>& hnVector)
+{
+  if ( ! htVector.size() ) return true;
+
+  // Get number of objects to be sent
+  G4int nofActiveT = 0;
+  if ( fState.GetIsActivation() ) {
+    // only activated histograms will be treated
+    for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+      auto activation = hnVector[i]->GetActivation();
+      if ( activation ) ++nofActiveT;
+    }
+  } else {
+      nofActiveT = G4int(htVector.size());
+  }
+
+  if ( ! nofActiveT ) return true;
+
+  G4int commRank;
+  if ( ! fHmpi->comm_rank(commRank) ) {
+    G4Analysis::Warn(
+      "Failed to get MPI commander rank.\nMerging will not be performed.",
+      fkClass, "Merge");
+    return false;
+  }
+
+  auto result = true;
+
+  if ( commRank != fHmpi->rank() ) {
+    fState.Message(G4Analysis::kVL3, "mpi send", "Hn|Pn",
+      "on rank "  + to_string(commRank) +
+      " destination rank: " + to_string(fHmpi->rank()));
+
+    result &= Send(nofActiveT, htVector, hnVector);
+
+    fState.Message(G4Analysis::kVL1, "mpi send", "Hn|Pn",
+      "on rank "  + to_string(commRank) +
+      " destination rank: " + to_string(fHmpi->rank()));
+
+  } else {
+    fState.Message(G4Analysis::kVL3, "mpi wait_histos", "Hn|Pn",
+      "on rank "  + to_string(commRank) +
+      " destination rank: " + to_string(fHmpi->rank()));
+
+    result &= Receive(nofActiveT, htVector, hnVector);
+
+    fState.Message(G4Analysis::kVL1, "mpi wait_histos", "Hn|Pn",
+      "on rank "  + to_string(commRank) +
+      " destination rank: " + to_string(fHmpi->rank()));
+  }
+  return result;
+}

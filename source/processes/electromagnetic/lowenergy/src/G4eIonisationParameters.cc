@@ -164,8 +164,7 @@ void G4eIonisationParameters::LoadData()
     const size_t nElements = material->GetNumberOfElements();
       
     for (size_t iEl=0; iEl<nElements; iEl++) {
-      G4Element* element = (*elementVector)[iEl];
-      G4double Z = element->GetZ();
+      G4double Z = (*elementVector)[iEl]->GetZ();
       if (!(activeZ.contains(Z))) {
 	activeZ.push_back(Z);
       }

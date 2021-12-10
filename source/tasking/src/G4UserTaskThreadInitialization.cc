@@ -92,6 +92,8 @@ void G4UserTaskThreadInitialization::SetupRNGEngine(
     retRNG = new CLHEP::RanecuEngine;
   if(dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG))
     retRNG = new CLHEP::Ranlux64Engine;
+  if(dynamic_cast<const CLHEP::RanluxppEngine*>(aNewRNG))
+    retRNG = new CLHEP::RanluxppEngine;
   if(dynamic_cast<const CLHEP::MTwistEngine*>(aNewRNG))
     retRNG = new CLHEP::MTwistEngine;
   if(dynamic_cast<const CLHEP::DualRand*>(aNewRNG))
@@ -109,7 +111,7 @@ void G4UserTaskThreadInitialization::SetupRNGEngine(
     G4ExceptionDescription msg;
     msg << " Unknown type of RNG Engine - " << G4endl
         << " Can cope only with HepJamesRandom, MixMaxRng, Ranecu, Ranlux64,"
-        << " MTwistEngine, DualRand, Ranlux or Ranshi." << G4endl
+        << " Ranlux++, MTwistEngine, DualRand, Ranlux or Ranshi." << G4endl
         << " Cannot clone this type of RNG engine, as required for this thread"
         << G4endl << " Aborting... " << G4endl;
     G4Exception("G4UserTaskInitializition::SetupRNGEngine()", "Run0122",

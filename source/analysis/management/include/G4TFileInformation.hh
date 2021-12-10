@@ -39,21 +39,17 @@
 template <typename FT>
 struct G4TFileInformation
 {
-  G4TFileInformation(const G4String fileName) 
-    :  fFileName(fileName),
-       fFile(nullptr),
-       fIsOpen(false),
-       fIsEmpty(true),
-       fIsDeleted(false) {}
+  G4TFileInformation(const G4String fileName)
+    :  fFileName(fileName) {}
 
-  ~G4TFileInformation()
-      {}    
+  G4TFileInformation() = default;
+  ~G4TFileInformation() = default;
 
   G4String fFileName;
-  std::shared_ptr<FT> fFile;
-  G4bool fIsOpen;
-  G4bool fIsEmpty;
-  G4bool fIsDeleted;
+  std::shared_ptr<FT> fFile { nullptr };
+  G4bool fIsOpen { false };
+  G4bool fIsEmpty { true };
+  G4bool fIsDeleted { false };
 };
 
 #endif

@@ -79,10 +79,10 @@ namespace G4INCL {
 
     static G4double getCutNNSquared() { return cutNNSquared; }
     
-    /// \brief Get the bias
+    /// \brief Get the global bias factor
     static G4double getBias() { return bias; }
     
-    /// \brief Set the bias
+    /// \brief Set the global bias factor
     static void setBias(const G4double b) { bias=b; }
 
   private:

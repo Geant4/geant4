@@ -26,6 +26,8 @@
 //
 // Author: Ivana Hrivnacova, 15/09/2020 (ivana@ipno.in2p3.fr)
 
+#include "G4AnalysisUtilities.hh"
+
 #include "tools/hdf5/header"
 #include "tools/hdf5/h2file"
 #include "tools/histo/h1d"
@@ -71,7 +73,7 @@ G4bool G4Hdf5HnFileManager<HT>::WriteExtra(
 {
   // create a new file
   // create new file
-  hid_t hfile = ::H5Fcreate(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);  
+  hid_t hfile = ::H5Fcreate(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
   // Do nothing if there is no file
   // (te error should be handled by caller)
@@ -126,11 +128,9 @@ G4bool G4Hdf5HnFileManager<HT>::Write(
 
   auto hdirectory = std::get<1>(*fFileManager->GetTFile(fileName));
     if ( hdirectory < 0 ) {
-    G4ExceptionDescription description;
-    description 
-      << "Failed to get Hdf5 file " << fileName << " histo directory."; 
-    G4Exception("G4Hdf5HnFileManager<HT>::Write()",
-                "Analysis_W022", JustWarning, description);
+    G4Analysis::Warn(
+      "Failed to get Hdf5 file " + fileName + " histo directory.",
+      fkClass, "Write");
     return false;
   }
 

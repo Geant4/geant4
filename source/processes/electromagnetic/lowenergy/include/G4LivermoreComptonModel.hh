@@ -84,11 +84,12 @@ private:
   static G4ShellData*       shellData;
   static G4DopplerProfile*  profileData;
 
-  static const G4int maxZ = 99;
-  static G4PhysicsFreeVector* data[100];
-  static const G4double ScatFuncFitParam[101][9];
+
+  static G4PhysicsFreeVector* data[101]; // 101 because Z range is 1-100
+  static const G4double ScatFuncFitParam[101][16];
 
   G4int verboseLevel;
+  G4int maxZ;
   G4bool isInitialised;
 
 };

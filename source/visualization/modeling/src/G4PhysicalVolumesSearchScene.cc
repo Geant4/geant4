@@ -101,7 +101,7 @@ G4PhysicalVolumesSearchScene::Matcher::Matcher(const G4String& requiredMatch)
       fRequiredMatch = requiredMatch;
     }
   }
-  if (fRequiredMatch.isNull()) {
+  if (fRequiredMatch.empty()) {
     G4Exception
     ("G4PhysicalVolumesSearchScene::Matcher::Matcher",
      "modeling0013", JustWarning, "Required match is null");

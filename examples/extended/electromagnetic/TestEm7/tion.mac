@@ -21,23 +21,58 @@
 /testem/det/tallyPosition 3  5.  0. 0. cm
 #
 #/testem/phys/addPhysics  emstandard_opt0
-/testem/phys/addPhysics  emstandard_opt4
-#/testem/phys/addPhysics  emstandardSS
+#/testem/phys/addPhysics  emstandard_opt4
+/testem/phys/addPhysics  emstandardWVI
+#/testem/phys/addPhysics  emlowenergy
 #/testem/phys/addPhysics  ionGasModels
 #
 /run/initialize
 #
 /gun/particle ion
-/gun/ion 9 19 9
-#/gun/ion 6 12 6
-#/gun/energy 1.0 MeV
-/gun/energy 0.01 MeV
+/gun/ion 6 12 6
+/gun/energy 2.4 GeV
 #
 # step limit
 /run/setCut 0.5 mm
-/testem/stepMax 0.1 um
 #
 /run/printProgress 100
 #
-/run/beamOn 1000
+#/analysis/setFileName c12
+#/analysis/h1/set 2 100 80 90 mm
+#/analysis/h1/set 3 100 80 90 mm
+#
+/run/beamOn 500
+#
+/gun/energy 24 MeV
+/run/beamOn 500
+#
+/testem/det/setMat G4_Be
+#
+#Bi209 at 879.6 MeV/u
+/gun/particle ion
+/gun/ion 83 209 
+/gun/energy 183836.4 MeV
+/run/beamOn 500
+#
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 54 136 54
+/gun/energy 108664 MeV
+/run/beamOn 500
+#
+# O18
+/testem/det/setMat G4_Pb
+/gun/particle ion
+/gun/ion 8 18 8
+/gun/energy 12564 MeV
+/run/beamOn 500
+#
+/testem/det/setMat G4_Au
+/gun/particle ion
+/gun/ion 92 238 92
+/gun/energy 224434 MeV
+/run/beamOn 500
+#
+/gun/energy 19.7 MeV
+/run/beamOn 500
 #

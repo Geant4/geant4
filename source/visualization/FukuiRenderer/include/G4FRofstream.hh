@@ -25,100 +25,92 @@
 //
 //
 //
+
+#ifndef G4_FR_OFSTREAM_HH
+#define G4_FR_OFSTREAM_HH
+
 #include <fstream>
-
-#if !defined G4_FR_OFSTREAM_HH
-#define      G4_FR_OFSTREAM_HH
-
 
 #include "globals.hh"
 
-/////////////////////
-//typedef int G4bool ;
-//#define false 0 ;
-//#define true  1 ;
-////////////////////
-
-class G4FRofstream {
+class G4FRofstream
+{
+ public:
+  enum
+  {
+    SEND_BUFMAX = 1024
+  };
 
  public:
-	enum { SEND_BUFMAX = 1024 };
+  // constructors
+  G4FRofstream() { flag_file_open = false; }
+  G4FRofstream(const char* filename);
 
- public: 
-	
-	// constructors
-	G4FRofstream ()                       { flag_file_open = false ; } 
-	G4FRofstream ( const char* filename ) ;
+  // destructor
+  virtual ~G4FRofstream();
 
-	// destructor
-	virtual ~G4FRofstream ();
+  // open and close
+  void Open(const char* filename);
+  void Close();
+  G4bool IsOpen() { return flag_file_open; }
 
-	// open and close 
-	void Open ( const char* filename );
-	void Close() ;
-	G4bool IsOpen() { return flag_file_open ;}
+  // utilities
+  void SendLine(const char* string);  // save string with new line
 
-	// utilities
-	void SendLine( const char* string ) ; // save string with new line
-
-	// static functions
-	static G4bool DoesFileExist( const char* filename ) ;
+  // static functions
+  static G4bool DoesFileExist(const char* filename);
 
  protected:
-	G4bool flag_file_open ;
-	std::ofstream fout ;
-} ;
+  G4bool flag_file_open;
+  std::ofstream fout;
+};
 
-
-inline  void G4FRofstream::Open ( const char* filename )
-{ 
-	if( !IsOpen() ) {
-		fout.open( filename ) ; 
-		flag_file_open = true ;
-	}
+inline void G4FRofstream::Open(const char* filename)
+{
+  if(!IsOpen())
+  {
+    fout.open(filename);
+    flag_file_open = true;
+  }
 }
 
-
-inline  void G4FRofstream::Close ()
-{ 
-	if( IsOpen() ) {
-		fout.close();
-		flag_file_open = false ;
-	}
+inline void G4FRofstream::Close()
+{
+  if(IsOpen())
+  {
+    fout.close();
+    flag_file_open = false;
+  }
 }
 
-inline  void    G4FRofstream::SendLine ( const char* message ) 
+inline void G4FRofstream::SendLine(const char* message)
 {
-	if ( IsOpen() ) {
-		fout << message << G4endl;
-	}		
+  if(IsOpen())
+  {
+    fout << message << G4endl;
+  }
 }
 
-
-inline  G4bool  G4FRofstream::DoesFileExist ( const char* filename ) 
+inline G4bool G4FRofstream::DoesFileExist(const char* filename)
 {
-	G4bool status = false ;
+  G4bool status = false;
 
-	std::ifstream fout_tmp( filename ) ; 
-	if( fout_tmp ) { status = true ; }
-	fout_tmp.close();
+  std::ifstream fout_tmp(filename);
+  if(fout_tmp)
+  {
+    status = true;
+  }
+  fout_tmp.close();
 
-	return status ;
+  return status;
 }
 
-
-inline 
-G4FRofstream::G4FRofstream ( const char* filename ) 
+inline G4FRofstream::G4FRofstream(const char* filename)
 {
-	flag_file_open = false ; 
-	Open( filename ); 
-} 
+  flag_file_open = false;
+  Open(filename);
+}
 
-inline 
-G4FRofstream::~G4FRofstream () 
-{
-	Close() ;
-} 
-
+inline G4FRofstream::~G4FRofstream() { Close(); }
 
 #endif

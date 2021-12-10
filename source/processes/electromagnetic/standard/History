@@ -14,6 +14,85 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 November 21: V.Ivanchenko  (emstand-V10-07-28)
+- G4PairProductionRelModel - reduce upper limit of parameterisation x-section 
+    from 80 to 30 GeV
+
+09 November 21: V.Ivanchenko  (emstand-V10-07-27)
+- G4ionIonisation - minor clean-up
+- G4IonICRU73Data - new data structure for ion ionisation data
+- G4LindhardSorensenIonModel - use G4BraggIonModel, G4BetheBlochModel 
+    and G4IonICRU73Data, do not apply corrections at the last step of 
+    an ion
+- G4BraggIonModel, G4BetheBlochModel - do not apply corrections at 
+    the last step of an ion
+
+30 October 21: V.Ivanchenko  (emstand-V10-07-26)
+- G4BetheBlochModel, G4BraggIonModel, G4ionIonisation - use ion 
+    corrections for all ions except alpha in order to fix #2440
+
+12 October 21: V.Ivanchenko  (emstand-V10-07-25)
+- G4BetheBlochModel, G4BraggIonModel - improved usage of corrections
+    to ion dedx, code clean-up
+- G4ionIonisation - use G4WaterStopping with spline enabled
+- G4alphaIonisation - removed as obsolete
+
+07 Octoberber 21: V.Ivanchenko  (emstand-V10-07-24)
+- G4UniversalFluctuations - Laszlo Urban substantially simplified
+    sampling algorithm - less number of parameters, faster
+    computations, results are in statistical agreement with the 
+    previous version of the code
+
+27 September 21: V.Ivanchenko  (emstand-V10-07-23)
+- G4BraggIonModel, G4BetheBlochModel - fixed computation of
+    dedx for alpha if ICRU90 data are used (problem #2414);
+    improved method signatures; code clean-up.
+- G4hIonisation, G4ionIonisation - He3 dedx derived from alpha dedx;
+    pi, K, proton, pbar, GenericIon have own dedx and other tables;
+    other hadrons derived from K, protons, pbar; ions derived
+    from GenericIon
+- G4ASTARStopping - improved method signatures
+- CoulombScattering - disable spline
+
+31 August 21: J.Hahnfeld (emstand-V10-07-22)
+- G4PEEffectFluoModel - optimize cross section computation with
+  reciprocals and Horners scheme
+
+27 August 21: V.Ivanchenko  (emstand-V10-07-21)
+- G4BraggModel, G4BraggIonModel - set lowest energy to 0.25 keV,
+    added protection to limit cut value by the lowest energy
+- G4LinhardSorensenIonModel, G4ICRU73QOModel - added protection 
+    to limit cut value by the lowest energy
+- G4BetheBlochModel - minor clean-up
+
+26 August 21: V.Ivanchenko  (emstand-V10-07-20)
+- G4BetheBlochModel - critical fix of dEdx for protons and alpha
+    with scaled energy E>10 GeV for the case of use ICRU90 data.
+    Should fix #2414
+
+20 August 21: V.Ivanchenko  (emstand-V10-07-19)
+- G4PAIModelData - use optimal methods to access G4PhysicsVector
+
+04 August 21: A.Ribon  (emstand-V10-07-18)
+- G4eplusAnnihilation : migrated to the new version of G4PhysicsModelCatalog
+
+18 July 21: V.Ivanchenko  (emstand-V10-07-17)
+- G4UniversalFluctuation, G4IonFluctuations, G4AtomaFluctuations,
+  G4PAIModel, G4PAIPhotModel - updated according to change 
+    of G4VEmFluctuationModel signature 
+
+16 July 21: V.Ivanchenko  (emstand-V10-07-16)
+- G4UniversalFluctuation - minor optimisation, code clean-up 
+- G4UrbanMscModel - use random arrays instead flat() method
+    to speed-up the code; use more const variables
+
+10 July 21: V.Ivanchenko  (emstand-V10-07-15)
+- G4BetheBlochModel, G4ESTARStopping, G4AtimaEnergyLossModel,
+  G4LindhardSorensenIonModel - fixed Coverity warnings by 
+    initialisation of all variables in class constructors
+- G4UrbanMscModel - do not apply energy correction at small 
+    steps below 1% of a particle range
+
 24 May 21: J.Allison  (emstand-V10-07-14)
 - G4eplusAnnihilation.cc:
   o Instantiate clip board only if Quantum Entanglement is requested.

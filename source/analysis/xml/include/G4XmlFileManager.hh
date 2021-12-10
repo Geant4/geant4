@@ -40,6 +40,7 @@
 
 #include <fstream>
 #include <memory>
+#include <string_view>
 
 // Type aliases
 using XmlNtupleDescription = G4TNtupleDescription<tools::waxml::ntuple, std::ofstream>;
@@ -50,7 +51,8 @@ class G4XmlFileManager : public G4VTFileManager<std::ofstream>
 {
   public:
     explicit G4XmlFileManager(const G4AnalysisManagerState& state);
-    ~G4XmlFileManager();
+    G4XmlFileManager() = delete;
+    virtual ~G4XmlFileManager() = default;
 
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<std::ofstream>::WriteFile;
@@ -63,17 +65,20 @@ class G4XmlFileManager : public G4VTFileManager<std::ofstream>
 
     // Specific methods for files per objects
     G4bool CreateNtupleFile(XmlNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(XmlNtupleDescription* ntupleDescription); 
-    
+    G4bool CloseNtupleFile(XmlNtupleDescription* ntupleDescription);
+
   protected:
     // Methods derived from templated base class
     virtual std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
     virtual G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;    
+    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
 
    private:
-    // utility method
+    // Utility method
     G4String GetNtupleFileName(XmlNtupleDescription* ntupleDescription);
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmlFileManager" };
 };
 
 #endif

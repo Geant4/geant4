@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -52,10 +52,8 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   OpenGLImmediateQt (OGLIQt, OGLI)
@@ -111,7 +109,7 @@ Some /vis commands (optionally) take a string to specify colour.
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  990 eV     e+  -1 MeV proton 100 keV
+ Energy thresholds :  gamma  -1 MeV    e-  1 keV    e+  -1 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2320,7 +2318,7 @@ Terminate current event processing.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.020749s Sys=0.000000s
+  User=0.020000s Real=0.019917s Sys=0.000000s
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.

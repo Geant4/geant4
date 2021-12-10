@@ -55,11 +55,10 @@ class G4LogicalVolume;
 class G4ModelingParameters;
 class G4VisTrajContext;
 
-class G4HepRepFileSceneHandler: public G4VSceneHandler {
-
-public:
-  G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
-		      const G4String& name);
+class G4HepRepFileSceneHandler : public G4VSceneHandler
+{
+ public:
+  G4HepRepFileSceneHandler(G4VGraphicsSystem& system, const G4String& name);
   virtual ~G4HepRepFileSceneHandler();
 
   ////////////////////////////////////////////////////////////////
@@ -80,9 +79,9 @@ public:
   void AddSolid(const G4VSolid&);
 
   using G4VSceneHandler::AddCompound;
-  void AddCompound (const G4VTrajectory&);
+  void AddCompound(const G4VTrajectory&);
   void InitTrajectory();
-  void AddCompound (const G4VHit&);
+  void AddCompound(const G4VHit&);
   void InitHit();
 
   // void PreAddSolid(const G4Transform3D& objectTransformation,
@@ -114,28 +113,27 @@ public:
 
   void BeginModeling();
   void EndModeling();
-  
+
   void BeginPrimitives2D(const G4Transform3D& objectTransformation);
   void EndPrimitives2D();
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
 
-  //void ClearStore ();
-  void ClearTransientStore ();
+  // void ClearStore ();
+  void ClearTransientStore();
 
   ////////////////////////////////////////////////////////////////
   // Required...
 
-  G4HepRepFileXMLWriter *GetHepRepXMLWriter();
+  G4HepRepFileXMLWriter* GetHepRepXMLWriter();
 
-protected:
-  static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
+ protected:
+  static G4int fSceneIdCount;  // Counter for HepRep scene handlers.
 
-private:
-  G4HepRepFileXMLWriter *hepRepXMLWriter;
-  void AddHepRepInstance(const char* primName,
-			 const G4Visible visible);
+ private:
+  G4HepRepFileXMLWriter* hepRepXMLWriter;
+  void AddHepRepInstance(const char* primName, const G4Visible visible);
   void CheckFileOpen();
   int fileCounter;
   G4bool haveVisible;
@@ -146,18 +144,17 @@ private:
   G4bool doneInitTraj;
   G4bool drawingHit;
   G4bool doneInitHit;
-  
+
   const G4VisTrajContext* trajContext;
-  
+
   std::vector<G4AttValue>* trajAttValues;
-  std::map<G4String,G4AttDef>* trajAttDefs;
+  std::map<G4String, G4AttDef>* trajAttDefs;
   std::vector<G4AttValue>* hitAttValues;
-  std::map<G4String,G4AttDef>* hitAttDefs;
-  
+  std::map<G4String, G4AttDef>* hitAttDefs;
+
 #ifdef G4HEPREPFILEDEBUG
   void PrintThings();
 #endif
-
 };
 
 #endif

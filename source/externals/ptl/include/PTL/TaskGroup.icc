@@ -68,7 +68,7 @@ TaskGroup<Tp, Arg, MaxDepth>::~TaskGroup()
     if(m_tbb_task_group)
     {
         auto* _arena = m_pool->get_task_arena();
-        _arena->execute([=]() { m_tbb_task_group->wait(); });
+        _arena->execute([this]() { this->m_tbb_task_group->wait(); });
     }
     delete m_tbb_task_group;
     this->clear();
@@ -95,7 +95,7 @@ TaskGroup<Tp, Arg, MaxDepth>::wait()
         if(m_tbb_task_group)
         {
             auto* _arena = m_pool->get_task_arena();
-            _arena->execute([=]() { m_tbb_task_group->wait(); });
+            _arena->execute([this]() { this->m_tbb_task_group->wait(); });
         }
     } };
 

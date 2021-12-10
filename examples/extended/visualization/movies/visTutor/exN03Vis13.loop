@@ -3,5 +3,5 @@
 /vis/viewer/set/timeWindow/endTime {endTime} ns {timeRange} ns
 # Force refresh here (since auto-refresh switched off in main mac).
 /vis/viewer/refresh
-# Print eps file
-#/vis/ogl/printEPS
+# Export if required
+#/vis/ogl/export

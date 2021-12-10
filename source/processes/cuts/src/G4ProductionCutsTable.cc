@@ -351,12 +351,7 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
 
 // --------------------------------------------------------------------
 void G4ProductionCutsTable::ResetConverters()
-{
-  for(std::size_t i=0; i< NumberOfG4CutIndex; ++i)
-  {
-    if (converters[i]!=0) converters[i]->Reset();
-  }
-}
+{}
 
 // --------------------------------------------------------------------
 void G4ProductionCutsTable::SetEnergyRange(G4double lowedge, G4double highedge)

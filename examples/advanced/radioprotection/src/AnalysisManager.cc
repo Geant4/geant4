@@ -125,9 +125,9 @@ void AnalysisManager::finish()
    {
     G4AnalysisManager* manager = G4AnalysisManager::Instance();    
     manager -> Write();
-    manager -> CloseFile();  
-      
-    delete G4AnalysisManager::Instance();
+    manager -> CloseFile();
+
+    manager -> Clear();
     factoryOn = false;
    }
 }

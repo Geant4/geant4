@@ -39,7 +39,6 @@ set(G4VIS_MODULE_OPENINVENTOR_SOURCES
   )
 
 set(G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES Coin::Coin)
-add_definitions(-DG4VIS_BUILD_OI_DRIVER)
 
 #----------------------------------------------------------------------------
 # UNIX Only (Xt) sources
@@ -72,7 +71,6 @@ if(GEANT4_USE_INVENTOR_XT)
     wheelmouse.cc)
 
   # Add the definitions for SoXt
-  add_definitions(-DG4INTY_BUILD_XT)
   add_definitions(-DG4VIS_BUILD_OIX_DRIVER)
 
   # SoXt Library and others
@@ -101,12 +99,6 @@ if(GEANT4_USE_INVENTOR_QT)
     G4OpenInventorQtViewer.cc
     G4SoQt.cc)
 
-  # Add the definitions
-  # Argh.. Have to remember about INTY and UI because of their use...
-  add_definitions(-DG4VIS_BUILD_OIQT_DRIVER)
-  add_definitions(-DG4INTY_BUILD_QT)
-  add_definitions(-DG4UI_BUILD_QT_SESSION)
-
   # Add libraries
   list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES
     SoQt::SoQt
@@ -131,10 +123,6 @@ if(GEANT4_USE_INVENTOR_WIN)
     G4OpenInventorWin.cc
     G4OpenInventorWinViewer.cc
     )
-
-  # Add the definitions for SoWin
-  add_definitions(-DG4INTY_BUILD_WIN32)
-  add_definitions(-DG4VIS_BUILD_OIWIN32_DRIVER)
 
   # SoWin Library
   list(APPEND G4VIS_MODULE_OPENINVENTOR_LINK_LIBRARIES SoWin::SoWin OpenGL::GL)

@@ -25,7 +25,7 @@
 //
 
 // The main manager for Xml analysis.
-// It delegates most of functions to the object specific managers. 
+// It delegates most of functions to the object specific managers.
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -38,17 +38,22 @@
 #include "tools/waxml/ntuple"
 
 #include <memory>
+#include <string_view>
 
+class G4XmlAnalysisManager;
 class G4XmlFileManager;
 class G4XmlNtupleFileManager;
+template <class T>
+class G4ThreadLocalSingleton;
 
 class G4XmlAnalysisManager : public G4ToolsAnalysisManager
 {
+  friend class G4ThreadLocalSingleton<G4XmlAnalysisManager>;
+
   public:
-    explicit G4XmlAnalysisManager(G4bool isMaster = true);
-    ~G4XmlAnalysisManager();
-    
-    // static methods
+    virtual ~G4XmlAnalysisManager();
+
+    // Static methods
     static G4XmlAnalysisManager* Instance();
     static G4bool IsInstance();
 
@@ -61,37 +66,26 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
     std::vector<tools::waxml::ntuple*>::iterator EndNtuple();
     std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
     std::vector<tools::waxml::ntuple*>::const_iterator EndConstNtuple() const;
-    
+
   protected:
-    // virtual methods from base class
+    // Virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName) final;
     virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl(G4bool reset) final; 
+    virtual G4bool CloseFileImpl(G4bool reset) final;
+    virtual G4bool ResetImpl() final;
     virtual G4bool IsOpenFileImpl() const final;
 
   private:
-    // static data members
-    static G4XmlAnalysisManager* fgMasterInstance;
-    static G4ThreadLocal G4XmlAnalysisManager* fgInstance;
+    G4XmlAnalysisManager();
 
-    // methods
-    template <typename T>
-    G4bool WriteT(const std::vector<T*>& htVector,
-                  const std::vector<G4HnInformation*>& hnVector,
-                  const G4String& directoryName,
-                  const G4String& hnType);
-    G4bool WriteH1();
-    G4bool WriteH2();
-    G4bool WriteH3();
-    G4bool WriteP1();
-    G4bool WriteP2();
-    G4bool WriteNtuple();
-    G4bool CloseNtupleFiles();
-    G4bool Reset();
+    // Static data members
+    inline static G4XmlAnalysisManager* fgMasterInstance { nullptr };
+    inline static G4ThreadLocal G4bool fgIsInstance { false };
+    static constexpr std::string_view fkClass { "G4XmlAnalysisManager" };
 
-    // data members
-    std::shared_ptr<G4XmlFileManager>  fFileManager;
-    std::shared_ptr<G4XmlNtupleFileManager>  fNtupleFileManager;
+    // Data members
+    std::shared_ptr<G4XmlFileManager>  fFileManager { nullptr };
+    std::shared_ptr<G4XmlNtupleFileManager>  fNtupleFileManager { nullptr };
 };
 
 #include "G4XmlAnalysisManager.icc"

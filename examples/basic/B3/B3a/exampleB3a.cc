@@ -34,14 +34,14 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4AnalysisManager.hh"
 #include "G4TScoreNtupleWriter.hh"
 
 #include "Randomize.hh"
 
-#include "B3DetectorConstruction.hh"
-#include "B3PhysicsList.hh"
-#include "B3aActionInitialization.hh"
-#include "B3Analysis.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,13 +66,13 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  runManager->SetUserInitialization(new B3DetectorConstruction);
+  runManager->SetUserInitialization(new B3::DetectorConstruction);
   //
-  runManager->SetUserInitialization(new B3PhysicsList);
+  runManager->SetUserInitialization(new B3::PhysicsList);
 
   // Set user action initialization
   //
-  runManager->SetUserInitialization(new B3aActionInitialization());
+  runManager->SetUserInitialization(new B3a::ActionInitialization());
 
   // Initialize visualization
   //

@@ -49,8 +49,6 @@
 #ifndef G4UIWin32_h
 #define G4UIWin32_h
 
-#if defined(G4UI_BUILD_WIN32_SESSION) || defined(G4UI_USE_WIN32)
-
 #define ID_EXIT_APP                     40001
 #define ID_OPEN_MACRO                   40002
 #define ID_SAVE_VIEWER_STATE            40003
@@ -182,7 +180,5 @@ class G4UIWin32 : public G4VBasicShell, public G4VInteractiveSession
     std::vector<G4String> fHistory;
     G4int fHistoryPos;
 };
-
-#endif
 
 #endif

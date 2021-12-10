@@ -509,13 +509,7 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     # Have to use detected CLHEP paths to set base dir and others
     get_filename_component(_CLHEP_INCLUDE_DIR "${CLHEP_INCLUDE_DIR}" REALPATH)
     get_filename_component(_CLHEP_BASE_DIR "${_CLHEP_INCLUDE_DIR}" DIRECTORY)
-
-    # Handle granular vs singular cases
-    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
-      get_target_property(_CLHEP_LIB_DIR CLHEP::Vector LOCATION)
-    else()
-      get_target_property(_CLHEP_LIB_DIR CLHEP::CLHEP LOCATION)
-    endif()
+    get_target_property(_CLHEP_LIB_DIR CLHEP::CLHEP LOCATION)
 
     get_filename_component(_CLHEP_LIB_DIR "${_CLHEP_LIB_DIR}" REALPATH)
     get_filename_component(_CLHEP_LIB_DIR "${_CLHEP_LIB_DIR}" DIRECTORY)
@@ -525,21 +519,6 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     _g4tc_setenv_command(GEANT4_TC_CLHEP_INCLUDE_DIR ${SHELL_FAMILY} CLHEP_INCLUDE_DIR "${_CLHEP_INCLUDE_DIR}")
 
     # Only need to handle CLHEP_LIB for granular case
-    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
-      set(G4_SYSTEM_CLHEP_LIBRARIES )
-      foreach(_clhep_lib ${CLHEP_LIBRARIES})
-        get_target_property(_CLHEP_LIB_NAME ${_clhep_lib} LOCATION)
-        get_filename_component(_curlib "${_CLHEP_LIB_NAME}" NAME)
-        string(REGEX REPLACE "^lib(.*)\\.(so|a|dylib|lib|dll)$" "\\1" _curlib "${_curlib}")
-        set(G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES} -l${_curlib}")
-      endforeach()
-
-      # Strip first "-l" as that's prepended by Geant4Make
-      string(REGEX REPLACE "^ *\\-l" "" G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES}")
-
-      _g4tc_setenv_command(GEANT4_TC_CLHEP_LIB ${SHELL_FAMILY} CLHEP_LIB "\"${G4_SYSTEM_CLHEP_LIBRARIES}\"")
-    endif()
-
     _g4tc_setenv_command(GEANT4_TC_CLHEP_LIB_DIR ${SHELL_FAMILY} CLHEP_LIB_DIR ${_CLHEP_LIB_DIR})
 
 
@@ -582,6 +561,12 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     # variable...
     get_filename_component(_xercesc_root ${XercesC_INCLUDE_DIR} PATH)
     _g4tc_setenv_command(GEANT4_TC_GDML_PATH_SETUP ${SHELL_FAMILY} XERCESCROOT ${_xercesc_root})
+
+    # Needed temporarily to workaround issue on LCG setups
+    if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+      get_filename_component(_xercesc_libdir ${XercesC_LIBRARY_RELEASE} DIRECTORY)
+      _g4tc_prepend_path(GEANT4_TC_XERCESC_LIB_PATH_SETUP ${SHELL_FAMILY} LD_LIBRARY_PATH ${_xercesc_libdir})
+    endif()
   else()
     set(GEANT4_TC_G4LIB_USE_GDML "# NOT BUILT WITH GDML SUPPORT")
   endif()
@@ -648,20 +633,6 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     # Might need library setup, but for now recommend system install....
   else()
     set(GEANT4_TC_G4UI_USE_XM "# NOT BUILT WITH XM INTERFACE")
-  endif()
-
-  # - Network DAWN
-  if(GEANT4_USE_NETWORKDAWN)
-    _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_DAWN ${SHELL_FAMILY} G4VIS_USE_DAWN 1)
-  else()
-    set(GEANT4_TC_G4VIS_USE_DAWN "# NOT BUILT WITH NETWORK DAWN SUPPORT")
-  endif()
-
-  # - Network VRML
-  if(GEANT4_USE_NETWORKVRML)
-    _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_VRML ${SHELL_FAMILY} G4VIS_USE_VRML 1)
-  else()
-    set(GEANT4_TC_G4VIS_USE_VRML "# NOT BUILT WITH NETWORK VRML SUPPORT")
   endif()
 
   # - OpenInventor
@@ -766,7 +737,7 @@ endmacro()
 #
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL ${PROJECT_SOURCE_DIR})
-set(G4INCLUDE ${PROJECT_SOURCE_DIR}/this_is_a_deliberate_dummy_path)
+set(G4INCLUDE ${PROJECT_BINARY_DIR}/this_is_a_deliberate_dummy_path)
 set(G4BIN_DIR ${PROJECT_BINARY_DIR})
 set(G4LIB ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(G4LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
@@ -781,7 +752,7 @@ foreach(_ds ${GEANT4_EXPORTED_DATASETS})
 endforeach()
 
 # - Fonts
-set(TOOLS_FONT_PATH "${PROJECT_SOURCE_DIR}/source/analysis/fonts")
+set(TOOLS_FONT_PATH "${PROJECT_SOURCE_DIR}/source/externals/g4tools/fonts")
 
 # - Configure the shell scripts for the BUILD TREE
 _g4tc_configure_build_tree_scripts(geant4make)
@@ -965,12 +936,7 @@ foreach(_shell IN LISTS shells_list)
     set(GEANT4_TC_CLHEP_LIB_PATH_SETUP "# - Builtin CLHEP used")
     if(GEANT4_USE_SYSTEM_CLHEP)
       # Handle granular vs singular cases
-      if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
-	get_target_property(_CLHEP_LIB_DIR CLHEP::Vector LOCATION)
-      else()
-	get_target_property(_CLHEP_LIB_DIR CLHEP::CLHEP LOCATION)
-      endif()
-
+	    get_target_property(_CLHEP_LIB_DIR CLHEP::CLHEP LOCATION)
       get_filename_component(_CLHEP_LIB_DIR "${_CLHEP_LIB_DIR}" REALPATH)
       get_filename_component(_CLHEP_LIB_DIR "${_CLHEP_LIB_DIR}" DIRECTORY)
 

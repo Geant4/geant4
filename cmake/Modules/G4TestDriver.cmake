@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------
 # Geant4 test driver
-#   Script arguments: 
+#   Script arguments:
 #     CMD command to be executed for the test
 #     PRE command to be executed before the test command
 #     POST command to be executed after the test command
@@ -9,7 +9,7 @@
 #     ENV evironment VAR1=Value1;VAR2=Value2
 #     CWD current working directory
 #     TST test name (used to name output/error files)
-#     TIM timeout 
+#     TIM timeout
 #     DBG debug flag
 
 if(DBG)
@@ -56,9 +56,9 @@ if(TIM)
 else()
   if(NOT $ENV{CTEST_TIMEOUT} STREQUAL "")
      math(EXPR _timeout "$ENV{CTEST_TIMEOUT} - 120")
-  else()	  
+  else()
      math(EXPR _timeout "1500 - 120")
-  endif()	  
+  endif()
 endif()
 
 if(CWD)

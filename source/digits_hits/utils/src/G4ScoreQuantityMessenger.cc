@@ -313,8 +313,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
       {
         G4PSCellFluxForCylinder3D* pps =
           new G4PSCellFluxForCylinder3D(token[0]);
-        G4ThreeVector msize = mesh->GetSize();     // gevin in R Z N/A
-        pps->SetCylinderSize(msize[0], msize[1]);  // given in dr dz
+        pps->SetCylinderSize(mesh->GetSize(),mesh->GetStartAngle(),mesh->GetAngleSpan());   
         G4int nSeg[3];
         mesh->GetNumberOfSegments(nSeg);
         pps->SetNumberOfSegments(nSeg);
@@ -348,8 +347,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
       {
         G4PSPassageCellFluxForCylinder3D* pps =
           new G4PSPassageCellFluxForCylinder3D(token[0]);
-        G4ThreeVector msize = mesh->GetSize();     // gevin in R Z N/A
-        pps->SetCylinderSize(msize[0], msize[1]);  // given in dr dz
+        pps->SetCylinderSize(mesh->GetSize(),mesh->GetStartAngle(),mesh->GetAngleSpan());   
         G4int nSeg[3];
         mesh->GetNumberOfSegments(nSeg);
         pps->SetNumberOfSegments(nSeg);
@@ -401,8 +399,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand* command,
         G4PSDoseDepositForCylinder3D* pps =
           new G4PSDoseDepositForCylinder3D(token[0]);
         pps->SetUnit(token[1]);
-        G4ThreeVector msize = mesh->GetSize();     // gevin in R Z N/A
-        pps->SetCylinderSize(msize[0], msize[1]);  // given in dr dz
+        pps->SetCylinderSize(mesh->GetSize(),mesh->GetStartAngle(),mesh->GetAngleSpan());   
         G4int nSeg[3];
         mesh->GetNumberOfSegments(nSeg);
         pps->SetNumberOfSegments(nSeg);
@@ -820,7 +817,7 @@ void G4ScoreQuantityMessenger::FillTokenVec(G4String newValues,
 {
   G4Tokenizer next(newValues);
   G4String val;
-  while(!(val = next()).isNull())
+  while(!(val = next()).empty())
   {  // Loop checking 12.18.2015 M.Asai
     token.push_back(val);
   }

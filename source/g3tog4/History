@@ -2,6 +2,18 @@
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V10-07-04 15-November-2021 I.Hrivnacova
+- Fixed Coverity: uninitialized variable in G3EleTable.cc
+
+g3tog4-V10-07-03 25-October-2021 B.Morgan
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+g3tog4-V10-07-02 18-October-2021 B.Morgan
+- Use std::string member functions from G4String in place of synonyms
+
+g3tog4-V10-07-01 29-June-2021 G.Cosmo
+- Fixed compilation error in G3EleTable when c++20 is enabled.
+
 g3tog4-V10-07-00 1-April-2021 B.Morgan
 - Migrate build to modular CMake API
 

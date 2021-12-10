@@ -34,9 +34,10 @@
 #include "tools/wroot/mpi_ntuple_row_wise"
 #include "tools/wroot/mpi_ntuple_column_wise"
 
+using namespace G4Analysis;
+
 const int kTAG_NTUPLE = 1004;   // This constant is defined in G4MPImanager
                                 // (should be passed from the application)
-
 namespace {
 
 //_____________________________________________________________________________
@@ -114,17 +115,12 @@ tools::wroot::base_pntuple*  G4RootMpiPNtupleManager::GetNtupleInFunction(
 //_____________________________________________________________________________
 void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDescription)
 {
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()
-        ->Message("create from booking", "mpi pntuple", 
-                   ntupleDescription->fDescription.fNtupleBooking.name());
-    }
-#endif
+  Message(kVL4, "create from booking", "mpi pntuple",
+    ntupleDescription->fDescription.fNtupleBooking.name());
 
   // Wait for the ntuple data from main
 
-  G4bool verbose = ( fState.GetVerboseL2() );
+  G4bool verbose = IsVerbose(kVL2);
 
   G4cout << "Go to wait_buffer from " << fDestinationRank << G4endl;
   fImpi->pack_reset();
@@ -229,13 +225,8 @@ void G4RootMpiPNtupleManager::CreateNtuple(G4RootMpiPNtupleDescription* ntupleDe
          // pntuple object is not deleted automatically
   fNtupleVector.push_back(ntupleDescription->fNtuple);  
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL3() ) {
-      fState.GetVerboseL3()
-        ->Message("create from booking", "mpi pntuple", 
-                  ntupleDescription->fDescription.fNtupleBooking.name());
-    }
-#endif
+  Message(kVL3, "create from booking", "mpi pntuple",
+    ntupleDescription->fDescription.fNtupleBooking.name());
 }
 
 //_____________________________________________________________________________
@@ -266,13 +257,8 @@ void G4RootMpiPNtupleManager::CreateNtuplesFromBooking(
     // Do not create ntuple if it already exists
     if ( ntupleDescription->fNtuple ) continue;
     
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()
-        ->Message("create from booking", "mpi pntuple", 
-                   ntupleDescription->fDescription.fNtupleBooking.name());
-    }
-#endif
+    Message(kVL4, "create from booking", "mpi pntuple",
+      ntupleDescription->fDescription.fNtupleBooking.name());
 
     // create ntuple
     CreateNtuple(ntupleDescription);
@@ -281,13 +267,8 @@ void G4RootMpiPNtupleManager::CreateNtuplesFromBooking(
     // (nothing to be done ?)
     // FinishTNtuple(ntupleDescription);
 
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL3() ) {
-      fState.GetVerboseL3()
-        ->Message("create from booking", "mpi pntuple", 
-                  ntupleDescription->fDescription.fNtupleBooking.name());
-    }
-#endif
+    Message(kVL3, "create from booking", "mpi pntuple",
+      ntupleDescription->fDescription.fNtupleBooking.name());
   }
 
 }   
@@ -338,13 +319,7 @@ G4bool G4RootMpiPNtupleManager::AddNtupleRow(G4int ntupleId)
     return false; 
   }  
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId;  
-    fState.GetVerboseL4()->Message("add", "pntuple row", description);
-  }  
-#endif
+  Message(kVL4, "add", "pntuple row", " ntupleId " + to_string(ntupleId));
 
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
   if ( ! ntupleDescription ) return false;
@@ -362,13 +337,7 @@ G4bool G4RootMpiPNtupleManager::AddNtupleRow(G4int ntupleId)
                 "Analysis_W002", JustWarning, description);
   }         
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL3() ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId;  
-    fState.GetVerboseL3()->Message("add", "pntuple row", description);
-  }  
-#endif
+  Message(kVL3, "add", "pntuple row", " ntupleId " + to_string(ntupleId));
 
   return true;
 }
@@ -390,13 +359,8 @@ G4bool G4RootMpiPNtupleManager::Merge()
     // (this happend when the main rank re-opens a new file for merged data)
     if ( ! ntupleDescription->fNtuple ) continue;
   
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) {
-      fState.GetVerboseL4()
-        ->Message("end_fill", "pntuple", ntupleDescription->fDescription.fNtupleBooking.name());
-    }  
-#endif
-  
+    Message(kVL4, "merge", "pntuple", ntupleDescription->fDescription.fNtupleBooking.name());
+
     // G4cout << "call end_fill " << fImpi 
     //        << " to rank " << ntupleDescription->fMainNtupleRank 
     //        << " pntuple: " << ntupleDescription->fNtuple << G4endl;
@@ -415,16 +379,25 @@ G4bool G4RootMpiPNtupleManager::Merge()
     delete ntupleDescription->fNtuple;
     ntupleDescription->fNtuple = nullptr;
   
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL3() ) {
-      fState.GetVerboseL3()
-        ->Message("end_fill", "pntuple", ntupleDescription->fDescription.fNtupleBooking.name());
-    }  
-#endif
+    Message(kVL3, "merge", "pntuple", ntupleDescription->fDescription.fNtupleBooking.name());
   }
 
   return finalResult;
 }
+
+//_____________________________________________________________________________
+void G4RootMpiPNtupleManager::Clear()
+{
+  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+    delete ntupleDescription->fNtuple;
+  }
+
+  fNtupleDescriptionVector.clear();
+  fNtupleVector.clear();
+
+  Message(kVL2, "clear", "pntuples");
+}
+
 
 //_____________________________________________________________________________
 G4bool G4RootMpiPNtupleManager::Reset(G4bool deleteNtuple)

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-10-07-ref-06    (25-June-2021)
+ Geant4 version Name: geant4-11-00-ref-00    (10-December-2021)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,10 +26,8 @@ You have successfully registered the following graphics systems.
 Registered graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
   OpenGLImmediateQt (OGLIQt, OGLI)
@@ -89,21 +87,88 @@ G4AdjointPhysicsList::SetCuts:CutLength : 10 um
 *** Company:      SpaceIT GmbH, Bern, Switzerland            ***
 *** Sponsored by: ESA/ESTEC contract contract 21435/08/NL/AT ***
 ****************************************************************
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           livermore
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
 
 compt:  for gamma SubType=13 BuildTable=1
       Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina : Emin=    0 meV Emax=  100 TeV
+       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
 
 phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric : Emin=    0 meV Emax=  100 TeV  SauterGavrila
+       PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
 
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 meV Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:1  SubType=2
@@ -111,15 +176,7 @@ eIoni:  for e-  XStype:1  SubType=2
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 meV Emax=  100 TeV
-
-eBrem:  for e-  XStype:4  SubType=3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB : Emin=    0 meV Emax=    1 GeV  ModifiedTsai
-            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
 ========== Computation of cross section matrices for adjoint models ==========
 Build adjoint cross section matrices for Inv_eIon_model
 Build adjoint cross section matrices for AdjointeBremModel
@@ -136,35 +193,35 @@ The model AdjointPEEffect does not use cross section matrices
 Index : 0     used in the geometry : Yes
  Material : Vacuum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Aluminum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  34.1725 keV    e+  33.9436 keV proton 1 keV
+ Energy thresholds :  gamma  1 keV    e-  34.1087 keV    e+  33.7276 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
+ Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  31.9516 keV    e+  31.7376 keV proton 1 keV
+ Energy thresholds :  gamma  1 keV    e-  31.7001 keV    e+  31.3441 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : Tantalum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  6.90363 keV    e-  75.0136 keV    e+  73.5164 keV proton 1 keV
+ Energy thresholds :  gamma  6.87412 keV    e-  74.7946 keV    e+  73.3238 keV proton 1 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -176,14 +233,22 @@ See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 start.
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W012
-      issued by : G4VFileManager::SetHistoDirectoryName()
+*** G4Exception : Analysis_W001
+      issued by : G4VFileManager::SetHistoDirectoryName
 Cannot set Histo directory name as its value was already used.
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
 
-----> Histogram Tree is opened in adjoint_sim.root
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Analysis_W001
+      issued by : G4VFileManager::SetHistoDirectoryName
+Cannot set Histo directory name as its value was already used.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+----> Histogram Tree is opened in adjoint_sim.
 nb event 0
 nb event 1
 nb event 2
@@ -334,13 +399,13 @@ nb event 170000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 171412 events processed.
-  User=64.090000s Real=67.508702s Sys=0.180000s
+  Run Aborted after 173480 events processed.
+  User=63.050000s Real=73.608608s Sys=0.230000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00164111
-error[MeV] = 1.64111e-05
+normalised edep [MeV] = 0.0016125
+error[MeV] = 1.61245e-05
 
-----> Histogram Tree is saved in adjoint_sim.root
+----> Histogram Tree is saved in adjoint_sim.
 0 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them one by one.
   "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
@@ -348,7 +413,7 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 1
-Dynamic pools deleted: 11 / Total memory freed: 28 MB
+Number of memory pools allocated: 14 of which, static: 1
+Dynamic pools deleted: 13 / Total memory freed: 27 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

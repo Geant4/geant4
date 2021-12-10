@@ -41,10 +41,13 @@
 #include "G4LEnpData.hh"
 #include "Randomize.hh"
 
+#include "G4PhysicsModelCatalog.hh"
+
 
 G4LEnp::G4LEnp():
  G4HadronElastic("G4LEnp")  // G4HadronicInteraction("G4LEnp")
 {
+  secID = G4PhysicsModelCatalog::GetModelID( "model_" + GetModelName() );  
   //    theParticleChange.SetNumberOfSecondaries(1);
   
   //    SetMinEnergy(10.*MeV);
@@ -300,7 +303,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     theParticleChange.SetMomentumChange(newP->GetMomentumDirection());
     theParticleChange.SetEnergyChange(newP->GetKineticEnergy());
     delete newP;
-    theParticleChange.AddSecondary(targetParticle);    
+    theParticleChange.AddSecondary(targetParticle, secID);    
 
     return &theParticleChange;
 }

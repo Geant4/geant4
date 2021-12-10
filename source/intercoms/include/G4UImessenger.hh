@@ -110,10 +110,10 @@ template <typename T>
 T* G4UImessenger::CreateCommand(const G4String& cname, const G4String& dsc)
 {
   G4String path;
-  if(cname(0) != '/')
+  if(cname[0] != '/')
   {
     path = baseDirName + cname;
-    if(path(0) != '/')
+    if(path[0] != '/')
       path = "/" + path;
   }
 

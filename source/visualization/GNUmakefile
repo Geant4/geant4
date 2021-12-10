@@ -56,10 +56,10 @@ ifdef G4VIS_BUILD_QT3D_DRIVER
   SUBDIRS += Qt3D
   SUBLIBS += G4visQt3D
 endif
-#ifdef G4VIS_BUILD_TOOLSSG_DRIVER
+ifdef G4VIS_BUILD_TOOLSSG_DRIVER
   SUBDIRS += ToolsSG
   SUBLIBS += G4ToolsSG
-#endif
+endif
 endif #G4VIS_BUILD
 
 .PHONY: granular obj glob global clean

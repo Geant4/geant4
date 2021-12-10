@@ -62,7 +62,7 @@ G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4boo
         std::vector<G4AttValue>::const_iterator iAtt;
         for (iAtt = attValues->begin(); iAtt != attValues->end(); ++iAtt) {
           if (iAtt->GetName() == "PostVPath" &&
-              iAtt->GetValue().contains(soughtPVName)) break;
+              G4StrUtil::contains(iAtt->GetValue(), soughtPVName)) break;
         }
         if (iAtt != attValues->end()) {  // Required value found
           fMap.GetColour(soughtPVName, colour);

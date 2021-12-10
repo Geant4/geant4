@@ -29,8 +29,6 @@
 // can update the view parameters, irrespective of any changes to the
 // camera type.
 
-#ifdef G4VIS_BUILD_OI_DRIVER
-
 // this :
 #include "G4OpenInventorViewer.hh"
 
@@ -790,5 +788,3 @@ Controls on an Inventor examiner viewer are :\n\
     return "";
   }
 }
-
-#endif

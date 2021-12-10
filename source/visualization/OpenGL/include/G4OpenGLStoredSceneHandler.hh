@@ -29,8 +29,6 @@
 // Andrew Walkden  10th February 1997
 // G4OpenGLStoredSceneHandler - creates OpenGL Display lists.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLSTOREDSCENEHANDLER_HH
 #define G4OPENGLSTOREDSCENEHANDLER_HH
 
@@ -56,12 +54,12 @@ public:
   void EndPrimitives2D ();
   void BeginModeling ();
   void EndModeling ();
+  using G4VSceneHandler::AddPrimitive;
   void AddPrimitive (const G4Polyline&);
   void AddPrimitive (const G4Polymarker&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Text&);
-  void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void ClearStore ();
   void ClearTransientStore ();
@@ -149,7 +147,5 @@ private:
   bool AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline);
 
 };
-
-#endif
 
 #endif

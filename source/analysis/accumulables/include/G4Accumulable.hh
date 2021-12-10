@@ -40,16 +40,18 @@ template <typename T>
 class G4Accumulable : public G4VAccumulable
 {
   public:
-    G4Accumulable(const G4String& name, T initValue, 
+    G4Accumulable(const G4String& name, T initValue,
                 G4MergeMode mergeMode = G4MergeMode::kAddition);
-    G4Accumulable(T initValue, 
+    G4Accumulable(T initValue,
                 G4MergeMode mergeMode = G4MergeMode::kAddition);
     G4Accumulable(const G4Accumulable& rhs);
+    G4Accumulable(G4Accumulable&& rhs);
     G4Accumulable() = delete;
-    virtual ~G4Accumulable();
+    virtual ~G4Accumulable() = default;
 
-    // operators
+    // Operators
     G4Accumulable<T>& operator= (const G4Accumulable<T>& rhs);
+    G4Accumulable<T>& operator= (G4Accumulable<T>&& rhs);
     G4Accumulable<T>& operator+=(const G4Accumulable<T>& rhs);
     G4Accumulable<T>& operator*=(const G4Accumulable<T>& rhs);
     G4Accumulable<T>  operator++(int); // postfix increment
@@ -59,16 +61,16 @@ class G4Accumulable : public G4VAccumulable
     G4Accumulable<T>& operator+=(const T& rhs);
     G4Accumulable<T>& operator*=(const T& rhs);
 
-    // methods
+    // Methods
     virtual void Merge(const G4VAccumulable& other) final;
     virtual void Reset() final;
 
-    // get methods
+    // Get methods
     T  GetValue() const;
     G4MergeMode GetMergeMode() const;
 
   private:
-    // data members
+    // Data members
     T  fValue;
     T  fInitValue;
     G4MergeMode  fMergeMode;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 
-// The base class for Ntuple managers. 
-// It implements common functions independent from the output type. 
+// The base class for Ntuple managers.
+// It implements common functions independent from the output type.
 //
 // Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
 
@@ -39,7 +39,8 @@ class G4BaseNtupleManager : public G4VNtupleManager
 {
   public:
     explicit G4BaseNtupleManager(const G4AnalysisManagerState& state);
-    virtual ~G4BaseNtupleManager();
+    G4BaseNtupleManager() = delete;
+    virtual ~G4BaseNtupleManager() = default;
 
     // deleted copy constructor & assignment operator
     G4BaseNtupleManager(const G4BaseNtupleManager& rhs) = delete;
@@ -50,18 +51,18 @@ class G4BaseNtupleManager : public G4VNtupleManager
     virtual G4int CreateNtuple(G4NtupleBooking* booking) = 0;
 
     // Methods to fill ntuples
-    // Methods for ntuple with id = FirstNtupleId                     
+    // Methods for ntuple with id = FirstNtupleId
     virtual G4bool FillNtupleIColumn(G4int id, G4int value) final;
     virtual G4bool FillNtupleFColumn(G4int id, G4float value) final;
     virtual G4bool FillNtupleDColumn(G4int id, G4double value) final;
     virtual G4bool FillNtupleSColumn(G4int id, const G4String& value) final;
     virtual G4bool AddNtupleRow() final;
 
-    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
+    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)
     virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) = 0;
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) = 0;
     virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) = 0;
-    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
+    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId,
                                      const G4String& value) = 0;
     virtual G4bool AddNtupleRow(G4int ntupleId) = 0;
 
@@ -69,7 +70,7 @@ class G4BaseNtupleManager : public G4VNtupleManager
     virtual G4bool SetFirstNtupleColumnId(G4int firstId) final;
 
   protected:
-    G4int   fFirstNtupleColumnId;
+    G4int   fFirstNtupleColumnId { 0 };
 };
 
 #endif

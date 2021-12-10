@@ -188,7 +188,7 @@ G4double G4UPara::GetYHalfLength() const
 }
 G4double G4UPara::GetXHalfLength() const
 {
-  return GetZ();
+  return GetX();
 }
 G4ThreeVector G4UPara::GetSymAxis() const
 {

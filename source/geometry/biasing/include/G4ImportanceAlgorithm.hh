@@ -35,6 +35,7 @@
 #ifndef G4IMPORTANCEALGORITHM_HH
 #define G4IMPORTANCEALGORITHM_HH 1
 
+#include "G4Threading.hh"
 #include "G4VImportanceAlgorithm.hh"
 
 class G4ImportanceAlgorithm : public G4VImportanceAlgorithm

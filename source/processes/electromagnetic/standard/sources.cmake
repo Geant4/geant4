@@ -29,6 +29,7 @@ geant4_add_module(G4emstandard
     G4IonCoulombCrossSection.hh
     G4IonCoulombScatteringModel.hh
     G4IonFluctuations.hh
+    G4IonICRU73Data.hh
     G4KleinNishinaCompton.hh
     G4KleinNishinaModel.hh
     G4LindhardSorensenData.hh
@@ -60,7 +61,6 @@ geant4_add_module(G4emstandard
     G4WentzelVIRelModel.hh
     G4WentzelVIRelXSection.hh
     G4XrayRayleighModel.hh
-    G4alphaIonisation.hh
     G4eBremsstrahlung.hh
     G4eBremParametrizedModel.hh
     G4eBremsstrahlungRelModel.hh
@@ -106,6 +106,7 @@ geant4_add_module(G4emstandard
     G4IonCoulombCrossSection.cc
     G4IonCoulombScatteringModel.cc
     G4IonFluctuations.cc
+    G4IonICRU73Data.cc
     G4KleinNishinaCompton.cc
     G4KleinNishinaModel.cc
     G4LindhardSorensenData.cc
@@ -135,7 +136,6 @@ geant4_add_module(G4emstandard
     G4WentzelVIRelModel.cc
     G4WentzelVIRelXSection.cc
     G4XrayRayleighModel.cc
-    G4alphaIonisation.cc
     G4eBremsstrahlung.cc
     G4eBremParametrizedModel.cc
     G4eBremsstrahlungRelModel.cc

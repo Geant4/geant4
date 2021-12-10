@@ -28,7 +28,11 @@ geant4_add_module(G4emdna-utils
     # physchemIO
     G4VPhysChemIO.hh
     G4PhysChemIO.hh
-		G4IRTUtils.hh
+	G4IRTUtils.hh
+	G4DNAScavengerMaterial.hh
+	G4VChemistryWorld.hh
+	G4DNAMesh.hh
+	G4DNAEventSet.hh
   SOURCES
     G4DNAChemistryManager.cc
     G4DNACPA100LogLogInterpolation.cc
@@ -54,7 +58,10 @@ geant4_add_module(G4emdna-utils
     # physchemIO
     G4VPhysChemIO.cc
     G4PhysChemIO.cc
-		G4IRTUtils.cc)
+	G4IRTUtils.cc
+	G4DNAScavengerMaterial.cc
+	G4DNAMesh.cc
+	G4DNAEventSet.cc)
 
 geant4_module_link_libraries(G4emdna-utils
   PUBLIC

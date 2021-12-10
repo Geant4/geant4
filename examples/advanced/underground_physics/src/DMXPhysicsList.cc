@@ -185,7 +185,7 @@
 #include "G4HadronicParameters.hh"
 
 #include "G4Decay.hh"
-#include "G4RadioactiveDecayBase.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4NuclideTable.hh"
 #include "G4NuclearLevelData.hh"
@@ -830,7 +830,7 @@ void DMXPhysicsList::ConstructGeneral() {
   }
 
   G4PhysicsListHelper::GetPhysicsListHelper()->
-    RegisterProcess(new G4RadioactiveDecayBase(), G4GenericIon::GenericIon());
+    RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());
 }
 
 // Cuts /////////////////////////////////////////////////////////////////////

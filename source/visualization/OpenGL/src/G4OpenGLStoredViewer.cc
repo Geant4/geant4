@@ -31,8 +31,6 @@
 //                            an OpenGL view, for inheritance by
 //                            derived (X, Xm...) classes.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
-
 #include "G4OpenGLStoredViewer.hh"
 
 #include "G4PhysicalConstants.hh"
@@ -78,13 +76,15 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
       (lastVP.GetCBDAlgorithmNumber() !=
        fVP.GetCBDAlgorithmNumber())                               ||
+      // Note: Section and Cutaway can reveal back-facing faces. If
+      // backface culling is implemented, the image can look strange because
+      // the back-facing faces are not there. For the moment, we have disabled
+      // (commented out) backface culling (it seems not to affect performance -
+      // in fact, performance seems to improve), so there is no problem.
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
-      // Section (DCUT) implemented locally.  But still need to visit
-      // kernel if status changes so that back plane culling can be
-      // switched.
-      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      // Cutaways implemented locally.  But still need to visit kernel
-      // if status changes so that back plane culling can be switched.
+      // Section (DCUT) is NOT implemented locally so we need to visit the kernel.
+      // (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      // Cutaways are implemented locally so we do not need to visit the kernel.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.GetGlobalMarkerScale()    != fVP.GetGlobalMarkerScale())    ||
@@ -491,5 +491,3 @@ void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Circle& circle)
   fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(circle);
   fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
 }
-
-#endif

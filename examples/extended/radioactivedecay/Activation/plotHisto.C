@@ -18,9 +18,9 @@
   TH1D* hist24 = (TH1D*)f.Get("24");
   hist24->Draw("HIST");  
      
-  TH1D* hist25 = (TH1D*)f.Get("25");
-  hist25->Draw("HIST");
+  TH1D* hist27 = (TH1D*)f.Get("27");
+  hist27->Draw("HIST");
   
-  TH1D* hist26 = (TH1D*)f.Get("26");
-  hist26->Draw("HIST");  
+  TH1D* hist28 = (TH1D*)f.Get("28");
+  hist28->Draw("HIST");  
 }  

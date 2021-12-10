@@ -80,14 +80,13 @@ private:
 
   void Initialise();
 
-  void AddData(const G4double* e, const G4double* s, G4int idx);
+  void AddData(const G4double* energy, const G4double* xs, G4int idx);
 
-  char* dirPath;
-  const G4Material* currentMaterial;
+  char* dirPath = nullptr;
+  const G4Material* currentMaterial = nullptr;
 
-  G4int type;
-  G4int matIndex;
-  G4double emin;
+  G4int type = 0;
+  G4int matIndex = -1;
   std::vector<G4PhysicsFreeVector*> sdata;
   std::vector<G4String> name;
 };

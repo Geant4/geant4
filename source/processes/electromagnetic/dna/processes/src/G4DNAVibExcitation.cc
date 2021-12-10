@@ -28,6 +28,7 @@
 #include "G4LEPTSVibExcitationModel.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Positron.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,7 +38,7 @@ G4DNAVibExcitation::G4DNAVibExcitation(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetProcessSubType(54);
+  SetProcessSubType(fLowEnergyVibrationalExcitation);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

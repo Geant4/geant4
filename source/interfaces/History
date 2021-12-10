@@ -16,6 +16,49 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 2021 - Koichi Murakami (interfaces-V10-07-23)
+- Add verbose setting in G4UIExecutive [BZ-2402]
+
+8 November 2021 - Ben Morgan (interfaces-V10-07-22)
+- Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
+  by obsolete GNUmake system
+
+02 November 2021 - Laurent Garnier (interfaces-V10-07-21)
+- Fix HTML links in Qt UI Start page
+
+28 October 2021 - John Allison (interfaces-V10-07-20)
+- G4UIQt.cc: Replace '<' by "&lt" in session output.
+
+25 October 2021 - Ben Morgan (interfaces-V10-07-19)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+19 October 2021 - Ben Morgan (interfaces-V10-07-18)
+- Don't discard return value of G4String::strip.
+
+18 October 2021 - B. Morgan (interfaces-V10-07-17)
+- Use std::string member functions from G4String in place of synonyms
+
+04 October 2021 - Stewart Boogert / Laurie Nevay (interfaces-V10-07-16)
+- Add context for VtkQt visualisation driver
+
+1 October 2021 Ben Morgan (interfaces-V10-07-15)
+- Use proper enum interface for G4String::strip
+
+25 September 2021  Ben Morgan (interfaces-V10-07-14)
+- Remove no longer support GAG/Gain UI
+
+21 September 2021  Guilherme Amadio (interfaces-V10-07-13)
+- Fix C++20 warnings from GCC 11.2.0.
+
+12 Jujy 2021  Igor Semeniouk (interfaces-V10-07-12)
+- G4UIQt.hh: add fExitIcon pointer
+- G4UIQt.cc: "exit" icon and extension selection
+- G4InteractorMessenger.cc - allow use exit icon by user
+
+23 June 2021  Igor Semeniouk (interfaces-V10-07-11)
+- G4UIQt.cc: Fix "Viewer Properties" window opened on Startup
+  o "viewer" window must be constructed with setVisiable(false)
+
 22 April 2021 Ben Morgan (interfaces-V10-07-10)
 - G4UIQt.cc: Deal properly with creation and deletion of Viewer Properties
 

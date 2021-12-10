@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 August 2021 Laurent Garnier (visexternals-V10-07-04)
+- Fix issues with GL lib when building X11 AND Qt. GL libs should be include only once
+
+18 August 2021 Laurent Garnier (visexternals-V10-07-03)
+- Fix issues in PDF generation due to remplacement by DBL_MAX introduced in visexternals-V10-07-02
+
+06 August 2021 Laurent Garnier (visexternals-V10-07-02)
+- Migrate gl2ps to 1.4.2
+- Patch lines:
+  4452-4495-4520: Replace ~1UL by DBL_MAX
+  4133: Add break statement
+
 14 April 2021 Ben Morgan (visexternals-V10-07-01)
 - Migrate gl2ps build to modular CMake system
 

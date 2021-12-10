@@ -15,6 +15,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 November 2021 - P. Arce (ascii-V10-07-04)
+- Add G4MultiUnion and G4ScaledSolid from user contribution (Pooria Heidary): GitHub PR #28
+- G4tgbVolume.cc: correct lacking conversion degree-radian in polycone
+- G4tgbMaterialSimple.cc,G4tgrMaterial.cc: Change STP_Temperature to NTP_Temperature to be consistent with NIST materials 
+
+16 November 2021 - G. Cosmo (ascii-V10-07-03)
+- Change prefix to free math functions in G4tgrEvaluator source, to avoid
+  potential clashes with system functions carrying same name and signature.
+  Addressing problem report #2444.
+
+9 July 2021 - V. Ivanchenko (ascii-V10-07-02)
+- G4tgbGeometryDumper - fixed access to G4Elements
+
 1 April 2021 - B. Morgan (ascii-V10-07-01)
 - Migrate build to modular CMake API
 

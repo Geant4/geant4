@@ -49,10 +49,13 @@ public:
   static const std::vector<G4int>& GetBCHadrons();
   static const std::vector<G4int>& GetLightIons();
   static const std::vector<G4int>& GetLightAntiIons();
+  static const std::vector<G4int>& GetHyperNuclei();
+  static const std::vector<G4int>& GetHyperAntiNuclei();
 
   // several vectors of PDG codes for EM physics
   static const std::vector<G4int>& GetHeavyChargedParticles();
   static const std::vector<G4int>& GetBCChargedHadrons();
+  static const std::vector<G4int>& GetChargedHyperNuclei();
 
 private:
 
@@ -63,8 +66,11 @@ private:
   static const std::vector<G4int> sBCHadrons;
   static const std::vector<G4int> sLightIons;
   static const std::vector<G4int> sLightAntiIons;
+  static const std::vector<G4int> sHyperNuclei;
+  static const std::vector<G4int> sHyperAntiNuclei;
   static const std::vector<G4int> sHeavyChargedPart;
   static const std::vector<G4int> sBCChargedHadrons;
+  static const std::vector<G4int> sChargedHyperNuclei;
 };
 
 #endif

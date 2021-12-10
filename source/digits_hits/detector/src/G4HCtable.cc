@@ -48,7 +48,7 @@ G4int G4HCtable::Registor(G4String SDname, G4String HCname)
 G4int G4HCtable::GetCollectionID(G4String HCname) const
 {
   G4int i = -1;
-  if(HCname.index("/") == std::string::npos)  // HCname only
+  if(HCname.find("/") == std::string::npos)  // HCname only
   {
     for(size_t j = 0; j < HClist.size(); j++)
     {

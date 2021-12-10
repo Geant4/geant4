@@ -45,27 +45,31 @@ class G4XmlNtupleFileManager : public G4VNtupleFileManager
 {
   public:
     explicit G4XmlNtupleFileManager(const G4AnalysisManagerState& state);
-    ~G4XmlNtupleFileManager();
-    
+    G4XmlNtupleFileManager() = delete;
+    virtual ~G4XmlNtupleFileManager() = default;
+
     virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
 
     // Methods to be performed at file management
     virtual G4bool ActionAtOpenFile(const G4String& fileName) override;
     virtual G4bool ActionAtWrite() override;
     virtual G4bool ActionAtCloseFile(G4bool reset) override;
-    virtual G4bool Reset() override; 
+    virtual G4bool Reset() override;
 
     void SetFileManager(std::shared_ptr<G4XmlFileManager> fileManager);
 
     std::shared_ptr<G4XmlNtupleManager> GetNtupleManager() const;
 
   private:
-    // methods
+    // Methods
     G4bool CloseNtupleFiles();
 
-    // data members
-    std::shared_ptr<G4XmlFileManager>  fFileManager;
-    std::shared_ptr<G4XmlNtupleManager>  fNtupleManager;
+    // Static data members
+    static constexpr std::string_view fkClass { "G4XmlNtupleFileManager" };
+
+    // Data members
+    std::shared_ptr<G4XmlFileManager>  fFileManager { nullptr };
+    std::shared_ptr<G4XmlNtupleManager>  fNtupleManager { nullptr };
 };
 
 // inline functions

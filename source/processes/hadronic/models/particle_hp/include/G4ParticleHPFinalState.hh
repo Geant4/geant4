@@ -64,6 +64,8 @@ public:
     theProjectile = G4Neutron::Neutron();
 
     theResult.Put( 0 );
+
+    secID = -1;
   }
   
   virtual ~G4ParticleHPFinalState()
@@ -135,5 +137,6 @@ protected:
     G4int theNDLDataA;
     G4int theNDLDataM;
 
+    G4int secID;  // Creator model ID for the secondaries created by this class or derived ones
 };
 #endif

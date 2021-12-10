@@ -129,6 +129,10 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
       {
 	PIXEshellCS = new G4teoCrossSection(namePIXExsModel);
       }
+    else if(namePIXExsModel == "ECPSSR_ANSTO")
+      {
+	PIXEshellCS = new G4teoCrossSection(namePIXExsModel);
+      }    
     else if(namePIXExsModel == "Empirical")
       {
 	PIXEshellCS = new G4empCrossSection(namePIXExsModel);

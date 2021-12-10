@@ -10,17 +10,17 @@ gROOT->SetStyle("Plain");
 Double_t scale;
 	
 c1 = new TCanvas ("c1","",20,20,1000,500);
-c1.Divide(2,1);
+c1->Divide(2,1);
 
-system ("rm -rf microelectronics.root");
-system ("hadd microelectronics.root microelectronics_*.root");
+//system ("rm -rf microelectronics.root");
+//system ("hadd microelectronics.root microelectronics_*.root");
 
 TFile f("microelectronics.root"); 
 
 TNtuple* ntuple;
-ntuple = (TNtuple*)f->Get("microelectronics"); 
+ntuple = (TNtuple*)f.Get("microelectronics"); 
      
-c1.cd(1);
+c1->cd(1);
   gStyle->SetOptStat(000000);
   
   // All
@@ -37,7 +37,7 @@ c1.cd(1);
   
   gPad->SetLogy();
 
-c1.cd(2);
+c1->cd(2);
 
   // Electrons
   ntuple->SetMarkerColor(2);

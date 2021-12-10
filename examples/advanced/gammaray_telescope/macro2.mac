@@ -23,7 +23,6 @@
 
 # You can modify the geometry of the telescope via a messenger
 
-/control/execute emstd.mac
 /payload/setNbOfTKRLayers 10
 /payload/update
 

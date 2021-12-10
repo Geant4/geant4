@@ -241,8 +241,6 @@ private:
 
   G4int nICelectrons;
 
-  G4int idxIC;
-
   // Energy-momentum checking
   std::pair<G4double, G4double> epCheckLevels;
   G4bool levelsSetByProcess;

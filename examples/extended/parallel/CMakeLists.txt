@@ -1,6 +1,6 @@
 # - CmakeLists.txt for parallel examples
 
-cmake_minimum_required(VERSION 3.12...3.20)
+cmake_minimum_required(VERSION 3.16...3.21)
 
 find_package(Geant4)
 include(${Geant4_USE_FILE})

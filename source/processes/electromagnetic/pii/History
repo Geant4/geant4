@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-07-2021  V.Ivanchenko, tag empii-V10-07-01
+            use const pointer to G4Element
+
 16-04-2021  B.Morgan, tag empii-V10-07-00
             Migrate build to modular CMake API
 

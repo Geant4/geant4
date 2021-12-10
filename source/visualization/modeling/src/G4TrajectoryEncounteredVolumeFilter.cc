@@ -56,7 +56,7 @@ G4TrajectoryEncounteredVolumeFilter::Evaluate(const G4VTrajectory& traj) const
         std::vector<G4AttValue>::const_iterator iAtt;
         for (iAtt = attValues->begin(); iAtt != attValues->end(); ++iAtt) {
           if (iAtt->GetName() == "PostVPath" &&
-              iAtt->GetValue().contains(pvname)) break;
+              G4StrUtil::contains(iAtt->GetValue(),pvname)) break;
         }
         if (iAtt != attValues->end()) {  // Required value found
           return true;  // First found pvname determines selection.

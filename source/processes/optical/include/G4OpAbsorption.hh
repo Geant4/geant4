@@ -73,6 +73,8 @@ class G4OpAbsorption : public G4VDiscreteProcess
 
   virtual void Initialise();
 
+  void SetVerboseLevel(G4int);
+
  private:
   G4OpAbsorption(const G4OpAbsorption& right) = delete;
   G4OpAbsorption& operator=(const G4OpAbsorption& right) = delete;

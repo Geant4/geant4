@@ -29,7 +29,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
+// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues
 //
 //   **********************************************
 //   *        UltraPhysicsList.hh
@@ -49,7 +49,7 @@ class UltraPhysicsList : public G4VModularPhysicsList
   public:
     UltraPhysicsList();
     ~UltraPhysicsList();
- 
+
   protected:
     // Construct particles and processes
     void ConstructParticle();
@@ -65,8 +65,6 @@ class UltraPhysicsList : public G4VModularPhysicsList
   G4VPhysicsConstructor*  fEmPhysicsList;
   G4VPhysicsConstructor*  fOpPhysicsList;
   G4VPhysicsConstructor*  fDecayPhysicsList;
-
-  std::vector<G4VPhysicsConstructor*> fHadronPhys;
   G4String fEmName;
 
   G4int fVerboseLebel;
@@ -79,4 +77,3 @@ class UltraPhysicsList : public G4VModularPhysicsList
 };
 
 #endif
-

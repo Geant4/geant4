@@ -47,6 +47,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4TransportationManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 ///////////////////////////////////////////////////////////////////////
 //  Constructor
@@ -60,6 +61,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
 
+  secID = G4PhysicsModelCatalog::GetModelID("model_SynRad");
   SetProcessSubType(fSynchrotronRadiation);
   verboseLevel = 1;
   FirstTime    = true;
@@ -267,7 +269,6 @@ G4VParticleChange* G4SynchrotronRadiation::PostStepDoIt(
                               gammaPolarization.z());
 
       aParticleChange.SetNumberOfSecondaries(1);
-      aParticleChange.AddSecondary(aGamma);
 
       // Update the incident particle
       G4double newKinEnergy = kineticEnergy - energyOfSR;
@@ -280,6 +281,14 @@ G4VParticleChange* G4SynchrotronRadiation::PostStepDoIt(
       {
         aParticleChange.ProposeEnergy(0.);
       }
+
+      // Create the G4Track
+      G4Track* aSecondaryTrack = new G4Track(aGamma, trackData.GetGlobalTime(), trackData.GetPosition());
+      aSecondaryTrack->SetTouchableHandle(stepData.GetPostStepPoint()->GetTouchableHandle());
+      aSecondaryTrack->SetParentID(trackData.GetTrackID());
+      aSecondaryTrack->SetCreatorModelID(secID);
+      aParticleChange.AddSecondary(aSecondaryTrack);
+
     }
   }
   return G4VDiscreteProcess::PostStepDoIt(trackData, stepData);

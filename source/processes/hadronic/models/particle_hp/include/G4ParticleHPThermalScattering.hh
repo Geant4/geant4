@@ -67,6 +67,10 @@ struct E_P_E_isoAng
    std::vector < G4double > prob; 
    std::vector < E_isoAng* > vE_isoAngle; 
    G4double sum_of_probXdEs;  // should be close to 1
+   std::vector< G4double > secondary_energy_cdf;
+   std::vector< G4double > secondary_energy_pdf;
+   std::vector< G4double > secondary_energy_value; 
+   G4int secondary_energy_cdf_size;
    E_P_E_isoAng() {
       energy=0.0;
       n=0;
@@ -122,13 +126,17 @@ class G4ParticleHPThermalScattering : public G4HadronicInteraction
       G4ParticleHPElastic* theHPElastic;
       
       G4double getMu ( E_isoAng* );
+      G4double getMu ( G4double rndm1 , G4double rndm2 , E_isoAng* anEPM );
 
       std::pair< G4double , G4double > find_LH ( G4double , std::vector<G4double>* );
       G4double get_linear_interpolated ( G4double , std::pair < G4double , G4double > , std::pair < G4double , G4double > );
 
       E_isoAng create_E_isoAng_from_energy( G4double , std::vector< E_isoAng* >* );
 
-      G4double get_secondary_energy_from_E_P_E_isoAng ( G4double , E_P_E_isoAng* );
+      G4double get_secondary_energy_from_E_P_E_isoAng ( G4double random , E_P_E_isoAng* anE_P_E_isoAng );
+
+      std::pair< G4double, G4double > sample_inelastic_E_mu( G4double pE , std::vector< E_P_E_isoAng* >* vNEP_EPM ); 
+      std::pair< G4double, G4int > sample_inelastic_E( G4double rndm1 , G4double rndm2 , E_P_E_isoAng* anE_P_E_isoAng );
 
       std::pair< G4double , E_isoAng > create_sE_and_EPM_from_pE_and_vE_P_E_isoAng ( G4double , G4double , std::vector < E_P_E_isoAng* >* );
 

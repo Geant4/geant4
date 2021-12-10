@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 August 2021 Alberto Ribon (hadr-proc-V10-07-06)
+--------------------------------------------------
+- G4HadronElasticProcess : set the creator model ID for the elastic recoil,
+  using the new version of the G4PhysicsModelCatalog
+
 16 April 2021 Ben Morgan (hadr-proc-V10-07-05)
 ------------------------------------------------
 - Migrate build to modular CMake API

@@ -43,6 +43,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VMoleculeCounter.hh"
 #include "G4Exp.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 static G4double onsager_constant = e_squared / (4. * pi * epsilon0 * k_Boltzmann);
 
@@ -117,7 +118,7 @@ void G4DNAElectronHoleRecombination::Create()
     enableAlongStepDoIt = false;
     enablePostStepDoIt = true;
 
-    SetProcessSubType(60);
+    SetProcessSubType(fLowEnergyTransportation);
 
     G4VITProcess::SetInstantiateProcessState(false);
     // ie G4DNAElectronHoleRecombination uses a state class

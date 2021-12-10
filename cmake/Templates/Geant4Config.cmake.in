@@ -82,8 +82,6 @@
 #  motif             (Motif-X11/OpenGL Graphical User Interface)
 #  qt                (Qt5/OpenGL Graphical User Interface)
 #
-#  vis_network_dawn  (Client/Server network interface to DAWN visualization)
-#  vis_network_vrml  (Client/Server network interface to VRML visualization)
 #  vis_opengl_x11    (OpenGL visualization with X11 interface)
 #  vis_opengl_win32  (OpenGL visualization with X11 interface)
 #  vis_raytracer_x11 (RayTracer visualization with X11 interface)
@@ -121,12 +119,6 @@
 # Geant4_LIBRARIES variables will be populated to use the builtin or
 # system APIs as required, and you should use these to ensure you compile
 # and link against the same API version.
-#
-# An additional variable is set for CLHEP when Geant4 was built using a
-# system install to indicate whether the single/granular CLHEP library/ies
-# was/were linked against
-#
-#  Geant4_system_clhep_ISGRANULAR (TRUE is Geant4 linked to granular CLHEP)
 #
 # Environment variables for, and directory paths to, physics datasets
 # used by some Geant4 physics processes may be determined from the
@@ -256,12 +248,7 @@ set(Geant4_system_clhep_FOUND @GEANT4_USE_SYSTEM_CLHEP@)
 
 if(Geant4_system_clhep_FOUND)
   set(Geant4_builtin_clhep_FOUND FALSE)
-  set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
-  if(Geant4_system_clhep_ISGRANULAR)
-    find_dependency(CLHEP @CLHEP_VERSION@ EXACT COMPONENTS @__g4_clhep_components@ CONFIG)
-  else()
-    find_dependency(CLHEP @CLHEP_VERSION@ EXACT CONFIG)
-  endif()
+  find_dependency(CLHEP @CLHEP_VERSION@ EXACT CONFIG)
   # Explicitly use include_directories.
   # - Geant4 and CLHEP use full imported targets with usage requirements,
   #   but ROOT (used in the examples), ignores usage requirements in dictionary
@@ -399,27 +386,7 @@ endif()
 set(Geant4_ui_win32_FOUND @WIN32@)
 if(Geant4_ui_win32_FOUND)
   if(("ui_win32" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_ui_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_WIN32
-      -DG4UI_USE_WIN32
-      )
-  endif()
-endif()
-
-# - Visualization : Network DAWN
-set(Geant4_vis_dawn_network_FOUND @GEANT4_USE_NETWORK_DAWN@)
-if(Geant4_vis_dawn_network_FOUND)
-  if(("vis_dawn_network" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_DAWN)
-  endif()
-endif()
-
-# - Visualization : Network VRML
-set(Geant4_vis_vrml_network_FOUND @GEANT4_USE_NETWORK_VRML@)
-if(Geant4_vis_vrml_network_FOUND)
-  if(("vis_vrml_network" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VRML)
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_WIN32)
   endif()
 endif()
 
@@ -433,11 +400,7 @@ if(Geant4_vis_raytracer_x11_FOUND)
   include("${CMAKE_CURRENT_LIST_DIR}/G4X11Shim.cmake")
 
   if(("vis_raytracer_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_XT
-      -DG4VIS_USE_RAYTRACERX
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_RAYTRACERX)
   endif()
 endif()
 
@@ -467,15 +430,8 @@ if(Geant4_qt_FOUND)
      OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
      OR ("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS)
      OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_QT
-      -DG4UI_USE_QT
-      -DG4VIS_USE_OPENGLQT
-     #-DG4VIS_USE_TOOLSSG_QT_GLES
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_QT -DG4VIS_USE_OPENGLQT)
     set(_geant4_use_opengl_library ON)
-   #set(_geant4_use_toolssg_library ON)
     # Qt3D is always on if available
     set(_geant4_use_qt3D_library ${Geant4_qt3d_FOUND})
   endif()
@@ -499,12 +455,7 @@ if(Geant4_motif_FOUND)
      OR ("vis_openinventor" IN_LIST Geant4_FIND_COMPONENTS)
      OR ("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS)
      OR Geant4_ui_all_FOUND OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_XT
-      -DG4UI_USE_XM
-      -DG4VIS_USE_OPENGLXM
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4UI_USE_XM -DG4VIS_USE_OPENGLXM)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -521,11 +472,7 @@ if(Geant4_vis_opengl_x11_FOUND)
   endif()
 
   if(("vis_opengl_x11" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_XT
-      -DG4VIS_USE_OPENGLX
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGLX)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -535,11 +482,7 @@ set(Geant4_vis_opengl_win32_FOUND @GEANT4_USE_OPENGL_WIN32@)
 if(Geant4_vis_opengl_win32_FOUND)
   find_dependency(OpenGL)
   if(("vis_opengl_win32" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4INTY_USE_WIN32
-      -DG4VIS_USE_OPENGLWIN32
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGLWIN32)
     set(_geant4_use_opengl_library ON)
   endif()
 endif()
@@ -569,9 +512,9 @@ if(Geant4_vis_openinventor_FOUND)
       list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIQT)
     else()
       if(WIN32)
-        list(APPEND Geant4_DEFINITIONS -G4INTY_USE_WIN32 -DG4VIS_USE_OI -DG4VIS_USE_OIWIN32)
+        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIWIN32)
       else()
-        list(APPEND Geant4_DEFINITIONS -DG4INTY_USE_XT -DG4VIS_USE_OI -DG4VIS_USE_OIX)
+        list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OI -DG4VIS_USE_OIX)
       endif()
     endif()
 
@@ -591,10 +534,7 @@ if(Geant4_vis_toolssg_x11_gles_FOUND)
   endif()
 
   if(("vis_toolssg_x11_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4VIS_USE_TOOLSSG_X11_GLES
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_X11_GLES)
     set(_geant4_use_toolssg_library ON)
   endif()
 endif()
@@ -604,10 +544,7 @@ set(Geant4_vis_toolssg_windows_gles_FOUND @GEANT4_USE_TOOLSSG_WINDOWS_GLES@)
 if(Geant4_vis_toolssg_windows_gles_FOUND)
   find_dependency(OpenGL)
   if(("vis_toolssg_windows_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4VIS_USE_TOOLSSG_WINDOWS_GLES
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_WINDOWS_GLES)
     set(_geant4_use_toolssg_library ON)
   endif()
 endif()
@@ -624,10 +561,7 @@ if(Geant4_vis_toolssg_xt_gles_FOUND)
   endif()
 
   if(("vis_toolssg_xt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4VIS_USE_TOOLSSG_XT_GLES
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_XT_GLES)
     set(_geant4_use_toolssg_library ON)
   endif()
 endif()
@@ -637,16 +571,24 @@ set(Geant4_vis_toolssg_qt_gles_FOUND @GEANT4_USE_TOOLSSG_QT_GLES@)
 if(Geant4_vis_toolssg_qt_gles_FOUND)
   find_dependency(OpenGL)
   if(("vis_toolssg_qt_gles" IN_LIST Geant4_FIND_COMPONENTS) OR Geant4_vis_all_FOUND)
-    list(APPEND
-      Geant4_DEFINITIONS
-      -DG4VIS_USE_TOOLSSG_QT_GLES
-      )
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG_QT_GLES)
     set(_geant4_use_toolssg_library ON)
   endif()
 endif()
 
 # Reset any OpenGL Preference
 set(OpenGL_GL_PREFERENCE "${OpenGL_GL_PREFERENCE_SAVE}")
+
+set(Geant4_vis_Vtk_FOUND @GEANT4_USE_VTK@)
+if(Geant4_vis_Vtk_FOUND)
+  find_dependency(VTK)
+  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VTK)
+  set(_geant4_use_vtk_library ON)
+
+  if(Geant4_qt_FOUND)
+    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_VTK_QT)
+  endif()
+endif()
 
 #-----------------------------------------------------------------------
 # Include the files listing all the imported targets and configuring
@@ -693,39 +635,35 @@ set(_geant4_internal_libraries
   Geant4::G4GMocren${_geant4_lib_use_suffix}
   Geant4::G4visHepRep${_geant4_lib_use_suffix}
   Geant4::G4RayTracer${_geant4_lib_use_suffix}
-  Geant4::G4VRML${_geant4_lib_use_suffix}
-  )
+  Geant4::G4VRML${_geant4_lib_use_suffix})
 
 # - G4OpenGL if it's requested.
 if(_geant4_use_opengl_library)
   list(APPEND _geant4_internal_libraries
     Geant4::G4OpenGL${_geant4_lib_use_suffix}
-    Geant4::G4gl2ps${_geant4_lib_use_suffix}
-    )
+    Geant4::G4gl2ps${_geant4_lib_use_suffix})
   list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_OPENGL)
 endif()
 
 # - Qt3D if it's requested.
 if(_geant4_use_qt3D_library)
-  list(APPEND _geant4_internal_libraries
-    Geant4::G4visQt3D${_geant4_lib_use_suffix}
-    )
+  list(APPEND _geant4_internal_libraries Geant4::G4visQt3D${_geant4_lib_use_suffix})
   list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_QT3D)
 endif()
 
 # - G4OpenInventor if it's requested.
 if(_geant4_use_inventor_library)
-  list(APPEND _geant4_internal_libraries
-    Geant4::G4OpenInventor${_geant4_lib_use_suffix}
-    )
+  list(APPEND _geant4_internal_libraries Geant4::G4OpenInventor${_geant4_lib_use_suffix})
 endif()
 
 # - G4ToolsSG if it's requested.
 if(_geant4_use_toolssg_library)
-  list(APPEND _geant4_internal_libraries
-    Geant4::G4ToolsSG${_geant4_lib_use_suffix}
-    )
+  list(APPEND _geant4_internal_libraries Geant4::G4ToolsSG${_geant4_lib_use_suffix})
   list(APPEND Geant4_DEFINITIONS -DG4VIS_USE_TOOLSSG)
+endif()
+
+if(_geant4_use_vtk_library)
+  list(APPEND _geant4_internal_libraries Geant4::G4visVtk${_geant4_lib_use_suffix})
 endif()
 
 # - G3toG4 if it's requested

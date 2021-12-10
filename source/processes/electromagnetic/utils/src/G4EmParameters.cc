@@ -127,6 +127,7 @@ void G4EmParameters::Initialise()
   muhadLateralDisplacement = false;
   useAngGeneratorForIonisation = false;
   useMottCorrection = false;
+  integral = true;
   birks = false;
   fICRU90 = false;
   gener = false;
@@ -135,6 +136,7 @@ void G4EmParameters::Initialise()
   fPolarisation = false;
   fMuDataFromFile = false;
   fDNA = false;
+  fIsPrinted = false;
 
   minKinEnergy = 0.1*CLHEP::keV;
   maxKinEnergy = 100.0*CLHEP::TeV;
@@ -202,14 +204,6 @@ G4bool G4EmParameters::LPM() const
   return flagLPM;
 }
 
-// are obsolete
-void G4EmParameters::SetSpline(G4bool)
-{}
-G4bool G4EmParameters::Spline() const
-{
-  return true;
-}
-
 void G4EmParameters::SetUseCutAsFinalRange(G4bool val)
 {
   if(IsLocked()) { return; }
@@ -254,6 +248,17 @@ G4bool G4EmParameters::BeardenFluoDir() const
   return fCParameters->BeardenFluoDir();
 }
 
+void G4EmParameters::SetANSTOFluoDir(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetANSTOFluoDir(val);
+}
+
+G4bool G4EmParameters::ANSTOFluoDir() const
+{
+  return fCParameters->ANSTOFluoDir();
+}
+
 void G4EmParameters::SetAuger(G4bool val)
 {
   if(IsLocked()) { return; }
@@ -261,17 +266,6 @@ void G4EmParameters::SetAuger(G4bool val)
 }
 
 G4bool G4EmParameters::Auger() const
-{
-  return fCParameters->Auger();
-}
-
-// obsolete
-void G4EmParameters::SetAugerCascade(G4bool val)
-{
-  SetAuger(val);
-}
-
-G4bool G4EmParameters::AugerCascade() const
 {
   return fCParameters->Auger();
 }
@@ -351,6 +345,17 @@ void G4EmParameters::SetUseMottCorrection(G4bool val)
 G4bool G4EmParameters::UseMottCorrection() const
 {
   return useMottCorrection;
+}
+
+void G4EmParameters::SetIntegral(G4bool val)
+{
+  if(IsLocked()) { return; }
+  integral = val;
+}
+
+G4bool G4EmParameters::Integral() const
+{
+  return integral;
 }
 
 void G4EmParameters::SetEnablePolarisation(G4bool val)
@@ -480,6 +485,16 @@ void G4EmParameters::ActivateDNA()
 {
   if(IsLocked()) { return; }
   fDNA = true;
+}
+
+void G4EmParameters::SetIsPrintedFlag(G4bool val)
+{
+  fIsPrinted = val;
+}
+
+G4bool G4EmParameters::IsPrintLocked() const
+{
+  return fIsPrinted;
 }
 
 G4EmSaturation* G4EmParameters::GetEmSaturation()
@@ -1315,6 +1330,8 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Fluorescence enabled                               " <<fCParameters->Fluo() << "\n";
   os << "Fluorescence Bearden data files enabled            " 
      <<fCParameters->BeardenFluoDir() << "\n";
+  os << "Fluorescence ANSTO data files enabled              " 
+     <<fCParameters->ANSTOFluoDir() << "\n";
   os << "Auger electron cascade enabled                     " 
      <<fCParameters->Auger() << "\n";
   os << "PIXE atomic de-excitation enabled                  " <<fCParameters->Pixe() << "\n";
@@ -1342,8 +1359,10 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os.precision(prec);
 }
 
-void G4EmParameters::Dump() const
+void G4EmParameters::Dump()
 {
+  if(fIsPrinted) return;
+
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&emParametersMutex);
 #endif

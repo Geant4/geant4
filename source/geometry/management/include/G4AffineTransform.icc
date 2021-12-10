@@ -86,13 +86,6 @@ G4AffineTransform( const G4double prxx,const G4double prxy,const G4double prxz,
    tx(ptx),ty(pty),tz(ptz)
 {}
 
-inline G4AffineTransform::G4AffineTransform(const G4AffineTransform& rhs)
- : rxx(rhs.rxx),rxy(rhs.rxy),rxz(rhs.rxz),
-   ryx(rhs.ryx),ryy(rhs.ryy),ryz(rhs.ryz),
-   rzx(rhs.rzx),rzy(rhs.rzy),rzz(rhs.rzz),
-   tx(rhs.tx),ty(rhs.ty),tz(rhs.tz)
-{}
-
 inline G4AffineTransform&
 G4AffineTransform::operator = (const G4AffineTransform& rhs)
 {
@@ -103,9 +96,6 @@ G4AffineTransform::operator = (const G4AffineTransform& rhs)
   tx = rhs.tx; ty = rhs.ty; tz = rhs.tz;
   return *this;
 }
-
-inline G4AffineTransform::~G4AffineTransform()
-{}
 
 inline G4AffineTransform
 G4AffineTransform::operator * (const G4AffineTransform& tf) const

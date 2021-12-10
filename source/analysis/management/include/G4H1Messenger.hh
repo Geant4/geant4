@@ -50,28 +50,29 @@ class G4H1Messenger : public G4UImessenger
 {
   public:
     explicit G4H1Messenger(G4VAnalysisManager* manager);
+    G4H1Messenger() = delete;
     virtual ~G4H1Messenger();
-   
-    // methods
+
+    // Methods
     virtual void SetNewValue(G4UIcommand* command, G4String value) final;
-    
+
   private:
     void CreateH1Cmd();
     void SetH1Cmd();
- 
-    G4VAnalysisManager*  fManager; ///< Associated class
-    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper; 
+
+    G4VAnalysisManager*  fManager { nullptr }; ///< Associated class
+    std::unique_ptr<G4AnalysisMessengerHelper>  fHelper;
     std::unique_ptr<G4UIdirectory>  fDirectory;
 
     std::unique_ptr<G4UIcommand>  fCreateH1Cmd;
     std::unique_ptr<G4UIcommand>  fSetH1Cmd;
     std::unique_ptr<G4UIcommand>  fSetH1XCmd;
-    std::unique_ptr<G4UIcommand>  fSetH1TitleCmd;   
-    std::unique_ptr<G4UIcommand>  fSetH1XAxisCmd;   
-    std::unique_ptr<G4UIcommand>  fSetH1YAxisCmd;   
+    std::unique_ptr<G4UIcommand>  fSetH1TitleCmd;
+    std::unique_ptr<G4UIcommand>  fSetH1XAxisCmd;
+    std::unique_ptr<G4UIcommand>  fSetH1YAxisCmd;
     std::unique_ptr<G4UIcommand>  fSetH1XAxisLogCmd;
     std::unique_ptr<G4UIcommand>  fSetH1YAxisLogCmd;
 };
-  
+
 #endif
 

@@ -75,6 +75,7 @@ namespace G4INCL {
         Ep((Float_t)0.0),
         nShots(0),
         geometricCrossSection((Float_t)0.0),
+        biasFactor((Float_t)0.0),
         nTransparents(0),
         reactionCrossSection((Float_t)0.0),
         errorReactionCrossSection((Float_t)0.0),
@@ -123,6 +124,8 @@ namespace G4INCL {
       Int_t nShots;
       /** \brief Geometric cross section */
       Float_t geometricCrossSection;
+      /** \brief Bias factor */
+      Float_t biasFactor;
       /** \brief Number of transparent shots */
       Int_t nTransparents;
       /** \brief Calculated reaction cross section */

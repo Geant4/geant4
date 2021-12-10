@@ -535,8 +535,8 @@ void Run::EndOfRun()
                            ->GetProperty(kRINDEX)
                            ->Value(fEkin);
 
-      G4H1* histo_trans = analysisMan->GetH1(histo_id_trans);
-      G4H1* histo_refl  = analysisMan->GetH1(histo_id_refl);
+      auto histo_trans = analysisMan->GetH1(histo_id_trans);
+      auto histo_refl  = analysisMan->GetH1(histo_id_refl);
       std::vector<G4double> trans;
       std::vector<G4double> refl;
       std::vector<G4double> tot;

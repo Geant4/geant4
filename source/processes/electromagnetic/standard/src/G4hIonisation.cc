@@ -112,18 +112,21 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     //G4cout << " G4hIonisation::InitialiseEnergyLossProcess " << pname 
     //   << "  " << bpart << G4endl;
 
-    // standard base particles
-    if(part == bpart || pname == "proton" ||
-       pname == "anti_proton" || 
-       pname == "pi+" || pname == "pi-" || 
-       pname == "kaon+" || pname == "kaon-" || pname == "GenericIon"
-       || pname == "He3" || pname == "alpha") 
-      { 
-	theBaseParticle = nullptr;
-      }
-    // select base particle 
-    else if(bpart == nullptr) {
+    // define base particle
+    if(part == bpart) { 
+      theBaseParticle = nullptr;
+    } else if(nullptr != bpart) { 
+      theBaseParticle = bpart;
 
+    } else if(pname == "proton" || pname == "anti_proton" || 
+	      pname == "pi+" || pname == "pi-" || 
+	      pname == "kaon+" || pname == "kaon-" || 
+	      pname == "GenericIon" || pname == "alpha") { 
+      // no base particles
+      theBaseParticle = nullptr;
+
+    } else {
+      // select base particle 
       if(part->GetPDGSpin() == 0.0) {
 	if(q > 0.0) { theBaseParticle = G4KaonPlus::KaonPlus(); }
 	else { theBaseParticle = G4KaonMinus::KaonMinus(); }
@@ -131,10 +134,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 	if(q > 0.0) { theBaseParticle = G4Proton::Proton(); } 
 	else { theBaseParticle = G4AntiProton::AntiProton(); }
       }
-
-      // base particle defined by interface
-    } else { 
-      theBaseParticle = bpart;
     }
     SetBaseParticle(theBaseParticle);
 

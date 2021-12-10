@@ -58,97 +58,97 @@ class G4UIcommand;
 
 // Messenger class that defines commands for the optical physics
 
-class G4OpticalParametersMessenger: public G4UImessenger
+class G4OpticalParametersMessenger : public G4UImessenger
 {
-  public:
+ public:
+  G4OpticalParametersMessenger(G4OpticalParameters*);
+  virtual ~G4OpticalParametersMessenger();
 
-    G4OpticalParametersMessenger(G4OpticalParameters*);
-    virtual ~G4OpticalParametersMessenger();
+  // methods
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
-    // methods
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-
+ private:
   G4OpticalParametersMessenger() = delete;
-  G4OpticalParametersMessenger(const G4OpticalParametersMessenger& right) = delete;
-  G4OpticalParametersMessenger& operator=(const G4OpticalParametersMessenger& right) = delete;
+  G4OpticalParametersMessenger(const G4OpticalParametersMessenger& right) =
+    delete;
+  G4OpticalParametersMessenger& operator=(
+    const G4OpticalParametersMessenger& right) = delete;
 
   // data members
 
   /// associated class
-  G4OpticalParameters*      params;
+  G4OpticalParameters* params;
 
   /// command directory
-  G4UIdirectory*    fDir;
-  G4UIdirectory*    fCerenkovDir;
-  G4UIdirectory*    fScintDir;
-  G4UIdirectory*    fWlsDir;
-  G4UIdirectory*    fWls2Dir;
-  G4UIdirectory*    fBoundaryDir;
-  G4UIdirectory*    fMieDir;
-  G4UIdirectory*    fAbsDir;
-  G4UIdirectory*    fRaylDir;
+  G4UIdirectory* fDir;
+  G4UIdirectory* fCerenkovDir;
+  G4UIdirectory* fScintDir;
+  G4UIdirectory* fWlsDir;
+  G4UIdirectory* fWls2Dir;
+  G4UIdirectory* fBoundaryDir;
+  G4UIdirectory* fMieDir;
+  G4UIdirectory* fAbsDir;
+  G4UIdirectory* fRaylDir;
 
   /// selectOpProcess command
-  G4UIcommand*           fActivateProcessCmd;
+  G4UIcommand* fActivateProcessCmd;
 
   /// setProcessVerbose command
-  G4UIcmdWithAnInteger*  fVerboseCmd;
+  G4UIcmdWithAnInteger* fVerboseCmd;
 
   // Cerenkov
 
   // setCerenkovMaxPhotons command
-  G4UIcmdWithAnInteger*  fCerenkovMaxPhotonsCmd;
+  G4UIcmdWithAnInteger* fCerenkovMaxPhotonsCmd;
 
   /// setCerenkovMaxBetaChange command
-  G4UIcmdWithADouble*    fCerenkovMaxBetaChangeCmd;
+  G4UIcmdWithADouble* fCerenkovMaxBetaChangeCmd;
 
   /// setStackPhotons command
-  G4UIcmdWithABool*      fCerenkovStackPhotonsCmd;
+  G4UIcmdWithABool* fCerenkovStackPhotonsCmd;
 
-  G4UIcmdWithABool*      fCerenkovTrackSecondariesFirstCmd;
-  G4UIcmdWithAnInteger*  fCerenkovVerboseLevelCmd;
+  G4UIcmdWithABool* fCerenkovTrackSecondariesFirstCmd;
+  G4UIcmdWithAnInteger* fCerenkovVerboseLevelCmd;
 
   // Scintillation
 
   /// setScintillationByParticleType command
-  G4UIcmdWithABool*      fScintByParticleTypeCmd;
+  G4UIcmdWithABool* fScintByParticleTypeCmd;
 
   /// setScintillationTrackInfo command
-  G4UIcmdWithABool*      fScintTrackInfoCmd;
+  G4UIcmdWithABool* fScintTrackInfoCmd;
 
   /// setStackPhotons command
-  G4UIcmdWithABool*      fScintStackPhotonsCmd;
+  G4UIcmdWithABool* fScintStackPhotonsCmd;
 
-  G4UIcmdWithABool*      fScintTrackSecondariesFirstCmd;
+  G4UIcmdWithABool* fScintTrackSecondariesFirstCmd;
 
   /// setFiniteRiseTime command
-  G4UIcmdWithABool*      fScintFiniteRiseTimeCmd;
+  G4UIcmdWithABool* fScintFiniteRiseTimeCmd;
 
-  G4UIcmdWithAnInteger*  fScintVerboseLevelCmd;
+  G4UIcmdWithAnInteger* fScintVerboseLevelCmd;
 
   // WLS
 
   /// setWLSTimeProfile command
-  G4UIcmdWithAString*    fWLSTimeProfileCmd;
-  G4UIcmdWithAnInteger*  fWLSVerboseLevelCmd;
+  G4UIcmdWithAString* fWLSTimeProfileCmd;
+  G4UIcmdWithAnInteger* fWLSVerboseLevelCmd;
 
   // WLS2
 
   /// setWLS2TimeProfile command
-  G4UIcmdWithAString*    fWLS2TimeProfileCmd;
-  G4UIcmdWithAnInteger*  fWLS2VerboseLevelCmd;
-  
+  G4UIcmdWithAString* fWLS2TimeProfileCmd;
+  G4UIcmdWithAnInteger* fWLS2VerboseLevelCmd;
+
   /// setInvokeSD command
-  G4UIcmdWithABool*      fBoundaryInvokeSDCmd;
-  G4UIcmdWithAnInteger*  fBoundaryVerboseLevelCmd;
+  G4UIcmdWithABool* fBoundaryInvokeSDCmd;
+  G4UIcmdWithAnInteger* fBoundaryVerboseLevelCmd;
 
-  G4UIcmdWithAnInteger*  fAbsorptionVerboseLevelCmd;
-  G4UIcmdWithAnInteger*  fRayleighVerboseLevelCmd;
-  G4UIcmdWithAnInteger*  fMieVerboseLevelCmd;
+  G4UIcmdWithAnInteger* fAbsorptionVerboseLevelCmd;
+  G4UIcmdWithAnInteger* fRayleighVerboseLevelCmd;
+  G4UIcmdWithAnInteger* fMieVerboseLevelCmd;
 
-  G4UIcommand*           fDumpCmd;
+  G4UIcommand* fDumpCmd;
 };
 
-#endif // G4OpticalParametersMessenger_h
+#endif  // G4OpticalParametersMessenger_h

@@ -36,22 +36,12 @@
 // to a scene handler.  A scene is a collection of models.
 // A special case is made for G4PhysicalVolumeModel - a non-null pointer
 // is to be returned by G4PhysicalVolumeModel::GetG4PhysicalVolumeModel().
-//
-// The model must take care of the required transformation itself - thus the
-// models components should be transformed before delivering to the scene
-// handler. The model could receive the transformation in its constructor,
-// e.g., G4PhysicalVolumeModel, or handle it in the model's SetTransformation,
-// e.g., in G4AxesModel (relatively simple) or in G4ArrowModel (quite
-// complicated). This avoids having to transform the components perhaps
-// multiple times. The reasons for this are mainly to do with how we implement
-// G4PhysicalVolumeModel
 
 #ifndef G4VMODEL_HH
 #define G4VMODEL_HH
 
 #include "globals.hh"
 #include "G4VisExtent.hh"
-#include "G4Transform3D.hh"
 
 class G4VGraphicsScene;
 class G4ModelingParameters;
@@ -64,9 +54,7 @@ public: // With description
 
   friend std::ostream& operator << (std::ostream& os, const G4VModel&);
 
-  G4VModel
-  (const G4Transform3D& modelTransformation = G4Transform3D(),
-   const G4ModelingParameters* = 0);
+  G4VModel(const G4ModelingParameters* = 0);
    
   virtual ~G4VModel ();
 
@@ -89,19 +77,11 @@ public: // With description
   const G4VisExtent& GetExtent () const;
   // Extent of visible objects in local coordinate system.
 
-  const G4VisExtent& GetTransformedExtent () const;
-  // Extent of visible objects in transformed coordinate system.
-
   const G4String& GetGlobalDescription () const;
   // A description which does not change and lasts the life of the model.
 
   const G4String& GetGlobalTag () const;
   // A tag which does not change and lasts the life of the model.
-
-  const G4Transform3D& GetTransformation () const;
-  // Model transformation, i.e., position and orientation of model in
-  // world.  It is the responsibility of the model to apply this
-  // transformation before passing items to the graphics scene.
 
   // Set methods for above...
   void SetModelingParameters (const G4ModelingParameters*);
@@ -109,7 +89,6 @@ public: // With description
   void SetType (const G4String&);
   void SetGlobalDescription (const G4String&);
   void SetGlobalTag (const G4String&);
-  virtual void SetTransformation (const G4Transform3D&);
 
   virtual G4bool Validate (G4bool warn = true);
   // Validate, but allow internal changes (hence non-const function).
@@ -120,7 +99,6 @@ protected:
   G4String                    fGlobalTag;
   G4String                    fGlobalDescription;
   G4VisExtent                 fExtent;
-  G4Transform3D               fTransform;           
   const G4ModelingParameters* fpMP;
 
 private:

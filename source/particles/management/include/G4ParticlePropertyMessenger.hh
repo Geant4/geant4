@@ -70,10 +70,7 @@ class G4ParticlePropertyMessenger : public G4UImessenger
 
   private:
 
-    G4ParticleDefinition* SetCurrentParticle();
-
     G4ParticleTable* theParticleTable = nullptr;
-    G4ParticleDefinition* currentParticle = nullptr;
 
     G4UIdirectory*             thisDirectory = nullptr;
     G4UIcmdWithoutParameter*   dumpCmd = nullptr;

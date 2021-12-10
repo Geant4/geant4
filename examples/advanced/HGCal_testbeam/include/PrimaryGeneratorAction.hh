@@ -209,7 +209,7 @@ private:
   /// Reader of particle Y position (in mm)
   TTreeReaderValue<Float_t> *fHgcalPosY;
   /// Reader of particle Z position (in mm)
-  TTreeReaderValue<Float_t> *fHgcalPosZ;
+  // TTreeReaderValue<Float_t> *fHgcalPosZ;
   /// Reader of particle X momentum (in MeV)
   TTreeReaderValue<Float_t> *fHgcalMomX;
   /// Reader of particle Y momentum (in MeV)

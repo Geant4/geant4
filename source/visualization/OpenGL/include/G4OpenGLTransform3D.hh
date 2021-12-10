@@ -30,8 +30,6 @@
 // G4OpenGLTransform3D provides OpenGL style transformation matrix
 // from G4Transform3D.
 
-#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
-
 #ifndef G4OPENGLTRANSFORM3D_HH
 #define G4OPENGLTRANSFORM3D_HH
 
@@ -45,7 +43,5 @@ public:
 private:
   GLdouble m[16];
 };
-
-#endif
 
 #endif

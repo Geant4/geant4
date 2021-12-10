@@ -30,5 +30,4 @@
 
 #include "G4ErrorTanPlaneTarget.hh"
 
-G4ErrorTanPlaneTarget::G4ErrorTanPlaneTarget(){}
-G4ErrorTanPlaneTarget::~G4ErrorTanPlaneTarget(){}
+G4ErrorTanPlaneTarget::G4ErrorTanPlaneTarget() = default;

@@ -31,15 +31,13 @@
 
 #include "CCalSteppingAction.hh"
 #include "CCalRunAction.hh"
-#include "CCalAnalysis.hh"
 
+#include "G4AnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4StepPoint.hh"
 #include "G4ThreeVector.hh"
 #include "G4RunManager.hh"
-
-#include "CCalAnalysis.hh"
 
 CCalSteppingAction::CCalSteppingAction()
 {

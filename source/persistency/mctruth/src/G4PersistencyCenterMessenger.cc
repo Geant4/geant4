@@ -217,7 +217,7 @@ G4String G4PersistencyCenterMessenger::GetCurrentValue(G4UIcommand* command)
 
   if(command == verboseCmd)
   {
-    return pc->VerboseLevel();
+    return G4UIcommand::ConvertToString(pc->VerboseLevel());
   }
   else if(command == select)
   {

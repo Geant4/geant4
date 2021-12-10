@@ -131,7 +131,9 @@ void G4ShellEMDataSet::SetEnergiesData(G4DataVector* energies,
       return;
     }
 
-  G4String msg = "component " + (G4String)componentId + " not found";
+  G4String msg = "component ";
+  msg += static_cast<char>(componentId);
+  msg += " not found";
  
   G4Exception("G4ShellEMDataSet::SetEnergiesData()","em0008", FatalErrorInArgument ,msg);
 }
@@ -151,7 +153,9 @@ void G4ShellEMDataSet::SetLogEnergiesData(G4DataVector* energies,
       return;
     }
 
-  G4String msg = "component " + (G4String)componentId + " not found"; 
+  G4String msg = "component ";
+  msg += static_cast<char>(componentId);
+  msg += " not found";
   G4Exception("G4ShellEMDataSet::SetLogEnergiesData()","em0008", 
 	      FatalErrorInArgument ,msg);
 }
@@ -173,7 +177,7 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
       G4Exception("G4ShellEMDataSet::LoadData()", "em0003",FatalException, message);
       return 0;
     }
-
+  
   G4DataVector* orig_shell_energies = 0;
   G4DataVector* orig_shell_data = 0;
   G4DataVector* log_shell_energies = 0;

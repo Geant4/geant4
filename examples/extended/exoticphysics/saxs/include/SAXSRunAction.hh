@@ -34,6 +34,7 @@
 #include "SAXSRunActionMessenger.hh"
 
 #include "G4UserRunAction.hh"
+#include "G4AnalysisManager.hh"
 #include "globals.hh"
 
 class G4Run;
@@ -41,24 +42,23 @@ class SAXSRunActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/// Run action class.
-
 class SAXSRunAction : public G4UserRunAction
 {
 public:
   SAXSRunAction();
   virtual ~SAXSRunAction();
    
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void EndOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*) override;
+  void EndOfRunAction(const G4Run*) override;
 
-  void SetFileName(G4String);
+  void SetFileName(const G4String&);
     
 private:
-  G4String fFileName;
-  SAXSRunActionMessenger* fMessenger;   
+  SAXSRunActionMessenger* fMessenger = nullptr;
+  G4AnalysisManager* fAnalysisManager = nullptr;
 
-  G4bool fIsFileOpened;
+  G4bool fIsFileOpened = false;
+  G4String fFileName = "";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

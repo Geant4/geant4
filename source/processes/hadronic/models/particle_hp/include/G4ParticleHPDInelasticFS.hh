@@ -42,7 +42,7 @@ class G4ParticleHPDInelasticFS : public G4ParticleHPInelasticCompFS
 {
   public:
   
-  G4ParticleHPDInelasticFS(){}
+  G4ParticleHPDInelasticFS();
   ~G4ParticleHPDInelasticFS(){}
   void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
   G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);

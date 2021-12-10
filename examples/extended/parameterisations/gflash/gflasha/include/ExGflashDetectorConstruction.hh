@@ -29,10 +29,10 @@
 #ifndef ExGflashDetectorConstruction_h
 #define ExGflashDetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "ExGflashSensitiveDetector.hh"
-#include "G4ThreeVector.hh"
 #include "G4Cache.hh"
+#include "G4ThreeVector.hh"
+#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
 class G4LogicalVolume;
@@ -48,47 +48,65 @@ class ExGflashMessenger;
 
 class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
+ public:
   ExGflashDetectorConstruction();
-  ~ExGflashDetectorConstruction();
-  
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
-  
-  void SetLBining (G4ThreeVector);
-  void SetRBining (G4ThreeVector);
-  void SetVerbose(G4int val)  {fVerbose = val;}
+  ~ExGflashDetectorConstruction() override;
+
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
+
+  void SetLBining(G4ThreeVector);
+  void SetRBining(G4ThreeVector);
+  void SetVerbose(G4int val) { fVerbose = val; }
 
   void SetMaterial(G4String mat);
 
-  G4int    GetVerbose() const    {return fVerbose;}
+  G4int GetVerbose() const
+  {
+    return fVerbose;
+  }
 
-  G4int    GetnLtot() const      {return fNLtot;}
-  G4int    GetnRtot() const      {return fNRtot;}
-  G4double GetdLradl() const     {return fDLradl;}
-  G4double GetdRradl() const     {return fDRradl;}
+  G4int GetnLtot() const
+  {
+    return fNLtot;
+  }
+  G4int GetnRtot() const
+  {
+    return fNRtot;
+  }
+  G4double GetdLradl() const
+  {
+    return fDLradl;
+  }
+  G4double GetdRradl() const
+  {
+    return fDRradl;
+  }
 
-  G4double GetSDRadLen() const   {return fSDRadLen;}
-  
-private:
-  G4int fNbOfCrystals; // cube of nb x nb crystals
+  G4double GetSDRadLen() const
+  {
+    return fSDRadLen;
+  }
 
-  G4double fCrystalWidth; // x,y size
-  G4double fCrystalLength;// z size
+ private:
+  G4int fNbOfCrystals;  // cube of nb x nb crystals
 
-  G4LogicalVolume*    fCrystal_log;
+  G4double fCrystalWidth;   // x,y size
+  G4double fCrystalLength;  // z size
+
+  G4LogicalVolume* fCrystal_log;
   G4Material* fDetMat;
-  G4Region*           fRegion;
+  G4Region* fRegion;
 
   G4double fSDRadLen;  // SD material Rad Lenght
 
   G4int fVerbose;
-  G4int    fNLtot,    fNRtot;       // nb of bins: longitudinal and radial
-  G4double fDLradl,   fDRradl;      // bin thickness (in radl unit)
+  G4int fNLtot, fNRtot;       // nb of bins: longitudinal and radial
+  G4double fDLradl, fDRradl;  // bin thickness (in radl unit)
 
-  ExGflashMessenger*  fGflashMessenger;
+  ExGflashMessenger* fGflashMessenger;
 
-  static G4ThreadLocal GFlashShowerModel* fFastShowerModel; 
+  static G4ThreadLocal GFlashShowerModel* fFastShowerModel;
   static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation;
   static G4ThreadLocal GFlashParticleBounds* fParticleBounds;
   static G4ThreadLocal GFlashHitMaker* fHitMaker;

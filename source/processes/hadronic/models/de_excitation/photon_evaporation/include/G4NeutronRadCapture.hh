@@ -66,7 +66,8 @@ private:
   G4NeutronRadCapture & operator=(const G4NeutronRadCapture &right) = delete;
   G4NeutronRadCapture(const G4NeutronRadCapture&) = delete;
 
-  G4int icID;
+  G4int icID;   // creator model ID for electrons produced by internal conversion
+  G4int secID;  // creator model ID for the other secondaries produced by this model
   const G4ParticleDefinition* electron;
   G4double lowestEnergyLimit;
   G4double minExcitation;

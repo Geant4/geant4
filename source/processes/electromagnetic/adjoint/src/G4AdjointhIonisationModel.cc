@@ -226,6 +226,8 @@ void G4AdjointhIonisationModel::RapidSampleSecondaries(
     DiffCrossSectionPerAtomPrimToSecond(projectileKinEnergy, eEnergy, 1, 1);
   w_corr *= diffCS / diffCS_perAtom_Used;
 
+  if (isScatProjToProj && fTcutSecond>0.005) w_corr=1.;
+
   G4double new_weight = aTrack.GetWeight() * w_corr;
   fParticleChange->SetParentWeightByProcess(false);
   fParticleChange->SetSecondaryWeightByProcess(false);
@@ -290,7 +292,8 @@ G4double G4AdjointhIonisationModel::DiffCrossSectionPerAtomPrimToSecond(
   {
     G4double Tmax = kinEnergyProj;
     G4double E1   = kinEnergyProd;
-    G4double E2   = kinEnergyProd * 1.000001;
+    //1.0006 factor seems to give the best diff CS, important impact on proton correction factor
+    G4double E2   = kinEnergyProd *1.0006;
     G4double sigma1, sigma2;
     if(kinEnergyProj > 2. * MeV)
     {

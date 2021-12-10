@@ -2,9 +2,6 @@
 # Visualization of detector geometry and events  
 ###################################################
 
-# create empty scene
-/vis/scene/create
-
 /run/initialize
 #
 # Use this open statement to create an OpenGL view:

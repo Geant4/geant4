@@ -44,6 +44,7 @@
 #include "G4Log.hh"
 #include "G4Exp.hh"
 #include "G4RandomDirection.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
                            G4GEMProbability * aEmissionStrategy) :
@@ -52,7 +53,8 @@ G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
   Z(theZ),
   EmissionProbability(0.0),
   MaximalKineticEnergy(-CLHEP::GeV),
-  theEvaporationProbabilityPtr(aEmissionStrategy)
+  theEvaporationProbabilityPtr(aEmissionStrategy),
+  secID(-1)
 { 
   theCoulombBarrierPtr = new G4GEMCoulombBarrier(theA, theZ);
   theEvaporationProbabilityPtr->SetCoulomBarrier(theCoulombBarrierPtr);
@@ -63,6 +65,7 @@ G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
   fG4pow = G4Pow::GetInstance(); 
   ResidualZ = ResidualA = 0;
   fNucData = G4NuclearLevelData::GetInstance();
+  secID = G4PhysicsModelCatalog::GetModelID("model_G4GEMChannel");
 }
 
 G4GEMChannel::~G4GEMChannel()
@@ -137,10 +140,12 @@ G4Fragment* G4GEMChannel::EmittedFragment(G4Fragment* theNucleus)
   EvaporatedMomentum.boost(ResidualMomentum.boostVector());
   
   evFragment = new G4Fragment(A, Z, EvaporatedMomentum);
+  if ( evFragment != nullptr ) { evFragment->SetCreatorModelID(secID); }
   ResidualMomentum -= EvaporatedMomentum;
   theNucleus->SetZandA_asInt(ResidualZ, ResidualA);
   theNucleus->SetMomentum(ResidualMomentum);
-
+  theNucleus->SetCreatorModelID(secID);
+  
   return evFragment; 
 } 
 

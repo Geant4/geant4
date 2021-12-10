@@ -27,8 +27,6 @@
 //
 //
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
-
 #include "G4OpenGLQtViewer.hh" // should be first in case we include
                                // some boost SIGNAL/SLOT library
 #include "G4OpenGLQtMovieDialog.hh"
@@ -466,5 +464,3 @@ void G4OpenGLQtMovieDialog::setRecordingInfos(QString txt) {
 void G4OpenGLQtMovieDialog::enabledApplyButton() {
   fButtonStartPause->setEnabled(true);
 }
-
-#endif

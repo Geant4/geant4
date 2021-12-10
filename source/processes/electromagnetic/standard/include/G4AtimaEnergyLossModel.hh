@@ -147,21 +147,22 @@ private:
   G4NistManager*              nist;
   G4Pow* g4calc;
 
-  G4double mass;
-  G4double tlimit;
-  G4double spin;
-  G4double magMoment2;
-  G4double chargeSquare;
-  G4double ratio;
-  G4double formfact;
-  G4double corrFactor;
-  G4bool   isIon;
+  G4double mass = 0.0;
+  G4double tlimit = DBL_MAX;
+  G4double spin = 0.0;
+  G4double magMoment2 = 0.0;
+  G4double chargeSquare = 1.0;
+  G4double ratio = 1.0;
+  G4double formfact = 0.0;
+  G4double corrFactor = 1.0;
   G4double MLN10;
   G4double atomic_mass_unit;
   G4double dedx_constant;
   G4double electron_mass;
   G4double fine_structure;
   G4double domega2dx_constant;
+
+  G4bool   isIon = false;
 
   static G4double stepE;
   static G4double tableE[200];

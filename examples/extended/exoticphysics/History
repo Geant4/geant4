@@ -15,6 +15,9 @@ track of all tags.
 
      ----------------------------------------------------------
 
+17 November 2021:  I. Hrivnacova (exExoticPhysics-V10-07-01)
+- Added new saxs example in CMake and README's
+
 24 May 2021:  B. Morgan (exExoticPhysics-V10-07-00)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

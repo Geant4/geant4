@@ -8,6 +8,20 @@
                       Category History file
                       ---------------------
 
+07.10.2021 - I. Hrivnacova (STCyclotron-V10-07-07)
+- Migration to new G4AnalysisManager.hh header;
+  define the default output file type (root),
+  removed STCyclotronAnalysis.hh.
+
+08.09.2021 G. Cosmo (STCyclotron-V10-07-06)
+- Added protection against potential division by zero in function
+  STCyclotronRun::EndOfRun().
+
+19.07.2021 I. Hrivnacova (STCyclotron-V10-07-05)
+- Updated for changes in the analysis category:
+  removed deleting of the analysis manager,
+  as this is now done by the Geant4 kernel.
+
 22.06.2021 - Gabriele Cosmo (STCyclotron-V10-07-04)
 - Use new CLHEP units for minute, hour, day, year in STCyclotronPhysicsList.
 

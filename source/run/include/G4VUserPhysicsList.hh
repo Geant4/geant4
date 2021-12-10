@@ -51,6 +51,7 @@
 #include "G4VUPLSplitter.hh"
 
 #include "G4Threading.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 class G4UserPhysicsListMessenger;
 class G4PhysicsListHelper;
@@ -222,7 +223,11 @@ class G4VUserPhysicsList
 
     void RemoveProcessManager();
       // Remove and delete ProcessManagers for all particles in the
-      // Particle Table. Function invoked from RunManager.
+      // Particle Table.
+
+    void RemoveTrackingManager();
+      // Remove and delete TrackingManagers for all particles in the
+      // Particle Table.
 
     void AddProcessManager(G4ParticleDefinition* newParticle,
                            G4ProcessManager* newManager = nullptr);
@@ -318,6 +323,8 @@ inline void G4VUserPhysicsList::Construct()
       G4cout << "G4VUserPhysicsList::Construct()" << G4endl;
   #endif
 
+  if ( G4Threading::IsMasterThread() ) G4PhysicsModelCatalog::Initialize();
+  
   InitializeProcessManager();
 
   #ifdef G4VERBOSE

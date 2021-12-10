@@ -551,6 +551,7 @@ G4BestUnit::G4BestUnit(G4double value, const G4String& category)
   Value[0]        = value;
   Value[1]        = 0.;
   Value[2]        = 0.;
+  Category        = category;
   IndexOfCategory = i;
 }
 
@@ -578,6 +579,7 @@ G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
   Value[0]        = value.x();
   Value[1]        = value.y();
   Value[2]        = value.z();
+  Category        = category;
   IndexOfCategory = i;
 }
 
@@ -611,6 +613,19 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
     std::max(std::max(std::fabs(a.Value[0]), std::fabs(a.Value[1])),
              std::fabs(a.Value[2]));
 
+  //special treatement for Energy.
+  if ((a.Category == "Energy") && (value == 0.)) {
+    for (G4int j = 0; j < a.nbOfVals; ++j) {
+       flux << a.Value[j] << " ";
+    }
+    std::ios::fmtflags oldform = flux.flags();
+    flux.setf(std::ios::left, std::ios::adjustfield);
+    flux << std::setw(len) << "eV";
+    flux.flags(oldform);
+    return flux;
+  }	     
+	     
+  //here, value != 0.
   for(std::size_t k = 0; k < List.size(); ++k)
   {
     G4double unit = List[k]->GetValue();

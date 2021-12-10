@@ -65,19 +65,23 @@ public:
 
   G4bool IsGUI() const;
 
+  void SetVerbose(G4bool val);
+
   void SetPrompt(const G4String& prompt);
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);
 
   void SessionStart();
 
 private:
-  enum SessionType { kNone, kQt, kXm, kWin32, kGag, kTcsh, kCsh };
+  enum SessionType { kNone, kQt, kXm, kWin32, kTcsh, kCsh };
   SessionType selected;
 
   G4UIsession* session;
   G4VUIshell* shell;
 
   G4bool isGUI;
+
+  G4bool verbose;
 
   std::map<G4String, G4String> sessionMap;
 
@@ -96,6 +100,11 @@ inline G4UIsession* G4UIExecutive::GetSession() const
 inline G4bool G4UIExecutive::IsGUI() const
 {
   return isGUI;
+}
+
+inline void G4UIExecutive::SetVerbose(G4bool val)
+{
+  verbose = val;
 }
 
 #endif

@@ -34,6 +34,9 @@
 #include "G4AnalysisManagerState.hh"
 #include "globals.hh"
 
+#include <memory>
+#include <string_view>
+
 class G4VNtupleManager;
 class G4NtupleBookingManager;
 
@@ -44,16 +47,17 @@ class G4VNtupleFileManager
   friend class G4VAnalysisManager;
 
   public:
-    explicit G4VNtupleFileManager(const G4AnalysisManagerState& state,
-                                  const G4String& fileType);
-    virtual ~G4VNtupleFileManager();
+    G4VNtupleFileManager(const G4AnalysisManagerState& state,
+                         const G4String& fileType);
+    G4VNtupleFileManager() = delete;
+    virtual ~G4VNtupleFileManager() = default;
 
     // deleted copy constructor & assignment operator
     G4VNtupleFileManager(const G4VNtupleFileManager& rhs) = delete;
     G4VNtupleFileManager& operator=(const G4VNtupleFileManager& rhs) = delete;
 
     // MT/MPI
-    virtual void SetNtupleMerging(G4bool mergeNtuples, 
+    virtual void SetNtupleMerging(G4bool mergeNtuples,
                    G4int nofReducedNtupleFiles = 0);
     virtual void SetNtupleRowWise(G4bool rowWise, G4bool rowMode = true);
     virtual void SetBasketSize(unsigned int basketSize);
@@ -73,10 +77,21 @@ class G4VNtupleFileManager
     G4String GetFileType() const;
 
   protected:
-    // static data members
+    // Methods for verbose
+    void Message(G4int level,
+                 const G4String& action,
+                 const G4String& objectType,
+                 const G4String& objectName = "",
+                 G4bool success = true) const;
+
+    // Static data members
     const G4AnalysisManagerState& fState;
-    G4String  fFileType; 
-    std::shared_ptr<G4NtupleBookingManager> fBookingManager;
+    G4String  fFileType;
+    std::shared_ptr<G4NtupleBookingManager> fBookingManager { nullptr };
+
+  private:
+    // Static data members
+    static constexpr std::string_view fkClass { "G4VNtupleFileManager" };
 };
 
 // inline functions
@@ -91,6 +106,13 @@ inline G4bool G4VNtupleFileManager::IsNtupleMergingSupported() const {
 
 inline G4String G4VNtupleFileManager::GetFileType() const {
   return fFileType;
+}
+
+inline void G4VNtupleFileManager::Message(
+  G4int level, const G4String& action, const G4String& objectType,
+  const G4String& objectName, G4bool success) const
+{
+  fState.Message(level, action, objectType, objectName, success);
 }
 
 #endif

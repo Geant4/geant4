@@ -30,20 +30,7 @@ inline G4VAccumulable::G4VAccumulable(const G4String& name)
 {}
 
 //_____________________________________________________________________________
-inline G4VAccumulable::G4VAccumulable(const G4VAccumulable& rhs)
-  : fName(rhs.fName)
-{}
-
-//_____________________________________________________________________________
-inline G4VAccumulable&  G4VAccumulable::operator=(const G4VAccumulable& rhs)
-{
-  fName = rhs.fName;
-
-  return *this;
-}
-
-//_____________________________________________________________________________
 inline G4String G4VAccumulable::GetName() const
-{ 
+{
   return fName;
 }

@@ -72,7 +72,8 @@ class G4Tet : public G4VSolid
     void SetVertices(const G4ThreeVector& anchor,
                      const G4ThreeVector& p1,
                      const G4ThreeVector& p2,
-                     const G4ThreeVector& p3);
+                     const G4ThreeVector& p3,
+                     G4bool* degeneracyFlag = nullptr);
 
     // Accessors, return the four vertices of the shape
     void GetVertices(G4ThreeVector& anchor,
@@ -95,6 +96,7 @@ class G4Tet : public G4VSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void SetBoundingLimits(const G4ThreeVector& pMin, const G4ThreeVector& pMax);
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,

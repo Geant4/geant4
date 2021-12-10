@@ -89,10 +89,17 @@ void G4VScoringMesh::SetSize(G4double size[3])
   if(!sizeIsSet)
   {
     sizeIsSet = true;
+    for(int i = 0; i < 3; i++)
+    {
+      fSize[i] = size[i];
+    }
   }
-  for(int i = 0; i < 3; i++)
+  else
   {
-    fSize[i] = size[i];
+    G4String message = "   Mesh size has already been set and it cannot be changed.\n";
+    message += "  This method is ignored.";
+    G4Exception("G4VScoringMesh::SetSize()",
+                "DigiHitsUtilsScoreVScoringMesh000", JustWarning, message);
   }
 }
 G4ThreeVector G4VScoringMesh::GetSize() const
@@ -124,7 +131,8 @@ void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3])
   }
   else
   {
-    G4String message = "   The size of scoring segments can not be changed.";
+    G4String message = "   Number of bins has already been set and it cannot be changed.\n";
+    message += "  This method is ignored.";
     G4Exception("G4VScoringMesh::SetNumberOfSegments()",
                 "DigiHitsUtilsScoreVScoringMesh000", JustWarning, message);
   }

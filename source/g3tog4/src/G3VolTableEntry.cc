@@ -339,8 +339,8 @@ G3VolTableEntry*
 G3VolTableEntry::GetMasterClone(){
   G3VolTableEntry* master;
   G4String name = fVname;
-  if (name.contains(gSeparator)) {
-    name = name(0, name.first(gSeparator));
+  if (G4StrUtil::contains(name, gSeparator)) {
+    name = name.substr(0, name.find(gSeparator));
     master = G3Vol.GetVTE(name); 
   }
   else 

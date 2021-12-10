@@ -57,5 +57,6 @@ private:
 	G4VPhysicalVolume* ConstructDiamondDetector();
 	G4VPhysicalVolume* ConstructMicroDiamondDetector();
 	G4VPhysicalVolume* ConstructSiliconDetector();
+	G4VPhysicalVolume* ConstructSiliconBridgeDetector();
 };
 #endif

@@ -5,6 +5,7 @@ geant4_add_module(G4procman
   PUBLIC_HEADERS
     G4EntanglementAuxInfo.hh
     G4eplusAnnihilationEntanglementClipBoard.hh
+    G4NoProcess.hh
     G4ParticleTypes.hh
     G4ProcTblElement.hh
     G4ProcTblElement.icc

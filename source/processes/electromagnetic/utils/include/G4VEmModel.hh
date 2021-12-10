@@ -218,6 +218,10 @@ public:
   // add a region for the model
   virtual void DefineForRegion(const G4Region*);
 
+  // fill number of different type of secondaries after SampleSecondaries(...)
+  virtual void FillNumberOfSecondaries(G4int& numberOfTriplets,
+                                       G4int& numberOfRecoil);
+
   // for automatic documentation
   virtual void ModelDescription(std::ostream& outFile) const;
 
@@ -424,38 +428,39 @@ protected:
   const std::vector<G4double>* theDensityFactor = nullptr;
   const std::vector<G4int>*    theDensityIdx = nullptr;
 
-  G4double        inveplus;
-  G4double        pFactor = 1.0;
+  G4double inveplus;
+  G4double pFactor = 1.0;
 
 private:
 
-  G4double        lowLimit;
-  G4double        highLimit;
-  G4double        eMinActive = 0.0;
-  G4double        eMaxActive = DBL_MAX;
-  G4double        secondaryThreshold = DBL_MAX;
-  G4double        polarAngleLimit;
+  G4double lowLimit;
+  G4double highLimit;
+  G4double eMinActive = 0.0;
+  G4double eMaxActive = DBL_MAX;
+  G4double secondaryThreshold = DBL_MAX;
+  G4double polarAngleLimit;
 
-  G4int           nSelectors = 0;
-  G4int           nsec = 5;
+  G4int nSelectors = 0;
+  G4int nsec = 5;
 
 protected:
 
-  size_t          idxTable = 0;
-  G4bool          lossFlucFlag = true;
+  size_t currentCoupleIndex = 0;
+  size_t basedCoupleIndex = 0;
+  G4bool lossFlucFlag = true;
 
 private:
 
-  G4bool          theLPMflag = false;
-  G4bool          flagDeexcitation = false;
-  G4bool          flagForceBuildTable = false;
-  G4bool          isMaster = true;
+  G4bool theLPMflag = false;
+  G4bool flagDeexcitation = false;
+  G4bool flagForceBuildTable = false;
+  G4bool isMaster = true;
 
-  G4bool          localTable = true;
-  G4bool          localElmSelectors = true;
-  G4bool          useAngularGenerator = false;
-  G4bool          useBaseMaterials = true;
-  G4bool          isLocked = false;
+  G4bool localTable = true;
+  G4bool localElmSelectors = true;
+  G4bool useAngularGenerator = false;
+  G4bool useBaseMaterials = false;
+  G4bool isLocked = false;
 
   const G4String  name;
   std::vector<G4double>  xsec;
@@ -468,11 +473,14 @@ inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* ptr)
 {
   if(fCurrentCouple != ptr) {
     fCurrentCouple = ptr;
+    basedCoupleIndex = currentCoupleIndex = ptr->GetIndex();
     pBaseMaterial = ptr->GetMaterial();
     pFactor = 1.0;
-    if(useBaseMaterials && nullptr != pBaseMaterial->GetBaseMaterial()) {
-      pBaseMaterial = pBaseMaterial->GetBaseMaterial();
-      pFactor = (*theDensityFactor)[(*theDensityIdx)[ptr->GetIndex()]];
+    if(useBaseMaterials) {
+      basedCoupleIndex = (*theDensityIdx)[currentCoupleIndex];
+      if(nullptr != pBaseMaterial->GetBaseMaterial()) 
+	pBaseMaterial = pBaseMaterial->GetBaseMaterial();
+      pFactor = (*theDensityFactor)[currentCoupleIndex];
     }
   }
 }

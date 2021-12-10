@@ -25,13 +25,12 @@ geant4_add_module(G4graphics_reps
     G4Polyline.hh
     G4Polymarker.hh
     G4Polymarker.icc
-    G4Scale.hh
-    G4Scale.icc
     G4SmartFilter.hh
     G4Square.hh
     G4Square.icc
     G4Text.hh
     G4Text.icc
+    G4Plotter.hh
     G4TypeKey.hh
     G4TypeKeyT.hh
     G4VFilter.hh
@@ -63,9 +62,9 @@ geant4_add_module(G4graphics_reps
     G4PolyhedronArbitrary.cc
     G4Polyline.cc
     G4Polymarker.cc
-    G4Scale.cc
     G4Square.cc
     G4Text.cc
+    G4Plotter.cc
     G4VGraphicsScene.cc
     G4VMarker.cc
     G4VVisManager.cc

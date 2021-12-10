@@ -73,8 +73,8 @@ void G4TextPPReporter::SparseOption(const G4String& option)
   
   // 1st option : base directory
   baseDir = savedToken();
-  if (!baseDir.isNull()) {
-    if(baseDir(baseDir.length()-1)!='/') {
+  if (!baseDir.empty()) {
+    if(baseDir.back()!='/') {
       baseDir += "/";
     }
   }

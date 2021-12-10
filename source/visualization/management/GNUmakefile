@@ -10,7 +10,7 @@ endif
 # For debug mode
 # CPPFLAGS += -DG4DEBUG_VIS_MANAGEMENT
 
-GLOBLIBS  = libG4modeling.lib
+GLOBLIBS  = libG4modeling.lib libG4tools.lib
 GLOBLIBS += libG4tasking.lib libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
@@ -22,6 +22,7 @@ include $(G4INSTALL)/config/G4VIS_BUILD.gmk
 
 CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+CPPFLAGS += -I$(G4BASE)/externals/g4tools/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include

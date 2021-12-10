@@ -40,7 +40,7 @@
 class ICRP110UserScoreWriter:public G4VScoreWriter
 {
 public:
-  ICRP110UserScoreWriter();
+  explicit ICRP110UserScoreWriter();
   virtual ~ICRP110UserScoreWriter();
   // store a quantity into a file
   void DumpQuantityToFile(const G4String & psName, 

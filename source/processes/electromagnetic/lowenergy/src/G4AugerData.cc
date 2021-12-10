@@ -26,7 +26,7 @@
 //
 // 
 //
-// Author: Alfonso Mmantero (Alfonso.Mantero@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
@@ -407,27 +407,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 
 void G4AugerData::BuildAugerTransitionTable()
 {
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
-
-  G4DataVector activeZ;
-  activeZ.clear();
-  
-  for (G4int mLocal=0; mLocal<nMaterials; mLocal++) {
-    const G4Material* material= (*materialTable)[mLocal];        
-    const G4ElementVector* elementVector = material->GetElementVector();
-    const size_t nElements = material->GetNumberOfElements();
-    
-    for (size_t iEl=0; iEl<nElements; iEl++) {
-      G4Element* element = (*elementVector)[iEl];
-      G4double Z = element->GetZ();
-      if (!(activeZ.contains(Z))) {
-	activeZ.push_back(Z);
-      }
-    }
-  }  
-  for (G4int element = 6; element < 100; element++)
+  for (G4int element = 6; element < 100; ++element)
     {     
       augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
     }

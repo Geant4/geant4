@@ -37,13 +37,14 @@
 
 #include "G4ChannelingTrackData.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ChannelingOptrChangeCrossSection::G4ChannelingOptrChangeCrossSection(G4String particleName,
                                                                        G4String         name)
 :G4VBiasingOperator(name),
-fChannelingID(-1),
+fChannelingID(G4PhysicsModelCatalog::GetModelID("model_channeling")),
 fSetup(true){
     fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
     
@@ -181,9 +182,6 @@ G4ChannelingOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Tra
     
     G4double analogXS = 1./analogInteractionLength;
     
-    if(fChannelingID==-1){
-        fChannelingID = G4PhysicsModelCatalog::GetIndex("channeling");
-    }
     G4ChannelingTrackData* trackdata =
     (G4ChannelingTrackData*)(track->GetAuxiliaryTrackInformation(fChannelingID));
     if(trackdata==nullptr) return 0;

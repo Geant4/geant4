@@ -56,6 +56,8 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   // Create analysis manager
   // The choice of analysis technology is done via selection of a namespace
   fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->SetDefaultFileType("root");
+
   // Set the default file name "testem2"
   // which can be then redefine in a macro via UI command
   fAnalysisManager->SetFileName("testem2");
@@ -170,6 +172,7 @@ void RunAction::EndOfRunAction(const G4Run*)
  // save histos and close analysis
  fAnalysisManager->Write();
  fAnalysisManager->CloseFile(); 
+ fAnalysisManager->Clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

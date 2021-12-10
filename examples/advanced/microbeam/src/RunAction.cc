@@ -35,8 +35,8 @@
 #include "RunAction.hh"
 
 #include "G4UImanager.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
-#include "Analysis.hh"
 
 RunAction::RunAction(const DetectorConstruction* det) 
 :fDetector(det)
@@ -62,6 +62,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->SetDefaultFileType("root");
   
   G4cout << "Using " << man->GetType() << " analysis manager" << G4endl;
 
@@ -179,7 +180,7 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
   //save histograms      
   man->Write();
   man->CloseFile();
-  
+
   // Complete clean-up
-  delete G4AnalysisManager::Instance();
+  man->Clear();
 }

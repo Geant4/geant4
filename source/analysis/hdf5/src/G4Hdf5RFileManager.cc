@@ -27,33 +27,30 @@
 // Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
 
 #include "G4Hdf5RFileManager.hh"
+#include "G4Hdf5HnRFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
 #include "tools/hdf5/h2file"
-#include <tools/zlib>
-
-#include <iostream>
-#include <cstdio>
+#include "tools/hdf5/group_exists"
+#include "tools/zlib"
 
 using namespace G4Analysis;
-
-//_____________________________________________________________________________
-const G4String G4Hdf5RFileManager::fgkDefaultDirectoryName = "default";
+using namespace tools;
 
 //_____________________________________________________________________________
 G4Hdf5RFileManager::G4Hdf5RFileManager(const G4AnalysisManagerState& state)
- : G4BaseFileManager(state),
-   fRFiles()
+ : G4VRFileManager(state)
 {
+  // Create helpers defined in the base class
+  fH1RFileManager = std::make_shared<G4Hdf5HnRFileManager<histo::h1d>>(this);
+  fH2RFileManager = std::make_shared<G4Hdf5HnRFileManager<histo::h2d>>(this);
+  fH3RFileManager = std::make_shared<G4Hdf5HnRFileManager<histo::h3d>>(this);
+  fP1RFileManager = std::make_shared<G4Hdf5HnRFileManager<histo::p1d>>(this);
+  fP2RFileManager = std::make_shared<G4Hdf5HnRFileManager<histo::p2d>>(this);
 }
 
-//_____________________________________________________________________________
-G4Hdf5RFileManager::~G4Hdf5RFileManager()
-{  
-}
-
-// 
+//
 // private methods
 //
 
@@ -64,93 +61,71 @@ hid_t G4Hdf5RFileManager::OpenRFile(const G4String& fileName,
   // Get full file name
   G4String name = GetFullFileName(fileName, isPerThread);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("open", "read analysis file", name);
-#endif
+  Message(kVL4, "open", "read analysis file", name);
 
   // create new file
   hid_t newFile = H5Fopen(name, H5F_ACC_RDONLY, H5P_DEFAULT);
   if ( newFile < 0 ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << name;
-    G4Exception("G4Hdf5RFileManager::OpenFile()",
-                "Analysis_WR001", JustWarning, description);
-    return false;
+    Warn("Cannot open file " + name, fkClass, "OpenRFile");
+    return kInvalidId;
   }
 
   // newFile->add_unziper('Z',tools::decompress_buffer);
-  
+
   // add file in a map
-  std::map<G4String, hid_t>::iterator it
-    = fRFiles.find(name);
-  if ( it != fRFiles.end() ) { 
-    it->second = newFile;
-  }
-  else {
-    fRFiles[name] = newFile;
-  }    
+  fRFiles[name] = G4Hdf5File(newFile, kInvalidId, kInvalidId);
 
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("open", "read analysis file", name);
-#endif
+  Message(kVL1, "open", "read analysis file", name);
 
-  return true;
-}  
-  
+  return newFile;
+}
+
 //_____________________________________________________________________________
 hid_t G4Hdf5RFileManager::OpenDirectory(hid_t file, const G4String& directoryName)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
-    fState.GetVerboseL4()->Message("open", "read directory", directoryName);
-  }
-#endif
-  
+  Message(kVL4, "open", "read directory", directoryName);
+
   auto directory = tools_H5Gopen(file, directoryName);
   if ( directory < 0 ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "cannot open directory " << directoryName;
-    G4Exception("G4Hdf5RFileManager::OpenDirectory()",
-                "Analysis_W001", JustWarning, description);
-    return kInvalidId;       
-  }  
+    Warn("Cannot open directory " + directoryName, fkClass, "OpenDirectory");
+    return kInvalidId;
+  }
   else {
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL2() ) {
-      fState.GetVerboseL2()->Message("open", "read directory", directoryName);
-    }
-#endif
+    Message(kVL2, "open", "read directory", directoryName);
     return directory;
-  }    
+  }
 }
 
 //_____________________________________________________________________________
 hid_t  G4Hdf5RFileManager::GetRDirectory(const G4String& directoryType,
-                                        const G4String& fileName, 
-                                        const G4String& dirName,
-                                        G4bool isPerThread)
+                                         const G4String& fileName,
+                                         const G4String& dirName,
+                                         G4bool isPerThread)
 {
   // Get or open a file
   auto rfile = GetRFile(fileName, isPerThread);
-  if ( rfile < 0 ) {
-    // Try to open it if not found in the map 
-    if ( ! OpenRFile(fileName, isPerThread) ) return kInvalidId;
+  if ( ! rfile ) {
+    // Try to open it if not found in the map
+    if ( OpenRFile(fileName, isPerThread) < 0 ) return kInvalidId;
     rfile = GetRFile(fileName, isPerThread);
+  }
+
+  auto isHistograms = (directoryType == "histograms");
+
+  // Get directory if already open
+  hid_t directory = kInvalidId;
+  if ( isHistograms ) {
+    directory = std::get<1>(*rfile);
+  } else {
+    directory = std::get<2>(*rfile);
+  }
+  if ( directory != kInvalidId ) {
+    return directory;
   }
 
   // Use default directory name if not specified
   auto newDirName = dirName;
   if ( newDirName == "" ) {
-    // if ( fDefaultDirectory > 0  ) {
-    //   // Return the default directory if the name is not set and the default directory
-    //   // already exists
-    //   directory = fDefaultDirectory;
-    //   return true;
-    // } else {
       // Create the default directory if the name is not set and the default directory
       // does not yet exist
       newDirName = fgkDefaultDirectoryName;
@@ -159,28 +134,35 @@ hid_t  G4Hdf5RFileManager::GetRDirectory(const G4String& directoryType,
   }
 
   // Open directory
-  return OpenDirectory(rfile, newDirName);
-}
+  directory = OpenDirectory(std::get<0>(*rfile), newDirName);
 
+  // Update
+  if ( isHistograms ) {
+    std::get<1>(*rfile) = directory;
+  } else {
+    std::get<2>(*rfile) = directory;
+  }
+
+  return directory;
+}
 
 //
 // public methods
 //
 
 //_____________________________________________________________________________
-hid_t G4Hdf5RFileManager::GetRFile(const G4String& fileName,
-                                   G4bool isPerThread) const
-{ 
+G4Hdf5File* G4Hdf5RFileManager::GetRFile(const G4String& fileName,
+                                         G4bool isPerThread)
+{
   // Get full file name
   G4String name = GetFullFileName(fileName, isPerThread);
 
-  std::map<G4String, hid_t>::const_iterator it
-    = fRFiles.find(name);
+  auto it = fRFiles.find(name);
   if  ( it != fRFiles.end() )
-    return it->second;
+    return &(it->second);
   else {
-    return kInvalidId;
-  }     
+    return nullptr;
+  }
 }
 
 //_____________________________________________________________________________
@@ -197,4 +179,19 @@ hid_t G4Hdf5RFileManager::GetNtupleRDirectory(const G4String& fileName, const G4
   return GetRDirectory("ntuples", fileName, dirName, isPerThread);
 }
 
-
+//_____________________________________________________________________________
+void G4Hdf5RFileManager::CloseFiles()
+{
+  // Close all open directories and file
+  for ( auto [key, rfile] : fRFiles ) {
+    if (std::get<1>(rfile) != kInvalidId) {
+      ::H5Gclose(std::get<1>(rfile));
+    }
+    if (std::get<2>(rfile) != kInvalidId) {
+      ::H5Gclose(std::get<2>(rfile));
+    }
+    if (std::get<0>(rfile) != kInvalidId) {
+      ::H5Fclose(std::get<0>(rfile));
+    }
+  }
+}

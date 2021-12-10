@@ -55,36 +55,31 @@ public:
   
   // Calculates the total (integrated over kinetic energy) emission
   // probability of a fragment
-  G4double CalcEmissionProbability(const G4Fragment & aFragment);
+  G4double CalcEmissionProbability(const G4Fragment & aFragment) override;
   
-  G4double SampleKineticEnergy(const G4Fragment & aFragment);
+  G4double SampleKineticEnergy(const G4Fragment & aFragment) override;
 
-protected:
-
-  virtual G4double GetAlpha() const = 0;
-
-  virtual G4double GetBeta() const = 0;
-
-  G4double CrossSection(G4double ekin) const;
-
-  virtual G4double 
-  ProbabilityDistributionFunction(G4double K, 
-				  const G4Fragment & aFragment) = 0; 
-
-private:	
-  // This method performs integration for probability function over 
-  // fragment kinetic energy
-  G4double IntegrateEmissionProbability(G4double Low, G4double Up, 
-					const G4Fragment & aFragment);	
-
-  G4double GetOpt0(G4double ekin) const;
-
-  // operators
   G4PreCompoundFragment(const G4PreCompoundFragment &right) = delete;
   const G4PreCompoundFragment& 
   operator= (const G4PreCompoundFragment &right) = delete;
   G4bool operator==(const G4PreCompoundFragment &right) const = delete;
   G4bool operator!=(const G4PreCompoundFragment &right) const = delete;
+
+protected:
+
+  G4double CrossSection(G4double ekin) const;
+
+  virtual G4double 
+  ProbabilityDistributionFunction(G4double ekin, 
+				  const G4Fragment & aFragment) = 0; 
+
+private:	
+  // This method performs integration for probability function over 
+  // fragment kinetic energy
+  G4double IntegrateEmissionProbability(G4double low, G4double up, 
+					const G4Fragment & aFragment);	
+
+  G4double GetOpt0(G4double ekin) const;
 
   G4int index;
 

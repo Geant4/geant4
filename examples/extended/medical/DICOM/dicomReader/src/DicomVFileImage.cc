@@ -61,9 +61,9 @@ void DicomVFileImage::ReadData()
 
   std::vector<double> dRows = Read1Data(theDataset, DCM_Rows, 1);
   std::vector<double> dColumns = Read1Data(theDataset, DCM_Columns, 1);
-  fNoVoxelY = dRows[0];
-  fNoVoxelX = dColumns[0];
-  fNoVoxelZ = 1;
+  fNoVoxelsY = dRows[0];
+  fNoVoxelsX = dColumns[0];
+  fNoVoxelsZ = 1;
   
   fMinX = dImagePositionPatient[0]; // center of upper corner of pixel?
   fMaxX = dImagePositionPatient[0]+dColumns[0]*dPixelSpacing[0];
@@ -77,8 +77,8 @@ void DicomVFileImage::ReadData()
   fVoxelDimY = dPixelSpacing[1];
   fVoxelDimZ = dSliceThickness[0];
 
-  if( DicomFileMgr::verbose >= debugVerb ) G4cout << " DicomVFileImage::ReadData:  fNoVoxel " 
-       << fNoVoxelX << " " << fNoVoxelY << " " << fNoVoxelZ << G4endl;
+  if( DicomFileMgr::verbose >= debugVerb ) G4cout << " DicomVFileImage::ReadData:  fNoVoxels " 
+       << fNoVoxelsX << " " << fNoVoxelsY << " " << fNoVoxelsZ << G4endl;
   if( DicomFileMgr::verbose >= debugVerb ) G4cout << " DicomVFileImage::ReadData:  fMin " 
        << fMinX << " " << fMinY << " " << fMinZ << G4endl;
   if( DicomFileMgr::verbose >= debugVerb ) G4cout << " DicomVFileImage::ReadData:  fMax " 
@@ -194,9 +194,9 @@ void DicomVFileImage::ReadPixelData()
                     FatalException,
                     ("PixelData not found: " + G4String(result.text())).c_str());
       }
-      for( int ir = 0; ir < fNoVoxelY; ir++ ) {
-        for( int ic = 0; ic < fNoVoxelX; ic++ ) {
-          fHounsfieldV.push_back(pixData[ic+ir*fNoVoxelX]*fRescaleSlope + fRescaleIntercept);
+      for( int ir = 0; ir < fNoVoxelsY; ir++ ) {
+        for( int ic = 0; ic < fNoVoxelsX; ic++ ) {
+          fHounsfieldV.push_back(pixData[ic+ir*fNoVoxelsX]*fRescaleSlope + fRescaleIntercept);
         }
       }
     } else if(fBitAllocated == 16) { // Case 16 bits :
@@ -207,9 +207,9 @@ void DicomVFileImage::ReadPixelData()
                     FatalException,
                     ("PixelData not found: " + G4String(result.text())).c_str());
       }
-      for( int ir = 0; ir < fNoVoxelY; ir++ ) {
-        for( int ic = 0; ic < fNoVoxelX; ic++ ) {
-          fHounsfieldV.push_back(pixData[ic+ir*fNoVoxelX]*fRescaleSlope + fRescaleIntercept);
+      for( int ir = 0; ir < fNoVoxelsY; ir++ ) {
+        for( int ic = 0; ic < fNoVoxelsX; ic++ ) {
+          fHounsfieldV.push_back(pixData[ic+ir*fNoVoxelsX]*fRescaleSlope + fRescaleIntercept);
         }
       }
     } else if(fBitAllocated == 32) { // Case 32 bits :
@@ -220,9 +220,9 @@ void DicomVFileImage::ReadPixelData()
                     FatalException,
                     ("PixelData not found: " + G4String(result.text())).c_str());
       }
-      for( int ir = 0; ir < fNoVoxelY; ir++ ) {
-        for( int ic = 0; ic < fNoVoxelX; ic++ ) {
-          fHounsfieldV.push_back(pixData[ic+ir*fNoVoxelX]*fRescaleSlope + fRescaleIntercept);
+      for( int ir = 0; ir < fNoVoxelsY; ir++ ) {
+        for( int ic = 0; ic < fNoVoxelsX; ic++ ) {
+          fHounsfieldV.push_back(pixData[ic+ir*fNoVoxelsX]*fRescaleSlope + fRescaleIntercept);
         }
       }
     }
@@ -240,13 +240,13 @@ void DicomVFileImage::operator+=( const DicomVFileImage& rhs )
 DicomVFileImage DicomVFileImage::operator+( const DicomVFileImage& rhs )
 {
   //----- Check that both slices has the same dimensions
-  if( fNoVoxelX != rhs.GetNoVoxelX()
-      || fNoVoxelY != rhs.GetNoVoxelY() ) {
+  if( fNoVoxelsX != rhs.GetNoVoxelsX()
+      || fNoVoxelsY != rhs.GetNoVoxelsY() ) {
     G4cerr << "DicomVFileImage error adding two slice headers:\
         !!! Different number of voxels: "
-           << "  X= " << fNoVoxelX << " =? " << rhs.GetNoVoxelX()
-           << "  Y=  " << fNoVoxelY << " =? " << rhs.GetNoVoxelY()
-           << "  Z=  " << fNoVoxelZ << " =? " << rhs.GetNoVoxelZ()
+           << "  X= " << fNoVoxelsX << " =? " << rhs.GetNoVoxelsX()
+           << "  Y=  " << fNoVoxelsY << " =? " << rhs.GetNoVoxelsY()
+           << "  Z=  " << fNoVoxelsZ << " =? " << rhs.GetNoVoxelsZ()
            << G4endl;
     G4Exception("DicomVFileImage::DicomVFileImage",
                 "",FatalErrorInArgument,"");
@@ -297,7 +297,7 @@ DicomVFileImage DicomVFileImage::operator+( const DicomVFileImage& rhs )
   //----- Add data from second slice header
   temp.SetMinZ( std::min( fMinZ, rhs.GetMinZ() ) );
   temp.SetMaxZ( std::max( fMaxZ, rhs.GetMaxZ() ) );
-  temp.SetNoVoxelZ( fNoVoxelZ + rhs.GetNoVoxelZ() );
+  temp.SetNoVoxelsZ( fNoVoxelsZ + rhs.GetNoVoxelsZ() );
   
   return temp;
 }
@@ -315,7 +315,7 @@ void DicomVFileImage::DumpHeaderToTextFile(std::ofstream& fout)
         << "### DicomVFileImage::Dumping Z Slice header to Text file " << G4endl;
 
   G4int fCompress = theFileMgr->GetCompression();
-  fout << fNoVoxelX/fCompress << " " << fNoVoxelY/fCompress << " " << fNoVoxelZ << std::endl;
+  fout << fNoVoxelsX/fCompress << " " << fNoVoxelsY/fCompress << " " << fNoVoxelsZ << std::endl;
   fout << fMinX << " " << fMaxX << std::endl;
   fout << fMinY << " " << fMaxY << std::endl;
   fout << fMinZ << " " << fMaxZ << std::endl;
@@ -328,8 +328,8 @@ void DicomVFileImage::Print(std::ostream& out )
   G4int fCompress = theFileMgr->GetCompression();
   out << "@@ CT Slice " << fLocation << G4endl;
 
-  out << "@ NoVoxels " << fNoVoxelX/fCompress << " " << fNoVoxelY/fCompress << " " 
-      << fNoVoxelZ << G4endl;
+  out << "@ NoVoxels " << fNoVoxelsX/fCompress << " " << fNoVoxelsY/fCompress << " " 
+      << fNoVoxelsZ << G4endl;
   out << "@ DIM X: " << fMinX << " " << fMaxX
       << " Y: " << fMinY << " " << fMaxY
       << " Z: " << fMinZ << " " << fMaxZ << G4endl;

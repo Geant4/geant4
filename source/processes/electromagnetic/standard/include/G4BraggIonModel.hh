@@ -47,16 +47,14 @@
 // Class Description:
 //
 // Implementation of energy loss and delta-electron production
-// by heavy slow charged particles using ICRU'49 and NIST evaluated data 
-// for He4 ions
+// by heavy slow charged particles using ICRU'49, NIST, and ICRU90 
+// evaluated data for alpha and protons
 
 // -------------------------------------------------------------------
 //
 
 #ifndef G4BraggIonModel_h
 #define G4BraggIonModel_h 1
-
-#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VEmModel.hh"
 #include "G4ASTARStopping.hh"
@@ -86,24 +84,24 @@ public:
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy);
-				 
+
   G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
 				 G4double maxEnergy) override;
-				 				 
+
   G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
 				 G4double maxEnergy) override;
-				 
+
   G4double ComputeDEDXPerVolume(const G4Material*,
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double cutEnergy) override;
+                                const G4ParticleDefinition*,
+                                G4double kineticEnergy,
+                                G4double cutEnergy) override;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 			 const G4MaterialCutsCouple*,
@@ -111,7 +109,7 @@ public:
 			 G4double tmin,
 			 G4double maxEnergy) override;
 
-  // Compute ion charge 
+  // Compute ion charge not applied to alpha
   G4double GetChargeSquareRatio(const G4ParticleDefinition*,
 				const G4Material*,
 				G4double kineticEnergy) override;
@@ -139,59 +137,48 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  G4double HeEffChargeSquare(G4double z, G4double kinEnergyInMeV) const;
+  G4double HeEffChargeSquare(const G4double z, 
+                             const G4double kinEnergyInMeV) const;
 
-  void HasMaterial(const G4Material* material);
+  G4int HasMaterial(const G4Material* material) const;
 
-  G4double StoppingPower(const G4Material* material,
-                               G4double kineticEnergy);
+  G4double StoppingPower(const G4Material* material, 
+                         const G4double kinEnergy) const;
 
-  G4double ElectronicStoppingPower(G4double z,
-                                   G4double kineticEnergy) const;
+  G4double ElectronicStoppingPower(const G4double z, 
+                                   const G4double kinEnergy) const;
 
-  G4double DEDX(const G4Material* material, G4double kineticEnergy);
+  G4double DEDX(const G4Material* material, const G4double kinEnergy);
 
   G4EmCorrections*            corr = nullptr;
   const G4ParticleDefinition* particle = nullptr;
-  G4ParticleDefinition*       theElectron = nullptr;
+  const G4ParticleDefinition* theElectron;
   G4ParticleChangeForLoss*    fParticleChange = nullptr;
   G4ICRU90StoppingData*       fICRU90 = nullptr;
 
-  const G4Material*           currentMaterial = nullptr;
-  const G4Material*           baseMaterial = nullptr;
+  const G4Material* currentMaterial = nullptr;
+  const G4Material* baseMaterial = nullptr;
 
-  static G4ASTARStopping*      fASTAR;
+  static G4ASTARStopping* fASTAR;
 
-  G4double mass;
-  G4double spin;
-  G4double chargeSquare;
-  G4double massRate;
-  G4double ratio;
-  G4double lowestKinEnergy;
+  G4double mass = 0.0;
+  G4double spin = 0.0;
+  G4double chargeSquare = 1.0;
+  G4double effChargeSquare = 1.0;
+  G4double massRate = 1.0;
+  G4double ratio = 1.0;
   G4double HeMass;
   G4double massFactor;
-  G4double corrFactor = 1.0;
   G4double rateMassHe2p;
   G4double theZieglerFactor;
+  G4double lowestKinEnergy;
 
   G4int    iMolecula = -1; // index in the molecula's table
   G4int    iASTAR = -1;    // index in ASTAR
   G4int    iICRU90 = -1;
   G4bool   isIon = false;
+  G4bool   isAlpha = false;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
-{
-  particle = p;
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q   = particle->GetPDGCharge()/CLHEP::eplus;
-  chargeSquare = q*q;
-  massRate     = mass/CLHEP::proton_mass_c2;
-  ratio        = CLHEP::electron_mass_c2/mass;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -37,94 +37,89 @@
 #include "G4LogicalVolume.hh"
 #include "G4VSceneHandler.hh"
 
-
 class G4VRML2File;
 class G4VisAttributes;
 
-class G4VRML2FileSceneHandler: public G4VSceneHandler {
-
+class G4VRML2FileSceneHandler : public G4VSceneHandler
+{
   friend class G4VRML2FileViewer;
 
-// methods (public) 
-public:
-	G4VRML2FileSceneHandler(G4VRML2File& system, const G4String& name = "");
-	virtual ~G4VRML2FileSceneHandler();
+  // methods (public)
+ public:
+  G4VRML2FileSceneHandler(G4VRML2File& system, const G4String& name = "");
+  virtual ~G4VRML2FileSceneHandler();
 
-	using G4VSceneHandler::AddSolid;
-	void AddSolid(const G4Box&);
-	void AddSolid(const G4Cons&);
-	void AddSolid(const G4Tubs&);
-	void AddSolid(const G4Trd&);
-	void AddSolid(const G4Trap&);
-	void AddSolid(const G4Sphere&);
-        void AddSolid(const G4Para&);
-	void AddSolid(const G4Torus&);
-        void AddSolid(const G4VSolid&);
+  using G4VSceneHandler::AddSolid;
+  void AddSolid(const G4Box&);
+  void AddSolid(const G4Cons&);
+  void AddSolid(const G4Tubs&);
+  void AddSolid(const G4Trd&);
+  void AddSolid(const G4Trap&);
+  void AddSolid(const G4Sphere&);
+  void AddSolid(const G4Para&);
+  void AddSolid(const G4Torus&);
+  void AddSolid(const G4VSolid&);
 
-	using G4VSceneHandler::AddCompound;
+  using G4VSceneHandler::AddCompound;
 
-	void BeginPrimitives(const G4Transform3D& objectTransformation);
-	void EndPrimitives();
+  void BeginPrimitives(const G4Transform3D& objectTransformation);
+  void EndPrimitives();
 
-	using G4VSceneHandler::AddPrimitive;
-	void AddPrimitive(const G4Polyline&);
-	void AddPrimitive(const G4Polyhedron&);
-	void AddPrimitive(const G4Text&); 
-	void AddPrimitive(const G4Circle&);
-	void AddPrimitive(const G4Square&);
+  using G4VSceneHandler::AddPrimitive;
+  void AddPrimitive(const G4Polyline&);
+  void AddPrimitive(const G4Polyhedron&);
+  void AddPrimitive(const G4Text&);
+  void AddPrimitive(const G4Circle&);
+  void AddPrimitive(const G4Square&);
 
-	void ClearTransientStore();  // Used for triggering detector re-drawing.
+  void ClearTransientStore();  // Used for triggering detector re-drawing.
 
-	void BeginModeling();
-	void EndModeling();
+  void BeginModeling();
+  void EndModeling();
 
-	void VRMLBeginModeling();
-	void VRMLEndModeling();
+  void VRMLBeginModeling();
+  void VRMLEndModeling();
 
-	void connectPort();
-	void closePort();
+  void connectPort();
+  void closePort();
 
-// methods (private) 
-private:
+  // methods (private)
+ private:
+  void SendMaterialNode(const G4VisAttributes* pAV);
+  void SendMaterialNode();
 
-	void      SendMaterialNode          ( const G4VisAttributes*  pAV ); 
-	void      SendMaterialNode          ();
+  void SendLineColor(const G4VisAttributes* pAV);
+  void SendMarkerColor(const G4VMarker& mark);
+  void SendMarkerWorldPosition(const G4VMarker& mark);
 
-	void      SendLineColor             ( const G4VisAttributes*  pAV ); 
-	void      SendMarkerColor           ( const G4VMarker&  mark ) ;
-	void      SendMarkerWorldPosition   ( const G4VMarker&  mark ) ;
+  G4double GetMarkerHalfSize(const G4VMarker& mark);
+  void GetMarkerWorldPosition(const G4VMarker& mark, double* pX, double* pY,
+                              double* pZ);
 
-	G4double  GetMarkerHalfSize         ( const G4VMarker&  mark ) ;
-	void      GetMarkerWorldPosition    (	const G4VMarker&  mark , 
-						double* pX             ,
-						double* pY             ,
-						double* pZ              ) ;
+  G4bool isConnected() { return fFlagDestOpen; }
 
-	G4bool    isConnected      () { return fFlagDestOpen ; }
+  G4bool IsPVPickable() { return fPVPickable; }
+  void SetPVPickability(G4bool on_off) { fPVPickable = on_off; }
+  G4double SetPVTransparency();
+  G4double GetPVTransparency() { return fPVTransparency; }
 
-	G4bool    IsPVPickable     ()                { return fPVPickable   ;}  
-	void      SetPVPickability ( G4bool on_off ) { fPVPickable = on_off ;}  
-	G4double  SetPVTransparency ()  ; 
-	G4double  GetPVTransparency () { return fPVTransparency ; } 
+  // data
+ private:
+  char fVRMLFileDestDir[256];
+  char fVRMLFileName[256];
 
-// data 
-private:
-	char fVRMLFileDestDir[256] ; 
-	char fVRMLFileName[256]    ; 
+  G4VRML2File& fSystem;  // Graphics system for this scene.
+  G4bool fFlagDestOpen;
 
-	G4VRML2File& fSystem;	// Graphics system for this scene.
-	G4bool       fFlagDestOpen ;
+  G4int fMaxFileNum;
 
-	G4int        fMaxFileNum   ;	
+  G4bool fPVPickable;
+  G4double fPVTransparency;
 
-	G4bool       fPVPickable ;
-	G4double     fPVTransparency ;
+  static G4int fSceneIdCount;
 
-	static G4int fSceneIdCount;
-
-public: 
-	std::ofstream     fDest ;
-
+ public:
+  std::ofstream fDest;
 };
 
-#endif //G4VRML2FILE_SCENE_HANDLER_HH
+#endif  // G4VRML2FILE_SCENE_HANDLER_HH

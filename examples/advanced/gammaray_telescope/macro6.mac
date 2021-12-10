@@ -12,11 +12,8 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
-#/control/execute physics_polarized.mac
-#
 #G4EmStandard_Option4 with BetheHeitler5D model
-#
-/control/execute physics_polarized_new.mac
+/control/execute physics_opt4.mac
 /run/initialize
 /gun/sourceGen true
 #/particle/select geantino

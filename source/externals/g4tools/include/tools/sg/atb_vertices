@@ -123,17 +123,17 @@ public:
     if(touched()) {
       if(do_back.value()) gen_back();
       if(draw_edges.value()) gen_edges();
-#ifdef __APPLE__
       m_all_a_one = true;
      {tools_vforcit_npp(float,rgbas.values(),it) {
         if(*(it+3)!=1) {m_all_a_one = false;break;}
         it += 4;
       }}
-#endif //__APPLE__
       clean_gstos();
       reset_touched();
     }
     if(xyzs.empty()) return;
+
+    if(!have_to_render(a_action)) return;
 
     const state& state = a_action.state();
 
@@ -326,9 +326,7 @@ public:
   ,m_xyzs_pos(0)
   ,m_rgbas_pos(0)
   ,m_nms_pos(0)
-#ifdef __APPLE__
   ,m_all_a_one(true)
-#endif
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -351,9 +349,7 @@ public:
   ,m_xyzs_pos(a_from.m_xyzs_pos)
   ,m_rgbas_pos(a_from.m_rgbas_pos)
   ,m_nms_pos(a_from.m_nms_pos)
-#ifdef __APPLE__
   ,m_all_a_one(true)
-#endif
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -539,6 +535,23 @@ public:
     parent::clear();
   }
 protected:
+  bool have_to_render(render_action& a_action) {
+    bool transparent = false;
+    if(rgbas.size()) {
+      if(!m_all_a_one) transparent = true;
+    } else {
+      if(a_action.state().m_color.a()!=1) transparent = true;
+    }
+    if(transparent) {
+      if(a_action.do_transparency()) return true;
+      a_action.set_have_to_do_transparency(true);
+      return false;
+    } else {
+      if(a_action.do_transparency()) return false;
+    }
+    return true;
+  }
+    
   void gen_back(){
     m_back_xyzs.clear();
     m_back_nms.clear();
@@ -688,9 +701,7 @@ protected:
   size_t m_xyzs_pos;
   size_t m_rgbas_pos;
   size_t m_nms_pos;
-#ifdef __APPLE__
   bool m_all_a_one;
-#endif
 };
 
 }}

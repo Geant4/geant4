@@ -610,8 +610,8 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
     originalName += c;
     while (is.get(c) && c != ' ') {originalName += c;}
   }
-  originalName = originalName.strip (G4String::both, ' ');
-  originalName = originalName.strip (G4String::both, '"');
+  G4StrUtil::strip(originalName, ' ');
+  G4StrUtil::strip(originalName, '"');
 
   G4VViewer* originalViewer = fpVisManager -> GetViewer (originalName);
   if (!originalViewer) {
@@ -632,8 +632,8 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
     cloneName += c;
     while (is.get(c) && c != ' ') {cloneName += c;}
   }
-  cloneName = cloneName.strip (G4String::both, ' ');
-  cloneName = cloneName.strip (G4String::both, '"');
+  G4StrUtil::strip(cloneName, ' ');
+  G4StrUtil::strip(cloneName, '"');
 
   G4bool errorWhileNaming = false;
   if (cloneName == "none") {
@@ -873,16 +873,7 @@ void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValu
 
   // Copy camera-specific view parameters
   G4ViewParameters vp = currentViewer->GetViewParameters();
-  const G4ViewParameters& fromVP = fromViewer->GetViewParameters();
-  vp.SetViewpointDirection  (fromVP.GetViewpointDirection());
-  vp.SetLightpointDirection (fromVP.GetLightpointDirection());
-  vp.SetLightsMoveWithCamera(fromVP.GetLightsMoveWithCamera());
-  vp.SetUpVector            (fromVP.GetUpVector());
-  vp.SetFieldHalfAngle      (fromVP.GetFieldHalfAngle());
-  vp.SetZoomFactor          (fromVP.GetZoomFactor());
-  vp.SetScaleFactor         (fromVP.GetScaleFactor());
-  vp.SetCurrentTargetPoint  (fromVP.GetCurrentTargetPoint());
-  vp.SetDolly               (fromVP.GetDolly());
+  CopyCameraParameters(vp, fromViewer->GetViewParameters());
   SetViewParameters(currentViewer, vp);
   
   if (verbosity >= G4VisManager::confirmations) {
@@ -979,8 +970,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     newName += c;
     while (is.get(c) && c != ' ') {newName += c;}
   }
-  newName = newName.strip (G4String::both, ' ');
-  newName = newName.strip (G4String::both, '"');
+  G4StrUtil::strip(newName, ' ');
+  G4StrUtil::strip(newName, '"');
 
   // Now get window size hint...
   is >> windowSizeHintString;
@@ -1041,6 +1032,17 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
     }
   }
 
+  // If there was an existing viewer, use its view parameters
+  if (fThereWasAViewer) {
+    // OK, we're going to use its view parameters below
+  } else {
+    // There wasn't one...but if there now is...
+    if (fpVisManager->GetCurrentViewer()) {
+      fThereWasAViewer = true;
+      fVPExistingViewer = fpVisManager->GetCurrentViewer()->GetViewParameters();
+    }
+  }
+
   // WindowSizeHint and XGeometryString are picked up from the vis
   // manager in the G4VViewer constructor. In G4VisManager, after Viewer
   // creation, we will store theses parameters in G4ViewParameters.
@@ -1048,7 +1050,13 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newVa
   fpVisManager -> CreateViewer (newName,windowSizeHintString);
 
   G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
+
   if (newViewer && newViewer -> GetName () == newName) {
+    if (fThereWasAViewer) {
+      G4ViewParameters vp = newViewer->GetViewParameters();
+      CopyMostViewParameters(vp, fVPExistingViewer);
+      fpVisManager->GetCurrentViewer()->SetViewParameters(vp);
+    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New viewer \"" << newName << "\" created." << G4endl;
     }
@@ -1344,7 +1352,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     // Assume user has specified a Unix "glob" pattern in leaf
     // Default pattern is *.g4view, which translates to ^.*\\.g4view
     // Convert pattern into a regexp
-    G4String regexp_pattern('^');
+    G4String regexp_pattern("^");
     for (size_t i = 0; i < pattern.length(); ++i) {
       if (pattern[i] == '.') {
 	regexp_pattern += "\\.";
@@ -1918,7 +1926,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     WriteCommands(G4cout,vp,stp);
   } else {
     // Write to file - but add extension if not prescribed
-    if (!filename.contains('.')) {
+    if (!G4StrUtil::contains(filename, '.')) {
       // No extension supplied - add .g4view
       filename += ".g4view";
     }

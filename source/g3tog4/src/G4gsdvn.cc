@@ -64,7 +64,8 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
     G4String newName = vname;
     if (i>0) {
       char index[12]; sprintf(index, "%d", i);
-      newName.append(gSeparator); newName = newName + index;
+      newName += gSeparator;
+      newName = newName + index;
     }	
 
     // create new VTE with 0 solid

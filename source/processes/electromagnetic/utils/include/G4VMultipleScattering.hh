@@ -207,6 +207,8 @@ public:
   inline G4double GeomFactor() const;
  
   inline G4double PolarAngleLimit() const;
+
+  inline G4bool UseBaseMaterial() const;
  
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
@@ -250,7 +252,6 @@ private:
   G4SafetyHelper*             safetyHelper = nullptr;
   const G4ParticleDefinition* firstParticle = nullptr;
   const G4ParticleDefinition* currParticle = nullptr;
-  //  const G4ParticleDefinition* theGenericIon = nullptr;
  
   std::vector<G4VMscModel*>   mscModels;
 
@@ -284,6 +285,7 @@ private:
   G4bool                      isIon = false;
   G4bool                      fPositionChanged = false;
   G4bool                      isActive = false;
+  G4bool                      baseMat = false;
 };
 
 // ======== Run time inline methods ================
@@ -386,6 +388,13 @@ inline G4VMscModel*
 G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 {
   return static_cast<G4VMscModel*>(modelManager->GetModel(idx, ver));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VMultipleScattering::UseBaseMaterial() const
+{
+  return baseMat;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

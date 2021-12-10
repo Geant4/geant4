@@ -112,7 +112,7 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter = new G4UIparameter("Icon",'s',false);
   parameter->SetDefaultValue("");
   parameter->SetParameterCandidates
-  ("open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho user_icon");
+  ("open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho exit user_icon");
   addIcon->SetParameter (parameter);
 
   parameter = new G4UIparameter("Command",'s',true);
@@ -217,8 +217,8 @@ G4bool GetValues (
       return false;
     }
     G4String token = tok;
-    if( token(0)=='"' ) {
-      while( token(token.length()-1) != '"' ) {
+    if( token[0]=='"' ) {
+      while( token.back() != '"' ) {
 	tok = strtok(NULL," ");
 	if( (tok==NULL) || (*tok=='\0')) {
 	  STRDEL(value);
@@ -227,9 +227,9 @@ G4bool GetValues (
 	token += " ";
 	token += tok;
       }
-      token = (G4String)token.strip(G4String::both,'"');
+      G4StrUtil::strip(token, '"');
     }
-    if( token.isNull() ) {
+    if( token.empty() ) {
       STRDEL(value);
       return false;
     } else { 

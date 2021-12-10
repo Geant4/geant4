@@ -57,6 +57,7 @@
 #include "G4ITNavigator.hh"
 #include "G4ITSafetyHelper.hh" // Not used yet
 #include "G4TrackingInformation.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
 
 using namespace std;
 
@@ -126,7 +127,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName,
   fpState.reset(new G4ITBrownianState());
 
   //ctor
-  SetProcessSubType(61);
+  SetProcessSubType(fLowEnergyBrownianTransportation);
 
   fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fpWaterDensity = 0;
@@ -148,7 +149,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTran
     G4ITTransportation(right)
 {
   //copy ctor
-  SetProcessSubType(61);
+  SetProcessSubType(fLowEnergyBrownianTransportation);
   fUseMaximumTimeBeforeReachingBoundary = right
       .fUseMaximumTimeBeforeReachingBoundary;
   fUseSchedulerMinTimeSteps = right.fUseSchedulerMinTimeSteps;

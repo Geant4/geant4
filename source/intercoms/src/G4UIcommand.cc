@@ -57,18 +57,7 @@ G4UIcommand::G4UIcommand(const char* theCommandPath,
   , messenger(theMessenger)
 {
   G4String comStr = theCommandPath;
-  if(!theMessenger)
-  {  // this must be a directory
-    if(comStr(comStr.length() - 1) != '/')
-    {
-      G4cerr << "G4UIcommand Warning : " << G4endl;
-      G4cerr << "  <" << theCommandPath << "> must be a directory." << G4endl;
-      G4cerr << "  '/' is appended." << G4endl;
-      comStr += "/";
-    }
-  }
   G4UIcommandCommonConstructorCode(comStr);
-  G4String nullString;
   availabelStateList.clear();
   availabelStateList.push_back(G4State_PreInit);
   availabelStateList.push_back(G4State_Init);
@@ -83,8 +72,8 @@ void G4UIcommand::G4UIcommandCommonConstructorCode(const char* theCommandPath)
 {
   commandPath            = theCommandPath;
   commandName            = theCommandPath;
-  G4int commandNameIndex = commandName.last('/');
-  commandName.remove(0, commandNameIndex + 1);
+  G4int commandNameIndex = commandName.rfind('/');
+  commandName.erase(0, commandNameIndex + 1);
 #ifdef G4MULTITHREADED
   if(messenger && messenger->CommandsShouldBeInMaster() &&
      G4Threading::IsWorkerThread())
@@ -99,6 +88,33 @@ void G4UIcommand::G4UIcommandCommonConstructorCode(const char* theCommandPath)
 #else
   G4UImanager::GetUIpointer()->AddNewCommand(this);
 #endif
+}
+
+// --------------------------------------------------------------------
+void G4UIcommand::SetCommandType(CommandType typ)
+{
+  if(messenger==nullptr)
+  {  // this must be a directory
+    if(typ != CmdDirectory)
+    {
+      G4ExceptionDescription ed;
+      ed << "A UI command <" << commandPath
+         << "> is defined without vaild messenger.";
+      G4Exception("G4UIcommand::SetCommandType","UI2031",
+         FatalException,ed);
+    }
+    else if(commandPath.back() != '/')
+    {
+      G4ExceptionDescription ed;
+      ed << "G4UIcommand Warning : \n" 
+         << "  <" << commandPath << "> must be a directory." 
+         << "  '/' is appended.";
+      G4Exception("G4UIcommand::SetCommandType","UI2032",
+         JustWarning,ed);
+      commandPath += "/";
+    }
+  }
+  commandType = typ;
 }
 
 // --------------------------------------------------------------------
@@ -149,13 +165,13 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         correctParameters.append(" ");
       }
       aToken = parameterToken();
-      if(aToken.length() > 0 && aToken(0) == '"')
+      if(aToken.length() > 0 && aToken[0] == '"')
       {
-        while(aToken(aToken.length() - 1) != '"' ||
-              (aToken.length() == 1 && aToken(0) == '"'))
+        while(aToken.back() != '"' ||
+              (aToken.length() == 1 && aToken[0] == '"'))
         {
           G4String additionalToken = parameterToken();
-          if(additionalToken.isNull())
+          if(additionalToken.empty())
           {
             return fParameterUnreadable + i_thParameter;
           }
@@ -167,9 +183,9 @@ G4int G4UIcommand::DoIt(G4String parameterList)
               parameter[i_thParameter]->GetParameterType() == 's')
       {
         G4String anotherToken;
-        while(!((anotherToken = parameterToken()).isNull()))
+        while(!((anotherToken = parameterToken()).empty()))
         {
-          G4int idxs = anotherToken.index("#");
+          G4int idxs = anotherToken.find("#");
           if(idxs == G4int(std::string::npos))
           {
             aToken += " ";
@@ -178,7 +194,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
           else if(idxs > 0)
           {
             aToken += " ";
-            aToken += anotherToken(0, idxs);
+            aToken += anotherToken.substr(0, idxs);
             break;
           }
           else
@@ -188,7 +204,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         }
       }
 
-      if(aToken.isNull() || aToken == "!")
+      if(aToken.empty() || aToken == "!")
       {
         if(parameter[i_thParameter]->IsOmittable())
         {
@@ -199,12 +215,12 @@ G4int G4UIcommand::DoIt(G4String parameterList)
             for(G4int ii = 0; ii < i_thParameter; ++ii)
             {
               parVal = cvSt();
-              if(parVal(0) == '"')
+              if(parVal[0] == '"')
               {
-                while(parVal(parVal.length() - 1) != '"')
+                while(parVal.back() != '"')
                 {
                   G4String additionalToken = cvSt();
-                  if(additionalToken.isNull())
+                  if(additionalToken.empty())
                   {
                     return fParameterUnreadable + i_thParameter;
                   }
@@ -214,19 +230,18 @@ G4int G4UIcommand::DoIt(G4String parameterList)
               }
             }
             G4String aCVToken = cvSt();
-            if(aCVToken(0) == '"')
+            if(aCVToken[0] == '"')
             {
-              while(aCVToken(aCVToken.length() - 1) != '"')
+              while(aCVToken.back() != '"')
               {
                 G4String additionalToken = cvSt();
-                if(additionalToken.isNull())
+                if(additionalToken.empty())
                 {
                   return fParameterUnreadable + i_thParameter;
                 }
                 aCVToken += " ";
                 aCVToken += additionalToken;
               }
-              // aCVToken.strip(G4String::both,'"');
             }
             correctParameters.append(aCVToken);
           }
@@ -396,7 +411,7 @@ void G4UIcommand::List()
 {
   G4cout << G4endl;
   G4cout << G4endl;
-  if(commandPath(commandPath.length() - 1) != '/')
+  if(commandPath.back() != '/')
   {
     G4cout << "Command " << commandPath << G4endl;
   }
@@ -410,7 +425,7 @@ void G4UIcommand::List()
   {
     G4cout << commandGuidance[i_thGuidance] << G4endl;
   }
-  if(!rangeString.isNull())
+  if(!rangeString.empty())
   {
     G4cout << " Range of parameters : " << rangeString << G4endl;
   }
@@ -529,8 +544,7 @@ G4String G4UIcommand::ConvertToString(G4ThreeVector vec, const char* unitName)
 // --------------------------------------------------------------------
 G4bool G4UIcommand::ConvertToBool(const char* st)
 {
-  G4String v = st;
-  v.toUpper();
+  G4String v = G4StrUtil::to_upper_copy(st);
   G4bool vl = false;
   if(v == "Y" || v == "YES" || v == "1" || v == "T" || v == "TRUE")
   {
@@ -612,7 +626,7 @@ G4int G4UIcommand::CheckNewValue(const char* newValue)
 {
   yystype result;
   // if( TypeCheck(newValue) == 0 ) return 1;
-  if(!rangeString.isNull())
+  if(!rangeString.empty())
   {
     if(RangeCheck(newValue) == 0)
       return fParameterOutOfRange;
@@ -656,7 +670,7 @@ G4int G4UIcommand::TypeCheck(const char* t)
       case 'S':
         break;
       case 'B':
-        aNewValue.toUpper();
+        G4StrUtil::to_upper(aNewValue);
         if(aNewValue == "Y" || aNewValue == "N" || aNewValue == "YES" ||
            aNewValue == "NO" || aNewValue == "1" || aNewValue == "0" ||
            aNewValue == "T" || aNewValue == "F" || aNewValue == "TRUE" ||
@@ -1503,7 +1517,7 @@ tokenNum G4UIcommand::Yylex()  // reads input and returns token number, KR486
   {  // I or D
     do
     {
-      buf += G4String((unsigned char) c);
+      buf += (unsigned char)c;
       c = G4UIpGetc();
     } while(c == '.' || isdigit(c) || c == 'e' || c == 'E' || c == '+' ||
             c == '-');
@@ -1530,7 +1544,7 @@ tokenNum G4UIcommand::Yylex()  // reads input and returns token number, KR486
   {  // IDENTIFIER
     do
     {
-      buf += G4String((unsigned char) c);
+      buf += (unsigned char) c;
     } while((c = G4UIpGetc()) != EOF && (isalnum(c) || c == '_'));
     G4UIpUngetc(c);
     if(IsParameter(buf))
@@ -1579,7 +1593,7 @@ G4int G4UIcommand::G4UIpGetc()
 {  // emulation of getc()
   G4int length = rangeString.length();
   if(bp < length)
-    return rangeString(bp++);
+    return rangeString[bp++];
   else
     return EOF;
 }
@@ -1589,14 +1603,14 @@ G4int G4UIcommand::G4UIpUngetc(G4int c)
 {  // emulation of ungetc()
   if(c < 0)
     return -1;
-  if(bp > 0 && c == rangeString(bp - 1))
+  if(bp > 0 && c == rangeString[bp - 1])
   {
     --bp;
   }
   else
   {
     G4cerr << "G4UIpUngetc() failed." << G4endl;
-    G4cerr << "bp=" << bp << " c=" << c << " pR(bp-1)=" << rangeString(bp - 1)
+    G4cerr << "bp=" << bp << " c=" << c << " pR(bp-1)=" << rangeString[bp - 1]
            << G4endl;
     paramERR = 1;
     return -1;

@@ -47,22 +47,20 @@
 class G4PhysicsLinearVector : public G4PhysicsVector
 {
 public:
-  explicit G4PhysicsLinearVector(G4bool spline = false);
   // The vector will be filled from external file using Retrieve() method
+  explicit G4PhysicsLinearVector(G4bool spline = false);
 
+  // Energies will be computed and filled at construction, values will be 
+  // filled with zeros. Required Nbin > 0 and Emax > Emin.
+  // Use PutValue(..) to fill the data vector
   explicit G4PhysicsLinearVector(G4double Emin, G4double Emax, std::size_t Nbin,
                                  G4bool spline = false);
-  // Energy vector will be computed and filled at construction,
-  // number of elements 'Nbin+1'. Use PutValue() to fill the data vector
 
-  virtual ~G4PhysicsLinearVector();
+  virtual ~G4PhysicsLinearVector() = default;
 
-  virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii) final;
-  // To retrieve persistent data from a file stream
+protected:
 
-  virtual void ScaleVector(G4double factorE, G4double factorV) final;
-  // Scale all values of the vector and second derivatives
-  // by factorV, energies - by vectorE
+  void Initialise() final;
 };
 
 #endif

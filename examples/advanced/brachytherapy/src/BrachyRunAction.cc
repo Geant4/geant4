@@ -41,7 +41,7 @@
 //
 
 #include "BrachyRunAction.hh"
-#include "BrachyAnalysisManager.hh"
+#include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

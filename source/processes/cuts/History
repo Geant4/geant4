@@ -16,6 +16,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October. 12th, 2021 - V.Ivanchenko (proccuts-V10-07-05)
+- G4PhysicsTableHelper - fixed Coverity warning due to index type,
+    removed G4ThreadLocal variable, substitute old cerr by 
+    G4Exception (old printouts are kept), removed unused headers
+- G4MCCIndexConversionTable - changed inline functions -only one
+    return is left instead of two
+
+September. 1th, 2021 - V.Ivanchenko (proccuts-V10-07-04)
+- G4VRangeToEnergyConverter, G4RToEConvForPositron,
+  G4RToEConvForElectron, G4RToEConvForGamma, G4RToEConvForProton
+    Simplified the design - do not use G4PhysicsTable and 
+    G4PhysicsVector but convert range cut to production threshold 
+    directly; expected memory reduction for big detectors and
+    some speed-up of initialisation
+
+July. 18th, 2021 - V.Ivanchenko (proccuts-V10-07-03)
+- G4VRangeToEnergyConverter - updated interfaces to G4PhysicsVector
+
+July. 11th, 2021 - V.Ivanchenko (proccuts-V10-07-02)
+- G4PhysicsTableHelper - fixed minor Coverity report
+
 May. 26th, 2021 - V.Ivanchenko (proccuts-V10-07-01)
 - G4PhysicsTableHelper - updated interface to Retrieve(..) method
 

@@ -58,7 +58,8 @@ class G4VParticipants
     virtual void SetNucleus(G4V3DNucleus* aNucleus);
     virtual G4V3DNucleus* GetWoundedNucleus() const;
 
-    virtual void InitProjectileNucleus(G4int theZ, G4int theA);
+    virtual void InitProjectileNucleus(G4int theZ, G4int theA,
+				       G4int numberOfLambdasOrAntiLambdas = 0);
     virtual void SetProjectileNucleus(G4V3DNucleus* aNucleus);
     virtual G4V3DNucleus* GetProjectileNucleus() const;
 

@@ -2,9 +2,9 @@
 <gdml xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
   <define>
-    <position name="SiliconBlockUpper_vol_0_pos_0x438ed50" unit="cm" x="7.00000000e+00" y="0.00000000e+00" z="0.00000000e+00"/>
+    <position name="SiliconBlockUpper_vol_0_pos" unit="cm" x="7.00000000e+00" y="0.00000000e+00" z="0.00000000e+00"/>
     <rotation name="identity_rot" unit="rad" x="0" y="0" z="0"/>
-    <position name="SiliconBlockDown_vol_1_pos_0x43938f0" unit="cm" x="-7.00000000e+00" y="0.00000000e+00" z="0.00000000e+00"/>
+    <position name="SiliconBlockDown_vol_1_pos" unit="cm" x="-7.00000000e+00" y="0.00000000e+00" z="0.00000000e+00"/>
     <position name="AssemblyVol_pos_1" unit="cm" x="14.00000000e+00" y="0.00000000e+00" z="0.00000000e+00"/>
     <position name="AssemblyVol_pos_2" unit="cm" x="-14.00000000e+00" y="0.00000000e+00" z="0.00000000e+00"/>
   </define>
@@ -35,30 +35,30 @@
   </materials>
 
   <solids>
-    <box lunit="cm" name="world_volume_shape_0x4345980" x="6.00000000e+03" y="6.00000000e+03" z="6.00000000e+03"/>
-    <box lunit="cm" name="SiliconBlockUpper_vol_shape_0x438eae0" x="10.00000000e+00" y="4.00000000e+01" z="4.00000000e+01"/>
-    <box lunit="cm" name="SiliconBlockDown_vol_shape_0x43935f0" x="10.00000000e+00" y="4.00000000e+01" z="4.00000000e+01"/>
+    <box lunit="cm" name="world_volume_shape" x="6.00000000e+03" y="6.00000000e+03" z="6.00000000e+03"/>
+    <box lunit="cm" name="SiliconBlockUpper_vol_shape" x="10.00000000e+00" y="4.00000000e+01" z="4.00000000e+01"/>
+    <box lunit="cm" name="SiliconBlockDown_vol_shape" x="10.00000000e+00" y="4.00000000e+01" z="4.00000000e+01"/>
   </solids>
 
   <structure>
-    <volume name="SiliconBlockUpper_vol_0x438ebb0">
+    <volume name="SiliconBlockUpper_vol">
       <materialref ref="Silicon"/>
-      <solidref ref="SiliconBlockUpper_vol_shape_0x438eae0"/>
+      <solidref ref="SiliconBlockUpper_vol_shape"/>
     </volume>
-    <volume name="SiliconBlockDown_vol_0x43936c0">
+    <volume name="SiliconBlockDown_vol">
       <materialref ref="Silicon"/>
-      <solidref ref="SiliconBlockDown_vol_shape_0x43935f0"/>
+      <solidref ref="SiliconBlockDown_vol_shape"/>
     </volume>
 
     <assembly name="AssemblyVol">
       <physvol>
-        <volumeref ref="SiliconBlockUpper_vol_0x438ebb0"/>
-        <positionref ref="SiliconBlockUpper_vol_0_pos_0x438ed50"/>
+        <volumeref ref="SiliconBlockUpper_vol"/>
+        <positionref ref="SiliconBlockUpper_vol_0_pos"/>
         <rotationref ref="identity_rot"/>
       </physvol>
       <physvol>
-        <volumeref ref="SiliconBlockDown_vol_0x43936c0"/>
-        <positionref ref="SiliconBlockDown_vol_1_pos_0x43938f0"/>
+        <volumeref ref="SiliconBlockDown_vol"/>
+        <positionref ref="SiliconBlockDown_vol_1_pos"/>
         <rotationref ref="identity_rot"/>
       </physvol>
     </assembly>
@@ -74,9 +74,9 @@
       </physvol>
     </assembly>
 
-    <volume name="world_volume_0x4345a00">
+    <volume name="world_volume">
       <materialref ref="Air"/>
-      <solidref ref="world_volume_shape_0x4345980"/>
+      <solidref ref="world_volume_shape"/>
       <physvol>
         <volumeref ref="AssemblyVol_2"/>
       </physvol>
@@ -84,7 +84,7 @@
   </structure>
 
   <setup name="default" version="1.0">
-    <world ref="world_volume_0x4345a00"/>
+    <world ref="world_volume"/>
   </setup>
 
 </gdml>

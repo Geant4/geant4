@@ -29,7 +29,7 @@
 #include "G4UserRunAction.hh"
 #include "G4GenericMessenger.hh"
 #include "G4String.hh"
-#include "g4root.hh"
+#include "G4AnalysisManager.hh"
 #include <iostream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ RunAction::RunAction(EventAction *eventAction)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction() { delete G4AnalysisManager::Instance(); }
+RunAction::~RunAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +59,7 @@ void RunAction::BeginOfRunAction(const G4Run *) {
   // Create analysis manager
   // The choice of analysis technology is done via selection of a namespaces
   auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   // Default settings

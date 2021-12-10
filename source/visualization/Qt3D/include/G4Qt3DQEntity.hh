@@ -25,8 +25,6 @@
 //
 // John Allison, 30th August 2020
 
-#if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)
-
 #ifndef G4QT3DQENTITY_HH
 #define G4QT3DQENTITY_HH
 
@@ -47,5 +45,3 @@ private:
 };
 
 #endif
-
-#endif  // #if defined (G4VIS_BUILD_QT3D_DRIVER) || defined (G4VIS_USE_QT3D)

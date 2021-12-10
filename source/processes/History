@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 25, 2021 (processes-V10-07-05)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 18, 2021 (processes-V10-07-04)
+- Use std::string member functions from G4String in place of synonyms
+
+August 5, 2021 (processes-V10-07-03)
+- Migration to the new version of G4PhysicsModelCatalog
+
 April 18, 2021 (processes-V10-07-02)
 - Migrate main/orphaned processes categories to modular CMake API
   - EM/Hadronic/Biasing are to be handled in separate MRs

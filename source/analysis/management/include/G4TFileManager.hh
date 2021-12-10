@@ -33,14 +33,16 @@
 
 #include <vector>
 #include <memory>
+#include <string_view>
 
 template <typename FT>
 class G4TFileManager
 {
   public:
     explicit G4TFileManager(const G4AnalysisManagerState& state);
+    G4TFileManager() = delete;
     virtual ~G4TFileManager();
-   
+
     // Per file methods
     // (implements all tests and warnings, fills the map)
     std::shared_ptr<FT> CreateTFile(const G4String& fileName);
@@ -56,6 +58,9 @@ class G4TFileManager
     G4bool CloseFiles();
     G4bool DeleteEmptyFiles();
 
+    // Clear all data
+    void ClearData();
+
   protected:
     // Methods to be implemented per file type manipulate file
     virtual std::shared_ptr<FT> CreateFileImpl(const G4String& fileName) = 0;
@@ -64,16 +69,19 @@ class G4TFileManager
 
   private:
     // Methods
-    void FileNotFoundException(const G4String& fileName, 
-          const G4String& functionName) const;
-    G4TFileInformation<FT>* GetFileInfoInFunction(const G4String& fileName, 
-      G4String functionName, G4bool warn = true) const;
-    std::shared_ptr<FT> GetFileInFunction(const G4String& fileName, 
-      G4String functionName, G4bool warn = true) const;
+    void FileNotFoundWarning(const G4String& fileName,
+          std::string_view functionName) const;
+    G4TFileInformation<FT>* GetFileInfoInFunction(const G4String& fileName,
+      std::string_view functionName, G4bool warn = true) const;
+    std::shared_ptr<FT> GetFileInFunction(const G4String& fileName,
+      std::string_view functionName, G4bool warn = true) const;
 
     G4bool WriteTFile(std::shared_ptr<FT> file, const G4String& fileName);
     G4bool CloseTFile(std::shared_ptr<FT> file, const G4String& fileName);
     G4bool DeleteEmptyFile(const G4String& fileName);
+
+    // Static data members
+    static constexpr std::string_view fkClass { "G4TFileManager<FT>" };
 
     // Data members
     const G4AnalysisManagerState& fAMState;

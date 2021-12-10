@@ -301,8 +301,8 @@ void G4VisCommandsTouchable::SetNewValue
       G4Polyhedron* polyhedron =
       properties.fpTouchablePV->GetLogicalVolume()->GetSolid()->GetPolyhedron();
       G4cout << "\nLocal polyhedron coordinates:\n" << *polyhedron;
-      G4Transform3D* transform = tempPVModel.GetCurrentTransform();
-      polyhedron->Transform(*transform);
+      const G4Transform3D& transform = tempPVModel.GetCurrentTransform();
+      polyhedron->Transform(transform);
       G4cout << "\nGlobal polyhedron coordinates:\n" << *polyhedron;
     } else {
       G4cout << "Touchable not found." << G4endl;
@@ -382,8 +382,7 @@ void G4VisCommandsTouchable::SetNewValue
     G4double length = std::pow(10,intLog10LengthMax);
     if (5.*length < lengthMax) length *= 5.;
     else if (2.*length < lengthMax) length *= 2.;
-    G4AxesModel axesModel(0.,0.,0.,length);
-    axesModel.SetTransformation(transform);
+    G4AxesModel axesModel(0.,0.,0.,length,transform);
     axesModel.SetGlobalTag("LocalAxesModel");
     axesModel.DescribeYourselfTo(*fpVisManager->GetCurrentSceneHandler());
 

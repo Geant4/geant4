@@ -86,7 +86,7 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName, G4bool ascii)
   }
 
   // check if the file has been opened successfully
-  if(!fOut)
+  if(!fOut.is_open())
   {
 #ifdef G4VERBOSE
     G4cerr << "G4PhysicsTable::StorePhysicsTable():";
@@ -158,7 +158,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
   }
 
   // check if the file has been opened successfully
-  if(!fIn)
+  if(!fIn.is_open())
   {
 #ifdef G4VERBOSE
     G4cerr << "G4PhysicsTable::RetrievePhysicsTable():";
@@ -279,11 +279,8 @@ G4PhysicsVector* G4PhysicsTable::CreatePhysicsVector(G4int type, G4bool spline)
       pVector = new G4PhysicsLogVector(spline);
       break;
 
-    case T_G4PhysicsFreeVector:
-      pVector = new G4PhysicsFreeVector(spline);
-      break;
-
     default:
+      pVector = new G4PhysicsVector(spline);
       break;
   }
   return pVector;
